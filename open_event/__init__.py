@@ -1,13 +1,9 @@
-import os
-import sys
-
 from flask import Flask, render_template
-from flask.ext.sqlalchemy import SQLAlchemy
-
+from open_event.models import db
 app = Flask(__name__)
 app.config.from_object('config')
 
-db = SQLAlchemy(app)
+db.init_app(app)
 
 @app.errorhandler(404)
 def not_found(error):
