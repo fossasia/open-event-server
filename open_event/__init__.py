@@ -1,7 +1,12 @@
 from flask import Flask, render_template
 from open_event.models import db
+from admin import AdminView
+
 app = Flask(__name__)
 app.config.from_object('config')
+
+AdminView(app, "Open Event").init()
+
 
 db.init_app(app)
 
