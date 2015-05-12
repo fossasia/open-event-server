@@ -77,7 +77,7 @@ class Session(db.Model):
         self.end_time = end_time
         self.type = type
         self.track = track
-        self.speakers = speakers
+        self.speakers = [speakers]
         self.level = level
         self.microlocation = microlocation
 
@@ -93,7 +93,7 @@ class Session(db.Model):
                 'end_time': self.end_time,
                 'type': self.type,
                 'track': self.track,
-                'speakers': self.speakers,
+                'speakers': [{'id': speaker.id} for speaker in self.speakers],
                 'level': self.level,
                 'microlocation': self.microlocation
                 }
@@ -139,7 +139,6 @@ class Speaker(db.Model):
     organisation = db.Column(db.String)
     position = db.Column(db.String)
     country = db.Column(db.String)
-
     def __init__(self,
                  name=None,
                  photo=None,
@@ -184,7 +183,8 @@ class Speaker(db.Model):
                 'linkedin': self.linkedin,
                 'organisation': self.organisation,
                 'position': self.position,
-                'country': self.country
+                'country': self.country,
+                'sessions': [session.serialize for session in self.sessions]
                 }
 
 
