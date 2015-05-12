@@ -1,6 +1,6 @@
 from flask.ext.admin import Admin, BaseView, expose
 from flask.ext.admin.contrib.sqla import ModelView
-from models import Sponsor, Event, Speaker, Session, db
+from models import Sponsor, Event, Speaker, Session, Microlocation, Track,  db
 
 
 class AdminView(object):
@@ -18,3 +18,5 @@ class AdminView(object):
         self.admin.add_view(ModelView(Sponsor, db.session))
         self.admin.add_view(ModelView(Speaker, db.session))
         self.admin.add_view(ModelView(Session, db.session))
+        self.admin.add_view(ModelView(Track, db.session))
+        self.admin.add_view(ModelView(Microlocation, db.session))
