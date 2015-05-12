@@ -25,6 +25,17 @@ class Event(db.Model):
     def __repr__(self):
         return '<Event %r>' % (self.name)
 
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {'id': self.id,
+                'name': self.name,
+                'start_time': self.start_time,
+                'end_time': self.end_time,
+                'latitude': self.latitude,
+                'longitude': self.longitude,
+                'location_name': self.location_name}
+
 speakers = db.Table('speakers_sessions',
     db.Column('speaker_id', db.Integer, db.ForeignKey('speaker.id')),
     db.Column('session_id', db.Integer, db.ForeignKey('session.id'))
@@ -70,6 +81,23 @@ class Session(db.Model):
         self.level = level
         self.microlocation = microlocation
 
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {'id': self.id,
+                'title': self.title,
+                'subtitle': self.subtitle,
+                'abstract': self.abstract,
+                'description': self.description,
+                'start_time': self.start_time,
+                'end_time': self.end_time,
+                'type': self.type,
+                'track': self.track,
+                'speakers': self.speakers,
+                'level': self.level,
+                'microlocation': self.microlocation
+                }
+
     def __repr__(self):
         return '<Session %r>' % (self.title)
 
@@ -86,6 +114,15 @@ class Track(db.Model):
 
     def __repr__(self):
         return '<Track %r>' % (self.name)
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {'id': self.id,
+                'name': self.name,
+                'description': self.description,
+                }
+
 
 class Speaker(db.Model):
     __tablename__ = 'speaker'
@@ -132,6 +169,25 @@ class Speaker(db.Model):
     def __repr__(self):
         return '<Speaker %r>' % (self.name)
 
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {'id': self.id,
+                'name': self.name,
+                'photo': self.photo,
+                'biography': self.biography,
+                'email': self.email,
+                'web': self.web,
+                'twitter': self.twitter,
+                'facebook': self.facebook,
+                'github': self.github,
+                'linkedin': self.linkedin,
+                'organisation': self.organisation,
+                'position': self.position,
+                'country': self.country
+                }
+
+
 class Sponsor(db.Model):
     __tablename__ = 'sponsors'
     id = db.Column(db.Integer, primary_key=True)
@@ -146,6 +202,16 @@ class Sponsor(db.Model):
 
     def __repr__(self):
         return '<Sponsor %r>' % (self.name)
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {'id': self.id,
+                'name': self.name,
+                'url': self.url,
+                'logo': self.logo,
+                }
+
 
 class Microlocation(db.Model):
     __tablename__ = 'microlocations'
@@ -163,3 +229,13 @@ class Microlocation(db.Model):
 
     def __repr__(self):
         return '<Sponsor %r>' % (self.name)
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {'id': self.id,
+                'name': self.name,
+                'latitude': self.latitude,
+                'longitude': self.longitude,
+                'floor': self.floor
+                }
