@@ -51,11 +51,12 @@ class Session(db.Model):
     start_time = db.Column(db.DateTime)
     end_time = db.Column(db.DateTime)
     type = db.Column(db.String)
-    track = db.Column(db.Integer)
+    track = db.relationship("Track", uselist=False, backref="session")
     speakers = db.relationship('Speaker', secondary=speakers,
                                 backref=db.backref('sessions', lazy='dynamic'))
     level = db.Column(db.String)
-    microlocation = db.Column(db.Integer)
+    # microlocation = db.Column(db.Integer)
+    microlocation = db.relationship("Microlocation", uselist=False, backref="session")
 
     def __init__(self,
                  title=None,
@@ -92,10 +93,10 @@ class Session(db.Model):
                 'start_time': self.start_time,
                 'end_time': self.end_time,
                 'type': self.type,
-                'track': self.track,
-                'speakers': [{'id': speaker.id} for speaker in self.speakers],
+                'track': ({'id': self.track.id, 'name': self.track.name})if self.track else None,
+                'speakers': [{'id': speaker.id, 'name': speaker.name} for speaker in self.speakers],
                 'level': self.level,
-                'microlocation': self.microlocation
+                'microlocation': ({'id': self.microlocation.id, 'name': self.microlocation.name})if self.microlocation else None,
                 }
 
     def __repr__(self):
@@ -107,7 +108,7 @@ class Track(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     description = db.Column(db.Text)
-
+    session_id = db.Column(db.Integer, db.ForeignKey('session.id'))
     def __init__(self, name=None, description=None):
         self.name = name
         self.description = description
@@ -184,7 +185,7 @@ class Speaker(db.Model):
                 'organisation': self.organisation,
                 'position': self.position,
                 'country': self.country,
-                'sessions': [session.serialize for session in self.sessions]
+                'sessions': [{'id': session.id, 'title': session.title} for session in self.sessions]
                 }
 
 
@@ -220,6 +221,7 @@ class Microlocation(db.Model):
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     floor = db.Column(db.Integer)
+    session_id = db.Column(db.Integer, db.ForeignKey('session.id'))
 
     def __init__(self, name=None, latitude=None, longitude=None, floor=None ):
         self.name = name
@@ -228,7 +230,7 @@ class Microlocation(db.Model):
         self.floor = floor
 
     def __repr__(self):
-        return '<Sponsor %r>' % (self.name)
+        return '<Microlocation %r>' % (self.name)
 
     @property
     def serialize(self):
