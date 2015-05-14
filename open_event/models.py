@@ -1,17 +1,18 @@
 from flask.ext.sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import validates
 
 db = SQLAlchemy()
 
 class Event(db.Model):
     __tablename__ = 'events'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, unique=True)
+    name = db.Column(db.String, nullable=False)
     logo = db.Column(db.String)
-    start_time = db.Column(db.DateTime)
-    end_time = db.Column(db.DateTime)
+    start_time = db.Column(db.DateTime, nullable=False)
+    end_time = db.Column(db.DateTime, nullable=False)
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
-    location_name = db.Column(db.String)
+    location_name = db.Column(db.String, nullable=False)
 
     def __init__(self, name=None, logo=None, start_time=None, end_time=None, latitude=None, longitude=None, location_name=None):
         self.name = name
@@ -44,18 +45,17 @@ speakers = db.Table('speakers_sessions',
 class Session(db.Model):
     __tablename__ = 'session'
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String)
+    title = db.Column(db.String, nullable=False)
     subtitle = db.Column(db.String)
     abstract = db.Column(db.Text)
     description = db.Column(db.Text)
-    start_time = db.Column(db.DateTime)
-    end_time = db.Column(db.DateTime)
+    start_time = db.Column(db.DateTime, nullable=False)
+    end_time = db.Column(db.DateTime, nullable=False)
     type = db.Column(db.String)
     track = db.relationship("Track", uselist=False, backref="session")
     speakers = db.relationship('Speaker', secondary=speakers,
                                 backref=db.backref('sessions', lazy='dynamic'))
     level = db.Column(db.String)
-    # microlocation = db.Column(db.Integer)
     microlocation = db.relationship("Microlocation", uselist=False, backref="session")
 
     def __init__(self,
@@ -106,9 +106,10 @@ class Session(db.Model):
 class Track(db.Model):
     __tablename__ = 'tracks'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
+    name = db.Column(db.String, nullable=False)
     description = db.Column(db.Text)
     session_id = db.Column(db.Integer, db.ForeignKey('session.id'))
+
     def __init__(self, name=None, description=None):
         self.name = name
         self.description = description
@@ -128,10 +129,10 @@ class Track(db.Model):
 class Speaker(db.Model):
     __tablename__ = 'speaker'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
+    name = db.Column(db.String, nullable=False)
     photo = db.Column(db.String)
-    biography = db.Column(db.Text)
-    email = db.Column(db.String)
+    biography = db.Column(db.Text, nullable=False)
+    email = db.Column(db.String, nullable=False)
     web = db.Column(db.String)
     twitter = db.Column(db.String)
     facebook = db.Column(db.String)
@@ -140,6 +141,7 @@ class Speaker(db.Model):
     organisation = db.Column(db.String)
     position = db.Column(db.String)
     country = db.Column(db.String)
+
     def __init__(self,
                  name=None,
                  photo=None,
@@ -192,7 +194,7 @@ class Speaker(db.Model):
 class Sponsor(db.Model):
     __tablename__ = 'sponsors'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
+    name = db.Column(db.String, nullable=False)
     url = db.Column(db.String)
     logo = db.Column(db.String)
 
@@ -217,9 +219,9 @@ class Sponsor(db.Model):
 class Microlocation(db.Model):
     __tablename__ = 'microlocations'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    latitude = db.Column(db.Float)
-    longitude = db.Column(db.Float)
+    name = db.Column(db.String, nullable=False)
+    latitude = db.Column(db.Float, nullable=False)
+    longitude = db.Column(db.Float, nullable=False)
     floor = db.Column(db.Integer)
     session_id = db.Column(db.Integer, db.ForeignKey('session.id'))
 
