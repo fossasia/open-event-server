@@ -1,5 +1,4 @@
 from flask.ext.sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import validates
 
 db = SQLAlchemy()
 
@@ -12,9 +11,16 @@ class Event(db.Model):
     end_time = db.Column(db.DateTime, nullable=False)
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
-    location_name = db.Column(db.String, nullable=False)
+    location_name = db.Column(db.String)
 
-    def __init__(self, name=None, logo=None, start_time=None, end_time=None, latitude=None, longitude=None, location_name=None):
+    def __init__(self,
+                 name=None,
+                 logo=None,
+                 start_time=None,
+                 end_time=None,
+                 latitude=None,
+                 longitude=None,
+                 location_name=None):
         self.name = name
         self.logo = logo
         self.start_time = start_time
@@ -38,9 +44,8 @@ class Event(db.Model):
                 'location_name': self.location_name}
 
 speakers = db.Table('speakers_sessions',
-    db.Column('speaker_id', db.Integer, db.ForeignKey('speaker.id')),
-    db.Column('session_id', db.Integer, db.ForeignKey('session.id'))
-)
+                    db.Column('speaker_id', db.Integer, db.ForeignKey('speaker.id')),
+                    db.Column('session_id', db.Integer, db.ForeignKey('session.id')))
 
 class Session(db.Model):
     __tablename__ = 'session'
@@ -48,7 +53,7 @@ class Session(db.Model):
     title = db.Column(db.String, nullable=False)
     subtitle = db.Column(db.String)
     abstract = db.Column(db.Text)
-    description = db.Column(db.Text)
+    description = db.Column(db.Text, nullable=False)
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
     type = db.Column(db.String)
@@ -96,7 +101,8 @@ class Session(db.Model):
                 'track': ({'id': self.track.id, 'name': self.track.name})if self.track else None,
                 'speakers': [{'id': speaker.id, 'name': speaker.name} for speaker in self.speakers],
                 'level': self.level,
-                'microlocation': ({'id': self.microlocation.id, 'name': self.microlocation.name})if self.microlocation else None,
+                'microlocation': ({'id': self.microlocation.id,
+                                   'name': self.microlocation.name})if self.microlocation else None,
                 }
 
     def __repr__(self):
@@ -107,7 +113,7 @@ class Track(db.Model):
     __tablename__ = 'tracks'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
-    description = db.Column(db.Text)
+    description = db.Column(db.Text, nullable=False)
     session_id = db.Column(db.Integer, db.ForeignKey('session.id'))
 
     def __init__(self, name=None, description=None):
@@ -131,16 +137,16 @@ class Speaker(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     photo = db.Column(db.String)
-    biography = db.Column(db.Text, nullable=False)
+    biography = db.Column(db.Text)
     email = db.Column(db.String, nullable=False)
     web = db.Column(db.String)
     twitter = db.Column(db.String)
     facebook = db.Column(db.String)
     github = db.Column(db.String)
     linkedin = db.Column(db.String)
-    organisation = db.Column(db.String)
+    organisation = db.Column(db.String, nullable=False)
     position = db.Column(db.String)
-    country = db.Column(db.String)
+    country = db.Column(db.String, nullable=False)
 
     def __init__(self,
                  name=None,
