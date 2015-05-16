@@ -44,9 +44,32 @@ class Event(db.Model):
                 'longitude': self.longitude,
                 'location_name': self.location_name}
 
+
+class Track(db.Model):
+    __tablename__ = 'tracks'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    session = db.relationship("Session")
+    def __init__(self, name=None, description=None):
+        self.name = name
+        self.description = description
+
+    def __repr__(self):
+        return '<Track %r>' % (self.name)
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {'id': self.id,
+                'name': self.name,
+                'description': self.description,
+                }
+
 speakers = db.Table('speakers_sessions',
                     db.Column('speaker_id', db.Integer, db.ForeignKey('speaker.id')),
                     db.Column('session_id', db.Integer, db.ForeignKey('session.id')))
+
 
 class Session(db.Model):
     __tablename__ = 'session'
@@ -58,7 +81,7 @@ class Session(db.Model):
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
     type = db.Column(db.String)
-    track = db.relationship("Track", uselist=False, backref="session")
+    track_id = db.Column(db.Integer, db.ForeignKey('tracks.id'))
     speakers = db.relationship('Speaker', secondary=speakers,
                                 backref=db.backref('sessions', lazy='dynamic'))
     level = db.Column(db.String)
@@ -83,7 +106,7 @@ class Session(db.Model):
         self.start_time = start_time
         self.end_time = end_time
         self.type = type
-        self.track = track
+        self.track_id = track
         self.speakers = [speakers]
         self.level = level
         self.microlocation = microlocation
@@ -99,7 +122,9 @@ class Session(db.Model):
                 'start_time': DateFormatter().format_date(self.start_time),
                 'end_time': DateFormatter().format_date(self.end_time),
                 'type': self.type,
-                'track': ({'id': self.track.id, 'name': self.track.name})if self.track else None,
+                'track': ({'id': self.track_id,
+                           'name': str(Track.query.filter(Track.id == self.track_id)
+                                       .first().name)}) if self.track_id else None,
                 'speakers': [{'id': speaker.id, 'name': speaker.name} for speaker in self.speakers],
                 'level': self.level,
                 'microlocation': ({'id': self.microlocation.id,
@@ -109,28 +134,6 @@ class Session(db.Model):
     def __repr__(self):
         return '<Session %r>' % (self.title)
 
-
-class Track(db.Model):
-    __tablename__ = 'tracks'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
-    description = db.Column(db.Text, nullable=False)
-    session_id = db.Column(db.Integer, db.ForeignKey('session.id'))
-
-    def __init__(self, name=None, description=None):
-        self.name = name
-        self.description = description
-
-    def __repr__(self):
-        return '<Track %r>' % (self.name)
-
-    @property
-    def serialize(self):
-        """Return object data in easily serializeable format"""
-        return {'id': self.id,
-                'name': self.name,
-                'description': self.description,
-                }
 
 
 class Speaker(db.Model):
