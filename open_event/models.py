@@ -1,4 +1,5 @@
 from flask.ext.sqlalchemy import SQLAlchemy
+from date_formatter import DateFormatter
 
 db = SQLAlchemy()
 
@@ -37,8 +38,8 @@ class Event(db.Model):
         """Return object data in easily serializeable format"""
         return {'id': self.id,
                 'name': self.name,
-                'start_time': self.start_time,
-                'end_time': self.end_time,
+                'start_time': DateFormatter().format_date(self.start_time),
+                'end_time': DateFormatter().format_date(self.end_time),
                 'latitude': self.latitude,
                 'longitude': self.longitude,
                 'location_name': self.location_name}
@@ -95,8 +96,8 @@ class Session(db.Model):
                 'subtitle': self.subtitle,
                 'abstract': self.abstract,
                 'description': self.description,
-                'start_time': self.start_time,
-                'end_time': self.end_time,
+                'start_time': DateFormatter().format_date(self.start_time),
+                'end_time': DateFormatter().format_date(self.end_time),
                 'type': self.type,
                 'track': ({'id': self.track.id, 'name': self.track.name})if self.track else None,
                 'speakers': [{'id': speaker.id, 'name': speaker.name} for speaker in self.speakers],
