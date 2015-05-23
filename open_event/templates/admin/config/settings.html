@@ -1,0 +1,22 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+<h2>Settings</h2>
+<form action="{{ url_for('configview.index') }}" method=post>
+    {{ form.hidden_tag() }}
+
+    {{ form.title.label }}
+    {{ form.title }}
+
+    {{ form.email.label }}
+    {{ form.email }}
+
+    {{ form.logo.label }}
+    {{ form.logo }}
+
+    {{ form.color.label }}
+    {{ form.color }}
+
+    {{ form.submit }}
+  </form>
+
+{% endblock %}

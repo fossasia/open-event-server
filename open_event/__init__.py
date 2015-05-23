@@ -1,7 +1,7 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, url_for
 from flask import request
 
-from open_event.views.admin import AdminView
+from open_event.views.admin.admin import AdminView
 from helpers.query_filter import QueryFilter
 
 from open_event.models import db
@@ -10,7 +10,7 @@ from open_event.models.speaker import Speaker
 from open_event.models.sponsor import Sponsor
 from open_event.models.microlocation import Microlocation
 from open_event.models.event import Event
-
+from open_event.models.session import Session
 
 app = Flask(__name__)
 app.secret_key = 'super secret key'
@@ -60,3 +60,21 @@ def get_sponsors():
 def get_microlocations():
     return jsonify({"microlocation":
                     [microlocation.serialize for microlocation in QueryFilter(request.args, Microlocation.query).get_filtered_data()]})
+
+
+@app.route("/site-map")
+def site_map():
+    links = []
+    for rule in app.url_map.iter_rules():
+        # Filter out rules we can't navigate to in a browser
+        # and rules that require parameters
+        if "GET" in rule.methods and has_no_empty_params(rule):
+            url = url_for(rule.endpoint)
+            links.append((url, rule.endpoint))
+    return str(links)
+
+
+def has_no_empty_params(rule):
+    defaults = rule.defaults if rule.defaults is not None else ()
+    arguments = rule.arguments if rule.arguments is not None else ()
+    return len(defaults) >= len(arguments)

@@ -1,4 +1,4 @@
-from flask.ext.admin import Admin, BaseView, expose
+from flask.ext.admin import Admin, expose
 from flask.ext.admin.contrib.sqla import ModelView
 
 from open_event.models import db
@@ -8,7 +8,7 @@ from open_event.models.speaker import Speaker
 from open_event.models.sponsor import Sponsor
 from open_event.models.microlocation import Microlocation
 from open_event.models.event import Event
-
+from open_event.views.admin.config import ConfigView
 
 class AdminView(object):
 
@@ -27,3 +27,4 @@ class AdminView(object):
         self.admin.add_view(ModelView(Session, db.session))
         self.admin.add_view(ModelView(Track, db.session))
         self.admin.add_view(ModelView(Microlocation, db.session))
+        self.admin.add_view(ConfigView(name='Settings'))
