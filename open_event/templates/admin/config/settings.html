@@ -2,7 +2,7 @@
 {% block body %}
 <h2>Settings</h2>
 <form action="{{ url_for('configview.index') }}" method=post>
-    {{ form.hidden_tag() }}
+    <!--{{ form.hidden_tag() }}-->
 
     {{ form.title.label }}
     {{ form.title }}

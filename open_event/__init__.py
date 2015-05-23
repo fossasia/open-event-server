@@ -11,6 +11,7 @@ from open_event.models.sponsor import Sponsor
 from open_event.models.microlocation import Microlocation
 from open_event.models.event import Event
 from open_event.models.session import Session
+from open_event.models.config import Config
 
 app = Flask(__name__)
 app.secret_key = 'super secret key'
@@ -61,6 +62,11 @@ def get_microlocations():
     return jsonify({"microlocation":
                     [microlocation.serialize for microlocation in QueryFilter(request.args, Microlocation.query).get_filtered_data()]})
 
+
+@app.route('/get/api/v1/configuration', methods=['GET'])
+def get_configuration():
+    return jsonify({"configuration":
+                    [configuration.serialize for configuration in QueryFilter(request.args, Config.query).get_filtered_data()]})
 
 @app.route("/site-map")
 def site_map():

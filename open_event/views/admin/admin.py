@@ -10,6 +10,7 @@ from open_event.models.microlocation import Microlocation
 from open_event.models.event import Event
 from open_event.views.admin.config import ConfigView
 
+
 class AdminView(object):
 
     def __init__(self, app, app_name):

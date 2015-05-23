@@ -14,7 +14,6 @@ class ConfigView(BaseView):
             self._save_settings_to_db(request)
             return self.render('admin/config/settings.html', form=form)
         elif request.method == 'GET':
-
             return self.render('admin/config/settings.html', form=self._fill_form(form))
 
     def _save_settings_to_db(self, request):
