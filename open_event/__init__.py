@@ -1,8 +1,17 @@
 from flask import Flask, render_template, jsonify
-from open_event.models import Event, Session, Track, Speaker, Sponsor, Microlocation, db
-from admin import AdminView
 from flask import request
+
+from open_event.views.admin import AdminView
 from helpers.query_filter import QueryFilter
+
+from open_event.models import db
+from open_event.models.track import Track
+from open_event.models.speaker import Speaker
+from open_event.models.sponsor import Sponsor
+from open_event.models.microlocation import Microlocation
+from open_event.models.event import Event
+
+
 app = Flask(__name__)
 app.secret_key = 'super secret key'
 app.config.from_object('config')
