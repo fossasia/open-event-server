@@ -57,7 +57,7 @@ def get_sponsors():
                     [sponsor.serialize for sponsor in QueryFilter(request.args, Sponsor.query).get_filtered_data()]})
 
 
-@app.route('/get/api/v1/microlocation', methods=['GET'])
+@app.route('/get/api/v1/microlocations', methods=['GET'])
 def get_microlocations():
     return jsonify({"microlocation":
                     [microlocation.serialize for microlocation in QueryFilter(request.args, Microlocation.query).get_filtered_data()]})
