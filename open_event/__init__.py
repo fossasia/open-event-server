@@ -59,7 +59,7 @@ def get_sponsors():
 
 @app.route('/get/api/v1/microlocations', methods=['GET'])
 def get_microlocations():
-    return jsonify({"microlocation":
+    return jsonify({"microlocations":
                     [microlocation.serialize for microlocation in QueryFilter(request.args, Microlocation.query).get_filtered_data()]})
 
 

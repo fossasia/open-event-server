@@ -24,7 +24,7 @@ class ConfigView(BaseView):
             configuration = Config(title=form.title.data,
                                    logo=form.logo.data,
                                    email=form.email.data,
-                                   color=form.color.data)
+                                   color=str(form.color.data))
             db.session.add(configuration)
         else:
             # Update Configuration
@@ -42,6 +42,3 @@ class ConfigView(BaseView):
             form.logo.data = config.logo
             form.color.data = config.color
         return form
-
-
-
