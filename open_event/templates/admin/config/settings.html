@@ -1,22 +1,16 @@
 {% extends 'admin/master.html' %}
+{% from "forms/_formhelpers.html" import render_field %}
 {% block body %}
-<h2>Settings</h2>
-<form action="{{ url_for('configview.index') }}" method=post>
-    <!--{{ form.hidden_tag() }}-->
+    <h2>Settings</h2>
+    <form action="{{ url_for('configview.index') }}" method=post >
 
-    {{ form.title.label }}
-    {{ form.title }}
+        {{render_field(form.title)}}
+        {{render_field(form.email)}}
+        {{render_field(form.logo)}}
+        {{render_field(form.color)}}
 
-    {{ form.email.label }}
-    {{ form.email }}
+        {{ form.submit(class_="btn btn-warning") }}
 
-    {{ form.logo.label }}
-    {{ form.logo }}
-
-    {{ form.color.label }}
-    {{ form.color }}
-
-    {{ form.submit }}
-  </form>
+    </form>
 
 {% endblock %}
