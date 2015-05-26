@@ -1,4 +1,4 @@
-from flask.ext.admin import Admin, expose
+from flask.ext.admin import Admin
 from flask.ext.admin.contrib.sqla import ModelView
 
 from open_event.models import db
@@ -8,8 +8,14 @@ from open_event.models.speaker import Speaker
 from open_event.models.sponsor import Sponsor
 from open_event.models.microlocation import Microlocation
 from open_event.models.event import Event
-from open_event.views.admin.config import ConfigView
 
+from open_event.views.admin.models_views.config import ConfigView
+from open_event.views.admin.models_views.speaker import SpeakerView
+from open_event.views.admin.models_views.event import EventView
+from open_event.views.admin.models_views.sponsor import SponsorView
+from open_event.views.admin.models_views.session import SessionView
+from open_event.views.admin.models_views.track import TrackView
+from open_event.views.admin.models_views.microlocation import MicrolocationView
 
 class AdminView(object):
 
@@ -22,10 +28,10 @@ class AdminView(object):
         self._add_views()
 
     def _add_views(self):
-        self.admin.add_view(ModelView(Event, db.session))
-        self.admin.add_view(ModelView(Sponsor, db.session))
-        self.admin.add_view(ModelView(Speaker, db.session))
-        self.admin.add_view(ModelView(Session, db.session))
-        self.admin.add_view(ModelView(Track, db.session))
-        self.admin.add_view(ModelView(Microlocation, db.session))
+        self.admin.add_view(EventView(Event, db.session))
+        self.admin.add_view(SponsorView(Sponsor, db.session))
+        self.admin.add_view(SpeakerView(Speaker, db.session))
+        self.admin.add_view(SessionView(Session, db.session))
+        self.admin.add_view(TrackView(Track, db.session))
+        self.admin.add_view(MicrolocationView(Microlocation, db.session))
         self.admin.add_view(ConfigView(name='Settings'))

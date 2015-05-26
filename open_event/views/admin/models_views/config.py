@@ -2,8 +2,8 @@ from flask.ext.admin import BaseView, expose
 from open_event.forms.config import ConfigForm
 from flask import request, flash
 
-from ...models import db
-from ...models.config import Config
+from open_event.models import db
+from open_event.models.config import Config
 
 
 class ConfigView(BaseView):
