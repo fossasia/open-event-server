@@ -1,7 +1,7 @@
 
 {% macro render_field(field) %}
-<div class="input-group">
-  <dt>{{ field.label }}</dt>
+<div class="form-group">
+  <div class="col-sm-offset-2 col-sm-10">{{ field.label }}</div>
   <dd>{{ field(**kwargs)|safe }}
   {% if field.errors %}
     <ul class=errors>

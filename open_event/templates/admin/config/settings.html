@@ -1,23 +1,20 @@
 {% extends 'admin/master.html' %}
 {% from "forms/_formhelpers.html" import render_field %}
+
 {% block body %}
+<div class="container">
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Event Settings</h3>
-        </div>
-        <div class="panel-body">
-            <form action="{{ url_for('configview.index') }}" method=post>
+    <h2>Event Settings</h2>
+    <form action="{{ url_for('configview.index') }}" method=post>
 
-                {{render_field(form.title)}}
-                {{render_field(form.email)}}
-                {{render_field(form.logo)}}
-                {{render_field(form.color)}}
+        {{render_field(form.title)}}
+        {{render_field(form.email)}}
+        {{render_field(form.logo)}}
+        {{render_field(form.color)}}
 
-                {{ form.submit(class_="btn btn-success") }}
+        {{ form.submit(class_="btn btn-success") }}
 
-            </form>
-        </div>
-    </div>
+    </form>
 
+</div>
 {% endblock %}

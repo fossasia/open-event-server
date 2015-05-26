@@ -66,7 +66,7 @@ def get_microlocations():
 @app.route('/get/api/v1/configuration', methods=['GET'])
 def get_configuration():
     return jsonify({"configuration":
-                    [configuration.serialize for configuration in QueryFilter(request.args, Config.query).get_filtered_data()]})
+                    configuration.serialize for configuration in QueryFilter(request.args, Config.query).get_filtered_data()})
 
 @app.route("/site-map")
 def site_map():
