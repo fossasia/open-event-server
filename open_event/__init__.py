@@ -12,10 +12,15 @@ from open_event.models.microlocation import Microlocation
 from open_event.models.event import Event
 from open_event.models.session import Session
 from open_event.models.config import Config
+import sys
+import logging
 
 app = Flask(__name__)
 app.secret_key = 'super secret key'
 app.config.from_object('config')
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.ERROR)
+
 
 AdminView(app, "Open Event").init()
 
