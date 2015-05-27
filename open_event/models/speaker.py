@@ -62,5 +62,5 @@ class Speaker(db.Model):
                 'organisation': self.organisation,
                 'position': self.position,
                 'country': self.country,
-                'sessions': [{'id': session.id} for session in self.sessions]
+                'sessions': [session.id for session in self.sessions]
                 }
