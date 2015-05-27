@@ -1,7 +1,8 @@
 import os
 _basedir = os.path.abspath(os.path.dirname(__file__))
 
-SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'app.db')
+# SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'app.db')
+SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
 # DATABASE_CONNECT_OPTIONS = {}
 #
 # THREADS_PER_PAGE = 8
