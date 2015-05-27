@@ -6,3 +6,4 @@ requests==2.7.0
 gunicorn==19.3.0
 WTForms-Components==0.9.7
 WTForms==2.0.2
+psycopg2
