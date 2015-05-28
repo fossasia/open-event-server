@@ -11,7 +11,7 @@ class SpeakerView(ModelView):
         'biography': Formatter.column_formatter,
         'web': Formatter.column_formatter,
         'twitter': Formatter.column_formatter,
-        'faceook': Formatter.column_formatter,
+        'facebook': Formatter.column_formatter,
         'github': Formatter.column_formatter,
         'linkedin': Formatter.column_formatter,
         'organisation': Formatter.column_formatter,
