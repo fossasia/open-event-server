@@ -22,5 +22,5 @@ Type ```vagrant up``` to start a new virtual machine running the server. This re
 
 [Go to demo version](http://glacial-earth-2730.herokuapp.com/admin/)
 
-## Chat Opent event orga-server
+## Chat open event orga-server
 [![Join the chat at https://gitter.im/fossasia/open-event-orga-server](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/fossasia/open-event-orga-server?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
