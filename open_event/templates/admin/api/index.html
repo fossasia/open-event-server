@@ -1,0 +1,43 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+
+<div class="list-group">
+
+    <a href="{{ url_for('get_tracks') }}" class="list-group-item">
+        <h4 class="list-group-item-heading">Tracks</h4>
+        <p class="list-group-item-text">Shows all tracks in json format</p>
+    </a>
+
+    <a href="{{ url_for('get_events') }}" class="list-group-item">
+        <h4 class="list-group-item-heading">Events</h4>
+        <p class="list-group-item-text">Shows all events in json format</p>
+    </a>
+
+    <a href="{{ url_for('get_sponsors') }}" class="list-group-item">
+        <h4 class="list-group-item-heading">Sponsors</h4>
+        <p class="list-group-item-text">Shows all sponsors in json format</p>
+    </a>
+
+    <a href="{{ url_for('get_speakers') }}" class="list-group-item">
+        <h4 class="list-group-item-heading">Speakers</h4>
+        <p class="list-group-item-text">Shows all speakers in json format</p>
+    </a>
+
+    <a href="{{ url_for('get_sessions') }}" class="list-group-item">
+        <h4 class="list-group-item-heading">Sessions</h4>
+        <p class="list-group-item-text">Shows all sessions in json format</p>
+    </a>
+
+    <a href="{{ url_for('get_microlocations') }}" class="list-group-item">
+        <h4 class="list-group-item-heading">Microlocations</h4>
+        <p class="list-group-item-text">Shows all microlocations in json format</p>
+    </a>
+
+    <a href="{{ url_for('get_configuration') }}" class="list-group-item">
+        <h4 class="list-group-item-heading">Settings</h4>
+        <p class="list-group-item-text">Shows event configuration in json format</p>
+    </a>
+
+</div>
+
+{% endblock %}

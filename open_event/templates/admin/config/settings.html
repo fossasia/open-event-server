@@ -5,14 +5,16 @@
 <div class="container">
 
     <h2>Event Settings</h2>
-    <form action="{{ url_for('configview.index') }}" method=post>
+    <form action="{{ url_for('configview.index') }}" method=post class="admin-form form-horizontal">
 
         {{render_field(form.title)}}
         {{render_field(form.email)}}
         {{render_field(form.logo)}}
         {{render_field(form.color)}}
 
-        {{ form.submit(class_="btn btn-success") }}
+        <div class="col-md-offset-2 col-md-10 submit-row">
+            {{ form.submit(class_="btn btn-success") }}
+        </div>
 
     </form>
 
