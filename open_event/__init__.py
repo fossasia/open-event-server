@@ -1,9 +1,13 @@
+import sys
+import logging
+
 from flask import Flask, render_template, jsonify, url_for
 from flask import request
 from flask.ext.cors import CORS, cross_origin
-from open_event.views.admin.admin import AdminView
-from helpers.query_filter import QueryFilter
+from flask.ext.migrate import Migrate, MigrateCommand
+from flask.ext.script import Manager
 
+from open_event.views.admin.admin import AdminView
 from open_event.models import db
 from open_event.models.track import Track
 from open_event.models.speaker import Speaker
@@ -12,16 +16,17 @@ from open_event.models.microlocation import Microlocation
 from open_event.models.event import Event
 from open_event.models.session import Session
 from open_event.models.config import Config
-import sys
-import logging
+from helpers.query_filter import QueryFilter
 
 app = Flask(__name__)
+migrate = Migrate(app, db)
 cors = CORS(app)
 app.secret_key = 'super secret key'
 app.config.from_object('config')
+manager = Manager(app)
+manager.add_command('db', MigrateCommand)
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.ERROR)
-
 
 AdminView(app, "Open Event").init()
 

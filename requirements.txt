@@ -11,3 +11,5 @@ logging
 colour
 flask-cors
 pep8
+nose
+Flask-Migrate

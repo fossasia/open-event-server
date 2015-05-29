@@ -7,6 +7,8 @@ class Event(db.Model):
     __tablename__ = 'events'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
+    email = db.Column(db.String)
+    color = db.Column(db.String)
     logo = db.Column(db.String)
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
@@ -21,9 +23,13 @@ class Event(db.Model):
                  end_time=None,
                  latitude=None,
                  longitude=None,
-                 location_name=None):
+                 location_name=None,
+                 email=None,
+                 color=None):
         self.name = name
         self.logo = logo
+        self.email = email
+        self.color = color
         self.start_time = start_time
         self.end_time = end_time
         self.latitude = latitude
@@ -42,4 +48,6 @@ class Event(db.Model):
                 'end_time': DateFormatter().format_date(self.end_time),
                 'latitude': self.latitude,
                 'longitude': self.longitude,
-                'location_name': self.location_name}
+                'location_name': self.location_name,
+                'email': self.email,
+                'color': self.color}
