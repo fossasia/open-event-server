@@ -10,3 +10,4 @@ psycopg2
 logging
 colour
 flask-cors
+pep8
