@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify, url_for
 from flask import request
-
+from flask.ext.cors import CORS, cross_origin
 from open_event.views.admin.admin import AdminView
 from helpers.query_filter import QueryFilter
 
@@ -16,6 +16,7 @@ import sys
 import logging
 
 app = Flask(__name__)
+cors = CORS(app)
 app.secret_key = 'super secret key'
 app.config.from_object('config')
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
@@ -33,45 +34,53 @@ def not_found(error):
 
 
 @app.route('/get/api/v1/events', methods=['GET'])
+@cross_origin()
 def get_events():
     return jsonify({"events":
                     [event.serialize for event in QueryFilter(request.args, Event.query).get_filtered_data()]})
 
 
 @app.route('/get/api/v1/sessions', methods=['GET'])
+@cross_origin()
 def get_sessions():
     return jsonify({"sessions":
                     [session.serialize for session in QueryFilter(request.args, Session.query).get_filtered_data()]})
 
 
 @app.route('/get/api/v1/tracks', methods=['GET'])
+@cross_origin()
 def get_tracks():
     return jsonify({"tracks":
                     [track.serialize for track in QueryFilter(request.args, Track.query).get_filtered_data()]})
 
 
 @app.route('/get/api/v1/speakers', methods=['GET'])
+@cross_origin()
 def get_speakers():
     return jsonify({"speakers":
                     [speaker.serialize for speaker in QueryFilter(request.args, Speaker.query).get_filtered_data()]})
 
 
 @app.route('/get/api/v1/sponsors', methods=['GET'])
+@cross_origin()
 def get_sponsors():
     return jsonify({"sponsors":
                     [sponsor.serialize for sponsor in QueryFilter(request.args, Sponsor.query).get_filtered_data()]})
 
 
 @app.route('/get/api/v1/microlocations', methods=['GET'])
+@cross_origin()
 def get_microlocations():
     return jsonify({"microlocations":
                     [microlocation.serialize for microlocation in QueryFilter(request.args, Microlocation.query).get_filtered_data()]})
 
 
 @app.route('/get/api/v1/configuration', methods=['GET'])
+@cross_origin()
 def get_configuration():
     return jsonify({"configuration":
                     configuration.serialize for configuration in QueryFilter(request.args, Config.query).get_filtered_data()})
+
 
 @app.route("/site-map")
 def site_map():

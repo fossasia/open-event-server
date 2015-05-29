@@ -9,3 +9,4 @@ WTForms==2.0.2
 psycopg2
 logging
 colour
+flask-cors
