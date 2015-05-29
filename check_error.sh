@@ -2,5 +2,4 @@
 pylint open_event
 pep8 open_event
 
-#FILES=find . -name "*.py"
-#coverage run $FILES
+nosetests --with-coverage --cover-erase --cover-package=open_event --cover-html
