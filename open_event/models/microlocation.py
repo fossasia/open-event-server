@@ -9,12 +9,14 @@ class Microlocation(db.Model):
     longitude = db.Column(db.Float, nullable=False)
     floor = db.Column(db.Integer)
     session_id = db.Column(db.Integer, db.ForeignKey('session.id'))
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
 
-    def __init__(self, name=None, latitude=None, longitude=None, floor=None ):
+    def __init__(self, name=None, latitude=None, longitude=None, floor=None, event_id=None):
         self.name = name
         self.latitude = latitude
         self.longitude = longitude
         self.floor = floor
+        self.event_id = event_id
 
     def __repr__(self):
         return '<Microlocation %r>' % (self.name)

@@ -23,6 +23,7 @@ class Session(db.Model):
                                 backref=db.backref('sessions', lazy='dynamic'))
     level = db.Column(db.String)
     microlocation = db.relationship("Microlocation", uselist=False, backref="session")
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
 
     def __init__(self,
                  title=None,
@@ -35,7 +36,8 @@ class Session(db.Model):
                  track=None,
                  speakers=None,
                  level=None,
-                 microlocation=None):
+                 microlocation=None,
+                 event_id=None):
         self.title = title
         self.subtitle = subtitle
         self.abstract = abstract
@@ -47,6 +49,7 @@ class Session(db.Model):
         self.speakers = [speakers]
         self.level = level
         self.microlocation = microlocation
+        self.event_id = event_id
 
     @property
     def serialize(self):

@@ -44,39 +44,44 @@ def get_events():
                     [event.serialize for event in QueryFilter(request.args, Event.query).get_filtered_data()]})
 
 
-@app.route('/get/api/v1/sessions', methods=['GET'])
+@app.route('/get/api/v1/event/<event_id>sessions', methods=['GET'])
 @cross_origin()
-def get_sessions():
+def get_sessions(event_id):
+    sessions = Track.query.filter_by(event_id=event_id)
     return jsonify({"sessions":
-                    [session.serialize for session in QueryFilter(request.args, Session.query).get_filtered_data()]})
+                    [session.serialize for session in QueryFilter(request.args, sessions).get_filtered_data()]})
 
 
-@app.route('/get/api/v1/tracks', methods=['GET'])
+@app.route('/get/api/v1/event/<event_id>/tracks', methods=['GET'])
 @cross_origin()
-def get_tracks():
+def get_tracks(event_id):
+    tracks = Track.query.filter_by(event_id=event_id)
     return jsonify({"tracks":
-                    [track.serialize for track in QueryFilter(request.args, Track.query).get_filtered_data()]})
+                    [track.serialize for track in QueryFilter(request.args, tracks).get_filtered_data()]})
 
 
-@app.route('/get/api/v1/speakers', methods=['GET'])
+@app.route('/get/api/v1/event/<event_id>/speakers', methods=['GET'])
 @cross_origin()
-def get_speakers():
+def get_speakers(event_id):
+    speakers = Track.query.filter_by(event_id=event_id)
     return jsonify({"speakers":
-                    [speaker.serialize for speaker in QueryFilter(request.args, Speaker.query).get_filtered_data()]})
+                    [speaker.serialize for speaker in QueryFilter(request.args, speakers).get_filtered_data()]})
 
 
 @app.route('/get/api/v1/sponsors', methods=['GET'])
 @cross_origin()
-def get_sponsors():
+def get_sponsors(event_id):
+    sponsors = Sponsor.query.filter_by(event_id=event_id)
     return jsonify({"sponsors":
-                    [sponsor.serialize for sponsor in QueryFilter(request.args, Sponsor.query).get_filtered_data()]})
+                    [sponsor.serialize for sponsor in QueryFilter(request.args, sponsors).get_filtered_data()]})
 
 
 @app.route('/get/api/v1/microlocations', methods=['GET'])
 @cross_origin()
-def get_microlocations():
+def get_microlocations(event_id):
+    microlocations = Microlocation.query.filter_by(event_id=event_id)
     return jsonify({"microlocations":
-                    [microlocation.serialize for microlocation in QueryFilter(request.args, Microlocation.query).get_filtered_data()]})
+                    [microlocation.serialize for microlocation in QueryFilter(request.args, microlocations).get_filtered_data()]})
 
 
 @app.route("/site-map")

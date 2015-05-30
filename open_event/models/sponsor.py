@@ -7,11 +7,13 @@ class Sponsor(db.Model):
     name = db.Column(db.String, nullable=False)
     url = db.Column(db.String)
     logo = db.Column(db.String)
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
 
-    def __init__(self, name=None, url=None, logo=None, ):
+    def __init__(self, name=None, url=None, logo=None, event_id=None ):
         self.name = name
         self.url = url
         self.logo = logo
+        self.event_id = event_id
 
     def __repr__(self):
         return '<Sponsor %r>' % (self.name)

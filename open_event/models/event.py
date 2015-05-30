@@ -15,6 +15,11 @@ class Event(db.Model):
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     location_name = db.Column(db.String)
+    track = db.relationship('Track', backref="event")
+    microlocation = db.relationship('Microlocation', backref="event")
+    session = db.relationship('Session', backref="event")
+    speaker = db.relationship('Speaker', backref="event")
+    sponsor = db.relationship('Sponsor', backref="event")
 
     def __init__(self,
                  name=None,

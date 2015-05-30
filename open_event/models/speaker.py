@@ -16,6 +16,7 @@ class Speaker(db.Model):
     organisation = db.Column(db.String, nullable=False)
     position = db.Column(db.String)
     country = db.Column(db.String, nullable=False)
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
 
     def __init__(self,
                  name=None,
@@ -29,7 +30,8 @@ class Speaker(db.Model):
                  linkedin=None,
                  organisation=None,
                  position=None,
-                 country=None):
+                 country=None,
+                 event_id=None):
         self.name = name
         self.photo = photo
         self.biography = biography
@@ -42,6 +44,7 @@ class Speaker(db.Model):
         self.organisation = organisation
         self.position = position
         self.country = country
+        self.event_id = event_id
 
     def __repr__(self):
         return '<Speaker %r>' % (self.name)
