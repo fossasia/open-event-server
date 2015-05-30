@@ -8,7 +8,6 @@ from open_event.models.sponsor import Sponsor
 from open_event.models.microlocation import Microlocation
 from open_event.models.event import Event
 
-from open_event.views.admin.models_views.config import ConfigView
 from open_event.views.admin.models_views.speaker import SpeakerView
 from open_event.views.admin.models_views.event import EventView
 from open_event.views.admin.models_views.sponsor import SponsorView
@@ -35,5 +34,4 @@ class AdminView(object):
         self.admin.add_view(SessionView(Session, db.session))
         self.admin.add_view(TrackView(Track, db.session))
         self.admin.add_view(MicrolocationView(Microlocation, db.session))
-        self.admin.add_view(ConfigView(name='Settings'))
         self.admin.add_view(ApiView(name='Api'))

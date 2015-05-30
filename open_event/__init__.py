@@ -15,7 +15,6 @@ from open_event.models.sponsor import Sponsor
 from open_event.models.microlocation import Microlocation
 from open_event.models.event import Event
 from open_event.models.session import Session
-from open_event.models.config import Config
 from helpers.query_filter import QueryFilter
 
 app = Flask(__name__)
@@ -78,13 +77,6 @@ def get_sponsors():
 def get_microlocations():
     return jsonify({"microlocations":
                     [microlocation.serialize for microlocation in QueryFilter(request.args, Microlocation.query).get_filtered_data()]})
-
-
-@app.route('/get/api/v1/configuration', methods=['GET'])
-@cross_origin()
-def get_configuration():
-    return jsonify({"configuration":
-                    configuration.serialize for configuration in QueryFilter(request.args, Config.query).get_filtered_data()})
 
 
 @app.route("/site-map")
