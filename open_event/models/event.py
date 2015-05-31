@@ -49,6 +49,7 @@ class Event(db.Model):
         """Return object data in easily serializeable format"""
         return {'id': self.id,
                 'name': self.name,
+                'logo': self.logo,
                 'start_time': DateFormatter().format_date(self.start_time),
                 'end_time': DateFormatter().format_date(self.end_time),
                 'latitude': self.latitude,
