@@ -1,1 +1,1 @@
-__author__ = 'rafal'
+"""Written by - Rafal Kowalski"""

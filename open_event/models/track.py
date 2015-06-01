@@ -1,3 +1,4 @@
+"""Written by - Rafal Kowalski"""
 from . import db
 
 
@@ -22,5 +23,4 @@ class Track(db.Model):
         """Return object data in easily serializeable format"""
         return {'id': self.id,
                 'name': self.name,
-                'description': self.description,
-                }
+                'description': self.description}

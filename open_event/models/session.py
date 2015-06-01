@@ -1,11 +1,15 @@
-__author__ = 'rafal'
+"""Written by - Rafal Kowalski"""
 from . import db
 from .track import Track
-from ..date_formatter import DateFormatter
+from open_event.helpers.date_formatter import DateFormatter
 
 speakers = db.Table('speakers_sessions',
-                    db.Column('speaker_id', db.Integer, db.ForeignKey('speaker.id')),
-                    db.Column('session_id', db.Integer, db.ForeignKey('session.id')))
+                    db.Column('speaker_id',
+                              db.Integer,
+                              db.ForeignKey('speaker.id')),
+                    db.Column('session_id',
+                              db.Integer,
+                              db.ForeignKey('session.id')))
 
 
 class Session(db.Model):
@@ -15,15 +19,23 @@ class Session(db.Model):
     subtitle = db.Column(db.String)
     abstract = db.Column(db.Text)
     description = db.Column(db.Text, nullable=False)
-    start_time = db.Column(db.DateTime, nullable=False)
-    end_time = db.Column(db.DateTime, nullable=False)
+    start_time = db.Column(db.DateTime,
+                           nullable=False)
+    end_time = db.Column(db.DateTime,
+                         nullable=False)
     type = db.Column(db.String)
-    track_id = db.Column(db.Integer, db.ForeignKey('tracks.id'))
-    speakers = db.relationship('Speaker', secondary=speakers,
-                                backref=db.backref('sessions', lazy='dynamic'))
+    track_id = db.Column(db.Integer,
+                         db.ForeignKey('tracks.id'))
+    speakers = db.relationship('Speaker',
+                               secondary=speakers,
+                               backref=db.backref('sessions',
+                                                  lazy='dynamic'))
     level = db.Column(db.String)
-    microlocation = db.relationship("Microlocation", uselist=False, backref="session")
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    microlocation = db.relationship("Microlocation",
+                                    uselist=False,
+                                    backref="session")
+    event_id = db.Column(db.Integer,
+                         db.ForeignKey('events.id'))
 
     def __init__(self,
                  title=None,
@@ -68,8 +80,7 @@ class Session(db.Model):
                 'speakers': [{'id': speaker.id, 'name': speaker.name} for speaker in self.speakers],
                 'level': self.level,
                 'microlocation': ({'id': self.microlocation.id,
-                                   'name': self.microlocation.name})if self.microlocation else None,
-                }
+                                   'name': self.microlocation.name})if self.microlocation else None}
 
     def __repr__(self):
         return '<Session %r>' % (self.title)

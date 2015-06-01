@@ -1,3 +1,4 @@
+"""Written by - Rafal Kowalski"""
 from open_event import manager
 
 

@@ -1,3 +1,4 @@
+"""Written by - Rafal Kowalski"""
 from flask.ext.admin import BaseView, expose
 
 

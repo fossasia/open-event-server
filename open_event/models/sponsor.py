@@ -1,3 +1,4 @@
+"""Written by - Rafal Kowalski"""
 from . import db
 
 
@@ -9,7 +10,7 @@ class Sponsor(db.Model):
     logo = db.Column(db.String)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
 
-    def __init__(self, name=None, url=None, logo=None, event_id=None ):
+    def __init__(self, name=None, url=None, logo=None, event_id=None):
         self.name = name
         self.url = url
         self.logo = logo
@@ -24,5 +25,4 @@ class Sponsor(db.Model):
         return {'id': self.id,
                 'name': self.name,
                 'url': self.url,
-                'logo': self.logo,
-                }
+                'logo': self.logo}

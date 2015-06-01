@@ -1,3 +1,4 @@
+"""Written by - Rafal Kowalski"""
 from flask.ext.admin.contrib.sqla import ModelView
 from ....helpers.formatter import Formatter
 

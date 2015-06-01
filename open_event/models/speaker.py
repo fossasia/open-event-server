@@ -1,3 +1,4 @@
+"""Written by - Rafal Kowalski"""
 from . import db
 
 
@@ -65,5 +66,4 @@ class Speaker(db.Model):
                 'organisation': self.organisation,
                 'position': self.position,
                 'country': self.country,
-                'sessions': [session.id for session in self.sessions]
-                }
+                'sessions': [session.id for session in self.sessions]}

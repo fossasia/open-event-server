@@ -1,3 +1,6 @@
+"""Written by - Rafal Kowalski"""
+
+
 class Formatter(object):
 
     @staticmethod

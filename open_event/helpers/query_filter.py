@@ -1,3 +1,6 @@
+"""Written by - Rafal Kowalski"""
+
+
 class QueryFilter(object):
     def __init__(self, args, query):
         self.args = args

@@ -1,9 +1,9 @@
+"""Written by - Rafal Kowalski"""
 from flask.ext.admin.contrib.sqla import ModelView
 from ....helpers.formatter import Formatter
 
 
 class SpeakerView(ModelView):
-    # column_list = ('name', 'email',)
     column_formatters = {
         'name': Formatter.column_formatter,
         'email': Formatter.column_formatter,
@@ -16,5 +16,4 @@ class SpeakerView(ModelView):
         'linkedin': Formatter.column_formatter,
         'organisation': Formatter.column_formatter,
         'position': Formatter.column_formatter,
-        'country': Formatter.column_formatter,
-    }
+        'country': Formatter.column_formatter}

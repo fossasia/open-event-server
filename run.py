@@ -1,4 +1,5 @@
-from open_event import app, manager
+"""Written by - Rafal Kowalski"""
+from open_event import app
 from open_event.models import db
 
 if __name__ == "__main__":
