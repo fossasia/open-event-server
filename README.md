@@ -24,3 +24,7 @@ Type ```vagrant up``` to start a new virtual machine running the server. This re
 
 ## Chat open event orga-server
 [![Join the chat at https://gitter.im/fossasia/open-event-orga-server](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/fossasia/open-event-orga-server?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+
+##License
+This project is currently licensed under the GNU General Public License v3. A copy of LICENSE.md should be present along with the source code. To obtain the software under a different license, please contact FOSSASIA.
