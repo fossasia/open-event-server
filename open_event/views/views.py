@@ -10,6 +10,7 @@ from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
 from ..models.event import Event
 from ..models.session import Session
+from ..models.version import Version
 from ..helpers.object_formatter import ObjectFormatter
 
 # @app.errorhandler(404)
@@ -62,6 +63,19 @@ def get_sponsors(event_id):
 def get_microlocations(event_id):
     microlocations = Microlocation.query.filter_by(event_id=event_id)
     return ObjectFormatter.get_json("microlocations", microlocations, request)
+
+
+@app.route('/get/api/v1/version/<event_id>', methods=['GET'])
+@cross_origin()
+def get_event_versions(event_id):
+    versions = Version.query.filter_by(event_id=event_id)
+    return ObjectFormatter.get_json("versions", versions, request)
+
+
+@app.route('/get/api/v1/version', methods=['GET'])
+@cross_origin()
+def get_versions():
+    return ObjectFormatter.get_json("versions", Version.query, request)
 
 
 @app.route("/site-map")

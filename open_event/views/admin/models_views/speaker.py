@@ -1,6 +1,7 @@
 """Written by - Rafal Kowalski"""
 from flask.ext.admin.contrib.sqla import ModelView
 from ....helpers.formatter import Formatter
+from ....helpers.update_version import VersionUpdater
 
 
 class SpeakerView(ModelView):
@@ -17,3 +18,9 @@ class SpeakerView(ModelView):
         'organisation': Formatter.column_formatter,
         'position': Formatter.column_formatter,
         'country': Formatter.column_formatter}
+
+    def on_model_change(self, form, model, is_created):
+        event_id = model.event_id
+        if event_id:
+            v = VersionUpdater(event_id=event_id, is_created=is_created, column_to_increment="tracks_ver")
+            v.update()
