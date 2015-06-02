@@ -7,5 +7,5 @@ class TrackView(ModelView):
     def on_model_change(self, form, model, is_created):
         event_id = model.event_id
         if event_id:
-            v = VersionUpdater(event_id=event_id, is_created=is_created, column_to_increment="speakers_ver")
+            v = VersionUpdater(event_id=event_id, is_created=is_created, column_to_increment="tracks_ver")
             v.update()
