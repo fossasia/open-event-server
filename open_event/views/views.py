@@ -33,7 +33,7 @@ def get_event_by_id(event_id):
 @app.route('/get/api/v1/event/<event_id>/sessions', methods=['GET'])
 @cross_origin()
 def get_sessions(event_id):
-    sessions = Track.query.filter_by(event_id=event_id)
+    sessions = Session.query.filter_by(event_id=event_id)
     return ObjectFormatter.get_json("sessions", sessions, request)
 
 
