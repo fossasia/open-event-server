@@ -47,7 +47,7 @@ def get_tracks(event_id):
 @app.route('/get/api/v1/event/<event_id>/speakers', methods=['GET'])
 @cross_origin()
 def get_speakers(event_id):
-    speakers = Track.query.filter_by(event_id=event_id)
+    speakers = Speaker.query.filter_by(event_id=event_id)
     return ObjectFormatter.get_json("speakers", speakers, request)
 
 
