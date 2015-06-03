@@ -56,15 +56,15 @@ class Event(db.Model):
     @property
     def serialize(self):
         """Return object data in easily serializeable format"""
-        return {'id': self.id,
-                'name': self.name,
-                'logo': self.logo,
-                'start_time':
-                    DateFormatter().format_date(self.start_time),
-                'end_time':
-                    DateFormatter().format_date(self.end_time),
-                'latitude': self.latitude,
-                'longitude': self.longitude,
-                'location_name': self.location_name,
-                'email': self.email,
-                'color': self.color}
+        return {"events":[{'id': self.id,
+                           'name': self.name,
+                           'logo': self.logo,
+                           'start_time':
+                               DateFormatter().format_date(self.start_time),
+                           'end_time':
+                               DateFormatter().format_date(self.end_time),
+                           'latitude': self.latitude,
+                           'longitude': self.longitude,
+                           'location_name': self.location_name,
+                           'email': self.email,
+                           'color': self.color}]}

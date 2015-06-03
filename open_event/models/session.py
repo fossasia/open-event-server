@@ -77,10 +77,9 @@ class Session(db.Model):
                 'track': ({'id': self.track_id,
                            'name': str(Track.query.filter(Track.id == self.track_id)
                                        .first().name)}) if self.track_id else None,
-                'speakers': [{'id': speaker.id, 'name': speaker.name} for speaker in self.speakers],
+                'speakers': [speaker.id for speaker in self.speakers],
                 'level': self.level,
-                'microlocation': ({'id': self.microlocation.id,
-                                   'name': self.microlocation.name})if self.microlocation else None}
+                'microlocation': self.microlocation.id if self.microlocation else None}
 
     def __repr__(self):
         return '<Session %r>' % (self.title)
