@@ -74,9 +74,7 @@ class Session(db.Model):
                 'start_time': DateFormatter().format_date(self.start_time),
                 'end_time': DateFormatter().format_date(self.end_time),
                 'type': self.type,
-                'track': ({'id': self.track_id,
-                           'name': str(Track.query.filter(Track.id == self.track_id)
-                                       .first().name)}) if self.track_id else None,
+                'track': self.track_id if self.track_id else None,
                 'speakers': [speaker.id for speaker in self.speakers],
                 'level': self.level,
                 'microlocation': self.microlocation.id if self.microlocation else None}
