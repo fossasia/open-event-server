@@ -1,3 +1,4 @@
+"""Written by - Rafal Kowalski"""
 from ..models.version import Version
 from ..models import db
 
@@ -13,7 +14,6 @@ class VersionUpdater(object):
             version = Version(event_id=self.event_id)
             db.session.add(version)
             db.session.commit()
-            pass
         else:
             previous_version = Version.query.filter_by(event_id=self.event_id).order_by(Version.id.desc()).first()
             if not previous_version:
@@ -31,8 +31,7 @@ class VersionUpdater(object):
                               speakers_ver=previous_version_dict["speakers_ver"],
                               tracks_ver=previous_version_dict["tracks_ver"],
                               sponsors_ver=previous_version_dict["sponsors_ver"],
-                              microlocations_ver=previous_version_dict["microlocations_ver"]
-                              )
+                              microlocations_ver=previous_version_dict["microlocations_ver"])
         db.session.add(new_version)
         db.session.commit()
 

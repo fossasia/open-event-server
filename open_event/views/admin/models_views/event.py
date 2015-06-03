@@ -12,8 +12,5 @@ class EventView(ModelView):
     }
 
     def on_model_change(self, form, model, is_created):
-        try:
-            v = VersionUpdater(event_id=model.id, is_created=is_created, column_to_increment="event_ver")
-            v.update()
-        except Exception as e:
-            print e
+        v = VersionUpdater(event_id=model.id, is_created=is_created, column_to_increment="event_ver")
+        v.update()

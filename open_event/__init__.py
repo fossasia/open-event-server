@@ -6,6 +6,7 @@ from flask import Flask, render_template, jsonify, url_for
 from flask.ext.migrate import Migrate, MigrateCommand
 from flask.ext.script import Manager
 from open_event.models import db
+import open_event.models.event_listeners
 from open_event.views.admin.admin import AdminView
 from flask.ext.cors import CORS
 
