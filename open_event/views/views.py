@@ -65,17 +65,10 @@ def get_microlocations(event_id):
     return ObjectFormatter.get_json("microlocations", microlocations, request)
 
 
-@app.route('/get/api/v1/version/<event_id>', methods=['GET'])
-@cross_origin()
-def get_event_versions(event_id):
-    versions = Version.query.filter_by(event_id=event_id)
-    return ObjectFormatter.get_json("versions", versions, request)
-
-
 @app.route('/get/api/v1/version', methods=['GET'])
 @cross_origin()
 def get_versions():
-    return ObjectFormatter.get_json("versions", Version.query, request)
+    return jsonify(Version.query.order_by(Version.id.desc()).first().serialize)
 
 
 @app.route("/site-map")
