@@ -71,6 +71,15 @@ def get_versions():
     return jsonify(Version.query.order_by(Version.id.desc()).first().serialize)
 
 
+@app.route('/get/api/v1/event/<event_id>/version', methods=['GET'])
+@cross_origin()
+def get_event_version(event_id):
+    version = Version.query.filter_by(event_id=event_id).order_by(Version.id.desc()).first()
+    if version:
+        return jsonify(version.serialize)
+    return jsonify({"version": []})
+
+
 @app.route("/site-map")
 def site_map():
     links = []
