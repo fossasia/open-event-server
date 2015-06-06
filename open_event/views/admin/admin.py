@@ -1,6 +1,6 @@
 """Written by - Rafal Kowalski"""
 from flask.ext.admin import Admin
-
+from flask import url_for, render_template
 from open_event.models import db
 from open_event.models.session import Session
 from open_event.models.track import Track
@@ -29,10 +29,11 @@ class AdminView(object):
         self._add_views()
 
     def _add_views(self):
+        current_event = 1
         self.admin.add_view(EventView(Event, db.session))
-        self.admin.add_view(SponsorView(Sponsor, db.session))
-        self.admin.add_view(SpeakerView(Speaker, db.session))
-        self.admin.add_view(SessionView(Session, db.session))
-        self.admin.add_view(TrackView(Track, db.session))
-        self.admin.add_view(MicrolocationView(Microlocation, db.session))
+        # self.admin.add_view(SponsorView(Sponsor, db.session))
+        # self.admin.add_view(SpeakerView(Speaker, db.session))
+        # self.admin.add_view(SessionView(Session, db.session))
+        self.admin.add_view(TrackView(Track, db.session, endpoint="event/<event_id>/track"))
+        # self.admin.add_view(MicrolocationView(Microlocation, db.session, url="event/1/microlocation"))
         self.admin.add_view(ApiView(name='Api'))

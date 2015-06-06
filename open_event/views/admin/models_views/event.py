@@ -2,6 +2,7 @@
 from flask.ext.admin.contrib.sqla import ModelView
 from ....helpers.formatter import Formatter
 from ....helpers.update_version import VersionUpdater
+from flask.ext.admin import Admin, BaseView, expose
 
 
 class EventView(ModelView):
@@ -26,3 +27,7 @@ class EventView(ModelView):
     def on_model_change(self, form, model, is_created):
         v = VersionUpdater(event_id=model.id, is_created=is_created, column_to_increment="event_ver")
         v.update()
+
+    @expose('/<event_id>/track')
+    def event_sessions(self, event_id):
+        return self.render("admin/master.html")
