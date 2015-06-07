@@ -68,7 +68,10 @@ def get_microlocations(event_id):
 @app.route('/get/api/v1/version', methods=['GET'])
 @cross_origin()
 def get_versions():
-    return jsonify(Version.query.order_by(Version.id.desc()).first().serialize)
+    version = Version.query.order_by(Version.id.desc()).first()
+    if version:
+        return jsonify(version.serialize)
+    return jsonify({"version": []})
 
 
 @app.route('/get/api/v1/event/<event_id>/version', methods=['GET'])
