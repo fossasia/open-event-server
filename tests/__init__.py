@@ -1,30 +1,20 @@
 """Written by - Rafal Kowalski"""
-import os
 import datetime
 import unittest
+from setup import Setup
 from open_event import app
 from open_event.models import db
 from open_event.models.track import Track
 from open_event.models.event import Event
 
-_basedir = os.path.abspath(os.path.dirname(__file__))
 
 class OpenEventTestCase(unittest.TestCase):
 
     def setUp(self):
-        app.config['TESTING'] = True
-        app.config['WTF_CSRF_ENABLED'] = False
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(_basedir, 'test.db')
-        app.secret_key = 'super secret key'
-        with app.app_context():
-            db.create_all()
-        self.app = app.test_client()
+        self.app = Setup.create_app()
 
     def tearDown(self):
-        with app.app_context():
-            db.session.remove()
-            db.drop_all()
-        pass
+        Setup.drop_db()
 
     def test_urls_response(self):
         expected_status_code = 200

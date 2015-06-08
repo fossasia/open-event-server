@@ -71,6 +71,7 @@ def get_versions():
     version = Version.query.order_by(Version.id.desc()).first()
     if version:
         return jsonify(version.serialize)
+    return jsonify({"version": []})
 
 
 @app.route('/get/api/v1/event/<event_id>/version', methods=['GET'])
