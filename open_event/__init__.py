@@ -22,6 +22,7 @@ manager.add_command('db', MigrateCommand)
 
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.ERROR)
-
-AdminView(app, "Open Event").init()
 db.init_app(app)
+with app.app_context():
+    AdminView(app, "Open Event").init()
+

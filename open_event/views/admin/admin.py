@@ -1,5 +1,6 @@
 """Written by - Rafal Kowalski"""
 from flask.ext.admin import Admin
+from flask.ext.admin.base import MenuLink
 from flask import url_for, render_template
 from open_event.models import db
 from open_event.models.session import Session
@@ -17,7 +18,6 @@ from open_event.views.admin.models_views.track import TrackView
 from open_event.views.admin.models_views.microlocation import MicrolocationView
 from open_event.views.admin.models_views.api import ApiView
 
-
 class AdminView(object):
 
     def __init__(self, app, app_name):
@@ -29,11 +29,21 @@ class AdminView(object):
         self._add_views()
 
     def _add_views(self):
-        current_event = 1
-        self.admin.add_view(EventView(Event, db.session))
-        # self.admin.add_view(SponsorView(Sponsor, db.session))
-        # self.admin.add_view(SpeakerView(Speaker, db.session))
-        # self.admin.add_view(SessionView(Session, db.session))
-        self.admin.add_view(TrackView(Track, db.session, endpoint="event/<event_id>/track"))
-        # self.admin.add_view(MicrolocationView(Microlocation, db.session, url="event/1/microlocation"))
+        self._add_models_to_menu()
         self.admin.add_view(ApiView(name='Api'))
+        self._add_events_to_submenu()
+        # self.admin.add_view(SuperView())
+
+    def _add_events_to_submenu(self):
+        for event in Event.query.all():
+            self.admin.add_link(MenuLink(name=event.name, url='/admin/event/%s' % event.id, category="Switch event"))
+
+    def _add_models_to_menu(self):
+        event = Event.query.first()
+        self.admin.add_view(EventView(Event, db.session))
+        # if event:
+        #     self.admin.add_view(SponsorView(Sponsor, db.session, endpoint="event/%s/sponsor" % event.id))
+        #     self.admin.add_view(SpeakerView(Speaker, db.session, endpoint="event/%s/speaker" % event.id))
+        #     self.admin.add_view(SessionView(Session, db.session, endpoint="event/%s/session" % event.id))
+        #     self.admin.add_view(TrackView(Track, db.session, endpoint="event/%s/track" % event.id))
+        #     self.admin.add_view(MicrolocationView(Microlocation, db.session, endpoint="event/%s/microlocation" % event.id))

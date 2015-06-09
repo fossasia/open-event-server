@@ -18,3 +18,9 @@ class QueryFilter(object):
             del filters["order_by"]
 
         return self.query.filter_by(**filters).order_by(column)
+    @staticmethod
+    def get_query_list(query):
+        rows = []
+        for u in query:
+             rows.append(u.__dict__)
+        return rows
