@@ -1,7 +1,7 @@
 {% extends 'admin/base1.html' %}
 
 {% block body %}
-    <a href="{{ get_url('event.event_track_new', event_id=event_id )}}">Add Track</a>
+    <a href="{{ get_url('event.event_session_new', event_id=event_id )}}">Add Session</a>
     <div class="table-responsive">
         <table class="table table-condensed" id="table-list">
             <thead>
@@ -14,16 +14,22 @@
                 </tr>
             </thead>
             <tbody>
-                {% for track in objects %}
+                {% for session in objects %}
                     <tr>
-                        <td>{{track.id}}</td>
-                        <td>{{track.name}}</td>
-                        <td>{{track.description}}</td>
+                        <td>{{session.id}}</td>
+                        <td>{{session.title}}</td>
+                        <td>{{session.subtitle}}</td>
+                        <td>{{session.abstract}}</td>
+                        <td>{{session.Description}}</td>
+                        <td>{{session.start_time}}</td>
+                        <td>{{session.end_time}}</td>
+                        <td>{{session.type}}</td>
+                        <td>{{session.level}}</td>
                         <td>
-                            <a class="icon" href="{{ get_url('event.event_track_edit', event_id=event_id, track_id=track.id )}}" title="Edit record">
+                            <a class="icon" href="{{ get_url('event.event_session_edit', event_id=event_id, session_id=session.id )}}" title="Edit record">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </a>
-                            <a onclick="return confirm('Are you sure you want to delete this record?');" href="{{ get_url('event.event_track_delete', event_id=event_id, track_id=track.id )}}" title="Delete record">
+                            <a onclick="return confirm('Are you sure you want to delete this record?');" href="{{ get_url('event.event_session_delete', event_id=event_id, session_id=session.id )}}" title="Delete record">
                                 <span class="glyphicon glyphicon-trash"></span>
                             </a>
                         </td>

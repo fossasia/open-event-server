@@ -7,10 +7,11 @@ from ....helpers.update_version import VersionUpdater
 from flask.ext.admin import expose
 from ....models.track import Track
 from ....models.event import Event
-from open_event.forms.admin.track_form import TrackForm
+from ....models.session import Session
 from ....models import db
 from flask import flash
 from ....helpers.query_filter import QueryFilter
+from open_event.forms.admin.session_form import SessionForm
 
 class EventView(ModelView):
 
@@ -49,6 +50,7 @@ class EventView(ModelView):
     @expose('/<event_id>/track/new', methods=('GET', 'POST'))
     def event_track_new(self, event_id):
         events = Event.query.all()
+        from open_event.forms.admin.track_form import TrackForm
         form = TrackForm(request.form)
         if form.validate():
             new_track = Track(name=form.name.data,
@@ -63,6 +65,7 @@ class EventView(ModelView):
     def event_track_edit(self, event_id, track_id):
         track = Track.query.get(track_id)
         events = Event.query.all()
+        from open_event.forms.admin.track_form import TrackForm
         form = TrackForm(obj=track)
         if form.validate():
             track.name = form.name.data
@@ -79,3 +82,29 @@ class EventView(ModelView):
         db.session.commit()
         flash('You successfully delete track')
         return redirect(url_for('.event_tracks', event_id=event_id))
+
+    @expose('/<event_id>/session')
+    def event_sessions(self, event_id):
+        sessions = Session.query.filter_by(event_id=event_id)
+        events = Event.query.all()
+        return self.render('admin/model/session/list.html', objects=sessions, event_id=event_id, events=events)
+
+    @expose('/<event_id>/session/new', methods=('GET', 'POST'))
+    def event_session_new(self, event_id):
+        events = Event.query.all()
+        form = SessionForm()
+        print form.Meta
+        print form.validate()
+        if form.validate():
+            new_session = Session(title=form.title.data,
+                                  subtitle=form.subtitle.data,
+                                  description=form.description.data,
+                                  start_time=form.start_time.data,
+                                  end_time=form.end_time.data,
+                                  event_id=event_id,
+                                  speakers='')
+            db.session.add(new_session)
+            db.session.commit()
+            return redirect(url_for('.event_tracks', event_id=event_id))
+        
+        return self.render('admin/model/track/create1.html',form=form, event_id=event_id, events=events)
