@@ -7,7 +7,7 @@ class Track(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     description = db.Column(db.Text, nullable=False)
-    session = db.relationship("Session")
+    session = db.relationship("Session", remote_side=[id])
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
 
     def __init__(self, name=None, description=None, event_id=None):

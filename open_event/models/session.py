@@ -3,7 +3,7 @@ from . import db
 from .track import Track
 from open_event.helpers.date_formatter import DateFormatter
 
-speakers = db.Table('speakers_sessions',
+speakers_sessions = db.Table('speakers_sessions',
                     db.Column('speaker_id',
                               db.Integer,
                               db.ForeignKey('speaker.id')),
@@ -27,7 +27,7 @@ class Session(db.Model):
     track_id = db.Column(db.Integer,
                          db.ForeignKey('tracks.id'))
     speakers = db.relationship('Speaker',
-                               secondary=speakers,
+                               secondary=speakers_sessions,
                                backref=db.backref('sessions',
                                                   lazy='dynamic'))
     level = db.Column(db.String)

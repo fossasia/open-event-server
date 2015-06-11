@@ -12,6 +12,8 @@ from ....models import db
 from flask import flash
 from ....helpers.query_filter import QueryFilter
 from open_event.forms.admin.session_form import SessionForm
+from sqlalchemy.orm.collections import InstrumentedList
+
 
 class EventView(ModelView):
 
@@ -56,6 +58,7 @@ class EventView(ModelView):
             new_track = Track(name=form.name.data,
                               description=form.description.data,
                               event_id=event_id)
+            new_track.session = InstrumentedList([Session.query.get(form.session.data)])
             db.session.add(new_track)
             db.session.commit()
             return redirect(url_for('.event_tracks', event_id=event_id))
@@ -70,6 +73,7 @@ class EventView(ModelView):
         if form.validate():
             track.name = form.name.data
             track.description=form.description.data
+            track.session = InstrumentedList([])
             db.session.add(track)
             db.session.commit()
             return redirect(url_for('.event_tracks', event_id=event_id))
@@ -93,8 +97,6 @@ class EventView(ModelView):
     def event_session_new(self, event_id):
         events = Event.query.all()
         form = SessionForm()
-        print form.Meta
-        print form.validate()
         if form.validate():
             new_session = Session(title=form.title.data,
                                   subtitle=form.subtitle.data,
@@ -102,9 +104,32 @@ class EventView(ModelView):
                                   start_time=form.start_time.data,
                                   end_time=form.end_time.data,
                                   event_id=event_id,
-                                  speakers='')
+                                  speakers=form.speakers.data)
+            new_session.speakers = InstrumentedList([])
             db.session.add(new_session)
             db.session.commit()
-            return redirect(url_for('.event_tracks', event_id=event_id))
-        
+            return redirect(url_for('.event_sessions', event_id=event_id))
+
         return self.render('admin/model/track/create1.html',form=form, event_id=event_id, events=events)
+
+
+    @expose('/<event_id>/session/<session_id>/edit', methods=('GET', 'POST'))
+    def event_session_edit(self, event_id, session_id):
+        session = Session.query.get(session_id)
+        events = Event.query.all()
+        form = SessionForm(obj=session)
+        if form.validate():
+            session.title = form.name.data
+            session.description=form.description.data
+            db.session.add(session)
+            db.session.commit()
+            return redirect(url_for('.event_sessions', event_id=event_id))
+        return self.render('admin/model/session/create.html', form=form, event_id=event_id, events=events)
+
+    @expose('/<event_id>/session/<session_id>/delete', methods=('GET', 'POST'))
+    def event_session_delete(self, event_id, session_id):
+        session = Session.query.get(session_id)
+        db.session.delete(session)
+        db.session.commit()
+        flash('You successfully delete session')
+        return redirect(url_for('.event_sessions', event_id=event_id))
