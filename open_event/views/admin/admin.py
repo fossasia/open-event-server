@@ -14,7 +14,7 @@ from open_event.views.admin.models_views.speaker import SpeakerView
 from open_event.views.admin.models_views.event import EventView
 from open_event.views.admin.models_views.sponsor import SponsorView
 from open_event.views.admin.models_views.session import SessionView
-from open_event.views.admin.models_views.track import TrackView
+# from open_event.views.admin.models_views.track import TrackView
 from open_event.views.admin.models_views.microlocation import MicrolocationView
 from open_event.views.admin.models_views.api import ApiView
 
