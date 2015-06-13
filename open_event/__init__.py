@@ -13,6 +13,7 @@ from flask.ext.cors import CORS
 app = Flask(__name__)
 from views import views
 migrate = Migrate(app, db)
+db.init_app(app)
 cors = CORS(app)
 app.secret_key = 'super secret key'
 app.config.from_object('config')
@@ -22,7 +23,7 @@ manager.add_command('db', MigrateCommand)
 
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.ERROR)
-db.init_app(app)
+
 with app.app_context():
     AdminView(app, "Open Event").init()
 

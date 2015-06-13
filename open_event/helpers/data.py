@@ -16,7 +16,7 @@ class DataManager(object):
         new_track = Track(name=form.name.data,
                               description=form.description.data,
                               event_id=event_id)
-        new_track.session = InstrumentedList([form.description.data] if form.description.data else [])
+        new_track.session = form.session.data
         db.session.add(new_track)
         db.session.commit()
 

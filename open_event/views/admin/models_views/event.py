@@ -43,6 +43,11 @@ class EventView(ModelView):
         v = VersionUpdater(event_id=model.id, is_created=is_created, column_to_increment="event_ver")
         v.update()
 
+    @expose('/')
+    def index_view(self):
+        self._template_args['events'] = Event.query.all()
+        return super(EventView, self).index_view()
+
     @expose('/<event_id>')
     def event(self, event_id):
         events = Event.query.all()

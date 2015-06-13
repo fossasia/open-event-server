@@ -47,6 +47,16 @@
           {% block main_menu %}
           <ul class="nav navbar-nav">
             {{ layout.menu() }}
+            <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" aria-expanded="true">Switch event<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                {%for event in events%}
+                  <li>
+                    <a href="/admin/event/{{event.id}}">{{event.name}}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </li>
           </ul>
           {% endblock %}
 

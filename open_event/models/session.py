@@ -24,8 +24,7 @@ class Session(db.Model):
     end_time = db.Column(db.DateTime,
                          nullable=False)
     type = db.Column(db.String)
-    track_id = db.Column(db.Integer,
-                         db.ForeignKey('tracks.id'))
+    track = db.relationship('Track', uselist=False, backref='session')
     speakers = db.relationship('Speaker',
                                secondary=speakers_sessions,
                                backref=db.backref('sessions',
@@ -46,7 +45,6 @@ class Session(db.Model):
                  end_time=None,
                  type=None,
                  track=None,
-                 speakers=None,
                  level=None,
                  microlocation=None,
                  event_id=None):
@@ -57,8 +55,7 @@ class Session(db.Model):
         self.start_time = start_time
         self.end_time = end_time
         self.type = type
-        self.track_id = track
-        self.speakers = speakers
+        self.track = track
         self.level = level
         self.microlocation = microlocation
         self.event_id = event_id
