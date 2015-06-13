@@ -9,11 +9,14 @@ from ....models.track import Track
 from ....models.event import Event
 from ....models.session import Session
 from ....models.speaker import Speaker
+from ....models.sponsor import Sponsor
+from ....models.microlocation import Microlocation
 from ....models import db
 from flask import flash
 from ....helpers.query_filter import QueryFilter
 from open_event.forms.admin.session_form import SessionForm
 from open_event.forms.admin.speaker_form import SpeakerForm
+from open_event.forms.admin.sponsor_form import SponsorForm
 from sqlalchemy.orm.collections import InstrumentedList
 from ....helpers.data import DataManager
 
@@ -137,3 +140,65 @@ class EventView(ModelView):
     def event_speaker_delete(self, event_id, speaker_id):
         DataManager.remove_speaker(speaker_id)
         return redirect(url_for('.event_speakers', event_id=event_id))
+
+    @expose('/<event_id>/sponsor')
+    def event_sponsors(self, event_id):
+        sponsors = Sponsor.query.filter_by(event_id=event_id)
+        events = Event.query.all()
+        return self.render('admin/model/sponsor/list.html', objects=sponsors, event_id=event_id, events=events)
+
+    @expose('/<event_id>/sponsor/new', methods=('GET', 'POST'))
+    def event_sponsor_new(self, event_id):
+        events = Event.query.all()
+        form = SponsorForm()
+        if form.validate():
+            DataManager.create_sponsor(form, event_id)
+            return redirect(url_for('.event_sponsors', event_id=event_id))
+        return self.render('admin/model/sponsor/create.html',form=form, event_id=event_id, events=events)
+
+    @expose('/<event_id>/sponsor/<sponsor_id>/edit', methods=('GET', 'POST'))
+    def event_sponsor_edit(self, event_id, sponsor_id):
+        sponsor = Sponsor.query.get(sponsor_id)
+        events = Event.query.all()
+        form = SponsorForm(obj=sponsor)
+        if form.validate():
+            DataManager.create_sponsor(form, event_id)
+            return redirect(url_for('.event_sponsors', event_id=event_id))
+        return self.render('admin/model/sponsor/create.html', form=form, event_id=event_id, events=events)
+
+    @expose('/<event_id>/sponsor/<sponsor_id>/delete', methods=('GET', 'POST'))
+    def event_sponsor_delete(self, event_id, sponsor_id):
+        DataManager.remove_sponsor(sponsor_id)
+        return redirect(url_for('.event_sponsors', event_id=event_id))
+
+    @expose('/<event_id>/microlocation')
+    def event_microlocations(self, event_id):
+        microlocations = Microlocation.query.filter_by(event_id=event_id)
+        events = Event.query.all()
+        return self.render('admin/model/microlocation/list.html', objects=microlocations, event_id=event_id, events=events)
+
+    @expose('/<event_id>/microlocation/new', methods=('GET', 'POST'))
+    def event_microlocation_new(self, event_id):
+        events = Event.query.all()
+        from open_event.forms.admin.microlocation_form import MicrolocationForm
+        form = MicrolocationForm()
+        if form.validate():
+            DataManager.create_microlocation(form, event_id)
+            return redirect(url_for('.event_microlocations', event_id=event_id))
+        return self.render('admin/model/microlocation/create.html',form=form, event_id=event_id, events=events)
+
+    @expose('/<event_id>/microlocation/<microlocation_id>/edit', methods=('GET', 'POST'))
+    def event_microlocation_edit(self, event_id, microlocation_id):
+        microlocation = Microlocation.query.get(microlocation_id)
+        events = Event.query.all()
+        from open_event.forms.admin.microlocation_form import MicrolocationForm
+        form = MicrolocationForm(obj=microlocation)
+        if form.validate():
+            DataManager.create_microlocation(form, event_id)
+            return redirect(url_for('.event_microlocations', event_id=event_id))
+        return self.render('admin/model/microlocation/create.html', form=form, event_id=event_id, events=events)
+
+    @expose('/<event_id>/microlocation/<microlocation_id>/delete', methods=('GET', 'POST'))
+    def event_microlocation_delete(self, event_id, microlocation_id):
+        DataManager.remove_microlocation(microlocation_id)
+        return redirect(url_for('.event_microlocations', event_id=event_id))

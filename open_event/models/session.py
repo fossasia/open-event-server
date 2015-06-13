@@ -58,7 +58,7 @@ class Session(db.Model):
         self.end_time = end_time
         self.type = type
         self.track_id = track
-        self.speakers = [speakers]
+        self.speakers = speakers
         self.level = level
         self.microlocation = microlocation
         self.event_id = event_id
@@ -81,3 +81,5 @@ class Session(db.Model):
 
     def __repr__(self):
         return '<Session %r>' % (self.title)
+
+
