@@ -1,7 +1,6 @@
 """Written by - Rafal Kowalski"""
 from .. import app
-from flask import jsonify, url_for
-from flask import request, render_template
+from flask import jsonify, url_for, redirect, request
 from flask.ext.cors import cross_origin
 
 from ..models.track import Track
@@ -16,6 +15,12 @@ from ..helpers.object_formatter import ObjectFormatter
 # @app.errorhandler(404)
 # def not_found(error):
 #     return render_template('404.html'), 404
+
+
+@app.route('/', methods=['GET'])
+@cross_origin()
+def get_admin():
+    return redirect(url_for('.admin.index'))
 
 
 @app.route('/get/api/v1/event', methods=['GET'])

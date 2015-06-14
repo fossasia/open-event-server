@@ -1,7 +1,13 @@
 {% extends 'admin/base1.html' %}
 
 {% block body %}
-    <a href="{{ get_url('event.event_microlocation_new', event_id=event_id )}}">Add microlocation</a>
+
+    <h2>Microlocation
+        <a href="{{ get_url('event.event_microlocation_new', event_id=event_id )}}" class="btn btn-primary" style="margin:5px">
+            Add New <i class="glyphicon glyphicon-plus" aria-hidden="true" style="margin-right:5px"></i>
+        </a>
+    </h2>
+
     <div class="table-responsive">
         <table class="table table-condensed" id="table-list">
             <thead>
@@ -21,6 +27,7 @@
                     <tr>
                         <td>{{microlocation.id}}</td>
                         <td>{{microlocation.name}}</td>
+                        <td>{{microlocation.url}}</td>
                         <td>{{microlocation.latitude}}</td>
                         <td>{{microlocation.longitude}}</td>
                         <td>{{microlocation.floor}}</td>
@@ -38,11 +45,13 @@
             </tbody>
         </table>
     </div>
+
 {% endblock %}
 
 {% block tail %}
-    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css">
     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>
     <script language="javascript">
         (function($) {
             $(document).ready(function() {

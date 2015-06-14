@@ -11,13 +11,9 @@ from ....models.session import Session
 from ....models.speaker import Speaker
 from ....models.sponsor import Sponsor
 from ....models.microlocation import Microlocation
-from ....models import db
-from flask import flash
-from ....helpers.query_filter import QueryFilter
 from open_event.forms.admin.session_form import SessionForm
 from open_event.forms.admin.speaker_form import SpeakerForm
 from open_event.forms.admin.sponsor_form import SponsorForm
-from sqlalchemy.orm.collections import InstrumentedList
 from ....helpers.data import DataManager
 
 class EventView(ModelView):
@@ -48,10 +44,20 @@ class EventView(ModelView):
         self._template_args['events'] = Event.query.all()
         return super(EventView, self).index_view()
 
+    @expose('/new/', methods=('GET', 'POST'))
+    def create_view(self):
+        self._template_args['events'] = Event.query.all()
+        return super(EventView, self).create_view()
+
+    @expose('/edit/', methods=('GET', 'POST'))
+    def edit_view(self):
+        self._template_args['events'] = Event.query.all()
+        return super(EventView, self).edit_view()
+
     @expose('/<event_id>')
     def event(self, event_id):
         events = Event.query.all()
-        return self.render('admin/model/track/list1.html', event_id=event_id, events=events)
+        return self.render('admin/base1.html', event_id=event_id, events=events)
 
     @expose('/<event_id>/track')
     def event_tracks(self, event_id):
@@ -99,7 +105,7 @@ class EventView(ModelView):
         if form.validate():
             DataManager.create_session(form, event_id)
             return redirect(url_for('.event_sessions', event_id=event_id))
-        return self.render('admin/model/track/create1.html',form=form, event_id=event_id, events=events)
+        return self.render('admin/model/session/create.html',form=form, event_id=event_id, events=events)
 
     @expose('/<event_id>/session/<session_id>/edit', methods=('GET', 'POST'))
     def event_session_edit(self, event_id, session_id):
@@ -113,7 +119,7 @@ class EventView(ModelView):
 
     @expose('/<event_id>/session/<session_id>/delete', methods=('GET', 'POST'))
     def event_session_delete(self, event_id, session_id):
-        DataManager.remove_track(session_id)
+        DataManager.remove_session(session_id)
         return redirect(url_for('.event_sessions', event_id=event_id))
 
     @expose('/<event_id>/speaker')

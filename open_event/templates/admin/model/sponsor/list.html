@@ -1,7 +1,12 @@
 {% extends 'admin/base1.html' %}
 
 {% block body %}
-    <a href="{{ get_url('event.event_sponsor_new', event_id=event_id )}}">Add Sponsor</a>
+    <h2>Sponsor
+        <a href="{{ get_url('event.event_sponsor_new', event_id=event_id )}}" class="btn btn-primary" style="margin:5px">
+            Add New <i class="glyphicon glyphicon-plus" aria-hidden="true" style="margin-right:5px"></i>
+        </a>
+    </h2>
+
     <div class="table-responsive">
         <table class="table table-condensed" id="table-list">
             <thead>

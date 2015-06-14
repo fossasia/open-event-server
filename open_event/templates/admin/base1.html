@@ -39,7 +39,7 @@
 	    <span class="icon-bar"></span>
 	  </button>
 	  {% block brand %}
-	  <a class="navbar-brand" href="#">{{ admin_view.admin.name }}</a>
+	  <a class="navbar-brand" href="{{get_url('admin.index')}}">{{ admin_view.admin.name }}</a>
 	  {% endblock %}
 	</div>
 	<!-- navbar content -->
@@ -47,12 +47,14 @@
           {% block main_menu %}
           <ul class="nav navbar-nav">
             <!-- Main menu-->
+            {% if event_id %}
             <li><a href="/admin/event/{{event_id}}/sponsor">Sponsor</a><li>
             <li><a href="/admin/event/{{event_id}}/speaker">Speaker</a><li>
             <li><a href="/admin/event/{{event_id}}/session">Session</a><li>
             <li><a href="/admin/event/{{event_id}}/track">Track</a><li>
             <li><a href="/admin/event/{{event_id}}/microlocation">Microlocation</a><li>
-            <li><a href="#">Api</a><li>
+            <li><a href="{{ get_url('apiview.index') }}">Api</a><li>
+            {% endif %}
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" aria-expanded="true">Switch event<b class="caret"></b></a>
               <ul class="dropdown-menu">
@@ -61,6 +63,9 @@
                     <a href="/admin/event/{{event.id}}">{{event.name}}</a>
                   </li>
                 {% endfor %}
+                <li class="divider"></li>
+                <li><a href="{{ get_url('event.create_view')}}"><i class="glyphicon glyphicon-plus" aria-hidden="true" style="margin-right:5px"></i>Add new event</a></li>
+                <li><a href="{{ get_url('event.index_view')}}"><i class="glyphicon glyphicon-th-list" aria-hidden="true" style="margin-right:5px"></i>List of events</a></li>
               </ul>
             </li>
             <!-- end Main menu -->
