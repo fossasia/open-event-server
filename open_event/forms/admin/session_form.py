@@ -1,10 +1,15 @@
+"""Written by - Rafal Kowalski"""
 from flask_wtf import Form
 from wtforms import StringField, TextAreaField
 from open_event.models.speaker import Speaker
 from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField
 from flask.ext.admin.form.fields import DateTimeField
+from ...helpers.helpers import get_event_id
+
+
 def get_speakers():
-    return Speaker.query.all()
+    return Speaker.query.filter_by(event_id=get_event_id())
+
 
 class SessionForm(Form):
     title = StringField('Title')
