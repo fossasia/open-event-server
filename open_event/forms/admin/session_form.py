@@ -1,8 +1,8 @@
 from flask_wtf import Form
-from wtforms import StringField, DateTimeField, TextAreaField
+from wtforms import StringField, TextAreaField
 from open_event.models.speaker import Speaker
 from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField
-
+from flask.ext.admin.form.fields import DateTimeField
 def get_speakers():
     return Speaker.query.all()
 

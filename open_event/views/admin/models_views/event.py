@@ -143,7 +143,7 @@ class EventView(ModelView):
         events = Event.query.all()
         form = SpeakerForm(obj=speaker)
         if form.validate():
-            DataManager.create_speaker(form, event_id)
+            DataManager.update_speaker(form, speaker)
             return redirect(url_for('.event_speakers', event_id=event_id))
         return self.render('admin/model/speaker/create.html', form=form, event_id=event_id, events=events)
 
@@ -173,7 +173,7 @@ class EventView(ModelView):
         events = Event.query.all()
         form = SponsorForm(obj=sponsor)
         if form.validate():
-            DataManager.create_sponsor(form, event_id)
+            DataManager.update_sponsor(form, sponsor)
             return redirect(url_for('.event_sponsors', event_id=event_id))
         return self.render('admin/model/sponsor/create.html', form=form, event_id=event_id, events=events)
 
@@ -205,7 +205,7 @@ class EventView(ModelView):
         from open_event.forms.admin.microlocation_form import MicrolocationForm
         form = MicrolocationForm(obj=microlocation)
         if form.validate():
-            DataManager.create_microlocation(form, event_id)
+            DataManager.update_microlocation(form, microlocation)
             return redirect(url_for('.event_microlocations', event_id=event_id))
         return self.render('admin/model/microlocation/create.html', form=form, event_id=event_id, events=events)
 

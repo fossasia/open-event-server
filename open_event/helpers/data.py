@@ -161,7 +161,10 @@ class DataManager(object):
     @staticmethod
     def update_microlocation(form, microlocation):
         data = form.data
+        session = data["session"]
+        del data["session"]
         db.session.query(Microlocation).filter_by(id=microlocation.id).update(dict(data))
+        microlocation.session = session
         db.session.add(microlocation)
         db.session.commit()
         update_version(microlocation.event_id, False, "microlocations_ver")
