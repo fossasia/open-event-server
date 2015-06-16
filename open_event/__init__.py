@@ -1,14 +1,16 @@
-"""Written by - Rafal Kowalski"""
+"""Copyright 2015 Rafal Kowalski"""
 import sys
 import logging
 
 from flask import Flask, render_template, jsonify, url_for
 from flask.ext.migrate import Migrate, MigrateCommand
 from flask.ext.script import Manager
-from open_event.models import db
-import open_event.models.event_listeners
-from open_event.views.admin.admin import AdminView
 from flask.ext.cors import CORS
+
+import open_event.models.event_listeners
+from open_event.models import db
+from open_event.views.admin.admin import AdminView
+
 
 app = Flask(__name__)
 from views import views

@@ -1,7 +1,8 @@
-"""Written by - Rafal Kowalski"""
+"""Copyright 2015 Rafal Kowalski"""
 from . import db
 from .track import Track
 from open_event.helpers.date_formatter import DateFormatter
+
 
 speakers_sessions = db.Table('speakers_sessions',
                     db.Column('speaker_id',

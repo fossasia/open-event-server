@@ -1,7 +1,9 @@
-"""Written by - Rafal Kowalski"""
+"""Copyright 2015 Rafal Kowalski"""
 import datetime
 import unittest
-from setup import Setup
+
+from setup_database import Setup
+
 from open_event import app
 from open_event.models import db
 from open_event.models.session import Session

@@ -1,1 +1,1 @@
-__author__ = 'rafal'
+"""Copyright 2015 Rafal Kowalski"""

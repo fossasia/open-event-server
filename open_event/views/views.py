@@ -1,4 +1,4 @@
-"""Written by - Rafal Kowalski"""
+"""Copyright 2015 Rafal Kowalski"""
 from .. import app
 from flask import jsonify, url_for, redirect, request
 from flask.ext.cors import cross_origin

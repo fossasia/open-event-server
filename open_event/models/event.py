@@ -1,6 +1,6 @@
-"""Written by - Rafal Kowalski"""
-from . import db
+"""Copyright 2015 Rafal Kowalski"""
 from open_event.helpers.date_formatter import DateFormatter
+from . import db
 
 
 class Event(db.Model):
@@ -31,7 +31,6 @@ class Event(db.Model):
                               backref="event")
     sponsor = db.relationship('Sponsor',
                               backref="event")
-
 
     def __init__(self,
                  name=None,

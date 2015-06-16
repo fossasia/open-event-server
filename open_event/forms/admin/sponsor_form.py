@@ -1,3 +1,4 @@
+"""Copyright 2015 Rafal Kowalski"""
 from flask_wtf import Form
 from wtforms import StringField
 

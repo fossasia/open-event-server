@@ -1,6 +1,7 @@
-"""Written by - Rafal Kowalski"""
-from open_event import manager
+"""Copyright 2015 Rafal Kowalski"""
 from flask import url_for
+
+from open_event import manager
 from open_event import app
 
 @manager.command

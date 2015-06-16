@@ -1,8 +1,9 @@
-"""Written by - Rafal Kowalski"""
+"""Copyright 2015 Rafal Kowalski"""
 from flask_wtf import Form
-from wtforms import StringField, FloatField, TextAreaField
-from open_event.models.session import Session
+from wtforms import StringField, FloatField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
+
+from open_event.models.session import Session
 from ...helpers.helpers import get_event_id
 
 

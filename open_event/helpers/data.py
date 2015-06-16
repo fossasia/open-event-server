@@ -1,5 +1,6 @@
-"""Written by - Rafal Kowalski"""
+"""Copyright 2015 Rafal Kowalski"""
 from sqlalchemy.orm.collections import InstrumentedList
+from flask import flash
 
 from ..models import db
 from ..models.track import Track
@@ -8,17 +9,19 @@ from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
 from ..helpers.update_version import VersionUpdater
-from flask import flash
+
 
 def update_version(event_id, is_created, column_to_increment):
-    VersionUpdater(event_id=event_id, is_created=is_created, column_to_increment=column_to_increment).update()
+    VersionUpdater(event_id=event_id,
+                   is_created=is_created,
+                   column_to_increment=column_to_increment).update()
 
 class DataManager(object):
     @staticmethod
     def create_track(form, event_id):
         new_track = Track(name=form.name.data,
-                              description=form.description.data,
-                              event_id=event_id)
+                          description=form.description.data,
+                          event_id=event_id)
         new_track.session = form.session.data
         db.session.add(new_track)
         db.session.commit()
@@ -28,7 +31,9 @@ class DataManager(object):
     def update_track(form, track):
         data = form.data
         del data['session']
-        db.session.query(Track).filter_by(id=track.id).update(dict(data))
+        db.session.query(Track)\
+            .filter_by(id=track.id)\
+            .update(dict(data))
         track.session = form.session.data
         db.session.add(track)
         db.session.commit()
@@ -44,14 +49,14 @@ class DataManager(object):
     @staticmethod
     def create_session(form, event_id):
         new_session = Session(title=form.title.data,
-                                  subtitle=form.subtitle.data,
-                                  description=form.description.data,
-                                  start_time=form.start_time.data,
-                                  end_time=form.end_time.data,
-                                  event_id=event_id,
-                                  abstract=form.abstract.data,
-                                  type=form.type.data,
-                                  level=form.level.data)
+                              subtitle=form.subtitle.data,
+                              description=form.description.data,
+                              start_time=form.start_time.data,
+                              end_time=form.end_time.data,
+                              event_id=event_id,
+                              abstract=form.abstract.data,
+                              type=form.type.data,
+                              level=form.level.data)
         new_session.speakers = InstrumentedList(form.speakers.data if form.speakers.data else [])
         db.session.add(new_session)
         db.session.commit()
@@ -62,7 +67,9 @@ class DataManager(object):
         data = form.data
         speakers = data["speakers"]
         del data["speakers"]
-        db.session.query(Session).filter_by(id=session.id).update(dict(data))
+        db.session.query(Session)\
+            .filter_by(id=session.id)\
+            .update(dict(data))
         session.speakers = InstrumentedList(speakers if speakers else [])
         db.session.add(session)
         db.session.commit()
@@ -97,18 +104,11 @@ class DataManager(object):
 
     @staticmethod
     def update_speaker(form, speaker):
-        speaker.name=form.name.data
-        speaker.photo=form.photo.data
-        speaker.biography=form.biography.data
-        speaker.email=form.email.data
-        speaker.web=form.web.data
-        speaker.twitter=form.twitter.data
-        speaker.facebook=form.facebook.data
-        speaker.github=form.github.data
-        speaker.linkedin=form.linkedin.data
-        speaker.organisation=form.organisation.data
-        speaker.position=form.position.data
-        speaker.country=form.country.data
+        data = form.data
+        del data['sessions']
+        db.session.query(Speaker)\
+            .filter_by(id=speaker.id)\
+            .update(dict(data))
         speaker.sessions = InstrumentedList(form.sessions.data if form.sessions.data else [])
         db.session.add(speaker)
         db.session.commit()
@@ -163,7 +163,9 @@ class DataManager(object):
         data = form.data
         session = data["session"]
         del data["session"]
-        db.session.query(Microlocation).filter_by(id=microlocation.id).update(dict(data))
+        db.session.query(Microlocation)\
+            .filter_by(id=microlocation.id)\
+            .update(dict(data))
         microlocation.session = session
         db.session.add(microlocation)
         db.session.commit()
@@ -175,4 +177,3 @@ class DataManager(object):
         db.session.delete(microlocation)
         db.session.commit()
         flash('You successfully delete microlocation')
-

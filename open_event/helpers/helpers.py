@@ -1,9 +1,10 @@
-"""Written by - Rafal Kowalski"""
-from flask import request
+"""Copyright 2015 Rafal Kowalski"""
 import re
+from flask import request
+
 
 
 def get_event_id():
     url = request.url
-    m = re.search('event\/[0-9]*', url)
-    return m.group(0).split('/')[1]
+    result = re.search('event\/[0-9]*', url)
+    return result.group(0).split('/')[1]

@@ -1,11 +1,12 @@
-"""Written by - Rafal Kowalski"""
+"""Copyright 2015 Rafal Kowalski"""
 from flask.ext.admin import Admin
+from flask.ext.admin.base import AdminIndexView
+from flask.ext.admin import expose
+
 from open_event.models import db
 from open_event.models.event import Event
 from open_event.views.admin.models_views.event import EventView
 from open_event.views.admin.models_views.api import ApiView
-from flask.ext.admin.base import AdminIndexView
-from flask.ext.admin import expose
 
 
 class MyHomeView(AdminIndexView):

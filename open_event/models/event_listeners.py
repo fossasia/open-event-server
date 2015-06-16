@@ -1,7 +1,8 @@
-"""Written by - Rafal Kowalski"""
+"""Copyright 2015 Rafal Kowalski"""
+from sqlalchemy.event import listens_for
+
 from .event import Event
 from .version import Version
-from sqlalchemy.event import listens_for
 
 
 @listens_for(Event, "after_insert")

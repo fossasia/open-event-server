@@ -1,4 +1,4 @@
-"""Written by - Rafal Kowalski"""
+"""Copyright 2015 Rafal Kowalski"""
 from open_event import app
 from open_event.models import db
 
