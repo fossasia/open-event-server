@@ -1,4 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
+import logging
+
 from sqlalchemy.orm.collections import InstrumentedList
 from flask import flash
 
@@ -11,43 +13,55 @@ from ..models.microlocation import Microlocation
 from ..helpers.update_version import VersionUpdater
 
 
-def update_version(event_id, is_created, column_to_increment):
-    VersionUpdater(event_id=event_id,
-                   is_created=is_created,
-                   column_to_increment=column_to_increment).update()
-
 class DataManager(object):
+    """Main class responsible for DataBase managing"""
     @staticmethod
     def create_track(form, event_id):
+        """
+        Track will be saved to database with proper Event id
+        :param form: view data form
+        :param event_id: Track belongs to Event by event id
+        """
         new_track = Track(name=form.name.data,
                           description=form.description.data,
                           event_id=event_id)
         new_track.session = form.session.data
-        db.session.add(new_track)
-        db.session.commit()
+        save_to_db(new_track, "Track saved")
         update_version(event_id, True, "tracks_ver")
 
     @staticmethod
     def update_track(form, track):
+        """
+        Track will be updated in database
+        :param form: view data form
+        :param track: object contains all earlier data
+        """
         data = form.data
         del data['session']
         db.session.query(Track)\
             .filter_by(id=track.id)\
             .update(dict(data))
         track.session = form.session.data
-        db.session.add(track)
-        db.session.commit()
+        save_to_db(track, "Track updated")
         update_version(track.event_id, False,"tracks_ver")
 
     @staticmethod
     def remove_track(track_id):
+        """
+        Track will be removed from database
+        :param track_id: Track id to remove object
+        """
         track = Track.query.get(track_id)
-        db.session.delete(track)
-        db.session.commit()
-        flash('You successfully delete track')
+        delete_from_db(track, "Track deleted")
+        flash('You successfully deleted track')
 
     @staticmethod
     def create_session(form, event_id):
+        """
+        Session will be saved to database with proper Event id
+        :param form: view data form
+        :param event_id: Session belongs to Event by event id
+        """
         new_session = Session(title=form.title.data,
                               subtitle=form.subtitle.data,
                               description=form.description.data,
@@ -58,12 +72,16 @@ class DataManager(object):
                               type=form.type.data,
                               level=form.level.data)
         new_session.speakers = InstrumentedList(form.speakers.data if form.speakers.data else [])
-        db.session.add(new_session)
-        db.session.commit()
+        save_to_db(new_session, "Session saved")
         update_version(event_id, True, "session_ver")
 
     @staticmethod
     def update_session(form, session):
+        """
+        Session will be updated in database
+        :param form: view data form
+        :param session: object contains all earlier data
+        """
         data = form.data
         speakers = data["speakers"]
         del data["speakers"]
@@ -71,19 +89,26 @@ class DataManager(object):
             .filter_by(id=session.id)\
             .update(dict(data))
         session.speakers = InstrumentedList(speakers if speakers else [])
-        db.session.add(session)
-        db.session.commit()
+        save_to_db(session, "Session updated")
         update_version(session.event_id, False, "session_ver")
 
     @staticmethod
     def remove_session(session_id):
+        """
+        Session will be removed from database
+        :param session_id: Session id to remove object
+        """
         session = Session.query.get(session_id)
-        db.session.delete(session)
-        db.session.commit()
+        delete_from_db(session, "Session deleted")
         flash('You successfully delete session')
 
     @staticmethod
     def create_speaker(form, event_id):
+        """
+        Speaker will be saved to database with proper Event id
+        :param form: view data form
+        :param event_id: Speaker belongs to Event by event id
+        """
         new_speaker = Speaker(name=form.name.data,
                               photo=form.photo.data,
                               biography=form.biography.data,
@@ -98,68 +123,94 @@ class DataManager(object):
                               position=form.position.data,
                               country=form.country.data)
         new_speaker.sessions = InstrumentedList(form.sessions.data if form.sessions.data else [])
-        db.session.add(new_speaker)
-        db.session.commit()
+        save_to_db(new_speaker, "Speaker saved")
         update_version(event_id, True, "speakers_ver")
 
     @staticmethod
     def update_speaker(form, speaker):
+        """
+        Speaker will be updated in database
+        :param form: view data form
+        :param speaker: object contains all earlier data
+        """
         data = form.data
         del data['sessions']
         db.session.query(Speaker)\
             .filter_by(id=speaker.id)\
             .update(dict(data))
         speaker.sessions = InstrumentedList(form.sessions.data if form.sessions.data else [])
-        db.session.add(speaker)
-        db.session.commit()
+        save_to_db(speaker, "Speaker updated")
         update_version(speaker.event_id, False, "speakers_ver")
 
     @staticmethod
     def remove_speaker(speaker_id):
+        """
+        Speaker will be removed from database
+        :param speaker_id: Speaker id to remove object
+        """
         speaker = Speaker.query.get(speaker_id)
-        db.session.delete(speaker)
-        db.session.commit()
+        delete_from_db(speaker, "Speaker deleted")
         flash('You successfully delete speaker')
 
     @staticmethod
     def create_sponsor(form, event_id):
+        """
+        Sponsor will be saved to database with proper Event id
+        :param form: view data form
+        :param event_id: Sponsor belongs to Event by event id
+        """
         new_sponsor = Sponsor(name=form.name.data,
                               url=form.url.data,
                               event_id=event_id,
                               logo=form.logo.data)
-        db.session.add(new_sponsor)
-        db.session.commit()
+        save_to_db(new_sponsor, "Sponsor saved")
         update_version(event_id, True, "sponsors_ver")
 
     @staticmethod
     def update_sponsor(form, sponsor):
+        """
+        Sponsor will be updated in database
+        :param form: view data form
+        :param sponsor: object contains all earlier data
+        """
         data = form.data
         db.session.query(Sponsor).filter_by(id=sponsor.id).update(dict(data))
-        db.session.add(sponsor)
-        db.session.commit()
+        save_to_db(sponsor, "Sponsor updated")
         update_version(sponsor.event_id, False, "sponsors_ver")
 
     @staticmethod
     def remove_sponsor(sponsor_id):
+        """
+        Sponsor will be removed from database
+        :param sponsor_id: Sponsor id to remove object
+        """
         sponsor = Sponsor.query.get(sponsor_id)
-        db.session.delete(sponsor)
-        db.session.commit()
+        delete_from_db(sponsor, "Sponsor deleted")
         flash('You successfully delete sponsor')
 
     @staticmethod
     def create_microlocation(form, event_id):
+        """
+        Microlocation will be saved to database with proper Event id
+        :param form: view data form
+        :param event_id: Microlocation belongs to Event by event id
+        """
         new_microlocation = Microlocation(name=form.name.data,
                                           latitude=form.latitude.data,
                                           longitude=form.longitude.data,
                                           floor=form.floor.data,
                                           event_id=event_id)
         new_microlocation.session = form.session.data
-        db.session.add(new_microlocation)
-        db.session.commit()
+        save_to_db(new_microlocation, "Microlocation saved")
         update_version(event_id, True, "microlocations_ver")
 
     @staticmethod
     def update_microlocation(form, microlocation):
+        """
+        Microlocation will be updated in database
+        :param form: view data form
+        :param microlocation: object contains all earlier data
+        """
         data = form.data
         session = data["session"]
         del data["session"]
@@ -167,13 +218,60 @@ class DataManager(object):
             .filter_by(id=microlocation.id)\
             .update(dict(data))
         microlocation.session = session
-        db.session.add(microlocation)
-        db.session.commit()
+        save_to_db(microlocation, "Microlocation updated")
         update_version(microlocation.event_id, False, "microlocations_ver")
 
     @staticmethod
     def remove_microlocation(microlocation_id):
+        """
+        Microlocation will be removed from database
+        :param microlocation_id: Sponsor id to remove object
+        """
         microlocation = Microlocation.query.get(microlocation_id)
-        db.session.delete(microlocation)
-        db.session.commit()
+        delete_from_db(microlocation, "Microlocation deleted")
         flash('You successfully delete microlocation')
+
+
+def save_to_db(item, msg):
+    """Convenience function to wrap a proper DB save
+    :param item: will be saved to database
+    :param msg: Message to log
+    """
+    try:
+        logging.info(msg)
+        db.session.add(item)
+        logging.info('added to session')
+        db.session.commit()
+        return True
+    except Exception, e:
+        logging.error('DB Exception! %s' % e )
+        db.session.rollback()
+        return False
+
+
+def delete_from_db(item, msg):
+    """Convenience function to wrap a proper DB delete
+    :param item: will be removed from database
+    :param msg: Message to log
+    """
+    try:
+        logging.info(msg)
+        db.session.delete(item)
+        logging.info('removed from session')
+        db.session.commit()
+        return True
+    except Exception, e:
+        logging.error('DB Exception! %s' % e )
+        db.session.rollback()
+        return False
+
+
+def update_version(event_id, is_created, column_to_increment):
+    """Function resposnible for increasing version when some data will be created or changed
+    :param event_id: Event id
+    :param is_created: Object exist True/False
+    :param column_to_increment: which column should be increment
+    """
+    VersionUpdater(event_id=event_id,
+                   is_created=is_created,
+                   column_to_increment=column_to_increment).update()
