@@ -1,1 +1,1 @@
-"""Written by - Rafal Kowalski"""
+"""Copyright 2015 Rafal Kowalski"""

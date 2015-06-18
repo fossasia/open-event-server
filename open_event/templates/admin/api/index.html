@@ -1,18 +1,15 @@
-{% extends 'admin/master.html' %}
+{% extends 'admin/base1.html' %}
 {% block body %}
 
 <div class="list-group">
-
     <a href="{{ url_for('get_events') }}" class="list-group-item">
          <h4 class="list-group-item-heading">Events</h4>
          <p class="list-group-item-text">Shows all events in json format</p>
     </a>
-
     <a href="{{ url_for('get_versions') }}" class="list-group-item">
          <h4 class="list-group-item-heading">Versions</h4>
          <p class="list-group-item-text">Shows all versions in json format</p>
     </a>
-
 </div>
 
 {% endblock %}

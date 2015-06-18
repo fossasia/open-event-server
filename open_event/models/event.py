@@ -1,6 +1,6 @@
-"""Written by - Rafal Kowalski"""
-from . import db
+"""Copyright 2015 Rafal Kowalski"""
 from open_event.helpers.date_formatter import DateFormatter
+from . import db
 
 
 class Event(db.Model):
@@ -19,6 +19,8 @@ class Event(db.Model):
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     location_name = db.Column(db.String)
+    slogan = db.Column(db.String)
+    url = db.Column(db.String)
     track = db.relationship('Track',
                             backref="event")
     microlocation = db.relationship('Microlocation',
@@ -39,7 +41,9 @@ class Event(db.Model):
                  longitude=None,
                  location_name=None,
                  email=None,
-                 color=None):
+                 color=None,
+                 slogan=None,
+                 url=None):
         self.name = name
         self.logo = logo
         self.email = email
@@ -49,6 +53,8 @@ class Event(db.Model):
         self.latitude = latitude
         self.longitude = longitude
         self.location_name = location_name
+        self.slogan = slogan
+        self.url = url
 
     def __repr__(self):
         return '<Event %r>' % (self.name)
@@ -67,4 +73,6 @@ class Event(db.Model):
                            'longitude': self.longitude,
                            'location_name': self.location_name,
                            'email': self.email,
-                           'color': self.color}]}
+                           'color': self.color,
+                           'slogan': self.slogan,
+                           'url': self.url}]}

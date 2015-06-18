@@ -1,4 +1,4 @@
-"""Written by - Rafal Kowalski"""
+"""Copyright 2015 Rafal Kowalski"""
 from . import db
 
 
@@ -7,13 +7,14 @@ class Track(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     description = db.Column(db.Text, nullable=False)
-    session = db.relationship("Session")
+    session_id = db.Column(db.Integer, db.ForeignKey('session.id'))
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
 
-    def __init__(self, name=None, description=None, event_id=None):
+    def __init__(self, name=None, description=None, event_id=None, session=None):
         self.name = name
         self.description = description
         self.event_id = event_id
+        self.session_id = session
 
     def __repr__(self):
         return '<Track %r>' % (self.name)

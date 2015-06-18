@@ -1,7 +1,6 @@
-"""Written by - Rafal Kowalski"""
+"""Copyright 2015 Rafal Kowalski"""
 from .. import app
-from flask import jsonify, url_for
-from flask import request
+from flask import jsonify, url_for, redirect, request
 from flask.ext.cors import cross_origin
 
 from ..models.track import Track
@@ -16,6 +15,12 @@ from ..helpers.object_formatter import ObjectFormatter
 # @app.errorhandler(404)
 # def not_found(error):
 #     return render_template('404.html'), 404
+
+
+@app.route('/', methods=['GET'])
+@cross_origin()
+def get_admin():
+    return redirect(url_for('.admin.index'))
 
 
 @app.route('/get/api/v1/event', methods=['GET'])
@@ -81,21 +86,3 @@ def get_event_version(event_id):
     if version:
         return jsonify(version.serialize)
     return jsonify({"version": []})
-
-
-@app.route("/site-map")
-def site_map():
-    links = []
-    for rule in app.url_map.iter_rules():
-        # Filter out rules we can't navigate to in a browser
-        # and rules that require parameters
-        if "GET" in rule.methods and has_no_empty_params(rule):
-            url = url_for(rule.endpoint)
-            links.append((url, rule.endpoint))
-    return str(links)
-
-
-def has_no_empty_params(rule):
-    defaults = rule.defaults if rule.defaults is not None else ()
-    arguments = rule.arguments if rule.arguments is not None else ()
-    return len(defaults) >= len(arguments)
