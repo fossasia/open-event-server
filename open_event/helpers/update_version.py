@@ -3,7 +3,6 @@ from ..models import db
 from ..models.version import Version
 
 
-
 class VersionUpdater(object):
     def __init__(self, is_created, event_id, column_to_increment):
         self.is_created = is_created

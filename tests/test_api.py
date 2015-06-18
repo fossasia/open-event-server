@@ -1,15 +1,11 @@
 """Copyright 2015 Rafal Kowalski"""
-import datetime
 import unittest
-import logging
 
 from setup_database import Setup
 
 from open_event import app
-from open_event.models import db
-from open_event.models.track import Track
-from open_event.models.event import Event
-
+from open_event.helpers.data import save_to_db
+from object_mother import ObjectMother
 
 class TestApi(unittest.TestCase):
 
@@ -23,15 +19,11 @@ class TestApi(unittest.TestCase):
         with self.assertRaises(Exception) as context:
             self.app.get('/get/api/v1/event/1')
         self.assertTrue(AttributeError, context.exception)
-        ev = Event(name="event1", start_time=datetime.datetime(2003, 8, 4, 12, 30, 45), end_time=datetime.datetime(2003, 8, 4, 12, 30, 45))
-        tr = Track(name="name", event_id=1, description="description")
-        with app.app_context():
-            db.session.add(ev)
-            db.session.add(tr)
-            try:
-                db.session.commit()
-            except Exception as error:
-                logging.error(error)
+        event = ObjectMother.get_event()
+        track = ObjectMother.get_track()
+        with app.test_request_context():
+            save_to_db(event, "Event saved")
+            save_to_db(track, "Track saved")
         self.assertEqual(self.app.get('/get/api/v1/event/1').status_code, 200)
         self.assertEqual(self.app.get('/get/api/v1/event/1/tracks').status_code, 200)
 
