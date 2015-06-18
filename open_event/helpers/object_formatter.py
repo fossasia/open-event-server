@@ -1,6 +1,7 @@
-"""Written by - Rafal Kowalski"""
-from .query_filter import QueryFilter
+"""Copyright 2015 Rafal Kowalski"""
 from flask import jsonify
+
+from .query_filter import QueryFilter
 
 
 class ObjectFormatter(object):

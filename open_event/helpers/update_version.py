@@ -1,6 +1,6 @@
-"""Written by - Rafal Kowalski"""
-from ..models.version import Version
+"""Copyright 2015 Rafal Kowalski"""
 from ..models import db
+from ..models.version import Version
 
 
 class VersionUpdater(object):

@@ -1,9 +1,10 @@
-"""Written by - Rafal Kowalski"""
+"""Copyright 2015 Rafal Kowalski"""
 from . import db
 from .track import Track
 from open_event.helpers.date_formatter import DateFormatter
 
-speakers = db.Table('speakers_sessions',
+
+speakers_sessions = db.Table('speakers_sessions',
                     db.Column('speaker_id',
                               db.Integer,
                               db.ForeignKey('speaker.id')),
@@ -24,10 +25,9 @@ class Session(db.Model):
     end_time = db.Column(db.DateTime,
                          nullable=False)
     type = db.Column(db.String)
-    track_id = db.Column(db.Integer,
-                         db.ForeignKey('tracks.id'))
+    track = db.relationship('Track', uselist=False, backref='session')
     speakers = db.relationship('Speaker',
-                               secondary=speakers,
+                               secondary=speakers_sessions,
                                backref=db.backref('sessions',
                                                   lazy='dynamic'))
     level = db.Column(db.String)
@@ -46,7 +46,6 @@ class Session(db.Model):
                  end_time=None,
                  type=None,
                  track=None,
-                 speakers=None,
                  level=None,
                  microlocation=None,
                  event_id=None):
@@ -57,8 +56,7 @@ class Session(db.Model):
         self.start_time = start_time
         self.end_time = end_time
         self.type = type
-        self.track_id = track
-        self.speakers = [speakers]
+        self.track = track
         self.level = level
         self.microlocation = microlocation
         self.event_id = event_id
@@ -81,3 +79,5 @@ class Session(db.Model):
 
     def __repr__(self):
         return '<Session %r>' % (self.title)
+
+
