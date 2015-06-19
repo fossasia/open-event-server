@@ -1,7 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 from flask_wtf import Form
 from wtforms import StringField
-from wtforms.validators import Length
+from wtforms.validators import Length, DataRequired
 from open_event.models.session import Session
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from ...helpers.helpers import get_event_id
@@ -12,6 +12,6 @@ def get_sessions():
 
 
 class TrackForm(Form):
-    name = StringField('Name', [Length(min=6, max=35)])
+    name = StringField('Name', [Length(min=6, max=35), DataRequired()])
     description = StringField('Description', [Length(min=4, max=25)])
     session = QuerySelectField(query_factory=get_sessions, allow_blank=True)

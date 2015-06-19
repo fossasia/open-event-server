@@ -95,7 +95,7 @@
     {% if direct_error %}
       <ul{% if direct_error %} class="input-errors"{% endif %}>
       {% for e in field.errors if e is string %}
-        <li>{{ e }}</li>
+        <p style="color:red; font-size: 11px">{{ e }}</p>
       {% endfor %}
       </ul>
     {% endif %}
