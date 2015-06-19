@@ -62,7 +62,7 @@ class Event(db.Model):
     @property
     def serialize(self):
         """Return object data in easily serializeable format"""
-        return {"events":[{'id': self.id,
+        return {'id': self.id,
                            'name': self.name,
                            'logo': self.logo,
                            'start_time':
@@ -75,4 +75,4 @@ class Event(db.Model):
                            'email': self.email,
                            'color': self.color,
                            'slogan': self.slogan,
-                           'url': self.url}]}
+                           'url': self.url}
