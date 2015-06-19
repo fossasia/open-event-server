@@ -13,5 +13,5 @@ def get_sessions():
 
 class TrackForm(Form):
     name = StringField('Name', [Length(min=6, max=35)])
-    description = StringField('Description', [Length(min=4, max=25)])
+    description = StringField('Description', [Length(min=4, max=300)])
     session = QuerySelectField(query_factory=get_sessions, allow_blank=True)
