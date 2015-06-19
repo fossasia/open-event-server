@@ -26,6 +26,7 @@ class DataManager(object):
                           description=form.description.data,
                           event_id=event_id)
         new_track.session = form.session.data
+        db.session.query(Session).filter_by(id=form.session.data.id).track=new_track.id
         save_to_db(new_track, "Track saved")
         update_version(event_id, True, "tracks_ver")
 
@@ -42,6 +43,7 @@ class DataManager(object):
             .filter_by(id=track.id)\
             .update(dict(data))
         track.session = form.session.data
+        db.session.query(Session).filter_by(id=form.session.data.id).track=track.id
         save_to_db(track, "Track updated")
         update_version(track.event_id, False,"tracks_ver")
 
