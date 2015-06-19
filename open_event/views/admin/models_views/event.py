@@ -64,6 +64,13 @@ class EventView(ModelView):
                            event_id=event_id,
                            events=events)
 
+    @expose('/<event_id>/event')
+    def event(self, event_id):
+        events = Event.query.all()
+        return self.render('admin/base1.html',
+                           event_id=event_id,
+                           events=events)
+
     @expose('/<event_id>/track')
     def event_tracks(self, event_id):
         tracks = Track.query.filter_by(event_id=event_id)

@@ -34,6 +34,11 @@ def get_events():
 def get_event_by_id(event_id):
     return jsonify(Event.query.get(event_id).serialize)
 
+@app.route('/get/api/v1/event/<event_id>/event', methods=['GET'])
+@cross_origin()
+def get_event_by_id(event_id):
+    return jsonify(Event.query.get(event_id).serialize)
+
 
 @app.route('/get/api/v1/event/<event_id>/sessions', methods=['GET'])
 @cross_origin()
