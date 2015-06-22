@@ -26,8 +26,9 @@ class DataManager(object):
                           description=form.description.data,
                           event_id=event_id)
         new_track.session = form.session.data
+        db.session.query(Session).filter_by(id=form.session.data).track=new_track.id
         save_to_db(new_track, "Track saved")
-        update_version(event_id, True, "tracks_ver")
+        update_version(event_id, False, "tracks_ver")
 
     @staticmethod
     def update_track(form, track):
@@ -42,6 +43,7 @@ class DataManager(object):
             .filter_by(id=track.id)\
             .update(dict(data))
         track.session = form.session.data
+        db.session.query(Session).filter_by(id=form.session.data).track=track.id
         save_to_db(track, "Track updated")
         update_version(track.event_id, False,"tracks_ver")
 
@@ -73,7 +75,7 @@ class DataManager(object):
                               level=form.level.data)
         new_session.speakers = InstrumentedList(form.speakers.data if form.speakers.data else [])
         save_to_db(new_session, "Session saved")
-        update_version(event_id, True, "session_ver")
+        update_version(event_id, False, "session_ver")
 
     @staticmethod
     def update_session(form, session):
@@ -124,7 +126,7 @@ class DataManager(object):
                               country=form.country.data)
         new_speaker.sessions = InstrumentedList(form.sessions.data if form.sessions.data else [])
         save_to_db(new_speaker, "Speaker saved")
-        update_version(event_id, True, "speakers_ver")
+        update_version(event_id, False, "speakers_ver")
 
     @staticmethod
     def update_speaker(form, speaker):
@@ -164,7 +166,7 @@ class DataManager(object):
                               event_id=event_id,
                               logo=form.logo.data)
         save_to_db(new_sponsor, "Sponsor saved")
-        update_version(event_id, True, "sponsors_ver")
+        update_version(event_id, False, "sponsors_ver")
 
     @staticmethod
     def update_sponsor(form, sponsor):
@@ -202,7 +204,7 @@ class DataManager(object):
                                           event_id=event_id)
         new_microlocation.session = form.session.data
         save_to_db(new_microlocation, "Microlocation saved")
-        update_version(event_id, True, "microlocations_ver")
+        update_version(event_id, False, "microlocations_ver")
 
     @staticmethod
     def update_microlocation(form, microlocation):
