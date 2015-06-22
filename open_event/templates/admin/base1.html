@@ -13,8 +13,14 @@
     {% endblock %}
     {% block head_css %}
         <link href="{{ admin_static.url(filename='bootstrap/bootstrap3/css/bootstrap.min.css') }}" rel="stylesheet">
-        <link href="{{ admin_static.url(filename='bootstrap/bootstrap3/css/bootstrap-theme.min.css') }}" rel="stylesheet">
-        <link href="{{ admin_static.url(filename='admin/css/bootstrap3/admin.css') }}" rel="stylesheet">
+        <link href="{{url_for('static', filename='admin/css/roboto.css')}}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='admin/css/material-fullpalette.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='admin/css/material-custom.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='admin/css/ripples.css') }}" rel="stylesheet">
+        <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        <script src="{{ url_for('static', filename='admin/js/material.min.js')}}"></script>
+
         <style>
         body {
             padding-top: 4px;
@@ -31,17 +37,17 @@
     <div class="container">
       <nav class="navbar navbar-default" role="navigation">
 	<!-- Brand and toggle get grouped for better mobile display -->
-	<div class="navbar-header">
-	  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#admin-navbar-collapse">
-	    <span class="sr-only">Toggle navigation</span>
-	    <span class="icon-bar"></span>
-	    <span class="icon-bar"></span>
-	    <span class="icon-bar"></span>
-	  </button>
-	  {% block brand %}
-	  <a class="navbar-brand" href="{{get_url('admin.index')}}">{{ admin_view.admin.name }}</a>
-	  {% endblock %}
-	</div>
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#admin-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          {% block brand %}
+          <a class="navbar-brand" href="{{get_url('admin.index')}}">{{ admin_view.admin.name }}</a>
+          {% endblock %}
+        </div>
 	<!-- navbar content -->
         <div class="collapse navbar-collapse" id="admin-navbar-collapse">
           {% block main_menu %}

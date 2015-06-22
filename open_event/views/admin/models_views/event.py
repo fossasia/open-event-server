@@ -81,7 +81,7 @@ class EventView(ModelView):
         if form.validate():
             DataManager.create_track(form, event_id)
             return redirect(url_for('.event_tracks', event_id=event_id))
-        return self.render('admin/model/track/create1.html',
+        return self.render('admin/model/create_model.html',
                            form=form,
                            event_id=event_id,
                            events=events)
@@ -96,7 +96,7 @@ class EventView(ModelView):
         if form.validate():
             DataManager.update_track(form, track)
             return redirect(url_for('.event_tracks', event_id=event_id))
-        return self.render('admin/model/track/create1.html',
+        return self.render('admin/model/create_model.html',
                            form=form,
                            event_id=event_id,
                            events=events)
@@ -123,7 +123,7 @@ class EventView(ModelView):
         if form.validate():
             DataManager.create_session(form, event_id)
             return redirect(url_for('.event_sessions', event_id=event_id))
-        return self.render('admin/model/session/create.html',
+        return self.render('admin/model/create_model.html',
                            form=form,
                            event_id=event_id,
                            events=events)
@@ -136,7 +136,7 @@ class EventView(ModelView):
         if form.validate():
             DataManager.update_session(form, session)
             return redirect(url_for('.event_sessions', event_id=event_id))
-        return self.render('admin/model/session/create.html',
+        return self.render('admin/model/create_model.html',
                            form=form,
                            event_id=event_id,
                            events=events)
@@ -163,7 +163,7 @@ class EventView(ModelView):
         if form.validate():
             DataManager.create_speaker(form, event_id)
             return redirect(url_for('.event_speakers', event_id=event_id))
-        return self.render('admin/model/speaker/create.html',
+        return self.render('admin/model/create_model.html',
                            form=form,
                            event_id=event_id,
                            events=events)
@@ -177,7 +177,7 @@ class EventView(ModelView):
             DataManager.update_speaker(form, speaker)
             return redirect(url_for('.event_speakers',
                                     event_id=event_id))
-        return self.render('admin/model/speaker/create.html',
+        return self.render('admin/model/create_model.html',
                            form=form, event_id=event_id,
                            events=events)
 
@@ -203,7 +203,7 @@ class EventView(ModelView):
         if form.validate():
             DataManager.create_sponsor(form, event_id)
             return redirect(url_for('.event_sponsors', event_id=event_id))
-        return self.render('admin/model/sponsor/create.html',
+        return self.render('admin/model/create_model.html',
                            form=form,
                            event_id=event_id,
                            events=events)
@@ -216,7 +216,7 @@ class EventView(ModelView):
         if form.validate():
             DataManager.update_sponsor(form, sponsor)
             return redirect(url_for('.event_sponsors', event_id=event_id))
-        return self.render('admin/model/sponsor/create.html',
+        return self.render('admin/model/create_model.html',
                            form=form,
                            event_id=event_id,
                            events=events)
@@ -244,7 +244,7 @@ class EventView(ModelView):
         if form.validate():
             DataManager.create_microlocation(form, event_id)
             return redirect(url_for('.event_microlocations', event_id=event_id))
-        return self.render('admin/model/microlocation/create.html',
+        return self.render('admin/model/create_model.html',
                            form=form,
                            event_id=event_id,
                            events=events)
@@ -258,7 +258,7 @@ class EventView(ModelView):
         if form.validate():
             DataManager.update_microlocation(form, microlocation)
             return redirect(url_for('.event_microlocations', event_id=event_id))
-        return self.render('admin/model/microlocation/create.html',
+        return self.render('admin/model/create_model.html',
                            form=form,
                            event_id=event_id,
                            events=events)

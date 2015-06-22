@@ -8,43 +8,43 @@
         </a>
     </h2>
 
-    <div class="table-responsive">
-        <table class="table table-condensed" id="table-list">
-            <thead>
+
+    <table class="table table-condensed" id="table-list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Url</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Floor</th>
+                <th>Session</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for microlocation in objects %}
                 <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Url</th>
-                    <th>Latitude</th>
-                    <th>Longitude</th>
-                    <th>Floor</th>
-                    <th>Session</th>
-                    <th></th>
+                    <td>{{microlocation.id}}</td>
+                    <td>{{microlocation.name}}</td>
+                    <td>{{microlocation.url}}</td>
+                    <td>{{microlocation.latitude}}</td>
+                    <td>{{microlocation.longitude}}</td>
+                    <td>{{microlocation.floor}}</td>
+                    <td>{{microlocation.session}}</td>
+                    <td>
+                        <a class="icon" href="{{ get_url('event.event_microlocation_edit', event_id=event_id, microlocation_id=microlocation.id )}}" title="Edit record">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </a>
+                        <a onclick="return confirm('Are you sure you want to delete this record?');" href="{{ get_url('event.event_microlocation_delete', event_id=event_id, microlocation_id=microlocation.id)}}" title="Delete record">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                {% for microlocation in objects %}
-                    <tr>
-                        <td>{{microlocation.id}}</td>
-                        <td>{{microlocation.name}}</td>
-                        <td>{{microlocation.url}}</td>
-                        <td>{{microlocation.latitude}}</td>
-                        <td>{{microlocation.longitude}}</td>
-                        <td>{{microlocation.floor}}</td>
-                        <td>{{microlocation.session}}</td>
-                        <td>
-                            <a class="icon" href="{{ get_url('event.event_microlocation_edit', event_id=event_id, microlocation_id=microlocation.id )}}" title="Edit record">
-                                <span class="glyphicon glyphicon-pencil"></span>
-                            </a>
-                            <a onclick="return confirm('Are you sure you want to delete this record?');" href="{{ get_url('event.event_microlocation_delete', event_id=event_id, microlocation_id=microlocation.id)}}" title="Delete record">
-                                <span class="glyphicon glyphicon-trash"></span>
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+            {% endfor %}
+        </tbody>
+    </table>
+
 
 {% endblock %}
 

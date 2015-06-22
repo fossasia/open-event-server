@@ -11,11 +11,12 @@
 {% endblock %}
 
 {% block body %}
-
-  {% call lib.form_tag(form) %}
-      {{ lib.render_form_fields(form, form_opts=form_opts) }}
-      {{ lib.render_form_buttons(return_url, extra()) }}
-  {% endcall %}
+    <div class="well bs-component">
+      {% call lib.form_tag(form) %}
+          {{ lib.render_form_fields(form, form_opts=form_opts) }}
+          {{ lib.render_form_buttons(return_url, extra()) }}
+      {% endcall %}
+    </div>
 {% endblock %}
 
 {% block tail %}
