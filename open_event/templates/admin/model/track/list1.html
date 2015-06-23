@@ -14,6 +14,7 @@
                 <th>Id</th>
                 <th>Name</th>
                 <th>Description</th>
+                <th>Image</th>
                 <th></th>
             </tr>
         </thead>
@@ -23,6 +24,7 @@
                     <td>{{track.id}}</td>
                     <td>{{track.name}}</td>
                     <td>{{track.description}}</td>
+                    <td>{{track.track_image_url}}</td>
                     <td>
                         <a class="icon" href="{{ get_url('event.event_track_edit', event_id=event_id, track_id=track.id )}}" title="Edit record">
                             <span class="glyphicon glyphicon-pencil"></span>
