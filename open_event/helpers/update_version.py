@@ -20,7 +20,9 @@ class VersionUpdater(object):
                 version = Version(event_id=self.event_id)
                 db.session.add(version)
                 db.session.commit()
-            self._create_new_version(previous_version)
+                self._create_new_version(version)
+            else:
+                self._create_new_version(previous_version)
 
     def _create_new_version(self, previous_version):
         previous_version_dict = self._previous_version_to_dict(previous_version)
