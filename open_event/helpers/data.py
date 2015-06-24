@@ -24,7 +24,8 @@ class DataManager(object):
         """
         new_track = Track(name=form.name.data,
                           description=form.description.data,
-                          event_id=event_id)
+                          event_id=event_id,
+                          track_image_url=form.track_image_url.data)
         new_track.session = form.session.data
         db.session.query(Session).filter_by(id=form.session.data).track=new_track.id
         save_to_db(new_track, "Track saved")
