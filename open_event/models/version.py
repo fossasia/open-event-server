@@ -5,7 +5,7 @@ from . import db
 class Version(db.Model):
     __tablename__ = 'versions'
     id = db.Column(db.Integer, primary_key=True)
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    event_id = db.Column(db.Integer)
     event_ver = db.Column(db.Integer, nullable=False, default=0)
     session_ver = db.Column(db.Integer, nullable=False, default=0)
     speakers_ver = db.Column(db.Integer, nullable=False, default=0)
