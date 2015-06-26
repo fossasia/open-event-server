@@ -10,21 +10,16 @@
     <table class="table table-condensed" id="table-list">
         <thead>
             <tr>
-
+                <th></th>
                 <th>Id</th>
                 <th>Name</th>
                 <th>Description</th>
                 <th>Image</th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for track in objects %}
                 <tr>
-                    <td>{{track.id}}</td>
-                    <td>{{track.name}}</td>
-                    <td>{{track.description}}</td>
-                    <td>{{track.track_image_url}}</td>
                     <td>
                         <a class="icon" href="{{ get_url('event.event_track_edit', event_id=event_id, track_id=track.id )}}" title="Edit record">
                             <span class="glyphicon glyphicon-pencil"></span>
@@ -33,6 +28,10 @@
                             <span class="glyphicon glyphicon-trash"></span>
                         </a>
                     </td>
+                    <td>{{track.id}}</td>
+                    <td>{{track.name}}</td>
+                    <td>{{track.description}}</td>
+                    <td>{{track.track_image_url}}</td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -47,7 +46,9 @@
     <script language="javascript">
         (function($) {
             $(document).ready(function() {
-                $('#table-list').dataTable();
+                $('#table-list').dataTable({
+                    "scrollX": true
+                });
             } );
         })(jQuery);
     </script>

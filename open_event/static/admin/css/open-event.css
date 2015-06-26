@@ -1,0 +1,7 @@
+.dataTable th, .dataTable td {
+    max-width: 200px;
+    min-width: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

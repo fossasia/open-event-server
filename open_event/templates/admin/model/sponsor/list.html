@@ -9,20 +9,16 @@
     <table class="table table-condensed" id="table-list">
         <thead>
             <tr>
+                <th></th>
                 <th>Id</th>
                 <th>Name</th>
                 <th>Url</th>
                 <th>Logo</th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for sponsor in objects %}
                 <tr>
-                    <td>{{sponsor.id}}</td>
-                    <td>{{sponsor.name}}</td>
-                    <td>{{sponsor.url}}</td>
-                    <td>{{sponsor.logo}}</td>
                     <td>
                         <a class="icon" href="{{ get_url('event.event_sponsor_edit', event_id=event_id, sponsor_id=sponsor.id )}}" title="Edit record">
                             <span class="glyphicon glyphicon-pencil"></span>
@@ -31,6 +27,10 @@
                             <span class="glyphicon glyphicon-trash"></span>
                         </a>
                     </td>
+                    <td>{{sponsor.id}}</td>
+                    <td>{{sponsor.name}}</td>
+                    <td>{{sponsor.url}}</td>
+                    <td>{{sponsor.logo}}</td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -44,7 +44,9 @@
     <script language="javascript">
         (function($) {
             $(document).ready(function() {
-                $('#table-list').dataTable();
+                $('#table-list').dataTable({
+                    "scrollX": true
+                });
             } );
         })(jQuery);
     </script>

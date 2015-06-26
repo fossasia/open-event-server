@@ -12,6 +12,7 @@
     <table class="table table-condensed" id="table-list">
         <thead>
             <tr>
+                <th></th>
                 <th>Id</th>
                 <th>Name</th>
                 <th>Url</th>
@@ -19,19 +20,11 @@
                 <th>Longitude</th>
                 <th>Floor</th>
                 <th>Session</th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for microlocation in objects %}
                 <tr>
-                    <td>{{microlocation.id}}</td>
-                    <td>{{microlocation.name}}</td>
-                    <td>{{microlocation.url}}</td>
-                    <td>{{microlocation.latitude}}</td>
-                    <td>{{microlocation.longitude}}</td>
-                    <td>{{microlocation.floor}}</td>
-                    <td>{{microlocation.session}}</td>
                     <td>
                         <a class="icon" href="{{ get_url('event.event_microlocation_edit', event_id=event_id, microlocation_id=microlocation.id )}}" title="Edit record">
                             <span class="glyphicon glyphicon-pencil"></span>
@@ -40,6 +33,13 @@
                             <span class="glyphicon glyphicon-trash"></span>
                         </a>
                     </td>
+                    <td>{{microlocation.id}}</td>
+                    <td>{{microlocation.name}}</td>
+                    <td>{{microlocation.url}}</td>
+                    <td>{{microlocation.latitude}}</td>
+                    <td>{{microlocation.longitude}}</td>
+                    <td>{{microlocation.floor}}</td>
+                    <td>{{microlocation.session}}</td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -55,7 +55,9 @@
     <script language="javascript">
         (function($) {
             $(document).ready(function() {
-                $('#table-list').dataTable();
+                $('#table-list').dataTable({
+                    "scrollX": true
+                });
             } );
         })(jQuery);
     </script>
