@@ -3,7 +3,7 @@ from flask import request, url_for, redirect
 
 from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.admin import expose
-
+from flask.ext.admin.helpers import get_redirect_target
 from open_event.forms.admin.session_form import SessionForm
 from open_event.forms.admin.speaker_form import SpeakerForm
 from open_event.forms.admin.sponsor_form import SponsorForm
@@ -30,7 +30,9 @@ class EventView(ModelView):
                    'end_time',
                    'latitude',
                    'longitude',
-                   'location_name')
+                   'location_name',
+                   'slogan',
+                   'url')
 
     column_formatters = {
         'name': Formatter.column_formatter,
@@ -50,6 +52,7 @@ class EventView(ModelView):
     @expose('/new/', methods=('GET', 'POST'))
     def create_view(self):
         self._template_args['events'] = Event.query.all()
+        self._template_args['return_url'] = get_redirect_target() or self.get_url('.index_view')
         return super(EventView, self).create_view()
 
     @expose('/edit/', methods=('GET', 'POST'))

@@ -10,7 +10,7 @@
     <table class="table table-condensed" id="table-list">
         <thead>
             <tr>
-
+                <th></th>
                 <th>Id</th>
                 <th>Title</th>
                 <th>Subtitle</th>
@@ -20,12 +20,19 @@
                 <th>End Time</th>
                 <th>Type</th>
                 <th>Level</th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for session in objects %}
                 <tr>
+                    <td>
+                        <a class="icon" href="{{ get_url('event.event_session_edit', event_id=event_id, session_id=session.id )}}" title="Edit record">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </a>
+                        <a onclick="return confirm('Are you sure you want to delete this record?');" href="{{ get_url('event.event_session_delete', event_id=event_id, session_id=session.id)}}" title="Delete record">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                    </td>
                     <td>{{session.id}}</td>
                     <td>{{session.title}}</td>
                     <td>{{session.subtitle}}</td>
@@ -35,14 +42,6 @@
                     <td>{{session.end_time}}</td>
                     <td>{{session.type}}</td>
                     <td>{{session.level}}</td>
-                    <td>
-                        <a class="icon" href="{{ get_url('event.event_session_edit', event_id=event_id, session_id=session.id )}}" title="Edit record">
-                            <span class="glyphicon glyphicon-pencil"></span>
-                        </a>
-                        <a onclick="return confirm('Are you sure you want to delete this record?');" href="{{ get_url('event.event_session_delete', event_id=event_id, session_id=session.id)}}" title="Delete record">
-                            <span class="glyphicon glyphicon-trash"></span>
-                        </a>
-                    </td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -55,7 +54,9 @@
     <script language="javascript">
         (function($) {
             $(document).ready(function() {
-                $('#table-list').dataTable();
+                $('#table-list').dataTable({
+                    "scrollX": true
+                });
             } );
         })(jQuery);
     </script>
