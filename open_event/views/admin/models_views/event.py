@@ -94,7 +94,6 @@ class EventView(ModelView):
         track = Track.query.get(track_id)
         events = Event.query.all()
         from open_event.forms.admin.track_form import TrackForm
-        print "Test", track.session
         form = TrackForm(obj=track)
         if form.validate():
             DataManager.update_track(form, track)
