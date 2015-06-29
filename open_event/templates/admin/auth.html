@@ -1,38 +1,45 @@
 {% extends 'admin/base1.html' %}
 {% block body %}
-    <div class="row-fluid">
-
-        <div>
-            {% if current_user.is_authenticated() %}
-            <h1>Flask-Admin example</h1>
-            <p class="lead">
-                Authentication
-            </p>
-            <p>
-                This example shows how you can use Flask-Login for authentication. It is only intended as a basic demonstration.
-            </p>
-            {% else %}
-            <form method="POST" action="">
-                {{ form.hidden_tag() if form.hidden_tag }}
-                {% for f in form if f.type != 'CSRFTokenField' %}
-                <div>
-                {{ f.label }}
-                {{ f }}
-                {% if f.errors %}
-                <ul>
-                    {% for e in f.errors %}
-                    <li>{{ e }}</li>
-                    {% endfor %}
-                </ul>
+    <div class="row">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6">
+            <div class="well bs-component">
+                {% if current_user.is_authenticated() %}
+                <h1>Flask-Admin example</h1>
+                <p class="lead">
+                    Authentication
+                </p>
+                <p>
+                    This example shows how you can use Flask-Login for authentication. It is only intended as a basic demonstration.
+                </p>
+                {% else %}
+                <form method="POST" action="" class="form-horizontal">
+                    <fieldset>
+                        {{ form.hidden_tag() if form.hidden_tag }}
+                        {% for f in form if f.type != 'CSRFTokenField' %}
+                            <div class="form-group">
+                                {{ f.label(class_="col-lg-2 control-label") }}
+                                <div class="col-lg-10">
+                                    {{ f(class_="form-control") }}
+                                    {% if f.errors %}
+                                    <ul style="list-style:none; font-size:11px">
+                                        {% for e in f.errors %}
+                                        <li style="color:red">{{ e }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <button class="btn btn-success" type="submit">Submit</button>
+                    </fieldset>
+                </form>
+                {{ link | safe }}
                 {% endif %}
-                </div>
-                {% endfor %}
-                <button class="btn" type="submit">Submit</button>
-            </form>
-            {{ link | safe }}
-            {% endif %}
+            </div>
+            <a class="btn btn-primary" href="/"><i class="icon-arrow-left icon-white"></i> Back</a>
         </div>
+        <div class="col-lg-3"></div>
 
-        <a class="btn btn-primary" href="/"><i class="icon-arrow-left icon-white"></i> Back</a>
     </div>
 {% endblock %}
