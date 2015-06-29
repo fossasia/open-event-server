@@ -1,6 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
 from flask import request, url_for, redirect
-
+from flask.ext import login
 from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.admin import expose
 from flask.ext.admin.helpers import get_redirect_target
@@ -39,6 +39,13 @@ class EventView(ModelView):
         'location_name': Formatter.column_formatter,
         'logo': Formatter.column_formatter
     }
+
+    def is_accessible(self):
+        return login.current_user.is_authenticated()
+
+    def _handle_view(self, name, **kwargs):
+        if not self.is_accessible():
+            return redirect(url_for('admin.login_view', next=request.url))
 
     def on_model_change(self, form, model, is_created):
         v = VersionUpdater(event_id=model.id, is_created=is_created, column_to_increment="event_ver")

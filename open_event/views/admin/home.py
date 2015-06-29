@@ -15,8 +15,6 @@ from open_event.models.user import User
 class MyHomeView(AdminIndexView):
     @expose('/')
     def index(self):
-        print dir(self._template_args)
-        print dir(self)
         self._template = "admin/auth.html"
         if not login.current_user.is_authenticated():
             return redirect(url_for('.login_view'))
@@ -36,6 +34,8 @@ class MyHomeView(AdminIndexView):
         link = '<p>Don\'t have an account? <a href="' + url_for('.register_view') + '">Click here to register.</a></p>'
         self._template_args['form'] = form
         self._template_args['link'] = link
+        self._template_args['events'] = Event.query.all()
+        self._template = "admin/auth.html"
         return super(MyHomeView, self).index()
 
     @expose('/register/', methods=('GET', 'POST'))
@@ -57,6 +57,8 @@ class MyHomeView(AdminIndexView):
         link = '<p>Already have an account? <a href="' + url_for('.login_view') + '">Click here to log in.</a></p>'
         self._template_args['form'] = form
         self._template_args['link'] = link
+        self._template_args['events'] = Event.query.all()
+        self._template = "admin/auth.html"
         return super(MyHomeView, self).index()
 
     @expose('/logout/')
