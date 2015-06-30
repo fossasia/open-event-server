@@ -50,6 +50,9 @@ class EventView(ModelView):
     def on_model_change(self, form, model, is_created):
         v = VersionUpdater(event_id=model.id, is_created=is_created, column_to_increment="event_ver")
         v.update()
+        if is_created:
+            owner_id = login.current_user.id
+            DataManager.add_owner_to_event(owner_id, model)
 
     @expose('/')
     def index_view(self):

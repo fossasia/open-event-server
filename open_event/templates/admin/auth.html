@@ -5,12 +5,12 @@
         <div class="col-lg-6">
             <div class="well bs-component">
                 {% if current_user.is_authenticated() %}
-                <h1>Flask-Admin example</h1>
+                <h1>Open Event</h1>
                 <p class="lead">
-                    Authentication
+
                 </p>
                 <p>
-                    This example shows how you can use Flask-Login for authentication. It is only intended as a basic demonstration.
+                    The FOSSASIA Open Event Project aims to make it easier for events, conferences, tech summits (maybe more types in future) to easily create Web and Mobile (only Android right now) micro Apps. The project comprises of a data schema for easily storing event details, a server and web frontend that are used to view, modify, update this data easily by the event organisers, a mobile-friendly webapp client to show the event data to attendees, an Android app template which will be used to generate specific apps for each event.
                 </p>
                 {% else %}
                 <form method="POST" action="" class="form-horizontal">
@@ -37,7 +37,6 @@
                 {{ link | safe }}
                 {% endif %}
             </div>
-            <a class="btn btn-primary" href="/"><i class="icon-arrow-left icon-white"></i> Back</a>
         </div>
         <div class="col-lg-3"></div>
 

@@ -3,14 +3,13 @@ from flask import url_for, redirect, request
 from flask.ext import login
 from flask.ext.admin.base import AdminIndexView
 from flask.ext.admin import helpers, expose
-from werkzeug.security import generate_password_hash, check_password_hash
 
 from ...forms.admin.auth.registration_form import RegistrationForm
 from ...forms.admin.auth.login_form import LoginForm
 from open_event.models import db
 from open_event.models.event import Event
 from open_event.models.user import User
-
+from ...helpers.data import DataManager
 
 class MyHomeView(AdminIndexView):
     @expose('/')
@@ -42,16 +41,7 @@ class MyHomeView(AdminIndexView):
     def register_view(self):
         form = RegistrationForm(request.form)
         if helpers.validate_form_on_submit(form):
-            user = User()
-
-            form.populate_obj(user)
-            # we hash the users password to avoid saving it as plaintext in the db,
-            # remove to use plain text:
-            user.password = generate_password_hash(form.password.data)
-
-            db.session.add(user)
-            db.session.commit()
-
+            user = DataManager.create_user(form)
             login.login_user(user)
             return redirect(url_for('.index'))
         link = '<p>Already have an account? <a href="' + url_for('.login_view') + '">Click here to log in.</a></p>'
