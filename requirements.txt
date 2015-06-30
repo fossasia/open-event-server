@@ -13,3 +13,4 @@ flask-cors
 pep8
 nose
 Flask-Migrate
+Flask-Login
