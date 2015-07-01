@@ -11,3 +11,4 @@ pip install flask
 pip install flask-admin
 pip install flask-sqlalchemy
 pip install Flask-WTF
+pip install flask-migrate
