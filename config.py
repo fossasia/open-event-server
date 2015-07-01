@@ -2,19 +2,38 @@
 import os
 _basedir = os.path.abspath(os.path.dirname(__file__))
 
-# SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'app.db')
-SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL'] # heroku
+class Config(object):
+    DEBUG = False
+    TESTING = False
+    CSRF_ENABLED = True
+    CORS_HEADERS = 'Content-Type'
+    SQLALCHEMY_TRACK_MODIFICATIONS = True
 
-# DATABASE_CONNECT_OPTIONS = {}
-#
-# THREADS_PER_PAGE = 8
-#
-# CSRF_ENABLED = True
-# CSRF_SESSION_KEY = "somethingimpossibletoguess"
-#
-# RECAPTCHA_USE_SSL = False
-# RECAPTCHA_PUBLIC_KEY = '6LeYIbsSAAAAACRPIllxA7wvXjIE411PfdB2gt2J'
-# RECAPTCHA_PRIVATE_KEY = '6LeYIbsSAAAAAJezaIq3Ft_hSTo0YtyeFG-JgRtu'
-# RECAPTCHA_OPTIONS = {'theme': 'white'}
-CORS_HEADERS = 'Content-Type'
-SQLALCHEMY_TRACK_MODIFICATIONS = True
+
+class ProductionConfig(Config):
+    DEBUG = False
+    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+
+
+class StagingConfig(Config):
+    DEVELOPMENT = True
+    DEBUG = True
+
+
+class DevelopmentConfig(Config):
+    DEVELOPMENT = True
+    DEBUG = True
+
+
+class TestingConfig(Config):
+    TESTING = True
+
+class LocalPSQLConfig(Config):
+    DEVELOPMENT = True
+    DEBUG = True
+    SQLALCHEMY_DATABASE_URI ="postgresql://postgres:start@localhost/test"
+
+class LocalSQLITEConfig(Config):
+    DEVELOPMENT = True
+    DEBUG = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'app.db')
