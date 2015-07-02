@@ -13,9 +13,7 @@ class LoginForm(form.Form):
         if user is None:
             raise validators.ValidationError('Invalid user')
 
-        # we're comparing the plaintext pw with the the hash from the db
         if not check_password_hash(user.password, self.password.data):
-        # to compare plain text passwords use
         # if user.password != self.password.data:
             raise validators.ValidationError('Invalid password')
 
