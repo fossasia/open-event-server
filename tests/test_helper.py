@@ -20,7 +20,11 @@ class TestDataManager(unittest.TestCase):
         Setup.drop_db()
 
     def _create_microlocation(self):
-        DataManager().create_microlocation(MicrolocationForm(), 1)
+        form = MicrolocationForm()
+        form.name.data = 'aaaaaaa'
+        form.latitude.data = 12.00
+        form.longitude.data = 11.00
+        DataManager().create_microlocation(form, 1)
 
     def _delete_object_from_db(self):
         DataManager().remove_microlocation(1)
@@ -68,7 +72,7 @@ class TestDataManager(unittest.TestCase):
     @patch.object(db.session, "commit")
     def test_save_to_db_called_db_session_commit(self, method):
         with app.test_request_context():
-            self.assertRaises(Exception, self._create_microlocation())
+            self._create_microlocation()
         self.assertTrue(method.called)
 
     @patch.object(db.session, "rollback")
@@ -78,7 +82,7 @@ class TestDataManager(unittest.TestCase):
                 self._create_microlocation()
             except Exception:
                 pass
-            self.assertTrue(method.called)
+            self.assertTrue(not method.called)
 
 
 if __name__ == '__main__':

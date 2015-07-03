@@ -20,8 +20,8 @@ class TestEvent(unittest.TestCase):
         with app.test_request_context():
             save_to_db(event,"Event saved")
             save_to_db(track, "Track saved")
-        self.assertEqual(self.app.get('/admin/event/1').status_code, 200)
-        self.assertEqual(self.app.get('/admin/event/1/track').status_code, 200)
+        self.assertEqual(self.app.get('/get/api/v1/event/1/tracks').status_code, 200)
+        self.assertEqual(self.app.get('/admin/login/').status_code, 200)
 
 if __name__ == '__main__':
     unittest.main()
