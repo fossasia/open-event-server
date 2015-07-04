@@ -1,12 +1,13 @@
+"""Copyright 2015 Rafal Kowalski"""
 from flask import url_for
 
 
 def login(app, login, password):
-        return app.post(url_for('admin.login_view'),
+        return app.post('admin/login/',
                         data=dict(
                              login=login,
                              password=password
-                             ))
+                             ), follow_redirects=True)
 
 
 def logout(app):
