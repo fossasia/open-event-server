@@ -3,8 +3,8 @@ import unittest
 from mock import patch
 
 import open_event.helpers.data
-from object_mother import ObjectMother
-from setup_database import Setup
+from tests.object_mother import ObjectMother
+from tests.setup_database import Setup
 from open_event import app
 from open_event.models import db
 from open_event.models.version import Version
@@ -15,6 +15,9 @@ from open_event.forms.admin.microlocation_form import MicrolocationForm
 class TestDataManager(unittest.TestCase):
     def setUp(self):
         self.app = Setup.create_app()
+        with app.test_request_context():
+            db.session.add(ObjectMother.get_event())
+            db.session.commit()
 
     def tearDown(self):
         Setup.drop_db()

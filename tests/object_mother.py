@@ -35,4 +35,7 @@ class ObjectMother(object):
 
     @staticmethod
     def get_user():
-        return User(login="test", password="test", nickname="test", email="email@gmail.com")
+        return User(login="test",
+                    password="test",
+                    nickname="test",
+                    email="email@gmail.com")

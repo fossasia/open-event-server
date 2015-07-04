@@ -1,11 +1,11 @@
 """Copyright 2015 Rafal Kowalski"""
 import unittest
 from flask import url_for
-from setup_database import Setup
+from tests.setup import Setup
 from open_event import app
 from open_event.helpers.data import save_to_db
-from object_mother import ObjectMother
-from auth_helper import register
+from tests.object_mother import ObjectMother
+from tests.auth_helper import register
 from open_event.models.track import Track
 
 
