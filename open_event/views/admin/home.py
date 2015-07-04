@@ -6,10 +6,8 @@ from flask.ext.admin import helpers, expose
 
 from ...forms.admin.auth.registration_form import RegistrationForm
 from ...forms.admin.auth.login_form import LoginForm
-from open_event.models import db
-from open_event.models.event import Event
-from open_event.models.user import User
 from ...helpers.data import DataManager
+from ...helpers.data_getter import DataGetter
 
 class MyHomeView(AdminIndexView):
     @expose('/')
@@ -17,7 +15,7 @@ class MyHomeView(AdminIndexView):
         self._template = "admin/auth.html"
         if not login.current_user.is_authenticated():
             return redirect(url_for('.login_view'))
-        self._template_args['events'] = Event.query.all()
+        self._template_args['events'] = DataGetter.get_all_events()
         return super(MyHomeView, self).index()
 
     @expose('/login/', methods=('GET', 'POST'))
@@ -33,7 +31,7 @@ class MyHomeView(AdminIndexView):
         link = '<p>Don\'t have an account? <a href="' + url_for('.register_view') + '">Click here to register.</a></p>'
         self._template_args['form'] = form
         self._template_args['link'] = link
-        self._template_args['events'] = Event.query.all()
+        self._template_args['events'] = DataGetter.get_all_events()
         self._template = "admin/auth.html"
         return super(MyHomeView, self).index()
 
@@ -47,7 +45,7 @@ class MyHomeView(AdminIndexView):
         link = '<p>Already have an account? <a href="' + url_for('.login_view') + '">Click here to log in.</a></p>'
         self._template_args['form'] = form
         self._template_args['link'] = link
-        self._template_args['events'] = Event.query.all()
+        self._template_args['events'] = DataGetter.get_all_events()
         self._template = "admin/auth.html"
         return super(MyHomeView, self).index()
 

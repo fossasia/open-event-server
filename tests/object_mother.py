@@ -4,6 +4,8 @@ from open_event.models.track import Track
 from open_event.models.event import Event
 from open_event.models.session import Session
 from open_event.models.microlocation import Microlocation
+from open_event.models.user import User
+
 
 class ObjectMother(object):
     @staticmethod
@@ -30,3 +32,7 @@ class ObjectMother(object):
         return Microlocation(name="name",
                              latitude=1.0,
                              longitude=1.0)
+
+    @staticmethod
+    def get_user():
+        return User(login="test", password="test", nickname="test", email="email@gmail.com")
