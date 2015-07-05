@@ -13,7 +13,7 @@ from open_event.forms.admin.microlocation_form import MicrolocationForm
 from ....helpers.data import DataManager
 from ....helpers.formatter import Formatter
 from ....helpers.update_version import VersionUpdater
-from ....helpers.helpers import is_event_owner
+from ....helpers.helpers import is_event_owner, is_track_name_unique_in_event
 from ....helpers.data_getter import DataGetter
 
 class EventView(ModelView):
@@ -90,7 +90,7 @@ class EventView(ModelView):
         events = DataGetter.get_all_events()
         form = TrackForm(request.form)
         if form.validate():
-            if is_event_owner(event_id):
+            if is_event_owner(event_id) and is_track_name_unique_in_event(form, event_id):
                 DataManager.create_track(form, event_id)
                 flash("Track added")
             else:
@@ -106,7 +106,7 @@ class EventView(ModelView):
         track = DataGetter.get_track(track_id)
         events = DataGetter.get_all_events()
         form = TrackForm(obj=track)
-        if form.validate():
+        if form.validate() and is_track_name_unique_in_event(form, event_id, track_id):
             if is_event_owner(event_id):
                 DataManager.update_track(form, track)
                 flash("Track updated")
