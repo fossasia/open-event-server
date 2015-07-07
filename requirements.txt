@@ -15,4 +15,3 @@ nose
 Flask-Migrate
 Flask-Login
 flask-scrypt
-Werkzeug==0.10.6
