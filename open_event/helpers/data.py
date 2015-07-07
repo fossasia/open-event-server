@@ -3,6 +3,7 @@ import logging
 
 from sqlalchemy.orm.collections import InstrumentedList
 from flask import flash
+from flask.ext.scrypt import generate_password_hash, generate_random_salt, check_password_hash
 
 from ..models import db
 from ..models.track import Track
@@ -12,7 +13,7 @@ from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
 from ..models.user import User
 from ..helpers.update_version import VersionUpdater
-from werkzeug.security import generate_password_hash, check_password_hash
+
 
 class DataManager(object):
     """Main class responsible for DataBase managing"""
@@ -247,7 +248,10 @@ class DataManager(object):
         form.populate_obj(user)
         # we hash the users password to avoid saving it as plaintext in the db,
         # remove to use plain text:
-        user.password = generate_password_hash(form.password.data)
+        salt = generate_random_salt()
+        password = form.password.data
+        user.password = generate_password_hash(password, salt)
+        user.salt = salt
         save_to_db(user, "User created")
         return user
 

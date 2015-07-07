@@ -1,5 +1,5 @@
 from wtforms import form, StringField, PasswordField, validators
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask.ext.scrypt import check_password_hash
 from ....models import db
 from ....models.user import User
 
@@ -13,7 +13,7 @@ class LoginForm(form.Form):
         if user is None:
             raise validators.ValidationError('Invalid user')
 
-        if not check_password_hash(user.password, self.password.data):
+        if not check_password_hash(self.password.data, user.password, user.salt):
         # if user.password != self.password.data:
             raise validators.ValidationError('Invalid password')
 
