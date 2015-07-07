@@ -13,7 +13,7 @@ class LoginForm(form.Form):
         if user is None:
             raise validators.ValidationError('Invalid user')
 
-        if not check_password_hash(self.password.data.encode("utf-8"), user.password, user.salt):
+        if not check_password_hash(self.password.data.encode("utf-8"), user.password.encode('utf-8'), user.salt):
         # if user.password != self.password.data:
             raise validators.ValidationError('Invalid password')
 
