@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Install essential packages from Apt
 apt-get update -y
 # Python dev packages
@@ -30,7 +31,7 @@ pip install Flask-Login
 pip install flask-scrypt
 
 # Edit the following to change the name of the database user that will be created:
-APP_DB_USER=postgres
+APP_DB_USER=open_event_user
 APP_DB_PASS=start
 
 # Edit the following to change the name of the database that is created (defaults to the user name)
@@ -110,7 +111,7 @@ echo "client_encoding = utf8" >> "$PG_CONF"
 # Restart so that all new config is loaded:
 service postgresql restart
 
-cat << EOF | su - postgres -c psql
+cat << EOF | sudo -u postgres psql
 -- Create the database user:
 CREATE USER $APP_DB_USER WITH PASSWORD '$APP_DB_PASS';
 
