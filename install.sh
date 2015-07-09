@@ -129,3 +129,12 @@ date > "$PROVISIONED_ON"
 echo "Successfully created PostgreSQL dev virtual machine."
 echo ""
 print_db_usage
+
+cd /vagrant
+cat << EOF | python
+from open_event import app
+from open_event.models import db
+
+with app.app_context():
+	db.create_all()
+EOF
