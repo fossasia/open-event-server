@@ -39,9 +39,9 @@ class VersionUpdater(object):
 
     def _previous_version_to_dict(self, previous_version):
         return {"event_id": self.event_id,
-                "event_ver": previous_version.event_ver,
-                "session_ver": previous_version.session_ver,
-                "speakers_ver": previous_version.speakers_ver,
-                "tracks_ver": previous_version.tracks_ver,
-                "sponsors_ver":previous_version.sponsors_ver,
-                "microlocations_ver": previous_version.microlocations_ver}
+                "event_ver": previous_version.event_ver if previous_version.event_ver else 0,
+                "session_ver": previous_version.session_ver if previous_version.session_ver else 0 ,
+                "speakers_ver": previous_version.speakers_ver if previous_version.speakers_ver else 0,
+                "tracks_ver": previous_version.tracks_ver if previous_version.tracks_ver else 0,
+                "sponsors_ver": previous_version.sponsors_ver if previous_version.sponsors_ver else 0,
+                "microlocations_ver": previous_version.microlocations_ver if previous_version.microlocations_ver else 0}

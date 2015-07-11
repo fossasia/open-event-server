@@ -22,7 +22,7 @@ manager.add_command('db', MigrateCommand)
 
 cors = CORS(app)
 app.secret_key = 'super secret key'
-app.config.from_object('config')
+app.config.from_object('config.ProductionConfig')
 
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.ERROR)

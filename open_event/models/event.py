@@ -31,6 +31,7 @@ class Event(db.Model):
                               backref="event")
     sponsor = db.relationship('Sponsor',
                               backref="event")
+    owner = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __init__(self,
                  name=None,
@@ -43,7 +44,8 @@ class Event(db.Model):
                  email=None,
                  color=None,
                  slogan=None,
-                 url=None):
+                 url=None,
+                 owner=None):
         self.name = name
         self.logo = logo
         self.email = email
@@ -55,6 +57,7 @@ class Event(db.Model):
         self.location_name = location_name
         self.slogan = slogan
         self.url = url
+        self.owner = owner
 
     def __repr__(self):
         return '<Event %r>' % (self.name)

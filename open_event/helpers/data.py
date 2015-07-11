@@ -3,6 +3,7 @@ import logging
 
 from sqlalchemy.orm.collections import InstrumentedList
 from flask import flash
+from flask.ext.scrypt import generate_password_hash, generate_random_salt, check_password_hash
 
 from ..models import db
 from ..models.track import Track
@@ -10,6 +11,7 @@ from ..models.session import Session
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
+from ..models.user import User
 from ..helpers.update_version import VersionUpdater
 
 
@@ -30,6 +32,9 @@ class DataManager(object):
         db.session.query(Session).filter_by(id=form.session.data).track=new_track.id
         save_to_db(new_track, "Track saved")
         update_version(event_id, False, "tracks_ver")
+        session = form.session.data
+        if session:
+            update_version(event_id, False, "session_ver")
 
     @staticmethod
     def update_track(form, track):
@@ -47,6 +52,9 @@ class DataManager(object):
         db.session.query(Session).filter_by(id=form.session.data).track=track.id
         save_to_db(track, "Track updated")
         update_version(track.event_id, False,"tracks_ver")
+        session = form.session.data
+        if session:
+            update_version(track.event_id, False, "session_ver")
 
     @staticmethod
     def remove_track(track_id):
@@ -233,6 +241,24 @@ class DataManager(object):
         microlocation = Microlocation.query.get(microlocation_id)
         delete_from_db(microlocation, "Microlocation deleted")
         flash('You successfully delete microlocation')
+
+    @staticmethod
+    def create_user(form):
+        user = User()
+        form.populate_obj(user)
+        # we hash the users password to avoid saving it as plaintext in the db,
+        # remove to use plain text:
+        salt = generate_random_salt()
+        password = form.password.data
+        user.password = generate_password_hash(password, salt)
+        user.salt = salt
+        save_to_db(user, "User created")
+        return user
+
+    @staticmethod
+    def add_owner_to_event(owner_id, event):
+        event.owner = owner_id
+        db.session.commit()
 
 
 def save_to_db(item, msg):

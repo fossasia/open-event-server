@@ -1,8 +1,8 @@
 """Copyright 2015 Rafal Kowalski"""
 import unittest
 
-from setup_database import Setup
-from object_mother import ObjectMother
+from tests.setup_database import Setup
+from tests.object_mother import ObjectMother
 from open_event import app
 from open_event.helpers.data import save_to_db
 

@@ -1,0 +1,44 @@
+{% extends 'admin/base1.html' %}
+{% block body %}
+    <div class="row">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6">
+            <div class="well bs-component">
+                {% if current_user.is_authenticated() %}
+                <h1>Open Event</h1>
+                <p class="lead">
+
+                </p>
+                <p>
+                    The FOSSASIA Open Event Project aims to make it easier for events, conferences, tech summits (maybe more types in future) to easily create Web and Mobile (only Android right now) micro Apps. The project comprises of a data schema for easily storing event details, a server and web frontend that are used to view, modify, update this data easily by the event organisers, a mobile-friendly webapp client to show the event data to attendees, an Android app template which will be used to generate specific apps for each event.
+                </p>
+                {% else %}
+                <form method="POST" action="" class="form-horizontal">
+                    <fieldset>
+                        {{ form.hidden_tag() if form.hidden_tag }}
+                        {% for f in form if f.type != 'CSRFTokenField' %}
+                            <div class="form-group">
+                                {{ f.label(class_="col-lg-2 control-label") }}
+                                <div class="col-lg-10">
+                                    {{ f(class_="form-control") }}
+                                    {% if f.errors %}
+                                    <ul style="list-style:none; font-size:11px">
+                                        {% for e in f.errors %}
+                                        <li style="color:red">{{ e }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <button class="btn btn-success" type="submit">Submit</button>
+                    </fieldset>
+                </form>
+                {{ link | safe }}
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-lg-3"></div>
+
+    </div>
+{% endblock %}

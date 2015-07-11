@@ -14,12 +14,12 @@ class Setup(object):
         app.config['WTF_CSRF_ENABLED'] = False
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(_basedir, 'test.db')
         app.secret_key = 'super secret key'
-        with app.app_context():
+        with app.test_request_context():
             db.create_all()
         return app.test_client()
 
     @staticmethod
     def drop_db():
-        with app.app_context():
+        with app.test_request_context():
             db.session.remove()
             db.drop_all()
