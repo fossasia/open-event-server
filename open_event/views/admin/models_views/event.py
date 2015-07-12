@@ -74,7 +74,8 @@ class EventView(ModelView):
         events = DataGetter.get_all_events()
         return self.render('admin/base1.html',
                            event_id=event_id,
-                           events=events)
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id))
 
     @expose('/<event_id>/track')
     def event_tracks(self, event_id):
@@ -83,7 +84,8 @@ class EventView(ModelView):
         return self.render('admin/model/track/list1.html',
                            objects=tracks,
                            event_id=event_id,
-                           events=events)
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id))
 
     @expose('/<event_id>/track/new', methods=('GET', 'POST'))
     def event_track_new(self, event_id):
@@ -99,7 +101,8 @@ class EventView(ModelView):
         return self.render('admin/model/create_model.html',
                            form=form,
                            event_id=event_id,
-                           events=events)
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id))
 
     @expose('/<event_id>/track/<track_id>/edit', methods=('GET', 'POST'))
     def event_track_edit(self, event_id, track_id):
@@ -116,7 +119,8 @@ class EventView(ModelView):
         return self.render('admin/model/create_model.html',
                            form=form,
                            event_id=event_id,
-                           events=events)
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id))
 
     @expose('/<event_id>/track/<track_id>/delete', methods=('GET', 'POST'))
     def event_track_delete(self, event_id, track_id):
@@ -135,7 +139,8 @@ class EventView(ModelView):
         return self.render('admin/model/session/list.html',
                            objects=sessions,
                            event_id=event_id,
-                           events=events)
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id))
 
     @expose('/<event_id>/session/new', methods=('GET', 'POST'))
     def event_session_new(self, event_id):
@@ -150,7 +155,8 @@ class EventView(ModelView):
         return self.render('admin/model/create_model.html',
                            form=form,
                            event_id=event_id,
-                           events=events)
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id))
 
     @expose('/<event_id>/session/<session_id>/edit', methods=('GET', 'POST'))
     def event_session_edit(self, event_id, session_id):
@@ -167,7 +173,8 @@ class EventView(ModelView):
         return self.render('admin/model/create_model.html',
                            form=form,
                            event_id=event_id,
-                           events=events)
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id))
 
     @expose('/<event_id>/session/<session_id>/delete', methods=('GET', 'POST'))
     def event_session_delete(self, event_id, session_id):
@@ -185,7 +192,8 @@ class EventView(ModelView):
         return self.render('admin/model/speaker/list.html',
                            objects=speakers,
                            event_id=event_id,
-                           events=events)
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id))
 
     @expose('/<event_id>/speaker/new', methods=('GET', 'POST'))
     def event_speaker_new(self, event_id):
@@ -201,7 +209,8 @@ class EventView(ModelView):
         return self.render('admin/model/create_model.html',
                            form=form,
                            event_id=event_id,
-                           events=events)
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id))
 
     @expose('/<event_id>/speaker/<speaker_id>/edit', methods=('GET', 'POST'))
     def event_speaker_edit(self, event_id, speaker_id):
@@ -217,8 +226,10 @@ class EventView(ModelView):
             return redirect(url_for('.event_speakers',
                                     event_id=event_id))
         return self.render('admin/model/create_model.html',
-                           form=form, event_id=event_id,
-                           events=events)
+                           form=form,
+                           event_id=event_id,
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id))
 
     @expose('/<event_id>/speaker/<speaker_id>/delete', methods=('GET', 'POST'))
     def event_speaker_delete(self, event_id, speaker_id):
@@ -236,7 +247,8 @@ class EventView(ModelView):
         return self.render('admin/model/sponsor/list.html',
                            objects=sponsors,
                            event_id=event_id,
-                           events=events)
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id))
 
     @expose('/<event_id>/sponsor/new', methods=('GET', 'POST'))
     def event_sponsor_new(self, event_id):
@@ -252,7 +264,8 @@ class EventView(ModelView):
         return self.render('admin/model/create_model.html',
                            form=form,
                            event_id=event_id,
-                           events=events)
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id))
 
     @expose('/<event_id>/sponsor/<sponsor_id>/edit', methods=('GET', 'POST'))
     def event_sponsor_edit(self, event_id, sponsor_id):
@@ -269,7 +282,8 @@ class EventView(ModelView):
         return self.render('admin/model/create_model.html',
                            form=form,
                            event_id=event_id,
-                           events=events)
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id))
 
     @expose('/<event_id>/sponsor/<sponsor_id>/delete', methods=('GET', 'POST'))
     def event_sponsor_delete(self, event_id, sponsor_id):
@@ -287,7 +301,8 @@ class EventView(ModelView):
         return self.render('admin/model/microlocation/list.html',
                            objects=microlocations,
                            event_id=event_id,
-                           events=events)
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id))
 
     @expose('/<event_id>/microlocation/new', methods=('GET', 'POST'))
     def event_microlocation_new(self, event_id):
@@ -303,7 +318,8 @@ class EventView(ModelView):
         return self.render('admin/model/create_model.html',
                            form=form,
                            event_id=event_id,
-                           events=events)
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id))
 
     @expose('/<event_id>/microlocation/<microlocation_id>/edit', methods=('GET', 'POST'))
     def event_microlocation_edit(self, event_id, microlocation_id):
@@ -320,7 +336,8 @@ class EventView(ModelView):
         return self.render('admin/model/create_model.html',
                            form=form,
                            event_id=event_id,
-                           events=events)
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id))
 
     @expose('/<event_id>/microlocation/<microlocation_id>/delete', methods=('GET', 'POST'))
     def event_microlocation_delete(self, event_id, microlocation_id):

@@ -92,9 +92,14 @@
           {% endblock %}
         </div>
       </nav>
-
+      {% if event_id %}
+        <div style="margin:5px">
+              Event Owner: <div class="label label-info">{{ owner }}</div>
+        </div>
+      {% endif %}
       {% block messages %}
       {{ layout.messages() }}
+
       {% endblock %}
 
       {% set render_ctx = h.resolve_ctx() %}

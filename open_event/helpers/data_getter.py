@@ -1,9 +1,11 @@
+"""Copyright 2015 Rafal Kowalski"""
 from ..models.event import Event
 from ..models.session import Session
 from ..models.track import Track
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
+from ..models.user import User
 from helpers import get_event_id
 
 class DataGetter:
@@ -54,3 +56,9 @@ class DataGetter:
     @staticmethod
     def get_microlocation(microlocation_id):
         return Microlocation.query.get(microlocation_id)
+
+    @staticmethod
+    def get_event_owner(event_id):
+        print "Test"
+        owner_id = Event.query.get(event_id).owner
+        return User.query.get(owner_id).login
