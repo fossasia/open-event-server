@@ -8,7 +8,8 @@ class Event(db.Model):
     id = db.Column(db.Integer,
                    primary_key=True)
     name = db.Column(db.String,
-                     nullable=False)
+                     nullable=False,
+                     unique=True)
     email = db.Column(db.String)
     color = db.Column(db.String)
     logo = db.Column(db.String)
@@ -32,6 +33,7 @@ class Event(db.Model):
     sponsor = db.relationship('Sponsor',
                               backref="event")
     owner = db.Column(db.Integer, db.ForeignKey('user.id'))
+    db.UniqueConstraint('track.name')
 
     def __init__(self,
                  name=None,
