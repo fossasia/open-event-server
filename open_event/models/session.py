@@ -25,7 +25,7 @@ class Session(db.Model):
     end_time = db.Column(db.DateTime,
                          nullable=False)
     type = db.Column(db.String)
-    track = db.relationship('Track', uselist=False, backref='session')
+    track_id = db.Column(db.Integer, db.ForeignKey('tracks.id'))
     speakers = db.relationship('Speaker',
                                secondary=speakers_sessions,
                                backref=db.backref('sessions',

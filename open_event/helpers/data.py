@@ -28,12 +28,12 @@ class DataManager(object):
                           description=form.description.data,
                           event_id=event_id,
                           track_image_url=form.track_image_url.data)
-        new_track.session = form.session.data
-        db.session.query(Session).filter_by(id=form.session.data).track=new_track.id
+        new_track.sessions = form.sessions.data
+        db.session.query(Session).filter_by(id=form.sessions.data).track=new_track.id
         save_to_db(new_track, "Track saved")
         update_version(event_id, False, "tracks_ver")
-        session = form.session.data
-        if session:
+        sessions = form.sessions.data
+        if sessions:
             update_version(event_id, False, "session_ver")
 
     @staticmethod
@@ -44,16 +44,16 @@ class DataManager(object):
         :param track: object contains all earlier data
         """
         data = form.data
-        del data['session']
+        del data['sessions']
         db.session.query(Track)\
             .filter_by(id=track.id)\
             .update(dict(data))
-        track.session = form.session.data
-        db.session.query(Session).filter_by(id=form.session.data).track=track.id
+        track.sessions = form.sessions.data
+        db.session.query(Session).filter_by(id=form.sessions.data).track=track.id
         save_to_db(track, "Track updated")
         update_version(track.event_id, False,"tracks_ver")
-        session = form.session.data
-        if session:
+        sessions = form.sessions.data
+        if sessions:
             update_version(track.event_id, False, "session_ver")
 
     @staticmethod

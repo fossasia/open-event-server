@@ -8,7 +8,7 @@ class Track(db.Model):
     name = db.Column(db.String, nullable=False)
     description = db.Column(db.Text, nullable=False)
     track_image_url = db.Column(db.Text)
-    session_id = db.Column(db.Integer, db.ForeignKey('session.id'))
+    sessions = db.relationship('Session', backref='track', lazy='dynamic')
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
 
     def __init__(self, name=None, description=None, event_id=None, session=None, track_image_url=None):

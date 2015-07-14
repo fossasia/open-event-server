@@ -59,6 +59,5 @@ class DataGetter:
 
     @staticmethod
     def get_event_owner(event_id):
-        print "Test"
         owner_id = Event.query.get(event_id).owner
         return User.query.get(owner_id).login
