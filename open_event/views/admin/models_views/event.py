@@ -16,6 +16,7 @@ from ....helpers.update_version import VersionUpdater
 from ....helpers.helpers import is_event_owner, is_track_name_unique_in_event
 from ....helpers.data_getter import DataGetter
 
+
 class EventView(ModelView):
 
     column_list = ('id',
@@ -56,22 +57,26 @@ class EventView(ModelView):
     @expose('/')
     def index_view(self):
         self._template_args['events'] = DataGetter.get_all_events()
+        self.name = "Event"
         return super(EventView, self).index_view()
 
     @expose('/new/', methods=('GET', 'POST'))
     def create_view(self):
         self._template_args['events'] = DataGetter.get_all_events()
         self._template_args['return_url'] = get_redirect_target() or self.get_url('.index_view')
+        self.name = "Event | New"
         return super(EventView, self).create_view()
 
     @expose('/edit/', methods=('GET', 'POST'))
     def edit_view(self):
         self._template_args['events'] = DataGetter.get_all_events()
+        self.name = "Event | Edit"
         return super(EventView, self).edit_view()
 
     @expose('/<event_id>')
     def event(self, event_id):
         events = DataGetter.get_all_events()
+        self.name = "Event | " + event_id
         return self.render('admin/base1.html',
                            event_id=event_id,
                            events=events,
@@ -81,6 +86,7 @@ class EventView(ModelView):
     def event_tracks(self, event_id):
         tracks = DataGetter.get_tracks(event_id)
         events = DataGetter.get_all_events()
+        self.name = "Track"
         return self.render('admin/model/track/list1.html',
                            objects=tracks,
                            event_id=event_id,
@@ -91,6 +97,7 @@ class EventView(ModelView):
     def event_track_new(self, event_id):
         events = DataGetter.get_all_events()
         form = TrackForm(request.form)
+        self.name = " Track | New"
         if form.validate():
             if is_event_owner(event_id) and is_track_name_unique_in_event(form, event_id):
                 DataManager.create_track(form, event_id)
@@ -109,6 +116,7 @@ class EventView(ModelView):
         track = DataGetter.get_track(track_id)
         events = DataGetter.get_all_events()
         form = TrackForm(obj=track)
+        self.name = "Track | Edit"
         if form.validate() and is_track_name_unique_in_event(form, event_id, track_id):
             if is_event_owner(event_id):
                 DataManager.update_track(form, track)
@@ -136,6 +144,7 @@ class EventView(ModelView):
     def event_sessions(self, event_id):
         sessions = DataGetter.get_sessions(event_id)
         events = DataGetter.get_all_events()
+        self.name = "Session"
         return self.render('admin/model/session/list.html',
                            objects=sessions,
                            event_id=event_id,
@@ -146,6 +155,7 @@ class EventView(ModelView):
     def event_session_new(self, event_id):
         events = DataGetter.get_all_events()
         form = SessionForm()
+        self.name = "Session | New"
         if form.validate():
             if is_event_owner(event_id):
                 DataManager.create_session(form, event_id)
@@ -163,6 +173,7 @@ class EventView(ModelView):
         session = DataGetter.get_session(session_id)
         events = DataGetter.get_all_events()
         form = SessionForm(obj=session)
+        self.name = "Session | Edit"
         if form.validate():
             if is_event_owner(event_id):
                 DataManager.update_session(form, session)
@@ -189,6 +200,7 @@ class EventView(ModelView):
     def event_speakers(self, event_id):
         speakers = DataGetter.get_speakers(event_id)
         events = DataGetter.get_all_events()
+        self.name = "Speaker"
         return self.render('admin/model/speaker/list.html',
                            objects=speakers,
                            event_id=event_id,
@@ -199,6 +211,7 @@ class EventView(ModelView):
     def event_speaker_new(self, event_id):
         events = DataGetter.get_all_events()
         form = SpeakerForm()
+        self.name = "Speaker | New"
         if form.validate():
             if is_event_owner(event_id):
                 DataManager.create_speaker(form, event_id)
@@ -217,6 +230,7 @@ class EventView(ModelView):
         speaker = DataGetter.get_speaker(speaker_id)
         events = DataGetter.get_all_events()
         form = SpeakerForm(obj=speaker)
+        self.name = "Speaker " + speaker_id + " | Edit"
         if form.validate():
             if is_event_owner(event_id):
                 DataManager.update_speaker(form, speaker)
@@ -244,6 +258,7 @@ class EventView(ModelView):
     def event_sponsors(self, event_id):
         sponsors = DataGetter.get_sponsors(event_id)
         events = DataGetter.get_all_events()
+        self.name = "Sponsor"
         return self.render('admin/model/sponsor/list.html',
                            objects=sponsors,
                            event_id=event_id,
@@ -254,6 +269,7 @@ class EventView(ModelView):
     def event_sponsor_new(self, event_id):
         events = DataGetter.get_all_events()
         form = SponsorForm()
+        self.name = "Sponsor | New"
         if form.validate():
             if is_event_owner(event_id):
                 DataManager.create_sponsor(form, event_id)
@@ -272,6 +288,7 @@ class EventView(ModelView):
         sponsor = DataGetter.get_sponsor(sponsor_id)
         events = DataGetter.get_all_events()
         form = SponsorForm(obj=sponsor)
+        self.name = "Sponsor " + sponsor_id + " | Edit"
         if form.validate():
             if is_event_owner(event_id):
                 DataManager.update_sponsor(form, sponsor)
@@ -298,6 +315,7 @@ class EventView(ModelView):
     def event_microlocations(self, event_id):
         microlocations = DataGetter.get_microlocations(event_id)
         events = DataGetter.get_all_events()
+        self.name = "Microlocation"
         return self.render('admin/model/microlocation/list.html',
                            objects=microlocations,
                            event_id=event_id,
@@ -308,6 +326,7 @@ class EventView(ModelView):
     def event_microlocation_new(self, event_id):
         events = DataGetter.get_all_events()
         form = MicrolocationForm()
+        self.name = "Microlocation | New"
         if form.validate():
             if is_event_owner(event_id):
                 DataManager.create_microlocation(form, event_id)
@@ -326,6 +345,7 @@ class EventView(ModelView):
         microlocation = DataGetter.get_microlocation(microlocation_id)
         events = DataGetter.get_all_events()
         form = MicrolocationForm(obj=microlocation)
+        self.name = "Microlocation " + microlocation_id + " | Edit"
         if form.validate():
             if is_event_owner(event_id):
                 DataManager.update_microlocation(form, microlocation)
@@ -347,3 +367,5 @@ class EventView(ModelView):
             flash("You don't have permission!")
         return redirect(url_for('.event_microlocations',
                                 event_id=event_id))
+
+
