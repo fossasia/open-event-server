@@ -15,10 +15,10 @@ from ....helpers.formatter import Formatter
 from ....helpers.update_version import VersionUpdater
 from ....helpers.helpers import is_event_owner, is_track_name_unique_in_event
 from ....helpers.data_getter import DataGetter
-
+from ....forms.admin.event_form import EventForm
 
 class EventView(ModelView):
-
+    form = EventForm
     column_list = ('id',
                    'name',
                    'email',
@@ -65,7 +65,8 @@ class EventView(ModelView):
         self._template_args['events'] = DataGetter.get_all_events()
         self._template_args['return_url'] = get_redirect_target() or self.get_url('.index_view')
         self.name = "Event | New"
-        return super(EventView, self).create_view()
+        index_view = super(EventView, self).create_view()
+        return index_view
 
     @expose('/edit/', methods=('GET', 'POST'))
     def edit_view(self):
