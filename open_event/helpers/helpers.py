@@ -1,5 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 import re
+import os.path
+from werkzeug import secure_filename
 from flask import request
 from flask.ext import login
 from ..models.event import Event
@@ -27,3 +29,9 @@ def is_track_name_unique_in_event(form, event_id, *args):
                 return False
         else:
             return True
+
+def save_files(param):
+    file = request.files[param]
+    filename = secure_filename(file.filename)
+    file.save(os.path.join(os.path.realpath('.') + '/static/', filename))
+    return  filename

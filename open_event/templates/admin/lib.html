@@ -110,8 +110,10 @@
 {% endmacro %}
 
 {% macro render_form_fields(form, form_opts=None) %}
+
     {% if form.hidden_tag is defined %}
         {{ form.hidden_tag() }}
+
     {% else %}
         {% if csrf_token %}
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>

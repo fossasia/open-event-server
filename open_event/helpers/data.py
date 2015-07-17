@@ -12,6 +12,7 @@ from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
 from ..models.user import User
+from ..models.event import Event
 from ..helpers.update_version import VersionUpdater
 
 
@@ -259,6 +260,35 @@ class DataManager(object):
     def add_owner_to_event(owner_id, event):
         event.owner = owner_id
         db.session.commit()
+
+    @staticmethod
+    def create_event(form, file_name):
+        """
+        Event will be saved to database with proper Event id
+        :param form: view data form
+        """
+        data = form.data
+        del data["logo"]
+        event = Event(dict(data))
+        event.logo = file_name
+        save_to_db(event, "Event saved")
+        # update_version(event_id, False, "microlocations_ver")
+
+    @staticmethod
+    def update_event(form, event, file_name):
+        """
+        Event will be updated in database
+        :param form: view data form
+        :param event: object contains all earlier data
+        """
+        data = form.data
+        del data["logo"]
+        db.session.query(Event)\
+            .filter_by(id=event.id)\
+            .update(dict(data))
+        event.logo = file_name
+        save_to_db(event, "Event updated")
+        # update_version(microlocation.event_id, False, "microlocations_ver")
 
 
 def save_to_db(item, msg):

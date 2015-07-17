@@ -2,6 +2,7 @@
 from flask import request, url_for, redirect, flash
 from flask.ext import login
 from flask.ext.admin.contrib.sqla import ModelView
+from flask.ext.admin.model.helpers import get_mdict_item_or_list
 from flask.ext.admin import expose
 from flask.ext.admin.helpers import get_redirect_target
 from open_event.forms.admin.session_form import SessionForm
@@ -13,7 +14,7 @@ from open_event.forms.admin.microlocation_form import MicrolocationForm
 from ....helpers.data import DataManager
 from ....helpers.formatter import Formatter
 from ....helpers.update_version import VersionUpdater
-from ....helpers.helpers import is_event_owner, is_track_name_unique_in_event
+from ....helpers.helpers import is_event_owner, is_track_name_unique_in_event, save_files
 from ....helpers.data_getter import DataGetter
 from ....forms.admin.event_form import EventForm
 
@@ -62,17 +63,41 @@ class EventView(ModelView):
 
     @expose('/new/', methods=('GET', 'POST'))
     def create_view(self):
-        self._template_args['events'] = DataGetter.get_all_events()
+        events = DataGetter.get_all_events()
         self._template_args['return_url'] = get_redirect_target() or self.get_url('.index_view')
         self.name = "Event | New"
-        index_view = super(EventView, self).create_view()
-        return index_view
+        self.form = EventForm()
+        if self.form.validate():
+            if request.method == "POST":
+                filename = save_files("logo")
+                DataManager.create_event(self.form, filename)
+                flash("Event updated")
+                return redirect(url_for('.index_view'))
+        return self.render('admin/model/create_model.html',
+                           form=self.form,
+                           events=events)
 
     @expose('/edit/', methods=('GET', 'POST'))
     def edit_view(self):
-        self._template_args['events'] = DataGetter.get_all_events()
+        events = DataGetter.get_all_events()
+        event_id = get_mdict_item_or_list(request.args, 'id')
         self.name = "Event | Edit"
-        return super(EventView, self).edit_view()
+        event = DataGetter.get_event(event_id)
+        self.form = EventForm(obj=event)
+        if self.form.validate():
+            if request.method == "POST":
+                if is_event_owner(event_id):
+                    filename = save_files("logo")
+                    DataManager.update_event(self.form, event, filename)
+                    flash("Event updated")
+                else:
+                    flash("You don't have permission!")
+                return redirect(url_for('.index_view', event_id=event_id))
+        return self.render('admin/model/create_model.html',
+                           form=self.form,
+                           event_id=event_id,
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id))
 
     @expose('/<event_id>')
     def event(self, event_id):

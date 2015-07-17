@@ -14,6 +14,10 @@ class DataGetter:
         return Event.query.all()
 
     @staticmethod
+    def get_event(event_id):
+        return Event.query.get(event_id)
+
+    @staticmethod
     def get_sessions_by_event_id():
         return Session.query.filter_by(event_id=get_event_id())
 
