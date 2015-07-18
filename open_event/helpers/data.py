@@ -267,12 +267,18 @@ class DataManager(object):
         Event will be saved to database with proper Event id
         :param form: view data form
         """
-        data = form.data
-        del data["logo"]
-        event = Event(dict(data))
-        event.logo = file_name
+        event = Event(name=form.name.data,
+                      email=form.email.data,
+                      color=form.color.data,
+                      logo=file_name,
+                      start_time=form.start_time.data,
+                      end_time=form.end_time.data,
+                      latitude=form.latitude.data,
+                      longitude=form.longitude.data,
+                      location_name=form.location_name.data,
+                      slogan=form.slogan.data,
+                      url=form.url.data)
         save_to_db(event, "Event saved")
-        # update_version(event_id, False, "microlocations_ver")
 
     @staticmethod
     def update_event(form, event, file_name):
@@ -288,7 +294,6 @@ class DataManager(object):
             .update(dict(data))
         event.logo = file_name
         save_to_db(event, "Event updated")
-        # update_version(microlocation.event_id, False, "microlocations_ver")
 
 
 def save_to_db(item, msg):
