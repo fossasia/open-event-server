@@ -3,6 +3,7 @@ import logging
 
 from sqlalchemy.orm.collections import InstrumentedList
 from flask import flash
+from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt, check_password_hash
 
 from ..models import db
@@ -277,7 +278,8 @@ class DataManager(object):
                       longitude=form.longitude.data,
                       location_name=form.location_name.data,
                       slogan=form.slogan.data,
-                      url=form.url.data)
+                      url=form.url.data,
+                      owner=login.current_user.id)
         save_to_db(event, "Event saved")
 
     @staticmethod
