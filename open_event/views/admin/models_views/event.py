@@ -67,7 +67,7 @@ class EventView(ModelView):
         self._template_args['return_url'] = get_redirect_target() or self.get_url('.index_view')
         self.name = "Event | New"
         self.form = EventForm()
-        if self.form.validate():
+        if self.form.validate() and self.form.validate_date():
             if request.method == "POST":
                 filename = save_files("logo")
                 DataManager.create_event(self.form, filename)
@@ -84,7 +84,7 @@ class EventView(ModelView):
         self.name = "Event | Edit"
         event = DataGetter.get_event(event_id)
         self.form = EventForm(obj=event)
-        if self.form.validate():
+        if self.form.validate() and self.form.validate_date():
             if request.method == "POST":
                 if is_event_owner(event_id):
                     filename = save_files("logo")
@@ -182,7 +182,7 @@ class EventView(ModelView):
         events = DataGetter.get_all_events()
         form = SessionForm()
         self.name = "Session | New"
-        if form.validate():
+        if form.validate() and form.validate_date():
             if is_event_owner(event_id):
                 DataManager.create_session(form, event_id)
             else:
@@ -200,7 +200,7 @@ class EventView(ModelView):
         events = DataGetter.get_all_events()
         form = SessionForm(obj=session)
         self.name = "Session | Edit"
-        if form.validate():
+        if form.validate() and form.validate_date():
             if is_event_owner(event_id):
                 DataManager.update_session(form, session)
                 flash("Session updated")
