@@ -182,7 +182,7 @@ class EventView(ModelView):
         events = DataGetter.get_all_events()
         form = SessionForm()
         self.name = "Session | New"
-        if form.validate() and form.validate_date():
+        if form.validate():
             if is_event_owner(event_id):
                 DataManager.create_session(form, event_id)
             else:
@@ -200,7 +200,7 @@ class EventView(ModelView):
         events = DataGetter.get_all_events()
         form = SessionForm(obj=session)
         self.name = "Session | Edit"
-        if form.validate() and form.validate_date():
+        if form.validate():
             if is_event_owner(event_id):
                 DataManager.update_session(form, session)
                 flash("Session updated")
