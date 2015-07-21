@@ -16,3 +16,16 @@ class CustomDateSessionValidate(object):
             if not (event.start_time <= session_start and session_end <= event.end_time and session_start < session_end):
                 self.message = "Session date should be between Event date"
                 raise ValidationError(self.message)
+
+
+class CustomDateEventValidate(object):
+    def __init__(self, message=None):
+        self.message = message
+
+    def __call__(self, form, field):
+        event_start = form['start_time'].data
+        event_end = form['end_time'].data
+        if event_start is not None and event_end is not None:
+            if not event_start < event_end:
+                self.message = "Start time has to be less than end time"
+                raise ValidationError(self.message)

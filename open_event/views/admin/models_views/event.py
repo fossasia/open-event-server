@@ -67,7 +67,7 @@ class EventView(ModelView):
         self._template_args['return_url'] = get_redirect_target() or self.get_url('.index_view')
         self.name = "Event | New"
         self.form = EventForm()
-        if self.form.validate() and self.form.validate_date():
+        if self.form.validate():
             if request.method == "POST":
                 filename = save_files("logo")
                 DataManager.create_event(self.form, filename)
@@ -84,7 +84,7 @@ class EventView(ModelView):
         self.name = "Event | Edit"
         event = DataGetter.get_event(event_id)
         self.form = EventForm(obj=event)
-        if self.form.validate() and self.form.validate_date():
+        if self.form.validate():
             if request.method == "POST":
                 if is_event_owner(event_id):
                     filename = save_files("logo")
