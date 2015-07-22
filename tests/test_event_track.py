@@ -24,7 +24,7 @@ class TestEvent(unittest.TestCase):
         Setup.drop_db()
 
     def test_api_tracks(self):
-        self.assertEqual(self.app.get('/get/api/v1/event/1/tracks').status_code, 200)
+        self.assertEqual(self.app.get('/api/v1/event/1/tracks').status_code, 200)
 
     def test_admin_track(self):
         self.assertEqual(self.app.get('/admin/event/1/track').status_code, 200)
