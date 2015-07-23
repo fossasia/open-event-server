@@ -393,5 +393,3 @@ class EventView(ModelView):
             flash("You don't have permission!")
         return redirect(url_for('.event_microlocations',
                                 event_id=event_id))
-
-

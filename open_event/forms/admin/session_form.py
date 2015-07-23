@@ -19,7 +19,7 @@ class SessionForm(Form):
     subtitle = StringField('Subtitle')
     abstract = TextAreaField('Abstract')
     description = TextAreaField('Description', [DataRequired()])
-    start_time = DateTimeField('Start Time', [DataRequired()])
+    start_time = DateTimeField('Start Time', [DataRequired(), CustomDateSessionValidate()])
     end_time = DateTimeField('End Time', [DataRequired(), CustomDateSessionValidate()])
     type = StringField('Type')
     level = StringField('Level')

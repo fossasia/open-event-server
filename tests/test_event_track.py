@@ -10,6 +10,7 @@ from open_event.models.track import Track
 
 
 class TestEvent(unittest.TestCase):
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
