@@ -17,6 +17,7 @@ from ....helpers.update_version import VersionUpdater
 from ....helpers.helpers import is_event_owner, is_track_name_unique_in_event, save_files
 from ....helpers.data_getter import DataGetter
 from ....forms.admin.event_form import EventForm
+from ....forms.admin.file_form import FileForm
 
 class EventView(ModelView):
     form = EventForm
@@ -393,3 +394,15 @@ class EventView(ModelView):
             flash("You don't have permission!")
         return redirect(url_for('.event_microlocations',
                                 event_id=event_id))
+
+    @expose('/upload', methods=['GET', 'POST'])
+    def upload(self):
+        """Upload a new file."""
+        events = DataGetter.get_all_events()
+        self.form = FileForm()
+        if request.method == 'POST':
+            filename = save_files("file")
+            return redirect(url_for('.index_view'))
+        return self.render('admin/model/create_model.html',
+                           form=self.form,
+                           events=events)
