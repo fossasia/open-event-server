@@ -15,6 +15,10 @@ from ..models.microlocation import Microlocation
 from ..models.user import User
 from ..models.event import Event
 from ..helpers.update_version import VersionUpdater
+from ..models.file import File
+from werkzeug import secure_filename
+from flask import request
+import os.path
 
 
 class DataManager(object):
@@ -263,7 +267,7 @@ class DataManager(object):
         db.session.commit()
 
     @staticmethod
-    def create_event(form, file_name):
+    def create_event(form):
         """
         Event will be saved to database with proper Event id
         :param form: view data form
@@ -271,7 +275,7 @@ class DataManager(object):
         event = Event(name=form.name.data,
                       email=form.email.data,
                       color=form.color.data,
-                      logo=file_name,
+                      logo=form.logo.data.name,
                       start_time=form.start_time.data,
                       end_time=form.end_time.data,
                       latitude=form.latitude.data,
@@ -283,19 +287,32 @@ class DataManager(object):
         save_to_db(event, "Event saved")
 
     @staticmethod
-    def update_event(form, event, file_name):
+    def update_event(form, event):
         """
         Event will be updated in database
         :param form: view data form
         :param event: object contains all earlier data
         """
         data = form.data
-        del data["logo"]
+        logo = data['logo']
+        del data['logo']
         db.session.query(Event)\
             .filter_by(id=event.id)\
             .update(dict(data))
-        event.logo = file_name
+        event.logo = logo.name
+        print event.logo
         save_to_db(event, "Event updated")
+
+    @staticmethod
+    def create_file():
+        """
+        File from request will be saved to databse
+        """
+        file = request.files["file"]
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(os.path.realpath('.') + '/static/', filename))
+        file_object = File(name=filename, path='')
+        save_to_db(file_object, "file saved")
 
 
 def save_to_db(item, msg):

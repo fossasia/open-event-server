@@ -6,8 +6,9 @@ from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
 from ..models.user import User
+from ..models.file import File
 from helpers import get_event_id
-
+from ..models import db
 class DataGetter:
     @staticmethod
     def get_all_events():
@@ -65,3 +66,8 @@ class DataGetter:
     def get_event_owner(event_id):
         owner_id = Event.query.get(event_id).owner
         return User.query.get(owner_id).login
+
+    @staticmethod
+    def get_all_files():
+        files = File.query.all()
+        return files

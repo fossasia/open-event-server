@@ -7,6 +7,7 @@ from flask.ext import login
 from ..models.event import Event
 from ..models.track import Track
 
+
 def get_event_id():
     url = request.url
     result = re.search('event\/[0-9]*', url)
@@ -29,9 +30,3 @@ def is_track_name_unique_in_event(form, event_id, *args):
                 return False
         else:
             return True
-
-def save_files(param):
-    file = request.files[param]
-    filename = secure_filename(file.filename)
-    file.save(os.path.join(os.path.realpath('.') + '/static/', filename))
-    return  filename
