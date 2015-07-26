@@ -2,7 +2,7 @@
 import logging
 
 from sqlalchemy.orm.collections import InstrumentedList
-from flask import flash
+from flask import flash, request
 from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt, check_password_hash
 
@@ -17,7 +17,6 @@ from ..models.event import Event
 from ..helpers.update_version import VersionUpdater
 from ..models.file import File
 from werkzeug import secure_filename
-from flask import request
 import os.path
 
 
@@ -299,8 +298,7 @@ class DataManager(object):
         db.session.query(Event)\
             .filter_by(id=event.id)\
             .update(dict(data))
-        event.logo = logo.name
-        print event.logo
+        event.logo = logo
         save_to_db(event, "Event updated")
 
     @staticmethod

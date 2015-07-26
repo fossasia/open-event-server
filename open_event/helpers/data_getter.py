@@ -8,7 +8,8 @@ from ..models.microlocation import Microlocation
 from ..models.user import User
 from ..models.file import File
 from helpers import get_event_id
-from ..models import db
+
+
 class DataGetter:
     @staticmethod
     def get_all_events():

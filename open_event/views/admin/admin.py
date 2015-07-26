@@ -24,7 +24,8 @@ class AdminView(object):
         self._add_models_to_menu()
 
     def _add_models_to_menu(self):
-        self.admin.add_view(EventView(Event, db.session))
+        ev = EventView(Event, db.session)
+        self.admin.add_view(ev)
         self.admin.add_view(ApiView(name='Api'))
 
     def init_login(self):

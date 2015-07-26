@@ -1,7 +1,5 @@
 """Copyright 2015 Rafal Kowalski"""
 import re
-import os.path
-from werkzeug import secure_filename
 from flask import request
 from flask.ext import login
 from ..models.event import Event

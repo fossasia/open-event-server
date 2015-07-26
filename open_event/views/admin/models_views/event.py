@@ -33,6 +33,7 @@ class EventView(ModelView):
                    'location_name',
                    'slogan',
                    'url')
+    app=None
 
     column_formatters = {
         'name': Formatter.column_formatter,
