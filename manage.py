@@ -2,7 +2,7 @@
 from flask import url_for
 
 from open_event import manager
-from open_event import app
+from open_event import current_app as app
 
 @manager.command
 def list_routes():

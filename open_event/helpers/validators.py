@@ -1,6 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
-from helpers import get_event_id
-from data_getter import DataGetter
+from open_event.helpers.helpers import get_event_id
+from open_event.helpers.data_getter import DataGetter
 from wtforms import ValidationError
 
 

@@ -3,7 +3,7 @@ from flask_wtf import Form
 from wtforms import StringField, TextAreaField
 from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField
 from wtforms.validators import DataRequired
-from flask.ext.admin.form.fields import DateTimeField
+from flask_admin.form.fields import DateTimeField
 
 from open_event.models.speaker import Speaker
 from ...helpers.helpers import get_event_id

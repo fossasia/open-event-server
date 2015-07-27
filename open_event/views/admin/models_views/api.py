@@ -1,5 +1,5 @@
 """Copyright 2015 Rafal Kowalski"""
-from flask.ext.admin import BaseView, expose
+from flask_admin import BaseView, expose
 
 from ....models.event import Event
 

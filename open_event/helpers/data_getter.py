@@ -7,7 +7,7 @@ from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
 from ..models.user import User
 from ..models.file import File
-from helpers import get_event_id
+from open_event.helpers.helpers import get_event_id
 
 
 class DataGetter:
@@ -70,5 +70,6 @@ class DataGetter:
 
     @staticmethod
     def get_all_files():
-        files = File.query.all()
-        return files
+        # from open_event import current_app
+        # files = File.query.all()
+        return []

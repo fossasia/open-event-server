@@ -1,10 +1,10 @@
 """Copyright 2015 Rafal Kowalski"""
 from flask import request, url_for, redirect, flash
 from flask.ext import login
-from flask.ext.admin.contrib.sqla import ModelView
-from flask.ext.admin.model.helpers import get_mdict_item_or_list
-from flask.ext.admin import expose
-from flask.ext.admin.helpers import get_redirect_target
+from flask_admin.contrib.sqla import ModelView
+from flask_admin.model.helpers import get_mdict_item_or_list
+from flask_admin import expose
+from flask_admin.helpers import get_redirect_target
 from open_event.forms.admin.session_form import SessionForm
 from open_event.forms.admin.speaker_form import SpeakerForm
 from open_event.forms.admin.sponsor_form import SponsorForm

@@ -1,8 +1,8 @@
 """Copyright 2015 Rafal Kowalski"""
 from flask import url_for, redirect, request
 from flask.ext import login
-from flask.ext.admin.base import AdminIndexView
-from flask.ext.admin import helpers, expose
+from flask_admin.base import AdminIndexView
+from flask_admin import helpers, expose
 
 from ...forms.admin.auth.registration_form import RegistrationForm
 from ...forms.admin.auth.login_form import LoginForm

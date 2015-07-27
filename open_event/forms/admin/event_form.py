@@ -2,7 +2,7 @@
 from flask_wtf import Form
 from wtforms import StringField, FloatField, SelectField
 from wtforms.validators import DataRequired
-from flask.ext.admin.form.fields import DateTimeField
+from flask_admin.form.fields import DateTimeField
 from ...helpers.validators import CustomDateEventValidate
 from ...helpers.data_getter import DataGetter
 
