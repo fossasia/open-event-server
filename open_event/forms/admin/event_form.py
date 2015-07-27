@@ -6,7 +6,6 @@ from flask_admin.form.fields import DateTimeField
 from ...helpers.validators import CustomDateEventValidate
 from ...helpers.data_getter import DataGetter
 
-
 class EventForm(Form):
     name = StringField('Name', [DataRequired()])
     latitude = FloatField('Latitude', [DataRequired()])
@@ -15,7 +14,8 @@ class EventForm(Form):
     color = StringField('Color')
     start_time = DateTimeField('Start Time', [DataRequired(), CustomDateEventValidate()])
     end_time = DateTimeField('End Time', [DataRequired(), CustomDateEventValidate()])
-    logo = SelectField(choices=DataGetter.get_all_files())
+    logo = SelectField('Logo',coerce=str, choices=DataGetter.get_all_files())
     email = StringField('Email')
     slogan = StringField('Slogan')
     url = StringField('Url')
+

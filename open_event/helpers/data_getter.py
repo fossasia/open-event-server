@@ -70,6 +70,5 @@ class DataGetter:
 
     @staticmethod
     def get_all_files():
-        # from open_event import current_app
-        # files = File.query.all()
-        return []
+        files = File.query.all()
+        return [(file.name, file.name) for file in files]

@@ -1,8 +1,7 @@
 import unittest
 from tests.setup import Setup
-from open_event import app
+from open_event import current_app as app
 from open_event.helpers.data import save_to_db
-from tests.object_mother import ObjectMother
 from mock import MagicMock
 from open_event.helpers.validators import CustomDateEventValidate, CustomDateSessionValidate
 from open_event.forms.admin.event_form import EventForm
@@ -11,6 +10,8 @@ from datetime import datetime
 from wtforms import ValidationError
 from open_event.models.event import Event
 from flask import request
+
+
 class TestValidation(unittest.TestCase):
     def setUp(self):
         self.app = Setup.create_app()

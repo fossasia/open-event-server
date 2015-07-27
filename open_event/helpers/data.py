@@ -274,7 +274,7 @@ class DataManager(object):
         event = Event(name=form.name.data,
                       email=form.email.data,
                       color=form.color.data,
-                      logo=form.logo.data.name,
+                      logo=form.logo.data,
                       start_time=form.start_time.data,
                       end_time=form.end_time.data,
                       latitude=form.latitude.data,

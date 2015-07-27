@@ -1,7 +1,7 @@
 """Written by - Rafal Kowalski"""
 import os
 
-from open_event import app
+from open_event import current_app as app
 from open_event.models import db
 
 _basedir = os.path.abspath(os.path.dirname(__file__))

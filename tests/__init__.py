@@ -2,7 +2,7 @@
 import datetime
 import unittest
 from tests.setup import Setup
-from open_event import app
+from open_event import current_app as app
 from open_event.models import db
 from open_event.models.track import Track
 from open_event.models.event import Event
@@ -22,7 +22,7 @@ class OpenEventTestCase(unittest.TestCase):
         self.assertTrue(AttributeError, context.exception)
         ev = Event(name="event1", start_time=datetime.datetime(2003, 8, 4, 12, 30, 45), end_time=datetime.datetime(2003, 8, 4, 12, 30, 45))
         tr = Track(name="name", event_id=1, description="description")
-        with app.app_context():
+        with app.test_request_context():
             db.session.add(ev)
             db.session.add(tr)
             db.session.commit()

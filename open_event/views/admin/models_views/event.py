@@ -16,11 +16,11 @@ from ....helpers.formatter import Formatter
 from ....helpers.update_version import VersionUpdater
 from ....helpers.helpers import is_event_owner, is_track_name_unique_in_event
 from ....helpers.data_getter import DataGetter
-from ....forms.admin.event_form import EventForm
+
 from ....forms.admin.file_form import FileForm
 
 class EventView(ModelView):
-    form = EventForm
+    form = None
     column_list = ('id',
                    'name',
                    'email',
@@ -33,7 +33,6 @@ class EventView(ModelView):
                    'location_name',
                    'slogan',
                    'url')
-    app=None
 
     column_formatters = {
         'name': Formatter.column_formatter,
@@ -68,6 +67,7 @@ class EventView(ModelView):
         events = DataGetter.get_all_events()
         self._template_args['return_url'] = get_redirect_target() or self.get_url('.index_view')
         self.name = "Event | New"
+        from ....forms.admin.event_form import EventForm
         self.form = EventForm()
         if self.form.validate():
             if request.method == "POST":
@@ -84,6 +84,7 @@ class EventView(ModelView):
         event_id = get_mdict_item_or_list(request.args, 'id')
         self.name = "Event | Edit"
         event = DataGetter.get_event(event_id)
+        from ....forms.admin.event_form import EventForm
         self.form = EventForm(obj=event)
         if self.form.validate():
             if request.method == "POST":

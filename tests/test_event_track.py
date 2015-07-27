@@ -2,7 +2,7 @@
 import unittest
 from flask import url_for
 from tests.setup import Setup
-from open_event import app
+from open_event import current_app as app
 from open_event.helpers.data import save_to_db
 from tests.object_mother import ObjectMother
 from tests.auth_helper import register

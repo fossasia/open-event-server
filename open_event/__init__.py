@@ -37,4 +37,5 @@ def create_app():
 
     return app, manager, db
 
+
 current_app, manager, database = create_app()
