@@ -309,7 +309,7 @@ class DataManager(object):
         file = request.files["file"]
         filename = secure_filename(file.filename)
         file.save(os.path.join(os.path.realpath('.') + '/static/', filename))
-        file_object = File(name=filename, path='')
+        file_object = File(name=filename, path='', owner_id=login.current_user.id)
         save_to_db(file_object, "file saved")
 
 

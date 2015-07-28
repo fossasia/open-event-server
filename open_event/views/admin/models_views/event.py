@@ -16,7 +16,6 @@ from ....helpers.formatter import Formatter
 from ....helpers.update_version import VersionUpdater
 from ....helpers.helpers import is_event_owner, is_track_name_unique_in_event
 from ....helpers.data_getter import DataGetter
-
 from ....forms.admin.file_form import FileForm
 
 class EventView(ModelView):
@@ -399,10 +398,12 @@ class EventView(ModelView):
     def upload(self):
         """Upload a new file."""
         events = DataGetter.get_all_events()
+        files = DataGetter.get_all_owner_files()
         self.form = FileForm()
         if request.method == 'POST':
             DataManager.create_file()
             return redirect(url_for('.index_view'))
-        return self.render('admin/model/create_model.html',
+        return self.render('admin/model/file/file.html',
                            form=self.form,
-                           events=events)
+                           events=events,
+                           files=files)

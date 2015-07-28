@@ -14,7 +14,7 @@ class EventForm(Form):
     color = StringField('Color')
     start_time = DateTimeField('Start Time', [DataRequired(), CustomDateEventValidate()])
     end_time = DateTimeField('End Time', [DataRequired(), CustomDateEventValidate()])
-    logo = SelectField('Logo',coerce=str, choices=DataGetter.get_all_files())
+    logo = SelectField('Logo',coerce=str, choices=DataGetter.get_all_files_tuple())
     email = StringField('Email')
     slogan = StringField('Slogan')
     url = StringField('Url')

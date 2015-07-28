@@ -8,7 +8,7 @@ from ..models.microlocation import Microlocation
 from ..models.user import User
 from ..models.file import File
 from open_event.helpers.helpers import get_event_id
-
+from flask.ext import login
 
 class DataGetter:
     @staticmethod
@@ -69,6 +69,11 @@ class DataGetter:
         return User.query.get(owner_id).login
 
     @staticmethod
-    def get_all_files():
-        files = File.query.all()
+    def get_all_files_tuple():
+        files = File.query.filter_by(owner_id=login.current_user.id)
         return [(file.name, file.name) for file in files]
+
+    @staticmethod
+    def get_all_owner_files():
+        files = File.query.filter_by(owner_id=login.current_user.id)
+        return files

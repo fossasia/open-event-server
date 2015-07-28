@@ -10,12 +10,15 @@ class File(db.Model):
                      nullable=False)
     path = db.Column(db.String,
                          nullable=False)
+    owner_id = db.Column(db.Integer,
+                         db.ForeignKey('user.id'))
 
     def __init__(self,
                  name=None,
-                 path=None):
+                 path=None,
+                 owner_id=None):
         self.name = name
         self.path = path
-
+        self.owner_id = owner_id
     def __repr__(self):
         return '<File %r>' % (self.name)
