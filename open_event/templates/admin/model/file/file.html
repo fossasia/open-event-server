@@ -34,13 +34,13 @@
                         {% for file in files %}
                             <tr>
                                 <td>
-                                    <a onclick="" href="" title="Delete record">
+                                    <a onclick="return confirm('Are you sure you want to delete this record?');" href="{{ get_url('event.remove_file', file_id=file.id)}}" title="Delete record">
                                         <span class="glyphicon glyphicon-trash"></span>
                                     </a>
                                 </td>
                                 <td>{{file.id}}</td>
                                 <td>{{file.name}}</td>
-                                <td><img src="/static/{{file.name}}" alt="Mountain View" style="width:304px;height:228px;"></td>
+                                <td><img src="/pic/{{file.name}}" height="84" width="84"></td>
                             </tr>
                         {% endfor %}
                     </tbody>

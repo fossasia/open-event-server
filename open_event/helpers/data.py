@@ -304,13 +304,24 @@ class DataManager(object):
     @staticmethod
     def create_file():
         """
-        File from request will be saved to databse
+        File from request will be saved to database
         """
         file = request.files["file"]
         filename = secure_filename(file.filename)
         file.save(os.path.join(os.path.realpath('.') + '/static/', filename))
         file_object = File(name=filename, path='', owner_id=login.current_user.id)
         save_to_db(file_object, "file saved")
+        flash("File added")
+
+    @staticmethod
+    def remove_file(file_id):
+        """
+        File from request will be removed from database
+        """
+        file = File.query.get(file_id)
+        os.remove(os.path.join(os.path.realpath('.') + '/static/', file.name))
+        delete_from_db(file, "File removed")
+        flash("File removed")
 
 
 def save_to_db(item, msg):

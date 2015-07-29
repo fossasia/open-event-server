@@ -402,7 +402,19 @@ class EventView(ModelView):
         self.form = FileForm()
         if request.method == 'POST':
             DataManager.create_file()
-            return redirect(url_for('.index_view'))
+
+        return self.render('admin/model/file/file.html',
+                           form=self.form,
+                           events=events,
+                           files=files)
+
+    @expose('/remove_file/<file_id>', methods=['GET', 'POST'])
+    def remove_file(self, file_id):
+        """Upload a new file."""
+        events = DataGetter.get_all_events()
+        files = DataGetter.get_all_owner_files()
+        DataManager.remove_file(file_id)
+
         return self.render('admin/model/file/file.html',
                            form=self.form,
                            events=events,

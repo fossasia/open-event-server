@@ -1,5 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
-from flask import jsonify, url_for, redirect, request
+import os
+from flask import jsonify, url_for, redirect, request, send_from_directory
 from flask.ext.cors import cross_origin
 
 from ..models.track import Track
@@ -83,3 +84,8 @@ def get_event_version(event_id):
     if version:
         return jsonify(version.serialize)
     return jsonify({"version": []})
+
+
+@app.route('/pic/<path:filename>')
+def send_pic(filename):
+    return send_from_directory(os.path.realpath('.') + '/static/', filename)
