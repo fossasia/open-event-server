@@ -82,11 +82,12 @@
 
           {% block menu_links %}
           <ul class="nav navbar-nav navbar-right">
-            <li>
-              {% if current_user.is_authenticated() %}
-                <a href="{{ get_url('admin.logout_view')}}">Log out</a>
-              {% endif %}
-            </li>
+            {% if current_user.is_authenticated() %}
+              <li><a>{{current_user.login}}</a></li>
+              <li>
+                  <a href="{{ get_url('admin.logout_view')}}">Log out</a>
+              </li>
+            {% endif %}
           </ul>
           {% endblock %}
           {% block access_control %}
