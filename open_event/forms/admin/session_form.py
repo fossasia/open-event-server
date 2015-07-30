@@ -15,6 +15,7 @@ def get_speakers():
 
 
 class SessionForm(Form):
+    """Session Form class"""
     title = StringField('Title', [DataRequired()])
     subtitle = StringField('Subtitle')
     abstract = TextAreaField('Abstract')

@@ -6,7 +6,9 @@ from flask_admin.form.fields import DateTimeField
 from ...helpers.validators import CustomDateEventValidate
 from ...helpers.data_getter import DataGetter
 
+
 class EventForm(Form):
+    """Event Form class"""
     name = StringField('Name', [DataRequired()])
     latitude = FloatField('Latitude', [DataRequired()])
     longitude = FloatField('Longitude', [DataRequired()])
@@ -18,4 +20,3 @@ class EventForm(Form):
     email = StringField('Email')
     slogan = StringField('Slogan')
     url = StringField('Url')
-
