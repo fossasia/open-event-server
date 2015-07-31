@@ -10,6 +10,7 @@ from ..models.file import File
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
 
+
 class DataGetter:
     @staticmethod
     def get_all_events():

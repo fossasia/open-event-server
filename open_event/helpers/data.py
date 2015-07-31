@@ -284,6 +284,9 @@ class DataManager(object):
                       url=form.url.data,
                       owner=login.current_user.id)
         save_to_db(event, "Event saved")
+        update_version(event_id=event.id,
+                       is_created=True,
+                       column_to_increment="event_ver")
 
     @staticmethod
     def update_event(form, event):
@@ -300,6 +303,9 @@ class DataManager(object):
             .update(dict(data))
         event.logo = logo
         save_to_db(event, "Event updated")
+        update_version(event_id=event.id,
+                       is_created=False,
+                       column_to_increment="event_ver")
 
     @staticmethod
     def create_file():
