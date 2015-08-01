@@ -12,7 +12,10 @@ class Config(object):
 
 class ProductionConfig(Config):
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+    try:
+        SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+    except:
+        pass
 
 
 class StagingConfig(Config):
@@ -31,7 +34,7 @@ class TestingConfig(Config):
 class LocalPSQLConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI ="postgresql://open_event_user:start@localhost/test"
+    SQLALCHEMY_DATABASE_URI ="postgresql://postgres:start@localhost/test"
 
 class LocalSQLITEConfig(Config):
     DEVELOPMENT = True

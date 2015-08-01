@@ -3,7 +3,7 @@ import unittest
 
 from tests.setup import Setup
 
-from open_event import app
+from open_event import current_app as app
 from open_event.helpers.data import save_to_db
 from tests.object_mother import ObjectMother
 
@@ -17,15 +17,15 @@ class TestApi(unittest.TestCase):
 
     def test_api_tracks(self):
         with self.assertRaises(Exception) as context:
-            self.app.get('/get/api/v1/event/1')
+            self.app.get('/api/v1/event/1')
         self.assertTrue(AttributeError, context.exception)
         event = ObjectMother.get_event()
         track = ObjectMother.get_track()
         with app.test_request_context():
             save_to_db(event, "Event saved")
             save_to_db(track, "Track saved")
-        self.assertEqual(self.app.get('/get/api/v1/event/1').status_code, 200)
-        self.assertEqual(self.app.get('/get/api/v1/event/1/tracks').status_code, 200)
+        self.assertEqual(self.app.get('/api/v1/event/1').status_code, 200)
+        self.assertEqual(self.app.get('/api/v1/event/1/tracks').status_code, 200)
 
 if __name__ == '__main__':
     unittest.main()

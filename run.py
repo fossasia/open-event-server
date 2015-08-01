@@ -1,8 +1,8 @@
 """Copyright 2015 Rafal Kowalski"""
-from open_event import app
-from open_event.models import db
 
 if __name__ == "__main__":
-    with app.app_context():
+    from open_event import current_app
+    from open_event.models import db
+    with current_app.app_context():
         db.create_all()
-    app.run(host='0.0.0.0')
+    current_app.run(host='0.0.0.0', debug=True)

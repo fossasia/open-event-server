@@ -55,13 +55,14 @@
           <ul class="nav navbar-nav">
             <!-- Main menu-->
             {% if event_id %}
-            <li><a href="/admin/event/{{event_id}}/sponsor">Sponsor</a><li>
-            <li><a href="/admin/event/{{event_id}}/speaker">Speaker</a><li>
-            <li><a href="/admin/event/{{event_id}}/session">Session</a><li>
-            <li><a href="/admin/event/{{event_id}}/track">Track</a><li>
-            <li><a href="/admin/event/{{event_id}}/microlocation">Microlocation</a><li>
-            <li><a href="{{ get_url('apiview.index') }}">Api</a><li>
+              <li><a href="/admin/event/{{event_id}}/sponsor">Sponsor</a><li>
+              <li><a href="/admin/event/{{event_id}}/speaker">Speaker</a><li>
+              <li><a href="/admin/event/{{event_id}}/session">Session</a><li>
+              <li><a href="/admin/event/{{event_id}}/track">Track</a><li>
+              <li><a href="/admin/event/{{event_id}}/microlocation">Microlocation</a><li>
+              <li><a href="{{ get_url('apiview.index') }}">Api</a><li></li>
             {% endif %}
+            <li><a href="{{ get_url('event.upload') }}">Files</a><li>
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" aria-expanded="true">Switch event<b class="caret"></b></a>
               <ul class="dropdown-menu">
@@ -81,11 +82,12 @@
 
           {% block menu_links %}
           <ul class="nav navbar-nav navbar-right">
-            <li>
-              {% if current_user.is_authenticated() %}
-                <a href="{{ get_url('admin.logout_view')}}">Log out</a>
-              {% endif %}
-            </li>
+            {% if current_user.is_authenticated() %}
+              <li><a>{{current_user.login}}</a></li>
+              <li>
+                  <a href="{{ get_url('admin.logout_view')}}">Log out</a>
+              </li>
+            {% endif %}
           </ul>
           {% endblock %}
           {% block access_control %}

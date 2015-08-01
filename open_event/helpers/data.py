@@ -2,7 +2,8 @@
 import logging
 
 from sqlalchemy.orm.collections import InstrumentedList
-from flask import flash
+from flask import flash, request
+from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt, check_password_hash
 
 from ..models import db
@@ -12,7 +13,11 @@ from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
 from ..models.user import User
+from ..models.event import Event
 from ..helpers.update_version import VersionUpdater
+from ..models.file import File
+from werkzeug import secure_filename
+import os.path
 
 
 class DataManager(object):
@@ -259,6 +264,70 @@ class DataManager(object):
     def add_owner_to_event(owner_id, event):
         event.owner = owner_id
         db.session.commit()
+
+    @staticmethod
+    def create_event(form):
+        """
+        Event will be saved to database with proper Event id
+        :param form: view data form
+        """
+        event = Event(name=form.name.data,
+                      email=form.email.data,
+                      color=form.color.data,
+                      logo=form.logo.data,
+                      start_time=form.start_time.data,
+                      end_time=form.end_time.data,
+                      latitude=form.latitude.data,
+                      longitude=form.longitude.data,
+                      location_name=form.location_name.data,
+                      slogan=form.slogan.data,
+                      url=form.url.data,
+                      owner=login.current_user.id)
+        save_to_db(event, "Event saved")
+        update_version(event_id=event.id,
+                       is_created=True,
+                       column_to_increment="event_ver")
+
+    @staticmethod
+    def update_event(form, event):
+        """
+        Event will be updated in database
+        :param form: view data form
+        :param event: object contains all earlier data
+        """
+        data = form.data
+        logo = data['logo']
+        del data['logo']
+        db.session.query(Event)\
+            .filter_by(id=event.id)\
+            .update(dict(data))
+        event.logo = logo
+        save_to_db(event, "Event updated")
+        update_version(event_id=event.id,
+                       is_created=False,
+                       column_to_increment="event_ver")
+
+    @staticmethod
+    def create_file():
+        """
+        File from request will be saved to database
+        """
+        file = request.files["file"]
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(os.path.realpath('.') + '/static/', filename))
+        file_object = File(name=filename, path='', owner_id=login.current_user.id)
+        save_to_db(file_object, "file saved")
+        flash("File added")
+
+    @staticmethod
+    def remove_file(file_id):
+        """
+        File from request will be removed from database
+        """
+        file = File.query.get(file_id)
+        os.remove(os.path.join(os.path.realpath('.') + '/static/', file.name))
+        delete_from_db(file, "File removed")
+        flash("File removed")
 
 
 def save_to_db(item, msg):

@@ -3,7 +3,7 @@ import unittest
 
 from tests.setup_database import Setup
 from tests.object_mother import ObjectMother
-from open_event import app
+from open_event import current_app as app
 from open_event.helpers.data import save_to_db
 
 

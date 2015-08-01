@@ -5,6 +5,7 @@ from flask.ext import login
 from ..models.event import Event
 from ..models.track import Track
 
+
 def get_event_id():
     url = request.url
     result = re.search('event\/[0-9]*', url)

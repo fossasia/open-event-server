@@ -1,6 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 from open_event.helpers.date_formatter import DateFormatter
 from . import db
+from sqlalchemy_utils import ColorType
 
 
 class Event(db.Model):
@@ -11,7 +12,7 @@ class Event(db.Model):
                      nullable=False,
                      unique=True)
     email = db.Column(db.String)
-    color = db.Column(db.String)
+    color = db.Column(ColorType)
     logo = db.Column(db.String)
     start_time = db.Column(db.DateTime,
                            nullable=False)

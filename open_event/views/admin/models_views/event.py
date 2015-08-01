@@ -1,9 +1,10 @@
 """Copyright 2015 Rafal Kowalski"""
 from flask import request, url_for, redirect, flash
 from flask.ext import login
-from flask.ext.admin.contrib.sqla import ModelView
-from flask.ext.admin import expose
-from flask.ext.admin.helpers import get_redirect_target
+from flask_admin.contrib.sqla import ModelView
+from flask_admin.model.helpers import get_mdict_item_or_list
+from flask_admin import expose
+from flask_admin.helpers import get_redirect_target
 from open_event.forms.admin.session_form import SessionForm
 from open_event.forms.admin.speaker_form import SpeakerForm
 from open_event.forms.admin.sponsor_form import SponsorForm
@@ -15,10 +16,10 @@ from ....helpers.formatter import Formatter
 from ....helpers.update_version import VersionUpdater
 from ....helpers.helpers import is_event_owner, is_track_name_unique_in_event
 from ....helpers.data_getter import DataGetter
-
+from ....forms.admin.file_form import FileForm
 
 class EventView(ModelView):
-
+    form = None
     column_list = ('id',
                    'name',
                    'email',
@@ -62,16 +63,41 @@ class EventView(ModelView):
 
     @expose('/new/', methods=('GET', 'POST'))
     def create_view(self):
-        self._template_args['events'] = DataGetter.get_all_events()
+        events = DataGetter.get_all_events()
         self._template_args['return_url'] = get_redirect_target() or self.get_url('.index_view')
         self.name = "Event | New"
-        return super(EventView, self).create_view()
+        from ....forms.admin.event_form import EventForm
+        self.form = EventForm()
+        if self.form.validate():
+            if request.method == "POST":
+                DataManager.create_event(self.form)
+                flash("Event updated")
+                return redirect(url_for('.index_view'))
+        return self.render('admin/model/create_model.html',
+                           form=self.form,
+                           events=events)
 
     @expose('/edit/', methods=('GET', 'POST'))
     def edit_view(self):
-        self._template_args['events'] = DataGetter.get_all_events()
+        events = DataGetter.get_all_events()
+        event_id = get_mdict_item_or_list(request.args, 'id')
         self.name = "Event | Edit"
-        return super(EventView, self).edit_view()
+        event = DataGetter.get_event(event_id)
+        from ....forms.admin.event_form import EventForm
+        self.form = EventForm(obj=event)
+        if self.form.validate():
+            if request.method == "POST":
+                if is_event_owner(event_id):
+                    DataManager.update_event(self.form, event)
+                    flash("Event updated")
+                else:
+                    flash("You don't have permission!")
+                return redirect(url_for('.index_view', event_id=event_id))
+        return self.render('admin/model/create_model.html',
+                           form=self.form,
+                           event_id=event_id,
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id))
 
     @expose('/<event_id>')
     def event(self, event_id):
@@ -368,4 +394,28 @@ class EventView(ModelView):
         return redirect(url_for('.event_microlocations',
                                 event_id=event_id))
 
+    @expose('/upload', methods=['GET', 'POST'])
+    def upload(self):
+        """Upload a new file."""
+        events = DataGetter.get_all_events()
+        files = DataGetter.get_all_owner_files()
+        self.form = FileForm()
+        if request.method == 'POST':
+            DataManager.create_file()
 
+        return self.render('admin/model/file/file.html',
+                           form=self.form,
+                           events=events,
+                           files=files)
+
+    @expose('/remove_file/<file_id>', methods=['GET', 'POST'])
+    def remove_file(self, file_id):
+        """Upload a new file."""
+        events = DataGetter.get_all_events()
+        files = DataGetter.get_all_owner_files()
+        DataManager.remove_file(file_id)
+
+        return self.render('admin/model/file/file.html',
+                           form=self.form,
+                           events=events,
+                           files=files)

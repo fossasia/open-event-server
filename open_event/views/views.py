@@ -1,6 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
-from .. import app
-from flask import jsonify, url_for, redirect, request
+import os
+from flask import jsonify, url_for, redirect, request, send_from_directory
 from flask.ext.cors import cross_origin
 
 from ..models.track import Track
@@ -11,16 +11,14 @@ from ..models.event import Event
 from ..models.session import Session
 from ..models.version import Version
 from ..helpers.object_formatter import ObjectFormatter
-
-# @app.errorhandler(404)
-# def not_found(error):
-#     return render_template('404.html'), 404
+from flask import Blueprint
 
 
+app = Blueprint('', __name__)
 @app.route('/', methods=['GET'])
 @cross_origin()
 def get_admin():
-    return redirect(url_for('.admin.index'))
+    return redirect(url_for('admin.index'))
 
 
 @app.route('/api/v1/event', methods=['GET'])
@@ -86,3 +84,8 @@ def get_event_version(event_id):
     if version:
         return jsonify(version.serialize)
     return jsonify({"version": []})
+
+
+@app.route('/pic/<path:filename>')
+def send_pic(filename):
+    return send_from_directory(os.path.realpath('.') + '/static/', filename)

@@ -6,6 +6,7 @@ from ...helpers.data_getter import DataGetter
 
 
 class MicrolocationForm(Form):
+    """Microlocation form class"""
     name = StringField('Name', [validators.DataRequired()])
     latitude = FloatField('Latitude', [validators.DataRequired()])
     longitude = FloatField('Longitude', [validators.DataRequired()])

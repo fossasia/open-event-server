@@ -1,35 +1,35 @@
 """Copyright 2015 Rafal Kowalski"""
 from flask.ext import login
-from flask.ext.admin import Admin
+from flask_admin import Admin
 
 from open_event.models import db
 from open_event.models.event import Event
 from open_event.models.user import User
 from open_event.views.admin.models_views.event import EventView
 from open_event.views.admin.models_views.api import ApiView
-from home import MyHomeView
+from open_event.views.admin.home import MyHomeView
 
 class AdminView(object):
 
-    def __init__(self, app, app_name):
-        self.app = app
-        self.init_login()
+    def __init__(self, app_name):
         self.admin = Admin(name=app_name, template_mode='bootstrap3', index_view=MyHomeView())
 
-    def init(self):
-        self.admin.init_app(self.app)
+    def init(self, app):
+        self.admin.init_app(app)
         self._add_views()
 
     def _add_views(self):
         self._add_models_to_menu()
 
     def _add_models_to_menu(self):
-        self.admin.add_view(EventView(Event, db.session))
+        ev = EventView(Event, db.session)
+        self.admin.add_view(ev)
         self.admin.add_view(ApiView(name='Api'))
 
-    def init_login(self):
+    @staticmethod
+    def init_login(app):
         login_manager = login.LoginManager()
-        login_manager.init_app(self.app)
+        login_manager.init_app(app)
 
         # Create user loader function
         @login_manager.user_loader

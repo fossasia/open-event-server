@@ -11,6 +11,7 @@ def get_sessions():
 
 
 class SpeakerForm(Form):
+    """Speaker Form class"""
     name = StringField('Name', [validators.DataRequired()])
     photo = StringField('Photo')
     biography = TextAreaField('Biography')

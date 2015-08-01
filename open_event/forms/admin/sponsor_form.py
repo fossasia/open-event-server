@@ -4,6 +4,7 @@ from wtforms import StringField, validators
 
 
 class SponsorForm(Form):
+    """Sponsor Form class"""
     name = StringField('Name', [validators.DataRequired()])
     url = StringField('Url')
     logo = StringField('Logo')

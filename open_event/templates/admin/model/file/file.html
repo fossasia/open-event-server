@@ -1,0 +1,57 @@
+{% extends 'admin/base1.html' %}
+{% import 'admin/lib.html' as lib with context %}
+
+{% macro extra() %}
+  <input name="_add_another" type="submit" class="btn btn-large" value="{{ _gettext('Save and Add') }}" />
+{% endmacro %}
+
+{% block head %}
+    {{ super() }}
+    {{ lib.form_css() }}
+{% endblock %}
+
+{% block body %}
+    <div class="well bs-component">
+        <h2>Owner Files</h2>
+        <div class="row">
+            <div class="col-md-6">
+              {% call lib.form_tag(form) %}
+                  {{ lib.render_form_fields(form, form_opts=form_opts) }}
+                  {{ lib.render_form_buttons(return_url, extra()) }}
+              {% endcall %}
+            </div>
+            <div class="col-md-6">
+                <table class="table table-condensed" id="table-list">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Min</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for file in files %}
+                            <tr>
+                                <td>
+                                    <a onclick="return confirm('Are you sure you want to delete this record?');" href="{{ get_url('event.remove_file', file_id=file.id)}}" title="Delete record">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </a>
+                                </td>
+                                <td>{{file.id}}</td>
+                                <td>{{file.name}}</td>
+                                <td><img src="/pic/{{file.name}}" height="84" width="84"></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block tail %}
+  {{ super() }}
+  {{ lib.form_js() }}
+{% endblock %}
