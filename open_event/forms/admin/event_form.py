@@ -5,6 +5,7 @@ from wtforms.validators import DataRequired
 from flask_admin.form.fields import DateTimeField
 from ...helpers.validators import CustomDateEventValidate
 from ...helpers.data_getter import DataGetter
+from wtforms_components import ColorField
 
 
 class EventForm(Form):
@@ -13,7 +14,7 @@ class EventForm(Form):
     latitude = FloatField('Latitude', [DataRequired()])
     longitude = FloatField('Longitude', [DataRequired()])
     location_name = StringField('Location name')
-    color = StringField('Color')
+    color = ColorField('Color')
     start_time = DateTimeField('Start Time', [DataRequired(), CustomDateEventValidate()])
     end_time = DateTimeField('End Time', [DataRequired(), CustomDateEventValidate()])
     logo = SelectField('Logo',coerce=str, choices=DataGetter.get_all_files_tuple())
