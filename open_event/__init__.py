@@ -24,7 +24,7 @@ def create_app():
 
     cors = CORS(app)
     app.secret_key = 'super secret key'
-    app.config.from_object('config.LocalPSQLConfig')
+    app.config.from_object('config.ProductionConfig')
     app.config['UPLOADS_FOLDER'] = os.path.realpath('.') + '/static/'
     app.config['FILE_SYSTEM_STORAGE_FILE_VIEW'] = 'static'
 
