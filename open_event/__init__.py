@@ -12,6 +12,8 @@ from open_event.models import db
 from open_event.views.admin.admin import AdminView
 import os.path
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 def create_app():
     app = Flask(__name__)
     from open_event.views.views import app as routes
@@ -27,7 +29,9 @@ def create_app():
     app.config.from_object('config.ProductionConfig')
     app.config['UPLOADS_FOLDER'] = os.path.realpath('.') + '/static/'
     app.config['FILE_SYSTEM_STORAGE_FILE_VIEW'] = 'static'
-
+    app.config['STATIC_URL'] = '/static/'
+    app.config['STATIC_ROOT'] = 'staticfiles'
+    app.config['STATICFILES_DIRS'] = (os.path.join(BASE_DIR, 'static'),)
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     app.logger.setLevel(logging.ERROR)
 
