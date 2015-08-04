@@ -373,3 +373,14 @@ def update_version(event_id, is_created, column_to_increment):
     VersionUpdater(event_id=event_id,
                    is_created=is_created,
                    column_to_increment=column_to_increment).update()
+
+
+def get_or_create(model, **kwargs):
+    instance = db.session.query(model).filter_by(**kwargs).first()
+    if instance:
+        return instance
+    else:
+        instance = model(**kwargs)
+        db.session.add(instance)
+        db.session.commit()
+        return instance
