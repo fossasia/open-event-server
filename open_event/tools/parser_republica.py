@@ -13,12 +13,12 @@ class RepublicaParser(object):
     def _parse_objects(self):
         event_saver = EventSaver(self.url + 'events/' + self.event_id, self.owner_login)
         event_saver.parse()
-        # SpeakerSaver(self.url + self.event_id + '/speakers',
-        #              self.owner_login,
-        #              event_id=event_saver.get_event_id()).parse()
-        # TrackSaver(self.url + self.event_id + '/tracks',
-        #              self.owner_login,
-        #              event_id=event_saver.get_event_id()).parse()
+        SpeakerSaver(self.url + self.event_id + '/speakers',
+                     self.owner_login,
+                     event_id=event_saver.get_event_id()).parse()
+        TrackSaver(self.url + self.event_id + '/tracks',
+                     self.owner_login,
+                     event_id=event_saver.get_event_id()).parse()
         SessionSaver(self.url + self.event_id + '/sessions',
                      self.owner_login,
                      event_id=event_saver.get_event_id()).parse()
