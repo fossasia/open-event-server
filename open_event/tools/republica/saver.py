@@ -6,7 +6,7 @@ from open_event.models.speaker import Speaker
 from open_event.models.track import Track
 from open_event.models.user import User
 from open_event.models.session import Session
-from open_event.helpers.data import get_or_create
+from open_event.helpers.data import get_or_create, save_to_db
 from open_event import current_app
 
 class ObjectSaver(object):
@@ -123,13 +123,16 @@ class SessionSaver(ObjectSaver):
         try:
             start_time = row["begin"].split('.')[0]
             end_time = row["end"].split('.')[0]
-            print start_time, end_time
             event_id = self.event_id
-            # abstract = row["abstract"]
+            abstract = row["abstract"]
             type = None
             level = row["level"]["label_en"]
+            speakers = []
 
             with current_app.app_context():
+                for speaker in row['speakers']:
+                    speakers.append(Speaker.query.filter_by(name=speaker['name']).first())
+
                 new_session = get_or_create(Session,
                               title=title,
                               subtitle=subtitle,
@@ -137,9 +140,11 @@ class SessionSaver(ObjectSaver):
                               start_time=datetime.strptime(start_time, '%Y-%m-%dT%H:%M:%S'),
                               end_time=datetime.strptime(end_time, '%Y-%m-%dT%H:%M:%S'),
                               event_id=event_id,
-                              # abstract=abstract,
+                              abstract=abstract,
                               type=type,
                               level=level)
-        except:
-            pass
-        # new_session.speakers = todo
+                new_session.speakers = speakers
+                save_to_db(new_session, "Session Updated")
+        except Exception as e:
+            print e
+
