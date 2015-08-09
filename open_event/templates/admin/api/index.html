@@ -2,18 +2,15 @@
 {% block body %}
     <div class="well bs-component">
         <h2> Api </h2>
-        {% for event in owner_events%}
-            <h3>Event name: {{event.name}}</h3>
             <div class="list-group">
-                <a href="/api/v1/event/{{event.id}}" class="list-group-item">Event</a>
-                <a href="/api/v1/event/{{event.id}}/sessions" class="list-group-item">Sessions</a>
-                <a href="/api/v1/event/{{event.id}}/tracks" class="list-group-item">Tracks</a>
-                <a href="/api/v1/event/{{event.id}}/speakers" class="list-group-item">Speakers</a>
-                <a href="/api/v1/event/{{event.id}}/sponsors" class="list-group-item">Sponsors</a>
-                <a href="/api/v1/event/{{event.id}}/microlocations" class="list-group-item">Microlocations</a>
-                <a href="/api/v1/event/{{event.id}}/version" class="list-group-item">Version</a>
+                <a href="/api/v1/event/{{event_id}}" class="list-group-item">Event</a>
+                <a href="/api/v1/event/{{event_id}}/sessions" class="list-group-item">Sessions</a>
+                <a href="/api/v1/event/{{event_id}}/tracks" class="list-group-item">Tracks</a>
+                <a href="/api/v1/event/{{event_id}}/speakers" class="list-group-item">Speakers</a>
+                <a href="/api/v1/event/{{event_id}}/sponsors" class="list-group-item">Sponsors</a>
+                <a href="/api/v1/event/{{event_id}}/microlocations" class="list-group-item">Microlocations</a>
+                <a href="/api/v1/event/{{event_id}}/version" class="list-group-item">Version</a>
             </div>
-        {% endfor %}
     </div>
 
 {% endblock %}

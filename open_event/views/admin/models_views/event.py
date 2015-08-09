@@ -419,3 +419,12 @@ class EventView(ModelView):
                            form=self.form,
                            events=events,
                            files=files)
+
+    @expose('/<event_id>/api')
+    def event(self, event_id):
+        events = DataGetter.get_all_events()
+        self.name = "Api | " + event_id
+        return self.render('admin/api/index.html',
+                           event_id=event_id,
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id))
