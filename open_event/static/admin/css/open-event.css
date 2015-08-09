@@ -5,3 +5,8 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+.dataTable th{
+    min-width:30px
+
+}
