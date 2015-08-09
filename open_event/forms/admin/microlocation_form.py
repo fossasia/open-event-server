@@ -8,7 +8,7 @@ from ...helpers.data_getter import DataGetter
 class MicrolocationForm(Form):
     """Microlocation form class"""
     name = StringField('Name', [validators.DataRequired()])
-    latitude = FloatField('Latitude', [validators.DataRequired()])
-    longitude = FloatField('Longitude', [validators.DataRequired()])
+    latitude = FloatField('Latitude',[validators.optional()])
+    longitude = FloatField('Longitude', [validators.optional()])
     floor = IntegerField('Floor', [validators.optional()])
-    session = QuerySelectField(query_factory=DataGetter.get_sessions_by_event_id, allow_blank=True)
+    # session = QuerySelectField(query_factory=DataGetter.get_sessions_by_event_id, allow_blank=True)

@@ -216,7 +216,6 @@ class DataManager(object):
                                           longitude=form.longitude.data,
                                           floor=form.floor.data,
                                           event_id=event_id)
-        new_microlocation.session = form.session.data
         save_to_db(new_microlocation, "Microlocation saved")
         update_version(event_id, False, "microlocations_ver")
 
@@ -233,7 +232,6 @@ class DataManager(object):
         db.session.query(Microlocation)\
             .filter_by(id=microlocation.id)\
             .update(dict(data))
-        microlocation.session = session
         save_to_db(microlocation, "Microlocation updated")
         update_version(microlocation.event_id, False, "microlocations_ver")
 

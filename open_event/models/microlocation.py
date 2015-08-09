@@ -8,10 +8,8 @@ class Microlocation(db.Model):
                    primary_key=True)
     name = db.Column(db.String,
                      nullable=False)
-    latitude = db.Column(db.Float,
-                         nullable=False)
-    longitude = db.Column(db.Float,
-                          nullable=False)
+    latitude = db.Column(db.Float)
+    longitude = db.Column(db.Float)
     floor = db.Column(db.Integer)
     session_id = db.Column(db.Integer, db.ForeignKey('session.id'))
     event_id = db.Column(db.Integer,
