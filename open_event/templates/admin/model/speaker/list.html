@@ -62,6 +62,10 @@
                 $('#table-list').dataTable({
                     "scrollX": true,
                     "pageLength": 50,
+                    "columnDefs": [
+                        { "width": "5%", "targets": 0 },
+                        { "width": "5%", "targets": 1 }
+                      ]
                 });
             } );
         })(jQuery);
