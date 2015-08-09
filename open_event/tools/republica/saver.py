@@ -1,3 +1,4 @@
+"""Copyright 2015 Rafal Kowalski"""
 import requests
 import json
 from datetime import datetime
@@ -10,7 +11,7 @@ from open_event.helpers.data import get_or_create, save_to_db
 from open_event import current_app
 
 class ObjectSaver(object):
-
+    """Object Saver Main class"""
     def __init__(self, url, owner_login, event_id=None):
         self.url = url
         self.owner_login = owner_login
@@ -18,12 +19,19 @@ class ObjectSaver(object):
         self.event_id = event_id
 
     def _get_response(self, url):
+        """
+        :param url: from republica
+        :return: json
+        """
         data_response = requests.get(url).text
         return json.loads(data_response)
 
 class EventSaver(ObjectSaver):
-
+    """Event saver main class"""
     def parse(self):
+        """
+        Parse data from response
+        """
         for row in self.data['data']:
             self._save(row)
 

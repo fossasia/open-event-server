@@ -1,21 +1,23 @@
+"""Copyright 2015 Rafal Kowalski"""
 import sys
 import os
 try:
-    PWD = os.environ['PWD']
-    sys.path.extend([PWD])
+    PWD = os.environ['DATABASE_URL']
+    sys.path.extend(["/Users/rafal/Desktop/fossasia-summer/open-event-orga-server"])
 except Exception as error:
     print error
 
 from open_event.tools.republica.saver import EventSaver, SpeakerSaver, TrackSaver, SessionSaver
 
 class RepublicaParser(object):
-
+    """Republica Parser main class"""
     def __init__(self, url, event_id, owner_login):
         self.url = url
         self.owner_login = owner_login
         self.event_id = event_id
 
     def parse(self):
+        """Parse data from republica url"""
         self._parse_objects()
 
     def _parse_objects(self):
