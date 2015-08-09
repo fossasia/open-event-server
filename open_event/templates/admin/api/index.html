@@ -1,15 +1,18 @@
 {% extends 'admin/base1.html' %}
 {% block body %}
-
-<div class="list-group">
-    <a href="/api/v1/event" class="list-group-item">
-         <h4 class="list-group-item-heading">Events</h4>
-         <p class="list-group-item-text">Shows all events in json format</p>
-    </a>
-    <a href="/api/v1/version" class="list-group-item">
-         <h4 class="list-group-item-heading">Versions</h4>
-         <p class="list-group-item-text">Shows all versions in json format</p>
-    </a>
-</div>
+    <div class="well bs-component">
+        <h2> Api </h2>
+        {% for event in owner_events%}
+            <h3>Event name: {{event.name}}</h3>
+            <div class="list-group">
+                <a href="/api/v1/event/{{event.id}}" class="list-group-item">Event</a>
+                <a href="/api/v1/event/{{event.id}}/sessions" class="list-group-item">Sessions</a>
+                <a href="/api/v1/event/{{event.id}}/tracks" class="list-group-item">Tracks</a>
+                <a href="/api/v1/event/{{event.id}}/speakers" class="list-group-item">Speakers</a>
+                <a href="/api/v1/event/{{event.id}}/sponsors" class="list-group-item">Sponsors</a>
+                <a href="/api/v1/event/{{event.id}}/microlocations" class="list-group-item">Microlocations</a>
+            </div>
+        {% endfor %}
+    </div>
 
 {% endblock %}
