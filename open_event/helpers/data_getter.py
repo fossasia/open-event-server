@@ -23,6 +23,11 @@ class DataGetter:
         return Event.query.get(event_id)
 
     @staticmethod
+    def get_all_owner_events(owner_id):
+        """Method return all owner events"""
+        return Event.query.filter_by(owner=owner_id)
+
+    @staticmethod
     def get_sessions_by_event_id():
         """
         :return: All Sessions with correct event_id

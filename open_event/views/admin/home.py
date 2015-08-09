@@ -16,6 +16,7 @@ class MyHomeView(AdminIndexView):
         if not login.current_user.is_authenticated():
             return redirect(url_for('.login_view'))
         self._template_args['events'] = DataGetter.get_all_events()
+        self._template_args['owner_events'] = DataGetter.get_all_owner_events(login.current_user.id)
         return super(MyHomeView, self).index()
 
     @expose('/login/', methods=('GET', 'POST'))
