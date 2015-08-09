@@ -11,6 +11,7 @@ class Microlocation(db.Model):
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     floor = db.Column(db.Integer)
+    room = db.Column(db.String)
     session_id = db.Column(db.Integer, db.ForeignKey('session.id'))
     event_id = db.Column(db.Integer,
                          db.ForeignKey('events.id'))
@@ -20,12 +21,14 @@ class Microlocation(db.Model):
                  latitude=None,
                  longitude=None,
                  floor=None,
-                 event_id=None):
+                 event_id=None,
+                 room=None):
         self.name = name
         self.latitude = latitude
         self.longitude = longitude
         self.floor = floor
         self.event_id = event_id
+        self.room = room
 
     def __repr__(self):
         return '<Microlocation %r>' % (self.name)
@@ -37,4 +40,5 @@ class Microlocation(db.Model):
                 'name': self.name,
                 'latitude': self.latitude,
                 'longitude': self.longitude,
-                'floor': self.floor}
+                'floor': self.floor,
+                'room': self.room}

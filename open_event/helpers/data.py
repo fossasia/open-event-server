@@ -215,6 +215,7 @@ class DataManager(object):
                                           latitude=form.latitude.data,
                                           longitude=form.longitude.data,
                                           floor=form.floor.data,
+                                          room=form.room.data,
                                           event_id=event_id)
         save_to_db(new_microlocation, "Microlocation saved")
         update_version(event_id, False, "microlocations_ver")

@@ -11,4 +11,5 @@ class MicrolocationForm(Form):
     latitude = FloatField('Latitude',[validators.optional()])
     longitude = FloatField('Longitude', [validators.optional()])
     floor = IntegerField('Floor', [validators.optional()])
+    room = StringField('Room', [validators.optional()])
     # session = QuerySelectField(query_factory=DataGetter.get_sessions_by_event_id, allow_blank=True)
