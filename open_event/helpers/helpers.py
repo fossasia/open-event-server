@@ -1,5 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
 import re
+import requests
 from flask import request
 from flask.ext import login
 from ..models.event import Event
@@ -28,3 +29,8 @@ def is_track_name_unique_in_event(form, event_id, *args):
                 return False
         else:
             return True
+
+
+def send_email_after_account_create(form):
+    payload = {'to': form.email.data, 'from': 'open-event@googlegroups.com', 'subject':"Account Created on Open Event", "html":"Your Account Has Been Created! Congratulations!<br /> Your login: " + form.login.data}
+    requests.post("https://api.sendgrid.com/api/mail.send.json", data=payload, headers={"Authorization": "Bearer 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"})

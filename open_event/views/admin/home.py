@@ -8,6 +8,7 @@ from ...forms.admin.auth.registration_form import RegistrationForm
 from ...forms.admin.auth.login_form import LoginForm
 from ...helpers.data import DataManager
 from ...helpers.data_getter import DataGetter
+from ...helpers.helpers import send_email_after_account_create
 
 class MyHomeView(AdminIndexView):
     @expose('/')
@@ -42,6 +43,7 @@ class MyHomeView(AdminIndexView):
         if helpers.validate_form_on_submit(form):
             user = DataManager.create_user(form)
             login.login_user(user)
+            send_email_after_account_create(form)
             return redirect(url_for('.index'))
         link = '<p>Already have an account? <a href="' + url_for('.login_view') + '">Click here to log in.</a></p>'
         self._template_args['form'] = form
