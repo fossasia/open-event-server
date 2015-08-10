@@ -75,7 +75,8 @@ class EventView(ModelView):
                 return redirect(url_for('.index_view'))
         return self.render('admin/model/create_model.html',
                            form=self.form,
-                           events=events)
+                           events=events,
+                           cancel_url=url_for('.index_view'))
 
     @expose('/edit/', methods=('GET', 'POST'))
     def edit_view(self):
@@ -97,7 +98,8 @@ class EventView(ModelView):
                            form=self.form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id))
+                           owner=DataGetter.get_event_owner(event_id),
+                           cancel_url=url_for('.index_view'))
 
     @expose('/<event_id>')
     def event(self, event_id):
@@ -135,7 +137,8 @@ class EventView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id))
+                           owner=DataGetter.get_event_owner(event_id),
+                           cancel_url=url_for('.event_tracks', event_id=event_id))
 
     @expose('/<event_id>/track/<track_id>/edit', methods=('GET', 'POST'))
     def event_track_edit(self, event_id, track_id):
@@ -154,7 +157,8 @@ class EventView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id))
+                           owner=DataGetter.get_event_owner(event_id),
+                           cancel_url=url_for('.event_tracks', event_id=event_id))
 
     @expose('/<event_id>/track/<track_id>/delete', methods=('GET', 'POST'))
     def event_track_delete(self, event_id, track_id):
@@ -192,7 +196,8 @@ class EventView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id))
+                           owner=DataGetter.get_event_owner(event_id),
+                           cancel_url=url_for('.event_sessions', event_id=event_id))
 
     @expose('/<event_id>/session/<session_id>/edit', methods=('GET', 'POST'))
     def event_session_edit(self, event_id, session_id):
@@ -211,7 +216,8 @@ class EventView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id))
+                           owner=DataGetter.get_event_owner(event_id),
+                           cancel_url=url_for('.event_sessions', event_id=event_id))
 
     @expose('/<event_id>/session/<session_id>/delete', methods=('GET', 'POST'))
     def event_session_delete(self, event_id, session_id):
@@ -249,7 +255,8 @@ class EventView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id))
+                           owner=DataGetter.get_event_owner(event_id),
+                           cancel_url=url_for('.event_speakers', event_id=event_id))
 
     @expose('/<event_id>/speaker/<speaker_id>/edit', methods=('GET', 'POST'))
     def event_speaker_edit(self, event_id, speaker_id):
@@ -269,7 +276,8 @@ class EventView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id))
+                           owner=DataGetter.get_event_owner(event_id),
+                           cancel_url=url_for('.event_speakers', event_id=event_id))
 
     @expose('/<event_id>/speaker/<speaker_id>/delete', methods=('GET', 'POST'))
     def event_speaker_delete(self, event_id, speaker_id):
@@ -307,7 +315,8 @@ class EventView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id))
+                           owner=DataGetter.get_event_owner(event_id),
+                           cancel_url=url_for('.event_sponsors', event_id=event_id))
 
     @expose('/<event_id>/sponsor/<sponsor_id>/edit', methods=('GET', 'POST'))
     def event_sponsor_edit(self, event_id, sponsor_id):
@@ -326,7 +335,8 @@ class EventView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id))
+                           owner=DataGetter.get_event_owner(event_id),
+                           cancel_url=url_for('.event_sponsors', event_id=event_id))
 
     @expose('/<event_id>/sponsor/<sponsor_id>/delete', methods=('GET', 'POST'))
     def event_sponsor_delete(self, event_id, sponsor_id):
@@ -364,7 +374,8 @@ class EventView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id))
+                           owner=DataGetter.get_event_owner(event_id),
+                           cancel_url=url_for('.event_microlocations', event_id=event_id))
 
     @expose('/<event_id>/microlocation/<microlocation_id>/edit', methods=('GET', 'POST'))
     def event_microlocation_edit(self, event_id, microlocation_id):
@@ -383,7 +394,8 @@ class EventView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id))
+                           owner=DataGetter.get_event_owner(event_id),
+                           cancel_url=url_for('.event_microlocations', event_id=event_id))
 
     @expose('/<event_id>/microlocation/<microlocation_id>/delete', methods=('GET', 'POST'))
     def event_microlocation_delete(self, event_id, microlocation_id):
@@ -427,4 +439,5 @@ class EventView(ModelView):
         return self.render('admin/api/index.html',
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id))
+                           owner=DataGetter.get_event_owner(event_id),
+                           )
