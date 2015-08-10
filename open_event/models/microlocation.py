@@ -3,7 +3,7 @@ from . import db
 
 
 class Microlocation(db.Model):
-    __tablename__ = 'microlocations'
+    __tablename__ = 'microlocation'
     id = db.Column(db.Integer,
                    primary_key=True)
     name = db.Column(db.String,
@@ -12,7 +12,8 @@ class Microlocation(db.Model):
     longitude = db.Column(db.Float)
     floor = db.Column(db.Integer)
     room = db.Column(db.String)
-    session_id = db.Column(db.Integer, db.ForeignKey('session.id'))
+    session = db.relationship('Session',
+                              backref="microlocation")
     event_id = db.Column(db.Integer,
                          db.ForeignKey('events.id'))
 

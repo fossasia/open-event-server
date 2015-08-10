@@ -31,9 +31,8 @@ class Session(db.Model):
                                backref=db.backref('sessions',
                                                   lazy='dynamic'))
     level = db.Column(db.String)
-    microlocation = db.relationship("Microlocation",
-                                    uselist=False,
-                                    backref="session")
+    microlocation_id = db.Column(db.Integer,
+                         db.ForeignKey('microlocation.id'))
     event_id = db.Column(db.Integer,
                          db.ForeignKey('events.id'))
 

@@ -86,8 +86,10 @@ class DataManager(object):
                               event_id=event_id,
                               abstract=form.abstract.data,
                               type=form.type.data,
-                              level=form.level.data)
+                              level=form.level.data,
+                              )
         new_session.speakers = InstrumentedList(form.speakers.data if form.speakers.data else [])
+        new_session.microlocation=form.microlocation.data
         save_to_db(new_session, "Session saved")
         update_version(event_id, False, "session_ver")
 
@@ -100,11 +102,14 @@ class DataManager(object):
         """
         data = form.data
         speakers = data["speakers"]
+        microlocation = data["microlocation"]
         del data["speakers"]
+        del data["microlocation"]
         db.session.query(Session)\
             .filter_by(id=session.id)\
             .update(dict(data))
         session.speakers = InstrumentedList(speakers if speakers else [])
+        session.microlocation = microlocation
         save_to_db(session, "Session updated")
         update_version(session.event_id, False, "session_ver")
 

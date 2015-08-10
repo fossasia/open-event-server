@@ -107,6 +107,14 @@ class DataGetter:
         return Microlocation.query.filter_by(event_id=event_id)
 
     @staticmethod
+    def get_microlocations_by_event_id():
+        """
+        :param event_id: Event id
+        :return: All Microlocation filtered by event_id
+        """
+        return Microlocation.query.filter_by(event_id=get_event_id())
+
+    @staticmethod
     def get_microlocation(microlocation_id):
         """
         :param microlocation_id: Microlocation id
