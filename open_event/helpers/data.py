@@ -18,7 +18,7 @@ from ..helpers.update_version import VersionUpdater
 from ..models.file import File
 from werkzeug import secure_filename
 import os.path
-
+import random
 
 class DataManager(object):
     """Main class responsible for DataBase managing"""
@@ -260,9 +260,23 @@ class DataManager(object):
         salt = generate_random_salt()
         password = form.password.data
         user.password = generate_password_hash(password, salt)
+        hash = random.getrandbits(128)
+        user.reset_password = hash
+
         user.salt = salt
         save_to_db(user, "User created")
         return user
+
+    @staticmethod
+    def update_user(form, reset_hash):
+        user = User.query.filter_by(reset_password=reset_hash).first()
+        salt = generate_random_salt()
+        password = form.password.data
+        user.password = generate_password_hash(password, salt)
+        new_hash = random.getrandbits(128)
+        user.reset_password = new_hash
+        user.salt = salt
+        save_to_db(user, "User updated")
 
     @staticmethod
     def add_owner_to_event(owner_id, event):

@@ -14,7 +14,6 @@ class LoginForm(form.Form):
             raise validators.ValidationError('Invalid user')
 
         if not check_password_hash(self.password.data.encode("utf-8"), user.password.encode('utf-8'), user.salt):
-        # if user.password != self.password.data:
             raise validators.ValidationError('Invalid password')
 
     def get_user(self):

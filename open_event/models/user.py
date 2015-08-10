@@ -7,6 +7,7 @@ class User(db.Model):
     login = db.Column(db.String(80), unique=True)
     email = db.Column(db.String(120))
     password = db.Column(db.String(128))
+    reset_password = db.Column(db.String(128))
     salt = db.Column(db.String(128))
 
     # Flask-Login integration

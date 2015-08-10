@@ -6,9 +6,11 @@ from flask_admin import helpers, expose
 
 from ...forms.admin.auth.registration_form import RegistrationForm
 from ...forms.admin.auth.login_form import LoginForm
+from ...forms.admin.auth.change_password import ChangePasswordForm
+from ...forms.admin.auth.password_reminder_form import PasswordReminderForm
 from ...helpers.data import DataManager
 from ...helpers.data_getter import DataGetter
-from ...helpers.helpers import send_email_after_account_create
+from ...helpers.helpers import send_email_after_account_create, send_email_with_reset_password_hash
 
 class MyHomeView(AdminIndexView):
     @expose('/')
@@ -30,7 +32,8 @@ class MyHomeView(AdminIndexView):
 
         if login.current_user.is_authenticated():
             return redirect(url_for('.index'))
-        link = '<p>Don\'t have an account? <a href="' + url_for('.register_view') + '">Click here to register.</a></p>'
+        link = '<p>Don\'t have an account? <a href="' + url_for('.register_view') + '">Click here to register.</a></p>' \
+                                                                                    '<p><a href="'+ url_for('.password_reminder_view') +'">Forgot your password</a>?</p>'
         self._template_args['form'] = form
         self._template_args['link'] = link
         self._template_args['events'] = DataGetter.get_all_events()
@@ -49,6 +52,34 @@ class MyHomeView(AdminIndexView):
         self._template_args['form'] = form
         self._template_args['link'] = link
         self._template_args['events'] = DataGetter.get_all_events()
+        self._template = "admin/auth.html"
+        return super(MyHomeView, self).index()
+
+    @expose('/password/reminder', methods=('GET', 'POST'))
+    def password_reminder_view(self):
+
+        form = PasswordReminderForm(request.form)
+        if request.method == 'POST':
+            if form.validate():
+                email = form.email.data
+                user = DataGetter.get_user_by_email(email)
+                link = request.host + url_for(".change_password_view", hash=user.reset_password)
+                send_email_with_reset_password_hash(email, link)
+                return redirect(url_for('.index'))
+        self._template_args['form'] = form
+        self._template = "admin/auth.html"
+        return super(MyHomeView, self).index()
+
+    @expose('/reset_password/<hash>', methods=('GET', 'POST'))
+    def change_password_view(self, hash):
+
+        form = ChangePasswordForm(request.form)
+        if request.method == 'POST':
+            if helpers.validate_form_on_submit(form):
+                DataManager.update_user(form, hash)
+                return redirect(url_for('.index'))
+        self._template_args['name'] = 'Change Password'
+        self._template_args['form'] = form
         self._template = "admin/auth.html"
         return super(MyHomeView, self).index()
 

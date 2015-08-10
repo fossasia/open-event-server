@@ -29,3 +29,4 @@ class CustomDateEventValidate(object):
             if not event_start < event_end:
                 self.message = "Start time has to be less than end time"
                 raise ValidationError(self.message)
+

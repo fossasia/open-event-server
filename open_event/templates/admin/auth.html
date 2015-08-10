@@ -17,6 +17,7 @@
                             <div style="clear:both"></div>
                         </p>
                     {% else %}
+                        <h2>{{name}}</h2>
                         <form method="POST" action="" class="form-horizontal">
                             <fieldset>
                                 {{ form.hidden_tag() if form.hidden_tag }}

@@ -9,6 +9,7 @@ from ..models.user import User
 from ..models.file import File
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
+from flask import flash
 
 
 class DataGetter:
@@ -147,3 +148,12 @@ class DataGetter:
         """
         files = File.query.filter_by(owner_id=login.current_user.id)
         return files
+
+    @staticmethod
+    def get_user_by_email(email):
+        user = User.query.filter_by(email=email)
+        if user:
+            return user.first()
+        else:
+            flash("User doesn't exist")
+            return None
