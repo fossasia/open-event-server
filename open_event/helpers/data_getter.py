@@ -138,7 +138,6 @@ class DataGetter:
         :return All files filtered by owner, Format [(test.png, test1.png)...]:
         """
         files = File.query.filter_by(owner_id=login.current_user.id)
-        print files
         return [(file.name, file.name) for file in files]
 
     @staticmethod
@@ -148,6 +147,13 @@ class DataGetter:
         """
         files = File.query.filter_by(owner_id=login.current_user.id)
         return files
+
+    @staticmethod
+    def get_file(file_id):
+        """
+        :return: file
+        """
+        return File.query.get(file_id)
 
     @staticmethod
     def get_user_by_email(email):

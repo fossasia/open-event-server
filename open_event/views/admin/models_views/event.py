@@ -68,6 +68,8 @@ class EventView(ModelView):
         self.name = "Event | New"
         from ....forms.admin.event_form import EventForm
         self.form = EventForm()
+        self.form.logo.choices=DataGetter.get_all_files_tuple()
+        self.form.logo.choices.insert(0, ('', ''))
         if self.form.validate():
             if request.method == "POST":
                 DataManager.create_event(self.form)
@@ -86,6 +88,8 @@ class EventView(ModelView):
         event = DataGetter.get_event(event_id)
         from ....forms.admin.event_form import EventForm
         self.form = EventForm(obj=event)
+        self.form.logo.choices=DataGetter.get_all_files_tuple()
+        self.form.logo.choices.insert(0, ('', ''))
         if self.form.validate():
             if request.method == "POST":
                 if is_event_owner(event_id):
@@ -439,5 +443,4 @@ class EventView(ModelView):
         return self.render('admin/api/index.html',
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id),
-                           )
+                           owner=DataGetter.get_event_owner(event_id))

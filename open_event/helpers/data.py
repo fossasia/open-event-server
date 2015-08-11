@@ -301,6 +301,10 @@ class DataManager(object):
                       slogan=form.slogan.data,
                       url=form.url.data,
                       owner=login.current_user.id)
+        if form.logo.data:
+            event.logo = form.logo.data
+        else:
+            event.logo = ''
         save_to_db(event, "Event saved")
         update_version(event_id=event.id,
                        is_created=True,
@@ -319,7 +323,10 @@ class DataManager(object):
         db.session.query(Event)\
             .filter_by(id=event.id)\
             .update(dict(data))
-        event.logo = logo
+        if logo:
+            event.logo = logo
+        else:
+            event.logo = ''
         save_to_db(event, "Event updated")
         update_version(event_id=event.id,
                        is_created=False,
