@@ -71,9 +71,9 @@ class Event(db.Model):
         return {'id': self.id,
                            'name': self.name,
                            'logo': self.logo,
-                           'start_time':
+                           'begin':
                                DateFormatter().format_date(self.start_time),
-                           'end_time':
+                           'end':
                                DateFormatter().format_date(self.end_time),
                            'latitude': self.latitude,
                            'longitude': self.longitude,
