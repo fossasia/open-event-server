@@ -79,6 +79,6 @@ class Event(db.Model):
                            'longitude': self.longitude,
                            'location_name': self.location_name,
                            'email': self.email,
-                           'color': self.color.get_hex(),
+                           'color': self.color.get_hex() if self.color else '',
                            'slogan': self.slogan,
                            'url': self.url}
