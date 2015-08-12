@@ -437,7 +437,7 @@ class EventView(ModelView):
                            files=files)
 
     @expose('/<event_id>/api')
-    def event(self, event_id):
+    def api(self, event_id):
         events = DataGetter.get_all_events()
         self.name = "Api | " + event_id
         return self.render('admin/api/index.html',

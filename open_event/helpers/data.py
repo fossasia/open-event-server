@@ -264,6 +264,7 @@ class DataManager(object):
         user.reset_password = hash
 
         user.salt = salt
+        user.role = 'speaker'
         save_to_db(user, "User created")
         return user
 

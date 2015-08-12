@@ -11,7 +11,6 @@ from open_event.helpers.helpers import get_event_id
 from flask.ext import login
 from flask import flash
 
-
 class DataGetter:
     @staticmethod
     def get_all_events():
@@ -163,3 +162,19 @@ class DataGetter:
         else:
             flash("User doesn't exist")
             return None
+
+    @staticmethod
+    def get_all_users():
+        """
+        :return: All system users
+        """
+        return User.query.all()
+
+    @staticmethod
+    def get_user(id):
+        """
+        :return: User
+        """
+        return User.query.get(int(id))
+
+

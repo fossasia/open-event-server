@@ -5,7 +5,7 @@ from ....models.user import User
 
 class RegistrationForm(form.Form):
     login = StringField(validators=[validators.required()])
-    email = StringField()
+    email = StringField(validators=[validators.email()])
     password = PasswordField(validators=[validators.required()])
 
     def validate_login(self, field):

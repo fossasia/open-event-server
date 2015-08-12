@@ -8,7 +8,7 @@ from ...forms.admin.auth.registration_form import RegistrationForm
 from ...forms.admin.auth.login_form import LoginForm
 from ...forms.admin.auth.change_password import ChangePasswordForm
 from ...forms.admin.auth.password_reminder_form import PasswordReminderForm
-from ...helpers.data import DataManager
+from ...helpers.data import DataManager, save_to_db
 from ...helpers.data_getter import DataGetter
 from ...helpers.helpers import send_email_after_account_create, send_email_with_reset_password_hash
 
@@ -87,3 +87,20 @@ class MyHomeView(AdminIndexView):
     def logout_view(self):
         login.logout_user()
         return redirect(url_for('.index'))
+
+    @expose('/set_role', methods=('GET', 'POST'))
+    def set_role(self):
+        id = request.args['id']
+        role = request.args['roles']
+        user = DataGetter.get_user(id)
+        user.role = role
+        save_to_db(user, "User Role updated")
+        return redirect(url_for('.roles_manager'))
+
+    @expose('/manage_roles')
+    def roles_manager(self):
+        users = DataGetter.get_all_users()
+        events = DataGetter.get_all_events()
+        return self.render('admin/role_manager.html',
+                           users=users,
+                           events=events)
