@@ -8,7 +8,7 @@ from flask.ext.scrypt import generate_password_hash, generate_random_salt, check
 
 from ..models import db
 from ..models.track import Track
-from ..models.session import Session
+from ..models.session import Session, Level, Format
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
@@ -84,12 +84,12 @@ class DataManager(object):
                               start_time=form.start_time.data,
                               end_time=form.end_time.data,
                               event_id=event_id,
-                              abstract=form.abstract.data,
-                              type=form.type.data,
-                              level=form.level.data,
-                              )
+                              abstract=form.abstract.data)
+
         new_session.speakers = InstrumentedList(form.speakers.data if form.speakers.data else [])
-        new_session.microlocation=form.microlocation.data
+        new_session.microlocation = form.microlocation.data
+        new_session.format = form.format.data
+        new_session.level = form.level.data
         save_to_db(new_session, "Session saved")
         update_version(event_id, False, "session_ver")
 
@@ -103,13 +103,19 @@ class DataManager(object):
         data = form.data
         speakers = data["speakers"]
         microlocation = data["microlocation"]
+        level = data["level"]
+        format = data["format"]
         del data["speakers"]
         del data["microlocation"]
+        del data["level"]
+        del data["format"]
         db.session.query(Session)\
             .filter_by(id=session.id)\
             .update(dict(data))
         session.speakers = InstrumentedList(speakers if speakers else [])
         session.microlocation = microlocation
+        session.format = form.format.data
+        session.level = level
         save_to_db(session, "Session updated")
         update_version(session.event_id, False, "session_ver")
 
@@ -208,6 +214,76 @@ class DataManager(object):
         sponsor = Sponsor.query.get(sponsor_id)
         delete_from_db(sponsor, "Sponsor deleted")
         flash('You successfully delete sponsor')
+
+    @staticmethod
+    def create_level(form, event_id):
+        """
+        Level will be saved to database with proper Event id
+        :param form: view data form
+        :param event_id: Level belongs to Event by event id
+        """
+        new_sponsor = Level(name=form.name.data,
+                            label_en=form.label_en.data,
+                              )
+        save_to_db(new_sponsor, "Level saved")
+        update_version(event_id, False, "session_ver")
+
+    @staticmethod
+    def update_level(form, level, event_id):
+        """
+        Level will be updated in database
+        :param form: view data form
+        :param level: object contains all earlier data
+        """
+        data = form.data
+        db.session.query(Level).filter_by(id=level.id).update(dict(data))
+        save_to_db(level, "Level updated")
+        update_version(event_id, False, "session_ver")
+
+    @staticmethod
+    def remove_level(level_id):
+        """
+        Level will be removed from database
+        :param level_id: Level id to remove object
+        """
+        level = Level.query.get(level_id)
+        delete_from_db(level, "Level deleted")
+        flash('You successfully delete level')
+
+    @staticmethod
+    def create_format(form, event_id):
+        """
+        Format will be saved to database with proper Event id
+        :param form: view data form
+        :param event_id: Format belongs to Event by event id
+        """
+        new_sponsor = Format(name=form.name.data,
+                            label_en=form.label_en.data,
+                              )
+        save_to_db(new_sponsor, "Format saved")
+        update_version(event_id, False, "session_ver")
+
+    @staticmethod
+    def update_format(form, format, event_id):
+        """
+        Format will be updated in database
+        :param form: view data form
+        :param format: object contains all earlier data
+        """
+        data = form.data
+        db.session.query(Format).filter_by(id=format.id).update(dict(data))
+        save_to_db(format, "Level updated")
+        update_version(event_id, False, "session_ver")
+
+    @staticmethod
+    def remove_format(format_id):
+        """
+        Format will be removed from database
+        :param format_id: Format id to remove object
+        """
+        format = Level.query.get(format_id)
+        delete_from_db(format, "Format deleted")
+        flash('You successfully delete format')
 
     @staticmethod
     def create_microlocation(form, event_id):

@@ -10,6 +10,8 @@ from open_event.forms.admin.speaker_form import SpeakerForm
 from open_event.forms.admin.sponsor_form import SponsorForm
 from open_event.forms.admin.track_form import TrackForm
 from open_event.forms.admin.microlocation_form import MicrolocationForm
+from open_event.forms.admin.level_form import LevelForm
+from open_event.forms.admin.format_form import FormatForm
 
 from ....helpers.data import DataManager
 from ....helpers.formatter import Formatter
@@ -437,10 +439,128 @@ class EventView(ModelView):
                            files=files)
 
     @expose('/<event_id>/api')
-    def event(self, event_id):
+    def event_api(self, event_id):
         events = DataGetter.get_all_events()
         self.name = "Api | " + event_id
         return self.render('admin/api/index.html',
                            event_id=event_id,
                            events=events,
                            owner=DataGetter.get_event_owner(event_id))
+
+    @expose('/<event_id>/level')
+    def event_levels(self, event_id):
+        levels = DataGetter.get_levels()
+        events = DataGetter.get_all_events()
+        self.name = "Level"
+        return self.render('admin/model/level/list.html',
+                           objects=levels,
+                           event_id=event_id,
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id))
+
+    @expose('/<event_id>/level/new', methods=('GET', 'POST'))
+    def event_level_new(self, event_id):
+        events = DataGetter.get_all_events()
+        form = LevelForm()
+        self.name = "Level | New"
+        if form.validate():
+            if is_event_owner(event_id):
+                DataManager.create_level(form, event_id)
+                flash("Level added")
+            else:
+                flash("You don't have permission!")
+            return redirect(url_for('.event_levels', event_id=event_id))
+        return self.render('admin/model/create_model.html',
+                           form=form,
+                           event_id=event_id,
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id),
+                           cancel_url=url_for('.event_levels', event_id=event_id))
+
+    @expose('/<event_id>/level/<level_id>/edit', methods=('GET', 'POST'))
+    def event_level_edit(self, event_id, level_id):
+        level = DataGetter.get_level(level_id)
+        events = DataGetter.get_all_events()
+        form = LevelForm(obj=level)
+        self.name = "Level " + level_id + " | Edit"
+        if form.validate():
+            if is_event_owner(event_id):
+                DataManager.update_level(form, level, event_id)
+                flash("Level updated")
+            else:
+                flash("You don't have permission!")
+            return redirect(url_for('.event_levels', event_id=event_id))
+        return self.render('admin/model/create_model.html',
+                           form=form,
+                           event_id=event_id,
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id),
+                           cancel_url=url_for('.event_levels', event_id=event_id))
+
+    @expose('/<event_id>/level/<level_id>/delete', methods=('GET', 'POST'))
+    def event_level_delete(self, event_id, level_id):
+        if is_event_owner(event_id):
+            DataManager.remove_level(level_id)
+        else:
+            flash("You don't have permission!")
+        return redirect(url_for('.event_levels',
+                                event_id=event_id))
+
+    @expose('/<event_id>/format')
+    def event_formats(self, event_id):
+        formats = DataGetter.get_levels()
+        events = DataGetter.get_all_events()
+        self.name = "Format"
+        return self.render('admin/model/format/list.html',
+                           objects=formats,
+                           event_id=event_id,
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id))
+
+    @expose('/<event_id>/format/new', methods=('GET', 'POST'))
+    def event_format_new(self, event_id):
+        events = DataGetter.get_all_events()
+        form = FormatForm()
+        self.name = "Format | New"
+        if form.validate():
+            if is_event_owner(event_id):
+                DataManager.create_format(form, event_id)
+                flash("Format added")
+            else:
+                flash("You don't have permission!")
+            return redirect(url_for('.event_formats', event_id=event_id))
+        return self.render('admin/model/create_model.html',
+                           form=form,
+                           event_id=event_id,
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id),
+                           cancel_url=url_for('.event_formats', event_id=event_id))
+
+    @expose('/<event_id>/format/<format_id>/edit', methods=('GET', 'POST'))
+    def event_format_edit(self, event_id, format_id):
+        format = DataGetter.get_format(format_id)
+        events = DataGetter.get_all_events()
+        form = FormatForm(obj=format)
+        self.name = "format " + format_id + " | Edit"
+        if form.validate():
+            if is_event_owner(event_id):
+                DataManager.update_format(form, format, event_id)
+                flash("Format updated")
+            else:
+                flash("You don't have permission!")
+            return redirect(url_for('.event_formats', event_id=event_id))
+        return self.render('admin/model/create_model.html',
+                           form=form,
+                           event_id=event_id,
+                           events=events,
+                           owner=DataGetter.get_event_owner(event_id),
+                           cancel_url=url_for('.event_formats', event_id=event_id))
+
+    @expose('/<event_id>/format/<format_id>/delete', methods=('GET', 'POST'))
+    def event_format_delete(self, event_id, format_id):
+        if is_event_owner(event_id):
+            DataManager.remove_format(format_id)
+        else:
+            flash("You don't have permission!")
+        return redirect(url_for('.event_formats',
+                                event_id=event_id))
