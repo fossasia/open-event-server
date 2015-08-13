@@ -72,7 +72,7 @@ class Session(db.Model):
                 'end': DateFormatter().format_date(self.end_time),
                 'type': self.type,
                 'track': self.track.id if self.track else None,
-                'speakers': [speaker.id for speaker in self.speakers],
+                'speakers': [{'id': speaker.id, 'name': speaker.name} for speaker in self.speakers],
                 'level': self.level,
                 'microlocation': self.microlocation.id if self.microlocation else None}
 
