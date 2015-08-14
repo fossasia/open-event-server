@@ -16,8 +16,9 @@ speakers_sessions = db.Table('speakers_sessions',
 class Level(db.Model):
     __tablename__ = 'level'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    label_en = db.Column(db.String, nullable=False)
+    name = db.Column(db.String, nullable=False)
+    label_en = db.Column(db.String)
+    event_id = db.Column(db.Integer, nullable=False)
     session = db.relationship('Session',
                               backref="level")
 
@@ -32,6 +33,7 @@ class Format(db.Model):
     label_en = db.Column(db.String, nullable=False)
     session = db.relationship('Session',
                               backref="format")
+    event_id = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
         return '<Format %r>' % (self.name)

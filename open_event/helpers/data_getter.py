@@ -119,14 +119,14 @@ class DataGetter:
         """
         :return: All Event Levels
         """
-        return Level.query.select_from(Session).filter(Session.event_id==get_event_id())
+        return Level.query.filter_by(event_id=get_event_id())
 
     @staticmethod
     def get_formats():
         """
         :return: All Event Formats
         """
-        return Format.query.select_from(Session).filter(Session.event_id==get_event_id())
+        return Format.query.filter_by(event_id=get_event_id())
 
     @staticmethod
     def get_level(level_id):

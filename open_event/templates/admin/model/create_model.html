@@ -11,13 +11,17 @@
 {% endblock %}
 
 {% block body %}
-    <div class="well bs-component">
-          <h2>{{ admin_view.name }}</h2>
-          {% call lib.form_tag(form) %}
-              {{ lib.render_form_fields(form, form_opts=form_opts) }}
-              {{ lib.render_form_buttons(cancel_url, extra()) }}
-          {% endcall %}
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <div class="well bs-component">
+              <h2>{{ admin_view.name }}</h2>
+              {% call lib.form_tag(form) %}
+                  {{ lib.render_form_fields(form, form_opts=form_opts) }}
+                  {{ lib.render_form_buttons(cancel_url, extra()) }}
+              {% endcall %}
+        </div>
     </div>
+    <div class="col-md-2"></div>
 {% endblock %}
 
 {% block tail %}

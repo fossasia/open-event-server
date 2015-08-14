@@ -1,39 +1,43 @@
 {% extends 'admin/base1.html' %}
 
 {% block body %}
-    <h2>Format
-        <a href="{{ get_url('event.event_format_new', event_id=event_id )}}" class="btn btn-primary" style="margin:5px">
-            Add New <i class="glyphicon glyphicon-plus" aria-hidden="true" style="margin-right:5px"></i>
-        </a>
-    </h2>
-    <table class="table table-condensed" id="table-list">
-        <thead>
-            <tr>
-                <th></th>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Label en</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for format in objects %}
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <h2>Format
+            <a href="{{ get_url('event.event_format_new', event_id=event_id )}}" class="btn btn-primary" style="margin:5px">
+                Add New <i class="glyphicon glyphicon-plus" aria-hidden="true" style="margin-right:5px"></i>
+            </a>
+        </h2>
+        <table class="table table-condensed" id="table-list">
+            <thead>
                 <tr>
-                    <td>
-                        <a class="icon" href="{{ get_url('event.event_format_edit', event_id=event_id, format_id=format.id )}}" title="Edit record">
-                            <span class="glyphicon glyphicon-pencil"></span>
-                        </a>
-                        <a onclick="return confirm('Are you sure you want to delete this record?');" href="{{ get_url('event.event_format_delete', event_id=event_id, format_id=format.id)}}" title="Delete record">
-                            <span class="glyphicon glyphicon-trash"></span>
-                        </a>
-                    </td>
-                    <td>{{format.id}}</td>
-                    <td>{{format.name}}</td>
-                    <td>{{format.label_en}}</td>
-
+                    <th></th>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Label en</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for format in objects %}
+                    <tr>
+                        <td>
+                            <a class="icon" href="{{ get_url('event.event_format_edit', event_id=event_id, format_id=format.id )}}" title="Edit record">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </a>
+                            <a onclick="return confirm('Are you sure you want to delete this record?');" href="{{ get_url('event.event_format_delete', event_id=event_id, format_id=format.id)}}" title="Delete record">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </a>
+                        </td>
+                        <td>{{format.id}}</td>
+                        <td>{{format.name}}</td>
+                        <td>{{format.label_en}}</td>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-2"></div>
 
 {% endblock %}
 

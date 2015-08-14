@@ -223,8 +223,8 @@ class DataManager(object):
         :param event_id: Level belongs to Event by event id
         """
         new_level = Level(name=form.name.data,
-                            label_en=form.label_en.data,
-                              )
+                          label_en=form.label_en.data,
+                          event_id=event_id)
         save_to_db(new_level, "Level saved")
         update_version(event_id, False, "session_ver")
 
@@ -258,7 +258,8 @@ class DataManager(object):
         :param event_id: Format belongs to Event by event id
         """
         new_format = Format(name=form.name.data,
-                            label_en=form.label_en.data)
+                            label_en=form.label_en.data,
+                            event_id=event_id)
         save_to_db(new_format, "Format saved")
         update_version(event_id, False, "session_ver")
 

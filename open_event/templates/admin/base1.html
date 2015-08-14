@@ -23,11 +23,6 @@
         <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
         <script src="{{ url_for('static', filename='admin/js/material.min.js')}}"></script>
 
-        <style>
-        body {
-            padding-top: 4px;
-        }
-        </style>
     {% endblock %}
     {% block head %}
     {% endblock %}
@@ -35,25 +30,33 @@
     {% endblock %}
   </head>
   <body>
+    {{ menu1.render_menu() }}
     {% block page_body %}
-    <div class="container">
-      {{ menu1.render_menu() }}
-      {% if event_id %}
-        <div style="margin:5px">
-              Event Owner: <div class="label label-info">{{ owner }}</div>
+    <!--<div class="container">-->
+        <div class="row">
+          <div class="col-md-2"></div>
+          <div class="col-md-8">
+              {% if event_id %}
+                <div style="margin:5px">
+                      Event Owner: <div class="label label-info">{{ owner }}</div>
+                </div>
+              {% endif %}
+          </div>
+          <div class="col-md-2"></div>
         </div>
-      {% endif %}
-      {% block messages %}
-      {{ layout.messages() }}
+        <div class="row">
+          {% block messages %}
+          {{ layout.messages() }}
 
-      {% endblock %}
+          {% endblock %}
 
-      {% set render_ctx = h.resolve_ctx() %}
+          {% set render_ctx = h.resolve_ctx() %}
 
-      {% block body %}
+          {% block body %}
 
-      {% endblock %}
-    </div>
+          {% endblock %}
+
+        </div>
     {% endblock %}
 
     {% block tail_js %}
