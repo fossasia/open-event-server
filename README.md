@@ -1,4 +1,6 @@
 #  Open-Event Organiser Server
+
+[![Join the chat at https://gitter.im/fossasia/open-event-orga-server](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/fossasia/open-event-orga-server?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 This server which will manage all the data of the event. Backed by a database, it provides API endpoints to fetch the data, and also to modify/update it.
 
 The database can be a sqlite db file or saved in json itself.  
