@@ -2,8 +2,8 @@
 import sys
 import os
 try:
-    PWD = os.environ['DATABASE_URL']
-    sys.path.extend(["/Users/rafal/Desktop/fossasia-summer/open-event-orga-server"])
+    PWD = os.environ['PWD']
+    sys.path.extend([PWD])
 except Exception as error:
     print error
 
