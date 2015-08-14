@@ -1,0 +1,57 @@
+{% extends 'admin/base1.html' %}
+
+{% block body %}
+    <h2>Level
+        <a href="{{ get_url('event.event_level_new', event_id=event_id )}}" class="btn btn-primary" style="margin:5px">
+            Add New <i class="glyphicon glyphicon-plus" aria-hidden="true" style="margin-right:5px"></i>
+        </a>
+    </h2>
+    <table class="table table-condensed" id="table-list">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Label en</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for level in objects %}
+                <tr>
+                    <td>
+                        <a class="icon" href="{{ get_url('event.event_level_edit', event_id=event_id, level_id=level.id )}}" title="Edit record">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </a>
+                        <a onclick="return confirm('Are you sure you want to delete this record?');" href="{{ get_url('event.event_level_delete', event_id=event_id, level_id=level.id)}}" title="Delete record">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                    </td>
+                    <td>{{level.id}}</td>
+                    <td>{{level.name}}</td>
+                    <td>{{level.label_en}}</td>
+
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+
+{% block tail %}
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.css">
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+    <script language="javascript">
+        (function($) {
+            $(document).ready(function() {
+                $('#table-list').dataTable({
+                    "scrollX": true,
+                    "pageLength": 50,
+                    "columnDefs": [
+                        { "width": "5%", "targets": 0 },
+                        { "width": "5%", "targets": 1 }
+                      ]
+                });
+            } );
+        })(jQuery);
+    </script>
+{% endblock %}

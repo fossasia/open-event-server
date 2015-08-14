@@ -13,6 +13,30 @@ speakers_sessions = db.Table('speakers_sessions',
                               db.ForeignKey('session.id')))
 
 
+class Level(db.Model):
+    __tablename__ = 'level'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    label_en = db.Column(db.String, nullable=False)
+    session = db.relationship('Session',
+                              backref="level")
+
+    def __repr__(self):
+        return '<Level %r>' % (self.name)
+
+
+class Format(db.Model):
+    __tablename__ = 'format'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    label_en = db.Column(db.String, nullable=False)
+    session = db.relationship('Session',
+                              backref="format")
+
+    def __repr__(self):
+        return '<Format %r>' % (self.name)
+
+
 class Session(db.Model):
     __tablename__ = 'session'
     id = db.Column(db.Integer, primary_key=True)
@@ -24,13 +48,15 @@ class Session(db.Model):
                            nullable=False)
     end_time = db.Column(db.DateTime,
                          nullable=False)
-    type = db.Column(db.String)
     track_id = db.Column(db.Integer, db.ForeignKey('tracks.id'))
     speakers = db.relationship('Speaker',
                                secondary=speakers_sessions,
                                backref=db.backref('sessions',
                                                   lazy='dynamic'))
-    level = db.Column(db.String)
+    level_id = db.Column(db.Integer,
+                         db.ForeignKey('level.id'))
+    format_id = db.Column(db.Integer,
+                         db.ForeignKey('format.id'))
     microlocation_id = db.Column(db.Integer,
                          db.ForeignKey('microlocation.id'))
     event_id = db.Column(db.Integer,
@@ -43,7 +69,7 @@ class Session(db.Model):
                  description=None,
                  start_time=None,
                  end_time=None,
-                 type=None,
+                 format=None,
                  track=None,
                  level=None,
                  microlocation=None,
@@ -54,7 +80,7 @@ class Session(db.Model):
         self.description = description
         self.start_time = start_time
         self.end_time = end_time
-        self.type = type
+        self.format = format
         self.track = track
         self.level = level
         self.microlocation = microlocation
@@ -68,12 +94,12 @@ class Session(db.Model):
                 'subtitle': self.subtitle,
                 'abstract': self.abstract,
                 'description': self.description,
-                'start_time': DateFormatter().format_date(self.start_time),
-                'end_time': DateFormatter().format_date(self.end_time),
-                'type': self.type,
+                'begin': DateFormatter().format_date(self.start_time),
+                'end': DateFormatter().format_date(self.end_time),
+                'format': {'id': self.format.name, 'label_en': self.format.label_en} if self.format else None,
                 'track': self.track.id if self.track else None,
-                'speakers': [speaker.id for speaker in self.speakers],
-                'level': self.level,
+                'speakers': [{'id': speaker.id, 'name': speaker.name} for speaker in self.speakers],
+                'level': {'id': self.level.name, 'label_en': self.level.label_en} if self.level else None,
                 'microlocation': self.microlocation.id if self.microlocation else None}
 
     def __repr__(self):

@@ -1,6 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
 from ..models.event import Event
-from ..models.session import Session
+from ..models.session import Session, Level, Format
 from ..models.track import Track
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
@@ -113,6 +113,36 @@ class DataGetter:
         :return: All Microlocation filtered by event_id
         """
         return Microlocation.query.filter_by(event_id=get_event_id())
+
+    @staticmethod
+    def get_levels():
+        """
+        :return: All Event Levels
+        """
+        return Level.query.select_from(Session).filter(Session.event_id==get_event_id())
+
+    @staticmethod
+    def get_formats():
+        """
+        :return: All Event Formats
+        """
+        return Format.query.select_from(Session).filter(Session.event_id==get_event_id())
+
+    @staticmethod
+    def get_level(level_id):
+        """
+        :param level_id: Level object id
+        :return: Level object
+        """
+        return Level.query.get(level_id)
+
+    @staticmethod
+    def get_format(format_id):
+        """
+        :param format_id: Format object id
+        :return: Format object
+        """
+        return Format.query.get(format_id)
 
     @staticmethod
     def get_microlocation(microlocation_id):
