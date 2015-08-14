@@ -22,6 +22,22 @@ class Level(db.Model):
     session = db.relationship('Session',
                               backref="level")
 
+    def __init__(self,
+                 name=None,
+                 label_en=None,
+                 session=None,
+                 event_id=None):
+
+        self.name = name
+        self.label_en = label_en
+        self.event_id = event_id
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {'name': self.name,
+                'label_en': self.label_en}
+
     def __repr__(self):
         return '<Level %r>' % (self.name)
 
@@ -34,6 +50,22 @@ class Format(db.Model):
     session = db.relationship('Session',
                               backref="format")
     event_id = db.Column(db.Integer, nullable=False)
+
+    def __init__(self,
+                 name=None,
+                 label_en=None,
+                 session=None,
+                 event_id=None):
+
+        self.name = name
+        self.label_en = label_en
+        self.event_id = event_id
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {'name': self.name,
+                'label_en': self.label_en}
 
     def __repr__(self):
         return '<Format %r>' % (self.name)

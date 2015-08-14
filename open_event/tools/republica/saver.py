@@ -139,8 +139,8 @@ class SessionSaver(ObjectSaver):
             speakers = []
 
             with current_app.app_context():
-                level = get_or_create(Level, name=row["level"]["id"], label_en=row["level"]["label_en"] )
-                format = get_or_create(Format, name=row["format"]["id"], label_en=row["format"]["label_en"] )
+                level = get_or_create(Level, name=row["level"]["id"], label_en=row["level"]["label_en"], event_id=event_id )
+                format = get_or_create(Format, name=row["format"]["id"], label_en=row["format"]["label_en"], event_id=event_id )
                 for speaker in row['speakers']:
                     speakers.append(Speaker.query.filter_by(name=speaker['name']).first())
 

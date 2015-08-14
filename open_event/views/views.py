@@ -8,7 +8,7 @@ from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
 from ..models.event import Event
-from ..models.session import Session
+from ..models.session import Session, Level, Format
 from ..models.version import Version
 from ..helpers.object_formatter import ObjectFormatter
 from flask import Blueprint
@@ -59,6 +59,18 @@ def get_speakers(event_id):
 def get_sponsors(event_id):
     sponsors = Sponsor.query.filter_by(event_id=event_id)
     return ObjectFormatter.get_json("sponsors", sponsors, request)
+
+@app.route('/api/v1/event/<event_id>/levels', methods=['GET'])
+@cross_origin()
+def get_levels(event_id):
+    levels = Level.query.filter_by(event_id=event_id)
+    return ObjectFormatter.get_json("levels", levels, request)
+
+@app.route('/api/v1/event/<event_id>/formats', methods=['GET'])
+@cross_origin()
+def get_formats(event_id):
+    formats = Format.query.filter_by(event_id=event_id)
+    return ObjectFormatter.get_json("formats", formats, request)
 
 
 @app.route('/api/v1/event/<event_id>/microlocations', methods=['GET'])
