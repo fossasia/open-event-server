@@ -116,6 +116,13 @@ class EventView(ModelView):
                            events=events,
                            owner=DataGetter.get_event_owner(event_id))
 
+    @expose('/<event_id>/event')
+    def event(self, event_id):
+        events = Event.query.all()
+        return self.render('admin/base1.html',
+                           event_id=event_id,
+                           events=events)
+
     @expose('/<event_id>/track')
     def event_tracks(self, event_id):
         tracks = DataGetter.get_tracks(event_id)
