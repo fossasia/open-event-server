@@ -53,3 +53,14 @@ def send_email_with_reset_password_hash(email, link):
     requests.post("https://api.sendgrid.com/api/mail.send.json",
                   data=payload,
                   headers=HEADERS)
+
+def is_event_admin(event_id, users):
+    is_admin = False
+    for object in users:
+        if object.user.id == login.current_user.id:
+            for ass in login.current_user.events_assocs:
+                if ass.event_id == int(event_id):
+                    is_admin = ass.admin
+                    if is_event_admin:
+                        return is_admin
+    return is_admin

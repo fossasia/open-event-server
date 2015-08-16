@@ -1,5 +1,5 @@
 """Copyright 2015 Rafal Kowalski"""
-from ..models.event import Event
+from ..models.event import Event, Association
 from ..models.session import Session, Level, Format
 from ..models.track import Track
 from ..models.speaker import Speaker
@@ -23,9 +23,10 @@ class DataGetter:
         return Event.query.get(event_id)
 
     @staticmethod
-    def get_all_owner_events(owner_id):
+    def get_all_owner_events():
         """Method return all owner events"""
-        return Event.query.filter_by(owner=owner_id)
+        # return Event.query.filter_by(owner=owner_id)
+        return login.current_user.events_assocs
 
     @staticmethod
     def get_sessions_by_event_id():
@@ -206,5 +207,13 @@ class DataGetter:
         :return: User
         """
         return User.query.get(int(id))
+
+    @staticmethod
+    def get_association():
+        return Association()
+
+    @staticmethod
+    def get_association_by_event_and_user(event_id, user_id):
+        return Association.query.filter_by(event_id=event_id, user_id=user_id).first()
 
 

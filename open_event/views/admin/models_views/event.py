@@ -1,10 +1,12 @@
 """Copyright 2015 Rafal Kowalski"""
 from flask import request, url_for, redirect, flash
 from flask.ext import login
+from sqlalchemy.exc import IntegrityError
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.model.helpers import get_mdict_item_or_list
 from flask_admin import expose
 from flask_admin.helpers import get_redirect_target
+
 from open_event.forms.admin.session_form import SessionForm
 from open_event.forms.admin.speaker_form import SpeakerForm
 from open_event.forms.admin.sponsor_form import SponsorForm
@@ -13,10 +15,10 @@ from open_event.forms.admin.microlocation_form import MicrolocationForm
 from open_event.forms.admin.level_form import LevelForm
 from open_event.forms.admin.format_form import FormatForm
 
-from ....helpers.data import DataManager
+from ....helpers.data import DataManager, save_to_db
 from ....helpers.formatter import Formatter
 from ....helpers.update_version import VersionUpdater
-from ....helpers.helpers import is_event_owner, is_track_name_unique_in_event
+from ....helpers.helpers import is_event_owner, is_track_name_unique_in_event, is_event_admin
 from ....helpers.data_getter import DataGetter
 from ....forms.admin.file_form import FileForm
 
@@ -563,4 +565,55 @@ class EventView(ModelView):
         else:
             flash("You don't have permission!")
         return redirect(url_for('.event_formats',
+                                event_id=event_id))
+
+    @expose('/<event_id>/user_permissions', methods=('GET', 'POST'))
+    def user_permissions(self, event_id):
+        users = DataGetter.get_all_users()
+        event_users = DataGetter.get_event(event_id).users
+        if is_event_admin(event_id, event_users):
+            return self.render('admin/permissions/permission.html',
+                           # form=form,
+                           event_id=event_id,
+                           cancel_url=url_for('.index_view', event_id=event_id),
+                           users=users,
+                           event_users=event_users)
+        else:
+            flash("You don't have permission!")
+            return redirect(url_for('.index_view',
+                                    event_id=event_id))
+
+    @expose('/<event_id>/add_user_to_event', methods=('GET', 'POST'))
+    def add_user_to_event(self, event_id):
+        event = DataGetter.get_event(event_id)
+        for row in request.args.getlist('user'):
+            user_id = int(row)
+            user = DataGetter.get_user(user_id)
+            asso = DataGetter.get_association()
+            asso.event_id = event_id
+            asso.user = user
+            asso.admin = False
+            asso.editor = False
+            try:
+                event.users.append(asso)
+                save_to_db(event, "Event updated")
+            except Exception:
+                pass
+
+        return redirect(url_for('.user_permissions',
+                                event_id=event_id))
+
+    @expose('/<event_id>/update_user_permission', methods=('GET', 'POST'))
+    def update_user_permission(self, event_id):
+        event = DataGetter.get_event(event_id)
+        asso = DataGetter.get_association_by_event_and_user(event_id, user_id=int(request.args['id']))
+        asso.admin= False
+        asso.editor = False
+        for arg in request.args:
+            if arg == 'admin':
+                asso.admin = True
+            elif arg == 'editor':
+                asso.editor = True
+        save_to_db(asso, "Permission updated")
+        return redirect(url_for('.user_permissions',
                                 event_id=event_id))

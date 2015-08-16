@@ -3,6 +3,24 @@ from open_event.helpers.date_formatter import DateFormatter
 from . import db
 from sqlalchemy_utils import ColorType
 
+# users_permissions = db.Table('users_permissions',
+#                              db.Column('event_id',
+#                                        db.Integer,
+#                                        db.ForeignKey('events.id')),
+#                              db.Column('user_id',
+#                                        db.Integer,
+#                                        db.ForeignKey('user.id')),
+#                              db.Column('editor', db.Boolean),
+#                              db.Column('admin', db.Boolean)
+#                              )
+class Association(db.Model):
+    __tablename__ = 'association'
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    editor = db.Column(db.Boolean)
+    admin = db.Column(db.Boolean)
+    user = db.relationship("User", backref="events_assocs")
+
 
 class Event(db.Model):
     __tablename__ = 'events'
@@ -33,7 +51,7 @@ class Event(db.Model):
                               backref="event")
     sponsor = db.relationship('Sponsor',
                               backref="event")
-    owner = db.Column(db.Integer, db.ForeignKey('user.id'))
+    users = db.relationship("Association", backref="event")
     db.UniqueConstraint('track.name')
 
     def __init__(self,
@@ -48,7 +66,7 @@ class Event(db.Model):
                  color=None,
                  slogan=None,
                  url=None,
-                 owner=None):
+                 ):
         self.name = name
         self.logo = logo
         self.email = email
@@ -60,7 +78,7 @@ class Event(db.Model):
         self.location_name = location_name
         self.slogan = slogan
         self.url = url
-        self.owner = owner
+        # self.owner = owner
 
     def __repr__(self):
         return '<Event %r>' % (self.name)

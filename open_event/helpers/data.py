@@ -13,7 +13,7 @@ from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
 from ..models.user import User
-from ..models.event import Event
+from ..models.event import Event, Association
 from ..helpers.update_version import VersionUpdater
 from ..models.file import File
 from werkzeug import secure_filename
@@ -376,8 +376,11 @@ class DataManager(object):
                       longitude=form.longitude.data,
                       location_name=form.location_name.data,
                       slogan=form.slogan.data,
-                      url=form.url.data,
-                      owner=login.current_user.id)
+                      url=form.url.data)
+        a = Association()
+        a.user = login.current_user
+        a.admin = True
+        event.users.append(a)
         if form.logo.data:
             event.logo = form.logo.data
         else:

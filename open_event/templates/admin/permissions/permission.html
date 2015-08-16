@@ -1,0 +1,66 @@
+{% extends 'admin/base1.html' %}
+
+
+
+{% block body %}
+    <link href="{{url_for('static', filename='admin/css/prism.css')}}" rel="stylesheet">
+    <link href="{{url_for('static', filename='admin/css/chosen.css')}}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='admin/js/prism.js')}}"></script>
+    <script src="{{ url_for('static', filename='admin/js/chosen.jquery.js')}}"></script>
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <div class="well bs-component">
+            <div class="row">
+                <div class="col-md-6">
+                    <h2> Add User to Event </h2>
+                    <form action="/admin/event/{{event_id}}/add_user_to_event">
+                        <select class="users chosen-rtl" multiple style="width:250px" name="user">
+                            {% for user in users %}
+                                <option value="{{user.id}}">{{user.login}}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="btn btn-success">Apply</button>
+                    </form>
+                </div>
+
+                <div class="col-md-6">
+                    <h2> Event Users </h2>
+                    <table class="table table-condensed" id="table-list">
+                        <thead>
+                            <tr>
+                                <th>Login</th>
+                                <th>Admin</th>
+                                <th>Editor</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in event_users %}
+                                <tr>
+                                    <form action="/admin/event/{{event_id}}/update_user_permission">
+                                        <input type="hidden" name="id" value={{user.user.id}}>
+                                        <td>{{user.user.login}}</td>
+                                        <td><input name='admin' type='checkbox' {{'checked' if user.admin else '' }} /></td>
+                                        <td><input name='editor' type='checkbox' {{'checked' if user.editor else '' }} /></td>
+                                        <td>
+                                            <button class="btn btn-success btn-xs ">Update</button>
+                                        </td>
+                                    </form>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+
+    <script language="javascript">
+        (function($) {
+            $(document).ready(function() {
+               $(".users").chosen({no_results_text: "Oops, nothing found!"}, {width: "100%"});
+            } );
+        })(jQuery);
+    </script>
+{% endblock %}
