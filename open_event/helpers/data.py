@@ -379,6 +379,7 @@ class DataManager(object):
                       url=form.url.data)
         a = Association()
         a.user = login.current_user
+        a.admin = False
         a.admin = True
         event.users.append(a)
         if form.logo.data:
