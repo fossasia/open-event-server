@@ -18,7 +18,7 @@ from open_event.forms.admin.format_form import FormatForm
 from ....helpers.data import DataManager, save_to_db, delete_from_db
 from ....helpers.formatter import Formatter
 from ....helpers.update_version import VersionUpdater
-from ....helpers.helpers import is_event_owner, is_track_name_unique_in_event, is_event_admin
+from ....helpers.helpers import is_track_name_unique_in_event, is_event_admin
 from ....helpers.data_getter import DataGetter
 from ....forms.admin.file_form import FileForm
 
@@ -303,7 +303,7 @@ class EventView(ModelView):
         form = SponsorForm()
         self.name = "Sponsor | New"
         if form.validate():
-            if is_event_owner(event_id):
+            if is_event_admin_or_editor(event_id):
                 DataManager.create_sponsor(form, event_id)
                 flash("Sponsor added")
             else:
