@@ -8,12 +8,12 @@ from flask.ext.scrypt import generate_password_hash, generate_random_salt, check
 
 from ..models import db
 from ..models.track import Track
-from ..models.session import Session, Level, Format
+from ..models.session import Session, Level, Format, Language
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
 from ..models.user import User
-from ..models.event import Event, Association
+from ..models.event import Event, EventsUsers
 from ..helpers.update_version import VersionUpdater
 from ..models.file import File
 from werkzeug import secure_filename
@@ -105,17 +105,20 @@ class DataManager(object):
         microlocation = data["microlocation"]
         level = data["level"]
         format = data["format"]
+        language = data["language"]
         del data["speakers"]
         del data["microlocation"]
         del data["level"]
         del data["format"]
+        del data["language"]
         db.session.query(Session)\
             .filter_by(id=session.id)\
             .update(dict(data))
         session.speakers = InstrumentedList(speakers if speakers else [])
         session.microlocation = microlocation
-        session.format = form.format.data
+        session.format = format
         session.level = level
+        session.language = language
         save_to_db(session, "Session updated")
         update_version(session.event_id, False, "session_ver")
 
@@ -286,6 +289,42 @@ class DataManager(object):
         flash('You successfully delete format')
 
     @staticmethod
+    def create_language(form, event_id):
+        """
+        Language will be saved to database with proper Event id
+        :param form: view data form
+        :param event_id: language belongs to Event by event id
+        """
+        new_language = Language(name=form.name.data,
+                                label_en=form.label_en.data,
+                                label_de=form.label_de.data,
+                                event_id=event_id)
+        save_to_db(new_language, "Language saved")
+        update_version(event_id, False, "session_ver")
+
+    @staticmethod
+    def update_language(form, language, event_id):
+        """
+        Language will be updated in database
+        :param form: view data form
+        :param language: object contains all earlier data
+        """
+        data = form.data
+        db.session.query(Language).filter_by(id=language.id).update(dict(data))
+        save_to_db(language, "Language updated")
+        update_version(event_id, False, "session_ver")
+
+    @staticmethod
+    def remove_language(language_id):
+        """
+        Language will be removed from database
+        :param language_id: language id to remove object
+        """
+        language = Language.query.get(language_id)
+        delete_from_db(language, "Language deleted")
+        flash('You successfully delete language')
+
+    @staticmethod
     def create_microlocation(form, event_id):
         """
         Microlocation will be saved to database with proper Event id
@@ -377,7 +416,7 @@ class DataManager(object):
                       location_name=form.location_name.data,
                       slogan=form.slogan.data,
                       url=form.url.data)
-        a = Association()
+        a = EventsUsers()
         a.user = login.current_user
         a.admin = False
         a.admin = True

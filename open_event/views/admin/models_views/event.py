@@ -14,6 +14,7 @@ from open_event.forms.admin.track_form import TrackForm
 from open_event.forms.admin.microlocation_form import MicrolocationForm
 from open_event.forms.admin.level_form import LevelForm
 from open_event.forms.admin.format_form import FormatForm
+from open_event.forms.admin.language_form import LanguageForm
 
 from ....helpers.data import DataManager, save_to_db, delete_from_db
 from ....helpers.formatter import Formatter
@@ -543,6 +544,62 @@ class EventView(ModelView):
         else:
             flash("You don't have permission!")
         return redirect(url_for('.event_formats',
+                                event_id=event_id))
+
+    @expose('/<event_id>/language')
+    def event_languages(self, event_id):
+        languages = DataGetter.get_languages()
+        events = DataGetter.get_all_events()
+        self.name = "Language"
+        return self.render('admin/model/language/list.html',
+                           objects=languages,
+                           event_id=event_id,
+                           events=events)
+
+    @expose('/<event_id>/language/new', methods=('GET', 'POST'))
+    def event_language_new(self, event_id):
+        events = DataGetter.get_all_events()
+        form = LanguageForm()
+        self.name = "Language | New"
+        if form.validate():
+            if is_event_admin_or_editor(event_id):
+                DataManager.create_language(form, event_id)
+                flash("Language added")
+            else:
+                flash("You don't have permission!")
+            return redirect(url_for('.event_languages', event_id=event_id))
+        return self.render('admin/model/create_model.html',
+                           form=form,
+                           event_id=event_id,
+                           events=events,
+                           cancel_url=url_for('.event_languages', event_id=event_id))
+
+    @expose('/<event_id>/language/<language_id>/edit', methods=('GET', 'POST'))
+    def event_language_edit(self, event_id, language_id):
+        language = DataGetter.get_language(language_id)
+        events = DataGetter.get_all_events()
+        form = LanguageForm(obj=language)
+        self.name = "Language " + language_id + " | Edit"
+        if form.validate():
+            if is_event_admin_or_editor(event_id):
+                DataManager.update_language(form, language, event_id)
+                flash("Language updated")
+            else:
+                flash("You don't have permission!")
+            return redirect(url_for('.event_languages', event_id=event_id))
+        return self.render('admin/model/create_model.html',
+                           form=form,
+                           event_id=event_id,
+                           events=events,
+                           cancel_url=url_for('.event_languages', event_id=event_id))
+
+    @expose('/<event_id>/language/<language_id>/delete', methods=('GET', 'POST'))
+    def event_language_delete(self, event_id, language_id):
+        if is_event_admin_or_editor(event_id):
+            DataManager.remove_language(language_id)
+        else:
+            flash("You don't have permission!")
+        return redirect(url_for('.event_languages',
                                 event_id=event_id))
 
     @expose('/<event_id>/user_permissions', methods=('GET', 'POST'))

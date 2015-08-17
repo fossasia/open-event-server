@@ -1,6 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
-from ..models.event import Event, Association
-from ..models.session import Session, Level, Format
+from ..models.event import Event, EventsUsers
+from ..models.session import Session, Level, Format, Language
 from ..models.track import Track
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
@@ -130,6 +130,13 @@ class DataGetter:
         return Format.query.filter_by(event_id=get_event_id())
 
     @staticmethod
+    def get_languages():
+        """
+        :return: All Event Languages
+        """
+        return Language.query.filter_by(event_id=get_event_id())
+
+    @staticmethod
     def get_level(level_id):
         """
         :param level_id: Level object id
@@ -144,6 +151,14 @@ class DataGetter:
         :return: Format object
         """
         return Format.query.get(format_id)
+
+    @staticmethod
+    def get_language(language_id):
+        """
+        :param language: Language object id
+        :return: Language object
+        """
+        return Language.query.get(language_id)
 
     @staticmethod
     def get_microlocation(microlocation_id):
@@ -210,10 +225,10 @@ class DataGetter:
 
     @staticmethod
     def get_association():
-        return Association()
+        return EventsUsers()
 
     @staticmethod
     def get_association_by_event_and_user(event_id, user_id):
-        return Association.query.filter_by(event_id=event_id, user_id=user_id).first()
+        return EventsUsers.query.filter_by(event_id=event_id, user_id=user_id).first()
 
 

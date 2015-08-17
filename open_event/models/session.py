@@ -71,6 +71,39 @@ class Format(db.Model):
         return '<Format %r>' % (self.name)
 
 
+class Language(db.Model):
+    __tablename__ = 'language'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    label_en = db.Column(db.String)
+    label_de = db.Column(db.String)
+    session = db.relationship('Session',
+                              backref="language")
+    event_id = db.Column(db.Integer, nullable=False)
+
+    def __init__(self,
+                 name=None,
+                 label_en=None,
+                 label_de=None,
+                 session=None,
+                 event_id=None):
+
+        self.name = name
+        self.label_en = label_en
+        self.label_de = label_de
+        self.event_id = event_id
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {'name': self.name,
+                'label_en': self.label_en,
+                'label_de': self.label_de}
+
+    def __repr__(self):
+        return '<Language %r>' % (self.name)
+
+
 class Session(db.Model):
     __tablename__ = 'session'
     id = db.Column(db.Integer, primary_key=True)
@@ -91,6 +124,8 @@ class Session(db.Model):
                          db.ForeignKey('level.id'))
     format_id = db.Column(db.Integer,
                          db.ForeignKey('format.id'))
+    language_id = db.Column(db.Integer,
+                         db.ForeignKey('language.id'))
     microlocation_id = db.Column(db.Integer,
                          db.ForeignKey('microlocation.id'))
     event_id = db.Column(db.Integer,
@@ -106,6 +141,7 @@ class Session(db.Model):
                  format=None,
                  track=None,
                  level=None,
+                 language=None,
                  microlocation=None,
                  event_id=None):
         self.title = title
@@ -117,6 +153,7 @@ class Session(db.Model):
         self.format = format
         self.track = track
         self.level = level
+        self.language = language
         self.microlocation = microlocation
         self.event_id = event_id
 
@@ -134,6 +171,7 @@ class Session(db.Model):
                 'track': self.track.id if self.track else None,
                 'speakers': [{'id': speaker.id, 'name': speaker.name} for speaker in self.speakers],
                 'level': {'id': self.level.name, 'label_en': self.level.label_en} if self.level else None,
+                'lang': {'id': self.language.name, 'label_en': self.language.label_en, 'label_de': self.language.label_de} if self.language else None,
                 'microlocation': self.microlocation.id if self.microlocation else None}
 
     def __repr__(self):

@@ -3,20 +3,13 @@ from open_event.helpers.date_formatter import DateFormatter
 from . import db
 from sqlalchemy_utils import ColorType
 
-# users_permissions = db.Table('users_permissions',
-#                              db.Column('event_id',
-#                                        db.Integer,
-#                                        db.ForeignKey('events.id')),
-#                              db.Column('user_id',
-#                                        db.Integer,
-#                                        db.ForeignKey('user.id')),
-#                              db.Column('editor', db.Boolean),
-#                              db.Column('admin', db.Boolean)
-#                              )
-class Association(db.Model):
-    __tablename__ = 'association'
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'), primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+
+class EventsUsers(db.Model):
+    __tablename__ = 'eventsusers'
+    id = db.Column(db.Integer,
+                   primary_key=True)
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     editor = db.Column(db.Boolean)
     admin = db.Column(db.Boolean)
     user = db.relationship("User", backref="events_assocs")
@@ -51,7 +44,7 @@ class Event(db.Model):
                               backref="event")
     sponsor = db.relationship('Sponsor',
                               backref="event")
-    users = db.relationship("Association", backref="event")
+    users = db.relationship("EventsUsers", backref="event")
     db.UniqueConstraint('track.name')
 
     def __init__(self,
