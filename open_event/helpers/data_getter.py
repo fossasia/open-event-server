@@ -1,6 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
-from ..models.event import Event
-from ..models.session import Session, Level, Format
+from ..models.event import Event, EventsUsers
+from ..models.session import Session, Level, Format, Language
 from ..models.track import Track
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
@@ -23,9 +23,10 @@ class DataGetter:
         return Event.query.get(event_id)
 
     @staticmethod
-    def get_all_owner_events(owner_id):
+    def get_all_owner_events():
         """Method return all owner events"""
-        return Event.query.filter_by(owner=owner_id)
+        # return Event.query.filter_by(owner=owner_id)
+        return login.current_user.events_assocs
 
     @staticmethod
     def get_sessions_by_event_id():
@@ -129,6 +130,13 @@ class DataGetter:
         return Format.query.filter_by(event_id=get_event_id())
 
     @staticmethod
+    def get_languages():
+        """
+        :return: All Event Languages
+        """
+        return Language.query.filter_by(event_id=get_event_id())
+
+    @staticmethod
     def get_level(level_id):
         """
         :param level_id: Level object id
@@ -143,6 +151,14 @@ class DataGetter:
         :return: Format object
         """
         return Format.query.get(format_id)
+
+    @staticmethod
+    def get_language(language_id):
+        """
+        :param language: Language object id
+        :return: Language object
+        """
+        return Language.query.get(language_id)
 
     @staticmethod
     def get_microlocation(microlocation_id):
@@ -206,5 +222,13 @@ class DataGetter:
         :return: User
         """
         return User.query.get(int(id))
+
+    @staticmethod
+    def get_association():
+        return EventsUsers()
+
+    @staticmethod
+    def get_association_by_event_and_user(event_id, user_id):
+        return EventsUsers.query.filter_by(event_id=event_id, user_id=user_id).first()
 
 

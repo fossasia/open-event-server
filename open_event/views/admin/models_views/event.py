@@ -1,10 +1,12 @@
 """Copyright 2015 Rafal Kowalski"""
 from flask import request, url_for, redirect, flash
 from flask.ext import login
+from sqlalchemy.exc import IntegrityError
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.model.helpers import get_mdict_item_or_list
 from flask_admin import expose
 from flask_admin.helpers import get_redirect_target
+
 from open_event.forms.admin.session_form import SessionForm
 from open_event.forms.admin.speaker_form import SpeakerForm
 from open_event.forms.admin.sponsor_form import SponsorForm
@@ -12,11 +14,12 @@ from open_event.forms.admin.track_form import TrackForm
 from open_event.forms.admin.microlocation_form import MicrolocationForm
 from open_event.forms.admin.level_form import LevelForm
 from open_event.forms.admin.format_form import FormatForm
+from open_event.forms.admin.language_form import LanguageForm
 
-from ....helpers.data import DataManager
+from ....helpers.data import DataManager, save_to_db, delete_from_db
 from ....helpers.formatter import Formatter
 from ....helpers.update_version import VersionUpdater
-from ....helpers.helpers import is_event_owner, is_track_name_unique_in_event
+from ....helpers.helpers import is_track_name_unique_in_event, is_event_admin
 from ....helpers.data_getter import DataGetter
 from ....forms.admin.file_form import FileForm
 
@@ -94,7 +97,7 @@ class EventView(ModelView):
         self.form.logo.choices.insert(0, ('', ''))
         if self.form.validate():
             if request.method == "POST":
-                if is_event_owner(event_id):
+                if is_event_admin_or_editor(event_id):
                     DataManager.update_event(self.form, event)
                     flash("Event updated")
                 else:
@@ -104,7 +107,7 @@ class EventView(ModelView):
                            form=self.form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id),
+                           # owner=DataGetter.get_event_owner(event_id),
                            cancel_url=url_for('.index_view'))
 
     @expose('/<event_id>')
@@ -124,8 +127,7 @@ class EventView(ModelView):
         return self.render('admin/model/track/list1.html',
                            objects=tracks,
                            event_id=event_id,
-                           events=events,
-                           owner=DataGetter.get_event_owner(event_id))
+                           events=events)
 
     @expose('/<event_id>/track/new', methods=('GET', 'POST'))
     def event_track_new(self, event_id):
@@ -133,7 +135,7 @@ class EventView(ModelView):
         form = TrackForm(request.form)
         self.name = " Track | New"
         if form.validate():
-            if is_event_owner(event_id) and is_track_name_unique_in_event(form, event_id):
+            if is_event_admin_or_editor(event_id) and is_track_name_unique_in_event(form, event_id):
                 DataManager.create_track(form, event_id)
                 flash("Track added")
             else:
@@ -143,7 +145,6 @@ class EventView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id),
                            cancel_url=url_for('.event_tracks', event_id=event_id))
 
     @expose('/<event_id>/track/<track_id>/edit', methods=('GET', 'POST'))
@@ -153,7 +154,7 @@ class EventView(ModelView):
         form = TrackForm(obj=track)
         self.name = "Track | Edit"
         if form.validate() and is_track_name_unique_in_event(form, event_id, track_id):
-            if is_event_owner(event_id):
+            if is_event_admin_or_editor(event_id):
                 DataManager.update_track(form, track)
                 flash("Track updated")
             else:
@@ -163,12 +164,11 @@ class EventView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id),
                            cancel_url=url_for('.event_tracks', event_id=event_id))
 
     @expose('/<event_id>/track/<track_id>/delete', methods=('GET', 'POST'))
     def event_track_delete(self, event_id, track_id):
-        if is_event_owner(event_id):
+        if is_event_admin_or_editor(event_id):
             DataManager.remove_track(track_id)
             flash("Track deleted")
         else:
@@ -184,8 +184,7 @@ class EventView(ModelView):
         return self.render('admin/model/session/list.html',
                            objects=sessions,
                            event_id=event_id,
-                           events=events,
-                           owner=DataGetter.get_event_owner(event_id))
+                           events=events)
 
     @expose('/<event_id>/session/new', methods=('GET', 'POST'))
     def event_session_new(self, event_id):
@@ -193,7 +192,7 @@ class EventView(ModelView):
         form = SessionForm()
         self.name = "Session | New"
         if form.validate():
-            if is_event_owner(event_id):
+            if is_event_admin_or_editor(event_id):
                 DataManager.create_session(form, event_id)
             else:
                 flash("You don't have permission!")
@@ -202,7 +201,6 @@ class EventView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id),
                            cancel_url=url_for('.event_sessions', event_id=event_id))
 
     @expose('/<event_id>/session/<session_id>/edit', methods=('GET', 'POST'))
@@ -212,7 +210,7 @@ class EventView(ModelView):
         form = SessionForm(obj=session)
         self.name = "Session | Edit"
         if form.validate():
-            if is_event_owner(event_id):
+            if is_event_admin_or_editor(event_id):
                 DataManager.update_session(form, session)
                 flash("Session updated")
             else:
@@ -222,12 +220,11 @@ class EventView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id),
                            cancel_url=url_for('.event_sessions', event_id=event_id))
 
     @expose('/<event_id>/session/<session_id>/delete', methods=('GET', 'POST'))
     def event_session_delete(self, event_id, session_id):
-        if is_event_owner(event_id):
+        if is_event_admin_or_editor(event_id):
             DataManager.remove_session(session_id)
         else:
             flash("You don't have permission!")
@@ -242,8 +239,7 @@ class EventView(ModelView):
         return self.render('admin/model/speaker/list.html',
                            objects=speakers,
                            event_id=event_id,
-                           events=events,
-                           owner=DataGetter.get_event_owner(event_id))
+                           events=events)
 
     @expose('/<event_id>/speaker/new', methods=('GET', 'POST'))
     def event_speaker_new(self, event_id):
@@ -251,7 +247,7 @@ class EventView(ModelView):
         form = SpeakerForm()
         self.name = "Speaker | New"
         if form.validate():
-            if is_event_owner(event_id):
+            if is_event_admin_or_editor(event_id):
                 DataManager.create_speaker(form, event_id)
                 flash("Speaker added")
             else:
@@ -261,7 +257,6 @@ class EventView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id),
                            cancel_url=url_for('.event_speakers', event_id=event_id))
 
     @expose('/<event_id>/speaker/<speaker_id>/edit', methods=('GET', 'POST'))
@@ -271,7 +266,7 @@ class EventView(ModelView):
         form = SpeakerForm(obj=speaker)
         self.name = "Speaker " + speaker_id + " | Edit"
         if form.validate():
-            if is_event_owner(event_id):
+            if is_event_admin_or_editor(event_id):
                 DataManager.update_speaker(form, speaker)
                 flash("Speaker updated")
             else:
@@ -282,12 +277,11 @@ class EventView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id),
                            cancel_url=url_for('.event_speakers', event_id=event_id))
 
     @expose('/<event_id>/speaker/<speaker_id>/delete', methods=('GET', 'POST'))
     def event_speaker_delete(self, event_id, speaker_id):
-        if is_event_owner(event_id):
+        if is_event_admin_or_editor(event_id):
             DataManager.remove_speaker(speaker_id)
         else:
             flash("You don't have permission!")
@@ -302,8 +296,7 @@ class EventView(ModelView):
         return self.render('admin/model/sponsor/list.html',
                            objects=sponsors,
                            event_id=event_id,
-                           events=events,
-                           owner=DataGetter.get_event_owner(event_id))
+                           events=events)
 
     @expose('/<event_id>/sponsor/new', methods=('GET', 'POST'))
     def event_sponsor_new(self, event_id):
@@ -311,7 +304,7 @@ class EventView(ModelView):
         form = SponsorForm()
         self.name = "Sponsor | New"
         if form.validate():
-            if is_event_owner(event_id):
+            if is_event_admin_or_editor(event_id):
                 DataManager.create_sponsor(form, event_id)
                 flash("Sponsor added")
             else:
@@ -321,7 +314,6 @@ class EventView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id),
                            cancel_url=url_for('.event_sponsors', event_id=event_id))
 
     @expose('/<event_id>/sponsor/<sponsor_id>/edit', methods=('GET', 'POST'))
@@ -331,7 +323,7 @@ class EventView(ModelView):
         form = SponsorForm(obj=sponsor)
         self.name = "Sponsor " + sponsor_id + " | Edit"
         if form.validate():
-            if is_event_owner(event_id):
+            if is_event_admin_or_editor(event_id):
                 DataManager.update_sponsor(form, sponsor)
                 flash("Sponsor updated")
             else:
@@ -341,12 +333,11 @@ class EventView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id),
                            cancel_url=url_for('.event_sponsors', event_id=event_id))
 
     @expose('/<event_id>/sponsor/<sponsor_id>/delete', methods=('GET', 'POST'))
     def event_sponsor_delete(self, event_id, sponsor_id):
-        if is_event_owner(event_id):
+        if is_event_admin_or_editor(event_id):
             DataManager.remove_sponsor(sponsor_id)
         else:
             flash("You don't have permission!")
@@ -361,8 +352,7 @@ class EventView(ModelView):
         return self.render('admin/model/microlocation/list.html',
                            objects=microlocations,
                            event_id=event_id,
-                           events=events,
-                           owner=DataGetter.get_event_owner(event_id))
+                           events=events)
 
     @expose('/<event_id>/microlocation/new', methods=('GET', 'POST'))
     def event_microlocation_new(self, event_id):
@@ -370,7 +360,7 @@ class EventView(ModelView):
         form = MicrolocationForm()
         self.name = "Microlocation | New"
         if form.validate():
-            if is_event_owner(event_id):
+            if is_event_admin_or_editor(event_id):
                 DataManager.create_microlocation(form, event_id)
                 flash("Microlocation added")
             else:
@@ -380,7 +370,6 @@ class EventView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id),
                            cancel_url=url_for('.event_microlocations', event_id=event_id))
 
     @expose('/<event_id>/microlocation/<microlocation_id>/edit', methods=('GET', 'POST'))
@@ -390,7 +379,7 @@ class EventView(ModelView):
         form = MicrolocationForm(obj=microlocation)
         self.name = "Microlocation " + microlocation_id + " | Edit"
         if form.validate():
-            if is_event_owner(event_id):
+            if is_event_admin_or_editor(event_id):
                 DataManager.update_microlocation(form, microlocation)
                 flash("Microlocation updated")
             else:
@@ -400,12 +389,11 @@ class EventView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id),
                            cancel_url=url_for('.event_microlocations', event_id=event_id))
 
     @expose('/<event_id>/microlocation/<microlocation_id>/delete', methods=('GET', 'POST'))
     def event_microlocation_delete(self, event_id, microlocation_id):
-        if is_event_owner(event_id):
+        if is_event_admin_or_editor(event_id):
             DataManager.remove_microlocation(microlocation_id)
         else:
             flash("You don't have permission!")
@@ -444,8 +432,7 @@ class EventView(ModelView):
         self.name = "Api | " + event_id
         return self.render('admin/api/index.html',
                            event_id=event_id,
-                           events=events,
-                           owner=DataGetter.get_event_owner(event_id))
+                           events=events)
 
     @expose('/<event_id>/level')
     def event_levels(self, event_id):
@@ -455,8 +442,7 @@ class EventView(ModelView):
         return self.render('admin/model/level/list.html',
                            objects=levels,
                            event_id=event_id,
-                           events=events,
-                           owner=DataGetter.get_event_owner(event_id))
+                           events=events)
 
     @expose('/<event_id>/level/new', methods=('GET', 'POST'))
     def event_level_new(self, event_id):
@@ -464,7 +450,7 @@ class EventView(ModelView):
         form = LevelForm()
         self.name = "Level | New"
         if form.validate():
-            if is_event_owner(event_id):
+            if is_event_admin_or_editor(event_id):
                 DataManager.create_level(form, event_id)
                 flash("Level added")
             else:
@@ -474,7 +460,6 @@ class EventView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id),
                            cancel_url=url_for('.event_levels', event_id=event_id))
 
     @expose('/<event_id>/level/<level_id>/edit', methods=('GET', 'POST'))
@@ -484,7 +469,7 @@ class EventView(ModelView):
         form = LevelForm(obj=level)
         self.name = "Level " + level_id + " | Edit"
         if form.validate():
-            if is_event_owner(event_id):
+            if is_event_admin_or_editor(event_id):
                 DataManager.update_level(form, level, event_id)
                 flash("Level updated")
             else:
@@ -494,12 +479,11 @@ class EventView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id),
                            cancel_url=url_for('.event_levels', event_id=event_id))
 
     @expose('/<event_id>/level/<level_id>/delete', methods=('GET', 'POST'))
     def event_level_delete(self, event_id, level_id):
-        if is_event_owner(event_id):
+        if is_event_admin_or_editor(event_id):
             DataManager.remove_level(level_id)
         else:
             flash("You don't have permission!")
@@ -514,8 +498,7 @@ class EventView(ModelView):
         return self.render('admin/model/format/list.html',
                            objects=formats,
                            event_id=event_id,
-                           events=events,
-                           owner=DataGetter.get_event_owner(event_id))
+                           events=events)
 
     @expose('/<event_id>/format/new', methods=('GET', 'POST'))
     def event_format_new(self, event_id):
@@ -523,7 +506,7 @@ class EventView(ModelView):
         form = FormatForm()
         self.name = "Format | New"
         if form.validate():
-            if is_event_owner(event_id):
+            if is_event_admin_or_editor(event_id):
                 DataManager.create_format(form, event_id)
                 flash("Format added")
             else:
@@ -533,7 +516,6 @@ class EventView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id),
                            cancel_url=url_for('.event_formats', event_id=event_id))
 
     @expose('/<event_id>/format/<format_id>/edit', methods=('GET', 'POST'))
@@ -543,7 +525,7 @@ class EventView(ModelView):
         form = FormatForm(obj=format)
         self.name = "format " + format_id + " | Edit"
         if form.validate():
-            if is_event_owner(event_id):
+            if is_event_admin_or_editor(event_id):
                 DataManager.update_format(form, format, event_id)
                 flash("Format updated")
             else:
@@ -553,14 +535,130 @@ class EventView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           owner=DataGetter.get_event_owner(event_id),
                            cancel_url=url_for('.event_formats', event_id=event_id))
 
     @expose('/<event_id>/format/<format_id>/delete', methods=('GET', 'POST'))
     def event_format_delete(self, event_id, format_id):
-        if is_event_owner(event_id):
+        if is_event_admin_or_editor(event_id):
             DataManager.remove_format(format_id)
         else:
             flash("You don't have permission!")
         return redirect(url_for('.event_formats',
                                 event_id=event_id))
+
+    @expose('/<event_id>/language')
+    def event_languages(self, event_id):
+        languages = DataGetter.get_languages()
+        events = DataGetter.get_all_events()
+        self.name = "Language"
+        return self.render('admin/model/language/list.html',
+                           objects=languages,
+                           event_id=event_id,
+                           events=events)
+
+    @expose('/<event_id>/language/new', methods=('GET', 'POST'))
+    def event_language_new(self, event_id):
+        events = DataGetter.get_all_events()
+        form = LanguageForm()
+        self.name = "Language | New"
+        if form.validate():
+            if is_event_admin_or_editor(event_id):
+                DataManager.create_language(form, event_id)
+                flash("Language added")
+            else:
+                flash("You don't have permission!")
+            return redirect(url_for('.event_languages', event_id=event_id))
+        return self.render('admin/model/create_model.html',
+                           form=form,
+                           event_id=event_id,
+                           events=events,
+                           cancel_url=url_for('.event_languages', event_id=event_id))
+
+    @expose('/<event_id>/language/<language_id>/edit', methods=('GET', 'POST'))
+    def event_language_edit(self, event_id, language_id):
+        language = DataGetter.get_language(language_id)
+        events = DataGetter.get_all_events()
+        form = LanguageForm(obj=language)
+        self.name = "Language " + language_id + " | Edit"
+        if form.validate():
+            if is_event_admin_or_editor(event_id):
+                DataManager.update_language(form, language, event_id)
+                flash("Language updated")
+            else:
+                flash("You don't have permission!")
+            return redirect(url_for('.event_languages', event_id=event_id))
+        return self.render('admin/model/create_model.html',
+                           form=form,
+                           event_id=event_id,
+                           events=events,
+                           cancel_url=url_for('.event_languages', event_id=event_id))
+
+    @expose('/<event_id>/language/<language_id>/delete', methods=('GET', 'POST'))
+    def event_language_delete(self, event_id, language_id):
+        if is_event_admin_or_editor(event_id):
+            DataManager.remove_language(language_id)
+        else:
+            flash("You don't have permission!")
+        return redirect(url_for('.event_languages',
+                                event_id=event_id))
+
+    @expose('/<event_id>/user_permissions', methods=('GET', 'POST'))
+    def user_permissions(self, event_id):
+        users = DataGetter.get_all_users()
+        event_users = DataGetter.get_event(event_id).users
+        if is_event_admin(event_id, event_users):
+            return self.render('admin/permissions/permission.html',
+                           event_id=event_id,
+                           cancel_url=url_for('.index_view', event_id=event_id),
+                           users=users,
+                           event_users=event_users)
+        else:
+            flash("You don't have permission!")
+            return redirect(url_for('.index_view',
+                                    event_id=event_id))
+
+    @expose('/<event_id>/add_user_to_event', methods=('GET', 'POST'))
+    def add_user_to_event(self, event_id):
+        event = DataGetter.get_event(event_id)
+        for row in request.args.getlist('user'):
+            user_id = int(row)
+            user = DataGetter.get_user(user_id)
+            asso = DataGetter.get_association()
+            asso.event_id = event_id
+            asso.user = user
+            asso.admin = False
+            asso.editor = False
+            try:
+                event.users.append(asso)
+                save_to_db(event, "Event updated")
+            except Exception:
+                pass
+        return redirect(url_for('.user_permissions',
+                                event_id=event_id))
+
+    @expose('/<event_id>/update_user_permission', methods=('GET', 'POST'))
+    def update_user_permission(self, event_id):
+        asso = DataGetter.get_association_by_event_and_user(event_id, user_id=int(request.args['id']))
+        asso.admin= False
+        asso.editor = False
+        for arg in request.args:
+            if arg == 'admin':
+                asso.admin = True
+            elif arg == 'editor':
+                asso.editor = True
+        save_to_db(asso, "Permission updated")
+        return redirect(url_for('.user_permissions',
+                                event_id=event_id))
+
+    @expose('/<event_id>/delete_user_permission/<user_id>', methods=('GET', 'POST'))
+    def delete_user_permission(self, event_id, user_id):
+        asso = DataGetter.get_association_by_event_and_user(event_id, user_id=int(user_id))
+        delete_from_db(asso, "Permission updated")
+        return redirect(url_for('.user_permissions',
+                                event_id=event_id))
+
+def is_event_admin_or_editor(event_id):
+    asso = DataGetter.get_association_by_event_and_user(event_id, login.current_user.id)
+    if asso:
+        return asso.admin or asso.editor
+    return False

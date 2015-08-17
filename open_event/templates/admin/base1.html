@@ -32,18 +32,6 @@
   <body>
     {{ menu1.render_menu() }}
     {% block page_body %}
-    <!--<div class="container">-->
-        <div class="row">
-          <div class="col-md-2"></div>
-          <div class="col-md-8">
-              {% if event_id %}
-                <div style="margin:5px">
-                      Event Owner: <div class="label label-info">{{ owner }}</div>
-                </div>
-              {% endif %}
-          </div>
-          <div class="col-md-2"></div>
-        </div>
         <div class="row">
           {% block messages %}
           {{ layout.messages() }}

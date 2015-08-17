@@ -4,6 +4,17 @@ from . import db
 from sqlalchemy_utils import ColorType
 
 
+class EventsUsers(db.Model):
+    __tablename__ = 'eventsusers'
+    id = db.Column(db.Integer,
+                   primary_key=True)
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    editor = db.Column(db.Boolean)
+    admin = db.Column(db.Boolean)
+    user = db.relationship("User", backref="events_assocs")
+
+
 class Event(db.Model):
     __tablename__ = 'events'
     id = db.Column(db.Integer,
@@ -33,7 +44,7 @@ class Event(db.Model):
                               backref="event")
     sponsor = db.relationship('Sponsor',
                               backref="event")
-    owner = db.Column(db.Integer, db.ForeignKey('user.id'))
+    users = db.relationship("EventsUsers", backref="event")
     db.UniqueConstraint('track.name')
 
     def __init__(self,
@@ -48,7 +59,7 @@ class Event(db.Model):
                  color=None,
                  slogan=None,
                  url=None,
-                 owner=None):
+                 ):
         self.name = name
         self.logo = logo
         self.email = email
@@ -60,7 +71,7 @@ class Event(db.Model):
         self.location_name = location_name
         self.slogan = slogan
         self.url = url
-        self.owner = owner
+        # self.owner = owner
 
     def __repr__(self):
         return '<Event %r>' % (self.name)

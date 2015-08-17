@@ -5,7 +5,7 @@
         <div class="well bs-component">
             <div class="row">
                 <div class="col-lg-1"></div>
-                <div class="col-lg-7">
+                <div class="col-lg-6">
                     <div class="">
                         {% if current_user.is_authenticated() %}
                             <h1>Open Event</h1>
@@ -45,14 +45,36 @@
                         {% endif %}
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-5">
                     {% if current_user.is_authenticated() %}
                         <h2>User Events</h2>
-                        <div class="list-group">
-                            {%for event in owner_events %}
-                                <a href="/admin/event/edit/?id={{event.id}}" class="list-group-item">{{event.name}}</a>
+
+
+                        <table class="table table-condensed" id="table-list">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%for asso in owner_events %}
+                                <tr>
+                                    <td>
+                                        <a href="/admin/event/edit/?id={{asso.event.id}}" class="">{{asso.event.name}} </a>
+                                    </td>
+                                    <td>
+                                        {% if asso.admin %}
+                                            <a class="btn btn-info btn-xs" href="/admin/event/{{asso.event.id}}/user_permissions">Add User Permission</a>
+                                        {% else %}
+                                            <span class="btn btn-info btn-xs disabled">Add User Permission</span>
+                                        {% endif%}
+                                    </td>
+                                </tr>
                             {% endfor %}
-                        </div>
+                        </tbody>
+                    </table>
+
                     {% endif %}
                 </div>
 
