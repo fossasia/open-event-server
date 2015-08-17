@@ -418,7 +418,7 @@ class DataManager(object):
                       url=form.url.data)
         a = EventsUsers()
         a.user = login.current_user
-        a.admin = False
+        a.editor = True
         a.admin = True
         event.users.append(a)
         if form.logo.data:

@@ -50,8 +50,8 @@ class EventSaver(ObjectSaver):
                           end_time=datetime.strptime(date[1], '%Y-%m-%d'),
                           latitude=locations['coords'][0],
                           longitude=locations['coords'][1],
-                          location_name=locations["label"],
-                          owner=owner.id)
+                          location_name=locations["label"]
+                          )
             self.event_id = event.id
 
     def get_event_id(self):
