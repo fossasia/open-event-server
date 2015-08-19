@@ -19,12 +19,18 @@
             <div class="col-md-10">
 
                 <h2>Session
+                    {% if is_editor_or_admin %}
                     <a href="{{ get_url('event.event_session_new', event_id=event_id )}}" class="btn btn-primary" style="margin:5px">
                         Add New <i class="glyphicon glyphicon-plus" aria-hidden="true" style="margin-right:5px"></i>
                     </a>
+                    {% else %}
+                    <a href="{{ get_url('event.event_session_new', event_id=event_id )}}" class="btn btn-info" style="margin:5px">
+                        Send proposal <i class="glyphicon glyphicon-envelope" aria-hidden="true" style="margin-right:5px"></i>
+                    </a>
+                    {%endif%}
                 </h2>
-
-                <table class="table table-condensed" id="table-list">
+                <h3>Accepted sessions</h3>
+                <table class="table table-condensed" id="table-list_accepted">
                     <thead>
                         <tr>
                             <th></th>
@@ -40,9 +46,57 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for session in objects %}
+                        {% for session in accepted_sessions %}
+                            <tr>
+                                <td>{% if is_editor_or_admin %}
+                                    <a class="icon" href="{{ get_url('event.event_session_reject_session', event_id=event_id, session_id=session.id )}}" title="Edit record">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </a>
+                                    <a class="icon" href="{{ get_url('event.event_session_edit', event_id=event_id, session_id=session.id )}}" title="Edit record">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </a>
+                                    <a onclick="return confirm('Are you sure you want to delete this record?');" href="{{ get_url('event.event_session_delete', event_id=event_id, session_id=session.id)}}" title="Delete record">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </a>
+                                    {%endif%}
+                                </td>
+                                <td>{{session.id}}</td>
+                                <td>{{session.title}}</td>
+                                <td>{{session.subtitle}}</td>
+                                <td>{{session.abstract}}</td>
+                                <td>{{session.description}}</td>
+                                <td>{{session.start_time}}</td>
+                                <td>{{session.end_time}}</td>
+                                <td>{{session.format}}</td>
+                                <td>{{session.level}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% if is_editor_or_admin %}
+                <h3>Not Accepted sessions</h3>
+                <table class="table table-condensed" id="table-list_not_accepted">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Id</th>
+                            <th>Title</th>
+                            <th>Subtitle</th>
+                            <th>Abstract</th>
+                            <th>Description</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Format</th>
+                            <th>Level</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for session in not_accepted_sessions %}
                             <tr>
                                 <td>
+                                    <a class="icon" href="{{ get_url('event.event_session_accept_session', event_id=event_id, session_id=session.id)}}" title="Edit record">
+                                        <span class="glyphicon glyphicon-ok"></span>
+                                    </a>
                                     <a class="icon" href="{{ get_url('event.event_session_edit', event_id=event_id, session_id=session.id )}}" title="Edit record">
                                         <span class="glyphicon glyphicon-pencil"></span>
                                     </a>
@@ -63,6 +117,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                {% endif %}
             </div>
 
         </div>
@@ -76,7 +131,15 @@
     <script language="javascript">
         (function($) {
             $(document).ready(function() {
-                $('#table-list').dataTable({
+                $('#table-list_accepted').dataTable({
+                    "scrollX": true,
+                    "pageLength": 50,
+                    <!--"columnDefs": [-->
+                        <!--{ "width": "5%", "targets": 0 },-->
+                        <!--{ "width": "5%", "targets": 1 }-->
+                      <!--]-->
+                });
+                $('#table-list_not_accepted').dataTable({
                     "scrollX": true,
                     "pageLength": 50,
                     <!--"columnDefs": [-->
@@ -85,6 +148,12 @@
                       <!--]-->
                 });
             } );
+
+
+            $('#myTabs a').click(function (e) {
+  e.preventDefault()
+  $(this).tab('show')
+})
         })(jQuery);
     </script>
 {% endblock %}

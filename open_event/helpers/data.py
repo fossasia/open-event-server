@@ -72,7 +72,7 @@ class DataManager(object):
         flash('You successfully deleted track')
 
     @staticmethod
-    def create_session(form, event_id):
+    def create_session(form, event_id, is_accepted=True):
         """
         Session will be saved to database with proper Event id
         :param form: view data form
@@ -90,6 +90,7 @@ class DataManager(object):
         new_session.microlocation = form.microlocation.data
         new_session.format = form.format.data
         new_session.level = form.level.data
+        new_session.is_accepted = is_accepted
         save_to_db(new_session, "Session saved")
         update_version(event_id, False, "session_ver")
 
