@@ -4,7 +4,6 @@ import requests
 from flask import request
 from flask.ext import login
 from ..models.track import Track
-from math import ceil
 
 
 def get_event_id():
@@ -52,6 +51,11 @@ def send_email_with_reset_password_hash(email, link):
 
 
 def is_event_admin(event_id, users):
+    """
+    :param event_id: Event id
+    :param users: User id
+    :return: is user admin
+    """
     is_admin = False
     for object in users:
         if object.user.id == login.current_user.id:

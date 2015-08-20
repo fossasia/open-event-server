@@ -225,10 +225,12 @@ class DataGetter:
 
     @staticmethod
     def get_association():
+        """Return instance of EventUser"""
         return EventsUsers()
 
     @staticmethod
     def get_association_by_event_and_user(event_id, user_id):
+        """Returns EventUser filtered by user_id and event_id"""
         return EventsUsers.query.filter_by(event_id=event_id, user_id=user_id).first()
 
 

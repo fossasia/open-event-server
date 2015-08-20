@@ -2,11 +2,13 @@
 
 
 class QueryFilter(object):
+    """Query filter class"""
     def __init__(self, args, query):
         self.args = args
         self.query = query
 
     def get_filtered_data(self):
+        """Returns Filtered data"""
         filters = {}
         column = None
 
@@ -21,6 +23,7 @@ class QueryFilter(object):
 
     @staticmethod
     def get_query_list(query):
+        """Returns list query"""
         rows = []
         for u in query:
             rows.append(u.__dict__)

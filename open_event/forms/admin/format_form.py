@@ -4,6 +4,6 @@ from wtforms import StringField, validators
 
 
 class FormatForm(Form):
-    """Level Form class"""
+    """Format Form class"""
     name = StringField('Name', [validators.DataRequired()])
     label_en = StringField('Label En')

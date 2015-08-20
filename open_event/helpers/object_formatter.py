@@ -5,9 +5,10 @@ from .query_filter import QueryFilter
 
 PER_PAGE = 20
 class ObjectFormatter(object):
-
+    """Object formatter class"""
     @staticmethod
     def get_json(name, query, request, page=None):
+        """Returns formatted json"""
         objects = QueryFilter(request.args, query).get_filtered_data()
         count = objects.count()
         if not page:

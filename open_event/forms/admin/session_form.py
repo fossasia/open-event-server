@@ -12,6 +12,7 @@ from ...helpers.data_getter import DataGetter
 
 
 def get_speakers():
+    """Returns Event's speakers"""
     return Speaker.query.filter_by(event_id=get_event_id())
 
 

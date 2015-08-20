@@ -1,3 +1,4 @@
+"""Copyright 2015 Rafal Kowalski"""
 from wtforms import form, StringField, PasswordField, validators
 from ....models import db
 from ....models.user import User

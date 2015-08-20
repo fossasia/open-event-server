@@ -5,6 +5,7 @@ from wtforms import ValidationError
 
 
 class CustomDateSessionValidate(object):
+    """Date session validation class"""
     def __init__(self, message=None):
         self.message = message
 
@@ -19,6 +20,7 @@ class CustomDateSessionValidate(object):
 
 
 class CustomDateEventValidate(object):
+    """Date Event validation class"""
     def __init__(self, message=None):
         self.message = message
 

@@ -4,12 +4,14 @@ from ..models.version import Version
 
 
 class VersionUpdater(object):
+    """Version Update class"""
     def __init__(self, is_created, event_id, column_to_increment):
         self.is_created = is_created
         self.column_to_increment = column_to_increment
         self.event_id = event_id
 
     def update(self):
+        """Update version in db"""
         if self.is_created:
             version = Version(event_id=self.event_id)
             db.session.add(version)

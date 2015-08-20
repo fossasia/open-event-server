@@ -4,7 +4,7 @@ from wtforms import StringField, validators
 
 
 class LanguageForm(Form):
-    """Level Form class"""
+    """Language Form class"""
     name = StringField('Name', [validators.DataRequired()])
     label_en = StringField('Label En')
     label_de = StringField('Label DE')
