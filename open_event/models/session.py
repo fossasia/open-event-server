@@ -14,6 +14,7 @@ speakers_sessions = db.Table('speakers_sessions',
 
 
 class Level(db.Model):
+    """Level Model class"""
     __tablename__ = 'level'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
@@ -43,6 +44,7 @@ class Level(db.Model):
 
 
 class Format(db.Model):
+    """Format model class"""
     __tablename__ = 'format'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
@@ -72,6 +74,7 @@ class Format(db.Model):
 
 
 class Language(db.Model):
+    """Language model class"""
     __tablename__ = 'language'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
@@ -105,6 +108,7 @@ class Language(db.Model):
 
 
 class Session(db.Model):
+    """Session model class"""
     __tablename__ = 'session'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)

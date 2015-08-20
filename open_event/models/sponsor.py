@@ -3,6 +3,7 @@ from . import db
 
 
 class Sponsor(db.Model):
+    """Sponsor model class"""
     __tablename__ = 'sponsors'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)

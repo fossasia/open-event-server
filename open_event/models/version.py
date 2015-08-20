@@ -3,6 +3,7 @@ from . import db
 
 
 class Version(db.Model):
+    """Version model class"""
     __tablename__ = 'versions'
     id = db.Column(db.Integer, primary_key=True)
     event_id = db.Column(db.Integer)

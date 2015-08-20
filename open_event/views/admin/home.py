@@ -15,6 +15,7 @@ from ...helpers.helpers import send_email_after_account_create, send_email_with_
 class MyHomeView(AdminIndexView):
     @expose('/')
     def index(self):
+        """Main page"""
         self._template = "admin/auth.html"
         if not login.current_user.is_authenticated():
             return redirect(url_for('.login_view'))
@@ -24,6 +25,7 @@ class MyHomeView(AdminIndexView):
 
     @expose('/login/', methods=('GET', 'POST'))
     def login_view(self):
+        """Login view page"""
         # handle user login
         form = LoginForm(request.form)
         if helpers.validate_form_on_submit(form):
@@ -42,6 +44,7 @@ class MyHomeView(AdminIndexView):
 
     @expose('/register/', methods=('GET', 'POST'))
     def register_view(self):
+        """Register view page"""
         form = RegistrationForm(request.form)
         if helpers.validate_form_on_submit(form):
             user = DataManager.create_user(form)
@@ -57,7 +60,7 @@ class MyHomeView(AdminIndexView):
 
     @expose('/password/reminder', methods=('GET', 'POST'))
     def password_reminder_view(self):
-
+        """Password reminder view"""
         form = PasswordReminderForm(request.form)
         if request.method == 'POST':
             if form.validate():
@@ -72,7 +75,7 @@ class MyHomeView(AdminIndexView):
 
     @expose('/reset_password/<hash>', methods=('GET', 'POST'))
     def change_password_view(self, hash):
-
+        """Change password view"""
         form = ChangePasswordForm(request.form)
         if request.method == 'POST':
             if helpers.validate_form_on_submit(form):
@@ -85,11 +88,13 @@ class MyHomeView(AdminIndexView):
 
     @expose('/logout/')
     def logout_view(self):
+        """Logout method which redirect to index"""
         login.logout_user()
         return redirect(url_for('.index'))
 
     @expose('/set_role', methods=('GET', 'POST'))
     def set_role(self):
+        """Set user role method"""
         id = request.args['id']
         role = request.args['roles']
         user = DataGetter.get_user(id)
@@ -99,6 +104,7 @@ class MyHomeView(AdminIndexView):
 
     @expose('/manage_roles')
     def roles_manager(self):
+        """Roles manager view"""
         users = DataGetter.get_all_users()
         events = DataGetter.get_all_events()
         return self.render('admin/role_manager.html',

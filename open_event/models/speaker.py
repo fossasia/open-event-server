@@ -3,6 +3,7 @@ from . import db
 
 
 class Speaker(db.Model):
+    """Speaker model class"""
     __tablename__ = 'speaker'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)

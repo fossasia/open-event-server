@@ -5,6 +5,7 @@ from sqlalchemy_utils import ColorType
 
 
 class EventsUsers(db.Model):
+    """Many to Many table Event Users"""
     __tablename__ = 'eventsusers'
     id = db.Column(db.Integer,
                    primary_key=True)
@@ -16,6 +17,7 @@ class EventsUsers(db.Model):
 
 
 class Event(db.Model):
+    """Event object table"""
     __tablename__ = 'events'
     id = db.Column(db.Integer,
                    primary_key=True)

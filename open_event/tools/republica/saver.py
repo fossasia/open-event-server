@@ -59,8 +59,9 @@ class EventSaver(ObjectSaver):
 
 
 class SpeakerSaver(ObjectSaver):
-
+    """Speaker saver class"""
     def parse(self):
+        """Parse data"""
         for row in self.data['data']:
             self._save(row)
 
@@ -99,8 +100,9 @@ class SpeakerSaver(ObjectSaver):
 
 
 class TrackSaver(ObjectSaver):
-
+    """Track Saver class"""
     def parse(self):
+        """Parse data"""
         for row in self.data['data']:
             self._save(row)
 
@@ -119,8 +121,10 @@ class TrackSaver(ObjectSaver):
         # track.sessions = todo
 
 class SessionSaver(ObjectSaver):
+    """Session Saver class"""
 
     def parse(self):
+        """Parse data"""
         for row in self.data['data']:
             self._save(row)
 

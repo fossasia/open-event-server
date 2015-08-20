@@ -10,11 +10,12 @@ from open_event.views.admin.models_views.api import ApiView
 from open_event.views.admin.home import MyHomeView
 
 class AdminView(object):
-
+    """Main Admin class View"""
     def __init__(self, app_name):
         self.admin = Admin(name=app_name, template_mode='bootstrap3', index_view=MyHomeView())
 
     def init(self, app):
+        """Init flask admin"""
         self.admin.init_app(app)
         self._add_views()
 
@@ -27,6 +28,7 @@ class AdminView(object):
 
     @staticmethod
     def init_login(app):
+        """Init login"""
         login_manager = login.LoginManager()
         login_manager.init_app(app)
 

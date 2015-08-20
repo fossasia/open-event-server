@@ -3,6 +3,7 @@ from . import db
 
 
 class Microlocation(db.Model):
+    """Microlocation model class"""
     __tablename__ = 'microlocation'
     id = db.Column(db.Integer,
                    primary_key=True)

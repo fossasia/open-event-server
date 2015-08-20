@@ -3,6 +3,7 @@ from . import db
 
 
 class File(db.Model):
+    """File model class"""
     __tablename__ = 'files'
     id = db.Column(db.Integer,
                    primary_key=True)
