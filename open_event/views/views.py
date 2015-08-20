@@ -18,30 +18,35 @@ app = Blueprint('', __name__)
 @app.route('/', methods=['GET'])
 @cross_origin()
 def get_admin():
+    """Redirect to admin page"""
     return redirect(url_for('admin.index'))
 
 
 @app.route('/api/v1/event', methods=['GET'])
 @cross_origin()
 def get_events():
+    """Returns all events"""
     return ObjectFormatter.get_json("events", Event.query, request)
 
 
 @app.route('/api/v1/event/page/<int:page>', methods=['GET'])
 @cross_origin()
 def get_events_per_page(page):
+    """Returns 20 events per page"""
     return ObjectFormatter.get_json("events", Event.query, request, page)
 
 
 @app.route('/api/v1/event/<event_id>', methods=['GET'])
 @cross_origin()
 def get_event_by_id(event_id):
+    """Returns events by event id"""
     return jsonify({"events":[Event.query.get(event_id).serialize]})
 
 
 @app.route('/api/v1/event/<event_id>/sessions', methods=['GET'])
 @cross_origin()
 def get_sessions(event_id):
+    """Returns all event's sessions"""
     sessions = Session.query.filter_by(event_id=event_id, is_accepted=True)
     return ObjectFormatter.get_json("sessions", sessions, request)
 
@@ -49,6 +54,7 @@ def get_sessions(event_id):
 @app.route('/api/v1/event/<event_id>/sessions/page/<int:page>', methods=['GET'])
 @cross_origin()
 def get_sessions_per_page(event_id, page):
+    """Returns 20 event's sessions"""
     sessions = Session.query.filter_by(event_id=event_id, is_accepted=True)
     return ObjectFormatter.get_json("sessions", sessions, request, page)
 
@@ -56,6 +62,7 @@ def get_sessions_per_page(event_id, page):
 @app.route('/api/v1/event/<event_id>/tracks', methods=['GET'])
 @cross_origin()
 def get_tracks(event_id):
+    """Returns all event's tracks"""
     tracks = Track.query.filter_by(event_id=event_id)
     return ObjectFormatter.get_json("tracks", tracks, request)
 
@@ -63,6 +70,7 @@ def get_tracks(event_id):
 @app.route('/api/v1/event/<event_id>/tracks/page/<int:page>', methods=['GET'])
 @cross_origin()
 def get_tracks_per_page(event_id, page):
+    """Returns 20 event's tracks"""
     tracks = Track.query.filter_by(event_id=event_id)
     return ObjectFormatter.get_json("tracks", tracks, request, page)
 
@@ -70,6 +78,7 @@ def get_tracks_per_page(event_id, page):
 @app.route('/api/v1/event/<event_id>/speakers', methods=['GET'])
 @cross_origin()
 def get_speakers(event_id):
+    """Returns all event's speakers"""
     speakers = Speaker.query.filter_by(event_id=event_id)
     return ObjectFormatter.get_json("speakers", speakers, request)
 
@@ -77,6 +86,7 @@ def get_speakers(event_id):
 @app.route('/api/v1/event/<event_id>/speakers/page/<int:page>', methods=['GET'])
 @cross_origin()
 def get_speakers_per_page(event_id, page):
+    """Returns 20 event's speakers"""
     speakers = Speaker.query.filter_by(event_id=event_id)
     return ObjectFormatter.get_json("speakers", speakers, request, page)
 
@@ -84,6 +94,7 @@ def get_speakers_per_page(event_id, page):
 @app.route('/api/v1/event/<event_id>/sponsors', methods=['GET'])
 @cross_origin()
 def get_sponsors(event_id):
+    """Returns all event's sponsors"""
     sponsors = Sponsor.query.filter_by(event_id=event_id)
     return ObjectFormatter.get_json("sponsors", sponsors, request)
 
@@ -91,6 +102,7 @@ def get_sponsors(event_id):
 @app.route('/api/v1/event/<event_id>/sponsors/page/<int:page>', methods=['GET'])
 @cross_origin()
 def get_sponsors_per_page(event_id, page):
+    """Returns 20 event's sponsors"""
     sponsors = Sponsor.query.filter_by(event_id=event_id)
     return ObjectFormatter.get_json("sponsors", sponsors, request, page)
 
@@ -98,6 +110,7 @@ def get_sponsors_per_page(event_id, page):
 @app.route('/api/v1/event/<event_id>/levels', methods=['GET'])
 @cross_origin()
 def get_levels(event_id):
+    """Returns all event's levels"""
     levels = Level.query.filter_by(event_id=event_id)
     return ObjectFormatter.get_json("levels", levels, request)
 
@@ -105,6 +118,7 @@ def get_levels(event_id):
 @app.route('/api/v1/event/<event_id>/levels/page/<int:page>', methods=['GET'])
 @cross_origin()
 def get_levels_per_page(event_id, page):
+    """Returns 20 event's levels"""
     levels = Level.query.filter_by(event_id=event_id)
     return ObjectFormatter.get_json("levels", levels, request, page)
 
@@ -112,6 +126,7 @@ def get_levels_per_page(event_id, page):
 @app.route('/api/v1/event/<event_id>/formats', methods=['GET'])
 @cross_origin()
 def get_formats(event_id):
+    """Returns all event's formats"""
     formats = Format.query.filter_by(event_id=event_id)
     return ObjectFormatter.get_json("formats", formats, request)
 
@@ -119,12 +134,14 @@ def get_formats(event_id):
 @app.route('/api/v1/event/<event_id>/formats/page/<int:page>', methods=['GET'])
 @cross_origin()
 def get_formatsper_page(event_id, page):
+    """Returns 20 event's formats"""
     formats = Format.query.filter_by(event_id=event_id)
     return ObjectFormatter.get_json("formats", formats, request, page)
 
 
 @app.route('/api/v1/event/<event_id>/languages', methods=['GET'])
 def get_languages(event_id, page):
+    """Returns all event's languages"""
     languages = Language.query.filter_by(event_id=event_id)
     return ObjectFormatter.get_json("languages", languages, request, page)
 
@@ -132,6 +149,7 @@ def get_languages(event_id, page):
 @app.route('/api/v1/event/<event_id>/languages/page/<int:page>', methods=['GET'])
 @cross_origin()
 def get_languages_per_page(event_id, page):
+    """Returns 20 event's languages"""
     languages = Language.query.filter_by(event_id=event_id)
     return ObjectFormatter.get_json("languages", languages, request, page)
 
@@ -139,6 +157,7 @@ def get_languages_per_page(event_id, page):
 @app.route('/api/v1/event/<event_id>/microlocations', methods=['GET'])
 @cross_origin()
 def get_microlocations(event_id):
+    """Returns all event's microlocations"""
     microlocations = Microlocation.query.filter_by(event_id=event_id)
     return ObjectFormatter.get_json("microlocations", microlocations, request)
 
@@ -146,6 +165,7 @@ def get_microlocations(event_id):
 @app.route('/api/v1/event/<event_id>/microlocations/page/<int:page>', methods=['GET'])
 @cross_origin()
 def get_microlocations_per_page(event_id, page):
+    """Returns 20 event's microlocations"""
     microlocations = Microlocation.query.filter_by(event_id=event_id)
     return ObjectFormatter.get_json("microlocations", microlocations, request, page)
 
@@ -153,6 +173,7 @@ def get_microlocations_per_page(event_id, page):
 @app.route('/api/v1/version', methods=['GET'])
 @cross_origin()
 def get_versions():
+    """Returns the latest version"""
     version = Version.query.order_by(Version.id.desc()).first()
     if version:
         return jsonify(version.serialize)
@@ -162,6 +183,7 @@ def get_versions():
 @app.route('/api/v1/event/<event_id>/version', methods=['GET'])
 @cross_origin()
 def get_event_version(event_id):
+    """Returns event's the latest version"""
     version = Version.query.filter_by(event_id=event_id).order_by(Version.id.desc()).first()
     if version:
         return jsonify(version.serialize)
@@ -170,4 +192,5 @@ def get_event_version(event_id):
 
 @app.route('/pic/<path:filename>')
 def send_pic(filename):
+    """Returns image"""
     return send_from_directory(os.path.realpath('.') + '/static/', filename)
