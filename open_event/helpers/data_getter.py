@@ -52,12 +52,12 @@ class DataGetter:
         return Track.query.get(track_id)
 
     @staticmethod
-    def get_sessions(event_id):
+    def get_sessions(event_id, is_accepted=True):
         """
         :param event_id: Event id
         :return: Return all Sessions objects with Event id
         """
-        return Session.query.filter_by(event_id=event_id)
+        return Session.query.filter_by(event_id=event_id, is_accepted=is_accepted)
 
     @staticmethod
     def get_session(session_id):

@@ -178,13 +178,16 @@ class EventView(ModelView):
 
     @expose('/<event_id>/session')
     def event_sessions(self, event_id):
-        sessions = DataGetter.get_sessions(event_id)
+        accepted_sessions = DataGetter.get_sessions(event_id)
+        not_accepted_sessions = DataGetter.get_sessions(event_id, False)
         events = DataGetter.get_all_events()
         self.name = "Session"
         return self.render('admin/model/session/list.html',
-                           objects=sessions,
+                           accepted_sessions=accepted_sessions,
+                           not_accepted_sessions=not_accepted_sessions,
                            event_id=event_id,
-                           events=events)
+                           events=events,
+                           is_editor_or_admin=is_event_admin_or_editor(event_id))
 
     @expose('/<event_id>/session/new', methods=('GET', 'POST'))
     def event_session_new(self, event_id):
@@ -196,6 +199,20 @@ class EventView(ModelView):
                 DataManager.create_session(form, event_id)
             else:
                 flash("You don't have permission!")
+            return redirect(url_for('.event_sessions', event_id=event_id))
+        return self.render('admin/model/create_model.html',
+                           form=form,
+                           event_id=event_id,
+                           events=events,
+                           cancel_url=url_for('.event_sessions', event_id=event_id))
+
+    @expose('/<event_id>/session/new_proposal', methods=('GET', 'POST'))
+    def event_session_new(self, event_id):
+        events = DataGetter.get_all_events()
+        form = SessionForm()
+        self.name = "Session | New Proposal"
+        if form.validate():
+            DataManager.create_session(form, event_id, False)
             return redirect(url_for('.event_sessions', event_id=event_id))
         return self.render('admin/model/create_model.html',
                            form=form,
@@ -221,6 +238,23 @@ class EventView(ModelView):
                            event_id=event_id,
                            events=events,
                            cancel_url=url_for('.event_sessions', event_id=event_id))
+
+    @expose('/<event_id>/session/<session_id>/accept_session', methods=('GET', 'POST'))
+    def event_session_accept_session(self, event_id, session_id):
+        session = DataGetter.get_session(session_id)
+        session.is_accepted = True
+        save_to_db(session, session)
+        flash("Session accepted!")
+        return redirect(url_for('.event_sessions', event_id=event_id))
+
+    @expose('/<event_id>/session/<session_id>/reject_session', methods=('GET', 'POST'))
+    def event_session_reject_session(self, event_id, session_id):
+        session = DataGetter.get_session(session_id)
+        session.is_accepted = False
+        save_to_db(session, session)
+        flash("Session rejected!")
+        return redirect(url_for('.event_sessions', event_id=event_id))
+
 
     @expose('/<event_id>/session/<session_id>/delete', methods=('GET', 'POST'))
     def event_session_delete(self, event_id, session_id):

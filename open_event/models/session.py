@@ -128,9 +128,10 @@ class Session(db.Model):
                          db.ForeignKey('language.id'))
     microlocation_id = db.Column(db.Integer,
                          db.ForeignKey('microlocation.id'))
+
     event_id = db.Column(db.Integer,
                          db.ForeignKey('events.id'))
-
+    is_accepted = db.Column(db.Boolean, default=False)
     def __init__(self,
                  title=None,
                  subtitle=None,
@@ -143,7 +144,8 @@ class Session(db.Model):
                  level=None,
                  language=None,
                  microlocation=None,
-                 event_id=None):
+                 event_id=None,
+                 is_accepted=False):
         self.title = title
         self.subtitle = subtitle
         self.abstract = abstract
@@ -156,6 +158,7 @@ class Session(db.Model):
         self.language = language
         self.microlocation = microlocation
         self.event_id = event_id
+        self.is_accepted = is_accepted
 
     @property
     def serialize(self):
