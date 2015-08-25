@@ -427,7 +427,7 @@ class EventView(ModelView):
             else:
                 flash("You don't have permission!")
             return redirect(url_for('.event_microlocations', event_id=event_id))
-        return self.render('admin/model/create_model.html',
+        return self.render('admin/model/create_microlocation.html',
                            form=form,
                            event_id=event_id,
                            events=events,
@@ -447,7 +447,7 @@ class EventView(ModelView):
             else:
                 flash("You don't have permission!")
             return redirect(url_for('.event_microlocations', event_id=event_id))
-        return self.render('admin/model/create_model.html',
+        return self.render('admin/model/create_microlocation.html',
                            form=form,
                            event_id=event_id,
                            events=events,

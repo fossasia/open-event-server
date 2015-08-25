@@ -349,8 +349,9 @@ class DataManager(object):
         :param microlocation: object contains all earlier data
         """
         data = form.data
-        session = data["session"]
-        del data["session"]
+        if "session" in data.keys():
+            session = data["session"]
+            del data["session"]
         db.session.query(Microlocation)\
             .filter_by(id=microlocation.id)\
             .update(dict(data))
