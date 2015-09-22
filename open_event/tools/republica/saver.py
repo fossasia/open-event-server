@@ -141,6 +141,7 @@ class SessionSaver(ObjectSaver):
             format = None
             level = None
             speakers = []
+            track = None
 
             with current_app.app_context():
                 level = get_or_create(Level, name=row["level"]["id"], label_en=row["level"]["label_en"], event_id=event_id )
@@ -161,6 +162,7 @@ class SessionSaver(ObjectSaver):
                               format=format,
                               language=lang)
                 new_session.speakers = speakers
+                new_session.track = Track.query.filter_by(name=row['track']['label_en']).first()
                 save_to_db(new_session, "Session Updated")
         except Exception as e:
             print e
