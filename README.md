@@ -1,7 +1,9 @@
-#  Open-Event Organiser Server
-This server which will manage all the data of the event. Backed by a database, it provides API endpoints to fetch the data, and also to modify/update it.
+#  Open-Event Server
 
-The database can be a sqlite db file or saved in json itself.  
+This server which will manage all the data of the event. Backed by a database,
+it provides API endpoints to fetch the data, and also to modify/update it.
+
+The database can be a sqlite db file or saved in json itself.
 
 The schema for the database is provided [here](https://github.com/fossasia/open-event/blob/master/DATABASE.md)
 
@@ -11,7 +13,7 @@ The data is provided over the API endpoints as described [here](https://github.c
 
 Type ```vagrant up``` to start a new virtual machine running the server. This requires having Vagrant installed.
 
-## Proposed Stack
+## Stack
 
 * Database - Postgres
 * Webserver - Nginx
@@ -26,5 +28,8 @@ Type ```vagrant up``` to start a new virtual machine running the server. This re
 [![Join the chat at https://gitter.im/fossasia/open-event-orga-server](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/fossasia/open-event-orga-server?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
-##License
-This project is currently licensed under the GNU General Public License v3. A copy of LICENSE.md should be present along with the source code. To obtain the software under a different license, please contact FOSSASIA.
+## License
+
+This project is currently licensed under the GNU General Public License v3. A
+copy of LICENSE.md should be present along with the source code. To obtain the
+software under a different license, please contact FOSSASIA.
