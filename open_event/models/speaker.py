@@ -54,6 +54,9 @@ class Speaker(db.Model):
     @property
     def serialize(self):
         """Return object data in easily serializeable format"""
+
+        session_data = [ { 'title': session.title, 'id': session.id } for session in self.sessions ]
+
         return {'id': self.id,
                 'name': self.name,
                 'photo': self.photo,
@@ -67,4 +70,4 @@ class Speaker(db.Model):
                 'organisation': self.organisation,
                 'position': self.position,
                 'country': self.country,
-                'sessions': [session.id for session in self.sessions]}
+                'sessions': session_data  }
