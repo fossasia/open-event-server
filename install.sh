@@ -8,28 +8,28 @@ apt-get install -y nginx uwsgi uwsgi-plugin-python
 apt-get install -y postgresql postgresql-contrib libpq-dev
 
 #Flask
-pip install flask
-pip install flask-admin
-pip install flask-sqlalchemy
-pip install Flask-WTF
-pip install Flask==0.10.1
-pip install Flask-Admin==1.1.0
-pip install Flask-SQLAlchemy==2.0
-pip install Flask-WTF==0.11
-pip install requests==2.7.0
-pip install gunicorn==19.3.0
-pip install WTForms-Components==0.9.7
-pip install WTForms==2.0.2
-pip install psycopg2
-pip install logging
-pip install colour
-pip install flask-cors
-pip install pep8
-pip install nose
-pip install Flask-Migrate
-pip install Flask-Login
-pip install flask-scrypt
-
+# pip install flask
+# pip install flask-admin
+# pip install flask-sqlalchemy
+# pip install Flask-WTF
+# pip install Flask==0.10.1
+# pip install Flask-Admin==1.1.0
+# pip install Flask-SQLAlchemy==2.0
+# pip install Flask-WTF==0.11
+# pip install requests==2.7.0
+# pip install gunicorn==19.3.0
+# pip install WTForms-Components==0.9.7
+# pip install WTForms==2.0.2
+# pip install psycopg2
+# pip install logging
+# pip install colour
+# pip install flask-cors
+# pip install pep8
+# pip install nose
+# pip install Flask-Migrate
+# pip install Flask-Login
+# pip install flask-scrypt
+pip install -r requirements.txt
 # Edit the following to change the name of the database user that will be created:
 APP_DB_USER=open_event_user
 APP_DB_PASS=start
@@ -138,4 +138,3 @@ from open_event.models import db
 with app.app_context():
 	db.create_all()
 EOF
-
