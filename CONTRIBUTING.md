@@ -5,18 +5,18 @@ Need a push in the right direction?
 * Fork this repo.
 * Make sure you have Git, Vagrant and other dependencies installed.
 * To download git for your platform follow the link provided:
-  <a href ="https://git-scm.com/downloads"> Download Git for your platform here </a>
+  <a href ="https://git-scm.com/downloads"> Download Git for your platform here. </a>
 * To download Vagrant for your platform follow the link provided:
-  <a href ="http://www.vagrantup.com/downloads"> Download Vagrant for your platform here </a>
+  <a href ="http://www.vagrantup.com/downloads"> Download Vagrant for your platform here. </a>
 * Vagrant uses VirtualBox as it's provider.
 * To download VirtualBox for your platform follow the link provided:
-* <a href = "https://www.virtualbox.org/"> Download VirtualBox for your platform here </a>
+  <a href = "https://www.virtualbox.org/"> Download VirtualBox for your platform here. </a>
 * On downloading the above dependencies you will get the appropriate installer or package for your platform.
 * You can then install the dependencies using the standard procedures for your operating system.
 * For more information about git feel free to follow this link:
-  <a href ="https://git-scm.com/">Know more about Git </a>
+  <a href ="https://git-scm.com/">Know more about Git. </a>
 * For more information about vagrant feel free to follow this link:
-  <a href = "https://docs.vagrantup.com/v2/"> Know more about Vagrant </a>
+  <a href = "https://docs.vagrantup.com/v2/"> Know more about Vagrant. </a>
 * On installing the above dependencies change your working directory to the directory you would like to use 
   as your project directory.
 * On doing so run the following commands on the terminal:
