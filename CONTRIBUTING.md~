@@ -20,8 +20,8 @@ Need a push in the right direction?
 * On installing the above dependencies change your working directory to the directory you would like to use 
   as your project directory.
 * On doing so run the following commands on the terminal:
-	* ```vagrant init hashicorp/precise32```
-	* ```vagrant up```
+* ```vagrant init hashicorp/precise32```
+* ```vagrant up```
 * Make sure ```vagrant up``` works locally on your machine 
 * Run the tests.
 * Do they run correctly and pass? If not,let us know! 
