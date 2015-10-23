@@ -1,0 +1,59 @@
+    Following in the steps of other open source projects that
+    eventually take over the world, here is the partial list
+    of people who have contributed to open-event-orga-server and its supporting
+    works.  It is sorted by name and formatted to allow easy
+    grepping and beautification by scripts.
+    The fields are: name (N), email (E), web-address (W),
+    description (D), main username (U), alias usernames (A)
+    and geographic location (S).
+
+    Thanks
+    FOSSASIA Team 
+
+ ---------
+ 
+ N: Arnav Gupta
+ U: championswimmer
+ E: dev@championswimmer.in
+ W: http://championswimmer.in
+ S: New Delhi, India
+ D: GPLv3 license
+ 
+ 
+ N: Check your git settings!
+ U: invalid-email-address
+ E: support@github.com
+ W: https://help.github.com/article
+ 
+
+ N: Duke leto
+ E: duke@leto.net
+ U: leto
+ W: http://duke.leto.net
+ S: Portland, OR
+ D: Contributing doc
+
+
+ N: Manan Wason
+ U: mananwason
+ E: manan13056@iiitd.ac.in
+ S: New Delhi, India  
+ D: Increased word limit track
+
+
+ N: Mario Behling
+ U: mariobehling
+ S: Berlin, Germany 
+ W: http://mariobehling.de
+
+
+ N: Mohit kumar bajoria
+ U: mbj36
+ E: mohitbajo36@gmail.com
+ W: mbj36.github.io
+ S: Jammu, India.
+ D: Improved contributing doc
+
+
+ N: Rafał Kowalski
+ U: rafalkowalski
