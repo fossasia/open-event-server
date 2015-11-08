@@ -66,8 +66,9 @@ class MyHomeView(AdminIndexView):
             if form.validate():
                 email = form.email.data
                 user = DataGetter.get_user_by_email(email)
-                link = request.host + url_for(".change_password_view", hash=user.reset_password)
-                send_email_with_reset_password_hash(email, link)
+                if user:
+                    link = request.host + url_for(".change_password_view", hash=user.reset_password)
+                    send_email_with_reset_password_hash(email, link)
                 return redirect(url_for('.index'))
         self._template_args['form'] = form
         self._template = "admin/auth.html"
