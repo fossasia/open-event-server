@@ -1,6 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 from open_event.helpers.helpers import get_event_id
 from open_event.helpers.data_getter import DataGetter
+from open_event.models.event import Event
 from wtforms import ValidationError
 
 
@@ -10,7 +11,7 @@ class CustomDateSessionValidate(object):
         self.message = message
 
     def __call__(self, form, field):
-        event = DataGetter.get_event(get_event_id())
+        event = DataGetter.get_object(Event, get_event_id())
         session_start = form['start_time'].data
         session_end = form['end_time'].data
         if session_start != None and session_end != None:

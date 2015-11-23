@@ -11,16 +11,13 @@ from open_event.helpers.helpers import get_event_id
 from flask.ext import login
 from flask import flash
 
+
 class DataGetter:
+
     @staticmethod
     def get_all_events():
         """Method return all events"""
         return Event.query.all()
-
-    @staticmethod
-    def get_event(event_id):
-        """Method return Event with proper event_id"""
-        return Event.query.get(event_id)
 
     @staticmethod
     def get_all_owner_events():
@@ -44,28 +41,12 @@ class DataGetter:
         return Track.query.filter_by(event_id=event_id)
 
     @staticmethod
-    def get_track(track_id):
-        """
-        :param track_id: Track id
-        :return: Track object with proper track_id
-        """
-        return Track.query.get(track_id)
-
-    @staticmethod
     def get_sessions(event_id, is_accepted=True):
         """
         :param event_id: Event id
         :return: Return all Sessions objects with Event id
         """
         return Session.query.filter_by(event_id=event_id, is_accepted=is_accepted)
-
-    @staticmethod
-    def get_session(session_id):
-        """
-        :param session_id: Session id
-        :return: Session with session_id
-        """
-        return Session.query.get(session_id)
 
     @staticmethod
     def get_speakers(event_id):
@@ -76,28 +57,12 @@ class DataGetter:
         return Speaker.query.filter_by(event_id=event_id)
 
     @staticmethod
-    def get_speaker(speaker_id):
-        """
-        :param speaker_id: Speaker id
-        :return: Speaker object with speaker_id
-        """
-        return Speaker.query.get(speaker_id)
-
-    @staticmethod
     def get_sponsors(event_id):
         """
         :param event_id: Event id
         :return: All Sponsors fitered by event_id
         """
         return Sponsor.query.filter_by(event_id=event_id)
-
-    @staticmethod
-    def get_sponsor(sponsor_id):
-        """
-        :param sponsor_id: Sponsor id
-        :return: Sponsor with sponsor_id
-        """
-        return Sponsor.query.get(sponsor_id)
 
     @staticmethod
     def get_microlocations(event_id):
@@ -137,30 +102,6 @@ class DataGetter:
         return Language.query.filter_by(event_id=get_event_id())
 
     @staticmethod
-    def get_level(level_id):
-        """
-        :param level_id: Level object id
-        :return: Level object
-        """
-        return Level.query.get(level_id)
-
-    @staticmethod
-    def get_format(format_id):
-        """
-        :param format_id: Format object id
-        :return: Format object
-        """
-        return Format.query.get(format_id)
-
-    @staticmethod
-    def get_language(language_id):
-        """
-        :param language: Language object id
-        :return: Language object
-        """
-        return Language.query.get(language_id)
-
-    @staticmethod
     def get_microlocation(microlocation_id):
         """
         :param microlocation_id: Microlocation id
@@ -192,13 +133,6 @@ class DataGetter:
         """
         files = File.query.filter_by(owner_id=login.current_user.id)
         return files
-
-    @staticmethod
-    def get_file(file_id):
-        """
-        :return: file
-        """
-        return File.query.get(file_id)
 
     @staticmethod
     def get_user_by_email(email):
@@ -233,4 +167,6 @@ class DataGetter:
         """Returns EventUser filtered by user_id and event_id"""
         return EventsUsers.query.filter_by(event_id=event_id, user_id=user_id).first()
 
-
+    @staticmethod
+    def get_object(db_model, object_id):
+        return db_model.query.get(object_id)

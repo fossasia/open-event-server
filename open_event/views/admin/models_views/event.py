@@ -22,6 +22,13 @@ from ....helpers.helpers import is_track_name_unique_in_event, is_event_admin
 from ....helpers.data_getter import DataGetter
 from ....forms.admin.file_form import FileForm
 
+from open_event.models.event import Event
+from open_event.models.track import Track
+from open_event.models.session import Session, Format, Language, Level
+from open_event.models.speaker import Speaker
+from open_event.models.sponsor import Sponsor
+from open_event.models.microlocation import Microlocation
+
 class EventView(ModelView):
     """Main EVent view class"""
     form = None
@@ -95,7 +102,7 @@ class EventView(ModelView):
         events = DataGetter.get_all_events()
         event_id = get_mdict_item_or_list(request.args, 'id')
         self.name = "Event | Edit"
-        event = DataGetter.get_event(event_id)
+        event = DataGetter.get_object(Event, event_id)
         from ....forms.admin.event_form import EventForm
         self.form = EventForm(obj=event)
         self.form.logo.choices=DataGetter.get_all_files_tuple()
@@ -158,7 +165,7 @@ class EventView(ModelView):
     @expose('/<event_id>/track/<track_id>/edit', methods=('GET', 'POST'))
     def event_track_edit(self, event_id, track_id):
         """Edit track view"""
-        track = DataGetter.get_track(track_id)
+        track = DataGetter.get_object(Track, track_id)
         events = DataGetter.get_all_events()
         form = TrackForm(obj=track)
         self.name = "Track | Edit"
@@ -236,7 +243,7 @@ class EventView(ModelView):
     @expose('/<event_id>/session/<session_id>/edit', methods=('GET', 'POST'))
     def event_session_edit(self, event_id, session_id):
         """Edit Session view"""
-        session = DataGetter.get_session(session_id)
+        session = DataGetter.get_object(Session, session_id)
         events = DataGetter.get_all_events()
         form = SessionForm(obj=session)
         self.name = "Session | Edit"
@@ -256,7 +263,7 @@ class EventView(ModelView):
     @expose('/<event_id>/session/<session_id>/accept_session', methods=('GET', 'POST'))
     def event_session_accept_session(self, event_id, session_id):
         """Accept session method"""
-        session = DataGetter.get_session(session_id)
+        session = DataGetter.get_object(Session, session_id)
         session.is_accepted = True
         save_to_db(session, session)
         flash("Session accepted!")
@@ -265,7 +272,7 @@ class EventView(ModelView):
     @expose('/<event_id>/session/<session_id>/reject_session', methods=('GET', 'POST'))
     def event_session_reject_session(self, event_id, session_id):
         """Reject session method"""
-        session = DataGetter.get_session(session_id)
+        session = DataGetter.get_object(Session, session_id)
         session.is_accepted = False
         save_to_db(session, session)
         flash("Session rejected!")
@@ -315,7 +322,7 @@ class EventView(ModelView):
     @expose('/<event_id>/speaker/<speaker_id>/edit', methods=('GET', 'POST'))
     def event_speaker_edit(self, event_id, speaker_id):
         """Edit speaker view"""
-        speaker = DataGetter.get_speaker(speaker_id)
+        speaker = DataGetter.get_object(Speaker, speaker_id)
         events = DataGetter.get_all_events()
         form = SpeakerForm(obj=speaker)
         self.name = "Speaker " + speaker_id + " | Edit"
@@ -376,7 +383,7 @@ class EventView(ModelView):
     @expose('/<event_id>/sponsor/<sponsor_id>/edit', methods=('GET', 'POST'))
     def event_sponsor_edit(self, event_id, sponsor_id):
         """Edit sponsor view"""
-        sponsor = DataGetter.get_sponsor(sponsor_id)
+        sponsor = DataGetter.get_object(Sponsor, sponsor_id)
         events = DataGetter.get_all_events()
         form = SponsorForm(obj=sponsor)
         self.name = "Sponsor " + sponsor_id + " | Edit"
@@ -436,7 +443,7 @@ class EventView(ModelView):
     @expose('/<event_id>/microlocation/<microlocation_id>/edit', methods=('GET', 'POST'))
     def event_microlocation_edit(self, event_id, microlocation_id):
         """Edit Microlocation view"""
-        microlocation = DataGetter.get_microlocation(microlocation_id)
+        microlocation = DataGetter.get_object(Microlocation, microlocation_id)
         events = DataGetter.get_all_events()
         form = MicrolocationForm(obj=microlocation)
         self.name = "Microlocation " + microlocation_id + " | Edit"
@@ -530,7 +537,7 @@ class EventView(ModelView):
     @expose('/<event_id>/level/<level_id>/edit', methods=('GET', 'POST'))
     def event_level_edit(self, event_id, level_id):
         """Edit level view"""
-        level = DataGetter.get_level(level_id)
+        level = DataGetter.get_object(Level, level_id)
         events = DataGetter.get_all_events()
         form = LevelForm(obj=level)
         self.name = "Level " + level_id + " | Edit"
@@ -590,7 +597,7 @@ class EventView(ModelView):
     @expose('/<event_id>/format/<format_id>/edit', methods=('GET', 'POST'))
     def event_format_edit(self, event_id, format_id):
         """Format edit view"""
-        format = DataGetter.get_format(format_id)
+        format = DataGetter.get_object(Format, format_id)
         events = DataGetter.get_all_events()
         form = FormatForm(obj=format)
         self.name = "format " + format_id + " | Edit"
@@ -650,7 +657,7 @@ class EventView(ModelView):
     @expose('/<event_id>/language/<language_id>/edit', methods=('GET', 'POST'))
     def event_language_edit(self, event_id, language_id):
         """Edit language view"""
-        language = DataGetter.get_language(language_id)
+        language = DataGetter.get_object(Language, language_id)
         events = DataGetter.get_all_events()
         form = LanguageForm(obj=language)
         self.name = "Language " + language_id + " | Edit"
@@ -681,7 +688,7 @@ class EventView(ModelView):
     def user_permissions(self, event_id):
         """User permission view"""
         users = DataGetter.get_all_users()
-        event_users = DataGetter.get_event(event_id).users
+        event_users = DataGetter.get_object(Event, event_id).users
         if is_event_admin(event_id, event_users):
             return self.render('admin/permissions/permission.html',
                            event_id=event_id,
@@ -696,7 +703,7 @@ class EventView(ModelView):
     @expose('/<event_id>/add_user_to_event', methods=('GET', 'POST'))
     def add_user_to_event(self, event_id):
         """Add user to event method"""
-        event = DataGetter.get_event(event_id)
+        event = DataGetter.get_object(Event, event_id)
         for row in request.args.getlist('user'):
             user_id = int(row)
             user = DataGetter.get_user(user_id)
@@ -717,7 +724,7 @@ class EventView(ModelView):
     def update_user_permission(self, event_id):
         """Update user permissions"""
         asso = DataGetter.get_association_by_event_and_user(event_id, user_id=int(request.args['id']))
-        asso.admin= False
+        asso.admin = False
         asso.editor = False
         for arg in request.args:
             if arg == 'admin':
