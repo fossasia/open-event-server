@@ -7,9 +7,6 @@ apt-get install -y libxml2-dev libxslt1-dev
 apt-get install -y nginx uwsgi uwsgi-plugin-python
 apt-get install -y postgresql postgresql-contrib libpq-dev
 
-#Flask
-pip freeze > requirements.txt
-pip install -r requirements.txt
 # Edit the following to change the name of the database user that will be created:
 APP_DB_USER=open_event_user
 APP_DB_PASS=start
@@ -24,9 +21,9 @@ PG_VERSION=9.4
 # Changes below this line are probably not necessary
 ###########################################################
 print_db_usage () {
-  echo "Your PostgreSQL database has been setup and can be accessed on your local machine on the forwarded port (default: 15432)"
+  echo "Your PostgreSQL database has been setup and can be accessed on your local machine on the forwarded port (default: 5432)"
   echo "  Host: localhost"
-  echo "  Port: 15432"
+  echo "  Port: 5432"
   echo "  Database: $APP_DB_NAME"
   echo "  Username: $APP_DB_USER"
   echo "  Password: $APP_DB_PASS"
@@ -41,10 +38,10 @@ print_db_usage () {
   echo "  PGUSER=$APP_DB_USER PGPASSWORD=$APP_DB_PASS psql -h localhost $APP_DB_NAME"
   echo ""
   echo "Env variable for application development:"
-  echo "  DATABASE_URL=postgresql://$APP_DB_USER:$APP_DB_PASS@localhost:15432/$APP_DB_NAME"
+  echo "  DATABASE_URL=postgresql://$APP_DB_USER:$APP_DB_PASS@localhost:5432/$APP_DB_NAME"
   echo ""
   echo "Local command to access the database via psql:"
-  echo "  PGUSER=$APP_DB_USER PGPASSWORD=$APP_DB_PASS psql -h localhost -p 15432 $APP_DB_NAME"
+  echo "  PGUSER=$APP_DB_USER PGPASSWORD=$APP_DB_PASS psql -h localhost -p 5432 $APP_DB_NAME"
 }
 
 export DEBIAN_FRONTEND=noninteractive
@@ -71,7 +68,7 @@ fi
 
 # Update package list and upgrade all packages
 apt-get update
-apt-get -y upgrade
+# apt-get -y upgrade
 
 apt-get -y install "postgresql-$PG_VERSION" "postgresql-contrib-$PG_VERSION"
 
@@ -110,11 +107,14 @@ echo "Successfully created PostgreSQL dev virtual machine."
 echo ""
 print_db_usage
 
-cd /vagrant
-cat << EOF | python
-from open_event import app
-from open_event.models import db
+echo "exporting database url for app"
+export DATABASE_URL=postgresql://$APP_DB_USER:$APP_DB_PASS@localhost:5432/$APP_DB_NAME
 
-with app.app_context():
-	db.create_all()
-EOF
+cd /vagrant
+#Flask
+echo "Installing requirements"
+pip install -r requirements.txt
+
+python create_db.py
+
+echo "export DATABASE_URL=$DATABASE_URL" >> ~/.bashrc
