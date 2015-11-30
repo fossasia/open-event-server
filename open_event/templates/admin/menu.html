@@ -48,7 +48,7 @@
 
           {% block menu_links %}
           <ul class="nav navbar-nav navbar-right">
-              {% if current_user.is_authenticated() %}
+              {% if current_user.is_authenticated %}
                 {% if current_user.is_super_admin() %}
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" aria-expanded="true">Admin Panel<b class="caret"></b></a>
