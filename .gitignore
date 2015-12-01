@@ -12,3 +12,4 @@ _mailinglist
 .tox
 .cache/
 test.db
+.idea/
