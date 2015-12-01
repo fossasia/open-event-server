@@ -9,6 +9,8 @@ The schema for the database is provided [here](https://github.com/fossasia/open-
 
 The data is provided over the API endpoints as described [here](https://github.com/fossasia/open-event/blob/master/API.md)
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 # Getting Started
 
 ## Install
