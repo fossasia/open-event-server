@@ -15,7 +15,7 @@ class ProductionConfig(Config):
     try:
         SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
     except:
-        pass
+        print "did not find DATABASE_URL exported"
 
 
 class StagingConfig(Config):

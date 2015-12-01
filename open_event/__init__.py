@@ -1,18 +1,19 @@
 """Copyright 2015 Rafal Kowalski"""
-import sys
 import logging
+import os.path
+import sys
 
 from flask import Flask
+from flask.ext.cors import CORS
 from flask.ext.migrate import Migrate, MigrateCommand
 from flask.ext.script import Manager
-from flask.ext.cors import CORS
 
 import open_event.models.event_listeners
 from open_event.models import db
 from open_event.views.admin.admin import AdminView
-import os.path
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 
 def create_app():
     app = Flask(__name__)
