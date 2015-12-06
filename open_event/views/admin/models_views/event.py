@@ -53,7 +53,7 @@ class EventView(ModelView):
 
     def is_accessible(self):
         """Check user access"""
-        return login.current_user.is_authenticated()
+        return login.current_user.is_authenticated
 
     def _handle_view(self, name, **kwargs):
         if not self.is_accessible():
