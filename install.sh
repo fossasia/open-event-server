@@ -117,4 +117,4 @@ pip install -r requirements.txt
 
 python create_db.py
 
-echo "export DATABASE_URL=$DATABASE_URL" >> ~/.bashrc
+echo "export DATABASE_URL=$DATABASE_URL" >> /home/vagrant/.bashrc
