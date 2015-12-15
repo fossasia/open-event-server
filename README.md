@@ -11,6 +11,9 @@ The data is provided over the API endpoints as described [here](https://github.c
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
+# Communication
+Please join our mailing list to discuss questions regarding the project: https://groups.google.com/forum/#!forum/open-event
+
 # Getting Started
 
 ## Install
