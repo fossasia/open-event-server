@@ -190,6 +190,9 @@ class DataManager(object):
         :param form: view data form
         :param event_id: Sponsor belongs to Event by event id
         """
+        file = request.files["logo"]
+    	filename = secure_filename(file.filename)
+	    file.save(os.path.join(os.path.realpath('.') + '/static/Sponsor Logo/', filename))
         new_sponsor = Sponsor(name=form.name.data,
                               url=form.url.data,
                               event_id=event_id,
@@ -216,6 +219,7 @@ class DataManager(object):
         :param sponsor_id: Sponsor id to remove object
         """
         sponsor = Sponsor.query.get(sponsor_id)
+    	os.remove(os.path.join(os.path.realpath('.') + '/static/Sponsor Logo/', sponsor.logo))
         delete_from_db(sponsor, "Sponsor deleted")
         flash('You successfully delete sponsor')
 
