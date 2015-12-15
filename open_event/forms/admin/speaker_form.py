@@ -4,7 +4,6 @@ from wtforms import StringField, TextAreaField, validators
 from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField
 from open_event.models.session import Session
 from ...helpers.helpers import get_event_id
-from flask_wtf.file import FileField
 
 
 def get_sessions():
@@ -15,7 +14,7 @@ def get_sessions():
 class SpeakerForm(Form):
     """Speaker Form class"""
     name = StringField('Name', [validators.DataRequired()])
-    photo = FileField('Photo')
+    photo = StringField('Photo')
     biography = TextAreaField('Biography')
     email = StringField('Email', [validators.DataRequired()])
     web = StringField('Web')
