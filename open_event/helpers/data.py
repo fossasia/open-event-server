@@ -194,7 +194,7 @@ class DataManager(object):
         :param form: view data form
         :param event_id: Sponsor belongs to Event by event id
         """
-         file = request.files["logo"]
+        file = request.files["logo"]
 	 filename = secure_filename(file.filename)
 	 file.save(os.path.join(os.path.realpath('.') + '/static/sponsor_logo/', filename))
         new_sponsor = Sponsor(name=form.name.data,
