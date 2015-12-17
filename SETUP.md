@@ -87,17 +87,18 @@ to bring up the virtual machine. This will start installation of a ubuntu box wi
 ```vagrant ssh```
 This will bring you to the root directory of the Virtual Machine.
 
-![Terminal-ls](https://cloud.githubusercontent.com/assets/9834624/11853336/5e7f4208-a40b-11e5-8393-e37bf3a901ff.png)
+![Terminal-Appcreate](https://cloud.githubusercontent.com/assets/9834624/11853335/5e7f398e-a40b-11e5-99d3-e3b9662b1819.png)
+
 
 * Notice that the top of the Terminal window no longer says “bash”. Now type 
 ```cd /vagrant```
 
-![Terminal-Appcreate](https://cloud.githubusercontent.com/assets/9834624/11853335/5e7f398e-a40b-11e5-99d3-e3b9662b1819.png)
+![Terminal-Server](https://cloud.githubusercontent.com/assets/9834624/11853337/5e830226-a40b-11e5-8816-4f735307f902.png)
 
 
 * (optional)In Terminal, type “ls” to view the files of the directory.
 
-![Terminal-Server](https://cloud.githubusercontent.com/assets/9834624/11853337/5e830226-a40b-11e5-8816-4f735307f902.png)
+![EventSite](https://cloud.githubusercontent.com/assets/9834624/11853338/5e859e46-a40b-11e5-9b29-97c21d34896c.png)
 
 * To run the app, type 
 ```python create_db.py```
@@ -105,7 +106,7 @@ this step should exit normally without raising any errors. If Terminal does repo
 ```echo $DATABASE_URL```
 to double check your database configuration.
 
-![EventSite](https://cloud.githubusercontent.com/assets/9834624/11853338/5e859e46-a40b-11e5-9b29-97c21d34896c.png)
+![screen shot 2015-12-13 at 7 20 13 pm](https://cloud.githubusercontent.com/assets/9834624/11853339/5e89fcca-a40b-11e5-9b3d-64b0d2429398.png)
 
 * Next, type
 ```python manage.py runserver -h 0.0.0.0 -p 5000```
@@ -117,7 +118,6 @@ to double check your database configuration.
 * If you want to shutdown the server press “CTRL + C”.
 
 
-![screen shot 2015-12-13 at 7 20 13 pm](https://cloud.githubusercontent.com/assets/9834624/11853339/5e89fcca-a40b-11e5-9b3d-64b0d2429398.png)
 
 ![screen shot 2015-12-13 at 7 20 31 pm](https://cloud.githubusercontent.com/assets/9834624/11853341/5e8f3f96-a40b-11e5-9d54-76f35af12a05.png)
 
