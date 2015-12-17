@@ -107,22 +107,19 @@ this step should exit normally without raising any errors. If Terminal does repo
 ```echo $DATABASE_URL```
 to double check your database configuration.
 
-![screen shot 2015-12-13 at 7 20 13 pm](https://cloud.githubusercontent.com/assets/9834624/11853339/5e89fcca-a40b-11e5-9b3d-64b0d2429398.png)
+![screen shot 2015-12-13 at 7 20 31 pm](https://cloud.githubusercontent.com/assets/9834624/11853341/5e8f3f96-a40b-11e5-9d54-76f35af12a05.png)
+
 
 * Next, type
 ```python manage.py runserver -h 0.0.0.0 -p 5000```
 
-![screen shot 2015-12-13 at 7 20 31 pm](https://cloud.githubusercontent.com/assets/9834624/11853341/5e8f3f96-a40b-11e5-9d54-76f35af12a05.png)
+![screen shot 2015-12-13 at 7 22 45 pm](https://cloud.githubusercontent.com/assets/9834624/11853340/5e90acf0-a40b-11e5-8232-cd5978f966a9.png)
 
 
 * Now your server is up and running. To view the admin page go to [localhost:8001](localhost:8001)
 * Congratulations! If you see the admin page you have successfully configured the application! 
 * If you want to shutdown the server press “CTRL + C”.
 
-
-![screen shot 2015-12-13 at 7 21 33 pm](https://cloud.githubusercontent.com/assets/9834624/11853342/5e97fb0e-a40b-11e5-8124-99918fed521b.png)
-
-![screen shot 2015-12-13 at 7 22 45 pm](https://cloud.githubusercontent.com/assets/9834624/11853340/5e90acf0-a40b-11e5-8232-cd5978f966a9.png)
 
 ![screen shot 2015-12-13 at 7 22 55 pm](https://cloud.githubusercontent.com/assets/9834624/11853343/5e9cab7c-a40b-11e5-96ad-30df2a3e33a0.png)
 
