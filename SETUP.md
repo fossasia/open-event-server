@@ -120,9 +120,6 @@ to double check your database configuration.
 * Congratulations! If you see the admin page you have successfully configured the application! 
 * If you want to shutdown the server press “CTRL + C”.
 
-
-![screen shot 2015-12-13 at 7 22 55 pm](https://cloud.githubusercontent.com/assets/9834624/11853343/5e9cab7c-a40b-11e5-96ad-30df2a3e33a0.png)
-
 ![screen shot 2015-12-13 at 7 23 06 pm](https://cloud.githubusercontent.com/assets/9834624/11853345/5eb0e1b4-a40b-11e5-9995-f5bba6255064.png)
 
 ![screen shot 2015-12-14 at 5 13 53 pm](https://cloud.githubusercontent.com/assets/9834624/11853344/5ea28ccc-a40b-11e5-82d7-5ce49c2e2991.png)
