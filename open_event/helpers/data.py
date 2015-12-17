@@ -140,9 +140,9 @@ class DataManager(object):
         :param form: view data form
         :param event_id: Speaker belongs to Event by event id
         """
-	 file = request.files["photo"]
-	 filename = secure_filename(file.filename)
-	 file.save(os.path.join(os.path.realpath('.') + '/static/speaker_photos/', filename))
+        file = request.files["photo"]
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(os.path.realpath('.') + '/static/speaker_photos/', filename))
         new_speaker = Speaker(name=form.name.data,
                               photo=form.photo.data,
                               biography=form.biography.data,
