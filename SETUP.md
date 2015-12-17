@@ -6,7 +6,7 @@
 ![Downloads](https://cloud.githubusercontent.com/assets/9834624/11853313/5e2216c8-a40b-11e5-92d8-d525ba50a4eb.png)
 * After clicking on [Universal (32 and 64-bit)](https://releases.hashicorp.com/vagrant/1.7.4/vagrant_1.7.4.dmg) Vagrant will begin to download. Once the download is completed, click on it.
 
-![Vagrant-Package](https://cloud.githubusercontent.com/assets/9834624/11858241/d026a000-a42d-11e5-8151-31ac5c5970fe.png)
+![screen shot 2015-12-16 at 9 43 47 pm](https://cloud.githubusercontent.com/assets/9834624/11860002/5af622e0-a43e-11e5-8292-fabed1a41af1.png)
 
 * Next double-click on Vagrant.pkg to open the package. You will be brought to the Vagrant installer.
 
@@ -113,7 +113,7 @@ to double check your database configuration.
 * Next, type
 ```python manage.py runserver -h 0.0.0.0 -p 5000```
 
-![screen shot 2015-12-13 at 7 22 45 pm](https://cloud.githubusercontent.com/assets/9834624/11853340/5e90acf0-a40b-11e5-8232-cd5978f966a9.png)
+![screen shot 2015-12-13 at 7 22 55 pm](https://cloud.githubusercontent.com/assets/9834624/11853343/5e9cab7c-a40b-11e5-96ad-30df2a3e33a0.png)
 
 
 * Now your server is up and running. To view the admin page go to [localhost:8001](localhost:8001)
