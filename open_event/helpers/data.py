@@ -183,7 +183,7 @@ class DataManager(object):
         :param speaker_id: Speaker id to remove object
         """
         speaker = Speaker.query.get(speaker_id)
-	 os.remove(os.path.join(os.path.realpath('.') + '/static/speaker_photos/', speaker.photo))
+        os.remove(os.path.join(os.path.realpath('.') + '/static/speaker_photos/', speaker.photo))
         delete_from_db(speaker, "Speaker deleted")
         flash('You successfully delete speaker')
 
@@ -195,8 +195,8 @@ class DataManager(object):
         :param event_id: Sponsor belongs to Event by event id
         """
         file = request.files["logo"]
-	 filename = secure_filename(file.filename)
-	 file.save(os.path.join(os.path.realpath('.') + '/static/sponsor_logo/', filename))
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(os.path.realpath('.') + '/static/sponsor_logo/', filename))
         new_sponsor = Sponsor(name=form.name.data,
                               url=form.url.data,
                               event_id=event_id,
@@ -223,7 +223,7 @@ class DataManager(object):
         :param sponsor_id: Sponsor id to remove object
         """
         sponsor = Sponsor.query.get(sponsor_id)
-    	 os.remove(os.path.join(os.path.realpath('.') + '/static/sponsor_logo/', sponsor.logo))
+    	os.remove(os.path.join(os.path.realpath('.') + '/static/sponsor_logo/', sponsor.logo))
         delete_from_db(sponsor, "Sponsor deleted")
         flash('You successfully delete sponsor')
 
