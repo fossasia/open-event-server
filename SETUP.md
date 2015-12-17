@@ -55,10 +55,12 @@
 
 * Once your computer has successfully finished installing Oracle VM VirtualBox you will be directed to the last page of the installer. Click “Close”.
 
-![Terminal-search](https://cloud.githubusercontent.com/assets/9834624/11858953/392f8bb0-a434-11e5-9939-e2de9c14ed7f.png)
+![Virtualbox-summary](https://cloud.githubusercontent.com/assets/9834624/11853329/5e71173c-a40b-11e5-876a-7aca23d3f744.png)
+
 * Open your Terminal application, Terminal’s default location is in your home/applications/utilities folder. You can also open Terminal by searching “Terminal” in spotlight search.
 
-![Virtualbox-summary](https://cloud.githubusercontent.com/assets/9834624/11853329/5e71173c-a40b-11e5-876a-7aca23d3f744.png)
+![Terminal-search](https://cloud.githubusercontent.com/assets/9834624/11858953/392f8bb0-a434-11e5-9939-e2de9c14ed7f.png)
+
 * In Terminal, type or copy and paste
 ```git clone git@github.com:fossasia/open-event-orga-server.git```
 after entering commands in Terminal press the "Enter" key.
