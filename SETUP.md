@@ -2,7 +2,7 @@
 * Navigate to [Vagrant Download Page](http://www.vagrantup.com/downloads.html)
 * Click on the proper package for your operating system and architecture, we will be using MAC OSX
 
-
+![Vagrant-Downloads](https://cloud.githubusercontent.com/assets/9834624/11853310/5e1df64c-a40b-11e5-9d86-a8930e939fd1.png)
 ![Downloads](https://cloud.githubusercontent.com/assets/9834624/11853313/5e2216c8-a40b-11e5-92d8-d525ba50a4eb.png)
 * After clicking on [Universal (32 and 64-bit)](https://releases.hashicorp.com/vagrant/1.7.4/vagrant_1.7.4.dmg) Vagrant will begin to download. Once the download is completed, click on it.
 
@@ -26,23 +26,36 @@
 
 * The Installer will prompt you for your username and password. Then click “Install Software”.
 
-![screen shot 2015-12-13 at 6 47 46 pm](https://cloud.githubusercontent.com/assets/9834624/11853320/5e54d70c-a40b-11e5-9483-2fe1a3b51fe6.png)
+![Vagrant-Summary](https://cloud.githubusercontent.com/assets/9834624/11853320/5e54d70c-a40b-11e5-9483-2fe1a3b51fe6.png)
 
-![Vagrant-Summary](https://cloud.githubusercontent.com/assets/9834624/11853321/5e553a3a-a40b-11e5-892b-51b906225cee.png)
-* Here
-![VirtualBox-Downloads](https://cloud.githubusercontent.com/assets/9834624/11853322/5e5547b4-a40b-11e5-90eb-f2f96cfca33e.png)
+* If the installation was successful you can close the installer and get ready to setup VirtualBox. 
 
-![VirtualBox-Installer](https://cloud.githubusercontent.com/assets/9834624/11853327/5e6a30f2-a40b-11e5-9b58-10064b34d843.png)
+![Vbox-Downloads](https://cloud.githubusercontent.com/assets/9834624/11853321/5e553a3a-a40b-11e5-892b-51b906225cee.png)
+* Navigate to the [Virtualbox Download Page](https://www.virtualbox.org/wiki/Downloads).
+* Then click on "amd64", right next to the "VirtualBox 5.0.10 for OS X hosts" label.
+![VirtualBox-Installer](https://cloud.githubusercontent.com/assets/9834624/11853322/5e5547b4-a40b-11e5-90eb-f2f96cfca33e.png)
 
-![VirtualBox-RunProgram](https://cloud.githubusercontent.com/assets/9834624/11853323/5e5ea2dc-a40b-11e5-9a50-ffda4e08297a.png)
+* After completing the download open the VirtualBox installer. Click on the “VirtualBox.pkg” icon.
 
-![VirtualBox-Intro](https://cloud.githubusercontent.com/assets/9834624/11853324/5e621d86-a40b-11e5-9587-298ea5b26a31.png)
+![VirtualBox-RunProgram](https://cloud.githubusercontent.com/assets/9834624/11853327/5e6a30f2-a40b-11e5-9b58-10064b34d843.png)
 
-![VirtualBox-Instaltype](https://cloud.githubusercontent.com/assets/9834624/11853326/5e67b7d2-a40b-11e5-8565-ecf423311c80.png)
+* The installer will prompt you to run a program to determine if the software can be installed, click “Continue”.
 
-![VirtualBox-Pass](https://cloud.githubusercontent.com/assets/9834624/11853328/5e6be06e-a40b-11e5-85be-0b5502062a19.png)
+![VirtualBox-Intro](https://cloud.githubusercontent.com/assets/9834624/11853323/5e5ea2dc-a40b-11e5-9a50-ffda4e08297a.png)
 
-![Virtualbox-Installing](https://cloud.githubusercontent.com/assets/9834624/11853329/5e71173c-a40b-11e5-876a-7aca23d3f744.png)
+* If the program has successfully determined that you can install the software the installer will remain open, press continue. Then select “Macintosh HD” has your installation destination.   Click “Continue”.
+
+![VirtualBox-Intaltype](https://cloud.githubusercontent.com/assets/9834624/11853324/5e621d86-a40b-11e5-9587-298ea5b26a31.png)
+
+* After selecting the destination, click “Install”.
+
+![VirtualBox-Pass](https://cloud.githubusercontent.com/assets/9834624/11853326/5e67b7d2-a40b-11e5-8565-ecf423311c80.png)
+
+* Installer will prompt you for your username and password, then click “Install Software”.
+
+![Virtualbox-summary](https://cloud.githubusercontent.com/assets/9834624/11853329/5e71173c-a40b-11e5-876a-7aca23d3f744.png)
+
+* Once your computer has successfully finished installing Oracle VM VirtualBox you will be directed to the last page of the installer. Click “Close”.
 
 ![Virtualbox-summary](https://cloud.githubusercontent.com/assets/9834624/11853331/5e75a66c-a40b-11e5-8984-00dd1b57730f.png)
 
