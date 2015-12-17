@@ -98,7 +98,8 @@ This will bring you to the root directory of the Virtual Machine.
 
 * (optional)In Terminal, type “ls” to view the files of the directory.
 
-![EventSite](https://cloud.githubusercontent.com/assets/9834624/11853338/5e859e46-a40b-11e5-9b29-97c21d34896c.png)
+![screen shot 2015-12-13 at 7 20 13 pm](https://cloud.githubusercontent.com/assets/9834624/11853339/5e89fcca-a40b-11e5-9b3d-64b0d2429398.png)
+
 
 * To run the app, type 
 ```python create_db.py```
@@ -111,15 +112,13 @@ to double check your database configuration.
 * Next, type
 ```python manage.py runserver -h 0.0.0.0 -p 5000```
 
-![screen shot 2015-12-13 at 7 20 13 pm](https://cloud.githubusercontent.com/assets/9834624/11853339/5e89fcca-a40b-11e5-9b3d-64b0d2429398.png)
+![screen shot 2015-12-13 at 7 20 31 pm](https://cloud.githubusercontent.com/assets/9834624/11853341/5e8f3f96-a40b-11e5-9d54-76f35af12a05.png)
+
 
 * Now your server is up and running. To view the admin page go to [localhost:8001](localhost:8001)
 * Congratulations! If you see the admin page you have successfully configured the application! 
 * If you want to shutdown the server press “CTRL + C”.
 
-
-
-![screen shot 2015-12-13 at 7 20 31 pm](https://cloud.githubusercontent.com/assets/9834624/11853341/5e8f3f96-a40b-11e5-9d54-76f35af12a05.png)
 
 ![screen shot 2015-12-13 at 7 21 33 pm](https://cloud.githubusercontent.com/assets/9834624/11853342/5e97fb0e-a40b-11e5-8124-99918fed521b.png)
 
