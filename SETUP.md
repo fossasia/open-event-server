@@ -53,27 +53,65 @@
 
 * Installer will prompt you for your username and password, then click “Install Software”.
 
-![Virtualbox-summary](https://cloud.githubusercontent.com/assets/9834624/11853329/5e71173c-a40b-11e5-876a-7aca23d3f744.png)
-
 * Once your computer has successfully finished installing Oracle VM VirtualBox you will be directed to the last page of the installer. Click “Close”.
 
-![Virtualbox-summary](https://cloud.githubusercontent.com/assets/9834624/11853331/5e75a66c-a40b-11e5-8984-00dd1b57730f.png)
+![Terminal-search](https://cloud.githubusercontent.com/assets/9834624/11858953/392f8bb0-a434-11e5-9939-e2de9c14ed7f.png)
+* Open your Terminal application, Terminal’s default location is in your home/applications/utilities folder. You can also open Terminal by searching “Terminal” in spotlight search.
 
-![Terminal-clone](https://cloud.githubusercontent.com/assets/9834624/11853330/5e72b952-a40b-11e5-8b58-80f7d1a50b2c.png)
+![Virtualbox-summary](https://cloud.githubusercontent.com/assets/9834624/11853329/5e71173c-a40b-11e5-876a-7aca23d3f744.png)
+* In Terminal, type or copy and paste
+```git clone git@github.com:fossasia/open-event-orga-server.git```
+after entering commands in Terminal press the "Enter" key.
 
-![Terminal-cd1](https://cloud.githubusercontent.com/assets/9834624/11853332/5e789fb6-a40b-11e5-876e-ba37e462643d.png)
+![Terminal-clone](https://cloud.githubusercontent.com/assets/9834624/11853331/5e75a66c-a40b-11e5-8984-00dd1b57730f.png)
+* Then type or copy and paste 
+```cd open-event-orga-server```
+ (cd means change directory)
 
-![Terminal-cd2](https://cloud.githubusercontent.com/assets/9834624/11853333/5e78ebba-a40b-11e5-9b1a-02ba564c64fb.png)
+![Terminal-cd1](https://cloud.githubusercontent.com/assets/9834624/11853330/5e72b952-a40b-11e5-8b58-80f7d1a50b2c.png)
 
-![screen shot 2015-12-13 at 7 00 12 pm](https://cloud.githubusercontent.com/assets/9834624/11853334/5e7eeff6-a40b-11e5-8131-430bfd468b13.png)
+* You will then change into the “open-event-orga-server” directory.
 
-![screen shot 2015-12-13 at 7 17 27 pm](https://cloud.githubusercontent.com/assets/9834624/11853336/5e7f4208-a40b-11e5-8393-e37bf3a901ff.png)
+![Terminal-Vagrant](https://cloud.githubusercontent.com/assets/9834624/11853332/5e789fb6-a40b-11e5-876e-ba37e462643d.png)
+*In Terminal in the “open-event-orga-server” directory, type
+```vagrant up```
+to bring up the virtual machine. This will start installation of a ubuntu box within which the server will run with all its components. If after typing “vagrant up” you received an error stating “valid providers not found ….”, type
+```vagrant up --provider=virtualbox```
+* This step may take a long time depending on your computer and internet connection
 
-![screen shot 2015-12-13 at 7 18 07 pm](https://cloud.githubusercontent.com/assets/9834624/11853335/5e7f398e-a40b-11e5-99d3-e3b9662b1819.png)
+![Terminal-cd3](https://cloud.githubusercontent.com/assets/9834624/11853333/5e78ebba-a40b-11e5-9b1a-02ba564c64fb.png)
 
-![screen shot 2015-12-13 at 7 19 48 pm](https://cloud.githubusercontent.com/assets/9834624/11853337/5e830226-a40b-11e5-8816-4f735307f902.png)
+* Terminal will output a bunch of content related to the provisioning of the virtual machine. Next, type 
+```vagrant ssh```
+This will bring you to the root directory of the Virtual Machine.
 
-![screen shot 2015-12-13 at 7 19 56 pm](https://cloud.githubusercontent.com/assets/9834624/11853338/5e859e46-a40b-11e5-9b29-97c21d34896c.png)
+![Terminal-Notice](https://cloud.githubusercontent.com/assets/9834624/11853334/5e7eeff6-a40b-11e5-8131-430bfd468b13.png)
+
+* Notice that the top of the Terminal window no longer says “bash”. Now type 
+```cd /vagrant```
+
+![Terminal-ls](https://cloud.githubusercontent.com/assets/9834624/11853336/5e7f4208-a40b-11e5-8393-e37bf3a901ff.png)
+
+* (optional)In Terminal, type “ls” to view the files of the directory.
+
+![Terminal-Appcreate](https://cloud.githubusercontent.com/assets/9834624/11853335/5e7f398e-a40b-11e5-99d3-e3b9662b1819.png)
+
+* To run the app, type 
+```python create_db.py```
+this step should exit normally without raising any errors. If Terminal does report an error type 
+```echo $DATABASE_URL```
+to double check your database configuration.
+
+![Terminal-Server](https://cloud.githubusercontent.com/assets/9834624/11853337/5e830226-a40b-11e5-8816-4f735307f902.png)
+* Next, type
+```python manage.py runserver -h 0.0.0.0 -p 5000```
+
+![EventSite](https://cloud.githubusercontent.com/assets/9834624/11853338/5e859e46-a40b-11e5-9b29-97c21d34896c.png)
+
+* Now your server is up and running. To view the admin page go to [localhost:8001](localhost:8001)
+* Congratulations! If you see the admin page you have successfully configured the application! 
+* If you want to shutdown the server press “CTRL + C”.
+
 
 ![screen shot 2015-12-13 at 7 20 13 pm](https://cloud.githubusercontent.com/assets/9834624/11853339/5e89fcca-a40b-11e5-9b3d-64b0d2429398.png)
 
