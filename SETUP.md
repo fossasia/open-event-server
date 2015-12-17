@@ -75,7 +75,7 @@ after entering commands in Terminal press the "Enter" key.
 * You will then change into the “open-event-orga-server” directory.
 
 ![Terminal-Vagrant](https://cloud.githubusercontent.com/assets/9834624/11853332/5e789fb6-a40b-11e5-876e-ba37e462643d.png)
-*In Terminal in the “open-event-orga-server” directory, type
+* In Terminal in the “open-event-orga-server” directory, type
 ```vagrant up```
 to bring up the virtual machine. This will start installation of a ubuntu box within which the server will run with all its components. If after typing “vagrant up” you received an error stating “valid providers not found ….”, type
 ```vagrant up --provider=virtualbox```
@@ -87,16 +87,17 @@ to bring up the virtual machine. This will start installation of a ubuntu box wi
 ```vagrant ssh```
 This will bring you to the root directory of the Virtual Machine.
 
-![Terminal-Notice](https://cloud.githubusercontent.com/assets/9834624/11853334/5e7eeff6-a40b-11e5-8131-430bfd468b13.png)
+![Terminal-ls](https://cloud.githubusercontent.com/assets/9834624/11853336/5e7f4208-a40b-11e5-8393-e37bf3a901ff.png)
 
 * Notice that the top of the Terminal window no longer says “bash”. Now type 
 ```cd /vagrant```
 
-![Terminal-ls](https://cloud.githubusercontent.com/assets/9834624/11853336/5e7f4208-a40b-11e5-8393-e37bf3a901ff.png)
+![Terminal-Appcreate](https://cloud.githubusercontent.com/assets/9834624/11853335/5e7f398e-a40b-11e5-99d3-e3b9662b1819.png)
+
 
 * (optional)In Terminal, type “ls” to view the files of the directory.
 
-![Terminal-Appcreate](https://cloud.githubusercontent.com/assets/9834624/11853335/5e7f398e-a40b-11e5-99d3-e3b9662b1819.png)
+![Terminal-Server](https://cloud.githubusercontent.com/assets/9834624/11853337/5e830226-a40b-11e5-8816-4f735307f902.png)
 
 * To run the app, type 
 ```python create_db.py```
@@ -104,11 +105,12 @@ this step should exit normally without raising any errors. If Terminal does repo
 ```echo $DATABASE_URL```
 to double check your database configuration.
 
-![Terminal-Server](https://cloud.githubusercontent.com/assets/9834624/11853337/5e830226-a40b-11e5-8816-4f735307f902.png)
+![EventSite](https://cloud.githubusercontent.com/assets/9834624/11853338/5e859e46-a40b-11e5-9b29-97c21d34896c.png)
+
 * Next, type
 ```python manage.py runserver -h 0.0.0.0 -p 5000```
 
-![EventSite](https://cloud.githubusercontent.com/assets/9834624/11853338/5e859e46-a40b-11e5-9b29-97c21d34896c.png)
+![screen shot 2015-12-13 at 7 20 13 pm](https://cloud.githubusercontent.com/assets/9834624/11853339/5e89fcca-a40b-11e5-9b3d-64b0d2429398.png)
 
 * Now your server is up and running. To view the admin page go to [localhost:8001](localhost:8001)
 * Congratulations! If you see the admin page you have successfully configured the application! 
