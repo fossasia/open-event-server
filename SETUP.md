@@ -53,9 +53,9 @@
 
 * Installer will prompt you for your username and password, then click “Install Software”.
 
-* Once your computer has successfully finished installing Oracle VM VirtualBox you will be directed to the last page of the installer. Click “Close”.
-
 ![Virtualbox-summary](https://cloud.githubusercontent.com/assets/9834624/11853329/5e71173c-a40b-11e5-876a-7aca23d3f744.png)
+
+* Once your computer has successfully finished installing Oracle VM VirtualBox you will be directed to the last page of the installer. Click “Close”.
 
 * Open your Terminal application, Terminal’s default location is in your home/applications/utilities folder. You can also open Terminal by searching “Terminal” in spotlight search.
 
