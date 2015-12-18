@@ -42,6 +42,12 @@ def get_event_by_id(event_id):
     """Returns events by event id"""
     return jsonify({"events":[Event.query.get(event_id).serialize]})
 
+@app.route('/api/v1/event/search/name/<name_search>', methods=['GET'])
+@cross_origin()
+def search_events_by_name(name_search):
+    """Returns events matching a string"""
+    # is there a SQL injection here?
+    return jsonify({"events":[Event.name.ilike('%' + name_search + '%')]})
 
 @app.route('/api/v1/event/<event_id>/sessions', methods=['GET'])
 @cross_origin()
