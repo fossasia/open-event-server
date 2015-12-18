@@ -91,7 +91,7 @@ class EventView(ModelView):
                 DataManager.create_event(self.form)
                 flash("Event updated")
                 return redirect(url_for('.index_view'))
-        return self.render('admin/model/create_model.html',
+        return self.render('admin/model/create_event.html',
                            form=self.form,
                            events=events,
                            cancel_url=url_for('.index_view'))
@@ -115,7 +115,7 @@ class EventView(ModelView):
                 else:
                     flash("You don't have permission!")
                 return redirect(url_for('.index_view', event_id=event_id))
-        return self.render('admin/model/create_model.html',
+        return self.render('admin/model/edit_event.html',
                            form=self.form,
                            event_id=event_id,
                            events=events,
