@@ -144,7 +144,7 @@ class DataManager(object):
         filename = secure_filename(file.filename)
         file.save(os.path.join(os.path.realpath('.') + '/static/speaker_photos/', filename))
         new_speaker = Speaker(name=form.name.data,
-                              photo=form.photo.data,
+                              photo=filename,
                               biography=form.biography.data,
                               email=form.email.data,
                               web=form.web.data,
@@ -200,7 +200,7 @@ class DataManager(object):
         new_sponsor = Sponsor(name=form.name.data,
                               url=form.url.data,
                               event_id=event_id,
-                              logo=form.logo.data)
+                              logo=filename)
         save_to_db(new_sponsor, "Sponsor saved")
         update_version(event_id, False, "sponsors_ver")
 
