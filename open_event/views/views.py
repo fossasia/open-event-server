@@ -42,6 +42,12 @@ def get_event_by_id(event_id):
     """Returns events by event id"""
     return jsonify({"events":[Event.query.get(event_id).serialize]})
 
+@app.route('/api/v1/event/search/name/<name_search>', methods=['GET'])
+@cross_origin()
+def search_events_by_name(name_search):
+    """Returns events which have a name matching a string"""
+    matching_events = Event.query.filter( Event.name.contains(name_search) )
+    return ObjectFormatter.get_json("events", matching_events, request)
 
 @app.route('/api/v1/event/<event_id>/sessions', methods=['GET'])
 @cross_origin()
