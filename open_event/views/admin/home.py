@@ -18,10 +18,13 @@ class MyHomeView(AdminIndexView):
         """Main page"""
         self._template = "admin/auth.html"
         if not login.current_user.is_authenticated:
+            print "Unauthenticated user"
             return redirect(url_for('.login_view'))
-        self._template_args['events'] = DataGetter.get_all_events()
-        self._template_args['owner_events'] = DataGetter.get_all_owner_events()
-        return super(MyHomeView, self).index()
+        else:
+            print "Authenticated user"
+            self._template_args['events'] = DataGetter.get_all_events()
+            self._template_args['owner_events'] = DataGetter.get_all_owner_events()
+            return super(MyHomeView, self).index()
 
     @expose('/login/', methods=('GET', 'POST'))
     def login_view(self):
