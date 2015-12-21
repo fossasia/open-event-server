@@ -195,8 +195,19 @@ def get_event_version(event_id):
         return jsonify(version.serialize)
     return jsonify({"version": []})
 
-
 @app.route('/pic/<path:filename>')
 def send_pic(filename):
     """Returns image"""
     return send_from_directory(os.path.realpath('.') + '/static/', filename)
+    
+@app.route('/api/v1/event/<event_id>/sessions/<string:speaker_name>', methods=['GET'])
+@cross_origin()
+def get_sessions_at_event(event_id, session_name):
+    sessions=Session.query.filter(Session.event_id == event_id,Session.name == speaker_name)
+    return ObjectFormatter.get_json("sessions", sessions, request)    
+
+@app.route('/api/v1/event/<event_id>/speakers/<string:speaker_name>', methods=['GET'])
+@cross_origin()
+def get_speakers_at_event(event_id, speaker_name):
+    speakers=Speaker.query.filter(Speaker.event_id == event_id,Speaker.name == speaker_name)
+    return ObjectFormatter.get_json("speakers", speakers, request)
