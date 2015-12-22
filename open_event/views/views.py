@@ -199,13 +199,13 @@ def get_event_version(event_id):
 @app.route('/api/v1/event/<event_id>/sessions/<string:session_name>', methods=['GET'])
 @cross_origin()
 def get_sessions_at_event(event_id, session_name):
-    sessions=Session.query.filter(Session.event_id == event_id,Session.name == session_name)
+    sessions=Session.query.filter(Session.event_id == event_id,Session.name.contains(session_name))
     return ObjectFormatter.get_json("sessions", sessions, request)
     
 @app.route('/api/v1/event/<event_id>/speakers/<string:speaker_name>', methods=['GET'])
 @cross_origin()
 def get_speakers_at_event(event_id, speaker_name):
-    speakers=Speaker.query.filter(Speaker.event_id == event_id,Speaker.name == speaker_name)
+    speakers=Speaker.query.filter(Speaker.event_id == event_id,Speaker.name.contains(speaker_name))
     return ObjectFormatter.get_json("speakers", speakers, request)
 
 @app.route('/pic/<path:filename>')
