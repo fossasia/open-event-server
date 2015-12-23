@@ -196,13 +196,13 @@ def get_event_version(event_id):
     return jsonify({"version": []})
 
 
-@app.route('/api/v1/event/<event_id>/sessions/<string:session_name>', methods=['GET'])
+@app.route('/api/v1/event/<event_id>/sessions/title/<string:session_title>', methods=['GET'])
 @cross_origin()
-def get_sessions_at_event(event_id, session_name):
-    sessions=Session.query.filter(Session.event_id == event_id,Session.name.contains(session_name))
+def get_sessions_at_event(event_id, session_title):
+    sessions=Session.query.filter(Session.event_id == event_id,Session.title.contains(session_title))
     return ObjectFormatter.get_json("sessions", sessions, request)
     
-@app.route('/api/v1/event/<event_id>/speakers/<string:speaker_name>', methods=['GET'])
+@app.route('/api/v1/event/<event_id>/speakers/name/<string:speaker_name>', methods=['GET'])
 @cross_origin()
 def get_speakers_at_event(event_id, speaker_name):
     speakers=Speaker.query.filter(Speaker.event_id == event_id,Speaker.name.contains(speaker_name))
