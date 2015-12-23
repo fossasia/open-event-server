@@ -39,7 +39,11 @@
                         </td>
                         <td>{{speaker.id}}</td>
                         <td>{{speaker.name}}</td>
-                        <td><img src="/pic/speaker_photos/{{speaker.photo}}" height="84" width="84"></td>
+                        <td>
+                            {% if speaker.photo %}
+                            <img src="/pic/speaker_photos/{{speaker.photo}}" height="84" width="84">
+                            {% endif %}
+                        </td>
                         <td>{{speaker.biography}}</td>
                         <td>{{speaker.email}}</td>
                         <td>{{speaker.web}}</td>
