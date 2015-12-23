@@ -32,7 +32,11 @@
                         <td>{{sponsor.id}}</td>
                         <td>{{sponsor.name}}</td>
                         <td>{{sponsor.url}}</td>
-                        <td><img src="/pic/sponsor_logo/{{sponsor.logo}}" height="84" width="84"></td>
+                        <td>
+                            {% if sponsor.logo %}
+                            <img src="/pic/sponsor_logo/{{sponsor.logo}}" height="84" width="84">
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
