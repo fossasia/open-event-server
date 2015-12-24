@@ -29,7 +29,7 @@
                                             <div class="col-lg-10">
                                                 {{ f(class_="form-control") }}
                                                 {% if f.errors %}
-                                                <ul style="list-style:none; font-size:11px">
+                                                <ul class="auth_required" style="list-style:none; font-size:11px">
                                                     {% for e in f.errors %}
                                                     <li style="color:red">{{ e }}</li>
                                                     {% endfor %}
