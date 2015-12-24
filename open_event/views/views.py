@@ -12,10 +12,13 @@ from ..models.session import Session, Level, Format, Language
 from ..models.version import Version
 from ..helpers.object_formatter import ObjectFormatter
 from flask import Blueprint
+from flask.ext.autodoc import Autodoc
 
+auto=Autodoc()
 
 app = Blueprint('', __name__)
 @app.route('/', methods=['GET'])
+@auto.doc()
 @cross_origin()
 def get_admin():
     """Redirect to admin page"""
@@ -23,6 +26,7 @@ def get_admin():
 
 
 @app.route('/api/v1/event', methods=['GET'])
+@auto.doc()
 @cross_origin()
 def get_events():
     """Returns all events"""
@@ -30,6 +34,7 @@ def get_events():
 
 
 @app.route('/api/v1/event/page/<int:page>', methods=['GET'])
+@auto.doc()
 @cross_origin()
 def get_events_per_page(page):
     """Returns 20 events per page"""
@@ -37,12 +42,14 @@ def get_events_per_page(page):
 
 
 @app.route('/api/v1/event/<event_id>', methods=['GET'])
+@auto.doc()
 @cross_origin()
 def get_event_by_id(event_id):
     """Returns events by event id"""
     return jsonify({"events":[Event.query.get(event_id).serialize]})
 
 @app.route('/api/v1/event/search/name/<name_search>', methods=['GET'])
+@auto.doc()
 @cross_origin()
 def search_events_by_name(name_search):
     """Returns events which have a name matching a string"""
@@ -50,6 +57,7 @@ def search_events_by_name(name_search):
     return ObjectFormatter.get_json("events", matching_events, request)
 
 @app.route('/api/v1/event/<event_id>/sessions', methods=['GET'])
+@auto.doc()
 @cross_origin()
 def get_sessions(event_id):
     """Returns all event's sessions"""
@@ -58,6 +66,7 @@ def get_sessions(event_id):
 
 
 @app.route('/api/v1/event/<event_id>/sessions/page/<int:page>', methods=['GET'])
+@auto.doc()
 @cross_origin()
 def get_sessions_per_page(event_id, page):
     """Returns 20 event's sessions"""
@@ -66,6 +75,7 @@ def get_sessions_per_page(event_id, page):
 
 
 @app.route('/api/v1/event/<event_id>/tracks', methods=['GET'])
+@auto.doc()
 @cross_origin()
 def get_tracks(event_id):
     """Returns all event's tracks"""
@@ -74,6 +84,7 @@ def get_tracks(event_id):
 
 
 @app.route('/api/v1/event/<event_id>/tracks/page/<int:page>', methods=['GET'])
+@auto.doc()
 @cross_origin()
 def get_tracks_per_page(event_id, page):
     """Returns 20 event's tracks"""
@@ -82,6 +93,7 @@ def get_tracks_per_page(event_id, page):
 
 
 @app.route('/api/v1/event/<event_id>/speakers', methods=['GET'])
+@auto.doc()
 @cross_origin()
 def get_speakers(event_id):
     """Returns all event's speakers"""
@@ -90,6 +102,7 @@ def get_speakers(event_id):
 
 
 @app.route('/api/v1/event/<event_id>/speakers/page/<int:page>', methods=['GET'])
+@auto.doc()
 @cross_origin()
 def get_speakers_per_page(event_id, page):
     """Returns 20 event's speakers"""
@@ -98,6 +111,7 @@ def get_speakers_per_page(event_id, page):
 
 
 @app.route('/api/v1/event/<event_id>/sponsors', methods=['GET'])
+@auto.doc()
 @cross_origin()
 def get_sponsors(event_id):
     """Returns all event's sponsors"""
@@ -106,6 +120,7 @@ def get_sponsors(event_id):
 
 
 @app.route('/api/v1/event/<event_id>/sponsors/page/<int:page>', methods=['GET'])
+@auto.doc()
 @cross_origin()
 def get_sponsors_per_page(event_id, page):
     """Returns 20 event's sponsors"""
@@ -114,6 +129,7 @@ def get_sponsors_per_page(event_id, page):
 
 
 @app.route('/api/v1/event/<event_id>/levels', methods=['GET'])
+@auto.doc()
 @cross_origin()
 def get_levels(event_id):
     """Returns all event's levels"""
@@ -122,6 +138,7 @@ def get_levels(event_id):
 
 
 @app.route('/api/v1/event/<event_id>/levels/page/<int:page>', methods=['GET'])
+@auto.doc()
 @cross_origin()
 def get_levels_per_page(event_id, page):
     """Returns 20 event's levels"""
@@ -130,6 +147,7 @@ def get_levels_per_page(event_id, page):
 
 
 @app.route('/api/v1/event/<event_id>/formats', methods=['GET'])
+@auto.doc()
 @cross_origin()
 def get_formats(event_id):
     """Returns all event's formats"""
@@ -138,6 +156,7 @@ def get_formats(event_id):
 
 
 @app.route('/api/v1/event/<event_id>/formats/page/<int:page>', methods=['GET'])
+@auto.doc()
 @cross_origin()
 def get_formatsper_page(event_id, page):
     """Returns 20 event's formats"""
@@ -146,6 +165,7 @@ def get_formatsper_page(event_id, page):
 
 
 @app.route('/api/v1/event/<event_id>/languages', methods=['GET'])
+@auto.doc()
 def get_languages(event_id, page):
     """Returns all event's languages"""
     languages = Language.query.filter_by(event_id=event_id)
@@ -153,6 +173,7 @@ def get_languages(event_id, page):
 
 
 @app.route('/api/v1/event/<event_id>/languages/page/<int:page>', methods=['GET'])
+@auto.doc()
 @cross_origin()
 def get_languages_per_page(event_id, page):
     """Returns 20 event's languages"""
@@ -161,6 +182,7 @@ def get_languages_per_page(event_id, page):
 
 
 @app.route('/api/v1/event/<event_id>/microlocations', methods=['GET'])
+@auto.doc()
 @cross_origin()
 def get_microlocations(event_id):
     """Returns all event's microlocations"""
@@ -169,6 +191,7 @@ def get_microlocations(event_id):
 
 
 @app.route('/api/v1/event/<event_id>/microlocations/page/<int:page>', methods=['GET'])
+@auto.doc()
 @cross_origin()
 def get_microlocations_per_page(event_id, page):
     """Returns 20 event's microlocations"""
@@ -177,6 +200,7 @@ def get_microlocations_per_page(event_id, page):
 
 
 @app.route('/api/v1/version', methods=['GET'])
+@auto.doc()
 @cross_origin()
 def get_versions():
     """Returns the latest version"""
@@ -187,6 +211,7 @@ def get_versions():
 
 
 @app.route('/api/v1/event/<event_id>/version', methods=['GET'])
+@auto.doc()
 @cross_origin()
 def get_event_version(event_id):
     """Returns event's the latest version"""
@@ -197,6 +222,11 @@ def get_event_version(event_id):
 
 
 @app.route('/pic/<path:filename>')
+@auto.doc()
 def send_pic(filename):
     """Returns image"""
     return send_from_directory(os.path.realpath('.') + '/static/', filename)
+
+@app.route('/documentation')
+def documentation():
+	return auto.html()

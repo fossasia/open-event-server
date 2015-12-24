@@ -11,12 +11,14 @@ from flask.ext.script import Manager
 import open_event.models.event_listeners
 from open_event.models import db
 from open_event.views.admin.admin import AdminView
+from flask.ext.autodoc import Autodoc
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 def create_app():
     app = Flask(__name__)
+    auto=Autodoc(app)
     from open_event.views.views import app as routes
     app.register_blueprint(routes)
     migrate = Migrate(app, db)
