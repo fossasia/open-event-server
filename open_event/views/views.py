@@ -41,7 +41,7 @@ def get_events_per_page(page):
     return ObjectFormatter.get_json("events", Event.query, request, page)
 
 
-@app.route('/api/v1/event/<event_id>', methods=['GET'])
+@app.route('/api/v1/event/<int:event_id>', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def get_event_by_id(event_id):
@@ -56,7 +56,7 @@ def search_events_by_name(name_search):
     matching_events = Event.query.filter( Event.name.contains(name_search) )
     return ObjectFormatter.get_json("events", matching_events, request)
 
-@app.route('/api/v1/event/<event_id>/sessions', methods=['GET'])
+@app.route('/api/v1/event/<int:event_id>/sessions', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def get_sessions(event_id):
@@ -65,7 +65,7 @@ def get_sessions(event_id):
     return ObjectFormatter.get_json("sessions", sessions, request)
 
 
-@app.route('/api/v1/event/<event_id>/sessions/page/<int:page>', methods=['GET'])
+@app.route('/api/v1/event/<int:event_id>/sessions/page/<int:page>', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def get_sessions_per_page(event_id, page):
@@ -74,7 +74,7 @@ def get_sessions_per_page(event_id, page):
     return ObjectFormatter.get_json("sessions", sessions, request, page)
 
 
-@app.route('/api/v1/event/<event_id>/tracks', methods=['GET'])
+@app.route('/api/v1/event/<int:event_id>/tracks', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def get_tracks(event_id):
@@ -83,7 +83,7 @@ def get_tracks(event_id):
     return ObjectFormatter.get_json("tracks", tracks, request)
 
 
-@app.route('/api/v1/event/<event_id>/tracks/page/<int:page>', methods=['GET'])
+@app.route('/api/v1/event/<int:event_id>/tracks/page/<int:page>', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def get_tracks_per_page(event_id, page):
@@ -92,7 +92,7 @@ def get_tracks_per_page(event_id, page):
     return ObjectFormatter.get_json("tracks", tracks, request, page)
 
 
-@app.route('/api/v1/event/<event_id>/speakers', methods=['GET'])
+@app.route('/api/v1/event/<int:event_id>/speakers', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def get_speakers(event_id):
@@ -101,7 +101,7 @@ def get_speakers(event_id):
     return ObjectFormatter.get_json("speakers", speakers, request)
 
 
-@app.route('/api/v1/event/<event_id>/speakers/page/<int:page>', methods=['GET'])
+@app.route('/api/v1/event/<int:event_id>/speakers/page/<int:page>', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def get_speakers_per_page(event_id, page):
@@ -110,7 +110,7 @@ def get_speakers_per_page(event_id, page):
     return ObjectFormatter.get_json("speakers", speakers, request, page)
 
 
-@app.route('/api/v1/event/<event_id>/sponsors', methods=['GET'])
+@app.route('/api/v1/event/<int:event_id>/sponsors', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def get_sponsors(event_id):
@@ -119,7 +119,7 @@ def get_sponsors(event_id):
     return ObjectFormatter.get_json("sponsors", sponsors, request)
 
 
-@app.route('/api/v1/event/<event_id>/sponsors/page/<int:page>', methods=['GET'])
+@app.route('/api/v1/event/<int:event_id>/sponsors/page/<int:page>', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def get_sponsors_per_page(event_id, page):
@@ -128,7 +128,7 @@ def get_sponsors_per_page(event_id, page):
     return ObjectFormatter.get_json("sponsors", sponsors, request, page)
 
 
-@app.route('/api/v1/event/<event_id>/levels', methods=['GET'])
+@app.route('/api/v1/event/<int:event_id>/levels', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def get_levels(event_id):
@@ -137,7 +137,7 @@ def get_levels(event_id):
     return ObjectFormatter.get_json("levels", levels, request)
 
 
-@app.route('/api/v1/event/<event_id>/levels/page/<int:page>', methods=['GET'])
+@app.route('/api/v1/event/<int:event_id>/levels/page/<int:page>', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def get_levels_per_page(event_id, page):
@@ -146,7 +146,7 @@ def get_levels_per_page(event_id, page):
     return ObjectFormatter.get_json("levels", levels, request, page)
 
 
-@app.route('/api/v1/event/<event_id>/formats', methods=['GET'])
+@app.route('/api/v1/event/<int:event_id>/formats', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def get_formats(event_id):
@@ -155,7 +155,7 @@ def get_formats(event_id):
     return ObjectFormatter.get_json("formats", formats, request)
 
 
-@app.route('/api/v1/event/<event_id>/formats/page/<int:page>', methods=['GET'])
+@app.route('/api/v1/event/<int:event_id>/formats/page/<int:page>', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def get_formatsper_page(event_id, page):
@@ -164,7 +164,7 @@ def get_formatsper_page(event_id, page):
     return ObjectFormatter.get_json("formats", formats, request, page)
 
 
-@app.route('/api/v1/event/<event_id>/languages', methods=['GET'])
+@app.route('/api/v1/event/<int:event_id>/languages', methods=['GET'])
 @auto.doc()
 def get_languages(event_id, page):
     """Returns all event's languages"""
@@ -172,7 +172,7 @@ def get_languages(event_id, page):
     return ObjectFormatter.get_json("languages", languages, request, page)
 
 
-@app.route('/api/v1/event/<event_id>/languages/page/<int:page>', methods=['GET'])
+@app.route('/api/v1/event/<int:event_id>/languages/page/<int:page>', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def get_languages_per_page(event_id, page):
@@ -181,7 +181,7 @@ def get_languages_per_page(event_id, page):
     return ObjectFormatter.get_json("languages", languages, request, page)
 
 
-@app.route('/api/v1/event/<event_id>/microlocations', methods=['GET'])
+@app.route('/api/v1/event/<int:event_id>/microlocations', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def get_microlocations(event_id):
@@ -190,7 +190,7 @@ def get_microlocations(event_id):
     return ObjectFormatter.get_json("microlocations", microlocations, request)
 
 
-@app.route('/api/v1/event/<event_id>/microlocations/page/<int:page>', methods=['GET'])
+@app.route('/api/v1/event/<int:event_id>/microlocations/page/<int:page>', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def get_microlocations_per_page(event_id, page):
@@ -210,7 +210,7 @@ def get_versions():
     return jsonify({"version": []})
 
 
-@app.route('/api/v1/event/<event_id>/version', methods=['GET'])
+@app.route('/api/v1/event/<int:event_id>/version', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def get_event_version(event_id):
@@ -221,13 +221,15 @@ def get_event_version(event_id):
     return jsonify({"version": []})
 
 
-@app.route('/api/v1/event/<event_id>/sessions/title/<string:session_title>', methods=['GET'])
+@app.route('/api/v1/event/<int:event_id>/sessions/title/<string:session_title>', methods=['GET'])
+@auto.doc()
 @cross_origin()
 def get_sessions_at_event(event_id, session_title):
     sessions=Session.query.filter(Session.event_id == event_id,Session.title.contains(session_title))
     return ObjectFormatter.get_json("sessions", sessions, request)
-    
-@app.route('/api/v1/event/<event_id>/speakers/name/<string:speaker_name>', methods=['GET'])
+
+@app.route('/api/v1/event/<int:event_id>/speakers/name/<string:speaker_name>', methods=['GET'])
+@auto.doc()
 @cross_origin()
 def get_speakers_at_event(event_id, speaker_name):
     speakers=Speaker.query.filter(Speaker.event_id == event_id,Speaker.name.contains(speaker_name))
