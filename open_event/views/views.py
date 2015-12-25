@@ -225,6 +225,7 @@ def get_event_version(event_id):
 @auto.doc()
 @cross_origin()
 def get_sessions_at_event(event_id, session_title):
+    """Returns all the sessions of a particular event which contain session_title string in their title"""
     sessions=Session.query.filter(Session.event_id == event_id,Session.title.contains(session_title))
     return ObjectFormatter.get_json("sessions", sessions, request)
 
@@ -232,6 +233,7 @@ def get_sessions_at_event(event_id, session_title):
 @auto.doc()
 @cross_origin()
 def get_speakers_at_event(event_id, speaker_name):
+    """Returns all the speakers of a particular event which contain speaker_name string in their name"""
     speakers=Speaker.query.filter(Speaker.event_id == event_id,Speaker.name.contains(speaker_name))
     return ObjectFormatter.get_json("speakers", speakers, request)
 
