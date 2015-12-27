@@ -3,6 +3,7 @@ Flask-Admin==1.1.0
 Flask-SQLAlchemy==2.0
 Flask-WTF==0.11
 Flask-Autodoc==0.1.2
+icalendar==3.9.2
 requests==2.7.0
 gunicorn==19.3.0
 WTForms-Components==0.9.7
