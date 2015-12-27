@@ -12,6 +12,7 @@ import open_event.models.event_listeners
 from open_event.models import db
 from open_event.views.admin.admin import AdminView
 from flask.ext.autodoc import Autodoc
+from icalendar import Calendar,Event
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -19,6 +20,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 def create_app():
     app = Flask(__name__)
     auto=Autodoc(app)
+    cal=Calendar()
+    event=Event()
     from open_event.views.views import app as routes
     app.register_blueprint(routes)
     migrate = Migrate(app, db)
