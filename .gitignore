@@ -13,3 +13,4 @@ _mailinglist
 .cache/
 test.db
 .idea/
+.bundle/
