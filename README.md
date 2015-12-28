@@ -92,6 +92,24 @@ python manage.py runserver -h 0.0.0.0 -p 5000
 * To view the admin page go to [127.0.0.1:8001](http://127.0.0.1:8001/) or [localhost:8001](http://localhost:8001/) you should be directed to the admin page automatically.
 * Congratulations you have finally made it through the configuration part of the app, now Good Luck Coding :)
 
+## Model updates
+
+When writing changes to models. Use migrations.
+
+ ```
+ # To generate a migration after doing a model update
+ python manage.py db migrate
+
+ # To sync Database
+ python manage.py db upgrade
+
+ # To rollback
+ python manage.py db downgrade
+
+ ```
+
+When checking in code for models, please update migrations as well.
+
 ## Stack
 
 * Database - Postgres
