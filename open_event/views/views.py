@@ -18,6 +18,7 @@ from icalendar import Calendar,Event
 auto=Autodoc()
 cal=Calendar()
 event=Event()
+track=Event()
 
 app = Blueprint('', __name__)
 @app.route('/', methods=['GET'])
@@ -243,7 +244,7 @@ def get_speakers_at_event(event_id, speaker_name):
 @app.route('/api/v1/event/<int:event_id>/export/iCal', methods=['GET'])
 @auto.doc()
 @cross_origin()
-def generate_icalender(event_id):
+def generate_icalender_event(event_id):
 	"""Takes an event id and returns the event in iCal format"""		
 	matching_event=Events.query.get(event_id)
 	if matching_event == None:
@@ -260,6 +261,20 @@ def generate_icalender(event_id):
 	event.add('slogan',matching_event.slogan)
 	event.add('url',matching_event.url)
 	cal.add_component(event)
+	return cal.to_ical()
+
+@app.route('/api/v1/track/<int:track_id>/export/iCal', methods=['GET'])
+@auto.doc()
+@cross_origin()
+def generate_icalender_track(track_id):
+	"""Takes a track id and returns the track in iCal format"""		
+	matching_track=Track.query.get(track_id)	
+	if matching_track==None:
+		return "Sorry,the track does not exist"	
+	track.add('name',matching_track.name)	
+	track.add('description',matching_track.description)
+	track.add('image url',matching_track.track_image_url)
+	cal.add_component(track)
 	return cal.to_ical()
 
 @app.route('/pic/<path:filename>')
