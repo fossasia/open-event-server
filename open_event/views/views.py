@@ -13,12 +13,11 @@ from ..models.version import Version
 from ..helpers.object_formatter import ObjectFormatter
 from flask import Blueprint
 from flask.ext.autodoc import Autodoc
-from icalendar import Calendar,Event
+from icalendar import Calendar
+import icalendar
 
 auto=Autodoc()
 cal=Calendar()
-event=Event()
-track=Event()
 
 app = Blueprint('', __name__)
 @app.route('/', methods=['GET'])
@@ -246,6 +245,7 @@ def get_speakers_at_event(event_id, speaker_name):
 @cross_origin()
 def generate_icalender_event(event_id):
 	"""Takes an event id and returns the event in iCal format"""		
+	event=icalendar.Event()
 	matching_event=Events.query.get(event_id)
 	if matching_event == None:
 		return "Sorry,the event does not exist"
@@ -268,6 +268,7 @@ def generate_icalender_event(event_id):
 @cross_origin()
 def generate_icalender_track(track_id):
 	"""Takes a track id and returns the track in iCal format"""		
+	track=icalendar.Event()
 	matching_track=Track.query.get(track_id)	
 	if matching_track==None:
 		return "Sorry,the track does not exist"	
