@@ -13,8 +13,11 @@ from ..models.version import Version
 from ..helpers.object_formatter import ObjectFormatter
 from flask import Blueprint
 from flask.ext.autodoc import Autodoc
+from icalendar import Calendar
+import icalendar
 
 auto=Autodoc()
+cal=Calendar()
 
 app = Blueprint('', __name__)
 @app.route('/', methods=['GET'])
@@ -236,6 +239,44 @@ def get_speakers_at_event(event_id, speaker_name):
     """Returns all the speakers of a particular event which contain speaker_name string in their name"""
     speakers=Speaker.query.filter(Speaker.event_id == event_id,Speaker.name.contains(speaker_name))
     return ObjectFormatter.get_json("speakers", speakers, request)
+
+@app.route('/api/v1/event/<int:event_id>/export/iCal', methods=['GET'])
+@auto.doc()
+@cross_origin()
+def generate_icalender_event(event_id):
+	"""Takes an event id and returns the event in iCal format"""		
+	event=icalendar.Event()
+	matching_event=Event.query.get(event_id)
+	if matching_event == None:
+		return "Sorry,the event does not exist"
+	event.add('name',matching_event.name)
+	event.add('latitude',matching_event.latitude)
+	event.add('longitude',matching_event.longitude)
+	event.add('location',matching_event.location_name)
+	event.add('color',matching_event.color)	
+	event.add('start time',matching_event.start_time)
+	event.add('end time',matching_event.end_time)	
+	event.add('logo',matching_event.logo)
+	event.add('email',matching_event.email)
+	event.add('slogan',matching_event.slogan)
+	event.add('url',matching_event.url)
+	cal.add_component(event)
+	return cal.to_ical()
+
+@app.route('/api/v1/track/<int:track_id>/export/iCal', methods=['GET'])
+@auto.doc()
+@cross_origin()
+def generate_icalender_track(track_id):
+	"""Takes a track id and returns the track in iCal format"""		
+	track=icalendar.Event()
+	matching_track=Track.query.get(track_id)	
+	if matching_track==None:
+		return "Sorry,the track does not exist"	
+	track.add('name',matching_track.name)	
+	track.add('description',matching_track.description)
+	track.add('image url',matching_track.track_image_url)
+	cal.add_component(track)
+	return cal.to_ical()
 
 @app.route('/pic/<path:filename>')
 @auto.doc()
