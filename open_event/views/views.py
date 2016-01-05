@@ -246,7 +246,7 @@ def get_speakers_at_event(event_id, speaker_name):
 def generate_icalender_event(event_id):
 	"""Takes an event id and returns the event in iCal format"""		
 	event=icalendar.Event()
-	matching_event=Events.query.get(event_id)
+	matching_event=Event.query.get(event_id)
 	if matching_event == None:
 		return "Sorry,the event does not exist"
 	event.add('name',matching_event.name)
