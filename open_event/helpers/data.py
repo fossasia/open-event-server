@@ -421,6 +421,12 @@ class DataManager(object):
         Event will be saved to database with proper Event id
         :param form: view data form
         """
+        file     = request.files["logo"]
+        filename = ''
+
+        if file:
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(os.path.realpath('.') + '/static/event_logo/', filename))
         event = Event(name=form.name.data,
                       email=form.email.data,
                       color=form.color.data,
