@@ -7,6 +7,7 @@ from ...helpers.validators import CustomDateEventValidate
 from ...helpers.data_getter import DataGetter
 from wtforms_components import ColorField
 from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField, QuerySelectField
+from flask_wtf.file import FileField
 
 class EventForm(Form):
     """Event Form class"""
@@ -17,7 +18,7 @@ class EventForm(Form):
     color = ColorField('Color')
     start_time = DateTimeField('Start Time', [DataRequired(), CustomDateEventValidate()])
     end_time = DateTimeField('End Time', [DataRequired(), CustomDateEventValidate()])
-    logo = SelectField('Logo', coerce=str)
+    logo = FileField('Logo')
     # logo = QuerySelectField(query_factory=DataGetter.get_all_owner_files, allow_blank=True)
     email = StringField('Email')
     slogan = StringField('Slogan')
