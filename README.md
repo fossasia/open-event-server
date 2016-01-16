@@ -15,6 +15,17 @@ The data is provided over the API endpoints as described [here](https://github.c
 Please join our mailing list to discuss questions regarding the project: https://groups.google.com/forum/#!forum/open-event
 
 # Getting Started
+## Install with Docker on Ubuntu:
+* Get the latest version of docker:
+```
+sudo apt-get install linux-image-extra-`uname -r`
+sudo apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" | sudo tee /etc/apt/sources.list.d/docker.list
+sudo apt-get update
+sudo apt-get install docker-engine
+```
+* Docker run: ```docker run -p 80:5000 dengyiping/open-event-orga-server```
+
 
 ## Install
 * Install [VirtualBox][1], choose a version that is compatible with the vagrant version. The current version at the time of writing is `5.0.x` for VirtualBox.
