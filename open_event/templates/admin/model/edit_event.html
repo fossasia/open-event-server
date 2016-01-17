@@ -11,8 +11,8 @@
 {% endblock %}
 
 {% block body %}
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
         <div class="well bs-component">
 
               <h2>{{ admin_view.name }}</h2>
@@ -29,7 +29,7 @@
               </div>
         </div>
     </div>
-    <div class="col-md-2"></div>
+    <div class="col-md-1"></div>
     <!-- bring in the google maps library -->
         <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
         <script src="{{ url_for('static', filename='admin/js/map.js' )}}"></script>
