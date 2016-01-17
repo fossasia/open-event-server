@@ -31,8 +31,11 @@
     </div>
     <div class="col-md-2"></div>
     <!-- bring in the google maps library -->
-        <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
-        <script src="{{ url_for('static', filename='admin/js/map.js' )}}"></script>
+       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.5/leaflet.css">
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.5/leaflet.js"></script>
+       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.4.0/leaflet-geocoder-mapzen.css">
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.4.0/leaflet-geocoder-mapzen.js"></script>
+       <script src="{{ url_for('static', filename='admin/js/map2.js' )}}">
 {% endblock %}
 
 {% block tail %}
