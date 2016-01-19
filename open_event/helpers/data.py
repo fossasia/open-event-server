@@ -481,10 +481,14 @@ class DataManager(object):
         """
         file = request.files["file"]
         filename = secure_filename(file.filename)
+        is_image = check_filetype(filename)
         file.save(os.path.join(os.path.realpath('.') + '/static/', filename))
-        file_object = File(name=filename, path='', owner_id=login.current_user.id)
+        file_object = File(name=filename, path='', owner_id=login.current_user.id, is_image=is_image)
         save_to_db(file_object, "file saved")
-        flash("File added")
+        if is_image:
+            flash("Image added")
+        else:
+            flash("File added")
 
     @staticmethod
     def remove_file(file_id):
@@ -551,3 +555,8 @@ def get_or_create(model, **kwargs):
         db.session.add(instance)
         db.session.commit()
         return instance
+
+
+def check_filetype(filename):
+    image_extensions = set(['png', 'jpg', 'jpeg', 'gif'])
+    return '.' in filename and filename.rsplit('.', 1)[1] in image_extensions

@@ -13,13 +13,16 @@ class File(db.Model):
                          nullable=False)
     owner_id = db.Column(db.Integer,
                          db.ForeignKey('user.id'))
+    is_image = db.Column(db.Boolean)
 
     def __init__(self,
                  name=None,
                  path=None,
-                 owner_id=None):
+                 owner_id=None,
+                 is_image=None):
         self.name = name
         self.path = path
         self.owner_id = owner_id
+        self.is_image = is_image
     def __repr__(self):
         return '<File %r>' % (self.name)
