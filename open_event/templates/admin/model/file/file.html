@@ -42,12 +42,7 @@
                                     </td>
                                     <td>{{file.id}}</td>
                                     <td>{{file.name}}</td>
-                                    <td>{% if file.is_image==true %}
-                                   			<img src="/pic/{{file.name}}" height="84" width="84">
-                                    	{% else %}
-                                    		<p>No preview available</p>
-                                    	{% endif %}
-                                    </td>
+                                    <td><img src="/pic/{{file.name}}" height="84" width="84"></td>
                                 </tr>
                             {% endfor %}
                         </tbody>
