@@ -481,10 +481,13 @@ class DataManager(object):
         """
         file = request.files["file"]
         filename = secure_filename(file.filename)
-        file.save(os.path.join(os.path.realpath('.') + '/static/', filename))
-        file_object = File(name=filename, path='', owner_id=login.current_user.id)
-        save_to_db(file_object, "file saved")
-        flash("File added")
+        if file.mimetype.split('/', 1)[0] == "image":
+            file.save(os.path.join(os.path.realpath('.') + '/static/', filename))
+            file_object = File(name=filename, path='', owner_id=login.current_user.id)
+            save_to_db(file_object, "file saved")
+            flash("Image added")
+        else:
+            flash("The selected file is not an image. Please select a image file and try again.")
 
     @staticmethod
     def remove_file(file_id):
