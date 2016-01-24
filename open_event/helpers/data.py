@@ -423,14 +423,13 @@ class DataManager(object):
         """
         file     = request.files["logo"]
         filename = ''
-
         if file:
             filename = secure_filename(file.filename)
             file.save(os.path.join(os.path.realpath('.') + '/static/event_logo/', filename))
         event = Event(name=form.name.data,
                       email=form.email.data,
                       color=form.color.data,
-                      logo=form.logo.data,
+                      logo=filename,
                       start_time=form.start_time.data,
                       end_time=form.end_time.data,
                       latitude=form.latitude.data,
@@ -443,8 +442,8 @@ class DataManager(object):
         a.editor = True
         a.admin = True
         event.users.append(a)
-        if form.logo.data:
-            event.logo = form.logo.data
+        if filename:
+            event.logo = filename
         else:
             event.logo = ''
         save_to_db(event, "Event saved")
@@ -462,11 +461,16 @@ class DataManager(object):
         data = form.data
         logo = data['logo']
         del data['logo']
+        file     = request.files["logo"]
+        filename = ''
+        if file:
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(os.path.realpath('.') + '/static/event_logo/', filename))
         db.session.query(Event)\
             .filter_by(id=event.id)\
             .update(dict(data))
-        if logo:
-            event.logo = logo
+        if filename:
+            event.logo = filename
         else:
             event.logo = ''
         save_to_db(event, "Event updated")
