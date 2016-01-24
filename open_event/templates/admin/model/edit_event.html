@@ -24,18 +24,53 @@
                       {% endcall %}
                   </div>
                   <div class="col-md-6">
-                      <div id="map" style="width:400px; height:300px"></div>
+                      <div id="floating-panel">
+                      <input id="address" type="textbox" value="Sydney, NSW">
+                      <input id="submit" type="button" value="Geocode" onclick="saveAddress()">
+    </div>
+			<div id="map" style="width:400px; height:300px"></div>
                   </div>
               </div>
         </div>
     </div>
     <div class="col-md-2"></div>
     <!-- bring in the google maps library -->
-       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.5/leaflet.css">
-       <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.5/leaflet.js"></script>
-       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.4.0/leaflet-geocoder-mapzen.css">
-       <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.4.0/leaflet-geocoder-mapzen.js"></script>
-       <script src="{{ url_for('static', filename='admin/js/map2.js' )}}">
+     <script>
+function initMap() {
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 8,
+    center: {lat: -34.397, lng: 150.644}
+  });
+  var geocoder = new google.maps.Geocoder();
+
+  document.getElementById('submit').addEventListener('click', function() {
+    geocodeAddress(geocoder, map);
+  });
+}
+
+function saveAddress(){
+		var address = document.getElementById('address').value;
+	document.getElementById('location_name').value=address;
+}
+
+function geocodeAddress(geocoder, resultsMap) {
+  var address = document.getElementById('address').value;
+  geocoder.geocode({'address': address}, function(results, status) {
+    if (status === google.maps.GeocoderStatus.OK) {
+      resultsMap.setCenter(results[0].geometry.location);
+      var marker = new google.maps.Marker({
+        map: resultsMap,
+        position: results[0].geometry.location
+      });
+    } else {
+      alert('Geocode was not successful for the following reason: ' + status);
+    }
+  });
+}
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiXdFK2gtVMIHB890Nxu5CKNUTbQwQzo0&signed_in=true&callback=initMap"
+        async defer></script>
 {% endblock %}
 
 {% block tail %}
