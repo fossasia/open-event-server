@@ -2,6 +2,7 @@
 import logging
 
 from sqlalchemy.orm.collections import InstrumentedList
+from sqlalchemy.sql.expression import exists
 from flask import flash, request
 from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt, check_password_hash
@@ -481,13 +482,16 @@ class DataManager(object):
         """
         file = request.files["file"]
         filename = secure_filename(file.filename)
-        if file.mimetype.split('/', 1)[0] == "image":
-            file.save(os.path.join(os.path.realpath('.') + '/static/', filename))
-            file_object = File(name=filename, path='', owner_id=login.current_user.id)
-            save_to_db(file_object, "file saved")
-            flash("Image added")
+        if db.session.query(exists().where(File.name == filename)).scalar() == False:
+            if file.mimetype.split('/', 1)[0] == "image":
+                file.save(os.path.join(os.path.realpath('.') + '/static/', filename))
+                file_object = File(name=filename, path='', owner_id=login.current_user.id)
+                save_to_db(file_object, "file saved")
+                flash("Image added")
+            else:
+                flash("The selected file is not an image. Please select a image file and try again.")
         else:
-            flash("The selected file is not an image. Please select a image file and try again.")
+            flash("A file named \"" + filename + "\" already exists")
 
     @staticmethod
     def remove_file(file_id):
