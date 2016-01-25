@@ -218,7 +218,15 @@ class DataManager(object):
         :param sponsor: object contains all earlier data
         """
         data = form.data
+        del data['logo']
         db.session.query(Sponsor).filter_by(id=sponsor.id).update(dict(data))
+        file = request.files["logo"]
+        if file.filename:
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(os.path.realpath('.') + '/static/sponsor_logo/', filename))
+            if sponsor.logo:
+                os.remove(os.path.join(os.path.realpath('.') + '/static/sponsor_logo/', sponsor.logo))
+            sponsor.logo = filename
         save_to_db(sponsor, "Sponsor updated")
         update_version(sponsor.event_id, False, "sponsors_ver")
 
