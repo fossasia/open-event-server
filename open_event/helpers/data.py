@@ -173,9 +173,17 @@ class DataManager(object):
         """
         data = form.data
         del data['sessions']
+        del data['photo']
         db.session.query(Speaker)\
             .filter_by(id=speaker.id)\
             .update(dict(data))
+        file = request.files["photo"]
+        if file:
+            if speaker.photo:
+                os.remove(os.path.join(os.path.realpath('.') + '/static/speaker_photos/', speaker.photo))
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(os.path.realpath('.') + '/static/speaker_photos/', filename))
+            speaker.photo = filename
         speaker.sessions = InstrumentedList(form.sessions.data if form.sessions.data else [])
         save_to_db(speaker, "Speaker updated")
         update_version(speaker.event_id, False, "speakers_ver")
@@ -221,11 +229,11 @@ class DataManager(object):
         del data['logo']
         db.session.query(Sponsor).filter_by(id=sponsor.id).update(dict(data))
         file = request.files["logo"]
-        if file.filename:
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(os.path.realpath('.') + '/static/sponsor_logo/', filename))
+        if file:
             if sponsor.logo:
                 os.remove(os.path.join(os.path.realpath('.') + '/static/sponsor_logo/', sponsor.logo))
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(os.path.realpath('.') + '/static/sponsor_logo/', filename))
             sponsor.logo = filename
         save_to_db(sponsor, "Sponsor updated")
         update_version(sponsor.event_id, False, "sponsors_ver")
@@ -470,11 +478,11 @@ class DataManager(object):
             .update(dict(data))
 
         file = request.files["logo"]
-        if file.filename:
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(os.path.realpath('.') + '/static/event_logo/', filename))
+        if file:
             if event.logo:
                 os.remove(os.path.join(os.path.realpath('.') + '/static/event_logo/', event.logo))
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(os.path.realpath('.') + '/static/event_logo/', filename))
             event.logo = filename
         save_to_db(event, "Event updated")
         update_version(event_id=event.id,
