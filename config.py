@@ -1,6 +1,8 @@
 """Written by - Rafal Kowalski"""
 import os
+
 _basedir = os.path.abspath(os.path.dirname(__file__))
+
 
 class Config(object):
     DEBUG = False
@@ -31,10 +33,12 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     TESTING = True
 
+
 class LocalPSQLConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI ="postgresql://postgres:start@localhost/test"
+    SQLALCHEMY_DATABASE_URI = "postgresql://postgres:start@localhost/test"
+
 
 class LocalSQLITEConfig(Config):
     DEVELOPMENT = True
