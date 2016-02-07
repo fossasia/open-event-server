@@ -478,6 +478,12 @@ class DataManager(object):
                        column_to_increment="event_ver")
 
     @staticmethod
+    def delete_event(e_id):
+        EventsUsers.query.filter_by(event_id=e_id).delete()
+        Event.query.filter_by(id=e_id).delete()
+        db.session.commit()
+
+    @staticmethod
     def create_file():
         """
         File from request will be saved to database
