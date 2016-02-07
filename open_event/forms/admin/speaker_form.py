@@ -14,7 +14,7 @@ def get_sessions():
 class SpeakerForm(Form):
     """Speaker Form class"""
     name = StringField('Name', [validators.DataRequired()])
-    photo = FileField('Photo')
+    photo = StringField('Photo')
     biography = TextAreaField('Biography')
     email = StringField('Email', [validators.DataRequired()])
     web = StringField('Web')

@@ -79,22 +79,25 @@ class EventView(ModelView):
     @expose('/new/', methods=('GET', 'POST'))
     def create_view(self):
         """Event create view"""
+
         events = DataGetter.get_all_events()
         self._template_args['return_url'] = get_redirect_target() or self.get_url('.index_view')
         self.name = "Event | New"
         from ....forms.admin.event_form import EventForm
         self.form = EventForm()
-        self.form.logo.choices=DataGetter.get_all_files_tuple()
-        self.form.logo.choices.insert(0, ('', ''))
         if self.form.validate():
             if request.method == "POST":
-                DataManager.create_event(self.form)
+                try:
+                    DataManager.create_event(self.form)
+                except Exception as error:
+                    print error
                 flash("Event updated")
                 return redirect(url_for('.index_view'))
         return self.render('admin/model/create_event.html',
                            form=self.form,
                            events=events,
                            cancel_url=url_for('.index_view'))
+
 
     @expose('/edit/', methods=('GET', 'POST'))
     def edit_view(self):
@@ -105,8 +108,6 @@ class EventView(ModelView):
         event = DataGetter.get_object(Event, event_id)
         from ....forms.admin.event_form import EventForm
         self.form = EventForm(obj=event)
-        self.form.logo.choices=DataGetter.get_all_files_tuple()
-        self.form.logo.choices.insert(0, ('', ''))
         if self.form.validate():
             if request.method == "POST":
                 if is_event_admin_or_editor(event_id):

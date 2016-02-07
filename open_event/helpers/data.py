@@ -143,15 +143,8 @@ class DataManager(object):
         :param form: view data form
         :param event_id: Speaker belongs to Event by event id
         """
-        file = request.files["photo"]
-        filename = ''
-
-        if file:
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(os.path.realpath('.') + '/static/speaker_photos/', filename))
-
         new_speaker = Speaker(name=form.name.data,
-                              photo=filename,
+                              photo=form.photo.data,
                               biography=form.biography.data,
                               email=form.email.data,
                               web=form.web.data,
@@ -190,7 +183,6 @@ class DataManager(object):
         :param speaker_id: Speaker id to remove object
         """
         speaker = Speaker.query.get(speaker_id)
-        os.remove(os.path.join(os.path.realpath('.') + '/static/speaker_photos/', speaker.photo))
         delete_from_db(speaker, "Speaker deleted")
         flash('You successfully delete speaker')
 
@@ -201,15 +193,10 @@ class DataManager(object):
         :param form: view data form
         :param event_id: Sponsor belongs to Event by event id
         """
-        file = request.files["logo"]
-        filename = ''
-        if file:
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(os.path.realpath('.') + '/static/sponsor_logo/', filename))
         new_sponsor = Sponsor(name=form.name.data,
                               url=form.url.data,
                               event_id=event_id,
-                              logo=filename)
+                              logo=form.logo.data)
         save_to_db(new_sponsor, "Sponsor saved")
         update_version(event_id, False, "sponsors_ver")
 
@@ -232,7 +219,6 @@ class DataManager(object):
         :param sponsor_id: Sponsor id to remove object
         """
         sponsor = Sponsor.query.get(sponsor_id)
-        os.remove(os.path.join(os.path.realpath('.') + '/static/sponsor_logo/', sponsor.logo))
         delete_from_db(sponsor, "Sponsor deleted")
         flash('You successfully delete sponsor')
 
@@ -424,12 +410,6 @@ class DataManager(object):
         Event will be saved to database with proper Event id
         :param form: view data form
         """
-        file = request.files["logo"]
-        filename = ''
-
-        if file:
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(os.path.realpath('.') + '/static/event_logo/', filename))
         event = Event(name=form.name.data,
                       email=form.email.data,
                       color=form.color.data,
