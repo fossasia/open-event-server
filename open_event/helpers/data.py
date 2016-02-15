@@ -1,28 +1,31 @@
 """Copyright 2015 Rafal Kowalski"""
 import logging
+import os.path
+import random
+import traceback
 
-from sqlalchemy.orm.collections import InstrumentedList
-from sqlalchemy.sql.expression import exists
 from flask import flash, request
 from flask.ext import login
-from flask.ext.scrypt import generate_password_hash, generate_random_salt, check_password_hash
+from flask.ext.scrypt import generate_password_hash, generate_random_salt
+from sqlalchemy.orm.collections import InstrumentedList
+from sqlalchemy.sql.expression import exists
+from werkzeug import secure_filename
 
+from ..helpers.update_version import VersionUpdater
 from ..models import db
-from ..models.track import Track
+from ..models.event import Event, EventsUsers
+from ..models.file import File
+from ..models.microlocation import Microlocation
 from ..models.session import Session, Level, Format, Language
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
-from ..models.microlocation import Microlocation
+from ..models.track import Track
 from ..models.user import User
-from ..models.event import Event, EventsUsers
-from ..helpers.update_version import VersionUpdater
-from ..models.file import File
-from werkzeug import secure_filename
-import os.path
-import random
+
 
 class DataManager(object):
     """Main class responsible for DataBase managing"""
+
     @staticmethod
     def create_track(form, event_id):
         """
@@ -35,7 +38,7 @@ class DataManager(object):
                           event_id=event_id,
                           track_image_url=form.track_image_url.data)
         new_track.sessions = form.sessions.data
-        db.session.query(Session).filter_by(id=form.sessions.data).track=new_track.id
+        db.session.query(Session).filter_by(id=form.sessions.data).track = new_track.id
         save_to_db(new_track, "Track saved")
         update_version(event_id, False, "tracks_ver")
         sessions = form.sessions.data
@@ -51,13 +54,13 @@ class DataManager(object):
         """
         data = form.data
         del data['sessions']
-        db.session.query(Track)\
-            .filter_by(id=track.id)\
+        db.session.query(Track) \
+            .filter_by(id=track.id) \
             .update(dict(data))
         track.sessions = form.sessions.data
-        db.session.query(Session).filter_by(id=form.sessions.data).track=track.id
+        db.session.query(Session).filter_by(id=form.sessions.data).track = track.id
         save_to_db(track, "Track updated")
-        update_version(track.event_id, False,"tracks_ver")
+        update_version(track.event_id, False, "tracks_ver")
         sessions = form.sessions.data
         if sessions:
             update_version(track.event_id, False, "session_ver")
@@ -113,8 +116,8 @@ class DataManager(object):
         del data["level"]
         del data["format"]
         del data["language"]
-        db.session.query(Session)\
-            .filter_by(id=session.id)\
+        db.session.query(Session) \
+            .filter_by(id=session.id) \
             .update(dict(data))
         session.speakers = InstrumentedList(speakers if speakers else [])
         session.microlocation = microlocation
@@ -141,7 +144,7 @@ class DataManager(object):
         :param form: view data form
         :param event_id: Speaker belongs to Event by event id
         """
-        file     = request.files["photo"]
+        file = request.files["photo"]
         filename = ''
 
         if file:
@@ -174,8 +177,8 @@ class DataManager(object):
         """
         data = form.data
         del data['sessions']
-        db.session.query(Speaker)\
-            .filter_by(id=speaker.id)\
+        db.session.query(Speaker) \
+            .filter_by(id=speaker.id) \
             .update(dict(data))
         speaker.sessions = InstrumentedList(form.sessions.data if form.sessions.data else [])
         save_to_db(speaker, "Speaker updated")
@@ -200,7 +203,7 @@ class DataManager(object):
         :param event_id: Sponsor belongs to Event by event id
         """
         file = request.files["logo"]
-        filename=''
+        filename = ''
         if file:
             filename = secure_filename(file.filename)
             file.save(os.path.join(os.path.realpath('.') + '/static/sponsor_logo/', filename))
@@ -230,7 +233,7 @@ class DataManager(object):
         :param sponsor_id: Sponsor id to remove object
         """
         sponsor = Sponsor.query.get(sponsor_id)
-    	os.remove(os.path.join(os.path.realpath('.') + '/static/sponsor_logo/', sponsor.logo))
+        os.remove(os.path.join(os.path.realpath('.') + '/static/sponsor_logo/', sponsor.logo))
         delete_from_db(sponsor, "Sponsor deleted")
         flash('You successfully delete sponsor')
 
@@ -367,8 +370,8 @@ class DataManager(object):
         if "session" in data.keys():
             session = data["session"]
             del data["session"]
-        db.session.query(Microlocation)\
-            .filter_by(id=microlocation.id)\
+        db.session.query(Microlocation) \
+            .filter_by(id=microlocation.id) \
             .update(dict(data))
         save_to_db(microlocation, "Microlocation updated")
         update_version(microlocation.event_id, False, "microlocations_ver")
@@ -422,7 +425,7 @@ class DataManager(object):
         Event will be saved to database with proper Event id
         :param form: view data form
         """
-        file     = request.files["logo"]
+        file = request.files["logo"]
         filename = ''
 
         if file:
@@ -463,8 +466,8 @@ class DataManager(object):
         data = form.data
         logo = data['logo']
         del data['logo']
-        db.session.query(Event)\
-            .filter_by(id=event.id)\
+        db.session.query(Event) \
+            .filter_by(id=event.id) \
             .update(dict(data))
         if logo:
             event.logo = logo
@@ -474,6 +477,12 @@ class DataManager(object):
         update_version(event_id=event.id,
                        is_created=False,
                        column_to_increment="event_ver")
+
+    @staticmethod
+    def delete_event(e_id):
+        EventsUsers.query.filter_by(event_id=e_id).delete()
+        Event.query.filter_by(id=e_id).delete()
+        db.session.commit()
 
     @staticmethod
     def create_file():
@@ -516,7 +525,8 @@ def save_to_db(item, msg):
         db.session.commit()
         return True
     except Exception, e:
-        logging.error('DB Exception! %s' % e )
+        logging.error('DB Exception! %s' % e)
+        traceback.print_exc()
         db.session.rollback()
         return False
 
@@ -533,7 +543,7 @@ def delete_from_db(item, msg):
         db.session.commit()
         return True
     except Exception, e:
-        logging.error('DB Exception! %s' % e )
+        logging.error('DB Exception! %s' % e)
         db.session.rollback()
         return False
 
