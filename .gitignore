@@ -12,5 +12,6 @@ _mailinglist
 .tox
 .cache/
 test.db
+app.db
 .idea/
 .bundle/
