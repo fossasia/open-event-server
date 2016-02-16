@@ -169,9 +169,17 @@ class DataManager(object):
         """
         data = form.data
         del data['sessions']
+        del data['photo']
         db.session.query(Speaker) \
             .filter_by(id=speaker.id) \
             .update(dict(data))
+        file = request.files["photo"]
+        if file:
+            if speaker.photo:
+                os.remove(os.path.join(os.path.realpath('.') + '/static/speaker_photos/', speaker.photo))
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(os.path.realpath('.') + '/static/speaker_photos/', filename))
+            speaker.photo = filename
         speaker.sessions = InstrumentedList(form.sessions.data if form.sessions.data else [])
         save_to_db(speaker, "Speaker updated")
         update_version(speaker.event_id, False, "speakers_ver")
@@ -208,7 +216,15 @@ class DataManager(object):
         :param sponsor: object contains all earlier data
         """
         data = form.data
+        del data['logo']
         db.session.query(Sponsor).filter_by(id=sponsor.id).update(dict(data))
+        file = request.files["logo"]
+        if file:
+            if sponsor.logo:
+                os.remove(os.path.join(os.path.realpath('.') + '/static/sponsor_logo/', sponsor.logo))
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(os.path.realpath('.') + '/static/sponsor_logo/', filename))
+            sponsor.logo = filename
         save_to_db(sponsor, "Sponsor updated")
         update_version(sponsor.event_id, False, "sponsors_ver")
 
@@ -413,7 +429,7 @@ class DataManager(object):
         event = Event(name=form.name.data,
                       email=form.email.data,
                       color=form.color.data,
-                      logo=form.logo.data,
+                      logo=filename,
                       start_time=form.start_time.data,
                       end_time=form.end_time.data,
                       latitude=form.latitude.data,
@@ -426,10 +442,6 @@ class DataManager(object):
         a.editor = True
         a.admin = True
         event.users.append(a)
-        if form.logo.data:
-            event.logo = form.logo.data
-        else:
-            event.logo = ''
         save_to_db(event, "Event saved")
         update_version(event_id=event.id,
                        is_created=True,
@@ -443,15 +455,18 @@ class DataManager(object):
         :param event: object contains all earlier data
         """
         data = form.data
-        logo = data['logo']
         del data['logo']
         db.session.query(Event) \
             .filter_by(id=event.id) \
             .update(dict(data))
-        if logo:
-            event.logo = logo
-        else:
-            event.logo = ''
+
+        file = request.files["logo"]
+        if file:
+            if event.logo:
+                os.remove(os.path.join(os.path.realpath('.') + '/static/event_logo/', event.logo))
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(os.path.realpath('.') + '/static/event_logo/', filename))
+            event.logo = filename
         save_to_db(event, "Event updated")
         update_version(event_id=event.id,
                        is_created=False,

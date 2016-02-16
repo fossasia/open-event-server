@@ -131,6 +131,8 @@
                                 {% else %}
                                 <td>{{ form[c](pk=get_pk_value(row), value=get_value(row, c)) }}</td>
                                 {% endif %}
+                            {% elif c == 'logo' and row.logo %}
+                            <td><img src="/pic/event_logo/{{ row.logo }}" height="84" width="84"></td>
                             {% else %}
                             <td>{{ get_value(row, c) }}</td>
                             {% endif %}
