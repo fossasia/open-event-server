@@ -18,7 +18,7 @@ class EventForm(Form):
     color = ColorField('Color')
     start_time = DateTimeField('Start Time', [DataRequired(), CustomDateEventValidate()])
     end_time = DateTimeField('End Time', [DataRequired(), CustomDateEventValidate()])
-    logo = FileField('Logo')
+    logo = StringField('Logo')
     # logo = QuerySelectField(query_factory=DataGetter.get_all_owner_files, allow_blank=True)
     email = StringField('Email')
     slogan = StringField('Slogan')

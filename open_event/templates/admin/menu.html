@@ -28,7 +28,7 @@
 
               <li {% if "/api" in request.path  %} class="active"{% endif %}><a href="/admin/event/{{event_id}}/api">Api</a><li></li>
             {% endif %}
-            <li {% if "/upload" in request.path  %} class="active"{% endif %}><a href="{{ get_url('event.upload') }}">Files</a><li>
+
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" aria-expanded="true">Switch event<b class="caret"></b></a>
               <ul class="dropdown-menu">

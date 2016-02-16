@@ -7,4 +7,4 @@ class SponsorForm(Form):
     """Sponsor Form class"""
     name = StringField('Name', [validators.DataRequired()])
     url = StringField('Url')
-    logo = FileField('Logo')
+    logo = StringField('Logo Url')
