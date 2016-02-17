@@ -12,6 +12,12 @@ def get_event_id():
     result = re.search('event\/[0-9]*', url)
     return result.group(0).split('/')[1]
 
+def get_session_id():
+    """Get session Id from request url"""
+    url = request.url
+    result = re.search('session\/[0-9]*', url)
+    return result.group(0).split('/')[1]
+
 def is_track_name_unique_in_event(form, event_id, *args):
     """Check unique of track name in event"""
     track_name = form.name.data
