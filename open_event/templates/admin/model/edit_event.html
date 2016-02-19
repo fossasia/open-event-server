@@ -36,13 +36,21 @@
     <div class="col-md-2"></div>
     <!-- bring in the google maps library -->
      <script>
+     var marker;
+     var init_marker;
 function initMap() {
+  document.getElementById("address").defaultValue=document.getElementById('location_name').value;
   latitude=document.getElementById('latitude').value;
   longitude=document.getElementById('longitude').value;
   var latlng = new google.maps.LatLng(latitude,longitude);
   var map = new google.maps.Map(document.getElementById('map'), {
     zoom: 8,
     center: latlng
+  });
+  init_marker = new google.maps.Marker({
+    draggable: true,
+    position: latlng,
+    map: map
   });
   var geocoder = new google.maps.Geocoder();
 
@@ -65,10 +73,26 @@ function geocodeAddress(geocoder, resultsMap) {
       document.getElementById('latitude').value=latitude;
       document.getElementById('longitude').value=longitude;
       resultsMap.setCenter(results[0].geometry.location);
-      var marker = new google.maps.Marker({
+      init_marker.setMap(null);
+      if(marker==null){
+        marker = new google.maps.Marker({
         map: resultsMap,
+        draggable: true,
         position: results[0].geometry.location
       });
+      }
+      else{
+        marker.setMap(null)
+        marker = new google.maps.Marker({
+        map: resultsMap,
+        draggable: true,
+        position: results[0].geometry.location
+      });
+      }
+      google.maps.event.addListener(marker, 'dragend', function (event) {
+      document.getElementById("latitude").value = this.getPosition().lat();
+      document.getElementById("longitude").value = this.getPosition().lng();
+});
     } else {
       alert('Geocode was not successful for the following reason: ' + status);
     }
