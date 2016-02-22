@@ -123,6 +123,17 @@ class EventView(ModelView):
                            # owner=DataGetter.get_event_owner(event_id),
                            cancel_url=url_for('.index_view'))
 
+    @expose('/delete/', methods=('GET', 'POST'))
+    def delete_view(self):
+        event_id = request.values['id']
+        if request.method == "POST":
+          if is_event_admin_or_editor(event_id):
+            DataManager.delete_event(event_id)
+            flash("Event deleted")
+          else:
+            flash("You don't have permission!")
+          return redirect(url_for('.index_view'))
+
     @expose('/<event_id>')
     def event(self, event_id):
         """Event view"""

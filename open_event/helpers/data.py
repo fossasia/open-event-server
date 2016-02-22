@@ -8,6 +8,7 @@ from flask import flash, request
 from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from sqlalchemy.orm.collections import InstrumentedList
+from sqlalchemy.sql.expression import exists
 from werkzeug import secure_filename
 
 from ..helpers.update_version import VersionUpdater
@@ -458,19 +459,28 @@ class DataManager(object):
                        column_to_increment="event_ver")
 
     @staticmethod
+    def delete_event(e_id):
+        EventsUsers.query.filter_by(event_id=e_id).delete()
+        Event.query.filter_by(id=e_id).delete()
+        db.session.commit()
+
+    @staticmethod
     def create_file():
         """
         File from request will be saved to database
         """
         file = request.files["file"]
         filename = secure_filename(file.filename)
-        if file.mimetype.split('/', 1)[0] == "image":
-            file.save(os.path.join(os.path.realpath('.') + '/static/', filename))
-            file_object = File(name=filename, path='', owner_id=login.current_user.id)
-            save_to_db(file_object, "file saved")
-            flash("Image added")
+        if db.session.query(exists().where(File.name == filename)).scalar() == False:
+            if file.mimetype.split('/', 1)[0] == "image":
+                file.save(os.path.join(os.path.realpath('.') + '/static/', filename))
+                file_object = File(name=filename, path='', owner_id=login.current_user.id)
+                save_to_db(file_object, "file saved")
+                flash("Image added")
+            else:
+                flash("The selected file is not an image. Please select a image file and try again.")
         else:
-            flash("The selected file is not an image. Please select a image file and try again.")
+            flash("A file named \"" + filename + "\" already exists")
 
     @staticmethod
     def remove_file(file_id):
