@@ -39,11 +39,11 @@
        var marker;
        var init_marker;
   function initMap() {
-    $("#address").defaultValue=$("#location_name").value;
-    latitude=$("#latitude").value;
-    longitude=$("#longitude").value;
+    $("#address")[0].defaultValue=$("#location_name")[0].value;
+    latitude=$("#latitude")[0].value;
+    longitude=$("#longitude")[0].value;
     var latlng = new google.maps.LatLng(latitude,longitude);
-  var map = new google.maps.Map($("#map"), {
+  var map = new google.maps.Map($("#map")[0], {
     zoom: 8,
     center: latlng
   });
@@ -53,31 +53,31 @@
     map: map
   });
 google.maps.event.addListener(init_marker, 'dragend', function (event) {
-            $("#latitude").value = this.getPosition().lat();
-            $("#longitude").value = this.getPosition().lng();
+            $("#latitude")[0].value = this.getPosition().lat();
+            $("#longitude")[0].value = this.getPosition().lng();
 });
   var geocoder = new google.maps.Geocoder();
 
-  $("#submit").addEventListener('click', function() {
+  $("#submit")[0].addEventListener('click', function() {
     geocodeAddress(geocoder, map);
   });
 }
 
 function saveAddress(){
- var address = $("#address").value;
- $("#location_name").value=address;
+ var address = $("#address")[0].value;
+ $("#location_name")[0].value=address;
  //marker.setMap(null);
 }
 
 function geocodeAddress(geocoder, resultsMap) {
-  var address = $("#address").value;
+  var address = $("#address")[0].value;
   //marker.setMap(null);
   geocoder.geocode({'address': address}, function(results, status) {
     if (status === google.maps.GeocoderStatus.OK) {
       var latitude = results[0].geometry.location.lat();
       var longitude = results[0].geometry.location.lng();
-      $("#latitude").value=latitude;
-      $("#longitude").value=longitude;
+      $("#latitude")[0].value=latitude;
+      $("#longitude")[0].value=longitude;
       resultsMap.setCenter(results[0].geometry.location);
       init_marker.setMap(null);
       if(marker==null){
@@ -96,8 +96,8 @@ function geocodeAddress(geocoder, resultsMap) {
       });
       }
       google.maps.event.addListener(marker, 'dragend', function (event) {
-      $("#latitude").value = this.getPosition().lat();
-      $("#longitude").value = this.getPosition().lng();
+      $("#latitude")[0].value = this.getPosition().lat();
+      $("#longitude")[0].value = this.getPosition().lng();
 });
     } else {
       alert('Geocode was not successful for the following reason: ' + status);
