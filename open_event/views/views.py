@@ -1,5 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
 import os
+import re
 from flask import jsonify, json, url_for, redirect, request, send_from_directory
 from flask.ext.cors import cross_origin
 
@@ -296,20 +297,29 @@ def post_reviews(session_id):
     """Post reviews for sessions"""
     data = json.loads(request.data)
     if "comment" not in data:
-            data["comment"] = ""
-
-    reviews = DataGetter.get_reviews_by_email(data["email"])
-    print reviews.count()
-
+        data["comment"] = ""
+    reviews = DataGetter.get_reviews_by_email_and_session_id(data["email"])
     if reviews.count() > 0:
         DataManager.update_review(data, reviews[0], session_id)
-        return "200 OK\n"
-    elif "email" in data and "rating" in data:  
+        return jsonify(
+                {'status': '200',
+                 'detail': 'Review Updated'})
+
+    elif "email" in data and "rating" in data: 
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", data["email"]):
+            return jsonify(
+                {'status': '400',
+                 'detail': 'Not valid data'})
+
         DataManager.create_review(data, session_id)        
-        return "200 OK\n"
-    else:
-        print "Error: Email and Rating are required\n"
-        return "Error: Email and Rating are required\n"
+        return jsonify(
+                {'status': '200',
+                 'detail': 'Review Added'})    
+    
+    return jsonify(
+                {'status': '500',
+                "title": "The backend responded with an error",
+                "detail": "All required paramters not obtained"})
     
 
 
@@ -322,3 +332,4 @@ def send_pic(filename):
 @app.route('/documentation')
 def documentation():
 	return auto.html()
+
