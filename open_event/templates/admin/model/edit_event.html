@@ -24,15 +24,90 @@
                       {% endcall %}
                   </div>
                   <div class="col-md-6">
-                      <div id="map" style="width:400px; height:300px"></div>
+                      <div id="floating-panel">
+                      <input id="address" type="textbox" value="Sydney, NSW">
+                      <input id="submit" type="button" value="Geocode" onclick="saveAddress()">
+    </div>
+			<div id="map" style="width:400px; height:300px"></div>
                   </div>
               </div>
         </div>
     </div>
     <div class="col-md-2"></div>
     <!-- bring in the google maps library -->
-        <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
-        <script src="{{ url_for('static', filename='admin/js/map.js' )}}"></script>
+      <script>
+       var marker;
+       var init_marker;
+  function initMap() {
+    $("#address")[0].defaultValue=$("#location_name")[0].value;
+    latitude=$("#latitude")[0].value;
+    longitude=$("#longitude")[0].value;
+    var latlng = new google.maps.LatLng(latitude,longitude);
+  var map = new google.maps.Map($("#map")[0], {
+    zoom: 8,
+    center: latlng
+  });
+  init_marker = new google.maps.Marker({
+    draggable: true,
+    position: latlng,
+    map: map
+  });
+google.maps.event.addListener(init_marker, 'dragend', function (event) {
+            $("#latitude")[0].value = this.getPosition().lat();
+            $("#longitude")[0].value = this.getPosition().lng();
+});
+  var geocoder = new google.maps.Geocoder();
+
+  $("#submit")[0].addEventListener('click', function() {
+    geocodeAddress(geocoder, map);
+  });
+}
+
+function saveAddress(){
+ var address = $("#address")[0].value;
+ $("#location_name")[0].value=address;
+ //marker.setMap(null);
+}
+
+function geocodeAddress(geocoder, resultsMap) {
+  var address = $("#address")[0].value;
+  //marker.setMap(null);
+  geocoder.geocode({'address': address}, function(results, status) {
+    if (status === google.maps.GeocoderStatus.OK) {
+      var latitude = results[0].geometry.location.lat();
+      var longitude = results[0].geometry.location.lng();
+      $("#latitude")[0].value=latitude;
+      $("#longitude")[0].value=longitude;
+      resultsMap.setCenter(results[0].geometry.location);
+      init_marker.setMap(null);
+      if(marker==null){
+        marker = new google.maps.Marker({
+        map: resultsMap,
+        draggable: true,
+        position: results[0].geometry.location
+      });
+      }
+      else{
+        marker.setMap(null)
+        marker = new google.maps.Marker({
+        map: resultsMap,
+        draggable: true,
+        position: results[0].geometry.location
+      });
+      }
+      google.maps.event.addListener(marker, 'dragend', function (event) {
+      $("#latitude")[0].value = this.getPosition().lat();
+      $("#longitude")[0].value = this.getPosition().lng();
+});
+    } else {
+      alert('Geocode was not successful for the following reason: ' + status);
+    }
+  });
+}
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiXdFK2gtVMIHB890Nxu5CKNUTbQwQzo0&signed_in=true&callback=initMap"
+        async defer></script>
 {% endblock %}
 
 {% block tail %}
