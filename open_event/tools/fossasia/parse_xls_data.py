@@ -16,6 +16,8 @@ def get_time(row, date):
     return '2016 ' + date + ' ' + str(time[3]) + ':' + str(time[4])
 
 if __name__ == "__main__":
+
+    event_id = sys.argv[1]
     xl_workbook = xlrd.open_workbook('open_event/tools/fossasia/FOSSASIA 2016 - Schedule.xlsx')
     sheet_names = xl_workbook.sheet_names()
     print('Sheet Names', sheet_names)
@@ -38,7 +40,7 @@ if __name__ == "__main__":
                     time = get_time(row, date)
                     end_time = get_time(next_row, date)
 
-                    Saver(row, 4, time, end_time, sheet_n)._save()
+                    Saver(row, event_id, time, end_time, sheet_n)._save()
                 except Exception as e:
                     print e
 
