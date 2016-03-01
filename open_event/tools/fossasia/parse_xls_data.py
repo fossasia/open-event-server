@@ -18,13 +18,15 @@ def get_time(row, date):
 if __name__ == "__main__":
 
     event_id = sys.argv[1]
-    xl_workbook = xlrd.open_workbook('open_event/tools/fossasia/FOSSASIA 2016 - Schedule.xlsx')
+    xl_workbook = xlrd.open_workbook('open_event/tools/fossasia/FOSSASIA 2016 - Schedule App.xlsx')
     sheet_names = xl_workbook.sheet_names()
     print('Sheet Names', sheet_names)
 
     for sheet_n in sheet_names:
         print sheet_n
-        if sheet_n in ["Tech Kids I", "OpenTech"]:
+        if sheet_n in ["Tech Kids I", "OpenTech", "Exhibition", "OpenTech Workshops", "Science Hack Day", "Tech Kids II",
+                       "Web Tech", "Hardware", "Python",
+                       "DevOpS", "Data", "DB", "Privacy/Security", "ISC", "Linux", "Design"]:
 
             xl_sheet = xl_workbook.sheet_by_name(sheet_n)
             date = ""

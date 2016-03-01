@@ -29,26 +29,27 @@ class Saver(object):
 
                 sp = get_or_create(Speaker,
                                     name=name + ' ' + fam_name,
-                                    photo=photo,
-                                    web=web,
-                                    event_id=self.event_id,
-                                    twitter=twitter,
-                                    github=github,
-                                    linkedin=linkedin,
-                                    organisation=company,
-                                    country=country,
                                     email=email)
+                sp.photo=photo
+                sp.web=web
+                sp.event_id=self.event_id
+                sp.witter=twitter
+                sp.github=github
+                sp.linkedin=linkedin
+                sp.organisation=company
+                sp.country=country
+                save_to_db(sp, "Speaker Updated")
                 speakers.append(sp)
 
                 new_session = get_or_create(Session,
                                             title=topic,
-                                            description=bio,
-                                            start_time=datetime.strptime(self.date, "%Y %A %B %d %H:%M"),
-                                            end_time=datetime.strptime(self.end_time, "%Y %A %B %d %H:%M"),
                                             event_id=self.event_id,
-                                            abstract=abstract,
                                             is_accepted=True)
-
+                new_session.description = bio
+                new_session.start_time = datetime.strptime(self.date, "%Y %A %B %d %H:%M"),
+                new_session.end_time = datetime.strptime(self.end_time, "%Y %A %B %d %H:%M")
+                new_session.abstract = abstract
+                save_to_db(new_session, "Session Updated")
 
                 new_session.speakers = speakers
                 new_session.track = get_or_create(Track, name=self.track_name, description="", event_id=self.event_id, track_image_url="")
