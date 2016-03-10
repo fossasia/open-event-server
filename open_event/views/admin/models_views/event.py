@@ -85,8 +85,8 @@ class EventView(ModelView):
         self.name = "Event | New"
         from ....forms.admin.event_form import EventForm
         self.form = EventForm()
-        if self.form.validate():
-            if request.method == "POST":
+        if request.method == "POST":
+            if self.form.validate():
                 try:
                     DataManager.create_event(self.form)
                 except Exception as error:
