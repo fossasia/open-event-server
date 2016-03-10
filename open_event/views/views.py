@@ -169,10 +169,10 @@ def get_formatsper_page(event_id, page):
 
 @app.route('/api/v1/event/<int:event_id>/languages', methods=['GET'])
 @auto.doc()
-def get_languages(event_id, page):
+def get_languages(event_id):
     """Returns all event's languages"""
     languages = Language.query.filter_by(event_id=event_id)
-    return ObjectFormatter.get_json("languages", languages, request, page)
+    return ObjectFormatter.get_json("languages", languages, request)
 
 
 @app.route('/api/v1/event/<int:event_id>/languages/page/<int:page>', methods=['GET'])
