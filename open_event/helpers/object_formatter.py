@@ -16,8 +16,7 @@ class ObjectFormatter(object):
                 {name: [
                     table_object.serialize
                     for table_object in
-                    objects],
-                 'count': count})
+                    objects]})
         else:
             pagination = objects.paginate(page, PER_PAGE)
             return jsonify(
@@ -26,7 +25,6 @@ class ObjectFormatter(object):
                     for table_object in
                     pagination.items
                     ],
-                  'count': count,
                   'total_pages': pagination.pages,
                   'page': pagination.page
 
