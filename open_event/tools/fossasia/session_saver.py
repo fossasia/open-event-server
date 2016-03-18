@@ -7,8 +7,8 @@ from open_event.models.track import Track
 
 from datetime import datetime
 
-class Saver(object):
 
+class Saver(object):
     def __init__(self, row, event_id, date, end_time, track_name):
         self.row = row
         self.event_id = event_id
@@ -28,16 +28,16 @@ class Saver(object):
             with current_app.app_context():
 
                 sp = get_or_create(Speaker,
-                                    name=name + ' ' + fam_name,
-                                    email=email,
-                                    photo=photo,
-                                    web=web,
-                                    event_id=self.event_id,
-                                    twitter=twitter,
-                                    github=github,
-                                    linkedin=linkedin,
-                                    organisation=company,
-                                    country=country)
+                                   name=name + ' ' + fam_name,
+                                   email=email,
+                                   photo=photo,
+                                   web=web,
+                                   event_id=self.event_id,
+                                   twitter=twitter,
+                                   github=github,
+                                   linkedin=linkedin,
+                                   organisation=company,
+                                   country=country)
 
                 speakers.append(sp)
 
@@ -45,14 +45,14 @@ class Saver(object):
                                             title=topic,
                                             event_id=self.event_id,
                                             is_accepted=True,
-                                            description = bio,
-                                            start_time = datetime.strptime(self.date, "%Y %A %B %d %H:%M"),
-                                            end_time = datetime.strptime(self.end_time, "%Y %A %B %d %H:%M"),
-                                            abstract = abstract)
-
+                                            description=bio,
+                                            start_time=datetime.strptime(self.date, "%Y %A %B %d %H:%M"),
+                                            end_time=datetime.strptime(self.end_time, "%Y %A %B %d %H:%M"),
+                                            abstract=abstract)
 
                 new_session.speakers = speakers
-                new_session.track = get_or_create(Track, name=self.track_name, description="", event_id=self.event_id, track_image_url="")
+                new_session.track = get_or_create(Track, name=self.track_name, description="", event_id=self.event_id,
+                                                  track_image_url="")
                 save_to_db(new_session, "Session Updated")
         except Exception as e:
             print e
@@ -83,7 +83,5 @@ class Saver(object):
         abstract = row[22].value
         bio = row[23].value
 
-        return session_date, session_time, name, fam_name, company, email, web, mobile_phone, github, bitbucket, twitter, linkedin, country, city, photo, type, topic, track, abstract, bio
-
-
-
+        return session_date, session_time, name, fam_name, company, email, web, mobile_phone,\
+            github, bitbucket, twitter, linkedin, country, city, photo, type, topic, track, abstract, bio

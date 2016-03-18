@@ -28,4 +28,5 @@ class SessionForm(Form):
     format = QuerySelectField(label='Format', query_factory=DataGetter.get_formats, allow_blank=True)
     language = QuerySelectField(label='Language', query_factory=DataGetter.get_languages, allow_blank=True)
     speakers = QuerySelectMultipleField(query_factory=get_speakers, allow_blank=True)
-    microlocation = QuerySelectField(label='Microlocation', query_factory=DataGetter.get_microlocations_by_event_id, allow_blank=True)
+    microlocation = QuerySelectField(label='Microlocation', query_factory=DataGetter.get_microlocations_by_event_id,
+                                     allow_blank=True)

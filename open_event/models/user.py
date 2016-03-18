@@ -5,6 +5,7 @@ ADMIN = 'admin'
 ORGANIZER = 'organizer'
 SUPERADMIN = 'super_admin'
 
+
 class User(db.Model):
     """User model class"""
     id = db.Column(db.Integer, primary_key=True)

@@ -4,8 +4,11 @@ from flask import jsonify
 from .query_filter import QueryFilter
 
 PER_PAGE = 20
+
+
 class ObjectFormatter(object):
     """Object formatter class"""
+
     @staticmethod
     def get_json(name, query, request, page=None):
         """Returns formatted json"""
@@ -20,12 +23,15 @@ class ObjectFormatter(object):
         else:
             pagination = objects.paginate(page, PER_PAGE)
             return jsonify(
-                {name: [
-                    table_object.serialize
-                    for table_object in
-                    pagination.items
-                    ],
-                  'total_pages': pagination.pages,
-                  'page': pagination.page
+                {
+                    name:
+                        [
+                            table_object.serialize
+                            for table_object in
+                            pagination.items
+                        ],
+                    'total_pages': pagination.pages,
+                    'page': pagination.page
 
-                 })
+                }
+            )

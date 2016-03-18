@@ -3,14 +3,13 @@ from . import db
 from .track import Track
 from open_event.helpers.date_formatter import DateFormatter
 
-
 speakers_sessions = db.Table('speakers_sessions',
-                    db.Column('speaker_id',
-                              db.Integer,
-                              db.ForeignKey('speaker.id')),
-                    db.Column('session_id',
-                              db.Integer,
-                              db.ForeignKey('session.id')))
+                             db.Column('speaker_id',
+                                       db.Integer,
+                                       db.ForeignKey('speaker.id')),
+                             db.Column('session_id',
+                                       db.Integer,
+                                       db.ForeignKey('session.id')))
 
 
 class Level(db.Model):
@@ -28,7 +27,6 @@ class Level(db.Model):
                  label_en=None,
                  session=None,
                  event_id=None):
-
         self.name = name
         self.label_en = label_en
         self.event_id = event_id
@@ -58,7 +56,6 @@ class Format(db.Model):
                  label_en=None,
                  session=None,
                  event_id=None):
-
         self.name = name
         self.label_en = label_en
         self.event_id = event_id
@@ -90,7 +87,6 @@ class Language(db.Model):
                  label_de=None,
                  session=None,
                  event_id=None):
-
         self.name = name
         self.label_en = label_en
         self.label_de = label_de
@@ -127,15 +123,16 @@ class Session(db.Model):
     level_id = db.Column(db.Integer,
                          db.ForeignKey('level.id'))
     format_id = db.Column(db.Integer,
-                         db.ForeignKey('format.id'))
+                          db.ForeignKey('format.id'))
     language_id = db.Column(db.Integer,
-                         db.ForeignKey('language.id'))
+                            db.ForeignKey('language.id'))
     microlocation_id = db.Column(db.Integer,
-                         db.ForeignKey('microlocation.id'))
+                                 db.ForeignKey('microlocation.id'))
 
     event_id = db.Column(db.Integer,
                          db.ForeignKey('events.id'))
     is_accepted = db.Column(db.Boolean, default=False)
+
     def __init__(self,
                  title=None,
                  subtitle=None,
@@ -178,10 +175,9 @@ class Session(db.Model):
                 'track': self.track.id if self.track else None,
                 'speakers': [{'id': speaker.id, 'name': speaker.name} for speaker in self.speakers],
                 'level': {'id': self.level.name, 'label_en': self.level.label_en} if self.level else None,
-                'lang': {'id': self.language.name, 'label_en': self.language.label_en, 'label_de': self.language.label_de} if self.language else None,
+                'lang': {'id': self.language.name, 'label_en': self.language.label_en,
+                         'label_de': self.language.label_de} if self.language else None,
                 'microlocation': self.microlocation.id if self.microlocation else None}
 
     def __repr__(self):
         return '<Session %r>' % (self.title)
-
-

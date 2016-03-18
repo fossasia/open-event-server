@@ -1,6 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 import sys
 import os
+
 try:
     PWD = os.environ['PWD']
     sys.path.extend([PWD])
@@ -15,6 +16,7 @@ def get_time(row, date):
     time = xlrd.xldate_as_tuple(row[1].value, xl_workbook.datemode)
     return '2016 ' + date + ' ' + str(time[3]) + ':' + str(time[4])
 
+
 if __name__ == "__main__":
 
     event_id = sys.argv[1]
@@ -24,7 +26,8 @@ if __name__ == "__main__":
 
     for sheet_n in sheet_names:
         print sheet_n
-        if sheet_n in ["Tech Kids I", "OpenTech", "Exhibition", "OpenTech Workshops", "Science Hack Day", "Tech Kids II",
+        if sheet_n in ["Tech Kids I", "OpenTech", "Exhibition", "OpenTech Workshops", "Science Hack Day",
+                       "Tech Kids II",
                        "Web Tech", "Hardware", "Python",
                        "DevOpS", "Data", "DB", "Privacy/Security", "ISC", "Linux", "Design"]:
 
@@ -38,11 +41,10 @@ if __name__ == "__main__":
                 if "Sunday" in row[0].value or "Saturday" in row[0].value or "Friday" in row[0].value:
                     date = row[0].value
                 try:
-                    next_row = xl_sheet.row(index+1)
+                    next_row = xl_sheet.row(index + 1)
                     time = get_time(row, date)
                     end_time = get_time(next_row, date)
 
                     Saver(row, event_id, time, end_time, sheet_n)._save()
                 except Exception as e:
                     print e
-

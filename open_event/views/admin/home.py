@@ -42,7 +42,7 @@ class MyHomeView(AdminIndexView):
             return redirect(url_for('.index'))
         link = '<p>Don\'t have an account? <a href="' + url_for('.register_view') + '">Click here to register.</a></p>' \
                                                                                     '<p><a href="' + url_for(
-                '.password_reminder_view') + '">Forgot your password</a>?</p>'
+            '.password_reminder_view') + '">Forgot your password</a>?</p>'
         self._template_args['form'] = form
         self._template_args['link'] = link
         self._template_args['events'] = DataGetter.get_all_events()
