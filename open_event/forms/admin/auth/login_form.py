@@ -3,6 +3,7 @@ from wtforms import form, StringField, PasswordField, validators
 from flask.ext.scrypt import check_password_hash
 from ....models import db
 from ....models.user import User
+from sqlalchemy import or_
 
 class LoginForm(form.Form):
     """Login Form class"""
@@ -21,4 +22,4 @@ class LoginForm(form.Form):
 
     def get_user(self):
         """Returns user by login"""
-        return db.session.query(User).filter_by(login=self.login.data).first()
+        return db.session.query(User).filter(or_(User.login==self.login.data, User.email==self.login.data)).first()
