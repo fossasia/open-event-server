@@ -1,7 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 from flask_wtf import Form
 from wtforms import StringField, FloatField, SelectField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Email, Optional
 from flask_admin.form.fields import DateTimeField
 from ...helpers.validators import CustomDateEventValidate
 from ...helpers.data_getter import DataGetter
@@ -20,6 +20,6 @@ class EventForm(Form):
     end_time = DateTimeField('End Time', [DataRequired(), CustomDateEventValidate()])
     logo = StringField('Logo')
     # logo = QuerySelectField(query_factory=DataGetter.get_all_owner_files, allow_blank=True)
-    email = StringField('Email')
+    email = StringField('Email', [Optional(), Email()])
     slogan = StringField('Slogan')
     url = StringField('Url')
