@@ -4,6 +4,7 @@ from flask.ext.scrypt import check_password_hash
 from ....models import db
 from ....models.user import User
 
+
 class LoginForm(form.Form):
     """Login Form class"""
     login = StringField(validators=[validators.required()])

@@ -29,6 +29,7 @@ from open_event.models.speaker import Speaker
 from open_event.models.sponsor import Sponsor
 from open_event.models.microlocation import Microlocation
 
+
 class EventView(ModelView):
     """Main EVent view class"""
     form = None
@@ -98,7 +99,6 @@ class EventView(ModelView):
                            events=events,
                            cancel_url=url_for('.index_view'))
 
-
     @expose('/edit/', methods=('GET', 'POST'))
     def edit_view(self):
         """Event edit view"""
@@ -127,12 +127,12 @@ class EventView(ModelView):
     def delete_view(self):
         event_id = request.values['id']
         if request.method == "POST":
-          if is_event_admin_or_editor(event_id):
-            DataManager.delete_event(event_id)
-            flash("Event deleted")
-          else:
-            flash("You don't have permission!")
-          return redirect(url_for('.index_view'))
+            if is_event_admin_or_editor(event_id):
+                DataManager.delete_event(event_id)
+                flash("Event deleted")
+            else:
+                flash("You don't have permission!")
+            return redirect(url_for('.index_view'))
 
     @expose('/<event_id>')
     def event(self, event_id):
@@ -289,7 +289,6 @@ class EventView(ModelView):
         save_to_db(session, session)
         flash("Session rejected!")
         return redirect(url_for('.event_sessions', event_id=event_id))
-
 
     @expose('/<event_id>/session/<session_id>/delete', methods=('GET', 'POST'))
     def event_session_delete(self, event_id, session_id):
@@ -703,10 +702,10 @@ class EventView(ModelView):
         event_users = DataGetter.get_object(Event, event_id).users
         if is_event_admin(event_id, event_users):
             return self.render('admin/permissions/permission.html',
-                           event_id=event_id,
-                           cancel_url=url_for('.index_view', event_id=event_id),
-                           users=users,
-                           event_users=event_users)
+                               event_id=event_id,
+                               cancel_url=url_for('.index_view', event_id=event_id),
+                               users=users,
+                               event_users=event_users)
         else:
             flash("You don't have permission!")
             return redirect(url_for('.index_view',
@@ -754,6 +753,7 @@ class EventView(ModelView):
         delete_from_db(asso, "Permission updated")
         return redirect(url_for('.user_permissions',
                                 event_id=event_id))
+
 
 def is_event_admin_or_editor(event_id):
     """check is admin or editor"""

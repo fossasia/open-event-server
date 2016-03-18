@@ -6,8 +6,8 @@ from open_event.models import db
 
 _basedir = os.path.abspath(os.path.dirname(__file__))
 
-class Setup(object):
 
+class Setup(object):
     @staticmethod
     def create_app():
         app.config['TESTING'] = True

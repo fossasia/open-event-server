@@ -55,7 +55,7 @@ class Speaker(db.Model):
     def serialize(self):
         """Return object data in easily serializeable format"""
 
-        session_data = [ { 'title': session.title, 'id': session.id } for session in self.sessions ]
+        session_data = [{'title': session.title, 'id': session.id} for session in self.sessions]
 
         return {'id': self.id,
                 'name': self.name,
@@ -70,4 +70,4 @@ class Speaker(db.Model):
                 'organisation': self.organisation,
                 'position': self.position,
                 'country': self.country,
-                'sessions': session_data  }
+                'sessions': session_data}

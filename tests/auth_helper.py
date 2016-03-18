@@ -3,11 +3,11 @@ from flask import url_for
 
 
 def login(app, login, password):
-        return app.post('admin/login/',
-                        data=dict(
-                             login=login,
-                             password=password
-                             ), follow_redirects=True)
+    return app.post('admin/login/',
+                    data=dict(
+                        login=login,
+                        password=password
+                    ), follow_redirects=True)
 
 
 def logout(app):
@@ -16,8 +16,8 @@ def logout(app):
 
 def register(app, login, email, password):
     return app.post('admin/register/',
-                         data=dict(
-                             login=login,
-                             email=email,
-                             password=password
-                             ), follow_redirects=True)
+                    data=dict(
+                        login=login,
+                        email=email,
+                        password=password
+                    ), follow_redirects=True)
