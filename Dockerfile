@@ -16,7 +16,7 @@ RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main" > "/etc
 RUN wget --quiet -O - http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | apt-key add -
 RUN apt-get update
 #Clone the source
-RUN git clone https://github.com/DengYiping/open-event-orga-server.git
+RUN git clone https://github.com/fossasia/open-event-orga-server.git
 #cd into the dir
 WORKDIR open-event-orga-server
 #run the script
