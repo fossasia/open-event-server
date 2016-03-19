@@ -17,7 +17,6 @@ from icalendar import Calendar
 import icalendar
 
 auto=Autodoc()
-cal=Calendar()
 
 app = Blueprint('', __name__)
 @app.route('/', methods=['GET'])
@@ -244,7 +243,8 @@ def get_speakers_at_event(event_id, speaker_name):
 @auto.doc()
 @cross_origin()
 def generate_icalender_event(event_id):
-	"""Takes an event id and returns the event in iCal format"""		
+	"""Takes an event id and returns the event in iCal format"""
+	cal=Calendar()
 	event=icalendar.Event()
 	matching_event=Event.query.get(event_id)
 	if matching_event == None:
@@ -267,7 +267,8 @@ def generate_icalender_event(event_id):
 @auto.doc()
 @cross_origin()
 def generate_icalender_track(track_id):
-	"""Takes a track id and returns the track in iCal format"""		
+	"""Takes a track id and returns the track in iCal format"""
+	cal=Calendar()
 	track=icalendar.Event()
 	matching_track=Track.query.get(track_id)	
 	if matching_track==None:
