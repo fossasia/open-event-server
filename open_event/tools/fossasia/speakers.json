@@ -10,7 +10,7 @@
     "id": 1,
     "photo": "",
     "organisation": "FOSSASIA",
-    "biography": "Hong Phuc, originally from Vietnam, has lived in the US, Singapore and Berlin. She was a speaker at the Chaos Communication Congress presenting the latest advances in Open Fashion and Technology. She is also the founder of FOSSASIA, an initiative in Asia bringing together an inspiring community across borders and ages to form a better future with Open Technologies and ICT. Hong Phuc organizes events like the annual FOSSASIA summit since 2009 and puts together Science Hackdays across the region in Vietnam, Dubai and China."
+    "biography": "Hong Phuc, originally from Vietnam, has lived in the US, Singapore and Berlin. She was a speaker at the Chaos Communication Congress presenting the latest advances in Open Fashion and Technology. She is also the founder of FOSSASIA, the Asia organization bringing together an inspiring community across borders and ages to form a better future with Open Technologies and ICT. Hong Phuc organizes events like the annual FOSSASIA summit since 2009 and puts together Science Hackdays across the region in Vietnam, Dubai and China."
   },
   {
     "py/object": "models.Speaker",
@@ -92,29 +92,29 @@
   },
   {
     "py/object": "models.Speaker",
-    "web": "",
+    "web": "http://oszilat.com",
     "github": "",
-    "name": "Awesome Surprise Talk",
-    "country": "",
-    "twitter": "",
+    "name": "Jan Nikolai Nelles",
+    "country": "Germany",
+    "twitter": "https://twitter.com/nextnikolai",
     "linkedin": "",
     "id": 8,
-    "photo": "",
-    "organisation": "OpenArtTech",
-    "biography": ""
+    "photo": "http://payload352.cargocollective.com/1/14/457820/9356895/The-Other-Nefertiti-3D-print_842.jpg",
+    "organisation": "Artist of \"The Other Nefertiti\"",
+    "biography": "Jan Nikolai Nelles is a multi-disciplinary artist based in Berlin. He graduated from Offenbach University of Art and Design in 2011. \u2028\u2028His work oscillates between visual and media art. In the past he founded an independent art gallery in Offenbach, Germany, and co-founded a photography magazine. Since 2009, he also collaborates with Nora Al-Badri on several artistic interventions."
   },
   {
     "py/object": "models.Speaker",
     "web": "https://developers.google.com/open-source/",
     "github": "",
     "name": "Cat Allman",
-    "country": "USA",
-    "twitter": "",
-    "linkedin": "",
+    "country": "San Francisco",
+    "twitter": "https://twitter.com/catallman",
+    "linkedin": "https://www.linkedin.com/in/catallman",
     "id": 9,
-    "photo": "https://media.licdn.com/media/p/8/005/068/2e0/158e90f.jpg",
+    "photo": "Keynote of 20 minutes",
     "organisation": "Google",
-    "biography": "Cat is the Science Outreach Program Manager at Google. She manages outreach to the global FOSS community with her team. They run student programs such as Google Summer of Code and Google Code-in, sponsor and host FOSS project events, and fund a wide variety of projects. She speaks at conferences, and in her spare time is a co-organizer and the logistics lead for Science Foo Camp, an annual invitation-only un-conference for scientists. This \"spare time\" activity has turned into a 2nd team to manage around outreach to science and maker communities."
+    "biography": ""
   },
   {
     "py/object": "models.Speaker",
@@ -177,9 +177,9 @@
     "twitter": "",
     "linkedin": "",
     "id": 14,
-    "photo": "Talk of 20 minutes",
+    "photo": "",
     "organisation": "MySQL",
-    "biography": ""
+    "biography": "Ricky Setyawan has been in the IT industry for 17 years with the good last 15 years working as RDBMS specialist. He is currently MySQL Principal Sales Consultant for Singapore, Malaysia, Indonesia, Brunei and Pakistan. Prior to joining Oracle, he was a Principal DBA doing database design and management on Oracle and DB2 on RedHat Linux on continuous availability server. He has been working on a number of RDBMS throughout his career such as Oracle, DB2, SQL Server, and MySQL."
   },
   {
     "py/object": "models.Speaker",
@@ -235,13 +235,26 @@
   },
   {
     "py/object": "models.Speaker",
+    "web": "http://www3.ntu.edu.sg/home/fcbond/",
+    "github": "https://github.com/fcbond",
+    "name": "Francis Bond",
+    "country": "Australia",
+    "twitter": "",
+    "linkedin": "",
+    "id": 19,
+    "photo": "https://avatars2.githubusercontent.com/u/1113286?v=3&s=460",
+    "organisation": "Nanyang Technological University",
+    "biography": "Francis Bond is an Associate Professor at the Division of Linguistics and Multilingual Studies, Nanyang Technological University, Singapore.He worked on machine translation and natural language understanding in Japan, first at Nippon Telegraph and Telephone Corporation and then at the National Institute of Information and Communications Technology in Japan, where his focus was on open source natural language processing. He is an active member of the Deep Linguistic Processing with HPSG Initiative (DELPH-IN) and the Global WordNet Association. His main research interest is in natural language understanding.  Francis has developed and released wordnets for Chinese, Japanese, Malay and Indonesian and coordinates the open multilingual wordnet. He is a member of the Internationalization Program of the Internet Architecture Board."
+  },
+  {
+    "py/object": "models.Speaker",
     "web": "http://yacy.net",
     "github": "https://github.com/orbiter",
     "name": "Michael Christen",
     "country": "Germany",
     "twitter": "https://twitter.com/0rb1t3r",
     "linkedin": "https://www.linkedin.com/in/orbiter",
-    "id": 19,
+    "id": 20,
     "photo": "https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/2/005/05a/327/0391260.jpg",
     "organisation": "YaCy.net",
     "biography": "I made YaCy and loklak"
@@ -254,23 +267,10 @@
     "country": "United States of America",
     "twitter": "https://twitter.com/pleia2",
     "linkedin": "https://www.linkedin.com/in/elizabethkjoseph",
-    "id": 20,
+    "id": 21,
     "photo": "http://princessleia.com/images/ekrumbach_056_800x800.png",
     "organisation": "Hewlett Packard Enterprise",
     "biography": "Elizabeth K. Joseph is a Systems Administrator at HPE working on the OpenStack Infrastructure team which runs the fully open source infrastructure built for OpenStack development. She also does work in the Ubuntu community and is the co-author of the 8th edition of The Official Ubuntu Book."
-  },
-  {
-    "py/object": "models.Speaker",
-    "web": "",
-    "github": "",
-    "name": "Lightning Talks",
-    "country": "",
-    "twitter": "",
-    "linkedin": "",
-    "id": 21,
-    "photo": "",
-    "organisation": "",
-    "biography": ""
   },
   {
     "py/object": "models.Speaker",
@@ -562,7 +562,7 @@
     "py/object": "models.Speaker",
     "web": "https://github.com/rafalkowalski",
     "github": "https://github.com/rafalkowalski",
-    "name": "Rafal Kowalski, Manan Wason",
+    "name": "Rafal Kowalski",
     "country": "Poland",
     "twitter": "",
     "linkedin": "https://www.linkedin.com/in/rafa%C5%82-kowalski-545a1464",
@@ -595,7 +595,7 @@
     "id": 46,
     "photo": "",
     "organisation": "One Maker Group",
-    "biography": "Like before"
+    "biography": "I have a very curious mind and I strive to integrate design, technology and learning in all my endeavors. I\u2019m currently the Lead Curriculum Developer for OneMaker Group and my main objective is to help makers of all ages build up their creative confidence by breaking the barriers of the mind, and show that everybody have the potential to be a maker and a designer. Before joining OMG, I worked at Autodesk for over 9 years in Singapore as a Learning Content Developer. I hold a B.A in Architecture from the Monterrey Institute of Technology and Higher Education and has worked as a 3D modeler and Graphic Designer in Mexico, USA and Canada. She is actively involved in the Singapore Maker community."
   },
   {
     "py/object": "models.Speaker",
@@ -686,7 +686,7 @@
     "id": 53,
     "photo": "",
     "organisation": "Smaato ",
-    "biography": "Smaato will share with you tips on how to :- 1) Overcome integration challenges  2) Make money on inventory 3) Choose optimal ad format 4) Promote your app "
+    "biography": "Delynn Smaato will share with you tips on how to:  1) Overcome integration challenges   2) Make money on inventory  3) Choose optimal ad format  4) Promote your app"
   },
   {
     "py/object": "models.Speaker",
@@ -738,7 +738,7 @@
     "id": 57,
     "photo": "",
     "organisation": "FOSSASIA",
-    "biography": ""
+    "biography": "Hong Phuc, originally from Vietnam, has lived in the US, Singapore and Berlin. She was a speaker at the Chaos Communication Congress presenting the latest advances in Open Fashion and Technology. She is also the founder of FOSSASIA, the Asia organization bringing together an inspiring community across borders and ages to form a better future with Open Technologies and ICT. Hong Phuc organizes events like the annual FOSSASIA summit since 2009 and puts together Science Hackdays across the region in Vietnam, Dubai and China."
   },
   {
     "py/object": "models.Speaker",
@@ -834,7 +834,7 @@
   {
     "py/object": "models.Speaker",
     "web": "http://mananwason.me",
-    "github": "mananwason",
+    "github": "https://github.com/mananwason",
     "name": "Manan Wason",
     "country": "India",
     "twitter": "https://twitter.com/mananwason9",
@@ -885,42 +885,16 @@
   },
   {
     "py/object": "models.Speaker",
-    "web": "Http://www.onemakergroup.sg",
-    "github": "",
-    "name": "Wilfred Wong",
-    "country": "Singapore",
-    "twitter": "",
-    "linkedin": "",
-    "id": 69,
-    "photo": "",
-    "organisation": "OneMaker Group",
-    "biography": "Introducing kids to different types of digital fabrication techniques. (3D printing, laser cutting, CNC milling.)"
-  },
-  {
-    "py/object": "models.Speaker",
     "web": "http://onemakergroup.com",
     "github": "",
     "name": "Syabiqah Phang",
     "country": "Singapore",
     "twitter": "",
     "linkedin": "",
-    "id": 70,
+    "id": 69,
     "photo": "",
     "organisation": "OneMaker Group",
     "biography": "Kids will explore how to create connected devices and how to send automated actions to these objects over the internet. This will help them to be confident when navigating the exciting yet unknown IoT world of the future. "
-  },
-  {
-    "py/object": "models.Speaker",
-    "web": "https://www.facebook.com/groundupinitiative/",
-    "github": "",
-    "name": "Gabriel Perumal",
-    "country": "Singapore",
-    "twitter": "",
-    "linkedin": "",
-    "id": 71,
-    "photo": "https://www.facebook.com/groundupinitiative/photos/pb.107655739315072.-2207520000.1455796067./1023161874431116/?type=3&theater",
-    "organisation": "Ground Up Initiative",
-    "biography": "Kids are the future of the world it is our duty to provide them the necessary tech skills whether software or hardware but also by making it easy for them to learn step by step and to inspire them that if they have a willing mind and a good spirit u can accomplish everything if u put your mind to it"
   },
   {
     "py/object": "models.Speaker",
@@ -930,10 +904,36 @@
     "country": "Singapore",
     "twitter": " https://twitter.com/elfgoh",
     "linkedin": "",
-    "id": 72,
+    "id": 70,
     "photo": "",
     "organisation": "12Geeks",
     "biography": "Luther Goh is a founders of 12Geeks, a brand focus on providing quality electronic products on their ecommerce platform, and also quality training. He is also a web developer and member of Hackerspace Singapore. He has taught Arduino classes to students and the general public. Luther is also a python programmer."
+  },
+  {
+    "py/object": "models.Speaker",
+    "web": "Http://www.onemakergroup.sg",
+    "github": "",
+    "name": "Wilfred Wong",
+    "country": "Singapore",
+    "twitter": "",
+    "linkedin": "",
+    "id": 71,
+    "photo": "",
+    "organisation": "OneMaker Group",
+    "biography": "Introducing kids to different types of digital fabrication techniques. (3D printing, laser cutting, CNC milling.)"
+  },
+  {
+    "py/object": "models.Speaker",
+    "web": "https://www.facebook.com/groundupinitiative/",
+    "github": "",
+    "name": "Gabriel Perumal",
+    "country": "Singapore",
+    "twitter": "",
+    "linkedin": "",
+    "id": 72,
+    "photo": "https://www.facebook.com/groundupinitiative/photos/pb.107655739315072.-2207520000.1455796067./1023161874431116/?type=3&theater",
+    "organisation": "Ground Up Initiative",
+    "biography": "Kids are the future of the world it is our duty to provide them the necessary tech skills whether software or hardware but also by making it easy for them to learn step by step and to inspire them that if they have a willing mind and a good spirit u can accomplish everything if u put your mind to it"
   },
   {
     "py/object": "models.Speaker",
@@ -950,29 +950,16 @@
   },
   {
     "py/object": "models.Speaker",
-    "web": "http://akhilhector.com",
-    "github": "https://github.com/AkhilHector",
-    "name": "Akhil Pandey",
-    "country": "India",
-    "twitter": "",
-    "linkedin": "https://linkedin.com/in/akhilpandey",
+    "web": "http://garuda.io/",
+    "github": "",
+    "name": "Jiin Joo Ong",
+    "country": "Singapore",
+    "twitter": "https://twitter.com/jiinjoo",
+    "linkedin": "https://sg.linkedin.com/in/jiinjoo",
     "id": 74,
-    "photo": "https://avatars.githubusercontent.com/u/5903056?v=3",
-    "organisation": "Mozilla",
-    "biography": "Working with IOT and javascript is , but the talk is just a mere display of the scope in which a js enthusiast can find the interaction handy."
-  },
-  {
-    "py/object": "models.Speaker",
-    "web": "http://rolandturner.com/",
-    "github": "https://github.com/rolandturner",
-    "name": "Roland Turner",
-    "country": "Australia",
-    "twitter": "https://twitter.com/rolandturner",
-    "linkedin": "https://www.linkedin.com/in/rolandturner",
-    "id": 75,
-    "photo": "http://cdn.rolandturner.com/rolandturner.jpeg",
-    "organisation": "FOSSASIA",
-    "biography": "Roland has been playing with electronics since he was 7, built his first radio transmitter when he was 10, started programming when he was 12 and passed his ham radio exams when he was 17. He has been involved in the founding and organising of technology community groups since the late 1980s, most recently HackerspaceSG and FOSSASIA respectively. In addition to building a sensor network to map the haze in order to work out where [not] to run and advising early-stage technology startups because they are interesting, he is working on bouncing radio waves off the moon simply because it is there."
+    "photo": "",
+    "organisation": "Garuda Robotics",
+    "biography": "Ong Jiin Joo is the co-founder and CTO of Singapore-based drone solutions and services company, Garuda Robotics."
   },
   {
     "py/object": "models.Speaker",
@@ -982,7 +969,7 @@
     "country": "India",
     "twitter": "https://twitter.com/parmeshwr",
     "linkedin": "https://www.linkedin.com/in/parmeshwr-prasad-0013b3b5?trk=hp-identity-name",
-    "id": 76,
+    "id": 75,
     "photo": "",
     "organisation": "dell",
     "biography": "Parmeshwr Prasad is associated with Dell server Division from past 3 years. He is having varied experience in embedded system, servers, cloud and Open Source. He has been an active Linux kernel developer for more than 7 years. Keen passion for continuous learning, innovation and adoption of new ideas from lateral technology domains. Patents across diverse areas covering UEFI, ESRT and PCIe. He was the speaker for open source events like CentOS-dojo, ESTF and OSIdays.  "
@@ -995,7 +982,7 @@
     "country": "India",
     "twitter": "https://twitter.com/shwetank",
     "linkedin": "",
-    "id": 77,
+    "id": 76,
     "photo": "",
     "organisation": "Opera",
     "biography": "Shwetank is PM of the Extensions platform in Opera as well as part of Opera's Developer Relations team.   Over the years, he was worked to evangelize open web standards and cutting edge web technologies. He has written technical articles for a variety of publications and regularly talks at various developer conferences around the world. "
@@ -1008,7 +995,7 @@
     "country": "India",
     "twitter": "https://twitter.com/kushaldas",
     "linkedin": "",
-    "id": 78,
+    "id": 77,
     "photo": "https://kushaldas.in/assets/images/me2.jpg",
     "organisation": "Fedora Project",
     "biography": "Kushal Das is a core developer of CPython, and a fellow at Python Software Society. He is a long time Fedora contributor. He is currently working as Fedora Cloud Engineer in the Fedora Engineering team at Red Hat. "
@@ -1021,7 +1008,7 @@
     "country": "Sri Lanka",
     "twitter": "",
     "linkedin": "https://lk.linkedin.com/in/jaminy-prabaharan-3a393672",
-    "id": 79,
+    "id": 78,
     "photo": "https://lk.linkedin.com/in/jaminy-prabaharan-3a393672",
     "organisation": "Smart guidance for blind",
     "biography": "I am currently studying in third year of B.Tech in Electronic and communication Engineering in National Institute of Technology,Warangal under Rajiv Ghandhi Memorial scholarship scheme(provide by ICCR). Awards, achievements and certificates  Awarded certificate of merit (High Distinction) for Australian National Chemistry Quiz conducted by Royal Australian Chemical Institute in 2009. Awarded certificate  of merit (Distinction) for Australian National Chemistry Quiz conducted by Royal Australian Chemical Institute in 2011 Awarded certificate of merit in the Essay Competition 2007 (English Medium) conducted by the Sri Lanka-Thailand Society in association with the Royal Thai Embassy. Awarded certificate of Distinction for Sri Lankan Mathematical Olympiad 2010 conducted by Sri Lanka Olympiad Mathematics Foundation.  Projects Worked Developed VHDL model for \u201cJewellery Lock\u201d and MIPS and implemented on FPGA board. Developed Line following robot for National Robotic Competition. Designed our own microcontroller board within 24 hours of time for Hackathon 3.0 organized by Lakshya Foundation. Developed Bluetooth controlled temperature indicator using Galileo board. Developed password controlled door lock model within 12 hours of time for Electronic weekend. Worked on \u201cSmart Bin\u201d for Hackathon organized by GHCI (Grass Hopper Celebration in India). Developed the basic prototype for sensor based wireless valve controller. This project was selected for pitch talk in AugustFest-India\u2019s largest startup conference. Conferences attended  Developed the basic prototype for sensor based wireless valve controller. This project was selected for pitch talk in AugustFest-India\u2019s largest startup conference.  Other qualification Able to work with C programming language, photoshop, MATLAB & AutoCAD. Have good knowledge in working with Arduino UNO, Galileo board, FPGA board. Capable of completing project within the time limits. Capable of learning new languages easily Languages Proficiency \u2013 English, Tamil, Sinhala, Telugu "
@@ -1034,7 +1021,7 @@
     "country": "India",
     "twitter": "",
     "linkedin": "",
-    "id": 80,
+    "id": 79,
     "photo": "",
     "organisation": "Makino Asia Private Limited",
     "biography": "I graduated with a master's degree from the School of EEE, NTU in 2012 and have been working in the machine tool industry with a major Japanese machine tool company. I have been a researcher all my career and have authored several patents which have been spun into hardware start-ups or have been licensed by the industry."
@@ -1047,10 +1034,23 @@
     "country": "India",
     "twitter": "https://twitter.com/tusitalabooks",
     "linkedin": "https://www.linkedin.com/in/caffeine",
-    "id": 81,
+    "id": 80,
     "photo": "https://drive.google.com/file/d/0B1MfOE5aG1HCV3VzZHlFcnUyWDg/view?usp=sharing",
     "organisation": "Tusitala Digital Storytelling",
     "biography": "https://hackpad.com/IoT-REX-NpFlg9J1mNl"
+  },
+  {
+    "py/object": "models.Speaker",
+    "web": "http://rolandturner.com/",
+    "github": "https://github.com/rolandturner",
+    "name": "Roland Turner",
+    "country": "Australia",
+    "twitter": "https://twitter.com/rolandturner",
+    "linkedin": "https://www.linkedin.com/in/rolandturner",
+    "id": 81,
+    "photo": "http://cdn.rolandturner.com/rolandturner.jpeg",
+    "organisation": "FOSSASIA",
+    "biography": "Roland has been playing with electronics since he was 7, built his first radio transmitter when he was 10, started programming when he was 12 and passed his ham radio exams when he was 17. He has been involved in the founding and organising of technology community groups since the late 1980s, most recently HackerspaceSG and FOSSASIA respectively. In addition to building a sensor network to map the haze in order to work out where [not] to run and advising early-stage technology startups because they are interesting, he is working on bouncing radio waves off the moon simply because it is there."
   },
   {
     "py/object": "models.Speaker",
@@ -1132,16 +1132,16 @@
   },
   {
     "py/object": "models.Speaker",
-    "web": "http://garuda.io/",
-    "github": "",
-    "name": "Jiin Joo Ong",
-    "country": "Singapore",
-    "twitter": "https://twitter.com/jiinjoo",
-    "linkedin": "https://sg.linkedin.com/in/jiinjoo",
+    "web": "http://akhilhector.com",
+    "github": "https://github.com/AkhilHector",
+    "name": "Akhil Pandey",
+    "country": "India",
+    "twitter": "",
+    "linkedin": "https://linkedin.com/in/akhilpandey",
     "id": 88,
-    "photo": "",
-    "organisation": "Garuda Robotics",
-    "biography": "Ong Jiin Joo is the co-founder and CTO of Singapore-based drone solutions and services company, Garuda Robotics."
+    "photo": "https://avatars.githubusercontent.com/u/5903056?v=3",
+    "organisation": "Mozilla",
+    "biography": "Working with IOT and javascript is , but the talk is just a mere display of the scope in which a js enthusiast can find the interaction handy."
   },
   {
     "py/object": "models.Speaker",
@@ -1210,13 +1210,26 @@
   },
   {
     "py/object": "models.Speaker",
+    "web": "http://julialang.org",
+    "github": "https://github.com/ViralBShah",
+    "name": "Viral B. Shah",
+    "country": "India",
+    "twitter": "https://twitter.com/Viral_B_Shah",
+    "linkedin": "",
+    "id": 94,
+    "photo": "https://pbs.twimg.com/profile_images/657498074751721472/KtzF3QsD.jpg",
+    "organisation": "Julia Computing",
+    "biography": "Co-author of @RebootingIndia. Co-inventor of @JuliaLanguage. Founding Partner of Julia Computing, Inc and @FourthLion_IN."
+  },
+  {
+    "py/object": "models.Speaker",
     "web": "http://rahulmahale.wordpress.com/",
     "github": "https://github.com/RahulMahale",
     "name": "Rahul Mahale",
     "country": "India",
     "twitter": "http://twitter.com/Rahul_Mahale/",
     "linkedin": "https://in.linkedin.com/in/slashrahul",
-    "id": 94,
+    "id": 95,
     "photo": "https://www.dropbox.com/s/4snq5r2r5jwucbi/me.jpg?dl=0",
     "organisation": "BigBinary",
     "biography": "This small workshop is an introduction to a Orchestrating tool for cloud infrastructure called Terraform. It is a Golang based tool Open-Sourced by Hashicorp."
@@ -1229,7 +1242,7 @@
     "country": "India",
     "twitter": "https://twitter.com/sameerkasi200x",
     "linkedin": "https://www.linkedin.com/in/samkumar150288",
-    "id": 95,
+    "id": 96,
     "photo": "http://www.ashnik.com/wp-content/uploads/2014/10/sameer.jpg",
     "organisation": "Ashnik Pte Ltd",
     "biography": "Sameer Kumar is the Database Solution Architect working with Ashnik. Sameer and his team works towards providing enterprise level solutions based on open source and cloud technologies. He has an experience in working on various roles ranging from development to performance tuning and from installation and migration to support and services roles. Sameer has acquired Professional Certification for his adept skills of PostgreSQL. He is also certified as the IBM DB2 Advanced DBA and was nominated as IBM Champion for his contributions in IBM data community. Besides, he is also experienced in MongoDB, Oracle and SQL Server. Prior to joining Ashnik he has worked as a development DBA at Misys. While working as DBA at Misys for Core Banking solution he handled roles ranging from Design and Architecting to Development and Deployment of physical and logical database on varied RDBMS implementations. He has also worked on noSQL technologies e.g. MongoDB and ORM technologies viz. Hibernate."
@@ -1242,7 +1255,7 @@
     "country": "India",
     "twitter": "https://twitter.com/coala_analyzer",
     "linkedin": "",
-    "id": 96,
+    "id": 97,
     "photo": "http://imgur.com/o7hDkIq",
     "organisation": "coala-analyzer",
     "biography": "I'm an undergraduate student pursuing my computer science degree at Indraprasatha Institute of Information Technology, Delhi. I started working on coala  as my GSoC 2015 project. My primary objective was to develop a GUI for it. During my GSoC I got heavily involved in the project and have been contributing to it ever since. I have seen the project grow from a simple tool to a swiss knife. It also helped me select program analysis as a research area going further. I presented my GSoC project briefly at GUADEC 2015 (Gothenburg, Sweden)."
@@ -1255,7 +1268,7 @@
     "country": "Singapore",
     "twitter": "",
     "linkedin": "",
-    "id": 97,
+    "id": 98,
     "photo": "",
     "organisation": "The Gentlebros Pte. Ltd.",
     "biography": "Desmond Wong is the CEO of The Gentlebros, a small 3 man studio set up last year in 2015. Their first game, Slashy Hero, has met with some success being published by Kongregate and reaching over 700k downloads since it was first released. They are now looking at a China release that will further boost their profits and revenue."
@@ -1268,7 +1281,7 @@
     "country": "Israel",
     "twitter": "",
     "linkedin": "https://www.linkedin.com/in/lironaravot",
-    "id": 98,
+    "id": 99,
     "photo": "",
     "organisation": "Red Hat",
     "biography": "Senior software engineer with over 9 years of experience working for Red Hat for the past 3.5, maintainer of oVirt open virtualization project (www.ovirt.org). Senior member of the oVirt storage team."
@@ -1281,7 +1294,7 @@
     "country": "India",
     "twitter": "https://twitter.com/anisha_narang",
     "linkedin": "https://www.linkedin.com/in/anisha-narang-4438a946",
-    "id": 99,
+    "id": 100,
     "photo": "https://www.facebook.com/photo.php?fbid=10152204641577738&set=pb.545822737.-2207520000.1451558197.&type=3&theater",
     "organisation": "Red Hat",
     "biography": "I joined Red Hat as an intern and have been working with Red Hat for nearly three years now. I handle most of the QA responsibilities at work and enjoy doing test automation. I have worked with a couple of test automation tools like Selenium, Watir, etc. I also work with Jenkins to make sure tests are being executed timely. I enjoy traveling and meeting new people ;) "
@@ -1294,7 +1307,7 @@
     "country": "India",
     "twitter": "https://twitter.com/digen_",
     "linkedin": "",
-    "id": 100,
+    "id": 101,
     "photo": "",
     "organisation": "Shreshta IT Technologies Pvt. Ltd.",
     "biography": "At my company (Shreshta IT Technologies Pvt. Ltd.) we use Ansible to manage configurations/application deployments in appliances(Firewall/Data backup/VPN) installed at customer locations. As majority of our customers have  a simple broadband connection, pushing the updates/configuration changes through Ansible is extremely easy and reliable over various other alternatives of IT automation.   Note: While, this workshop isn't about our company or what we do, I'd like to share experiences with how we've been able to use Ansible effectively for our workflow. There will be no mention of our company or our products in the entire workshop. "
@@ -1307,7 +1320,7 @@
     "country": "Germany",
     "twitter": "",
     "linkedin": "",
-    "id": 101,
+    "id": 102,
     "photo": "http://detektor.fm/wp-content/uploads/2013/05/nils_magnus.jpg",
     "organisation": "LinuxTag Association",
     "biography": "Nils Magnus is a system architect and journalist. He has a 15+ year track record in system and database engineering, cloud infrastructure design based on Open Source, and security managment. He believes in sustainable data center solutions and cooperative, agile development methods. In his role as an organizer at LinuxTag Association and the German Unix Users Group, he organizes for more than 15 years conferences and workshops on these topics. Nils Magnus lives in Munich and Berlin, both Germany. "
@@ -1320,7 +1333,7 @@
     "country": "India",
     "twitter": "https://twitter.com/rishiloyola",
     "linkedin": "https://in.linkedin.com/in/rishi-shah-78103bab",
-    "id": 102,
+    "id": 103,
     "photo": "https://flic.kr/p/CEjaas",
     "organisation": "appbase.io",
     "biography": "Content and Timings: What is Docker? (3:00) How Docker differs from VM? (2:00) Basic Terms (3:00) Why Use Docker? (4:45) How Does Docker Work? (6:08) Docker Artifact Server (7:01) Docker and the Three Ways of DevOps (3:00) Docker Demos (14:45)"
@@ -1333,7 +1346,7 @@
     "country": "Belgium",
     "twitter": "https://twitter.com/vincentdesmet",
     "linkedin": "https://vn.linkedin.com/in/vincentds",
-    "id": 103,
+    "id": 104,
     "photo": "https://www.flickr.com/photos/95949760@N07/21952855164/in/album-72157660080743540/",
     "organisation": "Docker Saigon",
     "biography": "During the demo we will show how to - deploy applications on k8s,  - scale applications on k8s - expose applications on k8s - apply the canary deployment pattern with k8s,  - do a full rolling update with k8s  and take failing application instances out of the production workload for instant debuging"
@@ -1346,7 +1359,7 @@
     "country": "Australia",
     "twitter": "https://twitter.com/hunternield",
     "linkedin": "https://sg.linkedin.com/in/hunter",
-    "id": 104,
+    "id": 105,
     "photo": "",
     "organisation": "Acaleph",
     "biography": "Hunter is an technologist, developer, designer, data geek and entrepreneur. For over 15 years, he has been working with IT infrastructure and open-source technologies."
@@ -1359,7 +1372,7 @@
     "country": "Sri Lanka",
     "twitter": "https://twitter.com/BC_Dilum",
     "linkedin": "https://lk.linkedin.com/in/dilumnavanjana",
-    "id": 105,
+    "id": 106,
     "photo": "https://scontent-hkg3-1.xx.fbcdn.net/hphotos-xft1/v/t1.0-9/10417561_10204672485323300_819182022288122758_n.jpg?oh=9683254877a21f74bcdbe8c229d8c305&oe=56E2E885",
     "organisation": "99x Technology",
     "biography": "GSoC 2015 participator with contribution to Celluloid. Currently Working, Studying & contributing to the F/OSS community. Planning to make everything in the world better with Concurrent programming."
@@ -1372,7 +1385,7 @@
     "country": "India",
     "twitter": "https://twitter.com/haseeb_offline",
     "linkedin": "",
-    "id": 106,
+    "id": 107,
     "photo": "",
     "organisation": "Mozilla",
     "biography": "Open Source enthusiast, passionate about community organizing and events, Currently contributing to Mozilla as Community web opener, Community leader at DuckDuckHack(DuckDuckGo)"
@@ -1385,7 +1398,7 @@
     "country": "Vietnam",
     "twitter": "https://twitter.com/DangHaiAn1",
     "linkedin": "https://www.linkedin.com/in/dang-hai-an-5a704581",
-    "id": 107,
+    "id": 108,
     "photo": "",
     "organisation": "Institut National des Sciences Appliqu\u00e9es de Toulouse",
     "biography": "DANG Hai An is a computer engineering student in Toulouse, France. He participated in the development of FOSSASIA API during Google Summer of Code 2015, and really enjoyed the experience. He hopes to see the expansion of open-source organisations and projects all over ASIA."
@@ -1398,7 +1411,7 @@
     "country": "Indonesia",
     "twitter": "http://twitter.com/ariestiyansyah",
     "linkedin": "http://linkedin.com/in/ariestiyansyah",
-    "id": 108,
+    "id": 109,
     "photo": "https://pbs.twimg.com/profile_images/683931873077100544/Mcy7uWaB_400x400.jpg",
     "organisation": "Mozilla Tech Speaker",
     "biography": "Hola, my name is Rizky Ariestiyansyah and I\u2019m a Full Stack Developer & Business Strategist with equal parts interest in business, tax, management development, and writing. Now I am active as Mozilla Representative and Mozilla Tech Speaker"
@@ -1411,7 +1424,7 @@
     "country": "Thailand",
     "twitter": "https://twitter.com/hansbak",
     "linkedin": "https://th.linkedin.com/in/bakkerjc",
-    "id": 109,
+    "id": 110,
     "photo": "http://ofbiznew.antwebsystems.com/aws-default/awsimages/antwebbuilding.gif",
     "organisation": "AntWebsystems Co.,Ltd",
     "biography": "Hans Bakker. AntWebsystems.com Self starter, self-made, highly motivated advocate of open source, especially Apache OFBiz ERP. Now managing the AntWebsystems company, which provides quality services for competitive rates around the Apache OFBiz open source ERP system using open source development and production tools only. Regular speaker at Apache conferences in Europe and the USA "
@@ -1424,7 +1437,7 @@
     "country": "Philippines",
     "twitter": "http://twitter.com/bobreyes",
     "linkedin": "",
-    "id": 110,
+    "id": 111,
     "photo": "https://www.dropbox.com/s/h30ouesf7hg37ly/bob-profile-pic-formal-headshot.JPG?dl=0",
     "organisation": "Mozilla Philippines Community",
     "biography": "Bob is a Mozilla Representative & Reps Mentor from Manila, Philippines. He is a technopreneur managing his own IT Consultancy firm, with more than 15 years of experience in the field of aviation and more than 10 years of being a volunteer Mozillian."
@@ -1437,7 +1450,7 @@
     "country": "Vietnam",
     "twitter": "https://twitter.com/trongdan_tran",
     "linkedin": "    https://sg.linkedin.com/in/thewind2006",
-    "id": 111,
+    "id": 112,
     "photo": "https://flic.kr/p/DbWUXz",
     "organisation": "GrabTaxi",
     "biography": "Just introduce some application and use case of chat bot in Telegram and Slack"
@@ -1450,7 +1463,7 @@
     "country": "China",
     "twitter": "https://twitter.com/xwalk_project",
     "linkedin": "",
-    "id": 112,
+    "id": 113,
     "photo": "",
     "organisation": "Intel, Crosswalk Project",
     "biography": "Ningxin Hu is a software engineer, working at Intel in Shanghai, specialized in web technology. Ningxin helps close the gaps between web and native apps focusing on bringing new device capability to web platform and accelerating JavaScript execution by parallelism hardware. Ningxin worked on web browser and runtime projects for various OSes including Moblin, MeeGo, Tizen, Windows and Android. Today, Ningxin mostly contributes to Blink and Chromium as well as a newly launched project named Crosswalk, a web-based application runtime targeting Android, Tizen, and other platforms. On the web standardization side, Ningxin is participating in the W3C Device APIs working group."
@@ -1463,7 +1476,7 @@
     "country": "South Africa",
     "twitter": "",
     "linkedin": "https://www.linkedin.com/profile/view?id=AAMAAABzbNcB69SCO1j9nBwEQ96hR3rcmt-eJUQ&authType=&authToken=&trk=mp-allpost-aut-name",
-    "id": 113,
+    "id": 114,
     "photo": "",
     "organisation": "Jumping Bean",
     "biography": "Mark Clarke is a  developer,  security professional and trainer who works at Jumping Bean, an open source integration company, in Johannesburg South Africa.  He has over 15 year experience of leveraging open source and free software to build robust solutions for customers.   He is passionate about technology and creating a vibrant and innovative start-up industry and culture in the developing world  using open source and free software."
@@ -1476,7 +1489,7 @@
     "country": "Malaysia",
     "twitter": "https://twitter.com/soareschen",
     "linkedin": "https://sg.linkedin.com/in/soareschen",
-    "id": 114,
+    "id": 115,
     "photo": "http://www.meetup.com/Singapore-JS/photos/12333132/436066145/",
     "organisation": "SingaporeJS",
     "biography": "NodeSchool is an open source project run by volunteers with two goals: to create high quality programming curriculum and to host community learning events."
@@ -1489,7 +1502,7 @@
     "country": "",
     "twitter": "",
     "linkedin": "",
-    "id": 115,
+    "id": 116,
     "photo": "",
     "organisation": "FOSSASIA",
     "biography": ""
@@ -1502,7 +1515,7 @@
     "country": "",
     "twitter": "",
     "linkedin": "",
-    "id": 116,
+    "id": 117,
     "photo": "",
     "organisation": "Cofounders.sg",
     "biography": ""
@@ -1515,7 +1528,7 @@
     "country": "Singapore",
     "twitter": "",
     "linkedin": "",
-    "id": 117,
+    "id": 118,
     "photo": "https://github.com/voodootikigod/logo.js/blob/master/webaudio/webaudio-js.png",
     "organisation": "Web Audio",
     "biography": "Chinmay is a geek who works with audio technologies. His background is in embedded systems and engineering acoustics, and currently works with underwater communication and networking. He is also the organiser of a couple of geek/developer/hacker meetups in Singapore. He has been involved with WebAudio since the early days and helps out in the W3C specification process for WebAudio."
@@ -1528,7 +1541,7 @@
     "country": "Switzerland",
     "twitter": "",
     "linkedin": "",
-    "id": 118,
+    "id": 119,
     "photo": "",
     "organisation": "Python User Group Singapore",
     "biography": "Ivan earned his PhD in Physics in 2003 from University of Geneva, Switzerland. He spent 13 years doing academic research in medical physics, but then decided that he really preferred writing software to scientific papers, and moved to IT field. He has been an active member of the Python User Group Singapore since 2011."
@@ -1541,7 +1554,7 @@
     "country": "India",
     "twitter": "https://twitter.com/yudocaa",
     "linkedin": "https://in.linkedin.com/in/sayanchowdhury",
-    "id": 119,
+    "id": 120,
     "photo": "https://sayanchowdhury.fedorapeople.org/yoda.jpg",
     "organisation": "Fedora Project",
     "biography": "I am Sayan Chowdhury. I work as a Fedora Infrastructure Engineer in the Fedora Engineering Team and also a Fedora Ambassador from India. I am an open source contributor. I have contributed to Fedora, Mozilla, VLC and various other Python open source projects.   "
@@ -1554,7 +1567,7 @@
     "country": "India",
     "twitter": "https://twitter.com/dufferzafar",
     "linkedin": "",
-    "id": 120,
+    "id": 121,
     "photo": "",
     "organisation": "Jamia Millia Islamia",
     "biography": "I am a CS undergrad student from Delhi, India and love to build things using my text editor."
@@ -1567,7 +1580,7 @@
     "country": "India",
     "twitter": "",
     "linkedin": "https://www.linkedin.com/in/sundeepanand",
-    "id": 121,
+    "id": 122,
     "photo": "",
     "organisation": "Red Hat",
     "biography": "Sundeep works with Globalization Team at Red Hat. He has 5 years of experience, mostly in i18n software development. He holds B.E. (Hons) from Staffordshire University, UK. He loves to code, travel and explore."
@@ -1580,7 +1593,7 @@
     "country": "India",
     "twitter": " https://twitter.com/yask123",
     "linkedin": "https://in.linkedin.com/in/yask123",
-    "id": 122,
+    "id": 123,
     "photo": "",
     "organisation": "Moin Moin Wiki",
     "biography": "I will be giving a talk about my GSoC'15 project which I successfully completed for Moin Moin Wiki Engine (Python Software Foundation). MoinMoin is a high performance wiki engine written in Python, used by various organizations such as Ubuntu, Debian, Open Office,PSF.. etc. My project was to build a proper User Interface and User Experience for the wiki users. I will be talking about the various challenges I faced while working on this project and how I solved them."
@@ -1593,7 +1606,7 @@
     "country": "India",
     "twitter": "",
     "linkedin": "",
-    "id": 123,
+    "id": 124,
     "photo": "",
     "organisation": "Red Hat",
     "biography": "Amita Sharma - I am a Senior Quality Engineer at Red Hat, working for 5 years now. I am responsible for Quality Assurance and testing of Red Hat Directory Server (389). I am a Fedora and Open Source Software enthusiast and contribute to various projects in different ways. I spoke about Fedora QA process at Flock, 2014 in Prague. I regularly write for the Fedora Magazine and blog at http://whatamithinks.wordpress.com/.\""
@@ -1606,7 +1619,7 @@
     "country": "India",
     "twitter": "https://twitter.com/sahil_shekhawat/",
     "linkedin": "https://www.linkedin.com/in/sahilshekhawat",
-    "id": 124,
+    "id": 125,
     "photo": "http://www.pydy.org/_static/logo.svg",
     "organisation": "SymPy / PyDy",
     "biography": "PyDy, short for Python Dynamics, is both a workflow that utlizes an array of scientific tools written in the Python programming language to study multibody dynamics and a set of software packages that help automate and enhance the workflow. The core of this toolset is the SymPy mechanics package which generates symbolic equations of motion for complex multibody systems and PyDy which extends the SymPy output to the numerical domain for simulation, analyses, and visualization. PyDy builds on the popular scientific Python stack such as NumPy, SciPy, IPython, matplotlib, Cython, and Theano."
@@ -1619,7 +1632,7 @@
     "country": "India",
     "twitter": "https://twitter.com/iaktech",
     "linkedin": "https://www.linkedin.com/in/iaktech",
-    "id": 125,
+    "id": 126,
     "photo": "https://avatars3.githubusercontent.com/u/5647941?v=3&s=400",
     "organisation": "SymPy",
     "biography": "I am a Final year Student at Delhi Technological University, India and a core developer at the SymPy Project. I spend most of my time committing for Open Source. I am also an active member of Python Delhi User group."
@@ -1632,7 +1645,7 @@
     "country": "Spain",
     "twitter": "https://twitter.com/marcoagutier",
     "linkedin": "https://www.linkedin.com/in/marcoagutierrez",
-    "id": 126,
+    "id": 127,
     "photo": "http://magutierrez.com/wp-content/uploads/2016/01/marcog.jpg",
     "organisation": "Robolab, University of Extremadura, Spain",
     "biography": "Marco A. Guti\u00e9rrez is a PhD student in cognitive vision for robotics systems at the Robotics and Artificial Vision Laboratory (RoboLab) from the University of Extremadura, Spain since 2011. He is currently holding an A*STAR Research Attachment Programme (ARAP) scholarship in the Human Language Technology Department at I2R, A*STAR, Singapore. He has contributed to several open-source robotics and computer vision related projects like RoboComp and the Point Cloud Library as organization administrator and mentor (respectively) for several editions of the Google Summer of Code programme (2013, 2014 and 2015). "
@@ -1645,7 +1658,7 @@
     "country": "India",
     "twitter": "https://twitter.com/tricksy0207",
     "linkedin": "https://www.linkedin.com/in/ankitashukla707",
-    "id": 127,
+    "id": 128,
     "photo": "",
     "organisation": "IIT Roorkee",
     "biography": "Ankita is a Computer Science senior at Indian Institute of Technology, Roorkee. She has been a contributor to FOSS for almost 3 years now. In 2014, she interned with Wikimedia under Gnome\u2019s Outreach Program for Women (now Outreachy) on a project entitled \u201cCollaborative Spelling Dictionary\u201d.  Ankita mentored for Mediawiki projects this year at Google Code In 2015 and Gnome Outreachy. She\u2019s also guiding two high-school mentees under the #include fellowship program this year. "
@@ -1658,7 +1671,7 @@
     "country": "Malaysia",
     "twitter": "https://twitter.com/errazudin",
     "linkedin": "https://my.linkedin.com/in/errazudinishak",
-    "id": 128,
+    "id": 129,
     "photo": "https://pbs.twimg.com/profile_images/506206012248821760/8CuTOjzO.jpeg",
     "organisation": "Open Source Developers Club Malaysia",
     "biography": "Errazudin works as Data Masseur at OSSB Malaysia. His job focuses on making sense out of massive data. He has previously spoken at several meetups and conferences and has worked with various technologies. In his free time he loves to compose Ahmad-Jais-like tunes in his dream or try to help his little daughter with her super tough kindergarten homework."
@@ -1671,7 +1684,7 @@
     "country": "Singapore/APAC",
     "twitter": "",
     "linkedin": "",
-    "id": 129,
+    "id": 130,
     "photo": "",
     "organisation": "IBM",
     "biography": "Fibish is the Senior Cloud Advisor with a focus on IT transformation to help customers to achieve their business objective. In addition to strategic advisory around IT Transformation, Fibish provides consultation and architecture of innovative solutions to help businesses realise greater value from IT with agility.  Prior to joining IBM, Fibish was CTO with Cloud Brokerage Platform Company, where he was responsible for strategic advisory, leading and delivering Cloud solutions for multiple customers across the region. He led the advisory & architecture team, product roadmap, overall cloud strategy, customer engagements, all the while ensuring provided solutions met customer outcome.  Fibish has 18 years of experience in a broad range of roles and industries, from financial services to service providers, leveraging real life IT executive experience with management consulting skills and a passion for start-up business models to solve complex business problems.    He has been involved with numerous transformation projects in the AP region enabling customers to achieve their business outcome, developed Private and Hybrid cloud strategy- IaaS, PaaS & SaaS, open cloud reference architecture and roadmap for transition, transformation & innovation.  Fibish graduated from the University of Wales with MS in Business IT.  He also holds Bachelors in Science in Computing. He is involved with number of volunteering organization to help make society a better place. He is on the Advisory board of start-up companies.  "
@@ -1684,7 +1697,7 @@
     "country": "Singapore",
     "twitter": "https://twitter.com/uzyn",
     "linkedin": "https://www.linkedin.com/in/uzynchua",
-    "id": 130,
+    "id": 131,
     "photo": "http://zynesis.com/img/team/uzyn-chua.jpg",
     "organisation": "Zynesis",
     "biography": "U-Zyn's primary interests are blockchain, sysops and security. He runs Zynesis, a sysops and blockchain consultancy, during the day and hacks around at night."
@@ -1697,7 +1710,7 @@
     "country": "India",
     "twitter": "https://twitter.com/satdeep_gill",
     "linkedin": "http://www.linkedin.com/in/satdeepgill",
-    "id": 131,
+    "id": 132,
     "photo": "https://commons.wikimedia.org/wiki/File:Satdeep-gill_01.JPG",
     "organisation": "Punjabi Wikimedians",
     "biography": "Wikimedian since 2009, I realized that there is no single project which focus on folklore. This will help to translate folklores as well. I am student of Punjabi Language and Literature and I have studied Culture and Folklore as a part of my academic curriculum."
@@ -1710,7 +1723,7 @@
     "country": "Korea",
     "twitter": "https://twitter.com/seoul_engineer",
     "linkedin": "",
-    "id": 132,
+    "id": 133,
     "photo": "https://pbs.twimg.com/profile_images/679593920024555520/OnYP2TW0_400x400.png",
     "organisation": "NFLabs Inc, Apache Software Foundation",
     "biography": "Apache Zeppelin (incubating) committer and PPMC, Engineer @NFLabs,"
@@ -1723,7 +1736,7 @@
     "country": "Indonesia",
     "twitter": "http://twitter.com/hotosm",
     "linkedin": "https://www.linkedin.com/in/mhairiohara",
-    "id": 133,
+    "id": 134,
     "photo": "https://github.com/mataharimhairi/images/blob/master/profile_pic.png",
     "organisation": "Humanitarian OpenStreetMap Team",
     "biography": "Mhairi O'Hara is a GIS specialist working with the Humanitarian OpenStreetMap Team (HOT) on a number of projects including technical development, mapping initiatives and the coordination of internships in open source.  With a background in volcanology, she is now dedicated to disaster management and humanitarian efforts, and is an keen advocate of open data and software. "
@@ -1736,7 +1749,7 @@
     "country": "Vietnam, Ho Chi Minh City",
     "twitter": "https://twitter.com/thsonvt",
     "linkedin": "https://sg.linkedin.com/in/thsonvt",
-    "id": 134,
+    "id": 135,
     "photo": "",
     "organisation": "IBM",
     "biography": "A 15 min of talk about Apache Solr and 5 min about its implementation in IBM Watson Retrieve & Rank API"
@@ -1749,7 +1762,7 @@
     "country": "USA",
     "twitter": "https://twitter.com/aadrake",
     "linkedin": "https://sg.linkedin.com/in/aadrake",
-    "id": 135,
+    "id": 136,
     "photo": "",
     "organisation": "Atazzo",
     "biography": "Adam Drake has been in technology roles for nearly 20 years in a variety of industries including ecommerce, online travel, online marketing, financial services, healthcare, and oil and gas. His background is in Applied Mathematics, and his interests include online learning systems, high-frequency/low-latency data processing systems, recommender systems, and distributed systems."
@@ -1762,7 +1775,7 @@
     "country": "Singapore",
     "twitter": "https://twitter.com/geoicon",
     "linkedin": "https://sg.linkedin.com/in/sgganesh",
-    "id": 136,
+    "id": 137,
     "photo": "https://goo.gl/R5Hibc",
     "organisation": "GeoICON Pte. Ltd",
     "biography": "Open source geospatial software is lesser known application stack to governments. This talk intended to introduce the stack and the application possibilities with FOSS4G. The talk will focus on GeoServer, PostGIS, QGIS and Mapbox technologies"
@@ -1775,7 +1788,7 @@
     "country": "India",
     "twitter": "https://twitter.com/aneeshd16",
     "linkedin": "https://www.linkedin.com/in/aneeshdevasthale",
-    "id": 137,
+    "id": 138,
     "photo": "",
     "organisation": "Loklak",
     "biography": "Aneesh Devasthale is a software developer and entrepreneur from New Delhi. He loves experimenting and combining different technologies. He is on a mission to make software that can solve the world's problems."
@@ -1788,23 +1801,10 @@
     "country": "Indonesia",
     "twitter": "https://twitter.com/philipskokoh",
     "linkedin": "",
-    "id": 138,
+    "id": 139,
     "photo": "",
     "organisation": "Living Analytics Research Centre (LARC)",
     "biography": "Elastic software engineer (Medcl Zeng) LARC engineers (Philips Kokoh Prasetyo, Arinto Murdopo, Casey Vu)"
-  },
-  {
-    "py/object": "models.Speaker",
-    "web": "https://github.com/rafalkowalski",
-    "github": "https://github.com/rafalkowalski",
-    "name": "Rafal Kowalski",
-    "country": "Poland",
-    "twitter": "",
-    "linkedin": "https://www.linkedin.com/in/rafa%C5%82-kowalski-545a1464",
-    "id": 139,
-    "photo": "",
-    "organisation": "Open-Event/FOSSASIA",
-    "biography": "This workshops introduces the ideas and implementation of Open Event, the data format exchange and how we build Android and Web Apps based on the Open Event JSON. We will give you an overview of the app and quickly move on to show you how to generate apps from the Open Event JSON."
   },
   {
     "py/object": "models.Speaker",
@@ -2003,26 +2003,13 @@
   },
   {
     "py/object": "models.Speaker",
-    "web": "https://www.facebook.com/cocotsaizax",
-    "github": "",
-    "name": "Menghsuan Tsai",
-    "country": "Taiwan",
-    "twitter": "",
-    "linkedin": "",
-    "id": 155,
-    "photo": "",
-    "organisation": "National Cheng Kung University",
-    "biography": "I have a strong passion in dealing problems in an efficient way. No matter how much time it takes, I like to try things to benefit the society.  I am willing to devote myself to spend thousands of hours to help others save an hour for their work. I believe the environment must be changed to make it a better world for us to do things effectively. Apart from the efficiency, I am interested in joining a community because it gives me an opportunity to acquire both determination and selflessness. Working together in the community makes me feel a part of something bigger; it teaches me not to only make decision from my perspective view but to take the whole community into consideration. Although practicing coding takes sweat, I am still willing to devote myself to help others finish the projects. Not until I overcome one failure after another can I learn that the turning points are meant to trigger your potential ability. Every obstacle happened in community is a chance for me to cultivate skills and enhance competitiveness.  As the two main points mentioned above, with the ambition to challenge myself and to venture into the unknown, I would like to grab the chance to join FOSSASIA 2016. To wake myself up under the sleepy eyes of ignoring the cruel facts of the world, it\u2019s necessary to be stimulated by the diversity. To gain more information and get to know more people, it is a great opportunity for me to face challenges and receive suggestions. I know I am still lack for experience and knowledge, so I hope, by joining FOSSASIA 2016, I can get more inspiration and innovation to make my project even better.  And...  One reason why I want to attend this program is because of my ambition for promoting the open source software. I am a sophomore at Cheng Kung University in Tainan the southern city in Taiwan. I am usually buried under a heavy load of homework during the week. So I usually try to take an adventure to try new software programs for making my work more convenient. \u201cTechnology happens when imagination meets need.\u201d With the development of the technology, I can use open sources, such as Inkscape, Amara and Gimp online. One of the most terrifying assignment that I have ever had)was assigned by Professor Yung for the course \u201celectrical circuit\u201d. We had to read through papers about the electricity and find out what we can probe from our class materials, like noise filters or common base amplifiers. Moreover, I had to make an English presentation to give my proposal in this class.  So when I finally have some free time on weekends, I can surf the internet to check out the latest information for open source. I easily use Inskape to redesign picture forms Openclipart to make eye-popping slides. Also as a English learner, I use Amara to translate video like Emma Watson\u2019s speech in the EU from youtube. From this, I practice not only my listening skills, but also how to boost my impact of my communication in English. Simply put, I want to deliver the convince which I gain from the open source software. Open source software has changed the way I see my world, and now I want it to change the world that I see and live in. "
-  },
-  {
-    "py/object": "models.Speaker",
     "web": "http://intzone.com",
     "github": "https://github.com/zionsg",
     "name": "Zion Ng",
     "country": "Singapore",
     "twitter": "https://twitter.com/zionsg2015",
     "linkedin": "https://sg.linkedin.com/in/zionsg2015",
-    "id": 156,
+    "id": 155,
     "photo": "https://momocentral.com/system/devs/logos/000/000/027/original/zion.jpg",
     "organisation": "intZone.com",
     "biography": "Zion Ng is a Singaporean freelance web developer at intZone.com. Programming has been his favourite hobby since his teens, a tool to create solutions for himself, family and friends. He believes in lifelong learning as passion may die off but passion for learning will keep the flame alive. He graduated from the School of Computing, National University of Singapore and is also a Zend Certified Engineer (PHP and Zend Framework)."
@@ -2035,7 +2022,7 @@
     "country": "Singapore",
     "twitter": "https://twitter.com/woohuiren",
     "linkedin": "https://www.linkedin.com/in/woohuiren",
-    "id": 157,
+    "id": 156,
     "photo": "http://i.imgur.com/OE63qaN.jpg",
     "organisation": "Fedora Project",
     "biography": "Here's a short run through of what the talk will be about:   - Self Introduction - FOSS & OSS -- How I contribute to FOSS -- How you can contribute -- Why I contribute -- Why you should contribute -- Power of FOSS & OSS - About Fedora -- Brief dramatic history --- Argument of Fedora Devs with Linus - Why Fedora -- Cutting edge - How to Fedora -- Pidora -- Cloud images - Alternatives to proprietary software -- Skype alternatives, etc. - Conclusion"
@@ -2048,7 +2035,7 @@
     "country": "Singapore",
     "twitter": "https://twitter.com/sayanee_",
     "linkedin": "https://www.linkedin.com/in/sayanee",
-    "id": 158,
+    "id": 157,
     "photo": "https://www.flickr.com/photos/jurvistan/23015512439/in/album-72157661087124089/",
     "organisation": "We Build SG",
     "biography": "Sayanee is a web developer with an interest in connecting low powered sensors to the Internet. She created developer tools screencasts at http://build-podcast.com and does some coding for the https://webuild.sg project. In her free time, she loves to attend developer meetups and conferences to share what she is learning."
@@ -2061,7 +2048,7 @@
     "country": "India",
     "twitter": "https://twitter.com/anivar",
     "linkedin": "https://in.linkedin.com/in/anivar",
-    "id": 159,
+    "id": 158,
     "photo": "https://commons.wikimedia.org/wiki/File%3AAnivar_Aravind_%2815182117864%29.jpg",
     "organisation": "Mozilla India",
     "biography": "Anivar A. Aravind is a Senior Program/Project Management professional based in Bangalore with 10+ year Industry experience. He is a well known Free Software/Culture Evangelist in South Asia with a 14 year active involvement record. Anivar has a long track record of initiating, sustaining and running various Technical, Policy and Developer platforms and mobilizing people support and participation in such initiatives. Anivar has significant expertise on ICT public policy, Internet Governance, Open standards, Language technology, FOSS Licensing, Accessibility, and coordinating remote and scattered teams. He has substantial experience in mentoring many free and open source software projects and start-ups in social technology space to find their feet, assisting in various capacities from part- time adviser to chief technologist. As a social entrepreneur and activist working in the field of ICT4D for the last 10 years, he has extensive experience working with many small and large organizations at the local, regional, national and international levels. He contributed to the launch and maintenance of many thematic and regional networks and his activism has always focused on bridging the awareness gap between digital rights activism and general public in India.  He is the Executive Director of Indic Project and currently chairing Mozilla India Policy and Advocacy task force."
@@ -2074,7 +2061,7 @@
     "country": "USA",
     "twitter": "",
     "linkedin": "",
-    "id": 160,
+    "id": 159,
     "photo": "",
     "organisation": "Open Invention Network",
     "biography": "Keith Bergelt is the CEO of Open Invention Network (OIN), the largest patent non-aggression community in history, organized to support freedom of action in Linux and open source software.  OIN has more than 2,000 community members and owns more than 1,100 global patents and applications.  OIN offers a free license to its owned patents and coordinates a broad OSS-centric member cross-license; both are available in one OIN license on a royalty free basis to any party that joins the OIN community.  Prior to joining OIN, Mr. Bergelt served as CEO of two funds formed to unlock the considerable asset value of intellectual property in middle market companies.  Previously, Mr. Bergelt's private sector experience includes service as a senior advisor to the technology investment division at Texas Pacific Group.   He also headed business development, IP and licensing for Cambridge Display Technology.  Additionally, he established and served as General Manager of the Strategic Intellectual Asset Management business unit and director of Technology Strategy at Motorola.     Mr. Bergelt's public sector experience includes service as an American Diplomat in Washington, DC, New York, NY (United Nations), and Tokyo, Japan (American Embassy)."
@@ -2087,7 +2074,7 @@
     "country": "India",
     "twitter": "",
     "linkedin": "",
-    "id": 161,
+    "id": 160,
     "photo": "http://anweshadas.in/content/images/2015/03/479357_510013835681502_1332101143_o.jpg",
     "organisation": "Fedora Project",
     "biography": "Anwesha Das, an Advocate practicing law for 6 years. She is an active user of FOSS technologies. She contributes to Fedora Project.  One of her major goal is to help the FOSS developers with the legal aspect of the software industry."
@@ -2100,10 +2087,23 @@
     "country": "Taiwan",
     "twitter": "",
     "linkedin": " https://tw.linkedin.com/in/kevin-huang-b2a3096",
-    "id": 162,
+    "id": 161,
     "photo": "",
     "organisation": "Open Invention Network",
     "biography": "To reduce patent risk around Linux system"
+  },
+  {
+    "py/object": "models.Speaker",
+    "web": "https://www.facebook.com/cocotsaizax",
+    "github": "",
+    "name": "Menghsuan Tsai",
+    "country": "Taiwan",
+    "twitter": "",
+    "linkedin": "",
+    "id": 162,
+    "photo": "",
+    "organisation": "National Cheng Kung University",
+    "biography": "I have a strong passion in dealing problems in an efficient way. No matter how much time it takes, I like to try things to benefit the society.  I am willing to devote myself to spend thousands of hours to help others save an hour for their work. I believe the environment must be changed to make it a better world for us to do things effectively. Apart from the efficiency, I am interested in joining a community because it gives me an opportunity to acquire both determination and selflessness. Working together in the community makes me feel a part of something bigger; it teaches me not to only make decision from my perspective view but to take the whole community into consideration. Although practicing coding takes sweat, I am still willing to devote myself to help others finish the projects. Not until I overcome one failure after another can I learn that the turning points are meant to trigger your potential ability. Every obstacle happened in community is a chance for me to cultivate skills and enhance competitiveness.  As the two main points mentioned above, with the ambition to challenge myself and to venture into the unknown, I would like to grab the chance to join FOSSASIA 2016. To wake myself up under the sleepy eyes of ignoring the cruel facts of the world, it\u2019s necessary to be stimulated by the diversity. To gain more information and get to know more people, it is a great opportunity for me to face challenges and receive suggestions. I know I am still lack for experience and knowledge, so I hope, by joining FOSSASIA 2016, I can get more inspiration and innovation to make my project even better.  And...  One reason why I want to attend this program is because of my ambition for promoting the open source software. I am a sophomore at Cheng Kung University in Tainan the southern city in Taiwan. I am usually buried under a heavy load of homework during the week. So I usually try to take an adventure to try new software programs for making my work more convenient. \u201cTechnology happens when imagination meets need.\u201d With the development of the technology, I can use open sources, such as Inkscape, Amara and Gimp online. One of the most terrifying assignment that I have ever had)was assigned by Professor Yung for the course \u201celectrical circuit\u201d. We had to read through papers about the electricity and find out what we can probe from our class materials, like noise filters or common base amplifiers. Moreover, I had to make an English presentation to give my proposal in this class.  So when I finally have some free time on weekends, I can surf the internet to check out the latest information for open source. I easily use Inskape to redesign picture forms Openclipart to make eye-popping slides. Also as a English learner, I use Amara to translate video like Emma Watson\u2019s speech in the EU from youtube. From this, I practice not only my listening skills, but also how to boost my impact of my communication in English. Simply put, I want to deliver the convince which I gain from the open source software. Open source software has changed the way I see my world, and now I want it to change the world that I see and live in. "
   },
   {
     "py/object": "models.Speaker",
@@ -2207,7 +2207,7 @@
     "id": 170,
     "photo": "",
     "organisation": "",
-    "biography": ""
+    "biography": "Science Hackers from all over the world who enjoy open knowledge and sharing."
   },
   {
     "py/object": "models.Speaker",
@@ -2250,13 +2250,26 @@
   },
   {
     "py/object": "models.Speaker",
+    "web": "http://www.nora-al-badri.de",
+    "github": "",
+    "name": "Nora Al-Badri",
+    "country": "Germany",
+    "twitter": "https://twitter.com/noraalbadri",
+    "linkedin": "",
+    "id": 174,
+    "photo": "http://images.google.de/imgres?imgurl=http%3A%2F%2Fwww.somethingelse-off.com%2Fwp-content%2Fuploads%2F2015%2F11%2FNora-Al-Badri-Portrait2.jpg&imgrefurl=http%3A%2F%2Fwww.somethingelse-off.com%2Fportfolio%2Fnora-al-badri%2F&h=1200&w=960&tbnid=Z9AsePA4mJoiCM%3A&docid=HQjIks_bkgeJRM&ei=4CzlVrHDEsWfaJbGoeAE&tbm=isch&client=safari&iact=rc&uact=3&dur=871&page=1&start=0&ndsp=17&ved=0ahUKEwixs4aAp73LAhXFDxoKHRZjCEwQrQMIHjAA",
+    "organisation": "Artist of \"The Other Nefertiti\"",
+    "biography": "Nora Al-Badri is a multi-disciplinary artist with a German-Iraqi background working in different mediums such as sculpture and installation, photography and film. Her pieces deal with issues arising through hegemonic and neocolonial power structures and representations between the so called global South and North as well as with the various faces of war. Al-Badri lives and works in Berlin. She studied political sciences at Johann Wolfgang Goethe University in Frankfurt/Main and visual communications at Offenbach University of Art and Design. Her works got granted by several institutions like Goethe-Institut, Institut f\u00fcr Auslandsbeziehungen (IfA), German Federal Foreign Office and European Cultural Foundation (ECF). Since 2009 she also collaborates with Jan Nikolai Nelles as a collective."
+  },
+  {
+    "py/object": "models.Speaker",
     "web": "https://chris-lamb.co.uk/",
     "github": "lamby",
     "name": "Chris Lamb",
     "country": "United Kingdom",
     "twitter": "https://twitter.com/lolamby",
     "linkedin": "",
-    "id": 174,
+    "id": 175,
     "photo": "",
     "organisation": "Debian",
     "biography": "I have been a prolific Debian Developer since 2008, not only maintaining popular software packages such as Redis, but I have been an \"archive assistant\", committer in the Live CD, Installer and X.Org maintainer teams, and an active participant in archive-wide quality-assurance efforts."
@@ -2269,7 +2282,7 @@
     "country": "India",
     "twitter": "",
     "linkedin": "",
-    "id": 175,
+    "id": 176,
     "photo": "",
     "organisation": "Oracle Corporation Singapore Pte Ltd",
     "biography": "Anand Jain is a Linux kernel developer at Oracle corporation Singapore. Currently he is contributing to the development of Btrfs File System."
@@ -2282,10 +2295,10 @@
     "country": "China",
     "twitter": "",
     "linkedin": "",
-    "id": 176,
+    "id": 177,
     "photo": "",
     "organisation": "Deepin",
-    "biography": "Could you give me a example, I don't know what to fill this."
+    "biography": "Derek is a Linux user and developer. Interesting in how to measure and improve system performance recently."
   },
   {
     "py/object": "models.Speaker",
@@ -2295,7 +2308,7 @@
     "country": "India",
     "twitter": "",
     "linkedin": "",
-    "id": 177,
+    "id": 178,
     "photo": "http://procesaing.org",
     "organisation": "The Processing Foundation",
     "biography": "I'll be talking about how people can use Processing tools/language to learn to code. This will specifically be targeted to people who don't know how to code."
@@ -2308,10 +2321,23 @@
     "country": "Pakistan",
     "twitter": "https://twitter.com/owais_zahid",
     "linkedin": "https://sg.linkedin.com/in/owaiszahid",
-    "id": 178,
+    "id": 179,
     "photo": "https://s.gravatar.com/avatar/888bce4690bbd62492301e34dcdb3fb9?s=80",
     "organisation": "Autodesk",
     "biography": "Owais Zahid joined the Autodesk PLM 360 engineering team in 2014 as a Senior User Interface Developer. He is a certified Scrum Master. He divides his time between working as his team\u2019s Scrum Master and developing the next generation user interface of PLM 360. Owais has over 10 years\u2019 programming experience developing software in multiple programming languages. He holds a Master of Science degree from National University of Computer and Emerging Sciences. When not creating the next PLM UI, Owais is a frequent contributor to the Autodesk Engineering blogs and spends his free time programming in the genre of 3D game programming and augmented reality."
+  },
+  {
+    "py/object": "models.Speaker",
+    "web": "http://vrcollab.com",
+    "github": "wizztjh",
+    "name": "Jia Hen Tee",
+    "country": "Malaysia",
+    "twitter": "https://twitter.com/wizztjh",
+    "linkedin": " https://www.linkedin.com/in/wizztjh",
+    "id": 180,
+    "photo": "",
+    "organisation": "VRcollab",
+    "biography": "Founder and CTO of VRcollab"
   },
   {
     "py/object": "models.Speaker",
@@ -2321,7 +2347,7 @@
     "country": "Germany",
     "twitter": "https://twitter.com/jancborchardt",
     "linkedin": "",
-    "id": 179,
+    "id": 181,
     "photo": "https://border-none.net/uploads/bono/jan-christoph_borchardt_03.jpg",
     "organisation": "ownCloud, Open Source Design",
     "biography": "Jan-Christoph Borchardt is an open source designer, currently focused on ownCloud and opensourcedesign.net He worked with several open source software projects including Unhosted, Terms of Service; Didn\u2019t Read, Litewrite, Diaspora and more. Jan also regularly collaborates with design universities to get students involved in open source."
@@ -2334,23 +2360,10 @@
     "country": "Malaysia",
     "twitter": "https://twitter.com/piratefsh",
     "linkedin": "",
-    "id": 180,
+    "id": 182,
     "photo": "https://goo.gl/photos/JJNoMmKMzHweD8CJ7",
     "organisation": "Code Artist",
     "biography": "Sher Minn Chong is a front-end web engineer. Equal parts programmer and visual artist, she is enjoys the combination of both worlds, especially for the web. Her background spans rapid development at startups, coding education, and never graduated from Recurse Center. She is currently excited about creative coding, JavaScript technologies, and computer vision."
-  },
-  {
-    "py/object": "models.Speaker",
-    "web": "http://vrcollab.com",
-    "github": "wizztjh",
-    "name": "Jia Hen Tee",
-    "country": "Malaysia",
-    "twitter": "https://twitter.com/wizztjh",
-    "linkedin": " https://www.linkedin.com/in/wizztjh",
-    "id": 181,
-    "photo": "",
-    "organisation": "VRcollab",
-    "biography": "Founder and CTO of VRcollab"
   },
   {
     "py/object": "models.Speaker",
@@ -2360,7 +2373,7 @@
     "country": "Russia/St.-Petersburg",
     "twitter": "https://twitter.com/seoul_victoria",
     "linkedin": "https://www.linkedin.com/in/victoriabondarchuk",
-    "id": 182,
+    "id": 183,
     "photo": "https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAIRAAAAJGUyNWI2NjgxLWE1NzMtNGI4MC1hYTQxLWFkOGVkZGRkYTdlZg.jpg",
     "organisation": "Seoul Tech Society, Dmajor",
     "biography": "UX Researcher from Seoul. Interested in Open Source and Open Fashion. "
@@ -2373,7 +2386,7 @@
     "country": "Indonesia",
     "twitter": "",
     "linkedin": "https://sg.linkedin.com/in/david-effendi-5a5769b4",
-    "id": 183,
+    "id": 184,
     "photo": "http://photos1.meetupstatic.com/photos/member/e/2/9/d/highres_243718013.jpeg",
     "organisation": "ChorusText",
     "biography": "ChorusText is an open assistive device built with Arduino, Linux SBC and a few sliders and buttons. It is a text-editing device that lets the user do text editing by means of touch and hearing, without eyesight. It is an ongoing project and the goal of the project is to come up with an assistive device that enables the visually challenged to edit text effectively, and with open-source code + design files such that anyone interested can build one themselves."
@@ -2386,7 +2399,7 @@
     "country": "India",
     "twitter": "https://twitter.com/coala_analyzer",
     "linkedin": "",
-    "id": 184,
+    "id": 185,
     "photo": "https://github.com/coala-analyzer/coala-artwork/blob/master/artwork/logo/coala_color.svg",
     "organisation": "coala",
     "biography": "Ankit has contributed mainly in coala-artwork and helped out in website design for coala. He also did the gitmate.io website. He is also a GNOME foundation member.  Udayan who will also be helping with the stall has been involved with coala since February 2015. He may also be giving a talk at FOSSASIA if selected. coala was his GSoC project where he worked on core coala features and developing a GUI for it. Since then he has been involved with coala in some capacity."
@@ -2399,7 +2412,7 @@
     "country": "France",
     "twitter": "https://twitter.com/YouthMobile_",
     "linkedin": "https://www.linkedin.com/company/unesco",
-    "id": 185,
+    "id": 186,
     "photo": "http://unesco-ci.org/youthmobile/wp-content/uploads/2014/03/YM_Logo_v3-011d2.png",
     "organisation": "UNESCO",
     "biography": "WHO BENEFITS FROM YOUTHMOBILE?  \u00bbYouth and Youth organizations Informal learning opportunities for youth to engage in society and earn livelihoods as mobile app entrepreneurs. ICT-enabled youth organizations creating a sustainable pool of trainers, support staff, and mentors.  \u00bbSecondary School Students Acquiring high-level 21st century skills and confidence to develop/promote mobile apps to resolve local issues of sustainable development.  \u00bbTeachers and Principals Teaching a new, innovative course in mobile apps development, acquiring ICT-pedagogy skills, connecting the school to other schools nationally and globally.  \u00bb By gathering training materials to teach young people to develop mobile apps. The materials will be high-level and open-licensed for translation, localization, and innovations. Training materials will be pedagogically accurate for accreditation and employer recognition.  \u00bb By training teachers to teach the students. UNESCO will be identifying all schools worldwide with existing programs for advanced computer studies.  \u00bb By linking the learners to mobile app competitions, through the creation of the first global list of app competitors: encouraging trained students to submit apps for prizes, recognition, and employment opportunities; and let them meet and learn from those who made it."
@@ -2412,7 +2425,7 @@
     "country": "Singapore",
     "twitter": "",
     "linkedin": "",
-    "id": 186,
+    "id": 187,
     "photo": "",
     "organisation": "Nanyang Polytechnic",
     "biography": "Open source software and hardware kit has enabled solutions to be developed rapidly. To enhance student learning experience, students having been taught on fundamental concepts and knowledge, use open source hardware and software to reinforce the understanding through the application development. Students have benefited from the methods greatly. "
@@ -2425,7 +2438,7 @@
     "country": "Singapore",
     "twitter": "",
     "linkedin": "",
-    "id": 187,
+    "id": 188,
     "photo": "",
     "organisation": "NTU Nanyang Technopreneruship Center",
     "biography": "The Master of Science in Technopreneurship and Innovation (MSc TIP) programme aims to develop and equip global entrepreneurs with the skills and stamina to turn novel ideas into successful ventures in the fast-paced economy today. Modelled after the venture creation cycle, this programme enables candidates to develop an entrepreneurial mindset and the essential business knowledge. Participants learn effective entrepreneurship problem-solving techniques and business decision making approaches through the unique TIP pedagogy: Experiential Learning, Global Immersion and Transformational Experience.   Imparting managerial theories and technical skills, the distinguished faculty members and business mentors inspire the participants with their strong domain expertise and hands-on approaches. Further to that, the programme fosters a global entrepreneurship learning ecosystem which includes visit to leading technology hotbeds such as Silicon Valley, Boston, New York City, Beijing Zhongguanzun Science Park and Shenzhen Institutes of Advanced Technology (SIAT), and learning exchange at world-class universities such as Stanford, Berkley, Tsinghua, and Peking University. "
@@ -2438,7 +2451,7 @@
     "country": "Turkey",
     "twitter": "https://twitter.com/EminAksehirli",
     "linkedin": "https://sg.linkedin.com/in/eminaksehirli",
-    "id": 188,
+    "id": 189,
     "photo": "",
     "organisation": "Singtel",
     "biography": "Dr. Emin Aksehirli is a computer engineer and he is currently working as a data scientist. He is a free software and free culture enthusiast."
