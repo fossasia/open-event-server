@@ -48,7 +48,7 @@ def parse_speakers():
                     sp.linkedin = spek['linkedin']
                     sp.github = spek['github']
                     sp.organisation = spek['organisation']
-                    sp.biography = spek['"biography"']
+                    sp.biography = spek['biography']
                     save_to_db(sp, "Speaker")
 
 
