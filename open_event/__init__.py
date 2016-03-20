@@ -49,6 +49,7 @@ def create_app():
     app.logger.setLevel(logging.INFO)
     # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
+    app.config['ASSETS_DEBUG'] = app.config.get('DEVELOPMENT')
     # Assets minification using Flask-Assets plugin
     assets = Environment(app)
     # Defining asset bundles
