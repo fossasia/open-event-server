@@ -13,20 +13,29 @@ from icalendar import Calendar, Event
 import open_event.models.event_listeners
 from open_event.models import db
 from open_event.views.admin.admin import AdminView
+from flask.ext.assets import Environment, Bundle
+from flask.ext.compress import Compress
+from flask.ext.cache import Cache
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 def create_app():
     app = Flask(__name__)
+    compress = Compress()
+    cache=Cache(app,config={'CACHE_TYPE':'simple'})
     auto = Autodoc(app)
     cal = Calendar()
     event = Event()
+    
+    assets=Environment(app);
     from open_event.views.views import app as routes
     app.register_blueprint(routes)
     migrate = Migrate(app, db)
 
     db.init_app(app)
+    compress.init_app(app)
+    cache.init_app(app)
     manager = Manager(app)
     manager.add_command('db', MigrateCommand)
 
