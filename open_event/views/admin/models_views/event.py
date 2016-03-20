@@ -28,6 +28,9 @@ from open_event.models.session import Session, Format, Language, Level
 from open_event.models.speaker import Speaker
 from open_event.models.sponsor import Sponsor
 from open_event.models.microlocation import Microlocation
+import requests_cache
+
+requests_cache.install_cache()
 
 class EventView(ModelView):
     """Main EVent view class"""
