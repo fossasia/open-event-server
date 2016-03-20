@@ -69,16 +69,28 @@ def create_app():
     form_css = Bundle('css/vendor/select2/select2.css',
                       'css/vendor/select2/select2-bootstrap3.css',
                       'css/vendor/daterangepicker-bs3.css',
-                      filters='cssrewrite,datauri,cssmin', output='gen/form.styles.libs.css')
+                      filters='cssrewrite,datauri,cssmin', output='gen/form.styles.css')
 
     form_js = Bundle('js/vendor/daterangepicker.js',
                      'js/vendor/form-1.0.0.js',
                      filters='jsmin', output='gen/form.scripts.js')
+
+    list_css = Bundle('css/vendor/dataTables.bootstrap.css',
+                      filters='cssrewrite,datauri,cssmin', output='gen/list.styles.css')
+
+    list_js = Bundle('js/vendor/datatables/jquery.dataTables.min.js',
+                     'js/vendor/datatables/dataTables.bootstrap.js',
+                     filters='jsmin', output='gen/list.scripts.js')
+
     # Registering bundles
     assets.register('common_css', common_css)
     assets.register('common_js', common_js)
+
     assets.register('form_css', form_css)
     assets.register('form_js', form_js)
+
+    assets.register('list_css', list_css)
+    assets.register('list_js', list_js)
 
     admin_view = AdminView("Open Event")
     admin_view.init(app)
