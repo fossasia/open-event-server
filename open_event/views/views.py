@@ -4,6 +4,7 @@ from flask import jsonify, url_for, redirect, request, send_from_directory
 from flask.ext.cors import cross_origin
 
 from ..models.track import Track
+from ..models.review import Review
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
@@ -93,6 +94,24 @@ def get_tracks_per_page(event_id, page):
     """Returns 20 event's tracks"""
     tracks = Track.query.filter_by(event_id=event_id)
     return ObjectFormatter.get_json("tracks", tracks, request, page)
+
+
+@app.route('/api/v1/event/<int:event_id>/sessions/<int:session_id>/reviews', methods=['GET'])
+@auto.doc()
+@cross_origin()
+def get_reviews(event_id, session_id):
+    """Returns Reviews for a Session"""
+    reviews = Review.query.filter_by(session_id=session_id)
+    return ObjectFormatter.get_json('reviews', reviews, request)
+
+
+@app.route('/api/v1/event/<int:event_id>/sessions/<int:session_id>/reviews/page/<int:page>', methods=['GET'])
+@auto.doc()
+@cross_origin()
+def get_reviews_per_page(event_id, session_id, page):
+    """Returns Paged Reviews for a Session"""
+    reviews = Review.query.filter_by(session_id=session_id)
+    return ObjectFormatter.get_json('reviews', reviews, request, page)
 
 
 @app.route('/api/v1/event/<int:event_id>/speakers', methods=['GET'])
@@ -244,7 +263,7 @@ def get_speakers_at_event(event_id, speaker_name):
 @auto.doc()
 @cross_origin()
 def generate_icalender_event(event_id):
-	"""Takes an event id and returns the event in iCal format"""		
+	"""Takes an event id and returns the event in iCal format"""
 	event=icalendar.Event()
 	matching_event=Event.query.get(event_id)
 	if matching_event == None:
@@ -253,9 +272,9 @@ def generate_icalender_event(event_id):
 	event.add('latitude',matching_event.latitude)
 	event.add('longitude',matching_event.longitude)
 	event.add('location',matching_event.location_name)
-	event.add('color',matching_event.color)	
+	event.add('color',matching_event.color)
 	event.add('start time',matching_event.start_time)
-	event.add('end time',matching_event.end_time)	
+	event.add('end time',matching_event.end_time)
 	event.add('logo',matching_event.logo)
 	event.add('email',matching_event.email)
 	event.add('slogan',matching_event.slogan)
@@ -267,12 +286,12 @@ def generate_icalender_event(event_id):
 @auto.doc()
 @cross_origin()
 def generate_icalender_track(track_id):
-	"""Takes a track id and returns the track in iCal format"""		
+	"""Takes a track id and returns the track in iCal format"""
 	track=icalendar.Event()
-	matching_track=Track.query.get(track_id)	
+	matching_track=Track.query.get(track_id)
 	if matching_track==None:
-		return "Sorry,the track does not exist"	
-	track.add('name',matching_track.name)	
+		return "Sorry,the track does not exist"
+	track.add('name',matching_track.name)
 	track.add('description',matching_track.description)
 	track.add('image url',matching_track.track_image_url)
 	cal.add_component(track)

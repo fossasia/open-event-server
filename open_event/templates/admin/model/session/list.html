@@ -43,6 +43,7 @@
                             <th>End Time</th>
                             <th>Format</th>
                             <th>Level</th>
+                            <th>Reviews</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -69,6 +70,7 @@
                                 <td>{{session.end_time}}</td>
                                 <td>{{session.format}}</td>
                                 <td>{{session.level}}</td>
+                                <td><a href="{{ get_url('event.session_reviews', event_id=event_id, session_id=session.id) }}">Reviews</a></td>
                             </tr>
                         {% endfor %}
                     </tbody>

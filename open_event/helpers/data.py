@@ -21,6 +21,7 @@ from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.track import Track
 from ..models.user import User
+from ..models.review import Review
 
 
 class DataManager(object):
@@ -186,6 +187,27 @@ class DataManager(object):
         speaker = Speaker.query.get(speaker_id)
         delete_from_db(speaker, "Speaker deleted")
         flash('You successfully delete speaker')
+
+    @staticmethod
+    def create_review(form, session_id):
+        review = Review(name=form.name.data,
+                        email=form.email.data,
+                        comment=form.comment.data,
+                        rating=form.rating.data,
+                        session_id=session_id)
+        return save_to_db(review, 'Review saved')
+
+    @staticmethod
+    def update_review(form, review):
+        data = form.data
+        db.session.query(Review).filter_by(id=review.id).update(dict(data))
+        save_to_db(review, 'Review updated')
+
+    @staticmethod
+    def remove_review(review_id):
+        review = Review.query.get(review_id)
+        delete_from_db(review, 'Review deleted')
+        flash('Successfully deleted review')
 
     @staticmethod
     def create_sponsor(form, event_id):

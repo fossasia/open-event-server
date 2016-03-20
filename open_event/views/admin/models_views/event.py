@@ -14,6 +14,7 @@ from open_event.forms.admin.microlocation_form import MicrolocationForm
 from open_event.forms.admin.level_form import LevelForm
 from open_event.forms.admin.format_form import FormatForm
 from open_event.forms.admin.language_form import LanguageForm
+from open_event.forms.admin.review_form import ReviewForm
 
 from ....helpers.data import DataManager, save_to_db, delete_from_db
 from ....helpers.formatter import Formatter
@@ -28,6 +29,8 @@ from open_event.models.session import Session, Format, Language, Level
 from open_event.models.speaker import Speaker
 from open_event.models.sponsor import Sponsor
 from open_event.models.microlocation import Microlocation
+from open_event.models.review import Review
+
 
 class EventView(ModelView):
     """Main EVent view class"""
@@ -300,6 +303,63 @@ class EventView(ModelView):
             flash("You don't have permission!")
         return redirect(url_for('.event_sessions',
                                 event_id=event_id))
+
+    @expose('/<event_id>/session/<session_id>/review')
+    def session_reviews(self, event_id, session_id):
+        """Reviews for a Session"""
+        reviews = DataGetter.get_reviews(session_id)
+        self.name = 'Reviews'
+        return self.render('admin/model/review/list.html',
+                           objects=reviews,
+                           event_id=event_id,
+                           session_id=session_id)
+
+    @expose('/<event_id>/session/<session_id>/review/new', methods=('GET', 'POST'))
+    def session_review_new(self, event_id, session_id):
+        """Add Review for a Session"""
+        events = DataGetter.get_all_events()
+        form = ReviewForm()
+        self.name = 'Review'
+        if form.validate_on_submit():
+            is_created = DataManager.create_review(form, session_id)
+            if is_created:
+                flash('Thank you for your review')
+                return redirect(url_for('.session_reviews',
+                                event_id=event_id, session_id=session_id))
+            else:
+                flash('Sorry, review not added. It had invalid data.')
+        return self.render('admin/model/create_model.html',
+                           form=form,
+                           event_id=event_id,
+                           events=events,
+                           cancel_url=url_for('.session_reviews',
+                               event_id=event_id, session_id=session_id))
+
+    @expose('/<event_id>/session/<session_id>/review/<review_id>/edit', methods=('GET', 'POST'))
+    def session_review_edit(self, event_id, session_id, review_id):
+        """Edit Review for a Session"""
+        review = DataGetter.get_object(Review, review_id)
+        events = DataGetter.get_all_events()
+        form = ReviewForm(obj=review)
+        self.name = 'Review {0} | Edit'.format(review_id)
+        if form.validate_on_submit():
+            DataManager.update_review(form, review)
+            flash("Review updated")
+            return redirect(url_for('.session_reviews',
+                                    event_id=event_id, session_id=session_id))
+        return self.render('admin/model/create_model.html',
+                           form=form,
+                           event_id=event_id,
+                           events=events,
+                           cancel_url=url_for('.session_reviews',
+                               event_id=event_id, session_id=session_id))
+
+    @expose('/<event_id>/session/<session_id>/review/<review_id>/delete', methods=('GET', 'POST'))
+    def session_review_delete(self, event_id, session_id, review_id):
+        """Delete Review for a Session"""
+        DataManager.remove_review(review_id)
+        return redirect(url_for('.session_reviews',
+                                    event_id=event_id, session_id=session_id))
 
     @expose('/<event_id>/speaker')
     def event_speakers(self, event_id):
