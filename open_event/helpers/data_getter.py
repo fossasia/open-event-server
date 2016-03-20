@@ -3,6 +3,7 @@ from ..models.event import Event, EventsUsers
 from ..models.session import Session, Level, Format, Language
 from ..models.track import Track
 from ..models.speaker import Speaker
+from ..models.review import Review
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
 from ..models.user import User
@@ -55,6 +56,14 @@ class DataGetter:
         :return: Speaker objects filter by event_id
         """
         return Speaker.query.filter_by(event_id=event_id)
+
+    @staticmethod
+    def get_reviews(session_id):
+        """
+        :param session_id: Session Id
+        :return: Reviews for a session_id
+        """
+        return Review.query.filter_by(session_id=session_id)
 
     @staticmethod
     def get_sponsors(event_id):
