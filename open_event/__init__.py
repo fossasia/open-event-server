@@ -8,6 +8,7 @@ from flask.ext.autodoc import Autodoc
 from flask.ext.cors import CORS
 from flask.ext.migrate import Migrate, MigrateCommand
 from flask.ext.script import Manager
+from flask.ext.assets import Environment, Bundle
 from icalendar import Calendar, Event
 
 import open_event.models.event_listeners
@@ -19,6 +20,11 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def create_app():
     app = Flask(__name__)
+
+    # jinja config for trimming unnecessary line break and whitespaces
+    app.jinja_env.trim_blocks = True
+    app.jinja_env.lstrip_blocks = True
+
     auto = Autodoc(app)
     cal = Calendar()
     event = Event()
@@ -42,6 +48,50 @@ def create_app():
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     app.logger.setLevel(logging.INFO)
     # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
+
+    app.config['ASSETS_DEBUG'] = app.config.get('DEVELOPMENT')
+    # Assets minification using Flask-Assets plugin
+    assets = Environment(app)
+    # Defining asset bundles
+    common_css = Bundle('css/vendor/bootstrap.min.css',
+                        'css/roboto.css',
+                        'css/material/material-custom.css',
+                        'css/material/ripples.css',
+                        'css/open-event.css',
+                        filters='cssrewrite,datauri,cssmin', output='gen/common.styles.css')
+
+    common_js = Bundle('js/vendor/jquery-2.1.1.min.js',
+                       'js/vendor/bootstrap.min.js',
+                       'js/vendor/moment-2.8.4.min.js',
+                       'js/vendor/select2.min.js',
+                       'js/material.js',
+                       filters='jsmin', output='gen/common.scripts.js')
+
+    form_css = Bundle('css/vendor/select2/select2.css',
+                      'css/vendor/select2/select2-bootstrap3.css',
+                      'css/vendor/daterangepicker-bs3.css',
+                      filters='cssrewrite,datauri,cssmin', output='gen/form.styles.css')
+
+    form_js = Bundle('js/vendor/daterangepicker.js',
+                     'js/vendor/form-1.0.0.js',
+                     filters='jsmin', output='gen/form.scripts.js')
+
+    list_css = Bundle('css/vendor/dataTables.bootstrap.css',
+                      filters='cssrewrite,datauri,cssmin', output='gen/list.styles.css')
+
+    list_js = Bundle('js/vendor/datatables/jquery.dataTables.min.js',
+                     'js/vendor/datatables/dataTables.bootstrap.js',
+                     filters='jsmin', output='gen/list.scripts.js')
+
+    # Registering bundles
+    assets.register('common_css', common_css)
+    assets.register('common_js', common_js)
+
+    assets.register('form_css', form_css)
+    assets.register('form_js', form_js)
+
+    assets.register('list_css', list_css)
+    assets.register('list_js', list_js)
 
     admin_view = AdminView("Open Event")
     admin_view.init(app)

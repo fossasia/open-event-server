@@ -14,6 +14,7 @@ class Config(object):
 
 class ProductionConfig(Config):
     DEBUG = False
+    DEVELOPMENT = False
     try:
         SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
     except:

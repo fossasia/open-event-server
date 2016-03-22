@@ -1,3 +1,5 @@
+/open_event/static/gen
+/open_event/static/.webassets-cache
 .vagrant/
 .DS_Store
 *.pyc
@@ -14,4 +16,5 @@ _mailinglist
 test.db
 app.db
 .idea/
+run.cmd
 .bundle/

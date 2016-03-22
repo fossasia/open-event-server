@@ -30,12 +30,12 @@
         </div>
     </div>
     <div class="col-md-2"></div>
-    <!-- bring in the google maps library -->
-        <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
-        <script src="{{ url_for('static', filename='admin/js/map.js' )}}"></script>
 {% endblock %}
 
 {% block tail %}
   {{ super() }}
   {{ lib.form_js() }}
+  <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+  <script src="{{ url_for('static', filename='js/map.js' )}}"></script>
+
 {% endblock %}
