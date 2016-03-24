@@ -47,6 +47,8 @@ class Speaker(db.Model):
         self.position = position
         self.country = country
         self.event_id = event_id
+        # ensure links are in social fields
+        self.ensure_socialLinks()
 
     def __repr__(self):
         return '<Speaker %r>' % (self.name)
@@ -71,3 +73,18 @@ class Speaker(db.Model):
                 'position': self.position,
                 'country': self.country,
                 'sessions': session_data  }
+
+    def ensure_socialLinks(self):
+        """convert usernames in social network fields to full links"""
+        self.twitter = self._ensure_socialLink('https://twitter.com', self.twitter)
+        self.facebook = self._ensure_socialLink('https://www.facebook.com', self.facebook)
+        self.github = self._ensure_socialLink('https://github.com', self.github)
+
+    def _ensure_socialLink(self, website, link):
+        """if link is username, prepend website to it"""
+        if link == '' or link is None:
+            return link
+        if link.find('/') != -1: # has backslash, so not a username
+            return link
+        else:
+            return website + '/' + link
