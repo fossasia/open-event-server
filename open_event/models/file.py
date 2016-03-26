@@ -21,5 +21,9 @@ class File(db.Model):
         self.name = name
         self.path = path
         self.owner_id = owner_id
+
     def __repr__(self):
-        return '<File %r>' % (self.name)
+        return '<File %r>' % self.name
+
+    def __str__(self):
+        return self.name

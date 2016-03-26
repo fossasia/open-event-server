@@ -42,6 +42,8 @@ class Level(db.Model):
     def __repr__(self):
         return '<Level %r>' % (self.name)
 
+    def __str__(self):
+        return self.name
 
 class Format(db.Model):
     """Format model class"""
@@ -72,6 +74,8 @@ class Format(db.Model):
     def __repr__(self):
         return '<Format %r>' % (self.name)
 
+    def __str__(self):
+        return self.name
 
 class Language(db.Model):
     """Language model class"""
@@ -106,6 +110,10 @@ class Language(db.Model):
     def __repr__(self):
         return '<Language %r>' % (self.name)
 
+    def __str__(self):
+        return self.name
+
+
 
 class Session(db.Model):
     """Session model class"""
@@ -136,6 +144,7 @@ class Session(db.Model):
     event_id = db.Column(db.Integer,
                          db.ForeignKey('events.id'))
     is_accepted = db.Column(db.Boolean, default=False)
+
     def __init__(self,
                  title=None,
                  subtitle=None,
@@ -182,6 +191,9 @@ class Session(db.Model):
                 'microlocation': self.microlocation.id if self.microlocation else None}
 
     def __repr__(self):
-        return '<Session %r>' % (self.title)
+        return '<Session %r>' % self.title
+
+    def __str__(self):
+        return self.title
 
 
