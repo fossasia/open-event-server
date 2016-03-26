@@ -33,7 +33,10 @@ class Microlocation(db.Model):
         self.room = room
 
     def __repr__(self):
-        return '<Microlocation %r>' % (self.name)
+        return '<Microlocation %r>' % self.name
+
+    def __str__(self):
+        return self.name
 
     @property
     def serialize(self):
