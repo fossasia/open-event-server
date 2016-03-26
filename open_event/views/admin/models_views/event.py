@@ -238,7 +238,7 @@ class EventView(ModelView):
                            cancel_url=url_for('.event_sessions', event_id=event_id))
 
     @expose('/<event_id>/session/new_proposal', methods=('GET', 'POST'))
-    def event_session_new(self, event_id):
+    def event_session_new_proposal(self, event_id):
         """New Session proposal view"""
         events = DataGetter.get_all_events()
         form = SessionForm()
