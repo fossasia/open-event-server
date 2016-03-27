@@ -32,6 +32,7 @@
   <body>
     {{ menu1.render_menu() }}
     {% block page_body %}
+      <div class="container">
         <div class="row">
           {% block messages %}
           {{ layout.messages() }}
@@ -45,6 +46,7 @@
           {% endblock %}
 
         </div>
+      </div>
     {% endblock %}
 
     {% block tail_js %}
