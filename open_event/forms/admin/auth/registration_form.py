@@ -12,3 +12,7 @@ class RegistrationForm(form.Form):
     def validate_login(self, field):
         if db.session.query(User).filter_by(login=self.login.data).count() > 0:
             raise validators.ValidationError('Duplicate username')
+
+    def validate_email(self, field):
+    	if db.session.query(User).filter_by(email=self.email.data).count() > 0:
+    		raise validators.ValidationError('Duplicate email')
