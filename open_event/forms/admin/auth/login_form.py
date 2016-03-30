@@ -7,7 +7,7 @@ from sqlalchemy import or_
 
 class LoginForm(form.Form):
     """Login Form class"""
-    login = StringField(validators=[validators.required()])
+    login = StringField(u'Username or Email', validators=[validators.required()])
     password = PasswordField(validators=[validators.required()])
 
     def __init__(self, form):
