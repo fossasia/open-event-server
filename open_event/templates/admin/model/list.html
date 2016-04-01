@@ -26,30 +26,15 @@
                 </li>
                 {% endif %}
 
-                {% if filters %}
-                <li class="dropdown">
-                    {{ model_layout.filter_options() }}
-                </li>
-                {% endif %}
-
                 {% if actions %}
                 <li class="dropdown">
                     {{ actionlib.dropdown(actions) }}
                 </li>
                 {% endif %}
 
-                {% if search_supported %}
-                <li>
-                    {{ model_layout.search_form() }}
-                </li>
-                {% endif %}
             </ul>
+            <br>
             {% endblock %}
-
-            {% if filters %}
-                {{ model_layout.filter_form() }}
-                <div class="clearfix"></div>
-            {% endif %}
 
             {% block model_list_table %}
             <table class="table table-striped table-bordered table-hover model-list">
@@ -57,7 +42,7 @@
                     <tr>
                         {% block list_header scoped %}
                             {% if actions %}
-                            <th class="list-checkbox-column">
+                            <th class="list-checkbox-column" style="text-align: center">
                                 <input type="checkbox" name="rowtoggle" class="action-rowtoggle" title="{{ _gettext('Select all records') }}" />
                             </th>
                             {% endif %}
@@ -67,22 +52,7 @@
                             {% set column = 0 %}
                             {% for c, name in list_columns %}
                             <th class="column-header">
-                                {% if admin_view.is_sortable(c) %}
-                                    {% if sort_column == column %}
-                                        <a href="{{ sort_url(column, True) }}" title="{{ _gettext('Sort by %(name)s', name=name) }}">
-                                            {{ name }}
-                                            {% if sort_desc %}
-                                                <span class="glyphicon glyphicon-chevron-up"></span>
-                                            {% else %}
-                                                <span class="glyphicon glyphicon-chevron-down"></span>
-                                            {% endif %}
-                                        </a>
-                                    {% else %}
-                                        <a href="{{ sort_url(column) }}" title="{{ _gettext('Sort by %(name)s', name=name) }}">{{ name }}</a>
-                                    {% endif %}
-                                {% else %}
-                                    {{ name }}
-                                {% endif %}
+                                {{ name }}
                                 {% if admin_view.column_descriptions.get(c) %}
                                     <a class="glyphicon glyphicon-question-sign"
                                        title="{{ admin_view.column_descriptions[c] }}"
@@ -99,28 +69,28 @@
                 <tr>
                     {% block list_row scoped %}
                         {% if actions %}
-                        <td>
+                        <td style="text-align: center">
                             <input type="checkbox" name="rowid" class="action-checkbox" value="{{ get_pk_value(row) }}" title="{{ _gettext('Select record') }}" />
                         </td>
                         {% endif %}
                         {% block list_row_actions_column scoped %}
                         <td>
                             {% block list_row_actions scoped %}
-                                {%- if admin_view.can_edit -%}
-                                <a class="icon" href="{{ get_url('.edit_view', id=get_pk_value(row), url=return_url) }}" title="{{ _gettext('Edit record') }}">
-                                    <span class="glyphicon glyphicon-pencil"></span>
-                                </a>
-                                {%- endif -%}
-                                {%- if admin_view.can_delete -%}
-                                <form class="icon" method="POST" action="{{ get_url('.delete_view') }}">
-                                    {{ delete_form.id(value=get_pk_value(row)) }}
-                                    {{ delete_form.url(value=return_url) }}
-                                    {{ delete_form.csrf_token }}
-                                    <button onclick="return confirm('{{ _gettext('Are you sure you want to delete this record?') }}');" title="Delete record">
-                                        <span class="glyphicon glyphicon-trash"></span>
-                                    </button>
-                                </form>
-                                {%- endif -%}
+                                    {%- if admin_view.can_edit -%}
+                                    <a class="btn btn-info btn-xs table-btn" href="{{ get_url('.edit_view', id=get_pk_value(row), url=return_url) }}" title="{{ _gettext('Edit record') }}">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </a>
+                                    {%- endif -%}
+                                    {%- if admin_view.can_delete -%}
+                                     <button class="btn btn-danger btn-xs delete-btn table-btn" title="Delete record">
+                                         <span class="glyphicon glyphicon-trash"></span>
+                                     </button>
+                                    <form method="POST" class="delete-form" action="{{ get_url('.delete_view') }}">
+                                        {{ delete_form.id(value=get_pk_value(row)) }}
+                                        {{ delete_form.url(value=return_url) }}
+                                        {{ delete_form.csrf_token }}
+                                    </form>
+                                    {%- endif -%}
                             {% endblock %}
                         </td>
                         {% endblock %}
@@ -160,12 +130,11 @@
 
 {% block tail %}
     {{ super() }}
-    <script src="{{ admin_static.url(filename='admin/js/filters-1.0.0.js') }}"></script>
     {{ lib.form_js() }}
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.css">
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
 
-    {{ actionlib.script(_gettext('Please select at least one record.'),
-                        actions,
-                        actions_confirmation) }}
+    {{ actionlib.script(_gettext('Please select at least one record.'), actions, actions_confirmation) }}
 
     <script language="javascript">
         (function($) {
@@ -173,13 +142,41 @@
                 html: true,
                 placement: 'bottom'
             });
-            {% if filter_groups %}
-                var filter = new AdminFilters(
-                    '#filter_form', '.field-filters',
-                    {{ filter_groups|tojson|safe }},
-                    {{ active_filters|tojson|safe }}
-                );
-            {% endif %}
+
+            $(document).on('click','.delete-btn', function () {
+               $(this).siblings(".delete-form").submit();
+            });
+
+            $('.model-list').dataTable({
+                "scrollX": true,
+                "pageLength": 50,
+                "order": [[ 2, "asc" ]],
+                "autoWidth": false,
+                 "columnDefs": [
+                    { "width": "10px !important", "targets": 0 },
+                    {
+                        "render": function ( data, type, row ) {
+                            return '<img src="'+data+'" style="width:60px"/>';
+                        },
+                        "orderable": false,
+                        "searchable": false,
+                        "targets": 6
+                    },
+                    {
+                        "orderable": false,
+                        "searchable": false,
+                        "targets": [0,1]
+                    },
+                    {
+                        "render": function ( data, type, row ) {
+                            return '<a href="'+data+'">' + data + '</a>';
+                        },
+                        "targets": 13
+                    }
+                ]
+            });
         })(jQuery);
+
+
     </script>
 {% endblock %}
