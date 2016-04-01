@@ -75,6 +75,14 @@ def get_sessions_per_page(event_id, page):
     sessions = Session.query.filter_by(event_id=event_id, is_accepted=True)
     return ObjectFormatter.get_json("sessions", sessions, request, page)
 
+@app.route('/api/v1/event/<int:event_id>/sessions/<int:session_id>', methods=['GET'])
+@auto.doc()
+@cross_origin()
+def get_session(session_id):
+    """Returns all event's sessions"""
+    session = Session.query.get(session_id)
+    return ObjectFormatter.get_json("session", session, request)
+
 
 @app.route('/api/v1/event/<int:event_id>/tracks', methods=['GET'])
 @auto.doc()
@@ -110,6 +118,14 @@ def get_speakers_per_page(event_id, page):
     """Returns 20 event's speakers"""
     speakers = Speaker.query.filter_by(event_id=event_id)
     return ObjectFormatter.get_json("speakers", speakers, request, page)
+
+@app.route('/api/v1/event/<int:event_id>/speakers/<int:speaker_id>', methods=['GET'])
+@auto.doc()
+@cross_origin()
+def get_speaker(speaker_id):
+    """Returns details of given Speaker id"""
+    speaker = Speaker.query.get(speaker_id)
+    return ObjectFormatter.get_json("speaker", speaker, request)
 
 
 @app.route('/api/v1/event/<int:event_id>/sponsors', methods=['GET'])
@@ -254,7 +270,7 @@ def generate_icalender_event(event_id):
 	event.add('location',matching_event.location_name)
 	event.add('color',matching_event.color)
 	event.add('dtstart',matching_event.start_time)
-	event.add('dtend',matching_event.end_time)	
+	event.add('dtend',matching_event.end_time)
 	event.add('logo',matching_event.logo)
 	event.add('email',matching_event.email)
 	event.add('description',matching_event.slogan)
@@ -269,14 +285,15 @@ def generate_icalender_track(track_id):
 	"""Takes a track id and returns the track in iCal format"""
 	cal=Calendar()
 	track=icalendar.Event()
-	matching_track=Track.query.get(track_id)	
+	matching_track=Track.query.get(track_id)
 	if matching_track==None:
-		return "Sorry,the track does not exist"	
-	track.add('summary',matching_track.name)	
+		return "Sorry,the track does not exist"
+	track.add('summary',matching_track.name)
 	track.add('description',matching_track.description)
 	track.add('url',matching_track.track_image_url)
 	cal.add_component(track)
 	return cal.to_ical()
+
 
 @app.route('/pic/<path:filename>')
 @auto.doc()
