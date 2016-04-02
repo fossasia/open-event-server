@@ -6,6 +6,8 @@ from open_event.models.speaker import Speaker
 from open_event.models.track import Track
 
 from datetime import datetime
+import logging
+
 
 class Saver(object):
 
@@ -55,7 +57,7 @@ class Saver(object):
                 new_session.track = get_or_create(Track, name=self.track_name, description="", event_id=self.event_id, track_image_url="")
                 save_to_db(new_session, "Session Updated")
         except Exception as e:
-            print e
+            logging.error('Error during session updation %s' % e)
 
     def _get_values(self):
         row = self.row

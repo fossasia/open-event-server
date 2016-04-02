@@ -1,4 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
+import logging
+
 from flask import request, url_for, redirect, flash
 from flask.ext import login
 from flask_admin.contrib.sqla import ModelView
@@ -89,7 +91,7 @@ class EventView(ModelView):
             try:
                 DataManager.create_event(self.form)
             except Exception as error:
-                print error
+                logging.error('Error during event creation: %s' % error)
             flash("Event updated")
             return redirect(url_for('.index_view'))
         return self.render('admin/model/create_event.html',
