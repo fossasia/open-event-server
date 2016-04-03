@@ -1,5 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
 import json
+import logging
 from datetime import datetime
 
 import requests
@@ -177,4 +178,4 @@ class SessionSaver(ObjectSaver):
                 new_session.track = Track.query.filter_by(name=row['track']['label_en']).first()
                 save_to_db(new_session, "Session Updated")
         except Exception as e:
-            print e
+            logging.error('Error while saving session: %s' % e)
