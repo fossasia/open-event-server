@@ -33,11 +33,12 @@
               <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" aria-expanded="true">Switch event<b class="caret"></b></a>
               <ul class="dropdown-menu">
                 {%for event in events%}
-                  <li>
+                  <li {% if event.id == event_id|int() %}class="active"{% endif %}>
                     <a href="/admin/event/edit/?id={{event.id}}">{{event.name}}</a>
                   </li>
                 {% endfor %}
                 <li class="dropdown-menu"></li>
+                <li class="divider"></li>
                 <li><a href="{{ get_url('event.create_view', url=return_url)}}"><i class="glyphicon glyphicon-plus" aria-hidden="true" style="margin-right:5px"></i>Add new event</a></li>
                 <li><a href="{{ get_url('event.index_view')}}"><i class="glyphicon glyphicon-th-list" aria-hidden="true" style="margin-right:5px"></i>List of events</a></li>
               </ul>
