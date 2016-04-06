@@ -33,7 +33,7 @@
               <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" aria-expanded="true">Switch event<b class="caret"></b></a>
               <ul class="dropdown-menu">
                 {%for event in events%}
-                  <li {% if event.id == event_id|int() %}class="active"{% endif %}>
+                  <li {% if event_id %}{% if event.id == event_id|int() %}class="active"{% endif %}{% endif %}>
                     <a href="/admin/event/edit/?id={{event.id}}">{{event.name}}</a>
                   </li>
                 {% endfor %}
