@@ -3,6 +3,7 @@ from ..models.event import Event, EventsUsers
 from ..models.session import Session, Level, Format, Language
 from ..models.track import Track
 from ..models.speaker import Speaker
+from ..models.reviews import Review
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
 from ..models.user import User
