@@ -15,6 +15,7 @@ from ..helpers.update_version import VersionUpdater
 from ..models import db
 from ..models.event import Event, EventsUsers
 from ..models.file import File
+from ..models.reviews import Review
 from ..models.microlocation import Microlocation
 from ..models.session import Session, Level, Format, Language
 from ..models.speaker import Speaker

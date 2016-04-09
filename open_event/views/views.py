@@ -299,7 +299,6 @@ def post_reviews(session_id):
     if "comment" not in data:
         data["comment"] = ""
     reviews = DataGetter.get_reviews_by_email_and_session_id(data["email"])
-    print reviews.count()
 
     if reviews.count() > 0:
         DataManager.update_review(data, reviews[0], session_id)
