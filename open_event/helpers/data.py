@@ -72,6 +72,7 @@ class DataManager(object):
         Track will be removed from database
         :param track_id: Track id to remove object
         """
+        Session.query.filter_by(track_id=track_id).delete()
         track = Track.query.get(track_id)
         delete_from_db(track, "Track deleted")
         flash('You successfully deleted track')
@@ -405,6 +406,7 @@ class DataManager(object):
         Microlocation will be removed from database
         :param microlocation_id: Sponsor id to remove object
         """
+        Session.query.filter_by(microlocation_id=microlocation_id).delete()
         microlocation = Microlocation.query.get(microlocation_id)
         delete_from_db(microlocation, "Microlocation deleted")
         flash('You successfully delete microlocation')
@@ -498,6 +500,11 @@ class DataManager(object):
     @staticmethod
     def delete_event(e_id):
         EventsUsers.query.filter_by(event_id=e_id).delete()
+        Microlocation.query.filter_by(event_id=e_id).delete()
+        Speaker.query.filter_by(event_id=e_id).delete()
+        Sponsor.query.filter_by(event_id=e_id).delete()
+        Track.query.filter_by(event_id=e_id).delete()
+        Session.query.filter_by(event_id=e_id).delete()
         Event.query.filter_by(id=e_id).delete()
         db.session.commit()
 
