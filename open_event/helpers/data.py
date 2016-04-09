@@ -76,6 +76,42 @@ class DataManager(object):
         flash('You successfully deleted track')
 
     @staticmethod
+    def create_review(data, session_id, is_accepted=True):
+        """
+        review will be saved to database with proper Event id
+        :param data: review data
+        :param session_id: review belongs to Event by event id
+        """
+        new_review = Review(email=data["email"],
+                              rating=data["rating"],
+                              comment=data["comment"],
+                              session_id=session_id)
+        
+        save_to_db(new_review, "review saved")
+
+    @staticmethod
+    def update_review(data, review, session_id):
+        """
+        review will be updated in database
+        :param data: review data 
+        :param review: object contains all earlier data
+        """
+        data["session_id"]=session_id
+        db.session.query(Review) \
+            .filter_by(id=review.id) \
+            .update(dict(data))
+        save_to_db(review, "review updated")
+
+    @staticmethod
+    def remove_review(review_id):
+        """
+        review will be removed from database
+        :param review_id: review id to remove object
+        """
+        review = Review.query.get(review_id)
+        delete_from_db(review, "review deleted")
+
+    @staticmethod
     def create_session(form, event_id, is_accepted=True):
         """
         Session will be saved to database with proper Event id
