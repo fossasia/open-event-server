@@ -14,6 +14,8 @@ from ...helpers.data import DataManager, save_to_db
 from ...helpers.data_getter import DataGetter
 from ...helpers.helpers import send_email_after_account_create, send_email_with_reset_password_hash
 
+def intended_url():
+    return request.args.get('next') or url_for('.index')
 
 class MyHomeView(AdminIndexView):
     @expose('/')
@@ -39,7 +41,7 @@ class MyHomeView(AdminIndexView):
             login.login_user(user)
 
         if login.current_user.is_authenticated:
-            return redirect(url_for('.index'))
+            return redirect(intended_url())
         link = '<p>Don\'t have an account? <a href="' + url_for('.register_view') + '">Click here to register.</a></p>' \
                                                                                     '<p><a href="' + url_for(
                 '.password_reminder_view') + '">Forgot your password</a>?</p>'
@@ -58,7 +60,7 @@ class MyHomeView(AdminIndexView):
             user = DataManager.create_user(form)
             login.login_user(user)
             send_email_after_account_create(form)
-            return redirect(url_for('.index'))
+            return redirect(intended_url())
         link = '<p>Already have an account? <a href="' + url_for('.login_view') + '">Click here to log in.</a></p>'
         self._template_args['form'] = form
         self._template_args['link'] = link
@@ -77,7 +79,7 @@ class MyHomeView(AdminIndexView):
                 if user:
                     link = request.host + url_for(".change_password_view", hash=user.reset_password)
                     send_email_with_reset_password_hash(email, link)
-                return redirect(url_for('.index'))
+                return redirect(intended_url())
         self._template_args['form'] = form
         self._template = "admin/auth.html"
         return super(MyHomeView, self).index()

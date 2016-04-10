@@ -31,7 +31,10 @@ class Version(db.Model):
         self.microlocations_ver = microlocations_ver
 
     def __repr__(self):
-        return '<Version %r>' % (self.id)
+        return '<Version %r>' % self.id
+
+    def __str__(self):
+        return self.id
 
     @property
     def serialize(self):

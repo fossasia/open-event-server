@@ -76,7 +76,10 @@ class Event(db.Model):
         # self.owner = owner
 
     def __repr__(self):
-        return '<Event %r>' % (self.name)
+        return '<Event %r>' % self.name
+
+    def __str__(self):
+        return self.name
 
     @property
     def serialize(self):

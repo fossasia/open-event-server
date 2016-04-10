@@ -17,9 +17,13 @@ from open_event.models.track import Track
 from open_event.models.microlocation import Microlocation
 from dateutil.parser import parse
 import re
+
+
 def get_sessions():
     with open('open_event/tools/fossasia/sessions.json', 'r+') as f:
         return json.load(f)['sessions']
+
+
 def parse_speakers():
     with current_app.app_context():
         with open('open_event/tools/fossasia/speakers.json', 'r+') as f:
@@ -42,7 +46,9 @@ def parse_speakers():
                     sp.photo = spek['photo']
                     sp.twitter = spek['twitter']
                     sp.linkedin = spek['linkedin']
+                    sp.github = spek['github']
                     sp.organisation = spek['organisation']
+                    sp.biography = spek['biography']
                     save_to_db(sp, "Speaker")
 
 

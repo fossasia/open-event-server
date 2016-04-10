@@ -1,4 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
+import logging
+
 from flask import request, url_for, redirect, flash
 from flask.ext import login
 from flask_admin.contrib.sqla import ModelView
@@ -85,14 +87,13 @@ class EventView(ModelView):
         self.name = "Event | New"
         from ....forms.admin.event_form import EventForm
         self.form = EventForm()
-        if request.method == "POST":
-            if self.form.validate():
-                try:
-                    DataManager.create_event(self.form)
-                except Exception as error:
-                    print error
-                flash("Event updated")
-                return redirect(url_for('.index_view'))
+        if self.form.validate_on_submit():
+            try:
+                DataManager.create_event(self.form)
+            except Exception as error:
+                logging.error('Error during event creation: %s' % error)
+            flash("Event updated")
+            return redirect(url_for('.index_view'))
         return self.render('admin/model/create_event.html',
                            form=self.form,
                            events=events,
@@ -108,14 +109,13 @@ class EventView(ModelView):
         event = DataGetter.get_object(Event, event_id)
         from ....forms.admin.event_form import EventForm
         self.form = EventForm(obj=event)
-        if self.form.validate():
-            if request.method == "POST":
-                if is_event_admin_or_editor(event_id):
-                    DataManager.update_event(self.form, event)
-                    flash("Event updated")
-                else:
-                    flash("You don't have permission!")
-                return redirect(url_for('.index_view', event_id=event_id))
+        if self.form.validate_on_submit():
+            if is_event_admin_or_editor(event_id):
+                DataManager.update_event(self.form, event)
+                flash("Event updated")
+            else:
+                flash("You don't have permission!")
+            return redirect(url_for('.index_view', event_id=event_id))
         return self.render('admin/model/edit_event.html',
                            form=self.form,
                            event_id=event_id,
@@ -161,7 +161,7 @@ class EventView(ModelView):
         events = DataGetter.get_all_events()
         form = TrackForm(request.form)
         self.name = " Track | New"
-        if form.validate():
+        if form.validate_on_submit():
             if is_event_admin_or_editor(event_id) and is_track_name_unique_in_event(form, event_id):
                 DataManager.create_track(form, event_id)
                 flash("Track added")
@@ -181,7 +181,7 @@ class EventView(ModelView):
         events = DataGetter.get_all_events()
         form = TrackForm(obj=track)
         self.name = "Track | Edit"
-        if form.validate() and is_track_name_unique_in_event(form, event_id, track_id):
+        if form.validate_on_submit() and is_track_name_unique_in_event(form, event_id, track_id):
             if is_event_admin_or_editor(event_id):
                 DataManager.update_track(form, track)
                 flash("Track updated")
@@ -225,7 +225,7 @@ class EventView(ModelView):
         events = DataGetter.get_all_events()
         form = SessionForm()
         self.name = "Session | New"
-        if form.validate():
+        if form.validate_on_submit():
             if is_event_admin_or_editor(event_id):
                 DataManager.create_session(form, event_id)
             else:
@@ -238,12 +238,12 @@ class EventView(ModelView):
                            cancel_url=url_for('.event_sessions', event_id=event_id))
 
     @expose('/<event_id>/session/new_proposal', methods=('GET', 'POST'))
-    def event_session_new(self, event_id):
+    def event_session_new_proposal(self, event_id):
         """New Session proposal view"""
         events = DataGetter.get_all_events()
         form = SessionForm()
         self.name = "Session | New Proposal"
-        if form.validate():
+        if form.validate_on_submit():
             DataManager.create_session(form, event_id, False)
             return redirect(url_for('.event_sessions', event_id=event_id))
         return self.render('admin/model/create_model.html',
@@ -259,7 +259,7 @@ class EventView(ModelView):
         events = DataGetter.get_all_events()
         form = SessionForm(obj=session)
         self.name = "Session | Edit"
-        if form.validate():
+        if form.validate_on_submit():
             if is_event_admin_or_editor(event_id):
                 DataManager.update_session(form, session)
                 flash("Session updated")
@@ -318,7 +318,7 @@ class EventView(ModelView):
         events = DataGetter.get_all_events()
         form = SpeakerForm()
         self.name = "Speaker | New"
-        if form.validate():
+        if form.validate_on_submit():
             if is_event_admin_or_editor(event_id):
                 DataManager.create_speaker(form, event_id)
                 flash("Speaker added")
@@ -338,7 +338,7 @@ class EventView(ModelView):
         events = DataGetter.get_all_events()
         form = SpeakerForm(obj=speaker)
         self.name = "Speaker " + speaker_id + " | Edit"
-        if form.validate():
+        if form.validate_on_submit():
             if is_event_admin_or_editor(event_id):
                 DataManager.update_speaker(form, speaker)
                 flash("Speaker updated")
@@ -379,7 +379,7 @@ class EventView(ModelView):
         events = DataGetter.get_all_events()
         form = SponsorForm()
         self.name = "Sponsor | New"
-        if form.validate():
+        if form.validate_on_submit():
             if is_event_admin_or_editor(event_id):
                 DataManager.create_sponsor(form, event_id)
                 flash("Sponsor added")
@@ -399,7 +399,7 @@ class EventView(ModelView):
         events = DataGetter.get_all_events()
         form = SponsorForm(obj=sponsor)
         self.name = "Sponsor " + sponsor_id + " | Edit"
-        if form.validate():
+        if form.validate_on_submit():
             if is_event_admin_or_editor(event_id):
                 DataManager.update_sponsor(form, sponsor)
                 flash("Sponsor updated")
@@ -439,7 +439,7 @@ class EventView(ModelView):
         events = DataGetter.get_all_events()
         form = MicrolocationForm()
         self.name = "Microlocation | New"
-        if form.validate():
+        if form.validate_on_submit():
             if is_event_admin_or_editor(event_id):
                 DataManager.create_microlocation(form, event_id)
                 flash("Microlocation added")
@@ -459,7 +459,7 @@ class EventView(ModelView):
         events = DataGetter.get_all_events()
         form = MicrolocationForm(obj=microlocation)
         self.name = "Microlocation " + microlocation_id + " | Edit"
-        if form.validate():
+        if form.validate_on_submit():
             if is_event_admin_or_editor(event_id):
                 DataManager.update_microlocation(form, microlocation)
                 flash("Microlocation updated")
@@ -533,7 +533,7 @@ class EventView(ModelView):
         events = DataGetter.get_all_events()
         form = LevelForm()
         self.name = "Level | New"
-        if form.validate():
+        if form.validate_on_submit():
             if is_event_admin_or_editor(event_id):
                 DataManager.create_level(form, event_id)
                 flash("Level added")
@@ -553,7 +553,7 @@ class EventView(ModelView):
         events = DataGetter.get_all_events()
         form = LevelForm(obj=level)
         self.name = "Level " + level_id + " | Edit"
-        if form.validate():
+        if form.validate_on_submit():
             if is_event_admin_or_editor(event_id):
                 DataManager.update_level(form, level, event_id)
                 flash("Level updated")
@@ -593,7 +593,7 @@ class EventView(ModelView):
         events = DataGetter.get_all_events()
         form = FormatForm()
         self.name = "Format | New"
-        if form.validate():
+        if form.validate_on_submit():
             if is_event_admin_or_editor(event_id):
                 DataManager.create_format(form, event_id)
                 flash("Format added")
@@ -613,7 +613,7 @@ class EventView(ModelView):
         events = DataGetter.get_all_events()
         form = FormatForm(obj=format)
         self.name = "format " + format_id + " | Edit"
-        if form.validate():
+        if form.validate_on_submit():
             if is_event_admin_or_editor(event_id):
                 DataManager.update_format(form, format, event_id)
                 flash("Format updated")
@@ -653,7 +653,7 @@ class EventView(ModelView):
         events = DataGetter.get_all_events()
         form = LanguageForm()
         self.name = "Language | New"
-        if form.validate():
+        if form.validate_on_submit():
             if is_event_admin_or_editor(event_id):
                 DataManager.create_language(form, event_id)
                 flash("Language added")
@@ -673,7 +673,7 @@ class EventView(ModelView):
         events = DataGetter.get_all_events()
         form = LanguageForm(obj=language)
         self.name = "Language " + language_id + " | Edit"
-        if form.validate():
+        if form.validate_on_submit():
             if is_event_admin_or_editor(event_id):
                 DataManager.update_language(form, language, event_id)
                 flash("Language updated")
