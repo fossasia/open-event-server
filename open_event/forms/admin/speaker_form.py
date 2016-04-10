@@ -1,10 +1,10 @@
 """Copyright 2015 Rafal Kowalski"""
 from flask_wtf import Form
 from wtforms import StringField, TextAreaField, validators
+from wtforms.widgets import ListWidget, CheckboxInput
 from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField
 from open_event.models.session import Session
 from ...helpers.helpers import get_event_id
-from flask_wtf.file import FileField
 
 def get_sessions():
     """Returns Event's Sessions"""
@@ -25,4 +25,8 @@ class SpeakerForm(Form):
     organisation = StringField('Organisation', [validators.DataRequired()])
     position = StringField('Position')
     country = StringField('Country', [validators.DataRequired()])
-    sessions = QuerySelectMultipleField(query_factory=get_sessions, allow_blank=True)
+    sessions = QuerySelectMultipleField(
+            query_factory=get_sessions,
+            widget=ListWidget(prefix_label=False),
+            option_widget=CheckboxInput()
+    )
