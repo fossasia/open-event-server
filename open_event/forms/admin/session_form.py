@@ -1,7 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 from flask_wtf import Form
+from flask_admin.form.widgets import Select2Widget
 from wtforms import StringField, TextAreaField
-from wtforms.widgets import ListWidget, CheckboxInput
 from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField, QuerySelectField
 from wtforms.validators import DataRequired
 from flask_admin.form.fields import DateTimeField
@@ -30,7 +30,6 @@ class SessionForm(Form):
     language = QuerySelectField(label='Language', query_factory=DataGetter.get_languages, allow_blank=True)
     speakers = QuerySelectMultipleField(
             query_factory=get_speakers,
-            widget=ListWidget(prefix_label=False),
-            option_widget=CheckboxInput()
+            widget=Select2Widget(multiple=True)
     )
     microlocation = QuerySelectField(label='Microlocation', query_factory=DataGetter.get_microlocations_by_event_id, allow_blank=True)
