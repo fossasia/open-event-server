@@ -79,6 +79,7 @@ class Speaker(db.Model):
         self.twitter = self._ensure_socialLink('https://twitter.com', self.twitter)
         self.facebook = self._ensure_socialLink('https://www.facebook.com', self.facebook)
         self.github = self._ensure_socialLink('https://github.com', self.github)
+        self.linkedin = self._ensure_socialLink('https://www.linkedin.com/in', self.linkedin)
 
     def _ensure_socialLink(self, website, link):
         """if link is username, prepend website to it"""
