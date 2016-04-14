@@ -1,7 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 from flask_admin import BaseView, expose
-from flask.ext import login
 from ....helpers.data_getter import DataGetter
+
 
 class ApiView(BaseView):
     """Api View class"""

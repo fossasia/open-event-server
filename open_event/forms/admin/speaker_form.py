@@ -6,6 +6,7 @@ from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField
 from open_event.models.session import Session
 from ...helpers.helpers import get_event_id
 
+
 def get_sessions():
     """Returns Event's Sessions"""
     return Session.query.filter_by(event_id=get_event_id())

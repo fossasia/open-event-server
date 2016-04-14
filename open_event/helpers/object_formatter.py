@@ -3,6 +3,7 @@ from flask import jsonify
 
 from .query_filter import QueryFilter
 
+
 PER_PAGE = 20
 class ObjectFormatter(object):
     """Object formatter class"""
