@@ -20,7 +20,10 @@ class Track(db.Model):
         self.track_image_url = track_image_url
 
     def __repr__(self):
-        return '<Track %r>' % (self.name)
+        return '<Track %r>' % self.name
+
+    def __str__(self):
+        return self.name
 
     @property
     def serialize(self):

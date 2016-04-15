@@ -2,12 +2,16 @@
 import logging
 import os.path
 import sys
+import json
 
 from flask import Flask
 from flask.ext.autodoc import Autodoc
 from flask.ext.cors import CORS
 from flask.ext.migrate import Migrate, MigrateCommand
 from flask.ext.script import Manager
+from flask import render_template
+from flask import request
+
 from icalendar import Calendar, Event
 
 import open_event.models.event_listeners
@@ -16,9 +20,9 @@ from open_event.views.admin.admin import AdminView
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+app = Flask(__name__)
 
 def create_app():
-    app = Flask(__name__)
     auto = Autodoc(app)
     cal = Calendar()
     event = Event()
@@ -49,5 +53,17 @@ def create_app():
 
     return app, manager, db
 
+@app.errorhandler(404)
+def page_not_found(e):
+    if request_wants_json():
+        return json.dumps({"error": "endpoint_not_found"})
+    return render_template('404.html'), 404
+
+# taken from http://flask.pocoo.org/snippets/45/
+def request_wants_json():
+    best = request.accept_mimetypes.best_match(['application/json', 'text/html'])
+    return best == 'application/json' and \
+        request.accept_mimetypes[best] > \
+        request.accept_mimetypes['text/html']
 
 current_app, manager, database = create_app()

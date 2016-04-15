@@ -383,7 +383,7 @@ class DataManager(object):
         password = form.password.data
         user.password = generate_password_hash(password, salt)
         hash = random.getrandbits(128)
-        user.reset_password = hash
+        user.reset_password = str(hash)
 
         user.salt = salt
         user.role = 'speaker'

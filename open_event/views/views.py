@@ -16,8 +16,8 @@ from flask.ext.autodoc import Autodoc
 from icalendar import Calendar
 import icalendar
 
-auto=Autodoc()
-cal=Calendar()
+
+auto = Autodoc()
 
 app = Blueprint('', __name__)
 @app.route('/', methods=['GET'])
@@ -244,21 +244,21 @@ def get_speakers_at_event(event_id, speaker_name):
 @auto.doc()
 @cross_origin()
 def generate_icalender_event(event_id):
-	"""Takes an event id and returns the event in iCal format"""		
+	"""Takes an event id and returns the event in iCal format"""
+	cal=Calendar()
 	event=icalendar.Event()
 	matching_event=Event.query.get(event_id)
 	if matching_event == None:
 		return "Sorry,the event does not exist"
-	event.add('name',matching_event.name)
-	event.add('latitude',matching_event.latitude)
-	event.add('longitude',matching_event.longitude)
+	event.add('summary',matching_event.name)
+	event.add('geo',(matching_event.latitude, matching_event.longitude))
 	event.add('location',matching_event.location_name)
-	event.add('color',matching_event.color)	
-	event.add('start time',matching_event.start_time)
-	event.add('end time',matching_event.end_time)	
+	event.add('color',matching_event.color)
+	event.add('dtstart',matching_event.start_time)
+	event.add('dtend',matching_event.end_time)	
 	event.add('logo',matching_event.logo)
 	event.add('email',matching_event.email)
-	event.add('slogan',matching_event.slogan)
+	event.add('description',matching_event.slogan)
 	event.add('url',matching_event.url)
 	cal.add_component(event)
 	return cal.to_ical()
@@ -267,14 +267,15 @@ def generate_icalender_event(event_id):
 @auto.doc()
 @cross_origin()
 def generate_icalender_track(track_id):
-	"""Takes a track id and returns the track in iCal format"""		
+	"""Takes a track id and returns the track in iCal format"""
+	cal=Calendar()
 	track=icalendar.Event()
 	matching_track=Track.query.get(track_id)	
 	if matching_track==None:
 		return "Sorry,the track does not exist"	
-	track.add('name',matching_track.name)	
+	track.add('summary',matching_track.name)	
 	track.add('description',matching_track.description)
-	track.add('image url',matching_track.track_image_url)
+	track.add('url',matching_track.track_image_url)
 	cal.add_component(track)
 	return cal.to_ical()
 

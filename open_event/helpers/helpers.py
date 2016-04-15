@@ -28,6 +28,7 @@ def is_track_name_unique_in_event(form, event_id, *args):
         else:
             return True
 
+
 HEADERS = {"Authorization": "Bearer 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"}
 def send_email_after_account_create(form):
     """Send email after account create"""

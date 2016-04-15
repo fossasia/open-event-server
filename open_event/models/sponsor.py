@@ -18,7 +18,10 @@ class Sponsor(db.Model):
         self.event_id = event_id
 
     def __repr__(self):
-        return '<Sponsor %r>' % (self.name)
+        return '<Sponsor %r>' % self.name
+
+    def __str__(self):
+        return self.name
 
     @property
     def serialize(self):

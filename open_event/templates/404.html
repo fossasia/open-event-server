@@ -1,10 +1,29 @@
+{% import 'admin/static.html' as admin_static with context %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>404</title>
+    <title>You got 404'd</title>
+    <link href="{{ admin_static.url(filename='bootstrap/bootstrap3/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='admin/css/roboto.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='admin/css/material-custom.css') }}" rel="stylesheet">
 </head>
 <body>
-
+<div class="container">
+    <div class="row">
+        <div class="col-md-push-3 col-md-6" style="margin-top: 20px;">
+            <div class="jumbotron">
+                <h2 style="font-weight: 100; ">Page Not Found</h2>
+                <p class="lead">Oops, the page you're looking for does not exist.</p>
+                <p style="font-size: 14px;">
+                    You may want to head back to the homepage and restart your journey.
+                </p>
+                <a href="/" class="btn btn-large btn-info" style="background-color: #3f51b5;">
+                    <i class="glyphicon glyphicon-home"></i> Take Me Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

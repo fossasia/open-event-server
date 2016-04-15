@@ -6,8 +6,8 @@ from open_event.models import db
 from open_event.models.event import Event
 from open_event.models.user import User
 from open_event.views.admin.models_views.event import EventView
-from open_event.views.admin.models_views.api import ApiView
 from open_event.views.admin.home import MyHomeView
+
 
 class AdminView(object):
     """Main Admin class View"""
