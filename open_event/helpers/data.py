@@ -88,14 +88,13 @@ class DataManager(object):
                               rating=data["rating"],
                               comment=data["comment"],
                               session_id=session_id)
-        
         save_to_db(new_review, "review saved")
 
     @staticmethod
     def update_review(data, review, session_id):
         """
         review will be updated in database
-        :param data: review data 
+        :param data: review data
         :param review: object contains all earlier data
         """
         data["session_id"]=session_id

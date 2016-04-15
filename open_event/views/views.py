@@ -13,7 +13,7 @@ from ..models.session import Session, Level, Format, Language
 from ..models.reviews import Review
 from ..models.version import Version
 from ..helpers.object_formatter import ObjectFormatter
-from ..helpers.data import DataManager, save_to_db, delete_from_db
+from ..helpers.data import DataManager, delete_from_db
 from ..helpers.data_getter import DataGetter
 from flask import Blueprint
 from flask.ext.autodoc import Autodoc
@@ -311,10 +311,10 @@ def post_reviews(session_id):
             return jsonify(
                 {'status': '400',
                  'detail': 'Not valid data'})
-        DataManager.create_review(data, session_id)        
+        DataManager.create_review(data, session_id)
         return jsonify(
                 {'status': '200',
-                 'detail': 'Review Added'})  
+                 'detail': 'Review Added'})
     return jsonify(
                 {'status': '500',
                 "title": "The backend responded with an error",

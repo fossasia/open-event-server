@@ -1,5 +1,4 @@
 from . import db
-from .session import Session
 
 class Review(db.Model):
     """Review model class"""
@@ -9,7 +8,7 @@ class Review(db.Model):
     comment = db.Column(db.String)
     rating = db.Column(db.Integer, nullable=False)
     session_id = db.Column(db.Integer, db.ForeignKey('session.id'))
-    
+
     def __init__(self,
                  email=None,
                  comment=None,
