@@ -18,3 +18,4 @@ Flask-Migrate==1.6.0
 Flask-Login==0.3.2
 flask-scrypt
 xlrd
+mock==2.0.0

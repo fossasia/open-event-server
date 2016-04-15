@@ -38,7 +38,7 @@ class TestEvent(unittest.TestCase):
                                       name='track1',
                                       description='trackdescription'),
                                   follow_redirects=True)
-            self.assertEqual(len(Track.query.all()), 2)
+            self.assertEqual(len(Track.query.all()), 1)
 
 
 if __name__ == '__main__':

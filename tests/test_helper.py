@@ -16,7 +16,8 @@ class TestDataManager(unittest.TestCase):
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
-            db.session.add(ObjectMother.get_event())
+            event = ObjectMother.get_event()
+            db.session.add(event)
             db.session.commit()
 
     def tearDown(self):
