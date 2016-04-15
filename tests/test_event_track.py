@@ -1,7 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 import unittest
 from flask import url_for
-from tests.setup import Setup
+from tests.set_up import Setup
 from open_event import current_app as app
 from open_event.helpers.data import save_to_db
 from tests.object_mother import ObjectMother
