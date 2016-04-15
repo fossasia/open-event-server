@@ -1,12 +1,11 @@
 {% extends 'admin/base1.html' %}
 
-
-
+    {% block head_css %}
+        {{  super() }}
+        <link href="{{url_for('static', filename='css/prism.css')}}" rel="stylesheet">
+        <link href="{{url_for('static', filename='css/chosen.css')}}" rel="stylesheet">
+    {% endblock %}
 {% block body %}
-    <link href="{{url_for('static', filename='admin/css/prism.css')}}" rel="stylesheet">
-    <link href="{{url_for('static', filename='admin/css/chosen.css')}}" rel="stylesheet">
-    <script src="{{ url_for('static', filename='admin/js/prism.js')}}"></script>
-    <script src="{{ url_for('static', filename='admin/js/chosen.jquery.js')}}"></script>
     <div class="col-md-2"></div>
     <div class="col-md-8">
         <div class="well bs-component">
@@ -61,6 +60,12 @@
     </div>
     <div class="col-md-2"></div>
 
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/prism.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/chosen.jquery.js')}}"></script>
     <script language="javascript">
         (function($) {
             $(document).ready(function() {

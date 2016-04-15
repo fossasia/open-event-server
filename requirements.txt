@@ -18,5 +18,8 @@ Flask-Migrate==1.8.0
 Flask-Login==0.3.2
 flask-scrypt
 xlrd
+Flask-Assets==0.11
+jsmin==2.2.1
+cssmin==0.2.0
 mock
 SQLAlchemy-Utils
