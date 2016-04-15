@@ -1,5 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
 from . import db
+from ..helpers.helpers import ensure_socialLink
 
 
 class Speaker(db.Model):
@@ -76,16 +77,7 @@ class Speaker(db.Model):
 
     def ensure_socialLinks(self):
         """convert usernames in social network fields to full links"""
-        self.twitter = self._ensure_socialLink('https://twitter.com', self.twitter)
-        self.facebook = self._ensure_socialLink('https://www.facebook.com', self.facebook)
-        self.github = self._ensure_socialLink('https://github.com', self.github)
-        self.linkedin = self._ensure_socialLink('https://www.linkedin.com/in', self.linkedin)
-
-    def _ensure_socialLink(self, website, link):
-        """if link is username, prepend website to it"""
-        if link == '' or link is None:
-            return link
-        if link.find('/') != -1: # has backslash, so not a username
-            return link
-        else:
-            return website + '/' + link
+        self.twitter = ensure_socialLink('https://twitter.com', self.twitter)
+        self.facebook = ensure_socialLink('https://www.facebook.com', self.facebook)
+        self.github = ensure_socialLink('https://github.com', self.github)
+        self.linkedin = ensure_socialLink('https://www.linkedin.com/in', self.linkedin)
