@@ -1,6 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 import os
-from flask import jsonify, url_for, redirect, request, send_from_directory
+import re
+from flask import jsonify, json, url_for, redirect, request, send_from_directory
 from flask.ext.cors import cross_origin
 
 from ..models.track import Track
@@ -9,8 +10,11 @@ from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
 from ..models.event import Event
 from ..models.session import Session, Level, Format, Language
+from ..models.reviews import Review
 from ..models.version import Version
 from ..helpers.object_formatter import ObjectFormatter
+from ..helpers.data import DataManager, save_to_db, delete_from_db
+from ..helpers.data_getter import DataGetter
 from flask import Blueprint
 from flask.ext.autodoc import Autodoc
 from icalendar import Calendar
@@ -278,6 +282,44 @@ def generate_icalender_track(track_id):
 	track.add('url',matching_track.track_image_url)
 	cal.add_component(track)
 	return cal.to_ical()
+
+@app.route('/api/v1/session/<int:session_id>/reviews', methods=['GET'])
+@auto.doc()
+@cross_origin()
+def get_reviews(session_id):
+    """Returns all session's reviews"""
+    reviews = Review.query.filter_by(session_id=session_id)
+    return ObjectFormatter.get_json("reviews", reviews, request)
+
+@app.route('/api/v1/session/<int:session_id>/reviews', methods=['POST'])
+@auto.doc()
+@cross_origin()
+def post_reviews(session_id):
+    """Post reviews for sessions"""
+    data = json.loads(request.data)
+    if "comment" not in data:
+        data["comment"] = ""
+    reviews = DataGetter.get_reviews_by_email_and_session_id(data["email"])
+
+    if reviews.count() > 0:
+        DataManager.update_review(data, reviews[0], session_id)
+        return jsonify(
+                {'status': '200',
+                 'detail': 'Review Updated'})
+
+    elif "email" in data and "rating" in data: 
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", data["email"]):
+            return jsonify(
+                {'status': '400',
+                 'detail': 'Not valid data'})
+        DataManager.create_review(data, session_id)        
+        return jsonify(
+                {'status': '200',
+                 'detail': 'Review Added'})  
+    return jsonify(
+                {'status': '500',
+                "title": "The backend responded with an error",
+                "detail": "All required paramters not obtained"})
 
 @app.route('/pic/<path:filename>')
 @auto.doc()
