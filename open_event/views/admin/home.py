@@ -14,8 +14,10 @@ from ...helpers.data import DataManager, save_to_db
 from ...helpers.data_getter import DataGetter
 from ...helpers.helpers import send_email_after_account_create, send_email_with_reset_password_hash
 
+
 def intended_url():
     return request.args.get('next') or url_for('.index')
+
 
 class MyHomeView(AdminIndexView):
     @expose('/')

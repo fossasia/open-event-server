@@ -5,6 +5,7 @@ from ....models import db
 from ....models.user import User
 from sqlalchemy import or_
 
+
 class LoginForm(form.Form):
     """Login Form class"""
     login = StringField(u'Username or Email', validators=[validators.required()])

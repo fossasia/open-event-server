@@ -1,5 +1,11 @@
 #  Open-Event Server
 
+[![Build Status](https://travis-ci.org/fossasia/open-event-orga-server.svg?branch=master)](https://travis-ci.org/fossasia/open-event-orga-server)
+[![Dependency Status](https://gemnasium.com/badges/github.com/fossasia/open-event-orga-server.svg)](https://gemnasium.com/github.com/fossasia/open-event-orga-server)
+[![Codacy Badge](https://api.codacy.com/project/badge/grade/645630f8334b40dd93ba804956908a42)](https://www.codacy.com/app/triplez/open-event-orga-server)
+[![Issue Count](https://codeclimate.com/github/fossasia/open-event-orga-server/badges/issue_count.svg)](https://codeclimate.com/github/fossasia/open-event-orga-server)
+[![Gitter](https://badges.gitter.im/fossasia/open-event-orga-server.svg)](https://gitter.im/fossasia/open-event-orga-server?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
 This server which will manage all the data of the event. Backed by a database,
 it provides API endpoints to fetch the data, and also to modify/update it.
 

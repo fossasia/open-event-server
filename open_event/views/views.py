@@ -16,7 +16,8 @@ from flask.ext.autodoc import Autodoc
 from icalendar import Calendar
 import icalendar
 
-auto=Autodoc()
+
+auto = Autodoc()
 
 app = Blueprint('', __name__)
 @app.route('/', methods=['GET'])

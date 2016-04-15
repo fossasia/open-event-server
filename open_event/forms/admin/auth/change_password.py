@@ -1,6 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 from wtforms import form, PasswordField, validators
 
+
 class ChangePasswordForm(form.Form):
     """Change Password Form"""
     password = PasswordField(validators=[validators.required(), validators.length(min=8)])

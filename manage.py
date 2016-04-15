@@ -1,8 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
-from flask import url_for
-
 from open_event import manager
 from open_event import current_app as app
+
 
 @manager.command
 def list_routes():
