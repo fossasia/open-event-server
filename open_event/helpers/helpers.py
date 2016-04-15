@@ -68,7 +68,7 @@ def is_event_admin(event_id, users):
     return is_admin
 
 
-def ensure_socialLink(website, link):
+def ensure_social_link(website, link):
     """
     converts usernames of social profiles to full profile links
     if link is username, prepend website to it else return the link
