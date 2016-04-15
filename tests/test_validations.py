@@ -2,7 +2,6 @@ import unittest
 from tests.set_up import Setup
 from open_event import current_app as app
 from open_event.helpers.data import save_to_db
-from mock import MagicMock
 from open_event.helpers.validators import CustomDateEventValidate, CustomDateSessionValidate
 from open_event.forms.admin.event_form import EventForm
 from open_event.forms.admin.session_form import SessionForm
@@ -30,15 +29,16 @@ class TestValidation(unittest.TestCase):
 
     def test_event_end_time_smaller_than_start_time(self):
         with app.test_request_context():
-            self.event_form['start_time'].data = MagicMock(return_value=datetime(2015, 8, 4, 12, 30, 45))
-            self.event_form['end_time'].data = MagicMock(return_value=datetime(2015, 1, 4, 12, 30, 45))
-            self.assertRaises(ValidationError, CustomDateEventValidate().__call__(form=self.event_form, field=None))
+            self.event_form['start_time'].data = datetime(2015, 8, 4, 12, 30, 45)
+            self.event_form['end_time'].data = datetime(2015, 1, 4, 12, 30, 45)
+            with self.assertRaises(ValidationError):
+                CustomDateEventValidate().__call__(form=self.event_form, field=None)
 
     def test_event_start_time_smaller_than_end_time(self):
         with app.test_request_context():
-            self.event_form['start_time'].data = MagicMock(return_value=datetime(2015, 8, 4, 12, 30, 45))
-            self.event_form['end_time'].data = MagicMock(return_value=datetime(2015, 9, 4, 12, 30, 45))
-            self.assertRaises(ValidationError, CustomDateEventValidate().__call__(form=self.event_form, field=None))
+            self.event_form['start_time'].data = datetime(2015, 8, 4, 12, 30, 45)
+            self.event_form['end_time'].data = datetime(2015, 9, 4, 12, 30, 45)
+            CustomDateEventValidate().__call__(form=self.event_form, field=None)
 
     def test_session_start_time_and_end_time_contains_in_event_date(self):
         with app.test_request_context():
@@ -52,7 +52,8 @@ class TestValidation(unittest.TestCase):
             self.session_form['start_time'].data = datetime(2015, 8, 4, 12, 30, 45)
             self.session_form['end_time'].data = datetime(2014, 9, 4, 12, 30, 45)
             request.url = 'http://0.0.0.0:5000/admin/event/1'
-            self.assertRaises(ValidationError, CustomDateSessionValidate().__call__(form=self.session_form, field=None))
+            with self.assertRaises(ValidationError):
+                CustomDateSessionValidate().__call__(form=self.session_form, field=None)
 
 if __name__ == '__main__':
     unittest.main()
