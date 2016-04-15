@@ -1,7 +1,7 @@
 """Written by - Rafal Kowalski"""
 import datetime
 import unittest
-from tests.setup import Setup
+from tests.set_up import Setup
 from open_event import current_app as app
 from open_event.models import db
 from open_event.models.track import Track

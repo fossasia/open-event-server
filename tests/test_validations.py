@@ -1,5 +1,5 @@
 import unittest
-from tests.setup import Setup
+from tests.set_up import Setup
 from open_event import current_app as app
 from open_event.helpers.data import save_to_db
 from mock import MagicMock
