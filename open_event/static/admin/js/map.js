@@ -22,7 +22,7 @@ $( document ).ready(function() {
 
   }
 
-  const LON = long ;
+  const LON = long;
   const LAT = lati;
   const ZOOM = 14;
   const EPSG4326 = new OpenLayers.Projection("EPSG:4326");
@@ -34,7 +34,6 @@ $( document ).ready(function() {
   const featureHeight = 32;
   const featureWidth = 32;
   const featureStyle = {
-
     fillColor:      deftColor,
     strokeColor:    deftColor,
     pointRadius:    1,
@@ -48,12 +47,11 @@ $( document ).ready(function() {
     fontSize:       "10px",
     fontWeight:     "bold",
     labelAlign:     "rm"
-
   };
   const vectorL = new OpenLayers.Layer.Vector("Vector Layer", {
                         styleMap:   new OpenLayers.StyleMap(featureStyle)
   });
-  const map = new OpenLayers.Map("map",{ projection: EPSG900913});
+  const map = new OpenLayers.Map("map", {projection: EPSG900913});
 
   // Open Street Maps layer
   map.addLayer(new OpenLayers.Layer.OSM());
