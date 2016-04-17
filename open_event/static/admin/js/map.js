@@ -4,32 +4,32 @@ $( document ).ready(function() {
   var lati = $("#latitude").val();
   var labelName = $("#name").val();
 
-  if (lati == "") {
+  if (lati === "") {
 
     lati = "51.08150695757747";
 
   }
 
-  if (long == "") {
+  if (long === "") {
 
     long = "17.026073455812494";
 
   }
 
-  if (labelName == "") {
+  if (labelName === "") {
 
     labelName = "Type name";
 
   }
 
-  var Lon             = long ;
-  var Lat             = lati;
-  var Zoom            = 14;
-  var EPSG4326        = new OpenLayers.Projection( "EPSG:4326" );
-  var EPSG900913      = new OpenLayers.Projection("EPSG:900913");
+  var Lon = long ;
+  var Lat = lati;
+  var Zoom = 14;
+  var EPSG4326 = new OpenLayers.Projection( "EPSG:4326" );
+  var EPSG900913 = new OpenLayers.Projection("EPSG:900913");
 
-  var LL              = new OpenLayers.LonLat( Lon, Lat );
-  var XY              = LL.clone().transform( EPSG4326, EPSG900913 );
+  var LL = new OpenLayers.LonLat( Lon, Lat );
+  var XY = LL.clone().transform( EPSG4326, EPSG900913 );
 
 
   var map = new OpenLayers.Map("map",{ projection: EPSG900913});
