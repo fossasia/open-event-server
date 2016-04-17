@@ -1,13 +1,13 @@
 $( document ).ready(function() {
 
-    var long = $('#longitude').val();
-    var lati = $('#latitude').val();
-    var label_name = $('#name').val();
-    if (lati == '') {
-        lati = '51.08150695757747'
+    var long = $("#longitude").val();
+    var lati = $("#latitude").val();
+    var labelName = $("#name").val();
+    if (lati == "") {
+        lati = "51.08150695757747";
     }
-    if (long == ''){ long = '17.026073455812494'}
-    if (label_name == ''){ label_name = "Type name"}
+    if (long == ""){ long = "17.026073455812494"}
+    if (labelName == ""){ labelName = "Type name"}
     var	Lon             = long ;
     var	Lat             = lati;
     var	Zoom            = 14;
@@ -18,7 +18,7 @@ $( document ).ready(function() {
     var	XY              = LL.clone().transform( EPSG4326, EPSG900913 );
 
 
-    map = new OpenLayers.Map('map',{ projection: EPSG900913});
+    var map = new OpenLayers.Map("map",{ projection: EPSG900913});
 
     //Open Street Maps layer
     map.addLayer(new OpenLayers.Layer.OSM());
@@ -38,7 +38,7 @@ $( document ).ready(function() {
         graphicHeight:  featureHeight,
         graphicXOffset: -featureWidth/2,
         graphicYOffset: -featureHeight,
-        label:          label_name,
+        label:          labelName,
         fontColor:      "#000000",
         fontSize:       "10px",
         fontWeight:     "bold",
@@ -57,11 +57,11 @@ $( document ).ready(function() {
         //Don´t user the position of the pixel or the feature, use the point position instead!
         var point = feature.geometry.components[0];
 
-        var llpoint = point.clone()
+        var llpoint = point.clone();
         llpoint.transform(  new OpenLayers.Projection(EPSG900913),
                             new OpenLayers.Projection(EPSG4326));
-        $('#latitude').val(llpoint.y);
-        $('#longitude').val(llpoint.x);
+        $("#latitude").val(llpoint.y);
+        $("#longitude").val(llpoint.x);
 
     }});
 

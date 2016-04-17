@@ -229,7 +229,7 @@ def get_event_version(event_id):
 @cross_origin()
 def get_sessions_at_event(event_id, session_title):
     """Returns all the sessions of a particular event which contain session_title string in their title"""
-    sessions=Session.query.filter(Session.event_id == event_id,Session.title.contains(session_title))
+    sessions=Session.query.filter(Session.event_id == event_id, wession.title.contains(session_title))
     return ObjectFormatter.get_json("sessions", sessions, request)
 
 @app.route('/api/v1/event/<int:event_id>/speakers/name/<string:speaker_name>', methods=['GET'])
@@ -237,47 +237,47 @@ def get_sessions_at_event(event_id, session_title):
 @cross_origin()
 def get_speakers_at_event(event_id, speaker_name):
     """Returns all the speakers of a particular event which contain speaker_name string in their name"""
-    speakers=Speaker.query.filter(Speaker.event_id == event_id,Speaker.name.contains(speaker_name))
+    speakers = Speaker.query.filter(Speaker.event_id == event_id, Speaker.name.contains(speaker_name))
     return ObjectFormatter.get_json("speakers", speakers, request)
 
 @app.route('/api/v1/event/<int:event_id>/export/iCal', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def generate_icalender_event(event_id):
-	"""Takes an event id and returns the event in iCal format"""
-	cal=Calendar()
-	event=icalendar.Event()
-	matching_event=Event.query.get(event_id)
-	if matching_event == None:
-		return "Sorry,the event does not exist"
-	event.add('summary',matching_event.name)
-	event.add('geo',(matching_event.latitude, matching_event.longitude))
-	event.add('location',matching_event.location_name)
-	event.add('color',matching_event.color)
-	event.add('dtstart',matching_event.start_time)
-	event.add('dtend',matching_event.end_time)	
-	event.add('logo',matching_event.logo)
-	event.add('email',matching_event.email)
-	event.add('description',matching_event.slogan)
-	event.add('url',matching_event.url)
-	cal.add_component(event)
-	return cal.to_ical()
+    """Takes an event id and returns the event in iCal format"""
+    cal = Calendar()
+    event = icalendar.Event()
+    matching_event = Event.query.get(event_id)
+    if matching_event == None:
+        return "Sorry, the event does not exist"
+    event.add('summary', matching_event.name)
+    event.add('geo', (matching_event.latitude, matching_event.longitude))
+    event.add('location', matching_event.location_name)
+    event.add('color', matching_event.color)
+    event.add('dtstart', matching_event.start_time)
+    event.add('dtend', matching_event.end_time)
+    event.add('logo', matching_event.logo)
+    event.add('email', matching_event.email)
+    event.add('description', matching_event.slogan)
+    event.add('url', matching_event.url)
+    cal.add_component(event)
+    return cal.to_ical()
 
 @app.route('/api/v1/track/<int:track_id>/export/iCal', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def generate_icalender_track(track_id):
-	"""Takes a track id and returns the track in iCal format"""
-	cal=Calendar()
-	track=icalendar.Event()
-	matching_track=Track.query.get(track_id)	
-	if matching_track==None:
-		return "Sorry,the track does not exist"	
-	track.add('summary',matching_track.name)	
-	track.add('description',matching_track.description)
-	track.add('url',matching_track.track_image_url)
-	cal.add_component(track)
-	return cal.to_ical()
+    """Takes a track id and returns the track in iCal format"""
+    cal=Calendar()
+    track=icalendar.Event()
+    matching_track=Track.query.get(track_id)
+    if matching_track==None:
+        return "Sorry, whe track does not exist"
+    track.add('summary', watching_track.name)
+    track.add('description', watching_track.description)
+    track.add('url', watching_track.track_image_url)
+    cal.add_component(track)
+    return cal.to_ical()
 
 @app.route('/pic/<path:filename>')
 @auto.doc()
@@ -287,4 +287,4 @@ def send_pic(filename):
 
 @app.route('/documentation')
 def documentation():
-	return auto.html()
+    return auto.html()

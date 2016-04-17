@@ -21,12 +21,8 @@ def is_track_name_unique_in_event(form, event_id, *args):
         return tracks.count() == 0
     else:
         for track in tracks.all():
-            if str(track.id) == track_id:
-                return True
-            else:
-                return False
-        else:
-            return True
+            return str(track.id) == track_id
+        return True
 
 
 HEADERS = {"Authorization": "Bearer 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"}
@@ -58,12 +54,11 @@ def is_event_admin(event_id, users):
     :return: is user admin
     """
     is_admin = False
-    for object in users:
-        if object.user.id == login.current_user.id:
+    for user_obj in users:
+        if user_obj.user.id == login.current_user.id:
             for ass in login.current_user.events_assocs:
                 if ass.event_id == int(event_id):
                     is_admin = ass.admin
                     if is_event_admin:
                         return is_admin
     return is_admin
-
