@@ -27,23 +27,13 @@ $( document ).ready(function() {
   const ZOOM = 14;
   const EPSG4326 = new OpenLayers.Projection("EPSG:4326");
   const EPSG900913 = new OpenLayers.Projection("EPSG:900913");
-
-  const LL = new OpenLayers.LonLat(LON, LAT);
-  const XY = LL.clone().transform(EPSG4326, EPSG900913);
-
-
-  const map = new OpenLayers.Map("map",{ projection: EPSG900913});
-
-  //Open Street Maps layer
-  map.addLayer(new OpenLayers.Layer.OSM());
-
-  map.setCenter(XY, ZOOM);
-
-  const deftColor     = "#00FF00";
-  const deftIcon      = "/static/admin/img/marker.png";
+  const LONLAT = new OpenLayers.LonLat(LON, LAT);
+  const XY = LONLAT.clone().transform(EPSG4326, EPSG900913);
+  const deftColor = "#00FF00";
+  const deftIcon = "/static/admin/img/marker.png";
   const featureHeight = 32;
-  const featureWidth  = 32;
-  const featureStyle  = {
+  const featureWidth = 32;
+  const featureStyle = {
 
     fillColor:      deftColor,
     strokeColor:    deftColor,
@@ -60,17 +50,23 @@ $( document ).ready(function() {
     labelAlign:     "rm"
 
   };
-
   const vectorL = new OpenLayers.Layer.Vector("Vector Layer", {
                         styleMap:   new OpenLayers.StyleMap(featureStyle)
   });
+  const map = new OpenLayers.Map("map",{ projection: EPSG900913});
+
+  // Open Street Maps layer
+  map.addLayer(new OpenLayers.Layer.OSM());
+
+  map.setCenter(XY, ZOOM);
+
   map.addLayer(vectorL);
 
 
   var dragVectorC = new OpenLayers.Control.DragFeature(vectorL, {
                               onDrag: function(feature, pixel){
 
-    //Don´t user the position of the pixel or the feature, use the point position instead!
+    // Don´t user the position of the pixel or the feature, use the point position instead!
     var point = feature.geometry.components[0];
 
     var llpoint = point.clone();
