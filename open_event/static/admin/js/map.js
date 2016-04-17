@@ -22,28 +22,28 @@ $( document ).ready(function() {
 
   }
 
-  var Lon = long ;
-  var Lat = lati;
-  var Zoom = 14;
-  var EPSG4326 = new OpenLayers.Projection( "EPSG:4326" );
-  var EPSG900913 = new OpenLayers.Projection("EPSG:900913");
+  const LON = long ;
+  const LAT = lati;
+  const ZOOM = 14;
+  const EPSG4326 = new OpenLayers.Projection("EPSG:4326");
+  const EPSG900913 = new OpenLayers.Projection("EPSG:900913");
 
-  var LL = new OpenLayers.LonLat( Lon, Lat );
-  var XY = LL.clone().transform( EPSG4326, EPSG900913 );
+  const LL = new OpenLayers.LonLat(LON, LAT);
+  const XY = LL.clone().transform(EPSG4326, EPSG900913);
 
 
-  var map = new OpenLayers.Map("map",{ projection: EPSG900913});
+  const map = new OpenLayers.Map("map",{ projection: EPSG900913});
 
   //Open Street Maps layer
   map.addLayer(new OpenLayers.Layer.OSM());
 
-  map.setCenter(XY, Zoom);
+  map.setCenter(XY, ZOOM);
 
-  var deftColor     = "#00FF00";
-  var deftIcon      = "/static/admin/img/marker.png";
-  var featureHeight = 32;
-  var featureWidth  = 32;
-  var featureStyle  = {
+  const deftColor     = "#00FF00";
+  const deftIcon      = "/static/admin/img/marker.png";
+  const featureHeight = 32;
+  const featureWidth  = 32;
+  const featureStyle  = {
 
     fillColor:      deftColor,
     strokeColor:    deftColor,
@@ -61,13 +61,13 @@ $( document ).ready(function() {
 
   };
 
-  var vectorL = new OpenLayers.Layer.Vector(  "Vector Layer", {
-                        styleMap:   new OpenLayers.StyleMap(  featureStyle  )
+  const vectorL = new OpenLayers.Layer.Vector("Vector Layer", {
+                        styleMap:   new OpenLayers.StyleMap(featureStyle)
   });
-  map.addLayer( vectorL );
+  map.addLayer(vectorL);
 
 
-  var dragVectorC = new OpenLayers.Control.DragFeature(   vectorL, {
+  var dragVectorC = new OpenLayers.Control.DragFeature(vectorL, {
                               onDrag: function(feature, pixel){
 
     //Don´t user the position of the pixel or the feature, use the point position instead!
@@ -81,7 +81,7 @@ $( document ).ready(function() {
 
   }});
 
-  map.addControl( dragVectorC );
+  map.addControl(dragVectorC);
   dragVectorC.activate();
 
 
