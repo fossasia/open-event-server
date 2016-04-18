@@ -11,7 +11,7 @@ config = context.config
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 fileConfig(config.config_file_name)
-logger = logging.getLogger('alembic.env')
+LOGGER = logging.getLogger('alembic.env')
 
 # add your model's MetaData object here
 # for 'autogenerate' support
@@ -63,7 +63,7 @@ def run_migrations_online():
             script = directives[0]
             if script.upgrade_ops.is_empty():
                 directives[:] = []
-                logger.info('No changes in schema detected.')
+                LOGGER.info('No changes in schema detected.')
 
     engine = engine_from_config(config.get_section(config.config_ini_section),
                                 prefix='sqlalchemy.',
