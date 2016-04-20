@@ -109,6 +109,14 @@ python manage.py runserver -h 0.0.0.0 -p 5000
 * To view the admin page go to [127.0.0.1:8001](http://127.0.0.1:8001/) or [localhost:8001](http://localhost:8001/) you should be directed to the admin page automatically.
 * Congratulations you have finally made it through the configuration part of the app, now Good Luck Coding :)
 
+### Install front-end dependencies
+
+We use [Bower](http://bower.io) to manage front-end dependencies. `cd` to the directory where `bower.json` is stored and run:
+
+```
+bower install
+```
+
 ## Model updates
 
 When writing changes to models. Use migrations.
