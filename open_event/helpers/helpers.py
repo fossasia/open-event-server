@@ -12,6 +12,7 @@ def get_event_id():
     result = re.search('event\/[0-9]*', url)
     return result.group(0).split('/')[1]
 
+
 def is_track_name_unique_in_event(form, event_id, *args):
     """Check unique of track name in event"""
     track_name = form.name.data
@@ -25,23 +26,30 @@ def is_track_name_unique_in_event(form, event_id, *args):
         return True
 
 
-HEADERS = {"Authorization": "Bearer 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"}
+HEADERS = {
+    "Authorization": ("Bearer SG.55ztiWJxQYuYK7ToThxDPA.rAc929FzcDQsyj" \
+                      "VwmIvKlPoc1YVpKCSOwhEFWZvxFT8")
+}
+
+
 def send_email_after_account_create(form):
     """Send email after account create"""
     payload = {'to': form.email.data,
                'from': 'open-event@googlegroups.com',
-               'subject':"Account Created on Open Event",
-               "html":"Your Account Has Been Created! Congratulations!<br /> Your login: " + form.login.data}
+               'subject': "Account Created on Open Event",
+               "html": ("Your Account Has Been Created! Congratulations!" \
+                        "<br/> Your login: ") + form.login.data}
     requests.post("https://api.sendgrid.com/api/mail.send.json",
                   data=payload,
                   headers=HEADERS)
+
 
 def send_email_with_reset_password_hash(email, link):
     """Send email with reset password hash"""
     payload = {'to': email,
                'from': 'open-event@googlegroups.com',
-               'subject':"Please click to below link",
-               "html":"Change password now " + link}
+               'subject': "Please click to below link",
+               "html": "Change password now " + link}
     requests.post("https://api.sendgrid.com/api/mail.send.json",
                   data=payload,
                   headers=HEADERS)

@@ -22,6 +22,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
 
+
 def create_app():
     auto = Autodoc(app)
     cal = Calendar()
@@ -53,15 +54,18 @@ def create_app():
 
     return app, manager, db
 
+
 @app.errorhandler(404)
 def page_not_found(e):
     if request_wants_json():
         return json.dumps({"error": "endpoint_not_found"})
     return render_template('404.html'), 404
 
+
 # taken from http://flask.pocoo.org/snippets/45/
 def request_wants_json():
-    best = request.accept_mimetypes.best_match(['application/json', 'text/html'])
+    best = request.accept_mimetypes.best_match(
+        ['application/json', 'text/html'])
     return best == 'application/json' and \
         request.accept_mimetypes[best] > \
         request.accept_mimetypes['text/html']

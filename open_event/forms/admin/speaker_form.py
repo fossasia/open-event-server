@@ -17,7 +17,8 @@ class SpeakerForm(Form):
     name = StringField('Name', [validators.DataRequired()])
     photo = StringField('Photo')
     biography = TextAreaField('Biography')
-    email = StringField('Email', [validators.DataRequired(), validators.Email()])
+    email = StringField(
+        'Email', [validators.DataRequired(), validators.Email()])
     web = StringField('Web')
     twitter = StringField('Twitter')
     facebook = StringField('Facebook')
