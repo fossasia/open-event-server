@@ -28,6 +28,8 @@ coverage==4.0.3
 pylint==1.5.5
 pep8==1.7.0
 glob2==0.4.1
+python-coveralls==2.7.0
+codeclimate-test-reporter==0.1.0
 
 # deploy
 gunicorn==19.4.5
