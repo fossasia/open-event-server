@@ -465,6 +465,11 @@ class DataManager(object):
     @staticmethod
     def delete_event(e_id):
         EventsUsers.query.filter_by(event_id=e_id).delete()
+        Sponsor.query.filter_by(id=e_id).delete()
+        Speaker.query.filter_by(id=e_id).delete()
+        Microlocation.query.filter_by(id=e_id).delete()
+        Track.query.filter_by(id=e_id).delete()
+        Session.query.filter_by(id=e_id).delete()
         Event.query.filter_by(id=e_id).delete()
         db.session.commit()
 
