@@ -10,9 +10,9 @@
   ],
   "license": "GNU GPL v3",
   "dependencies": {
-    "chosen": "1.4.2",
-    "jquery-migrate": "1.2.1",
+    "chosen": "1.5.1",
+    "jquery-migrate": "1.4.0",
     "bootstrap-material-design": "0.5.9",
-    "prism": "1.4.0"
+    "prism": "1.4.1"
   }
 }
