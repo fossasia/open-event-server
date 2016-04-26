@@ -39,7 +39,9 @@
                 {% endfor %}
                 <li class="dropdown-menu"></li>
                 <li><a href="{{ get_url('event.create_view', url=return_url)}}"><i class="glyphicon glyphicon-plus" aria-hidden="true" style="margin-right:5px"></i>Add new event</a></li>
+                 {% if events %}
                 <li><a href="{{ get_url('event.index_view')}}"><i class="glyphicon glyphicon-th-list" aria-hidden="true" style="margin-right:5px"></i>List of events</a></li>
+              	{% endif %}
               </ul>
             </li>
             {% endif %}
