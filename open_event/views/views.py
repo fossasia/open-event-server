@@ -71,8 +71,8 @@ def get_sessions(event_id):
 @cross_origin()
 def get_session_by_id(event_id,session_id):
     """Returns a session's data by session id"""
-    sessions = Session.query.filter_by(event_id=event_id,id=session_id)
-    return ObjectFormatter.get_json("sessions", sessions, request)
+    sessions = Session.query.get(session_id)
+    return jsonify(sessions.serialize)
 
 
 @app.route('/api/v1/event/<int:event_id>/sessions/page/<int:page>', methods=['GET'])
@@ -115,8 +115,8 @@ def get_speakers(event_id):
 @cross_origin()
 def get_speaker_by_id(event_id,speaker_id):
     """Return speaker data by speaker id"""
-    speakers = Speaker.query.filter_by(event_id=event_id,id=speaker_id)
-    return ObjectFormatter.get_json("speakers", speakers, request)
+    speakers = Speaker.query.get(speaker_id)
+    return jsonify(speakers.serialize)
 
 
 @app.route('/api/v1/event/<int:event_id>/speakers/page/<int:page>', methods=['GET'])
