@@ -66,10 +66,10 @@ def get_sessions(event_id):
     sessions = Session.query.filter_by(event_id=event_id, is_accepted=True)
     return ObjectFormatter.get_json("sessions", sessions, request)
 
-@app.route('/api/v1/event/<int:event_id>/sessions/<int:session_id>', methods=['GET'])
+@app.route('/api/v1/event/sessions/<int:session_id>', methods=['GET'])
 @auto.doc()
 @cross_origin()
-def get_session_by_id(event_id,session_id):
+def get_session_by_id(session_id):
     """Returns a session's data by session id"""
     sessions = Session.query.get(session_id)
     return jsonify(sessions.serialize)
@@ -110,10 +110,10 @@ def get_speakers(event_id):
     speakers = Speaker.query.filter_by(event_id=event_id)
     return ObjectFormatter.get_json("speakers", speakers, request)
     
-@app.route('/api/v1/event/<int:event_id>/speakers/<int:speaker_id>', methods=['GET'])
+@app.route('/api/v1/event/speakers/<int:speaker_id>', methods=['GET'])
 @auto.doc()
 @cross_origin()
-def get_speaker_by_id(event_id,speaker_id):
+def get_speaker_by_id(speaker_id):
     """Return speaker data by speaker id"""
     speakers = Speaker.query.get(speaker_id)
     return jsonify(speakers.serialize)
