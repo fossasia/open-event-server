@@ -5,7 +5,7 @@ from open_event import current_app as app
 from open_event.helpers.data import save_to_db
 
 
-class Test_Get_Speaker_By_Id(unittest.TestCase):
+class TestGetSpeakerById(unittest.TestCase):
     def setUp(self):
         self.app = Setup.create_app()
 
