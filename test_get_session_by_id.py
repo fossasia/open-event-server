@@ -1,13 +1,11 @@
-
 import unittest
-
 from tests.setup_database import Setup
 from tests.object_mother import ObjectMother
 from open_event import current_app as app
 from open_event.helpers.data import save_to_db
 
 
-class Test_Get_Session_By_Id(unittest.TestCase):
+class TestGetSessionById(unittest.TestCase):
     def setUp(self):
         self.app = Setup.create_app()
 
