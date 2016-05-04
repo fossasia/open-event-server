@@ -1,6 +1,8 @@
 """Copyright 2015 Rafal Kowalski"""
 import sys
 import os
+
+
 try:
     PWD = os.environ['PWD']
     sys.path.extend([PWD])
@@ -8,6 +10,7 @@ except Exception as error:
     print error
 
 from open_event.tools.republica.saver import EventSaver, SpeakerSaver, TrackSaver, SessionSaver
+
 
 class RepublicaParser(object):
     """Republica Parser main class"""

@@ -31,6 +31,7 @@ from open_event.models.speaker import Speaker
 from open_event.models.sponsor import Sponsor
 from open_event.models.microlocation import Microlocation
 
+
 class EventView(ModelView):
     """Main EVent view class"""
     form = None

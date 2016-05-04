@@ -1,0 +1,15 @@
+language: python
+python:
+  - "2.7"
+# command to install dependencies
+install: "pip install -r requirements.txt"
+# command to run tests
+script: nosetests --with-coverage
+# upload coverage
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+  - coveralls
+  - codeclimate-test-reporter
+addons:
+  code_climate:
+    repo_token: 753e4b10e96f82079b5b1f4f89bb8b68db6ddfb048adaf4b9ee65dcbe9aece34

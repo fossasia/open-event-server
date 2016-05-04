@@ -15,3 +15,6 @@ test.db
 app.db
 .idea/
 .bundle/
+
+# Static files at 'open_event/static/admin/lib'
+lib/
