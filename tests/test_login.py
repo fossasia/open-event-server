@@ -1,5 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
 import unittest
+from tests.utils import OpenEventTestCase
 from auth_helper import register
 import unittest
 from flask import url_for
@@ -10,14 +11,11 @@ from tests.object_mother import ObjectMother
 from tests.auth_helper import register, logout, login
 
 
-class TestLogin(unittest.TestCase):
+class TestLogin(OpenEventTestCase):
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
             register(self.app, 'test', 'email@gmail.com', 'test')
-
-    def tearDown(self):
-        Setup.drop_db()
 
     def test_registration(self):
         rv = register(self.app,'test', 'email@gmail.com', 'test')
