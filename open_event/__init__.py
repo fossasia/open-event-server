@@ -49,6 +49,7 @@ def create_app():
     app.config['STATICFILES_DIRS'] = (os.path.join(BASE_DIR, 'static'),)
     app.config['DEBUG_TB_ENABLED']=True
     app.config['SQLALCHEMY_RECORD_QUERIES'] = True
+    app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     app.logger.setLevel(logging.INFO)
     # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
