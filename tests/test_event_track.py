@@ -1,5 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
 import unittest
+from tests.utils import OpenEventTestCase
 from flask import url_for
 from tests.set_up import Setup
 from open_event import current_app as app
@@ -9,7 +10,7 @@ from tests.auth_helper import register
 from open_event.models.track import Track
 
 
-class TestEvent(unittest.TestCase):
+class TestEvent(OpenEventTestCase):
 
     def setUp(self):
         self.app = Setup.create_app()
@@ -20,9 +21,6 @@ class TestEvent(unittest.TestCase):
             save_to_db(event,"Event saved")
             save_to_db(track, "Track saved")
             register(self.app,'test', 'email@gmail.com', 'test')
-
-    def tearDown(self):
-        Setup.drop_db()
 
     def test_api_tracks(self):
         self.assertEqual(self.app.get('/api/v1/event/1/tracks').status_code, 200)

@@ -1,4 +1,5 @@
 import unittest
+from tests.utils import OpenEventTestCase
 from tests.set_up import Setup
 from open_event import current_app as app
 from open_event.helpers.data import save_to_db
@@ -11,7 +12,7 @@ from open_event.models.event import Event
 from flask import request
 
 
-class TestValidation(unittest.TestCase):
+class TestValidation(OpenEventTestCase):
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
@@ -23,9 +24,6 @@ class TestValidation(unittest.TestCase):
 
             self.event_form = EventForm()
             self.session_form = SessionForm()
-
-    def tearDown(self):
-        Setup.drop_db()
 
     def test_event_end_time_smaller_than_start_time(self):
         with app.test_request_context():

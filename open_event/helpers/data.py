@@ -38,7 +38,8 @@ class DataManager(object):
                           event_id=event_id,
                           track_image_url=form.track_image_url.data)
         new_track.sessions = form.sessions.data
-        db.session.query(Session).filter_by(id=form.sessions.data).track = new_track.id
+        db.session.query(Session) \
+                  .filter_by(id=form.sessions.data).track = new_track.id
         save_to_db(new_track, "Track saved")
         update_version(event_id, False, "tracks_ver")
         sessions = form.sessions.data
@@ -58,7 +59,8 @@ class DataManager(object):
             .filter_by(id=track.id) \
             .update(dict(data))
         track.sessions = form.sessions.data
-        db.session.query(Session).filter_by(id=form.sessions.data).track = track.id
+        db.session.query(Session) \
+            .filter_by(id=form.sessions.data).track = track.id
         save_to_db(track, "Track updated")
         update_version(track.event_id, False, "tracks_ver")
         sessions = form.sessions.data
@@ -90,7 +92,8 @@ class DataManager(object):
                               event_id=event_id,
                               abstract=form.abstract.data)
 
-        new_session.speakers = InstrumentedList(form.speakers.data if form.speakers.data else [])
+        new_session.speakers = InstrumentedList(
+            form.speakers.data if form.speakers.data else [])
         new_session.microlocation = form.microlocation.data
         new_session.format = form.format.data
         new_session.level = form.level.data
@@ -173,7 +176,8 @@ class DataManager(object):
         db.session.query(Speaker) \
             .filter_by(id=speaker.id) \
             .update(dict(data))
-        speaker.sessions = InstrumentedList(form.sessions.data if form.sessions.data else [])
+        speaker.sessions = InstrumentedList(
+            form.sessions.data if form.sessions.data else [])
         save_to_db(speaker, "Speaker updated")
         update_version(speaker.event_id, False, "speakers_ver")
 
@@ -476,14 +480,21 @@ class DataManager(object):
         """
         file = request.files["file"]
         filename = secure_filename(file.filename)
-        if db.session.query(exists().where(File.name == filename)).scalar() == False:
+        if not db.session.query(exists() \
+                 .where(File.name == filename)).scalar():
             if file.mimetype.split('/', 1)[0] == "image":
-                file.save(os.path.join(os.path.realpath('.') + '/static/', filename))
-                file_object = File(name=filename, path='', owner_id=login.current_user.id)
+                file.save(os.path.join(os.path.realpath('.')
+                          + '/static/', filename))
+                file_object = File(
+                    name=filename,
+                    path='',
+                    owner_id=login.current_user.id
+                )
                 save_to_db(file_object, "file saved")
                 flash("Image added")
             else:
-                flash("The selected file is not an image. Please select a image file and try again.")
+                flash("The selected file is not an image. Please select a " \
+                      "image file and try again.")
         else:
             flash("A file named \"" + filename + "\" already exists")
 
@@ -534,7 +545,8 @@ def delete_from_db(item, msg):
 
 
 def update_version(event_id, is_created, column_to_increment):
-    """Function resposnible for increasing version when some data will be created or changed
+    """Function resposnible for increasing version when some data will be
+    created or changed
     :param event_id: Event id
     :param is_created: Object exist True/False
     :param column_to_increment: which column should be increment

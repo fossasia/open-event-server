@@ -14,8 +14,10 @@ class EventForm(Form):
     longitude = FloatField('Longitude')
     location_name = StringField('Location name')
     color = ColorField('Color')
-    start_time = DateTimeField('Start Time', [DataRequired(), CustomDateEventValidate()])
-    end_time = DateTimeField('End Time', [DataRequired(), CustomDateEventValidate()])
+    start_time = DateTimeField(
+        'Start Time', [DataRequired(), CustomDateEventValidate()])
+    end_time = DateTimeField(
+        'End Time', [DataRequired(), CustomDateEventValidate()])
     logo = StringField('Logo')
     email = StringField('Email', [Optional(), Email()])
     slogan = StringField('Slogan')

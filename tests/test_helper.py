@@ -1,5 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
 import unittest
+from tests.utils import OpenEventTestCase
 from mock import patch
 
 import open_event.helpers.data
@@ -12,15 +13,12 @@ from open_event.helpers.data import DataManager, update_version, save_to_db
 from open_event.forms.admin.microlocation_form import MicrolocationForm
 
 
-class TestDataManager(unittest.TestCase):
+class TestDataManager(OpenEventTestCase):
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
             db.session.add(ObjectMother.get_event())
             db.session.commit()
-
-    def tearDown(self):
-        Setup.drop_db()
 
     def _create_microlocation(self):
         form = MicrolocationForm()

@@ -25,10 +25,10 @@ class MyHomeView(AdminIndexView):
         """Main page"""
         self._template = "admin/auth.html"
         if not login.current_user.is_authenticated:
-            print "Unauthenticated user"
+            # print "Unauthenticated user"
             return redirect(url_for('.login_view'))
         else:
-            print "Authenticated user"
+            # print "Authenticated user"
             self._template_args['events'] = DataGetter.get_all_events()
             self._template_args['owner_events'] = DataGetter.get_all_owner_events()
             return super(MyHomeView, self).index()
