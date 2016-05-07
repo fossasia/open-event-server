@@ -15,7 +15,6 @@ class TrackView(ModelView):
         """Track list view"""
         tracks = DataGetter.get_tracks(event_id)
         events = DataGetter.get_all_events()
-        self.name = "Track"
         return self.render('admin/model/track/list1.html',
                            objects=tracks,
                            event_id=event_id,
@@ -26,7 +25,6 @@ class TrackView(ModelView):
         """New track view"""
         events = DataGetter.get_all_events()
         form = TrackForm(request.form)
-        self.name = " Track | New"
         if form.validate_on_submit():
             if is_event_admin_or_editor(event_id) and is_track_name_unique_in_event(form, event_id):
                 DataManager.create_track(form, event_id)
@@ -38,7 +36,8 @@ class TrackView(ModelView):
                            form=form,
                            event_id=event_id,
                            events=events,
-                           cancel_url=url_for('.index_view', event_id=event_id))
+                           cancel_url=url_for('.index_view',
+                                              event_id=event_id))
 
     @expose('/edit', methods=('GET', 'POST'))
     def edit_view(self, event_id):
@@ -47,7 +46,6 @@ class TrackView(ModelView):
         track = DataGetter.get_object(Track, track_id)
         events = DataGetter.get_all_events()
         form = TrackForm(obj=track)
-        self.name = "Track | Edit"
         if form.validate_on_submit() and is_track_name_unique_in_event(form, event_id, track_id):
             if is_event_admin_or_editor(event_id):
                 DataManager.update_track(form, track)

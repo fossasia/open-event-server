@@ -26,7 +26,7 @@ class AdminView(object):
     def _add_models_to_menu(self):
         ev = EventView(Event, db.session)
         self.admin.add_view(ev)
-        self.admin.add_view(TrackView(Track, db.session, name='test', url='event/<event_id>/track'))
+        self.admin.add_view(TrackView(Track, db.session, name='Track', url='event/<event_id>/track'))
 
     @staticmethod
     def init_login(app):
