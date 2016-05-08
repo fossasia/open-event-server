@@ -6,6 +6,7 @@ apt-get install -y build-essential python python-dev python-setuptools python-pi
 apt-get install -y libxml2-dev libxslt1-dev
 apt-get install -y nginx uwsgi uwsgi-plugin-python
 apt-get install -y postgresql postgresql-contrib libpq-dev
+apt-get install -y libffi-dev
 
 # Edit the following to change the name of the database user that will be created:
 APP_DB_USER=open_event_user
