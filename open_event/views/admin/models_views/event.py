@@ -48,12 +48,6 @@ class EventView(ModelView):
                    'slogan',
                    'url')
 
-    column_formatters = {
-        'name': Formatter.column_formatter,
-        'location_name': Formatter.column_formatter,
-        'logo': Formatter.column_formatter
-    }
-
     def is_accessible(self):
         """Check user access"""
         return login.current_user.is_authenticated

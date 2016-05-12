@@ -15,3 +15,11 @@
     margin-left: 20%;
     margin-right: 20%
 }
+.table-btn {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+ul.form-control {
+  display: inline;
+}
