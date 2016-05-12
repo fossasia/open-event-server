@@ -13,6 +13,7 @@ from flask import render_template
 from flask import request
 
 from icalendar import Calendar, Event
+from flask_debugtoolbar import DebugToolbarExtension
 
 import open_event.models.event_listeners
 from open_event.models import db
@@ -22,11 +23,11 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
 
-
 def create_app():
     auto = Autodoc(app)
     cal = Calendar()
     event = Event()
+
     from open_event.views.views import app as routes
     app.register_blueprint(routes)
     migrate = Migrate(app, db)
@@ -44,6 +45,7 @@ def create_app():
     app.config['STATIC_URL'] = '/static/'
     app.config['STATIC_ROOT'] = 'staticfiles'
     app.config['STATICFILES_DIRS'] = (os.path.join(BASE_DIR, 'static'),)
+    app.config['SQLALCHEMY_RECORD_QUERIES'] = True
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     app.logger.setLevel(logging.INFO)
     # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
@@ -51,6 +53,12 @@ def create_app():
     admin_view = AdminView("Open Event")
     admin_view.init(app)
     admin_view.init_login(app)
+
+    # Flask-DebugToolbar Configuration
+    # Set DEBUG_TB_ENABLED as False in Production
+    app.config['DEBUG_TB_ENABLED'] = True
+    app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+    DebugToolbarExtension(app)
 
     return app, manager, db
 
