@@ -9,9 +9,9 @@ class OAuth():
     USER_INFO='https://www.googleapis.com/userinfo/v2/me'
     SCOPE=['profile','email']
 
-class Fb_OAuth():
+class FbOAuth():
 	"Facebook Credentials"
-
+	
 	CLIENT_ID='1790977354468723'
    	CLIENT_SECRET='830da5c5ab66f0b2224a9ad5efa7cdb4'
    	REDIRECT_URI='http://localhost:8001/fCallback'

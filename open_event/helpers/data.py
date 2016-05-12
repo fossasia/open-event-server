@@ -22,9 +22,8 @@ from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.track import Track
 from ..models.user import User
-from open_event.helpers.oauth import OAuth,Fb_OAuth
+from open_event.helpers.oauth import OAuth,FbOAuth
 from requests_oauthlib import OAuth2Session
-from requests_oauthlib.compliance_fixes import facebook_compliance_fix
 
 
 class DataManager(object):
@@ -573,11 +572,11 @@ def get_google_auth(state=None,token=None):
 
 def get_facebook_auth(state=None,token=None):
     if token:
-        return OAuth2Session(Fb_OAuth.CLIENT_ID,token=token)
+        return OAuth2Session(FbOAuth.CLIENT_ID,token=token)
     if state:
-        return OAuth2Session(Fb_OAuth.CLIENT_ID,state=state,scope=Fb_OAuth.SCOPE,redirect_uri=Fb_OAuth.REDIRECT_URI)
-    oauth=OAuth2Session(Fb_OAuth.CLIENT_ID,scope=Fb_OAuth.SCOPE,redirect_uri=Fb_OAuth.REDIRECT_URI) 
-    return oaut
+        return OAuth2Session(FbOAuth.CLIENT_ID,state=state,scope=FbOAuth.SCOPE,redirect_uri=FbOAuth.REDIRECT_URI)
+    oauth=OAuth2Session(FbOAuth.CLIENT_ID,scope=FbOAuth.SCOPE,redirect_uri=FbOAuth.REDIRECT_URI)
+    return oauth
 
 def create_user_oauth(user,user_data,token,method):
     if user is None:
@@ -585,12 +584,10 @@ def create_user_oauth(user,user_data,token,method):
         user.email=user_data['email']
     user.login=user_data['name']
     user.role = 'speaker'
-    
     if method=='Google':
         user.avatar=user_data['picture']
-    #if method=='Facebook':
-        #user.avatar=user_data['picture']['data']['url']
-    
+    if method=='Facebook':
+        user.avatar=user_data['picture']['data']['url']
     user.tokens=json.dumps(token)
     save_to_db(user, "User created")
     return user

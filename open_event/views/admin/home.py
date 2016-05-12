@@ -13,7 +13,7 @@ from ...forms.admin.auth.registration_form import RegistrationForm
 from ...helpers.data import DataManager, save_to_db,get_google_auth,get_facebook_auth
 from ...helpers.data_getter import DataGetter
 from ...helpers.helpers import send_email_after_account_create, send_email_with_reset_password_hash
-from open_event.helpers.oauth import OAuth,Fb_OAuth
+from open_event.helpers.oauth import OAuth,FbOAuth
 
 
 def intended_url():
@@ -42,19 +42,16 @@ class MyHomeView(AdminIndexView):
         if helpers.validate_form_on_submit(form):
             user = form.get_user()
             login.login_user(user)
-
         if login.current_user.is_authenticated:
             return redirect(intended_url())
-        
         #Add Google Oauth 2.0 Login
         google=get_google_auth()
         auth_url,state=google.authorization_url(OAuth.AUTH_URI,access_type='offline')
         session['oauth_state']=state
-    
+        #Add Facebook Oauth 2.0 login
         facebook=get_facebook_auth()
-        fb_auth_url, state = facebook.authorization_url(Fb_OAuth.AUTH_URI,access_type='offline')
+        fb_auth_url, state = facebook.authorization_url(FbOAuth.AUTH_URI,access_type='offline')
         session['fb_oauth_state']=state
-
         link = '<p>Don\'t have an account? <a href="' + url_for('.register_view') + '">Click here to register.</a></p>' \
                                                                                     '<p><a href="' + url_for(
                 '.password_reminder_view') + '">Forgot your password</a>?</p>'
