@@ -6,6 +6,7 @@ from open_event.models import db
 from open_event.models.event import Event
 from open_event.models.user import User
 from open_event.views.admin.models_views.event import EventView
+from open_event.views.admin.models_views.events import EventsView
 from open_event.views.admin.home import MyHomeView
 
 
@@ -23,8 +24,11 @@ class AdminView(object):
         self._add_models_to_menu()
 
     def _add_models_to_menu(self):
-        ev = EventView(Event, db.session)
-        self.admin.add_view(ev)
+        # ev = EventView(Event, db.session)
+        events = EventsView(Event, db.session, name='Events', url='events')
+
+        # self.admin.add_view(ev)
+        self.admin.add_view(events)
 
     @staticmethod
     def init_login(app):
