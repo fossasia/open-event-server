@@ -1,0 +1,12 @@
+machine:
+  python:
+    version: 2.7
+
+checkout:
+  post:
+    - pip install -U pip setuptools virtualenv
+
+test:
+  override:
+    - nosetests
+
