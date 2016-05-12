@@ -16,7 +16,7 @@ class User(db.Model):
     salt = db.Column(db.String(128))
     role = db.Column(db.String())
     avatar=db.Column(db.String(500))
-    tokens=db.Column(db.Text)
+    tokens=db.Column(db.Text(500))
 
     # Flask-Login integration
     def is_authenticated(self):

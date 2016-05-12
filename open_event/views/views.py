@@ -1,6 +1,5 @@
 """Copyright 2015 Rafal Kowalski"""
 import os
-import json
 
 from flask import jsonify, url_for, redirect, request, send_from_directory,session
 from flask.ext.cors import cross_origin
@@ -18,11 +17,10 @@ from flask import Blueprint
 from flask.ext.autodoc import Autodoc
 from icalendar import Calendar
 import icalendar
-from open_event.helpers.oauth import OAuth,Fb_OAuth
+from open_event.helpers.oauth import OAuth,FbOAuth
 from requests.exceptions import HTTPError
-from ..helpers.data import DataManager, save_to_db,get_google_auth,create_user_oauth,get_facebook_auth
+from ..helpers.data import DataManager,get_google_auth,create_user_oauth,get_facebook_auth
 from ..helpers.data_getter import DataGetter
-from ..forms.admin.auth.registration_form import RegistrationForm
 
 
 
@@ -324,7 +322,8 @@ def callback():
             code_url=(((request.url.split('&'))[1]).split('='))[1]
             new_code=(code_url.split('%2F'))[0]+'/'+(code_url.split('%2F'))[1]
         try:
-            token = google.fetch_token(OAuth.TOKEN_URI,authorization_url=request.url,code=new_code,client_secret=OAuth.CLIENT_SECRET)
+            token = google.fetch_token(OAuth.TOKEN_URI,authorization_url=request.url,
+                                       code=new_code,client_secret=OAuth.CLIENT_SECRET)
         except HTTPError:
             return 'HTTP Error occurred'
         google=get_google_auth(token=token)
@@ -352,11 +351,12 @@ def facebook_callback():
         if 'code' in request.url:
             code_url=(((request.url.split('&'))[0]).split('='))[1]
         try:
-            token = facebook.fetch_token(Fb_OAuth.TOKEN_URI,authorization_url=request.url,code=code_url,client_secret=Fb_OAuth.CLIENT_SECRET)
+            token = facebook.fetch_token(FbOAuth.TOKEN_URI,authorization_url=request.url,
+                                         code=code_url,client_secret=FbOAuth.CLIENT_SECRET)
         except HTTPError:
             return 'HTTP Error occurred'
         facebook=get_facebook_auth(token=token)
-        resp=facebook.get(Fb_OAuth.USER_INFO)
+        resp=facebook.get(FbOAuth.USER_INFO)
         if resp.status_code==200:
             user_data=resp.json()
             email=user_data['email']

@@ -1,4 +1,4 @@
-class OAuth():
+class OAuth(object):
     """Google Credentials"""
 
     CLIENT_ID='449612261522-1eg34prt23l0454et59qgqno3rjd8muq.apps.googleusercontent.com'
@@ -9,14 +9,13 @@ class OAuth():
     USER_INFO='https://www.googleapis.com/userinfo/v2/me'
     SCOPE=['profile','email']
 
-class Fb_OAuth():
-	"Facebook Credentials"
+class FbOAuth(object):
+    """Facebook Credentials"""
 
-	CLIENT_ID='1790977354468723'
-   	CLIENT_SECRET='830da5c5ab66f0b2224a9ad5efa7cdb4'
-   	REDIRECT_URI='http://localhost:8001/fCallback'
-   	AUTH_URI='https://www.facebook.com/dialog/oauth'
-   	TOKEN_URI='https://graph.facebook.com/oauth/access_token'
-   	USER_INFO='https://graph.facebook.com/me?fields=email,id,name,picture'
-   	SCOPE=['public_profile','email']
-    
+    CLIENT_ID='1790977354468723'
+    CLIENT_SECRET='830da5c5ab66f0b2224a9ad5efa7cdb4'
+    REDIRECT_URI='http://localhost:8001/fCallback'
+    AUTH_URI='https://www.facebook.com/dialog/oauth'
+    TOKEN_URI='https://graph.facebook.com/oauth/access_token'
+    USER_INFO='https://graph.facebook.com/me?fields=email,id,name,picture'
+    SCOPE=['public_profile','email']
