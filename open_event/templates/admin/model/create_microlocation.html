@@ -2,7 +2,7 @@
 {% import 'admin/lib.html' as lib with context %}
 
 {% macro extra() %}
-  <input name="_add_another" type="submit" class="btn btn-large" value="{{ _gettext('Save and Add') }}" />
+    <input name="_add_another" type="submit" class="btn btn-large" value="{{ _gettext('Save and Add') }}"/>
 {% endmacro %}
 
 {% block head %}
@@ -13,29 +13,94 @@
 {% block body %}
     <div class="col-md-2"></div>
     <div class="col-md-8">
-        <div class="well bs-component">
+    <div class="well bs-component">
 
-              <h2>{{ admin_view.name }}</h2>
-              <div class="row">
-                  <div class="col-md-6">
-                      {% call lib.form_tag(form) %}
-                          {{ lib.render_form_fields(form, form_opts=form_opts) }}
-                          {{ lib.render_form_buttons(cancel_url, extra()) }}
-                      {% endcall %}
-                  </div>
-                  <div class="col-md-6">
-                      <div id="map" style="width:400px; height:300px"></div>
-                  </div>
-              </div>
+        <h2>{{ admin_view.name }}</h2>
+        <div class="row">
+            <div class="col-md-6">
+                {% call lib.form_tag(form) %}
+                    {{ lib.render_form_fields(form, form_opts=form_opts) }}
+                    {{ lib.render_form_buttons(cancel_url, extra()) }}
+                {% endcall %}
+            </div>
+            <div class="col-md-6">
+                <div id="floating-panel">
+                    <input id="address" type="textbox" value="Sydney, NSW">
+                    <input id="submit" type="button" value="Geocode" onclick="saveAddress()">
+                </div>
+                <div id="map" style="width:400px; height:300px"></div>
+            </div>
         </div>
     </div>
-    <div class="col-md-2"></div>
-    <!-- bring in the google maps library -->
-        <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
-        <script src="{{ url_for('static', filename='admin/js/map.js' )}}"></script>
+    <script>
+        var marker;
+        var init_marker;
+        function initMap() {
+            var map = new google.maps.Map($("#map")[0], {
+                zoom: 8,
+                center: {lat: -34.397, lng: 150.644}
+            });
+            var geocoder = new google.maps.Geocoder();
+            init_marker = new google.maps.Marker({
+                draggable: true,
+                position: {lat: -34.397, lng: 150.644},
+                map: map
+            });
+            google.maps.event.addListener(init_marker, 'dragend', function (event) {
+                $("#latitude")[0].value = this.getPosition().lat();
+                $("#longitude")[0].value = this.getPosition().lng();
+            });
+            $("#submit")[0].addEventListener('click', function () {
+                geocodeAddress(geocoder, map);
+            });
+        }
+
+        function saveAddress() {
+            var address = $("#address")[0].value;
+            $("#location_name")[0].value = address;
+        }
+
+        function geocodeAddress(geocoder, resultsMap) {
+            var address = $("#address")[0].value;
+            geocoder.geocode({'address': address}, function (results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    var latitude = results[0].geometry.location.lat();
+                    var longitude = results[0].geometry.location.lng();
+                    $("#latitude")[0].value = latitude;
+                    $("#longitude")[0].value = longitude;
+                    resultsMap.setCenter(results[0].geometry.location);
+                    init_marker.setMap(null);
+                    if (marker == null) {
+                        marker = new google.maps.Marker({
+                            map: resultsMap,
+                            draggable: true,
+                            position: results[0].geometry.location
+                        });
+                    }
+                    else {
+                        marker.setMap(null)
+                        marker = new google.maps.Marker({
+                            map: resultsMap,
+                            draggable: true,
+                            position: results[0].geometry.location
+                        });
+                    }
+                    google.maps.event.addListener(marker, 'dragend', function (event) {
+                        $("#latitude")[0].value = this.getPosition().lat();
+                        $("#longitude")[0].value = this.getPosition().lng();
+                    });
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiXdFK2gtVMIHB890Nxu5CKNUTbQwQzo0&signed_in=true&callback=initMap"
+            async defer></script>
 {% endblock %}
 
 {% block tail %}
-  {{ super() }}
-  {{ lib.form_js() }}
+    {{ super() }}
+    {{ lib.form_js() }}
 {% endblock %}
