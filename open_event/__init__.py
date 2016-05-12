@@ -23,6 +23,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
 
+
 def create_app():
     auto = Autodoc(app)
     cal = Calendar()
