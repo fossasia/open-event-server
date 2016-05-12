@@ -90,5 +90,17 @@ class TestValidation(OpenEventTestCase):
                 CustomDateSessionValidate().__call__(form=self.session_form,
                                                      field=None)
 
+    def test_session_both_time_equality(self):
+        """Session end time and start time should not be equal"""
+        with app.test_request_context():
+            self.session_form['start_time'].data = \
+                datetime(2015, 8, 4, 12, 30, 45)
+            self.session_form['end_time'].data = \
+                datetime(2015, 8, 4, 12, 30, 45)
+            request.url = 'http://0.0.0.0:5000/admin/event/1'
+            with self.assertRaises(ValidationError):
+                CustomDateSessionValidate().__call__(form=self.session_form,
+                                                     field=None)
+
 if __name__ == '__main__':
     unittest.main()
