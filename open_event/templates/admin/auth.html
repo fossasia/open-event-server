@@ -39,6 +39,8 @@
                                         </div>
                                     {% endfor %}
                                     <button class="btn btn-success" type="submit">Submit</button>
+                                    <a href="{{auth_url}}" class="btn btn-primary btn-block" style="padding: 11px 1;">Login with Google</a>
+                                    <a href="{{fb_auth_url}}" class="btn btn-primary btn-block" style="padding: 11px 1;">Login with Facebook</a>
                                 </fieldset>
                             </form>
                         {{ link | safe }}
