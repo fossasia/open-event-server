@@ -5,6 +5,7 @@ from ..models.track import Track
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
+from ..models.users_events_roles import UsersEventsRoles
 from ..models.user import User
 from ..models.file import File
 from open_event.helpers.helpers import get_event_id
@@ -18,6 +19,11 @@ class DataGetter:
     def get_all_events():
         """Method return all events"""
         return Event.query.all()
+
+    @staticmethod
+    def get_all_users_events_roles():
+        """Method return all events"""
+        return UsersEventsRoles.query
 
     @staticmethod
     def get_all_owner_events():
@@ -175,3 +181,9 @@ class DataGetter:
     @staticmethod
     def get_object(db_model, object_id):
         return db_model.query.get(object_id)
+
+    @staticmethod
+    def get_user_events_roles(event_id):
+        return UsersEventsRoles.query.filter_by(user_id=login.current_user.id, event_id=event_id)
+
+

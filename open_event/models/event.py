@@ -14,6 +14,7 @@ class EventsUsers(db.Model):
     editor = db.Column(db.Boolean)
     admin = db.Column(db.Boolean)
     user = db.relationship("User", backref="events_assocs")
+    role = db.Column(db.String, nullable=False)
 
 
 class Event(db.Model):
@@ -22,8 +23,7 @@ class Event(db.Model):
     id = db.Column(db.Integer,
                    primary_key=True)
     name = db.Column(db.String,
-                     nullable=False,
-                     unique=True)
+                     nullable=False)
     email = db.Column(db.String)
     color = db.Column(ColorType)
     logo = db.Column(db.String)
@@ -47,6 +47,8 @@ class Event(db.Model):
     sponsor = db.relationship('Sponsor',
                               backref="event")
     users = db.relationship("EventsUsers", backref="event")
+
+    roles = db.relationship("UsersEventsRoles", backref="event")
     db.UniqueConstraint('track.name')
 
     def __init__(self,

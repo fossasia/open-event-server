@@ -5,7 +5,6 @@ from flask_admin import Admin
 from open_event.models import db
 from open_event.models.event import Event
 from open_event.models.user import User
-from open_event.views.admin.models_views.event import EventView
 from open_event.views.admin.models_views.events import EventsView
 from open_event.views.admin.home import MyHomeView
 
@@ -40,3 +39,4 @@ class AdminView(object):
         @login_manager.user_loader
         def load_user(user_id):
             return db.session.query(User).get(user_id)
+

@@ -21,6 +21,8 @@ from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.track import Track
 from ..models.user import User
+from ..models.role import Role
+from ..models.users_events_roles import UsersEventsRoles
 
 
 class DataManager(object):
@@ -439,6 +441,29 @@ class DataManager(object):
         update_version(event_id=event.id,
                        is_created=True,
                        column_to_increment="event_ver")
+
+    @staticmethod
+    def create_event_test():
+        import datetime
+        event = Event(name="add",
+                      email="",
+                      color='#f5f5f5',
+                      logo="None",
+                      start_time=datetime.datetime.now(),
+                      end_time=datetime.datetime.now(),
+                      latitude=10.0,
+                      longitude=10.0,
+                      location_name="None",
+                      slogan="None",
+                      url="None")
+        role = Role(name='admin')
+        db.session.add(event)
+        db.session.add(role)
+        db.session.flush()
+        db.session.refresh(event)
+        db.session.refresh(role)
+        uer = UsersEventsRoles(event_id=event, user_id=login.current_user.id, role_id=role.id)
+        save_to_db(uer, "Event saved")
 
     @staticmethod
     def update_event(form, event):
