@@ -30,6 +30,19 @@ class TestValidation(OpenEventTestCase):
             self.event_form = EventForm()
             self.session_form = SessionForm()
 
+    def _session_form_req_url(self, start_time, end_time):
+        """
+        Helper function to initialize Session form with start and end time,
+        and validate it.
+        """
+        validator = CustomDateSessionValidate()
+
+        self.session_form['start_time'].data = start_time
+        self.session_form['end_time'].data = end_time
+        request.url = 'http://0.0.0.0:5000/admin/event/1'
+
+        validator(form=self.session_form, field=None)
+
     def test_event_start_and_end_time(self):
         """Event end time should not be smaller than its start time"""
         with app.test_request_context():
@@ -38,69 +51,54 @@ class TestValidation(OpenEventTestCase):
             self.event_form['end_time'].data = \
                 datetime(2015, 1, 4, 12, 30, 45)
             with self.assertRaises(ValidationError):
-                CustomDateEventValidate().__call__(form=self.event_form,
-                                                   field=None)
+                validator = CustomDateEventValidate()
+                validator(form=self.event_form, field=None)
 
     def test_session_end_time_range(self):
         """Session end time should be inside Event time range"""
         with app.test_request_context():
-            self.session_form['start_time'].data = \
-                datetime(2013, 8, 4, 12, 30, 45)
-            self.session_form['end_time'].data = \
-                datetime(2017, 9, 4, 12, 30, 45)
-            request.url = 'http://0.0.0.0:5000/admin/event/1'
             with self.assertRaises(ValidationError):
-                CustomDateSessionValidate().__call__(form=self.session_form,
-                                                     field=None)
+                self._session_form_req_url(
+                    datetime(2013, 8, 4, 12, 30, 45),
+                    datetime(2017, 9, 4, 12, 30, 45)
+                )
 
     def test_session_start_time_range(self):
         """Session start time should be inside Event time range"""
         with app.test_request_context():
-            self.session_form['start_time'].data = \
-                datetime(2012, 8, 4, 12, 30, 45)
-            self.session_form['end_time'].data = \
-                datetime(2016, 9, 4, 12, 30, 45)
-            request.url = 'http://0.0.0.0:5000/admin/event/1'
             with self.assertRaises(ValidationError):
-                CustomDateSessionValidate().__call__(form=self.session_form,
-                                                     field=None)
+                self._session_form_req_url(
+                    datetime(2012, 8, 4, 12, 30, 45),
+                    datetime(2016, 9, 4, 12, 30, 45)
+                )
 
     def test_session_both_time_range(self):
         """Both Session start and end time should be inside Event time range
         """
         with app.test_request_context():
-            self.session_form['start_time'].data = \
-                datetime(2012, 8, 4, 12, 30, 45)
-            self.session_form['end_time'].data = \
-                datetime(2017, 9, 4, 12, 30, 45)
-            request.url = 'http://0.0.0.0:5000/admin/event/1'
             with self.assertRaises(ValidationError):
-                CustomDateSessionValidate().__call__(form=self.session_form,
-                                                     field=None)
+                self._session_form_req_url(
+                    datetime(2012, 8, 4, 12, 30, 45),
+                    datetime(2017, 9, 4, 12, 30, 45)
+                )
 
     def test_session_start_and_end_time(self):
         """Session end time should not be smaller than its start time"""
         with app.test_request_context():
-            self.session_form['start_time'].data = \
-                datetime(2015, 8, 4, 12, 30, 45)
-            self.session_form['end_time'].data = \
-                datetime(2014, 9, 4, 12, 30, 45)
-            request.url = 'http://0.0.0.0:5000/admin/event/1'
             with self.assertRaises(ValidationError):
-                CustomDateSessionValidate().__call__(form=self.session_form,
-                                                     field=None)
+                self._session_form_req_url(
+                    datetime(2015, 8, 4, 12, 30, 45),
+                    datetime(2014, 9, 4, 12, 30, 45)
+                )
 
     def test_session_both_time_equality(self):
         """Session end time and start time should not be equal"""
         with app.test_request_context():
-            self.session_form['start_time'].data = \
-                datetime(2015, 8, 4, 12, 30, 45)
-            self.session_form['end_time'].data = \
-                datetime(2015, 8, 4, 12, 30, 45)
-            request.url = 'http://0.0.0.0:5000/admin/event/1'
             with self.assertRaises(ValidationError):
-                CustomDateSessionValidate().__call__(form=self.session_form,
-                                                     field=None)
+                self._session_form_req_url(
+                    datetime(2015, 8, 4, 12, 30, 45),
+                    datetime(2015, 8, 4, 12, 30, 45)
+                )
 
 if __name__ == '__main__':
     unittest.main()
