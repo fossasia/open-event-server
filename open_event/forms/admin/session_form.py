@@ -42,6 +42,11 @@ class SessionForm(Form):
         query_factory=DataGetter.get_languages,
         allow_blank=True
     )
+    track = QuerySelectField(
+        label='Track',
+        query_factory=DataGetter.get_tracks_by_event_id,
+        allow_blank=True
+    )
     speakers = QuerySelectMultipleField(
             query_factory=get_speakers,
             widget=Select2Widget(multiple=True)

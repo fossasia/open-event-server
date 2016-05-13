@@ -37,14 +37,8 @@ class DataManager(object):
                           description=form.description.data,
                           event_id=event_id,
                           track_image_url=form.track_image_url.data)
-        new_track.sessions = form.sessions.data
-        db.session.query(Session) \
-                  .filter_by(id=form.sessions.data).track = new_track.id
         save_to_db(new_track, "Track saved")
         update_version(event_id, False, "tracks_ver")
-        sessions = form.sessions.data
-        if sessions:
-            update_version(event_id, False, "session_ver")
 
     @staticmethod
     def update_track(form, track):
@@ -54,18 +48,11 @@ class DataManager(object):
         :param track: object contains all earlier data
         """
         data = form.data
-        del data['sessions']
         db.session.query(Track) \
             .filter_by(id=track.id) \
             .update(dict(data))
-        track.sessions = form.sessions.data
-        db.session.query(Session) \
-            .filter_by(id=form.sessions.data).track = track.id
         save_to_db(track, "Track updated")
         update_version(track.event_id, False, "tracks_ver")
-        sessions = form.sessions.data
-        if sessions:
-            update_version(track.event_id, False, "session_ver")
 
     @staticmethod
     def remove_track(track_id):
@@ -97,6 +84,7 @@ class DataManager(object):
         new_session.microlocation = form.microlocation.data
         new_session.format = form.format.data
         new_session.level = form.level.data
+        new_session.track = form.track.data
         new_session.is_accepted = is_accepted
         save_to_db(new_session, "Session saved")
         update_version(event_id, False, "session_ver")
@@ -113,11 +101,13 @@ class DataManager(object):
         microlocation = data["microlocation"]
         level = data["level"]
         format = data["format"]
+        track = data["track"]
         language = data["language"]
         del data["speakers"]
         del data["microlocation"]
         del data["level"]
         del data["format"]
+        del data["track"]
         del data["language"]
         db.session.query(Session) \
             .filter_by(id=session.id) \
@@ -126,6 +116,7 @@ class DataManager(object):
         session.microlocation = microlocation
         session.format = format
         session.level = level
+        session.track = track
         session.language = language
         save_to_db(session, "Session updated")
         update_version(session.event_id, False, "session_ver")

@@ -41,6 +41,14 @@ class DataGetter:
         return Track.query.filter_by(event_id=event_id)
 
     @staticmethod
+    def get_tracks_by_event_id():
+        """
+        :param event_id: Event id
+        :return: All Tracks filtered by event_id
+        """
+        return Track.query.filter_by(event_id=get_event_id())
+
+    @staticmethod
     def get_sessions(event_id, is_accepted=True):
         """
         :param event_id: Event id
