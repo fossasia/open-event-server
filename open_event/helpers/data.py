@@ -3,6 +3,7 @@ import logging
 import os.path
 import random
 import traceback
+import json
 
 from flask import flash, request
 from flask.ext import login
@@ -21,6 +22,8 @@ from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.track import Track
 from ..models.user import User
+from open_event.helpers.oauth import OAuth,FbOAuth
+from requests_oauthlib import OAuth2Session
 
 
 class DataManager(object):
@@ -381,6 +384,8 @@ class DataManager(object):
 
         user.salt = salt
         user.role = 'speaker'
+        user.avatar=""
+        user.tokens=""
         save_to_db(user, "User created")
         return user
 
@@ -556,3 +561,33 @@ def get_or_create(model, **kwargs):
         db.session.add(instance)
         db.session.commit()
         return instance
+
+def get_google_auth(state=None,token=None):
+    if token:
+        return OAuth2Session(OAuth.CLIENT_ID,token=token)
+    if state:
+        return OAuth2Session(OAuth.CLIENT_ID,state=state,scope=OAuth.SCOPE,redirect_uri=OAuth.REDIRECT_URI)
+    oauth=OAuth2Session(OAuth.CLIENT_ID,scope=OAuth.SCOPE,redirect_uri=OAuth.REDIRECT_URI)
+    return oauth
+
+def get_facebook_auth(state=None,token=None):
+    if token:
+        return OAuth2Session(FbOAuth.CLIENT_ID,token=token)
+    if state:
+        return OAuth2Session(FbOAuth.CLIENT_ID,state=state,scope=FbOAuth.SCOPE,redirect_uri=FbOAuth.REDIRECT_URI)
+    oauth=OAuth2Session(FbOAuth.CLIENT_ID,scope=FbOAuth.SCOPE,redirect_uri=FbOAuth.REDIRECT_URI)
+    return oauth
+
+def create_user_oauth(user,user_data,token,method):
+    if user is None:
+        user=User()
+        user.email=user_data['email']
+    user.login=user_data['name']
+    user.role = 'speaker'
+    if method=='Google':
+        user.avatar=user_data['picture']
+    if method=='Facebook':
+        user.avatar=user_data['picture']['data']['url']
+    user.tokens=json.dumps(token)
+    save_to_db(user, "User created")
+    return user
