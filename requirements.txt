@@ -20,7 +20,8 @@ colour
 xlrd
 mock
 SQLAlchemy-Utils
-cryptography==1.3.2
+cryptography==1.2.3
+
 
 # these prevent SSL warnings in urllib3
 pyopenssl
