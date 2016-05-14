@@ -15,7 +15,6 @@ from flask import request
 from icalendar import Calendar, Event
 from flask_debugtoolbar import DebugToolbarExtension
 
-import open_event.models.event_listeners
 from open_event.models import db
 from open_event.views.admin.admin import AdminView
 
@@ -33,13 +32,13 @@ def create_app():
     app.register_blueprint(routes)
     migrate = Migrate(app, db)
 
+    app.config.from_object('config.ProductionConfig')
     db.init_app(app)
     manager = Manager(app)
     manager.add_command('db', MigrateCommand)
 
     cors = CORS(app)
     app.secret_key = 'super secret key'
-    app.config.from_object('config.ProductionConfig')
     # app.config.from_object('config.LocalSQLITEConfig')
     app.config['UPLOADS_FOLDER'] = os.path.realpath('.') + '/static/'
     app.config['FILE_SYSTEM_STORAGE_FILE_VIEW'] = 'static'
