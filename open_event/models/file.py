@@ -10,7 +10,7 @@ class File(db.Model):
     name = db.Column(db.String,
                      nullable=False)
     path = db.Column(db.String,
-                         nullable=False)
+                     nullable=False)
     owner_id = db.Column(db.Integer,
                          db.ForeignKey('user.id'))
 
@@ -26,4 +26,7 @@ class File(db.Model):
         return '<File %r>' % self.name
 
     def __str__(self):
+        return unicode(self).encode('utf-8')
+
+    def __unicode__(self):
         return self.name
