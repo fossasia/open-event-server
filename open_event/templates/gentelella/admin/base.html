@@ -32,6 +32,14 @@
         <div class="main_container">
             {{ sidebar.render_sidebar() }}
             {{ menu.render_menu() }}
+            <div class="right_col" role="main" style="min-height: 3574px;">
+                 <div class="">
+
+                    {% block body %}
+
+                    {% endblock %}
+                 </div>
+            </div>
         </div>
     </div>
 </body>

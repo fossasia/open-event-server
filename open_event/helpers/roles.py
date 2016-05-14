@@ -1,15 +1,18 @@
 from functools import wraps
 
 from data_getter import DataGetter
-
-ANY = "ANY"
-ORGANIZER = "ORGANIZER"
-VOLUNTEER = "VOLUNTEER"
-TRACK_ORGANIZER = "TRACK_ORGANIZER"
-CO_ORGANIZER = "CO_ORGANIZER"
+from enum import Enum
 
 
-def role_required(roles=(ANY,)):
+class Role(Enum):
+    any = "ANY"
+    organizer = "ORGANIZER"
+    volunteer = "VOLUNTEER"
+    track_organizer = "TRACK_ORGANIZER"
+    co_organizer = "CO_ORGANIZER"
+
+
+def role_required(roles=(Role.any,)):
     def wrapper(fn):
         @wraps(fn)
         def decorated_view(*args, **kwargs):

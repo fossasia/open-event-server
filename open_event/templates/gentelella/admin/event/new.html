@@ -1,0 +1,19 @@
+{% extends 'gentelella/admin/base.html' %}
+{% block body %}
+<form action="/admin/events/new/" method="POST" role="form" class="admin-form form-horizontal" enctype="multipart/form-data">
+    {% if csrf_token %}
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    {% endif %}
+
+
+    <div class="item form-group">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">Title <span class="required">*</span>
+        </label>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+          <textarea required="required" name="title" class="form-control col-md-7 col-xs-12"></textarea>
+        </div>
+    </div>
+
+    <button id="send" type="submit" class="btn btn-success">Submit</button>
+</form>
+{% endblock %}

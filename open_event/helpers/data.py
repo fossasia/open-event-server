@@ -445,7 +445,7 @@ class DataManager(object):
     @staticmethod
     def create_event_test():
         import datetime
-        event = Event(name="add",
+        event = Event(name="nn",
                       email="",
                       color='#f5f5f5',
                       logo="None",
@@ -462,7 +462,7 @@ class DataManager(object):
         db.session.flush()
         db.session.refresh(event)
         db.session.refresh(role)
-        uer = UsersEventsRoles(event_id=event, user_id=login.current_user.id, role_id=role.id)
+        uer = UsersEventsRoles(event_id=event.id, user_id=login.current_user.id, role_id=role.id)
         save_to_db(uer, "Event saved")
 
     @staticmethod
