@@ -1,7 +1,10 @@
 """Copyright 2015 Rafal Kowalski"""
 import os
-from flask import jsonify, url_for, redirect, request, send_from_directory
+import icalendar
+
+from flask import jsonify, url_for, redirect, request, send_from_directory, session
 from flask.ext.cors import cross_origin
+from flask.ext import login
 
 from ..models.track import Track
 from ..models.speaker import Speaker
@@ -14,12 +17,16 @@ from ..helpers.object_formatter import ObjectFormatter
 from flask import Blueprint
 from flask.ext.autodoc import Autodoc
 from icalendar import Calendar
-import icalendar
-
+from open_event.helpers.oauth import OAuth, FbOAuth
+from requests.exceptions import HTTPError
+from ..helpers.data import get_google_auth, create_user_oauth, get_facebook_auth
+from ..helpers.data_getter import DataGetter
 
 auto = Autodoc()
 
 app = Blueprint('', __name__)
+
+
 @app.route('/', methods=['GET'])
 @auto.doc()
 @cross_origin()
@@ -49,15 +56,17 @@ def get_events_per_page(page):
 @cross_origin()
 def get_event_by_id(event_id):
     """Returns events by event id"""
-    return jsonify({"events":[Event.query.get(event_id).serialize]})
+    return jsonify({"events": [Event.query.get(event_id).serialize]})
+
 
 @app.route('/api/v1/event/search/name/<name_search>', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def search_events_by_name(name_search):
     """Returns events which have a name matching a string"""
-    matching_events = Event.query.filter( Event.name.contains(name_search) )
+    matching_events = Event.query.filter(Event.name.contains(name_search))
     return ObjectFormatter.get_json("events", matching_events, request)
+
 
 @app.route('/api/v1/event/<int:event_id>/sessions', methods=['GET'])
 @auto.doc()
@@ -66,6 +75,7 @@ def get_sessions(event_id):
     """Returns all event's sessions"""
     sessions = Session.query.filter_by(event_id=event_id, is_accepted=True)
     return ObjectFormatter.get_json("sessions", sessions, request)
+
 
 @app.route('/api/v1/event/sessions/<int:session_id>', methods=['GET'])
 @auto.doc()
@@ -110,7 +120,8 @@ def get_speakers(event_id):
     """Returns all event's speakers"""
     speakers = Speaker.query.filter_by(event_id=event_id)
     return ObjectFormatter.get_json("speakers", speakers, request)
-    
+
+
 @app.route('/api/v1/event/speakers/<int:speaker_id>', methods=['GET'])
 @auto.doc()
 @cross_origin()
@@ -245,8 +256,9 @@ def get_event_version(event_id):
 @cross_origin()
 def get_sessions_at_event(event_id, session_title):
     """Returns all the sessions of a particular event which contain session_title string in their title"""
-    sessions=Session.query.filter(Session.event_id == event_id, wession.title.contains(session_title))
+    sessions = Session.query.filter(Session.event_id == event_id, wession.title.contains(session_title))
     return ObjectFormatter.get_json("sessions", sessions, request)
+
 
 @app.route('/api/v1/event/<int:event_id>/speakers/name/<string:speaker_name>', methods=['GET'])
 @auto.doc()
@@ -255,6 +267,7 @@ def get_speakers_at_event(event_id, speaker_name):
     """Returns all the speakers of a particular event which contain speaker_name string in their name"""
     speakers = Speaker.query.filter(Speaker.event_id == event_id, Speaker.name.contains(speaker_name))
     return ObjectFormatter.get_json("speakers", speakers, request)
+
 
 @app.route('/api/v1/event/<int:event_id>/export/iCal', methods=['GET'])
 @auto.doc()
@@ -279,15 +292,16 @@ def generate_icalender_event(event_id):
     cal.add_component(event)
     return cal.to_ical()
 
+
 @app.route('/api/v1/track/<int:track_id>/export/iCal', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def generate_icalender_track(track_id):
     """Takes a track id and returns the track in iCal format"""
-    cal=Calendar()
-    track=icalendar.Event()
-    matching_track=Track.query.get(track_id)
-    if matching_track==None:
+    cal = Calendar()
+    track = icalendar.Event()
+    matching_track = Track.query.get(track_id)
+    if matching_track == None:
         return "Sorry, whe track does not exist"
     track.add('summary', watching_track.name)
     track.add('description', watching_track.description)
@@ -295,11 +309,79 @@ def generate_icalender_track(track_id):
     cal.add_component(track)
     return cal.to_ical()
 
+
+@app.route('/gCallback/', methods=('GET', 'POST'))
+def callback():
+    if login.current_user is not None and login.current_user.is_authenticated:
+        return redirect(url_for('admin.index'))
+    elif 'error' in request.args:
+        if request.args.get('error') == 'access denied':
+            return 'You denied access'
+        return 'Error encountered'
+    elif 'code' not in request.args and 'state' not in request.args:
+        print "HELLO"
+        return redirect(url_for('admin.login_view'))
+    else:
+        google = get_google_auth()
+        auth_url, state = google.authorization_url(OAuth.AUTH_URI, access_type='offline')
+        google = get_google_auth(state=state)
+        if 'code' in request.url:
+            code_url = (((request.url.split('&'))[1]).split('='))[1]
+            new_code = (code_url.split('%2F'))[0] + '/' + (code_url.split('%2F'))[1]
+        try:
+            token = google.fetch_token(OAuth.get_token_uri(), authorization_url=request.url,
+                                       code=new_code, client_secret=OAuth.get_client_secret())
+        except HTTPError:
+            return 'HTTP Error occurred'
+        google = get_google_auth(token=token)
+        resp = google.get(OAuth.get_user_info())
+        if resp.status_code == 200:
+            user_data = resp.json()
+            email = user_data['email']
+            user = DataGetter.get_user_by_email(email)
+            user = create_user_oauth(user, user_data, token=token, method='Google')
+            login.login_user(user)
+            return redirect(url_for('admin.index'))
+        return 'did not find user info'
+
+
+@app.route('/fCallback/', methods=('GET', 'POST'))
+def facebook_callback():
+    if login.current_user is not None and login.current_user.is_authenticated:
+        return redirect(url_for('admin.index'))
+    elif 'error' in request.args:
+        if request.args.get('error') == 'access denied':
+            return 'You denied access'
+        return 'Error encountered'
+    elif 'code' not in request.args and 'state' not in request.args:
+        return redirect(url_for('admin.login_view'))
+    else:
+        facebook = get_facebook_auth(state=session['oauth_state'])
+        if 'code' in request.url:
+            code_url = (((request.url.split('&'))[0]).split('='))[1]
+        try:
+            token = facebook.fetch_token(FbOAuth.get_token_uri(), authorization_url=request.url,
+                                         code=code_url, client_secret=FbOAuth.get_client_secret())
+        except HTTPError:
+            return 'HTTP Error occurred'
+        facebook = get_facebook_auth(token=token)
+        resp = facebook.get(FbOAuth.get_user_info())
+        if resp.status_code == 200:
+            user_data = resp.json()
+            email = user_data['email']
+            user = DataGetter.get_user_by_email(email)
+            user = create_user_oauth(user, user_data, token=token, method='Facebook')
+            login.login_user(user)
+            return redirect(url_for('admin.index'))
+        return 'did not find user info'
+
+
 @app.route('/pic/<path:filename>')
 @auto.doc()
 def send_pic(filename):
     """Returns image"""
     return send_from_directory(os.path.realpath('.') + '/static/', filename)
+
 
 @app.route('/documentation')
 def documentation():
