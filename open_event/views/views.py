@@ -322,9 +322,7 @@ def callback():
         print "HELLO"
         return redirect(url_for('admin.login_view'))
     else:
-        google = get_google_auth()
-        auth_url, state = google.authorization_url(OAuth.AUTH_URI, access_type='offline')
-        google = get_google_auth(state=state)
+        google = get_google_auth(state=session['oauth_state'])
         if 'code' in request.url:
             code_url = (((request.url.split('&'))[1]).split('='))[1]
             new_code = (code_url.split('%2F'))[0] + '/' + (code_url.split('%2F'))[1]
@@ -356,7 +354,7 @@ def facebook_callback():
     elif 'code' not in request.args and 'state' not in request.args:
         return redirect(url_for('admin.login_view'))
     else:
-        facebook = get_facebook_auth(state=session['oauth_state'])
+        facebook = get_facebook_auth(state=session['fb_oauth_state'])
         if 'code' in request.url:
             code_url = (((request.url.split('&'))[0]).split('='))[1]
         try:
@@ -365,12 +363,12 @@ def facebook_callback():
         except HTTPError:
             return 'HTTP Error occurred'
         facebook = get_facebook_auth(token=token)
-        resp = facebook.get(FbOAuth.get_user_info())
-        if resp.status_code == 200:
-            user_data = resp.json()
-            email = user_data['email']
-            user = DataGetter.get_user_by_email(email)
-            user = create_user_oauth(user, user_data, token=token, method='Facebook')
+        response = facebook.get(FbOAuth.get_user_info())
+        if response.status_code == 200:
+            user_info = response.json()
+            email = user_info['email']
+            user_email = DataGetter.get_user_by_email(email)
+            user = create_user_oauth(user_email, user_info, token=token, method='Facebook')
             login.login_user(user)
             return redirect(url_for('admin.index'))
         return 'did not find user info'
