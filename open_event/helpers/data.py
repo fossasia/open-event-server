@@ -396,6 +396,21 @@ class DataManager(object):
         return user
 
     @staticmethod
+    def create_super_admin(password):
+        user = User()
+        user.login = 'super_admin'
+        user.nickname = 'super_admin'
+        salt = generate_random_salt()
+        password = password
+        user.password = generate_password_hash(password, salt)
+        hash = random.getrandbits(128)
+        user.reset_password = str(hash)
+        user.salt = salt
+        user.role = 'super_admin'
+        save_to_db(user, "User created")
+        return user
+
+    @staticmethod
     def update_user(form, reset_hash):
         user = User.query.filter_by(reset_password=reset_hash).first()
         salt = generate_random_salt()
