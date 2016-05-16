@@ -52,6 +52,10 @@ When writing changes to models. Use migrations.
 
 When checking in code for models, please update migrations as well.
 
+
+##How to run tests for Open-Event Server?:
+For steps regarding how to run tests please refer to [How to run tests](docs/TESTS.md)
+
 ## Stack
 
 * Database - Postgres
