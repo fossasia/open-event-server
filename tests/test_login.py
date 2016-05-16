@@ -4,7 +4,7 @@ from tests.utils import OpenEventTestCase
 from auth_helper import register
 import unittest
 from flask import url_for
-from tests.set_up import Setup
+from tests.setup_database import Setup
 from open_event import current_app as app
 from open_event.helpers.data import save_to_db
 from tests.object_mother import ObjectMother
