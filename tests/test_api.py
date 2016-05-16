@@ -8,12 +8,11 @@ from open_event import current_app as app
 from open_event.helpers.data import save_to_db
 from tests.object_mother import ObjectMother
 
+
 class TestApi(OpenEventTestCase):
 
     def test_api_tracks(self):
-        with self.assertRaises(Exception) as context:
-            self.app.get('/api/v1/event/1')
-        self.assertTrue(AttributeError, context.exception)
+        self.assertEqual(self.app.get('/api/v1/event/1').status_code, 404)
         event = ObjectMother.get_event()
         track = ObjectMother.get_track()
         with app.test_request_context():

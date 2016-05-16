@@ -183,3 +183,18 @@ class DataGetter:
     @staticmethod
     def get_object(db_model, object_id):
         return db_model.query.get(object_id)
+
+    @staticmethod
+    def get_event(event_id):
+        """Check if event with the id exists"""
+        return Event.query.filter_by(id=event_id).first()
+
+    @staticmethod
+    def get_session(session_id):
+        """Check if session with the id exists"""
+        return Session.query.filter_by(id=session_id).first()
+
+    @staticmethod
+    def get_speaker(speaker_id):
+        """Get speaker with id"""
+        return Speaker.query.filter_by(id=speaker_id).first()

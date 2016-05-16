@@ -11,6 +11,8 @@ from ..models.event import Event
 from ..models.session import Session, Level, Format, Language
 from ..models.version import Version
 from ..helpers.object_formatter import ObjectFormatter
+from ..helpers.data_getter import DataGetter
+from views_helpers import event_status_code
 from flask import Blueprint
 from flask.ext.autodoc import Autodoc
 from icalendar import Calendar
@@ -20,6 +22,8 @@ import icalendar
 auto = Autodoc()
 
 app = Blueprint('', __name__)
+
+
 @app.route('/', methods=['GET'])
 @auto.doc()
 @cross_origin()
@@ -49,15 +53,20 @@ def get_events_per_page(page):
 @cross_origin()
 def get_event_by_id(event_id):
     """Returns events by event id"""
-    return jsonify({"events":[Event.query.get(event_id).serialize]})
+    event = DataGetter.get_event(event_id)
+    if event:
+        return jsonify({"events": event.serialize})
+    return jsonify({"events": {}}), 404
+
 
 @app.route('/api/v1/event/search/name/<name_search>', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def search_events_by_name(name_search):
     """Returns events which have a name matching a string"""
-    matching_events = Event.query.filter( Event.name.contains(name_search) )
+    matching_events = Event.query.filter(Event.name.contains(name_search))
     return ObjectFormatter.get_json("events", matching_events, request)
+
 
 @app.route('/api/v1/event/<int:event_id>/sessions', methods=['GET'])
 @auto.doc()
@@ -65,15 +74,19 @@ def search_events_by_name(name_search):
 def get_sessions(event_id):
     """Returns all event's sessions"""
     sessions = Session.query.filter_by(event_id=event_id, is_accepted=True)
-    return ObjectFormatter.get_json("sessions", sessions, request)
+    return ObjectFormatter.get_json("sessions", sessions, request), \
+        event_status_code(event_id)
+
 
 @app.route('/api/v1/event/sessions/<int:session_id>', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def get_session_by_id(session_id):
     """Returns a session's data by session id"""
-    sessions = Session.query.get(session_id)
-    return jsonify(sessions.serialize)
+    session = DataGetter.get_session(session_id)
+    if session:
+        return jsonify(session.serialize)
+    return jsonify({}), 404
 
 
 @app.route('/api/v1/event/<int:event_id>/sessions/page/<int:page>', methods=['GET'])
@@ -82,7 +95,8 @@ def get_session_by_id(session_id):
 def get_sessions_per_page(event_id, page):
     """Returns 20 event's sessions"""
     sessions = Session.query.filter_by(event_id=event_id, is_accepted=True)
-    return ObjectFormatter.get_json("sessions", sessions, request, page)
+    return ObjectFormatter.get_json("sessions", sessions, request, page), \
+        event_status_code(event_id)
 
 
 @app.route('/api/v1/event/<int:event_id>/tracks', methods=['GET'])
@@ -91,7 +105,8 @@ def get_sessions_per_page(event_id, page):
 def get_tracks(event_id):
     """Returns all event's tracks"""
     tracks = Track.query.filter_by(event_id=event_id)
-    return ObjectFormatter.get_json("tracks", tracks, request)
+    return ObjectFormatter.get_json("tracks", tracks, request), \
+        event_status_code(event_id)
 
 
 @app.route('/api/v1/event/<int:event_id>/tracks/page/<int:page>', methods=['GET'])
@@ -100,7 +115,8 @@ def get_tracks(event_id):
 def get_tracks_per_page(event_id, page):
     """Returns 20 event's tracks"""
     tracks = Track.query.filter_by(event_id=event_id)
-    return ObjectFormatter.get_json("tracks", tracks, request, page)
+    return ObjectFormatter.get_json("tracks", tracks, request, page), \
+        event_status_code(event_id)
 
 
 @app.route('/api/v1/event/<int:event_id>/speakers', methods=['GET'])
@@ -109,15 +125,19 @@ def get_tracks_per_page(event_id, page):
 def get_speakers(event_id):
     """Returns all event's speakers"""
     speakers = Speaker.query.filter_by(event_id=event_id)
-    return ObjectFormatter.get_json("speakers", speakers, request)
+    return ObjectFormatter.get_json("speakers", speakers, request), \
+        event_status_code(event_id)
+
 
 @app.route('/api/v1/event/speakers/<int:speaker_id>', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def get_speaker_by_id(speaker_id):
     """Return speaker data by speaker id"""
-    speakers = Speaker.query.get(speaker_id)
-    return jsonify(speakers.serialize)
+    speaker = DataGetter.get_speaker(speaker_id)
+    if speaker:
+        return jsonify(speaker.serialize)
+    return jsonify({}), 404
 
 
 @app.route('/api/v1/event/<int:event_id>/speakers/page/<int:page>', methods=['GET'])
@@ -126,7 +146,8 @@ def get_speaker_by_id(speaker_id):
 def get_speakers_per_page(event_id, page):
     """Returns 20 event's speakers"""
     speakers = Speaker.query.filter_by(event_id=event_id)
-    return ObjectFormatter.get_json("speakers", speakers, request, page)
+    return ObjectFormatter.get_json("speakers", speakers, request, page), \
+        event_status_code(event_id)
 
 
 @app.route('/api/v1/event/<int:event_id>/sponsors', methods=['GET'])
@@ -135,7 +156,8 @@ def get_speakers_per_page(event_id, page):
 def get_sponsors(event_id):
     """Returns all event's sponsors"""
     sponsors = Sponsor.query.filter_by(event_id=event_id)
-    return ObjectFormatter.get_json("sponsors", sponsors, request)
+    return ObjectFormatter.get_json("sponsors", sponsors, request), \
+        event_status_code(event_id)
 
 
 @app.route('/api/v1/event/<int:event_id>/sponsors/page/<int:page>', methods=['GET'])
@@ -144,7 +166,8 @@ def get_sponsors(event_id):
 def get_sponsors_per_page(event_id, page):
     """Returns 20 event's sponsors"""
     sponsors = Sponsor.query.filter_by(event_id=event_id)
-    return ObjectFormatter.get_json("sponsors", sponsors, request, page)
+    return ObjectFormatter.get_json("sponsors", sponsors, request, page), \
+        event_status_code(event_id)
 
 
 @app.route('/api/v1/event/<int:event_id>/levels', methods=['GET'])
@@ -153,7 +176,8 @@ def get_sponsors_per_page(event_id, page):
 def get_levels(event_id):
     """Returns all event's levels"""
     levels = Level.query.filter_by(event_id=event_id)
-    return ObjectFormatter.get_json("levels", levels, request)
+    return ObjectFormatter.get_json("levels", levels, request), \
+        event_status_code(event_id)
 
 
 @app.route('/api/v1/event/<int:event_id>/levels/page/<int:page>', methods=['GET'])
@@ -162,7 +186,8 @@ def get_levels(event_id):
 def get_levels_per_page(event_id, page):
     """Returns 20 event's levels"""
     levels = Level.query.filter_by(event_id=event_id)
-    return ObjectFormatter.get_json("levels", levels, request, page)
+    return ObjectFormatter.get_json("levels", levels, request, page), \
+        event_status_code(event_id)
 
 
 @app.route('/api/v1/event/<int:event_id>/formats', methods=['GET'])
@@ -171,7 +196,8 @@ def get_levels_per_page(event_id, page):
 def get_formats(event_id):
     """Returns all event's formats"""
     formats = Format.query.filter_by(event_id=event_id)
-    return ObjectFormatter.get_json("formats", formats, request)
+    return ObjectFormatter.get_json("formats", formats, request), \
+        event_status_code(event_id)
 
 
 @app.route('/api/v1/event/<int:event_id>/formats/page/<int:page>', methods=['GET'])
@@ -180,7 +206,8 @@ def get_formats(event_id):
 def get_formatsper_page(event_id, page):
     """Returns 20 event's formats"""
     formats = Format.query.filter_by(event_id=event_id)
-    return ObjectFormatter.get_json("formats", formats, request, page)
+    return ObjectFormatter.get_json("formats", formats, request, page), \
+        event_status_code(event_id)
 
 
 @app.route('/api/v1/event/<int:event_id>/languages', methods=['GET'])
@@ -188,7 +215,8 @@ def get_formatsper_page(event_id, page):
 def get_languages(event_id):
     """Returns all event's languages"""
     languages = Language.query.filter_by(event_id=event_id)
-    return ObjectFormatter.get_json("languages", languages, request)
+    return ObjectFormatter.get_json("languages", languages, request), \
+        event_status_code(event_id)
 
 
 @app.route('/api/v1/event/<int:event_id>/languages/page/<int:page>', methods=['GET'])
@@ -197,7 +225,8 @@ def get_languages(event_id):
 def get_languages_per_page(event_id, page):
     """Returns 20 event's languages"""
     languages = Language.query.filter_by(event_id=event_id)
-    return ObjectFormatter.get_json("languages", languages, request, page)
+    return ObjectFormatter.get_json("languages", languages, request, page), \
+        event_status_code(event_id)
 
 
 @app.route('/api/v1/event/<int:event_id>/microlocations', methods=['GET'])
@@ -206,7 +235,8 @@ def get_languages_per_page(event_id, page):
 def get_microlocations(event_id):
     """Returns all event's microlocations"""
     microlocations = Microlocation.query.filter_by(event_id=event_id)
-    return ObjectFormatter.get_json("microlocations", microlocations, request)
+    return ObjectFormatter.get_json("microlocations", microlocations, request), \
+        event_status_code(event_id)
 
 
 @app.route('/api/v1/event/<int:event_id>/microlocations/page/<int:page>', methods=['GET'])
@@ -215,7 +245,8 @@ def get_microlocations(event_id):
 def get_microlocations_per_page(event_id, page):
     """Returns 20 event's microlocations"""
     microlocations = Microlocation.query.filter_by(event_id=event_id)
-    return ObjectFormatter.get_json("microlocations", microlocations, request, page)
+    return ObjectFormatter.get_json("microlocations", microlocations, request, page), \
+        event_status_code(event_id)
 
 
 @app.route('/api/v1/version', methods=['GET'])
@@ -226,7 +257,7 @@ def get_versions():
     version = Version.query.order_by(Version.id.desc()).first()
     if version:
         return jsonify(version.serialize)
-    return jsonify({"version": []})
+    return jsonify({"version": []}), 404
 
 
 @app.route('/api/v1/event/<int:event_id>/version', methods=['GET'])
@@ -237,25 +268,33 @@ def get_event_version(event_id):
     version = Version.query.filter_by(event_id=event_id).order_by(Version.id.desc()).first()
     if version:
         return jsonify(version.serialize)
-    return jsonify({"version": []})
+    return jsonify({"version": []}), 404
 
 
 @app.route('/api/v1/event/<int:event_id>/sessions/title/<string:session_title>', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def get_sessions_at_event(event_id, session_title):
-    """Returns all the sessions of a particular event which contain session_title string in their title"""
-    sessions=Session.query.filter(Session.event_id == event_id, Session.title.contains(session_title))
-    return ObjectFormatter.get_json("sessions", sessions, request)
+    """
+    Returns all the sessions of a particular event which
+    contain session_title string in their title
+    """
+    sessions = Session.query.filter(Session.event_id == event_id, Session.title.contains(session_title))
+    return ObjectFormatter.get_json("sessions", sessions, request), \
+        event_status_code(event_id)
 
 
 @app.route('/api/v1/event/<int:event_id>/speakers/name/<string:speaker_name>', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def get_speakers_at_event(event_id, speaker_name):
-    """Returns all the speakers of a particular event which contain speaker_name string in their name"""
+    """
+    Returns all the speakers of a particular event which
+    contain speaker_name string in their name
+    """
     speakers = Speaker.query.filter(Speaker.event_id == event_id, Speaker.name.contains(speaker_name))
-    return ObjectFormatter.get_json("speakers", speakers, request)
+    return ObjectFormatter.get_json("speakers", speakers, request), \
+        event_status_code(event_id)
 
 
 @app.route('/api/v1/event/<int:event_id>/export/ical', methods=['GET'])
@@ -267,7 +306,7 @@ def generate_icalendar_event(event_id):
     event = icalendar.Event()
     matching_event = Event.query.get(event_id)
     if matching_event is None:
-        return "Sorry, the event does not exist"
+        return "Sorry, the event does not exist", 404
     event.add('summary', matching_event.name)
     event.add('geo', (matching_event.latitude, matching_event.longitude))
     event.add('location', matching_event.location_name)
@@ -291,7 +330,7 @@ def generate_icalendar_track(event_id, track_id):
     track = icalendar.Event()
     matching_track = Track.query.get(track_id)
     if matching_track is None or matching_track.event_id != event_id:
-        return "Sorry, the track does not exist"
+        return "Sorry, the track does not exist", 404
     track.add('summary', matching_track.name)
     track.add('description', matching_track.description)
     track.add('url', matching_track.track_image_url)
