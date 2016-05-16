@@ -5,15 +5,71 @@
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     {% endif %}
 
-
+    Wizard (Step 1) - Default
     <div class="item form-group">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12">Title <span class="required">*</span>
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">Name <span class="required">*</span>
         </label>
         <div class="col-md-6 col-sm-6 col-xs-12">
-          <textarea required="required" name="title" class="form-control col-md-7 col-xs-12"></textarea>
+          <input required="required" name="name" class="form-control col-md-7 col-xs-12"/>
         </div>
     </div>
 
-    <button id="send" type="submit" class="btn btn-success">Submit</button>
+    <div class="item form-group">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">Description
+        </label>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+          <textarea name="description" class="form-control col-md-7 col-xs-12"></textarea>
+        </div>
+    </div>
+
+    <div class="item form-group">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">Start Date
+        </label>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+          <input name="start_date" class="form-control col-md-7 col-xs-12"/>
+        </div>
+
+    </div>
+
+    <div class="item form-group">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">End Date
+        </label>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+          <input name="end_date" class="form-control col-md-7 col-xs-12"/>
+        </div>
+    </div>
+
+    <div class="item form-group">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">Background image
+        </label>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+          <input name="background_url" class="form-control col-md-7 col-xs-12"/>
+        </div>
+    </div>
+
+    <div class="item form-group">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">Logo
+        </label>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+          <input name="logo" class="form-control col-md-7 col-xs-12"/>
+        </div>
+    </div>
+
+    <div class="item form-group">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">Event Url
+        </label>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+          <input name="event_url" class="form-control col-md-7 col-xs-12"/>
+        </div>
+    </div>
+
+    Wizard Step (2) - Sessions
+
+    Wizard Step (3) - Tracks
+
+    Wizard Step (4) - Social (Optional)
+
+
+    <button id="send" type="submit" class="btn btn-success">Save Draft</button>
 </form>
 {% endblock %}

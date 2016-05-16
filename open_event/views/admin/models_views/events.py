@@ -3,7 +3,6 @@ from flask_admin.contrib.sqla import ModelView
 from ....helpers.data import DataManager
 from ....helpers.data_getter import DataGetter
 from ....helpers.roles import role_required, Role
-from flask import request
 from flask.ext import login
 from flask import request, url_for, redirect, flash
 

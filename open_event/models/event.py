@@ -49,6 +49,7 @@ class Event(db.Model):
     users = db.relationship("EventsUsers", backref="event")
 
     roles = db.relationship("UsersEventsRoles", backref="event")
+    state = db.Column(db.String, default="Draft")
     db.UniqueConstraint('track.name')
 
     def __init__(self,
@@ -63,6 +64,7 @@ class Event(db.Model):
                  color=None,
                  slogan=None,
                  url=None,
+                 state=None
                  ):
         self.name = name
         self.logo = logo
@@ -75,6 +77,7 @@ class Event(db.Model):
         self.location_name = location_name
         self.slogan = slogan
         self.url = url
+        self.state=state
         # self.owner = owner
 
     def __repr__(self):
