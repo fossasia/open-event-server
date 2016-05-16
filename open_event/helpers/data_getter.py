@@ -187,14 +187,14 @@ class DataGetter:
     @staticmethod
     def get_event(event_id):
         """Get event by id, None if it doesn't exist"""
-        return Event.query.filter_by(id=event_id).first()
+        return Event.query.get(event_id)
 
     @staticmethod
     def get_session(session_id):
         """Get session by id"""
-        return Session.query.filter_by(id=session_id).first()
+        return Session.query.get(session_id)
 
     @staticmethod
     def get_speaker(speaker_id):
         """Get speaker by id"""
-        return Speaker.query.filter_by(id=speaker_id).first()
+        return Speaker.query.get(speaker_id)
