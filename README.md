@@ -92,7 +92,7 @@ Now you are inside a synced up copy of the project directory. if you do `ls`, th
 * Before running the app , install the requirements from 
 requirements.txt .
 ```
-pip install -r requirements.txt
+pip install -r requirements/dev.txt
 ```
 * Time to run the app, if the DB migrations went well, then doing this will be okay
 ```
