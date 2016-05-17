@@ -79,3 +79,7 @@ def request_wants_json():
         request.accept_mimetypes['text/html']
 
 current_app, manager, database = create_app()
+
+
+if __name__ == '__main__':
+    current_app.run()
