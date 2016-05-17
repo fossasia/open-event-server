@@ -12,7 +12,6 @@
   "dependencies": {
     "chosen": "1.5.1",
     "jquery-migrate": "1.4.0",
-    "bootstrap-material-design": "0.5.9",
-    "prism": "1.4.1"
+    "bootstrap-material-design": "0.5.9"
   }
 }

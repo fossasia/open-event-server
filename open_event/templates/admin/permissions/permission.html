@@ -1,9 +1,7 @@
 {% extends 'admin/base1.html' %}
 
 
-
 {% block body %}
-    <link href="{{url_for('static', filename='admin/css/prism.css')}}" rel="stylesheet">
     <link href="{{url_for('static', filename='admin/lib/chosen/chosen.min.css')}}" rel="stylesheet">
     <div class="col-md-2"></div>
     <div class="col-md-8">
@@ -61,7 +59,6 @@
 {% endblock %}
 
 {% block tail %}
-<script src="{{ url_for('static', filename='admin/js/prism.js')}}"></script>
 <script src="{{ url_for('static', filename='admin/lib/chosen/chosen.jquery.min.js')}}"></script>
 <script language="javascript">
   (function($) {
