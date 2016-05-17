@@ -114,7 +114,7 @@ export DATABASE_URL=postgresql://$APP_DB_USER:$APP_DB_PASS@localhost:5432/$APP_D
 cd /vagrant
 #Flask
 echo "Installing requirements"
-pip install -r requirements.txt
+pip install -r requirements/dev.txt
 
 python create_db.py
 

@@ -33,8 +33,8 @@ class ObjectMother(object):
         return Microlocation(name="name",
                              latitude=1.0,
                              longitude=1.0)
-    
-    
+
+
     @staticmethod
     def get_speaker():
         return Speaker( name="name",

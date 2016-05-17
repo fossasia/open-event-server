@@ -24,6 +24,7 @@ The data is provided over the API endpoints as described [here](https://github.c
 Please join our mailing list to discuss questions regarding the project: https://groups.google.com/forum/#!forum/open-event
 
 # Getting Started
+
 ## How do I install Open-Event Server with Docker?:
 To install Open-Event Server with Docker please refer to [Docker installation](docs/DOCKER.md)
 
@@ -33,6 +34,7 @@ For installation steps on how to deploy Open-Event Server using vagrant please r
 
 ## How to configure Bower? :
 In order to install and configure bower please refer to [Bower installation](docs/BOWER.md)
+
 
 ## Model updates
 
