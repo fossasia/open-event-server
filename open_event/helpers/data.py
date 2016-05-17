@@ -432,53 +432,28 @@ class DataManager(object):
         Event will be saved to database with proper Event id
         :param form: view data form
         """
-        event = Event(name=form.name.data,
-                      email=form.email.data,
-                      color=form.color.data,
-                      logo=form.logo.data,
-                      start_time=form.start_time.data,
-                      end_time=form.end_time.data,
-                      latitude=form.latitude.data,
-                      longitude=form.longitude.data,
-                      location_name=form.location_name.data,
-                      slogan=form.slogan.data,
-                      url=form.url.data)
-        a = EventsUsers()
-        a.user = login.current_user
-        a.editor = True
-        a.admin = True
-        event.users.append(a)
-        if form.logo.data:
-            event.logo = form.logo.data
-        else:
-            event.logo = ''
-        save_to_db(event, "Event saved")
-        update_version(event_id=event.id,
-                       is_created=True,
-                       column_to_increment="event_ver")
-
-    @staticmethod
-    def create_event_test():
         import datetime
-        event = Event(name="nn",
-                      email="",
+        event = Event(name=form['name'],
+                      email='dsads',
                       color='#f5f5f5',
-                      logo="None",
+                      logo=['logo'],
                       start_time=datetime.datetime.now(),
                       end_time=datetime.datetime.now(),
                       latitude=10.0,
                       longitude=10.0,
-                      location_name="None",
-                      slogan="None",
-                      url="None")
-        role = Role(name='admin')
+                      location_name='dsadsa',
+                      slogan='dsadsadas',
+                      url=form['event_url'])
+        role = Role(name='ORGANIZER')
         db.session.add(event)
         db.session.add(role)
         db.session.flush()
         db.session.refresh(event)
         db.session.refresh(role)
         uer = UsersEventsRoles(event_id=event.id, user_id=login.current_user.id, role_id=role.id)
-        save_to_db(uer, "Event saved")
+        print save_to_db(uer, "Event saved")
+        return event
+
 
     @staticmethod
     def update_event(form, event):

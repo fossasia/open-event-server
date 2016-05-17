@@ -183,6 +183,10 @@ class DataGetter:
         return db_model.query.get(object_id)
 
     @staticmethod
+    def get_event(event_id):
+        return Event.query.get(event_id)
+
+    @staticmethod
     def get_user_events_roles(event_id):
         return UsersEventsRoles.query.filter_by(user_id=login.current_user.id, event_id=event_id)
 

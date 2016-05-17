@@ -1,10 +1,10 @@
+from flask import request, url_for, redirect
 from flask_admin import expose
 from flask_admin.contrib.sqla import ModelView
+from flask.ext import login
 from ....helpers.data import DataManager
 from ....helpers.data_getter import DataGetter
-from ....helpers.roles import role_required, Role
-from flask.ext import login
-from flask import request, url_for, redirect, flash
+
 
 class EventsView(ModelView):
 
@@ -17,33 +17,22 @@ class EventsView(ModelView):
 
     @expose('/')
     def index_view(self):
-        # print DataGetter.get_all_users_events_roles().all()
         events = DataGetter.get_user_events()
-        print events, "dsadsaa"
-
         return self.render('/gentelella/admin/event/index.html',
                            events=events)
 
     @expose('/new/', methods=('GET', 'POST'))
     def create_view(self):
-        DataManager.create_event_test()
-        print dir(request)
-        print request.values
-        print request.query_string
-        print request.form
-
+        if request.method == 'POST':
+            event = DataManager.create_event(request.form)
+            return redirect(url_for('.details_view', event_id=event.id))
         return self.render('/gentelella/admin/event/new.html')
 
-    @expose('/<event_id>/details/', methods=('GET', 'POST'))
+    @expose('/<event_id>/', methods=('GET', 'POST'))
     def details_view(self, event_id):
-        pass
-
-    @expose('/<event_id>/edit/', methods=('GET', 'POST'))
-    @role_required(roles=(Role.organizer,))
-    def edit_view(self, event_id):
-        return ''
+        event = DataGetter.get_event(event_id)
+        return self.render('/gentelella/admin/event/details.html', event=event)
 
     @expose('/<event_id>/delete/', methods=('GET', 'POST'))
     def delete_view(self, event_id):
         return ''
-
