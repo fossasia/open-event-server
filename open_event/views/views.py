@@ -256,7 +256,7 @@ def get_event_version(event_id):
 @cross_origin()
 def get_sessions_at_event(event_id, session_title):
     """Returns all the sessions of a particular event which contain session_title string in their title"""
-    sessions = Session.query.filter(Session.event_id == event_id, wession.title.contains(session_title))
+    sessions=Session.query.filter(Session.event_id == event_id, Session.title.contains(session_title))
     return ObjectFormatter.get_json("sessions", sessions, request)
 
 
@@ -269,15 +269,15 @@ def get_speakers_at_event(event_id, speaker_name):
     return ObjectFormatter.get_json("speakers", speakers, request)
 
 
-@app.route('/api/v1/event/<int:event_id>/export/iCal', methods=['GET'])
+@app.route('/api/v1/event/<int:event_id>/export/ical', methods=['GET'])
 @auto.doc()
 @cross_origin()
-def generate_icalender_event(event_id):
+def generate_icalendar_event(event_id):
     """Takes an event id and returns the event in iCal format"""
     cal = Calendar()
     event = icalendar.Event()
     matching_event = Event.query.get(event_id)
-    if matching_event == None:
+    if matching_event is None:
         return "Sorry, the event does not exist"
     event.add('summary', matching_event.name)
     event.add('geo', (matching_event.latitude, matching_event.longitude))
@@ -293,21 +293,22 @@ def generate_icalender_event(event_id):
     return cal.to_ical()
 
 
-@app.route('/api/v1/track/<int:track_id>/export/iCal', methods=['GET'])
+@app.route('/api/v1/event/<int:event_id>/tracks/<int:track_id>/export/ical', methods=['GET'])
 @auto.doc()
 @cross_origin()
-def generate_icalender_track(track_id):
+def generate_icalendar_track(event_id, track_id):
     """Takes a track id and returns the track in iCal format"""
     cal = Calendar()
     track = icalendar.Event()
     matching_track = Track.query.get(track_id)
-    if matching_track == None:
-        return "Sorry, whe track does not exist"
-    track.add('summary', watching_track.name)
-    track.add('description', watching_track.description)
-    track.add('url', watching_track.track_image_url)
+    if matching_track is None or matching_track.event_id != event_id:
+        return "Sorry, the track does not exist"
+    track.add('summary', matching_track.name)
+    track.add('description', matching_track.description)
+    track.add('url', matching_track.track_image_url)
     cal.add_component(track)
     return cal.to_ical()
+
 
 
 @app.route('/gCallback/', methods=('GET', 'POST'))

@@ -41,7 +41,7 @@ USER root
 
 RUN export DATABASE_URL=postgresql://open_event_user:start@localhost:5432/test
 #install dependencies
-RUN pip install -r requirements.txt
+RUN pip install -r requirements/prod.txt
 #create db
 RUN python create_db.py
 #set environment
