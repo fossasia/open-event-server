@@ -19,4 +19,4 @@
 	* ```git push heroku master```
     * ```git push heroku yourbranch:master``` if you are in a different branch than master
 * Finally, time to create tables on the server. Also in case of model updates, run the following command -
-    * ```heroku run python manage.py db upgrade```
+    * ```heroku run migrate```
