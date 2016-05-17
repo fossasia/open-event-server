@@ -2,7 +2,7 @@
 import os
 import icalendar
 
-from flask import jsonify, url_for, redirect, request, send_from_directory, session
+from flask import jsonify, url_for, redirect, request, send_from_directory
 from flask.ext.cors import cross_origin
 from flask.ext import login
 
@@ -256,7 +256,7 @@ def get_event_version(event_id):
 @cross_origin()
 def get_sessions_at_event(event_id, session_title):
     """Returns all the sessions of a particular event which contain session_title string in their title"""
-    sessions=Session.query.filter(Session.event_id == event_id, Session.title.contains(session_title))
+    sessions = Session.query.filter(Session.event_id == event_id, Session.title.contains(session_title))
     return ObjectFormatter.get_json("sessions", sessions, request)
 
 
@@ -310,7 +310,6 @@ def generate_icalendar_track(event_id, track_id):
     return cal.to_ical()
 
 
-
 @app.route('/gCallback/', methods=('GET', 'POST'))
 def callback():
     if login.current_user is not None and login.current_user.is_authenticated:
@@ -320,10 +319,11 @@ def callback():
             return 'You denied access'
         return 'Error encountered'
     elif 'code' not in request.args and 'state' not in request.args:
-        print "HELLO"
         return redirect(url_for('admin.login_view'))
     else:
-        google = get_google_auth(state=session['oauth_state'])
+        google = get_google_auth()
+        state = google.authorization_url(OAuth.get_auth_uri(), access_type='offline')[1]
+        google = get_google_auth(state=state)
         if 'code' in request.url:
             code_url = (((request.url.split('&'))[1]).split('='))[1]
             new_code = (code_url.split('%2F'))[0] + '/' + (code_url.split('%2F'))[1]
@@ -355,7 +355,9 @@ def facebook_callback():
     elif 'code' not in request.args and 'state' not in request.args:
         return redirect(url_for('admin.login_view'))
     else:
-        facebook = get_facebook_auth(state=session['fb_oauth_state'])
+        facebook = get_facebook_auth()
+        state = facebook.authorization_url(FbOAuth.get_auth_uri(), access_type='offline')[1]
+        facebook = get_facebook_auth(state=state)
         if 'code' in request.url:
             code_url = (((request.url.split('&'))[0]).split('='))[1]
         try:
