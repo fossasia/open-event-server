@@ -141,6 +141,8 @@ class Session(db.Model):
     microlocation_id = db.Column(db.Integer,
                          db.ForeignKey('microlocation.id'))
 
+    session_type = db.relationship("SessionType", uselist=False, back_populates="session")
+
     event_id = db.Column(db.Integer,
                          db.ForeignKey('events.id'))
     is_accepted = db.Column(db.Boolean, default=False)
