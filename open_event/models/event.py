@@ -48,8 +48,6 @@ class Event(db.Model):
                               backref="event")
     users = db.relationship("EventsUsers", backref="event")
 
-    session_type = db.relationship("SessionType", backref="event")
-
     roles = db.relationship("UsersEventsRoles", backref="event")
     state = db.Column(db.String, default="Draft")
     db.UniqueConstraint('track.name')

@@ -3,14 +3,13 @@ from . import db
 from .track import Track
 from open_event.helpers.date_formatter import DateFormatter
 
-
 speakers_sessions = db.Table('speakers_sessions',
-                    db.Column('speaker_id',
-                              db.Integer,
-                              db.ForeignKey('speaker.id')),
-                    db.Column('session_id',
-                              db.Integer,
-                              db.ForeignKey('session.id')))
+                             db.Column('speaker_id',
+                                       db.Integer,
+                                       db.ForeignKey('speaker.id')),
+                             db.Column('session_id',
+                                       db.Integer,
+                                       db.ForeignKey('session.id')))
 
 
 class Level(db.Model):
@@ -28,7 +27,6 @@ class Level(db.Model):
                  label_en=None,
                  session=None,
                  event_id=None):
-
         self.name = name
         self.label_en = label_en
         self.event_id = event_id
@@ -45,6 +43,7 @@ class Level(db.Model):
     def __str__(self):
         return self.name
 
+
 class Format(db.Model):
     """Format model class"""
     __tablename__ = 'format'
@@ -60,7 +59,6 @@ class Format(db.Model):
                  label_en=None,
                  session=None,
                  event_id=None):
-
         self.name = name
         self.label_en = label_en
         self.event_id = event_id
@@ -76,6 +74,7 @@ class Format(db.Model):
 
     def __str__(self):
         return self.name
+
 
 class Language(db.Model):
     """Language model class"""
@@ -94,7 +93,6 @@ class Language(db.Model):
                  label_de=None,
                  session=None,
                  event_id=None):
-
         self.name = name
         self.label_en = label_en
         self.label_de = label_de
@@ -112,7 +110,6 @@ class Language(db.Model):
 
     def __str__(self):
         return self.name
-
 
 
 class Session(db.Model):
@@ -135,13 +132,11 @@ class Session(db.Model):
     level_id = db.Column(db.Integer,
                          db.ForeignKey('level.id'))
     format_id = db.Column(db.Integer,
-                         db.ForeignKey('format.id'))
+                          db.ForeignKey('format.id'))
     language_id = db.Column(db.Integer,
-                         db.ForeignKey('language.id'))
+                            db.ForeignKey('language.id'))
     microlocation_id = db.Column(db.Integer,
-                         db.ForeignKey('microlocation.id'))
-
-    session_type = db.relationship("SessionType", uselist=False, back_populates="session")
+                                 db.ForeignKey('microlocation.id'))
 
     event_id = db.Column(db.Integer,
                          db.ForeignKey('events.id'))
@@ -189,7 +184,8 @@ class Session(db.Model):
                 'track': self.track.id if self.track else None,
                 'speakers': [{'id': speaker.id, 'name': speaker.name} for speaker in self.speakers],
                 'level': {'id': self.level.name, 'label_en': self.level.label_en} if self.level else None,
-                'lang': {'id': self.language.name, 'label_en': self.language.label_en, 'label_de': self.language.label_de} if self.language else None,
+                'lang': {'id': self.language.name, 'label_en': self.language.label_en,
+                         'label_de': self.language.label_de} if self.language else None,
                 'microlocation': self.microlocation.id if self.microlocation else None}
 
     def __repr__(self):
@@ -197,5 +193,3 @@ class Session(db.Model):
 
     def __str__(self):
         return self.title
-
-

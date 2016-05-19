@@ -7,7 +7,9 @@ class SessionType(db.Model):
     name = db.Column(db.String, nullable=False)
     length = db.Column(db.Float, nullable=False)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
-    session_id = db.relationship("Session", back_populates="session_type")
+    session_id = db.Column(db.Integer, db.ForeignKey('session.id'))
+    events = db.relationship("Event", backref="session_type")
+    sessions = db.relationship("Session", uselist=False, backref="session_type")
 
     def __init__(self, name=None, length=None, event_id=None, session_id=None):
         self.name = name
@@ -17,7 +19,6 @@ class SessionType(db.Model):
 
     def __repr__(self):
         return '<SessionType %r>' % self.name
-
 
     @property
     def serialize(self):
