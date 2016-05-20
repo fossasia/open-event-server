@@ -23,6 +23,7 @@ from ..models.track import Track
 from ..models.user import User
 from ..models.role import Role
 from ..models.users_events_roles import UsersEventsRoles
+from ..models.session_type import SessionType
 
 
 class DataManager(object):
@@ -444,14 +445,23 @@ class DataManager(object):
                       location_name='dsadsa',
                       slogan='dsadsadas',
                       url=form['event_url'])
+
         role = Role(name='ORGANIZER')
         db.session.add(event)
         db.session.add(role)
         db.session.flush()
         db.session.refresh(event)
         db.session.refresh(role)
+
+        session_type_names = form.getlist('session_type[name]')
+        session_type_length = form.getlist('session_type[length]')
+
+        for index, name in enumerate(session_type_names):
+            session_type = SessionType(name=name, length=session_type_length[index], event_id=event.id)
+            db.session.add(session_type)
+
         uer = UsersEventsRoles(event_id=event.id, user_id=login.current_user.id, role_id=role.id)
-        print save_to_db(uer, "Event saved")
+        save_to_db(uer, "Event saved")
         return event
 
 
