@@ -1,6 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 import logging
 import os.path
+from os import environ
 import sys
 import json
 
@@ -32,14 +33,13 @@ def create_app():
     app.register_blueprint(routes)
     migrate = Migrate(app, db)
 
-    app.config.from_object('config.ProductionConfig')
+    app.config.from_object(environ.get('APP_CONFIG', 'config.ProductionConfig'))
     db.init_app(app)
     manager = Manager(app)
     manager.add_command('db', MigrateCommand)
 
     cors = CORS(app)
     app.secret_key = 'super secret key'
-    # app.config.from_object('config.LocalSQLITEConfig')
     app.config['UPLOADS_FOLDER'] = os.path.realpath('.') + '/static/'
     app.config['FILE_SYSTEM_STORAGE_FILE_VIEW'] = 'static'
     app.config['STATIC_URL'] = '/static/'
@@ -55,7 +55,6 @@ def create_app():
     admin_view.init_login(app)
 
     # Flask-DebugToolbar Configuration
-    # Set DEBUG_TB_ENABLED as False in Production
     app.config['DEBUG_TB_ENABLED'] = True
     app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
     DebugToolbarExtension(app)
@@ -79,3 +78,7 @@ def request_wants_json():
         request.accept_mimetypes['text/html']
 
 current_app, manager, database = create_app()
+
+
+if __name__ == '__main__':
+    current_app.run()
