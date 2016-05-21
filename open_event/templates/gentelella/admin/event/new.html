@@ -1,6 +1,6 @@
 {% extends 'gentelella/admin/base.html' %}
 {% block body %}
-<form action="/admin/events/new/" method="POST" role="form" class="admin-form form-horizontal" enctype="multipart/form-data">
+<form name="test" action="/admin/events/new/" method="POST" role="form" class="admin-form form-horizontal">
     {% if csrf_token %}
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     {% endif %}
@@ -63,7 +63,23 @@
         </div>
     </div>
 
-    Wizard Step (2) - Sessions
+    Wizard Step (2) - Sessions Types
+
+    <div class="row session-types">
+        <div class="col-sm-6">
+            <div class=" col-sm-6">
+                <input type="text" class="form-control" name="session_type[name]" placeholder="Name" value="Lighting Talks">
+            </div>
+
+            <div class="col-sm-6 input-group">
+                <input type="text" class="form-control" name="session_type[length]" placeholder="Length" value="5">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary add-session-type">+</button>
+                </span>
+            </div>
+        </div>
+    </div>
+
 
     Wizard Step (3) - Tracks
 
