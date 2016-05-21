@@ -59,6 +59,11 @@ def create_app():
     app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
     DebugToolbarExtension(app)
 
+    # API version 2
+    with app.app_context():
+        from open_event.api import api_v2
+        app.register_blueprint(api_v2)
+
     return app, manager, db
 
 
