@@ -7,14 +7,14 @@ from .helpers import get_object_list, get_object_or_404
 api = Namespace('sessions', description='Sessions', path='/')
 
 session = api.model('Session', {
-    'id': fields.Integer,
+    'id': fields.Integer(required=True),
     'title': fields.String,
     'subtitle': fields.String,
     'abstract': fields.String,
     'description': fields.String,
     'start_time': fields.DateTime,
     'end_time': fields.DateTime,
-    # 'track': fields.Integer,
+    # track
     # speakers
     # level
     # language

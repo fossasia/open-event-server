@@ -1,0 +1,41 @@
+from flask.ext.restplus import Resource, Namespace, fields
+
+from open_event.models.session import Language as LanguageModel
+from open_event.models.event import Event as EventModel
+from .helpers import get_object_list, get_object_or_404
+
+api = Namespace('languages', description='languages', path='/')
+
+language = api.model('language', {
+    'id': fields.Integer(required=True),
+    'name': fields.String,
+    'label_en': fields.String,
+    'label_de': fields.String,
+})
+
+
+@api.route('/events/<int:event_id>/languages/<int:id>')
+@api.param('id')
+@api.response(404, 'language not found')
+class Language(Resource):
+    @api.doc('get_language')
+    @api.marshal_with(language)
+    def get(self, event_id, id):
+        """Fetch a language given its id"""
+        # Check if an event with `event_id` exists
+        get_object_or_404(EventModel, event_id)
+
+        return get_object_or_404(LanguageModel, id)
+
+
+@api.route('/events/<int:event_id>/languages')
+@api.param('event_id')
+class LanguageList(Resource):
+    @api.doc('list_languages')
+    @api.marshal_list_with(language)
+    def get(self, event_id):
+        """List all sessions"""
+        # Check if an event with `event_id` exists
+        get_object_or_404(EventModel, event_id)
+
+        return get_object_list(LanguageModel, event_id=event_id)
