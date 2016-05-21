@@ -45,7 +45,10 @@ def get_events():
 @cross_origin()
 def get_events_per_page(page):
     """Returns 20 events per page"""
-    return ObjectFormatter.get_json("events", Event.query, request, page)
+    return api_response(
+        data=ObjectFormatter.get_json("events", Event.query, request, page),
+        check_data=True
+    )
 
 
 @app.route('/api/v1/event/<int:event_id>', methods=['GET'])
@@ -107,7 +110,8 @@ def get_sessions_per_page(event_id, page):
     return api_response(
         data=ObjectFormatter.get_json("sessions", sessions, request, page),
         status_code=event_status_code(event_id),
-        error='Event'
+        error='Event',
+        check_data=True
     )
 
 
@@ -133,7 +137,8 @@ def get_tracks_per_page(event_id, page):
     return api_response(
         data=ObjectFormatter.get_json("tracks", tracks, request, page),
         status_code=event_status_code(event_id),
-        error='Event'
+        error='Event',
+        check_data=True
     )
 
 
@@ -173,7 +178,8 @@ def get_speakers_per_page(event_id, page):
     return api_response(
         data=ObjectFormatter.get_json("speakers", speakers, request, page),
         status_code=event_status_code(event_id),
-        error='Event'
+        error='Event',
+        check_data=True
     )
 
 
@@ -199,7 +205,8 @@ def get_sponsors_per_page(event_id, page):
     return api_response(
         data=ObjectFormatter.get_json("sponsors", sponsors, request, page),
         status_code=event_status_code(event_id),
-        error='Event'
+        error='Event',
+        check_data=True
     )
 
 
@@ -225,7 +232,8 @@ def get_levels_per_page(event_id, page):
     return api_response(
         data=ObjectFormatter.get_json("levels", levels, request, page),
         status_code=event_status_code(event_id),
-        error='Event'
+        error='Event',
+        check_data=True
     )
 
 
@@ -251,7 +259,8 @@ def get_formatsper_page(event_id, page):
     return api_response(
         data=ObjectFormatter.get_json("formats", formats, request, page),
         status_code=event_status_code(event_id),
-        error='Event'
+        error='Event',
+        check_data=True
     )
 
 
@@ -276,7 +285,8 @@ def get_languages_per_page(event_id, page):
     return api_response(
         data=ObjectFormatter.get_json("languages", languages, request, page),
         status_code=event_status_code(event_id),
-        error='Event'
+        error='Event',
+        check_data=True
     )
 
 
@@ -302,7 +312,8 @@ def get_microlocations_per_page(event_id, page):
     return api_response(
         data=ObjectFormatter.get_json("microlocations", microlocations, request, page),
         status_code=event_status_code(event_id),
-        error='Event'
+        error='Event',
+        check_data=True
     )
 
 

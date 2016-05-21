@@ -1,5 +1,6 @@
 from ..helpers.data_getter import DataGetter
 from flask import jsonify
+import json
 
 
 def error_404_message(item):
@@ -10,12 +11,21 @@ def error_404_message(item):
 def api_response(
         data=None,
         status_code=200,
-        error='Item'):
+        error='Item',
+        check_data=False,
+        error_data='Page'):
     """
     Api response helper
     if status_code is 200, return data
     else return error message with {status_code}
     """
+    # check if data is empty
+    if check_data:
+        if len(json.loads(data.data)) == 0 and status_code == 200:
+            # don't overwrite existing error
+            status_code = 404
+            error = error_data
+    # return response
     if status_code == 200:
         return data, 200
     elif status_code == 404:
