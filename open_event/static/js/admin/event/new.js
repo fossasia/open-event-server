@@ -19,6 +19,26 @@ $( document ).ready(function() {
         $(this).parent().parent().parent().remove()
     });
 
+    $('.add-social-links').click(function (){
+        var row = "<div class='col-sm-12 row-social-links'>" +
+                    "<div class='col-sm-3'>" +
+                        "<input type='text' class='form-control' name='social[name]' placeholder='Name'>" +
+                    "</div>" +
+                    "<div class='col-sm-3 input-group'>" +
+                        "<input type='text' class='form-control' name='social[length]' placeholder='Length'>" +
+                        "<span class='input-group-btn'>" +
+                            "<button type='button' class='btn btn-danger remove-social-links'>-</button>" +
+                        "</span>" +
+                    "</div>" +
+                "</div>"
+        $('.social-links').append(row)
+
+    })
+
+    $( "body" ).on( "click", ".remove-social-links", function (){
+        $(this).parent().parent().parent().remove()
+    });
+
     // Smart Wizard
     $('#wizard').smartWizard({
         labelFinish:'Save Draft',
