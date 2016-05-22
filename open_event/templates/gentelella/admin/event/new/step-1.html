@@ -1,11 +1,4 @@
-{% extends 'gentelella/admin/base.html' %}
-{% block body %}
-<form name="test" action="/admin/events/new/" method="POST" role="form" class="admin-form form-horizontal">
-    {% if csrf_token %}
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-    {% endif %}
-
-    Wizard (Step 1) - Default
+<div id="step-1" class="wizard_content" style="display: block;">
     <div class="item form-group">
         <label class="control-label col-md-3 col-sm-3 col-xs-12">Name <span class="required">*</span>
         </label>
@@ -59,33 +52,8 @@
         <label class="control-label col-md-3 col-sm-3 col-xs-12">Event Url
         </label>
         <div class="col-md-6 col-sm-6 col-xs-12">
-          <input name="event_url" class="form-control col-md-7 col-xs-12"/>
+            <input name="event_url" class="form-control col-md-7 col-xs-12"/>
         </div>
     </div>
+</div>
 
-    Wizard Step (2) - Sessions Types
-
-    <div class="row session-types">
-        <div class="col-sm-6">
-            <div class=" col-sm-6">
-                <input type="text" class="form-control" name="session_type[name]" placeholder="Name" value="Lighting Talks">
-            </div>
-
-            <div class="col-sm-6 input-group">
-                <input type="text" class="form-control" name="session_type[length]" placeholder="Length" value="5">
-                <span class="input-group-btn">
-                    <button type="button" class="btn btn-primary add-session-type">+</button>
-                </span>
-            </div>
-        </div>
-    </div>
-
-
-    Wizard Step (3) - Tracks
-
-    Wizard Step (4) - Social (Optional)
-
-
-    <button id="send" type="submit" class="btn btn-success">Save Draft</button>
-</form>
-{% endblock %}

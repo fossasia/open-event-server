@@ -17,4 +17,13 @@ $( document ).ready(function() {
     $( "body" ).on( "click", ".remove-session-type", function (){
         $(this).parent().parent().parent().remove()
     });
+
+
+    $(document).ready(function() {
+      // Smart Wizard
+        $('#wizard').smartWizard();
+    });
+
+
+
 });
