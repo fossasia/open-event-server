@@ -2,7 +2,7 @@
 {% block body %}
 
 
-<form name="test" action="/admin/events/new/" method="POST" role="form" class="admin-form form-horizontal">
+<form name="test" action="/admin/events/new/" method="POST" role="form" class="admin-form form-horizontal event-create-form">
     {% if csrf_token %}
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     {% endif %}
@@ -56,7 +56,7 @@
         </div>
     </div>
 
-    <button id="send" type="submit" class="btn btn-success">Save Draft</button>
 </form>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery/jquery.smartWizard.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/new.js') }}"></script>
 {% endblock %}
