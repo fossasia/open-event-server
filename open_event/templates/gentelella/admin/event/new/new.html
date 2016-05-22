@@ -15,7 +15,6 @@
                     {% if csrf_token %}
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     {% endif %}
-
                     <div id="wizard" class="form_wizard wizard_horizontal">
                         <ul class="wizard_steps anchor">
                             <li>
@@ -55,6 +54,7 @@
                                 </a>
                             </li>
                         </ul>
+
 
                         <div class="stepContainer">
                             {% include '/gentelella/admin/event/new/step-1.html' %}
