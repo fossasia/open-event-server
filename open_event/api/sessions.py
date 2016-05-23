@@ -2,7 +2,7 @@ from flask.ext.restplus import Resource, Namespace, fields
 
 from open_event.models.session import Session as SessionModel
 from open_event.models.event import Event as EventModel
-from .helpers import get_object_list, get_object_or_404
+from .helpers import get_object_list, get_object_or_404, get_object_in_event
 
 api = Namespace('sessions', description='Sessions', path='/')
 
@@ -49,17 +49,14 @@ session = api.model('Session', {
 
 
 @api.route('/events/<int:event_id>/sessions/<int:id>')
-@api.param('id')
 @api.response(404, 'Session not found')
+@api.response(400, 'Object does not belong to event')
 class Session(Resource):
     @api.doc('get_session')
     @api.marshal_with(session)
     def get(self, event_id, id):
         """Fetch a session given its id"""
-        # Check if an event with `event_id` exists
-        get_object_or_404(EventModel, event_id)
-
-        return get_object_or_404(SessionModel, id)
+        return get_object_in_event(SessionModel, id, event_id)
 
 
 @api.route('/events/<int:event_id>/sessions')

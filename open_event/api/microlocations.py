@@ -2,7 +2,7 @@ from flask.ext.restplus import Resource, Namespace, fields
 
 from open_event.models.microlocation import Microlocation as MicrolocationModel
 from open_event.models.event import Event as EventModel
-from .helpers import get_object_list, get_object_or_404
+from .helpers import get_object_list, get_object_or_404, get_object_in_event
 
 api = Namespace('microlocations', description='microlocations', path='/')
 
@@ -17,17 +17,14 @@ microlocation = api.model('microlocation', {
 
 
 @api.route('/events/<int:event_id>/microlocations/<int:id>')
-@api.param('id')
-@api.response(404, 'microlocation not found')
+@api.response(404, 'Microlocation not found')
+@api.response(400, 'Object does not belong to event')
 class Microlocation(Resource):
     @api.doc('get_microlocation')
     @api.marshal_with(microlocation)
     def get(self, event_id, id):
         """Fetch a microlocation given its id"""
-        # Check if an event with `event_id` exists
-        get_object_or_404(EventModel, event_id)
-
-        return get_object_or_404(MicrolocationModel, id)
+        return get_object_in_event(MicrolocationModel, id, event_id)
 
 
 @api.route('/events/<int:event_id>/microlocations')

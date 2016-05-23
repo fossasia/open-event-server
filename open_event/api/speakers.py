@@ -2,7 +2,7 @@ from flask.ext.restplus import Resource, Namespace, fields
 
 from open_event.models.speaker import Speaker as SpeakerModel
 from open_event.models.event import Event as EventModel
-from .helpers import get_object_list, get_object_or_404
+from .helpers import get_object_list, get_object_or_404, get_object_in_event
 
 api = Namespace('speakers', description='Speakers', path='/')
 
@@ -30,17 +30,14 @@ speaker = api.model('Speaker', {
 
 
 @api.route('/events/<int:event_id>/speakers/<int:id>')
-@api.param('id')
-@api.response(404, 'speaker not found')
+@api.response(404, 'Speaker not found')
+@api.response(400, 'Object does not belong to event')
 class Speaker(Resource):
     @api.doc('get_speaker')
     @api.marshal_with(speaker)
     def get(self, event_id, id):
         """Fetch a speaker given its id"""
-        # Check if an event with `event_id` exists
-        get_object_or_404(EventModel, event_id)
-
-        return get_object_or_404(SpeakerModel, id)
+        return get_object_in_event(SpeakerModel, id, event_id)
 
 
 @api.route('/events/<int:event_id>/speakers')

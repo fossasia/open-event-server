@@ -2,7 +2,7 @@ from flask.ext.restplus import Resource, Namespace, fields
 
 from open_event.models.sponsor import Sponsor as SponsorModel
 from open_event.models.event import Event as EventModel
-from .helpers import get_object_list, get_object_or_404
+from .helpers import get_object_list, get_object_or_404, get_object_in_event
 
 api = Namespace('sponsors', description='sponsors', path='/')
 
@@ -15,17 +15,14 @@ sponsor = api.model('sponsor', {
 
 
 @api.route('/events/<int:event_id>/sponsors/<int:id>')
-@api.param('id')
-@api.response(404, 'sponsor not found')
+@api.response(404, 'Sponsor not found')
+@api.response(400, 'Object does not belong to event')
 class Sponsor(Resource):
     @api.doc('get_sponsor')
     @api.marshal_with(sponsor)
     def get(self, event_id, id):
         """Fetch a sponsor given its id"""
-        # Check if an event with `event_id` exists
-        get_object_or_404(EventModel, event_id)
-
-        return get_object_or_404(SponsorModel, id)
+        return get_object_in_event(SponsorModel, id, event_id)
 
 
 @api.route('/events/<int:event_id>/sponsors')

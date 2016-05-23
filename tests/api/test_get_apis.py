@@ -3,6 +3,7 @@ import unittest
 
 from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
+from tests.api.utils import create_path
 
 from open_event import current_app as app
 from open_event.helpers.data import save_to_db
@@ -12,18 +13,6 @@ from open_event.models.speaker import Speaker
 from open_event.models.sponsor import Sponsor
 from open_event.models.microlocation import Microlocation
 from open_event.models.track import Track
-
-
-def _create_url(*args):
-    """Returns base Events URL with passed arguments appended as path
-    variables in the end.
-
-    '/api/v2/events' + '/arg1/arg2/arg3'
-    """
-    url = '/api/v2/events'
-    if args:
-        url += '/' + '/'.join(map(str, args))
-    return url
 
 
 class TestGetApi(OpenEventTestCase):
@@ -65,63 +54,63 @@ class TestGetApi(OpenEventTestCase):
 
     def test_event_api(self):
         with app.test_request_context():
-            url = _create_url()
+            url = create_path()
             response = self.app.get(url, follow_redirects=True)
             self.assertIn('TestEvent', response.data)
             self.assertEqual(response.status_code, 200)
 
     def test_track_api(self):
         with app.test_request_context():
-            url = _create_url(1, 'tracks')
+            url = create_path(1, 'tracks')
             response = self.app.get(url, follow_redirects=True)
             self.assertIn('TestTrack', response.data)
             self.assertEqual(response.status_code, 200)
 
     def test_microlocation_api(self):
         with app.test_request_context():
-            url = _create_url(1, 'microlocations')
+            url = create_path(1, 'microlocations')
             response = self.app.get(url, follow_redirects=True)
             self.assertIn('TestMicrolocation', response.data)
             self.assertEqual(response.status_code, 200)
 
     def test_level_api(self):
         with app.test_request_context():
-            url = _create_url(1, 'levels')
+            url = create_path(1, 'levels')
             response = self.app.get(url, follow_redirects=True)
             self.assertIn('TestLevel', response.data)
             self.assertEqual(response.status_code, 200)
 
     def test_format_api(self):
         with app.test_request_context():
-            url = _create_url(1, 'formats')
+            url = create_path(1, 'formats')
             response = self.app.get(url, follow_redirects=True)
             self.assertIn('TestFormat', response.data)
             self.assertEqual(response.status_code, 200)
 
     def test_language_api(self):
         with app.test_request_context():
-            url = _create_url(1, 'languages')
+            url = create_path(1, 'languages')
             response = self.app.get(url, follow_redirects=True)
             self.assertIn('TestLanguage', response.data)
             self.assertEqual(response.status_code, 200)
 
     def test_session_api(self):
         with app.test_request_context():
-            url = _create_url(1, 'sessions')
+            url = create_path(1, 'sessions')
             response = self.app.get(url, follow_redirects=True)
             self.assertIn('TestSession', response.data)
             self.assertEqual(response.status_code, 200)
 
     def test_speaker_api(self):
         with app.test_request_context():
-            url = _create_url(1, 'speakers')
+            url = create_path(1, 'speakers')
             response = self.app.get(url, follow_redirects=True)
             self.assertIn('TestSpeaker', response.data)
             self.assertEqual(response.status_code, 200)
 
     def test_sponsor_api(self):
         with app.test_request_context():
-            url = _create_url(1, 'sponsors')
+            url = create_path(1, 'sponsors')
             response = self.app.get(url, follow_redirects=True)
             self.assertIn('TestSponsor', response.data)
             self.assertEqual(response.status_code, 200)

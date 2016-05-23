@@ -2,7 +2,7 @@ from flask.ext.restplus import Resource, Namespace, fields
 
 from open_event.models.session import Level as LevelModel
 from open_event.models.event import Event as EventModel
-from .helpers import get_object_list, get_object_or_404
+from .helpers import get_object_list, get_object_or_404, get_object_in_event
 
 api = Namespace('levels', description='levels', path='/')
 
@@ -14,17 +14,14 @@ level = api.model('level', {
 
 
 @api.route('/events/<int:event_id>/levels/<int:id>')
-@api.param('id')
-@api.response(404, 'level not found')
+@api.response(404, 'Level not found')
+@api.response(400, 'Object does not belong to event')
 class Level(Resource):
     @api.doc('get_level')
     @api.marshal_with(level)
     def get(self, event_id, id):
         """Fetch a level given its id"""
-        # Check if an event with `event_id` exists
-        get_object_or_404(EventModel, event_id)
-
-        return get_object_or_404(LevelModel, id)
+        return get_object_in_event(LevelModel, id, event_id)
 
 
 @api.route('/events/<int:event_id>/levels')
