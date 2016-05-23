@@ -1,0 +1,156 @@
+.sessions-holder {
+    z-index: 1 !important;
+}
+
+.session {
+    background-color: #efefef;
+    border: solid #b6b6b6 1px;
+    color: #3d3d3d;
+    height: 48px;
+    width: 216px;
+    display: flex;
+    align-items: center;
+}
+
+.unscheduled {
+    margin-bottom: 3px;
+    cursor: all-scroll !important;
+    padding: 10px;
+}
+
+.scheduled {
+    position: absolute !important;
+    top: 120px;
+    padding: 5px;
+    color: white;
+}
+
+.scheduled > .time {
+    color: white;
+}
+
+.timeline-table td {
+    z-index: -1 !important;
+}
+
+.timeline .timeunits {
+    padding: 0;
+}
+
+.timeline .timeunits.x1 .timeunit {
+    height: 24px;
+    font-size: 10px;
+    line-height: 24px;
+}
+
+.timeline .timeunits .timeunit {
+    border-style: none solid solid solid;
+    border-width: 0 1px 1px 1px;
+    border-right-color: rgb(221, 221, 221);
+    border-bottom-color: rgb(221, 221, 221);
+    border-left-color: rgb(221, 221, 221);
+    border-image-source: initial;
+    border-image-slice: initial;
+    border-image-repeat: initial;
+    text-align: center;
+    width: 55px;
+}
+
+.timeline .timeunits .timeunit:nth-child(2n+1) {
+    background-color: rgb(250, 250, 250);
+}
+
+.timeline .rooms {
+    border-right: 1px solid rgb(221, 221, 221);
+    padding: 0;
+}
+
+.timeline .rooms.x1 {
+    background-image: url("../img/builder-timeunitbg-x1.png");
+    background-repeat-x: initial;
+    background-repeat-y: initial;
+    background-position-x: initial;
+    background-position-y: initial;
+    background-origin: initial;
+    background-clip: initial;
+    background-size: initial;
+}
+
+.timeline .rooms .track-container {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    width: 654px;
+}
+
+.timeline .rooms .track {
+    display: inline-block;
+    position: relative;
+    width: 216px;
+    border-right: 1px solid rgb(221, 221, 221);
+    margin-left: -4px;
+}
+
+.timeline .rooms .track:first-child {
+    margin-left: 0;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.timeline .rooms.x1 .track-header {
+    height: 23px;
+    line-height: 23px;
+}
+
+.timeline .rooms .track-header {
+    width: 100%;
+    position: absolute;
+    background-color: rgb(250, 250, 250);
+    top: 0;
+    left: 0;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.badge {
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: 700;
+    color: rgb(255, 255, 255);
+    line-height: 1;
+    vertical-align: baseline;
+    white-space: nowrap;
+    text-align: center;
+    background-color: rgb(153, 153, 153);
+    border-radius: 10px;
+}
+
+.badge:empty {
+    display: none;
+}
+
+.timeline .rooms .track-header .badge {
+    padding: 2px 4px;
+    font-size: 10px;
+    font-weight: normal;
+    line-height: 1;
+    background-color: rgb(187, 187, 187);
+    vertical-align: text-bottom;
+}
+
+.track-item {
+    position: absolute;
+    width: 215px;
+    display: block;
+    font-size: 12px;
+    min-height: 24px;
+}
+
+.track-inner.drop-now {
+    background-color: rgba(220, 220, 220, 0.35);
+}
+
