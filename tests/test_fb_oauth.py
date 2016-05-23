@@ -1,0 +1,43 @@
+import unittest
+from tests.utils import OpenEventTestCase
+from tests.setup_database import Setup
+from open_event import current_app as app
+from open_event.helpers.oauth import FbOAuth
+from open_event.helpers.data import get_facebook_auth
+from tests.auth_helper import register, login
+
+
+class TestFacebookOauth(OpenEventTestCase):
+
+    def setUp(self):
+        self.app = Setup.create_app()
+
+    def test_redirect(self):
+        """Tests whether on redirection the user is being redirected to the proper authentication url of Facebook"""
+        with app.test_request_context():
+            facebook = get_facebook_auth()
+            auth_url = facebook.authorization_url(FbOAuth.get_auth_uri(), access_type='offline')[0]
+            self.assertTrue(FbOAuth.get_auth_uri() in auth_url)
+
+    def test_user_already_logged_in(self):
+        """If the user is already logged in then on clicking 'Login with Facebook' he should be redirected
+            directly to the admin page"""
+        with app.test_request_context():
+            register(self.app, 'test', 'email@gmail.com', 'test')
+            login(self.app, 'test', 'test')
+            self.assertTrue('/admin/' in self.app.get('/fCallback/?code=dummy_code&state=dummy_state)').data)
+            self.assertEqual(self.app.get('/fCallback/?code=dummy_code&state=dummy_state)').status_code, 302)
+
+    def test_error_return(self):
+        """This tests the various errors returned by callback function"""
+        with app.test_request_context():
+            self.assertTrue("You denied access" in self.app.get(
+                "/fCallback/?code=dummy_code&state=dummy_state&error=access denied").data)
+            self.assertTrue("Error encountered" in self.app.get(
+              "/fCallback/?code=dummy_code&state=dummy_state&error=12234").data)
+            self.assertTrue("/admin/login" in self.app.get("/fCallback/?no_code_and_state").data)
+            self.assertEqual(self.app.get("/fCallback/1234").status_code, 404)
+
+
+if __name__ == '__main__':
+    unittest.main()
