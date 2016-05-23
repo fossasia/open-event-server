@@ -695,6 +695,20 @@ class EventView(ModelView):
         return redirect(url_for('.user_permissions',
                                 event_id=event_id))
 
+    @expose('/<event_id>/scheduler')
+    def event_scheduler(self, event_id):
+        """Sessions list view"""
+        accepted_sessions = DataGetter.get_sessions(event_id)
+        not_accepted_sessions = DataGetter.get_sessions(event_id, False)
+        events = DataGetter.get_all_events()
+        self.name = "Scheduler"
+        return self.render('admin/scheduler/scheduler.html',
+                           accepted_sessions=accepted_sessions,
+                           not_accepted_sessions=not_accepted_sessions,
+                           event_id=event_id,
+                           events=events,
+                           is_editor_or_admin=is_event_admin_or_editor(event_id))
+
 def is_event_admin_or_editor(event_id):
     """check is admin or editor"""
     asso = DataGetter.get_association_by_event_and_user(event_id, login.current_user.id)
