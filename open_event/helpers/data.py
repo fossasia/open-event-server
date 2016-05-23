@@ -24,6 +24,7 @@ from ..models.user import User
 from ..models.role import Role
 from ..models.users_events_roles import UsersEventsRoles
 from ..models.session_type import SessionType
+from ..models.social_link import SocialLink
 
 
 class DataManager(object):
@@ -456,9 +457,16 @@ class DataManager(object):
         session_type_names = form.getlist('session_type[name]')
         session_type_length = form.getlist('session_type[length]')
 
+        social_link_name = form.getlist('social[name]')
+        social_link_link = form.getlist('social[link]')
+
         for index, name in enumerate(session_type_names):
             session_type = SessionType(name=name, length=session_type_length[index], event_id=event.id)
             db.session.add(session_type)
+
+        for index, name in enumerate(social_link_name):
+            social_link = SocialLink(name=name, link=social_link_link[index], event_id=event.id)
+            db.session.add(social_link)
 
         uer = UsersEventsRoles(event_id=event.id, user_id=login.current_user.id, role_id=role.id)
         save_to_db(uer, "Event saved")
