@@ -67,6 +67,14 @@ def get_sessions(event_id):
     sessions = Session.query.filter_by(event_id=event_id, is_accepted=True)
     return ObjectFormatter.get_json("sessions", sessions, request)
 
+@app.route('/api/v1/event/sessions/<int:session_id>', methods=['GET'])
+@auto.doc()
+@cross_origin()
+def get_session_by_id(session_id):
+    """Returns a session's data by session id"""
+    sessions = Session.query.get(session_id)
+    return jsonify(sessions.serialize)
+
 
 @app.route('/api/v1/event/<int:event_id>/sessions/page/<int:page>', methods=['GET'])
 @auto.doc()
@@ -102,6 +110,14 @@ def get_speakers(event_id):
     """Returns all event's speakers"""
     speakers = Speaker.query.filter_by(event_id=event_id)
     return ObjectFormatter.get_json("speakers", speakers, request)
+
+@app.route('/api/v1/event/speakers/<int:speaker_id>', methods=['GET'])
+@auto.doc()
+@cross_origin()
+def get_speaker_by_id(speaker_id):
+    """Return speaker data by speaker id"""
+    speakers = Speaker.query.get(speaker_id)
+    return jsonify(speakers.serialize)
 
 
 @app.route('/api/v1/event/<int:event_id>/speakers/page/<int:page>', methods=['GET'])
@@ -229,55 +245,59 @@ def get_event_version(event_id):
 @cross_origin()
 def get_sessions_at_event(event_id, session_title):
     """Returns all the sessions of a particular event which contain session_title string in their title"""
-    sessions=Session.query.filter(Session.event_id == event_id,Session.title.contains(session_title))
+    sessions=Session.query.filter(Session.event_id == event_id, Session.title.contains(session_title))
     return ObjectFormatter.get_json("sessions", sessions, request)
+
 
 @app.route('/api/v1/event/<int:event_id>/speakers/name/<string:speaker_name>', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def get_speakers_at_event(event_id, speaker_name):
     """Returns all the speakers of a particular event which contain speaker_name string in their name"""
-    speakers=Speaker.query.filter(Speaker.event_id == event_id,Speaker.name.contains(speaker_name))
+    speakers = Speaker.query.filter(Speaker.event_id == event_id, Speaker.name.contains(speaker_name))
     return ObjectFormatter.get_json("speakers", speakers, request)
 
-@app.route('/api/v1/event/<int:event_id>/export/iCal', methods=['GET'])
-@auto.doc()
-@cross_origin()
-def generate_icalender_event(event_id):
-	"""Takes an event id and returns the event in iCal format"""
-	cal=Calendar()
-	event=icalendar.Event()
-	matching_event=Event.query.get(event_id)
-	if matching_event == None:
-		return "Sorry,the event does not exist"
-	event.add('summary',matching_event.name)
-	event.add('geo',(matching_event.latitude, matching_event.longitude))
-	event.add('location',matching_event.location_name)
-	event.add('color',matching_event.color)
-	event.add('dtstart',matching_event.start_time)
-	event.add('dtend',matching_event.end_time)	
-	event.add('logo',matching_event.logo)
-	event.add('email',matching_event.email)
-	event.add('description',matching_event.slogan)
-	event.add('url',matching_event.url)
-	cal.add_component(event)
-	return cal.to_ical()
 
-@app.route('/api/v1/track/<int:track_id>/export/iCal', methods=['GET'])
+@app.route('/api/v1/event/<int:event_id>/export/ical', methods=['GET'])
 @auto.doc()
 @cross_origin()
-def generate_icalender_track(track_id):
-	"""Takes a track id and returns the track in iCal format"""
-	cal=Calendar()
-	track=icalendar.Event()
-	matching_track=Track.query.get(track_id)	
-	if matching_track==None:
-		return "Sorry,the track does not exist"	
-	track.add('summary',matching_track.name)	
-	track.add('description',matching_track.description)
-	track.add('url',matching_track.track_image_url)
-	cal.add_component(track)
-	return cal.to_ical()
+def generate_icalendar_event(event_id):
+    """Takes an event id and returns the event in iCal format"""
+    cal = Calendar()
+    event = icalendar.Event()
+    matching_event = Event.query.get(event_id)
+    if matching_event is None:
+        return "Sorry, the event does not exist"
+    event.add('summary', matching_event.name)
+    event.add('geo', (matching_event.latitude, matching_event.longitude))
+    event.add('location', matching_event.location_name)
+    event.add('color', matching_event.color)
+    event.add('dtstart', matching_event.start_time)
+    event.add('dtend', matching_event.end_time)
+    event.add('logo', matching_event.logo)
+    event.add('email', matching_event.email)
+    event.add('description', matching_event.slogan)
+    event.add('url', matching_event.url)
+    cal.add_component(event)
+    return cal.to_ical()
+
+
+@app.route('/api/v1/event/<int:event_id>/tracks/<int:track_id>/export/ical', methods=['GET'])
+@auto.doc()
+@cross_origin()
+def generate_icalendar_track(event_id, track_id):
+    """Takes a track id and returns the track in iCal format"""
+    cal = Calendar()
+    track = icalendar.Event()
+    matching_track = Track.query.get(track_id)
+    if matching_track is None or matching_track.event_id != event_id:
+        return "Sorry, the track does not exist"
+    track.add('summary', matching_track.name)
+    track.add('description', matching_track.description)
+    track.add('url', matching_track.track_image_url)
+    cal.add_component(track)
+    return cal.to_ical()
+
 
 @app.route('/pic/<path:filename>')
 @auto.doc()
@@ -285,6 +305,7 @@ def send_pic(filename):
     """Returns image"""
     return send_from_directory(os.path.realpath('.') + '/static/', filename)
 
+
 @app.route('/documentation')
 def documentation():
-	return auto.html()
+    return auto.html()

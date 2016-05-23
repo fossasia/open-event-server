@@ -1,7 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 from flask_wtf import Form
+from flask_admin.form.widgets import Select2Widget
 from wtforms import StringField, TextAreaField, validators
-from wtforms.widgets import ListWidget, CheckboxInput
 from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField
 from open_event.models.session import Session
 from ...helpers.helpers import get_event_id
@@ -17,7 +17,8 @@ class SpeakerForm(Form):
     name = StringField('Name', [validators.DataRequired()])
     photo = StringField('Photo')
     biography = TextAreaField('Biography')
-    email = StringField('Email', [validators.DataRequired(), validators.Email()])
+    email = StringField(
+        'Email', [validators.DataRequired(), validators.Email()])
     web = StringField('Web')
     twitter = StringField('Twitter')
     facebook = StringField('Facebook')
@@ -28,6 +29,5 @@ class SpeakerForm(Form):
     country = StringField('Country', [validators.DataRequired()])
     sessions = QuerySelectMultipleField(
             query_factory=get_sessions,
-            widget=ListWidget(prefix_label=False),
-            option_widget=CheckboxInput()
+            widget=Select2Widget(multiple=True)
     )

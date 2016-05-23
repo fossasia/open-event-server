@@ -14,5 +14,5 @@ class RegistrationForm(form.Form):
             raise validators.ValidationError('Duplicate username')
 
     def validate_email(self, field):
-    	if db.session.query(User).filter_by(email=self.email.data).count() > 0:
-    		raise validators.ValidationError('Duplicate email')
+        if db.session.query(User).filter_by(email=self.email.data).count() > 0:
+            raise validators.ValidationError('Duplicate email')

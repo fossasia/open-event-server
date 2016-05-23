@@ -4,10 +4,11 @@ from flask_admin import Admin
 
 from open_event.models import db
 from open_event.models.event import Event
+from open_event.models.track import Track
 from open_event.models.user import User
 from open_event.views.admin.models_views.event import EventView
 from open_event.views.admin.home import MyHomeView
-
+from open_event.views.admin.track_view import TrackView
 
 class AdminView(object):
     """Main Admin class View"""
@@ -25,6 +26,7 @@ class AdminView(object):
     def _add_models_to_menu(self):
         ev = EventView(Event, db.session)
         self.admin.add_view(ev)
+        self.admin.add_view(TrackView(Track, db.session, name='Track', url='event/<event_id>/track'))
 
     @staticmethod
     def init_login(app):

@@ -1,19 +1,14 @@
 """Copyright 2015 Rafal Kowalski"""
 import unittest
+from tests.utils import OpenEventTestCase
 
-from tests.set_up import Setup
+from tests.setup_database import Setup
 
 from open_event import current_app as app
 from open_event.helpers.data import save_to_db
 from tests.object_mother import ObjectMother
 
-class TestApi(unittest.TestCase):
-
-    def setUp(self):
-        self.app = Setup.create_app()
-
-    def tearDown(self):
-        Setup.drop_db()
+class TestApi(OpenEventTestCase):
 
     def test_api_tracks(self):
         with self.assertRaises(Exception) as context:

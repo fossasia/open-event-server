@@ -1,23 +1,21 @@
 """Copyright 2015 Rafal Kowalski"""
 import unittest
+from tests.utils import OpenEventTestCase
 from auth_helper import register
 import unittest
 from flask import url_for
-from tests.set_up import Setup
+from tests.setup_database import Setup
 from open_event import current_app as app
 from open_event.helpers.data import save_to_db
 from tests.object_mother import ObjectMother
 from tests.auth_helper import register, logout, login
 
 
-class TestLogin(unittest.TestCase):
+class TestLogin(OpenEventTestCase):
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
             register(self.app, 'test', 'email@gmail.com', 'test')
-
-    def tearDown(self):
-        Setup.drop_db()
 
     def test_registration(self):
         rv = register(self.app,'test', 'email@gmail.com', 'test')

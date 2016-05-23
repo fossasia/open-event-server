@@ -41,12 +41,23 @@ class DataGetter:
         return Track.query.filter_by(event_id=event_id)
 
     @staticmethod
+    def get_tracks_by_event_id():
+        """
+        :param event_id: Event id
+        :return: All Tracks filtered by event_id
+        """
+        return Track.query.filter_by(event_id=get_event_id())
+
+    @staticmethod
     def get_sessions(event_id, is_accepted=True):
         """
         :param event_id: Event id
         :return: Return all Sessions objects with Event id
         """
-        return Session.query.filter_by(event_id=event_id, is_accepted=is_accepted)
+        return Session.query.filter_by(
+            event_id=event_id,
+            is_accepted=is_accepted
+        )
 
     @staticmethod
     def get_speakers(event_id):
@@ -165,7 +176,9 @@ class DataGetter:
     @staticmethod
     def get_association_by_event_and_user(event_id, user_id):
         """Returns EventUser filtered by user_id and event_id"""
-        return EventsUsers.query.filter_by(event_id=event_id, user_id=user_id).first()
+        return EventsUsers.query.filter_by(
+            event_id=event_id,
+            user_id=user_id).first()
 
     @staticmethod
     def get_object(db_model, object_id):
