@@ -6,6 +6,11 @@ from .helpers import get_object_list, get_object_or_404
 
 api = Namespace('speakers', description='Speakers', path='/')
 
+session = api.model('Session', {
+    'id': fields.Integer,
+    'title': fields.String,
+})
+
 speaker = api.model('Speaker', {
     'id': fields.Integer(required=True),
     'name': fields.String,
@@ -20,7 +25,7 @@ speaker = api.model('Speaker', {
     'organisation': fields.String,
     'position': fields.String,
     'country': fields.String,
-    # sessions
+    'sessions': fields.List(fields.Nested(session)),
 })
 
 

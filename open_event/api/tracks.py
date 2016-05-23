@@ -6,12 +6,17 @@ from .helpers import get_object_list, get_object_or_404
 
 api = Namespace('tracks', description='Tracks', path='/')
 
+session = api.model('Session', {
+    'id': fields.Integer(required=True),
+    'title': fields.String,
+})
+
 track = api.model('Track', {
     'id': fields.Integer(required=True),
     'name': fields.String,
     'description': fields.String,
     'track_image_url': fields.String,
-    # sessions
+    'sessions': fields.List(fields.Nested(session)),
 })
 
 

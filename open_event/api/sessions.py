@@ -6,6 +6,32 @@ from .helpers import get_object_list, get_object_or_404
 
 api = Namespace('sessions', description='Sessions', path='/')
 
+track = api.model('Track', {
+    'id': fields.Integer(required=True),
+    'name': fields.String,
+})
+
+speaker = api.model('Speaker', {
+    'id': fields.Integer(required=True),
+    'name': fields.String,
+})
+
+level = api.model('Level', {
+    'id': fields.Integer(required=True),
+    'label_en': fields.String,
+})
+
+language = api.model('Language', {
+    'id': fields.Integer(required=True),
+    'label_en': fields.String,
+    'label_de': fields.String,
+})
+
+microlocation = api.model('Microlocation', {
+    'id': fields.Integer(required=True),
+    'name': fields.String,
+})
+
 session = api.model('Session', {
     'id': fields.Integer(required=True),
     'title': fields.String,
@@ -14,11 +40,11 @@ session = api.model('Session', {
     'description': fields.String,
     'start_time': fields.DateTime,
     'end_time': fields.DateTime,
-    # track
-    # speakers
-    # level
-    # language
-    # microlocation
+    'track': fields.Nested(track),
+    'speakers': fields.List(fields.Nested(speaker)),
+    'level': fields.Nested(level),
+    'language': fields.Nested(language),
+    'microlocation': fields.Nested(microlocation),
 })
 
 
