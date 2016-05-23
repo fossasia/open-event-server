@@ -7,8 +7,8 @@ from open_event.helpers.data import save_to_db
 from tests.object_mother import ObjectMother
 
 
-class TestSessionType(OpenEventTestCase):
-    def test_add_session_type_to_db(self):
+class TestSocialLink(OpenEventTestCase):
+    def test_add_social_link_to_db(self):
         """Checks the one to many relationship between event and social_links """
         self.app = Setup.create_app()
         with app.test_request_context():
