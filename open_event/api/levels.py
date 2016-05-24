@@ -6,7 +6,7 @@ from .helpers import get_object_list, get_object_or_404, get_object_in_event
 
 api = Namespace('levels', description='levels', path='/')
 
-_level = api.model('level', {
+LEVEL = api.model('level', {
     'id': fields.Integer(required=True),
     'name': fields.String,
     'label_en': fields.String,
@@ -18,7 +18,7 @@ _level = api.model('level', {
 @api.response(400, 'Object does not belong to event')
 class Level(Resource):
     @api.doc('get_level')
-    @api.marshal_with(_level)
+    @api.marshal_with(LEVEL)
     def get(self, event_id, level_id):
         """Fetch a level given its id"""
         return get_object_in_event(LevelModel, level_id, event_id)
@@ -28,7 +28,7 @@ class Level(Resource):
 @api.param('event_id')
 class LevelList(Resource):
     @api.doc('list_levels')
-    @api.marshal_list_with(_level)
+    @api.marshal_list_with(LEVEL)
     def get(self, event_id):
         """List all sessions"""
         # Check if an event with `event_id` exists

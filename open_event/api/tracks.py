@@ -6,17 +6,17 @@ from .helpers import get_object_list, get_object_or_404, get_object_in_event
 
 api = Namespace('tracks', description='Tracks', path='/')
 
-_session = api.model('Session', {
+SESSION = api.model('Session', {
     'id': fields.Integer(required=True),
     'title': fields.String,
 })
 
-_track = api.model('Track', {
+TRACK = api.model('Track', {
     'id': fields.Integer(required=True),
     'name': fields.String,
     'description': fields.String,
     'track_image_url': fields.String,
-    'sessions': fields.List(fields.Nested(_session)),
+    'sessions': fields.List(fields.Nested(SESSION)),
 })
 
 
@@ -25,7 +25,7 @@ _track = api.model('Track', {
 @api.response(400, 'Object does not belong to event')
 class Track(Resource):
     @api.doc('get_track')
-    @api.marshal_with(_track)
+    @api.marshal_with(TRACK)
     def get(self, event_id, track_id):
         """Fetch a track given its id"""
         return get_object_in_event(TrackModel, track_id, event_id)
@@ -34,7 +34,7 @@ class Track(Resource):
 @api.route('/events/<int:event_id>/tracks')
 class TrackList(Resource):
     @api.doc('list_tracks')
-    @api.marshal_list_with(_track)
+    @api.marshal_list_with(TRACK)
     def get(self, event_id):
         """List all sessions"""
         # Check if an event with `event_id` exists

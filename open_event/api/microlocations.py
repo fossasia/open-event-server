@@ -6,7 +6,7 @@ from .helpers import get_object_list, get_object_or_404, get_object_in_event
 
 api = Namespace('microlocations', description='microlocations', path='/')
 
-_microlocation = api.model('microlocation', {
+MICROLOCATION = api.model('microlocation', {
     'id': fields.Integer(required=True),
     'name': fields.String,
     'latitude': fields.Float,
@@ -21,7 +21,7 @@ _microlocation = api.model('microlocation', {
 @api.response(400, 'Object does not belong to event')
 class Microlocation(Resource):
     @api.doc('get_microlocation')
-    @api.marshal_with(_microlocation)
+    @api.marshal_with(MICROLOCATION)
     def get(self, event_id, microlocation_id):
         """Fetch a microlocation given its id"""
         return get_object_in_event(MicrolocationModel, microlocation_id,
@@ -32,7 +32,7 @@ class Microlocation(Resource):
 @api.param('event_id')
 class MicrolocationList(Resource):
     @api.doc('list_microlocations')
-    @api.marshal_list_with(_microlocation)
+    @api.marshal_list_with(MICROLOCATION)
     def get(self, event_id):
         """List all sessions"""
         # Check if an event with `event_id` exists

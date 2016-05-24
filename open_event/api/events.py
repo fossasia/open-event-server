@@ -5,7 +5,7 @@ from .helpers import get_object_list, get_object_or_404
 
 api = Namespace('events', description='Events')
 
-_event = api.model('Event', {
+EVENT = api.model('Event', {
     'id': fields.Integer(required=True),
     'name': fields.String,
     'email': fields.String,
@@ -26,7 +26,7 @@ _event = api.model('Event', {
 @api.response(404, 'Event not found')
 class Event(Resource):
     @api.doc('get_event')
-    @api.marshal_with(_event)
+    @api.marshal_with(EVENT)
     def get(self, event_id):
         """Fetch an event given its id"""
         return get_object_or_404(EventModel, event_id)
@@ -35,7 +35,7 @@ class Event(Resource):
 @api.route('/')
 class EventList(Resource):
     @api.doc('list_events')
-    @api.marshal_list_with(_event)
+    @api.marshal_list_with(EVENT)
     def get(self):
         """List all events"""
         return get_object_list(EventModel)

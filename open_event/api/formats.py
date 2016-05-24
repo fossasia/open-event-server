@@ -6,7 +6,7 @@ from .helpers import get_object_list, get_object_or_404, get_object_in_event
 
 api = Namespace('formats', description='formats', path='/')
 
-_format = api.model('Format', {
+FORMAT = api.model('Format', {
     'id': fields.Integer(required=True),
     'name': fields.String,
     'label_en': fields.String,
@@ -18,7 +18,7 @@ _format = api.model('Format', {
 @api.response(400, 'Object does not belong to event')
 class Format(Resource):
     @api.doc('get_format')
-    @api.marshal_with(_format)
+    @api.marshal_with(FORMAT)
     def get(self, event_id, format_id):
         """Fetch a format given its id"""
         return get_object_in_event(FormatModel, format_id, event_id)
@@ -28,7 +28,7 @@ class Format(Resource):
 @api.param('event_id')
 class FormatList(Resource):
     @api.doc('list_formats')
-    @api.marshal_list_with(_format)
+    @api.marshal_list_with(FORMAT)
     def get(self, event_id):
         """List all sessions"""
         # Check if an event with `event_id` exists

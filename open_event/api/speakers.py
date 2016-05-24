@@ -6,12 +6,12 @@ from .helpers import get_object_list, get_object_or_404, get_object_in_event
 
 api = Namespace('speakers', description='Speakers', path='/')
 
-_session = api.model('Session', {
+SESSION = api.model('Session', {
     'id': fields.Integer,
     'title': fields.String,
 })
 
-_speaker = api.model('Speaker', {
+SPEAKER = api.model('Speaker', {
     'id': fields.Integer(required=True),
     'name': fields.String,
     'photo': fields.String,
@@ -25,7 +25,7 @@ _speaker = api.model('Speaker', {
     'organisation': fields.String,
     'position': fields.String,
     'country': fields.String,
-    'sessions': fields.List(fields.Nested(_session)),
+    'sessions': fields.List(fields.Nested(SESSION)),
 })
 
 
@@ -34,7 +34,7 @@ _speaker = api.model('Speaker', {
 @api.response(400, 'Object does not belong to event')
 class Speaker(Resource):
     @api.doc('get_speaker')
-    @api.marshal_with(_speaker)
+    @api.marshal_with(SPEAKER)
     def get(self, event_id, speaker_id):
         """Fetch a speaker given its id"""
         return get_object_in_event(SpeakerModel, speaker_id, event_id)
@@ -44,7 +44,7 @@ class Speaker(Resource):
 @api.param('event_id')
 class SpeakerList(Resource):
     @api.doc('list_speakers')
-    @api.marshal_list_with(_speaker)
+    @api.marshal_list_with(SPEAKER)
     def get(self, event_id):
         """List all speakers"""
         # Check if an event with `event_id` exists
