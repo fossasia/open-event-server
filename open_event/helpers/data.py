@@ -3,6 +3,7 @@ import logging
 import os.path
 import random
 import traceback
+from datetime import datetime
 
 from flask import flash, request
 from flask.ext import login
@@ -25,6 +26,7 @@ from ..models.role import Role
 from ..models.users_events_roles import UsersEventsRoles
 from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
+from ..models.track import Track
 
 
 class DataManager(object):
@@ -434,13 +436,12 @@ class DataManager(object):
         Event will be saved to database with proper Event id
         :param form: view data form
         """
-        import datetime
         event = Event(name=form['name'],
                       email='dsads',
                       color='#f5f5f5',
                       logo=['logo'],
-                      start_time=datetime.datetime.now(),
-                      end_time=datetime.datetime.now(),
+                      start_time=datetime.strptime(form['start_date'], '%m/%d/%Y'),
+                      end_time=datetime.strptime(form['end_date'], '%m/%d/%Y'),
                       latitude=10.0,
                       longitude=10.0,
                       location_name='dsadsa',
@@ -460,6 +461,8 @@ class DataManager(object):
         social_link_name = form.getlist('social[name]')
         social_link_link = form.getlist('social[link]')
 
+        track_name = form.getlist('tracks[name]')
+
         for index, name in enumerate(session_type_names):
             session_type = SessionType(name=name, length=session_type_length[index], event_id=event.id)
             db.session.add(session_type)
@@ -467,6 +470,10 @@ class DataManager(object):
         for index, name in enumerate(social_link_name):
             social_link = SocialLink(name=name, link=social_link_link[index], event_id=event.id)
             db.session.add(social_link)
+
+        for index, name in enumerate(track_name):
+            track = Track(name=name, description="", track_image_url="")
+            db.session.add(track)
 
         uer = UsersEventsRoles(event_id=event.id, user_id=login.current_user.id, role_id=role.id)
         save_to_db(uer, "Event saved")
