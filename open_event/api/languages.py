@@ -6,7 +6,7 @@ from .helpers import get_object_list, get_object_or_404, get_object_in_event
 
 api = Namespace('languages', description='languages', path='/')
 
-language = api.model('language', {
+_language = api.model('language', {
     'id': fields.Integer(required=True),
     'name': fields.String,
     'label_en': fields.String,
@@ -14,22 +14,22 @@ language = api.model('language', {
 })
 
 
-@api.route('/events/<int:event_id>/languages/<int:id>')
+@api.route('/events/<int:event_id>/languages/<int:language_id>')
 @api.response(404, 'Language not found')
 @api.response(400, 'Object does not belong to event')
 class Language(Resource):
     @api.doc('get_language')
-    @api.marshal_with(language)
-    def get(self, event_id, id):
+    @api.marshal_with(_language)
+    def get(self, event_id, language_id):
         """Fetch a language given its id"""
-        return get_object_in_event(LanguageModel, id, event_id)
+        return get_object_in_event(LanguageModel, language_id, event_id)
 
 
 @api.route('/events/<int:event_id>/languages')
 @api.param('event_id')
 class LanguageList(Resource):
     @api.doc('list_languages')
-    @api.marshal_list_with(language)
+    @api.marshal_list_with(_language)
     def get(self, event_id):
         """List all sessions"""
         # Check if an event with `event_id` exists

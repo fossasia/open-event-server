@@ -6,12 +6,12 @@ from .helpers import get_object_list, get_object_or_404, get_object_in_event
 
 api = Namespace('speakers', description='Speakers', path='/')
 
-session = api.model('Session', {
+_session = api.model('Session', {
     'id': fields.Integer,
     'title': fields.String,
 })
 
-speaker = api.model('Speaker', {
+_speaker = api.model('Speaker', {
     'id': fields.Integer(required=True),
     'name': fields.String,
     'photo': fields.String,
@@ -25,26 +25,26 @@ speaker = api.model('Speaker', {
     'organisation': fields.String,
     'position': fields.String,
     'country': fields.String,
-    'sessions': fields.List(fields.Nested(session)),
+    'sessions': fields.List(fields.Nested(_session)),
 })
 
 
-@api.route('/events/<int:event_id>/speakers/<int:id>')
+@api.route('/events/<int:event_id>/speakers/<int:speaker_id>')
 @api.response(404, 'Speaker not found')
 @api.response(400, 'Object does not belong to event')
 class Speaker(Resource):
     @api.doc('get_speaker')
-    @api.marshal_with(speaker)
-    def get(self, event_id, id):
+    @api.marshal_with(_speaker)
+    def get(self, event_id, speaker_id):
         """Fetch a speaker given its id"""
-        return get_object_in_event(SpeakerModel, id, event_id)
+        return get_object_in_event(SpeakerModel, speaker_id, event_id)
 
 
 @api.route('/events/<int:event_id>/speakers')
 @api.param('event_id')
 class SpeakerList(Resource):
     @api.doc('list_speakers')
-    @api.marshal_list_with(speaker)
+    @api.marshal_list_with(_speaker)
     def get(self, event_id):
         """List all speakers"""
         # Check if an event with `event_id` exists

@@ -6,33 +6,33 @@ from .helpers import get_object_list, get_object_or_404, get_object_in_event
 
 api = Namespace('sessions', description='Sessions', path='/')
 
-track = api.model('Track', {
+_track = api.model('Track', {
     'id': fields.Integer(required=True),
     'name': fields.String,
 })
 
-speaker = api.model('Speaker', {
+_speaker = api.model('Speaker', {
     'id': fields.Integer(required=True),
     'name': fields.String,
 })
 
-level = api.model('Level', {
+_level = api.model('Level', {
     'id': fields.Integer(required=True),
     'label_en': fields.String,
 })
 
-language = api.model('Language', {
+_language = api.model('Language', {
     'id': fields.Integer(required=True),
     'label_en': fields.String,
     'label_de': fields.String,
 })
 
-microlocation = api.model('Microlocation', {
+_microlocation = api.model('Microlocation', {
     'id': fields.Integer(required=True),
     'name': fields.String,
 })
 
-session = api.model('Session', {
+_session = api.model('Session', {
     'id': fields.Integer(required=True),
     'title': fields.String,
     'subtitle': fields.String,
@@ -40,30 +40,30 @@ session = api.model('Session', {
     'description': fields.String,
     'start_time': fields.DateTime,
     'end_time': fields.DateTime,
-    'track': fields.Nested(track),
-    'speakers': fields.List(fields.Nested(speaker)),
-    'level': fields.Nested(level),
-    'language': fields.Nested(language),
-    'microlocation': fields.Nested(microlocation),
+    'track': fields.Nested(_track),
+    'speakers': fields.List(fields.Nested(_speaker)),
+    'level': fields.Nested(_level),
+    'language': fields.Nested(_language),
+    'microlocation': fields.Nested(_microlocation),
 })
 
 
-@api.route('/events/<int:event_id>/sessions/<int:id>')
+@api.route('/events/<int:event_id>/sessions/<int:session_id>')
 @api.response(404, 'Session not found')
 @api.response(400, 'Object does not belong to event')
 class Session(Resource):
     @api.doc('get_session')
-    @api.marshal_with(session)
-    def get(self, event_id, id):
+    @api.marshal_with(_session)
+    def get(self, event_id, session_id):
         """Fetch a session given its id"""
-        return get_object_in_event(SessionModel, id, event_id)
+        return get_object_in_event(SessionModel, session_id, event_id)
 
 
 @api.route('/events/<int:event_id>/sessions')
 @api.param('event_id')
 class SessionList(Resource):
     @api.doc('list_sessions')
-    @api.marshal_list_with(session)
+    @api.marshal_list_with(_session)
     def get(self, event_id):
         """List all sessions"""
         # Check if an event with `event_id` exists
