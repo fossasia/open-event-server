@@ -31,7 +31,7 @@ class SponsorList(Resource):
     @api.doc('list_sponsors')
     @api.marshal_list_with(SPONSOR)
     def get(self, event_id):
-        """List all sessions"""
+        """List all sponsors"""
         # Check if an event with `event_id` exists
         get_object_or_404(EventModel, event_id)
 

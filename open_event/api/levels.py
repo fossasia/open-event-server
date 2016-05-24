@@ -30,7 +30,7 @@ class LevelList(Resource):
     @api.doc('list_levels')
     @api.marshal_list_with(LEVEL)
     def get(self, event_id):
-        """List all sessions"""
+        """List all levels"""
         # Check if an event with `event_id` exists
         get_object_or_404(EventModel, event_id)
 
