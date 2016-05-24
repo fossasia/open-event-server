@@ -6,7 +6,7 @@ from .helpers import get_object_list, get_object_or_404, get_object_in_event
 
 api = Namespace('tracks', description='Tracks', path='/')
 
-SESSION = api.model('Session', {
+TRACK_SESSION = api.model('TrackSession', {
     'id': fields.Integer(required=True),
     'title': fields.String,
 })
@@ -16,7 +16,7 @@ TRACK = api.model('Track', {
     'name': fields.String,
     'description': fields.String,
     'track_image_url': fields.String,
-    'sessions': fields.List(fields.Nested(SESSION)),
+    'sessions': fields.List(fields.Nested(TRACK_SESSION)),
 })
 
 
