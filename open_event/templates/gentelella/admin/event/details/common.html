@@ -1,7 +1,24 @@
-{{event.id}}
-{{event.name}}
-{{event.state}}
-{{event.session_type}}
-{{event.social_link}}
-{{event.start_time}}
-{{event.end_time}}
+<div class="x_content">
+    <table class="table table-striped">
+        <tbody>
+	        <tr><td><b>Event ID: </b></td><td>{{event.id}}</td></tr>
+	        <tr><td><b>Event Url: </b></td><td>{{event.url}}</td></tr>
+	        <tr><td><b>Event Start Time: </b></td><td>{{event.start_time}}</td></tr>
+	        <tr><td><b>Event End Time: </b></td><td>{{event.end_time}}</td></tr>
+	        <tr><td><b>Event Session Types: </b></td>
+	        	<td>
+	        	{% for sessionType in event.session_type %}
+	        		{{sessionType.name}},
+	        	{% endfor %}
+	        	</td>
+	        </tr>
+	        <tr><td><b>Event Social Links: </b></td>
+	        	<td>
+	        	{% for socialLink in event.social_link %}
+	        		<a href="{{socialLink.link}}">{{socialLink.name}}</a>,
+	        	{% endfor %}
+	        	</td>
+	        </tr>
+        </tbody>
+    </table>
+</div>
