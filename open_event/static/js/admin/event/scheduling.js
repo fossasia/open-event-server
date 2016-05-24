@@ -30,7 +30,15 @@
                 // enable inertial throwing
                 inertia: false,
                 // enable autoScroll
-                autoScroll: false,
+                autoScroll: {
+                    container: $(".track-container")[0],
+                    margin: 50,
+                    distance: 5,
+                    interval: 10
+                },
+                restrict: {
+                    restriction: '.draggable-holder'
+                },
                 // call this function on every dragmove event
                 onmove: function (event) {
                     var $sessionElement = $(event.target),
