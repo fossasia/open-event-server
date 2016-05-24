@@ -36,7 +36,7 @@ class TrackList(Resource):
     @api.doc('list_tracks')
     @api.marshal_list_with(TRACK)
     def get(self, event_id):
-        """List all sessions"""
+        """List all tracks"""
         # Check if an event with `event_id` exists
         get_object_or_404(EventModel, event_id)
 

@@ -30,7 +30,7 @@ class FormatList(Resource):
     @api.doc('list_formats')
     @api.marshal_list_with(FORMAT)
     def get(self, event_id):
-        """List all sessions"""
+        """List all formats"""
         # Check if an event with `event_id` exists
         get_object_or_404(EventModel, event_id)
 

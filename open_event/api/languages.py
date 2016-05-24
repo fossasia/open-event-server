@@ -31,7 +31,7 @@ class LanguageList(Resource):
     @api.doc('list_languages')
     @api.marshal_list_with(LANGUAGE)
     def get(self, event_id):
-        """List all sessions"""
+        """List all languages"""
         # Check if an event with `event_id` exists
         get_object_or_404(EventModel, event_id)
 
