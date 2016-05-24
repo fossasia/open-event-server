@@ -1,86 +1,116 @@
 {% extends 'gentelella/admin/base.html' %}
 {% block head_css %}
-    {{ super() }}
-    <link href="{{ url_for('static', filename='css/admin/scheduling.css') }}" rel="stylesheet">
+{{ super() }}
+<link href="{{ url_for('static', filename='css/admin/scheduling.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
 <div class="page-title">
     <div class="title_left">
-        <h3>Event Details</h3>
+        <h3>Event name: {{event.name}}</h3>
     </div>
 
 </div>
+
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="x_panel" style="min-height:600px;">
-            <div class="row">
-                <h3 class="col-md-offset-5">{{event.name}}</h3>
-                <form name="test" action="/admin/events/new/" method="POST" role="form"
-                      class="admin-form form-horizontal event-create-form">
-                    {% if csrf_token %}
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                    {% endif %}
-                    <div id="wizard" class="form_wizard wizard_horizontal">
-                        <ul class="wizard_steps anchor">
-                            <li>
-                                <a href="#step-1" class="selected" isdone="1" rel="1">
-                                    <span class="step_no">1</span>
-                                    <span class="step_descr">
-                                        Draft <br>
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#step-2" class="disabled" isdone="0" rel="2">
-                                    <span class="step_no">2</span>
-                                    <span class="step_descr">
-                                        Call for papers<br>
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#step-3" class="disabled" isdone="0" rel="3">
-                                    <span class="step_no">3</span>
-                                    <span class="step_descr">
-                                        Scheduling<br>
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#step-4" class="disabled" isdone="0" rel="4">
-                                    <span class="step_no">4</span>
-                                    <span class="step_descr">
-                                        Published<br>
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#step-5" class="disabled" isdone="0" rel="5">
-                                    <span class="step_no">5</span>
-                                    <span class="step_descr">
-                                        Completed<br>
-                                    </span>
-                                </a>
-                            </li>
-                        </ul>
+        <div class="x_panel tile fixed_height_320">
 
+            <div class="row x_title">
+                <div class="col-md-6">
+                    <h3> General </h3>
+                </div>
 
-                        <div class="stepContainer">
-                            {% include '/gentelella/admin/event/details/draft.html' %}
-                            {% include '/gentelella/admin/event/details/call_for_papers.html' %}
-                            {% include '/gentelella/admin/event/details/scheduling.html' %}
-                            {% include '/gentelella/admin/event/details/published.html' %}
-                            {% include '/gentelella/admin/event/details/completed.html' %}
-                        </div>
-                    </div>
-                </form>
+            </div>
+            <div class="x_content">
+                <div class="col-md-12 ">
+                    {% include '/gentelella/admin/event/details/common.html' %}
+                </div>
 
-
+                <div class="clearfix"></div>
             </div>
         </div>
     </div>
 </div>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel" style="min-height:600px;">
+            <div class="row">
+                <div class="row x_title">
+                    <div class="col-md-6">
+                        <h3>Event State</h3>
+                    </div>
+
+                </div>
+                <div class="x_content">
+                    <div class="col-md-12 ">
+                        <form name="test" action="/admin/events/new/" method="POST" role="form"
+                              class="admin-form form-horizontal event-create-form">
+                            {% if csrf_token %}
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            {% endif %}
+                            <div id="wizard" class="form_wizard wizard_horizontal">
+                                <ul class="wizard_steps anchor">
+                                    <li>
+                                        <a href="#step-1" class="selected" isdone="1" rel="1">
+                                            <span class="step_no">1</span>
+                                    <span class="step_descr">
+                                        Draft <br>
+                                    </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#step-2" class="disabled" isdone="0" rel="2">
+                                            <span class="step_no">2</span>
+                                    <span class="step_descr">
+                                        Call for papers<br>
+                                    </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#step-3" class="disabled" isdone="0" rel="3">
+                                            <span class="step_no">3</span>
+                                    <span class="step_descr">
+                                        Scheduling<br>
+                                    </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#step-4" class="disabled" isdone="0" rel="4">
+                                            <span class="step_no">4</span>
+                                    <span class="step_descr">
+                                        Published<br>
+                                    </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#step-5" class="disabled" isdone="0" rel="5">
+                                            <span class="step_no">5</span>
+                                    <span class="step_descr">
+                                        Completed<br>
+                                    </span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+
+                                <div class="stepContainer">
+                                    {% include '/gentelella/admin/event/details/draft.html' %}
+                                    {% include '/gentelella/admin/event/details/call_for_papers.html' %}
+                                    {% include '/gentelella/admin/event/details/scheduling.html' %}
+                                    {% include '/gentelella/admin/event/details/published.html' %}
+                                    {% include '/gentelella/admin/event/details/completed.html' %}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script src="{{ url_for('static', filename='admin/lib/interact/dist/interact.min.js') }}"></script>
 <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
