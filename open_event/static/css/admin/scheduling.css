@@ -23,6 +23,7 @@
     top: 120px;
     padding: 5px;
     color: white;
+    z-index: 2;
 }
 
 .scheduled > .time {
