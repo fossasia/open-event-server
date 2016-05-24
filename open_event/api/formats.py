@@ -6,7 +6,7 @@ from .helpers import get_object_list, get_object_or_404, get_object_in_event
 
 api = Namespace('formats', description='formats', path='/')
 
-format_ = api.model('format', {
+format_ = api.model('Format', {
     'id': fields.Integer(required=True),
     'name': fields.String,
     'label_en': fields.String,
@@ -21,7 +21,7 @@ class Format(Resource):
     @api.marshal_with(format_)
     def get(self, event_id, id):
         """Fetch a format given its id"""
-        return get_object_in_event(Format, id, event_id)
+        return get_object_in_event(FormatModel, id, event_id)
 
 
 @api.route('/events/<int:event_id>/formats')

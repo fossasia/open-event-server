@@ -7,7 +7,6 @@ def _get_queryset(klass):
     """Returns the queryset for `klass` model"""
     return klass.query
 
-
 def get_object_list(klass, **kwargs):
     """Returns a list of objects of a model class. Uses other passed arguments
     with `filter_by` to filter objects.
@@ -44,8 +43,8 @@ def get_object_in_event(klass, id_, event_id):
     """Returns a object (such as a Session, Track, Speaker, etc.) belonging
     to an Event.
 
-    First checks if Event with `event_id` exists and model `klass` (e.g. Track)
-    with `id_` exists.
+    First checks if Event with `event_id` exists. Then checks if  model `klass`
+    (e.g. Track) with `id_` exists.
     If both exist, it checks if model belongs to that Event. If it doesn't,
     it returns a 400 (Bad Request) status.
     """
@@ -53,6 +52,6 @@ def get_object_in_event(klass, id_, event_id):
     obj = get_object_or_404(klass, id_)
 
     if obj.event_id != event.id:
-        abort(400, 'Requested object does not belong to the event')
+        abort(400, 'Object does not belong to event')
 
     return obj

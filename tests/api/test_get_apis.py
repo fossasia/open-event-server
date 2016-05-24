@@ -54,64 +54,64 @@ class TestGetApi(OpenEventTestCase):
 
     def test_event_api(self):
         with app.test_request_context():
-            url = create_path()
-            response = self.app.get(url, follow_redirects=True)
+            path = create_path()
+            response = self.app.get(path, follow_redirects=True)
             self.assertIn('TestEvent', response.data)
             self.assertEqual(response.status_code, 200)
 
     def test_track_api(self):
         with app.test_request_context():
-            url = create_path(1, 'tracks')
-            response = self.app.get(url, follow_redirects=True)
+            path = create_path(1, 'tracks')
+            response = self.app.get(path, follow_redirects=True)
             self.assertIn('TestTrack', response.data)
             self.assertEqual(response.status_code, 200)
 
     def test_microlocation_api(self):
         with app.test_request_context():
-            url = create_path(1, 'microlocations')
-            response = self.app.get(url, follow_redirects=True)
+            path = create_path(1, 'microlocations')
+            response = self.app.get(path, follow_redirects=True)
             self.assertIn('TestMicrolocation', response.data)
             self.assertEqual(response.status_code, 200)
 
     def test_level_api(self):
         with app.test_request_context():
-            url = create_path(1, 'levels')
-            response = self.app.get(url, follow_redirects=True)
+            path = create_path(1, 'levels')
+            response = self.app.get(path, follow_redirects=True)
             self.assertIn('TestLevel', response.data)
             self.assertEqual(response.status_code, 200)
 
     def test_format_api(self):
         with app.test_request_context():
-            url = create_path(1, 'formats')
-            response = self.app.get(url, follow_redirects=True)
+            path = create_path(1, 'formats')
+            response = self.app.get(path, follow_redirects=True)
             self.assertIn('TestFormat', response.data)
             self.assertEqual(response.status_code, 200)
 
     def test_language_api(self):
         with app.test_request_context():
-            url = create_path(1, 'languages')
-            response = self.app.get(url, follow_redirects=True)
+            path = create_path(1, 'languages')
+            response = self.app.get(path, follow_redirects=True)
             self.assertIn('TestLanguage', response.data)
             self.assertEqual(response.status_code, 200)
 
     def test_session_api(self):
         with app.test_request_context():
-            url = create_path(1, 'sessions')
-            response = self.app.get(url, follow_redirects=True)
+            path = create_path(1, 'sessions')
+            response = self.app.get(path, follow_redirects=True)
             self.assertIn('TestSession', response.data)
             self.assertEqual(response.status_code, 200)
 
     def test_speaker_api(self):
         with app.test_request_context():
-            url = create_path(1, 'speakers')
-            response = self.app.get(url, follow_redirects=True)
+            path = create_path(1, 'speakers')
+            response = self.app.get(path, follow_redirects=True)
             self.assertIn('TestSpeaker', response.data)
             self.assertEqual(response.status_code, 200)
 
     def test_sponsor_api(self):
         with app.test_request_context():
-            url = create_path(1, 'sponsors')
-            response = self.app.get(url, follow_redirects=True)
+            path = create_path(1, 'sponsors')
+            response = self.app.get(path, follow_redirects=True)
             self.assertIn('TestSponsor', response.data)
             self.assertEqual(response.status_code, 200)
 
