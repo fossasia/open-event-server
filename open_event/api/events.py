@@ -2,7 +2,7 @@ from flask.ext.restplus import Resource, Namespace, fields, reqparse
 
 from open_event.models.event import Event as EventModel
 from .helpers import get_object_list, get_object_or_404, get_paged_object
-from utils import PAGED_MODEL
+from utils import PAGED_MODEL, PAGE_REQPARSER
 
 
 api = Namespace('events', description='Events')
@@ -49,9 +49,7 @@ class EventList(Resource):
 
 @api.route('/page')
 class EventListPaged(Resource):
-    parser = reqparse.RequestParser()
-    parser.add_argument('start', type=int, help='start position', default=1)
-    parser.add_argument('limit', type=int, help='max number of items', default=20)
+    parser = PAGE_REQPARSER
 
     @api.doc('list_events_paged', params={
         'start': 'Position to start from',
@@ -61,4 +59,5 @@ class EventListPaged(Resource):
     def get(self):
         """List events in paged form"""
         args = self.parser.parse_args()
-        return get_paged_object(EventModel, args=args)
+        url = self.api.url_for(self)  # WARN: undocumented way
+        return get_paged_object(EventModel, url, args=args)

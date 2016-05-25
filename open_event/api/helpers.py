@@ -58,9 +58,22 @@ def get_object_in_event(klass, id_, event_id):
     return obj
 
 
-def get_paged_object(klass, event_id=None, args={}, **kwargs):
+def make_url_query(args):
+    """
+    Helper function to return a query url string from a dict
+    """
+    return '?' + '&'.join('%s=%s' % (key, args[key]) for key in args)
+
+
+def get_paged_object(klass, url, event_id=None, args={}, **kwargs):
     """
     Returns a page-response object
+
+    klass - model class to query from
+    url - url of the request
+    event_id - to check for event_id
+    args - args passed to the request as query parameters
+    kwargs - filters for query on the `klass` model
     """
     if event_id is not None:
         get_object_or_404(EventModel, event_id)
@@ -69,11 +82,31 @@ def get_paged_object(klass, event_id=None, args={}, **kwargs):
     count = len(results)
     if (count < args['start']):
         abort(404, 'Page overflow')
+    # get page bounds
+    start = args['start']
+    limit = args['limit']
     # make response
     obj = {}
-    obj['start'] = args['start']
-    obj['limit'] = args['limit']
-    obj['next'] = 'http://google.com'
-    obj['previous'] = 'http://google.com'
-    obj['results'] = results[(args['start'] - 1):(args['start'] - 1 + args['limit'])]
+    obj['start'] = start
+    obj['limit'] = limit
+    obj['count'] = count
+    # make URLs
+    # make previous url
+    args_copy = args.copy()
+    if start == 1:
+        obj['previous'] = ''
+    else:
+        args_copy['start'] = max(1, start - limit)
+        args_copy['limit'] = start - 1
+        obj['previous'] = url + make_url_query(args_copy)
+    # make next url
+    args_copy = args.copy()
+    if start + limit > count:
+        obj['next'] = ''
+    else:
+        args_copy['start'] = start + limit
+        obj['next'] = url + make_url_query(args_copy)
+    # finally extract result according to bounds
+    obj['results'] = results[(start - 1):(start - 1 + limit)]
+
     return obj
