@@ -22,6 +22,7 @@ from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.track import Track
 from ..models.user import User
+from ..models.user_detail import UserDetail
 from ..models.role import Role
 from ..models.users_events_roles import UsersEventsRoles
 from ..models.session_type import SessionType
@@ -385,6 +386,7 @@ class DataManager(object):
     @staticmethod
     def create_user(form):
         user = User()
+        user_detail = UserDetail()
         form.populate_obj(user)
         # we hash the users password to avoid saving it as plaintext in the db,
         # remove to use plain text:
@@ -397,6 +399,10 @@ class DataManager(object):
         user.salt = salt
         user.role = 'speaker'
         save_to_db(user, "User created")
+
+        user_detail.user_id = user.id
+        save_to_db(user_detail, "User Details Added")
+
         return user
 
     @staticmethod
@@ -415,7 +421,7 @@ class DataManager(object):
         return user
 
     @staticmethod
-    def update_user(form, reset_hash):
+    def reset_password(form, reset_hash):
         user = User.query.filter_by(reset_password=reset_hash).first()
         salt = generate_random_salt()
         password = form.password.data
@@ -423,6 +429,18 @@ class DataManager(object):
         new_hash = random.getrandbits(128)
         user.reset_password = new_hash
         user.salt = salt
+        save_to_db(user, "password resetted")
+
+    @staticmethod
+    def update_user(form, user_id):
+        user = User.query.filter_by(id=user_id).first()
+        user_detail = UserDetail.query.filter_by(user_id=user_id).first()
+        user.login = form['login']
+        user.email = form['email']
+        user_detail.facebook = form['facebook']
+        user_detail.avatar = form['avatar']
+        user_detail.contact = form['contact']
+        user_detail.twitter = form['twitter']
         save_to_db(user, "User updated")
 
     @staticmethod

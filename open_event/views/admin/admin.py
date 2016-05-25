@@ -8,6 +8,7 @@ from open_event.models.role import Role
 from open_event.models.user import User
 from open_event.views.admin.models_views.events import EventsView
 from open_event.views.admin.models_views.roles import RoleView
+from open_event.views.admin.models_views.profile import ProfileView
 from open_event.views.admin.home import MyHomeView
 
 
@@ -27,6 +28,11 @@ class AdminView(object):
         self.admin.add_view(events)
         self.admin.add_view(RoleView(Role, db.session, name='Role', url='events/<event_id>/roles'))
 
+        profile = ProfileView(User, db.session, name='Profile', url='profile')
+
+        # self.admin.add_view(ev)
+        self.admin.add_view(events)
+        self.admin.add_view(profile)
 
     @staticmethod
     def init_login(app):
