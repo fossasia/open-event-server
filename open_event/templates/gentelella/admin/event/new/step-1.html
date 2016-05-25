@@ -36,7 +36,7 @@
         <label class="control-label col-md-3 col-sm-3 col-xs-12">Location
         </label>
         <div class="col-md-6 col-sm-6 col-xs-12">
-          <input id="location" class="form-control col-md-7 col-xs-12"/> <input id="submit" type="button" value="Go">
+          <input id="location" class="form-control col-md-7 col-xs-12"/> <input id="search-location" type="button" value="Go">
         </div>
     </div>
 
@@ -81,7 +81,7 @@ function initMap() {
     position: {lat: -34.397, lng: 150.644},
     map: map
   });
-  $("#submit")[0].addEventListener('click', function() {
+  $("#search-location")[0].addEventListener('click', function() {
     geocodeAddress(geocoder, map);
   });
 }
