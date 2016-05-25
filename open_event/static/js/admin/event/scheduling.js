@@ -3,6 +3,27 @@
  */
 (function ($) {
     $(document).ready(function () {
+
+        /**
+         * @return {boolean}
+         */
+        function horizontallyBound($parentDiv, $childDiv, offsetAdd) {
+            var pageWidth = $parentDiv.width();
+            var pageHeight = $parentDiv.height();
+            var pageTop = $parentDiv.offset().top;
+            var pageLeft =$parentDiv.offset().left;
+            var elementWidth = $childDiv.width();
+            var elementHeight = $childDiv.height();
+            var elementTop = $childDiv.offset().top;
+            var elementLeft = $childDiv.offset().left;
+            var offset = 50 + offsetAdd;
+            return !!((elementLeft + offset >= pageLeft) && (elementTop + offset >= pageTop) && (elementLeft + elementWidth <= pageLeft + pageWidth) && (elementTop + elementHeight <= pageTop + pageHeight));
+        }
+
+        function restrictionCheck(x, $sessionElement) {
+            return (horizontallyBound($(".rooms"), $sessionElement, 0));
+        }
+
         /**
          *  24px == 15 minutes
          *  (Smallest unit of measurement is 15 minutes)
@@ -37,7 +58,7 @@
                     interval: 10
                 },
                 restrict: {
-                    restriction: '.draggable-holder'
+                    restriction: "#tc"
                 },
                 // call this function on every dragmove event
                 onmove: function (event) {
@@ -45,11 +66,14 @@
                         x = (parseFloat($sessionElement.data('x')) || 0) + event.dx,
                         y = (parseFloat($sessionElement.data('y')) || 0) + event.dy;
 
-                    $sessionElement.css("-webkit-transform", 'translate(' + x + 'px, ' + y + 'px)');
-                    $sessionElement.css("transform", 'translate(' + x + 'px, ' + y + 'px)');
+                    if (restrictionCheck( x, $sessionElement) || $sessionElement.hasClass("unscheduled")) {
+                        $sessionElement.css("-webkit-transform", 'translate(' + x + 'px, ' + y + 'px)');
+                        $sessionElement.css("transform", 'translate(' + x + 'px, ' + y + 'px)');
 
-                    $sessionElement.data('x', x);
-                    $sessionElement.data('y', y);
+                        $sessionElement.data('x', x);
+                        $sessionElement.data('y', y);
+                    }
+
                     $sessionElement.data("top", roundOffToMultiple($sessionElement.offset().top - $(".rooms.x1").offset().top));
                 },
                 // call this function on every dragend event
@@ -63,7 +87,10 @@
             .resizable({
                 preserveAspectRatio: false,
                 enabled: true,
-                edges: {left: false, right: false, bottom: true, top: false}
+                edges: {left: false, right: false, bottom: true, top: false},
+                restrict: {
+                    restriction: ".track-container"
+                }
             })
             .on('resizemove', function (event) {
                 if ($(event.target).hasClass("scheduled")) {
@@ -128,6 +155,11 @@
                         "-webkit-transform": "",
                         "transform": ""
                     }).removeData("x").removeData("y");
+                } else {
+                    if ($trackDropZone.length == 0) {
+                        $sessionElement.appendTo($(".sessions-holder"));
+                        $sessionElement.addClass('unscheduled').removeClass('scheduled');
+                    }
                 }
             }
         });
