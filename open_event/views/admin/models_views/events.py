@@ -33,8 +33,8 @@ class EventsView(ModelView):
         event = DataGetter.get_event(event_id)
         return self.render('/gentelella/admin/event/details/details.html', event=event)
 
-    @expose('/<event_id>/delete/', methods=('GET',))
+    @expose('/<event_id>/delete/', methods=('GET','POST'))
     def delete_view(self, event_id):
-        if request.method == "GET":
+        if request.method == "POST":
             DataManager.delete_event(event_id)
         return redirect(url_for('.index_view'))
