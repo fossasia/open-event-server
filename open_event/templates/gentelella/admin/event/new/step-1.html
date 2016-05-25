@@ -33,6 +33,14 @@
     </div>
 
     <div class="item form-group">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">Location
+        </label>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+          <input id="location" class="form-control col-md-7 col-xs-12"/> <input id="submit" type="button" value="Go">
+        </div>
+    </div>
+
+    <div class="item form-group">
         <label class="control-label col-md-3 col-sm-3 col-xs-12">Background image
         </label>
         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -55,5 +63,56 @@
             <input name="event_url" class="form-control col-md-7 col-xs-12"/>
         </div>
     </div>
+
+    <div class="col-md-6" style="left:330px">
+        <div id="map" style="width:400px; height:300px"></div>
+    </div>
+    <script>
+        var marker;
+      var init_marker;
+function initMap() {
+  var map = new google.maps.Map($("#map")[0], {
+    zoom: 8,
+    center: {lat: -34.397, lng: 150.644}
+  });
+  var geocoder = new google.maps.Geocoder();
+  init_marker = new google.maps.Marker({
+    draggable: true,
+    position: {lat: -34.397, lng: 150.644},
+    map: map
+  });
+  $("#submit")[0].addEventListener('click', function() {
+    geocodeAddress(geocoder, map);
+  });
+}
+function geocodeAddress(geocoder, resultsMap) {
+  var address = $("#location")[0].value;
+  geocoder.geocode({'address': address}, function(results, status) {
+    if (status === google.maps.GeocoderStatus.OK) {
+      resultsMap.setCenter(results[0].geometry.location);
+       init_marker.setMap(null);
+       if(marker==null){
+        marker = new google.maps.Marker({
+        map: resultsMap,
+        draggable: true,
+        position: results[0].geometry.location
+      });
+      }
+      else{
+        marker.setMap(null)
+        marker = new google.maps.Marker({
+        map: resultsMap,
+        draggable: true,
+        position: results[0].geometry.location
+      });
+      }
+    } else {
+      alert('Geocode was not successful for the following reason: ' + status);
+    }
+  });
+}
+
+
+    </script>
 </div>
 
