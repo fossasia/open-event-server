@@ -505,11 +505,10 @@ class DataManager(object):
     @staticmethod
     def delete_event(e_id):
         EventsUsers.query.filter_by(event_id=e_id).delete()
-        Sponsor.query.filter_by(id=e_id).delete()
-        Speaker.query.filter_by(id=e_id).delete()
-        Microlocation.query.filter_by(id=e_id).delete()
+        UsersEventsRoles.query.filter_by(event_id=e_id).delete()
+        SessionType.query.filter_by(event_id=e_id).delete()
+        SocialLink.query.filter_by(event_id=e_id).delete()
         Track.query.filter_by(id=e_id).delete()
-        Session.query.filter_by(id=e_id).delete()
         Event.query.filter_by(id=e_id).delete()
         db.session.commit()
 
@@ -547,6 +546,15 @@ class DataManager(object):
         os.remove(os.path.join(os.path.realpath('.') + '/static/', file.name))
         delete_from_db(file, "File removed")
         flash("File removed")
+
+    @staticmethod
+    def add_role_to_event(form, event_id):
+        role = Role(name=form['user_role'])
+        db.session.add(role)
+        db.session.flush()
+        db.session.refresh(role)
+        uer = UsersEventsRoles(event_id=event_id, user_id=form['user_id'], role_id=role.id)
+        save_to_db(uer, "Event saved")
 
 
 def save_to_db(item, msg):

@@ -62,7 +62,7 @@ $( document ).ready(function() {
     // Smart Wizard
     $('#wizard').smartWizard({
         labelFinish:'Save Draft',
-        onFinish: function(){ $(".event-create-form").submit()}
+        onFinish: function(){ $("#event-create-form").submit()}
     });
 
     $('.date-picker').daterangepicker({

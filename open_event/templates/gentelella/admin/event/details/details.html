@@ -1,7 +1,7 @@
 {% extends 'gentelella/admin/base.html' %}
 {% block head_css %}
-{{ super() }}
-<link href="{{ url_for('static', filename='css/admin/scheduling.css') }}" rel="stylesheet">
+    {{ super() }}
+    <link href="{{ url_for('static', filename='css/admin/scheduling.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
@@ -11,6 +11,7 @@
     </div>
 
 </div>
+{% include '/gentelella/admin/event/details/roles.html' %}
 
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
@@ -94,13 +95,12 @@
                                     </li>
                                 </ul>
 
-
                                 <div class="stepContainer">
-                                    {% include '/gentelella/admin/event/details/draft.html' %}
-                                    {% include '/gentelella/admin/event/details/call_for_papers.html' %}
-                                    {% include '/gentelella/admin/event/details/scheduling.html' %}
-                                    {% include '/gentelella/admin/event/details/published.html' %}
-                                    {% include '/gentelella/admin/event/details/completed.html' %}
+                                    {% include '/gentelella/admin/event/details/steps/draft.html' %}
+                                    {% include '/gentelella/admin/event/details/steps/call_for_papers.html' %}
+                                    {% include '/gentelella/admin/event/details/steps/scheduling.html' %}
+                                    {% include '/gentelella/admin/event/details/steps/published.html' %}
+                                    {% include '/gentelella/admin/event/details/steps/completed.html' %}
                                 </div>
                             </div>
                         </form>
@@ -111,15 +111,17 @@
     </div>
 </div>
 
-
-<script src="{{ url_for('static', filename='admin/lib/interact/dist/interact.min.js') }}"></script>
-<script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
-<script src="{{ url_for('static', filename='admin/lib/underscore/underscore-min.js') }}"></script>
-
-<script src="{{ url_for('static', filename='js/jquery/randomColor.min.js') }}"></script>
-
-<script type="text/javascript" src="{{ url_for('static', filename='js/jquery/jquery.smartWizard.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/details.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/scheduling.js') }}"></script>
-
 {% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='admin/lib/interact/dist/interact.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery/randomColor.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/underscore/underscore-min.js') }}"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery/jquery.smartWizard.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/details.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/scheduling.js') }}"></script>
+{% endblock %}
+
