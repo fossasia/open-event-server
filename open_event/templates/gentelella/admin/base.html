@@ -27,6 +27,7 @@
             {{ sidebar.render_sidebar() }}
             {{ menu.render_menu() }}
             <div class="right_col" role="main" style="min-height: 3574px;">
+                 {% include '/gentelella/admin/notifications.html' %}
                  <div class="">
 
                     {% block body %}

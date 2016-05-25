@@ -2,6 +2,7 @@ from functools import wraps
 
 from data_getter import DataGetter
 from enum import Enum
+from flask import flash
 
 
 class Role(Enum):
@@ -18,7 +19,7 @@ def role_required(roles=(Role.any,)):
         def decorated_view(*args, **kwargs):
             if can(roles, kwargs):
                 return fn(*args, **kwargs)
-            return 'Not permission'
+            return flash('Not permission')
         return decorated_view
     return wrapper
 
