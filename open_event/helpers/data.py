@@ -11,6 +11,7 @@ from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from sqlalchemy.orm.collections import InstrumentedList
 from sqlalchemy.sql.expression import exists
 from werkzeug import secure_filename
+from wtforms import ValidationError
 
 from ..helpers.update_version import VersionUpdater
 from ..models import db
@@ -447,38 +448,39 @@ class DataManager(object):
                       location_name='dsadsa',
                       slogan='dsadsadas',
                       url=form['event_url'])
+        if event.start_time <= event.end_time:
+            role = Role(name='ORGANIZER')
+            db.session.add(event)
+            db.session.add(role)
+            db.session.flush()
+            db.session.refresh(event)
+            db.session.refresh(role)
 
-        role = Role(name='ORGANIZER')
-        db.session.add(event)
-        db.session.add(role)
-        db.session.flush()
-        db.session.refresh(event)
-        db.session.refresh(role)
+            session_type_names = form.getlist('session_type[name]')
+            session_type_length = form.getlist('session_type[length]')
 
-        session_type_names = form.getlist('session_type[name]')
-        session_type_length = form.getlist('session_type[length]')
+            social_link_name = form.getlist('social[name]')
+            social_link_link = form.getlist('social[link]')
 
-        social_link_name = form.getlist('social[name]')
-        social_link_link = form.getlist('social[link]')
+            track_name = form.getlist('tracks[name]')
 
-        track_name = form.getlist('tracks[name]')
+            for index, name in enumerate(session_type_names):
+                session_type = SessionType(name=name, length=session_type_length[index], event_id=event.id)
+                db.session.add(session_type)
 
-        for index, name in enumerate(session_type_names):
-            session_type = SessionType(name=name, length=session_type_length[index], event_id=event.id)
-            db.session.add(session_type)
+            for index, name in enumerate(social_link_name):
+                social_link = SocialLink(name=name, link=social_link_link[index], event_id=event.id)
+                db.session.add(social_link)
 
-        for index, name in enumerate(social_link_name):
-            social_link = SocialLink(name=name, link=social_link_link[index], event_id=event.id)
-            db.session.add(social_link)
+            for index, name in enumerate(track_name):
+                track = Track(name=name, description="", track_image_url="")
+                db.session.add(track)
 
-        for index, name in enumerate(track_name):
-            track = Track(name=name, description="", track_image_url="")
-            db.session.add(track)
-
-        uer = UsersEventsRoles(event_id=event.id, user_id=login.current_user.id, role_id=role.id)
-        save_to_db(uer, "Event saved")
-        return event
-
+            uer = UsersEventsRoles(event_id=event.id, user_id=login.current_user.id, role_id=role.id)
+            save_to_db(uer, "Event saved")
+            return event
+        else:
+            raise ValidationError("start date greater than end date")
 
     @staticmethod
     def update_event(form, event):
