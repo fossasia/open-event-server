@@ -2,7 +2,9 @@ from flask.ext.restplus import Resource, Namespace, fields
 
 from open_event.models.track import Track as TrackModel
 from open_event.models.event import Event as EventModel
-from .helpers import get_object_list, get_object_or_404, get_object_in_event
+from .helpers import get_object_list, get_object_or_404, get_object_in_event,\
+    get_paginated_list
+from utils import PAGINATED_MODEL, PaginatedResourceBase
 
 api = Namespace('tracks', description='Tracks', path='/')
 
@@ -17,6 +19,10 @@ TRACK = api.model('Track', {
     'description': fields.String,
     'track_image_url': fields.String,
     'sessions': fields.List(fields.Nested(TRACK_SESSION)),
+})
+
+TRACK_PAGINATED = api.clone('TrackPaginated', PAGINATED_MODEL, {
+    'results': fields.List(fields.Nested(TRACK))
 })
 
 
@@ -41,3 +47,19 @@ class TrackList(Resource):
         get_object_or_404(EventModel, event_id)
 
         return get_object_list(TrackModel, event_id=event_id)
+
+
+@api.route('/events/<int:event_id>/tracks/page')
+class TrackListPaginated(Resource, PaginatedResourceBase):
+    @api.doc('list_tracks_paginated')
+    @api.param('start')
+    @api.param('limit')
+    @api.marshal_with(TRACK_PAGINATED)
+    def get(self, event_id):
+        """List tracks in a paginated manner"""
+        return get_paginated_list(
+            TrackModel,
+            self.api.url_for(self, event_id=event_id),
+            args=self.parser.parse_args(),
+            event_id=event_id
+        )

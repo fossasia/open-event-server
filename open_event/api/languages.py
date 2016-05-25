@@ -2,7 +2,9 @@ from flask.ext.restplus import Resource, Namespace, fields
 
 from open_event.models.session import Language as LanguageModel
 from open_event.models.event import Event as EventModel
-from .helpers import get_object_list, get_object_or_404, get_object_in_event
+from .helpers import get_object_list, get_object_or_404, get_object_in_event,\
+    get_paginated_list
+from utils import PAGINATED_MODEL, PaginatedResourceBase
 
 api = Namespace('languages', description='languages', path='/')
 
@@ -11,6 +13,10 @@ LANGUAGE = api.model('Language', {
     'name': fields.String,
     'label_en': fields.String,
     'label_de': fields.String,
+})
+
+LANGUAGE_PAGINATED = api.clone('LanguagePaginated', PAGINATED_MODEL, {
+    'results': fields.List(fields.Nested(LANGUAGE))
 })
 
 
@@ -36,3 +42,19 @@ class LanguageList(Resource):
         get_object_or_404(EventModel, event_id)
 
         return get_object_list(LanguageModel, event_id=event_id)
+
+
+@api.route('/events/<int:event_id>/languages/page')
+class LanguageListPaginated(Resource, PaginatedResourceBase):
+    @api.doc('list_languages_paginated')
+    @api.param('start')
+    @api.param('limit')
+    @api.marshal_with(LANGUAGE_PAGINATED)
+    def get(self, event_id):
+        """List languages in a paginated manner"""
+        return get_paginated_list(
+            LanguageModel,
+            self.api.url_for(self, event_id=event_id),
+            args=self.parser.parse_args(),
+            event_id=event_id
+        )

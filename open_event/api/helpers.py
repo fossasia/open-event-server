@@ -65,9 +65,9 @@ def make_url_query(args):
     return '?' + '&'.join('%s=%s' % (key, args[key]) for key in args)
 
 
-def get_paged_object(klass, url, event_id=None, args={}, **kwargs):
+def get_paginated_list(klass, url, args={}, **kwargs):
     """
-    Returns a page-response object
+    Returns a paginated response object
 
     klass - model class to query from
     url - url of the request
@@ -75,16 +75,16 @@ def get_paged_object(klass, url, event_id=None, args={}, **kwargs):
     args - args passed to the request as query parameters
     kwargs - filters for query on the `klass` model
     """
-    if event_id is not None:
-        get_object_or_404(EventModel, event_id)
-    # check if page exists
-    results = get_object_list(klass, **kwargs)
-    count = len(results)
-    if (count < args['start']):
-        abort(404, 'Page overflow')
+    if 'event_id' in kwargs:
+        get_object_or_404(EventModel, kwargs['event_id'])
     # get page bounds
     start = args['start']
     limit = args['limit']
+    # check if page exists
+    results = get_object_list(klass, **kwargs)
+    count = len(results)
+    if (count < start):
+        abort(404, 'Start position (%s) out of bound' % start)
     # make response
     obj = {}
     obj['start'] = start

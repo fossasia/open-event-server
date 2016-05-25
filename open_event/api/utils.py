@@ -1,8 +1,8 @@
 from flask_restplus import Model, fields, reqparse
 
 
-# Base Api Model for a paged response
-PAGED_MODEL = Model('PagedModel', {
+# Base Api Model for a paginated response
+PAGINATED_MODEL = Model('PaginatedModel', {
     'start': fields.Integer,
     'limit': fields.Integer,
     'count': fields.Integer,
@@ -10,7 +10,13 @@ PAGED_MODEL = Model('PagedModel', {
     'previous': fields.String
 })
 
-# Request parser for a pagination-type Resource
-PAGE_REQPARSER = reqparse.RequestParser()
-PAGE_REQPARSER.add_argument('start', type=int, default=1)
-PAGE_REQPARSER.add_argument('limit', type=int, default=20)
+
+# Base class for Paginated Resource
+class PaginatedResourceBase():
+    """
+    Paginated Resource Helper class
+    This includes basic properties used in the class
+    """
+    parser = reqparse.RequestParser()
+    parser.add_argument('start', type=int, default=1)
+    parser.add_argument('limit', type=int, default=20)

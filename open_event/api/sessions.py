@@ -2,7 +2,9 @@ from flask.ext.restplus import Resource, Namespace, fields
 
 from open_event.models.session import Session as SessionModel
 from open_event.models.event import Event as EventModel
-from .helpers import get_object_list, get_object_or_404, get_object_in_event
+from .helpers import get_object_list, get_object_or_404, get_object_in_event,\
+    get_paginated_list
+from utils import PAGINATED_MODEL, PaginatedResourceBase
 
 api = Namespace('sessions', description='Sessions', path='/')
 
@@ -47,6 +49,10 @@ SESSION = api.model('Session', {
     'microlocation': fields.Nested(SESSION_MICROLOCATION),
 })
 
+SESSION_PAGINATED = api.clone('SessionPaginated', PAGINATED_MODEL, {
+    'results': fields.List(fields.Nested(SESSION))
+})
+
 
 @api.route('/events/<int:event_id>/sessions/<int:session_id>')
 @api.response(404, 'Session not found')
@@ -70,3 +76,19 @@ class SessionList(Resource):
         get_object_or_404(EventModel, event_id)
 
         return get_object_list(SessionModel, event_id=event_id)
+
+
+@api.route('/events/<int:event_id>/sessions/page')
+class SessionListPaginated(Resource, PaginatedResourceBase):
+    @api.doc('list_sessions_paginated')
+    @api.param('start')
+    @api.param('limit')
+    @api.marshal_with(SESSION_PAGINATED)
+    def get(self, event_id):
+        """List sessions in a paginated manner"""
+        return get_paginated_list(
+            SessionModel,
+            self.api.url_for(self, event_id=event_id),
+            args=self.parser.parse_args(),
+            event_id=event_id
+        )
