@@ -11,6 +11,7 @@
     </div>
 
 </div>
+{% include '/gentelella/admin/event/details/roles.html' %}
 
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
@@ -94,13 +95,12 @@
                                     </li>
                                 </ul>
 
-
                                 <div class="stepContainer">
-                                    {% include '/gentelella/admin/event/details/draft.html' %}
-                                    {% include '/gentelella/admin/event/details/call_for_papers.html' %}
-                                    {% include '/gentelella/admin/event/details/scheduling.html' %}
-                                    {% include '/gentelella/admin/event/details/published.html' %}
-                                    {% include '/gentelella/admin/event/details/completed.html' %}
+                                    {% include '/gentelella/admin/event/details/steps/draft.html' %}
+                                    {% include '/gentelella/admin/event/details/steps/call_for_papers.html' %}
+                                    {% include '/gentelella/admin/event/details/steps/scheduling.html' %}
+                                    {% include '/gentelella/admin/event/details/steps/published.html' %}
+                                    {% include '/gentelella/admin/event/details/steps/completed.html' %}
                                 </div>
                             </div>
                         </form>

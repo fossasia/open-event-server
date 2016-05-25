@@ -1,0 +1,15 @@
+{% extends 'gentelella/admin/event/details/base_panel.html' %}
+{% block panel_title %}Manage Roles{% endblock %}
+{% block panel_content %}
+    <div class="col-md-6">
+        <h4>Permissions List</h4>
+    </div>
+    <div class="col-md-6">
+        <h4>Add user permission</h4>
+        <form>
+            <input name="user_email" placeholder="User email">
+            <input name="user_role" placeholder="Choose Role">
+            <button type="submit" class="btn btn-success">Add</button>
+        </form>
+    </div>
+{% endblock %}
