@@ -15,6 +15,7 @@
     "bootstrap-material-design": "0.5.9",
     "prism": "1.4.1",
     "moment": "^2.13.0",
-    "interact": "^1.2.6"
+    "interact": "^1.2.6",
+    "underscore": "^1.8.3"
   }
 }
