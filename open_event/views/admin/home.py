@@ -92,7 +92,7 @@ class MyHomeView(AdminIndexView):
         form = ChangePasswordForm(request.form)
         if request.method == 'POST':
             if helpers.validate_form_on_submit(form):
-                DataManager.update_user(form, hash)
+                DataManager.reset_password(form, hash)
                 return redirect(url_for('.index'))
         self._template_args['name'] = 'Change Password'
         self._template_args['form'] = form
