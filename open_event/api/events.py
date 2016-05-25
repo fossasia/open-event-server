@@ -32,7 +32,7 @@ class Event(Resource):
         return get_object_or_404(EventModel, event_id)
 
 
-@api.route('/')
+@api.route('')
 class EventList(Resource):
     @api.doc('list_events')
     @api.marshal_list_with(EVENT)
