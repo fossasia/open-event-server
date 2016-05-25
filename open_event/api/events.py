@@ -53,7 +53,10 @@ class EventListPaged(Resource):
     parser.add_argument('start', type=int, help='start position', default=1)
     parser.add_argument('limit', type=int, help='max number of items', default=20)
 
-    @api.doc('list_events_paged')
+    @api.doc('list_events_paged', params={
+        'start': 'Position to start from',
+        'limit': 'Max items to return'
+    })
     @api.marshal_with(EVENT_PAGED)
     def get(self):
         """List events in paged form"""
