@@ -1,18 +1,30 @@
 <div id="step-3" class="wizard_content" style="display: block;">
     <!--{% include '/gentelella/admin/event/details/common.html' %}-->
 
-    <div class="row">
+    <div class="row flash-message-holder">
+        <div class="col-md-12" style="text-align: center;">
+            <br>
+            <br>
+            <span class="text-muted message loading-text" style="font-weight: 100; font-size: 30px;">Sessions loading ...</span>
+            <span class="text-danger message error-text" style="font-weight: 100; font-size: 30px; display: none;">Error loading sessions.</span>
+            <br>
+            <br>
+            <br>
+        </div>
+    </div>
+    <div class="row scheduler-holder" style="display: none;">
         <div class="col-xs-3 sessions-holder" style="width: 20%; margin-left: 10px;">
             <h4>Sessions</h4><br>
             <div class="sessions-list">
 
             </div>
+            <span class="text-muted no-sessions-info" style="font-size: 24px; font-weight: 100;">
+                No Unscheduled sessions.
+            </span>
         </div>
         <div class="col-xs-9">
-            <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default date-change-btn active">May 18</button>
-                <button type="button" class="btn btn-default date-change-btn">May 19</button>
-                <button type="button" class="btn btn-default date-change-btn">May 20</button>
+            <div class="btn-group date-change-btn-holder" role="group">
+
             </div>
             <div class="timeline" style="margin-top: 10px; margin-left: 10px;">
                 <table class="timeline-table table">
@@ -91,6 +103,10 @@
     </div>
 </script>
 
+
+<script id="date-change-button-template" type="text/x-template">
+    <button type="button" class="btn btn-default date-change-btn">May 20</button>
+</script>
 
 <script id="session-template" type="text/x-template">
     <div class="session">

@@ -14,7 +14,7 @@ var time = {
         minutes: 0
     },
     end: {
-        hours: 17,
+        hours: 21,
         minutes: 0
     },
     unit: {
@@ -105,10 +105,6 @@ function updateElementTime($element) {
 
     $element.data("start-time", startTimeString).data("end-time", endTimeString);
     $element.find(".time").text(startTimeString + " to " + endTimeString);
-}
-
-function persistTimeline() {
-    // TODO Create javascript object and persist to backed using AJAX
 }
 
 function initializeInteractables() {
@@ -258,7 +254,7 @@ function processTrackSession(tracks, sessions, callback) {
             hour: startTime.hours(),
             minute: startTime.minutes()
         }).diff(topTime)).asMinutes(), true);
-        var dayString = startTime.format("MMMM Do"); // formatted as eg. 2nd May
+        var dayString = startTime.format("Do MMMM YYYY"); // formatted as eg. 2nd May
 
         if(!_.contains(days, dayString)) {
             days.push(dayString);
@@ -295,14 +291,27 @@ function processTrackSession(tracks, sessions, callback) {
         }
     });
 
-    console.log(days);
-    console.log(sessionsStore);
-    console.log(tracksStore);
 
-    loadTracksToTimeline("March 18th");
+    loadDateButtons();
     callback();
 }
 
+function loadDateButtons() {
+    var dayButtonTemplate = $("#date-change-button-template").html();
+    var $dayButtonsHolder = $(".date-change-btn-holder");
+    var sortedDays = days.sort();
+    console.log(sortedDays);
+    _.each(sortedDays, function (day, index) {
+        var $dayButton = $(dayButtonTemplate);
+        console.log(day);
+        if(index == 0) {
+            $dayButton.addClass("active");
+        }
+        $dayButton.text(day);
+        $dayButtonsHolder.append($dayButton)
+    });
+    loadTracksToTimeline(sortedDays[0]);
+}
 
 function loadTracksToTimeline(day) {
 
@@ -312,6 +321,9 @@ function loadTracksToTimeline(day) {
 
     var $tracksHolder = $(".track-container");
     var $unscheduledSessionsHolder = $(".sessions-list");
+
+    $tracksHolder.html("");
+    $unscheduledSessionsHolder.html("");
 
     var $trackElement = $(trackTemplate);
     $trackElement.data("track-id", 0);
@@ -351,23 +363,31 @@ function loadTracksToTimeline(day) {
         } else {
             $sessionElement.addClass("unscheduled");
             $unscheduledSessionsHolder.append($sessionElement);
+            $(".no-sessions-info").hide();
         }
     });
 
     updateCounterBadge();
 }
 
-function loadData(callback) {
-    $.get("https://open-event.herokuapp.com/api/v2/events/15/tracks", function(tracks){
-        $.get("https://open-event.herokuapp.com/api/v2/events/15/sessions", function(sessions){
-            processTrackSession(tracks, sessions, callback)
+function loadData(eventId, callback) {
+    $.get("https://open-event.herokuapp.com/api/v2/events/" + eventId + "/tracks", function(tracks){
+        $.get("https://open-event.herokuapp.com/api/v2/events/" + eventId + "/sessions", function(sessions){
+            processTrackSession(tracks, sessions, callback);
         });
     });
 }
 
+$(document).on("click", ".date-change-btn", function () {
+    $(this).addClass("active");
+    loadTracksToTimeline($(this).text());
+    $(this).siblings().removeClass("active");
+});
 
 $(document).ready(function () {
-    loadData(function () {
+    loadData(18, function () {
+        $(".flash-message-holder").hide();
+        $(".scheduler-holder").show();
         initializeInteractables();
     });
 });
