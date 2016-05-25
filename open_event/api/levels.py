@@ -6,7 +6,7 @@ from .helpers import get_object_list, get_object_or_404, get_object_in_event
 
 api = Namespace('levels', description='levels', path='/')
 
-LEVEL = api.model('level', {
+LEVEL = api.model('Level', {
     'id': fields.Integer(required=True),
     'name': fields.String,
     'label_en': fields.String,

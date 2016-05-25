@@ -6,7 +6,7 @@ from .helpers import get_object_list, get_object_or_404, get_object_in_event
 
 api = Namespace('sponsors', description='sponsors', path='/')
 
-SPONSOR = api.model('sponsor', {
+SPONSOR = api.model('Sponsor', {
     'id': fields.Integer(required=True),
     'name': fields.String,
     'url': fields.String,
