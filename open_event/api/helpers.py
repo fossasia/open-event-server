@@ -7,6 +7,7 @@ def _get_queryset(klass):
     """Returns the queryset for `klass` model"""
     return klass.query
 
+
 def get_object_list(klass, **kwargs):
     """Returns a list of objects of a model class. Uses other passed arguments
     with `filter_by` to filter objects.
@@ -53,5 +54,59 @@ def get_object_in_event(klass, id_, event_id):
 
     if obj.event_id != event.id:
         abort(400, 'Object does not belong to event')
+
+    return obj
+
+
+def make_url_query(args):
+    """
+    Helper function to return a query url string from a dict
+    """
+    return '?' + '&'.join('%s=%s' % (key, args[key]) for key in args)
+
+
+def get_paginated_list(klass, url, args={}, **kwargs):
+    """
+    Returns a paginated response object
+
+    klass - model class to query from
+    url - url of the request
+    event_id - to check for event_id
+    args - args passed to the request as query parameters
+    kwargs - filters for query on the `klass` model
+    """
+    if 'event_id' in kwargs:
+        get_object_or_404(EventModel, kwargs['event_id'])
+    # get page bounds
+    start = args['start']
+    limit = args['limit']
+    # check if page exists
+    results = get_object_list(klass, **kwargs)
+    count = len(results)
+    if (count < start):
+        abort(404, 'Start position (%s) out of bound' % start)
+    # make response
+    obj = {}
+    obj['start'] = start
+    obj['limit'] = limit
+    obj['count'] = count
+    # make URLs
+    # make previous url
+    args_copy = args.copy()
+    if start == 1:
+        obj['previous'] = ''
+    else:
+        args_copy['start'] = max(1, start - limit)
+        args_copy['limit'] = start - 1
+        obj['previous'] = url + make_url_query(args_copy)
+    # make next url
+    args_copy = args.copy()
+    if start + limit > count:
+        obj['next'] = ''
+    else:
+        args_copy['start'] = start + limit
+        obj['next'] = url + make_url_query(args_copy)
+    # finally extract result according to bounds
+    obj['results'] = results[(start - 1):(start - 1 + limit)]
 
     return obj

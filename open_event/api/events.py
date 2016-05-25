@@ -1,7 +1,8 @@
 from flask.ext.restplus import Resource, Namespace, fields
 
 from open_event.models.event import Event as EventModel
-from .helpers import get_object_list, get_object_or_404
+from .helpers import get_object_list, get_object_or_404, get_paginated_list
+from utils import PAGINATED_MODEL, PaginatedResourceBase
 
 api = Namespace('events', description='Events')
 
@@ -18,6 +19,10 @@ EVENT = api.model('Event', {
     'slogan': fields.String,
     'url': fields.String,
     'location_name': fields.String,
+})
+
+EVENT_PAGINATED = api.clone('EventPaginated', PAGINATED_MODEL, {
+    'results': fields.List(fields.Nested(EVENT))
 })
 
 
@@ -39,3 +44,16 @@ class EventList(Resource):
     def get(self):
         """List all events"""
         return get_object_list(EventModel)
+
+
+@api.route('/page')
+class EventListPaginated(Resource, PaginatedResourceBase):
+    @api.doc('list_events_paginated')
+    @api.param('start')
+    @api.param('limit')
+    @api.marshal_with(EVENT_PAGINATED)
+    def get(self):
+        """List events in a paginated manner"""
+        args = self.parser.parse_args()
+        url = self.api.url_for(self)  # WARN: undocumented way
+        return get_paginated_list(EventModel, url, args=args)
