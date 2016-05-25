@@ -1,50 +1,71 @@
 {% extends 'gentelella/admin/event/details/base_panel.html' %}
-{% block panel_title %}Manage Roles{% endblock %}
+{% block panel_title %}
+Manage Roles
+<button class="btn btn-info pull-right" data-toggle="modal" data-target="#add-role">+</button>
+{% endblock %}
 {% block panel_content %}
-    <div class="col-md-6">
-        <h4>Permissions List</h4>
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>User Name</th>
-                    <th>Role</th>
-                    <th>Options</th>
+<div class="col-md-12">
+    <h4>Permissions List</h4>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>User Name</th>
+            <th>Role</th>
+            <th>Options</th>
 
-                </tr>
-                </thead>
-                <tbody>
-                {% for role in event.roles %}
-                <tr>
-                    <td>{{role.user.name}}</td>
-                    <td>{{role.role.name}}</td>
-                    <td>
-                        <a class="icon"  title="See Event">
-                            <span class="glyphicon glyphicon-pencil"></span>
-                        </a>
-                        <a title="Delete record">
-                            <span class="glyphicon glyphicon-trash"></span>
-                        </a>
-                    </td>
-                </tr>
-                {%endfor%}
-                </tbody>
-            </table>
+        </tr>
+        </thead>
+        <tbody>
+        {% for role in event.roles %}
+        <tr>
+            <td>{{role.user.name}}</td>
+            <td>{{role.role.name}}</td>
+            <td>
+                <a class="icon" title="See Event">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </a>
+                <a title="Delete record">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </a>
+            </td>
+        </tr>
+        {%endfor%}
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="add-role" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add Role</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/admin/events/{{event.id}}/roles/new/" method="POST" role="form">
+                    <p>
+                        <label>User email:</label>
+                        <input name="user_id" placeholder="User" class="form-control">
+                    </p>
+                    <p> <label>Permissions:</label>
+                        <select name="user_role" id="heard" class="form-control" required="">
+                            <option value="">Choose..</option>
+                            <option value="VOLUNTEER">VOLUNTEER</option>
+                            <option value="TRACK_ORGANIZER">TRACK_ORGANIZER</option>
+                            <option value="CO_ORGANIZER">CO_ORGANIZER</option>
+                        </select>
+                    </p>
+                    <button type="submit" class="btn btn-success">Add</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
-    <div class="col-md-6">
-        <h4>Add user permission</h4>
-        <form action="/admin/events/{{event.id}}/roles/new/" method="POST" role="form">
-            <p>
-                <input name="user_id" placeholder="User" class="form-control" >
-            </p>
-            <p>
-                <select name="user_role" id="heard" class="form-control" required="">
-                    <option value="">Choose..</option>
-                    <option value="VOLUNTEER">VOLUNTEER</option>
-                    <option value="TRACK_ORGANIZER">TRACK_ORGANIZER</option>
-                    <option value="CO_ORGANIZER">CO_ORGANIZER</option>
-                </select>
-            </p>
-            <button type="submit" class="btn btn-success">Add</button>
-        </form>
-    </div>
+</div>
+
+
 {% endblock %}

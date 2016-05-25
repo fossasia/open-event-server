@@ -60,7 +60,7 @@ $( document ).ready(function() {
     });
 
     // Smart Wizard
-    $('#wizard').smartWizard({
+    $("#wizard").smartWizard({
         labelFinish:'Save Draft',
         onFinish: function(){ $("#event-create-form").submit()}
     });

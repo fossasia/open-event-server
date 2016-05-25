@@ -31,7 +31,7 @@ class AdminView(object):
         profile = ProfileView(User, db.session, name='Profile', url='profile')
 
         # self.admin.add_view(ev)
-        self.admin.add_view(events)
+        # self.admin.add_view(events)
         self.admin.add_view(profile)
 
     @staticmethod

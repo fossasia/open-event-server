@@ -6,7 +6,6 @@ class UsersEventsRoles(db.Model):
     id = db.Column(db.Integer,
                    primary_key=True)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
-
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship("User", backref="roles")
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
