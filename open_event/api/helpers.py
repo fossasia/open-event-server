@@ -7,6 +7,7 @@ def _get_queryset(klass):
     """Returns the queryset for `klass` model"""
     return klass.query
 
+
 def get_object_list(klass, **kwargs):
     """Returns a list of objects of a model class. Uses other passed arguments
     with `filter_by` to filter objects.
@@ -54,4 +55,25 @@ def get_object_in_event(klass, id_, event_id):
     if obj.event_id != event.id:
         abort(400, 'Object does not belong to event')
 
+    return obj
+
+
+def get_paged_object(klass, event_id=None, args={}, **kwargs):
+    """
+    Returns a page-response object
+    """
+    if event_id is not None:
+        get_object_or_404(EventModel, event_id)
+    # check if page exists
+    results = get_object_list(klass, **kwargs)
+    count = len(results)
+    if (count < args['start']):
+        abort(404, 'Page overflow')
+    # make response
+    obj = {}
+    obj['start'] = args['start']
+    obj['limit'] = args['limit']
+    obj['next'] = 'http://google.com'
+    obj['previous'] = 'http://google.com'
+    obj['results'] = results[(args['start'] - 1):(args['start'] - 1 + args['limit'])]
     return obj
