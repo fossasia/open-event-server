@@ -3,12 +3,47 @@
 {% block panel_content %}
     <div class="col-md-6">
         <h4>Permissions List</h4>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>Role</th>
+                    <th>Options</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {% for role in event.roles %}
+                <tr>
+                    <td>{{role.user.name}}</td>
+                    <td>{{role.role.name}}</td>
+                    <td>
+                        <a class="icon"  title="See Event">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </a>
+                        <a title="Delete record">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                    </td>
+                </tr>
+                {%endfor%}
+                </tbody>
+            </table>
     </div>
     <div class="col-md-6">
         <h4>Add user permission</h4>
-        <form>
-            <input name="user_email" placeholder="User email">
-            <input name="user_role" placeholder="Choose Role">
+        <form action="/admin/events/{{event.id}}/roles/new/" method="POST" role="form">
+            <p>
+                <input name="user_id" placeholder="User" class="form-control" >
+            </p>
+            <p>
+                <select name="user_role" id="heard" class="form-control" required="">
+                    <option value="">Choose..</option>
+                    <option value="VOLUNTEER">VOLUNTEER</option>
+                    <option value="TRACK_ORGANIZER">TRACK_ORGANIZER</option>
+                    <option value="CO_ORGANIZER">CO_ORGANIZER</option>
+                </select>
+            </p>
             <button type="submit" class="btn btn-success">Add</button>
         </form>
     </div>

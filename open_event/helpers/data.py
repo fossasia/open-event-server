@@ -547,6 +547,15 @@ class DataManager(object):
         delete_from_db(file, "File removed")
         flash("File removed")
 
+    @staticmethod
+    def add_role_to_event(form, event_id):
+        role = Role(name=form['user_role'])
+        db.session.add(role)
+        db.session.flush()
+        db.session.refresh(role)
+        uer = UsersEventsRoles(event_id=event_id, user_id=form['user_id'], role_id=role.id)
+        save_to_db(uer, "Event saved")
+
 
 def save_to_db(item, msg):
     """Convenience function to wrap a proper DB save

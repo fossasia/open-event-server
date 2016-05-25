@@ -4,9 +4,12 @@ from flask_admin import Admin
 
 from open_event.models import db
 from open_event.models.event import Event
+from open_event.models.role import Role
 from open_event.models.user import User
 from open_event.views.admin.models_views.events import EventsView
+from open_event.views.admin.models_views.roles import RoleView
 from open_event.views.admin.home import MyHomeView
+
 
 
 class AdminView(object):
@@ -20,14 +23,10 @@ class AdminView(object):
         self._add_views()
 
     def _add_views(self):
-        self._add_models_to_menu()
-
-    def _add_models_to_menu(self):
-        # ev = EventView(Event, db.session)
         events = EventsView(Event, db.session, name='Events', url='events')
-
-        # self.admin.add_view(ev)
         self.admin.add_view(events)
+        self.admin.add_view(RoleView(Role, db.session, name='Role', url='events/<event_id>/roles'))
+
 
     @staticmethod
     def init_login(app):

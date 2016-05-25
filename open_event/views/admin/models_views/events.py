@@ -31,6 +31,7 @@ class EventsView(ModelView):
     @expose('/<event_id>/', methods=('GET', 'POST'))
     def details_view(self, event_id):
         event = DataGetter.get_event(event_id)
+
         return self.render('/gentelella/admin/event/details/details.html', event=event)
 
     @expose('/<event_id>/delete/', methods=('GET','POST'))
