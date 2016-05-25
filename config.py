@@ -10,6 +10,7 @@ class Config(object):
     CSRF_ENABLED = True
     CORS_HEADERS = 'Content-Type'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
+    ERROR_404_HELP = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///../app.db')
 
 

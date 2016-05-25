@@ -1,6 +1,17 @@
-from flask.ext.restplus.errors import abort
+from flask.ext.restplus import abort
 
 from open_event.models.event import Event as EventModel
+
+
+def _error_abort(code, message):
+    """Abstraction over restplus `abort`.
+    Returns error with the status code and message.
+    """
+    error = {
+        'code': code,
+        'message': message
+    }
+    abort(code, error=error)
 
 
 def _get_queryset(klass):
@@ -24,7 +35,7 @@ def get_list_or_404(klass, **kwargs):
     """
     obj_list = get_object_list(klass, **kwargs)
     if not obj_list:
-        abort(404)
+        _error_abort(404, 'Object list is empty')
     return obj_list
 
 
@@ -36,7 +47,7 @@ def get_object_or_404(klass, id_):
     queryset = _get_queryset(klass)
     obj = queryset.get(id_)
     if obj is None:
-        abort(404, '{} does not exist'.format(klass.__name__))
+        _error_abort(404, '{} does not exist'.format(klass.__name__))
     return obj
 
 
@@ -53,7 +64,7 @@ def get_object_in_event(klass, id_, event_id):
     obj = get_object_or_404(klass, id_)
 
     if obj.event_id != event.id:
-        abort(400, 'Object does not belong to event')
+        _error_abort(400, 'Object does not belong to event')
 
     return obj
 
