@@ -6,7 +6,7 @@ from .helpers import get_object_list, get_object_or_404, get_object_in_event
 
 api = Namespace('microlocations', description='microlocations', path='/')
 
-MICROLOCATION = api.model('microlocation', {
+MICROLOCATION = api.model('Microlocation', {
     'id': fields.Integer(required=True),
     'name': fields.String,
     'latitude': fields.Float,

@@ -6,28 +6,28 @@ from .helpers import get_object_list, get_object_or_404, get_object_in_event
 
 api = Namespace('sessions', description='Sessions', path='/')
 
-TRACK = api.model('Track', {
+SESSION_TRACK = api.model('SessionTrack', {
     'id': fields.Integer(required=True),
     'name': fields.String,
 })
 
-SPEAKER = api.model('Speaker', {
+SESSION_SPEAKER = api.model('SessionSpeaker', {
     'id': fields.Integer(required=True),
     'name': fields.String,
 })
 
-LEVEL = api.model('Level', {
+SESSION_LEVEL = api.model('SessionLevel', {
     'id': fields.Integer(required=True),
     'label_en': fields.String,
 })
 
-LANGUAGE = api.model('Language', {
+SESSION_LANGUAGE = api.model('SessionLanguage', {
     'id': fields.Integer(required=True),
     'label_en': fields.String,
     'label_de': fields.String,
 })
 
-MICROLOCATION = api.model('Microlocation', {
+SESSION_MICROLOCATION = api.model('SessionMicrolocation', {
     'id': fields.Integer(required=True),
     'name': fields.String,
 })
@@ -40,11 +40,11 @@ SESSION = api.model('Session', {
     'description': fields.String,
     'start_time': fields.DateTime,
     'end_time': fields.DateTime,
-    'track': fields.Nested(TRACK),
-    'speakers': fields.List(fields.Nested(SPEAKER)),
-    'level': fields.Nested(LEVEL),
-    'language': fields.Nested(LANGUAGE),
-    'microlocation': fields.Nested(MICROLOCATION),
+    'track': fields.Nested(SESSION_TRACK),
+    'speakers': fields.List(fields.Nested(SESSION_SPEAKER)),
+    'level': fields.Nested(SESSION_LEVEL),
+    'language': fields.Nested(SESSION_LANGUAGE),
+    'microlocation': fields.Nested(SESSION_MICROLOCATION),
 })
 
 

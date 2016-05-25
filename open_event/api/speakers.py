@@ -6,7 +6,7 @@ from .helpers import get_object_list, get_object_or_404, get_object_in_event
 
 api = Namespace('speakers', description='Speakers', path='/')
 
-SESSION = api.model('Session', {
+SPEAKER_SESSION = api.model('SpeakerSession', {
     'id': fields.Integer,
     'title': fields.String,
 })
@@ -25,7 +25,7 @@ SPEAKER = api.model('Speaker', {
     'organisation': fields.String,
     'position': fields.String,
     'country': fields.String,
-    'sessions': fields.List(fields.Nested(SESSION)),
+    'sessions': fields.List(fields.Nested(SPEAKER_SESSION)),
 })
 
 
