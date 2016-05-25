@@ -35,12 +35,14 @@
                         <td>{{event.start_time}}</td>
                         <td>{{event.end_time}}</td>
                         <td>
+                            {% if event %}
                             <a class="icon" href="{{ get_url('event.details_view', event_id=event.id )}}" title="See Event">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </a>
                             <a onclick="return confirm('Are you sure you want to delete this record?');" href="{{ get_url('event.delete_view', event_id=event.id)}}" title="Delete record">
                                 <span class="glyphicon glyphicon-trash"></span>
                             </a>
+                            {% endif %}
                         </td>
                     </tr>
                     {%endfor%}
