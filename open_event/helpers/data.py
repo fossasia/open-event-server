@@ -3,6 +3,7 @@ import logging
 import os.path
 import random
 import traceback
+from datetime import datetime
 
 from flask import flash, request
 from flask.ext import login
@@ -435,13 +436,12 @@ class DataManager(object):
         Event will be saved to database with proper Event id
         :param form: view data form
         """
-        import datetime
         event = Event(name=form['name'],
                       email='dsads',
                       color='#f5f5f5',
                       logo=['logo'],
-                      start_time=datetime.datetime.now(),
-                      end_time=datetime.datetime.now(),
+                      start_time=datetime.strptime(form['start_date'], '%m/%d/%Y'),
+                      end_time=datetime.strptime(form['end_date'], '%m/%d/%Y'),
                       latitude=10.0,
                       longitude=10.0,
                       location_name='dsadsa',

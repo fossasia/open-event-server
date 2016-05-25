@@ -25,7 +25,7 @@ $( document ).ready(function() {
                         "<input type='text' class='form-control' name='social[name]' placeholder='Name'>" +
                     "</div>" +
                     "<div class='col-sm-3 input-group'>" +
-                        "<input type='text' class='form-control' name='social[length]' placeholder='Length'>" +
+                        "<input type='text' class='form-control' name='social[link]' placeholder='Length'>" +
                         "<span class='input-group-btn'>" +
                             "<button type='button' class='btn btn-danger remove-social-links'>-</button>" +
                         "</span>" +
@@ -64,5 +64,12 @@ $( document ).ready(function() {
         labelFinish:'Save Draft',
         onFinish: function(){ $(".event-create-form").submit()}
     });
+
+    $('.date-picker').daterangepicker({
+          singleDatePicker: true,
+          calender_style: "picker_4"
+        }, function(start, end, label) {
+          console.log(start.toISOString(), end.toISOString(), label);
+        });
 
 });
