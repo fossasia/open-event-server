@@ -96,12 +96,16 @@ class TestGetApiPaginatedUrls(OpenEventTestCase, PaginatedApiTestCase):
             next is not empty
         3. start from position 2 and see if prev is not empty
         """
-        path = get_path(1, name + 's', 'page')
+        if name == 'event':
+            path = get_path('page')
+        else:
+            path = get_path(1, name + 's', 'page')
         data = self._json_from_url(path)
         self.assertEqual(data['next'], '')
         self.assertEqual(data['previous'], '')
         # add second service
         with app.test_request_context():
+            create_event(name='TestEvent2')
             create_services(1)
         data = self._json_from_url(path + '?limit=1')
         self.assertIn('start=2', data['next'])
@@ -110,6 +114,27 @@ class TestGetApiPaginatedUrls(OpenEventTestCase, PaginatedApiTestCase):
         data = self._json_from_url(path + '?start=2')
         self.assertIn('limit=1', data['previous'])
         self.assertEqual(data['next'], '')
+
+    def test_event_api(self):
+        self._test_model('event')
+
+
+class TestGetApiPaginatedEvents(OpenEventTestCase):
+    """
+    Test Paginated GET API for Events
+    """
+    def setUp(self):
+        self.app = Setup.create_app()
+
+    def test_api(self):
+        path = get_path('page')
+        response = self.app.get(path)
+        self.assertEqual(response.status_code, 404, msg=response.data)
+        with app.test_request_context():
+            create_event()
+        response = self.app.get(path)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('TestEvent', response.data)
 
 
 if __name__ == '__main__':
