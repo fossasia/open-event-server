@@ -13,40 +13,6 @@
         </div>
     </div>
 
-
-    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-          <div class="modal-content">
-
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-              </button>
-              <h4 class="modal-title" id="myModalLabel">New Track</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row tracks">
-                    <div class="col-sm-12">
-                        <div class="col-sm-12 input-group">
-                            <label>Name:</label>
-                            <input type="text" class="form-control" name="name" placeholder="Name" value="Track 1">
-                        </div>
-
-                        <div class="col-sm-12 input-group">
-                            <label>Color:</label>
-                            <input class="jscolor" value="ab2567" name="color">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-
-          </div>
-        </div>
-    </div>
-
     <div class="row scheduler-holder" style="display: none;">
         <div class="col-xs-3 sessions-holder" style="width: 20%; margin-left: 10px;">
             <h4>Sessions</h4><br>
@@ -58,16 +24,28 @@
             </span>
         </div>
         <div class="col-xs-9">
-            <div class="btn-group date-change-btn-holder" role="group">
 
+            <div class="btn-toolbar" role="toolbar">
+                <div class="btn-group date-change-btn-holder" role="group">
+
+                </div>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-default">Clear Overlaps</button>
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-track-modal"
+                            style="float:right;">Add New Track
+                    </button>
+                </div>
             </div>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg" style="float:right;">Add New Track</button>
             <div class="timeline" style="margin-top: 10px; margin-left: 10px;">
                 <table class="timeline-table table">
                     <tbody>
                     <tr>
                         <td class="timeunits x1" width="55">
                             <div class="timeunit"></div>
+                            <div class="timeunit">08:00</div>
+                            <div class="timeunit">08:15</div>
+                            <div class="timeunit">08:30</div>
+                            <div class="timeunit">08:45</div>
                             <div class="timeunit">09:00</div>
                             <div class="timeunit">09:15</div>
                             <div class="timeunit">09:30</div>
@@ -118,8 +96,9 @@
                             <div class="timeunit">20:45</div>
                             <div class="timeunit">21:00</div>
                         </td>
-                        <td class="rooms x1">
-                            <div class="track-container clearfix draggable-holder" style="width: 750px; height: 1215px;">
+                        <td class="tracks x1">
+                            <div class="track-container clearfix draggable-holder"
+                                 style="width: 750px; height: 1311px;">
                             </div>
                         </td>
                     </tr>
@@ -133,7 +112,7 @@
 <script id="track-template" type="text/x-template">
     <div class="track">
         <div class="text-center track-header"><span class="badge">0</span></div>
-        <div class="track-inner" style="height: 1200px;">
+        <div class="track-inner" style="height: 1296px;">
 
         </div>
     </div>
@@ -145,10 +124,40 @@
 </script>
 
 <script id="session-template" type="text/x-template">
-    <div class="session">
-        <span class="title"></span>&nbsp;&nbsp;&nbsp;
-        <i class="small time text-muted"></i>
+    <div class="session title" data-toggle="tooltip" data-animation="false" data-placement="top" title="">
+
     </div>
 </script>
 
+<div class="modal fade" id="add-track-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
 
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">New Track</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row tracks">
+                    <div class="col-sm-12">
+                        <div class="col-sm-12 input-group">
+                            <label>Name:</label>
+                            <input type="text" class="form-control" name="name" placeholder="Name" value="Track 1">
+                        </div>
+
+                        <div class="col-sm-12 input-group">
+                            <label>Color:</label>&nbsp;&nbsp;
+                            <input class="jscolor" value="ab2567" name="color">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+
+        </div>
+    </div>
+</div>
