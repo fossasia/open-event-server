@@ -12,6 +12,7 @@
             <br>
         </div>
     </div>
+
     <div class="row scheduler-holder" style="display: none;">
         <div class="col-xs-3 sessions-holder" style="width: 20%; margin-left: 10px;">
             <h4>Sessions</h4><br>
@@ -28,11 +29,13 @@
                 <div class="btn-group date-change-btn-holder" role="group">
 
                 </div>
-                <div class="btn-group" role="group" >
+                <div class="btn-group" role="group">
                     <button type="button" class="btn btn-default">Clear Overlaps</button>
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-track-modal"
+                            style="float:right;">Add New Track
+                    </button>
                 </div>
             </div>
-
             <div class="timeline" style="margin-top: 10px; margin-left: 10px;">
                 <table class="timeline-table table">
                     <tbody>
@@ -126,4 +129,35 @@
     </div>
 </script>
 
+<div class="modal fade" id="add-track-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
 
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">New Track</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row tracks">
+                    <div class="col-sm-12">
+                        <div class="col-sm-12 input-group">
+                            <label>Name:</label>
+                            <input type="text" class="form-control" name="name" placeholder="Name" value="Track 1">
+                        </div>
+
+                        <div class="col-sm-12 input-group">
+                            <label>Color:</label>&nbsp;&nbsp;
+                            <input class="jscolor" value="ab2567" name="color">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+
+        </div>
+    </div>
+</div>
