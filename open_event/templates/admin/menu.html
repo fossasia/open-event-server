@@ -25,6 +25,7 @@
               <li {% if "/session" in request.path  %} class="active"{% endif %}><a href="/admin/event/{{event_id}}/session">Session</a><li>
               <li {% if "/track" in request.path  %} class="active"{% endif %}><a href="/admin/event/{{event_id}}/track">Track</a><li>
               <li {% if "/microlocation" in request.path  %} class="active"{% endif %}><a href="/admin/event/{{event_id}}/microlocation">Microlocation</a><li>
+              <li {% if "/scheduler" in request.path  %} class="active"{% endif %}><a href="/admin/event/{{event_id}}/scheduler">Scheduler</a><li>
 
               <li {% if "/api" in request.path  %} class="active"{% endif %}><a href="/admin/event/{{event_id}}/api">Api</a><li></li>
             {% endif %}
