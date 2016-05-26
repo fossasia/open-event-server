@@ -39,3 +39,9 @@ class EventsView(ModelView):
         if request.method == "GET":
             DataManager.delete_event(event_id)
         return redirect(url_for('.index_view'))
+
+    @expose('/current/', methods=('GET',))
+    def current_view(self):
+        events = DataGetter.get_current_events()
+        return self.render('/gentelella/admin/event/current_events.html',
+                           events=events)
