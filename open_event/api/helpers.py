@@ -71,9 +71,9 @@ def get_paginated_list(klass, url, args={}, **kwargs):
 
     klass - model class to query from
     url - url of the request
-    event_id - to check for event_id
     args - args passed to the request as query parameters
-    kwargs - filters for query on the `klass` model
+    kwargs - filters for query on the `klass` model. if
+        kwargs has event_id, check if it exists for 404
     """
     if 'event_id' in kwargs:
         get_object_or_404(EventModel, kwargs['event_id'])
