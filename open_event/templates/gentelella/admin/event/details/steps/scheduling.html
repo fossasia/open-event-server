@@ -127,7 +127,7 @@
 
     </div>
 </script>
-
+<form id="add-track-form" onsubmit="return add_track()">
 <div class="modal fade" id="add-track-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
@@ -142,21 +142,53 @@
                     <div class="col-sm-12">
                         <div class="col-sm-12 input-group">
                             <label>Name:</label>
-                            <input type="text" class="form-control" name="name" placeholder="Name" value="Track 1">
+                            <input type="text" required="required" class="form-control" name="name" placeholder="Name">
                         </div>
 
                         <div class="col-sm-12 input-group">
                             <label>Color:</label>&nbsp;&nbsp;
                             <input class="jscolor" value="ab2567" name="color">
                         </div>
+                        {% if csrf_token %}
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        {% endif %}
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" id="close-add-track" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Add Track</button>
             </div>
 
         </div>
     </div>
 </div>
+</form>
+
+<script type="text/javascript">
+    function add_track(evt) {
+        var a = $('#add-track-form').serializeArray();
+        var name = a[0].value;
+        var color = a[1].value;
+        var csrf = $('#csrf_token').val();
+        var payload = {
+                'name': name,
+                'description': '',
+                'track_image_url': '',
+                'color': color,
+                'csrf_token': csrf
+        };
+        var posting = $.ajax({
+                type: "POST",
+                url: "{{ url_for('track.create_view', event_id=event.id) }}",
+                data: payload,
+        });
+
+        posting.done(function(result){
+            console.log("Track added");
+            $('#close-add-track').click();
+        });
+
+        return false;
+    };
+</script>
