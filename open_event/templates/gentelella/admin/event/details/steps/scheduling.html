@@ -23,15 +23,26 @@
             </span>
         </div>
         <div class="col-xs-9">
-            <div class="btn-group date-change-btn-holder" role="group">
 
+            <div class="btn-toolbar" role="toolbar">
+                <div class="btn-group date-change-btn-holder" role="group">
+
+                </div>
+                <div class="btn-group" role="group" >
+                    <button type="button" class="btn btn-default">Clear Overlaps</button>
+                </div>
             </div>
+
             <div class="timeline" style="margin-top: 10px; margin-left: 10px;">
                 <table class="timeline-table table">
                     <tbody>
                     <tr>
                         <td class="timeunits x1" width="55">
                             <div class="timeunit"></div>
+                            <div class="timeunit">08:00</div>
+                            <div class="timeunit">08:15</div>
+                            <div class="timeunit">08:30</div>
+                            <div class="timeunit">08:45</div>
                             <div class="timeunit">09:00</div>
                             <div class="timeunit">09:15</div>
                             <div class="timeunit">09:30</div>
@@ -82,8 +93,9 @@
                             <div class="timeunit">20:45</div>
                             <div class="timeunit">21:00</div>
                         </td>
-                        <td class="rooms x1">
-                            <div class="track-container clearfix draggable-holder" style="width: 750px; height: 1215px;">
+                        <td class="tracks x1">
+                            <div class="track-container clearfix draggable-holder"
+                                 style="width: 750px; height: 1311px;">
                             </div>
                         </td>
                     </tr>
@@ -97,7 +109,7 @@
 <script id="track-template" type="text/x-template">
     <div class="track">
         <div class="text-center track-header"><span class="badge">0</span></div>
-        <div class="track-inner" style="height: 1200px;">
+        <div class="track-inner" style="height: 1296px;">
 
         </div>
     </div>
@@ -109,9 +121,8 @@
 </script>
 
 <script id="session-template" type="text/x-template">
-    <div class="session">
-        <span class="title"></span>&nbsp;&nbsp;&nbsp;
-        <i class="small time text-muted"></i>
+    <div class="session title" data-toggle="tooltip" data-animation="false" data-placement="top" title="">
+
     </div>
 </script>
 
