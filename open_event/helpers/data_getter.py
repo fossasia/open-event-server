@@ -197,3 +197,8 @@ class DataGetter:
         for el in uer:
             results.append(Event.query.get(el.id))
         return results
+
+    @staticmethod
+    def get_completed_events():
+        events = Event.query.filter(Event.state == 'Completed')
+        return events
