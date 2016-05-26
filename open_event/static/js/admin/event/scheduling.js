@@ -39,9 +39,35 @@ function updateCounterBadge() {
     });
 }
 
+
+function fixOverlaps() {
+    $tracks = $(".track");
+    $.each($tracks, function (index, $track) {
+        $track = $($track);
+        var $sessionElements = $track.find(".session.scheduled");
+        $.each($sessionElements, function (index, $sessionElement) {
+            $sessionElement = $($sessionElement);
+            var isColliding = sessionOverlapTest($track, $sessionElement);
+            if (!isColliding) {
+
+            } else {
+                $sessionElement.appendTo($(".sessions-list"));
+                $sessionElement.addClass('unscheduled').removeClass('scheduled').tooltip("hide").attr("data-original-title", "");
+                $sessionElement.css({
+                    "-webkit-transform": "",
+                    "transform": "",
+                    "background-color": ""
+                }).removeData("x").removeData("y");
+                $(".no-sessions-info").hide();
+            }
+        });
+    });
+    updateCounterBadge();
+}
+
 function roundOffToMultiple(val, multiple) {
     if (!multiple) {
-        multiple = 12;
+        multiple = 6;
     }
     if (val > 0) {
         var roundUp = Math.ceil(val / multiple) * multiple;
@@ -162,10 +188,10 @@ function initializeInteractables() {
                     $sessionElement.data('y', y);
                 }
 
-                if(overDraggable($sessionElement)) {
+                if (overDraggable($sessionElement)) {
                     updateElementTime($sessionElement);
                 } else {
-                    $sessionElement.tooltip("hide").attr("data-original-title","");
+                    $sessionElement.tooltip("hide").attr("data-original-title", "");
                 }
 
                 $sessionElement.data("top", roundOffToMultiple($sessionElement.offset().top - $(".tracks.x1").offset().top));
@@ -235,7 +261,7 @@ function initializeInteractables() {
                 updateColor($sessionElement);
             } else {
                 $sessionElement.appendTo($(".sessions-holder"));
-                $sessionElement.addClass('unscheduled').removeClass('scheduled').tooltip("hide").attr("data-original-title","");
+                $sessionElement.addClass('unscheduled').removeClass('scheduled').tooltip("hide").attr("data-original-title", "");
                 $sessionElement.css({
                     "-webkit-transform": "",
                     "transform": "",
@@ -253,7 +279,7 @@ function initializeInteractables() {
                     "-webkit-transform": "",
                     "transform": "",
                     "background-color": ""
-                }).removeData("x").removeData("y").tooltip("hide").attr("data-original-title","");
+                }).removeData("x").removeData("y").tooltip("hide").attr("data-original-title", "");
             }
         }
     });
@@ -407,8 +433,7 @@ function loadTracksToTimeline(day) {
         $sessionElement.ellipsis();
 
     });
-
-    updateCounterBadge();
+    fixOverlaps();
     $('[data-toggle="tooltip"]').tooltip();
 }
 
@@ -432,5 +457,11 @@ $(document).ready(function () {
         $(".flash-message-holder").hide();
         $(".scheduler-holder").show();
         initializeInteractables();
+
     });
+
+    $(".clear-overlaps-button").click(function () {
+        fixOverlaps();
+    });
+
 });
