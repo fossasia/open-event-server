@@ -249,6 +249,16 @@ class DataManager(object):
         flash('You successfully delete sponsor')
 
     @staticmethod
+    def remove_role(uer_id):
+        """
+        Role will be removed from database
+        :param uer_id: Role id to remove object
+        """
+        uer = UsersEventsRoles.query.get(uer_id)
+        delete_from_db(uer, "UER deleted")
+        flash('You successfully delete role')
+
+    @staticmethod
     def create_level(form, event_id):
         """
         Level will be saved to database with proper Event id
