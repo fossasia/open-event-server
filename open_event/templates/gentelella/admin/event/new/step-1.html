@@ -1,4 +1,4 @@
-<div id="step-1" class="wizard_content" style="display: block;">
+<div id="step-1" class="wizard_content col-md-8" style="display: block;">
     <div class="item form-group">
         <label class="control-label col-md-3 col-sm-3 col-xs-12">Name <span class="required">*</span>
         </label>
@@ -63,11 +63,12 @@
             <input name="event_url" class="form-control col-md-7 col-xs-12"/>
         </div>
     </div>
+</div>
 
-    <div class="col-md-6" style="left:330px">
-        <div id="map" style="width:400px; height:300px"></div>
-    </div>
-    <script>
+<div class="col-md-4" style="margin-left:-10rem;">
+    <div id="map" style="width:400px; height:300px"></div>
+</div>
+<script>
         var marker;
       var init_marker;
 function initMap() {
@@ -113,6 +114,5 @@ function geocodeAddress(geocoder, resultsMap) {
 }
 
 
-    </script>
-</div>
+</script>
 
