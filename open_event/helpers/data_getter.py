@@ -199,6 +199,11 @@ class DataGetter:
         return results
 
     @staticmethod
+    def get_completed_events():
+        events = Event.query.filter(Event.state == 'Completed')
+        return events
+
+    @staticmethod
     def get_current_events():
         events = Event.query.filter(Event.state != 'Completed')
         return events
