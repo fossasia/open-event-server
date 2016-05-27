@@ -10,7 +10,7 @@
 // TIME SETTINGS
 var time = {
     start: {
-        hours: 9,
+        hours: 8,
         minutes: 0
     },
     end: {
@@ -39,9 +39,35 @@ function updateCounterBadge() {
     });
 }
 
+
+function fixOverlaps() {
+    $tracks = $(".track");
+    $.each($tracks, function (index, $track) {
+        $track = $($track);
+        var $sessionElements = $track.find(".session.scheduled");
+        $.each($sessionElements, function (index, $sessionElement) {
+            $sessionElement = $($sessionElement);
+            var isColliding = sessionOverlapTest($track, $sessionElement);
+            if (!isColliding) {
+
+            } else {
+                $sessionElement.appendTo($(".sessions-list"));
+                $sessionElement.addClass('unscheduled').removeClass('scheduled').tooltip("hide").attr("data-original-title", "");
+                $sessionElement.css({
+                    "-webkit-transform": "",
+                    "transform": "",
+                    "background-color": ""
+                }).removeData("x").removeData("y");
+                $(".no-sessions-info").hide();
+            }
+        });
+    });
+    updateCounterBadge();
+}
+
 function roundOffToMultiple(val, multiple) {
     if (!multiple) {
-        multiple = 24;
+        multiple = 6;
     }
     if (val > 0) {
         var roundUp = Math.ceil(val / multiple) * multiple;
@@ -71,6 +97,30 @@ function sessionOverlapTest($track, $session) {
     return returnVal;
 }
 
+/**
+ * @return {boolean}
+ */
+function horizontallyBound($parentDiv, $childDiv, offsetAdd) {
+    var pageWidth = $parentDiv.width();
+    var pageHeight = $parentDiv.height();
+    var pageTop = $parentDiv.offset().top;
+    var pageLeft = $parentDiv.offset().left;
+    var elementWidth = $childDiv.width();
+    var elementHeight = $childDiv.height();
+    var elementTop = $childDiv.offset().top;
+    var elementLeft = $childDiv.offset().left;
+    var offset = 50 + offsetAdd;
+    return !!((elementLeft + offset >= pageLeft) && (elementTop + offset >= pageTop) && (elementLeft + elementWidth <= pageLeft + pageWidth) && (elementTop + elementHeight <= pageTop + pageHeight));
+}
+
+function restrictionCheck(x, $sessionElement) {
+    return (horizontallyBound($(".tracks"), $sessionElement, 0));
+}
+
+function overDraggable($sessionElement) {
+    return collision($(".tracks"), $sessionElement);
+}
+
 // Borrowed from http://stackoverflow.com/a/5541252/1562480. Author: BC.
 function collision($div1, $div2) {
     var x1 = $div1.offset().left;
@@ -89,10 +139,8 @@ function collision($div1, $div2) {
 }
 
 function updateColor($element) {
-    $element.css("background-color", randomColor({
-        hue: 'green',
-        luminosity: 'dark'
-    }));
+    $element.css("background-color", palette.random("800"));
+    $element.css("background-color", palette.random("800"));
 }
 
 function updateElementTime($element) {
@@ -104,7 +152,8 @@ function updateElementTime($element) {
     var endTimeString = topTime.add(topInterval + mins, "m").format("LT");
 
     $element.data("start-time", startTimeString).data("end-time", endTimeString);
-    $element.find(".time").text(startTimeString + " to " + endTimeString);
+    $element.attr("data-original-title", startTimeString + " to " + endTimeString);
+    $element.tooltip("show");
 }
 
 function initializeInteractables() {
@@ -131,12 +180,21 @@ function initializeInteractables() {
                     x = (parseFloat($sessionElement.data('x')) || 0) + event.dx,
                     y = (parseFloat($sessionElement.data('y')) || 0) + event.dy;
 
-                $sessionElement.css("-webkit-transform", 'translate(' + x + 'px, ' + y + 'px)');
-                $sessionElement.css("transform", 'translate(' + x + 'px, ' + y + 'px)');
+                if (restrictionCheck(x, $sessionElement) || $sessionElement.hasClass("unscheduled")) {
+                    $sessionElement.css("-webkit-transform", 'translate(' + x + 'px, ' + y + 'px)');
+                    $sessionElement.css("transform", 'translate(' + x + 'px, ' + y + 'px)');
 
-                $sessionElement.data('x', x);
-                $sessionElement.data('y', y);
-                $sessionElement.data("top", roundOffToMultiple($sessionElement.offset().top - $(".rooms.x1").offset().top));
+                    $sessionElement.data('x', x);
+                    $sessionElement.data('y', y);
+                }
+
+                if (overDraggable($sessionElement)) {
+                    updateElementTime($sessionElement);
+                } else {
+                    $sessionElement.tooltip("hide").attr("data-original-title", "");
+                }
+
+                $sessionElement.data("top", roundOffToMultiple($sessionElement.offset().top - $(".tracks.x1").offset().top));
             },
             // call this function on every dragend event
             onend: function (event) {
@@ -160,6 +218,8 @@ function initializeInteractables() {
                 // update the element's style
                 target.style.width = roundOffToMultiple(event.rect.width) + 'px';
                 target.style.height = roundOffToMultiple(event.rect.height) + 'px';
+
+                $(event.target).ellipsis();
 
                 updateElementTime($(event.target));
             }
@@ -201,7 +261,12 @@ function initializeInteractables() {
                 updateColor($sessionElement);
             } else {
                 $sessionElement.appendTo($(".sessions-holder"));
-                $sessionElement.addClass('unscheduled').removeClass('scheduled');
+                $sessionElement.addClass('unscheduled').removeClass('scheduled').tooltip("hide").attr("data-original-title", "");
+                $sessionElement.css({
+                    "-webkit-transform": "",
+                    "transform": "",
+                    "background-color": ""
+                }).removeData("x").removeData("y");
             }
 
         },
@@ -212,8 +277,9 @@ function initializeInteractables() {
             if (!$sessionElement.hasClass("scheduled")) {
                 $sessionElement.css({
                     "-webkit-transform": "",
-                    "transform": ""
-                }).removeData("x").removeData("y");
+                    "transform": "",
+                    "background-color": ""
+                }).removeData("x").removeData("y").tooltip("hide").attr("data-original-title", "");
             }
         }
     });
@@ -221,16 +287,16 @@ function initializeInteractables() {
 
 function minutesToPixels(minutes, forTop) {
     minutes = Math.abs(minutes);
-    if(forTop) {
-        return ((minutes/time.unit.minutes) * time.unit.pixels) + time.unit.pixels;
+    if (forTop) {
+        return ((minutes / time.unit.minutes) * time.unit.pixels) + time.unit.pixels;
     } else {
-        return (minutes/time.unit.minutes) * time.unit.pixels;
+        return (minutes / time.unit.minutes) * time.unit.pixels;
     }
 }
 
 function pixelsToMinutes(pixels, fromTop) {
     pixels = Math.abs(pixels);
-    if(fromTop) {
+    if (fromTop) {
         return ((pixels - time.unit.pixels) / time.unit.pixels) * time.unit.minutes;
     } else {
         return (pixels / time.unit.pixels) * time.unit.minutes;
@@ -244,7 +310,7 @@ var tracksStore = [];
 function processTrackSession(tracks, sessions, callback) {
 
     var topTime = moment({hour: time.start.hours, minute: time.start.minutes});
-    _.each(sessions, function(session){
+    _.each(sessions, function (session) {
 
         var startTime = moment(session.start_time);
         var endTime = moment(session.end_time);
@@ -256,7 +322,7 @@ function processTrackSession(tracks, sessions, callback) {
         }).diff(topTime)).asMinutes(), true);
         var dayString = startTime.format("Do MMMM YYYY"); // formatted as eg. 2nd May
 
-        if(!_.contains(days, dayString)) {
+        if (!_.contains(days, dayString)) {
             days.push(dayString);
         }
 
@@ -272,7 +338,7 @@ function processTrackSession(tracks, sessions, callback) {
 
         var dayIndex = _.indexOf(days, dayString);
 
-        if(_.isArray(sessionsStore[dayIndex])) {
+        if (_.isArray(sessionsStore[dayIndex])) {
             sessionsStore[dayIndex].push(sessionObject);
         } else {
             sessionsStore[dayIndex] = [sessionObject]
@@ -286,7 +352,7 @@ function processTrackSession(tracks, sessions, callback) {
             id: track.id,
             count: track.sessions.length
         };
-        if(!_.contains(tracksStore, tracksObject)) {
+        if (!_.contains(tracksStore, tracksObject)) {
             tracksStore.push(tracksObject);
         }
     });
@@ -300,11 +366,9 @@ function loadDateButtons() {
     var dayButtonTemplate = $("#date-change-button-template").html();
     var $dayButtonsHolder = $(".date-change-btn-holder");
     var sortedDays = days.sort();
-    console.log(sortedDays);
     _.each(sortedDays, function (day, index) {
         var $dayButton = $(dayButtonTemplate);
-        console.log(day);
-        if(index == 0) {
+        if (index == 0) {
             $dayButton.addClass("active");
         }
         $dayButton.text(day);
@@ -340,16 +404,16 @@ function loadTracksToTimeline(day) {
     _.each(sessionsStore[dayIndex], function (session) {
         var $sessionElement = $(sessionTemplate);
         $sessionElement.data("session-id", session.id);
-        $sessionElement.find(".title").text(session.title);
+        $sessionElement.attr("data-original-text", session.title);
 
         var scheduled = false;
-        if(!_.isNull(session.start_time) && !_.isNull(session.end_time) && session.start_time != session.end_time) {
+        if (!_.isNull(session.start_time) && !_.isNull(session.end_time) && session.start_time != session.end_time) {
             scheduled = true;
         }
 
-        if(scheduled) {
+        if (scheduled) {
             $sessionElement.addClass("scheduled");
-            $sessionElement.find(".time").text(session.start_time + " to " + session.end_time);
+            $sessionElement.attr("data-original-title", session.start_time + " to " + session.end_time);
             updateColor($sessionElement);
 
             if (_.isNull(session.track_id)) {
@@ -359,20 +423,23 @@ function loadTracksToTimeline(day) {
             $sessionElement.data("top", session.top);
             $sessionElement.css("top", session.top + "px");
             $sessionElement.css("height", minutesToPixels(session.duration) + "px");
-            $tracksHolder.find(".track[data-track-id="+session.track_id+"]").append($sessionElement);
+            $tracksHolder.find(".track[data-track-id=" + session.track_id + "]").append($sessionElement);
         } else {
             $sessionElement.addClass("unscheduled");
             $unscheduledSessionsHolder.append($sessionElement);
             $(".no-sessions-info").hide();
         }
-    });
 
-    updateCounterBadge();
+        $sessionElement.ellipsis();
+
+    });
+    fixOverlaps();
+    $('[data-toggle="tooltip"]').tooltip();
 }
 
 function loadData(eventId, callback) {
-    $.get("https://open-event.herokuapp.com/api/v2/events/" + eventId + "/tracks", function(tracks){
-        $.get("https://open-event.herokuapp.com/api/v2/events/" + eventId + "/sessions", function(sessions){
+    $.get("https://open-event.herokuapp.com/api/v2/events/" + eventId + "/tracks", function (tracks) {
+        $.get("https://open-event.herokuapp.com/api/v2/events/" + eventId + "/sessions", function (sessions) {
             processTrackSession(tracks, sessions, callback);
         });
     });
@@ -385,9 +452,16 @@ $(document).on("click", ".date-change-btn", function () {
 });
 
 $(document).ready(function () {
+    // TODO Load the event ID dynamically based on current event
     loadData(18, function () {
         $(".flash-message-holder").hide();
         $(".scheduler-holder").show();
         initializeInteractables();
+
     });
+
+    $(".clear-overlaps-button").click(function () {
+        fixOverlaps();
+    });
+
 });

@@ -1,4 +1,8 @@
-<div class="x_content">
+{% extends 'gentelella/admin/event/details/base_panel.html' %}
+{% block panel_title %}
+General Info
+{% endblock %}
+{% block panel_content %}
     <table class="table table-striped">
         <tbody>
 	        <tr><td><b>Event ID: </b></td><td>{{event.id}}</td></tr>
@@ -21,4 +25,4 @@
 	        </tr>
         </tbody>
     </table>
-</div>
+{% endblock %}

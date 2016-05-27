@@ -5,35 +5,21 @@
 {% endblock %}
 
 {% block body %}
+<div class="row">
 <div class="page-title">
     <div class="title_left">
         <h3>Event name: {{event.name}}</h3>
     </div>
 
 </div>
-
+</div>
 
 <div class="row">
-    <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="x_panel tile fixed_height_320">
-
-            <div class="row x_title">
-                <div class="col-md-6">
-                    <h3> General </h3>
-                </div>
-
-            </div>
-            <div class="x_content">
-                <div class="col-md-12 ">
-                    {% include '/gentelella/admin/event/details/common.html' %}
-                </div>
-
-                <div class="clearfix"></div>
-            </div>
-        </div>
-    </div>
+    {% include '/gentelella/admin/event/details/general_info.html' %}
+    {% include '/gentelella/admin/event/details/roles.html' %}
 </div>
-{% include '/gentelella/admin/event/details/roles.html' %}
+
+
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel" style="min-height:600px;">
@@ -117,11 +103,13 @@
     {{ super() }}
     <script src="{{ url_for('static', filename='admin/lib/interact/dist/interact.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/jquery/randomColor.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery/material.palette.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/underscore/underscore-min.js') }}"></script>
 
+    <script src="{{ url_for('static', filename='js/jquery/jquery.ellipsis.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery/jquery.smartWizard.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/details.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/scheduling.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/jscolor.js') }}"></script>
 {% endblock %}
 
