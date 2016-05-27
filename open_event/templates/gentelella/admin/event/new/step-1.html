@@ -102,7 +102,7 @@ function initMap() {
   });
   $(document).keypress(function(e) {
       var key = e.which||e.keyCode;
-      if(key==9||key==13){
+      if(key==13){
        geocodeAddress(geocoder, map);
       }
   });
