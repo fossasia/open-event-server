@@ -481,14 +481,15 @@ class DataManager(object):
         event = Event(name=form['name'],
                       email='dsads',
                       color='#f5f5f5',
-                      logo=['logo'],
+                      logo=form['logo'],
                       start_time=datetime.strptime(form['start_date'], '%m/%d/%Y'),
                       end_time=datetime.strptime(form['end_date'], '%m/%d/%Y'),
-                      latitude=10.0,
-                      longitude=10.0,
-                      location_name='dsadsa',
-                      slogan='dsadsadas',
+                      latitude=form['lat'],
+                      longitude=form['long'],
+                      location_name=form['location_name'],
+                      slogan=form['description'],
                       url=form['event_url'])
+        print "HERE"
         if event.start_time <= event.end_time:
             role = Role(name='ORGANIZER')
             db.session.add(event)
