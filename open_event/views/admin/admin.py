@@ -6,9 +6,11 @@ from open_event.models import db
 from open_event.models.event import Event
 from open_event.models.role import Role
 from open_event.models.user import User
+from open_event.models.track import Track
 from open_event.views.admin.models_views.events import EventsView
 from open_event.views.admin.models_views.roles import RoleView
 from open_event.views.admin.models_views.profile import ProfileView
+from open_event.views.admin.models_views.tracks import TracksView
 from open_event.views.admin.home import MyHomeView
 
 
@@ -27,12 +29,13 @@ class AdminView(object):
         events = EventsView(Event, db.session, name='Events', url='events')
         self.admin.add_view(events)
         self.admin.add_view(RoleView(Role, db.session, name='Role', url='events/<event_id>/roles'))
-
         profile = ProfileView(User, db.session, name='Profile', url='profile')
-
+        self.admin.add_view(profile)
+        track = TracksView(Track, db.session, name='Track', url='events/<event_id>/tracks')
+        self.admin.add_view(track)
         # self.admin.add_view(ev)
         # self.admin.add_view(events)
-        self.admin.add_view(profile)
+
 
     @staticmethod
     def init_login(app):

@@ -1,3 +1,13 @@
+/*
+
+    Layers (top to bottom)
+        Session Element - 2
+        Session Holder - 1
+        Timeline - -1
+
+
+*/
+
 .sessions-holder {
     z-index: 1 !important;
 }
@@ -7,7 +17,11 @@
     border: solid #b6b6b6 1px;
     color: #3d3d3d;
     height: 48px;
+    overflow: hidden;
     width: 216px;
+	white-space: normal;
+    padding: 5px;
+    font-size: 11px;
     display: flex;
     align-items: center;
 }
@@ -15,19 +29,14 @@
 .unscheduled {
     margin-bottom: 3px;
     cursor: all-scroll !important;
-    padding: 10px;
 }
 
 .scheduled {
     position: absolute !important;
     top: 120px;
-    padding: 5px;
     color: white;
     z-index: 2;
-}
-
-.scheduled > .time {
-    color: white;
+    border: none;
 }
 
 .timeline-table td {
@@ -61,12 +70,12 @@
     background-color: rgb(250, 250, 250);
 }
 
-.timeline .rooms {
+.timeline .tracks {
     border-right: 1px solid rgb(221, 221, 221);
     padding: 0;
 }
 
-.timeline .rooms.x1 {
+.timeline .tracks.x1 {
     background-image: url("../../img/admin/builder-timeunitbg-x1.png");
     background-repeat-x: initial;
     background-repeat-y: initial;
@@ -77,22 +86,22 @@
     background-size: initial;
 }
 
-.timeline .rooms .track-container {
+.timeline .tracks .track-container {
     overflow-x: scroll;
     overflow-y: hidden;
     white-space: nowrap;
     width: 654px;
 }
 
-.timeline .rooms .track {
+.timeline .tracks .track {
     display: inline-block;
     position: relative;
     width: 216px;
     border-right: 1px solid rgb(221, 221, 221);
-    margin-left: -4px;
+    margin-left: 0;
 }
 
-.timeline .rooms .track:first-child {
+.timeline .tracks .track:first-child {
     margin-left: 0;
 }
 
@@ -100,12 +109,12 @@
     text-align: center;
 }
 
-.timeline .rooms.x1 .track-header {
+.timeline .tracks.x1 .track-header {
     height: 23px;
     line-height: 23px;
 }
 
-.timeline .rooms .track-header {
+.timeline .tracks .track-header {
     width: 100%;
     position: absolute;
     background-color: rgb(250, 250, 250);
@@ -134,7 +143,7 @@
     display: none;
 }
 
-.timeline .rooms .track-header .badge {
+.timeline .tracks .track-header .badge {
     padding: 2px 4px;
     font-size: 10px;
     font-weight: normal;

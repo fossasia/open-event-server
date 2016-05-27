@@ -55,6 +55,19 @@ class DataManager(object):
             update_version(event_id, False, "session_ver")
 
     @staticmethod
+    def create_new_track(form, event_id):
+        """
+        Track will be saved to database with proper Event id
+        :param form: view data form
+        :param event_id: Track belongs to Event by event id
+        """
+        new_track = Track(name=form['name'],
+                          description=form['description'],
+                          event_id=event_id,
+                          track_image_url=form['track_image_url'])
+        save_to_db(new_track, "Track saved")
+
+    @staticmethod
     def update_track(form, track):
         """
         Track will be updated in database

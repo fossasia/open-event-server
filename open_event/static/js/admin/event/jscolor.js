@@ -1025,7 +1025,7 @@ var jsc = {
 		this.pointerBorderColor = '#FFFFFF'; // px
         this.pointerBorderWidth = 1; // px
         this.pointerThickness = 2; // px
-		this.zIndex = 1000;
+		this.zIndex = 2000;
 		this.container = null; // where to append the color picker (BODY element by default)
 
 
