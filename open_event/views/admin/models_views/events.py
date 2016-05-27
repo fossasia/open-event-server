@@ -45,10 +45,10 @@ class EventsView(ModelView):
     @expose('/completed/', methods=('GET',))
     def completed_events_view(self):
         events = DataGetter.get_completed_events()
-        return self.render('/gentelella/admin/event/completed_events.html', event=events)
+        return self.render('/gentelella/admin/event/completed_events.html', events=events)
 
     @expose('/current/', methods=('GET',))
     def current_view(self):
         events = DataGetter.get_current_events()
-        return self.render('/gentelella/admin/event/current_events.html', event=events)
+        return self.render('/gentelella/admin/event/current_events.html', events=events)
 
