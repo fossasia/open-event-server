@@ -474,10 +474,10 @@ class DataManager(object):
                       logo=['logo'],
                       start_time=datetime.strptime(form['start_date'], '%m/%d/%Y'),
                       end_time=datetime.strptime(form['end_date'], '%m/%d/%Y'),
-                      latitude=10.0,
-                      longitude=10.0,
-                      location_name='dsadsa',
-                      slogan='dsadsadas',
+                      latitude=form['lat'],
+                      longitude=form['long'],
+                      location_name=form['location_name'],
+                      slogan=form['slogan'],
                       url=form['event_url'])
         if event.start_time <= event.end_time:
             role = Role(name='ORGANIZER')
