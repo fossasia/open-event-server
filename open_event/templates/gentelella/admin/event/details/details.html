@@ -2,6 +2,7 @@
 {% block head_css %}
     {{ super() }}
     <link href="{{ url_for('static', filename='css/admin/scheduling.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/admin/pnotify.custom.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') }}">
 {% endblock %}
 
@@ -111,6 +112,7 @@
     <script src="{{ url_for('static', filename='js/jquery/jquery.ellipsis.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery/jquery.smartWizard.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/details.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/pnotify.custom.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/scheduling.js') }}"></script>
 {% endblock %}
 
