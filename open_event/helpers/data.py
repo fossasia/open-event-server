@@ -480,8 +480,10 @@ class DataManager(object):
                       location_name=form['location_name'],
                       slogan=form['description'],
                       url=form['event_url'])
-        print "HERE"
         if event.start_time <= event.end_time:
+            if not isinstance(form['lat'], float) and not isinstance(form['long'], float):
+                event.latitude = 0.00
+                event.longitude = 0.00
             role = Role(name='ORGANIZER')
             db.session.add(event)
             db.session.add(role)
