@@ -10,16 +10,17 @@
 // TIME SETTINGS
 var time = {
     start: {
-        hours: 8,
+        hours: 0,
         minutes: 0
     },
     end: {
-        hours: 21,
-        minutes: 0
+        hours: 23,
+        minutes: 59
     },
     unit: {
         minutes: 15,
-        pixels: 24
+        pixels: 24,
+        count: 0
     }
 };
 
@@ -144,7 +145,7 @@ function updateColor($element) {
 }
 
 function updateElementTime($element) {
-    var topTime = moment({hour: time.start.hours, minute: time.start.minutes});
+    var topTime = moment.utc({hour: time.start.hours, minute: time.start.minutes});
     var mins = pixelsToMinutes($element.outerHeight(false));
     var topInterval = pixelsToMinutes($element.data("top"), true);
 
@@ -309,17 +310,21 @@ var tracksStore = [];
 
 function processTrackSession(tracks, sessions, callback) {
 
-    var topTime = moment({hour: time.start.hours, minute: time.start.minutes});
+    var topTime = moment.utc({hour: time.start.hours, minute: time.start.minutes});
+
     _.each(sessions, function (session) {
 
-        var startTime = moment(session.start_time);
-        var endTime = moment(session.end_time);
+        var startTime = moment.utc(session.start_time);
+        var endTime = moment.utc(session.end_time);
         var duration = moment.duration(endTime.diff(startTime));
 
-        var top = minutesToPixels(moment.duration(moment({
+        var top = minutesToPixels(moment.duration(moment.utc({
             hour: startTime.hours(),
             minute: startTime.minutes()
         }).diff(topTime)).asMinutes(), true);
+
+        console.log(session.start_time);
+
         var dayString = startTime.format("Do MMMM YYYY"); // formatted as eg. 2nd May
 
         if (!_.contains(days, dayString)) {
@@ -392,12 +397,14 @@ function loadTracksToTimeline(day) {
     var $trackElement = $(trackTemplate);
     $trackElement.data("track-id", 0);
     $trackElement.find(".track-header").html("Standalone &nbsp;&nbsp;&nbsp;<span class='badge'>0</span>");
+    $trackElement.find(".track-inner").css("height", time.unit.count * time.unit.pixels + "px");
     $tracksHolder.append($trackElement);
 
     _.each(tracksStore, function (track) {
         var $trackElement = $(trackTemplate);
         $trackElement.attr("data-track-id", track.id);
         $trackElement.find(".track-header").html(track.name + "&nbsp;&nbsp;&nbsp;<span class='badge'>0</span>");
+        $trackElement.find(".track-inner").css("height", time.unit.count * time.unit.pixels + "px");
         $tracksHolder.append($trackElement);
     });
 
@@ -430,7 +437,7 @@ function loadTracksToTimeline(day) {
             $(".no-sessions-info").hide();
         }
 
-        $sessionElement.ellipsis();
+        $sessionElement.ellipsis().ellipsis();
 
     });
     fixOverlaps();
@@ -462,7 +469,26 @@ $(document).on("click", ".session.scheduled > .remove-btn", function () {
     }).removeData("x").removeData("y");
 });
 
+function generateTimeUnits() {
+    var start = moment.utc().hour(time.start.hours).minute(time.start.minutes).second(0);
+    var end = moment.utc().hour(time.end.hours).minute(time.end.minutes).second(0);
+    var $timeUnitsHolder = $(".timeunits");
+    var timeUnitsCount = 1;
+    while (start <= end) {
+        var timeUnitDiv = $("<div class='timeunit'>" + start.format('HH:mm') + "</div>");
+        $timeUnitsHolder.append(timeUnitDiv);
+        start.add(time.unit.minutes, 'minutes');
+        timeUnitsCount++;
+    }
+    $(".track-container").css("height", timeUnitsCount * time.unit.pixels);
+
+    time.unit.count = timeUnitsCount;
+}
+
 $(document).ready(function () {
+
+    generateTimeUnits();
+
     // TODO Load the event ID dynamically based on current event
     loadData(18, function () {
         $(".flash-message-holder").hide();
@@ -475,4 +501,12 @@ $(document).ready(function () {
         fixOverlaps();
     });
 
+    $(".timeline").scroll(function () {
+        var cont = $(this);
+        var el = $(cont.find(".track-inner")[0]);
+        var elementTop = el.position().top;
+        var pos = cont.scrollTop() + elementTop;
+        console.log("scroll: "+ pos);
+        cont.find(".track-header").css("top", pos + "px");
+    });
 });

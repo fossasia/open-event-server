@@ -38,6 +38,8 @@
 
             el.find(".text").text(t.text());
             t.remove();
+
+            return el;
         });
     };
 })(jQuery);
