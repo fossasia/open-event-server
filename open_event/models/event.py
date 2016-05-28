@@ -50,6 +50,8 @@ class Event(db.Model):
 
     roles = db.relationship("UsersEventsRoles", backref="event")
     state = db.Column(db.String, default="Draft")
+    closing_datetime = db.Column(db.DateTime)
+
     db.UniqueConstraint('track.name')
 
     def __init__(self,
