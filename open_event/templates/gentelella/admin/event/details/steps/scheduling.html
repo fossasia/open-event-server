@@ -123,8 +123,11 @@
 </script>
 
 <script id="session-template" type="text/x-template">
-    <div class="session title" data-toggle="tooltip" data-animation="false" data-placement="top" title="">
+    <div class="session" data-toggle="tooltip" data-animation="false" data-placement="top" title="">
+        <div class="text">
 
+        </div>
+        <i class="remove-btn glyphicon glyphicon-remove"></i>
     </div>
 </script>
 <form id="add-track-form" onsubmit="return add_track()">
@@ -147,7 +150,7 @@
 
                         <label>Color:</label>&nbsp;&nbsp;
                         <div class="input-group colorpicker-component" id="color">
-                            <input type="text" value="#e01ab5" class="form-control" name="color"/>
+                            <input type="text" value="#e01ab5" class="form-control" name="color" title="track-color"/>
                             <span class="input-group-addon"><i></i></span>
                           </div>
 
@@ -186,7 +189,7 @@
         var posting = $.ajax({
                 type: "POST",
                 url: "{{ url_for('track.create_view', event_id=event.id) }}",
-                data: payload,
+                data: payload
         });
 
         posting.done(function(result){
@@ -195,5 +198,5 @@
         });
 
         return false;
-    };
+    }
 </script>
