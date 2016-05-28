@@ -10,16 +10,17 @@
 // TIME SETTINGS
 var time = {
     start: {
-        hours: 8,
+        hours: 0,
         minutes: 0
     },
     end: {
-        hours: 21,
-        minutes: 0
+        hours: 23,
+        minutes: 59
     },
     unit: {
         minutes: 15,
-        pixels: 24
+        pixels: 24,
+        count: 0
     }
 };
 
@@ -392,12 +393,14 @@ function loadTracksToTimeline(day) {
     var $trackElement = $(trackTemplate);
     $trackElement.data("track-id", 0);
     $trackElement.find(".track-header").html("Standalone &nbsp;&nbsp;&nbsp;<span class='badge'>0</span>");
+    $trackElement.find(".track-inner").css("height", time.unit.count * time.unit.pixels + "px");
     $tracksHolder.append($trackElement);
 
     _.each(tracksStore, function (track) {
         var $trackElement = $(trackTemplate);
         $trackElement.attr("data-track-id", track.id);
         $trackElement.find(".track-header").html(track.name + "&nbsp;&nbsp;&nbsp;<span class='badge'>0</span>");
+        $trackElement.find(".track-inner").css("height", time.unit.count * time.unit.pixels + "px");
         $tracksHolder.append($trackElement);
     });
 
@@ -430,7 +433,7 @@ function loadTracksToTimeline(day) {
             $(".no-sessions-info").hide();
         }
 
-        $sessionElement.ellipsis();
+        $sessionElement.ellipsis().ellipsis();
 
     });
     fixOverlaps();
@@ -462,7 +465,26 @@ $(document).on("click", ".session.scheduled > .remove-btn", function () {
     }).removeData("x").removeData("y");
 });
 
+function generateTimeUnits() {
+    var start = moment().hour(time.start.hours).minute(time.start.minutes).second(0);
+    var end = moment().hour(time.end.hours).minute(time.end.minutes).second(0);
+    var $timeUnitsHolder = $(".timeunits");
+    var timeUnitsCount = 1;
+    while (start <= end) {
+        var timeUnitDiv = $("<div class='timeunit'>" + start.format('HH:mm') + "</div>");
+        $timeUnitsHolder.append(timeUnitDiv);
+        start.add(time.unit.minutes, 'minutes');
+        timeUnitsCount++;
+    }
+    $(".track-container").css("height", timeUnitsCount * time.unit.pixels);
+
+    time.unit.count = timeUnitsCount;
+}
+
 $(document).ready(function () {
+
+    generateTimeUnits();
+
     // TODO Load the event ID dynamically based on current event
     loadData(18, function () {
         $(".flash-message-holder").hide();
