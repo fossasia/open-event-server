@@ -145,10 +145,12 @@
                             <input type="text" required="required" class="form-control" name="name" placeholder="Name">
                         </div>
 
-                        <div class="col-sm-12 input-group">
-                            <label>Color:</label>&nbsp;&nbsp;
-                            <input class="jscolor" value="ab2567" name="color">
-                        </div>
+                        <label>Color:</label>&nbsp;&nbsp;
+                        <div class="input-group colorpicker-component" id="color">
+                            <input type="text" value="#e01ab5" class="form-control" name="color"/>
+                            <span class="input-group-addon"><i></i></span>
+                          </div>
+
                         {% if csrf_token %}
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                         {% endif %}
@@ -166,6 +168,9 @@
 </form>
 
 <script type="text/javascript">
+    $(function() {
+        $('#color').colorpicker();
+    });
     function add_track(evt) {
         var a = $('#add-track-form').serializeArray();
         var name = a[0].value;

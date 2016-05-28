@@ -2,6 +2,7 @@
 {% block head_css %}
     {{ super() }}
     <link href="{{ url_for('static', filename='css/admin/scheduling.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -103,6 +104,7 @@
     {{ super() }}
     <script src="{{ url_for('static', filename='admin/lib/interact/dist/interact.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery/material.palette.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/underscore/underscore-min.js') }}"></script>
 
