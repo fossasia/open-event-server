@@ -31,12 +31,24 @@
     cursor: all-scroll !important;
 }
 
+.unscheduled > .remove-btn {
+    display: none;
+}
+
 .scheduled {
     position: absolute !important;
     top: 120px;
     color: white;
     z-index: 2;
     border: none;
+    padding-right: 10px;
+}
+
+.scheduled > .remove-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
 }
 
 .timeline-table td {

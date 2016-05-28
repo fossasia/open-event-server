@@ -1,20 +1,20 @@
 // Borrowed from http://stackoverflow.com/a/1022672/1562480
-(function ($) {
+(function ellipsisInit($) {
     $.fn.ellipsis = function () {
         return this.each(function () {
             var el = $(this);
 
             var text = el.attr("data-original-text");
-            el.text(text);
+            el.find(".text").text(text);
 
             var multiline = true;
-            
+
             var t = $(this.cloneNode(true))
                     .hide()
-                    .css('position', 'absolute')
-                    .css('overflow', 'visible')
-                    .width(multiline ? el.width() : 'auto')
-                    .height(multiline ? 'auto' : el.height())
+                    .css("position", "absolute")
+                    .css("overflow", "visible")
+                    .width(multiline ? el.width() : "auto")
+                    .height(multiline ? "auto" : el.height())
                 ;
 
             el.after(t);
@@ -33,9 +33,10 @@
             while (text.length > 0 && func()) {
                 text = text.substr(0, text.length - 1);
                 t.text(text + "...");
+
             }
 
-            el.text(t.text());
+            el.find(".text").text(t.text());
             t.remove();
         });
     };

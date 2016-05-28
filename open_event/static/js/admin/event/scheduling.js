@@ -160,7 +160,7 @@ function initializeInteractables() {
 
     $tracks = $(".track");
 
-    interact('.session')
+    interact(".session")
         .draggable({
             // enable inertial throwing
             inertia: false,
@@ -172,7 +172,7 @@ function initializeInteractables() {
                 interval: 10
             },
             restrict: {
-                restriction: '.draggable-holder'
+                restriction: ".draggable-holder"
             },
             // call this function on every dragmove event
             onmove: function (event) {
@@ -181,8 +181,8 @@ function initializeInteractables() {
                     y = (parseFloat($sessionElement.data('y')) || 0) + event.dy;
 
                 if (restrictionCheck(x, $sessionElement) || $sessionElement.hasClass("unscheduled")) {
-                    $sessionElement.css("-webkit-transform", 'translate(' + x + 'px, ' + y + 'px)');
-                    $sessionElement.css("transform", 'translate(' + x + 'px, ' + y + 'px)');
+                    $sessionElement.css("-webkit-transform", "translate(" + x + "px, " + y + "px)");
+                    $sessionElement.css("transform", "translate(" + x + "px, " + y + "px)");
 
                     $sessionElement.data('x', x);
                     $sessionElement.data('y', y);
@@ -203,21 +203,21 @@ function initializeInteractables() {
         });
 
 
-    interact('.session')
+    interact(".session")
         .resizable({
             preserveAspectRatio: false,
             enabled: true,
             edges: {left: false, right: false, bottom: true, top: false}
         })
-        .on('resizemove', function (event) {
+        .on("resizemove", function (event) {
             if ($(event.target).hasClass("scheduled")) {
                 var target = event.target,
-                    x = (parseFloat(target.getAttribute('data-x')) || 0),
-                    y = (parseFloat(target.getAttribute('data-y')) || 0);
+                    x = (parseFloat(target.getAttribute("data-x")) || 0),
+                    y = (parseFloat(target.getAttribute("data-y")) || 0);
 
                 // update the element's style
-                target.style.width = roundOffToMultiple(event.rect.width) + 'px';
-                target.style.height = roundOffToMultiple(event.rect.height) + 'px';
+                target.style.width = roundOffToMultiple(event.rect.width) + "px";
+                target.style.height = roundOffToMultiple(event.rect.height) + "px";
 
                 $(event.target).ellipsis();
 
@@ -225,26 +225,26 @@ function initializeInteractables() {
             }
         });
 
-    interact('.track-inner').dropzone({
+    interact(".track-inner").dropzone({
         // only accept elements matching this CSS selector
-        accept: '.session',
+        accept: ".session",
         // Require a 75% element overlap for a drop to be possible
         overlap: 0.50,
 
         ondropactivate: function (event) {
-            $(event.target).addClass('drop-active');
+            $(event.target).addClass("drop-active");
         },
         ondragenter: function (event) {
-            $(event.target).addClass('drop-now');
+            $(event.target).addClass("drop-now");
         },
         ondragleave: function (event) {
-            $(event.target).removeClass('drop-now');
+            $(event.target).removeClass("drop-now");
         },
         ondrop: function (event) {
             var $sessionElement = $(event.relatedTarget);
             var $trackDropZone = $(event.target);
-            $sessionElement.removeClass('unscheduled').addClass('scheduled');
-            $trackDropZone.removeClass('drop-active').removeClass('drop-now');
+            $sessionElement.removeClass("unscheduled").addClass("scheduled");
+            $trackDropZone.removeClass("drop-active").removeClass("drop-now");
 
             $sessionElement.css({
                 "-webkit-transform": "",
@@ -261,7 +261,7 @@ function initializeInteractables() {
                 updateColor($sessionElement);
             } else {
                 $sessionElement.appendTo($(".sessions-holder"));
-                $sessionElement.addClass('unscheduled').removeClass('scheduled').tooltip("hide").attr("data-original-title", "");
+                $sessionElement.addClass("unscheduled").removeClass("scheduled").tooltip("hide").attr("data-original-title", "");
                 $sessionElement.css({
                     "-webkit-transform": "",
                     "transform": "",
@@ -273,7 +273,7 @@ function initializeInteractables() {
         ondropdeactivate: function (event) {
             var $trackDropZone = $(event.target);
             var $sessionElement = $(event.relatedTarget);
-            $trackDropZone.removeClass('drop-now').removeClass('drop-active');
+            $trackDropZone.removeClass("drop-now").removeClass("drop-active");
             if (!$sessionElement.hasClass("scheduled")) {
                 $sessionElement.css({
                     "-webkit-transform": "",
@@ -434,7 +434,7 @@ function loadTracksToTimeline(day) {
 
     });
     fixOverlaps();
-    $('[data-toggle="tooltip"]').tooltip();
+    $("[data-toggle=tooltip]").tooltip();
 }
 
 function loadData(eventId, callback) {
@@ -449,6 +449,17 @@ $(document).on("click", ".date-change-btn", function () {
     $(this).addClass("active");
     loadTracksToTimeline($(this).text());
     $(this).siblings().removeClass("active");
+});
+
+$(document).on("click", ".session.scheduled > .remove-btn", function () {
+    var $sessionElement = $(this).parent();
+    $sessionElement.appendTo($(".sessions-holder"));
+    $sessionElement.addClass("unscheduled").removeClass("scheduled").tooltip("hide").attr("data-original-title", "");
+    $sessionElement.css({
+        "-webkit-transform": "",
+        "transform": "",
+        "background-color": ""
+    }).removeData("x").removeData("y");
 });
 
 $(document).ready(function () {
