@@ -261,7 +261,7 @@ function initializeInteractables() {
                 updateColor($sessionElement);
             } else {
                 $sessionElement.appendTo($(".sessions-holder"));
-                $sessionElement.addClass('unscheduled').removeClass('scheduled').tooltip("hide").attr("data-original-title", "");
+                $sessionElement.addClass("unscheduled").removeClass("scheduled").tooltip("hide").attr("data-original-title", "");
                 $sessionElement.css({
                     "-webkit-transform": "",
                     "transform": "",
@@ -273,7 +273,7 @@ function initializeInteractables() {
         ondropdeactivate: function (event) {
             var $trackDropZone = $(event.target);
             var $sessionElement = $(event.relatedTarget);
-            $trackDropZone.removeClass('drop-now').removeClass('drop-active');
+            $trackDropZone.removeClass("drop-now").removeClass("drop-active");
             if (!$sessionElement.hasClass("scheduled")) {
                 $sessionElement.css({
                     "-webkit-transform": "",
@@ -449,6 +449,17 @@ $(document).on("click", ".date-change-btn", function () {
     $(this).addClass("active");
     loadTracksToTimeline($(this).text());
     $(this).siblings().removeClass("active");
+});
+
+$(document).on("click", ".session.scheduled > .remove-btn", function () {
+    var $sessionElement = $(this).parent();
+    $sessionElement.appendTo($(".sessions-holder"));
+    $sessionElement.addClass("unscheduled").removeClass("scheduled").tooltip("hide").attr("data-original-title", "");
+    $sessionElement.css({
+        "-webkit-transform": "",
+        "transform": "",
+        "background-color": ""
+    }).removeData("x").removeData("y");
 });
 
 $(document).ready(function () {

@@ -5,7 +5,7 @@
             var el = $(this);
 
             var text = el.attr("data-original-text");
-            el.text(text);
+            el.find(".text").text(text);
 
             var multiline = true;
 
@@ -33,9 +33,10 @@
             while (text.length > 0 && func()) {
                 text = text.substr(0, text.length - 1);
                 t.text(text + "...");
+
             }
 
-            el.text(t.text());
+            el.find(".text").text(t.text());
             t.remove();
         });
     };
