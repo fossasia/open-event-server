@@ -1,5 +1,5 @@
 // Borrowed from http://stackoverflow.com/a/1022672/1562480
-(function ($) {
+(function ellipsisInit($) {
     $.fn.ellipsis = function () {
         return this.each(function () {
             var el = $(this);
@@ -8,13 +8,13 @@
             el.text(text);
 
             var multiline = true;
-            
+
             var t = $(this.cloneNode(true))
                     .hide()
-                    .css('position', 'absolute')
-                    .css('overflow', 'visible')
-                    .width(multiline ? el.width() : 'auto')
-                    .height(multiline ? 'auto' : el.height())
+                    .css("position", "absolute")
+                    .css("overflow", "visible")
+                    .width(multiline ? el.width() : "auto")
+                    .height(multiline ? "auto" : el.height())
                 ;
 
             el.after(t);
