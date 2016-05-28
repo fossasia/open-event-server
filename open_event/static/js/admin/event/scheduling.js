@@ -149,7 +149,7 @@ function updateElementTime($element) {
     var topInterval = pixelsToMinutes($element.data("top"), true);
 
     var startTimeString = topTime.add(topInterval, 'm').format("LT");
-    var endTimeString = topTime.add(topInterval + mins, "m").format("LT");
+    var endTimeString = topTime.add(mins, "m").format("LT");
 
     $element.data("start-time", startTimeString).data("end-time", endTimeString);
     $element.attr("data-original-title", startTimeString + " to " + endTimeString);
