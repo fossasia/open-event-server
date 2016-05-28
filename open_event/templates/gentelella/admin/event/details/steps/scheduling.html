@@ -193,8 +193,21 @@
         });
 
         posting.done(function(result){
-            console.log("Track added");
             $('#close-add-track').click();
+            new PNotify({
+                title: 'Track Added',
+                text: 'Track added successfully to DB',
+                type: 'success'
+            });
+        });
+
+        posting.fail(function(){
+            $('#close-add-track').click();
+            new PNotify({
+                title: 'Error',
+                text: 'Track could not be added to DB',
+                type: 'error'
+            });
         });
 
         return false;
