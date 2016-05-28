@@ -45,7 +45,7 @@ $( document ).ready(function() {
                         "<input type='text' class='form-control' name='tracks[name]' placeholder='Name'>" +
                     "</div>" +
                     "<div class='col-sm-3 input-group'>" +
-                        "<input class='jscolor' value='ab2567' name='tracks[color]'>" +
+                        "<input id='cp1' type='text' class='form-control' value='#5367ce' name='tracks[color]' />" +
                         "<span class='input-group-btn'>" +
                             "<button type='button' class='btn btn-danger remove-tracks'>-</button>" +
                         "</span>" +
