@@ -40,8 +40,6 @@ class EventsView(ModelView):
             DataManager.delete_event(event_id)
         return redirect(url_for('.index_view'))
 
-
-
     @expose('/completed/', methods=('GET',))
     def completed_events_view(self):
         events = DataGetter.get_completed_events()

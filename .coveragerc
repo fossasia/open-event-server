@@ -1,0 +1,4 @@
+[report]
+omit =
+    */migrations/*
+    */site-packages/*

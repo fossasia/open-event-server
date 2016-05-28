@@ -1,6 +1,5 @@
 """Copyright 2015 Rafal Kowalski"""
 from . import db
-from .track import Track
 from open_event.helpers.date_formatter import DateFormatter
 
 speakers_sessions = db.Table('speakers_sessions',
@@ -41,6 +40,9 @@ class Level(db.Model):
         return '<Level %r>' % (self.name)
 
     def __str__(self):
+        return unicode(self).encode('utf-8')
+
+    def __unicode__(self):
         return self.name
 
 
@@ -73,6 +75,9 @@ class Format(db.Model):
         return '<Format %r>' % (self.name)
 
     def __str__(self):
+        return unicode(self).encode('utf-8')
+
+    def __unicode__(self):
         return self.name
 
 
@@ -109,8 +114,10 @@ class Language(db.Model):
         return '<Language %r>' % (self.name)
 
     def __str__(self):
-        return self.name
+        return unicode(self).encode('utf-8')
 
+    def __unicode__(self):
+        return self.name
 
 class Session(db.Model):
     """Session model class"""
@@ -127,8 +134,7 @@ class Session(db.Model):
     track_id = db.Column(db.Integer, db.ForeignKey('tracks.id'))
     speakers = db.relationship('Speaker',
                                secondary=speakers_sessions,
-                               backref=db.backref('sessions',
-                                                  lazy='dynamic'))
+                               backref=db.backref('sessions', lazy='dynamic'))
     level_id = db.Column(db.Integer,
                          db.ForeignKey('level.id'))
     format_id = db.Column(db.Integer,
@@ -173,23 +179,40 @@ class Session(db.Model):
     @property
     def serialize(self):
         """Return object data in easily serializeable format"""
-        return {'id': self.id,
-                'title': self.title,
-                'subtitle': self.subtitle,
-                'abstract': self.abstract,
-                'description': self.description,
-                'begin': DateFormatter().format_date(self.start_time),
-                'end': DateFormatter().format_date(self.end_time),
-                'format': {'id': self.format.name, 'label_en': self.format.label_en} if self.format else None,
-                'track': self.track.id if self.track else None,
-                'speakers': [{'id': speaker.id, 'name': speaker.name} for speaker in self.speakers],
-                'level': {'id': self.level.name, 'label_en': self.level.label_en} if self.level else None,
-                'lang': {'id': self.language.name, 'label_en': self.language.label_en,
-                         'label_de': self.language.label_de} if self.language else None,
-                'microlocation': self.microlocation.id if self.microlocation else None}
+        return {
+            'id': self.id,
+            'title': self.title,
+            'subtitle': self.subtitle,
+            'abstract': self.abstract,
+            'description': self.description,
+            'begin': DateFormatter().format_date(self.start_time),
+            'end': DateFormatter().format_date(self.end_time),
+            'format': {
+                'id': self.format.name,
+                'label_en': self.format.label_en
+            } if self.format else None,
+            'track': self.track.id if self.track else None,
+            'speakers': [
+                {'id': speaker.id, 'name': speaker.name}
+                for speaker in self.speakers
+            ],
+            'level': {
+                'id': self.level.name,
+                'label_en': self.level.label_en
+            } if self.level else None,
+            'lang': {
+                'id': self.language.name,
+                'label_en': self.language.label_en,
+                'label_de': self.language.label_de
+            } if self.language else None,
+            'microlocation': self.microlocation.id if self.microlocation else None
+        }
 
     def __repr__(self):
         return '<Session %r>' % self.title
 
     def __str__(self):
+        return unicode(self).encode('utf-8')
+
+    def __unicode__(self):
         return self.title

@@ -52,25 +52,31 @@ class Speaker(db.Model):
         return '<Speaker %r>' % self.name
 
     def __str__(self):
+        return unicode(self).encode('utf-8')
+
+    def __unicode__(self):
         return self.name
 
     @property
     def serialize(self):
         """Return object data in easily serializeable format"""
 
-        session_data = [ { 'title': session.title, 'id': session.id } for session in self.sessions ]
+        session_data = [{'title': session.title, 'id': session.id}
+                        for session in self.sessions]
 
-        return {'id': self.id,
-                'name': self.name,
-                'photo': self.photo,
-                'biography': self.biography,
-                'email': self.email,
-                'web': self.web,
-                'twitter': self.twitter,
-                'facebook': self.facebook,
-                'github': self.github,
-                'linkedin': self.linkedin,
-                'organisation': self.organisation,
-                'position': self.position,
-                'country': self.country,
-                'sessions': session_data  }
+        return {
+            'id': self.id,
+            'name': self.name,
+            'photo': self.photo,
+            'biography': self.biography,
+            'email': self.email,
+            'web': self.web,
+            'twitter': self.twitter,
+            'facebook': self.facebook,
+            'github': self.github,
+            'linkedin': self.linkedin,
+            'organisation': self.organisation,
+            'position': self.position,
+            'country': self.country,
+            'sessions': session_data
+        }

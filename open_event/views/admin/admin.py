@@ -14,7 +14,6 @@ from open_event.views.admin.models_views.tracks import TracksView
 from open_event.views.admin.home import MyHomeView
 
 
-
 class AdminView(object):
     """Main Admin class View"""
     def __init__(self, app_name):

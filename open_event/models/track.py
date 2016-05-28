@@ -12,7 +12,8 @@ class Track(db.Model):
     sessions = db.relationship('Session', backref='track', lazy='dynamic')
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
 
-    def __init__(self, name=None, description=None, event_id=None, session=None, track_image_url=None):
+    def __init__(self, name=None, description=None, event_id=None,
+                 session=None, track_image_url=None):
         self.name = name
         self.description = description
         self.event_id = event_id
@@ -23,12 +24,20 @@ class Track(db.Model):
         return '<Track %r>' % self.name
 
     def __str__(self):
+        return unicode(self).encode('utf-8')
+
+    def __unicode__(self):
         return self.name
 
     @property
     def serialize(self):
         """Return object data in easily serializeable format"""
-        return {'id': self.id,
-                'name': self.name,
-                'description': self.description,
-                'track_image_url': self.track_image_url}
+        sessions = [{'id': session.id, 'title': session.title}
+                    for session in self.sessions]
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'sessions': sessions,
+            'track_image_url': self.track_image_url,
+        }
