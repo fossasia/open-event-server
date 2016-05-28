@@ -70,3 +70,4 @@ def is_event_admin(event_id, users):
                     if is_event_admin:
                         return is_admin
     return is_admin
+

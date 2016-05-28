@@ -28,7 +28,7 @@ class EventsView(ModelView):
             return redirect(url_for('.details_view', event_id=event.id))
         return self.render('/gentelella/admin/event/new/new.html')
 
-    @expose('/<event_id>/', methods=('GET', 'POST'))
+    @expose('/<int:event_id>/', methods=('GET', 'POST'))
     def details_view(self, event_id):
         event = DataGetter.get_event(event_id)
 
@@ -40,8 +40,13 @@ class EventsView(ModelView):
             DataManager.delete_event(event_id)
         return redirect(url_for('.index_view'))
 
+    @expose('/completed/', methods=('GET',))
+    def completed_events_view(self):
+        events = DataGetter.get_completed_events()
+        return self.render('/gentelella/admin/event/completed_events.html', events=events)
+
     @expose('/current/', methods=('GET',))
     def current_view(self):
         events = DataGetter.get_current_events()
-        return self.render('/gentelella/admin/event/current_events.html',
-                           events=events)
+        return self.render('/gentelella/admin/event/current_events.html', events=events)
+

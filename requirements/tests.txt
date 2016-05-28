@@ -1,0 +1,5 @@
+-r dev.txt
+
+coverage==4.0.3
+coveralls==1.1.0
+codeclimate-test-reporter==0.1.1

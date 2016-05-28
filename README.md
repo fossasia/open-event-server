@@ -88,6 +88,12 @@ vagrant ssh
 cd /vagrant
 ```
 Now you are inside a synced up copy of the project directory. if you do `ls`, the files within the folder are the same as in your current folder.
+
+* Before running the app , install the requirements from 
+requirements.txt .
+```
+pip install -r requirements/dev.txt
+```
 * Time to run the app, if the DB migrations went well, then doing this will be okay
 ```
 python create_db.py

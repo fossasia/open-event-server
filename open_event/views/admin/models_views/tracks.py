@@ -3,6 +3,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask import request, url_for, redirect
 from ....helpers.data import DataManager
 
+
 class TracksView(ModelView):
 
     @expose('/new/', methods=('GET', 'POST'))

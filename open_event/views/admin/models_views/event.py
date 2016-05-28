@@ -145,67 +145,6 @@ class EventView(ModelView):
                            events=events,
                            owner=DataGetter.get_event_owner(event_id))
 
-    @expose('/<event_id>/track')
-    def event_tracks(self, event_id):
-        """Track list view"""
-        tracks = DataGetter.get_tracks(event_id)
-        events = DataGetter.get_all_events()
-        self.name = "Track"
-        return self.render('admin/model/track/list1.html',
-                           objects=tracks,
-                           event_id=event_id,
-                           events=events)
-
-    @expose('/<event_id>/track/new', methods=('GET', 'POST'))
-    def event_track_new(self, event_id):
-        """New track view"""
-        events = DataGetter.get_all_events()
-        form = TrackForm(request.form)
-        self.name = " Track | New"
-        if form.validate_on_submit():
-            if is_event_admin_or_editor(event_id) and is_track_name_unique_in_event(form, event_id):
-                DataManager.create_track(form, event_id)
-                flash("Track added")
-            else:
-                flash("You don't have permission!")
-            return redirect(url_for('.event_tracks', event_id=event_id))
-        return self.render('admin/model/create_model.html',
-                           form=form,
-                           event_id=event_id,
-                           events=events,
-                           cancel_url=url_for('.event_tracks', event_id=event_id))
-
-    @expose('/<event_id>/track/<track_id>/edit', methods=('GET', 'POST'))
-    def event_track_edit(self, event_id, track_id):
-        """Edit track view"""
-        track = DataGetter.get_object(Track, track_id)
-        events = DataGetter.get_all_events()
-        form = TrackForm(obj=track)
-        self.name = "Track | Edit"
-        if form.validate_on_submit() and is_track_name_unique_in_event(form, event_id, track_id):
-            if is_event_admin_or_editor(event_id):
-                DataManager.update_track(form, track)
-                flash("Track updated")
-            else:
-                flash("You don't have permission!")
-            return redirect(url_for('.event_tracks', event_id=event_id))
-        return self.render('admin/model/create_model.html',
-                           form=form,
-                           event_id=event_id,
-                           events=events,
-                           cancel_url=url_for('.event_tracks', event_id=event_id))
-
-    @expose('/<event_id>/track/<track_id>/delete', methods=('GET', 'POST'))
-    def event_track_delete(self, event_id, track_id):
-        """Delete track method"""
-        if is_event_admin_or_editor(event_id):
-            DataManager.remove_track(track_id)
-            flash("Track deleted")
-        else:
-            flash("You don't have permission!")
-        return redirect(url_for('.event_tracks',
-                                event_id=event_id))
-
     @expose('/<event_id>/session')
     def event_sessions(self, event_id):
         """Sessions list view"""

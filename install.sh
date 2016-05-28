@@ -6,6 +6,7 @@ apt-get install -y build-essential python python-dev python-setuptools python-pi
 apt-get install -y libxml2-dev libxslt1-dev
 apt-get install -y nginx uwsgi uwsgi-plugin-python
 apt-get install -y postgresql postgresql-contrib libpq-dev
+apt-get install -y libffi-dev
 
 # Edit the following to change the name of the database user that will be created:
 APP_DB_USER=open_event_user
@@ -113,7 +114,7 @@ export DATABASE_URL=postgresql://$APP_DB_USER:$APP_DB_PASS@localhost:5432/$APP_D
 cd /vagrant
 #Flask
 echo "Installing requirements"
-pip install -r requirements.txt
+pip install -r requirements/dev.txt
 
 python create_db.py
 

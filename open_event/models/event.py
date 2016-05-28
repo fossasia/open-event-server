@@ -64,8 +64,7 @@ class Event(db.Model):
                  color=None,
                  slogan=None,
                  url=None,
-                 state=None
-                 ):
+                 state=None):
         self.name = name
         self.logo = logo
         self.email = email
@@ -84,22 +83,25 @@ class Event(db.Model):
         return '<Event %r>' % self.name
 
     def __str__(self):
+        return unicode(self).encode('utf-8')
+
+    def __unicode__(self):
         return self.name
 
     @property
     def serialize(self):
         """Return object data in easily serializeable format"""
-        return {'id': self.id,
-                           'name': self.name,
-                           'logo': self.logo,
-                           'begin':
-                               DateFormatter().format_date(self.start_time),
-                           'end':
-                               DateFormatter().format_date(self.end_time),
-                           'latitude': self.latitude,
-                           'longitude': self.longitude,
-                           'location_name': self.location_name,
-                           'email': self.email,
-                           'color': self.color.get_hex() if self.color else '',
-                           'slogan': self.slogan,
-                           'url': self.url}
+        return {
+            'id': self.id,
+            'name': self.name,
+            'logo': self.logo,
+            'begin': DateFormatter().format_date(self.start_time),
+            'end': DateFormatter().format_date(self.end_time),
+            'latitude': self.latitude,
+            'longitude': self.longitude,
+            'location_name': self.location_name,
+            'email': self.email,
+            'color': self.color.get_hex() if self.color else '',
+            'slogan': self.slogan,
+            'url': self.url
+        }

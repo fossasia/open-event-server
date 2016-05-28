@@ -47,6 +47,14 @@ class DataGetter:
         return Track.query.filter_by(event_id=event_id)
 
     @staticmethod
+    def get_tracks_by_event_id():
+        """
+        :param event_id: Event id
+        :return: All Tracks filtered by event_id
+        """
+        return Track.query.filter_by(event_id=get_event_id())
+
+    @staticmethod
     def get_sessions(event_id, is_accepted=True):
         """
         :param event_id: Event id
@@ -199,6 +207,22 @@ class DataGetter:
         return results
 
     @staticmethod
+    def get_completed_events():
+        events = Event.query.filter(Event.state == 'Completed')
+        return events
+
+    @staticmethod
     def get_current_events():
         events = Event.query.filter(Event.state != 'Completed')
         return events
+
+    @staticmethod
+    def get_session(session_id):
+        """Get session by id"""
+        return Session.query.get(session_id)
+
+    @staticmethod
+    def get_speaker(speaker_id):
+        """Get speaker by id"""
+        return Speaker.query.get(speaker_id)
+
