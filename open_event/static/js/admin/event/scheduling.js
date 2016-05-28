@@ -501,4 +501,12 @@ $(document).ready(function () {
         fixOverlaps();
     });
 
+    $(".timeline").scroll(function () {
+        var cont = $(this);
+        var el = $(cont.find(".track-inner")[0]);
+        var elementTop = el.position().top;
+        var pos = cont.scrollTop() + elementTop;
+        console.log("scroll: "+ pos);
+        cont.find(".track-header").css("top", pos + "px");
+    });
 });
