@@ -6,7 +6,10 @@
             </div>
 
             <div class="col-sm-6 input-group">
-                <input id="cp1" type="text" class="form-control" value="#5367ce" name="tracks[color]" />
+                <div class="input-group colorpicker-component" id="color">
+                    <input type="text" value="#e01ab5" class="form-control" name="tracks[color]" title="track-color"/>
+                    <span class="input-group-addon"><i></i></span>
+                </div>
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-primary add-tracks">+</button>
                 </span>
@@ -18,6 +21,6 @@
 <script src="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js') }}"></script>
 <script>
      $(function() {
-         $('#cp1').colorpicker();
+         $('#color').colorpicker();
      });
 </script>

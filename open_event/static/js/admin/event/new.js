@@ -1,4 +1,5 @@
 $( document ).ready(function() {
+    var counter = 0;
     $('.add-session-type').click(function (){
         var row = "<div class='col-sm-12 row-session-type'>" +
                     "<div class='col-sm-3'>" +
@@ -40,18 +41,23 @@ $( document ).ready(function() {
     });
 
     $('.add-tracks').click(function (){
+        counter++;
         var row = "<div class='col-sm-12 row-tracks'>" +
                     "<div class='col-sm-3'>" +
                         "<input type='text' class='form-control' name='tracks[name]' placeholder='Name'>" +
                     "</div>" +
                     "<div class='col-sm-3 input-group'>" +
-                        "<input id='cp1' type='text' class='form-control' value='#5367ce' name='tracks[color]' />" +
+                        "<div class='input-group colorpicker-component' id='color"+counter+"'>"+
+                            "<input type='text' value='#e01ab5' class='form-control' name='tracks[color]' title='track-color'/>"+
+                            "<span class='input-group-addon'><i></i></span>"+
+                        "</div>" +
                         "<span class='input-group-btn'>" +
                             "<button type='button' class='btn btn-danger remove-tracks'>-</button>" +
                         "</span>" +
                     "</div>" +
-                "</div>"
-        $('.tracks').append(row)
+                "</div>";
+        $('.tracks').append(row);
+        $('#color'+counter).colorpicker();
 
     })
 
