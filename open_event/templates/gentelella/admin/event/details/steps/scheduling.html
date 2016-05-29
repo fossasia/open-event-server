@@ -13,8 +13,13 @@
     </div>
 
     <div class="row scheduler-holder" style="display: none;">
-        <div class="col-xs-3 sessions-holder" style="width: 20%; margin-left: 10px;">
+        <div class="col-xs-3 sessions-holder" style="">
             <h4>Sessions</h4><br>
+            <div class="input-group">
+                <span class="input-group-addon" id="search-addon"><i class="glyphicon glyphicon-search"></i></span>
+                <input type="search" class="form-control" id="sessions-search" placeholder="Search sessions ..." aria-describedby="search-addon">
+            </div>
+            <br>
             <div class="sessions-list">
 
             </div>
@@ -35,7 +40,8 @@
                     </button>
                 </div>
             </div>
-            <div class="timeline" style="margin-top: 10px; margin-left: 10px; height: 600px; overflow-x: hidden; overflow-y: scroll; width: 100%;">
+            <div class="timeline"
+                 style="margin-top: 10px; margin-left: 10px; height: 600px; overflow-x: hidden; overflow-y: scroll; width: 100%;">
                 <table class="timeline-table table">
                     <tbody>
                     <tr>
@@ -43,7 +49,8 @@
                             <div class="timeunit"></div>
                         </td>
                         <td class="tracks x1">
-                            <div class="track-container clearfix draggable-holder" style="width: 750px; height: 1311px;">
+                            <div class="track-container clearfix draggable-holder"
+                                 style="width: 750px; height: 1311px;">
                             </div>
                         </td>
                     </tr>
@@ -80,47 +87,50 @@
     </div>
 </script>
 <form id="add-track-form" onsubmit="return add_track()">
-<div class="modal fade" id="add-track-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
+    <div class="modal fade" id="add-track-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
 
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                </button>
-                <h4 class="modal-title">New Track</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row tracks">
-                    <div class="col-sm-12">
-                        <div class="col-sm-12 input-group">
-                            <label>Name:</label>
-                            <input type="text" required="required" class="form-control" name="name" placeholder="Name">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">New Track</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row tracks">
+                        <div class="col-sm-12">
+                            <div class="col-sm-12 input-group">
+                                <label>Name:</label>
+                                <input type="text" required="required" class="form-control" name="name"
+                                       placeholder="Name">
+                            </div>
+
+                            <label>Color:</label>&nbsp;&nbsp;
+                            <div class="input-group colorpicker-component" id="color">
+                                <input type="text" value="#e01ab5" class="form-control" name="color"
+                                       title="track-color"/>
+                                <span class="input-group-addon"><i></i></span>
+                            </div>
+
+                            {% if csrf_token %}
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            {% endif %}
                         </div>
-
-                        <label>Color:</label>&nbsp;&nbsp;
-                        <div class="input-group colorpicker-component" id="color">
-                            <input type="text" value="#e01ab5" class="form-control" name="color" title="track-color"/>
-                            <span class="input-group-addon"><i></i></span>
-                          </div>
-
-                        {% if csrf_token %}
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                        {% endif %}
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="close-add-track" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Add Track</button>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" id="close-add-track" class="btn btn-default" data-dismiss="modal">Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">Add Track</button>
+                </div>
 
+            </div>
         </div>
     </div>
-</div>
 </form>
 
 <script type="text/javascript">
-    $(function() {
+    $(function () {
         $('#color').colorpicker();
     });
     function add_track(evt) {
@@ -129,19 +139,19 @@
         var color = a[1].value;
         var csrf = $('#csrf_token').val();
         var payload = {
-                'name': name,
-                'description': '',
-                'track_image_url': '',
-                'color': color,
-                'csrf_token': csrf
+            'name': name,
+            'description': '',
+            'track_image_url': '',
+            'color': color,
+            'csrf_token': csrf
         };
         var posting = $.ajax({
-                type: "POST",
-                url: "{{ url_for('track.create_view', event_id=event.id) }}",
-                data: payload
+            type: "POST",
+            url: "{{ url_for('track.create_view', event_id=event.id) }}",
+            data: payload
         });
 
-        posting.done(function(result){
+        posting.done(function (result) {
             $('#close-add-track').click();
             new PNotify({
                 title: 'Track Added',
@@ -150,7 +160,7 @@
             });
         });
 
-        posting.fail(function(){
+        posting.fail(function () {
             $('#close-add-track').click();
             new PNotify({
                 title: 'Error',

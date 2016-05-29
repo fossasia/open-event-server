@@ -28,7 +28,6 @@ var time = {
  *
  *
  */
-
 var $tracks = $(".track");
 
 function updateCounterBadge() {
@@ -64,8 +63,20 @@ function fixOverlaps() {
         });
     });
     updateCounterBadge();
+    updateCurrentUnscheduledSessions();
 }
 
+function updateCurrentUnscheduledSessions() {
+    var $unscheduledSessions = $(".sessions-list").find(".session");
+    currentUnscheduledStore = [];
+    $.each($unscheduledSessions, function (index, $sessionElement) {
+        $sessionElement = $($sessionElement);
+        var session = {
+            id: $sessionElement.data("session-id"),
+            title: $sessionElement.attr("data-original-text")
+        };
+        currentUnscheduledStore.push(session);
+    });
 }
 
 function sessionOverlapTest($track, $session) {
@@ -257,6 +268,7 @@ function pixelsToMinutes(pixels, fromTop) {
 var days = [];
 var sessionsStore = [];
 var tracksStore = [];
+var currentUnscheduledStore = [];
 
 function processTrackSession(tracks, sessions, callback) {
 
@@ -272,8 +284,6 @@ function processTrackSession(tracks, sessions, callback) {
             hour: startTime.hours(),
             minute: startTime.minutes()
         }).diff(topTime)).asMinutes(), true);
-
-        console.log(session.start_time);
 
         var dayString = startTime.format("Do MMMM YYYY"); // formatted as eg. 2nd May
 
@@ -386,9 +396,7 @@ function loadTracksToTimeline(day) {
             $unscheduledSessionsHolder.append($sessionElement);
             $(".no-sessions-info").hide();
         }
-
         $sessionElement.ellipsis().ellipsis();
-
     });
     fixOverlaps();
     $("[data-toggle=tooltip]").tooltip();
@@ -456,7 +464,39 @@ $(document).ready(function () {
         var el = $(cont.find(".track-inner")[0]);
         var elementTop = el.position().top;
         var pos = cont.scrollTop() + elementTop;
-        console.log("scroll: "+ pos);
         cont.find(".track-header").css("top", pos + "px");
+    });
+
+    var sessionTemplate = $("#session-template").html();
+    var $unscheduledSessionsHolder = $(".sessions-list");
+
+    $("#sessions-search").valueChange(function (value) {
+
+        var filtered = [];
+        if (_.isEmpty(value) || value == "") {
+            filtered = currentUnscheduledStore;
+        } else {
+            filtered = _.filter(currentUnscheduledStore, function (session) {
+                return fuzzy_match(session.title, value);
+            });
+        }
+
+        if (filtered.length == 0) {
+            $(".no-sessions-info").show();
+        } else {
+            $(".no-sessions-info").hide();
+        }
+
+        $unscheduledSessionsHolder.html("");
+
+        _.each(filtered, function (session) {
+            var $sessionElement = $(sessionTemplate);
+            $sessionElement.data("session-id", session.id);
+            $sessionElement.attr("data-original-text", session.title);
+            $sessionElement.addClass("unscheduled");
+            $unscheduledSessionsHolder.append($sessionElement);
+            $sessionElement.ellipsis().ellipsis();
+        });
+
     });
 });
