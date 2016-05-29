@@ -28,7 +28,6 @@ var time = {
  *
  *
  */
-
 var $tracks = $(".track");
 
 function updateCounterBadge() {
@@ -64,25 +63,20 @@ function fixOverlaps() {
         });
     });
     updateCounterBadge();
+    updateCurrentUnscheduledSessions();
 }
 
-function roundOffToMultiple(val, multiple) {
-    if (!multiple) {
-        multiple = 6;
-    }
-    if (val > 0) {
-        var roundUp = Math.ceil(val / multiple) * multiple;
-        var roundDown = Math.floor(val / multiple) * multiple;
-
-        if (val >= roundDown + 12) {
-            return roundUp;
-        } else {
-            return roundDown;
-        }
-
-    } else {
-        return multiple;
-    }
+function updateCurrentUnscheduledSessions() {
+    var $unscheduledSessions = $(".sessions-list").find(".session");
+    currentUnscheduledStore = [];
+    $.each($unscheduledSessions, function (index, $sessionElement) {
+        $sessionElement = $($sessionElement);
+        var session = {
+            id: $sessionElement.data("session-id"),
+            title: $sessionElement.attr("data-original-text")
+        };
+        currentUnscheduledStore.push(session);
+    });
 }
 
 function sessionOverlapTest($track, $session) {
@@ -98,45 +92,12 @@ function sessionOverlapTest($track, $session) {
     return returnVal;
 }
 
-/**
- * @return {boolean}
- */
-function horizontallyBound($parentDiv, $childDiv, offsetAdd) {
-    var pageWidth = $parentDiv.width();
-    var pageHeight = $parentDiv.height();
-    var pageTop = $parentDiv.offset().top;
-    var pageLeft = $parentDiv.offset().left;
-    var elementWidth = $childDiv.width();
-    var elementHeight = $childDiv.height();
-    var elementTop = $childDiv.offset().top;
-    var elementLeft = $childDiv.offset().left;
-    var offset = 50 + offsetAdd;
-    return !!((elementLeft + offset >= pageLeft) && (elementTop + offset >= pageTop) && (elementLeft + elementWidth <= pageLeft + pageWidth) && (elementTop + elementHeight <= pageTop + pageHeight));
-}
-
 function restrictionCheck(x, $sessionElement) {
     return (horizontallyBound($(".tracks"), $sessionElement, 0));
 }
 
 function overDraggable($sessionElement) {
     return collision($(".tracks"), $sessionElement);
-}
-
-// Borrowed from http://stackoverflow.com/a/5541252/1562480. Author: BC.
-function collision($div1, $div2) {
-    var x1 = $div1.offset().left;
-    var y1 = $div1.offset().top;
-    var h1 = $div1.outerHeight(true);
-    var w1 = $div1.outerWidth(true);
-    var b1 = y1 + h1;
-    var r1 = x1 + w1;
-    var x2 = $div2.offset().left;
-    var y2 = $div2.offset().top;
-    var h2 = $div2.outerHeight(true);
-    var w2 = $div2.outerWidth(true);
-    var b2 = y2 + h2;
-    var r2 = x2 + w2;
-    return !(b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2);
 }
 
 function updateColor($element) {
@@ -307,6 +268,7 @@ function pixelsToMinutes(pixels, fromTop) {
 var days = [];
 var sessionsStore = [];
 var tracksStore = [];
+var currentUnscheduledStore = [];
 
 function processTrackSession(tracks, sessions, callback) {
 
@@ -322,8 +284,6 @@ function processTrackSession(tracks, sessions, callback) {
             hour: startTime.hours(),
             minute: startTime.minutes()
         }).diff(topTime)).asMinutes(), true);
-
-        console.log(session.start_time);
 
         var dayString = startTime.format("Do MMMM YYYY"); // formatted as eg. 2nd May
 
@@ -436,9 +396,7 @@ function loadTracksToTimeline(day) {
             $unscheduledSessionsHolder.append($sessionElement);
             $(".no-sessions-info").hide();
         }
-
         $sessionElement.ellipsis().ellipsis();
-
     });
     fixOverlaps();
     $("[data-toggle=tooltip]").tooltip();
@@ -506,7 +464,39 @@ $(document).ready(function () {
         var el = $(cont.find(".track-inner")[0]);
         var elementTop = el.position().top;
         var pos = cont.scrollTop() + elementTop;
-        console.log("scroll: "+ pos);
         cont.find(".track-header").css("top", pos + "px");
+    });
+
+    var sessionTemplate = $("#session-template").html();
+    var $unscheduledSessionsHolder = $(".sessions-list");
+
+    $("#sessions-search").valueChange(function (value) {
+
+        var filtered = [];
+        if (_.isEmpty(value) || value == "") {
+            filtered = currentUnscheduledStore;
+        } else {
+            filtered = _.filter(currentUnscheduledStore, function (session) {
+                return fuzzy_match(session.title, value);
+            });
+        }
+
+        if (filtered.length == 0) {
+            $(".no-sessions-info").show();
+        } else {
+            $(".no-sessions-info").hide();
+        }
+
+        $unscheduledSessionsHolder.html("");
+
+        _.each(filtered, function (session) {
+            var $sessionElement = $(sessionTemplate);
+            $sessionElement.data("session-id", session.id);
+            $sessionElement.attr("data-original-text", session.title);
+            $sessionElement.addClass("unscheduled");
+            $unscheduledSessionsHolder.append($sessionElement);
+            $sessionElement.ellipsis().ellipsis();
+        });
+
     });
 });
