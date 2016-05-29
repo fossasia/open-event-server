@@ -18,5 +18,6 @@
     "moment": "^2.13.0",
     "interact": "^1.2.6",
     "underscore": "^1.8.3"
+    "bootstrap-daterangepicker": "^2.1.20"
   }
 }
