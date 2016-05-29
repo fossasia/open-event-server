@@ -157,7 +157,6 @@ def requires_auth(f):
             # used in swagger UI
             if login.current_user.is_authenticated:
                 g.user = login.current_user
-                print login.current_user.login
                 return f(*args, **kwargs)
             else:
                 _error_abort(401, 'Authentication credentials not found')
