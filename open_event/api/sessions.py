@@ -1,13 +1,18 @@
 from flask.ext.restplus import Resource, Namespace, fields
+from sqlalchemy.orm.collections import InstrumentedList
 
-from open_event.models.session import Session as SessionModel
-from open_event.models.event import Event as EventModel
-from .helpers import get_object_list, get_object_or_404, get_object_in_event,\
-    get_paginated_list
-from utils import PAGINATED_MODEL, PaginatedResourceBase
+from open_event.models.session import Session as SessionModel, \
+    Language as LanguageModel, Level as LevelModel
+from open_event.models.track import Track as TrackModel
+from open_event.models.microlocation import Microlocation as MicrolocationModel
+from open_event.models.speaker import Speaker as SpeakerModel
+
+from .helpers import get_paginated_list, requires_auth, save_db_model
+from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO
 
 api = Namespace('sessions', description='Sessions', path='/')
 
+# Create models
 SESSION_TRACK = api.model('SessionTrack', {
     'id': fields.Integer(required=True),
     'name': fields.String,
@@ -53,6 +58,42 @@ SESSION_PAGINATED = api.clone('SessionPaginated', PAGINATED_MODEL, {
     'results': fields.List(fields.Nested(SESSION))
 })
 
+SESSION_POST = api.clone('SessionPost', SESSION, {
+    'track_id': fields.Integer,
+    'level_id': fields.Integer,
+    'language_id': fields.Integer,
+    'microlocation_id': fields.Integer
+})
+del SESSION_POST['id']
+del SESSION_POST['track']
+del SESSION_POST['level']
+del SESSION_POST['language']
+del SESSION_POST['microlocation']
+
+
+# Create DAO
+class SessionDAO(ServiceDAO):
+    def create(self, event_id, data):
+        data['track'] = TrackModel.query.get(data['track_id'])
+        data['level'] = LevelModel.query.get(data['level_id'])
+        data['language'] = LanguageModel.query.get(data['language_id'])
+        data['microlocation'] = MicrolocationModel.query.get(data['microlocation_id'])
+        data['event_id'] = event_id
+        speakers = data['speakers']
+        del data['speakers']
+        del data['track_id']
+        del data['level_id']
+        del data['language_id']
+        del data['microlocation_id']
+        session = SessionModel(**data)
+        session.speakers = InstrumentedList(
+            SpeakerModel.query.get(_['id']) for _ in speakers
+        )
+        new_session = save_db_model(session, SessionModel.__name__, event_id)
+        return self.get(event_id, new_session.id)
+
+DAO = SessionDAO(model=SessionModel)
+
 
 @api.route('/events/<int:event_id>/sessions/<int:session_id>')
 @api.response(404, 'Session not found')
@@ -62,7 +103,7 @@ class Session(Resource):
     @api.marshal_with(SESSION)
     def get(self, event_id, session_id):
         """Fetch a session given its id"""
-        return get_object_in_event(SessionModel, session_id, event_id)
+        return DAO.get(event_id, session_id)
 
 
 @api.route('/events/<int:event_id>/sessions')
@@ -72,10 +113,15 @@ class SessionList(Resource):
     @api.marshal_list_with(SESSION)
     def get(self, event_id):
         """List all sessions"""
-        # Check if an event with `event_id` exists
-        get_object_or_404(EventModel, event_id)
+        return DAO.list(event_id)
 
-        return get_object_list(SessionModel, event_id=event_id)
+    @requires_auth
+    @api.doc('create_session')
+    @api.marshal_with(SESSION)
+    @api.expect(SESSION_POST, validate=True)
+    def post(self, event_id):
+        """Create a session"""
+        return DAO.create(event_id, self.api.payload)
 
 
 @api.route('/events/<int:event_id>/sessions/page')

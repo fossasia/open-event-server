@@ -129,6 +129,16 @@ def get_paginated_list(klass, url, args={}, **kwargs):
     return obj
 
 
+def save_db_model(new_model, model_name, event_id=None):
+    """
+    Save a new/modified model to database
+    """
+    save_to_db(new_model, "Model %s saved" % model_name)
+    if not event_id:
+        update_version(event_id, False, "session_ver")
+    return new_model
+
+
 def create_service_model(model, event_id, data):
     """
     Create a new service model (microlocations, sessions, speakers etc)
