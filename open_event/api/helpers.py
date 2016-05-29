@@ -150,15 +150,18 @@ def requires_auth(f):
     """
     @wraps(f)
     def decorated(*args, **kwargs):
-        # check for active session
-        # used in swagger UI
-        if login.current_user is not None:
-            g.user = login.current_user
-            return f(*args, **kwargs)
         # check for auth headers
         auth = request.authorization
         if not auth:
-            _error_abort(401, 'Authentication headers missing')
+            # check for active session
+            # used in swagger UI
+            if login.current_user.is_authenticated:
+                g.user = login.current_user
+                print login.current_user.login
+                return f(*args, **kwargs)
+            else:
+                _error_abort(401, 'Authentication credentials not found')
+        # validate credentials
         user = UserModel.query.filter_by(login=auth.username).first()
         auth_ok = False
         if user is not None:
