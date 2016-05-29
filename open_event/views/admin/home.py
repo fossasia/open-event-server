@@ -23,7 +23,7 @@ class MyHomeView(AdminIndexView):
     @expose('/')
     def index(self):
         """Main page"""
-        self._template = "admin/auth.html"
+        self._template = "/gentelella/admin/login.html"
         if not login.current_user.is_authenticated:
             # print "Unauthenticated user"
             return redirect(url_for('.login_view'))
@@ -37,20 +37,16 @@ class MyHomeView(AdminIndexView):
     def login_view(self):
         """Login view page"""
         # handle user login
-        form = LoginForm(request.form)
+        form = request.form
         if helpers.validate_form_on_submit(form):
             user = form.get_user()
             login.login_user(user)
 
         if login.current_user.is_authenticated:
             return redirect(intended_url())
-        link = '<p>Don\'t have an account? <a href="' + url_for('.register_view') + '">Click here to register.</a></p>' \
-                                                                                    '<p><a href="' + url_for(
-                '.password_reminder_view') + '">Forgot your password</a>?</p>'
         self._template_args['form'] = form
-        self._template_args['link'] = link
         self._template_args['events'] = DataGetter.get_all_events()
-        self._template = "admin/auth.html"
+        self._template = "/gentelella/admin/login.html"
         return super(MyHomeView, self).index()
 
     @expose('/register/', methods=('GET', 'POST'))
