@@ -2,7 +2,8 @@ from flask.ext.restplus import Resource, Namespace, fields
 from sqlalchemy.orm.collections import InstrumentedList
 
 from open_event.models.session import Session as SessionModel, \
-    Language as LanguageModel, Level as LevelModel
+    Language as LanguageModel, Level as LevelModel, \
+    Format as FormatModel
 from open_event.models.track import Track as TrackModel
 from open_event.models.microlocation import Microlocation as MicrolocationModel
 from open_event.models.speaker import Speaker as SpeakerModel
@@ -68,6 +69,7 @@ SESSION_POST = api.clone('SessionPost', SESSION, {
     'track_id': fields.Integer,
     'level_id': fields.Integer,
     'language_id': fields.Integer,
+    'format_id': fields.Integer,
     'microlocation_id': fields.Integer
 })
 del SESSION_POST['id']
@@ -75,6 +77,7 @@ del SESSION_POST['track']
 del SESSION_POST['level']
 del SESSION_POST['language']
 del SESSION_POST['microlocation']
+del SESSION_POST['format']
 
 
 # Create DAO
@@ -83,6 +86,7 @@ class SessionDAO(ServiceDAO):
         data['track'] = TrackModel.query.get(data['track_id'])
         data['level'] = LevelModel.query.get(data['level_id'])
         data['language'] = LanguageModel.query.get(data['language_id'])
+        data['format'] = FormatModel.query.get(data['format_id'])
         data['microlocation'] = MicrolocationModel.query.get(data['microlocation_id'])
         data['event_id'] = event_id
         speakers = data['speakers']
@@ -90,6 +94,7 @@ class SessionDAO(ServiceDAO):
         del data['track_id']
         del data['level_id']
         del data['language_id']
+        del data['format_id']
         del data['microlocation_id']
         session = SessionModel(**data)
         session.speakers = InstrumentedList(
