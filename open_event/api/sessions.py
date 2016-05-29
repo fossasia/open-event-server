@@ -34,6 +34,11 @@ SESSION_LANGUAGE = api.model('SessionLanguage', {
     'label_de': fields.String,
 })
 
+SESSION_FORMAT = api.model('SessionFormat', {
+    'id': fields.Integer(required=True),
+    'name': fields.String
+})
+
 SESSION_MICROLOCATION = api.model('SessionMicrolocation', {
     'id': fields.Integer(required=True),
     'name': fields.String,
@@ -51,6 +56,7 @@ SESSION = api.model('Session', {
     'speakers': fields.List(fields.Nested(SESSION_SPEAKER)),
     'level': fields.Nested(SESSION_LEVEL),
     'language': fields.Nested(SESSION_LANGUAGE),
+    'format': fields.Nested(SESSION_FORMAT),
     'microlocation': fields.Nested(SESSION_MICROLOCATION),
 })
 
