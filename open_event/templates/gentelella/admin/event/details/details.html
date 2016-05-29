@@ -3,6 +3,7 @@
     {{ super() }}
     <link href="{{ url_for('static', filename='css/admin/scheduling.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/admin/pnotify.custom.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='admin/lib/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') }}">
 {% endblock %}
 
@@ -107,8 +108,9 @@
     <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery/material.palette.js') }}"></script>
-    <script src="{{ url_for('static', filename='admin/lib/underscore/underscore-min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/daterangepicker.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/lodash/dist/lodash.min.js') }}"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='admin/lib/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery/jquery.ellipsis.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery/jquery.smartWizard.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/details.js') }}"></script>

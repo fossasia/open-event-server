@@ -327,7 +327,7 @@ function processTrackSession(tracks, sessions, callback) {
 
         var dayString = startTime.format("Do MMMM YYYY"); // formatted as eg. 2nd May
 
-        if (!_.contains(days, dayString)) {
+        if (!_.includes(days, dayString)) {
             days.push(dayString);
         }
 
@@ -357,7 +357,7 @@ function processTrackSession(tracks, sessions, callback) {
             id: track.id,
             count: track.sessions.length
         };
-        if (!_.contains(tracksStore, tracksObject)) {
+        if (!_.includes(tracksStore, tracksObject)) {
             tracksStore.push(tracksObject);
         }
     });
