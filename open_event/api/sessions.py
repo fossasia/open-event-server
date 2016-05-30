@@ -67,6 +67,7 @@ SESSION_PAGINATED = api.clone('SessionPaginated', PAGINATED_MODEL, {
 
 SESSION_POST = api.clone('SessionPost', SESSION, {
     'track_id': fields.Integer,
+    'speaker_ids': fields.List(fields.Integer),
     'level_id': fields.Integer,
     'language_id': fields.Integer,
     'format_id': fields.Integer,
@@ -74,6 +75,7 @@ SESSION_POST = api.clone('SessionPost', SESSION, {
 })
 del SESSION_POST['id']
 del SESSION_POST['track']
+del SESSION_POST['speakers']
 del SESSION_POST['level']
 del SESSION_POST['language']
 del SESSION_POST['microlocation']
@@ -89,8 +91,8 @@ class SessionDAO(ServiceDAO):
         data['format'] = FormatModel.query.get(data['format_id'])
         data['microlocation'] = MicrolocationModel.query.get(data['microlocation_id'])
         data['event_id'] = event_id
-        speakers = data['speakers']
-        del data['speakers']
+        speakers = data['speaker_ids']
+        del data['speaker_ids']
         del data['track_id']
         del data['level_id']
         del data['language_id']
@@ -98,7 +100,7 @@ class SessionDAO(ServiceDAO):
         del data['microlocation_id']
         session = SessionModel(**data)
         session.speakers = InstrumentedList(
-            SpeakerModel.query.get(_['id']) for _ in speakers
+            SpeakerModel.query.get(_) for _ in speakers
         )
         new_session = save_db_model(session, SessionModel.__name__, event_id)
         return self.get(event_id, new_session.id)
