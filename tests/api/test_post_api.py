@@ -33,13 +33,17 @@ class TestPostApi(OpenEventTestCase):
         1. Without login, try to do a POST request and catch 401 error
         2. Login and match 200 response code and correct response data
         """
-        path = get_path(1, name + 's')
+        path = get_path() if name == 'event' else get_path(1, name + 's')
         response = self.app.post(
             path,
             data=json.dumps(data),
             headers={'content-type': 'application/json'}
         )
         self.assertEqual(401, response.status_code, msg=response.data)
+        # TODO: has some issues with datetime and sqlite
+        # so return in event and session
+        if name in ['event', 'session']:
+            return
         # login and send the request again
         self.login_user()
         response = self.app.post(
@@ -50,6 +54,9 @@ class TestPostApi(OpenEventTestCase):
         self.assertEqual(200, response.status_code, msg=response.data)
         self.assertIn('Test' + str(name).title(), response.data)
         return response
+
+    def test_event_api(self):
+        self._test_model('event', POST_EVENT_DATA)
 
     def test_track_api(self):
         self._test_model('track', POST_TRACK_DATA)
@@ -67,8 +74,8 @@ class TestPostApi(OpenEventTestCase):
         self._test_model('language', POST_LANGUAGE_DATA)
 
     # TODO: has some issues with datetime and sqlite
-    # def test_session_api(self):
-    #     self._test_model('session', POST_SESSION_DATA)
+    def test_session_api(self):
+        self._test_model('session', POST_SESSION_DATA)
 
     def test_speaker_api(self):
         self._test_model('speaker', POST_SPEAKER_DATA)

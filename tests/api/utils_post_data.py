@@ -2,6 +2,20 @@
 This file contains sample POST data
 """
 
+POST_EVENT_DATA = {
+    "color": "red",
+    "email": "email@gmail.com",
+    "end_time": "2016-05-30T12:12:43.891Z",
+    "latitude": 0,
+    "location_name": "TestEvent",
+    "logo": "http://imgur.com/image.png",
+    "longitude": 0,
+    "name": "TestEvent",
+    "slogan": "TestEvent",
+    "start_time": "2016-05-25T12:12:43.891Z",
+    "url": "http://website.com"
+}
+
 POST_FORMAT_DATA = {
     "label_en": "TestFormat",
     "name": "TestFormat"
