@@ -34,11 +34,11 @@ HEADERS = {
 
 def send_email_after_account_create(form):
     """Send email after account create"""
-    payload = {'to': form.email.data,
+    payload = {'to': form['email'],
                'from': 'open-event@googlegroups.com',
                'subject': "Account Created on Open Event",
                "html": ("Your Account Has Been Created! Congratulations!" \
-                        "<br/> Your login: ") + form.login.data}
+                        "<br/> Your login: ") + form['username']}
     requests.post("https://api.sendgrid.com/api/mail.send.json",
                   data=payload,
                   headers=HEADERS)
