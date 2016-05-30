@@ -48,7 +48,7 @@ class TestPostApi(OpenEventTestCase):
             headers={'content-type': 'application/json'}
         )
         self.assertEqual(200, response.status_code, msg=response.data)
-        self.assertIn('Test' + str(name).title(), msg=response.data)
+        self.assertIn('Test' + str(name).title(), response.data)
         return response
 
     def test_track_api(self):
