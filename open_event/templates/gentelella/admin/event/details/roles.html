@@ -1,4 +1,5 @@
 {% extends 'gentelella/admin/event/details/base_panel.html' %}
+{% from 'gentelella/admin/event/details/roles/_edit.html' import editrole %}
 {% block panel_title %}
 Manage Roles
 <button class="btn btn-info pull-right" data-toggle="modal" data-target="#add-role">+</button>
@@ -21,12 +22,13 @@ Manage Roles
             <td>{{role.user.name}}</td>
             <td>{{role.role.name}}</td>
             <td>
-                <a class="icon" title="See Event">
+                <a class="icon" title="Edit Role" data-toggle="modal" data-target="#edit-role-{{role.id}}">
                     <span class="glyphicon glyphicon-pencil"></span>
                 </a>
                 <a title="Delete record" onclick="return confirm('Are you sure you want to delete this record?');" href="{{ get_url('role.delete_view', event_id=event.id,uer_id=role.id)}}">
                     <span class="glyphicon glyphicon-trash"></span>
                 </a>
+                {{editrole(event, role)}}
             </td>
         </tr>
         {%endfor%}

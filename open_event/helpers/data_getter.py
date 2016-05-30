@@ -199,6 +199,10 @@ class DataGetter:
         return UsersEventsRoles.query.filter_by(user_id=login.current_user.id, event_id=event_id)
 
     @staticmethod
+    def get_user_event_role(role_id):
+        return UsersEventsRoles.query.get(role_id)
+
+    @staticmethod
     def get_user_events():
         results = []
         uer = UsersEventsRoles.query.filter_by(user_id=login.current_user.id)

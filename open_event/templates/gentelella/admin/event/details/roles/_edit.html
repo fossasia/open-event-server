@@ -1,0 +1,33 @@
+{% macro editrole(current_event, role) -%}
+<div class="modal fade" id="edit-role-{{role.id}}" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit Role</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/admin/events/{{current_event.id}}/roles/{{role.id}}/update/" method="POST" role="form">
+                    <p>
+                        <label>User email:</label>
+                        <input name="user_id" placeholder="User" class="form-control" value="{{role.user.id}}">
+                    </p>
+                    <p> <label>Permissions:</label>
+                        <select name="user_role" id="heard" class="form-control" required="">
+                            <option value="VOLUNTEER" {{'selected' if 'VOLUNTEER' == role.role.name else '' }}>VOLUNTEER</option>
+                            <option value="TRACK_ORGANIZER" {{'selected' if 'TRACK_ORGANIZER' == role.role.name else '' }}>TRACK_ORGANIZER</option>
+                            <option value="CO_ORGANIZER" {{'selected' if 'CO_ORGANIZER' == role.role.name else '' }}>CO_ORGANIZER</option>
+                        </select>
+                    </p>
+                    <button type="submit" class="btn btn-warning">Update</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{%- endmacro %}

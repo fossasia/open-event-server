@@ -595,6 +595,16 @@ class DataManager(object):
         uer = UsersEventsRoles(event_id=event_id, user_id=form['user_id'], role_id=role.id)
         save_to_db(uer, "Event saved")
 
+    @staticmethod
+    def update_user_event_role(form, uer):
+        role = Role(name=form['user_role'])
+        db.session.add(role)
+        db.session.flush()
+        db.session.refresh(role)
+        uer.user = User.query.get(int(form['user_id']))
+        uer.role_id = role.id
+        save_to_db(uer, "Event saved")
+
 
 def save_to_db(item, msg):
     """Convenience function to wrap a proper DB save
