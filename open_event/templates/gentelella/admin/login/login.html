@@ -1,0 +1,32 @@
+{% extends 'gentelella/admin/login/base.html' %}
+{% block login %}
+    <div class="animate form login_form">
+          <section class="login_content">
+            <form method="post">
+              <h1>Login Form</h1>
+              <div>
+                <input name="username" type="text" class="form-control" placeholder="Username" required="" />
+              </div>
+              <div>
+                <input name="password" type="password" class="form-control" placeholder="Password" required="" />
+              </div>
+              <div>
+                <button type="submit" class="btn btn-default" >Log in</button>
+                <a class="reset_pass" href="#">Lost your password?</a>
+              </div>
+
+              <div class="clearfix"></div>
+
+              <div class="separator">
+                <p class="change_link">New to site?
+                  <a href="/admin/register" class="to_register"> Create Account </a>
+                </p>
+
+                <div class="clearfix"></div>
+                <br />
+
+              </div>
+            </form>
+          </section>
+        </div>
+{% endblock %}

@@ -400,13 +400,15 @@ class DataManager(object):
 
     @staticmethod
     def create_user(form):
-        user = User()
+        user = User(nickname='asdf',
+                    login=form['username'],
+                    email=form['email'])
         user_detail = UserDetail()
-        form.populate_obj(user)
+
         # we hash the users password to avoid saving it as plaintext in the db,
         # remove to use plain text:
         salt = generate_random_salt()
-        password = form.password.data
+        password = form['password']
         user.password = generate_password_hash(password, salt)
         hash = random.getrandbits(128)
         user.reset_password = str(hash)
