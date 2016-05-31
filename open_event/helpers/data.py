@@ -29,10 +29,22 @@ from ..models.users_events_roles import UsersEventsRoles
 from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
 from ..models.track import Track
+from ..models.invite import Invite
 
 
 class DataManager(object):
     """Main class responsible for DataBase managing"""
+
+    @staticmethod
+    def add_invite_to_event(user_id, event_id):
+        """
+        Invite will be saved to database with proper Event id and User id
+        :param user_id: Invite belongs to User by user id
+        :param event_id: Invite belongs to Event by event id
+        """
+        new_invite = Invite(user_id=user_id,
+                          event_id=event_id)
+        save_to_db(new_invite, "Invite saved")
 
     @staticmethod
     def create_track(form, event_id):

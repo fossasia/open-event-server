@@ -7,10 +7,12 @@ from open_event.models.event import Event
 from open_event.models.role import Role
 from open_event.models.user import User
 from open_event.models.track import Track
+from open_event.models.invite import Invite
 from open_event.views.admin.models_views.events import EventsView
 from open_event.views.admin.models_views.roles import RoleView
 from open_event.views.admin.models_views.profile import ProfileView
 from open_event.views.admin.models_views.tracks import TracksView
+from open_event.views.admin.models_views.invite import InviteView
 from open_event.views.admin.home import MyHomeView
 
 
@@ -32,6 +34,7 @@ class AdminView(object):
         self.admin.add_view(profile)
         track = TracksView(Track, db.session, name='Track', url='events/<event_id>/tracks')
         self.admin.add_view(track)
+        self.admin.add_view(InviteView(Invite, db.session, name='Invite', url='events/<event_id>/invite'))
         # self.admin.add_view(ev)
         # self.admin.add_view(events)
 
