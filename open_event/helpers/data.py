@@ -441,7 +441,7 @@ class DataManager(object):
     def reset_password(form, reset_hash):
         user = User.query.filter_by(reset_password=reset_hash).first()
         salt = generate_random_salt()
-        password = form.password.data
+        password = form['new_password_again']
         user.password = generate_password_hash(password, salt)
         new_hash = random.getrandbits(128)
         user.reset_password = new_hash
