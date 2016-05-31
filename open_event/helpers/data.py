@@ -400,13 +400,15 @@ class DataManager(object):
 
     @staticmethod
     def create_user(form):
-        user = User()
+        user = User(nickname='asdf',
+                    login=form['username'],
+                    email=form['email'])
         user_detail = UserDetail()
-        form.populate_obj(user)
+
         # we hash the users password to avoid saving it as plaintext in the db,
         # remove to use plain text:
         salt = generate_random_salt()
-        password = form.password.data
+        password = form['password']
         user.password = generate_password_hash(password, salt)
         hash = random.getrandbits(128)
         user.reset_password = str(hash)
@@ -591,6 +593,16 @@ class DataManager(object):
         db.session.flush()
         db.session.refresh(role)
         uer = UsersEventsRoles(event_id=event_id, user_id=form['user_id'], role_id=role.id)
+        save_to_db(uer, "Event saved")
+
+    @staticmethod
+    def update_user_event_role(form, uer):
+        role = Role(name=form['user_role'])
+        db.session.add(role)
+        db.session.flush()
+        db.session.refresh(role)
+        uer.user = User.query.get(int(form['user_id']))
+        uer.role_id = role.id
         save_to_db(uer, "Event saved")
 
 
