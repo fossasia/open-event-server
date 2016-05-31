@@ -1,13 +1,15 @@
 /**
  * Created by Niranjan on 23-May-16.
  */
+
 /**
+ *  TIME CONFIGURATION & MANIPULATION
+ *  =================================
+ *
  *  24px == 15 minutes
  *  (Smallest unit of measurement is 15 minutes)
  *
  */
-
-// TIME SETTINGS
 var time = {
     start: {
         hours: 0,
@@ -24,65 +26,275 @@ var time = {
     }
 };
 
-/*
+/**
+ * Convert minutes to pixels based on the time unit configuration
+ * @param {number} minutes The minutes that need to be converted to pixels
+ * @param {boolean} [forTop=false] Indicate whether top header compensation needs to be done
+ * @returns {number} The pixels
+ */
+function minutesToPixels(minutes, forTop) {
+    minutes = Math.abs(minutes);
+    if (forTop) {
+        return ((minutes / time.unit.minutes) * time.unit.pixels) + time.unit.pixels;
+    } else {
+        return (minutes / time.unit.minutes) * time.unit.pixels;
+    }
+}
+
+/**
+ * Convert pixels to minutes based on the time unit configuration
+ * @param {number} pixels The pixels that need to be converted to minutes
+ * @param {boolean} [fromTop=false] Indicate whether top header compensation needs to be done
+ * @returns {number} The minutes
+ */
+function pixelsToMinutes(pixels, fromTop) {
+    pixels = Math.abs(pixels);
+    if (fromTop) {
+        return ((pixels - time.unit.pixels) / time.unit.pixels) * time.unit.minutes;
+    } else {
+        return (pixels / time.unit.pixels) * time.unit.minutes;
+    }
+}
+
+/**
+ * IN-MEMORY DATA STORES
+ * =====================
  *
+ * @type {Array}
+ */
+var days = [];
+var sessionsStore = [];
+var tracksStore = [];
+var unscheduledStore = [];
+
+/**
+ * jQuery OBJECT REFERENCES
+ * ========================
  *
+ * @type {jQuery|HTMLElement}
  */
 var $tracks = $(".track");
+var $unscheduledSessionsList = $(".sessions-list");
+var $tracksHolder = $(".track-container");
+var $unscheduledSessionsHolder = $unscheduledSessionsList;
+var $noSessionsInfoBox = $(".no-sessions-info");
+var $dayButtonsHolder = $(".date-change-btn-holder");
 
-function updateCounterBadge() {
-    $tracks = $(".track");
-    $.each($tracks, function (index, $track) {
-        $track = $($track);
+/**
+ * TEMPLATE STRINGS
+ * ================
+ *
+ * @type {string}
+ */
+var trackTemplate = $("#track-template").html();
+var sessionTemplate = $("#session-template").html();
+var dayButtonTemplate = $("#date-change-button-template").html();
+
+
+/**
+ * Data Getters
+ * ============
+ *
+ */
+
+/**
+ *
+ * @param {int|Object|jQuery} sessionRef Can be session ID, or session object or an existing session element from the target
+ * @param {jQuery} $searchTarget the target to search for the element
+ * @returns {Object} Returns object with session element and session object
+ */
+function getSessionFromReference(sessionRef, $searchTarget) {
+    var $sessionElement;
+    var session;
+    var newElement = false;
+    if (sessionRef instanceof jQuery) {
+        $sessionElement = sessionRef;
+        session = $sessionElement.data("session");
+    } else if (_.isObjectLike(sessionRef)) {
+        $sessionElement = $searchTarget.find(".session[data-session-id=" + sessionRef.id + "]");
+        // If it's a new session, create session element from template and initialize
+        if ($sessionElement.length == 0) {
+            $sessionElement = $(sessionTemplate);
+            $sessionElement.attr("data-session-id", sessionRef.id);
+            $sessionElement.attr("data-original-text", sessionRef.title);
+            $sessionElement.data("session", sessionRef);
+            newElement = true;
+            session = sessionRef;
+        }
+        session = sessionRef;
+    } else if (_.isNumber(sessionRef)) {
+        $sessionElement = $searchTarget.find(".session[data-session-id=" + sessionRef + "]");
+        session = $sessionElement.data("session");
+    } else {
+        return false;
+    }
+
+    return {
+        $sessionElement: $sessionElement,
+        session: session,
+        newElement: newElement
+    }
+
+}
+
+/**
+ * UI MANIPULATION METHODS
+ * =======================
+ *
+ */
+
+/**
+ * Add a session to the timeline at the said position
+ * @param {int|Object|jQuery} sessionRef Can be session ID, or session object or an existing session element from the unscheduled list
+ * @param {Object} [position] Contains position information if the session is changed (track-id and top)
+ */
+function addSessionToTimeline(sessionRef, position) {
+    var sessionRefObject;
+    if (_.isUndefined(position)) {
+        sessionRefObject = getSessionFromReference(sessionRef, $unscheduledSessionsHolder);
+    } else {
+        sessionRefObject = getSessionFromReference(sessionRef, $tracksHolder);
+    }
+
+    if (!sessionRefObject) {
+        logError("addSessionToTimeline", sessionRef);
+        return false;
+    }
+
+    var oldTrack = sessionRefObject.session.track_id;
+    var newTrack = null;
+
+    if (!_.isUndefined(position)) {
+        sessionRefObject.session.top = position.top;
+        sessionRefObject.session.track_id = position.track_id;
+        newTrack = position.track_id;
+        sessionRefObject.session = updateSessionTime(sessionRefObject.$sessionElement);
+        sessionRefObject.$sessionElement.data("session", sessionRefObject.session);
+    }
+
+    sessionRefObject.$sessionElement.css({
+        "-webkit-transform": "",
+        "transform": ""
+    }).removeData("x").removeData("y");
+
+    sessionRefObject.$sessionElement.removeClass("unscheduled").addClass("scheduled");
+
+    if (_.isNull(sessionRefObject.session.track_id)) {
+        sessionRefObject.session.track_id = 0;
+    }
+
+    sessionRefObject.$sessionElement.css("top", sessionRefObject.session.top + "px");
+    sessionRefObject.$sessionElement.css("height", minutesToPixels(sessionRefObject.session.duration) + "px");
+    $tracksHolder.find(".track[data-track-id=" + sessionRefObject.session.track_id + "]").append(sessionRefObject.$sessionElement);
+
+    sessionRefObject.$sessionElement.ellipsis().ellipsis();
+
+    updateSessionTimeOnTooltip(sessionRefObject.$sessionElement);
+    updateColor(sessionRefObject.$sessionElement);
+
+    if (!sessionRefObject.newElement) {
+        $(document).trigger("scheduling:change", sessionRefObject.session);
+    }
+
+    _.remove(unscheduledStore, function (sessionTemp) {
+        return sessionTemp.id == sessionRefObject.session.id
+    });
+
+    $(document).trigger("scheduling:recount", [oldTrack, newTrack]);
+}
+
+/**
+ * Remove a session from the timeline and add it to the Unscheduled list or create a session element and add to Unscheduled list
+ * @param {int|Object|jQuery} sessionRef Can be session ID, or session object or an existing session element from the timeline
+ * @param {boolean} [isFiltering=false]
+ */
+function addSessionToUnscheduled(sessionRef, isFiltering) {
+    var session;
+
+    var sessionRefObject = getSessionFromReference(sessionRef, $tracksHolder);
+    if (!sessionRefObject) {
+        logError("addSessionToUnscheduled", sessionRef);
+        return false;
+    }
+
+    var oldTrack = sessionRefObject.session.track_id;
+
+    sessionRefObject.session.top = null;
+    sessionRefObject.session.duration = 30;
+    sessionRefObject.session.start_time.hours(0).minutes(0);
+    sessionRefObject.session.end_time.hours(0).minutes(0);
+
+    sessionRefObject.$sessionElement.data("session", session);
+    $unscheduledSessionsHolder.append(sessionRefObject.$sessionElement);
+
+    sessionRefObject.$sessionElement.addClass('unscheduled').removeClass('scheduled').tooltip("hide").attr("data-original-title", "");
+    sessionRefObject.$sessionElement.css({
+        "-webkit-transform": "",
+        "transform": "",
+        "background-color": "",
+        "height": "48px",
+        "top": ""
+    }).removeData("x").removeData("y");
+
+    sessionRefObject.$sessionElement.ellipsis().ellipsis();
+    $noSessionsInfoBox.hide();
+
+    if (_.isUndefined(isFiltering) || !isFiltering) {
+        if (!sessionRefObject.newElement) {
+            $(document).trigger("scheduling:change", sessionRefObject.session);
+        }
+        unscheduledStore.push(sessionRefObject.session);
+        $(document).trigger("scheduling:recount", [oldTrack]);
+    }
+}
+
+/**
+ * Update the counter badge that displays the number of sessions under each track
+ * @param {array} trackIds An array of track IDs to recount
+ */
+function updateTrackSessionsCounterBadges(trackIds) {
+    _.each(trackIds, function (trackId) {
+        var $track = $tracksHolder.find(".track[data-track-id=" + trackId + "]");
         var sessionsCount = $track.find(".session.scheduled").length;
         $track.find(".track-header > .badge").text(sessionsCount);
     });
 }
 
+/**
+ * Randomly generate and set a background color for an element
+ * @param {jQuery} $element the element to be colored
+ */
+function updateColor($element) {
+    $element.css("background-color", palette.random("800"));
+    $element.css("background-color", palette.random("800"));
+}
 
-function fixOverlaps() {
-    $tracks = $(".track");
+/**
+ * Move any overlapping session to the unscheduled list. To be run as soon as timeline is initialized.
+ */
+function removeOverlaps() {
     $.each($tracks, function (index, $track) {
         $track = $($track);
         var $sessionElements = $track.find(".session.scheduled");
         $.each($sessionElements, function (index, $sessionElement) {
             $sessionElement = $($sessionElement);
-            var isColliding = sessionOverlapTest($track, $sessionElement);
-            if (!isColliding) {
-
-            } else {
-                $sessionElement.appendTo($(".sessions-list"));
-                $sessionElement.addClass('unscheduled').removeClass('scheduled').tooltip("hide").attr("data-original-title", "");
-                $sessionElement.css({
-                    "-webkit-transform": "",
-                    "transform": "",
-                    "background-color": ""
-                }).removeData("x").removeData("y");
-                $(".no-sessions-info").hide();
+            var isColliding = isSessionOverlapping($track, $sessionElement);
+            if (isColliding) {
+                addSessionToUnscheduled($sessionElement);
             }
         });
     });
-    updateCounterBadge();
-    updateCurrentUnscheduledSessions();
 }
 
-function updateCurrentUnscheduledSessions() {
-    var $unscheduledSessions = $(".sessions-list").find(".session");
-    currentUnscheduledStore = [];
-    $.each($unscheduledSessions, function (index, $sessionElement) {
-        $sessionElement = $($sessionElement);
-        var session = {
-            id: $sessionElement.data("session-id"),
-            title: $sessionElement.attr("data-original-text")
-        };
-        currentUnscheduledStore.push(session);
-    });
-}
-
-function sessionOverlapTest($track, $session) {
+/**
+ * Check if a session is overlapping any other session
+ * @param {jQuery} $track The track to search in
+ * @param {jQuery} $session The session
+ * @returns {boolean|jQuery} If no overlap, return false. If overlaps, return the session that's beneath.
+ */
+function isSessionOverlapping($track, $session) {
     var $otherSessions = $track.find(".session.scheduled");
-    var returnVal;
-    returnVal = false;
+    var returnVal = false;
     $.each($otherSessions, function (index, $otherSession) {
         $otherSession = $($otherSession);
         if (!$otherSession.is($session) && collision($otherSession, $session)) {
@@ -92,32 +304,129 @@ function sessionOverlapTest($track, $session) {
     return returnVal;
 }
 
-function restrictionCheck(x, $sessionElement) {
-    return (horizontallyBound($(".tracks"), $sessionElement, 0));
+/**
+ * Check if the session is within the timeline
+ * @param {jQuery} $sessionElement the session element to check
+ * @returns {boolean} Return true, if outside the boundary. Else, false.
+ */
+function isSessionRestricted($sessionElement) {
+    return !horizontallyBound($tracks, $sessionElement, 0);
 }
 
-function overDraggable($sessionElement) {
-    return collision($(".tracks"), $sessionElement);
+/**
+ * Check if the session element is over the timeline
+ * @param {jQuery} $sessionElement the session element to check
+ * @returns {boolean}
+ */
+function isSessionOverTimeline($sessionElement) {
+    return collision($tracks, $sessionElement);
 }
 
-function updateColor($element) {
-    $element.css("background-color", palette.random("800"));
-    $element.css("background-color", palette.random("800"));
-}
-
-function updateElementTime($element) {
+/**
+ * Update the session's time on it's tooltip and display it.
+ * @param {jQuery} $sessionElement the target session element
+ */
+function updateSessionTimeOnTooltip($sessionElement) {
     var topTime = moment.utc({hour: time.start.hours, minute: time.start.minutes});
-    var mins = pixelsToMinutes($element.outerHeight(false));
-    var topInterval = pixelsToMinutes($element.data("top"), true);
+    var mins = pixelsToMinutes($sessionElement.outerHeight(false));
+    var topInterval = pixelsToMinutes($sessionElement.data("temp-top"), true);
 
     var startTimeString = topTime.add(topInterval, 'm').format("LT");
     var endTimeString = topTime.add(mins, "m").format("LT");
 
-    $element.data("start-time", startTimeString).data("end-time", endTimeString);
-    $element.attr("data-original-title", startTimeString + " to " + endTimeString);
-    $element.tooltip("show");
+    $sessionElement.attr("data-original-title", startTimeString + " to " + endTimeString);
+    $sessionElement.tooltip("show");
 }
 
+/**
+ * Update the session time and store to the session object
+ * @param {jQuery} $sessionElement The session element to update
+ * @param {object} [session] the session object to work on
+ * @returns {*}
+ */
+function updateSessionTime($sessionElement, session) {
+
+    var saveSession = false;
+    if (_.isUndefined(session)) {
+        session = $sessionElement.data("session");
+        saveSession = true;
+    }
+    var topTime = moment.utc({hour: time.start.hours, minute: time.start.minutes});
+    var duration = pixelsToMinutes($sessionElement.outerHeight(false));
+    var topInterval = pixelsToMinutes($sessionElement.data("temp-top"), true);
+
+    var newStartTime = topTime.add(topInterval, 'm');
+    var newEndTime = topTime.add(duration, "m");
+
+    session.duration = duration;
+    session.start_time.hours(newStartTime.hours());
+    session.start_time.minutes(newStartTime.minutes());
+
+    session.end_time.hours(newEndTime.hours());
+    session.end_time.minutes(newEndTime.minutes());
+
+    if (saveSession) {
+        $sessionElement.data("session", session);
+    }
+
+    return session;
+}
+
+/**
+ * Add a new track to the timeline
+ * @param {object} track The track object containing the details of the track
+ */
+function addTrackToTimeline(track) {
+    var $trackElement = $(trackTemplate);
+    $trackElement.attr("data-track-id", track.id);
+    $trackElement.find(".track-header").html(track.name + "&nbsp;&nbsp;&nbsp;<span class='badge'>0</span>");
+    $trackElement.find(".track-inner").css("height", time.unit.count * time.unit.pixels + "px");
+    $tracksHolder.append($trackElement);
+}
+
+/**
+ * Generate timeunits for the timeline
+ */
+function generateTimeUnits() {
+    var start = moment.utc().hour(time.start.hours).minute(time.start.minutes).second(0);
+    var end = moment.utc().hour(time.end.hours).minute(time.end.minutes).second(0);
+    var $timeUnitsHolder = $(".timeunits");
+    var timeUnitsCount = 1;
+    while (start <= end) {
+        var timeUnitDiv = $("<div class='timeunit'>" + start.format('HH:mm') + "</div>");
+        $timeUnitsHolder.append(timeUnitDiv);
+        start.add(time.unit.minutes, 'minutes');
+        timeUnitsCount++;
+    }
+    $tracksHolder.css("height", timeUnitsCount * time.unit.pixels);
+    time.unit.count = timeUnitsCount;
+}
+
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
+
+/**
+ * Initialize all the interactables necessary (drag-drop and resize)
+ */
 function initializeInteractables() {
 
     $tracks = $(".track");
@@ -128,7 +437,7 @@ function initializeInteractables() {
             inertia: false,
             // enable autoScroll
             autoScroll: {
-                container: $(".track-container")[0],
+                container: $tracksHolder[0],
                 margin: 50,
                 distance: 5,
                 interval: 10
@@ -142,21 +451,20 @@ function initializeInteractables() {
                     x = (parseFloat($sessionElement.data('x')) || 0) + event.dx,
                     y = (parseFloat($sessionElement.data('y')) || 0) + event.dy;
 
-                if (restrictionCheck(x, $sessionElement) || $sessionElement.hasClass("unscheduled")) {
-                    $sessionElement.css("-webkit-transform", "translate(" + x + "px, " + y + "px)");
-                    $sessionElement.css("transform", "translate(" + x + "px, " + y + "px)");
+                $sessionElement.css("-webkit-transform", "translate(" + x + "px, " + y + "px)");
+                $sessionElement.css("transform", "translate(" + x + "px, " + y + "px)");
 
-                    $sessionElement.data('x', x);
-                    $sessionElement.data('y', y);
-                }
+                $sessionElement.data('x', x);
+                $sessionElement.data('y', y);
 
-                if (overDraggable($sessionElement)) {
-                    updateElementTime($sessionElement);
+                $sessionElement.data("temp-top", roundOffToMultiple($sessionElement.offset().top - $(".tracks.x1").offset().top));
+
+                if (isSessionOverTimeline($sessionElement)) {
+                    updateSessionTimeOnTooltip($sessionElement);
                 } else {
                     $sessionElement.tooltip("hide").attr("data-original-title", "");
                 }
 
-                $sessionElement.data("top", roundOffToMultiple($sessionElement.offset().top - $(".tracks.x1").offset().top));
             },
             // call this function on every dragend event
             onend: function (event) {
@@ -177,13 +485,19 @@ function initializeInteractables() {
                     x = (parseFloat(target.getAttribute("data-x")) || 0),
                     y = (parseFloat(target.getAttribute("data-y")) || 0);
 
-                // update the element's style
                 target.style.width = roundOffToMultiple(event.rect.width) + "px";
                 target.style.height = roundOffToMultiple(event.rect.height) + "px";
 
                 $(event.target).ellipsis();
 
-                updateElementTime($(event.target));
+                updateSessionTimeOnTooltip($(event.target));
+            }
+        })
+        .on("resizeend", function (event) {
+            if ($(event.target).hasClass("scheduled")) {
+                var $sessionElement = $(event.target);
+                updateSessionTime($sessionElement);
+                $(document).trigger("scheduling:change", $sessionElement.data("session"));
             }
         });
 
@@ -205,30 +519,19 @@ function initializeInteractables() {
         ondrop: function (event) {
             var $sessionElement = $(event.relatedTarget);
             var $trackDropZone = $(event.target);
-            $sessionElement.removeClass("unscheduled").addClass("scheduled");
+
             $trackDropZone.removeClass("drop-active").removeClass("drop-now");
 
-            $sessionElement.css({
-                "-webkit-transform": "",
-                "transform": ""
-            }).removeData("x").removeData("y");
+            addSessionToTimeline($sessionElement, {
+                track_id: parseInt($trackDropZone.parent().attr("data-track-id")),
+                top: $sessionElement.data("temp-top")
+            });
 
-            $sessionElement.appendTo($trackDropZone);
-            $sessionElement.css("top", $sessionElement.data("top") + "px");
-
-            var isColliding = sessionOverlapTest($trackDropZone, $sessionElement);
+            var isColliding = isSessionOverlapping($trackDropZone, $sessionElement);
             if (!isColliding) {
-                updateCounterBadge();
-                updateElementTime($sessionElement);
-                updateColor($sessionElement);
+                updateSessionTime($sessionElement);
             } else {
-                $sessionElement.appendTo($(".sessions-holder"));
-                $sessionElement.addClass("unscheduled").removeClass("scheduled").tooltip("hide").attr("data-original-title", "");
-                $sessionElement.css({
-                    "-webkit-transform": "",
-                    "transform": "",
-                    "background-color": ""
-                }).removeData("x").removeData("y");
+                addSessionToUnscheduled($sessionElement);
             }
 
         },
@@ -247,29 +550,16 @@ function initializeInteractables() {
     });
 }
 
-function minutesToPixels(minutes, forTop) {
-    minutes = Math.abs(minutes);
-    if (forTop) {
-        return ((minutes / time.unit.minutes) * time.unit.pixels) + time.unit.pixels;
-    } else {
-        return (minutes / time.unit.minutes) * time.unit.pixels;
-    }
-}
-
-function pixelsToMinutes(pixels, fromTop) {
-    pixels = Math.abs(pixels);
-    if (fromTop) {
-        return ((pixels - time.unit.pixels) / time.unit.pixels) * time.unit.minutes;
-    } else {
-        return (pixels / time.unit.pixels) * time.unit.minutes;
-    }
-}
-
-var days = [];
-var sessionsStore = [];
-var tracksStore = [];
-var currentUnscheduledStore = [];
-
+/**
+ * This callback called after sessions and tracks are processed.
+ * @callback postProcessCallback
+ */
+/**
+ * Process the tracks and sessions data loaded from the server into in-memory data stores
+ * @param {object} tracks The tracks json object
+ * @param {object} sessions The sessions json object
+ * @param {postProcessCallback} callback The post-process callback
+ */
 function processTrackSession(tracks, sessions, callback) {
 
     var topTime = moment.utc({hour: time.start.hours, minute: time.start.minutes});
@@ -285,20 +575,23 @@ function processTrackSession(tracks, sessions, callback) {
             minute: startTime.minutes()
         }).diff(topTime)).asMinutes(), true);
 
-        var dayString = startTime.format("Do MMMM YYYY"); // formatted as eg. 2nd May
+        var dayString = startTime.format("Do MMMM YYYY"); // formatted as eg. 2nd May 2013
 
         if (!_.includes(days, dayString)) {
             days.push(dayString);
         }
 
+        /**
+         * @type {{id: number, title: string, top: number, duration: number, track_id: number|null, start_time: Moment, end_time: Moment}}
+         */
         var sessionObject = {
             id: session.id,
             title: session.title,
             top: top,
             duration: Math.abs(duration.asMinutes()),
             track_id: session.track.id,
-            start_time: startTime.format("HH:mm"),
-            end_time: endTime.format("HH:mm")
+            start_time: startTime,
+            end_time: endTime
         };
 
         var dayIndex = _.indexOf(days, dayString);
@@ -308,28 +601,26 @@ function processTrackSession(tracks, sessions, callback) {
         } else {
             sessionsStore[dayIndex] = [sessionObject]
         }
-
     });
 
     _.each(tracks, function (track) {
         var tracksObject = {
             name: track.name,
-            id: track.id,
-            count: track.sessions.length
+            id: track.id
         };
         if (!_.includes(tracksStore, tracksObject)) {
             tracksStore.push(tracksObject);
         }
     });
 
-
     loadDateButtons();
     callback();
 }
 
+/**
+ * Load the date selection button onto the DOM
+ */
 function loadDateButtons() {
-    var dayButtonTemplate = $("#date-change-button-template").html();
-    var $dayButtonsHolder = $(".date-change-btn-holder");
     var sortedDays = days.sort();
     _.each(sortedDays, function (day, index) {
         var $dayButton = $(dayButtonTemplate);
@@ -342,64 +633,35 @@ function loadDateButtons() {
     loadTracksToTimeline(sortedDays[0]);
 }
 
+/**
+ * Load all the sessions of a given day into the timeline
+ * @param {string} day
+ */
 function loadTracksToTimeline(day) {
 
     var dayIndex = _.indexOf(days, day);
-    var trackTemplate = $("#track-template").html();
-    var sessionTemplate = $("#session-template").html();
 
-    var $tracksHolder = $(".track-container");
-    var $unscheduledSessionsHolder = $(".sessions-list");
+    $tracksHolder.empty();
+    $unscheduledSessionsHolder.empty();
+    $noSessionsInfoBox.show();
 
-    $tracksHolder.html("");
-    $unscheduledSessionsHolder.html("");
-
-    var $trackElement = $(trackTemplate);
-    $trackElement.data("track-id", 0);
-    $trackElement.find(".track-header").html("Standalone &nbsp;&nbsp;&nbsp;<span class='badge'>0</span>");
-    $trackElement.find(".track-inner").css("height", time.unit.count * time.unit.pixels + "px");
-    $tracksHolder.append($trackElement);
-
-    _.each(tracksStore, function (track) {
-        var $trackElement = $(trackTemplate);
-        $trackElement.attr("data-track-id", track.id);
-        $trackElement.find(".track-header").html(track.name + "&nbsp;&nbsp;&nbsp;<span class='badge'>0</span>");
-        $trackElement.find(".track-inner").css("height", time.unit.count * time.unit.pixels + "px");
-        $tracksHolder.append($trackElement);
+    addTrackToTimeline({
+        id: 0,
+        name: "Standalone"
     });
+
+    _.each(tracksStore, addTrackToTimeline);
 
     _.each(sessionsStore[dayIndex], function (session) {
-        var $sessionElement = $(sessionTemplate);
-        $sessionElement.data("session-id", session.id);
-        $sessionElement.attr("data-original-text", session.title);
-
-        var scheduled = false;
         if (!_.isNull(session.start_time) && !_.isNull(session.end_time) && session.start_time != session.end_time) {
-            scheduled = true;
-        }
-
-        if (scheduled) {
-            $sessionElement.addClass("scheduled");
-            $sessionElement.attr("data-original-title", session.start_time + " to " + session.end_time);
-            updateColor($sessionElement);
-
-            if (_.isNull(session.track_id)) {
-                session.track_id = 0;
-            }
-
-            $sessionElement.data("top", session.top);
-            $sessionElement.css("top", session.top + "px");
-            $sessionElement.css("height", minutesToPixels(session.duration) + "px");
-            $tracksHolder.find(".track[data-track-id=" + session.track_id + "]").append($sessionElement);
+            addSessionToTimeline(session);
         } else {
-            $sessionElement.addClass("unscheduled");
-            $unscheduledSessionsHolder.append($sessionElement);
-            $(".no-sessions-info").hide();
+            addSessionToUnscheduled(session);
         }
-        $sessionElement.ellipsis().ellipsis();
     });
-    fixOverlaps();
-    $("[data-toggle=tooltip]").tooltip();
+
+    $tracks = $(".track");
+    $("[data-toggle=tooltip]").tooltip("hide");
 }
 
 function loadData(eventId, callback) {
@@ -410,93 +672,78 @@ function loadData(eventId, callback) {
     });
 }
 
-$(document).on("click", ".date-change-btn", function () {
-    $(this).addClass("active");
-    loadTracksToTimeline($(this).text());
-    $(this).siblings().removeClass("active");
-});
-
-$(document).on("click", ".session.scheduled > .remove-btn", function () {
-    var $sessionElement = $(this).parent();
-    $sessionElement.appendTo($(".sessions-holder"));
-    $sessionElement.addClass("unscheduled").removeClass("scheduled").tooltip("hide").attr("data-original-title", "");
-    $sessionElement.css({
-        "-webkit-transform": "",
-        "transform": "",
-        "background-color": ""
-    }).removeData("x").removeData("y");
-});
-
-function generateTimeUnits() {
-    var start = moment.utc().hour(time.start.hours).minute(time.start.minutes).second(0);
-    var end = moment.utc().hour(time.end.hours).minute(time.end.minutes).second(0);
-    var $timeUnitsHolder = $(".timeunits");
-    var timeUnitsCount = 1;
-    while (start <= end) {
-        var timeUnitDiv = $("<div class='timeunit'>" + start.format('HH:mm') + "</div>");
-        $timeUnitsHolder.append(timeUnitDiv);
-        start.add(time.unit.minutes, 'minutes');
-        timeUnitsCount++;
-    }
-    $(".track-container").css("height", timeUnitsCount * time.unit.pixels);
-
-    time.unit.count = timeUnitsCount;
-}
-
-$(document).ready(function () {
-
-    generateTimeUnits();
-
-    // TODO Load the event ID dynamically based on current event
-    loadData(18, function () {
+/**
+ * Initialize the timeline for a given event
+ * @param {int} eventId The event ID
+ */
+function initializeTimeline(eventId) {
+    loadData(eventId, function () {
         $(".flash-message-holder").hide();
         $(".scheduler-holder").show();
         initializeInteractables();
 
     });
+}
+/**
+ * FUNCTIONS THAT ARE TRIGGERED BY EVENTS
+ * ======================================
+ *
+ */
 
-    $(".clear-overlaps-button").click(function () {
-        fixOverlaps();
-    });
+/**
+ * Hold the timeline track headers in place while scroll
+ */
+$(".timeline").scroll(function () {
+    var cont = $(this);
+    var el = $(cont.find(".track-inner")[0]);
+    var elementTop = el.position().top;
+    var pos = cont.scrollTop() + elementTop;
+    cont.find(".track-header").css("top", pos + "px");
+});
 
-    $(".timeline").scroll(function () {
-        var cont = $(this);
-        var el = $(cont.find(".track-inner")[0]);
-        var elementTop = el.position().top;
-        var pos = cont.scrollTop() + elementTop;
-        cont.find(".track-header").css("top", pos + "px");
-    });
+/**
+ * Handle unscheduled sessions search
+ */
+$("#sessions-search").valueChange(function (value) {
+    var filtered = [];
 
-    var sessionTemplate = $("#session-template").html();
-    var $unscheduledSessionsHolder = $(".sessions-list");
-
-    $("#sessions-search").valueChange(function (value) {
-
-        var filtered = [];
-        if (_.isEmpty(value) || value == "") {
-            filtered = currentUnscheduledStore;
-        } else {
-            filtered = _.filter(currentUnscheduledStore, function (session) {
-                return fuzzy_match(session.title, value);
-            });
-        }
-
-        if (filtered.length == 0) {
-            $(".no-sessions-info").show();
-        } else {
-            $(".no-sessions-info").hide();
-        }
-
-        $unscheduledSessionsHolder.html("");
-
-        _.each(filtered, function (session) {
-            var $sessionElement = $(sessionTemplate);
-            $sessionElement.data("session-id", session.id);
-            $sessionElement.attr("data-original-text", session.title);
-            $sessionElement.addClass("unscheduled");
-            $unscheduledSessionsHolder.append($sessionElement);
-            $sessionElement.ellipsis().ellipsis();
+    if (_.isEmpty(value) || value == "") {
+        filtered = unscheduledStore;
+    } else {
+        filtered = _.filter(unscheduledStore, function (session) {
+            return fuzzyMatch(session.title, value);
         });
+    }
 
-    });
+    $unscheduledSessionsHolder.html("");
+
+    if (filtered.length == 0) {
+        $(".no-sessions-info").show();
+    } else {
+        $(".no-sessions-info").hide();
+        _.each(filtered, function (session) {
+            addSessionToUnscheduled(session, true);
+        });
+    }
+});
+
+/**
+ * Global document events for date change button, remove button and clear overlaps button
+ */
+$(document)
+    .on("click", ".date-change-btn", function () {
+        $(this).addClass("active").siblings().removeClass("active");
+        loadTracksToTimeline($(this).text());
+    })
+    .on("click", ".session.scheduled > .remove-btn", function () {
+        addSessionToUnscheduled($(this).parent());
+    })
+    .on("click", ".clear-overlaps-button", removeOverlaps);
+
+/**
+ * Initialize the Scheduler UI on document ready
+ */
+$(document).ready(function () {
+    generateTimeUnits();
+    initializeTimeline(18);
 });
