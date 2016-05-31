@@ -53,7 +53,7 @@ class MyHomeView(AdminIndexView):
             send_email_after_account_create(request.form)
             return redirect(intended_url())
 
-    @expose('/password/reminder', methods=('GET', 'POST'))
+    @expose('/password/reset', methods=('GET', 'POST'))
     def password_reminder_view(self):
         """Password reminder view"""
         if request.method == 'GET':
