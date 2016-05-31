@@ -64,10 +64,11 @@ function getSessionFromReference(sessionRef, $searchTarget) {
         // If it's a new session, create session element from template and initialize
         if ($sessionElement.length == 0) {
             $sessionElement = $(sessionTemplate);
-            $sessionElement.attr("data-session-id", session.id);
-            $sessionElement.attr("data-original-text", session.title);
+            $sessionElement.attr("data-session-id", sessionRef.id);
+            $sessionElement.attr("data-original-text", sessionRef.title);
             $sessionElement.data("session", sessionRef);
             newElement = true;
+            session = sessionRef;
         }
         session = sessionRef;
     } else if (_.isNumber(sessionRef)) {
@@ -113,7 +114,7 @@ function addSessionToTimeline(sessionRef, position) {
         sessionRefObject.session.track_id = position.track_id;
         newTrack = position.track_id;
         sessionRefObject.session = updateSessionTime(sessionRefObject.$sessionElement);
-        sessionRefObject.$sessionElement.data("session", session);
+        sessionRefObject.$sessionElement.data("session", sessionRefObject.session);
     }
 
     sessionRefObject.$sessionElement.css({
@@ -122,18 +123,19 @@ function addSessionToTimeline(sessionRef, position) {
     }).removeData("x").removeData("y");
 
     sessionRefObject.$sessionElement.removeClass("unscheduled").addClass("scheduled");
-    sessionRefObject.$sessionElement.attr("data-original-title", sessionRefObject.session.start_time + " to " + sessionRefObject.session.end_time);
-    updateColor(sessionRefObject.$sessionElement);
 
     if (_.isNull(sessionRefObject.session.track_id)) {
         sessionRefObject.session.track_id = 0;
     }
 
     sessionRefObject.$sessionElement.css("top", sessionRefObject.session.top + "px");
-    sessionRefObject.$sessionElement.css("height", minutesToPixels(session.duration) + "px");
+    sessionRefObject.$sessionElement.css("height", minutesToPixels(sessionRefObject.session.duration) + "px");
     $tracksHolder.find(".track[data-track-id=" + sessionRefObject.session.track_id + "]").append(sessionRefObject.$sessionElement);
 
     sessionRefObject.$sessionElement.ellipsis().ellipsis();
+
+    updateSessionTimeOnTooltip(sessionRefObject.$sessionElement);
+    updateColor(sessionRefObject.$sessionElement);
 
     if (!sessionRefObject.newElement) {
         $(document).trigger("scheduling:change", sessionRefObject.session);
@@ -147,7 +149,6 @@ function addSessionToTimeline(sessionRef, position) {
  * @param {int|Object|jQuery} sessionRef Can be session ID, or session object or an existing session element from the timeline
  */
 function addSessionToUnscheduled(sessionRef) {
-    var $sessionElement;
     var session;
 
     var sessionRefObject = getSessionFromReference(sessionRef, $tracksHolder);
@@ -160,11 +161,11 @@ function addSessionToUnscheduled(sessionRef) {
 
     sessionRefObject.session.top = null;
     sessionRefObject.session.duration = null;
-    sessionRefObject.session.start_time = null;
-    sessionRefObject.session.end_time = null;
+    sessionRefObject.session.start_time.hours(0).minutes(0);
+    sessionRefObject.session.end_time.hours(0).minutes(0);
 
     sessionRefObject.$sessionElement.data("session", session);
-    $unscheduledSessionsHolder.append($sessionElement);
+    $unscheduledSessionsHolder.append(sessionRefObject.$sessionElement);
 
     sessionRefObject.$sessionElement.addClass('unscheduled').removeClass('scheduled').tooltip("hide").attr("data-original-title", "");
     sessionRefObject.$sessionElement.css({
@@ -366,13 +367,11 @@ function initializeInteractables() {
                     x = (parseFloat($sessionElement.data('x')) || 0) + event.dx,
                     y = (parseFloat($sessionElement.data('y')) || 0) + event.dy;
 
-                if (!isSessionRestricted($sessionElement) || $sessionElement.hasClass("unscheduled")) {
-                    $sessionElement.css("-webkit-transform", "translate(" + x + "px, " + y + "px)");
-                    $sessionElement.css("transform", "translate(" + x + "px, " + y + "px)");
+                $sessionElement.css("-webkit-transform", "translate(" + x + "px, " + y + "px)");
+                $sessionElement.css("transform", "translate(" + x + "px, " + y + "px)");
 
-                    $sessionElement.data('x', x);
-                    $sessionElement.data('y', y);
-                }
+                $sessionElement.data('x', x);
+                $sessionElement.data('y', y);
 
                 $sessionElement.data("temp-top", roundOffToMultiple($sessionElement.offset().top - $(".tracks.x1").offset().top));
 
@@ -402,13 +401,19 @@ function initializeInteractables() {
                     x = (parseFloat(target.getAttribute("data-x")) || 0),
                     y = (parseFloat(target.getAttribute("data-y")) || 0);
 
-                // update the element's style
                 target.style.width = roundOffToMultiple(event.rect.width) + "px";
                 target.style.height = roundOffToMultiple(event.rect.height) + "px";
 
                 $(event.target).ellipsis();
 
                 updateSessionTimeOnTooltip($(event.target));
+            }
+        })
+        .on("resizeend", function(event){
+            if ($(event.target).hasClass("scheduled")) {
+                var $sessionElement = $(event.target);
+                updateSessionTime($sessionElement);
+                $(document).trigger("scheduling:change", $sessionElement.data("session"));
             }
         });
 
@@ -444,6 +449,7 @@ function initializeInteractables() {
             } else {
                 addSessionToUnscheduled($sessionElement);
             }
+            
         },
         ondropdeactivate: function (event) {
             var $trackDropZone = $(event.target);
@@ -570,7 +576,7 @@ function loadTracksToTimeline(day) {
         }
     });
 
-    $("[data-toggle=tooltip]").tooltip();
+    $("[data-toggle=tooltip]").tooltip("hide");
 }
 
 function loadData(eventId, callback) {
