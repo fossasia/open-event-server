@@ -10,7 +10,7 @@ $( document ).ready(function() {
           timePicker: true,
           calender_style: "picker_4",
           locale: {
-            format: 'MM/DD/YYYY h:mm A'
+            format: 'MM/DD/YYYY H:mm A'
           }
         });
 

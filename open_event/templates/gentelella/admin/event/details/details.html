@@ -35,11 +35,7 @@
                 </div>
                 <div class="x_content">
                     <div class="col-md-12 ">
-                        <form name="test" action="/admin/events/new/" method="POST" role="form"
-                              class="admin-form form-horizontal event-create-form">
-                            {% if csrf_token %}
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                            {% endif %}
+
                             <div id="wizard" class="form_wizard wizard_horizontal">
                                 <ul class="wizard_steps anchor">
                                     <li>
@@ -92,7 +88,6 @@
                                     {% include '/gentelella/admin/event/details/steps/completed.html' %}
                                 </div>
                             </div>
-                        </form>
                     </div>
                 </div>
             </div>
