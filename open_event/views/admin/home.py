@@ -11,7 +11,7 @@ from ...helpers.data import DataManager, save_to_db,get_google_auth,get_facebook
 from ...helpers.data_getter import DataGetter
 from ...helpers.helpers import send_email_after_account_create, send_email_with_reset_password_hash
 from open_event.models.user import User
-from open_event.helpers.oauth import OAuth,FbOAuth
+from open_event.helpers.oauth import OAuth, FbOAuth
 
 
 def intended_url():
@@ -62,9 +62,9 @@ class MyHomeView(AdminIndexView):
             send_email_after_account_create(request.form)
             return redirect(intended_url())
 
-    @expose('/password/reminder', methods=('GET', 'POST'))
-    def password_reminder_view(self):
-        """Password reminder view"""
+    @expose('/password/reset', methods=('GET', 'POST'))
+    def password_reset_view(self):
+        """Password reset view"""
         if request.method == 'GET':
             return self.render('/gentelella/admin/login/password_reminder.html')
         if request.method == 'POST':
