@@ -3,6 +3,7 @@ import logging
 import os.path
 import random
 import traceback
+import json
 from datetime import datetime
 
 from flask import flash, request
@@ -21,7 +22,6 @@ from ..models.microlocation import Microlocation
 from ..models.session import Session, Level, Format, Language
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
-from ..models.track import Track
 from ..models.user import User
 from ..models.user_detail import UserDetail
 from ..models.role import Role
@@ -29,6 +29,8 @@ from ..models.users_events_roles import UsersEventsRoles
 from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
 from ..models.track import Track
+from open_event.helpers.oauth import OAuth, FbOAuth
+from requests_oauthlib import OAuth2Session
 
 
 class DataManager(object):
@@ -559,10 +561,10 @@ class DataManager(object):
         file = request.files["file"]
         filename = secure_filename(file.filename)
         if not db.session.query(exists() \
-                 .where(File.name == filename)).scalar():
+                                    .where(File.name == filename)).scalar():
             if file.mimetype.split('/', 1)[0] == "image":
                 file.save(os.path.join(os.path.realpath('.')
-                          + '/static/', filename))
+                                       + '/static/', filename))
                 file_object = File(
                     name=filename,
                     path='',
@@ -639,6 +641,41 @@ def delete_from_db(item, msg):
         logging.error('DB Exception! %s' % e)
         db.session.rollback()
         return False
+
+
+def get_google_auth(state=None, token=None):
+    if token:
+        return OAuth2Session(OAuth.get_client_id(), token=token)
+    if state:
+        return OAuth2Session(OAuth.get_client_id(), state=state, scope=OAuth.SCOPE,
+                             redirect_uri=OAuth.get_redirect_uri())
+    oauth = OAuth2Session(OAuth.get_client_id(), scope=OAuth.SCOPE, redirect_uri=OAuth.get_redirect_uri())
+    return oauth
+
+
+def get_facebook_auth(state=None, token=None):
+    if token:
+        return OAuth2Session(FbOAuth.get_client_id(), token=token)
+    if state:
+        return OAuth2Session(FbOAuth.get_client_id(), state=state, scope=FbOAuth.SCOPE,
+                             redirect_uri=FbOAuth.get_redirect_uri())
+    oauth = OAuth2Session(FbOAuth.get_client_id(), scope=FbOAuth.SCOPE, redirect_uri=FbOAuth.get_redirect_uri())
+    return oauth
+
+
+def create_user_oauth(user, user_data, token, method):
+    if user is None:
+        user = User()
+        user.email = user_data['email']
+    user.login = user_data['name']
+    user.role = 'speaker'
+    if method == 'Google':
+        user.avatar = user_data['picture']
+    if method == 'Facebook':
+        user.avatar = user_data['picture']['data']['url']
+    user.tokens = json.dumps(token)
+    save_to_db(user, "User created")
+    return user
 
 
 def update_version(event_id, is_created, column_to_increment):

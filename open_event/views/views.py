@@ -2,6 +2,7 @@
 import os
 from flask import jsonify, url_for, redirect, request, send_from_directory
 from flask.ext.cors import cross_origin
+from flask.ext import login
 
 from ..models.track import Track
 from ..models.speaker import Speaker
@@ -18,7 +19,9 @@ from flask.ext.autodoc import Autodoc
 from icalendar import Calendar
 import icalendar
 from flask import render_template
-
+from open_event.helpers.oauth import OAuth, FbOAuth
+from requests.exceptions import HTTPError
+from ..helpers.data import get_google_auth, create_user_oauth, get_facebook_auth
 
 auto = Autodoc()
 
@@ -421,6 +424,73 @@ def generate_icalendar_track(event_id, track_id):
     return cal.to_ical()
 
 
+@app.route('/gCallback/', methods=('GET', 'POST'))
+def callback():
+    if login.current_user is not None and login.current_user.is_authenticated:
+        return redirect(url_for('admin.index'))
+    elif 'error' in request.args:
+        if request.args.get('error') == 'access denied':
+            return 'You denied access'
+        return 'Error encountered'
+    elif 'code' not in request.args and 'state' not in request.args:
+        return redirect(url_for('admin.login_view'))
+    else:
+        google = get_google_auth()
+        state = google.authorization_url(OAuth.get_auth_uri(), access_type='offline')[1]
+        google = get_google_auth(state=state)
+        if 'code' in request.url:
+            code_url = (((request.url.split('&'))[1]).split('='))[1]
+            new_code = (code_url.split('%2F'))[0] + '/' + (code_url.split('%2F'))[1]
+        try:
+            token = google.fetch_token(OAuth.get_token_uri(), authorization_url=request.url,
+                                       code=new_code, client_secret=OAuth.get_client_secret())
+        except HTTPError:
+            return 'HTTP Error occurred'
+        google = get_google_auth(token=token)
+        resp = google.get(OAuth.get_user_info())
+        if resp.status_code == 200:
+            user_data = resp.json()
+            email = user_data['email']
+            user = DataGetter.get_user_by_email(email)
+            user = create_user_oauth(user, user_data, token=token, method='Google')
+            login.login_user(user)
+            return redirect(url_for('admin.index'))
+        return 'did not find user info'
+
+
+@app.route('/fCallback/', methods=('GET', 'POST'))
+def facebook_callback():
+    if login.current_user is not None and login.current_user.is_authenticated:
+        return redirect(url_for('admin.index'))
+    elif 'error' in request.args:
+        if request.args.get('error') == 'access denied':
+            return 'You denied access'
+        return 'Error encountered'
+    elif 'code' not in request.args and 'state' not in request.args:
+        return redirect(url_for('admin.login_view'))
+    else:
+        facebook = get_facebook_auth()
+        state = facebook.authorization_url(FbOAuth.get_auth_uri(), access_type='offline')[1]
+        facebook = get_facebook_auth(state=state)
+        if 'code' in request.url:
+            code_url = (((request.url.split('&'))[0]).split('='))[1]
+        try:
+            token = facebook.fetch_token(FbOAuth.get_token_uri(), authorization_url=request.url,
+                                         code=code_url, client_secret=FbOAuth.get_client_secret())
+        except HTTPError:
+            return 'HTTP Error occurred'
+        facebook = get_facebook_auth(token=token)
+        response = facebook.get(FbOAuth.get_user_info())
+        if response.status_code == 200:
+            user_info = response.json()
+            email = user_info['email']
+            user_email = DataGetter.get_user_by_email(email)
+            user = create_user_oauth(user_email, user_info, token=token, method='Facebook')
+            login.login_user(user)
+            return redirect(url_for('admin.index'))
+        return 'did not find user info'
+
+
 @app.route('/pic/<path:filename>')
 @auto.doc()
 def send_pic(filename):
@@ -431,4 +501,3 @@ def send_pic(filename):
 @app.route('/documentation')
 def documentation():
     return auto.html()
-
