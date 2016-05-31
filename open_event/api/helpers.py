@@ -1,6 +1,7 @@
 from flask.ext.restplus import abort
 
 from open_event.models.event import Event as EventModel
+from custom_fields import CustomField
 
 
 def _error_abort(code, message):
@@ -121,3 +122,17 @@ def get_paginated_list(klass, url, args={}, **kwargs):
     obj['results'] = results[(start - 1):(start - 1 + limit)]
 
     return obj
+
+
+def validate_payload(payload, api_model):
+    """
+    Validate payload against an api_model. Aborts in case of failure
+    - This function is for custom fields as they can't be validated by
+      flask restplus automatically.
+    - This is to be called at the start of a post or put method
+    """
+    for key in payload:
+        field = api_model[key]
+        if isinstance(field, CustomField) and hasattr(field, 'validate'):
+            if not field.validate(payload[key]):
+                _error_abort(400, 'Validation of \'%s\' field failed' % key)
