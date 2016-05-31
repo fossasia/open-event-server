@@ -66,7 +66,7 @@ class UriField(CustomField):
         return True
 
 
-class ImageUriField(CustomField):
+class ImageUriField(UriField):
     """
     Image URL (url ends with image.ext) field
     """
