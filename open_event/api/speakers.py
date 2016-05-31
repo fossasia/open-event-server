@@ -5,6 +5,7 @@ from open_event.models.event import Event as EventModel
 from .helpers import get_object_list, get_object_or_404, get_object_in_event,\
     get_paginated_list
 from utils import PAGINATED_MODEL, PaginatedResourceBase
+from custom_fields import UriField, EmailField, ImageUriField
 
 api = Namespace('speakers', description='Speakers', path='/')
 
@@ -16,11 +17,11 @@ SPEAKER_SESSION = api.model('SpeakerSession', {
 SPEAKER = api.model('Speaker', {
     'id': fields.Integer(required=True),
     'name': fields.String,
-    'photo': fields.String,
+    'photo': ImageUriField(),
     'biography': fields.String,
-    'email': fields.String,
-    'web': fields.String,
-    'twitter': fields.String,
+    'email': EmailField(),
+    'web': UriField(),
+    'twitter': fields.String,  # not sure for now whether uri or string field
     'facebook': fields.String,
     'github': fields.String,
     'linkedin': fields.String,

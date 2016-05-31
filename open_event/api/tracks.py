@@ -5,6 +5,7 @@ from open_event.models.event import Event as EventModel
 from .helpers import get_object_list, get_object_or_404, get_object_in_event,\
     get_paginated_list
 from utils import PAGINATED_MODEL, PaginatedResourceBase
+from custom_fields import ImageUriField
 
 api = Namespace('tracks', description='Tracks', path='/')
 
@@ -17,7 +18,7 @@ TRACK = api.model('Track', {
     'id': fields.Integer(required=True),
     'name': fields.String,
     'description': fields.String,
-    'track_image_url': fields.String,
+    'track_image_url': ImageUriField(),
     'sessions': fields.List(fields.Nested(TRACK_SESSION)),
 })
 

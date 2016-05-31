@@ -5,14 +5,15 @@ from open_event.models.event import Event as EventModel
 from .helpers import get_object_list, get_object_or_404, get_object_in_event,\
     get_paginated_list
 from utils import PAGINATED_MODEL, PaginatedResourceBase
+from custom_fields import UriField, ImageUriField
 
 api = Namespace('sponsors', description='sponsors', path='/')
 
 SPONSOR = api.model('Sponsor', {
     'id': fields.Integer(required=True),
     'name': fields.String,
-    'url': fields.String,
-    'logo': fields.String,
+    'url': UriField(),
+    'logo': ImageUriField(),
 })
 
 SPONSOR_PAGINATED = api.clone('SponsorPaginated', PAGINATED_MODEL, {
