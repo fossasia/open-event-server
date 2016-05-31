@@ -27,11 +27,20 @@ class CustomField(Raw):
         else:
             return value
 
+    def validate_empty(self):
+        """
+        Return when value is empty or null
+        """
+        if self.required:
+            return False
+        else:
+            return True
+
     def validate(self, value):
         """
         Validate the value. return True if valid
         """
-        return True
+        pass
 
 
 class EmailField(CustomField):
@@ -43,8 +52,8 @@ class EmailField(CustomField):
     __schema_example__ = 'email@domain.com'
 
     def validate(self, value):
-        if not self.required and not value:
-            return True
+        if not value:
+            return self.validate_empty()
         if not EMAIL_REGEX.match(value):
             return False
         return True
@@ -59,8 +68,8 @@ class UriField(CustomField):
     __schema_example__ = 'http://website.com'
 
     def validate(self, value):
-        if not self.required and not value:
-            return True
+        if not value:
+            return self.validate_empty()
         if not URI_REGEX.match(value):
             return False
         return True
@@ -82,8 +91,8 @@ class ColorField(CustomField):
     __schema_example__ = 'green'
 
     def validate(self, value):
-        if not self.required and not value:
-            return True
+        if not value:
+            return self.validate_empty()
         try:
             # using the same colour package used by sqlalchemy and wtforms
             colour.Color(value)
