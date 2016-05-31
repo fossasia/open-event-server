@@ -54,8 +54,8 @@ class MyHomeView(AdminIndexView):
             return redirect(intended_url())
 
     @expose('/password/reset', methods=('GET', 'POST'))
-    def password_reminder_view(self):
-        """Password reminder view"""
+    def password_reset_view(self):
+        """Password reset view"""
         if request.method == 'GET':
             return self.render('/gentelella/admin/login/password_reminder.html')
         if request.method == 'POST':
