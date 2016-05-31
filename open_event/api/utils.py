@@ -2,8 +2,8 @@ from flask_restplus import Model, fields, reqparse
 
 # Parameters for a paginated response
 PAGE_PARAMS = {
-    'start': {'description': 'ID to begin from', 'type': int},
-    'limit': {'description': 'Number of results to be retrieved', 'type': int},
+    'start': {'description': 'Serial number to start from', 'type': int},
+    'limit': {'description': 'Limit on the number of results', 'type': int},
 }
 
 # Base Api Model for a paginated response
