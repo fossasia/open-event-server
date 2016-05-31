@@ -4,7 +4,7 @@ from open_event.models.session import Session as SessionModel
 from open_event.models.event import Event as EventModel
 from .helpers import get_object_list, get_object_or_404, get_object_in_event,\
     get_paginated_list
-from utils import PAGINATED_MODEL, PaginatedResourceBase
+from utils import PAGINATED_MODEL, PaginatedResourceBase, PAGE_PARAMS
 
 api = Namespace('sessions', description='Sessions', path='/')
 
@@ -56,7 +56,7 @@ SESSION_PAGINATED = api.clone('SessionPaginated', PAGINATED_MODEL, {
 
 @api.route('/events/<int:event_id>/sessions/<int:session_id>')
 @api.response(404, 'Session not found')
-@api.response(400, 'Object does not belong to event')
+@api.response(400, 'Session does not belong to event')
 class Session(Resource):
     @api.doc('get_session')
     @api.marshal_with(SESSION)
@@ -66,7 +66,6 @@ class Session(Resource):
 
 
 @api.route('/events/<int:event_id>/sessions')
-@api.param('event_id')
 class SessionList(Resource):
     @api.doc('list_sessions')
     @api.marshal_list_with(SESSION)
@@ -80,9 +79,7 @@ class SessionList(Resource):
 
 @api.route('/events/<int:event_id>/sessions/page')
 class SessionListPaginated(Resource, PaginatedResourceBase):
-    @api.doc('list_sessions_paginated')
-    @api.param('start')
-    @api.param('limit')
+    @api.doc('list_sessions_paginated', params=PAGE_PARAMS)
     @api.marshal_with(SESSION_PAGINATED)
     def get(self, event_id):
         """List sessions in a paginated manner"""

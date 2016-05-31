@@ -4,7 +4,7 @@ from open_event.models.speaker import Speaker as SpeakerModel
 from open_event.models.event import Event as EventModel
 from .helpers import get_object_list, get_object_or_404, get_object_in_event,\
     get_paginated_list
-from utils import PAGINATED_MODEL, PaginatedResourceBase
+from utils import PAGINATED_MODEL, PaginatedResourceBase, PAGE_PARAMS
 
 api = Namespace('speakers', description='Speakers', path='/')
 
@@ -37,7 +37,7 @@ SPEAKER_PAGINATED = api.clone('SpeakerPaginated', PAGINATED_MODEL, {
 
 @api.route('/events/<int:event_id>/speakers/<int:speaker_id>')
 @api.response(404, 'Speaker not found')
-@api.response(400, 'Object does not belong to event')
+@api.response(400, 'Speaker does not belong to event')
 class Speaker(Resource):
     @api.doc('get_speaker')
     @api.marshal_with(SPEAKER)
@@ -47,7 +47,6 @@ class Speaker(Resource):
 
 
 @api.route('/events/<int:event_id>/speakers')
-@api.param('event_id')
 class SpeakerList(Resource):
     @api.doc('list_speakers')
     @api.marshal_list_with(SPEAKER)
@@ -61,9 +60,7 @@ class SpeakerList(Resource):
 
 @api.route('/events/<int:event_id>/speakers/page')
 class SpeakerListPaginated(Resource, PaginatedResourceBase):
-    @api.doc('list_speakers_paginated')
-    @api.param('start')
-    @api.param('limit')
+    @api.doc('list_speakers_paginated', params=PAGE_PARAMS)
     @api.marshal_with(SPEAKER_PAGINATED)
     def get(self, event_id):
         """List speakers in a paginated manner"""

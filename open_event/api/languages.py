@@ -4,7 +4,7 @@ from open_event.models.session import Language as LanguageModel
 from open_event.models.event import Event as EventModel
 from .helpers import get_object_list, get_object_or_404, get_object_in_event,\
     get_paginated_list
-from utils import PAGINATED_MODEL, PaginatedResourceBase
+from utils import PAGINATED_MODEL, PaginatedResourceBase, PAGE_PARAMS
 
 api = Namespace('languages', description='languages', path='/')
 
@@ -22,7 +22,7 @@ LANGUAGE_PAGINATED = api.clone('LanguagePaginated', PAGINATED_MODEL, {
 
 @api.route('/events/<int:event_id>/languages/<int:language_id>')
 @api.response(404, 'Language not found')
-@api.response(400, 'Object does not belong to event')
+@api.response(400, 'Language does not belong to event')
 class Language(Resource):
     @api.doc('get_language')
     @api.marshal_with(LANGUAGE)
@@ -32,7 +32,6 @@ class Language(Resource):
 
 
 @api.route('/events/<int:event_id>/languages')
-@api.param('event_id')
 class LanguageList(Resource):
     @api.doc('list_languages')
     @api.marshal_list_with(LANGUAGE)
@@ -46,9 +45,7 @@ class LanguageList(Resource):
 
 @api.route('/events/<int:event_id>/languages/page')
 class LanguageListPaginated(Resource, PaginatedResourceBase):
-    @api.doc('list_languages_paginated')
-    @api.param('start')
-    @api.param('limit')
+    @api.doc('list_languages_paginated', params=PAGE_PARAMS)
     @api.marshal_with(LANGUAGE_PAGINATED)
     def get(self, event_id):
         """List languages in a paginated manner"""

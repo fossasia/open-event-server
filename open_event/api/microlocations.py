@@ -4,7 +4,7 @@ from open_event.models.microlocation import Microlocation as MicrolocationModel
 from open_event.models.event import Event as EventModel
 from .helpers import get_object_list, get_object_or_404, get_object_in_event,\
     get_paginated_list
-from utils import PAGINATED_MODEL, PaginatedResourceBase
+from utils import PAGINATED_MODEL, PaginatedResourceBase, PAGE_PARAMS
 
 api = Namespace('microlocations', description='microlocations', path='/')
 
@@ -24,7 +24,7 @@ MICROLOCATION_PAGINATED = api.clone('MicrolocationPaginated', PAGINATED_MODEL, {
 
 @api.route('/events/<int:event_id>/microlocations/<int:microlocation_id>')
 @api.response(404, 'Microlocation not found')
-@api.response(400, 'Object does not belong to event')
+@api.response(400, 'Microlocation does not belong to event')
 class Microlocation(Resource):
     @api.doc('get_microlocation')
     @api.marshal_with(MICROLOCATION)
@@ -35,7 +35,6 @@ class Microlocation(Resource):
 
 
 @api.route('/events/<int:event_id>/microlocations')
-@api.param('event_id')
 class MicrolocationList(Resource):
     @api.doc('list_microlocations')
     @api.marshal_list_with(MICROLOCATION)
@@ -49,9 +48,7 @@ class MicrolocationList(Resource):
 
 @api.route('/events/<int:event_id>/microlocations/page')
 class MicrolocationListPaginated(Resource, PaginatedResourceBase):
-    @api.doc('list_microlocations_paginated')
-    @api.param('start')
-    @api.param('limit')
+    @api.doc('list_microlocations_paginated', params=PAGE_PARAMS)
     @api.marshal_with(MICROLOCATION_PAGINATED)
     def get(self, event_id):
         """List microlocations in a paginated manner"""

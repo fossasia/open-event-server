@@ -4,7 +4,7 @@ from open_event.models.sponsor import Sponsor as SponsorModel
 from open_event.models.event import Event as EventModel
 from .helpers import get_object_list, get_object_or_404, get_object_in_event,\
     get_paginated_list
-from utils import PAGINATED_MODEL, PaginatedResourceBase
+from utils import PAGINATED_MODEL, PaginatedResourceBase, PAGE_PARAMS
 
 api = Namespace('sponsors', description='sponsors', path='/')
 
@@ -22,7 +22,7 @@ SPONSOR_PAGINATED = api.clone('SponsorPaginated', PAGINATED_MODEL, {
 
 @api.route('/events/<int:event_id>/sponsors/<int:sponsor_id>')
 @api.response(404, 'Sponsor not found')
-@api.response(400, 'Object does not belong to event')
+@api.response(400, 'Sponsor does not belong to event')
 class Sponsor(Resource):
     @api.doc('get_sponsor')
     @api.marshal_with(SPONSOR)
@@ -32,7 +32,6 @@ class Sponsor(Resource):
 
 
 @api.route('/events/<int:event_id>/sponsors')
-@api.param('event_id')
 class SponsorList(Resource):
     @api.doc('list_sponsors')
     @api.marshal_list_with(SPONSOR)
@@ -46,9 +45,7 @@ class SponsorList(Resource):
 
 @api.route('/events/<int:event_id>/sponsors/page')
 class SponsorListPaginated(Resource, PaginatedResourceBase):
-    @api.doc('list_sponsors_paginated')
-    @api.param('start')
-    @api.param('limit')
+    @api.doc('list_sponsors_paginated', params=PAGE_PARAMS)
     @api.marshal_with(SPONSOR_PAGINATED)
     def get(self, event_id):
         """List sponsors in a paginated manner"""

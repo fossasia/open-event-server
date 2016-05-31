@@ -4,7 +4,7 @@ from open_event.models.session import Format as FormatModel
 from open_event.models.event import Event as EventModel
 from .helpers import get_object_list, get_object_or_404, get_object_in_event, \
     get_paginated_list
-from utils import PAGINATED_MODEL, PaginatedResourceBase
+from utils import PAGINATED_MODEL, PaginatedResourceBase, PAGE_PARAMS
 
 
 api = Namespace('formats', description='formats', path='/')
@@ -22,7 +22,7 @@ FORMAT_PAGINATED = api.clone('FormatPaginated', PAGINATED_MODEL, {
 
 @api.route('/events/<int:event_id>/formats/<int:format_id>')
 @api.response(404, 'Format not found')
-@api.response(400, 'Object does not belong to event')
+@api.response(400, 'Format does not belong to event')
 class Format(Resource):
     @api.doc('get_format')
     @api.marshal_with(FORMAT)
@@ -32,7 +32,6 @@ class Format(Resource):
 
 
 @api.route('/events/<int:event_id>/formats')
-@api.param('event_id')
 class FormatList(Resource):
     @api.doc('list_formats')
     @api.marshal_list_with(FORMAT)
@@ -46,9 +45,7 @@ class FormatList(Resource):
 
 @api.route('/events/<int:event_id>/formats/page')
 class FormatListPaginated(Resource, PaginatedResourceBase):
-    @api.doc('list_formats_paginated')
-    @api.param('start')
-    @api.param('limit')
+    @api.doc('list_formats_paginated', params=PAGE_PARAMS)
     @api.marshal_with(FORMAT_PAGINATED)
     def get(self, event_id):
         """List formats in a paginated manner"""
