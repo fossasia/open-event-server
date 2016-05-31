@@ -3,13 +3,14 @@ from flask.ext.restplus import Resource, Namespace, fields
 from open_event.models.event import Event as EventModel
 from .helpers import get_object_list, get_object_or_404, get_paginated_list
 from utils import PAGINATED_MODEL, PaginatedResourceBase
+from custom_fields import EmailField
 
 api = Namespace('events', description='Events')
 
 EVENT = api.model('Event', {
     'id': fields.Integer(required=True),
     'name': fields.String,
-    'email': fields.String,
+    'email': EmailField,
     'color': fields.String,
     'logo': fields.String,
     'start_time': fields.DateTime,
