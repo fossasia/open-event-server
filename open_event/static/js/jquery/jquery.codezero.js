@@ -43,7 +43,7 @@ function fuzzyMatch(str, pattern) {
 /**
  * Round of the the closest multiple of a number specified
  * @param {int} val The number to round off
- * @param {int} multiple The number to whose closest multiple val has to be rounded off to
+ * @param {int} [multiple=6] The number to whose closest multiple val has to be rounded off to
  * @returns {int}
  */
 function roundOffToMultiple(val, multiple) {
@@ -69,10 +69,13 @@ function roundOffToMultiple(val, multiple) {
  * Check if an element is horizontally bound within a parent div
  * @param {jQuery} $parentDiv The parent div
  * @param {jQuery} $childDiv The child div target
- * @param {int} offsetAdd Offset to add while checking
+ * @param {int} [offsetAdd=0] Offset to add while checking
  * @returns {boolean}
  */
 function horizontallyBound($parentDiv, $childDiv, offsetAdd) {
+    if(!offsetAdd) {
+        offsetAdd = 0;
+    }
     var pageWidth = $parentDiv.width();
     var pageHeight = $parentDiv.height();
     var pageTop = $parentDiv.offset().top;
@@ -114,7 +117,7 @@ function collision($div1, $div2) {
 /**
  * Log an error message to the console
  * @param {string} message The message
- * @param {string} ref a reference object that will be printed along with the message
+ * @param {Object} [ref] a reference object that will be printed along with the message
  */
 function logError(message, ref) {
     if (_.isUndefined(ref)) {
@@ -128,7 +131,7 @@ function logError(message, ref) {
 /**
  * Log a debug message to the console
  * @param {string} message The message
- * @param {string} ref a reference object that will be printed along with the message
+ * @param {Object} [ref] a reference object that will be printed along with the message
  */
 function logDebug(message, ref) {
     if (_.isUndefined(ref)) {
