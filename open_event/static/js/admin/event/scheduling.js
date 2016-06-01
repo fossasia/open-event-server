@@ -189,7 +189,7 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
 
     sessionRefObject.$sessionElement.css("top", sessionRefObject.session.top + "px");
     sessionRefObject.$sessionElement.css("height", minutesToPixels(sessionRefObject.session.duration) + "px");
-    $tracksHolder.find(".track[data-track-id=" + sessionRefObject.session.track_id + "]").append(sessionRefObject.$sessionElement);
+    $tracksHolder.find(".track[data-track-id=" + sessionRefObject.session.track_id + "] > .track-inner").append(sessionRefObject.$sessionElement);
 
     sessionRefObject.$sessionElement.ellipsis().ellipsis();
 
@@ -267,7 +267,7 @@ function addSessionToUnscheduled(sessionRef, isFiltering, shouldBroadcast) {
  */
 function updateTrackSessionsCounterBadges(trackIds) {
     _.each(trackIds, function (trackId) {
-        var $track = $tracksHolder.find(".track[data-track-id=" + trackId + "]");
+        var $track = $tracksHolder.find(".track[data-track-id=" + trackId + "] > .track-inner");
         var sessionsCount = $track.find(".session.scheduled").length;
         $track.find(".track-header > .badge").text(sessionsCount);
     });
@@ -286,29 +286,29 @@ function updateColor($element) {
  * Move any overlapping session to the unscheduled list. To be run as soon as timeline is initialized.
  */
 function removeOverlaps() {
-    $.each($tracks, function (index, $track) {
-        $track = $($track);
-        var $sessionElements = $track.find(".session.scheduled");
-        $.each($sessionElements, function (index, $sessionElement) {
-            $sessionElement = $($sessionElement);
-            var isColliding = isSessionOverlapping($track, $sessionElement);
-            if (isColliding) {
-                addSessionToUnscheduled($sessionElement);
-            }
-        });
+    var $sessionElements = $tracksHolder.find(".session.scheduled");
+    _.each($sessionElements, function ($sessionElement) {
+        $sessionElement = $($sessionElement);
+        var isColliding = isSessionOverlapping($sessionElement);
+        if (isColliding) {
+            addSessionToUnscheduled($sessionElement);
+        }
     });
 }
 
 /**
  * Check if a session is overlapping any other session
- * @param {jQuery} $track The track to search in
  * @param {jQuery} $session The session
+ * @param {jQuery} [$track] The track to search in
  * @returns {boolean|jQuery} If no overlap, return false. If overlaps, return the session that's beneath.
  */
-function isSessionOverlapping($track, $session) {
+function isSessionOverlapping($session, $track) {
+    if (isUndefinedOrNull($track)) {
+        $track = $session.parent();
+    }
     var $otherSessions = $track.find(".session.scheduled");
     var returnVal = false;
-    $.each($otherSessions, function (index, $otherSession) {
+    _.each($otherSessions, function ($otherSession) {
         $otherSession = $($otherSession);
         if (!$otherSession.is($session) && collision($otherSession, $session)) {
             returnVal = $otherSession;
@@ -540,10 +540,11 @@ function initializeInteractables() {
                 top: $sessionElement.data("temp-top")
             });
 
-            var isColliding = isSessionOverlapping($trackDropZone, $sessionElement);
+            var isColliding = isSessionOverlapping($sessionElement, $trackDropZone);
             if (!isColliding) {
                 updateSessionTime($sessionElement);
             } else {
+                createSnackbar("Session cannot be dropped onto another sessions.", "Try Again");
                 addSessionToUnscheduled($sessionElement);
             }
 
