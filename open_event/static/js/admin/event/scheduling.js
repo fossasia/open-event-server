@@ -74,11 +74,11 @@ var unscheduledStore = [];
  * @type {jQuery|HTMLElement}
  */
 var $tracks = $(".track");
-var $unscheduledSessionsList = $(".sessions-list");
-var $tracksHolder = $(".track-container");
+var $unscheduledSessionsList = $("#sessions-list");
+var $tracksHolder = $("#track-container");
 var $unscheduledSessionsHolder = $unscheduledSessionsList;
-var $noSessionsInfoBox = $(".no-sessions-info");
-var $dayButtonsHolder = $(".date-change-btn-holder");
+var $noSessionsInfoBox = $("#no-sessions-info");
+var $dayButtonsHolder = $("#date-change-btn-holder");
 
 /**
  * TEMPLATE STRINGS
@@ -442,7 +442,7 @@ function generateTimeUnits() {
  */
 function initializeInteractables() {
 
-    $tracks = $(".track");
+    $tracks = $tracksHolder.find(".track");
 
     interact(".session")
         .draggable({
@@ -674,7 +674,7 @@ function loadTracksToTimeline(day) {
         }
     });
 
-    $tracks = $(".track");
+    $tracks = $tracksHolder.find(".track");
     $("[data-toggle=tooltip]").tooltip("hide");
 }
 
