@@ -1,6 +1,10 @@
 /**
  * Created by Niranjan on 29-May-16.
  */
+
+/**
+ * An extended jQuery method to call a callback on an input change
+ */
 jQuery.fn.extend({
     valueChange: function (callback) {
         return this.each(function () {
@@ -16,17 +20,32 @@ jQuery.fn.extend({
     }
 });
 
-
-var cache = _.memoize(function(pattern){
-  return new RegExp(pattern.split("").reduce(function(a,b){
-    return a+'[^'+b+']*'+b;
-  }), 'i');
+/**
+ * Cache the results of a RegExp match.
+ * @type {Function}
+ */
+var cachedFuzzyMatch = _.memoize(function (pattern) {
+    return new RegExp(pattern.split("").reduce(function (a, b) {
+        return a + '[^' + b + ']*' + b;
+    }), 'i');
 });
 
-function fuzzy_match(str,pattern){
-  return cache(pattern).test(str)
+/**
+ * Fuzzy match a string and a pattern/query
+ * @param {string} str The target string
+ * @param {string} pattern The query string
+ * @returns {boolean} true if matches. Else false.
+ */
+function fuzzyMatch(str, pattern) {
+    return cachedFuzzyMatch(pattern).test(str)
 }
 
+/**
+ * Round of the the closest multiple of a number specified
+ * @param {int} val The number to round off
+ * @param {int} [multiple=6] The number to whose closest multiple val has to be rounded off to
+ * @returns {int}
+ */
 function roundOffToMultiple(val, multiple) {
     if (!multiple) {
         multiple = 6;
@@ -47,9 +66,16 @@ function roundOffToMultiple(val, multiple) {
 }
 
 /**
- * @return {boolean}
+ * Check if an element is horizontally bound within a parent div
+ * @param {jQuery} $parentDiv The parent div
+ * @param {jQuery} $childDiv The child div target
+ * @param {int} [offsetAdd=0] Offset to add while checking
+ * @returns {boolean}
  */
 function horizontallyBound($parentDiv, $childDiv, offsetAdd) {
+    if(!offsetAdd) {
+        offsetAdd = 0;
+    }
     var pageWidth = $parentDiv.width();
     var pageHeight = $parentDiv.height();
     var pageTop = $parentDiv.offset().top;
@@ -62,7 +88,15 @@ function horizontallyBound($parentDiv, $childDiv, offsetAdd) {
     return !!((elementLeft + offset >= pageLeft) && (elementTop + offset >= pageTop) && (elementLeft + elementWidth <= pageLeft + pageWidth) && (elementTop + elementHeight <= pageTop + pageHeight));
 }
 
-// Borrowed from http://stackoverflow.com/a/5541252/1562480. Author: BC.
+/**
+ * Borrowed from http://stackoverflow.com/a/5541252/1562480. Author: BC.
+ *
+ * Check if a div collides/overlaps with/over another div
+ *
+ * @param {jQuery} $div1 The first div
+ * @param {jQuery} $div2 The second div
+ * @returns {boolean} true if overlaps/collides, else false.
+ */
 function collision($div1, $div2) {
     var x1 = $div1.offset().left;
     var y1 = $div1.offset().top;
@@ -78,5 +112,35 @@ function collision($div1, $div2) {
     var r2 = x2 + w2;
     return !(b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2);
 }
+
+
+/**
+ * Log an error message to the console
+ * @param {string} message The message
+ * @param {Object} [ref] a reference object that will be printed along with the message
+ */
+function logError(message, ref) {
+    if (_.isUndefined(ref)) {
+        console.log("[E] " + message);
+    } else {
+        console.log("[E] " + message + ". Ref ↴");
+        console.log(ref);
+    }
+}
+
+/**
+ * Log a debug message to the console
+ * @param {string} message The message
+ * @param {Object} [ref] a reference object that will be printed along with the message
+ */
+function logDebug(message, ref) {
+    if (_.isUndefined(ref)) {
+        console.log("[D] " + message);
+    } else {
+        console.log("[D] " + message + ". Ref ↴");
+        console.log(ref);
+    }
+}
+
 
 

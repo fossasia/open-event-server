@@ -33,6 +33,14 @@ class EventsView(ModelView):
         event = DataGetter.get_event(event_id)
         return self.render('/gentelella/admin/event/details/details.html', event=event)
 
+    @expose('/<event_id>/update/', methods=('POST',))
+    def update_view(self, event_id):
+        event = DataGetter.get_event(event_id)
+        if request.method == "POST":
+            data = dict((key, request.form.getlist(key)) for key in request.form.keys())
+            DataManager.update_event(data, event_id)
+        return self.render('/gentelella/admin/event/details/details.html', event=event)
+
     @expose('/<event_id>/delete/', methods=('GET',))
     def delete_view(self, event_id):
         if request.method == "GET":

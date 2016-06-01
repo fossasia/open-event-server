@@ -31,10 +31,23 @@ from ..models.social_link import SocialLink
 from ..models.track import Track
 from open_event.helpers.oauth import OAuth, FbOAuth
 from requests_oauthlib import OAuth2Session
+from ..models.invite import Invite
+
 
 
 class DataManager(object):
     """Main class responsible for DataBase managing"""
+
+    @staticmethod
+    def add_invite_to_event(user_id, event_id):
+        """
+        Invite will be saved to database with proper Event id and User id
+        :param user_id: Invite belongs to User by user id
+        :param event_id: Invite belongs to Event by event id
+        """
+        new_invite = Invite(user_id=user_id,
+                          event_id=event_id)
+        save_to_db(new_invite, "Invite saved")
 
     @staticmethod
     def create_track(form, event_id):
@@ -522,24 +535,21 @@ class DataManager(object):
             raise ValidationError("start date greater than end date")
 
     @staticmethod
-    def update_event(form, event):
+    def update_event(data, event_id):
         """
         Event will be updated in database
-        :param form: view data form
+        :param data: view data form
         :param event: object contains all earlier data
         """
-        data = form.data
-        logo = data['logo']
-        del data['logo']
+
+        closing_date = data.get('closing_datetime', None)
+        if closing_date:
+            data['closing_datetime'] = datetime.strptime(closing_date[0], '%m/%d/%Y %I:%M %p')
         db.session.query(Event) \
-            .filter_by(id=event.id) \
+            .filter_by(id=event_id) \
             .update(dict(data))
-        if logo:
-            event.logo = logo
-        else:
-            event.logo = ''
-        save_to_db(event, "Event updated")
-        update_version(event_id=event.id,
+        save_to_db(Event.query.get(event_id), "Event updated")
+        update_version(event_id=event_id,
                        is_created=False,
                        column_to_increment="event_ver")
 

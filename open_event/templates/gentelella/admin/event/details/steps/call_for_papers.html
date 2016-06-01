@@ -52,3 +52,41 @@
         </div>
     </div>
 </form>
+
+<script type="text/javascript">
+    function invite_speakers(evt) {
+        var a = $('#invite-speaker-form').serializeArray();
+        var email = a[0].value;
+        console.log(email);
+        var csrf = $('#csrf_token').val();
+        var payload = {
+            'email': email,
+            'csrf_token': csrf
+        };
+        var posting = $.ajax({
+            type: "POST",
+            url: "{{ url_for('invite.create_view', event_id=event.id) }}",
+            data: payload
+        });
+
+        posting.done(function (result) {
+            $('#close-add-track').click();
+            new PNotify({
+                title: 'Track Added',
+                text: 'Track added successfully to DB',
+                type: 'success'
+            });
+        });
+
+        posting.fail(function () {
+            $('#close-add-track').click();
+            new PNotify({
+                title: 'Error',
+                text: 'Invitation could not be added to DB',
+                type: 'error'
+            });
+        });
+
+        return false;
+    }
+</script>
