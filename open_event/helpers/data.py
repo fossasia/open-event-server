@@ -140,7 +140,8 @@ class DataManager(object):
                               start_time=form["start_time"],
                               end_time=form["end_time"],
                               event_id=event_id,
-                              abstract="")
+                              abstract="",
+                              state="pending")
 
         save_to_db(new_session, "Session saved")
         update_version(event_id, False, "session_ver")
