@@ -1,16 +1,17 @@
 """Copyright 2015 Rafal Kowalski"""
 import logging
 
-from flask import url_for, redirect, request
+from flask import url_for, redirect, request, session
 from flask.ext import login
 from flask_admin import expose
 from flask_admin.base import AdminIndexView
 from flask.ext.scrypt import generate_password_hash
 
-from ...helpers.data import DataManager, save_to_db
+from ...helpers.data import DataManager, save_to_db,get_google_auth,get_facebook_auth
 from ...helpers.data_getter import DataGetter
 from ...helpers.helpers import send_email_after_account_create, send_email_with_reset_password_hash
 from open_event.models.user import User
+from open_event.helpers.oauth import OAuth, FbOAuth
 
 
 def intended_url():
@@ -27,7 +28,15 @@ class MyHomeView(AdminIndexView):
     def login_view(self):
         valid_user = None
         if request.method == 'GET':
-            return self.render('/gentelella/admin/login/login.html')
+            google = get_google_auth()
+            auth_url, state = google.authorization_url(OAuth.get_auth_uri(), access_type='offline')
+            session['oauth_state'] = state
+
+            # Add Facebook Oauth 2.0 login
+            facebook = get_facebook_auth()
+            fb_auth_url, state = facebook.authorization_url(FbOAuth.get_auth_uri(), access_type='offline')
+            session['fb_oauth_state'] = state
+            return self.render('/gentelella/admin/login/login.html', auth_url=auth_url, fb_auth_url=fb_auth_url)
         if request.method == 'POST':
             username = request.form['username']
             users = User.query.filter_by(login=username)
