@@ -204,20 +204,18 @@ class DataGetter:
 
     @staticmethod
     def get_user_events():
-        results = []
-        uer = UsersEventsRoles.query.filter_by(user_id=login.current_user.id)
-        for el in uer:
-            results.append(Event.query.get(el.id))
-        return results
+        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)
 
     @staticmethod
     def get_completed_events():
-        events = Event.query.filter(Event.state == 'Completed')
+        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
+            .filter(Event.state == 'Completed')
         return events
 
     @staticmethod
     def get_current_events():
-        events = Event.query.filter(Event.state != 'Completed')
+        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
+            .filter(Event.state != 'Completed')
         return events
 
     @staticmethod
