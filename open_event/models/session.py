@@ -146,7 +146,7 @@ class Session(db.Model):
 
     event_id = db.Column(db.Integer,
                          db.ForeignKey('events.id'))
-    is_accepted = db.Column(db.Boolean, default=False)
+    state = db.Column(db.String, default="pending")
 
     def __init__(self,
                  title=None,
@@ -161,7 +161,7 @@ class Session(db.Model):
                  language=None,
                  microlocation=None,
                  event_id=None,
-                 is_accepted=False):
+                 state="pending"):
         self.title = title
         self.subtitle = subtitle
         self.abstract = abstract
@@ -174,7 +174,7 @@ class Session(db.Model):
         self.language = language
         self.microlocation = microlocation
         self.event_id = event_id
-        self.is_accepted = is_accepted
+        self.state = state
 
     @property
     def serialize(self):

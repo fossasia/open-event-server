@@ -2,6 +2,7 @@
 from ..models.event import Event, EventsUsers
 from ..models.session import Session, Level, Format, Language
 from ..models.track import Track
+from ..models.invite import Invite
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
@@ -14,6 +15,15 @@ from flask import flash
 
 
 class DataGetter:
+
+    @staticmethod
+    def get_invite_by_user_id(user_id):
+        invite = Invite.query.filter_by(user_id=user_id)
+        if invite:
+            return invite.first()
+        else:
+            flash("Invite doesn't exist")
+            return None
 
     @staticmethod
     def get_all_events():

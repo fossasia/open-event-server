@@ -46,7 +46,9 @@ class DataManager(object):
         :param event_id: Invite belongs to Event by event id
         """
         new_invite = Invite(user_id=user_id,
-                          event_id=event_id)
+                            event_id=event_id)
+        hash = random.getrandbits(128)
+        new_invite.hash = "%032x" % hash
         save_to_db(new_invite, "Invite saved")
 
     @staticmethod
@@ -122,6 +124,25 @@ class DataManager(object):
         new_session.level = form.level.data
         new_session.track = form.track.data
         new_session.is_accepted = is_accepted
+        save_to_db(new_session, "Session saved")
+        update_version(event_id, False, "session_ver")
+
+    @staticmethod
+    def add_session_to_event(form, event_id):
+        """
+        Session will be saved to database with proper Event id
+        :param form: view data form
+        :param event_id: Session belongs to Event by event id
+        """
+        new_session = Session(title=form["title"],
+                              subtitle="",
+                              description=form["description"],
+                              start_time=form["start_time"],
+                              end_time=form["end_time"],
+                              event_id=event_id,
+                              abstract="",
+                              state="pending")
+
         save_to_db(new_session, "Session saved")
         update_version(event_id, False, "session_ver")
 

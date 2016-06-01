@@ -31,14 +31,14 @@ HEADERS = {
                       "VwmIvKlPoc1YVpKCSOwhEFWZvxFT8")
 }
 
-def send_email_invitation(email, username, event_name):
+def send_email_invitation(email, username, event_name, link):
     """Send email after account create"""
     payload = {'to': email,
                'from': 'open-event@googlegroups.com',
                'subject': "Invitation to Submit Papers for " + event_name,
-               "html": ("Hi " + username + "<br/>" + \
-                        "You are invited to submit papers for event: " + event_name + \
-                        "<br/> ")}
+               "html": ("Hi %s<br/>" + \
+                        "You are invited to submit papers for event: %s" + \
+                        "<br/> Visit this link to fill up details: %s" % (username, event_name, link))}
     requests.post("https://api.sendgrid.com/api/mail.send.json",
                   data=payload,
                   headers=HEADERS)
