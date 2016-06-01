@@ -8,6 +8,7 @@ class Invite(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship("User", backref="invite")
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    hash = db.Column(db.String, nullable=False)
 
     def __init__(self, event_id=None, user_id=None):
         self.user_id = user_id
