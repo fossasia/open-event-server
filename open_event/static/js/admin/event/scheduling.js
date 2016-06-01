@@ -147,8 +147,9 @@ function getSessionFromReference(sessionRef, $searchTarget) {
  * Add a session to the timeline at the said position
  * @param {int|Object|jQuery} sessionRef Can be session ID, or session object or an existing session element from the unscheduled list
  * @param {Object} [position] Contains position information if the session is changed (track-id and top)
+ * @param {boolean} [shouldBroadcast=true]
  */
-function addSessionToTimeline(sessionRef, position) {
+function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
     var sessionRefObject;
     if (_.isUndefined(position)) {
         sessionRefObject = getSessionFromReference(sessionRef, $unscheduledSessionsHolder);
@@ -164,7 +165,7 @@ function addSessionToTimeline(sessionRef, position) {
     var oldTrack = sessionRefObject.session.track_id;
     var newTrack = null;
 
-    if (!_.isUndefined(position)) {
+    if (!isUndefinedOrNull(position)) {
         sessionRefObject.session.top = position.top;
         sessionRefObject.session.track_id = position.track_id;
         newTrack = position.track_id;
@@ -183,6 +184,9 @@ function addSessionToTimeline(sessionRef, position) {
         sessionRefObject.session.track_id = 0;
     }
 
+    delete  sessionRefObject.session.start_time.isReset;
+    delete  sessionRefObject.session.end_time.isReset;
+
     sessionRefObject.$sessionElement.css("top", sessionRefObject.session.top + "px");
     sessionRefObject.$sessionElement.css("height", minutesToPixels(sessionRefObject.session.duration) + "px");
     $tracksHolder.find(".track[data-track-id=" + sessionRefObject.session.track_id + "]").append(sessionRefObject.$sessionElement);
@@ -192,23 +196,27 @@ function addSessionToTimeline(sessionRef, position) {
     updateSessionTimeOnTooltip(sessionRefObject.$sessionElement);
     updateColor(sessionRefObject.$sessionElement);
 
-    if (!sessionRefObject.newElement) {
-        $(document).trigger("scheduling:change", sessionRefObject.session);
+    if (isUndefinedOrNull(shouldBroadcast) || shouldBroadcast) {
+        if (!sessionRefObject.newElement) {
+            $(document).trigger("scheduling:change", sessionRefObject.session);
+        }
+
+        $(document).trigger("scheduling:recount", [oldTrack, newTrack]);
     }
 
     _.remove(unscheduledStore, function (sessionTemp) {
         return sessionTemp.id == sessionRefObject.session.id
     });
 
-    $(document).trigger("scheduling:recount", [oldTrack, newTrack]);
 }
 
 /**
  * Remove a session from the timeline and add it to the Unscheduled list or create a session element and add to Unscheduled list
  * @param {int|Object|jQuery} sessionRef Can be session ID, or session object or an existing session element from the timeline
  * @param {boolean} [isFiltering=false]
+ * @param {boolean} [shouldBroadcast=true]
  */
-function addSessionToUnscheduled(sessionRef, isFiltering) {
+function addSessionToUnscheduled(sessionRef, isFiltering, shouldBroadcast) {
     var session;
 
     var sessionRefObject = getSessionFromReference(sessionRef, $tracksHolder);
@@ -223,6 +231,9 @@ function addSessionToUnscheduled(sessionRef, isFiltering) {
     sessionRefObject.session.duration = 30;
     sessionRefObject.session.start_time.hours(0).minutes(0);
     sessionRefObject.session.end_time.hours(0).minutes(0);
+
+    sessionRefObject.session.start_time.isReset = true;
+    sessionRefObject.session.end_time.isReset = true;
 
     sessionRefObject.$sessionElement.data("session", session);
     $unscheduledSessionsHolder.append(sessionRefObject.$sessionElement);
@@ -239,12 +250,14 @@ function addSessionToUnscheduled(sessionRef, isFiltering) {
     sessionRefObject.$sessionElement.ellipsis().ellipsis();
     $noSessionsInfoBox.hide();
 
-    if (_.isUndefined(isFiltering) || !isFiltering) {
-        if (!sessionRefObject.newElement) {
-            $(document).trigger("scheduling:change", sessionRefObject.session);
+    if (isUndefinedOrNull(isFiltering) || !isFiltering) {
+        if (isUndefinedOrNull(shouldBroadcast) || shouldBroadcast) {
+            if (!sessionRefObject.newElement) {
+                $(document).trigger("scheduling:change", sessionRefObject.session);
+            }
+            $(document).trigger("scheduling:recount", [oldTrack]);
         }
         unscheduledStore.push(sessionRefObject.session);
-        $(document).trigger("scheduling:recount", [oldTrack]);
     }
 }
 
@@ -653,10 +666,11 @@ function loadTracksToTimeline(day) {
     _.each(tracksStore, addTrackToTimeline);
 
     _.each(sessionsStore[dayIndex], function (session) {
-        if (!_.isNull(session.start_time) && !_.isNull(session.end_time) && session.start_time != session.end_time) {
-            addSessionToTimeline(session);
+        // Add session elements, but do not broadcast.
+        if (!_.isNull(session.start_time) && !_.isNull(session.end_time) && session.start_time != session.end_time && !session.hasOwnProperty("isReset")) {
+            addSessionToTimeline(session, null, false);
         } else {
-            addSessionToUnscheduled(session);
+            addSessionToUnscheduled(session, false, false);
         }
     });
 

@@ -142,5 +142,7 @@ function logDebug(message, ref) {
     }
 }
 
-
+function isUndefinedOrNull(variable) {
+    return (_.isUndefined(variable) || _.isNull(variable));
+}
 
