@@ -10,7 +10,7 @@ class UserDetail(db.Model):
     facebook = db.Column(db.String)
     twitter = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship("User", uselist=False, backref="user_detail")
+
 
     def __init__(self, fullname=None, avatar=None, contact=None, user_id=None, facebook=None, twitter=None):
         self.fullname = fullname

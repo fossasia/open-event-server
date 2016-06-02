@@ -35,8 +35,8 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Avatar
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                            {% if profile.user_detail[0].avatar %}
-                              <input name="avatar" class="form-control col-md-7 col-xs-12" value="{{profile.user_detail[0].avatar}}"/>
+                            {% if profile.user_detail.avatar %}
+                              <input name="avatar" class="form-control col-md-7 col-xs-12" value="{{profile.user_detail.avatar}}"/>
                             {% else %}
                               <input name="avatar" class="form-control col-md-7 col-xs-12" placeholder="Enter Link for Avatar"/>
                             {% endif %}
@@ -46,8 +46,8 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Contact
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                            {% if profile.user_detail[0].contact %}
-                              <input name="contact" class="form-control col-md-7 col-xs-12" value="{{profile.user_detail[0].contact}}"/>
+                            {% if profile.user_detail.contact %}
+                              <input name="contact" class="form-control col-md-7 col-xs-12" value="{{profile.user_detail.contact}}"/>
                             {% else %}
                               <input name="contact" class="form-control col-md-7 col-xs-12"/>
                             {% endif %}
@@ -57,8 +57,8 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Facebook
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                            {% if profile.user_detail[0].facebook %}
-                              <input name="facebook" class="form-control col-md-7 col-xs-12" value="{{profile.user_detail[0].facebook}}"/>
+                            {% if profile.user_detail.facebook %}
+                              <input name="facebook" class="form-control col-md-7 col-xs-12" value="{{profile.user_detail.facebook}}"/>
                             {% else %}
                               <input name="facebook" class="form-control col-md-7 col-xs-12"/>
                             {% endif %}
@@ -68,8 +68,8 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Twitter
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                            {% if profile.user_detail[0].twitter %}
-                              <input name="twitter" class="form-control col-md-7 col-xs-12" value="{{profile.user_detail[0].twitter}}"/>
+                            {% if profile.user_detail.twitter %}
+                              <input name="twitter" class="form-control col-md-7 col-xs-12" value="{{profile.user_detail.twitter}}"/>
                             {% else %}
                               <input name="twitter" class="form-control col-md-7 col-xs-12"/>
                             {% endif %}

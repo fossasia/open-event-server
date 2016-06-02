@@ -18,7 +18,7 @@ class User(db.Model):
     role = db.Column(db.String())
     avatar = db.Column(db.String())
     tokens = db.Column(db.Text)
-
+    user_detail = db.relationship("UserDetail", uselist=False, backref="user")
     # Flask-Login integration
     def is_authenticated(self):
         return True

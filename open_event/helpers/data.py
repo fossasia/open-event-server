@@ -486,6 +486,7 @@ class DataManager(object):
 
     @staticmethod
     def update_user(form, user_id):
+        print form
         user = User.query.filter_by(id=user_id).first()
         user_detail = UserDetail.query.filter_by(user_id=user_id).first()
         user.login = form['login']

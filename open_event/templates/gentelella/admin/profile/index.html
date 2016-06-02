@@ -16,8 +16,8 @@
         <div class="x_panel">
             <div class="x_title">
                 <h1>
-                    {% if profile.user_detail[0].avatar %}
-                    <img src="{{profile.user_detail[0].avatar}}">
+                    {% if profile.user_detail.avatar %}
+                    <img src="{{profile.user_detail.avatar}}">
                     {% else %}
                     <img src="{{ url_for('static', filename='img/avatar.png') }}">
                     {% endif %}
@@ -30,11 +30,11 @@
                 <div class="clearfix"></div>
                 <h4><b>Role : </b>{{profile.role}}</h4>
                 <div class="clearfix"></div>
-                <h4><b>Contact : </b>{{profile.user_detail[0].contact}}</h4>
+                <h4><b>Contact : </b>{{profile.user_detail.contact}}</h4>
                 <div class="clearfix"></div>
-                <h4><b>Facebook : </b>{{profile.user_detail[0].facebook}}</h4>
+                <h4><b>Facebook : </b>{{profile.user_detail.facebook}}</h4>
                 <div class="clearfix"></div>
-                <h4><b>Twitter : </b>{{profile.user_detail[0].twitter}}</h4>
+                <h4><b>Twitter : </b>{{profile.user_detail.twitter}}</h4>
                 <div class="clearfix"></div>
             </div>
             <a class="icon" href="{{ get_url('user.edit_view')}}" title="Edit Profile" style="position:absolute; top:1em; right:1em;">
