@@ -162,6 +162,11 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
         return false;
     }
 
+    if (_.isNull(sessionRefObject.session.track_id)) {
+        addSessionToUnscheduled(sessionRefObject.$sessionElement);
+        return;
+    }
+
     var oldTrack = sessionRefObject.session.track_id;
     var newTrack = null;
 
@@ -180,9 +185,6 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
 
     sessionRefObject.$sessionElement.removeClass("unscheduled").addClass("scheduled");
 
-    if (_.isNull(sessionRefObject.session.track_id)) {
-        sessionRefObject.session.track_id = 0;
-    }
 
     delete  sessionRefObject.session.start_time.isReset;
     delete  sessionRefObject.session.end_time.isReset;
@@ -231,6 +233,7 @@ function addSessionToUnscheduled(sessionRef, isFiltering, shouldBroadcast) {
     sessionRefObject.session.duration = 30;
     sessionRefObject.session.start_time.hours(0).minutes(0);
     sessionRefObject.session.end_time.hours(0).minutes(0);
+    sessionRefObject.session.track_id = null;
 
     sessionRefObject.session.start_time.isReset = true;
     sessionRefObject.session.end_time.isReset = true;
@@ -659,17 +662,15 @@ function loadTracksToTimeline(day) {
     $unscheduledSessionsHolder.empty();
     $noSessionsInfoBox.show();
 
-    addTrackToTimeline({
-        id: 0,
-        name: "Standalone"
-    });
-
     _.each(tracksStore, addTrackToTimeline);
 
     _.each(sessionsStore[dayIndex], function (session) {
         // Add session elements, but do not broadcast.
-        if (!_.isNull(session.start_time) && !_.isNull(session.end_time) && session.start_time != session.end_time && !session.hasOwnProperty("isReset")) {
+        if (!_.isNull(session.top) && !_.isNull(session.track_id) && !_.isNull(session.start_time) && !_.isNull(session.end_time) && !session.hasOwnProperty("isReset")) {
             addSessionToTimeline(session, null, false);
+            if(session.title === "RedHat") {
+                console.log(session);
+            }
         } else {
             addSessionToUnscheduled(session, false, false);
         }
