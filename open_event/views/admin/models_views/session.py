@@ -13,5 +13,11 @@ class SessionView(ModelView):
         if invite and invite.hash == hash:
             if request.method == 'POST':
                 DataManager.add_session_to_event(request.form, event_id)
-                return redirect(url_for('event.details_view', event_id=event_id))
+                return redirect(url_for('session.display_view', event_id=event_id))
             return self.render('/gentelella/admin/session/new.html')
+
+    @expose('/display/')
+    def display_view(self, event_id):
+        sessions = DataGetter.get_sessions_by_event_id(event_id)
+        return self.render('/gentelella/admin/session/display.html',
+                           sessions=sessions)

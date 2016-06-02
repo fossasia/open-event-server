@@ -36,9 +36,9 @@ def send_email_invitation(email, username, event_name, link):
     payload = {'to': email,
                'from': 'open-event@googlegroups.com',
                'subject': "Invitation to Submit Papers for " + event_name,
-               "html": ("Hi %s<br/>" + \
-                        "You are invited to submit papers for event: %s" + \
-                        "<br/> Visit this link to fill up details: %s" % (username, event_name, link))}
+               "html": ("Hi %s<br/>" % str(username) + \
+                        "You are invited to submit papers for event: %s" % str(event_name) + \
+                        "<br/> Visit this link to fill up details: %s" % link)}
     requests.post("https://api.sendgrid.com/api/mail.send.json",
                   data=payload,
                   headers=HEADERS)
