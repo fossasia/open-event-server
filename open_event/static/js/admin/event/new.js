@@ -74,6 +74,10 @@ $(document).ready(function() {
     onFinish: function() { $("#event-create-form").submit(); }
    });
 
+  $('.buttonNext').addClass("btn btn-success");
+  $('.buttonPrevious').addClass("btn btn-primary");
+  $('.buttonFinish').addClass("btn btn-default");
+
   $('.date-picker').daterangepicker({
     singleDatePicker: true,
     calender_style: "picker_4"
