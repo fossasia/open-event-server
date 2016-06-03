@@ -6,7 +6,7 @@ General Info
     <table class="table table-striped">
         <tbody>
 	        <tr><td><b>Event ID: </b></td><td>{{event.id}}</td></tr>
-	        <tr><td><b>Event Url: </b></td><td>{{event.url}}</td></tr>
+	        <tr><td><b>Event Url: </b></td><td>{{event.event_url}}</td></tr>
 	        <tr><td><b>Event Start Time: </b></td><td>{{event.start_time}}</td></tr>
 	        <tr><td><b>Event End Time: </b></td><td>{{event.end_time}}</td></tr>
 	        <tr><td><b>Event Session Types: </b></td>
@@ -23,6 +23,8 @@ General Info
 	        	{% endfor %}
 	        	</td>
 	        </tr>
+        <a class="btn btn-default" onclick="return confirm('Do you want to edit this record?');" href="{{ get_url('event.edit_view', event_id=event.id)}}" title="Edit record">Edit Event</a>
         </tbody>
     </table>
+
 {% endblock %}

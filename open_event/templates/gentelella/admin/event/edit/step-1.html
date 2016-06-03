@@ -3,21 +3,22 @@
 
        <div class="item form-group">
         <div class="col-md-6 col-sm-6 col-xs-12">
-          <input name="latitude" id="latitude" class="form-control col-md-7 col-xs-12" value="0.00"/>
+          <input name="latitude" id="latitude" class="form-control col-md-7 col-xs-12" value="{{ event.latitude }}"/>
         </div>
     </div>
 
     <div class="item form-group">
         <div class="col-md-6 col-sm-6 col-xs-12">
-          <input name="longitude" id="longitude" class="form-control col-md-7 col-xs-12" value="0.00"/>
+          <input name="longitude" id="longitude" class="form-control col-md-7 col-xs-12" value="{{ event.longitude }}"/>
         </div>
     </div>
+
 
     <div class="item form-group">
         <label class="control-label col-md-3 col-sm-3 col-xs-12">Name <span class="required">*</span>
         </label>
         <div class="col-md-6 col-sm-6 col-xs-12">
-          <input required="required" name="name" class="form-control col-md-7 col-xs-12"/>
+          <input value="{{ event.name }}" required="required" name="name" class="form-control col-md-7 col-xs-12" />
         </div>
     </div>
 
@@ -25,7 +26,7 @@
         <label class="control-label col-md-3 col-sm-3 col-xs-12">Description
         </label>
         <div class="col-md-6 col-sm-6 col-xs-12">
-          <textarea name="description" class="form-control col-md-7 col-xs-12"></textarea>
+          <textarea name="description" class="form-control col-md-7 col-xs-12">{{ event.description }}</textarea>
         </div>
     </div>
 
@@ -33,7 +34,7 @@
         <label class="control-label col-md-3 col-sm-3 col-xs-12">Start Date <span class="required">*</span>
         </label>
         <div class="col-md-6 col-sm-6 col-xs-12">
-          <input required="required" name="start_time" class="date-picker form-control col-md-7 col-xs-12"placeholder="MM/DD/YYYY"/>
+          <input value="{{ event.start_time }}" required="required" name="start_time" class="date-picker form-control col-md-7 col-xs-12"placeholder="MM/DD/YYYY"/>
         </div>
 
     </div>
@@ -42,7 +43,7 @@
         <label class="control-label col-md-3 col-sm-3 col-xs-12">End Date <span class="required">*</span>
         </label>
         <div class="col-md-6 col-sm-6 col-xs-12">
-          <input required="required" name="end_time" class="date-picker form-control col-md-7 col-xs-12"placeholder="MM/DD/YYYY"/>
+          <input value="{{ event.end_time }}" required="required" name="end_time" class="date-picker form-control col-md-7 col-xs-12"placeholder="MM/DD/YYYY"/>
         </div>
     </div>
 
@@ -50,7 +51,7 @@
         <label class="control-label col-md-3 col-sm-3 col-xs-12">Location
         </label>
         <div class="col-md-6 col-sm-6 col-xs-12">
-          <input name="location_name" id="location" class="form-control col-md-7 col-xs-12"/>
+          <input value="{{ event.location_name }}" name="location_name" id="location" class="form-control col-md-7 col-xs-12"/>
         </div>
     </div>
 
@@ -58,7 +59,7 @@
         <label class="control-label col-md-3 col-sm-3 col-xs-12">Background image
         </label>
         <div class="col-md-6 col-sm-6 col-xs-12">
-          <input name="background_url" class="form-control col-md-7 col-xs-12"/>
+          <input value="{{ event.background_url }}" name="background_url" class="form-control col-md-7 col-xs-12"/>
         </div>
     </div>
 
@@ -66,7 +67,7 @@
         <label class="control-label col-md-3 col-sm-3 col-xs-12">Logo
         </label>
         <div class="col-md-6 col-sm-6 col-xs-12">
-          <input name="logo" class="form-control col-md-7 col-xs-12"/>
+          <input value="{{ event.logo }}" name="logo" class="form-control col-md-7 col-xs-12"/>
         </div>
     </div>
 
@@ -74,7 +75,7 @@
         <label class="control-label col-md-3 col-sm-3 col-xs-12">Event Url
         </label>
         <div class="col-md-6 col-sm-6 col-xs-12">
-            <input name="event_url" class="form-control col-md-7 col-xs-12"/>
+            <input value="{{ event.event_url }}" name="event_url" class="form-control col-md-7 col-xs-12"/>
         </div>
     </div>
   </div>
@@ -90,14 +91,17 @@
         $('#longitude').hide();
   });
 function initMap() {
+    latitude=$("#latitude")[0].value;
+    longitude=$("#longitude")[0].value;
+    var latlng = new google.maps.LatLng(latitude,longitude);
   var map = new google.maps.Map($("#map")[0], {
     zoom: 8,
-    center: {lat: -34.397, lng: 150.644}
+    center: latlng
   });
   var geocoder = new google.maps.Geocoder();
   init_marker = new google.maps.Marker({
     draggable: true,
-    position: {lat: -34.397, lng: 150.644},
+    position: latlng,
     map: map
   });
   $(document).keypress(function(e) {

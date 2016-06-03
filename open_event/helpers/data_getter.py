@@ -9,6 +9,8 @@ from ..models.microlocation import Microlocation
 from ..models.users_events_roles import UsersEventsRoles
 from ..models.user import User
 from ..models.file import File
+from ..models.session_type import SessionType
+from ..models.social_link import SocialLink
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
 from flask import flash
@@ -245,3 +247,18 @@ class DataGetter:
         """Get speaker by id"""
         return Speaker.query.get(speaker_id)
 
+    @staticmethod
+    def get_session_types_by_event_id(event_id):
+        """
+        :param event_id: Event id
+        :return: All Tracks filtered by event_id
+        """
+        return SessionType.query.filter_by(event_id=event_id)
+
+    @staticmethod
+    def get_social_links_by_event_id(event_id):
+        """
+        :param event_id: Event id
+        :return: All Tracks filtered by event_id
+        """
+        return SocialLink.query.filter_by(event_id=event_id)

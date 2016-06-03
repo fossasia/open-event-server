@@ -512,17 +512,16 @@ class DataManager(object):
                       email='dsads',
                       color='#f5f5f5',
                       logo=form['logo'],
-                      start_time=datetime.strptime(form['start_date'], '%m/%d/%Y'),
-                      end_time=datetime.strptime(form['end_date'], '%m/%d/%Y'),
-                      latitude=form['lat'],
-                      longitude=form['long'],
+                      start_time=datetime.strptime(form['start_time'], '%m/%d/%Y'),
+                      end_time=datetime.strptime(form['end_time'], '%m/%d/%Y'),
+                      latitude=form['latitude'],
+                      longitude=form['longitude'],
                       location_name=form['location_name'],
-                      slogan=form['description'],
-                      url=form['event_url'])
+                      description=form['description'],
+                      event_url=form['event_url'],
+                      background_url=form['background_url'])
+
         if event.start_time <= event.end_time:
-            if not isinstance(form['lat'], float) and not isinstance(form['long'], float):
-                event.latitude = 0.00
-                event.longitude = 0.00
             role = Role(name='ORGANIZER')
             db.session.add(event)
             db.session.add(role)
@@ -547,7 +546,7 @@ class DataManager(object):
                 db.session.add(social_link)
 
             for index, name in enumerate(track_name):
-                track = Track(name=name, description="", track_image_url="")
+                track = Track(name=name, description="", track_image_url="", event_id=event.id)
                 db.session.add(track)
 
             uer = UsersEventsRoles(event_id=event.id, user_id=login.current_user.id, role_id=role.id)
@@ -557,23 +556,54 @@ class DataManager(object):
             raise ValidationError("start date greater than end date")
 
     @staticmethod
-    def update_event(data, event_id):
+    def edit_event(form, event_id, event, session_types, tracks, social_links):
         """
         Event will be updated in database
         :param data: view data form
         :param event: object contains all earlier data
         """
 
-        closing_date = data.get('closing_datetime', None)
-        if closing_date:
-            data['closing_datetime'] = datetime.strptime(closing_date[0], '%m/%d/%Y %I:%M %p')
-        db.session.query(Event) \
-            .filter_by(id=event_id) \
-            .update(dict(data))
-        save_to_db(Event.query.get(event_id), "Event updated")
-        update_version(event_id=event_id,
-                       is_created=False,
-                       column_to_increment="event_ver")
+        event.name = form['name']
+        event.logo = form['logo']
+        event.start_time = form['start_time']
+        event.end_time = form['end_time']
+        event.latitude = form['latitude']
+        event.longitude = form['longitude']
+        event.location_name = form['location_name']
+        event.description = form['description']
+        event.event_url = form['event_url']
+        event.background_url = form['background_url']
+
+        session_type_names = form.getlist('session_type[name]')
+        session_type_length = form.getlist('session_type[length]')
+
+        social_link_name = form.getlist('social[name]')
+        social_link_link = form.getlist('social[link]')
+
+        track_name = form.getlist('tracks[name]')
+
+        for session_type in session_types:
+            delete_from_db(session_type, 'Session Type Deleted')
+
+        for track in tracks:
+            delete_from_db(track, 'Track')
+
+        for social_link in social_links:
+            delete_from_db(social_link, 'Social Link Deleted')
+
+        for index, name in enumerate(session_type_names):
+            session_type = SessionType(name=name, length=session_type_length[index], event_id=event_id)
+            save_to_db(session_type, 'Session Type saved')
+
+        for index, name in enumerate(social_link_name):
+            social_link = SocialLink(name=name, link=social_link_link[index], event_id=event.id)
+            save_to_db(social_link, 'Social Link Saved')
+
+        for index, name in enumerate(track_name):
+            track = Track(name=name, description="", track_image_url="", event_id=event.id)
+            save_to_db(track, 'Track Saved')
+
+        return event
 
     @staticmethod
     def delete_event(e_id):

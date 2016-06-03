@@ -7,7 +7,6 @@ from ....helpers.data_getter import DataGetter
 
 
 class EventsView(ModelView):
-
     def is_accessible(self):
         return login.current_user.is_authenticated
 
@@ -33,13 +32,18 @@ class EventsView(ModelView):
         event = DataGetter.get_event(event_id)
         return self.render('/gentelella/admin/event/details/details.html', event=event)
 
-    @expose('/<event_id>/update/', methods=('POST',))
-    def update_view(self, event_id):
+    @expose('/<int:event_id>/edit/', methods=('GET', 'POST'))
+    def edit_view(self, event_id):
         event = DataGetter.get_event(event_id)
+        session_types = DataGetter.get_session_types_by_event_id(event_id)
+        tracks = DataGetter.get_tracks(event_id)
+        social_links = DataGetter.get_social_links_by_event_id(event_id)
+        if request.method == 'GET':
+            return self.render('/gentelella/admin/event/edit/edit.html', event=event, session_types=session_types,
+                               tracks=tracks, social_links=social_links)
         if request.method == "POST":
-            data = dict((key, request.form.getlist(key)) for key in request.form.keys())
-            DataManager.update_event(data, event_id)
-        return self.render('/gentelella/admin/event/details/details.html', event=event)
+            event = DataManager.edit_event(request.form, event_id, event, session_types, tracks, social_links)
+            return self.render('/gentelella/admin/event/details/details.html', event=event)
 
     @expose('/<event_id>/delete/', methods=('GET',))
     def delete_view(self, event_id):
@@ -56,4 +60,3 @@ class EventsView(ModelView):
     def current_view(self):
         events = DataGetter.get_current_events()
         return self.render('/gentelella/admin/event/current_events.html', events=events)
-
