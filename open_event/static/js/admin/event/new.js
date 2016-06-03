@@ -69,6 +69,11 @@ $(document).ready(function() {
     onFinish: function() { $("#event-create-form").submit(); }
   });
 
+  $("#wizard-edit").smartWizard({
+    labelFinish:'Update',
+    onFinish: function() { $("#event-create-form").submit(); }
+   });
+
   $('.date-picker').daterangepicker({
     singleDatePicker: true,
     calender_style: "picker_4"
