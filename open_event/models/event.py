@@ -14,6 +14,7 @@ class EventsUsers(db.Model):
     editor = db.Column(db.Boolean)
     admin = db.Column(db.Boolean)
     user = db.relationship("User", backref="events_assocs")
+    role = db.Column(db.String, nullable=False)
 
 
 class Event(db.Model):
@@ -22,8 +23,7 @@ class Event(db.Model):
     id = db.Column(db.Integer,
                    primary_key=True)
     name = db.Column(db.String,
-                     nullable=False,
-                     unique=True)
+                     nullable=False)
     email = db.Column(db.String)
     color = db.Column(ColorType)
     logo = db.Column(db.String)
@@ -34,8 +34,9 @@ class Event(db.Model):
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     location_name = db.Column(db.String)
-    slogan = db.Column(db.String)
-    url = db.Column(db.String)
+    description = db.Column(db.Text)
+    event_url = db.Column(db.String)
+    background_url = db.Column(db.String)
     track = db.relationship('Track',
                             backref="event")
     microlocation = db.relationship('Microlocation',
@@ -47,6 +48,11 @@ class Event(db.Model):
     sponsor = db.relationship('Sponsor',
                               backref="event")
     users = db.relationship("EventsUsers", backref="event")
+
+    roles = db.relationship("UsersEventsRoles", backref="event")
+    state = db.Column(db.String, default="Draft")
+    closing_datetime = db.Column(db.DateTime)
+
     db.UniqueConstraint('track.name')
 
     def __init__(self,
@@ -59,8 +65,10 @@ class Event(db.Model):
                  location_name=None,
                  email=None,
                  color=None,
-                 slogan=None,
-                 url=None):
+                 description=None,
+                 event_url=None,
+                 background_url=None,
+                 state=None):
         self.name = name
         self.logo = logo
         self.email = email
@@ -70,8 +78,10 @@ class Event(db.Model):
         self.latitude = latitude
         self.longitude = longitude
         self.location_name = location_name
-        self.slogan = slogan
-        self.url = url
+        self.description = description
+        self.event_url = event_url
+        self.background_url = background_url
+        self.state = state
         # self.owner = owner
 
     def __repr__(self):
@@ -97,6 +107,7 @@ class Event(db.Model):
             'location_name': self.location_name,
             'email': self.email,
             'color': self.color.get_hex() if self.color else '',
-            'slogan': self.slogan,
-            'url': self.url
+            'description': self.description,
+            'event_url': self.event_url,
+            'background_url': self.background_url
         }

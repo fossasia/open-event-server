@@ -3,9 +3,11 @@ from . import db
 from open_event.helpers.date_formatter import DateFormatter
 
 speakers_sessions = db.Table('speakers_sessions',
-                             db.Column('speaker_id', db.Integer,
+                             db.Column('speaker_id',
+                                       db.Integer,
                                        db.ForeignKey('speaker.id')),
-                             db.Column('session_id', db.Integer,
+                             db.Column('session_id',
+                                       db.Integer,
                                        db.ForeignKey('session.id')))
 
 
@@ -24,7 +26,6 @@ class Level(db.Model):
                  label_en=None,
                  session=None,
                  event_id=None):
-
         self.name = name
         self.label_en = label_en
         self.event_id = event_id
@@ -60,7 +61,6 @@ class Format(db.Model):
                  label_en=None,
                  session=None,
                  event_id=None):
-
         self.name = name
         self.label_en = label_en
         self.event_id = event_id
@@ -98,7 +98,6 @@ class Language(db.Model):
                  label_de=None,
                  session=None,
                  event_id=None):
-
         self.name = name
         self.label_en = label_en
         self.label_de = label_de
@@ -119,7 +118,6 @@ class Language(db.Model):
 
     def __unicode__(self):
         return self.name
-
 
 class Session(db.Model):
     """Session model class"""
@@ -148,7 +146,7 @@ class Session(db.Model):
 
     event_id = db.Column(db.Integer,
                          db.ForeignKey('events.id'))
-    is_accepted = db.Column(db.Boolean, default=False)
+    state = db.Column(db.String, default="pending")
 
     def __init__(self,
                  title=None,
@@ -163,7 +161,7 @@ class Session(db.Model):
                  language=None,
                  microlocation=None,
                  event_id=None,
-                 is_accepted=False):
+                 state="pending"):
         self.title = title
         self.subtitle = subtitle
         self.abstract = abstract
@@ -176,7 +174,7 @@ class Session(db.Model):
         self.language = language
         self.microlocation = microlocation
         self.event_id = event_id
-        self.is_accepted = is_accepted
+        self.state = state
 
     @property
     def serialize(self):
