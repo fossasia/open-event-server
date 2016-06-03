@@ -35,6 +35,10 @@
     display: none;
 }
 
+.unscheduled > .edit-btn {
+    display: none;
+}
+
 .scheduled {
     position: absolute !important;
     top: 120px;
@@ -48,7 +52,14 @@
     position: absolute;
     top: 10px;
     right: 10px;
-    cursor: pointer;
+    cursor: pointer
+}
+
+.scheduled > .edit-btn {
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    cursor: pointer
 }
 
 .timeline-table td {
