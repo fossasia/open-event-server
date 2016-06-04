@@ -19,8 +19,9 @@ EVENT = api.model('Event', {
     'end_time': fields.DateTime,
     'latitude': fields.Float,
     'longitude': fields.Float,
-    'slogan': fields.String,
-    'url': fields.String,
+    'event_url': fields.String,
+    'background_url': fields.String,
+    'description': fields.String,
     'location_name': fields.String,
 })
 

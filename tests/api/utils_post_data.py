@@ -11,9 +11,10 @@ POST_EVENT_DATA = {
     "logo": "http://imgur.com/image.png",
     "longitude": 0,
     "name": "TestEvent",
-    "slogan": "TestEvent",
+    'event_url': "http://site.com",
+    'background_url': "http://imgur.com/image.png",
+    'description': "blah blah",
     "start_time": "2016-05-25T12:12:43.891Z",
-    "url": "http://website.com"
 }
 
 POST_FORMAT_DATA = {
