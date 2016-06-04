@@ -2,7 +2,7 @@ from flask.ext.restplus import Resource, Namespace, fields
 
 from open_event.models.sponsor import Sponsor as SponsorModel
 from .helpers import get_paginated_list, requires_auth
-from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO
+from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, PAGE_PARAMS
 
 api = Namespace('sponsors', description='sponsors', path='/')
 
@@ -30,7 +30,7 @@ DAO = SponsorDAO(model=SponsorModel)
 
 @api.route('/events/<int:event_id>/sponsors/<int:sponsor_id>')
 @api.response(404, 'Sponsor not found')
-@api.response(400, 'Object does not belong to event')
+@api.response(400, 'Sponsor does not belong to event')
 class Sponsor(Resource):
     @api.doc('get_sponsor')
     @api.marshal_with(SPONSOR)
@@ -40,7 +40,6 @@ class Sponsor(Resource):
 
 
 @api.route('/events/<int:event_id>/sponsors')
-@api.param('event_id')
 class SponsorList(Resource):
     @api.doc('list_sponsors')
     @api.marshal_list_with(SPONSOR)
@@ -59,9 +58,7 @@ class SponsorList(Resource):
 
 @api.route('/events/<int:event_id>/sponsors/page')
 class SponsorListPaginated(Resource, PaginatedResourceBase):
-    @api.doc('list_sponsors_paginated')
-    @api.param('start')
-    @api.param('limit')
+    @api.doc('list_sponsors_paginated', params=PAGE_PARAMS)
     @api.marshal_with(SPONSOR_PAGINATED)
     def get(self, event_id):
         """List sponsors in a paginated manner"""

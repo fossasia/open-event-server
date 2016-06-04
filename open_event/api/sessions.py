@@ -9,7 +9,7 @@ from open_event.models.microlocation import Microlocation as MicrolocationModel
 from open_event.models.speaker import Speaker as SpeakerModel
 
 from .helpers import get_paginated_list, requires_auth, save_db_model
-from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO
+from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, PAGE_PARAMS
 
 api = Namespace('sessions', description='Sessions', path='/')
 
@@ -110,7 +110,7 @@ DAO = SessionDAO(model=SessionModel)
 
 @api.route('/events/<int:event_id>/sessions/<int:session_id>')
 @api.response(404, 'Session not found')
-@api.response(400, 'Object does not belong to event')
+@api.response(400, 'Session does not belong to event')
 class Session(Resource):
     @api.doc('get_session')
     @api.marshal_with(SESSION)
@@ -120,7 +120,6 @@ class Session(Resource):
 
 
 @api.route('/events/<int:event_id>/sessions')
-@api.param('event_id')
 class SessionList(Resource):
     @api.doc('list_sessions')
     @api.marshal_list_with(SESSION)
@@ -139,9 +138,7 @@ class SessionList(Resource):
 
 @api.route('/events/<int:event_id>/sessions/page')
 class SessionListPaginated(Resource, PaginatedResourceBase):
-    @api.doc('list_sessions_paginated')
-    @api.param('start')
-    @api.param('limit')
+    @api.doc('list_sessions_paginated', params=PAGE_PARAMS)
     @api.marshal_with(SESSION_PAGINATED)
     def get(self, event_id):
         """List sessions in a paginated manner"""

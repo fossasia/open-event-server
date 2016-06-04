@@ -25,6 +25,13 @@ def _get_queryset(klass):
     return klass.query
 
 
+def _make_url_query(args):
+    """
+    Helper function to return a query url string from a dict
+    """
+    return '?' + '&'.join('%s=%s' % (key, args[key]) for key in args)
+
+
 def get_object_list(klass, **kwargs):
     """Returns a list of objects of a model class. Uses other passed arguments
     with `filter_by` to filter objects.
@@ -58,7 +65,7 @@ def get_object_or_404(klass, id_):
 
 
 def get_object_in_event(klass, id_, event_id):
-    """Returns a object (such as a Session, Track, Speaker, etc.) belonging
+    """Returns an object (such as a Session, Track, Speaker, etc.) belonging
     to an Event.
 
     First checks if Event with `event_id` exists. Then checks if  model `klass`
@@ -75,11 +82,6 @@ def get_object_in_event(klass, id_, event_id):
     return obj
 
 
-def make_url_query(args):
-    """
-    Helper function to return a query url string from a dict
-    """
-    return '?' + '&'.join('%s=%s' % (key, args[key]) for key in args)
 
 
 def get_paginated_list(klass, url, args={}, **kwargs):
@@ -115,14 +117,14 @@ def get_paginated_list(klass, url, args={}, **kwargs):
     else:
         args_copy['start'] = max(1, start - limit)
         args_copy['limit'] = start - 1
-        obj['previous'] = url + make_url_query(args_copy)
+        obj['previous'] = url + _make_url_query(args_copy)
     # make next url
     args_copy = args.copy()
     if start + limit > count:
         obj['next'] = ''
     else:
         args_copy['start'] = start + limit
-        obj['next'] = url + make_url_query(args_copy)
+        obj['next'] = url + _make_url_query(args_copy)
     # finally extract result according to bounds
     obj['results'] = results[(start - 1):(start - 1 + limit)]
 

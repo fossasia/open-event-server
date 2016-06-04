@@ -2,7 +2,7 @@ from flask.ext.restplus import Resource, Namespace, fields
 
 from open_event.models.session import Level as LevelModel
 from .helpers import get_paginated_list, requires_auth
-from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO
+from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, PAGE_PARAMS
 
 api = Namespace('levels', description='levels', path='/')
 
@@ -29,7 +29,7 @@ DAO = LevelDAO(model=LevelModel)
 
 @api.route('/events/<int:event_id>/levels/<int:level_id>')
 @api.response(404, 'Level not found')
-@api.response(400, 'Object does not belong to event')
+@api.response(400, 'Level does not belong to event')
 class Level(Resource):
     @api.doc('get_level')
     @api.marshal_with(LEVEL)
@@ -39,7 +39,6 @@ class Level(Resource):
 
 
 @api.route('/events/<int:event_id>/levels')
-@api.param('event_id')
 class LevelList(Resource):
     @api.doc('list_levels')
     @api.marshal_list_with(LEVEL)
@@ -58,9 +57,7 @@ class LevelList(Resource):
 
 @api.route('/events/<int:event_id>/levels/page')
 class LevelListPaginated(Resource, PaginatedResourceBase):
-    @api.doc('list_levels_paginated')
-    @api.param('start')
-    @api.param('limit')
+    @api.doc('list_levels_paginated', params=PAGE_PARAMS)
     @api.marshal_with(LEVEL_PAGINATED)
     def get(self, event_id):
         """List levels in a paginated manner"""

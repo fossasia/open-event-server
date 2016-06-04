@@ -2,7 +2,7 @@ from flask.ext.restplus import Resource, Namespace, fields
 
 from open_event.models.session import Language as LanguageModel
 from .helpers import get_paginated_list, requires_auth
-from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO
+from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, PAGE_PARAMS
 
 api = Namespace('languages', description='languages', path='/')
 
@@ -30,7 +30,7 @@ DAO = LanguageDAO(model=LanguageModel)
 
 @api.route('/events/<int:event_id>/languages/<int:language_id>')
 @api.response(404, 'Language not found')
-@api.response(400, 'Object does not belong to event')
+@api.response(400, 'Language does not belong to event')
 class Language(Resource):
     @api.doc('get_language')
     @api.marshal_with(LANGUAGE)
@@ -40,7 +40,6 @@ class Language(Resource):
 
 
 @api.route('/events/<int:event_id>/languages')
-@api.param('event_id')
 class LanguageList(Resource):
     @api.doc('list_languages')
     @api.marshal_list_with(LANGUAGE)
@@ -59,9 +58,7 @@ class LanguageList(Resource):
 
 @api.route('/events/<int:event_id>/languages/page')
 class LanguageListPaginated(Resource, PaginatedResourceBase):
-    @api.doc('list_languages_paginated')
-    @api.param('start')
-    @api.param('limit')
+    @api.doc('list_languages_paginated', params=PAGE_PARAMS)
     @api.marshal_with(LANGUAGE_PAGINATED)
     def get(self, event_id):
         """List languages in a paginated manner"""

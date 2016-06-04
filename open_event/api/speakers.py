@@ -2,7 +2,7 @@ from flask.ext.restplus import Resource, Namespace, fields
 
 from open_event.models.speaker import Speaker as SpeakerModel
 from .helpers import get_paginated_list, requires_auth
-from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO
+from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, PAGE_PARAMS
 
 api = Namespace('speakers', description='Speakers', path='/')
 
@@ -46,7 +46,7 @@ DAO = SpeakerDAO(model=SpeakerModel)
 
 @api.route('/events/<int:event_id>/speakers/<int:speaker_id>')
 @api.response(404, 'Speaker not found')
-@api.response(400, 'Object does not belong to event')
+@api.response(400, 'Speaker does not belong to event')
 class Speaker(Resource):
     @api.doc('get_speaker')
     @api.marshal_with(SPEAKER)
@@ -56,7 +56,6 @@ class Speaker(Resource):
 
 
 @api.route('/events/<int:event_id>/speakers')
-@api.param('event_id')
 class SpeakerList(Resource):
     @api.doc('list_speakers')
     @api.marshal_list_with(SPEAKER)
@@ -75,9 +74,7 @@ class SpeakerList(Resource):
 
 @api.route('/events/<int:event_id>/speakers/page')
 class SpeakerListPaginated(Resource, PaginatedResourceBase):
-    @api.doc('list_speakers_paginated')
-    @api.param('start')
-    @api.param('limit')
+    @api.doc('list_speakers_paginated', params=PAGE_PARAMS)
     @api.marshal_with(SPEAKER_PAGINATED)
     def get(self, event_id):
         """List speakers in a paginated manner"""
