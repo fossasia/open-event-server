@@ -5,6 +5,7 @@ from flask.ext import login
 from flask.ext.scrypt import check_password_hash
 
 from open_event.models.event import Event as EventModel
+from custom_fields import CustomField
 from open_event.models.user import User as UserModel
 from open_event.helpers.data import save_to_db, update_version
 
@@ -82,8 +83,6 @@ def get_object_in_event(klass, id_, event_id):
     return obj
 
 
-
-
 def get_paginated_list(klass, url, args={}, **kwargs):
     """
     Returns a paginated response object
@@ -129,6 +128,20 @@ def get_paginated_list(klass, url, args={}, **kwargs):
     obj['results'] = results[(start - 1):(start - 1 + limit)]
 
     return obj
+
+
+def validate_payload(payload, api_model):
+    """
+    Validate payload against an api_model. Aborts in case of failure
+    - This function is for custom fields as they can't be validated by
+      flask restplus automatically.
+    - This is to be called at the start of a post or put method
+    """
+    for key in payload:
+        field = api_model[key]
+        if isinstance(field, CustomField) and hasattr(field, 'validate'):
+            if not field.validate(payload[key]):
+                _error_abort(400, 'Validation of \'%s\' field failed' % key)
 
 
 def save_db_model(new_model, model_name, event_id=None):

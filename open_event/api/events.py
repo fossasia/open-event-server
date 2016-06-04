@@ -1,6 +1,7 @@
 from flask.ext.restplus import Resource, Namespace, fields
 from flask import g
 
+from custom_fields import EmailField, ColorField, UriField, ImageUriField
 from open_event.models.event import Event as EventModel, EventsUsers
 from .helpers import get_object_list, get_object_or_404, get_paginated_list,\
     requires_auth
@@ -12,15 +13,15 @@ api = Namespace('events', description='Events')
 EVENT = api.model('Event', {
     'id': fields.Integer(required=True),
     'name': fields.String,
-    'email': fields.String,
-    'color': fields.String,
-    'logo': fields.String,
+    'email': EmailField(),
+    'color': ColorField(),
+    'logo': ImageUriField(),
     'start_time': fields.DateTime,
     'end_time': fields.DateTime,
     'latitude': fields.Float,
     'longitude': fields.Float,
-    'event_url': fields.String,
-    'background_url': fields.String,
+    'event_url': UriField(),
+    'background_url': UriField(),
     'description': fields.String,
     'location_name': fields.String,
 })

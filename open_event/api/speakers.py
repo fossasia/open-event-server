@@ -1,6 +1,7 @@
 from flask.ext.restplus import Resource, Namespace, fields
 
 from open_event.models.speaker import Speaker as SpeakerModel
+from custom_fields import UriField, EmailField, ImageUriField
 from .helpers import get_paginated_list, requires_auth
 from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, PAGE_PARAMS
 
@@ -14,11 +15,11 @@ SPEAKER_SESSION = api.model('SpeakerSession', {
 SPEAKER = api.model('Speaker', {
     'id': fields.Integer(required=True),
     'name': fields.String,
-    'photo': fields.String,
+    'photo': ImageUriField(),
     'biography': fields.String,
-    'email': fields.String,
-    'web': fields.String,
-    'twitter': fields.String,
+    'email': EmailField(),
+    'web': UriField(),
+    'twitter': fields.String,  # not sure for now whether uri or string field
     'facebook': fields.String,
     'github': fields.String,
     'linkedin': fields.String,
