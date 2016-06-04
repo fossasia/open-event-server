@@ -20,6 +20,4 @@ class SocialLink(db.Model):
     @property
     def serialize(self):
         """Return object data in easily serializeable format"""
-        return {'id': self.id,
-                'name': self.name,
-                'link': self.link}
+        return {'id': self.id, 'name': self.name, 'link': self.link}
