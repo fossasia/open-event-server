@@ -1,10 +1,8 @@
 from flask.ext.restplus import Resource, Namespace, fields
 
 from open_event.models.session import Language as LanguageModel
-from open_event.models.event import Event as EventModel
-from .helpers import get_object_list, get_object_or_404, get_object_in_event,\
-    get_paginated_list
-from utils import PAGINATED_MODEL, PaginatedResourceBase
+from .helpers import get_paginated_list, requires_auth
+from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO
 
 api = Namespace('languages', description='languages', path='/')
 
@@ -19,6 +17,16 @@ LANGUAGE_PAGINATED = api.clone('LanguagePaginated', PAGINATED_MODEL, {
     'results': fields.List(fields.Nested(LANGUAGE))
 })
 
+LANGUAGE_POST = api.clone('LanguagePost', LANGUAGE)
+del LANGUAGE_POST['id']
+
+
+# Create DAO
+class LanguageDAO(ServiceDAO):
+    pass
+
+DAO = LanguageDAO(model=LanguageModel)
+
 
 @api.route('/events/<int:event_id>/languages/<int:language_id>')
 @api.response(404, 'Language not found')
@@ -28,7 +36,7 @@ class Language(Resource):
     @api.marshal_with(LANGUAGE)
     def get(self, event_id, language_id):
         """Fetch a language given its id"""
-        return get_object_in_event(LanguageModel, language_id, event_id)
+        return DAO.get(event_id, language_id)
 
 
 @api.route('/events/<int:event_id>/languages')
@@ -38,10 +46,15 @@ class LanguageList(Resource):
     @api.marshal_list_with(LANGUAGE)
     def get(self, event_id):
         """List all languages"""
-        # Check if an event with `event_id` exists
-        get_object_or_404(EventModel, event_id)
+        return DAO.list(event_id)
 
-        return get_object_list(LanguageModel, event_id=event_id)
+    @requires_auth
+    @api.doc('create_language')
+    @api.marshal_with(LANGUAGE)
+    @api.expect(LANGUAGE_POST, validate=True)
+    def post(self, event_id):
+        """Create a language"""
+        return DAO.create(event_id, self.api.payload)
 
 
 @api.route('/events/<int:event_id>/languages/page')
