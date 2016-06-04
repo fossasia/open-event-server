@@ -1,4 +1,7 @@
+from sqlalchemy import event
+
 from . import db
+from user_detail import UserDetail
 
 SPEAKER = 'speaker'
 ADMIN = 'admin'
@@ -47,3 +50,8 @@ class User(db.Model):
     # Required for administrative interface
     def __unicode__(self):
         return self.username
+
+
+@event.listens_for(User, 'init')
+def receive_init(target, args, kwargs):
+    target.user_detail = UserDetail()

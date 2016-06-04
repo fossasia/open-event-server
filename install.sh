@@ -70,7 +70,9 @@ fi
 # Update package list and upgrade all packages
 apt-get update
 # apt-get -y upgrade
-
+sudo apt-get -y install npm
+sudo npm install -g bower
+bower install
 apt-get -y install "postgresql-$PG_VERSION" "postgresql-contrib-$PG_VERSION"
 
 PG_CONF="/etc/postgresql/$PG_VERSION/main/postgresql.conf"
