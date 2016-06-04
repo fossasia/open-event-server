@@ -3,6 +3,7 @@ from flask import g
 
 from custom_fields import EmailField, ColorField, UriField, ImageUriField
 from open_event.models.event import Event as EventModel, EventsUsers
+from open_event.models.user import ADMIN, SUPERADMIN
 from .helpers import get_object_list, get_object_or_404, get_paginated_list,\
     requires_auth
 from utils import PAGINATED_MODEL, PaginatedResourceBase, PAGE_PARAMS
@@ -64,6 +65,7 @@ class EventList(Resource):
         a.user = g.user
         a.editor = True
         a.admin = True
+        a.role = SUPERADMIN if a.user.role == SUPERADMIN else ADMIN
         new_event.users.append(a)
         save_to_db(new_event, "Event saved")
         update_version(

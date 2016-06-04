@@ -12,4 +12,3 @@ class TracksView(ModelView):
             print request.form
             DataManager.create_new_track(request.form, event_id)
         return redirect(url_for('event.details_view', event_id=event_id))
-
