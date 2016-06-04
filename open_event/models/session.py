@@ -16,7 +16,7 @@ class Level(db.Model):
     event_id = db.Column(db.Integer, nullable=False)
     session = db.relationship('Session', backref="level")
 
-    def __init__(self, name=None, label_en=None, session=None, event_id=None):
+    def __init__(self, name=None, label_en=None, event_id=None):
         self.name = name
         self.label_en = label_en
         self.event_id = event_id
