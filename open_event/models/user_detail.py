@@ -11,8 +11,13 @@ class UserDetail(db.Model):
     twitter = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-
-    def __init__(self, fullname=None, avatar=None, contact=None, user_id=None, facebook=None, twitter=None):
+    def __init__(self,
+                 fullname=None,
+                 avatar=None,
+                 contact=None,
+                 user_id=None,
+                 facebook=None,
+                 twitter=None):
         self.fullname = fullname
         self.avatar = avatar
         self.contact = contact

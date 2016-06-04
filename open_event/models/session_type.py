@@ -9,7 +9,9 @@ class SessionType(db.Model):
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
     session_id = db.Column(db.Integer, db.ForeignKey('session.id'))
     events = db.relationship("Event", backref="session_type")
-    sessions = db.relationship("Session", uselist=False, backref="session_type")
+    sessions = db.relationship("Session",
+                               uselist=False,
+                               backref="session_type")
 
     def __init__(self, name=None, length=None, event_id=None, session_id=None):
         self.name = name
@@ -23,6 +25,4 @@ class SessionType(db.Model):
     @property
     def serialize(self):
         """Return object data in easily serializeable format"""
-        return {'id': self.id,
-                'name': self.name,
-                'length': self.length}
+        return {'id': self.id, 'name': self.name, 'length': self.length}
