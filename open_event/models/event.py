@@ -7,8 +7,7 @@ from sqlalchemy_utils import ColorType
 class EventsUsers(db.Model):
     """Many to Many table Event Users"""
     __tablename__ = 'eventsusers'
-    id = db.Column(db.Integer,
-                   primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     editor = db.Column(db.Boolean)
@@ -20,33 +19,24 @@ class EventsUsers(db.Model):
 class Event(db.Model):
     """Event object table"""
     __tablename__ = 'events'
-    id = db.Column(db.Integer,
-                   primary_key=True)
-    name = db.Column(db.String,
-                     nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
     email = db.Column(db.String)
     color = db.Column(ColorType)
     logo = db.Column(db.String)
-    start_time = db.Column(db.DateTime,
-                           nullable=False)
-    end_time = db.Column(db.DateTime,
-                         nullable=False)
+    start_time = db.Column(db.DateTime, nullable=False)
+    end_time = db.Column(db.DateTime, nullable=False)
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     location_name = db.Column(db.String)
     description = db.Column(db.Text)
     event_url = db.Column(db.String)
     background_url = db.Column(db.String)
-    track = db.relationship('Track',
-                            backref="event")
-    microlocation = db.relationship('Microlocation',
-                                    backref="event")
-    session = db.relationship('Session',
-                              backref="event")
-    speaker = db.relationship('Speaker',
-                              backref="event")
-    sponsor = db.relationship('Sponsor',
-                              backref="event")
+    track = db.relationship('Track', backref="event")
+    microlocation = db.relationship('Microlocation', backref="event")
+    session = db.relationship('Session', backref="event")
+    speaker = db.relationship('Speaker', backref="event")
+    sponsor = db.relationship('Sponsor', backref="event")
     users = db.relationship("EventsUsers", backref="event")
 
     roles = db.relationship("UsersEventsRoles", backref="event")
