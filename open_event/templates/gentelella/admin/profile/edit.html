@@ -1,0 +1,86 @@
+{% extends 'gentelella/admin/base.html' %}
+{% block body %}
+<div class="page-title">
+    <div class="title_left">
+        <h3>Edit Profile Information</h3>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel" style="min-height:600px;">
+            <div class="row">
+                <center><h4> Details </h4>
+                <form name="test" action="/admin/profile/edit/" method="POST" role="form"
+                      class="admin-form form-horizontal event-create-form">
+                    {% if csrf_token %}
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    {% endif %}
+                    <div style="display: block;">
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Userame <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input required="required" name="login" class="form-control col-md-7 col-xs-12" value="{{profile.login}}"/>
+                            </div>
+                        </div>
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Email <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input required="required" name="email" class="form-control col-md-7 col-xs-12" value="{{profile.email}}"/>
+                            </div>
+                        </div>
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Avatar
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            {% if profile.user_detail.avatar %}
+                              <input name="avatar" class="form-control col-md-7 col-xs-12" value="{{profile.user_detail.avatar}}"/>
+                            {% else %}
+                              <input name="avatar" class="form-control col-md-7 col-xs-12" placeholder="Enter Link for Avatar"/>
+                            {% endif %}
+                            </div>
+                        </div>
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Contact
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            {% if profile.user_detail.contact %}
+                              <input name="contact" class="form-control col-md-7 col-xs-12" value="{{profile.user_detail.contact}}"/>
+                            {% else %}
+                              <input name="contact" class="form-control col-md-7 col-xs-12"/>
+                            {% endif %}
+                            </div>
+                        </div>
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Facebook
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            {% if profile.user_detail.facebook %}
+                              <input name="facebook" class="form-control col-md-7 col-xs-12" value="{{profile.user_detail.facebook}}"/>
+                            {% else %}
+                              <input name="facebook" class="form-control col-md-7 col-xs-12"/>
+                            {% endif %}
+                            </div>
+                        </div>
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Twitter
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            {% if profile.user_detail.twitter %}
+                              <input name="twitter" class="form-control col-md-7 col-xs-12" value="{{profile.user_detail.twitter}}"/>
+                            {% else %}
+                              <input name="twitter" class="form-control col-md-7 col-xs-12"/>
+                            {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <center><input class="btn btn-success" type="submit" value="Save"></center>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

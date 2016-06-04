@@ -1,10 +1,8 @@
 from flask.ext.restplus import Resource, Namespace, fields
 
 from open_event.models.session import Level as LevelModel
-from open_event.models.event import Event as EventModel
-from .helpers import get_object_list, get_object_or_404, get_object_in_event,\
-    get_paginated_list
-from utils import PAGINATED_MODEL, PaginatedResourceBase, PAGE_PARAMS
+from .helpers import get_paginated_list, requires_auth
+from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, PAGE_PARAMS
 
 api = Namespace('levels', description='levels', path='/')
 
@@ -18,6 +16,16 @@ LEVEL_PAGINATED = api.clone('LevelPaginated', PAGINATED_MODEL, {
     'results': fields.List(fields.Nested(LEVEL))
 })
 
+LEVEL_POST = api.clone('LevelPost', LEVEL)
+del LEVEL_POST['id']
+
+
+# Create DAO
+class LevelDAO(ServiceDAO):
+    pass
+
+DAO = LevelDAO(model=LevelModel)
+
 
 @api.route('/events/<int:event_id>/levels/<int:level_id>')
 @api.response(404, 'Level not found')
@@ -27,7 +35,7 @@ class Level(Resource):
     @api.marshal_with(LEVEL)
     def get(self, event_id, level_id):
         """Fetch a level given its id"""
-        return get_object_in_event(LevelModel, level_id, event_id)
+        return DAO.get(event_id, level_id)
 
 
 @api.route('/events/<int:event_id>/levels')
@@ -36,10 +44,15 @@ class LevelList(Resource):
     @api.marshal_list_with(LEVEL)
     def get(self, event_id):
         """List all levels"""
-        # Check if an event with `event_id` exists
-        get_object_or_404(EventModel, event_id)
+        return DAO.list(event_id)
 
-        return get_object_list(LevelModel, event_id=event_id)
+    @requires_auth
+    @api.doc('create_level')
+    @api.marshal_with(LEVEL)
+    @api.expect(LEVEL_POST, validate=True)
+    def post(self, event_id):
+        """Create a level"""
+        return DAO.create(event_id, self.api.payload)
 
 
 @api.route('/events/<int:event_id>/levels/page')

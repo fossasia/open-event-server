@@ -1,0 +1,30 @@
+{% extends 'gentelella/admin/event/details/base_panel.html' %}
+{% block panel_title %}
+General Info
+{% endblock %}
+{% block panel_content %}
+    <table class="table table-striped">
+        <tbody>
+	        <tr><td><b>Event ID: </b></td><td>{{event.id}}</td></tr>
+	        <tr><td><b>Event Url: </b></td><td>{{event.event_url}}</td></tr>
+	        <tr><td><b>Event Start Time: </b></td><td>{{event.start_time}}</td></tr>
+	        <tr><td><b>Event End Time: </b></td><td>{{event.end_time}}</td></tr>
+	        <tr><td><b>Event Session Types: </b></td>
+	        	<td>
+	        	{% for sessionType in event.session_type %}
+	        		{{sessionType.name}},
+	        	{% endfor %}
+	        	</td>
+	        </tr>
+	        <tr><td><b>Event Social Links: </b></td>
+	        	<td>
+	        	{% for socialLink in event.social_link %}
+	        		<a href="{{socialLink.link}}">{{socialLink.name}}</a>,
+	        	{% endfor %}
+	        	</td>
+	        </tr>
+        <a class="btn btn-default" onclick="return confirm('Do you want to edit this record?');" href="{{ get_url('event.edit_view', event_id=event.id)}}" title="Edit record">Edit Event</a>
+        </tbody>
+    </table>
+
+{% endblock %}

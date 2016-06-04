@@ -89,7 +89,7 @@ cd /vagrant
 ```
 Now you are inside a synced up copy of the project directory. if you do `ls`, the files within the folder are the same as in your current folder.
 
-* Before running the app , install the requirements from 
+* Before running the app , install the requirements from
 requirements.txt .
 ```
 pip install -r requirements/dev.txt
@@ -117,6 +117,14 @@ python manage.py runserver -h 0.0.0.0 -p 5000
 * Now your server is up and running. We use 0.0.0.0 as address so that the app binds to all public IPs on the box, so that you can browse it from your host machine. In the `Vagrantfile` we have exposed port 5000 from the guest machine to 8001 so all API calls and HTTP requests must be made via 8001 from the host machine
 * To view the admin page go to [127.0.0.1:8001](http://127.0.0.1:8001/) or [localhost:8001](http://localhost:8001/) you should be directed to the admin page automatically.
 * Congratulations you have finally made it through the configuration part of the app, now Good Luck Coding :)
+
+### Development Mode
+
+To enable development mode (development Flask config), set `APP_CONFIG` environment variable to "config.DevelopmentConfig".
+
+```
+export APP_CONFIG=config.DevelopmentConfig
+```
 
 ### Install front-end dependencies
 

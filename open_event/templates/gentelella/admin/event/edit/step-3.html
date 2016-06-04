@@ -1,0 +1,35 @@
+<div id="step-3" class="wizard_content" style="display: block;">
+    {% for track  in tracks %}
+    <div class="row tracks">
+            <div class="col-sm-6">
+            <div class=" col-sm-6">
+                <input type="text" class="form-control" name="tracks[name]" placeholder="Name" value="{{ track.name }}">
+            </div>
+
+            <div class="col-sm-6 input-group">
+                <div class="input-group colorpicker-component" id="color">
+                    <input type="text" value="#e01ab5" class="form-control" name="tracks[color]" title="track-color"/>
+                    <span class="input-group-addon"><i></i></span>
+                </div>
+                {% if track.name == tracks[0].name %}
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary add-tracks">+</button>
+                </span>
+                {% endif %}
+                {% if track.name != tracks[0].name %}
+                <span class='input-group-btn'>
+                    <button type='button' class='btn btn-danger remove-tracks'>-</button>
+                </span>
+                {% endif %}
+            </div>
+            </div>
+    </div>
+    {% endfor %}
+</div>
+<link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') }}">
+<script src="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js') }}"></script>
+<script>
+     $(function() {
+         $('#color').colorpicker();
+     });
+</script>

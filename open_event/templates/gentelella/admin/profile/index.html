@@ -1,0 +1,47 @@
+{% extends 'gentelella/admin/base.html' %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block body %}
+
+
+<div class="page-title">
+    <div class="title_left">
+        <h3>Profile</h3>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h1>
+                    {% if profile.user_detail.avatar %}
+                    <img src="{{profile.user_detail.avatar}}">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='img/avatar.png') }}">
+                    {% endif %}
+                    <span style="padding:1em;">{{profile.login}}</span>
+                </h1>
+                <div class="clearfix"></div>
+            </div>
+            <div>
+                <h4><b>Email ID : </b>{{profile.email}}</h4>
+                <div class="clearfix"></div>
+                <h4><b>Role : </b>{{profile.role}}</h4>
+                <div class="clearfix"></div>
+                <h4><b>Contact : </b>{{profile.user_detail.contact}}</h4>
+                <div class="clearfix"></div>
+                <h4><b>Facebook : </b>{{profile.user_detail.facebook}}</h4>
+                <div class="clearfix"></div>
+                <h4><b>Twitter : </b>{{profile.user_detail.twitter}}</h4>
+                <div class="clearfix"></div>
+            </div>
+            <a class="icon" href="{{ get_url('user.edit_view')}}" title="Edit Profile" style="position:absolute; top:1em; right:1em;">
+                <span class="glyphicon glyphicon-pencil"></span> Edit Information
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

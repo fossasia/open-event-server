@@ -29,6 +29,7 @@ def create_app():
     cal = Calendar()
     event = Event()
 
+
     from open_event.views.views import app as routes
     app.register_blueprint(routes)
     migrate = Migrate(app, db)
@@ -81,6 +82,7 @@ def request_wants_json():
     return best == 'application/json' and \
         request.accept_mimetypes[best] > \
         request.accept_mimetypes['text/html']
+
 
 current_app, manager, database = create_app()
 

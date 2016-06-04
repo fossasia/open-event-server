@@ -1,0 +1,15 @@
+<div id="step-1" class="wizard_content" style="display: block;">
+    <div class="row">
+        <form action="/admin/events/{{event.id}}/update/" method="POST">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Call For papers closing date<span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <input required="required" name="closing_datetime" class="date-picker form-control col-md-7 col-xs-12" value="{{event.closing_datetime}}"/>
+            </div>
+            <button class="btn btn-success" type="submit">Update</button>
+        </form>
+    </div>
+    <div class="row">
+        <a class="col-md-offset-10 btn btn-success " id="go_to_call_for_papers">Go to Call For Papers</a>
+    </div>
+</div>
