@@ -5,7 +5,7 @@ from open_event import current_app as app
 from open_event.helpers.oauth import FbOAuth
 from open_event.helpers.data import get_facebook_auth
 from tests.auth_helper import register, login
-
+from open_event.helpers.data import create_user_oauth
 
 class TestFacebookOauth(OpenEventTestCase):
     def setUp(self):
@@ -37,6 +37,16 @@ class TestFacebookOauth(OpenEventTestCase):
                 "/fCallback/?code=dummy_code&state=dummy_state&error=12234").data)
             self.assertTrue("/admin/login" in self.app.get("/fCallback/?no_code_and_state").data)
             self.assertEqual(self.app.get("/fCallback/1234").status_code, 404)
+
+    def test_if_user_has_user_details(self):
+        """Check if user has user_details fields during sign up via facebook"""
+        with app.test_request_context():
+            user = None
+            user_data = {'email': 'test@gmail.com', 'name': 'dsads', 'picture': {'data': {'url': 'aaaa'}}}
+            token = 'dsadsads'
+            method = 'Facebook'
+            user = create_user_oauth(user, user_data, token, method)
+            self.assertTrue(user.user_detail)
 
 
 if __name__ == '__main__':

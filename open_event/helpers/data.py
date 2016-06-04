@@ -439,7 +439,6 @@ class DataManager(object):
         user = User(nickname='asdf',
                     login=form['username'],
                     email=form['email'])
-        user_detail = UserDetail()
 
         # we hash the users password to avoid saving it as plaintext in the db,
         # remove to use plain text:
@@ -452,9 +451,6 @@ class DataManager(object):
         user.salt = salt
         user.role = 'speaker'
         save_to_db(user, "User created")
-
-        user_detail.user_id = user.id
-        save_to_db(user_detail, "User Details Added")
 
         return user
 
@@ -737,6 +733,7 @@ def create_user_oauth(user, user_data, token, method):
         user.avatar = user_data['picture']['data']['url']
     user.tokens = json.dumps(token)
     save_to_db(user, "User created")
+
     return user
 
 
