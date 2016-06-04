@@ -1,7 +1,13 @@
+from functools import wraps
+from flask import request, g
 from flask.ext.restplus import abort
+from flask.ext import login
+from flask.ext.scrypt import check_password_hash
 
 from open_event.models.event import Event as EventModel
 from custom_fields import CustomField
+from open_event.models.user import User as UserModel
+from open_event.helpers.data import save_to_db, update_version
 
 
 def _error_abort(code, message):
@@ -18,6 +24,13 @@ def _error_abort(code, message):
 def _get_queryset(klass):
     """Returns the queryset for `klass` model"""
     return klass.query
+
+
+def _make_url_query(args):
+    """
+    Helper function to return a query url string from a dict
+    """
+    return '?' + '&'.join('%s=%s' % (key, args[key]) for key in args)
 
 
 def get_object_list(klass, **kwargs):
@@ -53,7 +66,7 @@ def get_object_or_404(klass, id_):
 
 
 def get_object_in_event(klass, id_, event_id):
-    """Returns a object (such as a Session, Track, Speaker, etc.) belonging
+    """Returns an object (such as a Session, Track, Speaker, etc.) belonging
     to an Event.
 
     First checks if Event with `event_id` exists. Then checks if  model `klass`
@@ -68,13 +81,6 @@ def get_object_in_event(klass, id_, event_id):
         _error_abort(400, 'Object does not belong to event')
 
     return obj
-
-
-def make_url_query(args):
-    """
-    Helper function to return a query url string from a dict
-    """
-    return '?' + '&'.join('%s=%s' % (key, args[key]) for key in args)
 
 
 def get_paginated_list(klass, url, args={}, **kwargs):
@@ -110,14 +116,14 @@ def get_paginated_list(klass, url, args={}, **kwargs):
     else:
         args_copy['start'] = max(1, start - limit)
         args_copy['limit'] = start - 1
-        obj['previous'] = url + make_url_query(args_copy)
+        obj['previous'] = url + _make_url_query(args_copy)
     # make next url
     args_copy = args.copy()
     if start + limit > count:
         obj['next'] = ''
     else:
         args_copy['start'] = start + limit
-        obj['next'] = url + make_url_query(args_copy)
+        obj['next'] = url + _make_url_query(args_copy)
     # finally extract result according to bounds
     obj['results'] = results[(start - 1):(start - 1 + limit)]
 
@@ -136,3 +142,59 @@ def validate_payload(payload, api_model):
         if isinstance(field, CustomField) and hasattr(field, 'validate'):
             if not field.validate(payload[key]):
                 _error_abort(400, 'Validation of \'%s\' field failed' % key)
+
+
+def save_db_model(new_model, model_name, event_id=None):
+    """
+    Save a new/modified model to database
+    """
+    save_to_db(new_model, "Model %s saved" % model_name)
+    if not event_id:
+        update_version(event_id, False, "session_ver")
+    return new_model
+
+
+def create_service_model(model, event_id, data):
+    """
+    Create a new service model (microlocations, sessions, speakers etc)
+    and save it to database
+    """
+    data['event_id'] = event_id
+    new_model = model(**data)
+    save_to_db(new_model, "Model %s saved" % model.__name__)
+    update_version(event_id, False, "session_ver")
+    return new_model
+
+
+def requires_auth(f):
+    """
+    Custom decorator to restrict non-login access to views
+    g.user holds the successfully authenticated user
+    Can be extended in future to allow other types of logins
+    Source: http://stackoverflow.com/q/32290511/2295672
+    """
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        # check for auth headers
+        auth = request.authorization
+        if not auth:
+            # check for active session
+            # used in swagger UI
+            if login.current_user.is_authenticated:
+                g.user = login.current_user
+                return f(*args, **kwargs)
+            else:
+                _error_abort(401, 'Authentication credentials not found')
+        # validate credentials
+        user = UserModel.query.filter_by(login=auth.username).first()
+        auth_ok = False
+        if user is not None:
+            auth_ok = check_password_hash(
+                auth.password.encode('utf-8'),
+                user.password.encode('utf-8'),
+                user.salt)
+        if not auth_ok:
+            return _error_abort(401, 'Authentication failed. Wrong username or password')
+        g.user = user
+        return f(*args, **kwargs)
+    return decorated

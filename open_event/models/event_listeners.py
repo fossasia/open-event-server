@@ -12,7 +12,5 @@ def after_insert(mapper, connection, target):
     version = Version.query.order_by(Version.id.desc()).first()
     if version:
         version_id = version.id
-        connection.execute(
-            link_table.update().
-            where(link_table.c.id == version_id).
-            values(event_id=target.id))
+        connection.execute(link_table.update().where(
+            link_table.c.id == version_id).values(event_id=target.id))

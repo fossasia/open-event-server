@@ -2,11 +2,15 @@
 from ..models.event import Event, EventsUsers
 from ..models.session import Session, Level, Format, Language
 from ..models.track import Track
+from ..models.invite import Invite
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
+from ..models.users_events_roles import UsersEventsRoles
 from ..models.user import User
 from ..models.file import File
+from ..models.session_type import SessionType
+from ..models.social_link import SocialLink
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
 from flask import flash
@@ -15,9 +19,23 @@ from flask import flash
 class DataGetter:
 
     @staticmethod
+    def get_invite_by_user_id(user_id):
+        invite = Invite.query.filter_by(user_id=user_id)
+        if invite:
+            return invite.first()
+        else:
+            flash("Invite doesn't exist")
+            return None
+
+    @staticmethod
     def get_all_events():
         """Method return all events"""
         return Event.query.all()
+
+    @staticmethod
+    def get_all_users_events_roles():
+        """Method return all events"""
+        return UsersEventsRoles.query
 
     @staticmethod
     def get_all_owner_events():
@@ -31,6 +49,13 @@ class DataGetter:
         :return: All Sessions with correct event_id
         """
         return Session.query.filter_by(event_id=get_event_id())
+
+    @staticmethod
+    def get_sessions_by_event_id(event_id):
+        """
+        :return: All Sessions with correct event_id
+        """
+        return Session.query.filter_by(event_id=event_id)
 
     @staticmethod
     def get_tracks(event_id):
@@ -186,8 +211,31 @@ class DataGetter:
 
     @staticmethod
     def get_event(event_id):
-        """Get event by id, None if it doesn't exist"""
         return Event.query.get(event_id)
+
+    @staticmethod
+    def get_user_events_roles(event_id):
+        return UsersEventsRoles.query.filter_by(user_id=login.current_user.id, event_id=event_id)
+
+    @staticmethod
+    def get_user_event_role(role_id):
+        return UsersEventsRoles.query.get(role_id)
+
+    @staticmethod
+    def get_user_events():
+        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)
+
+    @staticmethod
+    def get_completed_events():
+        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
+            .filter(Event.state == 'Completed')
+        return events
+
+    @staticmethod
+    def get_current_events():
+        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
+            .filter(Event.state != 'Completed')
+        return events
 
     @staticmethod
     def get_session(session_id):
@@ -198,3 +246,19 @@ class DataGetter:
     def get_speaker(speaker_id):
         """Get speaker by id"""
         return Speaker.query.get(speaker_id)
+
+    @staticmethod
+    def get_session_types_by_event_id(event_id):
+        """
+        :param event_id: Event id
+        :return: All Tracks filtered by event_id
+        """
+        return SessionType.query.filter_by(event_id=event_id)
+
+    @staticmethod
+    def get_social_links_by_event_id(event_id):
+        """
+        :param event_id: Event id
+        :return: All Tracks filtered by event_id
+        """
+        return SocialLink.query.filter_by(event_id=event_id)

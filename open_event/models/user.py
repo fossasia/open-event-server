@@ -5,6 +5,7 @@ ADMIN = 'admin'
 ORGANIZER = 'organizer'
 SUPERADMIN = 'super_admin'
 
+
 class User(db.Model):
     """User model class"""
     id = db.Column(db.Integer, primary_key=True)
@@ -15,6 +16,9 @@ class User(db.Model):
     reset_password = db.Column(db.String(128))
     salt = db.Column(db.String(128))
     role = db.Column(db.String())
+    avatar = db.Column(db.String())
+    tokens = db.Column(db.Text)
+    user_detail = db.relationship("UserDetail", uselist=False, backref="user")
 
     # Flask-Login integration
     def is_authenticated(self):
