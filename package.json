@@ -1,0 +1,25 @@
+{
+  "name": "open-event-orga-server",
+  "version": "1.0.0",
+  "description": "[![Build Status](https://travis-ci.org/fossasia/open-event-orga-server.svg?branch=master)](https://travis-ci.org/fossasia/open-event-orga-server)\r [![Dependency Status](https://gemnasium.com/badges/github.com/fossasia/open-event-orga-server.svg)](https://gemnasium.com/github.com/fossasia/open-event-orga-server)\r [![Codacy Badge](https://api.codacy.com/project/badge/grade/645630f8334b40dd93ba804956908a42)](https://www.codacy.com/app/triplez/open-event-orga-server)\r [![Issue Count](https://codeclimate.com/github/fossasia/open-event-orga-server/badges/issue_count.svg)](https://codeclimate.com/github/fossasia/open-event-orga-server)\r [![Test Coverage](https://codeclimate.com/github/fossasia/open-event-orga-server/badges/coverage.svg)](https://codeclimate.com/github/fossasia/open-event-orga-server/coverage)\r [![Coverage Status](https://coveralls.io/repos/github/fossasia/open-event-orga-server/badge.svg?branch=master)](https://coveralls.io/github/fossasia/open-event-orga-server?branch=master)\r [![codecov](https://codecov.io/gh/fossasia/open-event-orga-server/branch/master/graph/badge.svg)](https://codecov.io/gh/fossasia/open-event-orga-server)\r [![Gitter](https://badges.gitter.im/fossasia/open-event-orga-server.svg)](https://gitter.im/fossasia/open-event-orga-server?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)",
+  "scripts": {
+    "postinstall": "node node_modules/bower/bin/bower install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fossasia/open-event-orga-server.git"
+  },
+  "keywords": [
+    "open",
+    "event"
+  ],
+  "author": "FOSSASIA",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/fossasia/open-event-orga-server/issues"
+  },
+  "homepage": "https://github.com/fossasia/open-event-orga-server#readme",
+  "dependencies": {
+    "bower": "^1.7.9"
+  }
+}
