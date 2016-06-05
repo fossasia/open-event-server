@@ -6,6 +6,8 @@ from open_event.models.event import Event as EventModel
 DEFAULT_PAGE_START = 1
 DEFAULT_PAGE_LIMIT = 20
 
+POST_RESPONSES = {401: 'Authentication failure'}
+
 # Parameters for a paginated response
 PAGE_PARAMS = {
     'start': {

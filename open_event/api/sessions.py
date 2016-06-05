@@ -9,7 +9,8 @@ from open_event.models.microlocation import Microlocation as MicrolocationModel
 from open_event.models.speaker import Speaker as SpeakerModel
 
 from .helpers import get_paginated_list, requires_auth, save_db_model
-from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, PAGE_PARAMS
+from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
+    PAGE_PARAMS, POST_RESPONSES
 
 api = Namespace('sessions', description='Sessions', path='/')
 
@@ -128,7 +129,7 @@ class SessionList(Resource):
         return DAO.list(event_id)
 
     @requires_auth
-    @api.doc('create_session')
+    @api.doc('create_session', responses=POST_RESPONSES)
     @api.marshal_with(SESSION)
     @api.expect(SESSION_POST, validate=True)
     def post(self, event_id):

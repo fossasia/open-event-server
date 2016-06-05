@@ -3,7 +3,8 @@ from flask.ext.restplus import Resource, Namespace, fields
 from open_event.models.sponsor import Sponsor as SponsorModel
 from custom_fields import UriField, ImageUriField
 from .helpers import get_paginated_list, requires_auth
-from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, PAGE_PARAMS
+from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
+    PAGE_PARAMS, POST_RESPONSES
 
 api = Namespace('sponsors', description='sponsors', path='/')
 
@@ -49,7 +50,7 @@ class SponsorList(Resource):
         return DAO.list(event_id)
 
     @requires_auth
-    @api.doc('create_sponsor')
+    @api.doc('create_sponsor', responses=POST_RESPONSES)
     @api.marshal_with(SPONSOR)
     @api.expect(SPONSOR_POST, validate=True)
     def post(self, event_id):

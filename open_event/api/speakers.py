@@ -3,7 +3,8 @@ from flask.ext.restplus import Resource, Namespace, fields
 from open_event.models.speaker import Speaker as SpeakerModel
 from custom_fields import UriField, EmailField, ImageUriField
 from .helpers import get_paginated_list, requires_auth
-from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, PAGE_PARAMS
+from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
+    PAGE_PARAMS, POST_RESPONSES
 
 api = Namespace('speakers', description='Speakers', path='/')
 
@@ -65,7 +66,7 @@ class SpeakerList(Resource):
         return DAO.list(event_id)
 
     @requires_auth
-    @api.doc('create_speaker')
+    @api.doc('create_speaker', responses=POST_RESPONSES)
     @api.marshal_with(SPEAKER)
     @api.expect(SPEAKER_POST, validate=True)
     def post(self, event_id):
