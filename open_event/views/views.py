@@ -405,7 +405,7 @@ def generate_icalendar_event(event_id):
     cal.add_component(event)
 
     #Saving ical in file
-    filename = "event_calendar/" + str(uuid.uuid4().hex[:15]) + ".ics"
+    filename = "event_calendar/event-calendar-" + str(event_id) + ".ics"
     f = open(os.path.join(os.path.realpath('.') + '/static/', filename), 'wb')
     f.write(cal.to_ical())
     f.close()
