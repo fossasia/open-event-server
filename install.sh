@@ -70,8 +70,12 @@ fi
 # Update package list and upgrade all packages
 apt-get update
 # apt-get -y upgrade
-sudo apt-get -y install npm
+
+# Git required by bower
+sudo apt-get install --force-yes -y git
+sudo apt-get install -y npm
 sudo npm install -g bower
+sudo ln -s /usr/bin/nodejs /usr/bin/node
 bower install
 apt-get -y install "postgresql-$PG_VERSION" "postgresql-contrib-$PG_VERSION"
 
