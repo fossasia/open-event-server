@@ -1,7 +1,7 @@
 from flask_admin import expose
 from flask_admin.contrib.sqla import ModelView
 from flask import request, url_for, redirect
-from ....helpers.data import DataManager
+from ....helpers.data import DataManager,save_to_db
 from ....helpers.data_getter import DataGetter
 
 
@@ -21,3 +21,17 @@ class SessionView(ModelView):
         sessions = DataGetter.get_sessions_by_event_id(event_id)
         return self.render('/gentelella/admin/session/display.html',
                            sessions=sessions)
+
+    @expose('/<int:session_id>/accept_session', methods=('GET',))
+    def accept_session(self, event_id, session_id):
+        session = DataGetter.get_session(session_id)
+        session.state = 'accepted'
+        save_to_db(session, 'Session Accepted')
+        return redirect(url_for('.display_view', event_id=event_id))
+
+    @expose('/<int:session_id>/reject_session', methods=('GET',))
+    def reject_session(self, event_id, session_id):
+        session = DataGetter.get_session(session_id)
+        session.state = 'rejected'
+        save_to_db(session, 'Session Rejected')
+        return redirect(url_for('.display_view', event_id=event_id))

@@ -44,13 +44,6 @@ class DataGetter:
         return login.current_user.events_assocs
 
     @staticmethod
-    def get_sessions_by_event_id():
-        """
-        :return: All Sessions with correct event_id
-        """
-        return Session.query.filter_by(event_id=get_event_id())
-
-    @staticmethod
     def get_sessions_by_event_id(event_id):
         """
         :return: All Sessions with correct event_id
@@ -262,3 +255,4 @@ class DataGetter:
         :return: All Tracks filtered by event_id
         """
         return SocialLink.query.filter_by(event_id=event_id)
+
