@@ -34,7 +34,6 @@ from requests_oauthlib import OAuth2Session
 from ..models.invite import Invite
 
 
-
 class DataManager(object):
     """Main class responsible for DataBase managing"""
 
@@ -531,6 +530,7 @@ class DataManager(object):
             social_link_link = form.getlist('social[link]')
 
             track_name = form.getlist('tracks[name]')
+            track_color = form.getlist('tracks[color]')
 
             for index, name in enumerate(session_type_names):
                 session_type = SessionType(name=name, length=session_type_length[index], event_id=event.id)
@@ -541,7 +541,8 @@ class DataManager(object):
                 db.session.add(social_link)
 
             for index, name in enumerate(track_name):
-                track = Track(name=name, description="", track_image_url="", event_id=event.id)
+                track = Track(name=name, description="", track_image_url="", color=track_color[index],
+                              event_id=event.id)
                 db.session.add(track)
 
             uer = UsersEventsRoles(event_id=event.id, user_id=login.current_user.id, role_id=role.id)
@@ -576,6 +577,7 @@ class DataManager(object):
         social_link_link = form.getlist('social[link]')
 
         track_name = form.getlist('tracks[name]')
+        track_color = form.getlist('tracks[color]')
 
         for session_type in session_types:
             delete_from_db(session_type, 'Session Type Deleted')
@@ -595,7 +597,7 @@ class DataManager(object):
             save_to_db(social_link, 'Social Link Saved')
 
         for index, name in enumerate(track_name):
-            track = Track(name=name, description="", track_image_url="", event_id=event.id)
+            track = Track(name=name, description="", track_image_url="", color=track_color[index], event_id=event.id)
             save_to_db(track, 'Track Saved')
 
         return event
