@@ -682,8 +682,8 @@ function loadTracksToTimeline(day) {
 }
 
 function loadData(eventId, callback) {
-    $.get("https://open-event.herokuapp.com/api/v2/events/" + eventId + "/tracks", function (tracks) {
-        $.get("https://open-event.herokuapp.com/api/v2/events/" + eventId + "/sessions", function (sessions) {
+    $.get("/api/v2/events/" + eventId + "/tracks", function (tracks) {
+        $.get("/api/v2/events/" + eventId + "/sessions", function (sessions) {
             processTrackSession(tracks, sessions, callback);
         });
     });
