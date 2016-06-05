@@ -73,6 +73,7 @@ var unscheduledStore = [];
  *
  * @type {jQuery|HTMLElement}
  */
+var $timeline = $("#timeline");
 var $tracks = $(".track");
 var $unscheduledSessionsList = $("#sessions-list");
 var $tracksHolder = $("#track-container");
@@ -760,6 +761,7 @@ $(document)
  * Initialize the Scheduler UI on document ready
  */
 $(document).ready(function () {
+    var eventId = $timeline.data("event-id").trim();
     generateTimeUnits();
-    initializeTimeline(18);
+    initializeTimeline(eventId);
 });
