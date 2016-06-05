@@ -8,7 +8,7 @@
 
             <div class="col-sm-6 input-group">
                 <div class="input-group colorpicker-component" id="color">
-                    <input type="text" value="#e01ab5" class="form-control" name="tracks[color]" title="track-color"/>
+                    <input type="text" value="{{ track.color }}" class="form-control" name="tracks[color]" title="track-color"/>
                     <span class="input-group-addon"><i></i></span>
                 </div>
                 {% if track.name == tracks[0].name %}
