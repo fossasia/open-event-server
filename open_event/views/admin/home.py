@@ -26,7 +26,6 @@ class MyHomeView(AdminIndexView):
 
     @expose('/login/', methods=('GET', 'POST'))
     def login_view(self):
-        valid_user = None
         if request.method == 'GET':
             google = get_google_auth()
             auth_url, state = google.authorization_url(OAuth.get_auth_uri(), access_type='offline')
@@ -38,15 +37,12 @@ class MyHomeView(AdminIndexView):
             session['fb_oauth_state'] = state
             return self.render('/gentelella/admin/login/login.html', auth_url=auth_url, fb_auth_url=fb_auth_url)
         if request.method == 'POST':
-            username = request.form['username']
-            users = User.query.filter_by(login=username)
-            for user in users:
-                if user.password == generate_password_hash(request.form['password'], user.salt):
-                    valid_user = user
-            if valid_user is None:
+            email = request.form['email']
+            user = DataGetter.get_user_by_email(email)
+            if user is None:
                 logging.info('No such user')
                 return redirect(url_for('admin.login_view'))
-            login.login_user(valid_user)
+            login.login_user(user)
             logging.info('logged successfully')
             return redirect(intended_url())
 

@@ -49,7 +49,7 @@ def send_email_after_account_create(form):
                'from': 'open-event@googlegroups.com',
                'subject': "Account Created on Open Event",
                "html": ("Your Account Has Been Created! Congratulations!" \
-                        "<br/> Your login: ") + form['username']}
+                        "<br/> Your login: ") + form['email']}
     requests.post("https://api.sendgrid.com/api/mail.send.json",
                   data=payload,
                   headers=HEADERS)

@@ -437,7 +437,6 @@ class DataManager(object):
     @staticmethod
     def create_user(form):
         user = User(nickname='asdf',
-                    login=form['username'],
                     email=form['email'])
 
         # we hash the users password to avoid saving it as plaintext in the db,
@@ -725,7 +724,6 @@ def create_user_oauth(user, user_data, token, method):
     if user is None:
         user = User()
         user.email = user_data['email']
-    user.login = user_data['name']
     user.role = 'speaker'
     if method == 'Google':
         user.avatar = user_data['picture']
