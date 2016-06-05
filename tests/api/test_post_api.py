@@ -24,8 +24,8 @@ class TestPostApi(OpenEventTestCase):
         """
         register a user and login
         """
-        register(self.app, 'test', 'test@gmail.com', 'test')
-        login(self.app, 'test', 'test')
+        register(self.app, 'test@gmail.com', 'test')
+        login(self.app, 'test@email.com', 'test')
 
     def _test_model(self, name, data):
         """
