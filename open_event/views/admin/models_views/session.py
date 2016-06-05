@@ -22,14 +22,14 @@ class SessionView(ModelView):
         return self.render('/gentelella/admin/session/display.html',
                            sessions=sessions)
 
-    @expose('/<int:session_id>/accept_session', methods=('GET', 'POST'))
+    @expose('/<int:session_id>/accept_session', methods=('GET',))
     def accept_session(self, event_id, session_id):
         session = DataGetter.get_session(session_id)
         session.state = 'accepted'
         save_to_db(session, 'Session Accepted')
         return redirect(url_for('.display_view', event_id=event_id))
 
-    @expose('/<int:session_id>/reject_session', methods=('GET', 'POST'))
+    @expose('/<int:session_id>/reject_session', methods=('GET',))
     def reject_session(self, event_id, session_id):
         session = DataGetter.get_session(session_id)
         session.state = 'rejected'
