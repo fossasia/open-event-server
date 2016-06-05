@@ -7,6 +7,7 @@ from open_event.helpers.data import get_facebook_auth
 from tests.auth_helper import register, login
 from open_event.helpers.data import create_user_oauth
 
+
 class TestFacebookOauth(OpenEventTestCase):
     def setUp(self):
         self.app = Setup.create_app()
@@ -22,8 +23,8 @@ class TestFacebookOauth(OpenEventTestCase):
         """If the user is already logged in then on clicking 'Login with Facebook' he should be redirected
             directly to the admin page"""
         with app.test_request_context():
-            register(self.app, 'test', 'email@gmail.com', 'test')
-            login(self.app, 'test', 'test')
+            register(self.app, 'email@gmail.com', 'test')
+            login(self.app, 'email@gmail.com', 'test')
             self.assertTrue('Create New Event' in self.app.get('/fCallback/?code=dummy_code&state=dummy_state)',
                                                                follow_redirects=True).data)
             self.assertEqual(self.app.get('/fCallback/?code=dummy_code&state=dummy_state)').status_code, 302)
