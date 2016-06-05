@@ -26,7 +26,9 @@ class ObjectMother(object):
         return Session(title='test',
                        description='dsad',
                        start_time=datetime(2003, 8, 4, 12, 30, 45),
-                       end_time=datetime(2003, 8, 4, 12, 30, 45))
+                       end_time=datetime(2003, 8, 4, 12, 30, 45),
+                       event_id=1,
+                       state='pending')
 
     @staticmethod
     def get_microlocation():
