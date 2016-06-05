@@ -1,9 +1,10 @@
 from flask.ext.restplus import Resource, Namespace, fields
 
 from open_event.models.track import Track as TrackModel
-from custom_fields import ImageUriField
+from custom_fields import ImageUriField, ColorField
 from .helpers import get_paginated_list, requires_auth
-from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, PAGE_PARAMS
+from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
+    PAGE_PARAMS
 
 api = Namespace('tracks', description='Tracks', path='/')
 
@@ -16,6 +17,7 @@ TRACK = api.model('Track', {
     'id': fields.Integer(required=True),
     'name': fields.String,
     'description': fields.String,
+    'color': ColorField(),
     'track_image_url': ImageUriField(),
     'sessions': fields.List(fields.Nested(TRACK_SESSION)),
 })
