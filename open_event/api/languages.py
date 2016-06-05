@@ -53,7 +53,7 @@ class LanguageList(Resource):
     @api.expect(LANGUAGE_POST, validate=True)
     def post(self, event_id):
         """Create a language"""
-        return DAO.create(event_id, self.api.payload)
+        return DAO.create(event_id, self.api.payload, LANGUAGE_POST)
 
 
 @api.route('/events/<int:event_id>/languages/page')

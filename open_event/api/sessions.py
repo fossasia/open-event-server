@@ -133,7 +133,7 @@ class SessionList(Resource):
     @api.expect(SESSION_POST, validate=True)
     def post(self, event_id):
         """Create a session"""
-        return DAO.create(event_id, self.api.payload)
+        return DAO.create(event_id, self.api.payload, SESSION_POST)
 
 
 @api.route('/events/<int:event_id>/sessions/page')

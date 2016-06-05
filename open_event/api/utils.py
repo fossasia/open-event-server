@@ -1,6 +1,6 @@
 from flask_restplus import Model, fields, reqparse
 from .helpers import get_object_list, get_object_or_404, get_object_in_event, \
-    create_service_model
+    create_service_model, validate_payload
 from open_event.models.event import Event as EventModel
 
 DEFAULT_PAGE_START = 1
@@ -58,7 +58,13 @@ class ServiceDAO:
         get_object_or_404(EventModel, event_id)
         return get_object_list(self.model, event_id=event_id)
 
-    def create(self, event_id, data):
+    def create(self, event_id, data, api_model=None):
+        """
+        Create data. Pass api_model as None when there is no need to
+        validate data or no restplus Api model for that data exists
+        """
+        if api_model:
+            validate_payload(data, api_model)
         item = create_service_model(self.model, event_id, data)
         return self.get(event_id, item.id)
 

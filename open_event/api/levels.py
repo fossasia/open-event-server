@@ -52,7 +52,7 @@ class LevelList(Resource):
     @api.expect(LEVEL_POST, validate=True)
     def post(self, event_id):
         """Create a level"""
-        return DAO.create(event_id, self.api.payload)
+        return DAO.create(event_id, self.api.payload, LEVEL_POST)
 
 
 @api.route('/events/<int:event_id>/levels/page')

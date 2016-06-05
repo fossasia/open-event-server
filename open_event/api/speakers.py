@@ -70,7 +70,7 @@ class SpeakerList(Resource):
     @api.expect(SPEAKER_POST, validate=True)
     def post(self, event_id):
         """Create a speaker"""
-        return DAO.create(event_id, self.api.payload)
+        return DAO.create(event_id, self.api.payload, SPEAKER_POST)
 
 
 @api.route('/events/<int:event_id>/speakers/page')

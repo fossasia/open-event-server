@@ -5,7 +5,7 @@ from custom_fields import EmailField, ColorField, UriField, ImageUriField
 from open_event.models.event import Event as EventModel, EventsUsers
 from open_event.models.user import ADMIN, SUPERADMIN
 from .helpers import get_object_list, get_object_or_404, get_paginated_list,\
-    requires_auth
+    requires_auth, validate_payload
 from utils import PAGINATED_MODEL, PaginatedResourceBase, PAGE_PARAMS
 from open_event.helpers.data import save_to_db, update_version
 
@@ -60,6 +60,7 @@ class EventList(Resource):
     @api.expect(EVENT_POST, validate=True)
     def post(self):
         """Create an event"""
+        validate_payload(self.api.payload, EVENT_POST)
         new_event = EventModel(**self.api.payload)
         a = EventsUsers()
         a.user = g.user

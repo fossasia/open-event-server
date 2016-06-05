@@ -54,7 +54,7 @@ class SponsorList(Resource):
     @api.expect(SPONSOR_POST, validate=True)
     def post(self, event_id):
         """Create a sponsor"""
-        return DAO.create(event_id, self.api.payload)
+        return DAO.create(event_id, self.api.payload, SPONSOR_POST)
 
 
 @api.route('/events/<int:event_id>/sponsors/page')

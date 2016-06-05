@@ -55,7 +55,7 @@ class MicrolocationList(Resource):
     @api.expect(MICROLOCATION_POST, validate=True)
     def post(self, event_id):
         """Create a microlocation"""
-        return DAO.create(event_id, self.api.payload)
+        return DAO.create(event_id, self.api.payload, MICROLOCATION_POST)
 
 
 @api.route('/events/<int:event_id>/microlocations/page')

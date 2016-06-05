@@ -61,7 +61,7 @@ class TrackList(Resource):
     @api.expect(TRACK_POST, validate=True)
     def post(self, event_id):
         """Create a track"""
-        return DAO.create(event_id, self.api.payload)
+        return DAO.create(event_id, self.api.payload, TRACK_POST)
 
 
 @api.route('/events/<int:event_id>/tracks/page')
