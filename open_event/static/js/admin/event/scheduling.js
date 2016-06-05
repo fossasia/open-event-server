@@ -761,7 +761,7 @@ $(document)
  * Initialize the Scheduler UI on document ready
  */
 $(document).ready(function () {
-    var eventId = $timeline.data("event-id").trim();
+    var eventId = $timeline.data("event-id");
     generateTimeUnits();
     initializeTimeline(eventId);
 });
