@@ -80,5 +80,6 @@ POST_SPONSOR_DATA = {
 POST_TRACK_DATA = {
     "description": "TestTrack",
     "name": "TestTrack",
+    "color": "red",
     "track_image_url": "http://imgur.com/image.png"
 }
