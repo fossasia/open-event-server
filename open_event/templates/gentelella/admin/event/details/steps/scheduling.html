@@ -39,6 +39,7 @@
                     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-track-modal"
                             style="float:right;">Add New Track
                     </button>
+                     <button type="button" class="btn btn-default" style="float:right;" onclick="return export_as_ical();">Export as iCal</button>
                 </div>
             </div>
             <div class="timeline" id="timeline" data-event-id="{{ event.id }}"
@@ -193,6 +194,16 @@
     $(function () {
         $('#color').colorpicker();
     });
+
+    function export_as_ical(evt) {
+        $.getJSON("/api/v1/event/" + {{event.id}} + "/export/ical", function (result) {
+            console.log(result["filename"]);
+            window.open("/calendar/" + result["filename"]);
+        });
+
+        return false;
+    }
+
     function add_track(evt) {
         var a = $('#add-track-form').serializeArray();
         var name = a[0].value;
