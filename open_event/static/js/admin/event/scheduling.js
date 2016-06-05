@@ -732,6 +732,8 @@ $("#sessions-search").valueChange(function (value) {
         });
     }
 
+    filtered = _.sortBy(filtered, "title");
+    
     $unscheduledSessionsHolder.html("");
 
     if (filtered.length == 0) {
