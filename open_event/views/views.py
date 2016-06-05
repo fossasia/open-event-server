@@ -1,5 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
 import os
+import uuid
 from flask import jsonify, url_for, redirect, request, send_from_directory
 from flask.ext.cors import cross_origin
 from flask.ext import login
@@ -399,10 +400,21 @@ def generate_icalendar_event(event_id):
     event.add('dtend', matching_event.end_time)
     event.add('logo', matching_event.logo)
     event.add('email', matching_event.email)
-    event.add('description', matching_event.slogan)
-    event.add('url', matching_event.url)
+    event.add('description', matching_event.description)
+    event.add('url', matching_event.event_url)
     cal.add_component(event)
-    return cal.to_ical()
+
+    #Saving ical in file
+    filename = "event_calendar/" + str(uuid.uuid4().hex[:15]) + ".ics"
+    f = open(os.path.join(os.path.realpath('.') + '/static/', filename), 'wb')
+    f.write(cal.to_ical())
+    f.close()
+
+    return api_response(
+        data=jsonify(calendar=str(cal.to_ical), filename=filename),
+        status_code=event_status_code(event_id),
+        error='Event'
+    )
 
 
 @app.route('/api/v1/event/<int:event_id>/tracks/<int:track_id>/export/ical', methods=['GET'])
@@ -495,6 +507,13 @@ def facebook_callback():
 @auto.doc()
 def send_pic(filename):
     """Returns image"""
+    return send_from_directory(os.path.realpath('.') + '/static/', filename)
+
+
+@app.route('/calendar/<path:filename>')
+@auto.doc()
+def send_cal(filename):
+    """Returns calendar"""
     return send_from_directory(os.path.realpath('.') + '/static/', filename)
 
 
