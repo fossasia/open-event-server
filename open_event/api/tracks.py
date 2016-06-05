@@ -4,7 +4,7 @@ from open_event.models.track import Track as TrackModel
 from custom_fields import ImageUriField, ColorField
 from .helpers import get_paginated_list, requires_auth
 from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
-    PAGE_PARAMS
+    PAGE_PARAMS, POST_RESPONSES
 
 api = Namespace('tracks', description='Tracks', path='/')
 
@@ -58,7 +58,7 @@ class TrackList(Resource):
         return DAO.list(event_id)
 
     @requires_auth
-    @api.doc('create_track')
+    @api.doc('create_track', responses=POST_RESPONSES)
     @api.marshal_with(TRACK)
     @api.expect(TRACK_POST, validate=True)
     def post(self, event_id):

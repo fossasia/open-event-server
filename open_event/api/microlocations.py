@@ -2,7 +2,8 @@ from flask.ext.restplus import Resource, Namespace, fields
 
 from open_event.models.microlocation import Microlocation as MicrolocationModel
 from .helpers import get_paginated_list, requires_auth
-from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, PAGE_PARAMS
+from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
+    PAGE_PARAMS, POST_RESPONSES
 
 api = Namespace('microlocations', description='microlocations', path='/')
 
@@ -50,7 +51,7 @@ class MicrolocationList(Resource):
         return DAO.list(event_id)
 
     @requires_auth
-    @api.doc('create_microlocation')
+    @api.doc('create_microlocation', responses=POST_RESPONSES)
     @api.marshal_with(MICROLOCATION)
     @api.expect(MICROLOCATION_POST, validate=True)
     def post(self, event_id):
