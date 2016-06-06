@@ -39,7 +39,8 @@ $(document).ready(function() {
     $(this).parent().parent().parent().remove();
   });
 
-  $('.add-tracks').click(function () {
+  $("body").on("click", '#add-tracks', function () {
+    console.log("dsaddsa")
     counter += 1;
     var row = "<div class='col-sm-12 row-tracks'>" +
                 "<div class='col-sm-3'>" +
