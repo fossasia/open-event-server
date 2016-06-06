@@ -40,7 +40,6 @@ $(document).ready(function() {
   });
 
   $("body").on("click", '#add-tracks', function () {
-    console.log("dsaddsa")
     counter += 1;
     var row = "<div class='col-sm-12 row-tracks'>" +
                 "<div class='col-sm-3'>" +
@@ -79,11 +78,5 @@ $(document).ready(function() {
   $('.buttonPrevious').addClass("btn btn-primary");
   $('.buttonFinish').addClass("btn btn-default");
 
-  $('.date-picker').daterangepicker({
-    singleDatePicker: true,
-    calender_style: "picker_4"
-  }, function(start, end, label) {
-    console.log(start.toISOString(), end.toISOString(), label);
-  });
 
 });
