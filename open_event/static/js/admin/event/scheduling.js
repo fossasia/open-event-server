@@ -80,6 +80,7 @@ var $microlocationsHolder = $("#microlocation-container");
 var $unscheduledSessionsHolder = $unscheduledSessionsList;
 var $noSessionsInfoBox = $("#no-sessions-info");
 var $dayButtonsHolder = $("#date-change-btn-holder");
+var $addMicrolocationForm = $('#add-microlocation-form');
 
 /**
  * TEMPLATE STRINGS
@@ -163,17 +164,20 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
         return false;
     }
 
-    if (_.isNull(sessionRefObject.session.microlocation_id)) {
+    if ((_.isNull(sessionRefObject.session.microlocation) || _.isNull(sessionRefObject.session.microlocation.id)) && isUndefinedOrNull(position)) {
         addSessionToUnscheduled(sessionRefObject.$sessionElement);
         return;
     }
 
-    var oldMicrolocation = sessionRefObject.session.microlocation_id;
+    var oldMicrolocation = (_.isNull(sessionRefObject.session.microlocation) ? 0 : sessionRefObject.session.microlocation.id);
     var newMicrolocation = null;
 
     if (!isUndefinedOrNull(position)) {
         sessionRefObject.session.top = position.top;
-        sessionRefObject.session.microlocation_id = position.microlocation_id;
+        sessionRefObject.session.microlocation = {
+            id: position.microlocation_id,
+            name: position.microlocation_name
+        };
         newMicrolocation = position.microlocation_id;
         sessionRefObject.session = updateSessionTime(sessionRefObject.$sessionElement);
         sessionRefObject.$sessionElement.data("session", sessionRefObject.session);
@@ -186,13 +190,12 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
 
     sessionRefObject.$sessionElement.removeClass("unscheduled").addClass("scheduled");
 
-
     delete  sessionRefObject.session.start_time.isReset;
     delete  sessionRefObject.session.end_time.isReset;
 
     sessionRefObject.$sessionElement.css("top", sessionRefObject.session.top + "px");
     sessionRefObject.$sessionElement.css("height", minutesToPixels(sessionRefObject.session.duration) + "px");
-    $microlocationsHolder.find(".microlocation[data-microlocation-id=" + sessionRefObject.session.microlocation_id + "] > .microlocation-inner").append(sessionRefObject.$sessionElement);
+    $microlocationsHolder.find(".microlocation[data-microlocation-id=" + sessionRefObject.session.microlocation.id + "] > .microlocation-inner").append(sessionRefObject.$sessionElement);
 
     sessionRefObject.$sessionElement.ellipsis().ellipsis();
 
@@ -228,13 +231,13 @@ function addSessionToUnscheduled(sessionRef, isFiltering, shouldBroadcast) {
         return false;
     }
 
-    var oldMicrolocation = sessionRefObject.session.microlocation_id;
+    var oldMicrolocation = (_.isNull(sessionRefObject.session.microlocation) ? 0 : sessionRefObject.session.microlocation.id);
 
     sessionRefObject.session.top = null;
     sessionRefObject.session.duration = 30;
     sessionRefObject.session.start_time.hours(0).minutes(0);
     sessionRefObject.session.end_time.hours(0).minutes(0);
-    sessionRefObject.session.microlocation_id = null;
+    sessionRefObject.session.microlocation = null;
 
     sessionRefObject.session.start_time.isReset = true;
     sessionRefObject.session.end_time.isReset = true;
@@ -396,6 +399,7 @@ function updateSessionTime($sessionElement, session) {
 function addMicrolocationToTimeline(microlocation) {
     var $microlocationElement = $(microlocationTemplate);
     $microlocationElement.attr("data-microlocation-id", microlocation.id);
+    $microlocationElement.attr("data-microlocation-name", microlocation.name);
     $microlocationElement.find(".microlocation-header").html(microlocation.name + "&nbsp;&nbsp;&nbsp;<span class='badge'>0</span>");
     $microlocationElement.find(".microlocation-inner").css("height", time.unit.count * time.unit.pixels + "px");
     $microlocationsHolder.append($microlocationElement);
@@ -541,6 +545,7 @@ function initializeInteractables() {
 
             addSessionToTimeline($sessionElement, {
                 microlocation_id: parseInt($microlocationDropZone.parent().attr("data-microlocation-id")),
+                microlocation_name: $microlocationDropZone.parent().attr("data-microlocation-name"),
                 top: $sessionElement.data("temp-top")
             });
 
@@ -599,38 +604,27 @@ function processMicrolocationSession(microlocations, sessions, callback) {
             days.push(dayString);
         }
 
-        /**
-         * @type {{id: number, title: string, top: number, duration: number, microlocation_id: number|null, start_time: Moment, end_time: Moment}}
-         */
-        var sessionObject = {
-            id: session.id,
-            title: session.title,
-            top: top,
-            duration: Math.abs(duration.asMinutes()),
-            microlocation_id: session.microlocation.id,
-            start_time: startTime,
-            end_time: endTime
-        };
+        session.start_time = startTime;
+        session.end_time = endTime;
+        session.duration = Math.abs(duration.asMinutes());
+        session.top = top;
 
         var dayIndex = _.indexOf(days, dayString);
 
         if (_.isArray(sessionsStore[dayIndex])) {
-            sessionsStore[dayIndex].push(sessionObject);
+            sessionsStore[dayIndex].push(session);
         } else {
-            sessionsStore[dayIndex] = [sessionObject]
+            sessionsStore[dayIndex] = [session]
         }
     });
 
     _.each(microlocations, function (microlocation) {
-        var microlocationsObject = {
-            name: microlocation.name,
-            id: microlocation.id
-        };
-        if (!_.includes(microlocationsStore, microlocationsObject)) {
-            microlocationsStore.push(microlocationsObject);
+        if (!_.includes(microlocationsStore, microlocation)) {
+            microlocationsStore.push(microlocation);
         }
     });
 
+    microlocationsStore = _.sortBy(microlocationsStore, "name");
     loadDateButtons();
     callback();
 }
@@ -667,11 +661,8 @@ function loadMicrolocationsToTimeline(day) {
 
     _.each(sessionsStore[dayIndex], function (session) {
         // Add session elements, but do not broadcast.
-        if (!_.isNull(session.top) && !_.isNull(session.microlocation_id) && !_.isNull(session.start_time) && !_.isNull(session.end_time) && !session.hasOwnProperty("isReset")) {
+        if (!_.isNull(session.top) && !_.isNull(session.microlocation) && !_.isNull(session.microlocation.id) && !_.isNull(session.start_time) && !_.isNull(session.end_time) && !session.hasOwnProperty("isReset")) {
             addSessionToTimeline(session, null, false);
-            if(session.title === "RedHat") {
-                console.log(session);
-            }
         } else {
             addSessionToUnscheduled(session, false, false);
         }
@@ -743,6 +734,39 @@ $("#sessions-search").valueChange(function (value) {
         });
     }
 });
+
+$addMicrolocationForm.submit(function (event) {
+    event.preventDefault();
+    var payload = {
+        "room": $addMicrolocationForm.find("input[name=room]").val(),
+        "latitude": parseFloat($addMicrolocationForm.find("input[name=latitude]").val()),
+        "name": $addMicrolocationForm.find("input[name=name]").val(),
+        "longitude": parseFloat($addMicrolocationForm.find("input[name=longitude]").val()),
+        "floor": parseInt($addMicrolocationForm.find("input[name=floor]").val())
+    };
+    $.ajax({
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
+        },
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        url: $addMicrolocationForm.attr("action"),
+        data: JSON.stringify(payload),
+        success: function (microlocation) {
+            addMicrolocationToTimeline(microlocation);
+            $('#close-add-microlocation').click();
+            $addMicrolocationForm.find("input, textarea").val("");
+            createSnackbar("Microlocation has been created successfully.");
+        },
+        failure: function () {
+            createSnackbar("An error occurred while creating microlocation.", "Try Again", function () {
+                $addMicrolocationForm.trigger("submit");
+            });
+        }
+    });
+});
+
 
 /**
  * Global document events for date change button, remove button and clear overlaps button

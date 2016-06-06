@@ -150,7 +150,7 @@
     </div>
 </form>
 
-<form id="add-microlocation-form" onsubmit="return add_microlocation()">
+<form id="add-microlocation-form" method="post" action="{{ url_for('api.microlocations_microlocation_list', event_id=event.id) }}">
     <div class="modal fade" id="add-microlocation-modal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
@@ -171,13 +171,13 @@
 
                             <div class="col-sm-12 input-group">
                                 <label>Latitude:</label>
-                                <input type="text" required="required" class="form-control" name="latitude"
+                                <input type="number" required="required" class="form-control" name="latitude"
                                        placeholder="Latitude">
                             </div>
 
                             <div class="col-sm-12 input-group">
                                 <label>Longitude:</label>
-                                <input type="text" required="required" class="form-control" name="longitude"
+                                <input type="number" required="required" class="form-control" name="longitude"
                                        placeholder="Longitude">
                             </div>
 
@@ -192,10 +192,6 @@
                                 <input type="text" required="required" class="form-control" name="Room"
                                        placeholder="Room">
                             </div>
-
-                            {% if csrf_token %}
-                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -210,47 +206,3 @@
         </div>
     </div>
 </form>
-
-<script type="text/javascript">
-    $(function () {
-        $('#color').colorpicker();
-    });
-    function add_microlocation(evt) {
-        var a = $('#add-microlocation-form').serializeArray();
-        var name = a[0].value;
-        var color = a[1].value;
-        var csrf = $('#csrf_token').val();
-        var payload = {
-            'name': name,
-            'latitude': '',
-            'longitude': '',
-            'floor': color,
-            'room': csrf
-        };
-        var posting = $.ajax({
-            type: "POST",
-            url: "{{ url_for('api.microlocations_microlocation_list', event_id=event.id) }}",
-            data: payload
-        });
-
-        posting.done(function (result) {
-            $('#close-add-microlocation').click();
-            new PNotify({
-                title: 'Microlocation Added',
-                text: 'Microlocation added successfully to DB',
-                type: 'success'
-            });
-        });
-
-        posting.fail(function () {
-            $('#close-add-microlocation').click();
-            new PNotify({
-                title: 'Error',
-                text: 'Microlocation could not be added to DB',
-                type: 'error'
-            });
-        });
-
-        return false;
-    }
-</script>
