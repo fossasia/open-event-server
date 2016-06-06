@@ -2,9 +2,9 @@ from flask import request, url_for, redirect
 from flask_admin import expose
 from flask_admin.contrib.sqla import ModelView
 from flask.ext import login
-from ....helpers.data import DataManager
+from ....helpers.data import DataManager, save_to_db
 from ....helpers.data_getter import DataGetter
-
+from datetime import datetime
 
 class EventsView(ModelView):
     def is_accessible(self):
@@ -63,3 +63,10 @@ class EventsView(ModelView):
     def current_view(self):
         events = DataGetter.get_current_events()
         return self.render('/gentelella/admin/event/current_events.html', events=events)
+
+    @expose('/<int:event_id>/update/', methods=('POST',))
+    def save_closing_date(self, event_id):
+        event = DataGetter.get_event(event_id)
+        event.closing_datetime = request.form['closing_datetime']
+        save_to_db(event, 'Closing Datetime Updated')
+        return self.render('/gentelella/admin/event/details/details.html', event=event)
