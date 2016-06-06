@@ -24,12 +24,15 @@ class EventsView(ModelView):
     def create_view(self):
         if request.method == 'POST':
             event = DataManager.create_event(request.form)
-            return redirect(url_for('.details_view', event_id=event.id))
+            if event:
+                return redirect(url_for('.details_view', event_id=event.id))
+            return redirect(url_for('.index_view'))
         return self.render('/gentelella/admin/event/new/new.html')
 
     @expose('/<int:event_id>/', methods=('GET', 'POST'))
     def details_view(self, event_id):
         event = DataGetter.get_event(event_id)
+
         return self.render('/gentelella/admin/event/details/details.html', event=event)
 
     @expose('/<int:event_id>/edit/', methods=('GET', 'POST'))
