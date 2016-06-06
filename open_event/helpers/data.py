@@ -453,10 +453,10 @@ class DataManager(object):
         return user
 
     @staticmethod
-    def create_super_admin(password):
+    def create_super_admin(email, password):
         user = User()
         user.login = 'super_admin'
-        user.email = 'super_admin@gmail.com'
+        user.email = email
         user.nickname = 'super_admin'
         salt = generate_random_salt()
         password = password
