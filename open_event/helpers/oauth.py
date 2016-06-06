@@ -1,9 +1,10 @@
+from flask import request
+
 class OAuth(object):
     """Google Credentials"""
 
     CLIENT_ID = '449612261522-1eg34prt23l0454et59qgqno3rjd8muq.apps.googleusercontent.com'
     CLIENT_SECRET = 'aq8XaUlxCfhwwMyZyNw8kS-D'
-    REDIRECT_URI = 'http://localhost:8001/gCallback'
     AUTH_URI = 'https://accounts.google.com/o/oauth2/auth'
     TOKEN_URI = 'https://accounts.google.com/o/oauth2/token'
     USER_INFO = 'https://www.googleapis.com/userinfo/v2/me'
@@ -19,7 +20,9 @@ class OAuth(object):
 
     @classmethod
     def get_redirect_uri(self):
-        return self.REDIRECT_URI
+        url = (request.url.split('http://')[1]).split('/')[0]
+        redirect_uri = 'http://'+url+'/gCallback'
+        return redirect_uri
 
     @classmethod
     def get_auth_uri(self):
