@@ -456,6 +456,7 @@ class DataManager(object):
     def create_super_admin(password):
         user = User()
         user.login = 'super_admin'
+        user.email = 'super_admin@gmail.com'
         user.nickname = 'super_admin'
         salt = generate_random_salt()
         password = password

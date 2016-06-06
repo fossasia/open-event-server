@@ -17,8 +17,40 @@ jQuery.fn.extend({
                 }
             });
         });
+    },
+    appendAt: function ($element, index) {
+        return this.each(function () {
+            var elem = $(this);
+            if (index === 0) {
+                elem.prepend($element);
+                return;
+            } else if (index === -1) {
+                elem.append($element);
+                return;
+            }
+            elem.find("div:nth-child(" + (index) + ")").after($element);
+        });
+    }
+
+});
+
+/**
+ * Extend Lodash and add some additional functionality
+ */
+_.mixin({
+    /**
+     * Push data into an array while maintaining sort order
+     * @param array
+     * @param value
+     * @param [iteratee=_.identity]
+     */
+    sortedPush: function (array, value, iteratee) {
+        var sortedIndex = _.sortedIndex(array, value, iteratee);
+        array.splice(sortedIndex, 0, value);
+        return sortedIndex;
     }
 });
+
 
 /**
  * Cache the results of a RegExp match.

@@ -6,7 +6,7 @@ from open_event.models.event import Event as EventModel, EventsUsers
 from open_event.models.user import ADMIN, SUPERADMIN
 from .helpers import get_object_list, get_object_or_404, get_paginated_list,\
     requires_auth
-from utils import PAGINATED_MODEL, PaginatedResourceBase, PAGE_PARAMS
+from utils import PAGINATED_MODEL, PaginatedResourceBase, PAGE_PARAMS, POST_RESPONSES
 from open_event.helpers.data import save_to_db, update_version
 
 api = Namespace('events', description='Events')
@@ -55,7 +55,7 @@ class EventList(Resource):
         return get_object_list(EventModel)
 
     @requires_auth
-    @api.doc('create_event')
+    @api.doc('create_event', responses=POST_RESPONSES)
     @api.marshal_with(EVENT)
     @api.expect(EVENT_POST, validate=True)
     def post(self):

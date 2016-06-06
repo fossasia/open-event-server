@@ -2,7 +2,8 @@ from flask.ext.restplus import Resource, Namespace, fields
 
 from open_event.models.session import Level as LevelModel
 from .helpers import get_paginated_list, requires_auth
-from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, PAGE_PARAMS
+from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
+    PAGE_PARAMS, POST_RESPONSES
 
 api = Namespace('levels', description='levels', path='/')
 
@@ -47,7 +48,7 @@ class LevelList(Resource):
         return DAO.list(event_id)
 
     @requires_auth
-    @api.doc('create_level')
+    @api.doc('create_level', responses=POST_RESPONSES)
     @api.marshal_with(LEVEL)
     @api.expect(LEVEL_POST, validate=True)
     def post(self, event_id):
