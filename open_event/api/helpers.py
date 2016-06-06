@@ -186,7 +186,7 @@ def requires_auth(f):
             else:
                 _error_abort(401, 'Authentication credentials not found')
         # validate credentials
-        user = UserModel.query.filter_by(login=auth.username).first()
+        user = UserModel.query.filter_by(email=auth.username).first()
         auth_ok = False
         if user is not None:
             auth_ok = check_password_hash(
