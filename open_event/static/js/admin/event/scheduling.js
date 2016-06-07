@@ -339,7 +339,11 @@ function isSessionRestricted($sessionElement) {
  * @returns {boolean}
  */
 function isSessionOverTimeline($sessionElement) {
-    return collision($microlocations, $sessionElement);
+    try {
+        return collision($microlocations, $sessionElement);
+    } catch (e) {
+        return false;
+    }
 }
 
 /**
