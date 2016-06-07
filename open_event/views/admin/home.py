@@ -42,6 +42,9 @@ class MyHomeView(AdminIndexView):
             if user is None:
                 logging.info('No such user')
                 return redirect(url_for('admin.login_view'))
+            if user.password != generate_password_hash(request.form['password'], user.salt):
+                logging.info('Password Incorrect')
+                return redirect(url_for('admin.login_view'))
             login.login_user(user)
             logging.info('logged successfully')
             return redirect(intended_url())
@@ -104,3 +107,10 @@ class MyHomeView(AdminIndexView):
         return self.render('admin/role_manager.html',
                            users=users,
                            events=events)
+
+    @expose('/sessions/', methods=('GET', ))
+    def view_user_sessions(self):
+        sessions = DataGetter.get_user_sessions()
+        return self.render('/gentelella/admin/session/user_sessions.html',
+                           sessions=sessions)
+

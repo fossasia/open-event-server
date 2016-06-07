@@ -4,7 +4,7 @@ This file contains sample POST data
 
 POST_EVENT_DATA = {
     "color": "red",
-    "email": "email@gmail.com",
+    "email": "event@gmail.com",
     "end_time": "2016-05-30T12:12:43.891Z",
     "latitude": 0,
     "location_name": "TestEvent",
@@ -59,7 +59,7 @@ POST_SESSION_DATA = {
 POST_SPEAKER_DATA = {
     "biography": "TestSpeaker",
     "country": "TestSpeaker",
-    "email": "a@b.com",
+    "email": "speaker@gmail.com",
     "facebook": "http://facebook.com/user",
     "github": "http://github.com/user",
     "linkedin": "http://in.linkedin.com/user",

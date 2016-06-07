@@ -256,3 +256,6 @@ class DataGetter:
         """
         return SocialLink.query.filter_by(event_id=event_id)
 
+    @staticmethod
+    def get_user_sessions():
+        return Session.query.all()

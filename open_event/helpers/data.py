@@ -453,10 +453,10 @@ class DataManager(object):
         return user
 
     @staticmethod
-    def create_super_admin(password):
+    def create_super_admin(email, password):
         user = User()
         user.login = 'super_admin'
-        user.email = 'super_admin@gmail.com'
+        user.email = email
         user.nickname = 'super_admin'
         salt = generate_random_salt()
         password = password
@@ -547,8 +547,8 @@ class DataManager(object):
                 db.session.add(track)
 
             uer = UsersEventsRoles(event_id=event.id, user_id=login.current_user.id, role_id=role.id)
-            save_to_db(uer, "Event saved")
-            return event
+            if save_to_db(uer, "Event saved"):
+                return event
         else:
             raise ValidationError("start date greater than end date")
 
@@ -680,6 +680,7 @@ def save_to_db(item, msg):
         db.session.commit()
         return True
     except Exception, e:
+        print e
         logging.error('DB Exception! %s' % e)
         traceback.print_exc()
         db.session.rollback()
@@ -698,6 +699,7 @@ def delete_from_db(item, msg):
         db.session.commit()
         return True
     except Exception, e:
+        print e
         logging.error('DB Exception! %s' % e)
         db.session.rollback()
         return False
