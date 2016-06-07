@@ -25,6 +25,8 @@ EVENT = api.model('Event', {
     'background_url': UriField(),
     'description': fields.String,
     'location_name': fields.String,
+    'state': fields.String,
+    'closing_date': fields.DateTime,
 })
 
 EVENT_PAGINATED = api.clone('EventPaginated', PAGINATED_MODEL, {
