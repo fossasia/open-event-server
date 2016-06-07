@@ -42,6 +42,9 @@ class MyHomeView(AdminIndexView):
             if user is None:
                 logging.info('No such user')
                 return redirect(url_for('admin.login_view'))
+            if user.password != generate_password_hash(request.form['password'], user.salt):
+                logging.info('Password Incorrect')
+                return redirect(url_for('admin.login_view'))
             login.login_user(user)
             logging.info('logged successfully')
             return redirect(intended_url())
