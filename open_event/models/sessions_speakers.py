@@ -1,7 +1,7 @@
 from . import db
 
 
-class UsersEventsRoles(db.Model):
+class SessionsSpeakers(db.Model):
     __tablename__ = 'sessions_speakers'
     id = db.Column(db.Integer, primary_key=True)
     speaker_id = db.Column(db.Integer, db.ForeignKey('speaker.id'))
