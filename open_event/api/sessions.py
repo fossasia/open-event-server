@@ -9,6 +9,7 @@ from open_event.models.microlocation import Microlocation as MicrolocationModel
 from open_event.models.speaker import Speaker as SpeakerModel
 
 from .helpers import get_paginated_list, requires_auth, save_db_model
+from custom_fields import DateTimeField
 from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES
 
@@ -52,8 +53,8 @@ SESSION = api.model('Session', {
     'subtitle': fields.String,
     'abstract': fields.String,
     'description': fields.String,
-    'start_time': fields.DateTime,
-    'end_time': fields.DateTime,
+    'start_time': DateTimeField(),
+    'end_time': DateTimeField(),
     'track': fields.Nested(SESSION_TRACK),
     'speakers': fields.List(fields.Nested(SESSION_SPEAKER)),
     'level': fields.Nested(SESSION_LEVEL),
@@ -92,6 +93,8 @@ class SessionDAO(ServiceDAO):
         data['format'] = FormatModel.query.get(data['format_id'])
         data['microlocation'] = MicrolocationModel.query.get(data['microlocation_id'])
         data['event_id'] = event_id
+        data['start_time'] = SESSION_POST['start_time'].from_str(data['start_time'])
+        data['end_time'] = SESSION_POST['end_time'].from_str(data['end_time'])
         speakers = data['speaker_ids']
         del data['speaker_ids']
         del data['track_id']

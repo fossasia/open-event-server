@@ -36,8 +36,8 @@ class TestPostApiBasicAuth(OpenEventTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('Test' + str(name).title(), response.data)
 
-    # def test_event_api(self):
-    #     self._test_model('event', POST_EVENT_DATA)
+    def test_event_api(self):
+        self._test_model('event', POST_EVENT_DATA)
 
     def test_track_api(self):
         self._test_model('track', POST_TRACK_DATA)
@@ -54,9 +54,8 @@ class TestPostApiBasicAuth(OpenEventTestCase):
     def test_language_api(self):
         self._test_model('language', POST_LANGUAGE_DATA)
 
-    # TODO: has some issues with datetime and sqlite
-    # def test_session_api(self):
-    #     self._test_model('session', POST_SESSION_DATA)
+    def test_session_api(self):
+        self._test_model('session', POST_SESSION_DATA)
 
     def test_speaker_api(self):
         self._test_model('speaker', POST_SPEAKER_DATA)
