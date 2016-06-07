@@ -38,6 +38,16 @@
                         <td>{{session.start_time}}</td>
                         <td>{{session.end_time}}</td>
                         <td>{{session.state}}</td>
+                        <td>
+                           {% if session %}
+                           <a class="icon" href="{{ get_url('session.accept_session', event_id=session.event_id, session_id=session.id)}}" title="Accept Session">
+                                <span class="glyphicon glyphicon-ok"></span>
+                           </a>
+                           <a class="icon" href="{{ get_url('session.reject_session', event_id=session.event_id, session_id=session.id)}}" title="Reject Session">
+                               <span class="glyphicon glyphicon-remove"></span>
+                           </a>
+                           {% endif %}
+                       </td>
                     </tr>
                     {%endfor%}
                     </tbody>
