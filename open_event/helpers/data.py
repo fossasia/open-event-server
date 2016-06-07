@@ -146,6 +146,17 @@ class DataManager(object):
         update_version(event_id, False, "session_ver")
 
     @staticmethod
+    def edit_session(form, session):
+        session.title = form['title']
+        session.subtitle = form['subtitle']
+        session.description = form['description']
+        session.start_time = form['start_time']
+        session.end_time = form['end_time']
+        session.abstract = form['abstract']
+
+        save_to_db(session, 'Session Updated')
+
+    @staticmethod
     def update_session(form, session):
         """
         Session will be updated in database

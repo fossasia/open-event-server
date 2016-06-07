@@ -16,6 +16,15 @@ class SessionView(ModelView):
                 return redirect(url_for('session.display_view', event_id=event_id))
             return self.render('/gentelella/admin/session/new.html')
 
+    @expose('/<int:session_id>/edit/', methods=('GET','POST'))
+    def edit_view(self, event_id, session_id):
+        session = DataGetter.get_session(session_id)
+        if request.method == 'GET':
+            return self.render('/gentelella/admin/session/edit.html', session=session)
+        if request.method == 'POST':
+            DataManager.edit_session(request.form, session)
+            return redirect(url_for('session.display_view', event_id=event_id))
+
     @expose('/display/')
     def display_view(self, event_id):
         sessions = DataGetter.get_sessions_by_event_id(event_id)
