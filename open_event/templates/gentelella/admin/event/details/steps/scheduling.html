@@ -36,8 +36,9 @@
                 </div>
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-default clear-overlaps-button">Clear Overlaps</button>
-                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-track-modal"
-                            style="float:right;">Add New Track
+                    <button type="button" class="btn btn-default" data-toggle="modal"
+                            data-target="#add-microlocation-modal"
+                            style="float:right;">Add New Microlocation
                     </button>
                      <button type="button" class="btn btn-default" style="float:right;" onclick="return export_as_ical();">Export as iCal</button>
                 </div>
@@ -50,8 +51,8 @@
                         <td class="timeunits x1" width="55">
                             <div class="timeunit"></div>
                         </td>
-                        <td class="tracks x1">
-                            <div id="track-container" class="track-container clearfix draggable-holder"
+                        <td class="microlocations x1">
+                            <div id="microlocation-container" class="microlocation-container clearfix draggable-holder"
                                  style="width: 750px; height: 1311px;">
                             </div>
                         </td>
@@ -66,10 +67,10 @@
     </div>
 </div>
 
-<script id="track-template" type="text/x-template">
-    <div class="track">
-        <div class="text-center track-header"><span class="badge">0</span></div>
-        <div class="track-inner" style="height: 1296px;">
+<script id="microlocation-template" type="text/x-template">
+    <div class="microlocation">
+        <div class="text-center microlocation-header"><span class="badge">0</span></div>
+        <div class="microlocation-inner" style="height: 1296px;">
 
         </div>
     </div>
@@ -101,7 +102,7 @@
                     <h4 class="modal-title">Edit Session</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="row tracks">
+                    <div class="row microlocations">
                         <div class="col-sm-12">
                             <div class="col-sm-12 input-group">
                                 <label>Title:</label>
@@ -122,12 +123,14 @@
 
                             <div class="col-sm-12 input-group">
                                 <label>New Start Time:</label>
-                                <input required="required" name="start_time" class="date-picker form-control"placeholder="MM/DD/YYYY"/>
+                                <input required="required" name="start_time" class="date-picker form-control"
+                                       placeholder="MM/DD/YYYY"/>
                             </div>
 
                             <div class="col-sm-12 input-group">
                                 <label>New End Time:</label>
-                                <input required="required" name="start_time" class="date-picker form-control"placeholder="MM/DD/YYYY"/>
+                                <input required="required" name="start_time" class="date-picker form-control"
+                                       placeholder="MM/DD/YYYY"/>
                             </div>
 
                             {% if csrf_token %}
@@ -137,7 +140,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="close-add-track" class="btn btn-default" data-dismiss="modal">Close
+                    <button type="button" id="close-add-microlocation" class="btn btn-default" data-dismiss="modal">
+                        Close
                     </button>
                     <button type="submit" class="btn btn-primary">Update Session Information</button>
                 </div>
@@ -147,18 +151,18 @@
     </div>
 </form>
 
-<form id="add-track-form" onsubmit="return add_track()">
-    <div class="modal fade" id="add-track-modal" tabindex="-1" role="dialog" aria-hidden="true">
+<form id="add-microlocation-form" method="post" action="{{ url_for('api.microlocations_microlocation_list', event_id=event.id) }}">
+    <div class="modal fade" id="add-microlocation-modal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title">New Track</h4>
+                    <h4 class="modal-title">New Microlocation</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="row tracks">
+                    <div class="row microlocations">
                         <div class="col-sm-12">
                             <div class="col-sm-12 input-group">
                                 <label>Name:</label>
@@ -166,78 +170,48 @@
                                        placeholder="Name">
                             </div>
 
-                            <label>Color:</label>&nbsp;&nbsp;
-                            <div class="input-group colorpicker-component" id="color">
-                                <input type="text" value="#e01ab5" class="form-control" name="color"
-                                       title="track-color"/>
-                                <span class="input-group-addon"><i></i></span>
+                            <div class="col-sm-12 input-group">
+                                <label>Latitude:</label>
+                                <input type="number" required="required" class="form-control" name="latitude"
+                                       placeholder="Latitude">
                             </div>
 
-                            {% if csrf_token %}
-                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                            {% endif %}
+                            <div class="col-sm-12 input-group">
+                                <label>Longitude:</label>
+                                <input type="number" required="required" class="form-control" name="longitude"
+                                       placeholder="Longitude">
+                            </div>
+
+                            <div class="col-sm-12 input-group">
+                                <label>Floor:</label>
+                                <input type="number" required="required" class="form-control" name="floor"
+                                       placeholder="Floor">
+                            </div>
+
+                            <div class="col-sm-12 input-group">
+                                <label>Room:</label>
+                                <input type="text" required="required" class="form-control" name="Room"
+                                       placeholder="Room">
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="close-add-track" class="btn btn-default" data-dismiss="modal">Close
+                    <button type="button" id="close-add-microlocation" class="btn btn-default" data-dismiss="modal">
+                        Close
                     </button>
-                    <button type="submit" class="btn btn-primary">Add Track</button>
+                    <button type="submit" class="btn btn-primary">Add Microlocation</button>
                 </div>
 
             </div>
         </div>
     </div>
 </form>
-
 <script type="text/javascript">
-    $(function () {
-        $('#color').colorpicker();
-    });
-
     function export_as_ical(evt) {
         $.getJSON("/api/v1/event/" + {{event.id}} + "/export/ical", function (result) {
             console.log(result["filename"]);
             window.open("/calendar/" + result["filename"]);
-        });
-
-        return false;
-    }
-
-    function add_track(evt) {
-        var a = $('#add-track-form').serializeArray();
-        var name = a[0].value;
-        var color = a[1].value;
-        var csrf = $('#csrf_token').val();
-        var payload = {
-            'name': name,
-            'description': '',
-            'track_image_url': '',
-            'color': color,
-            'csrf_token': csrf
-        };
-        var posting = $.ajax({
-            type: "POST",
-            url: "{{ url_for('track.create_view', event_id=event.id) }}",
-            data: payload
-        });
-
-        posting.done(function (result) {
-            $('#close-add-track').click();
-            new PNotify({
-                title: 'Track Added',
-                text: 'Track added successfully to DB',
-                type: 'success'
-            });
-        });
-
-        posting.fail(function () {
-            $('#close-add-track').click();
-            new PNotify({
-                title: 'Error',
-                text: 'Track could not be added to DB',
-                type: 'error'
-            });
         });
 
         return false;
