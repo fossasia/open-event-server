@@ -49,7 +49,7 @@ POST_SESSION_DATA = {
     "language_id": 1,
     "level_id": 1,
     "microlocation_id": 1,
-    "speaker_ids": [1],
+    "speaker_ids": [],
     "start_time": "2016-05-30 08:47:37",
     "subtitle": "TestSession",
     "title": "TestSession",
