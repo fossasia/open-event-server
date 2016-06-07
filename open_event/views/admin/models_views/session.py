@@ -14,7 +14,7 @@ class SessionView(ModelView):
             if request.method == 'POST':
                 DataManager.add_session_to_event(request.form, event_id)
                 return redirect(url_for('session.display_view', event_id=event_id))
-            return self.render('/gentelella/admin/session/new.html')
+            return self.render('/gentelella/admin/session/new/new.html')
 
     @expose('/<int:session_id>/edit/', methods=('GET','POST'))
     def edit_view(self, event_id, session_id):
