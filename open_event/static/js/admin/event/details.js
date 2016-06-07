@@ -32,4 +32,8 @@ $(document).ready(function () {
 
   $(".actionBar").remove();
 
+  $.get("/api/v2/events/" + 2 , function (events) {
+    console.log(events)
+  });
+
 });
