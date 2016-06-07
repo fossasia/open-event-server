@@ -183,6 +183,18 @@ function isUndefinedOrNull(variable) {
     return (_.isUndefined(variable) || _.isNull(variable));
 }
 
+
+/**
+ * Get the value of a cookie (Original JavaScript code by Chirp Internet: www.chirp.com.au)
+ * @param name
+ * @returns {string}
+ */
+function getCookie(name) {
+    var re = new RegExp(name + "=([^;]+)");
+    var value = re.exec(document.cookie);
+    return (value != null) ? decodeURI(value[1]) : null;
+}
+
 /**
  * Create a material design snackbar to display simple notifications
  */

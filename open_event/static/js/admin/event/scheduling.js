@@ -724,7 +724,7 @@ $("#sessions-search").valueChange(function (value) {
     }
 
     filtered = _.sortBy(filtered, "title");
-    
+
     $unscheduledSessionsHolder.html("");
 
     if (filtered.length == 0) {
@@ -748,7 +748,7 @@ $addMicrolocationForm.submit(function (event) {
     };
     $.ajax({
         beforeSend: function (xhr) {
-            xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
+            xhr.setRequestHeader("Authorization", "Basic " + btoa(getCookie("username").replace(/['"]+/g, '') + ":" + getCookie("password")));
         },
         type: "POST",
         contentType: "application/json; charset=utf-8",
