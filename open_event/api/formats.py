@@ -39,6 +39,13 @@ class Format(Resource):
         """Fetch a format given its id"""
         return DAO.get(event_id, format_id)
 
+    @requires_auth
+    @api.doc('delete_format')
+    @api.marshal_with(FORMAT)
+    def delete(self, event_id, format_id):
+        """Delete a format given its id"""
+        return DAO.delete(event_id, format_id)
+
 
 @api.route('/events/<int:event_id>/formats')
 class FormatList(Resource):

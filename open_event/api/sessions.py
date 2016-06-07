@@ -119,6 +119,13 @@ class Session(Resource):
         """Fetch a session given its id"""
         return DAO.get(event_id, session_id)
 
+    @requires_auth
+    @api.doc('delete_session')
+    @api.marshal_with(SESSION)
+    def delete(self, event_id, session_id):
+        """Delete a session given its id"""
+        return DAO.delete(event_id, session_id)
+
 
 @api.route('/events/<int:event_id>/sessions')
 class SessionList(Resource):
