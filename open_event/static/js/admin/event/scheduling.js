@@ -773,6 +773,16 @@ $addMicrolocationForm.submit(function (event) {
     });
 });
 
+$(".export-png-button").click(function () {
+    html2canvas($timeline[0], {
+        onrendered: function (canvas) {
+            canvas.id = "generated-canvas";
+            canvas.toBlob(function (blob) {
+                saveAs(blob, "timeline.png");
+            });
+        }
+    });
+});
 
 /**
  * Global document events for date change button, remove button and clear overlaps button
