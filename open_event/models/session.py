@@ -138,6 +138,7 @@ class Session(db.Model):
                  level=None,
                  language=None,
                  microlocation=None,
+                 speakers=[],
                  event_id=None,
                  state="pending"):
         self.title = title
@@ -151,6 +152,7 @@ class Session(db.Model):
         self.level = level
         self.language = language
         self.microlocation = microlocation
+        self.speakers = speakers
         self.event_id = event_id
         self.state = state
 

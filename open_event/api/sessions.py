@@ -10,7 +10,7 @@ from open_event.models.speaker import Speaker as SpeakerModel
 
 from .helpers import get_paginated_list, requires_auth, save_db_model
 from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
-    PAGE_PARAMS, POST_RESPONSES
+    PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
 
 api = Namespace('sessions', description='Sessions', path='/')
 
@@ -85,6 +85,25 @@ del SESSION_POST['format']
 
 # Create DAO
 class SessionDAO(ServiceDAO):
+    # def _update_helper(self, obj, event_id, data):
+    #     data['track'] = TrackModel.query.get(data['track_id'])
+    #     data['level'] = LevelModel.query.get(data['level_id'])
+    #     data['language'] = LanguageModel.query.get(data['language_id'])
+    #     data['format'] = FormatModel.query.get(data['format_id'])
+    #     data['microlocation'] = MicrolocationModel.query.get(data['microlocation_id'])
+    #     data['event_id'] = event_id
+    #     speakers = data['speaker_ids']
+    #     del data['speaker_ids']
+    #     del data['track_id']
+    #     del data['level_id']
+    #     del data['language_id']
+    #     del data['format_id']
+    #     del data['microlocation_id']
+    #     obj.speakers = InstrumentedList(
+    #         SpeakerModel.query.get(_) for _ in speakers
+    #     )
+    #     return (obj, data)
+
     def create(self, event_id, data):
         data['track'] = TrackModel.query.get(data['track_id'])
         data['level'] = LevelModel.query.get(data['level_id'])
@@ -92,7 +111,9 @@ class SessionDAO(ServiceDAO):
         data['format'] = FormatModel.query.get(data['format_id'])
         data['microlocation'] = MicrolocationModel.query.get(data['microlocation_id'])
         data['event_id'] = event_id
-        speakers = data['speaker_ids']
+        data['speakers'] = InstrumentedList(
+            SpeakerModel.query.get(_) for _ in data['speaker_ids']
+        )
         del data['speaker_ids']
         del data['track_id']
         del data['level_id']
@@ -100,9 +121,9 @@ class SessionDAO(ServiceDAO):
         del data['format_id']
         del data['microlocation_id']
         session = SessionModel(**data)
-        session.speakers = InstrumentedList(
-            SpeakerModel.query.get(_) for _ in speakers
-        )
+        # session.speakers = InstrumentedList(
+        #     SpeakerModel.query.get(_) for _ in speakers
+        # )
         new_session = save_db_model(session, SessionModel.__name__, event_id)
         return self.get(event_id, new_session.id)
 
