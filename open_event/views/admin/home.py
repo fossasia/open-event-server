@@ -6,29 +6,12 @@ from flask.ext import login
 from flask_admin import expose
 from flask_admin.base import AdminIndexView
 from flask.ext.scrypt import generate_password_hash
-from datetime import datetime
-import jwt
 
 from ...helpers.data import DataManager, save_to_db,get_google_auth,get_facebook_auth
 from ...helpers.data_getter import DataGetter
 from ...helpers.helpers import send_email_after_account_create, send_email_with_reset_password_hash
 from open_event.helpers.oauth import OAuth, FbOAuth
 from flask import current_app
-
-def generate_token(user):
-    _jwt = current_app.extensions['jwt']
-    iat = datetime.utcnow()
-    exp = iat + current_app.config.get('JWT_EXPIRATION_DELTA')
-    nbf = iat + current_app.config.get('JWT_NOT_BEFORE_DELTA')
-    payload = {'exp': exp, 'iat': iat, 'nbf': nbf, 'identity': user.id}
-    secret = current_app.config['JWT_SECRET_KEY']
-    algorithm = current_app.config['JWT_ALGORITHM']
-    required_claims = current_app.config['JWT_REQUIRED_CLAIMS']
-    missing_claims = list(set(required_claims) - set(payload.keys()))
-    if missing_claims:
-        raise RuntimeError('Payload is missing required claims: %s' % ', '.join(missing_claims))
-    headers = _jwt.jwt_headers_callback(user)
-    return jwt.encode(payload, secret, algorithm=algorithm, headers=headers)
 
 def intended_url():
     return request.args.get('next') or url_for('.index')
@@ -61,12 +44,16 @@ class MyHomeView(AdminIndexView):
             if user.password != generate_password_hash(request.form['password'], user.salt):
                 logging.info('Password Incorrect')
                 return redirect(url_for('admin.login_view'))
-            token = generate_token(user)
+
+            _jwt = current_app.extensions['jwt']
+            identity = _jwt.authentication_callback(email, request.form['password'])
+            access_token = _jwt.jwt_encode_callback(identity)
+            
             login.login_user(user)
             logging.info('logged successfully')
             redirect_to_intended = redirect(intended_url())
             response = current_app.make_response(redirect_to_intended)
-            response.set_cookie('access_token', value=token)
+            response.set_cookie('access_token', value=access_token)
             return response
 
     @expose('/register/', methods=('GET', 'POST'))
