@@ -215,7 +215,6 @@ def auth_jwt():
     A helper function that throws JWTError if JWT is not set
     """
     g.user = current_identity
-    pass
 
 
 def auth_basic():

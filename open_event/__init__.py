@@ -57,7 +57,7 @@ def create_app():
 
     # set up jwt
     app.config['JWT_AUTH_USERNAME_KEY'] = 'email'
-    app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=84400)
+    app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=24*60*60)
     app.config['JWT_AUTH_URL_RULE'] = None
     jwt = JWT(app, jwt_authenticate, jwt_identity)
 
