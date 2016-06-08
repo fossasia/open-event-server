@@ -5,7 +5,7 @@ from .helpers import get_paginated_list, requires_auth
 from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES
 
-api = Namespace('levels', description='levels', path='/')
+api = Namespace('levels', description='Levels', path='/')
 
 LEVEL = api.model('Level', {
     'id': fields.Integer(required=True),
