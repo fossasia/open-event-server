@@ -1,12 +1,14 @@
 from flask.ext.restplus import Resource, Namespace, fields
 from flask import g
 
-from custom_fields import EmailField, ColorField, UriField, ImageUriField
+from custom_fields import EmailField, ColorField, UriField, ImageUriField,\
+    DateTimeField
 from open_event.models.event import Event as EventModel, EventsUsers
 from open_event.models.user import ADMIN, SUPERADMIN
 from .helpers import get_object_list, get_object_or_404, get_paginated_list,\
     requires_auth
-from utils import PAGINATED_MODEL, PaginatedResourceBase, PAGE_PARAMS, POST_RESPONSES
+from utils import PAGINATED_MODEL, PaginatedResourceBase, PAGE_PARAMS,\
+    POST_RESPONSES
 from open_event.helpers.data import save_to_db, update_version, delete_from_db
 
 api = Namespace('events', description='Events')
@@ -17,8 +19,8 @@ EVENT = api.model('Event', {
     'email': EmailField(),
     'color': ColorField(),
     'logo': ImageUriField(),
-    'start_time': fields.DateTime,
-    'end_time': fields.DateTime,
+    'start_time': DateTimeField(),
+    'end_time': DateTimeField(),
     'latitude': fields.Float,
     'longitude': fields.Float,
     'event_url': UriField(),
@@ -72,6 +74,10 @@ class EventList(Resource):
     def post(self):
         """Create an event"""
         new_event = EventModel(**self.api.payload)
+        # convert date-time values from string to datetime
+        new_event.start_time = EVENT_POST['start_time'].from_str(new_event.start_time)
+        new_event.end_time = EVENT_POST['end_time'].from_str(new_event.end_time)
+        # set user (owner)
         a = EventsUsers()
         a.user = g.user
         a.editor = True
