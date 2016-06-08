@@ -113,6 +113,7 @@ class SessionDAO(ServiceDAO):
         data['event_id'] = event_id
         data['speakers'] = InstrumentedList(
             SpeakerModel.query.get(_) for _ in data['speaker_ids']
+            if SpeakerModel.query.get(_) is not None
         )
         del data['speaker_ids']
         del data['track_id']
@@ -121,9 +122,6 @@ class SessionDAO(ServiceDAO):
         del data['format_id']
         del data['microlocation_id']
         session = SessionModel(**data)
-        # session.speakers = InstrumentedList(
-        #     SpeakerModel.query.get(_) for _ in speakers
-        # )
         new_session = save_db_model(session, SessionModel.__name__, event_id)
         return self.get(event_id, new_session.id)
 
