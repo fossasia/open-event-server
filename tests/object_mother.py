@@ -35,7 +35,8 @@ class ObjectMother(object):
     def get_microlocation():
         return Microlocation(name="name",
                              latitude=1.0,
-                             longitude=1.0)
+                             longitude=1.0,
+                             event_id=1)
 
 
     @staticmethod
