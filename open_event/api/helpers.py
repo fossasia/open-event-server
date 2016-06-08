@@ -3,6 +3,7 @@ from flask import request, g
 from flask.ext.restplus import abort
 from flask.ext import login
 from flask.ext.scrypt import check_password_hash
+from flask_jwt import jwt_required, JWTError, current_identity
 
 from open_event.models.event import Event as EventModel
 from custom_fields import CustomField
@@ -179,31 +180,68 @@ def requires_auth(f):
     """
     Custom decorator to restrict non-login access to views
     g.user holds the successfully authenticated user
-    Can be extended in future to allow other types of logins
-    Source: http://stackoverflow.com/q/32290511/2295672
+    Allows JWT token based access and Basic auth access
+    Falls back to active session if both are not present
     """
     @wraps(f)
     def decorated(*args, **kwargs):
-        # check for auth headers
-        auth = request.authorization
-        if not auth:
-            # check for active session
-            # used in swagger UI
+        message = 'Authentication credentials not found'
+        success = False
+        # JWT Auth
+        try:
+            auth_jwt()
+            success = True
+        except JWTError as e:
+            if e.headers is not None and 'WWW-Authenticate' not in e.headers:
+                # JWT header was set but something wrong happened
+                message = e.error + ': ' + e.description
+
+        # Basic Auth
+        if not success:
+            results = auth_basic()
+            if not results[0]:
+                if results[1]:
+                    message = results[1]
+            else:
+                success = True
+
+        # if none worked, check for active session
+        # used in swagger UI
+        if not success:
             if login.current_user.is_authenticated:
                 g.user = login.current_user
-                return f(*args, **kwargs)
-            else:
-                _error_abort(401, 'Authentication credentials not found')
-        # validate credentials
-        user = UserModel.query.filter_by(email=auth.username).first()
-        auth_ok = False
-        if user is not None:
-            auth_ok = check_password_hash(
-                auth.password.encode('utf-8'),
-                user.password.encode('utf-8'),
-                user.salt)
-        if not auth_ok:
-            return _error_abort(401, 'Authentication failed. Wrong username or password')
-        g.user = user
-        return f(*args, **kwargs)
+                success = True
+        if success:
+            return f(*args, **kwargs)
+        else:
+            _error_abort(401, message)
     return decorated
+
+
+@jwt_required()
+def auth_jwt():
+    """
+    A helper function that throws JWTError if JWT is not set
+    """
+    g.user = current_identity
+
+
+def auth_basic():
+    """
+    Check for basic auth in header. Return a tuple as result
+    The second value of tuple is set only when user tried basic_auth
+    """
+    auth = request.authorization  # only works in Basic auth
+    if not auth:
+        return (False, '')
+    user = UserModel.query.filter_by(email=auth.username).first()
+    auth_ok = False
+    if user is not None:
+        auth_ok = check_password_hash(
+            auth.password.encode('utf-8'),
+            user.password.encode('utf-8'),
+            user.salt)
+    if not auth_ok:
+        return (False, 'Authentication failed. Wrong username or password')
+    g.user = user
+    return (True, '')

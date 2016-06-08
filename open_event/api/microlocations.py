@@ -5,7 +5,7 @@ from .helpers import get_paginated_list, requires_auth
 from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES
 
-api = Namespace('microlocations', description='microlocations', path='/')
+api = Namespace('microlocations', description='Microlocations', path='/')
 
 MICROLOCATION = api.model('Microlocation', {
     'id': fields.Integer(required=True),
