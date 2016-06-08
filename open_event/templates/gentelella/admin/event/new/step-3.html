@@ -1,5 +1,6 @@
 <div id="step-3" class="wizard_content" style="display: block;">
     <div class="row tracks">
+        <h2 style="padding: 6px 12px;">Tracks</h2>
         <div class="col-sm-6">
             <div class=" col-sm-6">
                 <input type="text" class="form-control" name="tracks[name]" placeholder="Name" value="Track 1">
@@ -12,6 +13,24 @@
                 </div>
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-primary" id="add-tracks">+</button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="row rooms">
+        <h2 style="padding: 6px 12px;">Rooms</h2>
+        <div class="col-sm-6">
+            <div class=" col-sm-6">
+                <input type="text" class="form-control" name="rooms[name]" placeholder="Name" value="Room 1">
+            </div>
+
+            <div class="col-sm-6 input-group">
+                <div class="input-group colorpicker-component" id="room-color">
+                    <input type="text" value="#e01ab5" class="form-control" name="rooms[color]" title="rooms-color"/>
+                    <span class="input-group-addon"><i></i></span>
+                </div>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="add-rooms">+</button>
                 </span>
             </div>
         </div>
