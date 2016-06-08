@@ -56,6 +56,13 @@ class Speaker(Resource):
         """Fetch a speaker given its id"""
         return DAO.get(event_id, speaker_id)
 
+    @requires_auth
+    @api.doc('delete_speaker')
+    @api.marshal_with(SPEAKER)
+    def delete(self, event_id, speaker_id):
+        """Delete a speaker given its id"""
+        return DAO.delete(event_id, speaker_id)
+
 
 @api.route('/events/<int:event_id>/speakers')
 class SpeakerList(Resource):

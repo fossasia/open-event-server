@@ -5,7 +5,7 @@ from .helpers import get_paginated_list, requires_auth
 from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES
 
-api = Namespace('formats', description='formats', path='/')
+api = Namespace('formats', description='Formats', path='/')
 
 # Create models
 FORMAT = api.model('Format', {
@@ -38,6 +38,13 @@ class Format(Resource):
     def get(self, event_id, format_id):
         """Fetch a format given its id"""
         return DAO.get(event_id, format_id)
+
+    @requires_auth
+    @api.doc('delete_format')
+    @api.marshal_with(FORMAT)
+    def delete(self, event_id, format_id):
+        """Delete a format given its id"""
+        return DAO.delete(event_id, format_id)
 
 
 @api.route('/events/<int:event_id>/formats')

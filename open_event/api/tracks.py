@@ -48,6 +48,13 @@ class Track(Resource):
         """Fetch a track given its id"""
         return DAO.get(event_id, track_id)
 
+    @requires_auth
+    @api.doc('delete_track')
+    @api.marshal_with(TRACK)
+    def delete(self, event_id, track_id):
+        """Delete a track given its id"""
+        return DAO.delete(event_id, track_id)
+
 
 @api.route('/events/<int:event_id>/tracks')
 class TrackList(Resource):

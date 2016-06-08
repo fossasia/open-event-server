@@ -105,6 +105,7 @@ class SessionDAO(ServiceDAO):
         session = SessionModel(**data)
         session.speakers = InstrumentedList(
             SpeakerModel.query.get(_) for _ in speakers
+            if SpeakerModel.query.get(_) is not None
         )
         new_session = save_db_model(session, SessionModel.__name__, event_id)
         return self.get(event_id, new_session.id)
@@ -121,6 +122,13 @@ class Session(Resource):
     def get(self, event_id, session_id):
         """Fetch a session given its id"""
         return DAO.get(event_id, session_id)
+
+    @requires_auth
+    @api.doc('delete_session')
+    @api.marshal_with(SESSION)
+    def delete(self, event_id, session_id):
+        """Delete a session given its id"""
+        return DAO.delete(event_id, session_id)
 
 
 @api.route('/events/<int:event_id>/sessions')

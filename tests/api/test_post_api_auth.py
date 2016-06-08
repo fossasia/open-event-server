@@ -64,5 +64,50 @@ class TestPostApiBasicAuth(OpenEventTestCase):
         self._test_model('sponsor', POST_SPONSOR_DATA)
 
 
+class TestPostApiJWTAuth(TestPostApiBasicAuth):
+    """
+    Tests the JWT Auth in Post API
+    """
+    def _send_login_request(self, password):
+        """
+        sends a login request and returns the response
+        """
+        response = self.app.post(
+            '/api/v2/login',
+            data=json.dumps({
+                'email': 'myemail@gmail.com',
+                'password': password
+            }),
+            headers={'content-type': 'application/json'}
+        )
+        return response
+
+    def _test_model(self, name, data):
+        """
+        1. Test getting JWT token with wrong credentials and getting 401
+        2. Get JWT token with right credentials
+        3. Send a sample successful POST request
+        """
+        path = get_path() if name == 'event' else get_path(1, name + 's')
+        # get access token
+        response = self._send_login_request('wrong_password')
+        self.assertEqual(response.status_code, 401)
+        response = self._send_login_request('test')
+        self.assertEqual(response.status_code, 200)
+        token = json.loads(response.data)['access_token']
+        # send a post request
+        response = self.app.post(
+            path,
+            data=json.dumps(data),
+            headers={
+                'content-type': 'application/json',
+                'Authorization': 'JWT %s' % token
+            }
+        )
+        self.assertNotEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Test' + str(name).title(), response.data)
+
+
 if __name__ == '__main__':
     unittest.main()

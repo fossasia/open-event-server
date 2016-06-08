@@ -6,7 +6,7 @@ from .helpers import get_paginated_list, requires_auth
 from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES
 
-api = Namespace('sponsors', description='sponsors', path='/')
+api = Namespace('sponsors', description='Sponsors', path='/')
 
 SPONSOR = api.model('Sponsor', {
     'id': fields.Integer(required=True),
@@ -39,6 +39,13 @@ class Sponsor(Resource):
     def get(self, event_id, sponsor_id):
         """Fetch a sponsor given its id"""
         return DAO.get(event_id, sponsor_id)
+
+    @requires_auth
+    @api.doc('delete_sponsor')
+    @api.marshal_with(SPONSOR)
+    def delete(self, event_id, sponsor_id):
+        """Delete a sponsor given its id"""
+        return DAO.delete(event_id, sponsor_id)
 
 
 @api.route('/events/<int:event_id>/sponsors')

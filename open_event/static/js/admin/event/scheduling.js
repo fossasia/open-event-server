@@ -64,7 +64,7 @@ function pixelsToMinutes(pixels, fromTop) {
  */
 var days = [];
 var sessionsStore = [];
-var tracksStore = [];
+var microlocationsStore = [];
 var unscheduledStore = [];
 
 /**
@@ -74,12 +74,13 @@ var unscheduledStore = [];
  * @type {jQuery|HTMLElement}
  */
 var $timeline = $("#timeline");
-var $tracks = $(".track");
+var $microlocations = $(".microlocation");
 var $unscheduledSessionsList = $("#sessions-list");
-var $tracksHolder = $("#track-container");
+var $microlocationsHolder = $("#microlocation-container");
 var $unscheduledSessionsHolder = $unscheduledSessionsList;
 var $noSessionsInfoBox = $("#no-sessions-info");
 var $dayButtonsHolder = $("#date-change-btn-holder");
+var $addMicrolocationForm = $('#add-microlocation-form');
 
 /**
  * TEMPLATE STRINGS
@@ -87,7 +88,7 @@ var $dayButtonsHolder = $("#date-change-btn-holder");
  *
  * @type {string}
  */
-var trackTemplate = $("#track-template").html();
+var microlocationTemplate = $("#microlocation-template").html();
 var sessionTemplate = $("#session-template").html();
 var dayButtonTemplate = $("#date-change-button-template").html();
 
@@ -147,7 +148,7 @@ function getSessionFromReference(sessionRef, $searchTarget) {
 /**
  * Add a session to the timeline at the said position
  * @param {int|Object|jQuery} sessionRef Can be session ID, or session object or an existing session element from the unscheduled list
- * @param {Object} [position] Contains position information if the session is changed (track-id and top)
+ * @param {Object} [position] Contains position information if the session is changed (microlocation-id and top)
  * @param {boolean} [shouldBroadcast=true]
  */
 function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
@@ -155,7 +156,7 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
     if (_.isUndefined(position)) {
         sessionRefObject = getSessionFromReference(sessionRef, $unscheduledSessionsHolder);
     } else {
-        sessionRefObject = getSessionFromReference(sessionRef, $tracksHolder);
+        sessionRefObject = getSessionFromReference(sessionRef, $microlocationsHolder);
     }
 
     if (!sessionRefObject) {
@@ -163,18 +164,21 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
         return false;
     }
 
-    if (_.isNull(sessionRefObject.session.track_id)) {
+    if ((_.isNull(sessionRefObject.session.microlocation) || _.isNull(sessionRefObject.session.microlocation.id)) && isUndefinedOrNull(position)) {
         addSessionToUnscheduled(sessionRefObject.$sessionElement);
         return;
     }
 
-    var oldTrack = sessionRefObject.session.track_id;
-    var newTrack = null;
+    var oldMicrolocation = (_.isNull(sessionRefObject.session.microlocation) ? 0 : sessionRefObject.session.microlocation.id);
+    var newMicrolocation = null;
 
     if (!isUndefinedOrNull(position)) {
         sessionRefObject.session.top = position.top;
-        sessionRefObject.session.track_id = position.track_id;
-        newTrack = position.track_id;
+        sessionRefObject.session.microlocation = {
+            id: position.microlocation_id,
+            name: position.microlocation_name
+        };
+        newMicrolocation = position.microlocation_id;
         sessionRefObject.session = updateSessionTime(sessionRefObject.$sessionElement);
         sessionRefObject.$sessionElement.data("session", sessionRefObject.session);
     }
@@ -186,13 +190,12 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
 
     sessionRefObject.$sessionElement.removeClass("unscheduled").addClass("scheduled");
 
-
     delete  sessionRefObject.session.start_time.isReset;
     delete  sessionRefObject.session.end_time.isReset;
 
     sessionRefObject.$sessionElement.css("top", sessionRefObject.session.top + "px");
     sessionRefObject.$sessionElement.css("height", minutesToPixels(sessionRefObject.session.duration) + "px");
-    $tracksHolder.find(".track[data-track-id=" + sessionRefObject.session.track_id + "] > .track-inner").append(sessionRefObject.$sessionElement);
+    $microlocationsHolder.find(".microlocation[data-microlocation-id=" + sessionRefObject.session.microlocation.id + "] > .microlocation-inner").append(sessionRefObject.$sessionElement);
 
     sessionRefObject.$sessionElement.ellipsis().ellipsis();
 
@@ -204,7 +207,7 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
             $(document).trigger("scheduling:change", sessionRefObject.session);
         }
 
-        $(document).trigger("scheduling:recount", [oldTrack, newTrack]);
+        $(document).trigger("scheduling:recount", [oldMicrolocation, newMicrolocation]);
     }
 
     _.remove(unscheduledStore, function (sessionTemp) {
@@ -222,19 +225,19 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
 function addSessionToUnscheduled(sessionRef, isFiltering, shouldBroadcast) {
     var session;
 
-    var sessionRefObject = getSessionFromReference(sessionRef, $tracksHolder);
+    var sessionRefObject = getSessionFromReference(sessionRef, $microlocationsHolder);
     if (!sessionRefObject) {
         logError("addSessionToUnscheduled", sessionRef);
         return false;
     }
 
-    var oldTrack = sessionRefObject.session.track_id;
+    var oldMicrolocation = (_.isNull(sessionRefObject.session.microlocation) ? 0 : sessionRefObject.session.microlocation.id);
 
     sessionRefObject.session.top = null;
     sessionRefObject.session.duration = 30;
     sessionRefObject.session.start_time.hours(0).minutes(0);
     sessionRefObject.session.end_time.hours(0).minutes(0);
-    sessionRefObject.session.track_id = null;
+    sessionRefObject.session.microlocation = null;
 
     sessionRefObject.session.start_time.isReset = true;
     sessionRefObject.session.end_time.isReset = true;
@@ -259,21 +262,21 @@ function addSessionToUnscheduled(sessionRef, isFiltering, shouldBroadcast) {
             if (!sessionRefObject.newElement) {
                 $(document).trigger("scheduling:change", sessionRefObject.session);
             }
-            $(document).trigger("scheduling:recount", [oldTrack]);
+            $(document).trigger("scheduling:recount", [oldMicrolocation]);
         }
         unscheduledStore.push(sessionRefObject.session);
     }
 }
 
 /**
- * Update the counter badge that displays the number of sessions under each track
- * @param {array} trackIds An array of track IDs to recount
+ * Update the counter badge that displays the number of sessions under each microlocation
+ * @param {array} microlocationIds An array of microlocation IDs to recount
  */
-function updateTrackSessionsCounterBadges(trackIds) {
-    _.each(trackIds, function (trackId) {
-        var $track = $tracksHolder.find(".track[data-track-id=" + trackId + "] > .track-inner");
-        var sessionsCount = $track.find(".session.scheduled").length;
-        $track.find(".track-header > .badge").text(sessionsCount);
+function updateMicrolocationSessionsCounterBadges(microlocationIds) {
+    _.each(microlocationIds, function (microlocationId) {
+        var $microlocation = $microlocationsHolder.find(".microlocation[data-microlocation-id=" + microlocationId + "] > .microlocation-inner");
+        var sessionsCount = $microlocation.find(".session.scheduled").length;
+        $microlocation.find(".microlocation-header > .badge").text(sessionsCount);
     });
 }
 
@@ -290,7 +293,7 @@ function updateColor($element) {
  * Move any overlapping session to the unscheduled list. To be run as soon as timeline is initialized.
  */
 function removeOverlaps() {
-    var $sessionElements = $tracksHolder.find(".session.scheduled");
+    var $sessionElements = $microlocationsHolder.find(".session.scheduled");
     _.each($sessionElements, function ($sessionElement) {
         $sessionElement = $($sessionElement);
         var isColliding = isSessionOverlapping($sessionElement);
@@ -303,14 +306,14 @@ function removeOverlaps() {
 /**
  * Check if a session is overlapping any other session
  * @param {jQuery} $session The session
- * @param {jQuery} [$track] The track to search in
+ * @param {jQuery} [$microlocation] The microlocation to search in
  * @returns {boolean|jQuery} If no overlap, return false. If overlaps, return the session that's beneath.
  */
-function isSessionOverlapping($session, $track) {
-    if (isUndefinedOrNull($track)) {
-        $track = $session.parent();
+function isSessionOverlapping($session, $microlocation) {
+    if (isUndefinedOrNull($microlocation)) {
+        $microlocation = $session.parent();
     }
-    var $otherSessions = $track.find(".session.scheduled");
+    var $otherSessions = $microlocation.find(".session.scheduled");
     var returnVal = false;
     _.each($otherSessions, function ($otherSession) {
         $otherSession = $($otherSession);
@@ -327,7 +330,7 @@ function isSessionOverlapping($session, $track) {
  * @returns {boolean} Return true, if outside the boundary. Else, false.
  */
 function isSessionRestricted($sessionElement) {
-    return !horizontallyBound($tracks, $sessionElement, 0);
+    return !horizontallyBound($microlocations, $sessionElement, 0);
 }
 
 /**
@@ -336,7 +339,11 @@ function isSessionRestricted($sessionElement) {
  * @returns {boolean}
  */
 function isSessionOverTimeline($sessionElement) {
-    return collision($tracks, $sessionElement);
+    try {
+        return collision($microlocations, $sessionElement);
+    } catch (e) {
+        return false;
+    }
 }
 
 /**
@@ -390,15 +397,16 @@ function updateSessionTime($sessionElement, session) {
 }
 
 /**
- * Add a new track to the timeline
- * @param {object} track The track object containing the details of the track
+ * Add a new microlocation to the timeline
+ * @param {object} microlocation The microlocation object containing the details of the microlocation
  */
-function addTrackToTimeline(track) {
-    var $trackElement = $(trackTemplate);
-    $trackElement.attr("data-track-id", track.id);
-    $trackElement.find(".track-header").html(track.name + "&nbsp;&nbsp;&nbsp;<span class='badge'>0</span>");
-    $trackElement.find(".track-inner").css("height", time.unit.count * time.unit.pixels + "px");
-    $tracksHolder.append($trackElement);
+function addMicrolocationToTimeline(microlocation) {
+    var $microlocationElement = $(microlocationTemplate);
+    $microlocationElement.attr("data-microlocation-id", microlocation.id);
+    $microlocationElement.attr("data-microlocation-name", microlocation.name);
+    $microlocationElement.find(".microlocation-header").html(microlocation.name + "&nbsp;&nbsp;&nbsp;<span class='badge'>0</span>");
+    $microlocationElement.find(".microlocation-inner").css("height", time.unit.count * time.unit.pixels + "px");
+    $microlocationsHolder.append($microlocationElement);
 }
 
 /**
@@ -415,7 +423,7 @@ function generateTimeUnits() {
         start.add(time.unit.minutes, 'minutes');
         timeUnitsCount++;
     }
-    $tracksHolder.css("height", timeUnitsCount * time.unit.pixels);
+    $microlocationsHolder.css("height", timeUnitsCount * time.unit.pixels);
     time.unit.count = timeUnitsCount;
 }
 
@@ -446,7 +454,7 @@ function generateTimeUnits() {
  */
 function initializeInteractables() {
 
-    $tracks = $tracksHolder.find(".track");
+    $microlocations = $microlocationsHolder.find(".microlocation");
 
     interact(".session")
         .draggable({
@@ -454,7 +462,7 @@ function initializeInteractables() {
             inertia: false,
             // enable autoScroll
             autoScroll: {
-                container: $tracksHolder[0],
+                container: $microlocationsHolder[0],
                 margin: 50,
                 distance: 5,
                 interval: 10
@@ -474,7 +482,7 @@ function initializeInteractables() {
                 $sessionElement.data('x', x);
                 $sessionElement.data('y', y);
 
-                $sessionElement.data("temp-top", roundOffToMultiple($sessionElement.offset().top - $(".tracks.x1").offset().top));
+                $sessionElement.data("temp-top", roundOffToMultiple($sessionElement.offset().top - $(".microlocations.x1").offset().top));
 
                 if (isSessionOverTimeline($sessionElement)) {
                     updateSessionTimeOnTooltip($sessionElement);
@@ -518,7 +526,7 @@ function initializeInteractables() {
             }
         });
 
-    interact(".track-inner").dropzone({
+    interact(".microlocation-inner").dropzone({
         // only accept elements matching this CSS selector
         accept: ".session",
         // Require a 75% element overlap for a drop to be possible
@@ -535,16 +543,17 @@ function initializeInteractables() {
         },
         ondrop: function (event) {
             var $sessionElement = $(event.relatedTarget);
-            var $trackDropZone = $(event.target);
+            var $microlocationDropZone = $(event.target);
 
-            $trackDropZone.removeClass("drop-active").removeClass("drop-now");
+            $microlocationDropZone.removeClass("drop-active").removeClass("drop-now");
 
             addSessionToTimeline($sessionElement, {
-                track_id: parseInt($trackDropZone.parent().attr("data-track-id")),
+                microlocation_id: parseInt($microlocationDropZone.parent().attr("data-microlocation-id")),
+                microlocation_name: $microlocationDropZone.parent().attr("data-microlocation-name"),
                 top: $sessionElement.data("temp-top")
             });
 
-            var isColliding = isSessionOverlapping($sessionElement, $trackDropZone);
+            var isColliding = isSessionOverlapping($sessionElement, $microlocationDropZone);
             if (!isColliding) {
                 updateSessionTime($sessionElement);
             } else {
@@ -554,9 +563,9 @@ function initializeInteractables() {
 
         },
         ondropdeactivate: function (event) {
-            var $trackDropZone = $(event.target);
+            var $microlocationDropZone = $(event.target);
             var $sessionElement = $(event.relatedTarget);
-            $trackDropZone.removeClass("drop-now").removeClass("drop-active");
+            $microlocationDropZone.removeClass("drop-now").removeClass("drop-active");
             if (!$sessionElement.hasClass("scheduled")) {
                 $sessionElement.css({
                     "-webkit-transform": "",
@@ -569,16 +578,16 @@ function initializeInteractables() {
 }
 
 /**
- * This callback called after sessions and tracks are processed.
+ * This callback called after sessions and microlocations are processed.
  * @callback postProcessCallback
  */
 /**
- * Process the tracks and sessions data loaded from the server into in-memory data stores
- * @param {object} tracks The tracks json object
+ * Process the microlocations and sessions data loaded from the server into in-memory data stores
+ * @param {object} microlocations The microlocations json object
  * @param {object} sessions The sessions json object
  * @param {postProcessCallback} callback The post-process callback
  */
-function processTrackSession(tracks, sessions, callback) {
+function processMicrolocationSession(microlocations, sessions, callback) {
 
     var topTime = moment.utc({hour: time.start.hours, minute: time.start.minutes});
 
@@ -599,38 +608,27 @@ function processTrackSession(tracks, sessions, callback) {
             days.push(dayString);
         }
 
-        /**
-         * @type {{id: number, title: string, top: number, duration: number, track_id: number|null, start_time: Moment, end_time: Moment}}
-         */
-        var sessionObject = {
-            id: session.id,
-            title: session.title,
-            top: top,
-            duration: Math.abs(duration.asMinutes()),
-            track_id: session.track.id,
-            start_time: startTime,
-            end_time: endTime
-        };
+        session.start_time = startTime;
+        session.end_time = endTime;
+        session.duration = Math.abs(duration.asMinutes());
+        session.top = top;
 
         var dayIndex = _.indexOf(days, dayString);
 
         if (_.isArray(sessionsStore[dayIndex])) {
-            sessionsStore[dayIndex].push(sessionObject);
+            sessionsStore[dayIndex].push(session);
         } else {
-            sessionsStore[dayIndex] = [sessionObject]
+            sessionsStore[dayIndex] = [session]
         }
     });
 
-    _.each(tracks, function (track) {
-        var tracksObject = {
-            name: track.name,
-            id: track.id
-        };
-        if (!_.includes(tracksStore, tracksObject)) {
-            tracksStore.push(tracksObject);
+    _.each(microlocations, function (microlocation) {
+        if (!_.includes(microlocationsStore, microlocation)) {
+            microlocationsStore.push(microlocation);
         }
     });
 
+    microlocationsStore = _.sortBy(microlocationsStore, "name");
     loadDateButtons();
     callback();
 }
@@ -648,43 +646,40 @@ function loadDateButtons() {
         $dayButton.text(day);
         $dayButtonsHolder.append($dayButton)
     });
-    loadTracksToTimeline(sortedDays[0]);
+    loadMicrolocationsToTimeline(sortedDays[0]);
 }
 
 /**
  * Load all the sessions of a given day into the timeline
  * @param {string} day
  */
-function loadTracksToTimeline(day) {
+function loadMicrolocationsToTimeline(day) {
 
     var dayIndex = _.indexOf(days, day);
 
-    $tracksHolder.empty();
+    $microlocationsHolder.empty();
     $unscheduledSessionsHolder.empty();
     $noSessionsInfoBox.show();
 
-    _.each(tracksStore, addTrackToTimeline);
+    _.each(microlocationsStore, addMicrolocationToTimeline);
 
     _.each(sessionsStore[dayIndex], function (session) {
         // Add session elements, but do not broadcast.
-        if (!_.isNull(session.top) && !_.isNull(session.track_id) && !_.isNull(session.start_time) && !_.isNull(session.end_time) && !session.hasOwnProperty("isReset")) {
+        if (!_.isNull(session.top) && !_.isNull(session.microlocation) && !_.isNull(session.microlocation.id) && !_.isNull(session.start_time) && !_.isNull(session.end_time) && !session.hasOwnProperty("isReset")) {
             addSessionToTimeline(session, null, false);
-            if(session.title === "RedHat") {
-                console.log(session);
-            }
         } else {
             addSessionToUnscheduled(session, false, false);
         }
     });
 
-    $tracks = $tracksHolder.find(".track");
+    $microlocations = $microlocationsHolder.find(".microlocation");
     $("[data-toggle=tooltip]").tooltip("hide");
 }
 
 function loadData(eventId, callback) {
-    $.get("/api/v2/events/" + eventId + "/tracks", function (tracks) {
+    $.get("/api/v2/events/" + eventId + "/microlocations", function (microlocations) {
         $.get("/api/v2/events/" + eventId + "/sessions", function (sessions) {
-            processTrackSession(tracks, sessions, callback);
+            processMicrolocationSession(microlocations, sessions, callback);
         });
     });
 }
@@ -708,14 +703,14 @@ function initializeTimeline(eventId) {
  */
 
 /**
- * Hold the timeline track headers in place while scroll
+ * Hold the timeline microlocation headers in place while scroll
  */
 $(".timeline").scroll(function () {
     var cont = $(this);
-    var el = $(cont.find(".track-inner")[0]);
+    var el = $(cont.find(".microlocation-inner")[0]);
     var elementTop = el.position().top;
     var pos = cont.scrollTop() + elementTop;
-    cont.find(".track-header").css("top", pos + "px");
+    cont.find(".microlocation-header").css("top", pos + "px");
 });
 
 /**
@@ -733,7 +728,7 @@ $("#sessions-search").valueChange(function (value) {
     }
 
     filtered = _.sortBy(filtered, "title");
-    
+
     $unscheduledSessionsHolder.html("");
 
     if (filtered.length == 0) {
@@ -746,13 +741,56 @@ $("#sessions-search").valueChange(function (value) {
     }
 });
 
+$addMicrolocationForm.submit(function (event) {
+    event.preventDefault();
+    var payload = {
+        "room": $addMicrolocationForm.find("input[name=room]").val(),
+        "latitude": parseFloat($addMicrolocationForm.find("input[name=latitude]").val()),
+        "name": $addMicrolocationForm.find("input[name=name]").val(),
+        "longitude": parseFloat($addMicrolocationForm.find("input[name=longitude]").val()),
+        "floor": parseInt($addMicrolocationForm.find("input[name=floor]").val())
+    };
+    $.ajax({
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "Basic " + btoa(getCookie("username").replace(/['"]+/g, '') + ":" + getCookie("password")));
+        },
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        url: $addMicrolocationForm.attr("action"),
+        data: JSON.stringify(payload),
+        success: function (microlocation) {
+            addMicrolocationToTimeline(microlocation);
+            $('#close-add-microlocation').click();
+            $addMicrolocationForm.find("input, textarea").val("");
+            createSnackbar("Microlocation has been created successfully.");
+        },
+        failure: function () {
+            createSnackbar("An error occurred while creating microlocation.", "Try Again", function () {
+                $addMicrolocationForm.trigger("submit");
+            });
+        }
+    });
+});
+
+$(".export-png-button").click(function () {
+    html2canvas($timeline[0], {
+        onrendered: function (canvas) {
+            canvas.id = "generated-canvas";
+            canvas.toBlob(function (blob) {
+                saveAs(blob, "timeline.png");
+            });
+        }
+    });
+});
+
 /**
  * Global document events for date change button, remove button and clear overlaps button
  */
 $(document)
     .on("click", ".date-change-btn", function () {
         $(this).addClass("active").siblings().removeClass("active");
-        loadTracksToTimeline($(this).text());
+        loadMicrolocationsToTimeline($(this).text());
     })
     .on("click", ".session.scheduled > .remove-btn", function () {
         addSessionToUnscheduled($(this).parent());

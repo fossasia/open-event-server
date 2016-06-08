@@ -2,7 +2,7 @@
 {% block body %}
 <div class="page-title">
     <div class="title_left">
-        <h3>Session Form</h3>
+        <h3>Edit Session</h3>
     </div>
 
 </div>
@@ -21,7 +21,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Title <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input required="required" name="title" class="form-control col-md-7 col-xs-12"/>
+                              <input value="{{ session.title }}" required="required" name="title" class="form-control col-md-7 col-xs-12" />
                             </div>
                         </div>
 
@@ -29,7 +29,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Description <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                              <textarea name="description" class="form-control col-md-7 col-xs-12"></textarea>
+                              <textarea name="description" class="form-control col-md-7 col-xs-12">{{ session.description }}</textarea>
                             </div>
                         </div>
 
@@ -37,7 +37,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Start Time <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input required="required" name="start_time" class="date-picker form-control col-md-7 col-xs-12"placeholder="MM/DD/YYYY"/>
+                              <input value="{{ session.start_time }}" required="required" name="start_time" class="date-picker form-control col-md-7 col-xs-12"placeholder="MM/DD/YYYY"/>
                             </div>
 
                         </div>
@@ -46,7 +46,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">End Time <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input required="required" name="end_time" class="date-picker form-control col-md-7 col-xs-12"placeholder="MM/DD/YYYY"/>
+                              <input value="{{ session.end_time }}" required="required" name="end_time" class="date-picker form-control col-md-7 col-xs-12"placeholder="MM/DD/YYYY"/>
                             </div>
                         </div>
 
@@ -54,7 +54,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Abstract
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                              <textarea name="abstract" class="form-control col-md-7 col-xs-12"></textarea>
+                              <textarea name="abstract" class="form-control col-md-7 col-xs-12">{{ session.abstract }}</textarea>
                             </div>
                         </div>
 
@@ -62,7 +62,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Subtitle
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                              <textarea name="subtitle" class="form-control col-md-7 col-xs-12"></textarea>
+                              <textarea name="subtitle" class="form-control col-md-7 col-xs-12">{{ session.subtitle }}</textarea>
                             </div>
                         </div>
                     </div>

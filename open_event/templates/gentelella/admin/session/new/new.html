@@ -2,7 +2,7 @@
 {% block body %}
 <div class="page-title">
     <div class="title_left">
-        <h3>Create Event</h3>
+        <h3>Create Session</h3>
     </div>
 
 </div>
@@ -10,7 +10,7 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel" style="min-height:600px;">
             <div class="row">
-                <form name="test" action="/admin/events/new/" method="POST" role="form" class="admin-form form-horizontal" id="event-create-form">
+                <form name="test" action="" method="POST" role="form" class="admin-form form-horizontal" id="session-create-form">
                     {% if csrf_token %}
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     {% endif %}
@@ -20,8 +20,8 @@
                                 <a href="#step-1" class="selected" isdone="1" rel="1">
                                     <span class="step_no">1</span>
                                     <span class="step_descr">
-                                        Event <br>
-
+                                        Session <br>
+                                        <small>Details about Session</small>
                                     </span>
                                 </a>
                             </li>
@@ -29,7 +29,8 @@
                                 <a href="#step-2" class="disabled" isdone="0" rel="2">
                                     <span class="step_no">2</span>
                                     <span class="step_descr">
-                                        Sessions Types<br>
+                                        Speaker Details<br>
+                                        <small>Details about Speaker</small>
                                     </span>
                                 </a>
                             </li>
@@ -37,24 +38,8 @@
                                 <a href="#step-3" class="disabled" isdone="0" rel="3">
                                     <span class="step_no">3</span>
                                     <span class="step_descr">
-                                        Tracks<br>
-
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#step-4" class="disabled" isdone="0" rel="4">
-                                    <span class="step_no">4</span>
-                                    <span class="step_descr">
-                                        Rooms<br>
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#step-5" class="disabled" isdone="0" rel="5">
-                                    <span class="step_no">5</span>
-                                    <span class="step_descr">
-                                        Social<br>
+                                        Invite Speakers<br>
+                                        <small>Invite other speakers for session</small>
                                     </span>
                                 </a>
                             </li>
@@ -62,11 +47,9 @@
 
 
                         <div class="stepContainer">
-                            {% include '/gentelella/admin/event/new/step-1.html' %}
-                            {% include '/gentelella/admin/event/new/step-2.html' %}
-                            {% include '/gentelella/admin/event/new/step-3.html' %}
-                            {% include '/gentelella/admin/event/new/step-4.html' %}
-                            {% include '/gentelella/admin/event/new/step-5.html' %}
+                            {% include '/gentelella/admin/session/new/step-1.html' %}
+                            {% include '/gentelella/admin/session/new/step-2.html' %}
+                            {% include '/gentelella/admin/session/new/step-3.html' %}
                         </div>
 
                     </div>
@@ -84,7 +67,6 @@
     <script type="text/javascript" src="{{ url_for('static', filename='admin/lib/jQuery-Smart-Wizard/js/jquery.smartWizard.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='admin/lib/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/new.js') }}"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHdXg0Y_zk-wCNpslbBqcezLdHniaEwkI&callback=initMap" async defer></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/jscolor.js') }}"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/session/new.js') }}"></script>
 {% endblock %}

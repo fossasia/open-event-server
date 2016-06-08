@@ -12,7 +12,7 @@ from ...helpers.data_getter import DataGetter
 from ...helpers.helpers import send_email_after_account_create, send_email_with_reset_password_hash
 from open_event.models.user import User
 from open_event.helpers.oauth import OAuth, FbOAuth
-
+from flask import current_app
 
 def intended_url():
     return request.args.get('next') or url_for('.index')
@@ -47,7 +47,14 @@ class MyHomeView(AdminIndexView):
                 return redirect(url_for('admin.login_view'))
             login.login_user(user)
             logging.info('logged successfully')
-            return redirect(intended_url())
+            redirect_to_intended = redirect(intended_url())
+            response = current_app.make_response(redirect_to_intended)
+
+            # TODO Remove these cookie setters once a proper token-based auth is available in the API. -@niranjan94
+            response.set_cookie('username', value=email)
+            response.set_cookie('password', value=request.form['password'])
+
+            return response
 
     @expose('/register/', methods=('GET', 'POST'))
     def register_view(self):

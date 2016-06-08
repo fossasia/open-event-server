@@ -5,7 +5,7 @@ from .helpers import get_paginated_list, requires_auth
 from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES
 
-api = Namespace('microlocations', description='microlocations', path='/')
+api = Namespace('microlocations', description='Microlocations', path='/')
 
 MICROLOCATION = api.model('Microlocation', {
     'id': fields.Integer(required=True),
@@ -40,6 +40,13 @@ class Microlocation(Resource):
     def get(self, event_id, microlocation_id):
         """Fetch a microlocation given its id"""
         return DAO.get(event_id, microlocation_id)
+
+    @requires_auth
+    @api.doc('delete_microlocation')
+    @api.marshal_with(MICROLOCATION)
+    def delete(self, event_id, microlocation_id):
+        """Delete a microlocation given its id"""
+        return DAO.delete(event_id, microlocation_id)
 
 
 @api.route('/events/<int:event_id>/microlocations')

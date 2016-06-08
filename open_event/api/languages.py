@@ -5,7 +5,7 @@ from .helpers import get_paginated_list, requires_auth
 from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES
 
-api = Namespace('languages', description='languages', path='/')
+api = Namespace('languages', description='Languages', path='/')
 
 LANGUAGE = api.model('Language', {
     'id': fields.Integer(required=True),
@@ -38,6 +38,13 @@ class Language(Resource):
     def get(self, event_id, language_id):
         """Fetch a language given its id"""
         return DAO.get(event_id, language_id)
+
+    @requires_auth
+    @api.doc('delete_language')
+    @api.marshal_with(LANGUAGE)
+    def delete(self, event_id, language_id):
+        """Delete a language given its id"""
+        return DAO.delete(event_id, language_id)
 
 
 @api.route('/events/<int:event_id>/languages')

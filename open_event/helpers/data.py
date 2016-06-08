@@ -27,6 +27,7 @@ from ..models.user_detail import UserDetail
 from ..models.role import Role
 from ..models.users_events_roles import UsersEventsRoles
 from ..models.session_type import SessionType
+from ..models.sessions_speakers import SessionsSpeakers
 from ..models.social_link import SocialLink
 from ..models.track import Track
 from open_event.helpers.oauth import OAuth, FbOAuth
@@ -145,6 +146,50 @@ class DataManager(object):
         save_to_db(new_session, "Session saved")
         update_version(event_id, False, "session_ver")
 
+        new_speaker = Speaker(name=form["name"],
+                              photo="",
+                              biography=form["biography"],
+                              email=form["email"],
+                              web=form["web"],
+                              event_id=event_id,
+                              twitter="",
+                              facebook="",
+                              github="",
+                              linkedin="",
+                              organisation=form["organisation"],
+                              position="",
+                              country="")
+        save_to_db(new_speaker, "Speaker saved")
+        update_version(event_id, False, "speakers_ver")
+
+        new_session_speaker = SessionsSpeakers(session_id=new_session.id,
+                                            speaker_id=new_speaker.id)
+
+        save_to_db(new_session_speaker, "Session Speaker saved")
+
+    @staticmethod
+    def create_speaker_session_relation(session_id, speaker_id, event_id):
+        """
+        Session, speaker ids will be saved to database
+        :param form: view data form
+        :param event_id: Session, speaker belongs to Event by event id
+        """
+        new_session_speaker = SessionsSpeakers(session_id=session_id,
+                                            speaker_id=speaker_id)
+
+        save_to_db(new_session_speaker, "Session Speaker saved")
+
+    @staticmethod
+    def edit_session(form, session):
+        session.title = form['title']
+        session.subtitle = form['subtitle']
+        session.description = form['description']
+        session.start_time = form['start_time']
+        session.end_time = form['end_time']
+        session.abstract = form['abstract']
+
+        save_to_db(session, 'Session Updated')
+
     @staticmethod
     def update_session(form, session):
         """
@@ -194,20 +239,19 @@ class DataManager(object):
         :param form: view data form
         :param event_id: Speaker belongs to Event by event id
         """
-        new_speaker = Speaker(name=form.name.data,
-                              photo=form.photo.data,
-                              biography=form.biography.data,
-                              email=form.email.data,
-                              web=form.web.data,
+        new_speaker = Speaker(name=form["name"],
+                              photo="",
+                              biography=form["biography"],
+                              email=form["email"],
+                              web=form["web"],
                               event_id=event_id,
-                              twitter=form.twitter.data,
-                              facebook=form.facebook.data,
-                              github=form.github.data,
-                              linkedin=form.linkedin.data,
-                              organisation=form.organisation.data,
-                              position=form.position.data,
-                              country=form.country.data)
-        new_speaker.sessions = InstrumentedList(form.sessions.data if form.sessions.data else [])
+                              twitter="",
+                              facebook="",
+                              github="",
+                              linkedin="",
+                              organisation=form["organisation"],
+                              position="",
+                              country="")
         save_to_db(new_speaker, "Speaker saved")
         update_version(event_id, False, "speakers_ver")
 
