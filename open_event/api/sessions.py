@@ -102,6 +102,7 @@ class SessionDAO(ServiceDAO):
         session = SessionModel(**data)
         session.speakers = InstrumentedList(
             SpeakerModel.query.get(_) for _ in speakers
+            if SpeakerModel.query.get(_) is not None
         )
         new_session = save_db_model(session, SessionModel.__name__, event_id)
         return self.get(event_id, new_session.id)
