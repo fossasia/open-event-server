@@ -10,10 +10,9 @@ from tests.api.utils_post_data import *
 from open_event import current_app as app
 
 
-class TestPostApi(OpenEventTestCase):
+class TestDeleteApi(OpenEventTestCase):
     """
-    Test POST APIs against 401 (unauthorized) and
-    200 (successful) status codes
+    Test Delete APIs for 200 (successful) status codes
     """
     def setUp(self):
         self.app = Setup.create_app()
@@ -28,31 +27,35 @@ class TestPostApi(OpenEventTestCase):
 
     def _test_model(self, name, data):
         """
-        Tests -
-        1. Without login, try to do a POST request and catch 401 error
-        2. Login and match 200 response code and correct response data
+        Logs in a user and creates model.
+        Tests for 200 status on deletion and for the deleted object.
+        Tests that the deleted object no longer exists.
         """
-        path = get_path() if name == 'event' else get_path(1, name + 's')
-        response = self.app.post(
-            path,
-            data=json.dumps(data),
-            headers={'content-type': 'application/json'}
-        )
-        self.assertEqual(401, response.status_code, msg=response.data)
         # TODO: has some issues with datetime and sqlite
         # so return in event and session
         if name in ['event', 'session']:
             return
-        # login and send the request again
+
         self._login_user()
+        path = get_path() if name == 'event' else get_path(1, name + 's')
         response = self.app.post(
             path,
             data=json.dumps(data),
-            headers={'content-type': 'application/json'}
+            headers={'Content-Type': 'application/json'}
         )
-        self.assertEqual(200, response.status_code, msg=response.data)
+
+        path = get_path(1) if name == 'event' else get_path(1, name + 's', 1)
+        response = self.app.delete(
+            path,
+            data=json.dumps(data),
+            headers={'Content-Type': 'application/json'}
+        )
+        self.assertEqual(response.status_code, 200)
         self.assertIn('Test' + str(name).title(), response.data)
-        return response
+
+        response = self.app.get(path)
+        self.assertEqual(response.status_code, 404)
+        self.assertIn('does not exist', response.data)
 
     def test_event_api(self):
         self._test_model('event', POST_EVENT_DATA)

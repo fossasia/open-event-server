@@ -41,6 +41,13 @@ class Microlocation(Resource):
         """Fetch a microlocation given its id"""
         return DAO.get(event_id, microlocation_id)
 
+    @requires_auth
+    @api.doc('delete_microlocation')
+    @api.marshal_with(MICROLOCATION)
+    def delete(self, event_id, microlocation_id):
+        """Delete a microlocation given its id"""
+        return DAO.delete(event_id, microlocation_id)
+
 
 @api.route('/events/<int:event_id>/microlocations')
 class MicrolocationList(Resource):

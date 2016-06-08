@@ -39,6 +39,13 @@ class Language(Resource):
         """Fetch a language given its id"""
         return DAO.get(event_id, language_id)
 
+    @requires_auth
+    @api.doc('delete_language')
+    @api.marshal_with(LANGUAGE)
+    def delete(self, event_id, language_id):
+        """Delete a language given its id"""
+        return DAO.delete(event_id, language_id)
+
 
 @api.route('/events/<int:event_id>/languages')
 class LanguageList(Resource):

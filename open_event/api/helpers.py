@@ -7,7 +7,7 @@ from flask.ext.scrypt import check_password_hash
 from open_event.models.event import Event as EventModel
 from custom_fields import CustomField
 from open_event.models.user import User as UserModel
-from open_event.helpers.data import save_to_db, update_version
+from open_event.helpers.data import save_to_db, update_version, delete_from_db
 
 
 def _error_abort(code, message):
@@ -164,6 +164,15 @@ def create_service_model(model, event_id, data):
     save_to_db(new_model, "Model %s saved" % model.__name__)
     update_version(event_id, False, "session_ver")
     return new_model
+
+
+def delete_service_model(model, event_id, service_id):
+    """
+    Delete a service model.
+    """
+    item = get_object_in_event(model, service_id, event_id)
+    delete_from_db(item, '{} deleted'.format(model.__name__))
+    return item
 
 
 def requires_auth(f):

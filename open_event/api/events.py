@@ -7,7 +7,7 @@ from open_event.models.user import ADMIN, SUPERADMIN
 from .helpers import get_object_list, get_object_or_404, get_paginated_list,\
     requires_auth
 from utils import PAGINATED_MODEL, PaginatedResourceBase, PAGE_PARAMS, POST_RESPONSES
-from open_event.helpers.data import save_to_db, update_version
+from open_event.helpers.data import save_to_db, update_version, delete_from_db
 
 api = Namespace('events', description='Events')
 
@@ -46,6 +46,15 @@ class Event(Resource):
     def get(self, event_id):
         """Fetch an event given its id"""
         return get_object_or_404(EventModel, event_id)
+
+    @requires_auth
+    @api.doc('delete_event')
+    @api.marshal_with(EVENT)
+    def delete(self, event_id):
+        """Delete an event given its id"""
+        event = get_object_or_404(EventModel, event_id)
+        delete_from_db(event, 'Event deleted')
+        return event
 
 
 @api.route('')

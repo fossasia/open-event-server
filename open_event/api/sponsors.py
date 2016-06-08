@@ -40,6 +40,13 @@ class Sponsor(Resource):
         """Fetch a sponsor given its id"""
         return DAO.get(event_id, sponsor_id)
 
+    @requires_auth
+    @api.doc('delete_sponsor')
+    @api.marshal_with(SPONSOR)
+    def delete(self, event_id, sponsor_id):
+        """Delete a sponsor given its id"""
+        return DAO.delete(event_id, sponsor_id)
+
 
 @api.route('/events/<int:event_id>/sponsors')
 class SponsorList(Resource):
