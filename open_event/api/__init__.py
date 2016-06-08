@@ -10,6 +10,7 @@ from .microlocations import api as microlocation_api
 from .levels import api as level_api
 from .formats import api as format_api
 from .languages import api as language_api
+from .login import api as login_api
 
 api_v2 = Blueprint('api', __name__, url_prefix='/api/v2')
 
@@ -26,3 +27,4 @@ api.add_namespace(microlocation_api)
 api.add_namespace(level_api)
 api.add_namespace(format_api)
 api.add_namespace(language_api)
+api.add_namespace(login_api)

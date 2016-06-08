@@ -12,12 +12,16 @@ from flask.ext.migrate import Migrate, MigrateCommand
 from flask.ext.script import Manager
 from flask import render_template
 from flask import request
+from flask.ext.jwt import JWT
+from datetime import timedelta
 
 from icalendar import Calendar, Event
 from flask_debugtoolbar import DebugToolbarExtension
 
 from open_event.models import db
 from open_event.views.admin.admin import AdminView
+from helpers.jwt import jwt_authenticate, jwt_identity
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -51,6 +55,12 @@ def create_app():
     app.logger.setLevel(logging.INFO)
     # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
+    # set up jwt
+    app.config['JWT_AUTH_USERNAME_KEY'] = 'email'
+    app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=84400)
+    app.config['JWT_AUTH_URL_RULE'] = '/admin/jwtauth'  # not used anyway
+    jwt = JWT(app, jwt_authenticate, jwt_identity)
+
     admin_view = AdminView("Open Event")
     admin_view.init(app)
     admin_view.init_login(app)
@@ -65,7 +75,7 @@ def create_app():
         from open_event.api import api_v2
         app.register_blueprint(api_v2)
 
-    return app, manager, db
+    return app, manager, db, jwt
 
 
 @app.errorhandler(404)
@@ -84,7 +94,7 @@ def request_wants_json():
         request.accept_mimetypes['text/html']
 
 
-current_app, manager, database = create_app()
+current_app, manager, database, jwt = create_app()
 
 
 if __name__ == '__main__':
