@@ -58,7 +58,8 @@ class Event(db.Model):
                  description=None,
                  event_url=None,
                  background_url=None,
-                 state=None):
+                 state=None,
+                 closing_datetime=None):
         self.name = name
         self.logo = logo
         self.email = email
@@ -72,6 +73,7 @@ class Event(db.Model):
         self.event_url = event_url
         self.background_url = background_url
         self.state = state
+        self.closing_datetime = closing_datetime
         # self.owner = owner
 
     def __repr__(self):

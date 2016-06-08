@@ -5,8 +5,9 @@ from custom_fields import EmailField, ColorField, UriField, ImageUriField
 from open_event.models.event import Event as EventModel, EventsUsers
 from open_event.models.user import ADMIN, SUPERADMIN
 from .helpers import get_object_list, get_object_or_404, get_paginated_list,\
-    requires_auth
-from utils import PAGINATED_MODEL, PaginatedResourceBase, PAGE_PARAMS, POST_RESPONSES
+    requires_auth, update_model
+from utils import PAGINATED_MODEL, PaginatedResourceBase, PAGE_PARAMS, \
+    POST_RESPONSES, PUT_RESPONSES
 from open_event.helpers.data import save_to_db, update_version, delete_from_db
 
 api = Namespace('events', description='Events')
@@ -26,7 +27,7 @@ EVENT = api.model('Event', {
     'description': fields.String,
     'location_name': fields.String,
     'state': fields.String,
-    'closing_date': fields.DateTime,
+    'closing_datetime': fields.DateTime,
 })
 
 EVENT_PAGINATED = api.clone('EventPaginated', PAGINATED_MODEL, {
@@ -55,6 +56,14 @@ class Event(Resource):
         event = get_object_or_404(EventModel, event_id)
         delete_from_db(event, 'Event deleted')
         return event
+
+    @requires_auth
+    @api.doc('update_event', responses=PUT_RESPONSES)
+    @api.marshal_with(EVENT)
+    @api.expect(EVENT_POST, validate=True)
+    def put(self, event_id):
+        """Update a event given its id"""
+        return update_model(EventModel, event_id, self.api.payload)
 
 
 @api.route('')

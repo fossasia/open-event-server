@@ -1,6 +1,6 @@
 from flask_restplus import Model, fields, reqparse
 from .helpers import get_object_list, get_object_or_404, get_object_in_event, \
-    create_service_model, delete_service_model, update_service_model
+    create_service_model, delete_service_model, update_model
 from open_event.models.event import Event as EventModel
 
 DEFAULT_PAGE_START = 1
@@ -70,7 +70,7 @@ class ServiceDAO:
         return item
 
     def update(self, event_id, service_id, data):
-        item = update_service_model(self.model, event_id, service_id, data)
+        item = update_model(self.model, service_id, data, event_id)
         return item
 
     def delete(self, event_id, service_id):

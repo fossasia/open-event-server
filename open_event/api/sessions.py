@@ -85,45 +85,46 @@ del SESSION_POST['format']
 
 # Create DAO
 class SessionDAO(ServiceDAO):
-    # def _update_helper(self, obj, event_id, data):
-    #     data['track'] = TrackModel.query.get(data['track_id'])
-    #     data['level'] = LevelModel.query.get(data['level_id'])
-    #     data['language'] = LanguageModel.query.get(data['language_id'])
-    #     data['format'] = FormatModel.query.get(data['format_id'])
-    #     data['microlocation'] = MicrolocationModel.query.get(data['microlocation_id'])
-    #     data['event_id'] = event_id
-    #     speakers = data['speaker_ids']
-    #     del data['speaker_ids']
-    #     del data['track_id']
-    #     del data['level_id']
-    #     del data['language_id']
-    #     del data['format_id']
-    #     del data['microlocation_id']
-    #     obj.speakers = InstrumentedList(
-    #         SpeakerModel.query.get(_) for _ in speakers
-    #     )
-    #     return (obj, data)
-
-    def create(self, event_id, data):
-        data['track'] = TrackModel.query.get(data['track_id'])
-        data['level'] = LevelModel.query.get(data['level_id'])
-        data['language'] = LanguageModel.query.get(data['language_id'])
-        data['format'] = FormatModel.query.get(data['format_id'])
-        data['microlocation'] = MicrolocationModel.query.get(data['microlocation_id'])
-        data['event_id'] = event_id
-        data['speakers'] = InstrumentedList(
-            SpeakerModel.query.get(_) for _ in data['speaker_ids']
-            if SpeakerModel.query.get(_) is not None
-        )
+    def _delete_id_fields(self, data):
         del data['speaker_ids']
         del data['track_id']
         del data['level_id']
         del data['language_id']
         del data['format_id']
         del data['microlocation_id']
-        session = SessionModel(**data)
-        new_session = save_db_model(session, SessionModel.__name__, event_id)
-        return self.get(event_id, new_session.id)
+        return data
+
+    def fix_payload_post(self, event_id, data):
+        """
+        Fixes payload of POST request
+        """
+        data['track'] = TrackModel.query.get(data['track_id'])
+        data['level'] = LevelModel.query.get(data['level_id'])
+        data['language'] = LanguageModel.query.get(data['language_id'])
+        data['format'] = FormatModel.query.get(data['format_id'])
+        data['microlocation'] = MicrolocationModel.query.get(
+            data['microlocation_id'])
+        data['event_id'] = event_id
+        data['speakers'] = InstrumentedList(
+            SpeakerModel.query.get(_) for _ in data['speaker_ids']
+            if SpeakerModel.query.get(_) is not None
+        )
+        data = self._delete_id_fields(data)
+        return data
+
+    def update(self, event_id, service_id, data):
+        data_copy = data.copy()
+        data_copy = self.fix_payload_post(event_id, data_copy)
+        data = self._delete_id_fields(data)
+        obj = ServiceDAO.update(self, event_id, service_id, data)
+        obj.track = data_copy['track']
+        obj.level = data_copy['level']
+        obj.language = data_copy['language']
+        obj.format = data_copy['format']
+        obj.microlocation = data_copy['microlocation']
+        obj.speakers = data_copy['speakers']
+        obj = save_db_model(obj, SessionModel.__name__, event_id)
+        return obj
 
 DAO = SessionDAO(model=SessionModel)
 
@@ -145,6 +146,14 @@ class Session(Resource):
         """Delete a session given its id"""
         return DAO.delete(event_id, session_id)
 
+    @requires_auth
+    @api.doc('update_session', responses=PUT_RESPONSES)
+    @api.marshal_with(SESSION)
+    @api.expect(SESSION_POST, validate=True)
+    def put(self, event_id, session_id):
+        """Update a session given its id"""
+        return DAO.update(event_id, session_id, self.api.payload)
+
 
 @api.route('/events/<int:event_id>/sessions')
 class SessionList(Resource):
@@ -160,7 +169,8 @@ class SessionList(Resource):
     @api.expect(SESSION_POST, validate=True)
     def post(self, event_id):
         """Create a session"""
-        return DAO.create(event_id, self.api.payload)
+        payload = DAO.fix_payload_post(event_id, self.api.payload)
+        return DAO.create(event_id, payload)
 
 
 @api.route('/events/<int:event_id>/sessions/page')
