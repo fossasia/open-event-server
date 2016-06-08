@@ -62,6 +62,10 @@
     cursor: pointer
 }
 
+#timeline {
+    background-color: #FFFFFF;
+}
+
 .timeline-table td {
     z-index: -1 !important;
 }
@@ -93,12 +97,12 @@
     background-color: rgb(250, 250, 250);
 }
 
-.timeline .tracks {
+.timeline .microlocations {
     border-right: 1px solid rgb(221, 221, 221);
     padding: 0;
 }
 
-.timeline .tracks.x1 {
+.timeline .microlocations.x1 {
     background-image: url("../../img/admin/builder-timeunitbg-x1.png");
     background-repeat-x: initial;
     background-repeat-y: initial;
@@ -109,14 +113,14 @@
     background-size: initial;
 }
 
-.timeline .tracks .track-container {
+.timeline .microlocations .microlocation-container {
     overflow-x: scroll;
     overflow-y: hidden;
     white-space: nowrap;
     width: 654px;
 }
 
-.timeline .tracks .track {
+.timeline .microlocations .microlocation {
     display: inline-block;
     position: relative;
     width: 216px;
@@ -124,7 +128,7 @@
     margin-left: 0;
 }
 
-.timeline .tracks .track:first-child {
+.timeline .microlocations .microlocation:first-child {
     margin-left: 0;
 }
 
@@ -132,12 +136,12 @@
     text-align: center;
 }
 
-.timeline .tracks.x1 .track-header {
+.timeline .microlocations.x1 .microlocation-header {
     height: 23px;
     line-height: 23px;
 }
 
-.timeline .tracks .track-header {
+.timeline .microlocations .microlocation-header {
     width: 100%;
     position: absolute;
     background-color: rgb(250, 250, 250);
@@ -166,7 +170,7 @@
     display: none;
 }
 
-.timeline .tracks .track-header .badge {
+.timeline .microlocations .microlocation-header .badge {
     padding: 2px 4px;
     font-size: 10px;
     font-weight: normal;
@@ -175,7 +179,7 @@
     vertical-align: text-bottom;
 }
 
-.track-item {
+.microlocation-item {
     position: absolute;
     width: 215px;
     display: block;
@@ -183,7 +187,7 @@
     min-height: 24px;
 }
 
-.track-inner.drop-now {
+.microlocation-inner.drop-now {
     background-color: rgba(220, 220, 220, 0.35);
 }
 

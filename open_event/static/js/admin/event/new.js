@@ -39,7 +39,7 @@ $(document).ready(function() {
     $(this).parent().parent().parent().remove();
   });
 
-  $('.add-tracks').click(function () {
+  $("body").on("click", '#add-tracks', function () {
     counter += 1;
     var row = "<div class='col-sm-12 row-tracks'>" +
                 "<div class='col-sm-3'>" +
@@ -69,11 +69,14 @@ $(document).ready(function() {
     onFinish: function() { $("#event-create-form").submit(); }
   });
 
-  $('.date-picker').daterangepicker({
-    singleDatePicker: true,
-    calender_style: "picker_4"
-  }, function(start, end, label) {
-    console.log(start.toISOString(), end.toISOString(), label);
-  });
+  $("#wizard-edit").smartWizard({
+    labelFinish:'Update',
+    onFinish: function() { $("#event-create-form").submit(); }
+   });
+
+  $('.buttonNext').addClass("btn btn-success");
+  $('.buttonPrevious').addClass("btn btn-primary");
+  $('.buttonFinish').addClass("btn btn-default");
+
 
 });

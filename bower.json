@@ -20,8 +20,12 @@
     "interact": "^1.2.6",
     "lodash": "^4.13.1",
     "bootstrap-daterangepicker": "^2.1.20",
-    "pnotify": "~3.0.0",
     "jQuery-Smart-Wizard": "~3.3.1",
-    "google-material-color": "~1.2.6"
+    "google-material-color": "~1.2.6",
+    "datatables.net": "^1.10.12",
+    "datatables.net-bs": "^1.10.12",
+    "html2canvas": "^0.4.1",
+    "file-saver": "^1.3.1",
+    "blob": "*"
   }
 }

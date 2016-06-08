@@ -9,7 +9,9 @@ from open_event.models.microlocation import Microlocation as MicrolocationModel
 from open_event.models.speaker import Speaker as SpeakerModel
 
 from .helpers import get_paginated_list, requires_auth, save_db_model
-from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, PAGE_PARAMS
+from custom_fields import DateTimeField
+from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
+    PAGE_PARAMS, POST_RESPONSES
 
 api = Namespace('sessions', description='Sessions', path='/')
 
@@ -51,8 +53,8 @@ SESSION = api.model('Session', {
     'subtitle': fields.String,
     'abstract': fields.String,
     'description': fields.String,
-    'start_time': fields.DateTime,
-    'end_time': fields.DateTime,
+    'start_time': DateTimeField(),
+    'end_time': DateTimeField(),
     'track': fields.Nested(SESSION_TRACK),
     'speakers': fields.List(fields.Nested(SESSION_SPEAKER)),
     'level': fields.Nested(SESSION_LEVEL),
@@ -91,6 +93,8 @@ class SessionDAO(ServiceDAO):
         data['format'] = FormatModel.query.get(data['format_id'])
         data['microlocation'] = MicrolocationModel.query.get(data['microlocation_id'])
         data['event_id'] = event_id
+        data['start_time'] = SESSION_POST['start_time'].from_str(data['start_time'])
+        data['end_time'] = SESSION_POST['end_time'].from_str(data['end_time'])
         speakers = data['speaker_ids']
         del data['speaker_ids']
         del data['track_id']
@@ -101,6 +105,7 @@ class SessionDAO(ServiceDAO):
         session = SessionModel(**data)
         session.speakers = InstrumentedList(
             SpeakerModel.query.get(_) for _ in speakers
+            if SpeakerModel.query.get(_) is not None
         )
         new_session = save_db_model(session, SessionModel.__name__, event_id)
         return self.get(event_id, new_session.id)
@@ -118,6 +123,13 @@ class Session(Resource):
         """Fetch a session given its id"""
         return DAO.get(event_id, session_id)
 
+    @requires_auth
+    @api.doc('delete_session')
+    @api.marshal_with(SESSION)
+    def delete(self, event_id, session_id):
+        """Delete a session given its id"""
+        return DAO.delete(event_id, session_id)
+
 
 @api.route('/events/<int:event_id>/sessions')
 class SessionList(Resource):
@@ -128,7 +140,7 @@ class SessionList(Resource):
         return DAO.list(event_id)
 
     @requires_auth
-    @api.doc('create_session')
+    @api.doc('create_session', responses=POST_RESPONSES)
     @api.marshal_with(SESSION)
     @api.expect(SESSION_POST, validate=True)
     def post(self, event_id):

@@ -3,9 +3,10 @@ from flask.ext.restplus import Resource, Namespace, fields
 from open_event.models.sponsor import Sponsor as SponsorModel
 from custom_fields import UriField, ImageUriField
 from .helpers import get_paginated_list, requires_auth
-from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, PAGE_PARAMS
+from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
+    PAGE_PARAMS, POST_RESPONSES
 
-api = Namespace('sponsors', description='sponsors', path='/')
+api = Namespace('sponsors', description='Sponsors', path='/')
 
 SPONSOR = api.model('Sponsor', {
     'id': fields.Integer(required=True),
@@ -39,6 +40,13 @@ class Sponsor(Resource):
         """Fetch a sponsor given its id"""
         return DAO.get(event_id, sponsor_id)
 
+    @requires_auth
+    @api.doc('delete_sponsor')
+    @api.marshal_with(SPONSOR)
+    def delete(self, event_id, sponsor_id):
+        """Delete a sponsor given its id"""
+        return DAO.delete(event_id, sponsor_id)
+
 
 @api.route('/events/<int:event_id>/sponsors')
 class SponsorList(Resource):
@@ -49,7 +57,7 @@ class SponsorList(Resource):
         return DAO.list(event_id)
 
     @requires_auth
-    @api.doc('create_sponsor')
+    @api.doc('create_sponsor', responses=POST_RESPONSES)
     @api.marshal_with(SPONSOR)
     @api.expect(SPONSOR_POST, validate=True)
     def post(self, event_id):

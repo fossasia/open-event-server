@@ -2,9 +2,10 @@ from flask.ext.restplus import Resource, Namespace, fields
 
 from open_event.models.session import Language as LanguageModel
 from .helpers import get_paginated_list, requires_auth
-from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, PAGE_PARAMS
+from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
+    PAGE_PARAMS, POST_RESPONSES
 
-api = Namespace('languages', description='languages', path='/')
+api = Namespace('languages', description='Languages', path='/')
 
 LANGUAGE = api.model('Language', {
     'id': fields.Integer(required=True),
@@ -38,6 +39,13 @@ class Language(Resource):
         """Fetch a language given its id"""
         return DAO.get(event_id, language_id)
 
+    @requires_auth
+    @api.doc('delete_language')
+    @api.marshal_with(LANGUAGE)
+    def delete(self, event_id, language_id):
+        """Delete a language given its id"""
+        return DAO.delete(event_id, language_id)
+
 
 @api.route('/events/<int:event_id>/languages')
 class LanguageList(Resource):
@@ -48,7 +56,7 @@ class LanguageList(Resource):
         return DAO.list(event_id)
 
     @requires_auth
-    @api.doc('create_language')
+    @api.doc('create_language', responses=POST_RESPONSES)
     @api.marshal_with(LANGUAGE)
     @api.expect(LANGUAGE_POST, validate=True)
     def post(self, event_id):

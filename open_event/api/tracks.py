@@ -1,9 +1,10 @@
 from flask.ext.restplus import Resource, Namespace, fields
 
 from open_event.models.track import Track as TrackModel
-from custom_fields import ImageUriField
+from custom_fields import ImageUriField, ColorField
 from .helpers import get_paginated_list, requires_auth
-from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, PAGE_PARAMS
+from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
+    PAGE_PARAMS, POST_RESPONSES
 
 api = Namespace('tracks', description='Tracks', path='/')
 
@@ -16,6 +17,7 @@ TRACK = api.model('Track', {
     'id': fields.Integer(required=True),
     'name': fields.String,
     'description': fields.String,
+    'color': ColorField(),
     'track_image_url': ImageUriField(),
     'sessions': fields.List(fields.Nested(TRACK_SESSION)),
 })
@@ -46,6 +48,13 @@ class Track(Resource):
         """Fetch a track given its id"""
         return DAO.get(event_id, track_id)
 
+    @requires_auth
+    @api.doc('delete_track')
+    @api.marshal_with(TRACK)
+    def delete(self, event_id, track_id):
+        """Delete a track given its id"""
+        return DAO.delete(event_id, track_id)
+
 
 @api.route('/events/<int:event_id>/tracks')
 class TrackList(Resource):
@@ -56,7 +65,7 @@ class TrackList(Resource):
         return DAO.list(event_id)
 
     @requires_auth
-    @api.doc('create_track')
+    @api.doc('create_track', responses=POST_RESPONSES)
     @api.marshal_with(TRACK)
     @api.expect(TRACK_POST, validate=True)
     def post(self, event_id):

@@ -71,19 +71,13 @@
 
         posting.done(function (result) {
             $('#close-add-track').click();
-            new PNotify({
-                title: 'Track Added',
-                text: 'Track added successfully to DB',
-                type: 'success'
-            });
+            $('#invite-speaker-form').find("input, textarea").val("");
+            createSnackbar("Speaker has been invited successfully.")
         });
 
         posting.fail(function () {
-            $('#close-add-track').click();
-            new PNotify({
-                title: 'Error',
-                text: 'Invitation could not be added to DB',
-                type: 'error'
+            createSnackbar("There was an error while inviting.", "Try Again", function(){
+                invite_speakers();
             });
         });
 

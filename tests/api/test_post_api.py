@@ -20,12 +20,11 @@ class TestPostApi(OpenEventTestCase):
         with app.test_request_context():
             create_event()
 
-    def login_user(self):
+    def _login_user(self):
         """
-        register a user and login
+        Registers an email and logs in.
         """
-        register(self.app, 'test', 'test@gmail.com', 'test')
-        login(self.app, 'test', 'test')
+        register(self.app, 'test@example.com', 'test')
 
     def _test_model(self, name, data):
         """
@@ -40,12 +39,8 @@ class TestPostApi(OpenEventTestCase):
             headers={'content-type': 'application/json'}
         )
         self.assertEqual(401, response.status_code, msg=response.data)
-        # TODO: has some issues with datetime and sqlite
-        # so return in event and session
-        if name in ['event', 'session']:
-            return
         # login and send the request again
-        self.login_user()
+        self._login_user()
         response = self.app.post(
             path,
             data=json.dumps(data),
@@ -73,7 +68,6 @@ class TestPostApi(OpenEventTestCase):
     def test_language_api(self):
         self._test_model('language', POST_LANGUAGE_DATA)
 
-    # TODO: has some issues with datetime and sqlite
     def test_session_api(self):
         self._test_model('session', POST_SESSION_DATA)
 

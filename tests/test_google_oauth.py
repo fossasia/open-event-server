@@ -16,8 +16,8 @@ class TestGoogleOauth(OpenEventTestCase):
         """If the user is already logged in then on clicking 'Login with Google' he should be redirected
             directly to the admin page"""
         with app.test_request_context():
-            register(self.app, 'test', 'email@gmail.com', 'test')
-            login(self.app, 'test', 'test')
+            register(self.app, 'email@gmail.com', 'test')
+            login(self.app, 'email@gmail.com', 'test')
             self.assertTrue('Create New Event' in self.app.get('/gCallback/?state=dummy_state&code=dummy_code)',
                                                                follow_redirects=True).data)
             self.assertEqual(self.app.get('/gCallback/?state=dummy_state&code=dummy_code)').status_code, 302)

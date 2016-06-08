@@ -22,23 +22,40 @@ def create_event(name='TestEvent'):
     return event.id
 
 
-def create_services(event_id):
-    """Create services and associates them with `event_id`.
+def create_services(event_id, serial_no=''):
+    """Creates services and associates them with `event_id`. Service names
+    have an optional `serial_no` that can be used to make them unique.
     """
-    microlocation = Microlocation(name='TestMicrolocation',
-                                  event_id=event_id)
-    track = Track(name='TestTrack', description='descp', event_id=event_id)
-    level = Level(name='TestLevel', event_id=event_id)
-    format_ = Format(name='TestFormat', label_en='label',
-                     event_id=event_id)
-    language = Language(name='TestLanguage', event_id=event_id)
-    session = Session(title='TestSession', description='descp',
+    test_micro = 'TestMicrolocation{}_{}'.format(serial_no, event_id)
+    test_track = 'TestTrack{}_{}'.format(serial_no, event_id)
+    test_level = 'TestLevel{}_{}'.format(serial_no, event_id)
+    test_format = 'TestFormat{}_{}'.format(serial_no, event_id)
+    test_lang = 'TestLanguage{}_{}'.format(serial_no, event_id)
+    test_session = 'TestSession{}_{}'.format(serial_no, event_id)
+    test_speaker = 'TestSpeaker{}_{}'.format(serial_no, event_id)
+    test_sponsor = 'TestSponsor{}_{}'.format(serial_no, event_id)
+
+    microlocation = Microlocation(name=test_micro, event_id=event_id)
+    track = Track(
+        name=test_track,
+        description='descp',
+        event_id=event_id,
+        color='red'
+    )
+    level = Level(name=test_level, event_id=event_id)
+    format_ = Format(name=test_format, label_en='label', event_id=event_id)
+    language = Language(name=test_lang, event_id=event_id)
+    session = Session(title=test_session,
+                      description='descp',
                       start_time=datetime(2014, 8, 4, 12, 30, 45),
                       end_time=datetime(2015, 9, 4, 12, 30, 45),
                       event_id=event_id)
-    speaker = Speaker(name='TestSpeaker', email='email@eg.com',
-                      organisation='org', country='japan', event_id=event_id)
-    sponsor = Sponsor(name='TestSponsor', event_id=event_id)
+    speaker = Speaker(name=test_speaker,
+                      email='email@eg.com',
+                      organisation='org',
+                      country='japan',
+                      event_id=event_id)
+    sponsor = Sponsor(name=test_sponsor, event_id=event_id)
 
     save_to_db(microlocation, 'Microlocation saved')
     save_to_db(track, 'Track saved')
