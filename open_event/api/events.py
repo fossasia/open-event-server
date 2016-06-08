@@ -45,6 +45,7 @@ class Event(Resource):
         """Fetch an event given its id"""
         return get_object_or_404(EventModel, event_id)
 
+    @requires_auth
     @api.doc('delete_event')
     @api.marshal_with(EVENT)
     def delete(self, event_id):

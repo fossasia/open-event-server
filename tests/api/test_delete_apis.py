@@ -21,10 +21,9 @@ class TestDeleteApi(OpenEventTestCase):
 
     def _login_user(self):
         """
-        Register a user and login
+        Registers an email and logs in.
         """
         register(self.app, 'test@example.com', 'test')
-        login(self.app, 'test@email.com', 'test')
 
     def _test_model(self, name, data):
         """

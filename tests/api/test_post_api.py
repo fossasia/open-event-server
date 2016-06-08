@@ -20,12 +20,11 @@ class TestPostApi(OpenEventTestCase):
         with app.test_request_context():
             create_event()
 
-    def login_user(self):
+    def _login_user(self):
         """
-        register a user and login
+        Registers an email and logs in.
         """
-        register(self.app, 'test@gmail.com', 'test')
-        login(self.app, 'test@email.com', 'test')
+        register(self.app, 'test@example.com', 'test')
 
     def _test_model(self, name, data):
         """
@@ -45,7 +44,7 @@ class TestPostApi(OpenEventTestCase):
         if name in ['event', 'session']:
             return
         # login and send the request again
-        self.login_user()
+        self._login_user()
         response = self.app.post(
             path,
             data=json.dumps(data),
