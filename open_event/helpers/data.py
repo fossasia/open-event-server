@@ -577,6 +577,9 @@ class DataManager(object):
             track_name = form.getlist('tracks[name]')
             track_color = form.getlist('tracks[color]')
 
+            room_name = form.getlist('rooms[name]')
+            room_color = form.getlist('rooms[color]')
+
             for index, name in enumerate(session_type_names):
                 session_type = SessionType(name=name, length=session_type_length[index], event_id=event.id)
                 db.session.add(session_type)
@@ -589,6 +592,10 @@ class DataManager(object):
                 track = Track(name=name, description="", track_image_url="", color=track_color[index],
                               event_id=event.id)
                 db.session.add(track)
+
+            for index, name in enumerate(room_name):
+                room = Microlocation(name=name, event_id=event.id)
+                db.session.add(room)
 
             uer = UsersEventsRoles(event_id=event.id, user_id=login.current_user.id, role_id=role.id)
             if save_to_db(uer, "Event saved"):
