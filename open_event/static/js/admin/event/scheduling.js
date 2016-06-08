@@ -752,7 +752,7 @@ $addMicrolocationForm.submit(function (event) {
     };
     $.ajax({
         beforeSend: function (xhr) {
-            xhr.setRequestHeader("Authorization", "Basic " + btoa(getCookie("username").replace(/['"]+/g, '') + ":" + getCookie("password")));
+            xhr.setRequestHeader("Authorization", "jwt " + getCookie("access_token"));
         },
         type: "POST",
         contentType: "application/json; charset=utf-8",
