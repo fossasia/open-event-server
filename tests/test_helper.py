@@ -3,7 +3,6 @@ import unittest
 from tests.utils import OpenEventTestCase
 from mock import patch
 
-import open_event.helpers.data
 from tests.object_mother import ObjectMother
 from tests.setup_database import Setup
 from open_event import current_app as app
@@ -23,13 +22,6 @@ class TestDataManager(OpenEventTestCase):
     def _delete_object_from_db(self):
         DataManager().remove_microlocation(1)
 
-    @patch.object(open_event.helpers.data, "delete_from_db")
-    def test_delete_from_db_method_called_after_delete_object(self, method):
-        microlocation = ObjectMother.get_microlocation()
-        with app.test_request_context():
-            save_to_db(microlocation, "Microlocation saved")
-            self._delete_object_from_db()
-            self.assertTrue(method.called)
 
     @patch.object(db.session, "rollback")
     def test_rollback_called_when_object_doesnt_exist(self, method):
