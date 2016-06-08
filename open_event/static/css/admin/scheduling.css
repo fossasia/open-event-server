@@ -62,6 +62,10 @@
     cursor: pointer
 }
 
+#timeline {
+    background-color: #FFFFFF;
+}
+
 .timeline-table td {
     z-index: -1 !important;
 }
