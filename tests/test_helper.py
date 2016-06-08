@@ -43,21 +43,6 @@ class TestDataManager(OpenEventTestCase):
             update_version(1, True, "tracks_ver")
             self.assertEqual(len(Version.query.all()), 1)
 
-    @patch.object(db.session, "commit")
-    def test_save_to_db_called_db_session_commit(self, method):
-        with app.test_request_context():
-            self._create_microlocation()
-        self.assertTrue(method.called)
-
-    @patch.object(db.session, "rollback")
-    def test_save_to_db_called_db_session_rollback(self, method):
-        with app.test_request_context():
-            try:
-                self._create_microlocation()
-            except Exception:
-                pass
-            self.assertTrue(not method.called)
-
 
 if __name__ == '__main__':
     unittest.main()
