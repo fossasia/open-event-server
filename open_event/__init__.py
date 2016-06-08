@@ -58,7 +58,7 @@ def create_app():
     # set up jwt
     app.config['JWT_AUTH_USERNAME_KEY'] = 'email'
     app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=84400)
-    app.config['JWT_AUTH_URL_RULE'] = '/admin/jwtauth'  # not used anyway
+    app.config['JWT_AUTH_URL_RULE'] = None
     jwt = JWT(app, jwt_authenticate, jwt_identity)
 
     admin_view = AdminView("Open Event")
