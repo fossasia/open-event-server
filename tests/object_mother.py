@@ -48,5 +48,4 @@ class ObjectMother(object):
     def get_user():
         return User(login="test",
                     password="test",
-                    nickname="test",
                     email="email@gmail.com")
