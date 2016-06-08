@@ -10,7 +10,6 @@ from flask.ext.scrypt import generate_password_hash
 from ...helpers.data import DataManager, save_to_db,get_google_auth,get_facebook_auth
 from ...helpers.data_getter import DataGetter
 from ...helpers.helpers import send_email_after_account_create, send_email_with_reset_password_hash
-from open_event.models.user import User
 from open_event.helpers.oauth import OAuth, FbOAuth
 from flask import current_app
 
@@ -45,15 +44,16 @@ class MyHomeView(AdminIndexView):
             if user.password != generate_password_hash(request.form['password'], user.salt):
                 logging.info('Password Incorrect')
                 return redirect(url_for('admin.login_view'))
+
+            _jwt = current_app.extensions['jwt']
+            identity = _jwt.authentication_callback(email, request.form['password'])
+            access_token = _jwt.jwt_encode_callback(identity)
+            
             login.login_user(user)
             logging.info('logged successfully')
             redirect_to_intended = redirect(intended_url())
             response = current_app.make_response(redirect_to_intended)
-
-            # TODO Remove these cookie setters once a proper token-based auth is available in the API. -@niranjan94
-            response.set_cookie('username', value=email)
-            response.set_cookie('password', value=request.form['password'])
-
+            response.set_cookie('access_token', value=access_token)
             return response
 
     @expose('/register/', methods=('GET', 'POST'))
