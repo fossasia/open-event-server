@@ -23,7 +23,8 @@ var time = {
         minutes: 15,
         pixels: 24,
         count: 0
-    }
+    },
+    format: "YYYY-MM-DD HH:MM:SS"
 };
 
 /**
@@ -205,16 +206,21 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
 
     if (isUndefinedOrNull(shouldBroadcast) || shouldBroadcast) {
         if (!sessionRefObject.newElement) {
-            $(document).trigger("scheduling:change", sessionRefObject.session);
+            $(document).trigger({
+                type: "scheduling:change",
+                session: sessionRefObject.session
+            });
         }
 
-        $(document).trigger("scheduling:recount", [oldMicrolocation, newMicrolocation]);
+        $(document).trigger({
+            type: "scheduling:recount",
+            microlocations: [oldMicrolocation, newMicrolocation]
+        });
     }
 
     _.remove(unscheduledStore, function (sessionTemp) {
         return sessionTemp.id == sessionRefObject.session.id
     });
-
 }
 
 /**
@@ -261,9 +267,15 @@ function addSessionToUnscheduled(sessionRef, isFiltering, shouldBroadcast) {
     if (isUndefinedOrNull(isFiltering) || !isFiltering) {
         if (isUndefinedOrNull(shouldBroadcast) || shouldBroadcast) {
             if (!sessionRefObject.newElement) {
-                $(document).trigger("scheduling:change", sessionRefObject.session);
+                $(document).trigger({
+                    type: "scheduling:change",
+                    session: sessionRefObject.session
+                });
             }
-            $(document).trigger("scheduling:recount", [oldMicrolocation]);
+            $(document).trigger({
+                type: "scheduling:recount",
+                microlocations: [oldMicrolocation]
+            });
         }
         unscheduledStore.push(sessionRefObject.session);
     }
@@ -796,4 +808,20 @@ $(document).ready(function () {
     eventId = parseInt($timeline.data("event-id"));
     generateTimeUnits();
     initializeTimeline(eventId);
+});
+
+$(document).on("scheduling:change", function (e) {
+    var session = _.cloneDeep(e.session);
+    session.start_time = session.start_time.format(time.format);
+    session.end_time = session.end_time.format(time.format);
+    api.sessions.put_session({event_id: eventId, session_id: session.id, payload: session}, function (success) {
+        createSnackbar("Changes have been saved.", "Dismiss", null, 1000);
+    }, function (error) {
+        createSnackbar("An error occurred while saving the changes.", "Try Again", function () {
+            $(document).trigger({
+                type: "scheduling:change",
+                session: e.session
+            });
+        });
+    });
 });
