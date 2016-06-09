@@ -39,10 +39,6 @@ class TestPostApi(OpenEventTestCase):
             headers={'content-type': 'application/json'}
         )
         self.assertEqual(401, response.status_code, msg=response.data)
-        # TODO: has some issues with datetime and sqlite
-        # so return in event and session
-        if name in ['event', 'session']:
-            return
         # login and send the request again
         self._login_user()
         response = self.app.post(
@@ -72,7 +68,6 @@ class TestPostApi(OpenEventTestCase):
     def test_language_api(self):
         self._test_model('language', POST_LANGUAGE_DATA)
 
-    # TODO: has some issues with datetime and sqlite
     def test_session_api(self):
         self._test_model('session', POST_SESSION_DATA)
 

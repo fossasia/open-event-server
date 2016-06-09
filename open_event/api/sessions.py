@@ -9,6 +9,7 @@ from open_event.models.microlocation import Microlocation as MicrolocationModel
 from open_event.models.speaker import Speaker as SpeakerModel
 
 from .helpers import get_paginated_list, requires_auth, save_db_model
+from custom_fields import DateTimeField
 from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
 
@@ -52,8 +53,8 @@ SESSION = api.model('Session', {
     'subtitle': fields.String,
     'abstract': fields.String,
     'description': fields.String,
-    'start_time': fields.DateTime,
-    'end_time': fields.DateTime,
+    'start_time': DateTimeField(),
+    'end_time': DateTimeField(),
     'track': fields.Nested(SESSION_TRACK),
     'speakers': fields.List(fields.Nested(SESSION_SPEAKER)),
     'level': fields.Nested(SESSION_LEVEL),
@@ -85,13 +86,16 @@ del SESSION_POST['format']
 
 # Create DAO
 class SessionDAO(ServiceDAO):
-    def _delete_id_fields(self, data):
+    def _delete_fields(self, data):
         del data['speaker_ids']
         del data['track_id']
         del data['level_id']
         del data['language_id']
         del data['format_id']
         del data['microlocation_id']
+        data['start_time'] = SESSION_POST['start_time'].from_str(
+            data['start_time'])
+        data['end_time'] = SESSION_POST['end_time'].from_str(data['end_time'])
         return data
 
     def fix_payload_post(self, event_id, data):
@@ -109,13 +113,13 @@ class SessionDAO(ServiceDAO):
             SpeakerModel.query.get(_) for _ in data['speaker_ids']
             if SpeakerModel.query.get(_) is not None
         )
-        data = self._delete_id_fields(data)
+        data = self._delete_fields(data)
         return data
 
     def update(self, event_id, service_id, data):
         data_copy = data.copy()
         data_copy = self.fix_payload_post(event_id, data_copy)
-        data = self._delete_id_fields(data)
+        data = self._delete_fields(data)
         obj = ServiceDAO.update(self, event_id, service_id, data)
         obj.track = data_copy['track']
         obj.level = data_copy['level']

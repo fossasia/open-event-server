@@ -1,7 +1,8 @@
 from flask.ext.restplus import Resource, Namespace, fields
 from flask import g
 
-from custom_fields import EmailField, ColorField, UriField, ImageUriField
+from custom_fields import EmailField, ColorField, UriField, ImageUriField,\
+    DateTimeField
 from open_event.models.event import Event as EventModel, EventsUsers
 from open_event.models.user import ADMIN, SUPERADMIN
 from .helpers import get_object_list, get_object_or_404, get_paginated_list,\
@@ -18,8 +19,8 @@ EVENT = api.model('Event', {
     'email': EmailField(),
     'color': ColorField(),
     'logo': ImageUriField(),
-    'start_time': fields.DateTime,
-    'end_time': fields.DateTime,
+    'start_time': DateTimeField(required=True),
+    'end_time': DateTimeField(required=True),
     'latitude': fields.Float,
     'longitude': fields.Float,
     'event_url': UriField(),
@@ -27,7 +28,7 @@ EVENT = api.model('Event', {
     'description': fields.String,
     'location_name': fields.String,
     'state': fields.String,
-    'closing_datetime': fields.DateTime,
+    'closing_datetime': DateTimeField(),
 })
 
 EVENT_PAGINATED = api.clone('EventPaginated', PAGINATED_MODEL, {
@@ -81,6 +82,11 @@ class EventList(Resource):
     def post(self):
         """Create an event"""
         new_event = EventModel(**self.api.payload)
+        # convert date-time values from string to datetime
+        new_event.start_time = EVENT_POST['start_time'].from_str(new_event.start_time)
+        new_event.end_time = EVENT_POST['end_time'].from_str(new_event.end_time)
+        new_event.closing_datetime = EVENT_POST['closing_datetime'].from_str(new_event.closing_datetime)
+        # set user (owner)
         a = EventsUsers()
         a.user = g.user
         a.editor = True
