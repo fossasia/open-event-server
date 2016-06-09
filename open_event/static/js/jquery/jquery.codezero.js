@@ -17,8 +17,40 @@ jQuery.fn.extend({
                 }
             });
         });
+    },
+    appendAt: function ($element, index) {
+        return this.each(function () {
+            var elem = $(this);
+            if (index === 0) {
+                elem.prepend($element);
+                return;
+            } else if (index === -1) {
+                elem.append($element);
+                return;
+            }
+            elem.find("div:nth-child(" + (index) + ")").after($element);
+        });
+    }
+
+});
+
+/**
+ * Extend Lodash and add some additional functionality
+ */
+_.mixin({
+    /**
+     * Push data into an array while maintaining sort order
+     * @param array
+     * @param value
+     * @param [iteratee=_.identity]
+     */
+    sortedPush: function (array, value, iteratee) {
+        var sortedIndex = _.sortedIndex(array, value, iteratee);
+        array.splice(sortedIndex, 0, value);
+        return sortedIndex;
     }
 });
+
 
 /**
  * Cache the results of a RegExp match.
@@ -98,19 +130,23 @@ function horizontallyBound($parentDiv, $childDiv, offsetAdd) {
  * @returns {boolean} true if overlaps/collides, else false.
  */
 function collision($div1, $div2) {
-    var x1 = $div1.offset().left;
-    var y1 = $div1.offset().top;
-    var h1 = $div1.outerHeight(true);
-    var w1 = $div1.outerWidth(true);
-    var b1 = y1 + h1;
-    var r1 = x1 + w1;
-    var x2 = $div2.offset().left;
-    var y2 = $div2.offset().top;
-    var h2 = $div2.outerHeight(true);
-    var w2 = $div2.outerWidth(true);
-    var b2 = y2 + h2;
-    var r2 = x2 + w2;
-    return !(b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2);
+    try {
+        var x1 = $div1.offset().left;
+        var y1 = $div1.offset().top;
+        var h1 = $div1.outerHeight(true);
+        var w1 = $div1.outerWidth(true);
+        var b1 = y1 + h1;
+        var r1 = x1 + w1;
+        var x2 = $div2.offset().left;
+        var y2 = $div2.offset().top;
+        var h2 = $div2.outerHeight(true);
+        var w2 = $div2.outerWidth(true);
+        var b2 = y2 + h2;
+        var r2 = x2 + w2;
+        return !(b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2);
+    } catch (ignored) {
+        return false;
+    }
 }
 
 
@@ -149,6 +185,18 @@ function logDebug(message, ref) {
  */
 function isUndefinedOrNull(variable) {
     return (_.isUndefined(variable) || _.isNull(variable));
+}
+
+
+/**
+ * Get the value of a cookie (Original JavaScript code by Chirp Internet: www.chirp.com.au)
+ * @param name
+ * @returns {string}
+ */
+function getCookie(name) {
+    var re = new RegExp(name + "=([^;]+)");
+    var value = re.exec(document.cookie);
+    return (value != null) ? decodeURI(value[1]) : null;
 }
 
 /**

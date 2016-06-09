@@ -33,7 +33,7 @@
         <label class="control-label col-md-3 col-sm-3 col-xs-12">Start Date <span class="required">*</span>
         </label>
         <div class="col-md-6 col-sm-6 col-xs-12">
-          <input required="required" name="start_time" class="date-picker form-control col-md-7 col-xs-12"placeholder="MM/DD/YYYY"/>
+          <input id="event-start" required="required" name="start_time" class="date-picker form-control col-md-7 col-xs-12"placeholder="MM/DD/YYYY"/>
         </div>
 
     </div>
@@ -42,7 +42,7 @@
         <label class="control-label col-md-3 col-sm-3 col-xs-12">End Date <span class="required">*</span>
         </label>
         <div class="col-md-6 col-sm-6 col-xs-12">
-          <input required="required" name="end_time" class="date-picker form-control col-md-7 col-xs-12"placeholder="MM/DD/YYYY"/>
+          <input id="event-end" required="required" name="end_time" class="date-picker form-control col-md-7 col-xs-12"placeholder="MM/DD/YYYY"/>
         </div>
     </div>
 
@@ -76,6 +76,27 @@
         <div class="col-md-6 col-sm-6 col-xs-12">
             <input name="event_url" class="form-control col-md-7 col-xs-12"/>
         </div>
+    </div>
+
+    <div class="item form-group">
+      <div class="row">
+        <label class="control-label col-md-6 col-sm-6 col-xs-12">Social Links
+        </label>
+      </div>
+      <div class="row social-links">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class=" col-sm-6">
+                  <input type="text" class="form-control" name="social[name]" placeholder="Name" value="Google Plus">
+              </div>
+
+              <div class="col-sm-6 input-group">
+                  <input type="text" class="form-control" name="social[link]" placeholder="Link" >
+                  <span class="input-group-btn">
+                      <button type="button" class="btn btn-primary add-social-links">+</button>
+                  </span>
+              </div>
+          </div>
+      </div>
     </div>
   </div>
   <div class="col-md-4" style="margin-left:-10rem;">
@@ -136,6 +157,18 @@ function geocodeAddress(geocoder, resultsMap) {
   });
 }
 
+$(document).ready(function() {
+    $('#event-start').daterangepicker({
+        singleDatePicker: true,
+        calender_style: "picker_4"
+    });
+
+    $('#event-end').daterangepicker({
+        singleDatePicker: true,
+        calender_style: "picker_4"
+
+    });
+});
 
 </script>
 

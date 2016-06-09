@@ -36,7 +36,12 @@ def create_services(event_id, serial_no=''):
     test_sponsor = 'TestSponsor{}_{}'.format(serial_no, event_id)
 
     microlocation = Microlocation(name=test_micro, event_id=event_id)
-    track = Track(name=test_track, description='descp', event_id=event_id)
+    track = Track(
+        name=test_track,
+        description='descp',
+        event_id=event_id,
+        color='red'
+    )
     level = Level(name=test_level, event_id=event_id)
     format_ = Format(name=test_format, label_en='label', event_id=event_id)
     language = Language(name=test_lang, event_id=event_id)

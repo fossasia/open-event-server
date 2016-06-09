@@ -27,12 +27,12 @@ from ..models.user_detail import UserDetail
 from ..models.role import Role
 from ..models.users_events_roles import UsersEventsRoles
 from ..models.session_type import SessionType
+from ..models.sessions_speakers import SessionsSpeakers
 from ..models.social_link import SocialLink
 from ..models.track import Track
 from open_event.helpers.oauth import OAuth, FbOAuth
 from requests_oauthlib import OAuth2Session
 from ..models.invite import Invite
-
 
 
 class DataManager(object):
@@ -146,6 +146,50 @@ class DataManager(object):
         save_to_db(new_session, "Session saved")
         update_version(event_id, False, "session_ver")
 
+        new_speaker = Speaker(name=form["name"],
+                              photo="",
+                              biography=form["biography"],
+                              email=form["email"],
+                              web=form["web"],
+                              event_id=event_id,
+                              twitter="",
+                              facebook="",
+                              github="",
+                              linkedin="",
+                              organisation=form["organisation"],
+                              position="",
+                              country="")
+        save_to_db(new_speaker, "Speaker saved")
+        update_version(event_id, False, "speakers_ver")
+
+        new_session_speaker = SessionsSpeakers(session_id=new_session.id,
+                                            speaker_id=new_speaker.id)
+
+        save_to_db(new_session_speaker, "Session Speaker saved")
+
+    @staticmethod
+    def create_speaker_session_relation(session_id, speaker_id, event_id):
+        """
+        Session, speaker ids will be saved to database
+        :param form: view data form
+        :param event_id: Session, speaker belongs to Event by event id
+        """
+        new_session_speaker = SessionsSpeakers(session_id=session_id,
+                                            speaker_id=speaker_id)
+
+        save_to_db(new_session_speaker, "Session Speaker saved")
+
+    @staticmethod
+    def edit_session(form, session):
+        session.title = form['title']
+        session.subtitle = form['subtitle']
+        session.description = form['description']
+        session.start_time = form['start_time']
+        session.end_time = form['end_time']
+        session.abstract = form['abstract']
+
+        save_to_db(session, 'Session Updated')
+
     @staticmethod
     def update_session(form, session):
         """
@@ -195,20 +239,19 @@ class DataManager(object):
         :param form: view data form
         :param event_id: Speaker belongs to Event by event id
         """
-        new_speaker = Speaker(name=form.name.data,
-                              photo=form.photo.data,
-                              biography=form.biography.data,
-                              email=form.email.data,
-                              web=form.web.data,
+        new_speaker = Speaker(name=form["name"],
+                              photo="",
+                              biography=form["biography"],
+                              email=form["email"],
+                              web=form["web"],
                               event_id=event_id,
-                              twitter=form.twitter.data,
-                              facebook=form.facebook.data,
-                              github=form.github.data,
-                              linkedin=form.linkedin.data,
-                              organisation=form.organisation.data,
-                              position=form.position.data,
-                              country=form.country.data)
-        new_speaker.sessions = InstrumentedList(form.sessions.data if form.sessions.data else [])
+                              twitter="",
+                              facebook="",
+                              github="",
+                              linkedin="",
+                              organisation=form["organisation"],
+                              position="",
+                              country="")
         save_to_db(new_speaker, "Speaker saved")
         update_version(event_id, False, "speakers_ver")
 
@@ -437,7 +480,6 @@ class DataManager(object):
     @staticmethod
     def create_user(form):
         user = User(nickname='asdf',
-                    login=form['username'],
                     email=form['email'])
 
         # we hash the users password to avoid saving it as plaintext in the db,
@@ -455,9 +497,10 @@ class DataManager(object):
         return user
 
     @staticmethod
-    def create_super_admin(password):
+    def create_super_admin(email, password):
         user = User()
         user.login = 'super_admin'
+        user.email = email
         user.nickname = 'super_admin'
         salt = generate_random_salt()
         password = password
@@ -532,6 +575,10 @@ class DataManager(object):
             social_link_link = form.getlist('social[link]')
 
             track_name = form.getlist('tracks[name]')
+            track_color = form.getlist('tracks[color]')
+
+            room_name = form.getlist('rooms[name]')
+            room_color = form.getlist('rooms[color]')
 
             for index, name in enumerate(session_type_names):
                 session_type = SessionType(name=name, length=session_type_length[index], event_id=event.id)
@@ -542,12 +589,17 @@ class DataManager(object):
                 db.session.add(social_link)
 
             for index, name in enumerate(track_name):
-                track = Track(name=name, description="", track_image_url="", event_id=event.id)
+                track = Track(name=name, description="", track_image_url="", color=track_color[index],
+                              event_id=event.id)
                 db.session.add(track)
 
+            for index, name in enumerate(room_name):
+                room = Microlocation(name=name, event_id=event.id)
+                db.session.add(room)
+
             uer = UsersEventsRoles(event_id=event.id, user_id=login.current_user.id, role_id=role.id)
-            save_to_db(uer, "Event saved")
-            return event
+            if save_to_db(uer, "Event saved"):
+                return event
         else:
             raise ValidationError("start date greater than end date")
 
@@ -577,6 +629,7 @@ class DataManager(object):
         social_link_link = form.getlist('social[link]')
 
         track_name = form.getlist('tracks[name]')
+        track_color = form.getlist('tracks[color]')
 
         for session_type in session_types:
             delete_from_db(session_type, 'Session Type Deleted')
@@ -596,7 +649,7 @@ class DataManager(object):
             save_to_db(social_link, 'Social Link Saved')
 
         for index, name in enumerate(track_name):
-            track = Track(name=name, description="", track_image_url="", event_id=event.id)
+            track = Track(name=name, description="", track_image_url="", color=track_color[index], event_id=event.id)
             save_to_db(track, 'Track Saved')
 
         return event
@@ -678,6 +731,7 @@ def save_to_db(item, msg):
         db.session.commit()
         return True
     except Exception, e:
+        print e
         logging.error('DB Exception! %s' % e)
         traceback.print_exc()
         db.session.rollback()
@@ -696,6 +750,7 @@ def delete_from_db(item, msg):
         db.session.commit()
         return True
     except Exception, e:
+        print e
         logging.error('DB Exception! %s' % e)
         db.session.rollback()
         return False
@@ -725,7 +780,6 @@ def create_user_oauth(user, user_data, token, method):
     if user is None:
         user = User()
         user.email = user_data['email']
-    user.login = user_data['name']
     user.role = 'speaker'
     if method == 'Google':
         user.avatar = user_data['picture']

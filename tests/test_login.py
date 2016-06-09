@@ -14,23 +14,23 @@ class TestLogin(OpenEventTestCase):
         self.assertTrue("Login Form" in rv.data)
 
     def test_correct_login(self):
-        register(self.app, 'test', 'email@gmail.com', 'test')
+        register(self.app, 'email@gmail.com', 'test')
         logout(self.app)
-        rv = login(self.app, 'test', 'test')
+        rv = login(self.app, 'email@gmail.com', 'test')
         self.assertTrue("Create New Event" in rv.data)
 
     def test_incorrect_login(self):
-        register(self.app, 'test', 'email@gmail.com', 'test')
+        register(self.app, 'email@gmail.com', 'test')
         logout(self.app)
-        rv = login(self.app, 'other_test', 'other_test')
+        rv = login(self.app, 'other_email@gmail.com', 'other_test')
         self.assertTrue("Login Form" in rv.data)
 
     def test_registration(self):
-        rv = register(self.app, 'test', 'email@gmail.com', 'test')
+        rv = register(self.app, 'email@gmail.com', 'test')
         self.assertTrue("Create New Event" in rv.data)
 
     def test_logout(self):
-        login(self.app, 'test', 'test')
+        login(self.app, 'email@gmail.com', 'test')
         rv = logout(self.app)
         self.assertTrue("Login" in rv.data)
 

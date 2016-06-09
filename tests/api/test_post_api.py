@@ -3,7 +3,7 @@ import json
 
 from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
-from tests.auth_helper import login, register
+from tests.auth_helper import register
 from tests.api.utils import create_event, get_path
 from tests.api.utils_post_data import *
 
@@ -20,12 +20,11 @@ class TestPostApiBase(OpenEventTestCase):
         with app.test_request_context():
             create_event()
 
-    def login_user(self):
+    def _login_user(self):
         """
-        register a user and login
+        Registers an email and logs in.
         """
-        register(self.app, 'test', 'test@gmail.com', 'test')
-        login(self.app, 'test', 'test')
+        register(self.app, 'test@example.com', 'test')
 
     def post_request(self, path, data):
         """
@@ -52,12 +51,8 @@ class TestPostApi(TestPostApiBase):
         path = get_path() if name == 'event' else get_path(1, name + 's')
         response = self.post_request(path, data)
         self.assertEqual(401, response.status_code, msg=response.data)
-        # TODO: has some issues with datetime and sqlite
-        # so return in event and session
-        if name in ['event', 'session']:
-            return
         # login and send the request again
-        self.login_user()
+        self._login_user()
         response = self.post_request(path, data)
         self.assertEqual(200, response.status_code, msg=response.data)
         self.assertIn('Test' + str(name).title(), response.data)
@@ -81,7 +76,6 @@ class TestPostApi(TestPostApiBase):
     def test_language_api(self):
         self._test_model('language', POST_LANGUAGE_DATA)
 
-    # TODO: has some issues with datetime and sqlite
     def test_session_api(self):
         self._test_model('session', POST_SESSION_DATA)
 

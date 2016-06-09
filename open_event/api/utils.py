@@ -1,10 +1,17 @@
 from flask_restplus import Model, fields, reqparse
 from .helpers import get_object_list, get_object_or_404, get_object_in_event, \
-    create_service_model, validate_payload
+    create_service_model, validate_payload, delete_service_model, update_model
 from open_event.models.event import Event as EventModel
 
 DEFAULT_PAGE_START = 1
 DEFAULT_PAGE_LIMIT = 20
+
+POST_RESPONSES = {401: 'Authentication failure', 400: 'Validation error'}
+PUT_RESPONSES = {
+    400: 'Validation Error / Bad request',
+    401: 'Authentication failure',
+    404: 'Object/Event not found'
+}
 
 # Parameters for a paginated response
 PAGE_PARAMS = {
@@ -58,18 +65,17 @@ class ServiceDAO:
         get_object_or_404(EventModel, event_id)
         return get_object_list(self.model, event_id=event_id)
 
-    def create(self, event_id, data, api_model=None):
-        """
-        Create data. Pass api_model as None when there is no need to
-        validate data or no restplus Api model for that data exists
-        """
-        if api_model:
-            validate_payload(data, api_model)
+    def create(self, event_id, data):
         item = create_service_model(self.model, event_id, data)
-        return self.get(event_id, item.id)
+        return item
 
-    def update(self):
-        pass
+    def update(self, event_id, service_id, data):
+        item = update_model(self.model, service_id, data, event_id)
+        return item
 
-    def delete(self):
-        pass
+    def delete(self, event_id, service_id):
+        item = delete_service_model(self.model, event_id, service_id)
+        return item
+
+    def validate(self, data, api_model):
+        validate_payload(data, api_model)

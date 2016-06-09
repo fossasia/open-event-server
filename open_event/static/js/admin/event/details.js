@@ -6,14 +6,14 @@ $(document).ready(function () {
     noForwardJumping: true,
   });
 
-  $('.date-picker').daterangepicker({
-    singleDatePicker: true,
-    timePicker: true,
-    calender_style: "picker_4",
-    locale: {
-      format: 'MM/DD/YYYY H:mm A'
-    }
-  });
+//  $('.date-picker').daterangepicker({
+//    singleDatePicker: true,
+//    timePicker: true,
+//    calender_style: "picker_4",
+//    locale: {
+//      format: 'MM/DD/YYYY H:mm A'
+//    }
+//  });
 
   $("#go_to_call_for_papers").click(function () {
     $('#wizard').smartWizard('goToStep', 2);
@@ -31,5 +31,9 @@ $(document).ready(function () {
   });
 
   $(".actionBar").remove();
+
+  $.get("/api/v2/events/" + 2 , function (events) {
+    console.log(events)
+  });
 
 });

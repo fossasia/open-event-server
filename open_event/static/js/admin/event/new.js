@@ -39,7 +39,7 @@ $(document).ready(function() {
     $(this).parent().parent().parent().remove();
   });
 
-  $('.add-tracks').click(function () {
+  $("body").on("click", '#add-tracks', function () {
     counter += 1;
     var row = "<div class='col-sm-12 row-tracks'>" +
                 "<div class='col-sm-3'>" +
@@ -63,9 +63,33 @@ $(document).ready(function() {
     $(this).parent().parent().parent().remove();
   });
 
+  $("body").on("click", '#add-rooms', function () {
+    counter += 1;
+    var row = "<div class='col-sm-12 row-rooms'>" +
+                "<div class='col-sm-3'>" +
+                  "<input type='text' class='form-control' name='rooms[name]' placeholder='Name'>" +
+                "</div>" +
+                "<div class='col-sm-3 input-group'>" +
+                  "<div class='input-group colorpicker-component' id='color"+counter+"'>"+
+                    "<input type='text' value='#e01ab5' class='form-control' name='rooms[color]' title='track-color'/>"+
+                    "<span class='input-group-addon'><i></i></span>"+
+                  "</div>" +
+                  "<span class='input-group-btn'>" +
+                    "<button type='button' class='btn btn-danger remove-rooms'>-</button>" +
+                  "</span>" +
+                "</div>" +
+              "</div>";
+    $('.rooms').append(row);
+    $('#room-color'+counter).colorpicker();
+  });
+
+  $("body").on("click", ".remove-rooms", function () {
+    $(this).parent().parent().parent().remove();
+  });
+
   // Smart Wizard
   $("#wizard").smartWizard({
-    labelFinish:'Save Draft',
+    labelFinish:'Publish',
     onFinish: function() { $("#event-create-form").submit(); }
   });
 
@@ -78,11 +102,5 @@ $(document).ready(function() {
   $('.buttonPrevious').addClass("btn btn-primary");
   $('.buttonFinish').addClass("btn btn-default");
 
-  $('.date-picker').daterangepicker({
-    singleDatePicker: true,
-    calender_style: "picker_4"
-  }, function(start, end, label) {
-    console.log(start.toISOString(), end.toISOString(), label);
-  });
 
 });

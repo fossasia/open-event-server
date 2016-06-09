@@ -19,20 +19,24 @@ class ObjectMother(object):
     def get_track():
         return Track(name="name",
                      event_id=1,
-                     description="description")
+                     description="description",
+                     color="red")
 
     @staticmethod
     def get_session():
         return Session(title='test',
                        description='dsad',
                        start_time=datetime(2003, 8, 4, 12, 30, 45),
-                       end_time=datetime(2003, 8, 4, 12, 30, 45))
+                       end_time=datetime(2003, 8, 4, 12, 30, 45),
+                       event_id=1,
+                       state='pending')
 
     @staticmethod
     def get_microlocation():
         return Microlocation(name="name",
                              latitude=1.0,
-                             longitude=1.0)
+                             longitude=1.0,
+                             event_id=1)
 
 
     @staticmethod

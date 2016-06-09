@@ -10,9 +10,7 @@ from flask.ext.scrypt import generate_password_hash
 from ...helpers.data import DataManager, save_to_db,get_google_auth,get_facebook_auth
 from ...helpers.data_getter import DataGetter
 from ...helpers.helpers import send_email_after_account_create, send_email_with_reset_password_hash
-from open_event.models.user import User
 from open_event.helpers.oauth import OAuth, FbOAuth
-
 
 def intended_url():
     return request.args.get('next') or url_for('.index')
@@ -26,7 +24,6 @@ class MyHomeView(AdminIndexView):
 
     @expose('/login/', methods=('GET', 'POST'))
     def login_view(self):
-        valid_user = None
         if request.method == 'GET':
             google = get_google_auth()
             auth_url, state = google.authorization_url(OAuth.get_auth_uri(), access_type='offline')
@@ -38,15 +35,15 @@ class MyHomeView(AdminIndexView):
             session['fb_oauth_state'] = state
             return self.render('/gentelella/admin/login/login.html', auth_url=auth_url, fb_auth_url=fb_auth_url)
         if request.method == 'POST':
-            username = request.form['username']
-            users = User.query.filter_by(login=username)
-            for user in users:
-                if user.password == generate_password_hash(request.form['password'], user.salt):
-                    valid_user = user
-            if valid_user is None:
+            email = request.form['email']
+            user = DataGetter.get_user_by_email(email)
+            if user is None:
                 logging.info('No such user')
                 return redirect(url_for('admin.login_view'))
-            login.login_user(valid_user)
+            if user.password != generate_password_hash(request.form['password'], user.salt):
+                logging.info('Password Incorrect')
+                return redirect(url_for('admin.login_view'))
+            login.login_user(user)
             logging.info('logged successfully')
             return redirect(intended_url())
 
@@ -108,3 +105,10 @@ class MyHomeView(AdminIndexView):
         return self.render('admin/role_manager.html',
                            users=users,
                            events=events)
+
+    @expose('/sessions/', methods=('GET', ))
+    def view_user_sessions(self):
+        sessions = DataGetter.get_user_sessions()
+        return self.render('/gentelella/admin/session/user_sessions.html',
+                           sessions=sessions)
+

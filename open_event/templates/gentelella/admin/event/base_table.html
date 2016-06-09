@@ -1,4 +1,9 @@
 {% extends 'gentelella/admin/base.html' %}
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" />
+{% endblock %}
+
 {% block body %}
 <div class="page-title">
     <div class="title_left">
@@ -59,4 +64,12 @@
         </div>
     </div>
 </div>
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script type="text/javascript" src="{{ url_for('static', filename='admin/lib/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='admin/lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script type="text/javascript">
+        $('.table').DataTable();
+    </script>
 {% endblock %}

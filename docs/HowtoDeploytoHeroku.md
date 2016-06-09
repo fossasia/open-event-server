@@ -1,5 +1,4 @@
 # How to deploy server to Heroku
-
 ### Steps
 
 * We need to install heroku on our machine. Type the following in your linux terminal:
@@ -15,6 +14,10 @@
 * After setting env vars, create the heroku database.
     * ```heroku addons:create heroku-postgresql:hobby-dev```
     * ```heroku pg:promote <HEROKU_POSTGRESQL_COLOR_URL>```
+* Add python build pack to the app
+    * ```heroku buildpacks:set heroku/python```
+* Add Node.js build pack to the app
+    * ```heroku buildpacks:add --index 1 heroku/nodejs```
 * Then we deploy the code to heroku.
 	* ```git push heroku master``` or
     * ```git push heroku yourbranch:master``` if you are in a different branch than master

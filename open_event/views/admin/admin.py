@@ -38,9 +38,6 @@ class AdminView(object):
         self.admin.add_view(track)
         self.admin.add_view(InviteView(Invite, db.session, name='Invite', url='events/<event_id>/invite'))
         self.admin.add_view(SessionView(Session, db.session, name='Session', url='events/<event_id>/session'))
-        # self.admin.add_view(ev)
-        # self.admin.add_view(events)
-
 
     @staticmethod
     def init_login(app):

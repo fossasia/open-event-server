@@ -19,9 +19,9 @@ class TestPostApiValidation(TestPostApiBase):
         sure POST request failed
         """
         path = get_path() if name == 'event' else get_path(1, name + 's')
-        self.login_user()
+        self._login_user()
         for field in fields:
-            data_copy = data
+            data_copy = data.copy()
             data_copy[field] = 'r@nd0m_g00d_for_n0thing_v@lue'
             response = self.post_request(path, data_copy)
             self.assertEqual(response.status_code, 400)
