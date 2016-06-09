@@ -12,7 +12,6 @@ SUPERADMIN = 'super_admin'
 class User(db.Model):
     """User model class"""
     id = db.Column(db.Integer, primary_key=True)
-    nickname = db.Column(db.String(100))
     email = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(128))
     reset_password = db.Column(db.String(128))

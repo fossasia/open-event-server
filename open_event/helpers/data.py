@@ -478,15 +478,14 @@ class DataManager(object):
         flash('You successfully delete microlocation')
 
     @staticmethod
-    def create_user(form):
-        user = User(nickname='asdf',
-                    email=form['email'])
+    def create_user(userdata):
+        user = User(email=userdata[0],
+                    password=userdata[1])
 
         # we hash the users password to avoid saving it as plaintext in the db,
         # remove to use plain text:
         salt = generate_random_salt()
-        password = form['password']
-        user.password = generate_password_hash(password, salt)
+        user.password = generate_password_hash(user.password, salt)
         hash = random.getrandbits(128)
         user.reset_password = str(hash)
 
@@ -501,7 +500,6 @@ class DataManager(object):
         user = User()
         user.login = 'super_admin'
         user.email = email
-        user.nickname = 'super_admin'
         salt = generate_random_salt()
         password = password
         user.password = generate_password_hash(password, salt)
