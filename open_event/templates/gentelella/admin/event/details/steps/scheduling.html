@@ -144,7 +144,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="close-add-microlocation" class="btn btn-default" data-dismiss="modal">
+                    <button type="button" id="close-edit-session" class="btn btn-default" data-dismiss="modal">
                         Close
                     </button>
                     <button type="submit" class="btn btn-primary">Update Session Information</button>
@@ -155,7 +155,7 @@
     </div>
 </form>
 
-<form id="add-microlocation-form" method="post" action="{{ url_for('api.microlocations_microlocation_list', event_id=event.id) }}">
+<form id="add-microlocation-form" method="post">
     <div class="modal fade" id="add-microlocation-modal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">

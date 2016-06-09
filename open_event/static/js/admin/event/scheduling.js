@@ -23,7 +23,8 @@ var time = {
         minutes: 15,
         pixels: 24,
         count: 0
-    }
+    },
+    format: "YYYY-MM-DD HH:MM:SS"
 };
 
 /**
@@ -66,6 +67,7 @@ var days = [];
 var sessionsStore = [];
 var microlocationsStore = [];
 var unscheduledStore = [];
+var eventId;
 
 /**
  * jQuery OBJECT REFERENCES
@@ -204,16 +206,21 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
 
     if (isUndefinedOrNull(shouldBroadcast) || shouldBroadcast) {
         if (!sessionRefObject.newElement) {
-            $(document).trigger("scheduling:change", sessionRefObject.session);
+            $(document).trigger({
+                type: "scheduling:change",
+                session: sessionRefObject.session
+            });
         }
 
-        $(document).trigger("scheduling:recount", [oldMicrolocation, newMicrolocation]);
+        $(document).trigger({
+            type: "scheduling:recount",
+            microlocations: [oldMicrolocation, newMicrolocation]
+        });
     }
 
     _.remove(unscheduledStore, function (sessionTemp) {
         return sessionTemp.id == sessionRefObject.session.id
     });
-
 }
 
 /**
@@ -260,9 +267,15 @@ function addSessionToUnscheduled(sessionRef, isFiltering, shouldBroadcast) {
     if (isUndefinedOrNull(isFiltering) || !isFiltering) {
         if (isUndefinedOrNull(shouldBroadcast) || shouldBroadcast) {
             if (!sessionRefObject.newElement) {
-                $(document).trigger("scheduling:change", sessionRefObject.session);
+                $(document).trigger({
+                    type: "scheduling:change",
+                    session: sessionRefObject.session
+                });
             }
-            $(document).trigger("scheduling:recount", [oldMicrolocation]);
+            $(document).trigger({
+                type: "scheduling:recount",
+                microlocations: [oldMicrolocation]
+            });
         }
         unscheduledStore.push(sessionRefObject.session);
     }
@@ -750,23 +763,17 @@ $addMicrolocationForm.submit(function (event) {
         "longitude": parseFloat($addMicrolocationForm.find("input[name=longitude]").val()),
         "floor": parseInt($addMicrolocationForm.find("input[name=floor]").val())
     };
-    $.ajax({
-        type: "POST",
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        url: $addMicrolocationForm.attr("action"),
-        data: JSON.stringify(payload),
-        success: function (microlocation) {
-            addMicrolocationToTimeline(microlocation);
-            $('#close-add-microlocation').click();
-            $addMicrolocationForm.find("input, textarea").val("");
-            createSnackbar("Microlocation has been created successfully.");
-        },
-        failure: function () {
-            createSnackbar("An error occurred while creating microlocation.", "Try Again", function () {
-                $addMicrolocationForm.trigger("submit");
-            });
-        }
+
+    api.microlocations.post_microlocation_list({event_id: eventId, payload: payload}, function (success) {
+        addMicrolocationToTimeline(success.obj);
+        $addMicrolocationForm.find(".modal").modal("hide");
+        $addMicrolocationForm.find("input, textarea").val("");
+        createSnackbar("Microlocation has been created successfully.");
+    }, function (error) {
+        console.log('failed with the following: ' + error.statusText);
+        createSnackbar("An error occurred while creating microlocation.", "Try Again", function () {
+            $addMicrolocationForm.trigger("submit");
+        });
     });
 });
 
@@ -798,7 +805,23 @@ $(document)
  * Initialize the Scheduler UI on document ready
  */
 $(document).ready(function () {
-    var eventId = $timeline.data("event-id");
+    eventId = parseInt($timeline.data("event-id"));
     generateTimeUnits();
     initializeTimeline(eventId);
+});
+
+$(document).on("scheduling:change", function (e) {
+    var session = _.cloneDeep(e.session);
+    session.start_time = session.start_time.format(time.format);
+    session.end_time = session.end_time.format(time.format);
+    api.sessions.put_session({event_id: eventId, session_id: session.id, payload: session}, function (success) {
+        createSnackbar("Changes have been saved.", "Dismiss", null, 1000);
+    }, function (error) {
+        createSnackbar("An error occurred while saving the changes.", "Try Again", function () {
+            $(document).trigger({
+                type: "scheduling:change",
+                session: e.session
+            });
+        });
+    });
 });
