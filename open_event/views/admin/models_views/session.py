@@ -1,12 +1,14 @@
+import os
+
 from flask_admin import expose
 from flask_admin.contrib.sqla import ModelView
 from flask import request, url_for, redirect
-from ....helpers.data import DataManager,save_to_db
+from ....helpers.data import DataManager, save_to_db
 from ....helpers.data_getter import DataGetter
+from werkzeug.utils import secure_filename
 
 
 class SessionView(ModelView):
-
     @expose('/new/<user_id>/<hash>/', methods=('GET', 'POST'))
     def create_view(self, event_id, user_id, hash):
         invite = DataGetter.get_invite_by_user_id(user_id)
@@ -16,7 +18,7 @@ class SessionView(ModelView):
                 return redirect(url_for('session.display_view', event_id=event_id))
             return self.render('/gentelella/admin/session/new/new.html')
 
-    @expose('/<int:session_id>/edit/', methods=('GET','POST'))
+    @expose('/<int:session_id>/edit/', methods=('GET', 'POST'))
     def edit_view(self, event_id, session_id):
         session = DataGetter.get_session(session_id)
         if request.method == 'GET':
@@ -44,3 +46,19 @@ class SessionView(ModelView):
         session.state = 'rejected'
         save_to_db(session, 'Session Rejected')
         return redirect(url_for('.display_view', event_id=event_id))
+
+    @expose('/<int:session_id>/upload/', methods=('POST', ))
+    def upload_file(self, session_id):
+        session = DataGetter.get_session(session_id)
+        file = request.files["file"]
+        filename = secure_filename(file.filename)
+        if '.mp3' in filename:
+            file.save(os.path.join(os.path.realpath('.') + '/static/media/audio/', filename))
+            session.audio_url = os.path.join(os.path.realpath('.') + '/static/media/audio/', filename)
+        if '.mp4' in filename:
+            file.save(os.path.join(os.path.realpath('.') + '/static/media/video/', filename))
+            session.video_url = os.path.join(os.path.realpath('.') + '/static/media/video/', filename)
+        if '.txt' in filename or '.pdf' in filename:
+            file.save(os.path.join(os.path.realpath('.') + '/static/media/slides/', filename))
+            session.slides_url = os.path.join(os.path.realpath('.') + '/static/media/slides/', filename)
+        return self.render('')
