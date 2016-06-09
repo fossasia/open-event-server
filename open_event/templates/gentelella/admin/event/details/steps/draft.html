@@ -19,7 +19,7 @@ $(document).ready(function() {
     $('#closing_datetime').daterangepicker({
         singleDatePicker: true,
         calender_style: "picker_4",
-        startDate: "{{ event.closing_datetime.strftime('%m/%d/%Y %H:%M %p') }}"
+        startDate: "{{ event.closing_datetime.strftime('%m/%d/%Y %H:%M %p') if event.closing_datetime is not none else event.start_time.strftime('%m/%d/%Y %H:%M %p') }}"
     });
 });
 </script>
