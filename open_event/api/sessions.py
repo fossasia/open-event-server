@@ -9,7 +9,7 @@ from open_event.models.microlocation import Microlocation as MicrolocationModel
 from open_event.models.speaker import Speaker as SpeakerModel
 
 from .helpers import get_paginated_list, requires_auth, save_db_model
-from custom_fields import DateTimeField
+from custom_fields import DateTimeField, UriField
 from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
 
@@ -55,6 +55,10 @@ SESSION = api.model('Session', {
     'description': fields.String,
     'start_time': DateTimeField(),
     'end_time': DateTimeField(),
+    'slides_url': UriField(),
+    'video_url': UriField(),
+    'signup_url': UriField(),
+    'audio': fields.String,
     'track': fields.Nested(SESSION_TRACK),
     'speakers': fields.List(fields.Nested(SESSION_SPEAKER)),
     'level': fields.Nested(SESSION_LEVEL),
