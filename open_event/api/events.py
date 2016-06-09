@@ -39,6 +39,16 @@ EVENT_POST = api.clone('EventPost', EVENT)
 del EVENT_POST['id']
 
 
+# Helper function to fix datetime event payload
+# TODO: Make ServiceDAO more versatile so that event can use it
+def fix_payload(data):
+    data['start_time'] = EVENT_POST['start_time'].from_str(data['start_time'])
+    data['end_time'] = EVENT_POST['end_time'].from_str(data['end_time'])
+    data['closing_datetime'] = EVENT_POST['closing_datetime'].from_str(
+        data['closing_datetime'])
+    return data
+
+
 @api.route('/<int:event_id>')
 @api.param('event_id')
 @api.response(404, 'Event not found')
@@ -64,7 +74,8 @@ class Event(Resource):
     @api.expect(EVENT_POST, validate=True)
     def put(self, event_id):
         """Update a event given its id"""
-        return update_model(EventModel, event_id, self.api.payload)
+        payload = fix_payload(self.api.payload)
+        return update_model(EventModel, event_id, payload)
 
 
 @api.route('')
@@ -81,11 +92,8 @@ class EventList(Resource):
     @api.expect(EVENT_POST, validate=True)
     def post(self):
         """Create an event"""
-        new_event = EventModel(**self.api.payload)
-        # convert date-time values from string to datetime
-        new_event.start_time = EVENT_POST['start_time'].from_str(new_event.start_time)
-        new_event.end_time = EVENT_POST['end_time'].from_str(new_event.end_time)
-        new_event.closing_datetime = EVENT_POST['closing_datetime'].from_str(new_event.closing_datetime)
+        payload = fix_payload(self.api.payload)
+        new_event = EventModel(**payload)
         # set user (owner)
         a = EventsUsers()
         a.user = g.user
