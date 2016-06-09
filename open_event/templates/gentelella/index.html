@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
           integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom/index.css') }}"/>
     {% endblock %}
 
     {% block head_js %}
@@ -23,8 +24,149 @@
 <body class="nav-sm">
 <div class="main_container">
     {{ menu.render_menu() }}
+    <div style="clear:both"></div>
+    <div id="main-image">
+        <div class="img-content">
+            <h1>The simplest way to create event</h1>
+            <a href="/admin/events/new" class="btn btn-info btn-lg">Create event</a>
+        </div>
+    </div>
+    <div class="index-container">
+        <div class="row">
+            <h3 class="blue">Upcoming events</h3>
+            <div class="row text-center">
 
-    <a href="/admin/events/new" class="btn btn-primary">Create event</a>
+                <div class="col-md-3 col-sm-6 hero-feature">
+                    <div class="thumbnail">
+                        <img src="http://placehold.it/800x500" alt="">
+                        <div class="caption">
+                            <small>THU, JUN 16 3:00 PM</small>
+                            <h4>FOSSASIA 2017</h4>
+                            <small>Singapore</small>
+                            <hr>
+                            <p>
+                                #tech, #conference
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 hero-feature">
+                    <div class="thumbnail">
+                        <img src="http://placehold.it/800x500" alt="">
+                        <div class="caption">
+                            <small>THU, JUN 16 3:00 PM</small>
+                            <h4>FOSSASIA 2017</h4>
+                            <small>Singapore</small>
+                            <hr>
+                            <p>
+                                #tech, #conference
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 hero-feature">
+                    <div class="thumbnail">
+                        <img src="http://placehold.it/800x500" alt="">
+                        <div class="caption">
+                            <small>THU, JUN 16 3:00 PM</small>
+                            <h4>FOSSASIA 2017</h4>
+                            <small>Singapore</small>
+                            <hr>
+                            <p>
+                                #tech, #conference
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 hero-feature">
+                    <div class="thumbnail">
+                        <img src="http://placehold.it/800x500" alt="">
+                        <div class="caption">
+                            <small>THU, JUN 16 3:00 PM</small>
+                            <h4>FOSSASIA 2017</h4>
+                            <small>Singapore</small>
+                            <hr>
+                            <p>
+                                #tech, #conference
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <h3 class="blue">Call for Speakers</h3>
+            <div class="row text-center">
+
+                <div class="col-md-3 col-sm-6 hero-feature">
+                    <div class="thumbnail">
+                        <img src="http://placehold.it/800x500" alt="">
+                        <div class="caption">
+                            <small>THU, JUN 16 3:00 PM</small>
+                            <h4>FOSSASIA 2017</h4>
+                            <small>Singapore</small>
+                            <hr>
+                            <p>
+                                #tech, #conference
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 hero-feature">
+                    <div class="thumbnail">
+                        <img src="http://placehold.it/800x500" alt="">
+                        <div class="caption">
+                            <small>THU, JUN 16 3:00 PM</small>
+                            <h4>FOSSASIA 2017</h4>
+                            <small>Singapore</small>
+                            <hr>
+                            <p>
+                                #tech, #conference
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 hero-feature">
+                    <div class="thumbnail">
+                        <img src="http://placehold.it/800x500" alt="">
+                        <div class="caption">
+                            <small>THU, JUN 16 3:00 PM</small>
+                            <h4>FOSSASIA 2017</h4>
+                            <small>Singapore</small>
+                            <hr>
+                            <p>
+                                #tech, #conference
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 hero-feature">
+                    <div class="thumbnail">
+                        <img src="http://placehold.it/800x500" alt="">
+                        <div class="caption">
+                            <small>THU, JUN 16 3:00 PM</small>
+                            <h4>FOSSASIA 2017</h4>
+                            <small>Singapore</small>
+                            <hr>
+                            <p>
+                                #tech, #conference
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 
 </div>
 
