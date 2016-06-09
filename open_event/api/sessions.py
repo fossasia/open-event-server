@@ -58,7 +58,7 @@ SESSION = api.model('Session', {
     'slides_url': UriField(),
     'video_url': UriField(),
     'signup_url': UriField(),
-    'audio': fields.String,
+    'audio_url': UriField(),
     'track': fields.Nested(SESSION_TRACK),
     'speakers': fields.List(fields.Nested(SESSION_SPEAKER)),
     'level': fields.Nested(SESSION_LEVEL),

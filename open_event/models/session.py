@@ -126,7 +126,7 @@ class Session(db.Model):
     slides_url = db.Column(db.String)
     video_url = db.Column(db.String)
     signup_url = db.Column(db.String)
-    audio = db.Column(db.String)
+    audio_url = db.Column(db.String)
 
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
     state = db.Column(db.String, default="pending")
@@ -147,7 +147,7 @@ class Session(db.Model):
                  slides_url=None,
                  video_url=None,
                  signup_url=None,
-                 audio=None,
+                 audio_url=None,
                  event_id=None,
                  state="pending"):
         self.title = title
@@ -165,7 +165,7 @@ class Session(db.Model):
         self.slides_url = slides_url
         self.video_url = video_url
         self.signup_url = signup_url
-        self.audio = audio
+        self.audio_url = audio_url
         self.event_id = event_id
         self.state = state
 
