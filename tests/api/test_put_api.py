@@ -44,10 +44,6 @@ class TestPutApi(OpenEventTestCase):
         path = get_path(1) if name == 'event' else get_path(1, name + 's', 1)
         response = self._put(path, data)
         self.assertEqual(401, response.status_code, msg=response.data)
-        # TODO: has some issues with datetime and sqlite
-        # so return in event and session
-        if name in ['event', 'session']:
-            return
         # login and send the request again
         self._login_user()
         response = self._put(path, data)
@@ -73,7 +69,6 @@ class TestPutApi(OpenEventTestCase):
     def test_language_api(self):
         self._test_model('language', POST_LANGUAGE_DATA)
 
-    # TODO: has some issues with datetime and sqlite
     def test_session_api(self):
         self._test_model('session', POST_SESSION_DATA)
 

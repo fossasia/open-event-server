@@ -3,7 +3,7 @@ import json
 
 from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
-from tests.auth_helper import login, register
+from tests.auth_helper import register
 from tests.api.utils import create_event, get_path
 from tests.api.utils_post_data import *
 
@@ -31,11 +31,6 @@ class TestDeleteApi(OpenEventTestCase):
         Tests for 200 status on deletion and for the deleted object.
         Tests that the deleted object no longer exists.
         """
-        # TODO: has some issues with datetime and sqlite
-        # so return in event and session
-        if name in ['event', 'session']:
-            return
-
         self._login_user()
         path = get_path() if name == 'event' else get_path(1, name + 's')
         response = self.app.post(
@@ -75,7 +70,6 @@ class TestDeleteApi(OpenEventTestCase):
     def test_language_api(self):
         self._test_model('language', POST_LANGUAGE_DATA)
 
-    # TODO: has some issues with datetime and sqlite
     def test_session_api(self):
         self._test_model('session', POST_SESSION_DATA)
 
