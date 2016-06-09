@@ -15,6 +15,7 @@ POST_EVENT_DATA = {
     'background_url': "http://imgur.com/image.png",
     'description': "blah blah",
     "start_time": "2016-05-25 12:12:43",
+    "closing_datetime": "2016-05-22 12:12:43"
 }
 
 POST_FORMAT_DATA = {

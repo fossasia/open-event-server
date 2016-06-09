@@ -112,10 +112,12 @@ class DateTimeField(CustomField):
     dt_format = '%Y-%m-%d %H:%M:%S'
 
     def to_str(self, value):
-        return unicode(value.strftime(self.dt_format))
+        return None if not value \
+            else unicode(value.strftime(self.dt_format))
 
     def from_str(self, value):
-        return datetime.strptime(value, self.dt_format)
+        return None if not value \
+            else datetime.strptime(value, self.dt_format)
 
     def format(self, value):
         return self.to_str(value)

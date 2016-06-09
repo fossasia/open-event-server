@@ -6,6 +6,7 @@ from flask.ext.scrypt import check_password_hash
 from flask_jwt import jwt_required, JWTError, current_identity
 
 from open_event.models.event import Event as EventModel
+from open_event.models import db
 from custom_fields import CustomField
 from open_event.models.user import User as UserModel
 from open_event.helpers.data import save_to_db, update_version, delete_from_db
@@ -173,6 +174,22 @@ def delete_service_model(model, event_id, service_id):
     """
     item = get_object_in_event(model, service_id, event_id)
     delete_from_db(item, '{} deleted'.format(model.__name__))
+    return item
+
+
+def update_model(model, item_id, data, event_id=None):
+    """
+    Updates a model
+    """
+    if event_id is not None:
+        item = get_object_in_event(model, item_id, event_id)
+    else:
+        item = get_object_or_404(model, item_id)
+    db.session.query(model).filter_by(id=item_id).update(dict(data))
+    # model.__table__.update().where(model.id==item_id).values(**data)
+    save_to_db(item, "%s updated" % model.__name__)
+    if event_id:
+        update_version(event_id, False, "session_ver")
     return item
 
 
