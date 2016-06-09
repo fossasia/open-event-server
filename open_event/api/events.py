@@ -74,6 +74,7 @@ class Event(Resource):
     @api.expect(EVENT_POST, validate=True)
     def put(self, event_id):
         """Update a event given its id"""
+        validate_payload(self.api.payload, EVENT_POST)
         payload = fix_payload(self.api.payload)
         return update_model(EventModel, event_id, payload)
 

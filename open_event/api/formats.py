@@ -52,6 +52,7 @@ class Format(Resource):
     @api.expect(FORMAT_POST, validate=True)
     def put(self, event_id, format_id):
         """Update a format given its id"""
+        DAO.validate(self.api.payload, FORMAT_POST)
         return DAO.update(event_id, format_id, self.api.payload)
 
 

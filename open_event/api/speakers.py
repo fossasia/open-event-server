@@ -69,6 +69,7 @@ class Speaker(Resource):
     @api.expect(SPEAKER_POST, validate=True)
     def put(self, event_id, speaker_id):
         """Update a speaker given its id"""
+        DAO.validate(self.api.payload, SPEAKER_POST)
         return DAO.update(event_id, speaker_id, self.api.payload)
 
 

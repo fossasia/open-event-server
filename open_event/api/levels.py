@@ -51,6 +51,7 @@ class Level(Resource):
     @api.expect(LEVEL_POST, validate=True)
     def put(self, event_id, level_id):
         """Update a level given its id"""
+        DAO.validate(self.api.payload, LEVEL_POST)
         return DAO.update(event_id, level_id, self.api.payload)
 
 
