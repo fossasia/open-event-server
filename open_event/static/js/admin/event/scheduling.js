@@ -751,9 +751,6 @@ $addMicrolocationForm.submit(function (event) {
         "floor": parseInt($addMicrolocationForm.find("input[name=floor]").val())
     };
     $.ajax({
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("Authorization", "Basic " + btoa(getCookie("username").replace(/['"]+/g, '') + ":" + getCookie("password")));
-        },
         type: "POST",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
