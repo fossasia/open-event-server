@@ -66,6 +66,7 @@ var days = [];
 var sessionsStore = [];
 var microlocationsStore = [];
 var unscheduledStore = [];
+var eventId;
 
 /**
  * jQuery OBJECT REFERENCES
@@ -750,23 +751,17 @@ $addMicrolocationForm.submit(function (event) {
         "longitude": parseFloat($addMicrolocationForm.find("input[name=longitude]").val()),
         "floor": parseInt($addMicrolocationForm.find("input[name=floor]").val())
     };
-    $.ajax({
-        type: "POST",
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        url: $addMicrolocationForm.attr("action"),
-        data: JSON.stringify(payload),
-        success: function (microlocation) {
-            addMicrolocationToTimeline(microlocation);
-            $('#close-add-microlocation').click();
-            $addMicrolocationForm.find("input, textarea").val("");
-            createSnackbar("Microlocation has been created successfully.");
-        },
-        failure: function () {
-            createSnackbar("An error occurred while creating microlocation.", "Try Again", function () {
-                $addMicrolocationForm.trigger("submit");
-            });
-        }
+
+    api.microlocations.post_microlocation_list({event_id: eventId, payload: payload}, function (success) {
+        addMicrolocationToTimeline(success.obj);
+        $addMicrolocationForm.find(".modal").modal("hide");
+        $addMicrolocationForm.find("input, textarea").val("");
+        createSnackbar("Microlocation has been created successfully.");
+    }, function (error) {
+        console.log('failed with the following: ' + error.statusText);
+        createSnackbar("An error occurred while creating microlocation.", "Try Again", function () {
+            $addMicrolocationForm.trigger("submit");
+        });
     });
 });
 
@@ -798,7 +793,7 @@ $(document)
  * Initialize the Scheduler UI on document ready
  */
 $(document).ready(function () {
-    var eventId = $timeline.data("event-id");
+    eventId = parseInt($timeline.data("event-id"));
     generateTimeUnits();
     initializeTimeline(eventId);
 });
