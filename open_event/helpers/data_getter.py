@@ -86,6 +86,10 @@ class DataGetter:
         return Speaker.query.filter_by(event_id=event_id)
 
     @staticmethod
+    def get_speaker_columns():
+        return Speaker.__table__.columns
+
+    @staticmethod
     def get_sponsors(event_id):
         """
         :param event_id: Event id
@@ -234,6 +238,10 @@ class DataGetter:
     def get_session(session_id):
         """Get session by id"""
         return Session.query.get(session_id)
+
+    @staticmethod
+    def get_session_columns():
+        return Session.__table__.columns
 
     @staticmethod
     def get_speaker(speaker_id):

@@ -22,12 +22,16 @@ class EventsView(ModelView):
 
     @expose('/new/', methods=('GET', 'POST'))
     def create_view(self):
+        session_columns = DataGetter.get_session_columns()
+        speaker_columns = DataGetter.get_speaker_columns()
         if request.method == 'POST':
             event = DataManager.create_event(request.form)
             if event:
                 return redirect(url_for('.details_view', event_id=event.id))
             return redirect(url_for('.index_view'))
-        return self.render('/gentelella/admin/event/new/new.html')
+        return self.render('/gentelella/admin/event/new/new.html',
+                           session_columns=session_columns,
+                           speaker_columns=speaker_columns)
 
     @expose('/<int:event_id>/', methods=('GET', 'POST'))
     def details_view(self, event_id):

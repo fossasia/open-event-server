@@ -1,3 +1,74 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/icheck.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/switchery.css') }}" />
 <div id="step-5" class="wizard_content" style="display: block;">
-
+	<div class="col-md-1"></div>
+	<div class="col-md-10">
+		<div class="row session_form col-md-12 col-sm-12 col-xs-12" style="padding-bottom:20px;">
+			<center><h1>Customize Session Form</h1></center>
+			<div class="row">
+				<div class="col-md-6 col-sm-6 col-xs-12">
+					<h2><b>Options</b></h2>
+				</div>
+				<div class="col-md-3 col-sm-3 col-xs-12">
+					<h2><b>Include</b></h2>
+				</div>
+				<div class="col-md-3 col-sm-3 col-xs-12">
+					<h2><b>Require</b></h2>
+				</div>
+			</div>
+			<hr/><hr/>
+		</div>
+		<hr/>
+		<div class="row speaker_form col-md-12 col-sm-12 col-xs-12" style="padding-bottom:20px;">
+			<center><h1>Customize Session Form</h1></center>
+			<div class="row">
+				<div class="col-md-6 col-sm-6 col-xs-12">
+					<h2><b>Options</b></h2>
+				</div>
+				<div class="col-md-3 col-sm-3 col-xs-12">
+					<h2><b>Include</b></h2>
+				</div>
+				<div class="col-md-3 col-sm-3 col-xs-12">
+					<h2><b>Require</b></h2>
+				</div>
+			</div>
+			<hr/><hr/>
+		</div>
+	</div>
 </div>
+<script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/icheck.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/switchery.js') }}"></script>
+<script type="text/javascript">
+show_options({{session_columns | safe}}, '.session_form');
+show_options({{speaker_columns | safe}}, '.speaker_form');
+function show_options(array, div) {
+	for (index in array) {
+		var column = array[index].split(".")[1];
+		if (column.contains("id")) {
+			column = column.split("id")[0].split("_")[0];
+		}
+		if (column.length > 0 && column != "event") {
+			var element = '<div class="row">'+
+							'<div class="col-md-6 col-sm-6 col-xs-12" style="text-transform:capitalize;font-size:1.3em;">' +
+								column +
+							'</div>'+
+							'<div class="col-md-3 col-sm-3 col-xs-12">' +
+								'<div class="">'+
+		                            '<label>'+
+		                              '<input type="checkbox" class="js-switch" id="' + column + '-include" />'+
+		                            '</label>'+
+		                        '</div>'+
+							'</div>'+
+							'<div class="col-md-3 col-sm-3 col-xs-12">' +
+								'<div class="">'+
+		                            '<label>'+
+		                              '<input type="checkbox" class="js-switch" id="' + column + '-require" />'+
+		                            '</label>'+
+		                        '</div>'+
+							'</div>'+
+	                      '</div><hr/>';
+			$(div).append(element);
+		}
+	}
+}
+</script>
