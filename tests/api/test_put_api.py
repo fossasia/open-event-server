@@ -4,21 +4,22 @@ import json
 from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
 from tests.auth_helper import register
-from tests.api.utils import create_event, get_path
+from tests.api.utils import create_event, get_path, create_services
 from tests.api.utils_post_data import *
 
 from open_event import current_app as app
 
 
-class TestPostApi(OpenEventTestCase):
+class TestPutApi(OpenEventTestCase):
     """
-    Test POST APIs against 401 (unauthorized) and
+    Test PUT APIs against 401 (unauthorized) and
     200 (successful) status codes
     """
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
-            create_event()
+            event_id = create_event(name='TestEvent1')
+            create_services(event_id)
 
     def _login_user(self):
         """
@@ -26,29 +27,29 @@ class TestPostApi(OpenEventTestCase):
         """
         register(self.app, 'test@example.com', 'test')
 
+    def _put(self, path, data):
+        return self.app.put(
+            path,
+            data=json.dumps(data),
+            headers={'content-type': 'application/json'}
+        )
+
     def _test_model(self, name, data):
         """
         Tests -
-        1. Without login, try to do a POST request and catch 401 error
-        2. Login and match 200 response code and correct response data
+        1. Without login, try to do a PUT request and catch 401 error
+        2. Login and match 200 response code and make sure that
+            data changed
         """
-        path = get_path() if name == 'event' else get_path(1, name + 's')
-        response = self.app.post(
-            path,
-            data=json.dumps(data),
-            headers={'content-type': 'application/json'}
-        )
+        path = get_path(1) if name == 'event' else get_path(1, name + 's', 1)
+        response = self._put(path, data)
         self.assertEqual(401, response.status_code, msg=response.data)
         # login and send the request again
         self._login_user()
-        response = self.app.post(
-            path,
-            data=json.dumps(data),
-            headers={'content-type': 'application/json'}
-        )
+        response = self._put(path, data)
         self.assertEqual(200, response.status_code, msg=response.data)
-        self.assertIn('Test' + str(name).title(), response.data)
-        return response
+        # surrounded by quotes for strict checking
+        self.assertIn('"Test%s"' % str(name).title(), response.data)
 
     def test_event_api(self):
         self._test_model('event', POST_EVENT_DATA)

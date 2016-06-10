@@ -4,7 +4,7 @@ from open_event.models.track import Track as TrackModel
 from custom_fields import ImageUriField, ColorField
 from .helpers import get_paginated_list, requires_auth
 from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
-    PAGE_PARAMS, POST_RESPONSES
+    PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
 
 api = Namespace('tracks', description='Tracks', path='/')
 
@@ -47,6 +47,21 @@ class Track(Resource):
     def get(self, event_id, track_id):
         """Fetch a track given its id"""
         return DAO.get(event_id, track_id)
+
+    @requires_auth
+    @api.doc('delete_track')
+    @api.marshal_with(TRACK)
+    def delete(self, event_id, track_id):
+        """Delete a track given its id"""
+        return DAO.delete(event_id, track_id)
+
+    @requires_auth
+    @api.doc('update_track', responses=PUT_RESPONSES)
+    @api.marshal_with(TRACK)
+    @api.expect(TRACK_POST, validate=True)
+    def put(self, event_id, track_id):
+        """Update a track given its id"""
+        return DAO.update(event_id, track_id, self.api.payload)
 
 
 @api.route('/events/<int:event_id>/tracks')

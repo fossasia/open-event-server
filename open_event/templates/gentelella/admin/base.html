@@ -19,6 +19,8 @@
 
     {% block head_js %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+        {# Globally included Swagger API Client. See the file for more details. #}
+        <script type="text/javascript" src="{{ url_for('static', filename='js/admin/api.js') }}"></script>
     {% endblock %}
 </head>
 <body class="nav-md">

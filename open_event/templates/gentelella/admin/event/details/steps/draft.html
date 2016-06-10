@@ -4,7 +4,7 @@
             <label class="control-label col-md-3 col-sm-3 col-xs-12">Call For papers closing date<span class="required">*</span>
             </label>
             <div class="col-md-6 col-sm-6 col-xs-12">
-              <input required="required" name="closing_datetime" class="date-picker form-control col-md-7 col-xs-12" value="{{event.closing_datetime}}"/>
+              <input id="closing_datetime" required="required" name="closing_datetime" class="date-picker form-control col-md-7 col-xs-12" value="{{event.closing_datetime}}"/>
             </div>
             <button class="btn btn-success" type="submit">Update</button>
         </form>
@@ -13,3 +13,13 @@
         <a class="col-md-offset-10 btn btn-success " id="go_to_call_for_papers">Go to Call For Papers</a>
     </div>
 </div>
+<script>
+$(document).ready(function() {
+
+    $('#closing_datetime').daterangepicker({
+        singleDatePicker: true,
+        calender_style: "picker_4",
+        startDate: "{{ event.closing_datetime.strftime('%m/%d/%Y %H:%M %p') if event.closing_datetime is not none else event.start_time.strftime('%m/%d/%Y %H:%M %p') }}"
+    });
+});
+</script>

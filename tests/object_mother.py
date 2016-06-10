@@ -19,7 +19,8 @@ class ObjectMother(object):
     def get_track():
         return Track(name="name",
                      event_id=1,
-                     description="description")
+                     description="description",
+                     color="red")
 
     @staticmethod
     def get_session():
@@ -34,7 +35,8 @@ class ObjectMother(object):
     def get_microlocation():
         return Microlocation(name="name",
                              latitude=1.0,
-                             longitude=1.0)
+                             longitude=1.0,
+                             event_id=1)
 
 
     @staticmethod

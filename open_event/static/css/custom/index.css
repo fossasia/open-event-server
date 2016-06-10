@@ -1,0 +1,63 @@
+body{
+    background: white;
+}
+
+.main_container .top_nav {
+    margin-left:0px !important;
+}
+
+#main-image{
+    background-image: url("/static/img/startup-594090_1920.jpg");
+    height: 500px;
+    overflow: hidden;
+    padding:-100px;
+    background-position: 0px -150px;
+}
+
+.index-container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+
+@media (min-width: 768px) {
+  .index-container {
+    width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .index-container {
+    width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .index-container {
+    width: 1170px;
+  }
+}
+
+.img-content{
+    text-align:center;
+    padding-top:60px;
+    color:white;
+}
+
+.img-content h1 {
+    margin-top:220px;
+    font-size: 60px;
+}
+
+.nav_menu{
+    margin-bottom: 0px;
+}
+
+.thumbnail{
+    overflow: none;
+    border: none;
+    height:335px
+}
+ .caption{
+    text-align: left
+ }

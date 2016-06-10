@@ -4,9 +4,9 @@ from open_event.models.sponsor import Sponsor as SponsorModel
 from custom_fields import UriField, ImageUriField
 from .helpers import get_paginated_list, requires_auth
 from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
-    PAGE_PARAMS, POST_RESPONSES
+    PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
 
-api = Namespace('sponsors', description='sponsors', path='/')
+api = Namespace('sponsors', description='Sponsors', path='/')
 
 SPONSOR = api.model('Sponsor', {
     'id': fields.Integer(required=True),
@@ -39,6 +39,21 @@ class Sponsor(Resource):
     def get(self, event_id, sponsor_id):
         """Fetch a sponsor given its id"""
         return DAO.get(event_id, sponsor_id)
+
+    @requires_auth
+    @api.doc('delete_sponsor')
+    @api.marshal_with(SPONSOR)
+    def delete(self, event_id, sponsor_id):
+        """Delete a sponsor given its id"""
+        return DAO.delete(event_id, sponsor_id)
+
+    @requires_auth
+    @api.doc('update_sponsor', responses=PUT_RESPONSES)
+    @api.marshal_with(SPONSOR)
+    @api.expect(SPONSOR_POST, validate=True)
+    def put(self, event_id, sponsor_id):
+        """Update a sponsor given its id"""
+        return DAO.update(event_id, sponsor_id, self.api.payload)
 
 
 @api.route('/events/<int:event_id>/sponsors')

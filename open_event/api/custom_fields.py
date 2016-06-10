@@ -1,6 +1,7 @@
 import re
-from flask.ext.restplus.fields import Raw
 import colour
+from datetime import datetime
+from flask.ext.restplus.fields import Raw
 
 
 EMAIL_REGEX = re.compile(r'\S+@\S+\.\S+')
@@ -96,6 +97,39 @@ class ColorField(CustomField):
         try:
             # using the same colour package used by sqlalchemy and wtforms
             colour.Color(value)
+        except Exception:
+            return False
+        return True
+
+
+class DateTimeField(CustomField):
+    """
+    Custom DateTime field
+    """
+    __schema_type__ = 'string'
+    __schema_format__ = 'date-time'
+    __schema_example__ = '2016-06-06 11:22:33'
+    dt_format = '%Y-%m-%d %H:%M:%S'
+
+    def to_str(self, value):
+        return None if not value \
+            else unicode(value.strftime(self.dt_format))
+
+    def from_str(self, value):
+        return None if not value \
+            else datetime.strptime(value, self.dt_format)
+
+    def format(self, value):
+        return self.to_str(value)
+
+    def validate(self, value):
+        if not value:
+            return self.validate_empty()
+        try:
+            if value.__class__.__name__ in ['unicode', 'str']:
+                self.from_str(value)
+            else:
+                self.to_str(value)
         except Exception:
             return False
         return True

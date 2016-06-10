@@ -3,9 +3,9 @@ from flask.ext.restplus import Resource, Namespace, fields
 from open_event.models.session import Level as LevelModel
 from .helpers import get_paginated_list, requires_auth
 from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
-    PAGE_PARAMS, POST_RESPONSES
+    PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
 
-api = Namespace('levels', description='levels', path='/')
+api = Namespace('levels', description='Levels', path='/')
 
 LEVEL = api.model('Level', {
     'id': fields.Integer(required=True),
@@ -37,6 +37,21 @@ class Level(Resource):
     def get(self, event_id, level_id):
         """Fetch a level given its id"""
         return DAO.get(event_id, level_id)
+
+    @requires_auth
+    @api.doc('delete_level')
+    @api.marshal_with(LEVEL)
+    def delete(self, event_id, level_id):
+        """Delete a level given its id"""
+        return DAO.delete(event_id, level_id)
+
+    @requires_auth
+    @api.doc('update_level', responses=PUT_RESPONSES)
+    @api.marshal_with(LEVEL)
+    @api.expect(LEVEL_POST, validate=True)
+    def put(self, event_id, level_id):
+        """Update a level given its id"""
+        return DAO.update(event_id, level_id, self.api.payload)
 
 
 @api.route('/events/<int:event_id>/levels')

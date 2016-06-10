@@ -5,7 +5,7 @@ This file contains sample POST data
 POST_EVENT_DATA = {
     "color": "red",
     "email": "event@gmail.com",
-    "end_time": "2016-05-30T12:12:43.891Z",
+    "end_time": "2016-05-30 12:12:43",
     "latitude": 0,
     "location_name": "TestEvent",
     "logo": "http://imgur.com/image.png",
@@ -14,7 +14,8 @@ POST_EVENT_DATA = {
     'event_url': "http://site.com",
     'background_url': "http://imgur.com/image.png",
     'description': "blah blah",
-    "start_time": "2016-05-25T12:12:43.891Z",
+    "start_time": "2016-05-25 12:12:43",
+    "closing_datetime": "2016-05-22 12:12:43"
 }
 
 POST_FORMAT_DATA = {
@@ -44,13 +45,13 @@ POST_MICROLOCATION_DATA = {
 POST_SESSION_DATA = {
     "abstract": "TestSession",
     "description": "TestSession",
-    "end_time": "2016-05-30T08:47:37.410Z",
+    "end_time": "2016-05-30 09:47:37",
     "format_id": 1,
     "language_id": 1,
     "level_id": 1,
     "microlocation_id": 1,
-    "speaker_ids": [1],
-    "start_time": "2016-05-25T08:47:37.410Z",
+    "speaker_ids": [],
+    "start_time": "2016-05-30 08:47:37",
     "subtitle": "TestSession",
     "title": "TestSession",
     "track_id": 1
