@@ -20,7 +20,7 @@ class MyHomeView(AdminIndexView):
 
     @expose('/')
     def index(self):
-        return self.render('gentelella/admin/login/admin.html')
+        return self.render('gentelella/index.html')
 
     @expose('/login/', methods=('GET', 'POST'))
     def login_view(self):
