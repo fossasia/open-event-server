@@ -25,11 +25,11 @@ class SessionView(ModelView):
             DataManager.edit_session(request.form, session)
             return redirect(url_for('session.display_view', event_id=event_id))
 
-    @expose('/display/')
+    @expose('/')
     def display_view(self, event_id):
         sessions = DataGetter.get_sessions_by_event_id(event_id)
         return self.render('/gentelella/admin/session/display.html',
-                           sessions=sessions)
+                           sessions=sessions, event_id=event_id)
 
     @expose('/<int:session_id>/accept_session', methods=('GET',))
     def accept_session(self, event_id, session_id):
