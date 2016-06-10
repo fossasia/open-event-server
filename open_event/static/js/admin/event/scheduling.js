@@ -83,6 +83,8 @@ var $unscheduledSessionsHolder = $unscheduledSessionsList;
 var $noSessionsInfoBox = $("#no-sessions-info");
 var $dayButtonsHolder = $("#date-change-btn-holder");
 var $addMicrolocationForm = $('#add-microlocation-form');
+var $editSessionModal = $('#edit-session-modal');
+var $editSessionForm = $("#edit-session-form");
 
 /**
  * TEMPLATE STRINGS
@@ -698,10 +700,10 @@ function loadMicrolocationsToTimeline(day) {
 }
 
 function loadData(eventId, callback) {
-    api.microlocations.get_microlocation_list({ event_id: eventId }, function(microlocationsData) {
-       api.sessions.get_session_list({ event_id: eventId }, function(sessionData) {
-           processMicrolocationSession(microlocationsData.obj, sessionData.obj, callback);
-       })
+    api.microlocations.get_microlocation_list({event_id: eventId}, function (microlocationsData) {
+        api.sessions.get_session_list({event_id: eventId}, function (sessionData) {
+            processMicrolocationSession(microlocationsData.obj, sessionData.obj, callback);
+        })
     });
 }
 
@@ -807,7 +809,38 @@ $(document)
     .on("click", ".session.scheduled > .remove-btn", function () {
         addSessionToUnscheduled($(this).parent());
     })
+    .on("click", ".session.scheduled > .edit-btn", function () {
+        var $sessionElement = $(this).parent();
+        var session = $sessionElement.data("session");
+        $editSessionForm.bindObject(session, time.format);
+        $editSessionModal.modal('show');
+    })
     .on("click", ".clear-overlaps-button", removeOverlaps);
+
+$(".date-picker").daterangepicker({
+    "singleDatePicker": true,
+    "showDropdowns": true,
+    "timePicker": true,
+    "timePicker24Hour": true,
+    "startDate": $editSessionModal.data("start-date"),
+    locale: {
+        format: time.format
+    }
+});
+
+$editSessionForm.submit(function () {
+    var session = $editSessionForm.data("object");
+    session.start_time = moment.utc($editSessionForm.find("input[name=start_time]").val());
+    session.end_time = moment.utc($editSessionForm.find("input[name=end_time]").val());
+    session.title = $editSessionForm.find("input[name=title]").val();
+    session.description = $editSessionForm.find("input[name=description]").text();
+    session.abstract = $editSessionForm.find("input[name=abstract]").val();
+    $(document).trigger({
+        type: "scheduling:change",
+        session: session
+    });
+    $editSessionModal.modal("hide");
+});
 
 /**
  * Initialize the Scheduler UI on document ready
