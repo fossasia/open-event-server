@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/swagger/swagger.css') }}">
+    {% include 'swagger-ui-css.html' %}
+    {% include 'swagger-ui-libs.html' %}
+    <script type="text/javascript">
+        $(function () {
+            window.swaggerUi = new SwaggerUi({
+                url: "{{ specs_url }}",
+                validatorUrl: "{{ config.SWAGGER_VALIDATOR_URL }}" || null,
+                dom_id: "swagger-ui-container",
+                supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
+                onComplete: function(swaggerApi, swaggerUi){
+                    if(typeof initOAuth == "function") {
+                        {% if config.SWAGGER_UI_OAUTH_CLIENT_ID -%}
+                            initOAuth({
+                                clientId: "{{ config.SWAGGER_UI_OAUTH_CLIENT_ID }}",
+                                realm: "{{ config.SWAGGER_UI_OAUTH_REALM }}",
+                                appName: "{{ config.SWAGGER_UI_OAUTH_APP_NAME }}"
+                            });
+                        {%- endif %}
+                    }
+                    $('pre code').each(function(i, e) {
+                        hljs.highlightBlock(e)
+                    });
+                },
+                onFailure: function(data) {
+                    log("Unable to Load SwaggerUI");
+                },
+                jsonEditor: {{ config.SWAGGER_UI_JSONEDITOR | default(False) | string | lower }},
+                docExpansion: "{{ config.SWAGGER_UI_DOC_EXPANSION | default('none') }}"
+            });
+            window.swaggerUi.load();
+        });
+    </script>
+</head>
+
+<body class="swagger-section">
+    <div id="message-bar" class="swagger-ui-wrap">&nbsp;</div>
+    {% include 'swagger/user-info.html' %}
+    <div id="swagger-ui-container" class="swagger-ui-wrap"></div>
+</body>
+</html>
