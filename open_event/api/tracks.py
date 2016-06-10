@@ -61,6 +61,7 @@ class Track(Resource):
     @api.expect(TRACK_POST, validate=True)
     def put(self, event_id, track_id):
         """Update a track given its id"""
+        DAO.validate(self.api.payload, TRACK_POST)
         return DAO.update(event_id, track_id, self.api.payload)
 
 
@@ -78,6 +79,7 @@ class TrackList(Resource):
     @api.expect(TRACK_POST, validate=True)
     def post(self, event_id):
         """Create a track"""
+        DAO.validate(self.api.payload, TRACK_POST)
         return DAO.create(event_id, self.api.payload)
 
 

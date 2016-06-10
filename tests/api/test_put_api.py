@@ -10,15 +10,14 @@ from tests.api.utils_post_data import *
 from open_event import current_app as app
 
 
-class TestPutApi(OpenEventTestCase):
+class TestPutApiBase(OpenEventTestCase):
     """
-    Test PUT APIs against 401 (unauthorized) and
-    200 (successful) status codes
+    Base class for help testing PUT APIs
     """
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
-            event_id = create_event(name='TestEvent1')
+            event_id = create_event(name='TestEvent_1')
             create_services(event_id)
 
     def _login_user(self):
@@ -34,6 +33,12 @@ class TestPutApi(OpenEventTestCase):
             headers={'content-type': 'application/json'}
         )
 
+
+class TestPutApi(TestPutApiBase):
+    """
+    Test PUT APIs against 401 (unauthorized) and
+    200 (successful) status codes
+    """
     def _test_model(self, name, data):
         """
         Tests -
