@@ -698,10 +698,10 @@ function loadMicrolocationsToTimeline(day) {
 }
 
 function loadData(eventId, callback) {
-    $.get("/api/v2/events/" + eventId + "/microlocations", function (microlocations) {
-        $.get("/api/v2/events/" + eventId + "/sessions", function (sessions) {
-            processMicrolocationSession(microlocations, sessions, callback);
-        });
+    api.microlocations.get_microlocation_list({ event_id: eventId }, function(microlocationsData) {
+       api.sessions.get_session_list({ event_id: eventId }, function(sessionData) {
+           processMicrolocationSession(microlocationsData.obj, sessionData.obj, callback);
+       })
     });
 }
 
