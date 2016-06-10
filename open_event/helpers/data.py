@@ -226,6 +226,7 @@ class DataManager(object):
             .update(dict(data))
         speaker.sessions = InstrumentedList(
             form.sessions.data if form.sessions.data else [])
+        speaker.ensure_social_links()
         save_to_db(speaker, "Speaker updated")
         update_version(speaker.event_id, False, "speakers_ver")
 
