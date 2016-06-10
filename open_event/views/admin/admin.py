@@ -9,12 +9,16 @@ from open_event.models.user import User
 from open_event.models.track import Track
 from open_event.models.invite import Invite
 from open_event.models.session import Session
+from open_event.models.speaker import Speaker
+from open_event.models.sponsor import Sponsor
 from open_event.views.admin.models_views.events import EventsView
 from open_event.views.admin.models_views.roles import RoleView
 from open_event.views.admin.models_views.profile import ProfileView
 from open_event.views.admin.models_views.tracks import TracksView
 from open_event.views.admin.models_views.invite import InviteView
 from open_event.views.admin.models_views.session import SessionView
+from open_event.views.admin.models_views.events_speakers import EventsSpeakersView
+from open_event.views.admin.models_views.events_sponsors import EventsSponsorsView
 from open_event.views.admin.home import MyHomeView
 
 
@@ -31,6 +35,8 @@ class AdminView(object):
     def _add_views(self):
         events = EventsView(Event, db.session, name='Events', url='events')
         self.admin.add_view(events)
+        self.admin.add_view(EventsSpeakersView(Speaker, db.session, name='Speaker', url='events/<event_id>/speakers'))
+        self.admin.add_view(EventsSponsorsView(Sponsor, db.session, name='Sponsor', url='events/<event_id>/sponsors'))
         self.admin.add_view(RoleView(Role, db.session, name='Role', url='events/<event_id>/roles'))
         profile = ProfileView(User, db.session, name='Profile', url='profile')
         self.admin.add_view(profile)
