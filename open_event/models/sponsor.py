@@ -8,10 +8,12 @@ class SponsorType(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
 
-    def __init__(self, name=None, sponsor_id=None):
+    def __init__(self, name=None, sponsor_id=None, event_id=None):
         self.name = name
         self.sponsor_id = sponsor_id
+        self.event_id = event_id
 
     def __repr__(self):
         return '<SponsorType %r>' % self.name
@@ -42,11 +44,12 @@ class Sponsor(db.Model):
     sponsor_type = db.relationship('SponsorType')
 
     def __init__(self, name=None, url=None, logo=None, event_id=None,
-                 description=None):
+                 description=None, sponsor_type_id=None):
         self.name = name
         self.url = url
         self.logo = logo
         self.event_id = event_id
+        self.sponsor_type_id = sponsor_type_id
         self.description
 
     def __repr__(self):
