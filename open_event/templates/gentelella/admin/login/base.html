@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Open Event</title>
+
+    <!-- Bootstrap -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap/dist/css/bootstrap.min.css')}}" >
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/font-awesome/css/font-awesome.min.css')}}" >
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://colorlib.com/polygon/gentelella/css/animate.min.css" >
+
+    <!-- Custom Theme Style -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.min.css')}}" >
+  </head>
+
+  <body class="login">
+  <div>
+      <a class="hiddenanchor" id="signup"></a>
+      <a class="hiddenanchor" id="signin"></a>
+      <div class="login_wrapper">
+       {% block login %}
+          {% endblock %}
+
+           {% block register %}
+          {% endblock %}
+
+        {% block password_reminder %}
+          {% endblock %}
+
+      {% block change_password %}
+          {% endblock %}
+      </div>
+  </div>
+</body>
+</html>

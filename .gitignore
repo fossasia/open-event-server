@@ -18,3 +18,4 @@ app.db
 
 # Static files at 'open_event/static/admin/lib'
 lib/
+node_modules

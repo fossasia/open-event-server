@@ -1,0 +1,127 @@
+{% extends 'gentelella/admin/base.html' %}
+{% block head_css %}
+    {{ super() }}
+    <link href="{{ url_for('static', filename='css/admin/scheduling.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='admin/lib/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" />
+{% endblock %}
+
+{% block body %}
+<div class="row">
+<div class="page-title">
+    <div class="title_left">
+        <h3>Event name: {{event.name}}</h3>
+    </div>
+
+</div>
+</div>
+
+<div class="row">
+    {% include '/gentelella/admin/event/details/general_info.html' %}
+    {% include '/gentelella/admin/event/details/roles.html' %}
+</div>
+
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel" style="min-height:600px;">
+            <div class="row">
+                <div class="row x_title">
+                    <div class="col-md-6">
+                        <h3>Event State</h3>
+                    </div>
+
+                </div>
+                <div class="x_content">
+                    <div class="col-md-12 ">
+
+                            <div id="wizard" class="form_wizard wizard_horizontal">
+                                <ul class="wizard_steps anchor">
+                                    <li>
+                                        <a href="#step-1" class="selected" isdone="1" rel="1">
+                                            <span class="step_no">1</span>
+                                    <span class="step_descr">
+                                        Draft <br>
+                                    </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#step-2" class="disabled" isdone="0" rel="2">
+                                            <span class="step_no">2</span>
+                                    <span class="step_descr">
+                                        Call for papers<br>
+                                    </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#step-3" class="disabled" isdone="0" rel="3">
+                                            <span class="step_no">3</span>
+                                    <span class="step_descr">
+                                        Scheduling<br>
+                                    </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#step-4" class="disabled" isdone="0" rel="4">
+                                            <span class="step_no">4</span>
+                                    <span class="step_descr">
+                                        Published<br>
+                                    </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#step-5" class="disabled" isdone="0" rel="5">
+                                            <span class="step_no">5</span>
+                                    <span class="step_descr">
+                                        Completed<br>
+                                    </span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <div class="stepContainer" style="overflow-y: hidden;">
+                                    {% include '/gentelella/admin/event/details/steps/draft.html' %}
+                                    {% include '/gentelella/admin/event/details/steps/call_for_papers.html' %}
+                                    {% include '/gentelella/admin/event/details/steps/scheduling.html' %}
+                                    {% include '/gentelella/admin/event/details/steps/published.html' %}
+                                    {% include '/gentelella/admin/event/details/steps/completed.html' %}
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='admin/lib/interact/dist/interact.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/google-material-color/dist/palette.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/lodash/dist/lodash.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/blob/Blob.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/file-saver/FileSaver.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/html2canvas/build/html2canvas.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/jquery/canvas-to-blob.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery/jquery.ellipsis.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='admin/lib/jQuery-Smart-Wizard/js/jquery.smartWizard.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/details.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/scheduling.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/callForPaper.js') }}"></script>
+
+    <script type="text/javascript">
+        $('.role-table').DataTable();
+    </script>
+
+{% endblock %}
+

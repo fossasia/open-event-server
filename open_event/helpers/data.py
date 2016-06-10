@@ -3,6 +3,8 @@ import logging
 import os.path
 import random
 import traceback
+import json
+from datetime import datetime
 
 from flask import flash, request
 from flask.ext import login
@@ -10,6 +12,7 @@ from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from sqlalchemy.orm.collections import InstrumentedList
 from sqlalchemy.sql.expression import exists
 from werkzeug import secure_filename
+from wtforms import ValidationError
 
 from ..helpers.update_version import VersionUpdater
 from ..models import db
@@ -19,12 +22,34 @@ from ..models.microlocation import Microlocation
 from ..models.session import Session, Level, Format, Language
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
-from ..models.track import Track
 from ..models.user import User
+from ..models.user_detail import UserDetail
+from ..models.role import Role
+from ..models.users_events_roles import UsersEventsRoles
+from ..models.session_type import SessionType
+from ..models.sessions_speakers import SessionsSpeakers
+from ..models.social_link import SocialLink
+from ..models.track import Track
+from open_event.helpers.oauth import OAuth, FbOAuth
+from requests_oauthlib import OAuth2Session
+from ..models.invite import Invite
 
 
 class DataManager(object):
     """Main class responsible for DataBase managing"""
+
+    @staticmethod
+    def add_invite_to_event(user_id, event_id):
+        """
+        Invite will be saved to database with proper Event id and User id
+        :param user_id: Invite belongs to User by user id
+        :param event_id: Invite belongs to Event by event id
+        """
+        new_invite = Invite(user_id=user_id,
+                            event_id=event_id)
+        hash = random.getrandbits(128)
+        new_invite.hash = "%032x" % hash
+        save_to_db(new_invite, "Invite saved")
 
     @staticmethod
     def create_track(form, event_id):
@@ -39,6 +64,19 @@ class DataManager(object):
                           track_image_url=form.track_image_url.data)
         save_to_db(new_track, "Track saved")
         update_version(event_id, False, "tracks_ver")
+
+    @staticmethod
+    def create_new_track(form, event_id):
+        """
+        Track will be saved to database with proper Event id
+        :param form: view data form
+        :param event_id: Track belongs to Event by event id
+        """
+        new_track = Track(name=form['name'],
+                          description=form['description'],
+                          event_id=event_id,
+                          track_image_url=form['track_image_url'])
+        save_to_db(new_track, "Track saved")
 
     @staticmethod
     def update_track(form, track):
@@ -90,6 +128,69 @@ class DataManager(object):
         update_version(event_id, False, "session_ver")
 
     @staticmethod
+    def add_session_to_event(form, event_id):
+        """
+        Session will be saved to database with proper Event id
+        :param form: view data form
+        :param event_id: Session belongs to Event by event id
+        """
+        new_session = Session(title=form["title"],
+                              subtitle="",
+                              description=form["description"],
+                              start_time=form["start_time"],
+                              end_time=form["end_time"],
+                              event_id=event_id,
+                              abstract="",
+                              state="pending")
+
+        save_to_db(new_session, "Session saved")
+        update_version(event_id, False, "session_ver")
+
+        new_speaker = Speaker(name=form["name"],
+                              photo="",
+                              biography=form["biography"],
+                              email=form["email"],
+                              web=form["web"],
+                              event_id=event_id,
+                              twitter="",
+                              facebook="",
+                              github="",
+                              linkedin="",
+                              organisation=form["organisation"],
+                              position="",
+                              country="")
+        save_to_db(new_speaker, "Speaker saved")
+        update_version(event_id, False, "speakers_ver")
+
+        new_session_speaker = SessionsSpeakers(session_id=new_session.id,
+                                            speaker_id=new_speaker.id)
+
+        save_to_db(new_session_speaker, "Session Speaker saved")
+
+    @staticmethod
+    def create_speaker_session_relation(session_id, speaker_id, event_id):
+        """
+        Session, speaker ids will be saved to database
+        :param form: view data form
+        :param event_id: Session, speaker belongs to Event by event id
+        """
+        new_session_speaker = SessionsSpeakers(session_id=session_id,
+                                            speaker_id=speaker_id)
+
+        save_to_db(new_session_speaker, "Session Speaker saved")
+
+    @staticmethod
+    def edit_session(form, session):
+        session.title = form['title']
+        session.subtitle = form['subtitle']
+        session.description = form['description']
+        session.start_time = form['start_time']
+        session.end_time = form['end_time']
+        session.abstract = form['abstract']
+
+        save_to_db(session, 'Session Updated')
+
+    @staticmethod
     def update_session(form, session):
         """
         Session will be updated in database
@@ -138,20 +239,19 @@ class DataManager(object):
         :param form: view data form
         :param event_id: Speaker belongs to Event by event id
         """
-        new_speaker = Speaker(name=form.name.data,
-                              photo=form.photo.data,
-                              biography=form.biography.data,
-                              email=form.email.data,
-                              web=form.web.data,
+        new_speaker = Speaker(name=form["name"],
+                              photo="",
+                              biography=form["biography"],
+                              email=form["email"],
+                              web=form["web"],
                               event_id=event_id,
-                              twitter=form.twitter.data,
-                              facebook=form.facebook.data,
-                              github=form.github.data,
-                              linkedin=form.linkedin.data,
-                              organisation=form.organisation.data,
-                              position=form.position.data,
-                              country=form.country.data)
-        new_speaker.sessions = InstrumentedList(form.sessions.data if form.sessions.data else [])
+                              twitter="",
+                              facebook="",
+                              github="",
+                              linkedin="",
+                              organisation=form["organisation"],
+                              position="",
+                              country="")
         save_to_db(new_speaker, "Speaker saved")
         update_version(event_id, False, "speakers_ver")
 
@@ -217,6 +317,16 @@ class DataManager(object):
         sponsor = Sponsor.query.get(sponsor_id)
         delete_from_db(sponsor, "Sponsor deleted")
         flash('You successfully delete sponsor')
+
+    @staticmethod
+    def remove_role(uer_id):
+        """
+        Role will be removed from database
+        :param uer_id: Role id to remove object
+        """
+        uer = UsersEventsRoles.query.get(uer_id)
+        delete_from_db(uer, "UER deleted")
+        flash('You successfully delete role')
 
     @staticmethod
     def create_level(form, event_id):
@@ -368,31 +478,60 @@ class DataManager(object):
         flash('You successfully delete microlocation')
 
     @staticmethod
-    def create_user(form):
-        user = User()
-        form.populate_obj(user)
+    def create_user(userdata):
+        user = User(email=userdata[0],
+                    password=userdata[1])
+
         # we hash the users password to avoid saving it as plaintext in the db,
         # remove to use plain text:
         salt = generate_random_salt()
-        password = form.password.data
-        user.password = generate_password_hash(password, salt)
+        user.password = generate_password_hash(user.password, salt)
         hash = random.getrandbits(128)
         user.reset_password = str(hash)
 
         user.salt = salt
         user.role = 'speaker'
         save_to_db(user, "User created")
+
         return user
 
     @staticmethod
-    def update_user(form, reset_hash):
+    def create_super_admin(email, password):
+        user = User()
+        user.login = 'super_admin'
+        user.email = email
+        salt = generate_random_salt()
+        password = password
+        user.password = generate_password_hash(password, salt)
+        hash = random.getrandbits(128)
+        user.reset_password = str(hash)
+        user.salt = salt
+        user.role = 'super_admin'
+        save_to_db(user, "User created")
+        return user
+
+    @staticmethod
+    def reset_password(form, reset_hash):
         user = User.query.filter_by(reset_password=reset_hash).first()
         salt = generate_random_salt()
-        password = form.password.data
+        password = form['new_password_again']
         user.password = generate_password_hash(password, salt)
         new_hash = random.getrandbits(128)
         user.reset_password = new_hash
         user.salt = salt
+        save_to_db(user, "password resetted")
+
+    @staticmethod
+    def update_user(form, user_id):
+        print form
+        user = User.query.filter_by(id=user_id).first()
+        user_detail = UserDetail.query.filter_by(user_id=user_id).first()
+        user.login = form['login']
+        user.email = form['email']
+        user_detail.facebook = form['facebook']
+        user_detail.avatar = form['avatar']
+        user_detail.contact = form['contact']
+        user_detail.twitter = form['twitter']
         save_to_db(user, "User updated")
 
     @staticmethod
@@ -406,61 +545,120 @@ class DataManager(object):
         Event will be saved to database with proper Event id
         :param form: view data form
         """
-        event = Event(name=form.name.data,
-                      email=form.email.data,
-                      color=form.color.data,
-                      logo=form.logo.data,
-                      start_time=form.start_time.data,
-                      end_time=form.end_time.data,
-                      latitude=form.latitude.data,
-                      longitude=form.longitude.data,
-                      location_name=form.location_name.data,
-                      slogan=form.slogan.data,
-                      url=form.url.data)
-        a = EventsUsers()
-        a.user = login.current_user
-        a.editor = True
-        a.admin = True
-        event.users.append(a)
-        if form.logo.data:
-            event.logo = form.logo.data
+        event = Event(name=form['name'],
+                      email='dsads',
+                      color='#f5f5f5',
+                      logo=form['logo'],
+                      start_time=datetime.strptime(form['start_time'], '%m/%d/%Y'),
+                      end_time=datetime.strptime(form['end_time'], '%m/%d/%Y'),
+                      latitude=form['latitude'],
+                      longitude=form['longitude'],
+                      location_name=form['location_name'],
+                      description=form['description'],
+                      event_url=form['event_url'],
+                      background_url=form['background_url'])
+
+        if event.start_time <= event.end_time:
+            role = Role(name='ORGANIZER')
+            db.session.add(event)
+            db.session.add(role)
+            db.session.flush()
+            db.session.refresh(event)
+            db.session.refresh(role)
+
+            session_type_names = form.getlist('session_type[name]')
+            session_type_length = form.getlist('session_type[length]')
+
+            social_link_name = form.getlist('social[name]')
+            social_link_link = form.getlist('social[link]')
+
+            track_name = form.getlist('tracks[name]')
+            track_color = form.getlist('tracks[color]')
+
+            room_name = form.getlist('rooms[name]')
+            room_color = form.getlist('rooms[color]')
+
+            for index, name in enumerate(session_type_names):
+                session_type = SessionType(name=name, length=session_type_length[index], event_id=event.id)
+                db.session.add(session_type)
+
+            for index, name in enumerate(social_link_name):
+                social_link = SocialLink(name=name, link=social_link_link[index], event_id=event.id)
+                db.session.add(social_link)
+
+            for index, name in enumerate(track_name):
+                track = Track(name=name, description="", track_image_url="", color=track_color[index],
+                              event_id=event.id)
+                db.session.add(track)
+
+            for index, name in enumerate(room_name):
+                room = Microlocation(name=name, event_id=event.id)
+                db.session.add(room)
+
+            uer = UsersEventsRoles(event_id=event.id, user_id=login.current_user.id, role_id=role.id)
+            if save_to_db(uer, "Event saved"):
+                return event
         else:
-            event.logo = ''
-        save_to_db(event, "Event saved")
-        update_version(event_id=event.id,
-                       is_created=True,
-                       column_to_increment="event_ver")
+            raise ValidationError("start date greater than end date")
 
     @staticmethod
-    def update_event(form, event):
+    def edit_event(form, event_id, event, session_types, tracks, social_links):
         """
         Event will be updated in database
-        :param form: view data form
+        :param data: view data form
         :param event: object contains all earlier data
         """
-        data = form.data
-        logo = data['logo']
-        del data['logo']
-        db.session.query(Event) \
-            .filter_by(id=event.id) \
-            .update(dict(data))
-        if logo:
-            event.logo = logo
-        else:
-            event.logo = ''
-        save_to_db(event, "Event updated")
-        update_version(event_id=event.id,
-                       is_created=False,
-                       column_to_increment="event_ver")
+
+        event.name = form['name']
+        event.logo = form['logo']
+        event.start_time = form['start_time']
+        event.end_time = form['end_time']
+        event.latitude = form['latitude']
+        event.longitude = form['longitude']
+        event.location_name = form['location_name']
+        event.description = form['description']
+        event.event_url = form['event_url']
+        event.background_url = form['background_url']
+
+        session_type_names = form.getlist('session_type[name]')
+        session_type_length = form.getlist('session_type[length]')
+
+        social_link_name = form.getlist('social[name]')
+        social_link_link = form.getlist('social[link]')
+
+        track_name = form.getlist('tracks[name]')
+        track_color = form.getlist('tracks[color]')
+
+        for session_type in session_types:
+            delete_from_db(session_type, 'Session Type Deleted')
+
+        for track in tracks:
+            delete_from_db(track, 'Track')
+
+        for social_link in social_links:
+            delete_from_db(social_link, 'Social Link Deleted')
+
+        for index, name in enumerate(session_type_names):
+            session_type = SessionType(name=name, length=session_type_length[index], event_id=event_id)
+            save_to_db(session_type, 'Session Type saved')
+
+        for index, name in enumerate(social_link_name):
+            social_link = SocialLink(name=name, link=social_link_link[index], event_id=event.id)
+            save_to_db(social_link, 'Social Link Saved')
+
+        for index, name in enumerate(track_name):
+            track = Track(name=name, description="", track_image_url="", color=track_color[index], event_id=event.id)
+            save_to_db(track, 'Track Saved')
+
+        return event
 
     @staticmethod
     def delete_event(e_id):
         EventsUsers.query.filter_by(event_id=e_id).delete()
-        Sponsor.query.filter_by(id=e_id).delete()
-        Speaker.query.filter_by(id=e_id).delete()
-        Microlocation.query.filter_by(id=e_id).delete()
+        UsersEventsRoles.query.filter_by(event_id=e_id).delete()
+        SessionType.query.filter_by(event_id=e_id).delete()
+        SocialLink.query.filter_by(event_id=e_id).delete()
         Track.query.filter_by(id=e_id).delete()
-        Session.query.filter_by(id=e_id).delete()
         Event.query.filter_by(id=e_id).delete()
         db.session.commit()
 
@@ -472,10 +670,10 @@ class DataManager(object):
         file = request.files["file"]
         filename = secure_filename(file.filename)
         if not db.session.query(exists() \
-                 .where(File.name == filename)).scalar():
+                                    .where(File.name == filename)).scalar():
             if file.mimetype.split('/', 1)[0] == "image":
                 file.save(os.path.join(os.path.realpath('.')
-                          + '/static/', filename))
+                                       + '/static/', filename))
                 file_object = File(
                     name=filename,
                     path='',
@@ -499,6 +697,25 @@ class DataManager(object):
         delete_from_db(file, "File removed")
         flash("File removed")
 
+    @staticmethod
+    def add_role_to_event(form, event_id):
+        role = Role(name=form['user_role'])
+        db.session.add(role)
+        db.session.flush()
+        db.session.refresh(role)
+        uer = UsersEventsRoles(event_id=event_id, user_id=form['user_id'], role_id=role.id)
+        save_to_db(uer, "Event saved")
+
+    @staticmethod
+    def update_user_event_role(form, uer):
+        role = Role(name=form['user_role'])
+        db.session.add(role)
+        db.session.flush()
+        db.session.refresh(role)
+        uer.user = User.query.get(int(form['user_id']))
+        uer.role_id = role.id
+        save_to_db(uer, "Event saved")
+
 
 def save_to_db(item, msg):
     """Convenience function to wrap a proper DB save
@@ -512,6 +729,7 @@ def save_to_db(item, msg):
         db.session.commit()
         return True
     except Exception, e:
+        print e
         logging.error('DB Exception! %s' % e)
         traceback.print_exc()
         db.session.rollback()
@@ -530,9 +748,45 @@ def delete_from_db(item, msg):
         db.session.commit()
         return True
     except Exception, e:
+        print e
         logging.error('DB Exception! %s' % e)
         db.session.rollback()
         return False
+
+
+def get_google_auth(state=None, token=None):
+    if token:
+        return OAuth2Session(OAuth.get_client_id(), token=token)
+    if state:
+        return OAuth2Session(OAuth.get_client_id(), state=state, scope=OAuth.SCOPE,
+                             redirect_uri=OAuth.get_redirect_uri())
+    oauth = OAuth2Session(OAuth.get_client_id(), scope=OAuth.SCOPE, redirect_uri=OAuth.get_redirect_uri())
+    return oauth
+
+
+def get_facebook_auth(state=None, token=None):
+    if token:
+        return OAuth2Session(FbOAuth.get_client_id(), token=token)
+    if state:
+        return OAuth2Session(FbOAuth.get_client_id(), state=state, scope=FbOAuth.SCOPE,
+                             redirect_uri=FbOAuth.get_redirect_uri())
+    oauth = OAuth2Session(FbOAuth.get_client_id(), scope=FbOAuth.SCOPE, redirect_uri=FbOAuth.get_redirect_uri())
+    return oauth
+
+
+def create_user_oauth(user, user_data, token, method):
+    if user is None:
+        user = User()
+        user.email = user_data['email']
+    user.role = 'speaker'
+    if method == 'Google':
+        user.avatar = user_data['picture']
+    if method == 'Facebook':
+        user.avatar = user_data['picture']['data']['url']
+    user.tokens = json.dumps(token)
+    save_to_db(user, "User created")
+
+    return user
 
 
 def update_version(event_id, is_created, column_to_increment):

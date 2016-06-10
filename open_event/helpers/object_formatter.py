@@ -21,6 +21,8 @@ class ObjectFormatter(object):
                     for table_object in
                     objects]})
         else:
+            if count <= ((page-1) * PER_PAGE):  # no results possible
+                return jsonify({})
             pagination = objects.paginate(page, PER_PAGE)
             return jsonify({
                 name: [

@@ -1,0 +1,50 @@
+{% macro render_menu(test='') %}
+<div class="top_nav">
+    <div class="nav_menu">
+        <nav class="" role="navigation">
+            <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                    <a href="/browse" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                       aria-expanded="false">
+                        Browse Events
+                        <span class=" fa fa-angle-down"></span>
+                    </a>
+                </li>
+                {% if current_user.is_authenticated %}
+
+                <li class="">
+                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                       aria-expanded="false">
+                        <img src="{{ url_for('static', filename='img/avatar.png') }}"/>
+                        {{current_user.login}}
+                        <span class=" fa fa-angle-down"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-usermenu pull-right">
+                        <li><a href="/admin/profile"> Profile</a>
+                        </li>
+
+                        <li><a href="/admin/logout/"><i class="fa fa-sign-out pull-right"></i> Logout</a>
+                        </li>
+                    </ul>
+                </li>
+
+                {% else %}
+
+                <li class="">
+                    <a href="/admin/login" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                       aria-expanded="false">
+                        Login
+                        <span class=" fa fa-angle-down"></span>
+                    </a>
+                </li>
+
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+
+</div>
+{% endmacro %}
