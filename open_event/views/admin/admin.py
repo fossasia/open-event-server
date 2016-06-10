@@ -37,13 +37,14 @@ class AdminView(object):
         self.admin.add_view(events)
         self.admin.add_view(EventsSpeakersView(Speaker, db.session, name='Speaker', url='events/<event_id>/speakers'))
         self.admin.add_view(EventsSponsorsView(Sponsor, db.session, name='Sponsor', url='events/<event_id>/sponsors'))
+        self.admin.add_view(SessionView(Session, db.session, name='Sessions', url='events/<event_id>/sessions'))
         self.admin.add_view(RoleView(Role, db.session, name='Role', url='events/<event_id>/roles'))
         profile = ProfileView(User, db.session, name='Profile', url='profile')
         self.admin.add_view(profile)
         track = TracksView(Track, db.session, name='Track', url='events/<event_id>/tracks')
         self.admin.add_view(track)
         self.admin.add_view(InviteView(Invite, db.session, name='Invite', url='events/<event_id>/invite'))
-        self.admin.add_view(SessionView(Session, db.session, name='Session', url='events/<event_id>/session'))
+
 
     @staticmethod
     def init_login(app):
