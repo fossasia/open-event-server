@@ -8,6 +8,18 @@
 {% endblock %}
 
 {% block body %}
+<div class="" role="tabpanel">
+  <ul id="myTab" class="nav nav-tabs " role="tablist">
+    <li role="presentation" class="active"><a href="">Home</a>
+    </li>
+    <li role="presentation" class=""><a href="/admin/events/{{event.id}}/session/" >Sessions</a>
+    </li>
+    <li role="presentation" class=""><a href="/admin/events/{{event.id}}/speakers/">Speaker</a>
+    </li>
+    <li role="presentation" class=""><a href="/admin/events/{{event.id}}/sponsors/">Sponsors</a>
+    </li>
+  </ul>
+</div>
 <div class="row">
 <div class="page-title">
     <div class="title_left">
@@ -22,7 +34,7 @@
     {% include '/gentelella/admin/event/details/roles.html' %}
 </div>
 
-
+<!--
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel" style="min-height:600px;">
@@ -94,6 +106,7 @@
         </div>
     </div>
 </div>
+-->
 
 {% endblock %}
 
