@@ -156,6 +156,7 @@ class Session(Resource):
     @api.expect(SESSION_POST, validate=True)
     def put(self, event_id, session_id):
         """Update a session given its id"""
+        DAO.validate(self.api.payload, SESSION_POST)
         return DAO.update(event_id, session_id, self.api.payload)
 
 
@@ -173,6 +174,7 @@ class SessionList(Resource):
     @api.expect(SESSION_POST, validate=True)
     def post(self, event_id):
         """Create a session"""
+        DAO.validate(self.api.payload, SESSION_POST)
         payload = DAO.fix_payload_post(event_id, self.api.payload)
         return DAO.create(event_id, payload)
 

@@ -3,17 +3,15 @@ import json
 
 from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
-from tests.auth_helper import register
 from tests.api.utils import create_event, get_path
 from tests.api.utils_post_data import *
-
+from tests.auth_helper import register
 from open_event import current_app as app
 
-
-class TestPostApi(OpenEventTestCase):
+class TestPostApiBase(OpenEventTestCase):
     """
-    Test POST APIs against 401 (unauthorized) and
-    200 (successful) status codes
+    Base class to test POST APIs
+    Includes some helper methods which are required by POST API testcases
     """
     def setUp(self):
         self.app = Setup.create_app()
@@ -24,8 +22,25 @@ class TestPostApi(OpenEventTestCase):
         """
         Registers an email and logs in.
         """
-        register(self.app, 'test@example.com', 'test')
+        with app.test_request_context():
+            register(self.app, u'test@example.com', u'test')
 
+    def post_request(self, path, data):
+        """
+        send a post request to a url
+        """
+        return self.app.post(
+            path,
+            data=json.dumps(data),
+            headers={'content-type': 'application/json'}
+        )
+
+
+class TestPostApi(TestPostApiBase):
+    """
+    Test POST APIs against 401 (unauthorized) and
+    200 (successful) status codes
+    """
     def _test_model(self, name, data):
         """
         Tests -
@@ -33,19 +48,11 @@ class TestPostApi(OpenEventTestCase):
         2. Login and match 200 response code and correct response data
         """
         path = get_path() if name == 'event' else get_path(1, name + 's')
-        response = self.app.post(
-            path,
-            data=json.dumps(data),
-            headers={'content-type': 'application/json'}
-        )
+        response = self.post_request(path, data)
         self.assertEqual(401, response.status_code, msg=response.data)
         # login and send the request again
         self._login_user()
-        response = self.app.post(
-            path,
-            data=json.dumps(data),
-            headers={'content-type': 'application/json'}
-        )
+        response = self.post_request(path, data)
         self.assertEqual(200, response.status_code, msg=response.data)
         self.assertIn('Test' + str(name).title(), response.data)
         return response

@@ -3,29 +3,27 @@ import json
 
 from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
-from tests.auth_helper import register
 from tests.api.utils import create_event, get_path, create_services
 from tests.api.utils_post_data import *
-
+from tests.auth_helper import register
 from open_event import current_app as app
 
-
-class TestPutApi(OpenEventTestCase):
+class TestPutApiBase(OpenEventTestCase):
     """
-    Test PUT APIs against 401 (unauthorized) and
-    200 (successful) status codes
+    Base class for help testing PUT APIs
     """
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
-            event_id = create_event(name='TestEvent1')
+            event_id = create_event(name='TestEvent_1')
             create_services(event_id)
 
     def _login_user(self):
         """
         Registers an email and logs in.
         """
-        register(self.app, 'test@example.com', 'test')
+        with app.test_request_context():
+            register(self.app, u'test@example.com', u'test')
 
     def _put(self, path, data):
         return self.app.put(
@@ -34,6 +32,12 @@ class TestPutApi(OpenEventTestCase):
             headers={'content-type': 'application/json'}
         )
 
+
+class TestPutApi(TestPutApiBase):
+    """
+    Test PUT APIs against 401 (unauthorized) and
+    200 (successful) status codes
+    """
     def _test_model(self, name, data):
         """
         Tests -

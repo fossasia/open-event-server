@@ -2,6 +2,7 @@
 import re
 import requests
 from flask import request
+from itsdangerous import Serializer
 from flask.ext import login
 from ..models.track import Track
 
@@ -31,6 +32,7 @@ HEADERS = {
                       "VwmIvKlPoc1YVpKCSOwhEFWZvxFT8")
 }
 
+
 def send_email_invitation(email, event_name, link):
     """Send email after account create"""
     payload = {'to': email,
@@ -43,6 +45,7 @@ def send_email_invitation(email, event_name, link):
                   data=payload,
                   headers=HEADERS)
 
+
 def send_email_after_account_create(form):
     """Send email after account create"""
     payload = {'to': form['email'],
@@ -50,6 +53,18 @@ def send_email_after_account_create(form):
                'subject': "Account Created on Open Event",
                "html": ("Your Account Has Been Created! Congratulations!" \
                         "<br/> Your login: ") + form['email']}
+    requests.post("https://api.sendgrid.com/api/mail.send.json",
+                  data=payload,
+                  headers=HEADERS)
+
+
+def send_email_confirmation(form, link):
+    payload = {'to': form['email'],
+               'from': 'open-event@googlegroups.com',
+               'subject': "Email Confirmation to Create Account for Open-Event ",
+               "html": ("Hi %s<br/>" % str(form['email']) + \
+                        "<br/> Please visit this link to confirm your email: %s" % link)}
+
     requests.post("https://api.sendgrid.com/api/mail.send.json",
                   data=payload,
                   headers=HEADERS)
@@ -82,3 +97,6 @@ def is_event_admin(event_id, users):
                         return is_admin
     return is_admin
 
+
+def get_serializer(secret_key=None):
+    return Serializer('secret_key')
