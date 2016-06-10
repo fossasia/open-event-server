@@ -30,6 +30,22 @@ jQuery.fn.extend({
             }
             elem.find("div:nth-child(" + (index) + ")").after($element);
         });
+    },
+
+    bindObject: function(object, timeParseFormat) {
+        return this.each(function () {
+            var $elem = $(this);
+            $elem.data("object", object);
+            _.forOwn(object, function(value, key) {
+
+                if(value.hasOwnProperty("_isAMomentObject") && value._isAMomentObject) {
+                    value = value.format(timeParseFormat ? timeParseFormat : "YYYY-MM-DD HH:mm:ss");
+                }
+
+                $elem.find('input[name="'+key+'"]').val(value);
+                $elem.find('textarea[name="'+key+'"]').text(value);
+            });
+        });
     }
 
 });
