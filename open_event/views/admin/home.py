@@ -21,7 +21,7 @@ def intended_url():
 class MyHomeView(AdminIndexView):
     @expose('/')
     def index(self):
-        return self.render('gentelella/index.html')
+        return self.render('gentelella/admin/index.html')
 
     @expose('/login/', methods=('GET', 'POST'))
     def login_view(self):
