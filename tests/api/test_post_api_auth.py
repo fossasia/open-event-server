@@ -4,10 +4,9 @@ import base64
 
 from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
-from tests.auth_helper import register
 from tests.api.utils import create_event, get_path, create_sponsor_type
 from tests.api.utils_post_data import *
-
+from tests.auth_helper import register
 from open_event import current_app as app
 
 
@@ -17,10 +16,14 @@ class TestPostApiBasicAuth(OpenEventTestCase):
     """
     def setUp(self):
         self.app = Setup.create_app()
-        register(self.app, 'myemail@gmail.com', 'test')
         with app.test_request_context():
+<<<<<<< HEAD
             event_id = create_event()
             create_sponsor_type(event_id)
+=======
+            register(self.app, u'myemail@gmail.com', u'test')
+            create_event()
+>>>>>>> upstream/development
 
     def _test_model(self, name, data):
         path = get_path() if name == 'event' else get_path(1, name + 's')
