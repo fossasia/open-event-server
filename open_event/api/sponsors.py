@@ -53,6 +53,7 @@ class Sponsor(Resource):
     @api.expect(SPONSOR_POST, validate=True)
     def put(self, event_id, sponsor_id):
         """Update a sponsor given its id"""
+        DAO.validate(self.api.payload, SPONSOR_POST)
         return DAO.update(event_id, sponsor_id, self.api.payload)
 
 
@@ -70,6 +71,7 @@ class SponsorList(Resource):
     @api.expect(SPONSOR_POST, validate=True)
     def post(self, event_id):
         """Create a sponsor"""
+        DAO.validate(self.api.payload, SPONSOR_POST)
         return DAO.create(event_id, self.api.payload)
 
 

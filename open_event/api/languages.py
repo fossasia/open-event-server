@@ -52,6 +52,7 @@ class Language(Resource):
     @api.expect(LANGUAGE_POST, validate=True)
     def put(self, event_id, language_id):
         """Update a language given its id"""
+        DAO.validate(self.api.payload, LANGUAGE_POST)
         return DAO.update(event_id, language_id, self.api.payload)
 
 
@@ -69,6 +70,7 @@ class LanguageList(Resource):
     @api.expect(LANGUAGE_POST, validate=True)
     def post(self, event_id):
         """Create a language"""
+        DAO.validate(self.api.payload, LANGUAGE_POST)
         return DAO.create(event_id, self.api.payload)
 
 

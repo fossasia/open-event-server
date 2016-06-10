@@ -54,6 +54,7 @@ class Microlocation(Resource):
     @api.expect(MICROLOCATION_POST, validate=True)
     def put(self, event_id, microlocation_id):
         """Update a microlocation given its id"""
+        DAO.validate(self.api.payload, MICROLOCATION_POST)
         return DAO.update(event_id, microlocation_id, self.api.payload)
 
 
@@ -71,6 +72,7 @@ class MicrolocationList(Resource):
     @api.expect(MICROLOCATION_POST, validate=True)
     def post(self, event_id):
         """Create a microlocation"""
+        DAO.validate(self.api.payload, MICROLOCATION_POST)
         return DAO.create(event_id, self.api.payload)
 
 

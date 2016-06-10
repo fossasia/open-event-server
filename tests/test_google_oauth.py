@@ -19,6 +19,7 @@ class TestGoogleOauth(OpenEventTestCase):
             register(self.app, 'email@gmail.com', 'test')
             login(self.app, 'email@gmail.com', 'test')
             self.assertTrue('Create New Event' in self.app.get('/gCallback/?state=dummy_state&code=dummy_code',
+
                                                                follow_redirects=True).data)
             self.assertEqual(self.app.get('/gCallback/?state=dummy_state&code=dummy_code').status_code, 302)
 
