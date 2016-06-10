@@ -3,12 +3,10 @@ import json
 
 from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
-from tests.auth_helper import register
 from tests.api.utils import create_event, get_path
 from tests.api.utils_post_data import *
-
+from tests.auth_helper import register
 from open_event import current_app as app
-
 
 class TestPostApiBase(OpenEventTestCase):
     """
@@ -24,7 +22,8 @@ class TestPostApiBase(OpenEventTestCase):
         """
         Registers an email and logs in.
         """
-        register(self.app, 'test@example.com', 'test')
+        with app.test_request_context():
+            register(self.app, u'test@example.com', u'test')
 
     def post_request(self, path, data):
         """
