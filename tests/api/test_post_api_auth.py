@@ -17,13 +17,9 @@ class TestPostApiBasicAuth(OpenEventTestCase):
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
-<<<<<<< HEAD
+            register(self.app, u'myemail@gmail.com', u'test')
             event_id = create_event()
             create_sponsor_type(event_id)
-=======
-            register(self.app, u'myemail@gmail.com', u'test')
-            create_event()
->>>>>>> upstream/development
 
     def _test_model(self, name, data):
         path = get_path() if name == 'event' else get_path(1, name + 's')
