@@ -17,7 +17,7 @@ class TestLogin(OpenEventTestCase):
         register(self.app, 'email@gmail.com', 'test')
         logout(self.app)
         rv = login(self.app, 'email@gmail.com', 'test')
-        self.assertTrue("Create New Event" in rv.data)
+        self.assertTrue("Create event" in rv.data)
 
     def test_incorrect_login(self):
         register(self.app, 'email@gmail.com', 'test')
@@ -27,7 +27,7 @@ class TestLogin(OpenEventTestCase):
 
     def test_registration(self):
         rv = register(self.app, 'email@gmail.com', 'test')
-        self.assertTrue("Create New Event" in rv.data)
+        self.assertTrue("Create event" in rv.data)
 
     def test_logout(self):
         login(self.app, 'email@gmail.com', 'test')

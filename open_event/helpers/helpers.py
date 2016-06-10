@@ -61,7 +61,7 @@ def send_email_after_account_create(form):
 def send_email_confirmation(form, link):
     payload = {'to': form['email'],
                'from': 'open-event@googlegroups.com',
-               'subject': "Email Confiramtion to Create Account for Open-Event ",
+               'subject': "Email Confirmation to Create Account for Open-Event ",
                "html": ("Hi %s<br/>" % str(form['email']) + \
                         "<br/> Please visit this link to confirm your email: %s" % link)}
 

@@ -452,6 +452,8 @@ def callback():
         google = get_google_auth(state=state)
         if 'code' in request.url:
             code_url = (((request.url.split('&'))[1]).split('='))[1]
+            print 'HELOOOOOOOOOOOOOO'
+            print(code_url)
             new_code = (code_url.split('%2F'))[0] + '/' + (code_url.split('%2F'))[1]
         try:
             token = google.fetch_token(OAuth.get_token_uri(), authorization_url=request.url,

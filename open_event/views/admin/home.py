@@ -1,6 +1,5 @@
 """Copyright 2015 Rafal Kowalski"""
 import logging
-import unicodedata
 
 from flask import url_for, redirect, request, session
 from flask.ext import login

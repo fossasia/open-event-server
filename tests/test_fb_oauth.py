@@ -25,9 +25,9 @@ class TestFacebookOauth(OpenEventTestCase):
         with app.test_request_context():
             register(self.app, 'email@gmail.com', 'test')
             login(self.app, 'email@gmail.com', 'test')
-            self.assertTrue('Create New Event' in self.app.get('/fCallback/?code=dummy_code&state=dummy_state)',
+            self.assertTrue('Create New Event' in self.app.get('/fCallback/?code=dummy_code&state=dummy_state',
                                                                follow_redirects=True).data)
-            self.assertEqual(self.app.get('/fCallback/?code=dummy_code&state=dummy_state)').status_code, 302)
+            self.assertEqual(self.app.get('/fCallback/?code=dummy_code&state=dummy_state').status_code, 302)
 
     def test_error_return(self):
         """This tests the various errors returned by callback function"""
