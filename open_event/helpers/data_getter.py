@@ -225,7 +225,7 @@ class DataGetter:
         return events
 
     @staticmethod
-    def get_published_events():
+    def get_all_published_events():
         events = Event.query.filter(Event.state == 'Published')
         return events
 
