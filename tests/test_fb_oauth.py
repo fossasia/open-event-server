@@ -33,11 +33,7 @@ class TestFacebookOauth(OpenEventTestCase):
             self.app.get(url_for('admin.create_account_after_confirmation_view', hash=data_hash), follow_redirects=True)
             logout(self.app)
             login(self.app, 'email@gmail.com', 'test')
-<<<<<<< HEAD
-            self.assertTrue('Create event' in self.app.get('/fCallback/?code=dummy_code&state=dummy_state',
-=======
             self.assertTrue('Create New Event' in self.app.get('/fCallback/?code=dummy_code&state=dummy_state',
->>>>>>> f37b510e51689cf5d1394981ddf6edf962b42219
                                                                follow_redirects=True).data)
             self.assertEqual(self.app.get('/fCallback/?code=dummy_code&state=dummy_state').status_code, 302)
 
