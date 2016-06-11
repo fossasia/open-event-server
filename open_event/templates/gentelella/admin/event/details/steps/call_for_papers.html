@@ -8,11 +8,12 @@
         <a href="{{ url_for('session.display_view', event_id=event.id) }}"><button class="btn btn-warning ">Accept/Reject Session</button></a>
     </div>
     <div class="row">
-        <div class="col-md-offset-10">
-            <a class=" btn btn-danger" id="back_to_draft">Back to Draft</a>
-            <a class=" btn btn-success " id="start_scheduling">Start Scheduling</a>
+        <div class="col-md-12">
+            <div class="btn-group pull-right" role="group">
+                <a class="btn btn-danger previous-step">Back to Draft</a>
+                <a class="btn btn-success next-step">Start Scheduling</a>
+            </div>
         </div>
-
     </div>
 
 </div>
