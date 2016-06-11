@@ -1,46 +1,29 @@
-<div id="step-2" class="wizard_content" style="display: block;">
-    <div class="col-md-10">
-        <div class="item form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Name <span class="required">*</span>
-            </label>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-              <input required="required" name="sponsors[name]" class="form-control col-md-7 col-xs-12"/>
-            </div>
-        </div>
-        <div class="item form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Logo <span class="required">*</span>
-            </label>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-              <input required="required" name="sponsors[logo]" class="form-control col-md-7 col-xs-12"/>
-            </div>
-        </div>
-        <div class="item form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Description
-            </label>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-              <textarea name="sponsors[description]" class="form-control col-md-7 col-xs-12"></textarea>
-            </div>
-        </div>
-        <div class="item form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Level
-            </label>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-              <input required="required" name="sponsors[level]" class="form-control col-md-7 col-xs-12"/>
-            </div>
-        </div>
-        <div class="item form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Type
-            </label>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-              <input required="required" name="sponsors[type]" class="form-control col-md-7 col-xs-12" value="Gold"/>
-            </div>
-        </div>
-        <div class="item form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">url
-            </label>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-              <input required="required" name="sponsors[url]" class="form-control col-md-7 col-xs-12"/>
-            </div>
-        </div>
-    </div>
+<div id="step-2" class="wizard_content" style="display: block;min-height:500px">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Sl.</th>
+                <th>Name</th>
+                <th>Logo</th>
+                <th>Description</th>
+                <th>Level</th>
+                <th>Type</th>
+                <th>URL</th>
+            </tr>
+        </thead>
+        <tbody class="sponsors">
+            <tr class="row-sponsor">
+                <td>1</td>
+                <td><input required="required" name="sponsors[name]" class="form-control col-md-7 col-xs-12"/></td>
+                <td><input required="required" name="sponsors[logo]" class="form-control col-md-7 col-xs-12"/></td>
+                <td><textarea name="sponsors[description]" class="form-control col-md-7 col-xs-12"></textarea></td>
+                <td><input required="required" name="sponsors[level]" class="form-control col-md-7 col-xs-12"/></td>
+                <td><input required="required" name="sponsors[type]" class="form-control col-md-7 col-xs-12" value="Gold"/></td>
+                <td><input required="required" name="sponsors[url]" class="form-control col-md-7 col-xs-12"/></td>
+            </tr>
+        </tbody>
+    </table>
+    <span class='input-group-btn'>
+        <button type='button' class='btn btn-success add-sponsor'>Add Another Sponsor</button>
+    </span>
 </div>
