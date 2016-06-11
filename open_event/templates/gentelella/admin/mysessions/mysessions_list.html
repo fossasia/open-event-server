@@ -1,0 +1,91 @@
+{% extends 'gentelella/admin/base.html' %}
+
+{% block title %}
+    My Sessions
+{% endblock %}
+
+{% block head_css %}
+    {{ super() }}
+    <link href="{{ url_for('static', filename='css/admin/mysessions.css') }}" rel="stylesheet">
+{% endblock %}
+
+
+{% macro session_element(session) -%}
+    <div class="session row" onclick="window.location.href='{{ url_for('mysessionview.display_session_view',session_id=session.id) }}'">
+        <div class="col col-xs-2" style="line-height:155px;">
+            {% if session.event.logo %}
+                <img src="{{ session.event.logo }}" style="width: 100%;">
+            {% else %}
+                <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=Event+Logo&w=300&h=200" style="width: 100%;">
+            {% endif %}
+        </div>
+        <div class="col col-xs-8" style="position: relative;">
+            <h3 class="title">{{ session.title }}</h3>
+            <span class="time">
+                {% if session.start_time %}
+                    {{ session.event.start_time.strftime('%B %d, %Y - %I:%M %p') }}
+                {% else %}
+                    {{ session.event.start_time.strftime('%B %d, %Y - %I:%M %p') }}
+                {% endif %}
+            </span><br><br>
+            <span class="event-name">{{ session.event.name }}</span>
+        </div>
+        <div class="col col-xs-2">
+            {% if session.state == 'pending' %}
+                <span class="status label label-warning pull-right">Under Review</span>
+            {% elif session.state == 'accepted' %}
+                <span class="status label label-success pull-right">Accepted</span>
+            {% elif session.state == 'rejected' %}
+                <span class="status label label-danger pull-right">Rejected</span>
+            {% else %}
+                <span class="status label label-info pull-right">N/A</span>
+            {% endif %}
+
+        </div>
+    </div>
+{%- endmacro %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="x_panel" style="min-height:600px;">
+                <div class="x_title">
+                    <h2>My Session Proposals</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <ul class="nav nav-tabs bar_tabs" style="background-color: white;">
+                        <li role="presentation" class="active">
+                            <a href="#upcoming-events-tab" role="tab" data-toggle="tab" aria-expanded="true">Upcoming
+                                Events</a>
+                        </li>
+                        <li role="presentation" class="">
+                            <a href="#past-events-tab" role="tab" data-toggle="tab" aria-expanded="false">Past
+                                Events</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade active in" id="upcoming-events-tab">
+                            {% for session in upcoming_events_sessions %}
+                                {{ session_element(session) }}
+                            {% else %}
+                                <span class="message">No session proposals for upcoming events found</span>
+                            {% endfor %}
+                        </div>
+                        <div class="tab-pane fade" id="past-events-tab">
+                            {% for session in past_events_sessions %}
+                                {{ session_element(session) }}
+                            {% else %}
+                                <span class="message">No session proposals for past events found</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+{% endblock %}
+

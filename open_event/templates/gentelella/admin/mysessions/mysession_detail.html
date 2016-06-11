@@ -1,0 +1,19 @@
+{% extends 'gentelella/admin/base.html' %}
+{% block head_css %}
+    {{ super() }}
+    <link href="{{ url_for('static', filename='css/admin/mysessions.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="x_panel" style="min-height:600px;">
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+{% endblock %}
+

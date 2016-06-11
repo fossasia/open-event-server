@@ -12,6 +12,7 @@ from open_event.models.session import Session
 from open_event.models.speaker import Speaker
 from open_event.models.sponsor import Sponsor
 from open_event.views.admin.models_views.events import EventsView
+from open_event.views.admin.models_views.my_sessions import MySessionView
 from open_event.views.admin.models_views.roles import RoleView
 from open_event.views.admin.models_views.profile import ProfileView
 from open_event.views.admin.models_views.scheduler import SchedulerView
@@ -35,6 +36,7 @@ class AdminView(object):
 
     def _add_views(self):
         self.admin.add_view(EventsView(Event, db.session, name='Events', url='events'))
+        self.admin.add_view(MySessionView(name='MySessions', url='events/mysessions'))
         self.admin.add_view(EventsSpeakersView(Speaker, db.session, name='Speaker', url='events/<event_id>/speakers'))
         self.admin.add_view(EventsSponsorsView(Sponsor, db.session, name='Sponsor', url='events/<event_id>/sponsors'))
         self.admin.add_view(SessionView(Session, db.session, name='Sessions', url='events/<event_id>/sessions'))
@@ -43,7 +45,6 @@ class AdminView(object):
         self.admin.add_view(ProfileView(User, db.session, name='Profile', url='profile'))
         self.admin.add_view(TracksView(Track, db.session, name='Track', url='events/<event_id>/tracks'))
         self.admin.add_view(InviteView(Invite, db.session, name='Invite', url='events/<event_id>/invite'))
-
 
     @staticmethod
     def init_login(app):
