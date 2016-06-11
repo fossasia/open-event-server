@@ -712,11 +712,12 @@ function loadData(eventId, callback) {
  * @param {int} eventId The event ID
  */
 function initializeTimeline(eventId) {
-    loadData(eventId, function () {
-        $(".flash-message-holder").hide();
-        $(".scheduler-holder").show();
-        initializeInteractables();
-
+    initializeSwaggerClient(function () {
+        loadData(eventId, function () {
+            $(".flash-message-holder").hide();
+            $(".scheduler-holder").show();
+            initializeInteractables();
+        });
     });
 }
 /**
@@ -848,13 +849,7 @@ $editSessionForm.submit(function () {
 $(document).ready(function () {
     eventId = parseInt($timeline.data("event-id"));
     generateTimeUnits();
-    if(_.isUndefined(api) || _.isUndefined(api.microlocations)) {
-        $(document).on("swagger:loaded", function () {
-            initializeTimeline(eventId);
-        });
-    } else {
-        initializeTimeline(eventId);
-    }
+    initializeTimeline(eventId);
 });
 
 $(document).on("scheduling:change", function (e) {
