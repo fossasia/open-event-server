@@ -1,5 +1,5 @@
 {% macro render_menu(test='') %}
-<div>
+<div class="top_nav" style="margin-left:0">
     <div class="nav_menu">
         <nav class="" role="navigation">
             <ul class="nav navbar-nav">
@@ -10,13 +10,6 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li class="">
-                    <a href="/browse" class="user-profile dropdown-toggle" data-toggle="dropdown"
-                       aria-expanded="false">
-                        Browse Events
-                        <span class=" fa fa-angle-down"></span>
-                    </a>
-                </li>
                 <li class="">
                     <a href="/events/create/" aria-expanded="false">
                         Create Event
@@ -53,6 +46,13 @@
                 </li>
 
                 {% endif %}
+                <li class="">
+                    <a href="/browse" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                       aria-expanded="false">
+                        Browse Events
+                        <span class=" fa fa-angle-down"></span>
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>
