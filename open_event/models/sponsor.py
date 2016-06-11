@@ -37,6 +37,7 @@ class Sponsor(db.Model):
     name = db.Column(db.String, nullable=False)
     description = db.Column(db.String)
     url = db.Column(db.String)
+    level = db.Column(db.String)
     logo = db.Column(db.String)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
 
@@ -44,11 +45,12 @@ class Sponsor(db.Model):
     sponsor_type = db.relationship('SponsorType')
 
     def __init__(self, name=None, url=None, logo=None, event_id=None,
-                 description=None, sponsor_type_id=None):
+                 description=None, sponsor_type_id=None, level=None, ):
         self.name = name
         self.url = url
         self.logo = logo
         self.event_id = event_id
+        self.level = level
         self.sponsor_type_id = sponsor_type_id
         self.description = description
 
