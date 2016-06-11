@@ -6,6 +6,13 @@ from ....helpers.data_getter import DataGetter
 
 
 class SessionView(ModelView):
+    @expose('/', methods=('GET', 'POST'))
+    def index_view(self, event_id):
+        pass
+
+    @expose('/create/', methods=('GET', 'POST'))
+    def new_view(self, event_id):
+        pass
 
     @expose('/new/<user_id>/<hash>/', methods=('GET', 'POST'))
     def create_view(self, event_id, user_id, hash):
@@ -25,11 +32,11 @@ class SessionView(ModelView):
             DataManager.edit_session(request.form, session)
             return redirect(url_for('session.display_view', event_id=event_id))
 
-    @expose('/display/')
+    @expose('/')
     def display_view(self, event_id):
         sessions = DataGetter.get_sessions_by_event_id(event_id)
         return self.render('/gentelella/admin/session/display.html',
-                           sessions=sessions)
+                           sessions=sessions, event_id=event_id)
 
     @expose('/<int:session_id>/accept_session', methods=('GET',))
     def accept_session(self, event_id, session_id):
@@ -44,3 +51,9 @@ class SessionView(ModelView):
         session.state = 'rejected'
         save_to_db(session, 'Session Rejected')
         return redirect(url_for('.display_view', event_id=event_id))
+
+    @expose('/mysessions/', methods=('GET', 'POST'))
+    def user_sessions_view(self, event_id):
+        pass
+
+

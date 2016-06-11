@@ -1,12 +1,12 @@
 /**
- * Created by Niranjan on 23-May-16.
+ * Created by Niranjan (@niranjan94) on 23-May-16.
  */
 
 /**
  *  TIME CONFIGURATION & MANIPULATION
  *  =================================
  *
- *  24px == 15 minutes
+ *  24px === 15 minutes
  *  (Smallest unit of measurement is 15 minutes)
  *
  */
@@ -24,7 +24,7 @@ var time = {
         pixels: 24,
         count: 0
     },
-    format: "YYYY-MM-DD HH:MM:SS"
+    format: "YYYY-MM-DD HH:mm:ss"
 };
 
 /**
@@ -83,6 +83,8 @@ var $unscheduledSessionsHolder = $unscheduledSessionsList;
 var $noSessionsInfoBox = $("#no-sessions-info");
 var $dayButtonsHolder = $("#date-change-btn-holder");
 var $addMicrolocationForm = $('#add-microlocation-form');
+var $editSessionModal = $('#edit-session-modal');
+var $editSessionForm = $("#edit-session-form");
 
 /**
  * TEMPLATE STRINGS
@@ -117,7 +119,7 @@ function getSessionFromReference(sessionRef, $searchTarget) {
     } else if (_.isObjectLike(sessionRef)) {
         $sessionElement = $searchTarget.find(".session[data-session-id=" + sessionRef.id + "]");
         // If it's a new session, create session element from template and initialize
-        if ($sessionElement.length == 0) {
+        if ($sessionElement.length === 0) {
             $sessionElement = $(sessionTemplate);
             $sessionElement.attr("data-session-id", sessionRef.id);
             $sessionElement.attr("data-original-text", sessionRef.title);
@@ -183,7 +185,12 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
         newMicrolocation = position.microlocation_id;
         sessionRefObject.session = updateSessionTime(sessionRefObject.$sessionElement);
         sessionRefObject.$sessionElement.data("session", sessionRefObject.session);
+    } else {
+        if (isUndefinedOrNull(shouldBroadcast) || shouldBroadcast) {
+            sessionRefObject.session = updateSessionTime(sessionRefObject.$sessionElement);
+        }
     }
+
 
     sessionRefObject.$sessionElement.css({
         "-webkit-transform": "",
@@ -195,6 +202,7 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
     delete  sessionRefObject.session.start_time.isReset;
     delete  sessionRefObject.session.end_time.isReset;
 
+    sessionRefObject.$sessionElement.data("temp-top", sessionRefObject.session.top);
     sessionRefObject.$sessionElement.css("top", sessionRefObject.session.top + "px");
     sessionRefObject.$sessionElement.css("height", minutesToPixels(sessionRefObject.session.duration) + "px");
     $microlocationsHolder.find(".microlocation[data-microlocation-id=" + sessionRefObject.session.microlocation.id + "] > .microlocation-inner").append(sessionRefObject.$sessionElement);
@@ -219,7 +227,7 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
     }
 
     _.remove(unscheduledStore, function (sessionTemp) {
-        return sessionTemp.id == sessionRefObject.session.id
+        return sessionTemp.id === sessionRefObject.session.id
     });
 }
 
@@ -389,13 +397,13 @@ function updateSessionTime($sessionElement, session) {
         saveSession = true;
     }
     var topTime = moment.utc({hour: time.start.hours, minute: time.start.minutes});
-    var duration = pixelsToMinutes($sessionElement.outerHeight(false));
+    var mins = pixelsToMinutes($sessionElement.outerHeight(false));
     var topInterval = pixelsToMinutes($sessionElement.data("temp-top"), true);
 
-    var newStartTime = topTime.add(topInterval, 'm');
-    var newEndTime = topTime.add(duration, "m");
+    var newStartTime = _.cloneDeep(topTime.add(topInterval, 'm'));
+    var newEndTime = topTime.add(mins, "m");
 
-    session.duration = duration;
+    session.duration = mins;
     session.start_time.hours(newStartTime.hours());
     session.start_time.minutes(newStartTime.minutes());
 
@@ -525,17 +533,18 @@ function initializeInteractables() {
 
                 target.style.width = roundOffToMultiple(event.rect.width) + "px";
                 target.style.height = roundOffToMultiple(event.rect.height) + "px";
-
                 $(event.target).ellipsis();
-
                 updateSessionTimeOnTooltip($(event.target));
             }
         })
         .on("resizeend", function (event) {
             if ($(event.target).hasClass("scheduled")) {
                 var $sessionElement = $(event.target);
-                updateSessionTime($sessionElement);
-                $(document).trigger("scheduling:change", $sessionElement.data("session"));
+                $(document).trigger({
+                    type: "scheduling:change",
+                    session: $sessionElement.data("session")
+                });
+
             }
         });
 
@@ -601,13 +610,14 @@ function initializeInteractables() {
  * @param {postProcessCallback} callback The post-process callback
  */
 function processMicrolocationSession(microlocations, sessions, callback) {
-
     var topTime = moment.utc({hour: time.start.hours, minute: time.start.minutes});
-
     _.each(sessions, function (session) {
+        session = _.cloneDeep(session);
 
         var startTime = moment.utc(session.start_time);
         var endTime = moment.utc(session.end_time);
+
+
         var duration = moment.duration(endTime.diff(startTime));
 
         var top = minutesToPixels(moment.duration(moment.utc({
@@ -653,7 +663,7 @@ function loadDateButtons() {
     var sortedDays = days.sort();
     _.each(sortedDays, function (day, index) {
         var $dayButton = $(dayButtonTemplate);
-        if (index == 0) {
+        if (index === 0) {
             $dayButton.addClass("active");
         }
         $dayButton.text(day);
@@ -690,10 +700,10 @@ function loadMicrolocationsToTimeline(day) {
 }
 
 function loadData(eventId, callback) {
-    $.get("/api/v2/events/" + eventId + "/microlocations", function (microlocations) {
-        $.get("/api/v2/events/" + eventId + "/sessions", function (sessions) {
-            processMicrolocationSession(microlocations, sessions, callback);
-        });
+    api.microlocations.get_microlocation_list({event_id: eventId}, function (microlocationsData) {
+        api.sessions.get_session_list({event_id: eventId}, function (sessionData) {
+            processMicrolocationSession(microlocationsData.obj, sessionData.obj, callback);
+        })
     });
 }
 
@@ -732,7 +742,7 @@ $(".timeline").scroll(function () {
 $("#sessions-search").valueChange(function (value) {
     var filtered = [];
 
-    if (_.isEmpty(value) || value == "") {
+    if (_.isEmpty(value) || value === "") {
         filtered = unscheduledStore;
     } else {
         filtered = _.filter(unscheduledStore, function (session) {
@@ -744,7 +754,7 @@ $("#sessions-search").valueChange(function (value) {
 
     $unscheduledSessionsHolder.html("");
 
-    if (filtered.length == 0) {
+    if (filtered.length === 0) {
         $(".no-sessions-info").show();
     } else {
         $(".no-sessions-info").hide();
@@ -799,7 +809,38 @@ $(document)
     .on("click", ".session.scheduled > .remove-btn", function () {
         addSessionToUnscheduled($(this).parent());
     })
+    .on("click", ".session.scheduled > .edit-btn", function () {
+        var $sessionElement = $(this).parent();
+        var session = $sessionElement.data("session");
+        $editSessionForm.bindObject(session, time.format);
+        $editSessionModal.modal('show');
+    })
     .on("click", ".clear-overlaps-button", removeOverlaps);
+
+$(".date-picker").daterangepicker({
+    "singleDatePicker": true,
+    "showDropdowns": true,
+    "timePicker": true,
+    "timePicker24Hour": true,
+    "startDate": $editSessionModal.data("start-date"),
+    locale: {
+        format: time.format
+    }
+});
+
+$editSessionForm.submit(function () {
+    var session = $editSessionForm.data("object");
+    session.start_time = moment.utc($editSessionForm.find("input[name=start_time]").val());
+    session.end_time = moment.utc($editSessionForm.find("input[name=end_time]").val());
+    session.title = $editSessionForm.find("input[name=title]").val();
+    session.description = $editSessionForm.find("input[name=description]").text();
+    session.abstract = $editSessionForm.find("input[name=abstract]").val();
+    $(document).trigger({
+        type: "scheduling:change",
+        session: session
+    });
+    $editSessionModal.modal("hide");
+});
 
 /**
  * Initialize the Scheduler UI on document ready
@@ -807,14 +848,43 @@ $(document)
 $(document).ready(function () {
     eventId = parseInt($timeline.data("event-id"));
     generateTimeUnits();
-    initializeTimeline(eventId);
+    if(_.isUndefined(api) || _.isUndefined(api.microlocations)) {
+        $(document).on("swagger:loaded", function () {
+            initializeTimeline(eventId);
+        });
+    } else {
+        initializeTimeline(eventId);
+    }
 });
 
 $(document).on("scheduling:change", function (e) {
+
+    // Make a deep clone of the session object
     var session = _.cloneDeep(e.session);
+    var session_id = session.id;
+
+    // Format the payload to match API requirements
     session.start_time = session.start_time.format(time.format);
     session.end_time = session.end_time.format(time.format);
-    api.sessions.put_session({event_id: eventId, session_id: session.id, payload: session}, function (success) {
+    session.track_id = _.isNull(session.track.id) ? 0 : session.track.id;
+    session.level_id = _.isNull(session.level.id) ? 0 : session.level.id;
+    session.format_id = _.isNull(session.format.id) ? 0 : session.format.id;
+    session.language_id = _.isNull(session.language.id) ? 0 : session.language.id;
+    session.microlocation_id = _.isNull(session.microlocation.id) ? 0 : session.microlocation.id;
+    session.speaker_ids = _.map(session.speakers, 'id');
+
+    // Clean up the payload
+    delete session.track;
+    delete session.level;
+    delete session.format;
+    delete session.language;
+    delete session.speakers;
+    delete session.microlocation;
+    delete session.duration;
+    delete session.top;
+    delete session.id;
+
+    api.sessions.put_session({event_id: eventId, session_id: session_id, payload: session}, function (success) {
         createSnackbar("Changes have been saved.", "Dismiss", null, 1000);
     }, function (error) {
         createSnackbar("An error occurred while saving the changes.", "Try Again", function () {

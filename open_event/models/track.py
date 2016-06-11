@@ -10,17 +10,20 @@ class Track(db.Model):
     description = db.Column(db.Text, nullable=False)
     track_image_url = db.Column(db.Text)
     color = db.Column(db.String, nullable=False)
+    location = db.Column(db.String)
     sessions = db.relationship('Session', backref='track', lazy='dynamic')
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
 
     def __init__(self, name=None, description=None, event_id=None,
-                 session=None, track_image_url=None, color=None):
+                 session=None, track_image_url=None, color=None,
+                 location=None):
         self.name = name
         self.description = description
         self.event_id = event_id
         self.session_id = session
         self.track_image_url = track_image_url
         self.color = color
+        self.location = location
 
     def __repr__(self):
         return '<Track %r>' % self.name

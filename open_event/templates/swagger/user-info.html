@@ -1,0 +1,14 @@
+<script type="text/javascript">
+function open_page(page){
+    var CURRENT_URL = window.location.href.split('?')[0];
+    document.location = '/admin/' + page + '/?next=' + encodeURIComponent(CURRENT_URL) ;
+}
+</script>
+
+<div class="swagger-login">
+{% if user.email %}
+    <span class="gray">Logged in as</span> <span class="handle">{{ user.email }}</span>
+{% else %}
+    <a href="javascript:open_page('login');">Login</a> | <a href="javascript:open_page('register');">Register</a>
+{% endif %}
+</div>

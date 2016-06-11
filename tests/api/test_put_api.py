@@ -82,6 +82,9 @@ class TestPutApi(TestPutApiBase):
     def test_sponsor_api(self):
         self._test_model('sponsor', POST_SPONSOR_DATA)
 
+    def test_sponsor_type_api(self):
+        self._test_model('sponsor_type', POST_SPONSOR_TYPE_DATA)
+
 
 if __name__ == '__main__':
     unittest.main()

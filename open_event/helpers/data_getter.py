@@ -225,6 +225,22 @@ class DataGetter:
         return events
 
     @staticmethod
+    def get_all_published_events():
+        events = Event.query.filter(Event.state == 'Published')
+        return events
+
+    @staticmethod
+    def get_call_for_speakers_events():
+        events = Event.query.filter(Event.state == 'Call for papers')
+        return events
+
+    @staticmethod
+    def get_published_events():
+        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
+            .filter(Event.state == 'Call for papers')
+        return events
+
+    @staticmethod
     def get_current_events():
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
             .filter(Event.state != 'Completed')

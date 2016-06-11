@@ -35,66 +35,25 @@
         <div class="row">
             <h3 class="blue">Upcoming events</h3>
             <div class="row text-center">
-
-                <div class="col-md-3 col-sm-6 hero-feature">
-                    <div class="thumbnail">
-                        <img src="http://placehold.it/800x500" alt="">
-                        <div class="caption">
-                            <small>THU, JUN 16 3:00 PM</small>
-                            <h4>FOSSASIA 2017</h4>
-                            <small>Singapore</small>
-                            <hr>
-                            <p>
-                                #tech, #conference
-                            </p>
+                aaa{{aa}}aaa
+                {% for event in aa %}
+                    {{event}}
+                    <div class="col-md-3 col-sm-6 hero-feature">
+                        <div class="thumbnail">
+                            <img src="http://placehold.it/800x500" alt="">
+                            <div class="caption">
+                                <small>{{event.start_time}}</small>
+                                <h4>{{event.title}}</h4>
+                                <small>{{event.location_name}}</small>
+                                <hr>
+                                <p>
+                                    #tech, #conferensce
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                {%endfor%}
 
-                <div class="col-md-3 col-sm-6 hero-feature">
-                    <div class="thumbnail">
-                        <img src="http://placehold.it/800x500" alt="">
-                        <div class="caption">
-                            <small>THU, JUN 16 3:00 PM</small>
-                            <h4>FOSSASIA 2017</h4>
-                            <small>Singapore</small>
-                            <hr>
-                            <p>
-                                #tech, #conference
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-sm-6 hero-feature">
-                    <div class="thumbnail">
-                        <img src="http://placehold.it/800x500" alt="">
-                        <div class="caption">
-                            <small>THU, JUN 16 3:00 PM</small>
-                            <h4>FOSSASIA 2017</h4>
-                            <small>Singapore</small>
-                            <hr>
-                            <p>
-                                #tech, #conference
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-sm-6 hero-feature">
-                    <div class="thumbnail">
-                        <img src="http://placehold.it/800x500" alt="">
-                        <div class="caption">
-                            <small>THU, JUN 16 3:00 PM</small>
-                            <h4>FOSSASIA 2017</h4>
-                            <small>Singapore</small>
-                            <hr>
-                            <p>
-                                #tech, #conference
-                            </p>
-                        </div>
-                    </div>
-                </div>
 
             </div>
         </div>
@@ -103,65 +62,22 @@
             <h3 class="blue">Call for Speakers</h3>
             <div class="row text-center">
 
-                <div class="col-md-3 col-sm-6 hero-feature">
-                    <div class="thumbnail">
-                        <img src="http://placehold.it/800x500" alt="">
-                        <div class="caption">
-                            <small>THU, JUN 16 3:00 PM</small>
-                            <h4>FOSSASIA 2017</h4>
-                            <small>Singapore</small>
-                            <hr>
-                            <p>
-                                #tech, #conference
-                            </p>
+                {% for event in call_for_papers_evs %}
+                    <div class="col-md-3 col-sm-6 hero-feature">
+                        <div class="thumbnail">
+                            <img src="http://placehold.it/800x500" alt="">
+                            <div class="caption">
+                                <small>{{event.start_time}}</small>
+                                <h4>{{event.title}}</h4>
+                                <small>{{event.location_name}}</small>
+                                <hr>
+                                <p>
+                                    #tech, #conference
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-md-3 col-sm-6 hero-feature">
-                    <div class="thumbnail">
-                        <img src="http://placehold.it/800x500" alt="">
-                        <div class="caption">
-                            <small>THU, JUN 16 3:00 PM</small>
-                            <h4>FOSSASIA 2017</h4>
-                            <small>Singapore</small>
-                            <hr>
-                            <p>
-                                #tech, #conference
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-sm-6 hero-feature">
-                    <div class="thumbnail">
-                        <img src="http://placehold.it/800x500" alt="">
-                        <div class="caption">
-                            <small>THU, JUN 16 3:00 PM</small>
-                            <h4>FOSSASIA 2017</h4>
-                            <small>Singapore</small>
-                            <hr>
-                            <p>
-                                #tech, #conference
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-sm-6 hero-feature">
-                    <div class="thumbnail">
-                        <img src="http://placehold.it/800x500" alt="">
-                        <div class="caption">
-                            <small>THU, JUN 16 3:00 PM</small>
-                            <h4>FOSSASIA 2017</h4>
-                            <small>Singapore</small>
-                            <hr>
-                            <p>
-                                #tech, #conference
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                {%endfor%}
 
             </div>
         </div>
