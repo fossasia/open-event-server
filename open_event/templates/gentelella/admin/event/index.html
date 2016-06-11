@@ -1,4 +1,124 @@
-{% extends 'gentelella/admin/event/base_table.html' %}
-{% block table_title %}
-Events Table
+{% extends 'gentelella/admin/base.html' %}
+{% block head_css %}
+{{ super() }}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='admin/lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"/>
+{% endblock %}
+
+{% block body %}
+<div class="page-title">
+    <div class="title_left">
+        <h3>Events</h3>
+    </div>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Events list</h2>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+                <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                    <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab"
+                                                                  data-toggle="tab"
+                                                                  aria-expanded="true">Live</a>
+                        </li>
+                        <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab"
+                                                            data-toggle="tab"
+                                                            aria-expanded="false">Draft</a>
+                        </li>
+                        <li role="presentation" class=""><a href="#tab_content3" role="tab" id="profile-tab2"
+                                                            data-toggle="tab"
+                                                            aria-expanded="false">Past</a>
+                        </li>
+                    </ul>
+                    <div id="myTabContent" class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade active in" id="tab_content1"
+                             aria-labelledby="home-tab">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>State</th>
+                                    <th>Url</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Options</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for event in live_events %}
+                                    {% include '/gentelella/admin/event/_table.html' %}
+                                {%endfor%}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>State</th>
+                                    <th>Url</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Options</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for event in draft_events %}
+                                    {% include '/gentelella/admin/event/_table.html' %}
+                                {%endfor%}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>State</th>
+                                    <th>Url</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Options</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for event in past_events %}
+                                    {% include '/gentelella/admin/event/_table.html' %}
+                                {%endfor%}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+{% block tail_js %}
+{{ super() }}
+<script type="text/javascript"
+        src="{{ url_for('static', filename='admin/lib/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+<script type="text/javascript"
+        src="{{ url_for('static', filename='admin/lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+<script type="text/javascript">
+        $('.table').DataTable();
+
+
+
+</script>
 {% endblock %}
