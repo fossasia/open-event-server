@@ -848,7 +848,13 @@ $editSessionForm.submit(function () {
 $(document).ready(function () {
     eventId = parseInt($timeline.data("event-id"));
     generateTimeUnits();
-    initializeTimeline(eventId);
+    if(_.isUndefined(api) || _.isUndefined(api.microlocations)) {
+        $(document).on("swagger:loaded", function () {
+            initializeTimeline(eventId);
+        });
+    } else {
+        initializeTimeline(eventId);
+    }
 });
 
 $(document).on("scheduling:change", function (e) {
