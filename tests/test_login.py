@@ -20,7 +20,7 @@ class TestLogin(OpenEventTestCase):
             register(self.app, u'email@gmail.com', u'test')
             logout(self.app)
             rv = login(self.app, 'email@gmail.com', 'test')
-            self.assertTrue("Create event" in rv.data)
+            self.assertTrue("Create New Event" in rv.data, msg=rv.data)
 
     def test_incorrect_login(self):
         with app.test_request_context():
@@ -32,7 +32,7 @@ class TestLogin(OpenEventTestCase):
     def test_registration(self):
         with app.test_request_context():
             rv = register(self.app, u'email@gmail.com', u'test')
-            self.assertTrue("Create event" in rv.data)
+            self.assertTrue("Create New Event" in rv.data)
 
     def test_logout(self):
         login(self.app, 'email@gmail.com', 'test')
