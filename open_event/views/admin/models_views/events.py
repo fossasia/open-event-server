@@ -23,7 +23,7 @@ class EventsView(ModelView):
         return self.render('/gentelella/admin/event/index.html',
                            live_events=live_events, draft_events=draft_events, past_events=past_events)
 
-    @expose('/new/', methods=('GET', 'POST'))
+    @expose('/create/', methods=('GET', 'POST'))
     def create_view(self):
         session_columns = DataGetter.get_session_columns()
         speaker_columns = DataGetter.get_speaker_columns()

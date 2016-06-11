@@ -1,5 +1,4 @@
 {% import 'gentelella/admin/menu.html' as menu with context %}
-{% import 'gentelella/admin/left_sidebar.html' as sidebar with context %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,9 +27,8 @@
 <body class="nav-md">
     <div class="container body">
         <div class="main_container">
-            {{ sidebar.render_sidebar() }}
             {{ menu.render_menu() }}
-            <div class="right_col" role="main">
+            <div role="main" style="padding:10px;">
                  {% include '/gentelella/admin/notifications.html' %}
                  <div class="">
 
