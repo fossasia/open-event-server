@@ -6,13 +6,26 @@ from ....helpers.data_getter import DataGetter
 
 
 class SessionView(ModelView):
-    @expose('/', methods=('GET', 'POST'))
+    @expose('/')
     def index_view(self, event_id):
-        pass
+        sessions = DataGetter.get_sessions_by_event_id(event_id)
+        return self.render('/gentelella/admin/event/session/display.html',
+                           sessions=sessions, event_id=event_id)
+
+    @expose('/display/')
+    def display_view(self, event_id):
+        sessions = DataGetter.get_sessions_by_event_id(event_id)
+        return self.render('/gentelella/admin/event/session/display.html',
+                           sessions=sessions, event_id=event_id)
 
     @expose('/create/', methods=('GET', 'POST'))
-    def new_view(self, event_id):
-        pass
+    def new_view(self, event_id, user_id, hash):
+        invite = DataGetter.get_invite_by_user_id(user_id)
+        if invite and invite.hash == hash:
+            if request.method == 'POST':
+                DataManager.add_session_to_event(request.form, event_id)
+                return redirect(url_for('session.index_view', event_id=event_id))
+            return self.render('/gentelella/admin/event/session/new/new.html')
 
     @expose('/new/<user_id>/<hash>/', methods=('GET', 'POST'))
     def create_view(self, event_id, user_id, hash):
@@ -20,7 +33,7 @@ class SessionView(ModelView):
         if invite and invite.hash == hash:
             if request.method == 'POST':
                 DataManager.add_session_to_event(request.form, event_id)
-                return redirect(url_for('session.display_view', event_id=event_id))
+                return redirect(url_for('session.index_view', event_id=event_id))
             return self.render('/gentelella/admin/session/new/new.html')
 
     @expose('/<int:session_id>/edit/', methods=('GET','POST'))
@@ -30,13 +43,7 @@ class SessionView(ModelView):
             return self.render('/gentelella/admin/session/edit.html', session=session)
         if request.method == 'POST':
             DataManager.edit_session(request.form, session)
-            return redirect(url_for('session.display_view', event_id=event_id))
-
-    @expose('/')
-    def display_view(self, event_id):
-        sessions = DataGetter.get_sessions_by_event_id(event_id)
-        return self.render('/gentelella/admin/session/display.html',
-                           sessions=sessions, event_id=event_id)
+            return redirect(url_for('session.index_view', event_id=event_id))
 
     @expose('/<int:session_id>/accept_session', methods=('GET',))
     def accept_session(self, event_id, session_id):
