@@ -33,6 +33,7 @@ from ..models.track import Track
 from open_event.helpers.oauth import OAuth, FbOAuth
 from requests_oauthlib import OAuth2Session
 from ..models.invite import Invite
+from ..models.call_for_papers import CallForPaper
 
 
 class DataManager(object):
@@ -580,6 +581,10 @@ class DataManager(object):
             room_name = form.getlist('rooms[name]')
             room_color = form.getlist('rooms[color]')
 
+            call_for_speakers = CallForPaper(announcement=form['announcement'],
+                                             start_date=datetime.strptime(form['start_date'], '%m/%d/%Y'),
+                                             end_date=datetime.strptime(form['end_date'], '%m/%d/%Y'))
+
             for index, name in enumerate(session_type_names):
                 session_type = SessionType(name=name, length=session_type_length[index], event_id=event.id)
                 db.session.add(session_type)
@@ -598,7 +603,7 @@ class DataManager(object):
                 db.session.add(room)
 
             uer = UsersEventsRoles(event_id=event.id, user_id=login.current_user.id, role_id=role.id)
-            if save_to_db(uer, "Event saved"):
+            if save_to_db(call_for_speakers, "Call for paper saved") and save_to_db(uer, "Event saved"):
                 return event
         else:
             raise ValidationError("start date greater than end date")
