@@ -534,6 +534,7 @@ class DataManager(object):
         user_detail.avatar = form['avatar']
         user_detail.contact = form['contact']
         user_detail.twitter = form['twitter']
+        user_detail.details = form['details']
         print user, user_detail, save_to_db(user, "User updated")
 
 
