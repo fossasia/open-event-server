@@ -139,6 +139,11 @@ def validate_payload(payload, api_model):
       flask restplus automatically.
     - This is to be called at the start of a post or put method
     """
+    # check if any reqd fields are missing in payload
+    for key in api_model:
+        if api_model[key].required and key not in payload:
+            _error_abort(400, 'Required field \'%s\' missing' % key)
+    # check payload
     for key in payload:
         field = api_model[key]
         if isinstance(field, fields.List):
