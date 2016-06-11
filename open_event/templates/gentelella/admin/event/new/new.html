@@ -10,7 +10,7 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel" style="min-height:600px;">
             <div class="row">
-                <form name="test" action="/admin/events/new/" method="POST" role="form" class="admin-form form-horizontal" id="event-create-form">
+                <form name="test" action="/events/new/" method="POST" role="form" class="admin-form form-horizontal" id="event-create-form">
                     {% if csrf_token %}
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     {% endif %}

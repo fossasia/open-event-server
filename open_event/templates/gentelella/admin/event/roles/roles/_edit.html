@@ -9,7 +9,7 @@
                 <h4 class="modal-title">Edit Role</h4>
             </div>
             <div class="modal-body">
-                <form action="/admin/events/{{current_event.id}}/roles/{{role.id}}/update/" method="POST" role="form">
+                <form action="/events/{{current_event.id}}/roles/{{role.id}}/update/" method="POST" role="form">
                     <p>
                         <label>User email:</label>
                         <input name="user_id" placeholder="User" class="form-control" value="{{role.user.id}}">
