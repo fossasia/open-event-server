@@ -12,6 +12,12 @@ class SessionView(ModelView):
         return self.render('/gentelella/admin/event/session/display.html',
                            sessions=sessions, event_id=event_id)
 
+    @expose('/display/')
+    def display_view(self, event_id):
+        sessions = DataGetter.get_sessions_by_event_id(event_id)
+        return self.render('/gentelella/admin/event/session/display.html',
+                           sessions=sessions, event_id=event_id)
+
     @expose('/create/', methods=('GET', 'POST'))
     def new_view(self, event_id, user_id, hash):
         invite = DataGetter.get_invite_by_user_id(user_id)
