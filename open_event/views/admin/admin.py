@@ -36,7 +36,7 @@ class AdminView(object):
 
     def _add_views(self):
         self.admin.add_view(EventsView(Event, db.session, name='Events', url='events'))
-        self.admin.add_view(MySessionView(name='My Sessions', url='events/mysessions'))
+        self.admin.add_view(MySessionView(name='MySessions', url='events/mysessions'))
         self.admin.add_view(EventsSpeakersView(Speaker, db.session, name='Speaker', url='events/<event_id>/speakers'))
         self.admin.add_view(EventsSponsorsView(Sponsor, db.session, name='Sponsor', url='events/<event_id>/sponsors'))
         self.admin.add_view(SessionView(Session, db.session, name='Sessions', url='events/<event_id>/sessions'))
