@@ -1,16 +1,25 @@
 {% macro render_menu(test='') %}
-<div class="top_nav">
+<div>
     <div class="nav_menu">
         <nav class="" role="navigation">
-            <div class="nav toggle">
-                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-            </div>
+            <ul class="nav navbar-nav">
+                <li class="">
+                    <a href="/">
+                        Home
+                    </a>
+                </li>
+            </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="">
                     <a href="/browse" class="user-profile dropdown-toggle" data-toggle="dropdown"
                        aria-expanded="false">
                         Browse Events
                         <span class=" fa fa-angle-down"></span>
+                    </a>
+                </li>
+                <li class="">
+                    <a href="/events/create/" aria-expanded="false">
+                        Create Event
                     </a>
                 </li>
                 {% if current_user.is_authenticated %}
