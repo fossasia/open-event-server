@@ -1,5 +1,5 @@
-from flask.ext.restplus import Resource, Namespace, fields
-
+from flask.ext.restplus import Resource, Namespace
+import custom_fields as fields
 from open_event.models.session import Level as LevelModel
 from .helpers import get_paginated_list, requires_auth
 from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
@@ -9,8 +9,8 @@ api = Namespace('levels', description='Levels', path='/')
 
 LEVEL = api.model('Level', {
     'id': fields.Integer(required=True),
-    'name': fields.String,
-    'label_en': fields.String,
+    'name': fields.String(),
+    'label_en': fields.String(),
 })
 
 LEVEL_PAGINATED = api.clone('LevelPaginated', PAGINATED_MODEL, {

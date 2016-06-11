@@ -1,6 +1,6 @@
 from functools import wraps
 from flask import request, g
-from flask.ext.restplus import abort
+from flask.ext.restplus import abort, fields
 from flask.ext import login
 from flask.ext.scrypt import check_password_hash
 from flask_jwt import jwt_required, JWTError, current_identity
@@ -141,6 +141,9 @@ def validate_payload(payload, api_model):
     """
     for key in payload:
         field = api_model[key]
+        if isinstance(field, fields.List):
+            field = field.container
+            print field.validate
         if isinstance(field, CustomField) and hasattr(field, 'validate'):
             if not field.validate(payload[key]):
                 _error_abort(400, 'Validation of \'%s\' field failed' % key)

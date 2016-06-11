@@ -1,7 +1,6 @@
-from flask.ext.restplus import Resource, Namespace, fields
-
+from flask.ext.restplus import Resource, Namespace
+import custom_fields as fields
 from open_event.models.sponsor import Sponsor as SponsorModel, SponsorType as SponsorTypeModel
-from custom_fields import UriField, ImageUriField
 from .helpers import get_paginated_list, requires_auth, get_object_in_event
 from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
@@ -10,11 +9,11 @@ api = Namespace('sponsors', description='Sponsors', path='/')
 
 SPONSOR = api.model('Sponsor', {
     'id': fields.Integer(required=True),
-    'name': fields.String,
-    'url': UriField(),
-    'logo': ImageUriField(),
-    'description': fields.String,
-    'sponsor_type_id': fields.Integer,
+    'name': fields.String(),
+    'url': fields.Uri(),
+    'logo': fields.ImageUri(),
+    'description': fields.String(),
+    'sponsor_type_id': fields.Integer(),
 })
 
 SPONSOR_PAGINATED = api.clone('SponsorPaginated', PAGINATED_MODEL, {

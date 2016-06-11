@@ -1,18 +1,18 @@
 import json
-from flask.ext.restplus import Resource, Namespace, fields
-from custom_fields import EmailField
+from flask.ext.restplus import Resource, Namespace
+import custom_fields as fields
 from helpers import _error_abort
 from flask_jwt import JWTError
 
 api = Namespace('login', description='Login')
 
 LOGIN = api.model('Login', {
-    'email': EmailField(required=True),
+    'email': fields.Email(required=True),
     'password': fields.String(required=True)
 })
 
 TOKEN = api.model('Token', {
-    'access_token': fields.String
+    'access_token': fields.String()
 })
 
 

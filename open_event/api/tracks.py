@@ -1,7 +1,7 @@
-from flask.ext.restplus import Resource, Namespace, fields
+from flask.ext.restplus import Resource, Namespace
 
 from open_event.models.track import Track as TrackModel
-from custom_fields import ImageUriField, ColorField
+import custom_fields as fields
 from .helpers import get_paginated_list, requires_auth
 from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
@@ -10,16 +10,16 @@ api = Namespace('tracks', description='Tracks', path='/')
 
 TRACK_SESSION = api.model('TrackSession', {
     'id': fields.Integer(required=True),
-    'title': fields.String,
+    'title': fields.String(),
 })
 
 TRACK = api.model('Track', {
     'id': fields.Integer(required=True),
-    'name': fields.String,
-    'description': fields.String,
-    'color': ColorField(),
-    'track_image_url': ImageUriField(),
-    'location': fields.String,
+    'name': fields.String(),
+    'description': fields.String(),
+    'color': fields.Color(),
+    'track_image_url': fields.ImageUri(),
+    'location': fields.String(),
     'sessions': fields.List(fields.Nested(TRACK_SESSION)),
 })
 

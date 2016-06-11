@@ -1,7 +1,7 @@
-from flask.ext.restplus import Resource, Namespace, fields
+from flask.ext.restplus import Resource, Namespace
 
 from open_event.models.speaker import Speaker as SpeakerModel
-from custom_fields import UriField, EmailField, ImageUriField
+import custom_fields as fields
 from .helpers import get_paginated_list, requires_auth
 from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
@@ -9,24 +9,24 @@ from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
 api = Namespace('speakers', description='Speakers', path='/')
 
 SPEAKER_SESSION = api.model('SpeakerSession', {
-    'id': fields.Integer,
-    'title': fields.String,
+    'id': fields.Integer(),
+    'title': fields.String(),
 })
 
 SPEAKER = api.model('Speaker', {
     'id': fields.Integer(required=True),
-    'name': fields.String,
-    'photo': ImageUriField(),
-    'biography': fields.String,
-    'email': EmailField(),
-    'web': UriField(),
-    'twitter': fields.String,  # not sure for now whether uri or string field
-    'facebook': fields.String,
-    'github': fields.String,
-    'linkedin': fields.String,
-    'organisation': fields.String,
-    'position': fields.String,
-    'country': fields.String,
+    'name': fields.String(),
+    'photo': fields.ImageUri(),
+    'biography': fields.String(),
+    'email': fields.Email(),
+    'web': fields.Uri(),
+    'twitter': fields.String(),  # not sure for now whether uri or string field
+    'facebook': fields.String(),
+    'github': fields.String(),
+    'linkedin': fields.String(),
+    'organisation': fields.String(),
+    'position': fields.String(),
+    'country': fields.String(),
     'sessions': fields.List(fields.Nested(SPEAKER_SESSION)),
 })
 

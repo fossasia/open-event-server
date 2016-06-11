@@ -1,8 +1,7 @@
-from flask.ext.restplus import Resource, Namespace, fields
+from flask.ext.restplus import Resource, Namespace
 from flask import g
 
-from custom_fields import EmailField, ColorField, UriField, ImageUriField,\
-    DateTimeField
+import custom_fields as fields
 from open_event.models.event import Event as EventModel, EventsUsers
 from open_event.models.user import ADMIN, SUPERADMIN
 from .helpers import get_object_list, get_object_or_404, get_paginated_list,\
@@ -15,20 +14,20 @@ api = Namespace('events', description='Events')
 
 EVENT = api.model('Event', {
     'id': fields.Integer(required=True),
-    'name': fields.String,
-    'email': EmailField(),
-    'color': ColorField(),
-    'logo': ImageUriField(),
-    'start_time': DateTimeField(required=True),
-    'end_time': DateTimeField(required=True),
-    'latitude': fields.Float,
-    'longitude': fields.Float,
-    'event_url': UriField(),
-    'background_url': UriField(),
-    'description': fields.String,
-    'location_name': fields.String,
-    'state': fields.String,
-    'closing_datetime': DateTimeField(),
+    'name': fields.String(required=True),
+    'email': fields.Email(),
+    'color': fields.Color(),
+    'logo': fields.ImageUri(),
+    'start_time': fields.DateTime(required=True),
+    'end_time': fields.DateTime(required=True),
+    'latitude': fields.Float(),
+    'longitude': fields.Float(),
+    'event_url': fields.Uri(),
+    'background_url': fields.Uri(),
+    'description': fields.String(),
+    'location_name': fields.String(),
+    'state': fields.String(),
+    'closing_datetime': fields.DateTime(),
 })
 
 EVENT_PAGINATED = api.clone('EventPaginated', PAGINATED_MODEL, {
@@ -90,7 +89,7 @@ class EventList(Resource):
     @requires_auth
     @api.doc('create_event', responses=POST_RESPONSES)
     @api.marshal_with(EVENT)
-    @api.expect(EVENT_POST, validate=True)
+    @api.expect(EVENT_POST)
     def post(self):
         """Create an event"""
         validate_payload(self.api.payload, EVENT_POST)

@@ -1,7 +1,7 @@
 import re
 import colour
 from datetime import datetime
-from flask.ext.restplus.fields import Raw
+from flask.ext.restplus.fields import Raw, Nested, List
 
 
 EMAIL_REGEX = re.compile(r'\S+@\S+\.\S+')
@@ -50,7 +50,7 @@ class CustomField(Raw):
         pass
 
 
-class EmailField(CustomField):
+class Email(CustomField):
     """
     Email field
     """
@@ -65,7 +65,7 @@ class EmailField(CustomField):
         return True
 
 
-class UriField(CustomField):
+class Uri(CustomField):
     """
     URI (link) field
     """
@@ -80,14 +80,14 @@ class UriField(CustomField):
         return True
 
 
-class ImageUriField(UriField):
+class ImageUri(Uri):
     """
     Image URL (url ends with image.ext) field
     """
     __schema_example__ = 'http://website.com/image.ext'
 
 
-class ColorField(CustomField):
+class Color(CustomField):
     """
     Color (or colour) field
     """
@@ -105,7 +105,7 @@ class ColorField(CustomField):
         return True
 
 
-class DateTimeField(CustomField):
+class DateTime(CustomField):
     """
     Custom DateTime field
     """
@@ -137,7 +137,7 @@ class DateTimeField(CustomField):
         return True
 
 
-class StringField(CustomField):
+class String(CustomField):
     """
     Custom String Field
     """
@@ -150,7 +150,7 @@ class StringField(CustomField):
             return False
 
 
-class IntegerField(CustomField):
+class Integer(CustomField):
     """
     Custom Integer Field
     """
@@ -168,7 +168,7 @@ class IntegerField(CustomField):
             return False
 
 
-class FloatField(CustomField):
+class Float(CustomField):
     """
     Custom Float Field
     """
