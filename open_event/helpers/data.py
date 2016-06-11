@@ -523,16 +523,18 @@ class DataManager(object):
 
     @staticmethod
     def update_user(form, user_id):
-        print form
+
         user = User.query.filter_by(id=user_id).first()
         user_detail = UserDetail.query.filter_by(user_id=user_id).first()
-        user.login = form['login']
+
         user.email = form['email']
+        user_detail.fullname = form['full_name']
         user_detail.facebook = form['facebook']
         user_detail.avatar = form['avatar']
         user_detail.contact = form['contact']
         user_detail.twitter = form['twitter']
-        save_to_db(user, "User updated")
+        print user, user_detail, save_to_db(user, "User updated")
+
 
     @staticmethod
     def add_owner_to_event(owner_id, event):
