@@ -6,7 +6,12 @@ from open_event.models.event import Event as EventModel
 DEFAULT_PAGE_START = 1
 DEFAULT_PAGE_LIMIT = 20
 
-POST_RESPONSES = {401: 'Authentication failure', 400: 'Validation error'}
+POST_RESPONSES = {
+    400: 'Validation error',
+    401: 'Authentication failure',
+    404: 'Event does not exist'
+}
+
 PUT_RESPONSES = {
     400: 'Validation Error / Bad request',
     401: 'Authentication failure',

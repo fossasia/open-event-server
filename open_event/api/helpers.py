@@ -161,6 +161,7 @@ def create_service_model(model, event_id, data):
     Create a new service model (microlocations, sessions, speakers etc)
     and save it to database
     """
+    get_object_or_404(EventModel, event_id)
     data['event_id'] = event_id
     new_model = model(**data)
     save_to_db(new_model, "Model %s saved" % model.__name__)
