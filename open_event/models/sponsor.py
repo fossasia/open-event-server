@@ -50,7 +50,7 @@ class Sponsor(db.Model):
         self.logo = logo
         self.event_id = event_id
         self.sponsor_type_id = sponsor_type_id
-        self.description
+        self.description = description
 
     def __repr__(self):
         return '<Sponsor %r>' % self.name
