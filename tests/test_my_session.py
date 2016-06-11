@@ -14,7 +14,7 @@ class TestMySession(OpenEventTestCase):
         with app.test_request_context():
             register(self.app, u'email2@gmail.com', u'test2')
             login(self.app, 'email2@gmail.com', 'test2')
-            rv = self.app.get('admin/events/mysessions/', follow_redirects=True)
+            rv = self.app.get('events/mysessions/', follow_redirects=True)
             logout(self.app)
             self.assertTrue("My Session Proposals" in rv.data, msg=rv.data)
 
