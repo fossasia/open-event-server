@@ -19,6 +19,7 @@ TRACK = api.model('Track', {
     'description': fields.String,
     'color': ColorField(),
     'track_image_url': ImageUriField(),
+    'location': fields.String,
     'sessions': fields.List(fields.Nested(TRACK_SESSION)),
 })
 
