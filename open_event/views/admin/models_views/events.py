@@ -16,9 +16,12 @@ class EventsView(ModelView):
 
     @expose('/')
     def index_view(self):
-        events = DataGetter.get_user_events()
+        print "aaa"
+        live_events = DataGetter.get_live_events()
+        draft_events = DataGetter.get_draft_events()
+        past_events = DataGetter.get_past_events()
         return self.render('/gentelella/admin/event/index.html',
-                           events=events)
+                           live_events=live_events, draft_events=draft_events, past_events=past_events)
 
     @expose('/new/', methods=('GET', 'POST'))
     def create_view(self):
@@ -57,16 +60,6 @@ class EventsView(ModelView):
         if request.method == "GET":
             DataManager.delete_event(event_id)
         return redirect(url_for('.index_view'))
-
-    @expose('/completed/', methods=('GET',))
-    def completed_events_view(self):
-        events = DataGetter.get_completed_events()
-        return self.render('/gentelella/admin/event/completed_events.html', events=events)
-
-    @expose('/current/', methods=('GET',))
-    def current_view(self):
-        events = DataGetter.get_current_events()
-        return self.render('/gentelella/admin/event/current_events.html', events=events)
 
     @expose('/<int:event_id>/update/', methods=('POST',))
     def save_closing_date(self, event_id):
