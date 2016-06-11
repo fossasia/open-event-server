@@ -6,7 +6,7 @@ from flask.ext import login
 from flask_admin import expose
 from flask_admin.base import AdminIndexView
 from flask.ext.scrypt import generate_password_hash
-
+from wtforms import ValidationError
 
 from ...helpers.data import DataManager, save_to_db, get_google_auth, get_facebook_auth
 from ...helpers.data_getter import DataGetter
@@ -54,6 +54,10 @@ class MyHomeView(AdminIndexView):
         if request.method == 'GET':
             return self.render('/gentelella/admin/login/register.html')
         if request.method == 'POST':
+            users = DataGetter.get_all_users()
+            for user in users:
+                if user.email == request.form['email']:
+                    raise ValidationError('Email already exists')
             logging.info("Registration under process")
             s = get_serializer()
             data = [request.form['email'], request.form['password']]
