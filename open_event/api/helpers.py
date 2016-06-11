@@ -143,10 +143,13 @@ def validate_payload(payload, api_model):
         field = api_model[key]
         if isinstance(field, fields.List):
             field = field.container
-            print field.validate
+            data = payload[key]
+        else:
+            data = [payload[key]]
         if isinstance(field, CustomField) and hasattr(field, 'validate'):
-            if not field.validate(payload[key]):
-                _error_abort(400, 'Validation of \'%s\' field failed' % key)
+            for i in data:
+                if not field.validate(i):
+                    _error_abort(400, 'Validation of \'%s\' field failed' % key)
 
 
 def save_db_model(new_model, model_name, event_id=None):
