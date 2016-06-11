@@ -1,6 +1,25 @@
 $(document).ready(function() {
 
   var counter = 0;
+  var sponsor_counter = 1;
+  $( "body" ).on( "click", ".add-sponsor", function () {
+    sponsor_counter += 1;
+    var row = '<tr class="row-sponsor">'+
+                '<td>' + sponsor_counter + '</td>'+
+                '<td><input required="required" name="sponsors[name]" class="form-control col-md-7 col-xs-12"/></td>'+
+                '<td><input required="required" name="sponsors[logo]" class="form-control col-md-7 col-xs-12"/></td>'+
+                '<td><textarea name="sponsors[description]" class="form-control col-md-7 col-xs-12"></textarea></td>'+
+                '<td><input required="required" name="sponsors[level]" class="form-control col-md-7 col-xs-12"/></td>'+
+                '<td><input required="required" name="sponsors[type]" class="form-control col-md-7 col-xs-12" value="Gold"/></td>'+
+                '<td><input required="required" name="sponsors[url]" class="form-control col-md-7 col-xs-12"/></td>'+
+            '</tr>';
+    $('.sponsors').append(row);
+  });
+
+  $( "body" ).on( "click", ".remove-sponsor", function () {
+    $(this).parent().parent().parent().remove();
+  });
+
   $('.add-session-type').click(function () {
     var row = "<div class='col-sm-12 row-session-type'>" +
                 "<div class='col-sm-3'>" +

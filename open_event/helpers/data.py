@@ -585,6 +585,12 @@ class DataManager(object):
                                              start_date=datetime.strptime(form['start_date'], '%m/%d/%Y'),
                                              end_date=datetime.strptime(form['end_date'], '%m/%d/%Y'))
 
+            sponsor_name = form.getlist('sponsors[name]')
+            sponsor_logo = form.getlist('sponsors[logo]')
+            sponsor_url = form.getlist('sponsors[url]')
+            sponsor_level = form.getlist('sponsors[level]')
+            sponsor_description = form.getlist('sponsors[description]')
+
             for index, name in enumerate(session_type_names):
                 session_type = SessionType(name=name, length=session_type_length[index], event_id=event.id)
                 db.session.add(session_type)
@@ -601,6 +607,10 @@ class DataManager(object):
             for index, name in enumerate(room_name):
                 room = Microlocation(name=name, event_id=event.id)
                 db.session.add(room)
+
+            for index, name in enumerate(sponsor_name):
+                sponsor = Sponsor(name=name, logo=sponsor_logo[index], url=sponsor_url[index], level=sponsor_level[index], description=sponsor_description[index], event_id=event.id)
+                db.session.add(sponsor)
 
             uer = UsersEventsRoles(event_id=event.id, user_id=login.current_user.id, role_id=role.id)
             if save_to_db(call_for_speakers, "Call for paper saved") and save_to_db(uer, "Event saved"):
