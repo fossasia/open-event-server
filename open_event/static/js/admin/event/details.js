@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     var steps = {
         Draft: 1,
         CallForPapers: 2,
@@ -52,5 +51,4 @@ $(document).ready(function () {
     });
 
     $(".actionBar").remove();
-
 });

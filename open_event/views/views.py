@@ -34,7 +34,11 @@ app = Blueprint('', __name__)
 @cross_origin()
 def get_main_page():
     """Redirect to admin page"""
-    return render_template('gentelella/index.html')
+    call_for_papers_evs = DataGetter.get_call_for_speakers_events()
+    published_events= DataGetter.get_published_events()
+    return render_template('gentelella/index.html',
+                           call_for_papers_evs=call_for_papers_evs,
+                           published_events=published_events)
 
 
 @app.route('/api/v1/event', methods=['GET'])

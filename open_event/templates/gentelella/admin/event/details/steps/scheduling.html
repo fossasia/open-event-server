@@ -48,8 +48,9 @@
                 </div>
 
                 <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-default"  onclick="return export_as_ical();">Export as iCal</button>
-                    <button type="button" class="btn btn-default export-png-button" >Export as PNG</button>
+                    <button type="button" class="btn btn-default" onclick="return export_as_ical();">Export as iCal
+                    </button>
+                    <button type="button" class="btn btn-default export-png-button">Export as PNG</button>
                 </div>
 
             </div>
@@ -101,10 +102,11 @@
     </div>
 </script>
 
-<form id="edit-session-form">
-    <div class="modal fade" id="edit-session-modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
+<div class="modal fade" id="edit-session-modal" tabindex="-1" role="dialog" aria-hidden="true"
+     data-start-date="{{ event.start_time.strftime('%Y %m %d') }}">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <form id="edit-session-form">
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
@@ -112,17 +114,17 @@
                     <h4 class="modal-title">Edit Session</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="row microlocations">
+                    <div class="row">
                         <div class="col-sm-12">
                             <div class="col-sm-12 input-group">
-                                <label>Title:</label>
-                                <input type="text" required="required" class="form-control" name="title"
+                                <label for="title">Title:</label>
+                                <input type="text" required="required" class="form-control" id="title" name="title"
                                        placeholder="Enter New Title">
                             </div>
 
                             <div class="col-sm-12 input-group">
-                                <label>New Description:</label>
-                                <textarea name="description" class="form-control"></textarea>
+                                <label for="description">New Description:</label>
+                                <textarea id="description" name="description" class="form-control"></textarea>
                             </div>
 
                             <div class="col-sm-12 input-group">
@@ -132,34 +134,27 @@
                             </div>
 
                             <div class="col-sm-12 input-group">
-                                <label>New Start Time:</label>
+                                <label>Start Time:</label>
                                 <input required="required" name="start_time" class="date-picker form-control"
-                                       placeholder="MM/DD/YYYY"/>
+                                       placeholder="YYYY-MM-DD HH:mm:ss"/>
                             </div>
 
                             <div class="col-sm-12 input-group">
-                                <label>New End Time:</label>
-                                <input required="required" name="start_time" class="date-picker form-control"
-                                       placeholder="MM/DD/YYYY"/>
+                                <label>End Time:</label>
+                                <input required="required" name="end_time" class="date-picker form-control"
+                                       placeholder="YYYY-MM-DD HH:mm:ss"/>
                             </div>
-
-                            {% if csrf_token %}
-                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                            {% endif %}
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="close-edit-session" class="btn btn-default" data-dismiss="modal">
-                        Close
-                    </button>
-                    <button type="submit" class="btn btn-primary">Update Session Information</button>
+                    <button type="reset" id="close-edit-session" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Update Session</button>
                 </div>
-
-            </div>
+            </form>
         </div>
     </div>
-</form>
+</div>
 
 <form id="add-microlocation-form" method="post">
     <div class="modal fade" id="add-microlocation-modal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -219,7 +214,7 @@
 </form>
 <script type="text/javascript">
     function export_as_ical(evt) {
-        $.getJSON("/api/v1/event/" + {{event.id}} + "/export/ical", function (result) {
+        $.getJSON("/api/v1/event/" + {{event.id}} +"/export/ical", function (result) {
             console.log(result["filename"]);
             window.open("/calendar/" + result["filename"]);
         });
