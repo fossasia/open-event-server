@@ -5,7 +5,7 @@ from open_event.helpers.helpers import get_serializer
 
 
 def login(app, email, password):
-    return app.post('admin/login/',
+    return app.post('login/',
                     data=dict(
                         email=email,
                         password=password
@@ -13,7 +13,7 @@ def login(app, email, password):
 
 
 def logout(app):
-    return app.get('admin/logout', follow_redirects=True)
+    return app.get('logout', follow_redirects=True)
 
 
 def register(app, email, password):
