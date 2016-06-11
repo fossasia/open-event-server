@@ -1,13 +1,26 @@
 {% extends 'gentelella/admin/base.html' %}
 {% block head_css %}
     {{ super() }}
-    <link href="{{ url_for('static', filename='css/admin/scheduling.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/admin/scheduler.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='admin/lib/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" />
 {% endblock %}
 
 {% block body %}
+<div class="" role="tabpanel">
+  <ul id="myTab" class="nav nav-tabs " role="tablist">
+    <li role="presentation" class="active"><a href="">Home</a>
+    </li>
+    <li role="presentation"><a href="/admin/events/{{event.id}}/scheduler/">Scheduler</a></li>
+    <li role="presentation" class=""><a href="/admin/events/{{event.id}}/session/" >Sessions</a>
+    </li>
+    <li role="presentation" class=""><a href="/admin/events/{{event.id}}/speakers/">Speaker</a>
+    </li>
+    <li role="presentation" class=""><a href="/admin/events/{{event.id}}/sponsors/">Sponsors</a>
+    </li>
+  </ul>
+</div>
 <div class="row">
 <div class="page-title">
     <div class="title_left">
@@ -22,7 +35,7 @@
     {% include '/gentelella/admin/event/details/roles.html' %}
 </div>
 
-
+<!--
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel" style="min-height:600px;">
@@ -83,7 +96,6 @@
                                 <div class="stepContainer" style="overflow-y: hidden;">
                                     {% include '/gentelella/admin/event/details/steps/draft.html' %}
                                     {% include '/gentelella/admin/event/details/steps/call_for_papers.html' %}
-                                    {% include '/gentelella/admin/event/details/steps/scheduling.html' %}
                                     {% include '/gentelella/admin/event/details/steps/published.html' %}
                                     {% include '/gentelella/admin/event/details/steps/completed.html' %}
                                 </div>
@@ -94,6 +106,7 @@
         </div>
     </div>
 </div>
+-->
 
 {% endblock %}
 
@@ -116,7 +129,7 @@
     <script type="text/javascript" src="{{ url_for('static', filename='admin/lib/jQuery-Smart-Wizard/js/jquery.smartWizard.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/details.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/scheduling.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/scheduler.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/callForPaper.js') }}"></script>
 
     <script type="text/javascript">

@@ -72,15 +72,22 @@ POST_SPEAKER_DATA = {
     "web": "http://website.com"
 }
 
+POST_SPONSOR_TYPE_DATA = {
+    "name": "TestSponsor_Type",
+}
+
 POST_SPONSOR_DATA = {
     "logo": "http://imgur.com/image.png",
     "name": "TestSponsor",
-    "url": "http://sponsor.com"
+    "url": "http://sponsor.com",
+    "description": "Big Sponsor",
+    "sponsor_type_id": 1,
 }
 
 POST_TRACK_DATA = {
     "description": "TestTrack",
     "name": "TestTrack",
     "color": "red",
-    "track_image_url": "http://imgur.com/image.png"
+    "track_image_url": "http://imgur.com/image.png",
+    "location": "Some Street, Some City",
 }

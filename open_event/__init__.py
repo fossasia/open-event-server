@@ -66,7 +66,6 @@ def create_app():
     admin_view.init_login(app)
 
     # Flask-DebugToolbar Configuration
-    app.config['DEBUG_TB_ENABLED'] = True
     app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
     DebugToolbarExtension(app)
 

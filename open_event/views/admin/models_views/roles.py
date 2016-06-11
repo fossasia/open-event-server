@@ -6,6 +6,9 @@ from ....helpers.data_getter import DataGetter
 
 
 class RoleView(ModelView):
+    @expose('/', methods=('GET', 'POST'))
+    def index_view(self, event_id):
+        return ''
 
     @expose('/new/', methods=('GET', 'POST'))
     def create_view(self, event_id):

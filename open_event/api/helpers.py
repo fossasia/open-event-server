@@ -211,14 +211,14 @@ def requires_auth(f):
         except JWTError as e:
             if e.headers is not None and 'WWW-Authenticate' not in e.headers:
                 # JWT header was set but something wrong happened
-                message = e.error + ': ' + e.description
+                _error_abort(401, e.error + ': ' + e.description)
 
         # Basic Auth
         if not success:
             results = auth_basic()
             if not results[0]:
-                if results[1]:
-                    message = results[1]
+                if results[1]:  # basic auth was set but..
+                    _error_abort(401, results[1])
             else:
                 success = True
 
