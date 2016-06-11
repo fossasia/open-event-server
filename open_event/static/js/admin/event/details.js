@@ -1,39 +1,56 @@
 $(document).ready(function () {
 
-  $('#wizard').smartWizard({
-    includeFinishButton: false,
-    keyNavigation: false,
-    noForwardJumping: true,
-  });
+    var steps = {
+        Draft: 1,
+        CallForPapers: 2,
+        Scheduling: 3,
+        Published: 4,
+        Completed: 5
+    };
 
-//  $('.date-picker').daterangepicker({
-//    singleDatePicker: true,
-//    timePicker: true,
-//    calender_style: "picker_4",
-//    locale: {
-//      format: 'MM/DD/YYYY H:mm A'
-//    }
-//  });
+    var $wizard = $('#wizard');
 
-  $("#go_to_call_for_papers").click(function () {
-    $('#wizard').smartWizard('goToStep', 2);
-    // Send post to change event state to Call for papers
-  });
+    $wizard.smartWizard({
+        includeFinishButton: false,
+        keyNavigation: false,
+        noForwardJumping: true,
+        onShowStep: handleStepChange
+    });
 
-  $("#back_to_draft").click(function () {
-    $('#wizard').smartWizard('goToStep', 1);
-    // Send post to change event state to Call for papers
-  });
+    function handleStepChange($step, context) {
+        console.log(context.toStep);
+        switch (context.toStep) {
+            case steps.Draft:
+                // TODO Make a post request to change event state to 'draft'
+                break;
 
-  $("#start_scheduling").click(function () {
-    $('#wizard').smartWizard('goToStep', 3);
-    // Send post to change event state to Call for papers
-  });
+            case steps.CallForPapers:
+                // TODO Make a post request to change event state to 'Call for papers'
+                break;
 
-  $(".actionBar").remove();
+            case steps.Scheduling:
+                // TODO Make a post request to change event state to 'Scheduling'
+                break;
 
-  $.get("/api/v2/events/" + 2 , function (events) {
-    console.log(events)
-  });
+            case steps.Published:
+                // TODO Make a POST request to change event state to 'Published'
+                break;
+
+            case steps.Completed:
+                // TODO Make a POST request to change event state to 'Completed'
+
+                break;
+        }
+    }
+
+    $(document).on("click", ".previous-step", function () {
+        $wizard.smartWizard('goBackward');
+    });
+
+    $(document).on("click", ".next-step", function () {
+        $wizard.smartWizard('goForward');
+    });
+
+    $(".actionBar").remove();
 
 });
