@@ -49,7 +49,7 @@ class Language(Resource):
     @requires_auth
     @api.doc('update_language', responses=PUT_RESPONSES)
     @api.marshal_with(LANGUAGE)
-    @api.expect(LANGUAGE_POST, validate=True)
+    @api.expect(LANGUAGE_POST)
     def put(self, event_id, language_id):
         """Update a language given its id"""
         DAO.validate(self.api.payload, LANGUAGE_POST)
@@ -67,7 +67,7 @@ class LanguageList(Resource):
     @requires_auth
     @api.doc('create_language', responses=POST_RESPONSES)
     @api.marshal_with(LANGUAGE)
-    @api.expect(LANGUAGE_POST, validate=True)
+    @api.expect(LANGUAGE_POST)
     def post(self, event_id):
         """Create a language"""
         DAO.validate(self.api.payload, LANGUAGE_POST)

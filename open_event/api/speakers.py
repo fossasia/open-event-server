@@ -66,7 +66,7 @@ class Speaker(Resource):
     @requires_auth
     @api.doc('update_speaker', responses=PUT_RESPONSES)
     @api.marshal_with(SPEAKER)
-    @api.expect(SPEAKER_POST, validate=True)
+    @api.expect(SPEAKER_POST)
     def put(self, event_id, speaker_id):
         """Update a speaker given its id"""
         DAO.validate(self.api.payload, SPEAKER_POST)
@@ -84,7 +84,7 @@ class SpeakerList(Resource):
     @requires_auth
     @api.doc('create_speaker', responses=POST_RESPONSES)
     @api.marshal_with(SPEAKER)
-    @api.expect(SPEAKER_POST, validate=True)
+    @api.expect(SPEAKER_POST)
     def post(self, event_id):
         """Create a speaker"""
         DAO.validate(self.api.payload, SPEAKER_POST)

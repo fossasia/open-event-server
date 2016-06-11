@@ -19,7 +19,7 @@ TOKEN = api.model('Token', {
 @api.route('')
 class Login(Resource):
     @api.doc('get_token')
-    @api.expect(LOGIN, validate=True)
+    @api.expect(LOGIN)
     @api.marshal_with(TOKEN)
     @api.response(401, 'Authentication Failed')
     def post(self):

@@ -70,7 +70,7 @@ class Event(Resource):
     @requires_auth
     @api.doc('update_event', responses=PUT_RESPONSES)
     @api.marshal_with(EVENT)
-    @api.expect(EVENT_POST, validate=True)
+    @api.expect(EVENT_POST)
     def put(self, event_id):
         """Update a event given its id"""
         validate_payload(self.api.payload, EVENT_POST)

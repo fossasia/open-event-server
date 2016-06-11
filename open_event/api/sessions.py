@@ -153,7 +153,7 @@ class Session(Resource):
     @requires_auth
     @api.doc('update_session', responses=PUT_RESPONSES)
     @api.marshal_with(SESSION)
-    @api.expect(SESSION_POST, validate=True)
+    @api.expect(SESSION_POST)
     def put(self, event_id, session_id):
         """Update a session given its id"""
         DAO.validate(self.api.payload, SESSION_POST)
@@ -171,7 +171,7 @@ class SessionList(Resource):
     @requires_auth
     @api.doc('create_session', responses=POST_RESPONSES)
     @api.marshal_with(SESSION)
-    @api.expect(SESSION_POST, validate=True)
+    @api.expect(SESSION_POST)
     def post(self, event_id):
         """Create a session"""
         DAO.validate(self.api.payload, SESSION_POST)

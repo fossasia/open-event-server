@@ -59,7 +59,7 @@ class Track(Resource):
     @requires_auth
     @api.doc('update_track', responses=PUT_RESPONSES)
     @api.marshal_with(TRACK)
-    @api.expect(TRACK_POST, validate=True)
+    @api.expect(TRACK_POST)
     def put(self, event_id, track_id):
         """Update a track given its id"""
         DAO.validate(self.api.payload, TRACK_POST)
@@ -77,7 +77,7 @@ class TrackList(Resource):
     @requires_auth
     @api.doc('create_track', responses=POST_RESPONSES)
     @api.marshal_with(TRACK)
-    @api.expect(TRACK_POST, validate=True)
+    @api.expect(TRACK_POST)
     def post(self, event_id):
         """Create a track"""
         DAO.validate(self.api.payload, TRACK_POST)

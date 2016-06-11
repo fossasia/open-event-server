@@ -54,7 +54,7 @@ class Sponsor(Resource):
     @requires_auth
     @api.doc('update_sponsor', responses=PUT_RESPONSES)
     @api.marshal_with(SPONSOR)
-    @api.expect(SPONSOR_POST, validate=True)
+    @api.expect(SPONSOR_POST)
     def put(self, event_id, sponsor_id):
         """Update a sponsor given its id"""
         DAO.validate(self.api.payload, SPONSOR_POST)
@@ -73,7 +73,7 @@ class SponsorList(Resource):
     @requires_auth
     @api.doc('create_sponsor', responses=POST_RESPONSES)
     @api.marshal_with(SPONSOR)
-    @api.expect(SPONSOR_POST, validate=True)
+    @api.expect(SPONSOR_POST)
     def post(self, event_id):
         """Create a sponsor"""
         DAO.validate(self.api.payload, SPONSOR_POST)

@@ -49,7 +49,7 @@ class Format(Resource):
     @requires_auth
     @api.doc('update_format', responses=PUT_RESPONSES)
     @api.marshal_with(FORMAT)
-    @api.expect(FORMAT_POST, validate=True)
+    @api.expect(FORMAT_POST)
     def put(self, event_id, format_id):
         """Update a format given its id"""
         DAO.validate(self.api.payload, FORMAT_POST)
@@ -67,7 +67,7 @@ class FormatList(Resource):
     @requires_auth
     @api.doc('create_format', responses=POST_RESPONSES)
     @api.marshal_with(FORMAT)
-    @api.expect(FORMAT_POST, validate=True)
+    @api.expect(FORMAT_POST)
     def post(self, event_id):
         """Create a format"""
         DAO.validate(self.api.payload, FORMAT_POST)

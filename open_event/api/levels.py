@@ -48,7 +48,7 @@ class Level(Resource):
     @requires_auth
     @api.doc('update_level', responses=PUT_RESPONSES)
     @api.marshal_with(LEVEL)
-    @api.expect(LEVEL_POST, validate=True)
+    @api.expect(LEVEL_POST)
     def put(self, event_id, level_id):
         """Update a level given its id"""
         DAO.validate(self.api.payload, LEVEL_POST)
@@ -66,7 +66,7 @@ class LevelList(Resource):
     @requires_auth
     @api.doc('create_level', responses=POST_RESPONSES)
     @api.marshal_with(LEVEL)
-    @api.expect(LEVEL_POST, validate=True)
+    @api.expect(LEVEL_POST)
     def post(self, event_id):
         """Create a level"""
         DAO.validate(self.api.payload, LEVEL_POST)
