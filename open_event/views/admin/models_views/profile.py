@@ -24,6 +24,7 @@ class ProfileView(ModelView):
     @expose('/edit/', methods=('GET', 'POST'))
     def edit_view(self):
         if request.method == 'POST':
+            print request.form
             profile = DataManager.update_user(request.form, login.current_user.id)
             return redirect(url_for('.index_view'))
         profile = DataGetter.get_user(login.current_user.id)
