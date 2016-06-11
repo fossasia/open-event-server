@@ -9,7 +9,6 @@ from tests.api.utils_post_data import *
 from tests.auth_helper import register
 from open_event import current_app as app
 
-
 class TestPostApiBasicAuth(OpenEventTestCase):
     """
     Tests the Basic Authorization in Post API
