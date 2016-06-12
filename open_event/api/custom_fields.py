@@ -16,7 +16,8 @@ class CustomField(Raw):
 
     def __init__(self, *args, **kwargs):
         super(CustomField, self).__init__(**kwargs)
-        # can be used for managing params
+        # custom params
+        self.positive = kwargs.get('positive', True)
 
     def format(self, value):
         """
@@ -153,6 +154,8 @@ class String(CustomField):
 class Integer(CustomField):
     """
     Custom Integer Field
+    Args:
+        :positive - accept only positive numbers, True by default
     """
     __schema_type__ = 'integer'
     __schema_format__ = 'int'
@@ -161,11 +164,11 @@ class Integer(CustomField):
     def validate(self, value):
         if value is None:
             return self.validate_empty()
-        if type(value) == int and value >= 0:
-            # No <0 int values right now
-            return True
-        else:
+        if type(value) != int:
             return False
+        if self.positive and value < 0:
+            return False
+        return True
 
 
 class Float(CustomField):
