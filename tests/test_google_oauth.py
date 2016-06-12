@@ -11,6 +11,7 @@ from open_event.helpers.data import get_google_auth
 from tests.auth_helper import login, logout
 from open_event.helpers.helpers import get_serializer
 
+
 class TestGoogleOauth(OpenEventTestCase):
     def setUp(self):
         self.app = Setup.create_app()
@@ -25,8 +26,8 @@ class TestGoogleOauth(OpenEventTestCase):
             self.app.get(url_for('admin.create_account_after_confirmation_view', hash=data_hash), follow_redirects=True)
             logout(self.app)
             login(self.app, 'email@gmail.com', 'test')
-            self.assertTrue('Create New Event' in self.app.get('/gCallback/?state=dummy_state&code=dummy_code',
-                                                               follow_redirects=True).data)
+            self.assertTrue('Open Event' in self.app.get('/gCallback/?state=dummy_state&code=dummy_code',
+                                                           follow_redirects=True).data)
             self.assertEqual(self.app.get('/gCallback/?state=dummy_state&code=dummy_code').status_code, 302)
 
     def test_redirect(self):
@@ -49,7 +50,7 @@ class TestGoogleOauth(OpenEventTestCase):
                 "/gCallback/?state=dummy_state&code=dummy_code&error=access denied").data)
             self.assertTrue("Error encountered" in self.app.get(
                 "/gCallback/?state=dummy_state&code=dummy_code&error=12234").data)
-            self.assertTrue("/admin/login" in self.app.get("/gCallback/?no_code_and_state").data)
+            self.assertTrue("/login" in self.app.get("/gCallback/?no_code_and_state").data)
             self.assertEqual(self.app.get("/gCallback/1234").status_code, 404)
 
 

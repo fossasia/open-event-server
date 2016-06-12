@@ -1,63 +1,75 @@
-body{
+body {
     background: white;
 }
 
-.main_container .top_nav {
-    margin-left:0px !important;
+.right_col {
+    padding: 0 !important;
 }
 
-#main-image{
-    background-image: url("/static/img/startup-594090_1920.jpg");
+.carousel {
     height: 500px;
+    margin-bottom: 60px;
+    position: inherit;
+}
+
+.carousel-inner {
+    top: -10px;
+}
+
+.carousel-caption {
+    z-index: 10;
+}
+
+/*noinspection CssOptimizeSimilarProperties,CssUnknownTarget*/
+.carousel .item {
+    height: 500px;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/static/img/startup-594090_1920.jpg');
+    background-position: center;
+}
+
+.carousel-caption h1 {
+    font-weight: 100;
+}
+
+.carousel-caption .btn {
+    font-weight: 100;
+    font-size: 25px;
+}
+
+.row {
+    margin: 0;
+    padding: 10px;
+}
+
+.thumbnail {
     overflow: hidden;
-    padding:-100px;
-    background-position: 0px -150px;
+    height: auto;
 }
 
-.index-container {
-    padding-right: 15px;
-    padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto;
+.section-header {
+    color: #2196F3;
+    font-weight: 300;
 }
-
 
 @media (min-width: 768px) {
-  .index-container {
-    width: 750px;
-  }
-}
-@media (min-width: 992px) {
-  .index-container {
-    width: 970px;
-  }
-}
-@media (min-width: 1200px) {
-  .index-container {
-    width: 1170px;
-  }
+    .carousel-caption p {
+        margin-bottom: 50px;
+        font-size: 30px;
+        line-height: 1.4;
+    }
+
+    .carousel-caption h1 {
+        font-size: 50px;
+    }
 }
 
-.img-content{
-    text-align:center;
-    padding-top:60px;
-    color:white;
+.hero-feature {
+    margin-bottom: 30px;
 }
 
-.img-content h1 {
-    margin-top:220px;
-    font-size: 60px;
+.no-data-message {
+    font-size: 16px;
+    margin-left: 10px;
 }
 
-.nav_menu{
-    margin-bottom: 0px;
-}
 
-.thumbnail{
-    overflow: none;
-    border: none;
-    height:335px
-}
- .caption{
-    text-align: left
- }

@@ -1,5 +1,5 @@
-from flask.ext.restplus import Resource, Namespace, fields
-
+from flask.ext.restplus import Resource, Namespace
+import custom_fields as fields
 from open_event.models.microlocation import Microlocation as MicrolocationModel
 from .helpers import get_paginated_list, requires_auth
 from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
@@ -9,11 +9,11 @@ api = Namespace('microlocations', description='Microlocations', path='/')
 
 MICROLOCATION = api.model('Microlocation', {
     'id': fields.Integer(required=True),
-    'name': fields.String,
-    'latitude': fields.Float,
-    'longitude': fields.Float,
-    'floor': fields.Integer,
-    'room': fields.String,
+    'name': fields.String(),
+    'latitude': fields.Float(),
+    'longitude': fields.Float(),
+    'floor': fields.Integer(),
+    'room': fields.String(),
 })
 
 MICROLOCATION_PAGINATED = api.clone('MicrolocationPaginated', PAGINATED_MODEL, {
@@ -51,7 +51,7 @@ class Microlocation(Resource):
     @requires_auth
     @api.doc('update_microlocation', responses=PUT_RESPONSES)
     @api.marshal_with(MICROLOCATION)
-    @api.expect(MICROLOCATION_POST, validate=True)
+    @api.expect(MICROLOCATION_POST)
     def put(self, event_id, microlocation_id):
         """Update a microlocation given its id"""
         DAO.validate(self.api.payload, MICROLOCATION_POST)
@@ -69,7 +69,7 @@ class MicrolocationList(Resource):
     @requires_auth
     @api.doc('create_microlocation', responses=POST_RESPONSES)
     @api.marshal_with(MICROLOCATION)
-    @api.expect(MICROLOCATION_POST, validate=True)
+    @api.expect(MICROLOCATION_POST)
     def post(self, event_id):
         """Create a microlocation"""
         DAO.validate(self.api.payload, MICROLOCATION_POST)

@@ -12,6 +12,7 @@ from open_event.models.session import Session
 from open_event.models.speaker import Speaker
 from open_event.models.sponsor import Sponsor
 from open_event.views.admin.models_views.events import EventsView
+from open_event.views.admin.models_views.my_sessions import MySessionView
 from open_event.views.admin.models_views.roles import RoleView
 from open_event.views.admin.models_views.profile import ProfileView
 from open_event.views.admin.models_views.scheduler import SchedulerView
@@ -25,8 +26,12 @@ from open_event.views.admin.home import MyHomeView
 
 class AdminView(object):
     """Main Admin class View"""
+
     def __init__(self, app_name):
-        self.admin = Admin(name=app_name, template_mode='bootstrap3', index_view=MyHomeView())
+        self.admin = Admin(name=app_name, template_mode='bootstrap3', index_view=MyHomeView(
+            name='Home',
+            url='/'
+        ), static_url_path='/static')
 
     def init(self, app):
         """Init flask admin"""
@@ -34,16 +39,16 @@ class AdminView(object):
         self._add_views()
 
     def _add_views(self):
-        self.admin.add_view(EventsView(Event, db.session, name='Events', url='events'))
-        self.admin.add_view(EventsSpeakersView(Speaker, db.session, name='Speaker', url='events/<event_id>/speakers'))
-        self.admin.add_view(EventsSponsorsView(Sponsor, db.session, name='Sponsor', url='events/<event_id>/sponsors'))
-        self.admin.add_view(SessionView(Session, db.session, name='Sessions', url='events/<event_id>/sessions'))
-        self.admin.add_view(SchedulerView(name='Scheduler', url='events/<event_id>/scheduler'))
-        self.admin.add_view(RoleView(Role, db.session, name='Role', url='events/<event_id>/roles'))
-        self.admin.add_view(ProfileView(User, db.session, name='Profile', url='profile'))
-        self.admin.add_view(TracksView(Track, db.session, name='Track', url='events/<event_id>/tracks'))
-        self.admin.add_view(InviteView(Invite, db.session, name='Invite', url='events/<event_id>/invite'))
-
+        self.admin.add_view(EventsView(Event, db.session, name='Events', url='/events'))
+        self.admin.add_view(MySessionView(name='MySessions', url='/events/mysessions'))
+        self.admin.add_view(EventsSpeakersView(Speaker, db.session, name='Speaker', url='/events/<event_id>/speakers'))
+        self.admin.add_view(EventsSponsorsView(Sponsor, db.session, name='Sponsor', url='/events/<event_id>/sponsors'))
+        self.admin.add_view(SessionView(Session, db.session, name='Sessions', url='/events/<event_id>/sessions'))
+        self.admin.add_view(SchedulerView(name='Scheduler', url='/events/<event_id>/scheduler'))
+        self.admin.add_view(RoleView(Role, db.session, name='Role', url='/events/<event_id>/roles'))
+        self.admin.add_view(ProfileView(User, db.session, name='Profile', url='/profile'))
+        self.admin.add_view(TracksView(Track, db.session, name='Track', url='/events/<event_id>/tracks'))
+        self.admin.add_view(InviteView(Invite, db.session, name='Invite', url='/events/<event_id>/invite'))
 
     @staticmethod
     def init_login(app):
@@ -55,4 +60,3 @@ class AdminView(object):
         @login_manager.user_loader
         def load_user(user_id):
             return db.session.query(User).get(user_id)
-

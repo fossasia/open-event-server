@@ -1,5 +1,5 @@
-from flask.ext.restplus import Resource, Namespace, fields
-
+from flask.ext.restplus import Resource, Namespace
+import custom_fields as fields
 from open_event.models.sponsor import SponsorType as SponsorTypeModel
 from .helpers import get_paginated_list, requires_auth
 from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
@@ -9,7 +9,7 @@ api = Namespace('sponsor_types', description='SponsorTypes', path='/')
 
 SPONSOR_TYPE = api.model('SponsorType', {
     'id': fields.Integer(required=True),
-    'name': fields.String,
+    'name': fields.String(),
 })
 
 SPONSOR_TYPE_PAGINATED = api.clone('SponsorTypePaginated', PAGINATED_MODEL, {
@@ -47,7 +47,7 @@ class SponsorType(Resource):
     @requires_auth
     @api.doc('update_sponsor_type', responses=PUT_RESPONSES)
     @api.marshal_with(SPONSOR_TYPE)
-    @api.expect(SPONSOR_TYPE_POST, validate=True)
+    @api.expect(SPONSOR_TYPE_POST)
     def put(self, event_id, sponsor_type_id):
         """Update a sponsor_type given its id"""
         DAO.validate(self.api.payload, SPONSOR_TYPE_POST)
@@ -65,7 +65,7 @@ class SponsorTypeList(Resource):
     @requires_auth
     @api.doc('create_sponsor_type', responses=POST_RESPONSES)
     @api.marshal_with(SPONSOR_TYPE)
-    @api.expect(SPONSOR_TYPE_POST, validate=True)
+    @api.expect(SPONSOR_TYPE_POST)
     def post(self, event_id):
         """Create a sponsor_type"""
         DAO.validate(self.api.payload, SPONSOR_TYPE_POST)

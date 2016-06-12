@@ -8,6 +8,7 @@ from tests.api.utils_post_data import *
 from tests.auth_helper import register
 from open_event import current_app as app
 
+
 class TestPostApiBase(OpenEventTestCase):
     """
     Base class to test POST APIs

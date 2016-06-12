@@ -14,6 +14,7 @@ from ..models.social_link import SocialLink
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
 from flask import flash
+import datetime
 
 
 class DataGetter:
@@ -76,6 +77,18 @@ class DataGetter:
             event_id=event_id,
             is_accepted=is_accepted
         )
+
+    @staticmethod
+    def get_sessions_of_user(upcoming_events=True):
+        """
+        :return: Return all Sessions objects with the current user as a speaker
+        """
+        if upcoming_events:
+            return Session.query.filter(Session.speakers.any(Speaker.email == login.current_user.email)).filter(
+                Event.state != 'Completed')
+        else:
+            return Session.query.filter(Session.speakers.any(Speaker.email == login.current_user.email)).filter(
+                Event.state == 'Completed')
 
     @staticmethod
     def get_speakers(event_id):
@@ -249,6 +262,19 @@ class DataGetter:
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
             .filter(Event.state != 'Completed')
         return events
+
+    @staticmethod
+    def get_live_events():
+        return Event.query.filter(Event.start_time <= datetime.datetime.now())\
+            .filter(Event.end_time >= datetime.datetime.now())
+
+    @staticmethod
+    def get_draft_events():
+        return Event.query.filter(Event.start_time >= datetime.datetime.now())
+
+    @staticmethod
+    def get_past_events():
+        return Event.query.filter(Event.end_time <= datetime.datetime.now())
 
     @staticmethod
     def get_session(session_id):

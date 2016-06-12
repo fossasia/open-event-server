@@ -1,14 +1,14 @@
 """empty message
 
-Revision ID: 9a01232a22cc
-Revises: 0d25e6904746
-Create Date: 2016-06-10 09:41:32.125958
+Revision ID: 8a3b434d8265
+Revises: d563f6eba95a
+Create Date: 2016-06-11 14:12:41.416951
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '9a01232a22cc'
-down_revision = '008dae41b45e'
+revision = '8a3b434d8265'
+down_revision = 'd563f6eba95a'
 
 from alembic import op
 import sqlalchemy as sa
@@ -20,6 +20,8 @@ def upgrade():
     op.create_table('sponsor_type',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
+    sa.Column('event_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['event_id'], ['events.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.add_column(u'sponsors', sa.Column('description', sa.String(), nullable=True))

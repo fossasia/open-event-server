@@ -5,6 +5,7 @@ class UserDetail(db.Model):
     __tablename__ = "user_detail"
     id = db.Column(db.Integer, primary_key=True)
     fullname = db.Column(db.String)
+    details = db.Column(db.String)
     avatar = db.Column(db.String)
     contact = db.Column(db.String)
     facebook = db.Column(db.String)
