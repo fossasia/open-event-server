@@ -3,17 +3,195 @@
     {{ super() }}
     <link href="{{ url_for('static', filename='css/admin/mysessions.css') }}" rel="stylesheet">
 {% endblock %}
+{% block title %}
+    {{ session.title }} - My Sessions
+{% endblock %}
 
 {% block body %}
     <div class="row">
         <div class="col-md-12">
             <div class="x_panel" style="min-height:600px;">
+                <div class="x_content">
+                    <br>
+                    {% if session.state == 'pending' %}
+                        <span class="detail-status label label-warning">Under Review</span>
+                    {% elif session.state == 'accepted' %}
+                        <span class="detail-status label label-success">Accepted</span>
+                    {% elif session.state == 'rejected' %}
+                        <span class="detail-status label label-danger">Rejected</span>
+                    {% else %}
+                        <span class="detail-status label label-info">N/A</span>
+                    {% endif %}
+                    <button class="btn btn-info pull-right" data-toggle="modal" data-target="#edit-session-modal">Edit
+                        Proposal
+                    </button>
+                    <br>
+                    <br>
+                    <h4 style="font-weight: 300; color: #8d8d8d">{{ session.event.name }}
+                        ~ {{ session.event.start_time.strftime('%B %d, %Y %I:%M %p') }}</h4>
+                    <h1 style="font-weight: 300;"><span class="title">{{ session.title }}</span>
+                        <small class="subtitle" style="font-weight: 300; color: #8d8d8d">{{ session.subtitle }}</small>
+                    </h1>
+                    <h3 style="font-weight: 300; color: #8d8d8d">By
+                        {% for speaker in session.speakers %}
+                            {{ speaker.name }}
+                        {% endfor %}
+                    </h3>
+                    <h4 style="font-weight: 300; color: #8d8d8d">
+                        {{ session.event.start_time.strftime('%B %d, %Y - %I:%M %p') }}
+                        <i>(to)</i> {{ session.event.end_time.strftime('%B %d, %Y - %I:%M %p') }}
+                    </h4>
+                    <br>
+                    <h5>Abstract</h5>
+                    <p style="text-align: justify;"><i class="abstract">
+                        {{ session.abstract }}
+                    </i></p>
+                    <br>
+                    <h5>Description</h5>
+                    <p style="text-align: justify" class="description">
+                        {{ session.description }}
+                    </p>
+                    <br>
+                    <div class="row" style="text-align: center; font-size: 16px;">
+                        <div class="col-md-2 col-md-push-1">
+                            <strong>Microlocation</strong><br>
+                            {{ session.microlocation.name }}
+                        </div>
+                        <div class="col-md-2 col-md-push-1">
+                            <strong>Track</strong><br>
+                            {{ session.track.name }}
+                        </div>
+                        <div class="col-md-2 col-md-push-1">
+                            <strong>Language</strong><br>
+                            {{ session.language.name }}
+                        </div>
+                        <div class="col-md-2 col-md-push-1">
+                            <strong>Format</strong><br>
+                            {{ session.format.name }}
+                        </div>
+                        <div class="col-md-2 col-md-push-1">
+                            <strong>Level</strong><br>
+                            {{ session.level.name }}
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                </div>
             </div>
         </div>
     </div>
+    <form id="edit-session-form">
+        <div class="modal fade" id="edit-session-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">Edit Session Proposal</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row microlocations">
+                            <div class="col-sm-12">
+                                <div class="col-sm-12 input-group">
+                                    <label>Title:</label>
+                                    <input type="text" required="required" class="form-control" name="title"
+                                           placeholder="Title" value="{{ session.title }}">
+                                </div>
+
+                                <div class="col-sm-12 input-group">
+                                    <label>Subtitle:</label>
+                                    <input type="text" required="required" class="form-control" name="subtitle"
+                                           placeholder="Subtitle" value="{{ session.subtitle }}">
+                                </div>
+
+                                <div class="col-sm-12 input-group">
+                                    <label>Abstract:</label>
+                                    <textarea rows="4" name="abstract" title="abstract"
+                                              style="width: 100%" required>{{ session.abstract }}</textarea>
+                                </div>
+
+                                <div class="col-sm-12 input-group">
+                                    <label>Description:</label>
+                                    <textarea rows="5" name="description"
+                                              title="description"
+                                              style="width: 100%" required>{{ session.description }}</textarea>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="close-edit-session" class="btn btn-default" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="submit" class="btn btn-primary">Edit Session Proposal</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 
 {% endblock %}
 {% block tail_js %}
     {{ super() }}
+    <script src="{{ url_for('static', filename='admin/lib/lodash/dist/lodash.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
+    <script type="text/javascript">
+        var $editSessionForm = $("#edit-session-form");
+        var $editSessionModal = $("#edit-session-modal");
+        var sessionId = {{ session.id }};
+        var eventId = {{ session.event.id }}
+        $editSessionForm.submit(function (e) {
+            e.preventDefault();
+            $editSessionForm.lockForm();
+            initializeSwaggerClient(function () {
+                api.sessions.get_session({event_id: eventId, session_id: sessionId }, function (get_success) {
+                    var session = get_success.obj;
+                    session.title = $editSessionForm.find("input[name=title]").val();
+                    session.subtitle = $editSessionForm.find("input[name=subtitle]").val();
+                    session.abstract = $editSessionForm.find("textarea[name=abstract]").val();
+                    session.description = $editSessionForm.find("textarea[name=description]").val();
+
+                    // Format the payload to match API requirements
+                    session.track_id = _.isNull(session.track.id) ? 0 : session.track.id;
+                    session.level_id = _.isNull(session.level.id) ? 0 : session.level.id;
+                    session.format_id = _.isNull(session.format.id) ? 0 : session.format.id;
+                    session.language_id = _.isNull(session.language.id) ? 0 : session.language.id;
+                    session.microlocation_id = _.isNull(session.microlocation.id) ? 0 : session.microlocation.id;
+                    session.speaker_ids = _.map(session.speakers, 'id');
+
+                    // Clean up the payload
+                    delete session.track;
+                    delete session.level;
+                    delete session.format;
+                    delete session.language;
+                    delete session.speakers;
+                    delete session.microlocation;
+                    delete session.id;
+
+                    api.sessions.put_session({event_id: eventId, session_id: sessionId, payload: session}, function (put_success) {
+                        createSnackbar("Changes have been saved.", "Dismiss", null, 1000);
+                        var newSession = put_success.obj;
+                        $(".title").text(newSession.title);
+                        $(".subtitle").text(newSession.subtitle);
+                        $(".abstract").text(newSession.abstract);
+                        $(".description").text(newSession.description);
+                        $editSessionForm.unlockForm();
+                        $editSessionModal.modal('hide');
+                    }, function (error) {
+                        createSnackbar("An error occurred while saving the changes.", "Try Again", function () {
+                            $editSessionForm.unlockForm();
+                            $editSessionForm.submit();
+                        });
+                    });
+                }, function (error) {
+                    createSnackbar("An error occurred while saving the changes.", "Try Again", function () {
+                        $editSessionForm.unlockForm();
+                        $editSessionForm.submit();
+                    });
+                });
+            });
+        });
+    </script>
 {% endblock %}
 
