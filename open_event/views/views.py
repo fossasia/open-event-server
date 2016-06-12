@@ -537,4 +537,5 @@ def documentation():
 
 @app.route('/heroku_releases')
 def heroku_releases():
-    return "v" + str(get_latest_heroku_release()['version'])
+    return render_template('gentelella/admin/current_version.html',
+                    version=get_latest_heroku_release())
