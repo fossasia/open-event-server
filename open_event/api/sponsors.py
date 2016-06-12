@@ -28,7 +28,7 @@ del SPONSOR_POST['id']
 class SponsorDAO(ServiceDAO):
     def validate_sponsor_type(self, payload, event_id):
         sponsor_type_id = payload.get('sponsor_type_id', False)
-        if sponsor_type_id:
+        if sponsor_type_id is not None:
             get_object_in_event(SponsorTypeModel, sponsor_type_id, event_id)
 
 DAO = SponsorDAO(model=SponsorModel)
