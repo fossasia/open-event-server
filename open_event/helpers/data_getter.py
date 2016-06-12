@@ -11,6 +11,8 @@ from ..models.user import User
 from ..models.file import File
 from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
+from ..models.call_for_papers import CallForPaper
+from ..models.sponsor import SponsorType
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
 from flask import flash
@@ -309,3 +311,11 @@ class DataGetter:
     @staticmethod
     def get_user_sessions():
         return Session.query.all()
+
+    @staticmethod
+    def get_call_for_papers(event_id):
+        return CallForPaper.query.filter_by(event_id=event_id)
+
+    @staticmethod
+    def get_sponsor_types(event_id):
+        return SponsorType.query.filter_by(event_id=event_id)

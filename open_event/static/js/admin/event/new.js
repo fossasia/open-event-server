@@ -1,6 +1,7 @@
 $(document).ready(function() {
 
   var counter = 0;
+  var room_counter = 0;
   var sponsor_counter = 1;
   $( "body" ).on( "click", ".add-sponsor", function () {
     sponsor_counter += 1;
@@ -83,14 +84,14 @@ $(document).ready(function() {
   });
 
   $("body").on("click", '#add-rooms', function () {
-    counter += 1;
+    room_counter += 1;
     var row = "<div class='col-sm-12 row-rooms'>" +
                 "<div class='col-sm-3'>" +
                   "<input type='text' class='form-control' name='rooms[name]' placeholder='Name'>" +
                 "</div>" +
                 "<div class='col-sm-3 input-group'>" +
-                  "<div class='input-group colorpicker-component' id='color"+counter+"'>"+
-                    "<input type='text' value='#e01ab5' class='form-control' name='rooms[color]' title='track-color'/>"+
+                  "<div class='input-group colorpicker-component' id='room-color"+room_counter+"'>"+
+                    "<input type='text' value='#e01ab5' class='form-control' name='rooms[color]' title='rooms-color'/>"+
                     "<span class='input-group-addon'><i></i></span>"+
                   "</div>" +
                   "<span class='input-group-btn'>" +
@@ -99,7 +100,7 @@ $(document).ready(function() {
                 "</div>" +
               "</div>";
     $('.rooms').append(row);
-    $('#room-color'+counter).colorpicker();
+    $('#room-color'+room_counter).colorpicker();
   });
 
   $("body").on("click", ".remove-rooms", function () {
@@ -114,7 +115,7 @@ $(document).ready(function() {
 
   $("#wizard-edit").smartWizard({
     labelFinish:'Update',
-    onFinish: function() { $("#event-create-form").submit(); }
+    onFinish: function() { $("#event-edit-form").submit(); }
    });
 
   $('.buttonNext').addClass("btn btn-success");

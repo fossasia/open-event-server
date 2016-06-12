@@ -164,7 +164,7 @@ class DataManager(object):
         update_version(event_id, False, "speakers_ver")
 
         new_session_speaker = SessionsSpeakers(session_id=new_session.id,
-                                            speaker_id=new_speaker.id)
+                                               speaker_id=new_speaker.id)
 
         save_to_db(new_session_speaker, "Session Speaker saved")
 
@@ -176,7 +176,7 @@ class DataManager(object):
         :param event_id: Session, speaker belongs to Event by event id
         """
         new_session_speaker = SessionsSpeakers(session_id=session_id,
-                                            speaker_id=speaker_id)
+                                               speaker_id=speaker_id)
 
         save_to_db(new_session_speaker, "Session Speaker saved")
 
@@ -537,7 +537,6 @@ class DataManager(object):
         user_detail.details = form['details']
         print user, user_detail, save_to_db(user, "User updated")
 
-
     @staticmethod
     def add_owner_to_event(owner_id, event):
         event.owner = owner_id
@@ -584,7 +583,8 @@ class DataManager(object):
 
             call_for_speakers = CallForPaper(announcement=form['announcement'],
                                              start_date=datetime.strptime(form['start_date'], '%m/%d/%Y'),
-                                             end_date=datetime.strptime(form['end_date'], '%m/%d/%Y'))
+                                             end_date=datetime.strptime(form['end_date'], '%m/%d/%Y'),
+                                             event_id=event.id)
 
             sponsor_name = form.getlist('sponsors[name]')
             sponsor_logo = form.getlist('sponsors[logo]')
@@ -610,7 +610,8 @@ class DataManager(object):
                 db.session.add(room)
 
             for index, name in enumerate(sponsor_name):
-                sponsor = Sponsor(name=name, logo=sponsor_logo[index], url=sponsor_url[index], level=sponsor_level[index], description=sponsor_description[index], event_id=event.id)
+                sponsor = Sponsor(name=name, logo=sponsor_logo[index], url=sponsor_url[index],
+                                  level=sponsor_level[index], description=sponsor_description[index], event_id=event.id)
                 db.session.add(sponsor)
 
             uer = UsersEventsRoles(event_id=event.id, user_id=login.current_user.id, role_id=role.id)
@@ -620,13 +621,14 @@ class DataManager(object):
             raise ValidationError("start date greater than end date")
 
     @staticmethod
-    def edit_event(form, event_id, event, session_types, tracks, social_links):
+    def edit_event(form, event_id, event, session_types, tracks, social_links, microlocations, call_for_papers,
+                   sponsors):
         """
         Event will be updated in database
         :param data: view data form
         :param event: object contains all earlier data
         """
-
+        print(form)
         event.name = form['name']
         event.logo = form['logo']
         event.start_time = form['start_time']
@@ -638,15 +640,6 @@ class DataManager(object):
         event.event_url = form['event_url']
         event.background_url = form['background_url']
 
-        session_type_names = form.getlist('session_type[name]')
-        session_type_length = form.getlist('session_type[length]')
-
-        social_link_name = form.getlist('social[name]')
-        social_link_link = form.getlist('social[link]')
-
-        track_name = form.getlist('tracks[name]')
-        track_color = form.getlist('tracks[color]')
-
         for session_type in session_types:
             delete_from_db(session_type, 'Session Type Deleted')
 
@@ -656,17 +649,62 @@ class DataManager(object):
         for social_link in social_links:
             delete_from_db(social_link, 'Social Link Deleted')
 
+        for microlocation in microlocations:
+            delete_from_db(microlocation, 'Microlocation deleted')
+
+        for sponsor in sponsors:
+            delete_from_db(sponsor, 'Sponsor deleted')
+
+        for call_for_paper in call_for_papers:
+            delete_from_db(call_for_paper, 'Call for paper deleted')
+
+        session_type_names = form.getlist('session_type[name]')
+        session_type_length = form.getlist('session_type[length]')
+
+        social_link_name = form.getlist('social[name]')
+        social_link_link = form.getlist('social[link]')
+
+        track_name = form.getlist('tracks[name]')
+        track_color = form.getlist('tracks[color]')
+
+        room_name = form.getlist('rooms[name]')
+        room_color = form.getlist('rooms[color]')
+
+        call_for_speakers = CallForPaper(announcement=form['announcement'],
+                                         start_date=datetime.strptime(form['start_date'], '%m/%d/%Y'),
+                                         end_date=datetime.strptime(form['end_date'], '%m/%d/%Y'),
+                                         event_id=event.id)
+
+        sponsor_name = form.getlist('sponsors[name]')
+        sponsor_logo = form.getlist('sponsors[logo]')
+        sponsor_url = form.getlist('sponsors[url]')
+        sponsor_level = form.getlist('sponsors[level]')
+        sponsor_description = form.getlist('sponsors[description]')
+
+        # save the edited info to database
         for index, name in enumerate(session_type_names):
-            session_type = SessionType(name=name, length=session_type_length[index], event_id=event_id)
-            save_to_db(session_type, 'Session Type saved')
+            session_type = SessionType(name=name, length=session_type_length[index], event_id=event.id)
+            db.session.add(session_type)
 
         for index, name in enumerate(social_link_name):
             social_link = SocialLink(name=name, link=social_link_link[index], event_id=event.id)
-            save_to_db(social_link, 'Social Link Saved')
+            db.session.add(social_link)
 
         for index, name in enumerate(track_name):
-            track = Track(name=name, description="", track_image_url="", color=track_color[index], event_id=event.id)
-            save_to_db(track, 'Track Saved')
+            track = Track(name=name, description="", track_image_url="", color=track_color[index],
+                          event_id=event.id)
+            db.session.add(track)
+
+        for index, name in enumerate(room_name):
+            room = Microlocation(name=name, event_id=event.id)
+            db.session.add(room)
+
+        for index, name in enumerate(sponsor_name):
+            sponsor = Sponsor(name=name, logo=sponsor_logo[index], url=sponsor_url[index], level=sponsor_level[index],
+                              description=sponsor_description[index], event_id=event.id)
+            db.session.add(sponsor)
+
+        save_to_db(call_for_speakers, "Call for papers saved")
 
         return event
 

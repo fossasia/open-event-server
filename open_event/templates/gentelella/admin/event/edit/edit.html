@@ -2,7 +2,7 @@
 {% block body %}
 <div class="page-title">
     <div class="title_left">
-        <h3>Edit Event</h3>
+        <h3>Edit Event: Stage 1</h3>
     </div>
 
 </div>
@@ -10,7 +10,7 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel" style="min-height:600px;">
             <div class="row">
-                <form name="test" action="/events/{{ event.id }}/edit/" method="POST" role="form" class="admin-form form-horizontal" id="event-create-form">
+                <form name="test" action="/events/{{ event.id }}/edit/" method="POST" role="form" class="admin-form form-horizontal" id="event-edit-form">
                     {% if csrf_token %}
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     {% endif %}
@@ -20,8 +20,8 @@
                                 <a href="#step-1" class="selected" isdone="1" rel="1">
                                     <span class="step_no">1</span>
                                     <span class="step_descr">
-                                        Event <br>
-                                        <small>Details about event</small>
+                                        Basic Details <br>
+
                                     </span>
                                 </a>
                             </li>
@@ -29,8 +29,7 @@
                                 <a href="#step-2" class="disabled" isdone="0" rel="2">
                                     <span class="step_no">2</span>
                                     <span class="step_descr">
-                                        Sessions Types<br>
-                                        <small>Define session types in session</small>
+                                        Sponsors<br>
                                     </span>
                                 </a>
                             </li>
@@ -38,8 +37,8 @@
                                 <a href="#step-3" class="disabled" isdone="0" rel="3">
                                     <span class="step_no">3</span>
                                     <span class="step_descr">
-                                        Tracks<br>
-                                        <small>Define basic track info</small>
+                                        Sessions, Tracks, Rooms<br>
+
                                     </span>
                                 </a>
                             </li>
@@ -47,8 +46,15 @@
                                 <a href="#step-4" class="disabled" isdone="0" rel="4">
                                     <span class="step_no">4</span>
                                     <span class="step_descr">
-                                        Social<br>
-                                        <small>Add social links</small>
+                                        Call for Speakers<br>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#step-5" class="disabled" isdone="0" rel="5">
+                                    <span class="step_no">5</span>
+                                    <span class="step_descr">
+                                        Create Session Forms<br>
                                     </span>
                                 </a>
                             </li>
@@ -60,6 +66,7 @@
                             {% include '/gentelella/admin/event/edit/step-2.html' %}
                             {% include '/gentelella/admin/event/edit/step-3.html' %}
                             {% include '/gentelella/admin/event/edit/step-4.html' %}
+                            {% include '/gentelella/admin/event/edit/step-5.html' %}
                         </div>
 
                     </div>

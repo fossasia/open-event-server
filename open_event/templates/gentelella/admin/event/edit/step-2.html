@@ -1,28 +1,31 @@
-<div id="step-2" class="wizard_content" style="display: block;">
-    <div class="row session-types">
-        <div class="col-sm-6">
-            {% for session_type in session_types %}
-
-                <div class=" col-sm-6">
-                    <input type="text" class="form-control" name="session_type[name]" placeholder="Name" value="{{ session_type.name }}">
-                </div>
-
-                <div class="col-sm-6 input-group">
-                    <input type="text" class="form-control" name="session_type[length]" placeholder="Length" value="{{ session_type.length }}">
-                    {% if session_type.name == session_types[0].name %}
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-primary add-session-type">+</button>
-                    </span>
-                    {% endif %}
-                    {% if session_type.name != session_types[0].name %}
-                    <span class='input-group-btn'>
-                        <button type='button' class='btn btn-danger remove-session-type'>-</button>
-                    </span>
-                    {% endif %}
-                </div>
-
-            {% endfor %}
-
-        </div>
-    </div>
+<div id="step-2" class="wizard_content" style="display: block;min-height:500px">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Sl.</th>
+                <th>Name</th>
+                <th>Logo</th>
+                <th>Description</th>
+                <th>Level</th>
+                <th>Type</th>
+                <th>URL</th>
+            </tr>
+        </thead>
+        <tbody class="sponsors">
+        {% for sponsor in sponsors %}
+            <tr class="row-sponsor">
+                <td>{{ sponsor.id }}</td>
+                <td><input value="{{ sponsor.name }}" required="required" name="sponsors[name]" class="form-control col-md-7 col-xs-12"/></td>
+                <td><input value="{{ sponsor.logo }}" required="required" name="sponsors[logo]" class="form-control col-md-7 col-xs-12"/></td>
+                <td><textarea name="sponsors[description]" class="form-control col-md-7 col-xs-12">{{ sponsor.description }}</textarea></td>
+                <td><input value="{{ sponsor.level }}" required="required" name="sponsors[level]" class="form-control col-md-7 col-xs-12"/></td>
+                <td><input required="required" name="sponsors[type]" class="form-control col-md-7 col-xs-12" value=""/></td>
+                <td><input value="{{ sponsor.url }}" required="required" name="sponsors[url]" class="form-control col-md-7 col-xs-12"/></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <span class='input-group-btn'>
+        <button type='button' class='btn btn-success add-sponsor'>Add Another Sponsor</button>
+    </span>
 </div>
