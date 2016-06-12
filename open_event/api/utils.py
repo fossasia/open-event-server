@@ -59,8 +59,9 @@ class ServiceDAO:
     Data Access Object for service models like microlocations,
     speakers and so.
     """
-    def __init__(self, model):
+    def __init__(self, model, post_api_model=None):
         self.model = model
+        self.post_api_model = post_api_model
 
     def get(self, event_id, sid):
         return get_object_in_event(self.model, sid, event_id)
@@ -70,11 +71,15 @@ class ServiceDAO:
         get_object_or_404(EventModel, event_id)
         return get_object_list(self.model, event_id=event_id)
 
-    def create(self, event_id, data):
+    def create(self, event_id, data, validate=True):
+        if validate:
+            self.validate(data)
         item = create_service_model(self.model, event_id, data)
         return item
 
-    def update(self, event_id, service_id, data):
+    def update(self, event_id, service_id, data, validate=True):
+        if validate:
+            self.validate(data)
         item = update_model(self.model, service_id, data, event_id)
         return item
 
@@ -82,5 +87,6 @@ class ServiceDAO:
         item = delete_service_model(self.model, event_id, service_id)
         return item
 
-    def validate(self, data, api_model):
-        validate_payload(data, api_model)
+    def validate(self, data):
+        if self.post_api_model:
+            validate_payload(data, self.post_api_model)

@@ -26,7 +26,7 @@ del LANGUAGE_POST['id']
 class LanguageDAO(ServiceDAO):
     pass
 
-DAO = LanguageDAO(model=LanguageModel)
+DAO = LanguageDAO(LanguageModel, LANGUAGE_POST)
 
 
 @api.route('/events/<int:event_id>/languages/<int:language_id>')
@@ -52,7 +52,6 @@ class Language(Resource):
     @api.expect(LANGUAGE_POST)
     def put(self, event_id, language_id):
         """Update a language given its id"""
-        DAO.validate(self.api.payload, LANGUAGE_POST)
         return DAO.update(event_id, language_id, self.api.payload)
 
 
@@ -70,7 +69,6 @@ class LanguageList(Resource):
     @api.expect(LANGUAGE_POST)
     def post(self, event_id):
         """Create a language"""
-        DAO.validate(self.api.payload, LANGUAGE_POST)
         return DAO.create(event_id, self.api.payload)
 
 

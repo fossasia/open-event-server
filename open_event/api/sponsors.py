@@ -31,7 +31,18 @@ class SponsorDAO(ServiceDAO):
         if sponsor_type_id is not None:
             get_object_in_event(SponsorTypeModel, sponsor_type_id, event_id)
 
-DAO = SponsorDAO(model=SponsorModel)
+    def create(self, event_id, data):
+        self.validate(data)
+        self.validate_sponsor_type(data, event_id)
+        return ServiceDAO.create(self, event_id, data, validate=False)
+
+    def update(self, event_id, service_id, data):
+        self.validate(data)
+        self.validate_sponsor_type(data, event_id)
+        return ServiceDAO.update(self, event_id, service_id, data, validate=False)
+
+
+DAO = SponsorDAO(SponsorModel, SPONSOR_POST)
 
 
 @api.route('/events/<int:event_id>/sponsors/<int:sponsor_id>')
@@ -57,8 +68,6 @@ class Sponsor(Resource):
     @api.expect(SPONSOR_POST)
     def put(self, event_id, sponsor_id):
         """Update a sponsor given its id"""
-        DAO.validate(self.api.payload, SPONSOR_POST)
-        DAO.validate_sponsor_type(self.api.payload, event_id)
         return DAO.update(event_id, sponsor_id, self.api.payload)
 
 
@@ -76,8 +85,6 @@ class SponsorList(Resource):
     @api.expect(SPONSOR_POST)
     def post(self, event_id):
         """Create a sponsor"""
-        DAO.validate(self.api.payload, SPONSOR_POST)
-        DAO.validate_sponsor_type(self.api.payload, event_id)
         return DAO.create(event_id, self.api.payload)
 
 
