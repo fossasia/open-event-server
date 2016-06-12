@@ -32,51 +32,80 @@ jQuery.fn.extend({
         });
     },
 
-    bindObject: function(object, timeParseFormat) {
+    bindObject: function (object, timeParseFormat) {
         return this.each(function () {
             var $elem = $(this);
             $elem.data("object", object);
-            _.forOwn(object, function(value, key) {
+            _.forOwn(object, function (value, key) {
 
-                if(value.hasOwnProperty("_isAMomentObject") && value._isAMomentObject) {
+                if (value.hasOwnProperty("_isAMomentObject") && value._isAMomentObject) {
                     value = value.format(timeParseFormat ? timeParseFormat : "YYYY-MM-DD HH:mm:ss");
                 }
 
-                $elem.find('input[name="'+key+'"]').val(value);
-                $elem.find('textarea[name="'+key+'"]').text(value);
+                $elem.find('input[name="' + key + '"]').val(value);
+                $elem.find('textarea[name="' + key + '"]').text(value);
             });
         });
+    },
+    disable: function() {
+        return this.each(function() {
+            if(!$(this).hasClass("nt")){
+                $(this).addClass("disabled").addClass("processing");
+                $(this).attr('disabled','disabled');
+            }
+        });
+    },
+    enable: function() {
+        return this.each(function() {
+            if(!$(this).hasClass("nt")){
+                $(this).removeClass("disabled").removeClass("processing");
+                $(this).removeAttr('disabled');
+            }
+        });
+    },
+    lockForm: function(){
+        return this.each(function() {
+            $(this).find("select,input,textarea,button").disable();
+        });
+    },
+    unlockForm: function(){
+        return this.each(function() {
+            $(this).find("select,input,textarea,button").enable();
+        });
     }
-
 });
 
 /**
  * Extend Lodash and add some additional functionality
  */
-_.mixin({
-    /**
-     * Push data into an array while maintaining sort order
-     * @param array
-     * @param value
-     * @param [iteratee=_.identity]
-     */
-    sortedPush: function (array, value, iteratee) {
-        var sortedIndex = _.sortedIndex(array, value, iteratee);
-        array.splice(sortedIndex, 0, value);
-        return sortedIndex;
-    }
-});
+if ('undefined' === !typeof _) {
+    _.mixin({
+        /**
+         * Push data into an array while maintaining sort order
+         * @param array
+         * @param value
+         * @param [iteratee=_.identity]
+         */
+        sortedPush: function (array, value, iteratee) {
+            var sortedIndex = _.sortedIndex(array, value, iteratee);
+            array.splice(sortedIndex, 0, value);
+            return sortedIndex;
+        }
+    });
+}
 
-
+var cachedFuzzyMatch;
 /**
  * Cache the results of a RegExp match.
  * @type {Function}
  */
-var cachedFuzzyMatch = _.memoize(function (pattern) {
-    return new RegExp(pattern.split("").reduce(function (a, b) {
-        return a + '[^' + b + ']*' + b;
-    }), 'i');
-});
+if ('undefined' === !typeof _) {
+    cachedFuzzyMatch = _.memoize(function (pattern) {
+        return new RegExp(pattern.split("").reduce(function (a, b) {
+            return a + '[^' + b + ']*' + b;
+        }), 'i');
+    });
+}
 
 /**
  * Fuzzy match a string and a pattern/query
@@ -200,7 +229,7 @@ function logDebug(message, ref) {
  * @returns {boolean} The result of the check
  */
 function isUndefinedOrNull(variable) {
-    return (_.isUndefined(variable) || _.isNull(variable));
+    return !!(typeof variable === 'undefined' || variable === null);
 }
 
 
