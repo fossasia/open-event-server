@@ -6,6 +6,7 @@ from ....helpers.data import DataManager, save_to_db
 from ....helpers.data_getter import DataGetter
 from datetime import datetime
 
+
 class EventsView(ModelView):
     def is_accessible(self):
         return login.current_user.is_authenticated
@@ -48,11 +49,19 @@ class EventsView(ModelView):
         session_types = DataGetter.get_session_types_by_event_id(event_id)
         tracks = DataGetter.get_tracks(event_id)
         social_links = DataGetter.get_social_links_by_event_id(event_id)
+        microlocations = DataGetter.get_microlocations(event_id)
+        call_for_papers = DataGetter.get_call_for_papers(event_id)
+        sponsors = DataGetter.get_sponsors(event_id)
+        session_columns = DataGetter.get_session_columns()
+        speaker_columns = DataGetter.get_speaker_columns()
         if request.method == 'GET':
             return self.render('/gentelella/admin/event/edit/edit.html', event=event, session_types=session_types,
-                               tracks=tracks, social_links=social_links)
+                               tracks=tracks, social_links=social_links, microlocations=microlocations,
+                               call_for_paper=call_for_papers, sponsors=sponsors, session_columns=session_columns,
+                               speaker_columns=speaker_columns)
         if request.method == "POST":
-            event = DataManager.edit_event(request.form, event_id, event, session_types, tracks, social_links)
+            event = DataManager.edit_event(request.form, event_id, event, session_types, tracks, social_links,
+                                           microlocations, call_for_papers, sponsors)
             return self.render('/gentelella/admin/event/details/details.html', event=event)
 
     @expose('/<event_id>/delete/', methods=('GET',))

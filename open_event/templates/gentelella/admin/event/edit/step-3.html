@@ -1,28 +1,58 @@
 <div id="step-3" class="wizard_content" style="display: block;">
     <div class="row tracks">
+        <h2 style="padding: 6px 12px;">Tracks</h2>
         <div class="col-sm-6">
-            {% for track  in tracks %}
-                <div class="row">
-                    <div class=" col-sm-6">
-                        <input type="text" class="form-control" name="tracks[name]" placeholder="Name" value="{{ track.name }}">
-                    </div>
-                    <div class="col-sm-6 input-group">
-                        <div class="input-group colorpicker-component" id="color">
-                            <input type="text" value="{{ track.color }}" class="form-control" name="tracks[color]" title="track-color"/>
-                            <span class="input-group-addon"><i></i></span>
-                        </div>
-                        {% if track.name == tracks[0].name %}
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-primary" id="add-tracks">+</button>
-                        </span>
-                        {% endif %}
-                        {% if track.name != tracks[0].name %}
-                        <span class='input-group-btn'>
-                            <button type='button' class='btn btn-danger remove-tracks'>-</button>
-                        </span>
-                        {% endif %}
-                    </div>
+            {% for track in tracks %}
+            <div class=" col-sm-6">
+                <input type="text" class="form-control" name="tracks[name]" placeholder="Name" value="{{ track.name }}">
+            </div>
+
+            <div class="col-sm-6 input-group">
+                <div class="input-group colorpicker-component" id="color">
+                    <input type="text" value="{{ track.color }}" class="form-control" name="tracks[color]" title="track-color"/>
+                    <span class="input-group-addon"><i></i></span>
                 </div>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="add-tracks">+</button>
+                </span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row rooms">
+        <h2 style="padding: 6px 12px;">Rooms</h2>
+        <div class="col-sm-6">
+            {% for microlocation in microlocations %}
+            <div class=" col-sm-6">
+                <input type="text" class="form-control" name="rooms[name]" placeholder="Name" value="{{ microlocation.name }}">
+            </div>
+
+            <div class="col-sm-6 input-group">
+                <div class="input-group colorpicker-component" id="room-color">
+                    <input type="text" value="#e01ab5" class="form-control" name="rooms[color]" title="rooms-color"/>
+                    <span class="input-group-addon"><i></i></span>
+                </div>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="add-rooms">+</button>
+                </span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row session-types">
+        <h2 style="padding: 6px 12px;">Session Types</h2>
+        <div class="col-sm-6">
+            {% for session_type in session_types %}
+            <div class=" col-sm-6">
+                <input type="text" class="form-control" name="session_type[name]" placeholder="Name" value="{{ session_type.name }}">
+            </div>
+
+            <div class="col-sm-6 input-group">
+                <input type="text" class="form-control" name="session_type[length]" placeholder="Length" value="{{ session_type.length }}">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary add-session-type">+</button>
+                </span>
+            </div>
             {% endfor %}
         </div>
     </div>
@@ -32,5 +62,6 @@
 <script>
      $(function() {
          $('#color').colorpicker();
+         $('#room-color').colorpicker();
      });
 </script>
