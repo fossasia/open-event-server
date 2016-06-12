@@ -539,4 +539,4 @@ def heroku_releases():
     token = os.environ.get('API_TOKEN_HEROKU', None)
     result = os.popen(
         'curl -n https://api.heroku.com/apps/open-event/releases -H "Authorization: Bearer ' + token + '" -H "Accept: application/vnd.heroku+json; version=3"').read()
-    return json.loads(result)
+    return str(result)
