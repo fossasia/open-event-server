@@ -40,7 +40,7 @@ def chunks(l, n):
 def get_main_page():
     """Redirect to admin page"""
     call_for_papers_evs = DataGetter.get_call_for_speakers_events().all()
-    published_events = DataGetter.get_published_events().all()
+    published_events = DataGetter.get_all_published_events().all()
     # Provide data as chunks of 6 for the UI to render in a proper way
     return render_template('gentelella/index.html',
                            call_for_papers_evs=list(chunks(call_for_papers_evs, 6)),
