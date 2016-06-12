@@ -23,6 +23,7 @@ from flask import render_template
 from open_event.helpers.oauth import OAuth, FbOAuth
 from requests.exceptions import HTTPError
 from ..helpers.data import get_google_auth, create_user_oauth, get_facebook_auth
+from ..helpers.helpers import get_latest_heroku_release
 import json
 
 
@@ -536,7 +537,4 @@ def documentation():
 
 @app.route('/heroku_releases')
 def heroku_releases():
-    token = os.environ.get('API_TOKEN_HEROKU', None)
-    result = os.popen(
-        'curl -n https://api.heroku.com/apps/open-event/releases -H "Authorization: Bearer ' + token + '" -H "Accept: application/vnd.heroku+json; version=3"').read()
-    return str(result)
+    return "v" + str(get_latest_heroku_release()['version'])
