@@ -524,3 +524,10 @@ def send_cal(filename):
 @app.route('/documentation')
 def documentation():
     return auto.html()
+
+
+@app.route('/heroku_releases')
+def heroku_releases():
+    token = os.environ.get('API_TOKEN_HEROKU', None)
+    result = os.system('curl -n https://api.heroku.com/apps/open-event/releases -H "Authorization: Bearer ' + token + '" -H "Accept: application/vnd.heroku+json; version=3"')
+    return result
