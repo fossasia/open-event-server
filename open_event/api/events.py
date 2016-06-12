@@ -5,9 +5,9 @@ import custom_fields as fields
 from open_event.models.event import Event as EventModel, EventsUsers
 from open_event.models.user import ADMIN, SUPERADMIN
 from .helpers import get_object_list, get_object_or_404, get_paginated_list,\
-    requires_auth, validate_payload, update_model
+    requires_auth, update_model
 from utils import PAGINATED_MODEL, PaginatedResourceBase, PAGE_PARAMS, \
-    POST_RESPONSES, PUT_RESPONSES
+    POST_RESPONSES, PUT_RESPONSES, ServiceDAO
 from open_event.helpers.data import save_to_db, update_version, delete_from_db
 
 api = Namespace('events', description='Events')
@@ -23,7 +23,7 @@ EVENT = api.model('Event', {
     'latitude': fields.Float(),
     'longitude': fields.Float(),
     'event_url': fields.Uri(),
-    'background_url': fields.Uri(),
+    'background_url': fields.ImageUri(),
     'description': fields.String(),
     'location_name': fields.String(),
     'state': fields.String(),
@@ -38,63 +38,31 @@ EVENT_POST = api.clone('EventPost', EVENT)
 del EVENT_POST['id']
 
 
-# Helper function to fix datetime event payload
-# TODO: Make ServiceDAO more versatile so that event can use it
-def fix_payload(data):
-    data['start_time'] = EVENT_POST['start_time'].from_str(data['start_time'])
-    data['end_time'] = EVENT_POST['end_time'].from_str(data['end_time'])
-    data['closing_datetime'] = EVENT_POST['closing_datetime'].from_str(
-        data['closing_datetime'])
-    return data
+class EventDAO(ServiceDAO):
+    """
+    Event DAO
+    """
+    def fix_payload(self, data):
+        """
+        Fixes the payload data.
+        Here converts string time from datetime obj
+        """
+        data['start_time'] = EVENT_POST['start_time'].from_str(data['start_time'])
+        data['end_time'] = EVENT_POST['end_time'].from_str(data['end_time'])
+        data['closing_datetime'] = EVENT_POST['closing_datetime'].from_str(
+            data['closing_datetime'])
+        return data
 
-
-@api.route('/<int:event_id>')
-@api.param('event_id')
-@api.response(404, 'Event not found')
-class Event(Resource):
-    @api.doc('get_event')
-    @api.marshal_with(EVENT)
     def get(self, event_id):
-        """Fetch an event given its id"""
-        return get_object_or_404(EventModel, event_id)
+        return get_object_or_404(self.model, event_id)
 
-    @requires_auth
-    @api.doc('delete_event')
-    @api.marshal_with(EVENT)
-    def delete(self, event_id):
-        """Delete an event given its id"""
-        event = get_object_or_404(EventModel, event_id)
-        delete_from_db(event, 'Event deleted')
-        return event
+    def list(self):
+        return get_object_list(self.model)
 
-    @requires_auth
-    @api.doc('update_event', responses=PUT_RESPONSES)
-    @api.marshal_with(EVENT)
-    @api.expect(EVENT_POST)
-    def put(self, event_id):
-        """Update a event given its id"""
-        validate_payload(self.api.payload, EVENT_POST)
-        payload = fix_payload(self.api.payload)
-        return update_model(EventModel, event_id, payload)
-
-
-@api.route('')
-class EventList(Resource):
-    @api.doc('list_events')
-    @api.marshal_list_with(EVENT)
-    def get(self):
-        """List all events"""
-        return get_object_list(EventModel)
-
-    @requires_auth
-    @api.doc('create_event', responses=POST_RESPONSES)
-    @api.marshal_with(EVENT)
-    @api.expect(EVENT_POST)
-    def post(self):
-        """Create an event"""
-        validate_payload(self.api.payload, EVENT_POST)
-        payload = fix_payload(self.api.payload)
-        new_event = EventModel(**payload)
+    def create(self, data):
+        self.validate(data)
+        payload = self.fix_payload(data)
+        new_event = self.model(**payload)
         # set user (owner)
         a = EventsUsers()
         a.user = g.user
@@ -109,7 +77,63 @@ class EventList(Resource):
             column_to_increment="event_ver"
         )
         # return the new event created
-        return get_object_or_404(EventModel, new_event.id)
+        return get_object_or_404(self.model, new_event.id)
+
+    def update(self, event_id, data):
+        self.validate(data)
+        payload = self.fix_payload(data)
+        return update_model(self.model, event_id, payload)
+
+    def delete(self, event_id):
+        event = get_object_or_404(self.model, event_id)
+        delete_from_db(event, 'Event deleted')
+        return event
+
+
+DAO = EventDAO(EventModel, EVENT_POST)
+
+
+@api.route('/<int:event_id>')
+@api.param('event_id')
+@api.response(404, 'Event not found')
+class Event(Resource):
+    @api.doc('get_event')
+    @api.marshal_with(EVENT)
+    def get(self, event_id):
+        """Fetch an event given its id"""
+        return DAO.get(event_id)
+
+    @requires_auth
+    @api.doc('delete_event')
+    @api.marshal_with(EVENT)
+    def delete(self, event_id):
+        """Delete an event given its id"""
+        return DAO.delete(event_id)
+
+    @requires_auth
+    @api.doc('update_event', responses=PUT_RESPONSES)
+    @api.marshal_with(EVENT)
+    @api.expect(EVENT_POST)
+    def put(self, event_id):
+        """Update a event given its id"""
+        return DAO.update(event_id, self.api.payload)
+
+
+@api.route('')
+class EventList(Resource):
+    @api.doc('list_events')
+    @api.marshal_list_with(EVENT)
+    def get(self):
+        """List all events"""
+        return DAO.list()
+
+    @requires_auth
+    @api.doc('create_event', responses=POST_RESPONSES)
+    @api.marshal_with(EVENT)
+    @api.expect(EVENT_POST)
+    def post(self):
+        """Create an event"""
+        return DAO.create(self.api.payload)
 
 
 @api.route('/page')
