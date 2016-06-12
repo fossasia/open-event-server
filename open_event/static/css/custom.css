@@ -4185,6 +4185,7 @@ fieldset {
 
 .actionBar a {
   margin: 0 3px;
+  float:right;
 }
 
 .wizard_verticle .wizard_content {
