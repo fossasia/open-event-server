@@ -26,7 +26,7 @@ class TestGoogleOauth(OpenEventTestCase):
             self.app.get(url_for('admin.create_account_after_confirmation_view', hash=data_hash), follow_redirects=True)
             logout(self.app)
             login(self.app, 'email@gmail.com', 'test')
-            self.assertTrue('Create event' in self.app.get('/gCallback/?state=dummy_state&code=dummy_code',
+            self.assertTrue('Open Event' in self.app.get('/gCallback/?state=dummy_state&code=dummy_code',
                                                            follow_redirects=True).data)
             self.assertEqual(self.app.get('/gCallback/?state=dummy_state&code=dummy_code').status_code, 302)
 
