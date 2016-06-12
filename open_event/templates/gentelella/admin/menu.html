@@ -1,61 +1,38 @@
 {% macro render_menu(test='') %}
-<div>
+<div class="top_nav" style="margin-left:0">
     <div class="nav_menu">
-        <nav class="" role="navigation">
+        <nav>
             <ul class="nav navbar-nav">
-                <li class="">
-                    <a href="/">
-                        Home
+                <li style="margin-left: 10px;">
+                    <a href="/" style="font-size: 26px; font-weight: 300;">
+                        Open Event
                     </a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li class="">
-                    <a href="/browse" class="user-profile dropdown-toggle" data-toggle="dropdown"
-                       aria-expanded="false">
-                        Browse Events
-                        <span class=" fa fa-angle-down"></span>
-                    </a>
-                </li>
-                <li class="">
-                    <a href="/events/create/" aria-expanded="false">
-                        Create Event
-                    </a>
-                </li>
+                <li><a href="/events/create/" aria-expanded="false">Create Event</a></li>
                 {% if current_user.is_authenticated %}
-
-                <li class="">
-                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
-                       aria-expanded="false">
-                        <img src="{{ url_for('static', filename='img/avatar.png') }}"/>
-                        {{current_user.login}}
-                        <span class=" fa fa-angle-down"></span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-usermenu pull-right">
-                        <li><a href="/events/mysessions/">My Sessions</a></li>
-                        <li><a href="/events/">Manage Events</a></li>
-                        <li class="divider"></li>
-                        <li><a href="/profile"> Profile</a> </li>
-
-                        <li><a href="/logout/"><i class="fa fa-sign-out pull-right"></i> Logout</a>
-                        </li>
-                    </ul>
-                </li>
-
+                    <li>
+                        <a href="#" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <img src="{{ url_for('static', filename='img/avatar.png') }}"/>
+                            {# current_user.user_detail.fullname #}
+                            <span class=" fa fa-angle-down"></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-usermenu pull-right">
+                            <li><a href="/events/mysessions/">My Sessions</a></li>
+                            <li><a href="/events/">Manage Events</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/profile"> Profile</a> </li>
+                            <li><a href="/logout/"><i class="fa fa-sign-out pull-right"></i> Logout</a>
+                            </li>
+                        </ul>
+                    </li>
                 {% else %}
-
-                <li class="">
-                    <a href="/login" class="user-profile dropdown-toggle" data-toggle="dropdown"
-                       aria-expanded="false">
-                        Login
-                        <span class=" fa fa-angle-down"></span>
-                    </a>
-                </li>
-
+                    <li> <a href="/login" class="user-profile">Login</a></li>
                 {% endif %}
+                <li><a href="/browse" class="user-profile">Browse Events</a></li>
             </ul>
         </nav>
     </div>
-
 </div>
 {% endmacro %}

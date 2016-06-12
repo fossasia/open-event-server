@@ -10,14 +10,12 @@ class Config(object):
     CSRF_ENABLED = True
     CORS_HEADERS = 'Content-Type'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
-    DEBUG_TB_ENABLED = True
     ERROR_404_HELP = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///../app.db')
 
 
 class ProductionConfig(Config):
     DEBUG = False
-    DEBUG_TB_ENABLED = False  # debug toolbar
     try:  # you don't want production on default db
         SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
     except KeyError:

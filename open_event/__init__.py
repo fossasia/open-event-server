@@ -16,7 +16,6 @@ from flask.ext.jwt import JWT
 from datetime import timedelta
 
 from icalendar import Calendar, Event
-from flask_debugtoolbar import DebugToolbarExtension
 
 from open_event.models import db
 from open_event.views.admin.admin import AdminView
@@ -64,10 +63,6 @@ def create_app():
     admin_view = AdminView("Open Event")
     admin_view.init(app)
     admin_view.init_login(app)
-
-    # Flask-DebugToolbar Configuration
-    app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
-    DebugToolbarExtension(app)
 
     # API version 2
     with app.app_context():

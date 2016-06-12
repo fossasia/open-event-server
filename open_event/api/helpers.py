@@ -1,6 +1,6 @@
 from functools import wraps
 from flask import request, g
-from flask.ext.restplus import abort
+from flask.ext.restplus import abort, fields
 from flask.ext import login
 from flask.ext.scrypt import check_password_hash
 from flask_jwt import jwt_required, JWTError, current_identity
@@ -139,11 +139,22 @@ def validate_payload(payload, api_model):
       flask restplus automatically.
     - This is to be called at the start of a post or put method
     """
+    # check if any reqd fields are missing in payload
+    for key in api_model:
+        if api_model[key].required and key not in payload:
+            _error_abort(400, 'Required field \'%s\' missing' % key)
+    # check payload
     for key in payload:
         field = api_model[key]
+        if isinstance(field, fields.List):
+            field = field.container
+            data = payload[key]
+        else:
+            data = [payload[key]]
         if isinstance(field, CustomField) and hasattr(field, 'validate'):
-            if not field.validate(payload[key]):
-                _error_abort(400, 'Validation of \'%s\' field failed' % key)
+            for i in data:
+                if not field.validate(i):
+                    _error_abort(400, 'Validation of \'%s\' field failed' % key)
 
 
 def save_db_model(new_model, model_name, event_id=None):

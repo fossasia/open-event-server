@@ -1,5 +1,5 @@
-from flask.ext.restplus import Resource, Namespace, fields
-
+from flask.ext.restplus import Resource, Namespace
+import custom_fields as fields
 from open_event.models.session import Language as LanguageModel
 from .helpers import get_paginated_list, requires_auth
 from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
@@ -9,9 +9,9 @@ api = Namespace('languages', description='Languages', path='/')
 
 LANGUAGE = api.model('Language', {
     'id': fields.Integer(required=True),
-    'name': fields.String,
-    'label_en': fields.String,
-    'label_de': fields.String,
+    'name': fields.String(),
+    'label_en': fields.String(),
+    'label_de': fields.String(),
 })
 
 LANGUAGE_PAGINATED = api.clone('LanguagePaginated', PAGINATED_MODEL, {
@@ -49,7 +49,7 @@ class Language(Resource):
     @requires_auth
     @api.doc('update_language', responses=PUT_RESPONSES)
     @api.marshal_with(LANGUAGE)
-    @api.expect(LANGUAGE_POST, validate=True)
+    @api.expect(LANGUAGE_POST)
     def put(self, event_id, language_id):
         """Update a language given its id"""
         DAO.validate(self.api.payload, LANGUAGE_POST)
@@ -67,7 +67,7 @@ class LanguageList(Resource):
     @requires_auth
     @api.doc('create_language', responses=POST_RESPONSES)
     @api.marshal_with(LANGUAGE)
-    @api.expect(LANGUAGE_POST, validate=True)
+    @api.expect(LANGUAGE_POST)
     def post(self, event_id):
         """Create a language"""
         DAO.validate(self.api.payload, LANGUAGE_POST)
