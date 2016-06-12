@@ -1,4 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
+import json
+import os
 import re
 import requests
 from flask import request
@@ -100,3 +102,13 @@ def is_event_admin(event_id, users):
 
 def get_serializer(secret_key=None):
     return Serializer('secret_key')
+
+def get_latest_heroku_release():
+    token = os.environ.get('API_TOKEN_HEROKU', None)
+    headers = {
+        "Accept": "application/vnd.heroku+json; version=3",
+        "Authorization": "Bearer " + token,
+        "Range": "version ..; max=1, order=desc"
+    }
+    response = requests.get("https://api.heroku.com/apps/open-event/releases", headers=headers)
+    return json.loads(response.text)[0]
