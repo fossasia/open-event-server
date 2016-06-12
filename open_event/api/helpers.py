@@ -1,6 +1,6 @@
 from functools import wraps
 from flask import request, g
-from flask.ext.restplus import abort, fields
+from flask.ext.restplus import fields
 from flask.ext import login
 from flask.ext.scrypt import check_password_hash
 from flask_jwt import jwt_required, JWTError, current_identity
@@ -8,19 +8,9 @@ from flask_jwt import jwt_required, JWTError, current_identity
 from open_event.models.event import Event as EventModel
 from open_event.models import db
 from custom_fields import CustomField
+from .errors import NotFoundError, InvalidServiceError, ValidationError, NotAuthorizedError
 from open_event.models.user import User as UserModel
 from open_event.helpers.data import save_to_db, update_version, delete_from_db
-
-
-def _error_abort(code, message):
-    """Abstraction over restplus `abort`.
-    Returns error with the status code and message.
-    """
-    error = {
-        'code': code,
-        'message': message
-    }
-    abort(code, error=error)
 
 
 def _get_queryset(klass):
@@ -51,7 +41,7 @@ def get_list_or_404(klass, **kwargs):
     """
     obj_list = get_object_list(klass, **kwargs)
     if not obj_list:
-        _error_abort(404, 'Object list is empty')
+        raise NotFoundError(message='Object list is empty')
     return obj_list
 
 
@@ -63,7 +53,7 @@ def get_object_or_404(klass, id_):
     queryset = _get_queryset(klass)
     obj = queryset.get(id_)
     if obj is None:
-        _error_abort(404, '{} does not exist'.format(klass.__name__))
+        raise NotFoundError(message='{} does not exist'.format(klass.__name__))
     return obj
 
 
@@ -80,7 +70,8 @@ def get_object_in_event(klass, id_, event_id):
     obj = get_object_or_404(klass, id_)
 
     if obj.event_id != event.id:
-        _error_abort(400, 'Object does not belong to event')
+        raise InvalidServiceError(
+            message='{} does not belong to event'.format(klass.__name__))
 
     return obj
 
@@ -104,7 +95,8 @@ def get_paginated_list(klass, url, args={}, **kwargs):
     results = get_object_list(klass, **kwargs)
     count = len(results)
     if (count < start):
-        abort(404, 'Start position (%s) out of bound' % start)
+        raise NotFoundError(
+            message='Start position \'{}\' out of bound'.format(start))
     # make response
     obj = {}
     obj['start'] = start
@@ -142,7 +134,9 @@ def validate_payload(payload, api_model):
     # check if any reqd fields are missing in payload
     for key in api_model:
         if api_model[key].required and key not in payload:
-            _error_abort(400, 'Required field \'%s\' missing' % key)
+            raise ValidationError(
+                field=key,
+                message='Required field \'{}\' missing'.format(key))
     # check payload
     for key in payload:
         field = api_model[key]
@@ -154,7 +148,9 @@ def validate_payload(payload, api_model):
         if isinstance(field, CustomField) and hasattr(field, 'validate'):
             for i in data:
                 if not field.validate(i):
-                    _error_abort(400, field.validation_error % ('\'%s\'' % key))
+                    raise ValidationError(field=key,
+                                          message=field.validation_error %
+                                          ('\'%s\'' % key))
 
 
 def save_db_model(new_model, model_name, event_id=None):
@@ -223,14 +219,14 @@ def requires_auth(f):
         except JWTError as e:
             if e.headers is not None and 'WWW-Authenticate' not in e.headers:
                 # JWT header was set but something wrong happened
-                _error_abort(401, e.error + ': ' + e.description)
+                raise NotAuthorizedError(message=e.error + ': ' + e.description)
 
         # Basic Auth
         if not success:
             results = auth_basic()
             if not results[0]:
                 if results[1]:  # basic auth was set but..
-                    _error_abort(401, results[1])
+                    raise NotAuthorizedError(message=results[1])
             else:
                 success = True
 
@@ -243,7 +239,7 @@ def requires_auth(f):
         if success:
             return f(*args, **kwargs)
         else:
-            _error_abort(401, message)
+            raise NotAuthorizedError(message=message)
     return decorated
 
 
