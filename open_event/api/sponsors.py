@@ -1,7 +1,6 @@
-from flask.ext.restplus import Resource, Namespace, fields
-
+from flask.ext.restplus import Resource, Namespace
+import custom_fields as fields
 from open_event.models.sponsor import Sponsor as SponsorModel, SponsorType as SponsorTypeModel
-from custom_fields import UriField, ImageUriField
 from .helpers import get_paginated_list, requires_auth, get_object_in_event
 from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
@@ -10,11 +9,11 @@ api = Namespace('sponsors', description='Sponsors', path='/')
 
 SPONSOR = api.model('Sponsor', {
     'id': fields.Integer(required=True),
-    'name': fields.String,
-    'url': UriField(),
-    'logo': ImageUriField(),
-    'description': fields.String,
-    'sponsor_type_id': fields.Integer,
+    'name': fields.String(),
+    'url': fields.Uri(),
+    'logo': fields.ImageUri(),
+    'description': fields.String(),
+    'sponsor_type_id': fields.Integer(),
 })
 
 SPONSOR_PAGINATED = api.clone('SponsorPaginated', PAGINATED_MODEL, {
@@ -29,7 +28,7 @@ del SPONSOR_POST['id']
 class SponsorDAO(ServiceDAO):
     def validate_sponsor_type(self, payload, event_id):
         sponsor_type_id = payload.get('sponsor_type_id', False)
-        if sponsor_type_id:
+        if sponsor_type_id is not None:
             get_object_in_event(SponsorTypeModel, sponsor_type_id, event_id)
 
 DAO = SponsorDAO(model=SponsorModel)
@@ -55,7 +54,7 @@ class Sponsor(Resource):
     @requires_auth
     @api.doc('update_sponsor', responses=PUT_RESPONSES)
     @api.marshal_with(SPONSOR)
-    @api.expect(SPONSOR_POST, validate=True)
+    @api.expect(SPONSOR_POST)
     def put(self, event_id, sponsor_id):
         """Update a sponsor given its id"""
         DAO.validate(self.api.payload, SPONSOR_POST)
@@ -74,7 +73,7 @@ class SponsorList(Resource):
     @requires_auth
     @api.doc('create_sponsor', responses=POST_RESPONSES)
     @api.marshal_with(SPONSOR)
-    @api.expect(SPONSOR_POST, validate=True)
+    @api.expect(SPONSOR_POST)
     def post(self, event_id):
         """Create a sponsor"""
         DAO.validate(self.api.payload, SPONSOR_POST)

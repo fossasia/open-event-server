@@ -46,15 +46,15 @@ POST_SESSION_DATA = {
     "abstract": "TestSession",
     "description": "TestSession",
     "end_time": "2016-05-30 09:47:37",
-    "format_id": 0,
-    "language_id": 0,
-    "level_id": 0,
-    "microlocation_id": 0,
+    "format_id": None,
+    "language_id": None,
+    "level_id": None,
+    "microlocation_id": None,
     "speaker_ids": [],
     "start_time": "2016-05-30 08:47:37",
     "subtitle": "TestSession",
     "title": "TestSession",
-    "track_id": 0
+    "track_id": None
 }
 
 POST_SPEAKER_DATA = {

@@ -1,4 +1,4 @@
-from flask.ext.restplus import Resource, Namespace, fields
+from flask.ext.restplus import Resource, Namespace
 from sqlalchemy.orm.collections import InstrumentedList
 
 from open_event.models.session import Session as SessionModel, \
@@ -8,9 +8,9 @@ from open_event.models.track import Track as TrackModel
 from open_event.models.microlocation import Microlocation as MicrolocationModel
 from open_event.models.speaker import Speaker as SpeakerModel
 
-from helpers import get_paginated_list, requires_auth, save_db_model, \
+from .helpers import get_paginated_list, requires_auth, save_db_model, \
     get_object_in_event
-from custom_fields import DateTimeField
+import custom_fields as fields
 from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
 
@@ -19,43 +19,43 @@ api = Namespace('sessions', description='Sessions', path='/')
 # Create models
 SESSION_TRACK = api.model('SessionTrack', {
     'id': fields.Integer(required=True),
-    'name': fields.String,
+    'name': fields.String(),
 })
 
 SESSION_SPEAKER = api.model('SessionSpeaker', {
     'id': fields.Integer(required=True),
-    'name': fields.String,
+    'name': fields.String(),
 })
 
 SESSION_LEVEL = api.model('SessionLevel', {
     'id': fields.Integer(required=True),
-    'label_en': fields.String,
+    'label_en': fields.String(),
 })
 
 SESSION_LANGUAGE = api.model('SessionLanguage', {
     'id': fields.Integer(required=True),
-    'label_en': fields.String,
-    'label_de': fields.String,
+    'label_en': fields.String(),
+    'label_de': fields.String(),
 })
 
 SESSION_FORMAT = api.model('SessionFormat', {
     'id': fields.Integer(required=True),
-    'name': fields.String
+    'name': fields.String()
 })
 
 SESSION_MICROLOCATION = api.model('SessionMicrolocation', {
     'id': fields.Integer(required=True),
-    'name': fields.String,
+    'name': fields.String(),
 })
 
 SESSION = api.model('Session', {
     'id': fields.Integer(required=True),
-    'title': fields.String,
-    'subtitle': fields.String,
-    'abstract': fields.String,
-    'description': fields.String,
-    'start_time': DateTimeField(),
-    'end_time': DateTimeField(),
+    'title': fields.String(),
+    'subtitle': fields.String(),
+    'abstract': fields.String(),
+    'description': fields.String(),
+    'start_time': fields.DateTime(),
+    'end_time': fields.DateTime(),
     'track': fields.Nested(SESSION_TRACK),
     'speakers': fields.List(fields.Nested(SESSION_SPEAKER)),
     'level': fields.Nested(SESSION_LEVEL),
@@ -69,12 +69,12 @@ SESSION_PAGINATED = api.clone('SessionPaginated', PAGINATED_MODEL, {
 })
 
 SESSION_POST = api.clone('SessionPost', SESSION, {
-    'track_id': fields.Integer,
-    'speaker_ids': fields.List(fields.Integer),
-    'level_id': fields.Integer,
-    'language_id': fields.Integer,
-    'format_id': fields.Integer,
-    'microlocation_id': fields.Integer
+    'track_id': fields.Integer(),
+    'speaker_ids': fields.List(fields.Integer()),
+    'level_id': fields.Integer(),
+    'language_id': fields.Integer(),
+    'format_id': fields.Integer(),
+    'microlocation_id': fields.Integer()
 })
 del SESSION_POST['id']
 del SESSION_POST['track']
@@ -103,7 +103,7 @@ class SessionDAO(ServiceDAO):
         """
         returns object (model). Checks if object is in same event
         """
-        if not sid:  # TODO: Right now, 0 is same as null. This should change
+        if sid is None:
             return None
         return get_object_in_event(model, sid, event_id)
 
@@ -161,7 +161,7 @@ class Session(Resource):
     @requires_auth
     @api.doc('update_session', responses=PUT_RESPONSES)
     @api.marshal_with(SESSION)
-    @api.expect(SESSION_POST, validate=True)
+    @api.expect(SESSION_POST)
     def put(self, event_id, session_id):
         """Update a session given its id"""
         DAO.validate(self.api.payload, SESSION_POST)
@@ -179,7 +179,7 @@ class SessionList(Resource):
     @requires_auth
     @api.doc('create_session', responses=POST_RESPONSES)
     @api.marshal_with(SESSION)
-    @api.expect(SESSION_POST, validate=True)
+    @api.expect(SESSION_POST)
     def post(self, event_id):
         """Create a session"""
         DAO.validate(self.api.payload, SESSION_POST)
