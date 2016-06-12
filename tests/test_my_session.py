@@ -35,7 +35,7 @@ class TestMySession(OpenEventTestCase):
             login(self.app, 'email2@gmail.com', 'test2')
             rv = self.app.get('events/mysessions/' + str(session.id), follow_redirects=True)
             logout(self.app)
-            self.assertTrue(session.title in rv.data, msg=rv.data)
+            self.assertTrue("Description" in rv.data, msg=rv.data)
 
     def test_my_session_unauthorized_access(self):
         with app.test_request_context():
