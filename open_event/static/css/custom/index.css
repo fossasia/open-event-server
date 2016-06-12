@@ -34,6 +34,7 @@ body {
 .carousel-caption .btn {
     font-weight: 100;
     font-size: 25px;
+    text-transform: uppercase;
 }
 
 .row {
