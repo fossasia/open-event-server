@@ -29,16 +29,22 @@ auto = Autodoc()
 app = Blueprint('', __name__)
 
 
+def chunks(l, n):
+    """Yield successive n-sized chunks from l."""
+    for i in xrange(0, len(l), n):
+        yield l[i:i + n]
+
 @app.route('/', methods=['GET'])
 @auto.doc()
 @cross_origin()
 def get_main_page():
     """Redirect to admin page"""
-    call_for_papers_evs = DataGetter.get_call_for_speakers_events()
-    published_events = DataGetter.get_all_published_events()
+    call_for_papers_evs = DataGetter.get_call_for_speakers_events().all()
+    published_events = DataGetter.get_published_events().all()
+    # Provide data as chunks of 6 for the UI to render in a proper way
     return render_template('gentelella/index.html',
-                           call_for_papers_evs=call_for_papers_evs,
-                           published_events=published_events)
+                           call_for_papers_evs=list(chunks(call_for_papers_evs, 6)),
+                           published_events=list(chunks(published_events, 6)))
 
 
 @app.route('/api/v1/event', methods=['GET'])
