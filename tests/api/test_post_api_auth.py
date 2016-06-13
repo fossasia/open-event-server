@@ -33,7 +33,7 @@ class TestPostApiBasicAuth(OpenEventTestCase):
             }
         )
         self.assertNotEqual(response.status_code, 401)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
         self.assertIn('Test' + str(name).title(), response.data)
 
     def test_event_api(self):
@@ -108,7 +108,7 @@ class TestPostApiJWTAuth(TestPostApiBasicAuth):
             }
         )
         self.assertNotEqual(response.status_code, 401)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
         self.assertIn('Test' + str(name).title(), response.data)
 
 

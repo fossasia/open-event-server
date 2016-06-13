@@ -69,8 +69,11 @@ class SponsorTypeList(Resource):
     @api.expect(SPONSOR_TYPE_POST)
     def post(self, event_id):
         """Create a sponsor_type"""
-        return DAO.create(event_id, self.api.payload)
-
+        return DAO.create(
+            event_id,
+            self.api.payload,
+            self.api.url_for(self, event_id=event_id)
+        )
 
 @api.route('/events/<int:event_id>/sponsor_types/page')
 class SponsorTypeListPaginated(Resource, PaginatedResourceBase):

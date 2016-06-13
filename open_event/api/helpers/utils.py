@@ -9,7 +9,8 @@ DEFAULT_PAGE_LIMIT = 20
 POST_RESPONSES = {
     400: 'Validation error',
     401: 'Authentication failure',
-    404: 'Event does not exist'
+    404: 'Event does not exist',
+    201: 'Resource created successfully'
 }
 
 PUT_RESPONSES = {
@@ -103,11 +104,15 @@ class ServiceDAO(BaseDAO):
         get_object_or_404(EventModel, event_id)
         return get_object_list(self.model, event_id=event_id)
 
-    def create(self, event_id, data, validate=True):
+    def create(self, event_id, data, url, validate=True):
         if validate:
             self.validate(data)
         item = create_model(self.model, data, event_id=event_id)
-        return item
+
+        # Return created resource with a 201 status code and its Location
+        # (url) in the header.
+        resource_location = url + '/' + str(item.id)
+        return item, 201, {'Location': resource_location}
 
     def update(self, event_id, service_id, data, validate=True):
         if validate:

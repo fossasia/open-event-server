@@ -41,13 +41,13 @@ class TestPostApiBase(OpenEventTestCase):
 class TestPostApi(TestPostApiBase):
     """
     Test POST APIs against 401 (unauthorized) and
-    200 (successful) status codes
+    201 (successful) status codes
     """
     def _test_model(self, name, data):
         """
         Tests -
         1. Without login, try to do a POST request and catch 401 error
-        2. Login and match 200 response code and correct response data
+        2. Login and match 201 response code and correct response data
         """
         path = get_path() if name == 'event' else get_path(1, name + 's')
         response = self.post_request(path, data)
@@ -55,7 +55,8 @@ class TestPostApi(TestPostApiBase):
         # login and send the request again
         self._login_user()
         response = self.post_request(path, data)
-        self.assertEqual(200, response.status_code, msg=response.data)
+        self.assertEqual(201, response.status_code, msg=response.data)
+        self.assertIn('location', response.headers)
         self.assertIn('Test' + str(name).title(), response.data)
         return response
 
