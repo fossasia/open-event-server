@@ -99,7 +99,10 @@ def _fix_related_fields(srv, data, service_ids):
             data[field[1]] = ls
         else:
             old_id = old_value['id']
-            data[field[1]] = service_ids[field[2]][old_id]
+            if old_id is None:
+                data[field[1]] = None
+            else:
+                data[field[1]] = service_ids[field[2]][old_id]
             del data[field[0]]
     return data
 
@@ -108,7 +111,7 @@ def create_service_from_json(data, srv, event_id, service_ids={}):
     # sort by id
     data.sort(key=lambda k: k['id'])
     ids = {}
-    print 'hi', srv[0], data
+    print srv[0]
     # start creating
     for obj in data:
         # trim id field
@@ -117,7 +120,6 @@ def create_service_from_json(data, srv, event_id, service_ids={}):
         obj = _delete_fields(srv, obj)
         # related
         obj = _fix_related_fields(srv, obj, service_ids)
-        print 'o', obj
         # create object
         new_obj = srv[1].create(event_id, obj, 'dont')[0]
         ids[old_id] = new_obj.id
