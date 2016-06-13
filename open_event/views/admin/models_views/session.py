@@ -18,7 +18,7 @@ class SessionView(ModelView):
         sessions = DataGetter.get_sessions_by_event_id(event_id)
         event = DataGetter.get_event(event_id)
         return self.render('/gentelella/admin/event/session/display.html',
-                           sessions=sessions, event_id=event_id,event=event)
+                           sessions=sessions, event_id=event_id, event=event)
 
     @expose('/create/', methods=('GET', 'POST'))
     def create_view(self, event_id):
@@ -36,6 +36,12 @@ class SessionView(ModelView):
                 DataManager.add_session_to_event(request.form, event_id)
                 return redirect(url_for('session.index_view', event_id=event_id))
             return self.render('/gentelella/admin/session/new/new.html')
+
+    @expose('/<int:session_id>/invited/', methods=('GET', 'POST'))
+    def invited_view(self, event_id, session_id):
+        session = DataGetter.get_session(session_id)
+
+        return self.render('/gentelella/admin/event/session/invited.html')
 
     @expose('/<int:session_id>/edit/', methods=('GET', 'POST'))
     def edit_view(self, event_id, session_id):
