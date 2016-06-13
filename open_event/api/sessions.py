@@ -8,11 +8,11 @@ from open_event.models.track import Track as TrackModel
 from open_event.models.microlocation import Microlocation as MicrolocationModel
 from open_event.models.speaker import Speaker as SpeakerModel
 
-from .helpers import get_paginated_list, requires_auth, save_db_model, \
-    get_object_in_event
-import custom_fields as fields
-from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
+from .helpers.helpers import get_paginated_list, requires_auth, \
+    save_db_model, get_object_in_event
+from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
+from .helpers import custom_fields as fields
 
 api = Namespace('sessions', description='Sessions', path='/')
 

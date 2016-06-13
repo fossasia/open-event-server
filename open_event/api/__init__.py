@@ -14,7 +14,7 @@ from .formats import api as format_api
 from .languages import api as language_api
 from .login import api as login_api
 
-from .errors import (
+from helpers.errors import (
     NotFoundError,
     NotAuthorizedError,
     ValidationError,

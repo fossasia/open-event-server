@@ -1,13 +1,14 @@
 from flask.ext.restplus import Resource, Namespace
 from flask import g
 
-import custom_fields as fields
 from open_event.models.event import Event as EventModel, EventsUsers
 from open_event.models.user import ADMIN, SUPERADMIN
-from .helpers import get_paginated_list, requires_auth
-from utils import PAGINATED_MODEL, PaginatedResourceBase, PAGE_PARAMS, \
-    POST_RESPONSES, PUT_RESPONSES, BaseDAO
 from open_event.helpers.data import save_to_db, update_version
+
+from .helpers.helpers import get_paginated_list, requires_auth
+from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, PAGE_PARAMS, \
+    POST_RESPONSES, PUT_RESPONSES, BaseDAO
+from .helpers import custom_fields as fields
 
 api = Namespace('events', description='Events')
 

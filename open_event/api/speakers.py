@@ -1,10 +1,11 @@
 from flask.ext.restplus import Resource, Namespace
 
 from open_event.models.speaker import Speaker as SpeakerModel
-import custom_fields as fields
-from .helpers import get_paginated_list, requires_auth
-from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
+
+from .helpers.helpers import get_paginated_list, requires_auth
+from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
+from .helpers import custom_fields as fields
 
 api = Namespace('speakers', description='Speakers', path='/')
 
