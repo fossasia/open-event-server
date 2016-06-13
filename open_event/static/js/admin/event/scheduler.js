@@ -252,7 +252,7 @@ function addSessionToUnscheduled(sessionRef, isFiltering, shouldBroadcast) {
     sessionRefObject.session.duration = 30;
     sessionRefObject.session.start_time.hours(0).minutes(0);
     sessionRefObject.session.end_time.hours(0).minutes(0);
-    sessionRefObject.session.microlocation = null;
+    sessionRefObject.session.microlocation.id = null;
 
     sessionRefObject.session.start_time.isReset = true;
     sessionRefObject.session.end_time.isReset = true;
@@ -542,7 +542,7 @@ function initializeInteractables() {
                 var $sessionElement = $(event.target);
                 $(document).trigger({
                     type: "scheduling:change",
-                    session: $sessionElement.data("session")
+                    session: updateSessionTime($sessionElement)
                 });
 
             }
@@ -865,7 +865,7 @@ $(document).on("scheduling:change", function (e) {
     session.level_id = _.isNull(session.level.id) ? 0 : session.level.id;
     session.format_id = _.isNull(session.format.id) ? 0 : session.format.id;
     session.language_id = _.isNull(session.language.id) ? 0 : session.language.id;
-    session.microlocation_id = _.isNull(session.microlocation.id) ? 0 : session.microlocation.id;
+    session.microlocation_id = _.isNull(session.microlocation.id) ? null : session.microlocation.id;
     session.speaker_ids = _.map(session.speakers, 'id');
 
     // Clean up the payload
