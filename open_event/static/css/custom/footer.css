@@ -23,7 +23,7 @@ footer ul li
     line-height:25px
 }
 
-footer ul a, a:hover
+footer ul a, footer ul a:hover
 {
     color: white;
 }
