@@ -1,4 +1,5 @@
 {% extends 'gentelella/admin/base.html' %}
+
 {% block head_css %}
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"/>
@@ -7,6 +8,7 @@
 {% block title %}
 Events
 {% endblock %}
+
 {% block body %}
 <div class="page-title">
     <div class="title_left">
