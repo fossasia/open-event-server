@@ -1,8 +1,7 @@
 {% extends 'gentelella/admin/base.html' %}
 {% block head_css %}
 {{ super() }}
-<link rel="stylesheet"
-      href="{{ url_for('static', filename='admin/lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"/>
 {% endblock %}
 
 {% block title %}
@@ -11,19 +10,13 @@ Events
 {% block body %}
 <div class="page-title">
     <div class="title_left">
-        <h3>Events</h3>
+        <h3>Manage Events</h3>
     </div>
 </div>
-
 <div class="clearfix"></div>
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
-            <div class="x_title">
-                <h2>Events list</h2>
-                <div class="clearfix"></div>
-            </div>
-
             <div class="x_content">
                 <div class="" role="tabpanel" data-example-id="togglable-tabs">
                     <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist" style="background: #FFFFFF;">
