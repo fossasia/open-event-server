@@ -9,14 +9,16 @@ class SessionView(ModelView):
     @expose('/')
     def index_view(self, event_id):
         sessions = DataGetter.get_sessions_by_event_id(event_id)
+        event = DataGetter.get_event(event_id)
         return self.render('/gentelella/admin/event/session/display.html',
-                           sessions=sessions, event_id=event_id)
+                           sessions=sessions, event_id=event_id, event=event)
 
     @expose('/display/')
     def display_view(self, event_id):
         sessions = DataGetter.get_sessions_by_event_id(event_id)
+        event = DataGetter.get_event(event_id)
         return self.render('/gentelella/admin/event/session/display.html',
-                           sessions=sessions, event_id=event_id)
+                           sessions=sessions, event_id=event_id,event=event)
 
     @expose('/create/', methods=('GET', 'POST'))
     def create_view(self, event_id):

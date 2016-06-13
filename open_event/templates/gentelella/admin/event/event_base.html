@@ -3,13 +3,22 @@
     {{ super() }}
 {% endblock %}
 
+
+{% set navigation_bar = [
+    ('/events/' ~ event.id ~ '/', 'home', 'Home'),
+    ('/events/' ~ event.id ~ '/scheduler', 'scheduler', 'Scheduler'),
+    ('/events/' ~ event.id ~ '/sessions', 'sessions', 'Sessions'),
+    ('/events/' ~ event.id ~ '/speakers', 'speakers', 'Speakers'),
+    ('/events/' ~ event.id ~ '/sponsors', 'sponsors', 'Sponsors')
+] -%}
+
+{% set active_page = active_page|default('home') -%}
+
 {% macro tabs() %}
     <ul class="nav nav-tabs bar_tabs" role="tablist" style="background: #FFFFFF;">
-        <li><a href="/events/{{ event.id }}/">Home</a></li>
-        <li><a href="/events/{{ event.id }}/scheduler/">Scheduler</a></li>
-        <li><a href="/events/{{ event.id }}/sessions/">Sessions</a></li>
-        <li><a href="/events/{{ event.id }}/speakers/">Speaker</a></li>
-        <li><a href="/events/{{ event.id }}/sponsors/">Sponsors</a></li>
+        {% for href, id, caption in navigation_bar %}
+            <li{% if id == active_page %} class="active"{% endif %}><a href="{{ href|e }}">{{ caption|e }}</a></li>
+        {% endfor %}
     </ul>
 {% endmacro %}
 
@@ -22,7 +31,11 @@
                     {{ tabs() }}
                     <div class="x_panel">
                         <div class="x_title">
-                            <h3>{{ event.name }}</h3>
+                            <h3>{{ event.name }}
+                            {% if active_page != "home"  %}
+                                 <span style="font-weight: 300; color: #73879C;"> | {{ active_page | capitalize }}</span>
+                            {% endif %}
+                            </h3>
                         </div>
                         <div class="x_content">
                             {% block content %}

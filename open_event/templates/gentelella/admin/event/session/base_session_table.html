@@ -3,6 +3,9 @@
 {% block title %}
     {{ event.name }} - Sessions
 {% endblock %}
+
+{% set active_page = "sessions" %}
+
 {% block content %}
     <button class="btn btn-default" onclick="show_all();">All</button>
     <button class="btn btn-default" onclick="show_pending();">Pending</button>
