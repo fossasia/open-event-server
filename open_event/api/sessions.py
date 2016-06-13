@@ -125,6 +125,7 @@ class SessionDAO(ServiceDAO):
         return data
 
     def update(self, event_id, service_id, data):
+        self.validate(data)
         data_copy = data.copy()
         data_copy = self.fix_payload_post(event_id, data_copy)
         data = self._delete_fields(data)
@@ -138,7 +139,13 @@ class SessionDAO(ServiceDAO):
         obj = save_db_model(obj, SessionModel.__name__, event_id)
         return obj
 
-DAO = SessionDAO(model=SessionModel)
+    def create(self, event_id, data):
+        self.validate(data)
+        payload = self.fix_payload_post(event_id, data)
+        return ServiceDAO.create(self, event_id, payload, validate=False)
+
+
+DAO = SessionDAO(SessionModel, SESSION_POST)
 
 
 @api.route('/events/<int:event_id>/sessions/<int:session_id>')
@@ -164,7 +171,6 @@ class Session(Resource):
     @api.expect(SESSION_POST)
     def put(self, event_id, session_id):
         """Update a session given its id"""
-        DAO.validate(self.api.payload, SESSION_POST)
         return DAO.update(event_id, session_id, self.api.payload)
 
 
@@ -182,9 +188,7 @@ class SessionList(Resource):
     @api.expect(SESSION_POST)
     def post(self, event_id):
         """Create a session"""
-        DAO.validate(self.api.payload, SESSION_POST)
-        payload = DAO.fix_payload_post(event_id, self.api.payload)
-        return DAO.create(event_id, payload)
+        return DAO.create(event_id, self.api.payload)
 
 
 @api.route('/events/<int:event_id>/sessions/page')

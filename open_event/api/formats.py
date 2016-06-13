@@ -26,7 +26,7 @@ del FORMAT_POST['id']
 class FormatDAO(ServiceDAO):
     pass
 
-DAO = FormatDAO(model=FormatModel)
+DAO = FormatDAO(FormatModel, FORMAT_POST)
 
 
 @api.route('/events/<int:event_id>/formats/<int:format_id>')
@@ -52,7 +52,6 @@ class Format(Resource):
     @api.expect(FORMAT_POST)
     def put(self, event_id, format_id):
         """Update a format given its id"""
-        DAO.validate(self.api.payload, FORMAT_POST)
         return DAO.update(event_id, format_id, self.api.payload)
 
 
@@ -70,7 +69,6 @@ class FormatList(Resource):
     @api.expect(FORMAT_POST)
     def post(self, event_id):
         """Create a format"""
-        DAO.validate(self.api.payload, FORMAT_POST)
         return DAO.create(event_id, self.api.payload)
 
 

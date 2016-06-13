@@ -28,7 +28,7 @@ del MICROLOCATION_POST['id']
 class MicrolocationDAO(ServiceDAO):
     pass
 
-DAO = MicrolocationDAO(model=MicrolocationModel)
+DAO = MicrolocationDAO(MicrolocationModel, MICROLOCATION_POST)
 
 
 @api.route('/events/<int:event_id>/microlocations/<int:microlocation_id>')
@@ -54,7 +54,6 @@ class Microlocation(Resource):
     @api.expect(MICROLOCATION_POST)
     def put(self, event_id, microlocation_id):
         """Update a microlocation given its id"""
-        DAO.validate(self.api.payload, MICROLOCATION_POST)
         return DAO.update(event_id, microlocation_id, self.api.payload)
 
 
@@ -72,7 +71,6 @@ class MicrolocationList(Resource):
     @api.expect(MICROLOCATION_POST)
     def post(self, event_id):
         """Create a microlocation"""
-        DAO.validate(self.api.payload, MICROLOCATION_POST)
         return DAO.create(event_id, self.api.payload)
 
 

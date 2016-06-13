@@ -24,7 +24,7 @@ del SPONSOR_TYPE_POST['id']
 class SponsorTypeDAO(ServiceDAO):
     pass
 
-DAO = SponsorTypeDAO(model=SponsorTypeModel)
+DAO = SponsorTypeDAO(SponsorTypeModel, SPONSOR_TYPE_POST)
 
 
 @api.route('/events/<int:event_id>/sponsor_types/<int:sponsor_type_id>')
@@ -50,7 +50,6 @@ class SponsorType(Resource):
     @api.expect(SPONSOR_TYPE_POST)
     def put(self, event_id, sponsor_type_id):
         """Update a sponsor_type given its id"""
-        DAO.validate(self.api.payload, SPONSOR_TYPE_POST)
         return DAO.update(event_id, sponsor_type_id, self.api.payload)
 
 
@@ -68,7 +67,6 @@ class SponsorTypeList(Resource):
     @api.expect(SPONSOR_TYPE_POST)
     def post(self, event_id):
         """Create a sponsor_type"""
-        DAO.validate(self.api.payload, SPONSOR_TYPE_POST)
         return DAO.create(event_id, self.api.payload)
 
 

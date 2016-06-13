@@ -36,7 +36,7 @@ del TRACK_POST['sessions']
 class TrackDAO(ServiceDAO):
     pass
 
-DAO = TrackDAO(model=TrackModel)
+DAO = TrackDAO(TrackModel, TRACK_POST)
 
 
 @api.route('/events/<int:event_id>/tracks/<int:track_id>')
@@ -62,7 +62,6 @@ class Track(Resource):
     @api.expect(TRACK_POST)
     def put(self, event_id, track_id):
         """Update a track given its id"""
-        DAO.validate(self.api.payload, TRACK_POST)
         return DAO.update(event_id, track_id, self.api.payload)
 
 
@@ -80,7 +79,6 @@ class TrackList(Resource):
     @api.expect(TRACK_POST)
     def post(self, event_id):
         """Create a track"""
-        DAO.validate(self.api.payload, TRACK_POST)
         return DAO.create(event_id, self.api.payload)
 
 

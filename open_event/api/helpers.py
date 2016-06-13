@@ -163,24 +163,31 @@ def save_db_model(new_model, model_name, event_id=None):
     return new_model
 
 
-def create_service_model(model, event_id, data):
+def create_model(model, data, event_id=None):
     """
-    Create a new service model (microlocations, sessions, speakers etc)
-    and save it to database
+    Creates a model.
+    If event_id is set, the model is assumed as a child of event
+    i.e. Service Model
     """
-    get_object_or_404(EventModel, event_id)
-    data['event_id'] = event_id
+    if event_id is not None:
+        get_object_or_404(EventModel, event_id)
+        data['event_id'] = event_id
     new_model = model(**data)
     save_to_db(new_model, "Model %s saved" % model.__name__)
-    update_version(event_id, False, "session_ver")
+    if event_id:
+        update_version(event_id, False, "session_ver")
     return new_model
 
 
-def delete_service_model(model, event_id, service_id):
+def delete_model(model, item_id, event_id=None):
     """
-    Delete a service model.
+    Deletes a model
+    If event_id is set, it is assumed to be a service model
     """
-    item = get_object_in_event(model, service_id, event_id)
+    if event_id is not None:
+        item = get_object_in_event(model, item_id, event_id)
+    else:
+        item = get_object_or_404(model, item_id)
     delete_from_db(item, '{} deleted'.format(model.__name__))
     return item
 
