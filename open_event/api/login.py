@@ -1,7 +1,7 @@
 import json
 from flask.ext.restplus import Resource, Namespace
 import custom_fields as fields
-from helpers import _error_abort
+from .errors import NotAuthorizedError
 from flask_jwt import JWTError
 
 api = Namespace('login', description='Login')
@@ -28,4 +28,5 @@ class Login(Resource):
             response = jwt.auth_request_callback()
             return json.loads(response.data)
         except JWTError as e:
-            _error_abort(401, '%s: %s' % (e.error, e.description))
+            raise NotAuthorizedError(message='{}: {}'.format(e.error,
+                                                             e.description))
