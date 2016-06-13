@@ -3,12 +3,12 @@
 {% block title %}
     {{ event.name }} - Sessions
 {% endblock %}
-
 {% block content %}
     <button class="btn btn-default" onclick="show_all();">All</button>
     <button class="btn btn-default" onclick="show_pending();">Pending</button>
     <button class="btn btn-default" onclick="show_accepted();">Accepted</button>
     <button class="btn btn-default" onclick="show_rejected();">Rejected</button>
+    <a class="btn btn-success" href="{{ get_url('session.create_view', event_id=event_id) }}">Create Session</a>
 
     <table class="table table-striped">
         <thead>

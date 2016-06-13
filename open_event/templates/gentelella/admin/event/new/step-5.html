@@ -17,10 +17,12 @@
 				</div>
 			</div>
 			<hr/><hr/>
+			<input type="hidden" name="custom_form[name]" value="session_form"/>
+			<input type="hidden" class="form_val" name="custom_form[value]" value=""/>
 		</div>
 		<hr/>
 		<div class="row speaker_form col-md-12 col-sm-12 col-xs-12" style="padding-bottom:20px;">
-			<center><h1>Customize Session Form</h1></center>
+			<center><h1>Customize Speaker Form</h1></center>
 			<div class="row">
 				<div class="col-md-6 col-sm-6 col-xs-12">
 					<h2><b>Options</b></h2>
@@ -33,42 +35,106 @@
 				</div>
 			</div>
 			<hr/><hr/>
+			<input type="hidden" name="custom_form[name]" value="speaker_form"/>
+			<input type="hidden" class="form_val" name="custom_form[value]" value=""/>
 		</div>
 	</div>
 </div>
+
 <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/icheck.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/switchery.js') }}"></script>
 <script type="text/javascript">
+var session_form = {};
+var speaker_form = {};
+
 show_options({{session_columns | safe}}, '.session_form');
 show_options({{speaker_columns | safe}}, '.speaker_form');
+
 function show_options(array, div) {
 	for (index in array) {
 		var column = array[index].split(".")[1];
 		if (column.contains("id")) {
 			column = column.split("id")[0].split("_")[0];
 		}
-		if (column.length > 0 && column != "event") {
+		var form_name = div.split(".")[1];
+		console.log(form_name);
+		if (column.length > 0 && column != "event" && column != "start_time" && column != "end_time"  && column != "microlocation" && column != "state") {
+			if (form_name == 'session_form') {
+				session_form[column] = {}
+				session_form[column]['include'] = 0;
+				session_form[column]['require'] = 0;
+			}else if (form_name == 'speaker_form') {
+				speaker_form[column] = {}
+				speaker_form[column]['include'] = 0;
+				speaker_form[column]['require'] = 0;
+			}
 			var element = '<div class="row">'+
 							'<div class="col-md-6 col-sm-6 col-xs-12" style="text-transform:capitalize;font-size:1.3em;">' +
-								column +
+								column.replace("_", " ") +
 							'</div>'+
 							'<div class="col-md-3 col-sm-3 col-xs-12">' +
 								'<div class="">'+
 		                            '<label>'+
-		                              '<input type="checkbox" class="js-switch" id="' + column + '-include" />'+
+		                              '<input type="checkbox" class="js-switch include" id="' + form_name + '-' + column + '-include" onclick="includeClick(this);"/>'+
 		                            '</label>'+
 		                        '</div>'+
 							'</div>'+
 							'<div class="col-md-3 col-sm-3 col-xs-12">' +
 								'<div class="">'+
 		                            '<label>'+
-		                              '<input type="checkbox" class="js-switch" id="' + column + '-require" />'+
+		                              '<input type="checkbox" class="js-switch require" id="' + form_name + '-' + column + '-require" onclick="requireClick(this);" disabled/>'+
 		                            '</label>'+
 		                        '</div>'+
 							'</div>'+
 	                      '</div><hr/>';
 			$(div).append(element);
 		}
+	}
+	$('.session_form .form_val').val(JSON.stringify(session_form));
+	$('.speaker_form .form_val').val(JSON.stringify(speaker_form));
+}
+
+function includeClick(cb) {
+	var form_name = cb.id.split("-")[0];
+	var column = cb.id.split("-")[1];
+	var type = cb.id.split("-")[2];
+	if (form_name == 'session_form') {
+		if (cb.checked) {
+			session_form[column][type] = 1;
+			$(cb).parent().parent().parent().parent().find('.js-switch.require').prop('disabled', false);
+		}else {
+			session_form[column][type] = 0;
+			$(cb).parent().parent().parent().parent().find('.js-switch.require').prop('disabled', true);
+		}
+		$('.session_form .form_val').val(JSON.stringify(session_form));
+	}else if (form_name == 'speaker_form') {
+		if (cb.checked) {
+			speaker_form[column][type] = 1;
+			$(cb).parent().parent().parent().parent().find('.js-switch.require').prop('disabled', false);
+		}else {
+			speaker_form[column][type] = 0;
+			$(cb).parent().parent().parent().parent().find('.js-switch.require').prop('disabled', true);
+		}
+		$('.speaker_form .form_val').val(JSON.stringify(speaker_form));
+	}
+}
+
+function requireClick(cb) {
+	var form_name = cb.id.split("-")[0];
+	var column = cb.id.split("-")[1];
+	var type = cb.id.split("-")[2];
+	if (form_name == 'session_form') {
+		if (cb.checked)
+			session_form[column][type] = 1;
+		else
+			session_form[column][type] = 0;
+		$('.session_form .form_val').val(JSON.stringify(session_form));
+	}else if (form_name == 'speaker_form') {
+		if (cb.checked)
+			speaker_form[column][type] = 1;
+		else
+			speaker_form[column][type] = 0;
+		$('.speaker_form .form_val').val(JSON.stringify(speaker_form));
 	}
 }
 </script>

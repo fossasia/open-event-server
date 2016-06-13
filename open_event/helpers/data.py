@@ -34,6 +34,7 @@ from open_event.helpers.oauth import OAuth, FbOAuth
 from requests_oauthlib import OAuth2Session
 from ..models.invite import Invite
 from ..models.call_for_papers import CallForPaper
+from ..models.custom_forms import CustomForms
 
 
 class DataManager(object):
@@ -592,6 +593,9 @@ class DataManager(object):
             sponsor_level = form.getlist('sponsors[level]')
             sponsor_description = form.getlist('sponsors[description]')
 
+            custom_forms_name = form.getlist('custom_form[name]')
+            custom_forms_value = form.getlist('custom_form[value]')
+
             for index, name in enumerate(session_type_names):
                 session_type = SessionType(name=name, length=session_type_length[index], event_id=event.id)
                 db.session.add(session_type)
@@ -613,6 +617,18 @@ class DataManager(object):
                 sponsor = Sponsor(name=name, logo=sponsor_logo[index], url=sponsor_url[index],
                                   level=sponsor_level[index], description=sponsor_description[index], event_id=event.id)
                 db.session.add(sponsor)
+
+            session_form = ""
+            speaker_form = ""
+            for index, name in enumerate(custom_forms_name):
+                print name
+                if name == "session_form":
+                    session_form = custom_forms_value[index]
+                elif name == "speaker_form":
+                    speaker_form = custom_forms_value[index]
+
+            custom_form = CustomForms(session_form=session_form, speaker_form=speaker_form, event_id=event.id)
+            db.session.add(custom_form)
 
             uer = UsersEventsRoles(event_id=event.id, user_id=login.current_user.id, role_id=role.id)
             if save_to_db(call_for_speakers, "Call for paper saved") and save_to_db(uer, "Event saved"):
