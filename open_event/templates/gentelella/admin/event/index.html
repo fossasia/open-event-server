@@ -34,6 +34,10 @@ Events
                                                             data-toggle="tab"
                                                             aria-expanded="false">Past</a>
                         </li>
+                        <li role="presentation" class=""><a href="#tab_content4" role="tab" id="all-tab"
+                                                            data-toggle="tab"
+                                                            aria-expanded="false">All Events</a>
+                        </li>
                     </ul>
                     <div id="myTabContent" class="tab-content">
                         <div role="tabpanel" class="tab-pane fade active in" id="tab_content1"
@@ -92,6 +96,26 @@ Events
                                 </thead>
                                 <tbody>
                                 {% for event in past_events %}
+                                    {% include '/gentelella/admin/event/_table.html' %}
+                                {%endfor%}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="tab_content4"
+                             aria-labelledby="all-tab">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>State</th>
+                                    <th>Url</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Options</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for event in all_events %}
                                     {% include '/gentelella/admin/event/_table.html' %}
                                 {%endfor%}
                                 </tbody>
