@@ -19,16 +19,15 @@ class SessionView(ModelView):
                            sessions=sessions, event_id=event_id)
 
     @expose('/create/', methods=('GET', 'POST'))
-    def new_view(self, event_id, user_id, hash):
-        invite = DataGetter.get_invite_by_user_id(user_id)
-        if invite and invite.hash == hash:
-            if request.method == 'POST':
-                DataManager.add_session_to_event(request.form, event_id)
-                return redirect(url_for('session.index_view', event_id=event_id))
-            return self.render('/gentelella/admin/event/session/new/new.html')
+    def create_view(self, event_id):
+        form_elems = DataGetter.get_custom_form_elements(event_id)
+        if request.method == 'POST':
+            DataManager.add_session_to_event(request.form, event_id)
+            return redirect(url_for('session.index_view', event_id=event_id))
+        return self.render('/gentelella/admin/event/session/new/new.html', form_elems=form_elems)
 
     @expose('/new/<user_id>/<hash>/', methods=('GET', 'POST'))
-    def create_view(self, event_id, user_id, hash):
+    def new_view(self, event_id, user_id, hash):
         invite = DataGetter.get_invite_by_user_id(user_id)
         if invite and invite.hash == hash:
             if request.method == 'POST':
@@ -36,7 +35,7 @@ class SessionView(ModelView):
                 return redirect(url_for('session.index_view', event_id=event_id))
             return self.render('/gentelella/admin/session/new/new.html')
 
-    @expose('/<int:session_id>/edit/', methods=('GET','POST'))
+    @expose('/<int:session_id>/edit/', methods=('GET', 'POST'))
     def edit_view(self, event_id, session_id):
         session = DataGetter.get_session(session_id)
         if request.method == 'GET':

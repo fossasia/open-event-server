@@ -17,7 +17,6 @@ class EventsView(ModelView):
 
     @expose('/')
     def index_view(self):
-        print "aaa"
         live_events = DataGetter.get_live_events()
         draft_events = DataGetter.get_draft_events()
         past_events = DataGetter.get_past_events()
