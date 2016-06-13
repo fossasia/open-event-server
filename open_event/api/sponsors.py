@@ -1,9 +1,12 @@
 from flask.ext.restplus import Resource, Namespace
-import custom_fields as fields
+
 from open_event.models.sponsor import Sponsor as SponsorModel, SponsorType as SponsorTypeModel
-from .helpers import get_paginated_list, requires_auth, get_object_in_event
-from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
+
+
+from .helpers.helpers import get_paginated_list, requires_auth, get_object_in_event
+from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
+from .helpers import custom_fields as fields
 
 api = Namespace('sponsors', description='Sponsors', path='/')
 
