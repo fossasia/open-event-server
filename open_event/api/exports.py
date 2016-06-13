@@ -2,11 +2,13 @@ from flask import send_file, make_response
 from flask.ext.restplus import Resource, Namespace
 
 from helpers.export_helpers import export_event_json
+from helpers.helpers import nocache
 
 
 api = Namespace('event_exports', description='Event Exports', path='/')
 
 
+@nocache
 @api.route('/events/<int:event_id>/export/json')
 @api.hide
 class EventExportJson(Resource):
