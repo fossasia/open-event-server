@@ -113,7 +113,7 @@ $(document).ready(function() {
     onFinish: function() {
         var input = $("<input>")
                .attr("type", "hidden")
-               .attr("name", "state").val("Publish");
+               .attr("name", "state").val("Published");
         $('#wizard').append($(input));
         $("#event-create-form").submit(); },
     enableAllSteps: true,
@@ -124,7 +124,7 @@ $(document).ready(function() {
     onFinish: function() {
         var input = $("<input>")
                .attr("type", "hidden")
-               .attr("name", "state").val("Publish");
+               .attr("name", "state").val("Published");
         $('#wizard-edit').append($(input));
         $("#event-edit-form").submit(); },
     enableAllSteps: true,
