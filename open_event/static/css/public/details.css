@@ -79,7 +79,6 @@ body {
 
 .scrollspy {
     position: absolute;
-    top: 395px;
     left: 55px;
     z-index: 11;
     text-align: right;

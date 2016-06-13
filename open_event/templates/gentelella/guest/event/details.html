@@ -1,7 +1,7 @@
 {% extends 'gentelella/admin/base.html' %}
 
 {% set carousel_height = 500 if event.background_url else 300 -%}
-{% set scrollspy_top = carousel_height + 95 %}
+{% set scrollspy_top = (carousel_height + 95) ~ "px" %}
 
 {% block head_css %}
     {{ super() }}
@@ -9,13 +9,16 @@
     <style type="text/css">
         .carousel .item {
             height: {{ carousel_height }}px;
-            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ event.background_url }}');
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('{{ event.background_url }}');
         }
 
         .carousel {
             height: {{ carousel_height }}px;
         }
 
+        .scrollspy {
+            top: {{ scrollspy_top }};
+        }
     </style>
 {% endblock %}
 {% block title %}
@@ -47,7 +50,7 @@
 
 {% block body %}
     <div class="scrollspy" id="scrollspy">
-        <ul class="nav nav-pills nav-stacked" style="top: {{ scrollspy_top }}px;">
+        <ul class="nav nav-pills nav-stacked">
             <li role="presentation" class="active"><a href="#info">Info</a></li>
             <li role="presentation"><a href="#speakers">Speakers</a></li>
             <li role="presentation"><a href="#sponsors">Sponsors</a></li>
@@ -84,12 +87,6 @@
                     {{ speaker_info() }}
                     {{ speaker_info() }}
                 </div>
-                <div class="row">
-                    {{ speaker_info() }}
-                    {{ speaker_info() }}
-                    {{ speaker_info() }}
-                    {{ speaker_info() }}
-                </div>
                 <br>
                 <h3 id="sponsors">Sponsors</h3>
                 <div class="row">
@@ -116,78 +113,10 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="col-md-4 col-sm-6 sponsor-column">
-                            <div class="sponsor text-center">
-                                <a href="http://github.com" target="default">
-                                    <img alt="Sponsor" src="http://2016.fossasia.org/img/GitHub_Logo.png">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-6 sponsor-column">
-                            <div class="sponsor text-center">
-                                <a href="http://www.youthmobile.org/" target="default">
-                                    <img alt="Sponsor" src="http://2016.fossasia.org/img/YouthMobileUnesco.png">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-6 sponsor-column">
-                            <div class="sponsor text-center">
-                                <a href="http://www.science.edu.sg/" target="default">
-                                    <img alt="Sponsor" src="http://2016.fossasia.org/img/ScienceCentre.png">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-6 sponsor-column">
-                            <div class="sponsor text-center">
-                                <a href="http://oracle.com" target="default">
-                                    <img alt="Sponsor" src="http://2016.fossasia.org/img/Oracle.png">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-6 sponsor-column">
-                            <div class="sponsor text-center">
-                                <a href="http://mysql.com" target="default">
-                                    <img alt="Sponsor" src="http://2016.fossasia.org/img/MySQL.png">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-6 sponsor-column">
-                            <div class="sponsor text-center">
-                                <a href="https://www.hpe.com" target="default">
-                                    <img alt="Sponsor" src="http://2016.fossasia.org/img/HPE.png">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-6 sponsor-column">
-                            <div class="sponsor text-center">
-                                <a href="https://generalassemb.ly" target="default">
-                                    <img alt="General Assembly" src="http://2016.fossasia.org/img/GeneralAssembly.png">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-6 sponsor-column">
-                            <div class="sponsor text-center">
-                                <a href="http://mbm.asia" target="default">
-                                    <img alt="Sponsor" src="http://2016.fossasia.org/img/mbm_logo.png">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-6 sponsor-column">
-                            <div class="sponsor text-center">
-                                <a href="https://gandi.net" target="default">
-                                    <img alt="gandi.net" src="http://2016.fossasia.org/img/gandinet.jpg">
-                                </a>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <br>
                 <h3 id="organizers">Organizers</h3>
-                <div class="row">
-                    {{ organizer_info() }}
-                    {{ organizer_info() }}
-                    {{ organizer_info() }}
-                </div>
                 <div class="row">
                     {{ organizer_info() }}
                     {{ organizer_info() }}
@@ -200,16 +129,14 @@
                          class="col-md-8 {% if event.latitude == 0 or event.longitude ==0 %}hidden{% endif %}"></div>
                     <div class="col-md-4" style="text-align: left;">
                         <h4>Address</h4>
-                        Science Center Singapore
-                        15 Science Centre Rd
-                        609081 Singapore
+                        {{ event.location_name }}
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
 
-                <i class="fa fa-envelope fa-fw"></i> contact@fossasia.org<br>
-                <i class="fa fa-phone-square fa-fw"></i> +65 83435672
+                <i class="fa fa-envelope fa-fw"></i> contact@example.org<br>
+                <i class="fa fa-phone-square fa-fw"></i> +1 12121212
                 <br>
                 <br>
                 {% set twitter = [] %}
