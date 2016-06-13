@@ -3,7 +3,9 @@
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom/index.css') }}"/>
 {% endblock %}
-
+{% block title %}
+Home
+{% endblock %}
 {% macro event_box(event) %}
     <div class="col-md-2">
         <div class="thumbnail">

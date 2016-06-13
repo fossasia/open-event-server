@@ -1,0 +1,53 @@
+{% extends 'gentelella/admin/base.html' %}
+{% block head_css %}
+    {{ super() }}
+{% endblock %}
+
+
+{% set navigation_bar = [
+    ('/events/' ~ event.id ~ '/', 'home', 'Home'),
+    ('/events/' ~ event.id ~ '/scheduler', 'scheduler', 'Scheduler'),
+    ('/events/' ~ event.id ~ '/sessions', 'sessions', 'Sessions'),
+    ('/events/' ~ event.id ~ '/speakers', 'speakers', 'Speakers'),
+    ('/events/' ~ event.id ~ '/sponsors', 'sponsors', 'Sponsors')
+] -%}
+
+{% set active_page = active_page|default('home') -%}
+
+{% macro tabs() %}
+    <ul class="nav nav-tabs bar_tabs" role="tablist" style="background: #FFFFFF;">
+        {% for href, id, caption in navigation_bar %}
+            <li{% if id == active_page %} class="active"{% endif %}><a href="{{ href|e }}">{{ caption|e }}</a></li>
+        {% endfor %}
+    </ul>
+{% endmacro %}
+
+{% block body %}
+    <div class="page-title">
+        <div class="title_left">
+            <h3>{{ event.name }}
+                {% if active_page != "home" %}
+                    <span style="font-weight: 300; color: #73879C;"> | {{ active_page | capitalize }}</span>
+                {% endif %}
+            </h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_content">
+                    {{ tabs() }}
+                    <br>
+                    {% block content %}
+
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+{% endblock %}
+

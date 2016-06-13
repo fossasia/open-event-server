@@ -1,4 +1,12 @@
-{% extends 'gentelella/admin/base.html' %}
+{% extends 'gentelella/admin/event/event_base.html' %}
+
+{% block title %}
+    {{ event.name }} - Scheduler
+{% endblock %}
+
+{% set active_page = "scheduler" %}
+
+
 {% block head_css %}
     {{ super() }}
     <link href="{{ url_for('static', filename='css/admin/scheduler.css') }}" rel="stylesheet">
@@ -6,106 +14,83 @@
           rel="stylesheet">
 {% endblock %}
 
-{% block body %}
-    <div class="" role="tabpanel">
-        <ul id="myTab" class="nav nav-tabs " role="tablist">
-            <li role="presentation"><a href="/events/{{ event.id }}/">Home</a></li>
-            <li role="presentation" class="active"><a href="/events/{{ event.id }}/scheduler/">Scheduler</a></li>
-            <li role="presentation" class=""><a href="/events/{{ event.id }}/sessions/">Sessions</a>
-            </li>
-            <li role="presentation" class=""><a href="/events/{{ event.id }}/speakers/">Speaker</a>
-            </li>
-            <li role="presentation" class=""><a href="/events/{{ event.id }}/sponsors/">Sponsors</a>
-            </li>
-        </ul>
-    </div>
-    <div class="row">
-        <div class="page-title">
-            <div class="title_left">
-                <h3>{{ event.name }} | Scheduler</h3>
-            </div>
-
+{% block content %}
+    <div class="row flash-message-holder">
+        <div class="col-md-12" style="text-align: center;">
+            <br>
+            <br>
+            <span class="text-muted message loading-text" style="font-weight: 100; font-size: 30px;">Sessions loading ...</span>
+                        <span class="text-danger message error-text"
+                              style="font-weight: 100; font-size: 30px; display: none;">Error loading sessions.</span>
+            <br>
+            <br>
+            <br>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="x_panel" style="min-height:600px;">
-                <div class="row flash-message-holder">
-                    <div class="col-md-12" style="text-align: center;">
-                        <br>
-                        <br>
-                        <span class="text-muted message loading-text" style="font-weight: 100; font-size: 30px;">Sessions loading ...</span>
-                        <span class="text-danger message error-text"
-                              style="font-weight: 100; font-size: 30px; display: none;">Error loading sessions.</span>
-                        <br>
-                        <br>
-                        <br>
-                    </div>
-                </div>
+    <div class="row scheduler-holder" style="display: none;">
+        <div class="col-xs-3 sessions-holder">
+            <h4>Sessions</h4><br>
+            <div class="input-group">
+                                <span class="input-group-addon" id="search-addon"><i
+                                        class="glyphicon glyphicon-search"></i></span>
+                <input type="search" class="form-control" id="sessions-search"
+                       placeholder="Search sessions ..."
+                       aria-describedby="search-addon">
+            </div>
+            <br>
+            <div id="sessions-list" class="sessions-list">
 
-                <div class="row scheduler-holder" style="display: none;">
-                    <div class="col-xs-3 sessions-holder">
-                        <h4>Sessions</h4><br>
-                        <div class="input-group">
-                            <span class="input-group-addon" id="search-addon"><i class="glyphicon glyphicon-search"></i></span>
-                            <input type="search" class="form-control" id="sessions-search"
-                                   placeholder="Search sessions ..."
-                                   aria-describedby="search-addon">
-                        </div>
-                        <br>
-                        <div id="sessions-list" class="sessions-list">
-
-                        </div>
-                        <span id="no-sessions-info" class="text-muted no-sessions-info" style="font-size: 24px; font-weight: 100;">
+            </div>
+                        <span id="no-sessions-info" class="text-muted no-sessions-info"
+                              style="font-size: 24px; font-weight: 100;">
                             No Unscheduled sessions.
                         </span>
-                    </div>
-                    <div class="col-xs-9">
+        </div>
+        <div class="col-xs-9">
 
-                        <div class="btn-toolbar" role="toolbar">
-                            <div id="date-change-btn-holder" class="btn-group date-change-btn-holder" role="group">
+            <div class="btn-toolbar" role="toolbar">
+                <div id="date-change-btn-holder" class="btn-group date-change-btn-holder" role="group">
 
-                            </div>
-                            <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-default clear-overlaps-button">Clear Overlaps
-                                </button>
-                                <button type="button" class="btn btn-default" data-toggle="modal"
-                                        data-target="#add-microlocation-modal">Add New Microlocation
-                                </button>
-                            </div>
-
-                            <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-default" onclick="return export_as_ical();">Export
-                                    as iCal
-                                </button>
-                                <button type="button" class="btn btn-default export-png-button">Export as PNG</button>
-                            </div>
-
-                        </div>
-                        <div class="timeline" id="timeline" data-event-id="{{ event.id }}"
-                             style="margin-top: 10px; margin-left: 10px; width: 100%; overflow-x: hidden;">
-                            <table class="timeline-table table" style="width: 100%">
-                                <tbody>
-                                <tr>
-                                    <td class="timeunits x1" width="55">
-                                        <div class="timeunit"></div>
-                                    </td>
-                                    <td class="microlocations x1">
-                                        <div id="microlocation-container"
-                                             class="microlocation-container clearfix draggable-holder"
-                                             style="width: 750px; height: 1311px;">
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div style="float: right; margin-top: 10px;">
-                            All the timings are in UTC
-                        </div>
-                    </div>
                 </div>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-default clear-overlaps-button">Clear Overlaps
+                    </button>
+                    <button type="button" class="btn btn-default" data-toggle="modal"
+                            data-target="#add-microlocation-modal">Add New Microlocation
+                    </button>
+                </div>
+
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-default" onclick="return export_as_ical();">
+                        Export
+                        as iCal
+                    </button>
+                    <button type="button" class="btn btn-default export-png-button">Export as PNG
+                    </button>
+                </div>
+
+            </div>
+            <div class="timeline" id="timeline" data-event-id="{{ event.id }}"
+                 style="margin-top: 10px; margin-left: 10px; width: 100%; overflow-x: hidden;">
+                <table class="timeline-table table" style="width: 100%">
+                    <tbody>
+                    <tr>
+                        <td class="timeunits x1" width="55">
+                            <div class="timeunit"></div>
+                        </td>
+                        <td class="microlocations x1">
+                            <div id="microlocation-container"
+                                 class="microlocation-container clearfix draggable-holder"
+                                 style="width: 750px; height: 1311px;">
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="float: right; margin-top: 10px;">
+                All the timings are in UTC
             </div>
         </div>
     </div>

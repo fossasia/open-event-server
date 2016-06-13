@@ -1,17 +1,1 @@
 {% extends 'gentelella/admin/event/session/base_session_table.html' %}
-{% block table_title %}
-<div class="" role="tabpanel">
-  <ul id="myTab" class="nav nav-tabs" role="tablist">
-    <li role="presentation" ><a href="/events/{{event_id}}/" id="home-tab">Home</a>
-    </li>
-    <li role="presentation" ><a href="/events/{{ event_id }}/scheduler/">Scheduler</a></li>
-    <li role="presentation" class="active"><a href="">Sessions</a>
-    </li>
-    <li role="presentation" class=""><a href="/events/{{event_id}}/speakers/">Speaker</a>
-    </li>
-    <li role="presentation" class=""><a href="/events/{{event_id}}/sponsors/">Sponsors</a>
-    </li>
-  </ul>
-</div><br>
-<h3>Sessions</h3>
-{% endblock %}

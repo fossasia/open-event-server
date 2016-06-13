@@ -1,5 +1,6 @@
-from functools import wraps
-from flask import request, g
+from datetime import datetime
+from functools import wraps, update_wrapper
+from flask import request, g, make_response
 from flask.ext.restplus import fields
 from flask.ext import login
 from flask.ext.scrypt import check_password_hash
@@ -277,3 +278,18 @@ def auth_basic():
         return (False, 'Authentication failed. Wrong username or password')
     g.user = user
     return (True, '')
+
+
+# Disable caching in a view
+# Used in download views
+# http://arusahni.net/blog/2014/03/flask-nocache.html
+def nocache(view):
+    @wraps(view)
+    def no_cache(*args, **kwargs):
+        response = make_response(view(*args, **kwargs))
+        response.headers['Last-Modified'] = datetime.now()
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '-1'
+        return response
+    return update_wrapper(no_cache, view)

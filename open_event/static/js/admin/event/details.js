@@ -2,9 +2,8 @@ $(document).ready(function () {
     var steps = {
         Draft: 1,
         CallForPapers: 2,
-        Scheduling: 3,
-        Published: 4,
-        Completed: 5
+        Published: 3,
+        Completed: 4
     };
 
     var $wizard = $('#wizard');
@@ -25,10 +24,6 @@ $(document).ready(function () {
 
             case steps.CallForPapers:
                 // TODO Make a post request to change event state to 'Call for papers'
-                break;
-
-            case steps.Scheduling:
-                // TODO Make a post request to change event state to 'Scheduling'
                 break;
 
             case steps.Published:
