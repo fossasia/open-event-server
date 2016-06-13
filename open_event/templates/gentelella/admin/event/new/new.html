@@ -7,13 +7,14 @@ Create Event
 {% block body %}
 <div class="page-title">
     <div class="title_left">
-        <h3>Create Event: Stage 1</h3>
+        <h3>Create Event</h3>
     </div>
-
 </div>
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel" style="min-height:600px;">
+        <div class="x_content">
+            <br>
             <div class="row">
                 <form name="test" action="/events/create/" method="POST" role="form" class="admin-form form-horizontal" id="event-create-form">
                     {% if csrf_token %}
@@ -78,6 +79,8 @@ Create Event
 
                 </form>
             </div>
+
+        </div>
         </div>
     </div>
 </div>

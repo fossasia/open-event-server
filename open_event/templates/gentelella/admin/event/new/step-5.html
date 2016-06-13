@@ -53,7 +53,7 @@ show_options({{speaker_columns | safe}}, '.speaker_form');
 function show_options(array, div) {
 	for (index in array) {
 		var column = array[index].split(".")[1];
-		if (column.contains("id")) {
+		if (column.indexOf("id") > -1) {
 			column = column.split("id")[0].split("_")[0];
 		}
 		var form_name = div.split(".")[1];
