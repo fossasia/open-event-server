@@ -657,7 +657,7 @@ class DataManager(object):
         event.description = form['description']
         event.event_url = form['event_url']
         event.background_url = form['background_url']
-        
+
         state = form.get('state', None)
         if state:
             event.state = state
