@@ -1,0 +1,43 @@
+{% extends 'gentelella/admin/base.html' %}
+{% block head_css %}
+    {{ super() }}
+{% endblock %}
+
+{% macro tabs() %}
+    <ul class="nav nav-tabs bar_tabs" role="tablist" style="background: #FFFFFF;">
+        <li><a href="/events/{{ event.id }}/">Home</a></li>
+        <li><a href="/events/{{ event.id }}/scheduler/">Scheduler</a></li>
+        <li><a href="/events/{{ event.id }}/sessions/">Sessions</a></li>
+        <li><a href="/events/{{ event.id }}/speakers/">Speaker</a></li>
+        <li><a href="/events/{{ event.id }}/sponsors/">Sponsors</a></li>
+    </ul>
+{% endmacro %}
+
+{% block body %}
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_content">
+                    {{ tabs() }}
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h3>{{ event.name }}</h3>
+                        </div>
+                        <div class="x_content">
+                            {% block content %}
+
+                            {% endblock %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+{% endblock %}
+

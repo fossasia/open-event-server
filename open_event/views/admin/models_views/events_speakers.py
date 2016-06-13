@@ -7,6 +7,7 @@ class EventsSpeakersView(ModelView):
     @expose('/', methods=('GET', 'POST'))
     def index_view(self, event_id):
         speakers = DataGetter.get_speakers(event_id)
+
         return self.render('/gentelella/admin/event/speaker/display.html',
                            speakers=speakers, event_id=event_id)
 
