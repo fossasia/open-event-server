@@ -11,12 +11,14 @@
 
 
 {% macro session_element(session) -%}
-    <div class="session row" onclick="window.location.href='{{ url_for('mysessionview.display_session_view',session_id=session.id) }}'">
+    <div class="session row"
+         onclick="window.location.href='{{ url_for('mysessionview.display_session_view',session_id=session.id) }}'">
         <div class="col col-xs-2" style="line-height:155px;">
             {% if session.event.logo %}
                 <img src="{{ session.event.logo }}" style="width: 100%;">
             {% else %}
-                <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=Event+Logo&w=300&h=200" style="width: 100%;">
+                <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=Event+Logo&w=300&h=200"
+                     style="width: 100%;">
             {% endif %}
         </div>
         <div class="col col-xs-8" style="position: relative;">
@@ -46,13 +48,15 @@
 {%- endmacro %}
 
 {% block body %}
+    <div class="page-title">
+        <div class="title_left">
+            <h3>My Session Proposals</h3>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-12">
             <div class="x_panel" style="min-height:600px;">
-                <div class="x_title">
-                    <h2>My Session Proposals</h2>
-                    <div class="clearfix"></div>
-                </div>
                 <div class="x_content">
                     <ul class="nav nav-tabs bar_tabs" style="background-color: white;">
                         <li role="presentation" class="active">
