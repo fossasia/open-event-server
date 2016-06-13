@@ -139,10 +139,10 @@ class SessionDAO(ServiceDAO):
         obj = save_db_model(obj, SessionModel.__name__, event_id)
         return obj
 
-    def create(self, event_id, data):
+    def create(self, event_id, data, url):
         self.validate(data)
         payload = self.fix_payload_post(event_id, data)
-        return ServiceDAO.create(self, event_id, payload, validate=False)
+        return ServiceDAO.create(self, event_id, payload, url, validate=False)
 
 
 DAO = SessionDAO(SessionModel, SESSION_POST)
@@ -188,8 +188,11 @@ class SessionList(Resource):
     @api.expect(SESSION_POST)
     def post(self, event_id):
         """Create a session"""
-        return DAO.create(event_id, self.api.payload)
-
+        return DAO.create(
+            event_id,
+            self.api.payload,
+            self.api.url_for(self, event_id=event_id)
+        )
 
 @api.route('/events/<int:event_id>/sessions/page')
 class SessionListPaginated(Resource, PaginatedResourceBase):

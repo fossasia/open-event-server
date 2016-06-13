@@ -53,7 +53,7 @@ class EventDAO(BaseDAO):
             data['closing_datetime'])
         return data
 
-    def create(self, data):
+    def create(self, data, url):
         self.validate(data)
         payload = self.fix_payload(data)
         new_event = self.model(**payload)
@@ -70,8 +70,11 @@ class EventDAO(BaseDAO):
             is_created=True,
             column_to_increment="event_ver"
         )
-        # return the new event created
-        return self.get(new_event.id)
+
+        # Return created resource with a 201 status code and its Location
+        # (url) in the header.
+        resource_location = url + '/' + str(new_event.id)
+        return self.get(new_event.id), 201, {'Location': resource_location}
 
     def update(self, event_id, data):
         self.validate(data)
@@ -122,7 +125,7 @@ class EventList(Resource):
     @api.expect(EVENT_POST)
     def post(self):
         """Create an event"""
-        return DAO.create(self.api.payload)
+        return DAO.create(self.api.payload, self.api.url_for(self))
 
 
 @api.route('/page')

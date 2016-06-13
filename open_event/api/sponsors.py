@@ -34,10 +34,10 @@ class SponsorDAO(ServiceDAO):
         if sponsor_type_id is not None:
             get_object_in_event(SponsorTypeModel, sponsor_type_id, event_id)
 
-    def create(self, event_id, data):
+    def create(self, event_id, data, url):
         self.validate(data)
         self.validate_sponsor_type(data, event_id)
-        return ServiceDAO.create(self, event_id, data, validate=False)
+        return ServiceDAO.create(self, event_id, data, url, validate=False)
 
     def update(self, event_id, service_id, data):
         self.validate(data)
@@ -88,8 +88,11 @@ class SponsorList(Resource):
     @api.expect(SPONSOR_POST)
     def post(self, event_id):
         """Create a sponsor"""
-        return DAO.create(event_id, self.api.payload)
-
+        return DAO.create(
+            event_id,
+            self.api.payload,
+            self.api.url_for(self, event_id=event_id)
+        )
 
 @api.route('/events/<int:event_id>/sponsors/page')
 class SponsorListPaginated(Resource, PaginatedResourceBase):

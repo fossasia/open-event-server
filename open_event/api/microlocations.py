@@ -73,8 +73,11 @@ class MicrolocationList(Resource):
     @api.expect(MICROLOCATION_POST)
     def post(self, event_id):
         """Create a microlocation"""
-        return DAO.create(event_id, self.api.payload)
-
+        return DAO.create(
+            event_id,
+            self.api.payload,
+            self.api.url_for(self, event_id=event_id)
+        )
 
 @api.route('/events/<int:event_id>/microlocations/page')
 class MicrolocationListPaginated(Resource, PaginatedResourceBase):
