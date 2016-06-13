@@ -1,7 +1,11 @@
+import os
+
 from flask import request, url_for, redirect
 from flask_admin import expose
 from flask_admin.contrib.sqla import ModelView
 from flask.ext import login
+from werkzeug.utils import secure_filename
+
 from ....helpers.data import DataManager, save_to_db
 from ....helpers.data_getter import DataGetter
 from datetime import datetime
@@ -29,7 +33,6 @@ class EventsView(ModelView):
         session_columns = DataGetter.get_session_columns()
         speaker_columns = DataGetter.get_speaker_columns()
         if request.method == 'POST':
-            event = DataManager.create_event(request.form)
             if event:
                 return redirect(url_for('.details_view', event_id=event.id))
             return redirect(url_for('.index_view'))
