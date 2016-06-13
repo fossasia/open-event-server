@@ -5,7 +5,7 @@ from helpers.export_helpers import export_event_json
 from helpers.helpers import nocache
 
 
-api = Namespace('event_exports', description='Event Exports', path='/')
+api = Namespace('exports', description='Exports', path='/')
 
 
 @nocache
