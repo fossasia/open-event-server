@@ -15,6 +15,7 @@ from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
 from ..models.call_for_papers import CallForPaper
 from ..models.sponsor import SponsorType
+from ..models.custom_forms import CustomForms
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
 from flask import flash
@@ -79,6 +80,16 @@ class DataGetter:
         return Session.query.filter_by(
             event_id=event_id,
             is_accepted=is_accepted
+        )
+
+    @staticmethod
+    def get_custom_form_elements(event_id):
+        """
+        :param event_id: Event id
+        :return: Return json element of custom form
+        """
+        return CustomForms.query.filter_by(
+            event_id=event_id
         )
 
     @staticmethod

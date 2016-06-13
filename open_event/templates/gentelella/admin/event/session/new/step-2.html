@@ -1,42 +1,53 @@
 <div id="step-2" class="wizard_content" style="display: block;">
-  <div class="col-md-12">
-
-    <div class="item form-group">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12">Name <span class="required">*</span>
-        </label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-          <input required="required" name="name" class="form-control col-md-7 col-xs-12"/>
-        </div>
-    </div>
-
-    <div class="item form-group">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12">Email <span class="required">*</span>
-        </label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-          <input required="required" name="email" class="form-control col-md-7 col-xs-12"/>
-        </div>
-    </div>
-
-    <div class="item form-group">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12">Web </label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-          <input name="web" class="form-control col-md-7 col-xs-12"/>
-        </div>
-    </div>
-
-    <div class="item form-group">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12">Biography </label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-          <input name="biography" class="form-control col-md-7 col-xs-12"/>
-        </div>
-    </div>
-
-    <div class="item form-group">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12">Organisation </label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-          <input name="organisation" class="form-control col-md-7 col-xs-12"/>
-        </div>
-    </div>
-
+  <div class="col-md-12 speaker_form">
   </div>
 </div>
+<script type="text/javascript">
+$(document).ready(function() {
+    {% for elem in form_elems%}
+        var elements = {{elem.speaker_form | safe}};
+        for (index in elements) {
+            var set = 0;
+            if ((index == "biography") && elements[index]['include'] == 1) {
+                set = 1;
+                var form_elem = '<div class="item form-group">'+
+                                    '<label class="control-label col-md-3 col-sm-3 col-xs-12" style="text-transform:capitalize;">' +index;
+                if (elements[index]['require'] == 1) {
+                    form_elem += '<span class="required">*</span>'+
+                                    '</label>'+
+                                    '<div class="col-md-6 col-sm-6 col-xs-12">'+
+                                      '<textarea name="' + index + '" class="form-control col-md-7 col-xs-12"></textarea>'+
+                                    '</div>'+
+                                '</div>';
+                } else {
+                    form_elem += '</label>'+
+                                    '<div class="col-md-6 col-sm-6 col-xs-12">'+
+                                      '<textarea name="' + index + '" class="form-control col-md-7 col-xs-12"></textarea>'+
+                                    '</div>'+
+                                '</div>';
+                }
+            }else if (elements[index]['include'] == 1) {
+                set = 1;
+                var form_elem = '<div class="item form-group">'+
+                                    '<label class="control-label col-md-3 col-sm-3 col-xs-12" style="text-transform:capitalize;">' +index;
+                if (elements[index]['require'] == 1) {
+                    form_elem += '<span class="required">*</span>'+
+                                    '</label>'+
+                                    '<div class="col-md-6 col-sm-6 col-xs-12">'+
+                                      '<input name="'+index+'" class="form-control col-md-7 col-xs-12"/>'+
+                                    '</div>'+
+                                '</div>';
+                } else {
+                    form_elem += '</label>'+
+                                    '<div class="col-md-6 col-sm-6 col-xs-12">'+
+                                      '<input name="'+index+'" class="form-control col-md-7 col-xs-12"/>'+
+                                    '</div>'+
+                                '</div>';
+                }
+            }
+            if (set == 1)
+                $('.speaker_form').append(form_elem);
+        }
+    {% endfor %}
+});
+</script>
