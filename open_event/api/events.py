@@ -4,11 +4,10 @@ from flask import g
 import custom_fields as fields
 from open_event.models.event import Event as EventModel, EventsUsers
 from open_event.models.user import ADMIN, SUPERADMIN
-from .helpers import get_object_list, get_object_or_404, get_paginated_list,\
-    requires_auth, update_model
+from .helpers import get_paginated_list, requires_auth
 from utils import PAGINATED_MODEL, PaginatedResourceBase, PAGE_PARAMS, \
-    POST_RESPONSES, PUT_RESPONSES, ServiceDAO
-from open_event.helpers.data import save_to_db, update_version, delete_from_db
+    POST_RESPONSES, PUT_RESPONSES, BaseDAO
+from open_event.helpers.data import save_to_db, update_version
 
 api = Namespace('events', description='Events')
 
@@ -38,7 +37,7 @@ EVENT_POST = api.clone('EventPost', EVENT)
 del EVENT_POST['id']
 
 
-class EventDAO(ServiceDAO):
+class EventDAO(BaseDAO):
     """
     Event DAO
     """
@@ -52,12 +51,6 @@ class EventDAO(ServiceDAO):
         data['closing_datetime'] = EVENT_POST['closing_datetime'].from_str(
             data['closing_datetime'])
         return data
-
-    def get(self, event_id):
-        return get_object_or_404(self.model, event_id)
-
-    def list(self):
-        return get_object_list(self.model)
 
     def create(self, data):
         self.validate(data)
@@ -77,17 +70,12 @@ class EventDAO(ServiceDAO):
             column_to_increment="event_ver"
         )
         # return the new event created
-        return get_object_or_404(self.model, new_event.id)
+        return self.get(new_event.id)
 
     def update(self, event_id, data):
         self.validate(data)
         payload = self.fix_payload(data)
-        return update_model(self.model, event_id, payload)
-
-    def delete(self, event_id):
-        event = get_object_or_404(self.model, event_id)
-        delete_from_db(event, 'Event deleted')
-        return event
+        return BaseDAO.update(self, event_id, payload, validate=False)
 
 
 DAO = EventDAO(EventModel, EVENT_POST)

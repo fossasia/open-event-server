@@ -1,6 +1,6 @@
 from flask_restplus import Model, fields, reqparse
 from .helpers import get_object_list, get_object_or_404, get_object_in_event, \
-    create_service_model, validate_payload, delete_service_model, update_model
+    create_model, validate_payload, delete_model, update_model
 from open_event.models.event import Event as EventModel
 
 DEFAULT_PAGE_START = 1
@@ -53,16 +53,48 @@ class PaginatedResourceBase():
     parser.add_argument('limit', type=int, default=DEFAULT_PAGE_LIMIT)
 
 
-# DAO for Service Models
-class ServiceDAO:
+# DAO for Models
+class BaseDAO:
     """
-    Data Access Object for service models like microlocations,
-    speakers and so.
+    DAO for a basic independent model
     """
     def __init__(self, model, post_api_model=None):
         self.model = model
         self.post_api_model = post_api_model
 
+    def get(self, id_):
+        return get_object_or_404(self.model, id_)
+
+    def list(self):
+        return get_object_list(self.model)
+
+    def create(self, data, validate=True):
+        if validate:
+            self.validate(data)
+        item = create_model(self.model, data)
+        return item
+
+    def update(self, id_, data, validate=True):
+        if validate:
+            self.validate(data)
+        item = update_model(self.model, id_, data)
+        return item
+
+    def delete(self, id_):
+        item = delete_model(self.model, id_)
+        return item
+
+    def validate(self, data):
+        if self.post_api_model:
+            validate_payload(data, self.post_api_model)
+
+
+# DAO for Service Models
+class ServiceDAO(BaseDAO):
+    """
+    Data Access Object for service models like microlocations,
+    speakers and so.
+    """
     def get(self, event_id, sid):
         return get_object_in_event(self.model, sid, event_id)
 
@@ -74,7 +106,7 @@ class ServiceDAO:
     def create(self, event_id, data, validate=True):
         if validate:
             self.validate(data)
-        item = create_service_model(self.model, event_id, data)
+        item = create_model(self.model, data, event_id=event_id)
         return item
 
     def update(self, event_id, service_id, data, validate=True):
@@ -84,9 +116,5 @@ class ServiceDAO:
         return item
 
     def delete(self, event_id, service_id):
-        item = delete_service_model(self.model, event_id, service_id)
+        item = delete_model(self.model, service_id, event_id=event_id)
         return item
-
-    def validate(self, data):
-        if self.post_api_model:
-            validate_payload(data, self.post_api_model)
