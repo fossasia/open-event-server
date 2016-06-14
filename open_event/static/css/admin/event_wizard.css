@@ -1,0 +1,88 @@
+.step_no {
+    font-weight: 300;
+    font-size: 20px !important;
+}
+
+.step_descr {
+    font-weight: 300;
+    font-size: 15px;
+}
+
+.selected > .step_descr {
+    font-weight: 600;
+}
+
+.stepContainer {
+    overflow-y: hidden !important;
+}
+
+.wizard_steps {
+    margin-top: 20px !important;
+    margin-bottom: 50px !important;
+}
+
+.form-group > label, .label-header {
+    text-transform: uppercase;
+    font-weight: 300;
+    font-size: 13px;
+    margin-top: 10px;
+}
+
+.label-header {
+    font-size: 18px;
+    margin-left: 10px;
+}
+
+.form-control {
+
+}
+
+.required {
+    color: #f44336;
+    font-weight: 600;
+}
+
+#map {
+
+}
+
+.sponsor-table th {
+    text-transform: uppercase;
+    font-weight: 300;
+    font-size: 15px;
+}
+
+.row-sponsor > td:nth-child(1) {
+    font-size: 20px;
+    line-height: 40px;
+}
+
+.sponsor-table input, .sponsor-table textarea {
+    height: 40px;
+}
+
+.options-table {
+    margin-top: 15px;
+}
+
+.options-table td {
+    vertical-align: middle !important;
+    text-align: center;
+    font-size: 14px;
+}
+
+.options-table td:nth-child(1) {
+    vertical-align: middle !important;
+    text-align: right;
+    padding-right: 20px;
+}
+
+.options-table th {
+    font-size: 16px;
+    text-align: center;
+}
+
+.options-table th:nth-child(1) {
+    text-align: right;
+    padding-right: 20px;
+}

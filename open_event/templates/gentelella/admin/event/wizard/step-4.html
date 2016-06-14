@@ -1,0 +1,87 @@
+{% macro call_for_speakers_display(call_for_speakers=None) %}
+    <div class="item form-group">
+        <label class="control-label">Announcement <span class="required">*</span></label>
+        <textarea name="announcement"
+                  class="announcement form-control">{{ call_for_speakers.announcement | default('') }}</textarea>
+    </div>
+    <div class="row event-date-picker">
+        <div class="col-md-6">
+            <div class="item form-group">
+                <label>Starts <span class="required">*</span></label>
+                <br>
+                <div class="col-xs-12" style="padding-left: 0;">
+                    <input name="cfs_start_date"
+                           class="form-control col-xs-6 date start"
+                           value="{{ call_for_speakers.start_date.strftime('%m/%d/%Y')  if call_for_speakers else '' }}"
+                           placeholder="MM/DD/YYYY"/>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <div class="item form-group">
+                <label>Ends <span class="required">*</span></label>
+                <br>
+                <div class="col-xs-12" style="padding-left: 0;">
+                    <input name="cfs_end_date"
+                           class="form-control col-xs-6 date end"
+                           value="{{ call_for_speakers.end_date.strftime('%m/%d/%Y')  if call_for_speakers else '' }}"
+                           placeholder="MM/DD/YYYY"/>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endmacro %}
+
+<div id="step-4" class="wizard_content" style="display: block;">
+    <div class="col-md-3">
+
+    </div>
+    <div class="col-md-6">
+        <div style="width: 100%; text-align: center">
+            {% if call_for_speakers %}
+                <h2 style="font-weight: 300;">Turn <span class="state">off</span> call for speakers</h2>
+                <input type="checkbox" class="js-switch" name="call_for_speakers_state"
+                       value="on" id="call-for-speakers-switch" checked/>
+            {% else %}
+                <h2 style="font-weight: 300;">Turn <span class="state">on</span> call for speakers</h2>
+                <input type="checkbox" class="js-switch" name="call_for_speakers_state"
+                       value="on" id="call-for-speakers-switch"/>
+            {% endif %}
+        </div>
+        <div id="call-for-speakers-holder" style="{% if not call_for_speakers %}display: none;{% endif %}">
+            {% if call_for_speakers %}
+                {{ call_for_speakers_display(call_for_speakers) }}
+            {% else %}
+                {{ call_for_speakers_display() }}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var $callForSpeakersHolder = $("#call-for-speakers-holder");
+        var $state = $(".state");
+        $(".announcement").summernote(summernoteConfig);
+
+        var onOffSwitch = document.getElementById('call-for-speakers-switch');
+
+        onOffSwitch.onchange = function () {
+            if (onOffSwitch.checked) {
+                $callForSpeakersHolder.fadeIn();
+                $state.text("off");
+                $(".form_wizard").smartWizard('fixHeight');
+
+            } else {
+                $callForSpeakersHolder.fadeOut(function () {
+                    $(".form_wizard").smartWizard('fixHeight');
+                });
+                $state.text("on");
+            }
+        };
+
+    });
+</script>

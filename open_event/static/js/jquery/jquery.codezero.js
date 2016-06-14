@@ -47,29 +47,29 @@ jQuery.fn.extend({
             });
         });
     },
-    disable: function() {
-        return this.each(function() {
-            if(!$(this).hasClass("nt")){
+    disable: function () {
+        return this.each(function () {
+            if (!$(this).hasClass("nt")) {
                 $(this).addClass("disabled").addClass("processing");
-                $(this).attr('disabled','disabled');
+                $(this).attr('disabled', 'disabled');
             }
         });
     },
-    enable: function() {
-        return this.each(function() {
-            if(!$(this).hasClass("nt")){
+    enable: function () {
+        return this.each(function () {
+            if (!$(this).hasClass("nt")) {
                 $(this).removeClass("disabled").removeClass("processing");
                 $(this).removeAttr('disabled');
             }
         });
     },
-    lockForm: function(){
-        return this.each(function() {
+    lockForm: function () {
+        return this.each(function () {
             $(this).find("select,input,textarea,button").disable();
         });
     },
-    unlockForm: function(){
-        return this.each(function() {
+    unlockForm: function () {
+        return this.each(function () {
             $(this).find("select,input,textarea,button").enable();
         });
     }
@@ -312,3 +312,45 @@ var createSnackbar = (function () {
         snackbar.style.opacity = 1;
     };
 })();
+
+/**
+ * Recreate a node
+ * @param el
+ * @param withChildren
+ */
+function recreateNode(el, withChildren) {
+    if (withChildren) {
+        el.parentNode.replaceChild(el.cloneNode(true), el);
+    } else {
+        var newEl = el.cloneNode(false);
+        while (el.hasChildNodes()) newEl.appendChild(el.firstChild);
+        el.parentNode.replaceChild(newEl, el);
+    }
+}
+
+
+function superFileUploadButton() {
+    var inputs = document.querySelectorAll('.upload-btn');
+    Array.prototype.forEach.call(inputs, function (input) {
+        recreateNode(input);
+    });
+    inputs = document.querySelectorAll('.upload-btn');
+    Array.prototype.forEach.call(inputs, function (input) {
+        var label = input.nextElementSibling,
+            labelVal = label.innerHTML;
+
+
+        input.addEventListener('change', function (e) {
+            var fileName = '';
+            if (this.files && this.files.length > 1)
+                fileName = ( this.getAttribute('data-multiple-caption') || '' ).replace('{count}', this.files.length);
+            else
+                fileName = e.target.value.split('\\').pop();
+
+            if (fileName)
+                label.innerHTML = fileName;
+            else
+                label.innerHTML = labelVal;
+        });
+    });
+}
