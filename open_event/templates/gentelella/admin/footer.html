@@ -17,14 +17,14 @@
                 <ul>
 
                     {% for event_type in event_typo%}
-                        <li><a href="/how_it_works">{{event_type}}</a></li>
+                    <li><a href="/how_it_works">{{event_type}}</a></li>
                     {%endfor%}
                 </ul>
             </div>
             <div class="col-md-3"><h4>Locations</h4>
                 <ul>
                     {% for location in locations%}
-                        <li><a href="/how_it_works">{{location}}</a></li>
+                    <li><a href="/how_it_works">{{location}}</a></li>
                     {%endfor%}
                 </ul>
             </div>
@@ -43,15 +43,26 @@
     </div>
 
     <div class="row">
-        <div class="col-md-6 col-md-offset-3" id="footer-menu">
-            <a href="/about">About</a>
-            <a href="https://opev.wordpress.com/">Blog</a>
-            <a href="/support">Help</a>
-            <a href="/press">Press</a>
-            <a href="/security">Security</a>
-            <a href="/developers">Developers</a>
-            <a href="/privacy">Privacy</a>
-            <a href="/cookies">Cookies</a>
+        <div class="col-md-8 col-md-offset-2" id="footer-menu">
+            <div class="row">
+                <div class="col-md-9">
+                    <a href="/about">About</a>
+                    <a href="https://opev.wordpress.com/">Blog</a>
+                    <a href="/support">Help</a>
+                    <a href="/press">Press</a>
+                    <a href="/security">Security</a>
+                    <a href="/developers">Developers</a>
+                    <a href="/privacy">Privacy</a>
+                    <a href="/cookies">Cookies</a>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-control" >
+                        <option>Singapore</option>
+                        <option>Deutschland</option>
+                    </select>
+                </div>
+            </div>
+
         </div>
 
     </div>

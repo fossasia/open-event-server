@@ -35,7 +35,9 @@ footer ul a, footer a:hover, footer ul a:hover {
     filter: alpha(opacity=20);
 }
 
-#footer-menu { text-align:center; padding-top: 10px}
+#footer-menu select {margin-top: 10px}
+
+#footer-menu { text-align:center; }
 #footer-menu a{color: white; font-size: 16px; margin: 10px; line-height: 55px}
 footer .copyright{
     text-align: center;
