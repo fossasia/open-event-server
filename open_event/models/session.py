@@ -157,6 +157,10 @@ class Session(db.Model):
         self.state = state
 
     @property
+    def is_accepted(self):
+        return self.state == "accepted"
+
+    @property
     def serialize(self):
         """Return object data in easily serializeable format"""
         return {

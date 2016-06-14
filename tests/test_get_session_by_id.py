@@ -13,7 +13,7 @@ class TestGetSessionById(OpenEventTestCase):
         with app.test_request_context():
             save_to_db(session, "Session saved")
             response = self.app.get('/api/v1/event/sessions/1')
-            self.assertEqual(response.status_code,200)
+            self.assertEqual(response.status_code, 200)
 
 if __name__ == '__main__':
     unittest.main()

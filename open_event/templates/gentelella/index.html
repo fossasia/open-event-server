@@ -7,7 +7,7 @@
 Home
 {% endblock %}
 {% macro event_box(event) %}
-    <div class="col-md-2">
+    <div class="col-md-2" style="cursor: pointer;" onclick="location.href='/e/{{ event.id }}';">
         <div class="thumbnail">
             <img src="http://placehold.it/800x500" style="width:100%;">
             <div class="caption">
