@@ -23,7 +23,7 @@ from flask import render_template
 from open_event.helpers.oauth import OAuth, FbOAuth
 from requests.exceptions import HTTPError
 from ..helpers.data import get_google_auth, create_user_oauth, get_facebook_auth
-from ..helpers.helpers import get_latest_heroku_release
+from ..helpers.helpers import get_latest_heroku_release, get_commit_info
 import json
 
 
@@ -537,5 +537,8 @@ def documentation():
 
 @app.route('/heroku_releases')
 def heroku_releases():
+    version = get_latest_heroku_release()
+    commit_number = version.description.split(' ')[1]
+    commit_info = get_commit_info(commit_number)
     return render_template('gentelella/admin/current_version.html',
-                    version=get_latest_heroku_release())
+                           version=version, commit_info=commit_info)
