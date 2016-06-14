@@ -34,6 +34,10 @@ class EventsView(ModelView):
         session_columns = DataGetter.get_session_columns()
         speaker_columns = DataGetter.get_speaker_columns()
         if request.method == 'POST':
+            file = request.files['sponsors[logo]']
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(os.path.realpath('.') + '/static/media/image/', filename))
+            event = DataManager.create_event(request.form)
             if event:
                 return redirect(url_for('.details_view', event_id=event.id))
             return redirect(url_for('.index_view'))

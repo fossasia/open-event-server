@@ -16,7 +16,7 @@ Create Event
         <div class="x_content">
             <br>
             <div class="row">
-                <form name="test" action="/events/create/" method="POST" role="form" class="admin-form form-horizontal" id="event-create-form">
+                <form name="test" action="/events/create/" method="POST" role="form" class="admin-form form-horizontal" id="event-create-form" enctype="multipart/form-data">
                     {% if csrf_token %}
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     {% endif %}
