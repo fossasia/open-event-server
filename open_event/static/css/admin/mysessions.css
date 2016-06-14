@@ -23,8 +23,8 @@
 }
 
 .session .event-name {
-   position: absolute;
-   bottom: 20px;
+    position: absolute;
+    bottom: 20px;
 }
 
 .session .status {
@@ -39,4 +39,11 @@ span.message {
     font-weight: 100;
     line-height: 55px;
     margin-left: 20px;
+}
+
+.detail-status {
+    font-size: 19px;
+    font-weight: 300;
+    padding: 8px;
+    border-radius: 1px;
 }

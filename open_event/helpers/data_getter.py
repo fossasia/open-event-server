@@ -1,4 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
+from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+
 from ..models.event import Event, EventsUsers
 from ..models.session import Session, Level, Format, Language
 from ..models.track import Track
@@ -13,6 +15,7 @@ from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
 from ..models.call_for_papers import CallForPaper
 from ..models.sponsor import SponsorType
+from ..models.custom_forms import CustomForms
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
 from flask import flash
@@ -20,7 +23,6 @@ import datetime
 
 
 class DataGetter:
-
     @staticmethod
     def get_invite_by_user_id(user_id):
         invite = Invite.query.filter_by(user_id=user_id)
@@ -79,6 +81,29 @@ class DataGetter:
             event_id=event_id,
             is_accepted=is_accepted
         )
+
+    @staticmethod
+    def get_custom_form_elements(event_id):
+        """
+        :param event_id: Event id
+        :return: Return json element of custom form
+        """
+        return CustomForms.query.filter_by(
+            event_id=event_id
+        )
+
+    @staticmethod
+    def get_sessions_of_user_by_id(session_id):
+        """
+        :return: Return Sessions object with the current user as a speaker by ID
+        """
+        try:
+            return Session.query.filter(Session.speakers.any(Speaker.email == login.current_user.email)).filter(
+                Session.id == session_id).one()
+        except MultipleResultsFound, e:
+            return None
+        except NoResultFound, e:
+            return None
 
     @staticmethod
     def get_sessions_of_user(upcoming_events=True):
@@ -239,7 +264,7 @@ class DataGetter:
 
     @staticmethod
     def get_completed_events():
-        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
+        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.state == 'Completed')
         return events
 
@@ -261,13 +286,13 @@ class DataGetter:
 
     @staticmethod
     def get_current_events():
-        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
+        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.state != 'Completed')
         return events
 
     @staticmethod
     def get_live_events():
-        return Event.query.filter(Event.start_time <= datetime.datetime.now())\
+        return Event.query.filter(Event.start_time <= datetime.datetime.now()) \
             .filter(Event.end_time >= datetime.datetime.now())
 
     @staticmethod

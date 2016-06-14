@@ -8,10 +8,11 @@ from open_event.models.track import Track as TrackModel
 from open_event.models.microlocation import Microlocation as MicrolocationModel
 from open_event.models.speaker import Speaker as SpeakerModel
 
-from .helpers import get_paginated_list, requires_auth, save_db_model
-import custom_fields as fields
-from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
+from .helpers.helpers import get_paginated_list, requires_auth, \
+    save_db_model, get_object_in_event
+from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
+from .helpers import custom_fields as fields
 
 api = Namespace('sessions', description='Sessions', path='/')
 
@@ -98,25 +99,33 @@ class SessionDAO(ServiceDAO):
         data['end_time'] = SESSION_POST['end_time'].from_str(data['end_time'])
         return data
 
+    def get_object(self, model, sid, event_id):
+        """
+        returns object (model). Checks if object is in same event
+        """
+        if sid is None:
+            return None
+        return get_object_in_event(model, sid, event_id)
+
     def fix_payload_post(self, event_id, data):
         """
         Fixes payload of POST request
         """
-        data['track'] = TrackModel.query.get(data['track_id'])
-        data['level'] = LevelModel.query.get(data['level_id'])
-        data['language'] = LanguageModel.query.get(data['language_id'])
-        data['format'] = FormatModel.query.get(data['format_id'])
-        data['microlocation'] = MicrolocationModel.query.get(
-            data['microlocation_id'])
+        data['track'] = self.get_object(TrackModel, data['track_id'], event_id)
+        data['level'] = self.get_object(LevelModel, data['level_id'], event_id)
+        data['language'] = self.get_object(LanguageModel, data['language_id'], event_id)
+        data['format'] = self.get_object(FormatModel, data['format_id'], event_id)
+        data['microlocation'] = self.get_object(MicrolocationModel, data['microlocation_id'], event_id)
         data['event_id'] = event_id
         data['speakers'] = InstrumentedList(
             SpeakerModel.query.get(_) for _ in data['speaker_ids']
-            if SpeakerModel.query.get(_) is not None
+            if self.get_object(SpeakerModel, _, event_id) is not None
         )
         data = self._delete_fields(data)
         return data
 
     def update(self, event_id, service_id, data):
+        self.validate(data)
         data_copy = data.copy()
         data_copy = self.fix_payload_post(event_id, data_copy)
         data = self._delete_fields(data)
@@ -130,7 +139,13 @@ class SessionDAO(ServiceDAO):
         obj = save_db_model(obj, SessionModel.__name__, event_id)
         return obj
 
-DAO = SessionDAO(model=SessionModel)
+    def create(self, event_id, data, url):
+        self.validate(data)
+        payload = self.fix_payload_post(event_id, data)
+        return ServiceDAO.create(self, event_id, payload, url, validate=False)
+
+
+DAO = SessionDAO(SessionModel, SESSION_POST)
 
 
 @api.route('/events/<int:event_id>/sessions/<int:session_id>')
@@ -156,7 +171,6 @@ class Session(Resource):
     @api.expect(SESSION_POST)
     def put(self, event_id, session_id):
         """Update a session given its id"""
-        DAO.validate(self.api.payload, SESSION_POST)
         return DAO.update(event_id, session_id, self.api.payload)
 
 
@@ -174,10 +188,11 @@ class SessionList(Resource):
     @api.expect(SESSION_POST)
     def post(self, event_id):
         """Create a session"""
-        DAO.validate(self.api.payload, SESSION_POST)
-        payload = DAO.fix_payload_post(event_id, self.api.payload)
-        return DAO.create(event_id, payload)
-
+        return DAO.create(
+            event_id,
+            self.api.payload,
+            self.api.url_for(self, event_id=event_id)
+        )
 
 @api.route('/events/<int:event_id>/sessions/page')
 class SessionListPaginated(Resource, PaginatedResourceBase):

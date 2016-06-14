@@ -1,9 +1,11 @@
 from flask.ext.restplus import Resource, Namespace
-import custom_fields as fields
+
 from open_event.models.session import Level as LevelModel
-from .helpers import get_paginated_list, requires_auth
-from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
+
+from .helpers.helpers import get_paginated_list, requires_auth
+from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
+from .helpers import custom_fields as fields
 
 api = Namespace('levels', description='Levels', path='/')
 
@@ -25,7 +27,7 @@ del LEVEL_POST['id']
 class LevelDAO(ServiceDAO):
     pass
 
-DAO = LevelDAO(model=LevelModel)
+DAO = LevelDAO(LevelModel, LEVEL_POST)
 
 
 @api.route('/events/<int:event_id>/levels/<int:level_id>')
@@ -51,7 +53,6 @@ class Level(Resource):
     @api.expect(LEVEL_POST)
     def put(self, event_id, level_id):
         """Update a level given its id"""
-        DAO.validate(self.api.payload, LEVEL_POST)
         return DAO.update(event_id, level_id, self.api.payload)
 
 
@@ -69,9 +70,11 @@ class LevelList(Resource):
     @api.expect(LEVEL_POST)
     def post(self, event_id):
         """Create a level"""
-        DAO.validate(self.api.payload, LEVEL_POST)
-        return DAO.create(event_id, self.api.payload)
-
+        return DAO.create(
+            event_id,
+            self.api.payload,
+            self.api.url_for(self, event_id=event_id)
+        )
 
 @api.route('/events/<int:event_id>/levels/page')
 class LevelListPaginated(Resource, PaginatedResourceBase):

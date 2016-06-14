@@ -1,10 +1,11 @@
 from flask.ext.restplus import Resource, Namespace
 
 from open_event.models.track import Track as TrackModel
-import custom_fields as fields
-from .helpers import get_paginated_list, requires_auth
-from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
+
+from .helpers.helpers import get_paginated_list, requires_auth
+from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
+from .helpers import custom_fields as fields
 
 api = Namespace('tracks', description='Tracks', path='/')
 
@@ -36,7 +37,7 @@ del TRACK_POST['sessions']
 class TrackDAO(ServiceDAO):
     pass
 
-DAO = TrackDAO(model=TrackModel)
+DAO = TrackDAO(TrackModel, TRACK_POST)
 
 
 @api.route('/events/<int:event_id>/tracks/<int:track_id>')
@@ -62,7 +63,6 @@ class Track(Resource):
     @api.expect(TRACK_POST)
     def put(self, event_id, track_id):
         """Update a track given its id"""
-        DAO.validate(self.api.payload, TRACK_POST)
         return DAO.update(event_id, track_id, self.api.payload)
 
 
@@ -80,8 +80,11 @@ class TrackList(Resource):
     @api.expect(TRACK_POST)
     def post(self, event_id):
         """Create a track"""
-        DAO.validate(self.api.payload, TRACK_POST)
-        return DAO.create(event_id, self.api.payload)
+        return DAO.create(
+            event_id,
+            self.api.payload,
+            self.api.url_for(self, event_id=event_id)
+        )
 
 
 @api.route('/events/<int:event_id>/tracks/page')

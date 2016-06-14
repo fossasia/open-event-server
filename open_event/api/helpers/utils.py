@@ -1,12 +1,18 @@
 from flask_restplus import Model, fields, reqparse
 from .helpers import get_object_list, get_object_or_404, get_object_in_event, \
-    create_service_model, validate_payload, delete_service_model, update_model
+    create_model, validate_payload, delete_model, update_model
 from open_event.models.event import Event as EventModel
 
 DEFAULT_PAGE_START = 1
 DEFAULT_PAGE_LIMIT = 20
 
-POST_RESPONSES = {401: 'Authentication failure', 400: 'Validation error'}
+POST_RESPONSES = {
+    400: 'Validation error',
+    401: 'Authentication failure',
+    404: 'Event does not exist',
+    201: 'Resource created successfully'
+}
+
 PUT_RESPONSES = {
     400: 'Validation Error / Bad request',
     401: 'Authentication failure',
@@ -48,15 +54,48 @@ class PaginatedResourceBase():
     parser.add_argument('limit', type=int, default=DEFAULT_PAGE_LIMIT)
 
 
+# DAO for Models
+class BaseDAO:
+    """
+    DAO for a basic independent model
+    """
+    def __init__(self, model, post_api_model=None):
+        self.model = model
+        self.post_api_model = post_api_model
+
+    def get(self, id_):
+        return get_object_or_404(self.model, id_)
+
+    def list(self):
+        return get_object_list(self.model)
+
+    def create(self, data, validate=True):
+        if validate:
+            self.validate(data)
+        item = create_model(self.model, data)
+        return item
+
+    def update(self, id_, data, validate=True):
+        if validate:
+            self.validate(data)
+        item = update_model(self.model, id_, data)
+        return item
+
+    def delete(self, id_):
+        item = delete_model(self.model, id_)
+        return item
+
+    def validate(self, data):
+        if self.post_api_model:
+            validate_payload(data, self.post_api_model)
+
+
 # DAO for Service Models
-class ServiceDAO:
+class ServiceDAO(BaseDAO):
     """
     Data Access Object for service models like microlocations,
     speakers and so.
     """
-    def __init__(self, model):
-        self.model = model
-
     def get(self, event_id, sid):
         return get_object_in_event(self.model, sid, event_id)
 
@@ -65,17 +104,22 @@ class ServiceDAO:
         get_object_or_404(EventModel, event_id)
         return get_object_list(self.model, event_id=event_id)
 
-    def create(self, event_id, data):
-        item = create_service_model(self.model, event_id, data)
-        return item
+    def create(self, event_id, data, url, validate=True):
+        if validate:
+            self.validate(data)
+        item = create_model(self.model, data, event_id=event_id)
 
-    def update(self, event_id, service_id, data):
+        # Return created resource with a 201 status code and its Location
+        # (url) in the header.
+        resource_location = url + '/' + str(item.id)
+        return item, 201, {'Location': resource_location}
+
+    def update(self, event_id, service_id, data, validate=True):
+        if validate:
+            self.validate(data)
         item = update_model(self.model, service_id, data, event_id)
         return item
 
     def delete(self, event_id, service_id):
-        item = delete_service_model(self.model, event_id, service_id)
+        item = delete_model(self.model, service_id, event_id=event_id)
         return item
-
-    def validate(self, data, api_model):
-        validate_payload(data, api_model)

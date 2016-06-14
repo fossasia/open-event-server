@@ -1,9 +1,11 @@
 from flask.ext.restplus import Resource, Namespace
-import custom_fields as fields
+
 from open_event.models.session import Language as LanguageModel
-from .helpers import get_paginated_list, requires_auth
-from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
+
+from .helpers.helpers import get_paginated_list, requires_auth
+from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
+from .helpers import custom_fields as fields
 
 api = Namespace('languages', description='Languages', path='/')
 
@@ -26,7 +28,7 @@ del LANGUAGE_POST['id']
 class LanguageDAO(ServiceDAO):
     pass
 
-DAO = LanguageDAO(model=LanguageModel)
+DAO = LanguageDAO(LanguageModel, LANGUAGE_POST)
 
 
 @api.route('/events/<int:event_id>/languages/<int:language_id>')
@@ -52,7 +54,6 @@ class Language(Resource):
     @api.expect(LANGUAGE_POST)
     def put(self, event_id, language_id):
         """Update a language given its id"""
-        DAO.validate(self.api.payload, LANGUAGE_POST)
         return DAO.update(event_id, language_id, self.api.payload)
 
 
@@ -70,9 +71,11 @@ class LanguageList(Resource):
     @api.expect(LANGUAGE_POST)
     def post(self, event_id):
         """Create a language"""
-        DAO.validate(self.api.payload, LANGUAGE_POST)
-        return DAO.create(event_id, self.api.payload)
-
+        return DAO.create(
+            event_id,
+            self.api.payload,
+            self.api.url_for(self, event_id=event_id)
+        )
 
 @api.route('/events/<int:event_id>/languages/page')
 class LanguageListPaginated(Resource, PaginatedResourceBase):

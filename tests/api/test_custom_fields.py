@@ -1,5 +1,5 @@
 import unittest
-from open_event.api.custom_fields import Color, Email, Uri,\
+from open_event.api.helpers.custom_fields import Color, Email, Uri,\
     ImageUri, DateTime, Integer, Float
 
 

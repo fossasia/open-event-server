@@ -1,9 +1,11 @@
 from flask.ext.restplus import Resource, Namespace
-import custom_fields as fields
+
 from open_event.models.microlocation import Microlocation as MicrolocationModel
-from .helpers import get_paginated_list, requires_auth
-from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
+
+from .helpers.helpers import get_paginated_list, requires_auth
+from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
+from .helpers import custom_fields as fields
 
 api = Namespace('microlocations', description='Microlocations', path='/')
 
@@ -28,7 +30,7 @@ del MICROLOCATION_POST['id']
 class MicrolocationDAO(ServiceDAO):
     pass
 
-DAO = MicrolocationDAO(model=MicrolocationModel)
+DAO = MicrolocationDAO(MicrolocationModel, MICROLOCATION_POST)
 
 
 @api.route('/events/<int:event_id>/microlocations/<int:microlocation_id>')
@@ -54,7 +56,6 @@ class Microlocation(Resource):
     @api.expect(MICROLOCATION_POST)
     def put(self, event_id, microlocation_id):
         """Update a microlocation given its id"""
-        DAO.validate(self.api.payload, MICROLOCATION_POST)
         return DAO.update(event_id, microlocation_id, self.api.payload)
 
 
@@ -72,9 +73,11 @@ class MicrolocationList(Resource):
     @api.expect(MICROLOCATION_POST)
     def post(self, event_id):
         """Create a microlocation"""
-        DAO.validate(self.api.payload, MICROLOCATION_POST)
-        return DAO.create(event_id, self.api.payload)
-
+        return DAO.create(
+            event_id,
+            self.api.payload,
+            self.api.url_for(self, event_id=event_id)
+        )
 
 @api.route('/events/<int:event_id>/microlocations/page')
 class MicrolocationListPaginated(Resource, PaginatedResourceBase):

@@ -1,53 +1,53 @@
 <div id="step-1" class="wizard_content" style="display: block;">
-  <div class="col-md-12">
-
-    <div class="item form-group">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12">Title <span class="required">*</span>
-        </label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-          <input required="required" name="title" class="form-control col-md-7 col-xs-12"/>
-        </div>
-    </div>
-
-    <div class="item form-group">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12">Description <span class="required">*</span>
-        </label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-          <textarea name="description" class="form-control col-md-7 col-xs-12"></textarea>
-        </div>
-    </div>
-
-    <div class="item form-group">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12">Start Time <span class="required">*</span>
-        </label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-          <input required="required" name="start_time" class="date-picker form-control col-md-7 col-xs-12"placeholder="MM/DD/YYYY"/>
-        </div>
-
-    </div>
-
-    <div class="item form-group">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12">End Time <span class="required">*</span>
-        </label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-          <input required="required" name="end_time" class="date-picker form-control col-md-7 col-xs-12"placeholder="MM/DD/YYYY"/>
-        </div>
-    </div>
-
-    <div class="item form-group">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12">Abstract
-        </label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-          <textarea name="abstract" class="form-control col-md-7 col-xs-12"></textarea>
-        </div>
-    </div>
-
-    <div class="item form-group">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12">Subtitle
-        </label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-          <textarea name="subtitle" class="form-control col-md-7 col-xs-12"></textarea>
-        </div>
-    </div>
+  <div class="col-md-12 session_form">
   </div>
 </div>
+<script type="text/javascript">
+$(document).ready(function() {
+    {% for elem in form_elems%}
+        var elements = {{elem.session_form | safe}};
+        for (index in elements) {
+            var set = 0;
+            if ((index == "description" || index == "abstract") && elements[index]['include'] == 1) {
+                set = 1;
+                var form_elem = '<div class="item form-group">'+
+                                    '<label class="control-label col-md-3 col-sm-3 col-xs-12" style="text-transform:capitalize;">' +index;
+                if (elements[index]['require'] == 1) {
+                    form_elem += '<span class="required">*</span>'+
+                                    '</label>'+
+                                    '<div class="col-md-6 col-sm-6 col-xs-12">'+
+                                      '<textarea name="' + index + '" class="form-control col-md-7 col-xs-12"></textarea>'+
+                                    '</div>'+
+                                '</div>';
+                } else {
+                    form_elem += '</label>'+
+                                    '<div class="col-md-6 col-sm-6 col-xs-12">'+
+                                      '<textarea name="' + index + '" class="form-control col-md-7 col-xs-12"></textarea>'+
+                                    '</div>'+
+                                '</div>';
+                }
+            }else if (elements[index]['include'] == 1) {
+                set = 1;
+                var form_elem = '<div class="item form-group">'+
+                                    '<label class="control-label col-md-3 col-sm-3 col-xs-12" style="text-transform:capitalize;">' +index;
+                if (elements[index]['require'] == 1) {
+                    form_elem += '<span class="required">*</span>'+
+                                    '</label>'+
+                                    '<div class="col-md-6 col-sm-6 col-xs-12">'+
+                                      '<input name="'+index+'" class="form-control col-md-7 col-xs-12"/>'+
+                                    '</div>'+
+                                '</div>';
+                } else {
+                    form_elem += '</label>'+
+                                    '<div class="col-md-6 col-sm-6 col-xs-12">'+
+                                      '<input name="'+index+'" class="form-control col-md-7 col-xs-12"/>'+
+                                    '</div>'+
+                                '</div>';
+                }
+            }
+            if (set == 1)
+                $('.session_form').append(form_elem);
+        }
+    {% endfor %}
+});
+</script>

@@ -23,6 +23,9 @@ from flask import render_template
 from open_event.helpers.oauth import OAuth, FbOAuth
 from requests.exceptions import HTTPError
 from ..helpers.data import get_google_auth, create_user_oauth, get_facebook_auth
+from ..helpers.helpers import get_latest_heroku_release
+import json
+
 
 auto = Autodoc()
 
@@ -530,3 +533,9 @@ def send_cal(filename):
 @app.route('/documentation')
 def documentation():
     return auto.html()
+
+
+@app.route('/heroku_releases')
+def heroku_releases():
+    return render_template('gentelella/admin/current_version.html',
+                    version=get_latest_heroku_release())

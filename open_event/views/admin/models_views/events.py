@@ -21,12 +21,13 @@ class EventsView(ModelView):
 
     @expose('/')
     def index_view(self):
-        print "aaa"
         live_events = DataGetter.get_live_events()
         draft_events = DataGetter.get_draft_events()
         past_events = DataGetter.get_past_events()
+        all_events = DataGetter.get_all_events()
         return self.render('/gentelella/admin/event/index.html',
-                           live_events=live_events, draft_events=draft_events, past_events=past_events)
+                           live_events=live_events, draft_events=draft_events, past_events=past_events,
+                           all_events=all_events)
 
     @expose('/create/', methods=('GET', 'POST'))
     def create_view(self):

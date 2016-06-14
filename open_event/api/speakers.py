@@ -1,10 +1,11 @@
 from flask.ext.restplus import Resource, Namespace
 
 from open_event.models.speaker import Speaker as SpeakerModel
-import custom_fields as fields
-from .helpers import get_paginated_list, requires_auth
-from utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
+
+from .helpers.helpers import get_paginated_list, requires_auth
+from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
+from .helpers import custom_fields as fields
 
 api = Namespace('speakers', description='Speakers', path='/')
 
@@ -43,7 +44,7 @@ del SPEAKER_POST['sessions']  # don't allow adding sessions
 class SpeakerDAO(ServiceDAO):
     pass
 
-DAO = SpeakerDAO(model=SpeakerModel)
+DAO = SpeakerDAO(SpeakerModel, SPEAKER_POST)
 
 
 @api.route('/events/<int:event_id>/speakers/<int:speaker_id>')
@@ -69,7 +70,6 @@ class Speaker(Resource):
     @api.expect(SPEAKER_POST)
     def put(self, event_id, speaker_id):
         """Update a speaker given its id"""
-        DAO.validate(self.api.payload, SPEAKER_POST)
         return DAO.update(event_id, speaker_id, self.api.payload)
 
 
@@ -87,9 +87,11 @@ class SpeakerList(Resource):
     @api.expect(SPEAKER_POST)
     def post(self, event_id):
         """Create a speaker"""
-        DAO.validate(self.api.payload, SPEAKER_POST)
-        return DAO.create(event_id, self.api.payload)
-
+        return DAO.create(
+            event_id,
+            self.api.payload,
+            self.api.url_for(self, event_id=event_id)
+        )
 
 @api.route('/events/<int:event_id>/speakers/page')
 class SpeakerListPaginated(Resource, PaginatedResourceBase):

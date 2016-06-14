@@ -1,0 +1,37 @@
+{% extends 'gentelella/admin/base.html' %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block title %}
+Heroku Info
+{% endblock %}
+{% block body %}
+
+
+<div role="main" class="right_col" style="margin-left: 0px; min-height: 706px;">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Heroku info</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel" style="min-height:600px;">
+                    <div style="text-align:center">
+                        <a href="/" style="font-size: 26px; font-weight: 300;">
+                            Open Event
+                        </a>
+                        <p>Heroku Version: <b>{{version.version}}</b></p>
+                        <p>Responsible person for last changes: <b>{{version.user.email}}</b></p>
+                        <p>Revision: <b>{{version.description}}</b></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+{% endblock %}

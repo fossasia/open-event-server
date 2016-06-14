@@ -52,6 +52,7 @@ class AdminView(object):
 
     @staticmethod
     def init_login(app):
+        from flask import request, url_for, redirect
         """Init login"""
         login_manager = login.LoginManager()
         login_manager.init_app(app)
@@ -60,3 +61,8 @@ class AdminView(object):
         @login_manager.user_loader
         def load_user(user_id):
             return db.session.query(User).get(user_id)
+
+        @login_manager.unauthorized_handler
+        def unauthorized():
+            # do stuff
+            return redirect(url_for('admin.login_view', next=request.url))
