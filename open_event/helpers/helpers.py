@@ -83,23 +83,6 @@ def send_email_with_reset_password_hash(email, link):
                   headers=HEADERS)
 
 
-def is_event_admin(event_id, users):
-    """
-    :param event_id: Event id
-    :param users: User id
-    :return: is user admin
-    """
-    is_admin = False
-    for user_obj in users:
-        if user_obj.user.id == login.current_user.id:
-            for ass in login.current_user.events_assocs:
-                if ass.event_id == int(event_id):
-                    is_admin = ass.admin
-                    if is_event_admin:
-                        return is_admin
-    return is_admin
-
-
 def get_serializer(secret_key=None):
     return Serializer('secret_key')
 

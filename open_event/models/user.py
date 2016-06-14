@@ -2,6 +2,7 @@ from sqlalchemy import event
 
 from . import db
 from user_detail import UserDetail
+from .role import user_roles
 
 SPEAKER = 'speaker'
 ADMIN = 'admin'
@@ -16,10 +17,10 @@ class User(db.Model):
     password = db.Column(db.String(128))
     reset_password = db.Column(db.String(128))
     salt = db.Column(db.String(128))
-    role = db.Column(db.String())
     avatar = db.Column(db.String())
     tokens = db.Column(db.Text)
     user_detail = db.relationship("UserDetail", uselist=False, backref="user")
+    roles = db.relationship("Role", secondary=user_roles, back_populates="users")
 
     # Flask-Login integration
     def is_authenticated(self):
@@ -33,18 +34,6 @@ class User(db.Model):
 
     def get_id(self):
         return self.id
-
-    def is_super_admin(self):
-        return self.role == SUPERADMIN
-
-    def is_admin(self):
-        return self.role == ORGANIZER
-
-    def is_organizer(self):
-        return self.role == ADMIN
-
-    def is_speaker(self):
-        return self.role == SPEAKER
 
     # Required for administrative interface
     def __unicode__(self):
