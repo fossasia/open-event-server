@@ -123,7 +123,8 @@ class Session(db.Model):
     language_id = db.Column(db.Integer, db.ForeignKey('language.id'))
     microlocation_id = db.Column(db.Integer, db.ForeignKey('microlocation.id'))
 
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    event_id = db.Column(
+        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     state = db.Column(db.String, default="pending")
 
     def __init__(self,

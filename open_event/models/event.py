@@ -8,7 +8,8 @@ class EventsUsers(db.Model):
     """Many to Many table Event Users"""
     __tablename__ = 'eventsusers'
     id = db.Column(db.Integer, primary_key=True)
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    event_id = db.Column(
+        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     editor = db.Column(db.Boolean)
     admin = db.Column(db.Boolean)
