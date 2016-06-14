@@ -26,6 +26,8 @@ EVENT = api.model('Event', {
     'background_url': fields.ImageUri(),
     'description': fields.String(),
     'location_name': fields.String(),
+    'organizer_name': fields.String(),
+    'organizer_description': fields.String(),
     'state': fields.String(),
     'closing_datetime': fields.DateTime(),
 })

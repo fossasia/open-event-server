@@ -560,6 +560,8 @@ class DataManager(object):
                       location_name=form['location_name'],
                       description=form['description'],
                       event_url=form['event_url'],
+                      organizer_name=form['organizer_name'],
+                      organizer_description=form['organizer_description'],
                       background_url=form['background_url'])
 
         if event.start_time <= event.end_time:
@@ -655,6 +657,8 @@ class DataManager(object):
         event.description = form['description']
         event.event_url = form['event_url']
         event.background_url = form['background_url']
+        event.organizer_name = form['organizer_name']
+        event.organizer_description = form['organizer_description']
 
         for session_type in session_types:
             delete_from_db(session_type, 'Session Type Deleted')
