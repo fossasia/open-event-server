@@ -1,91 +1,94 @@
 {% macro track_entry(track=None) %}
-    <div class=" col-sm-6">
-        <input type="text" class="form-control" name="tracks[name]" placeholder="Name" value="{{ track.name | default('Track 1') }}">
-    </div>
-
-    <div class="col-sm-6 input-group">
-        <div class="input-group colorpicker-component" id="color">
-            <input type="text" value="{{ track.color | default('#e01ab5') }}" class="form-control" name="tracks[color]" title="track-color"/>
-            <span class="input-group-addon"><i></i></span>
+    <div class="track-holder">
+        <div class=" col-sm-5">
+            <input type="text" class="form-control" name="tracks[name]" placeholder="Name"
+                   value="{{ track.name | default('Track 1') }}">
         </div>
+
+        <div class="col-sm-7 input-group">
+            <div class="input-group colorpicker-component" id="color">
+                <input type="text" value="{{ track.color | default('#7B1FA2') }}" class="form-control color-picker-input"
+                       name="tracks[color]" title="track-color"/>
+                <span class="input-group-addon"><i></i></span>
+            </div>
         <span class="input-group-btn">
-            <button type="button" class="btn btn-primary" id="add-tracks">+</button>
+            <button type="button" class="btn btn-primary add-tracks">+</button>
         </span>
+        </div>
     </div>
 
 {% endmacro %}
 
 {% macro microlocation_entry(microlocation=None) %}
-    <div class=" col-sm-6">
-        <input type="text" class="form-control" name="rooms[name]" placeholder="Name"
-               value="{{ microlocation.name | default('Room 1') }}">
-    </div>
-
-    <div class="col-sm-6 input-group">
-        <div class="input-group colorpicker-component" id="room-color">
-            <input type="text" value="#e01ab5" class="form-control" name="rooms[color]"
-                   title="rooms-color"/>
-            <span class="input-group-addon"><i></i></span>
+    <div class="microlocation-holder">
+        <div class="col-xs-5">
+            <input type="text" class="form-control" name="rooms[name]" placeholder="Name"
+                   value="{{ microlocation.name | default('Room 1') }}">
         </div>
+
+        <div class="col-xs-7 input-group">
+            <div class="input-group colorpicker-component" id="room-color">
+                <input type="text" value="#7B1FA2" class="form-control color-picker-input" name="rooms[color]"
+                       title="rooms-color"/>
+                <span class="input-group-addon"><i></i></span>
+            </div>
         <span class="input-group-btn">
-            <button type="button" class="btn btn-primary" id="add-rooms">+</button>
+            <button type="button" class="btn btn-primary add-rooms">+</button>
         </span>
+        </div>
     </div>
 {% endmacro %}
 
 {% macro session_type_entry(session_type=None) %}
-    <div class=" col-sm-6">
-        <input type="text" class="form-control" name="session_type[name]" placeholder="Name"
-               value="{{ session_type.name | default('Lighting Talks') }}">
-    </div>
+    <div class="session-type-holder">
+        <div class="col-xs-5">
+            <input type="text" class="form-control" name="session_type[name]" placeholder="Name"
+                   value="{{ session_type.name | default('Lighting Talks') }}">
+        </div>
 
-    <div class="col-sm-6 input-group">
-        <input type="text" class="form-control" name="session_type[length]" placeholder="Length"
-               value="{{ session_type.length | default(5) }}">
-        <span class="input-group-btn">
-            <button type="button" class="btn btn-primary add-session-type">+</button>
-        </span>
+        <div class="col-xs-7 input-group">
+            <input type="text" class="form-control" name="session_type[length]" placeholder="Length"
+                   value="{{ session_type.length | default(5) }}">
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-primary add-session-type">+</button>
+            </span>
+        </div>
     </div>
 {% endmacro %}
 
 <div id="step-3" class="wizard_content" style="display: block;">
     <div class="col-md-10 col-md-push-1">
-        <div class="row tracks">
-            <h2 style="padding: 6px 12px;">Tracks</h2>
-            <div class="col-sm-6">
+        <div class="row">
+            <div class="col-md-4 tracks">
+                <h2 class="label-header">Tracks</h2>
                 {% if tracks %}
                     {% for track in tracks %}
                         {{ track_entry(track) }}
                     {% endfor %}
-                {% else %}
-                    {{ track_entry() }}
                 {% endif %}
+                {{ track_entry() }}
             </div>
-        </div>
-        <div class="row rooms">
-            <h2 style="padding: 6px 12px;">Rooms</h2>
-            <div class="col-sm-6">
+            <div class="col-md-4 rooms">
+                <h2 class="label-header">Rooms</h2>
                 {% if microlocations %}
                     {% for microlocation in microlocations %}
                         {{ microlocation_entry(microlocation) }}
                     {% endfor %}
-                {% else %}
-                    {{ microlocation_entry() }}
                 {% endif %}
+                {{ microlocation_entry() }}
             </div>
-        </div>
-        <div class="row session-types">
-            <h2 style="padding: 6px 12px;">Session Types</h2>
-            <div class="col-sm-6">
+            <div class="col-md-4 session-types">
+                <h2 class="label-header">Session Types</h2>
                 {% if session_types %}
                     {% for session_type in session_types %}
                         {{ session_type_entry(session_type) }}
                     {% endfor %}
-                {% else %}
-                    {{ session_type_entry() }}
                 {% endif %}
+                {{ session_type_entry() }}
             </div>
+
         </div>
+
     </div>
 </div>
 <script>
@@ -93,4 +96,61 @@
         $('#color').colorpicker();
         $('#room-color').colorpicker();
     });
+
+    var $wizard = $("#wizard");
+    var counter = 0;
+    var room_counter = 0;
+
+    $(document).on("click", '.add-session-type', function () {
+        var $element = $($(".session-type-holder")[0]).clone();
+        $element.find("input").val('').attr("value", "");
+        $element.find(".add-session-type").addClass("remove-session-type")
+                .removeClass("add-session-type")
+                .removeClass("btn-primary").addClass("btn-danger").text("-");
+        $('.session-types').append($element);
+        $wizard.smartWizard('fixHeight');
+    });
+
+    $(document).on("click", ".remove-session-type", function () {
+        $(this).closest(".session-type-holder").remove();
+    });
+
+
+    $(document).on("click", '.add-tracks', function () {
+        counter += 1;
+        var $element = $($(".track-holder")[0]).clone();
+        $element.find("input:not(.color-picker-input)").val('').attr("value", "");
+        $element.find(".add-tracks").addClass("remove-tracks")
+                .removeClass("add-tracks")
+                .removeClass("btn-primary").addClass("btn-danger").text("-");
+        $element.find(".colorpicker-component").attr("id", "color" + counter);
+        $('.tracks').append($element);
+        $('#color' + counter).colorpicker();
+        $wizard.smartWizard('fixHeight');
+    });
+
+    $(document).on("click", ".remove-tracks", function () {
+        $(this).closest(".track-holder").remove();
+    });
+
+    $(document).on("click", '.add-rooms', function () {
+        room_counter += 1;
+
+        var $element = $($(".microlocation-holder")[0]).clone();
+        $element.find("input:not(.color-picker-input)").val('').attr("value", "");
+        $element.find(".add-rooms").addClass("remove-rooms")
+                .removeClass("add-rooms")
+                .removeClass("btn-primary").addClass("btn-danger").text("-");
+        $element.find(".colorpicker-component").attr("id", "room-color" + room_counter);
+
+        $('.rooms').append($element);
+        $('#room-color' + room_counter).colorpicker();
+        $wizard.smartWizard('fixHeight');
+    });
+
+    $(document).on("click", ".remove-rooms", function () {
+        $(this).closest(".microlocation-holder").remove();
+    });
+
+
 </script>

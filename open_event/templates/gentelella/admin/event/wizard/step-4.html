@@ -1,37 +1,25 @@
 {% macro call_for_paper_display(call_for_paper=None) %}
     <div class="item form-group">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12">Announcement
-        </label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-                        <textarea name="announcement"
-                                  class="form-control col-md-7 col-xs-12">{{ call_for_paper.announcement | default('') }}</textarea>
-        </div>
+        <label class="control-label">Announcement</label>
+        <textarea name="announcement" class="announcement form-control">{{ call_for_paper.announcement | default('') }}</textarea>
     </div>
     <div class="item form-group">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12">Call for Papers Start Date <span
-                class="required">*</span>
-        </label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-            <input value="{{ call_for_paper.start_date | default('') }}" required="required"
-                   name="start_date" class="date-picker form-control col-md-7 col-xs-12"
-                   placeholder="MM/DD/YYYY"/>
-        </div>
+        <label class="control-label">Call for Papers Date <span class="required">*</span> </label>
+        <input value="{{ call_for_paper.start_date | default('') }} - {{ call_for_paper.end_date | default('') }}" required="required"
+               name="cfp_date_range" class="date-picker form-control"
+               placeholder="MM/DD/YYYY - MM/DD/YYYY"/>
     </div>
 
-    <div class="item form-group">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12">Call for Papers End Date <span
-                class="required">*</span>
-        </label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-            <input value="{{ call_for_paper.end_date | default('') }}" required="required"
-                   name="end_date" class="date-picker form-control col-md-7 col-xs-12"
-                   placeholder="MM/DD/YYYY"/>
-        </div>
-    </div>
+    <input name="start_date" class="start_date" type="hidden" value="{{ call_for_paper.start_date | default('') }}">
+    <input name="end_date" class="start_date" type="hidden" value="{{ call_for_paper.end_date | default('') }}">
+
 {% endmacro %}
 
 <div id="step-4" class="wizard_content" style="display: block;">
-    <div class="col-md-10">
+    <div class="col-md-4">
+
+    </div>
+    <div class="col-md-4">
         {% if call_for_paper %}
             {% for call_for_paper_entry in call_for_paper %}
                 {{ call_for_paper_display(call_for_paper_entry) }}
@@ -44,9 +32,24 @@
 
 <script>
     $(document).ready(function () {
+
+        $(".announcement").summernote(summernoteConfig);
+
+        var $startDate = $(".start_date");
+        var $endDate = $(".end_date");
+
         $('.date-picker').daterangepicker({
-            singleDatePicker: true,
-            calender_style: "picker_4"
+            {% if event %}
+                startDate: $startDate.val(),
+                endDate:  $endDate.val(),
+            {% endif %}
+            "opens": "center",
+            "autoApply": true
+        }, function (start, end, label) {
+            $startDate.val(start.format('MM/DD/YYYY'));
+            $endDate.val(end.format('MM/DD/YYYY'));
         });
+
+
     });
 </script>

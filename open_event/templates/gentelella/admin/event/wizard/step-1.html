@@ -1,150 +1,120 @@
+{% macro social_entry(social_link=None, remove=false) %}
+    <div class="social-link-holder">
+        <div class=" col-sm-4" style="padding-left: 0;">
+            <input type="text" class="form-control" name="social[name]" placeholder="Name"
+                   value="{{ social_link.name | default('Twitter', true) }}">
+        </div>
+        <div class="col-sm-8 input-group">
+            <input type="text" class="form-control" name="social[link]" placeholder="Link"
+                   value="{{ social_link.link | default('', true) }}">
+            <span class="input-group-btn">
+                {% if remove %}
+                    <button type="button" class="btn btn-danger remove-social-links">-</button>
+                {% else %}
+                    <button type="button" class="btn btn-primary add-social-links">+</button>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+{% endmacro %}
+
 <div id="step-1" class="wizard_content" style="display: block;">
-    <div class="col-md-8">
+    <div class="col-md-1">
 
+    </div>
+    <div class="col-md-5">
         <div class="item form-group">
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <input name="latitude" id="latitude" class="form-control col-md-7 col-xs-12"
-                       value="{{ event.latitude | default(0.00, true) }}"/>
-            </div>
+            <label>Name <span class="required">*</span></label>
+            <input required="required" name="name" class="form-control col-md-7 col-xs-12"
+                   value="{{ event.name | default('', true) }}"/>
+        </div>
+
+        <div class="form-group">
+            <label>Location</label>
+            <input value="{{ event.location_name | default('', true) }}" name="location_name" id="location"
+                   class="form-control col-md-7 col-xs-12"/>
         </div>
 
         <div class="item form-group">
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <input name="longitude" id="longitude" class="form-control col-md-7 col-xs-12"
-                       value="{{ event.longitude | default(0.00, true) }}"/>
-            </div>
+            <label>Event Timings <span class="required">*</span></label>
+            <input id="event-timings" required="required"
+                   name="event_timings" class="form-control" placeholder="MM/DD/YYYY HH:MM - MM/DD/YYYY HH:MM"/>
         </div>
 
+        <input type="hidden" id="start_time" name="start_time" value="{{ event.start_time | default('', true) }}">
+        <input type="hidden" id="end_time" name="end_time" value="{{ event.end_time | default('', true) }}">
+
         <div class="item form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Name <span class="required">*</span>
+            <label>Description</label>
+            <textarea name="description"
+                      class="form-control">{{ event.description | default('', true) }}</textarea>
+        </div>
+
+
+        <div class="item form-group">
+            <label>Background image
             </label>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <input required="required" name="name" class="form-control col-md-7 col-xs-12"
-                       value="{{ event.name | default('', true) }}"/>
-            </div>
+            <input value="{{ event.background_url | default('', true) }}" name="background_url"
+                   class="form-control"/>
         </div>
 
         <div class="item form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Description
+            <label>Logo
             </label>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <textarea name="description"
-                          class="form-control col-md-7 col-xs-12">{{ event.description | default('', true) }}</textarea>
-            </div>
+            <input value="{{ event.logo | default('', true) }}" name="logo"
+                   class="form-control"/>
         </div>
 
         <div class="item form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Start Date <span class="required">*</span>
+            <label>Event Url</label>
+            <input value="{{ event.event_url | default('', true) }}" name="event_url"
+                   class="form-control"/>
+        </div>
+
+        <div class="item form-group">
+            <label>Organizer name
             </label>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <input value="{{ event.start_time | default('', true) }}" id="event-start" required="required"
-                       name="start_time" class="date-picker form-control col-md-7 col-xs-12" placeholder="MM/DD/YYYY"/>
-            </div>
-
+            <input name="organizer_name" class="form-control"
+                   value="{{ event.organizer_name | default('', true) }}"/>
         </div>
-
         <div class="item form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">End Date <span class="required">*</span>
+            <label>Organizer Description
             </label>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <input value="{{ event.end_time | default('', true) }}" id="event-end" required="required" name="end_time"
-                       class="date-picker form-control col-md-7 col-xs-12" placeholder="MM/DD/YYYY"/>
-            </div>
+                <textarea name="organizer_description" class="form-control">
+                    {{ event.organizer_description | default('', true) }}
+                </textarea>
         </div>
 
-        <div class="item form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Location
-            </label>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <input value="{{ event.location_name | default('', true) }}" name="location_name" id="location"
-                       class="form-control col-md-7 col-xs-12"/>
-            </div>
-        </div>
+    </div>
+    <div class="col-md-1">
 
+    </div>
+    <div class="col-md-4">
         <div class="item form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Background image
-            </label>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <input value="{{ event.background_url | default('', true) }}" name="background_url"
-                       class="form-control col-md-7 col-xs-12"/>
-            </div>
+            <label>Geolocation</label>
         </div>
-
+        <div id="map" style="width:100%; height:300px"></div>
+        <br>
+        <br>
         <div class="item form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Logo
-            </label>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <input value="{{ event.logo | default('', true) }}" name="logo" class="form-control col-md-7 col-xs-12"/>
-            </div>
-        </div>
-
-        <div class="item form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Event Url
-            </label>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <input value="{{ event.event_url | default('', true) }}" name="event_url"
-                       class="form-control col-md-7 col-xs-12"/>
-            </div>
-        </div>
-
-        <div class="item form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Organizer name
-            </label>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <input name="organizer_name" class="form-control col-md-7 col-xs-12"
-                       value="{{ event.organizer_name | default('', true) }}"/>
-            </div>
-        </div>
-        <div class="item form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Organizer Description
-            </label>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <input name="organizer_description" class="form-control col-md-7 col-xs-12"
-                       value="{{ event.organizer_description | default('', true) }}"/>
-            </div>
-        </div>
-
-        <div class="item form-group">
-            <div class="row">
-                <label class="control-label col-md-6 col-sm-6 col-xs-12">Social Links
-                </label>
-            </div>
+            <label>Social Links</label>
             <div class="row social-links">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     {% if social_links %}
                         {% for social_link in social_links %}
-                            <div class=" col-sm-6">
-                                <input type="text" class="form-control" name="social[name]" placeholder="Name"
-                                       value="{{ social_link.name }}">
-                            </div>
-                            <div class="col-sm-6 input-group">
-                                <input type="text" class="form-control" name="social[link]" placeholder="Link"
-                                       value="{{ social_link.link }}">
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-primary add-social-links">+</button>
-                                </span>
-                            </div>
+                            {{ social_entry(social_link, true) }}
                         {% endfor %}
-                    {% else %}
-                        <div class=" col-sm-6">
-                            <input type="text" class="form-control" name="social[name]" placeholder="Name" value="Google Plus">
-                        </div>
-
-                        <div class="col-sm-6 input-group">
-                            <input type="text" class="form-control" name="social[link]" placeholder="Link" >
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-primary add-social-links">+</button>
-                            </span>
-                      </div>
-                {% endif %}
+                    {% endif %}
+                    {{ social_entry() }}
                 </div>
 
             </div>
         </div>
+
     </div>
-    <div class="col-md-4" style="margin-left:-10rem;">
-        <div id="map" style="width:400px; height:300px"></div>
-    </div>
+    <input type="hidden" name="latitude" id="latitude" value="{{ event.latitude | default(0.00, true) }}"/>
+    <input type="hidden" name="longitude" id="longitude" value="{{ event.longitude | default(0.00, true) }}"/>
+
 </div>
 <script>
     var marker;
@@ -152,16 +122,12 @@
     var $latitudeInput = $('#latitude');
     var $longitudeInput = $('#longitude');
     var $locationInput = $("#location");
-    $(document).ready(function () {
-        $latitudeInput.hide();
-        $longitudeInput.hide();
-    });
     function initMap() {
         var latitude = $latitudeInput.val();
         var longitude = $longitudeInput.val();
         var latlng = new google.maps.LatLng(latitude, longitude);
         var map = new google.maps.Map($("#map")[0], {
-            zoom: 8,
+            zoom: 1,
             center: latlng
         });
 
@@ -202,27 +168,51 @@
                     });
                 }
             } else {
+                if (status === 'ZERO_RESULTS') {
+                    resultsMap.setZoom(1);
+                    $latitudeInput.val(0.0);
+                    $longitudeInput.val(0.0);
+                }
                 console.log('Geocode was not successful for the following reason: ' + status);
             }
         });
     }
 
     $(document).ready(function () {
-        $('#event-start').daterangepicker({
-            singleDatePicker: true,
+
+        var $startTime = $("#start_time");
+        var $endTime = $("#end_time");
+
+        $('#event-timings').daterangepicker({
+            "timePicker": true,
+            "timePicker24Hour": true,
             {% if event %}
-                startDate: "{{ event.start_time.strftime('%m/%d/%Y') }}",
+                startDate: "{{ event.start_time.strftime('%m/%d/%Y %H:%M') }}",
+                endDate: "{{ event.end_time.strftime('%m/%d/%Y %H:%M') }}",
             {% endif %}
-            calender_style: "picker_4"
+            "opens": "center",
+            "autoApply": true
+        }, function (start, end, label) {
+            $startTime.val(start.format('MM/DD/YYYY hh:mm'));
+            $endTime.val(end.format('MM/DD/YYYY hh:mm'));
         });
 
-        $('#event-end').daterangepicker({
-            singleDatePicker: true,
-            {% if event %}
-                startDate: "{{ event.end_time.strftime('%m/%d/%Y') }}",
-            {% endif %}
-            calender_style: "picker_4"
-        });
+        $("textarea[name=description]").summernote(summernoteConfig);
+        $("textarea[name=organizer_description]").summernote(summernoteConfig);
+    });
+
+    $('.add-social-links').click(function () {
+        var $element = $($(".social-link-holder")[0]).clone();
+        $element.find("input").val('').attr("value", "");
+        $element.find(".add-social-links").addClass("remove-social-links")
+                .removeClass("add-social-links")
+                .removeClass("btn-primary").addClass("btn-danger").text("-");
+        $('.social-links > div').append($element);
+        $("#wizard").smartWizard('fixHeight');
+    });
+
+    $(document).on("click", ".remove-social-links", function () {
+        $(this).closest(".social-link-holder").remove();
     });
 
 </script>

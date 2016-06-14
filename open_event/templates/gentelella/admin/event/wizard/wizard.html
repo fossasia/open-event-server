@@ -1,12 +1,17 @@
 {% extends 'gentelella/admin/base.html' %}
 <!--suppress HtmlUnknownAnchorTarget -->
 
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap-daterangepicker/daterangepicker.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/icheck.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/switchery.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}" />
+{% endblock %}
 {% block head_js %}
     {{ super() }}
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/icheck.css') }}" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/switchery.css') }}" />
 {% endblock %}
 
 {% block body %}
@@ -17,7 +22,7 @@
 </div>
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="x_panel" style="min-height:600px;">
+        <div class="x_panel">
             <div class="row">
                 <form action="{% if event %}/events/{{ event.id }}/edit/{% else %}/events/create/{% endif %}" method="POST" role="form"
                       class="admin-form form-horizontal" id="{% if event %}event-edit-form{% else %}event-create-form{% endif %}">
@@ -69,13 +74,12 @@
                             </li>
                         </ul>
 
-                        <div class="stepContainer">
                             {% include 'gentelella/admin/event/wizard/step-1.html' %}
                             {% include 'gentelella/admin/event/wizard/step-2.html' %}
                             {% include 'gentelella/admin/event/wizard/step-3.html' %}
                             {% include 'gentelella/admin/event/wizard/step-4.html' %}
                             {% include 'gentelella/admin/event/wizard/step-5.html' %}
-                        </div>
+
                     </div>
                 </form>
             </div>

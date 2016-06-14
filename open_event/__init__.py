@@ -94,7 +94,6 @@ class SilentUndefined(Undefined):
     Dont break pageloads because vars arent there!
     """
     def _fail_with_undefined_error(self, *args, **kwargs):
-        logging.exception('JINJA2: something was undefined!')
         return False
 
 
