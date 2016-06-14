@@ -538,7 +538,7 @@ def documentation():
 @app.route('/heroku_releases')
 def heroku_releases():
     version = get_latest_heroku_release()
-    commit_number = version.description.split(' ')[1]
+    commit_number = version['description'].split(' ')[1]
     commit_info = get_commit_info(commit_number)
     return render_template('gentelella/admin/current_version.html',
                            version=version, commit_info=commit_info)
