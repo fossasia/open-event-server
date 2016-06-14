@@ -127,8 +127,15 @@ body {
     color: #dd4b39;
 }
 
-.speaker-info {
+.fa-github-square {
+    color: #171515;
+}
 
+.fa-linkedin-square {
+    color: #0077B5;
+}
+.speaker-info {
+    margin-bottom: 10px;
 }
 
 .speaker-info h3, .speaker-info h4, .speaker-info h5 {

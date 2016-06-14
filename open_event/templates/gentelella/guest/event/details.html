@@ -5,7 +5,7 @@
 
 {% block head_css %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/public/details.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/details.css') }}"/>
     <style type="text/css">
         .carousel .item {
             height: {{ carousel_height }}px;
@@ -29,12 +29,15 @@
     <i class="fa fa-facebook"></i> <a href="{{ domain + username }}">{{ username }}</a><br>
 {% endmacro %}
 
-{% macro speaker_info() %}
-    <div class="col-md-3 speaker-info" style="text-align: center">
-        <img src="https://randomuser.me/api/portraits/men/{{ range(1, 50) | random }}.jpg" style="width: 100%;"><br>
-        <h4 style="font-weight: 500;">Firstname Lastname</h4>
-        <h5 style="margin-top: 0;">Organisation</h5>
-        <a href=""><i class="fa fa-facebook-square"></i></a> <a href=""><i class="fa fa-twitter-square"></i></a>
+{% macro speaker_info(speaker) %}
+    <div class="col-md-3 col-sm-6 speaker-info" style="text-align: center">
+        <img src="{{ speaker.photo }}" style="width: 100%;"><br>
+        <h4 style="font-weight: 500;">{{ speaker.name }}</h4>
+        <h5 style="margin-top: 0;">{{ speaker.organisation }}</h5>
+        {% if speaker.facebook %}<a href="{{ speaker.facebook }}"><i class="fa fa-facebook-square"></i></a>{% endif %}
+        {% if speaker.twitter %}<a href="{{ speaker.twitter }}"><i class="fa fa-twitter-square"></i></a>{% endif %}
+        {% if speaker.linkedin %}<a href="{{ speaker.linkedin }}"><i class="fa fa-linkedin-square"></i></a>{% endif %}
+        {% if speaker.github %}<a href="{{ speaker.github }}"><i class="fa fa-github-square"></i></a>{% endif %}
     </div>
 {% endmacro %}
 
@@ -47,14 +50,24 @@
     </div>
 {% endmacro %}
 
+{% macro sponsor_info(sponsor) %}
+    <div class="col-md-4 col-sm-6 sponsor-column">
+        <div class="sponsor text-center">
+            <a href="{{ sponsor.url }}" target="default">
+                <img alt="{{ sponsor.name }}" src="{{ sponsor.logo }}">
+            </a>
+        </div>
+    </div>
+{% endmacro %}
+
 
 {% block body %}
-    <div class="scrollspy" id="scrollspy">
+    <div class="scrollspy hidden-xs hidden-sm" id="scrollspy">
         <ul class="nav nav-pills nav-stacked">
             <li role="presentation" class="active"><a href="#info">Info</a></li>
             <li role="presentation"><a href="#speakers">Speakers</a></li>
             <li role="presentation"><a href="#sponsors">Sponsors</a></li>
-            <li role="presentation"><a href="#organizers">Organizers</a></li>
+            <li role="presentation"><a href="#organizer">Organizer</a></li>
             <li role="presentation"><a href="#getting-here">Getting Here</a></li>
         </ul>
     </div>
@@ -80,48 +93,31 @@
                 <br>
                 <br>
                 <h3 id="speakers">Speakers</h3>
-
                 <div class="row">
-                    {{ speaker_info() }}
-                    {{ speaker_info() }}
-                    {{ speaker_info() }}
-                    {{ speaker_info() }}
+                    <div class="col-sm-12">
+                        {% for session in accepted_sessions %}
+                            {% for speaker in session.speakers %}
+                                {{ speaker_info(speaker) }}
+                            {% endfor %}
+                        {% else %}
+                            No sessions have been published yet
+                        {% endfor %}
+                    </div>
                 </div>
                 <br>
                 <h3 id="sponsors">Sponsors</h3>
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="col-md-4 col-sm-6 sponsor-column">
-                            <div class="sponsor text-center">
-                                <a href="https://developers.google.com/open-source/" target="default">
-                                    <img alt="Sponsor" src="http://2016.fossasia.org/img/Google.png">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-6 sponsor-column">
-                            <div class="sponsor text-center">
-                                <a href="http://www.unesco.org/new/en/communication-and-information/access-to-knowledge/free-and-open-source-software-foss/"
-                                   target="default">
-                                    <img alt="Sponsor" src="http://2016.fossasia.org/img/UNESCO.png">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-6 sponsor-column">
-                            <div class="sponsor text-center">
-                                <a href="http://redhat.com" target="default">
-                                    <img alt="Sponsor" src="http://2016.fossasia.org/img/RedHat.png">
-                                </a>
-                            </div>
-                        </div>
+                        {% for sponsor in event.sponsor %}
+                            {{ sponsor_info(sponsor) }}
+                        {% else %}
+                            Sponsors info unavailable
+                        {% endfor %}
                     </div>
                 </div>
                 <br>
-                <h3 id="organizers">Organizers</h3>
-                <div class="row">
-                    {{ organizer_info() }}
-                    {{ organizer_info() }}
-                    {{ organizer_info() }}
-                </div>
+                <h3 id="organizer">Organized by {{ event.organizer_name }}</h3>
+                <p>{{ event.organizer_description }}</p>
                 <br>
                 <h3 id="getting-here">Getting Here</h3>
                 <div class="row">
@@ -134,11 +130,9 @@
                 </div>
             </div>
             <div class="col-md-4">
-
-                <i class="fa fa-envelope fa-fw"></i> contact@example.org<br>
-                <i class="fa fa-phone-square fa-fw"></i> +1 12121212
-                <br>
-                <br>
+                {% if event.email %}
+                    <i class="fa fa-envelope fa-fw"></i> {{ event.email }}<br>
+                {% endif %}
                 {% set twitter = [] %}
                 {% for social_link in event.social_link %}
                     {% set social_name = social_link.name.strip().lower() %}
@@ -152,14 +146,14 @@
                     {% elif social_name == "google plus" %}
                         <i class="fa fa-google-plus-square fa-fw" style="color: #dd4b39"></i>
                         <a class="social-link" href="{{ social_link.link }}">Google +</a><br>
+                    {% else %}
+                        <i class="fa square-o fa-fw" style="color: #8d8d8d"></i>
+                        <a class="social-link" href="{{ social_link.link }}">{{ social_link.name }}</a><br>
                     {% endif %}
                 {% endfor %}
                 {% for twitterLink in twitter %}
                     <a class="twitter-timeline" href="{{ twitterLink }}" data-height="500">Tweets</a>
                 {% endfor %}
-                <p>
-
-                </p>
             </div>
         </div>
     </div>
