@@ -1,0 +1,37 @@
+/*noinspection CssFloatPxLength*/
+.upload-btn {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.upload-btn + label {
+    font-size: 14px;
+    font-weight: 200;
+    color: white;
+    background-color: #607D8B;
+    display: inline-block;
+    width: 110px;
+    transition: background-color linear 0.5s;
+    border-radius: 5px;
+    -webkit-appearance: button;
+    border: 1px solid #4a606e;
+    margin-top: 2px;
+    overflow: hidden;
+    height: 35px;
+    line-height: 35px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.upload-btn:focus + label,
+.upload-btn + label:hover {
+    background-color: #4a606e;
+}
+
+.upload-btn + label {
+    cursor: pointer; /* "hand" cursor */
+}
