@@ -9,6 +9,7 @@ from tests.api.utils_post_data import *
 from tests.auth_helper import register
 from open_event import current_app as app
 
+
 class TestDeleteApi(OpenEventTestCase):
     """
     Test Delete APIs for 200 (successful) status codes
@@ -39,13 +40,10 @@ class TestDeleteApi(OpenEventTestCase):
             data=json.dumps(data),
             headers={'Content-Type': 'application/json'}
         )
+        self.assertEqual(response.status_code, 201)
 
         path = get_path(1) if name == 'event' else get_path(1, name + 's', 1)
-        response = self.app.delete(
-            path,
-            data=json.dumps(data),
-            headers={'Content-Type': 'application/json'}
-        )
+        response = self.app.delete(path)
         self.assertEqual(response.status_code, 200)
         self.assertIn('Test' + str(name).title(), response.data)
 
