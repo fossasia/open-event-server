@@ -50,7 +50,7 @@ RELATED_FIELDS = {
 }
 
 
-def allowed_file(filename, ext):
+def _allowed_file(filename, ext):
     return '.' in filename and filename.rsplit('.', 1)[1] in ext
 
 
@@ -63,7 +63,7 @@ def get_file_from_request(ext=[], folder='static/temp/', name='file'):
     file = request.files['file']
     if file.filename == '':
         raise NotFoundError('File not found')
-    if not allowed_file(file.filename, ext):
+    if not _allowed_file(file.filename, ext):
         raise NotFoundError('Invalid file type')
     filename = secure_filename(file.filename)
     path = folder + filename
@@ -81,6 +81,9 @@ def _trim_id(data):
 
 
 def _delete_fields(srv, data):
+    """
+    Delete not needed fields in POST request
+    """
     if srv[0] in DELETE_FIELDS:
         for i in DELETE_FIELDS[srv[0]]:
             del data[i]
@@ -88,6 +91,11 @@ def _delete_fields(srv, data):
 
 
 def _fix_related_fields(srv, data, service_ids):
+    """
+    Fixes the ids services which are related to others.
+    Like track, format -> session
+    Also fixes their schema
+    """
     if srv[0] not in RELATED_FIELDS:
         return data
     for field in RELATED_FIELDS[srv[0]]:
@@ -115,6 +123,11 @@ def _fix_related_fields(srv, data, service_ids):
 
 
 def create_service_from_json(data, srv, event_id, service_ids={}):
+    """
+    Given :data as json, create the service on server
+    :service_ids are the mapping of ids of already created services.
+        Used for mapping old ids to new
+    """
     # sort by id
     data.sort(key=lambda k: k['id'])
     ids = {}
@@ -159,4 +172,5 @@ def import_event_json(zip_path):
             dic, item, new_event.id, service_ids)
         service_ids[item[0]] = changed_ids.copy()
 
+    # TODO: If something fails, delete event+everything
     return new_event
