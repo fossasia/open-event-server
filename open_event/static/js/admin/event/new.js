@@ -8,7 +8,7 @@ $(document).ready(function() {
     var row = '<tr class="row-sponsor">'+
                 '<td>' + sponsor_counter + '</td>'+
                 '<td><input required="required" name="sponsors[name]" class="form-control col-md-7 col-xs-12"/></td>'+
-                '<td><input required="required" name="sponsors[logo]" class="form-control col-md-7 col-xs-12"/></td>'+
+                '<td><input type="file" required="required" name="sponsors[logo]" class="col-md-12 col-xs-12"/></td>'+
                 '<td><textarea name="sponsors[description]" class="form-control col-md-7 col-xs-12"></textarea></td>'+
                 '<td><input required="required" name="sponsors[level]" class="form-control col-md-7 col-xs-12"/></td>'+
                 '<td><input required="required" name="sponsors[type]" class="form-control col-md-7 col-xs-12" value="Gold"/></td>'+

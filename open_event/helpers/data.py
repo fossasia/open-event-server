@@ -593,7 +593,6 @@ class DataManager(object):
                                              event_id=event.id)
 
             sponsor_name = form.getlist('sponsors[name]')
-            sponsor_logo = form.getlist('sponsors[logo]')
             sponsor_url = form.getlist('sponsors[url]')
             sponsor_level = form.getlist('sponsors[level]')
             sponsor_description = form.getlist('sponsors[description]')
@@ -619,7 +618,7 @@ class DataManager(object):
                 db.session.add(room)
 
             for index, name in enumerate(sponsor_name):
-                sponsor = Sponsor(name=name, logo=sponsor_logo[index], url=sponsor_url[index],
+                sponsor = Sponsor(name=name,url=sponsor_url[index],
                                   level=sponsor_level[index], description=sponsor_description[index], event_id=event.id)
                 db.session.add(sponsor)
 
