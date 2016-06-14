@@ -8,7 +8,8 @@ class EventsUsers(db.Model):
     """Many to Many table Event Users"""
     __tablename__ = 'eventsusers'
     id = db.Column(db.Integer, primary_key=True)
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    event_id = db.Column(
+        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     editor = db.Column(db.Boolean)
     admin = db.Column(db.Boolean)
@@ -32,6 +33,8 @@ class Event(db.Model):
     description = db.Column(db.Text)
     event_url = db.Column(db.String)
     background_url = db.Column(db.String)
+    organizer_name = db.Column(db.String)
+    organizer_description = db.Column(db.String)
     track = db.relationship('Track', backref="event")
     microlocation = db.relationship('Microlocation', backref="event")
     session = db.relationship('Session', backref="event")
@@ -59,6 +62,8 @@ class Event(db.Model):
                  description=None,
                  event_url=None,
                  background_url=None,
+                 organizer_name=None,
+                 organizer_description=None,
                  state=None,
                  closing_datetime=None,
                  type=None,
@@ -75,6 +80,8 @@ class Event(db.Model):
         self.description = description
         self.event_url = event_url
         self.background_url = background_url
+        self.organizer_name = organizer_name
+        self.organizer_description = organizer_description
         self.state = state
         self.closing_datetime = closing_datetime
         self.type = type
@@ -106,5 +113,7 @@ class Event(db.Model):
             'color': self.color.get_hex() if self.color else '',
             'description': self.description,
             'event_url': self.event_url,
-            'background_url': self.background_url
+            'background_url': self.background_url,
+            'organizer_name': self.organizer_name,
+            'organizer_description': self.organizer_description
         }

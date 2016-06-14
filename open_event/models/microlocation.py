@@ -16,7 +16,7 @@ class Microlocation(db.Model):
     session = db.relationship('Session',
                               backref="microlocation")
     event_id = db.Column(db.Integer,
-                         db.ForeignKey('events.id'))
+                         db.ForeignKey('events.id', ondelete='CASCADE'))
 
     def __init__(self,
                  name=None,

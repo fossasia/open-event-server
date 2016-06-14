@@ -21,6 +21,8 @@ from open_event.models import db
 from open_event.views.admin.admin import AdminView
 from helpers.jwt import jwt_authenticate, jwt_identity
 from open_event.helpers.data_getter import DataGetter
+from open_event.views.views import app as routes
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -32,8 +34,6 @@ def create_app():
     cal = Calendar()
     event = Event()
 
-
-    from open_event.views.views import app as routes
     app.register_blueprint(routes)
     migrate = Migrate(app, db)
 
@@ -52,6 +52,7 @@ def create_app():
     app.config['SQLALCHEMY_RECORD_QUERIES'] = True
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     app.logger.setLevel(logging.INFO)
+    app.jinja_env.add_extension('jinja2.ext.do')
     # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
     # set up jwt

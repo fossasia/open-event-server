@@ -16,6 +16,9 @@
         <a href="{{ get_url('event.details_view', event_id=event.id)}}" title="View Event Details">
             <span class="glyphicon glyphicon-eye-open"></span>
         </a>
+        <a href="/api/v2/events/{{event.id}}/export/json" title="Export Event">
+            <span class="glyphicon glyphicon glyphicon-share"></span>
+        </a>
         {% endif %}
     </td>
 </tr>

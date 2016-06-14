@@ -8,7 +8,8 @@ class CallForPaper(db.Model):
     announcement = db.Column(db.Text, nullable=False)
     start_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime, nullable=False)
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    event_id = db.Column(
+        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     events = db.relationship("Event", backref="call_for_papers")
 
     def __init__(self, announcement=None, start_date=None, end_date=None, event_id=None):
