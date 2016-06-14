@@ -1,0 +1,229 @@
+<div id="step-1" class="wizard_content" style="display: block;">
+    <div class="col-md-8">
+
+        <div class="item form-group">
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <input name="latitude" id="latitude" class="form-control col-md-7 col-xs-12"
+                       value="{{ event.latitude | default(0.00, true) }}"/>
+            </div>
+        </div>
+
+        <div class="item form-group">
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <input name="longitude" id="longitude" class="form-control col-md-7 col-xs-12"
+                       value="{{ event.longitude | default(0.00, true) }}"/>
+            </div>
+        </div>
+
+        <div class="item form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Name <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <input required="required" name="name" class="form-control col-md-7 col-xs-12"
+                       value="{{ event.name | default('', true) }}"/>
+            </div>
+        </div>
+
+        <div class="item form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Description
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <textarea name="description"
+                          class="form-control col-md-7 col-xs-12">{{ event.description | default('', true) }}</textarea>
+            </div>
+        </div>
+
+        <div class="item form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Start Date <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <input value="{{ event.start_time | default('', true) }}" id="event-start" required="required"
+                       name="start_time" class="date-picker form-control col-md-7 col-xs-12" placeholder="MM/DD/YYYY"/>
+            </div>
+
+        </div>
+
+        <div class="item form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">End Date <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <input value="{{ event.end_time | default('', true) }}" id="event-end" required="required" name="end_time"
+                       class="date-picker form-control col-md-7 col-xs-12" placeholder="MM/DD/YYYY"/>
+            </div>
+        </div>
+
+        <div class="item form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Location
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <input value="{{ event.location_name | default('', true) }}" name="location_name" id="location"
+                       class="form-control col-md-7 col-xs-12"/>
+            </div>
+        </div>
+
+        <div class="item form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Background image
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <input value="{{ event.background_url | default('', true) }}" name="background_url"
+                       class="form-control col-md-7 col-xs-12"/>
+            </div>
+        </div>
+
+        <div class="item form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Logo
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <input value="{{ event.logo | default('', true) }}" name="logo" class="form-control col-md-7 col-xs-12"/>
+            </div>
+        </div>
+
+        <div class="item form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Event Url
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <input value="{{ event.event_url | default('', true) }}" name="event_url"
+                       class="form-control col-md-7 col-xs-12"/>
+            </div>
+        </div>
+
+        <div class="item form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Organizer name
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <input name="organizer_name" class="form-control col-md-7 col-xs-12"
+                       value="{{ event.organizer_name | default('', true) }}"/>
+            </div>
+        </div>
+        <div class="item form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Organizer Description
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <input name="organizer_description" class="form-control col-md-7 col-xs-12"
+                       value="{{ event.organizer_description | default('', true) }}"/>
+            </div>
+        </div>
+
+        <div class="item form-group">
+            <div class="row">
+                <label class="control-label col-md-6 col-sm-6 col-xs-12">Social Links
+                </label>
+            </div>
+            <div class="row social-links">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    {% if social_links %}
+                        {% for social_link in social_links %}
+                            <div class=" col-sm-6">
+                                <input type="text" class="form-control" name="social[name]" placeholder="Name"
+                                       value="{{ social_link.name }}">
+                            </div>
+                            <div class="col-sm-6 input-group">
+                                <input type="text" class="form-control" name="social[link]" placeholder="Link"
+                                       value="{{ social_link.link }}">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-primary add-social-links">+</button>
+                                </span>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class=" col-sm-6">
+                            <input type="text" class="form-control" name="social[name]" placeholder="Name" value="Google Plus">
+                        </div>
+
+                        <div class="col-sm-6 input-group">
+                            <input type="text" class="form-control" name="social[link]" placeholder="Link" >
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-primary add-social-links">+</button>
+                            </span>
+                      </div>
+                {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4" style="margin-left:-10rem;">
+        <div id="map" style="width:400px; height:300px"></div>
+    </div>
+</div>
+<script>
+    var marker;
+    var init_marker;
+    var $latitudeInput = $('#latitude');
+    var $longitudeInput = $('#longitude');
+    var $locationInput = $("#location");
+    $(document).ready(function () {
+        $latitudeInput.hide();
+        $longitudeInput.hide();
+    });
+    function initMap() {
+        var latitude = $latitudeInput.val();
+        var longitude = $longitudeInput.val();
+        var latlng = new google.maps.LatLng(latitude, longitude);
+        var map = new google.maps.Map($("#map")[0], {
+            zoom: 8,
+            center: latlng
+        });
+
+        var geocoder = new google.maps.Geocoder();
+        init_marker = new google.maps.Marker({
+            draggable: true,
+            position: latlng,
+            map: map,
+            zoom: 15
+        });
+
+        $locationInput.valueChange(function () {
+            geocodeAddress(geocoder, map);
+        });
+    }
+    function geocodeAddress(geocoder, resultsMap) {
+        var address = $locationInput.val();
+        geocoder.geocode({'address': address}, function (results, status) {
+            if (status === google.maps.GeocoderStatus.OK) {
+                $latitudeInput.val(results[0].geometry.location.lat());
+                $longitudeInput.val(results[0].geometry.location.lng());
+                resultsMap.setCenter(results[0].geometry.location);
+                resultsMap.setZoom(10);
+                init_marker.setMap(null);
+                if (marker == null) {
+                    marker = new google.maps.Marker({
+                        map: resultsMap,
+                        draggable: true,
+                        position: results[0].geometry.location
+                    });
+                }
+                else {
+                    marker.setMap(null);
+                    marker = new google.maps.Marker({
+                        map: resultsMap,
+                        draggable: true,
+                        position: results[0].geometry.location
+                    });
+                }
+            } else {
+                console.log('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $('#event-start').daterangepicker({
+            singleDatePicker: true,
+            {% if event %}
+                startDate: "{{ event.start_time.strftime('%m/%d/%Y') }}",
+            {% endif %}
+            calender_style: "picker_4"
+        });
+
+        $('#event-end').daterangepicker({
+            singleDatePicker: true,
+            {% if event %}
+                startDate: "{{ event.end_time.strftime('%m/%d/%Y') }}",
+            {% endif %}
+            calender_style: "picker_4"
+        });
+    });
+
+</script>
+

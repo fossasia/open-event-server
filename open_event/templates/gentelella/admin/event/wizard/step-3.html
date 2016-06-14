@@ -1,0 +1,96 @@
+{% macro track_entry(track=None) %}
+    <div class=" col-sm-6">
+        <input type="text" class="form-control" name="tracks[name]" placeholder="Name" value="{{ track.name | default('Track 1') }}">
+    </div>
+
+    <div class="col-sm-6 input-group">
+        <div class="input-group colorpicker-component" id="color">
+            <input type="text" value="{{ track.color | default('#e01ab5') }}" class="form-control" name="tracks[color]" title="track-color"/>
+            <span class="input-group-addon"><i></i></span>
+        </div>
+        <span class="input-group-btn">
+            <button type="button" class="btn btn-primary" id="add-tracks">+</button>
+        </span>
+    </div>
+
+{% endmacro %}
+
+{% macro microlocation_entry(microlocation=None) %}
+    <div class=" col-sm-6">
+        <input type="text" class="form-control" name="rooms[name]" placeholder="Name"
+               value="{{ microlocation.name | default('Room 1') }}">
+    </div>
+
+    <div class="col-sm-6 input-group">
+        <div class="input-group colorpicker-component" id="room-color">
+            <input type="text" value="#e01ab5" class="form-control" name="rooms[color]"
+                   title="rooms-color"/>
+            <span class="input-group-addon"><i></i></span>
+        </div>
+        <span class="input-group-btn">
+            <button type="button" class="btn btn-primary" id="add-rooms">+</button>
+        </span>
+    </div>
+{% endmacro %}
+
+{% macro session_type_entry(session_type=None) %}
+    <div class=" col-sm-6">
+        <input type="text" class="form-control" name="session_type[name]" placeholder="Name"
+               value="{{ session_type.name | default('Lighting Talks') }}">
+    </div>
+
+    <div class="col-sm-6 input-group">
+        <input type="text" class="form-control" name="session_type[length]" placeholder="Length"
+               value="{{ session_type.length | default(5) }}">
+        <span class="input-group-btn">
+            <button type="button" class="btn btn-primary add-session-type">+</button>
+        </span>
+    </div>
+{% endmacro %}
+
+<div id="step-3" class="wizard_content" style="display: block;">
+    <div class="col-md-10 col-md-push-1">
+        <div class="row tracks">
+            <h2 style="padding: 6px 12px;">Tracks</h2>
+            <div class="col-sm-6">
+                {% if tracks %}
+                    {% for track in tracks %}
+                        {{ track_entry(track) }}
+                    {% endfor %}
+                {% else %}
+                    {{ track_entry() }}
+                {% endif %}
+            </div>
+        </div>
+        <div class="row rooms">
+            <h2 style="padding: 6px 12px;">Rooms</h2>
+            <div class="col-sm-6">
+                {% if microlocations %}
+                    {% for microlocation in microlocations %}
+                        {{ microlocation_entry(microlocation) }}
+                    {% endfor %}
+                {% else %}
+                    {{ microlocation_entry() }}
+                {% endif %}
+            </div>
+        </div>
+        <div class="row session-types">
+            <h2 style="padding: 6px 12px;">Session Types</h2>
+            <div class="col-sm-6">
+                {% if session_types %}
+                    {% for session_type in session_types %}
+                        {{ session_type_entry(session_type) }}
+                    {% endfor %}
+                {% else %}
+                    {{ session_type_entry() }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#color').colorpicker();
+        $('#room-color').colorpicker();
+    });
+</script>

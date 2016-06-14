@@ -1,0 +1,52 @@
+{% macro call_for_paper_display(call_for_paper=None) %}
+    <div class="item form-group">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">Announcement
+        </label>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+                        <textarea name="announcement"
+                                  class="form-control col-md-7 col-xs-12">{{ call_for_paper.announcement | default('') }}</textarea>
+        </div>
+    </div>
+    <div class="item form-group">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">Call for Papers Start Date <span
+                class="required">*</span>
+        </label>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            <input value="{{ call_for_paper.start_date | default('') }}" required="required"
+                   name="start_date" class="date-picker form-control col-md-7 col-xs-12"
+                   placeholder="MM/DD/YYYY"/>
+        </div>
+    </div>
+
+    <div class="item form-group">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">Call for Papers End Date <span
+                class="required">*</span>
+        </label>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            <input value="{{ call_for_paper.end_date | default('') }}" required="required"
+                   name="end_date" class="date-picker form-control col-md-7 col-xs-12"
+                   placeholder="MM/DD/YYYY"/>
+        </div>
+    </div>
+{% endmacro %}
+
+<div id="step-4" class="wizard_content" style="display: block;">
+    <div class="col-md-10">
+        {% if call_for_paper %}
+            {% for call_for_paper_entry in call_for_paper %}
+                {{ call_for_paper_display(call_for_paper_entry) }}
+            {% endfor %}
+        {% else %}
+            {{ call_for_paper_display() }}
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.date-picker').daterangepicker({
+            singleDatePicker: true,
+            calender_style: "picker_4"
+        });
+    });
+</script>

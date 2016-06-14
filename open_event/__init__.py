@@ -1,4 +1,5 @@
 """Copyright 2015 Rafal Kowalski"""
+from jinja2 import Undefined
 import logging
 import os.path
 from os import environ
@@ -51,6 +52,7 @@ def create_app():
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     app.logger.setLevel(logging.INFO)
     app.jinja_env.add_extension('jinja2.ext.do')
+    app.jinja_env.undefined = SilentUndefined
     # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
     # set up jwt
@@ -85,6 +87,15 @@ def request_wants_json():
     return best == 'application/json' and \
         request.accept_mimetypes[best] > \
         request.accept_mimetypes['text/html']
+
+
+class SilentUndefined(Undefined):
+    """
+    Dont break pageloads because vars arent there!
+    """
+    def _fail_with_undefined_error(self, *args, **kwargs):
+        logging.exception('JINJA2: something was undefined!')
+        return False
 
 
 current_app, manager, database, jwt = create_app()
