@@ -32,6 +32,8 @@ class Event(db.Model):
     description = db.Column(db.Text)
     event_url = db.Column(db.String)
     background_url = db.Column(db.String)
+    organizer_name = db.Column(db.String)
+    organizer_description = db.Column(db.String)
     track = db.relationship('Track', backref="event")
     microlocation = db.relationship('Microlocation', backref="event")
     session = db.relationship('Session', backref="event")
