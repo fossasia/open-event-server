@@ -51,7 +51,7 @@ class EventsView(ModelView):
         tracks = DataGetter.get_tracks(event_id)
         social_links = DataGetter.get_social_links_by_event_id(event_id)
         microlocations = DataGetter.get_microlocations(event_id)
-        call_for_speakers = DataGetter.get_call_for_papers(event_id)
+        call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
         sponsors = DataGetter.get_sponsors(event_id)
         session_columns = DataGetter.get_session_columns()
         speaker_columns = DataGetter.get_speaker_columns()

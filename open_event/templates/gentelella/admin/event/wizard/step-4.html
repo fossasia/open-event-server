@@ -53,9 +53,7 @@
         </div>
         <div id="call-for-speakers-holder" style="{% if not call_for_speakers %}display: none;{% endif %}">
             {% if call_for_speakers %}
-                {% for call_for_speakers_entry in call_for_speakers %}
-                    {{ call_for_speakers_display(call_for_speakers_entry) }}
-                {% endfor %}
+                {{ call_for_speakers_display(call_for_speakers) }}
             {% else %}
                 {{ call_for_speakers_display() }}
             {% endif %}

@@ -635,7 +635,7 @@ class DataManager(object):
                                                  start_date=datetime.strptime(form['cfs_start_date'], '%m/%d/%Y'),
                                                  end_date=datetime.strptime(form['cfs_end_date'], '%m/%d/%Y'),
                                                  event_id=event.id)
-                db.session.add(call_for_speakers)
+                save_to_db(call_for_speakers)
 
             uer = UsersEventsRoles(event_id=event.id, user_id=login.current_user.id, role_id=role.id)
             if save_to_db(uer, "Event saved"):

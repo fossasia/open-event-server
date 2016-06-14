@@ -2,6 +2,7 @@
     font-weight: 300;
     font-size: 20px !important;
 }
+
 .step_descr {
     font-weight: 300;
     font-size: 15px;
@@ -58,4 +59,30 @@
 
 .sponsor-table input, .sponsor-table textarea {
     height: 40px;
+}
+
+.options-table {
+    margin-top: 15px;
+}
+
+.options-table td {
+    vertical-align: middle !important;
+    text-align: center;
+    font-size: 14px;
+}
+
+.options-table td:nth-child(1) {
+    vertical-align: middle !important;
+    text-align: right;
+    padding-right: 20px;
+}
+
+.options-table th {
+    font-size: 16px;
+    text-align: center;
+}
+
+.options-table th:nth-child(1) {
+    text-align: right;
+    padding-right: 20px;
 }
