@@ -78,6 +78,33 @@
     </div>
 
     <div class="item form-group">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">Type
+        </label>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            <select class="form-control" name="event_type">
+
+                <option value="">Choose..</option>
+                {%for event_type in event_types%}
+                    <option value="{{event_type}}">{{event_type}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="item form-group">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">Topic
+        </label>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            <select class="form-control" name='topic'>
+                <option value="">Choose..</option>
+                {%for topic in event_topics%}
+                    <option value="{{topic}}">{{topic}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="item form-group">
       <div class="row">
         <label class="control-label col-md-6 col-sm-6 col-xs-12">Social Links
         </label>

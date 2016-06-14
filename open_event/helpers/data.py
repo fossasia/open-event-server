@@ -560,7 +560,9 @@ class DataManager(object):
                       location_name=form['location_name'],
                       description=form['description'],
                       event_url=form['event_url'],
-                      background_url=form['background_url'])
+                      background_url=form['background_url'],
+                      type=form['event_type'],
+                      topic=form['topic'])
         state = form.get('state', None)
         if state:
             event.state = state
@@ -657,6 +659,8 @@ class DataManager(object):
         event.description = form['description']
         event.event_url = form['event_url']
         event.background_url = form['background_url']
+        event.type = form['event_type']
+        event.topic = form['topic']
 
         state = form.get('state', None)
         if state:
