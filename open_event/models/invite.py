@@ -7,7 +7,8 @@ class Invite(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship("User", backref="invite")
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    event_id = db.Column(
+        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     hash = db.Column(db.String, nullable=False)
 
     def __init__(self, event_id=None, user_id=None):

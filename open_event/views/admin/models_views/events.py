@@ -36,7 +36,9 @@ class EventsView(ModelView):
             return redirect(url_for('.index_view'))
         return self.render('/gentelella/admin/event/new/new.html',
                            session_columns=session_columns,
-                           speaker_columns=speaker_columns)
+                           speaker_columns=speaker_columns,
+                           event_types=DataGetter.get_event_types(),
+                           event_topics=DataGetter.get_event_topics())
 
     @expose('/<int:event_id>/', methods=('GET', 'POST'))
     def details_view(self, event_id):
@@ -59,7 +61,8 @@ class EventsView(ModelView):
             return self.render('/gentelella/admin/event/edit/edit.html', event=event, session_types=session_types,
                                tracks=tracks, social_links=social_links, microlocations=microlocations,
                                call_for_speakers=call_for_speakers, sponsors=sponsors, session_columns=session_columns,
-                               speaker_columns=speaker_columns)
+                               speaker_columns=speaker_columns, event_types=DataGetter.get_event_types(),
+                               event_topics=DataGetter.get_event_topics())
         if request.method == "POST":
             event = DataManager.edit_event(request.form, event_id, event, session_types, tracks, social_links,
                                            microlocations, call_for_speakers, sponsors)

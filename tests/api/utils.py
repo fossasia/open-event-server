@@ -29,6 +29,29 @@ def create_sponsor_type(event_id, name='TestSponsor_Type'):
     print save_to_db(sponsor_type, 'SponsorType saved')
 
 
+def create_session(event_id, serial_no='', **kwargs):
+    """Creates Session with track ids and stuff
+    """
+    kwargs['track'] = Track.query.get(kwargs.get('track', 555))
+    kwargs['format'] = Format.query.get(kwargs.get('format', 555))
+    kwargs['microlocation'] = Microlocation.query.get(kwargs.get('microlocation', 555))
+    kwargs['level'] = Level.query.get(kwargs.get('level', 555))
+    kwargs['language'] = Language.query.get(kwargs.get('language', 555))
+    kwargs['speakers'] = [
+        Speaker.query.get(i) for i in kwargs['speakers']
+        if Speaker.query.get(i) is not None
+    ]
+    session = Session(
+        title='TestSession%d_%s' % (event_id, serial_no),
+        description='descp',
+        start_time=datetime(2014, 8, 4, 12, 30, 45),
+        end_time=datetime(2015, 9, 4, 12, 30, 45),
+        event_id=event_id,
+        **kwargs
+    )
+    save_to_db(session, 'Session saved')
+
+
 def create_services(event_id, serial_no=''):
     """Creates services and associates them with `event_id`. Service names
     have an optional `serial_no` that can be used to make them unique.
@@ -63,8 +86,8 @@ def create_services(event_id, serial_no=''):
                       organisation='org',
                       country='japan',
                       event_id=event_id)
-    sponsor = Sponsor(name=test_sponsor, sponsor_type_id=1, event_id=event_id)
     sponsor_type = SponsorType(name=test_sponsor_type, event_id=event_id)
+    sponsor = Sponsor(name=test_sponsor, sponsor_type_id=1, event_id=event_id)
 
     save_to_db(microlocation, 'Microlocation saved')
     save_to_db(track, 'Track saved')
@@ -73,8 +96,8 @@ def create_services(event_id, serial_no=''):
     save_to_db(language, 'Language saved')
     save_to_db(session, 'Session saved')
     save_to_db(speaker, 'Speaker saved')
-    save_to_db(sponsor, 'Sponsor saved')
     save_to_db(sponsor_type, 'SponsorType saved')
+    save_to_db(sponsor, 'Sponsor saved')
 
 
 def get_path(*args):

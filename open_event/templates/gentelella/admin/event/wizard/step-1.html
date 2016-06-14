@@ -83,6 +83,30 @@
                       class="form-control">{{ event.description | default('', true) }}</textarea>
         </div>
 
+        <div class="item form-group">
+            <label class="control-label">Type</label>
+            <select class="form-control" name="event_type">
+                {% if not event or not event.type %}
+                    <option value="">Choose..</option>
+                {% endif %}
+                {% for type in event_types %}
+                    <option value="{{ type }}" {{ "selected" if event and event.type == type else '' }}>{{ type }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="item form-group">
+            <label class="control-label">Topic
+            </label>
+            <select class="form-control" name='topic'>
+                {% if not event or not event.topic %}
+                    <option value="">Choose..</option>
+                {% endif %}
+                {% for topic in event_topics %}
+                    <option value="{{ topic }}" {{ "selected" if event and event.topic == topic else '' }}>{{ topic }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
         <div class="item form-group">
             <label>Background image URL
@@ -117,6 +141,7 @@
                     {{ event.organizer_description | default('', true) }}
                 </textarea>
         </div>
+
 
     </div>
     <div class="col-md-1">

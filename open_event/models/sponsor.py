@@ -8,7 +8,8 @@ class SponsorType(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    event_id = db.Column(
+        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
 
     def __init__(self, name=None, sponsor_id=None, event_id=None):
         self.name = name
@@ -39,9 +40,10 @@ class Sponsor(db.Model):
     url = db.Column(db.String)
     level = db.Column(db.String)
     logo = db.Column(db.String)
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
-
-    sponsor_type_id = db.Column(db.Integer, db.ForeignKey('sponsor_type.id'))
+    event_id = db.Column(
+        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    sponsor_type_id = db.Column(
+        db.Integer, db.ForeignKey('sponsor_type.id', ondelete='CASCADE'))
     sponsor_type = db.relationship('SponsorType')
 
     def __init__(self, name=None, url=None, logo=None, event_id=None,

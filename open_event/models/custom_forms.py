@@ -7,7 +7,8 @@ class CustomForms(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     session_form = db.Column(db.String, nullable=False)
     speaker_form = db.Column(db.String, nullable=False)
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    event_id = db.Column(
+        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     events = db.relationship("Event", backref="custom_forms")
 
     def __init__(self, event_id=None, session_form=None, speaker_form=None):

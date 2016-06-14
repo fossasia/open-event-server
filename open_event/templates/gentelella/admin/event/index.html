@@ -38,6 +38,10 @@ Events
                                                             data-toggle="tab"
                                                             aria-expanded="false">All Events</a>
                         </li>
+                        <li role="presentation" class=""><a href="#" role="tab" id="all-tab"
+                                                            data-toggle="modal" data-target="#importModal"
+                                                            aria-expanded="false">Import</a>
+                        </li>
                     </ul>
                     <div id="myTabContent" class="tab-content">
                         <div role="tabpanel" class="tab-pane fade active in" id="tab_content1"
@@ -129,6 +133,30 @@ Events
     </div>
 </div>
 
+<!-- import event modal -->
+<div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Import Event</h4>
+      </div>
+      <div class="modal-body">
+        <h5>Select event zip</h5><br>
+        <form>
+            <!-- <label class="btn btn-default btn-file"> -->
+                <input type="file" name="file" id="import_file">
+            <!-- </label> -->
+        </form>
+        <br>
+        <span id="import_error" class="red"></span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="btnImportEvent" onclick="importEventZip();">Create Event</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock %}
 {% block tail_js %}
@@ -137,6 +165,8 @@ Events
         src="{{ url_for('static', filename='admin/lib/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 <script type="text/javascript"
         src="{{ url_for('static', filename='admin/lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+<script type="text/javascript"
+        src="{{ url_for('static', filename='js/admin/event/importEvent.js') }}"></script>
 <script type="text/javascript">
         $('.table').DataTable();
 

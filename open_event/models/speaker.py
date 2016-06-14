@@ -18,7 +18,8 @@ class Speaker(db.Model):
     organisation = db.Column(db.String, nullable=False)
     position = db.Column(db.String)
     country = db.Column(db.String, nullable=False)
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    event_id = db.Column(
+        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
 
     def __init__(self,
                  name=None,

@@ -292,16 +292,19 @@ class DataGetter:
 
     @staticmethod
     def get_live_events():
-        return Event.query.filter(Event.start_time <= datetime.datetime.now()) \
-            .filter(Event.end_time >= datetime.datetime.now())
+        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
+            .filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
+            .filter(Event.state == 'Published')
 
     @staticmethod
     def get_draft_events():
-        return Event.query.filter(Event.start_time >= datetime.datetime.now())
+        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
+            .filter(Event.state == 'Draft')
 
     @staticmethod
     def get_past_events():
-        return Event.query.filter(Event.end_time <= datetime.datetime.now())
+        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
+            .filter(Event.end_time <= datetime.datetime.now()).filter(Event.state == 'Published')
 
     @staticmethod
     def get_session(session_id):
@@ -344,3 +347,54 @@ class DataGetter:
     @staticmethod
     def get_sponsor_types(event_id):
         return SponsorType.query.filter_by(event_id=event_id)
+
+    @staticmethod
+    def get_event_types():
+        return ['Appearance or Signing',
+                'Attraction',
+                'Camp, Trip, or Retreat',
+                'Class, Training, or Workshop',
+                'Concert or Performance',
+                'Conference',
+                'Convention',
+                'Dinner or Gala',
+                'Festival or Fair',
+                'Game or Competition',
+                'Meeting or Networking Event',
+                'Other',
+                'Party or Social Gathering',
+                'Race or Endurance Event',
+                'Rally',
+                'Screening',
+                'Seminar or Talk',
+                'Tour',
+                'Tournament',
+                'Tradeshow, Consumer Show, or Expo']
+
+    @staticmethod
+    def get_event_topics():
+        return ['Auto, Boat & Air',
+                'Business & Professional',
+                'Charity & Causes',
+                'Community & Culture',
+                'Family & Education',
+                'Fashion & Beauty',
+                'Film, Media & Entertainment',
+                'Food & Drink',
+                'Government & Politics',
+                'Health & Wellness',
+                'Hobbies & Special Interest',
+                'Home & Lifestyle',
+                'Music',
+                'Other',
+                'Performing & Visual Arts',
+                'Religion & Spirituality',
+                'Science & Technology',
+                'Seasonal & Holiday',
+                'Sports & Fitness',
+                'Travel & Outdoor']
+
+
+
+
+

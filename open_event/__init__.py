@@ -21,7 +21,9 @@ from icalendar import Calendar, Event
 from open_event.models import db
 from open_event.views.admin.admin import AdminView
 from helpers.jwt import jwt_authenticate, jwt_identity
+from open_event.helpers.data_getter import DataGetter
 from open_event.views.views import app as routes
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -96,6 +98,15 @@ class SilentUndefined(Undefined):
     def _fail_with_undefined_error(self, *args, **kwargs):
         return False
 
+@app.context_processor
+def locations():
+    location_names = filter(None, [event.location_name for event in DataGetter.get_all_events()])
+    return dict(locations=location_names[:10])
+
+@app.context_processor
+def event_types():
+    event_types = DataGetter.get_event_types()
+    return dict(event_typo=event_types[:10])
 
 current_app, manager, database, jwt = create_app()
 

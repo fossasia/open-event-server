@@ -16,19 +16,16 @@
                 <h4>Categories</h4>
                 <ul>
 
-                    <li><a href="/how_it_works">How it Works</a></li>
-                    <li><a href="/pricing">Pricing</a></li>
-                    <li><a href="/mobile_apps">Mobile Apps</a></li>
-                    <li><a href="/sitemap">Sitemap</a></li>
+                    {% for event_type in event_typo%}
+                        <li><a href="/how_it_works">{{event_type}}</a></li>
+                    {%endfor%}
                 </ul>
             </div>
             <div class="col-md-3"><h4>Locations</h4>
                 <ul>
-
-                    <li><a href="/how_it_works">How it Works</a></li>
-                    <li><a href="/pricing">Pricing</a></li>
-                    <li><a href="/mobile_apps">Mobile Apps</a></li>
-                    <li><a href="/sitemap">Sitemap</a></li>
+                    {% for location in locations%}
+                        <li><a href="/how_it_works">{{location}}</a></li>
+                    {%endfor%}
                 </ul>
             </div>
             <div class="col-md-3">

@@ -8,7 +8,8 @@ class EventsUsers(db.Model):
     """Many to Many table Event Users"""
     __tablename__ = 'eventsusers'
     id = db.Column(db.Integer, primary_key=True)
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    event_id = db.Column(
+        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     editor = db.Column(db.Boolean)
     admin = db.Column(db.Boolean)
@@ -44,7 +45,8 @@ class Event(db.Model):
     roles = db.relationship("UsersEventsRoles", backref="event")
     state = db.Column(db.String, default="Draft")
     closing_datetime = db.Column(db.DateTime)
-
+    type = db.Column(db.String)
+    topic = db.Column(db.String)
     db.UniqueConstraint('track.name')
 
     def __init__(self,
@@ -63,7 +65,9 @@ class Event(db.Model):
                  organizer_name=None,
                  organizer_description=None,
                  state=None,
-                 closing_datetime=None):
+                 closing_datetime=None,
+                 type=None,
+                 topic=None):
         self.name = name
         self.logo = logo
         self.email = email
@@ -80,6 +84,8 @@ class Event(db.Model):
         self.organizer_description = organizer_description
         self.state = state
         self.closing_datetime = closing_datetime
+        self.type = type
+        self.topic = topic
         # self.owner = owner
 
     def __repr__(self):

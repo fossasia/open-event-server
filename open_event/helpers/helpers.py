@@ -61,6 +61,7 @@ def send_email_after_account_create(form):
 
 
 def send_email_confirmation(form, link):
+    print link
     payload = {'to': form['email'],
                'from': 'open-event@googlegroups.com',
                'subject': "Email Confirmation to Create Account for Open-Event ",
@@ -103,6 +104,7 @@ def is_event_admin(event_id, users):
 def get_serializer(secret_key=None):
     return Serializer('secret_key')
 
+
 def get_latest_heroku_release():
     token = os.environ.get('API_TOKEN_HEROKU', None)
     headers = {
@@ -112,3 +114,10 @@ def get_latest_heroku_release():
     }
     response = requests.get("https://api.heroku.com/apps/open-event/releases", headers=headers)
     return json.loads(response.text)[0]
+
+
+def get_commit_info(commit_number):
+    response = requests.get("https://api.github.com/repos/fossasia/open-event-orga-server/commits/" + commit_number)
+    return json.loads(response.text)
+
+
