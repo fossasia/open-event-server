@@ -563,6 +563,9 @@ class DataManager(object):
                       organizer_name=form['organizer_name'],
                       organizer_description=form['organizer_description'],
                       background_url=form['background_url'])
+        state = form.get('state', None)
+        if state:
+            event.state = state
 
         if event.start_time <= event.end_time:
             role = Role(name='ORGANIZER')
@@ -646,7 +649,6 @@ class DataManager(object):
         :param data: view data form
         :param event: object contains all earlier data
         """
-        print(form)
         event.name = form['name']
         event.logo = form['logo']
         event.start_time = form['start_time']
@@ -659,6 +661,10 @@ class DataManager(object):
         event.background_url = form['background_url']
         event.organizer_name = form['organizer_name']
         event.organizer_description = form['organizer_description']
+
+        state = form.get('state', None)
+        if state:
+            event.state = state
 
         for session_type in session_types:
             delete_from_db(session_type, 'Session Type Deleted')

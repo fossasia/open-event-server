@@ -20,7 +20,7 @@ def upgrade():
     op.create_table('custom_forms',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('session_form', sa.String(), nullable=False),
-    sa.Column('speaker_form', sa.String(), nullable=False)
+    sa.Column('speaker_form', sa.String(), nullable=False),
     sa.Column('event_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['event_id'], ['events.id'], ),
     sa.PrimaryKeyConstraint('id')
