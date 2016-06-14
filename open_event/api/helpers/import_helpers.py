@@ -43,6 +43,9 @@ RELATED_FIELDS = {
         ('language', 'language_id', 'languages'),
         ('microlocation', 'microlocation_id', 'microlocations'),
         ('speakers', 'speaker_ids', 'speakers')
+    ],
+    'sponsors': [
+        ('sponsor_type_id', 'sponsor_type_id', 'sponsor_types')
     ]
 }
 
@@ -98,12 +101,16 @@ def _fix_related_fields(srv, data, service_ids):
             del data[field[0]]
             data[field[1]] = ls
         else:
-            old_id = old_value['id']
+            if type(old_value) == dict:
+                old_id = old_value['id']
+            else:
+                old_id = old_value
+            del data[field[0]]
             if old_id is None:
                 data[field[1]] = None
             else:
                 data[field[1]] = service_ids[field[2]][old_id]
-            del data[field[0]]
+
     return data
 
 
