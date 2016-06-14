@@ -1,4 +1,4 @@
-{% macro track_entry(track=None) %}
+{% macro track_entry(track=None, remove=false) %}
     <div class="track-holder">
         <div class=" col-sm-5">
             <input type="text" class="form-control" name="tracks[name]" placeholder="Name"
@@ -7,19 +7,25 @@
 
         <div class="col-sm-7 input-group">
             <div class="input-group colorpicker-component" id="color">
-                <input type="text" value="{{ track.color | default('#7B1FA2') }}" class="form-control color-picker-input"
+                <input type="text" value="{{ track.color | default('#7B1FA2') }}"
+                       class="form-control color-picker-input"
+                       placeholder="Color"
                        name="tracks[color]" title="track-color"/>
                 <span class="input-group-addon"><i></i></span>
             </div>
         <span class="input-group-btn">
-            <button type="button" class="btn btn-primary add-tracks">+</button>
+            {% if remove %}
+                <button type="button" class="btn btn-danger remove-tracks">-</button>
+            {% else %}
+                <button type="button" class="btn btn-primary add-tracks">+</button>
+            {% endif %}
         </span>
         </div>
     </div>
 
 {% endmacro %}
 
-{% macro microlocation_entry(microlocation=None) %}
+{% macro microlocation_entry(microlocation=None, remove=false) %}
     <div class="microlocation-holder">
         <div class="col-xs-5">
             <input type="text" class="form-control" name="rooms[name]" placeholder="Name"
@@ -27,19 +33,24 @@
         </div>
 
         <div class="col-xs-7 input-group">
-            <div class="input-group colorpicker-component" id="room-color">
-                <input type="text" value="#7B1FA2" class="form-control color-picker-input" name="rooms[color]"
-                       title="rooms-color"/>
-                <span class="input-group-addon"><i></i></span>
+            <div class="input-group">
+                <input type="number" class="form-control" name="rooms[floor]"
+                       placeholder="Floor"
+                       title="rooms-floor"/>
+                            <span class="input-group-btn">
+                        {% if remove %}
+                            <button type="button" class="btn btn-danger remove-rooms">-</button>
+                        {% else %}
+                            <button type="button" class="btn btn-primary add-rooms">+</button>
+                        {% endif %}
+                        </span>
+
             </div>
-        <span class="input-group-btn">
-            <button type="button" class="btn btn-primary add-rooms">+</button>
-        </span>
         </div>
     </div>
 {% endmacro %}
 
-{% macro session_type_entry(session_type=None) %}
+{% macro session_type_entry(session_type=None, remove=false) %}
     <div class="session-type-holder">
         <div class="col-xs-5">
             <input type="text" class="form-control" name="session_type[name]" placeholder="Name"
@@ -47,10 +58,14 @@
         </div>
 
         <div class="col-xs-7 input-group">
-            <input type="text" class="form-control" name="session_type[length]" placeholder="Length"
-                   value="{{ session_type.length | default(5) }}">
+            <input type="text" class="form-control session-length" name="session_type[length]" placeholder="Length (HH.MM)"
+                   value="{{ session_type.length | default('') }}">
             <span class="input-group-btn">
-                <button type="button" class="btn btn-primary add-session-type">+</button>
+                {% if remove %}
+                    <button type="button" class="btn btn-danger remove-session-type">-</button>
+                {% else %}
+                    <button type="button" class="btn btn-primary add-session-type">+</button>
+                {% endif %}
             </span>
         </div>
     </div>
@@ -63,7 +78,7 @@
                 <h2 class="label-header">Tracks</h2>
                 {% if tracks %}
                     {% for track in tracks %}
-                        {{ track_entry(track) }}
+                        {{ track_entry(track, true) }}
                     {% endfor %}
                 {% endif %}
                 {{ track_entry() }}
@@ -72,7 +87,7 @@
                 <h2 class="label-header">Rooms</h2>
                 {% if microlocations %}
                     {% for microlocation in microlocations %}
-                        {{ microlocation_entry(microlocation) }}
+                        {{ microlocation_entry(microlocation, true) }}
                     {% endfor %}
                 {% endif %}
                 {{ microlocation_entry() }}
@@ -81,7 +96,7 @@
                 <h2 class="label-header">Session Types</h2>
                 {% if session_types %}
                     {% for session_type in session_types %}
-                        {{ session_type_entry(session_type) }}
+                        {{ session_type_entry(session_type, true) }}
                     {% endfor %}
                 {% endif %}
                 {{ session_type_entry() }}
@@ -93,13 +108,17 @@
 </div>
 <script>
     $(function () {
-        $('#color').colorpicker();
-        $('#room-color').colorpicker();
+        $('.colorpicker-component').colorpicker();
+
+        $(".session-length").timepicker({
+            'timeFormat': 'H.i'
+        });
+
     });
 
-    var $wizard = $("#wizard");
+
+    var $wizard = $(".form_wizard");
     var counter = 0;
-    var room_counter = 0;
 
     $(document).on("click", '.add-session-type', function () {
         var $element = $($(".session-type-holder")[0]).clone();
@@ -107,6 +126,11 @@
         $element.find(".add-session-type").addClass("remove-session-type")
                 .removeClass("add-session-type")
                 .removeClass("btn-primary").addClass("btn-danger").text("-");
+
+        $element.find(".session-length").timepicker({
+            'timeFormat': 'G.i'
+        });
+
         $('.session-types').append($element);
         $wizard.smartWizard('fixHeight');
     });
@@ -134,17 +158,13 @@
     });
 
     $(document).on("click", '.add-rooms', function () {
-        room_counter += 1;
-
         var $element = $($(".microlocation-holder")[0]).clone();
-        $element.find("input:not(.color-picker-input)").val('').attr("value", "");
+        $element.find("input").val('').attr("value", "");
         $element.find(".add-rooms").addClass("remove-rooms")
                 .removeClass("add-rooms")
                 .removeClass("btn-primary").addClass("btn-danger").text("-");
-        $element.find(".colorpicker-component").attr("id", "room-color" + room_counter);
 
         $('.rooms').append($element);
-        $('#room-color' + room_counter).colorpicker();
         $wizard.smartWizard('fixHeight');
     });
 

@@ -553,8 +553,8 @@ class DataManager(object):
                       email='dsads',
                       color='#f5f5f5',
                       logo=form['logo'],
-                      start_time=datetime.strptime(form['start_time'], '%m/%d/%Y'),
-                      end_time=datetime.strptime(form['end_time'], '%m/%d/%Y'),
+                      start_time=datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M'),
+                      end_time=datetime.strptime(form['start_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M'),
                       latitude=form['latitude'],
                       longitude=form['longitude'],
                       location_name=form['location_name'],
@@ -586,11 +586,6 @@ class DataManager(object):
 
             room_name = form.getlist('rooms[name]')
             room_color = form.getlist('rooms[color]')
-
-            call_for_speakers = CallForPaper(announcement=form['announcement'],
-                                             start_date=datetime.strptime(form['start_date'], '%m/%d/%Y'),
-                                             end_date=datetime.strptime(form['end_date'], '%m/%d/%Y'),
-                                             event_id=event.id)
 
             sponsor_name = form.getlist('sponsors[name]')
             sponsor_logo = form.getlist('sponsors[logo]')
@@ -635,8 +630,15 @@ class DataManager(object):
             custom_form = CustomForms(session_form=session_form, speaker_form=speaker_form, event_id=event.id)
             db.session.add(custom_form)
 
+            if form.get('call_for_speakers_state', 'off') is 'on':
+                call_for_speakers = CallForPaper(announcement=form['announcement'],
+                                                 start_date=datetime.strptime(form['cfs_start_date'], '%m/%d/%Y'),
+                                                 end_date=datetime.strptime(form['cfs_end_date'], '%m/%d/%Y'),
+                                                 event_id=event.id)
+                db.session.add(call_for_speakers)
+
             uer = UsersEventsRoles(event_id=event.id, user_id=login.current_user.id, role_id=role.id)
-            if save_to_db(call_for_speakers, "Call for paper saved") and save_to_db(uer, "Event saved"):
+            if save_to_db(uer, "Event saved"):
                 return event
         else:
             raise ValidationError("start date greater than end date")
@@ -651,8 +653,8 @@ class DataManager(object):
         """
         event.name = form['name']
         event.logo = form['logo']
-        event.start_time = form['start_time']
-        event.end_time = form['end_time']
+        event.start_time = datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M')
+        event.end_time = datetime.strptime(form['start_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M')
         event.latitude = form['latitude']
         event.longitude = form['longitude']
         event.location_name = form['location_name']
@@ -696,11 +698,6 @@ class DataManager(object):
         room_name = form.getlist('rooms[name]')
         room_color = form.getlist('rooms[color]')
 
-        call_for_speakers = CallForPaper(announcement=form['announcement'],
-                                         start_date=datetime.strptime(form['start_date'], '%m/%d/%Y'),
-                                         end_date=datetime.strptime(form['end_date'], '%m/%d/%Y'),
-                                         event_id=event.id)
-
         sponsor_name = form.getlist('sponsors[name]')
         sponsor_logo = form.getlist('sponsors[logo]')
         sponsor_url = form.getlist('sponsors[url]')
@@ -730,8 +727,13 @@ class DataManager(object):
                               description=sponsor_description[index], event_id=event.id)
             db.session.add(sponsor)
 
-        save_to_db(call_for_speakers, "Call for papers saved")
-
+        if form.get('call_for_speakers_state', 'off') is 'on':
+            call_for_speakers = CallForPaper(announcement=form['announcement'],
+                                             start_date=datetime.strptime(form['cfs_start_date'], '%m/%d/%Y'),
+                                             end_date=datetime.strptime(form['cfs_end_date'], '%m/%d/%Y'),
+                                             event_id=event.id)
+            db.session.add(call_for_speakers)
+        save_to_db(event, "Event saved")
         return event
 
     @staticmethod

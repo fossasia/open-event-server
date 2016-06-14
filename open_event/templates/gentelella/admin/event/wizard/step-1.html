@@ -35,14 +35,47 @@
                    class="form-control col-md-7 col-xs-12"/>
         </div>
 
-        <div class="item form-group">
-            <label>Event Timings <span class="required">*</span></label>
-            <input id="event-timings" required="required"
-                   name="event_timings" class="form-control" placeholder="MM/DD/YYYY HH:MM - MM/DD/YYYY HH:MM"/>
-        </div>
+        <div class="row event-date-picker">
+            <div class="col-md-6">
+                <div class="item form-group">
+                    <label>Starts <span class="required">*</span></label>
+                    <br>
+                    <div class="col-xs-8" style="padding-left: 0;">
+                        <input required="required"
+                               name="start_date"
+                               value="{{ event.start_time.strftime('%m/%d/%Y') if event else '' }}"
+                               class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY"/>
+                    </div>
+                    <div class="col-xs-4" style="padding-left: 0;">
+                        <input required="required"
+                               name="start_time"
+                               value="{{ event.start_time.strftime('%H:%M') if event else '' }}"
+                               class="form-control col-xs-6 time start" placeholder="HH:MM"/>
+                    </div>
+                </div>
 
-        <input type="hidden" id="start_time" name="start_time" value="{{ event.start_time | default('', true) }}">
-        <input type="hidden" id="end_time" name="end_time" value="{{ event.end_time | default('', true) }}">
+            </div>
+            <div class="col-md-6">
+                <div class="item form-group">
+                    <label>Ends <span class="required">*</span></label>
+                    <br>
+                    <div class="col-xs-8" style="padding-left: 0;">
+                        <input required="required"
+                               name="end_date"
+                               value="{{ event.end_time.strftime('%m/%d/%Y') if event else '' }}"
+                               class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY"/>
+                    </div>
+                    <div class="col-xs-4" style="padding-left: 0;">
+                        <input required="required"
+                               name="end_time"
+                               value="{{ event.end_time.strftime('%H:%M') if event else '' }}"
+                               class="form-control col-xs-6 time end" placeholder="HH:MM"/>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
 
         <div class="item form-group">
             <label>Description</label>
@@ -52,14 +85,14 @@
 
 
         <div class="item form-group">
-            <label>Background image
+            <label>Background image URL
             </label>
             <input value="{{ event.background_url | default('', true) }}" name="background_url"
                    class="form-control"/>
         </div>
 
         <div class="item form-group">
-            <label>Logo
+            <label>Logo URL
             </label>
             <input value="{{ event.logo | default('', true) }}" name="logo"
                    class="form-control"/>
@@ -180,21 +213,19 @@
 
     $(document).ready(function () {
 
-        var $startTime = $("#start_time");
-        var $endTime = $("#end_time");
+        $('.time').timepicker({
+            'showDuration': true,
+            'timeFormat': 'H:i',
+            'scrollDefault': 'now'
+        });
 
-        $('#event-timings').daterangepicker({
-            "timePicker": true,
-            "timePicker24Hour": true,
-            {% if event %}
-                startDate: "{{ event.start_time.strftime('%m/%d/%Y %H:%M') }}",
-                endDate: "{{ event.end_time.strftime('%m/%d/%Y %H:%M') }}",
-            {% endif %}
-            "opens": "center",
-            "autoApply": true
-        }, function (start, end, label) {
-            $startTime.val(start.format('MM/DD/YYYY hh:mm'));
-            $endTime.val(end.format('MM/DD/YYYY hh:mm'));
+        $('.date').datepicker({
+            'format': 'mm/dd/yyyy',
+            'autoclose': true
+        });
+
+        $(".event-date-picker").datepair({
+            'defaultTimeDelta': 3600000
         });
 
         $("textarea[name=description]").summernote(summernoteConfig);
@@ -208,7 +239,7 @@
                 .removeClass("add-social-links")
                 .removeClass("btn-primary").addClass("btn-danger").text("-");
         $('.social-links > div').append($element);
-        $("#wizard").smartWizard('fixHeight');
+        $(".form_wizard").smartWizard('fixHeight');
     });
 
     $(document).on("click", ".remove-social-links", function () {

@@ -10,14 +10,15 @@
                 <i class="fa fa-cloud-upload" aria-hidden="true"></i>
                 Choose a file</label>
         </td>
-        <td><textarea name="sponsors[description]"
-                      class="form-control col-md-7 col-xs-12">{{ sponsor.description }}</textarea></td>
-        <td><input value="{{ sponsor.level | default('') }}" required="required" name="sponsors[level]"
+        <td><input type="number" value="{{ sponsor.level | default('') }}" required="required" name="sponsors[level]"
                    class="form-control col-md-7 col-xs-12"/></td>
         <td><input required="required" name="sponsors[type]" class="form-control col-md-7 col-xs-12"
-                   value="Gold"/></td>
+                   value=""/></td>
         <td><input value="{{ sponsor.url | default('') }}" required="required" name="sponsors[url]"
                    class="form-control col-md-7 col-xs-12"/></td>
+        <td><textarea name="sponsors[description]"
+                  class="form-control col-md-7 col-xs-12">{{ sponsor.description }}</textarea></td>
+
     </tr>
 {% endmacro %}
 
@@ -30,10 +31,10 @@
                 <th>Sl.</th>
                 <th>Name</th>
                 <th>Logo</th>
-                <th>Description</th>
                 <th>Level</th>
                 <th>Type</th>
                 <th>URL</th>
+                <th>Description</th>
             </tr>
             </thead>
             <tbody class="sponsors">
@@ -56,11 +57,12 @@
         sponsor_counter += 1;
         var $element = $($(".row-sponsor")[0]).clone();
         $element.find("td:nth-child(1)").text(sponsor_counter);
+        $element.find("input").val("").attr("value", "");
         $element.find("input[type=file]").attr("id", "sponsors-logo-" + sponsor_counter);
         $element.find(".file-label").attr("for", "sponsors-logo-" + sponsor_counter);
         $('.sponsors').append($element);
         superFileUploadButton();
-        $("#wizard").smartWizard('fixHeight');
+        $(".form_wizard").smartWizard('fixHeight');
     });
 
     $(document).on("click", ".remove-sponsor", function () {
