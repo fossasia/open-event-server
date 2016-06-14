@@ -8,7 +8,7 @@ from flask_admin.base import AdminIndexView
 from flask.ext.scrypt import generate_password_hash
 from wtforms import ValidationError
 
-from ...helpers.data import DataManager, save_to_db, get_google_auth, get_facebook_auth
+from ...helpers.data import DataManager, save_to_db, get_google_auth, get_facebook_auth, create_user_password
 from ...helpers.data_getter import DataGetter
 from ...helpers.helpers import send_email_with_reset_password_hash, send_email_confirmation, get_serializer
 from open_event.helpers.oauth import OAuth, FbOAuth
@@ -73,6 +73,19 @@ class MyHomeView(AdminIndexView):
         user = DataManager.create_user(data)
         login.login_user(user)
         return redirect(intended_url())
+
+    @expose('/password/new/<email>', methods=('GET', 'POST'))
+    def create_password_after_oauth_login(self, email):
+        s = get_serializer()
+        email = s.loads(email)
+        user = DataGetter.get_user_by_email(email)
+        if request.method == 'GET':
+            return self.render('/gentelella/admin/login/create_password.html')
+        if request.method == 'POST':
+            user = create_user_password(request.form, user)
+            if user is not None:
+                login.login_user(user)
+                return redirect(intended_url())
 
     @expose('/password/reset', methods=('GET', 'POST'))
     def password_reset_view(self):
