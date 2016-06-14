@@ -70,7 +70,7 @@
     </div>
 
     <div class="item form-group">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12">Event Url
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">Event URL
         </label>
         <div class="col-md-6 col-sm-6 col-xs-12">
             <input name="event_url" class="form-control col-md-7 col-xs-12"/>
@@ -89,6 +89,33 @@
         </label>
         <div class="col-md-6 col-sm-6 col-xs-12">
             <input name="organizer_description" class="form-control col-md-7 col-xs-12"/>
+        </div>
+    </div>
+
+    <div class="item form-group">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">Type
+        </label>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            <select class="form-control" name="event_type">
+
+                <option value="">Choose..</option>
+                {%for event_type in event_types%}
+                    <option value="{{event_type}}">{{event_type}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="item form-group">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">Topic
+        </label>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            <select class="form-control" name='topic'>
+                <option value="">Choose..</option>
+                {%for topic in event_topics%}
+                    <option value="{{topic}}">{{topic}}</option>
+                {% endfor %}
+            </select>
         </div>
     </div>
 
