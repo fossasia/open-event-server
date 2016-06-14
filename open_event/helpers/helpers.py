@@ -119,3 +119,5 @@ def get_latest_heroku_release():
 def get_commit_info(commit_number):
     response = requests.get("https://api.github.com/repos/fossasia/open-event-orga-server/commits/" + commit_number)
     return json.loads(response.text)
+
+

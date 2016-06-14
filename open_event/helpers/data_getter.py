@@ -347,3 +347,54 @@ class DataGetter:
     @staticmethod
     def get_sponsor_types(event_id):
         return SponsorType.query.filter_by(event_id=event_id)
+
+    @staticmethod
+    def get_event_types():
+        return ['Appearance or Signing',
+                'Attraction',
+                'Camp, Trip, or Retreat',
+                'Class, Training, or Workshop',
+                'Concert or Performance',
+                'Conference',
+                'Convention',
+                'Dinner or Gala',
+                'Festival or Fair',
+                'Game or Competition',
+                'Meeting or Networking Event',
+                'Other',
+                'Party or Social Gathering',
+                'Race or Endurance Event',
+                'Rally',
+                'Screening',
+                'Seminar or Talk',
+                'Tour',
+                'Tournament',
+                'Tradeshow, Consumer Show, or Expo']
+
+    @staticmethod
+    def get_event_topics():
+        return ['Auto, Boat & Air',
+                'Business & Professional',
+                'Charity & Causes',
+                'Community & Culture',
+                'Family & Education',
+                'Fashion & Beauty',
+                'Film, Media & Entertainment',
+                'Food & Drink',
+                'Government & Politics',
+                'Health & Wellness',
+                'Hobbies & Special Interest',
+                'Home & Lifestyle',
+                'Music',
+                'Other',
+                'Performing & Visual Arts',
+                'Religion & Spirituality',
+                'Science & Technology',
+                'Seasonal & Holiday',
+                'Sports & Fitness',
+                'Travel & Outdoor']
+
+
+
+
+
