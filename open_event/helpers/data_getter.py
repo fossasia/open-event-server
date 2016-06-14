@@ -292,16 +292,19 @@ class DataGetter:
 
     @staticmethod
     def get_live_events():
-        return Event.query.filter(Event.start_time <= datetime.datetime.now()) \
-            .filter(Event.end_time >= datetime.datetime.now())
+        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
+            .filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
+            .filter(Event.state == 'Published')
 
     @staticmethod
     def get_draft_events():
-        return Event.query.filter(Event.start_time >= datetime.datetime.now())
+        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
+            .filter(Event.state == 'Draft')
 
     @staticmethod
     def get_past_events():
-        return Event.query.filter(Event.end_time <= datetime.datetime.now())
+        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
+            .filter(Event.end_time <= datetime.datetime.now()).filter(Event.state == 'Published')
 
     @staticmethod
     def get_session(session_id):
