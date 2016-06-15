@@ -1,7 +1,8 @@
 {% macro field_switch(name, group, include=false, require=false ) %}
     {% set identifier = name | replace(group + '.','') %}
-    {% set ban_list = ['id', 'event_id', 'start_time', 'end_time', 'microlocation_id', 'level_id', 'format_id', 'event_id', 'state'] %}
+    {% set ban_list = ['id', 'event_id', 'start_time', 'end_time', 'microlocation_id', 'level_id', 'format_id', 'signup_url', 'event_id', 'state'] %}
     {% set required_list = ['title', 'name', 'email'] %}
+    {% set preselect_list = ['short_abstract', 'slides', 'photos', 'short_biography', 'website', 'twitter', 'organisation', 'position', 'country'] %}
     {% set name = identifier | replace('_id','') | replace('_',' ') %}
     {% if identifier not in ban_list %}
         <tr data-identifier="{{ name }}" data-group="{{ group }}">
@@ -12,7 +13,7 @@
             <td>
                 <label>
                     <input type="checkbox" class="js-switch include-switch" data-group="{{ group }}" {% if identifier not in required_list %}onclick="includeClick(this)"{% endif %}
-                           {% if include or identifier in required_list %}checked="checked"{% endif %} {% if identifier in required_list %}disabled{% endif %}/>
+                           {% if include or identifier in preselect_list or identifier in required_list %}checked="checked"{% endif %} {% if identifier in required_list %}disabled{% endif %}/>
                 </label>
             </td>
             <td>
@@ -51,11 +52,11 @@
 {% endmacro %}
 
 <div id="step-5" class="wizard_content" style="display: block;">
-    <div class="col-md-2"></div>
-    <div class="col-md-4">
+    <div class="col-md-2 hidden-sm hidden-xs"></div>
+    <div class="col-md-4 col-sm-12 col-xs-12">
         {{ options_table(session_columns, 'session') }}
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 col-sm-12 col-xs-12">
         {{ options_table(speaker_columns, 'speaker') }}
     </div>
     <input type="hidden" name="custom_form[name]" value="session_form">
