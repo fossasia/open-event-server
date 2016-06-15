@@ -59,7 +59,7 @@
 
         <div class="col-xs-7 input-group">
             <input type="text" class="form-control session-length" name="session_type[length]" placeholder="Length (HH.MM)"
-                   value="{{ session_type.length | default('') }}">
+                   value="{{ session_type.length | default(0.00, true) }}">
             <span class="input-group-btn">
                 {% if remove %}
                     <button type="button" class="btn btn-danger remove-session-type">-</button>
