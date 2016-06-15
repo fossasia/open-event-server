@@ -24,7 +24,7 @@ class TestMySession(OpenEventTestCase):
             event = ObjectMother.get_event()
             save_to_db(event, "Event Saved")
             session = Session(title='test',
-                              description='dsad',
+                              long_abstract='dsad',
                               start_time=datetime(2003, 8, 4, 12, 30, 45),
                               end_time=datetime(2003, 8, 4, 12, 30, 45),
                               event_id=event.id,
@@ -35,7 +35,7 @@ class TestMySession(OpenEventTestCase):
             login(self.app, 'email2@gmail.com', 'test2')
             rv = self.app.get('events/mysessions/' + str(session.id), follow_redirects=True)
             logout(self.app)
-            self.assertTrue("Description" in rv.data, msg=rv.data)
+            self.assertTrue("Long Abstract" in rv.data, msg=rv.data)
 
     def test_my_session_unauthorized_access(self):
         with app.test_request_context():
@@ -45,7 +45,7 @@ class TestMySession(OpenEventTestCase):
                               country="India")
             save_to_db(speaker, "Speaker saved")
             session = Session(title='test',
-                              description='dsad',
+                              long_abstract='dsad',
                               start_time=datetime(2003, 8, 4, 12, 30, 45),
                               end_time=datetime(2003, 8, 4, 12, 30, 45),
                               event_id=1,

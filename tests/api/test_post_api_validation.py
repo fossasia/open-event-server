@@ -27,7 +27,7 @@ class ApiValidationTestCase():
         return self._test_model(
             'speaker',
             POST_SPEAKER_DATA,
-            ['photo', 'email', 'web']
+            ['photo', 'email', 'website']
         )
 
     def test_sponsor_api(self):

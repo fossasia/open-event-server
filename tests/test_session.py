@@ -24,7 +24,7 @@ class TestSessionApi(OpenEventTestCase):
     def test_multiple_sessions_for_same_event(self):
         session1 = ObjectMother.get_session()
         session2 = Session(title='test2',
-                           description='dsadsd',
+                           long_abstract='dsadsd',
                            start_time=datetime(2003, 8, 4, 12, 30, 45),
                            end_time=datetime(2003, 8, 4, 12, 30, 45),
                            event_id=1,
