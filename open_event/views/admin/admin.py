@@ -22,6 +22,7 @@ from open_event.views.admin.models_views.session import SessionView
 from open_event.views.admin.models_views.events_speakers import EventsSpeakersView
 from open_event.views.admin.models_views.events_sponsors import EventsSponsorsView
 from open_event.views.admin.home import MyHomeView
+from open_event.views.admin.super_admin import SuperAdminView
 from open_event.views.public.event_detail import EventDetailView
 from open_event.views.admin.super_admin.super_admin import SuperAdminView
 
@@ -41,8 +42,10 @@ class AdminView(object):
         self._add_views()
 
     def _add_views(self):
-        self.admin.add_view(EventsView(Event, db.session, name='Events', url='/events'))
+        self.admin.add_view(SuperAdminView(name='SuperAdmin', url='/admin'))
+        self.admin.add_view(EventDetailView(name='Event Detail', url='/e'))
         self.admin.add_view(MySessionView(name='MySessions', url='/events/mysessions'))
+        self.admin.add_view(EventsView(Event, db.session, name='Events', url='/events'))
         self.admin.add_view(EventsSpeakersView(Speaker, db.session, name='Speaker', url='/events/<event_id>/speakers'))
         self.admin.add_view(EventsSponsorsView(Sponsor, db.session, name='Sponsor', url='/events/<event_id>/sponsors'))
         self.admin.add_view(SessionView(Session, db.session, name='Sessions', url='/events/<event_id>/sessions'))
@@ -51,7 +54,6 @@ class AdminView(object):
         self.admin.add_view(ProfileView(User, db.session, name='Profile', url='/profile'))
         self.admin.add_view(TracksView(Track, db.session, name='Track', url='/events/<event_id>/tracks'))
         self.admin.add_view(InviteView(Invite, db.session, name='Invite', url='/events/<event_id>/invite'))
-        self.admin.add_view(EventDetailView(name='Event Detail', url='/e'))
 
         self.admin.add_view(SuperAdminView(name='Admin', url='/admin'))
 
