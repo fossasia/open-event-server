@@ -210,8 +210,8 @@ class ChoiceString(String):
         self.choice_list = kwargs.get('choice_list', [])
 
     def validate(self, value):
-        if not super(ChoiceString, self).validate(value):
-            return False
+        if not value:
+            return self.validate_empty()
         if value not in self.choice_list:
             self.validation_error = 'Value of %s is not in available choices'
             return False
