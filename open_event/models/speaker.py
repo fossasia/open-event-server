@@ -9,6 +9,7 @@ class Speaker(db.Model):
     name = db.Column(db.String, nullable=False)
     photo = db.Column(db.String)
     short_biography = db.Column(db.Text)
+    long_biography = db.Column(db.Text)
     email = db.Column(db.String, nullable=False)
     mobile = db.Column(db.String)
     website = db.Column(db.String)
@@ -26,6 +27,7 @@ class Speaker(db.Model):
                  name=None,
                  photo=None,
                  short_biography=None,
+                 long_biography=None,
                  email=None,
                  mobile=None,
                  website=None,
@@ -40,6 +42,7 @@ class Speaker(db.Model):
         self.name = name
         self.photo = photo
         self.short_biography = short_biography
+        self.long_biography = long_biography
         self.email = email
         self.mobile = mobile
         self.website = website
@@ -73,6 +76,7 @@ class Speaker(db.Model):
             'name': self.name,
             'photo': self.photo,
             'short_biography': self.short_biography,
+            'long_biography': self.long_biography,
             'email': self.email,
             'mobile': self.mobile,
             'website': self.website,

@@ -19,6 +19,7 @@ SPEAKER = api.model('Speaker', {
     'name': fields.String(),
     'photo': fields.ImageUri(),
     'short_biography': fields.String(),
+    'long_biography': fields.String(),
     'email': fields.Email(),
     'mobile': fields.String(),
     'website': fields.Uri(),

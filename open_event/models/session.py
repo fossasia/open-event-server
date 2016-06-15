@@ -82,6 +82,7 @@ class Session(db.Model):
     subtitle = db.Column(db.String)
     short_abstract = db.Column(db.Text)
     long_abstract = db.Column(db.Text, nullable=False)
+    comments = db.Column(db.Text)
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
     track_id = db.Column(db.Integer, db.ForeignKey('tracks.id'))
@@ -107,6 +108,7 @@ class Session(db.Model):
                  subtitle=None,
                  short_abstract=None,
                  long_abstract=None,
+                 comments=None,
                  start_time=None,
                  end_time=None,
                  track=None,
@@ -124,6 +126,7 @@ class Session(db.Model):
         self.subtitle = subtitle
         self.short_abstract = short_abstract
         self.long_abstract = long_abstract
+        self.comments = comments
         self.start_time = start_time
         self.end_time = end_time
         self.track = track
@@ -151,6 +154,7 @@ class Session(db.Model):
             'subtitle': self.subtitle,
             'short_abstract': self.short_abstract,
             'long_abstract': self.long_abstract,
+            'comments': self.comments,
             'begin': DateFormatter().format_date(self.start_time),
             'end': DateFormatter().format_date(self.end_time),
             'track': self.track.id if self.track else None,
