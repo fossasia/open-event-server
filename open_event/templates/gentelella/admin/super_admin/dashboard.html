@@ -1,0 +1,10 @@
+{% extends 'gentelella/admin/base.html' %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block body %}
+<div class="row">
+    {% include 'gentelella/admin/super_admin/widgets/_recent_events.html' %}
+    {% include 'gentelella/admin/super_admin/widgets/_heroku.html' %}
+</div>
+{% endblock %}
