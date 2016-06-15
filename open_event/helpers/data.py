@@ -544,7 +544,7 @@ class DataManager(object):
         db.session.commit()
 
     @staticmethod
-    def create_event(form):
+    def create_event(form, imd):
         """
         Event will be saved to database with proper Event id
         :param form: view data form
@@ -591,10 +591,14 @@ class DataManager(object):
             room_color = form.getlist('rooms[color]')
 
             sponsor_name = form.getlist('sponsors[name]')
-            sponsor_logo = form.getlist('sponsors[logo]')
             sponsor_url = form.getlist('sponsors[url]')
             sponsor_level = form.getlist('sponsors[level]')
             sponsor_description = form.getlist('sponsors[description]')
+            sponsor_logo = []
+
+            for img_file in imd.getlist('sponsors[logo]'):
+                img_name = 'static/media/image/' + img_file.filename
+                sponsor_logo.append(img_name)
 
             custom_forms_name = form.getlist('custom_form[name]')
             custom_forms_value = form.getlist('custom_form[value]')
