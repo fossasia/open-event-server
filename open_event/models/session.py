@@ -36,35 +36,6 @@ class Level(db.Model):
         return self.name
 
 
-class Format(db.Model):
-    """Format model class"""
-    __tablename__ = 'format'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    label_en = db.Column(db.String, nullable=False)
-    session = db.relationship('Session', backref="format")
-    event_id = db.Column(db.Integer, nullable=False)
-
-    def __init__(self, name=None, label_en=None, session=None, event_id=None):
-        self.name = name
-        self.label_en = label_en
-        self.event_id = event_id
-
-    @property
-    def serialize(self):
-        """Return object data in easily serializeable format"""
-        return {'name': self.name, 'label_en': self.label_en}
-
-    def __repr__(self):
-        return '<Format %r>' % (self.name)
-
-    def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return self.name
-
-
 class Language(db.Model):
     """Language model class"""
     __tablename__ = 'language'
@@ -119,7 +90,6 @@ class Session(db.Model):
         secondary=speakers_sessions,
         backref=db.backref('sessions', lazy='dynamic'))
     level_id = db.Column(db.Integer, db.ForeignKey('level.id'))
-    format_id = db.Column(db.Integer, db.ForeignKey('format.id'))
     language_id = db.Column(db.Integer, db.ForeignKey('language.id'))
     microlocation_id = db.Column(db.Integer, db.ForeignKey('microlocation.id'))
 
@@ -139,7 +109,6 @@ class Session(db.Model):
                  description=None,
                  start_time=None,
                  end_time=None,
-                 format=None,
                  track=None,
                  level=None,
                  language=None,
@@ -157,7 +126,6 @@ class Session(db.Model):
         self.description = description
         self.start_time = start_time
         self.end_time = end_time
-        self.format = format
         self.track = track
         self.level = level
         self.language = language
@@ -185,10 +153,6 @@ class Session(db.Model):
             'description': self.description,
             'begin': DateFormatter().format_date(self.start_time),
             'end': DateFormatter().format_date(self.end_time),
-            'format': {
-                'id': self.format.name,
-                'label_en': self.format.label_en
-            } if self.format else None,
             'track': self.track.id if self.track else None,
             'speakers': [
                 {'id': speaker.id,

@@ -56,10 +56,6 @@ class TestGetApiNonExistingServices(OpenEventTestCase):
         path = get_path(1, 'levels', 1)
         self._test_path(path)
 
-    def test_format_api(self):
-        path = get_path(1, 'formats', 1)
-        self._test_path(path)
-
     def test_language_api(self):
         path = get_path(1, 'languages', 1)
         self._test_path(path)

@@ -27,9 +27,6 @@ class PaginatedApiTestCase:
     def test_level_api(self):
         self._test_model('level')
 
-    def test_format_api(self):
-        self._test_model('format')
-
     def test_language_api(self):
         self._test_model('language')
 
