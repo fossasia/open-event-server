@@ -6,8 +6,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/jt.timepicker/jquery.timepicker.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/icheck.css') }}" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/switchery.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/switchery/dist/switchery.min.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}" />
 {% endblock %}
 {% block head_js %}
@@ -26,12 +25,12 @@
         <div class="x_panel">
             <div class="row">
                 <form enctype="multipart/form-data" action="{% if event %}/events/{{ event.id }}/edit/{% else %}/events/create/{% endif %}" method="POST" role="form"
-                      class="admin-form form-horizontal" id="{% if event %}event-edit-form{% else %}event-create-form{% endif %}">
+                      class="admin-form form-horizontal" id="event-wizard-form">
 
                     {% if csrf_token %}
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     {% endif %}
-                    <div id="{% if event %}wizard-edit{% else %}wizard{% endif %}" class="form_wizard wizard_horizontal">
+                    <div id="wizard" data-type="{% if event %}edit{% else %}create{% endif %}" class="form_wizard wizard_horizontal">
                         <ul class="wizard_steps anchor">
                             <li>
                                 <a href="#step-1" class="selected" isdone="1" rel="1">
@@ -92,15 +91,17 @@
 {% endblock %}
 {% block tail_js %}
     {{ super() }}
-    <script type="text/javascript" src="{{ url_for('static', filename='admin/lib/jQuery-Smart-Wizard/js/jquery.smartWizard.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='admin/lib/jt.timepicker/jquery.timepicker.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='admin/lib/datepair.js/dist/datepair.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='admin/lib/datepair.js/dist/jquery.datepair.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/new.js') }}"></script>
-    <script src="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js') }}"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHdXg0Y_zk-wCNpslbBqcezLdHniaEwkI&callback=initMap" async defer></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/icheck.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/switchery.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='admin/lib/jQuery-Smart-Wizard/js/jquery.smartWizard.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/jt.timepicker/jquery.timepicker.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/datepair.js/dist/datepair.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/datepair.js/dist/jquery.datepair.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/switchery/dist/switchery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/bootstrap-validator/dist/validator.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js') }}"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/new.js') }}"></script>
 {% endblock %}

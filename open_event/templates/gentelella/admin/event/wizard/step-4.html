@@ -2,6 +2,7 @@
     <div class="item form-group">
         <label class="control-label">Announcement <span class="required">*</span></label>
         <textarea name="announcement"
+                  required="required"
                   class="announcement form-control">{{ call_for_speakers.announcement | default('') }}</textarea>
     </div>
     <div class="row event-date-picker">
@@ -12,6 +13,7 @@
                 <div class="col-xs-12" style="padding-left: 0;">
                     <input name="cfs_start_date"
                            class="form-control col-xs-6 date start"
+                           required="required"
                            value="{{ call_for_speakers.start_date.strftime('%m/%d/%Y')  if call_for_speakers else '' }}"
                            placeholder="MM/DD/YYYY"/>
                 </div>
@@ -25,6 +27,7 @@
                 <div class="col-xs-12" style="padding-left: 0;">
                     <input name="cfs_end_date"
                            class="form-control col-xs-6 date end"
+                           required="required"
                            value="{{ call_for_speakers.end_date.strftime('%m/%d/%Y')  if call_for_speakers else '' }}"
                            placeholder="MM/DD/YYYY"/>
                 </div>
