@@ -39,7 +39,6 @@ RELATED_FIELDS = {
     'sessions': [
         ('track', 'track_id', 'tracks'),
         ('level', 'level_id', 'levels'),
-        ('format', 'format_id', 'formats'),
         ('language', 'language_id', 'languages'),
         ('microlocation', 'microlocation_id', 'microlocations'),
         ('speakers', 'speaker_ids', 'speakers')
