@@ -62,6 +62,10 @@ SESSION = api.model('Session', {
     'language': fields.Nested(SESSION_LANGUAGE),
     'format': fields.Nested(SESSION_FORMAT),
     'microlocation': fields.Nested(SESSION_MICROLOCATION),
+    'slides': fields.String(),
+    'video': fields.String(),
+    'audio': fields.String(),
+    'signup_url': fields.Uri()
 })
 
 SESSION_PAGINATED = api.clone('SessionPaginated', PAGINATED_MODEL, {
