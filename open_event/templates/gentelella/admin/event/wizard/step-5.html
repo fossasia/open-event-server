@@ -63,15 +63,15 @@
 
 <script type="text/javascript">
 
-    var sessionForm = {};
-    var speakerForm = {};
+    var sessionForm = [{}];
+    var speakerForm = [{}];
 
     Array.prototype.setIncluded = function (field, state) {
-        this[field].include = state ? 1 : 0;
+        this[0][field].include = state ? 1 : 0;
     };
 
     Array.prototype.setRequired = function (field, state) {
-        this[field].require = state ? 1 : 0;
+        this[0][field].require = state ? 1 : 0;
     };
 
     function includeClick(button) {
@@ -87,7 +87,7 @@
         if($button.data('group') === 'session') {
             sessionForm.setIncluded($row.data('identifier'), button.checked);
         } else if($button.data('group') === 'speaker') {
-            sessionForm.setIncluded($row.data('identifier'), button.checked);
+            speakerForm.setIncluded($row.data('identifier'), button.checked);
         }
         persistData();
     }
@@ -102,7 +102,7 @@
         if($button.data('group') === 'session') {
             sessionForm.setRequired($row.data('identifier'), button.checked);
         } else if($button.data('group') === 'speaker') {
-            sessionForm.setRequired($row.data('identifier'), button.checked);
+            speakerForm.setRequired($row.data('identifier'), button.checked);
         }
         persistData();
     }
@@ -110,7 +110,7 @@
     $(function () {
         $.each($(".session-options-table").find('tr[data-identifier]'), function (key, row) {
             var $row = $(row);
-            sessionForm[$row.data('identifier')] = {
+            sessionForm[0][$row.data('identifier')] = {
                 include: $row.find('.include-switch')[0].checked ? 1 : 0,
                 require: $row.find('.require-switch')[0].require ? 1 : 0
             }
@@ -118,7 +118,7 @@
 
         $.each($(".speaker-options-table").find('tr[data-identifier]'), function (key, row) {
             var $row = $(row);
-            speakerForm[$row.data('identifier')] = {
+            speakerForm[0][$row.data('identifier')] = {
                 include: $row.find('.include-switch')[0].checked ? 1 : 0,
                 require: $row.find('.require-switch')[0].require ? 1 : 0
             }
@@ -128,8 +128,8 @@
     });
 
     function persistData() {
-        $("#session-value-form").attr('value', JSON.stringify(sessionForm));
-        $("#speaker-value-form").attr('value', JSON.stringify(speakerForm));
+        $("#session-value-form").attr('value', JSON.stringify(sessionForm[0]));
+        $("#speaker-value-form").attr('value', JSON.stringify((speakerForm)[0]));
     }
 
 
