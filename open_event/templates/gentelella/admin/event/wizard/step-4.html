@@ -6,7 +6,7 @@
                   class="announcement form-control">{{ call_for_speakers.announcement | default('') }}</textarea>
     </div>
     <div class="row event-date-picker">
-        <div class="col-md-6">
+        <div class="col-md-6 col-xs-6">
             <div class="item form-group">
                 <label>Starts <span class="required">*</span></label>
                 <br>
@@ -20,7 +20,7 @@
             </div>
 
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 col-xs-6">
             <div class="item form-group">
                 <label>Ends <span class="required">*</span></label>
                 <br>
@@ -39,10 +39,10 @@
 {% endmacro %}
 
 <div id="step-4" class="wizard_content" style="display: block;">
-    <div class="col-md-3">
+    <div class="col-md-3 col-xs-2">
 
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6 col-xs-8">
         <div style="width: 100%; text-align: center">
             {% if call_for_speakers %}
                 <h2 style="font-weight: 300;">Turn <span class="state">off</span> call for speakers</h2>

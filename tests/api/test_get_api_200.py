@@ -45,10 +45,6 @@ class TestGetApi(OpenEventTestCase):
         path = get_path(1, 'levels', 1)
         self._test_path(path, 'TestLevel_1')
 
-    def test_format_api(self):
-        path = get_path(1, 'formats', 1)
-        self._test_path(path, 'TestFormat_1')
-
     def test_language_api(self):
         path = get_path(1, 'languages', 1)
         self._test_path(path, 'TestLanguage_1')

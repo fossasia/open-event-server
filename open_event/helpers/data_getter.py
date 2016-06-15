@@ -2,7 +2,7 @@
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from ..models.event import Event, EventsUsers
-from ..models.session import Session, Level, Format, Language
+from ..models.session import Session, Level, Language
 from ..models.track import Track
 from ..models.invite import Invite
 from ..models.speaker import Speaker
@@ -20,6 +20,7 @@ from open_event.helpers.helpers import get_event_id
 from flask.ext import login
 from flask import flash
 import datetime
+from sqlalchemy import desc
 
 
 class DataGetter:
@@ -35,7 +36,7 @@ class DataGetter:
     @staticmethod
     def get_all_events():
         """Method return all events"""
-        return Event.query.all()
+        return Event.query.order_by(desc(Event.id)).all()
 
     @staticmethod
     def get_all_users_events_roles():
@@ -159,13 +160,6 @@ class DataGetter:
         :return: All Event Levels
         """
         return Level.query.filter_by(event_id=get_event_id())
-
-    @staticmethod
-    def get_formats():
-        """
-        :return: All Event Formats
-        """
-        return Format.query.filter_by(event_id=get_event_id())
 
     @staticmethod
     def get_languages():

@@ -10,7 +10,6 @@ from .sponsors import api as sponsor_api
 from .sponsor_types import api as sponsor_type_api
 from .microlocations import api as microlocation_api
 from .levels import api as level_api
-from .formats import api as format_api
 from .languages import api as language_api
 from .login import api as login_api
 from .exports import api as exports_api
@@ -38,7 +37,6 @@ api.add_namespace(sponsor_api)
 api.add_namespace(sponsor_type_api)
 api.add_namespace(microlocation_api)
 api.add_namespace(level_api)
-api.add_namespace(format_api)
 api.add_namespace(language_api)
 api.add_namespace(login_api)
 api.add_namespace(exports_api)
