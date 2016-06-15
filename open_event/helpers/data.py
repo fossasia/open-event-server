@@ -625,13 +625,14 @@ class DataManager(object):
             raise ValidationError("start date greater than end date")
 
     @staticmethod
-    def edit_event(form, event_id, event, session_types, tracks, social_links, microlocations, call_for_papers,
+    def edit_event(request, event_id, event, session_types, tracks, social_links, microlocations, call_for_papers,
                    sponsors):
         """
         Event will be updated in database
         :param data: view data form
         :param event: object contains all earlier data
         """
+        form = request.form
         event.name = form['name']
         event.logo = form['logo']
         event.start_time = datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M')
@@ -666,9 +667,9 @@ class DataManager(object):
 
         for sponsor in sponsors:
             delete_from_db(sponsor, 'Sponsor deleted')
-
-        for call_for_paper in call_for_papers:
-            delete_from_db(call_for_paper, 'Call for paper deleted')
+        if call_for_papers:
+            for call_for_paper in call_for_papers:
+                delete_from_db(call_for_paper, 'Call for paper deleted')
 
         session_type_names = form.getlist('session_type[name]')
         session_type_length = form.getlist('session_type[length]')
@@ -681,9 +682,9 @@ class DataManager(object):
 
         room_name = form.getlist('rooms[name]')
         room_color = form.getlist('rooms[color]')
-
+        print form
         sponsor_name = form.getlist('sponsors[name]')
-        sponsor_logo = form.getlist('sponsors[logo]')
+        sponsor_logo = request.files.getlist('sponsors[logo]')
         sponsor_url = form.getlist('sponsors[url]')
         sponsor_level = form.getlist('sponsors[level]')
         sponsor_description = form.getlist('sponsors[description]')
@@ -707,7 +708,7 @@ class DataManager(object):
             db.session.add(room)
 
         for index, name in enumerate(sponsor_name):
-            sponsor = Sponsor(name=name, logo=sponsor_logo[index], url=sponsor_url[index], level=sponsor_level[index],
+            sponsor = Sponsor(name=name, logo=sponsor_logo[index].filename, url=sponsor_url[index], level=sponsor_level[index],
                               description=sponsor_description[index], event_id=event.id)
             db.session.add(sponsor)
 
