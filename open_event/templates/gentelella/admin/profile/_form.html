@@ -15,51 +15,58 @@
 
 
         <label>Email:<span class="required">*</span>
-        </label>
+        </label><br>
 
         <input required="required" name="email" class="form-control"
                value="{{profile.email}}"/>
+        <div class="row">
+            <div class="col-md-6">
+                <label>Avatar:
+                </label><br>
+                <input type="file" id="profile-avatar" name="avatar" required="required"
+                           class="upload-btn"/>
+                <label class="file-label" for="profile-avatar">
+                    <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                    Upload Image
+                </label><br>
+            </div>
+            <div class="col-md-6">
+                <label>Contact:
+                </label>
 
+                {% if profile.user_detail.contact %}
+                <input name="contact" class="form-control" value="{{profile.user_detail.contact}}"/>
+                {% else %}
+                <input name="contact" class="form-control"/>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label class="control-label">Facebook:
+                </label>
 
-        <label>Avatar:
-        </label>
+                {% if profile.user_detail.facebook %}
+                <input name="facebook" class="form-control"
+                       value="{{profile.user_detail.facebook}}"/>
+                {% else %}
+                <input name="facebook" class="form-control"/>
+                {% endif %}
+            </div>
 
-        {% if profile.user_detail.avatar %}
-        <input name="avatar" class="form-control" value="{{profile.user_detail.avatar}}"/>
-        {% else %}
-        <input name="avatar" class="form-control" placeholder="Enter Link for Avatar"/>
-        {% endif %}
+            <div class="col-md-6">
+                <label class="control-label">Twitter:
+                </label>
 
-        <label>Contact:
-        </label>
-
-        {% if profile.user_detail.contact %}
-        <input name="contact" class="form-control" value="{{profile.user_detail.contact}}"/>
-        {% else %}
-        <input name="contact" class="form-control"/>
-        {% endif %}
+                {% if profile.user_detail.twitter %}
+                <input name="twitter" class="form-control" value="{{profile.user_detail.twitter}}"/>
+                {% else %}
+                <input name="twitter" class="form-control"/>
+                {% endif %}
+            </div>
+        </div>
 
     </div>
-
-    <label class="control-label">Facebook:
-    </label>
-
-    {% if profile.user_detail.facebook %}
-    <input name="facebook" class="form-control"
-           value="{{profile.user_detail.facebook}}"/>
-    {% else %}
-    <input name="facebook" class="form-control"/>
-    {% endif %}
-
-
-    <label class="control-label">Twitter:
-    </label>
-
-    {% if profile.user_detail.twitter %}
-    <input name="twitter" class="form-control" value="{{profile.user_detail.twitter}}"/>
-    {% else %}
-    <input name="twitter" class="form-control"/>
-    {% endif %}
 
     <p>
         <center><input class="btn btn-success" type="submit" value="Update changes"></center>

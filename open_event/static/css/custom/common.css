@@ -14,7 +14,6 @@
     color: white;
     background-color: #607D8B;
     display: inline-block;
-    width: 110px;
     transition: background-color linear 0.5s;
     border-radius: 5px;
     -webkit-appearance: button;
