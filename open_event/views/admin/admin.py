@@ -57,7 +57,7 @@ class AdminView(object):
 
         self.admin.add_view(SuperAdminView(name='Admin', url='/admin'))
         self.admin.add_view(SuperAdminEventsView(name='Admin', url='/admin/events'))
-        # self.admin.add_view(SuperAdminMySessionView(name='MySessions', url='/admin/events/mysessions'))
+        self.admin.add_view(SuperAdminMySessionView(name='MySessions', url='/admin/events/mysessions'))
 
     @staticmethod
     def init_login(app):

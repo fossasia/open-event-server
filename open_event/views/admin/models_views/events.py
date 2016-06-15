@@ -76,7 +76,7 @@ class EventsView(ModelView):
                                speaker_columns=speaker_columns, event_types=DataGetter.get_event_types(),
                                event_topics=DataGetter.get_event_topics())
         if request.method == "POST":
-            event = DataManager.edit_event(request.form, event_id, event, session_types, tracks, social_links,
+            event = DataManager.edit_event(request, event_id, event, session_types, tracks, social_links,
                                            microlocations, call_for_speakers, sponsors)
             return self.render('/gentelella/admin/event/details/details.html', event=event)
 
