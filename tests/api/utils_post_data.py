@@ -53,7 +53,11 @@ POST_SESSION_DATA = {
     "start_time": "2016-05-30 08:47:37",
     "subtitle": "TestSession",
     "title": "TestSession",
-    "track_id": None
+    "track_id": None,
+    "slides": "http://example.com/slides",
+    "video": "http://example.com/video",
+    "audio": "http://example.com/audio",
+    "signup_url": "http://example.com/signup"
 }
 
 POST_SPEAKER_DATA = {

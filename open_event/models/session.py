@@ -93,6 +93,11 @@ class Session(db.Model):
     language_id = db.Column(db.Integer, db.ForeignKey('language.id'))
     microlocation_id = db.Column(db.Integer, db.ForeignKey('microlocation.id'))
 
+    slides = db.Column(db.String)
+    video = db.Column(db.String)
+    audio = db.Column(db.String)
+    signup_url = db.Column(db.String)
+
     event_id = db.Column(
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     state = db.Column(db.String, default="pending")
@@ -110,7 +115,11 @@ class Session(db.Model):
                  microlocation=None,
                  speakers=[],
                  event_id=None,
-                 state="pending"):
+                 state="pending",
+                 slides=None,
+                 video=None,
+                 audio=None,
+                 signup_url=None):
         self.title = title
         self.subtitle = subtitle
         self.abstract = abstract
@@ -124,6 +133,10 @@ class Session(db.Model):
         self.speakers = speakers
         self.event_id = event_id
         self.state = state
+        self.slides = slides
+        self.video = video
+        self.audio = audio
+        self.signup_url = signup_url
 
     @property
     def is_accepted(self):
