@@ -94,3 +94,20 @@ POST_TRACK_DATA = {
     "track_image_url": "http://imgur.com/image.png",
     "location": "Some Street, Some City",
 }
+
+POST_USER_DATA = {
+    "email": "test@gmail.com",
+    "password": "test"
+}
+
+PUT_USER_DATA = {
+    "email": "email@domain.com",
+    "user_detail": {
+        "avatar": "http://website.com/image.ext",
+        "contact": "string",
+        "details": "TestUser",
+        "facebook": "string",
+        "fullname": "TestUser",
+        "twitter": "string"
+    }
+}
