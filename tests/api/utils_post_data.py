@@ -15,12 +15,12 @@ POST_EVENT_DATA = {
     'background_url': "http://imgur.com/image.png",
     'description': "blah blah",
     "start_time": "2016-05-25 12:12:43",
-    "closing_datetime": "2016-05-22 12:12:43"
-}
-
-POST_FORMAT_DATA = {
-    "label_en": "TestFormat",
-    "name": "TestFormat"
+    "closing_datetime": "2016-05-22 12:12:43",
+    "organizer_name": "FOSSASIA",
+    "organizer_description": "Promoting Open Source culture around the world",
+    "state": "TestEvent",
+    "type": "Conference",
+    "topic": "Science & Technology"
 }
 
 POST_LANGUAGE_DATA = {
@@ -46,7 +46,6 @@ POST_SESSION_DATA = {
     "abstract": "TestSession",
     "description": "TestSession",
     "end_time": "2016-05-30 09:47:37",
-    "format_id": None,
     "language_id": None,
     "level_id": None,
     "microlocation_id": None,
@@ -54,7 +53,11 @@ POST_SESSION_DATA = {
     "start_time": "2016-05-30 08:47:37",
     "subtitle": "TestSession",
     "title": "TestSession",
-    "track_id": None
+    "track_id": None,
+    "slides": "http://example.com/slides",
+    "video": "http://example.com/video",
+    "audio": "http://example.com/audio",
+    "signup_url": "http://example.com/signup"
 }
 
 POST_SPEAKER_DATA = {

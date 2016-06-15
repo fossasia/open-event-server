@@ -6,9 +6,11 @@ from open_event.models.user import ADMIN, SUPERADMIN
 from open_event.helpers.data import save_to_db, update_version
 
 from .helpers.helpers import get_paginated_list, requires_auth
-from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, PAGE_PARAMS, \
-    POST_RESPONSES, PUT_RESPONSES, BaseDAO
+from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
+    PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, BaseDAO
 from .helpers import custom_fields as fields
+from helpers.special_fields import EventTypeField, EventTopicField
+
 
 api = Namespace('events', description='Events')
 
@@ -30,6 +32,8 @@ EVENT = api.model('Event', {
     'organizer_description': fields.String(),
     'state': fields.String(),
     'closing_datetime': fields.DateTime(),
+    'type': EventTypeField(),
+    'topic': EventTopicField()
 })
 
 EVENT_PAGINATED = api.clone('EventPaginated', PAGINATED_MODEL, {

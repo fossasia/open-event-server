@@ -22,7 +22,7 @@ from open_event.models import db
 from open_event.views.admin.admin import AdminView
 from helpers.jwt import jwt_authenticate, jwt_identity
 from open_event.helpers.data_getter import DataGetter
-from open_event.views.views import app as routes
+from open_event.views.api_v1_views import app as api_v1_routes
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -35,7 +35,7 @@ def create_app():
     cal = Calendar()
     event = Event()
 
-    app.register_blueprint(routes)
+    app.register_blueprint(api_v1_routes)
     migrate = Migrate(app, db)
 
     app.config.from_object(environ.get('APP_CONFIG', 'config.ProductionConfig'))

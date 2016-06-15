@@ -1,20 +1,24 @@
 {% macro field_switch(name, group, include=false, require=false ) %}
     {% set identifier = name | replace(group + '.','') %}
     {% set ban_list = ['id', 'event_id', 'start_time', 'end_time', 'microlocation_id', 'level_id', 'format_id', 'event_id', 'state'] %}
+    {% set required_list = ['title', 'name', 'email'] %}
     {% set name = identifier | replace('_id','') | replace('_',' ') %}
     {% if identifier not in ban_list %}
         <tr data-identifier="{{ name }}" data-group="{{ group }}">
-            <td>{{ name | capitalize }}</td>
+            <td>
+                {{ name | capitalize }}
+                {% if identifier in required_list %}<span class="required">*</span>{% endif %}
+            </td>
             <td>
                 <label>
-                    <input type="checkbox" class="js-switch include-switch" data-group="{{ group }}" onclick="includeClick(this)"
-                           {% if include %}checked="checked"{% endif %}/>
+                    <input type="checkbox" class="js-switch include-switch" data-group="{{ group }}" {% if identifier not in required_list %}onclick="includeClick(this)"{% endif %}
+                           {% if include or identifier in required_list %}checked="checked"{% endif %} {% if identifier in required_list %}disabled{% endif %}/>
                 </label>
             </td>
             <td>
                 <label>
-                    <input type="checkbox" class="js-switch require-switch" data-group="{{ group }}" onclick="requireClick(this)"
-                           {% if include %}checked="checked"{% endif %}/>
+                    <input type="checkbox" class="js-switch require-switch" data-group="{{ group }}" {% if identifier not in required_list %}onclick="includeClick(this)"{% endif %}
+                           {% if include or identifier in required_list %}checked="checked"{% endif %}  {% if identifier in required_list %}disabled{% endif %}/>
                 </label>
             </td>
         </tr>

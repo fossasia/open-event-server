@@ -1,0 +1,35 @@
+<div class="col-md-4 col-sm-4 col-xs-12">
+        <div class="x_panel" style="height: auto;">
+            <div class="x_title">
+                <h2>Recent Events
+                    <small><a href="/admin/events">Go to Events</a></small>
+                </h2>
+
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="dashboard-widget-content">
+
+                    <ul class="list-unstyled timeline widget">
+                        {% for event in events %}
+                        <li>
+                            <div class="block">
+                                <div class="block_content">
+                                    <h2 class="title">
+                                        <a>{{event.name}}</a>
+                                    </h2>
+                                    <div class="byline">
+                                        <span>Created</span> by <a>{{event.organizer_name}}</a>
+                                    </div>
+                                    <p class="excerpt">{{event.description|striptags|truncate(100)}}
+                                    </p>
+                                    <a href="{{ get_url('event.details_view', event_id=event.id)}}"><label class="label label-info">Go to details</label></a>
+                                </div>
+                            </div>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
