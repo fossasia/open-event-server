@@ -6,7 +6,7 @@ import traceback
 import json
 from datetime import datetime
 
-from flask import flash, request
+from flask import flash, request, url_for
 from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from sqlalchemy.orm.collections import InstrumentedList
@@ -15,6 +15,8 @@ from werkzeug import secure_filename
 from wtforms import ValidationError
 
 from ..helpers.update_version import VersionUpdater
+from ..helpers.data_getter import DataGetter
+from ..helpers import helpers as Helper
 from ..models import db
 from ..models.event import Event, EventsUsers
 from ..models.file import File
@@ -136,31 +138,31 @@ class DataManager(object):
         :param form: view data form
         :param event_id: Session belongs to Event by event id
         """
-        new_session = Session(title=form["title"],
-                              subtitle="",
-                              description=form["description"],
-                              start_time=form["start_time"],
-                              end_time=form["end_time"],
+        new_session = Session(title=form["title"] if "title" in form.keys() else "",
+                              subtitle=form["subtitle"] if "subtitle" in form.keys() else "",
+                              description=form["description"] if "description" in form.keys() else "",
+                              start_time="2016-01-01",
+                              end_time="2016-01-01",
                               event_id=event_id,
-                              abstract="",
+                              abstract=form["abstract"] if "abstract" in form.keys() else "",
                               state="pending")
 
         save_to_db(new_session, "Session saved")
         update_version(event_id, False, "session_ver")
 
-        new_speaker = Speaker(name=form["name"],
-                              photo="",
-                              biography=form["biography"],
-                              email=form["email"],
-                              web=form["web"],
+        new_speaker = Speaker(name=form["name"] if "name" in form.keys() else "",
+                              photo=form["photo"] if "photo" in form.keys() else "",
+                              biography=form["biography"] if "biography" in form.keys() else "",
+                              email=form["email"] if "email" in form.keys() else "",
+                              web=form["web"] if "web" in form.keys() else "",
                               event_id=event_id,
-                              twitter="",
-                              facebook="",
-                              github="",
-                              linkedin="",
-                              organisation=form["organisation"],
-                              position="",
-                              country="")
+                              twitter=form["twitter"] if "twitter" in form.keys() else "",
+                              facebook=form["facebook"] if "facebook" in form.keys() else "",
+                              github=form["github"] if "github" in form.keys() else "",
+                              linkedin=form["linkedin"] if "linkedin" in form.keys() else "",
+                              organisation=form["organisation"] if "organisation" in form.keys() else "",
+                              position=form["position"] if "position" in form.keys() else "",
+                              country=form["country"] if "country" in form.keys() else "")
         save_to_db(new_speaker, "Speaker saved")
         update_version(event_id, False, "speakers_ver")
 
@@ -168,6 +170,17 @@ class DataManager(object):
                                                speaker_id=new_speaker.id)
 
         save_to_db(new_session_speaker, "Session Speaker saved")
+
+        invite_emails = form.getlist("speakers[email]")
+        for index, email in enumerate(invite_emails):
+            new_invite = Invite(event_id=event_id,
+                                session_id=new_session.id)
+            hash = random.getrandbits(128)
+            new_invite.hash = "%032x" % hash
+            save_to_db(new_invite, "Invite saved")
+
+            link = url_for('session.invited_view', session_id=new_session.id, event_id=event_id, _external=True)
+            Helper.send_email_invitation(email, new_session.title, link)
 
     @staticmethod
     def create_speaker_session_relation(session_id, speaker_id, event_id):
