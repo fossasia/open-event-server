@@ -144,6 +144,8 @@ def validate_payload(payload, api_model):
         if isinstance(field, fields.List):
             field = field.container
             data = payload[key]
+        elif isinstance(field, fields.Nested):
+            validate_payload(payload[key], field.model)
         else:
             data = [payload[key]]
         if isinstance(field, CustomField) and hasattr(field, 'validate'):
