@@ -10,7 +10,7 @@ from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
 from ..models.event import Event
-from ..models.session import Session, Level, Format, Language
+from ..models.session import Session, Level, Language
 from ..models.version import Version
 from ..helpers.object_formatter import ObjectFormatter
 from ..helpers.helpers import get_serializer
@@ -250,33 +250,6 @@ def get_levels_per_page(event_id, page):
     levels = Level.query.filter_by(event_id=event_id)
     return api_response(
         data=ObjectFormatter.get_json("levels", levels, request, page),
-        status_code=event_status_code(event_id),
-        error='Event',
-        check_data=True
-    )
-
-
-@app.route('/api/v1/event/<int:event_id>/formats', methods=['GET'])
-@auto.doc()
-@cross_origin()
-def get_formats(event_id):
-    """Returns all event's formats"""
-    formats = Format.query.filter_by(event_id=event_id)
-    return api_response(
-        data=ObjectFormatter.get_json("formats", formats, request),
-        status_code=event_status_code(event_id),
-        error='Event'
-    )
-
-
-@app.route('/api/v1/event/<int:event_id>/formats/page/<int:page>', methods=['GET'])
-@auto.doc()
-@cross_origin()
-def get_formatsper_page(event_id, page):
-    """Returns 20 event's formats"""
-    formats = Format.query.filter_by(event_id=event_id)
-    return api_response(
-        data=ObjectFormatter.get_json("formats", formats, request, page),
         status_code=event_status_code(event_id),
         error='Event',
         check_data=True
