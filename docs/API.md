@@ -24,6 +24,8 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**email** | string | Optional | Public |
 |**organizer_name** | string | Optional | Public |
 |**organizer_description** | string | Optional | Public |
+|**type** | string | Optional | Public |
+|**topic** | string | Optional | Public |
 |**closing_datetime** | string | Optional | Public |
 
 ### 2. Format
@@ -208,3 +210,22 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**id** | integer | Required |
 |**title** | string | Optional |
 
+
+### 11. User
+
+| Field | Datatype | Requirement | Access |
+| --- | --- | --- | --- |
+|**id** | integer | Required | Public |
+|**email** | string | Required | Public |
+|**user_detail** | **UserDetail** | Optional | Public |
+
+#### UserDetail
+
+| Field | Datatype | Requirement |
+| --- | --- | --- |
+|**fullname** | string | Optional | Public |
+|**details** | string | Optional | Public |
+|**contact** | string | Optional | Public |
+|**avatar** | string | Optional | Public |
+|**facebook** | string | Optional | Public |
+|**twitter** | string | Optional | Public |
