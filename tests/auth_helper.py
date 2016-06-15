@@ -2,6 +2,7 @@
 from flask import url_for
 
 from open_event.helpers.helpers import get_serializer
+from open_event.helpers.data import DataManager
 
 
 def login(app, email, password):
@@ -21,3 +22,7 @@ def register(app, email, password):
     data = [email, password]
     data_hash = s.dumps(data)
     return app.get(url_for('admin.create_account_after_confirmation_view', hash=data_hash), follow_redirects=True)
+
+
+def create_user(email, password):
+    DataManager.create_user([email, password])
