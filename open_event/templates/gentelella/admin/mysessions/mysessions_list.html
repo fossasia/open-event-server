@@ -50,7 +50,7 @@
 {% block body %}
     <div class="page-title">
         <div class="title_left">
-            <h3>My Session Proposals</h3>
+            <h3>{{page_content.title}}</h3>
         </div>
     </div>
 
@@ -60,12 +60,10 @@
                 <div class="x_content">
                     <ul class="nav nav-tabs bar_tabs" style="background-color: white;">
                         <li role="presentation" class="active">
-                            <a href="#upcoming-events-tab" role="tab" data-toggle="tab" aria-expanded="true">Upcoming
-                                Events</a>
+                            <a href="#upcoming-events-tab" role="tab" data-toggle="tab" aria-expanded="true">{{page_content.tab_upcoming_events}}</a>
                         </li>
                         <li role="presentation" class="">
-                            <a href="#past-events-tab" role="tab" data-toggle="tab" aria-expanded="false">Past
-                                Events</a>
+                            <a href="#past-events-tab" role="tab" data-toggle="tab" aria-expanded="false">{{page_content.tab_past_events}}</a>
                         </li>
                     </ul>
                     <div class="tab-content">
