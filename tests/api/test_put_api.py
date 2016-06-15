@@ -67,9 +67,6 @@ class TestPutApi(TestPutApiBase):
     def test_level_api(self):
         self._test_model('level', POST_LEVEL_DATA)
 
-    def test_format_api(self):
-        self._test_model('format', POST_FORMAT_DATA)
-
     def test_language_api(self):
         self._test_model('language', POST_LANGUAGE_DATA)
 

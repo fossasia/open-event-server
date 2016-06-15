@@ -4,7 +4,6 @@ import shutil
 from flask_restplus import marshal
 
 from ..events import DAO as EventDAO, EVENT
-from ..formats import DAO as FormatDAO, FORMAT
 from ..languages import DAO as LanguageDAO, LANGUAGE
 from ..levels import DAO as LevelDAO, LEVEL
 from ..microlocations import DAO as MicrolocationDAO, MICROLOCATION
@@ -17,7 +16,6 @@ from ..tracks import DAO as TrackDAO, TRACK
 
 EXPORTS = [
     ('event', EventDAO, EVENT),
-    ('formats', FormatDAO, FORMAT),
     ('languages', LanguageDAO, LANGUAGE),
     ('levels', LevelDAO, LEVEL),
     ('microlocations', MicrolocationDAO, MICROLOCATION),

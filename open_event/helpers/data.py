@@ -21,7 +21,7 @@ from ..models import db
 from ..models.event import Event, EventsUsers
 from ..models.file import File
 from ..models.microlocation import Microlocation
-from ..models.session import Session, Level, Format, Language
+from ..models.session import Session, Level, Language
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.user import User
@@ -124,7 +124,6 @@ class DataManager(object):
         new_session.speakers = InstrumentedList(
             form.speakers.data if form.speakers.data else [])
         new_session.microlocation = form.microlocation.data
-        new_session.format = form.format.data
         new_session.level = form.level.data
         new_session.track = form.track.data
         new_session.is_accepted = is_accepted
@@ -216,13 +215,11 @@ class DataManager(object):
         speakers = data["speakers"]
         microlocation = data["microlocation"]
         level = data["level"]
-        format = data["format"]
         track = data["track"]
         language = data["language"]
         del data["speakers"]
         del data["microlocation"]
         del data["level"]
-        del data["format"]
         del data["track"]
         del data["language"]
         db.session.query(Session) \
@@ -230,7 +227,6 @@ class DataManager(object):
             .update(dict(data))
         session.speakers = InstrumentedList(speakers if speakers else [])
         session.microlocation = microlocation
-        session.format = format
         session.level = level
         session.track = track
         session.language = language
@@ -377,41 +373,6 @@ class DataManager(object):
         level = Level.query.get(level_id)
         delete_from_db(level, "Level deleted")
         flash('You successfully delete level')
-
-    @staticmethod
-    def create_format(form, event_id):
-        """
-        Format will be saved to database with proper Event id
-        :param form: view data form
-        :param event_id: Format belongs to Event by event id
-        """
-        new_format = Format(name=form.name.data,
-                            label_en=form.label_en.data,
-                            event_id=event_id)
-        save_to_db(new_format, "Format saved")
-        update_version(event_id, False, "session_ver")
-
-    @staticmethod
-    def update_format(form, format, event_id):
-        """
-        Format will be updated in database
-        :param form: view data form
-        :param format: object contains all earlier data
-        """
-        data = form.data
-        db.session.query(Format).filter_by(id=format.id).update(dict(data))
-        save_to_db(format, "Format updated")
-        update_version(event_id, False, "session_ver")
-
-    @staticmethod
-    def remove_format(format_id):
-        """
-        Format will be removed from database
-        :param format_id: Format id to remove object
-        """
-        format = Format.query.get(format_id)
-        delete_from_db(format, "Format deleted")
-        flash('You successfully delete format')
 
     @staticmethod
     def create_language(form, event_id):

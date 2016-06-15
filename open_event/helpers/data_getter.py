@@ -2,7 +2,7 @@
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from ..models.event import Event, EventsUsers
-from ..models.session import Session, Level, Format, Language
+from ..models.session import Session, Level, Language
 from ..models.track import Track
 from ..models.invite import Invite
 from ..models.speaker import Speaker
@@ -160,13 +160,6 @@ class DataGetter:
         :return: All Event Levels
         """
         return Level.query.filter_by(event_id=get_event_id())
-
-    @staticmethod
-    def get_formats():
-        """
-        :return: All Event Formats
-        """
-        return Format.query.filter_by(event_id=get_event_id())
 
     @staticmethod
     def get_languages():

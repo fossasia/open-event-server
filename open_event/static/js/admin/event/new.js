@@ -1,52 +1,56 @@
+var $wizardForm = $("#event-wizard-form");
+
 $(document).ready(function () {
 
-    // Smart Wizard
-    $("#wizard").smartWizard({
-        labelFinish: 'Make your event live',
-        onFinish: function () {
-            var input = $("<input>")
-                .attr("type", "hidden")
-                .attr("name", "state").val("Published");
-            $('#wizard').append($(input));
-            $("#event-create-form").submit();
-        },
-        enableAllSteps: true
-    });
+    var $wizard = $("#wizard");
+    var wizardType = $wizard.data("type");
 
-    $("#wizard-edit").smartWizard({
+    // Smart Wizard
+    $wizard.smartWizard({
         labelFinish: 'Make your event live',
         onFinish: function () {
             var input = $("<input>")
                 .attr("type", "hidden")
                 .attr("name", "state").val("Published");
-            $('#wizard-edit').append($(input));
-            $("#event-edit-form").submit();
+            $wizard.append($(input));
+            $wizardForm.submit();
         },
-        enableAllSteps: true
+        enableAllSteps: true,
+        onLeaveStep: onLeaveStep
     });
 
     $('.buttonNext').addClass("btn btn-success");
     $('.buttonPrevious').addClass("btn btn-primary");
     $('.buttonFinish').addClass("btn btn-info");
-    addSaveButton()
+
+    $wizard.find(".buttonFinish")
+        .after('<a href="#" id="buttonSave" class="btn btn-warning">' + (wizardType === 'create' ? 'Save' : 'Update') + '</a>');
+
+    $("#buttonSave").click(function () {
+        $wizardForm.submit();
+    })
+
 
 });
 
+function onLeaveStep(obj, context) {
+    return !validate();
+}
 
-function addSaveButton() {
-    var wizard = $("#wizard");
-    var wizard_edit = $("#wizard-edit");
-    if (wizard.length) {
-        $("#wizard .buttonFinish").after('<a href="#" id="buttonSave" class="btn btn-warning">Save</a>');
-        $("#buttonSave").click(function () {
-            $("#event-create-form").submit();
-        })
-    }
-    else if (wizard_edit.length) {
-        $("#wizard-edit .buttonFinish").after('<a href="#" id="buttonSave" class="btn btn-warning">Update</a>');
-        $("#buttonSave").click(function () {
-            $("#event-edit-form").submit();
-        })
+function validate() {
+    try {
+        $wizardForm.validator('destroy');
+    } catch (ignored) {
     }
 
+    $wizardForm.validator({
+        disable: false,
+        feedback: {
+            success: 'glyphicon-ok',
+            error: 'glyphicon-remove'
+        }
+    });
+
+    $wizardForm.validator('validate');
+    return $wizardForm.data('bs.validator').hasErrors()
 }

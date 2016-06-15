@@ -1,15 +1,16 @@
 {% macro track_entry(track=None, remove=false) %}
     <div class="track-holder">
-        <div class=" col-sm-5">
-            <input type="text" class="form-control" name="tracks[name]" placeholder="Name"
+        <div class=" col-sm-5 form-group">
+            <input type="text" class="form-control" name="tracks[name]" placeholder="Name" required="required"
                    value="{{ track.name | default('Track 1') }}">
         </div>
 
-        <div class="col-sm-7 input-group">
-            <div class="input-group colorpicker-component" id="color">
+        <div class="col-sm-7 input-group form-group">
+            <div class="input-group colorpicker-component"  id="color">
                 <input type="text" value="{{ track.color | default('#7B1FA2') }}"
                        class="form-control color-picker-input"
                        placeholder="Color"
+                       required="required"
                        name="tracks[color]" title="track-color"/>
                 <span class="input-group-addon"><i></i></span>
             </div>
@@ -27,14 +28,14 @@
 
 {% macro microlocation_entry(microlocation=None, remove=false) %}
     <div class="microlocation-holder">
-        <div class="col-xs-5">
-            <input type="text" class="form-control" name="rooms[name]" placeholder="Name"
+        <div class="col-xs-5 form-group">
+            <input type="text" class="form-control" required="required" name="rooms[name]" placeholder="Name"
                    value="{{ microlocation.name | default('Room 1') }}">
         </div>
 
-        <div class="col-xs-7 input-group">
+        <div class="col-xs-7 input-group form-group">
             <div class="input-group">
-                <input type="number" class="form-control" name="rooms[floor]"
+                <input type="number" class="form-control" required="required" name="rooms[floor]"
                        placeholder="Floor"
                        title="rooms-floor"/>
                             <span class="input-group-btn">
@@ -52,13 +53,13 @@
 
 {% macro session_type_entry(session_type=None, remove=false) %}
     <div class="session-type-holder">
-        <div class="col-xs-5">
-            <input type="text" class="form-control" name="session_type[name]" placeholder="Name"
+        <div class="col-xs-5 form-group">
+            <input type="text" class="form-control" required="required" name="session_type[name]" placeholder="Name"
                    value="{{ session_type.name | default('Lighting Talks') }}">
         </div>
 
-        <div class="col-xs-7 input-group">
-            <input type="text" class="form-control session-length" name="session_type[length]" placeholder="Length (HH.MM)"
+        <div class="col-xs-7 input-group form-group">
+            <input type="text" required="required" class="form-control session-length" name="session_type[length]" placeholder="Length (HH.MM)"
                    value="{{ session_type.length | default(0.00, true) }}">
             <span class="input-group-btn">
                 {% if remove %}
