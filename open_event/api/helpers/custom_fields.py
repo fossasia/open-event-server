@@ -197,3 +197,22 @@ class Float(CustomField):
         except Exception:
             self.validation_error = '%s should be a Number'
             return False
+
+
+class ChoiceString(String):
+    """
+    Choice String Field. Allow only one of the given options
+    Args:
+        choice_list - List of valid choices
+    """
+    def __init__(self, **kwargs):
+        super(ChoiceString, self).__init__(**kwargs)
+        self.choice_list = kwargs.get('choice_list', [])
+
+    def validate(self, value):
+        if not super(ChoiceString, self).validate(value):
+            return False
+        if value not in self.choice_list:
+            self.validation_error = 'Value of %s is not in available choices'
+            return False
+        return True

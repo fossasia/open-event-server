@@ -1,6 +1,6 @@
 import unittest
 from open_event.api.helpers.custom_fields import Color, Email, Uri,\
-    ImageUri, DateTime, Integer, Float
+    ImageUri, DateTime, Integer, Float, ChoiceString
 
 
 class TestCustomFieldsValidation(unittest.TestCase):
@@ -63,6 +63,13 @@ class TestCustomFieldsValidation(unittest.TestCase):
         field = Float()
         self._test_common(field)
         self.assertTrue(field.validate(92))
+
+    def test_choice_string_field(self):
+        field = ChoiceString(choice_list=['a', 'b', 'c'])
+        self._test_common(field)
+        self.assertTrue(field.validate('a'))
+        self.assertFalse(field.validate('d'))
+        self.assertFalse(field.validate('ab'))
 
 
 if __name__ == '__main__':
