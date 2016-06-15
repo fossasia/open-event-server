@@ -140,7 +140,7 @@ class DataManager(object):
         """
         new_session = Session(title=form["title"] if "title" in form.keys() else "",
                               subtitle=form["subtitle"] if "subtitle" in form.keys() else "",
-                              description=form["description"],
+                              description=form["description"] if "description" in form.keys() else "",
                               start_time="2016-01-01",
                               end_time="2016-01-01",
                               event_id=event_id,
