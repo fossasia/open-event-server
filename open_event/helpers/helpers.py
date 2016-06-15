@@ -106,7 +106,7 @@ def get_serializer(secret_key=None):
 
 
 def get_latest_heroku_release():
-    token = os.environ.get('API_TOKEN_HEROKU', None)
+    token = os.environ.get('API_TOKEN_HEROKU', '')
     headers = {
         "Accept": "application/vnd.heroku+json; version=3",
         "Authorization": "Bearer " + token,
