@@ -7,7 +7,6 @@ from errors import NotFoundError
 from werkzeug import secure_filename
 
 from ..events import DAO as EventDAO
-from ..formats import DAO as FormatDAO
 from ..languages import DAO as LanguageDAO
 from ..levels import DAO as LevelDAO
 from ..microlocations import DAO as MicrolocationDAO
@@ -21,7 +20,6 @@ from errors import BaseError, ServerError
 
 
 IMPORT_SERIES = [
-    ('formats', FormatDAO),
     ('languages', LanguageDAO),
     ('levels', LevelDAO),
     ('microlocations', MicrolocationDAO),
