@@ -119,6 +119,16 @@ class DataGetter:
                 Event.state == 'Completed')
 
     @staticmethod
+    def get_all_sessions_of_user(upcoming_events=True):
+        """
+        :return: Return all Sessions objects with the current user as a speaker
+        """
+        if upcoming_events:
+            return Session.query.filter(Event.state != 'Completed')
+        else:
+            return Session.query.filter(Event.state == 'Completed')
+
+    @staticmethod
     def get_speakers(event_id):
         """
         :param event_id: Event id
