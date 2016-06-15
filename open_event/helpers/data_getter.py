@@ -20,6 +20,7 @@ from open_event.helpers.helpers import get_event_id
 from flask.ext import login
 from flask import flash
 import datetime
+from sqlalchemy import desc
 
 
 class DataGetter:
@@ -35,7 +36,7 @@ class DataGetter:
     @staticmethod
     def get_all_events():
         """Method return all events"""
-        return Event.query.all()
+        return Event.query.order_by(desc(Event.id)).all()
 
     @staticmethod
     def get_all_users_events_roles():

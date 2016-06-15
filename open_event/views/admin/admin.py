@@ -23,6 +23,7 @@ from open_event.views.admin.models_views.events_speakers import EventsSpeakersVi
 from open_event.views.admin.models_views.events_sponsors import EventsSponsorsView
 from open_event.views.admin.home import MyHomeView
 from open_event.views.public.event_detail import EventDetailView
+from open_event.views.admin.super_admin.super_admin import SuperAdminView
 
 
 class AdminView(object):
@@ -51,6 +52,9 @@ class AdminView(object):
         self.admin.add_view(TracksView(Track, db.session, name='Track', url='/events/<event_id>/tracks'))
         self.admin.add_view(InviteView(Invite, db.session, name='Invite', url='/events/<event_id>/invite'))
         self.admin.add_view(EventDetailView(name='Event Detail', url='/e'))
+
+        self.admin.add_view(SuperAdminView(name='Admin', url='/admin'))
+
 
     @staticmethod
     def init_login(app):
