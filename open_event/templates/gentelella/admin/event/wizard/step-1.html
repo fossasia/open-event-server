@@ -93,31 +93,6 @@
         </div>
 
         <div class="item form-group">
-            <label class="control-label">Type</label>
-            <select class="form-control" name="event_type">
-                {% if not event or not event.type %}
-                    <option value="">Choose..</option>
-                {% endif %}
-                {% for type in event_types %}
-                    <option value="{{ type }}" {{ "selected" if event and event.type == type else '' }}>{{ type }}</option>
-                {% endfor %}
-            </select>
-        </div>
-
-        <div class="item form-group">
-            <label class="control-label">Topic
-            </label>
-            <select class="form-control" name='topic'>
-                {% if not event or not event.topic %}
-                    <option value="">Choose..</option>
-                {% endif %}
-                {% for topic in event_topics %}
-                    <option value="{{ topic }}" {{ "selected" if event and event.topic == topic else '' }}>{{ topic }}</option>
-                {% endfor %}
-            </select>
-        </div>
-
-        <div class="item form-group">
             <label>Background image URL
             </label>
             <input value="{{ event.background_url | default('', true) }}" name="background_url"
@@ -157,10 +132,10 @@
 
     </div>
     <div class="col-md-4">
-        <div class="item form-group">
+        <div class="item form-group hidden-xs">
             <label>Geolocation</label>
         </div>
-        <div id="map" style="width:100%; height:300px"></div>
+        <div id="map" class="hidden-xs" style="width:100%; height:300px"></div>
         <br>
         <br>
         <div class="item form-group">
@@ -176,6 +151,48 @@
                 </div>
 
             </div>
+        </div>
+        <h2 style="font-weight: 300; text-transform: uppercase; margin-top: 20px;">Additional Details</h2>
+        <hr style="margin:0;">
+        <div class="item form-group">
+            <label class="control-label">Listing Privacy</label>
+            <div class="radio">
+                <label style="font-weight: 300;">
+                    <input type="radio" name="privacy" value="public" {% if (event and event.privacy == 'public') or not event %}checked{% endif %}>
+                    <strong style="font-weight: 400;">Public page:</strong> list this event on Open Event and search engines
+                </label>
+            </div>
+            <div class="radio">
+                <label style="font-weight: 300;">
+                    <input type="radio" name="privacy" value="private" {% if (event and event.privacy == 'private') %}checked{% endif %}>
+                    <strong style="font-weight: 400;">Private page:</strong> do not list this event publicly
+                </label>
+            </div>
+        </div>
+
+        <div class="item form-group">
+            <label class="control-label">Event Type</label>
+            <select class="form-control" name="event_type">
+                {% if not event or not event.type %}
+                    <option value="">Choose..</option>
+                {% endif %}
+                {% for type in event_types %}
+                    <option value="{{ type }}" {{ "selected" if event and event.type == type else '' }}>{{ type }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="item form-group">
+            <label class="control-label">Event Topic
+            </label>
+            <select class="form-control" name='topic'>
+                {% if not event or not event.topic %}
+                    <option value="">Choose..</option>
+                {% endif %}
+                {% for topic in event_topics %}
+                    <option value="{{ topic }}" {{ "selected" if event and event.topic == topic else '' }}>{{ topic }}</option>
+                {% endfor %}
+            </select>
         </div>
 
     </div>
