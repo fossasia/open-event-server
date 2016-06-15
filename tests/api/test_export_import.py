@@ -89,7 +89,7 @@ class TestEventImport(OpenEventTestCase):
     def test_import_extended(self):
         with app.test_request_context():
             create_session(
-                1, '4', track=1, format=1, language=1,
+                1, '4', track=1, language=1,
                 microlocation=1, level=1, speakers=[2, 3])
             create_session(
                 1, '5', track=2, speakers=[1]

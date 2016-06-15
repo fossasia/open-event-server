@@ -23,11 +23,6 @@ POST_EVENT_DATA = {
     "topic": "Science & Technology"
 }
 
-POST_FORMAT_DATA = {
-    "label_en": "TestFormat",
-    "name": "TestFormat"
-}
-
 POST_LANGUAGE_DATA = {
     "label_de": "TestLanguage",
     "label_en": "TestLanguage",
@@ -51,7 +46,6 @@ POST_SESSION_DATA = {
     "abstract": "TestSession",
     "description": "TestSession",
     "end_time": "2016-05-30 09:47:37",
-    "format_id": None,
     "language_id": None,
     "level_id": None,
     "microlocation_id": None,
