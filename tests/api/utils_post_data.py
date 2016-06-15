@@ -43,8 +43,8 @@ POST_MICROLOCATION_DATA = {
 }
 
 POST_SESSION_DATA = {
-    "abstract": "TestSession",
-    "description": "TestSession",
+    "short_abstract": "TestSession",
+    "long_abstract": "TestSession",
     "end_time": "2016-05-30 09:47:37",
     "language_id": None,
     "level_id": None,
@@ -52,6 +52,7 @@ POST_SESSION_DATA = {
     "speaker_ids": [],
     "start_time": "2016-05-30 08:47:37",
     "subtitle": "TestSession",
+    "comments": "Comments",
     "title": "TestSession",
     "track_id": None,
     "slides": "http://example.com/slides",
@@ -61,9 +62,11 @@ POST_SESSION_DATA = {
 }
 
 POST_SPEAKER_DATA = {
-    "biography": "TestSpeaker",
+    "short_biography": "TestSpeaker",
+    "long_biography": "TestSpeaker",
     "country": "TestSpeaker",
     "email": "speaker@gmail.com",
+    "mobile": "speaker@gmail.com",
     "facebook": "http://facebook.com/user",
     "github": "http://github.com/user",
     "linkedin": "http://in.linkedin.com/user",
@@ -72,7 +75,7 @@ POST_SPEAKER_DATA = {
     "photo": "http://imgur.com/skds.png",
     "position": "TestSession",
     "twitter": "http://twitter.com/user",
-    "web": "http://website.com"
+    "website": "http://website.com"
 }
 
 POST_SPONSOR_TYPE_DATA = {

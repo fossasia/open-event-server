@@ -31,7 +31,7 @@ class TestModelUnicode(OpenEventTestCase):
             microlocation = Microlocation(name=UNICODE_STRING)
             level = Level(name=UNICODE_STRING, event_id=1)
             language = Language(name=UNICODE_STRING, event_id=1)
-            session = Session(title=UNICODE_STRING, description='descp',
+            session = Session(title=UNICODE_STRING, long_abstract='descp',
                               start_time=datetime(2014, 8, 4, 12, 30, 45),
                               end_time=datetime(2015, 9, 4, 12, 30, 45))
             speaker = Speaker(name=UNICODE_STRING, email='email@eg.com',

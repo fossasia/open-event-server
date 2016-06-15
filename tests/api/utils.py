@@ -42,7 +42,7 @@ def create_session(event_id, serial_no='', **kwargs):
     ]
     session = Session(
         title='TestSession%d_%s' % (event_id, serial_no),
-        description='descp',
+        long_abstract='descp',
         start_time=datetime(2014, 8, 4, 12, 30, 45),
         end_time=datetime(2015, 9, 4, 12, 30, 45),
         event_id=event_id,
@@ -74,7 +74,7 @@ def create_services(event_id, serial_no=''):
     level = Level(name=test_level, event_id=event_id)
     language = Language(name=test_lang, event_id=event_id)
     session = Session(title=test_session,
-                      description='descp',
+                      long_abstract='descp',
                       start_time=datetime(2014, 8, 4, 12, 30, 45),
                       end_time=datetime(2015, 9, 4, 12, 30, 45),
                       event_id=event_id)

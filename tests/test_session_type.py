@@ -18,7 +18,7 @@ class TestSessionType(OpenEventTestCase):
             event = ObjectMother.get_event()
             session1 = ObjectMother.get_session()
             session2 = Session(title='test2',
-                               description='dsadsd',
+                               long_abstract='dsadsd',
                                start_time=datetime(2003, 8, 4, 12, 30, 45),
                                end_time=datetime(2003, 8, 4, 12, 30, 45))
             session_type1 = SessionType(name='Type1', length='30', event_id='1', session_id='1')
