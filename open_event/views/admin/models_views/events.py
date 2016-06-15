@@ -35,8 +35,9 @@ class EventsView(ModelView):
         if request.method == 'POST':
             imd = ImmutableMultiDict(request.files)
             for img_file in imd.getlist('sponsors[logo]'):
-                filename = secure_filename(img_file.filename)
-                img_file.save(os.path.join(os.path.realpath('.') + '/static/media/image/', filename))
+                if img_file.filename != '':
+                    filename = secure_filename(img_file.filename)
+                    img_file.save(os.path.join(os.path.realpath('.') + '/static/media/image/', filename))
             event = DataManager.create_event(request.form, imd)
             if event:
                 return redirect(url_for('.details_view', event_id=event.id))
