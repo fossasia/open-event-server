@@ -89,7 +89,7 @@ class User(Resource):
 
 
 @api.route('/users')
-class TrackList(Resource):
+class UserList(Resource):
     @api.doc('list_users')
     @api.marshal_list_with(USER)
     def get(self):
@@ -106,7 +106,7 @@ class TrackList(Resource):
 
 
 @api.route('/users/page')
-class TrackListPaginated(Resource, PaginatedResourceBase):
+class UserListPaginated(Resource, PaginatedResourceBase):
     @api.doc('list_users_paginated', params=PAGE_PARAMS)
     @api.marshal_with(USER_PAGINATED)
     def get(self):
