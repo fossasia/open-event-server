@@ -301,6 +301,20 @@ class DataGetter:
             .filter(Event.end_time <= datetime.datetime.now()).filter(Event.state == 'Published')
 
     @staticmethod
+    def get_all_live_events():
+        return Event.query.filter(Event.start_time >= datetime.datetime.now())\
+            .filter(Event.end_time >= datetime.datetime.now()) \
+            .filter(Event.state == 'Published')
+
+    @staticmethod
+    def get_all_draft_events():
+        return Event.query.filter(Event.state == 'Draft')
+
+    @staticmethod
+    def get_all_past_events():
+        return Event.query.filter(Event.end_time <= datetime.datetime.now()).filter(Event.state == 'Published')
+
+    @staticmethod
     def get_session(session_id):
         """Get session by id"""
         return Session.query.get(session_id)
