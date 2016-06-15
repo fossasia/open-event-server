@@ -17,8 +17,8 @@
         <thead>
         <tr>
             <th>Title</th>
-            <th>Description</th>
-            <th>Abstract</th>
+            <th>Long Abstract</th>
+            <th>Short Abstract</th>
             <th>Start Date</th>
             <th>End Date</th>
             <th>State</th>
@@ -28,8 +28,8 @@
         {% for session in sessions %}
             <tr class="session {{ session.state }}">
                 <td>{{ session.title }}</td>
-                <td>{{ session.description }}</td>
-                <td>{{ session.abstract }}</td>
+                <td>{{ session.long_abstract }}</td>
+                <td>{{ session.short_abstract }}</td>
                 <td>{{ session.start_time }}</td>
                 <td>{{ session.end_time }}</td>
                 <td>{{ session.state }}</td>

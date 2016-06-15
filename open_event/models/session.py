@@ -80,8 +80,8 @@ class Session(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     subtitle = db.Column(db.String)
-    abstract = db.Column(db.Text)
-    description = db.Column(db.Text, nullable=False)
+    short_abstract = db.Column(db.Text)
+    long_abstract = db.Column(db.Text, nullable=False)
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
     track_id = db.Column(db.Integer, db.ForeignKey('tracks.id'))
@@ -105,8 +105,8 @@ class Session(db.Model):
     def __init__(self,
                  title=None,
                  subtitle=None,
-                 abstract=None,
-                 description=None,
+                 short_abstract=None,
+                 long_abstract=None,
                  start_time=None,
                  end_time=None,
                  track=None,
@@ -122,8 +122,8 @@ class Session(db.Model):
                  signup_url=None):
         self.title = title
         self.subtitle = subtitle
-        self.abstract = abstract
-        self.description = description
+        self.short_abstract = short_abstract
+        self.long_abstract = long_abstract
         self.start_time = start_time
         self.end_time = end_time
         self.track = track
@@ -149,8 +149,8 @@ class Session(db.Model):
             'id': self.id,
             'title': self.title,
             'subtitle': self.subtitle,
-            'abstract': self.abstract,
-            'description': self.description,
+            'short_abstract': self.short_abstract,
+            'long_abstract': self.long_abstract,
             'begin': DateFormatter().format_date(self.start_time),
             'end': DateFormatter().format_date(self.end_time),
             'track': self.track.id if self.track else None,

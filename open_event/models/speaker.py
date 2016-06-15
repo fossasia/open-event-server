@@ -8,9 +8,10 @@ class Speaker(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     photo = db.Column(db.String)
-    biography = db.Column(db.Text)
+    short_biography = db.Column(db.Text)
     email = db.Column(db.String, nullable=False)
-    web = db.Column(db.String)
+    mobile = db.Column(db.String)
+    website = db.Column(db.String)
     twitter = db.Column(db.String)
     facebook = db.Column(db.String)
     github = db.Column(db.String)
@@ -24,9 +25,10 @@ class Speaker(db.Model):
     def __init__(self,
                  name=None,
                  photo=None,
-                 biography=None,
+                 short_biography=None,
                  email=None,
-                 web=None,
+                 mobile=None,
+                 website=None,
                  twitter=None,
                  facebook=None,
                  github=None,
@@ -37,9 +39,10 @@ class Speaker(db.Model):
                  event_id=None):
         self.name = name
         self.photo = photo
-        self.biography = biography
+        self.short_biography = short_biography
         self.email = email
-        self.web = web
+        self.mobile = mobile
+        self.website = website
         self.twitter = twitter
         self.facebook = facebook
         self.github = github
@@ -69,9 +72,10 @@ class Speaker(db.Model):
             'id': self.id,
             'name': self.name,
             'photo': self.photo,
-            'biography': self.biography,
+            'short_biography': self.short_biography,
             'email': self.email,
-            'web': self.web,
+            'mobile': self.mobile,
+            'website': self.website,
             'twitter': self.twitter,
             'facebook': self.facebook,
             'github': self.github,

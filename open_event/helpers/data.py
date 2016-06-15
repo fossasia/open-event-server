@@ -115,18 +115,17 @@ class DataManager(object):
         """
         new_session = Session(title=form.title.data,
                               subtitle=form.subtitle.data,
-                              description=form.description.data,
+                              long_abstract=form.long_abstract.data,
                               start_time=form.start_time.data,
                               end_time=form.end_time.data,
                               event_id=event_id,
-                              abstract=form.abstract.data)
+                              short_abstract=form.short_abstract.data)
 
         new_session.speakers = InstrumentedList(
             form.speakers.data if form.speakers.data else [])
         new_session.microlocation = form.microlocation.data
         new_session.level = form.level.data
         new_session.track = form.track.data
-        new_session.is_accepted = is_accepted
         save_to_db(new_session, "Session saved")
         update_version(event_id, False, "session_ver")
 
@@ -139,11 +138,11 @@ class DataManager(object):
         """
         new_session = Session(title=form["title"] if "title" in form.keys() else "",
                               subtitle=form["subtitle"] if "subtitle" in form.keys() else "",
-                              description=form["description"] if "description" in form.keys() else "",
+                              long_abstract=form["long_abstract"] if "long_abstract" in form.keys() else "",
                               start_time="2016-01-01",
                               end_time="2016-01-01",
                               event_id=event_id,
-                              abstract=form["abstract"] if "abstract" in form.keys() else "",
+                              short_abstract=form["short_abstract"] if "short_abstract" in form.keys() else "",
                               state="pending")
 
         save_to_db(new_session, "Session saved")
@@ -151,9 +150,9 @@ class DataManager(object):
 
         new_speaker = Speaker(name=form["name"] if "name" in form.keys() else "",
                               photo=form["photo"] if "photo" in form.keys() else "",
-                              biography=form["biography"] if "biography" in form.keys() else "",
+                              short_biography=form["short_biography"] if "short_biography" in form.keys() else "",
                               email=form["email"] if "email" in form.keys() else "",
-                              web=form["web"] if "web" in form.keys() else "",
+                              website=form["website"] if "website" in form.keys() else "",
                               event_id=event_id,
                               twitter=form["twitter"] if "twitter" in form.keys() else "",
                               facebook=form["facebook"] if "facebook" in form.keys() else "",
@@ -252,9 +251,9 @@ class DataManager(object):
         """
         new_speaker = Speaker(name=form["name"],
                               photo="",
-                              biography=form["biography"],
+                              short_biography=form["short_biography"],
                               email=form["email"],
-                              web=form["web"],
+                              website=form["website"],
                               event_id=event_id,
                               twitter="",
                               facebook="",
