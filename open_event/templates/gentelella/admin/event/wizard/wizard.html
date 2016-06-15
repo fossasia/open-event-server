@@ -25,7 +25,7 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
             <div class="row">
-                <form action="{% if event %}/events/{{ event.id }}/edit/{% else %}/events/create/{% endif %}" method="POST" role="form"
+                <form enctype="multipart/form-data" action="{% if event %}/events/{{ event.id }}/edit/{% else %}/events/create/{% endif %}" method="POST" role="form"
                       class="admin-form form-horizontal" id="{% if event %}event-edit-form{% else %}event-create-form{% endif %}">
 
                     {% if csrf_token %}
