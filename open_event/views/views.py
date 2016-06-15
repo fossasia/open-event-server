@@ -13,6 +13,7 @@ from ..models.event import Event
 from ..models.session import Session, Level, Format, Language
 from ..models.version import Version
 from ..helpers.object_formatter import ObjectFormatter
+from ..helpers.helpers import get_serializer
 from ..helpers.data_getter import DataGetter
 from views_helpers import event_status_code, api_response
 from flask import Blueprint
@@ -478,8 +479,13 @@ def callback():
             email = user_data['email']
             user = DataGetter.get_user_by_email(email)
             user = create_user_oauth(user, user_data, token=token, method='Google')
-            login.login_user(user)
-            return redirect(url_for('admin.index'))
+            if user.password is None:
+                s = get_serializer()
+                email = s.dumps(user.email)
+                return redirect(url_for('admin.create_password_after_oauth_login', email=email))
+            else:
+                login.login_user(user)
+                return redirect(url_for('admin.index'))
         return 'did not find user info'
 
 
@@ -511,8 +517,13 @@ def facebook_callback():
             email = user_info['email']
             user_email = DataGetter.get_user_by_email(email)
             user = create_user_oauth(user_email, user_info, token=token, method='Facebook')
-            login.login_user(user)
-            return redirect(url_for('admin.index'))
+            if user.password is None:
+                s = get_serializer()
+                email = s.dumps(user.email)
+                return redirect(url_for('admin.create_password_after_oauth_login', email=email))
+            else:
+                login.login_user(user)
+                return redirect(url_for('admin.index'))
         return 'did not find user info'
 
 

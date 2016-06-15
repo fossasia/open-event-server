@@ -879,6 +879,18 @@ def create_user_oauth(user, user_data, token, method):
     return user
 
 
+def create_user_password(form, user):
+    salt = generate_random_salt()
+    password = form['new_password_again']
+    user.password = generate_password_hash(password, salt)
+    hash = random.getrandbits(128)
+    user.reset_password = str(hash)
+    user.salt = salt
+
+    save_to_db(user, "User password created")
+    return user
+
+
 def update_version(event_id, is_created, column_to_increment):
     """Function resposnible for increasing version when some data will be
     created or changed
