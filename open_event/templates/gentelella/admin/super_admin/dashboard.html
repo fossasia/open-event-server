@@ -4,45 +4,7 @@
 {% endblock %}
 {% block body %}
 <div class="row">
-    <div class="col-md-4 col-sm-4 col-xs-12">
-        <div class="x_panel" style="height: auto;">
-            <div class="x_title">
-                <h2>Recent Events
-                    <small>Events</small>
-                </h2>
-                <ul class="nav navbar-right panel_toolbox">
-                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                    </li>
-
-                    <li><a class="close-link"><i class="fa fa-close"></i></a>
-                    </li>
-                </ul>
-                <div class="clearfix"></div>
-            </div>
-            <div class="x_content" style="display: none;">
-                <div class="dashboard-widget-content">
-
-                    <ul class="list-unstyled timeline widget">
-                        {% for event in events %}
-                        <li>
-                            <div class="block">
-                                <div class="block_content">
-                                    <h2 class="title">
-                                        <a>{{event.name}}</a>
-                                    </h2>
-                                    <div class="byline">
-                                        <span>Created</span> by <a>{{event.organizer_name}}</a>
-                                    </div>
-                                    <p class="excerpt">{{event.description}}<a href="{{ get_url('event.details_view', event_id=event.id)}}">Go to details</a>
-                                    </p>
-                                </div>
-                            </div>
-                        </li>
-                      {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% include 'gentelella/admin/super_admin/widgets/_recent_events.html' %}
+    {% include 'gentelella/admin/super_admin/widgets/_heroku.html' %}
 </div>
 {% endblock %}

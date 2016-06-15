@@ -4,7 +4,7 @@ from flask_admin import BaseView
 from flask.ext import login
 from ....helpers.data import DataManager
 from ....helpers.data_getter import DataGetter
-
+from open_event.helpers.helpers import get_latest_heroku_release, get_commit_info
 
 class SuperAdminView(BaseView):
 
@@ -18,6 +18,8 @@ class SuperAdminView(BaseView):
     @expose('/')
     def index_view(self):
         events = DataGetter.get_all_events()[:5]
+        version = get_latest_heroku_release()
+        commit_number = version['description'].split(' ')[1]
+        commit_info = get_commit_info(commit_number)
         return self.render('/gentelella/admin/super_admin/dashboard.html',
-                           events=events)
-
+                           events=events, version=version, commit_info=commit_info)

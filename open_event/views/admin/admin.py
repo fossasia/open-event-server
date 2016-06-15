@@ -22,7 +22,6 @@ from open_event.views.admin.models_views.session import SessionView
 from open_event.views.admin.models_views.events_speakers import EventsSpeakersView
 from open_event.views.admin.models_views.events_sponsors import EventsSponsorsView
 from open_event.views.admin.home import MyHomeView
-from open_event.views.admin.super_admin import SuperAdminView
 from open_event.views.public.event_detail import EventDetailView
 from open_event.views.admin.super_admin.super_admin import SuperAdminView
 
@@ -42,7 +41,6 @@ class AdminView(object):
         self._add_views()
 
     def _add_views(self):
-        self.admin.add_view(SuperAdminView(name='SuperAdmin', url='/admin'))
         self.admin.add_view(EventDetailView(name='Event Detail', url='/e'))
         self.admin.add_view(MySessionView(name='MySessions', url='/events/mysessions'))
         self.admin.add_view(EventsView(Event, db.session, name='Events', url='/events'))
