@@ -6,6 +6,7 @@ from ....helpers.data import DataManager
 from ....helpers.data_getter import DataGetter
 from open_event.helpers.helpers import get_latest_heroku_release, get_commit_info
 
+
 class SuperAdminView(BaseView):
 
     def is_accessible(self):
