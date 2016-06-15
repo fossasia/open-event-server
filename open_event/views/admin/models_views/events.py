@@ -29,6 +29,9 @@ class EventsView(ModelView):
     def create_view(self):
         session_columns = DataGetter.get_session_columns()
         speaker_columns = DataGetter.get_speaker_columns()
+        speaker_columns = list(speaker_columns)
+        speaker_columns.insert(2, speaker_columns.pop(4))  # Moving email to the top
+
         if request.method == 'POST':
             event = DataManager.create_event(request.form)
             if event:
@@ -57,6 +60,7 @@ class EventsView(ModelView):
         sponsors = DataGetter.get_sponsors(event_id)
         session_columns = DataGetter.get_session_columns()
         speaker_columns = DataGetter.get_speaker_columns()
+
         if request.method == 'GET':
             return self.render('/gentelella/admin/event/edit/edit.html', event=event, session_types=session_types,
                                tracks=tracks, social_links=social_links, microlocations=microlocations,
