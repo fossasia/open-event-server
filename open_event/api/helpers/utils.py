@@ -59,9 +59,10 @@ class BaseDAO:
     """
     DAO for a basic independent model
     """
-    def __init__(self, model, post_api_model=None):
+    def __init__(self, model, post_api_model=None, put_api_model=None):
         self.model = model
         self.post_api_model = post_api_model
+        self.put_api_model = put_api_model if put_api_model else post_api_model
 
     def get(self, id_):
         return get_object_or_404(self.model, id_)
@@ -71,13 +72,13 @@ class BaseDAO:
 
     def create(self, data, validate=True):
         if validate:
-            self.validate(data)
+            self.validate(data, self.post_api_model)
         item = create_model(self.model, data)
         return item
 
     def update(self, id_, data, validate=True):
         if validate:
-            self.validate(data)
+            self.validate(data, self.put_api_model)
         item = update_model(self.model, id_, data)
         return item
 
@@ -85,9 +86,11 @@ class BaseDAO:
         item = delete_model(self.model, id_)
         return item
 
-    def validate(self, data):
-        if self.post_api_model:
-            validate_payload(data, self.post_api_model)
+    def validate(self, data, model=None):
+        if not model:
+            model = self.post_api_model
+        if model:
+            validate_payload(data, model)
 
 
 # DAO for Service Models
