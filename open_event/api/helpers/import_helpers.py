@@ -17,6 +17,8 @@ from ..sponsor_types import DAO as SponsorTypeDAO
 from ..sponsors import DAO as SponsorDAO
 from ..tracks import DAO as TrackDAO
 
+from errors import BaseError, ServerError
+
 
 IMPORT_SERIES = [
     ('formats', FormatDAO),
@@ -131,7 +133,6 @@ def create_service_from_json(data, srv, event_id, service_ids={}):
     # sort by id
     data.sort(key=lambda k: k['id'])
     ids = {}
-    print srv[0]
     # start creating
     for obj in data:
         # trim id field
@@ -164,13 +165,19 @@ def import_event_json(zip_path):
     new_event = EventDAO.create(data, 'dont')[0]
 
     # create other services
-    service_ids = {}
-    for item in IMPORT_SERIES:
-        data = open(path + '/%s.json' % item[0], 'r').read()
-        dic = json.loads(data)
-        changed_ids = create_service_from_json(
-            dic, item, new_event.id, service_ids)
-        service_ids[item[0]] = changed_ids.copy()
+    try:
+        service_ids = {}
+        for item in IMPORT_SERIES:
+            data = open(path + '/%s.json' % item[0], 'r').read()
+            dic = json.loads(data)
+            changed_ids = create_service_from_json(
+                dic, item, new_event.id, service_ids)
+            service_ids[item[0]] = changed_ids.copy()
+    except BaseError as e:
+        EventDAO.delete(new_event.id)
+        raise e
+    except Exception:
+        EventDAO.delete(new_event.id)
+        raise ServerError()
 
-    # TODO: If something fails, delete event+everything
     return new_event
