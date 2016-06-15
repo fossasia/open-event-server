@@ -1,7 +1,7 @@
 {% set required_list = ['title', 'name', 'email'] %}
 {% set preselect_list = ['short_abstract', 'comments', 'slides', 'photo', 'short_biography', 'website', 'twitter', 'organisation', 'position', 'country'] %}
 
-{% set session_fields = ['title', 'subtitle', 'short_abstract', 'long_abstract', 'comments', 'track', 'language', 'slides', 'video', 'audio'] %}
+{% set session_fields = ['title', 'subtitle', 'short_abstract', 'long_abstract', 'comments', 'track', 'session_type', 'language', 'slides', 'video', 'audio'] %}
 {% set speaker_fields = ['name', 'email','photo', 'organisation', 'position', 'country', 'short_biography', 'long_biography', 'mobile', 'website', 'facebook', 'twitter', 'github', 'linkedin'] %}
 
 {% macro field_switch(name, group, include=false, require=false ) %}
@@ -35,7 +35,7 @@
 {% macro options_table(columns, group) %}
 
     <div style="width: 100%; text-align: center">
-        <h2 style="font-weight: 300; font-size: 22px;">Customize {{ group | capitalize }} Form</h2>
+        <h2 style="font-weight: 300; font-size: 22px;">Customize {{ group | capitalize }} Registration  Form</h2>
     </div>
 
     <table class="table table-striped table-bordered table-hover options-table {{ group }}-options-table">

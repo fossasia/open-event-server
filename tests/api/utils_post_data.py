@@ -20,7 +20,8 @@ POST_EVENT_DATA = {
     "organizer_description": "Promoting Open Source culture around the world",
     "state": "TestEvent",
     "type": "Conference",
-    "topic": "Science & Technology"
+    "topic": "Science & Technology",
+    "privacy": "public"
 }
 
 POST_LANGUAGE_DATA = {

@@ -263,13 +263,19 @@ class DataGetter:
         return events
 
     @staticmethod
-    def get_all_published_events():
-        events = Event.query.filter(Event.state == 'Published')
+    def get_all_published_events(include_private=False):
+        if include_private:
+            events = Event.query.filter(Event.state == 'Published')
+        else:
+            events = Event.query.filter(Event.state == 'Published').filter(Event.privacy != 'private')
         return events
 
     @staticmethod
-    def get_call_for_speakers_events():
-        events = Event.query.filter(Event.state == 'Call for papers')
+    def get_call_for_speakers_events(include_private=False):
+        if include_private:
+            events = Event.query.filter(Event.state == 'Call for papers')
+        else:
+            events = Event.query.filter(Event.state == 'Call for papers').filter(Event.privacy != 'private')
         return events
 
     @staticmethod
