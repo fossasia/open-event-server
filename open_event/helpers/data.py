@@ -38,6 +38,14 @@ from ..models.invite import Invite
 from ..models.call_for_papers import CallForPaper
 from ..models.custom_forms import CustomForms
 
+def string_empty(string):
+    if type(string) is not str and type(string) is not unicode:
+        return False
+    if string and string.strip() and string != u'' and string != u' ':
+        return False
+    else:
+        return True
+
 
 class DataManager(object):
     """Main class responsible for DataBase managing"""
@@ -578,12 +586,14 @@ class DataManager(object):
             custom_forms_value = form.getlist('custom_form[value]')
 
             for index, name in enumerate(session_type_names):
-                session_type = SessionType(name=name, length=session_type_length[index], event_id=event.id)
-                db.session.add(session_type)
+                if not string_empty(name):
+                    session_type = SessionType(name=name, length=session_type_length[index], event_id=event.id)
+                    db.session.add(session_type)
 
             for index, name in enumerate(social_link_name):
-                social_link = SocialLink(name=name, link=social_link_link[index], event_id=event.id)
-                db.session.add(social_link)
+                if not string_empty(social_link_link[index]):
+                    social_link = SocialLink(name=name, link=social_link_link[index], event_id=event.id)
+                    db.session.add(social_link)
 
             for index, name in enumerate(track_name):
                 track = Track(name=name, description="", track_image_url="", color=track_color[index],
@@ -591,13 +601,15 @@ class DataManager(object):
                 db.session.add(track)
 
             for index, name in enumerate(room_name):
-                room = Microlocation(name=name, event_id=event.id)
-                db.session.add(room)
+                if not string_empty(name):
+                    room = Microlocation(name=name, event_id=event.id)
+                    db.session.add(room)
 
             for index, name in enumerate(sponsor_name):
-                sponsor = Sponsor(name=name, logo=sponsor_logo[index], url=sponsor_url[index],
-                                  level=sponsor_level[index], description=sponsor_description[index], event_id=event.id)
-                db.session.add(sponsor)
+                if not string_empty(name):
+                    sponsor = Sponsor(name=name, logo=sponsor_logo[index], url=sponsor_url[index],
+                                      level=sponsor_level[index], description=sponsor_description[index], event_id=event.id)
+                    db.session.add(sponsor)
 
             session_form = ""
             speaker_form = ""
@@ -611,7 +623,7 @@ class DataManager(object):
             custom_form = CustomForms(session_form=session_form, speaker_form=speaker_form, event_id=event.id)
             db.session.add(custom_form)
 
-            if form.get('call_for_speakers_state', 'off') is 'on':
+            if form.get('call_for_speakers_state', u'off') == u'on':
                 call_for_speakers = CallForPaper(announcement=form['announcement'],
                                                  start_date=datetime.strptime(form['cfs_start_date'], '%m/%d/%Y'),
                                                  end_date=datetime.strptime(form['cfs_end_date'], '%m/%d/%Y'),
@@ -691,33 +703,39 @@ class DataManager(object):
 
         # save the edited info to database
         for index, name in enumerate(session_type_names):
-            session_type = SessionType(name=name, length=session_type_length[index], event_id=event.id)
-            db.session.add(session_type)
+            if not string_empty(name):
+                session_type = SessionType(name=name, length=session_type_length[index], event_id=event.id)
+                db.session.add(session_type)
 
         for index, name in enumerate(social_link_name):
-            social_link = SocialLink(name=name, link=social_link_link[index], event_id=event.id)
-            db.session.add(social_link)
+            if not string_empty(social_link_link[index]):
+                social_link = SocialLink(name=name, link=social_link_link[index], event_id=event.id)
+                db.session.add(social_link)
 
         for index, name in enumerate(track_name):
-            track = Track(name=name, description="", track_image_url="", color=track_color[index],
-                          event_id=event.id)
-            db.session.add(track)
+            if not string_empty(name):
+                track = Track(name=name, description="", track_image_url="", color=track_color[index],
+                              event_id=event.id)
+                db.session.add(track)
 
         for index, name in enumerate(room_name):
-            room = Microlocation(name=name, event_id=event.id)
-            db.session.add(room)
+            if not string_empty(name):
+                room = Microlocation(name=name, event_id=event.id)
+                db.session.add(room)
 
         for index, name in enumerate(sponsor_name):
-            sponsor = Sponsor(name=name, logo=sponsor_logo[index].filename, url=sponsor_url[index], level=sponsor_level[index],
-                              description=sponsor_description[index], event_id=event.id)
-            db.session.add(sponsor)
+            if not string_empty(name):
+                sponsor = Sponsor(name=name, logo=sponsor_logo[index].filename, url=sponsor_url[index], level=sponsor_level[index],
+                                  description=sponsor_description[index], event_id=event.id)
+                db.session.add(sponsor)
 
-        if form.get('call_for_speakers_state', 'off') is 'on':
+        if form.get('call_for_speakers_state', u'off') == u'on':
             call_for_speakers = CallForPaper(announcement=form['announcement'],
                                              start_date=datetime.strptime(form['cfs_start_date'], '%m/%d/%Y'),
                                              end_date=datetime.strptime(form['cfs_end_date'], '%m/%d/%Y'),
                                              event_id=event.id)
             save_to_db(call_for_speakers)
+
         save_to_db(event, "Event saved")
         return event
 
