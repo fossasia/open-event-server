@@ -28,10 +28,18 @@ $(document).ready(function () {
 
     $("#buttonSave").click(function () {
         $wizardForm.submit();
-    })
+    });
 
-
+    var hash = getHashValue('step').trim();
+    if(hash !== "1") {
+        $wizard.smartWizard('goToStep', parseInt(hash));
+    }
 });
+
+function getHashValue(key) {
+  var matches = location.hash.match(new RegExp(key+'=([^&]*)'));
+  return matches ? matches[1] : null;
+}
 
 function onLeaveStep(obj, context) {
     return !validate();

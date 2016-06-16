@@ -4,11 +4,31 @@ from flask import request, url_for, redirect
 from flask_admin import expose
 from flask_admin.contrib.sqla import ModelView
 from flask.ext import login
+from objbrowser import browse
+
 from ....helpers.data import DataManager, save_to_db
 from ....helpers.data_getter import DataGetter
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import ImmutableMultiDict
+
+
+def string_empty(string):
+    if type(string) is not str and type(string) is not unicode:
+        return False
+    if string and string.strip() and string != u'' and string != u' ':
+        return False
+    else:
+        return True
+
+def string_not_empty(string):
+    return not string_empty(string)
+
+def fields_not_empty(obj, fields):
+    for field in fields:
+        if string_empty(getattr(obj, field)):
+            return False
+    return True
 
 class EventsView(ModelView):
     def is_accessible(self):
@@ -48,7 +68,68 @@ class EventsView(ModelView):
     def details_view(self, event_id):
         event = DataGetter.get_event(event_id)
 
-        return self.render('/gentelella/admin/event/details/details.html', event=event)
+        checklist = {"": ""}
+
+        if fields_not_empty(event, ['name', 'start_time', 'end_time', 'location_name', 'organizer_name', 'organizer_description']):
+            checklist["1"] = 'success'
+        elif fields_not_empty(event, ['name', 'start_time', 'end_time']):
+            checklist["1"] = 'missing_some'
+        else:
+            checklist["1"] = 'missing_main'
+
+        call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
+        if call_for_speakers:
+            if fields_not_empty(call_for_speakers, ['announcement', 'start_date', 'end_date']):
+                checklist["4"] = "success"
+            elif fields_not_empty(call_for_speakers, ['start_date', 'end_date']):
+                checklist["4"] = "missing_some"
+            else:
+                checklist["4"] = 'missing_main'
+        else:
+            checklist["4"] = "optional"
+
+        sponsors = DataGetter.get_sponsors(event_id).all()
+        if not sponsors:
+            checklist["2"] = 'missing_main'
+        else:
+            for sponsor in sponsors:
+                if fields_not_empty(sponsor, ['name', 'description', 'url', 'level', 'logo']):
+                    checklist["2"] = 'success'
+                    break
+                else:
+                    checklist["2"] = 'missing_some'
+
+        session_types = DataGetter.get_session_types_by_event_id(event_id)
+        tracks = DataGetter.get_tracks(event_id)
+        microlocations = DataGetter.get_microlocations(event_id)
+
+        if not session_types and not tracks and not microlocations:
+            checklist["3"] = 'optional'
+        elif not session_types or not tracks or not microlocations:
+            checklist["3"] = 'missing_main'
+        else:
+            for session_type in session_types:
+                if fields_not_empty(session_type, ['name', 'length']):
+                    checklist["3"] = 'success'
+                    break
+                else:
+                    checklist["3"] = 'missing_some'
+            for microlocation in microlocations:
+                if fields_not_empty(microlocation, ['name']):
+                    checklist["3"] = 'success'
+                    break
+                else:
+                    checklist["3"] = 'missing_some'
+            for tracks in tracks:
+                if fields_not_empty(tracks, ['name', 'color']):
+                    checklist["3"] = 'success'
+                    break
+                else:
+                    checklist["3"] = 'missing_some'
+
+        checklist["5"] = 'success'
+
+        return self.render('/gentelella/admin/event/details/details.html', event=event, checklist=checklist)
 
     @expose('/<int:event_id>/edit/', methods=('GET', 'POST'))
     def edit_view(self, event_id):
@@ -68,7 +149,7 @@ class EventsView(ModelView):
         if request.method == "POST":
             event = DataManager.edit_event(request, event_id, event, session_types, tracks, social_links,
                                            microlocations, call_for_speakers, sponsors)
-            return self.render('/gentelella/admin/event/details/details.html', event=event)
+            return redirect(url_for('.details_view', event_id=event_id))
 
     @expose('/<event_id>/delete/', methods=('GET',))
     def delete_view(self, event_id):
