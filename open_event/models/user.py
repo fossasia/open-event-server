@@ -3,6 +3,8 @@ from sqlalchemy import event
 from . import db
 from user_detail import UserDetail
 from .role import Role
+from .service import Service
+from .permission import Permission
 from .users_events_roles import UsersEventsRoles
 
 # System-wide
@@ -29,7 +31,7 @@ class User(db.Model):
     tokens = db.Column(db.Text)
     user_detail = db.relationship("UserDetail", uselist=False, backref="user")
 
-    def is_role(self, role_name, event_id):
+    def _is_role(self, role_name, event_id):
         role = Role.query.filter_by(name=role_name).first()
         uer = UsersEventsRoles.query.filter_by(user=self,
                                                event_id=event_id,
@@ -40,47 +42,61 @@ class User(db.Model):
             return True
 
     def is_organizer(self, event_id):
-        return self.is_role(ORGANIZER, event_id)
+        return self._is_role(ORGANIZER, event_id)
 
     def is_coorganizer(self, event_id):
-        return self.is_role(COORGANIZER, event_id)
+        return self._is_role(COORGANIZER, event_id)
 
     def is_track_organizer(self, event_id):
-        return self.is_role(TRACK_ORGANIZER, event_id)
+        return self._is_role(TRACK_ORGANIZER, event_id)
 
     def is_moderator(self, event_id):
-        return self.is_role(MODERATOR, event_id)
+        return self._is_role(MODERATOR, event_id)
 
     def is_speaker(self, event_id):
-        return self.is_role(SPEAKER, event_id)
+        return self._is_role(SPEAKER, event_id)
 
-    # def has_perm(self, operation, service_class, service_id):
-    #     operations = ('create', 'read', 'update', 'delete',)
-    #     try:
-    #         index = operations.index(operation)
-    #     except ValueError:
-    #         # If `operation` arg not in `operations`
-    #         raise ValueError('No such operation defined')
+    def _has_perm(self, operation, service_class, event_id):
+        # Operation names and their corresponding permission in `Permissions`
+        operations = {
+            'create': 'can_create',
+            'read': 'can_read',
+            'update': 'can_update',
+            'delete': 'can_delete',
+        }
+        if operation not in operations.keys():
+            raise ValueError('No such operation defined')
 
-    #     try:
-    #         service = service_class.get_service_name()
-    #     except AttributeError:
-    #         # If `service_class` does not have `get_service_name()`
-    #         return False
+        try:
+            service_name = service_class.get_service_name()
+        except AttributeError:
+            # If `service_class` does not have `get_service_name()`
+            return False
 
-    #     perm = Permission.query.filter_by(user=self,
-    #                                       service=service,
-    #                                       service_id=service_id).first()
-    #     if not perm:
-    #         # If no such permission exist
-    #         return False
+        service = Service.query.filter_by(name=service_name).first()
 
-    #     perm_bit = bin(perm.modes)[2:][index]
-    #     # e.g. perm.modes = 14, bin()-> '0b1110', [2:]-> '1110', [index]-> '1'
-    #     if perm_bit == '1':
-    #         return True
-    #     else:
-    #         return False
+        uer_querylist = UsersEventsRoles.query.filter_by(user=self,
+                                                         event_id=event_id)
+        for uer in uer_querylist:
+            role = uer.role
+            perm = Permission.query.filter_by(role=role,
+                                              service=service).first()
+            if getattr(perm, operations[operation]):
+                return True
+
+        return False
+
+    def can_create(self, service_class, event_id):
+        return self._has_perm('create', service_class, event_id)
+
+    def can_read(self, service_class, event_id):
+        return self._has_perm('read', service_class, event_id)
+
+    def can_update(self, service_class, event_id):
+        return self._has_perm('update', service_class, event_id)
+
+    def can_delete(self, service_class, event_id):
+        return self._has_perm('delete', service_class, event_id)
 
     # Flask-Login integration
     def is_authenticated(self):
