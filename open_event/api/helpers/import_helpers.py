@@ -8,7 +8,6 @@ from werkzeug import secure_filename
 
 from ..events import DAO as EventDAO
 from ..languages import DAO as LanguageDAO
-from ..levels import DAO as LevelDAO
 from ..microlocations import DAO as MicrolocationDAO
 from ..sessions import DAO as SessionDAO
 from ..speakers import DAO as SpeakerDAO
@@ -20,7 +19,6 @@ from errors import BaseError, ServerError
 
 IMPORT_SERIES = [
     ('languages', LanguageDAO),
-    ('levels', LevelDAO),
     ('microlocations', MicrolocationDAO),
     ('sponsors', SponsorDAO),
     ('speakers', SpeakerDAO),
@@ -36,7 +34,6 @@ DELETE_FIELDS = {
 RELATED_FIELDS = {
     'sessions': [
         ('track', 'track_id', 'tracks'),
-        ('level', 'level_id', 'levels'),
         ('language', 'language_id', 'languages'),
         ('microlocation', 'microlocation_id', 'microlocations'),
         ('speakers', 'speaker_ids', 'speakers')
