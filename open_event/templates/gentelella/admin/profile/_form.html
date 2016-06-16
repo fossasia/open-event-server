@@ -1,6 +1,5 @@
 <p></p>
-<form name="test" action="/profile/edit/" method="POST" role="form"
-      class="admin-form form-horizontal event-create-form">
+
     {% if csrf_token %}
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     {% endif %}
@@ -65,13 +64,12 @@
     <div class="btn-toolbar" data-role="editor-toolbar"
         data-target="#editor">
     </div>
-</form>
 
 <script>
 $(document).ready(function() {
   $('#summernote').summernote(summernoteConfig);
 
-$('#summernote').val("aaaa")
+$('#summernote').val("aaaa");
 });
 
 </script>

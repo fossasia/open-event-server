@@ -65,14 +65,6 @@
                             <strong>Language</strong><br>
                             {{ session.language.name }}
                         </div>
-                        <div class="col-md-2 col-md-push-1">
-                            <strong>Format</strong><br>
-                            {{ session.format.name }}
-                        </div>
-                        <div class="col-md-2 col-md-push-1">
-                            <strong>Level</strong><br>
-                            {{ session.level.name }}
-                        </div>
                     </div>
                     <br>
                     <br>
@@ -154,16 +146,12 @@
 
                     // Format the payload to match API requirements
                     session.track_id = _.isNull(session.track.id) ? 0 : session.track.id;
-                    session.level_id = _.isNull(session.level.id) ? 0 : session.level.id;
-                    session.format_id = _.isNull(session.format.id) ? 0 : session.format.id;
                     session.language_id = _.isNull(session.language.id) ? 0 : session.language.id;
                     session.microlocation_id = _.isNull(session.microlocation.id) ? 0 : session.microlocation.id;
                     session.speaker_ids = _.map(session.speakers, 'id');
 
                     // Clean up the payload
                     delete session.track;
-                    delete session.level;
-                    delete session.format;
                     delete session.language;
                     delete session.speakers;
                     delete session.microlocation;

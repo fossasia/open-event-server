@@ -59,9 +59,6 @@ class TestDeleteApi(OpenEventTestCase):
     def test_microlocation_api(self):
         self._test_model('microlocation', POST_MICROLOCATION_DATA)
 
-    def test_level_api(self):
-        self._test_model('level', POST_LEVEL_DATA)
-
     def test_language_api(self):
         self._test_model('language', POST_LANGUAGE_DATA)
 

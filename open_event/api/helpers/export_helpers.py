@@ -5,7 +5,6 @@ from flask_restplus import marshal
 
 from ..events import DAO as EventDAO, EVENT
 from ..languages import DAO as LanguageDAO, LANGUAGE
-from ..levels import DAO as LevelDAO, LEVEL
 from ..microlocations import DAO as MicrolocationDAO, MICROLOCATION
 from ..sessions import DAO as SessionDAO, SESSION
 from ..speakers import DAO as SpeakerDAO, SPEAKER
@@ -16,7 +15,6 @@ from ..tracks import DAO as TrackDAO, TRACK
 EXPORTS = [
     ('event', EventDAO, EVENT),
     ('languages', LanguageDAO, LANGUAGE),
-    ('levels', LevelDAO, LEVEL),
     ('microlocations', MicrolocationDAO, MICROLOCATION),
     ('sessions', SessionDAO, SESSION),
     ('speakers', SpeakerDAO, SPEAKER),

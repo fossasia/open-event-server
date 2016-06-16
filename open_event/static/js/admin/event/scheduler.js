@@ -862,16 +862,12 @@ $(document).on("scheduling:change", function (e) {
     session.start_time = session.start_time.format(time.format);
     session.end_time = session.end_time.format(time.format);
     session.track_id = _.isNull(session.track.id) ? 0 : session.track.id;
-    session.level_id = _.isNull(session.level.id) ? 0 : session.level.id;
-    session.format_id = _.isNull(session.format.id) ? 0 : session.format.id;
     session.language_id = _.isNull(session.language.id) ? 0 : session.language.id;
     session.microlocation_id = _.isNull(session.microlocation.id) ? null : session.microlocation.id;
     session.speaker_ids = _.map(session.speakers, 'id');
 
     // Clean up the payload
     delete session.track;
-    delete session.level;
-    delete session.format;
     delete session.language;
     delete session.speakers;
     delete session.microlocation;
