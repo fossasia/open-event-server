@@ -1,5 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 import unittest
+
+from tests.auth_helper import register, login
 from tests.utils import OpenEventTestCase
 from tests.setup_database import Setup
 from tests.object_mother import ObjectMother
@@ -35,17 +37,22 @@ class TestSessionApi(OpenEventTestCase):
     def test_session_accept(self):
         with app.test_request_context():
             session = ObjectMother.get_session()
+            register(self.app, u'email2@gmail.com', u'test2')
+            login(self.app, 'email2@gmail.com', 'test2')
             save_to_db(session, "Session Saved")
             url = url_for('session.accept_session', event_id=1, session_id=1)
-            self.assertTrue('accepted' in self.app.get(url, follow_redirects=True).data)
+            rv = self.app.get(url, follow_redirects=True)
+            self.assertTrue("accepted" in rv.data, msg=rv.data)
 
     def test_session_reject(self):
         with app.test_request_context():
             session = ObjectMother.get_session()
+            register(self.app, u'email2@gmail.com', u'test2')
+            login(self.app, 'email2@gmail.com', 'test2')
             save_to_db(session, "Session Saved")
             url = url_for('session.reject_session', event_id=1, session_id=1)
-            self.assertTrue('rejected' in self.app.get(url, follow_redirects=True).data)
-
+            rv = self.app.get(url, follow_redirects=True)
+            self.assertTrue("rejected" in rv.data, msg=rv.data)
 
 if __name__ == '__main__':
     unittest.main()

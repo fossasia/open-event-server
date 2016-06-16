@@ -31,6 +31,15 @@
                 {% endif %}
             </h3>
         </div>
+        <div class="title_right" style="text-align: right">
+            {% if event.state == 'Published' %}
+                <a class="btn btn-default" style="text-transform: uppercase; font-weight: 300;"
+                   href="/e/{{ event.id }}">View Event</a>
+            {% else %}
+                <a class="btn btn-success" style="text-transform: uppercase; font-weight: 300;"
+                   href="/e/{{ event.id }}">Make Event Live</a>
+            {% endif %}
+        </div>
     </div>
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">

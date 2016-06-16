@@ -1,10 +1,14 @@
 <div class="col-md-6 col-sm-6 col-xs-6">
-    <div class="x_panel tile fixed_height_320">
-        <div class="row x_title">
-            <div class="col-md-12">
-                <h4> {% block panel_title %}
-                     {% endblock %} </h4>
-            </div>
+    <div class="x_panel tile fixed_height_390">
+        <div class="x_title">
+            <h2 style="font-weight: 400; text-transform: uppercase;">{% block panel_title %}{% endblock %}</h2>
+            <ul class="nav navbar-right panel_toolbox" style="min-width: 0;">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li>
+                    {% block addon_link %}{% endblock %}
+                </li>
+            </ul>
+            <div class="clearfix"></div>
         </div>
         <div class="x_content">
             <div class="col-md-12 ">

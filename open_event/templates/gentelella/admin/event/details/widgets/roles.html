@@ -2,7 +2,9 @@
 {% from 'gentelella/admin/event/details/roles/_edit.html' import editrole %}
 {% block panel_title %}
 Manage Roles
-<button class="btn btn-info pull-right" data-toggle="modal" data-target="#add-role">+</button>
+{% endblock %}
+{% block addon_link %}
+<button class="btn btn-info pull-right" style="color: #FFFFFF; height: 30px; width: 30px; margin: 0; padding-left: 10px;" data-toggle="modal" data-target="#add-role">+</button>
 {% endblock %}
 {% block panel_content %}
 <div class="col-md-12">
