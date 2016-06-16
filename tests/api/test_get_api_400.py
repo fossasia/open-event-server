@@ -38,7 +38,6 @@ class TestGetApiUnrelatedServices(OpenEventTestCase):
             self.assertEqual(response.status_code, 400)
             self.assertIn('does not belong to event', response.data)
 
-
     def test_microlocation_api(self):
         path = get_path(1, 'microlocations', 1)
         self._test_path(path)
@@ -65,10 +64,6 @@ class TestGetApiUnrelatedServices(OpenEventTestCase):
 
     def test_sponsor_api(self):
         path = get_path(1, 'sponsors', 1)
-        self._test_path(path)
-
-    def test_sponsor_type_api(self):
-        path = get_path(1, 'sponsor_types', 1)
         self._test_path(path)
 
 
