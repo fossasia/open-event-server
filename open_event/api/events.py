@@ -34,7 +34,8 @@ EVENT = api.model('Event', {
     'closing_datetime': fields.DateTime(),
     'type': EventTypeField(),
     'topic': EventTopicField(),
-    'privacy': fields.String()
+    'privacy': fields.String(),
+    'ticket_url': fields.Uri()
 })
 
 EVENT_PAGINATED = api.clone('EventPaginated', PAGINATED_MODEL, {

@@ -1,16 +1,15 @@
 import os
 
-from flask import request, url_for, redirect
+from flask import request, flash, url_for, redirect
 from flask_admin import expose
 from flask_admin.contrib.sqla import ModelView
 from flask.ext import login
 
 from ....helpers.data import DataManager, save_to_db
 from ....helpers.data_getter import DataGetter
-from datetime import datetime
+import datetime
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import ImmutableMultiDict
-
 
 def string_empty(string):
     if type(string) is not str and type(string) is not unicode:
@@ -60,6 +59,7 @@ class EventsView(ModelView):
                 return redirect(url_for('.details_view', event_id=event.id))
             return redirect(url_for('.index_view'))
         return self.render('/gentelella/admin/event/new/new.html',
+                           start_date=datetime.datetime.now() + datetime.timedelta(days=10),
                            event_types=DataGetter.get_event_types(),
                            event_topics=DataGetter.get_event_topics())
 
@@ -127,16 +127,15 @@ class EventsView(ModelView):
                     checklist["3"] = 'missing_some'
 
         checklist["5"] = 'success'
-
         return self.render('/gentelella/admin/event/details/details.html', event=event, checklist=checklist)
 
     @expose('/<int:event_id>/edit/', methods=('GET', 'POST'))
     def edit_view(self, event_id):
         event = DataGetter.get_event(event_id)
-        session_types = DataGetter.get_session_types_by_event_id(event_id)
-        tracks = DataGetter.get_tracks(event_id)
+        session_types = DataGetter.get_session_types_by_event_id(event_id).all()
+        tracks = DataGetter.get_tracks(event_id).all()
         social_links = DataGetter.get_social_links_by_event_id(event_id)
-        microlocations = DataGetter.get_microlocations(event_id)
+        microlocations = DataGetter.get_microlocations(event_id).all()
         call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
         sponsors = DataGetter.get_sponsors(event_id)
 

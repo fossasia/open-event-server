@@ -30,15 +30,23 @@ $(document).ready(function () {
         $wizardForm.submit();
     });
 
-    var hash = getHashValue('step').trim();
-    if(hash !== "1") {
+    var hash = "";
+    try {
+        hash = getHashValue('step').trim();
+    } catch (ignored) { }
+
+    if (hash !== "1") {
         $wizard.smartWizard('goToStep', parseInt(hash));
     }
+
+    $(window).resize(function () {
+        $wizard.smartWizard('fixHeight');
+    });
 });
 
 function getHashValue(key) {
-  var matches = location.hash.match(new RegExp(key+'=([^&]*)'));
-  return matches ? matches[1] : null;
+    var matches = location.hash.match(new RegExp(key + '=([^&]*)'));
+    return matches ? matches[1] : null;
 }
 
 function onLeaveStep(obj, context) {
