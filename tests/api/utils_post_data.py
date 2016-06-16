@@ -24,12 +24,6 @@ POST_EVENT_DATA = {
     "privacy": "public"
 }
 
-POST_LANGUAGE_DATA = {
-    "label_de": "TestLanguage",
-    "label_en": "TestLanguage",
-    "name": "TestLanguage"
-}
-
 POST_MICROLOCATION_DATA = {
     "floor": 1,
     "latitude": 1,
@@ -42,7 +36,6 @@ POST_SESSION_DATA = {
     "short_abstract": "TestSession",
     "long_abstract": "TestSession",
     "end_time": "2016-05-30 09:47:37",
-    "language_id": None,
     "microlocation_id": None,
     "speaker_ids": [],
     "start_time": "2016-05-30 08:47:37",
