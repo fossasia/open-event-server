@@ -14,7 +14,6 @@ from ..models.file import File
 from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
 from ..models.call_for_papers import CallForPaper
-from ..models.sponsor import SponsorType
 from ..models.custom_forms import CustomForms
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
@@ -370,7 +369,11 @@ class DataGetter:
 
     @staticmethod
     def get_sponsor_types(event_id):
-        return SponsorType.query.filter_by(event_id=event_id)
+        return list(set(
+            sponsor.sponsor_type for sponsor in
+            Sponsor.query.filter_by(event_id=event_id)
+            if sponsor.sponsor_type
+        ))
 
     @staticmethod
     def get_event_types():

@@ -536,7 +536,7 @@ class DataManager(object):
                       background_url=form['background_url'],
                       type=form['event_type'],
                       topic=form['topic'],
-                      privacy=form['privacy'],
+                      privacy=form.get('privacy', 'public'),
                       organizer_name=form['organizer_name'],
                       organizer_description=form['organizer_description'])
 
@@ -616,7 +616,7 @@ class DataManager(object):
                                                  start_date=datetime.strptime(form['cfs_start_date'], '%m/%d/%Y'),
                                                  end_date=datetime.strptime(form['cfs_end_date'], '%m/%d/%Y'),
                                                  event_id=event.id)
-                save_to_db(call_for_speakers)
+                save_to_db(call_for_speakers, "Call for speakers saved")
 
             uer = UsersEventsRoles(event_id=event.id, user_id=login.current_user.id, role_id=role.id)
             if save_to_db(uer, "Event saved"):
@@ -645,7 +645,7 @@ class DataManager(object):
         event.background_url = form['background_url']
         event.type = form['event_type']
         event.topic = form['topic']
-        event.privacy = form['privacy']
+        event.privacy = form.get('privacy', 'public')
         event.organizer_name = form['organizer_name']
         event.organizer_description = form['organizer_description']
 
@@ -667,9 +667,9 @@ class DataManager(object):
 
         for sponsor in sponsors:
             delete_from_db(sponsor, 'Sponsor deleted')
+
         if call_for_papers:
-            for call_for_paper in call_for_papers:
-                delete_from_db(call_for_paper, 'Call for paper deleted')
+            delete_from_db(call_for_papers, 'Call for paper deleted')
 
         session_type_names = form.getlist('session_type[name]')
         session_type_length = form.getlist('session_type[length]')
@@ -682,7 +682,7 @@ class DataManager(object):
 
         room_name = form.getlist('rooms[name]')
         room_color = form.getlist('rooms[color]')
-        print form
+
         sponsor_name = form.getlist('sponsors[name]')
         sponsor_logo = request.files.getlist('sponsors[logo]')
         sponsor_url = form.getlist('sponsors[url]')
@@ -717,7 +717,7 @@ class DataManager(object):
                                              start_date=datetime.strptime(form['cfs_start_date'], '%m/%d/%Y'),
                                              end_date=datetime.strptime(form['cfs_end_date'], '%m/%d/%Y'),
                                              event_id=event.id)
-            db.session.add(call_for_speakers)
+            save_to_db(call_for_speakers)
         save_to_db(event, "Event saved")
         return event
 
@@ -786,7 +786,7 @@ class DataManager(object):
         save_to_db(uer, "Event saved")
 
 
-def save_to_db(item, msg):
+def save_to_db(item, msg="Saved to db"):
     """Convenience function to wrap a proper DB save
     :param item: will be saved to database
     :param msg: Message to log

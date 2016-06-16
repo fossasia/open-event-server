@@ -7,7 +7,6 @@ from .sessions import api as session_api
 from .tracks import api as track_api
 from .speakers import api as speaker_api
 from .sponsors import api as sponsor_api
-from .sponsor_types import api as sponsor_type_api
 from .microlocations import api as microlocation_api
 from .levels import api as level_api
 from .languages import api as language_api
@@ -35,7 +34,6 @@ api.add_namespace(session_api)
 api.add_namespace(track_api)
 api.add_namespace(speaker_api)
 api.add_namespace(sponsor_api)
-api.add_namespace(sponsor_type_api)
 api.add_namespace(microlocation_api)
 api.add_namespace(level_api)
 api.add_namespace(language_api)

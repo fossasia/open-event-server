@@ -122,7 +122,7 @@
             var $row = $(row);
             sessionForm[0][$row.data('identifier')] = {
                 include: $row.find('.include-switch')[0].checked ? 1 : 0,
-                require: $row.find('.require-switch')[0].require ? 1 : 0
+                require: $row.find('.require-switch')[0].checked ? 1 : 0
             }
         });
 
@@ -130,7 +130,7 @@
             var $row = $(row);
             speakerForm[0][$row.data('identifier')] = {
                 include: $row.find('.include-switch')[0].checked ? 1 : 0,
-                require: $row.find('.require-switch')[0].require ? 1 : 0
+                require: $row.find('.require-switch')[0].checked ? 1 : 0
             }
         });
 

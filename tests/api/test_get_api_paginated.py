@@ -3,7 +3,7 @@ import json
 
 from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
-from tests.api.utils import create_event, create_services, get_path, create_sponsor_type
+from tests.api.utils import create_event, create_services, get_path
 
 from open_event import current_app as app
 
@@ -39,9 +39,6 @@ class PaginatedApiTestCase:
     def test_sponsor_api(self):
         self._test_model('sponsor')
 
-    def test_sponsor_type_api(self):
-        self._test_model('sponsor_type')
-
 
 class TestGetApiPaginated(OpenEventTestCase, PaginatedApiTestCase):
     """
@@ -64,7 +61,6 @@ class TestGetApiPaginated(OpenEventTestCase, PaginatedApiTestCase):
         # add single data
         with app.test_request_context():
             create_services(1)
-            create_sponsor_type(1)
         response = self.app.get(path, follow_redirects=True)
         self.assertEqual(response.status_code, 200)
         self.assertIn('Test' + str(name).title(), response.data)
