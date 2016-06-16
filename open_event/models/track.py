@@ -28,7 +28,7 @@ class Track(db.Model):
 
     @staticmethod
     def get_service_name():
-        return 'tracks'
+        return 'track'
 
     def __repr__(self):
         return '<Track %r>' % self.name

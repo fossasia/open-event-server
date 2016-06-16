@@ -55,6 +55,10 @@ class Speaker(db.Model):
         self.country = country
         self.event_id = event_id
 
+    @staticmethod
+    def get_service_name():
+        return 'speaker'
+
     def __repr__(self):
         return '<Speaker %r>' % self.name
 

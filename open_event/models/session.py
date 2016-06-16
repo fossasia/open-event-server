@@ -141,6 +141,11 @@ class Session(db.Model):
         self.audio = audio
         self.signup_url = signup_url
 
+    @staticmethod
+    def get_service_name():
+        return 'session'
+
+
     @property
     def is_accepted(self):
         return self.state == "accepted"

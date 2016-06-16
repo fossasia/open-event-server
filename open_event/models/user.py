@@ -2,12 +2,18 @@ from sqlalchemy import event
 
 from . import db
 from user_detail import UserDetail
-from .permission import Permission
+# from .users_events_roles import UsersEventsRoles
 
-SPEAKER = 'speaker'
+# System-wide
 ADMIN = 'admin'
-ORGANIZER = 'organizer'
 SUPERADMIN = 'super_admin'
+
+# Event-specific
+ORGANIZER = 'organizer'
+COORGANIZER = 'coorganizer'
+TRACK_ORGANIZER = 'track_organizer'
+MODERATOR = 'moderator'
+SPEAKER = 'speaker'
 
 
 class User(db.Model):
@@ -17,38 +23,37 @@ class User(db.Model):
     password = db.Column(db.String(128))
     reset_password = db.Column(db.String(128))
     salt = db.Column(db.String(128))
-    role = db.Column(db.String())
     avatar = db.Column(db.String())
     tokens = db.Column(db.Text)
     user_detail = db.relationship("UserDetail", uselist=False, backref="user")
 
-    def has_perm(self, operation, service_class, service_id):
-        operations = ('create', 'read', 'update', 'delete',)
-        try:
-            index = operations.index(operation)
-        except ValueError:
-            # If `operation` arg not in `operations`
-            raise ValueError('No such operation defined')
+    # def has_perm(self, operation, service_class, service_id):
+    #     operations = ('create', 'read', 'update', 'delete',)
+    #     try:
+    #         index = operations.index(operation)
+    #     except ValueError:
+    #         # If `operation` arg not in `operations`
+    #         raise ValueError('No such operation defined')
 
-        try:
-            service = service_class.get_service_name()
-        except AttributeError:
-            # If `service_class` does not have `get_service_name()`
-            return False
+    #     try:
+    #         service = service_class.get_service_name()
+    #     except AttributeError:
+    #         # If `service_class` does not have `get_service_name()`
+    #         return False
 
-        perm = Permission.query.filter_by(user=self,
-                                          service=service,
-                                          service_id=service_id).first()
-        if not perm:
-            # If no such permission exist
-            return False
+    #     perm = Permission.query.filter_by(user=self,
+    #                                       service=service,
+    #                                       service_id=service_id).first()
+    #     if not perm:
+    #         # If no such permission exist
+    #         return False
 
-        perm_bit = bin(perm.modes)[2:][index]
-        # e.g. perm.modes = 14, bin()-> '0b1110', [2:]-> '1110', [index]-> '1'
-        if perm_bit == '1':
-            return True
-        else:
-            return False
+    #     perm_bit = bin(perm.modes)[2:][index]
+    #     # e.g. perm.modes = 14, bin()-> '0b1110', [2:]-> '1110', [index]-> '1'
+    #     if perm_bit == '1':
+    #         return True
+    #     else:
+    #         return False
 
     # Flask-Login integration
     def is_authenticated(self):
@@ -63,14 +68,8 @@ class User(db.Model):
     def get_id(self):
         return self.id
 
-    def is_super_admin(self):
-        return self.role == SUPERADMIN
-
-    def is_admin(self):
-        return self.role == ORGANIZER
-
-    def is_organizer(self):
-        return self.role == ADMIN
+    def is_organizer(self, event_id):
+        return self.roles
 
     def is_speaker(self):
         return self.role == SPEAKER
