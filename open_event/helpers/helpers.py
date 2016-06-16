@@ -113,7 +113,10 @@ def get_latest_heroku_release():
         "Range": "version ..; max=1, order=desc"
     }
     response = requests.get("https://api.heroku.com/apps/open-event/releases", headers=headers)
-    return json.loads(response.text)[0]
+    try:
+        return json.loads(response.text)[0]
+    except:
+        return []
 
 
 def get_commit_info(commit_number):
