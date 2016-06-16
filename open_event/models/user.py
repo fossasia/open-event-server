@@ -24,11 +24,12 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(128))
-    role = db.Column(db.String())
     reset_password = db.Column(db.String(128))
     salt = db.Column(db.String(128))
     avatar = db.Column(db.String())
     tokens = db.Column(db.Text)
+    is_super_admin = db.Column(db.Boolean, default=False)
+    is_admin = db.Column(db.Boolean, default=False)
     user_detail = db.relationship("UserDetail", uselist=False, backref="user")
 
     def _is_role(self, role_name, event_id):
@@ -111,15 +112,13 @@ class User(db.Model):
     def get_id(self):
         return self.id
 
-    def is_super_admin(self):
-        return self.role == SUPERADMIN
-
-    def is_admin(self):
-        return self.role == ORGANIZER
-
     # Required for administrative interface
     def __unicode__(self):
         return self.username
+
+    @property
+    def is_staff(self):
+        return self.is_super_admin or self.is_admin
 
 
 @event.listens_for(User, 'init')
