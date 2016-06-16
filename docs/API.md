@@ -39,16 +39,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**name** | string | Optional | Public |
 
 
-### 3. Level
-
-| Field | Datatype | Requirement | Access |
-| --- | --- | --- | --- |
-|**id** | integer | Required | Public |
-|**label_en** | string | Optional | Public |
-|**name** | string | Optional | Public |
-
-
-### 4. Microlocation
+### 3. Microlocation
 
 | Field | Datatype | Requirement | Access |
 | --- | --- | --- | --- |
@@ -60,7 +51,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**room** | string | Optional | Public |
 
 
-### 5. Session
+### 4. Session
 
 | Field | Datatype | Requirement | Access |
 | --- | --- | --- | --- |
@@ -75,8 +66,6 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**language** | **SessionLanguage** | Optional | Public |
 |**track** | **SessionTrack** | Optional | Public |
 |**microlocation** | **SessionMicrolocation** | Optional | Public |
-|**level** | **SessionLevel** | Optional | Public |
-
 
 
 #### SessionSpeaker
@@ -112,17 +101,8 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**name** | string | Optional |
 
 
-#### SessionLevel
 
-| Field | Datatype | Requirement |
-| --- | --- | --- |
-|**id** | integer | Required |
-|**label_de** | string | Optional |
-|**label_en** | string | Optional |
-
-
-
-### 6. Speaker
+### 5. Speaker
 
 | Field | Datatype | Requirement | Access |
 | --- | --- | --- | --- |
@@ -153,7 +133,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**title** | string | Optional |
 
 
-### 7. Sponsor
+### 6. Sponsor
 
 | Field | Datatype | Requirement | Access |
 | --- | --- | --- | --- |
@@ -166,7 +146,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**sponsor_type** | string | Optional | Public |
 
 
-### 8. Track
+### 7. Track
 
 | Field | Datatype | Requirement | Access |
 | --- | --- | --- | --- |
@@ -186,7 +166,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**title** | string | Optional |
 
 
-### 9. User
+### 8. User
 
 | Field | Datatype | Requirement | Access |
 | --- | --- | --- | --- |
