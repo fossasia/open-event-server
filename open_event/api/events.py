@@ -2,7 +2,6 @@ from flask.ext.restplus import Resource, Namespace
 from flask import g
 
 from open_event.models.event import Event as EventModel, EventsUsers
-from open_event.models.user import ADMIN, SUPERADMIN
 from open_event.helpers.data import save_to_db, update_version
 
 from .helpers.helpers import get_paginated_list, requires_auth
@@ -70,7 +69,6 @@ class EventDAO(BaseDAO):
         a.user = g.user
         a.editor = True
         a.admin = True
-        a.role = SUPERADMIN if a.user.role == SUPERADMIN else ADMIN
         new_event.users.append(a)
         save_to_db(new_event, "Event saved")
         update_version(

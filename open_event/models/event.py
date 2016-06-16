@@ -14,7 +14,6 @@ class EventsUsers(db.Model):
     editor = db.Column(db.Boolean)
     admin = db.Column(db.Boolean)
     user = db.relationship("User", backref="events_assocs")
-    role = db.Column(db.String, nullable=False)
 
 
 class Event(db.Model):

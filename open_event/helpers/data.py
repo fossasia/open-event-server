@@ -462,7 +462,6 @@ class DataManager(object):
         user.reset_password = str(hash)
 
         user.salt = salt
-        user.role = 'speaker'
         save_to_db(user, "User created")
 
         return user
@@ -478,7 +477,8 @@ class DataManager(object):
         hash = random.getrandbits(128)
         user.reset_password = str(hash)
         user.salt = salt
-        user.role = 'super_admin'
+        user.is_super_admin = True
+        user.is_admin = True
         save_to_db(user, "User created")
         return user
 
@@ -856,7 +856,6 @@ def create_user_oauth(user, user_data, token, method):
     if user is None:
         user = User()
         user.email = user_data['email']
-    user.role = 'speaker'
     if method == 'Google':
         user.avatar = user_data['picture']
     if method == 'Facebook':
