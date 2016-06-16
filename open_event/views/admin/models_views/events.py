@@ -127,16 +127,15 @@ class EventsView(ModelView):
                     checklist["3"] = 'missing_some'
 
         checklist["5"] = 'success'
-
         return self.render('/gentelella/admin/event/details/details.html', event=event, checklist=checklist)
 
     @expose('/<int:event_id>/edit/', methods=('GET', 'POST'))
     def edit_view(self, event_id):
         event = DataGetter.get_event(event_id)
-        session_types = DataGetter.get_session_types_by_event_id(event_id)
-        tracks = DataGetter.get_tracks(event_id)
+        session_types = DataGetter.get_session_types_by_event_id(event_id).all()
+        tracks = DataGetter.get_tracks(event_id).all()
         social_links = DataGetter.get_social_links_by_event_id(event_id)
-        microlocations = DataGetter.get_microlocations(event_id)
+        microlocations = DataGetter.get_microlocations(event_id).all()
         call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
         sponsors = DataGetter.get_sponsors(event_id)
 
