@@ -579,7 +579,7 @@ class DataManager(object):
                                                  event_id=event.id)
                 save_to_db(call_for_speakers, "Call for speakers saved")
 
-            uer = UsersEventsRoles(event_id=event.id, user_id=login.current_user.id, role_id=role.id)
+            uer = UsersEventsRoles(login.current_user, event, role)
             if save_to_db(uer, "Event saved"):
                 return event
         else:
