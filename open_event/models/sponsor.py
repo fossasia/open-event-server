@@ -28,7 +28,7 @@ class Sponsor(db.Model):
 
     @staticmethod
     def get_service_name():
-        return 'sponsors'
+        return 'sponsor'
 
     def __repr__(self):
         return '<Sponsor %r>' % self.name

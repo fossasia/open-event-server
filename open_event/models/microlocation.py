@@ -32,6 +32,10 @@ class Microlocation(db.Model):
         self.event_id = event_id
         self.room = room
 
+    @staticmethod
+    def get_service_name():
+        return 'microlocation'
+
     def __repr__(self):
         return '<Microlocation %r>' % self.name
 
