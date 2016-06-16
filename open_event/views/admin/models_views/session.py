@@ -1,11 +1,20 @@
 from flask_admin import expose
 from flask_admin.contrib.sqla import ModelView
+from flask.ext import login
 from flask import request, url_for, redirect
-from ....helpers.data import DataManager,save_to_db
+from ....helpers.data import DataManager, save_to_db
 from ....helpers.data_getter import DataGetter
 
 
 class SessionView(ModelView):
+
+    def is_accessible(self):
+        return login.current_user.is_authenticated
+
+    def _handle_view(self, name, **kwargs):
+        if not self.is_accessible():
+            return redirect(url_for('admin.login_view', next=request.url))
+
     @expose('/')
     def index_view(self, event_id):
         sessions = DataGetter.get_sessions_by_event_id(event_id)
@@ -41,7 +50,18 @@ class SessionView(ModelView):
     def invited_view(self, event_id, session_id):
         session = DataGetter.get_session(session_id)
 
-        return self.render('/gentelella/admin/event/session/invited.html')
+        return self.render('/gentelella/admin/event/session/invited.html',
+                           session=session, event_id=event_id)
+
+    @expose('/<int:session_id>/speaker/', methods=('GET', 'POST'))
+    def speaker_view(self, event_id, session_id):
+        session = DataGetter.get_session(session_id)
+        form_elems = DataGetter.get_custom_form_elements(event_id)
+        if request.method == 'POST':
+            DataManager.add_speaker_to_session(request.form, event_id, session_id)
+            return redirect(url_for('session.index_view', event_id=event_id))
+        return self.render('/gentelella/admin/event/session/speaker.html',
+                           session=session, event_id=event_id, form_elems=form_elems)
 
     @expose('/<int:session_id>/edit/', methods=('GET', 'POST'))
     def edit_view(self, event_id, session_id):
