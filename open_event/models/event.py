@@ -48,6 +48,7 @@ class Event(db.Model):
     closing_datetime = db.Column(db.DateTime)
     type = db.Column(db.String)
     topic = db.Column(db.String)
+    ticket_url = db.Column(db.String)
     db.UniqueConstraint('track.name')
 
     def __init__(self,
@@ -69,7 +70,8 @@ class Event(db.Model):
                  closing_datetime=None,
                  type=None,
                  privacy=None,
-                 topic=None):
+                 topic=None,
+                 ticket_url=None):
         self.name = name
         self.logo = logo
         self.email = email
@@ -89,6 +91,7 @@ class Event(db.Model):
         self.closing_datetime = closing_datetime
         self.type = type
         self.topic = topic
+        self.ticket_url = ticket_url
         # self.owner = owner
 
     def __repr__(self):
@@ -119,5 +122,6 @@ class Event(db.Model):
             'background_url': self.background_url,
             'organizer_name': self.organizer_name,
             'organizer_description': self.organizer_description,
-            'privacy': self.privacy
+            'privacy': self.privacy,
+            'ticket_url': self.ticket_url
         }

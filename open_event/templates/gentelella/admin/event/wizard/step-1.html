@@ -125,7 +125,12 @@
                     {{ event.organizer_description | default('', true) }}
                 </textarea>
         </div>
-
+        <div class="item form-group">
+            <label>Ticket URL
+            </label>
+            <input name="ticket_url" class="form-control"
+                   value="{{ event.ticket_url | default('', true) }}"/>
+        </div>
 
     </div>
     <div class="col-md-1">

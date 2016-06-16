@@ -534,6 +534,7 @@ class DataManager(object):
                       type=form['event_type'],
                       topic=form['topic'],
                       privacy=form.get('privacy', 'public'),
+                      ticket_url=form['ticket_url'],
                       organizer_name=form['organizer_name'],
                       organizer_description=form['organizer_description'])
 
@@ -649,6 +650,7 @@ class DataManager(object):
         event.privacy = form.get('privacy', 'public')
         event.organizer_name = form['organizer_name']
         event.organizer_description = form['organizer_description']
+        event.ticket_url = form['ticket_url']
 
         state = form.get('state', None)
         if state:
