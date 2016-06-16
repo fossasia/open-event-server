@@ -38,6 +38,10 @@ $(document).ready(function () {
     if (hash !== "1") {
         $wizard.smartWizard('goToStep', parseInt(hash));
     }
+
+    $(window).resize(function () {
+        $wizard.smartWizard('fixHeight');
+    });
 });
 
 function getHashValue(key) {
