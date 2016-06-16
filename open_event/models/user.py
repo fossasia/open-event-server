@@ -2,7 +2,8 @@ from sqlalchemy import event
 
 from . import db
 from user_detail import UserDetail
-# from .users_events_roles import UsersEventsRoles
+from .role import Role
+from .users_events_roles import UsersEventsRoles
 
 # System-wide
 ADMIN = 'admin'
@@ -21,11 +22,37 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(128))
+    role = db.Column(db.String())
     reset_password = db.Column(db.String(128))
     salt = db.Column(db.String(128))
     avatar = db.Column(db.String())
     tokens = db.Column(db.Text)
     user_detail = db.relationship("UserDetail", uselist=False, backref="user")
+
+    def is_role(self, role_name, event_id):
+        role = Role.query.filter_by(name=role_name).first()
+        uer = UsersEventsRoles.query.filter_by(user=self,
+                                               event_id=event_id,
+                                               role=role).first()
+        if not uer:
+            return False
+        else:
+            return True
+
+    def is_organizer(self, event_id):
+        return self.is_role(ORGANIZER, event_id)
+
+    def is_coorganizer(self, event_id):
+        return self.is_role(COORGANIZER, event_id)
+
+    def is_track_organizer(self, event_id):
+        return self.is_role(TRACK_ORGANIZER, event_id)
+
+    def is_moderator(self, event_id):
+        return self.is_role(MODERATOR, event_id)
+
+    def is_speaker(self, event_id):
+        return self.is_role(SPEAKER, event_id)
 
     # def has_perm(self, operation, service_class, service_id):
     #     operations = ('create', 'read', 'update', 'delete',)
@@ -68,11 +95,11 @@ class User(db.Model):
     def get_id(self):
         return self.id
 
-    def is_organizer(self, event_id):
-        return self.roles
+    def is_super_admin(self):
+        return self.role == SUPERADMIN
 
-    def is_speaker(self):
-        return self.role == SPEAKER
+    def is_admin(self):
+        return self.role == ORGANIZER
 
     # Required for administrative interface
     def __unicode__(self):

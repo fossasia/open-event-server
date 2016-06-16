@@ -15,9 +15,9 @@ class UsersEventsRoles(db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
     role = db.relationship("Role")
 
-    def __init__(self, user, event_id, role):
+    def __init__(self, user, event, role):
         self.user = user
-        self.event_id = event_id
+        self.event = event
         self.role = role
 
     def __repr__(self):
