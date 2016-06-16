@@ -72,10 +72,6 @@ class TestGetApiNonExistingServices(OpenEventTestCase):
         path = get_path(1, 'sponsors', 1)
         self._test_path(path)
 
-    def test_sponsor_type_api(self):
-        path = get_path(1, 'sponsor_types', 1)
-        self._test_path(path)
-
 
 if __name__ == '__main__':
     unittest.main()

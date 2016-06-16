@@ -12,7 +12,6 @@ from ..levels import DAO as LevelDAO
 from ..microlocations import DAO as MicrolocationDAO
 from ..sessions import DAO as SessionDAO
 from ..speakers import DAO as SpeakerDAO
-from ..sponsor_types import DAO as SponsorTypeDAO
 from ..sponsors import DAO as SponsorDAO
 from ..tracks import DAO as TrackDAO
 
@@ -23,7 +22,6 @@ IMPORT_SERIES = [
     ('languages', LanguageDAO),
     ('levels', LevelDAO),
     ('microlocations', MicrolocationDAO),
-    ('sponsor_types', SponsorTypeDAO),
     ('sponsors', SponsorDAO),
     ('speakers', SpeakerDAO),
     ('tracks', TrackDAO),
@@ -42,9 +40,6 @@ RELATED_FIELDS = {
         ('language', 'language_id', 'languages'),
         ('microlocation', 'microlocation_id', 'microlocations'),
         ('speakers', 'speaker_ids', 'speakers')
-    ],
-    'sponsors': [
-        ('sponsor_type_id', 'sponsor_type_id', 'sponsor_types')
     ]
 }
 

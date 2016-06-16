@@ -4,7 +4,7 @@ from open_event.helpers.data import save_to_db
 from open_event.models.event import Event
 from open_event.models.session import Session, Level, Language
 from open_event.models.speaker import Speaker
-from open_event.models.sponsor import Sponsor, SponsorType
+from open_event.models.sponsor import Sponsor
 from open_event.models.microlocation import Microlocation
 from open_event.models.track import Track
 
@@ -20,13 +20,6 @@ def create_event(name='TestEvent'):
 
     save_to_db(event, 'Event saved')
     return event.id
-
-
-def create_sponsor_type(event_id, name='TestSponsor_Type'):
-    """Create Sponsor Type
-    """
-    sponsor_type = SponsorType(name=name, event_id=event_id)
-    print save_to_db(sponsor_type, 'SponsorType saved')
 
 
 def create_session(event_id, serial_no='', **kwargs):
@@ -62,7 +55,6 @@ def create_services(event_id, serial_no=''):
     test_session = 'TestSession{}_{}'.format(serial_no, event_id)
     test_speaker = 'TestSpeaker{}_{}'.format(serial_no, event_id)
     test_sponsor = 'TestSponsor{}_{}'.format(serial_no, event_id)
-    test_sponsor_type = 'TestSponsorType{}_{}'.format(serial_no, event_id)
 
     microlocation = Microlocation(name=test_micro, event_id=event_id)
     track = Track(
@@ -83,8 +75,8 @@ def create_services(event_id, serial_no=''):
                       organisation='org',
                       country='japan',
                       event_id=event_id)
-    sponsor_type = SponsorType(name=test_sponsor_type, event_id=event_id)
-    sponsor = Sponsor(name=test_sponsor, sponsor_type_id=1, event_id=event_id)
+    sponsor = Sponsor(
+        name=test_sponsor, sponsor_type='Gold', event_id=event_id)
 
     save_to_db(microlocation, 'Microlocation saved')
     save_to_db(track, 'Track saved')
@@ -92,7 +84,6 @@ def create_services(event_id, serial_no=''):
     save_to_db(language, 'Language saved')
     save_to_db(session, 'Session saved')
     save_to_db(speaker, 'Speaker saved')
-    save_to_db(sponsor_type, 'SponsorType saved')
     save_to_db(sponsor, 'Sponsor saved')
 
 

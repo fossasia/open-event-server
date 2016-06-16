@@ -69,10 +69,6 @@ class TestGetApiListed(OpenEventTestCase):
         path = get_path(1, 'sponsors')
         self._test_path(path, 'TestSponsor1_1', 'TestSponsor2_1')
 
-    def test_sponsor_type_api(self):
-        path = get_path(1, 'sponsor_types')
-        self._test_path(path, 'TestSponsorType1_1', 'TestSponsorType2_1')
-
 
 if __name__ == '__main__':
     unittest.main()
