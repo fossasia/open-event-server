@@ -8,7 +8,6 @@ from .tracks import api as track_api
 from .speakers import api as speaker_api
 from .sponsors import api as sponsor_api
 from .microlocations import api as microlocation_api
-from .languages import api as language_api
 from .login import api as login_api
 from .exports import api as exports_api
 from .imports import api as imports_api
@@ -34,7 +33,6 @@ api.add_namespace(track_api)
 api.add_namespace(speaker_api)
 api.add_namespace(sponsor_api)
 api.add_namespace(microlocation_api)
-api.add_namespace(language_api)
 api.add_namespace(login_api)
 api.add_namespace(exports_api)
 api.add_namespace(imports_api)
