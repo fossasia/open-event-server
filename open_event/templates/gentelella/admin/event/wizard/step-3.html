@@ -58,6 +58,7 @@
                    value="{{ session_type.name | default('Talks') if not empty else '' }}">
         </div>
 
+
         <div class="col-xs-7 input-group form-group">
             <input type="text" required="required" class="form-control session-length" name="session_type[length]" placeholder="Length (HH.MM)"
                    value="{{ session_type.length | default(0.30, true) }}">

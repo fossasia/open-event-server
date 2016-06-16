@@ -30,11 +30,6 @@ POST_LANGUAGE_DATA = {
     "name": "TestLanguage"
 }
 
-POST_LEVEL_DATA = {
-    "label_en": "TestLevel",
-    "name": "TestLevel"
-}
-
 POST_MICROLOCATION_DATA = {
     "floor": 1,
     "latitude": 1,
@@ -48,7 +43,6 @@ POST_SESSION_DATA = {
     "long_abstract": "TestSession",
     "end_time": "2016-05-30 09:47:37",
     "language_id": None,
-    "level_id": None,
     "microlocation_id": None,
     "speaker_ids": [],
     "start_time": "2016-05-30 08:47:37",

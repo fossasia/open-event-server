@@ -11,7 +11,7 @@ api = Namespace('sponsors', description='Sponsors', path='/')
 
 SPONSOR = api.model('Sponsor', {
     'id': fields.Integer(required=True),
-    'name': fields.String(),
+    'name': fields.String(required=True),
     'url': fields.Uri(),
     'logo': fields.ImageUri(),
     'description': fields.String(),
@@ -88,7 +88,7 @@ class SponsorList(Resource):
 
 @api.route('/events/<int:event_id>/sponsors/types')
 class SponsorTypesList(Resource):
-    @api.doc('list_sponsor_types')
+    @api.doc('list_sponsor_types', model=[fields.String()])
     def get(self, event_id):
         """List all sponsor types"""
         return DAO.list_types(event_id)

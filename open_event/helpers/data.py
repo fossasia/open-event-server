@@ -21,7 +21,7 @@ from ..models import db
 from ..models.event import Event, EventsUsers
 from ..models.file import File
 from ..models.microlocation import Microlocation
-from ..models.session import Session, Level, Language
+from ..models.session import Session, Language
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.user import User
@@ -132,7 +132,6 @@ class DataManager(object):
         new_session.speakers = InstrumentedList(
             form.speakers.data if form.speakers.data else [])
         new_session.microlocation = form.microlocation.data
-        new_session.level = form.level.data
         new_session.track = form.track.data
         save_to_db(new_session, "Session saved")
         update_version(event_id, False, "session_ver")
@@ -189,6 +188,34 @@ class DataManager(object):
             Helper.send_email_invitation(email, new_session.title, link)
 
     @staticmethod
+    def add_speaker_to_session(form, event_id, session_id):
+        """
+        Session will be saved to database with proper Event id
+        :param form: view data form
+        :param event_id: Session belongs to Event by event id
+        """
+        new_speaker = Speaker(name=form["name"] if "name" in form.keys() else "",
+                              photo=form["photo"] if "photo" in form.keys() else "",
+                              short_biography=form["short_biography"] if "short_biography" in form.keys() else "",
+                              email=form["email"] if "email" in form.keys() else "",
+                              website=form["website"] if "website" in form.keys() else "",
+                              event_id=event_id,
+                              twitter=form["twitter"] if "twitter" in form.keys() else "",
+                              facebook=form["facebook"] if "facebook" in form.keys() else "",
+                              github=form["github"] if "github" in form.keys() else "",
+                              linkedin=form["linkedin"] if "linkedin" in form.keys() else "",
+                              organisation=form["organisation"] if "organisation" in form.keys() else "",
+                              position=form["position"] if "position" in form.keys() else "",
+                              country=form["country"] if "country" in form.keys() else "")
+        save_to_db(new_speaker, "Speaker saved")
+        update_version(event_id, False, "speakers_ver")
+
+        new_session_speaker = SessionsSpeakers(session_id=session_id,
+                                               speaker_id=new_speaker.id)
+
+        save_to_db(new_session_speaker, "Session Speaker saved")
+
+    @staticmethod
     def create_speaker_session_relation(session_id, speaker_id, event_id):
         """
         Session, speaker ids will be saved to database
@@ -221,12 +248,10 @@ class DataManager(object):
         data = form.data
         speakers = data["speakers"]
         microlocation = data["microlocation"]
-        level = data["level"]
         track = data["track"]
         language = data["language"]
         del data["speakers"]
         del data["microlocation"]
-        del data["level"]
         del data["track"]
         del data["language"]
         db.session.query(Session) \
@@ -234,7 +259,6 @@ class DataManager(object):
             .update(dict(data))
         session.speakers = InstrumentedList(speakers if speakers else [])
         session.microlocation = microlocation
-        session.level = level
         session.track = track
         session.language = language
         save_to_db(session, "Session updated")
@@ -345,41 +369,6 @@ class DataManager(object):
         uer = UsersEventsRoles.query.get(uer_id)
         delete_from_db(uer, "UER deleted")
         flash('You successfully delete role')
-
-    @staticmethod
-    def create_level(form, event_id):
-        """
-        Level will be saved to database with proper Event id
-        :param form: view data form
-        :param event_id: Level belongs to Event by event id
-        """
-        new_level = Level(name=form.name.data,
-                          label_en=form.label_en.data,
-                          event_id=event_id)
-        save_to_db(new_level, "Level saved")
-        update_version(event_id, False, "session_ver")
-
-    @staticmethod
-    def update_level(form, level, event_id):
-        """
-        Level will be updated in database
-        :param form: view data form
-        :param level: object contains all earlier data
-        """
-        data = form.data
-        db.session.query(Level).filter_by(id=level.id).update(dict(data))
-        save_to_db(level, "Level updated")
-        update_version(event_id, False, "session_ver")
-
-    @staticmethod
-    def remove_level(level_id):
-        """
-        Level will be removed from database
-        :param level_id: Level id to remove object
-        """
-        level = Level.query.get(level_id)
-        delete_from_db(level, "Level deleted")
-        flash('You successfully delete level')
 
     @staticmethod
     def create_language(form, event_id):
@@ -630,7 +619,7 @@ class DataManager(object):
                                                  event_id=event.id)
                 save_to_db(call_for_speakers, "Call for speakers saved")
 
-            uer = UsersEventsRoles(event_id=event.id, user_id=login.current_user.id, role_id=role.id)
+            uer = UsersEventsRoles(login.current_user, event, role)
             if save_to_db(uer, "Event saved"):
                 return event
         else:

@@ -22,6 +22,8 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
+                <form name="test" action="/profile/edit/" method="POST" role="form"
+      class="admin-form form-horizontal event-create-form" enctype='multipart/form-data'>
 
                 <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
 
@@ -39,6 +41,14 @@
 
                         </div>
                         <!-- end of image cropping -->
+                        <div id="avatar-button" style="padding: 10px 0px;">
+                            <input type="file" id="profile-avatar" name="avatar" required="required"
+                                               class="upload-btn"/>
+                            <label class="file-label" for="profile-avatar">
+                                        <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                                        Upload New
+                            </label>
+                        </div>
 
                     </div>
                     <h3>{{profile.user_detail.fullname}}</h3>
@@ -85,6 +95,7 @@
                     {% include '/gentelella/admin/profile/_form.html' %}
 
                 </div>
+                </form>
             </div>
         </div>
     </div>

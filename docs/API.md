@@ -1,3 +1,25 @@
+## API Authentication
+
+To get access token, send a POST request to `/api/v2/login` with email and password.
+
+```json
+{
+  "email": "email@domain.com",
+  "password": "string"
+}
+```
+
+The return will be as follows in case of success.
+
+```json
+{
+  "access_token": "some_random_string"
+}
+```
+
+Then use the `access_token` in a request by setting the header `Authorization` to `JWT <access_token>`.
+
+
 ## API Fields
 
 Serialized headers are main models (e.g. `Event`, `Session`, etc.). Others  are nested fields (e.g. `SessionSpeaker`, `TrackSession`, etc.).
@@ -39,45 +61,38 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**name** | string | Optional | Public |
 
 
-### 3. Level
+### 3. Microlocation
 
 | Field | Datatype | Requirement | Access |
 | --- | --- | --- | --- |
 |**id** | integer | Required | Public |
-|**label_en** | string | Optional | Public |
-|**name** | string | Optional | Public |
-
-
-### 4. Microlocation
-
-| Field | Datatype | Requirement | Access |
-| --- | --- | --- | --- |
-|**id** | integer | Required | Public |
-|**name** | string | Optional | Public |
+|**name** | string | Required | Public |
 |**floor** | integer | Optional | Public |
 |**latitude** | number | Optional | Public |
 |**longitude** | number | Optional | Public |
 |**room** | string | Optional | Public |
 
 
-### 5. Session
+### 4. Session
 
 | Field | Datatype | Requirement | Access |
 | --- | --- | --- | --- |
 |**id** | integer | Required | Public |
-|**title** | string | Optional | Public |
+|**title** | string | Required | Public |
 |**subtitle** | string | Optional | Public |
-|**description** | string | Optional | Public |
-|**abstract** | string | Optional | Public |
-|**start_time** | string | Optional | Public |
-|**end_time** | string | Optional | Public |
+|**short_abstract** | string | Optional | Public |
+|**long_abstract** | string | Required | Public |
+|**comments** | string | Optional | Public |
+|**start_time** | string | Required | Public |
+|**end_time** | string | Required | Public |
 |**speakers** | Array[**SessionSpeaker**] | Optional | Public |
 |**language** | **SessionLanguage** | Optional | Public |
 |**track** | **SessionTrack** | Optional | Public |
 |**microlocation** | **SessionMicrolocation** | Optional | Public |
-|**level** | **SessionLevel** | Optional | Public |
-
-
+|**video** | string | Optional | Public |
+|**audio** | string | Optional | Public |
+|**slides** | string | Optional | Public |
+|**signup_url** | string | Optional | Public |
 
 #### SessionSpeaker
 
@@ -112,26 +127,17 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**name** | string | Optional |
 
 
-#### SessionLevel
 
-| Field | Datatype | Requirement |
-| --- | --- | --- |
-|**id** | integer | Required |
-|**label_de** | string | Optional |
-|**label_en** | string | Optional |
-
-
-
-### 6. Speaker
+### 5. Speaker
 
 | Field | Datatype | Requirement | Access |
 | --- | --- | --- | --- |
 |**id** | integer | Required | Public |
-|**name** | string | Optional | Public |
-|**email** | string | Optional | Public |
+|**name** | string | Required | Public |
+|**email** | string | Required | Public |
 |**biography** | string | Optional | Public |
-|**organisation** | string | Optional | Public |
-|**country** | string | Optional | Public |
+|**organisation** | string | Required | Public |
+|**country** | string | Required | Public |
 |**web** | string | Optional | Public |
 |**github** | string | Optional | Public |
 |**photo** | string | Optional | Public |
@@ -153,12 +159,12 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**title** | string | Optional |
 
 
-### 7. Sponsor
+### 6. Sponsor
 
 | Field | Datatype | Requirement | Access |
 | --- | --- | --- | --- |
 |**id** | integer | Required | Public |
-|**name** | string | Optional | Public |
+|**name** | string | Required | Public |
 |**description** | string | Optional | Public |
 |**url** | string | Optional | Public |
 |**logo** | string | Optional | Public |
@@ -166,14 +172,14 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**sponsor_type** | string | Optional | Public |
 
 
-### 8. Track
+### 7. Track
 
 | Field | Datatype | Requirement | Access |
 | --- | --- | --- | --- |
 |**id** | integer | Required | Public |
-|**name** | string | Optional | Public |
-|**description** | string | Optional | Public |
-|**color** | string | Optional | Public |
+|**name** | string | Required | Public |
+|**description** | string | Required | Public |
+|**color** | string | Required | Public |
 |**track_image_url** | string | Optional | Public |
 |**location** | string | Optional | Public |
 |**sessions** | Array[**TrackSession**] | Optional | Public |
@@ -186,7 +192,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**title** | string | Optional |
 
 
-### 9. User
+### 8. User
 
 | Field | Datatype | Requirement | Access |
 | --- | --- | --- | --- |

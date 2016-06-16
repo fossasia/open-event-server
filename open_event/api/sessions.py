@@ -2,7 +2,7 @@ from flask.ext.restplus import Resource, Namespace
 from sqlalchemy.orm.collections import InstrumentedList
 
 from open_event.models.session import Session as SessionModel, \
-    Language as LanguageModel, Level as LevelModel
+    Language as LanguageModel
 from open_event.models.track import Track as TrackModel
 from open_event.models.microlocation import Microlocation as MicrolocationModel
 from open_event.models.speaker import Speaker as SpeakerModel
@@ -26,11 +26,6 @@ SESSION_SPEAKER = api.model('SessionSpeaker', {
     'name': fields.String(),
 })
 
-SESSION_LEVEL = api.model('SessionLevel', {
-    'id': fields.Integer(required=True),
-    'label_en': fields.String(),
-})
-
 SESSION_LANGUAGE = api.model('SessionLanguage', {
     'id': fields.Integer(required=True),
     'label_en': fields.String(),
@@ -44,16 +39,15 @@ SESSION_MICROLOCATION = api.model('SessionMicrolocation', {
 
 SESSION = api.model('Session', {
     'id': fields.Integer(required=True),
-    'title': fields.String(),
+    'title': fields.String(required=True),
     'subtitle': fields.String(),
     'short_abstract': fields.String(),
-    'long_abstract': fields.String(),
+    'long_abstract': fields.String(required=True),
     'comments': fields.String(),
-    'start_time': fields.DateTime(),
-    'end_time': fields.DateTime(),
+    'start_time': fields.DateTime(required=True),
+    'end_time': fields.DateTime(required=True),
     'track': fields.Nested(SESSION_TRACK),
     'speakers': fields.List(fields.Nested(SESSION_SPEAKER)),
-    'level': fields.Nested(SESSION_LEVEL),
     'language': fields.Nested(SESSION_LANGUAGE),
     'microlocation': fields.Nested(SESSION_MICROLOCATION),
     'slides': fields.String(),
@@ -69,14 +63,12 @@ SESSION_PAGINATED = api.clone('SessionPaginated', PAGINATED_MODEL, {
 SESSION_POST = api.clone('SessionPost', SESSION, {
     'track_id': fields.Integer(),
     'speaker_ids': fields.List(fields.Integer()),
-    'level_id': fields.Integer(),
     'language_id': fields.Integer(),
     'microlocation_id': fields.Integer()
 })
 del SESSION_POST['id']
 del SESSION_POST['track']
 del SESSION_POST['speakers']
-del SESSION_POST['level']
 del SESSION_POST['language']
 del SESSION_POST['microlocation']
 
@@ -86,7 +78,6 @@ class SessionDAO(ServiceDAO):
     def _delete_fields(self, data):
         del data['speaker_ids']
         del data['track_id']
-        del data['level_id']
         del data['language_id']
         del data['microlocation_id']
         data['start_time'] = SESSION_POST['start_time'].from_str(
@@ -107,7 +98,6 @@ class SessionDAO(ServiceDAO):
         Fixes payload of POST request
         """
         data['track'] = self.get_object(TrackModel, data['track_id'], event_id)
-        data['level'] = self.get_object(LevelModel, data['level_id'], event_id)
         data['language'] = self.get_object(LanguageModel, data['language_id'], event_id)
         data['microlocation'] = self.get_object(MicrolocationModel, data['microlocation_id'], event_id)
         data['event_id'] = event_id
@@ -125,7 +115,6 @@ class SessionDAO(ServiceDAO):
         data = self._delete_fields(data)
         obj = ServiceDAO.update(self, event_id, service_id, data)
         obj.track = data_copy['track']
-        obj.level = data_copy['level']
         obj.language = data_copy['language']
         obj.microlocation = data_copy['microlocation']
         obj.speakers = data_copy['speakers']
@@ -186,6 +175,7 @@ class SessionList(Resource):
             self.api.payload,
             self.api.url_for(self, event_id=event_id)
         )
+
 
 @api.route('/events/<int:event_id>/sessions/page')
 class SessionListPaginated(Resource, PaginatedResourceBase):

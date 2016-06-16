@@ -1,6 +1,5 @@
 <p></p>
-<form name="test" action="/profile/edit/" method="POST" role="form"
-      class="admin-form form-horizontal event-create-form">
+
     {% if csrf_token %}
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     {% endif %}
@@ -13,53 +12,50 @@
         <label>Details about user:</label>
         <textarea name="details" id="summernote">{{profile.user_detail.details}}</textarea>
 
+        <div class="row">
+            <div class="col-md-6 col-xs-6">
+                <label>Email:<span class="required">*</span>
+                </label>
 
-        <label>Email:<span class="required">*</span>
-        </label>
+                <input required="required" name="email" class="form-control"
+                       value="{{profile.email}}"/>
+           </div>
+           <div class="col-md-6 col-xs-6">
+                <label>Contact:
+                </label>
 
-        <input required="required" name="email" class="form-control"
-               value="{{profile.email}}"/>
+                {% if profile.user_detail.contact %}
+                <input name="contact" class="form-control" value="{{profile.user_detail.contact}}"/>
+                {% else %}
+                <input name="contact" class="form-control"/>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-xs-6">
+                <label class="control-label">Facebook:
+                </label>
 
+                {% if profile.user_detail.facebook %}
+                <input name="facebook" class="form-control"
+                       value="{{profile.user_detail.facebook}}"/>
+                {% else %}
+                <input name="facebook" class="form-control"/>
+                {% endif %}
+            </div>
 
-        <label>Avatar:
-        </label>
+            <div class="col-md-6 col-xs-6">
+                <label class="control-label">Twitter:
+                </label>
 
-        {% if profile.user_detail.avatar %}
-        <input name="avatar" class="form-control" value="{{profile.user_detail.avatar}}"/>
-        {% else %}
-        <input name="avatar" class="form-control" placeholder="Enter Link for Avatar"/>
-        {% endif %}
-
-        <label>Contact:
-        </label>
-
-        {% if profile.user_detail.contact %}
-        <input name="contact" class="form-control" value="{{profile.user_detail.contact}}"/>
-        {% else %}
-        <input name="contact" class="form-control"/>
-        {% endif %}
-
+                {% if profile.user_detail.twitter %}
+                <input name="twitter" class="form-control" value="{{profile.user_detail.twitter}}"/>
+                {% else %}
+                <input name="twitter" class="form-control"/>
+                {% endif %}
+            </div>
+        </div>
     </div>
-
-    <label class="control-label">Facebook:
-    </label>
-
-    {% if profile.user_detail.facebook %}
-    <input name="facebook" class="form-control"
-           value="{{profile.user_detail.facebook}}"/>
-    {% else %}
-    <input name="facebook" class="form-control"/>
-    {% endif %}
-
-
-    <label class="control-label">Twitter:
-    </label>
-
-    {% if profile.user_detail.twitter %}
-    <input name="twitter" class="form-control" value="{{profile.user_detail.twitter}}"/>
-    {% else %}
-    <input name="twitter" class="form-control"/>
-    {% endif %}
 
     <p>
         <center><input class="btn btn-success" type="submit" value="Update changes"></center>
@@ -68,13 +64,12 @@
     <div class="btn-toolbar" data-role="editor-toolbar"
         data-target="#editor">
     </div>
-</form>
 
 <script>
 $(document).ready(function() {
   $('#summernote').summernote(summernoteConfig);
 
-$('#summernote').val("aaaa")
+$('#summernote').val("aaaa");
 });
 
 </script>

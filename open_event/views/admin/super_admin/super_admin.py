@@ -20,7 +20,10 @@ class SuperAdminView(BaseView):
     def index_view(self):
         events = DataGetter.get_all_events()[:5]
         version = get_latest_heroku_release()
-        commit_number = version['description'].split(' ')[1]
-        commit_info = get_commit_info(commit_number)
+        commit_number = None
+        commit_info = None
+        if version:
+            commit_number = version['description'].split(' ')[1]
+            commit_info = get_commit_info(commit_number)
         return self.render('/gentelella/admin/super_admin/dashboard.html',
                            events=events, version=version, commit_info=commit_info)

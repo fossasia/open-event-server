@@ -24,9 +24,6 @@ class PaginatedApiTestCase:
     def test_microlocation_api(self):
         self._test_model('microlocation')
 
-    def test_level_api(self):
-        self._test_model('level')
-
     def test_language_api(self):
         self._test_model('language')
 
