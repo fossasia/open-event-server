@@ -5,7 +5,7 @@ import os.path
 from os import environ
 import sys
 import json
-
+from collections import Counter
 from flask import Flask
 from flask.ext.autodoc import Autodoc
 from flask.ext.cors import CORS
@@ -100,8 +100,11 @@ class SilentUndefined(Undefined):
 
 @app.context_processor
 def locations():
-    location_names = filter(None, [event.location_name for event in DataGetter.get_all_events()])
-    return dict(locations=location_names[:10])
+    location_names = filter(None, [event.location_name for event in DataGetter.get_all_live_events()])
+    cnt = Counter()
+    for location in location_names:
+        cnt[location] += 1
+    return dict(locations=[v for v, k in cnt.most_common()][:10])
 
 @app.context_processor
 def event_types():
