@@ -11,7 +11,7 @@ api = Namespace('microlocations', description='Microlocations', path='/')
 
 MICROLOCATION = api.model('Microlocation', {
     'id': fields.Integer(required=True),
-    'name': fields.String(),
+    'name': fields.String(required=True),
     'latitude': fields.Float(),
     'longitude': fields.Float(),
     'floor': fields.Integer(),
