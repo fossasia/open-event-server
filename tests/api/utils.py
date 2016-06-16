@@ -55,6 +55,7 @@ def create_services(event_id, serial_no=''):
     test_session = 'TestSession{}_{}'.format(serial_no, event_id)
     test_speaker = 'TestSpeaker{}_{}'.format(serial_no, event_id)
     test_sponsor = 'TestSponsor{}_{}'.format(serial_no, event_id)
+    test_sponsor_type = 'TestSponsorType{}_{}'.format(serial_no, event_id)
 
     microlocation = Microlocation(name=test_micro, event_id=event_id)
     track = Track(
@@ -76,7 +77,7 @@ def create_services(event_id, serial_no=''):
                       country='japan',
                       event_id=event_id)
     sponsor = Sponsor(
-        name=test_sponsor, sponsor_type='Gold', event_id=event_id)
+        name=test_sponsor, sponsor_type=test_sponsor_type, event_id=event_id)
 
     save_to_db(microlocation, 'Microlocation saved')
     save_to_db(track, 'Track saved')
