@@ -15,6 +15,7 @@ SPONSOR = api.model('Sponsor', {
     'url': fields.Uri(),
     'logo': fields.ImageUri(),
     'description': fields.String(),
+    'level': fields.String(),
     'sponsor_type': fields.String(),
 })
 

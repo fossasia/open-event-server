@@ -76,8 +76,8 @@ def create_services(event_id, serial_no=''):
                       organisation='org',
                       country='japan',
                       event_id=event_id)
-    sponsor = Sponsor(
-        name=test_sponsor, sponsor_type=test_sponsor_type, event_id=event_id)
+    sponsor = Sponsor(name=test_sponsor, sponsor_type=test_sponsor_type,
+                      event_id=event_id, level='level')
 
     save_to_db(microlocation, 'Microlocation saved')
     save_to_db(track, 'Track saved')

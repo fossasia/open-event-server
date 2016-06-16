@@ -162,6 +162,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**description** | string | Optional | Public |
 |**url** | string | Optional | Public |
 |**logo** | string | Optional | Public |
+|**level** | string | Optional | Public |
 |**sponsor_type** | string | Optional | Public |
 
 

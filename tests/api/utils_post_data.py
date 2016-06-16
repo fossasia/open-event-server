@@ -84,6 +84,7 @@ POST_SPONSOR_DATA = {
     "name": "TestSponsor",
     "url": "http://sponsor.com",
     "description": "Big Sponsor",
+    "level": "TestSponsor",
     "sponsor_type": "Gold",
 }
 
