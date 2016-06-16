@@ -536,7 +536,7 @@ class DataManager(object):
                       background_url=form['background_url'],
                       type=form['event_type'],
                       topic=form['topic'],
-                      privacy=form['privacy'],
+                      privacy=form.get('privacy', 'public'),
                       organizer_name=form['organizer_name'],
                       organizer_description=form['organizer_description'])
 
@@ -645,7 +645,7 @@ class DataManager(object):
         event.background_url = form['background_url']
         event.type = form['event_type']
         event.topic = form['topic']
-        event.privacy = form['privacy']
+        event.privacy = form.get('privacy', 'public')
         event.organizer_name = form['organizer_name']
         event.organizer_description = form['organizer_description']
 
