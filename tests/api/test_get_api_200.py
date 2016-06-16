@@ -41,10 +41,6 @@ class TestGetApi(OpenEventTestCase):
         path = get_path(1, 'microlocations', 1)
         self._test_path(path, 'TestMicrolocation_1')
 
-    def test_level_api(self):
-        path = get_path(1, 'levels', 1)
-        self._test_path(path, 'TestLevel_1')
-
     def test_language_api(self):
         path = get_path(1, 'languages', 1)
         self._test_path(path, 'TestLanguage_1')

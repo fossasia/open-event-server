@@ -7,35 +7,6 @@ speakers_sessions = db.Table('speakers_sessions', db.Column(
         'session_id', db.Integer, db.ForeignKey('session.id')))
 
 
-class Level(db.Model):
-    """Level Model class"""
-    __tablename__ = 'level'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
-    label_en = db.Column(db.String)
-    event_id = db.Column(db.Integer, nullable=False)
-    session = db.relationship('Session', backref="level")
-
-    def __init__(self, name=None, label_en=None, event_id=None):
-        self.name = name
-        self.label_en = label_en
-        self.event_id = event_id
-
-    @property
-    def serialize(self):
-        """Return object data in easily serializeable format"""
-        return {'name': self.name, 'label_en': self.label_en}
-
-    def __repr__(self):
-        return '<Level %r>' % (self.name)
-
-    def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return self.name
-
-
 class Language(db.Model):
     """Language model class"""
     __tablename__ = 'language'
@@ -90,7 +61,6 @@ class Session(db.Model):
         'Speaker',
         secondary=speakers_sessions,
         backref=db.backref('sessions', lazy='dynamic'))
-    level_id = db.Column(db.Integer, db.ForeignKey('level.id'))
     language_id = db.Column(db.Integer, db.ForeignKey('language.id'))
     microlocation_id = db.Column(db.Integer, db.ForeignKey('microlocation.id'))
 
@@ -112,7 +82,6 @@ class Session(db.Model):
                  start_time=None,
                  end_time=None,
                  track=None,
-                 level=None,
                  language=None,
                  microlocation=None,
                  speakers=[],
@@ -130,7 +99,6 @@ class Session(db.Model):
         self.start_time = start_time
         self.end_time = end_time
         self.track = track
-        self.level = level
         self.language = language
         self.microlocation = microlocation
         self.speakers = speakers
@@ -167,10 +135,6 @@ class Session(db.Model):
                 {'id': speaker.id,
                  'name': speaker.name} for speaker in self.speakers
             ],
-            'level': {
-                'id': self.level.name,
-                'label_en': self.level.label_en
-            } if self.level else None,
             'lang': {
                 'id': self.language.name,
                 'label_en': self.language.label_en,
