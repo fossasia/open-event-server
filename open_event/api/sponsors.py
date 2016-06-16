@@ -11,7 +11,7 @@ api = Namespace('sponsors', description='Sponsors', path='/')
 
 SPONSOR = api.model('Sponsor', {
     'id': fields.Integer(required=True),
-    'name': fields.String(),
+    'name': fields.String(required=True),
     'url': fields.Uri(),
     'logo': fields.ImageUri(),
     'description': fields.String(),

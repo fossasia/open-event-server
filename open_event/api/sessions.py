@@ -39,13 +39,13 @@ SESSION_MICROLOCATION = api.model('SessionMicrolocation', {
 
 SESSION = api.model('Session', {
     'id': fields.Integer(required=True),
-    'title': fields.String(),
+    'title': fields.String(required=True),
     'subtitle': fields.String(),
     'short_abstract': fields.String(),
-    'long_abstract': fields.String(),
+    'long_abstract': fields.String(required=True),
     'comments': fields.String(),
-    'start_time': fields.DateTime(),
-    'end_time': fields.DateTime(),
+    'start_time': fields.DateTime(required=True),
+    'end_time': fields.DateTime(required=True),
     'track': fields.Nested(SESSION_TRACK),
     'speakers': fields.List(fields.Nested(SESSION_SPEAKER)),
     'language': fields.Nested(SESSION_LANGUAGE),
