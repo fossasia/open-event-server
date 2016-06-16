@@ -25,5 +25,5 @@ class SuperAdminView(BaseView):
         if version:
             commit_number = version['description'].split(' ')[1]
             commit_info = get_commit_info(commit_number)
-        return self.render('/gentelella/admin/super_admin/dashboard.html',
+        return self.render('/gentelella/admin/super_admin/widgets/index.html',
                            events=events, version=version, commit_info=commit_info)

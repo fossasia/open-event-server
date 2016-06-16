@@ -22,7 +22,7 @@ class SuperAdminEventsView(BaseView):
         draft_events = DataGetter.get_all_draft_events()
         past_events = DataGetter.get_all_past_events()
         all_events = DataGetter.get_all_events()
-        return self.render('/gentelella/admin/event/index.html',
+        return self.render('/gentelella/admin/super_admin/events/events.html',
                            live_events=live_events,
                            draft_events=draft_events,
                            past_events=past_events,
