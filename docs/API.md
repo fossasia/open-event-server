@@ -1,3 +1,25 @@
+## API Authentication
+
+To get access token, send a POST request to `/api/v2/login` with email and password.
+
+```json
+{
+  "email": "email@domain.com",
+  "password": "string"
+}
+```
+
+The return will be as follows in case of success.
+
+```json
+{
+  "access_token": "some_random_string"
+}
+```
+
+Then use the `access_token` in a request by setting the header `Authorization` to `JWT <access_token>`.
+
+
 ## API Fields
 
 Serialized headers are main models (e.g. `Event`, `Session`, etc.). Others  are nested fields (e.g. `SessionSpeaker`, `TrackSession`, etc.).
