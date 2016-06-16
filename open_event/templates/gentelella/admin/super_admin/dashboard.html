@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% set navigation_bar = [
-    ('/admin/', 'home', 'Home'),
+    ('/admin/', 'home', 'Admin'),
     ('/admin/events/', 'events', 'Events'),
     ('/admin/sessions/', 'sessions', 'Sessions'),
     ('/admin/users/', 'users', 'Users'),
@@ -15,7 +15,7 @@
 {% set active_page = active_page|default('home') -%}
 
 {% macro tabs() %}
-    <ul class="nav nav-tabs bar_tabs" role="tablist" style="background: #FFFFFF;">
+    <ul class="nav nav-tabs bar_tabs" role="tablist" style="background: #FFFFFF; margin-bottom:0px; border-bottom: 0px; background: none">
         {% for href, id, caption in navigation_bar %}
             <li{% if id == active_page %} class="active"{% endif %}><a href="{{ href|e }}">{{ caption|e }}</a></li>
         {% endfor %}
@@ -32,10 +32,13 @@
     </div>
 
     <div class="row">
+
         <div class="col-md-12">
+            {{ tabs() }}
             <div class="x_panel" style="min-height:600px;">
+
                 <div class="x_content">
-                    {{ tabs() }}
+
                     <br>
                     {% block content %}
 
