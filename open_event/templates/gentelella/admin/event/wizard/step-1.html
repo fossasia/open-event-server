@@ -47,14 +47,14 @@
                         <input required="required"
                                name="start_date"
                                data-error="Start date & time is required"
-                               value="{{ event.start_time.strftime('%m/%d/%Y') if event else '' }}"
+                               value="{{ event.start_time.strftime('%m/%d/%Y') if event else start_date.strftime('%m/%d/%Y') }}"
                                class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY"/>
 
                     </div>
                     <div class="col-xs-4" style="padding-left: 0;">
                         <input required="required"
                                name="start_time"
-                               value="{{ event.start_time.strftime('%H:%M') if event else '' }}"
+                               value="{{ event.start_time.strftime('%H:%M') if event else '19:00' }}"
                                class="form-control col-xs-6 time start" placeholder="HH:MM"/>
 
                     </div>
@@ -69,14 +69,14 @@
                         <input required="required"
                                name="end_date"
                                data-error="End date & time is required"
-                               value="{{ event.end_time.strftime('%m/%d/%Y') if event else '' }}"
+                               value="{{ event.end_time.strftime('%m/%d/%Y') if event else start_date.strftime('%m/%d/%Y') }}"
                                class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY"/>
 
                     </div>
                     <div class="col-xs-4" style="padding-left: 0;">
                         <input required="required"
                                name="end_time"
-                               value="{{ event.end_time.strftime('%H:%M') if event else '' }}"
+                               value="{{ event.end_time.strftime('%H:%M') if event else '22:00' }}"
                                class="form-control col-xs-6 time end" placeholder="HH:MM"/>
 
                     </div>
@@ -163,13 +163,16 @@
             <label class="control-label">Listing Privacy</label>
             <div class="radio">
                 <label style="font-weight: 300;">
-                    <input type="radio" name="privacy" value="public" {% if (event and event.privacy == 'public') or not event %}checked{% endif %}>
-                    <strong style="font-weight: 400;">Public page:</strong> list this event on Open Event and search engines
+                    <input type="radio" name="privacy" value="public"
+                           {% if (event and event.privacy == 'public') or not event %}checked{% endif %}>
+                    <strong style="font-weight: 400;">Public page:</strong> list this event on Open Event and search
+                    engines
                 </label>
             </div>
             <div class="radio">
                 <label style="font-weight: 300;">
-                    <input type="radio" name="privacy" value="private" {% if (event and event.privacy == 'private') %}checked{% endif %}>
+                    <input type="radio" name="privacy" value="private"
+                           {% if (event and event.privacy == 'private') %}checked{% endif %}>
                     <strong style="font-weight: 400;">Private page:</strong> do not list this event publicly
                 </label>
             </div>
