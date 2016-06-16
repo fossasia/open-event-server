@@ -12,16 +12,19 @@
         <meta name="description" content="">
         <meta name="author" content="">
     {% endblock %}
-    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
-    <link rel="dns-prefetch" href="https://maxcdn.bootstrapcdn.com" />
-    <link rel="dns-prefetch" href="https://cdn.rawgit.com" />
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com"/>
+    <link rel="dns-prefetch" href="https://maxcdn.bootstrapcdn.com"/>
+    <link rel="dns-prefetch" href="https://cdn.rawgit.com"/>
     {% block head_css %}
-        <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,400italic' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,400italic' rel='stylesheet'
+              type='text/css'>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+              integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+              crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}" />
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/custom/common.css') }}" />
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/custom/footer.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/custom/common.css') }}"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/custom/footer.css') }}"/>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.1/summernote.css" rel="stylesheet">
     {% endblock %}
 
@@ -29,33 +32,36 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='js/admin/global.js') }}"></script>
         {# Globally included Swagger API Client. See the file for more details. #}
-        <script type="text/javascript" src="{{ url_for('static', filename='admin/lib/swagger-js/browser/swagger-client.min.js') }}"></script>
+        <script type="text/javascript"
+                src="{{ url_for('static', filename='admin/lib/swagger-js/browser/swagger-client.min.js') }}"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='js/admin/api.js') }}"></script>
 
     {% endblock %}
 </head>
 <body class="nav-md" style="background-color: #F7F7F7;">
-    <div class="container body">
-        <div class="main_container">
-            {{ menu.render_menu() }}
-            <div role="main" class="right_col" style="margin-left:0;">
-                 {% include '/gentelella/admin/notifications.html' %}
-                 <div class="">
+<div class="container body">
+    <div class="main_container">
+        {{ menu.render_menu() }}
+        <div role="main" class="right_col" style="margin-left:0;padding-top: 68px !important;">
+            <div class="clearfix"></div>
+            <div>
+                {% include 'gentelella/admin/notifications.html' %}
+                {% block body %}
 
-                    {% block body %}
-
-                    {% endblock %}
-                 </div>
+                {% endblock %}
             </div>
-            {{ footer.render_footer() }}
         </div>
+        {{ footer.render_footer() }}
     </div>
+</div>
 
-    {% block tail_js %}
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-        <script type="text/javascript" src="{{ url_for('static', filename='js/custom.js') }}"></script>
-        <!--<script type="text/javascript" src="{{ url_for('static', filename='js/admin.js') }}"></script>-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.1/summernote.js"></script>
-    {% endblock %}
+{% block tail_js %}
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/custom.js') }}"></script>
+    <!--<script type="text/javascript" src="{{ url_for('static', filename='js/admin.js') }}"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.1/summernote.js"></script>
+{% endblock %}
 </body>
 </html>
