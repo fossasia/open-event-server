@@ -162,19 +162,10 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**description** | string | Optional | Public |
 |**url** | string | Optional | Public |
 |**logo** | string | Optional | Public |
-|**sponsor_type_id** | integer | Optional | Public |
+|**sponsor_type** | string | Optional | Public |
 
 
-
-### 8. SponsorType
-
-| Field | Datatype | Requirement | Access |
-| --- | --- | --- | --- |
-|**id** | integer | Required | Public |
-|**name** | string | Optional | Public |
-
-
-### 9. Track
+### 8. Track
 
 | Field | Datatype | Requirement | Access |
 | --- | --- | --- | --- |
@@ -194,7 +185,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**title** | string | Optional |
 
 
-### 10. User
+### 9. User
 
 | Field | Datatype | Requirement | Access |
 | --- | --- | --- | --- |
