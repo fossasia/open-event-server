@@ -26,6 +26,9 @@ from open_event.views.public.event_detail import EventDetailView
 from open_event.views.admin.super_admin.super_admin import SuperAdminView
 from open_event.views.admin.super_admin.events import SuperAdminEventsView
 from open_event.views.admin.super_admin.my_sessions import SuperAdminMySessionView
+from open_event.views.admin.super_admin.users import SuperAdminUsersView
+from open_event.views.admin.super_admin.permissions import SuperAdminPermissionsView
+from open_event.views.admin.super_admin.reports import SuperAdminReportsView
 
 
 class AdminView(object):
@@ -55,9 +58,12 @@ class AdminView(object):
         self.admin.add_view(TracksView(Track, db.session, name='Track', url='/events/<event_id>/tracks'))
         self.admin.add_view(InviteView(Invite, db.session, name='Invite', url='/events/<event_id>/invite'))
 
-        self.admin.add_view(SuperAdminView(name='Admin', url='/admin'))
-        self.admin.add_view(SuperAdminEventsView(name='Admin', url='/admin/events'))
-        self.admin.add_view(SuperAdminMySessionView(name='MySessions', url='/admin/events/mysessions'))
+        self.admin.add_view(SuperAdminView(name='Admin', url='/admin/'))
+        self.admin.add_view(SuperAdminEventsView(name='Event', url='/admin/events'))
+        self.admin.add_view(SuperAdminMySessionView(name='Sessions', url='/admin/sessions'))
+        self.admin.add_view(SuperAdminUsersView(name='Users', url='/admin/users'))
+        self.admin.add_view(SuperAdminPermissionsView(name='Permissions', url='/admin/permissions'))
+        self.admin.add_view(SuperAdminReportsView(name='Reports', url='/admin/reports'))
 
     @staticmethod
     def init_login(app):

@@ -2,6 +2,26 @@
 {% block head %}
 {{ super() }}
 {% endblock %}
+
+{% set navigation_bar = [
+    ('/admin/', 'home', 'Home'),
+    ('/admin/events/', 'events', 'Events'),
+    ('/admin/sessions/', 'sessions', 'Sessions'),
+    ('/admin/users/', 'users', 'Users'),
+    ('/admin/permissions/', 'permissions', 'Permission'),
+    ('/admin/reports/', 'reports', 'Reports')
+] -%}
+
+{% set active_page = active_page|default('home') -%}
+
+{% macro tabs() %}
+    <ul class="nav nav-tabs bar_tabs" role="tablist" style="background: #FFFFFF;">
+        {% for href, id, caption in navigation_bar %}
+            <li{% if id == active_page %} class="active"{% endif %}><a href="{{ href|e }}">{{ caption|e }}</a></li>
+        {% endfor %}
+    </ul>
+{% endmacro %}
+
 {% block body %}
 
 
@@ -15,37 +35,11 @@
         <div class="col-md-12">
             <div class="x_panel" style="min-height:600px;">
                 <div class="x_content">
-                    <ul class="nav nav-tabs bar_tabs" style="background-color: white;">
-                        <li role="presentation" class="active">
-                            <a href="#upcoming-events-tab" role="tab" data-toggle="tab" aria-expanded="true">Home</a>
-                        </li>
-                        <li role="presentation" class="">
-                            <a href="#past-events-tab" role="tab" data-toggle="tab" aria-expanded="false">Events</a>
-                        </li>
-                        <li role="presentation" class="">
-                            <a href="#past-events-tab" role="tab" data-toggle="tab" aria-expanded="false">Sessions</a>
-                        </li>
-                        <li role="presentation" class="">
-                            <a href="#past-events-tab" role="tab" data-toggle="tab" aria-expanded="false">Users</a>
-                        </li>
-                        <li role="presentation" class="">
-                            <a href="#past-events-tab" role="tab" data-toggle="tab" aria-expanded="false">Permissions</a>
-                        </li>
-                        <li role="presentation" class="">
-                            <a href="#past-events-tab" role="tab" data-toggle="tab" aria-expanded="false">Reports</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane fade active in" id="upcoming-events-tab">
-                            <div class="row">
-                                {% include 'gentelella/admin/super_admin/widgets/_recent_events.html' %}
-                                {% include 'gentelella/admin/super_admin/widgets/_heroku.html' %}
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="past-events-tab">
+                    {{ tabs() }}
+                    <br>
+                    {% block content %}
 
-                        </div>
-                    </div>
+                    {% endblock %}
                 </div>
             </div>
         </div>
