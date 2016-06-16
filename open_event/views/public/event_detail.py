@@ -10,7 +10,7 @@ class EventDetailView(BaseView):
     def display_default(self):
         return redirect("/browse")
 
-    @expose('/<event_id>')
+    @expose('/<int:event_id>')
     def display_event_detail_home(self, event_id):
         event = DataGetter.get_event(event_id=event_id)
         if not event or event.state != 'Published':
