@@ -6,26 +6,33 @@
 
 {% macro field_switch(name, group, include=false, require=false ) %}
     {% set identifier = name | replace(group + '.','') %}
-    {% set name = identifier | replace('_id','') | replace('_',' ') %}
-    <tr data-identifier="{{ name }}" data-group="{{ group }}">
+    {% set name = identifier | replace('_id','') %}
+    {% set pretty_name = name | replace('_',' ') | capitalize  %}
+    <tr data-identifier="{{ name }}" data-group="{{ group }}"
+        {% if not tracks and not microlocations and not session_types %}
+        data-toggle="tooltip"
+        {% endif %}
+        {% if (identifier == 'track' or identifier == 'session_type') %}
+        data-placement="left" title="You need to enable Tracks in Step 3 to activate this option"
+        {% endif %}>
         <td>
-            {{ name | capitalize }}
+            {{ pretty_name }}
             {% if identifier in required_list %}<span class="required">*</span>{% endif %}
         </td>
         <td>
             <label>
                 <input type="checkbox" class="js-switch include-switch" data-group="{{ group }}"
                        {% if identifier not in required_list %}onclick="includeClick(this)"{% endif %}
-                       {% if include or identifier in preselect_list or identifier in required_list %}checked="checked"{% endif %}
-                       {% if identifier in required_list %}disabled{% endif %}/>
+                       {% if (include or identifier in preselect_list or identifier in required_list) and ((identifier != 'track' and identifier != 'session_type') or tracks or microlocations or session_types) %}checked="checked"{% endif %}
+                       {% if (identifier in required_list) or ((identifier == 'track' or identifier == 'session_type') and not tracks and not microlocations and not session_types) %}disabled{% endif %}/>
             </label>
         </td>
         <td>
             <label>
                 <input type="checkbox" class="js-switch require-switch" data-group="{{ group }}"
                        {% if identifier not in required_list %}onclick="requireClick(this)"{% endif %}
-                       {% if include or identifier in required_list %}checked="checked"{% endif %}
-                       {% if identifier in required_list %}disabled{% endif %}/>
+                       {% if (include or identifier in required_list) and ((identifier != 'track' and identifier != 'session_type') or tracks or microlocations or session_types) %}checked="checked"{% endif %}
+                       {% if (identifier in required_list) or ((identifier == 'track' or identifier == 'session_type') and not tracks and not microlocations and not session_types) %}disabled{% endif %}/>
             </label>
         </td>
     </tr>
@@ -133,6 +140,8 @@
                 require: $row.find('.require-switch')[0].checked ? 1 : 0
             }
         });
+
+        $('[data-toggle="tooltip"]').tooltip();
 
         persistData();
     });

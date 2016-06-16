@@ -21,7 +21,8 @@ POST_EVENT_DATA = {
     "state": "TestEvent",
     "type": "Conference",
     "topic": "Science & Technology",
-    "privacy": "public"
+    "privacy": "public",
+    "ticket_url": "http://site.com/tickets"
 }
 
 POST_LANGUAGE_DATA = {
