@@ -494,18 +494,19 @@ class DataManager(object):
         save_to_db(user, "password resetted")
 
     @staticmethod
-    def update_user(form, user_id):
+    def update_user(form, user_id, avatar_img):
 
         user = User.query.filter_by(id=user_id).first()
         user_detail = UserDetail.query.filter_by(user_id=user_id).first()
 
+        print form
         user.email = form['email']
         user_detail.fullname = form['full_name']
         user_detail.facebook = form['facebook']
-        user_detail.avatar = form['avatar']
         user_detail.contact = form['contact']
         user_detail.twitter = form['twitter']
         user_detail.details = form['details']
+        user_detail.avatar_uploaded = avatar_img
         print user, user_detail, save_to_db(user, "User updated")
 
     @staticmethod
