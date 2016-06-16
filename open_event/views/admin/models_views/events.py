@@ -4,7 +4,6 @@ from flask import request, url_for, redirect
 from flask_admin import expose
 from flask_admin.contrib.sqla import ModelView
 from flask.ext import login
-from objbrowser import browse
 
 from ....helpers.data import DataManager, save_to_db
 from ....helpers.data_getter import DataGetter
