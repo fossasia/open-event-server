@@ -3,4 +3,5 @@ from open_event.models import db
 
 if __name__ == "__main__":
     with current_app.app_context():
+        db.reflect()
         db.drop_all()
