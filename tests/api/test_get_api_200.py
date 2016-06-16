@@ -45,10 +45,6 @@ class TestGetApi(OpenEventTestCase):
         path = get_path(1, 'levels', 1)
         self._test_path(path, 'TestLevel_1')
 
-    def test_format_api(self):
-        path = get_path(1, 'formats', 1)
-        self._test_path(path, 'TestFormat_1')
-
     def test_language_api(self):
         path = get_path(1, 'languages', 1)
         self._test_path(path, 'TestLanguage_1')
@@ -64,10 +60,6 @@ class TestGetApi(OpenEventTestCase):
     def test_sponsor_api(self):
         path = get_path(1, 'sponsors', 1)
         self._test_path(path, 'TestSponsor_1')
-
-    def test_sponsor_type_api(self):
-        path = get_path(1, 'sponsor_types', 1)
-        self._test_path(path, 'TestSponsorType_1')
 
 
 if __name__ == '__main__':

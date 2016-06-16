@@ -7,13 +7,11 @@ from errors import NotFoundError
 from werkzeug import secure_filename
 
 from ..events import DAO as EventDAO
-from ..formats import DAO as FormatDAO
 from ..languages import DAO as LanguageDAO
 from ..levels import DAO as LevelDAO
 from ..microlocations import DAO as MicrolocationDAO
 from ..sessions import DAO as SessionDAO
 from ..speakers import DAO as SpeakerDAO
-from ..sponsor_types import DAO as SponsorTypeDAO
 from ..sponsors import DAO as SponsorDAO
 from ..tracks import DAO as TrackDAO
 
@@ -21,11 +19,9 @@ from errors import BaseError, ServerError
 
 
 IMPORT_SERIES = [
-    ('formats', FormatDAO),
     ('languages', LanguageDAO),
     ('levels', LevelDAO),
     ('microlocations', MicrolocationDAO),
-    ('sponsor_types', SponsorTypeDAO),
     ('sponsors', SponsorDAO),
     ('speakers', SpeakerDAO),
     ('tracks', TrackDAO),
@@ -41,13 +37,9 @@ RELATED_FIELDS = {
     'sessions': [
         ('track', 'track_id', 'tracks'),
         ('level', 'level_id', 'levels'),
-        ('format', 'format_id', 'formats'),
         ('language', 'language_id', 'languages'),
         ('microlocation', 'microlocation_id', 'microlocations'),
         ('speakers', 'speaker_ids', 'speakers')
-    ],
-    'sponsors': [
-        ('sponsor_type_id', 'sponsor_type_id', 'sponsor_types')
     ]
 }
 

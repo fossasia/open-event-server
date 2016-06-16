@@ -26,6 +26,10 @@ class Track(db.Model):
         self.color = color
         self.location = location
 
+    @staticmethod
+    def get_service_name():
+        return 'tracks'
+
     def __repr__(self):
         return '<Track %r>' % self.name
 

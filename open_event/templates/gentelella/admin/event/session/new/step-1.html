@@ -8,7 +8,7 @@ $(document).ready(function() {
         var elements = {{elem.session_form | safe}};
         for (index in elements) {
             var set = 0;
-            if ((index == "description" || index == "abstract") && elements[index]['include'] == 1) {
+            if ((index == "long_abstract" || index == "short_abstract") && elements[index]['include'] == 1) {
                 set = 1;
                 var form_elem = '<div class="item form-group">'+
                                     '<label class="control-label col-md-3 col-sm-3 col-xs-12" style="text-transform:capitalize;">' +index;

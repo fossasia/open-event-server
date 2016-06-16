@@ -18,9 +18,11 @@ SPEAKER = api.model('Speaker', {
     'id': fields.Integer(required=True),
     'name': fields.String(),
     'photo': fields.ImageUri(),
-    'biography': fields.String(),
+    'short_biography': fields.String(),
+    'long_biography': fields.String(),
     'email': fields.Email(),
-    'web': fields.Uri(),
+    'mobile': fields.String(),
+    'website': fields.Uri(),
     'twitter': fields.String(),  # not sure for now whether uri or string field
     'facebook': fields.String(),
     'github': fields.String(),

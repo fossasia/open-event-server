@@ -2,7 +2,7 @@
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from ..models.event import Event, EventsUsers
-from ..models.session import Session, Level, Format, Language
+from ..models.session import Session, Level, Language
 from ..models.track import Track
 from ..models.invite import Invite
 from ..models.speaker import Speaker
@@ -14,12 +14,12 @@ from ..models.file import File
 from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
 from ..models.call_for_papers import CallForPaper
-from ..models.sponsor import SponsorType
 from ..models.custom_forms import CustomForms
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
 from flask import flash
 import datetime
+from sqlalchemy import desc
 
 
 class DataGetter:
@@ -35,7 +35,7 @@ class DataGetter:
     @staticmethod
     def get_all_events():
         """Method return all events"""
-        return Event.query.all()
+        return Event.query.order_by(desc(Event.id)).all()
 
     @staticmethod
     def get_all_users_events_roles():
@@ -118,6 +118,16 @@ class DataGetter:
                 Event.state == 'Completed')
 
     @staticmethod
+    def get_all_sessions_of_user(upcoming_events=True):
+        """
+        :return: Return all Sessions objects with the current user as a speaker
+        """
+        if upcoming_events:
+            return Session.query.filter(Event.state != 'Completed')
+        else:
+            return Session.query.filter(Event.state == 'Completed')
+
+    @staticmethod
     def get_speakers(event_id):
         """
         :param event_id: Event id
@@ -159,13 +169,6 @@ class DataGetter:
         :return: All Event Levels
         """
         return Level.query.filter_by(event_id=get_event_id())
-
-    @staticmethod
-    def get_formats():
-        """
-        :return: All Event Formats
-        """
-        return Format.query.filter_by(event_id=get_event_id())
 
     @staticmethod
     def get_languages():
@@ -269,13 +272,19 @@ class DataGetter:
         return events
 
     @staticmethod
-    def get_all_published_events():
-        events = Event.query.filter(Event.state == 'Published')
+    def get_all_published_events(include_private=False):
+        if include_private:
+            events = Event.query.filter(Event.state == 'Published')
+        else:
+            events = Event.query.filter(Event.state == 'Published').filter(Event.privacy != 'private')
         return events
 
     @staticmethod
-    def get_call_for_speakers_events():
-        events = Event.query.filter(Event.state == 'Call for papers')
+    def get_call_for_speakers_events(include_private=False):
+        if include_private:
+            events = Event.query.filter(Event.state == 'Call for papers')
+        else:
+            events = Event.query.filter(Event.state == 'Call for papers').filter(Event.privacy != 'private')
         return events
 
     @staticmethod
@@ -305,6 +314,20 @@ class DataGetter:
     def get_past_events():
         return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
             .filter(Event.end_time <= datetime.datetime.now()).filter(Event.state == 'Published')
+
+    @staticmethod
+    def get_all_live_events():
+        return Event.query.filter(Event.start_time >= datetime.datetime.now())\
+            .filter(Event.end_time >= datetime.datetime.now()) \
+            .filter(Event.state == 'Published')
+
+    @staticmethod
+    def get_all_draft_events():
+        return Event.query.filter(Event.state == 'Draft')
+
+    @staticmethod
+    def get_all_past_events():
+        return Event.query.filter(Event.end_time <= datetime.datetime.now()).filter(Event.state == 'Published')
 
     @staticmethod
     def get_session(session_id):
@@ -346,7 +369,11 @@ class DataGetter:
 
     @staticmethod
     def get_sponsor_types(event_id):
-        return SponsorType.query.filter_by(event_id=event_id)
+        return list(set(
+            sponsor.sponsor_type for sponsor in
+            Sponsor.query.filter_by(event_id=event_id)
+            if sponsor.sponsor_type
+        ))
 
     @staticmethod
     def get_event_types():

@@ -30,8 +30,6 @@ class EventsView(ModelView):
 
     @expose('/create/', methods=('GET', 'POST'))
     def create_view(self):
-        session_columns = DataGetter.get_session_columns()
-        speaker_columns = DataGetter.get_speaker_columns()
         if request.method == 'POST':
             imd = ImmutableMultiDict(request.files)
             for img_file in imd.getlist('sponsors[logo]'):
@@ -43,8 +41,6 @@ class EventsView(ModelView):
                 return redirect(url_for('.details_view', event_id=event.id))
             return redirect(url_for('.index_view'))
         return self.render('/gentelella/admin/event/new/new.html',
-                           session_columns=session_columns,
-                           speaker_columns=speaker_columns,
                            event_types=DataGetter.get_event_types(),
                            event_topics=DataGetter.get_event_topics())
 
@@ -63,16 +59,14 @@ class EventsView(ModelView):
         microlocations = DataGetter.get_microlocations(event_id)
         call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
         sponsors = DataGetter.get_sponsors(event_id)
-        session_columns = DataGetter.get_session_columns()
-        speaker_columns = DataGetter.get_speaker_columns()
+
         if request.method == 'GET':
             return self.render('/gentelella/admin/event/edit/edit.html', event=event, session_types=session_types,
                                tracks=tracks, social_links=social_links, microlocations=microlocations,
-                               call_for_speakers=call_for_speakers, sponsors=sponsors, session_columns=session_columns,
-                               speaker_columns=speaker_columns, event_types=DataGetter.get_event_types(),
+                               call_for_speakers=call_for_speakers, sponsors=sponsors, event_types=DataGetter.get_event_types(),
                                event_topics=DataGetter.get_event_topics())
         if request.method == "POST":
-            event = DataManager.edit_event(request.form, event_id, event, session_types, tracks, social_links,
+            event = DataManager.edit_event(request, event_id, event, session_types, tracks, social_links,
                                            microlocations, call_for_speakers, sponsors)
             return self.render('/gentelella/admin/event/details/details.html', event=event)
 

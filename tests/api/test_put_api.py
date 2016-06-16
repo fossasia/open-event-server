@@ -8,6 +8,7 @@ from tests.api.utils_post_data import *
 from tests.auth_helper import register
 from open_event import current_app as app
 
+
 class TestPutApiBase(OpenEventTestCase):
     """
     Base class for help testing PUT APIs
@@ -67,9 +68,6 @@ class TestPutApi(TestPutApiBase):
     def test_level_api(self):
         self._test_model('level', POST_LEVEL_DATA)
 
-    def test_format_api(self):
-        self._test_model('format', POST_FORMAT_DATA)
-
     def test_language_api(self):
         self._test_model('language', POST_LANGUAGE_DATA)
 
@@ -81,9 +79,6 @@ class TestPutApi(TestPutApiBase):
 
     def test_sponsor_api(self):
         self._test_model('sponsor', POST_SPONSOR_DATA)
-
-    def test_sponsor_type_api(self):
-        self._test_model('sponsor_type', POST_SPONSOR_TYPE_DATA)
 
 
 if __name__ == '__main__':

@@ -53,10 +53,6 @@ class TestGetApiListed(OpenEventTestCase):
         path = get_path(1, 'levels')
         self._test_path(path, 'TestLevel1_1', 'TestLevel2_1')
 
-    def test_format_api(self):
-        path = get_path(1, 'formats')
-        self._test_path(path, 'TestFormat1_1', 'TestFormat2_1')
-
     def test_language_api(self):
         path = get_path(1, 'languages')
         self._test_path(path, 'TestLanguage1_1', 'TestLanguage2_1')
@@ -73,8 +69,8 @@ class TestGetApiListed(OpenEventTestCase):
         path = get_path(1, 'sponsors')
         self._test_path(path, 'TestSponsor1_1', 'TestSponsor2_1')
 
-    def test_sponsor_type_api(self):
-        path = get_path(1, 'sponsor_types')
+    def test_sponsor_types_api(self):
+        path = get_path(1, 'sponsors', 'types')
         self._test_path(path, 'TestSponsorType1_1', 'TestSponsorType2_1')
 
 

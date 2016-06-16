@@ -43,6 +43,7 @@ class Event(db.Model):
     users = db.relationship("EventsUsers", backref="event")
 
     roles = db.relationship("UsersEventsRoles", backref="event")
+    privacy = db.Column(db.String, default="public")
     state = db.Column(db.String, default="Draft")
     closing_datetime = db.Column(db.DateTime)
     type = db.Column(db.String)
@@ -67,6 +68,7 @@ class Event(db.Model):
                  state=None,
                  closing_datetime=None,
                  type=None,
+                 privacy=None,
                  topic=None):
         self.name = name
         self.logo = logo
@@ -83,6 +85,7 @@ class Event(db.Model):
         self.organizer_name = organizer_name
         self.organizer_description = organizer_description
         self.state = state
+        self.privacy = privacy
         self.closing_datetime = closing_datetime
         self.type = type
         self.topic = topic
@@ -115,5 +118,6 @@ class Event(db.Model):
             'event_url': self.event_url,
             'background_url': self.background_url,
             'organizer_name': self.organizer_name,
-            'organizer_description': self.organizer_description
+            'organizer_description': self.organizer_description,
+            'privacy': self.privacy
         }

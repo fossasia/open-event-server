@@ -834,8 +834,8 @@ $editSessionForm.submit(function () {
     session.start_time = moment.utc($editSessionForm.find("input[name=start_time]").val());
     session.end_time = moment.utc($editSessionForm.find("input[name=end_time]").val());
     session.title = $editSessionForm.find("input[name=title]").val();
-    session.description = $editSessionForm.find("input[name=description]").text();
-    session.abstract = $editSessionForm.find("input[name=abstract]").val();
+    session.long_abstract = $editSessionForm.find("input[name=long_abstract]").text();
+    session.short_abstract = $editSessionForm.find("input[name=short_abstract]").val();
     $(document).trigger({
         type: "scheduling:change",
         session: session

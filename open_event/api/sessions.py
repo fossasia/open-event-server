@@ -2,8 +2,7 @@ from flask.ext.restplus import Resource, Namespace
 from sqlalchemy.orm.collections import InstrumentedList
 
 from open_event.models.session import Session as SessionModel, \
-    Language as LanguageModel, Level as LevelModel, \
-    Format as FormatModel
+    Language as LanguageModel, Level as LevelModel
 from open_event.models.track import Track as TrackModel
 from open_event.models.microlocation import Microlocation as MicrolocationModel
 from open_event.models.speaker import Speaker as SpeakerModel
@@ -38,11 +37,6 @@ SESSION_LANGUAGE = api.model('SessionLanguage', {
     'label_de': fields.String(),
 })
 
-SESSION_FORMAT = api.model('SessionFormat', {
-    'id': fields.Integer(required=True),
-    'name': fields.String()
-})
-
 SESSION_MICROLOCATION = api.model('SessionMicrolocation', {
     'id': fields.Integer(required=True),
     'name': fields.String(),
@@ -52,16 +46,20 @@ SESSION = api.model('Session', {
     'id': fields.Integer(required=True),
     'title': fields.String(),
     'subtitle': fields.String(),
-    'abstract': fields.String(),
-    'description': fields.String(),
+    'short_abstract': fields.String(),
+    'long_abstract': fields.String(),
+    'comments': fields.String(),
     'start_time': fields.DateTime(),
     'end_time': fields.DateTime(),
     'track': fields.Nested(SESSION_TRACK),
     'speakers': fields.List(fields.Nested(SESSION_SPEAKER)),
     'level': fields.Nested(SESSION_LEVEL),
     'language': fields.Nested(SESSION_LANGUAGE),
-    'format': fields.Nested(SESSION_FORMAT),
     'microlocation': fields.Nested(SESSION_MICROLOCATION),
+    'slides': fields.String(),
+    'video': fields.String(),
+    'audio': fields.String(),
+    'signup_url': fields.Uri()
 })
 
 SESSION_PAGINATED = api.clone('SessionPaginated', PAGINATED_MODEL, {
@@ -73,7 +71,6 @@ SESSION_POST = api.clone('SessionPost', SESSION, {
     'speaker_ids': fields.List(fields.Integer()),
     'level_id': fields.Integer(),
     'language_id': fields.Integer(),
-    'format_id': fields.Integer(),
     'microlocation_id': fields.Integer()
 })
 del SESSION_POST['id']
@@ -82,7 +79,6 @@ del SESSION_POST['speakers']
 del SESSION_POST['level']
 del SESSION_POST['language']
 del SESSION_POST['microlocation']
-del SESSION_POST['format']
 
 
 # Create DAO
@@ -92,7 +88,6 @@ class SessionDAO(ServiceDAO):
         del data['track_id']
         del data['level_id']
         del data['language_id']
-        del data['format_id']
         del data['microlocation_id']
         data['start_time'] = SESSION_POST['start_time'].from_str(
             data['start_time'])
@@ -114,7 +109,6 @@ class SessionDAO(ServiceDAO):
         data['track'] = self.get_object(TrackModel, data['track_id'], event_id)
         data['level'] = self.get_object(LevelModel, data['level_id'], event_id)
         data['language'] = self.get_object(LanguageModel, data['language_id'], event_id)
-        data['format'] = self.get_object(FormatModel, data['format_id'], event_id)
         data['microlocation'] = self.get_object(MicrolocationModel, data['microlocation_id'], event_id)
         data['event_id'] = event_id
         data['speakers'] = InstrumentedList(
@@ -133,7 +127,6 @@ class SessionDAO(ServiceDAO):
         obj.track = data_copy['track']
         obj.level = data_copy['level']
         obj.language = data_copy['language']
-        obj.format = data_copy['format']
         obj.microlocation = data_copy['microlocation']
         obj.speakers = data_copy['speakers']
         obj = save_db_model(obj, SessionModel.__name__, event_id)

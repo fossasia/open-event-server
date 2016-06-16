@@ -25,7 +25,7 @@ class ObjectMother(object):
     @staticmethod
     def get_session():
         return Session(title='test',
-                       description='dsad',
+                       long_abstract='dsad',
                        start_time=datetime(2003, 8, 4, 12, 30, 45),
                        end_time=datetime(2003, 8, 4, 12, 30, 45),
                        event_id=1,

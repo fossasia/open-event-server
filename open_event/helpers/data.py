@@ -21,7 +21,7 @@ from ..models import db
 from ..models.event import Event, EventsUsers
 from ..models.file import File
 from ..models.microlocation import Microlocation
-from ..models.session import Session, Level, Format, Language
+from ..models.session import Session, Level, Language
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.user import User
@@ -115,19 +115,17 @@ class DataManager(object):
         """
         new_session = Session(title=form.title.data,
                               subtitle=form.subtitle.data,
-                              description=form.description.data,
+                              long_abstract=form.long_abstract.data,
                               start_time=form.start_time.data,
                               end_time=form.end_time.data,
                               event_id=event_id,
-                              abstract=form.abstract.data)
+                              short_abstract=form.short_abstract.data)
 
         new_session.speakers = InstrumentedList(
             form.speakers.data if form.speakers.data else [])
         new_session.microlocation = form.microlocation.data
-        new_session.format = form.format.data
         new_session.level = form.level.data
         new_session.track = form.track.data
-        new_session.is_accepted = is_accepted
         save_to_db(new_session, "Session saved")
         update_version(event_id, False, "session_ver")
 
@@ -140,11 +138,11 @@ class DataManager(object):
         """
         new_session = Session(title=form["title"] if "title" in form.keys() else "",
                               subtitle=form["subtitle"] if "subtitle" in form.keys() else "",
-                              description=form["description"] if "description" in form.keys() else "",
+                              long_abstract=form["long_abstract"] if "long_abstract" in form.keys() else "",
                               start_time="2016-01-01",
                               end_time="2016-01-01",
                               event_id=event_id,
-                              abstract=form["abstract"] if "abstract" in form.keys() else "",
+                              short_abstract=form["short_abstract"] if "short_abstract" in form.keys() else "",
                               state="pending")
 
         save_to_db(new_session, "Session saved")
@@ -152,9 +150,9 @@ class DataManager(object):
 
         new_speaker = Speaker(name=form["name"] if "name" in form.keys() else "",
                               photo=form["photo"] if "photo" in form.keys() else "",
-                              biography=form["biography"] if "biography" in form.keys() else "",
+                              short_biography=form["short_biography"] if "short_biography" in form.keys() else "",
                               email=form["email"] if "email" in form.keys() else "",
-                              web=form["web"] if "web" in form.keys() else "",
+                              website=form["website"] if "website" in form.keys() else "",
                               event_id=event_id,
                               twitter=form["twitter"] if "twitter" in form.keys() else "",
                               facebook=form["facebook"] if "facebook" in form.keys() else "",
@@ -216,13 +214,11 @@ class DataManager(object):
         speakers = data["speakers"]
         microlocation = data["microlocation"]
         level = data["level"]
-        format = data["format"]
         track = data["track"]
         language = data["language"]
         del data["speakers"]
         del data["microlocation"]
         del data["level"]
-        del data["format"]
         del data["track"]
         del data["language"]
         db.session.query(Session) \
@@ -230,7 +226,6 @@ class DataManager(object):
             .update(dict(data))
         session.speakers = InstrumentedList(speakers if speakers else [])
         session.microlocation = microlocation
-        session.format = format
         session.level = level
         session.track = track
         session.language = language
@@ -256,9 +251,9 @@ class DataManager(object):
         """
         new_speaker = Speaker(name=form["name"],
                               photo="",
-                              biography=form["biography"],
+                              short_biography=form["short_biography"],
                               email=form["email"],
-                              web=form["web"],
+                              website=form["website"],
                               event_id=event_id,
                               twitter="",
                               facebook="",
@@ -377,41 +372,6 @@ class DataManager(object):
         level = Level.query.get(level_id)
         delete_from_db(level, "Level deleted")
         flash('You successfully delete level')
-
-    @staticmethod
-    def create_format(form, event_id):
-        """
-        Format will be saved to database with proper Event id
-        :param form: view data form
-        :param event_id: Format belongs to Event by event id
-        """
-        new_format = Format(name=form.name.data,
-                            label_en=form.label_en.data,
-                            event_id=event_id)
-        save_to_db(new_format, "Format saved")
-        update_version(event_id, False, "session_ver")
-
-    @staticmethod
-    def update_format(form, format, event_id):
-        """
-        Format will be updated in database
-        :param form: view data form
-        :param format: object contains all earlier data
-        """
-        data = form.data
-        db.session.query(Format).filter_by(id=format.id).update(dict(data))
-        save_to_db(format, "Format updated")
-        update_version(event_id, False, "session_ver")
-
-    @staticmethod
-    def remove_format(format_id):
-        """
-        Format will be removed from database
-        :param format_id: Format id to remove object
-        """
-        format = Format.query.get(format_id)
-        delete_from_db(format, "Format deleted")
-        flash('You successfully delete format')
 
     @staticmethod
     def create_language(form, event_id):
@@ -576,6 +536,7 @@ class DataManager(object):
                       background_url=form['background_url'],
                       type=form['event_type'],
                       topic=form['topic'],
+                      privacy=form.get('privacy', 'public'),
                       organizer_name=form['organizer_name'],
                       organizer_description=form['organizer_description'])
 
@@ -655,7 +616,7 @@ class DataManager(object):
                                                  start_date=datetime.strptime(form['cfs_start_date'], '%m/%d/%Y'),
                                                  end_date=datetime.strptime(form['cfs_end_date'], '%m/%d/%Y'),
                                                  event_id=event.id)
-                save_to_db(call_for_speakers)
+                save_to_db(call_for_speakers, "Call for speakers saved")
 
             uer = UsersEventsRoles(event_id=event.id, user_id=login.current_user.id, role_id=role.id)
             if save_to_db(uer, "Event saved"):
@@ -664,13 +625,14 @@ class DataManager(object):
             raise ValidationError("start date greater than end date")
 
     @staticmethod
-    def edit_event(form, event_id, event, session_types, tracks, social_links, microlocations, call_for_papers,
+    def edit_event(request, event_id, event, session_types, tracks, social_links, microlocations, call_for_papers,
                    sponsors):
         """
         Event will be updated in database
         :param data: view data form
         :param event: object contains all earlier data
         """
+        form = request.form
         event.name = form['name']
         event.logo = form['logo']
         event.start_time = datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M')
@@ -683,9 +645,9 @@ class DataManager(object):
         event.background_url = form['background_url']
         event.type = form['event_type']
         event.topic = form['topic']
+        event.privacy = form.get('privacy', 'public')
         event.organizer_name = form['organizer_name']
         event.organizer_description = form['organizer_description']
-
 
         state = form.get('state', None)
         if state:
@@ -706,8 +668,8 @@ class DataManager(object):
         for sponsor in sponsors:
             delete_from_db(sponsor, 'Sponsor deleted')
 
-        for call_for_paper in call_for_papers:
-            delete_from_db(call_for_paper, 'Call for paper deleted')
+        if call_for_papers:
+            delete_from_db(call_for_papers, 'Call for paper deleted')
 
         session_type_names = form.getlist('session_type[name]')
         session_type_length = form.getlist('session_type[length]')
@@ -722,7 +684,7 @@ class DataManager(object):
         room_color = form.getlist('rooms[color]')
 
         sponsor_name = form.getlist('sponsors[name]')
-        sponsor_logo = form.getlist('sponsors[logo]')
+        sponsor_logo = request.files.getlist('sponsors[logo]')
         sponsor_url = form.getlist('sponsors[url]')
         sponsor_level = form.getlist('sponsors[level]')
         sponsor_description = form.getlist('sponsors[description]')
@@ -746,7 +708,7 @@ class DataManager(object):
             db.session.add(room)
 
         for index, name in enumerate(sponsor_name):
-            sponsor = Sponsor(name=name, logo=sponsor_logo[index], url=sponsor_url[index], level=sponsor_level[index],
+            sponsor = Sponsor(name=name, logo=sponsor_logo[index].filename, url=sponsor_url[index], level=sponsor_level[index],
                               description=sponsor_description[index], event_id=event.id)
             db.session.add(sponsor)
 
@@ -755,7 +717,7 @@ class DataManager(object):
                                              start_date=datetime.strptime(form['cfs_start_date'], '%m/%d/%Y'),
                                              end_date=datetime.strptime(form['cfs_end_date'], '%m/%d/%Y'),
                                              event_id=event.id)
-            db.session.add(call_for_speakers)
+            save_to_db(call_for_speakers)
         save_to_db(event, "Event saved")
         return event
 
@@ -824,7 +786,7 @@ class DataManager(object):
         save_to_db(uer, "Event saved")
 
 
-def save_to_db(item, msg):
+def save_to_db(item, msg="Saved to db"):
     """Convenience function to wrap a proper DB save
     :param item: will be saved to database
     :param msg: Message to log

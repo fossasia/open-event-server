@@ -1,31 +1,41 @@
+{% set required_list = ['title', 'name', 'email'] %}
+{% set preselect_list = ['short_abstract', 'comments', 'slides', 'photo', 'short_biography', 'website', 'twitter', 'organisation', 'position', 'country'] %}
+
+{% set session_fields = ['title', 'subtitle', 'short_abstract', 'long_abstract', 'comments', 'track', 'session_type', 'language', 'slides', 'video', 'audio'] %}
+{% set speaker_fields = ['name', 'email','photo', 'organisation', 'position', 'country', 'short_biography', 'long_biography', 'mobile', 'website', 'facebook', 'twitter', 'github', 'linkedin'] %}
+
 {% macro field_switch(name, group, include=false, require=false ) %}
     {% set identifier = name | replace(group + '.','') %}
-    {% set ban_list = ['id', 'event_id', 'start_time', 'end_time', 'microlocation_id', 'level_id', 'format_id', 'event_id', 'state'] %}
     {% set name = identifier | replace('_id','') | replace('_',' ') %}
-    {% if identifier not in ban_list %}
-        <tr data-identifier="{{ name }}" data-group="{{ group }}">
-            <td>{{ name | capitalize }}</td>
-            <td>
-                <label>
-                    <input type="checkbox" class="js-switch include-switch" data-group="{{ group }}" onclick="includeClick(this)"
-                           {% if include %}checked="checked"{% endif %}/>
-                </label>
-            </td>
-            <td>
-                <label>
-                    <input type="checkbox" class="js-switch require-switch" data-group="{{ group }}" onclick="requireClick(this)"
-                           {% if include %}checked="checked"{% endif %}/>
-                </label>
-            </td>
-        </tr>
-    {% endif %}
+    <tr data-identifier="{{ name }}" data-group="{{ group }}">
+        <td>
+            {{ name | capitalize }}
+            {% if identifier in required_list %}<span class="required">*</span>{% endif %}
+        </td>
+        <td>
+            <label>
+                <input type="checkbox" class="js-switch include-switch" data-group="{{ group }}"
+                       {% if identifier not in required_list %}onclick="includeClick(this)"{% endif %}
+                       {% if include or identifier in preselect_list or identifier in required_list %}checked="checked"{% endif %}
+                       {% if identifier in required_list %}disabled{% endif %}/>
+            </label>
+        </td>
+        <td>
+            <label>
+                <input type="checkbox" class="js-switch require-switch" data-group="{{ group }}"
+                       {% if identifier not in required_list %}onclick="requireClick(this)"{% endif %}
+                       {% if include or identifier in required_list %}checked="checked"{% endif %}
+                       {% if identifier in required_list %}disabled{% endif %}/>
+            </label>
+        </td>
+    </tr>
 {% endmacro %}
 
 
 {% macro options_table(columns, group) %}
 
     <div style="width: 100%; text-align: center">
-        <h2 style="font-weight: 300; font-size: 22px;">Customize {{ group | capitalize }} Form</h2>
+        <h2 style="font-weight: 300; font-size: 22px;">Customize {{ group | capitalize }} Registration  Form</h2>
     </div>
 
     <table class="table table-striped table-bordered table-hover options-table {{ group }}-options-table">
@@ -47,12 +57,12 @@
 {% endmacro %}
 
 <div id="step-5" class="wizard_content" style="display: block;">
-    <div class="col-md-2"></div>
-    <div class="col-md-4">
-        {{ options_table(session_columns, 'session') }}
+    <div class="col-md-2 hidden-sm hidden-xs"></div>
+    <div class="col-md-4 col-sm-12 col-xs-12">
+        {{ options_table(session_fields, 'session') }}
     </div>
-    <div class="col-md-4">
-        {{ options_table(speaker_columns, 'speaker') }}
+    <div class="col-md-4 col-sm-12 col-xs-12">
+        {{ options_table(speaker_fields, 'speaker') }}
     </div>
     <input type="hidden" name="custom_form[name]" value="session_form">
     <input type="hidden" name="custom_form[name]" value="speaker_form">
@@ -84,9 +94,9 @@
             }
         }
 
-        if($button.data('group') === 'session') {
+        if ($button.data('group') === 'session') {
             sessionForm.setIncluded($row.data('identifier'), button.checked);
-        } else if($button.data('group') === 'speaker') {
+        } else if ($button.data('group') === 'speaker') {
             speakerForm.setIncluded($row.data('identifier'), button.checked);
         }
         persistData();
@@ -99,9 +109,9 @@
         if (!$includeSwitch[0].checked) {
             $includeSwitch.click();
         }
-        if($button.data('group') === 'session') {
+        if ($button.data('group') === 'session') {
             sessionForm.setRequired($row.data('identifier'), button.checked);
-        } else if($button.data('group') === 'speaker') {
+        } else if ($button.data('group') === 'speaker') {
             speakerForm.setRequired($row.data('identifier'), button.checked);
         }
         persistData();

@@ -2,9 +2,9 @@ from datetime import datetime
 
 from open_event.helpers.data import save_to_db
 from open_event.models.event import Event
-from open_event.models.session import Session, Level, Format, Language
+from open_event.models.session import Session, Level, Language
 from open_event.models.speaker import Speaker
-from open_event.models.sponsor import Sponsor, SponsorType
+from open_event.models.sponsor import Sponsor
 from open_event.models.microlocation import Microlocation
 from open_event.models.track import Track
 
@@ -22,18 +22,10 @@ def create_event(name='TestEvent'):
     return event.id
 
 
-def create_sponsor_type(event_id, name='TestSponsor_Type'):
-    """Create Sponsor Type
-    """
-    sponsor_type = SponsorType(name=name, event_id=event_id)
-    print save_to_db(sponsor_type, 'SponsorType saved')
-
-
 def create_session(event_id, serial_no='', **kwargs):
     """Creates Session with track ids and stuff
     """
     kwargs['track'] = Track.query.get(kwargs.get('track', 555))
-    kwargs['format'] = Format.query.get(kwargs.get('format', 555))
     kwargs['microlocation'] = Microlocation.query.get(kwargs.get('microlocation', 555))
     kwargs['level'] = Level.query.get(kwargs.get('level', 555))
     kwargs['language'] = Language.query.get(kwargs.get('language', 555))
@@ -43,7 +35,7 @@ def create_session(event_id, serial_no='', **kwargs):
     ]
     session = Session(
         title='TestSession%d_%s' % (event_id, serial_no),
-        description='descp',
+        long_abstract='descp',
         start_time=datetime(2014, 8, 4, 12, 30, 45),
         end_time=datetime(2015, 9, 4, 12, 30, 45),
         event_id=event_id,
@@ -59,7 +51,6 @@ def create_services(event_id, serial_no=''):
     test_micro = 'TestMicrolocation{}_{}'.format(serial_no, event_id)
     test_track = 'TestTrack{}_{}'.format(serial_no, event_id)
     test_level = 'TestLevel{}_{}'.format(serial_no, event_id)
-    test_format = 'TestFormat{}_{}'.format(serial_no, event_id)
     test_lang = 'TestLanguage{}_{}'.format(serial_no, event_id)
     test_session = 'TestSession{}_{}'.format(serial_no, event_id)
     test_speaker = 'TestSpeaker{}_{}'.format(serial_no, event_id)
@@ -74,10 +65,9 @@ def create_services(event_id, serial_no=''):
         color='red'
     )
     level = Level(name=test_level, event_id=event_id)
-    format_ = Format(name=test_format, label_en='label', event_id=event_id)
     language = Language(name=test_lang, event_id=event_id)
     session = Session(title=test_session,
-                      description='descp',
+                      long_abstract='descp',
                       start_time=datetime(2014, 8, 4, 12, 30, 45),
                       end_time=datetime(2015, 9, 4, 12, 30, 45),
                       event_id=event_id)
@@ -86,17 +76,15 @@ def create_services(event_id, serial_no=''):
                       organisation='org',
                       country='japan',
                       event_id=event_id)
-    sponsor_type = SponsorType(name=test_sponsor_type, event_id=event_id)
-    sponsor = Sponsor(name=test_sponsor, sponsor_type_id=1, event_id=event_id)
+    sponsor = Sponsor(name=test_sponsor, sponsor_type=test_sponsor_type,
+                      event_id=event_id, level='level')
 
     save_to_db(microlocation, 'Microlocation saved')
     save_to_db(track, 'Track saved')
     save_to_db(level, 'Level saved')
-    save_to_db(format_, 'Format saved')
     save_to_db(language, 'Language saved')
     save_to_db(session, 'Session saved')
     save_to_db(speaker, 'Speaker saved')
-    save_to_db(sponsor_type, 'SponsorType saved')
     save_to_db(sponsor, 'Sponsor saved')
 
 

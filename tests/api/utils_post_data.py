@@ -20,12 +20,8 @@ POST_EVENT_DATA = {
     "organizer_description": "Promoting Open Source culture around the world",
     "state": "TestEvent",
     "type": "Conference",
-    "topic": "Science & Technology"
-}
-
-POST_FORMAT_DATA = {
-    "label_en": "TestFormat",
-    "name": "TestFormat"
+    "topic": "Science & Technology",
+    "privacy": "public"
 }
 
 POST_LANGUAGE_DATA = {
@@ -48,24 +44,30 @@ POST_MICROLOCATION_DATA = {
 }
 
 POST_SESSION_DATA = {
-    "abstract": "TestSession",
-    "description": "TestSession",
+    "short_abstract": "TestSession",
+    "long_abstract": "TestSession",
     "end_time": "2016-05-30 09:47:37",
-    "format_id": None,
     "language_id": None,
     "level_id": None,
     "microlocation_id": None,
     "speaker_ids": [],
     "start_time": "2016-05-30 08:47:37",
     "subtitle": "TestSession",
+    "comments": "Comments",
     "title": "TestSession",
-    "track_id": None
+    "track_id": None,
+    "slides": "http://example.com/slides",
+    "video": "http://example.com/video",
+    "audio": "http://example.com/audio",
+    "signup_url": "http://example.com/signup"
 }
 
 POST_SPEAKER_DATA = {
-    "biography": "TestSpeaker",
+    "short_biography": "TestSpeaker",
+    "long_biography": "TestSpeaker",
     "country": "TestSpeaker",
     "email": "speaker@gmail.com",
+    "mobile": "speaker@gmail.com",
     "facebook": "http://facebook.com/user",
     "github": "http://github.com/user",
     "linkedin": "http://in.linkedin.com/user",
@@ -74,11 +76,7 @@ POST_SPEAKER_DATA = {
     "photo": "http://imgur.com/skds.png",
     "position": "TestSession",
     "twitter": "http://twitter.com/user",
-    "web": "http://website.com"
-}
-
-POST_SPONSOR_TYPE_DATA = {
-    "name": "TestSponsor_Type",
+    "website": "http://website.com"
 }
 
 POST_SPONSOR_DATA = {
@@ -86,7 +84,8 @@ POST_SPONSOR_DATA = {
     "name": "TestSponsor",
     "url": "http://sponsor.com",
     "description": "Big Sponsor",
-    "sponsor_type_id": 1,
+    "level": "TestSponsor",
+    "sponsor_type": "Gold",
 }
 
 POST_TRACK_DATA = {
@@ -95,4 +94,21 @@ POST_TRACK_DATA = {
     "color": "red",
     "track_image_url": "http://imgur.com/image.png",
     "location": "Some Street, Some City",
+}
+
+POST_USER_DATA = {
+    "email": "test@gmail.com",
+    "password": "test"
+}
+
+PUT_USER_DATA = {
+    "email": "email@domain.com",
+    "user_detail": {
+        "avatar": "http://website.com/image.ext",
+        "contact": "string",
+        "details": "TestUser",
+        "facebook": "string",
+        "fullname": "TestUser",
+        "twitter": "string"
+    }
 }

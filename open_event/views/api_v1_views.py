@@ -1,6 +1,5 @@
 """Copyright 2015 Rafal Kowalski"""
 import os
-import uuid
 from flask import jsonify, url_for, redirect, request, send_from_directory
 from flask.ext.cors import cross_origin
 from flask.ext import login
@@ -10,7 +9,7 @@ from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
 from ..models.event import Event
-from ..models.session import Session, Level, Format, Language
+from ..models.session import Session, Level, Language
 from ..models.version import Version
 from ..helpers.object_formatter import ObjectFormatter
 from ..helpers.helpers import get_serializer
@@ -20,36 +19,13 @@ from flask import Blueprint
 from flask.ext.autodoc import Autodoc
 from icalendar import Calendar
 import icalendar
-from flask import render_template
 from open_event.helpers.oauth import OAuth, FbOAuth
 from requests.exceptions import HTTPError
 from ..helpers.data import get_google_auth, create_user_oauth, get_facebook_auth
-from ..helpers.helpers import get_latest_heroku_release, get_commit_info
-import json
-
 
 auto = Autodoc()
 
 app = Blueprint('', __name__)
-
-
-def chunks(l, n):
-    """Yield successive n-sized chunks from l."""
-    for i in xrange(0, len(l), n):
-        yield l[i:i + n]
-
-@app.route('/', methods=['GET'])
-@auto.doc()
-@cross_origin()
-def get_main_page():
-    """Redirect to admin page"""
-    call_for_papers_evs = DataGetter.get_call_for_speakers_events().all()
-    published_events = DataGetter.get_all_published_events().all()
-    # Provide data as chunks of 6 for the UI to render in a proper way
-    return render_template('gentelella/index.html',
-                           call_for_papers_evs=list(chunks(call_for_papers_evs, 6)),
-                           published_events=list(chunks(published_events, 6)))
-
 
 @app.route('/api/v1/event', methods=['GET'])
 @auto.doc()
@@ -250,33 +226,6 @@ def get_levels_per_page(event_id, page):
     levels = Level.query.filter_by(event_id=event_id)
     return api_response(
         data=ObjectFormatter.get_json("levels", levels, request, page),
-        status_code=event_status_code(event_id),
-        error='Event',
-        check_data=True
-    )
-
-
-@app.route('/api/v1/event/<int:event_id>/formats', methods=['GET'])
-@auto.doc()
-@cross_origin()
-def get_formats(event_id):
-    """Returns all event's formats"""
-    formats = Format.query.filter_by(event_id=event_id)
-    return api_response(
-        data=ObjectFormatter.get_json("formats", formats, request),
-        status_code=event_status_code(event_id),
-        error='Event'
-    )
-
-
-@app.route('/api/v1/event/<int:event_id>/formats/page/<int:page>', methods=['GET'])
-@auto.doc()
-@cross_origin()
-def get_formatsper_page(event_id, page):
-    """Returns 20 event's formats"""
-    formats = Format.query.filter_by(event_id=event_id)
-    return api_response(
-        data=ObjectFormatter.get_json("formats", formats, request, page),
         status_code=event_status_code(event_id),
         error='Event',
         check_data=True
@@ -544,12 +493,3 @@ def send_cal(filename):
 @app.route('/documentation')
 def documentation():
     return auto.html()
-
-
-@app.route('/heroku_releases')
-def heroku_releases():
-    version = get_latest_heroku_release()
-    commit_number = version['description'].split(' ')[1]
-    commit_info = get_commit_info(commit_number)
-    return render_template('gentelella/admin/current_version.html',
-                           version=version, commit_info=commit_info)

@@ -4,7 +4,7 @@ import json
 
 from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
-from tests.api.utils import create_event, get_path, create_sponsor_type
+from tests.api.utils import create_event, get_path
 from tests.api.utils_post_data import *
 from tests.auth_helper import register
 from open_event import current_app as app
@@ -17,8 +17,7 @@ class TestDeleteApi(OpenEventTestCase):
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
-            event_id = create_event()
-            create_sponsor_type(event_id)
+            create_event()
 
     def _login_user(self):
         """
@@ -63,9 +62,6 @@ class TestDeleteApi(OpenEventTestCase):
     def test_level_api(self):
         self._test_model('level', POST_LEVEL_DATA)
 
-    def test_format_api(self):
-        self._test_model('format', POST_FORMAT_DATA)
-
     def test_language_api(self):
         self._test_model('language', POST_LANGUAGE_DATA)
 
@@ -77,9 +73,6 @@ class TestDeleteApi(OpenEventTestCase):
 
     def test_sponsor_api(self):
         self._test_model('sponsor', POST_SPONSOR_DATA)
-
-    def test_sponsor_type_api(self):
-        self._test_model('sponsor_type', POST_SPONSOR_TYPE_DATA)
 
 
 if __name__ == '__main__':
