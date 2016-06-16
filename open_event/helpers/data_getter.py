@@ -310,7 +310,7 @@ class DataGetter:
 
     @staticmethod
     def get_all_live_events():
-        return Event.query.filter(Event.start_time <= datetime.datetime.now())\
+        return Event.query.filter(Event.start_time >= datetime.datetime.now())\
             .filter(Event.end_time >= datetime.datetime.now()) \
             .filter(Event.state == 'Published')
 
