@@ -28,13 +28,11 @@ del SPONSOR_POST['id']
 
 # Create DAO
 class SponsorDAO(ServiceDAO):
-    def create(self, event_id, data, url):
-        self.validate(data)
-        return ServiceDAO.create(self, event_id, data, url, validate=False)
-
-    def update(self, event_id, service_id, data):
-        self.validate(data)
-        return ServiceDAO.update(self, event_id, service_id, data, validate=False)
+    def list_types(self, event_id):
+        sponsors = self.list(event_id)
+        return list(set(
+            sponsor.sponsor_type for sponsor in sponsors
+            if sponsor.sponsor_type is not None))
 
 
 DAO = SponsorDAO(SponsorModel, SPONSOR_POST)
@@ -85,6 +83,14 @@ class SponsorList(Resource):
             self.api.payload,
             self.api.url_for(self, event_id=event_id)
         )
+
+
+@api.route('/events/<int:event_id>/sponsors/types')
+class SponsorTypesList(Resource):
+    @api.doc('list_sponsor_types')
+    def get(self, event_id):
+        """List all sponsor types"""
+        return DAO.list_types(event_id)
 
 
 @api.route('/events/<int:event_id>/sponsors/page')
