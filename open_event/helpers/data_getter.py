@@ -369,7 +369,11 @@ class DataGetter:
 
     @staticmethod
     def get_sponsor_types(event_id):
-        return []  # need to update it
+        return list(set(
+            sponsor.sponsor_type for sponsor in
+            Sponsor.query.filter_by(event_id=event_id)
+            if sponsor.sponsor_type
+        ))
 
     @staticmethod
     def get_event_types():

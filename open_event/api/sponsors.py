@@ -32,7 +32,7 @@ class SponsorDAO(ServiceDAO):
         sponsors = self.list(event_id)
         return list(set(
             sponsor.sponsor_type for sponsor in sponsors
-            if sponsor.sponsor_type is not None))
+            if sponsor.sponsor_type))
 
 
 DAO = SponsorDAO(SponsorModel, SPONSOR_POST)
