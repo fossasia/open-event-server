@@ -24,13 +24,13 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
             <div class="row">
-                <form enctype="multipart/form-data" action="{% if event %}/events/{{ event.id }}/edit/{% else %}/events/create/{% endif %}" method="POST" role="form"
+                <form enctype="multipart/form-data" action="{% if event and not is_copy %}/events/{{ event.id }}/edit/{% else %}/events/create/{% endif %}" method="POST" role="form"
                       class="admin-form form-horizontal" id="event-wizard-form">
 
                     {% if csrf_token %}
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     {% endif %}
-                    <div id="wizard" data-type="{% if event %}edit{% else %}create{% endif %}" class="form_wizard wizard_horizontal">
+                    <div id="wizard" data-type="{% if event and not is_copy %}edit{% else %}create{% endif %}" class="form_wizard wizard_horizontal">
                         <ul class="wizard_steps anchor">
                             <li>
                                 <a href="#step-1" class="selected" isdone="1" rel="1">
