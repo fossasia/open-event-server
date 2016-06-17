@@ -2,7 +2,6 @@ import os
 
 from flask import request, url_for, redirect
 from flask_admin import expose
-from flask_admin.contrib.sqla import ModelView
 from flask.ext import login
 from ....helpers.data_getter import DataGetter
 from flask_admin import BaseView
@@ -18,4 +17,5 @@ class SuperAdminUsersView(BaseView):
 
     @expose('/')
     def index_view(self):
-        return self.render('/gentelella/admin/super_admin/users/users.html')
+        users = DataGetter.get_all_users()
+        return self.render('/gentelella/admin/super_admin/users/users.html', users=users)
