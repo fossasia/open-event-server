@@ -48,6 +48,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**organizer_description** | string | Optional | Public |
 |**type** | string | Optional | Public |
 |**topic** | string | Optional | Public |
+|**ticket_url** | string | Optional | Public |
 |**closing_datetime** | string | Optional | Public |
 
 
@@ -83,6 +84,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**audio** | string | Optional | Public |
 |**slides** | string | Optional | Public |
 |**signup_url** | string | Optional | Public |
+|**state** | string | Optional | Public |
 
 #### SessionSpeaker
 
@@ -90,6 +92,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 | --- | --- | --- |
 |**id** | integer | Required |
 |**name** | string | Optional |
+|**organisation** | string | Optional |
 
 
 

@@ -7,136 +7,128 @@ Events
 {% set active_page = "events" %}
 
 {% block head_css %}
-    {{ super() }}
+{{ super() }}
 {% endblock %}
 
 
 {% block content %}
-<div class="row">
-    <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="x_panel">
-            <div class="x_content">
-                <div class="" role="tabpanel" data-example-id="togglable-tabs">
-                    <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist" style="background: #FFFFFF;">
-                        <li role="presentation" class=""><a href="#tab_content4" role="tab" id="all-tab"
-                                                            data-toggle="tab"
-                                                            aria-expanded="false">All Events</a>
-                        </li>
-                        <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab"
-                                                                  data-toggle="tab"
-                                                                  aria-expanded="true">All Live</a>
-                        </li>
-                        <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab"
-                                                            data-toggle="tab"
-                                                            aria-expanded="false">All Draft</a>
-                        </li>
-                        <li role="presentation" class=""><a href="#tab_content3" role="tab" id="profile-tab2"
-                                                            data-toggle="tab"
-                                                            aria-expanded="false">All Past</a>
-                        </li>
 
-                        <li role="presentation" class=""><a href="#" role="tab" id="all-tab"
-                                                            data-toggle="modal" data-target="#importModal"
-                                                            aria-expanded="false">Import</a>
-                        </li>
-                    </ul>
-                    <div id="myTabContent" class="tab-content">
-                        <div role="tabpanel" class="tab-pane fade" id="tab_content4"
-                             aria-labelledby="all-tab">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>State</th>
-                                    <th>Url</th>
-                                    <th>Start Date</th>
-                                    <th>End Date</th>
-                                    <th>Options</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for event in all_events %}
-                                    {% include '/gentelella/admin/event/_table.html' %}
-                                {%endfor%}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div role="tabpanel" class="tab-pane fade active in" id="tab_content1"
-                             aria-labelledby="home-tab">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>State</th>
-                                    <th>Url</th>
-                                    <th>Start Date</th>
-                                    <th>End Date</th>
-                                    <th>Options</th>
+<div class="" role="tabpanel" data-example-id="togglable-tabs">
+    <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist" style="background: #FFFFFF;">
+        <li role="presentation" class=""><a href="#tab_content4" role="tab" id="all-tab"
+                                            data-toggle="tab"
+                                            aria-expanded="false">All Events</a>
+        </li>
+        <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab"
+                                                  data-toggle="tab"
+                                                  aria-expanded="true">All Live</a>
+        </li>
+        <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab"
+                                            data-toggle="tab"
+                                            aria-expanded="false">All Drafts</a>
+        </li>
+        <li role="presentation" class=""><a href="#tab_content3" role="tab" id="profile-tab2"
+                                            data-toggle="tab"
+                                            aria-expanded="false">All Past</a>
+        </li>
 
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for event in live_events %}
-                                    {% include '/gentelella/admin/event/_table.html' %}
-                                {%endfor%}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>State</th>
-                                    <th>Url</th>
-                                    <th>Start Date</th>
-                                    <th>End Date</th>
-                                    <th>Options</th>
+        <li role="presentation" class=""><a href="#" role="tab" id="all-tab"
+                                            data-toggle="modal" data-target="#importModal"
+                                            aria-expanded="false">Import</a>
+        </li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div role="tabpanel" class="tab-pane fade" id="tab_content4"
+             aria-labelledby="all-tab">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>State</th>
+                    <th>Url</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Options</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for event in all_events %}
+                {% include '/gentelella/admin/event/_table.html' %}
+                {%endfor%}
+                </tbody>
+            </table>
+        </div>
+        <div role="tabpanel" class="tab-pane fade active in" id="tab_content1"
+             aria-labelledby="home-tab">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>State</th>
+                    <th>Url</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Options</th>
 
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for event in draft_events %}
-                                    {% include '/gentelella/admin/event/_table.html' %}
-                                {%endfor%}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>State</th>
-                                    <th>Url</th>
-                                    <th>Start Date</th>
-                                    <th>End Date</th>
-                                    <th>Options</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for event in live_events %}
+                {% include '/gentelella/admin/event/_table.html' %}
+                {%endfor%}
+                </tbody>
+            </table>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>State</th>
+                    <th>Url</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Options</th>
 
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for event in past_events %}
-                                    {% include '/gentelella/admin/event/_table.html' %}
-                                {%endfor%}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                </tr>
+                </thead>
+                <tbody>
+                {% for event in draft_events %}
+                {% include '/gentelella/admin/event/_table.html' %}
+                {%endfor%}
+                </tbody>
+            </table>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>State</th>
+                    <th>Url</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Options</th>
 
+                </tr>
+                </thead>
+                <tbody>
+                {% for event in past_events %}
+                {% include '/gentelella/admin/event/_table.html' %}
+                {%endfor%}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 
 
-
+{% include '/gentelella/admin/event/_import_modal.html' %}
 
 {% endblock %}
 
 {% block tail_js %}
-    {{ super() }}
+{{ super() }}
 
 {% endblock %}
 

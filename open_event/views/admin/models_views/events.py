@@ -6,28 +6,12 @@ from flask_admin.contrib.sqla import ModelView
 from flask.ext import login
 
 from open_event.helpers.permission_decorators import is_organizer
+from open_event.helpers.helpers import fields_not_empty, string_empty
 from ....helpers.data import DataManager, save_to_db
 from ....helpers.data_getter import DataGetter
 import datetime
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import ImmutableMultiDict
-
-def string_empty(string):
-    if type(string) is not str and type(string) is not unicode:
-        return False
-    if string and string.strip() and string != u'' and string != u' ':
-        return False
-    else:
-        return True
-
-def string_not_empty(string):
-    return not string_empty(string)
-
-def fields_not_empty(obj, fields):
-    for field in fields:
-        if string_empty(getattr(obj, field)):
-            return False
-    return True
 
 class EventsView(ModelView):
     def is_accessible(self):
@@ -56,6 +40,9 @@ class EventsView(ModelView):
                     filename = secure_filename(img_file.filename)
                     img_file.save(os.path.join(os.path.realpath('.') + '/static/media/image/', filename))
             event = DataManager.create_event(request.form, imd)
+            if request.form.get('state', u'Draft') == u'Published' and string_empty(event.location_name):
+                flash("Your event was saved. To publish your event please review the highlighted fields below.", "warning")
+                return redirect(url_for('.edit_view', event_id=event.id) + "#step=location_name")
             if event:
                 return redirect(url_for('.details_view', event_id=event.id))
             return redirect(url_for('.index_view'))
@@ -70,7 +57,8 @@ class EventsView(ModelView):
 
         checklist = {"": ""}
 
-        if fields_not_empty(event, ['name', 'start_time', 'end_time', 'location_name', 'organizer_name', 'organizer_description']):
+        if fields_not_empty(event, ['name', 'start_time', 'end_time', 'location_name', 'organizer_name',
+                                    'organizer_description']):
             checklist["1"] = 'success'
         elif fields_not_empty(event, ['name', 'start_time', 'end_time']):
             checklist["1"] = 'missing_some'
@@ -149,12 +137,17 @@ class EventsView(ModelView):
         if request.method == "POST":
             event = DataManager.edit_event(request, event_id, event, session_types, tracks, social_links,
                                            microlocations, call_for_speakers, sponsors)
+            if request.form.get('state', u'Draft') == u'Published' and string_empty(event.location_name):
+                flash("Your event was saved. To publish your event please review the highlighted fields below.",
+                      "warning")
+                return redirect(url_for('.edit_view', event_id=event.id) + "#step=location_name")
             return redirect(url_for('.details_view', event_id=event_id))
 
     @expose('/<int:event_id>/delete/', methods=('GET',))
     def delete_view(self, event_id):
         if request.method == "GET":
             DataManager.delete_event(event_id)
+        flash("Your event has been deleted.", "danger")
         return redirect(url_for('.index_view'))
 
     @expose('/<int:event_id>/update/', methods=('POST',))
@@ -163,3 +156,33 @@ class EventsView(ModelView):
         event.closing_datetime = request.form['closing_datetime']
         save_to_db(event, 'Closing Datetime Updated')
         return self.render('/gentelella/admin/event/details/details.html', event=event)
+
+    @expose('/<int:event_id>/publish/', methods=('GET',))
+    def publish_event(self, event_id):
+        event = DataGetter.get_event(event_id)
+        if string_empty(event.location_name):
+            flash("Your event was saved. To publish your event please review the highlighted fields below.", "warning")
+            return redirect(url_for('.edit_view', event_id=event.id) + "#step=location_name")
+        event.state = 'Published'
+        save_to_db(event, 'Event Published')
+        flash("Your event has been published.", "success")
+        return redirect(url_for('.details_view', event_id=event_id))
+
+    @expose('/<int:event_id>/unpublish/', methods=('GET',))
+    def unpublish_event(self, event_id):
+        event = DataGetter.get_event(event_id)
+        event.state = 'Draft'
+        save_to_db(event, 'Event Unpublished')
+        flash("Your event has been unpublished.", "warning")
+        return redirect(url_for('.details_view', event_id=event_id))
+
+    @expose('/<int:event_id>/copy/', methods=('GET',))
+    def copy_event(self, event_id):
+        event = DataGetter.get_event(event_id)
+        event.name = "Copy of " + event.name
+        return self.render('/gentelella/admin/event/new/new.html',
+                           event=event,
+                           is_copy=True,
+                           start_date=datetime.datetime.now() + datetime.timedelta(days=10),
+                           event_types=DataGetter.get_event_types(),
+                           event_topics=DataGetter.get_event_topics())

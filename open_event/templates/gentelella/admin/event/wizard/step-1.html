@@ -35,6 +35,7 @@
         <div class="form-group">
             <label>Location</label>
             <input value="{{ event.location_name | default('', true) }}" name="location_name" id="location"
+                   placeholder="Location is required to make event live"
                    class="form-control col-md-7 col-xs-12"/>
         </div>
 
@@ -108,8 +109,7 @@
 
         <div class="item form-group">
             <label>Event Url</label>
-            <input value="{{ event.event_url | default('', true) }}" name="event_url"
-                   class="form-control"/>
+            <input value="" name="event_url" class="form-control"/>
         </div>
 
         <div class="item form-group">
@@ -232,6 +232,7 @@
         });
 
         $locationInput.valueChange(function () {
+            $locationInput.closest(".form-group").removeClass("has-warning");
             geocodeAddress(geocoder, map);
         });
     }

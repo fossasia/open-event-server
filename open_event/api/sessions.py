@@ -11,7 +11,7 @@ from .helpers.helpers import get_paginated_list, requires_auth, \
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
 from .helpers import custom_fields as fields
-from .helpers.special_fields import SessionLanguageField
+from .helpers.special_fields import SessionLanguageField, SessionStateField
 
 api = Namespace('sessions', description='Sessions', path='/')
 
@@ -24,6 +24,7 @@ SESSION_TRACK = api.model('SessionTrack', {
 SESSION_SPEAKER = api.model('SessionSpeaker', {
     'id': fields.Integer(required=True),
     'name': fields.String(),
+    'organisation': fields.String()
 })
 
 SESSION_MICROLOCATION = api.model('SessionMicrolocation', {
@@ -47,7 +48,8 @@ SESSION = api.model('Session', {
     'slides': fields.String(),
     'video': fields.String(),
     'audio': fields.String(),
-    'signup_url': fields.Uri()
+    'signup_url': fields.Uri(),
+    'state': SessionStateField()
 })
 
 SESSION_PAGINATED = api.clone('SessionPaginated', PAGINATED_MODEL, {

@@ -1,5 +1,5 @@
 {% extends 'gentelella/admin/super_admin/dashboard.html' %}
-
+{% import 'gentelella/admin/mysessions/mysessions_list.html' as mysessions with context %}
 {% block title %}
 Events
 {% endblock %}
@@ -7,21 +7,45 @@ Events
 {% set active_page = "sessions" %}
 
 {% block head_css %}
-    {{ super() }}
+{{ super() }}
+<link href="{{ url_for('static', filename='css/admin/mysessions.css') }}" rel="stylesheet">
 {% endblock %}
 
 
 {% block content %}
 
 
-
-
+<ul class="nav nav-tabs bar_tabs" style="background-color: white;">
+    <li role="presentation" class="active">
+        <a href="#upcoming-events-tab" role="tab" data-toggle="tab" aria-expanded="true">{{page_content.tab_upcoming_sessions}}</a>
+    </li>
+    <li role="presentation" class="">
+        <a href="#past-events-tab" role="tab" data-toggle="tab"
+           aria-expanded="false">{{page_content.tab_past_sessions}}</a>
+    </li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="upcoming-events-tab">
+        {% for session in upcoming_events_sessions %}
+        {{ mysessions.session_element(session) }}
+        {% else %}
+        <span class="message">No session proposals for upcoming events found</span>
+        {% endfor %}
+    </div>
+    <div class="tab-pane fade" id="past-events-tab">
+        {% for session in past_events_sessions %}
+        {{ mysessions.session_element(session) }}
+        {% else %}
+        <span class="message">No session proposals for past events found</span>
+        {% endfor %}
+    </div>
+</div>
 
 
 {% endblock %}
 
 {% block tail_js %}
-    {{ super() }}
+{{ super() }}
 
 {% endblock %}
 

@@ -1,3 +1,4 @@
+var $wizardForm = $("#session-create-form");
 $(document).ready(function() {
 
   var counter = 0;
@@ -23,7 +24,9 @@ $(document).ready(function() {
   // Smart Wizard
   $("#wizard").smartWizard({
     labelFinish:'Save Draft',
-    onFinish: function() { $("#session-create-form").submit(); }
+    onFinish: function() { $("#session-create-form").submit(); },
+    enableAllSteps: true,
+    onLeaveStep: onLeaveStep
   });
 
   $('.buttonNext').addClass("btn btn-success");
@@ -31,3 +34,26 @@ $(document).ready(function() {
   $('.buttonFinish').addClass("btn btn-default");
 
 });
+
+function onLeaveStep(obj, context) {
+    return !validate();
+}
+
+function validate() {
+    try {
+        $wizardForm.validator('destroy');
+    } catch (ignored) {
+    }
+
+    $wizardForm.validator({
+        disable: false,
+        feedback: {
+            success: 'glyphicon-ok',
+            error: 'glyphicon-remove'
+        }
+    });
+
+    $wizardForm.validator('validate');
+    return $wizardForm.data('bs.validator').hasErrors()
+}
+

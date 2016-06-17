@@ -14,6 +14,7 @@ from sqlalchemy.sql.expression import exists
 from werkzeug import secure_filename
 from wtforms import ValidationError
 
+from open_event.helpers.helpers import string_empty
 from ..helpers.update_version import VersionUpdater
 from ..helpers.data_getter import DataGetter
 from ..helpers import helpers as Helper
@@ -24,7 +25,7 @@ from ..models.microlocation import Microlocation
 from ..models.session import Session
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
-from ..models.user import User
+from ..models.user import User, ORGANIZER
 from ..models.user_detail import UserDetail
 from ..models.role import Role
 from ..models.users_events_roles import UsersEventsRoles
@@ -37,15 +38,6 @@ from requests_oauthlib import OAuth2Session
 from ..models.invite import Invite
 from ..models.call_for_papers import CallForPaper
 from ..models.custom_forms import CustomForms
-
-def string_empty(string):
-    if type(string) is not str and type(string) is not unicode:
-        return False
-    if string and string.strip() and string != u'' and string != u' ':
-        return False
-    else:
-        return True
-
 
 class DataManager(object):
     """Main class responsible for DataBase managing"""
@@ -498,19 +490,18 @@ class DataManager(object):
                       privacy=form.get('privacy', 'public'),
                       ticket_url=form['ticket_url'],
                       organizer_name=form['organizer_name'],
-                      organizer_description=form['organizer_description'])
+                      organizer_description=form['organizer_description'],
+                      creator=login.current_user)
 
         state = form.get('state', None)
-        if state:
+        if state and ((state == u'Published' and not string_empty(event.location_name)) or state != u'Published'):
             event.state = state
 
         if event.start_time <= event.end_time:
-            role = Role(name='ORGANIZER')
+            role = Role.query.filter_by(name=ORGANIZER).first()
             db.session.add(event)
-            db.session.add(role)
             db.session.flush()
             db.session.refresh(event)
-            db.session.refresh(role)
 
             session_type_names = form.getlist('session_type[name]')
             session_type_length = form.getlist('session_type[length]')
@@ -615,7 +606,7 @@ class DataManager(object):
         event.ticket_url = form['ticket_url']
 
         state = form.get('state', None)
-        if state:
+        if state and ((state == u'Published' and not string_empty(event.location_name)) or state != u'Published'):
             event.state = state
 
         for session_type in session_types:
@@ -739,20 +730,17 @@ class DataManager(object):
 
     @staticmethod
     def add_role_to_event(form, event_id):
-        role = Role(name=form['user_role'])
-        db.session.add(role)
-        db.session.flush()
-        db.session.refresh(role)
-        uer = UsersEventsRoles(event_id=event_id, user_id=form['user_id'], role_id=role.id)
+        user = User.query.filter_by(email=form['user_id']).first()
+        role = Role.query.filter_by(name=form['user_role']).first()
+        uer = UsersEventsRoles(event=Event.query.get(event_id),
+                               user=user, role=role)
         save_to_db(uer, "Event saved")
 
     @staticmethod
     def update_user_event_role(form, uer):
-        role = Role(name=form['user_role'])
-        db.session.add(role)
-        db.session.flush()
-        db.session.refresh(role)
-        uer.user = User.query.get(int(form['user_id']))
+        role = Role.query.filter_by(name=form['user_role']).first()
+        user = User.query.filter_by(email=form['user_id']).first()
+        uer.user = user
         uer.role_id = role.id
         save_to_db(uer, "Event saved")
 

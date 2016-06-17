@@ -1,4 +1,5 @@
 from flask import request
+from urlparse import urlparse
 
 class OAuth(object):
     """Google Credentials"""
@@ -20,8 +21,8 @@ class OAuth(object):
 
     @classmethod
     def get_redirect_uri(self):
-        url = (request.url.split('http://')[1]).split('/')[0]
-        redirect_uri = 'http://'+url+'/gCallback'
+        url = urlparse(request.url)
+        redirect_uri = url.scheme + '://' + url.netloc + '/gCallback'
         return redirect_uri
 
     @classmethod
@@ -57,8 +58,8 @@ class FbOAuth(object):
 
     @classmethod
     def get_redirect_uri(self):
-        url = (request.url.split('http://')[1]).split('/')[0]
-        fb_redirect_uri = 'http://' + url + '/fCallback'
+        url = urlparse(request.url)
+        fb_redirect_uri = url.scheme + '://' + url.netloc + '/fCallback'
         return fb_redirect_uri
 
     @classmethod

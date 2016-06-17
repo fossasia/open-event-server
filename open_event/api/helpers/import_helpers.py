@@ -74,7 +74,8 @@ def _delete_fields(srv, data):
     """
     if srv[0] in DELETE_FIELDS:
         for i in DELETE_FIELDS[srv[0]]:
-            del data[i]
+            if i in data:
+                del data[i]
     return data
 
 
