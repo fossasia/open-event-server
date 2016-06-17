@@ -25,7 +25,7 @@ from ..models.microlocation import Microlocation
 from ..models.session import Session
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
-from ..models.user import User
+from ..models.user import User, ORGANIZER
 from ..models.user_detail import UserDetail
 from ..models.role import Role
 from ..models.users_events_roles import UsersEventsRoles
@@ -498,12 +498,10 @@ class DataManager(object):
             event.state = state
 
         if event.start_time <= event.end_time:
-            role = Role(name='ORGANIZER')
+            role = Role.query.filter_by(name=ORGANIZER).first()
             db.session.add(event)
-            db.session.add(role)
             db.session.flush()
             db.session.refresh(event)
-            db.session.refresh(role)
 
             session_type_names = form.getlist('session_type[name]')
             session_type_length = form.getlist('session_type[length]')
@@ -732,19 +730,13 @@ class DataManager(object):
 
     @staticmethod
     def add_role_to_event(form, event_id):
-        role = Role(name=form['user_role'])
-        db.session.add(role)
-        db.session.flush()
-        db.session.refresh(role)
+        role = Role.query.filter_by(name=form['user_role']).first()
         uer = UsersEventsRoles(event_id=event_id, user_id=form['user_id'], role_id=role.id)
         save_to_db(uer, "Event saved")
 
     @staticmethod
     def update_user_event_role(form, uer):
-        role = Role(name=form['user_role'])
-        db.session.add(role)
-        db.session.flush()
-        db.session.refresh(role)
+        role = Role.query.filter_by(name=form['user_role']).first()
         uer.user = User.query.get(int(form['user_id']))
         uer.role_id = role.id
         save_to_db(uer, "Event saved")
