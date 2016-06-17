@@ -1,26 +1,26 @@
 [
     {
-        "floor": null, 
-        "id": 1, 
-        "latitude": null, 
-        "longitude": null, 
-        "name": "TestMicrolocation1_1", 
+        "floor": null,
+        "id": 1,
+        "latitude": null,
+        "longitude": null,
+        "name": "TestMicrolocation1_1",
         "room": null
-    }, 
+    },
     {
-        "floor": null, 
-        "id": 2, 
-        "latitude": null, 
-        "longitude": null, 
-        "name": "TestMicrolocation2_1", 
+        "floor": null,
+        "id": 2,
+        "latitude": null,
+        "longitude": null,
+        "name": "TestMicrolocation2_1",
         "room": null
-    }, 
+    },
     {
-        "floor": null, 
-        "id": 3, 
-        "latitude": null, 
-        "longitude": null, 
-        "name": "TestMicrolocation3_1", 
+        "floor": null,
+        "id": 3,
+        "latitude": null,
+        "longitude": null,
+        "name": "TestMicrolocation3_1",
         "room": null
     }
 ]
