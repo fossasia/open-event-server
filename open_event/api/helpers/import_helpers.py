@@ -163,8 +163,8 @@ def import_event_json(zip_path):
     except BaseError as e:
         EventDAO.delete(new_event.id)
         raise e
-    # except Exception:
-    #     EventDAO.delete(new_event.id)
-    #     raise ServerError()
+    except Exception:
+        EventDAO.delete(new_event.id)
+        raise ServerError()
 
     return new_event
