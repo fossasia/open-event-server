@@ -9,8 +9,8 @@ class SuperAdminMySessionView(BaseView):
     def display_my_sessions_view(self):
         upcoming_events_sessions = DataGetter.get_all_sessions_of_user(upcoming_events=True)
         past_events_sessions = DataGetter.get_all_sessions_of_user(upcoming_events=False)
-        page_content = {"tab_upcoming_events": "All Upcoming Events",
-                        "tab_past_events": "All Upcoming Events",
+        page_content = {"tab_upcoming_sessions": "All Upcoming",
+                        "tab_past_sessions": "All Past",
                         "title": "Sessions Proposals"}
         return self.render('/gentelella/admin/super_admin/sessions/sessions.html',
                            upcoming_events_sessions=upcoming_events_sessions,
