@@ -61,7 +61,7 @@ class EventDAO(BaseDAO):
         return data
 
     def create(self, data, url):
-        self.validate(data)
+        data = self.validate(data)
         payload = self.fix_payload(data)
         new_event = self.model(**payload)
         # set user (owner)
@@ -83,7 +83,7 @@ class EventDAO(BaseDAO):
         return self.get(new_event.id), 201, {'Location': resource_location}
 
     def update(self, event_id, data):
-        self.validate(data)
+        data = self.validate(data)
         payload = self.fix_payload(data)
         return BaseDAO.update(self, event_id, payload, validate=False)
 
