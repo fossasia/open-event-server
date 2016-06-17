@@ -1,3 +1,5 @@
+from open_event import current_app
+
 from open_event.models.role import Role
 from open_event.models.service import Service
 from open_event.models.permission import Permission
@@ -94,3 +96,8 @@ def populate():
     create_services()
     print 'Creating permissions...'
     create_permissions()
+
+
+if __name__ == '__main__':
+    with current_app.app_context():
+        populate()
