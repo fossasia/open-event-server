@@ -7,7 +7,6 @@ from errors import NotFoundError
 from werkzeug import secure_filename
 
 from ..events import DAO as EventDAO
-from ..languages import DAO as LanguageDAO
 from ..microlocations import DAO as MicrolocationDAO
 from ..sessions import DAO as SessionDAO
 from ..speakers import DAO as SpeakerDAO
@@ -18,7 +17,6 @@ from errors import BaseError, ServerError
 
 
 IMPORT_SERIES = [
-    ('languages', LanguageDAO),
     ('microlocations', MicrolocationDAO),
     ('sponsors', SponsorDAO),
     ('speakers', SpeakerDAO),
@@ -34,7 +32,6 @@ DELETE_FIELDS = {
 RELATED_FIELDS = {
     'sessions': [
         ('track', 'track_id', 'tracks'),
-        ('language', 'language_id', 'languages'),
         ('microlocation', 'microlocation_id', 'microlocations'),
         ('speakers', 'speaker_ids', 'speakers')
     ]

@@ -7,44 +7,6 @@ speakers_sessions = db.Table('speakers_sessions', db.Column(
         'session_id', db.Integer, db.ForeignKey('session.id')))
 
 
-class Language(db.Model):
-    """Language model class"""
-    __tablename__ = 'language'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    label_en = db.Column(db.String)
-    label_de = db.Column(db.String)
-    session = db.relationship('Session', backref="language")
-    event_id = db.Column(db.Integer, nullable=False)
-
-    def __init__(self,
-                 name=None,
-                 label_en=None,
-                 label_de=None,
-                 session=None,
-                 event_id=None):
-        self.name = name
-        self.label_en = label_en
-        self.label_de = label_de
-        self.event_id = event_id
-
-    @property
-    def serialize(self):
-        """Return object data in easily serializeable format"""
-        return {'name': self.name,
-                'label_en': self.label_en,
-                'label_de': self.label_de}
-
-    def __repr__(self):
-        return '<Language %r>' % (self.name)
-
-    def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return self.name
-
-
 class Session(db.Model):
     """Session model class"""
     __tablename__ = 'session'
@@ -61,7 +23,7 @@ class Session(db.Model):
         'Speaker',
         secondary=speakers_sessions,
         backref=db.backref('sessions', lazy='dynamic'))
-    language_id = db.Column(db.Integer, db.ForeignKey('language.id'))
+    language = db.Column(db.String)
     microlocation_id = db.Column(db.Integer, db.ForeignKey('microlocation.id'))
 
     slides = db.Column(db.String)
@@ -135,11 +97,6 @@ class Session(db.Model):
                 {'id': speaker.id,
                  'name': speaker.name} for speaker in self.speakers
             ],
-            'lang': {
-                'id': self.language.name,
-                'label_en': self.language.label_en,
-                'label_de': self.language.label_de
-            } if self.language else None,
             'microlocation': self.microlocation.id
             if self.microlocation else None
         }

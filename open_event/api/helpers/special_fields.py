@@ -19,3 +19,12 @@ class EventTopicField(fields.ChoiceString):
         super(EventTopicField, self).__init__(
             choice_list=DataGetter.get_event_topics(),
             **kwargs)
+
+
+class SessionLanguageField(fields.ChoiceString):
+    __schema_example__ = DataGetter.get_language_list()[51]
+
+    def __init__(self, **kwargs):
+        super(SessionLanguageField, self).__init__(
+            choice_list=DataGetter.get_language_list(),
+            **kwargs)
