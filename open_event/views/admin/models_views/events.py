@@ -145,6 +145,7 @@ class EventsView(ModelView):
     def delete_view(self, event_id):
         if request.method == "GET":
             DataManager.delete_event(event_id)
+        flash("Your event has been deleted.", "danger")
         return redirect(url_for('.index_view'))
 
     @expose('/<int:event_id>/update/', methods=('POST',))
@@ -153,3 +154,33 @@ class EventsView(ModelView):
         event.closing_datetime = request.form['closing_datetime']
         save_to_db(event, 'Closing Datetime Updated')
         return self.render('/gentelella/admin/event/details/details.html', event=event)
+
+    @expose('/<int:event_id>/publish/', methods=('GET',))
+    def publish_event(self, event_id):
+        event = DataGetter.get_event(event_id)
+        if string_empty(event.location_name):
+            flash("Your event was saved. To publish your event please review the highlighted fields below.", "warning")
+            return redirect(url_for('.edit_view', event_id=event.id) + "#step=location_name")
+        event.state = 'Published'
+        save_to_db(event, 'Event Published')
+        flash("Your event has been published.", "success")
+        return redirect(url_for('.details_view', event_id=event_id))
+
+    @expose('/<int:event_id>/unpublish/', methods=('GET',))
+    def unpublish_event(self, event_id):
+        event = DataGetter.get_event(event_id)
+        event.state = 'Draft'
+        save_to_db(event, 'Event Unpublished')
+        flash("Your event has been unpublished.", "warning")
+        return redirect(url_for('.details_view', event_id=event_id))
+
+    @expose('/<int:event_id>/copy/', methods=('GET',))
+    def copy_event(self, event_id):
+        event = DataGetter.get_event(event_id)
+        event.name = "Copy of " + event.name
+        return self.render('/gentelella/admin/event/new/new.html',
+                           event=event,
+                           is_copy=True,
+                           start_date=datetime.datetime.now() + datetime.timedelta(days=10),
+                           event_types=DataGetter.get_event_types(),
+                           event_topics=DataGetter.get_event_topics())
