@@ -5,6 +5,9 @@ The system has two kind of role type. 1. System roles are related to the Open Ev
 Currently the only system role of Super Admin.
 
 ### 1.1 Access to User Features for Super Admin
+
+The Super Admin can access all user features.
+
 | Function | Role | View | Create, Edit, Assign, Unassign | Delete | BaseURLs |
 | --- | --- | --- | --- | --- | --- |
 | MANAGE OWN PROFILE | Super Admin | YES | YES | YES | /profile
@@ -14,6 +17,9 @@ Currently the only system role of Super Admin.
 | MANAGE SESSIONS OF OWN EVENTS | Super Admin | YES | YES | YES | 
 
 ### 1.2 Access to Admin Features
+
+The Super Admin can access all admin features.
+
 | Function | Role | View | Create, Edit, Assign, Unassign | Delete | BaseURLs |
 | --- | --- | --- | --- | --- | --- |
 | ALL ROLES PERMISSIONS | Super Admin | YES | YES |  YES | /admin/permissions
