@@ -7,17 +7,16 @@
     {% set name = identifier | replace('_id','') %}
     {% set pretty_name = name | replace('_',' ') | capitalize  %}
     <div class="item form-group speaker-fields">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12" style="text-transform:capitalize;">
+        <label class="control-label">
             {{ pretty_name }}
         {% if require==1 %}
             <span class="required">*</span>
         {% endif %}
         </label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
         {% if identifier in textarea_fields %}
           <textarea name="{{ name }}" class="form-control col-md-7 col-xs-12"></textarea>
         {% elif identifier in media_fields %}
-          <input type="file" id="speaker-file-{{ name | default(1) }}" name="{{ name }}"
+          <br><input type="file" id="speaker-file-{{ name | default(1) }}" name="{{ name }}"
                    class="upload-btn"/>
           <label class="file-label" for="speaker-file-{{ name | default(1) }}">
                 <i class="fa fa-cloud-upload" aria-hidden="true"></i>
@@ -25,13 +24,15 @@
         {% else %}
           <input name="{{ name }}" class="form-control col-md-7 col-xs-12"/>
         {% endif %}
-        </div>
     </div>
 {% endmacro %}
 
 
 <div id="step-2" class="wizard_content" style="display: block;">
-  <div class="col-md-12 speaker_form">
+  <div class="col-md-3 col-sm-3 col-xs-12 speaker_form">
+
+  </div>
+  <div class="col-md-6 col-sm-6 col-xs-12 speaker_form">
     {% for elem in speaker_fields %}
             {% if speaker_form[elem].include==1 %}
                 {{ speaker_form_field(elem, speaker_form[elem].require) }}

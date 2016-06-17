@@ -7,20 +7,19 @@
     {% set name = identifier | replace('_id','') %}
     {% set pretty_name = name | replace('_',' ') | capitalize  %}
     <div class="item form-group speaker-fields">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12" style="text-transform:capitalize;">
+        <label class="control-label">
             {{ pretty_name }}
         {% if require==1 %}
             <span class="required">*</span>
         {% endif %}
         </label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
         {% if identifier in textarea_fields %}
           <textarea {% if require==1 %}
                         required="required"
                     {% endif %}
                     name="{{ name }}" class="form-control col-md-7 col-xs-12"></textarea>
         {% elif identifier in media_fields %}
-          <input {% if require==1 %}
+          <br><input {% if require==1 %}
                     required="required"
                 {% endif %}
                 type="file" id="speaker-file-{{ name | default(1) }}" name="{{ name }}"
@@ -34,12 +33,14 @@
                 {% endif %}
                 name="{{ name }}" class="form-control col-md-7 col-xs-12"/>
         {% endif %}
-        </div>
     </div>
 {% endmacro %}
 
 <div id="step-1" class="wizard_content" style="display: block;">
-  <div class="col-md-12 session_form">
+  <div class="col-md-3 col-sm-3 col-xs-12 speaker_form">
+
+  </div>
+  <div class="col-md-6 col-sm-6 col-xs-12 speaker_form">
     {% for elem in session_fields %}
             {% if session_form[elem].include==1 %}
                 {{ session_form_field(elem, session_form[elem].require) }}
