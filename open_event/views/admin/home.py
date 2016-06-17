@@ -151,3 +151,6 @@ class MyHomeView(AdminIndexView):
                            sessions=sessions)
 
 
+    @expose('/forbidden/', methods=('GET',))
+    def forbidden_view(self):
+        return self.render('/gentelella/admin/forbidden.html')

@@ -5,6 +5,7 @@ from flask_admin import expose
 from flask_admin.contrib.sqla import ModelView
 from flask.ext import login
 
+from open_event.helpers.permission_decorators import is_organizer
 from ....helpers.data import DataManager, save_to_db
 from ....helpers.data_getter import DataGetter
 import datetime
@@ -130,6 +131,7 @@ class EventsView(ModelView):
         return self.render('/gentelella/admin/event/details/details.html', event=event, checklist=checklist)
 
     @expose('/<int:event_id>/edit/', methods=('GET', 'POST'))
+    @is_organizer
     def edit_view(self, event_id):
         event = DataGetter.get_event(event_id)
         session_types = DataGetter.get_session_types_by_event_id(event_id).all()
@@ -149,7 +151,7 @@ class EventsView(ModelView):
                                            microlocations, call_for_speakers, sponsors)
             return redirect(url_for('.details_view', event_id=event_id))
 
-    @expose('/<event_id>/delete/', methods=('GET',))
+    @expose('/<int:event_id>/delete/', methods=('GET',))
     def delete_view(self, event_id):
         if request.method == "GET":
             DataManager.delete_event(event_id)
