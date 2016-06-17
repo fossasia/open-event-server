@@ -1,53 +1,50 @@
+{% set textarea_fields = ['short_abstract', 'long_abstract'] %}
+{% set media_fields = ['slides', 'video', 'audio'] %}
+
+{% set session_fields = ['title', 'subtitle', 'short_abstract', 'long_abstract', 'comments', 'track', 'session_type', 'language', 'slides', 'video', 'audio'] %}
+
+{% macro session_form_field(identifier, require=0) %}
+    {% set name = identifier | replace('_id','') %}
+    {% set pretty_name = name | replace('_',' ') | capitalize  %}
+    <div class="item form-group speaker-fields">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12" style="text-transform:capitalize;">
+            {{ pretty_name }}
+        {% if require==1 %}
+            <span class="required">*</span>
+        {% endif %}
+        </label>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+        {% if identifier in textarea_fields %}
+          <textarea {% if require==1 %}
+                        required="required"
+                    {% endif %}
+                    name="{{ name }}" class="form-control col-md-7 col-xs-12"></textarea>
+        {% elif identifier in media_fields %}
+          <input {% if require==1 %}
+                    required="required"
+                {% endif %}
+                type="file" id="speaker-file-{{ name | default(1) }}" name="{{ name }}"
+                   class="upload-btn"/>
+          <label class="file-label" for="speaker-file-{{ name | default(1) }}">
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                Choose a file</label>
+        {% else %}
+          <input {% if require==1 %}
+                    required="required"
+                {% endif %}
+                name="{{ name }}" class="form-control col-md-7 col-xs-12"/>
+        {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
 <div id="step-1" class="wizard_content" style="display: block;">
   <div class="col-md-12 session_form">
+    {% for elem in session_fields %}
+            {% if session_form[elem].include==1 %}
+                {{ session_form_field(elem, session_form[elem].require) }}
+            {% endif %}
+    {% endfor %}
   </div>
 </div>
-<script type="text/javascript">
-$(document).ready(function() {
-    {% for elem in form_elems%}
-        var elements = {{elem.session_form | safe}};
-        for (index in elements) {
-            var set = 0;
-            if ((index == "long_abstract" || index == "short_abstract") && elements[index]['include'] == 1) {
-                set = 1;
-                var form_elem = '<div class="item form-group">'+
-                                    '<label class="control-label col-md-3 col-sm-3 col-xs-12" style="text-transform:capitalize;">' +index;
-                if (elements[index]['require'] == 1) {
-                    form_elem += '<span class="required">*</span>'+
-                                    '</label>'+
-                                    '<div class="col-md-6 col-sm-6 col-xs-12">'+
-                                      '<textarea name="' + index + '" class="form-control col-md-7 col-xs-12"></textarea>'+
-                                    '</div>'+
-                                '</div>';
-                } else {
-                    form_elem += '</label>'+
-                                    '<div class="col-md-6 col-sm-6 col-xs-12">'+
-                                      '<textarea name="' + index + '" class="form-control col-md-7 col-xs-12"></textarea>'+
-                                    '</div>'+
-                                '</div>';
-                }
-            }else if (elements[index]['include'] == 1) {
-                set = 1;
-                var form_elem = '<div class="item form-group">'+
-                                    '<label class="control-label col-md-3 col-sm-3 col-xs-12" style="text-transform:capitalize;">' +index;
-                if (elements[index]['require'] == 1) {
-                    form_elem += '<span class="required">*</span>'+
-                                    '</label>'+
-                                    '<div class="col-md-6 col-sm-6 col-xs-12">'+
-                                      '<input name="'+index+'" class="form-control col-md-7 col-xs-12"/>'+
-                                    '</div>'+
-                                '</div>';
-                } else {
-                    form_elem += '</label>'+
-                                    '<div class="col-md-6 col-sm-6 col-xs-12">'+
-                                      '<input name="'+index+'" class="form-control col-md-7 col-xs-12"/>'+
-                                    '</div>'+
-                                '</div>';
-                }
-            }
-            if (set == 1)
-                $('.session_form').append(form_elem);
-        }
-    {% endfor %}
-});
-</script>
+

@@ -4,6 +4,7 @@ from flask.ext import login
 from flask import request, url_for, redirect
 from ....helpers.data import DataManager, save_to_db
 from ....helpers.data_getter import DataGetter
+import json
 
 
 class SessionView(ModelView):
@@ -32,10 +33,16 @@ class SessionView(ModelView):
     @expose('/create/', methods=('GET', 'POST'))
     def create_view(self, event_id):
         form_elems = DataGetter.get_custom_form_elements(event_id)
+        speaker_form = ""
+        session_form = ""
+        for elem in form_elems:
+            speaker_form = json.loads(elem.speaker_form)
+            session_form = json.loads(elem.session_form)
         if request.method == 'POST':
             DataManager.add_session_to_event(request.form, event_id)
             return redirect(url_for('session.index_view', event_id=event_id))
-        return self.render('/gentelella/admin/event/session/new/new.html', form_elems=form_elems)
+        return self.render('/gentelella/admin/event/session/new/new.html',
+                           speaker_form=speaker_form, session_form=session_form)
 
     @expose('/new/<user_id>/<hash>/', methods=('GET', 'POST'))
     def new_view(self, event_id, user_id, hash):

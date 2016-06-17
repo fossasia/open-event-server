@@ -1,53 +1,41 @@
+{% set textarea_fields = ['short_biography', 'long_biography'] %}
+{% set media_fields = ['photo'] %}
+
+{% set speaker_fields = ['name', 'email','photo', 'organisation', 'position', 'country', 'short_biography', 'long_biography', 'mobile', 'website', 'facebook', 'twitter', 'github', 'linkedin'] %}
+
+{% macro speaker_form_field(identifier, require=0) %}
+    {% set name = identifier | replace('_id','') %}
+    {% set pretty_name = name | replace('_',' ') | capitalize  %}
+    <div class="item form-group speaker-fields">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12" style="text-transform:capitalize;">
+            {{ pretty_name }}
+        {% if require==1 %}
+            <span class="required">*</span>
+        {% endif %}
+        </label>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+        {% if identifier in textarea_fields %}
+          <textarea name="{{ name }}" class="form-control col-md-7 col-xs-12"></textarea>
+        {% elif identifier in media_fields %}
+          <input type="file" id="speaker-file-{{ name | default(1) }}" name="{{ name }}"
+                   class="upload-btn"/>
+          <label class="file-label" for="speaker-file-{{ name | default(1) }}">
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                Choose a file</label>
+        {% else %}
+          <input name="{{ name }}" class="form-control col-md-7 col-xs-12"/>
+        {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
+
 <div id="step-2" class="wizard_content" style="display: block;">
   <div class="col-md-12 speaker_form">
+    {% for elem in speaker_fields %}
+            {% if speaker_form[elem].include==1 %}
+                {{ speaker_form_field(elem, speaker_form[elem].require) }}
+            {% endif %}
+    {% endfor %}
   </div>
 </div>
-<script type="text/javascript">
-$(document).ready(function() {
-    {% for elem in form_elems%}
-        var elements = {{elem.speaker_form | safe}};
-        for (index in elements) {
-            var set = 0;
-            if ((index == "short_biography") && elements[index]['include'] == 1) {
-                set = 1;
-                var form_elem = '<div class="item form-group">'+
-                                    '<label class="control-label col-md-3 col-sm-3 col-xs-12" style="text-transform:capitalize;">' +index;
-                if (elements[index]['require'] == 1) {
-                    form_elem += '<span class="required">*</span>'+
-                                    '</label>'+
-                                    '<div class="col-md-6 col-sm-6 col-xs-12">'+
-                                      '<textarea name="' + index + '" class="form-control col-md-7 col-xs-12"></textarea>'+
-                                    '</div>'+
-                                '</div>';
-                } else {
-                    form_elem += '</label>'+
-                                    '<div class="col-md-6 col-sm-6 col-xs-12">'+
-                                      '<textarea name="' + index + '" class="form-control col-md-7 col-xs-12"></textarea>'+
-                                    '</div>'+
-                                '</div>';
-                }
-            }else if (elements[index]['include'] == 1) {
-                set = 1;
-                var form_elem = '<div class="item form-group">'+
-                                    '<label class="control-label col-md-3 col-sm-3 col-xs-12" style="text-transform:capitalize;">' +index;
-                if (elements[index]['require'] == 1) {
-                    form_elem += '<span class="required">*</span>'+
-                                    '</label>'+
-                                    '<div class="col-md-6 col-sm-6 col-xs-12">'+
-                                      '<input name="'+index+'" class="form-control col-md-7 col-xs-12"/>'+
-                                    '</div>'+
-                                '</div>';
-                } else {
-                    form_elem += '</label>'+
-                                    '<div class="col-md-6 col-sm-6 col-xs-12">'+
-                                      '<input name="'+index+'" class="form-control col-md-7 col-xs-12"/>'+
-                                    '</div>'+
-                                '</div>';
-                }
-            }
-            if (set == 1)
-                $('.speaker_form').append(form_elem);
-        }
-    {% endfor %}
-});
-</script>
