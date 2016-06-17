@@ -1,7 +1,10 @@
 from flask.ext.restplus import Resource, Namespace
 from flask import g
 
-from open_event.models.event import Event as EventModel, EventsUsers
+from open_event.models.event import Event as EventModel
+from open_event.models.users_events_roles import UsersEventsRoles
+from open_event.models.role import Role
+from open_event.models.user import ORGANIZER
 from open_event.helpers.data import save_to_db, update_version
 
 from .helpers.helpers import get_paginated_list, requires_auth
@@ -12,6 +15,11 @@ from helpers.special_fields import EventTypeField, EventTopicField
 
 
 api = Namespace('events', description='Events')
+
+EVENT_CREATOR = api.model('EventCreator', {
+    'id': fields.Integer(),
+    'email': fields.Email()
+})
 
 EVENT = api.model('Event', {
     'id': fields.Integer(required=True),
@@ -34,7 +42,8 @@ EVENT = api.model('Event', {
     'type': EventTypeField(),
     'topic': EventTopicField(),
     'privacy': fields.String(),
-    'ticket_url': fields.Uri()
+    'ticket_url': fields.Uri(),
+    'creator': fields.Nested(EVENT_CREATOR, allow_null=True)
 })
 
 EVENT_PAGINATED = api.clone('EventPaginated', PAGINATED_MODEL, {
@@ -43,6 +52,7 @@ EVENT_PAGINATED = api.clone('EventPaginated', PAGINATED_MODEL, {
 
 EVENT_POST = api.clone('EventPost', EVENT)
 del EVENT_POST['id']
+del EVENT_POST['creator']
 
 
 class EventDAO(BaseDAO):
@@ -64,19 +74,17 @@ class EventDAO(BaseDAO):
         data = self.validate(data)
         payload = self.fix_payload(data)
         new_event = self.model(**payload)
-        # set user (owner)
-        a = EventsUsers()
-        a.user = g.user
-        a.editor = True
-        a.admin = True
-        new_event.users.append(a)
+        new_event.creator = g.user
         save_to_db(new_event, "Event saved")
+        # set organizer
+        role = Role.query.filter_by(name=ORGANIZER).first()
+        uer = UsersEventsRoles(g.user, new_event, role)
+        save_to_db(uer, 'UER saved')
         update_version(
             event_id=new_event.id,
             is_created=True,
             column_to_increment="event_ver"
         )
-
         # Return created resource with a 201 status code and its Location
         # (url) in the header.
         resource_location = url + '/' + str(new_event.id)
