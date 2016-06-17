@@ -14,6 +14,7 @@ from sqlalchemy.sql.expression import exists
 from werkzeug import secure_filename
 from wtforms import ValidationError
 
+from open_event.helpers.helpers import string_empty
 from ..helpers.update_version import VersionUpdater
 from ..helpers.data_getter import DataGetter
 from ..helpers import helpers as Helper
@@ -37,15 +38,6 @@ from requests_oauthlib import OAuth2Session
 from ..models.invite import Invite
 from ..models.call_for_papers import CallForPaper
 from ..models.custom_forms import CustomForms
-
-def string_empty(string):
-    if type(string) is not str and type(string) is not unicode:
-        return False
-    if string and string.strip() and string != u'' and string != u' ':
-        return False
-    else:
-        return True
-
 
 class DataManager(object):
     """Main class responsible for DataBase managing"""
@@ -501,7 +493,7 @@ class DataManager(object):
                       organizer_description=form['organizer_description'])
 
         state = form.get('state', None)
-        if state:
+        if state and ((state == u'Published' and not string_empty(event.location_name)) or state != u'Published'):
             event.state = state
 
         if event.start_time <= event.end_time:
@@ -615,7 +607,7 @@ class DataManager(object):
         event.ticket_url = form['ticket_url']
 
         state = form.get('state', None)
-        if state:
+        if state and ((state == u'Published' and not string_empty(event.location_name)) or state != u'Published'):
             event.state = state
 
         for session_type in session_types:

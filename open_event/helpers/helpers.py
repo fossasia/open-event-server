@@ -123,4 +123,19 @@ def get_commit_info(commit_number):
     response = requests.get("https://api.github.com/repos/fossasia/open-event-orga-server/commits/" + commit_number)
     return json.loads(response.text)
 
+def string_empty(string):
+    if type(string) is not str and type(string) is not unicode:
+        return False
+    if string and string.strip() and string != u'' and string != u' ':
+        return False
+    else:
+        return True
 
+def string_not_empty(string):
+    return not string_empty(string)
+
+def fields_not_empty(obj, fields):
+    for field in fields:
+        if string_empty(getattr(obj, field)):
+            return False
+    return True

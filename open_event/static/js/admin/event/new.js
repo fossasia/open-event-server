@@ -35,8 +35,10 @@ $(document).ready(function () {
         hash = getHashValue('step').trim();
     } catch (ignored) { }
 
-    if (hash !== "1") {
+    if (hash !== "1" && hash !== "location_name") {
         $wizard.smartWizard('goToStep', parseInt(hash));
+    } else if (hash === "location_name") {
+        $wizardForm.find("input[name=location_name]").closest(".form-group").addClass("has-warning");
     }
 
     $(window).resize(function () {
