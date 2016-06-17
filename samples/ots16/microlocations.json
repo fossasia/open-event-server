@@ -1,26 +1,34 @@
 [
-    {
-        "floor": null,
-        "id": 1,
-        "latitude": null,
-        "longitude": null,
-        "name": "TestMicrolocation1_1",
-        "room": null
-    },
-    {
-        "floor": null,
-        "id": 2,
-        "latitude": null,
-        "longitude": null,
-        "name": "TestMicrolocation2_1",
-        "room": null
-    },
-    {
-        "floor": null,
-        "id": 3,
-        "latitude": null,
-        "longitude": null,
-        "name": "TestMicrolocation3_1",
-        "room": null
-    }
+  {
+    "id": 8, 
+    "name": "Ebene 2, Raum 4"
+  }, 
+  {
+    "id": 3, 
+    "name": "Ebene 1, Raum 4 / First Floor, Room 4"
+  }, 
+  {
+    "id": 7, 
+    "name": "Ebene 1, Raum 2 und Raum 3 / Floor 1, Room 2 and Room 3"
+  }, 
+  {
+    "id": 6, 
+    "name": "Ebene 2, Loft / Floor 2"
+  }, 
+  {
+    "id": 1, 
+    "name": "Erdgeschoss, Saal / Ground Floor"
+  }, 
+  {
+    "id": 5, 
+    "name": "Ebene 1, Galerie / Floor 1"
+  }, 
+  {
+    "id": 2, 
+    "name": "Erdgeschoss, Hoflounge / Ground Floor, Hoflounge Room"
+  }, 
+  {
+    "id": 4, 
+    "name": "Ebene 1, Raum 1 / First Floor, Room 1"
+  }
 ]
