@@ -99,7 +99,7 @@ class SessionDAO(ServiceDAO):
         return data
 
     def update(self, event_id, service_id, data):
-        self.validate(data)
+        data = self.validate(data)
         data_copy = data.copy()
         data_copy = self.fix_payload_post(event_id, data_copy)
         data = self._delete_fields(data)
@@ -111,7 +111,7 @@ class SessionDAO(ServiceDAO):
         return obj
 
     def create(self, event_id, data, url):
-        self.validate(data)
+        data = self.validate(data)
         payload = self.fix_payload_post(event_id, data)
         return ServiceDAO.create(self, event_id, payload, url, validate=False)
 

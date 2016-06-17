@@ -1,6 +1,7 @@
 from flask_restplus import Model, fields, reqparse
 from .helpers import get_object_list, get_object_or_404, get_object_in_event, \
-    create_model, validate_payload, delete_model, update_model
+    create_model, validate_payload, delete_model, update_model, \
+    handle_extra_payload
 from open_event.models.event import Event as EventModel
 
 DEFAULT_PAGE_START = 1
@@ -72,13 +73,13 @@ class BaseDAO:
 
     def create(self, data, validate=True):
         if validate:
-            self.validate(data, self.post_api_model)
+            data = self.validate(data, self.post_api_model)
         item = create_model(self.model, data)
         return item
 
     def update(self, id_, data, validate=True):
         if validate:
-            self.validate(data, self.put_api_model)
+            data = self.validate(data, self.put_api_model)
         item = update_model(self.model, id_, data)
         return item
 
@@ -90,7 +91,9 @@ class BaseDAO:
         if not model:
             model = self.post_api_model
         if model:
+            data = handle_extra_payload(data, model)
             validate_payload(data, model)
+        return data
 
 
 # DAO for Service Models
@@ -109,7 +112,7 @@ class ServiceDAO(BaseDAO):
 
     def create(self, event_id, data, url, validate=True):
         if validate:
-            self.validate(data)
+            data = self.validate(data)
         item = create_model(self.model, data, event_id=event_id)
 
         # Return created resource with a 201 status code and its Location
@@ -119,7 +122,7 @@ class ServiceDAO(BaseDAO):
 
     def update(self, event_id, service_id, data, validate=True):
         if validate:
-            self.validate(data)
+            data = self.validate(data)
         item = update_model(self.model, service_id, data, event_id)
         return item
 

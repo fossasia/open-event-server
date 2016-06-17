@@ -9,8 +9,7 @@ from test_post_api import TestPostApiBase
 class ApiValidationTestCase():
     """
     Base class for testing api validation
-    NOTE - validates only for custom fields as default restplus
-    fields are validated by flask-restplus itself
+    NOTE - validates only for custom fields like email, url, color, datetime
     """
     def _test_model(self, name, data, fields=[]):
         pass
