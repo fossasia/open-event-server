@@ -48,6 +48,8 @@ class Event(db.Model):
     type = db.Column(db.String)
     topic = db.Column(db.String)
     ticket_url = db.Column(db.String)
+    creator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    creator = db.relationship('User')
     db.UniqueConstraint('track.name')
 
     def __init__(self,
@@ -70,7 +72,8 @@ class Event(db.Model):
                  type=None,
                  privacy=None,
                  topic=None,
-                 ticket_url=None):
+                 ticket_url=None,
+                 creator=None):
         self.name = name
         self.logo = logo
         self.email = email
@@ -91,7 +94,7 @@ class Event(db.Model):
         self.type = type
         self.topic = topic
         self.ticket_url = ticket_url
-        # self.owner = owner
+        self.creator = creator
 
     def __repr__(self):
         return '<Event %r>' % self.name
