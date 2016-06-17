@@ -25,7 +25,7 @@ from ..models.microlocation import Microlocation
 from ..models.session import Session
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
-from ..models.user import User
+from ..models.user import User, ORGANIZER
 from ..models.user_detail import UserDetail
 from ..models.role import Role
 from ..models.users_events_roles import UsersEventsRoles
@@ -498,7 +498,7 @@ class DataManager(object):
             event.state = state
 
         if event.start_time <= event.end_time:
-            role = Role(name='ORGANIZER')
+            role = Role(name=ORGANIZER)
             db.session.add(event)
             db.session.add(role)
             db.session.flush()
