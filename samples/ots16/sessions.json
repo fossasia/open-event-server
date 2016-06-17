@@ -13,7 +13,7 @@
       "name": "Maker Space",
       "id": 2
     },
-    "start_time": "2016-05-05T07:30:00",
+    "start_time": "2016-05-05 07:30:00",
     "session_id": "MS-1",
     "slides": null,
     "video": "https://www.youtube.com/channel/UCJoKp-gG2t7lH5_hiKp95yA",
@@ -21,7 +21,7 @@
     "sign_up": "http://www.meetup.com/OpenXLab/events/230011213/",
     "audio": null,
     "type": "Ganzt\u00e4giger L\u00f6tworkshop / Soldering Workshop",
-    "end_time": "2016-05-05T08:00:00"
+    "end_time": "2016-05-05 08:00:00"
   },
   {
     "speakers": [
@@ -37,7 +37,7 @@
       "name": "Maker Space",
       "id": 2
     },
-    "start_time": "2016-05-05T07:30:00",
+    "start_time": "2016-05-05 07:30:00",
     "session_id": "MS-2",
     "slides": null,
     "video": null,
@@ -45,7 +45,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Workshop/Ausstellung/Exhibition",
-    "end_time": "2016-05-05T08:00:00"
+    "end_time": "2016-05-05 08:00:00"
   },
   {
     "speakers": [
@@ -61,7 +61,7 @@
       "name": "Maker Space",
       "id": 2
     },
-    "start_time": "2016-05-05T07:30:00",
+    "start_time": "2016-05-05 07:30:00",
     "session_id": "MS-3",
     "slides": null,
     "video": null,
@@ -69,7 +69,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Infotisch, Ausstellung, Exhibition, Gem\u00fctliche Kissenecke",
-    "end_time": "2016-05-05T08:00:00"
+    "end_time": "2016-05-05 08:00:00"
   },
   {
     "speakers": [
@@ -85,7 +85,7 @@
       "name": "Maker Space",
       "id": 2
     },
-    "start_time": "2016-05-05T07:30:00",
+    "start_time": "2016-05-05 07:30:00",
     "session_id": "MS-4",
     "slides": null,
     "video": null,
@@ -93,7 +93,7 @@
     "sign_up": "http://www.meetup.com/OpenXLab/events/230593089/",
     "audio": null,
     "type": "Workshop und Infotisch",
-    "end_time": "2016-05-05T08:00:00"
+    "end_time": "2016-05-05 08:00:00"
   },
   {
     "speakers": [
@@ -109,7 +109,7 @@
       "name": "Maker Space",
       "id": 2
     },
-    "start_time": "2016-05-05T07:30:00",
+    "start_time": "2016-05-05 07:30:00",
     "session_id": "MS-5",
     "slides": null,
     "video": null,
@@ -117,7 +117,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Infotisch mit Workshops / Info table and Workshops",
-    "end_time": "2016-05-05T08:00:00"
+    "end_time": "2016-05-05 08:00:00"
   },
   {
     "speakers": [
@@ -133,7 +133,7 @@
       "name": "Maker Space",
       "id": 2
     },
-    "start_time": "2016-05-05T07:30:00",
+    "start_time": "2016-05-05 07:30:00",
     "session_id": "MS-6",
     "slides": null,
     "video": null,
@@ -141,7 +141,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Hackspace-Infotisch, Exhibition",
-    "end_time": "2016-05-05T08:00:00"
+    "end_time": "2016-05-05 08:00:00"
   },
   {
     "speakers": [
@@ -157,7 +157,7 @@
       "name": "Maker Space",
       "id": 2
     },
-    "start_time": "2016-05-05T07:30:00",
+    "start_time": "2016-05-05 07:30:00",
     "session_id": "MS-7",
     "slides": null,
     "video": null,
@@ -165,7 +165,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Freie Software-Infoecke / Information Corner",
-    "end_time": "2016-05-05T08:00:00"
+    "end_time": "2016-05-05 08:00:00"
   },
   {
     "speakers": [
@@ -181,7 +181,7 @@
       "name": "Maker Space",
       "id": 2
     },
-    "start_time": "2016-05-05T07:30:00",
+    "start_time": "2016-05-05 07:30:00",
     "session_id": "MS-8",
     "slides": null,
     "video": null,
@@ -189,7 +189,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Infotisch/Info Table",
-    "end_time": "2016-05-05T08:00:00"
+    "end_time": "2016-05-05 08:00:00"
   },
   {
     "speakers": [
@@ -205,7 +205,7 @@
       "name": "Maker Space",
       "id": 2
     },
-    "start_time": "2016-05-05T07:30:00",
+    "start_time": "2016-05-05 07:30:00",
     "session_id": "MS-9",
     "slides": null,
     "video": null,
@@ -213,7 +213,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Hardware Hacks",
-    "end_time": "2016-05-05T08:00:00"
+    "end_time": "2016-05-05 08:00:00"
   },
   {
     "speakers": [
@@ -234,7 +234,7 @@
       "name": "Maker Space",
       "id": 2
     },
-    "start_time": "2016-05-05T07:30:00",
+    "start_time": "2016-05-05 07:30:00",
     "session_id": "MS-10",
     "slides": null,
     "video": null,
@@ -242,7 +242,7 @@
     "sign_up": "http://www.meetup.com/FashionTec-Meetup-Berlin/events/230760758/",
     "audio": null,
     "type": "Workshop mit befreiten Strickmaschinen / Knitting Machines with Open Source",
-    "end_time": "2016-05-05T08:00:00"
+    "end_time": "2016-05-05 08:00:00"
   },
   {
     "speakers": [
@@ -258,7 +258,7 @@
       "name": "Maker Space",
       "id": 2
     },
-    "start_time": "2016-05-05T07:30:00",
+    "start_time": "2016-05-05 07:30:00",
     "session_id": "MS-12",
     "slides": null,
     "video": null,
@@ -266,7 +266,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Infotisch / Showcase Table",
-    "end_time": "2016-05-05T08:00:00"
+    "end_time": "2016-05-05 08:00:00"
   },
   {
     "speakers": [
@@ -282,7 +282,7 @@
       "name": "Maker Space",
       "id": 2
     },
-    "start_time": "2016-05-05T07:30:00",
+    "start_time": "2016-05-05 07:30:00",
     "session_id": "MS-13",
     "slides": null,
     "video": null,
@@ -290,7 +290,7 @@
     "sign_up": null,
     "audio": null,
     "type": "",
-    "end_time": "2016-05-05T08:00:00"
+    "end_time": "2016-05-05 08:00:00"
   },
   {
     "speakers": [
@@ -311,7 +311,7 @@
       "name": "Maker Space",
       "id": 2
     },
-    "start_time": "2016-05-05T07:30:00",
+    "start_time": "2016-05-05 07:30:00",
     "session_id": "MS-14",
     "slides": null,
     "video": null,
@@ -319,7 +319,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Workshop und Infotisch / Showcase Table",
-    "end_time": "2016-05-05T08:00:00"
+    "end_time": "2016-05-05 08:00:00"
   },
   {
     "speakers": [
@@ -335,7 +335,7 @@
       "name": "Maker Space",
       "id": 2
     },
-    "start_time": "2016-05-05T07:30:00",
+    "start_time": "2016-05-05 07:30:00",
     "session_id": "MS-15",
     "slides": null,
     "video": null,
@@ -343,7 +343,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Workshop und Infotisch / Showcase Table",
-    "end_time": "2016-05-05T08:00:00"
+    "end_time": "2016-05-05 08:00:00"
   },
   {
     "speakers": [
@@ -359,7 +359,7 @@
       "name": "Workshops",
       "id": 3
     },
-    "start_time": "2016-05-05T08:00:00",
+    "start_time": "2016-05-05 08:00:00",
     "session_id": "W-1",
     "slides": null,
     "video": null,
@@ -367,7 +367,7 @@
     "sign_up": "http://www.meetup.com/OpenXLab/events/230435191/",
     "audio": null,
     "type": "Workshop, 2h",
-    "end_time": "2016-05-05T08:30:00"
+    "end_time": "2016-05-05 08:30:00"
   },
   {
     "speakers": [
@@ -398,7 +398,7 @@
       "name": "Workshops",
       "id": 3
     },
-    "start_time": "2016-05-05T08:00:00",
+    "start_time": "2016-05-05 08:00:00",
     "session_id": "W-2",
     "slides": null,
     "video": null,
@@ -406,7 +406,7 @@
     "sign_up": "http://www.meetup.com/OpenXLab/events/230762856/",
     "audio": null,
     "type": "Workshop, 5h",
-    "end_time": "2016-05-05T08:30:00"
+    "end_time": "2016-05-05 08:30:00"
   },
   {
     "speakers": [
@@ -422,7 +422,7 @@
       "name": "Workshops",
       "id": 3
     },
-    "start_time": "2016-05-05T08:30:00",
+    "start_time": "2016-05-05 08:30:00",
     "session_id": "W-10",
     "slides": null,
     "video": null,
@@ -430,7 +430,7 @@
     "sign_up": "http://www.meetup.com/OpenXLab/events/230160858/",
     "audio": null,
     "type": "Workshop",
-    "end_time": "2016-05-05T09:00:00"
+    "end_time": "2016-05-05 09:00:00"
   },
   {
     "speakers": [
@@ -451,7 +451,7 @@
       "name": "Workshops",
       "id": 3
     },
-    "start_time": "2016-05-05T09:00:00",
+    "start_time": "2016-05-05 09:00:00",
     "session_id": "W-3",
     "slides": null,
     "video": null,
@@ -459,7 +459,7 @@
     "sign_up": "http://www.meetup.com/Software-Craftsmanship-Berlin/events/230566242/",
     "audio": null,
     "type": "Workshop und Developer Meetup, 2h",
-    "end_time": "2016-05-05T09:30:00"
+    "end_time": "2016-05-05 09:30:00"
   },
   {
     "speakers": [
@@ -475,7 +475,7 @@
       "name": "Workshops",
       "id": 3
     },
-    "start_time": "2016-05-05T09:00:00",
+    "start_time": "2016-05-05 09:00:00",
     "session_id": "W-4",
     "slides": null,
     "video": null,
@@ -483,7 +483,7 @@
     "sign_up": "http://www.meetup.com/OpenXLab/events/230446672/",
     "audio": null,
     "type": "Workshop, 2h",
-    "end_time": "2016-05-05T09:30:00"
+    "end_time": "2016-05-05 09:30:00"
   },
   {
     "speakers": [
@@ -499,7 +499,7 @@
       "name": "Workshops",
       "id": 3
     },
-    "start_time": "2016-05-05T12:00:00",
+    "start_time": "2016-05-05 12:00:00",
     "session_id": "W-11",
     "slides": null,
     "video": null,
@@ -507,7 +507,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Workshop",
-    "end_time": "2016-05-05T12:30:00"
+    "end_time": "2016-05-05 12:30:00"
   },
   {
     "speakers": [
@@ -523,7 +523,7 @@
       "name": "Workshops",
       "id": 3
     },
-    "start_time": "2016-05-05T12:00:00",
+    "start_time": "2016-05-05 12:00:00",
     "session_id": "W-5",
     "slides": null,
     "video": null,
@@ -531,7 +531,7 @@
     "sign_up": "http://www.meetup.com/OpenXLab/events/230447656/",
     "audio": null,
     "type": "Workshop, 1h",
-    "end_time": "2016-05-05T12:30:00"
+    "end_time": "2016-05-05 12:30:00"
   },
   {
     "speakers": [
@@ -552,7 +552,7 @@
       "name": "Workshops",
       "id": 3
     },
-    "start_time": "2016-05-05T13:00:00",
+    "start_time": "2016-05-05 13:00:00",
     "session_id": "W-8",
     "slides": null,
     "video": null,
@@ -560,7 +560,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Workshop, 1/2 h",
-    "end_time": "2016-05-05T13:30:00"
+    "end_time": "2016-05-05 13:30:00"
   },
   {
     "speakers": [
@@ -581,7 +581,7 @@
       "name": "Workshops",
       "id": 3
     },
-    "start_time": "2016-05-05T13:30:00",
+    "start_time": "2016-05-05 13:30:00",
     "session_id": "W-9",
     "slides": null,
     "video": null,
@@ -589,7 +589,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Workshop, 1/2 h",
-    "end_time": "2016-05-05T14:00:00"
+    "end_time": "2016-05-05 14:00:00"
   },
   {
     "speakers": [
@@ -605,7 +605,7 @@
       "name": "Workshops",
       "id": 3
     },
-    "start_time": "2016-05-05T14:00:00",
+    "start_time": "2016-05-05 14:00:00",
     "session_id": "W-6",
     "slides": null,
     "video": null,
@@ -613,7 +613,7 @@
     "sign_up": "http://www.meetup.com/OpenXLab/events/230539055/",
     "audio": null,
     "type": "Workshop, 2h",
-    "end_time": "2016-05-05T14:30:00"
+    "end_time": "2016-05-05 14:30:00"
   },
   {
     "speakers": [
@@ -634,7 +634,7 @@
       "name": "Workshops",
       "id": 3
     },
-    "start_time": "2016-05-05T14:00:00",
+    "start_time": "2016-05-05 14:00:00",
     "session_id": "W-7",
     "slides": null,
     "video": null,
@@ -642,7 +642,7 @@
     "sign_up": "http://www.meetup.com/Software-Craftsmanship-Berlin/events/230566242/",
     "audio": null,
     "type": "Workshop und Developer Meetup, 2h",
-    "end_time": "2016-05-05T14:30:00"
+    "end_time": "2016-05-05 14:30:00"
   },
   {
     "speakers": [
@@ -658,7 +658,7 @@
       "name": "LightningTalks",
       "id": 4
     },
-    "start_time": "2016-05-05T11:15:00",
+    "start_time": "2016-05-05 11:15:00",
     "session_id": "LT-1",
     "slides": null,
     "video": null,
@@ -666,7 +666,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Lightning Talk",
-    "end_time": "2016-05-05T11:45:00"
+    "end_time": "2016-05-05 11:45:00"
   },
   {
     "speakers": [
@@ -687,7 +687,7 @@
       "name": "LightningTalks",
       "id": 4
     },
-    "start_time": "2016-05-05T11:21:00",
+    "start_time": "2016-05-05 11:21:00",
     "session_id": "LT-9",
     "slides": null,
     "video": null,
@@ -695,7 +695,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Lightning Talk",
-    "end_time": "2016-05-05T11:51:00"
+    "end_time": "2016-05-05 11:51:00"
   },
   {
     "speakers": [
@@ -711,7 +711,7 @@
       "name": "LightningTalks",
       "id": 4
     },
-    "start_time": "2016-05-05T11:27:00",
+    "start_time": "2016-05-05 11:27:00",
     "session_id": "LT-7",
     "slides": null,
     "video": null,
@@ -719,7 +719,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Lightning Talk",
-    "end_time": "2016-05-05T11:57:00"
+    "end_time": "2016-05-05 11:57:00"
   },
   {
     "speakers": [
@@ -740,7 +740,7 @@
       "name": "LightningTalks",
       "id": 4
     },
-    "start_time": "2016-05-05T11:33:00",
+    "start_time": "2016-05-05 11:33:00",
     "session_id": "LT-2",
     "slides": null,
     "video": null,
@@ -748,7 +748,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Lightning Talk",
-    "end_time": "2016-05-05T12:03:00"
+    "end_time": "2016-05-05 12:03:00"
   },
   {
     "speakers": [
@@ -764,7 +764,7 @@
       "name": "LightningTalks",
       "id": 4
     },
-    "start_time": "2016-05-05T11:39:00",
+    "start_time": "2016-05-05 11:39:00",
     "session_id": "LT-3",
     "slides": null,
     "video": null,
@@ -772,7 +772,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Lightning Talk",
-    "end_time": "2016-05-05T12:09:00"
+    "end_time": "2016-05-05 12:09:00"
   },
   {
     "speakers": [
@@ -788,7 +788,7 @@
       "name": "LightningTalks",
       "id": 4
     },
-    "start_time": "2016-05-05T11:45:00",
+    "start_time": "2016-05-05 11:45:00",
     "session_id": "LT-4",
     "slides": null,
     "video": null,
@@ -796,7 +796,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Lightning Talk",
-    "end_time": "2016-05-05T12:15:00"
+    "end_time": "2016-05-05 12:15:00"
   },
   {
     "speakers": [
@@ -812,7 +812,7 @@
       "name": "LightningTalks",
       "id": 4
     },
-    "start_time": "2016-05-05T11:51:00",
+    "start_time": "2016-05-05 11:51:00",
     "session_id": "LT-5",
     "slides": null,
     "video": null,
@@ -820,7 +820,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Lightning Talk",
-    "end_time": "2016-05-05T12:21:00"
+    "end_time": "2016-05-05 12:21:00"
   },
   {
     "speakers": [
@@ -836,7 +836,7 @@
       "name": "LightningTalks",
       "id": 4
     },
-    "start_time": "2016-05-05T11:57:00",
+    "start_time": "2016-05-05 11:57:00",
     "session_id": "LT-6",
     "slides": null,
     "video": null,
@@ -844,7 +844,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Lightning Talk",
-    "end_time": "2016-05-05T12:27:00"
+    "end_time": "2016-05-05 12:27:00"
   },
   {
     "speakers": [
@@ -860,7 +860,7 @@
       "name": "LightningTalks",
       "id": 4
     },
-    "start_time": "2016-05-05T12:03:00",
+    "start_time": "2016-05-05 12:03:00",
     "session_id": "LT-8",
     "slides": null,
     "video": null,
@@ -868,7 +868,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Lightning Talk",
-    "end_time": "2016-05-05T12:33:00"
+    "end_time": "2016-05-05 12:33:00"
   },
   {
     "speakers": [
@@ -889,7 +889,7 @@
       "name": "LightningTalks",
       "id": 4
     },
-    "start_time": "2016-05-05T12:09:00",
+    "start_time": "2016-05-05 12:09:00",
     "session_id": "LT-11",
     "slides": null,
     "video": null,
@@ -897,7 +897,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Lightning Talk",
-    "end_time": "2016-05-05T12:39:00"
+    "end_time": "2016-05-05 12:39:00"
   },
   {
     "speakers": [
@@ -918,7 +918,7 @@
       "name": "LightningTalks",
       "id": 4
     },
-    "start_time": "2016-05-05T12:15:00",
+    "start_time": "2016-05-05 12:15:00",
     "session_id": "LT-10",
     "slides": null,
     "video": null,
@@ -926,7 +926,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Lightning Talk",
-    "end_time": "2016-05-05T12:45:00"
+    "end_time": "2016-05-05 12:45:00"
   },
   {
     "speakers": [
@@ -942,7 +942,7 @@
       "name": "OTS 1",
       "id": 5
     },
-    "start_time": "2016-05-05T08:55:00",
+    "start_time": "2016-05-05 08:55:00",
     "session_id": "OT-01",
     "slides": null,
     "video": "https://www.youtube.com/watch?v=RtkF5lEleAM",
@@ -950,7 +950,7 @@
     "sign_up": null,
     "audio": "audio/5058.mp3",
     "type": "",
-    "end_time": "2016-05-05T09:25:00"
+    "end_time": "2016-05-05 09:25:00"
   },
   {
     "speakers": [
@@ -966,7 +966,7 @@
       "name": "OTS 1",
       "id": 5
     },
-    "start_time": "2016-05-05T09:00:00",
+    "start_time": "2016-05-05 09:00:00",
     "session_id": "OT-02",
     "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/picoTCP_OpenTechSummit.pdf",
     "video": "https://www.youtube.com/watch?v=LyMDER7O0UI",
@@ -974,7 +974,7 @@
     "sign_up": null,
     "audio": "audio/5059.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T09:30:00"
+    "end_time": "2016-05-05 09:30:00"
   },
   {
     "speakers": [
@@ -990,7 +990,7 @@
       "name": "OTS 1",
       "id": 5
     },
-    "start_time": "2016-05-05T09:25:00",
+    "start_time": "2016-05-05 09:25:00",
     "session_id": "OT-03",
     "slides": null,
     "video": "https://www.youtube.com/watch?v=_viwqzg34Rw",
@@ -998,7 +998,7 @@
     "sign_up": null,
     "audio": "audio/5043.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T09:55:00"
+    "end_time": "2016-05-05 09:55:00"
   },
   {
     "speakers": [
@@ -1014,7 +1014,7 @@
       "name": "OTS 1",
       "id": 5
     },
-    "start_time": "2016-05-05T09:50:00",
+    "start_time": "2016-05-05 09:50:00",
     "session_id": "OT-04",
     "slides": null,
     "video": "https://www.youtube.com/watch?v=IJ1ihYramP8",
@@ -1022,7 +1022,7 @@
     "sign_up": null,
     "audio": "audio/5061.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T10:20:00"
+    "end_time": "2016-05-05 10:20:00"
   },
   {
     "speakers": [
@@ -1038,7 +1038,7 @@
       "name": "OTS 1",
       "id": 5
     },
-    "start_time": "2016-05-05T10:15:00",
+    "start_time": "2016-05-05 10:15:00",
     "session_id": "OT-05",
     "slides": null,
     "video": "https://www.youtube.com/watch?v=MIXP9hg14tg",
@@ -1046,7 +1046,7 @@
     "sign_up": null,
     "audio": "audio/5062.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T10:45:00"
+    "end_time": "2016-05-05 10:45:00"
   },
   {
     "speakers": [
@@ -1062,7 +1062,7 @@
       "name": "OTS 1",
       "id": 5
     },
-    "start_time": "2016-05-05T10:35:00",
+    "start_time": "2016-05-05 10:35:00",
     "session_id": "OT-06",
     "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/Open%20Data%20f%C3%BCr%20Dummies%20-%20oder%20-%20Wie%20nutze%20ich%20offene%20Daten%20v2.pdf",
     "video": "https://www.youtube.com/watch?v=sNUoTFHnLA0",
@@ -1070,7 +1070,7 @@
     "sign_up": null,
     "audio": "audio/5063.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T11:05:00"
+    "end_time": "2016-05-05 11:05:00"
   },
   {
     "speakers": [
@@ -1086,7 +1086,7 @@
       "name": "OTS 1",
       "id": 5
     },
-    "start_time": "2016-05-05T10:55:00",
+    "start_time": "2016-05-05 10:55:00",
     "session_id": "OT-07",
     "slides": null,
     "video": "https://www.youtube.com/watch?v=OFdHc0afOzs",
@@ -1094,7 +1094,7 @@
     "sign_up": null,
     "audio": "audio/5064.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T11:25:00"
+    "end_time": "2016-05-05 11:25:00"
   },
   {
     "speakers": [
@@ -1110,7 +1110,7 @@
       "name": "OTS 1",
       "id": 5
     },
-    "start_time": "2016-05-05T11:15:00",
+    "start_time": "2016-05-05 11:15:00",
     "session_id": "OT-08",
     "slides": null,
     "video": "https://www.youtube.com/watch?v=6Rmx5J9YjEc",
@@ -1118,7 +1118,7 @@
     "sign_up": null,
     "audio": "audio/5120.mp3",
     "type": "Lightning Talks",
-    "end_time": "2016-05-05T11:45:00"
+    "end_time": "2016-05-05 11:45:00"
   },
   {
     "speakers": [
@@ -1134,7 +1134,7 @@
       "name": "OTS 1",
       "id": 5
     },
-    "start_time": "2016-05-05T12:20:00",
+    "start_time": "2016-05-05 12:20:00",
     "session_id": "OT-09",
     "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/Hyperledger%20-%20OpenTechSummit%202016.pdf",
     "video": "https://www.youtube.com/watch?v=mdmimNaTCZQ",
@@ -1142,7 +1142,7 @@
     "sign_up": null,
     "audio": "audio/5066.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T12:50:00"
+    "end_time": "2016-05-05 12:50:00"
   },
   {
     "speakers": [
@@ -1158,7 +1158,7 @@
       "name": "OTS 1",
       "id": 5
     },
-    "start_time": "2016-05-05T12:45:00",
+    "start_time": "2016-05-05 12:45:00",
     "session_id": "OT-10",
     "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/Suchmaschinen%20der%20Zukunft%2020160505.pdf",
     "video": "https://www.youtube.com/watch?v=pOaqMt8mwXY",
@@ -1166,7 +1166,7 @@
     "sign_up": null,
     "audio": "audio/5067.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T13:15:00"
+    "end_time": "2016-05-05 13:15:00"
   },
   {
     "speakers": [
@@ -1182,7 +1182,7 @@
       "name": "OTS 1",
       "id": 5
     },
-    "start_time": "2016-05-05T13:15:00",
+    "start_time": "2016-05-05 13:15:00",
     "session_id": "OT-12",
     "slides": null,
     "video": "https://www.youtube.com/watch?v=PtIyubd4xjg",
@@ -1190,7 +1190,7 @@
     "sign_up": null,
     "audio": "audio/5068.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T13:45:00"
+    "end_time": "2016-05-05 13:45:00"
   },
   {
     "speakers": [
@@ -1221,7 +1221,7 @@
       "name": "OTS 1",
       "id": 5
     },
-    "start_time": "2016-05-05T13:40:00",
+    "start_time": "2016-05-05 13:40:00",
     "session_id": "OT-11",
     "slides": null,
     "video": "https://www.youtube.com/watch?v=yhNm9Mvkrvc",
@@ -1229,7 +1229,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Panel",
-    "end_time": "2016-05-05T14:10:00"
+    "end_time": "2016-05-05 14:10:00"
   },
   {
     "speakers": [
@@ -1245,7 +1245,7 @@
       "name": "OTS 1",
       "id": 5
     },
-    "start_time": "2016-05-05T14:30:00",
+    "start_time": "2016-05-05 14:30:00",
     "session_id": "OT-13",
     "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/The%20systemd%20Journal%20(Lennart%20Poettering).pdf",
     "video": "https://www.youtube.com/watch?v=Eo6DC3m2U7o",
@@ -1253,7 +1253,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T15:00:00"
+    "end_time": "2016-05-05 15:00:00"
   },
   {
     "speakers": [
@@ -1269,7 +1269,7 @@
       "name": "OTS 1",
       "id": 5
     },
-    "start_time": "2016-05-05T15:10:00",
+    "start_time": "2016-05-05 15:10:00",
     "session_id": "OT-14",
     "slides": null,
     "video": "https://www.youtube.com/watch?v=X37_Xod7-5k",
@@ -1277,7 +1277,7 @@
     "sign_up": null,
     "audio": "audio/5071.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T15:40:00"
+    "end_time": "2016-05-05 15:40:00"
   },
   {
     "speakers": [
@@ -1298,7 +1298,7 @@
       "name": "OTS 1",
       "id": 5
     },
-    "start_time": "2016-05-05T15:40:00",
+    "start_time": "2016-05-05 15:40:00",
     "session_id": "OT-15",
     "slides": null,
     "video": "https://www.youtube.com/watch?v=cvOMC6tPVJs",
@@ -1306,7 +1306,7 @@
     "sign_up": null,
     "audio": "audio/5072.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T16:10:00"
+    "end_time": "2016-05-05 16:10:00"
   },
   {
     "speakers": [
@@ -1322,7 +1322,7 @@
       "name": "OTS 1",
       "id": 5
     },
-    "start_time": "2016-05-05T16:10:00",
+    "start_time": "2016-05-05 16:10:00",
     "session_id": "OT-16",
     "slides": null,
     "video": "https://www.youtube.com/watch?v=bjgIMs-Tfs4",
@@ -1330,7 +1330,7 @@
     "sign_up": null,
     "audio": "audio/5073.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T16:40:00"
+    "end_time": "2016-05-05 16:40:00"
   },
   {
     "speakers": [
@@ -1346,7 +1346,7 @@
       "name": "OTS 1",
       "id": 5
     },
-    "start_time": "2016-05-05T16:40:00",
+    "start_time": "2016-05-05 16:40:00",
     "session_id": "OT-17",
     "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/quo-vadis-devops.pdf",
     "video": "https://www.youtube.com/watch?v=TkPMuOHRRlw",
@@ -1354,7 +1354,7 @@
     "sign_up": null,
     "audio": "audio/5074.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T17:10:00"
+    "end_time": "2016-05-05 17:10:00"
   },
   {
     "speakers": [
@@ -1370,7 +1370,7 @@
       "name": "OTS 1",
       "id": 5
     },
-    "start_time": "2016-05-05T17:05:00",
+    "start_time": "2016-05-05 17:05:00",
     "session_id": "OT-18",
     "slides": "http://www.jorgk.com/misc/tb.htm",
     "video": "https://www.youtube.com/watch?v=5ijNFPlv_sY",
@@ -1378,7 +1378,7 @@
     "sign_up": null,
     "audio": "audio/5075.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T17:35:00"
+    "end_time": "2016-05-05 17:35:00"
   },
   {
     "speakers": [
@@ -1394,7 +1394,7 @@
       "name": "OTS 1",
       "id": 5
     },
-    "start_time": "2016-05-05T17:30:00",
+    "start_time": "2016-05-05 17:30:00",
     "session_id": "OT-19",
     "slides": null,
     "video": "https://www.youtube.com/watch?v=Bzs2_ETVIyg",
@@ -1402,7 +1402,7 @@
     "sign_up": null,
     "audio": "audio/5076.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T18:00:00"
+    "end_time": "2016-05-05 18:00:00"
   },
   {
     "speakers": [
@@ -1440,7 +1440,7 @@
       "name": "OTS 1",
       "id": 5
     },
-    "start_time": "2016-05-05T17:55:00",
+    "start_time": "2016-05-05 17:55:00",
     "session_id": "OT-21",
     "slides": null,
     "video": "https://www.youtube.com/watch?v=LSqa1OxsdOE",
@@ -1448,7 +1448,7 @@
     "sign_up": null,
     "audio": "audio/5077.mp3",
     "type": "Danke und Lounge",
-    "end_time": "2016-05-05T18:25:00"
+    "end_time": "2016-05-05 18:25:00"
   },
   {
     "speakers": [
@@ -1464,7 +1464,7 @@
       "name": "OTS 2",
       "id": 6
     },
-    "start_time": "2016-05-05T09:00:00",
+    "start_time": "2016-05-05 09:00:00",
     "session_id": "OT2-1",
     "slides": null,
     "video": null,
@@ -1472,7 +1472,7 @@
     "sign_up": null,
     "audio": "audio/5078.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T09:30:00"
+    "end_time": "2016-05-05 09:30:00"
   },
   {
     "speakers": [
@@ -1493,7 +1493,7 @@
       "name": "OTS 2",
       "id": 6
     },
-    "start_time": "2016-05-05T09:30:00",
+    "start_time": "2016-05-05 09:30:00",
     "session_id": "OT2-2",
     "slides": null,
     "video": null,
@@ -1501,7 +1501,7 @@
     "sign_up": null,
     "audio": "audio/5079.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T10:00:00"
+    "end_time": "2016-05-05 10:00:00"
   },
   {
     "speakers": [
@@ -1517,7 +1517,7 @@
       "name": "OTS 2",
       "id": 6
     },
-    "start_time": "2016-05-05T10:00:00",
+    "start_time": "2016-05-05 10:00:00",
     "session_id": "OT2-3",
     "slides": null,
     "video": null,
@@ -1525,7 +1525,7 @@
     "sign_up": null,
     "audio": "audio/5080.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T10:30:00"
+    "end_time": "2016-05-05 10:30:00"
   },
   {
     "speakers": [
@@ -1541,7 +1541,7 @@
       "name": "OTS 2",
       "id": 6
     },
-    "start_time": "2016-05-05T10:30:00",
+    "start_time": "2016-05-05 10:30:00",
     "session_id": "OT2-4",
     "slides": null,
     "video": null,
@@ -1549,7 +1549,7 @@
     "sign_up": null,
     "audio": "audio/5081.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T11:00:00"
+    "end_time": "2016-05-05 11:00:00"
   },
   {
     "speakers": [
@@ -1565,7 +1565,7 @@
       "name": "OTS 2",
       "id": 6
     },
-    "start_time": "2016-05-05T11:00:00",
+    "start_time": "2016-05-05 11:00:00",
     "session_id": "OT2-5",
     "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/TinyBoy-STEAM-ENG.pptx",
     "video": null,
@@ -1573,7 +1573,7 @@
     "sign_up": null,
     "audio": "audio/5082.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T11:30:00"
+    "end_time": "2016-05-05 11:30:00"
   },
   {
     "speakers": [
@@ -1589,7 +1589,7 @@
       "name": "OTS 2",
       "id": 6
     },
-    "start_time": "2016-05-05T11:30:00",
+    "start_time": "2016-05-05 11:30:00",
     "session_id": "OT2-6",
     "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/ElioQoshi%20-%20Community%20Design%20Talk.ppt.pdf",
     "video": null,
@@ -1597,7 +1597,7 @@
     "sign_up": null,
     "audio": "audio/5083.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T12:00:00"
+    "end_time": "2016-05-05 12:00:00"
   },
   {
     "speakers": [
@@ -1613,7 +1613,7 @@
       "name": "OTS 2",
       "id": 6
     },
-    "start_time": "2016-05-05T12:00:00",
+    "start_time": "2016-05-05 12:00:00",
     "session_id": "OT2-7",
     "slides": null,
     "video": null,
@@ -1621,7 +1621,7 @@
     "sign_up": null,
     "audio": "audio/5084.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T12:30:00"
+    "end_time": "2016-05-05 12:30:00"
   },
   {
     "speakers": [
@@ -1637,7 +1637,7 @@
       "name": "OTS 2",
       "id": 6
     },
-    "start_time": "2016-05-05T12:30:00",
+    "start_time": "2016-05-05 12:30:00",
     "session_id": "OT2-8",
     "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/SLIDES_%20Sind%20die%20Kommentare%20noch%20zu%20retten_.pdf",
     "video": null,
@@ -1645,7 +1645,7 @@
     "sign_up": null,
     "audio": "audio/5085.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T13:00:00"
+    "end_time": "2016-05-05 13:00:00"
   },
   {
     "speakers": [
@@ -1661,7 +1661,7 @@
       "name": "OTS 2",
       "id": 6
     },
-    "start_time": "2016-05-05T13:00:00",
+    "start_time": "2016-05-05 13:00:00",
     "session_id": "OT2-9",
     "slides": null,
     "video": null,
@@ -1669,7 +1669,7 @@
     "sign_up": null,
     "audio": "audio/5086.mp3",
     "type": "Talk mit Live-Hack (20 Minuten)",
-    "end_time": "2016-05-05T13:30:00"
+    "end_time": "2016-05-05 13:30:00"
   },
   {
     "speakers": [
@@ -1685,7 +1685,7 @@
       "name": "OTS 2",
       "id": 6
     },
-    "start_time": "2016-05-05T13:30:00",
+    "start_time": "2016-05-05 13:30:00",
     "session_id": "OT2-10",
     "slides": null,
     "video": null,
@@ -1693,7 +1693,7 @@
     "sign_up": null,
     "audio": "audio/5087.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T14:00:00"
+    "end_time": "2016-05-05 14:00:00"
   },
   {
     "speakers": [
@@ -1709,7 +1709,7 @@
       "name": "OTS 2",
       "id": 6
     },
-    "start_time": "2016-05-05T14:00:00",
+    "start_time": "2016-05-05 14:00:00",
     "session_id": "OT2-11",
     "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/OpenTech%20Summit-%20Creating%20Service%20Clouds%20with%20Kubernetes%2C%20CoreOS%2C%20Container%20and%20Co%20.pdf",
     "video": null,
@@ -1717,7 +1717,7 @@
     "sign_up": null,
     "audio": "audio/5091.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T14:30:00"
+    "end_time": "2016-05-05 14:30:00"
   },
   {
     "speakers": [
@@ -1733,7 +1733,7 @@
       "name": "OTS 2",
       "id": 6
     },
-    "start_time": "2016-05-05T14:30:00",
+    "start_time": "2016-05-05 14:30:00",
     "session_id": "OT2-12",
     "slides": null,
     "video": null,
@@ -1741,7 +1741,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T15:00:00"
+    "end_time": "2016-05-05 15:00:00"
   },
   {
     "speakers": [
@@ -1757,7 +1757,7 @@
       "name": "OTS 2",
       "id": 6
     },
-    "start_time": "2016-05-05T15:00:00",
+    "start_time": "2016-05-05 15:00:00",
     "session_id": "OT2-13",
     "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/Bonvoisin%20-%20Current%20state%20of%20practices%20in%20open%20source%20hardware.pdf",
     "video": null,
@@ -1765,7 +1765,7 @@
     "sign_up": null,
     "audio": "audio/5090.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T15:30:00"
+    "end_time": "2016-05-05 15:30:00"
   },
   {
     "speakers": [
@@ -1781,7 +1781,7 @@
       "name": "OTS 2",
       "id": 6
     },
-    "start_time": "2016-05-05T15:30:00",
+    "start_time": "2016-05-05 15:30:00",
     "session_id": "OT2-15",
     "slides": null,
     "video": null,
@@ -1789,7 +1789,7 @@
     "sign_up": null,
     "audio": "audio/5092.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T16:00:00"
+    "end_time": "2016-05-05 16:00:00"
   },
   {
     "speakers": [
@@ -1805,7 +1805,7 @@
       "name": "OTS 2",
       "id": 6
     },
-    "start_time": "2016-05-05T16:00:00",
+    "start_time": "2016-05-05 16:00:00",
     "session_id": "OT2-16",
     "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/degrees_of_openness_praesi.pdf",
     "video": null,
@@ -1813,7 +1813,7 @@
     "sign_up": null,
     "audio": "audio/5093.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T16:30:00"
+    "end_time": "2016-05-05 16:30:00"
   },
   {
     "speakers": [
@@ -1829,7 +1829,7 @@
       "name": "OTS 2",
       "id": 6
     },
-    "start_time": "2016-05-05T16:30:00",
+    "start_time": "2016-05-05 16:30:00",
     "session_id": "OT2-17",
     "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/sehrgutachten-kleineanfragen-ots.pdf",
     "video": null,
@@ -1837,7 +1837,7 @@
     "sign_up": null,
     "audio": "audio/5094.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T17:00:00"
+    "end_time": "2016-05-05 17:00:00"
   },
   {
     "speakers": [
@@ -1853,7 +1853,7 @@
       "name": "OTS 2",
       "id": 6
     },
-    "start_time": "2016-05-05T17:00:00",
+    "start_time": "2016-05-05 17:00:00",
     "session_id": "OT2-18",
     "slides": null,
     "video": null,
@@ -1861,7 +1861,7 @@
     "sign_up": null,
     "audio": "audio/5095.mp3",
     "type": "Vortrag/Talk",
-    "end_time": "2016-05-05T17:30:00"
+    "end_time": "2016-05-05 17:30:00"
   },
   {
     "speakers": [
@@ -1877,7 +1877,7 @@
       "name": "OTS 2",
       "id": 6
     },
-    "start_time": "2016-05-05T17:30:00",
+    "start_time": "2016-05-05 17:30:00",
     "session_id": "OT2-19",
     "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/opstperils.odp",
     "video": null,
@@ -1885,7 +1885,7 @@
     "sign_up": null,
     "audio": "audio/5096.mp3",
     "type": "Talk of 25 minutes",
-    "end_time": "2016-05-05T18:00:00"
+    "end_time": "2016-05-05 18:00:00"
   },
   {
     "speakers": [],
@@ -1895,7 +1895,7 @@
       "name": "OTS 2",
       "id": 6
     },
-    "start_time": "2016-05-05T17:55:00",
+    "start_time": "2016-05-05 17:55:00",
     "session_id": "OT2-20",
     "slides": null,
     "video": null,
@@ -1903,7 +1903,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Danke und Lounge",
-    "end_time": "2016-05-05T18:25:00"
+    "end_time": "2016-05-05 18:25:00"
   },
   {
     "speakers": [
@@ -1919,7 +1919,7 @@
       "name": "Kids Camp",
       "id": 7
     },
-    "start_time": "2016-05-05T07:30:00",
+    "start_time": "2016-05-05 07:30:00",
     "session_id": "KC-1",
     "slides": null,
     "video": null,
@@ -1927,7 +1927,7 @@
     "sign_up": "http://www.meetup.com/OpenXLab/events/230160858/",
     "audio": null,
     "type": "Kids Workshops, Ganzt\u00e4gig / Whole day",
-    "end_time": "2016-05-05T08:00:00"
+    "end_time": "2016-05-05 08:00:00"
   },
   {
     "speakers": [
@@ -1948,7 +1948,7 @@
       "name": "Kids Camp",
       "id": 7
     },
-    "start_time": "2016-05-05T07:30:00",
+    "start_time": "2016-05-05 07:30:00",
     "session_id": "KC-2",
     "slides": null,
     "video": null,
@@ -1956,7 +1956,7 @@
     "sign_up": "http://www.meetup.com/OpenXLab/events/230160858/",
     "audio": null,
     "type": "Kids Workshops, Ganzt\u00e4gig / Whole day",
-    "end_time": "2016-05-05T08:00:00"
+    "end_time": "2016-05-05 08:00:00"
   },
   {
     "speakers": [
@@ -1987,7 +1987,7 @@
       "name": "Kids Camp",
       "id": 7
     },
-    "start_time": "2016-05-05T07:30:00",
+    "start_time": "2016-05-05 07:30:00",
     "session_id": "KC-3",
     "slides": null,
     "video": null,
@@ -1995,7 +1995,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Ausstellung/Vorstellung/ Exhibition",
-    "end_time": "2016-05-05T08:00:00"
+    "end_time": "2016-05-05 08:00:00"
   },
   {
     "speakers": [
@@ -2011,7 +2011,7 @@
       "name": "Kids Camp",
       "id": 7
     },
-    "start_time": "2016-05-05T07:30:00",
+    "start_time": "2016-05-05 07:30:00",
     "session_id": "KC-4",
     "slides": null,
     "video": null,
@@ -2019,7 +2019,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Ausstellung/Vorstellung/ Exhibition",
-    "end_time": "2016-05-05T08:00:00"
+    "end_time": "2016-05-05 08:00:00"
   },
   {
     "speakers": [
@@ -2035,7 +2035,7 @@
       "name": "Linux-Zertifizierung",
       "id": 8
     },
-    "start_time": "2016-05-05T12:00:00",
+    "start_time": "2016-05-05 12:00:00",
     "session_id": "Z-1",
     "slides": null,
     "video": null,
@@ -2043,7 +2043,7 @@
     "sign_up": null,
     "audio": null,
     "type": "Zertifizierung",
-    "end_time": "2016-05-05T12:30:00"
+    "end_time": "2016-05-05 12:30:00"
   },
   {
     "speakers": [
@@ -2059,7 +2059,7 @@
       "name": "Linux-Zertifizierung",
       "id": 8
     },
-    "start_time": "2016-05-05T14:00:00",
+    "start_time": "2016-05-05 14:00:00",
     "session_id": "Z-2",
     "slides": null,
     "video": null,
@@ -2067,6 +2067,6 @@
     "sign_up": null,
     "audio": null,
     "type": "Zertifizierung",
-    "end_time": "2016-05-05T14:30:00"
+    "end_time": "2016-05-05 14:30:00"
   }
 ]
