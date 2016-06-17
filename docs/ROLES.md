@@ -1,22 +1,36 @@
-Roles and their permissions:
+The system has two kind of role type. 1. System roles are related to the Open Event organization and operator of the application. 2. Event Roles are related to the users of the system with their different permissions.
 
-1. Super Admin can access:
- - HOME(Can create event, view upcoming events and call for speakers)
- - PROFILE(Own profile)
- - CREATE EVENT
- - MANAGE EVENTS(shows a list of all events. Can edit and delete events)
- - SPECIFIC EVENT DASHBOARD(Details regarding specific event. Can edit that particular event from here)
- - EDIT EVENT DETAILS
- - EDIT EVENT SPEAKERS
- - EDIT EVENT SPONSORS
- - SCHEDULE TRACKS,ROOMS,TIMES OF EVENTS
- - ASSIGN EVENT ROLES
- - CREATE NEW SESSIONS
- - PROPOSALS AND SESSIONS FOR ADMIN
- - PROPOSALS AND SESSIONS FOR SPEAKERS(can view proposals and sessions of any speaker given the ID)
- - SEE EVENT AND SCHEDULE
+##1. System Roles
 
-2. Organizer can access:
+Currently the only system role of Super Admin.
+
+### 1.1 Access to User Features for Super Admin
+| Function | Role | View | Create, Edit, Assign, Unassign | Delete | BaseURLs |
+| --- | --- | --- | --- | --- | --- |
+| MANAGE OWN PROFILE | Super Admin | YES | YES | YES | /profile
+| MANAGE OWN EVENTS | Super Admin | YES | YES | YES | /create, /events, /events/ID
+| IMPORT/EXPORT OWN EVENTS | Super Admin | YES | YES | YES | 
+| MANAGE OWN SESSIONS | Super Admin | YES | YES | YES | 
+| MANAGE SESSIONS OF OWN EVENTS | Super Admin | YES | YES | YES | 
+
+### 1.2 Access to Admin Features
+| Function | Role | View | Create, Edit, Assign, Unassign | Delete | BaseURLs |
+| --- | --- | --- | --- | --- | --- |
+| ALL ROLES PERMISSIONS | Super Admin | YES | YES |  YES | /admin/permissions
+| EVENTS AND SCHEDULES | Super Admin | YES | YES |  YES |
+| ADMINISTRATION | Super Admin | YES | YES |  YES | /admin/*
+| ALL EVENTS | Super Admin | YES | YES |  YES | /admin/events/
+| IMPORT/EXPORT OF ALL EVENTS | Super Admin | YES | YES |  YES | /admin/events/
+| ALL SESSIONS | Super Admin | YES | YES |  YES | /admin/sessions/
+| ALL USERS | Super Admin | YES | YES |  YES | /admin/users/
+| ALL REPORTS | Super Admin | YES | YES |  YES | /admin/reports
+
+
+##2. Event Roles
+
+###2.1 Organizer
+
+Organizer can access:
  - HOME
  - PROFILE(only his)
  - CREATE EVENT
