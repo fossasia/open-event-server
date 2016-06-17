@@ -490,7 +490,8 @@ class DataManager(object):
                       privacy=form.get('privacy', 'public'),
                       ticket_url=form['ticket_url'],
                       organizer_name=form['organizer_name'],
-                      organizer_description=form['organizer_description'])
+                      organizer_description=form['organizer_description'],
+                      creator=login.current_user)
 
         state = form.get('state', None)
         if state and ((state == u'Published' and not string_empty(event.location_name)) or state != u'Published'):
