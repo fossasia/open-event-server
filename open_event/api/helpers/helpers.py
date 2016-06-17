@@ -142,7 +142,7 @@ def handle_extra_payload(payload, api_model):
         elif isinstance(api_model[key], fields.List):
             temp = []
             for _ in payload[key]:
-                temp.append(handle_extra_payload(_, payload[key].container))
+                temp.append(handle_extra_payload(_, api_model[key].container))
             data[key] = temp
     return data
 
