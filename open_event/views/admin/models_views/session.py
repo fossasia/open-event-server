@@ -3,6 +3,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask.ext import login
 from flask import request, url_for, redirect
 from ....helpers.data import DataManager, save_to_db
+from open_event.helpers.permission_decorators import is_coorganizer
 from ....helpers.data_getter import DataGetter
 import json
 
@@ -31,6 +32,7 @@ class SessionView(ModelView):
                            sessions=sessions, event_id=event_id, event=event)
 
     @expose('/create/', methods=('GET', 'POST'))
+    @is_coorganizer
     def create_view(self, event_id):
         form_elems = DataGetter.get_custom_form_elements(event_id)
         speaker_form = ""

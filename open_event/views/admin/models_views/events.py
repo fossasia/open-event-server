@@ -1,17 +1,17 @@
 import os
 
-from flask import request, flash, url_for, redirect
+from flask import request, flash
 from flask_admin import expose
 from flask_admin.contrib.sqla import ModelView
-from flask.ext import login
 
-from open_event.helpers.permission_decorators import is_organizer
+from open_event.helpers.permission_decorators import *
 from open_event.helpers.helpers import fields_not_empty, string_empty
 from ....helpers.data import DataManager, save_to_db
 from ....helpers.data_getter import DataGetter
 import datetime
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import ImmutableMultiDict
+
 
 class EventsView(ModelView):
     def is_accessible(self):
@@ -119,7 +119,6 @@ class EventsView(ModelView):
         return self.render('/gentelella/admin/event/details/details.html', event=event, checklist=checklist)
 
     @expose('/<int:event_id>/edit/', methods=('GET', 'POST'))
-    @is_organizer
     def edit_view(self, event_id):
         event = DataGetter.get_event(event_id)
         session_types = DataGetter.get_session_types_by_event_id(event_id).all()
