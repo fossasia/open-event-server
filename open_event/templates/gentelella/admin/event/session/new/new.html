@@ -2,6 +2,12 @@
 {% block title %}
 Create Session
 {% endblock %}
+
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}" />
+{% endblock %}
+
 {% block body %}
 <div class="page-title">
     <div class="title_left">
@@ -66,6 +72,12 @@ Create Session
     <script type="text/javascript" src="{{ url_for('static', filename='admin/lib/jQuery-Smart-Wizard/js/jquery.smartWizard.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='admin/lib/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
-
+    <script src="{{ url_for('static', filename='admin/lib/bootstrap-validator/dist/validator.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/admin/session/new.js') }}"></script>
+    <script type="text/javascript">
+    $(document).ready(function () {
+            $("textarea").summernote(summernoteConfig);
+        $(".form_wizard").smartWizard('fixHeight');
+        });
+    </script>
 {% endblock %}
