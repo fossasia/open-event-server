@@ -79,5 +79,4 @@ class AdminView(object):
 
         @login_manager.unauthorized_handler
         def unauthorized():
-            # do stuff
             return redirect(url_for('admin.login_view', next=request.url))
