@@ -18,7 +18,7 @@ POST_EVENT_DATA = {
     "closing_datetime": "2016-05-22 12:12:43",
     "organizer_name": "FOSSASIA",
     "organizer_description": "Promoting Open Source culture around the world",
-    "state": "TestEvent",
+    "state": "pending",
     "type": "Conference",
     "topic": "Science & Technology",
     "privacy": "public",

@@ -28,3 +28,12 @@ class SessionLanguageField(fields.ChoiceString):
         super(SessionLanguageField, self).__init__(
             choice_list=DataGetter.get_language_list(),
             **kwargs)
+
+
+class SessionStateField(fields.ChoiceString):
+    __schema_example__ = 'pending'
+
+    def __init__(self, **kwargs):
+        super(SessionStateField, self).__init__(
+            choice_list=['pending', 'accepted', 'rejected'],
+            **kwargs)
