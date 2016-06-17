@@ -1,0 +1,2236 @@
+{ "sessions":[
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Cornfield Electronics",
+        "id": 1,
+        "name": "Mitch Altman"
+      }
+    ],
+    "description": "Wir bauen interessante, faszinierende, n\u00fctzliche und verr\u00fcckte Dinge wie: den TV-B-Gone (Fernsehausschalter f\u00fcr alle TVs!), das \"Brain Machine-Ger\u00e4t\" um Gl\u00fccksgef\u00fchle zu erzeugen, einen LEDcube mit blinkenden Lichtern, spa\u00dfige Spielger\u00e4te, interaktive farbige Blinkenlichter, ein MintyBoost-Gadget um USB-Ger\u00e4te zu laden und vieles mehr. Und nebenbei lernen wir gleich noch L\u00f6ten. Der Workshop wird durchgef\u00fchrt von der Hardware-Bastel-Maker und L\u00f6tlegende Mitch Altman und ist geeignet f\u00fcr Anf\u00e4nger und Fortgeschrittene, j\u00fcngere und \u00e4ltere. // Learn to Solder! A large variety of way cool kits are available at this workshop, all designed for total beginners to complete successfully -- and intriguing enough for the total hardware geek.",
+    "title": "Fantastische Hardware Bauen & L\u00f6ten Lernen mit Mitch (TV-B-Gone) // Learn to Solder with Cool Kits!",
+    "track": {
+      "order": 2,
+      "name": "Maker Space",
+      "id": 2
+    },
+    "start_time": "2016-05-05T07:30:00+00:00",
+    "session_id": "MS-1",
+    "slides": null,
+    "video": "https://www.youtube.com/channel/UCJoKp-gG2t7lH5_hiKp95yA",
+    "location": "Erdgeschoss, Saal / Ground Floor",
+    "sign_up": "http://www.meetup.com/OpenXLab/events/230011213/",
+    "audio": null,
+    "type": "Ganzt\u00e4giger L\u00f6tworkshop / Soldering Workshop",
+    "end_time": "2016-05-05T08:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Postapokalyptischer Schmuck",
+        "id": 2,
+        "name": "Paulaner Paula Pongratz"
+      }
+    ],
+    "description": "Beim Postapokalyptischen Schmuck-Workshop k\u00f6nnen Teilnehmende der OpenTechSummit aus Fundst\u00fccken vom Veranstaltungsgel\u00e4nde, aus Resten anderer dort stattfindender Workshops oder aus einem bereitgestellten Fundus Schmuck herstellen und sich ganz pers\u00f6nliche Unikate mit nach Hause nehmen. Passend zum Thema Makerbewegung werden hier u.a. 3D-Druck-Reste und -Fehldrucke, Lasercutter-Abschnitte sowie Elektroschrott zur Schmuckproduktion zur Verf\u00fcgung stehen. Es sollen \u00c4sthetikbewusstsein und bewussterer Umgang mit Ressourcen vermittelt werden, wobei gleichzeitig die Abfallmenge der Veranstaltung geringf\u00fcgig dezimiert wird.  We make jewellery from found objects from the Open Tech Summit or from leftovers of other workshops. Feel free to bring own material or choose from provided stuff, there will be lots of 3d-printer-deposit, electronic scrap, lasercutter-leavings!",
+    "title": "Postapokalyptischer Schmuck / Postapocalyptic Jewellery",
+    "track": {
+      "order": 2,
+      "name": "Maker Space",
+      "id": 2
+    },
+    "start_time": "2016-05-05T07:30:00+00:00",
+    "session_id": "MS-2",
+    "slides": null,
+    "video": null,
+    "location": "Erdgeschoss, Saal / Ground Floor",
+    "sign_up": null,
+    "audio": null,
+    "type": "Workshop/Ausstellung/Exhibition",
+    "end_time": "2016-05-05T08:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Wikimedia Deutschland e.V.",
+        "id": 3,
+        "name": "Sandra M\u00fcllrick"
+      }
+    ],
+    "description": "We will connect our Query Service Wikidata Talk with a exhibition area to build queriey's with people and introduce them to wikidata.",
+    "title": "Query Service Wikidata ",
+    "track": {
+      "order": 2,
+      "name": "Maker Space",
+      "id": 2
+    },
+    "start_time": "2016-05-05T07:30:00+00:00",
+    "session_id": "MS-3",
+    "slides": null,
+    "video": null,
+    "location": "Erdgeschoss, Saal / Ground Floor",
+    "sign_up": null,
+    "audio": null,
+    "type": "Infotisch, Ausstellung, Exhibition, Gem\u00fctliche Kissenecke",
+    "end_time": "2016-05-05T08:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Yacy",
+        "id": 4,
+        "name": "Michael Christen"
+      }
+    ],
+    "description": "Hauptentwickler Michael Christen zeigt uns wie wir in wenigen Schritten YaCy auf dem PC oder Handy installieren. YaCy ist eine Suchmaschine bei dem die Nutzer selbst zum Betreiber werden. Die freie Suchmaschinensoftware YaCy l\u00e4uft nicht auf einem Server im Internet, sondern auf dem eigenen Rechner und kann sich mit anderen Nutzern im Internet zusammenschalten, um die Reichweite des Suchindexes zu vergr\u00f6ssern.",
+    "title": "Unabh\u00e4ngige eigene Internet-Suche in wenigen Schritten auf dem PC installieren",
+    "track": {
+      "order": 2,
+      "name": "Maker Space",
+      "id": 2
+    },
+    "start_time": "2016-05-05T07:30:00+00:00",
+    "session_id": "MS-4",
+    "slides": null,
+    "video": null,
+    "location": "Erdgeschoss, Saal / Ground Floor",
+    "sign_up": "http://www.meetup.com/OpenXLab/events/230593089/",
+    "audio": null,
+    "type": "Workshop und Infotisch",
+    "end_time": "2016-05-05T08:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Nitrokey",
+        "id": 5,
+        "name": "Jan Suhr"
+      }
+    ],
+    "description": "Der Nitrokey ist ein USB-Stick mit integrierter Chipkarte zur hoch-sicheren Verschl\u00fcsselung von E-Mails und Daten, zur Benutzerauthentifikation in Netzwerken und zur Zugangskontrolle. Anders als bei Softwarel\u00f6sungen werden die Schl\u00fcssel immer sicher im Nitrokey gespeichert. Es ist unm\u00f6glich diese auszulesen, so dass der Nitrokey immun gegen Computerviren und sog. \"Trojaner\" ist. Die durch den Benutzer gew\u00e4hlte PIN und das manipulationssichere Design sch\u00fctzen im Falle von Verlust und Diebstahl. Die Hardware und Software sind beide als Open Source verf\u00fcgbar, um die \u00dcberpr\u00fcfung der Sicherheit und die Integration in eigene Anwendungen zu erm\u00f6glichen.  // Nitrokey is an USB key to enable highly secure encryption and signing of emails and data, as well as login to the Web, networks and computers. Other than ordinary software solutions, the secret keys are always stored securely inside the Nitrokey. Their extraction is impossible which makes Nitrokey immune to computer viruses and Trojan horses. The user-chosen PIN and the tamper-proof smart card protect in case of loss and theft. Hardware and software are both available as Open Source to allow verifying the security and integration with other applications. Website: https://www.nitrokey.com",
+    "title": "Nitrokey Sicherheits-USB-Stick",
+    "track": {
+      "order": 2,
+      "name": "Maker Space",
+      "id": 2
+    },
+    "start_time": "2016-05-05T07:30:00+00:00",
+    "session_id": "MS-5",
+    "slides": null,
+    "video": null,
+    "location": "Erdgeschoss, Saal / Ground Floor",
+    "sign_up": null,
+    "audio": null,
+    "type": "Infotisch mit Workshops / Info table and Workshops",
+    "end_time": "2016-05-05T08:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Heart of Code",
+        "id": 6,
+        "name": "Cat Spangehl"
+      }
+    ],
+    "description": "We would like to shortly introduce the Heart of Code, a Berlin based hackspace for women*. ",
+    "title": "Heart Of Code - a hackspace for women* in Berlin",
+    "track": {
+      "order": 2,
+      "name": "Maker Space",
+      "id": 2
+    },
+    "start_time": "2016-05-05T07:30:00+00:00",
+    "session_id": "MS-6",
+    "slides": null,
+    "video": null,
+    "location": "Erdgeschoss, Saal / Ground Floor",
+    "sign_up": null,
+    "audio": null,
+    "type": "Hackspace-Infotisch, Exhibition",
+    "end_time": "2016-05-05T08:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Free Software Foundation Europe e.V.",
+        "id": 7,
+        "name": "Erik Albers"
+      }
+    ],
+    "description": "Die Free Software Foundation Europe ist eine gemeinn\u00fctzige, regierungsunabh\u00e4ngige Organisation gef\u00fchrt von Matthias Kirschner als Pr\u00e4sident. 2010 erhielt die FSFE die Theodor Heuss Medaille f\u00fcr vorbildliches demokratisches Verhalten. Aktuelle Kampagnen sind \u201eFree Your Android\u201c (St\u00e4rkung der eigenen Kontrolle \u00fcber Android-Ger\u00e4te), \u201eAsk Your Candidates\u201c (Fragen an Wahlkandidaten, wie sie zu Freier Software stehen) und \u201eI love Free Software\u201c (Aktion am Valentinstag).   //   The Free Software Foundation Europe (FSFE) was founded in 2001 to support all aspects of the free software movement in Europe. FSFE is a charitable registered association (eingetragener Verein) under German law, and has registered 'chapters' in several European countries. FSFE believes that access to and control of software determines who may participate in a digital society. Therefore, the freedoms to use, copy, modify and redistribute software, as described in The Free Software Definition, are necessary for equal participation in the Information Age.",
+    "title": "Free Software Foundation Europe e.V.",
+    "track": {
+      "order": 2,
+      "name": "Maker Space",
+      "id": 2
+    },
+    "start_time": "2016-05-05T07:30:00+00:00",
+    "session_id": "MS-7",
+    "slides": null,
+    "video": null,
+    "location": "Erdgeschoss, Saal / Ground Floor",
+    "sign_up": null,
+    "audio": null,
+    "type": "Freie Software-Infoecke / Information Corner",
+    "end_time": "2016-05-05T08:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Makeomnia Ltd / HKCOTA",
+        "id": 8,
+        "name": "Alvin Lui"
+      }
+    ],
+    "description": "TinyBoy Project is an education project started at 2011. The talk is about the follow up of the project, what we did and the progress.  To show the new version of the TinyBoy, TinyBoy2. And to discuss about how to integrate into STEAM.",
+    "title": "TinyBoy Project - a 3D printer for education",
+    "track": {
+      "order": 2,
+      "name": "Maker Space",
+      "id": 2
+    },
+    "start_time": "2016-05-05T07:30:00+00:00",
+    "session_id": "MS-8",
+    "slides": null,
+    "video": null,
+    "location": "Erdgeschoss, Saal / Ground Floor",
+    "sign_up": null,
+    "audio": null,
+    "type": "Infotisch/Info Table",
+    "end_time": "2016-05-05T08:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Hasso-Plattner-Institut Potsdam",
+        "id": 9,
+        "name": "Fabian L\u00fcpke"
+      }
+    ],
+    "description": "Hey,  aus einem alten Bahndisplay baute ich eine Tweet-Anzeige. Dazu reverse-engineerte ich die LED-Matrix in der Display-Einheit, um es mit einem eigenem WLAN Modul (WeMos) anzusteuern. Tweets mit einem festlegbaren Hashtag werden automatisch auf dem Display angezeigt. Neben der Twitter-Funktionalit\u00e4t arbeite ich gerade daran, Tetris und Snake  zu implementieren, die man vom Handy aus \u00fcber WLAN steuern kann.  Gerne w\u00fcrde ich das Projekt bei Euch zeigen und ggf. bei einem Lightning Talk vorstellen.  Es w\u00e4re nett, in der N\u00e4he von \"loklak\" platziert zu werden, weil ich f\u00fcr den Zugriff auf Tweets, die API von loklak verwende.",
+    "title": "LED Matrix Display",
+    "track": {
+      "order": 2,
+      "name": "Maker Space",
+      "id": 2
+    },
+    "start_time": "2016-05-05T07:30:00+00:00",
+    "session_id": "MS-9",
+    "slides": null,
+    "video": null,
+    "location": "Erdgeschoss, Saal / Ground Floor",
+    "sign_up": null,
+    "audio": null,
+    "type": "Hardware Hacks",
+    "end_time": "2016-05-05T08:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Ayab-Knitting",
+        "id": 10,
+        "name": "Christian Obersteiner"
+      },
+      {
+        "organisation": "Ayab-Knitting",
+        "id": 11,
+        "name": "Andreas \"Andz\" M\u00fcller"
+      }
+    ],
+    "description": "Ayab ist eine freie Stricksoftware.",
+    "title": "Maschinenstricken mit Open Source",
+    "track": {
+      "order": 2,
+      "name": "Maker Space",
+      "id": 2
+    },
+    "start_time": "2016-05-05T07:30:00+00:00",
+    "session_id": "MS-10",
+    "slides": null,
+    "video": null,
+    "location": "Erdgeschoss, Saal / Ground Floor",
+    "sign_up": "http://www.meetup.com/FashionTec-Meetup-Berlin/events/230760758/",
+    "audio": null,
+    "type": "Workshop mit befreiten Strickmaschinen / Knitting Machines with Open Source",
+    "end_time": "2016-05-05T08:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Valentina",
+        "id": 12,
+        "name": "Susan Spencer"
+      }
+    ],
+    "description": "Valentina is open source pattern drafting software, designed to be the foundation of a new stack of open source tools to remake the garment industry. Parametric design +  open data formats + open source code = shareable/remixable patterns usable by any sewist or manufacturer for garment production.  Valentina enables independent designers to become ethically profitable, and can empower designers focused on eco fashion and slow fashion.   Small batch and custom sized clothing manufacturing is essential to create a sustainable future, preserve small to medium sized textile spinning and weaving manufacturers, enable independent and small designers and manufacturers to scale up to make a decent living, rebuild local garment districts, and reduce or eliminate slave labor.  Valentina is available for Linux, Mac, and Windows.",
+    "title": "Schnittmuster am PC erstellen mit Valentina / Valentina Digital Pattern Design",
+    "track": {
+      "order": 2,
+      "name": "Maker Space",
+      "id": 2
+    },
+    "start_time": "2016-05-05T07:30:00+00:00",
+    "session_id": "MS-12",
+    "slides": null,
+    "video": null,
+    "location": "Erdgeschoss, Saal / Ground Floor",
+    "sign_up": null,
+    "audio": null,
+    "type": "Infotisch / Showcase Table",
+    "end_time": "2016-05-05T08:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Neurofox, Brainduino",
+        "id": 13,
+        "name": "Konrad Willi D\u00f6ring"
+      }
+    ],
+    "description": "In the recent years, brain-computer interfaces are becoming increasingly popular for the use at home. However, current consumer devices are still subject to quality issues, and while most of the time the software is hackable, the hardware is only in a very few cases. In this talk, a brief introduction into brain-computer interfaces is given, as well as a presentation of a novel neuroheadset, that is low-cost, provides high quality and is completely open-source.",
+    "title": "PC mit Gedanken steuern - Brain-Computer Interfaces",
+    "track": {
+      "order": 2,
+      "name": "Maker Space",
+      "id": 2
+    },
+    "start_time": "2016-05-05T07:30:00+00:00",
+    "session_id": "MS-13",
+    "slides": null,
+    "video": null,
+    "location": "Erdgeschoss, Saal / Ground Floor",
+    "sign_up": null,
+    "audio": null,
+    "type": "",
+    "end_time": "2016-05-05T08:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Nefertiti Hack",
+        "id": 14,
+        "name": "Nora Al-Badri"
+      },
+      {
+        "organisation": "Nefertiti Hack",
+        "id": 15,
+        "name": "Jan Nikolai Nelles"
+      }
+    ],
+    "description": "\u201cThe Other Nefertiti\u201d is an artistic intervention by Jan Nikolai Nelles and Nora Al- Badri which went viral. \u201cWith the data leak as a part of this counter narrative within our investigative practice we want to activate the artefact, to inspire a critical re-assessment of today\u2019s conditions and to overcome the colonial notion of possession in Germany's museums\u201d. With regard to the notion of belonging and possession of material objects of other cultures, the artists intention is to make cultural objects publicly accessible and to promote a contemporary and critical approach on how the \u201cGlobal North\u201c deals with heritage and the representation of \u201cthe Other\u201d. \u201cWe should tell stories of entanglement and Nefertiti is a great case to start with to tell stories from very different angles and to see how they intertwine.\u201c At this link you will find a torrent to access the dataset under a public domain: http://nefertitihack.alloversky.com  Here is the video showing the scanning process: https://vimeo.com/148156899  \u201cThe Other Nefertiti\u201d  is a conceptual art piece questioning singularity and originality as well as ownership of material objects of other cultures. Nora Al-Badri and Jan Nikolai Nelles  went to the Neues Museum and scanned the iconic bust, but of course nobody knows if even this is the original bust. Through time and restoration there might not much genuine be left of the artifact itself. We give meaning to objects as well as we give meaning to data. Why worshipping the original, while we have all that beautiful remixes as of today? Maybe it was a server hack, a copy scan, an inside job, the cleaner, a hoax, but who cares, first of all it is an art piece. Of course a scan of the same thing looks the same, doesn't it? And tomorrow everybody with cameras or smartphones or Xbox will have the means and technique, where one can reclaim the interpretational sovereignty through scanning and sharing.   What the artists strived to achieve is a vivid discussion about the notion of possession and belonging of history in our museums and our minds. A discussion on the originality and truth of data as well as material objects is necessary, because in the end one concludes, that the institutional practice of todays museums and collections all around the Western world are corrupted. Museums are telling fictional stories, their stories, just because they control the artifacts and the way of representation. The fetishization of sacred staged artifacts and the Disneyfication is producing capital value for illicit trading and looting artifacts. One can't find a reflection about violent entanglement of the museums and their inherent colonial patina themselves. But isn't representing \u201cThe Other\u201d always violent? Art is about building new narratives, deconstructing power relations, not scanning techniques... .",
+    "title": "Scan die Nofretete im \u00c4gyptischen Museum / #NefertitiHack and Cultural Commons \"The Other Nefertiti\"",
+    "track": {
+      "order": 2,
+      "name": "Maker Space",
+      "id": 2
+    },
+    "start_time": "2016-05-05T07:30:00+00:00",
+    "session_id": "MS-14",
+    "slides": null,
+    "video": null,
+    "location": "Erdgeschoss, Saal / Ground Floor",
+    "sign_up": null,
+    "audio": null,
+    "type": "Workshop und Infotisch / Showcase Table",
+    "end_time": "2016-05-05T08:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "GNU Project",
+        "id": 16,
+        "name": "Ricardo Wurmus"
+      }
+    ],
+    "description": "This talk introduces the functional package manager GNU Guix and the underlying concept of functional package management to a general audience.  Also demonstrates the hackable GNU distribution \"Guix SD\" built on top of GNU Guix.",
+    "title": "Functional package management with GNU Guix",
+    "track": {
+      "order": 2,
+      "name": "Maker Space",
+      "id": 2
+    },
+    "start_time": "2016-05-05T07:30:00+00:00",
+    "session_id": "MS-15",
+    "slides": null,
+    "video": null,
+    "location": "Erdgeschoss, Saal / Ground Floor",
+    "sign_up": null,
+    "audio": null,
+    "type": "Workshop und Infotisch / Showcase Table",
+    "end_time": "2016-05-05T08:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "OpenTech Designer",
+        "id": 17,
+        "name": "Jan Dittrich"
+      }
+    ],
+    "description": "Paper Prototyping is an easy-to-use method for creating, developing and testing concepts for applications and websites.   Everybody can work together \u2013 no programming skills are needed. If we want to try something new, we don't need to delete code or discuss if the library supports it: just draw and cut out the new feature!  As well we can easily do a usability test with our prototypes to get further input and check if the idea is going into the right direction. ",
+    "title": "Workshop Paper Prototyping",
+    "track": {
+      "order": 3,
+      "name": "Workshops",
+      "id": 3
+    },
+    "start_time": "2016-05-05T08:00:00+00:00",
+    "session_id": "W-1",
+    "slides": null,
+    "video": null,
+    "location": "Erdgeschoss, Saal / Ground Floor",
+    "sign_up": "http://www.meetup.com/OpenXLab/events/230435191/",
+    "audio": null,
+    "type": "Workshop, 2h",
+    "end_time": "2016-05-05T08:30:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Metaversa e.V.",
+        "id": 18,
+        "name": "Birgit Marzinka"
+      },
+      {
+        "organisation": "Metaversa e.V.",
+        "id": 19,
+        "name": "Daniel Abma"
+      },
+      {
+        "organisation": "Metaversa e.V.",
+        "id": 20,
+        "name": "Jenny Roberts"
+      },
+      {
+        "organisation": "Metaversa e.V.",
+        "id": 21,
+        "name": "Kirsten Mohri"
+      }
+    ],
+    "description": "Roboter mit Scratch und Blockly programmieren - das ist das Thema vom Metaversa e.V. auf dem OpenTechSummit. Die mBots k\u00f6nnen \u00fcber eine grafische Programmiersprache an Tablets und Laptops programmiert werden. Zeit: 10 bis 15 Uhr. //  Der Metaversa e.V. ist ein Verein f\u00fcr Medien, Bildung und Kultur und besteht aus einem engagierten Team von Medienp\u00e4dagogInnen.",
+    "title": "Roboter mit Scratch und Blockly programmieren",
+    "track": {
+      "order": 3,
+      "name": "Workshops",
+      "id": 3
+    },
+    "start_time": "2016-05-05T08:00:00+00:00",
+    "session_id": "W-2",
+    "slides": null,
+    "video": null,
+    "location": "Erdgeschoss, Saal / Ground Floor",
+    "sign_up": "http://www.meetup.com/OpenXLab/events/230762856/",
+    "audio": null,
+    "type": "Workshop, 5h",
+    "end_time": "2016-05-05T08:30:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Coder Dojo Potsdam/OpenTechSchool",
+        "id": 22,
+        "name": "Nicco Kunzmann"
+      }
+    ],
+    "description": "Arduino Programmierung f\u00fcr Einsteiger mit CoderDojo und OpenTechSchool ",
+    "title": "Arduino Programmierung f\u00fcr Einsteiger mit CoderDojo und OpenTechSchool ",
+    "track": {
+      "order": 3,
+      "name": "Workshops",
+      "id": 3
+    },
+    "start_time": "2016-05-05T08:30:00+00:00",
+    "session_id": "W-10",
+    "slides": null,
+    "video": null,
+    "location": "Erdgeschoss, Saal / Ground Floor",
+    "sign_up": "http://www.meetup.com/OpenXLab/events/230160858/",
+    "audio": null,
+    "type": "Workshop",
+    "end_time": "2016-05-05T09:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Softwerkskammer Berlin \u2013 Software Craftsmanship Community",
+        "id": 23,
+        "name": "Raimo, Radczewski"
+      },
+      {
+        "organisation": "Softwerkskammer Berlin \u2013 Software Craftsmanship Community",
+        "id": 24,
+        "name": "Markus Decke"
+      }
+    ],
+    "description": "\u00dcbung macht den Meister! Zusammen mit der Softwerkskammer Berlin richten wir ein Coding Dojo aus. In zwei Stunden bearbeiten wir paarweise eine Programmieraufgabe und besprechen anschlie\u00dfend eure L\u00f6sungen.  Ganz im Sinne von Teach Me, Teach You, gilt die Lernerfahrung als oberstes Ziel des Workshops. Lern eine neue Sprache oder zeig jemand anderem deine Lieblingssprache!        Bringt, wenn m\u00f6glich, eure Laptops mit eingerichteter Entwicklungsumgebung mit (im besten Fall mit Testframework, z.B. JUnit oder mocha). Auch ohne Laptop k\u00f6nnt ihr teilnehmen. ",
+    "title": "Coding Dojo",
+    "track": {
+      "order": 3,
+      "name": "Workshops",
+      "id": 3
+    },
+    "start_time": "2016-05-05T09:00:00+00:00",
+    "session_id": "W-3",
+    "slides": null,
+    "video": null,
+    "location": "Erdgeschoss, Hoflounge / Ground Floor, Hoflounge Room",
+    "sign_up": "http://www.meetup.com/Software-Craftsmanship-Berlin/events/230566242/",
+    "audio": null,
+    "type": "Workshop und Developer Meetup, 2h",
+    "end_time": "2016-05-05T09:30:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "ownCloud",
+        "id": 25,
+        "name": "Jos Poortvliet"
+      }
+    ],
+    "description": "Keeping your data to yourself has become harder and harder. Luckily, there is a solution: ownCloud. At the workshops we will learn how to put your data on a server of your choosing while making it available to your devices wherever you are. File sync and share with others, music, picture and video galleries, mail, calendar and contacts apps and lots of more functionality in a modular, open source and easy to use PHP server app. ownCloud offers a web interface to all its functionality as well as access through webdav, CALDAV and CARDDAV, Ampache and through the mobile and desktop clients available for Win/Mac/Linux, Android/iOS/Blackberry and more platforms.   You want it? You can have it. If you don't have a server yet, consider bringing a Raspberry Pi 2, a Banana Pi or a cubietruck with the needed tools (SD card/power/etc). Or bring a laptop, old desktop or your SSH credentials to your VPS or home server and come set up your ownCloud at the OpenTechSummit!   In this workshop you'll be walked through the process and get hands-on help in installing and getting ownCloud up and running on your system.   A quick overview of how it will (most likely) work:   First a quick 'what is ownCloud' introduction. Then everybody (probably in pairs) gets a USB stick, SD card, development board and two network cables. The USB stick has a image to be put on the SD card. Then the Pi can be booted from it, connected to the network. I monitor the network and based on the MAC of the Pi I tell you your IP. From the laptop, you SSH into the Pi and install a web server and ownCloud. From your browser you then go and configure ownCloud.",
+    "title": "Let's set up our ownCloud with Jos Poortvliet at the OpenTechSummit",
+    "track": {
+      "order": 3,
+      "name": "Workshops",
+      "id": 3
+    },
+    "start_time": "2016-05-05T09:00:00+00:00",
+    "session_id": "W-4",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 1, Raum 4 / First Floor, Room 4",
+    "sign_up": "http://www.meetup.com/OpenXLab/events/230446672/",
+    "audio": null,
+    "type": "Workshop, 2h",
+    "end_time": "2016-05-05T09:30:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Coder Dojo Potsdam/OpenTechSchool",
+        "id": 22,
+        "name": "Nicco Kunzmann"
+      }
+    ],
+    "description": "Python Programmieren f\u00fcr Anf\u00e4nger",
+    "title": "Python Programmieren f\u00fcr Anf\u00e4nger",
+    "track": {
+      "order": 3,
+      "name": "Workshops",
+      "id": 3
+    },
+    "start_time": "2016-05-05T12:00:00+00:00",
+    "session_id": "W-11",
+    "slides": null,
+    "video": null,
+    "location": "Erdgeschoss, Saal / Ground Floor",
+    "sign_up": null,
+    "audio": null,
+    "type": "Workshop",
+    "end_time": "2016-05-05T12:30:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Piradio - Sender Berlin",
+        "id": 26,
+        "name": "Jenz Steiner"
+      }
+    ],
+    "description": "Du wolltest schon immer mal deine eigene Radiosendung machen, H\u00f6rspiele oder Reportagen aufnehmen? Jenz zeigt uns beim OpenTechSummit, wie es geht und die freie Software Audacity hilft uns dabei. Sie ist so einfach zu bedienen wie ein Schreibprogramm. Bitte ladet euch den lame codec vorher herunter unter http://audacity.sourceforge.net! //   Audacity is a free and easy to use audio editor. It is almost as easy to use as your old cassette player, if you've ever had one. Within one hour you will pick up the basics that you need in order to produce your own podcast, radio show, mixtape, listening play or wild audio collage. Please bring your own laptop, headphones, if possible: a digital audio recorder or USB-mic and all the necessary cables and cards. You may download the software and the lame codec in advance under http://audacity.sourceforge.net!",
+    "title": "Eigene Radiosendungen machen im 60-minutes Beginner Crash Course mit Audacity / Fast podcast production with audacity",
+    "track": {
+      "order": 3,
+      "name": "Workshops",
+      "id": 3
+    },
+    "start_time": "2016-05-05T12:00:00+00:00",
+    "session_id": "W-5",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 1, Raum 1 / First Floor, Room 1",
+    "sign_up": "http://www.meetup.com/OpenXLab/events/230447656/",
+    "audio": null,
+    "type": "Workshop, 1h",
+    "end_time": "2016-05-05T12:30:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "metacollect",
+        "id": 27,
+        "name": "Ulrike Thalheim"
+      },
+      {
+        "organisation": "metacollect",
+        "id": 28,
+        "name": "Moritz Beber"
+      }
+    ],
+    "description": "Germany has been experiencing a huge wave of civic engagement for refugees and newcomers during the last year. This is great and that is why some people at the refugee hackathon in Berlin wanted to provide an overview of these projects as complete as possible by creating metacollect. metacollect is an open data service that collects and provides current information on civil society projects and initiatives. Our long-term goal is to strengthen all players through the creation of a single interface. In the talk, we will give you a short overview about how to map the landscape of projects that aim to support refugees and newcomers and what pitfalls we encountered. Also, we would like to share some of our learnings on how to set up an open data project from scratch.",
+    "title": "metacollect - an open data service for refugee & integration projects",
+    "track": {
+      "order": 3,
+      "name": "Workshops",
+      "id": 3
+    },
+    "start_time": "2016-05-05T13:00:00+00:00",
+    "session_id": "W-8",
+    "slides": null,
+    "video": null,
+    "location": "Erdgeschoss, Hoflounge / Ground Floor, Hoflounge Room",
+    "sign_up": null,
+    "audio": null,
+    "type": "Workshop, 1/2 h",
+    "end_time": "2016-05-05T13:30:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "r0g_agency for open culture gGmbH",
+        "id": 29,
+        "name": "Stephen Kovats"
+      },
+      {
+        "organisation": "Peace Hack Camp",
+        "id": 30,
+        "name": "Mbisimo Emmanuel"
+      }
+    ],
+    "description": "Featuring #peacehackcamper Mbisimo Emmanuel, from jHUB, South Sudan's first Open Knowledge and Innovation Hub introducing their 'Open Learning Guide' http://jubahub.org/ and #peacehackcamp - an event that brings peacebuiders and tech innovators together for community empowerment and development in post-conflict regions. Website: http://peacehackcamp.net/",
+    "title": "#peacehackcamp @jHUB_Juba",
+    "track": {
+      "order": 3,
+      "name": "Workshops",
+      "id": 3
+    },
+    "start_time": "2016-05-05T13:30:00+00:00",
+    "session_id": "W-9",
+    "slides": null,
+    "video": null,
+    "location": "Erdgeschoss, Hoflounge / Ground Floor, Hoflounge Room",
+    "sign_up": null,
+    "audio": null,
+    "type": "Workshop, 1/2 h",
+    "end_time": "2016-05-05T14:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Altran",
+        "id": 31,
+        "name": "Toon Peters"
+      }
+    ],
+    "description": "picoTCP is an open source TCP/IP stack implementation targeted at embedded devices. Its focusses lie in Modularity, Portability and Quality. During this workshop, we\u2019ll learn how to get picoTCP running on a Cortex M3 target. The end goal of the workshop, is to play a network version of the snake game.  Target audience: Experience with C is required   What we\u2019ll bring: * Development boards (Seeeduino Arch Pro) * USB cables * Ethernet cables for the boards * An Ethernet switch * Bootable USB sticks * Source code on a stick * Manuals for the workshop   What you should bring: * Brains ;-) * A laptop that can boot from USB or * A laptop with all the prerequisites installed (I really hope you\u2019ll be running an Ubuntu based system, or I won\u2019t be able to give much support) $ sudo apt-get install ncurses-base $ sudo apt-get install libncurses5-dev $ sudo apt-get -y install lib32z1 lib32ncurses5 lib32bz2-1.0 (we need some extra stuff for 64 bit) Get the cross compiler for your system (https://launchpad.net/gcc-arm-embedded/+download) Extract it in e.g. /usr/local/gcc-arm-none-eabi-4_9-2015q1/ Add compiler to your path (add export PATH=\"$PATH:/usr/local/gcc-arm-none-eabi-4_9-2015q1/bin/\" to your ~/.bashrc file)   We\u2019ll need python too to program the boards: sudo apt-get -y install python sudo apt-get -y install python-pip sudo pip install --pre -U pyocd   Verify installation: $ pyocd-flashtool \u00e0 should tell you \u201cwaiting for a USB device connected\u201d $ arm-none-eabi-gcc \u2013v \u00e0 should give you the nice versions",
+    "title": "Let's get a network version of the snake game running using picoTCP on a Cortex M3",
+    "track": {
+      "order": 3,
+      "name": "Workshops",
+      "id": 3
+    },
+    "start_time": "2016-05-05T14:00:00+00:00",
+    "session_id": "W-6",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 1, Raum 1 / First Floor, Room 1",
+    "sign_up": "http://www.meetup.com/OpenXLab/events/230539055/",
+    "audio": null,
+    "type": "Workshop, 2h",
+    "end_time": "2016-05-05T14:30:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Softwerkskammer Berlin \u2013 Software Craftsmanship Community",
+        "id": 23,
+        "name": "Raimo, Radczewski"
+      },
+      {
+        "organisation": "Softwerkskammer Berlin \u2013 Software Craftsmanship Community",
+        "id": 24,
+        "name": "Markus Decke"
+      }
+    ],
+    "description": "\u00dcbung macht den Meister! Zusammen mit der Softwerkskammer Berlin richten wir ein Coding Dojo aus. In zwei Stunden bearbeiten wir paarweise eine Programmieraufgabe und besprechen anschlie\u00dfend eure L\u00f6sungen.  Ganz im Sinne von Teach Me, Teach You, gilt die Lernerfahrung als oberstes Ziel des Workshops. Lern eine neue Sprache oder zeig jemand anderem deine Lieblingssprache!        Bringt, wenn m\u00f6glich, eure Laptops mit eingerichteter Entwicklungsumgebung mit (im besten Fall mit Testframework, z.B. JUnit oder mocha). Auch ohne Laptop k\u00f6nnt ihr teilnehmen. ",
+    "title": "Coding Dojo",
+    "track": {
+      "order": 3,
+      "name": "Workshops",
+      "id": 3
+    },
+    "start_time": "2016-05-05T14:00:00+00:00",
+    "session_id": "W-7",
+    "slides": null,
+    "video": null,
+    "location": "Erdgeschoss, Hoflounge / Ground Floor, Hoflounge Room",
+    "sign_up": "http://www.meetup.com/Software-Craftsmanship-Berlin/events/230566242/",
+    "audio": null,
+    "type": "Workshop und Developer Meetup, 2h",
+    "end_time": "2016-05-05T14:30:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Syria on the Move, SocialVisions e.V.",
+        "id": 26,
+        "name": "Jenz Steiner"
+      }
+    ],
+    "description": "More than 4.7 million Syrians have now fled the war and became refugees in other countries. Humanitarian aid is is usefull, but cannot replace civil rights or freedom of speech. The Berlin based independent project \"Syria on the Move\" gives a voice to syrian refugees and helps them to get in touch by establishing a webbased map tool. This allows refugees to upload their pictures, share experiences and comment on issues that really matter to them. ",
+    "title": "Connecting Syrian refugees",
+    "track": {
+      "order": 4,
+      "name": "LightningTalks",
+      "id": 4
+    },
+    "start_time": "2016-05-05T11:15:00+00:00",
+    "session_id": "LT-1",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": null,
+    "type": "Lightning Talk",
+    "end_time": "2016-05-05T11:45:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "metacollect",
+        "id": 27,
+        "name": "Ulrike Thalheim"
+      },
+      {
+        "organisation": "metacollect",
+        "id": 28,
+        "name": "Moritz Beber"
+      }
+    ],
+    "description": "Germany has been experiencing a huge wave of civic engagement for refugees and newcomers during the last year. This is great and that is why some people at the refugee hackathon in Berlin wanted to provide an overview of these projects as complete as possible by creating metacollect. metacollect is an open data service that collects and provides current information on civil society projects and initiatives. Our long-term goal is to strengthen all players through the creation of a single interface. In the talk, we will give you a short overview about how to map the landscape of projects that aim to support refugees and newcomers and what pitfalls we encountered. Also, we would like to share some of our learnings on how to set up an open data project from scratch.",
+    "title": "metacollect - an open data service for refugee & integration projects",
+    "track": {
+      "order": 4,
+      "name": "LightningTalks",
+      "id": 4
+    },
+    "start_time": "2016-05-05T11:21:00+00:00",
+    "session_id": "LT-9",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": null,
+    "type": "Lightning Talk",
+    "end_time": "2016-05-05T11:51:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "FOSSASIA",
+        "id": 32,
+        "name": "Hong Phuc Dang"
+      }
+    ],
+    "description": "Background of FOSSASIA - an initiative in Asia bringing together an inspiring community across borders and ages to form a better future with Open Technologies and introduction to Code Program for Youth. ",
+    "title": "Open Source Movement In Asia",
+    "track": {
+      "order": 4,
+      "name": "LightningTalks",
+      "id": 4
+    },
+    "start_time": "2016-05-05T11:27:00+00:00",
+    "session_id": "LT-7",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": null,
+    "type": "Lightning Talk",
+    "end_time": "2016-05-05T11:57:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "User Researcher",
+        "id": 17,
+        "name": "Jan Dittrich"
+      },
+      {
+        "organisation": "Anthropologist",
+        "id": 33,
+        "name": "Lisa Conrad"
+      }
+    ],
+    "description": "Applications, algorithms and devices have an intended use \u2013 which often is ignored: People use Excel as a database, images to send text, Dropbox to share code\u2026 Why don't they use the \u00bbright\u00ab tools?  Instead of pointing out that the users are wrong we want to show why these \u00bbmisuses\u00ab of systems make sense from the users perspective  and why the people who use workarounds instead of the \u00bbright\u00ab tools are  hackers \u2013 without knowing it.",
+    "title": "In praise of workarounds",
+    "track": {
+      "order": 4,
+      "name": "LightningTalks",
+      "id": 4
+    },
+    "start_time": "2016-05-05T11:33:00+00:00",
+    "session_id": "LT-2",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": null,
+    "type": "Lightning Talk",
+    "end_time": "2016-05-05T12:03:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Copertura Label",
+        "id": 34,
+        "name": "Ivers Yves Pierre"
+      }
+    ],
+    "description": "What is a VC? What are the advantages of VC? What are the desadvantages of VC? Bonus: 5 models to raise money without VC",
+    "title": "Raising money without VC",
+    "track": {
+      "order": 4,
+      "name": "LightningTalks",
+      "id": 4
+    },
+    "start_time": "2016-05-05T11:39:00+00:00",
+    "session_id": "LT-3",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": null,
+    "type": "Lightning Talk",
+    "end_time": "2016-05-05T12:09:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Heart of Code",
+        "id": 6,
+        "name": "Cat Spangehl"
+      }
+    ],
+    "description": "We would like to shortly introduce the Heart of Code, a Berlin based hackspace for women*. ",
+    "title": "Heart Of Code - a hackspace for women* in Berlin",
+    "track": {
+      "order": 4,
+      "name": "LightningTalks",
+      "id": 4
+    },
+    "start_time": "2016-05-05T11:45:00+00:00",
+    "session_id": "LT-4",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": null,
+    "type": "Lightning Talk",
+    "end_time": "2016-05-05T12:15:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Heart of Code",
+        "id": 35,
+        "name": "Conny Kawohl"
+      }
+    ],
+    "description": "Spice up your Frontend with Sass. It's like CSS, but with superpowers! It will help make creating stylesheets easier, more readable and more concise. Plus it frees you up to experiment with color, font choices and component styling.  Prior knowledge of CSS helpful, but not necessary. Sass: http://sass-lang.com",
+    "title": "Get Sassy!",
+    "track": {
+      "order": 4,
+      "name": "LightningTalks",
+      "id": 4
+    },
+    "start_time": "2016-05-05T11:51:00+00:00",
+    "session_id": "LT-5",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": null,
+    "type": "Lightning Talk",
+    "end_time": "2016-05-05T12:21:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Flowedoo",
+        "id": 36,
+        "name": "Stefan Koehler"
+      }
+    ],
+    "description": "Vielfalt scheint erstrebenswert. Niemand m\u00f6chte jeden Tag dasselbe Essen vorgesetzt bekommen, st\u00e4ndig ein und dasselbe Computerspiel spielen m\u00fcssen oder gar von Monopolisten in Soft- und Hardware abh\u00e4ngen.  Damit Vielfalt entstehen kann, m\u00fcssen Voraussetzungen erf\u00fcllt werden. Einige dieser Bedingungenwerden im Vortrag kurz beleuchtet.",
+    "title": "Netze f\u00fcr Vielfalt",
+    "track": {
+      "order": 4,
+      "name": "LightningTalks",
+      "id": 4
+    },
+    "start_time": "2016-05-05T11:57:00+00:00",
+    "session_id": "LT-6",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": null,
+    "type": "Lightning Talk",
+    "end_time": "2016-05-05T12:27:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Neurofox, Brainduino",
+        "id": 13,
+        "name": "Konrad Willi D\u00f6ring"
+      }
+    ],
+    "description": "In the recent years, brain-computer interfaces are becoming increasingly popular for the use at home. However, current consumer devices are still subject to quality issues, and while most of the time the software is hackable, the hardware is only in a very few cases. In this talk, a brief introduction into brain-computer interfaces is given, as well as a presentation of a novel neuroheadset, that is low-cost, provides high quality and is completely open-source.",
+    "title": "Computer mit Gehirn steuern - Brain-Computer Interfaces",
+    "track": {
+      "order": 4,
+      "name": "LightningTalks",
+      "id": 4
+    },
+    "start_time": "2016-05-05T12:03:00+00:00",
+    "session_id": "LT-8",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": null,
+    "type": "Lightning Talk",
+    "end_time": "2016-05-05T12:33:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "r0g_agency for open culture gGmbH",
+        "id": 29,
+        "name": "Stephen Kovats"
+      },
+      {
+        "organisation": "Peace Hack Camp",
+        "id": 30,
+        "name": "Mbisimo Emmanuel"
+      }
+    ],
+    "description": "Featuring #peacehackcamper Mbisimo Emmanuel, from jHUB, South Sudan's first Open Knowledge and Innovation Hub introducing their 'Open Learning Guide' http://jubahub.org/ and #peacehackcamp - an event that brings peacebuiders and tech innovators together for community empowerment and development in post-conflict regions. ",
+    "title": "#peacehackcamp @jHUB_Juba",
+    "track": {
+      "order": 4,
+      "name": "LightningTalks",
+      "id": 4
+    },
+    "start_time": "2016-05-05T12:09:00+00:00",
+    "session_id": "LT-11",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": null,
+    "type": "Lightning Talk",
+    "end_time": "2016-05-05T12:39:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Nefertiti Hack",
+        "id": 14,
+        "name": "Nora Al-Badri"
+      },
+      {
+        "organisation": "Nefertiti Hack",
+        "id": 15,
+        "name": "Jan Nikolai Nelles"
+      }
+    ],
+    "description": "\u201cThe Other Nefertiti\u201d is an artistic intervention by Jan Nikolai Nelles and Nora Al- Badri which went viral. \u201cWith the data leak as a part of this counter narrative within our investigative practice we want to activate the artefact, to inspire a critical re-assessment of today\u2019s conditions and to overcome the colonial notion of possession in Germany's museums\u201d. With regard to the notion of belonging and possession of material objects of other cultures, the artists intention is to make cultural objects publicly accessible and to promote a contemporary and critical approach on how the \u201cGlobal North\u201c deals with heritage and the representation of \u201cthe Other\u201d. \u201cWe should tell stories of entanglement and Nefertiti is a great case to start with to tell stories from very different angles and to see how they intertwine.\u201c At this link you will find a torrent to access the dataset under a public domain: http://nefertitihack.alloversky.com  Here is the video showing the scanning process: https://vimeo.com/148156899  \u201cThe Other Nefertiti\u201d  is a conceptual art piece questioning singularity and originality as well as ownership of material objects of other cultures. Nora Al-Badri and Jan Nikolai Nelles  went to the Neues Museum and scanned the iconic bust, but of course nobody knows if even this is the original bust. Through time and restoration there might not much genuine be left of the artifact itself. We give meaning to objects as well as we give meaning to data. Why worshipping the original, while we have all that beautiful remixes as of today? Maybe it was a server hack, a copy scan, an inside job, the cleaner, a hoax, but who cares, first of all it is an art piece. Of course a scan of the same thing looks the same, doesn't it? And tomorrow everybody with cameras or smartphones or Xbox will have the means and technique, where one can reclaim the interpretational sovereignty through scanning and sharing.   What the artists strived to achieve is a vivid discussion about the notion of possession and belonging of history in our museums and our minds. A discussion on the originality and truth of data as well as material objects is necessary, because in the end one concludes, that the institutional practice of todays museums and collections all around the Western world are corrupted. Museums are telling fictional stories, their stories, just because they control the artifacts and the way of representation. The fetishization of sacred staged artifacts and the Disneyfication is producing capital value for illicit trading and looting artifacts. One can't find a reflection about violent entanglement of the museums and their inherent colonial patina themselves. But isn't representing \u201cThe Other\u201d always violent? Art is about building new narratives, deconstructing power relations, not scanning techniques... .",
+    "title": "Hack die Nofretete im \u00c4gyptischen Museum / #NefertitiHack and Cultural Commons \"The Other Nefertiti\"",
+    "track": {
+      "order": 4,
+      "name": "LightningTalks",
+      "id": 4
+    },
+    "start_time": "2016-05-05T12:15:00+00:00",
+    "session_id": "LT-10",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": null,
+    "type": "Lightning Talk",
+    "end_time": "2016-05-05T12:45:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "",
+        "id": 37,
+        "name": "OpenTechSummit 2016"
+      }
+    ],
+    "description": "",
+    "title": "Welcome in Berlin!",
+    "track": {
+      "order": 5,
+      "name": "OTS 1",
+      "id": 5
+    },
+    "start_time": "2016-05-05T08:55:00+00:00",
+    "session_id": "OT-01",
+    "slides": null,
+    "video": "https://www.youtube.com/watch?v=RtkF5lEleAM",
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": "audio/5058.mp3",
+    "type": "",
+    "end_time": "2016-05-05T09:25:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Intelligent Systems / Altran",
+        "id": 31,
+        "name": "Toon Peters"
+      }
+    ],
+    "description": "picoTCP is an open source TCP/IP stack implementation targetted at embedded devices. Its focusses lie in Modularity, Portability and Quality.  During this talk you'll get introduced to picoTCP",
+    "title": "picoTCP",
+    "track": {
+      "order": 5,
+      "name": "OTS 1",
+      "id": 5
+    },
+    "start_time": "2016-05-05T09:00:00+00:00",
+    "session_id": "OT-02",
+    "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/picoTCP_OpenTechSummit.pdf",
+    "video": "https://www.youtube.com/watch?v=LyMDER7O0UI",
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": "audio/5059.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T09:30:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Valentina",
+        "id": 12,
+        "name": "Susan Spencer"
+      }
+    ],
+    "description": "Valentina is open source pattern drafting software, designed to be the foundation of a new stack of open source tools to remake the garment industry. Parametric design +  open data formats + open source code = shareable/remixable patterns usable by any sewist or manufacturer for garment production.  Valentina enables independent designers to become ethically profitable, and can empower designers focused on eco fashion and slow fashion.   Small batch and custom sized clothing manufacturing is essential to create a sustainable future, preserve small to medium sized textile spinning and weaving manufacturers, enable independent and small designers and manufacturers to scale up to make a decent living, rebuild local garment districts, and reduce or eliminate slave labor.  Valentina is available for Linux, Mac, and Windows.",
+    "title": "Valentina digital pattern design",
+    "track": {
+      "order": 5,
+      "name": "OTS 1",
+      "id": 5
+    },
+    "start_time": "2016-05-05T09:25:00+00:00",
+    "session_id": "OT-03",
+    "slides": null,
+    "video": "https://www.youtube.com/watch?v=_viwqzg34Rw",
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": "audio/5043.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T09:55:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Wikimedia Deutschland e.V.",
+        "id": 38,
+        "name": "Marius Hoch"
+      }
+    ],
+    "description": "Wikidata is a repository of free knowledge in a structured form that contains pieces of information about everything on Wikipedia and more such as number of inhabitants of a country, geodata, historical dates, and others.  It is a free knowledge base that can be edited by humans and machines  alike and powers Wikimedia projects such as Wikipedia.  The Wikidata Query Service allows everyone to tap into this data and query information with SPARQL, find out relationships, and create beautiful visualizations.",
+    "title": "Mining the knowledge of the world with Wikidata",
+    "track": {
+      "order": 5,
+      "name": "OTS 1",
+      "id": 5
+    },
+    "start_time": "2016-05-05T09:50:00+00:00",
+    "session_id": "OT-04",
+    "slides": null,
+    "video": "https://www.youtube.com/watch?v=IJ1ihYramP8",
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": "audio/5061.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T10:20:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "FreeGeo API",
+        "id": 39,
+        "name": "Zac Brown"
+      }
+    ],
+    "description": "Explore the way the FreeGeo API uses the freely available, and open geospatial data provided by the OSM project to accomplish a free (and, of course, also open) production ready interface that lets developers perform geospatial calculations, geocoding and more! Link: https://www.freegeoapi.org",
+    "title": "FreeGeo API: What, Why & How",
+    "track": {
+      "order": 5,
+      "name": "OTS 1",
+      "id": 5
+    },
+    "start_time": "2016-05-05T10:15:00+00:00",
+    "session_id": "OT-05",
+    "slides": null,
+    "video": "https://www.youtube.com/watch?v=MIXP9hg14tg",
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": "audio/5062.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T10:45:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Code for Berlin",
+        "id": 40,
+        "name": "Thomas Tursics"
+      }
+    ],
+    "description": "Nach einer kurzen Einleitung, was Open Data ist, schauen wir gemeinsam in mehrere Open Data Portale hinein. Welche Daten werden angeboten, wie kann man sie sich anschauen und was daraus schlu\u00dffolgern? Unterf\u00fcttert mit jede Menge Anwendungsbeispielen aus der Community und Ergebnissen von Hackathons soll die Lust auf Open Data geweckt werden.",
+    "title": "Open Data f\u00fcr Dummies - oder - Wie nutze ich offene Daten",
+    "track": {
+      "order": 5,
+      "name": "OTS 1",
+      "id": 5
+    },
+    "start_time": "2016-05-05T10:35:00+00:00",
+    "session_id": "OT-06",
+    "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/Open%20Data%20f%C3%BCr%20Dummies%20-%20oder%20-%20Wie%20nutze%20ich%20offene%20Daten%20v2.pdf",
+    "video": "https://www.youtube.com/watch?v=sNUoTFHnLA0",
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": "audio/5063.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T11:05:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "IBM",
+        "id": 41,
+        "name": "Alexander Loibl"
+      }
+    ],
+    "description": "You need a flexible, scalable, and simple Cloud Storage for your Open Source project or company? The IBM Cloud Storage is ready for you.",
+    "title": "IBM OPEN YOUR MIND - Welcome to IBM Cloud Object Storage",
+    "track": {
+      "order": 5,
+      "name": "OTS 1",
+      "id": 5
+    },
+    "start_time": "2016-05-05T10:55:00+00:00",
+    "session_id": "OT-07",
+    "slides": null,
+    "video": "https://www.youtube.com/watch?v=OFdHc0afOzs",
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": "audio/5064.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T11:25:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "OpenTechSummit",
+        "id": 42,
+        "name": "Lightning Talkers"
+      }
+    ],
+    "description": "",
+    "title": "Kurzvortr\u00e4ge",
+    "track": {
+      "order": 5,
+      "name": "OTS 1",
+      "id": 5
+    },
+    "start_time": "2016-05-05T11:15:00+00:00",
+    "session_id": "OT-08",
+    "slides": null,
+    "video": "https://www.youtube.com/watch?v=6Rmx5J9YjEc",
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": "audio/5120.mp3",
+    "type": "Lightning Talks",
+    "end_time": "2016-05-05T11:45:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "FOSSASIA",
+        "id": 43,
+        "name": "Justin Lee"
+      }
+    ],
+    "description": "The Hyperledger Project is a collaborative effort created to advance blockchain technology by identifying and addressing important features and currently missing requirements, for a cross-industry open standard for distributed ledgers that can transform the way business transactions are conducted globally. This session discusses the underpinning technology focuses, future possibilities, and a quick demo to show a use case of Hyperledger.",
+    "title": "Introduction to Hyperledger",
+    "track": {
+      "order": 5,
+      "name": "OTS 1",
+      "id": 5
+    },
+    "start_time": "2016-05-05T12:20:00+00:00",
+    "session_id": "OT-09",
+    "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/Hyperledger%20-%20OpenTechSummit%202016.pdf",
+    "video": "https://www.youtube.com/watch?v=mdmimNaTCZQ",
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": "audio/5066.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T12:50:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "yacy.net",
+        "id": 4,
+        "name": "Michael Christen"
+      }
+    ],
+    "description": "Wir k\u00f6nnen nun auf 20 Jahre Suchmaschinenentwicklung f\u00fcr das World Wide Web zur\u00fcckblicken! Was k\u00f6nnen wir in der Zukunft erwarten, welche Dienste wird es geben? Der Vortrag zeigt M\u00f6glichkeiten, Entwicklungen und versucht, aus der Vergangenheit auf die Zukunkt zu schliessen. \u00dcberraschungen, Spa\u00df und Inspiration inklusive!",
+    "title": "Suchmaschinen der Zukunft",
+    "track": {
+      "order": 5,
+      "name": "OTS 1",
+      "id": 5
+    },
+    "start_time": "2016-05-05T12:45:00+00:00",
+    "session_id": "OT-10",
+    "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/Suchmaschinen%20der%20Zukunft%2020160505.pdf",
+    "video": "https://www.youtube.com/watch?v=pOaqMt8mwXY",
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": "audio/5067.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T13:15:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Founder Open Knowledge",
+        "id": 44,
+        "name": "Rufus Pollock"
+      }
+    ],
+    "description": "If you have ever been online, watched a movie or taken a medicine you have been a user of information. Today information in the form of software, databases and innovations is becoming more important than ever before. Information is becoming main thing we make, trade and use.  This is a new world being built on \"bits\". Its virtual nature makes it different from the physical world of bread and land and cars which can only have one user at a time. By contrast, information can be used by many at the same time.  The implications of this are huge. It makes a world of open information both possible and desirable -- that is a world in which all public information can be openly and freely used, shared and built on. This is a world where no-one is denied access to life-saving medicines because of cost, where everyone has access to our cultural heritage, where artists, innovators and creators are paid more and more fairly.  But getting there will not be easy. Dystopia is the default: if we do nothing we will get a world of exclusion and control where information is made to play by the same rules as our old physical one using \"intellectual property\" monopoly rights like copyright and patents.  In this talk we will explore the road ahead and explain why we can and must create an open future. The talk is for anyone interested in the coming information age and its implications for the politics, law and economics of this next century.",
+    "title": "Making an Open Information Age",
+    "track": {
+      "order": 5,
+      "name": "OTS 1",
+      "id": 5
+    },
+    "start_time": "2016-05-05T13:15:00+00:00",
+    "session_id": "OT-12",
+    "slides": null,
+    "video": "https://www.youtube.com/watch?v=PtIyubd4xjg",
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": "audio/5068.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T13:45:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "CTO Thoughtworks",
+        "id": 45,
+        "name": "Erik D\u00f6rnenburg"
+      },
+      {
+        "organisation": "Founder Open Knowledge",
+        "id": 44,
+        "name": "Rufus Pollock"
+      },
+      {
+        "organisation": "Founder FOSSASIA",
+        "id": 32,
+        "name": "Hong Phuc Dang"
+      },
+      {
+        "organisation": "IBM",
+        "id": 41,
+        "name": "Alexander Loibl"
+      }
+    ],
+    "description": "Technology and Society Panel",
+    "title": "The Power of Open",
+    "track": {
+      "order": 5,
+      "name": "OTS 1",
+      "id": 5
+    },
+    "start_time": "2016-05-05T13:40:00+00:00",
+    "session_id": "OT-11",
+    "slides": null,
+    "video": "https://www.youtube.com/watch?v=yhNm9Mvkrvc",
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": null,
+    "type": "Panel",
+    "end_time": "2016-05-05T14:10:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Red Hat",
+        "id": 46,
+        "name": "Lennart Poettering"
+      }
+    ],
+    "description": "systemd is a core component of most of today's popular Linux distributions. It takes the role of the system and service manager. Collecting log output of services and the rest of the system is a key functionality of systemd, implemented in the \"system Journal\" logging system. In this talk I'll give a quick introduction to the journal, and present its advantages over traditional syslog.",
+    "title": "The systemd Journal",
+    "track": {
+      "order": 5,
+      "name": "OTS 1",
+      "id": 5
+    },
+    "start_time": "2016-05-05T14:30:00+00:00",
+    "session_id": "OT-13",
+    "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/The%20systemd%20Journal%20(Lennart%20Poettering).pdf",
+    "video": "https://www.youtube.com/watch?v=Eo6DC3m2U7o",
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": null,
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T15:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Kinvolk GmbH",
+        "id": 47,
+        "name": "Chris K\u00fchl"
+      }
+    ],
+    "description": "Linux container technologies are an effective way to isolate processes while saving system resources. This translates directly to lower hosting costs as opposed to running full VMs.  rkt is a modular and secure container runtime for Linux systems. In this talk we'll first give a general overview of the project and then demonstrate how to use it.  The overview will include why it exists, what it is, how it works and what makes it unique. The demonstration will show how to build an Application Container Image (ACI), share the ACI, run ACIs and Docker images and use various utility functions rkt provides.",
+    "title": "The rkt container runtime; explanation and demonstration",
+    "track": {
+      "order": 5,
+      "name": "OTS 1",
+      "id": 5
+    },
+    "start_time": "2016-05-05T15:10:00+00:00",
+    "session_id": "OT-14",
+    "slides": null,
+    "video": "https://www.youtube.com/watch?v=X37_Xod7-5k",
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": "audio/5071.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T15:40:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Beuth Hochschule f\u00fcr Technik Berlin",
+        "id": 48,
+        "name": "Ruediger Weis"
+      },
+      {
+        "organisation": "Beuth Hochschule f\u00fcr Technik Berlin",
+        "id": 49,
+        "name": "Bruno Kirschner"
+      }
+    ],
+    "description": "Number theory provides us many tools to create sometimes really surprising technologies for social communication. We have learned that math might be our last defence line against a real existing all-encompassing surveillance. One central challenge in this conflict is to combine authentication and anonymity. Since a lot of these technologies have not been brought to the implemented world yet, we want to present a proposal to integrate blind signature schemes over elliptic curves into Open PGP. ",
+    "title": "Authenticated Anonymity by Math",
+    "track": {
+      "order": 5,
+      "name": "OTS 1",
+      "id": 5
+    },
+    "start_time": "2016-05-05T15:40:00+00:00",
+    "session_id": "OT-15",
+    "slides": null,
+    "video": "https://www.youtube.com/watch?v=cvOMC6tPVJs",
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": "audio/5072.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T16:10:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Free Software Foundation Europe e.V.",
+        "id": 50,
+        "name": "Matthias Kirschner"
+      }
+    ],
+    "description": "Einige Missverst\u00e4ndnisse zu Freier Software halten sich schon seit Jahren. Zum Beispiel: 1) Freie Software ist kostenlos. 2) Mit Freier Software kann man kein Geld verdienen. 3) Wer Freie Software \u00e4ndert, muss die \u00c4nderungen wieder allen verf\u00fcgbar machen. 4) Freie Software ist (un)sicherer als propriet\u00e4re Software. 5) Freie Software ist das \u00fcberlegene Entwicklungsmodell. 6) Freie Software bringt mir nichts, wenn ich nicht programmieren kann, \u2026 Diese Missverst\u00e4ndnisse sind leider nach wie vor weit verbreitet und erschweren es, m\u00f6glichst schnell das Potential Freier Software zu nutzen.  Der Vortrag ist richtig f\u00fcr Dich, wenn Du Dich wunderst warum eine der Aussagen falsch sein soll oder Du Anregungen suchst, wie und was Du auf solche oder \u00e4hnliche Aussagen in Zukunft in unter zwei Minuten erwidern kannst.",
+    "title": "Das Freie Software 1x1: Mi\u00dfverst\u00e4ndnisse gekonnt aufkl\u00e4ren",
+    "track": {
+      "order": 5,
+      "name": "OTS 1",
+      "id": 5
+    },
+    "start_time": "2016-05-05T16:10:00+00:00",
+    "session_id": "OT-16",
+    "slides": null,
+    "video": "https://www.youtube.com/watch?v=bjgIMs-Tfs4",
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": "audio/5073.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T16:40:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "cusy GmbH",
+        "id": 51,
+        "name": "Veit Schiele"
+      }
+    ],
+    "description": "DevOps ist in den letzten Jahren sehr erfolgreich geworden. H\u00e4ufig wurden in Unternehmen jedoch nur einige neue Werkzeuge eingef\u00fchrt. Die urspr\u00fcngliche Idee war jedoch, dass sich Arbeitskultur,-prozesse und -werkzeuge der Software-Entwicklung umfassend \u00e4ndern sollten. Wir werden eine vollst\u00e4ndige Toolchain f\u00fcr den gesamten Lebenszyklus von Software betrachten, vom agilen Software-Prozess \u00fcber Continuous Integration bis hin zu Continuous Deployment. Dar\u00fcberhinaus wird erst die Bereitstellung der gesamten Infrastruktur eine grundlegende Ver\u00e4nderung der Arbeitskultur und -prozesse bewirken k\u00f6nnen: Die Software-Entwickler sollten auf dieselbe Infrastruktur zum Entwickeln und Testen zur\u00fcckgreifen k\u00f6nnen, die auch in der Produktion verwendet wird; umgekehrt werden sie nicht mehr nur w\u00e4hrend der Entwicklungsphase auf \u00bbihre\u00ab Software verantwortlich sein sondern \u00fcber den gesamten Lebenszyklus hinweg. Nur durch diese Ver\u00e4nderungen werden die Gr\u00e4ben zwischen Development und Operations tats\u00e4chlich \u00fcberwunden werden k\u00f6nnen.",
+    "title": "Quo vadis DevOps?",
+    "track": {
+      "order": 5,
+      "name": "OTS 1",
+      "id": 5
+    },
+    "start_time": "2016-05-05T16:40:00+00:00",
+    "session_id": "OT-17",
+    "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/quo-vadis-devops.pdf",
+    "video": "https://www.youtube.com/watch?v=TkPMuOHRRlw",
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": "audio/5074.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T17:10:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Thunderbird",
+        "id": 52,
+        "name": "J\u00f6rg Knobloch"
+      }
+    ],
+    "description": "Ein \u00dcberblick zur Entwicklung von Thunderbird seit 2012 und die neue Version TB 45, sowie Ausblicke auf die Zukunft, wie die Integration von Enigmail. Neben technischen Entwicklungen werden Themen wie \"Neues Zuhause\" f\u00fcr Thunderbird, Spenden-Kampagne, oder auch um Sachen wie Migration auf eine neue Plattform besprochen. Weiterhin geht es darum wie Entwickler mitmachen k\u00f6nnen. F\u00fcr Leute, die Thunderbird schon gut kennen, gibt es M\u00f6glichkeiten auf SUMO oder Bugzilla bei der Triage mitzuhelfen. Einen ersten Einblick f\u00fcr Neueinsteiger soll zeigen wie Thunderbird kompiliert wird und Patches f\u00fcr Bugs zu erarbeiten. Einen Link zum Einstieg: https://developer.mozilla.org/en-US/docs/Mozilla/Developer_guide/Build_Instructions/Simple_Thunderbird_build",
+    "title": "Thunderbird - Entwicklung und Ausblick",
+    "track": {
+      "order": 5,
+      "name": "OTS 1",
+      "id": 5
+    },
+    "start_time": "2016-05-05T17:05:00+00:00",
+    "session_id": "OT-18",
+    "slides": "http://www.jorgk.com/misc/tb.htm",
+    "video": "https://www.youtube.com/watch?v=5ijNFPlv_sY",
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": "audio/5075.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T17:35:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Bioflux",
+        "id": 53,
+        "name": "R\u00fcdiger Trojok"
+      }
+    ],
+    "description": "Bioflux democratises Life Science with the automated Personal Laboratory. Making research collaborative, open and affordable for everyone. The Personal Lab shrinks a biology lab into a portable, affordable and automated device for point of care diagnostics and personalised drug production. High labor costs restrict rapid prototyping in life sciences inhibiting development of point-of-care diagnostics and personalized drugs for plants, animals and  humans. Existing automation robots used in the pharmaceutical industry are costly and only  economic for high revenue drug production controlled by monopolistic multinationals. This leaves many urgent, but scientifically solvable, environmental and  health problems untouched.  We are developing the Personal Lab as a new platform for scientific literate citizens to read and write biological code. The Personal Lab is a portable and affordable device enabling automated and programmable execution of biological protocols, increasing efficiency up to 100000X.  This will allow a community of users to collaboratively program and test new protocols and create bioapplications to e.g. solve the antibiotic crisis. We have established a network of hardware and software engineers and biologists that developed a prototype of a Personal Lab and are embedded in the global DIYbio scene and thereby quickly spead our technology . We will provide you with Biochips containing all needed reagents and a software that offers unlimited options to code your own bioapplications and share them with the community. Join us in this open source hardware project and start coding biology!",
+    "title": "Bioflux - A Personal Laboratory for everyone",
+    "track": {
+      "order": 5,
+      "name": "OTS 1",
+      "id": 5
+    },
+    "start_time": "2016-05-05T17:30:00+00:00",
+    "session_id": "OT-19",
+    "slides": null,
+    "video": "https://www.youtube.com/watch?v=Bzs2_ETVIyg",
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": "audio/5076.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T18:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Bioflux",
+        "id": 54,
+        "name": "Mirela Alistar"
+      }
+    ],
+    "description": "Bioflux democratises Life Science with the automated Personal Laboratory. Making research collaborative, open and affordable for everyone. The Personal Lab shrinks a biology lab into a portable and automated device for point of care diagnostics and personalised drug production. To date, high labor costs restrict rapid prototyping in life sciences inhibiting development of point-of-care diagnostics and personalized drugs for plants, animals and humans. Existing automation robots used in the pharmaceutical industry are costly and only economic for high revenue drug production controlled by monopolistic multinationals. This leaves many urgent, but scientifically solvable, environmental and health problems untouched. We are developing the Personal Lab as a new platform for scientific literate citizens to read and write biological code. The Personal Lab is a portable and affordable device enabling automated and programmable execution of biological protocols, increasing efficiency up to 100000X. This will allow a community of users to collaboratively program and test new protocols and create bioapplications to e.g. solve the antibiotic crisis. We have established a network of hardware and software engineers and biologists that developed a prototype of a Personal Lab and are embedded in the global DIYbio scene and thereby quickly spead our technology . We will provide you with Biochips containing all needed reagents and a software that offers unlimited options to code your own bioapplications and share them with the community. Join us in this open source hardware project and start coding biology!",
+    "title": "Bioflux - A Personal Laboratory for everyone",
+    "track": {
+      "order": 5,
+      "name": "OTS 1",
+      "id": 5
+    },
+    "session_id": "OT-20",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": null,
+    "type": "Vortrag/Talk"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "OTS",
+        "id": 55,
+        "name": "Mario Behling"
+      }
+    ],
+    "description": "",
+    "title": "Kurzes Wrap up und Ab geht's zur Lounge im Erdgeschoss bis 23 Uhr. / Wrap up and Lounge until 11pm in the ground floor space.",
+    "track": {
+      "order": 5,
+      "name": "OTS 1",
+      "id": 5
+    },
+    "start_time": "2016-05-05T17:55:00+00:00",
+    "session_id": "OT-21",
+    "slides": null,
+    "video": "https://www.youtube.com/watch?v=LSqa1OxsdOE",
+    "location": "Ebene 1, Galerie / Floor 1",
+    "sign_up": null,
+    "audio": "audio/5077.mp3",
+    "type": "Danke und Lounge",
+    "end_time": "2016-05-05T18:25:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Jugend Hackt",
+        "id": 56,
+        "name": "Jakob Schade"
+      }
+    ],
+    "description": "Auch 2015 konnten junge Hacker_innen bei Jugend Hackt zeigen, wie sie mit Code die Welt verbessern. In 5 Events mit fast 300 Teilnehmenden und \u00fcber 50 entstandenen Projekten gab es eine Vielzahl an spannenden, lustigen und auch wegweisenden Ideen und Prototypen, wie die Junghacker_innen ihre F\u00e4higkeiten f\u00fcr eine positive Gesellschaft einsetzen. Einige dieser Projekte werden hier vorgestellt und k\u00f6nnen mit den jungen Entwicklern selbst diskutiert werden. Jugend Hackt ist ein Hackathon f\u00fcr Jugendliche zwischen 12 und 18 Jahren, welcher seit 2013 von der Open Knowledge Foundation veranstaltet wird.",
+    "title": "Jugend Hackt",
+    "track": {
+      "order": 6,
+      "name": "OTS 2",
+      "id": 6
+    },
+    "start_time": "2016-05-05T09:00:00+00:00",
+    "session_id": "OT2-1",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 2, Loft / Floor 2",
+    "sign_up": null,
+    "audio": "audio/5078.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T09:30:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Junge T\u00fcftler",
+        "id": 57,
+        "name": "Franziska Schmid"
+      },
+      {
+        "organisation": "Junge T\u00fcftler",
+        "id": 58,
+        "name": "Julia Kleeberger"
+      }
+    ],
+    "description": "During this talk we want to share our vision of how education will change within the next years: Thanks to open educational resources, open source software and the digitalization of the society learning is not longer restricted to school buildings and can happens ubiquitously. Thus, we believe education doesn\u2019t need to be a privilege anymore.   We want to show possibilities how to live up to it and share our experiences we already gained with Junge T\u00fcftler: an initiative that offers children a playful access to coding & electronics.",
+    "title": "Feel the force! ... or how to make open education for real",
+    "track": {
+      "order": 6,
+      "name": "OTS 2",
+      "id": 6
+    },
+    "start_time": "2016-05-05T09:30:00+00:00",
+    "session_id": "OT2-2",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 2, Loft / Floor 2",
+    "sign_up": null,
+    "audio": "audio/5079.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T10:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Wikimedia Deutschland",
+        "id": 59,
+        "name": "Barbara Fischer"
+      }
+    ],
+    "description": "GLAMorous Importer wanted: More and more art & culture heritage keeping institutions as galleries, libraries archives or museums, aka GLAM, make large quantities of their collections accessible to further reuse. Often enough the content would be easier to reuse for apps and augmented reality if transferred to Wikimedia Commons. The talk intends to spur initiatives to transfer open data of the GLAMorous kind to Wikimedia Commons. It shows the opportunities, the hurdles and provides hints where to start. It is not a technical instruction how to do it, but a call for action to start to do it.",
+    "title": "GLAMorous Importer wanted",
+    "track": {
+      "order": 6,
+      "name": "OTS 2",
+      "id": 6
+    },
+    "start_time": "2016-05-05T10:00:00+00:00",
+    "session_id": "OT2-3",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 2, Loft / Floor 2",
+    "sign_up": null,
+    "audio": "audio/5080.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T10:30:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "initOS GmbH / Otto-von-Guericke University Magdeburg",
+        "id": 60,
+        "name": "Frederik Kramer"
+      }
+    ],
+    "description": "Die Erfindung und Verbreitung des Internet hat die Welt enger zusammenr\u00fccken lassen. L\u00e4ngst ist aus einem einst lokalen, regionalen oder bestenfalls nationalen Wettbewerb ein globaler Wettbewerb geworden. Stetig fallende Kosten der Informationsverarbeitung durch intensive Vernetzung und Erweiterung der \u00dcbertragungsbandbreiten sorgt daf\u00fcr, dass die gespeicherte Informationsmenge rasant w\u00e4chst.  Sie w\u00e4chst dabei erheblich schneller als die Weltbev\u00f6lkerung bzw. die Anzahl verf\u00fcgbarer Fachkr\u00e4fte, die sich mit den technischen  L\u00f6sungen der Informationsverarbeitung befassen. Die Informationstechnologiebranche ist diejenige Branche, die sich stellvertretend f\u00fcr alle anderen Branchen mit den technologischen Anforderungen der Informations- und Wissensverarbeitung auseinandersetzt. Daneben erzeugt und verarbeitet sie selbst im Rahmen ihrer Leistungserbringung gro\u00dfe Mengen komplexen Wissens. Im Maschinenraum der Informationstechnologiebranche planen, entwickeln, betreiben und warten Softwareentwickler, Tester, Administratoren und Projektmanager, Software, deren Erstellung auf Grund fachlicher Anforderungen bzw. eines entsprechenden Marktpotentials notwendig oder sinnvoll erscheint.  Was inbesondere in den 1990er Jahren noch als verr\u00fcckt galt, n\u00e4mlich Wissen in Form von Quellcode uns selbst ganze, komplexe Anwendungssysteme zu explizieren und f\u00fcr jedermann zug\u00e4nglich und nutzbar zu teilen (Open Source bzw. Free Software), hat zusammen mit dem Erfolg prominenter Projekte (z.B. Linux, LibreOffice, Firefox) und dem Ausbau weltweiter Kommunikationsnetze eine globale Erfolgsgeschichte geschrieben. Bis vor wenigen Jahren hielten die meisten Fachleute es f\u00fcr undenkbar, dass auch grundlegenste betriebliche Anwendungen, sogenannte Enterprise Resource Planning Systeme in diesem Modus entwickelt und betrieben werden k\u00f6nnen. U.a. das Open Source ERP-System Odoo tritt seit geraumer Zeit den Gegenbeweis an. Um den belgischen Hersteller haben sich in den vergangenen Jahren mehrere hundert Integrationspartner weltweit und eine Gruppe von \u00fcber 2 Mio. aktive Nutzer in einer Community formiert. Der Vortrag fast die seit 2008 andauernde Entwicklung von Odoo (zuvor als OpenERP bekannt) aus Sicht eines Integrationspartners zusammen und stellt dabei die Rolle des Wissensaustausches, \u00f6konomischer Interessen des Herstellers und der Integrationspartner sowie Erfolgs- und Risikofaktoren eines weltweit erfolgreichen Open Source Projektes am Beispiel dar. Insbesondere wird dabei auch auf den erkennbaren Trend der Professionalisierung erfolgreicher Open Source Projekte und Dual Licensing eingegangen. ",
+    "title": "Die Rolle von Wissen, \u00f6konomischer Faktoren und Professionalisierung in erfolgreichen Open Source Projekten am Beispiel von Odoo",
+    "track": {
+      "order": 6,
+      "name": "OTS 2",
+      "id": 6
+    },
+    "start_time": "2016-05-05T10:30:00+00:00",
+    "session_id": "OT2-4",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 2, Loft / Floor 2",
+    "sign_up": null,
+    "audio": "audio/5081.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T11:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Makeomnia Ltd / HKCOTA",
+        "id": 8,
+        "name": "Alvin Lui"
+      }
+    ],
+    "description": "TinyBoy Project is an education project started at 2011. The talk is about the follow up of the project, what we did and the progress.  To show the new version of the TinyBoy, TinyBoy2. And to discuss about how to integrate into STEAM.",
+    "title": "TinyBoy Project - a 3D printer for education",
+    "track": {
+      "order": 6,
+      "name": "OTS 2",
+      "id": 6
+    },
+    "start_time": "2016-05-05T11:00:00+00:00",
+    "session_id": "OT2-5",
+    "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/TinyBoy-STEAM-ENG.pptx",
+    "video": null,
+    "location": "Ebene 2, Loft / Floor 2",
+    "sign_up": null,
+    "audio": "audio/5082.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T11:30:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Mozilla",
+        "id": 61,
+        "name": "Elio Qoshi"
+      }
+    ],
+    "description": "In early 2016, we started the Community Design initative at Mozilla, allowing all volunteer contributors to work closer with staff and get involved in projects, which before were accessible only to staff at Mozilla. This caters the needs of both community and staff, in a decentralized way.",
+    "title": "Community Design at Mozilla  ",
+    "track": {
+      "order": 6,
+      "name": "OTS 2",
+      "id": 6
+    },
+    "start_time": "2016-05-05T11:30:00+00:00",
+    "session_id": "OT2-6",
+    "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/ElioQoshi%20-%20Community%20Design%20Talk.ppt.pdf",
+    "video": null,
+    "location": "Ebene 2, Loft / Floor 2",
+    "sign_up": null,
+    "audio": "audio/5083.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T12:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Open Source Circular Economy Days",
+        "id": 62,
+        "name": "Lars Zimmermann"
+      }
+    ],
+    "description": "Open Source Circular Design is so ugly! Is it? Or is it just a new paradigm for design we are going to explore? Funnier, sexier, more elegant ... that was yesterday (or is today). But in the future maybe it will be modular, hackable, reusable and open ...  This talk will be a reading of a letter exchange that happened between a guy that is a critic of open design and loves shiny apple stuff and a guy that tries to explore open source circular design. The letter exchanges brings up the key arguments of both sides. | It mentions and works in the context of the Open Source Circular Economy Days",
+    "title": "Open Source Circular Design is so Ugly! / Open Source Circular Design ist unglaublich h\u00e4sslich!",
+    "track": {
+      "order": 6,
+      "name": "OTS 2",
+      "id": 6
+    },
+    "start_time": "2016-05-05T12:00:00+00:00",
+    "session_id": "OT2-7",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 2, Loft / Floor 2",
+    "sign_up": null,
+    "audio": "audio/5084.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T12:30:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Community Managerin",
+        "id": 63,
+        "name": "Felicitas Blanck"
+      }
+    ],
+    "description": "Sind die Kommentare noch zu retten? Wie l\u00e4sst man Nutzer im Internet am besten zu Wort kommen? Und wie kommen wir dabei zu einer sachlicheren Debatte? Nutzerkommentare sind sprichw\u00f6rtliches Reservoir f\u00fcr Hass und Beleidigungen. Ist das Schliessen von Kommentarbereichen wirklich der Weisheit letzter Schluss? Daneben gibt es viele Versuche, durch die Anpassung der Nutzeroberfl\u00e4che zu einer sachlicheren Debatte zu kommen. Was gibt es f\u00fcr Ans\u00e4tze? Sind sie erfolgreich? Und was macht das ideale Kommentarsystem aus?",
+    "title": "Nutzerkommentare im Internet: Sind die Kommentare noch zu retten?",
+    "track": {
+      "order": 6,
+      "name": "OTS 2",
+      "id": 6
+    },
+    "start_time": "2016-05-05T12:30:00+00:00",
+    "session_id": "OT2-8",
+    "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/SLIDES_%20Sind%20die%20Kommentare%20noch%20zu%20retten_.pdf",
+    "video": null,
+    "location": "Ebene 2, Loft / Floor 2",
+    "sign_up": null,
+    "audio": "audio/5085.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T13:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Code Week Award",
+        "id": 64,
+        "name": "Code Week Award"
+      }
+    ],
+    "description": "Matthias und Nora vom Code Week Team stellen den Code Week Award vor und zeigen einen Live-Hack. Wir programmieren ein Computerspiel in nur 15 Minuten und spielen mit euch. Wer gewinnt, bekommt von uns einen \u00dcberraschungs-Preis.  Unter dem Motto \u201cJede Woche ist Code Week\u201d f\u00f6rdert der Code Week Award spielerische und kreative Workshop-Formate und digitale Kompetenzen bei Kindern und Jugendlichen in ganz Deutschland. Der Award wurde ankn\u00fcpfend an den Erfolg der EU Code Week im Oktober 2014 erstmalig von der Technologiestiftung Berlin und dem Design Research Lab der Universit\u00e4t der K\u00fcnste Berlin ausgeschrieben und durch die Unterst\u00fctzung von Samsung ins Leben gerufen. 2016 findet bereits die zweite Ausgabe des Awards statt, der in den vergangenen beiden Jahren bereits hunderte Kindern und Jugendlichen einen kreativen Umgang mit digitalen Technologien erm\u00f6glicht hat. ",
+    "title": "Code Week Award Live-Hack",
+    "track": {
+      "order": 6,
+      "name": "OTS 2",
+      "id": 6
+    },
+    "start_time": "2016-05-05T13:00:00+00:00",
+    "session_id": "OT2-9",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 2, Loft / Floor 2",
+    "sign_up": null,
+    "audio": "audio/5086.mp3",
+    "type": "Talk mit Live-Hack (20 Minuten)",
+    "end_time": "2016-05-05T13:30:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Gregarious Mammal",
+        "id": 65,
+        "name": "Chris Ward"
+      }
+    ],
+    "description": "We spend countless hours creating technically amazing projects built upon awesome, cutting edge code. We then promote our project through newsletters, events and social media and await certain success.  But nothing happens.  Why?  Whoops, we forgot to tell anyone how to effectively use our project, all that time waisted.  In this presentation I want to draw upon my experience in writing tutorials and technical documentation to help you write clear, concise and usable documentation for your own projects.  We will cover topics such as:  - Why write documentation? - Creating context and meaning - Writing clear copy - Creating meaningful examples and tutorials - Markdown, Restructured Text, Pandoc, LaTeX - Making documentation part of build processes - Testing Docs - Versioning of Docs and maintaining consistency",
+    "title": "Don't complain about bad documentation, learn to write it better!",
+    "track": {
+      "order": 6,
+      "name": "OTS 2",
+      "id": 6
+    },
+    "start_time": "2016-05-05T13:30:00+00:00",
+    "session_id": "OT2-10",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 2, Loft / Floor 2",
+    "sign_up": null,
+    "audio": "audio/5087.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T14:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Endocode AG",
+        "id": 66,
+        "name": "Thomas Fricke"
+      }
+    ],
+    "description": "It does not make sense to mourn about clouds just being other peoples computers. With Kubernetes (k8s) and Docker you can easily create your own public cloud running on your cloud providers computers, or with a little more effort,  your own *private* cloud running on or your *own* hardware.  There has been evolved an entire ecosystem for software deployed in  containers and for software components securing privacy in the k8s cloud.  With CoreOS as an immutable operating system running immutable containers you could get a higher integrity level build in your application by design.",
+    "title": "Creating Service Clouds with Kubernetes, CoreOS, Container and Co ",
+    "track": {
+      "order": 6,
+      "name": "OTS 2",
+      "id": 6
+    },
+    "start_time": "2016-05-05T14:00:00+00:00",
+    "session_id": "OT2-11",
+    "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/OpenTech%20Summit-%20Creating%20Service%20Clouds%20with%20Kubernetes%2C%20CoreOS%2C%20Container%20and%20Co%20.pdf",
+    "video": null,
+    "location": "Ebene 2, Loft / Floor 2",
+    "sign_up": null,
+    "audio": "audio/5091.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T14:30:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "flashcat-project",
+        "id": 67,
+        "name": "Kai Mertens"
+      }
+    ],
+    "description": "Coreboot and Libreboot are precious free firmware replacements for notebooks like the ThinkPad X200. Unfortunately, a non-free flashing equipment that relies on proprietary ARM-architecture is usually used for flashing. This needs to end! The flashcat team from Berlin now proudly presents a flasher which makes use of the Parallax Propeller, a true open design GPLv3 microcontroller. That's really exciting!",
+    "title": "flashcat - your true open design chip flasher",
+    "track": {
+      "order": 6,
+      "name": "OTS 2",
+      "id": 6
+    },
+    "start_time": "2016-05-05T14:30:00+00:00",
+    "session_id": "OT2-12",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 2, Loft / Floor 2",
+    "sign_up": null,
+    "audio": null,
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T15:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Technische Universit\u00e4t Berlin",
+        "id": 68,
+        "name": "J\u00e9r\u00e9my Bonvoisin"
+      }
+    ],
+    "description": "Based on the analysis of more than 70 significant open source product development projects, this contribution intends to give an overview of the current state of this emerging practice. The following questions will be particularly addressed:  - How projects use the public space offered by the internet and the existing sharing online platforms in order to stimulate attention and contributions from online communities?  - What are the gaps between actual practices and best practices formulated by the open source hardware association?  - What do these gaps reveal about the intention of open source product development projects?  - What different types of open source product development projects can be characterized? This research is lead in the context of the French-German project \"OPEN!-Methods and tools for community-based product development\" involving among others the Technische Universit\u00e4t Berlin and the University of Grenoble. This project is aimed at understanding and formalizing the emerging practice of community-based product development and at developing methodological and IT tools in order to support these practices.",
+    "title": "Current state of practices in open source hardware",
+    "track": {
+      "order": 6,
+      "name": "OTS 2",
+      "id": 6
+    },
+    "start_time": "2016-05-05T15:00:00+00:00",
+    "session_id": "OT2-13",
+    "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/Bonvoisin%20-%20Current%20state%20of%20practices%20in%20open%20source%20hardware.pdf",
+    "video": null,
+    "location": "Ebene 2, Loft / Floor 2",
+    "sign_up": null,
+    "audio": "audio/5090.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T15:30:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Askemos",
+        "id": 69,
+        "name": "J\u00f6rg Wittenberger"
+      }
+    ],
+    "description": "Der Vortrag beleuchtet die Modellierung rechtlicher Prozesse, die dabei stehenden ethischen und juristischen Anforderungen und vergleicht letztlich bekannte L\u00f6sungsans\u00e4tze. Gestreift werden Fragen wie:  Was sind Vertr\u00e4ge - Texte oder Prozesse? Vertr\u00e4ge \u00fcbertragen Rechte.  Alle Rechte, oder sind manche Rechte unver\u00e4u\u00dferlich?  (Menschenrechte irgendwo?!) Entscheiden mit \"smart contracts\" Maschinen was Recht ist? Smart contracts in der Blockchain?  Was wird aus Privatsph\u00e4re, ~autonomie, Bankgeheimnis etc.? Was ist Askemos?  Das Konzept ist 350 Jahre alt und entstammt der Aufkl\u00e4rung. Keine Authorit\u00e4t \"des Vertrauens\" sage uns was Recht ist! Ein \"modifiziertes git\"; privat, ohne schneller, skalierbar, privat und Ressourcen schonend.",
+    "title": "smart contracts [th]at work",
+    "track": {
+      "order": 6,
+      "name": "OTS 2",
+      "id": 6
+    },
+    "start_time": "2016-05-05T15:30:00+00:00",
+    "session_id": "OT2-15",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 2, Loft / Floor 2",
+    "sign_up": null,
+    "audio": "audio/5092.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T16:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "ionary",
+        "id": 70,
+        "name": "Denjell Caleb Thompson"
+      }
+    ],
+    "description": "Digital content may be licensed in an open way, but how open is its reuse and modification? This lecture presents a novel way of self-reporting the degree to which content can be used and modified with FOSS.",
+    "title": "Degrees of Openness [\u00b0O]",
+    "track": {
+      "order": 6,
+      "name": "OTS 2",
+      "id": 6
+    },
+    "start_time": "2016-05-05T16:00:00+00:00",
+    "session_id": "OT2-16",
+    "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/degrees_of_openness_praesi.pdf",
+    "video": null,
+    "location": "Ebene 2, Loft / Floor 2",
+    "sign_up": null,
+    "audio": "audio/5093.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T16:30:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Open Knowledge Foundation Deutschland",
+        "id": 71,
+        "name": "Maximilian Richt"
+      }
+    ],
+    "description": "Am Anfang stand eine Gerichtsentscheidung: Letzten Herbst entschied das Bundesverwaltungsgericht, dass der Bundestag ein Gutachten seines wissenschaftlichen Dienstes herausgeben muss, wenn eine IFG-Anfrage dazu gestellt wird.  Aber anstatt von selbst s\u00e4mtliche bisherigen Gutachten zu ver\u00f6ffentlichen, entschied sich der Bundestag, so wenig wie m\u00f6glich herauszugeben - bis wir die Kampagne \"FragDenBundestag\" starteten. Mit der Hilfe von tausenden Usern wurden mehr als 2.000 IFG-Anfragen gestellt, um Gutachten des Wissenschaftlichen Dienstes \u00f6ffentlich zu machen. Dies bewegte letztendlich den Bundestag dazu, St\u00fcck f\u00fcr St\u00fcck von selbst zu ver\u00f6ffentlichen.  In diesem Talk stelle ich die Plattformen sehrgutachten.de und kleineAnfragen.de vor, die einen einfacheren Zugang zu staatlichen Dokumenten erm\u00f6glichen und gehe auf die Schwierigkeiten ein, die entstehen, wenn man versucht, die eigene Regierung etwas transparenter zu machen.",
+    "title": "sehrgutachten und kleineAnfragen: Einmischen in Regierungsangelegenheiten",
+    "track": {
+      "order": 6,
+      "name": "OTS 2",
+      "id": 6
+    },
+    "start_time": "2016-05-05T16:30:00+00:00",
+    "session_id": "OT2-17",
+    "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/sehrgutachten-kleineanfragen-ots.pdf",
+    "video": null,
+    "location": "Ebene 2, Loft / Floor 2",
+    "sign_up": null,
+    "audio": "audio/5094.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T17:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "youbroketheinternet.org",
+        "id": 72,
+        "name": "carlo von lynX"
+      }
+    ],
+    "description": "It is time to write a new Constitution for the EU. We need a participation platform to do this. There are two kinds of participatory e-democracy. The one that an authority has set-up where you trust them that justice, fairness and democratic correctness will be provided, demagogy and inflammatory behavior be dealt with by trustworthy admins you never heard or saw. And the other one where the participants themselves are empowered to do this. Which approach do you find more appropriate for the task? Has this been done before? What went wrong in past attempts?",
+    "title": "Making participation: How to put participants in charge of their own e-democracy platform",
+    "track": {
+      "order": 6,
+      "name": "OTS 2",
+      "id": 6
+    },
+    "start_time": "2016-05-05T17:00:00+00:00",
+    "session_id": "OT2-18",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 2, Loft / Floor 2",
+    "sign_up": null,
+    "audio": "audio/5095.mp3",
+    "type": "Vortrag/Talk",
+    "end_time": "2016-05-05T17:30:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "OTS",
+        "id": 73,
+        "name": "Andr\u00e9 Rebentisch"
+      }
+    ],
+    "description": "From its start in 2004 Mr. Rebentisch closely followed the European Interoperability Framework (EIF) dossier. The document sparked a fruitful controversy about the promotion and use of open standards in the European public sector. External interference, trade sensitivities and a weak stance towards competition lead to a broader EIFv2 - which is right now under yet another review by the European Commission. The talk will focus on the EIF potentials for open technologies and also briefly touch upon the ongoing trade negotiations and TTIP disclosures.",
+    "title": "Open Standards in perils? European Commission revises the European Interoperability Framework",
+    "track": {
+      "order": 6,
+      "name": "OTS 2",
+      "id": 6
+    },
+    "start_time": "2016-05-05T17:30:00+00:00",
+    "session_id": "OT2-19",
+    "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/opstperils.odp",
+    "video": null,
+    "location": "Ebene 2, Loft / Floor 2",
+    "sign_up": null,
+    "audio": "audio/5096.mp3",
+    "type": "Talk of 25 minutes",
+    "end_time": "2016-05-05T18:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [],
+    "description": "",
+    "title": "In der Galerie, Ebene 1: Kurzes Wrap up und Ab geht's zur Lounge im Erdgeschoss bis 23 Uhr. / Wrap up and Lounge until 11pm in the ground floor space.",
+    "track": {
+      "order": 6,
+      "name": "OTS 2",
+      "id": 6
+    },
+    "start_time": "2016-05-05T17:55:00+00:00",
+    "session_id": "OT2-20",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 2, Loft / Floor 2",
+    "sign_up": null,
+    "audio": null,
+    "type": "Danke und Lounge",
+    "end_time": "2016-05-05T18:25:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Coder Dojo Potsdam",
+        "id": 22,
+        "name": "Nicco Kunzmann"
+      }
+    ],
+    "description": "Im KidsSpace k\u00f6nnen sich Kinder und Jugendliche kreativ mit Hardware und Programmieren auseinadersetzen.",
+    "title": "CoderDojo",
+    "track": {
+      "order": 7,
+      "name": "Kids Camp",
+      "id": 7
+    },
+    "start_time": "2016-05-05T07:30:00+00:00",
+    "session_id": "KC-1",
+    "slides": null,
+    "video": null,
+    "location": "Erdgeschoss, Saal / Ground Floor",
+    "sign_up": "http://www.meetup.com/OpenXLab/events/230160858/",
+    "audio": null,
+    "type": "Kids Workshops, Ganzt\u00e4gig / Whole day",
+    "end_time": "2016-05-05T08:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Junge T\u00fcftler",
+        "id": 58,
+        "name": "Julia Kleeberger"
+      },
+      {
+        "organisation": "Junge T\u00fcftler",
+        "id": 57,
+        "name": "Franziska Schmid"
+      }
+    ],
+    "description": "\u201eHallo Welt. Wir machen uns die Welt, wie sie uns gef\u00e4llt\u201c \u2013 unter diesem Motto laden wir Euch anl\u00e4sslich des Open Tech Summits dazu ein, mit uns gemeinsam zu t\u00fcfteln und zu coden. Dabei sind eurer Kreativit\u00e4t keine Grenzen gesetzt sind: ob es darum geht, Stoffgestalten Kl\u00e4nge zu entlocken, Papierkreaturen bei Dunklheit zum Leuchten zu bringen oder Schrottroboter zu bewegen. Alles ist m\u00f6glich und wir sind schon ganz gespannt darauf mit Euch gemeinsam unbekannte neue Welten und Gesch\u00f6pfe zu erschaffen und kennenzulernen. An verschiedenen Stationen k\u00f6nnt ihr Wesen, Kreaturen und Welten aus Pappe, Holz und Fundresten erschaffen und diese dann mittels Sensorik und Programmierung zum Leben erwecken. Besondere Vorkenntnisse werden nicht ben\u00f6tigt: daf\u00fcr aber jede Menge Neugier am Entdecken, Ausprobieren und Selber machen. Dabei lernt ihr spielerisch die Grundlagen der Elektronik und Programmierung kennen. Je nach Lust und Laune k\u00f6nnt ihr Euch in einer Station vertiefen oder auch das Angebot an den verschiedenen Stationen miteinander kombinieren. F\u00fcr Kinder im Alter von 6 \u2013 12 Jahren.   //   How can fabrics conduct electricity and is it possible to build electric circuits out of paper? In our 3 hour workshop children aged 6 and older will have the possibility to tinker and explore the impact of electricity in a playful way. They can craft figures made out of paper or felt and enrich them with electric functions. With our workshop we wanna share the fascination of technology with kids and want to encourage them to hack and tinker around with everyday objects. ",
+    "title": "\u201eHallo Welt. Wir machen uns die Welt, wie sie uns gef\u00e4llt\u201c",
+    "track": {
+      "order": 7,
+      "name": "Kids Camp",
+      "id": 7
+    },
+    "start_time": "2016-05-05T07:30:00+00:00",
+    "session_id": "KC-2",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 1, Raum 2 und Raum 3 / Floor 1, Room 2 and Room 3",
+    "sign_up": "http://www.meetup.com/OpenXLab/events/230160858/",
+    "audio": null,
+    "type": "Kids Workshops, Ganzt\u00e4gig / Whole day",
+    "end_time": "2016-05-05T08:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "",
+        "id": 56,
+        "name": "Jakob Schade"
+      },
+      {
+        "organisation": "",
+        "id": 74,
+        "name": "David Weber"
+      },
+      {
+        "organisation": "",
+        "id": 75,
+        "name": "Roman Kobosil"
+      },
+      {
+        "organisation": "",
+        "id": 76,
+        "name": "Paula Glaser"
+      }
+    ],
+    "description": "Auch 2015 konnten junge Hacker_innen bei Jugend Hackt zeigen, wie sie mit Code die Welt verbessern. In 5 Events mit fast 300 Teilnehmenden und \u00fcber 50 entstandenen Projekten gab es eine Vielzahl an spannenden, lustigen und auch wegweisenden Ideen und Prototypen, wie die Junghacker_innen ihre F\u00e4higkeiten f\u00fcr eine positive Gesellschaft einsetzen. An dem Stand k\u00f6nnen einige dieser Projekte mit den jungen Entwicklern selbst diskutiert werden und es besteht die M\u00f6glichkeit sich \u00fcber die Veranstaltungen 2016 zu informieren Jugend Hackt ist ein Hackathon f\u00fcr Jugendliche zwischen 12 und 18 Jahren, welcher seit 2013 von der Open Knowledge Foundation veranstaltet wird.",
+    "title": "Jugend Hackt",
+    "track": {
+      "order": 7,
+      "name": "Kids Camp",
+      "id": 7
+    },
+    "start_time": "2016-05-05T07:30:00+00:00",
+    "session_id": "KC-3",
+    "slides": null,
+    "video": null,
+    "location": "Erdgeschoss, Saal / Ground Floor",
+    "sign_up": null,
+    "audio": null,
+    "type": "Ausstellung/Vorstellung/ Exhibition",
+    "end_time": "2016-05-05T08:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "Code Week Award",
+        "id": 64,
+        "name": "Code Week Award"
+      }
+    ],
+    "description": "Matthias und Nora vom Code Week Team stellen den Code Week Award vor und zeigen einen Live-Hack. Wir programmieren ein Computerspiel in nur 15 Minuten und spielen mit euch. Wer gewinnt, bekommt von uns einen \u00dcberraschungs-Preis.  Unter dem Motto \u201cJede Woche ist Code Week\u201d f\u00f6rdert der Code Week Award spielerische und kreative Workshop-Formate und digitale Kompetenzen bei Kindern und Jugendlichen in ganz Deutschland. Der Award wurde ankn\u00fcpfend an den Erfolg der EU Code Week im Oktober 2014 erstmalig von der Technologiestiftung Berlin und dem Design Research Lab der Universit\u00e4t der K\u00fcnste Berlin ausgeschrieben und durch die Unterst\u00fctzung von Samsung ins Leben gerufen. 2016 findet bereits die zweite Ausgabe des Awards statt, der in den vergangenen beiden Jahren bereits hunderte Kindern und Jugendlichen einen kreativen Umgang mit digitalen Technologien erm\u00f6glicht hat. ",
+    "title": "Code Week Award Live-Hack",
+    "track": {
+      "order": 7,
+      "name": "Kids Camp",
+      "id": 7
+    },
+    "start_time": "2016-05-05T07:30:00+00:00",
+    "session_id": "KC-4",
+    "slides": null,
+    "video": null,
+    "location": "Erdgeschoss, Saal / Ground Floor",
+    "sign_up": null,
+    "audio": null,
+    "type": "Ausstellung/Vorstellung/ Exhibition",
+    "end_time": "2016-05-05T08:00:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "LPI e.V.",
+        "id": 77,
+        "name": "Harald Maa\u00dfen"
+      }
+    ],
+    "description": "LPI-Pr\u00fcfung",
+    "title": "LPI Zertifizierung",
+    "track": {
+      "order": 8,
+      "name": "Linux-Zertifizierung",
+      "id": 8
+    },
+    "start_time": "2016-05-05T12:00:00+00:00",
+    "session_id": "Z-1",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 2, Raum 4",
+    "sign_up": null,
+    "audio": null,
+    "type": "Zertifizierung",
+    "end_time": "2016-05-05T12:30:00+00:00"
+  },
+  {
+    "py/object": "models.Session",
+    "speakers": [
+      {
+        "organisation": "LPI e.V.",
+        "id": 77,
+        "name": "Harald Maa\u00dfen"
+      }
+    ],
+    "description": "LPI-Pr\u00fcfung",
+    "title": "LPI Zertifizierung",
+    "track": {
+      "order": 8,
+      "name": "Linux-Zertifizierung",
+      "id": 8
+    },
+    "start_time": "2016-05-05T14:00:00+00:00",
+    "session_id": "Z-2",
+    "slides": null,
+    "video": null,
+    "location": "Ebene 2, Raum 4",
+    "sign_up": null,
+    "audio": null,
+    "type": "Zertifizierung",
+    "end_time": "2016-05-05T14:30:00+00:00"
+  }
+]}

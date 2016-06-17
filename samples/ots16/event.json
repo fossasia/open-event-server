@@ -1,0 +1,23 @@
+{
+    "background_url": null, 
+    "closing_datetime": null, 
+    "color": null, 
+    "description": null, 
+    "email": null, 
+    "end_time": "2016-09-04 12:30:45", 
+    "event_url": null, 
+    "id": 1, 
+    "latitude": null, 
+    "location_name": null, 
+    "logo": null, 
+    "longitude": null, 
+    "name": "TestEvent", 
+    "organizer_description": null, 
+    "organizer_name": null, 
+    "privacy": "public", 
+    "start_time": "2013-08-04 12:30:45", 
+    "state": "Draft", 
+    "ticket_url": null, 
+    "topic": null, 
+    "type": null
+}

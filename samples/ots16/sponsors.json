@@ -1,0 +1,65 @@
+{ "sponsors":[
+  {
+    "py/object": "models.Sponsor",
+    "description": "The FFII is a global network of associations dedicated to consumer rights and education about digital media, genuine open standards. ",
+    "level": "1",
+    "image": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/img/FFII.gif",
+    "link": "http://ffii.org",
+    "type": "Platinum Sponsor",
+    "name": "FFII"
+  },
+  {
+    "py/object": "models.Sponsor",
+    "description": "",
+    "level": "2",
+    "image": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/img/CWA%20Logo%202016%20_S_White.png",
+    "link": "http://codeweek.de/",
+    "type": "Partner",
+    "name": "Code Week Award"
+  },
+  {
+    "py/object": "models.Sponsor",
+    "description": "",
+    "level": "2",
+    "image": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/img/Wikidata-logo-en.png",
+    "link": "https://www.wikidata.org/",
+    "type": "Partner",
+    "name": "WikiData"
+  },
+  {
+    "py/object": "models.Sponsor",
+    "description": "",
+    "level": "2",
+    "image": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/img/LPI-cube.jpg",
+    "link": "https://lpievent.lpice.eu/",
+    "type": "Partner",
+    "name": "LPI"
+  },
+  {
+    "py/object": "models.Sponsor",
+    "description": "",
+    "level": "2",
+    "image": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/img/AStA-logo.png",
+    "link": "http://astaup.de/",
+    "type": "Partner",
+    "name": "ASTAUp"
+  },
+  {
+    "py/object": "models.Sponsor",
+    "description": "",
+    "level": "2",
+    "image": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/img/asta-fhp.png",
+    "link": "http://asta.fh-potsdam.de/",
+    "type": "Partner",
+    "name": "ASTA FH Potsdam"
+  },
+  {
+    "py/object": "models.Sponsor",
+    "description": "",
+    "level": "3",
+    "image": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/img/VoiceRepublic.png",
+    "link": "https://voicerepublic.com/series/open-tech-summit-2016",
+    "type": "Media Partner",
+    "name": "Voice Republic"
+  }
+]}
