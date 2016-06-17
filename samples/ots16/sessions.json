@@ -1097,7 +1097,7 @@
     "audio": "audio/5058.mp3", 
     "type": "", 
     "id": 37, 
-    "long_abstract": "", 
+    "long_abstract": "Welcome in Berlin!", 
     "end_time": "2016-05-05 09:25:00"
   }, 
   {
@@ -1293,7 +1293,7 @@
     "audio": "audio/5120.mp3", 
     "type": "Lightning Talks", 
     "id": 44, 
-    "long_abstract": "", 
+    "long_abstract": "Kurzvortr\u00e4ge", 
     "end_time": "2016-05-05 11:45:00"
   }, 
   {
@@ -1675,7 +1675,7 @@
     "audio": "audio/5077.mp3", 
     "type": "Danke und Lounge", 
     "id": 57, 
-    "long_abstract": "", 
+    "long_abstract": "Kurzes Wrap up und Ab geht's zur Lounge im Erdgeschoss bis 23 Uhr. / Wrap up and Lounge until 11pm in the ground floor space.", 
     "end_time": "2016-05-05 18:25:00"
   }, 
   {
@@ -2206,7 +2206,7 @@
     "audio": null, 
     "type": "Danke und Lounge", 
     "id": 76, 
-    "long_abstract": "", 
+    "long_abstract": "In der Galerie, Ebene 1: Kurzes Wrap up und Ab geht's zur Lounge im Erdgeschoss bis 23 Uhr. / Wrap up and Lounge until 11pm in the ground floor space.", 
     "end_time": "2016-05-05 18:25:00"
   }, 
   {
