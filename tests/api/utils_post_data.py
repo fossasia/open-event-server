@@ -43,6 +43,7 @@ POST_SESSION_DATA = {
     "comments": "Comments",
     "title": "TestSession",
     "track_id": None,
+    "language": "German",
     "slides": "http://example.com/slides",
     "video": "http://example.com/video",
     "audio": "http://example.com/audio",
