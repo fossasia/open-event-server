@@ -17,10 +17,11 @@ Users
 <table class="table table-striped">
     <thead>
     <tr>
-        <th>Full name</th>
-        <th>Details</th>
-        <th>Super Admin</th>
-        <th>Contact</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Member Since</th>
+        <th>Last Access</th>
         <th>Options</th>
 
     </tr>
@@ -29,9 +30,10 @@ Users
     {% for user in users %}
     <tr>
         <td>{{user.user_detail.fullname}}</td>
-        <td>{{user.user_detail.details}}</td>
-        <td>{{user.is_super_admin}}</td>
-        <td>{{user.user_detail.contact}}</td>
+        <td>{{user.email}}</td>
+        <td>Not implemented</td>
+        <td>Not implemented</td>
+        <td>Not implemented</td>
         <td>
             <a href="#" title="Edit record">
             <span class="glyphicon glyphicon-pencil"></span>
