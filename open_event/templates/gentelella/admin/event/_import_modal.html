@@ -1,0 +1,24 @@
+<!-- import event modal -->
+<div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Import Event</h4>
+      </div>
+      <div class="modal-body">
+        <h5>Select event zip</h5><br>
+        <form>
+            <!-- <label class="btn btn-default btn-file"> -->
+                <input type="file" name="file" id="import_file">
+            <!-- </label> -->
+        </form>
+        <br>
+        <span id="import_error" class="red"></span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="btnImportEvent" onclick="importEventZip();">Create Event</button>
+      </div>
+    </div>
+  </div>
+</div>
