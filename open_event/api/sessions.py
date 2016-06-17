@@ -24,6 +24,7 @@ SESSION_TRACK = api.model('SessionTrack', {
 SESSION_SPEAKER = api.model('SessionSpeaker', {
     'id': fields.Integer(required=True),
     'name': fields.String(),
+    'organisation': fields.String()
 })
 
 SESSION_MICROLOCATION = api.model('SessionMicrolocation', {

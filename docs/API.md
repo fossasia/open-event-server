@@ -90,6 +90,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 | --- | --- | --- |
 |**id** | integer | Required |
 |**name** | string | Optional |
+|**organisation** | string | Optional |
 
 
 
