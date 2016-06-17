@@ -11,6 +11,7 @@ from .helpers.helpers import get_paginated_list, requires_auth, \
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
 from .helpers import custom_fields as fields
+from .helpers.special_fields import SessionLanguageField
 
 api = Namespace('sessions', description='Sessions', path='/')
 
@@ -41,6 +42,7 @@ SESSION = api.model('Session', {
     'end_time': fields.DateTime(required=True),
     'track': fields.Nested(SESSION_TRACK),
     'speakers': fields.List(fields.Nested(SESSION_SPEAKER)),
+    'language': SessionLanguageField(),
     'microlocation': fields.Nested(SESSION_MICROLOCATION),
     'slides': fields.String(),
     'video': fields.String(),

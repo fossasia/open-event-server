@@ -15,6 +15,7 @@ from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
 from ..models.call_for_papers import CallForPaper
 from ..models.custom_forms import CustomForms
+from .language_list import LANGUAGE_LIST
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
 from flask import flash
@@ -383,6 +384,10 @@ class DataGetter:
                 'Tour',
                 'Tournament',
                 'Tradeshow, Consumer Show, or Expo']
+
+    @staticmethod
+    def get_language_list():
+        return [i[1] for i in LANGUAGE_LIST]
 
     @staticmethod
     def get_event_topics():

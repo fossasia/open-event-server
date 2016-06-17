@@ -23,6 +23,7 @@ class Session(db.Model):
         'Speaker',
         secondary=speakers_sessions,
         backref=db.backref('sessions', lazy='dynamic'))
+    language = db.Column(db.String)
     microlocation_id = db.Column(db.Integer, db.ForeignKey('microlocation.id'))
 
     slides = db.Column(db.String)
@@ -43,6 +44,7 @@ class Session(db.Model):
                  start_time=None,
                  end_time=None,
                  track=None,
+                 language=None,
                  microlocation=None,
                  speakers=[],
                  event_id=None,
@@ -59,6 +61,7 @@ class Session(db.Model):
         self.start_time = start_time
         self.end_time = end_time
         self.track = track
+        self.language = language
         self.microlocation = microlocation
         self.speakers = speakers
         self.event_id = event_id
