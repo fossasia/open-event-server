@@ -9,7 +9,8 @@ from flask_jwt import jwt_required, JWTError, current_identity
 from open_event.models.event import Event as EventModel
 from open_event.models import db
 from custom_fields import CustomField
-from .errors import NotFoundError, InvalidServiceError, ValidationError, NotAuthorizedError
+from .errors import NotFoundError, InvalidServiceError, ValidationError, \
+    NotAuthorizedError
 from open_event.models.user import User as UserModel
 from open_event.helpers.data import save_to_db, update_version, delete_from_db
 
@@ -123,6 +124,27 @@ def get_paginated_list(klass, url, args={}, **kwargs):
     obj['results'] = results[(start - 1):(start - 1 + limit)]
 
     return obj
+
+
+def handle_extra_payload(payload, api_model):
+    """
+    Handles extra keys in payload
+    """
+    # not checking list type bcoz no such API
+    if type(payload) != dict:
+        return payload
+    data = payload.copy()
+    for key in payload:
+        if key not in api_model:
+            del data[key]
+        elif isinstance(api_model[key], fields.Nested):
+            data[key] = handle_extra_payload(data[key], api_model[key].model)
+        elif isinstance(api_model[key], fields.List):
+            temp = []
+            for _ in payload[key]:
+                temp.append(handle_extra_payload(_, payload[key].container))
+            data[key] = temp
+    return data
 
 
 def validate_payload(payload, api_model):
