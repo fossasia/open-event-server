@@ -9,7 +9,7 @@ from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
 from ..models.event import Event
-from ..models.session import Session, Language
+from ..models.session import Session
 from ..models.version import Version
 from ..helpers.object_formatter import ObjectFormatter
 from ..helpers.helpers import get_serializer
@@ -199,32 +199,6 @@ def get_sponsors_per_page(event_id, page):
     sponsors = Sponsor.query.filter_by(event_id=event_id)
     return api_response(
         data=ObjectFormatter.get_json("sponsors", sponsors, request, page),
-        status_code=event_status_code(event_id),
-        error='Event',
-        check_data=True
-    )
-
-
-@app.route('/api/v1/event/<int:event_id>/languages', methods=['GET'])
-@auto.doc()
-def get_languages(event_id):
-    """Returns all event's languages"""
-    languages = Language.query.filter_by(event_id=event_id)
-    return api_response(
-        data=ObjectFormatter.get_json("languages", languages, request),
-        status_code=event_status_code(event_id),
-        error='Event'
-    )
-
-
-@app.route('/api/v1/event/<int:event_id>/languages/page/<int:page>', methods=['GET'])
-@auto.doc()
-@cross_origin()
-def get_languages_per_page(event_id, page):
-    """Returns 20 event's languages"""
-    languages = Language.query.filter_by(event_id=event_id)
-    return api_response(
-        data=ObjectFormatter.get_json("languages", languages, request, page),
         status_code=event_status_code(event_id),
         error='Event',
         check_data=True

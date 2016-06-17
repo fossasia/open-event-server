@@ -2,7 +2,7 @@
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from ..models.event import Event, EventsUsers
-from ..models.session import Session, Language
+from ..models.session import Session
 from ..models.track import Track
 from ..models.invite import Invite
 from ..models.speaker import Speaker
@@ -15,6 +15,7 @@ from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
 from ..models.call_for_papers import CallForPaper
 from ..models.custom_forms import CustomForms
+from .language_list import LANGUAGE_LIST
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
 from flask import flash
@@ -162,13 +163,6 @@ class DataGetter:
         :return: All Microlocation filtered by event_id
         """
         return Microlocation.query.filter_by(event_id=get_event_id())
-
-    @staticmethod
-    def get_languages():
-        """
-        :return: All Event Languages
-        """
-        return Language.query.filter_by(event_id=get_event_id())
 
     @staticmethod
     def get_microlocation(microlocation_id):
@@ -390,6 +384,10 @@ class DataGetter:
                 'Tour',
                 'Tournament',
                 'Tradeshow, Consumer Show, or Expo']
+
+    @staticmethod
+    def get_language_list():
+        return [i[1] for i in LANGUAGE_LIST]
 
     @staticmethod
     def get_event_topics():

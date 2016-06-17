@@ -51,17 +51,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**closing_datetime** | string | Optional | Public |
 
 
-### 2. Languages
-
-| Field | Datatype | Requirement | Access |
-| --- | --- | --- | --- |
-|**id** | integer | Required | Public |
-|**label_de** | string | Optional | Public |
-|**label_en** | string | Optional | Public |
-|**name** | string | Optional | Public |
-
-
-### 3. Microlocation
+### 2. Microlocation
 
 | Field | Datatype | Requirement | Access |
 | --- | --- | --- | --- |
@@ -73,7 +63,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**room** | string | Optional | Public |
 
 
-### 4. Session
+### 3. Session
 
 | Field | Datatype | Requirement | Access |
 | --- | --- | --- | --- |
@@ -86,8 +76,8 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**start_time** | string | Required | Public |
 |**end_time** | string | Required | Public |
 |**speakers** | Array[**SessionSpeaker**] | Optional | Public |
-|**language** | **SessionLanguage** | Optional | Public |
 |**track** | **SessionTrack** | Optional | Public |
+|**language** | string | Optional | Public |
 |**microlocation** | **SessionMicrolocation** | Optional | Public |
 |**video** | string | Optional | Public |
 |**audio** | string | Optional | Public |
@@ -101,14 +91,6 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**id** | integer | Required |
 |**name** | string | Optional |
 
-
-#### SessionLanguage
-
-| Field | Datatype | Requirement |
-| --- | --- | --- |
-|**id** | integer | Required |
-|**label_de** | string | Optional |
-|**label_en** | string | Optional |
 
 
 #### SessionTrack
@@ -128,7 +110,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 
 
 
-### 5. Speaker
+### 4. Speaker
 
 | Field | Datatype | Requirement | Access |
 | --- | --- | --- | --- |
@@ -159,7 +141,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**title** | string | Optional |
 
 
-### 6. Sponsor
+### 5. Sponsor
 
 | Field | Datatype | Requirement | Access |
 | --- | --- | --- | --- |
@@ -172,7 +154,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**sponsor_type** | string | Optional | Public |
 
 
-### 7. Track
+### 6. Track
 
 | Field | Datatype | Requirement | Access |
 | --- | --- | --- | --- |
@@ -192,7 +174,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**title** | string | Optional |
 
 
-### 8. User
+### 7. User
 
 | Field | Datatype | Requirement | Access |
 | --- | --- | --- | --- |

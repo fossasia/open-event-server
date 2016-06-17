@@ -14,7 +14,7 @@ class TestGetApiUnrelatedServices(OpenEventTestCase):
     Track doesn't belong to the Event. The following path should give a 400
     response code: '/api/v2/events/2/tracks/3'
 
-    Services include Session, Track, Language, etc. (everything except Event)
+    Services include Session, Track, etc. (everything except Event)
     """
 
     def setUp(self):
@@ -44,10 +44,6 @@ class TestGetApiUnrelatedServices(OpenEventTestCase):
 
     def test_track_api(self):
         path = get_path(1, 'tracks', 1)
-        self._test_path(path)
-
-    def test_language_api(self):
-        path = get_path(1, 'languages', 1)
         self._test_path(path)
 
     def test_session_api(self):

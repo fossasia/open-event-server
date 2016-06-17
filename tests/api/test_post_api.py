@@ -68,9 +68,6 @@ class TestPostApi(TestPostApiBase):
     def test_microlocation_api(self):
         self._test_model('microlocation', POST_MICROLOCATION_DATA)
 
-    def test_language_api(self):
-        self._test_model('language', POST_LANGUAGE_DATA)
-
     def test_session_api(self):
         self._test_model('session', POST_SESSION_DATA)
 

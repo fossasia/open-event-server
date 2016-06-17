@@ -22,7 +22,7 @@ class TestGetApiNonExistingEvent(OpenEventTestCase):
 
 class TestGetApiNonExistingServices(OpenEventTestCase):
     """Test 404 response code for non existing services.
-    Services include Session, Track, Language, etc. (everything except Event)
+    Services include Session, Track, etc. (everything except Event)
     """
 
     def setUp(self):
@@ -50,10 +50,6 @@ class TestGetApiNonExistingServices(OpenEventTestCase):
 
     def test_track_api(self):
         path = get_path(1, 'tracks', 1)
-        self._test_path(path)
-
-    def test_language_api(self):
-        path = get_path(1, 'languages', 1)
         self._test_path(path)
 
     def test_session_api(self):
