@@ -1,0 +1,158 @@
+{% extends 'gentelella/admin/base.html' %}
+
+{% set carousel_height = 300 -%}
+{% set scrollspy_top = (carousel_height + 95) ~ "px" %}
+
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/details.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/sessions.css') }}"/>
+    <style type="text/css">
+        .carousel .item {
+            height: {{ carousel_height }}px;
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('{{ event.background_url }}');
+        }
+
+        .carousel {
+            height: {{ carousel_height }}px;
+        }
+
+        .scrollspy {
+            top: {{ scrollspy_top }};
+        }
+    </style>
+{% endblock %}
+{% block title %}
+    {{ event.name }}
+{% endblock %}
+
+{% macro social_link(name, domain, username) %}
+    <i class="fa fa-facebook"></i> <a href="{{ domain + username }}">{{ username }}</a><br>
+{% endmacro %}
+
+{% macro session_element(session = None, index=0) %}
+    <li class="list-group-item" data-session-id="MS-1">
+        <div class="row">
+            <div class="col-xs-1 col-md-1 col-sm-11">
+                <div class="btn-group-vertical" role="group" aria-label="...">
+                    <a class="btn btn-default" data-toggle="tooltip" data-placement="right" title="Direct Link"><i
+                            class="fa fa-link fa-fw"></i></a>
+                    <a class="btn btn-default" data-toggle="tooltip" data-placement="right" title="Video"><i
+                            class="fa fa-youtube-play fa-fw"></i></a>
+                    <a class="btn btn-default" data-toggle="tooltip" data-placement="right" title="Audio"><i
+                            class="fa fa-volume-up fa-fw"></i></a>
+                    <a class="btn btn-default" data-toggle="tooltip" data-placement="right" title="Slides"><i
+                            class="fa fa-slideshare fa-fw"></i></a>
+                    <a class="btn btn-default" data-toggle="tooltip" data-placement="right" title="Sign Up"><i
+                            class="fa fa-sign-in fa-fw"></i></a>
+                </div>
+            </div>
+            <div class="col-xs-11 col-md-11 col-sm-11" data-toggle="collapse"
+                 data-target="#session-extra-{{ session.id }} .collapse" aria-expanded="false">
+                <a class="anchor" name="session-{{ session.id }}"></a>
+                <h4 class="session-title">
+                    {{ session.title }}
+                </h4>
+                <p class="session-location">
+                    Ground Floor <i class="fa fa-map-marker fa-fw"></i><br>
+                    8:00 AM <i class="fa fa-clock-o fa-fw"></i>
+                </p>
+                <p>
+                    <span class="session-type">Soldering Workshop</span>
+                </p>
+                <p class="session-speakers">
+                    <img data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom"
+                         src="http://2016.opentechsummit.net/programm/speakers/Mitch_Altman.jpg">
+                    <img data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom"
+                         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAAMFBMVEWjo6Ph4eHg4ODc3NzZ2dmvr6+np6e0tLTGxsa+vr7Nzc2qqqrS0tK6urrDw8PKyspcfAhiAAAAuUlEQVQ4y9XUSQ7DIAwFUMcDM8n9b9uoSkMQrsmii+avnxDYX8ByM/BMiMx4A3KFPZVnsDh4xxUb0uF2SSaMcCaaMDeYLYhwCf4CLtKcmHcMDQYT4nmkoD1wOqTQbIW4+Zz9hv/cR+SSUuHJHTn4T8184K+weOjiiwqpwpBKIyQBJW3uoFT2mjhA0aEMMOkwjY9ZNbdq41kt180xuZ659G0z1D09kvUBHDvcN0iz9iAxE96qGeJDv+YXxOIHbyHde+sAAAAASUVORK5CYII=">
+
+                </p>
+
+                <div id="session-extra-{{ session.id }}">
+                    <p class="collapse">
+                        <span class="session-description">
+                            <i>{{ session.short_abstract }}</i><br>
+                            {{ session.long_abstract }}</span>
+                    </p>
+                    <div class="session-speakers-list collapse">
+                        <p class="session-speakers-less">
+                            <strong class="session-speaker-name">About Mitch Altman:</strong>
+                        </p>
+                        <div class="session-speakers-more">
+                            <p>
+                                <span class="session-speaker-bio">Mitch Altman is a San Francisco-based hacker and inventor, best known for inventing TV-B-Gone remote controls, a keychain that turns off TVs in public places. He was also co-founder of 3ware, a successful Silly Valley startup in the late 1990s, and did pioneering work in Virtual Reality in the mid-1980s. He has contributed to MAKE Magazine and other magazines, and wrote a chapter for “Maker Pro”, a book about making a living from projects one loves. For the last several years Mitch has been giving talks, and leading workshops around the world, teaching people to make cool things with microcontrollers and teaching everyone to solder. He promotes hackerspaces and open source hardware, and mentors others wherever he goes. He is a co-founder of Noisebridge hackerspace in San Francisco, and is President and CEO of Cornfield Electronics. Wikipedia page:</span>
+                            </p>
+                            <p class="session-speaker-social">
+                                <a class="social speaker-social" href="http://www.CornfieldElectronics.com">
+                                    <i class="fa fa-home"></i> Web
+                                </a>
+
+                                <a class="social speaker-social" href="https://github.com/maltman23">
+                                    <i class="fa fa-github"></i> Github
+                                </a>
+
+                                <a class="social speaker-social" href="https://twitter.com/@maltman23">
+                                    <i class="fa fa-twitter"></i> Twitter
+                                </a>
+
+                                <a class="social speaker-social" href="https://www.linkedin.com/pub/dir/Mitch/Altman">
+                                    <i class="fa fa-linkedin"></i> LinkedIn
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.row -->
+        </div>
+    </li>
+{% endmacro %}
+
+{% block body %}
+    <div class="scrollspy hidden-xs hidden-sm">
+        <ul class="nav nav-pills nav-stacked">
+            <li role="presentation"><a href="/e/{{ event.id }}">Info</a></li>
+            <li role="presentation"><a href="/e/{{ event.id }}/#speakers">Speakers</a></li>
+            <li role="presentation"><a href="/e/{{ event.id }}/#sponsors">Sponsors</a></li>
+            <li role="presentation" class="active"><a href="/e/{{ event.id }}/sessions">Sessions</a></li>
+            <li role="presentation"><a href="/e/{{ event.id }}/#organizer">Organizer</a></li>
+            <li role="presentation"><a href="/e/{{ event.id }}/#getting-here">Getting Here</a></li>
+        </ul>
+    </div>
+    <div class="carousel slide" style="margin-bottom: 0;">
+        <div id="info" class="carousel-inner">
+            <div class="item active">
+                <div class="container">
+                    <div class="carousel-caption">
+                        <h4>{{ event.start_time.strftime('%a, %B %d at %I:%M %p') | upper }}</h4>
+                        <h1>{{ event.name }}</h1>
+                        <h4><i class="glyphicon glyphicon-map-marker"></i> {{ event.location_name | upper }}</h4>
+                        <p></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="event-info container" style="min-height: 600px;">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="list-group session-list">
+                    {% for session in sessions %}
+                        {{ session_element(session, loop.index) }}
+                    {% endfor %}
+                </ul>
+
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+    <script src="https://cdn.rawgit.com/leafo/sticky-kit/v1.1.2/jquery.sticky-kit.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+{% endblock %}
