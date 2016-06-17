@@ -730,14 +730,17 @@ class DataManager(object):
 
     @staticmethod
     def add_role_to_event(form, event_id):
+        user = User.query.filter_by(email=form['user_id']).first()
         role = Role.query.filter_by(name=form['user_role']).first()
-        uer = UsersEventsRoles(event_id=event_id, user_id=form['user_id'], role_id=role.id)
+        uer = UsersEventsRoles(event=Event.query.get(event_id),
+                               user=user, role=role)
         save_to_db(uer, "Event saved")
 
     @staticmethod
     def update_user_event_role(form, uer):
         role = Role.query.filter_by(name=form['user_role']).first()
-        uer.user = User.query.get(int(form['user_id']))
+        user = User.query.filter_by(email=form['user_id']).first()
+        uer.user = user
         uer.role_id = role.id
         save_to_db(uer, "Event saved")
 

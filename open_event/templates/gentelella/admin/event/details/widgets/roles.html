@@ -21,7 +21,7 @@ Manage Roles
         <tbody>
         {% for role in event.roles %}
         <tr>
-            <td>{{role.user.name}}</td>
+            <td>{{role.user.email}}</td>
             <td>{{role.role.name}}</td>
             <td>
                 <a class="icon" title="Edit Role" data-toggle="modal" data-target="#edit-role-{{role.id}}">
@@ -56,9 +56,8 @@ Manage Roles
                     <p> <label>Permissions:</label>
                         <select name="user_role" id="heard" class="form-control" required="">
                             <option value="">Choose..</option>
-                            <option value="VOLUNTEER">VOLUNTEER</option>
-                            <option value="TRACK_ORGANIZER">TRACK_ORGANIZER</option>
-                            <option value="CO_ORGANIZER">CO_ORGANIZER</option>
+                            <option value="track_organizer">TRACK_ORGANIZER</option>
+                            <option value="coorganizer">CO_ORGANIZER</option>
                         </select>
                     </p>
                     <button type="submit" class="btn btn-success">Add</button>

@@ -12,13 +12,12 @@
                 <form action="/events/{{current_event.id}}/roles/{{role.id}}/update/" method="POST" role="form">
                     <p>
                         <label>User email:</label>
-                        <input name="user_id" placeholder="User" class="form-control" value="{{role.user.id}}">
+                        <input name="user_id" placeholder="User" class="form-control" value="{{role.user.email}}">
                     </p>
                     <p> <label>Permissions:</label>
                         <select name="user_role" id="heard" class="form-control" required="">
-                            <option value="VOLUNTEER" {{'selected' if 'VOLUNTEER' == role.role.name else '' }}>VOLUNTEER</option>
-                            <option value="TRACK_ORGANIZER" {{'selected' if 'TRACK_ORGANIZER' == role.role.name else '' }}>TRACK_ORGANIZER</option>
-                            <option value="CO_ORGANIZER" {{'selected' if 'CO_ORGANIZER' == role.role.name else '' }}>CO_ORGANIZER</option>
+                            <option value="track_organizer" {{'selected' if 'track_organizer' == role.role.name else '' }}>TRACK_ORGANIZER</option>
+                            <option value="coorganizer" {{'selected' if 'coorganizer' == role.role.name else '' }}>CO_ORGANIZER</option>
                         </select>
                     </p>
                     <button type="submit" class="btn btn-warning">Update</button>
