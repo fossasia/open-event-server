@@ -16,8 +16,6 @@ def create_event(name='TestEvent'):
     event = Event(name=name,
                   start_time=datetime(2013, 8, 4, 12, 30, 45),
                   end_time=datetime(2016, 9, 4, 12, 30, 45))
-    event.owner = 1
-
     save_to_db(event, 'Event saved')
     return event.id
 
