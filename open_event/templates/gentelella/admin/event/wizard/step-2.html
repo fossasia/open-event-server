@@ -18,6 +18,7 @@
                    class="form-control col-md-7 col-xs-12"/></td>
         <td><textarea name="sponsors[description]"
                   class="form-control col-md-7 col-xs-12">{{ sponsor.description }}</textarea></td>
+        <td><span class="glyphicon glyphicon-remove remove-sponsor" style="display:none;"></span></td>
 
     </tr>
 {% endmacro %}
@@ -61,12 +62,22 @@
         $element.find("input[type=file]").attr("id", "sponsors-logo-" + sponsor_counter);
         $element.find(".file-label").attr("for", "sponsors-logo-" + sponsor_counter);
         $('.sponsors').append($element);
+        $('.remove-sponsor').show();
         superFileUploadButton();
         $(".form_wizard").smartWizard('fixHeight');
     });
 
     $(document).on("click", ".remove-sponsor", function () {
-        $(this).parent().parent().parent().remove();
+        sponsor_counter -= 1;
+        $(this).closest("tr").remove();
+        var ctr = 1;
+        $('.sponsors').find('.row-sponsor td:nth-child(1)').each(function() {
+            $(this).text(ctr);
+            ctr += 1;
+        })
+        if (sponsor_counter == 1) {
+            $('.remove-sponsor').hide();
+        }
     });
 
     $(function () {
