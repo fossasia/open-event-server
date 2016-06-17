@@ -77,6 +77,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**end_time** | string | Required | Public |
 |**speakers** | Array[**SessionSpeaker**] | Optional | Public |
 |**track** | **SessionTrack** | Optional | Public |
+|**language** | string | Optional | Public |
 |**microlocation** | **SessionMicrolocation** | Optional | Public |
 |**video** | string | Optional | Public |
 |**audio** | string | Optional | Public |
