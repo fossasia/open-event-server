@@ -74,6 +74,11 @@ class TestPostApi(TestPostApiBase):
     def test_session_api(self):
         self._test_model('session', POST_SESSION_DATA)
 
+    def test_session_api_extra_payload(self):
+        extraData = POST_SESSION_DATA.copy()
+        extraData['new_key_2'] = 'value'
+        self._test_model('session', extraData)
+
     def test_speaker_api(self):
         self._test_model('speaker', POST_SPEAKER_DATA)
 

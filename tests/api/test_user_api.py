@@ -83,6 +83,11 @@ class TestUserApiWritable(TestUserApi):
         self.assertIn('email@domain.com', resp.data)
         self.assertNotIn('gmail', resp.data)
         self.assertIn('TestUser', resp.data)
+        # test adding invalid field and resistance
+        extraData = PUT_USER_DATA.copy()
+        extraData['user_detail']['new_field'] = 'value'
+        resp = self._put(path, extraData)
+        self.assertEqual(resp.status_code, 200)
 
     def test_delete_api(self):
         path = get_path(1)
