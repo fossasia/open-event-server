@@ -1,0 +1,66 @@
+[
+    {
+        "floor": null, 
+        "id": 1, 
+        "latitude": null, 
+        "longitude": null, 
+        "name": "Erdgeschoss, Saal / Ground Floor", 
+        "room": null
+    }, 
+    {
+        "floor": null, 
+        "id": 2, 
+        "latitude": null, 
+        "longitude": null, 
+        "name": "Erdgeschoss, Hoflounge / Ground Floor, Hoflounge Room", 
+        "room": null
+    }, 
+    {
+        "floor": null, 
+        "id": 3, 
+        "latitude": null, 
+        "longitude": null, 
+        "name": "Ebene 1, Raum 4 / First Floor, Room 4", 
+        "room": null
+    }, 
+    {
+        "floor": null, 
+        "id": 4, 
+        "latitude": null, 
+        "longitude": null, 
+        "name": "Ebene 1, Raum 1 / First Floor, Room 1", 
+        "room": null
+    }, 
+    {
+        "floor": null, 
+        "id": 5, 
+        "latitude": null, 
+        "longitude": null, 
+        "name": "Ebene 1, Galerie / Floor 1", 
+        "room": null
+    }, 
+    {
+        "floor": null, 
+        "id": 6, 
+        "latitude": null, 
+        "longitude": null, 
+        "name": "Ebene 2, Loft / Floor 2", 
+        "room": null
+    }, 
+    {
+        "floor": null, 
+        "id": 7, 
+        "latitude": null, 
+        "longitude": null, 
+        "name": "Ebene 1, Raum 2 und Raum 3 / Floor 1, Room 2 and Room 3", 
+        "room": null
+    }, 
+    {
+        "floor": null, 
+        "id": 8, 
+        "latitude": null, 
+        "longitude": null, 
+        "name": "Ebene 2, Raum 4", 
+        "room": null
+    }
+]
