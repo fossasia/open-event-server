@@ -60,7 +60,7 @@ class TestPostApi(TestPostApiBase):
         self.assertIn('location', response.headers)
         self.assertIn('Test' + str(name).title(), response.data)
         for string in checks:
-            self.assertIn(string, response.data)
+            self.assertIn(string, response.data, msg=string)
         return response
 
     def test_event_api(self):
