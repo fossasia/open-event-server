@@ -1,65 +1,65 @@
 [
-  {
-    "id": 1,
-    "description": "The FFII is a global network of associations dedicated to consumer rights and education about digital media, genuine open standards. ",
-    "level": "1",
-    "logo": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/img/FFII.gif",
-    "url": "http://ffii.org",
-    "sponsor_type": "Platinum Sponsor",
-    "name": "FFII"
-  },
-  {
-    "id": 2,
-    "description": "",
-    "level": "2",
-    "logo": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/img/CWA%20Logo%202016%20_S_White.png",
-    "url": "http://codeweek.de/",
-    "sponsor_type": "Partner",
-    "name": "Code Week Award"
-  },
-  {
-    "id": 3,
-    "description": "",
-    "level": "2",
-    "logo": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/img/Wikidata-logo-en.png",
-    "url": "https://www.wikidata.org/",
-    "sponsor_type": "Partner",
-    "name": "WikiData"
-  },
-  {
-    "id": 4,
-    "description": "",
-    "level": "2",
-    "logo": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/img/LPI-cube.jpg",
-    "url": "https://lpievent.lpice.eu/",
-    "sponsor_type": "Partner",
-    "name": "LPI"
-  },
-  {
-    "id": 5,
-    "description": "",
-    "level": "2",
-    "logo": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/img/AStA-logo.png",
-    "url": "http://astaup.de/",
-    "sponsor_type": "Partner",
-    "name": "ASTAUp"
-  },
-  {
-    "id": 6,
-    "description": "",
-    "level": "2",
-    "logo": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/img/asta-fhp.png",
-    "url": "http://asta.fh-potsdam.de/",
-    "sponsor_type": "Partner",
-    "name": "ASTA FH Potsdam"
-  },
-  {
-    "id": 7,
-    "description": "",
-    "level": "3",
-    "logo": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/img/VoiceRepublic.png",
-    "url": "https://voicerepublic.com/series/open-tech-summit-2016",
-    "sponsor_type": "Media Partner",
-    "name": "Voice Republic"
-  }
+    {
+        "description": "The FFII is a global network of associations dedicated to consumer rights and education about digital media, genuine open standards. ", 
+        "id": 1, 
+        "level": "1", 
+        "logo": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/img/FFII.gif", 
+        "name": "FFII", 
+        "sponsor_type": "Platinum Sponsor", 
+        "url": "http://ffii.org"
+    }, 
+    {
+        "description": "", 
+        "id": 2, 
+        "level": "2", 
+        "logo": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/img/CWA%20Logo%202016%20_S_White.png", 
+        "name": "Code Week Award", 
+        "sponsor_type": "Partner", 
+        "url": "http://codeweek.de/"
+    }, 
+    {
+        "description": "", 
+        "id": 3, 
+        "level": "2", 
+        "logo": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/img/Wikidata-logo-en.png", 
+        "name": "WikiData", 
+        "sponsor_type": "Partner", 
+        "url": "https://www.wikidata.org/"
+    }, 
+    {
+        "description": "", 
+        "id": 4, 
+        "level": "2", 
+        "logo": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/img/LPI-cube.jpg", 
+        "name": "LPI", 
+        "sponsor_type": "Partner", 
+        "url": "https://lpievent.lpice.eu/"
+    }, 
+    {
+        "description": "", 
+        "id": 5, 
+        "level": "2", 
+        "logo": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/img/AStA-logo.png", 
+        "name": "ASTAUp", 
+        "sponsor_type": "Partner", 
+        "url": "http://astaup.de/"
+    }, 
+    {
+        "description": "", 
+        "id": 6, 
+        "level": "2", 
+        "logo": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/img/asta-fhp.png", 
+        "name": "ASTA FH Potsdam", 
+        "sponsor_type": "Partner", 
+        "url": "http://asta.fh-potsdam.de/"
+    }, 
+    {
+        "description": "", 
+        "id": 7, 
+        "level": "3", 
+        "logo": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/img/VoiceRepublic.png", 
+        "name": "Voice Republic", 
+        "sponsor_type": "Media Partner", 
+        "url": "https://voicerepublic.com/series/open-tech-summit-2016"
+    }
 ]
