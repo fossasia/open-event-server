@@ -3539,6 +3539,23 @@ a.hiddenanchor {
   animation-fill-mode: both;
 }
 
+.login_wrapper {
+    right: 0px;
+    margin: 5% auto 0px;
+    max-width: 350px;
+    position: relative;
+}
+
+.registration_form, .login_form {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+}
+
+.login_form {
+    z-index: 22;
+}
+
 /********* /login ***************/
 
 
