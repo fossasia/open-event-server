@@ -80,18 +80,3 @@ def is_moderator(f):
         return f(*args, **kwargs)
 
     return decorated_function
-
-
-def is_speaker(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        user = User.query.get(login.current_user.id)
-        event_id = kwargs['event_id']
-        if user.is_admin is True or user.is_super_admin is True:
-            return f(*args, **kwargs)
-        if user.is_speaker(event_id) is False:
-            return redirect(url_for('admin.forbidden_view'))
-        return f(*args, **kwargs)
-
-    return decorated_function
-

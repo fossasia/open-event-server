@@ -204,7 +204,6 @@ user.is_organizer(event_id)
 user.is_coorganizer(event_id)
 user.is_track_organizer(event_id)
 user.is_moderator(event_id)
-user.is_speaker(event_id)
 ```
 
 

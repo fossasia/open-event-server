@@ -17,7 +17,6 @@ ORGANIZER = 'organizer'
 COORGANIZER = 'coorganizer'
 TRACK_ORGANIZER = 'track_organizer'
 MODERATOR = 'moderator'
-SPEAKER = 'speaker'
 
 
 class User(db.Model):
@@ -55,9 +54,6 @@ class User(db.Model):
 
     def is_moderator(self, event_id):
         return self._is_role(MODERATOR, event_id)
-
-    def is_speaker(self, event_id):
-        return self._is_role(SPEAKER, event_id)
 
     def _has_perm(self, operation, service_class, event_id):
         # Operation names and their corresponding permission in `Permissions`
