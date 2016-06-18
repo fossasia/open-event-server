@@ -69,17 +69,21 @@
 
     {% if link and link != '' and link != 'None' %}
         {% if what == 'video' %}
-            <a href="{{ link }}" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="{{ what | capitalize }}"><i
+            <a href="{{ link }}" class="btn btn-default" data-toggle="tooltip" data-placement="right"
+               title="{{ what | capitalize }}"><i
                     class="fa fa-youtube-play fa-fw"></i></a>
         {% elif what == 'audio' %}
-            <a href="{{ link }}" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="{{ what | capitalize }}"><i
-                            class="fa fa-volume-up fa-fw"></i></a>
+            <a href="{{ link }}" class="btn btn-default" data-toggle="tooltip" data-placement="right"
+               title="{{ what | capitalize }}"><i
+                    class="fa fa-volume-up fa-fw"></i></a>
         {% elif what == 'slides' %}
-            <a href="{{ link }}" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="{{ what | capitalize }}"><i
-                            class="fa fa-slideshare fa-fw"></i></a>
+            <a href="{{ link }}" class="btn btn-default" data-toggle="tooltip" data-placement="right"
+               title="{{ what | capitalize }}"><i
+                    class="fa fa-slideshare fa-fw"></i></a>
         {% elif what == 'sign up' %}
-            <a href="{{ link }}" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="{{ what | capitalize }}"><i
-                            class="fa fa-sign-in fa-fw"></i></a>
+            <a href="{{ link }}" class="btn btn-default" data-toggle="tooltip" data-placement="right"
+               title="{{ what | capitalize }}"><i
+                    class="fa fa-sign-in fa-fw"></i></a>
         {% endif %}
     {% endif %}
 
@@ -154,7 +158,7 @@
             <div class="hidden-xs">
                 <p class="session-location">
                     {{ session.microlocation.name }} <i class="fa fa-map-marker fa-fw"></i><br>
-                    8:00 AM <i class="fa fa-clock-o fa-fw"></i>
+                    {{ session.start_time.strftime('%I:%M %p') }} <i class="fa fa-clock-o fa-fw"></i>
                 </p>
             </div>
         </div>
@@ -189,13 +193,27 @@
     <div class="event-info container" style="min-height: 600px;">
         <div class="row">
             <div class="col-md-12">
+
+                <nav id="track-navbar" class="navbar navbar-default track-navbar">
+                    <div class="container-fluid">
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                            <ul class="nav navbar-nav">
+                                {% for track in tracks %}
+                                    <li class="track-link"><a href="#track-{{ track.id }}">{{ track.name }}</a></li>
+                                {% endfor %}
+
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
                 <ul class="list-group session-list">
-                    {% for session in sessions %}
-                        {{ session_element(session, loop.index) }}
+                    {% for track in tracks %}
+                        <h3 style="font-weight: 300;" id="track-{{ track.id }}">{{ track.name }}</h3>
+                        {% for session in track.sessions %}
+                            {{ session_element(session, loop.index) }}
+                        {% endfor %}
                     {% endfor %}
                 </ul>
-
-
             </div>
         </div>
     </div>
@@ -206,7 +224,27 @@
     <script src="https://cdn.rawgit.com/leafo/sticky-kit/v1.1.2/jquery.sticky-kit.min.js"></script>
     <script type="text/javascript">
         $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
+            $('[data-toggle="tooltip"]').tooltip();
+            $("#track-navbar").stick_in_parent({});
+            $('body').scrollspy({target: '#track-navbar'});
+
+        });
+
+
+        $('a[href*="#"]:not([href="#"])').click(function () {
+            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+                var target = $(this.hash);
+                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                if (target.length) {
+                    {#$(this).parent().parent().find("li.active").removeClass("active");
+                    $(this).parent().addClass("active");#}
+                    $('html, body').animate({
+                        scrollTop: target.offset().top
+                    }, 1000);
+                    return false;
+                }
+            }
+        });
+
     </script>
 {% endblock %}

@@ -40,3 +40,12 @@
     justify-content: center;
     color: white;
 }
+
+.track-link > a {
+    font-weight: 300 !important;
+}
+
+.track-navbar {
+    margin-bottom: 26px;
+    z-index: 9999999999;
+}
