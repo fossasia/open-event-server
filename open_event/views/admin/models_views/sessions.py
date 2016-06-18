@@ -38,12 +38,13 @@ class SessionsView(BaseView):
 
     @expose('/create/', methods=('GET', 'POST'))
     def create_view(self, event_id):
-        form_elems = DataGetter.get_custom_form_elements(event_id)
-        speaker_form = ""
-        session_form = ""
-        for elem in form_elems:
-            speaker_form = json.loads(elem.speaker_form)
-            session_form = json.loads(elem.session_form)
+        form_elems = DataGetter.get_custom_form_elements(event_id).first()
+        if not form_elems:
+            flash("Speaker and Session forms have been incorrectly configured for this event."
+                  " Session creation has been disabled", "danger")
+            return redirect(url_for('.index_view', event_id=event_id))
+        speaker_form = json.loads(form_elems.speaker_form)
+        session_form = json.loads(form_elems.session_form)
         if request.method == 'POST':
             DataManager.add_session_to_event(request.form, event_id)
             return redirect(url_for('.index_view', event_id=event_id))

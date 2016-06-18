@@ -95,7 +95,7 @@
                         </td>
                         <td>{{ speaker.name }}</td>
                         <td>{{ speaker.email }}</td>
-                        <td>{{ speaker.mobile if speaker.mobile != None else 'N/A' }}</td>
+                        <td>{{ speaker.mobile if speaker.mobile != None and speaker != '' else 'N/A' }}</td>
                         <td>
                             <ol style="padding-left: 14px;">
                                 {% for session in speaker.sessions %}
@@ -116,7 +116,7 @@
                         </td>
                         <td>
                             <div class="btn-group-vertical btn-group-xs" role="group" aria-label="...">
-                                <a data-toggle="tooltip" data-placement="left" title="View" href="{{ speaker.id }}/"
+                                <a data-toggle="tooltip" data-placement="left" title="View" href="{{ speaker.id }}/edit"
                                    class="btn btn-default">
                                     <i class="fa fa-eye"></i>
                                 </a>
