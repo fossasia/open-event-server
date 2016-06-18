@@ -3,7 +3,6 @@ from flask_admin.contrib.sqla import ModelView
 from flask.ext import login
 from flask import request, url_for, redirect
 from ....helpers.data import DataManager, save_to_db
-from open_event.helpers.permission_decorators import is_coorganizer
 from ....helpers.data_getter import DataGetter
 import json
 
