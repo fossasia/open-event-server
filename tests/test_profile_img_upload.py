@@ -2,13 +2,7 @@ import unittest
 from tests.utils import OpenEventTestCase
 from tests.setup_database import Setup
 from StringIO import StringIO
-from tests.object_mother import ObjectMother
 from open_event import current_app as app
-from tests.auth_helper import register, login
-from open_event.helpers.data import save_to_db
-from open_event.models.session import Session
-from datetime import datetime
-from flask import url_for
 
 
 class TestImageUpload(OpenEventTestCase):

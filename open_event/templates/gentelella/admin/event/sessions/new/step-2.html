@@ -14,7 +14,7 @@
         {% endif %}
         </label>
         {% if identifier in textarea_fields %}
-          <textarea name="{{ name }}" class="form-control col-md-7 col-xs-12"></textarea>
+          <textarea name="{{ name }}" class="form-control col-md-7 col-xs-12">{{ speaker[identifier] if speaker else ''}}</textarea>
         {% elif identifier in media_fields %}
           <br><input type="file" id="speaker-file-{{ name | default(1) }}" name="{{ name }}"
                    class="upload-btn"/>
@@ -22,7 +22,7 @@
                 <i class="fa fa-cloud-upload" aria-hidden="true"></i>
                 Choose a file</label>
         {% else %}
-          <input name="{{ name }}" class="form-control col-md-7 col-xs-12"/>
+          <input name="{{ name }}" class="form-control col-md-7 col-xs-12" value="{{ speaker[identifier] if speaker else ''}}"/>
         {% endif %}
     </div>
 {% endmacro %}
@@ -38,5 +38,9 @@
                 {{ speaker_form_field(elem, speaker_form[elem].require) }}
             {% endif %}
     {% endfor %}
+    {% if speaker %}
+        <button type="submit" class="btn btn-success" style="margin-top: 20px">Update Speaker</button>
+    {% endif %}
+
   </div>
 </div>

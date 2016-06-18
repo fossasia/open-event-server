@@ -9,15 +9,12 @@ class SessionType(db.Model):
     event_id = db.Column(
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     events = db.relationship("Event", backref="session_type")
-    sessions = db.relationship("Session",
-                               uselist=False,
-                               backref="session_type")
+    session = db.relationship('Session', backref="session_type")
 
-    def __init__(self, name=None, length=None, event_id=None, session_id=None):
+    def __init__(self, name=None, length=None, event_id=None):
         self.name = name
         self.length = length
         self.event_id = event_id
-        self.session_id = session_id
 
     def __repr__(self):
         return '<SessionType %r>' % self.name

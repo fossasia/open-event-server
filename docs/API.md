@@ -88,6 +88,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**track** | **SessionTrack** | Optional | Public |
 |**language** | string | Optional | Public |
 |**microlocation** | **SessionMicrolocation** | Optional | Public |
+|**session_type** | **SessionType** | Optional | Public |
 |**video** | string | Optional | Public |
 |**audio** | string | Optional | Public |
 |**slides** | string | Optional | Public |
@@ -101,7 +102,6 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**id** | integer | Required |
 |**name** | string | Optional |
 |**organisation** | string | Optional |
-
 
 
 #### SessionTrack
@@ -119,6 +119,13 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**id** | integer | Required |
 |**name** | string | Optional |
 
+
+#### SessionType
+
+| Field | Datatype | Requirement |
+| --- | --- | --- |
+|**id** | integer | Required |
+|**name** | string | Required |
 
 
 ### 4. Speaker

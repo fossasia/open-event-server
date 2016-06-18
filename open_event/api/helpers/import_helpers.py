@@ -8,7 +8,7 @@ from werkzeug import secure_filename
 
 from ..events import DAO as EventDAO
 from ..microlocations import DAO as MicrolocationDAO
-from ..sessions import DAO as SessionDAO
+from ..sessions import DAO as SessionDAO, TypeDAO as SessionTypeDAO
 from ..speakers import DAO as SpeakerDAO
 from ..sponsors import DAO as SponsorDAO
 from ..tracks import DAO as TrackDAO
@@ -21,10 +21,12 @@ IMPORT_SERIES = [
     ('sponsors', SponsorDAO),
     ('speakers', SpeakerDAO),
     ('tracks', TrackDAO),
+    ('session_types', SessionTypeDAO),
     ('sessions', SessionDAO)
 ]
 
 DELETE_FIELDS = {
+    'event': ['creator'],
     'tracks': ['sessions'],
     'speakers': ['sessions']
 }
@@ -33,7 +35,8 @@ RELATED_FIELDS = {
     'sessions': [
         ('track', 'track_id', 'tracks'),
         ('microlocation', 'microlocation_id', 'microlocations'),
-        ('speakers', 'speaker_ids', 'speakers')
+        ('speakers', 'speaker_ids', 'speakers'),
+        ('session_type', 'session_type_id', 'session_types')
     ]
 }
 
@@ -88,6 +91,10 @@ def _fix_related_fields(srv, data, service_ids):
     if srv[0] not in RELATED_FIELDS:
         return data
     for field in RELATED_FIELDS[srv[0]]:
+        if field[0] not in data:  # if not present
+            data[field[1]] = None
+            continue
+        # else continue normal
         old_value = data[field[0]]
         if type(old_value) == list:
             ls = []
@@ -149,6 +156,7 @@ def import_event_json(zip_path):
     # create event
     data = json.loads(open(path + '/event.json', 'r').read())
     _, data = _trim_id(data)
+    data = _delete_fields(('event', EventDAO), data)
     new_event = EventDAO.create(data, 'dont')[0]
 
     # create other services
