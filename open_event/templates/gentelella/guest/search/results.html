@@ -15,7 +15,9 @@
 
         {%for event in results %}
         <div class="thumbnail" onclick="location.href='/e/{{ event.id }}'">
-            <div class="left"><img src="http://placehold.it/800x500" style="width:300px; height: 180px" ></div>
+            <div class="left">
+        <img src="http://placehold.it/800x500" style="width:300px; height: 180px" />
+    </div>
 
             <div class="left" style="margin-left: 20px">
                 <p>{{ event.start_time.strftime('%B %d, %Y - %I:%M %p') }}</p>
@@ -70,7 +72,7 @@
                 $latitudeInput.val(results[0].geometry.location.lat());
                 $longitudeInput.val(results[0].geometry.location.lng());
                 resultsMap.setCenter(results[0].geometry.location);
-                resultsMap.setZoom(10);
+                resultsMap.setZoom(5);
                 init_marker.setMap(null);
                 if (marker == null) {
                     marker = new google.maps.Marker({
