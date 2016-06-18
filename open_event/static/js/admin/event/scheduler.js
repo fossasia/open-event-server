@@ -252,13 +252,7 @@ function addSessionToUnscheduled(sessionRef, isFiltering, shouldBroadcast) {
     sessionRefObject.session.duration = 30;
     sessionRefObject.session.start_time.hours(0).minutes(0);
     sessionRefObject.session.end_time.hours(0).minutes(0);
-    try {
-        sessionRefObject.session.microlocation.id = null;
-    } catch (e) {
-        sessionRefObject.session.microlocation = {
-            id: null
-        }
-    }
+    sessionRefObject.session.microlocation = null;
 
     sessionRefObject.session.start_time.isReset = true;
     sessionRefObject.session.end_time.isReset = true;
@@ -867,8 +861,8 @@ $(document).on("scheduling:change", function (e) {
     // Format the payload to match API requirements
     session.start_time = session.start_time.format(time.format);
     session.end_time = session.end_time.format(time.format);
-    session.track_id = _.isNull(session.track.id) ? 0 : session.track.id;
-    session.microlocation_id = _.isNull(session.microlocation.id) ? null : session.microlocation.id;
+    session.track_id = (_.isNull(session.track) || _.isNull(session.track.id)) ? null : session.track.id;
+    session.microlocation_id = (_.isNull(session.microlocation) || _.isNull(session.microlocation.id)) ? null : session.microlocation.id;
     session.speaker_ids = _.map(session.speakers, 'id');
 
     // Clean up the payload
