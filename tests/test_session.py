@@ -16,6 +16,10 @@ class TestSessionApi(OpenEventTestCase):
     def setUp(self):
         self.app = Setup.create_app()
 
+    def login(self):
+        register(self.app, u'email2@gmail.com', u'test2')
+        login(self.app, 'email2@gmail.com', 'test2')
+
     def test_add_session_to_db(self):
         session = ObjectMother.get_session()
         with app.test_request_context():
@@ -36,9 +40,8 @@ class TestSessionApi(OpenEventTestCase):
 
     def test_session_accept(self):
         with app.test_request_context():
+            self.login()
             session = ObjectMother.get_session()
-            register(self.app, u'email2@gmail.com', u'test2')
-            login(self.app, 'email2@gmail.com', 'test2')
             save_to_db(session, "Session Saved")
             url = url_for('session.accept_session', event_id=1, session_id=1)
             rv = self.app.get(url, follow_redirects=True)
@@ -47,12 +50,32 @@ class TestSessionApi(OpenEventTestCase):
     def test_session_reject(self):
         with app.test_request_context():
             session = ObjectMother.get_session()
-            register(self.app, u'email2@gmail.com', u'test2')
-            login(self.app, 'email2@gmail.com', 'test2')
+            self.login()
             save_to_db(session, "Session Saved")
             url = url_for('session.reject_session', event_id=1, session_id=1)
             rv = self.app.get(url, follow_redirects=True)
             self.assertTrue("rejected" in rv.data, msg=rv.data)
+
+    def test_session_delete(self):
+        with app.test_request_context():
+            self.login()
+            session = ObjectMother.get_session()
+            save_to_db(session, "Session Saved")
+            url = url_for('session.delete_session', event_id=1, session_id=1)
+            rv = self.app.get(url, follow_redirects=True)
+            self.assertTrue("deleted" in rv.data, msg=rv.data)
+
+    def test_session_view(self):
+        with app.test_request_context():
+            self.login()
+            event = ObjectMother.get_event()
+            save_to_db(event)
+            session = ObjectMother.get_session()
+            session.event_id = event.id
+            save_to_db(session, "Session Saved")
+            url = url_for('session.session_display_view', event_id=1, session_id=1)
+            rv = self.app.get(url, follow_redirects=True)
+            self.assertTrue("Short Abstract" in rv.data, msg=rv.data)
 
 if __name__ == '__main__':
     unittest.main()
