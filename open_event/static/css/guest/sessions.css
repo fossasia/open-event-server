@@ -1,0 +1,51 @@
+.list-group-item {
+    padding: 0;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.list-group-item > .row {
+    display: flex;
+    align-items: center;
+}
+
+.list-group-item > .row > div:nth-child(2) {
+    cursor: pointer;
+}
+
+.list-group-item .session-title {
+    font-weight: 400;
+    padding-right: 114px;
+    line-height: 24px;
+}
+
+.list-group-item .session-location {
+    float: right;
+    text-align: right;
+}
+
+.list-group-item .session-speakers > img {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+}
+
+.pic {
+    border-radius: 50%;
+    background-color: #a2a2a2;
+    width: 4rem;
+    height: 4rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.track-link > a {
+    font-weight: 300 !important;
+}
+
+.track-navbar {
+    margin-bottom: 26px;
+    z-index: 9999999999;
+}

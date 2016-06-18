@@ -1,0 +1,250 @@
+{% extends 'gentelella/admin/base.html' %}
+
+{% set carousel_height = 300 -%}
+{% set scrollspy_top = (carousel_height + 95) ~ "px" %}
+
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/details.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/sessions.css') }}"/>
+    <style type="text/css">
+        .carousel .item {
+            height: {{ carousel_height }}px;
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('{{ event.background_url }}');
+        }
+
+        .carousel {
+            height: {{ carousel_height }}px;
+        }
+
+        .scrollspy {
+            top: {{ scrollspy_top }};
+        }
+    </style>
+{% endblock %}
+{% block title %}
+    {{ event.name }}
+{% endblock %}
+
+{% block head_js %}
+    {{ super() }}
+
+    <script type="text/javascript">
+        function imgError(image) {
+            image.onerror = "";
+            image.src = '{{ url_for('static', filename='img/avatar.png') }}';
+            return true;
+        }
+    </script>
+{% endblock %}
+
+{% macro social_link(link, what) %}
+    {% if link and link != '' and link != 'None' %}
+        {% if what == 'website' %}
+            <a class="social speaker-social" href="{{ link }}">
+                <i class="fa fa-home"></i> {{ what | capitalize }}
+            </a>
+        {% elif what == 'facebook' %}
+            <a class="social speaker-social" href="{{ link }}">
+                <i class="fa fa-facebook"></i> {{ what | capitalize }}
+            </a>
+        {% elif what == 'twitter' %}
+            <a class="social speaker-social" href="{{ link }}">
+                <i class="fa fa-twitter"></i> {{ what | capitalize }}
+            </a>
+        {% elif what == 'github' %}
+            <a class="social speaker-social" href="{{ link }}">
+                <i class="fa fa-github"></i> {{ what | capitalize }}
+            </a>
+        {% elif what == 'linkedin' %}
+            <a class="social speaker-social" href="{{ link }}">
+                <i class="fa fa-linkedin"></i> {{ what | capitalize }}
+            </a>
+        {% endif %}
+    {% endif %}
+{% endmacro %}
+
+
+{% macro side_link(link, what) %}
+
+    {% if link and link != '' and link != 'None' %}
+        {% if what == 'video' %}
+            <a href="{{ link }}" class="btn btn-default" data-toggle="tooltip" data-placement="right"
+               title="{{ what | capitalize }}"><i
+                    class="fa fa-youtube-play fa-fw"></i></a>
+        {% elif what == 'audio' %}
+            <a href="{{ link }}" class="btn btn-default" data-toggle="tooltip" data-placement="right"
+               title="{{ what | capitalize }}"><i
+                    class="fa fa-volume-up fa-fw"></i></a>
+        {% elif what == 'slides' %}
+            <a href="{{ link }}" class="btn btn-default" data-toggle="tooltip" data-placement="right"
+               title="{{ what | capitalize }}"><i
+                    class="fa fa-slideshare fa-fw"></i></a>
+        {% elif what == 'sign up' %}
+            <a href="{{ link }}" class="btn btn-default" data-toggle="tooltip" data-placement="right"
+               title="{{ what | capitalize }}"><i
+                    class="fa fa-sign-in fa-fw"></i></a>
+        {% endif %}
+    {% endif %}
+
+{% endmacro %}
+
+{% macro session_element(session = None, index=0) %}
+    <li class="list-group-item" data-session-id="session-{{ session.id }}">
+        <div class="row">
+
+            <div class="col-xs-1 col-md-1 col-sm-11 hidden-xs">
+                <div class="btn-group-vertical" role="group">
+                    {{ side_link(session.video, 'video') }}
+                    {{ side_link(session.audio, 'audio') }}
+                    {{ side_link(session.slides, 'slides') }}
+                    {{ side_link(session.signup_url, 'sign up') }}
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-10 col-sm-10" data-toggle="collapse"
+                 data-target="#session-extra-{{ session.id }} .collapse" aria-expanded="false">
+                <a class="anchor" name="session-{{ session.id }}"></a>
+                <h4 class="session-title">
+                    {{ session.title }}
+                </h4>
+                <p>
+                    <span class="session-type">{{ session.session_type.name }}</span>
+                </p>
+                <p class="session-speakers">
+
+                    {% for speaker in session.speakers %}
+                        <img data-toggle="tooltip" data-placement="bottom" title="{{ speaker.name }}"
+                             src="{{ speaker.photo }}"
+                             onerror="imgError(this);">
+                    {% endfor %}
+
+                </p>
+
+                <div id="session-extra-{{ session.id }}">
+                    <p class="collapse">
+                        <span class="session-description">
+                            <i>{{ session.short_abstract }}</i><br>
+                            {{ session.long_abstract }}</span>
+                    </p>
+                    <div class="session-speakers-list collapse">
+
+                        {% for speaker in session.speakers %}
+                            {% if (speaker.short_biography and speaker.short_biography != '' and speaker.short_biography != 'None') or (speaker.long_biography and speaker.long_biography != '' and speaker.long_biography != 'None') %}
+                                <p class="session-speakers-less">
+                                    <strong class="session-speaker-name">About {{ speaker.name }}:</strong>
+                                </p>
+                                <div class="session-speakers-more">
+                                    <p>
+                                        {{ speaker.short_biography if speaker.short_biography and speaker.short_biography != 'None' }}
+                                    </p>
+                                    <p>
+                                        {{ speaker.long_biography if speaker.long_biography and speaker.long_biography != 'None' }}
+                                    </p>
+                                    <p class="session-speaker-social">
+                                        {{ social_link(speaker.website, 'website') }}
+                                        {{ social_link(speaker.facebook, 'facebook') }}
+                                        {{ social_link(speaker.twitter, 'twitter') }}
+                                        {{ social_link(speaker.github, 'github') }}
+                                        {{ social_link(speaker.linkedin, 'linkedin') }}
+                                    </p>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+            <div class="hidden-xs">
+                <p class="session-location">
+                    {{ session.microlocation.name }} <i class="fa fa-map-marker fa-fw"></i><br>
+                    {{ session.start_time.strftime('%I:%M %p') }} <i class="fa fa-clock-o fa-fw"></i>
+                </p>
+            </div>
+        </div>
+    </li>
+{% endmacro %}
+
+{% block body %}
+    <div class="scrollspy hidden-xs hidden-sm">
+        <ul class="nav nav-pills nav-stacked">
+            <li role="presentation"><a href="/e/{{ event.id }}">Info</a></li>
+            <li role="presentation"><a href="/e/{{ event.id }}/#speakers">Speakers</a></li>
+            <li role="presentation"><a href="/e/{{ event.id }}/#sponsors">Sponsors</a></li>
+            <li role="presentation" class="active"><a href="/e/{{ event.id }}/sessions">Sessions</a></li>
+            <li role="presentation"><a href="/e/{{ event.id }}/#organizer">Organizer</a></li>
+            <li role="presentation"><a href="/e/{{ event.id }}/#getting-here">Getting Here</a></li>
+        </ul>
+    </div>
+    <div class="carousel slide" style="margin-bottom: 0;">
+        <div id="info" class="carousel-inner">
+            <div class="item active">
+                <div class="container">
+                    <div class="carousel-caption">
+                        <h4>{{ event.start_time.strftime('%a, %B %d at %I:%M %p') | upper }}</h4>
+                        <h1>{{ event.name }}</h1>
+                        <h4><i class="glyphicon glyphicon-map-marker"></i> {{ event.location_name | upper }}</h4>
+                        <p></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="event-info container" style="min-height: 600px;">
+        <div class="row">
+            <div class="col-md-12">
+
+                <nav id="track-navbar" class="navbar navbar-default track-navbar">
+                    <div class="container-fluid">
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                            <ul class="nav navbar-nav">
+                                {% for track in tracks %}
+                                    <li class="track-link"><a href="#track-{{ track.id }}">{{ track.name }}</a></li>
+                                {% endfor %}
+
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+                <ul class="list-group session-list">
+                    {% for track in tracks %}
+                        <h3 style="font-weight: 300;" id="track-{{ track.id }}">{{ track.name }}</h3>
+                        {% for session in track.sessions %}
+                            {{ session_element(session, loop.index) }}
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+    <script src="https://cdn.rawgit.com/leafo/sticky-kit/v1.1.2/jquery.sticky-kit.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+            $("#track-navbar").stick_in_parent({});
+            $('body').scrollspy({target: '#track-navbar'});
+
+        });
+
+
+        $('a[href*="#"]:not([href="#"])').click(function () {
+            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+                var target = $(this.hash);
+                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                if (target.length) {
+                    {#$(this).parent().parent().find("li.active").removeClass("active");
+                    $(this).parent().addClass("active");#}
+                    $('html, body').animate({
+                        scrollTop: target.offset().top
+                    }, 1000);
+                    return false;
+                }
+            }
+        });
+
+    </script>
+{% endblock %}
