@@ -10,7 +10,7 @@ class RoleView(BaseView):
     def index_view(self, event_id):
         return ''
 
-    @expose('/create/', methods=('GET', 'POST'))
+    @expose('/new/', methods=('GET', 'POST'))
     @is_organizer
     def create_view(self, event_id):
         if request.method == 'POST':
