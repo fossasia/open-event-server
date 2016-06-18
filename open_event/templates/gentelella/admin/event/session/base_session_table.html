@@ -15,6 +15,10 @@
             font-weight: 300;
         }
 
+        .dataTables_filter {
+            width: auto;
+        }
+
         td {
             vertical-align: middle !important;
         }
@@ -28,7 +32,7 @@
     <div class="row">
         <div class="col-md-12">
             <div id="toolbar-holder" style="display: none;">
-                <div class="btn-group" data-toggle="buttons">
+                <div class="btn-group pull-left" data-toggle="buttons">
                     <label class="btn btn-default active">
                         <input type="radio" name="show_state" autocomplete="off" value="all" checked> All
                     </label>
@@ -42,7 +46,7 @@
                         <input type="radio" name="show_state" autocomplete="off" value="rejected"> Rejected
                     </label>
                 </div>
-                <div class="btn-group">
+                <div class="btn-group pull-left" style="margin-left: 5px; margin-right: 10px;">
                     <a class="btn btn-info" href="{{ get_url('session.create_view', event_id=event_id) }}">
                         Create Session
                     </a>
@@ -140,10 +144,10 @@
         );
 
         var table = $('.with-datatable').DataTable({
-            "dom": '<"row"<"toolbar col-md-5"><"col-md-3"l><"col-md-3"f>>tip'
+            "dom": '<"row"<"toolbar col-md-7"<"pull-left"l>><"col-md-3 pull-right"f>>tip'
         });
 
-        $("div.toolbar").html($("#toolbar-holder").html());
+        $("div.toolbar").prepend($("#toolbar-holder").html());
 
         $("input[name=show_state]").change(function () {
             table.draw();
