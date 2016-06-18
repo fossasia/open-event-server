@@ -43,7 +43,7 @@ class TestSessionApi(OpenEventTestCase):
             self.login()
             session = ObjectMother.get_session()
             save_to_db(session, "Session Saved")
-            url = url_for('session.accept_session', event_id=1, session_id=1)
+            url = url_for('event_sessions.accept_session', event_id=1, session_id=1)
             rv = self.app.get(url, follow_redirects=True)
             self.assertTrue("accepted" in rv.data, msg=rv.data)
 
@@ -52,7 +52,7 @@ class TestSessionApi(OpenEventTestCase):
             session = ObjectMother.get_session()
             self.login()
             save_to_db(session, "Session Saved")
-            url = url_for('session.reject_session', event_id=1, session_id=1)
+            url = url_for('event_sessions.reject_session', event_id=1, session_id=1)
             rv = self.app.get(url, follow_redirects=True)
             self.assertTrue("rejected" in rv.data, msg=rv.data)
 
@@ -61,7 +61,7 @@ class TestSessionApi(OpenEventTestCase):
             self.login()
             session = ObjectMother.get_session()
             save_to_db(session, "Session Saved")
-            url = url_for('session.delete_session', event_id=1, session_id=1)
+            url = url_for('event_sessions.delete_session', event_id=1, session_id=1)
             rv = self.app.get(url, follow_redirects=True)
             self.assertTrue("deleted" in rv.data, msg=rv.data)
 
@@ -73,7 +73,7 @@ class TestSessionApi(OpenEventTestCase):
             session = ObjectMother.get_session()
             session.event_id = event.id
             save_to_db(session, "Session Saved")
-            url = url_for('session.session_display_view', event_id=1, session_id=1)
+            url = url_for('event_sessions.session_display_view', event_id=1, session_id=1)
             rv = self.app.get(url, follow_redirects=True)
             self.assertTrue("Short Abstract" in rv.data, msg=rv.data)
 

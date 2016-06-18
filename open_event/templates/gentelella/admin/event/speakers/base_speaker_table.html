@@ -25,14 +25,14 @@
     </style>
 {% endblock %}
 
-{% set active_page = "sessions" %}
+{% set active_page = "speakers" %}
 
 {% block content %}
 
     <div class="row">
         <div class="col-md-12">
             <div id="toolbar-holder" style="display: none;">
-                <div class="btn-group pull-left" data-toggle="buttons">
+                <div class="btn-group pull-left" data-toggle="buttons" style="margin-left: 5px; margin-right: 10px;">
                     <label class="btn btn-default active">
                         <input type="radio" name="show_state" autocomplete="off" value="all" checked> All
                     </label>
@@ -46,73 +46,61 @@
                         <input type="radio" name="show_state" autocomplete="off" value="rejected"> Rejected
                     </label>
                 </div>
-                <div class="btn-group pull-left" style="margin-left: 5px; margin-right: 10px;">
-                    <a class="btn btn-info" href="{{ get_url('session.create_view', event_id=event_id) }}">
-                        Create Session
-                    </a>
-                </div>
             </div>
         </div>
         <div class="col-md-12" style="margin-top: 30px;">
             <table class="table table-striped table-hover with-datatable">
                 <thead>
                 <tr>
-                    <th>State</th>
-                    <th>Title</th>
-                    <th>Speakers</th>
-                    <th>Track</th>
-                    <th>Short Abstract</th>
-                    <th>Submission Date</th>
-                    <th>Last Changed Date</th>
                     <th></th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Submitted Sessions</th>
+                    <th>State</th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for session in sessions %}
+                {% for speaker in speakers %}
                     <tr>
                         <td>
-                            <span class="label label-{{ 'success' if session.state == 'accepted' else 'warning' }}">{{ session.state }}</span>
+
                         </td>
-                        <td>{{ session.title }}</td>
+                        <td>{{ speaker.name }}</td>
+                        <td>{{ speaker.email }}</td>
+                        <td>{{ speaker.mobile }}</td>
                         <td>
                             <ol style="padding-left: 14px;">
-                                {% for speaker in session.speakers %}
-                                    <li>{{ speaker.name }}</li>
+                                {% for session in speaker.sessions %}
+                                    <li>{{ session.title }}</li>
                                 {% endfor %}
                             </ol>
                         </td>
-                        <td>{{ session.track.name }}</td>
-                        <td>{{ session.short_abstract }}</td>
-                        <td>{{ session.start_time }}</td>
-                        <td>{{ session.end_time }}</td>
+                        <td>
+                            <ol style="padding-left: 14px;">
+                                {% for session in speaker.sessions %}
+                                    <li>{{ session.state }}</li>
+                                {% endfor %}
+                            </ol>
+                        </td>
                         <td>
                             <div class="btn-group-vertical btn-group-xs" role="group" aria-label="...">
-                                <a data-toggle="tooltip" data-placement="left" title="View" href="{{ session.id }}/"
+                                <a data-toggle="tooltip" data-placement="left" title="View" href="{{ speaker.id }}/"
                                    class="btn btn-default">
                                     <i class="fa fa-eye"></i>
                                 </a>
-                                <a data-toggle="tooltip" data-placement="left" title="Edit" href="{{ session.id }}/edit"
+                                <a data-toggle="tooltip" data-placement="left" title="Edit" href="{{ speaker.id }}/edit"
                                    class="btn btn-default">
                                     <i class="fa fa-pencil"></i>
                                 </a>
                                 <a data-toggle="tooltip" data-placement="left" title="Delete"
-                                   href="{{ session.id }}/delete" class="btn btn-default">
+                                   href="{{ speaker.id }}/delete" class="btn btn-default">
                                     <i class="fa fa-trash"></i>
                                 </a>
 
                             </div>
 
-                        </td>
-                        <td>
-                            <div class="btn-group-vertical" role="group" aria-label="...">
-                                <a href="{{ session.id }}/accept" class="btn btn-sm btn-success">
-                                    <i class="fa fa-check"></i>
-                                </a>
-                                <a href="{{ session.id }}/reject" class="btn btn-sm btn-danger">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div>
                         </td>
                     </tr>
                 {% endfor %}

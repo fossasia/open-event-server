@@ -1,7 +1,5 @@
 import unittest
 
-from flask import url_for
-
 from tests.utils import OpenEventTestCase
 from tests.setup_database import Setup
 from open_event import current_app as app

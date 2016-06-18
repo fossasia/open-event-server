@@ -23,7 +23,7 @@
                                     </div>
                                     <p class="excerpt">{{event.description|striptags|truncate(100)}}
                                     </p>
-                                    <a href="{{ get_url('event.details_view', event_id=event.id)}}"><label class="label label-info">Go to details</label></a>
+                                    <a href="{{ get_url('events.details_view', event_id=event.id)}}"><label class="label label-info">Go to details</label></a>
                                 </div>
                             </div>
                         </li>

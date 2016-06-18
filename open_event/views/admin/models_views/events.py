@@ -1,8 +1,8 @@
 import os
 
 from flask import request, flash
+from flask.ext.admin import BaseView
 from flask_admin import expose
-from flask_admin.contrib.sqla import ModelView
 
 from open_event.helpers.permission_decorators import *
 from open_event.helpers.helpers import fields_not_empty, string_empty
@@ -13,7 +13,7 @@ from werkzeug.utils import secure_filename
 from werkzeug.datastructures import ImmutableMultiDict
 
 
-class EventsView(ModelView):
+class EventsView(BaseView):
     def is_accessible(self):
         return login.current_user.is_authenticated
 

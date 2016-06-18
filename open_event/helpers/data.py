@@ -176,7 +176,7 @@ class DataManager(object):
             new_invite.hash = "%032x" % hash
             save_to_db(new_invite, "Invite saved")
 
-            link = url_for('session.invited_view', session_id=new_session.id, event_id=event_id, _external=True)
+            link = url_for('event_sessions.invited_view', session_id=new_session.id, event_id=event_id, _external=True)
             Helper.send_email_invitation(email, new_session.title, link)
 
     @staticmethod

@@ -12,7 +12,7 @@
 
 {% macro session_element(session) -%}
     <div class="session row"
-         onclick="window.location.href='{{ url_for('mysessionview.display_session_view',session_id=session.id) }}'">
+         onclick="window.location.href='{{ url_for('my_sessions.display_session_view',session_id=session.id) }}'">
         <div class="col col-xs-2" style="line-height:155px;">
             {% if session.event.logo %}
                 <img src="{{ session.event.logo }}" style="width: 100%;">

@@ -3,7 +3,7 @@
 General Info
 {% endblock %}
 {% block panel_content %}
-    <a class="btn btn-default" href="{{ get_url('event.edit_view', event_id=event.id)}}" title="Edit record">Edit Event</a>
+    <a class="btn btn-default" href="{{ get_url('events.edit_view', event_id=event.id)}}" title="Edit record">Edit Event</a>
     <table class="table table-striped">
         <tbody>
 	        <tr><td><b>Event ID: </b></td><td>{{event.id}}</td></tr>
