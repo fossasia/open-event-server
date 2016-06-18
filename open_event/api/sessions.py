@@ -9,7 +9,7 @@ from open_event.models.session_type import SessionType as SessionTypeModel
 
 from .helpers.helpers import get_paginated_list, requires_auth, \
     save_db_model, get_object_in_event
-from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
+from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO,\
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
 from .helpers import custom_fields as fields
 from .helpers.special_fields import SessionLanguageField, SessionStateField
@@ -33,10 +33,14 @@ SESSION_MICROLOCATION = api.model('SessionMicrolocation', {
     'name': fields.String(),
 })
 
-SESSION_TYPE = api.model('SessionType', {
-    'id': fields.Integer(),
-    'name': fields.String()
+SESSION_TYPE_FULL = api.model('SessionTypeFull', {
+    'id': fields.Integer(required=True),
+    'name': fields.String(required=True),
+    'length': fields.Float(required=True)
 })
+
+SESSION_TYPE = api.clone('SessionType', SESSION_TYPE_FULL)
+del SESSION_TYPE['length']
 
 SESSION = api.model('Session', {
     'id': fields.Integer(required=True),
@@ -70,14 +74,27 @@ SESSION_POST = api.clone('SessionPost', SESSION, {
     'session_type_id': fields.Integer()
 })
 
+SESSION_TYPE_POST = api.clone('SessionTypePost', SESSION_TYPE_FULL)
+
 del SESSION_POST['id']
 del SESSION_POST['track']
 del SESSION_POST['speakers']
 del SESSION_POST['microlocation']
 del SESSION_POST['session_type']
 
+del SESSION_TYPE_POST['id']
+
 
 # Create DAO
+
+class SessionTypeDAO(ServiceDAO):
+    """
+    SessionType DAO
+    added for import/export feature
+    """
+    pass
+
+
 class SessionDAO(ServiceDAO):
     def _delete_fields(self, data):
         data = self._del(data, ['speaker_ids', 'track_id',
@@ -134,7 +151,10 @@ class SessionDAO(ServiceDAO):
 
 
 DAO = SessionDAO(SessionModel, SESSION_POST)
+TypeDAO = SessionTypeDAO(SessionTypeModel, SESSION_TYPE_POST)
 
+
+# Create resources
 
 @api.route('/events/<int:event_id>/sessions/<int:session_id>')
 @api.response(404, 'Session not found')
