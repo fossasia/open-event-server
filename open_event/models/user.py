@@ -30,6 +30,7 @@ class User(db.Model):
     tokens = db.Column(db.Text)
     is_super_admin = db.Column(db.Boolean, default=False)
     is_admin = db.Column(db.Boolean, default=False)
+    is_verified = db.Column(db.Boolean, default=False)
     user_detail = db.relationship("UserDetail", uselist=False, backref="user")
 
     def _is_role(self, role_name, event_id):

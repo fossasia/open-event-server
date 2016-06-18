@@ -317,3 +317,15 @@ def nocache(view):
         response.headers['Expires'] = '-1'
         return response
     return update_wrapper(no_cache, view)
+
+
+def parse_args(parser, keep_none=False):
+    """
+    Abstraction over flask_restplus.reqparse.parser.parse_args
+    It returned None value if a value was not set
+    This completely removes that value from the returned dict
+    """
+    args = parser.parse_args()
+    if not keep_none:
+        args = {k: v for k, v in args.items() if v is not None}
+    return args

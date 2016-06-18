@@ -25,6 +25,7 @@ class Session(db.Model):
         backref=db.backref('sessions', lazy='dynamic'))
     language = db.Column(db.String)
     microlocation_id = db.Column(db.Integer, db.ForeignKey('microlocation.id'))
+    session_type_id = db.Column(db.Integer, db.ForeignKey('session_type.id'))
 
     slides = db.Column(db.String)
     video = db.Column(db.String)
@@ -52,7 +53,8 @@ class Session(db.Model):
                  slides=None,
                  video=None,
                  audio=None,
-                 signup_url=None):
+                 signup_url=None,
+                 session_type=None):
         self.title = title
         self.subtitle = subtitle
         self.short_abstract = short_abstract
@@ -70,11 +72,11 @@ class Session(db.Model):
         self.video = video
         self.audio = audio
         self.signup_url = signup_url
+        self.session_type = session_type
 
     @staticmethod
     def get_service_name():
         return 'session'
-
 
     @property
     def is_accepted(self):

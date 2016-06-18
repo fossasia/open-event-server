@@ -42,11 +42,13 @@ class TestPostApi(TestPostApiBase):
     Test POST APIs against 401 (unauthorized) and
     201 (successful) status codes
     """
-    def _test_model(self, name, data):
+    def _test_model(self, name, data, checks=[]):
         """
         Tests -
         1. Without login, try to do a POST request and catch 401 error
         2. Login and match 201 response code and correct response data
+        Param:
+            checks - list of strings to assert in successful response data
         """
         path = get_path() if name == 'event' else get_path(1, name + 's')
         response = self.post_request(path, data)
@@ -57,10 +59,12 @@ class TestPostApi(TestPostApiBase):
         self.assertEqual(201, response.status_code, msg=response.data)
         self.assertIn('location', response.headers)
         self.assertIn('Test' + str(name).title(), response.data)
+        for string in checks:
+            self.assertIn(string, response.data, msg=string)
         return response
 
     def test_event_api(self):
-        self._test_model('event', POST_EVENT_DATA)
+        self._test_model('event', POST_EVENT_DATA, ['test@example.com'])
 
     def test_track_api(self):
         self._test_model('track', POST_TRACK_DATA)

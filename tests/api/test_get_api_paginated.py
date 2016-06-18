@@ -127,6 +127,13 @@ class TestGetApiPaginatedEvents(OpenEventTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('TestEvent', response.data)
 
+    def test_api_filters(self):
+        with app.test_request_context():
+            create_event()
+        path = get_path('page') + '?location_name=r@nd0m'
+        resp = self.app.get(path)
+        self.assertEqual(resp.status_code, 404)
+
 
 if __name__ == '__main__':
     unittest.main()

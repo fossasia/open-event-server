@@ -50,6 +50,14 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**topic** | string | Optional | Public |
 |**ticket_url** | string | Optional | Public |
 |**closing_datetime** | string | Optional | Public |
+|**creator** | **EventCreator** | Required | Public |
+
+#### EventCreator
+
+| Field | Datatype | Requirement |
+| --- | --- | --- |
+|**id** | integer | Required |
+|**email** | string | Required |
 
 
 ### 2. Microlocation

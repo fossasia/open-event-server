@@ -65,6 +65,14 @@ class TestGetApiListed(OpenEventTestCase):
         path = get_path(1, 'sponsors', 'types')
         self._test_path(path, 'TestSponsorType1_1', 'TestSponsorType2_1')
 
+    # special tests
+
+    def test_event_api_filters(self):
+        path = get_path() + '?location_name=r@nd0m'
+        resp = self.app.get(path)
+        self.assertTrue(len(resp.data) < 4, resp.data)
+        self.assertNotIn('TestEvent', resp.data)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -4,75 +4,159 @@
     {{ event.name }} - Sessions
 {% endblock %}
 
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='admin/lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"/>
+    <style type="text/css">
+        .label {
+            text-transform: capitalize;
+            font-size: 100%;
+            font-weight: 300;
+        }
+
+        .dataTables_filter {
+            width: auto;
+        }
+
+        td {
+            vertical-align: middle !important;
+        }
+    </style>
+{% endblock %}
+
 {% set active_page = "sessions" %}
 
 {% block content %}
-    <button class="btn btn-default" onclick="show_all();">All</button>
-    <button class="btn btn-default" onclick="show_pending();">Pending</button>
-    <button class="btn btn-default" onclick="show_accepted();">Accepted</button>
-    <button class="btn btn-default" onclick="show_rejected();">Rejected</button>
-    <a class="btn btn-success" href="{{ get_url('session.create_view', event_id=event_id) }}">Create Session</a>
 
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Title</th>
-            <th>Long Abstract</th>
-            <th>Short Abstract</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>State</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for session in sessions %}
-            <tr class="session {{ session.state }}">
-                <td>{{ session.title }}</td>
-                <td>{{ session.long_abstract }}</td>
-                <td>{{ session.short_abstract }}</td>
-                <td>{{ session.start_time }}</td>
-                <td>{{ session.end_time }}</td>
-                <td>{{ session.state }}</td>
-                <td>
-                    {% if session %}
-                        <a class="icon"
-                           href="{{ get_url('session.accept_session', event_id=session.event_id, session_id=session.id) }}"
-                           title="Accept Session">
-                            <span class="glyphicon glyphicon-ok"></span>
-                        </a>
-                        <a class="icon"
-                           href="{{ get_url('session.reject_session', event_id=session.event_id, session_id=session.id) }}"
-                           title="Reject Session">
-                            <span class="glyphicon glyphicon-remove"></span>
-                        </a>
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="toolbar-holder" style="display: none;">
+                <div class="btn-group pull-left" data-toggle="buttons">
+                    <label class="btn btn-default active">
+                        <input type="radio" name="show_state" autocomplete="off" value="all" checked> All
+                    </label>
+                    <label class="btn btn-default">
+                        <input type="radio" name="show_state" autocomplete="off" value="pending"> Pending
+                    </label>
+                    <label class="btn btn-default">
+                        <input type="radio" name="show_state" autocomplete="off" value="accepted"> Accepted
+                    </label>
+                    <label class="btn btn-default">
+                        <input type="radio" name="show_state" autocomplete="off" value="rejected"> Rejected
+                    </label>
+                </div>
+                <div class="btn-group pull-left" style="margin-left: 5px; margin-right: 10px;">
+                    <a class="btn btn-info" href="{{ get_url('session.create_view', event_id=event_id) }}">
+                        Create Session
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12" style="margin-top: 30px;">
+            <table class="table table-striped table-hover with-datatable">
+                <thead>
+                <tr>
+                    <th>State</th>
+                    <th>Title</th>
+                    <th>Speakers</th>
+                    <th>Track</th>
+                    <th>Short Abstract</th>
+                    <th>Submission Date</th>
+                    <th>Last Changed Date</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for session in sessions %}
+                    <tr>
+                        <td>
+                            <span class="label label-{{ 'success' if session.state == 'accepted' else 'warning' }}">{{ session.state }}</span>
+                        </td>
+                        <td>{{ session.title }}</td>
+                        <td>
+                            <ol style="padding-left: 14px;">
+                                {% for speaker in session.speakers %}
+                                    <li>{{ speaker.name }}</li>
+                                {% endfor %}
+                            </ol>
+                        </td>
+                        <td>{{ session.track.name }}</td>
+                        <td>{{ session.short_abstract }}</td>
+                        <td>{{ session.start_time }}</td>
+                        <td>{{ session.end_time }}</td>
+                        <td>
+                            <div class="btn-group-vertical btn-group-xs" role="group" aria-label="...">
+                                <a data-toggle="tooltip" data-placement="left" title="View" href="{{ session.id }}/"
+                                   class="btn btn-default">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                                <a data-toggle="tooltip" data-placement="left" title="Edit" href="{{ session.id }}/edit"
+                                   class="btn btn-default">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <a data-toggle="tooltip" data-placement="left" title="Delete"
+                                   href="{{ session.id }}/delete" class="btn btn-default">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+
+                            </div>
+
+                        </td>
+                        <td>
+                            <div class="btn-group-vertical" role="group" aria-label="...">
+                                <a href="{{ session.id }}/accept" class="btn btn-sm btn-success">
+                                    <i class="fa fa-check"></i>
+                                </a>
+                                <a href="{{ session.id }}/reject" class="btn btn-sm btn-danger">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
 {% endblock %}
 
 {% block tail_js %}
     {{ super() }}
+    <script src="{{ url_for('static', filename='admin/lib/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+
     <script type="text/javascript">
-        function show_all() {
-            $('.session').show();
-        }
+        $.fn.dataTable.ext.search.push(
+                function (settings, data, dataIndex) {
+                    var user_option = $("input[name=show_state]:checked").val();
+                    console.log(user_option);
+                    var state = data[0].trim() || 'pending';
+                    if (user_option === "all") {
+                        return true;
+                    } else if (user_option === state) {
+                        return true;
+                    }
+                    return false;
+                }
+        );
 
-        function show_pending() {
-            $('.session').hide();
-            $('.session.pending').show();
-        }
+        var table = $('.with-datatable').DataTable({
+            "dom": '<"row"<"toolbar col-md-7"<"pull-left"l>><"col-md-3 pull-right"f>>tip'
+        });
 
-        function show_accepted() {
-            $('.session').hide();
-            $('.session.accepted').show();
-        }
+        $("div.toolbar").prepend($("#toolbar-holder").html());
 
-        function show_rejected() {
-            $('.session').hide();
-            $('.session.rejected').show();
-        }
+        $("input[name=show_state]").change(function () {
+            table.draw();
+        });
+
+        table.on('draw', function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+
     </script>
 {% endblock %}

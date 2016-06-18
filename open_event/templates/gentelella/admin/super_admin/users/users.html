@@ -1,27 +1,62 @@
 {% extends 'gentelella/admin/super_admin/dashboard.html' %}
 
 {% block title %}
-Events
+Users
 {% endblock %}
 
 {% set active_page = "users" %}
 
 {% block head_css %}
-    {{ super() }}
+{{ super() }}
 {% endblock %}
 
 
 {% block content %}
 
 
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Member Since</th>
+        <th>Last Access</th>
+        <th>Options</th>
 
+    </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+    <tr>
+        <td>{{user.user_detail.fullname}}</td>
+        <td>{{user.email}}</td>
+        <td>Not implemented</td>
+        <td>Not implemented</td>
+        <td>Not implemented</td>
+        <td>
+            <a href="#" title="Edit record">
+            <span class="glyphicon glyphicon-pencil"></span>
+        </a>
+        <a onclick="return confirm('Are you sure you want to delete this record?');"
+            title="Delete record">
+            <span class="glyphicon glyphicon-trash"></span>
+        </a>
+        <a title="View User Details">
+            <span class="glyphicon glyphicon-eye-open"></span>
+        </a>
 
+        </td>
+    </tr>
+    {%endfor%}
+    </tbody>
+</table>
 
 
 {% endblock %}
 
 {% block tail_js %}
-    {{ super() }}
+{{ super() }}
 
 {% endblock %}
 

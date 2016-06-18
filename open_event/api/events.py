@@ -1,10 +1,13 @@
-from flask.ext.restplus import Resource, Namespace
+from flask.ext.restplus import Resource, Namespace, reqparse
 from flask import g
 
-from open_event.models.event import Event as EventModel, EventsUsers
+from open_event.models.event import Event as EventModel
+from open_event.models.users_events_roles import UsersEventsRoles
+from open_event.models.role import Role
+from open_event.models.user import ORGANIZER
 from open_event.helpers.data import save_to_db, update_version
 
-from .helpers.helpers import get_paginated_list, requires_auth
+from .helpers.helpers import get_paginated_list, requires_auth, parse_args
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, BaseDAO
 from .helpers import custom_fields as fields
@@ -12,6 +15,11 @@ from helpers.special_fields import EventTypeField, EventTopicField
 
 
 api = Namespace('events', description='Events')
+
+EVENT_CREATOR = api.model('EventCreator', {
+    'id': fields.Integer(),
+    'email': fields.Email()
+})
 
 EVENT = api.model('Event', {
     'id': fields.Integer(required=True),
@@ -34,7 +42,8 @@ EVENT = api.model('Event', {
     'type': EventTypeField(),
     'topic': EventTopicField(),
     'privacy': fields.String(),
-    'ticket_url': fields.Uri()
+    'ticket_url': fields.Uri(),
+    'creator': fields.Nested(EVENT_CREATOR, allow_null=True)
 })
 
 EVENT_PAGINATED = api.clone('EventPaginated', PAGINATED_MODEL, {
@@ -43,6 +52,7 @@ EVENT_PAGINATED = api.clone('EventPaginated', PAGINATED_MODEL, {
 
 EVENT_POST = api.clone('EventPost', EVENT)
 del EVENT_POST['id']
+del EVENT_POST['creator']
 
 
 class EventDAO(BaseDAO):
@@ -64,19 +74,17 @@ class EventDAO(BaseDAO):
         data = self.validate(data)
         payload = self.fix_payload(data)
         new_event = self.model(**payload)
-        # set user (owner)
-        a = EventsUsers()
-        a.user = g.user
-        a.editor = True
-        a.admin = True
-        new_event.users.append(a)
+        new_event.creator = g.user
         save_to_db(new_event, "Event saved")
+        # set organizer
+        role = Role.query.filter_by(name=ORGANIZER).first()
+        uer = UsersEventsRoles(g.user, new_event, role)
+        save_to_db(uer, 'UER saved')
         update_version(
             event_id=new_event.id,
             is_created=True,
             column_to_increment="event_ver"
         )
-
         # Return created resource with a 201 status code and its Location
         # (url) in the header.
         resource_location = url + '/' + str(new_event.id)
@@ -89,6 +97,26 @@ class EventDAO(BaseDAO):
 
 
 DAO = EventDAO(EventModel, EVENT_POST)
+
+
+# DEFINE PARAMS
+
+EVENT_PARAMS = {
+    'location_name': {
+        'description': 'Filter by location_name',
+        'type': str
+    }
+}
+
+# DEFINE RESOURCES
+
+
+class EventResource():
+    """
+    Event Resource Base class
+    """
+    event_parser = reqparse.RequestParser()
+    event_parser.add_argument('location_name', type=str)
 
 
 @api.route('/<int:event_id>')
@@ -118,12 +146,12 @@ class Event(Resource):
 
 
 @api.route('')
-class EventList(Resource):
-    @api.doc('list_events')
+class EventList(Resource, EventResource):
+    @api.doc('list_events', params=EVENT_PARAMS)
     @api.marshal_list_with(EVENT)
     def get(self):
         """List all events"""
-        return DAO.list()
+        return DAO.list(**parse_args(self.event_parser))
 
     @requires_auth
     @api.doc('create_event', responses=POST_RESPONSES)
@@ -135,11 +163,15 @@ class EventList(Resource):
 
 
 @api.route('/page')
-class EventListPaginated(Resource, PaginatedResourceBase):
+class EventListPaginated(Resource, PaginatedResourceBase, EventResource):
     @api.doc('list_events_paginated', params=PAGE_PARAMS)
+    @api.doc(params=EVENT_PARAMS)
     @api.marshal_with(EVENT_PAGINATED)
     def get(self):
         """List events in a paginated manner"""
         args = self.parser.parse_args()
         url = self.api.url_for(self)  # WARN: undocumented way
-        return get_paginated_list(EventModel, url, args=args)
+        return get_paginated_list(
+            EventModel, url, args=args,
+            **parse_args(self.event_parser)
+        )

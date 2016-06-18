@@ -12,6 +12,7 @@ from ...helpers.data import DataManager, save_to_db, get_google_auth, get_facebo
 from ...helpers.data_getter import DataGetter
 from ...helpers.helpers import send_email_with_reset_password_hash, send_email_confirmation, get_serializer
 from open_event.helpers.oauth import OAuth, FbOAuth
+from open_event.models.user import User
 
 
 def intended_url():
@@ -71,6 +72,7 @@ class MyHomeView(AdminIndexView):
             logging.info("Registration under process")
             s = get_serializer()
             data = [request.form['email'], request.form['password']]
+            DataManager.create_user(data)
             form_hash = s.dumps(data)
             link = url_for('.create_account_after_confirmation_view', hash=form_hash, _external=True)
             send_email_confirmation(request.form, link)
@@ -80,7 +82,9 @@ class MyHomeView(AdminIndexView):
     def create_account_after_confirmation_view(self, hash):
         s = get_serializer()
         data = s.loads(hash)
-        user = DataManager.create_user(data)
+        user = User.query.filter_by(email=data[0]).first()
+        user.is_verified = True
+        save_to_db(user, 'User updated')
         login.login_user(user)
         return redirect(intended_url())
 
