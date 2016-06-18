@@ -12,7 +12,7 @@ Manage Roles
     <table class="role-table table table-striped">
         <thead>
         <tr>
-            <th>User Name</th>
+            <th>User Email</th>
             <th>Role</th>
             <th>Options</th>
 
@@ -22,8 +22,19 @@ Manage Roles
         {% for role in event.roles %}
         <tr>
             <td>{{role.user.email}}</td>
-            <td>{{role.role.name}}</td>
             <td>
+            {% if role.role.name == 'track_organizer' %}
+              Track Organizer
+            {% elif role.role.name == 'organizer' %}
+              Organizer
+            {% elif role.role.name == 'coorganizer' %}
+              Co-Organizer
+            {% elif role.role.name == 'moderator' %}
+              Moderator
+            {% endif %}
+            </td>
+            <td>
+              {% if role.role.name != 'organizer' %}
                 <a class="icon" title="Edit Role" data-toggle="modal" data-target="#edit-role-{{role.id}}">
                     <span class="glyphicon glyphicon-pencil"></span>
                 </a>
@@ -31,6 +42,7 @@ Manage Roles
                     <span class="glyphicon glyphicon-trash"></span>
                 </a>
                 {{editrole(event, role)}}
+              {% endif %}
             </td>
         </tr>
         {%endfor%}
@@ -56,8 +68,9 @@ Manage Roles
                     <p> <label>Permissions:</label>
                         <select name="user_role" id="heard" class="form-control" required="">
                             <option value="">Choose..</option>
-                            <option value="track_organizer">TRACK_ORGANIZER</option>
-                            <option value="coorganizer">CO_ORGANIZER</option>
+                            <option value="track_organizer">Track Organizer</option>
+                            <option value="coorganizer">Co-Organizer</option>
+                            <option value="moderator">Moderator</option>
                         </select>
                     </p>
                     <button type="submit" class="btn btn-success">Add</button>
