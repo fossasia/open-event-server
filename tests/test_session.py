@@ -77,5 +77,15 @@ class TestSessionApi(OpenEventTestCase):
             rv = self.app.get(url, follow_redirects=True)
             self.assertTrue("Short Abstract" in rv.data, msg=rv.data)
 
+    def test_wrong_form_config(self):
+        with app.test_request_context():
+            self.login()
+            event = ObjectMother.get_event()
+            save_to_db(event, "Event saved")
+            url = url_for('event_sessions.create_view', event_id=event.id)
+            rv = self.app.get(url, follow_redirects=True)
+            self.assertTrue("Speaker and Session forms have been incorrectly configured for this event."
+                            " Session creation has been disabled" in rv.data, msg=rv.data)
+
 if __name__ == '__main__':
     unittest.main()
