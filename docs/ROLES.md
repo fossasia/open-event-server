@@ -130,14 +130,28 @@ Moderator can only Read Tracks before they are published but cannot edit them.
 
 Speaker can read his own sessions (even unpublished), and can edit his own information.
 
-### Site Specific Roles
+### Site Specific Roles (Staff)
 
 ```
 admin
 super_admin
 ```
 
-They have access to all the resources. There can be multiple Admins but just one Super Admin. Only the Super Admin can assign users to be Admins.
+They have access to all the resources. There can be multiple Admins but just one Super Admin. Only the Super Admin can assign users as Admins.
+
+You can check if a user is an Admin or Super Admin using:
+
+```python
+user.is_admin
+user.is_super_admin
+```
+
+You can directly check if a user comes under Staff (Admin or Super Admin):
+
+```python
+user.is_staff
+```
+
 
 ### Services
 
