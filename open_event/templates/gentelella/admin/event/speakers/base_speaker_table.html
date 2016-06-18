@@ -13,6 +13,7 @@
             text-transform: capitalize;
             font-size: 100%;
             font-weight: 300;
+            margin-top: 2px;
         }
 
         .dataTables_filter {
@@ -22,9 +23,34 @@
         td {
             vertical-align: middle !important;
         }
+
+        .user-photo {
+            width: 5rem;
+            height: 5rem;
+            border-radius: 50%;
+        }
+
+        .state-list > li {
+            margin-top: 6px;
+        }
+
+        .state-list > li:nth-child(1) {
+            margin-top: 0;
+        }
     </style>
 {% endblock %}
 
+{% block head_js %}
+    {{ super() }}
+
+    <script type="text/javascript">
+        function imgError(image) {
+            image.onerror = "";
+            image.src = '{{ url_for('static', filename='img/avatar.png') }}';
+            return true;
+        }
+    </script>
+{% endblock %}
 {% set active_page = "speakers" %}
 
 {% block content %}
@@ -65,11 +91,11 @@
                 {% for speaker in speakers %}
                     <tr>
                         <td>
-
+                            <img src="{{ speaker.photo }}" class="user-photo" onerror="imgError(this);">
                         </td>
                         <td>{{ speaker.name }}</td>
                         <td>{{ speaker.email }}</td>
-                        <td>{{ speaker.mobile }}</td>
+                        <td>{{ speaker.mobile if speaker.mobile != None else 'N/A' }}</td>
                         <td>
                             <ol style="padding-left: 14px;">
                                 {% for session in speaker.sessions %}
@@ -78,9 +104,13 @@
                             </ol>
                         </td>
                         <td>
-                            <ol style="padding-left: 14px;">
+                            <ol style="padding-left: 14px;" class="state-list">
                                 {% for session in speaker.sessions %}
-                                    <li>{{ session.state }}</li>
+                                    <li>
+                                        <span class="label label-{{ 'success' if session.state == 'accepted' else 'warning' }}">
+                                            {{ session.state }}
+                                        </span>
+                                    </li>
                                 {% endfor %}
                             </ol>
                         </td>
@@ -121,10 +151,10 @@
                 function (settings, data, dataIndex) {
                     var user_option = $("input[name=show_state]:checked").val();
                     console.log(user_option);
-                    var state = data[0].trim() || 'pending';
+                    var state = data[5].trim() || 'pending';
                     if (user_option === "all") {
                         return true;
-                    } else if (user_option === state) {
+                    } else if (state.indexOf(user_option) > -1) {
                         return true;
                     }
                     return false;
