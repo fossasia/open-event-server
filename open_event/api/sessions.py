@@ -5,6 +5,7 @@ from open_event.models.session import Session as SessionModel
 from open_event.models.track import Track as TrackModel
 from open_event.models.microlocation import Microlocation as MicrolocationModel
 from open_event.models.speaker import Speaker as SpeakerModel
+from open_event.models.session_type import SessionType as SessionTypeModel
 
 from .helpers.helpers import get_paginated_list, requires_auth, \
     save_db_model, get_object_in_event
@@ -32,6 +33,11 @@ SESSION_MICROLOCATION = api.model('SessionMicrolocation', {
     'name': fields.String(),
 })
 
+SESSION_TYPE = api.model('SessionType', {
+    'id': fields.Integer(),
+    'name': fields.String()
+})
+
 SESSION = api.model('Session', {
     'id': fields.Integer(required=True),
     'title': fields.String(required=True),
@@ -49,7 +55,8 @@ SESSION = api.model('Session', {
     'video': fields.String(),
     'audio': fields.String(),
     'signup_url': fields.Uri(),
-    'state': SessionStateField()
+    'state': SessionStateField(),
+    'session_type': fields.Nested(SESSION_TYPE, allow_null=True)
 })
 
 SESSION_PAGINATED = api.clone('SessionPaginated', PAGINATED_MODEL, {
@@ -59,23 +66,26 @@ SESSION_PAGINATED = api.clone('SessionPaginated', PAGINATED_MODEL, {
 SESSION_POST = api.clone('SessionPost', SESSION, {
     'track_id': fields.Integer(),
     'speaker_ids': fields.List(fields.Integer()),
-    'microlocation_id': fields.Integer()
+    'microlocation_id': fields.Integer(),
+    'session_type_id': fields.Integer()
 })
+
 del SESSION_POST['id']
 del SESSION_POST['track']
 del SESSION_POST['speakers']
 del SESSION_POST['microlocation']
+del SESSION_POST['session_type']
 
 
 # Create DAO
 class SessionDAO(ServiceDAO):
     def _delete_fields(self, data):
-        del data['speaker_ids']
-        del data['track_id']
-        del data['microlocation_id']
+        data = self._del(data, ['speaker_ids', 'track_id',
+                         'microlocation_id', 'session_type_id'])
         data['start_time'] = SESSION_POST['start_time'].from_str(
-            data['start_time'])
-        data['end_time'] = SESSION_POST['end_time'].from_str(data['end_time'])
+            data.get('start_time'))
+        data['end_time'] = SESSION_POST['end_time'].from_str(
+            data.get('end_time'))
         return data
 
     def get_object(self, model, sid, event_id):
@@ -90,8 +100,12 @@ class SessionDAO(ServiceDAO):
         """
         Fixes payload of POST request
         """
-        data['track'] = self.get_object(TrackModel, data['track_id'], event_id)
-        data['microlocation'] = self.get_object(MicrolocationModel, data['microlocation_id'], event_id)
+        data['track'] = self.get_object(
+            TrackModel, data.get('track_id'), event_id)
+        data['microlocation'] = self.get_object(
+            MicrolocationModel, data.get('microlocation_id'), event_id)
+        data['session_type'] = self.get_object(
+            SessionTypeModel, data.get('session_type_id'), event_id)
         data['event_id'] = event_id
         data['speakers'] = InstrumentedList(
             SpeakerModel.query.get(_) for _ in data['speaker_ids']
@@ -109,6 +123,7 @@ class SessionDAO(ServiceDAO):
         obj.track = data_copy['track']
         obj.microlocation = data_copy['microlocation']
         obj.speakers = data_copy['speakers']
+        obj.session_type = data_copy['session_type']
         obj = save_db_model(obj, SessionModel.__name__, event_id)
         return obj
 

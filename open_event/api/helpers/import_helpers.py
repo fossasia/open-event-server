@@ -25,6 +25,7 @@ IMPORT_SERIES = [
 ]
 
 DELETE_FIELDS = {
+    'event': ['creator'],
     'tracks': ['sessions'],
     'speakers': ['sessions']
 }
@@ -88,6 +89,10 @@ def _fix_related_fields(srv, data, service_ids):
     if srv[0] not in RELATED_FIELDS:
         return data
     for field in RELATED_FIELDS[srv[0]]:
+        if field[0] not in data:  # if not present
+            data[field[1]] = None
+            continue
+        # else continue normal
         old_value = data[field[0]]
         if type(old_value) == list:
             ls = []
@@ -149,6 +154,7 @@ def import_event_json(zip_path):
     # create event
     data = json.loads(open(path + '/event.json', 'r').read())
     _, data = _trim_id(data)
+    data = _delete_fields(('event', EventDAO), data)
     new_event = EventDAO.create(data, 'dont')[0]
 
     # create other services

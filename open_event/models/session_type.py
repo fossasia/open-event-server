@@ -13,11 +13,10 @@ class SessionType(db.Model):
                                uselist=False,
                                backref="session_type")
 
-    def __init__(self, name=None, length=None, event_id=None, session_id=None):
+    def __init__(self, name=None, length=None, event_id=None):
         self.name = name
         self.length = length
         self.event_id = event_id
-        self.session_id = session_id
 
     def __repr__(self):
         return '<SessionType %r>' % self.name
