@@ -57,14 +57,13 @@
 </div>
 
 <script>
-var requestUrl = "http://ip-api.com/json";
+var requestUrl = "http://ip-api.com/json/";
 
 $.ajax({
   url: requestUrl,
-  type: 'GET',
+  type: 'POST',
   success: function(json)
   {
-    console.log("My country is: " + json.country);
     $("#event_browse").attr("action", "/" + json.country + "/events/")
   },
   error: function(err)
