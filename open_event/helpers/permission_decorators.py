@@ -1,7 +1,12 @@
 from flask.ext import login
 from functools import wraps
-from flask import url_for, redirect
+from flask import url_for, redirect, request
 from open_event.models.user import User
+from open_event.models.session import Session
+from open_event.models.microlocation import Microlocation
+from open_event.models.track import Track
+from open_event.models.speaker import Speaker
+from open_event.models.sponsor import Sponsor
 
 
 def is_super_admin(f):
@@ -31,7 +36,7 @@ def is_organizer(f):
     def decorated_function(*args, **kwargs):
         user = User.query.get(login.current_user.id)
         event_id = kwargs['event_id']
-        if user.is_admin is True or user.is_super_admin is True:
+        if user.is_staff is True:
             return f(*args, **kwargs)
         if user.is_organizer(event_id) is False:
             return redirect(url_for('admin.forbidden_view'))
@@ -45,7 +50,7 @@ def is_coorganizer(f):
     def decorated_function(*args, **kwargs):
         user = User.query.get(login.current_user.id)
         event_id = kwargs['event_id']
-        if user.is_admin is True or user.is_super_admin is True:
+        if user.is_staff is True:
             return f(*args, **kwargs)
         if user.is_coorganizer(event_id) is False:
             return redirect(url_for('admin.forbidden_view'))
@@ -59,7 +64,7 @@ def is_track_organizer(f):
     def decorated_function(*args, **kwargs):
         user = User.query.get(login.current_user.id)
         event_id = kwargs['event_id']
-        if user.is_admin is True or user.is_super_admin is True:
+        if user.is_staff is True:
             return f(*args, **kwargs)
         if user.is_track_organizer(event_id) is False:
             return redirect(url_for('admin.forbidden_view'))
@@ -73,7 +78,7 @@ def is_moderator(f):
     def decorated_function(*args, **kwargs):
         user = User.query.get(login.current_user.id)
         event_id = kwargs['event_id']
-        if user.is_admin is True or user.is_super_admin is True:
+        if user.is_staff is True:
             return f(*args, **kwargs)
         if user.is_moderator(event_id) is False:
             return redirect(url_for('admin.forbidden_view'))
@@ -87,7 +92,7 @@ def is_speaker(f):
     def decorated_function(*args, **kwargs):
         user = User.query.get(login.current_user.id)
         event_id = kwargs['event_id']
-        if user.is_admin is True or user.is_super_admin is True:
+        if user.is_staff is True:
             return f(*args, **kwargs)
         if user.is_speaker(event_id) is False:
             return redirect(url_for('admin.forbidden_view'))
@@ -95,3 +100,86 @@ def is_speaker(f):
 
     return decorated_function
 
+def can_accept_and_reject(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        user = User.query.get(login.current_user.id)
+        event_id = kwargs['event_id']
+        if user.is_staff is True:
+            return f(*args, **kwargs)
+        if user.is_organizer(event_id) is True or user.is_coorganizer(event_id) is True:
+            return f(*args, **kwargs)
+        return redirect(url_for('admin.forbidden_view'))
+
+    return decorated_function
+
+
+def can_access(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        user = User.query.get(login.current_user.id)
+        event_id = kwargs['event_id']
+        url = request.url
+        if user.is_staff is True:
+            return f(*args, **kwargs)
+        if '/create/' in url:
+            if '/events/create/' in url:
+                return f(*args, **kwargs)
+            if 'session' in url:
+                if user.can_create(Session, event_id) is True:
+                    return f(*args, **kwargs)
+            if 'track' in url:
+                if user.can_create(Track, event_id) is True:
+                    return f(*args, **kwargs)
+            if 'speaker' in url:
+                if user.can_create(Speaker, event_id) is True:
+                    return f(*args, **kwargs)
+            if 'sponsor' in url:
+                if user.can_create(Sponsor, event_id) is True:
+                    return f(*args, **kwargs)
+            if 'microlocation' in url:
+                if user.can_create(Microlocation, event_id) is True:
+                    return f(*args, **kwargs)
+            return redirect(url_for('admin.forbidden_view'))
+        if '/edit/' in url:
+            if 'events/' + event_id + '/edit/' in url:
+                if user.is_organizer(event_id) is True or user.is_coorganizer(event_id) is True:
+                    return f(*args, **kwargs)
+            if 'session' in url:
+                if user.can_update(Session, event_id) is True:
+                    return f(*args, **kwargs)
+            if 'track' in url:
+                if user.can_update(Track, event_id) is True:
+                    return f(*args, **kwargs)
+            if 'speaker' in url:
+                if user.can_update(Speaker, event_id) is True:
+                    return f(*args, **kwargs)
+            if 'sponsor' in url:
+                if user.can_update(Sponsor, event_id) is True:
+                    return f(*args, **kwargs)
+            if 'microlocation' in url:
+                if user.can_update(Microlocation, event_id) is True:
+                    return f(*args, **kwargs)
+            return redirect(url_for('admin.forbidden_view'))
+        if '/delete/' in url:
+            if 'events/' + event_id + '/delete/' in url:
+                if user.is_organizer is True or user.is_coorganizer is True:
+                    return f(*args, **kwargs)
+            if 'session' in url:
+                if user.can_delete(Session, event_id) is True:
+                    return f(*args, **kwargs)
+            if 'track' in url:
+                if user.can_delete(Track, event_id) is True:
+                    return f(*args, **kwargs)
+            if 'speaker' in url:
+                if user.can_delete(Speaker, event_id) is True:
+                    return f(*args, **kwargs)
+            if 'sponsor' in url:
+                if user.can_delete(Sponsor, event_id) is True:
+                    return f(*args, **kwargs)
+            if 'microlocation' in url:
+                if user.can_delete(Microlocation, event_id) is True:
+                    return f(*args, **kwargs)
+            return redirect(url_for('admin.forbidden_view'))
+
+    return decorated_function

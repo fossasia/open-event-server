@@ -118,7 +118,8 @@ class EventsView(ModelView):
         checklist["5"] = 'success'
         return self.render('/gentelella/admin/event/details/details.html', event=event, checklist=checklist)
 
-    @expose('/<int:event_id>/edit/', methods=('GET', 'POST'))
+    @expose('/<event_id>/edit/', methods=('GET', 'POST'))
+    @can_access
     def edit_view(self, event_id):
         event = DataGetter.get_event(event_id)
         session_types = DataGetter.get_session_types_by_event_id(event_id).all()
@@ -143,6 +144,7 @@ class EventsView(ModelView):
             return redirect(url_for('.details_view', event_id=event_id))
 
     @expose('/<int:event_id>/delete/', methods=('GET',))
+    @can_access
     def delete_view(self, event_id):
         if request.method == "GET":
             DataManager.delete_event(event_id)

@@ -1,9 +1,7 @@
 from flask_admin import expose
 from flask_admin.contrib.sqla import ModelView
-from flask.ext import login
-from flask import request, url_for, redirect
 from ....helpers.data import DataManager, save_to_db
-from open_event.helpers.permission_decorators import is_coorganizer
+from open_event.helpers.permission_decorators import *
 from ....helpers.data_getter import DataGetter
 import json
 
@@ -32,7 +30,7 @@ class SessionView(ModelView):
                            sessions=sessions, event_id=event_id, event=event)
 
     @expose('/create/', methods=('GET', 'POST'))
-    @is_coorganizer
+    @can_access
     def create_view(self, event_id):
         form_elems = DataGetter.get_custom_form_elements(event_id)
         speaker_form = ""
@@ -73,6 +71,7 @@ class SessionView(ModelView):
                            session=session, event_id=event_id, form_elems=form_elems)
 
     @expose('/<int:session_id>/edit/', methods=('GET', 'POST'))
+    @can_access
     def edit_view(self, event_id, session_id):
         session = DataGetter.get_session(session_id)
         if request.method == 'GET':
@@ -82,6 +81,7 @@ class SessionView(ModelView):
             return redirect(url_for('session.index_view', event_id=event_id))
 
     @expose('/<int:session_id>/accept_session', methods=('GET',))
+    @can_accept_and_reject
     def accept_session(self, event_id, session_id):
         session = DataGetter.get_session(session_id)
         session.state = 'accepted'
@@ -89,6 +89,7 @@ class SessionView(ModelView):
         return redirect(url_for('.display_view', event_id=event_id))
 
     @expose('/<int:session_id>/reject_session', methods=('GET',))
+    @can_accept_and_reject
     def reject_session(self, event_id, session_id):
         session = DataGetter.get_session(session_id)
         session.state = 'rejected'
