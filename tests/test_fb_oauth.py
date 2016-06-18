@@ -1,15 +1,12 @@
 import unittest
 
-from flask import url_for
-
 from tests.utils import OpenEventTestCase
 from tests.setup_database import Setup
 from open_event import current_app as app
 from open_event.helpers.oauth import FbOAuth
 from open_event.helpers.data import get_facebook_auth
-from tests.auth_helper import login, logout
+from tests.auth_helper import login, logout, register
 from open_event.helpers.data import create_user_oauth
-from open_event.helpers.helpers import get_serializer
 
 
 class TestFacebookOauth(OpenEventTestCase):
@@ -27,10 +24,7 @@ class TestFacebookOauth(OpenEventTestCase):
         """If the user is already logged in then on clicking 'Login with Facebook' he should be redirected
             directly to the admin page"""
         with app.test_request_context():
-            s = get_serializer()
-            data = [u'email@gmail.com', u'test']
-            data_hash = s.dumps(data)
-            self.app.get(url_for('admin.create_account_after_confirmation_view', hash=data_hash), follow_redirects=True)
+            register(self.app, 'email@gmail.com', 'test')
             logout(self.app)
             login(self.app, 'email@gmail.com', 'test')
             self.assertTrue('Open Event' in self.app.get('/fCallback/?code=dummy_code&state=dummy_state',

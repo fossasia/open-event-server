@@ -30,5 +30,8 @@ def register(app, email, password):
         follow_redirects=True)
 
 
-def create_user(email, password):
-    DataManager.create_user([email, password])
+def create_user(email, password, is_verified=True):
+    """
+    Registers the user but not logs in
+    """
+    DataManager.create_user([email, password], is_verified=is_verified)
