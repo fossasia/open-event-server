@@ -13,7 +13,7 @@ class InviteView(BaseView):
     def index_view(self):
         abort(404)
 
-    @expose('/create/', methods=('GET', 'POST'))
+    @expose('/new/', methods=('GET', 'POST'))
     def create_view(self, event_id):
         if request.method == 'POST':
             email = request.form['email']

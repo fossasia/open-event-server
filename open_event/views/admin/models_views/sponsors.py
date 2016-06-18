@@ -11,7 +11,7 @@ class SponsorsView(BaseView):
         return self.render('/gentelella/admin/event/sponsors/display.html',
                            sponsors=sponsors, event_id=event_id, event=event)
 
-    @expose('/create/', methods=('GET', 'POST'))
+    @expose('/new/', methods=('GET', 'POST'))
     @can_access
     def create_view(self, event_id):
         event = DataGetter.get_event(event_id)

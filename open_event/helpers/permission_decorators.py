@@ -122,7 +122,7 @@ def can_access(f):
         url = request.url
         if user.is_staff is True:
             return f(*args, **kwargs)
-        if '/create/' in url:
+        if '/create/' in url or '/new/' in url:
             if '/events/create/' in url:
                 return f(*args, **kwargs)
             if 'session' in url:
