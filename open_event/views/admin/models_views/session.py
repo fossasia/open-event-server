@@ -32,7 +32,6 @@ class SessionView(ModelView):
                            sessions=sessions, event_id=event_id, event=event)
 
     @expose('/create/', methods=('GET', 'POST'))
-    @is_coorganizer
     def create_view(self, event_id):
         form_elems = DataGetter.get_custom_form_elements(event_id)
         speaker_form = ""
