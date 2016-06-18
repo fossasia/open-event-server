@@ -1,6 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
 import unittest
-
+from open_event.helpers.permission_decorators import can_accept_and_reject
 from tests.auth_helper import register, login
 from tests.utils import OpenEventTestCase
 from tests.setup_database import Setup
@@ -45,7 +45,7 @@ class TestSessionApi(OpenEventTestCase):
             save_to_db(session, "Session Saved")
             url = url_for('event_sessions.accept_session', event_id=1, session_id=1)
             rv = self.app.get(url, follow_redirects=True)
-            self.assertTrue("accepted" in rv.data, msg=rv.data)
+            self.assertTrue("Forbidden" in rv.data, msg=rv.data)
 
     def test_session_reject(self):
         with app.test_request_context():
@@ -54,7 +54,7 @@ class TestSessionApi(OpenEventTestCase):
             save_to_db(session, "Session Saved")
             url = url_for('event_sessions.reject_session', event_id=1, session_id=1)
             rv = self.app.get(url, follow_redirects=True)
-            self.assertTrue("rejected" in rv.data, msg=rv.data)
+            self.assertTrue("Forbidden" in rv.data, msg=rv.data)
 
     def test_session_delete(self):
         with app.test_request_context():
@@ -84,8 +84,7 @@ class TestSessionApi(OpenEventTestCase):
             save_to_db(event, "Event saved")
             url = url_for('event_sessions.create_view', event_id=event.id)
             rv = self.app.get(url, follow_redirects=True)
-            self.assertTrue("Speaker and Session forms have been incorrectly configured for this event."
-                            " Session creation has been disabled" in rv.data, msg=rv.data)
+            self.assertTrue("Forbidden" in rv.data, msg=rv.data)
 
 if __name__ == '__main__':
     unittest.main()

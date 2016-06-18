@@ -3,7 +3,7 @@ from flask.ext.restplus import abort
 from flask_admin import expose
 from flask import request, url_for, redirect
 from ....helpers.data import DataManager
-
+from open_event.helpers.permission_decorators import *
 
 class TracksView(BaseView):
 
@@ -11,7 +11,8 @@ class TracksView(BaseView):
     def index_view(self):
         abort(404)
 
-    @expose('/new/', methods=('GET', 'POST'))
+    @expose('/create/', methods=('GET', 'POST'))
+    @can_access
     def create_view(self, event_id):
         if request.method == 'POST':
             print request.form

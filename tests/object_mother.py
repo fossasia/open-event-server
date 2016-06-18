@@ -65,6 +65,6 @@ class ObjectMother(object):
 
     @staticmethod
     def get_user():
-        return User(login="test",
-                    password="test",
-                    email="email@gmail.com")
+        return User(password="test",
+                    email="email@gmail.com",
+                    is_admin=False)
