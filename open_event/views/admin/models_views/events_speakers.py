@@ -12,7 +12,7 @@ class EventsSpeakersView(ModelView):
         return self.render('/gentelella/admin/event/speaker/display.html',
                            speakers=speakers, event_id=event_id, event=event)
 
-    @expose('/new/', methods=('GET', 'POST'))
+    @expose('/create/', methods=('GET', 'POST'))
     @can_access
     def create_view(self, event_id):
         event = DataGetter.get_event(event_id)

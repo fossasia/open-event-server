@@ -1,6 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
 import unittest
-
+from open_event.helpers.permission_decorators import can_accept_and_reject
 from tests.auth_helper import register, login
 from tests.utils import OpenEventTestCase
 from tests.setup_database import Setup
@@ -42,6 +42,8 @@ class TestSessionApi(OpenEventTestCase):
         with app.test_request_context():
             self.login()
             session = ObjectMother.get_session()
+            user = ObjectMother.get_user()
+            save_to_db(user, "User saved")
             save_to_db(session, "Session Saved")
             url = url_for('session.accept_session', event_id=1, session_id=1)
             rv = self.app.get(url, follow_redirects=True)
@@ -51,6 +53,8 @@ class TestSessionApi(OpenEventTestCase):
         with app.test_request_context():
             session = ObjectMother.get_session()
             self.login()
+            user = ObjectMother.get_user()
+            save_to_db(user, "User saved")
             save_to_db(session, "Session Saved")
             url = url_for('session.reject_session', event_id=1, session_id=1)
             rv = self.app.get(url, follow_redirects=True)

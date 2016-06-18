@@ -143,7 +143,7 @@ class EventsView(ModelView):
                 return redirect(url_for('.edit_view', event_id=event.id) + "#step=location_name")
             return redirect(url_for('.details_view', event_id=event_id))
 
-    @expose('/<int:event_id>/delete/', methods=('GET',))
+    @expose('/<event_id>/delete/', methods=('GET',))
     @can_access
     def delete_view(self, event_id):
         if request.method == "GET":

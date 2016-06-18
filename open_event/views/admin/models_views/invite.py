@@ -8,7 +8,7 @@ from ....helpers import helpers as Helper
 
 class InviteView(ModelView):
 
-    @expose('/new/', methods=('GET', 'POST'))
+    @expose('/create/', methods=('GET', 'POST'))
     def create_view(self, event_id):
         if request.method == 'POST':
             email = request.form['email']

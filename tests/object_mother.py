@@ -50,4 +50,5 @@ class ObjectMother(object):
     def get_user():
         return User(login="test",
                     password="test",
-                    email="email@gmail.com")
+                    email="email@gmail.com",
+                    is_admin=False)
