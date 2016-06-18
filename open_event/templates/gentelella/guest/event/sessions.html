@@ -26,45 +26,94 @@
     {{ event.name }}
 {% endblock %}
 
-{% macro social_link(name, domain, username) %}
-    <i class="fa fa-facebook"></i> <a href="{{ domain + username }}">{{ username }}</a><br>
+{% block head_js %}
+    {{ super() }}
+
+    <script type="text/javascript">
+        function imgError(image) {
+            image.onerror = "";
+            image.src = '{{ url_for('static', filename='img/avatar.png') }}';
+            return true;
+        }
+    </script>
+{% endblock %}
+
+{% macro social_link(link, what) %}
+    {% if link and link != '' and link != 'None' %}
+        {% if what == 'website' %}
+            <a class="social speaker-social" href="{{ link }}">
+                <i class="fa fa-home"></i> {{ what | capitalize }}
+            </a>
+        {% elif what == 'facebook' %}
+            <a class="social speaker-social" href="{{ link }}">
+                <i class="fa fa-facebook"></i> {{ what | capitalize }}
+            </a>
+        {% elif what == 'twitter' %}
+            <a class="social speaker-social" href="{{ link }}">
+                <i class="fa fa-twitter"></i> {{ what | capitalize }}
+            </a>
+        {% elif what == 'github' %}
+            <a class="social speaker-social" href="{{ link }}">
+                <i class="fa fa-github"></i> {{ what | capitalize }}
+            </a>
+        {% elif what == 'linkedin' %}
+            <a class="social speaker-social" href="{{ link }}">
+                <i class="fa fa-linkedin"></i> {{ what | capitalize }}
+            </a>
+        {% endif %}
+    {% endif %}
+{% endmacro %}
+
+
+{% macro side_link(link, what) %}
+
+    {% if link and link != '' and link != 'None' %}
+        {% if what == 'video' %}
+            <a href="{{ link }}" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="{{ what | capitalize }}"><i
+                    class="fa fa-youtube-play fa-fw"></i></a>
+        {% elif what == 'audio' %}
+            <a href="{{ link }}" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="{{ what | capitalize }}"><i
+                            class="fa fa-volume-up fa-fw"></i></a>
+        {% elif what == 'slides' %}
+            <a href="{{ link }}" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="{{ what | capitalize }}"><i
+                            class="fa fa-slideshare fa-fw"></i></a>
+        {% elif what == 'sign up' %}
+            <a href="{{ link }}" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="{{ what | capitalize }}"><i
+                            class="fa fa-sign-in fa-fw"></i></a>
+        {% endif %}
+    {% endif %}
+
 {% endmacro %}
 
 {% macro session_element(session = None, index=0) %}
-    <li class="list-group-item" data-session-id="MS-1">
+    <li class="list-group-item" data-session-id="session-{{ session.id }}">
         <div class="row">
-            <div class="col-xs-1 col-md-1 col-sm-11">
-                <div class="btn-group-vertical" role="group" aria-label="...">
-                    <a class="btn btn-default" data-toggle="tooltip" data-placement="right" title="Direct Link"><i
-                            class="fa fa-link fa-fw"></i></a>
-                    <a class="btn btn-default" data-toggle="tooltip" data-placement="right" title="Video"><i
-                            class="fa fa-youtube-play fa-fw"></i></a>
-                    <a class="btn btn-default" data-toggle="tooltip" data-placement="right" title="Audio"><i
-                            class="fa fa-volume-up fa-fw"></i></a>
-                    <a class="btn btn-default" data-toggle="tooltip" data-placement="right" title="Slides"><i
-                            class="fa fa-slideshare fa-fw"></i></a>
-                    <a class="btn btn-default" data-toggle="tooltip" data-placement="right" title="Sign Up"><i
-                            class="fa fa-sign-in fa-fw"></i></a>
+
+            <div class="col-xs-1 col-md-1 col-sm-11 hidden-xs">
+                <div class="btn-group-vertical" role="group">
+                    {{ side_link(session.video, 'video') }}
+                    {{ side_link(session.audio, 'audio') }}
+                    {{ side_link(session.slides, 'slides') }}
+                    {{ side_link(session.signup_url, 'sign up') }}
                 </div>
             </div>
-            <div class="col-xs-11 col-md-11 col-sm-11" data-toggle="collapse"
+
+            <div class="col-xs-12 col-md-10 col-sm-10" data-toggle="collapse"
                  data-target="#session-extra-{{ session.id }} .collapse" aria-expanded="false">
                 <a class="anchor" name="session-{{ session.id }}"></a>
                 <h4 class="session-title">
                     {{ session.title }}
                 </h4>
-                <p class="session-location">
-                    Ground Floor <i class="fa fa-map-marker fa-fw"></i><br>
-                    8:00 AM <i class="fa fa-clock-o fa-fw"></i>
-                </p>
                 <p>
-                    <span class="session-type">Soldering Workshop</span>
+                    <span class="session-type">{{ session.session_type.name }}</span>
                 </p>
                 <p class="session-speakers">
-                    <img data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom"
-                         src="http://2016.opentechsummit.net/programm/speakers/Mitch_Altman.jpg">
-                    <img data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom"
-                         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAAMFBMVEWjo6Ph4eHg4ODc3NzZ2dmvr6+np6e0tLTGxsa+vr7Nzc2qqqrS0tK6urrDw8PKyspcfAhiAAAAuUlEQVQ4y9XUSQ7DIAwFUMcDM8n9b9uoSkMQrsmii+avnxDYX8ByM/BMiMx4A3KFPZVnsDh4xxUb0uF2SSaMcCaaMDeYLYhwCf4CLtKcmHcMDQYT4nmkoD1wOqTQbIW4+Zz9hv/cR+SSUuHJHTn4T8184K+weOjiiwqpwpBKIyQBJW3uoFT2mjhA0aEMMOkwjY9ZNbdq41kt180xuZ659G0z1D09kvUBHDvcN0iz9iAxE96qGeJDv+YXxOIHbyHde+sAAAAASUVORK5CYII=">
+
+                    {% for speaker in session.speakers %}
+                        <img data-toggle="tooltip" data-placement="bottom" title="{{ speaker.name }}"
+                             src="{{ speaker.photo }}"
+                             onerror="imgError(this);">
+                    {% endfor %}
 
                 </p>
 
@@ -75,34 +124,39 @@
                             {{ session.long_abstract }}</span>
                     </p>
                     <div class="session-speakers-list collapse">
-                        <p class="session-speakers-less">
-                            <strong class="session-speaker-name">About Mitch Altman:</strong>
-                        </p>
-                        <div class="session-speakers-more">
-                            <p>
-                                <span class="session-speaker-bio">Mitch Altman is a San Francisco-based hacker and inventor, best known for inventing TV-B-Gone remote controls, a keychain that turns off TVs in public places. He was also co-founder of 3ware, a successful Silly Valley startup in the late 1990s, and did pioneering work in Virtual Reality in the mid-1980s. He has contributed to MAKE Magazine and other magazines, and wrote a chapter for “Maker Pro”, a book about making a living from projects one loves. For the last several years Mitch has been giving talks, and leading workshops around the world, teaching people to make cool things with microcontrollers and teaching everyone to solder. He promotes hackerspaces and open source hardware, and mentors others wherever he goes. He is a co-founder of Noisebridge hackerspace in San Francisco, and is President and CEO of Cornfield Electronics. Wikipedia page:</span>
-                            </p>
-                            <p class="session-speaker-social">
-                                <a class="social speaker-social" href="http://www.CornfieldElectronics.com">
-                                    <i class="fa fa-home"></i> Web
-                                </a>
 
-                                <a class="social speaker-social" href="https://github.com/maltman23">
-                                    <i class="fa fa-github"></i> Github
-                                </a>
+                        {% for speaker in session.speakers %}
+                            {% if (speaker.short_biography and speaker.short_biography != '' and speaker.short_biography != 'None') or (speaker.long_biography and speaker.long_biography != '' and speaker.long_biography != 'None') %}
+                                <p class="session-speakers-less">
+                                    <strong class="session-speaker-name">About {{ speaker.name }}:</strong>
+                                </p>
+                                <div class="session-speakers-more">
+                                    <p>
+                                        {{ speaker.short_biography if speaker.short_biography and speaker.short_biography != 'None' }}
+                                    </p>
+                                    <p>
+                                        {{ speaker.long_biography if speaker.long_biography and speaker.long_biography != 'None' }}
+                                    </p>
+                                    <p class="session-speaker-social">
+                                        {{ social_link(speaker.website, 'website') }}
+                                        {{ social_link(speaker.facebook, 'facebook') }}
+                                        {{ social_link(speaker.twitter, 'twitter') }}
+                                        {{ social_link(speaker.github, 'github') }}
+                                        {{ social_link(speaker.linkedin, 'linkedin') }}
+                                    </p>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
 
-                                <a class="social speaker-social" href="https://twitter.com/@maltman23">
-                                    <i class="fa fa-twitter"></i> Twitter
-                                </a>
-
-                                <a class="social speaker-social" href="https://www.linkedin.com/pub/dir/Mitch/Altman">
-                                    <i class="fa fa-linkedin"></i> LinkedIn
-                                </a>
-                            </p>
-                        </div>
                     </div>
                 </div>
-            </div><!-- /.row -->
+            </div>
+            <div class="hidden-xs">
+                <p class="session-location">
+                    {{ session.microlocation.name }} <i class="fa fa-map-marker fa-fw"></i><br>
+                    8:00 AM <i class="fa fa-clock-o fa-fw"></i>
+                </p>
+            </div>
         </div>
     </li>
 {% endmacro %}
