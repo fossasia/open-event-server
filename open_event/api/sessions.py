@@ -37,7 +37,7 @@ SESSION = api.model('Session', {
     'title': fields.String(required=True),
     'subtitle': fields.String(),
     'short_abstract': fields.String(),
-    'long_abstract': fields.String(required=True),
+    'long_abstract': fields.String(),
     'comments': fields.String(),
     'start_time': fields.DateTime(required=True),
     'end_time': fields.DateTime(required=True),
