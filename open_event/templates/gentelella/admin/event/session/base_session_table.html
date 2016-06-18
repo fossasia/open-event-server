@@ -27,28 +27,30 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="btn-group" data-toggle="buttons">
-                <label class="btn btn-default active">
-                    <input type="radio" name="show_state" autocomplete="off" value="all" checked> All
-                </label>
-                <label class="btn btn-default">
-                    <input type="radio" name="show_state" autocomplete="off" value="pending"> Pending
-                </label>
-                <label class="btn btn-default">
-                    <input type="radio" name="show_state" autocomplete="off" value="accepted"> Accepted
-                </label>
-                <label class="btn btn-default">
-                    <input type="radio" name="show_state" autocomplete="off" value="rejected"> Rejected
-                </label>
-            </div>
-            <div class="btn-group">
-                <a class="btn btn-info" href="{{ get_url('session.create_view', event_id=event_id) }}">
-                    Create Session
-                </a>
+            <div id="toolbar-holder" style="display: none;">
+                <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-default active">
+                        <input type="radio" name="show_state" autocomplete="off" value="all" checked> All
+                    </label>
+                    <label class="btn btn-default">
+                        <input type="radio" name="show_state" autocomplete="off" value="pending"> Pending
+                    </label>
+                    <label class="btn btn-default">
+                        <input type="radio" name="show_state" autocomplete="off" value="accepted"> Accepted
+                    </label>
+                    <label class="btn btn-default">
+                        <input type="radio" name="show_state" autocomplete="off" value="rejected"> Rejected
+                    </label>
+                </div>
+                <div class="btn-group">
+                    <a class="btn btn-info" href="{{ get_url('session.create_view', event_id=event_id) }}">
+                        Create Session
+                    </a>
+                </div>
             </div>
         </div>
         <div class="col-md-12" style="margin-top: 30px;">
-            <table class="table table-striped table-bordered table-hover with-datatable">
+            <table class="table table-striped table-hover with-datatable">
                 <thead>
                 <tr>
                     <th>State</th>
@@ -137,16 +139,19 @@
                 }
         );
 
-        var table = $('.with-datatable').DataTable();
+        var table = $('.with-datatable').DataTable({
+            "dom": '<"row"<"toolbar col-md-5"><"col-md-3"l><"col-md-3"f>>tip'
+        });
+
+        $("div.toolbar").html($("#toolbar-holder").html());
 
         $("input[name=show_state]").change(function () {
             table.draw();
         });
 
         table.on('draw', function () {
-           $('[data-toggle="tooltip"]').tooltip();
+            $('[data-toggle="tooltip"]').tooltip();
         });
-
 
 
     </script>
