@@ -47,17 +47,11 @@ class TestEventImport(OpenEventTestCase):
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
-            create_event()
+            register(self.app, u'test@example.com', u'test')
+            create_event(creator_email='test@example.com')
             create_services(1, '1')
             create_services(1, '2')
             create_services(1, '3')
-
-    def _login_user(self):
-        """
-        Registers an email and logs in.
-        """
-        with app.test_request_context():
-            register(self.app, u'test@example.com', u'test')
 
     def _upload(self, data, url, filename='anything'):
         return self.app.post(
@@ -71,8 +65,7 @@ class TestEventImport(OpenEventTestCase):
         resp = self.app.get(path)
         file = resp.data
         self.assertEqual(resp.status_code, 200)
-        # login and import
-        self._login_user()
+        # import
         upload_path = get_path('import', 'json')
         resp = self._upload(file, upload_path, 'event.zip')
         self.assertEqual(resp.status_code, 200)
@@ -89,7 +82,7 @@ class TestEventImport(OpenEventTestCase):
     def test_import_extended(self):
         with app.test_request_context():
             create_session(
-                1, '4', track=1,
+                1, '4', track=1, session_type=1,
                 microlocation=1, speakers=[2, 3])
             create_session(
                 1, '5', track=2, speakers=[1]

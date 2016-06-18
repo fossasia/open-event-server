@@ -95,6 +95,17 @@ class BaseDAO:
             validate_payload(data, model)
         return data
 
+    # Helper functions
+    def _del(self, data, fields):
+        """
+        Safe delete fields from payload
+        """
+        data_copy = data.copy()
+        for field in fields:
+            if field in data:
+                del data_copy[field]
+        return data_copy
+
 
 # DAO for Service Models
 class ServiceDAO(BaseDAO):

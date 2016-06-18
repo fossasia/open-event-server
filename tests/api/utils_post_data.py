@@ -48,7 +48,8 @@ POST_SESSION_DATA = {
     "slides": "http://example.com/slides",
     "video": "http://example.com/video",
     "audio": "http://example.com/audio",
-    "signup_url": "http://example.com/signup"
+    "signup_url": "http://example.com/signup",
+    "session_type_id": None
 }
 
 POST_SPEAKER_DATA = {
