@@ -2,6 +2,10 @@
     "background_url": "http://2016.opentechsummit.net/img/15435769939_82ab5f1580_k.jpg", 
     "closing_datetime": "2016-05-04 00:00:00", 
     "color": null, 
+    "creator": {
+        "email": "super_admin@gmail.com", 
+        "id": 1
+    }, 
     "description": "The OpenTechSummit brings the exciting ideas and creators of the open-Technology community in Berlin.", 
     "email": "contact@opentechsummit.net", 
     "end_time": "2016-05-05 09:00:00", 

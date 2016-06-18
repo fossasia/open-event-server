@@ -1139,8 +1139,6 @@ table.jambo_table tbody tr.selected td {
   float: left;
 }
 .dataTables_filter {
-  width: 50%;
-  float: right;
   text-align: right;
 }
 .dataTables_info {
@@ -3537,6 +3535,23 @@ a.hiddenanchor {
   animation-duration: 0.5s;
   animation-timing-function: ease;
   animation-fill-mode: both;
+}
+
+.login_wrapper {
+    right: 0px;
+    margin: 5% auto 0px;
+    max-width: 350px;
+    position: relative;
+}
+
+.registration_form, .login_form {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+}
+
+.login_form {
+    z-index: 22;
 }
 
 /********* /login ***************/

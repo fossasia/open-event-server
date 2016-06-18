@@ -50,6 +50,14 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**topic** | string | Optional | Public |
 |**ticket_url** | string | Optional | Public |
 |**closing_datetime** | string | Optional | Public |
+|**creator** | **EventCreator** | Required | Public |
+
+#### EventCreator
+
+| Field | Datatype | Requirement |
+| --- | --- | --- |
+|**id** | integer | Required |
+|**email** | string | Required |
 
 
 ### 2. Microlocation
@@ -80,6 +88,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**track** | **SessionTrack** | Optional | Public |
 |**language** | string | Optional | Public |
 |**microlocation** | **SessionMicrolocation** | Optional | Public |
+|**session_type** | **SessionType** | Optional | Public |
 |**video** | string | Optional | Public |
 |**audio** | string | Optional | Public |
 |**slides** | string | Optional | Public |
@@ -93,7 +102,6 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**id** | integer | Required |
 |**name** | string | Optional |
 |**organisation** | string | Optional |
-
 
 
 #### SessionTrack
@@ -111,6 +119,13 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**id** | integer | Required |
 |**name** | string | Optional |
 
+
+#### SessionType
+
+| Field | Datatype | Requirement |
+| --- | --- | --- |
+|**id** | integer | Required |
+|**name** | string | Required |
 
 
 ### 4. Speaker

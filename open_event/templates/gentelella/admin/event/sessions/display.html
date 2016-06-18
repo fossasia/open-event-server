@@ -1,0 +1,86 @@
+{% extends 'gentelella/admin/event/event_base.html' %}
+
+{% block title %}
+    {{ session.title }} - Sessions
+{% endblock %}
+
+{% block head_css %}
+    {{ super() }}
+    <link href="{{ url_for('static', filename='css/admin/mysessions.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% set active_page = "sessions" %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <br>
+            {% if session.state == 'pending' %}
+                <span class="detail-status label label-warning">Under Review</span>
+            {% elif session.state == 'accepted' %}
+                <span class="detail-status label label-success">Accepted</span>
+            {% elif session.state == 'rejected' %}
+                <span class="detail-status label label-danger">Rejected</span>
+            {% else %}
+                <span class="detail-status label label-info">N/A</span>
+            {% endif %}
+
+            <div class="btn-group pull-right" role="group" aria-label="...">
+                <a href="{{ session.id }}/accept" class="btn btn-success">
+                    <i class="fa fa-check"></i>
+                </a>
+                <a href="{{ session.id }}/reject" class="btn btn-danger">
+                    <i class="fa fa-times"></i>
+                </a>
+            </div>
+
+            <br>
+            <br>
+            <h4 style="font-weight: 300; color: #8d8d8d">{{ session.event.name }}
+                ~ {{ session.event.start_time.strftime('%B %d, %Y %I:%M %p') }}</h4>
+            <h1 style="font-weight: 300;"><span class="title">{{ session.title }}</span>
+                <small class="subtitle" style="font-weight: 300; color: #8d8d8d">{{ session.subtitle }}</small>
+            </h1>
+            <h3 style="font-weight: 300; color: #8d8d8d">By
+                {% for speaker in session.speakers %}
+                    {{ speaker.name }}
+                {% endfor %}
+            </h3>
+            <h4 style="font-weight: 300; color: #8d8d8d">
+                {{ session.event.start_time.strftime('%B %d, %Y - %I:%M %p') }}
+                <i>(to)</i> {{ session.event.end_time.strftime('%B %d, %Y - %I:%M %p') }}
+            </h4>
+            <br>
+            <h5>Short Abstract</h5>
+            <p style="text-align: justify;"><i class="short_abstract">
+                {{ session.short_abstract }}
+            </i></p>
+            <br>
+            <h5>Long Abstract</h5>
+            <p style="text-align: justify" class="long_abstract">
+                {{ session.long_abstract }}
+            </p>
+            <br>
+            <div class="row" style="font-size: 16px;">
+                <div class="col-md-2">
+                    <strong>Microlocation</strong><br>
+                    {{ session.microlocation.name }}
+                </div>
+                <div class="col-md-2">
+                    <strong>Track</strong><br>
+                    {{ session.track.name }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+
+    <script type="text/javascript">
+
+        $('[data-toggle="tooltip"]').tooltip();
+    </script>
+{% endblock %}

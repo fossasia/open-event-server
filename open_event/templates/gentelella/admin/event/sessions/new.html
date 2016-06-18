@@ -1,0 +1,149 @@
+{% extends 'gentelella/admin/base.html' %}
+{% block title %}
+Create Session
+{% endblock %}
+
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}" />
+{% endblock %}
+
+{% set textarea_session_fields = ['short_abstract', 'long_abstract'] %}
+{% set media_session_fields = ['slides', 'video', 'audio'] %}
+
+{% set session_fields = ['title', 'subtitle', 'short_abstract', 'long_abstract', 'comments', 'track', 'session_type', 'language', 'slides', 'video', 'audio'] %}
+
+{% macro session_form_field(identifier, require=0) %}
+    {% set name = identifier | replace('_id','') %}
+    {% set pretty_name = name | replace('_',' ') | capitalize  %}
+    <div class="item form-group speaker-fields">
+        <label class="control-label">
+            {{ pretty_name }}
+        {% if require==1 %}
+            <span class="required">*</span>
+        {% endif %}
+        </label>
+        {% if identifier in textarea_session_fields %}
+          <textarea {% if require==1 %}
+                        required="required"
+                    {% endif %}
+                    name="{{ name }}" class="form-control col-md-7 col-xs-12"></textarea>
+        {% elif identifier in media_session_fields %}
+          <br><input {% if require==1 %}
+                    required="required"
+                {% endif %}
+                type="file" id="speaker-file-{{ name | default(1) }}" name="{{ name }}"
+                   class="upload-btn"/>
+          <label class="file-label" for="speaker-file-{{ name | default(1) }}">
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                Choose a file</label>
+        {% else %}
+          <input {% if require==1 %}
+                    required="required"
+                {% endif %}
+                name="{{ name }}" class="form-control col-md-7 col-xs-12"/>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% set textarea_speaker_fields = ['short_biography', 'long_biography'] %}
+{% set media_speaker_fields = ['photo'] %}
+
+{% set speaker_fields = ['name', 'email','photo', 'organisation', 'position', 'country', 'short_biography', 'long_biography', 'mobile', 'website', 'facebook', 'twitter', 'github', 'linkedin'] %}
+
+{% macro speaker_form_field(identifier, require=0) %}
+    {% set name = identifier | replace('_id','') %}
+    {% set pretty_name = name | replace('_',' ') | capitalize  %}
+    <div class="item form-group speaker-fields">
+        <label class="control-label">
+            {{ pretty_name }}
+        {% if require==1 %}
+            <span class="required">*</span>
+        {% endif %}
+        </label>
+        {% if identifier in textarea_speaker_fields %}
+          <textarea name="{{ name }}" class="form-control col-md-7 col-xs-12"></textarea>
+        {% elif identifier in media_speaker_fields %}
+          <br><input type="file" id="speaker-file-{{ name | default(1) }}" name="{{ name }}"
+                   class="upload-btn"/>
+          <label class="file-label" for="speaker-file-{{ name | default(1) }}">
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                Choose a file</label>
+        {% else %}
+          <input name="{{ name }}" class="form-control col-md-7 col-xs-12"/>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% block body %}
+<div class="page-title">
+    <div class="title_left">
+        <h3>Create Session</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel" style="min-height:600px;">
+            <div class="row">
+                <form name="test" action="" method="POST" role="form" class="admin-form form-horizontal" id="session-create-form">
+                    {% if csrf_token %}
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    {% endif %}
+                    <div class="col-md-1 col-sm-1 col-xs-12">
+
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-12 session_form">
+                        <h4>Session Details</h4>
+                        {% for elem in session_fields %}
+                                {% if session_form[elem].include==1 %}
+                                    {{ session_form_field(elem, session_form[elem].require) }}
+                                {% endif %}
+                        {% endfor %}
+
+                        <div class="speakers">
+                            <hr><br><h4>Invite Speakers</h4>
+                            <div class="item form-group">
+                                <label class="control-label">Email </label>
+                                <div class="">
+                                    <input type="text" class="form-control col-md-7 col-sm-7" name="speakers[email]" placeholder="Email Address of Speaker" style="width:60%;">
+                                </div>
+
+                                <div class="col-sm-1 col-md-1 input-group">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary" id="add-speakers">+</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-12 speaker_form">
+                        <h4>Speaker Details</h4>
+                        {% for elem in speaker_fields %}
+                                {% if speaker_form[elem].include==1 %}
+                                    {{ speaker_form_field(elem, speaker_form[elem].require) }}
+                                {% endif %}
+                        {% endfor %}
+                    </div>
+                    <center><input type="submit" class="btn btn-success" value="Submit Session"/></center>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='admin/lib/bootstrap-validator/dist/validator.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/session/new.js') }}"></script>
+    <script type="text/javascript">
+    $(document).ready(function () {
+            $("textarea").summernote(summernoteConfig);
+        $(".form_wizard").smartWizard('fixHeight');
+        });
+    </script>
+{% endblock %}

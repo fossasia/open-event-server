@@ -1,10 +1,10 @@
 import os
 
-from flask import request, flash, url_for, redirect
+from flask import request, flash
+from flask.ext.admin import BaseView
 from flask_admin import expose
-from flask_admin.contrib.sqla import ModelView
-from flask.ext import login
 
+from open_event.helpers.permission_decorators import *
 from open_event.helpers.helpers import fields_not_empty, string_empty
 from ....helpers.data import DataManager, save_to_db
 from ....helpers.data_getter import DataGetter
@@ -12,7 +12,8 @@ import datetime
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import ImmutableMultiDict
 
-class EventsView(ModelView):
+
+class EventsView(BaseView):
     def is_accessible(self):
         return login.current_user.is_authenticated
 
@@ -141,7 +142,7 @@ class EventsView(ModelView):
                 return redirect(url_for('.edit_view', event_id=event.id) + "#step=location_name")
             return redirect(url_for('.details_view', event_id=event_id))
 
-    @expose('/<event_id>/delete/', methods=('GET',))
+    @expose('/<int:event_id>/delete/', methods=('GET',))
     def delete_view(self, event_id):
         if request.method == "GET":
             DataManager.delete_event(event_id)

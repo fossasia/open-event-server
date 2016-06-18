@@ -21,8 +21,17 @@ def register(app, email, password):
     s = get_serializer()
     data = [email, password]
     data_hash = s.dumps(data)
-    return app.get(url_for('admin.create_account_after_confirmation_view', hash=data_hash), follow_redirects=True)
+    app.post(
+        url_for('admin.register_view'),
+        data=dict(email=email, password=password),
+        follow_redirects=True)
+    return app.get(
+        url_for('admin.create_account_after_confirmation_view', hash=data_hash),
+        follow_redirects=True)
 
 
-def create_user(email, password):
-    DataManager.create_user([email, password])
+def create_user(email, password, is_verified=True):
+    """
+    Registers the user but not logs in
+    """
+    DataManager.create_user([email, password], is_verified=is_verified)

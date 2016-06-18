@@ -5,9 +5,6 @@ from tests.object_mother import ObjectMother
 from open_event import current_app as app
 from open_event.helpers.data import save_to_db
 from open_event.models.microlocation import Microlocation
-from datetime import datetime
-from flask import url_for
-
 
 class TestMicrolocationApi(OpenEventTestCase):
     def setUp(self):

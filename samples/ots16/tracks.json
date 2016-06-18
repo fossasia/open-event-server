@@ -275,8 +275,8 @@
         "name": "OTS 2", 
         "sessions": [
             {
-                "id": 69, 
-                "title": "flashcat - your true open design chip flasher"
+                "id": 66, 
+                "title": "Code Week Award Live-Hack"
             }, 
             {
                 "id": 58, 
@@ -311,16 +311,16 @@
                 "title": "Nutzerkommentare im Internet: Sind die Kommentare noch zu retten?"
             }, 
             {
-                "id": 66, 
-                "title": "Code Week Award Live-Hack"
-            }, 
-            {
                 "id": 67, 
                 "title": "Don't complain about bad documentation, learn to write it better!"
             }, 
             {
                 "id": 68, 
                 "title": "Creating Service Clouds with Kubernetes, CoreOS, Container and Co "
+            }, 
+            {
+                "id": 69, 
+                "title": "flashcat - your true open design chip flasher"
             }, 
             {
                 "id": 70, 

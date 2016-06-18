@@ -176,7 +176,7 @@ class DataManager(object):
             new_invite.hash = "%032x" % hash
             save_to_db(new_invite, "Invite saved")
 
-            link = url_for('session.invited_view', session_id=new_session.id, event_id=event_id, _external=True)
+            link = url_for('event_sessions.invited_view', session_id=new_session.id, event_id=event_id, _external=True)
             Helper.send_email_invitation(email, new_session.title, link)
 
     @staticmethod
@@ -403,10 +403,10 @@ class DataManager(object):
         flash('You successfully delete microlocation')
 
     @staticmethod
-    def create_user(userdata):
+    def create_user(userdata, is_verified=False):
         user = User(email=userdata[0],
-                    password=userdata[1])
-
+                    password=userdata[1],
+                    is_verified=is_verified)
         # we hash the users password to avoid saving it as plaintext in the db,
         # remove to use plain text:
         salt = generate_random_salt()
@@ -432,6 +432,7 @@ class DataManager(object):
         user.salt = salt
         user.is_super_admin = True
         user.is_admin = True
+        user.is_verified = True
         save_to_db(user, "User created")
         return user
 
@@ -730,7 +731,7 @@ class DataManager(object):
 
     @staticmethod
     def add_role_to_event(form, event_id):
-        user = User.query.filter_by(email=form['user_id']).first()
+        user = User.query.filter_by(email=form['user_email']).first()
         role = Role.query.filter_by(name=form['user_role']).first()
         uer = UsersEventsRoles(event=Event.query.get(event_id),
                                user=user, role=role)
@@ -739,7 +740,7 @@ class DataManager(object):
     @staticmethod
     def update_user_event_role(form, uer):
         role = Role.query.filter_by(name=form['user_role']).first()
-        user = User.query.filter_by(email=form['user_id']).first()
+        user = User.query.filter_by(email=form['user_email']).first()
         uer.user = user
         uer.role_id = role.id
         save_to_db(uer, "Event saved")
@@ -811,8 +812,8 @@ def create_user_oauth(user, user_data, token, method):
     if method == 'Facebook':
         user.avatar = user_data['picture']['data']['url']
     user.tokens = json.dumps(token)
+    user.is_verified = True
     save_to_db(user, "User created")
-
     return user
 
 

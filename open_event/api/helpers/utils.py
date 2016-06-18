@@ -68,8 +68,8 @@ class BaseDAO:
     def get(self, id_):
         return get_object_or_404(self.model, id_)
 
-    def list(self):
-        return get_object_list(self.model)
+    def list(self, **kwargs):
+        return get_object_list(self.model, **kwargs)
 
     def create(self, data, validate=True):
         if validate:
@@ -95,6 +95,17 @@ class BaseDAO:
             validate_payload(data, model)
         return data
 
+    # Helper functions
+    def _del(self, data, fields):
+        """
+        Safe delete fields from payload
+        """
+        data_copy = data.copy()
+        for field in fields:
+            if field in data:
+                del data_copy[field]
+        return data_copy
+
 
 # DAO for Service Models
 class ServiceDAO(BaseDAO):
@@ -105,10 +116,10 @@ class ServiceDAO(BaseDAO):
     def get(self, event_id, sid):
         return get_object_in_event(self.model, sid, event_id)
 
-    def list(self, event_id):
+    def list(self, event_id, **kwargs):
         # Check if an event with `event_id` exists
         get_object_or_404(EventModel, event_id)
-        return get_object_list(self.model, event_id=event_id)
+        return get_object_list(self.model, event_id=event_id, **kwargs)
 
     def create(self, event_id, data, url, validate=True):
         if validate:
