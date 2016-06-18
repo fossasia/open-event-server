@@ -44,6 +44,10 @@ class DataGetter:
         return UsersEventsRoles.query
 
     @staticmethod
+    def get_event_roles_for_user(user_id):
+        return UsersEventsRoles.query.filter_by(user_id=user_id)
+
+    @staticmethod
     def get_all_owner_events():
         """Method return all owner events"""
         # return Event.query.filter_by(owner=owner_id)
