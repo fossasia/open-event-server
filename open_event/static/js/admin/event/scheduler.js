@@ -612,36 +612,38 @@ function initializeInteractables() {
 function processMicrolocationSession(microlocations, sessions, callback) {
     var topTime = moment.utc({hour: time.start.hours, minute: time.start.minutes});
     _.each(sessions, function (session) {
-        session = _.cloneDeep(session);
+        if (session.state === 'accepted') {
+            session = _.cloneDeep(session);
 
-        var startTime = moment.utc(session.start_time);
-        var endTime = moment.utc(session.end_time);
+            var startTime = moment.utc(session.start_time);
+            var endTime = moment.utc(session.end_time);
 
 
-        var duration = moment.duration(endTime.diff(startTime));
+            var duration = moment.duration(endTime.diff(startTime));
 
-        var top = minutesToPixels(moment.duration(moment.utc({
-            hour: startTime.hours(),
-            minute: startTime.minutes()
-        }).diff(topTime)).asMinutes(), true);
+            var top = minutesToPixels(moment.duration(moment.utc({
+                hour: startTime.hours(),
+                minute: startTime.minutes()
+            }).diff(topTime)).asMinutes(), true);
 
-        var dayString = startTime.format("Do MMMM YYYY"); // formatted as eg. 2nd May 2013
+            var dayString = startTime.format("Do MMMM YYYY"); // formatted as eg. 2nd May 2013
 
-        if (!_.includes(days, dayString)) {
-            days.push(dayString);
-        }
+            if (!_.includes(days, dayString)) {
+                days.push(dayString);
+            }
 
-        session.start_time = startTime;
-        session.end_time = endTime;
-        session.duration = Math.abs(duration.asMinutes());
-        session.top = top;
+            session.start_time = startTime;
+            session.end_time = endTime;
+            session.duration = Math.abs(duration.asMinutes());
+            session.top = top;
 
-        var dayIndex = _.indexOf(days, dayString);
+            var dayIndex = _.indexOf(days, dayString);
 
-        if (_.isArray(sessionsStore[dayIndex])) {
-            sessionsStore[dayIndex].push(session);
-        } else {
-            sessionsStore[dayIndex] = [session]
+            if (_.isArray(sessionsStore[dayIndex])) {
+                sessionsStore[dayIndex].push(session);
+            } else {
+                sessionsStore[dayIndex] = [session]
+            }
         }
     });
 
