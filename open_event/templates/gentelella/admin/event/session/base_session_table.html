@@ -14,6 +14,7 @@
             font-size: 100%;
             font-weight: 300;
         }
+
         td {
             vertical-align: middle !important;
         }
@@ -81,13 +82,16 @@
                         <td>{{ session.end_time }}</td>
                         <td>
                             <div class="btn-group-vertical btn-group-xs" role="group" aria-label="...">
-                                <a href="{{ session.id }}/" class="btn btn-default">
+                                <a data-toggle="tooltip" data-placement="left" title="View" href="{{ session.id }}/"
+                                   class="btn btn-default">
                                     <i class="fa fa-eye"></i>
                                 </a>
-                                <a href="{{ session.id }}/edit" class="btn btn-default">
+                                <a data-toggle="tooltip" data-placement="left" title="Edit" href="{{ session.id }}/edit"
+                                   class="btn btn-default">
                                     <i class="fa fa-pencil"></i>
                                 </a>
-                                <a href="{{ session.id }}/delete" class="btn btn-default">
+                                <a data-toggle="tooltip" data-placement="left" title="Delete"
+                                   href="{{ session.id }}/delete" class="btn btn-default">
                                     <i class="fa fa-trash"></i>
                                 </a>
 
@@ -96,7 +100,7 @@
                         </td>
                         <td>
                             <div class="btn-group-vertical" role="group" aria-label="...">
-                                <a href="{{ session.id }}/approve" class="btn btn-sm btn-success">
+                                <a href="{{ session.id }}/accept" class="btn btn-sm btn-success">
                                     <i class="fa fa-check"></i>
                                 </a>
                                 <a href="{{ session.id }}/reject" class="btn btn-sm btn-danger">
@@ -138,6 +142,11 @@
         $("input[name=show_state]").change(function () {
             table.draw();
         });
+
+        table.on('draw', function () {
+           $('[data-toggle="tooltip"]').tooltip();
+        });
+
 
 
     </script>
