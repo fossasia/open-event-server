@@ -403,10 +403,10 @@ class DataManager(object):
         flash('You successfully delete microlocation')
 
     @staticmethod
-    def create_user(userdata):
+    def create_user(userdata, is_verified=False):
         user = User(email=userdata[0],
-                    password=userdata[1])
-
+                    password=userdata[1],
+                    is_verified=is_verified)
         # we hash the users password to avoid saving it as plaintext in the db,
         # remove to use plain text:
         salt = generate_random_salt()
@@ -432,6 +432,7 @@ class DataManager(object):
         user.salt = salt
         user.is_super_admin = True
         user.is_admin = True
+        user.is_verified = True
         save_to_db(user, "User created")
         return user
 
@@ -811,8 +812,8 @@ def create_user_oauth(user, user_data, token, method):
     if method == 'Facebook':
         user.avatar = user_data['picture']['data']['url']
     user.tokens = json.dumps(token)
+    user.is_verified = True
     save_to_db(user, "User created")
-
     return user
 
 
