@@ -27,11 +27,17 @@ Users
     </tr>
     </thead>
     <tbody>
-    {% for user in users %}
+    {% for user in user_list %}
     <tr>
-        <td>{{user.user_detail.fullname}}</td>
-        <td>{{user.email}}</td>
-        <td>Not implemented</td>
+        <td>{{ 'Not Available' if not user['user'].user_detail.fullname else user['user'].user_detail.fullname }}</td>
+        <td>{{ user['user'].email }}</td>
+        <td>
+        <ul style="padding-left:0;">
+        {% for role in user['roles'] %}
+          <li>{{ role.role.name|title }}, {{ role.event.name }}</li>
+        {% endfor %}
+        </ul>
+        </td>
         <td>Not implemented</td>
         <td>Not implemented</td>
         <td>

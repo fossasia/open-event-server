@@ -6,14 +6,14 @@
     <td>{{event.end_time}}</td>
     <td>
         {% if event %}
-        <a href="{{ get_url('event.edit_view', event_id=event.id)}}" title="Edit record">
+        <a href="{{ get_url('events.edit_view', event_id=event.id)}}" title="Edit record">
             <span class="glyphicon glyphicon-pencil"></span>
         </a>
         <a onclick="return confirm('Are you sure you want to delete this record?');"
-           href="{{ get_url('event.delete_view', event_id=event.id)}}" title="Delete record">
+           href="{{ get_url('events.delete_view', event_id=event.id)}}" title="Delete record">
             <span class="glyphicon glyphicon-trash"></span>
         </a>
-        <a href="{{ get_url('event.details_view', event_id=event.id)}}" title="View Event Details">
+        <a href="{{ get_url('events.details_view', event_id=event.id)}}" title="View Event Details">
             <span class="glyphicon glyphicon-eye-open"></span>
         </a>
         <a href="/api/v2/events/{{event.id}}/export/json" title="Export Event">

@@ -10,7 +10,7 @@
 
                 </li>
                 <li style="margin-left: 10px; line-height:32px; width:200px">
-                    <form enctype="multipart/form-data" action="" method="POST" role="form" id="event_browse">
+                    <form action="/Germany/events/" method="POST" role="form" id="event_browse">
 
                     {% if csrf_token %}
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -64,7 +64,7 @@ $.ajax({
   type: 'POST',
   success: function(json)
   {
-    $("#event_browse").attr("action", "/" + json.country + "/events/")
+    $("#event_browse").attr("action", "/" + json.country + "/events")
   },
   error: function(err)
   {

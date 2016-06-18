@@ -1,13 +1,15 @@
 {% extends 'gentelella/admin/event/event_base.html' %}
 
 {% block title %}
-{{ event.name }} - Speakers
+    {{ event.name }} - Speakers
 {% endblock %}
 
 {% set active_page = "speakers" %}
 
 {% block head_css %}
     {{ super() }}
+    <link href="{{ url_for('static', filename='css/admin/mysessions.css') }}" rel="stylesheet">
+
 {% endblock %}
 
 

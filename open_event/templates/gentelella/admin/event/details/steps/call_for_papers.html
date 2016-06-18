@@ -5,7 +5,7 @@
         </label>
 
         <button class="btn btn-success " type="button" data-toggle="modal" data-target="#invite-speaker-modal">Invite Person</button>
-        <a href="{{ url_for('session.index_view', event_id=event.id) }}"><button class="btn btn-warning ">Accept/Reject Session</button></a>
+        <a href="{{ url_for('event_sessions.index_view', event_id=event.id) }}"><button class="btn btn-warning ">Accept/Reject Session</button></a>
     </div>
     <div class="row">
         <div class="col-md-12">
@@ -66,7 +66,7 @@
         };
         var posting = $.ajax({
             type: "POST",
-            url: "{{ url_for('invite.create_view', event_id=event.id) }}",
+            url: "{{ url_for('event_invites.create_view', event_id=event.id) }}",
             data: payload
         });
 

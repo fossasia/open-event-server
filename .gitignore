@@ -26,3 +26,4 @@ static/exports/event*
 # temp static files
 static/temp/*
 !static/temp/.gitkeep
+/tests/test.db-journal

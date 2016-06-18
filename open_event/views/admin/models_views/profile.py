@@ -1,8 +1,8 @@
 import os
 
 from flask import request, url_for, redirect
+from flask.ext.admin import BaseView
 from flask_admin import expose
-from flask_admin.contrib.sqla import ModelView
 from flask.ext import login
 from werkzeug.utils import secure_filename
 
@@ -10,7 +10,7 @@ from ....helpers.data import DataManager
 from ....helpers.data_getter import DataGetter
 
 
-class ProfileView(ModelView):
+class ProfileView(BaseView):
 
     def is_accessible(self):
         return login.current_user.is_authenticated

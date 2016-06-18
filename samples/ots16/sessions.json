@@ -10,6 +10,10 @@
             "id": 1, 
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
+        "session_type": {
+            "id": 1, 
+            "name": "Ganzt\u00e4giger L\u00f6tworkshop / Soldering Workshop"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -40,6 +44,10 @@
         "microlocation": {
             "id": 1, 
             "name": "Erdgeschoss, Saal / Ground Floor"
+        }, 
+        "session_type": {
+            "id": 2, 
+            "name": "Workshop/Ausstellung/Exhibition"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -72,6 +80,10 @@
             "id": 1, 
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
+        "session_type": {
+            "id": 3, 
+            "name": "Infotisch, Ausstellung, Exhibition, Gem\u00fctliche Kissenecke"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -102,6 +114,10 @@
         "microlocation": {
             "id": 1, 
             "name": "Erdgeschoss, Saal / Ground Floor"
+        }, 
+        "session_type": {
+            "id": 4, 
+            "name": "Workshop und Infotisch"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -134,6 +150,10 @@
             "id": 1, 
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
+        "session_type": {
+            "id": 5, 
+            "name": "Infotisch mit Workshops / Info table and Workshops"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -164,6 +184,10 @@
         "microlocation": {
             "id": 1, 
             "name": "Erdgeschoss, Saal / Ground Floor"
+        }, 
+        "session_type": {
+            "id": 6, 
+            "name": "Hackspace-Infotisch, Exhibition"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -196,6 +220,10 @@
             "id": 1, 
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
+        "session_type": {
+            "id": 7, 
+            "name": "Freie Software-Infoecke / Information Corner"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -226,6 +254,10 @@
         "microlocation": {
             "id": 1, 
             "name": "Erdgeschoss, Saal / Ground Floor"
+        }, 
+        "session_type": {
+            "id": 8, 
+            "name": "Infotisch/Info Table"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -258,6 +290,10 @@
             "id": 1, 
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
+        "session_type": {
+            "id": 9, 
+            "name": "Hardware Hacks"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -288,6 +324,10 @@
         "microlocation": {
             "id": 1, 
             "name": "Erdgeschoss, Saal / Ground Floor"
+        }, 
+        "session_type": {
+            "id": 10, 
+            "name": "Workshop mit befreiten Strickmaschinen / Knitting Machines with Open Source"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -325,6 +365,10 @@
             "id": 1, 
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
+        "session_type": {
+            "id": 11, 
+            "name": "Infotisch / Showcase Table"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -356,6 +400,10 @@
             "id": 1, 
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
+        "session_type": {
+            "id": 12, 
+            "name": "Awesome Workshop"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -386,6 +434,10 @@
         "microlocation": {
             "id": 1, 
             "name": "Erdgeschoss, Saal / Ground Floor"
+        }, 
+        "session_type": {
+            "id": 13, 
+            "name": "Workshop und Infotisch / Showcase Table"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -423,6 +475,10 @@
             "id": 1, 
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
+        "session_type": {
+            "id": 13, 
+            "name": "Workshop und Infotisch / Showcase Table"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -454,6 +510,10 @@
             "id": 1, 
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
+        "session_type": {
+            "id": 14, 
+            "name": "Workshop, 2h"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -484,6 +544,10 @@
         "microlocation": {
             "id": 1, 
             "name": "Erdgeschoss, Saal / Ground Floor"
+        }, 
+        "session_type": {
+            "id": 15, 
+            "name": "Workshop, 5h"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -531,6 +595,10 @@
             "id": 1, 
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
+        "session_type": {
+            "id": 16, 
+            "name": "Workshop"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -561,6 +629,10 @@
         "microlocation": {
             "id": 2, 
             "name": "Erdgeschoss, Hoflounge / Ground Floor, Hoflounge Room"
+        }, 
+        "session_type": {
+            "id": 17, 
+            "name": "Workshop und Developer Meetup, 2h"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -598,6 +670,10 @@
             "id": 3, 
             "name": "Ebene 1, Raum 4 / First Floor, Room 4"
         }, 
+        "session_type": {
+            "id": 14, 
+            "name": "Workshop, 2h"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -628,6 +704,10 @@
         "microlocation": {
             "id": 1, 
             "name": "Erdgeschoss, Saal / Ground Floor"
+        }, 
+        "session_type": {
+            "id": 16, 
+            "name": "Workshop"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -660,6 +740,10 @@
             "id": 4, 
             "name": "Ebene 1, Raum 1 / First Floor, Room 1"
         }, 
+        "session_type": {
+            "id": 18, 
+            "name": "Workshop, 1h"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -690,6 +774,10 @@
         "microlocation": {
             "id": 2, 
             "name": "Erdgeschoss, Hoflounge / Ground Floor, Hoflounge Room"
+        }, 
+        "session_type": {
+            "id": 19, 
+            "name": "Workshop, 1/2 h"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -727,6 +815,10 @@
             "id": 2, 
             "name": "Erdgeschoss, Hoflounge / Ground Floor, Hoflounge Room"
         }, 
+        "session_type": {
+            "id": 19, 
+            "name": "Workshop, 1/2 h"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -755,37 +847,6 @@
     {
         "audio": null, 
         "comments": null, 
-        "end_time": "2016-05-05 15:00:00", 
-        "id": 69, 
-        "language": null, 
-        "long_abstract": "Coreboot and Libreboot are precious free firmware replacements for notebooks like the ThinkPad X200. Unfortunately, a non-free flashing equipment that relies on proprietary ARM-architecture is usually used for flashing. This needs to end! The flashcat team from Berlin now proudly presents a flasher which makes use of the Parallax Propeller, a true open design GPLv3 microcontroller. That's really exciting!", 
-        "microlocation": {
-            "id": 6, 
-            "name": "Ebene 2, Loft / Floor 2"
-        }, 
-        "short_abstract": "", 
-        "signup_url": null, 
-        "slides": null, 
-        "speakers": [
-            {
-                "id": 67, 
-                "name": "Kai Mertens", 
-                "organisation": "flashcat-project"
-            }
-        ], 
-        "start_time": "2016-05-05 14:30:00", 
-        "state": "accepted", 
-        "subtitle": null, 
-        "title": "flashcat - your true open design chip flasher", 
-        "track": {
-            "id": 5, 
-            "name": "OTS 2"
-        }, 
-        "video": null
-    }, 
-    {
-        "audio": null, 
-        "comments": null, 
         "end_time": "2016-05-05 14:30:00", 
         "id": 24, 
         "language": null, 
@@ -793,6 +854,10 @@
         "microlocation": {
             "id": 4, 
             "name": "Ebene 1, Raum 1 / First Floor, Room 1"
+        }, 
+        "session_type": {
+            "id": 14, 
+            "name": "Workshop, 2h"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -824,6 +889,10 @@
         "microlocation": {
             "id": 2, 
             "name": "Erdgeschoss, Hoflounge / Ground Floor, Hoflounge Room"
+        }, 
+        "session_type": {
+            "id": 17, 
+            "name": "Workshop und Developer Meetup, 2h"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -861,6 +930,10 @@
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
+        "session_type": {
+            "id": 20, 
+            "name": "Lightning Talk"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -891,6 +964,10 @@
         "microlocation": {
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
+        }, 
+        "session_type": {
+            "id": 20, 
+            "name": "Lightning Talk"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -928,6 +1005,10 @@
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
+        "session_type": {
+            "id": 20, 
+            "name": "Lightning Talk"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -958,6 +1039,10 @@
         "microlocation": {
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
+        }, 
+        "session_type": {
+            "id": 20, 
+            "name": "Lightning Talk"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -995,6 +1080,10 @@
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
+        "session_type": {
+            "id": 20, 
+            "name": "Lightning Talk"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -1025,6 +1114,10 @@
         "microlocation": {
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
+        }, 
+        "session_type": {
+            "id": 20, 
+            "name": "Lightning Talk"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -1057,6 +1150,10 @@
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
+        "session_type": {
+            "id": 20, 
+            "name": "Lightning Talk"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -1087,6 +1184,10 @@
         "microlocation": {
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
+        }, 
+        "session_type": {
+            "id": 20, 
+            "name": "Lightning Talk"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -1119,6 +1220,10 @@
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
+        "session_type": {
+            "id": 20, 
+            "name": "Lightning Talk"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -1149,6 +1254,10 @@
         "microlocation": {
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
+        }, 
+        "session_type": {
+            "id": 20, 
+            "name": "Lightning Talk"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -1186,6 +1295,10 @@
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
+        "session_type": {
+            "id": 20, 
+            "name": "Lightning Talk"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -1222,6 +1335,10 @@
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
+        "session_type": {
+            "id": 12, 
+            "name": "Awesome Workshop"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -1252,6 +1369,10 @@
         "microlocation": {
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
+        }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -1284,6 +1405,10 @@
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -1314,6 +1439,10 @@
         "microlocation": {
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
+        }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -1346,6 +1475,10 @@
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -1376,6 +1509,10 @@
         "microlocation": {
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
+        }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -1408,6 +1545,10 @@
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -1438,6 +1579,10 @@
         "microlocation": {
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
+        }, 
+        "session_type": {
+            "id": 22, 
+            "name": "Lightning Talks"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -1470,6 +1615,10 @@
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/Hyperledger%20-%20OpenTechSummit%202016.pdf", 
@@ -1500,6 +1649,10 @@
         "microlocation": {
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
+        }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -1532,6 +1685,10 @@
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -1562,6 +1719,10 @@
         "microlocation": {
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
+        }, 
+        "session_type": {
+            "id": 23, 
+            "name": "Panel"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -1609,6 +1770,10 @@
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/The%20systemd%20Journal%20(Lennart%20Poettering).pdf", 
@@ -1640,6 +1805,10 @@
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -1670,6 +1839,10 @@
         "microlocation": {
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
+        }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -1707,6 +1880,10 @@
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -1737,6 +1914,10 @@
         "microlocation": {
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
+        }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -1769,6 +1950,10 @@
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": "http://www.jorgk.com/misc/tb.htm", 
@@ -1800,6 +1985,10 @@
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -1821,6 +2010,41 @@
         "video": "https://www.youtube.com/watch?v=Bzs2_ETVIyg"
     }, 
     {
+        "audio": "audio/5086.mp3", 
+        "comments": null, 
+        "end_time": "2016-05-05 13:30:00", 
+        "id": 66, 
+        "language": null, 
+        "long_abstract": "Matthias und Nora vom Code Week Team stellen den Code Week Award vor und zeigen einen Live-Hack. Wir programmieren ein Computerspiel in nur 15 Minuten und spielen mit euch. Wer gewinnt, bekommt von uns einen \u00dcberraschungs-Preis.  Unter dem Motto \u201cJede Woche ist Code Week\u201d f\u00f6rdert der Code Week Award spielerische und kreative Workshop-Formate und digitale Kompetenzen bei Kindern und Jugendlichen in ganz Deutschland. Der Award wurde ankn\u00fcpfend an den Erfolg der EU Code Week im Oktober 2014 erstmalig von der Technologiestiftung Berlin und dem Design Research Lab der Universit\u00e4t der K\u00fcnste Berlin ausgeschrieben und durch die Unterst\u00fctzung von Samsung ins Leben gerufen. 2016 findet bereits die zweite Ausgabe des Awards statt, der in den vergangenen beiden Jahren bereits hunderte Kindern und Jugendlichen einen kreativen Umgang mit digitalen Technologien erm\u00f6glicht hat. ", 
+        "microlocation": {
+            "id": 6, 
+            "name": "Ebene 2, Loft / Floor 2"
+        }, 
+        "session_type": {
+            "id": 25, 
+            "name": "Talk mit Live-Hack (20 Minuten)"
+        }, 
+        "short_abstract": "", 
+        "signup_url": null, 
+        "slides": null, 
+        "speakers": [
+            {
+                "id": 64, 
+                "name": "Code Week Award", 
+                "organisation": "Code Week Award"
+            }
+        ], 
+        "start_time": "2016-05-05 13:00:00", 
+        "state": "accepted", 
+        "subtitle": null, 
+        "title": "Code Week Award Live-Hack", 
+        "track": {
+            "id": 5, 
+            "name": "OTS 2"
+        }, 
+        "video": null
+    }, 
+    {
         "audio": null, 
         "comments": null, 
         "end_time": "2016-05-05 18:25:00", 
@@ -1830,6 +2054,10 @@
         "microlocation": {
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
+        }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -1862,6 +2090,10 @@
             "id": 5, 
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
+        "session_type": {
+            "id": 24, 
+            "name": "Danke und Lounge"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -1893,6 +2125,10 @@
             "id": 6, 
             "name": "Ebene 2, Loft / Floor 2"
         }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -1923,6 +2159,10 @@
         "microlocation": {
             "id": 6, 
             "name": "Ebene 2, Loft / Floor 2"
+        }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -1960,6 +2200,10 @@
             "id": 6, 
             "name": "Ebene 2, Loft / Floor 2"
         }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -1990,6 +2234,10 @@
         "microlocation": {
             "id": 6, 
             "name": "Ebene 2, Loft / Floor 2"
+        }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -2022,6 +2270,10 @@
             "id": 6, 
             "name": "Ebene 2, Loft / Floor 2"
         }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/TinyBoy-STEAM-ENG.pptx", 
@@ -2052,6 +2304,10 @@
         "microlocation": {
             "id": 6, 
             "name": "Ebene 2, Loft / Floor 2"
+        }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -2084,6 +2340,10 @@
             "id": 6, 
             "name": "Ebene 2, Loft / Floor 2"
         }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -2115,6 +2375,10 @@
             "id": 6, 
             "name": "Ebene 2, Loft / Floor 2"
         }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/SLIDES_%20Sind%20die%20Kommentare%20noch%20zu%20retten_.pdf", 
@@ -2136,37 +2400,6 @@
         "video": null
     }, 
     {
-        "audio": "audio/5086.mp3", 
-        "comments": null, 
-        "end_time": "2016-05-05 13:30:00", 
-        "id": 66, 
-        "language": null, 
-        "long_abstract": "Matthias und Nora vom Code Week Team stellen den Code Week Award vor und zeigen einen Live-Hack. Wir programmieren ein Computerspiel in nur 15 Minuten und spielen mit euch. Wer gewinnt, bekommt von uns einen \u00dcberraschungs-Preis.  Unter dem Motto \u201cJede Woche ist Code Week\u201d f\u00f6rdert der Code Week Award spielerische und kreative Workshop-Formate und digitale Kompetenzen bei Kindern und Jugendlichen in ganz Deutschland. Der Award wurde ankn\u00fcpfend an den Erfolg der EU Code Week im Oktober 2014 erstmalig von der Technologiestiftung Berlin und dem Design Research Lab der Universit\u00e4t der K\u00fcnste Berlin ausgeschrieben und durch die Unterst\u00fctzung von Samsung ins Leben gerufen. 2016 findet bereits die zweite Ausgabe des Awards statt, der in den vergangenen beiden Jahren bereits hunderte Kindern und Jugendlichen einen kreativen Umgang mit digitalen Technologien erm\u00f6glicht hat. ", 
-        "microlocation": {
-            "id": 6, 
-            "name": "Ebene 2, Loft / Floor 2"
-        }, 
-        "short_abstract": "", 
-        "signup_url": null, 
-        "slides": null, 
-        "speakers": [
-            {
-                "id": 64, 
-                "name": "Code Week Award", 
-                "organisation": "Code Week Award"
-            }
-        ], 
-        "start_time": "2016-05-05 13:00:00", 
-        "state": "accepted", 
-        "subtitle": null, 
-        "title": "Code Week Award Live-Hack", 
-        "track": {
-            "id": 5, 
-            "name": "OTS 2"
-        }, 
-        "video": null
-    }, 
-    {
         "audio": "audio/5087.mp3", 
         "comments": null, 
         "end_time": "2016-05-05 14:00:00", 
@@ -2176,6 +2409,10 @@
         "microlocation": {
             "id": 6, 
             "name": "Ebene 2, Loft / Floor 2"
+        }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -2208,6 +2445,10 @@
             "id": 6, 
             "name": "Ebene 2, Loft / Floor 2"
         }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/OpenTech%20Summit-%20Creating%20Service%20Clouds%20with%20Kubernetes%2C%20CoreOS%2C%20Container%20and%20Co%20.pdf", 
@@ -2229,6 +2470,41 @@
         "video": null
     }, 
     {
+        "audio": null, 
+        "comments": null, 
+        "end_time": "2016-05-05 15:00:00", 
+        "id": 69, 
+        "language": null, 
+        "long_abstract": "Coreboot and Libreboot are precious free firmware replacements for notebooks like the ThinkPad X200. Unfortunately, a non-free flashing equipment that relies on proprietary ARM-architecture is usually used for flashing. This needs to end! The flashcat team from Berlin now proudly presents a flasher which makes use of the Parallax Propeller, a true open design GPLv3 microcontroller. That's really exciting!", 
+        "microlocation": {
+            "id": 6, 
+            "name": "Ebene 2, Loft / Floor 2"
+        }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
+        }, 
+        "short_abstract": "", 
+        "signup_url": null, 
+        "slides": null, 
+        "speakers": [
+            {
+                "id": 67, 
+                "name": "Kai Mertens", 
+                "organisation": "flashcat-project"
+            }
+        ], 
+        "start_time": "2016-05-05 14:30:00", 
+        "state": "accepted", 
+        "subtitle": null, 
+        "title": "flashcat - your true open design chip flasher", 
+        "track": {
+            "id": 5, 
+            "name": "OTS 2"
+        }, 
+        "video": null
+    }, 
+    {
         "audio": "audio/5090.mp3", 
         "comments": null, 
         "end_time": "2016-05-05 15:30:00", 
@@ -2238,6 +2514,10 @@
         "microlocation": {
             "id": 6, 
             "name": "Ebene 2, Loft / Floor 2"
+        }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -2270,6 +2550,10 @@
             "id": 6, 
             "name": "Ebene 2, Loft / Floor 2"
         }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -2300,6 +2584,10 @@
         "microlocation": {
             "id": 6, 
             "name": "Ebene 2, Loft / Floor 2"
+        }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -2332,6 +2620,10 @@
             "id": 6, 
             "name": "Ebene 2, Loft / Floor 2"
         }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/sehrgutachten-kleineanfragen-ots.pdf", 
@@ -2362,6 +2654,10 @@
         "microlocation": {
             "id": 6, 
             "name": "Ebene 2, Loft / Floor 2"
+        }, 
+        "session_type": {
+            "id": 21, 
+            "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -2394,6 +2690,10 @@
             "id": 6, 
             "name": "Ebene 2, Loft / Floor 2"
         }, 
+        "session_type": {
+            "id": 26, 
+            "name": "Talk of 25 minutes"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": "https://github.com/OpenTechSummit/2016.opentechsummit.net/raw/gh-pages/slides/opstperils.odp", 
@@ -2425,6 +2725,10 @@
             "id": 6, 
             "name": "Ebene 2, Loft / Floor 2"
         }, 
+        "session_type": {
+            "id": 24, 
+            "name": "Danke und Lounge"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -2449,6 +2753,10 @@
         "microlocation": {
             "id": 1, 
             "name": "Erdgeschoss, Saal / Ground Floor"
+        }, 
+        "session_type": {
+            "id": 27, 
+            "name": "Kids Workshops, Ganzt\u00e4gig / Whole day"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -2480,6 +2788,10 @@
         "microlocation": {
             "id": 7, 
             "name": "Ebene 1, Raum 2 und Raum 3 / Floor 1, Room 2 and Room 3"
+        }, 
+        "session_type": {
+            "id": 27, 
+            "name": "Kids Workshops, Ganzt\u00e4gig / Whole day"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -2516,6 +2828,10 @@
         "microlocation": {
             "id": 1, 
             "name": "Erdgeschoss, Saal / Ground Floor"
+        }, 
+        "session_type": {
+            "id": 28, 
+            "name": "Ausstellung/Vorstellung/ Exhibition"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
@@ -2563,6 +2879,10 @@
             "id": 1, 
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
+        "session_type": {
+            "id": 28, 
+            "name": "Ausstellung/Vorstellung/ Exhibition"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -2594,6 +2914,10 @@
             "id": 8, 
             "name": "Ebene 2, Raum 4"
         }, 
+        "session_type": {
+            "id": 29, 
+            "name": "Zertifizierung"
+        }, 
         "short_abstract": "", 
         "signup_url": null, 
         "slides": null, 
@@ -2624,6 +2948,10 @@
         "microlocation": {
             "id": 8, 
             "name": "Ebene 2, Raum 4"
+        }, 
+        "session_type": {
+            "id": 29, 
+            "name": "Zertifizierung"
         }, 
         "short_abstract": "", 
         "signup_url": null, 
