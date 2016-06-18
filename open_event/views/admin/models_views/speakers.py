@@ -30,15 +30,6 @@ class SpeakersView(BaseView):
         return self.render('/gentelella/admin/event/speakers/base_speaker_table.html',
                            speakers=speakers, event_id=event_id, event=event)
 
-    @expose('/<int:speaker_id>/')
-    def display_view(self, event_id, speaker_id):
-        speaker = get_speaker_or_throw(speaker_id)
-        event = DataGetter.get_event(event_id)
-        form_elems = DataGetter.get_custom_form_elements(event_id).first().speaker_form
-
-        return self.render('/gentelella/admin/event/speakers/display.html',
-                           speaker=speaker, event_id=event_id, event=event, speaker_form=form_elems)
-
     @expose('/<int:speaker_id>/edit/', methods=('GET', 'POST'))
     def edit_view(self, event_id, speaker_id):
         speaker = get_speaker_or_throw(speaker_id)
