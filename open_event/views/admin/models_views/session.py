@@ -95,7 +95,7 @@ class SessionView(ModelView):
         return redirect(url_for('.index_view', event_id=event_id))
 
     @expose('/<int:session_id>/delete', methods=('GET',))
-    def reject_session(self, event_id, session_id):
+    def delete_session(self, event_id, session_id):
         session = DataGetter.get_session(session_id)
         delete_from_db(session, 'Session Rejected')
         flash("The session has been deleted", "danger")
