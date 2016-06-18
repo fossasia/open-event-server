@@ -163,7 +163,7 @@ def can_access(f):
             return redirect(url_for('admin.forbidden_view'))
         if '/delete/' in url:
             if 'events/' + event_id + '/delete/' in url:
-                if user.is_organizer is True or user.is_coorganizer is True:
+                if user.is_organizer(event_id) is True or user.is_coorganizer(event_id) is True:
                     return f(*args, **kwargs)
             if 'session' in url:
                 if user.can_delete(Session, event_id) is True:
