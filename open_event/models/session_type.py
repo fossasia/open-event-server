@@ -8,7 +8,6 @@ class SessionType(db.Model):
     length = db.Column(db.Float, nullable=False)
     event_id = db.Column(
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
-    session_id = db.Column(db.Integer, db.ForeignKey('session.id'))
     events = db.relationship("Event", backref="session_type")
     sessions = db.relationship("Session",
                                uselist=False,
