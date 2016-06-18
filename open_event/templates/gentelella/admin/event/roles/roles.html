@@ -36,7 +36,7 @@ Manage Roles
                 <a class="icon" title="Edit Role" data-toggle="modal" data-target="#edit-role-{{role.id}}">
                     <span class="glyphicon glyphicon-pencil"></span>
                 </a>
-                <a title="Delete record" onclick="return confirm('Are you sure you want to delete this record?');" href="{{ get_url('role.delete_view', event_id=event.id,uer_id=role.id)}}">
+                <a title="Delete record" onclick="return confirm('Are you sure you want to delete this record?');" href="{{ get_url('event_roles.delete_view', event_id=event.id,uer_id=role.id)}}">
                     <span class="glyphicon glyphicon-trash"></span>
                 </a>
                 {{editrole(event, role)}}

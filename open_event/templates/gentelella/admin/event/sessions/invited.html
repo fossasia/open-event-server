@@ -37,7 +37,7 @@ Session Invitation
     <script type="text/javascript">
         function accepted(value) {
             if (value == 1) {
-                window.location = "{{ url_for('session.speaker_view', event_id=event_id, session_id=session.id) }}";
+                window.location = "{{ url_for('event_sessions.speaker_view', event_id=event_id, session_id=session.id) }}";
             } else {
                 window.location = "/";
             }

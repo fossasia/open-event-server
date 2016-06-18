@@ -1,9 +1,8 @@
+from flask.ext.admin import BaseView
 from flask_admin import expose
-from flask_admin.contrib.sqla import ModelView
-from ....helpers.data import DataManager,save_to_db
 from ....helpers.data_getter import DataGetter
 
-class EventsSponsorsView(ModelView):
+class SponsorsView(BaseView):
     @expose('/', methods=('GET', 'POST'))
     def index_view(self, event_id):
         sponsors = DataGetter.get_sponsors(event_id)
