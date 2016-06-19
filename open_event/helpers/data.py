@@ -129,12 +129,13 @@ class DataManager(object):
         update_version(event_id, False, "session_ver")
 
     @staticmethod
-    def add_session_to_event(form, event_id):
+    def add_session_to_event(form, event_id, speaker_img_name):
         """
         Session will be saved to database with proper Event id
         :param form: view data form
         :param event_id: Session belongs to Event by event id
         """
+        img_path = ""
         new_session = Session(title=form["title"] if "title" in form.keys() else "",
                               subtitle=form["subtitle"] if "subtitle" in form.keys() else "",
                               long_abstract=form["long_abstract"] if "long_abstract" in form.keys() else "",
@@ -147,8 +148,11 @@ class DataManager(object):
         save_to_db(new_session, "Session saved")
         update_version(event_id, False, "session_ver")
 
+        if speaker_img_name != "":
+            img_path = 'static/media/image/' + speaker_img_name
+
         new_speaker = Speaker(name=form["name"] if "name" in form.keys() else "",
-                              photo=form["photo"] if "photo" in form.keys() else "",
+                              photo=img_path if "photo" in form.keys() else "",
                               short_biography=form["short_biography"] if "short_biography" in form.keys() else "",
                               email=form["email"] if "email" in form.keys() else "",
                               website=form["website"] if "website" in form.keys() else "",
