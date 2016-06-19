@@ -3,7 +3,7 @@ var $wizardForm = $("#event-wizard-form");
 $(document).ready(function () {
 
     var $wizard = $("#wizard");
-    var wizardType = $wizard.data("type");
+    var state = $wizard.data('state');
 
     // Smart Wizard
     $wizard.smartWizard({
@@ -24,7 +24,11 @@ $(document).ready(function () {
     $('.buttonFinish').addClass("btn btn-info");
 
     $wizard.find(".buttonFinish")
-        .after('<a href="#" id="buttonSave" class="btn btn-warning">' + (wizardType === 'create' ? 'Save' : 'Update') + '</a>');
+        .after('<a href="#" id="buttonSave" class="btn btn-warning">Save</a>');
+
+    if(state === 'Published') {
+        $wizard.find(".buttonFinish").hide();
+    }
 
     $("#buttonSave").click(function () {
         $wizardForm.submit();
