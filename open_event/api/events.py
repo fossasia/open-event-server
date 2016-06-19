@@ -43,7 +43,8 @@ EVENT = api.model('Event', {
     'topic': EventTopicField(),
     'privacy': fields.String(),
     'ticket_url': fields.Uri(),
-    'creator': fields.Nested(EVENT_CREATOR, allow_null=True)
+    'creator': fields.Nested(EVENT_CREATOR, allow_null=True),
+    'schedule_published_on': fields.DateTime()
 })
 
 EVENT_PAGINATED = api.clone('EventPaginated', PAGINATED_MODEL, {

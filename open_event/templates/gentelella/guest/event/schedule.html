@@ -2,11 +2,12 @@
 
 {% set carousel_height = 300 -%}
 {% set scrollspy_top = (carousel_height + 95) ~ "px" %}
+{% set scheduler_readonly = true %}
 
 {% block head_css %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/details.css') }}"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/sessions.css') }}"/>
+    <link href="{{ url_for('static', filename='css/admin/scheduler.css') }}" rel="stylesheet">
     <style type="text/css">
         .carousel .item {
             height: {{ carousel_height }}px;
@@ -30,15 +31,11 @@
     {{ super() }}
 
     <script type="text/javascript">
-        function imgError(image) {
-            image.onerror = "";
-            image.src = '{{ url_for('static', filename='img/avatar.png') }}';
-            return true;
-        }
+
+        window.scheduler_readonly = true;
+
     </script>
 {% endblock %}
-
-
 
 {% block body %}
     <div class="scrollspy hidden-xs hidden-sm">
@@ -46,7 +43,8 @@
             <li role="presentation"><a href="/e/{{ event.id }}">Info</a></li>
             <li role="presentation"><a href="/e/{{ event.id }}/#speakers">Speakers</a></li>
             <li role="presentation"><a href="/e/{{ event.id }}/#sponsors">Sponsors</a></li>
-            <li role="presentation" class="active"><a href="/e/{{ event.id }}/sessions">Sessions</a></li>
+            <li role="presentation"><a href="/e/{{ event.id }}/sessions">Sessions</a></li>
+            <li role="presentation" class="active"><a href="/e/{{ event.id }}/schedule">Schedule</a></li>
             <li role="presentation"><a href="/e/{{ event.id }}/#organizer">Organizer</a></li>
             <li role="presentation"><a href="/e/{{ event.id }}/#getting-here">Getting Here</a></li>
         </ul>
@@ -66,39 +64,35 @@
         </div>
     </div>
     <div class="event-info container" style="min-height: 600px;">
+
         <div class="row">
             <div class="col-md-12">
+                <h1 style="font-weight: 300; font-size: 24px">Schedule
+                    <small>
+                        (Published on {{ event.schedule_published_on.strftime('%B %d, %Y') }})
+                    </small>
+                </h1>
+            </div>
+            <div class="col-md-12" style="margin-top: 10px;">
+                <div class="btn-toolbar" role="toolbar">
+                    <div id="date-change-btn-holder" class="btn-group date-change-btn-holder" role="group">
 
-                <nav id="track-navbar" class="navbar navbar-default track-navbar">
-                    <div class="container-fluid">
-                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                            <ul class="nav navbar-nav">
-                                {% for track in tracks %}
-                                    <li class="track-link"><a href="#track-{{ track.id }}">{{ track.name }}</a></li>
-                                {% endfor %}
-
-                            </ul>
-                        </div>
                     </div>
-                </nav>
-                <ul class="list-group session-list">
-                    {% for track in tracks %}
-                        <h3 style="font-weight: 300;" id="track-{{ track.id }}">{{ track.name }}</h3>
-                        {% for session in track.sessions %}
-                            {{ session_element(session, loop.index) }}
-                        {% endfor %}
-                    {% endfor %}
-                </ul>
+                </div>
+                {% include 'gentelella/admin/event/scheduler/components/timeline.html' %}
             </div>
         </div>
     </div>
+    {% include 'gentelella/admin/event/scheduler/components/timeline_templates.html' %}
+
 {% endblock %}
 
 {% block tail_js %}
     {{ super() }}
-    <script type="text/javascript">
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-    </script>
+    <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/google-material-color/dist/palette.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/lodash/dist/lodash.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery/jquery.ellipsis.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/scheduler.js') }}"></script>
 {% endblock %}

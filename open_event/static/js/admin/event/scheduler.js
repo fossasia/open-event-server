@@ -27,6 +27,11 @@ var time = {
     format: "YYYY-MM-DD HH:mm:ss"
 };
 
+
+function isReadOnly() {
+    return !(_.isUndefined(window.scheduler_readonly) || _.isNull(window.scheduler_readonly) || window.scheduler_readonly !== true)
+}
+
 /**
  * Convert minutes to pixels based on the time unit configuration
  * @param {number} minutes The minutes that need to be converted to pixels
@@ -610,6 +615,7 @@ function initializeInteractables() {
  * @param {postProcessCallback} callback The post-process callback
  */
 function processMicrolocationSession(microlocations, sessions, callback) {
+
     var topTime = moment.utc({hour: time.start.hours, minute: time.start.minutes});
     _.each(sessions, function (session) {
         if (session.state === 'accepted') {
@@ -690,10 +696,13 @@ function loadMicrolocationsToTimeline(day) {
 
     _.each(sessionsStore[dayIndex], function (session) {
         // Add session elements, but do not broadcast.
+
         if (!_.isNull(session.top) && !_.isNull(session.microlocation) && !_.isNull(session.microlocation.id) && !_.isNull(session.start_time) && !_.isNull(session.end_time) && !session.hasOwnProperty("isReset")) {
             addSessionToTimeline(session, null, false);
         } else {
-            addSessionToUnscheduled(session, false, false);
+            if (!isReadOnly()) {
+                addSessionToUnscheduled(session, false, false);
+            }
         }
     });
 
@@ -718,7 +727,14 @@ function initializeTimeline(eventId) {
         loadData(eventId, function () {
             $(".flash-message-holder").hide();
             $(".scheduler-holder").show();
-            initializeInteractables();
+            if (!isReadOnly()) {
+                initializeInteractables();
+            } else {
+                $('.edit-btn').hide();
+                $('.remove-btn').hide();
+            }
+
+            $('.microlocation-container').css("width", $(".microlocations.x1").width()+"px")
         });
     });
 }
@@ -820,16 +836,18 @@ $(document)
     })
     .on("click", ".clear-overlaps-button", removeOverlaps);
 
-$(".date-picker").daterangepicker({
-    "singleDatePicker": true,
-    "showDropdowns": true,
-    "timePicker": true,
-    "timePicker24Hour": true,
-    "startDate": $editSessionModal.data("start-date"),
-    locale: {
-        format: time.format
-    }
-});
+if (!isReadOnly()) {
+    $(".date-picker").daterangepicker({
+        "singleDatePicker": true,
+        "showDropdowns": true,
+        "timePicker": true,
+        "timePicker24Hour": true,
+        "startDate": $editSessionModal.data("start-date"),
+        locale: {
+            format: time.format
+        }
+    });
+}
 
 $editSessionForm.submit(function () {
     var session = $editSessionForm.data("object");
