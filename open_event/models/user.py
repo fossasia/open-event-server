@@ -130,6 +130,10 @@ class User(db.Model):
     def is_staff(self):
         return self.is_super_admin or self.is_admin
 
+    # update last access time
+    def update_lat(self):
+        self.last_access_time = datetime.now()
+
 
 @event.listens_for(User, 'init')
 def receive_init(target, args, kwargs):

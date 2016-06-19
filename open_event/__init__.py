@@ -118,8 +118,8 @@ def event_types():
 # http://stackoverflow.com/questions/26724623/
 @app.before_request
 def track_user():
-    if current_user.is_authenticated():
-        current_user.last_access_time = datetime.now()
+    if current_user.is_authenticated:
+        current_user.update_lat()
 
 
 current_app, manager, database, jwt = create_app()
