@@ -137,35 +137,52 @@ class DataManager(object):
         :param event_id: Session belongs to Event by event id
         """
         img_path = ""
-        new_session = Session(title=form["title"] if "title" in form.keys() else "",
-                              subtitle=form["subtitle"] if "subtitle" in form.keys() else "",
-                              long_abstract=form["long_abstract"] if "long_abstract" in form.keys() else "",
+        new_session = Session(title=form.get("title", ""),
+                              subtitle=form.get("subtitle", ""),
+                              long_abstract=form.get("long_abstract", ""),
                               start_time="2016-01-01",
                               end_time="2016-01-01",
                               event_id=event_id,
-                              short_abstract=form["short_abstract"] if "short_abstract" in form.keys() else "",
-                              state=state)
-
+                              short_abstract=form.get("short_abstract", ""),
+                              state="pending")
 
         if speaker_img_name != "":
             img_path = 'static/media/image/' + speaker_img_name
 
-        new_speaker = Speaker(name=form["name"] if "name" in form.keys() else "",
-                              photo=img_path if "photo" in form.keys() else "",
-                              short_biography=form["short_biography"] if "short_biography" in form.keys() else "",
-                              email=form["email"] if "email" in form.keys() else "",
-                              website=form["website"] if "website" in form.keys() else "",
+        user_data = DataGetter.get_user_by_email(form.get("email"))
+        if user_data:
+            print "User present"
+            user = user_data
+        else:
+            print "User New"
+            password = ("%032x" % random.getrandbits(128))[:8]
+            s = Helper.get_serializer()
+            data = [form['email'], password]
+            DataManager.create_user(data)
+            form_hash = s.dumps(data)
+            link = url_for('admin.create_account_after_confirmation_view', hash=form_hash, _external=True)
+            Helper.send_email_confirmation_session(form, link, password)
+            user = DataGetter.get_user_by_email(form.get("email"))
+            role = Role.query.filter_by(name='speaker').first()
+            event = Event.query.get(event_id)
+            uer = UsersEventsRoles(user, event, role)
+            save_to_db(uer)
+
+        new_speaker = Speaker(name=form.get("name", ""),
+                              photo=form.get("photo", ""),
+                              short_biography=form.get("short_biography", ""),
+                              email=form.get("email", ""),
+                              website=form.get("website", ""),
                               event_id=event_id,
-                              twitter=form["twitter"] if "twitter" in form.keys() else "",
-                              facebook=form["facebook"] if "facebook" in form.keys() else "",
-                              github=form["github"] if "github" in form.keys() else "",
-                              linkedin=form["linkedin"] if "linkedin" in form.keys() else "",
-                              organisation=form["organisation"] if "organisation" in form.keys() else "",
-                              position=form["position"] if "position" in form.keys() else "",
-                              country=form["country"] if "country" in form.keys() else "",
-                              user=login.current_user if login and login.current_user.is_authenticated else None)
-        new_session.speakers.append(new_speaker)
-        save_to_db(new_session, "Session saved")
+                              twitter=form.get("twitter", ""),
+                              facebook=form.get("facebook", ""),
+                              github=form.get("github", ""),
+                              linkedin=form.get("linkedin", ""),
+                              organisation=form.get("organisation", ""),
+                              position=form.get("position", ""),
+                              country=form.get("country", ""),
+                              user=user)
+        save_to_db(new_speaker, "Speaker saved")
         update_version(event_id, False, "speakers_ver")
         update_version(event_id, False, "session_ver")
 

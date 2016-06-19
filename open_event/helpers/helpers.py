@@ -72,6 +72,19 @@ def send_email_confirmation(form, link):
                   data=payload,
                   headers=HEADERS)
 
+def send_email_confirmation_session(form, link, password):
+    print link
+    payload = {'to': form['email'],
+               'from': 'open-event@googlegroups.com',
+               'subject': "Email Confirmation to Create Account for Open-Event ",
+               "html": ("Hi %s<br/>" % str(form['email']) + \
+                        "Your Session has been Created<br><br> Your Password: %s<br/><br/>" % str(password) + \
+                        "<br/> Please visit this link to confirm your email: %s" % link)}
+
+    requests.post("https://api.sendgrid.com/api/mail.send.json",
+                  data=payload,
+                  headers=HEADERS)
+
 
 def send_email_with_reset_password_hash(email, link):
     """Send email with reset password hash"""
