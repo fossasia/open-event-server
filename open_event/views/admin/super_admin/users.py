@@ -10,9 +10,9 @@ class SuperAdminUsersView(SuperAdminBaseView):
         user_list = []
         users = DataGetter.get_all_users()
         for user in users:
-            roles = DataGetter.get_event_roles_for_user(user.id)
+            event_roles = DataGetter.get_event_roles_for_user(user.id)
             user_list.append({
                 'user': user,
-                'roles': roles,}
+                'event_roles': event_roles,}
             )
         return self.render('/gentelella/admin/super_admin/users/users.html', user_list=user_list)
