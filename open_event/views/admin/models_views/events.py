@@ -1,4 +1,5 @@
 import os
+import json
 
 from flask import request, flash
 from flask.ext.admin import BaseView
@@ -128,15 +129,33 @@ class EventsView(BaseView):
         microlocations = DataGetter.get_microlocations(event_id).all()
         call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
         sponsors = DataGetter.get_sponsors(event_id)
+        custom_forms = DataGetter.get_custom_form_elements(event_id).first()
+        speaker_form = json.loads(custom_forms.speaker_form)
+        session_form = json.loads(custom_forms.session_form)
+
+        preselect = []
+        required = []
+        for session_field in session_form:
+            if session_form[session_field]['include'] == 1:
+                preselect.append(session_field)
+                if session_form[session_field]['require'] == 1:
+                    required.append(session_field)
+        for speaker_field in speaker_form:
+            if speaker_form[speaker_field]['include'] == 1:
+                preselect.append(speaker_field)
+                if speaker_form[speaker_field]['require'] == 1:
+                    required.append(speaker_field)
+        print preselect
 
         if request.method == 'GET':
             return self.render('/gentelella/admin/event/edit/edit.html', event=event, session_types=session_types,
                                tracks=tracks, social_links=social_links, microlocations=microlocations,
                                call_for_speakers=call_for_speakers, sponsors=sponsors, event_types=DataGetter.get_event_types(),
-                               event_topics=DataGetter.get_event_topics())
+                               event_topics=DataGetter.get_event_topics(), preselect=preselect,
+                               required=required)
         if request.method == "POST":
             event = DataManager.edit_event(request, event_id, event, session_types, tracks, social_links,
-                                           microlocations, call_for_speakers, sponsors)
+                                           microlocations, call_for_speakers, sponsors, custom_forms)
             if request.form.get('state', u'Draft') == u'Published' and string_empty(event.location_name):
                 flash("Your event was saved. To publish your event please review the highlighted fields below.",
                       "warning")
