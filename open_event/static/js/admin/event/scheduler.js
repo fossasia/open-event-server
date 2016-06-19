@@ -708,6 +708,11 @@ function loadMicrolocationsToTimeline(day) {
 
     $microlocations = $microlocationsHolder.find(".microlocation");
     $("[data-toggle=tooltip]").tooltip("hide");
+
+    if (isReadOnly()) {
+        $('.edit-btn').hide();
+        $('.remove-btn').hide();
+    }
 }
 
 function loadData(eventId, callback) {
@@ -734,7 +739,7 @@ function initializeTimeline(eventId) {
                 $('.remove-btn').hide();
             }
 
-            $('.microlocation-container').css("width", $(".microlocations.x1").width()+"px")
+            $('.microlocation-container').css("width", $(".microlocations.x1").width() + "px")
         });
     });
 }
