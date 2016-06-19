@@ -29,12 +29,14 @@
             <textarea {% if require==1 %}
                 required="required"
             {% endif %}
-                name="{{ identifier }}" class="form-control col-md-7 col-xs-12"></textarea>
+                name="{{ identifier }}" id="{{ identifier }}"
+                class="form-control col-md-7 col-xs-12"></textarea>
         {% elif identifier in media_session_fields %}
             <br><input {% if require==1 %}
             required="required"
         {% endif %}
             type="file" id="speaker-file-{{ identifier | default(1) }}" name="{{ identifier }}"
+            id="{{ identifier }}"
             class="upload-btn"/>
             <label class="file-label" for="speaker-file-{{ identifier | default(1) }}">
                 <i class="fa fa-cloud-upload" aria-hidden="true"></i>
@@ -43,7 +45,8 @@
             <input {% if require==1 %}
                 required="required"
             {% endif %}
-                name="{{ identifier }}" class="form-control col-md-7 col-xs-12"/>
+                name="{{ identifier }}" id="{{ identifier }}"
+                class="form-control col-md-7 col-xs-12"/>
         {% endif %}
     </div>
 {% endmacro %}
@@ -67,12 +70,14 @@
             <textarea {% if require==1 %}
                 required="required"
             {% endif %}
-                name="{{ identifier }}" class="form-control col-md-7 col-xs-12"></textarea>
+                name="{{ identifier }}" id="{{ identifier }}"
+                class="form-control col-md-7 col-xs-12"></textarea>
         {% elif identifier in media_speaker_fields %}
             <br><input {% if require==1 %}
             required="required"
         {% endif %}
             type="file" id="speaker-file-{{ identifier | default(1) }}" name="{{ identifier }}"
+            id="{{ identifier }}"
             class="upload-btn"/>
             <label class="file-label" for="speaker-file-{{ identifier | default(1) }}">
                 <i class="fa fa-cloud-upload" aria-hidden="true"></i>
@@ -84,9 +89,10 @@
                 name="{{ identifier }}"
                     {% if identifier=="email" %}
                         {% if current_user.is_authenticated %}
-                value="{{ current_user.email }}" disabled
+                value="{{ current_user.email }}" readonly
                         {% endif %}
                     {% endif %}
+                id="{{ identifier }}"
                 class="form-control col-md-7 col-xs-12"/>
         {% endif %}
     </div>
@@ -146,8 +152,8 @@
                     {% endfor %}
                 </div>
                 <div style="text-align: center;">
-                    <input type="submit" class="btn btn-primary" value="Save as Draft"/>
-                    <input type="submit" class="btn btn-success" value="Submit Session"/>
+                    <button class="btn btn-primary session-form-btn">Save as Draft</button>
+                    <button class="btn btn-success session-form-btn">Submit Session</button>
                 </div>
             </form>
 

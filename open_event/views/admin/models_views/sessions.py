@@ -8,20 +8,15 @@ from ....helpers.data import DataManager, save_to_db, delete_from_db
 from ....helpers.data_getter import DataGetter
 import json
 
+
 def get_session_or_throw(session_id):
     session = DataGetter.get_session(session_id)
     if not session:
         abort(404)
     return session
 
+
 class SessionsView(BaseView):
-
-    def is_accessible(self):
-        return login.current_user.is_authenticated
-
-    def _handle_view(self, name, **kwargs):
-        if not self.is_accessible():
-            return redirect(url_for('admin.login_view', next=request.url))
 
     @expose('/')
     def index_view(self, event_id):
@@ -38,7 +33,6 @@ class SessionsView(BaseView):
                            session=session, event_id=event_id, event=event)
 
     @expose('/create/', methods=('GET', 'POST'))
-    @can_access
     def create_view(self, event_id):
         form_elems = DataGetter.get_custom_form_elements(event_id).first()
         if not form_elems:
