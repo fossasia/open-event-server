@@ -165,6 +165,11 @@ sponsor
 microlocation
 ```
 
+To check if a user is a speaker in a session use:
+
+```python
+user.is_speaker_at_session(session_id)
+```
 
 
 ## Example code
@@ -204,7 +209,6 @@ user.is_organizer(event_id)
 user.is_coorganizer(event_id)
 user.is_track_organizer(event_id)
 user.is_moderator(event_id)
-user.is_speaker(event_id)
 ```
 
 

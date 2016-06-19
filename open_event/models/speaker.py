@@ -22,6 +22,8 @@ class Speaker(db.Model):
     country = db.Column(db.String, nullable=False)
     event_id = db.Column(
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship('User', backref='speakers')
 
     def __init__(self,
                  name=None,
@@ -38,7 +40,8 @@ class Speaker(db.Model):
                  organisation=None,
                  position=None,
                  country=None,
-                 event_id=None):
+                 event_id=None,
+                 user=None):
         self.name = name
         self.photo = photo
         self.short_biography = short_biography
@@ -54,6 +57,7 @@ class Speaker(db.Model):
         self.position = position
         self.country = country
         self.event_id = event_id
+        self.user = user
 
     @staticmethod
     def get_service_name():

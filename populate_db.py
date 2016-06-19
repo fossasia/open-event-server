@@ -11,7 +11,7 @@ from open_event.models.sponsor import Sponsor
 from open_event.models.microlocation import Microlocation
 
 from open_event.helpers.data import save_to_db
-from open_event.models.user import ORGANIZER, COORGANIZER, TRACK_ORGANIZER, MODERATOR, SPEAKER
+from open_event.models.user import ORGANIZER, COORGANIZER, TRACK_ORGANIZER, MODERATOR
 
 
 def create_roles():
@@ -19,7 +19,6 @@ def create_roles():
     save_to_db(Role(COORGANIZER), 'Role saved')
     save_to_db(Role(TRACK_ORGANIZER), 'Role saved')
     save_to_db(Role(MODERATOR), 'Role saved')
-    save_to_db(Role(SPEAKER), 'Role saved')
 
 
 def create_services():
@@ -41,7 +40,6 @@ def create_permissions():
     coorgr = Role.query.get(2)
     track_orgr = Role.query.get(3)
     mod = Role.query.get(4)
-    spkr = Role.query.get(5)
 
     track = Service.query.get(1)
     session = Service.query.get(2)
@@ -80,9 +78,6 @@ def create_permissions():
     # For MODERATOR
     perm = Permission(mod, track, False, True, False, False)
     save_to_db(perm, 'Permission saved')
-
-    # For SPEAKER
-    # ?
 
 
 def populate():
