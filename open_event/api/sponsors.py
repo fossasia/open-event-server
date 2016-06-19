@@ -2,9 +2,9 @@ from flask.ext.restplus import Resource, Namespace
 
 from open_event.models.sponsor import Sponsor as SponsorModel
 
-from .helpers.helpers import get_paginated_list, requires_auth, get_object_in_event
+from .helpers.helpers import get_paginated_list, requires_auth
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
-    PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
+    PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
 from .helpers import custom_fields as fields
 
 api = Namespace('sponsors', description='Sponsors', path='/')
@@ -40,8 +40,7 @@ DAO = SponsorDAO(SponsorModel, SPONSOR_POST)
 
 
 @api.route('/events/<int:event_id>/sponsors/<int:sponsor_id>')
-@api.response(404, 'Sponsor not found')
-@api.response(400, 'Sponsor does not belong to event')
+@api.doc(responses=SERVICE_RESPONSES)
 class Sponsor(Resource):
     @api.doc('get_sponsor')
     @api.marshal_with(SPONSOR)
