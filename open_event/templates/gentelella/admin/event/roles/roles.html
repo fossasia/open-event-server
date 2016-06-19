@@ -20,17 +20,7 @@ Manage Roles
         {% for role in event.roles %}
         <tr>
             <td>{{role.user.email}}</td>
-            <td>
-            {% if role.role.name == 'track_organizer' %}
-              Track Organizer
-            {% elif role.role.name == 'organizer' %}
-              Organizer
-            {% elif role.role.name == 'coorganizer' %}
-              Co-Organizer
-            {% elif role.role.name == 'moderator' %}
-              Moderator
-            {% endif %}
-            </td>
+            <td>{{ role.role.title_name }}</td>
             <td>
               {% if role.role.name != 'organizer' %}
                 <a class="icon" title="Edit Role" data-toggle="modal" data-target="#edit-role-{{role.id}}">

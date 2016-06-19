@@ -34,7 +34,7 @@ Users
         <td>
         <ul style="padding-left:0;">
         {% for role in user['roles'] %}
-          <li>{{ role.role.name|title }}, {{ role.event.name }}</li>
+          <li>{{ role.role.title_name }}, {{ role.event.name }}</li>
         {% endfor %}
         </ul>
         </td>
