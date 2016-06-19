@@ -4,7 +4,7 @@ from open_event.models.track import Track as TrackModel
 
 from .helpers.helpers import get_paginated_list, requires_auth
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
-    PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
+    PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
 from .helpers import custom_fields as fields
 
 api = Namespace('tracks', description='Tracks', path='/')
@@ -41,8 +41,7 @@ DAO = TrackDAO(TrackModel, TRACK_POST)
 
 
 @api.route('/events/<int:event_id>/tracks/<int:track_id>')
-@api.response(404, 'Track not found')
-@api.response(400, 'Track does not belong to event')
+@api.doc(responses=SERVICE_RESPONSES)
 class Track(Resource):
     @api.doc('get_track')
     @api.marshal_with(TRACK)

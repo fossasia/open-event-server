@@ -1,5 +1,3 @@
-import os
-
 from flask import request, url_for, redirect
 from flask_admin import expose
 from flask.ext import login
@@ -17,5 +15,12 @@ class SuperAdminUsersView(BaseView):
 
     @expose('/')
     def index_view(self):
+        user_list = []
         users = DataGetter.get_all_users()
-        return self.render('/gentelella/admin/super_admin/users/users.html', users=users)
+        for user in users:
+            roles = DataGetter.get_event_roles_for_user(user.id)
+            user_list.append({
+                'user': user,
+                'roles': roles,}
+            )
+        return self.render('/gentelella/admin/super_admin/users/users.html', user_list=user_list)

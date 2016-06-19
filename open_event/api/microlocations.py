@@ -4,7 +4,7 @@ from open_event.models.microlocation import Microlocation as MicrolocationModel
 
 from .helpers.helpers import get_paginated_list, requires_auth
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
-    PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
+    PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
 from .helpers import custom_fields as fields
 
 api = Namespace('microlocations', description='Microlocations', path='/')
@@ -34,8 +34,7 @@ DAO = MicrolocationDAO(MicrolocationModel, MICROLOCATION_POST)
 
 
 @api.route('/events/<int:event_id>/microlocations/<int:microlocation_id>')
-@api.response(404, 'Microlocation not found')
-@api.response(400, 'Microlocation does not belong to event')
+@api.doc(responses=SERVICE_RESPONSES)
 class Microlocation(Resource):
     @api.doc('get_microlocation')
     @api.marshal_with(MICROLOCATION)

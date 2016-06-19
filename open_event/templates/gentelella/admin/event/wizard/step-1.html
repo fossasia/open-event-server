@@ -1,4 +1,4 @@
-{% macro social_entry(social_link=None, remove=false) %}
+{% macro social_entry(social_link=None) %}
     <div class="social-link-holder">
         <div class=" col-sm-4" style="padding-left: 0;">
             <input type="text" class="form-control" name="social[name]" placeholder="Name"
@@ -8,11 +8,8 @@
             <input type="text" class="form-control" name="social[link]" placeholder="Link"
                    value="{{ social_link.link | default('', true) }}">
             <span class="input-group-btn">
-                {% if remove %}
-                    <button type="button" class="btn btn-danger remove-social-links">-</button>
-                {% else %}
-                    <button type="button" class="btn btn-primary add-social-links">+</button>
-                {% endif %}
+                <button type="button" class="btn btn-danger remove-social-links">-</button>
+                <button type="button" class="btn btn-primary add-social-links">+</button>
             </span>
         </div>
     </div>
@@ -149,10 +146,11 @@
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     {% if social_links %}
                         {% for social_link in social_links %}
-                            {{ social_entry(social_link, true) }}
+                            {{ social_entry(social_link) }}
                         {% endfor %}
+                    {% else %}
+                        {{ social_entry() }}
                     {% endif %}
-                    {{ social_entry() }}
                 </div>
 
             </div>
@@ -292,18 +290,17 @@
         $("textarea[name=organizer_description]").summernote(summernoteConfig);
     });
 
-    $('.add-social-links').click(function () {
+    $(document).on("click", '.add-social-links', function () {
         var $element = $($(".social-link-holder")[0]).clone();
         $element.find("input").val('').attr("value", "");
-        $element.find(".add-social-links").addClass("remove-social-links")
-                .removeClass("add-social-links")
-                .removeClass("btn-primary").addClass("btn-danger").text("-");
         $('.social-links > div').append($element);
         $(".form_wizard").smartWizard('fixHeight');
     });
 
     $(document).on("click", ".remove-social-links", function () {
-        $(this).closest(".social-link-holder").remove();
+        if ($('.social-links > div').children().length > 1) {
+            $(this).closest(".social-link-holder").remove();
+        }
     });
 
 </script>

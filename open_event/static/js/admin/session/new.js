@@ -20,19 +20,6 @@ $(document).ready(function() {
   $( "body" ).on( "click", "#remove-speakers", function () {
     $(this).parent().parent().parent().remove();
   });
-
-  // Smart Wizard
-  $("#wizard").smartWizard({
-    labelFinish:'Save Draft',
-    onFinish: function() { $("#session-create-form").submit(); },
-    enableAllSteps: true,
-    onLeaveStep: onLeaveStep
-  });
-
-  $('.buttonNext').addClass("btn btn-success");
-  $('.buttonPrevious').addClass("btn btn-primary");
-  $('.buttonFinish').addClass("btn btn-default");
-
 });
 
 function onLeaveStep(obj, context) {

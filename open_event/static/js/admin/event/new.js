@@ -3,17 +3,22 @@ var $wizardForm = $("#event-wizard-form");
 $(document).ready(function () {
 
     var $wizard = $("#wizard");
-    var wizardType = $wizard.data("type");
+    var state = $wizard.data('state');
+    var eventId = $wizard.data('id');
 
     // Smart Wizard
     $wizard.smartWizard({
         labelFinish: 'Make your event live',
         onFinish: function () {
-            var input = $("<input>")
-                .attr("type", "hidden")
-                .attr("name", "state").val("Published");
-            $wizard.append($(input));
-            $wizardForm.submit();
+            if (state === 'Published') {
+                location.href = "/events/" + eventId + "/unpublish/";
+            } else {
+                var input = $("<input>")
+                    .attr("type", "hidden")
+                    .attr("name", "state").val("Published");
+                $wizard.append($(input));
+                $wizardForm.submit();
+            }
         },
         enableAllSteps: true,
         onLeaveStep: onLeaveStep
@@ -24,7 +29,11 @@ $(document).ready(function () {
     $('.buttonFinish').addClass("btn btn-info");
 
     $wizard.find(".buttonFinish")
-        .after('<a href="#" id="buttonSave" class="btn btn-warning">' + (wizardType === 'create' ? 'Save' : 'Update') + '</a>');
+        .after('<a href="#" id="buttonSave" class="btn btn-warning">Save</a>');
+
+    if (state === 'Published') {
+        $wizard.find(".buttonFinish").text("Unpublish").removeClass("btn-info").addClass("btn-danger");
+    }
 
     $("#buttonSave").click(function () {
         $wizardForm.submit();
@@ -33,7 +42,8 @@ $(document).ready(function () {
     var hash = "";
     try {
         hash = getHashValue('step').trim();
-    } catch (ignored) { }
+    } catch (ignored) {
+    }
 
     if (hash !== "1" && hash !== "location_name") {
         $wizard.smartWizard('goToStep', parseInt(hash));

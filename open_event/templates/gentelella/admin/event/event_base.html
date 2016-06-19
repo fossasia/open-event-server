@@ -38,6 +38,11 @@
             </h3>
         </div>
         <div class="title_right" style="text-align: right">
+            {% if event.state == 'Published' %}
+                <div class="btn-group event-btn-group" role="group" style="">
+                    <a href="/e/{{ event.id }}/" type="button" class="btn btn-default">View </a>
+                </div>
+            {% endif %}
             <div class="btn-group event-btn-group" role="group" style="">
                 {% if event.state == 'Published' %}
                     <a href="/events/{{ event.id }}/unpublish" type="button" class="btn btn-default">Unpublish</a>
@@ -47,7 +52,9 @@
                 <a href="/events/{{ event.id }}/copy" type="button" class="btn btn-default">Copy</a>
             </div>
             <div class="btn-group event-btn-group" role="group" style="">
-                <button data-toggle="modal" data-target="#delete-confirm-modal" type="button" class="btn btn-danger">Delete</button>
+                <button data-toggle="modal" data-target="#delete-confirm-modal" type="button" class="btn btn-danger">
+                    Delete
+                </button>
             </div>
 
         </div>

@@ -159,7 +159,8 @@ class DataManager(object):
                               linkedin=form["linkedin"] if "linkedin" in form.keys() else "",
                               organisation=form["organisation"] if "organisation" in form.keys() else "",
                               position=form["position"] if "position" in form.keys() else "",
-                              country=form["country"] if "country" in form.keys() else "")
+                              country=form["country"] if "country" in form.keys() else "",
+                              user=login.current_user)
         save_to_db(new_speaker, "Speaker saved")
         update_version(event_id, False, "speakers_ver")
 
@@ -198,7 +199,8 @@ class DataManager(object):
                               linkedin=form["linkedin"] if "linkedin" in form.keys() else "",
                               organisation=form["organisation"] if "organisation" in form.keys() else "",
                               position=form["position"] if "position" in form.keys() else "",
-                              country=form["country"] if "country" in form.keys() else "")
+                              country=form["country"] if "country" in form.keys() else "",
+                              user=login.current_user)
         save_to_db(new_speaker, "Speaker saved")
         update_version(event_id, False, "speakers_ver")
 
@@ -282,7 +284,8 @@ class DataManager(object):
                               linkedin="",
                               organisation=form["organisation"],
                               position="",
-                              country="")
+                              country="",
+                              user=login.current_user)
         save_to_db(new_speaker, "Speaker saved")
         update_version(event_id, False, "speakers_ver")
 

@@ -1,6 +1,7 @@
 from flask.ext.admin import BaseView
 from flask.ext.restplus import abort
 from flask_admin import expose
+from open_event.helpers.permission_decorators import *
 from flask.ext import login
 from flask import request, url_for, redirect, flash
 from ....helpers.data import DataManager, save_to_db, delete_from_db
@@ -37,6 +38,7 @@ class SessionsView(BaseView):
                            session=session, event_id=event_id, event=event)
 
     @expose('/create/', methods=('GET', 'POST'))
+    @can_access
     def create_view(self, event_id):
         form_elems = DataGetter.get_custom_form_elements(event_id).first()
         if not form_elems:
@@ -45,20 +47,22 @@ class SessionsView(BaseView):
             return redirect(url_for('.index_view', event_id=event_id))
         speaker_form = json.loads(form_elems.speaker_form)
         session_form = json.loads(form_elems.session_form)
+        event = DataGetter.get_event(event_id)
         if request.method == 'POST':
             DataManager.add_session_to_event(request.form, event_id)
             return redirect(url_for('.index_view', event_id=event_id))
-        return self.render('/gentelella/admin/event/sessions/new/new.html',
-                           speaker_form=speaker_form, session_form=session_form)
+        return self.render('/gentelella/admin/event/sessions/new.html',
+                           speaker_form=speaker_form, session_form=session_form, event=event)
 
     @expose('/new/<user_id>/<hash>/', methods=('GET', 'POST'))
     def new_view(self, event_id, user_id, hash):
         invite = DataGetter.get_invite_by_user_id(user_id)
+        event = DataGetter.get_event(event_id)
         if invite and invite.hash == hash:
             if request.method == 'POST':
                 DataManager.add_session_to_event(request.form, event_id)
                 return redirect(url_for('.index_view', event_id=event_id))
-            return self.render('/gentelella/admin/sessions/new/new.html')
+            return self.render('/gentelella/admin/sessions/new.html', event=event)
 
     @expose('/<int:session_id>/invited/', methods=('GET', 'POST'))
     def invited_view(self, event_id, session_id):
@@ -77,6 +81,7 @@ class SessionsView(BaseView):
                            session=session, event_id=event_id, form_elems=form_elems)
 
     @expose('/<int:session_id>/edit/', methods=('GET', 'POST'))
+    @can_access
     def edit_view(self, event_id, session_id):
         session = get_session_or_throw(session_id)
         if request.method == 'GET':
@@ -85,7 +90,8 @@ class SessionsView(BaseView):
             DataManager.edit_session(request.form, session)
             return redirect(url_for('.index_view', event_id=event_id))
 
-    @expose('/<int:session_id>/accept', methods=('GET',))
+    @expose('/<int:session_id>/accept_session', methods=('GET',))
+    @can_accept_and_reject
     def accept_session(self, event_id, session_id):
         session = get_session_or_throw(session_id)
         session.state = 'accepted'
@@ -93,7 +99,8 @@ class SessionsView(BaseView):
         flash("The session has been accepted")
         return redirect(url_for('.index_view', event_id=event_id))
 
-    @expose('/<int:session_id>/reject', methods=('GET',))
+    @expose('/<int:session_id>/reject_session', methods=('GET',))
+    @can_accept_and_reject
     def reject_session(self, event_id, session_id):
         session = get_session_or_throw(session_id)
         session.state = 'rejected'

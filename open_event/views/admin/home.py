@@ -1,8 +1,9 @@
 """Copyright 2015 Rafal Kowalski"""
 import logging
 
-from flask import url_for, redirect, request, session
+from flask import url_for, redirect, request, session, jsonify
 from flask.ext import login
+from flask.ext.migrate import upgrade
 from flask_admin import expose
 from flask_admin.base import AdminIndexView
 from flask.ext.scrypt import generate_password_hash
@@ -157,3 +158,8 @@ class MyHomeView(AdminIndexView):
     @expose('/forbidden/', methods=('GET',))
     def forbidden_view(self):
         return self.render('/gentelella/admin/forbidden.html')
+
+    @expose('/migrate/', methods=('POST',))
+    def run_migrations(self):
+        upgrade()
+        return jsonify({'status': 'ok'})

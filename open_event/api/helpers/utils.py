@@ -3,21 +3,32 @@ from .helpers import get_object_list, get_object_or_404, get_object_in_event, \
     create_model, validate_payload, delete_model, update_model, \
     handle_extra_payload
 from open_event.models.event import Event as EventModel
+from .error_docs import (
+    notfound_error_model,
+    notauthorized_error_model,
+    validation_error_model,
+    invalidservice_error_model,
+)
 
 DEFAULT_PAGE_START = 1
 DEFAULT_PAGE_LIMIT = 20
 
 POST_RESPONSES = {
-    400: 'Validation error',
-    401: 'Authentication failure',
-    404: 'Event does not exist',
+    400: ('Validation error', validation_error_model),
+    401: ('Authentication failure', notauthorized_error_model),
+    404: ('Event does not exist', notfound_error_model),
     201: 'Resource created successfully'
 }
 
 PUT_RESPONSES = {
-    400: 'Validation Error / Bad request',
-    401: 'Authentication failure',
-    404: 'Object/Event not found'
+    400: ('Validation Error', validation_error_model),
+    401: ('Authentication failure', notauthorized_error_model),
+    404: ('Object/Event not found', notfound_error_model)
+}
+
+SERVICE_RESPONSES = {
+    404: ('Service not found', notfound_error_model),
+    400: ('Service does not belong to event', invalidservice_error_model),
 }
 
 # Parameters for a paginated response
