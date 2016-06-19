@@ -268,6 +268,7 @@ class DataGetter:
             events = Event.query.filter(Event.state == 'Published')
         else:
             events = Event.query.filter(Event.state == 'Published').filter(Event.privacy != 'private')
+        events = events.filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now())
         return events
 
     @staticmethod
