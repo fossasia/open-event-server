@@ -16,7 +16,7 @@ class MySessionView(BaseView):
                            upcoming_events_sessions=upcoming_events_sessions, past_events_sessions=past_events_sessions,
                            page_content=page_content)
 
-    @expose('/<int:session_id>')
+    @expose('/<int:session_id>/')
     @flask_login.login_required
     def display_session_view(self, session_id):
         session = DataGetter.get_sessions_of_user_by_id(session_id)

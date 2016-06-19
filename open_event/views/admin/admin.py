@@ -17,6 +17,7 @@ from open_event.views.admin.models_views.sponsors import SponsorsView
 from open_event.views.admin.home import MyHomeView
 from open_event.views.public.event_detail import EventDetailView
 from open_event.views.public.browse import BrowseView
+from open_event.views.public.pages import BasicPagesView
 from open_event.views.admin.super_admin.super_admin import SuperAdminView
 from open_event.views.admin.super_admin.events import SuperAdminEventsView
 from open_event.views.admin.super_admin.my_sessions import SuperAdminMySessionView
@@ -40,8 +41,10 @@ class AdminView(object):
         self._add_views()
 
     def _add_views(self):
+
         self.admin.add_view(EventDetailView(name='Event Detail', url='/e', endpoint="event_detail"))
         self.admin.add_view(BrowseView(name='Search Results', url='/<location>/events', endpoint="search_results"))
+        self.admin.add_view(BasicPagesView(name='Page', url='/'))
         self.admin.add_view(MySessionView(name='MySessions', url='/events/mysessions', endpoint="my_sessions"))
         self.admin.add_view(EventsView(name='Events', url='/events', endpoint="events"))
         self.admin.add_view(SpeakersView(name='Speakers', url='/events/<event_id>/speakers', endpoint="event_speakers"))
@@ -52,6 +55,7 @@ class AdminView(object):
         self.admin.add_view(ProfileView(name='Profile', url='/profile', endpoint="profile"))
         self.admin.add_view(TracksView(name='Track', url='/events/<event_id>/tracks', endpoint="event_tracks"))
         self.admin.add_view(InviteView(name='Invite', url='/events/<event_id>/invite', endpoint="event_invites"))
+
 
         self.admin.add_view(SuperAdminView(name='Admin', url='/admin/', endpoint="sadmin"))
         self.admin.add_view(SuperAdminEventsView(name='Events', url='/admin/events', endpoint="sadmin_events"))
