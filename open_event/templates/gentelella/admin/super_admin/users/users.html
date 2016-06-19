@@ -19,7 +19,8 @@ Users
     <tr>
         <th>Name</th>
         <th>Email</th>
-        <th>Role</th>
+        <th>Site-wide Roles</th>
+        <th>Event Roles</th>
         <th>Member Since</th>
         <th>Last Access</th>
         <th>Options</th>
@@ -32,8 +33,18 @@ Users
         <td>{{ 'Not Available' if not user['user'].user_detail.fullname else user['user'].user_detail.fullname }}</td>
         <td>{{ user['user'].email }}</td>
         <td>
+          <ul style="padding-left:0;">
+          {% if user['user'].is_super_admin %}
+            <li>Super Admin</li>
+          {% endif %}
+          {% if user['user'].is_admin %}
+            <li>Admin</li>
+          {% endif %}
+          </ul>
+        </td>
+        <td>
         <ul style="padding-left:0;">
-        {% for role in user['roles'] %}
+        {% for role in user['event_roles'] %}
           <li>{{ role.role.title_name }}, <a href="{{ get_url('events.details_view', event_id=role.event.id) }}" title="Go to event" target="_blank">{{ role.event.name }}</a></li>
         {% endfor %}
         </ul>
