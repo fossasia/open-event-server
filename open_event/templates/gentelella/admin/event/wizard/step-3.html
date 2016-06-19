@@ -1,4 +1,4 @@
-{% macro track_entry(track=None, remove=false, empty=False) %}
+{% macro track_entry(track=None, empty=False) %}
     <div class="track-holder">
         <div class=" col-xs-5 form-group">
             <input type="text" class="form-control" name="tracks[name]" placeholder="Name" required="required"
@@ -15,18 +15,15 @@
                 <span class="input-group-addon"><i></i></span>
             </div>
         <span class="input-group-btn">
-            {% if remove %}
-                <button type="button" class="btn btn-danger remove-tracks">-</button>
-            {% else %}
-                <button type="button" class="btn btn-primary add-tracks">+</button>
-            {% endif %}
+            <button type="button" class="btn btn-danger remove-tracks">-</button>
+            <button type="button" class="btn btn-primary add-tracks">+</button>
         </span>
         </div>
     </div>
 
 {% endmacro %}
 
-{% macro microlocation_entry(microlocation=None, remove=false, empty=False) %}
+{% macro microlocation_entry(microlocation=None, empty=False) %}
     <div class="microlocation-holder">
         <div class="col-xs-5 form-group">
             <input type="text" class="form-control" required="required" name="rooms[name]" placeholder="Name"
@@ -38,12 +35,9 @@
                 <input type="number" class="form-control" name="rooms[floor]"
                        placeholder="Floor"
                        title="rooms-floor"/>
-                            <span class="input-group-btn">
-                        {% if remove %}
+                        <span class="input-group-btn">
                             <button type="button" class="btn btn-danger remove-rooms">-</button>
-                        {% else %}
                             <button type="button" class="btn btn-primary add-rooms">+</button>
-                        {% endif %}
                         </span>
 
             </div>
@@ -51,7 +45,7 @@
     </div>
 {% endmacro %}
 
-{% macro session_type_entry(session_type=None, remove=false, empty=False) %}
+{% macro session_type_entry(session_type=None, empty=False) %}
     <div class="session-type-holder">
         <div class="col-xs-5 form-group">
             <input type="text" class="form-control" required="required" name="session_type[name]" placeholder="Name"
@@ -64,11 +58,8 @@
                    placeholder="Length (HH.MM)"
                    value="{{ session_type.length | default(0.30, true) }}">
             <span class="input-group-btn">
-                {% if remove %}
-                    <button type="button" class="btn btn-danger remove-session-type">-</button>
-                {% else %}
-                    <button type="button" class="btn btn-primary add-session-type">+</button>
-                {% endif %}
+                <button type="button" class="btn btn-danger remove-session-type">-</button>
+                <button type="button" class="btn btn-primary add-session-type">+</button>
             </span>
         </div>
     </div>
@@ -94,9 +85,8 @@
                 <h2 class="label-header">Tracks</h2>
                 {% if tracks %}
                     {% for track in tracks %}
-                        {{ track_entry(track, true) }}
+                        {{ track_entry(track) }}
                     {% endfor %}
-                    {{ track_entry(empty=True) }}
                 {% else %}
                     {{ track_entry() }}
                 {% endif %}
@@ -105,9 +95,8 @@
                 <h2 class="label-header">Rooms</h2>
                 {% if microlocations %}
                     {% for microlocation in microlocations %}
-                        {{ microlocation_entry(microlocation, true) }}
+                        {{ microlocation_entry(microlocation) }}
                     {% endfor %}
-                    {{ microlocation_entry(empty=True) }}
                 {% else %}
                     {{ microlocation_entry() }}
                 {% endif %}
@@ -116,9 +105,8 @@
                 <h2 class="label-header">Session Types</h2>
                 {% if session_types %}
                     {% for session_type in session_types %}
-                        {{ session_type_entry(session_type, true) }}
+                        {{ session_type_entry(session_type) }}
                     {% endfor %}
-                    {{ session_type_entry(empty=True) }}
                 {% else %}
                     {{ session_type_entry() }}
                 {% endif %}
@@ -183,10 +171,6 @@
     $(document).on("click", '.add-session-type', function () {
         var $element = $($(".session-type-holder")[0]).clone();
         $element.find("input").val('').attr("value", "");
-        $element.find(".add-session-type").addClass("remove-session-type")
-                .removeClass("add-session-type")
-                .removeClass("btn-primary").addClass("btn-danger").text("-");
-
         $element.find(".session-length").timepicker({
             'timeFormat': 'G.i'
         });
@@ -196,7 +180,9 @@
     });
 
     $(document).on("click", ".remove-session-type", function () {
-        $(this).closest(".session-type-holder").remove();
+        if ($('.session-types').children().length > 2) {
+            $(this).closest(".session-type-holder").remove();
+        }
     });
 
 
@@ -204,9 +190,6 @@
         counter += 1;
         var $element = $($(".track-holder")[0]).clone();
         $element.find("input:not(.color-picker-input)").val('').attr("value", "");
-        $element.find(".add-tracks").addClass("remove-tracks")
-                .removeClass("add-tracks")
-                .removeClass("btn-primary").addClass("btn-danger").text("-");
         $element.find(".colorpicker-component").attr("id", "color" + counter);
         $('.tracks').append($element);
         $('#color' + counter).colorpicker();
@@ -214,22 +197,22 @@
     });
 
     $(document).on("click", ".remove-tracks", function () {
-        $(this).closest(".track-holder").remove();
+        if ($('.tracks').children().length > 2) {
+            $(this).closest(".track-holder").remove();
+        }
     });
 
     $(document).on("click", '.add-rooms', function () {
         var $element = $($(".microlocation-holder")[0]).clone();
         $element.find("input").val('').attr("value", "");
-        $element.find(".add-rooms").addClass("remove-rooms")
-                .removeClass("add-rooms")
-                .removeClass("btn-primary").addClass("btn-danger").text("-");
-
         $('.rooms').append($element);
         $wizard.smartWizard('fixHeight');
     });
 
     $(document).on("click", ".remove-rooms", function () {
-        $(this).closest(".microlocation-holder").remove();
+        if ($('.rooms').children().length > 2) {
+            $(this).closest(".microlocation-holder").remove();
+        }
     });
 
 
