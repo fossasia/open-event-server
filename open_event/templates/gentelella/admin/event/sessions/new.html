@@ -27,21 +27,21 @@ Create Session
           <textarea {% if require==1 %}
                         required="required"
                     {% endif %}
-                    name="{{ name }}" class="form-control col-md-7 col-xs-12"></textarea>
+                    name="{{ identifier }}" class="form-control col-md-7 col-xs-12"></textarea>
         {% elif identifier in media_session_fields %}
           <br><input {% if require==1 %}
                     required="required"
                 {% endif %}
-                type="file" id="speaker-file-{{ name | default(1) }}" name="{{ name }}"
+                type="file" id="speaker-file-{{ identifier | default(1) }}" name="{{ identifier }}"
                    class="upload-btn"/>
-          <label class="file-label" for="speaker-file-{{ name | default(1) }}">
+          <label class="file-label" for="speaker-file-{{ identifier | default(1) }}">
                 <i class="fa fa-cloud-upload" aria-hidden="true"></i>
                 Choose a file</label>
         {% else %}
           <input {% if require==1 %}
                     required="required"
                 {% endif %}
-                name="{{ name }}" class="form-control col-md-7 col-xs-12"/>
+                name="{{ identifier }}" class="form-control col-md-7 col-xs-12"/>
         {% endif %}
     </div>
 {% endmacro %}
@@ -62,15 +62,30 @@ Create Session
         {% endif %}
         </label>
         {% if identifier in textarea_speaker_fields %}
-          <textarea name="{{ name }}" class="form-control col-md-7 col-xs-12"></textarea>
+          <textarea {% if require==1 %}
+                        required="required"
+                    {% endif %}
+                    name="{{ identifier }}" class="form-control col-md-7 col-xs-12"></textarea>
         {% elif identifier in media_speaker_fields %}
-          <br><input type="file" id="speaker-file-{{ name | default(1) }}" name="{{ name }}"
-                   class="upload-btn"/>
-          <label class="file-label" for="speaker-file-{{ name | default(1) }}">
+          <br><input {% if require==1 %}
+                        required="required"
+                    {% endif %}
+                    type="file" id="speaker-file-{{ identifier | default(1) }}" name="{{ identifier }}"
+                    class="upload-btn"/>
+          <label class="file-label" for="speaker-file-{{ identifier | default(1) }}">
                 <i class="fa fa-cloud-upload" aria-hidden="true"></i>
                 Choose a file</label>
         {% else %}
-          <input name="{{ name }}" class="form-control col-md-7 col-xs-12"/>
+          <input {% if require==1 %}
+                    required="required"
+                {% endif %}
+                name="{{ identifier }}"
+                {% if identifier=="email" %}
+                {% if current_user.is_authenticated %}
+                    value="{{ current_user.email }}" disabled
+                {% endif %}
+                {% endif %}
+                class="form-control col-md-7 col-xs-12"/>
         {% endif %}
     </div>
 {% endmacro %}
@@ -127,7 +142,10 @@ Create Session
                                 {% endif %}
                         {% endfor %}
                     </div>
-                    <center><input type="submit" class="btn btn-success" value="Submit Session"/></center>
+                    <center>
+                        <input type="submit" class="btn btn-primary" value="Save as Draft"/>
+                        <input type="submit" class="btn btn-success" value="Submit Session"/>
+                    </center>
                 </form>
             </div>
         </div>
@@ -143,7 +161,6 @@ Create Session
     <script type="text/javascript">
     $(document).ready(function () {
             $("textarea").summernote(summernoteConfig);
-        $(".form_wizard").smartWizard('fixHeight');
         });
     </script>
 {% endblock %}
