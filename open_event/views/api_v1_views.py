@@ -444,5 +444,8 @@ def documentation():
 
 @app.route('/migrate/', methods=('GET', 'POST'))
 def run_migrations():
-    upgrade()
+    try:
+        upgrade()
+    except:
+        print "Migrations have been run"
     return jsonify({'status': 'ok'})
