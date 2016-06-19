@@ -30,7 +30,7 @@
                     {% if csrf_token %}
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     {% endif %}
-                    <div id="wizard" data-state='{% if event %}{{ event.state }}{% endif %}' class="form_wizard wizard_horizontal">
+                    <div id="wizard" data-state='{% if event %}{{ event.state }}{% endif %}' data-id='{% if event %}{{ event.id }}{% endif %}' class="form_wizard wizard_horizontal">
                         <ul class="wizard_steps anchor">
                             <li>
                                 <a href="#step-1" class="selected" isdone="1" rel="1">
