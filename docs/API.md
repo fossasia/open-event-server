@@ -198,6 +198,8 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 | --- | --- | --- | --- |
 |**id** | integer | Required | Public |
 |**email** | string | Required | Public |
+|**signup_time** | string | Optional | Public |
+|**last_access_time** | string | Optional | Public |
 |**user_detail** | **UserDetail** | Optional | Public |
 
 #### UserDetail
