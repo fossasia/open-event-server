@@ -10,7 +10,7 @@ from open_event.models.session_type import SessionType as SessionTypeModel
 from .helpers.helpers import get_paginated_list, requires_auth, \
     save_db_model, get_object_in_event
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO,\
-    PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
+    PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
 from .helpers import custom_fields as fields
 from .helpers.special_fields import SessionLanguageField, SessionStateField
 
@@ -157,8 +157,7 @@ TypeDAO = SessionTypeDAO(SessionTypeModel, SESSION_TYPE_POST)
 # Create resources
 
 @api.route('/events/<int:event_id>/sessions/<int:session_id>')
-@api.response(404, 'Session not found')
-@api.response(400, 'Session does not belong to event')
+@api.doc(responses=SERVICE_RESPONSES)
 class Session(Resource):
     @api.doc('get_session')
     @api.marshal_with(SESSION)

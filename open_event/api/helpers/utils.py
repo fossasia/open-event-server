@@ -26,6 +26,11 @@ PUT_RESPONSES = {
     404: ('Object/Event not found', notfound_error_model)
 }
 
+SERVICE_RESPONSES = {
+    404: ('Service not found', notfound_error_model),
+    400: ('Service does not belong to event', invalidservice_error_model),
+}
+
 # Parameters for a paginated response
 PAGE_PARAMS = {
     'start': {

@@ -4,7 +4,7 @@ from open_event.models.speaker import Speaker as SpeakerModel
 
 from .helpers.helpers import get_paginated_list, requires_auth
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
-    PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
+    PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
 from .helpers import custom_fields as fields
 
 api = Namespace('speakers', description='Speakers', path='/')
@@ -50,8 +50,7 @@ DAO = SpeakerDAO(SpeakerModel, SPEAKER_POST)
 
 
 @api.route('/events/<int:event_id>/speakers/<int:speaker_id>')
-@api.response(404, 'Speaker not found')
-@api.response(400, 'Speaker does not belong to event')
+@api.doc(responses=SERVICE_RESPONSES)
 class Speaker(Resource):
     @api.doc('get_speaker')
     @api.marshal_with(SPEAKER)
