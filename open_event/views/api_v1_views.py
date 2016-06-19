@@ -3,6 +3,7 @@ import os
 from flask import jsonify, url_for, redirect, request, send_from_directory
 from flask.ext.cors import cross_origin
 from flask.ext import login
+from flask.ext.migrate import upgrade
 
 from ..models.track import Track
 from ..models.speaker import Speaker
@@ -440,3 +441,8 @@ def send_cal(filename):
 @app.route('/documentation')
 def documentation():
     return auto.html()
+
+@app.route('/migrate/', methods=('GET', 'POST'))
+def run_migrations(self):
+    upgrade()
+    return jsonify({'status': 'ok'})

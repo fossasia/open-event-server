@@ -24,6 +24,8 @@ USER_DETAIL = api.model('UserDetail', {
 USER = api.model('User', {
     'id': fields.Integer(),
     'email': fields.Email(required=True),
+    'signup_time': fields.DateTime(),
+    'last_access_time': fields.DateTime(),
     'user_detail': fields.Nested(USER_DETAIL)
 })
 
@@ -33,12 +35,22 @@ USER_PAGINATED = api.clone('UserPaginated', PAGINATED_MODEL, {
 
 USER_PUT = api.clone('UserPut', USER)
 del USER_PUT['id']
+del USER_PUT['signup_time']
+del USER_PUT['last_access_time']
 
 USER_POST = api.model('UserPost', {
     'email': fields.Email(required=True),
     'password': fields.String(required=True)
 })
 
+# Responses
+
+USER_POST_RESPONSES = POST_RESPONSES.copy()
+del USER_POST_RESPONSES[404]
+del USER_POST_RESPONSES[401]
+
+
+# DAO
 
 class UserDetailDAO(BaseDAO):
     pass
@@ -97,7 +109,7 @@ class UserList(Resource):
         return DAO.list()
 
     # @requires_auth
-    @api.doc('create_user', responses=POST_RESPONSES)
+    @api.doc('create_user', responses=USER_POST_RESPONSES)
     @api.marshal_with(USER)
     @api.expect(USER_POST)
     def post(self):

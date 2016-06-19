@@ -268,6 +268,8 @@ def requires_auth(f):
             if login.current_user.is_authenticated:
                 g.user = login.current_user
                 success = True
+        else:
+            g.user.update_lat()
         if success:
             return f(*args, **kwargs)
         else:
