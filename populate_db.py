@@ -15,10 +15,13 @@ from open_event.models.user import ORGANIZER, COORGANIZER, TRACK_ORGANIZER, MODE
 
 
 def create_roles():
-    save_to_db(Role(ORGANIZER), 'Role saved')
-    save_to_db(Role(COORGANIZER), 'Role saved')
-    save_to_db(Role(TRACK_ORGANIZER), 'Role saved')
-    save_to_db(Role(MODERATOR), 'Role saved')
+    save_to_db(Role(name=ORGANIZER, title_name='Organizer'), 'Role saved')
+    save_to_db(Role(name=COORGANIZER, title_name='Co-organizer'), 'Role saved')
+    save_to_db(
+        Role(name=TRACK_ORGANIZER,
+             title_name='Track Organizer'),
+        'Role saved')
+    save_to_db(Role(name=MODERATOR, title_name='Moderator'), 'Role saved')
 
 
 def create_services():
