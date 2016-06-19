@@ -47,20 +47,22 @@ class SessionsView(BaseView):
             return redirect(url_for('.index_view', event_id=event_id))
         speaker_form = json.loads(form_elems.speaker_form)
         session_form = json.loads(form_elems.session_form)
+        event = DataGetter.get_event(event_id)
         if request.method == 'POST':
             DataManager.add_session_to_event(request.form, event_id)
             return redirect(url_for('.index_view', event_id=event_id))
         return self.render('/gentelella/admin/event/sessions/new.html',
-                           speaker_form=speaker_form, session_form=session_form)
+                           speaker_form=speaker_form, session_form=session_form, event=event)
 
     @expose('/new/<user_id>/<hash>/', methods=('GET', 'POST'))
     def new_view(self, event_id, user_id, hash):
         invite = DataGetter.get_invite_by_user_id(user_id)
+        event = DataGetter.get_event(event_id)
         if invite and invite.hash == hash:
             if request.method == 'POST':
                 DataManager.add_session_to_event(request.form, event_id)
                 return redirect(url_for('.index_view', event_id=event_id))
-            return self.render('/gentelella/admin/sessions/new.html')
+            return self.render('/gentelella/admin/sessions/new.html', event=event)
 
     @expose('/<int:session_id>/invited/', methods=('GET', 'POST'))
     def invited_view(self, event_id, session_id):
