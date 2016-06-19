@@ -18,6 +18,7 @@ from datetime import timedelta
 
 from icalendar import Calendar, Event
 
+from open_event.helpers.helpers import string_empty
 from open_event.models import db
 from open_event.views.admin.admin import AdminView
 from helpers.jwt import jwt_authenticate, jwt_identity
@@ -103,11 +104,13 @@ class SilentUndefined(Undefined):
 def locations():
     names = []
     for event in DataGetter.get_all_live_events():
-        response = requests.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
-            event.longitude)).json()
-        for addr in response['results'][0]['address_components']:
-            if addr['types'] == ['locality', 'political']:
-                names.append(addr['short_name'])
+        if not string_empty(event.location) and not string_empty(event.latitude) and not string_empty(event.longitude):
+            response = requests.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
+                event.longitude)).json()
+            if response['status'] == u'OK':
+                for addr in response['results'][0]['address_components']:
+                    if addr['types'] == ['locality', 'political']:
+                        names.append(addr['short_name'])
 
     cnt = Counter()
     for location in names:
