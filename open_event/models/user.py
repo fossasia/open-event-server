@@ -35,6 +35,7 @@ class User(db.Model):
     signup_time = db.Column(db.DateTime)
     last_access_time = db.Column(db.DateTime)
     user_detail = db.relationship("UserDetail", uselist=False, backref="user")
+    created_date = db.Column(db.DateTime, default=datetime.now())
 
     def _is_role(self, role_name, event_id):
         role = Role.query.filter_by(name=role_name).first()
