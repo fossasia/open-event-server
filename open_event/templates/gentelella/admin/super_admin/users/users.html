@@ -34,7 +34,7 @@ Users
         <td>
         <ul style="padding-left:0;">
         {% for role in user['roles'] %}
-          <li>{{ role.role.title_name }}, {{ role.event.name }}</li>
+          <li>{{ role.role.title_name }}, <a href="{{ get_url('events.details_view', event_id=role.event.id) }}" title="Go to event" target="_blank">{{ role.event.name }}</a></li>
         {% endfor %}
         </ul>
         </td>
