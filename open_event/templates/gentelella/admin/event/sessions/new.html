@@ -108,14 +108,21 @@
                 <div class="col-md-1 col-sm-1 col-xs-12">
 
                 </div>
-                <div class="col-md-4 col-sm-4 col-xs-12 session_form">
+                <div class="col-md-5 col-sm-5 col-xs-12 session_form" style="margin-right: 25px;">
                     <h4>Session Details</h4>
                     {% for elem in session_fields %}
                         {% if session_form[elem].include==1 %}
                             {{ session_form_field(elem, session_form[elem].require) }}
                         {% endif %}
                     {% endfor %}
-
+                </div>
+                <div class="col-md-5 col-sm-5 col-xs-12 speaker_form">
+                    <h4>Speaker Details</h4>
+                    {% for elem in speaker_fields %}
+                        {% if speaker_form[elem].include==1 %}
+                            {{ speaker_form_field(elem, speaker_form[elem].require) }}
+                        {% endif %}
+                    {% endfor %}
                     <div class="speakers">
                         <hr>
                         <br><h4>Invite Speakers</h4>
@@ -133,17 +140,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-2 col-sm-2 col-xs-12">
-
-                </div>
-                <div class="col-md-4 col-sm-4 col-xs-12 speaker_form">
-                    <h4>Speaker Details</h4>
-                    {% for elem in speaker_fields %}
-                        {% if speaker_form[elem].include==1 %}
-                            {{ speaker_form_field(elem, speaker_form[elem].require) }}
-                        {% endif %}
-                    {% endfor %}
                 </div>
                 <div style="text-align: center;">
                     <input type="submit" class="btn btn-primary" value="Save as Draft"/>
