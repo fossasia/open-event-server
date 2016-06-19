@@ -104,7 +104,7 @@ class SilentUndefined(Undefined):
 def locations():
     names = []
     for event in DataGetter.get_all_live_events():
-        if not string_empty(event.location) and not string_empty(event.latitude) and not string_empty(event.longitude):
+        if not string_empty(event.location_name) and not string_empty(event.latitude) and not string_empty(event.longitude):
             response = requests.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
                 event.longitude)).json()
             if response['status'] == u'OK':
