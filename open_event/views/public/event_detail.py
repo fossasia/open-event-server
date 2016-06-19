@@ -30,6 +30,15 @@ class EventDetailView(BaseView):
         tracks = DataGetter.get_tracks(event_id)
         return self.render('/gentelella/guest/event/sessions.html', event=event, tracks=tracks)
 
+    @expose('/<int:event_id>/schedule/')
+    def display_event_schedule(self, event_id):
+        event = get_published_event_or_abort(event_id)
+        if not event.schedule_published_on:
+            abort(404)
+        return self.render('/gentelella/guest/event/schedule.html', event=event)
+
+    # SLUGGED PATHS
+
     @expose('/<int:event_id>/<slug>/')
     def display_event_detail_home_slugged(self, event_id, slug):
         return self.display_event_detail_home(event_id)

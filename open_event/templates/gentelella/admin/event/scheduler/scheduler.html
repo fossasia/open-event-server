@@ -82,53 +82,12 @@
 
 
             </div>
-            <div class="timeline" id="timeline" data-event-id="{{ event.id }}"
-                 style="margin-top: 10px; margin-left: 10px; width: 100%; overflow-x: hidden;">
-                <table class="timeline-table table" style="width: 100%">
-                    <tbody>
-                    <tr>
-                        <td class="timeunits x1" width="55">
-                            <div class="timeunit"></div>
-                        </td>
-                        <td class="microlocations x1">
-                            <div id="microlocation-container"
-                                 class="microlocation-container clearfix draggable-holder"
-                                 style="width: 750px; height: 1311px;">
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div style="float: right; margin-top: 10px;">
-                All the timings are in UTC
-            </div>
+            {% include 'gentelella/admin/event/scheduler/components/timeline.html' %}
+
         </div>
     </div>
 
-    <script id="microlocation-template" type="text/x-template">
-        <div class="microlocation">
-            <div class="text-center microlocation-header"><span class="badge">0</span></div>
-            <div class="microlocation-inner" style="height: 1296px;">
-
-            </div>
-        </div>
-    </script>
-
-
-    <script id="date-change-button-template" type="text/x-template">
-        <button type="button" class="btn btn-default date-change-btn">May 20</button>
-    </script>
-
-    <script id="session-template" type="text/x-template">
-        <div class="session" data-toggle="tooltip" data-animation="false" data-placement="top" title="">
-            <div class="text">
-
-            </div>
-            <i class="edit-btn glyphicon glyphicon-pencil" data-toggle="modal" data-target="#edit-session-modal"></i>
-            <i class="remove-btn glyphicon glyphicon-remove"></i>
-        </div>
-    </script>
+    {% include 'gentelella/admin/event/scheduler/components/timeline_templates.html' %}
 
     <div class="modal fade" id="edit-session-modal" tabindex="-1" role="dialog" aria-hidden="true"
          data-start-date="{{ event.start_time.strftime('%Y %m %d') }}">

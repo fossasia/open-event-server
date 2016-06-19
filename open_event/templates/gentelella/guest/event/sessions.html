@@ -172,6 +172,9 @@
             <li role="presentation"><a href="/e/{{ event.id }}/#speakers">Speakers</a></li>
             <li role="presentation"><a href="/e/{{ event.id }}/#sponsors">Sponsors</a></li>
             <li role="presentation" class="active"><a href="/e/{{ event.id }}/sessions">Sessions</a></li>
+            {% if event.schedule_published_on %}
+                <li role="presentation"><a href="/e/{{ event.id }}/schedule">Schedule</a></li>
+            {% endif %}
             <li role="presentation"><a href="/e/{{ event.id }}/#organizer">Organizer</a></li>
             <li role="presentation"><a href="/e/{{ event.id }}/#getting-here">Getting Here</a></li>
         </ul>
