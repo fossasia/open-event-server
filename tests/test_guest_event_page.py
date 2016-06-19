@@ -4,10 +4,12 @@ from datetime import datetime
 from flask import url_for
 
 from open_event.helpers.data import save_to_db
+from open_event.models.call_for_papers import CallForPaper
 from tests.object_mother import ObjectMother
 from tests.utils import OpenEventTestCase
 from tests.setup_database import Setup
 from open_event import current_app as app
+
 
 class TestGuestEventPage(OpenEventTestCase):
     def setUp(self):
@@ -18,14 +20,16 @@ class TestGuestEventPage(OpenEventTestCase):
             event = ObjectMother.get_event()
             event.state = 'Published'
             save_to_db(event, "Event Saved")
-            rv = self.app.get(url_for('event_detail.display_event_detail_home', event_id=event.id), follow_redirects=True)
+            rv = self.app.get(url_for('event_detail.display_event_detail_home', event_id=event.id),
+                              follow_redirects=True)
             self.assertTrue("Open Event" in rv.data, msg=rv.data)
 
     def test_unpublished_event_view_attempt(self):
         with app.test_request_context():
             event = ObjectMother.get_event()
             save_to_db(event, "Event Saved")
-            rv = self.app.get(url_for('event_detail.display_event_detail_home', event_id=event.id), follow_redirects=True)
+            rv = self.app.get(url_for('event_detail.display_event_detail_home', event_id=event.id),
+                              follow_redirects=True)
             self.assertEqual(rv.status_code, 404)
 
     def test_published_event_sessions_view(self):
@@ -87,6 +91,35 @@ class TestGuestEventPage(OpenEventTestCase):
             session.speakers = [speaker]
             save_to_db(speaker, "Session Saved")
             rv = self.app.get(url_for('event_detail.display_event_schedule', event_id=event.id), follow_redirects=True)
+            self.assertEqual(rv.status_code, 404)
+
+    def test_published_event_cfs_view(self):
+        with app.test_request_context():
+
+            event = ObjectMother.get_event()
+            event.state = 'Published'
+            save_to_db(event, "Event Saved")
+
+            custom_form = ObjectMother.get_custom_form()
+            custom_form.event_id = event.id
+            save_to_db(custom_form, "Custom form saved")
+
+            call_for_papers = CallForPaper(announcement="Announce",
+                                           start_date=datetime(2003, 8, 4, 12, 30, 45),
+                                           end_date=datetime(2004, 8, 4, 12, 30, 45),
+                                           event_id=event.id)
+
+            save_to_db(call_for_papers, "Call for papers saved")
+
+            rv = self.app.get(url_for('event_detail.display_event_cfs', event_id=event.id), follow_redirects=True)
+            self.assertTrue("Closed" in rv.data, msg=rv.data)
+
+    def test_published_event_cfs_view_attempt(self):
+        with app.test_request_context():
+            event = ObjectMother.get_event()
+            event.state = 'Published'
+            save_to_db(event, "Event Saved")
+            rv = self.app.get(url_for('event_detail.display_event_cfs', event_id=event.id), follow_redirects=True)
             self.assertEqual(rv.status_code, 404)
 
 if __name__ == '__main__':

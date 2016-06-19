@@ -30,7 +30,6 @@ from ..models.user_detail import UserDetail
 from ..models.role import Role
 from ..models.users_events_roles import UsersEventsRoles
 from ..models.session_type import SessionType
-from ..models.sessions_speakers import SessionsSpeakers
 from ..models.social_link import SocialLink
 from ..models.track import Track
 from open_event.helpers.oauth import OAuth, FbOAuth
@@ -129,9 +128,11 @@ class DataManager(object):
         update_version(event_id, False, "session_ver")
 
     @staticmethod
-    def add_session_to_event(form, event_id, speaker_img_name):
+    def add_session_to_event(form, event_id, speaker_img_name, state="pending"):
         """
         Session will be saved to database with proper Event id
+        :param speaker_img_name:
+        :param state:
         :param form: view data form
         :param event_id: Session belongs to Event by event id
         """
@@ -143,10 +144,8 @@ class DataManager(object):
                               end_time="2016-01-01",
                               event_id=event_id,
                               short_abstract=form["short_abstract"] if "short_abstract" in form.keys() else "",
-                              state="pending")
+                              state=state)
 
-        save_to_db(new_session, "Session saved")
-        update_version(event_id, False, "session_ver")
 
         if speaker_img_name != "":
             img_path = 'static/media/image/' + speaker_img_name
@@ -164,14 +163,11 @@ class DataManager(object):
                               organisation=form["organisation"] if "organisation" in form.keys() else "",
                               position=form["position"] if "position" in form.keys() else "",
                               country=form["country"] if "country" in form.keys() else "",
-                              user=login.current_user)
-        save_to_db(new_speaker, "Speaker saved")
+                              user=login.current_user if login and login.current_user.is_authenticated else None)
+        new_session.speakers.append(new_speaker)
+        save_to_db(new_session, "Session saved")
         update_version(event_id, False, "speakers_ver")
-
-        new_session_speaker = SessionsSpeakers(session_id=new_session.id,
-                                               speaker_id=new_speaker.id)
-
-        save_to_db(new_session_speaker, "Session Speaker saved")
+        update_version(event_id, False, "session_ver")
 
         invite_emails = form.getlist("speakers[email]")
         for index, email in enumerate(invite_emails):
@@ -191,6 +187,7 @@ class DataManager(object):
         :param form: view data form
         :param event_id: Session belongs to Event by event id
         """
+        session = DataGetter.get_session(session_id)
         new_speaker = Speaker(name=form["name"] if "name" in form.keys() else "",
                               photo=form["photo"] if "photo" in form.keys() else "",
                               short_biography=form["short_biography"] if "short_biography" in form.keys() else "",
@@ -205,13 +202,9 @@ class DataManager(object):
                               position=form["position"] if "position" in form.keys() else "",
                               country=form["country"] if "country" in form.keys() else "",
                               user=login.current_user)
-        save_to_db(new_speaker, "Speaker saved")
+        session.speakers.append(new_speaker)
+        save_to_db(session, "Speaker saved")
         update_version(event_id, False, "speakers_ver")
-
-        new_session_speaker = SessionsSpeakers(session_id=session_id,
-                                               speaker_id=new_speaker.id)
-
-        save_to_db(new_session_speaker, "Session Speaker saved")
 
     @staticmethod
     def create_speaker_session_relation(session_id, speaker_id, event_id):
@@ -220,10 +213,10 @@ class DataManager(object):
         :param form: view data form
         :param event_id: Session, speaker belongs to Event by event id
         """
-        new_session_speaker = SessionsSpeakers(session_id=session_id,
-                                               speaker_id=speaker_id)
-
-        save_to_db(new_session_speaker, "Session Speaker saved")
+        speaker = DataGetter.get_speaker(speaker_id)
+        session = DataGetter.get_session(session_id)
+        session.speakers.append(speaker)
+        save_to_db(session, "Session Speaker saved")
 
     @staticmethod
     def edit_session(form, session):
@@ -853,6 +846,12 @@ def create_user_password(form, user):
     save_to_db(user, "User password created")
     return user
 
+def user_logged_in(user):
+    speakers = DataGetter.get_speaker_by_email(user.email).all()
+    for speaker in speakers:
+        speaker.user = user
+        save_to_db(speaker)
+    return True
 
 def update_version(event_id, is_created, column_to_increment):
     """Function resposnible for increasing version when some data will be
