@@ -11,33 +11,134 @@ Events
 <link href="{{ url_for('static', filename='css/admin/mysessions.css') }}" rel="stylesheet">
 {% endblock %}
 
+{% macro session_rows(sessions) %}
+{% for session in sessions  %}
+<tr>
+    <td>{{session.event}}</td>
+    <td>{{session.title}}</td>
+    <td>{{session.speaker}}</td>
+    <td>Not implemented</td>
+    <td>{{session.event.start_time }} - {{ session.event.end_time}}</td>
+    <td>{{session.event.organizer_name}}</td>
+    <td>
+        {% if session %}
+        <a href="" title="Edit record">
+            <span class="glyphicon glyphicon-pencil"></span>
+        </a>
+        <a onclick="return confirm('Are you sure you want to delete this record?');"
+           href="#" title="Delete record">
+            <span class="glyphicon glyphicon-trash"></span>
+        </a>
+        <a href="" title="View Event Details">
+            <span class="glyphicon glyphicon-eye-open"></span>
+        </a>
+        <a href="" title="Export Event">
+            <span class="glyphicon glyphicon glyphicon-share"></span>
+        </a>
+        {% endif %}
+    </td>
+</tr>
+{%endfor%}
+{% endmacro %}
 
 {% block content %}
 
 
 <ul class="nav nav-tabs bar_tabs" style="background-color: white;">
+
     <li role="presentation" class="active">
-        <a href="#upcoming-events-tab" role="tab" data-toggle="tab" aria-expanded="true">{{page_content.tab_upcoming_sessions}}</a>
+        <a href="#all_sessions" role="tab" data-toggle="tab"
+           aria-expanded="false">All Sessions</a>
     </li>
     <li role="presentation" class="">
-        <a href="#past-events-tab" role="tab" data-toggle="tab"
-           aria-expanded="false">{{page_content.tab_past_sessions}}</a>
+        <a href="#all_pending" role="tab" data-toggle="tab"
+           aria-expanded="false">All Pending</a>
+    </li>
+    <li role="presentation" class="">
+        <a href="#all_accepted" role="tab" data-toggle="tab"
+           aria-expanded="false">All Accepted</a>
+    </li>
+    <li role="presentation" class="">
+        <a href="#all_rejected" role="tab" data-toggle="tab"
+           aria-expanded="false">All Rejected</a>
+    </li>
+    <li role="presentation" class="">
+        <a href="create" role="tab" data-toggle="tab"
+           aria-expanded="false">Create Session</a>
     </li>
 </ul>
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="upcoming-events-tab">
-        {% for session in upcoming_events_sessions %}
-        {{ mysessions.session_element(session) }}
-        {% else %}
-        <span class="message">No session proposals for upcoming events found</span>
-        {% endfor %}
+    <div class="tab-pane fade" id="all_sessions">
+        <table class="table table-striped with-datatable">
+            <thead>
+            <tr>
+                <th>Event</th>
+                <th>Title</th>
+                <th>Speaker</th>
+                <th>Date of Submission</th>
+                <th>Date of Event</th>
+                <th>Organizer</th>
+                <th>Options</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{session_rows(all_sessions)}}
+            </tbody>
+        </table>
     </div>
-    <div class="tab-pane fade" id="past-events-tab">
-        {% for session in past_events_sessions %}
-        {{ mysessions.session_element(session) }}
-        {% else %}
-        <span class="message">No session proposals for past events found</span>
-        {% endfor %}
+    <div class="tab-pane fade" id="all_pending">
+        <table class="table table-striped with-datatable">
+            <thead>
+            <tr>
+                <th>Event</th>
+                <th>Title</th>
+                <th>Speaker</th>
+                <th>Date of Submission</th>
+                <th>Date of Event</th>
+                <th>Organizer</th>
+                <th>Options</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{session_rows(all_pending)}}
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane fade" id="all_accepted">
+        <table class="table table-striped with-datatable">
+            <thead>
+            <tr>
+                <th>Event</th>
+                <th>Title</th>
+                <th>Speaker</th>
+                <th>Date of Submission</th>
+                <th>Date of Event</th>
+                <th>Organizer</th>
+                <th>Options</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{session_rows(all_accepted)}}
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane fade" id="all_rejected">
+        <table class="table table-striped with-datatable">
+            <thead>
+            <tr>
+                <th>Event</th>
+                <th>Title</th>
+                <th>Speaker</th>
+                <th>Date of Submission</th>
+                <th>Date of Event</th>
+                <th>Organizer</th>
+                <th>Options</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{session_rows(all_rejected)}}
+            </tbody>
+        </table>
     </div>
 </div>
 

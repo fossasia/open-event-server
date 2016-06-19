@@ -9,12 +9,15 @@ class SuperAdminMySessionView(SuperAdminBaseView):
     @expose('/')
     @flask_login.login_required
     def display_my_sessions_view(self):
-        upcoming_events_sessions = DataGetter.get_all_sessions_of_user(upcoming_events=True)
-        past_events_sessions = DataGetter.get_all_sessions_of_user(upcoming_events=False)
-        page_content = {"tab_upcoming_sessions": "All Upcoming",
-                        "tab_past_sessions": "All Past",
-                        "title": "Sessions Proposals"}
+        all_sessions = DataGetter.get_all_sessions()
+        all_pending = DataGetter.get_sessions_by_state('pending')
+        all_accepted = DataGetter.get_sessions_by_state('accepted')
+        all_rejected = DataGetter.get_sessions_by_state('rejected')
+
+        page_content = {"title": "Sessions Proposals"}
         return self.render('/gentelella/admin/super_admin/sessions/sessions.html',
-                           upcoming_events_sessions=upcoming_events_sessions,
-                           past_events_sessions=past_events_sessions,
-                           page_content=page_content)
+                           page_content=page_content,
+                           all_sessions=all_sessions,
+                           all_pending=all_pending,
+                           all_accepted=all_accepted,
+                           all_rejected=all_rejected)
