@@ -1,9 +1,11 @@
 import flask_login
-from flask_admin import BaseView, expose
+from flask_admin import expose
+
+from open_event.views.admin.super_admin.super_admin_base import SuperAdminBaseView
 from ....helpers.data_getter import DataGetter
 
 
-class SuperAdminMySessionView(BaseView):
+class SuperAdminMySessionView(SuperAdminBaseView):
     @expose('/')
     @flask_login.login_required
     def display_my_sessions_view(self):
