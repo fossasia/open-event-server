@@ -585,7 +585,7 @@ class DataManager(object):
 
     @staticmethod
     def edit_event(request, event_id, event, session_types, tracks, social_links, microlocations, call_for_papers,
-                   sponsors):
+                   sponsors, custom_forms):
         """
         Event will be updated in database
         :param data: view data form
@@ -631,6 +631,9 @@ class DataManager(object):
         if call_for_papers:
             delete_from_db(call_for_papers, 'Call for paper deleted')
 
+        if custom_forms:
+            delete_from_db(custom_forms, 'Customs form deleted')
+
         session_type_names = form.getlist('session_type[name]')
         session_type_length = form.getlist('session_type[length]')
 
@@ -648,6 +651,9 @@ class DataManager(object):
         sponsor_url = form.getlist('sponsors[url]')
         sponsor_level = form.getlist('sponsors[level]')
         sponsor_description = form.getlist('sponsors[description]')
+
+        custom_forms_name = form.getlist('custom_form[name]')
+        custom_forms_value = form.getlist('custom_form[value]')
 
         # save the edited info to database
         for index, name in enumerate(session_type_names):
@@ -676,6 +682,18 @@ class DataManager(object):
                 sponsor = Sponsor(name=name, logo=sponsor_logo[index].filename, url=sponsor_url[index], level=sponsor_level[index],
                                   description=sponsor_description[index], event_id=event.id)
                 db.session.add(sponsor)
+
+        session_form = ""
+        speaker_form = ""
+        for index, name in enumerate(custom_forms_name):
+            print name
+            if name == "session_form":
+                session_form = custom_forms_value[index]
+            elif name == "speaker_form":
+                speaker_form = custom_forms_value[index]
+
+        custom_form = CustomForms(session_form=session_form, speaker_form=speaker_form, event_id=event.id)
+        db.session.add(custom_form)
 
         if form.get('call_for_speakers_state', u'off') == u'on':
             call_for_speakers = CallForPaper(announcement=form['announcement'],
