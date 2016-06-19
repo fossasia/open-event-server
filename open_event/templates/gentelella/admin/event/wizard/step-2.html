@@ -1,6 +1,6 @@
-{% macro sponsor_row(sponsor=None) %}
+{% macro sponsor_row(sponsor=None, count=None) %}
     <tr class="row-sponsor">
-        <td>{{ sponsor.id | default(1) }}</td>
+        <td>{{ count | default(1) }}</td>
         <td><input value="{{ sponsor.name | default('') }}" name="sponsors[name]"
                    class="form-control col-md-7 col-xs-12"/></td>
         <td>
@@ -41,10 +41,11 @@
             <tbody class="sponsors">
             {% if sponsors %}
                 {% for sponsor in sponsors %}
-                    {{ sponsor_row(sponsor) }}
+                    {{ sponsor_row(sponsor, loop.index) }}
                 {% endfor %}
+            {% else %}
+                {{ sponsor_row() }}
             {% endif %}
-            {{ sponsor_row() }}
             </tbody>
         </table>
         <span class='input-group-btn'>
