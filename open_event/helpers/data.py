@@ -846,6 +846,12 @@ def create_user_password(form, user):
     save_to_db(user, "User password created")
     return user
 
+def user_logged_in(user):
+    speakers = DataGetter.get_speaker_by_email(user.email).all()
+    for speaker in speakers:
+        speaker.user = user
+        save_to_db(speaker)
+    return True
 
 def update_version(event_id, is_created, column_to_increment):
     """Function resposnible for increasing version when some data will be
