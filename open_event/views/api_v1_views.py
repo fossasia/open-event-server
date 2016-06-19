@@ -443,6 +443,6 @@ def documentation():
     return auto.html()
 
 @app.route('/migrate/', methods=('GET', 'POST'))
-def run_migrations(self):
+def run_migrations():
     upgrade()
     return jsonify({'status': 'ok'})
