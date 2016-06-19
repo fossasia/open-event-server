@@ -81,8 +81,14 @@ def create_app():
 @app.errorhandler(404)
 def page_not_found(e):
     if request_wants_json():
-        return json.dumps({"error": "endpoint_not_found"})
+        return json.dumps({"error": "not_found"}), 404
     return render_template('404.html'), 404
+
+@app.errorhandler(403)
+def forbidden(e):
+    if request_wants_json():
+        return json.dumps({"error": "forbidden"}), 403
+    return render_template('gentelella/admin/forbidden.html'), 403
 
 
 # taken from http://flask.pocoo.org/snippets/45/
