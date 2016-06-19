@@ -40,7 +40,6 @@ class Event(db.Model):
     speaker = db.relationship('Speaker', backref="event")
     sponsor = db.relationship('Sponsor', backref="event")
     users = db.relationship("EventsUsers", backref="event")
-
     roles = db.relationship("UsersEventsRoles", backref="event")
     privacy = db.Column(db.String, default="public")
     state = db.Column(db.String, default="Draft")
@@ -51,6 +50,7 @@ class Event(db.Model):
     creator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     creator = db.relationship('User')
     db.UniqueConstraint('track.name')
+    schedule_published_on = db.Column(db.DateTime)
 
     def __init__(self,
                  name=None,
@@ -73,7 +73,8 @@ class Event(db.Model):
                  privacy=None,
                  topic=None,
                  ticket_url=None,
-                 creator=None):
+                 creator=None,
+                 schedule_published_on=None):
         self.name = name
         self.logo = logo
         self.email = email
@@ -95,6 +96,7 @@ class Event(db.Model):
         self.topic = topic
         self.ticket_url = ticket_url
         self.creator = creator
+        self.schedule_published_on = schedule_published_on
 
     def __repr__(self):
         return '<Event %r>' % self.name
@@ -125,5 +127,6 @@ class Event(db.Model):
             'organizer_name': self.organizer_name,
             'organizer_description': self.organizer_description,
             'privacy': self.privacy,
-            'ticket_url': self.ticket_url
+            'ticket_url': self.ticket_url,
+            'schedule_published_on': self.schedule_published_on
         }
