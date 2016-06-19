@@ -1,11 +1,15 @@
 {% extends 'gentelella/admin/login/base.html' %}
+{% block title %}
+    Forbidden - 403
+{% endblock %}
 {% block register %}
-<div id="register" class="animate form registration_form">
-          <section class="login_content">
+    <div id="register" class="animate form registration_form">
+        <section class="login_content">
             <form method="post">
-              <h1>Forbidden Access</h1>
-              <p>Sorry, you dont have permission to access this resource</p>
+                <h1 style='font-size: 27px; font-weight: 300 !important; font-family: Roboto, Arial, "Droid Sans", sans-serif;
+    margin-bottom: 12px;'>Access denied</h1>
+                <p style="font-size: 16px;font-weight: 300;">Sorry, but you don't have permission access to this page.</p>
             </form>
-          </section>
-</div>
+        </section>
+    </div>
 {% endblock %}
