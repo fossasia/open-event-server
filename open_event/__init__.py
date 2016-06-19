@@ -11,10 +11,11 @@ from flask.ext.autodoc import Autodoc
 from flask.ext.cors import CORS
 from flask.ext.migrate import Migrate, MigrateCommand
 from flask.ext.script import Manager
+from flask.ext.login import current_user
 from flask import render_template
 from flask import request
 from flask.ext.jwt import JWT
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from icalendar import Calendar, Event
 
@@ -98,6 +99,7 @@ class SilentUndefined(Undefined):
     def _fail_with_undefined_error(self, *args, **kwargs):
         return False
 
+
 @app.context_processor
 def locations():
     location_names = filter(None, [event.location_name for event in DataGetter.get_all_live_events()])
@@ -106,10 +108,19 @@ def locations():
         cnt[location] += 1
     return dict(locations=[v for v, k in cnt.most_common()][:10])
 
+
 @app.context_processor
 def event_types():
     event_types = DataGetter.get_event_types()
     return dict(event_typo=event_types[:10])
+
+
+# http://stackoverflow.com/questions/26724623/
+@app.before_request
+def track_user():
+    if current_user.is_authenticated():
+        current_user.last_access_time = datetime.now()
+
 
 current_app, manager, database, jwt = create_app()
 

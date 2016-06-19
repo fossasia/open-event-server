@@ -1,4 +1,5 @@
 from sqlalchemy import event
+from datetime import datetime
 
 from . import db
 from user_detail import UserDetail
@@ -31,6 +32,8 @@ class User(db.Model):
     is_super_admin = db.Column(db.Boolean, default=False)
     is_admin = db.Column(db.Boolean, default=False)
     is_verified = db.Column(db.Boolean, default=False)
+    signup_time = db.Column(db.DateTime)
+    last_access_time = db.Column(db.DateTime)
     user_detail = db.relationship("UserDetail", uselist=False, backref="user")
 
     def _is_role(self, role_name, event_id):
@@ -131,3 +134,4 @@ class User(db.Model):
 @event.listens_for(User, 'init')
 def receive_init(target, args, kwargs):
     target.user_detail = UserDetail()
+    target.signup_time = datetime.now()
