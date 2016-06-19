@@ -23,6 +23,7 @@ from open_event.views.admin.admin import AdminView
 from helpers.jwt import jwt_authenticate, jwt_identity
 from open_event.helpers.data_getter import DataGetter
 from open_event.views.api_v1_views import app as api_v1_routes
+import requests
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -100,11 +101,19 @@ class SilentUndefined(Undefined):
 
 @app.context_processor
 def locations():
-    location_names = filter(None, [event.location_name for event in DataGetter.get_all_live_events()])
+    names = []
+    for event in DataGetter.get_all_live_events():
+        response = requests.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
+            event.longitude)).json()
+        for addr in response['results'][0]['address_components']:
+            if addr['types'] == ['locality', 'political']:
+                names.append(addr['short_name'])
+
     cnt = Counter()
-    for location in location_names:
+    for location in names:
         cnt[location] += 1
     return dict(locations=[v for v, k in cnt.most_common()][:10])
+
 
 @app.context_processor
 def event_types():
