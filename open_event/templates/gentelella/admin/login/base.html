@@ -3,7 +3,7 @@
 {% block head_css %}
 {{ super() }}
 <!-- Animate.css -->
-<link rel="stylesheet" href="https://colorlib.com/polygon/gentelella/css/animate.min.css" >
+<link rel="stylesheet" href="{{ url_for('static', filename='css/custom/animate.min.css') }}" >
 {% endblock %}
 
 {% block body %}

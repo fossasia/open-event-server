@@ -1,5 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 import os
+from urllib2 import urlopen
+
 from flask import jsonify, url_for, redirect, request, send_from_directory
 from flask.ext.cors import cross_origin
 from flask.ext import login
@@ -23,6 +25,7 @@ import icalendar
 from open_event.helpers.oauth import OAuth, FbOAuth
 from requests.exceptions import HTTPError
 from ..helpers.data import get_google_auth, create_user_oauth, get_facebook_auth, user_logged_in
+import geoip2.database
 
 auto = Autodoc()
 
@@ -453,6 +456,26 @@ def serve_static(filename):
 @app.route('/documentation')
 def documentation():
     return auto.html()
+
+@app.route('/api/location/', methods=('GET', 'POST'))
+def location():
+    reader = geoip2.database.Reader(os.path.realpath('.') + '/static/data/GeoLite2-Country.mmdb')
+    ip = request.remote_addr
+    if ip == '127.0.0.1' or ip == '0.0.0.0':
+        ip = urlopen('http://ip.42.pl/raw').read()
+    try:
+        response = reader.country(ip)
+        return jsonify({
+            'status': 'ok',
+            'name': response.country.name,
+            'code': response.country.iso_code
+        })
+    except:
+        return jsonify({
+            'status': 'ok',
+            'name': 'United States',
+            'code': 'US'
+        })
 
 @app.route('/migrate/', methods=('GET', 'POST'))
 def run_migrations():

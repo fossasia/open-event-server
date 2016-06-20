@@ -52,16 +52,20 @@ class SessionsView(BaseView):
         session_form = json.loads(form_elems.session_form)
         event = DataGetter.get_event(event_id)
         if request.method == 'POST':
-            speaker_img_filename = ""
+            speaker_img_file = ""
+            slide_file = ""
+            video_file = ""
+            audio_file = ""
             if 'slides' in request.files and request.files['slides'].filename != '':
                 slide_file = request.files['slides']
-                slide_filename = secure_filename(slide_file.filename)
-                slide_file.save(os.path.join(os.path.realpath('.') + '/static/media/image/', slide_filename))
+            if 'video' in request.files and request.files['video'].filename != '':
+                video_file = request.files['video']
+            if 'audio' in request.files and request.files['audio'].filename != '':
+                audio_file = request.files['audio']
             if 'photo' in request.files and request.files['photo'].filename != '':
                 speaker_img_file = request.files['photo']
-                speaker_img_filename = secure_filename(speaker_img_file.filename)
-                speaker_img_file.save(os.path.join(os.path.realpath('.') + '/static/media/image/', speaker_img_filename))
-            DataManager.add_session_to_event(request.form, event_id, speaker_img_filename)
+            DataManager.add_session_to_event(request.form, event_id, speaker_img_file,
+                                             slide_file, audio_file, video_file)
             return redirect(url_for('.index_view', event_id=event_id))
         return self.render('/gentelella/admin/event/sessions/new.html',
                            speaker_form=speaker_form, session_form=session_form, event=event)

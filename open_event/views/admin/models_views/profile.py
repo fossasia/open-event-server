@@ -24,11 +24,14 @@ class ProfileView(BaseView):
                            profile=profile)
 
     @expose('/edit/', methods=('GET', 'POST'))
-    def edit_view(self):
+    @expose('/edit/<user_id>', methods=('GET', 'POST'))
+    def edit_view(self, user_id=None):
+        if not user_id:
+            user_id = login.current_user.id
         if request.method == 'POST':
             avatar_img = request.files['avatar']
-            url = upload(avatar_img, 'users/%d/avatar' % login.current_user.id)
-            profile = DataManager.update_user(request.form, login.current_user.id, url)
+            url = upload(avatar_img, 'users/%d/avatar' % int(user_id))
+            profile = DataManager.update_user(request.form, int(user_id), url)
             return redirect(url_for('.index_view'))
-        profile = DataGetter.get_user(login.current_user.id)
+        profile = DataGetter.get_user(int(user_id))
         return self.render('/gentelella/admin/profile/edit.html', profile=profile)
