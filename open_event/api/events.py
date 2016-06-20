@@ -106,6 +106,10 @@ EVENT_PARAMS = {
     'location_name': {
         'description': 'Filter by location_name',
         'type': str
+    },
+    'contains': {
+        'description': 'Contains the string..',
+        'type': str
     }
 }
 
@@ -118,6 +122,7 @@ class EventResource():
     """
     event_parser = reqparse.RequestParser()
     event_parser.add_argument('location_name', type=str)
+    event_parser.add_argument('contains', type=str, dest='__event_contains')
 
 
 @api.route('/<int:event_id>')
