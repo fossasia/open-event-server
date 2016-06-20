@@ -165,8 +165,7 @@ class DataManager(object):
         speaker_img = ""
         if speaker_img_file != "":
             speaker_img = upload(speaker_img_file,
-                                 'events/%d/sessions/%d/avatar' % (int(event_id), int(new_session.id)))
-        print speaker_img
+                                 'events/%d/speaker/%d/photo' % (int(event_id), int(new_speaker.id)))
         new_speaker.photo = speaker_img
         save_to_db(new_speaker, "Speaker saved")
         update_version(event_id, False, "speakers_ver")
