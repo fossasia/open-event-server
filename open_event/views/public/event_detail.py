@@ -75,17 +75,21 @@ class EventDetailView(BaseView):
 
     @expose('/<int:event_id>/cfs/', methods=('POST',))
     def process_event_cfs(self, event_id):
-        speaker_img_filename = ""
         email = request.form['email']
+        speaker_img_file = ""
+        slide_file = ""
+        video_file = ""
+        audio_file = ""
         if 'slides' in request.files and request.files['slides'].filename != '':
             slide_file = request.files['slides']
-            slide_filename = secure_filename(slide_file.filename)
-            slide_file.save(os.path.join(os.path.realpath('.') + '/static/media/image/', slide_filename))
+        if 'video' in request.files and request.files['video'].filename != '':
+            video_file = request.files['video']
+        if 'audio' in request.files and request.files['audio'].filename != '':
+            audio_file = request.files['audio']
         if 'photo' in request.files and request.files['photo'].filename != '':
             speaker_img_file = request.files['photo']
-            speaker_img_filename = secure_filename(speaker_img_file.filename)
-            speaker_img_file.save(os.path.join(os.path.realpath('.') + '/static/media/image/', speaker_img_filename))
-        DataManager.add_session_to_event(request.form, event_id, speaker_img_filename)
+        DataManager.add_session_to_event(request.form, event_id, speaker_img_file,
+                                         slide_file, audio_file, video_file)
         if login.current_user.is_authenticated:
             flash("Your session proposal has been submitted", "success")
             return redirect(url_for('my_sessions.display_my_sessions_view', event_id=event_id))
