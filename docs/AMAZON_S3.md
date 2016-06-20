@@ -33,7 +33,7 @@ This makes S3 easy and flexible for data storage.
 
 ![iam_box](https://cloud.githubusercontent.com/assets/4047597/16184349/5953359e-36d9-11e6-9501-e8a0f33ea1bc.png)
 
-8 - You will be presented with the [IAM Management Console](https://console.aws.amazon.com/iam/home). Click on "Create New Users".
+8 - You will be presented with the [IAM Management Console](https://console.aws.amazon.com/iam/home#users). Click on "Create New Users".
 
 9 - Enter a username (example `opev_user`) and click on "Create".
 
@@ -94,6 +94,35 @@ This makes S3 easy and flexible for data storage.
 
 20 - Here `BUCKET_NAME` is 'opevbucketname' and `AWS_KEY` and `AWS_SECRET` are what you got from step 10.
 
+
+### Using the (S3) storage module in code
+
+S3 works on the concept of keys. Using the same idea, `open_event.helpers.storage` module has been created to allow uploading files to both S3 and local server.
+Here is a basic example.
+
+```python
+from open_event.helpers.storage import upload
+
+@app.route('/users/upload/', methods=('POST'))
+    def view(self):
+        profile_pic = request.files['profile_pic']
+        url = upload(profile_pic, 'users/%d/profile_pic' % login.current_user.id)
+        print url  # full URL to the uploaded resource, either on local server or S3
+```
+
+`upload` takes 2 parameters; the file object and the key. The key should be chosen wisely according to the purpose.
+For example,
+- When uploading user avatar, key should be 'users/<userId>/avatar'
+- When uploading event logo, key should be 'events/<eventId>logo'
+- When uploading audio of session, key should be 'events/<eventId>/sessions/<sessionId>/audio'
+
+This helps to avoid conflicts on the server and keep data distinct.
+
+Another important feature of upload is that it automatically switches to uploading on local server if AWS env vars are not set. This is suitable for development because
+uploading locally is fast, requires no Internet connection and gives you instant access to the uploaded file.
+
+Also note that upload always returns the absolute link of the file that is uploaded. So you can use the returned url directly in templates i.e. no need to use
+``{{ url_for('static', uploadedUrl) }}`, just use `{{uploadedUrl}}`.
 
 
 ### References
