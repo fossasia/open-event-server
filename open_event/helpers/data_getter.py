@@ -9,6 +9,9 @@ from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
 from ..models.users_events_roles import UsersEventsRoles
+from ..models.role import Role
+from ..models.service import Service
+from ..models.permission import Permission
 from ..models.user import User
 from ..models.file import File
 from ..models.session_type import SessionType
@@ -46,6 +49,18 @@ class DataGetter:
     @staticmethod
     def get_event_roles_for_user(user_id):
         return UsersEventsRoles.query.filter_by(user_id=user_id)
+
+    @staticmethod
+    def get_roles():
+        return Role.query.all()
+
+    @staticmethod
+    def get_services():
+        return Service.query.all()
+
+    @staticmethod
+    def get_permissions_by_role_service(role, service):
+        return Permission.query.filter_by(role=role, service=service)
 
     @staticmethod
     def get_all_owner_events():
