@@ -13,40 +13,47 @@ This makes S3 easy and flexible for data storage.
 
 ### Setting up S3 for orga-server
 
-1. Create account on AWS (https://aws.amazon.com/).
+1 - Create account on AWS (https://aws.amazon.com/).
 
-2. Once account is created, sign in to [AWS Management Console](https://console.aws.amazon.com/console/home)
+2 - Once account is created, sign in to [AWS Management Console](https://console.aws.amazon.com/console/home)
 
-3. [Open S3](https://console.aws.amazon.com/s3/home) from the massive list of web services Amazon provides.
+3 - [Open S3](https://console.aws.amazon.com/s3/home) from the massive list of web services Amazon provides.
 
-4. Click on the create bucket button to create a bucket. When the dialog opens, just enter a unique name and click "Create".
+4 - Click on the create bucket button to create a bucket. When the dialog opens, just enter a unique name and click "Create".
 
 ![create_bucket](https://cloud.githubusercontent.com/assets/4047597/16184351/596ce8cc-36d9-11e6-9a20-f53b611fbcc2.png)
-5. Bucket will be created and shown in the all bucket list.
 
-6. Now it's time to create access tokens for your bucket. Choose "Security Credentials" option from the dropdown menu with your full name as label.
+5 - Bucket will be created and shown in the all bucket list.
+
+6 - Now it's time to create access tokens for your bucket. Choose "Security Credentials" option from the dropdown menu with your full name as label.
 
 ![sec_cred](https://cloud.githubusercontent.com/assets/4047597/16184350/5966a49e-36d9-11e6-831e-a40f51e1fe5a.png)
-7. Choose IAM when the following dialog appears.
+
+7 - Choose IAM when the following dialog appears.
 
 ![iam_box](https://cloud.githubusercontent.com/assets/4047597/16184349/5953359e-36d9-11e6-9501-e8a0f33ea1bc.png)
-8. You will be presented with the [IAM Management Console](https://console.aws.amazon.com/iam/home). Click on "Create New Users".
 
-9. Enter a username (example `opev_user`) and click on "Create".
+8 - You will be presented with the [IAM Management Console](https://console.aws.amazon.com/iam/home). Click on "Create New Users".
+
+9 - Enter a username (example `opev_user`) and click on "Create".
 
 ![create_user](https://cloud.githubusercontent.com/assets/4047597/16184348/5949baf0-36d9-11e6-8c5c-6bf91fc97b8d.png)
-10. You will be shown the user credentials. Don't download them. **Copy them and keep them safe**. Then click on "Close".
+
+10 - You will be shown the user credentials. Don't download them. **Copy them and keep them safe**. Then click on "Close".
 
 ![user_creds](https://cloud.githubusercontent.com/assets/4047597/16184342/58f5631a-36d9-11e6-839b-0e0502d60267.png)
-11. You will be at IAM Users list now.
+
+11 - You will be at IAM Users list now.
 
 ![users_list](https://cloud.githubusercontent.com/assets/4047597/16184347/59434cce-36d9-11e6-890f-c88f3bd490f9.png)
-12. Now that the user has been created, it's time to give it bucket permissions. Click on [Policies](https://console.aws.amazon.com/iam/home?region=us-west-2#policies) in the sidebar.
 
-13. Click on "Create Policy" button and choose "Create your own Policy".
+12 - Now that the user has been created, it's time to give it bucket permissions. Click on [Policies](https://console.aws.amazon.com/iam/home?region=us-west-2#policies) in the sidebar.
+
+13 - Click on "Create Policy" button and choose "Create your own Policy".
 
 ![create_own_policy](https://cloud.githubusercontent.com/assets/4047597/16184346/593d8a0a-36d9-11e6-9dea-247626c283de.png)
-14. Enter a policy name, a description and the following in the policy document. (Be sure to **replace 'opevbucketname' with your bucket name.**)
+
+14 - Enter a policy name, a description and the following in the policy document. (Be sure to **replace 'opevbucketname' with your bucket name.**)
 
 ```json
 {
@@ -70,22 +77,26 @@ This makes S3 easy and flexible for data storage.
 ```
 
 ![policy_docu](https://cloud.githubusercontent.com/assets/4047597/16184345/59089a20-36d9-11e6-8ac0-9b16155207cd.png)
-15. Once policy is created, go back to [Users](https://console.aws.amazon.com/iam/home#users) tab from the sidebar.
 
-16. Click on `opev_user` (the user you just created) and when the user loads, open "Permissions" tab.
+15 - Once policy is created, go back to [Users](https://console.aws.amazon.com/iam/home#users) tab from the sidebar.
+
+16 - Click on `opev_user` (the user you just created) and when the user loads, open "Permissions" tab.
 
 ![user_policy](https://cloud.githubusercontent.com/assets/4047597/16184344/59007c32-36d9-11e6-885e-9ea05cff0a30.png)
-17. Click on "Attach policy" button, search for the policy you just created (here opev\_bucket\_access) and attach it.
 
-18. You will be redirected back to user permissions tab but now it will have that policy.
+17 - Click on "Attach policy" button, search for the policy you just created (here opev\_bucket\_access) and attach it.
+
+18 - You will be redirected back to user permissions tab but now it will have that policy.
 
 ![policy_done](https://cloud.githubusercontent.com/assets/4047597/16184343/58fa292c-36d9-11e6-9a0f-bf629c04922e.png)
-19. That's it. Set the environment variables `BUCKET_NAME`, `AWS_KEY` and `AWS_SECRET` to their respective values and the server will use S3 for storage.
 
-20. Here `BUCKET_NAME` is 'opevbucketname' and `AWS_KEY` and `AWS_SECRET` are what you got from step 10.
+19 - That's it. Set the environment variables `BUCKET_NAME`, `AWS_KEY` and `AWS_SECRET` to their respective values and the server will use S3 for storage.
+
+20 - Here `BUCKET_NAME` is 'opevbucketname' and `AWS_KEY` and `AWS_SECRET` are what you got from step 10.
 
 
-#### References
+
+### References
 
 * [Intro to S3](http://docs.aws.amazon.com/AmazonS3/latest/gsg/GetStartedWithS3.html)
 * [Developer guide](http://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html)
