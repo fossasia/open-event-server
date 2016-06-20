@@ -44,6 +44,7 @@
             </h1>
             <h3 style="font-weight: 300; color: #8d8d8d">By
                 {% for speaker in session.speakers %}
+                    <img src="{{speaker.photo}}" class="speaker-avatar">
                     {{ speaker.name }}
                 {% endfor %}
             </h3>
