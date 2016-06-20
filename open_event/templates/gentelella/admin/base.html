@@ -12,15 +12,9 @@
         <meta name="description" content="">
         <meta name="author" content="">
     {% endblock %}
-    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com"/>
-    <link rel="dns-prefetch" href="https://maxcdn.bootstrapcdn.com"/>
-    <link rel="dns-prefetch" href="https://cdn.rawgit.com"/>
     {% block head_css %}
-        <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,400italic' rel='stylesheet'
-              type='text/css'>
-        <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap/dist/css/bootstrap.min.css') }}"
-              integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
-              crossorigin="anonymous">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/roboto.css') }}"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap/dist/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/font-awesome/css/font-awesome.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}"/>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/custom/common.css') }}"/>
@@ -56,11 +50,8 @@
 </div>
 
 {% block tail_js %}
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-            crossorigin="anonymous"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/custom.js') }}"></script>
-    <!--<script type="text/javascript" src="{{ url_for('static', filename='js/admin.js') }}"></script>-->
+    <script src="{{ url_for('static', filename='admin/lib/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/summernote/dist/summernote.min.js') }}"></script>
 {% endblock %}
 </body>
