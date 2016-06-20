@@ -35,6 +35,8 @@
         <div class="col col-xs-2">
             {% if session.state == 'pending' %}
                 <span class="status label label-warning pull-right">Under Review</span>
+            {% elif session.state == 'draft' %}
+                <span class="detail-status label label-warning pull-right">Draft</span>
             {% elif session.state == 'accepted' %}
                 <span class="status label label-success pull-right">Accepted</span>
             {% elif session.state == 'rejected' %}

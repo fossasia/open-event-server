@@ -4,7 +4,7 @@ import os.path
 import random
 import traceback
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from flask import flash, request, url_for
 from flask.ext import login
@@ -130,7 +130,7 @@ class DataManager(object):
         update_version(event_id, False, "session_ver")
 
     @staticmethod
-    def add_session_to_event(form, event_id, speaker_img_file, slide_file, audio_file, video_file, state="pending"):
+    def add_session_to_event(form, event_id, speaker_img_file, slide_file, audio_file, video_file, state=None):
         """
         Session will be saved to database with proper Event id
         :param speaker_img_file:
@@ -138,28 +138,34 @@ class DataManager(object):
         :param form: view data form
         :param event_id: Session belongs to Event by event id
         """
-        new_session = Session(title=form["title"] if "title" in form.keys() else "",
-                              subtitle=form["subtitle"] if "subtitle" in form.keys() else "",
-                              long_abstract=form["long_abstract"] if "long_abstract" in form.keys() else "",
-                              start_time="2016-01-01",
-                              end_time="2016-01-01",
+        if not state:
+            state = form.get('state', 'draft')
+
+        event = DataGetter.get_event(event_id)
+
+        new_session = Session(title=form.get('title', ''),
+                              subtitle=form.get('subtitle', ''),
+                              long_abstract=form.get('long_abstract', ''),
+                              start_time=event.start_time,
+                              end_time=event.start_time + timedelta(hours=1),
                               event_id=event_id,
-                              short_abstract=form["short_abstract"] if "short_abstract" in form.keys() else "",
+                              short_abstract=form.get('short_abstract', ''),
                               state=state)
 
-        new_speaker = Speaker(name=form["name"] if "name" in form.keys() else "",
-                              short_biography=form["short_biography"] if "short_biography" in form.keys() else "",
-                              email=form["email"] if "email" in form.keys() else "",
-                              website=form["website"] if "website" in form.keys() else "",
+        new_speaker = Speaker(name=form.get('name', ''),
+                              short_biography=form.get('short_biography', ''),
+                              email=form.get('email', ''),
+                              website=form.get('website', ''),
                               event_id=event_id,
-                              twitter=form["twitter"] if "twitter" in form.keys() else "",
-                              facebook=form["facebook"] if "facebook" in form.keys() else "",
-                              github=form["github"] if "github" in form.keys() else "",
-                              linkedin=form["linkedin"] if "linkedin" in form.keys() else "",
-                              organisation=form["organisation"] if "organisation" in form.keys() else "",
-                              position=form["position"] if "position" in form.keys() else "",
-                              country=form["country"] if "country" in form.keys() else "",
+                              twitter=form.get('twitter', ''),
+                              facebook=form.get('facebook', ''),
+                              github=form.get('github', ''),
+                              linkedin=form.get('linkedin', ''),
+                              organisation=form.get('organisation', ''),
+                              position=form.get('position', ''),
+                              country=form.get('country', ''),
                               user=login.current_user if login and login.current_user.is_authenticated else None)
+
         new_session.speakers.append(new_speaker)
         save_to_db(new_session, "Session saved")
 
