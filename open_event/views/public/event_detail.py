@@ -16,7 +16,11 @@ from ...helpers.data_getter import DataGetter
 def get_published_event_or_abort(event_id):
     event = DataGetter.get_event(event_id=event_id)
     if not event or (event.state != u'Published' and event.state != 'Published'):
-        abort(404)
+        user = login.current_user
+        if not login.current_user.is_authenticated or (not user.is_organizer(event_id) and not
+                                                       user.is_coorganizer(event_id) and not
+                                                       user.is_track_organizer(event_id)):
+            abort(404)
     return event
 
 class EventDetailView(BaseView):

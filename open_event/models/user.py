@@ -1,6 +1,10 @@
 from sqlalchemy import event
 from datetime import datetime
 
+from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+
+from open_event.models.session import Session
+from open_event.models.speaker import Speaker
 from . import db
 from user_detail import UserDetail
 from .role import Role
@@ -99,6 +103,19 @@ class User(db.Model):
 
     def can_delete(self, service_class, event_id):
         return self._has_perm('delete', service_class, event_id)
+
+    def is_speaker_at_session(self, session_id):
+        try:
+            session = Session.query.filter(Session.speakers.any(Speaker.user_id == self.id)).filter(
+                Session.id == session_id).one()
+            if session:
+                return True
+            else:
+                return False
+        except MultipleResultsFound, e:
+            return False
+        except NoResultFound, e:
+            return False
 
     # Flask-Login integration
     def is_authenticated(self):
