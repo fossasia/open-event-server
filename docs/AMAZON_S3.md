@@ -114,7 +114,7 @@ from open_event.helpers.storage import upload
 `upload` takes 2 parameters; the file object and the key. The key should be chosen wisely according to the purpose.
 For example,
 - When uploading user avatar, key should be 'users/{userId}/avatar'
-- When uploading event logo, key should be 'events/{eventId}logo'
+- When uploading event logo, key should be 'events/{eventId}/logo'
 - When uploading audio of session, key should be 'events/{eventId}/sessions/{sessionId}/audio'
 
 This helps to avoid conflicts on the server and keep data distinct.
