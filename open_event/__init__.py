@@ -18,6 +18,7 @@ from flask.ext.jwt import JWT
 from datetime import timedelta, datetime
 
 from icalendar import Calendar, Event
+import humanize
 
 from open_event.helpers.helpers import string_empty
 from open_event.models import db
@@ -58,6 +59,7 @@ def create_app():
     app.logger.setLevel(logging.INFO)
     app.jinja_env.add_extension('jinja2.ext.do')
     app.jinja_env.undefined = SilentUndefined
+    app.jinja_env.filters['humanize'] = humanize.naturaltime
     # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
     # set up jwt
