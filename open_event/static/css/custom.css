@@ -35,6 +35,12 @@
   padding: 5px 6px;
   border-radius: 50%;
 }
+
+.profile_avatar {
+  width: 8em;
+  height: 8em;
+}
+
 .nav-sm .main_container .top_nav {
   display: block;
   margin-left: 70px;
