@@ -259,13 +259,38 @@ class DataManager(object):
         save_to_db(session, "Session Speaker saved")
 
     @staticmethod
-    def edit_session(form, session):
-        session.title = form['title']
-        session.subtitle = form['subtitle']
-        session.description = form['description']
-        session.start_time = form['start_time']
-        session.end_time = form['end_time']
-        session.abstract = form['abstract']
+    def edit_session(form, session, slide_file, audio_file, video_file):
+
+        event_id = session.event_id
+
+        form_state = form.get('state', 'draft')
+
+        if slide_file != "":
+            slide_url = upload(slide_file,
+                               'events/%d/session/%d/slide' % (int(event_id), int(session.id)))
+            session.slides = slide_url
+
+        if audio_file != "":
+            audio_url = upload(audio_file,
+                               'events/%d/session/%d/audio' % (int(event_id), int(session.id)))
+            session.audio = audio_url
+        if video_file != "":
+            video_url = upload(video_file,
+                               'events/%d/session/%d/video' % (int(event_id), int(session.id)))
+            session.video = video_url
+
+        if form_state == 'pending' and session.state != 'pending' and session.state != 'accepted' and session.state != 'rejected':
+            link = url_for('event_sessions.session_display_view',
+                           event_id=event_id, session_id=session.id, _external=True)
+            organizers = DataGetter.get_user_event_roles_by_role_name(event_id, 'organizer')
+            for organizer in organizers:
+                send_new_session_organizer(organizer.user.email, session.event.name, link)
+            session.state = form_state
+
+        session.title = form.get('title', '')
+        session.subtitle = form.get('subtitle', '')
+        session.long_abstract = form.get('long_abstract', '')
+        session.short_abstract = form.get('short_abstract', '')
 
         save_to_db(session, 'Session Updated')
 
