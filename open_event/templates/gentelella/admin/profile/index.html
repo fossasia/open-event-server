@@ -33,7 +33,7 @@
                         <div id="crop-avatar">
                             <!-- Current avatar -->
                             {% if profile.user_detail.avatar_uploaded %}
-                            <img src="/pic/media/image/{{profile.user_detail.avatar_uploaded}}">
+                            <img src="{{profile.user_detail.avatar_uploaded}}">
                             {% else %}
                             <img src="{{ url_for('static', filename='img/avatar.png') }}">
                             {% endif %}
