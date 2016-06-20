@@ -28,21 +28,31 @@ def is_track_name_unique_in_event(form, event_id, *args):
             return str(track.id) == track_id
         return True
 
-
 HEADERS = {
-    "Authorization": ("Bearer SG.55ztiWJxQYuYK7ToThxDPA.rAc929FzcDQsyj" \
+    "Authorization": ("Bearer SG.55ztiWJxQYuYK7ToThxDPA.rAc929FzcDQsyj"
                       "VwmIvKlPoc1YVpKCSOwhEFWZvxFT8")
 }
-
 
 def send_email_invitation(email, event_name, link):
     """Send email after account create"""
     payload = {'to': email,
                'from': 'open-event@googlegroups.com',
                'subject': "Invitation to Submit Papers for " + event_name,
-               "html": ("Hi %s<br/>" % str(email) + \
-                        "You are invited to submit papers for event: %s" % str(event_name) + \
+               "html": ("Hi %s<br/>" % str(email) +
+                        "You are invited to submit papers for event: %s" % str(event_name) +
                         "<br/> Visit this link to fill up details: %s" % link)}
+    requests.post("https://api.sendgrid.com/api/mail.send.json",
+                  data=payload,
+                  headers=HEADERS)
+
+def send_new_session_organizer(email, event_name, link):
+    """Send email after account create"""
+    payload = {'to': email,
+               'from': 'open-event@googlegroups.com',
+               'subject': "New session proposal for " + event_name,
+               "html": ("Hi %s<br/>" % str(email) +
+                        "The event <strong>%s</strong> has received a new session proposal. " % str(event_name) +
+                        "<br/> Visit this link to view the session: %s" % link)}
     requests.post("https://api.sendgrid.com/api/mail.send.json",
                   data=payload,
                   headers=HEADERS)
@@ -53,7 +63,7 @@ def send_email_after_account_create(form):
     payload = {'to': form['email'],
                'from': 'open-event@googlegroups.com',
                'subject': "Account Created on Open Event",
-               "html": ("Your Account Has Been Created! Congratulations!" \
+               "html": ("Your Account Has Been Created! Congratulations!"
                         "<br/> Your login: ") + form['email']}
     requests.post("https://api.sendgrid.com/api/mail.send.json",
                   data=payload,
@@ -65,7 +75,7 @@ def send_email_confirmation(form, link):
     payload = {'to': form['email'],
                'from': 'open-event@googlegroups.com',
                'subject': "Email Confirmation to Create Account for Open-Event ",
-               "html": ("Hi %s<br/>" % str(form['email']) + \
+               "html": ("Hi %s<br/>" % str(form['email']) +
                         "<br/> Please visit this link to confirm your email: %s" % link)}
 
     requests.post("https://api.sendgrid.com/api/mail.send.json",

@@ -14,7 +14,7 @@ from sqlalchemy.sql.expression import exists
 from werkzeug import secure_filename
 from wtforms import ValidationError
 
-from open_event.helpers.helpers import string_empty
+from open_event.helpers.helpers import string_empty, send_new_session_organizer
 from ..helpers.update_version import VersionUpdater
 from ..helpers.data_getter import DataGetter
 from open_event.helpers.storage import upload
@@ -152,7 +152,9 @@ class DataManager(object):
                               short_abstract=form.get('short_abstract', ''),
                               state=state)
 
-        new_speaker = Speaker(name=form.get('name', ''),
+        speaker = Speaker.query.filter_by(email=form.get('email', '')).filter_by(event_id=event_id).first()
+        if not speaker:
+            speaker = Speaker(name=form.get('name', ''),
                               short_biography=form.get('short_biography', ''),
                               email=form.get('email', ''),
                               website=form.get('website', ''),
@@ -166,8 +168,15 @@ class DataManager(object):
                               country=form.get('country', ''),
                               user=login.current_user if login and login.current_user.is_authenticated else None)
 
-        new_session.speakers.append(new_speaker)
+        new_session.speakers.append(speaker)
         save_to_db(new_session, "Session saved")
+
+        if state == 'pending':
+            link = url_for('event_sessions.session_display_view',
+                           event_id=event.id, session_id=new_session.id, _external=True)
+            organizers = DataGetter.get_user_event_roles_by_role_name(event.id, 'organizer')
+            for organizer in organizers:
+                send_new_session_organizer(organizer.user.email, event.name, link)
 
         slide_url = ""
         if slide_file != "":
@@ -184,14 +193,14 @@ class DataManager(object):
         speaker_img = ""
         if speaker_img_file != "":
             speaker_img = upload(speaker_img_file,
-                                 'events/%d/speaker/%d/photo' % (int(event_id), int(new_speaker.id)))
+                                 'events/%d/speaker/%d/photo' % (int(event_id), int(speaker.id)))
 
-        new_speaker.photo = speaker_img
+        speaker.photo = speaker_img
         new_session.audio = audio_url
         new_session.video = video_url
         new_session.slides = slide_url
         save_to_db(new_session, "Session saved")
-        save_to_db(new_speaker, "Speaker saved")
+        save_to_db(speaker, "Speaker saved")
         update_version(event_id, False, "speakers_ver")
         update_version(event_id, False, "session_ver")
 
@@ -207,14 +216,18 @@ class DataManager(object):
             Helper.send_email_invitation(email, new_session.title, link)
 
     @staticmethod
-    def add_speaker_to_session(form, event_id, session_id):
+    def add_speaker_to_session(form, event_id, session_id, user=login.current_user):
         """
         Session will be saved to database with proper Event id
+        :param session_id:
+        :param user:
         :param form: view data form
         :param event_id: Session belongs to Event by event id
         """
         session = DataGetter.get_session(session_id)
-        new_speaker = Speaker(name=form["name"] if "name" in form.keys() else "",
+        speaker = Speaker.query.filter_by(email=form.get('email', '')).filter_by(event_id=event_id).first()
+        if not speaker:
+            speaker = Speaker(name=form["name"] if "name" in form.keys() else "",
                               photo=form["photo"] if "photo" in form.keys() else "",
                               short_biography=form["short_biography"] if "short_biography" in form.keys() else "",
                               email=form["email"] if "email" in form.keys() else "",
@@ -227,8 +240,8 @@ class DataManager(object):
                               organisation=form["organisation"] if "organisation" in form.keys() else "",
                               position=form["position"] if "position" in form.keys() else "",
                               country=form["country"] if "country" in form.keys() else "",
-                              user=login.current_user)
-        session.speakers.append(new_speaker)
+                              user=user)
+        session.speakers.append(speaker)
         save_to_db(session, "Speaker saved")
         update_version(event_id, False, "speakers_ver")
 
@@ -236,7 +249,8 @@ class DataManager(object):
     def create_speaker_session_relation(session_id, speaker_id, event_id):
         """
         Session, speaker ids will be saved to database
-        :param form: view data form
+        :param speaker_id:
+        :param session_id:
         :param event_id: Session, speaker belongs to Event by event id
         """
         speaker = DataGetter.get_speaker(speaker_id)
@@ -289,27 +303,28 @@ class DataManager(object):
         flash('You successfully delete session')
 
     @staticmethod
-    def create_speaker(form, event_id):
+    def create_speaker(form, event_id, user=login.current_user):
         """
         Speaker will be saved to database with proper Event id
+        :param user:
         :param form: view data form
         :param event_id: Speaker belongs to Event by event id
         """
-        new_speaker = Speaker(name=form["name"],
-                              photo="",
-                              short_biography=form["short_biography"],
-                              email=form["email"],
-                              website=form["website"],
-                              event_id=event_id,
-                              twitter="",
-                              facebook="",
-                              github="",
-                              linkedin="",
-                              organisation=form["organisation"],
-                              position="",
-                              country="",
-                              user=login.current_user)
-        save_to_db(new_speaker, "Speaker saved")
+        speaker = Speaker(name=form["name"] if "name" in form.keys() else "",
+                          photo=form["photo"] if "photo" in form.keys() else "",
+                          short_biography=form["short_biography"] if "short_biography" in form.keys() else "",
+                          email=form["email"] if "email" in form.keys() else "",
+                          website=form["website"] if "website" in form.keys() else "",
+                          event_id=event_id,
+                          twitter=form["twitter"] if "twitter" in form.keys() else "",
+                          facebook=form["facebook"] if "facebook" in form.keys() else "",
+                          github=form["github"] if "github" in form.keys() else "",
+                          linkedin=form["linkedin"] if "linkedin" in form.keys() else "",
+                          organisation=form["organisation"] if "organisation" in form.keys() else "",
+                          position=form["position"] if "position" in form.keys() else "",
+                          country=form["country"] if "country" in form.keys() else "",
+                          user=user)
+        save_to_db(speaker, "Speaker saved")
         update_version(event_id, False, "speakers_ver")
 
     @staticmethod
