@@ -1,6 +1,6 @@
-## Amazon S3
+# Amazon S3
 
-### What is S3 ? Basic concepts
+## What is S3 ? Basic concepts
 
 S3 is Amazon's platform for data storage. The main idea of S3 is based on buckets and keys.
 Buckets are containers which store data. You create one bucket for one project.
@@ -11,7 +11,7 @@ It is interesting to note that key can include slashes. So if a key is 'image/2/
 This makes S3 easy and flexible for data storage.
 
 
-### Setting up S3 for orga-server
+## Setting up S3 for orga-server
 
 1 - Create account on AWS (https://aws.amazon.com/).
 
@@ -95,7 +95,8 @@ This makes S3 easy and flexible for data storage.
 20 - Here `BUCKET_NAME` is 'opevbucketname' and `AWS_KEY` and `AWS_SECRET` are what you got from step 10.
 
 
-### Using the (S3) storage module in code
+
+## Using the (S3) storage module in code
 
 S3 works on the concept of keys. Using the same idea, `open_event.helpers.storage` module has been created to allow uploading files to both S3 and local server.
 Here is a basic example.
@@ -125,7 +126,8 @@ Also note that upload always returns the absolute link of the file that is uploa
 ``{{ url_for('static', uploadedUrl) }}`, just use `{{uploadedUrl}}`.
 
 
-### References
+
+## References
 
 * [Intro to S3](http://docs.aws.amazon.com/AmazonS3/latest/gsg/GetStartedWithS3.html)
 * [Developer guide](http://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html)

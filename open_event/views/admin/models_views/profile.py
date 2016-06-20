@@ -1,10 +1,7 @@
-import os
-
 from flask import request, url_for, redirect
 from flask.ext.admin import BaseView
 from flask_admin import expose
 from flask.ext import login
-from werkzeug.utils import secure_filename
 
 from ....helpers.data import DataManager
 from ....helpers.data_getter import DataGetter
@@ -30,9 +27,6 @@ class ProfileView(BaseView):
     def edit_view(self):
         if request.method == 'POST':
             avatar_img = request.files['avatar']
-            # filename = secure_filename(avatar_img.filename)
-            # avatar_img.save(os.path.join(
-            # os.path.realpath('.') + '/static/media/image/', filename))
             url = upload(avatar_img, 'users/%d/avatar' % login.current_user.id)
             profile = DataManager.update_user(request.form, login.current_user.id, url)
             return redirect(url_for('.index_view'))

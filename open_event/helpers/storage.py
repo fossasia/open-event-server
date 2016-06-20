@@ -22,7 +22,7 @@ def upload(file, key, **kwargs):
 
 def upload_local(file, key, **kwargs):
     """
-    Uploads file locally
+    Uploads file locally. Base dir - static/media/
     """
     basename, ext = os.path.splitext(file.filename)
     file_path = 'static/media/' + key + ext
