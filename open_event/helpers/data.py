@@ -14,7 +14,7 @@ from sqlalchemy.sql.expression import exists
 from werkzeug import secure_filename
 from wtforms import ValidationError
 
-from open_event.helpers.helpers import string_empty
+from open_event.helpers.helpers import string_empty, send_new_session_organizer
 from ..helpers.update_version import VersionUpdater
 from ..helpers.data_getter import DataGetter
 from open_event.helpers.storage import upload
@@ -168,6 +168,13 @@ class DataManager(object):
 
         new_session.speakers.append(new_speaker)
         save_to_db(new_session, "Session saved")
+
+        if state == 'pending':
+            link = url_for('event_sessions.session_display_view',
+                           event_id=event.id, session_id=new_session.id, _external=True)
+            organizers = DataGetter.get_user_event_roles_by_role_name(event.id, 'organizer')
+            for organizer in organizers:
+                send_new_session_organizer(organizer.user.email, event.name, link)
 
         slide_url = ""
         if slide_file != "":
