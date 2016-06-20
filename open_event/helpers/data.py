@@ -136,6 +136,10 @@ class DataManager(object):
         :param form: view data form
         :param event_id: Session belongs to Event by event id
         """
+        state = "pending"
+        if not login.current_user.is_authenticated:
+            state = "unverified"
+
         img_path = ""
         new_session = Session(title=form.get("title", ""),
                               subtitle=form.get("subtitle", ""),
@@ -144,17 +148,18 @@ class DataManager(object):
                               end_time="2016-01-01",
                               event_id=event_id,
                               short_abstract=form.get("short_abstract", ""),
-                              state="pending")
+                              state=state)
+        save_to_db(new_session, "Session saved")
 
         if speaker_img_name != "":
             img_path = 'static/media/image/' + speaker_img_name
 
         user_data = DataGetter.get_user_by_email(form.get("email"))
         if user_data:
-            print "User present"
             user = user_data
+            if not login.current_user.is_authenticated:
+                flash('Please login to complete the process')
         else:
-            print "User New"
             password = ("%032x" % random.getrandbits(128))[:8]
             s = Helper.get_serializer()
             data = [form['email'], password]
@@ -167,9 +172,10 @@ class DataManager(object):
             event = Event.query.get(event_id)
             uer = UsersEventsRoles(user, event, role)
             save_to_db(uer)
+            flash('Email verification has been sent. Please login to complete the process')
 
         new_speaker = Speaker(name=form.get("name", ""),
-                              photo=form.get("photo", ""),
+                              photo=img_path,
                               short_biography=form.get("short_biography", ""),
                               email=form.get("email", ""),
                               website=form.get("website", ""),
@@ -193,8 +199,9 @@ class DataManager(object):
             hash = random.getrandbits(128)
             new_invite.hash = "%032x" % hash
             save_to_db(new_invite, "Invite saved")
+            print new_session.id
 
-            link = url_for('event_sessions.invited_view', session_id=new_session.id, event_id=event_id, _external=True)
+            link = url_for('event_sessions.invited_view', event_id=event_id, session_id=new_session.id, _external=True)
             Helper.send_email_invitation(email, new_session.title, link)
 
     @staticmethod
