@@ -56,7 +56,7 @@
 
 {% macro organizer_info() %}
     <div class="col-md-4 speaker-info" style="text-align: center">
-        <img src="https://randomuser.me/api/portraits/men/{{ range(1, 50) | random }}.jpg" style="width: 100%;"><br>
+        <img src="{{ url_for('static', filename='img/1.jpg') }}" style="width: 100%;"><br>
         <h4 style="font-weight: 500;">Firstname Lastname</h4>
         <h5 style="margin-top: 0;">Organisation</h5>
         <a href=""><i class="fa fa-facebook-square"></i></a> <a href=""><i class="fa fa-twitter-square"></i></a>
@@ -180,7 +180,7 @@
 
 {% block tail_js %}
     {{ super() }}
-    <script src="https://cdn.rawgit.com/leafo/sticky-kit/v1.1.2/jquery.sticky-kit.min.js"></script>
+    <script src="{{ url_for('static', filename='admin/lib/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
     <script type="text/javascript">
         var map;
         var eventLocation = {lat: {{ event.latitude }}, lng: {{ event.longitude }}};
