@@ -17,6 +17,7 @@ from wtforms import ValidationError
 from open_event.helpers.helpers import string_empty
 from ..helpers.update_version import VersionUpdater
 from ..helpers.data_getter import DataGetter
+from open_event.helpers.storage import upload
 from ..helpers import helpers as Helper
 from ..models import db
 from ..models.event import Event, EventsUsers
@@ -110,6 +111,7 @@ class DataManager(object):
         """
         Session will be saved to database with proper Event id
         :param form: view data form
+        :param slide_file:
         :param event_id: Session belongs to Event by event id
         """
         new_session = Session(title=form.title.data,
@@ -128,15 +130,14 @@ class DataManager(object):
         update_version(event_id, False, "session_ver")
 
     @staticmethod
-    def add_session_to_event(form, event_id, speaker_img_name, state="pending"):
+    def add_session_to_event(form, event_id, speaker_img_file, slide_file, state="pending"):
         """
         Session will be saved to database with proper Event id
-        :param speaker_img_name:
+        :param speaker_img_file:
         :param state:
         :param form: view data form
         :param event_id: Session belongs to Event by event id
         """
-        img_path = ""
         new_session = Session(title=form["title"] if "title" in form.keys() else "",
                               subtitle=form["subtitle"] if "subtitle" in form.keys() else "",
                               long_abstract=form["long_abstract"] if "long_abstract" in form.keys() else "",
@@ -146,12 +147,7 @@ class DataManager(object):
                               short_abstract=form["short_abstract"] if "short_abstract" in form.keys() else "",
                               state=state)
 
-
-        if speaker_img_name != "":
-            img_path = 'static/media/image/' + speaker_img_name
-
         new_speaker = Speaker(name=form["name"] if "name" in form.keys() else "",
-                              photo=img_path if "photo" in form.keys() else "",
                               short_biography=form["short_biography"] if "short_biography" in form.keys() else "",
                               email=form["email"] if "email" in form.keys() else "",
                               website=form["website"] if "website" in form.keys() else "",
@@ -166,6 +162,12 @@ class DataManager(object):
                               user=login.current_user if login and login.current_user.is_authenticated else None)
         new_session.speakers.append(new_speaker)
         save_to_db(new_session, "Session saved")
+        speaker_img = ""
+        if speaker_img_file != "":
+            speaker_img = upload(speaker_img_file,
+                                 'events/%d/speaker/%d/photo' % (int(event_id), int(new_speaker.id)))
+        new_speaker.photo = speaker_img
+        save_to_db(new_speaker, "Speaker saved")
         update_version(event_id, False, "speakers_ver")
         update_version(event_id, False, "session_ver")
 

@@ -9,6 +9,12 @@
     overflow: hidden;
 }
 
+.speaker-avatar {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+}
+
 .session > .col {
     height: 155px;
     overflow: hidden;
