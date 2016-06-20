@@ -130,7 +130,7 @@ class DataManager(object):
         update_version(event_id, False, "session_ver")
 
     @staticmethod
-    def add_session_to_event(form, event_id, speaker_img_file, slide_file, state="pending"):
+    def add_session_to_event(form, event_id, speaker_img_file, slide_file, audio_file, video_file, state="pending"):
         """
         Session will be saved to database with proper Event id
         :param speaker_img_file:
@@ -162,11 +162,29 @@ class DataManager(object):
                               user=login.current_user if login and login.current_user.is_authenticated else None)
         new_session.speakers.append(new_speaker)
         save_to_db(new_session, "Session saved")
+
+        slide_url = ""
+        if slide_file != "":
+            slide_url = upload(slide_file,
+                               'events/%d/session/%d/slide' % (int(event_id), int(new_session.id)))
+        audio_url = ""
+        if audio_file != "":
+            audio_url = upload(audio_file,
+                               'events/%d/session/%d/audio' % (int(event_id), int(new_session.id)))
+        video_url = ""
+        if video_file != "":
+            video_url = upload(video_file,
+                               'events/%d/session/%d/video' % (int(event_id), int(new_session.id)))
         speaker_img = ""
         if speaker_img_file != "":
             speaker_img = upload(speaker_img_file,
                                  'events/%d/speaker/%d/photo' % (int(event_id), int(new_speaker.id)))
+
         new_speaker.photo = speaker_img
+        new_session.audio = audio_url
+        new_session.video = video_url
+        new_session.slides = slide_url
+        save_to_db(new_session, "Session saved")
         save_to_db(new_speaker, "Speaker saved")
         update_version(event_id, False, "speakers_ver")
         update_version(event_id, False, "session_ver")

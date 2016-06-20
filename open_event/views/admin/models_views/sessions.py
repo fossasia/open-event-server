@@ -54,11 +54,18 @@ class SessionsView(BaseView):
         if request.method == 'POST':
             speaker_img_file = ""
             slide_file = ""
+            video_file = ""
+            audio_file = ""
             if 'slides' in request.files and request.files['slides'].filename != '':
                 slide_file = request.files['slides']
+            if 'video' in request.files and request.files['video'].filename != '':
+                video_file = request.files['video']
+            if 'audio' in request.files and request.files['audio'].filename != '':
+                audio_file = request.files['audio']
             if 'photo' in request.files and request.files['photo'].filename != '':
                 speaker_img_file = request.files['photo']
-            DataManager.add_session_to_event(request.form, event_id, speaker_img_file, slide_file)
+            DataManager.add_session_to_event(request.form, event_id, speaker_img_file,
+                                             slide_file, audio_file, video_file)
             return redirect(url_for('.index_view', event_id=event_id))
         return self.render('/gentelella/admin/event/sessions/new.html',
                            speaker_form=speaker_form, session_form=session_form, event=event)
