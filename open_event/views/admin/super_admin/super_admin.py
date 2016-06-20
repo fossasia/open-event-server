@@ -1,20 +1,11 @@
-from flask import request, url_for, redirect
 from flask_admin import expose
-from flask_admin import BaseView
-from flask.ext import login
-from ....helpers.data import DataManager
+
+from open_event.views.admin.super_admin.super_admin_base import SuperAdminBaseView
 from ....helpers.data_getter import DataGetter
 from open_event.helpers.helpers import get_latest_heroku_release, get_commit_info
 
 
-class SuperAdminView(BaseView):
-
-    def is_accessible(self):
-        return login.current_user.is_authenticated
-
-    def _handle_view(self, name, **kwargs):
-        if not self.is_accessible():
-            return redirect(url_for('admin.login_view', next=request.url))
+class SuperAdminView(SuperAdminBaseView):
 
     @expose('/')
     def index_view(self):

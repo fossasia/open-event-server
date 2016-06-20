@@ -7,7 +7,7 @@
 {% block head_css %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/details.css') }}"/>
-    <link href="{{ url_for('static', filename='css/admin/scheduler.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
     <style type="text/css">
         .carousel .item {
             height: {{ carousel_height }}px;
@@ -30,11 +30,6 @@
 {% block head_js %}
     {{ super() }}
 
-    <script type="text/javascript">
-
-        window.scheduler_readonly = true;
-
-    </script>
 {% endblock %}
 
 {% block body %}
@@ -43,11 +38,9 @@
             <li role="presentation"><a href="/e/{{ event.id }}">Info</a></li>
             <li role="presentation"><a href="/e/{{ event.id }}/#speakers">Speakers</a></li>
             <li role="presentation"><a href="/e/{{ event.id }}/#sponsors">Sponsors</a></li>
+            <li role="presentation" class="active"><a href="/e/{{ event.id }}/sessions">Call for speakers</a></li>
             <li role="presentation"><a href="/e/{{ event.id }}/sessions">Sessions</a></li>
-            {% if call_for_speakers %}
-                <li role="presentation"><a href="/e/{{ event.id }}/cfs">Call for speakers</a></li>
-            {% endif %}
-            <li role="presentation" class="active"><a href="/e/{{ event.id }}/schedule">Schedule</a></li>
+            <li role="presentation"><a href="/e/{{ event.id }}/schedule">Schedule</a></li>
             <li role="presentation"><a href="/e/{{ event.id }}/#organizer">Organizer</a></li>
             <li role="presentation"><a href="/e/{{ event.id }}/#getting-here">Getting Here</a></li>
         </ul>
@@ -67,35 +60,56 @@
         </div>
     </div>
     <div class="event-info container" style="min-height: 600px;">
-
         <div class="row">
             <div class="col-md-12">
-                <h1 style="font-weight: 300; font-size: 24px">Schedule
-                    <small>
-                        (Published on {{ event.schedule_published_on.strftime('%B %d, %Y') }})
-                    </small>
-                </h1>
-            </div>
-            <div class="col-md-12" style="margin-top: 10px;">
-                <div class="btn-toolbar" role="toolbar">
-                    <div id="date-change-btn-holder" class="btn-group date-change-btn-holder" role="group">
-
-                    </div>
-                </div>
-                {% include 'gentelella/admin/event/scheduler/components/timeline.html' %}
+                <h1 style="font-weight: 300; font-size: 30px">Call for Speakers</h1>
+                <p>
+                    {% if state == 'now' %}
+                        <span class="label label-success">Open</span>
+                    {% elif state == 'past' %}
+                        <span class="label label-danger">Closed</span>
+                    {% elif state == 'future' %}
+                        <span class="label label-info">Yet to Open</span>
+                    {% endif %}
+                </p>
+                <p><strong>{{ call_for_speakers.start_date.strftime('%a, %B %d at %I:%M %p') }}</strong>
+                 to
+                <strong>{{ call_for_speakers.end_date.strftime('%a, %B %d at %I:%M %p') }}</strong></p>
+                {{ call_for_speakers.announcement | safe }}
+                {% if state == "now" %}
+                    <button class="btn btn-success" data-toggle="modal" data-target="#session-model">Submit Proposal</button>
+                {% endif %}
             </div>
         </div>
     </div>
-    {% include 'gentelella/admin/event/scheduler/components/timeline_templates.html' %}
+    {% if state == "now" %}
+        <div class="modal fade" tabindex="-1" role="dialog" id="session-model">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Submit Proposal</h4>
+                    </div>
+                    <div class="modal-body">
+                        {% include 'gentelella/admin/event/sessions/session_form.html' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 
 {% endblock %}
 
+
+
 {% block tail_js %}
     {{ super() }}
-    <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='admin/lib/google-material-color/dist/palette.js') }}"></script>
-    <script src="{{ url_for('static', filename='admin/lib/lodash/dist/lodash.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/jquery/jquery.ellipsis.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/scheduler.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/session/new.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("textarea").summernote(summernoteConfig);
+        });
+    </script>
+
 {% endblock %}

@@ -61,6 +61,17 @@ class DataGetter:
         return Session.query.filter_by(event_id=event_id)
 
     @staticmethod
+    def get_sessions_by_state(state):
+        """
+        :return: All Sessions with correct event_id
+        """
+        return Session.query.filter_by(state=state)
+
+    @staticmethod
+    def get_all_sessions():
+        return Session.query.all()
+
+    @staticmethod
     def get_tracks(event_id):
         """
         :param event_id: Event id
@@ -116,10 +127,10 @@ class DataGetter:
         :return: Return all Sessions objects with the current user as a speaker
         """
         if upcoming_events:
-            return Session.query.filter(Session.speakers.any(Speaker.email == login.current_user.email)).filter(
+            return Session.query.filter(Session.speakers.any(Speaker.user_id == login.current_user.id)).filter(
                 Event.state != 'Completed')
         else:
-            return Session.query.filter(Session.speakers.any(Speaker.email == login.current_user.email)).filter(
+            return Session.query.filter(Session.speakers.any(Speaker.user_id == login.current_user.id)).filter(
                 Event.state == 'Completed')
 
     @staticmethod
@@ -334,6 +345,11 @@ class DataGetter:
     def get_speaker(speaker_id):
         """Get speaker by id"""
         return Speaker.query.get(speaker_id)
+
+    @staticmethod
+    def get_speaker_by_email(email_id):
+        """Get speaker by id"""
+        return Speaker.query.filter_by(email=email_id)
 
     @staticmethod
     def get_session_types_by_event_id(event_id):

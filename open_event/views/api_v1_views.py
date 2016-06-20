@@ -22,7 +22,7 @@ from icalendar import Calendar
 import icalendar
 from open_event.helpers.oauth import OAuth, FbOAuth
 from requests.exceptions import HTTPError
-from ..helpers.data import get_google_auth, create_user_oauth, get_facebook_auth
+from ..helpers.data import get_google_auth, create_user_oauth, get_facebook_auth, user_logged_in
 
 auto = Autodoc()
 
@@ -382,6 +382,7 @@ def callback():
                 return redirect(url_for('admin.create_password_after_oauth_login', email=email))
             else:
                 login.login_user(user)
+                user_logged_in(user)
                 return redirect(url_for('admin.index'))
         return 'did not find user info'
 
@@ -420,6 +421,7 @@ def facebook_callback():
                 return redirect(url_for('admin.create_password_after_oauth_login', email=email))
             else:
                 login.login_user(user)
+                user_logged_in(user)
                 return redirect(url_for('admin.index'))
         return 'did not find user info'
 

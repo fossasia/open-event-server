@@ -7,7 +7,6 @@ from .role import Role
 from .service import Service
 from .permission import Permission
 from .users_events_roles import UsersEventsRoles
-from .sessions_speakers import SessionsSpeakers
 
 # System-wide
 ADMIN = 'admin'
@@ -35,6 +34,7 @@ class User(db.Model):
     signup_time = db.Column(db.DateTime)
     last_access_time = db.Column(db.DateTime)
     user_detail = db.relationship("UserDetail", uselist=False, backref="user")
+    created_date = db.Column(db.DateTime, default=datetime.now())
 
     def _is_role(self, role_name, event_id):
         role = Role.query.filter_by(name=role_name).first()
@@ -99,15 +99,6 @@ class User(db.Model):
 
     def can_delete(self, service_class, event_id):
         return self._has_perm('delete', service_class, event_id)
-
-    def is_speaker_at_session(self, session_id):
-        for speaker in self.speakers:
-            ss = SessionsSpeakers.query.filter_by(speaker_id=speaker.id,
-                                                  session_id=session_id).first()
-            if ss is not None:
-                return True
-
-        return False
 
     # Flask-Login integration
     def is_authenticated(self):

@@ -6,6 +6,8 @@ from flask import request
 from errors import NotFoundError
 from werkzeug import secure_filename
 
+from open_event.helpers.data import save_to_db
+from open_event.models.custom_forms import CustomForms
 from ..events import DAO as EventDAO
 from ..microlocations import DAO as MicrolocationDAO
 from ..sessions import DAO as SessionDAO, TypeDAO as SessionTypeDAO
@@ -14,7 +16,6 @@ from ..sponsors import DAO as SponsorDAO
 from ..tracks import DAO as TrackDAO
 
 from errors import BaseError, ServerError
-
 
 IMPORT_SERIES = [
     ('microlocations', MicrolocationDAO),
@@ -175,4 +176,21 @@ def import_event_json(zip_path):
         EventDAO.delete(new_event.id)
         raise ServerError()
 
+    custom_form = CustomForms(event_id=new_event.id,
+                              session_form='{"title":{"include":1,"require":1},"subtitle":{"include":0,"require":0},'
+                                           '"short_abstract":{"include":1,"require":0},"long_abstract":{"include":0,'
+                                           '"require":0},"comments":{"include":1,"require":0},"track":{"include":0,'
+                                           '"require":0},"session_type":{"include":0,"require":0},"language":{"include":0,'
+                                           '"require":0},"slides":{"include":1,"require":0},"video":{"include":0,'
+                                           '"require":0},"audio":{"include":0,"require":0}}',
+                              speaker_form='{"name":{"include":1,"require":1},"email":{"include":1,"require":1},'
+                                           '"photo":{"include":1,"require":0},"organisation":{"include":1,'
+                                           '"require":0},"position":{"include":1,"require":0},"country":{"include":1,'
+                                           '"require":0},"short_biography":{"include":1,"require":0},"long_biography"'
+                                           ':{"include":0,"require":0},"mobile":{"include":0,"require":0},'
+                                           '"website":{"include":1,"require":0},"facebook":{"include":0,"require":0},'
+                                           '"twitter":{"include":1,"require":0},"github":{"include":0,"require":0},'
+                                           '"linkedin":{"include":0,"require":0}}')
+
+    save_to_db(custom_form, "Custom form saved")
     return new_event

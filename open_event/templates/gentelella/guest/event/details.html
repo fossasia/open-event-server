@@ -81,6 +81,12 @@
             <li role="presentation"><a href="#speakers">Speakers</a></li>
             <li role="presentation"><a href="#sponsors">Sponsors</a></li>
             <li role="presentation"><a href="/e/{{ event.id }}/sessions">Sessions</a></li>
+            {% if call_for_speakers %}
+                <li role="presentation"><a href="/e/{{ event.id }}/cfs">Call for speakers</a></li>
+            {% endif %}
+            {% if event.schedule_published_on %}
+                <li role="presentation"><a href="/e/{{ event.id }}/schedule">Schedule</a></li>
+            {% endif %}
             <li role="presentation"><a href="#organizer">Organizer</a></li>
             <li role="presentation"><a href="#getting-here">Getting Here</a></li>
         </ul>

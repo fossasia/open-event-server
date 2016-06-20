@@ -124,6 +124,7 @@ function fuzzyMatch(str, pattern) {
  * @returns {int}
  */
 function roundOffToMultiple(val, multiple) {
+    return val;
     if (!multiple) {
         multiple = 6;
     }

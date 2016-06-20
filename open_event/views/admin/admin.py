@@ -56,7 +56,6 @@ class AdminView(object):
         self.admin.add_view(TracksView(name='Track', url='/events/<event_id>/tracks', endpoint="event_tracks"))
         self.admin.add_view(InviteView(name='Invite', url='/events/<event_id>/invite', endpoint="event_invites"))
 
-
         self.admin.add_view(SuperAdminView(name='Admin', url='/admin/', endpoint="sadmin"))
         self.admin.add_view(SuperAdminEventsView(name='Events', url='/admin/events', endpoint="sadmin_events"))
         self.admin.add_view(SuperAdminMySessionView(name='Sessions', url='/admin/sessions', endpoint="sadmin_sessions"))

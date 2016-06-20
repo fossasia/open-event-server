@@ -19,7 +19,9 @@ Users
     <tr>
         <th>Name</th>
         <th>Email</th>
-        <th>Role</th>
+        <th>Status</th>
+        <th>System Roles</th>
+        <th>Event Roles</th>
         <th>Member Since</th>
         <th>Last Access</th>
         <th>Options</th>
@@ -31,15 +33,26 @@ Users
     <tr>
         <td>{{ 'Not Available' if not user['user'].user_detail.fullname else user['user'].user_detail.fullname }}</td>
         <td>{{ user['user'].email }}</td>
+        <td>{{ 'Active' if user['user'].is_active() else 'Inactive' }}</td>
+        <td>
+          <ul style="padding-left:0;">
+          {% if user['user'].is_super_admin %}
+            <li>Super Admin</li>
+          {% endif %}
+          {% if user['user'].is_admin %}
+            <li>Admin</li>
+          {% endif %}
+          </ul>
+        </td>
         <td>
         <ul style="padding-left:0;">
-        {% for role in user['roles'] %}
-          <li>{{ role.role.name|title }}, {{ role.event.name }}</li>
+        {% for role in user['event_roles'] %}
+          <li>{{ role.role.title_name }}, <a href="{{ get_url('events.details_view', event_id=role.event.id) }}" title="Go to event" target="_blank">{{ role.event.name }}</a></li>
         {% endfor %}
         </ul>
         </td>
-        <td>Not implemented</td>
-        <td>Not implemented</td>
+        <td>{{ user['user'].created_date|humanize }}</td>
+        <td>{{ user['user'].last_access_time|humanize }}</td>
         <td>
             <a href="#" title="Edit record">
             <span class="glyphicon glyphicon-pencil"></span>

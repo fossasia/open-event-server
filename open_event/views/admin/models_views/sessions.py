@@ -1,3 +1,5 @@
+import os
+
 from flask.ext.admin import BaseView
 from flask.ext.restplus import abort
 from flask_admin import expose
@@ -6,6 +8,7 @@ from flask.ext import login
 from flask import request, url_for, redirect, flash
 from ....helpers.data import DataManager, save_to_db, delete_from_db
 from ....helpers.data_getter import DataGetter
+from werkzeug.utils import secure_filename
 import json
 
 def get_session_or_throw(session_id):
@@ -49,7 +52,16 @@ class SessionsView(BaseView):
         session_form = json.loads(form_elems.session_form)
         event = DataGetter.get_event(event_id)
         if request.method == 'POST':
-            DataManager.add_session_to_event(request.form, event_id)
+            speaker_img_filename = ""
+            if 'slides' in request.files:
+                slide_file = request.files['slides']
+                slide_filename = secure_filename(slide_file.filename)
+                slide_file.save(os.path.join(os.path.realpath('.') + '/static/media/image/', slide_filename))
+            if 'photo' in request.files:
+                speaker_img_file = request.files['photo']
+                speaker_img_filename = secure_filename(speaker_img_file.filename)
+                speaker_img_file.save(os.path.join(os.path.realpath('.') + '/static/media/image/', speaker_img_filename))
+            DataManager.add_session_to_event(request.form, event_id, speaker_img_filename)
             return redirect(url_for('.index_view', event_id=event_id))
         return self.render('/gentelella/admin/event/sessions/new.html',
                            speaker_form=speaker_form, session_form=session_form, event=event)
@@ -90,7 +102,7 @@ class SessionsView(BaseView):
             DataManager.edit_session(request.form, session)
             return redirect(url_for('.index_view', event_id=event_id))
 
-    @expose('/<int:session_id>/accept_session', methods=('GET',))
+    @expose('/<int:session_id>/accept', methods=('GET',))
     @can_accept_and_reject
     def accept_session(self, event_id, session_id):
         session = get_session_or_throw(session_id)
@@ -99,7 +111,7 @@ class SessionsView(BaseView):
         flash("The session has been accepted")
         return redirect(url_for('.index_view', event_id=event_id))
 
-    @expose('/<int:session_id>/reject_session', methods=('GET',))
+    @expose('/<int:session_id>/reject', methods=('GET',))
     @can_accept_and_reject
     def reject_session(self, event_id, session_id):
         session = get_session_or_throw(session_id)

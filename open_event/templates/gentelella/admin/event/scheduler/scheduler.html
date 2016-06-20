@@ -30,8 +30,13 @@
 
     <div class="row scheduler-holder" style="display: none;">
         <div class="col-xs-3 sessions-holder">
-            <h4>Sessions</h4><br>
-            <div class="input-group">
+            <div class="btn-group" role="group">
+                <a type="button" class="btn btn-success" href="publish">
+                    Publish Schedule
+                </a>
+            </div>
+            <h2 style="margin-top: 20px;">Unscheduled Sessions</h2>
+            <div class="input-group" style="margin-top: 20px;">
                                 <span class="input-group-addon" id="search-addon"><i
                                         class="glyphicon glyphicon-search"></i></span>
                 <input type="search" class="form-control" id="sessions-search"
@@ -42,10 +47,15 @@
             <div id="sessions-list" class="sessions-list">
 
             </div>
-                        <span id="no-sessions-info" class="text-muted no-sessions-info"
-                              style="font-size: 24px; font-weight: 100;">
-                            No Unscheduled sessions.
-                        </span>
+            <span id="no-sessions-info" class="text-muted no-sessions-info"
+                  style="font-size: 24px; font-weight: 100;">
+                No Unscheduled sessions.
+            </span>
+            {% if event.schedule_published_on %}
+                <div style="margin-top: 18px;color: #8e8d8d;">
+                    Schedule last published on {{ event.schedule_published_on.strftime('%B %d, %Y - %I:%M %p') }}
+                </div>
+            {% endif %}
         </div>
         <div class="col-xs-9">
 
@@ -70,54 +80,14 @@
                     </button>
                 </div>
 
+
             </div>
-            <div class="timeline" id="timeline" data-event-id="{{ event.id }}"
-                 style="margin-top: 10px; margin-left: 10px; width: 100%; overflow-x: hidden;">
-                <table class="timeline-table table" style="width: 100%">
-                    <tbody>
-                    <tr>
-                        <td class="timeunits x1" width="55">
-                            <div class="timeunit"></div>
-                        </td>
-                        <td class="microlocations x1">
-                            <div id="microlocation-container"
-                                 class="microlocation-container clearfix draggable-holder"
-                                 style="width: 750px; height: 1311px;">
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div style="float: right; margin-top: 10px;">
-                All the timings are in UTC
-            </div>
+            {% include 'gentelella/admin/event/scheduler/components/timeline.html' %}
+
         </div>
     </div>
 
-    <script id="microlocation-template" type="text/x-template">
-        <div class="microlocation">
-            <div class="text-center microlocation-header"><span class="badge">0</span></div>
-            <div class="microlocation-inner" style="height: 1296px;">
-
-            </div>
-        </div>
-    </script>
-
-
-    <script id="date-change-button-template" type="text/x-template">
-        <button type="button" class="btn btn-default date-change-btn">May 20</button>
-    </script>
-
-    <script id="session-template" type="text/x-template">
-        <div class="session" data-toggle="tooltip" data-animation="false" data-placement="top" title="">
-            <div class="text">
-
-            </div>
-            <i class="edit-btn glyphicon glyphicon-pencil" data-toggle="modal" data-target="#edit-session-modal"></i>
-            <i class="remove-btn glyphicon glyphicon-remove"></i>
-        </div>
-    </script>
+    {% include 'gentelella/admin/event/scheduler/components/timeline_templates.html' %}
 
     <div class="modal fade" id="edit-session-modal" tabindex="-1" role="dialog" aria-hidden="true"
          data-start-date="{{ event.start_time.strftime('%Y %m %d') }}">

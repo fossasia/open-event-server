@@ -18,6 +18,7 @@ from flask.ext.jwt import JWT
 from datetime import timedelta, datetime
 
 from icalendar import Calendar, Event
+import humanize
 
 from open_event.helpers.helpers import string_empty
 from open_event.models import db
@@ -58,6 +59,7 @@ def create_app():
     app.logger.setLevel(logging.INFO)
     app.jinja_env.add_extension('jinja2.ext.do')
     app.jinja_env.undefined = SilentUndefined
+    app.jinja_env.filters['humanize'] = humanize.naturaltime
     # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
     # set up jwt
@@ -81,8 +83,14 @@ def create_app():
 @app.errorhandler(404)
 def page_not_found(e):
     if request_wants_json():
-        return json.dumps({"error": "endpoint_not_found"})
+        return json.dumps({"error": "not_found"}), 404
     return render_template('404.html'), 404
+
+@app.errorhandler(403)
+def forbidden(e):
+    if request_wants_json():
+        return json.dumps({"error": "forbidden"}), 403
+    return render_template('gentelella/admin/forbidden.html'), 403
 
 
 # taken from http://flask.pocoo.org/snippets/45/
