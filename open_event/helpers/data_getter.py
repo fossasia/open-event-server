@@ -109,12 +109,12 @@ class DataGetter:
         )
 
     @staticmethod
-    def get_sessions_of_user_by_id(session_id):
+    def get_sessions_of_user_by_id(session_id, user=login.current_user):
         """
         :return: Return Sessions object with the current user as a speaker by ID
         """
         try:
-            return Session.query.filter(Session.speakers.any(Speaker.email == login.current_user.email)).filter(
+            return Session.query.filter(Session.speakers.any(Speaker.user_id == user.id)).filter(
                 Session.id == session_id).one()
         except MultipleResultsFound, e:
             return None
