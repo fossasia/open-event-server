@@ -152,7 +152,9 @@ class DataManager(object):
                               short_abstract=form.get('short_abstract', ''),
                               state=state)
 
-        new_speaker = Speaker(name=form.get('name', ''),
+        speaker = Speaker.query.filter_by(email=form.get('email', '')).filter_by(event_id=event_id).first()
+        if not speaker:
+            speaker = Speaker(name=form.get('name', ''),
                               short_biography=form.get('short_biography', ''),
                               email=form.get('email', ''),
                               website=form.get('website', ''),
@@ -166,7 +168,7 @@ class DataManager(object):
                               country=form.get('country', ''),
                               user=login.current_user if login and login.current_user.is_authenticated else None)
 
-        new_session.speakers.append(new_speaker)
+        new_session.speakers.append(speaker)
         save_to_db(new_session, "Session saved")
 
         if state == 'pending':
@@ -191,14 +193,14 @@ class DataManager(object):
         speaker_img = ""
         if speaker_img_file != "":
             speaker_img = upload(speaker_img_file,
-                                 'events/%d/speaker/%d/photo' % (int(event_id), int(new_speaker.id)))
+                                 'events/%d/speaker/%d/photo' % (int(event_id), int(speaker.id)))
 
-        new_speaker.photo = speaker_img
+        speaker.photo = speaker_img
         new_session.audio = audio_url
         new_session.video = video_url
         new_session.slides = slide_url
         save_to_db(new_session, "Session saved")
-        save_to_db(new_speaker, "Speaker saved")
+        save_to_db(speaker, "Speaker saved")
         update_version(event_id, False, "speakers_ver")
         update_version(event_id, False, "session_ver")
 
