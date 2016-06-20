@@ -32,6 +32,7 @@
     "datepair.js": "datepair#^0.4.14",
     "jt.timepicker": "timepicker#^1.11.1",
     "bootstrap-validator": "^0.10.2",
-    "switchery": "^0.8.1"
+    "switchery": "^0.8.1",
+    "summernote": "^0.8.1"
   }
 }
