@@ -119,8 +119,8 @@ For example,
 
 This helps to avoid conflicts on the server and keep data distinct.
 
-Another important feature of upload is that it automatically switches to uploading on local server if AWS env vars are not set. This is suitable for development because
-uploading locally is fast, requires no Internet connection and gives you instant access to the uploaded file.
+Another important feature of upload is that it automatically switches to uploading on local server if AWS env vars are not set. So it doesn't affect development
+workflow. `upload` can be used in a uniform way without worrying where the data will be stored.
 
 Also note that upload always returns the absolute link of the file that is uploaded. So you can use the returned url directly in templates i.e. no need to use
 ``{{ url_for('static', uploadedUrl) }}`, just use `{{uploadedUrl}}`.

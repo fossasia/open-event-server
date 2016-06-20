@@ -444,7 +444,7 @@ def send_cal(filename):
 @app.route('/documentation')
 def serve_static(filename):
     """
-    Sends Image
+    Sends static file
     Note - This is not the most efficient method but since only development
     system will be using it, it's OK.
     Static files in production are stored on AWS so this won't be used
