@@ -15,7 +15,6 @@ from ...helpers.data_getter import DataGetter
 
 def get_published_event_or_abort(event_id):
     event = DataGetter.get_event(event_id=event_id)
-    logging.info(event.state)
     if not event or (event.state != u'Published' and event.state != 'Published'):
         abort(404)
     return event
@@ -74,11 +73,11 @@ class EventDetailView(BaseView):
     def process_event_cfs(self, event_id):
         speaker_img_filename = ""
         email = request.form['email']
-        if 'slides' in request.files:
+        if 'slides' in request.files and request.files['slides'].filename != '':
             slide_file = request.files['slides']
             slide_filename = secure_filename(slide_file.filename)
             slide_file.save(os.path.join(os.path.realpath('.') + '/static/media/image/', slide_filename))
-        if 'photo' in request.files:
+        if 'photo' in request.files and request.files['photo'].filename != '':
             speaker_img_file = request.files['photo']
             speaker_img_filename = secure_filename(speaker_img_file.filename)
             speaker_img_file.save(os.path.join(os.path.realpath('.') + '/static/media/image/', speaker_img_filename))
