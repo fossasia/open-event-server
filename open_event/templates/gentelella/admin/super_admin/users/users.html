@@ -19,6 +19,7 @@ Users
     <tr>
         <th>Name</th>
         <th>Email</th>
+        <th>Status</th>
         <th>System Roles</th>
         <th>Event Roles</th>
         <th>Member Since</th>
@@ -32,6 +33,7 @@ Users
     <tr>
         <td>{{ 'Not Available' if not user['user'].user_detail.fullname else user['user'].user_detail.fullname }}</td>
         <td>{{ user['user'].email }}</td>
+        <td>{{ 'Active' if user['user'].is_active() else 'Inactive' }}</td>
         <td>
           <ul style="padding-left:0;">
           {% if user['user'].is_super_admin %}
@@ -49,8 +51,8 @@ Users
         {% endfor %}
         </ul>
         </td>
-        <td>{{user['user'].created_date}}</td>
-        <td>{{user['user'].last_access_time}}</td>
+        <td>{{ user['user'].created_date|humanize }}</td>
+        <td>{{ user['user'].last_access_time|humanize }}</td>
         <td>
             <a href="#" title="Edit record">
             <span class="glyphicon glyphicon-pencil"></span>
