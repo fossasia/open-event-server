@@ -22,7 +22,7 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <form name="test" action="/profile/edit/" method="POST" role="form"
+                <form name="test" action="/profile/edit/{{user_id}}" method="POST" role="form"
       class="admin-form form-horizontal event-create-form" enctype='multipart/form-data'>
 
                 <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
@@ -33,9 +33,9 @@
                         <div id="crop-avatar">
                             <!-- Current avatar -->
                             {% if profile.user_detail.avatar_uploaded %}
-                            <img src="/pic/media/image/{{profile.user_detail.avatar_uploaded}}">
+                            <img src="{{profile.user_detail.avatar_uploaded}}" class="profile_avatar">
                             {% else %}
-                            <img src="{{ url_for('static', filename='img/avatar.png') }}">
+                            <img src="{{ url_for('static', filename='img/avatar.png') }}" class="profile_avatar">
                             {% endif %}
 
 

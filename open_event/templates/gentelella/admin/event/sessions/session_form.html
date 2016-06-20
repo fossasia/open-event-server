@@ -1,4 +1,4 @@
-{% set textarea_session_fields = ['short_abstract', 'long_abstract'] %}
+{% set textarea_session_fields = ['short_abstract', 'long_abstract', 'comments'] %}
 {% set media_session_fields = ['slides', 'video', 'audio'] %}
 
 {% set session_fields = ['title', 'subtitle', 'short_abstract', 'long_abstract', 'comments', 'track', 'session_type', 'language', 'slides', 'video', 'audio'] %}
@@ -129,7 +129,7 @@
         </div>
     </div>
     <div style="text-align: center;">
-        <input type="submit" class="btn btn-primary" value="Save as Draft"/>
-        <input type="submit" class="btn btn-success" value="Submit Session"/>
+        <button type="submit" class="btn btn-primary" name="state" value="draft">Save as Draft</button>
+        <button type="submit" class="btn btn-success" name="state" value="pending">Submit Session</button>
     </div>
 </form>

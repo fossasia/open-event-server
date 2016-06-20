@@ -44,6 +44,9 @@
             </h1>
             <h3 style="font-weight: 300; color: #8d8d8d">By
                 {% for speaker in session.speakers %}
+                    {% if speaker.photo %}
+                        <img src="{{speaker.photo}}" class="speaker-avatar">
+                    {% endif %}
                     {{ speaker.name }}
                 {% endfor %}
             </h3>
@@ -61,7 +64,7 @@
             <p style="text-align: justify" class="long_abstract">
                 {{ session.long_abstract }}
             </p>
-            <br>
+            <br><hr>
             <div class="row" style="font-size: 16px;">
                 <div class="col-md-2">
                     <strong>Microlocation</strong><br>
@@ -71,6 +74,27 @@
                     <strong>Track</strong><br>
                     {{ session.track.name }}
                 </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>Media</h4>
+                </div>
+                {% if session.slides %}
+                <div class="col-md-4">
+                    <h5>Slide</h5><a href="{{ session.slides }}" download>Download</a>
+                </div>
+                {% endif %}
+                {% if session.video %}
+                <div class="col-md-4">
+                    <h5>Video</h5><a href="{{ session.video }}" download>Download</a>
+                </div>
+                {% endif %}
+                {% if session.audio %}
+                <div class="col-md-4">
+                    <h5>Audio</h5><a href="{{ session.audio }}" download>Download</a>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>

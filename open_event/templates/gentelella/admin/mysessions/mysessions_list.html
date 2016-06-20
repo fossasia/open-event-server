@@ -17,7 +17,7 @@
             {% if session.event.logo %}
                 <img src="{{ session.event.logo }}" style="width: 100%;">
             {% else %}
-                <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=Event+Logo&w=300&h=200"
+                <img src="{{ url_for('static', filename='img/image-800x500.png') }}"
                      style="width: 100%;">
             {% endif %}
         </div>
@@ -35,6 +35,8 @@
         <div class="col col-xs-2">
             {% if session.state == 'pending' %}
                 <span class="status label label-warning pull-right">Under Review</span>
+            {% elif session.state == 'draft' %}
+                <span class="detail-status label label-warning pull-right">Draft</span>
             {% elif session.state == 'accepted' %}
                 <span class="status label label-success pull-right">Accepted</span>
             {% elif session.state == 'rejected' %}

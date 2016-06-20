@@ -4,7 +4,7 @@ import os.path
 import random
 import traceback
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from flask import flash, request, url_for
 from flask.ext import login
@@ -17,6 +17,7 @@ from wtforms import ValidationError
 from open_event.helpers.helpers import string_empty
 from ..helpers.update_version import VersionUpdater
 from ..helpers.data_getter import DataGetter
+from open_event.helpers.storage import upload
 from ..helpers import helpers as Helper
 from ..models import db
 from ..models.event import Event, EventsUsers
@@ -110,6 +111,7 @@ class DataManager(object):
         """
         Session will be saved to database with proper Event id
         :param form: view data form
+        :param slide_file:
         :param event_id: Session belongs to Event by event id
         """
         new_session = Session(title=form.title.data,
@@ -128,44 +130,68 @@ class DataManager(object):
         update_version(event_id, False, "session_ver")
 
     @staticmethod
-    def add_session_to_event(form, event_id, speaker_img_name, state="pending"):
+    def add_session_to_event(form, event_id, speaker_img_file, slide_file, audio_file, video_file, state=None):
         """
         Session will be saved to database with proper Event id
-        :param speaker_img_name:
+        :param speaker_img_file:
         :param state:
         :param form: view data form
         :param event_id: Session belongs to Event by event id
         """
-        img_path = ""
-        new_session = Session(title=form["title"] if "title" in form.keys() else "",
-                              subtitle=form["subtitle"] if "subtitle" in form.keys() else "",
-                              long_abstract=form["long_abstract"] if "long_abstract" in form.keys() else "",
-                              start_time="2016-01-01",
-                              end_time="2016-01-01",
+        if not state:
+            state = form.get('state', 'draft')
+
+        event = DataGetter.get_event(event_id)
+
+        new_session = Session(title=form.get('title', ''),
+                              subtitle=form.get('subtitle', ''),
+                              long_abstract=form.get('long_abstract', ''),
+                              start_time=event.start_time,
+                              end_time=event.start_time + timedelta(hours=1),
                               event_id=event_id,
-                              short_abstract=form["short_abstract"] if "short_abstract" in form.keys() else "",
+                              short_abstract=form.get('short_abstract', ''),
                               state=state)
 
-
-        if speaker_img_name != "":
-            img_path = 'static/media/image/' + speaker_img_name
-
-        new_speaker = Speaker(name=form["name"] if "name" in form.keys() else "",
-                              photo=img_path if "photo" in form.keys() else "",
-                              short_biography=form["short_biography"] if "short_biography" in form.keys() else "",
-                              email=form["email"] if "email" in form.keys() else "",
-                              website=form["website"] if "website" in form.keys() else "",
+        new_speaker = Speaker(name=form.get('name', ''),
+                              short_biography=form.get('short_biography', ''),
+                              email=form.get('email', ''),
+                              website=form.get('website', ''),
                               event_id=event_id,
-                              twitter=form["twitter"] if "twitter" in form.keys() else "",
-                              facebook=form["facebook"] if "facebook" in form.keys() else "",
-                              github=form["github"] if "github" in form.keys() else "",
-                              linkedin=form["linkedin"] if "linkedin" in form.keys() else "",
-                              organisation=form["organisation"] if "organisation" in form.keys() else "",
-                              position=form["position"] if "position" in form.keys() else "",
-                              country=form["country"] if "country" in form.keys() else "",
+                              twitter=form.get('twitter', ''),
+                              facebook=form.get('facebook', ''),
+                              github=form.get('github', ''),
+                              linkedin=form.get('linkedin', ''),
+                              organisation=form.get('organisation', ''),
+                              position=form.get('position', ''),
+                              country=form.get('country', ''),
                               user=login.current_user if login and login.current_user.is_authenticated else None)
+
         new_session.speakers.append(new_speaker)
         save_to_db(new_session, "Session saved")
+
+        slide_url = ""
+        if slide_file != "":
+            slide_url = upload(slide_file,
+                               'events/%d/session/%d/slide' % (int(event_id), int(new_session.id)))
+        audio_url = ""
+        if audio_file != "":
+            audio_url = upload(audio_file,
+                               'events/%d/session/%d/audio' % (int(event_id), int(new_session.id)))
+        video_url = ""
+        if video_file != "":
+            video_url = upload(video_file,
+                               'events/%d/session/%d/video' % (int(event_id), int(new_session.id)))
+        speaker_img = ""
+        if speaker_img_file != "":
+            speaker_img = upload(speaker_img_file,
+                                 'events/%d/speaker/%d/photo' % (int(event_id), int(new_speaker.id)))
+
+        new_speaker.photo = speaker_img
+        new_session.audio = audio_url
+        new_session.video = video_url
+        new_session.slides = slide_url
+        save_to_db(new_session, "Session saved")
+        save_to_db(new_speaker, "Speaker saved")
         update_version(event_id, False, "speakers_ver")
         update_version(event_id, False, "session_ver")
 

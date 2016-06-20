@@ -14,7 +14,7 @@
     "jquery-migrate": "1.4.0",
     "bootstrap-material-design": "0.5.9",
     "bootstrap-colorpicker": "2.3.3",
-    "font-awesome": "4.6.3",
+    "font-awesome": "^4.6.3",
     "prism": "1.4.1",
     "moment": "^2.13.0",
     "interact": "^1.2.6",
@@ -32,6 +32,8 @@
     "datepair.js": "datepair#^0.4.14",
     "jt.timepicker": "timepicker#^1.11.1",
     "bootstrap-validator": "^0.10.2",
-    "switchery": "^0.8.1"
+    "switchery": "^0.8.1",
+    "summernote": "^0.8.1",
+    "sticky-kit": "^1.1.2"
   }
 }
