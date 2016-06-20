@@ -1,7 +1,7 @@
 
 footer{
     border-top: 5px solid grey;
-    background:#515356;
+    background:#282C35;
     color: white;
     margin-left: 0px;
     font-weight: 300;
@@ -9,6 +9,7 @@ footer{
 
 footer h4 {
     font-size: 16px;
+    color: #45494E
 }
 
 footer ul
@@ -20,27 +21,29 @@ footer ul
 
 footer ul li
 {
-    line-height:25px
+    line-height:25px;
+
 }
 
 footer ul a, footer a:hover, footer ul a:hover {
     color: white;
+    color: #D2D6DF
 }
 
 #footer-menu{
     height: 80px;
-    border-top: 1px solid white;
-    border-bottom: 1px solid white;
-    opacity: 0.2;
-    filter: alpha(opacity=20);
+    border-top: 1px solid #666A73;
+    border-bottom: 1px solid #666A73;
+
 }
 
 #footer-menu select {margin-top: 10px}
 
-#footer-menu { text-align:center; }
-#footer-menu a{color: white; font-size: 16px; margin: 10px; line-height: 55px}
+
+#footer-menu a{color: #666A73; font-size: 16px; margin: 10px; line-height: 55px}
 footer .copyright{
     text-align: center;
-    opacity: 0.2;
-    filter: alpha(opacity=20);
+    color:#666A73;
     margin-top: 10px}
+
+#footer-menu select {background: #282C35; border-color:#666A73; color: #666A73  }
