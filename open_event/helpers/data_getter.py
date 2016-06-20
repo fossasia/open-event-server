@@ -59,8 +59,8 @@ class DataGetter:
         return Service.query.all()
 
     @staticmethod
-    def get_permissions_by_role_service(role, service):
-        return Permission.query.filter_by(role=role, service=service)
+    def get_permission_by_role_service(role, service):
+        return Permission.query.filter_by(role=role, service=service).first()
 
     @staticmethod
     def get_all_owner_events():

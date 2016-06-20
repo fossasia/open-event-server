@@ -13,6 +13,8 @@ Events
 
 {% block content %}
 
+<form method="post">
+
 <h2>
   Event Roles
   <button type="submit" class="btn btn-warning pull-right">Update</button>
@@ -37,35 +39,45 @@ Events
       <td>
       {% for oper, val in perm['track'].iteritems() %}
         <div class="checkbox">
-          <label><input type="checkbox" {{ 'checked' if val else '' }}>{{ oper|operation_name }}</label>
+          <label>
+            <input type="checkbox"  name="{{ role.name + '-track' }}" value="{{ oper }}" {{ 'checked' if val else '' }}>{{ oper|operation_name }}
+          </label>
         </div>
       {% endfor %}
       </td>
       <td>
       {% for oper, val in perm['session'].iteritems() %}
         <div class="checkbox">
-          <label><input type="checkbox" {{ 'checked' if val else '' }}>{{ oper|operation_name }}</label>
+          <label>
+            <input type="checkbox"  name="{{ role.name + '-session' }}" value="{{ oper }}" {{ 'checked' if val else '' }}>{{ oper|operation_name }}
+          </label>
         </div>
       {% endfor %}
       </td>
       <td>
       {% for oper, val in perm['speaker'].iteritems() %}
         <div class="checkbox">
-          <label><input type="checkbox" {{ 'checked' if val else '' }}>{{ oper|operation_name }}</label>
+          <label>
+            <input type="checkbox"  name="{{ role.name + '-speaker' }}" value="{{ oper }}" {{ 'checked' if val else '' }}>{{ oper|operation_name }}
+          </label>
         </div>
       {% endfor %}
       </td>
       <td>
       {% for oper, val in perm['sponsor'].iteritems() %}
         <div class="checkbox">
-          <label><input type="checkbox" {{ 'checked' if val else '' }}>{{ oper|operation_name }}</label>
+          <label>
+            <input type="checkbox"  name="{{ role.name + '-sponsor' }}" value="{{ oper }}" {{ 'checked' if val else '' }}>{{ oper|operation_name }}
+          </label>
         </div>
       {% endfor %}
       </td>
       <td>
       {% for oper, val in perm['microlocation'].iteritems() %}
         <div class="checkbox">
-          <label><input type="checkbox" {{ 'checked' if val else '' }}>{{ oper|operation_name }}</label>
+          <label>
+            <input type="checkbox"  name="{{ role.name + '-microlocation' }}" value="{{ oper }}" {{ 'checked' if val else '' }}>{{ oper|operation_name }}
+          </label>
         </div>
       {% endfor %}
       </td>
@@ -74,7 +86,7 @@ Events
   </tbody>
 </table>
 
-
+</form>
 
 {% endblock %}
 
