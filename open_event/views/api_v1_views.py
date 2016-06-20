@@ -440,9 +440,21 @@ def send_cal(filename):
     return send_from_directory(os.path.realpath('.') + '/static/', filename)
 
 
+@app.route('/serve_static/<path:filename>')
 @app.route('/documentation')
+def serve_static(filename):
+    """
+    Sends static file
+    Note - This is not the most efficient method but since only development
+    system will be using it, it's OK.
+    Static files in production are stored on AWS so this won't be used
+    """
+    return send_from_directory(os.path.realpath('.') + '/static/', filename)
+
+
 def documentation():
     return auto.html()
+
 
 @app.route('/migrate/', methods=('GET', 'POST'))
 def run_migrations():

@@ -27,3 +27,7 @@ static/exports/event*
 static/temp/*
 !static/temp/.gitkeep
 /tests/test.db-journal
+
+# uploads dir
+static/media/*
+!static/media/.gitkeep
