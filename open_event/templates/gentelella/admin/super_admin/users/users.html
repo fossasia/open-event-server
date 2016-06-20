@@ -54,7 +54,7 @@ Users
         <td>{{ user['user'].created_date|humanize }}</td>
         <td>{{ user['user'].last_access_time|humanize }}</td>
         <td>
-            <a href="#" title="Edit record">
+            <a href="{{ get_url('sadmin_users.edit_view', user_id=user['user'].id)}}" title="Edit record">
             <span class="glyphicon glyphicon-pencil"></span>
         </a>
         <a onclick="return confirm('Are you sure you want to delete this record?');"

@@ -879,3 +879,14 @@ def get_or_create(model, **kwargs):
         db.session.add(instance)
         db.session.commit()
         return instance
+
+def update_role_to_admin(form, user_id):
+    user = DataGetter.get_user(user_id)
+    if form['admin_perm'] == 'IsAdmin':
+        user.is_admin = True
+    else:
+        user.is_admin = False
+
+    save_to_db(user, "User role Updated")
+
+
