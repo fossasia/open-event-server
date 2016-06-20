@@ -849,8 +849,13 @@ def create_user_password(form, user):
 def user_logged_in(user):
     speakers = DataGetter.get_speaker_by_email(user.email).all()
     for speaker in speakers:
-        speaker.user = user
-        save_to_db(speaker)
+        if not speaker.user:
+            speaker.user = user
+            role = Role.query.filter_by(name='speaker').first()
+            event = DataGetter.get_event(speaker.event_id)
+            uer = UsersEventsRoles(user=user, event=event, role=role)
+            save_to_db(uer)
+            save_to_db(speaker)
     return True
 
 def update_version(event_id, is_created, column_to_increment):
