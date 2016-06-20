@@ -36,7 +36,7 @@ def upload_local(file, key, **kwargs):
 def upload_to_aws(file, key, acl='public-read'):
     """
     Uploads to AWS at key
-    http://opev.s3.amazonaws.com/{key}
+    http://{bucket}.s3.amazonaws.com/{key}
     """
     conn = S3Connection(AWS_KEY, AWS_SECRET)
     bucket = conn.get_bucket(BUCKET_NAME)
