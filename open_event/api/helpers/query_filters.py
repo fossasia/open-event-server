@@ -17,9 +17,18 @@ def extract_special_queries(queries):
 
 
 def apply_special_queries(query, specials):
+    """
+    Apply all special queries on the current
+    existing :query (set)
+    """
     for i in specials:
         query = FILTERS_LIST[i](specials[i], query)
     return query
+
+
+#######
+# DEFINE CUSTOM FILTERS BELOW
+#######
 
 
 def event_contains(value, query):
@@ -29,6 +38,11 @@ def event_contains(value, query):
         func.lower(Event.description).contains(value)
     ))
     return q
+
+
+#######
+# ADD CUSTOM FILTERS TO LIST
+#######
 
 
 FILTERS_LIST = {
