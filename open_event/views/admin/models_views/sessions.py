@@ -53,11 +53,11 @@ class SessionsView(BaseView):
         event = DataGetter.get_event(event_id)
         if request.method == 'POST':
             speaker_img_filename = ""
-            if 'slides' in request.files:
+            if 'slides' in request.files and request.files['slides'].filename != '':
                 slide_file = request.files['slides']
                 slide_filename = secure_filename(slide_file.filename)
                 slide_file.save(os.path.join(os.path.realpath('.') + '/static/media/image/', slide_filename))
-            if 'photo' in request.files:
+            if 'photo' in request.files and request.files['photo'].filename != '':
                 speaker_img_file = request.files['photo']
                 speaker_img_filename = secure_filename(speaker_img_file.filename)
                 speaker_img_file.save(os.path.join(os.path.realpath('.') + '/static/media/image/', speaker_img_filename))

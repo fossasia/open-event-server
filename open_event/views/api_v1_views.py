@@ -441,7 +441,6 @@ def send_cal(filename):
 
 
 @app.route('/serve_static/<path:filename>')
-@app.route('/documentation')
 def serve_static(filename):
     """
     Sends static file
@@ -451,10 +450,9 @@ def serve_static(filename):
     """
     return send_from_directory(os.path.realpath('.') + '/static/', filename)
 
-
+@app.route('/documentation')
 def documentation():
     return auto.html()
-
 
 @app.route('/migrate/', methods=('GET', 'POST'))
 def run_migrations():
