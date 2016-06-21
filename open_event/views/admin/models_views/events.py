@@ -35,12 +35,12 @@ class EventsView(BaseView):
     @expose('/create/', methods=('GET', 'POST'))
     def create_view(self):
         if request.method == 'POST':
+            img_files = []
             imd = ImmutableMultiDict(request.files)
-            for img_file in imd.getlist('sponsors[logo]'):
-                if img_file.filename != '':
-                    filename = secure_filename(img_file.filename)
-                    img_file.save(os.path.join(os.path.realpath('.') + '/static/media/image/', filename))
-            event = DataManager.create_event(request.form, imd)
+            if 'sponsors[logo]' in imd and request.files['sponsors[logo]'].filename != "":
+                for img_file in imd.getlist('sponsors[logo]'):
+                        img_files.append(img_file)
+            event = DataManager.create_event(request.form, img_files)
             if request.form.get('state', u'Draft') == u'Published' and string_empty(event.location_name):
                 flash("Your event was saved. To publish your event please review the highlighted fields below.", "warning")
                 return redirect(url_for('.edit_view', event_id=event.id) + "#step=location_name")

@@ -19,6 +19,7 @@ from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
 from ..models.call_for_papers import CallForPaper
 from ..models.custom_forms import CustomForms
+from ..models.mail import Mail
 from .language_list import LANGUAGE_LIST
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
@@ -453,7 +454,10 @@ class DataGetter:
                 'Sports & Fitness',
                 'Travel & Outdoor']
 
-
-
-
-
+    @staticmethod
+    def get_all_mails(count=300):
+        """
+        Get All Mails by latest first
+        """
+        mails = Mail.query.order_by(desc(Mail.time)).all()
+        return mails[:count]

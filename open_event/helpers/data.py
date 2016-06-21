@@ -41,6 +41,7 @@ from ..models.invite import Invite
 from ..models.call_for_papers import CallForPaper
 from ..models.custom_forms import CustomForms
 
+
 class DataManager(object):
     """Main class responsible for DataBase managing"""
 
@@ -560,8 +561,7 @@ class DataManager(object):
                 save_to_db(perm, 'Permission saved')
 
 
-    @staticmethod
-    def create_event(form, imd):
+    def create_event(form, img_files):
         """
         Event will be saved to database with proper Event id
         :param form: view data form
@@ -591,6 +591,7 @@ class DataManager(object):
             event.state = state
 
         if event.start_time <= event.end_time:
+            save_to_db(event, "Event Saved")
             role = Role.query.filter_by(name=ORGANIZER).first()
             db.session.add(event)
             db.session.flush()
@@ -612,14 +613,11 @@ class DataManager(object):
             sponsor_url = form.getlist('sponsors[url]')
             sponsor_level = form.getlist('sponsors[level]')
             sponsor_description = form.getlist('sponsors[description]')
-            sponsor_logo = []
-
-            for img_file in imd.getlist('sponsors[logo]'):
-                img_name = 'static/media/image/' + img_file.filename
-                sponsor_logo.append(img_name)
+            sponsor_logo_url = []
 
             custom_forms_name = form.getlist('custom_form[name]')
             custom_forms_value = form.getlist('custom_form[value]')
+
 
             for index, name in enumerate(session_type_names):
                 if not string_empty(name):
@@ -643,9 +641,13 @@ class DataManager(object):
 
             for index, name in enumerate(sponsor_name):
                 if not string_empty(name):
-                    sponsor = Sponsor(name=name, logo=sponsor_logo[index], url=sponsor_url[index],
+                    sponsor = Sponsor(name=name, url=sponsor_url[index],
                                       level=sponsor_level[index], description=sponsor_description[index], event_id=event.id)
-                    db.session.add(sponsor)
+                    save_to_db(sponsor, "Sponsor created")
+                    img_url = upload(img_files[index], 'events/%d/sponsor/%d/image' % (int(event.id), int(sponsor.id)))
+                    sponsor_logo_url.append(img_url)
+                    sponsor.logo = sponsor_logo_url[index]
+                    save_to_db(sponsor, "Sponsor updated")
 
             session_form = ""
             speaker_form = ""
@@ -938,6 +940,7 @@ def create_user_password(form, user):
     save_to_db(user, "User password created")
     return user
 
+
 def user_logged_in(user):
     speakers = DataGetter.get_speaker_by_email(user.email).all()
     for speaker in speakers:
@@ -949,6 +952,7 @@ def user_logged_in(user):
             save_to_db(uer)
             save_to_db(speaker)
     return True
+
 
 def update_version(event_id, is_created, column_to_increment):
     """Function resposnible for increasing version when some data will be
@@ -971,3 +975,14 @@ def get_or_create(model, **kwargs):
         db.session.add(instance)
         db.session.commit()
         return instance
+
+def update_role_to_admin(form, user_id):
+    user = DataGetter.get_user(user_id)
+    if form['admin_perm'] == 'isAdmin':
+        user.is_admin = True
+    else:
+        user.is_admin = False
+
+    save_to_db(user, "User role Updated")
+
+
