@@ -9,6 +9,14 @@ Events
 {% block head_css %}
 {{ super() }}
 <link href="{{ url_for('static', filename='css/admin/mysessions.css') }}" rel="stylesheet">
+<style type="text/css">
+        #event-tabs {
+            position: absolute;
+            background: transparent;
+            top: 9px;
+        }
+
+</style>
 {% endblock %}
 
 {% macro session_rows(sessions) %}
@@ -44,109 +52,106 @@ Events
 {% block content %}
 
 
-<ul class="nav nav-tabs bar_tabs" style="background-color: white;">
+<div>
+    <ul id="event-tabs" class="nav nav-tabs bar_tabs" role="tablist">
+        <li class=""><a href="#tab_content4" id="all-tab" data-toggle="tab">All Sessions</a></li>
+        <li class="active"><a href="#tab_content1" id="home-tab" data-toggle="tab">All Pending</a></li>
+        <li class=""><a href="#tab_content2" id="profile-tab" data-toggle="tab">All Accepted</a></li>
+        <li class=""><a href="#tab_content3" id="profile-tab2" data-toggle="tab">All Rejected</a></li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div role="tabpanel" class="tab-pane fade" id="tab_content4"
+             aria-labelledby="all-tab">
+            <table class="table table-striped no-global-dt">
+                <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Title</th>
+                    <th>Speaker</th>
+                    <th>Date of Submission</th>
+                    <th>Date of Event</th>
+                    <th>Organizer</th>
+                    <th>Options</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{session_rows(all_sessions)}}
+                </tbody>
+            </table>
+        </div>
+        <div role="tabpanel" class="tab-pane fade active in" id="tab_content1"
+             aria-labelledby="home-tab">
+            <table class="table table-striped no-global-dt">
+                <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Title</th>
+                    <th>Speaker</th>
+                    <th>Date of Submission</th>
+                    <th>Date of Event</th>
+                    <th>Organizer</th>
+                    <th>Options</th>
 
-    <li role="presentation" class="active">
-        <a href="#all_sessions" role="tab" data-toggle="tab"
-           aria-expanded="false">All Sessions</a>
-    </li>
-    <li role="presentation" class="">
-        <a href="#all_pending" role="tab" data-toggle="tab"
-           aria-expanded="false">All Pending</a>
-    </li>
-    <li role="presentation" class="">
-        <a href="#all_accepted" role="tab" data-toggle="tab"
-           aria-expanded="false">All Accepted</a>
-    </li>
-    <li role="presentation" class="">
-        <a href="#all_rejected" role="tab" data-toggle="tab"
-           aria-expanded="false">All Rejected</a>
-    </li>
-    <li role="presentation" class="">
-        <a href="create" role="tab" data-toggle="tab"
-           aria-expanded="false">Create Session</a>
-    </li>
-</ul>
-<div class="tab-content">
-    <div class="tab-pane fade" id="all_sessions">
-        <table class="table table-striped with-datatable">
-            <thead>
-            <tr>
-                <th>Event</th>
-                <th>Title</th>
-                <th>Speaker</th>
-                <th>Date of Submission</th>
-                <th>Date of Event</th>
-                <th>Organizer</th>
-                <th>Options</th>
-            </tr>
-            </thead>
-            <tbody>
-            {{session_rows(all_sessions)}}
-            </tbody>
-        </table>
-    </div>
-    <div class="tab-pane fade" id="all_pending">
-        <table class="table table-striped with-datatable">
-            <thead>
-            <tr>
-                <th>Event</th>
-                <th>Title</th>
-                <th>Speaker</th>
-                <th>Date of Submission</th>
-                <th>Date of Event</th>
-                <th>Organizer</th>
-                <th>Options</th>
-            </tr>
-            </thead>
-            <tbody>
-            {{session_rows(all_pending)}}
-            </tbody>
-        </table>
-    </div>
-    <div class="tab-pane fade" id="all_accepted">
-        <table class="table table-striped with-datatable">
-            <thead>
-            <tr>
-                <th>Event</th>
-                <th>Title</th>
-                <th>Speaker</th>
-                <th>Date of Submission</th>
-                <th>Date of Event</th>
-                <th>Organizer</th>
-                <th>Options</th>
-            </tr>
-            </thead>
-            <tbody>
-            {{session_rows(all_accepted)}}
-            </tbody>
-        </table>
-    </div>
-    <div class="tab-pane fade" id="all_rejected">
-        <table class="table table-striped with-datatable">
-            <thead>
-            <tr>
-                <th>Event</th>
-                <th>Title</th>
-                <th>Speaker</th>
-                <th>Date of Submission</th>
-                <th>Date of Event</th>
-                <th>Organizer</th>
-                <th>Options</th>
-            </tr>
-            </thead>
-            <tbody>
-            {{session_rows(all_rejected)}}
-            </tbody>
-        </table>
+                </tr>
+                </thead>
+                <tbody>
+                {{session_rows(all_pending)}}
+                </tbody>
+            </table>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+            <table class="table table-striped no-global-dt">
+                <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Title</th>
+                    <th>Speaker</th>
+                    <th>Date of Submission</th>
+                    <th>Date of Event</th>
+                    <th>Organizer</th>
+                    <th>Options</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {{session_rows(all_accepted)}}
+                </tbody>
+            </table>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
+            <table class="table table-striped no-global-dt">
+                <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Title</th>
+                    <th>Speaker</th>
+                    <th>Date of Submission</th>
+                    <th>Date of Event</th>
+                    <th>Organizer</th>
+                    <th>Options</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {{session_rows(all_rejected)}}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
-
 
 {% endblock %}
 
 {% block tail_js %}
 {{ super() }}
+<script type="text/javascript">
+        var table = $('.table.no-global-dt').DataTable({
+            "dom": '<"row"<"toolbar col-md-5"><"col-md-3"l><"col-md-3 pull-right"f>>tip',
+            "lengthMenu": [25, 50, 100, 200],
+            "pageLength": 50
+        });
 
+
+</script>
 {% endblock %}
 
