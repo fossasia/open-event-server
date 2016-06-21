@@ -21,6 +21,12 @@ EVENT_CREATOR = api.model('EventCreator', {
     'email': fields.Email()
 })
 
+EVENT_SOCIAL = api.model('EventSocial', {
+    'id': fields.Integer(),
+    'name': fields.String(),
+    'link': fields.String()
+})
+
 EVENT = api.model('Event', {
     'id': fields.Integer(required=True),
     'name': fields.String(required=True),
@@ -44,7 +50,8 @@ EVENT = api.model('Event', {
     'privacy': fields.String(),
     'ticket_url': fields.Uri(),
     'creator': fields.Nested(EVENT_CREATOR, allow_null=True),
-    'schedule_published_on': fields.DateTime()
+    'schedule_published_on': fields.DateTime(),
+    'social_links': fields.List(fields.Nested(EVENT_SOCIAL), attribute='social_link')
 })
 
 EVENT_PAGINATED = api.clone('EventPaginated', PAGINATED_MODEL, {
@@ -54,6 +61,7 @@ EVENT_PAGINATED = api.clone('EventPaginated', PAGINATED_MODEL, {
 EVENT_POST = api.clone('EventPost', EVENT)
 del EVENT_POST['id']
 del EVENT_POST['creator']
+del EVENT_POST['social_links']
 
 
 class EventDAO(BaseDAO):

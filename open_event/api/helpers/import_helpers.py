@@ -27,7 +27,7 @@ IMPORT_SERIES = [
 ]
 
 DELETE_FIELDS = {
-    'event': ['creator'],
+    'event': ['creator', 'social_links'],
     'tracks': ['sessions'],
     'speakers': ['sessions']
 }
