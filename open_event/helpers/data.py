@@ -619,9 +619,12 @@ class DataManager(object):
                     sponsor = Sponsor(name=name, url=sponsor_url[index],
                                       level=sponsor_level[index], description=sponsor_description[index], event_id=event.id)
                     save_to_db(sponsor, "Sponsor created")
-                    img_url = upload(img_files[index], 'events/%d/sponsor/%d/image' % (int(event.id), int(sponsor.id)))
-                    sponsor_logo_url.append(img_url)
-                    sponsor.logo = sponsor_logo_url[index]
+                    if len(img_files) != 0:
+                        img_url = upload(img_files[index], 'events/%d/sponsor/%d/image' % (int(event.id), int(sponsor.id)))
+                        sponsor_logo_url.append(img_url)
+                        sponsor.logo = sponsor_logo_url[index]
+                    else:
+                        sponsor.logo = ""
                     save_to_db(sponsor, "Sponsor updated")
 
             session_form = ""
