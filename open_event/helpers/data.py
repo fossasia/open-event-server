@@ -557,7 +557,6 @@ class DataManager(object):
                     else:
                         setattr(perm, oper[v], False)
 
-                print perm
                 save_to_db(perm, 'Permission saved')
 
 
