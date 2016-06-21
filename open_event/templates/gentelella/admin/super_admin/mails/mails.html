@@ -29,7 +29,7 @@ Mails
         <td data-toggle="tooltip" data-placement="bottom" title="{{ mail.time }}"
             data-delay='{"show":"500", "hide":"300"}'>{{ mail.time | humanize }}</td>
         <td>{{ mail.action }}</td>
-        <td>{{ mail.message }}</td>
+        <td><strong>{{ mail.subject }}</strong><br>{{ mail.message }}</td>
         </tr>
     {% endfor %}
 </tbody>
