@@ -510,7 +510,7 @@ class DataManager(object):
         db.session.commit()
 
     @staticmethod
-    def create_event(form, imd):
+    def create_event(form, img_files):
         """
         Event will be saved to database with proper Event id
         :param form: view data form
@@ -540,6 +540,7 @@ class DataManager(object):
             event.state = state
 
         if event.start_time <= event.end_time:
+            save_to_db(event, "Event Saved")
             role = Role.query.filter_by(name=ORGANIZER).first()
             db.session.add(event)
             db.session.flush()
@@ -561,14 +562,11 @@ class DataManager(object):
             sponsor_url = form.getlist('sponsors[url]')
             sponsor_level = form.getlist('sponsors[level]')
             sponsor_description = form.getlist('sponsors[description]')
-            sponsor_logo = []
-
-            for img_file in imd.getlist('sponsors[logo]'):
-                img_name = 'static/media/image/' + img_file.filename
-                sponsor_logo.append(img_name)
+            sponsor_logo_url = []
 
             custom_forms_name = form.getlist('custom_form[name]')
             custom_forms_value = form.getlist('custom_form[value]')
+
 
             for index, name in enumerate(session_type_names):
                 if not string_empty(name):
@@ -592,9 +590,13 @@ class DataManager(object):
 
             for index, name in enumerate(sponsor_name):
                 if not string_empty(name):
-                    sponsor = Sponsor(name=name, logo=sponsor_logo[index], url=sponsor_url[index],
+                    sponsor = Sponsor(name=name, url=sponsor_url[index],
                                       level=sponsor_level[index], description=sponsor_description[index], event_id=event.id)
-                    db.session.add(sponsor)
+                    save_to_db(sponsor, "Sponsor created")
+                    img_url = upload(img_files[index], 'events/%d/sponsor/%d/image' % (int(event.id), int(sponsor.id)))
+                    sponsor_logo_url.append(img_url)
+                    sponsor.logo = sponsor_logo_url[index]
+                    save_to_db(sponsor, "Sponsor updated")
 
             session_form = ""
             speaker_form = ""
