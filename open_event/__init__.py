@@ -25,6 +25,7 @@ from open_event.helpers.helpers import string_empty
 from open_event.models import db
 from open_event.views.admin.admin import AdminView
 from helpers.jwt import jwt_authenticate, jwt_identity
+from helpers.formatter import operation_name
 from open_event.helpers.data_getter import DataGetter
 from open_event.views.api_v1_views import app as api_v1_routes
 import requests
@@ -61,6 +62,7 @@ def create_app():
     app.jinja_env.add_extension('jinja2.ext.do')
     app.jinja_env.undefined = SilentUndefined
     app.jinja_env.filters['humanize'] = humanize.naturaltime
+    app.jinja_env.filters['operation_name'] = operation_name
     # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
     # set up jwt

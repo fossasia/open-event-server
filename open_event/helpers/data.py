@@ -29,6 +29,8 @@ from ..models.sponsor import Sponsor
 from ..models.user import User, ORGANIZER
 from ..models.user_detail import UserDetail
 from ..models.role import Role
+from ..models.service import Service
+from ..models.permission import Permission
 from ..models.users_events_roles import UsersEventsRoles
 from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
@@ -536,6 +538,29 @@ class DataManager(object):
         db.session.commit()
 
     @staticmethod
+    def update_permissions(form):
+        oper = {
+            'c': 'can_create',
+            'r': 'can_read',
+            'u': 'can_update',
+            'd': 'can_delete',
+        }
+        for role in Role.query.all():
+            for service in Service.query.all():
+                field = role.name + '-' + service.name
+                perm = Permission.query.filter_by(role=role, service=service).first()
+                if not perm:
+                    perm = Permission(role=role, service=service)
+
+                for v, attr in oper.iteritems():
+                    if v in form.getlist(field):
+                        setattr(perm, oper[v], True)
+                    else:
+                        setattr(perm, oper[v], False)
+
+                save_to_db(perm, 'Permission saved')
+
+
     def create_event(form, img_files):
         """
         Event will be saved to database with proper Event id
