@@ -1,4 +1,3 @@
-import os
 import json
 
 from flask import request, flash
@@ -10,7 +9,6 @@ from open_event.helpers.helpers import fields_not_empty, string_empty
 from ....helpers.data import DataManager, save_to_db
 from ....helpers.data_getter import DataGetter
 import datetime
-from werkzeug.utils import secure_filename
 from werkzeug.datastructures import ImmutableMultiDict
 
 
@@ -29,7 +27,9 @@ class EventsView(BaseView):
         past_events = DataGetter.get_past_events()
         all_events = DataGetter.get_all_events()
         return self.render('/gentelella/admin/event/index.html',
-                           live_events=live_events, draft_events=draft_events, past_events=past_events,
+                           live_events=live_events,
+                           draft_events=draft_events,
+                           past_events=past_events,
                            all_events=all_events)
 
     @expose('/create/', methods=('GET', 'POST'))
@@ -37,20 +37,27 @@ class EventsView(BaseView):
         if request.method == 'POST':
             img_files = []
             imd = ImmutableMultiDict(request.files)
-            if 'sponsors[logo]' in imd and request.files['sponsors[logo]'].filename != "":
+            if 'sponsors[logo]' in imd and request.files[
+                    'sponsors[logo]'].filename != "":
                 for img_file in imd.getlist('sponsors[logo]'):
-                        img_files.append(img_file)
+                    img_files.append(img_file)
             event = DataManager.create_event(request.form, img_files)
-            if request.form.get('state', u'Draft') == u'Published' and string_empty(event.location_name):
-                flash("Your event was saved. To publish your event please review the highlighted fields below.", "warning")
-                return redirect(url_for('.edit_view', event_id=event.id) + "#step=location_name")
+            if request.form.get('state',
+                                u'Draft') == u'Published' and string_empty(
+                                    event.location_name):
+                flash(
+                    "Your event was saved. To publish your event please review the highlighted fields below.",
+                    "warning")
+                return redirect(url_for(
+                    '.edit_view', event_id=event.id) + "#step=location_name")
             if event:
                 return redirect(url_for('.details_view', event_id=event.id))
             return redirect(url_for('.index_view'))
-        return self.render('/gentelella/admin/event/new/new.html',
-                           start_date=datetime.datetime.now() + datetime.timedelta(days=10),
-                           event_types=DataGetter.get_event_types(),
-                           event_topics=DataGetter.get_event_topics())
+        return self.render(
+            '/gentelella/admin/event/new/new.html',
+            start_date=datetime.datetime.now() + datetime.timedelta(days=10),
+            event_types=DataGetter.get_event_types(),
+            event_topics=DataGetter.get_event_topics())
 
     @expose('/<int:event_id>/', methods=('GET', 'POST'))
     def details_view(self, event_id):
@@ -58,8 +65,9 @@ class EventsView(BaseView):
 
         checklist = {"": ""}
 
-        if fields_not_empty(event, ['name', 'start_time', 'end_time', 'location_name', 'organizer_name',
-                                    'organizer_description']):
+        if fields_not_empty(event,
+                            ['name', 'start_time', 'end_time', 'location_name',
+                             'organizer_name', 'organizer_description']):
             checklist["1"] = 'success'
         elif fields_not_empty(event, ['name', 'start_time', 'end_time']):
             checklist["1"] = 'missing_some'
@@ -68,9 +76,11 @@ class EventsView(BaseView):
 
         call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
         if call_for_speakers:
-            if fields_not_empty(call_for_speakers, ['announcement', 'start_date', 'end_date']):
+            if fields_not_empty(call_for_speakers,
+                                ['announcement', 'start_date', 'end_date']):
                 checklist["4"] = "success"
-            elif fields_not_empty(call_for_speakers, ['start_date', 'end_date']):
+            elif fields_not_empty(call_for_speakers,
+                                  ['start_date', 'end_date']):
                 checklist["4"] = "missing_some"
             else:
                 checklist["4"] = 'missing_main'
@@ -82,7 +92,9 @@ class EventsView(BaseView):
             checklist["2"] = 'missing_main'
         else:
             for sponsor in sponsors:
-                if fields_not_empty(sponsor, ['name', 'description', 'url', 'level', 'logo']):
+                if fields_not_empty(
+                        sponsor,
+                    ['name', 'description', 'url', 'level', 'logo']):
                     checklist["2"] = 'success'
                     break
                 else:
@@ -117,13 +129,16 @@ class EventsView(BaseView):
                     checklist["3"] = 'missing_some'
 
         checklist["5"] = 'success'
-        return self.render('/gentelella/admin/event/details/details.html', event=event, checklist=checklist)
+        return self.render('/gentelella/admin/event/details/details.html',
+                           event=event,
+                           checklist=checklist)
 
     @expose('/<event_id>/edit/', methods=('GET', 'POST'))
     @can_access
     def edit_view(self, event_id):
         event = DataGetter.get_event(event_id)
-        session_types = DataGetter.get_session_types_by_event_id(event_id).all()
+        session_types = DataGetter.get_session_types_by_event_id(event_id).all(
+        )
         tracks = DataGetter.get_tracks(event_id).all()
         social_links = DataGetter.get_social_links_by_event_id(event_id)
         microlocations = DataGetter.get_microlocations(event_id).all()
@@ -148,21 +163,33 @@ class EventsView(BaseView):
         print preselect
 
         if request.method == 'GET':
-            return self.render('/gentelella/admin/event/edit/edit.html', event=event, session_types=session_types,
-                               tracks=tracks, social_links=social_links, microlocations=microlocations,
-                               call_for_speakers=call_for_speakers, sponsors=sponsors, event_types=DataGetter.get_event_types(),
-                               event_topics=DataGetter.get_event_topics(), preselect=preselect,
+            return self.render('/gentelella/admin/event/edit/edit.html',
+                               event=event,
+                               session_types=session_types,
+                               tracks=tracks,
+                               social_links=social_links,
+                               microlocations=microlocations,
+                               call_for_speakers=call_for_speakers,
+                               sponsors=sponsors,
+                               event_types=DataGetter.get_event_types(),
+                               event_topics=DataGetter.get_event_topics(),
+                               preselect=preselect,
                                required=required)
         if request.method == "POST":
-            event = DataManager.edit_event(request, event_id, event, session_types, tracks, social_links,
-                                           microlocations, call_for_speakers, sponsors, custom_forms)
-            if request.form.get('state', u'Draft') == u'Published' and string_empty(event.location_name):
-                flash("Your event was saved. To publish your event please review the highlighted fields below.",
-                      "warning")
-                return redirect(url_for('.edit_view', event_id=event.id) + "#step=location_name")
+            event = DataManager.edit_event(
+                request, event_id, event, session_types, tracks, social_links,
+                microlocations, call_for_speakers, sponsors, custom_forms)
+            if request.form.get('state',
+                                u'Draft') == u'Published' and string_empty(
+                                    event.location_name):
+                flash(
+                    "Your event was saved. To publish your event please review the highlighted fields below.",
+                    "warning")
+                return redirect(url_for(
+                    '.edit_view', event_id=event.id) + "#step=location_name")
             return redirect(url_for('.details_view', event_id=event_id))
 
-    @expose('/<event_id>/delete/', methods=('GET',))
+    @expose('/<event_id>/delete/', methods=('GET', ))
     @can_access
     def delete_view(self, event_id):
         if request.method == "GET":
@@ -170,25 +197,29 @@ class EventsView(BaseView):
         flash("Your event has been deleted.", "danger")
         return redirect(url_for('.index_view'))
 
-    @expose('/<int:event_id>/update/', methods=('POST',))
+    @expose('/<int:event_id>/update/', methods=('POST', ))
     def save_closing_date(self, event_id):
         event = DataGetter.get_event(event_id)
         event.closing_datetime = request.form['closing_datetime']
         save_to_db(event, 'Closing Datetime Updated')
-        return self.render('/gentelella/admin/event/details/details.html', event=event)
+        return self.render('/gentelella/admin/event/details/details.html',
+                           event=event)
 
-    @expose('/<int:event_id>/publish/', methods=('GET',))
+    @expose('/<int:event_id>/publish/', methods=('GET', ))
     def publish_event(self, event_id):
         event = DataGetter.get_event(event_id)
         if string_empty(event.location_name):
-            flash("Your event was saved. To publish your event please review the highlighted fields below.", "warning")
-            return redirect(url_for('.edit_view', event_id=event.id) + "#step=location_name")
+            flash(
+                "Your event was saved. To publish your event please review the highlighted fields below.",
+                "warning")
+            return redirect(url_for('.edit_view',
+                                    event_id=event.id) + "#step=location_name")
         event.state = 'Published'
         save_to_db(event, 'Event Published')
         flash("Your event has been published.", "success")
         return redirect(url_for('.details_view', event_id=event_id))
 
-    @expose('/<int:event_id>/unpublish/', methods=('GET',))
+    @expose('/<int:event_id>/unpublish/', methods=('GET', ))
     def unpublish_event(self, event_id):
         event = DataGetter.get_event(event_id)
         event.state = 'Draft'
@@ -196,13 +227,14 @@ class EventsView(BaseView):
         flash("Your event has been unpublished.", "warning")
         return redirect(url_for('.details_view', event_id=event_id))
 
-    @expose('/<int:event_id>/copy/', methods=('GET',))
+    @expose('/<int:event_id>/copy/', methods=('GET', ))
     def copy_event(self, event_id):
         event = DataGetter.get_event(event_id)
         event.name = "Copy of " + event.name
-        return self.render('/gentelella/admin/event/new/new.html',
-                           event=event,
-                           is_copy=True,
-                           start_date=datetime.datetime.now() + datetime.timedelta(days=10),
-                           event_types=DataGetter.get_event_types(),
-                           event_topics=DataGetter.get_event_topics())
+        return self.render(
+            '/gentelella/admin/event/new/new.html',
+            event=event,
+            is_copy=True,
+            start_date=datetime.datetime.now() + datetime.timedelta(days=10),
+            event_types=DataGetter.get_event_types(),
+            event_topics=DataGetter.get_event_topics())
