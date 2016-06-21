@@ -10,6 +10,9 @@ from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
 from ..models.users_events_roles import UsersEventsRoles
+from ..models.role import Role
+from ..models.service import Service
+from ..models.permission import Permission
 from ..models.user import User
 from ..models.file import File
 from ..models.session_type import SessionType
@@ -22,7 +25,7 @@ from open_event.helpers.helpers import get_event_id
 from flask.ext import login
 from flask import flash
 import datetime
-from sqlalchemy import desc
+from sqlalchemy import desc, asc
 
 
 class DataGetter:
@@ -48,6 +51,18 @@ class DataGetter:
     @staticmethod
     def get_event_roles_for_user(user_id):
         return UsersEventsRoles.query.filter_by(user_id=user_id)
+
+    @staticmethod
+    def get_roles():
+        return Role.query.all()
+
+    @staticmethod
+    def get_services():
+        return Service.query.all()
+
+    @staticmethod
+    def get_permission_by_role_service(role, service):
+        return Permission.query.filter_by(role=role, service=service).first()
 
     @staticmethod
     def get_all_owner_events():
@@ -151,7 +166,7 @@ class DataGetter:
         :param event_id: Event id
         :return: Speaker objects filter by event_id
         """
-        return Speaker.query.filter_by(event_id=event_id)
+        return Speaker.query.filter_by(event_id=event_id).order_by(asc(Speaker.name))
 
     @staticmethod
     def get_speaker_columns():

@@ -29,6 +29,8 @@ from ..models.sponsor import Sponsor
 from ..models.user import User, ORGANIZER
 from ..models.user_detail import UserDetail
 from ..models.role import Role
+from ..models.service import Service
+from ..models.permission import Permission
 from ..models.users_events_roles import UsersEventsRoles
 from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
@@ -131,14 +133,27 @@ class DataManager(object):
         update_version(event_id, False, "session_ver")
 
     @staticmethod
-    def add_session_to_event(form, event_id, speaker_img_file, slide_file, audio_file, video_file, state=None):
+    def add_session_to_event(request, event_id, state=None):
         """
         Session will be saved to database with proper Event id
-        :param speaker_img_file:
         :param state:
-        :param form: view data form
+        :param request: The request
         :param event_id: Session belongs to Event by event id
         """
+        form = request.form
+        speaker_img_file = ""
+        slide_file = ""
+        video_file = ""
+        audio_file = ""
+        if 'slides' in request.files and request.files['slides'].filename != '':
+            slide_file = request.files['slides']
+        if 'video' in request.files and request.files['video'].filename != '':
+            video_file = request.files['video']
+        if 'audio' in request.files and request.files['audio'].filename != '':
+            audio_file = request.files['audio']
+        if 'photo' in request.files and request.files['photo'].filename != '':
+            speaker_img_file = request.files['photo']
+
         if not state:
             state = form.get('state', 'draft')
 
@@ -170,6 +185,12 @@ class DataManager(object):
                               user=login.current_user if login and login.current_user.is_authenticated else None)
 
         new_session.speakers.append(speaker)
+
+        existing_speaker_ids = form.getlist("speakers[]")
+        for existing_speaker_id in existing_speaker_ids:
+            existing_speaker = DataGetter.get_speaker(existing_speaker_id)
+            new_session.speakers.append(existing_speaker)
+
         save_to_db(new_session, "Session saved")
 
         if state == 'pending':
@@ -202,8 +223,6 @@ class DataManager(object):
         new_session.slides = slide_url
         save_to_db(new_session, "Session saved")
         save_to_db(speaker, "Speaker saved")
-        update_version(event_id, False, "speakers_ver")
-        update_version(event_id, False, "session_ver")
 
         invite_emails = form.getlist("speakers[email]")
         for index, email in enumerate(invite_emails):
@@ -217,31 +236,49 @@ class DataManager(object):
             Helper.send_email_invitation(email, new_session.title, link)
 
     @staticmethod
-    def add_speaker_to_session(form, event_id, session_id, user=login.current_user):
+    def add_speaker_to_event(request, event_id, user=login.current_user):
+        form = request.form
+        speaker_img_file = ""
+        if 'photo' in request.files and request.files['photo'].filename != '':
+            speaker_img_file = request.files['photo']
+
+        speaker = Speaker.query.filter_by(email=form.get('email', '')).filter_by(event_id=event_id).first()
+        if not speaker:
+            speaker = Speaker(name=form.get('name', ''),
+                              short_biography=form.get('short_biography', ''),
+                              email=form.get('email', ''),
+                              website=form.get('website', ''),
+                              event_id=event_id,
+                              twitter=form.get('twitter', ''),
+                              facebook=form.get('facebook', ''),
+                              github=form.get('github', ''),
+                              linkedin=form.get('linkedin', ''),
+                              organisation=form.get('organisation', ''),
+                              position=form.get('position', ''),
+                              country=form.get('country', ''),
+                              user=user if login and login.current_user.is_authenticated else None)
+            save_to_db(speaker, "Speaker saved")
+
+        speaker_img = ""
+        if speaker_img_file != "":
+            speaker_img = upload(speaker_img_file,
+                                 'events/%d/speaker/%d/photo' % (int(event_id), int(speaker.id)))
+            speaker.photo = speaker_img
+            save_to_db(speaker, "Speaker photo saved")
+
+        return speaker
+
+    @staticmethod
+    def add_speaker_to_session(request, event_id, session_id, user=login.current_user):
         """
         Session will be saved to database with proper Event id
         :param session_id:
         :param user:
-        :param form: view data form
+        :param request: view data form
         :param event_id: Session belongs to Event by event id
         """
         session = DataGetter.get_session(session_id)
-        speaker = Speaker.query.filter_by(email=form.get('email', '')).filter_by(event_id=event_id).first()
-        if not speaker:
-            speaker = Speaker(name=form["name"] if "name" in form.keys() else "",
-                              photo=form["photo"] if "photo" in form.keys() else "",
-                              short_biography=form["short_biography"] if "short_biography" in form.keys() else "",
-                              email=form["email"] if "email" in form.keys() else "",
-                              website=form["website"] if "website" in form.keys() else "",
-                              event_id=event_id,
-                              twitter=form["twitter"] if "twitter" in form.keys() else "",
-                              facebook=form["facebook"] if "facebook" in form.keys() else "",
-                              github=form["github"] if "github" in form.keys() else "",
-                              linkedin=form["linkedin"] if "linkedin" in form.keys() else "",
-                              organisation=form["organisation"] if "organisation" in form.keys() else "",
-                              position=form["position"] if "position" in form.keys() else "",
-                              country=form["country"] if "country" in form.keys() else "",
-                              user=user)
+        speaker = DataManager.add_speaker_to_event(request, event_id, user)
         session.speakers.append(speaker)
         save_to_db(session, "Speaker saved")
         update_version(event_id, False, "speakers_ver")
@@ -260,9 +297,19 @@ class DataManager(object):
         save_to_db(session, "Session Speaker saved")
 
     @staticmethod
-    def edit_session(form, session, slide_file, audio_file, video_file):
-
+    def edit_session(request, session):
+        form = request.form
         event_id = session.event_id
+
+        slide_file = ""
+        video_file = ""
+        audio_file = ""
+        if 'slides' in request.files and request.files['slides'].filename != '':
+            slide_file = request.files['slides']
+        if 'video' in request.files and request.files['video'].filename != '':
+            video_file = request.files['video']
+        if 'audio' in request.files and request.files['audio'].filename != '':
+            audio_file = request.files['audio']
 
         form_state = form.get('state', 'draft')
 
@@ -292,6 +339,14 @@ class DataManager(object):
         session.subtitle = form.get('subtitle', '')
         session.long_abstract = form.get('long_abstract', '')
         session.short_abstract = form.get('short_abstract', '')
+
+        existing_speaker_ids = form.getlist("speakers[]")
+
+        session.speakers = []
+
+        for existing_speaker_id in existing_speaker_ids:
+            existing_speaker = DataGetter.get_speaker(existing_speaker_id)
+            session.speakers.append(existing_speaker)
 
         save_to_db(session, 'Session Updated')
 
@@ -536,6 +591,29 @@ class DataManager(object):
         db.session.commit()
 
     @staticmethod
+    def update_permissions(form):
+        oper = {
+            'c': 'can_create',
+            'r': 'can_read',
+            'u': 'can_update',
+            'd': 'can_delete',
+        }
+        for role in Role.query.all():
+            for service in Service.query.all():
+                field = role.name + '-' + service.name
+                perm = Permission.query.filter_by(role=role, service=service).first()
+                if not perm:
+                    perm = Permission(role=role, service=service)
+
+                for v, attr in oper.iteritems():
+                    if v in form.getlist(field):
+                        setattr(perm, oper[v], True)
+                    else:
+                        setattr(perm, oper[v], False)
+
+                save_to_db(perm, 'Permission saved')
+
+    @staticmethod
     def create_event(form, img_files):
         """
         Event will be saved to database with proper Event id
@@ -593,7 +671,6 @@ class DataManager(object):
             custom_forms_name = form.getlist('custom_form[name]')
             custom_forms_value = form.getlist('custom_form[value]')
 
-
             for index, name in enumerate(session_type_names):
                 if not string_empty(name):
                     session_type = SessionType(name=name, length=session_type_length[index], event_id=event.id)
@@ -617,11 +694,16 @@ class DataManager(object):
             for index, name in enumerate(sponsor_name):
                 if not string_empty(name):
                     sponsor = Sponsor(name=name, url=sponsor_url[index],
-                                      level=sponsor_level[index], description=sponsor_description[index], event_id=event.id)
+                                      level=sponsor_level[index], description=sponsor_description[index],
+                                      event_id=event.id)
                     save_to_db(sponsor, "Sponsor created")
-                    img_url = upload(img_files[index], 'events/%d/sponsor/%d/image' % (int(event.id), int(sponsor.id)))
-                    sponsor_logo_url.append(img_url)
-                    sponsor.logo = sponsor_logo_url[index]
+                    if len(img_files) != 0:
+                        img_url = upload(img_files[index],
+                                         'events/%d/sponsor/%d/image' % (int(event.id), int(sponsor.id)))
+                        sponsor_logo_url.append(img_url)
+                        sponsor.logo = sponsor_logo_url[index]
+                    else:
+                        sponsor.logo = ""
                     save_to_db(sponsor, "Sponsor updated")
 
             session_form = ""
@@ -679,27 +761,6 @@ class DataManager(object):
         if state and ((state == u'Published' and not string_empty(event.location_name)) or state != u'Published'):
             event.state = state
 
-        for session_type in session_types:
-            delete_from_db(session_type, 'Session Type Deleted')
-
-        for track in tracks:
-            delete_from_db(track, 'Track')
-
-        for social_link in social_links:
-            delete_from_db(social_link, 'Social Link Deleted')
-
-        for microlocation in microlocations:
-            delete_from_db(microlocation, 'Microlocation deleted')
-
-        for sponsor in sponsors:
-            delete_from_db(sponsor, 'Sponsor deleted')
-
-        if call_for_papers:
-            delete_from_db(call_for_papers, 'Call for paper deleted')
-
-        if custom_forms:
-            delete_from_db(custom_forms, 'Customs form deleted')
-
         session_type_names = form.getlist('session_type[name]')
         session_type_length = form.getlist('session_type[length]')
 
@@ -715,6 +776,7 @@ class DataManager(object):
         sponsor_name = form.getlist('sponsors[name]')
         sponsor_logo = request.files.getlist('sponsors[logo]')
         sponsor_url = form.getlist('sponsors[url]')
+        sponsor_type = form.getlist('sponsors[type]')
         sponsor_level = form.getlist('sponsors[level]')
         sponsor_description = form.getlist('sponsors[description]')
 
@@ -724,29 +786,43 @@ class DataManager(object):
         # save the edited info to database
         for index, name in enumerate(session_type_names):
             if not string_empty(name):
-                session_type = SessionType(name=name, length=session_type_length[index], event_id=event.id)
+                session_type, c = get_or_create(SessionType,
+                                                name=name,
+                                                length=session_type_length[index],
+                                                event_id=event.id)
                 db.session.add(session_type)
 
         for index, name in enumerate(social_link_name):
             if not string_empty(social_link_link[index]):
-                social_link = SocialLink(name=name, link=social_link_link[index], event_id=event.id)
+                social_link, c = get_or_create(SocialLink,
+                                               name=name,
+                                               link=social_link_link[index],
+                                               event_id=event.id)
                 db.session.add(social_link)
 
         for index, name in enumerate(track_name):
             if not string_empty(name):
-                track = Track(name=name, description="", track_image_url="", color=track_color[index],
-                              event_id=event.id)
+                track, c = get_or_create(Track,
+                                         name=name,
+                                         color=track_color[index].upper(),
+                                         event_id=event.id)
                 db.session.add(track)
 
         for index, name in enumerate(room_name):
             if not string_empty(name):
-                room = Microlocation(name=name, event_id=event.id)
+                room, c = get_or_create(Microlocation, name=name, event_id=event.id)
                 db.session.add(room)
 
         for index, name in enumerate(sponsor_name):
             if not string_empty(name):
-                sponsor = Sponsor(name=name, logo=sponsor_logo[index].filename, url=sponsor_url[index], level=sponsor_level[index],
-                                  description=sponsor_description[index], event_id=event.id)
+                sponsor, c = get_or_create(Sponsor,
+                                           name=name,
+                                           logo=sponsor_logo[index].filename,
+                                           url=sponsor_url[index],
+                                           sponsor_type=sponsor_type[index],
+                                           level=sponsor_level[index],
+                                           description=sponsor_description[index],
+                                           event_id=event.id)
                 db.session.add(sponsor)
 
         session_form = ""
@@ -758,14 +834,20 @@ class DataManager(object):
             elif name == "speaker_form":
                 speaker_form = custom_forms_value[index]
 
-        custom_form = CustomForms(session_form=session_form, speaker_form=speaker_form, event_id=event.id)
+        custom_form, c = get_or_create(CustomForms,
+                                       session_form=session_form,
+                                       speaker_form=speaker_form,
+                                       event_id=event.id)
         db.session.add(custom_form)
 
         if form.get('call_for_speakers_state', u'off') == u'on':
-            call_for_speakers = CallForPaper(announcement=form['announcement'],
-                                             start_date=datetime.strptime(form['cfs_start_date'], '%m/%d/%Y'),
-                                             end_date=datetime.strptime(form['cfs_end_date'], '%m/%d/%Y'),
-                                             event_id=event.id)
+            call_for_speakers, c = get_or_create(CallForPaper,
+                                                 announcement=form['announcement'],
+                                                 start_date=datetime.strptime(
+                                                     form['cfs_start_date'], '%m/%d/%Y'),
+                                                 end_date=datetime.strptime(
+                                                     form['cfs_end_date'], '%m/%d/%Y'),
+                                                 event_id=event.id)
             save_to_db(call_for_speakers)
 
         save_to_db(event, "Event saved")
@@ -942,14 +1024,17 @@ def update_version(event_id, is_created, column_to_increment):
 
 
 def get_or_create(model, **kwargs):
+    was_created = False
     instance = db.session.query(model).filter_by(**kwargs).first()
     if instance:
-        return instance
+        return instance, was_created
     else:
         instance = model(**kwargs)
         db.session.add(instance)
         db.session.commit()
-        return instance
+        was_created = True
+        return instance, was_created
+
 
 def update_role_to_admin(form, user_id):
     user = DataGetter.get_user(user_id)
@@ -959,5 +1044,3 @@ def update_role_to_admin(form, user_id):
         user.is_admin = False
 
     save_to_db(user, "User role Updated")
-
-

@@ -3,50 +3,12 @@
     {{ super() }}
     <link href="{{ url_for('static', filename='css/admin/mysessions.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/multiselect/css/multi-select.css') }}" />
 
 {% endblock %}
 {% block title %}
     {{ session.title }} - My Sessions
 {% endblock %}
-
-{% set textarea_session_fields = ['short_abstract', 'long_abstract', 'comments'] %}
-{% set media_session_fields = ['slides', 'video', 'audio'] %}
-
-{% set session_fields = ['title', 'subtitle', 'short_abstract', 'long_abstract', 'comments', 'track', 'session_type', 'language', 'slides', 'video', 'audio'] %}
-
-{% macro session_form_field(identifier, require=0) %}
-    {% set name = identifier | replace('_id','') %}
-    {% set pretty_name = name | replace('_',' ') | capitalize %}
-    <div class="item form-group speaker-fields">
-        <label class="control-label">
-            {{ pretty_name }}
-            {% if require==1 %}
-                <span class="required">*</span>
-            {% endif %}
-        </label>
-        {% if identifier in textarea_session_fields %}
-            <textarea {% if require==1 %}
-                required="required"
-            {% endif %}
-                name="{{ identifier }}" class="form-control col-md-7 col-xs-12">{{ session[identifier] }}</textarea>
-        {% elif identifier in media_session_fields %}
-            <br><input {% if require==1 %}
-            required="required"
-        {% endif %}
-            type="file" id="speaker-file-{{ identifier | default(1) }}" name="{{ identifier }}"
-            class="upload-btn"/>
-            <label class="file-label" for="speaker-file-{{ identifier | default(1) }}">
-                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-                Choose a file</label>
-        {% else %}
-            <input {% if require==1 %}
-                required="required"
-            {% endif %}
-                name="{{ identifier }}" class="form-control col-md-7 col-xs-12" value="{{ session[identifier] }}"/>
-        {% endif %}
-    </div>
-{% endmacro %}
-
 
 {% block body %}
     <div class="row">
@@ -111,51 +73,29 @@
             </div>
         </div>
     </div>
-    <form id="edit-session-form" enctype="multipart/form-data" method="post" action="">
-        <div class="modal fade" id="edit-session-modal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                        </button>
-                        <h4 class="modal-title">Edit Session Proposal</h4>
-                    </div>
-                    <div class="modal-body">
-                        {% if csrf_token %}
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                        {% endif %}
-                        <div class="session_form" style="margin-right: 25px;">
-                            <h4>Session Details</h4>
-                            {% for elem in session_fields %}
-                                {% if session_form[elem].include==1 %}
-                                    {{ session_form_field(elem, session_form[elem].require) }}
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="close-edit-session" class="btn btn-default" data-dismiss="modal">
-                            Close
-                        </button>
-                        <button type="submit" class="btn btn-primary" name="state" value="draft">Save as Draft
-                        </button>
-                        <button type="submit" class="btn btn-success" name="state" value="pending">Submit
-                            Session
-                        </button>
-                    </div>
+    <div class="modal fade" id="edit-session-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">Edit Session Proposal</h4>
+                </div>
+                <div class="modal-body">
+                    {% include 'gentelella/admin/event/sessions/components/session_speaker_form.html' %}
                 </div>
             </div>
         </div>
-    </form>
+    </div>
 
 {% endblock %}
 {% block tail_js %}
     {{ super() }}
+    <script src="{{ url_for('static', filename='js/jquery/jquery.multi-select.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $("textarea").summernote(summernoteConfig);
         });
     </script>
-
 {% endblock %}
 

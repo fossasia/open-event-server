@@ -28,14 +28,6 @@
 
 {% block head_js %}
     {{ super() }}
-
-    <script type="text/javascript">
-        function imgError(image) {
-            image.onerror = "";
-            image.src = '{{ url_for('static', filename='img/avatar.png') }}';
-            return true;
-        }
-    </script>
 {% endblock %}
 
 {% macro social_link(link, what) %}

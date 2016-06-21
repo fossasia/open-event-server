@@ -5,7 +5,7 @@ from flask.ext.restplus import abort
 from flask_admin import expose
 from flask.ext import login
 from flask import request, url_for, redirect, flash
-from ....helpers.data import delete_from_db, save_to_db
+from ....helpers.data import delete_from_db, save_to_db, DataManager
 from ....helpers.data_getter import DataGetter
 
 def get_speaker_or_throw(speaker_id):

@@ -8,6 +8,7 @@
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/details.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/multiselect/css/multi-select.css') }}" />
     <style type="text/css">
         .carousel .item {
             height: {{ carousel_height }}px;
@@ -92,7 +93,7 @@
                         <h4 class="modal-title">Submit Proposal</h4>
                     </div>
                     <div class="modal-body">
-                        {% include 'gentelella/admin/event/sessions/session_form.html' %}
+                        {% include 'gentelella/admin/event/sessions/components/session_speaker_form.html' %}
                     </div>
                 </div>
             </div>
@@ -105,6 +106,7 @@
 
 {% block tail_js %}
     {{ super() }}
+    <script src="{{ url_for('static', filename='js/jquery/jquery.multi-select.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/admin/session/new.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function () {

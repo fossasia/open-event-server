@@ -25,6 +25,7 @@ from open_event.helpers.helpers import string_empty
 from open_event.models import db
 from open_event.views.admin.admin import AdminView
 from helpers.jwt import jwt_authenticate, jwt_identity
+from helpers.formatter import operation_name
 from open_event.helpers.data_getter import DataGetter
 from open_event.views.api_v1_views import app as api_v1_routes
 import requests
@@ -61,6 +62,7 @@ def create_app():
     app.jinja_env.add_extension('jinja2.ext.do')
     app.jinja_env.undefined = SilentUndefined
     app.jinja_env.filters['humanize'] = humanize.naturaltime
+    app.jinja_env.filters['operation_name'] = operation_name
     # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
     # set up jwt
@@ -106,11 +108,17 @@ def request_wants_json():
 
 class SilentUndefined(Undefined):
     """
-    Dont break pageloads because vars arent there!
+    From http://stackoverflow.com/questions/6190348/
+    Don't break page loads because vars aren't there!
     """
     def _fail_with_undefined_error(self, *args, **kwargs):
         return False
-
+    __add__ = __radd__ = __mul__ = __rmul__ = __div__ = __rdiv__ = \
+        __truediv__ = __rtruediv__ = __floordiv__ = __rfloordiv__ = \
+        __mod__ = __rmod__ = __pos__ = __neg__ = __call__ = \
+        __getitem__ = __lt__ = __le__ = __gt__ = __ge__ = __int__ = \
+        __float__ = __complex__ = __pow__ = __rpow__ = \
+        _fail_with_undefined_error
 
 @app.context_processor
 def locations():
@@ -129,12 +137,10 @@ def locations():
         cnt[location] += 1
     return dict(locations=[v for v, k in cnt.most_common()][:10])
 
-
 @app.context_processor
 def event_types():
     event_types = DataGetter.get_event_types()
     return dict(event_typo=event_types[:10])
-
 
 # http://stackoverflow.com/questions/26724623/
 @app.before_request

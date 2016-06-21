@@ -2,6 +2,7 @@ from flask.ext.restplus import Resource, Namespace, reqparse
 from flask import g
 
 from open_event.models.event import Event as EventModel
+from open_event.models.social_link import SocialLink as SocialLinkModel
 from open_event.models.users_events_roles import UsersEventsRoles
 from open_event.models.role import Role
 from open_event.models.user import ORGANIZER
@@ -9,7 +10,7 @@ from open_event.helpers.data import save_to_db, update_version
 
 from .helpers.helpers import get_paginated_list, requires_auth, parse_args
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
-    PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, BaseDAO
+    PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, BaseDAO, ServiceDAO
 from .helpers import custom_fields as fields
 from helpers.special_fields import EventTypeField, EventTopicField
 
@@ -19,6 +20,12 @@ api = Namespace('events', description='Events')
 EVENT_CREATOR = api.model('EventCreator', {
     'id': fields.Integer(),
     'email': fields.Email()
+})
+
+EVENT_SOCIAL = api.model('EventSocial', {
+    'id': fields.Integer(),
+    'name': fields.String(),
+    'link': fields.String()
 })
 
 EVENT = api.model('Event', {
@@ -44,7 +51,8 @@ EVENT = api.model('Event', {
     'privacy': fields.String(),
     'ticket_url': fields.Uri(),
     'creator': fields.Nested(EVENT_CREATOR, allow_null=True),
-    'schedule_published_on': fields.DateTime()
+    'schedule_published_on': fields.DateTime(),
+    'social_links': fields.List(fields.Nested(EVENT_SOCIAL), attribute='social_link')
 })
 
 EVENT_PAGINATED = api.clone('EventPaginated', PAGINATED_MODEL, {
@@ -52,8 +60,24 @@ EVENT_PAGINATED = api.clone('EventPaginated', PAGINATED_MODEL, {
 })
 
 EVENT_POST = api.clone('EventPost', EVENT)
+SOCIAL_LINK_POST = api.clone('SocialLinkPost', EVENT_SOCIAL)
+
 del EVENT_POST['id']
 del EVENT_POST['creator']
+del EVENT_POST['social_links']
+
+del SOCIAL_LINK_POST['id']
+
+# ###################
+# Data Access Objects
+# ###################
+
+
+class SocialLinkDAO(ServiceDAO):
+    """
+    Social Link DAO
+    """
+    pass
 
 
 class EventDAO(BaseDAO):
@@ -97,6 +121,7 @@ class EventDAO(BaseDAO):
         return BaseDAO.update(self, event_id, payload, validate=False)
 
 
+LinkDAO = SocialLinkDAO(SocialLinkModel, SOCIAL_LINK_POST)
 DAO = EventDAO(EventModel, EVENT_POST)
 
 
