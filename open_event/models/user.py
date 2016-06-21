@@ -142,6 +142,9 @@ class User(db.Model):
     def update_lat(self):
         self.last_access_time = datetime.now()
 
+    def __repr__(self):
+        return '<User %r>' % self.email
+
 
 @event.listens_for(User, 'init')
 def receive_init(target, args, kwargs):
