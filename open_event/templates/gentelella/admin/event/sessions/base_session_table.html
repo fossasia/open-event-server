@@ -8,6 +8,8 @@
     {{ super() }}
     <link rel="stylesheet"
           href="{{ url_for('static', filename='admin/lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"/>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='admin/lib/datatables.net-responsive-bs/css/responsive.bootstrap.min.css') }}"/>
     <style type="text/css">
         .label {
             text-transform: capitalize;
@@ -53,8 +55,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12" style="margin-top: 10px;">
-            <table class="table table-striped table-hover with-datatable">
+        <div class="col-md-12" style="margin-top: 10px;width:100%">
+            <table class="table table-striped table-hover with-datatable dt-responsive">
                 <thead>
                 <tr>
                     <th>State</th>
@@ -127,6 +129,8 @@
     {{ super() }}
     <script src="{{ url_for('static', filename='admin/lib/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/datatables.net-responsive-bs/js/responsive.bootstrap.js') }}"></script>
 
     <script type="text/javascript">
         $.fn.dataTable.ext.search.push(
