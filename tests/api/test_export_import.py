@@ -1,5 +1,7 @@
 import unittest
 import json
+import shutil
+import os
 from StringIO import StringIO
 
 from tests.setup_database import Setup
@@ -89,6 +91,32 @@ class TestEventImport(OpenEventTestCase):
                 1, '5', track=2, speakers=[1]
             )
         self._test_import_success()
+
+
+class TestImportOTS(OpenEventTestCase):
+    """
+    Tests import of OTS sample
+    """
+    def setUp(self):
+        self.app = Setup.create_app()
+        with app.test_request_context():
+            register(self.app, u'test@example.com', u'test')
+
+    def _upload(self, data, url, filename='anything'):
+        return self.app.post(
+            url,
+            data={'file': (StringIO(data), filename)}
+        )
+
+    def test_import_ots(self):
+        dir_path = 'samples/ots16'
+        shutil.make_archive(dir_path, 'zip', dir_path)
+        file = open(dir_path + '.zip', 'r').read()
+        os.remove(dir_path + '.zip')
+        upload_path = get_path('import', 'json')
+        resp = self._upload(file, upload_path, 'event.zip')
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn(resp.data, 'Open Tech Summit')
 
 
 if __name__ == '__main__':
