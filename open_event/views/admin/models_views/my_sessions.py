@@ -44,19 +44,6 @@ class MySessionView(BaseView):
     @flask_login.login_required
     def process_session_view(self, session_id):
         session = DataGetter.get_sessions_of_user_by_id(session_id)
-        speaker_img_file = ""
-        slide_file = ""
-        video_file = ""
-        audio_file = ""
-        if 'slides' in request.files and request.files['slides'].filename != '':
-            slide_file = request.files['slides']
-        if 'video' in request.files and request.files['video'].filename != '':
-            video_file = request.files['video']
-        if 'audio' in request.files and request.files['audio'].filename != '':
-            audio_file = request.files['audio']
-        if 'photo' in request.files and request.files['photo'].filename != '':
-            speaker_img_file = request.files['photo']
-
-        DataManager.edit_session(request.form, session, slide_file, audio_file, video_file)
+        DataManager.edit_session(request, session)
         flash("The session has been updated successfully", "success")
         return redirect(url_for('.display_session_view', event_id=session.event_id, session_id=session_id))

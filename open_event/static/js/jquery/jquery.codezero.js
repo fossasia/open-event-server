@@ -91,6 +91,8 @@ jQuery.fn.extend({
     lockForm: function () {
         return this.each(function () {
             $(this).find("select,input,textarea,button").disable();
+            $(this).find(".note-editable").attr("contenteditable", "false").css("background-color", "#ffffff")
+
         });
     },
     /**
@@ -100,6 +102,7 @@ jQuery.fn.extend({
     unlockForm: function () {
         return this.each(function () {
             $(this).find("select,input,textarea,button").enable();
+            $(this).find(".note-editable").attr("contenteditable", "true")
         });
     }
 });

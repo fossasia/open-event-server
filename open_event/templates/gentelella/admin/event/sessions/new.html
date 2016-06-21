@@ -10,20 +10,15 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
 {% endblock %}
 
-
 {% block content %}
     <div class="row">
-
         <div class="col-md-12">
             <div style="text-align: center">
                 <h3>Create Session</h3>
             </div>
-
-            {% include 'gentelella/admin/event/sessions/session_form.html' %}
-
+            {% include 'gentelella/admin/event/sessions/components/session_speaker_form.html' %}
         </div>
     </div>
-
 
 {% endblock %}
 {% block tail_js %}

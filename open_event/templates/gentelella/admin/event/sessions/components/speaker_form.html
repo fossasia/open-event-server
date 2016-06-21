@@ -1,0 +1,21 @@
+{% import "gentelella/admin/event/sessions/components/_speaker_component.html" as _speaker_component with context %}
+
+<form enctype="multipart/form-data" action="" method="POST" class="form-horizontal" id="session-create-form">
+    {% if csrf_token %}
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    {% endif %}
+    <div class="col-md-2 col-sm-2 col-xs-12">
+
+    </div>
+    <div class="col-md-8 col-sm-8 col-xs-12 speaker_form">
+        {% for elem in _speaker_component.speaker_fields %}
+            {% if speaker_form[elem].include==1 %}
+                {{ _speaker_component.speaker_form_field(elem, speaker_form[elem].require) }}
+            {% endif %}
+        {% endfor %}
+        <br>
+        <button type="submit" class="btn btn-success">Save Speaker</button>
+    </div>
+    <div style="text-align: center;">
+    </div>
+</form>

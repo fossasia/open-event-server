@@ -72,6 +72,10 @@
                         <input type="radio" name="show_state" autocomplete="off" value="rejected"> Rejected
                     </label>
                 </div>
+                <div class="btn-group pull-left" style="margin-left: 5px; margin-right: 10px;">
+                    <a href="{{ url_for('.create_view', event_id=event_id) }}" class="btn btn-info">Add Speaker</a>
+                </div>
+
             </div>
         </div>
         <div class="col-md-12" style="margin-top: 10px;">
@@ -162,7 +166,7 @@
         );
 
         var table = $('.with-datatable').DataTable({
-            "dom": '<"row"<"toolbar col-md-7"<"pull-left"l>><"col-md-3 pull-right"f>>tip'
+            "dom": '<"row"<"toolbar col-md-8"<"pull-left"l>><"col-md-3 pull-right"f>>tip'
         });
 
         $("div.toolbar").prepend($("#toolbar-holder").html());
