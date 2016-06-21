@@ -1,78 +1,107 @@
-{% extends 'gentelella/admin/base.html' %}
+{% extends 'gentelella/admin/event/event_base.html' %}
 {% block title %}
-Edit Session
+    Edit Session - {{ event.name }}
 {% endblock %}
-{% block body %}
-<div class="page-title">
-    <div class="title_left">
-        <h3>Edit Session</h3>
+
+{% set active_page = "sessions" %}
+
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
+{% endblock %}
+
+{% set textarea_session_fields = ['short_abstract', 'long_abstract', 'comments'] %}
+{% set media_session_fields = ['slides', 'video', 'audio'] %}
+
+{% set session_fields = ['title', 'subtitle', 'short_abstract', 'long_abstract', 'comments', 'track', 'session_type', 'language', 'slides', 'video', 'audio'] %}
+
+{% macro session_form_field(identifier, require=0) %}
+    {% set name = identifier | replace('_id','') %}
+    {% set pretty_name = name | replace('_',' ') | capitalize %}
+    <div class="item form-group speaker-fields">
+        <label class="control-label">
+            {{ pretty_name }}
+            {% if require==1 %}
+                <span class="required">*</span>
+            {% endif %}
+        </label>
+        {% if identifier in textarea_session_fields %}
+            <textarea {% if require==1 %}
+                required="required"
+            {% endif %}
+                name="{{ identifier }}" class="form-control col-md-7 col-xs-12">
+                {% if session[identifier] %}
+                    {{ session[identifier] }}
+                {% endif %}
+            </textarea>
+        {% elif identifier in media_session_fields %}
+            <br><input {% if require==1 %}
+            required="required"
+        {% endif %}
+            type="file" id="speaker-file-{{ identifier | default(1) }}" name="{{ identifier }}"
+            class="upload-btn"/>
+            <label class="file-label" for="speaker-file-{{ identifier | default(1) }}">
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                Choose a file</label>
+        {% else %}
+            <input {% if require==1 %}
+                required="required"
+            {% endif %}
+                name="{{ identifier }}" class="form-control col-md-7 col-xs-12"
+                {% if session[identifier] %}
+                    value="{{ session[identifier] }}"
+                {% endif %} />
+        {% endif %}
     </div>
-</div>
-<div class="row">
-    <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="x_panel" style="min-height:600px;">
-            <div class="row">
-                <center><h4>Session Details</h4>
-                <form name="test" method="POST" role="form"
-                      class="admin-form form-horizontal event-create-form">
-                    {% if csrf_token %}
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                    {% endif %}
-                    <div style="display: block;">
-                        <div class="item form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Title <span class="required">*</span>
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input value="{{ session.title }}" required="required" name="title" class="form-control col-md-7 col-xs-12" />
-                            </div>
-                        </div>
+{% endmacro %}
 
-                        <div class="item form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Description <span class="required">*</span>
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                              <textarea name="long_abstract" class="form-control col-md-7 col-xs-12">{{ session.long_abstract }}</textarea>
-                            </div>
-                        </div>
 
-                        <div class="item form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Start Time <span class="required">*</span>
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input value="{{ session.start_time }}" required="required" name="start_time" class="date-picker form-control col-md-7 col-xs-12"placeholder="MM/DD/YYYY"/>
-                            </div>
+{% block content %}
+    <div class="row">
 
-                        </div>
-
-                        <div class="item form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">End Time <span class="required">*</span>
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input value="{{ session.end_time }}" required="required" name="end_time" class="date-picker form-control col-md-7 col-xs-12"placeholder="MM/DD/YYYY"/>
-                            </div>
-                        </div>
-
-                        <div class="item form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Abstract
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                              <textarea name="short_abstract" class="form-control col-md-7 col-xs-12">{{ session.short_abstract }}</textarea>
-                            </div>
-                        </div>
-
-                        <div class="item form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Subtitle
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                              <textarea name="subtitle" class="form-control col-md-7 col-xs-12">{{ session.subtitle }}</textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <center><input class="btn btn-success" type="submit" value="Save"></center>
-                </form>
+        <div class="col-md-12">
+            <div style="text-align: center">
+                <h3>Edit Session</h3>
             </div>
+
+            <form enctype="multipart/form-data" name="test" action="" method="POST" role="form"
+                  class="admin-form form-horizontal"
+                  id="session-create-form">
+                {% if csrf_token %}
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                {% endif %}
+                <div class="row">
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+
+                    </div>
+                    <div class="col-md-8 col-sm-8 col-xs-12 session_form" style="margin-right: 25px;">
+                        <h4>Session Details</h4>
+                        {% for elem in session_fields %}
+                            {% if session_form[elem].include==1 %}
+                                {{ session_form_field(elem, session_form[elem].require) }}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div style="text-align: center;">
+                        <button type="submit" class="btn btn-primary" name="state" value="draft">Save as Draft</button>
+                        <button type="submit" class="btn btn-success" name="state" value="pending">Submit Session</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-</div>
 
+
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='admin/lib/bootstrap-validator/dist/validator.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/session/new.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("textarea").summernote(summernoteConfig);
+        });
+    </script>
 {% endblock %}
