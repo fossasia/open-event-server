@@ -1,30 +1,23 @@
 {% extends 'gentelella/admin/login/base.html' %}
 {% block register %}
-<div id="register" class="row animate form registration_form">
-          <section class="login_content">
-            <form method="post">
-              <h1>Create Account</h1>
-              <div>
-                <input name="email" type="email" class="form-control" placeholder="Email" required="" />
-              </div>
-              <div>
-                <input name="password" type="password" class="form-control" placeholder="Password" required="" />
-              </div>
-              <div>
-                <button type="submit" class="btn btn-default">Submit</button>
-              </div>
+<form data-toggle="validator" role="form">
+  <div class="form-group has-feedback">
+      <input type="email" class="form-control" id="email" placeholder="Email" data-error="Invalid email address" required>
+    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+    <div class="help-block with-errors"></div>
+  </div>
+  <div class="form-group has-feedback">
+      <input type="password" data-minlength="6" class="form-control" id="inputPassword" placeholder="Password" required data-error="Minimum of 6 characters"> 
+      <div class="help-block with-errors"></div>
+    </div>
+  <div>
+       <button type="submit" class="btn btn-default">Submit</button>
+  </div>
+</form>
 
-              <div class="clearfix"></div>
+{% endblock %}
+{% block tail_js %}
+{{ super() }}
+<script src="{{ url_for('static', filename='admin/lib/bootstrap-validator/dist/validator.min.js') }}"></script>
 
-              <div class="separator">
-                <p class="change_link">Already a member ?
-                  <a href="/login" class="to_register"> Log in </a>
-                </p>
-
-                <div class="clearfix"></div>
-                <br />
-              </div>
-            </form>
-          </section>
-</div>
 {% endblock %}
