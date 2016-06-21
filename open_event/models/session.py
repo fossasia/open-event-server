@@ -14,7 +14,7 @@ class Session(db.Model):
     title = db.Column(db.String, nullable=False)
     subtitle = db.Column(db.String)
     short_abstract = db.Column(db.Text)
-    long_abstract = db.Column(db.Text, nullable=False)
+    long_abstract = db.Column(db.Text)
     comments = db.Column(db.Text)
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
