@@ -5,7 +5,7 @@
                    class="form-control col-md-7 col-xs-12"/></td>
         <td>
             <input type="file" id="sponsors-logo-{{ sponsor.id | default(1) }}" name="sponsors[logo]"
-                   class="upload-btn" value="{{ sponsor.logo }}" />
+                   class="upload-btn" value="" />
             <label class="file-label" for="sponsors-logo-{{ sponsor.id | default(1) }}">
                 <i class="fa fa-cloud-upload" aria-hidden="true"></i>
                 Choose a file</label>
@@ -13,7 +13,7 @@
         <td><input type="number" value="{{ sponsor.level | default('') }}" name="sponsors[level]"
                    class="form-control col-md-7 col-xs-12"/></td>
         <td><input name="sponsors[type]" class="form-control col-md-7 col-xs-12"
-                   value="{{ sponsor.sponsor_type }}"/></td>
+                   value="{{ sponsor.sponsor_type | default('', true) }}"/></td>
         <td><input value="{{ sponsor.url | default('') }}" name="sponsors[url]"
                    class="form-control col-md-7 col-xs-12"/></td>
         <td><textarea name="sponsors[description]"
