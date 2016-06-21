@@ -100,11 +100,33 @@ class SessionsView(BaseView):
     @can_access
     def edit_view(self, event_id, session_id):
         session = get_session_or_throw(session_id)
-        if request.method == 'GET':
-            return self.render('/gentelella/admin/sessions/edit.html', session=session)
-        if request.method == 'POST':
-            DataManager.edit_session(request.form, session)
+        form_elems = DataGetter.get_custom_form_elements(event_id).first()
+        if not form_elems:
+            flash("Speaker and Session forms have been incorrectly configured for this event."
+                  " Session creation has been disabled", "danger")
             return redirect(url_for('.index_view', event_id=event_id))
+        speaker_form = json.loads(form_elems.speaker_form)
+        session_form = json.loads(form_elems.session_form)
+        event = DataGetter.get_event(event_id)
+        if request.method == 'POST':
+            speaker_img_file = ""
+            slide_file = ""
+            video_file = ""
+            audio_file = ""
+            if 'slides' in request.files and request.files['slides'].filename != '':
+                slide_file = request.files['slides']
+            if 'video' in request.files and request.files['video'].filename != '':
+                video_file = request.files['video']
+            if 'audio' in request.files and request.files['audio'].filename != '':
+                audio_file = request.files['audio']
+            if 'photo' in request.files and request.files['photo'].filename != '':
+                speaker_img_file = request.files['photo']
+            DataManager.edit_session(request.form, session, event_id, speaker_img_file,
+                                     slide_file, audio_file, video_file)
+            return redirect(url_for('.index_view', event_id=event_id))
+        if request.method == 'GET':
+            return self.render('/gentelella/admin/event/sessions/edit.html', session=session,
+                               speaker_form=speaker_form, session_form=session_form, event=event)
 
     @expose('/<int:session_id>/accept', methods=('GET',))
     @can_accept_and_reject

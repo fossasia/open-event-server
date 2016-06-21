@@ -31,7 +31,10 @@
             <input {% if require==1 %}
                 required="required"
             {% endif %}
-                name="{{ identifier }}" class="form-control col-md-7 col-xs-12"/>
+                name="{{ identifier }}" class="form-control col-md-7 col-xs-12"
+                {% if session[identifier] %}
+                    value="{{ session[identifier] }}"
+                {% endif %} />
         {% endif %}
     </div>
 {% endmacro %}
