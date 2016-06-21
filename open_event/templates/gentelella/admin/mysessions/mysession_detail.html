@@ -3,6 +3,7 @@
     {{ super() }}
     <link href="{{ url_for('static', filename='css/admin/mysessions.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/multiselect/css/multi-select.css') }}" />
 
 {% endblock %}
 {% block title %}
@@ -90,6 +91,7 @@
 {% endblock %}
 {% block tail_js %}
     {{ super() }}
+    <script src="{{ url_for('static', filename='js/jquery/jquery.multi-select.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $("textarea").summernote(summernoteConfig);
