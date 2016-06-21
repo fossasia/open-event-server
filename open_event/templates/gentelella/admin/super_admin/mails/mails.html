@@ -23,13 +23,15 @@ Mails
     </tr>
 </thead>
 <tbody>
-    <tr>
-    <td>Awesome@gmail.com</td>
-    <td data-toggle="tooltip" data-placement="bottom" title="awesome"
-        data-delay='{"show":"500", "hide":"300"}'>4 days ago</td>
-    <td>User Registration</td>
-    <td>What an amazing day</td>
-    </tr>
+    {% for mail in mails %}
+        <tr>
+        <td>{{ mail.recipient }}</td>
+        <td data-toggle="tooltip" data-placement="bottom" title="awesome"
+            data-delay='{"show":"500", "hide":"300"}'>{{ mail.time }}</td>
+        <td>{{ mail.action }}</td>
+        <td>{{ mail.message }}</td>
+        </tr>
+    {% endfor %}
 </tbody>
 
 </table>

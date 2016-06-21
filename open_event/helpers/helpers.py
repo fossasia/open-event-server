@@ -94,6 +94,22 @@ def send_email_with_reset_password_hash(email, link):
                   headers=HEADERS)
 
 
+def send_email(to, subject, html):
+    """
+    Sends email
+    """
+    payload = {
+        'to': to,
+        'from': 'open-event@googlegroups.com',
+        'subject': subject,
+        'html': html
+    }
+    requests.post("https://api.sendgrid.com/api/mail.send.json",
+                  data=payload,
+                  headers=HEADERS)
+    return
+
+
 def is_event_admin(event_id, users):
     """
     :param event_id: Event id
