@@ -2,10 +2,51 @@
 {% block head_css %}
     {{ super() }}
     <link href="{{ url_for('static', filename='css/admin/mysessions.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
+
 {% endblock %}
 {% block title %}
     {{ session.title }} - My Sessions
 {% endblock %}
+
+{% set textarea_session_fields = ['short_abstract', 'long_abstract', 'comments'] %}
+{% set media_session_fields = ['slides', 'video', 'audio'] %}
+
+{% set session_fields = ['title', 'subtitle', 'short_abstract', 'long_abstract', 'comments', 'track', 'session_type', 'language', 'slides', 'video', 'audio'] %}
+
+{% macro session_form_field(identifier, require=0) %}
+    {% set name = identifier | replace('_id','') %}
+    {% set pretty_name = name | replace('_',' ') | capitalize %}
+    <div class="item form-group speaker-fields">
+        <label class="control-label">
+            {{ pretty_name }}
+            {% if require==1 %}
+                <span class="required">*</span>
+            {% endif %}
+        </label>
+        {% if identifier in textarea_session_fields %}
+            <textarea {% if require==1 %}
+                required="required"
+            {% endif %}
+                name="{{ identifier }}" class="form-control col-md-7 col-xs-12">{{ session[identifier] }}</textarea>
+        {% elif identifier in media_session_fields %}
+            <br><input {% if require==1 %}
+            required="required"
+        {% endif %}
+            type="file" id="speaker-file-{{ identifier | default(1) }}" name="{{ identifier }}"
+            class="upload-btn"/>
+            <label class="file-label" for="speaker-file-{{ identifier | default(1) }}">
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                Choose a file</label>
+        {% else %}
+            <input {% if require==1 %}
+                required="required"
+            {% endif %}
+                name="{{ identifier }}" class="form-control col-md-7 col-xs-12" value="{{ session[identifier] }}"/>
+        {% endif %}
+    </div>
+{% endmacro %}
+
 
 {% block body %}
     <div class="row">
@@ -46,12 +87,12 @@
                     <br>
                     <h5>Short Abstract</h5>
                     <p style="text-align: justify;"><i class="short_abstract">
-                        {{ session.short_abstract }}
+                        {{ session.short_abstract | safe }}
                     </i></p>
                     <br>
                     <h5>Long Abstract</h5>
                     <p style="text-align: justify" class="long_abstract">
-                        {{ session.long_abstract }}
+                        {{ session.long_abstract | safe }}
                     </p>
                     <br>
                     <div class="row" style="text-align: center; font-size: 16px;">
@@ -70,7 +111,7 @@
             </div>
         </div>
     </div>
-    <form id="edit-session-form">
+    <form id="edit-session-form" enctype="multipart/form-data" method="post" action="">
         <div class="modal fade" id="edit-session-modal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -80,41 +121,27 @@
                         <h4 class="modal-title">Edit Session Proposal</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="row microlocations">
-                            <div class="col-sm-12">
-                                <div class="col-sm-12 input-group">
-                                    <label>Title:</label>
-                                    <input type="text" required="required" class="form-control" name="title"
-                                           placeholder="Title" value="{{ session.title }}">
-                                </div>
-
-                                <div class="col-sm-12 input-group">
-                                    <label>Subtitle:</label>
-                                    <input type="text" required="required" class="form-control" name="subtitle"
-                                           placeholder="Subtitle" value="{{ session.subtitle }}">
-                                </div>
-
-                                <div class="col-sm-12 input-group">
-                                    <label>Short Abstract:</label>
-                                    <textarea rows="4" name="short_abstract" title="short_abstract"
-                                              style="width: 100%" required>{{ session.short_abstract }}</textarea>
-                                </div>
-
-                                <div class="col-sm-12 input-group">
-                                    <label>Long Abstract:</label>
-                                    <textarea rows="5" name="long_abstract"
-                                              title="long_abstract"
-                                              style="width: 100%" required>{{ session.long_abstract }}</textarea>
-                                </div>
-
-                            </div>
+                        {% if csrf_token %}
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        {% endif %}
+                        <div class="session_form" style="margin-right: 25px;">
+                            <h4>Session Details</h4>
+                            {% for elem in session_fields %}
+                                {% if session_form[elem].include==1 %}
+                                    {{ session_form_field(elem, session_form[elem].require) }}
+                                {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="close-edit-session" class="btn btn-default" data-dismiss="modal">
                             Close
                         </button>
-                        <button type="submit" class="btn btn-primary">Edit Session Proposal</button>
+                        <button type="submit" class="btn btn-primary" name="state" value="draft">Save as Draft
+                        </button>
+                        <button type="submit" class="btn btn-success" name="state" value="pending">Submit
+                            Session
+                        </button>
                     </div>
                 </div>
             </div>
@@ -124,60 +151,11 @@
 {% endblock %}
 {% block tail_js %}
     {{ super() }}
-    <script src="{{ url_for('static', filename='admin/lib/lodash/dist/lodash.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
     <script type="text/javascript">
-        var $editSessionForm = $("#edit-session-form");
-        var $editSessionModal = $("#edit-session-modal");
-        var sessionId = {{ session.id }};
-        var eventId = {{ session.event.id }}
-        $editSessionForm.submit(function (e) {
-            e.preventDefault();
-            $editSessionForm.lockForm();
-            initializeSwaggerClient(function () {
-                api.sessions.get_session({event_id: eventId, session_id: sessionId }, function (get_success) {
-                    var session = get_success.obj;
-                    session.title = $editSessionForm.find("input[name=title]").val();
-                    session.subtitle = $editSessionForm.find("input[name=subtitle]").val();
-                    session.short_abstract = $editSessionForm.find("textarea[name=short_abstract]").val();
-                    session.long_abstract = $editSessionForm.find("textarea[name=long_abstract]").val();
-
-                    // Format the payload to match API requirements
-                    session.track_id = _.isNull(session.track.id) ? 0 : session.track.id;
-                    session.language_id = _.isNull(session.language.id) ? 0 : session.language.id;
-                    session.microlocation_id = _.isNull(session.microlocation.id) ? 0 : session.microlocation.id;
-                    session.speaker_ids = _.map(session.speakers, 'id');
-
-                    // Clean up the payload
-                    delete session.track;
-                    delete session.language;
-                    delete session.speakers;
-                    delete session.microlocation;
-                    delete session.id;
-
-                    api.sessions.put_session({event_id: eventId, session_id: sessionId, payload: session}, function (put_success) {
-                        createSnackbar("Changes have been saved.", "Dismiss", null, 1000);
-                        var newSession = put_success.obj;
-                        $(".title").text(newSession.title);
-                        $(".subtitle").text(newSession.subtitle);
-                        $(".short_abstract").text(newSession.short_abstract);
-                        $(".long_abstract").text(newSession.long_abstract);
-                        $editSessionForm.unlockForm();
-                        $editSessionModal.modal('hide');
-                    }, function (error) {
-                        createSnackbar("An error occurred while saving the changes.", "Try Again", function () {
-                            $editSessionForm.unlockForm();
-                            $editSessionForm.submit();
-                        });
-                    });
-                }, function (error) {
-                    createSnackbar("An error occurred while saving the changes.", "Try Again", function () {
-                        $editSessionForm.unlockForm();
-                        $editSessionForm.submit();
-                    });
-                });
-            });
+        $(document).ready(function () {
+            $("textarea").summernote(summernoteConfig);
         });
     </script>
+
 {% endblock %}
 

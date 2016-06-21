@@ -1,4 +1,5 @@
 """Copyright 2015 Rafal Kowalski"""
+from flask.ext.htmlmin import HTMLMIN
 from jinja2 import Undefined
 import logging
 import os.path
@@ -68,6 +69,7 @@ def create_app():
     app.config['JWT_AUTH_URL_RULE'] = None
     jwt = JWT(app, jwt_authenticate, jwt_identity)
 
+    HTMLMIN(app)
     admin_view = AdminView("Open Event")
     admin_view.init(app)
     admin_view.init_login(app)
