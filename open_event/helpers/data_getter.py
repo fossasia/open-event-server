@@ -1,6 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
+from open_event.models.role import Role
 from ..models.event import Event, EventsUsers
 from ..models.session import Session
 from ..models.track import Track
@@ -277,6 +278,10 @@ class DataGetter:
     @staticmethod
     def get_user_event_role(role_id):
         return UsersEventsRoles.query.get(role_id)
+
+    @staticmethod
+    def get_user_event_roles_by_role_name(event_id, role_name):
+        return UsersEventsRoles.query.filter_by(event_id=event_id).filter(Role.name == role_name)
 
     @staticmethod
     def get_user_events():
