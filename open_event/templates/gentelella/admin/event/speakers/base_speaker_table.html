@@ -73,7 +73,7 @@
                     </label>
                 </div>
                 <div class="btn-group pull-left" style="margin-left: 5px; margin-right: 10px;">
-                    <a href="{{ url_for('.create_view', event_id=event_id) }}" class="btn btn-info">Add Speaker</a>
+                    <a href="{{ url_for('event_sessions.create_view', event_id=event_id) }}?from=speaker" class="btn btn-info">Add Speaker</a>
                 </div>
 
             </div>

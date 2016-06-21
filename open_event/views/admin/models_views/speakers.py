@@ -30,24 +30,6 @@ class SpeakersView(BaseView):
         return self.render('/gentelella/admin/event/speakers/base_speaker_table.html',
                            speakers=speakers, event_id=event_id, event=event)
 
-    @expose('/create/', methods=('GET', 'POST'))
-    def create_view(self, event_id):
-        event = DataGetter.get_event(event_id)
-
-        if request.method == 'POST':
-            DataManager.add_speaker_to_event(request, event_id, None)
-            flash("User has been added", "success")
-            return redirect(url_for('.index_view', event_id=event_id))
-
-        form_elems = DataGetter.get_custom_form_elements(event_id).first()
-        if not form_elems:
-            flash("Speaker and Session forms have been incorrectly configured for this event."
-                  " Session creation has been disabled", "danger")
-            return redirect(url_for('.index_view', event_id=event_id))
-        speaker_form = json.loads(form_elems.speaker_form)
-        return self.render('/gentelella/admin/event/speakers/edit.html',
-                           event_id=event_id, event=event, speaker_form=speaker_form)
-
     @expose('/<int:speaker_id>/edit/', methods=('GET', 'POST'))
     def edit_view(self, event_id, speaker_id):
         speaker = get_speaker_or_throw(speaker_id)

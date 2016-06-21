@@ -1,7 +1,7 @@
 {% extends 'gentelella/admin/event/event_base.html' %}
 
 {% block title %}
-    {{ speaker.name | default("Add Speaker", true) }} - {{ event.name }} - Speakers
+    {{ speaker.name }} - {{ event.name }} - Speakers
 {% endblock %}
 
 {% set active_page = "speakers" %}

@@ -52,6 +52,10 @@ class SessionsView(BaseView):
     def create_view(self, event_id):
         if request.method == 'POST':
             DataManager.add_session_to_event(request, event_id)
+            flash("The session and speaker have been saved")
+            get_from = request.args.get("from")
+            if get_from and get_from == 'speaker':
+                return redirect(url_for('event_speakers.index_view', event_id=event_id))
             return redirect(url_for('.index_view', event_id=event_id))
 
         form_elems = DataGetter.get_custom_form_elements(event_id).first()
@@ -99,18 +103,6 @@ class SessionsView(BaseView):
         session = DataGetter.get_session(session_id)
         return self.render('/gentelella/admin/event/sessions/invited.html',
                            session=session, event_id=event_id)
-
-    @expose('/<int:session_id>/speaker/', methods=('GET', 'POST'))
-    def speaker_view(self, event_id, session_id):
-        session = get_session_or_throw(session_id)
-        event = DataGetter.get_event(event_id)
-        form_elems = DataGetter.get_custom_form_elements(event_id).first()
-        speaker_form = json.loads(form_elems.speaker_form)
-        if request.method == 'POST':
-            DataManager.add_speaker_to_session(request, event_id, session_id)
-            return redirect(url_for('.index_view', event_id=event_id))
-        return self.render('/gentelella/admin/event/sessions/speaker.html',
-                           session=session, speaker_form=speaker_form, event=event)
 
     @expose('/<int:session_id>/accept', methods=('GET',))
     @can_accept_and_reject
