@@ -341,10 +341,12 @@ class DataManager(object):
         session.short_abstract = form.get('short_abstract', '')
 
         existing_speaker_ids = form.getlist("speakers[]")
+
+        session.speakers = []
+
         for existing_speaker_id in existing_speaker_ids:
             existing_speaker = DataGetter.get_speaker(existing_speaker_id)
-            if existing_speaker not in session.speakers:
-                session.speakers.append(existing_speaker)
+            session.speakers.append(existing_speaker)
 
         save_to_db(session, 'Session Updated')
 
