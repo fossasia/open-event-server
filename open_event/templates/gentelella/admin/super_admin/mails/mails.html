@@ -13,7 +13,7 @@ Mails
 
 {% block content %}
 
-<table class="table table-striped with-datatable">
+<table id="mailTable" class="table table-striped with-datatable">
 <thead>
     <tr>
     <th class="col-md-3">To</th>
@@ -26,8 +26,8 @@ Mails
     {% for mail in mails %}
         <tr>
         <td>{{ mail.recipient }}</td>
-        <td data-toggle="tooltip" data-placement="bottom" title="awesome"
-            data-delay='{"show":"500", "hide":"300"}'>{{ mail.time }}</td>
+        <td data-toggle="tooltip" data-placement="bottom" title="{{ mail.time }}"
+            data-delay='{"show":"500", "hide":"300"}'>{{ mail.time | humanize }}</td>
         <td>{{ mail.action }}</td>
         <td>{{ mail.message }}</td>
         </tr>
@@ -40,6 +40,16 @@ Mails
 {% endblock %}
 
 {% block tail_js %}
+    <script>
+
+    $(document).ready( function() {
+        $("#mailTable").dataTable().fnDestroy();
+        $('#mailTable').dataTable({
+            /* Disable initial sort */
+            "aaSorting": []
+        });
+    })
+    </script>
     {{ super() }}
 {% endblock %}
 

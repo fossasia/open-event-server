@@ -3,10 +3,13 @@ import json
 import os
 import re
 import requests
+from datetime import datetime
 from flask import request
 from itsdangerous import Serializer
 from flask.ext import login
 from ..models.track import Track
+from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
+    USER_REGISTER, PASSWORD_RESET, Mail
 
 
 def get_event_id():
@@ -33,70 +36,66 @@ HEADERS = {
                       "VwmIvKlPoc1YVpKCSOwhEFWZvxFT8")
 }
 
+
 def send_email_invitation(email, event_name, link):
-    """Send email after account create"""
-    payload = {'to': email,
-               'from': 'open-event@googlegroups.com',
-               'subject': "Invitation to Submit Papers for " + event_name,
-               "html": ("Hi %s<br/>" % str(email) +
-                        "You are invited to submit papers for event: %s" % str(event_name) +
-                        "<br/> Visit this link to fill up details: %s" % link)}
-    requests.post("https://api.sendgrid.com/api/mail.send.json",
-                  data=payload,
-                  headers=HEADERS)
+    """Send email for submit papers"""
+    send_email(
+        to=email,
+        action=INVITE_PAPERS,
+        subject='Invitation to Submit Papers for ' + event_name,
+        html=("Hi %s<br/>" % str(email) +
+              "You are invited to submit papers for event: %s" % str(event_name) +
+              "<br/> Visit this link to fill up details: %s" % link)
+    )
+
 
 def send_new_session_organizer(email, event_name, link):
-    """Send email after account create"""
-    payload = {'to': email,
-               'from': 'open-event@googlegroups.com',
-               'subject': "New session proposal for " + event_name,
-               "html": ("Hi %s<br/>" % str(email) +
-                        "The event <strong>%s</strong> has received a new session proposal. " % str(event_name) +
-                        "<br/> Visit this link to view the session: %s" % link)}
-    requests.post("https://api.sendgrid.com/api/mail.send.json",
-                  data=payload,
-                  headers=HEADERS)
+    """Send email after new sesions proposal"""
+    send_email(
+        to=email,
+        action=NEW_SESSION,
+        subject="New session proposal for " + event_name,
+        html=("Hi %s<br/>" % str(email) +
+              "The event <strong>%s</strong> has received a new session proposal. " % str(event_name) +
+              "<br/> Visit this link to view the session: %s" % link)
+    )
 
 
 def send_email_after_account_create(form):
     """Send email after account create"""
-    payload = {'to': form['email'],
-               'from': 'open-event@googlegroups.com',
-               'subject': "Account Created on Open Event",
-               "html": ("Your Account Has Been Created! Congratulations!"
-                        "<br/> Your login: ") + form['email']}
-    requests.post("https://api.sendgrid.com/api/mail.send.json",
-                  data=payload,
-                  headers=HEADERS)
+    send_email(
+        to=form['email'],
+        action=USER_REGISTER,
+        subject="Account Created on Open Event",
+        html=("Your Account Has Been Created! Congratulations!"
+              "<br/> Your login: ") + form['email']
+    )
 
 
 def send_email_confirmation(form, link):
-    print link
-    payload = {'to': form['email'],
-               'from': 'open-event@googlegroups.com',
-               'subject': "Email Confirmation to Create Account for Open-Event ",
-               "html": ("Hi %s<br/>" % str(form['email']) +
-                        "<br/> Please visit this link to confirm your email: %s" % link)}
-
-    requests.post("https://api.sendgrid.com/api/mail.send.json",
-                  data=payload,
-                  headers=HEADERS)
+    """account confirmation"""
+    send_email(
+        to=form['email'],
+        action=USER_CONFIRM,
+        subject="Email Confirmation to Create Account for Open-Event",
+        html=("Hi %s<br/>" % str(form['email']) +
+              "<br/> Please visit this link to confirm your email: %s" % link)
+    )
 
 
 def send_email_with_reset_password_hash(email, link):
     """Send email with reset password hash"""
-    payload = {'to': email,
-               'from': 'open-event@googlegroups.com',
-               'subject': "Please click to below link",
-               "html": "Change password now " + link}
-    requests.post("https://api.sendgrid.com/api/mail.send.json",
-                  data=payload,
-                  headers=HEADERS)
+    send_email(
+        to=email,
+        action=PASSWORD_RESET,
+        subject="Please click to below link",
+        html="Change password now " + link
+    )
 
 
-def send_email(to, subject, html):
+def send_email(to, action, subject, html):
     """
-    Sends email
+    Sends email and records it in DB
     """
     payload = {
         'to': to,
@@ -107,6 +106,13 @@ def send_email(to, subject, html):
     requests.post("https://api.sendgrid.com/api/mail.send.json",
                   data=payload,
                   headers=HEADERS)
+    # record_mail(to, action, subject, html)
+    mail = Mail(
+        recipient=to, action=action, subject=subject,
+        message=html, time=datetime.now()
+    )
+    from data import save_to_db
+    save_to_db(mail, 'Mail Recorded')
     return
 
 

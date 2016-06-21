@@ -444,5 +444,5 @@ class DataGetter:
         """
         Get All Mails by latest first
         """
-        mails = Mail.query
+        mails = Mail.query.order_by(desc(Mail.time)).all()
         return mails[:count]

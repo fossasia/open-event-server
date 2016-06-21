@@ -39,6 +39,7 @@ from ..models.invite import Invite
 from ..models.call_for_papers import CallForPaper
 from ..models.custom_forms import CustomForms
 
+
 class DataManager(object):
     """Main class responsible for DataBase managing"""
 
@@ -912,6 +913,7 @@ def create_user_password(form, user):
     save_to_db(user, "User password created")
     return user
 
+
 def user_logged_in(user):
     speakers = DataGetter.get_speaker_by_email(user.email).all()
     for speaker in speakers:
@@ -923,6 +925,7 @@ def user_logged_in(user):
             save_to_db(uer)
             save_to_db(speaker)
     return True
+
 
 def update_version(event_id, is_created, column_to_increment):
     """Function resposnible for increasing version when some data will be
