@@ -560,7 +560,7 @@ class DataManager(object):
 
                 save_to_db(perm, 'Permission saved')
 
-
+    @staticmethod
     def create_event(form, img_files):
         """
         Event will be saved to database with proper Event id
@@ -617,7 +617,6 @@ class DataManager(object):
 
             custom_forms_name = form.getlist('custom_form[name]')
             custom_forms_value = form.getlist('custom_form[value]')
-
 
             for index, name in enumerate(session_type_names):
                 if not string_empty(name):
