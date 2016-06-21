@@ -107,7 +107,7 @@ Users
 {% block tail_js %}
 {{ super() }}
 <script type="text/javascript">
-        $(document).on('click', 'a[data-target="#importModal"]').click(function(){
+        $(document).on('click', 'a[data-target="#importModal"]',function(){
             var userId = $(this).data('user-id');
             $("#importModal").find("form").attr("action","/admin/users/" + userId + "/edit/");
         });
