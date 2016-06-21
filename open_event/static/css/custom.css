@@ -251,6 +251,27 @@ body .container.body .right_col {
 .left_col .mCSB_dragger {
   max-height: 400px !important;
 }
+
+@media (max-width: 768px) {
+  .btn-responsive {
+    font-size:80%;
+    line-height: 1;
+    border-radius:3px;
+  }
+  .pull-right {
+    float: left!important;
+  }
+  .btn-group {
+    margin-bottom: 10px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 992px) {
+  .btn-responsive {
+    font-size:90%;
+    line-height: 1.2;
+  }
+}
 /**  ------------------------------------------  **/
 
 .blue {
