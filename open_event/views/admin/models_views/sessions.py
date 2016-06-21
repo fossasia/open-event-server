@@ -109,7 +109,6 @@ class SessionsView(BaseView):
         session_form = json.loads(form_elems.session_form)
         event = DataGetter.get_event(event_id)
         if request.method == 'POST':
-            speaker_img_file = ""
             slide_file = ""
             video_file = ""
             audio_file = ""
@@ -119,10 +118,7 @@ class SessionsView(BaseView):
                 video_file = request.files['video']
             if 'audio' in request.files and request.files['audio'].filename != '':
                 audio_file = request.files['audio']
-            if 'photo' in request.files and request.files['photo'].filename != '':
-                speaker_img_file = request.files['photo']
-            DataManager.edit_session(request.form, session, event_id, speaker_img_file,
-                                     slide_file, audio_file, video_file)
+            DataManager.edit_session(request.form, session, slide_file, audio_file, video_file)
             return redirect(url_for('.index_view', event_id=event_id))
         if request.method == 'GET':
             return self.render('/gentelella/admin/event/sessions/edit.html', session=session,
