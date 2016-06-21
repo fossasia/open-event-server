@@ -65,10 +65,11 @@ class SessionsView(BaseView):
             return redirect(url_for('.index_view', event_id=event_id))
         speaker_form = json.loads(form_elems.speaker_form)
         session_form = json.loads(form_elems.session_form)
+        speakers = DataGetter.get_speakers(event_id).all()
         event = DataGetter.get_event(event_id)
 
         return self.render('/gentelella/admin/event/sessions/new.html',
-                           speaker_form=speaker_form, session_form=session_form, event=event)
+                           speaker_form=speaker_form, session_form=session_form, event=event, speakers=speakers)
 
     @expose('/<int:session_id>/edit/', methods=('GET', 'POST'))
     @can_access
@@ -85,8 +86,9 @@ class SessionsView(BaseView):
             return redirect(url_for('.index_view', event_id=event_id))
         session_form = json.loads(form_elems.session_form)
         event = DataGetter.get_event(event_id)
+        speakers = DataGetter.get_speakers(event_id).all()
         return self.render('/gentelella/admin/event/sessions/edit.html', session=session,
-                           session_form=session_form, event=event)
+                           session_form=session_form, event=event, speakers=speakers)
 
     @expose('/new/<user_id>/<hash>/', methods=('GET', 'POST'))
     def new_view(self, event_id, user_id, hash):

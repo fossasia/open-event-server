@@ -185,6 +185,12 @@ class DataManager(object):
                               user=login.current_user if login and login.current_user.is_authenticated else None)
 
         new_session.speakers.append(speaker)
+
+        existing_speaker_ids = form.getlist("speakers[]")
+        for existing_speaker_id in existing_speaker_ids:
+            existing_speaker = DataGetter.get_speaker(existing_speaker_id)
+            new_session.speakers.append(existing_speaker)
+
         save_to_db(new_session, "Session saved")
 
         if state == 'pending':
@@ -333,6 +339,12 @@ class DataManager(object):
         session.subtitle = form.get('subtitle', '')
         session.long_abstract = form.get('long_abstract', '')
         session.short_abstract = form.get('short_abstract', '')
+
+        existing_speaker_ids = form.getlist("speakers[]")
+        for existing_speaker_id in existing_speaker_ids:
+            existing_speaker = DataGetter.get_speaker(existing_speaker_id)
+            if existing_speaker not in session.speakers:
+                session.speakers.append(existing_speaker)
 
         save_to_db(session, 'Session Updated')
 

@@ -25,7 +25,7 @@ from open_event.helpers.helpers import get_event_id
 from flask.ext import login
 from flask import flash
 import datetime
-from sqlalchemy import desc
+from sqlalchemy import desc, asc
 
 
 class DataGetter:
@@ -166,7 +166,7 @@ class DataGetter:
         :param event_id: Event id
         :return: Speaker objects filter by event_id
         """
-        return Speaker.query.filter_by(event_id=event_id)
+        return Speaker.query.filter_by(event_id=event_id).order_by(asc(Speaker.name))
 
     @staticmethod
     def get_speaker_columns():
