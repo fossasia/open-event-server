@@ -133,14 +133,27 @@ class DataManager(object):
         update_version(event_id, False, "session_ver")
 
     @staticmethod
-    def add_session_to_event(form, event_id, speaker_img_file, slide_file, audio_file, video_file, state=None):
+    def add_session_to_event(request, event_id, state=None):
         """
         Session will be saved to database with proper Event id
-        :param speaker_img_file:
         :param state:
-        :param form: view data form
+        :param request: The request
         :param event_id: Session belongs to Event by event id
         """
+        form = request.form
+        speaker_img_file = ""
+        slide_file = ""
+        video_file = ""
+        audio_file = ""
+        if 'slides' in request.files and request.files['slides'].filename != '':
+            slide_file = request.files['slides']
+        if 'video' in request.files and request.files['video'].filename != '':
+            video_file = request.files['video']
+        if 'audio' in request.files and request.files['audio'].filename != '':
+            audio_file = request.files['audio']
+        if 'photo' in request.files and request.files['photo'].filename != '':
+            speaker_img_file = request.files['photo']
+
         if not state:
             state = form.get('state', 'draft')
 
@@ -204,8 +217,6 @@ class DataManager(object):
         new_session.slides = slide_url
         save_to_db(new_session, "Session saved")
         save_to_db(speaker, "Speaker saved")
-        update_version(event_id, False, "speakers_ver")
-        update_version(event_id, False, "session_ver")
 
         invite_emails = form.getlist("speakers[email]")
         for index, email in enumerate(invite_emails):
@@ -219,31 +230,49 @@ class DataManager(object):
             Helper.send_email_invitation(email, new_session.title, link)
 
     @staticmethod
-    def add_speaker_to_session(form, event_id, session_id, user=login.current_user):
+    def add_speaker_to_event(request, event_id, user=login.current_user):
+        form = request.form
+        speaker_img_file = ""
+        if 'photo' in request.files and request.files['photo'].filename != '':
+            speaker_img_file = request.files['photo']
+
+        speaker = Speaker.query.filter_by(email=form.get('email', '')).filter_by(event_id=event_id).first()
+        if not speaker:
+            speaker = Speaker(name=form.get('name', ''),
+                              short_biography=form.get('short_biography', ''),
+                              email=form.get('email', ''),
+                              website=form.get('website', ''),
+                              event_id=event_id,
+                              twitter=form.get('twitter', ''),
+                              facebook=form.get('facebook', ''),
+                              github=form.get('github', ''),
+                              linkedin=form.get('linkedin', ''),
+                              organisation=form.get('organisation', ''),
+                              position=form.get('position', ''),
+                              country=form.get('country', ''),
+                              user=user if login and login.current_user.is_authenticated else None)
+            save_to_db(speaker, "Speaker saved")
+
+        speaker_img = ""
+        if speaker_img_file != "":
+            speaker_img = upload(speaker_img_file,
+                                 'events/%d/speaker/%d/photo' % (int(event_id), int(speaker.id)))
+            speaker.photo = speaker_img
+            save_to_db(speaker, "Speaker photo saved")
+
+        return speaker
+
+    @staticmethod
+    def add_speaker_to_session(request, event_id, session_id, user=login.current_user):
         """
         Session will be saved to database with proper Event id
         :param session_id:
         :param user:
-        :param form: view data form
+        :param request: view data form
         :param event_id: Session belongs to Event by event id
         """
         session = DataGetter.get_session(session_id)
-        speaker = Speaker.query.filter_by(email=form.get('email', '')).filter_by(event_id=event_id).first()
-        if not speaker:
-            speaker = Speaker(name=form["name"] if "name" in form.keys() else "",
-                              photo=form["photo"] if "photo" in form.keys() else "",
-                              short_biography=form["short_biography"] if "short_biography" in form.keys() else "",
-                              email=form["email"] if "email" in form.keys() else "",
-                              website=form["website"] if "website" in form.keys() else "",
-                              event_id=event_id,
-                              twitter=form["twitter"] if "twitter" in form.keys() else "",
-                              facebook=form["facebook"] if "facebook" in form.keys() else "",
-                              github=form["github"] if "github" in form.keys() else "",
-                              linkedin=form["linkedin"] if "linkedin" in form.keys() else "",
-                              organisation=form["organisation"] if "organisation" in form.keys() else "",
-                              position=form["position"] if "position" in form.keys() else "",
-                              country=form["country"] if "country" in form.keys() else "",
-                              user=user)
+        speaker = DataManager.add_speaker_to_event(request, event_id, user)
         session.speakers.append(speaker)
         save_to_db(session, "Speaker saved")
         update_version(event_id, False, "speakers_ver")
@@ -262,9 +291,19 @@ class DataManager(object):
         save_to_db(session, "Session Speaker saved")
 
     @staticmethod
-    def edit_session(form, session, slide_file, audio_file, video_file):
-
+    def edit_session(request, session):
+        form = request.form
         event_id = session.event_id
+
+        slide_file = ""
+        video_file = ""
+        audio_file = ""
+        if 'slides' in request.files and request.files['slides'].filename != '':
+            slide_file = request.files['slides']
+        if 'video' in request.files and request.files['video'].filename != '':
+            video_file = request.files['video']
+        if 'audio' in request.files and request.files['audio'].filename != '':
+            audio_file = request.files['audio']
 
         form_state = form.get('state', 'draft')
 
@@ -641,10 +680,12 @@ class DataManager(object):
             for index, name in enumerate(sponsor_name):
                 if not string_empty(name):
                     sponsor = Sponsor(name=name, url=sponsor_url[index],
-                                      level=sponsor_level[index], description=sponsor_description[index], event_id=event.id)
+                                      level=sponsor_level[index], description=sponsor_description[index],
+                                      event_id=event.id)
                     save_to_db(sponsor, "Sponsor created")
                     if len(img_files) != 0:
-                        img_url = upload(img_files[index], 'events/%d/sponsor/%d/image' % (int(event.id), int(sponsor.id)))
+                        img_url = upload(img_files[index],
+                                         'events/%d/sponsor/%d/image' % (int(event.id), int(sponsor.id)))
                         sponsor_logo_url.append(img_url)
                         sponsor.logo = sponsor_logo_url[index]
                     else:
@@ -980,6 +1021,7 @@ def get_or_create(model, **kwargs):
         was_created = True
         return instance, was_created
 
+
 def update_role_to_admin(form, user_id):
     user = DataGetter.get_user(user_id)
     if form['admin_perm'] == 'isAdmin':
@@ -988,5 +1030,3 @@ def update_role_to_admin(form, user_id):
         user.is_admin = False
 
     save_to_db(user, "User role Updated")
-
-

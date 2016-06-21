@@ -1,0 +1,47 @@
+{% import "gentelella/admin/event/sessions/components/_session_component.html" as _session_component with context %}
+{% import "gentelella/admin/event/sessions/components/_speaker_component.html" as _speaker_component with context %}
+<form enctype="multipart/form-data" action="" method="POST" class="form-horizontal" id="session-create-form">
+    {% if csrf_token %}
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    {% endif %}
+    <div class="col-md-1 col-sm-1 col-xs-12">
+
+    </div>
+    <div class="col-md-5 col-sm-5 col-xs-12 session_form" style="margin-right: 25px;">
+        <h4>Session Details</h4>
+        {% for elem in _session_component.session_fields %}
+            {% if session_form[elem].include==1 %}
+                {{ _session_component.session_form_field(elem, session_form[elem].require) }}
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div class="col-md-5 col-sm-5 col-xs-12 speaker_form">
+        <h4>Speaker Details</h4>
+        {% for elem in _speaker_component.speaker_fields %}
+            {% if speaker_form[elem].include==1 %}
+                {{ _speaker_component.speaker_form_field(elem, speaker_form[elem].require) }}
+            {% endif %}
+        {% endfor %}
+        <div class="speakers">
+            <hr>
+            <br><h4>Invite Speakers</h4>
+            <div class="item form-group">
+                <label class="control-label">Email </label>
+                <div class="">
+                    <input type="text" class="form-control col-md-7 col-sm-7" name="speakers[email]"
+                           placeholder="Email Address of Speaker" style="width:60%;">
+                </div>
+
+                <div class="col-sm-1 col-md-1 input-group">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary" id="add-speakers">+</button>
+                                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="text-align: center;">
+        <button type="submit" class="btn btn-primary" name="state" value="draft">Save as Draft</button>
+        <button type="submit" class="btn btn-success" name="state" value="pending">Submit Session</button>
+    </div>
+</form>

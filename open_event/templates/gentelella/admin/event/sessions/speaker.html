@@ -1,35 +1,33 @@
-{% extends 'gentelella/admin/base.html' %}
+{% extends 'gentelella/admin/event/event_base.html' %}
 {% block title %}
-Speaker Details
+    Create Session - {{ event.name }}
 {% endblock %}
-{% block body %}
-<div class="page-title">
-    <div class="title_left">
-        <h3>Speaker Details</h3>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="x_panel" style="min-height:600px;">
-            <div class="row">
-                <form name="test" action="" method="POST" role="form" class="admin-form form-horizontal" id="session-create-form">
-                    {% if csrf_token %}
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                    {% endif %}
-                    <div>
-                    {% include '/gentelella/admin/event/session/new/step-2.html' %}
-                    </div>
 
-                    <center><input type="submit" class="btn btn-success" value="Submit"/></center>
+{% set active_page = "sessions" %}
 
-                </form>
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div style="text-align: center">
+                <h3>Add speaker to session</h3>
             </div>
+            {% include 'gentelella/admin/event/sessions/components/speaker_form.html' %}
         </div>
     </div>
-</div>
-
 
 {% endblock %}
 {% block tail_js %}
     {{ super() }}
+    <script src="{{ url_for('static', filename='admin/lib/bootstrap-validator/dist/validator.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/session/new.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("textarea").summernote(summernoteConfig);
+        });
+    </script>
 {% endblock %}

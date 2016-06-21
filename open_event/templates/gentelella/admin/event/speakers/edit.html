@@ -1,7 +1,7 @@
 {% extends 'gentelella/admin/event/event_base.html' %}
 
 {% block title %}
-    {{ speaker.name }} - {{ event.name }} - Speakers
+    {{ speaker.name | default("Add Speaker", true) }} - {{ event.name }} - Speakers
 {% endblock %}
 
 {% set active_page = "speakers" %}
@@ -9,53 +9,11 @@
 {% block head_css %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
-
 {% endblock %}
 
-{% set textarea_fields = ['short_biography', 'long_biography'] %}
-{% set media_fields = ['photo'] %}
-
-{% set speaker_fields = ['name', 'email','photo', 'organisation', 'position', 'country', 'short_biography', 'long_biography', 'mobile', 'website', 'facebook', 'twitter', 'github', 'linkedin'] %}
-
-{% macro speaker_form_field(identifier, require=0) %}
-    {% set name = identifier | replace('_id','') %}
-    {% set pretty_name = name | replace('_',' ') | capitalize %}
-    <div class="item form-group speaker-fields">
-        <label class="control-label">
-            {{ pretty_name }}
-            {% if require==1 %}
-                <span class="required">*</span>
-            {% endif %}
-        </label>
-        {% if identifier in textarea_fields %}
-            <textarea name="{{ name }}"
-                      class="form-control col-md-7 col-xs-12">{{ speaker[identifier] if speaker else '' }}</textarea>
-        {% elif identifier in media_fields %}
-            <br><input type="file" id="speaker-file-{{ name | default(1) }}" name="{{ name }}"
-                       class="upload-btn"/>
-            <label class="file-label" for="speaker-file-{{ name | default(1) }}">
-                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-                Choose a file</label>
-        {% else %}
-            <input name="{{ name }}" class="form-control col-md-7 col-xs-12"
-                   value="{{ speaker[identifier] if speaker else '' }}"/>
-        {% endif %}
-    </div>
-{% endmacro %}
-
-
 {% block content %}
-    <div class="col-md-push-3 col-sm-push-3 col-md-6 col-sm-6 col-xs-12 speaker_form">
-        <form action="" method="post">
-            {% for elem in speaker_fields %}
-                {% if speaker_form[elem].include==1 %}
-                    {{ speaker_form_field(elem, speaker_form[elem].require) }}
-                {% endif %}
-            {% endfor %}
-            {% if speaker %}
-                <button type="submit" class="btn btn-success" style="margin-top: 20px">Update Speaker</button>
-            {% endif %}
-        </form>
+    <div class="col-md-push-2 col-sm-push-2 col-md-8 col-sm-8 col-xs-12 speaker_form">
+        {% include 'gentelella/admin/event/sessions/components/speaker_form.html' %}
     </div>
 {% endblock %}
 
