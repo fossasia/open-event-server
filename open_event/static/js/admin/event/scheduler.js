@@ -3,6 +3,21 @@
  */
 
 /**
+ *
+ * The Scheduler UI.
+ * ================
+ *
+ * The scheduler supports two modes:
+ * 1. Editable mode - The user can drag-drop and resize sessions
+ * 2. Readonly mode - The sessions are displayed on the timeline, but cannot be edited.
+ *
+ * The Editable mode is turned on by default. To switch to Readonly mode, set the variable
+ *      window.scheduler_readonly = true;
+ * Before including this file.
+ *
+ */
+
+/**
  *  TIME CONFIGURATION & MANIPULATION
  *  =================================
  *
@@ -27,7 +42,10 @@ var time = {
     format: "YYYY-MM-DD HH:mm:ss"
 };
 
-
+/**
+ * Whether the scheduler is to be run in readonly mode or not.
+ * @returns {boolean}
+ */
 function isReadOnly() {
     return !(_.isUndefined(window.scheduler_readonly) || _.isNull(window.scheduler_readonly) || window.scheduler_readonly !== true)
 }
