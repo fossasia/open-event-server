@@ -1,6 +1,9 @@
 """Copyright 2015 Rafal Kowalski"""
+from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+
+from open_event.models.role import Role
 from ..models.event import Event, EventsUsers
-from ..models.session import Session, Level, Format, Language
+from ..models.session import Session
 from ..models.track import Track
 from ..models.invite import Invite
 from ..models.speaker import Speaker
@@ -11,13 +14,18 @@ from ..models.user import User
 from ..models.file import File
 from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
+from ..models.call_for_papers import CallForPaper
+from ..models.custom_forms import CustomForms
+from ..models.mail import Mail
+from .language_list import LANGUAGE_LIST
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
 from flask import flash
+import datetime
+from sqlalchemy import desc
 
 
 class DataGetter:
-
     @staticmethod
     def get_invite_by_user_id(user_id):
         invite = Invite.query.filter_by(user_id=user_id)
@@ -30,12 +38,16 @@ class DataGetter:
     @staticmethod
     def get_all_events():
         """Method return all events"""
-        return Event.query.all()
+        return Event.query.order_by(desc(Event.id)).all()
 
     @staticmethod
     def get_all_users_events_roles():
         """Method return all events"""
         return UsersEventsRoles.query
+
+    @staticmethod
+    def get_event_roles_for_user(user_id):
+        return UsersEventsRoles.query.filter_by(user_id=user_id)
 
     @staticmethod
     def get_all_owner_events():
@@ -44,18 +56,22 @@ class DataGetter:
         return login.current_user.events_assocs
 
     @staticmethod
-    def get_sessions_by_event_id():
-        """
-        :return: All Sessions with correct event_id
-        """
-        return Session.query.filter_by(event_id=get_event_id())
-
-    @staticmethod
     def get_sessions_by_event_id(event_id):
         """
         :return: All Sessions with correct event_id
         """
         return Session.query.filter_by(event_id=event_id)
+
+    @staticmethod
+    def get_sessions_by_state(state):
+        """
+        :return: All Sessions with correct event_id
+        """
+        return Session.query.filter_by(state=state)
+
+    @staticmethod
+    def get_all_sessions():
+        return Session.query.all()
 
     @staticmethod
     def get_tracks(event_id):
@@ -68,21 +84,66 @@ class DataGetter:
     @staticmethod
     def get_tracks_by_event_id():
         """
-        :param event_id: Event id
         :return: All Tracks filtered by event_id
         """
         return Track.query.filter_by(event_id=get_event_id())
 
     @staticmethod
-    def get_sessions(event_id, is_accepted=True):
+    def get_sessions(event_id, state='accepted'):
         """
+        :param state: State of the session
         :param event_id: Event id
         :return: Return all Sessions objects with Event id
         """
         return Session.query.filter_by(
             event_id=event_id,
-            is_accepted=is_accepted
+            state=state
         )
+
+    @staticmethod
+    def get_custom_form_elements(event_id):
+        """
+        :param event_id: Event id
+        :return: Return json element of custom form
+        """
+        return CustomForms.query.filter_by(
+            event_id=event_id
+        )
+
+    @staticmethod
+    def get_sessions_of_user_by_id(session_id, user=login.current_user):
+        """
+        :return: Return Sessions object with the current user as a speaker by ID
+        """
+        try:
+            return Session.query.filter(Session.speakers.any(Speaker.user_id == user.id)).filter(
+                Session.id == session_id).one()
+        except MultipleResultsFound, e:
+            return None
+        except NoResultFound, e:
+            return None
+
+    @staticmethod
+    def get_sessions_of_user(upcoming_events=True):
+        """
+        :return: Return all Sessions objects with the current user as a speaker
+        """
+        if upcoming_events:
+            return Session.query.filter(Session.speakers.any(Speaker.user_id == login.current_user.id)).filter(
+                Event.state != 'Completed')
+        else:
+            return Session.query.filter(Session.speakers.any(Speaker.user_id == login.current_user.id)).filter(
+                Event.state == 'Completed')
+
+    @staticmethod
+    def get_all_sessions_of_user(upcoming_events=True):
+        """
+        :return: Return all Sessions objects with the current user as a speaker
+        """
+        if upcoming_events:
+            return Session.query.filter(Event.state != 'Completed')
+        else:
+            return Session.query.filter(Event.state == 'Completed')
 
     @staticmethod
     def get_speakers(event_id):
@@ -91,6 +152,10 @@ class DataGetter:
         :return: Speaker objects filter by event_id
         """
         return Speaker.query.filter_by(event_id=event_id)
+
+    @staticmethod
+    def get_speaker_columns():
+        return Speaker.__table__.columns
 
     @staticmethod
     def get_sponsors(event_id):
@@ -115,27 +180,6 @@ class DataGetter:
         :return: All Microlocation filtered by event_id
         """
         return Microlocation.query.filter_by(event_id=get_event_id())
-
-    @staticmethod
-    def get_levels():
-        """
-        :return: All Event Levels
-        """
-        return Level.query.filter_by(event_id=get_event_id())
-
-    @staticmethod
-    def get_formats():
-        """
-        :return: All Event Formats
-        """
-        return Format.query.filter_by(event_id=get_event_id())
-
-    @staticmethod
-    def get_languages():
-        """
-        :return: All Event Languages
-        """
-        return Language.query.filter_by(event_id=get_event_id())
 
     @staticmethod
     def get_microlocation(microlocation_id):
@@ -222,20 +266,77 @@ class DataGetter:
         return UsersEventsRoles.query.get(role_id)
 
     @staticmethod
+    def get_user_event_roles_by_role_name(event_id, role_name):
+        return UsersEventsRoles.query.filter_by(event_id=event_id).filter(Role.name == role_name)
+
+    @staticmethod
     def get_user_events():
         return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)
 
     @staticmethod
     def get_completed_events():
-        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
+        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.state == 'Completed')
         return events
 
     @staticmethod
+    def get_all_published_events(include_private=False):
+        if include_private:
+            events = Event.query.filter(Event.state == 'Published')
+        else:
+            events = Event.query.filter(Event.state == 'Published').filter(Event.privacy != 'private')
+        events = events.filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now())
+        return events
+
+    @staticmethod
+    def get_call_for_speakers_events(include_private=False):
+        if include_private:
+            events = Event.query.filter(Event.state == 'Call for papers')
+        else:
+            events = Event.query.filter(Event.state == 'Call for papers').filter(Event.privacy != 'private')
+        return events
+
+    @staticmethod
+    def get_published_events():
+        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
+            .filter(Event.state == 'Call for papers')
+        return events
+
+    @staticmethod
     def get_current_events():
-        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
+        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.state != 'Completed')
         return events
+
+    @staticmethod
+    def get_live_events():
+        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
+            .filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
+            .filter(Event.state == 'Published')
+
+    @staticmethod
+    def get_draft_events():
+        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
+            .filter(Event.state == 'Draft')
+
+    @staticmethod
+    def get_past_events():
+        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
+            .filter(Event.end_time <= datetime.datetime.now()).filter(Event.state == 'Published')
+
+    @staticmethod
+    def get_all_live_events():
+        return Event.query.filter(Event.start_time >= datetime.datetime.now())\
+            .filter(Event.end_time >= datetime.datetime.now()) \
+            .filter(Event.state == 'Published')
+
+    @staticmethod
+    def get_all_draft_events():
+        return Event.query.filter(Event.state == 'Draft')
+
+    @staticmethod
+    def get_all_past_events():
+        return Event.query.filter(Event.end_time <= datetime.datetime.now()).filter(Event.state == 'Published')
 
     @staticmethod
     def get_session(session_id):
@@ -243,9 +344,18 @@ class DataGetter:
         return Session.query.get(session_id)
 
     @staticmethod
+    def get_session_columns():
+        return Session.__table__.columns
+
+    @staticmethod
     def get_speaker(speaker_id):
         """Get speaker by id"""
         return Speaker.query.get(speaker_id)
+
+    @staticmethod
+    def get_speaker_by_email(email_id):
+        """Get speaker by id"""
+        return Speaker.query.filter_by(email=email_id)
 
     @staticmethod
     def get_session_types_by_event_id(event_id):
@@ -262,3 +372,77 @@ class DataGetter:
         :return: All Tracks filtered by event_id
         """
         return SocialLink.query.filter_by(event_id=event_id)
+
+    @staticmethod
+    def get_user_sessions():
+        return Session.query.all()
+
+    @staticmethod
+    def get_call_for_papers(event_id):
+        return CallForPaper.query.filter_by(event_id=event_id)
+
+    @staticmethod
+    def get_sponsor_types(event_id):
+        return list(set(
+            sponsor.sponsor_type for sponsor in
+            Sponsor.query.filter_by(event_id=event_id)
+            if sponsor.sponsor_type
+        ))
+
+    @staticmethod
+    def get_event_types():
+        return ['Appearance or Signing',
+                'Attraction',
+                'Camp, Trip, or Retreat',
+                'Class, Training, or Workshop',
+                'Concert or Performance',
+                'Conference',
+                'Convention',
+                'Dinner or Gala',
+                'Festival or Fair',
+                'Game or Competition',
+                'Meeting or Networking Event',
+                'Other',
+                'Party or Social Gathering',
+                'Race or Endurance Event',
+                'Rally',
+                'Screening',
+                'Seminar or Talk',
+                'Tour',
+                'Tournament',
+                'Tradeshow, Consumer Show, or Expo']
+
+    @staticmethod
+    def get_language_list():
+        return [i[1] for i in LANGUAGE_LIST]
+
+    @staticmethod
+    def get_event_topics():
+        return ['Auto, Boat & Air',
+                'Business & Professional',
+                'Charity & Causes',
+                'Community & Culture',
+                'Family & Education',
+                'Fashion & Beauty',
+                'Film, Media & Entertainment',
+                'Food & Drink',
+                'Government & Politics',
+                'Health & Wellness',
+                'Hobbies & Special Interest',
+                'Home & Lifestyle',
+                'Music',
+                'Other',
+                'Performing & Visual Arts',
+                'Religion & Spirituality',
+                'Science & Technology',
+                'Seasonal & Holiday',
+                'Sports & Fitness',
+                'Travel & Outdoor']
+
+    @staticmethod
+    def get_all_mails(count=300):
+        """
+        Get All Mails by latest first
+        """
+        mails = Mail.query.order_by(desc(Mail.time)).all()
+        return mails[:count]

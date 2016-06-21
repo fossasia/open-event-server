@@ -1,0 +1,86 @@
+<div id="step-2" class="wizard_content" style="display: block;">
+
+    <div class="row">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">Number of Sessions: 10
+        </label>
+
+        <button class="btn btn-success " type="button" data-toggle="modal" data-target="#invite-speaker-modal">Invite Person</button>
+        <a href="{{ url_for('event_sessions.index_view', event_id=event.id) }}"><button class="btn btn-warning ">Accept/Reject Session</button></a>
+    </div>
+    <div class="row">
+        <div class="col-md-offset-10">
+            <a class=" btn btn-danger" id="back_to_draft">Back to Draft</a>
+            <a class=" btn btn-success " id="start_scheduling">Start Scheduling</a>
+        </div>
+
+    </div>
+
+</div>
+
+<form id="invite-speaker-form" onsubmit="return invite_speakers()">
+    <div class="modal fade" id="invite-speaker-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">Invite Speakers</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row tracks">
+                        <div class="col-sm-12">
+                            <div class="col-sm-12 input-group">
+                                <label>Email:</label><span class="required">*</span>
+                                <input type="text" required="required" class="form-control" name="email"
+                                       placeholder="Enter email to invite">
+                            </div>
+
+                            {% if csrf_token %}
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="close-add-track" class="btn btn-default" data-dismiss="modal">Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">Invite Speakers</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    function invite_speakers(evt) {
+        var a = $('#invite-speaker-form').serializeArray();
+        var email = a[0].value;
+        console.log(email);
+        var csrf = $('#csrf_token').val();
+        var payload = {
+            'email': email,
+            'csrf_token': csrf
+        };
+        var posting = $.ajax({
+            type: "POST",
+            url: "{{ url_for('event_sessions.create_view', event_id=event.id) }}",
+            data: payload
+        });
+
+        posting.done(function (result) {
+            $('#close-add-track').click();
+            $('#invite-speaker-form').find("input, textarea").val("");
+            createSnackbar("Speaker has been invited successfully.")
+        });
+
+        posting.fail(function () {
+            createSnackbar("There was an error while inviting.", "Try Again", function(){
+                invite_speakers();
+            });
+        });
+
+        return false;
+    }
+</script>

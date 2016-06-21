@@ -12,6 +12,7 @@ class Setup(object):
     def create_app():
         app.config['TESTING'] = True
         app.config['WTF_CSRF_ENABLED'] = False
+        app.config['DEBUG_TB_ENABLED'] = False
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(_basedir, 'test.db')
         app.secret_key = 'super secret key'
         with app.test_request_context():

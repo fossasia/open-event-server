@@ -1,0 +1,400 @@
+[
+    {
+        "color": "#3DC8C3", 
+        "description": "Maker Space", 
+        "id": 1, 
+        "location": "Erdgeschoss, Saal", 
+        "name": "Maker Space", 
+        "sessions": [
+            {
+                "id": 1, 
+                "title": "Fantastische Hardware Bauen & L\u00f6ten Lernen mit Mitch (TV-B-Gone) // Learn to Solder with Cool Kits!"
+            }, 
+            {
+                "id": 2, 
+                "title": "Postapokalyptischer Schmuck / Postapocalyptic Jewellery"
+            }, 
+            {
+                "id": 3, 
+                "title": "Query Service Wikidata "
+            }, 
+            {
+                "id": 4, 
+                "title": "Unabh\u00e4ngige eigene Internet-Suche in wenigen Schritten auf dem PC installieren"
+            }, 
+            {
+                "id": 5, 
+                "title": "Nitrokey Sicherheits-USB-Stick"
+            }, 
+            {
+                "id": 6, 
+                "title": "Heart Of Code - a hackspace for women* in Berlin"
+            }, 
+            {
+                "id": 7, 
+                "title": "Free Software Foundation Europe e.V."
+            }, 
+            {
+                "id": 8, 
+                "title": "TinyBoy Project - a 3D printer for education"
+            }, 
+            {
+                "id": 9, 
+                "title": "LED Matrix Display"
+            }, 
+            {
+                "id": 10, 
+                "title": "Maschinenstricken mit Open Source"
+            }, 
+            {
+                "id": 11, 
+                "title": "Schnittmuster am PC erstellen mit Valentina / Valentina Digital Pattern Design"
+            }, 
+            {
+                "id": 12, 
+                "title": "PC mit Gedanken steuern - Brain-Computer Interfaces"
+            }, 
+            {
+                "id": 13, 
+                "title": "Scan die Nofretete im \u00c4gyptischen Museum / #NefertitiHack and Cultural Commons \"The Other Nefertiti\""
+            }, 
+            {
+                "id": 14, 
+                "title": "Functional package management with GNU Guix"
+            }
+        ], 
+        "track_image_url": "http://lorempixel.com/400/200"
+    }, 
+    {
+        "color": "#3DC8C3", 
+        "description": "Workshops", 
+        "id": 2, 
+        "location": "Erdgeschoss und Ebene 1", 
+        "name": "Workshops", 
+        "sessions": [
+            {
+                "id": 15, 
+                "title": "Workshop Paper Prototyping"
+            }, 
+            {
+                "id": 16, 
+                "title": "Roboter mit Scratch und Blockly programmieren"
+            }, 
+            {
+                "id": 17, 
+                "title": "Arduino Programmierung f\u00fcr Einsteiger mit CoderDojo und OpenTechSchool "
+            }, 
+            {
+                "id": 18, 
+                "title": "Coding Dojo"
+            }, 
+            {
+                "id": 19, 
+                "title": "Let's set up our ownCloud with Jos Poortvliet at the OpenTechSummit"
+            }, 
+            {
+                "id": 20, 
+                "title": "Python Programmieren f\u00fcr Anf\u00e4nger"
+            }, 
+            {
+                "id": 21, 
+                "title": "Eigene Radiosendungen machen im 60-minutes Beginner Crash Course mit Audacity / Fast podcast production with audacity"
+            }, 
+            {
+                "id": 22, 
+                "title": "metacollect - an open data service for refugee & integration projects"
+            }, 
+            {
+                "id": 23, 
+                "title": "#peacehackcamp @jHUB_Juba"
+            }, 
+            {
+                "id": 24, 
+                "title": "Let's get a network version of the snake game running using picoTCP on a Cortex M3"
+            }, 
+            {
+                "id": 25, 
+                "title": "Coding Dojo"
+            }
+        ], 
+        "track_image_url": "http://lorempixel.com/400/200"
+    }, 
+    {
+        "color": "#3DC8C3", 
+        "description": "LightningTalks", 
+        "id": 3, 
+        "location": "Ebene 1, Galerie", 
+        "name": "LightningTalks", 
+        "sessions": [
+            {
+                "id": 26, 
+                "title": "Connecting Syrian refugees"
+            }, 
+            {
+                "id": 27, 
+                "title": "metacollect - an open data service for refugee & integration projects"
+            }, 
+            {
+                "id": 28, 
+                "title": "Open Source Movement In Asia"
+            }, 
+            {
+                "id": 29, 
+                "title": "In praise of workarounds"
+            }, 
+            {
+                "id": 30, 
+                "title": "Raising money without VC"
+            }, 
+            {
+                "id": 31, 
+                "title": "Heart Of Code - a hackspace for women* in Berlin"
+            }, 
+            {
+                "id": 32, 
+                "title": "Get Sassy!"
+            }, 
+            {
+                "id": 33, 
+                "title": "Netze f\u00fcr Vielfalt"
+            }, 
+            {
+                "id": 34, 
+                "title": "Computer mit Gehirn steuern - Brain-Computer Interfaces"
+            }, 
+            {
+                "id": 35, 
+                "title": "#peacehackcamp @jHUB_Juba"
+            }, 
+            {
+                "id": 36, 
+                "title": "Hack die Nofretete im \u00c4gyptischen Museum / #NefertitiHack and Cultural Commons \"The Other Nefertiti\""
+            }
+        ], 
+        "track_image_url": "http://lorempixel.com/400/200"
+    }, 
+    {
+        "color": "#3DC8C3", 
+        "description": "OTS 1", 
+        "id": 4, 
+        "location": "Ebene 1, Galerie", 
+        "name": "OTS 1", 
+        "sessions": [
+            {
+                "id": 37, 
+                "title": "Welcome in Berlin!"
+            }, 
+            {
+                "id": 38, 
+                "title": "picoTCP"
+            }, 
+            {
+                "id": 39, 
+                "title": "Valentina digital pattern design"
+            }, 
+            {
+                "id": 40, 
+                "title": "Mining the knowledge of the world with Wikidata"
+            }, 
+            {
+                "id": 41, 
+                "title": "FreeGeo API: What, Why & How"
+            }, 
+            {
+                "id": 42, 
+                "title": "Open Data f\u00fcr Dummies - oder - Wie nutze ich offene Daten"
+            }, 
+            {
+                "id": 43, 
+                "title": "IBM OPEN YOUR MIND - Welcome to IBM Cloud Object Storage"
+            }, 
+            {
+                "id": 44, 
+                "title": "Kurzvortr\u00e4ge"
+            }, 
+            {
+                "id": 45, 
+                "title": "Introduction to Hyperledger"
+            }, 
+            {
+                "id": 46, 
+                "title": "Suchmaschinen der Zukunft"
+            }, 
+            {
+                "id": 47, 
+                "title": "Making an Open Information Age"
+            }, 
+            {
+                "id": 48, 
+                "title": "The Power of Open"
+            }, 
+            {
+                "id": 49, 
+                "title": "The systemd Journal"
+            }, 
+            {
+                "id": 50, 
+                "title": "The rkt container runtime; explanation and demonstration"
+            }, 
+            {
+                "id": 51, 
+                "title": "Authenticated Anonymity by Math"
+            }, 
+            {
+                "id": 52, 
+                "title": "Das Freie Software 1x1: Mi\u00dfverst\u00e4ndnisse gekonnt aufkl\u00e4ren"
+            }, 
+            {
+                "id": 53, 
+                "title": "Quo vadis DevOps?"
+            }, 
+            {
+                "id": 54, 
+                "title": "Thunderbird - Entwicklung und Ausblick"
+            }, 
+            {
+                "id": 55, 
+                "title": "Bioflux - A Personal Laboratory for everyone"
+            }, 
+            {
+                "id": 56, 
+                "title": "Bioflux - A Personal Laboratory for everyone"
+            }, 
+            {
+                "id": 57, 
+                "title": "Kurzes Wrap up und Ab geht's zur Lounge im Erdgeschoss bis 23 Uhr. / Wrap up and Lounge until 11pm in the ground floor space."
+            }
+        ], 
+        "track_image_url": "http://lorempixel.com/400/200"
+    }, 
+    {
+        "color": "#3DC8C3", 
+        "description": "OTS 2", 
+        "id": 5, 
+        "location": "Ebene 2, Loft", 
+        "name": "OTS 2", 
+        "sessions": [
+            {
+                "id": 66, 
+                "title": "Code Week Award Live-Hack"
+            }, 
+            {
+                "id": 58, 
+                "title": "Jugend Hackt"
+            }, 
+            {
+                "id": 59, 
+                "title": "Feel the force! ... or how to make open education for real"
+            }, 
+            {
+                "id": 60, 
+                "title": "GLAMorous Importer wanted"
+            }, 
+            {
+                "id": 61, 
+                "title": "Die Rolle von Wissen, \u00f6konomischer Faktoren und Professionalisierung in erfolgreichen Open Source Projekten am Beispiel von Odoo"
+            }, 
+            {
+                "id": 62, 
+                "title": "TinyBoy Project - a 3D printer for education"
+            }, 
+            {
+                "id": 63, 
+                "title": "Community Design at Mozilla  "
+            }, 
+            {
+                "id": 64, 
+                "title": "Open Source Circular Design is so Ugly! / Open Source Circular Design ist unglaublich h\u00e4sslich!"
+            }, 
+            {
+                "id": 65, 
+                "title": "Nutzerkommentare im Internet: Sind die Kommentare noch zu retten?"
+            }, 
+            {
+                "id": 67, 
+                "title": "Don't complain about bad documentation, learn to write it better!"
+            }, 
+            {
+                "id": 68, 
+                "title": "Creating Service Clouds with Kubernetes, CoreOS, Container and Co "
+            }, 
+            {
+                "id": 69, 
+                "title": "flashcat - your true open design chip flasher"
+            }, 
+            {
+                "id": 70, 
+                "title": "Current state of practices in open source hardware"
+            }, 
+            {
+                "id": 71, 
+                "title": "smart contracts [th]at work"
+            }, 
+            {
+                "id": 72, 
+                "title": "Degrees of Openness [\u00b0O]"
+            }, 
+            {
+                "id": 73, 
+                "title": "sehrgutachten und kleineAnfragen: Einmischen in Regierungsangelegenheiten"
+            }, 
+            {
+                "id": 74, 
+                "title": "Making participation: How to put participants in charge of their own e-democracy platform"
+            }, 
+            {
+                "id": 75, 
+                "title": "Open Standards in perils? European Commission revises the European Interoperability Framework"
+            }, 
+            {
+                "id": 76, 
+                "title": "In der Galerie, Ebene 1: Kurzes Wrap up und Ab geht's zur Lounge im Erdgeschoss bis 23 Uhr. / Wrap up and Lounge until 11pm in the ground floor space."
+            }
+        ], 
+        "track_image_url": "http://lorempixel.com/400/200"
+    }, 
+    {
+        "color": "#3DC8C3", 
+        "description": "Kids Camp", 
+        "id": 6, 
+        "location": "Erdgeschoss und Ebene 1", 
+        "name": "Kids Camp", 
+        "sessions": [
+            {
+                "id": 77, 
+                "title": "CoderDojo"
+            }, 
+            {
+                "id": 78, 
+                "title": "\u201eHallo Welt. Wir machen uns die Welt, wie sie uns gef\u00e4llt\u201c"
+            }, 
+            {
+                "id": 79, 
+                "title": "Jugend Hackt"
+            }, 
+            {
+                "id": 80, 
+                "title": "Code Week Award Live-Hack"
+            }
+        ], 
+        "track_image_url": "http://lorempixel.com/400/200"
+    }, 
+    {
+        "color": "#3DC8C3", 
+        "description": "Linux-Zertifizierung", 
+        "id": 7, 
+        "location": "Ebene 2, Raum 4", 
+        "name": "Linux-Zertifizierung", 
+        "sessions": [
+            {
+                "id": 81, 
+                "title": "LPI Zertifizierung"
+            }, 
+            {
+                "id": 82, 
+                "title": "LPI Zertifizierung"
+            }
+        ], 
+        "track_image_url": "http://lorempixel.com/400/200"
+    }
+]

@@ -1,0 +1,78 @@
+{% extends 'gentelella/admin/base.html' %}
+{% block title %}
+Edit Session
+{% endblock %}
+{% block body %}
+<div class="page-title">
+    <div class="title_left">
+        <h3>Edit Session</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel" style="min-height:600px;">
+            <div class="row">
+                <center><h4>Session Details</h4>
+                <form name="test" method="POST" role="form"
+                      class="admin-form form-horizontal event-create-form">
+                    {% if csrf_token %}
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    {% endif %}
+                    <div style="display: block;">
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Title <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input value="{{ session.title }}" required="required" name="title" class="form-control col-md-7 col-xs-12" />
+                            </div>
+                        </div>
+
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Description <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              <textarea name="long_abstract" class="form-control col-md-7 col-xs-12">{{ session.long_abstract }}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Start Time <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input value="{{ session.start_time }}" required="required" name="start_time" class="date-picker form-control col-md-7 col-xs-12"placeholder="MM/DD/YYYY"/>
+                            </div>
+
+                        </div>
+
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">End Time <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input value="{{ session.end_time }}" required="required" name="end_time" class="date-picker form-control col-md-7 col-xs-12"placeholder="MM/DD/YYYY"/>
+                            </div>
+                        </div>
+
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Abstract
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              <textarea name="short_abstract" class="form-control col-md-7 col-xs-12">{{ session.short_abstract }}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Subtitle
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              <textarea name="subtitle" class="form-control col-md-7 col-xs-12">{{ session.subtitle }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <center><input class="btn btn-success" type="submit" value="Save"></center>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

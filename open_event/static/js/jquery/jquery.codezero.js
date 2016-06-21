@@ -17,18 +17,95 @@ jQuery.fn.extend({
                 }
             });
         });
+    },
+    appendAt: function ($element, index) {
+        return this.each(function () {
+            var elem = $(this);
+            if (index === 0) {
+                elem.prepend($element);
+                return;
+            } else if (index === -1) {
+                elem.append($element);
+                return;
+            }
+            elem.find("div:nth-child(" + (index) + ")").after($element);
+        });
+    },
+
+    bindObject: function (object, timeParseFormat) {
+        return this.each(function () {
+            var $elem = $(this);
+            $elem.data("object", object);
+            _.forOwn(object, function (value, key) {
+
+                if (value.hasOwnProperty("_isAMomentObject") && value._isAMomentObject) {
+                    value = value.format(timeParseFormat ? timeParseFormat : "YYYY-MM-DD HH:mm:ss");
+                }
+
+                $elem.find('input[name="' + key + '"]').val(value);
+                $elem.find('textarea[name="' + key + '"]').text(value);
+            });
+        });
+    },
+    disable: function () {
+        return this.each(function () {
+            if (!$(this).hasClass("nt")) {
+                $(this).addClass("disabled").addClass("processing");
+                $(this).attr('disabled', 'disabled');
+            }
+        });
+    },
+    enable: function () {
+        return this.each(function () {
+            if (!$(this).hasClass("nt")) {
+                $(this).removeClass("disabled").removeClass("processing");
+                $(this).removeAttr('disabled');
+            }
+        });
+    },
+    lockForm: function () {
+        return this.each(function () {
+            $(this).find("select,input,textarea,button").disable();
+        });
+    },
+    unlockForm: function () {
+        return this.each(function () {
+            $(this).find("select,input,textarea,button").enable();
+        });
     }
 });
 
 /**
+ * Extend Lodash and add some additional functionality
+ */
+if ('undefined' === !typeof _) {
+    _.mixin({
+        /**
+         * Push data into an array while maintaining sort order
+         * @param array
+         * @param value
+         * @param [iteratee=_.identity]
+         */
+        sortedPush: function (array, value, iteratee) {
+            var sortedIndex = _.sortedIndex(array, value, iteratee);
+            array.splice(sortedIndex, 0, value);
+            return sortedIndex;
+        }
+    });
+}
+
+var cachedFuzzyMatch;
+/**
  * Cache the results of a RegExp match.
  * @type {Function}
  */
-var cachedFuzzyMatch = _.memoize(function (pattern) {
-    return new RegExp(pattern.split("").reduce(function (a, b) {
-        return a + '[^' + b + ']*' + b;
-    }), 'i');
-});
+if ('undefined' === !typeof _) {
+    cachedFuzzyMatch = _.memoize(function (pattern) {
+        return new RegExp(pattern.split("").reduce(function (a, b) {
+            return a + '[^' + b + ']*' + b;
+        }), 'i');
+    });
+}
 
 /**
  * Fuzzy match a string and a pattern/query
@@ -47,6 +124,7 @@ function fuzzyMatch(str, pattern) {
  * @returns {int}
  */
 function roundOffToMultiple(val, multiple) {
+    return val;
     if (!multiple) {
         multiple = 6;
     }
@@ -98,19 +176,23 @@ function horizontallyBound($parentDiv, $childDiv, offsetAdd) {
  * @returns {boolean} true if overlaps/collides, else false.
  */
 function collision($div1, $div2) {
-    var x1 = $div1.offset().left;
-    var y1 = $div1.offset().top;
-    var h1 = $div1.outerHeight(true);
-    var w1 = $div1.outerWidth(true);
-    var b1 = y1 + h1;
-    var r1 = x1 + w1;
-    var x2 = $div2.offset().left;
-    var y2 = $div2.offset().top;
-    var h2 = $div2.outerHeight(true);
-    var w2 = $div2.outerWidth(true);
-    var b2 = y2 + h2;
-    var r2 = x2 + w2;
-    return !(b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2);
+    try {
+        var x1 = $div1.offset().left;
+        var y1 = $div1.offset().top;
+        var h1 = $div1.outerHeight(true);
+        var w1 = $div1.outerWidth(true);
+        var b1 = y1 + h1;
+        var r1 = x1 + w1;
+        var x2 = $div2.offset().left;
+        var y2 = $div2.offset().top;
+        var h2 = $div2.outerHeight(true);
+        var w2 = $div2.outerWidth(true);
+        var b2 = y2 + h2;
+        var r2 = x2 + w2;
+        return !(b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2);
+    } catch (ignored) {
+        return false;
+    }
 }
 
 
@@ -148,7 +230,19 @@ function logDebug(message, ref) {
  * @returns {boolean} The result of the check
  */
 function isUndefinedOrNull(variable) {
-    return (_.isUndefined(variable) || _.isNull(variable));
+    return !!(typeof variable === 'undefined' || variable === null);
+}
+
+
+/**
+ * Get the value of a cookie (Original JavaScript code by Chirp Internet: www.chirp.com.au)
+ * @param name
+ * @returns {string}
+ */
+function getCookie(name) {
+    var re = new RegExp(name + "=([^;]+)");
+    var value = re.exec(document.cookie);
+    return (value != null) ? decodeURI(value[1]) : null;
 }
 
 /**
@@ -219,3 +313,45 @@ var createSnackbar = (function () {
         snackbar.style.opacity = 1;
     };
 })();
+
+/**
+ * Recreate a node
+ * @param el
+ * @param withChildren
+ */
+function recreateNode(el, withChildren) {
+    if (withChildren) {
+        el.parentNode.replaceChild(el.cloneNode(true), el);
+    } else {
+        var newEl = el.cloneNode(false);
+        while (el.hasChildNodes()) newEl.appendChild(el.firstChild);
+        el.parentNode.replaceChild(newEl, el);
+    }
+}
+
+
+function superFileUploadButton() {
+    var inputs = document.querySelectorAll('.upload-btn');
+    Array.prototype.forEach.call(inputs, function (input) {
+        recreateNode(input);
+    });
+    inputs = document.querySelectorAll('.upload-btn');
+    Array.prototype.forEach.call(inputs, function (input) {
+        var label = input.nextElementSibling,
+            labelVal = label.innerHTML;
+
+
+        input.addEventListener('change', function (e) {
+            var fileName = '';
+            if (this.files && this.files.length > 1)
+                fileName = ( this.getAttribute('data-multiple-caption') || '' ).replace('{count}', this.files.length);
+            else
+                fileName = e.target.value.split('\\').pop();
+
+            if (fileName)
+                label.innerHTML = fileName;
+            else
+                label.innerHTML = labelVal;
+        });
+    });
+}

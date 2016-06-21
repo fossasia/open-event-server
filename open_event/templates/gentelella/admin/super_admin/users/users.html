@@ -1,0 +1,79 @@
+{% extends 'gentelella/admin/super_admin/dashboard.html' %}
+
+{% block title %}
+Users
+{% endblock %}
+
+{% set active_page = "users" %}
+
+{% block head_css %}
+{{ super() }}
+{% endblock %}
+
+
+{% block content %}
+
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Status</th>
+        <th>System Roles</th>
+        <th>Event Roles</th>
+        <th>Member Since</th>
+        <th>Last Access</th>
+        <th>Options</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    {% for user in user_list %}
+    <tr>
+        <td>{{ 'Not Available' if not user['user'].user_detail.fullname else user['user'].user_detail.fullname }}</td>
+        <td>{{ user['user'].email }}</td>
+        <td>{{ 'Active' if user['user'].is_active() else 'Inactive' }}</td>
+        <td>
+          <ul style="padding-left:0;">
+          {% if user['user'].is_super_admin %}
+            <li>Super Admin</li>
+          {% endif %}
+          {% if user['user'].is_admin %}
+            <li>Admin</li>
+          {% endif %}
+          </ul>
+        </td>
+        <td>
+        <ul style="padding-left:0;">
+        {% for role in user['event_roles'] %}
+          <li>{{ role.role.title_name }}, <a href="{{ get_url('events.details_view', event_id=role.event.id) }}" title="Go to event" target="_blank">{{ role.event.name }}</a></li>
+        {% endfor %}
+        </ul>
+        </td>
+        <td>{{ user['user'].created_date|humanize }}</td>
+        <td>{{ user['user'].last_access_time|humanize }}</td>
+        <td>
+            <a href="{{ get_url('sadmin_users.details_view', user_id=user['user'].id)}}" title="Edit record">
+            <span class="glyphicon glyphicon-pencil"></span>
+        </a>
+        <a onclick="return confirm('Are you sure you want to delete this record?');"
+           href="{{ get_url('sadmin_users.delete_view', user_id=user['user'].id)}}" title="Delete record">
+            <span class="glyphicon glyphicon-trash"></span>
+        </a>
+
+
+        </td>
+    </tr>
+    {%endfor%}
+    </tbody>
+</table>
+
+
+{% endblock %}
+
+{% block tail_js %}
+{{ super() }}
+
+{% endblock %}
+

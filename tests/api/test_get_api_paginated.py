@@ -24,15 +24,6 @@ class PaginatedApiTestCase:
     def test_microlocation_api(self):
         self._test_model('microlocation')
 
-    def test_level_api(self):
-        self._test_model('level')
-
-    def test_format_api(self):
-        self._test_model('format')
-
-    def test_language_api(self):
-        self._test_model('language')
-
     def test_session_api(self):
         self._test_model('session')
 
@@ -135,6 +126,13 @@ class TestGetApiPaginatedEvents(OpenEventTestCase):
         response = self.app.get(path)
         self.assertEqual(response.status_code, 200)
         self.assertIn('TestEvent', response.data)
+
+    def test_api_filters(self):
+        with app.test_request_context():
+            create_event()
+        path = get_path('page') + '?location_name=r@nd0m'
+        resp = self.app.get(path)
+        self.assertEqual(resp.status_code, 404)
 
 
 if __name__ == '__main__':

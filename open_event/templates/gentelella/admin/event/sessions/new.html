@@ -1,0 +1,38 @@
+{% extends 'gentelella/admin/event/event_base.html' %}
+{% block title %}
+    Create Session - {{ event.name }}
+{% endblock %}
+
+{% set active_page = "sessions" %}
+
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
+{% endblock %}
+
+
+{% block content %}
+    <div class="row">
+
+        <div class="col-md-12">
+            <div style="text-align: center">
+                <h3>Create Session</h3>
+            </div>
+
+            {% include 'gentelella/admin/event/sessions/session_form.html' %}
+
+        </div>
+    </div>
+
+
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='admin/lib/bootstrap-validator/dist/validator.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/session/new.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("textarea").summernote(summernoteConfig);
+        });
+    </script>
+{% endblock %}

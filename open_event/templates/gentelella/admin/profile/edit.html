@@ -11,7 +11,7 @@
         <div class="x_panel" style="min-height:600px;">
             <div class="row">
                 <center><h4> Details </h4>
-                <form name="test" action="/admin/profile/edit/" method="POST" role="form"
+                <form name="test" action="/profile/edit/" method="POST" role="form"
                       class="admin-form form-horizontal event-create-form">
                     {% if csrf_token %}
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>

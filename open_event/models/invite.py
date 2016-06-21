@@ -7,12 +7,16 @@ class Invite(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship("User", backref="invite")
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    event_id = db.Column(
+        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    session_id = db.Column(db.Integer, db.ForeignKey('session.id'))
+    session = db.relationship("Session", backref="invite")
     hash = db.Column(db.String, nullable=False)
 
-    def __init__(self, event_id=None, user_id=None):
+    def __init__(self, event_id=None, user_id=None, session_id=None):
         self.user_id = user_id
         self.event_id = event_id
+        self.session_id = session_id
 
     def __repr__(self):
         return '<invite %r>' % self.user_id
@@ -27,4 +31,4 @@ class Invite(db.Model):
     def serialize(self):
         """Return object data in easily serializeable format"""
 
-        return {'id': self.id, 'user_id': self.user_id}
+        return {'id': self.id, 'user_id': self.user_id, 'session_id': self.session_id}

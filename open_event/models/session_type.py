@@ -6,18 +6,15 @@ class SessionType(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     length = db.Column(db.Float, nullable=False)
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
-    session_id = db.Column(db.Integer, db.ForeignKey('session.id'))
+    event_id = db.Column(
+        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     events = db.relationship("Event", backref="session_type")
-    sessions = db.relationship("Session",
-                               uselist=False,
-                               backref="session_type")
+    session = db.relationship('Session', backref="session_type")
 
-    def __init__(self, name=None, length=None, event_id=None, session_id=None):
+    def __init__(self, name=None, length=None, event_id=None):
         self.name = name
         self.length = length
         self.event_id = event_id
-        self.session_id = session_id
 
     def __repr__(self):
         return '<SessionType %r>' % self.name

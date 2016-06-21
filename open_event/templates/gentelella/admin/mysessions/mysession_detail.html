@@ -1,0 +1,161 @@
+{% extends 'gentelella/admin/base.html' %}
+{% block head_css %}
+    {{ super() }}
+    <link href="{{ url_for('static', filename='css/admin/mysessions.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
+
+{% endblock %}
+{% block title %}
+    {{ session.title }} - My Sessions
+{% endblock %}
+
+{% set textarea_session_fields = ['short_abstract', 'long_abstract', 'comments'] %}
+{% set media_session_fields = ['slides', 'video', 'audio'] %}
+
+{% set session_fields = ['title', 'subtitle', 'short_abstract', 'long_abstract', 'comments', 'track', 'session_type', 'language', 'slides', 'video', 'audio'] %}
+
+{% macro session_form_field(identifier, require=0) %}
+    {% set name = identifier | replace('_id','') %}
+    {% set pretty_name = name | replace('_',' ') | capitalize %}
+    <div class="item form-group speaker-fields">
+        <label class="control-label">
+            {{ pretty_name }}
+            {% if require==1 %}
+                <span class="required">*</span>
+            {% endif %}
+        </label>
+        {% if identifier in textarea_session_fields %}
+            <textarea {% if require==1 %}
+                required="required"
+            {% endif %}
+                name="{{ identifier }}" class="form-control col-md-7 col-xs-12">{{ session[identifier] }}</textarea>
+        {% elif identifier in media_session_fields %}
+            <br><input {% if require==1 %}
+            required="required"
+        {% endif %}
+            type="file" id="speaker-file-{{ identifier | default(1) }}" name="{{ identifier }}"
+            class="upload-btn"/>
+            <label class="file-label" for="speaker-file-{{ identifier | default(1) }}">
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                Choose a file</label>
+        {% else %}
+            <input {% if require==1 %}
+                required="required"
+            {% endif %}
+                name="{{ identifier }}" class="form-control col-md-7 col-xs-12" value="{{ session[identifier] }}"/>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="x_panel" style="min-height:600px;">
+                <div class="x_content">
+                    <br>
+                    {% if session.state == 'pending' %}
+                        <span class="detail-status label label-warning">Under Review</span>
+                    {% elif session.state == 'draft' %}
+                        <span class="detail-status label label-warning">Draft</span>
+                    {% elif session.state == 'accepted' %}
+                        <span class="detail-status label label-success">Accepted</span>
+                    {% elif session.state == 'rejected' %}
+                        <span class="detail-status label label-danger">Rejected</span>
+                    {% else %}
+                        <span class="detail-status label label-info">N/A</span>
+                    {% endif %}
+                    <button class="btn btn-info pull-right" data-toggle="modal" data-target="#edit-session-modal">Edit
+                        Proposal
+                    </button>
+                    <br>
+                    <br>
+                    <h4 style="font-weight: 300; color: #8d8d8d">{{ session.event.name }}
+                        ~ {{ session.event.start_time.strftime('%B %d, %Y %I:%M %p') }}</h4>
+                    <h1 style="font-weight: 300;"><span class="title">{{ session.title }}</span>
+                        <small class="subtitle" style="font-weight: 300; color: #8d8d8d">{{ session.subtitle }}</small>
+                    </h1>
+                    <h3 style="font-weight: 300; color: #8d8d8d">By
+                        {% for speaker in session.speakers %}
+                            {{ speaker.name }}
+                        {% endfor %}
+                    </h3>
+                    <h4 style="font-weight: 300; color: #8d8d8d">
+                        {{ session.event.start_time.strftime('%B %d, %Y - %I:%M %p') }}
+                        <i>(to)</i> {{ session.event.end_time.strftime('%B %d, %Y - %I:%M %p') }}
+                    </h4>
+                    <br>
+                    <h5>Short Abstract</h5>
+                    <p style="text-align: justify;"><i class="short_abstract">
+                        {{ session.short_abstract | safe }}
+                    </i></p>
+                    <br>
+                    <h5>Long Abstract</h5>
+                    <p style="text-align: justify" class="long_abstract">
+                        {{ session.long_abstract | safe }}
+                    </p>
+                    <br>
+                    <div class="row" style="text-align: center; font-size: 16px;">
+                        <div class="col-md-2 col-md-push-1">
+                            <strong>Microlocation</strong><br>
+                            {{ session.microlocation.name }}
+                        </div>
+                        <div class="col-md-2 col-md-push-1">
+                            <strong>Track</strong><br>
+                            {{ session.track.name }}
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form id="edit-session-form" enctype="multipart/form-data" method="post" action="">
+        <div class="modal fade" id="edit-session-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">Edit Session Proposal</h4>
+                    </div>
+                    <div class="modal-body">
+                        {% if csrf_token %}
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        {% endif %}
+                        <div class="session_form" style="margin-right: 25px;">
+                            <h4>Session Details</h4>
+                            {% for elem in session_fields %}
+                                {% if session_form[elem].include==1 %}
+                                    {{ session_form_field(elem, session_form[elem].require) }}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="close-edit-session" class="btn btn-default" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="submit" class="btn btn-primary" name="state" value="draft">Save as Draft
+                        </button>
+                        <button type="submit" class="btn btn-success" name="state" value="pending">Submit
+                            Session
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("textarea").summernote(summernoteConfig);
+        });
+    </script>
+
+{% endblock %}
+

@@ -1,22 +1,37 @@
 """Copyright 2015 Rafal Kowalski"""
+from flask import url_for
+
+from open_event.helpers.helpers import get_serializer
+from open_event.helpers.data import DataManager
 
 
-def login(app, username, password):
-    return app.post('admin/login/',
+def login(app, email, password):
+    return app.post('login/',
                     data=dict(
-                        username=username,
+                        email=email,
                         password=password
                     ), follow_redirects=True)
 
 
 def logout(app):
-    return app.get('admin/logout', follow_redirects=True)
+    return app.get('logout', follow_redirects=True)
 
 
-def register(app, username, email, password):
-    return app.post('admin/register/',
-                    data=dict(
-                        username=username,
-                        email=email,
-                        password=password
-                    ), follow_redirects=True)
+def register(app, email, password):
+    s = get_serializer()
+    data = [email, password]
+    data_hash = s.dumps(data)
+    app.post(
+        url_for('admin.register_view'),
+        data=dict(email=email, password=password),
+        follow_redirects=True)
+    return app.get(
+        url_for('admin.create_account_after_confirmation_view', hash=data_hash),
+        follow_redirects=True)
+
+
+def create_user(email, password, is_verified=True):
+    """
+    Registers the user but not logs in
+    """
+    DataManager.create_user([email, password], is_verified=is_verified)

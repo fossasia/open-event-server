@@ -1,10 +1,12 @@
 import unittest
+
 from tests.utils import OpenEventTestCase
 from tests.setup_database import Setup
 from open_event import current_app as app
 from open_event.helpers.oauth import FbOAuth
 from open_event.helpers.data import get_facebook_auth
-from tests.auth_helper import register, login
+from tests.auth_helper import login, logout, register
+from open_event.helpers.data import create_user_oauth
 
 
 class TestFacebookOauth(OpenEventTestCase):
@@ -22,11 +24,12 @@ class TestFacebookOauth(OpenEventTestCase):
         """If the user is already logged in then on clicking 'Login with Facebook' he should be redirected
             directly to the admin page"""
         with app.test_request_context():
-            register(self.app, 'test', 'email@gmail.com', 'test')
-            login(self.app, 'test', 'test')
-            self.assertTrue('Create New Event' in self.app.get('/fCallback/?code=dummy_code&state=dummy_state)',
-                                                               follow_redirects=True).data)
-            self.assertEqual(self.app.get('/fCallback/?code=dummy_code&state=dummy_state)').status_code, 302)
+            register(self.app, 'email@gmail.com', 'test')
+            logout(self.app)
+            login(self.app, 'email@gmail.com', 'test')
+            self.assertTrue('Open Event' in self.app.get('/fCallback/?code=dummy_code&state=dummy_state',
+                                                           follow_redirects=True).data)
+            self.assertEqual(self.app.get('/fCallback/?code=dummy_code&state=dummy_state').status_code, 302)
 
     def test_error_return(self):
         """This tests the various errors returned by callback function"""
@@ -35,8 +38,18 @@ class TestFacebookOauth(OpenEventTestCase):
                 "/fCallback/?code=dummy_code&state=dummy_state&error=access denied").data)
             self.assertTrue("Error encountered" in self.app.get(
                 "/fCallback/?code=dummy_code&state=dummy_state&error=12234").data)
-            self.assertTrue("/admin/login" in self.app.get("/fCallback/?no_code_and_state").data)
+            self.assertTrue("/login" in self.app.get("/fCallback/?no_code_and_state").data)
             self.assertEqual(self.app.get("/fCallback/1234").status_code, 404)
+
+    def test_if_user_has_user_details(self):
+        """Check if user has user_details fields during sign up via facebook"""
+        with app.test_request_context():
+            user = None
+            user_data = {'email': 'test@gmail.com', 'name': 'dsads', 'picture': {'data': {'url': 'aaaa'}}}
+            token = 'dsadsads'
+            method = 'Facebook'
+            user = create_user_oauth(user, user_data, token, method)
+            self.assertTrue(user.user_detail)
 
 
 if __name__ == '__main__':
