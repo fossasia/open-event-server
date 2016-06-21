@@ -9,9 +9,11 @@ class Speaker(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     photo = db.Column(db.String)
-    biography = db.Column(db.Text)
+    short_biography = db.Column(db.Text)
+    long_biography = db.Column(db.Text)
     email = db.Column(db.String, nullable=False)
-    web = db.Column(db.String)
+    mobile = db.Column(db.String)
+    website = db.Column(db.String)
     twitter = db.Column(db.String)
     facebook = db.Column(db.String)
     github = db.Column(db.String)
@@ -19,14 +21,19 @@ class Speaker(db.Model):
     organisation = db.Column(db.String, nullable=False)
     position = db.Column(db.String)
     country = db.Column(db.String, nullable=False)
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    event_id = db.Column(
+        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship('User', backref='speakers')
 
     def __init__(self,
                  name=None,
                  photo=None,
-                 biography=None,
+                 short_biography=None,
+                 long_biography=None,
                  email=None,
-                 web=None,
+                 mobile=None,
+                 website=None,
                  twitter=None,
                  facebook=None,
                  github=None,
@@ -34,12 +41,15 @@ class Speaker(db.Model):
                  organisation=None,
                  position=None,
                  country=None,
-                 event_id=None):
+                 event_id=None,
+                 user=None):
         self.name = name
         self.photo = photo
-        self.biography = biography
+        self.short_biography = short_biography
+        self.long_biography = long_biography
         self.email = email
-        self.web = web
+        self.mobile = mobile
+        self.website = website
         self.twitter = twitter
         self.facebook = facebook
         self.github = github
@@ -50,6 +60,11 @@ class Speaker(db.Model):
         self.event_id = event_id
         # ensure links are in social fields
         self.ensure_social_links()
+        self.user = user
+
+    @staticmethod
+    def get_service_name():
+        return 'speaker'
 
     def __repr__(self):
         return '<Speaker %r>' % self.name
@@ -71,9 +86,11 @@ class Speaker(db.Model):
             'id': self.id,
             'name': self.name,
             'photo': self.photo,
-            'biography': self.biography,
+            'short_biography': self.short_biography,
+            'long_biography': self.long_biography,
             'email': self.email,
-            'web': self.web,
+            'mobile': self.mobile,
+            'website': self.website,
             'twitter': self.twitter,
             'facebook': self.facebook,
             'github': self.github,

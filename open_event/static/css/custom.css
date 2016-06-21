@@ -35,6 +35,12 @@
   padding: 5px 6px;
   border-radius: 50%;
 }
+
+.profile_avatar {
+  width: 8em;
+  height: 8em;
+}
+
 .nav-sm .main_container .top_nav {
   display: block;
   margin-left: 70px;
@@ -332,7 +338,7 @@ body {
   color: #73879C;
   background: #2A3F54;
   /*#ECF0F1; #FCFCFC*/
-  font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
+  font-family: Roboto, Arial, "Droid Sans", sans-serif;
   font-size: 13px;
   font-weight: 400;
   line-height: 1.471;
@@ -1139,8 +1145,6 @@ table.jambo_table tbody tr.selected td {
   float: left;
 }
 .dataTables_filter {
-  width: 50%;
-  float: right;
   text-align: right;
 }
 .dataTables_info {
@@ -3539,6 +3543,23 @@ a.hiddenanchor {
   animation-fill-mode: both;
 }
 
+.login_wrapper {
+    right: 0px;
+    margin: 5% auto 0px;
+    max-width: 350px;
+    position: relative;
+}
+
+.registration_form, .login_form {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+}
+
+.login_form {
+    z-index: 22;
+}
+
 /********* /login ***************/
 
 
@@ -4185,6 +4206,7 @@ fieldset {
 
 .actionBar a {
   margin: 0 3px;
+  float:right;
 }
 
 .wizard_verticle .wizard_content {
@@ -4789,3 +4811,60 @@ ul.notifications {
   border: 1px solid #e5e5e5;
 }
 /** /Dropzone.js **/
+/**
+ * SNACKBAR CSS STYLES
+ * ===================
+ */
+.paper-snackbar {
+    transition-property: opacity, bottom, left, right, width, margin, border-radius;
+    transition-duration: 0.5s;
+    transition-timing-function: ease;
+    font-family: Roboto, 'Helvetica Neue', Helvetica, Arial, serif;
+    font-weight: 300;
+    font-size: 14px;
+    min-height: 14px;
+    background-color: #323232;
+    position: fixed;
+    z-index: 99999999;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    line-height: 22px;
+    padding: 18px 24px;
+    bottom: 0;
+    opacity: 0;
+
+}
+
+@media (min-width: 640px) {
+    .paper-snackbar {
+
+        min-width: 288px;
+        max-width: 568px;
+        display: inline-flex;
+        border-radius: 2px;
+        margin: 24px;
+        bottom: -100px;
+
+    }
+}
+
+@media (max-width: 640px) {
+    .paper-snackbar {
+        left: 0;
+        right: 0;
+    }
+}
+
+.paper-snackbar .action {
+    background: inherit;
+    display: inline-block;
+    border: none;
+    font-size: inherit;
+    text-transform: uppercase;
+    color: #ffeb3b;
+    margin: 0 0 0 24px;
+    padding: 0;
+    min-width: min-content;
+}

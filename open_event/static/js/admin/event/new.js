@@ -1,79 +1,84 @@
-$(document).ready(function() {
+var $wizardForm = $("#event-wizard-form");
 
-  var counter = 0;
-  $('.add-session-type').click(function () {
-    var row = "<div class='col-sm-12 row-session-type'>" +
-                "<div class='col-sm-3'>" +
-                  "<input type='text' class='form-control' name='session_type[name]' placeholder='Name'>" +
-                "</div>" +
-                "<div class='col-sm-3 input-group'>" +
-                  "<input type='text' class='form-control' name='session_type[length]' placeholder='Length'>" +
-                  "<span class='input-group-btn'>" +
-                    "<button type='button' class='btn btn-danger remove-session-type'>-</button>" +
-                  "</span>" +
-                "</div>" +
-              "</div>";
-    $('.session-types').append(row);
-  });
+$(document).ready(function () {
 
-  $( "body" ).on( "click", ".remove-session-type", function () {
-    $(this).parent().parent().parent().remove();
-  });
+    var $wizard = $("#wizard");
+    var state = $wizard.data('state');
+    var eventId = $wizard.data('id');
 
-  $('.add-social-links').click(function () {
-    var row = "<div class='col-sm-12 row-social-links'>" +
-                "<div class='col-sm-3'>" +
-                  "<input type='text' class='form-control' name='social[name]' placeholder='Name'>" +
-                "</div>" +
-                "<div class='col-sm-3 input-group'>" +
-                  "<input type='text' class='form-control' name='social[link]' placeholder='Length'>" +
-                  "<span class='input-group-btn'>" +
-                    "<button type='button' class='btn btn-danger remove-social-links'>-</button>" +
-                  "</span>" +
-                "</div>" +
-              "</div>";
-    $('.social-links').append(row);
-  });
+    // Smart Wizard
+    $wizard.smartWizard({
+        labelFinish: 'Make your event live',
+        onFinish: function () {
+            if (state === 'Published') {
+                location.href = "/events/" + eventId + "/unpublish/";
+            } else {
+                var input = $("<input>")
+                    .attr("type", "hidden")
+                    .attr("name", "state").val("Published");
+                $wizard.append($(input));
+                $wizardForm.submit();
+            }
+        },
+        enableAllSteps: true,
+        onLeaveStep: onLeaveStep
+    });
 
-  $("body").on("click", ".remove-social-links", function () {
-    $(this).parent().parent().parent().remove();
-  });
+    $('.buttonNext').addClass("btn btn-success");
+    $('.buttonPrevious').addClass("btn btn-primary");
+    $('.buttonFinish').addClass("btn btn-info");
 
-  $('.add-tracks').click(function () {
-    counter += 1;
-    var row = "<div class='col-sm-12 row-tracks'>" +
-                "<div class='col-sm-3'>" +
-                  "<input type='text' class='form-control' name='tracks[name]' placeholder='Name'>" +
-                "</div>" +
-                "<div class='col-sm-3 input-group'>" +
-                  "<div class='input-group colorpicker-component' id='color"+counter+"'>"+
-                    "<input type='text' value='#e01ab5' class='form-control' name='tracks[color]' title='track-color'/>"+
-                    "<span class='input-group-addon'><i></i></span>"+
-                  "</div>" +
-                  "<span class='input-group-btn'>" +
-                    "<button type='button' class='btn btn-danger remove-tracks'>-</button>" +
-                  "</span>" +
-                "</div>" +
-              "</div>";
-    $('.tracks').append(row);
-    $('#color'+counter).colorpicker();
-  });
+    $wizard.find(".buttonFinish")
+        .after('<a href="#" id="buttonSave" class="btn btn-warning">Save</a>');
 
-  $("body").on("click", ".remove-tracks", function () {
-    $(this).parent().parent().parent().remove();
-  });
+    if (state === 'Published') {
+        $wizard.find(".buttonFinish").text("Unpublish").removeClass("btn-info").addClass("btn-danger");
+    }
 
-  // Smart Wizard
-  $("#wizard").smartWizard({
-    labelFinish:'Save Draft',
-    onFinish: function() { $("#event-create-form").submit(); }
-  });
+    $("#buttonSave").click(function () {
+        $wizardForm.submit();
+    });
 
-  $('.date-picker').daterangepicker({
-    singleDatePicker: true,
-    calender_style: "picker_4"
-  }, function(start, end, label) {
-    console.log(start.toISOString(), end.toISOString(), label);
-  });
+    var hash = "";
+    try {
+        hash = getHashValue('step').trim();
+    } catch (ignored) {
+    }
 
+    if (hash !== "1" && hash !== "location_name") {
+        $wizard.smartWizard('goToStep', parseInt(hash));
+    } else if (hash === "location_name") {
+        $wizardForm.find("input[name=location_name]").closest(".form-group").addClass("has-warning");
+    }
+
+    $(window).resize(function () {
+        $wizard.smartWizard('fixHeight');
+    });
 });
+
+function getHashValue(key) {
+    var matches = location.hash.match(new RegExp(key + '=([^&]*)'));
+    return matches ? matches[1] : null;
+}
+
+function onLeaveStep(obj, context) {
+    return !validate();
+}
+
+function validate() {
+    try {
+        $wizardForm.validator('destroy');
+    } catch (ignored) {
+    }
+
+    $wizardForm.validator({
+        disable: false,
+        feedback: {
+            success: 'glyphicon-ok',
+            error: 'glyphicon-remove'
+        }
+    });
+
+    $wizardForm.validator('validate');
+    return $wizardForm.data('bs.validator').hasErrors()
+}

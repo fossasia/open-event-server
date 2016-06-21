@@ -1,0 +1,77 @@
+body {
+    background: white;
+}
+
+.right_col {
+    padding: 0 !important;
+    background-color: white !important;
+}
+
+.carousel {
+    height: 500px;
+    margin-bottom: 60px;
+    position: inherit;
+}
+
+.carousel-inner {
+    top: -10px;
+}
+
+.carousel-caption {
+    z-index: 10;
+}
+
+/*noinspection CssOptimizeSimilarProperties,CssUnknownTarget*/
+.carousel .item {
+    height: 500px;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/static/img/startup-594090_1920.jpg');
+    background-position: center;
+}
+
+.carousel-caption h1 {
+    font-weight: 100;
+}
+
+.carousel-caption .btn {
+    font-weight: 100;
+    font-size: 25px;
+    text-transform: uppercase;
+}
+
+.row {
+    margin: 0;
+    padding: 10px;
+}
+
+.thumbnail {
+    overflow: hidden;
+    height: auto;
+}
+
+.section-header {
+    color: #2196F3;
+    font-weight: 300;
+}
+
+@media (min-width: 768px) {
+    .carousel-caption p {
+        margin-bottom: 50px;
+        font-size: 30px;
+        line-height: 1.4;
+    }
+
+    .carousel-caption h1 {
+        font-size: 50px;
+    }
+}
+
+.hero-feature {
+    margin-bottom: 30px;
+}
+
+.no-data-message {
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+

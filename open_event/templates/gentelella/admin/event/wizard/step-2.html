@@ -1,0 +1,87 @@
+{% macro sponsor_row(sponsor=None, count=None) %}
+    <tr class="row-sponsor">
+        <td>{{ count | default(1) }}</td>
+        <td><input value="{{ sponsor.name | default('') }}" name="sponsors[name]"
+                   class="form-control col-md-7 col-xs-12"/></td>
+        <td>
+            <input type="file" id="sponsors-logo-{{ sponsor.id | default(1) }}" name="sponsors[logo]"
+                   class="upload-btn"/>
+            <label class="file-label" for="sponsors-logo-{{ sponsor.id | default(1) }}">
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                Choose a file</label>
+        </td>
+        <td><input type="number" value="{{ sponsor.level | default('') }}" name="sponsors[level]"
+                   class="form-control col-md-7 col-xs-12"/></td>
+        <td><input name="sponsors[type]" class="form-control col-md-7 col-xs-12"
+                   value=""/></td>
+        <td><input value="{{ sponsor.url | default('') }}" name="sponsors[url]"
+                   class="form-control col-md-7 col-xs-12"/></td>
+        <td><textarea name="sponsors[description]"
+                  class="form-control col-md-7 col-xs-12">{{ sponsor.description }}</textarea></td>
+        <td><span class="glyphicon glyphicon-remove remove-sponsor" style="display:none;cursor: pointer;"></span></td>
+
+    </tr>
+{% endmacro %}
+
+
+<div id="step-2" class="wizard_content" >
+    <div class="col-md-10 col-md-push-1">
+        <table class="table table-striped sponsor-table">
+            <thead>
+            <tr>
+                <th>Sl.</th>
+                <th>Name</th>
+                <th>Logo</th>
+                <th>Level</th>
+                <th>Type</th>
+                <th>URL</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+            <tbody class="sponsors">
+            {% if sponsors %}
+                {% for sponsor in sponsors %}
+                    {{ sponsor_row(sponsor, loop.index) }}
+                {% endfor %}
+            {% else %}
+                {{ sponsor_row() }}
+            {% endif %}
+            </tbody>
+        </table>
+        <span class='input-group-btn'>
+            <button type='button' class='btn btn-success add-sponsor'>Add Another Sponsor</button>
+        </span>
+    </div>
+</div>
+<script type="text/javascript">
+    var sponsor_counter = 1;
+    $(document).on("click", ".add-sponsor", function () {
+        sponsor_counter += 1;
+        var $element = $($(".row-sponsor")[0]).clone();
+        $element.find("td:nth-child(1)").text(sponsor_counter);
+        $element.find("input").val("").attr("value", "");
+        $element.find("input[type=file]").attr("id", "sponsors-logo-" + sponsor_counter);
+        $element.find(".file-label").attr("for", "sponsors-logo-" + sponsor_counter);
+        $('.sponsors').append($element);
+        $('.remove-sponsor').show();
+        superFileUploadButton();
+        $(".form_wizard").smartWizard('fixHeight');
+    });
+
+    $(document).on("click", ".remove-sponsor", function () {
+        sponsor_counter -= 1;
+        $(this).closest("tr").remove();
+        var ctr = 1;
+        $('.sponsors').find('.row-sponsor td:nth-child(1)').each(function() {
+            $(this).text(ctr);
+            ctr += 1;
+        })
+        if (sponsor_counter == 1) {
+            $('.remove-sponsor').hide();
+        }
+    });
+
+    $(function () {
+        superFileUploadButton();
+    });
+</script>

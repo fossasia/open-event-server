@@ -1,0 +1,35 @@
+{% extends 'gentelella/admin/super_admin/dashboard.html' %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block head_css %}
+    {{ super() }}
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="upcoming-events-tab">
+        <div class="row">
+            {% include 'gentelella/admin/super_admin/widgets/_recent_events.html' %}
+            {% include 'gentelella/admin/super_admin/widgets/_heroku.html' %}
+        </div>
+    </div>
+    <div class="tab-pane fade" id="past-events-tab">
+
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+
+{% endblock %}
+

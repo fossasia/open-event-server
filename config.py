@@ -16,7 +16,7 @@ class Config(object):
 
 class ProductionConfig(Config):
     DEBUG = False
-    DEBUG_TB_ENABLED = False  # debug toolbar
+    MINIFY_PAGE = True
     try:  # you don't want production on default db
         SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
     except KeyError:

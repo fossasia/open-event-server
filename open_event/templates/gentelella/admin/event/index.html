@@ -1,4 +1,67 @@
-{% extends 'gentelella/admin/event/base_table.html' %}
-{% block table_title %}
-Events Table
+{% extends 'gentelella/admin/base.html' %}
+{% import 'gentelella/admin/event/_table.html' as table with context %}
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='admin/lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"/>
+{% endblock %}
+
+{% block title %}
+    Events
+{% endblock %}
+
+{% block body %}
+    <div class="page-title">
+        <div class="title_left">
+            <h3>Manage Events</h3>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_content">
+                    <div>
+                        <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist" style="background: #FFFFFF;">
+                            <li class="active">
+                                <a href="#tab_content1" id="home-tab" data-toggle="tab">Live</a>
+                            </li>
+                            <li role="presentation">
+                                <a href="#tab_content2" id="profile-tab" data-toggle="tab">Draft</a>
+                            </li>
+                            <li>
+                                <a href="#tab_content3" id="profile-tab2" data-toggle="tab">Past</a>
+                            </li>
+                            <li role="presentation" class="">
+                                <a href="#" id="all-tab" data-toggle="modal" data-target="#importModal">Import</a>
+                            </li>
+                        </ul>
+                        <div id="myTabContent" class="tab-content">
+                            <div class="tab-pane fade active in" id="tab_content1">
+                                {{ table.events_table(live_events) }}
+                            </div>
+                            <div class="tab-pane fade" id="tab_content2">
+                                {{ table.events_table(draft_events) }}
+                            </div>
+                            <div class="tab-pane fade" id="tab_content3">
+                                {{ table.events_table(past_events) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% include 'gentelella/admin/event/_import_modal.html' %}
+
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='admin/lib/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin/event/importEvent.js') }}"></script>
+    <script type="text/javascript">
+        $('.table').DataTable();
+    </script>
 {% endblock %}

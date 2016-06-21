@@ -1,12 +1,9 @@
 {% extends 'gentelella/admin/login/base.html' %}
 {% block register %}
-<div id="register" class="animate form registration_form">
+<div id="register" class="row animate form registration_form">
           <section class="login_content">
             <form method="post">
               <h1>Create Account</h1>
-              <div>
-                <input name="username" type="text" class="form-control" placeholder="Username" required="" />
-              </div>
               <div>
                 <input name="email" type="email" class="form-control" placeholder="Email" required="" />
               </div>
@@ -21,7 +18,7 @@
 
               <div class="separator">
                 <p class="change_link">Already a member ?
-                  <a href="/admin/login" class="to_register"> Log in </a>
+                  <a href="/login" class="to_register"> Log in </a>
                 </p>
 
                 <div class="clearfix"></div>

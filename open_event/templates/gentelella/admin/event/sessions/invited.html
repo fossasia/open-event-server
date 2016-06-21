@@ -1,0 +1,46 @@
+{% extends 'gentelella/admin/base.html' %}
+{% block title %}
+Session Invitation
+{% endblock %}
+{% block body %}
+<div class="page-title">
+    <div class="title_left">
+        <h3>Invitation Page</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel" style="min-height:600px;">
+            <div class="row">
+            	<center>
+                    <h3>You have been invited for session: </h3><br>
+                    <h4>{{session.title}}</h4>
+                    <p><b>{{session.short_abstract}}</b></p>
+                    <p>{{session.long_abstract}}</p>
+                </center>
+            </div>
+            <div class="row">
+            	<div class="col-md-4 col-sm-12 col-xs-12"></div>
+            	<center><div class="col-md-4 col-sm-12 col-xs-12">
+            		<button class="btn btn-success" onclick="accepted(1);">Accept</button>
+            		<button class="btn btn-danger" onclick="accepted(0);">Reject</button>
+            	</div></center>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script type="text/javascript">
+        function accepted(value) {
+            if (value == 1) {
+                window.location = "{{ url_for('event_sessions.speaker_view', event_id=event_id, session_id=session.id) }}";
+            } else {
+                window.location = "/";
+            }
+        }
+    </script>
+{% endblock %}

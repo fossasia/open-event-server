@@ -18,3 +18,16 @@ app.db
 
 # Static files at 'open_event/static/admin/lib'
 lib/
+node_modules
+
+# event export files
+static/exports/event*
+
+# temp static files
+static/temp/*
+!static/temp/.gitkeep
+/tests/test.db-journal
+
+# uploads dir
+static/media/*
+!static/media/.gitkeep

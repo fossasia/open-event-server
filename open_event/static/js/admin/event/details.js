@@ -1,35 +1,49 @@
 $(document).ready(function () {
+    var steps = {
+        Draft: 1,
+        CallForPapers: 2,
+        Published: 3,
+        Completed: 4
+    };
 
-  $('#wizard').smartWizard({
-    includeFinishButton: false,
-    keyNavigation: false,
-    noForwardJumping: true,
-  });
+    var $wizard = $('#wizard');
 
-  $('.date-picker').daterangepicker({
-    singleDatePicker: true,
-    timePicker: true,
-    calender_style: "picker_4",
-    locale: {
-      format: 'MM/DD/YYYY H:mm A'
+    $wizard.smartWizard({
+        includeFinishButton: false,
+        keyNavigation: false,
+        noForwardJumping: true,
+        onShowStep: handleStepChange
+    });
+
+    function handleStepChange($step, context) {
+        console.log(context.toStep);
+        switch (context.toStep) {
+            case steps.Draft:
+                // TODO Make a post request to change event state to 'draft'
+                break;
+
+            case steps.CallForPapers:
+                // TODO Make a post request to change event state to 'Call for papers'
+                break;
+
+            case steps.Published:
+                // TODO Make a POST request to change event state to 'Published'
+                break;
+
+            case steps.Completed:
+                // TODO Make a POST request to change event state to 'Completed'
+
+                break;
+        }
     }
-  });
 
-  $("#go_to_call_for_papers").click(function () {
-    $('#wizard').smartWizard('goToStep', 2);
-    // Send post to change event state to Call for papers
-  });
+    $(document).on("click", ".previous-step", function () {
+        $wizard.smartWizard('goBackward');
+    });
 
-  $("#back_to_draft").click(function () {
-    $('#wizard').smartWizard('goToStep', 1);
-    // Send post to change event state to Call for papers
-  });
+    $(document).on("click", ".next-step", function () {
+        $wizard.smartWizard('goForward');
+    });
 
-  $("#start_scheduling").click(function () {
-    $('#wizard').smartWizard('goToStep', 3);
-    // Send post to change event state to Call for papers
-  });
-
-  $(".actionBar").remove();
-
+    $(".actionBar").remove();
 });

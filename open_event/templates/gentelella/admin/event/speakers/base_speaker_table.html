@@ -1,0 +1,180 @@
+{% extends 'gentelella/admin/event/event_base.html' %}
+
+{% block title %}
+    {{ event.name }} - Sessions
+{% endblock %}
+
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='admin/lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"/>
+    <style type="text/css">
+        .label {
+            text-transform: capitalize;
+            font-size: 100%;
+            font-weight: 300;
+            margin-top: 2px;
+        }
+
+        .dataTables_filter {
+            width: auto;
+        }
+
+        td {
+            vertical-align: middle !important;
+        }
+
+        .user-photo {
+            width: 5rem;
+            height: 5rem;
+            border-radius: 50%;
+        }
+
+        .state-list > li {
+            margin-top: 6px;
+        }
+
+        .state-list > li:nth-child(1) {
+            margin-top: 0;
+        }
+    </style>
+{% endblock %}
+
+{% block head_js %}
+    {{ super() }}
+
+    <script type="text/javascript">
+        function imgError(image) {
+            image.onerror = "";
+            image.src = '{{ url_for('static', filename='img/avatar.png') }}';
+            return true;
+        }
+    </script>
+{% endblock %}
+{% set active_page = "speakers" %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div id="toolbar-holder" style="display: none;">
+                <div class="btn-group pull-left" data-toggle="buttons" style="margin-left: 5px; margin-right: 10px;">
+                    <label class="btn btn-default active">
+                        <input type="radio" name="show_state" autocomplete="off" value="all" checked> All
+                    </label>
+                    <label class="btn btn-default">
+                        <input type="radio" name="show_state" autocomplete="off" value="pending"> Pending
+                    </label>
+                    <label class="btn btn-default">
+                        <input type="radio" name="show_state" autocomplete="off" value="accepted"> Accepted
+                    </label>
+                    <label class="btn btn-default">
+                        <input type="radio" name="show_state" autocomplete="off" value="rejected"> Rejected
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12" style="margin-top: 10px;">
+            <table class="table table-striped table-hover with-datatable">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Submitted Sessions</th>
+                    <th>State</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for speaker in speakers %}
+                    <tr>
+                        <td>
+                            <img src="{{ speaker.photo }}" class="user-photo" onerror="imgError(this);">
+                        </td>
+                        <td>{{ speaker.name }}</td>
+                        <td>{{ speaker.email }}</td>
+                        <td>{{ speaker.mobile if speaker.mobile != None and speaker != '' else 'N/A' }}</td>
+                        <td>
+                            <ol style="padding-left: 14px;">
+                                {% for session in speaker.sessions %}
+                                    <li>{{ session.title }}</li>
+                                {% endfor %}
+                            </ol>
+                        </td>
+                        <td>
+                            <ol style="padding-left: 14px;" class="state-list">
+                                {% for session in speaker.sessions %}
+                                    <li>
+                                        <span class="label label-{{ 'success' if session.state == 'accepted' else 'warning' }}">
+                                            {{ session.state }}
+                                        </span>
+                                    </li>
+                                {% endfor %}
+                            </ol>
+                        </td>
+                        <td>
+                            <div class="btn-group-vertical btn-group-xs" role="group" aria-label="...">
+                                <a data-toggle="tooltip" data-placement="left" title="View" href="{{ speaker.id }}/edit"
+                                   class="btn btn-default">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                                <a data-toggle="tooltip" data-placement="left" title="Edit" href="{{ speaker.id }}/edit"
+                                   class="btn btn-default">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <a data-toggle="tooltip" data-placement="left" title="Delete"
+                                   href="{{ speaker.id }}/delete" class="btn btn-default">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+
+                            </div>
+
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='admin/lib/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+
+    <script type="text/javascript">
+        $.fn.dataTable.ext.search.push(
+                function (settings, data, dataIndex) {
+                    var user_option = $("input[name=show_state]:checked").val();
+                    console.log(user_option);
+                    var state = data[5].trim() || 'pending';
+                    if (user_option === "all") {
+                        return true;
+                    } else if (state.indexOf(user_option) > -1) {
+                        return true;
+                    }
+                    return false;
+                }
+        );
+
+        var table = $('.with-datatable').DataTable({
+            "dom": '<"row"<"toolbar col-md-7"<"pull-left"l>><"col-md-3 pull-right"f>>tip'
+        });
+
+        $("div.toolbar").prepend($("#toolbar-holder").html());
+
+        $("input[name=show_state]").change(function () {
+            table.draw();
+        });
+
+        table.on('draw', function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+
+    </script>
+{% endblock %}

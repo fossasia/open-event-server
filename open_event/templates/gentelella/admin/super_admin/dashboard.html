@@ -1,0 +1,72 @@
+{% extends 'gentelella/admin/base.html' %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block head_css %}
+{{ super() }}
+<link rel="stylesheet"
+          href="{{ url_for('static', filename='admin/lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"/>
+{% endblock %}
+
+{% set navigation_bar = [
+('/admin/', 'home', 'Admin', 'Dashboard'),
+('/admin/events/', 'events', 'Events', 'Manage All Events'),
+('/admin/sessions/', 'sessions', 'Sessions', 'Manage All Sessions'),
+('/admin/users/', 'users', 'Users', 'Manage All Users'),
+('/admin/permissions/', 'permissions', 'Permission', 'Manage All Permissions'),
+('/admin/mails/', 'mails', 'Mails', 'See all System Mails'),
+('/admin/reports/', 'reports', 'Reports', 'Manage All Reports')
+] -%}
+
+{% set active_page = active_page|default('home') -%}
+
+{% macro tabs() %}
+<ul class="nav nav-tabs bar_tabs right" role="tablist"
+    style="background: #FFFFFF; margin-bottom:0px; border-bottom: 0px; background: none; margin-top:40px">
+    {% for href, id, caption, title in navigation_bar|reverse %}
+    <li
+    {% if id == active_page %} class="active"{% endif %}><a href="{{ href|e }}">{{ caption|e }}</a></li>
+    {% endfor %}
+</ul>
+{% endmacro %}
+
+{% block body %}
+
+
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="page-title left" style="width:0">
+            <div class="title_left">
+                {% for href, id, caption, page_title in navigation_bar %}
+                    {% if id == active_page %}
+                     <h3 style="white-space: nowrap;">{{page_title}} </h3>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        {{ tabs() }}
+        <div class="x_panel" style="min-height:600px;">
+
+            <div class="x_content">
+
+                <br>
+                {% block content %}
+
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block tail_js %}
+{{ super() }}
+
+<script src="{{ url_for('static', filename='admin/lib/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='admin/lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+<script type="text/javascript">
+     $('.table:not(.no-global-dt)').DataTable({"lengthMenu": [ 25, 50, 100, 200 ], "pageLength": 50});
+</script>
+{% endblock %}

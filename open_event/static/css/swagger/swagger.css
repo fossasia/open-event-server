@@ -1,0 +1,15 @@
+.swagger-login {
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: right;
+    margin-bottom: 12px;
+}
+
+.swagger-login .gray {
+    color: #444444;
+}
+
+.swagger-login .handle {
+    text-decoration: underline;
+}

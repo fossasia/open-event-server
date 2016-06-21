@@ -5,10 +5,12 @@ class UserDetail(db.Model):
     __tablename__ = "user_detail"
     id = db.Column(db.Integer, primary_key=True)
     fullname = db.Column(db.String)
+    details = db.Column(db.String)
     avatar = db.Column(db.String)
     contact = db.Column(db.String)
     facebook = db.Column(db.String)
     twitter = db.Column(db.String)
+    avatar_uploaded = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __init__(self,
@@ -17,13 +19,15 @@ class UserDetail(db.Model):
                  contact=None,
                  user_id=None,
                  facebook=None,
-                 twitter=None):
+                 twitter=None,
+                 avatar_uploaded=None):
         self.fullname = fullname
         self.avatar = avatar
         self.contact = contact
         self.user_id = user_id
         self.facebook = facebook
         self.twitter = twitter
+        self.avatar_uploaded = avatar_uploaded
 
     def __repr__(self):
         return '<UserDetail %r>' % self.id
@@ -36,4 +40,5 @@ class UserDetail(db.Model):
                 'avatar': self.avatar,
                 'contact': self.contact,
                 'facebook': self.facebook,
-                'twitter': self.twitter}
+                'twitter': self.twitter,
+                'avatar_uploaded':self.avatar_uploaded}

@@ -1,19 +1,69 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title></title>
-        {% block head_meta %}
-            <meta charset="UTF-8">
-            <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <meta name="description" content="">
-            <meta name="author" content="">
-        {% endblock %}
-        {% block head_css %}
-            <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}" />
-        {% endblock %}
-    </head>
-    <body>
-        <a href="/admin/events/new" class="btn btn-primary">Create event</a>
-    </body>
-</html>
+{% extends 'gentelella/admin/base.html' %}
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom/index.css') }}"/>
+{% endblock %}
+{% block title %}
+Home
+{% endblock %}
+{% macro event_box(event) %}
+    <div class="col-md-2" style="cursor: pointer;" onclick="location.href='/e/{{ event.id }}';">
+        <div class="thumbnail">
+            <img src="{{ url_for('static', filename='img/image-800x500.png') }}" style="width:100%;">
+            <div class="caption">
+                <small>{{ event.start_time.strftime('%B %d, %Y - %I:%M %p') }}</small>
+                <h4>{{ event.name }}</h4>
+                <small>{{ event.location_name }}</small>
+                <hr>
+                <p>
+                    #tech, #conference
+                </p>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+
+{% block body %}
+    <div class="carousel slide">
+        <div class="carousel-inner">
+            <div class="item active">
+                <div class="container">
+                    <div class="carousel-caption">
+                        <h1>The simplest way to create events.</h1>
+                        <p></p>
+                        <p><a class="btn btn-info btn-lg" href="/events/create/" role="button">Create Event</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <h3 class="section-header" style="margin-left: 10px; margin-bottom: 0;">Upcoming Events</h3>
+    </div>
+    {% for published_events_chunk in published_events %}
+        <div class="row">
+            {% for published_event in published_events_chunk %}
+                {{ event_box(published_event) }}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="row no-data-message">No upcoming events available at this time</div>
+    {% endfor %}
+
+    <div class="row">
+        <h3 class="section-header" style="margin-left: 10px; margin-bottom: 0;">Call for Speakers</h3>
+    </div>
+    {% for call_for_papers_evs_chunk in call_for_papers_evs %}
+        <div class="row">
+            {% for call_for_papers_evs in call_for_papers_evs_chunk %}
+                {{ event_box(call_for_papers_evs) }}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="row no-data-message">No call for speakers open at this time</div>
+    {% endfor %}
+    <br>
+    <br>
+{% endblock %}

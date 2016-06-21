@@ -5,14 +5,15 @@
         </label>
 
         <button class="btn btn-success " type="button" data-toggle="modal" data-target="#invite-speaker-modal">Invite Person</button>
-        <a href="{{ url_for('session.display_view', event_id=event.id) }}"><button class="btn btn-warning ">Accept/Reject Session</button></a>
+        <a href="{{ url_for('event_sessions.index_view', event_id=event.id) }}"><button class="btn btn-warning ">Accept/Reject Session</button></a>
     </div>
     <div class="row">
-        <div class="col-md-offset-10">
-            <a class=" btn btn-danger" id="back_to_draft">Back to Draft</a>
-            <a class=" btn btn-success " id="start_scheduling">Start Scheduling</a>
+        <div class="col-md-12">
+            <div class="btn-group pull-right" role="group">
+                <a class="btn btn-danger previous-step">Back to Draft</a>
+                <a class="btn btn-success next-step">Start Scheduling</a>
+            </div>
         </div>
-
     </div>
 
 </div>
@@ -65,25 +66,19 @@
         };
         var posting = $.ajax({
             type: "POST",
-            url: "{{ url_for('invite.create_view', event_id=event.id) }}",
+            url: "{{ url_for('event_invites.create_view', event_id=event.id) }}",
             data: payload
         });
 
         posting.done(function (result) {
             $('#close-add-track').click();
-            new PNotify({
-                title: 'Track Added',
-                text: 'Track added successfully to DB',
-                type: 'success'
-            });
+            $('#invite-speaker-form').find("input, textarea").val("");
+            createSnackbar("Speaker has been invited successfully.")
         });
 
         posting.fail(function () {
-            $('#close-add-track').click();
-            new PNotify({
-                title: 'Error',
-                text: 'Invitation could not be added to DB',
-                type: 'error'
+            createSnackbar("There was an error while inviting.", "Try Again", function(){
+                invite_speakers();
             });
         });
 

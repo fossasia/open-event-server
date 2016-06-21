@@ -1,0 +1,55 @@
+.session {
+    background-color: #fafafa;
+    margin: 10px;
+    cursor: pointer;
+    -webkit-transition: background-color 1s; /* Safari */
+    transition: background-color 1s;
+    border: solid #f2f2f2 1px;
+    height: 155px;
+    overflow: hidden;
+}
+
+.speaker-avatar {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+}
+
+.session > .col {
+    height: 155px;
+    overflow: hidden;
+}
+
+.session:hover {
+    background-color: #f2f2f2;
+}
+
+.session .time {
+    font-size: larger;
+}
+
+.session .event-name {
+    position: absolute;
+    bottom: 20px;
+}
+
+.session .status {
+    font-size: 19px;
+    font-weight: 300;
+    padding: 8px;
+    border-radius: 0;
+}
+
+span.message {
+    font-size: 30px;
+    font-weight: 100;
+    line-height: 55px;
+    margin-left: 20px;
+}
+
+.detail-status {
+    font-size: 19px;
+    font-weight: 300;
+    padding: 8px;
+    border-radius: 1px;
+}

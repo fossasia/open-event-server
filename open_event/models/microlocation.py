@@ -16,7 +16,7 @@ class Microlocation(db.Model):
     session = db.relationship('Session',
                               backref="microlocation")
     event_id = db.Column(db.Integer,
-                         db.ForeignKey('events.id'))
+                         db.ForeignKey('events.id', ondelete='CASCADE'))
 
     def __init__(self,
                  name=None,
@@ -31,6 +31,10 @@ class Microlocation(db.Model):
         self.floor = floor
         self.event_id = event_id
         self.room = room
+
+    @staticmethod
+    def get_service_name():
+        return 'microlocation'
 
     def __repr__(self):
         return '<Microlocation %r>' % self.name

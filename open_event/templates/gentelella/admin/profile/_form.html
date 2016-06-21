@@ -1,0 +1,76 @@
+<p></p>
+
+    {% if csrf_token %}
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    {% endif %}
+
+
+    <div style="display: block;">
+
+        <label>Full name:<span class="required">*</span></label>
+        <input required="required" name="full_name" class="form-control" value="{{profile.user_detail.fullname}}"/>
+        <label>Details about user:</label>
+        <textarea name="details" id="summernote">{{profile.user_detail.details}}</textarea>
+
+        <div class="row">
+            <div class="col-md-6 col-xs-6">
+                <label>Email:<span class="required">*</span>
+                </label>
+
+                <input required="required" name="email" class="form-control"
+                       value="{{profile.email}}"/>
+           </div>
+           <div class="col-md-6 col-xs-6">
+                <label>Contact:
+                </label>
+
+                {% if profile.user_detail.contact %}
+                <input name="contact" class="form-control" value="{{profile.user_detail.contact}}"/>
+                {% else %}
+                <input name="contact" class="form-control"/>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-xs-6">
+                <label class="control-label">Facebook:
+                </label>
+
+                {% if profile.user_detail.facebook %}
+                <input name="facebook" class="form-control"
+                       value="{{profile.user_detail.facebook}}"/>
+                {% else %}
+                <input name="facebook" class="form-control"/>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6 col-xs-6">
+                <label class="control-label">Twitter:
+                </label>
+
+                {% if profile.user_detail.twitter %}
+                <input name="twitter" class="form-control" value="{{profile.user_detail.twitter}}"/>
+                {% else %}
+                <input name="twitter" class="form-control"/>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <p>
+        <center><input class="btn btn-success" type="submit" value="Update changes"></center>
+    </p>
+
+    <div class="btn-toolbar" data-role="editor-toolbar"
+        data-target="#editor">
+    </div>
+
+<script>
+$(document).ready(function() {
+  $('#summernote').summernote(summernoteConfig);
+
+$('#summernote').val("aaaa");
+});
+
+</script>
+
