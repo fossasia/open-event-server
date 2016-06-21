@@ -1,0 +1,43 @@
+{% extends 'gentelella/admin/super_admin/dashboard.html' %}
+
+{% block title %}
+Mails
+{% endblock %}
+
+{% set active_page = "mails" %}
+
+{% block head_css %}
+    {{ super() }}
+{% endblock %}
+
+
+{% block content %}
+
+<table class="table table-striped with-datatable">
+<thead>
+    <tr>
+    <th class="col-md-3">To</th>
+    <th class="col-md-2">Time</th>
+    <th class="col-md-2">Action</th>
+    <th class="col-md-5">Message</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+    <td>Awesome@gmail.com</td>
+    <td>4 days ago</td>
+    <td>User Registration</td>
+    <td>What an amazing day</td>
+    </tr>
+</tbody>
+
+</table>
+
+
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+
+{% endblock %}
+
