@@ -69,9 +69,9 @@ class EventDetailView(BaseView):
             state = "past"
         elif call_for_speakers.start_date > now:
             sate = "future"
-
+        speakers = DataGetter.get_speakers(event_id).all()
         return self.render('/gentelella/guest/event/cfs.html', event=event, speaker_form=speaker_form,
-                           session_form=session_form, call_for_speakers=call_for_speakers, state=state)
+                           session_form=session_form, call_for_speakers=call_for_speakers, state=state, speakers=speakers)
 
     @expose('/<int:event_id>/cfs/', methods=('POST',))
     def process_event_cfs(self, event_id):

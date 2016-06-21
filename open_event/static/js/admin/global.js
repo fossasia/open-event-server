@@ -10,3 +10,9 @@ var summernoteConfig = {
     height: 150,
     disableDragAndDrop: true
 };
+
+function imgError(image) {
+    image.onerror = "";
+    image.src = '/static/img/avatar.png';
+    return true;
+}

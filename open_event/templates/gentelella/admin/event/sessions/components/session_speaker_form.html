@@ -1,5 +1,6 @@
 {% import "gentelella/admin/event/sessions/components/_session_component.html" as _session_component with context %}
 {% import "gentelella/admin/event/sessions/components/_speaker_component.html" as _speaker_component with context %}
+
 <form enctype="multipart/form-data" action="" method="POST" class="form-horizontal" id="session-create-form">
     {% if csrf_token %}
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -14,6 +15,17 @@
                 {{ _session_component.session_form_field(elem, session_form[elem].require) }}
             {% endif %}
         {% endfor %}
+        <div class="item form-group">
+            <label>Choose from existing speakers</label>
+            <select multiple="multiple" id="speakers" name="speakers[]">
+                {% for existing_speaker in speakers %}
+                    <option value="{{ existing_speaker.id }}" {% if session and existing_speaker in session.speaker %}selected{% endif %}
+                            data-html-addon="<img src='{{ existing_speaker.photo }}' onerror='imgError(this);' style='width: 2rem; height: 2rem;border-radius: 50%;'>">
+                        {{ existing_speaker.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
     </div>
     <div class="col-md-5 col-sm-5 col-xs-12 speaker_form">
         <h4>Speaker Details</h4>
@@ -45,3 +57,12 @@
         <button type="submit" class="btn btn-success" name="state" value="pending">Submit Session</button>
     </div>
 </form>
+
+<script type="text/javascript">
+    $(function () {
+        $('#speakers').multiSelect({
+            selectableHeader: "<div style='margin: 10px 0;'><strong>Available Speakers</strong></div>",
+            selectionHeader: "<div style='margin: 10px 0;'><strong>Selected Speakers</strong></div>"
+        })
+    });
+</script>
