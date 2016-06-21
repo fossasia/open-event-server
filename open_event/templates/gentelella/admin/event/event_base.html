@@ -70,11 +70,20 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_content">
-                    {{ tabs() }}
-                    <br>
-                    {% block content %}
+                    <div class="responsive-tabs-container accordion-xs accordion-sm">
+                        {{ tabs() }}
+                        <br>
+                        <div class="tabContent tab-content">
+                            {% for href, id, caption in navigation_bar %}
+                                <a href="{{ href|e }}" class="accordion-link {% if id == active_page %} active{% endif %}">{{ caption|e }}</a>
+                                <div class="tab-pane {% if id == active_page %} active{% endif %}">
+                                    {% block content %}
 
-                    {% endblock %}
+                                    {% endblock %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
