@@ -8,7 +8,7 @@ from werkzeug import secure_filename
 
 from open_event.helpers.data import save_to_db
 from open_event.models.custom_forms import CustomForms
-from ..events import DAO as EventDAO
+from ..events import DAO as EventDAO, LinkDAO as SocialLinkDAO
 from ..microlocations import DAO as MicrolocationDAO
 from ..sessions import DAO as SessionDAO, TypeDAO as SessionTypeDAO
 from ..speakers import DAO as SpeakerDAO
@@ -18,6 +18,7 @@ from ..tracks import DAO as TrackDAO
 from errors import BaseError, ServerError
 
 IMPORT_SERIES = [
+    ('social_links', SocialLinkDAO),
     ('microlocations', MicrolocationDAO),
     ('sponsors', SponsorDAO),
     ('speakers', SpeakerDAO),

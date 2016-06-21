@@ -2,6 +2,7 @@ from flask.ext.restplus import Resource, Namespace, reqparse
 from flask import g
 
 from open_event.models.event import Event as EventModel
+from open_event.models.social_link import SocialLink as SocialLinkModel
 from open_event.models.users_events_roles import UsersEventsRoles
 from open_event.models.role import Role
 from open_event.models.user import ORGANIZER
@@ -9,7 +10,7 @@ from open_event.helpers.data import save_to_db, update_version
 
 from .helpers.helpers import get_paginated_list, requires_auth, parse_args
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
-    PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, BaseDAO
+    PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, BaseDAO, ServiceDAO
 from .helpers import custom_fields as fields
 from helpers.special_fields import EventTypeField, EventTopicField
 
@@ -59,9 +60,24 @@ EVENT_PAGINATED = api.clone('EventPaginated', PAGINATED_MODEL, {
 })
 
 EVENT_POST = api.clone('EventPost', EVENT)
+SOCIAL_LINK_POST = api.clone('SocialLinkPost', EVENT_SOCIAL)
+
 del EVENT_POST['id']
 del EVENT_POST['creator']
 del EVENT_POST['social_links']
+
+del SOCIAL_LINK_POST['id']
+
+# ###################
+# Data Access Objects
+# ###################
+
+
+class SocialLinkDAO(ServiceDAO):
+    """
+    Social Link DAO
+    """
+    pass
 
 
 class EventDAO(BaseDAO):
@@ -105,6 +121,7 @@ class EventDAO(BaseDAO):
         return BaseDAO.update(self, event_id, payload, validate=False)
 
 
+LinkDAO = SocialLinkDAO(SocialLinkModel, SOCIAL_LINK_POST)
 DAO = EventDAO(EventModel, EVENT_POST)
 
 
