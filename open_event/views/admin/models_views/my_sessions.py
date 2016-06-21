@@ -36,9 +36,9 @@ class MySessionView(BaseView):
         speaker_form = json.loads(form_elems.speaker_form)
         session_form = json.loads(form_elems.session_form)
         event = DataGetter.get_event(session.event_id)
-
+        speakers = DataGetter.get_speakers(session.event_id).all()
         return self.render('/gentelella/admin/mysessions/mysession_detail.html', session=session,
-                           speaker_form=speaker_form, session_form=session_form, event=event)
+                           speaker_form=speaker_form, session_form=session_form, event=event, speakers=speakers)
 
     @expose('/<int:session_id>/', methods=('POST',))
     @flask_login.login_required
