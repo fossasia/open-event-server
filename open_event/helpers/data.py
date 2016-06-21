@@ -636,27 +636,6 @@ class DataManager(object):
         if state and ((state == u'Published' and not string_empty(event.location_name)) or state != u'Published'):
             event.state = state
 
-        for session_type in session_types:
-            delete_from_db(session_type, 'Session Type Deleted')
-
-        for track in tracks:
-            delete_from_db(track, 'Track')
-
-        for social_link in social_links:
-            delete_from_db(social_link, 'Social Link Deleted')
-
-        for microlocation in microlocations:
-            delete_from_db(microlocation, 'Microlocation deleted')
-
-        for sponsor in sponsors:
-            delete_from_db(sponsor, 'Sponsor deleted')
-
-        if call_for_papers:
-            delete_from_db(call_for_papers, 'Call for paper deleted')
-
-        if custom_forms:
-            delete_from_db(custom_forms, 'Customs form deleted')
-
         session_type_names = form.getlist('session_type[name]')
         session_type_length = form.getlist('session_type[length]')
 
@@ -672,6 +651,7 @@ class DataManager(object):
         sponsor_name = form.getlist('sponsors[name]')
         sponsor_logo = request.files.getlist('sponsors[logo]')
         sponsor_url = form.getlist('sponsors[url]')
+        sponsor_type = form.getlist('sponsors[type]')
         sponsor_level = form.getlist('sponsors[level]')
         sponsor_description = form.getlist('sponsors[description]')
 
@@ -681,29 +661,43 @@ class DataManager(object):
         # save the edited info to database
         for index, name in enumerate(session_type_names):
             if not string_empty(name):
-                session_type = SessionType(name=name, length=session_type_length[index], event_id=event.id)
+                session_type, c = get_or_create(SessionType,
+                                                name=name,
+                                                length=session_type_length[index],
+                                                event_id=event.id)
                 db.session.add(session_type)
 
         for index, name in enumerate(social_link_name):
             if not string_empty(social_link_link[index]):
-                social_link = SocialLink(name=name, link=social_link_link[index], event_id=event.id)
+                social_link, c = get_or_create(SocialLink,
+                                               name=name,
+                                               link=social_link_link[index],
+                                               event_id=event.id)
                 db.session.add(social_link)
 
         for index, name in enumerate(track_name):
             if not string_empty(name):
-                track = Track(name=name, description="", track_image_url="", color=track_color[index],
-                              event_id=event.id)
+                track, c = get_or_create(Track,
+                                         name=name,
+                                         color=track_color[index].upper(),
+                                         event_id=event.id)
                 db.session.add(track)
 
         for index, name in enumerate(room_name):
             if not string_empty(name):
-                room = Microlocation(name=name, event_id=event.id)
+                room, c = get_or_create(Microlocation, name=name, event_id=event.id)
                 db.session.add(room)
 
         for index, name in enumerate(sponsor_name):
             if not string_empty(name):
-                sponsor = Sponsor(name=name, logo=sponsor_logo[index].filename, url=sponsor_url[index], level=sponsor_level[index],
-                                  description=sponsor_description[index], event_id=event.id)
+                sponsor, c = get_or_create(Sponsor,
+                                           name=name,
+                                           logo=sponsor_logo[index].filename,
+                                           url=sponsor_url[index],
+                                           sponsor_type=sponsor_type[index],
+                                           level=sponsor_level[index],
+                                           description=sponsor_description[index],
+                                           event_id=event.id)
                 db.session.add(sponsor)
 
         session_form = ""
@@ -715,14 +709,20 @@ class DataManager(object):
             elif name == "speaker_form":
                 speaker_form = custom_forms_value[index]
 
-        custom_form = CustomForms(session_form=session_form, speaker_form=speaker_form, event_id=event.id)
+        custom_form, c = get_or_create(CustomForms,
+                                       session_form=session_form,
+                                       speaker_form=speaker_form,
+                                       event_id=event.id)
         db.session.add(custom_form)
 
         if form.get('call_for_speakers_state', u'off') == u'on':
-            call_for_speakers = CallForPaper(announcement=form['announcement'],
-                                             start_date=datetime.strptime(form['cfs_start_date'], '%m/%d/%Y'),
-                                             end_date=datetime.strptime(form['cfs_end_date'], '%m/%d/%Y'),
-                                             event_id=event.id)
+            call_for_speakers, c = get_or_create(CallForPaper,
+                                                 announcement=form['announcement'],
+                                                 start_date=datetime.strptime(
+                                                     form['cfs_start_date'], '%m/%d/%Y'),
+                                                 end_date=datetime.strptime(
+                                                     form['cfs_end_date'], '%m/%d/%Y'),
+                                                 event_id=event.id)
             save_to_db(call_for_speakers)
 
         save_to_db(event, "Event saved")
@@ -897,11 +897,13 @@ def update_version(event_id, is_created, column_to_increment):
 
 
 def get_or_create(model, **kwargs):
+    was_created = False
     instance = db.session.query(model).filter_by(**kwargs).first()
     if instance:
-        return instance
+        return instance, was_created
     else:
         instance = model(**kwargs)
         db.session.add(instance)
         db.session.commit()
-        return instance
+        was_created = True
+        return instance, was_created

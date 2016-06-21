@@ -56,7 +56,7 @@
         <div class="col-xs-7 input-group form-group">
             <input type="text" required="required" class="form-control session-length" name="session_type[length]"
                    placeholder="Length (HH.MM)"
-                   value="{{ session_type.length | default(0.30, true) }}">
+                   value="{{ '%1.2f' % session_type.length|float }}">
             <span class="input-group-btn">
                 <button type="button" class="btn btn-danger remove-session-type">-</button>
                 <button type="button" class="btn btn-primary add-session-type">+</button>
