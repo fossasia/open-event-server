@@ -104,7 +104,22 @@ DAO = EventDAO(EventModel, EVENT_POST)
 
 EVENT_PARAMS = {
     'location_name': {
-        'description': 'Filter by location_name',
+        'type': str
+    },
+    'contains': {
+        'description': 'Contains the string in name and description',
+        'type': str
+    },
+    'state': {
+        'type': str
+    },
+    'privacy': {
+        'type': str
+    },
+    'type': {
+        'type': str
+    },
+    'topic': {
         'type': str
     }
 }
@@ -118,6 +133,11 @@ class EventResource():
     """
     event_parser = reqparse.RequestParser()
     event_parser.add_argument('location_name', type=str)
+    event_parser.add_argument('contains', type=str, dest='__event_contains')
+    event_parser.add_argument('state', type=str)
+    event_parser.add_argument('privacy', type=str)
+    event_parser.add_argument('type', type=str)
+    event_parser.add_argument('topic', type=str)
 
 
 @api.route('/<int:event_id>')

@@ -1,4 +1,3 @@
-var $wizardForm = $("#session-create-form");
 $(document).ready(function() {
 
   var counter = 0;
@@ -21,26 +20,3 @@ $(document).ready(function() {
     $(this).parent().parent().parent().remove();
   });
 });
-
-function onLeaveStep(obj, context) {
-    return !validate();
-}
-
-function validate() {
-    try {
-        $wizardForm.validator('destroy');
-    } catch (ignored) {
-    }
-
-    $wizardForm.validator({
-        disable: false,
-        feedback: {
-            success: 'glyphicon-ok',
-            error: 'glyphicon-remove'
-        }
-    });
-
-    $wizardForm.validator('validate');
-    return $wizardForm.data('bs.validator').hasErrors();
-}
-

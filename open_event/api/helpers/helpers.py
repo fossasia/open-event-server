@@ -1,4 +1,5 @@
 from datetime import datetime
+from sqlalchemy import func
 from functools import wraps, update_wrapper
 from flask import request, g, make_response
 from flask.ext.restplus import fields
@@ -13,6 +14,8 @@ from .errors import NotFoundError, InvalidServiceError, ValidationError, \
     NotAuthorizedError
 from open_event.models.user import User as UserModel
 from open_event.helpers.data import save_to_db, update_version, delete_from_db
+
+from query_filters import extract_special_queries, apply_special_queries
 
 
 def _get_queryset(klass):
@@ -33,8 +36,18 @@ def get_object_list(klass, **kwargs):
     `klass` can be a model such as a Track, Event, Session, etc.
     """
     queryset = _get_queryset(klass)
-    obj_list = list(queryset.filter_by(**kwargs))
-    return obj_list
+    kwargs, specials = extract_special_queries(kwargs)
+    # case insenstive filter
+    for i in kwargs:
+        if type(kwargs[i]) == str:
+            queryset = queryset.filter(
+                func.lower(getattr(klass, i)) == kwargs[i].lower())
+        else:
+            queryset = queryset.filter(getattr(klass, i) == kwargs[i])
+    # special filters
+    obj_list = apply_special_queries(queryset, specials)
+    # return as list
+    return list(obj_list)
 
 
 def get_list_or_404(klass, **kwargs):
