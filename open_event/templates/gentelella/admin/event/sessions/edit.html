@@ -29,7 +29,11 @@
             <textarea {% if require==1 %}
                 required="required"
             {% endif %}
-                name="{{ identifier }}" class="form-control col-md-7 col-xs-12"></textarea>
+                name="{{ identifier }}" class="form-control col-md-7 col-xs-12">
+                {% if session[identifier] %}
+                    {{ session[identifier] }}
+                {% endif %}
+            </textarea>
         {% elif identifier in media_session_fields %}
             <br><input {% if require==1 %}
             required="required"
