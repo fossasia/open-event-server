@@ -19,10 +19,13 @@ class BrowseView(BaseView):
         results = DataGetter.get_all_events()
         if request.method == "POST":
             url = urlparse(request.url)
-            api_fullpath = url.scheme + '://' + url.netloc
             word = request.form['word']
-            results = marshal(EventDAO.list(location_name=location), EVENT)
-
+            if location and word:
+                results = marshal(EventDAO.list(location_name=location, __event_contains=word, privacy='public', state='Published'), EVENT)
+            elif location:
+                results = marshal(EventDAO.list(location_name=location, privacy='public', state='Published'), EVENT)
+            elif word:
+                results = marshal(EventDAO.list(__event_contains=word, privacy='public', state='Published'), EVENT)
             return self.render('/gentelella/guest/search/results.html', results=results, location=location)
         return self.render('/gentelella/guest/search/results.html', results=results, location=location)
 
