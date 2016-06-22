@@ -65,6 +65,7 @@ class MyHomeView(AdminIndexView):
     def register_view(self):
         """Register view page"""
         if request.method == 'GET':
+            print "HELOOO"
             return self.render('/gentelella/admin/login/register.html')
         if request.method == 'POST':
             users = DataGetter.get_all_users()
