@@ -8,7 +8,7 @@
     },
     "description": "The OpenTechSummit brings the exciting ideas and creators of the open-Technology community in Berlin.",
     "email": "contact@opentechsummit.net",
-    "end_time": "2016-05-05 09:00:00",
+    "start_time": "2016-05-05 09:00:00",
     "event_url": "http://2016.opentechsummit.net",
     "id": 1,
     "latitude": 52.52,
@@ -52,7 +52,7 @@
             "name": "YouTube"
         }
     ],
-    "start_time": "2016-05-05 21:00:00",
+    "end_time": "2016-05-05 21:00:00",
     "state": "Completed",
     "ticket_url": "http://www.eventnook.com/event/ots16/register",
     "topic": "Science & Technology",
