@@ -21,11 +21,11 @@ class BrowseView(BaseView):
             url = urlparse(request.url)
             word = request.form['word']
             if location and word:
-                results = marshal(EventDAO.list(location_name=location, __event_contains=word), EVENT)
+                results = marshal(EventDAO.list(location_name=location, __event_contains=word, privacy='public', state='Published'), EVENT)
             elif location:
-                results = marshal(EventDAO.list(location_name=location), EVENT)
+                results = marshal(EventDAO.list(location_name=location, privacy='public', state='Published'), EVENT)
             elif word:
-                results = marshal(EventDAO.list(__event_contains=word), EVENT)
+                results = marshal(EventDAO.list(__event_contains=word, privacy='public', state='Published'), EVENT)
             return self.render('/gentelella/guest/search/results.html', results=results, location=location)
         return self.render('/gentelella/guest/search/results.html', results=results, location=location)
 
