@@ -481,6 +481,7 @@ class DataManager(object):
         :param uer_id: Role id to remove object
         """
         uer = UsersEventsRoles.query.get(uer_id)
+        record_activity('delete_role', role=uer.role, user=uer.user, event=uer.event_id)
         delete_from_db(uer, "UER deleted")
         flash('You successfully delete role')
 

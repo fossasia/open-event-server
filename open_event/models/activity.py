@@ -9,8 +9,9 @@ ACTIVITIES = {
     'update_event': 'Event {event} updated',
     'create_event': 'Event {event} created',
     'delete_event': 'Event {event} deleted',
-    'create_role': 'Role {role} created for {user} in event {event}',
-    'update_role': 'Role update to {role} for {user} in event {event}',
+    'create_role': 'Role {role} created for user {user} in event {event}',
+    'update_role': 'Role updated to {role} for user {user} in event {event}',
+    'delete_role': 'User {user} removed from role {role} in event {event}',
     'create_session': 'Session {session} was created in event {event}'
 }
 
