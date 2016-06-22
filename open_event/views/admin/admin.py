@@ -25,6 +25,7 @@ from open_event.views.admin.super_admin.users import SuperAdminUsersView
 from open_event.views.admin.super_admin.permissions import SuperAdminPermissionsView
 from open_event.views.admin.super_admin.mails import SuperAdminMailsView
 from open_event.views.admin.super_admin.reports import SuperAdminReportsView
+from open_event.views.admin.super_admin.logs import SuperAdminLogsView
 
 
 class AdminView(object):
@@ -64,6 +65,7 @@ class AdminView(object):
         self.admin.add_view(SuperAdminPermissionsView(name='Permissions', url='/admin/permissions', endpoint="sadmin_permissions"))
         self.admin.add_view(SuperAdminMailsView(name='Mails', url='/admin/mails', endpoint="sadmin_mails"))
         self.admin.add_view(SuperAdminReportsView(name='Reports', url='/admin/reports', endpoint="sadmin_reports"))
+        self.admin.add_view(SuperAdminLogsView(name='Logs', url='/admin/logs', endpoint="sadmin_logs"))
 
     @staticmethod
     def init_login(app):
