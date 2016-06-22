@@ -625,6 +625,7 @@ class DataManager(object):
                       logo=form['logo'],
                       start_time=datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M'),
                       end_time=datetime.strptime(form['start_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M'),
+                      timezone=form['timezone'],
                       latitude=form['latitude'],
                       longitude=form['longitude'],
                       location_name=form['location_name'],
@@ -744,6 +745,7 @@ class DataManager(object):
         event.logo = form['logo']
         event.start_time = datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M')
         event.end_time = datetime.strptime(form['start_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M')
+        event.timezone = form['timezone']
         event.latitude = form['latitude']
         event.longitude = form['longitude']
         event.location_name = form['location_name']

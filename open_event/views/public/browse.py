@@ -21,7 +21,7 @@ class BrowseView(BaseView):
             url = urlparse(request.url)
             api_fullpath = url.scheme + '://' + url.netloc
             word = request.form['word']
-            results = marshal(EventDAO.list(location_name=location, contains=word), EVENT)
+            results = marshal(EventDAO.list(location_name=location), EVENT)
 
             return self.render('/gentelella/guest/search/results.html', results=results, location=location)
         return self.render('/gentelella/guest/search/results.html', results=results, location=location)

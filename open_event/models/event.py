@@ -26,6 +26,7 @@ class Event(db.Model):
     logo = db.Column(db.String)
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
+    timezone = db.Column(db.String, nullable=False, default="UTC")
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     location_name = db.Column(db.String)
@@ -57,6 +58,7 @@ class Event(db.Model):
                  logo=None,
                  start_time=None,
                  end_time=None,
+                 timezone='UTC',
                  latitude=None,
                  longitude=None,
                  location_name=None,
@@ -81,6 +83,7 @@ class Event(db.Model):
         self.color = color
         self.start_time = start_time
         self.end_time = end_time
+        self.timezone = timezone
         self.latitude = latitude
         self.longitude = longitude
         self.location_name = location_name
@@ -116,6 +119,7 @@ class Event(db.Model):
             'logo': self.logo,
             'begin': DateFormatter().format_date(self.start_time),
             'end': DateFormatter().format_date(self.end_time),
+            'timezone': self.timezone,
             'latitude': self.latitude,
             'longitude': self.longitude,
             'location_name': self.location_name,

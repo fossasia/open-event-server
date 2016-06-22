@@ -1,4 +1,5 @@
 """Copyright 2015 Rafal Kowalski"""
+import pytz
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from open_event.models.role import Role
@@ -461,3 +462,13 @@ class DataGetter:
         """
         mails = Mail.query.order_by(desc(Mail.time)).all()
         return mails[:count]
+
+    @staticmethod
+    def get_all_timezones():
+        """
+        Get all available timezones
+        :return:
+        """
+        return [(item, "(UTC" + datetime.datetime.now(pytz.timezone(item)).strftime('%z') + ") " + item) for item
+                in
+                pytz.common_timezones]

@@ -36,6 +36,7 @@ EVENT = api.model('Event', {
     'logo': fields.ImageUri(),
     'start_time': fields.DateTime(required=True),
     'end_time': fields.DateTime(required=True),
+    'timezone': fields.String(),
     'latitude': fields.Float(),
     'longitude': fields.Float(),
     'event_url': fields.Uri(),
@@ -93,6 +94,8 @@ class EventDAO(BaseDAO):
         data['end_time'] = EVENT_POST['end_time'].from_str(data['end_time'])
         data['closing_datetime'] = EVENT_POST['closing_datetime'].from_str(
             data['closing_datetime'])
+        data['schedule_published_on'] = EVENT_POST['schedule_published_on'].from_str(
+            data['schedule_published_on'])
         return data
 
     def create(self, data, url):
