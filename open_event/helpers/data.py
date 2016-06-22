@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 from flask import flash, request, url_for
 from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
+from flask.ext.login import current_user
 from sqlalchemy.orm.collections import InstrumentedList
 from sqlalchemy.sql.expression import exists
 from werkzeug import secure_filename
@@ -40,6 +41,7 @@ from requests_oauthlib import OAuth2Session
 from ..models.invite import Invite
 from ..models.call_for_papers import CallForPaper
 from ..models.custom_forms import CustomForms
+from ..models.activity import Activity, ACTIVITIES
 
 
 class DataManager(object):
@@ -995,7 +997,7 @@ def create_user_password(form, user):
     hash = random.getrandbits(128)
     user.reset_password = str(hash)
     user.salt = salt
-    user.is_verified =True
+    user.is_verified = True
     save_to_db(user, "User password created")
     return user
 
@@ -1011,6 +1013,18 @@ def user_logged_in(user):
             save_to_db(uer)
             save_to_db(speaker)
     return True
+
+
+def record_activity(template, namespace, user=None, *args):
+    """
+    record an activity
+    """
+    if not user:
+        user = current_user
+    actor = user.email + ' (' + user.id + ')'
+    msg = ACTIVITIES[template].format(*args)
+    activity = Activity(actor=actor, namespace=namespace.title(), detail=msg)
+    save_to_db(activity, 'Activity Recorded')
 
 
 def update_version(event_id, is_created, column_to_increment):
