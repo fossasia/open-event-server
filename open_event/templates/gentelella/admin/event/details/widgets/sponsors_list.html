@@ -1,0 +1,88 @@
+{% extends 'gentelella/admin/event/details/base_panel.html' %}
+{% block panel_title %}
+Event Sponsors
+{% endblock %}
+{% block addon_link %}
+<button class="btn btn-info pull-right" style="color: #FFFFFF; height: 30px; width: 30px; margin: 0; padding-left: 10px;" data-toggle="modal" data-target="#add-role">+</button>
+{% endblock %}
+{% block panel_content %}
+<div class="col-md-12">
+    <h4>Sponsors List</h4>
+    <table class="sponsor-table table table-striped">
+        <thead>
+        <tr>
+            <th>Logo</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Level</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for sponsor in event.sponsor %}
+        <tr>
+            <td>
+                <img style="width: 50px; height:50px;" src="{{ sponsor.logo }}" class="user-photo" onerror="imgError(this);">
+            </td>
+            <td>{{sponsor.name}}</td>
+            <td>{{ sponsor.type }}</td>
+            <td>{{ sponsor.level }}</td>
+            <td>
+                <a class="icon" title="Edit Sponsor" href="{{ get_url('event_sponsors.edit_view', event_id=event.id,sponsor_id=sponsor.id)}}">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </a>
+                <a title="Delete Sponsor" onclick="return confirm('Are you sure you want to delete this record?');" href="{{ get_url('event_sponsors.delete_view', event_id=event.id,sponsor_id=sponsor.id)}}">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </a>
+            </td>
+        </tr>
+        {%endfor%}
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="add-role" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add Role</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/events/{{event.id}}/roles/new/" method="POST" role="form">
+                    <p>
+                        <label>User email:</label>
+                        <input name="user_email" placeholder="User" class="form-control">
+                    </p>
+                    <p> <label>Permissions:</label>
+                        <select name="user_role" id="heard" class="form-control" required="">
+                            <option value="">Choose..</option>
+                            <option value="track_organizer">Track Organizer</option>
+                            <option value="coorganizer">Co-organizer</option>
+                            <option value="moderator">Moderator</option>
+                        </select>
+                    </p>
+                    <button type="submit" class="btn btn-success">Add</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='admin/lib/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script type="text/javascript">
+        $('.sponsor-table').DataTable();
+    </script>
+
+
+{% endblock %}
