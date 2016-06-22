@@ -3,12 +3,12 @@
         <td>{{ count | default(1) }}</td>
         <td><input value="{{ sponsor.name | default('') }}" name="sponsors[name]"
                    class="form-control col-md-7 col-xs-12"/></td>
-        <td>
+        <td width="11%">
             <input type="file" id="sponsors-logo-{{ sponsor.id | default(1) }}" name="sponsors[logo]"
                    class="upload-btn" value="" />
             <label class="file-label" for="sponsors-logo-{{ sponsor.id | default(1) }}">
                 <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-                Choose a file</label>
+                Upload File</label>
         </td>
         <td><input type="number" value="{{ sponsor.level | default('') }}" name="sponsors[level]"
                    class="form-control col-md-7 col-xs-12"/></td>
