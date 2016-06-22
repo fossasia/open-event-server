@@ -35,6 +35,7 @@
     "switchery": "^0.8.1",
     "summernote": "^0.8.1",
     "sticky-kit": "^1.1.2",
-    "multiselect": "^0.9.12"
+    "multiselect": "^0.9.12",
+    "selectize": "^0.12.1"
   }
 }
