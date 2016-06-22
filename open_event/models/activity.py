@@ -11,7 +11,7 @@ ACTIVITIES = {
     'delete_event': 'Event {event} deleted',
     'create_role': 'Role {role} created for {user} in event {event}',
     'update_role': 'Role update to {role} for {user} in event {event}',
-    'create_session': 'Session {session} was created'
+    'create_session': 'Session {session} was created in event {event}'
 }
 
 
@@ -20,16 +20,14 @@ class Activity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     actor = db.Column(db.String)  # user email + id
     time = db.Column(db.DateTime)
-    namespace = db.Column(db.String)
-    detail = db.Column(db.String)
+    action = db.Column(db.String)
 
-    def __init__(self, actor=None, time=None, namespace=None, detail=None):
+    def __init__(self, actor=None, time=None, action=None):
         self.actor = actor
         self.time = time
         if self.time is None:
             self.time = datetime.now()
-        self.namespace = namespace
-        self.detail = detail
+        self.action = action
 
     def __repr__(self):
         return '<Activity by %s>' % (self.actor)

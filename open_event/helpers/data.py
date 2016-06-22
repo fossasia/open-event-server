@@ -225,6 +225,7 @@ class DataManager(object):
         new_session.slides = slide_url
         save_to_db(new_session, "Session saved")
         save_to_db(speaker, "Speaker saved")
+        record_activity('create_session', session=new_session, event=event_id)
 
         invite_emails = form.getlist("speakers[email]")
         for index, email in enumerate(invite_emails):
@@ -1022,7 +1023,7 @@ def user_logged_in(user):
     return True
 
 
-def record_activity(template, namespace=None, login_user=None, **kwargs):
+def record_activity(template, login_user=None, **kwargs):
     """
     record an activity
     """
@@ -1030,22 +1031,23 @@ def record_activity(template, namespace=None, login_user=None, **kwargs):
         login_user = current_user
     actor = login_user.email + ' (' + str(login_user.id) + ')'
     id_str = ' (%d)'
+    s = '"%s"'
     # add more information for objects
     for k in kwargs:
         v = kwargs[k]
         if k.startswith('user'):
-            kwargs[k] = v.email + id_str % v.id
+            kwargs[k] = s % v.email + id_str % v.id
         elif k.startswith('role'):
-            kwargs[k] = v.title_name
+            kwargs[k] = s % v.title_name
         elif k.startswith('session'):
-            kwargs[k] = v.title + id_str % v.id
+            kwargs[k] = s % v.title + id_str % v.id
         else:
             kwargs[k] = str(v)
     msg = ACTIVITIES[template].format(**kwargs)
     # conn.execute(Activity.__table__.insert().values(
-    #     actor=actor, namespace=namespace, detail=msg, time=datetime.now()
+    #     actor=actor, action=msg, time=datetime.now()
     # ))
-    activity = Activity(actor=actor, namespace=namespace, detail=msg)
+    activity = Activity(actor=actor, action=msg)
     save_to_db(activity, 'Activity Recorded')
 
 

@@ -40,7 +40,6 @@ Logs
                 <tr>
                     <th>Actor</th>
                     <th>Time</th>
-                    <th>Namespace</th>
                     <th>Detail</th>
                 </tr>
                 </thead>
@@ -50,8 +49,7 @@ Logs
                         <td>{{ activity.actor }}</td>
                         <td data-toggle="tooltip" data-placement="bottom" title="{{ activity.time }}"
                             data-delay='{"show":"500", "hide":"300"}'>{{ activity.time | humanize }}</td>
-                        <td>{{ activity.namespace }}</td>
-                        <td>{{ activity.detail }}</td>
+                        <td>{{ activity.action }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -96,7 +94,8 @@ Logs
     $('#activity_table').DataTable({
         "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
         "lengthMenu": [25, 50, 100, 200],
-        "pageLength": 50,
+        "pageLength": 25,
+        "aaSorting": []
         // "language": {
         //     "lengthMenu": "Show _MENU_ Results"
         //   }
