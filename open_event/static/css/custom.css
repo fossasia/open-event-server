@@ -194,6 +194,8 @@
   }
   .search_bar #search-text {
     display: none;
+    position: absolute;
+    margin: 50px -160px;
   }
   .search-button {
     border-radius:3px !important;
@@ -210,6 +212,9 @@
   .navbar-nav {
     float:left;
     max-width: 55%;
+  }
+  .search_bar #search-text {
+    display: block;
   }
 }
 
