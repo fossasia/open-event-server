@@ -163,6 +163,36 @@
   min-width: inherit;
   color: #C4CFDA;
 }
+
+.search_bar {
+  width:200px
+}
+
+@media (max-width: 480px) {
+  .search_bar {
+    width:45%;
+  }
+  .navbar-nav > li {
+    float:left;
+  }
+  .navbar-nav {
+    float:left;
+  }
+}
+
+@media (max-width: 768px) and (min-width: 480px) {
+  .search_bar {
+    width:45%;
+  }
+  .navbar-nav > li {
+    float:left;
+  }
+  .navbar-nav {
+    float:left;
+    max-width: 55%;
+  }
+}
+
 .active a span.fa {
   text-align: right !important;
   margin-right: 4px;
@@ -464,7 +494,6 @@ a:hover, a:focus {
 }
 .top_nav .navbar-right {
   margin: 0;
-  width: 70%;
   float: right;
 }
 .top_nav .navbar-right li {
