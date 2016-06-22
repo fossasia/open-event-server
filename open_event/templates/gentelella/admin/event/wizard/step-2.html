@@ -23,7 +23,6 @@
     </tr>
 {% endmacro %}
 
-
 <div id="step-2" class="wizard_content" >
     <div class="col-md-10 col-md-push-1">
         <table class="table table-striped sponsor-table">
@@ -39,7 +38,7 @@
             </tr>
             </thead>
             <tbody class="sponsors">
-            {% if sponsors %}
+            {% if sponsors.count() > 0 %}
                 {% for sponsor in sponsors %}
                     {{ sponsor_row(sponsor, loop.index) }}
                 {% endfor %}
