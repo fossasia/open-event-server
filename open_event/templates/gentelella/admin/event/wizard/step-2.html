@@ -1,4 +1,4 @@
-{% macro sponsor_row(sponsor=None, count=None) %}
+{% macro sponsor_row(sponsor=None, count=1) %}
     <tr class="row-sponsor">
         <td>{{ count | default(1) }}</td>
         <td><input value="{{ sponsor.name | default('') }}" name="sponsors[name]"
