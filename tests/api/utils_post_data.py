@@ -6,6 +6,7 @@ POST_EVENT_DATA = {
     "color": "red",
     "email": "event@gmail.com",
     "end_time": "2016-05-30T12:12:43",
+    "timezone": "UTC",
     "latitude": 0,
     "location_name": "TestEvent",
     "logo": "http://imgur.com/image.png",

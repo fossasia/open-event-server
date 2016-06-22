@@ -36,6 +36,7 @@ EVENT = api.model('Event', {
     'logo': fields.ImageUri(),
     'start_time': fields.DateTime(required=True),
     'end_time': fields.DateTime(required=True),
+    'timezone': fields.String(),
     'latitude': fields.Float(),
     'longitude': fields.Float(),
     'event_url': fields.Uri(),
