@@ -38,7 +38,7 @@
             </tr>
             </thead>
             <tbody class="sponsors">
-            {% if sponsors.count() > 0 %}
+            {% if sponsors and sponsors.count() > 0 %}
                 {% for sponsor in sponsors %}
                     {{ sponsor_row(sponsor, loop.index) }}
                 {% endfor %}
