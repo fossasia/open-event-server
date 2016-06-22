@@ -45,7 +45,15 @@ Logs
                 </tr>
                 </thead>
                 <tbody>
-
+                    {% for activity in activities %}
+                        <tr>
+                        <td>{{ activity.actor }}</td>
+                        <td data-toggle="tooltip" data-placement="bottom" title="{{ activity.time }}"
+                            data-delay='{"show":"500", "hide":"300"}'>{{ activity.time | humanize }}</td>
+                        <td>{{ activity.namespace }}</td>
+                        <td>{{ activity.detail }}</td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

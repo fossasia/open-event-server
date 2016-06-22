@@ -4,10 +4,14 @@ from . import db
 
 
 ACTIVITIES = {
-    'update_profile': 'Profile of user {} updated',
-    'update_event': 'Event {} updated',
-    'create_event': 'Event {} created',
-    'create_role': 'Role {} created for {} in event {}'
+    'create_user': 'User {user} created',
+    'update_user': 'Profile of user {user} updated',
+    'update_event': 'Event {event} updated',
+    'create_event': 'Event {event} created',
+    'delete_event': 'Event {event} deleted',
+    'create_role': 'Role {role} created for {user} in event {event}',
+    'update_role': 'Role update to {role} for {user} in event {event}',
+    'create_session': 'Session {session} was created'
 }
 
 

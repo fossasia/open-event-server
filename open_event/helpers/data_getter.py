@@ -21,6 +21,7 @@ from ..models.social_link import SocialLink
 from ..models.call_for_papers import CallForPaper
 from ..models.custom_forms import CustomForms
 from ..models.mail import Mail
+from ..models.activity import Activity
 from .language_list import LANGUAGE_LIST
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
@@ -472,3 +473,11 @@ class DataGetter:
         return [(item, "(UTC" + datetime.datetime.now(pytz.timezone(item)).strftime('%z') + ") " + item) for item
                 in
                 pytz.common_timezones]
+
+    @staticmethod
+    def get_all_activities(count=300):
+        """
+        Get all activities by recent first
+        """
+        activities = Activity.query.order_by(desc(Activity.time)).all()
+        return activities[:count]

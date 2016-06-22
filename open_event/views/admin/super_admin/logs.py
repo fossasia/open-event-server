@@ -8,7 +8,9 @@ class SuperAdminLogsView(SuperAdminBaseView):
     @expose('/')
     def index_view(self):
         mails = DataGetter.get_all_mails(count=300)
+        activities = DataGetter.get_all_activities(count=400)
         return self.render(
             '/gentelella/admin/super_admin/logs/logs.html',
-            mails=mails
+            mails=mails,
+            activities=activities
         )
