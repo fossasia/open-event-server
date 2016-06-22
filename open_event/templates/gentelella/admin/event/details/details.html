@@ -22,6 +22,7 @@
         {% include 'gentelella/admin/event/details/widgets/setup_checklist.html' %}
         {% include 'gentelella/admin/event/details/widgets/general_info.html' %}
         {% include 'gentelella/admin/event/details/widgets/roles.html' %}
+        {% include 'gentelella/admin/event/details/widgets/sponsors_list.html' %}
     </div>
 
 {% endblock %}
@@ -32,5 +33,8 @@
     <script src="{{ url_for('static', filename='admin/lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script type="text/javascript">
         $('.role-table').DataTable();
+        $('.sponsor-table').DataTable();
     </script>
+
+
 {% endblock %}
