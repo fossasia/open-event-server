@@ -88,7 +88,8 @@
             <select name="timezone" class="form-control">
                 {% for value, text in timezones %}
                     {% if event %}
-                        <option value="{{ value }}" {% if event.timezone == value %}selected{% endif %}>{{ text }}</option>
+                        <option value="{{ value }}"
+                                {% if event.timezone == value %}selected{% endif %}>{{ text }}</option>
                     {% else %}
                         <option value="{{ value }}" {% if value == 'UTC' %}selected{% endif %}>{{ text }}</option>
                     {% endif %}
@@ -221,10 +222,19 @@
 <script>
     var marker;
     var init_marker;
+    var placeSearch, autocomplete;
+    var componentForm = {
+        street_number: 'short_name',
+        route: 'long_name',
+        locality: 'long_name',
+        administrative_area_level_1: 'short_name',
+        country: 'long_name',
+        postal_code: 'short_name'
+    };
     var $latitudeInput = $('#latitude');
     var $longitudeInput = $('#longitude');
     var $locationInput = $("#location");
-    function initMap() {
+    function initPlacesApi() {
         var latitude = $latitudeInput.val();
         var longitude = $longitudeInput.val();
         var latlng = new google.maps.LatLng(latitude, longitude);
@@ -241,10 +251,18 @@
             zoom: 15
         });
 
-        $locationInput.valueChange(function () {
+        var geocodeHandler = function () {
             $locationInput.closest(".form-group").removeClass("has-warning");
             geocodeAddress(geocoder, map);
-        });
+        };
+
+        $locationInput.valueChange(geocodeHandler);
+
+        autocomplete = new google.maps.places.Autocomplete((document.getElementById('location')), {types: ['geocode']});
+        geolocate();
+
+        autocomplete.addListener('place_changed', geocodeHandler);
+
     }
     function geocodeAddress(geocoder, resultsMap) {
         var address = $locationInput.val();
@@ -280,6 +298,22 @@
             }
         });
     }
+
+    function geolocate() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var geolocation = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            var circle = new google.maps.Circle({
+              center: geolocation,
+              radius: position.coords.accuracy
+            });
+            autocomplete.setBounds(circle.getBounds());
+          });
+        }
+      }
 
     $(document).ready(function () {
 
