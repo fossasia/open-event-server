@@ -15,7 +15,6 @@
     ('/events/' ~ event.id ~ '/scheduler', 'scheduler', 'Scheduler'),
     ('/events/' ~ event.id ~ '/sessions', 'sessions', 'Sessions'),
     ('/events/' ~ event.id ~ '/speakers', 'speakers', 'Speakers'),
-    ('/events/' ~ event.id ~ '/sponsors', 'sponsors', 'Sponsors')
 ] -%}
 
 {% set active_page = active_page|default('home') -%}
