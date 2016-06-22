@@ -14,6 +14,11 @@ class NotAuthorizedStatus(Raw):
     __schema_example__ = 'NOT_AUTHORIZED'
 
 
+class PermissionDeniedStatus(Raw):
+    __schema_type__ = 'string'
+    __schema_example__ = 'PERMISSION_DENIED'
+
+
 class ValidationStatus(Raw):
     __schema_type__ = 'string'
     __schema_example__ = 'INVALID_FIELD'
@@ -37,6 +42,11 @@ class NotFoundCode(Raw):
 class NotAuthorizedCode(Raw):
     __schema_type__ = 'integer'
     __schema_example__ = 401
+
+
+class PermissionDeniedCode(Raw):
+    __schema_type__ = 'integer'
+    __schema_example__ = 403
 
 
 class ValidationCode(Raw):
@@ -65,6 +75,13 @@ notauthorized_error_model = api.model('NotAuthorizedError', {
     'code': NotAuthorizedCode,
     'message': fields.String,
     'status': NotAuthorizedStatus,
+    'field': fields.String,
+})
+
+permissiondenied_error_model = api.model('PermissionDeniedError', {
+    'code': PermissionDeniedCode,
+    'message': fields.String,
+    'status': PermissionDeniedStatus,
     'field': fields.String,
 })
 
