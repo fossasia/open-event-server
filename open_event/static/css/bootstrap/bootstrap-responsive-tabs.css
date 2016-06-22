@@ -1,0 +1,45 @@
+.responsive-tabs-container[class*="accordion-"] .tab-pane {
+  margin-bottom: 15px;
+}
+.responsive-tabs-container[class*="accordion-"] .accordion-link {
+  display: none;
+  margin-bottom: 10px;
+  padding: 10px 15px;
+  background-color: #f5f5f5;
+  border-radius: 3px;
+  border: 1px solid #ddd;
+  color: #333;
+}
+@media (max-width: 767px) {
+  .responsive-tabs-container.accordion-xs .nav-tabs {
+    display: none;
+  }
+  .responsive-tabs-container.accordion-xs .accordion-link {
+    display: block;
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .responsive-tabs-container.accordion-sm .nav-tabs {
+    display: none;
+  }
+  .responsive-tabs-container.accordion-sm .accordion-link {
+    display: block;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .responsive-tabs-container.accordion-md .nav-tabs {
+    display: none;
+  }
+  .responsive-tabs-container.accordion-md .accordion-link {
+    display: block;
+  }
+}
+@media (min-width: 1200px) {
+  .responsive-tabs-container.accordion-lg .nav-tabs {
+    display: none;
+  }
+  .responsive-tabs-container.accordion-lg .accordion-link {
+    display: block;
+  }
+}
+/*# sourceMappingURL=bootstrap-responsive-tabs.css.map */

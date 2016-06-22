@@ -1,4 +1,4 @@
-{% extends 'gentelella/admin/event/event_base.html' %}
+ btn-responsive{% extends 'gentelella/admin/event/event_base.html' %}
 
 {% block title %}
     {{ event.name }} - Sessions
@@ -52,26 +52,26 @@
         <div class="col-md-12">
             <div id="toolbar-holder" style="display: none;">
                 <div class="btn-group pull-left" data-toggle="buttons" style="margin-left: 5px; margin-right: 10px;">
-                    <label class="btn btn-default active">
+                    <label class="btn btn-default btn-responsive active">
                         <input type="radio" name="show_state" autocomplete="off" value="all" checked> All
                     </label>
-                    <label class="btn btn-default">
+                    <label class="btn btn-default btn-responsive">
                         <input type="radio" name="show_state" autocomplete="off" value="pending"> Pending
                     </label>
-                    <label class="btn btn-default">
+                    <label class="btn btn-default btn-responsive">
                         <input type="radio" name="show_state" autocomplete="off" value="accepted"> Accepted
                     </label>
-                    <label class="btn btn-default">
+                    <label class="btn btn-default btn-responsive">
                         <input type="radio" name="show_state" autocomplete="off" value="rejected"> Rejected
                     </label>
                 </div>
-                <div class="btn-group pull-left" style="margin-left: 5px; margin-right: 10px;">
+                <div class="btn-group pull-left btn-responsive" style="margin-left: 5px; margin-right: 10px;">
                     <a href="{{ url_for('event_sessions.create_view', event_id=event_id) }}?from=speaker" class="btn btn-info">Add Speaker</a>
                 </div>
 
             </div>
         </div>
-        <div class="col-md-12" style="margin-top: 10px;">
+        <div class="col-md-12 table-responsive" style="margin-top: 10px;">
             <table class="table table-striped table-hover with-datatable">
                 <thead>
                 <tr>

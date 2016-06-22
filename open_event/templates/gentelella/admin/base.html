@@ -20,6 +20,7 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/custom/common.css') }}"/>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/custom/footer.css') }}"/>
         <link href="{{ url_for('static', filename='admin/lib/summernote/dist/summernote.css') }}" rel="stylesheet">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/bootstrap-responsive-tabs.css') }}">
     {% endblock %}
 
     {% block head_js %}
@@ -53,6 +54,12 @@
     <script src="{{ url_for('static', filename='admin/lib/bootstrap/dist/js/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/summernote/dist/summernote.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap/jquery.bootstrap-responsive-tabs.min.js') }}"></script>
+    <script type="text/javascript">
+    $('.bar_tabs').responsiveTabs({
+      accordionOn: ['xs', 'sm'] // xs, sm, md, lg
+    });
+    </script>
 {% endblock %}
 </body>
 </html>
