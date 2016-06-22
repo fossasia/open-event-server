@@ -474,8 +474,8 @@ function addMicrolocationToTimeline(microlocation) {
  * Generate timeunits for the timeline
  */
 function generateTimeUnits() {
-    var start = moment.utc().hour(dayLevelTime.start.hours).minute(dayLevelTime.start.minutes).second(0);
-    var end = moment.utc().hour(dayLevelTime.end.hours).minute(dayLevelTime.end.minutes).second(0);
+    var start = moment.utc().hour(window.dayLevelTime.start.hours).minute(window.dayLevelTime.start.minutes).second(0);
+    var end = moment.utc().hour(window.dayLevelTime.end.hours).minute(window.dayLevelTime.end.minutes).second(0);
     var $timeUnitsHolder = $(".timeunits");
     $timeUnitsHolder.html('<div class="timeunit"></div>');
     var timeUnitsCount = 1;
@@ -859,7 +859,7 @@ $addMicrolocationForm.submit(function (event) {
         $addMicrolocationForm.find("input, textarea").val("");
         createSnackbar("Microlocation has been created successfully.");
     }, function (error) {
-        console.log('failed with the following: ' + error.statusText);
+        logError('failed with the following: ' + error.statusText, error);
         createSnackbar("An error occurred while creating microlocation.", "Try Again", function () {
             $addMicrolocationForm.trigger("submit");
         });
@@ -930,8 +930,6 @@ $(document).ready(function () {
     window.mainEvent.id = parseInt($timeline.data("event-id"));
     window.mainEvent.start_time = moment.utc($timeline.data("event-start"));
     window.mainEvent.end_time = moment.utc($timeline.data("event-end"));
-    console.log(window.mainEvent);
-    generateTimeUnits();
     initializeTimeline(window.mainEvent.id);
 });
 
@@ -957,9 +955,9 @@ $(document).on("scheduling:change", function (e) {
     delete session.id;
 
     api.sessions.put_session({event_id: mainEvent.id, session_id: session_id, payload: session}, function (success) {
-        console.log(success);
         createSnackbar("Changes have been saved.", "Dismiss", null, 1000);
     }, function (error) {
+        logError('failed with the following: ' + error.statusText, error);
         createSnackbar("An error occurred while saving the changes.", "Try Again", function () {
             $(document).trigger({
                 type: "scheduling:change",
