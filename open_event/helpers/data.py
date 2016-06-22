@@ -641,7 +641,7 @@ class DataManager(object):
                       creator=login.current_user)
 
         state = form.get('state', None)
-        if state and ((state == u'Published' and not string_empty(event.location_name)) or state != u'Published'):
+        if state and ((state == u'Published' and not string_empty(event.location_name)) or state != u'Published') and login.current_user.is_verified:
             event.state = state
 
         if event.start_time <= event.end_time:
@@ -760,7 +760,7 @@ class DataManager(object):
         event.ticket_url = form['ticket_url']
 
         state = form.get('state', None)
-        if state and ((state == u'Published' and not string_empty(event.location_name)) or state != u'Published'):
+        if state and ((state == u'Published' and not string_empty(event.location_name)) or state != u'Published') and login.current_user.is_verified:
             event.state = state
 
         session_type_names = form.getlist('session_type[name]')
@@ -995,7 +995,7 @@ def create_user_password(form, user):
     hash = random.getrandbits(128)
     user.reset_password = str(hash)
     user.salt = salt
-
+    user.is_verified =True
     save_to_db(user, "User password created")
     return user
 
