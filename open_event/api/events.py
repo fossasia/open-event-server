@@ -93,6 +93,8 @@ class EventDAO(BaseDAO):
         data['end_time'] = EVENT_POST['end_time'].from_str(data['end_time'])
         data['closing_datetime'] = EVENT_POST['closing_datetime'].from_str(
             data['closing_datetime'])
+        data['schedule_published_on'] = EVENT_POST['schedule_published_on'].from_str(
+            data['schedule_published_on'])
         return data
 
     def create(self, data, url):

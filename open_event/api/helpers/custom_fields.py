@@ -116,16 +116,18 @@ class DateTime(CustomField):
     Custom DateTime field
     """
     __schema_format__ = 'date-time'
-    __schema_example__ = '2016-06-06 11:22:33'
-    dt_format = '%Y-%m-%d %H:%M:%S'
+    __schema_example__ = '2016-06-06T11:22:33'
+    dt_format = '%Y-%m-%dT%H:%M:%S'
 
     def to_str(self, value):
         return None if not value \
             else unicode(value.strftime(self.dt_format))
 
     def from_str(self, value):
-        return None if not value \
-            else datetime.strptime(value, self.dt_format)
+        if not value:
+            return None
+        value = value.replace(' ', 'T', 1)
+        return datetime.strptime(value, self.dt_format)
 
     def format(self, value):
         return self.to_str(value)
@@ -139,7 +141,7 @@ class DateTime(CustomField):
             else:
                 self.to_str(value)
         except Exception:
-            self.validation_error = 'Incorrect format of datetime used in %s field. Should be YYYY-MM-DD HH:MM:SS'
+            self.validation_error = 'Incorrect format of datetime used in %s field. Should be YYYY-MM-DDTHH:MM:SS.'
             return False
         return True
 
