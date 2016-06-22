@@ -1,13 +1,13 @@
 {% extends 'gentelella/admin/login/base.html' %}
 {% block register %}
-<form data-toggle="validator" role="form" method="post">
+<form data-toggle="validator" method="post">
   <div class="form-group has-feedback">
-      <input type="email" name="email" class="form-control" id="email" placeholder="Email" data-error="Invalid email address" required>
+      <input type="email" name="email" class="form-control" id="email" placeholder="Email" data-error="Invalid email address" required="">
     <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
     <div class="help-block with-errors"></div>
   </div>
   <div class="form-group has-feedback">
-      <input type="password" name="password" data-minlength="6" class="form-control" id="inputPassword" placeholder="Password" required data-error="Minimum of 6 characters"> 
+      <input type="password" name="password" data-minlength="6" class="form-control" id="inputPassword" placeholder="Password" required="" data-error="Minimum of 6 characters"> 
       <div class="help-block with-errors"></div>
     </div>
   <div>
