@@ -8,8 +8,6 @@
     {{ super() }}
     <link rel="stylesheet"
           href="{{ url_for('static', filename='admin/lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"/>
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='admin/lib/datatables.net-responsive-bs/css/responsive.bootstrap.min.css') }}"/>
     <style type="text/css">
         .label {
             text-transform: capitalize;
@@ -129,8 +127,6 @@
     {{ super() }}
     <script src="{{ url_for('static', filename='admin/lib/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='admin/lib/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='admin/lib/datatables.net-responsive-bs/js/responsive.bootstrap.js') }}"></script>
 
     <script type="text/javascript">
         $.fn.dataTable.ext.search.push(
