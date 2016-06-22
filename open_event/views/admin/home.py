@@ -1,7 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 import logging
 
-from flask import url_for, redirect, request, session
+from flask import url_for, redirect, request, session, flash
 from flask.ext import login
 from flask_admin import expose
 from flask_admin.base import AdminIndexView
@@ -74,11 +74,14 @@ class MyHomeView(AdminIndexView):
             logging.info("Registration under process")
             s = get_serializer()
             data = [request.form['email'], request.form['password']]
-            DataManager.create_user(data)
+            user = DataManager.create_user(data)
             form_hash = s.dumps(data)
             link = url_for('.create_account_after_confirmation_view', hash=form_hash, _external=True)
             send_email_confirmation(request.form, link)
-            return self.render('/gentelella/admin/login/email_confirmation.html')
+            login.login_user(user)
+            logging.info('logged successfully')
+            user_logged_in(user)
+            return redirect(intended_url())
 
     @expose('/account/create/<hash>', methods=('GET',))
     def create_account_after_confirmation_view(self, hash):

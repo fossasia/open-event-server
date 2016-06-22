@@ -386,7 +386,7 @@ def callback():
             else:
                 login.login_user(user)
                 user_logged_in(user)
-                return redirect(url_for('admin.index'))
+                return redirect(intended_url())
         return 'did not find user info'
 
 
@@ -425,7 +425,7 @@ def facebook_callback():
             else:
                 login.login_user(user)
                 user_logged_in(user)
-                return redirect(url_for('admin.index'))
+                return redirect(intended_url())
         return 'did not find user info'
 
 
@@ -484,3 +484,6 @@ def run_migrations():
     except:
         print "Migrations have been run"
     return jsonify({'status': 'ok'})
+
+def intended_url():
+    return request.args.get('next') or url_for('admin.index')
