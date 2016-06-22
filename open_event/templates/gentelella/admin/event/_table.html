@@ -5,7 +5,7 @@
         <tr>
             <th>Name</th>
             <th>Date</th>
-            <th>Organizers</th>
+            <th>Roles</th>
             <th>Sessions</th>
             <th>Speakers</th>
             <th>URL</th>
@@ -39,18 +39,18 @@
                 <td>{{ event.name }}</td>
                 <td>{{ event.start_time.strftime('%B %d, %Y - %I:%M %p') }}<br>(to)<br>{{ event.end_time.strftime('%B %d, %Y - %I:%M %p') }}</td>
                 <td>
-                    <ol>
+                    <ol style="padding-left:0;">
                         {% for role in event.roles %}
                             <li>
                                 {{ role.user.user_detail.fullname if role.user.user_detail.fullname else role.user.email }}
-                                ({{ role.role.name | capitalize }})
+                                ({{ role.role.title_name }})
                             </li>
                         {% endfor %}
                     </ol>
 
                 </td>
                 <td>
-                    <ol>
+                    <ol style="padding-left:0;">
                         <li>Drafts: {{ drafts.count }}</li>
                         <li>Submitted: {{ event.session | length }}</li>
                         <li>Accepted: {{ accepted.count }}</li>
