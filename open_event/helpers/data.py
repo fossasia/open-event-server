@@ -6,10 +6,9 @@ import traceback
 import json
 from datetime import datetime, timedelta
 
-from flask import flash, request, url_for
+from flask import flash, request, url_for, g
 from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
-from flask.ext.login import current_user
 from sqlalchemy.orm.collections import InstrumentedList
 from sqlalchemy.sql.expression import exists
 from werkzeug import secure_filename
@@ -1028,9 +1027,14 @@ def record_activity(template, login_user=None, **kwargs):
     """
     record an activity
     """
-    if not login_user:
-        login_user = current_user
-    actor = login_user.email + ' (' + str(login_user.id) + ')'
+    if not login_user and hasattr(g, 'user'):
+        login_user = g.user
+    if not login_user and login.current_user.is_authenticated:
+        login_user = login.current_user
+    if login_user:
+        actor = login_user.email + ' (' + str(login_user.id) + ')'
+    else:
+        actor = 'Anonymous'
     id_str = ' (%d)'
     s = '"%s"'
     # add more information for objects
