@@ -36,9 +36,9 @@
                             <a href="#" class="user-profile dropdown-toggle" data-toggle="dropdown"
                                aria-expanded="false">
                                 {% if current_user.user_detail.avatar_uploaded %}
-                                <img src="{{ current_user.user_detail.avatar_uploaded }}"/>
+                                <img src="{{ current_user.user_detail.avatar_uploaded }}" onerror="imgError(this)"/>
                                 {% else %}
-                                <img src="{{ url_for('static', filename='img/avatar.png') }}"/>
+                                <img src="{{ url_for('static', filename='img/avatar.png') }}" onerror="imgError(this)"/>
                                 {% endif %}
                                 {{ current_user.user_detail.fullname | default(current_user.email, true) }}
                                 <span class=" fa fa-angle-down"></span>
