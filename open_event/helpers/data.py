@@ -1056,7 +1056,9 @@ def record_activity(template, login_user=None, **kwargs):
     # add more information for objects
     for k in kwargs:
         v = kwargs[k]
-        if k.startswith('user'):
+        if k.find('_id') > -1:
+            kwargs[k] = str(v)
+        elif k.startswith('user'):
             kwargs[k] = s % v.email + id_str % v.id
         elif k.startswith('role'):
             kwargs[k] = s % v.title_name

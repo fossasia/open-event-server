@@ -24,7 +24,7 @@ ACTIVITIES = {
     'update_speaker': 'Speaker {speaker} of event {event_id} was updated',
     'add_speaker_to_session': 'Speaker {speaker} added to session {session} of event {event_id}',
     'system_admin': 'User {user} {status} system admin',
-    'update_user_email': 'User {user_id}\'s email changed from {old} to {new}'
+    'update_user_email': 'User {user_id} email changed from {old} to {new}'
 }
 
 
