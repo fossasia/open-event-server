@@ -8,10 +8,13 @@ These are -
 3. Update user email
 4. Assign/Edit/Remove an event-level role
 5. Create/Update/Delete Track
-6. Send Invite
+6. Send Invite for Event
 7. Assign/Remove a system level role
 8. Publish/Unpublish event
 9. Import Event
+10. Add Speaker to Session
+11. Create/Update/Delete Speaker
+12. Create/Update/Delete Session
 
 
 ## How to log information

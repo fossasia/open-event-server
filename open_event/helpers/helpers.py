@@ -171,3 +171,11 @@ def fields_not_empty(obj, fields):
         if string_empty(getattr(obj, field)):
             return False
     return True
+
+
+def get_request_stats():
+    """
+    Get IP, Browser, Platform, Version etc
+    """
+    # http://stackoverflow.com/questions/3759981/get-ip-address-of-visitors-using-python-flask
+    # http://stackoverflow.com/questions/9878020/how-do-i-get-the-user-agent-with-flask

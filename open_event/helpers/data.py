@@ -113,7 +113,7 @@ class DataManager(object):
         """
         track = Track.query.get(track_id)
         delete_from_db(track, "Track deleted")
-        record_activity('remove_track', event_id=track.event_id, track=track)
+        record_activity('delete_track', event_id=track.event_id, track=track)
         flash('You successfully deleted track')
 
     @staticmethod
@@ -274,6 +274,7 @@ class DataManager(object):
                                  'events/%d/speaker/%d/photo' % (int(event_id), int(speaker.id)))
             speaker.photo = speaker_img
             save_to_db(speaker, "Speaker photo saved")
+            record_activity('update_speaker', speaker=speaker, event_id=event_id)
 
         return speaker
 
@@ -359,6 +360,7 @@ class DataManager(object):
             session.speakers.append(existing_speaker)
 
         save_to_db(session, 'Session Updated')
+        record_activity('update_session', session=session, event_id=event_id)
 
     @staticmethod
     def update_session(form, session):
@@ -382,6 +384,7 @@ class DataManager(object):
         session.track = track
         save_to_db(session, "Session updated")
         update_version(session.event_id, False, "session_ver")
+        record_activity('update_session', session=session, event_id=session.event_id)
 
     @staticmethod
     def remove_session(session_id):
@@ -392,6 +395,7 @@ class DataManager(object):
         session = Session.query.get(session_id)
         delete_from_db(session, "Session deleted")
         flash('You successfully delete session')
+        record_activity('delete_session', session=session, event_id=session.event_id)
 
     @staticmethod
     def create_speaker(form, event_id, user=login.current_user):
@@ -433,6 +437,7 @@ class DataManager(object):
         speaker.sessions = InstrumentedList(
             form.sessions.data if form.sessions.data else [])
         save_to_db(speaker, "Speaker updated")
+        record_activity('update_speaker', speaker=speaker, event_id=speaker.event_id)
         update_version(speaker.event_id, False, "speakers_ver")
 
     @staticmethod
@@ -443,6 +448,7 @@ class DataManager(object):
         """
         speaker = Speaker.query.get(speaker_id)
         delete_from_db(speaker, "Speaker deleted")
+        record_activity('delete_speaker', speaker=speaker, event_id=speaker.event_id)
         flash('You successfully delete speaker')
 
     @staticmethod
@@ -1070,7 +1076,10 @@ def record_activity(template, login_user=None, **kwargs):
             kwargs[k] = s % v.name + id_str % v.id
         else:
             kwargs[k] = str(v)
-    msg = ACTIVITIES[template].format(**kwargs)
+    try:
+        msg = ACTIVITIES[template].format(**kwargs)
+    except Exception:  # in case some error happened, not good
+        msg = '[ERROR LOGGING] %s' % template
     # conn.execute(Activity.__table__.insert().values(
     #     actor=actor, action=msg, time=datetime.now()
     # ))
