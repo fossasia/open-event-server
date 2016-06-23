@@ -593,7 +593,10 @@ class DataManager(object):
         user_detail.contact = form['contact']
         user_detail.twitter = form['twitter']
         user_detail.details = form['details']
-        user_detail.avatar_uploaded = avatar_img
+        if avatar_img == "":
+            user_detail.avatar_uploaded = user.avatar 
+        else:   
+            user_detail.avatar_uploaded = avatar_img
         print user, user_detail, save_to_db(user, "User updated")
         record_activity('update_user', user=user)
 
@@ -992,6 +995,7 @@ def get_facebook_auth(state=None, token=None):
 
 
 def create_user_oauth(user, user_data, token, method):
+    print user_data
     if user is None:
         user = User()
         user.email = user_data['email']
@@ -1002,6 +1006,10 @@ def create_user_oauth(user, user_data, token, method):
     user.tokens = json.dumps(token)
     user.is_verified = True
     save_to_db(user, "User created")
+    user_detail = UserDetail.query.filter_by(user_id=user.id).first()
+    user_detail.avatar_uploaded = user.avatar
+    user_detail.fullname = user_data['name']
+    save_to_db(user, "User Details Updated")
     return user
 
 
