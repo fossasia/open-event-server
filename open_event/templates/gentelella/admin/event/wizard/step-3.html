@@ -133,7 +133,6 @@
             if (onOffSwitch.checked) {
                 $sessionTracksRoomsHolder.fadeIn();
                 $strState.text("off");
-                $(".form_wizard").smartWizard('fixHeight');
                 $sessionTracksRoomsHolder.find("input").removeAttr('disabled');
                 $sessionFormFieldRows.tooltip('destroy');
                 $sessionFormFieldRows.css("pointer-events", "all");
@@ -146,9 +145,7 @@
                 });
 
             } else {
-                $sessionTracksRoomsHolder.fadeOut(function () {
-                    $(".form_wizard").smartWizard('fixHeight');
-                });
+                $sessionTracksRoomsHolder.fadeOut();
                 $sessionTracksRoomsHolder.find("input").attr('disabled', 'disabled');
                 $strState.text("on");
                 $.each($sessionFormFieldRows.find('input'), function (index, elem) {
@@ -176,7 +173,6 @@
         });
 
         $('.session-types').append($element);
-        $wizard.smartWizard('fixHeight');
     });
 
     $(document).on("click", ".remove-session-type", function () {
@@ -193,7 +189,6 @@
         $element.find(".colorpicker-component").attr("id", "color" + counter);
         $('.tracks').append($element);
         $('#color' + counter).colorpicker();
-        $wizard.smartWizard('fixHeight');
     });
 
     $(document).on("click", ".remove-tracks", function () {
@@ -206,7 +201,6 @@
         var $element = $($(".microlocation-holder")[0]).clone();
         $element.find("input").val('').attr("value", "");
         $('.rooms').append($element);
-        $wizard.smartWizard('fixHeight');
     });
 
     $(document).on("click", ".remove-rooms", function () {

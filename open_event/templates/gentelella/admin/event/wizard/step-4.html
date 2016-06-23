@@ -76,12 +76,9 @@
             if (onOffSwitch.checked) {
                 $callForSpeakersHolder.fadeIn();
                 $state.text("off");
-                $(".form_wizard").smartWizard('fixHeight');
 
             } else {
-                $callForSpeakersHolder.fadeOut(function () {
-                    $(".form_wizard").smartWizard('fixHeight');
-                });
+                $callForSpeakersHolder.fadeOut();
                 $state.text("on");
             }
         };
