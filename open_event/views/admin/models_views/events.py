@@ -38,8 +38,12 @@ class EventsView(BaseView):
                            past_events=past_events,
                            all_events=all_events)
 
+    @expose('/create/<step>', methods=('GET', 'POST'))
+    def create_view_stepped(self, step):
+        return redirect(url_for('.create_view'))
+
     @expose('/create/', methods=('GET', 'POST'))
-    def create_view(self):
+    def create_view(self,):
         if request.method == 'POST':
             img_files = []
             imd = ImmutableMultiDict(request.files)
@@ -142,6 +146,11 @@ class EventsView(BaseView):
     @expose('/<event_id>/edit/', methods=('GET', 'POST'))
     @can_access
     def edit_view(self, event_id):
+        return self.edit_view_stepped(event_id=event_id, step='')
+
+    @expose('/<event_id>/edit/<step>', methods=('GET', 'POST'))
+    @can_access
+    def edit_view_stepped(self, event_id, step):
         event = DataGetter.get_event(event_id)
         session_types = DataGetter.get_session_types_by_event_id(event_id).all(
         )
@@ -181,6 +190,7 @@ class EventsView(BaseView):
                                event_topics=DataGetter.get_event_topics(),
                                preselect=preselect,
                                timezones=DataGetter.get_all_timezones(),
+                               step=step,
                                required=required)
         if request.method == "POST":
             event = DataManager.edit_event(
@@ -188,12 +198,11 @@ class EventsView(BaseView):
                 microlocations, call_for_speakers, sponsors, custom_forms)
             if request.form.get('state',
                                 u'Draft') == u'Published' and string_empty(
-                event.location_name):
+                                event.location_name):
                 flash(
                     "Your event was saved. To publish your event please review the highlighted fields below.",
                     "warning")
-                return redirect(url_for(
-                    '.edit_view', event_id=event.id) + "#step=location_name")
+                return redirect(url_for('.edit_view', event_id=event.id) + "#highlight=location_name")
 
             return redirect(url_for('.details_view', event_id=event_id))
 

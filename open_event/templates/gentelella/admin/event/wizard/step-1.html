@@ -15,7 +15,7 @@
     </div>
 {% endmacro %}
 
-<div id="step-1" class="wizard_content" style="display: block;">
+<div>
     <div class="col-md-1">
 
     </div>
@@ -345,7 +345,6 @@
         var $element = $($(".social-link-holder")[0]).clone();
         $element.find("input").val('').attr("value", "");
         $('.social-links > div').append($element);
-        $(".form_wizard").smartWizard('fixHeight');
     });
 
     $(document).on("click", ".remove-social-links", function () {

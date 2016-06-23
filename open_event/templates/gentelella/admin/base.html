@@ -14,8 +14,10 @@
     {% endblock %}
     {% block head_css %}
         <link rel="stylesheet" href="{{ url_for('static', filename='css/roboto.css') }}"/>
-        <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap/dist/css/bootstrap.min.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/font-awesome/css/font-awesome.min.css') }}">
+        <link rel="stylesheet"
+              href="{{ url_for('static', filename='admin/lib/bootstrap/dist/css/bootstrap.min.css') }}">
+        <link rel="stylesheet"
+              href="{{ url_for('static', filename='admin/lib/font-awesome/css/font-awesome.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}"/>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/custom/common.css') }}"/>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/custom/footer.css') }}"/>
@@ -52,18 +54,19 @@
 
 {% block tail_js %}
     <script src="{{ url_for('static', filename='admin/lib/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/summernote/dist/summernote.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
     <script type="text/javascript">
-    $(document).ready(function(){
-        $('.search-button').click(function(e){
-            if (window.screen.width <= 640 && ($('#search-text').val() == "")) {
-                e.preventDefault();
-                $('#search-text').toggle();
-                $('#search-text').width(0.9 * window.screen.width);
-            }
+        $(document).ready(function () {
+            var $searchText = $('#search-text');
+            $('.search-button').click(function (e) {
+                if (window.screen.width <= 640 && ($searchText.val() == "")) {
+                    e.preventDefault();
+                    $searchText.toggle();
+                    $searchText.width(0.9 * window.screen.width);
+                }
+            });
         });
-    });
     </script>
 {% endblock %}
 </body>

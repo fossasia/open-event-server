@@ -4,7 +4,7 @@
     Event Setup Checklist
 {% endblock %}
 
-{% macro stage(name, description, id='') %}
+{% macro stage(name, description, id='', route='') %}
 
     {% set state = checklist[id] %}
 
@@ -25,14 +25,14 @@
     <div class="alert {{ css_class }}" role="alert" style="margin-bottom: 2px; padding: 1px 10px 5px; color: #FFFFFF;">
         <h5 style="margin-bottom: 5px;"><i class="fa {{ icon_class }} fa-fw"></i> {{ name }} </h5>
         {{ description }}
-        <a href="/events/{{ event.id }}/edit#step={{ id }}" class="close" style="margin-top: -12px; font-weight: 500;">Edit <i class="fa fa-pencil-square-o"></i></a>
+        <a href="/events/{{ event.id }}/edit/{{ route }}" class="close" style="margin-top: -12px; font-weight: 500;">Edit <i class="fa fa-pencil-square-o"></i></a>
     </div>
 {% endmacro %}
 
 {% block panel_content %}
-    {{ stage('Basic Details', 'Basic information such as title, date, venue, etc.', '1') }}
-    {{ stage('Sponsors', 'Details and logos of sponsors', '2') }}
-    {{ stage('Session, Tracks, Rooms', 'Track details, colors, room locations and session types', '3') }}
-    {{ stage('Call for Speakers', '[ Optional ] Call for speakers announcement and dates', '4') }}
-    {{ stage('Session & Speaker forms customization', 'Customize the session and speaker registration forms', '5') }}
+    {{ stage('Basic Details', 'Basic information such as title, date, venue, etc.', '1', '') }}
+    {{ stage('Sponsors', 'Details and logos of sponsors', '2', 'sponsors') }}
+    {{ stage('Session, Tracks, Rooms', 'Track details, colors, room locations and session types', '3', 'sessions-tracks-rooms') }}
+    {{ stage('Call for Speakers', '[ Optional ] Call for speakers announcement and dates', '4', 'call-for-speakers') }}
+    {{ stage('Session & Speaker forms customization', 'Customize the session and speaker registration forms', '5', 'form-customization') }}
 {% endblock %}
