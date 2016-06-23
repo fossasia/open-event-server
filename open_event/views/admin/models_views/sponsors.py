@@ -2,6 +2,7 @@ from flask.ext.admin import BaseView
 from flask_admin import expose
 from ....helpers.data_getter import DataGetter
 from open_event.helpers.permission_decorators import *
+from open_event.helpers.data import delete_from_db
 
 class SponsorsView(BaseView):
     @expose('/', methods=('GET', 'POST'))
@@ -14,10 +15,12 @@ class SponsorsView(BaseView):
         event = DataGetter.get_event(event_id)
         return self.render('/gentelella/admin/event/sponsors/new.html', event_id=event_id, event=event)
 
-    @expose('/<sponsor_id>/delete/', methods=('POST',))
+    @expose('/<sponsor_id>/delete/', methods=('GET', ))
     @can_access
-    def delete_view(self, event_id,sponsor_id):
-        return ''
+    def delete_view(self, event_id, sponsor_id):
+        sponsor = DataGetter.get_sponsor(sponsor_id)
+        delete_from_db(sponsor, "Sponsor deleted")
+        return redirect(url_for('events.details_view', event_id=event_id))
 
     @expose('/<sponsor_id>/edit/', methods=('POST', 'GET'))
     @can_access
