@@ -6,13 +6,13 @@ from . import db
 ACTIVITIES = {
     'create_user': 'User {user} created',
     'update_user': 'Profile of user {user} updated',
-    'update_event': 'Event {event} updated',
-    'create_event': 'Event {event} created',
-    'delete_event': 'Event {event} deleted',
-    'create_role': 'Role {role} created for user {user} in event {event}',
-    'update_role': 'Role updated to {role} for user {user} in event {event}',
-    'delete_role': 'User {user} removed from role {role} in event {event}',
-    'create_session': 'Session {session} was created in event {event}'
+    'update_event': 'Event {event_id} updated',
+    'create_event': 'Event {event_id} created',
+    'delete_event': 'Event {event_id} deleted',
+    'create_role': 'Role {role} created for user {user} in event {event_id}',
+    'update_role': 'Role updated to {role} for user {user} in event {event_id}',
+    'delete_role': 'User {user} removed from role {role} in event {event_id}',
+    'create_session': 'Session {session} was created in event {event_id}'
 }
 
 

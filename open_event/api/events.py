@@ -184,7 +184,7 @@ class Event(Resource):
     def delete(self, event_id):
         """Delete an event given its id"""
         event = DAO.delete(event_id)
-        record_activity('delete_event', event=event_id)
+        record_activity('delete_event', event_id=event_id)
         return event
 
     @requires_auth
@@ -194,7 +194,7 @@ class Event(Resource):
     def put(self, event_id):
         """Update a event given its id"""
         event = DAO.update(event_id, self.api.payload)
-        record_activity('update_event', event=event_id)
+        record_activity('update_event', event_id=event_id)
         return event
 
 
@@ -213,7 +213,7 @@ class EventList(Resource, EventResource):
     def post(self):
         """Create an event"""
         item = DAO.create(self.api.payload, self.api.url_for(self))
-        record_activity('create_event', event=item[0].id)
+        record_activity('create_event', event_id=item[0].id)
         return item
 
 

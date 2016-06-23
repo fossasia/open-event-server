@@ -201,7 +201,7 @@ class SessionList(Resource):
             self.api.payload,
             self.api.url_for(self, event_id=event_id)
         )
-        record_activity('create_session', session=item[0], event=event_id)
+        record_activity('create_session', session=item[0], event_id=event_id)
         return item
 
 

@@ -224,7 +224,7 @@ class DataManager(object):
         new_session.slides = slide_url
         save_to_db(new_session, "Session saved")
         save_to_db(speaker, "Speaker saved")
-        record_activity('create_session', session=new_session, event=event_id)
+        record_activity('create_session', session=new_session, event_id=event_id)
 
         invite_emails = form.getlist("speakers[email]")
         for index, email in enumerate(invite_emails):
@@ -480,7 +480,7 @@ class DataManager(object):
         :param uer_id: Role id to remove object
         """
         uer = UsersEventsRoles.query.get(uer_id)
-        record_activity('delete_role', role=uer.role, user=uer.user, event=uer.event_id)
+        record_activity('delete_role', role=uer.role, user=uer.user, event_id=uer.event_id)
         delete_from_db(uer, "UER deleted")
         flash('You successfully delete role')
 
@@ -651,7 +651,7 @@ class DataManager(object):
 
         if event.start_time <= event.end_time:
             save_to_db(event, "Event Saved")
-            record_activity('create_event', event=event.id)
+            record_activity('create_event', event_id=event.id)
             role = Role.query.filter_by(name=ORGANIZER).first()
             db.session.add(event)
             db.session.flush()
@@ -859,7 +859,7 @@ class DataManager(object):
             save_to_db(call_for_speakers)
 
         save_to_db(event, "Event saved")
-        record_activity('update_event', event=event.id)
+        record_activity('update_event', event_id=event.id)
         return event
 
     @staticmethod
@@ -870,7 +870,7 @@ class DataManager(object):
         SocialLink.query.filter_by(event_id=e_id).delete()
         Track.query.filter_by(id=e_id).delete()
         Event.query.filter_by(id=e_id).delete()
-        record_activity('delete_event', event=e_id)
+        record_activity('delete_event', event_id=e_id)
         db.session.commit()
 
     @staticmethod
@@ -915,7 +915,7 @@ class DataManager(object):
         uer = UsersEventsRoles(event=Event.query.get(event_id),
                                user=user, role=role)
         save_to_db(uer, "Event saved")
-        record_activity('create_role', role=role, user=user, event=event_id)
+        record_activity('create_role', role=role, user=user, event_id=event_id)
 
     @staticmethod
     def update_user_event_role(form, uer):
@@ -924,7 +924,7 @@ class DataManager(object):
         uer.user = user
         uer.role_id = role.id
         save_to_db(uer, "Event saved")
-        record_activity('update_role', role=role, user=user, event=uer.event_id)
+        record_activity('update_role', role=role, user=user, event_id=uer.event_id)
 
 
 def save_to_db(item, msg="Saved to db"):
