@@ -7,7 +7,6 @@ from flask_restplus import marshal
 from open_event.api.events import DAO as EventDAO, EVENT
 
 
-
 class BrowseView(BaseView):
     @expose('/', methods=('GET', 'POST'))
     def browse(self, location):
