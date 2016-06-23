@@ -7,6 +7,8 @@ ACTIVITIES = {
     'create_user': 'User {user} created',
     'update_user': 'Profile of user {user} updated',
     'update_user_email': 'User {user_id} email changed from {old} to {new}',
+    'user_login': 'User {user} login from IP {ip} using browser {browser} on {platform} platform',
+    'user_logout': 'User {user} logout from IP {ip} using browser {browser} on {platform} platform',
 
     'update_event': 'Event {event_id} updated',
     'create_event': 'Event {event_id} created',

@@ -9,9 +9,10 @@ from flask.ext.scrypt import generate_password_hash
 from wtforms import ValidationError
 
 from ...helpers.data import DataManager, save_to_db, get_google_auth, get_facebook_auth, create_user_password, \
-    user_logged_in
+    user_logged_in, record_activity
 from ...helpers.data_getter import DataGetter
-from ...helpers.helpers import send_email_with_reset_password_hash, send_email_confirmation, get_serializer
+from ...helpers.helpers import send_email_with_reset_password_hash, send_email_confirmation, \
+    get_serializer, get_request_stats
 from open_event.helpers.oauth import OAuth, FbOAuth
 from open_event.models.user import User
 
@@ -23,6 +24,16 @@ def chunks(l, n):
     """Yield successive n-sized chunks from l."""
     for i in xrange(0, len(l), n):
         yield l[i:i + n]
+
+
+def record_user_login_logout(template, user):
+    req_stats = get_request_stats()
+    record_activity(
+        template,
+        user=user,
+        **req_stats
+    )
+
 
 class MyHomeView(AdminIndexView):
 
@@ -57,6 +68,7 @@ class MyHomeView(AdminIndexView):
                 logging.info('Password Incorrect')
                 return redirect(url_for('admin.login_view'))
             login.login_user(user)
+            record_user_login_logout('user_login', user)
             logging.info('logged successfully')
             user_logged_in(user)
             return redirect(intended_url())
@@ -79,6 +91,7 @@ class MyHomeView(AdminIndexView):
             link = url_for('.create_account_after_confirmation_view', hash=form_hash, _external=True)
             send_email_confirmation(request.form, link)
             login.login_user(user)
+            record_user_login_logout('user_login', user)
             logging.info('logged successfully')
             user_logged_in(user)
             return redirect(intended_url())
@@ -91,6 +104,7 @@ class MyHomeView(AdminIndexView):
         user.is_verified = True
         save_to_db(user, 'User updated')
         login.login_user(user)
+        record_user_login_logout('user_login', user)
         user_logged_in(user)
         return redirect(intended_url())
 
@@ -105,6 +119,7 @@ class MyHomeView(AdminIndexView):
             user = create_user_password(request.form, user)
             if user is not None:
                 login.login_user(user)
+                record_user_login_logout('user_login', user)
                 user_logged_in(user)
                 return redirect(intended_url())
 
@@ -133,6 +148,7 @@ class MyHomeView(AdminIndexView):
     @expose('/logout/')
     def logout_view(self):
         """Logout method which redirect to index"""
+        record_user_login_logout('user_logout', login.current_user)
         login.logout_user()
         return redirect(url_for('.index'))
 

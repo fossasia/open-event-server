@@ -176,6 +176,12 @@ def fields_not_empty(obj, fields):
 def get_request_stats():
     """
     Get IP, Browser, Platform, Version etc
+    http://werkzeug.pocoo.org/docs/0.11/utils/#module-werkzeug.useragents
     """
-    # http://stackoverflow.com/questions/3759981/get-ip-address-of-visitors-using-python-flask
-    # http://stackoverflow.com/questions/9878020/how-do-i-get-the-user-agent-with-flask
+    return {
+        'ip': request.remote_addr,
+        'platform': request.user_agent.platform,
+        'browser': request.user_agent.browser,
+        'version': request.user_agent.version,
+        'language': request.user_agent.language
+    }

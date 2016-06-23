@@ -15,6 +15,7 @@ These are -
 10. Add Speaker to Session
 11. Create/Update/Delete Speaker
 12. Create/Update/Delete Session
+13. Login/Logout from user (tracking IP, browser, platform)
 
 
 ## How to log information
