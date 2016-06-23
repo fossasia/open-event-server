@@ -21,5 +21,14 @@ class UsersEventsRoles(db.Model):
         self.role = role
 
     def __repr__(self):
-        return '<UsersEventsRoles %r:%r:%r>' % (self.user, self.event_id,
-                                                self.role)
+        return '<UER %r:%r:%r>' % (self.user,
+                                   self.event_id,
+                                   self.role, )
+
+    def __str__(self):
+        return unicode(self).encode('utf-8')
+
+    def __unicode__(self):
+        return '%r: %r in %r' % (self.user,
+                                 self.role,
+                                 self.event_id, )

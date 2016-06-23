@@ -19,7 +19,7 @@ class Invite(db.Model):
         self.session_id = session_id
 
     def __repr__(self):
-        return '<invite %r>' % self.user_id
+        return '<Invite %r>' % self.user_id
 
     def __str__(self):
         return unicode(self).encode('utf-8')
