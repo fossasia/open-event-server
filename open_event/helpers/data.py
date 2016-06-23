@@ -593,9 +593,7 @@ class DataManager(object):
         user_detail.contact = form['contact']
         user_detail.twitter = form['twitter']
         user_detail.details = form['details']
-        if avatar_img == "":
-            user_detail.avatar_uploaded = user.avatar 
-        else:   
+        if avatar_img != "":
             user_detail.avatar_uploaded = avatar_img
         print user, user_detail, save_to_db(user, "User updated")
         record_activity('update_user', user=user)
