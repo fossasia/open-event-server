@@ -8,7 +8,7 @@
     <div style="display: block;">
 
         <label>Full name:<span class="required">*</span></label>
-        <input required="required" name="full_name" class="form-control" value="{{profile.user_detail.fullname}}"/>
+        <input required="required" name="full_name" class="form-control" value="{{ profile.user_detail.fullname | default('', true) }}"/>
         <label>Details about user:</label>
         <textarea name="details" id="summernote">{{profile.user_detail.details}}</textarea>
 
