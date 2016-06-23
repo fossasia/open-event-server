@@ -22,10 +22,10 @@ class SettingsView(BaseView):
         return self.render('/gentelella/admin/settings/index.html',
                            settings=settings)
 
-    @expose('/edit/<user_id>', methods=('GET', 'POST'))
-    def edit_view(self, user_id):
+    @expose('/edit/<event_id>', methods=('GET', 'POST'))
+    def edit_view(self, event_id):
         if request.method == 'POST':
-            settings = DataManager.update_settings(request.form, user_id)
+            settings = DataManager.update_settings(request.form, login.current_user.id, event_id)
             return redirect(url_for('.index_view'))
-        settings = DataGetter.get_settings(int(user_id))
+        settings = DataGetter.get_settings(login.current_user.id)
         return self.render('/gentelella/admin/settings/edit.html', settings=settings)

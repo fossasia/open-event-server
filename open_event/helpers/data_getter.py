@@ -8,6 +8,7 @@ from ..models.session import Session
 from ..models.track import Track
 from ..models.invite import Invite
 from ..models.speaker import Speaker
+from ..models.setting import Setting
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
 from ..models.users_events_roles import UsersEventsRoles
@@ -72,6 +73,10 @@ class DataGetter:
         """Method return all owner events"""
         # return Event.query.filter_by(owner=owner_id)
         return login.current_user.events_assocs
+
+    @staticmethod
+    def get_settings(user_id):
+        return Setting.query.filter_by(user_id=user_id)
 
     @staticmethod
     def get_sessions_by_event_id(event_id):

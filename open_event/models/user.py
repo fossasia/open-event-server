@@ -7,6 +7,7 @@ from open_event.models.session import Session
 from open_event.models.speaker import Speaker
 from . import db
 from user_detail import UserDetail
+from setting import Setting
 from .role import Role
 from .service import Service
 from .permission import Permission
@@ -38,6 +39,7 @@ class User(db.Model):
     signup_time = db.Column(db.DateTime)
     last_access_time = db.Column(db.DateTime)
     user_detail = db.relationship("UserDetail", uselist=False, backref="user")
+    settings = db.relationship("Setting", uselist=False, backref="user")
     created_date = db.Column(db.DateTime, default=datetime.now())
 
     def _is_role(self, role_name, event_id):
@@ -151,4 +153,5 @@ class User(db.Model):
 @event.listens_for(User, 'init')
 def receive_init(target, args, kwargs):
     target.user_detail = UserDetail()
+    target.settings = Setting()
     target.signup_time = datetime.now()
