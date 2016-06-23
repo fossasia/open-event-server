@@ -83,7 +83,7 @@
                             </ol>
                         </td>
                         <td>{{ session.track.name }}</td>
-                        <td>{{ session.short_abstract }}</td>
+                        <td>{{ session.short_abstract|striptags }}</td>
                         <td>{{ session.start_time }}</td>
                         <td>{{ session.end_time }}</td>
                         <td>
