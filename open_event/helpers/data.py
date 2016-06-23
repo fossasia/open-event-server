@@ -59,7 +59,7 @@ class DataManager(object):
         hash = random.getrandbits(128)
         new_invite.hash = "%032x" % hash
         save_to_db(new_invite, "Invite saved")
-        record_activity('add_invite', new_hash=new_invite.hash, event_id=event_id, user_id=user_id)
+        record_activity('invite_user', event_id=event_id, user_id=user_id)
 
     @staticmethod
     def create_track(form, event_id):
@@ -73,7 +73,7 @@ class DataManager(object):
                           event_id=event_id,
                           track_image_url=form.track_image_url.data)
         save_to_db(new_track, "Track saved")
-        record_activity('create_track', event_id=event_id, track_id=new_track)
+        record_activity('create_track', event_id=event_id, track=new_track)
         update_version(event_id, False, "tracks_ver")
 
     @staticmethod
@@ -87,7 +87,7 @@ class DataManager(object):
                           description=form['description'],
                           event_id=event_id,
                           track_image_url=form['track_image_url'])
-        record_activity('create_track', event_id=event_id, track_id=new_track)
+        record_activity('create_track', event_id=event_id, track=new_track)
         save_to_db(new_track, "Track saved")
 
     @staticmethod
@@ -102,7 +102,7 @@ class DataManager(object):
             .filter_by(id=track.id) \
             .update(dict(data))
         save_to_db(track, "Track updated")
-        record_activity('update_track', event_id=track.event_id, track_id=track)
+        record_activity('update_track', event_id=track.event_id, track=track)
         update_version(track.event_id, False, "tracks_ver")
 
     @staticmethod
@@ -113,7 +113,7 @@ class DataManager(object):
         """
         track = Track.query.get(track_id)
         delete_from_db(track, "Track deleted")
-        record_activity('remove_track', event_id=track.event_id, track_id=track)
+        record_activity('remove_track', event_id=track.event_id, track=track)
         flash('You successfully deleted track')
 
     @staticmethod
@@ -290,7 +290,7 @@ class DataManager(object):
         speaker = DataManager.add_speaker_to_event(request, event_id, user)
         session.speakers.append(speaker)
         save_to_db(session, "Speaker saved")
-        record_activity('add_speaker_to_session', speaker=speaker, session_id=session_id, event_id=event_id)
+        record_activity('add_speaker_to_session', speaker=speaker, session=session, event_id=event_id)
         update_version(event_id, False, "speakers_ver")
 
     @staticmethod
@@ -1053,6 +1053,10 @@ def record_activity(template, login_user=None, **kwargs):
             kwargs[k] = s % v.title_name
         elif k.startswith('session'):
             kwargs[k] = s % v.title + id_str % v.id
+        elif k.startswith('track'):
+            kwargs[k] = s % v.name + id_str % v.id
+        elif k.startswith('speaker'):
+            kwargs[k] = s % v.name + id_str % v.id
         else:
             kwargs[k] = str(v)
     msg = ACTIVITIES[template].format(**kwargs)
