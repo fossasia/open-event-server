@@ -3,9 +3,11 @@ from . import db
 
 class Ticket(db.Model):
     __tablename__ = 'ticket'
+    __table_args__ = (db.UniqueConstraint(
+        'name', 'event_id', name='name_event_uc'), )
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False, unique=True)
+    name = db.Column(db.String, nullable=False)
     description = db.Column(db.String)
     quantity = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Integer)
