@@ -6,7 +6,7 @@ from open_event.models.social_link import SocialLink as SocialLinkModel
 from open_event.models.users_events_roles import UsersEventsRoles
 from open_event.models.role import Role
 from open_event.models.user import ORGANIZER
-from open_event.helpers.data import save_to_db, update_version
+from open_event.helpers.data import save_to_db, update_version, record_activity
 
 from .helpers.helpers import get_paginated_list, requires_auth, parse_args
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
@@ -183,7 +183,9 @@ class Event(Resource):
     @api.marshal_with(EVENT)
     def delete(self, event_id):
         """Delete an event given its id"""
-        return DAO.delete(event_id)
+        event = DAO.delete(event_id)
+        record_activity('delete_event', event_id=event_id)
+        return event
 
     @requires_auth
     @api.doc('update_event', responses=PUT_RESPONSES)
@@ -191,7 +193,9 @@ class Event(Resource):
     @api.expect(EVENT_POST)
     def put(self, event_id):
         """Update a event given its id"""
-        return DAO.update(event_id, self.api.payload)
+        event = DAO.update(event_id, self.api.payload)
+        record_activity('update_event', event_id=event_id)
+        return event
 
 
 @api.route('')
@@ -208,7 +212,9 @@ class EventList(Resource, EventResource):
     @api.expect(EVENT_POST)
     def post(self):
         """Create an event"""
-        return DAO.create(self.api.payload, self.api.url_for(self))
+        item = DAO.create(self.api.payload, self.api.url_for(self))
+        record_activity('create_event', event_id=item[0].id)
+        return item
 
 
 @api.route('/page')
