@@ -1,0 +1,68 @@
+.behclick-panel  .list-group {
+    margin-bottom: 0px;
+}
+.behclick-panel .list-group-item:first-child {
+    border-top-left-radius:0px;
+    border-top-right-radius:0px;
+}
+.behclick-panel .list-group-item {
+    border-right:0px;
+    border-left:0px;
+}
+.behclick-panel .list-group-item:last-child{
+    border-bottom-right-radius:0px;
+    border-bottom-left-radius:0px;
+}
+.behclick-panel .list-group-item {
+    padding: 5px;
+}
+.behclick-panel .panel-heading {
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+
+}
+.behclick-panel .panel-heading:last-child{
+    /* border-bottom: 0px; */
+}
+.behclick-panel {
+    border-radius: 0px;
+    border-right: 0px;
+    border-left: 0px;
+    border-bottom: 0px;
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
+}
+.behclick-panel .radio, .checkbox {
+    margin: 0px;
+    padding-left: 10px;
+}
+.behclick-panel .panel-title > a, .panel-title > small, .panel-title > .small, .panel-title > small > a, .panel-title > .small > a {
+    outline: none;
+}
+.behclick-panel .panel-body > .panel-heading{
+    padding:10px 10px;
+}
+.behclick-panel .panel-body {
+    padding: 0px;
+}
+ /* unvisited link */
+.behclick-panel a:link {
+    text-decoration:none;
+}
+
+/* visited link */
+.behclick-panel a:visited {
+    text-decoration:none;
+}
+
+/* mouse over link */
+.behclick-panel a:hover {
+    text-decoration:none;
+}
+
+/* selected link */
+.behclick-panel a:active {
+    text-decoration:none;
+}
+.behclick-panel{
+    color: #46b8da!important
+}
