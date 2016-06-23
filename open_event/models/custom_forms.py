@@ -17,13 +17,13 @@ class CustomForms(db.Model):
         self.speaker_form = speaker_form
 
     def __repr__(self):
-        return '<Custom Form %r>' % self.id
+        return '<CustomForm %r>' % self.id
 
     def __str__(self):
         return unicode(self).encode('utf-8')
 
     def __unicode__(self):
-        return self.id
+        return 'CustomForm %r' % self.id
 
     @property
     def serialize(self):

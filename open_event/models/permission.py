@@ -37,3 +37,10 @@ class Permission(db.Model):
     def __repr__(self):
         return '<Perm %r for %r>' % (self.role,
                                      self.service, )
+
+    def __str__(self):
+        return unicode(self).encode('utf-8')
+
+    def __unicode__(self):
+        return 'Perm %r for %r' % (self.role,
+                                   self.service, )

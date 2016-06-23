@@ -3,8 +3,9 @@ from . import db
 
 class Ticket(db.Model):
     __tablename__ = 'ticket'
-    __table_args__ = (db.UniqueConstraint(
-        'name', 'event_id', name='name_event_uc'), )
+    __table_args__ = (db.UniqueConstraint('name',
+                                          'event_id',
+                                          name='name_event_uc'), )
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
@@ -45,6 +46,12 @@ class Ticket(db.Model):
     def __repr__(self):
         return '<Ticket %r>' % self.name
 
+    def __str__(self):
+        return unicode(self).encode('utf-8')
+
+    def __unicode__(self):
+        return self.name
+
 
 class BookedTicket(db.Model):
     __tablename__ = 'booked_ticket'
@@ -65,4 +72,11 @@ class BookedTicket(db.Model):
         self.quantity = quantity
 
     def __repr__(self):
-        return '<BookedTicket {}:{}'.format(self.user, self.ticket)
+        return '<BookedTicket %r by %r' % (self.ticket,
+                                           self.user, )
+
+    def __str__(self):
+        return unicode(self).encode('utf-8')
+
+    def __unicode__(self):
+        return self.ticket
