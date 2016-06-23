@@ -15,6 +15,7 @@ ACTIVITIES = {
     'delete_event': 'Event {event_id} deleted',
     'import_event': 'Event {event_id} imported',
     'publish_event': 'Event {event_id} {status}',
+    'export_event': 'Event {event_id} exported',
 
     'create_role': 'Role {role} created for user {user} in event {event_id}',
     'update_role': 'Role updated to {role} for user {user} in event {event_id}',

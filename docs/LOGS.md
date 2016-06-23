@@ -11,7 +11,7 @@ These are -
 6. Send Invite for Event
 7. Assign/Remove a system level role
 8. Publish/Unpublish event
-9. Import Event
+9. Import/Export Event
 10. Add Speaker to Session
 11. Create/Update/Delete Speaker
 12. Create/Update/Delete Session
