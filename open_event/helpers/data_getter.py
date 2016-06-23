@@ -472,3 +472,7 @@ class DataGetter:
         return [(item, "(UTC" + datetime.datetime.now(pytz.timezone(item)).strftime('%z') + ") " + item) for item
                 in
                 pytz.common_timezones]
+
+    @staticmethod
+    def get_sponsor(sponsor_id):
+        return Sponsor.query.get(sponsor_id)
