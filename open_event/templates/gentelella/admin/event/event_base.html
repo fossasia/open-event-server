@@ -75,13 +75,11 @@
                         <div class="tabContent tab-content">
                             {% for href, id, caption in navigation_bar %}
                                 <a href="{{ href|e }}" class="accordion-link {% if id == active_page %} active{% endif %}">{{ caption|e }}</a>
-                                <div class="tab-pane {% if id == active_page %} active{% endif %}">
-                                    {% block content %}
-
-                                    {% endblock %}
-                                </div>
                             {% endfor %}
                         </div>
+                        {% block content %}
+
+                        {% endblock %}
                     </div>
                 </div>
             </div>

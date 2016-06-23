@@ -6,7 +6,7 @@ import traceback
 import json
 from datetime import datetime, timedelta
 
-from flask import flash, request, url_for
+from flask import flash, request, url_for, g
 from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from sqlalchemy.orm.collections import InstrumentedList
@@ -40,6 +40,7 @@ from requests_oauthlib import OAuth2Session
 from ..models.invite import Invite
 from ..models.call_for_papers import CallForPaper
 from ..models.custom_forms import CustomForms
+from ..models.activity import Activity, ACTIVITIES
 
 
 class DataManager(object):
@@ -223,6 +224,7 @@ class DataManager(object):
         new_session.slides = slide_url
         save_to_db(new_session, "Session saved")
         save_to_db(speaker, "Speaker saved")
+        record_activity('create_session', session=new_session, event_id=event_id)
 
         invite_emails = form.getlist("speakers[email]")
         for index, email in enumerate(invite_emails):
@@ -478,6 +480,7 @@ class DataManager(object):
         :param uer_id: Role id to remove object
         """
         uer = UsersEventsRoles.query.get(uer_id)
+        record_activity('delete_role', role=uer.role, user=uer.user, event_id=uer.event_id)
         delete_from_db(uer, "UER deleted")
         flash('You successfully delete role')
 
@@ -538,6 +541,7 @@ class DataManager(object):
 
         user.salt = salt
         save_to_db(user, "User created")
+        record_activity('create_user', user=user)
 
         return user
 
@@ -584,6 +588,7 @@ class DataManager(object):
         user_detail.details = form['details']
         user_detail.avatar_uploaded = avatar_img
         print user, user_detail, save_to_db(user, "User updated")
+        record_activity('update_user', user=user)
 
     @staticmethod
     def add_owner_to_event(owner_id, event):
@@ -641,11 +646,12 @@ class DataManager(object):
                       creator=login.current_user)
 
         state = form.get('state', None)
-        if state and ((state == u'Published' and not string_empty(event.location_name)) or state != u'Published'):
+        if state and ((state == u'Published' and not string_empty(event.location_name)) or state != u'Published') and login.current_user.is_verified:
             event.state = state
 
         if event.start_time <= event.end_time:
             save_to_db(event, "Event Saved")
+            record_activity('create_event', event_id=event.id)
             role = Role.query.filter_by(name=ORGANIZER).first()
             db.session.add(event)
             db.session.flush()
@@ -760,7 +766,7 @@ class DataManager(object):
         event.ticket_url = form['ticket_url']
 
         state = form.get('state', None)
-        if state and ((state == u'Published' and not string_empty(event.location_name)) or state != u'Published'):
+        if state and ((state == u'Published' and not string_empty(event.location_name)) or state != u'Published') and login.current_user.is_verified:
             event.state = state
 
         session_type_names = form.getlist('session_type[name]')
@@ -853,6 +859,7 @@ class DataManager(object):
             save_to_db(call_for_speakers)
 
         save_to_db(event, "Event saved")
+        record_activity('update_event', event_id=event.id)
         return event
 
     @staticmethod
@@ -863,6 +870,7 @@ class DataManager(object):
         SocialLink.query.filter_by(event_id=e_id).delete()
         Track.query.filter_by(id=e_id).delete()
         Event.query.filter_by(id=e_id).delete()
+        record_activity('delete_event', event_id=e_id)
         db.session.commit()
 
     @staticmethod
@@ -907,6 +915,7 @@ class DataManager(object):
         uer = UsersEventsRoles(event=Event.query.get(event_id),
                                user=user, role=role)
         save_to_db(uer, "Event saved")
+        record_activity('create_role', role=role, user=user, event_id=event_id)
 
     @staticmethod
     def update_user_event_role(form, uer):
@@ -915,6 +924,7 @@ class DataManager(object):
         uer.user = user
         uer.role_id = role.id
         save_to_db(uer, "Event saved")
+        record_activity('update_role', role=role, user=user, event_id=uer.event_id)
 
 
 def save_to_db(item, msg="Saved to db"):
@@ -995,7 +1005,7 @@ def create_user_password(form, user):
     hash = random.getrandbits(128)
     user.reset_password = str(hash)
     user.salt = salt
-
+    user.is_verified = True
     save_to_db(user, "User password created")
     return user
 
@@ -1011,6 +1021,39 @@ def user_logged_in(user):
             save_to_db(uer)
             save_to_db(speaker)
     return True
+
+
+def record_activity(template, login_user=None, **kwargs):
+    """
+    record an activity
+    """
+    if not login_user and hasattr(g, 'user'):
+        login_user = g.user
+    if not login_user and login.current_user.is_authenticated:
+        login_user = login.current_user
+    if login_user:
+        actor = login_user.email + ' (' + str(login_user.id) + ')'
+    else:
+        actor = 'Anonymous'
+    id_str = ' (%d)'
+    s = '"%s"'
+    # add more information for objects
+    for k in kwargs:
+        v = kwargs[k]
+        if k.startswith('user'):
+            kwargs[k] = s % v.email + id_str % v.id
+        elif k.startswith('role'):
+            kwargs[k] = s % v.title_name
+        elif k.startswith('session'):
+            kwargs[k] = s % v.title + id_str % v.id
+        else:
+            kwargs[k] = str(v)
+    msg = ACTIVITIES[template].format(**kwargs)
+    # conn.execute(Activity.__table__.insert().values(
+    #     actor=actor, action=msg, time=datetime.now()
+    # ))
+    activity = Activity(actor=actor, action=msg)
+    save_to_db(activity, 'Activity Recorded')
 
 
 def update_version(event_id, is_created, column_to_increment):

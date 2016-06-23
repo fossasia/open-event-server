@@ -54,10 +54,15 @@
     <script src="{{ url_for('static', filename='admin/lib/bootstrap/dist/js/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/summernote/dist/summernote.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap/jquery.bootstrap-responsive-tabs.min.js') }}"></script>
     <script type="text/javascript">
-    $('.bar_tabs').responsiveTabs({
-      accordionOn: ['xs'] // xs, sm, md, lg
+    $(document).ready(function(){
+        $('.search-button').click(function(e){
+            if (window.screen.width <= 640 && ($('#search-text').val() == "")) {
+                e.preventDefault();
+                $('#search-text').toggle();
+                $('#search-text').width(0.9 * window.screen.width);
+            }
+        });
     });
     </script>
 {% endblock %}

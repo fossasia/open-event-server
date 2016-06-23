@@ -13,12 +13,17 @@ import datetime
 from werkzeug.datastructures import ImmutableMultiDict
 
 
-class EventsView(BaseView):
-    def is_accessible(self):
-        return login.current_user.is_authenticated
+def is_verified_user():
+    return login.current_user.is_verified
 
+
+def is_accessible():
+    return login.current_user.is_authenticated
+
+
+class EventsView(BaseView):
     def _handle_view(self, name, **kwargs):
-        if not self.is_accessible():
+        if not is_accessible():
             return redirect(url_for('admin.login_view', next=request.url))
 
     @expose('/')
@@ -38,14 +43,11 @@ class EventsView(BaseView):
         if request.method == 'POST':
             img_files = []
             imd = ImmutableMultiDict(request.files)
-            if 'sponsors[logo]' in imd and request.files[
-                'sponsors[logo]'].filename != "":
+            if 'sponsors[logo]' in imd and request.files['sponsors[logo]'].filename != "":
                 for img_file in imd.getlist('sponsors[logo]'):
                     img_files.append(img_file)
             event = DataManager.create_event(request.form, img_files)
-            if request.form.get('state',
-                                u'Draft') == u'Published' and string_empty(
-                event.location_name):
+            if request.form.get('state', u'Draft') == u'Published' and string_empty(event.location_name):
                 flash(
                     "Your event was saved. To publish your event please review the highlighted fields below.",
                     "warning")
@@ -95,9 +97,7 @@ class EventsView(BaseView):
             checklist["2"] = 'missing_main'
         else:
             for sponsor in sponsors:
-                if fields_not_empty(
-                    sponsor,
-                    ['name', 'description', 'url', 'level', 'logo']):
+                if fields_not_empty(sponsor, ['name', 'description', 'url', 'level', 'logo']):
                     checklist["2"] = 'success'
                     break
                 else:
@@ -132,6 +132,9 @@ class EventsView(BaseView):
                     checklist["3"] = 'missing_some'
 
         checklist["5"] = 'success'
+        if not is_verified_user():
+            flash("To make your event live, please verify your email by "
+                  "clicking on the confirmation link sent to you.")
         return self.render('/gentelella/admin/event/details/details.html',
                            event=event,
                            checklist=checklist)
@@ -191,6 +194,7 @@ class EventsView(BaseView):
                     "warning")
                 return redirect(url_for(
                     '.edit_view', event_id=event.id) + "#step=location_name")
+
             return redirect(url_for('.details_view', event_id=event_id))
 
     @expose('/<event_id>/delete/', methods=('GET',))
@@ -218,6 +222,8 @@ class EventsView(BaseView):
                 "warning")
             return redirect(url_for('.edit_view',
                                     event_id=event.id) + "#step=location_name")
+        if not is_verified_user():
+            return redirect(url_for('.details_view', event_id=event_id))
         event.state = 'Published'
         save_to_db(event, 'Event Published')
         flash("Your event has been published.", "success")

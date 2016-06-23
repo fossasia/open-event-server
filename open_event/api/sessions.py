@@ -6,6 +6,7 @@ from open_event.models.track import Track as TrackModel
 from open_event.models.microlocation import Microlocation as MicrolocationModel
 from open_event.models.speaker import Speaker as SpeakerModel
 from open_event.models.session_type import SessionType as SessionTypeModel
+from open_event.helpers.data import record_activity
 
 from .helpers.helpers import get_paginated_list, requires_auth, \
     save_db_model, get_object_in_event
@@ -195,11 +196,13 @@ class SessionList(Resource):
     @api.expect(SESSION_POST)
     def post(self, event_id):
         """Create a session"""
-        return DAO.create(
+        item = DAO.create(
             event_id,
             self.api.payload,
             self.api.url_for(self, event_id=event_id)
         )
+        record_activity('create_session', session=item[0], event_id=event_id)
+        return item
 
 
 @api.route('/events/<int:event_id>/sessions/page')
