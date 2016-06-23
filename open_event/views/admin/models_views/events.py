@@ -7,7 +7,7 @@ from flask_admin import expose
 
 from open_event.helpers.permission_decorators import *
 from open_event.helpers.helpers import fields_not_empty, string_empty
-from ....helpers.data import DataManager, save_to_db
+from ....helpers.data import DataManager, save_to_db, record_activity
 from ....helpers.data_getter import DataGetter
 import datetime
 from werkzeug.datastructures import ImmutableMultiDict
@@ -153,7 +153,7 @@ class EventsView(BaseView):
         custom_forms = DataGetter.get_custom_form_elements(event_id).first()
         speaker_form = json.loads(custom_forms.speaker_form)
         session_form = json.loads(custom_forms.session_form)
-        
+
         preselect = []
         required = []
         for session_field in session_form:
@@ -226,6 +226,7 @@ class EventsView(BaseView):
             return redirect(url_for('.details_view', event_id=event_id))
         event.state = 'Published'
         save_to_db(event, 'Event Published')
+        record_activity('publish_event', event_id=event.id, status='published')
         flash("Your event has been published.", "success")
         return redirect(url_for('.details_view', event_id=event_id))
 
@@ -234,6 +235,7 @@ class EventsView(BaseView):
         event = DataGetter.get_event(event_id)
         event.state = 'Draft'
         save_to_db(event, 'Event Unpublished')
+        record_activity('publish_event', event_id=event.id, status='un-published')
         flash("Your event has been unpublished.", "warning")
         return redirect(url_for('.details_view', event_id=event_id))
 

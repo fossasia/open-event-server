@@ -9,6 +9,8 @@ ACTIVITIES = {
     'update_event': 'Event {event_id} updated',
     'create_event': 'Event {event_id} created',
     'delete_event': 'Event {event_id} deleted',
+    'import_event': 'Event {event_id} imported',
+    'publish_event': 'Event {event_id} {status}',
     'create_role': 'Role {role} created for user {user} in event {event_id}',
     'update_role': 'Role updated to {role} for user {user} in event {event_id}',
     'delete_role': 'User {user} removed from role {role} in event {event_id}',
@@ -21,6 +23,8 @@ ACTIVITIES = {
     'remove_speaker': 'Speaker {speaker} of event {event_id} was deleted',
     'update_speaker': 'Speaker {speaker} of event {event_id} was updated',
     'add_speaker_to_session': 'Speaker {speaker} added to session {session} of event {event_id}',
+    'system_admin': 'User {user} {status} system admin',
+    'update_user_email': 'User {user_id}\'s email changed from {old} to {new}'
 }
 
 

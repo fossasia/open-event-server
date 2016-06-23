@@ -587,6 +587,9 @@ class DataManager(object):
         user = User.query.filter_by(id=user_id).first()
         user_detail = UserDetail.query.filter_by(user_id=user_id).first()
 
+        if user.email != form['email']:
+            record_activity('update_user_email',
+                            user_id=user.id, old=user.email, new=form['email'])
         user.email = form['email']
         user_detail.fullname = form['full_name']
         user_detail.facebook = form['facebook']
@@ -1094,9 +1097,15 @@ def get_or_create(model, **kwargs):
 
 def update_role_to_admin(form, user_id):
     user = DataGetter.get_user(user_id)
+    old_admin_status = user.is_admin
     if form['admin_perm'] == 'isAdmin':
         user.is_admin = True
     else:
         user.is_admin = False
 
     save_to_db(user, "User role Updated")
+    if old_admin_status != user.is_admin:
+        record_activity(
+            'system_admin', user=user,
+            status='Assigned' if user.is_admin else 'Unassigned'
+        )
