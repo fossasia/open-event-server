@@ -40,6 +40,7 @@ from requests_oauthlib import OAuth2Session
 from ..models.invite import Invite
 from ..models.call_for_papers import CallForPaper
 from ..models.custom_forms import CustomForms
+from ..models.ticket import Ticket, BookedTicket
 from ..models.activity import Activity, ACTIVITIES
 
 
