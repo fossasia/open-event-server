@@ -478,10 +478,10 @@ class DataGetter:
     def get_sponsor(sponsor_id):
         return Sponsor.query.get(sponsor_id)
 
+    @staticmethod
     def get_all_activities(count=300):
         """
         Get all activities by recent first
         """
         activities = Activity.query.order_by(desc(Activity.time)).all()
         return activities[:count]
-
