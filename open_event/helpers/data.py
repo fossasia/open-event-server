@@ -579,7 +579,6 @@ class DataManager(object):
         user = User.query.filter_by(id=user_id).first()
         user_detail = UserDetail.query.filter_by(user_id=user_id).first()
 
-        print form
         user.email = form['email']
         user_detail.fullname = form['full_name']
         user_detail.facebook = form['facebook']

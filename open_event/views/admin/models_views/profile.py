@@ -30,7 +30,7 @@ class ProfileView(BaseView):
             user_id = login.current_user.id
         if request.method == 'POST':
             url = ""
-            if 'avatar' in request.files and requast.files['avatar'].filename != "":    
+            if 'avatar' in request.files and request.files['avatar'].filename != "":    
                 avatar_img = request.files['avatar']
                 url = upload(avatar_img, 'users/%d/avatar' % int(user_id))
             profile = DataManager.update_user(request.form, int(user_id), url)
