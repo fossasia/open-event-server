@@ -40,7 +40,7 @@
                                 {% else %}
                                 <img src="{{ url_for('static', filename='img/avatar.png') }}"/>
                                 {% endif %}
-                                {{ current_user.user_detail.fullname }}
+                                {{ current_user.user_detail.fullname | default(current_user.email, true) }}
                                 <span class=" fa fa-angle-down"></span>
                             </a>
                             <ul class="dropdown-menu dropdown-usermenu pull-right">
