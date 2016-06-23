@@ -171,3 +171,17 @@ def fields_not_empty(obj, fields):
         if string_empty(getattr(obj, field)):
             return False
     return True
+
+
+def get_request_stats():
+    """
+    Get IP, Browser, Platform, Version etc
+    http://werkzeug.pocoo.org/docs/0.11/utils/#module-werkzeug.useragents
+    """
+    return {
+        'ip': request.remote_addr,
+        'platform': request.user_agent.platform,
+        'browser': request.user_agent.browser,
+        'version': request.user_agent.version,
+        'language': request.user_agent.language
+    }

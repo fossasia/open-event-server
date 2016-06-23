@@ -3,15 +3,19 @@
 Certain information is being logged and stored in the database for future reference, resolving conflicts in case of hacks and for maintaining an overview of the system.
 These are -
 
-1. Create Event
-2. Update Event
-3. Delete Event
-4. Create User
-5. Update User
-6. Assign an event-level role
-7. Edit an event-level role
-8. Remove an event-level role
-9. Create Session
+1. Create/Update/Delete Event
+2. Create/Update User
+3. Update user email
+4. Assign/Edit/Remove an event-level role
+5. Create/Update/Delete Track
+6. Send Invite for Event
+7. Assign/Remove a system level role
+8. Publish/Unpublish event
+9. Import/Export Event
+10. Add Speaker to Session
+11. Create/Update/Delete Speaker
+12. Create/Update/Delete Session
+13. Login/Logout from user (tracking IP, browser, platform)
 
 
 ## How to log information
