@@ -153,7 +153,7 @@ class EventsView(BaseView):
         custom_forms = DataGetter.get_custom_form_elements(event_id).first()
         speaker_form = json.loads(custom_forms.speaker_form)
         session_form = json.loads(custom_forms.session_form)
-
+        
         preselect = []
         required = []
         for session_field in session_form:
