@@ -130,10 +130,6 @@ class User(db.Model):
     def get_id(self):
         return self.id
 
-    # Required for administrative interface
-    def __unicode__(self):
-        return self.username
-
     @property
     def is_staff(self):
         return self.is_super_admin or self.is_admin
@@ -144,6 +140,12 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.email
+
+    def __str__(self):
+        return unicode(self).encode('utf-8')
+
+    def __unicode__(self):
+        return self.email
 
 
 @event.listens_for(User, 'init')
