@@ -35,6 +35,8 @@ class TestLogin(OpenEventTestCase):
             self.assertTrue("Open Event" in rv.data)
 
     def test_logout(self):
+        with app.test_request_context():
+            register(self.app, u'email@gmail.com', u'test')
         login(self.app, 'email@gmail.com', 'test')
         rv = logout(self.app)
         self.assertTrue("Login" in rv.data)
