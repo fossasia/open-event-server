@@ -3,7 +3,7 @@
 Event Sponsors
 {% endblock %}
 {% block addon_link %}
-<button class="btn btn-info pull-right" style="color: #FFFFFF; height: 30px; width: 30px; margin: 0; padding-left: 10px;" data-toggle="modal" data-target="#add-role">+</button>
+<button onclick="addSponsor();"class="btn btn-info pull-right" style="color: #FFFFFF; height: 30px; width: 100px; margin: 0; padding-left: 10px;" data-target="#add-role">Add Sponsor</button>
 {% endblock %}
 {% block panel_content %}
 <div class="col-md-12">
@@ -40,41 +40,11 @@ Event Sponsors
         </tbody>
     </table>
 </div>
-
-<div class="modal fade" id="add-role" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Add Role</h4>
-            </div>
-            <div class="modal-body">
-                <form action="/events/{{event.id}}/roles/new/" method="POST" role="form">
-                    <p>
-                        <label>User email:</label>
-                        <input name="user_email" placeholder="User" class="form-control">
-                    </p>
-                    <p> <label>Permissions:</label>
-                        <select name="user_role" id="heard" class="form-control" required="">
-                            <option value="">Choose..</option>
-                            <option value="track_organizer">Track Organizer</option>
-                            <option value="coorganizer">Co-organizer</option>
-                            <option value="moderator">Moderator</option>
-                        </select>
-                    </p>
-                    <button type="submit" class="btn btn-success">Add</button>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
+<script type="text/javascript">
+    function addSponsor(){
+        window.location='/events/{{ event.id }}/edit#step=2';
+        }
+</script>
 {% endblock %}
 {% block tail_js %}
     {{ super() }}
@@ -82,7 +52,7 @@ Event Sponsors
     <script src="{{ url_for('static', filename='admin/lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script type="text/javascript">
         $('.sponsor-table').DataTable();
+
     </script>
-
-
+    
 {% endblock %}
