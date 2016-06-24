@@ -18,14 +18,16 @@ class SettingsView(BaseView):
 
     @expose('/')
     def index_view(self):
-        settings = DataGetter.get_settings(login.current_user.id)
+        events = DataGetter.get_all_events()
+        settings = DataGetter.get_email_notification_settings(login.current_user.id)
         return self.render('/gentelella/admin/settings/index.html',
-                           settings=settings)
+                           settings=settings, events=events)
 
-    @expose('/edit/<event_id>', methods=('GET', 'POST'))
+    @expose('/edit/event/<event_id>', methods=('GET', 'POST'))
     def edit_view(self, event_id):
         if request.method == 'POST':
-            settings = DataManager.update_settings(request.form, login.current_user.id, event_id)
-            return redirect(url_for('.index_view'))
-        settings = DataGetter.get_settings(login.current_user.id)
-        return self.render('/gentelella/admin/settings/edit.html', settings=settings)
+            settings = DataManager.add_email_notification_settings(request.form, login.current_user.id, event_id)
+            return redirect(url_for('settings.index_view'))
+        event = DataGetter.get_event(event_id)
+        settings = DataGetter.get_email_notification_settings_by_event_id(login.current_user.id, event_id)
+        return self.render('/gentelella/admin/settings/edit.html', settings=settings, event=event)

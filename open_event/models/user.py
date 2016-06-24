@@ -39,7 +39,6 @@ class User(db.Model):
     signup_time = db.Column(db.DateTime)
     last_access_time = db.Column(db.DateTime)
     user_detail = db.relationship("UserDetail", uselist=False, backref="user")
-    settings = db.relationship("Setting", uselist=False, backref="user")
     created_date = db.Column(db.DateTime, default=datetime.now())
 
     def _is_role(self, role_name, event_id):
@@ -119,6 +118,19 @@ class User(db.Model):
         except NoResultFound, e:
             return False
 
+    def is_speaker_at_event(self, event_id):
+        try:
+            session = Session.query.filter(Session.speakers.any(Speaker.user_id == self.id)).filter(
+                Session.event_id == event_id).first()
+            if session:
+                return True
+            else:
+                return False
+        except MultipleResultsFound, e:
+            return False
+        except NoResultFound, e:
+            return False
+
     # Flask-Login integration
     def is_authenticated(self):
         return True
@@ -153,5 +165,4 @@ class User(db.Model):
 @event.listens_for(User, 'init')
 def receive_init(target, args, kwargs):
     target.user_detail = UserDetail()
-    target.settings = Setting()
     target.signup_time = datetime.now()

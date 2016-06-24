@@ -30,6 +30,7 @@ from ..models.user import User, ORGANIZER
 from ..models.user_detail import UserDetail
 from ..models.role import Role
 from ..models.setting import Setting
+from ..models.email_notifications import EmailNotification
 from ..models.service import Service
 from ..models.permission import Permission
 from ..models.users_events_roles import UsersEventsRoles
@@ -77,6 +78,30 @@ class DataManager(object):
         save_to_db(new_track, "Track saved")
         record_activity('create_track', event_id=event_id, track=new_track)
         update_version(event_id, False, "tracks_ver")
+
+    @staticmethod
+    def add_email_notification_settings(form, user_id, event_id):
+        """
+        Track will be saved to database with proper Event id
+        :param form: view data form
+        :param event_id: Track belongs to Event by event id
+        """
+        email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(user_id, event_id)
+        if email_notification_setting:
+            email_notification_setting.next_event = int(form.get('next_event', 0))
+            email_notification_setting.new_paper = int(form.get('new_paper', 0))
+            email_notification_setting.session_schedule = int(form.get('session_schedule', 0))
+            email_notification_setting.session_accept_reject = int(form.get('session_accept_reject', 0))
+
+            save_to_db(email_notification_setting, "EmailSettings Updated")
+        else:
+            new_email_notification_setting = EmailNotification(next_event=int(form.get('next_event', 0)),
+                                                               new_paper=int(form.get('new_paper', 0)),
+                                                               session_schedule=int(form.get('session_schedule', 0)),
+                                                               session_accept_reject=int(form.get('session_accept_reject', 0)),
+                                                               user_id=user_id,
+                                                               event_id=event_id)
+            save_to_db(new_email_notification_setting, "EmailSetting Saved")
 
     @staticmethod
     def create_new_track(form, event_id):
