@@ -7,6 +7,8 @@ from datetime import datetime
 from flask import request
 from itsdangerous import Serializer
 from flask.ext import login
+
+from open_event.helpers.flask_helpers import get_real_ip
 from ..models.track import Track
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
     USER_REGISTER, PASSWORD_RESET, Mail
@@ -177,9 +179,11 @@ def get_request_stats():
     """
     Get IP, Browser, Platform, Version etc
     http://werkzeug.pocoo.org/docs/0.11/utils/#module-werkzeug.useragents
+
+    Note: request.remote_addr gives the server's address if the server is behind a reverse proxy. -@niranjan94
     """
     return {
-        'ip': request.remote_addr,
+        'ip': get_real_ip(),
         'platform': request.user_agent.platform,
         'browser': request.user_agent.browser,
         'version': request.user_agent.version,
