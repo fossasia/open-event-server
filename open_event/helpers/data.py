@@ -639,11 +639,12 @@ class DataManager(object):
     def create_event(form, img_files):
         """
         Event will be saved to database with proper Event id
+        :param img_files:
         :param form: view data form
         """
         event = Event(name=form['name'],
-                      email='dsads',
-                      color='#f5f5f5',
+                      email=form.get('email', u'test@example.com'),
+                      color=form.get('color', u'black'),
                       logo=form['logo'],
                       start_time=datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M'),
                       end_time=datetime.strptime(form['start_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M'),
@@ -656,7 +657,7 @@ class DataManager(object):
                       background_url=form['background_url'],
                       type=form['type'],
                       topic=form['topic'],
-                      privacy=form.get('privacy', 'public'),
+                      privacy=form.get('privacy', u'public'),
                       ticket_url=form['ticket_url'],
                       organizer_name=form['organizer_name'],
                       organizer_description=form['organizer_description'],
@@ -775,7 +776,7 @@ class DataManager(object):
         event.description = form['description']
         event.event_url = form['event_url']
         event.background_url = form['background_url']
-        event.type = form['event_type']
+        event.type = form['type']
         event.topic = form['topic']
         event.privacy = form.get('privacy', 'public')
         event.organizer_name = form['organizer_name']
