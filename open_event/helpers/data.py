@@ -69,7 +69,8 @@ class DataManager(object):
 
         link = url_for('events.user_role_invite',
                        event_id=event_id,
-                       hash=role_invite.hash)
+                       hash=role_invite.hash,
+                       _external=True)
 
         Helper.send_email_for_event_role_invite(user.email,
                                                 role.title_name,
