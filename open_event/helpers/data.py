@@ -654,7 +654,7 @@ class DataManager(object):
                       description=form['description'],
                       event_url=form['event_url'],
                       background_url=form['background_url'],
-                      type=form['event_type'],
+                      type=form['type'],
                       topic=form['topic'],
                       privacy=form.get('privacy', 'public'),
                       ticket_url=form['ticket_url'],

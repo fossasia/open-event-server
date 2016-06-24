@@ -1,36 +1,14 @@
 """Copyright 2015 Rafal Kowalski"""
 import unittest
-from tests.auth_helper import register, login
-from tests.setup_database import Setup
 from tests.object_mother import ObjectMother
 from open_event import current_app as app
 from open_event.helpers.data import save_to_db
-from open_event.models.session import Session
-from datetime import datetime
 from flask import url_for
 
 from tests.views.view_test_case import OpenEventViewTestCase
 
 
 class TestSessionApi(OpenEventViewTestCase):
-
-    def test_add_session_to_db(self):
-        session = ObjectMother.get_session()
-        with app.test_request_context():
-            save_to_db(session, "Session saved")
-            self.assertEqual(session.id, 1)
-            self.assertEqual(session.event_id, 1)
-
-    def test_multiple_sessions_for_same_event(self):
-        session1 = ObjectMother.get_session()
-        session2 = Session(title='test2',
-                           long_abstract='dsadsd',
-                           start_time=datetime(2003, 8, 4, 12, 30, 45),
-                           end_time=datetime(2003, 8, 4, 12, 30, 45),
-                           event_id=1,
-                           state='pending')
-        self.assertEqual(session1.event_id, 1)
-        self.assertEqual(session2.event_id, 1)
 
     def test_session_accept(self):
         with app.test_request_context():

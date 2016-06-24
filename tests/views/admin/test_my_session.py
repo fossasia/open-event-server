@@ -4,6 +4,7 @@ from datetime import datetime
 from open_event.helpers.data import save_to_db
 from open_event.models.session import Session
 from open_event.models.speaker import Speaker
+from tests.auth_helper import logout, login
 from tests.object_mother import ObjectMother
 from open_event import current_app as app
 from tests.views.view_test_case import OpenEventViewTestCase
@@ -15,11 +16,11 @@ class TestMySession(OpenEventViewTestCase):
         with app.test_request_context():
             event = ObjectMother.get_event()
             save_to_db(event, "Event saved")
-
             speaker = Speaker(name="name",
                               email="email2@gmail.com",
                               organisation="FOSSASIA",
                               event_id=event.id,
+                              user=self.super_admin,
                               country="India")
             save_to_db(speaker, "Speaker saved")
             session = Session(title='test',
@@ -36,11 +37,14 @@ class TestMySession(OpenEventViewTestCase):
     def test_my_session_unauthorized_access(self):
         with app.test_request_context():
             event = ObjectMother.get_event()
+            user = ObjectMother.get_user()
+            save_to_db(user, "User saved")
             save_to_db(event, "Event saved")
             speaker = Speaker(name="name",
                               email="email2@gmail.com",
                               organisation="FOSSASIA",
                               event_id=event.id,
+                              user=user,
                               country="India")
             save_to_db(speaker, "Speaker saved")
             session = Session(title='test',

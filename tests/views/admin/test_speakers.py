@@ -11,6 +11,14 @@ from tests.views.view_test_case import OpenEventViewTestCase
 
 class TestSpeakers(OpenEventViewTestCase):
 
+    def test_speakers_list(self):
+        with app.test_request_context():
+            event = ObjectMother.get_event()
+            save_to_db(event, "Event saved")
+            url = url_for('event_speakers.index_view', event_id=event.id)
+            rv = self.app.get(url, follow_redirects=True)
+            self.assertTrue("Speakers" in rv.data, msg=rv.data)
+
     def test_speaker_delete(self):
         with app.test_request_context():
             event = ObjectMother.get_event()
