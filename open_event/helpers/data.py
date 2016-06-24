@@ -663,7 +663,8 @@ class DataManager(object):
                       creator=login.current_user)
 
         state = form.get('state', None)
-        if state and ((state == u'Published' and not string_empty(event.location_name)) or state != u'Published') and login.current_user.is_verified:
+        if state and ((state == u'Published' and not string_empty(
+            event.location_name)) or state != u'Published') and login.current_user.is_verified:
             event.state = state
 
         if event.start_time <= event.end_time:
@@ -757,7 +758,7 @@ class DataManager(object):
 
     @staticmethod
     def edit_event(request, event_id, event, session_types, tracks, social_links, microlocations, call_for_papers,
-                   sponsors, custom_forms , img_files):
+                   sponsors, custom_forms, img_files, old_sponsor_logos, old_sponsor_names):
         """
         Event will be updated in database
         :param data: view data form
@@ -783,7 +784,8 @@ class DataManager(object):
         event.ticket_url = form['ticket_url']
 
         state = form.get('state', None)
-        if state and ((state == u'Published' and not string_empty(event.location_name)) or state != u'Published') and login.current_user.is_verified:
+        if state and ((state == u'Published' and not string_empty(
+            event.location_name)) or state != u'Published') and login.current_user.is_verified:
             event.state = state
 
         session_type_names = form.getlist('session_type[name]')
@@ -848,12 +850,22 @@ class DataManager(object):
                                   event_id=event.id, sponsor_type=sponsor_type[index])
                 save_to_db(sponsor, "Sponsor created")
                 if len(img_files) != 0:
-                    img_url = upload(img_files[index],
-                                     'events/%d/sponsor/%d/image' % (int(event.id), int(sponsor.id)))
-                    sponsor_logo_url.append(img_url)
-                    sponsor.logo = sponsor_logo_url[index]
+                    if img_files[index]:
+                        img_url = upload(img_files[index],
+                                         'events/%d/sponsor/%d/image' % (int(event.id), int(sponsor.id)))
+                        sponsor_logo_url.append(img_url)
+                        sponsor.logo = sponsor_logo_url[index]
+                    else:
+                        if name in old_sponsor_names:
+                            sponsor.logo = old_sponsor_logos[index]
+                        else:
+                            sponsor.logo = ""
                 else:
-                    sponsor.logo = ""
+                    if name in old_sponsor_names:
+                        sponsor.logo = old_sponsor_logos[index]
+                    else:
+                        sponsor.logo = ""
+                print sponsor.logo
                 save_to_db(sponsor, "Sponsor updated")
 
         session_form = ""
