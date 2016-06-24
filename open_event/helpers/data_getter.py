@@ -22,6 +22,7 @@ from ..models.call_for_papers import CallForPaper
 from ..models.custom_forms import CustomForms
 from ..models.mail import Mail
 from ..models.activity import Activity
+from ..models.setting import Setting
 from .language_list import LANGUAGE_LIST
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
