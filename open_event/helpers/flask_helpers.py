@@ -2,10 +2,13 @@ from flask import request
 from jinja2 import Undefined
 
 def get_real_ip():
-    if 'X-Forwarded-For' in request.headers:
-        return request.headers.getlist("X-Forwarded-For")[0].rpartition(' ')[-1]
-    else:
-        return request.remote_addr or 'untrackable'
+    try:
+        if 'X-Forwarded-For' in request.headers:
+            return request.headers.getlist("X-Forwarded-For")[0].rpartition(' ')[-1]
+        else:
+            return request.remote_addr or 'untrackable'
+    except:
+        return 'untrackable'
 
 class SilentUndefined(Undefined):
     """
