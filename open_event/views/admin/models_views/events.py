@@ -2,6 +2,7 @@ import json
 
 import pytz
 from flask import request, flash
+from flask.ext.restplus import abort
 from flask.ext.admin import BaseView
 from flask_admin import expose
 
@@ -259,3 +260,20 @@ class EventsView(BaseView):
             start_date=datetime.datetime.now() + datetime.timedelta(days=10),
             event_types=DataGetter.get_event_types(),
             event_topics=DataGetter.get_event_topics())
+
+    @expose('/<int:event_id>/role-invite/<user_id>/<hash>', methods=('GET', 'POST'))
+    def user_role_invite(self, event_id, user_id, hash):
+        event = DataGetter.get_event(event_id)
+        role_invite = DataGetter.get_event_role_invite(user_id=user_id,
+                                                       event_id=event.id,
+                                                       hash=hash)
+
+        if role_invite:
+            role = role_invite.role
+            data = dict()
+            data['user_email'] = role_invite.user.email
+            data['user_role'] = role.name
+            DataManager.add_role_to_event(data, event.id)
+            return redirect(url_for('.details_view', event_id=event.id))
+        else:
+            abort(404)

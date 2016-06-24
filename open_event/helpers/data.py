@@ -29,6 +29,7 @@ from ..models.sponsor import Sponsor
 from ..models.user import User, ORGANIZER
 from ..models.user_detail import UserDetail
 from ..models.role import Role
+from ..models.role_invite import RoleInvite
 from ..models.service import Service
 from ..models.permission import Permission
 from ..models.users_events_roles import UsersEventsRoles

@@ -16,6 +16,8 @@ class RoleInvite(db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
     role = db.relationship("Role")
 
+    hash = db.Column(db.String)
+
     def __init__(self, user, event, role):
         self.user = user
         self.event = event
