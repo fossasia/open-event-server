@@ -9,16 +9,9 @@ from open_event.helpers.data import save_to_db
 from open_event.helpers.data_getter import DataGetter
 from flask import url_for
 
-
-class TestEventFunctions(OpenEventTestCase):
+class TestEvents(OpenEventTestCase):
     def setUp(self):
         self.app = Setup.create_app()
-
-    def test_add_event_to_db(self):
-        event = ObjectMother.get_event()
-        with app.test_request_context():
-            save_to_db(event, "Event saved")
-            self.assertEqual(event.id, event.id)
 
     def test_event_publish(self):
         with app.test_request_context():
