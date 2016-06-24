@@ -6,7 +6,7 @@ import traceback
 import json
 from datetime import datetime, timedelta
 
-from flask import flash, request, url_for, g, current_app
+from flask import flash, request, url_for, g
 from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from sqlalchemy.orm.collections import InstrumentedList
@@ -42,7 +42,6 @@ from ..models.call_for_papers import CallForPaper
 from ..models.custom_forms import CustomForms
 from ..models.ticket import Ticket, BookedTicket
 from ..models.activity import Activity, ACTIVITIES
-from ..models.setting import Setting
 
 
 class DataManager(object):
@@ -1086,15 +1085,6 @@ def record_activity(template, login_user=None, **kwargs):
     # ))
     activity = Activity(actor=actor, action=msg)
     save_to_db(activity, 'Activity Recorded')
-
-
-def update_settings(**kwargs):
-    """
-    Update system settings
-    """
-    setting = Setting(**kwargs)
-    save_to_db(setting, 'Setting saved')
-    current_app.config['custom_settings'] = setting
 
 
 def update_version(event_id, is_created, column_to_increment):
