@@ -9,11 +9,9 @@ from open_event.views.admin.models_views.my_sessions import MySessionView
 from open_event.views.admin.models_views.roles import RoleView
 from open_event.views.admin.models_views.profile import ProfileView
 from open_event.views.admin.models_views.scheduler import SchedulerView
-from open_event.views.admin.models_views.tracks import TracksView
 from open_event.views.admin.models_views.invite import InviteView
 from open_event.views.admin.models_views.sessions import SessionsView
 from open_event.views.admin.models_views.speakers import SpeakersView
-from open_event.views.admin.models_views.sponsors import SponsorsView
 from open_event.views.admin.home import MyHomeView
 from open_event.views.public.event_detail import EventDetailView
 from open_event.views.public.browse import BrowseView
@@ -23,7 +21,6 @@ from open_event.views.admin.super_admin.events import SuperAdminEventsView
 from open_event.views.admin.super_admin.my_sessions import SuperAdminMySessionView
 from open_event.views.admin.super_admin.users import SuperAdminUsersView
 from open_event.views.admin.super_admin.permissions import SuperAdminPermissionsView
-from open_event.views.admin.super_admin.mails import SuperAdminMailsView
 from open_event.views.admin.super_admin.reports import SuperAdminReportsView
 from open_event.views.admin.super_admin.logs import SuperAdminLogsView
 from open_event.views.admin.super_admin.dep_settings import SuperAdminSettingsView
@@ -51,12 +48,10 @@ class AdminView(object):
         self.admin.add_view(MySessionView(name='MySessions', url='/events/mysessions', endpoint="my_sessions"))
         self.admin.add_view(EventsView(name='Events', url='/events', endpoint="events"))
         self.admin.add_view(SpeakersView(name='Speakers', url='/events/<event_id>/speakers', endpoint="event_speakers"))
-        self.admin.add_view(SponsorsView(name='Sponsors', url='/events/<event_id>/sponsors', endpoint="event_sponsors"))
         self.admin.add_view(SessionsView(name='Sessions', url='/events/<event_id>/sessions', endpoint="event_sessions"))
         self.admin.add_view(SchedulerView(name='Scheduler', url='/events/<event_id>/scheduler', endpoint="event_scheduler"))
         self.admin.add_view(RoleView(name='Role', url='/events/<event_id>/roles', endpoint="event_roles"))
         self.admin.add_view(ProfileView(name='Profile', url='/profile', endpoint="profile"))
-        self.admin.add_view(TracksView(name='Track', url='/events/<event_id>/tracks', endpoint="event_tracks"))
         self.admin.add_view(InviteView(name='Invite', url='/events/<event_id>/invite', endpoint="event_invites"))
 
         self.admin.add_view(SuperAdminView(name='Admin', url='/admin/', endpoint="sadmin"))
@@ -64,7 +59,6 @@ class AdminView(object):
         self.admin.add_view(SuperAdminMySessionView(name='Sessions', url='/admin/sessions', endpoint="sadmin_sessions"))
         self.admin.add_view(SuperAdminUsersView(name='Users', url='/admin/users', endpoint="sadmin_users"))
         self.admin.add_view(SuperAdminPermissionsView(name='Permissions', url='/admin/permissions', endpoint="sadmin_permissions"))
-        self.admin.add_view(SuperAdminMailsView(name='Mails', url='/admin/mails', endpoint="sadmin_mails"))
         self.admin.add_view(SuperAdminReportsView(name='Reports', url='/admin/reports', endpoint="sadmin_reports"))
         self.admin.add_view(SuperAdminLogsView(name='Logs', url='/admin/logs', endpoint="sadmin_logs"))
         self.admin.add_view(SuperAdminSettingsView(name='Settings', url='/admin/settings', endpoint="sadmin_settings"))
