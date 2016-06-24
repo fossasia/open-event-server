@@ -35,6 +35,7 @@ from ..models.users_events_roles import UsersEventsRoles
 from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
 from ..models.track import Track
+from ..models.email_notifications import EmailNotification
 from open_event.helpers.oauth import OAuth, FbOAuth
 from requests_oauthlib import OAuth2Session
 from ..models.invite import Invite
