@@ -757,7 +757,7 @@ class DataManager(object):
 
     @staticmethod
     def edit_event(request, event_id, event, session_types, tracks, social_links, microlocations, call_for_papers,
-                   sponsors, custom_forms):
+                   sponsors, custom_forms , img_files):
         """
         Event will be updated in database
         :param data: view data form
@@ -799,7 +799,7 @@ class DataManager(object):
         room_color = form.getlist('rooms[color]')
 
         sponsor_name = form.getlist('sponsors[name]')
-        sponsor_logo = request.files.getlist('sponsors[logo]')
+        sponsor_logo_url = []
         sponsor_url = form.getlist('sponsors[url]')
         sponsor_type = form.getlist('sponsors[type]')
         sponsor_level = form.getlist('sponsors[level]')
@@ -838,17 +838,23 @@ class DataManager(object):
                 room, c = get_or_create(Microlocation, name=name, event_id=event.id)
                 db.session.add(room)
 
+        for sponsor in sponsors:
+            delete_from_db(sponsor, "Sponsor Deleted")
+
         for index, name in enumerate(sponsor_name):
             if not string_empty(name):
-                sponsor, c = get_or_create(Sponsor,
-                                           name=name,
-                                           logo=sponsor_logo[index].filename,
-                                           url=sponsor_url[index],
-                                           sponsor_type=sponsor_type[index],
-                                           level=sponsor_level[index],
-                                           description=sponsor_description[index],
-                                           event_id=event.id)
-                db.session.add(sponsor)
+                sponsor = Sponsor(name=name, url=sponsor_url[index],
+                                  level=sponsor_level[index], description=sponsor_description[index],
+                                  event_id=event.id, sponsor_type=sponsor_type[index])
+                save_to_db(sponsor, "Sponsor created")
+                if len(img_files) != 0:
+                    img_url = upload(img_files[index],
+                                     'events/%d/sponsor/%d/image' % (int(event.id), int(sponsor.id)))
+                    sponsor_logo_url.append(img_url)
+                    sponsor.logo = sponsor_logo_url[index]
+                else:
+                    sponsor.logo = ""
+                save_to_db(sponsor, "Sponsor updated")
 
         session_form = ""
         speaker_form = ""
