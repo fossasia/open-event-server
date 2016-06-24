@@ -177,9 +177,11 @@ def get_request_stats():
     """
     Get IP, Browser, Platform, Version etc
     http://werkzeug.pocoo.org/docs/0.11/utils/#module-werkzeug.useragents
+
+    Note: request.remote_addr gives the server's address if the server is behind a reverse proxy. -@niranjan94
     """
     return {
-        'ip': request.remote_addr,
+        'ip': request.environ['REMOTE_ADDR'],
         'platform': request.user_agent.platform,
         'browser': request.user_agent.browser,
         'version': request.user_agent.version,
