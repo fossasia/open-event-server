@@ -2,18 +2,14 @@ import unittest
 from datetime import datetime
 
 from open_event.helpers.data import save_to_db
-from open_event.helpers.data import DataGetter
 from open_event.models.session import Session
 from open_event.models.speaker import Speaker
 from tests.object_mother import ObjectMother
-from tests.utils import OpenEventTestCase
-from tests.setup_database import Setup
-from tests.auth_helper import register, logout, login
 from open_event import current_app as app
+from tests.views.view_test_case import OpenEventViewTestCase
 
-class TestMySession(OpenEventTestCase):
-    def setUp(self):
-        self.app = Setup.create_app()
+
+class TestMySession(OpenEventViewTestCase):
 
     def test_my_session_detail(self):
         with app.test_request_context():
@@ -34,10 +30,7 @@ class TestMySession(OpenEventTestCase):
                               speakers=[speaker],
                               state='pending')
             save_to_db(session, "Session saved")
-            register(self.app, u'email2@gmail.com', u'test2')
-            login(self.app, 'email2@gmail.com', 'test2')
             rv = self.app.get('events/mysessions/' + str(session.id), follow_redirects=True)
-            logout(self.app)
             self.assertTrue("mysessions" in rv.data, msg=rv.data)
 
     def test_my_session_unauthorized_access(self):
@@ -57,21 +50,14 @@ class TestMySession(OpenEventTestCase):
                               event_id=event.id,
                               speakers=[speaker],
                               state='pending')
-            register(self.app, u'email3@gmail.com', u'test3')
-            login(self.app, 'email3@gmail.com', 'test3')
-
             save_to_db(session, "Session saved")
             rv = self.app.get('events/mysessions/' + str(session.id), follow_redirects=True)
             self.assertEqual(rv.status_code, 404)
 
     def test_my_session_list(self):
         with app.test_request_context():
-            register(self.app, u'email2@gmail.com', u'test2')
-            login(self.app, 'email2@gmail.com', 'test2')
             rv = self.app.get('events/mysessions/', follow_redirects=True)
-            logout(self.app)
             self.assertTrue("My Session Proposals" in rv.data, msg=rv.data)
-
 
 if __name__ == '__main__':
     unittest.main()

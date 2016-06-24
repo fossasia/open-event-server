@@ -1,8 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
 import unittest
-from open_event.helpers.permission_decorators import can_accept_and_reject
 from tests.auth_helper import register, login
-from tests.utils import OpenEventTestCase
 from tests.setup_database import Setup
 from tests.object_mother import ObjectMother
 from open_event import current_app as app
@@ -11,14 +9,10 @@ from open_event.models.session import Session
 from datetime import datetime
 from flask import url_for
 
+from tests.views.view_test_case import OpenEventViewTestCase
 
-class TestSessionApi(OpenEventTestCase):
-    def setUp(self):
-        self.app = Setup.create_app()
 
-    def login(self):
-        register(self.app, u'email2@gmail.com', u'test2')
-        login(self.app, 'email2@gmail.com', 'test2')
+class TestSessionApi(OpenEventViewTestCase):
 
     def test_add_session_to_db(self):
         session = ObjectMother.get_session()
@@ -40,7 +34,6 @@ class TestSessionApi(OpenEventTestCase):
 
     def test_session_accept(self):
         with app.test_request_context():
-            self.login()
             session = ObjectMother.get_session()
             save_to_db(session, "Session Saved")
             url = url_for('event_sessions.accept_session', event_id=1, session_id=1)
@@ -50,7 +43,6 @@ class TestSessionApi(OpenEventTestCase):
     def test_session_reject(self):
         with app.test_request_context():
             session = ObjectMother.get_session()
-            self.login()
             save_to_db(session, "Session Saved")
             url = url_for('event_sessions.reject_session', event_id=1, session_id=1)
             rv = self.app.get(url, follow_redirects=True)
@@ -58,7 +50,6 @@ class TestSessionApi(OpenEventTestCase):
 
     def test_session_delete(self):
         with app.test_request_context():
-            self.login()
             session = ObjectMother.get_session()
             save_to_db(session, "Session Saved")
             url = url_for('event_sessions.delete_session', event_id=1, session_id=1)
@@ -67,7 +58,6 @@ class TestSessionApi(OpenEventTestCase):
 
     def test_session_view(self):
         with app.test_request_context():
-            self.login()
             event = ObjectMother.get_event()
             save_to_db(event)
             session = ObjectMother.get_session()
@@ -79,7 +69,6 @@ class TestSessionApi(OpenEventTestCase):
 
     def test_wrong_form_config(self):
         with app.test_request_context():
-            self.login()
             event = ObjectMother.get_event()
             save_to_db(event, "Event saved")
             url = url_for('event_sessions.create_view', event_id=event.id)

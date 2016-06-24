@@ -1,28 +1,18 @@
 """Copyright 2015 Rafal Kowalski"""
 import unittest
 
-from tests.auth_helper import register, login
-from tests.utils import OpenEventTestCase
-from tests.setup_database import Setup
 from tests.object_mother import ObjectMother
 from open_event import current_app as app
 from open_event.helpers.data import save_to_db
-from open_event.models.session import Session
-from datetime import datetime
 from flask import url_for
 
+from tests.views.view_test_case import OpenEventViewTestCase
 
-class TestSpeakers(OpenEventTestCase):
-    def setUp(self):
-        self.app = Setup.create_app()
 
-    def login(self):
-        register(self.app, u'email2@gmail.com', u'test2')
-        login(self.app, 'email2@gmail.com', 'test2')
+class TestSpeakers(OpenEventViewTestCase):
 
     def test_speaker_delete(self):
         with app.test_request_context():
-            self.login()
             event = ObjectMother.get_event()
             save_to_db(event, "Event saved")
             speaker = ObjectMother.get_speaker()
@@ -34,7 +24,6 @@ class TestSpeakers(OpenEventTestCase):
 
     def test_speaker_view(self):
         with app.test_request_context():
-            self.login()
             event = ObjectMother.get_event()
             save_to_db(event, "Event saved")
             speaker = ObjectMother.get_speaker()
@@ -49,7 +38,6 @@ class TestSpeakers(OpenEventTestCase):
 
     def test_speaker_edit(self):
         with app.test_request_context():
-            self.login()
             event = ObjectMother.get_event()
             save_to_db(event, "Event saved")
             speaker = ObjectMother.get_speaker()
@@ -73,7 +61,6 @@ class TestSpeakers(OpenEventTestCase):
 
     def test_wrong_form_config(self):
         with app.test_request_context():
-            self.login()
             event = ObjectMother.get_event()
             save_to_db(event, "Event saved")
             speaker = ObjectMother.get_speaker()
