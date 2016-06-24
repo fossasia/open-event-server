@@ -1,6 +1,8 @@
 import unittest
 from datetime import datetime
 
+from flask import url_for
+
 from open_event.helpers.data import save_to_db
 from open_event.models.session import Session
 from open_event.models.speaker import Speaker
@@ -31,7 +33,7 @@ class TestMySession(OpenEventViewTestCase):
                               speakers=[speaker],
                               state='pending')
             save_to_db(session, "Session saved")
-            rv = self.app.get('events/mysessions/' + str(session.id), follow_redirects=True)
+            rv = self.app.get(url_for('my_sessions.display_session_view', session_id=session.id), follow_redirects=True)
             self.assertTrue("mysessions" in rv.data, msg=rv.data)
 
     def test_my_session_unauthorized_access(self):
@@ -55,12 +57,12 @@ class TestMySession(OpenEventViewTestCase):
                               speakers=[speaker],
                               state='pending')
             save_to_db(session, "Session saved")
-            rv = self.app.get('events/mysessions/' + str(session.id), follow_redirects=True)
+            rv = self.app.get(url_for('my_sessions.display_session_view', session_id=session.id), follow_redirects=True)
             self.assertEqual(rv.status_code, 404)
 
     def test_my_session_list(self):
         with app.test_request_context():
-            rv = self.app.get('events/mysessions/', follow_redirects=True)
+            rv = self.app.get(url_for('my_sessions.display_my_sessions_view'), follow_redirects=True)
             self.assertTrue("My Session Proposals" in rv.data, msg=rv.data)
 
 if __name__ == '__main__':
