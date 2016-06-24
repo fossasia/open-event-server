@@ -5,7 +5,7 @@ from boto.s3.key import Key
 
 BUCKET_NAME = os.environ.get('BUCKET_NAME')
 if BUCKET_NAME:
-    S3_URL = 'http://%s.s3.amazonaws.com/' % (BUCKET_NAME)
+    S3_URL = 'https://%s.s3.amazonaws.com/' % (BUCKET_NAME)
 AWS_KEY = os.environ.get('AWS_KEY')
 AWS_SECRET = os.environ.get('AWS_SECRET')
 
