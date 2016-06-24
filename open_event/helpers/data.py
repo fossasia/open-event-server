@@ -50,6 +50,12 @@ class DataManager(object):
 
     @staticmethod
     def add_event_role_invite(form, event_id):
+        """
+        Event Role Invite will be saved in the database and an email will
+        be sent to the user.
+        :param form: Form with 'user_email' and 'user_role'
+        :param event_id: Event id
+        """
         user = User.query.filter_by(email=form['user_email']).first()
         role = Role.query.filter_by(name=form['user_role']).first()
         event = Event.query.get(event_id)
@@ -57,6 +63,15 @@ class DataManager(object):
         hash = random.getrandbits(128)
         role_invite.hash = '%032x' % hash
         save_to_db(role_invite, "Role Invite saved")
+
+        link = url_for('events.user_role_invite',
+                       event_id=event_id,
+                       hash=role_invite.hash)
+
+        Helper.send_email_for_event_role_invite(user.email,
+                                                role.title_name,
+                                                event.name,
+                                                link)
 
     @staticmethod
     def add_invite_to_event(user_id, event_id):

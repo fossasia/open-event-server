@@ -99,7 +99,7 @@ def send_email_for_event_role_invite(email, role, event, link):
     """
     subject = 'Invitation to be {} at {}'.format(role, event)
     message = ("Hello {},<br><br>,".format(email) +
-        "You've been invited to be the {} at {}.".format(role, event) +
+        "You've been invited to be a {} at {}.".format(role, event) +
         "Please follow the link to accept the role: {}".format(link))
     send_email(
         to=email,
