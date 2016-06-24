@@ -28,11 +28,5 @@ class TestSuperAdminViews(OpenEventViewTestCase):
             rv = self.app.get(url_for('sadmin_permissions.index_view'), follow_redirects=True)
             self.assertTrue("Manage All Permissions" in rv.data, msg=rv.data)
 
-    def test_admin_reports(self):
-        with app.test_request_context():
-            rv = self.app.get(url_for('sadmin_reports.index_view'), follow_redirects=True)
-            self.assertTrue("Manage All Reports" in rv.data, msg=rv.data)
-
-
 if __name__ == '__main__':
     unittest.main()
