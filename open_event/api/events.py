@@ -173,7 +173,7 @@ class EventResource():
     event_parser.add_argument('start_time_gt', dest='__event_start_time_gt')
     event_parser.add_argument('start_time_lt', dest='__event_start_time_lt')
     event_parser.add_argument('end_time_gt', dest='__event_end_time_gt')
-    event_parser.add_argument('end_time_lt', type='__event_end_time_lt')
+    event_parser.add_argument('end_time_lt', dest='__event_end_time_lt')
 
 
 @api.route('/<int:event_id>')

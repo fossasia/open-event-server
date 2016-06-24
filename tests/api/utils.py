@@ -17,8 +17,8 @@ def create_event(name='TestEvent', creator_email=None):
     :param name Name of Event
     """
     event = Event(name=name,
-                  start_time=datetime(2013, 8, 4, 12, 30, 45),
-                  end_time=datetime(2016, 9, 4, 12, 30, 45))
+                  start_time=datetime(2016, 4, 8, 12, 30, 45),
+                  end_time=datetime(2016, 4, 9, 12, 30, 45))
     if creator_email:
         event.creator = User.query.filter_by(email=creator_email).first()
     save_to_db(event, 'Event saved')
