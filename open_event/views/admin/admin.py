@@ -8,6 +8,7 @@ from open_event.views.admin.models_views.events import EventsView
 from open_event.views.admin.models_views.my_sessions import MySessionView
 from open_event.views.admin.models_views.roles import RoleView
 from open_event.views.admin.models_views.profile import ProfileView
+from open_event.views.admin.models_views.settings import SettingsView
 from open_event.views.admin.models_views.scheduler import SchedulerView
 from open_event.views.admin.models_views.invite import InviteView
 from open_event.views.admin.models_views.sessions import SessionsView
@@ -53,6 +54,7 @@ class AdminView(object):
         self.admin.add_view(RoleView(name='Role', url='/events/<event_id>/roles', endpoint="event_roles"))
         self.admin.add_view(ProfileView(name='Profile', url='/profile', endpoint="profile"))
         self.admin.add_view(InviteView(name='Invite', url='/events/<event_id>/invite', endpoint="event_invites"))
+        self.admin.add_view(SettingsView(name='Settings', url='/settings', endpoint="settings"))
 
         self.admin.add_view(SuperAdminView(name='Admin', url='/admin/', endpoint="sadmin"))
         self.admin.add_view(SuperAdminEventsView(name='Events', url='/admin/events', endpoint="sadmin_events"))

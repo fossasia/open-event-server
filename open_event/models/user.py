@@ -7,6 +7,7 @@ from open_event.models.session import Session
 from open_event.models.speaker import Speaker
 from . import db
 from user_detail import UserDetail
+from setting import Setting
 from .role import Role
 from .service import Service
 from .permission import Permission
@@ -108,6 +109,19 @@ class User(db.Model):
         try:
             session = Session.query.filter(Session.speakers.any(Speaker.user_id == self.id)).filter(
                 Session.id == session_id).one()
+            if session:
+                return True
+            else:
+                return False
+        except MultipleResultsFound, e:
+            return False
+        except NoResultFound, e:
+            return False
+
+    def is_speaker_at_event(self, event_id):
+        try:
+            session = Session.query.filter(Session.speakers.any(Speaker.user_id == self.id)).filter(
+                Session.event_id == event_id).first()
             if session:
                 return True
             else:
