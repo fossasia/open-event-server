@@ -29,11 +29,6 @@ def register(app, email, password):
         url_for('admin.create_account_after_confirmation_view', hash=data_hash),
         follow_redirects=True)
 
-def register_login(app, email, password):
-    create_user(app, email, password)
-    return login(app, email, password)
-
-
 def create_super_admin(email, password):
     user = DataManager.create_user([email, password], is_verified=True)
     user.is_super_admin = True

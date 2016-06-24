@@ -1,13 +1,8 @@
 import unittest
-from datetime import datetime
 
 from flask import url_for
 
-from open_event.helpers.data import save_to_db
-from open_event.models.session import Session
-from open_event.models.speaker import Speaker
-from tests.auth_helper import logout, login, register_login, register
-from tests.object_mother import ObjectMother
+from tests.auth_helper import logout, login, register
 from open_event import current_app as app
 from tests.views.view_test_case import OpenEventViewTestCase
 
