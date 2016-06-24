@@ -38,7 +38,7 @@ class TestSessionApi(OpenEventViewTestCase):
             save_to_db(session, "Session Saved")
             url = url_for('event_sessions.accept_session', event_id=1, session_id=1)
             rv = self.app.get(url, follow_redirects=True)
-            self.assertTrue("Forbidden" in rv.data, msg=rv.data)
+            self.assertTrue("The session has been accepted" in rv.data, msg=rv.data)
 
     def test_session_reject(self):
         with app.test_request_context():
@@ -46,7 +46,7 @@ class TestSessionApi(OpenEventViewTestCase):
             save_to_db(session, "Session Saved")
             url = url_for('event_sessions.reject_session', event_id=1, session_id=1)
             rv = self.app.get(url, follow_redirects=True)
-            self.assertTrue("Forbidden" in rv.data, msg=rv.data)
+            self.assertTrue("The session has been rejected" in rv.data, msg=rv.data)
 
     def test_session_delete(self):
         with app.test_request_context():
@@ -73,7 +73,7 @@ class TestSessionApi(OpenEventViewTestCase):
             save_to_db(event, "Event saved")
             url = url_for('event_sessions.create_view', event_id=event.id)
             rv = self.app.get(url, follow_redirects=True)
-            self.assertTrue("Forbidden" in rv.data, msg=rv.data)
+            self.assertTrue("incorrectly configured" in rv.data, msg=rv.data)
 
 if __name__ == '__main__':
     unittest.main()
