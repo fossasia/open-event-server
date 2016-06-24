@@ -35,6 +35,7 @@ from ..models.users_events_roles import UsersEventsRoles
 from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
 from ..models.track import Track
+from ..models.email_notifications import EmailNotification
 from open_event.helpers.oauth import OAuth, FbOAuth
 from requests_oauthlib import OAuth2Session
 from ..models.invite import Invite
@@ -646,7 +647,7 @@ class DataManager(object):
                       color='#f5f5f5',
                       logo=form['logo'],
                       start_time=datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M'),
-                      end_time=datetime.strptime(form['start_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M'),
+                      end_time=datetime.strptime(form['end_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M'),
                       timezone=form['timezone'],
                       latitude=form['latitude'],
                       longitude=form['longitude'],
@@ -663,7 +664,8 @@ class DataManager(object):
                       creator=login.current_user)
 
         state = form.get('state', None)
-        if state and ((state == u'Published' and not string_empty(event.location_name)) or state != u'Published') and login.current_user.is_verified:
+        if state and ((state == u'Published' and not string_empty(
+            event.location_name)) or state != u'Published') and login.current_user.is_verified:
             event.state = state
 
         if event.start_time <= event.end_time:
@@ -757,7 +759,7 @@ class DataManager(object):
 
     @staticmethod
     def edit_event(request, event_id, event, session_types, tracks, social_links, microlocations, call_for_papers,
-                   sponsors, custom_forms):
+                   sponsors, custom_forms, img_files, old_sponsor_logos, old_sponsor_names):
         """
         Event will be updated in database
         :param data: view data form
@@ -767,7 +769,7 @@ class DataManager(object):
         event.name = form['name']
         event.logo = form['logo']
         event.start_time = datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M')
-        event.end_time = datetime.strptime(form['start_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M')
+        event.end_time = datetime.strptime(form['end_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M')
         event.timezone = form['timezone']
         event.latitude = form['latitude']
         event.longitude = form['longitude']
@@ -783,7 +785,8 @@ class DataManager(object):
         event.ticket_url = form['ticket_url']
 
         state = form.get('state', None)
-        if state and ((state == u'Published' and not string_empty(event.location_name)) or state != u'Published') and login.current_user.is_verified:
+        if state and ((state == u'Published' and not string_empty(
+            event.location_name)) or state != u'Published') and login.current_user.is_verified:
             event.state = state
 
         session_type_names = form.getlist('session_type[name]')
@@ -799,7 +802,7 @@ class DataManager(object):
         room_color = form.getlist('rooms[color]')
 
         sponsor_name = form.getlist('sponsors[name]')
-        sponsor_logo = request.files.getlist('sponsors[logo]')
+        sponsor_logo_url = []
         sponsor_url = form.getlist('sponsors[url]')
         sponsor_type = form.getlist('sponsors[type]')
         sponsor_level = form.getlist('sponsors[level]')
@@ -838,17 +841,33 @@ class DataManager(object):
                 room, c = get_or_create(Microlocation, name=name, event_id=event.id)
                 db.session.add(room)
 
+        for sponsor in sponsors:
+            delete_from_db(sponsor, "Sponsor Deleted")
+
         for index, name in enumerate(sponsor_name):
             if not string_empty(name):
-                sponsor, c = get_or_create(Sponsor,
-                                           name=name,
-                                           logo=sponsor_logo[index].filename,
-                                           url=sponsor_url[index],
-                                           sponsor_type=sponsor_type[index],
-                                           level=sponsor_level[index],
-                                           description=sponsor_description[index],
-                                           event_id=event.id)
-                db.session.add(sponsor)
+                sponsor = Sponsor(name=name, url=sponsor_url[index],
+                                  level=sponsor_level[index], description=sponsor_description[index],
+                                  event_id=event.id, sponsor_type=sponsor_type[index])
+                save_to_db(sponsor, "Sponsor created")
+                if len(img_files) != 0:
+                    if img_files[index]:
+                        img_url = upload(img_files[index],
+                                         'events/%d/sponsor/%d/image' % (int(event.id), int(sponsor.id)))
+                        sponsor_logo_url.append(img_url)
+                        sponsor.logo = sponsor_logo_url[index]
+                    else:
+                        if name in old_sponsor_names:
+                            sponsor.logo = old_sponsor_logos[index]
+                        else:
+                            sponsor.logo = ""
+                else:
+                    if name in old_sponsor_names:
+                        sponsor.logo = old_sponsor_logos[index]
+                    else:
+                        sponsor.logo = ""
+                print sponsor.logo
+                save_to_db(sponsor, "Sponsor updated")
 
         session_form = ""
         speaker_form = ""

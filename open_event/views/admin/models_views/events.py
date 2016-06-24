@@ -193,9 +193,23 @@ class EventsView(BaseView):
                                step=step,
                                required=required)
         if request.method == "POST":
+            img_files = []
+            imd = ImmutableMultiDict(request.files)
+            if 'sponsors[logo]' in imd and request.files['sponsors[logo]'].filename != "":
+                for img_file in imd.getlist('sponsors[logo]'):
+                    img_files.append(img_file)
+
+            old_sponsor_logos = []
+            old_sponsor_names = []
+            for sponsor in sponsors:
+                old_sponsor_logos.append(sponsor.logo)
+                old_sponsor_names.append(sponsor.name)
+
             event = DataManager.edit_event(
                 request, event_id, event, session_types, tracks, social_links,
-                microlocations, call_for_speakers, sponsors, custom_forms)
+                microlocations, call_for_speakers, sponsors, custom_forms, img_files, old_sponsor_logos, old_sponsor_names)
+
+
             if request.form.get('state',
                                 u'Draft') == u'Published' and string_empty(
                                 event.location_name):
