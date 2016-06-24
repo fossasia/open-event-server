@@ -8,6 +8,7 @@ USER_CONFIRM = 'User Confirmation'
 INVITE_PAPERS = 'Invitation For Papers'
 NEW_SESSION = 'New Session Proposal'
 PASSWORD_RESET = 'Reset Password'
+EVENT_ROLE = 'Event Role Invitation'
 
 
 class Mail(db.Model):

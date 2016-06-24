@@ -9,7 +9,7 @@ from itsdangerous import Serializer
 from flask.ext import login
 from ..models.track import Track
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
-    USER_REGISTER, PASSWORD_RESET, Mail
+    USER_REGISTER, PASSWORD_RESET, EVENT_ROLE, Mail
 
 
 def get_event_id():
@@ -90,6 +90,22 @@ def send_email_with_reset_password_hash(email, link):
         action=PASSWORD_RESET,
         subject="Please click to below link",
         html="Change password now " + link
+    )
+
+
+def send_email_for_event_role_invite(email, role, event, link):
+    """
+    Send Email to users for Event Role invites.
+    """
+    subject = 'Invitation to be {} at {}'.format(role, event)
+    message = ("Hello {},<br><br>,".format(email) +
+        "You've been invited to be the {} at {}.".format(role, event) +
+        "Please follow the link to accept the role: {}".format(link))
+    send_email(
+        to=email,
+        action=EVENT_ROLE,
+        subject=subject,
+        html=message
     )
 
 
