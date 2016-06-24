@@ -11,6 +11,9 @@ def get_or_create_super_admin():
         user = create_super_admin("test_super_admin@email.com", "test_super_admin")
     return user
 
+"""
+Extend from this test case if you need a user to be logged in
+"""
 class OpenEventViewTestCase(OpenEventTestCase):
 
     def setUp(self):

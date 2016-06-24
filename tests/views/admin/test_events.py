@@ -1,4 +1,3 @@
-import json
 import unittest
 
 from tests.api.utils_post_data import POST_EVENT_DATA
