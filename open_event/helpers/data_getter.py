@@ -8,6 +8,8 @@ from ..models.session import Session
 from ..models.track import Track
 from ..models.invite import Invite
 from ..models.speaker import Speaker
+from ..models.setting import Setting
+from ..models.email_notifications import EmailNotification
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
 from ..models.users_events_roles import UsersEventsRoles
@@ -23,10 +25,11 @@ from ..models.call_for_papers import CallForPaper
 from ..models.custom_forms import CustomForms
 from ..models.mail import Mail
 from ..models.activity import Activity
+from ..models.setting import Setting
 from .language_list import LANGUAGE_LIST
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
-from flask import flash
+from flask import flash, current_app
 import datetime
 from sqlalchemy import desc, asc
 
@@ -78,6 +81,14 @@ class DataGetter:
         """Method return all owner events"""
         # return Event.query.filter_by(owner=owner_id)
         return login.current_user.events_assocs
+
+    @staticmethod
+    def get_email_notification_settings(user_id):
+        return EmailNotification.query.filter_by(user_id=user_id)
+
+    @staticmethod
+    def get_email_notification_settings_by_event_id(user_id, event_id):
+        return EmailNotification.query.filter_by(user_id=user_id).filter_by(event_id=event_id).first()
 
     @staticmethod
     def get_sessions_by_event_id(event_id):
@@ -492,3 +503,11 @@ class DataGetter:
         """
         activities = Activity.query.order_by(desc(Activity.time)).all()
         return activities[:count]
+
+    @staticmethod
+    def get_system_setting():
+        """
+        Get System Setting
+        """
+        setting = Setting.query.order_by(desc(Setting.id)).first()
+        return setting

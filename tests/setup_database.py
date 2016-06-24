@@ -17,6 +17,7 @@ class Setup(object):
         app.secret_key = 'super secret key'
         with app.test_request_context():
             db.create_all()
+
         return app.test_client()
 
     @staticmethod

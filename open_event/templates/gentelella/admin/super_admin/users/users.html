@@ -54,19 +54,20 @@ Users
         <td>{{ user['user'].created_date|humanize }}</td>
         <td>{{ user['user'].last_access_time|humanize }}</td>
         <td>
-        {% if not user['user'].is_super_admin %}
-            <a href='#' data-toggle="modal" data-target="#importModal" title="Edit role" data-user-id="{{user['user'].id}}">
-            <span class="glyphicon glyphicon-pencil"></span>
+        <div class="btn-group btn-group-sm">
+            {% if not user['user'].is_super_admin %}
+            <a class="btn btn-default" href='#' data-toggle="modal" data-target="#importModal" title="Edit role" data-user-id="{{user['user'].id}}">
+                <i class="glyphicon glyphicon-pencil"></i>
             </a>
-        </a>
-        {% endif %}
-        <a href="{{ get_url('sadmin_users.details_view', user_id=user['user'].id)}}" title="View details">
-            <span class="glyphicon glyphicon-eye-open"></span>
-        </a>
-        <a onclick="return confirm('Are you sure you want to delete this record?');"
-           href="{{ get_url('sadmin_users.delete_view', user_id=user['user'].id)}}" title="Delete record">
-            <span class="glyphicon glyphicon-trash"></span>
-        </a>
+            {% endif %}
+            <a data-toggle="tooltip" data-placement="top" class="btn btn-default" href="{{ get_url('sadmin_users.details_view', user_id=user['user'].id)}}" title="View details">
+                <i class="glyphicon glyphicon-eye-open"></i>
+            </a>
+            <a data-toggle="tooltip" data-placement="top" class="btn btn-default" onclick="return confirm('Are you sure you want to delete this record?');"
+               href="{{ get_url('sadmin_users.delete_view', user_id=user['user'].id)}}" title="Delete record">
+                <i class="glyphicon glyphicon-trash"></i>
+            </a>
+        </div>
 
 
         </td>

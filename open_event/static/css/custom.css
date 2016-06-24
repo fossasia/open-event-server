@@ -155,6 +155,9 @@
   margin-bottom: 10px;
   float: left;
 }
+.settings-title h5.active{
+  color:blue;
+}
 .main_menu span.fa {
   float: right;
   text-align: center;
