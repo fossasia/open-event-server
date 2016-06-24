@@ -111,6 +111,26 @@
     }
 
     $( document ).ready(function() {
+        $("#search-form").change(function(e) {
+            e.preventDefault();
+            $('#search-form').attr('action', "/" + $("#inputSuccess3").val() + "/events/s").submit();
+
+        });
+
+        var params={};
+        decodeURIComponent(window.location.search)
+          .replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str,key,value) {
+            params[key] = value;
+          }
+        );
+
+        $(".categories input").each(function( index ) {
+            console.log(params['event_type'].replace(/\+/g, ' '))
+            if ($( this ).val() === params['event_type'].replace(/\+/g, ' ')){
+                $( this ).parent().css('color', 'black');
+                $('#collapse1').collapse()
+            }
+        })
 
     });
 
