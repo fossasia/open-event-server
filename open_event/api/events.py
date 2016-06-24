@@ -149,7 +149,11 @@ EVENT_PARAMS = {
     },
     'topic': {
         'type': str
-    }
+    },
+    'start_time_gt': {},
+    'start_time_lt': {},
+    'end_time_gt': {},
+    'end_time_lt': {}
 }
 
 # DEFINE RESOURCES
@@ -166,6 +170,10 @@ class EventResource():
     event_parser.add_argument('privacy', type=str)
     event_parser.add_argument('type', type=str)
     event_parser.add_argument('topic', type=str)
+    event_parser.add_argument('start_time_gt', dest='__event_start_time_gt')
+    event_parser.add_argument('start_time_lt', dest='__event_start_time_lt')
+    event_parser.add_argument('end_time_gt', dest='__event_end_time_gt')
+    event_parser.add_argument('end_time_lt', dest='__event_end_time_lt')
 
 
 @api.route('/<int:event_id>')
