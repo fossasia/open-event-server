@@ -4,6 +4,7 @@ from flask import url_for
 
 from open_event.helpers.data import save_to_db
 from open_event.models.role import Role
+from open_event.models.role_invite import RoleInvite
 from populate_db import populate
 from open_event.helpers.data_getter import DataGetter
 from tests.object_mother import ObjectMother
@@ -26,8 +27,11 @@ class TestRoles(OpenEventViewTestCase):
                 'user_role': 'coorganizer'
             }
             rv = self.app.post(url_for('event_roles.create_view', event_id=event.id), follow_redirects=True, data=data)
-            uer = DataGetter.get_user_event_roles_by_role_name(event.id, 'coorganizer').first()
-            self.assertTrue(uer is not None, msg=rv.data)
+
+            # Check if user has been sent a Role Invite
+            role = Role.query.filter_by(name='coorganizer').first()
+            ri = RoleInvite.query.filter_by(user=user, event=event, role=role).first()
+            self.assertTrue(ri is not None, msg=rv.data)
 
     def test_role_delete(self):
         with app.test_request_context():
