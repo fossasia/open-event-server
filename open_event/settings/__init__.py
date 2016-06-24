@@ -12,7 +12,7 @@ def get_settings():
         return current_app.config['custom_settings']
     s = DataGetter.get_system_setting()
     if s is None:
-        update_settings()
+        update_settings(secret='My default secret')
         return current_app.config['custom_settings']
     else:
         current_app.config['custom_settings'] = s
