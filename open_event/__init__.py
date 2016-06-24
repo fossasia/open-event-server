@@ -1,6 +1,5 @@
 """Copyright 2015 Rafal Kowalski"""
 from flask.ext.htmlmin import HTMLMIN
-from jinja2 import Undefined
 import logging
 import os.path
 from os import environ
@@ -16,11 +15,12 @@ from flask.ext.login import current_user
 from flask import render_template
 from flask import request
 from flask.ext.jwt import JWT
-from datetime import timedelta, datetime
+from datetime import timedelta
 
 from icalendar import Calendar, Event
 import humanize
 
+from open_event.helpers.flask_helpers import SilentUndefined
 from open_event.helpers.helpers import string_empty
 from open_event.models import db
 from open_event.views.admin.admin import AdminView
@@ -34,7 +34,6 @@ import requests
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
-
 
 def create_app():
     auto = Autodoc(app)
@@ -104,21 +103,6 @@ def request_wants_json():
     return best == 'application/json' and \
         request.accept_mimetypes[best] > \
         request.accept_mimetypes['text/html']
-
-
-class SilentUndefined(Undefined):
-    """
-    From http://stackoverflow.com/questions/6190348/
-    Don't break page loads because vars aren't there!
-    """
-    def _fail_with_undefined_error(self, *args, **kwargs):
-        return False
-    __add__ = __radd__ = __mul__ = __rmul__ = __div__ = __rdiv__ = \
-        __truediv__ = __rtruediv__ = __floordiv__ = __rfloordiv__ = \
-        __mod__ = __rmod__ = __pos__ = __neg__ = __call__ = \
-        __getitem__ = __lt__ = __le__ = __gt__ = __ge__ = __int__ = \
-        __float__ = __complex__ = __pow__ = __rpow__ = \
-        _fail_with_undefined_error
 
 @app.context_processor
 def locations():
