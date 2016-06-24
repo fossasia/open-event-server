@@ -459,8 +459,12 @@ def documentation():
 
 @app.route('/api/location/', methods=('GET', 'POST'))
 def location():
+    """
+    Note: request.remote_addr gives the server's address if the server is behind a reverse proxy. -@niranjan94
+    :return:
+    """
     reader = geoip2.database.Reader(os.path.realpath('.') + '/static/data/GeoLite2-Country.mmdb')
-    ip = request.remote_addr
+    ip = request.environ['REMOTE_ADDR']
     if ip == '127.0.0.1' or ip == '0.0.0.0':
         ip = urlopen('http://ip.42.pl/raw').read()
     try:
