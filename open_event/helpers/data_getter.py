@@ -26,7 +26,7 @@ from ..models.setting import Setting
 from .language_list import LANGUAGE_LIST
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
-from flask import flash
+from flask import flash, current_app
 import datetime
 from sqlalchemy import desc, asc
 
@@ -486,3 +486,11 @@ class DataGetter:
         """
         activities = Activity.query.order_by(desc(Activity.time)).all()
         return activities[:count]
+
+    @staticmethod
+    def get_system_setting():
+        """
+        Get System Setting
+        """
+        setting = Setting.query.order_by(desc(Setting.id)).first()
+        return setting
