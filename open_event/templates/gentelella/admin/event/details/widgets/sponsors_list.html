@@ -3,7 +3,7 @@
 Event Sponsors
 {% endblock %}
 {% block addon_link %}
-<button onclick="addSponsor();"class="btn btn-info pull-right" style="color: #FFFFFF; height: 30px; width: 100px; margin: 0; padding-left: 10px;" data-target="#add-role">Add Sponsor</button>
+<button onclick="addSponsor();" class="btn btn-info pull-right" style="color: #FFFFFF; height: 30px; width: 100px; margin: 0; padding-left: 10px;" data-target="#add-role">Add Sponsor</button>
 {% endblock %}
 {% block panel_content %}
 <div class="col-md-12">
@@ -42,7 +42,7 @@ Event Sponsors
 </div>
 <script type="text/javascript">
     function addSponsor(){
-        window.location="{{ get_url('events.edit_view', event_id=event.id) }}" + "#step=2";
+        window.location="{{ get_url('events.edit_view', event_id=event.id) }}" + "sponsors";
         }
 </script>
 {% endblock %}
@@ -54,5 +54,5 @@ Event Sponsors
         $('.sponsor-table').DataTable();
 
     </script>
-    
+
 {% endblock %}
