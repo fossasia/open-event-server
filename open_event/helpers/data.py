@@ -49,6 +49,16 @@ class DataManager(object):
     """Main class responsible for DataBase managing"""
 
     @staticmethod
+    def add_event_role_invite(form, event_id):
+        user = User.query.filter_by(email=form['user_email']).first()
+        role = Role.query.filter_by(name=form['user_role']).first()
+        event = Event.query.get(event_id)
+        role_invite = RoleInvite(user=user, event=event, role=role)
+        hash = random.getrandbits(128)
+        role_invite.hash = '%032x' % hash
+        save_to_db(role_invite, "Role Invite saved")
+
+    @staticmethod
     def add_invite_to_event(user_id, event_id):
         """
         Invite will be saved to database with proper Event id and User id

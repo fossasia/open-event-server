@@ -261,10 +261,11 @@ class EventsView(BaseView):
             event_types=DataGetter.get_event_types(),
             event_topics=DataGetter.get_event_topics())
 
-    @expose('/<int:event_id>/role-invite/<user_id>/<hash>', methods=('GET', 'POST'))
-    def user_role_invite(self, event_id, user_id, hash):
+    @expose('/<int:event_id>/role-invite/<hash>', methods=('GET', 'POST'))
+    def user_role_invite(self, event_id, hash):
         event = DataGetter.get_event(event_id)
-        role_invite = DataGetter.get_event_role_invite(user_id=user_id,
+        user = login.current_user
+        role_invite = DataGetter.get_event_role_invite(user_id=user.id,
                                                        event_id=event.id,
                                                        hash=hash)
 
@@ -274,6 +275,7 @@ class EventsView(BaseView):
             data['user_email'] = role_invite.user.email
             data['user_role'] = role.name
             DataManager.add_role_to_event(data, event.id)
+            flash('You have been added as a %s' % role.title_name)
             return redirect(url_for('.details_view', event_id=event.id))
         else:
             abort(404)
