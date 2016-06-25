@@ -32,6 +32,7 @@
     "sticky-kit": "^1.1.2",
     "multiselect": "^0.9.12",
     "selectize": "^0.12.1",
-    "bootstrap-daterangepicker": "^2.1.22"
+    "bootstrap-daterangepicker": "^2.1.22",
+    "nouislider": "^8.5.1"
   }
 }

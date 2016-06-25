@@ -160,6 +160,8 @@
                     {% if social_links %}
                         {% for social_link in social_links %}
                             {{ social_entry(social_link) }}
+                        {% else %}
+                            {{ social_entry() }}
                         {% endfor %}
                     {% else %}
                         {{ social_entry() }}

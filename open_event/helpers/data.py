@@ -262,29 +262,33 @@ class DataManager(object):
             for organizer in organizers:
                 send_new_session_organizer(organizer.user.email, event.name, link)
 
-        slide_url = ""
+        speaker_modified = False
+        session_modified = False
         if slide_file != "":
             slide_url = upload(slide_file,
                                'events/%d/session/%d/slide' % (int(event_id), int(new_session.id)))
-        audio_url = ""
+            new_session.slides = slide_url
+            session_modified = True
         if audio_file != "":
             audio_url = upload(audio_file,
                                'events/%d/session/%d/audio' % (int(event_id), int(new_session.id)))
-        video_url = ""
+            new_session.audio = audio_url
+            session_modified = True
         if video_file != "":
             video_url = upload(video_file,
                                'events/%d/session/%d/video' % (int(event_id), int(new_session.id)))
-        speaker_img = ""
+            new_session.video = video_url
+            session_modified = True
         if speaker_img_file != "":
             speaker_img = upload(speaker_img_file,
                                  'events/%d/speaker/%d/photo' % (int(event_id), int(speaker.id)))
+            speaker.photo = speaker_img
+            speaker_modified = True
 
-        speaker.photo = speaker_img
-        new_session.audio = audio_url
-        new_session.video = video_url
-        new_session.slides = slide_url
-        save_to_db(new_session, "Session saved")
-        save_to_db(speaker, "Speaker saved")
+        if session_modified:
+            save_to_db(new_session, "Session saved")
+        if speaker_modified:
+            save_to_db(speaker, "Speaker saved")
         record_activity('create_session', session=new_session, event_id=event_id)
 
         invite_emails = form.getlist("speakers[email]")
@@ -406,12 +410,20 @@ class DataManager(object):
         session.short_abstract = form.get('short_abstract', '')
 
         existing_speaker_ids = form.getlist("speakers[]")
+        current_speaker_ids = []
 
-        session.speakers = []
+        for current_speaker in session.speakers:
+            current_speaker_ids.append(str(current_speaker.id))
+
+        for current_speaker_id in current_speaker_ids:
+            if current_speaker_id not in existing_speaker_ids:
+                current_speaker = DataGetter.get_speaker(current_speaker_id)
+                session.speakers.remove(current_speaker)
 
         for existing_speaker_id in existing_speaker_ids:
             existing_speaker = DataGetter.get_speaker(existing_speaker_id)
-            session.speakers.append(existing_speaker)
+            if existing_speaker not in session.speakers:
+                session.speakers.append(existing_speaker)
 
         save_to_db(session, 'Session Updated')
         record_activity('update_session', session=session, event_id=event_id)
