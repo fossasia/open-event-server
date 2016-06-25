@@ -19,9 +19,8 @@ from datetime import timedelta
 
 from icalendar import Calendar, Event
 import humanize
-from sqlalchemy_continuum import make_versioned
-from sqlalchemy_continuum.plugins import FlaskPlugin
 import sqlalchemy as sa
+from markupsafe import Markup
 
 from open_event.helpers.flask_helpers import SilentUndefined
 from open_event.helpers.helpers import string_empty
@@ -130,6 +129,41 @@ def locations():
 def event_types():
     event_types = DataGetter.get_event_types()
     return dict(event_typo=event_types[:10])
+
+@app.context_processor
+def versioning_manager():
+    def count_versions(model_object):
+        from sqlalchemy_continuum.utils import count_versions
+        return count_versions(model_object)
+
+    def changeset(model_object):
+        from sqlalchemy_continuum import changeset
+        return changeset(model_object)
+
+    def transaction_class(model_object):
+        from sqlalchemy_continuum import transaction_class
+        return transaction_class(model_object)
+
+    def version_class(model_object):
+        from sqlalchemy_continuum import version_class
+        return version_class(model_object)
+
+    def user_name(transaction_object):
+        print transaction_object
+        user = DataGetter.get_user(transaction_object[0].user_id)
+        return user.name
+
+    def side_by_side_diff(changeset_entry):
+        from open_event.helpers.versioning import side_by_side_diff
+        for side_by_side_diff_entry in side_by_side_diff(changeset_entry[0], changeset_entry[1]):
+            yield side_by_side_diff_entry
+
+    return dict(count_versions=count_versions,
+                changeset=changeset,
+                transaction_class=transaction_class,
+                version_class=version_class,
+                side_by_side_diff=side_by_side_diff,
+                user_name=user_name)
 
 # http://stackoverflow.com/questions/26724623/
 @app.before_request
