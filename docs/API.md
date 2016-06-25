@@ -189,7 +189,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 | --- | --- | --- | --- |
 |**id** | integer | Required | Public |
 |**name** | string | Required | Public |
-|**description** | string | Required | Public |
+|**description** | string | Optional | Public |
 |**color** | string | Required | Public |
 |**track_image_url** | string | Optional | Public |
 |**location** | string | Optional | Public |
