@@ -2,14 +2,42 @@ import itertools
 
 import diff_match_patch
 import re
+from HTMLParser import HTMLParser
 
 
 def remove_line_breaks(target_string):
     return str(target_string).replace('\r', '')
 
+
 def strip_line_breaks(target_string):
     return str(target_string).replace('\n', '').replace('\r', '')
 
+
+def clean_up_string(target_string):
+    if target_string:
+        if not re.search('[a-zA-Z]', target_string):
+            return strip_line_breaks(target_string).strip().replace(" ", "")
+        else:
+            return remove_line_breaks(target_string).strip()
+    return target_string
+
+
+class MLStripper(HTMLParser):
+    def __init__(self):
+        HTMLParser.__init__(self)
+        self.reset()
+        self.fed = []
+
+    def handle_data(self, d):
+        self.fed.append(d)
+
+    def get_data(self):
+        return ''.join(self.fed)
+
+def strip_tags(html):
+    s = MLStripper()
+    s.feed(html)
+    return s.get_data()
 
 def side_by_side_diff(old_text, new_text):
     """
@@ -19,8 +47,15 @@ def side_by_side_diff(old_text, new_text):
 
     From: http://code.activestate.com/recipes/577784-line-based-side-by-side-diff/
     """
-    old_text = str(old_text)
-    new_text = str(new_text)
+
+    if not old_text:
+        old_text = ''
+
+    if not new_text:
+        new_text = ''
+
+    old_text = strip_tags(strip_line_breaks(str(old_text)))
+    new_text = strip_tags(strip_line_breaks(str(new_text)))
 
     def yield_open_entry(open_entry):
         """ Yield all open changes. """

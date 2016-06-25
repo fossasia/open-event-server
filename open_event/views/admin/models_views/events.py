@@ -6,6 +6,7 @@ from flask.ext.restplus import abort
 from flask.ext.admin import BaseView
 from flask_admin import expose
 
+from open_event import db
 from open_event.helpers.permission_decorators import *
 from open_event.helpers.helpers import fields_not_empty, string_empty
 from ....helpers.data import DataManager, save_to_db, record_activity
@@ -261,6 +262,15 @@ class EventsView(BaseView):
         save_to_db(event, 'Event Unpublished')
         record_activity('publish_event', event_id=event.id, status='un-published')
         flash("Your event has been unpublished.", "warning")
+        return redirect(url_for('.details_view', event_id=event_id))
+
+    @expose('/<int:event_id>/restore/<int:version_id>', methods=('GET',))
+    def restore_event_revision(self, event_id, version_id):
+        event = DataGetter.get_event(event_id)
+        version = event.versions[version_id]
+        version.revert()
+        db.session.commit()
+        flash("Your event has been restored.", "success")
         return redirect(url_for('.details_view', event_id=event_id))
 
     @expose('/<int:event_id>/copy/', methods=('GET',))
