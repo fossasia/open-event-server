@@ -20,7 +20,8 @@
         <div>
             <ul class="list-inline prod_size">
                 {%for filter in filters %}
-                    <li><button type="button" class="btn btn-default btn-xs">{{filter[1]}}</button></li>
+                    <li><button type="button" class="btn btn-default btn-xs">{{filter[1]}}
+                        <i class="fa fa-close" style="margin-left:3px"></i></button></li>
                 {%endfor%}
              </ul>
         </div>
