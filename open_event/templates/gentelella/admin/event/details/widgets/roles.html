@@ -49,12 +49,14 @@ Manage Roles
             </td>
         </tr>
         {%endfor%}
+        {% for invite in event.role_invites %}
         <tr>
             <td style="display:none;">invited</td>
-            <td>Donatello</td>
-            <td>Track Organizer</td>
+            <td>{{ invite.user.email }}</td>
+            <td>{{ invite.role.title_name }}</td>
             <td></td>
         </tr>
+        {% endfor %}
         </tbody>
     </table>
 </div>
