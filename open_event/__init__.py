@@ -27,6 +27,7 @@ from markupsafe import Markup
 from open_event.helpers.flask_helpers import SilentUndefined
 from open_event.helpers.helpers import string_empty
 from open_event.models import db
+from open_event.models.user import User
 from open_event.views.admin.admin import AdminView
 from helpers.jwt import jwt_authenticate, jwt_identity
 from helpers.formatter import operation_name
@@ -163,8 +164,10 @@ def versioning_manager():
         return version_class(model_object)
 
     def get_user_name(transaction_object):
-        user = DataGetter.get_user(transaction_object.user_id)
-        return user.email
+        if transaction_object and transaction_object.user_id:
+            user = DataGetter.get_user(transaction_object.user_id)
+            return user.email
+        return 'unconfigured@example.com'
 
     def side_by_side_diff(changeset_entry):
         from open_event.helpers.versioning import side_by_side_diff
