@@ -11,7 +11,7 @@ class RoleInvite(db.Model):
 
     event_id = db.Column(
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
-    event = db.relationship('Event')
+    event = db.relationship('Event', back_populates='role_invites')
 
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
     role = db.relationship("Role")

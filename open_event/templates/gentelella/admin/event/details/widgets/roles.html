@@ -4,14 +4,26 @@
 Manage Roles
 {% endblock %}
 {% block addon_link %}
-<button class="btn btn-info pull-right" style="color: #FFFFFF; height: 30px; width: 30px; margin: 0; padding-left: 10px;" data-toggle="modal" data-target="#add-role">+</button>
+<button class="btn btn-info pull-right" style="color: #FFFFFF; margin: 0;" data-toggle="modal" data-target="#add-role">+</button>
 {% endblock %}
 {% block panel_content %}
+
 <div class="col-md-12">
     <h4>Permissions List</h4>
+    <div id="toolbar-holder" style="display: none;">
+        <div class="btn-group pull-left" data-toggle="buttons">
+            <label class="btn btn-default active btn-responsive">
+                <input type="radio" name="role_status" autocomplete="off" value="accepted" checked> Accepted
+            </label>
+            <label class="btn btn-default btn-responsive">
+                <input type="radio" name="role_status" autocomplete="off" value="invited"> Invited
+            </label>
+        </div>
+    </div>
     <table class="role-table table table-striped">
         <thead>
         <tr>
+            <th style="display: none;">Status</th>
             <th>User Email</th>
             <th>Role</th>
             <th>Options</th>
@@ -21,6 +33,7 @@ Manage Roles
         <tbody>
         {% for role in event.roles %}
         <tr>
+            <td style="display: none;">accepted</td>
             <td>{{role.user.email}}</td>
             <td>{{ role.role.title_name }}</td>
             <td>
@@ -36,6 +49,14 @@ Manage Roles
             </td>
         </tr>
         {%endfor%}
+        {% for invite in event.role_invites %}
+        <tr>
+            <td style="display:none;">invited</td>
+            <td>{{ invite.user.email }}</td>
+            <td>{{ invite.role.title_name }}</td>
+            <td></td>
+        </tr>
+        {% endfor %}
         </tbody>
     </table>
 </div>

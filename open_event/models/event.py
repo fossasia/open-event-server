@@ -42,6 +42,7 @@ class Event(db.Model):
     sponsor = db.relationship('Sponsor', backref="event")
     users = db.relationship("EventsUsers", backref="event")
     roles = db.relationship("UsersEventsRoles", backref="event")
+    role_invites = db.relationship('RoleInvite', back_populates='event')
     privacy = db.Column(db.String, default="public")
     state = db.Column(db.String, default="Draft")
     closing_datetime = db.Column(db.DateTime)
