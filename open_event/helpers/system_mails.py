@@ -20,7 +20,7 @@ MAILS = {
         'recipient': 'Organizer',
         'subject': 'New session proposal for {event_name}',
         'message': (
-            "Hi {email}<br/>" +
+            "Hi {email},<br/>" +
             "The event <strong>{event_name}</strong> has received a new session proposal. " +
             "<br/> Visit this link to view the session: {link}"
         )
@@ -37,22 +37,22 @@ MAILS = {
         'recipient': 'User',
         'subject': 'Email Confirmation to Create Account for Open-Event',
         'message': (
-            "Hi {email}<br/>" +
-            "<br/> Please visit this link to confirm your email: {link}"
+            "Hi {email},<br/>" +
+            "Please visit this link to confirm your email: {link}"
         )
     },
     PASSWORD_RESET: {
         'recipient': 'User',
         'subject': 'Open Event: Password Reset',
         'message': (
-            "Change password now: {link}"
+            "Please use the following link to reset your password.<br> {link}"
         )
     },
     EVENT_ROLE: {
         'recipient': 'User',
         'subject': 'Invitation to be {role} at {event}',
         'message': (
-            "Hello {email},<br><br>" +
+            "Hello {email},<br>" +
             "You've been invited to be a {role} at {event}. " +
             "Please follow the link to accept the role: {link}"
         )

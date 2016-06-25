@@ -27,7 +27,7 @@ System Mails
     <tr>
     <td>{{ mails[mail]['recipient'] }}</td>
     <td>{{ mail }}</td>
-    <td>{{ mails[mail]['message'] }}</td>
+    <td><strong>{{ mails[mail]['subject'] }}</strong><br>{{ mails[mail]['message']|safe }}</td>
     </tr>
     {% endfor %}
 </tbody>
