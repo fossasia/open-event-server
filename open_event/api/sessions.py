@@ -136,6 +136,15 @@ class SessionDAO(ServiceDAO):
         return data
 
     def update(self, event_id, service_id, data):
+        form = DataGetter.get_custom_form_elements(event_id).first()
+        if form:
+            session_custom = json.loads(DataGetter.get_custom_form_elements(event_id).first().session_form)
+            for key in SESSION_POST:
+                if key in session_custom:
+                    if session_custom[key]['require'] == 1:
+                        SESSION_POST[key].required = True
+                    elif session_custom[key]['require'] == 0:
+                        SESSION_POST[key].required = False
         data = self.validate(data)
         data_copy = data.copy()
         data_copy = self.fix_payload_post(event_id, data_copy)
@@ -149,13 +158,15 @@ class SessionDAO(ServiceDAO):
         return obj
 
     def create(self, event_id, data, url):
-        session_custom = json.loads(DataGetter.get_custom_form_elements(event_id).first().session_form)
-        for key in SESSION_POST:
-            if key in session_custom:
-                if session_custom[key]['require'] == 1:
-                    SESSION_POST[key].required = True
-                elif session_custom[key]['require'] == 0:
-                    SESSION_POST[key].required = False
+        form = DataGetter.get_custom_form_elements(event_id).first()
+        if form:
+            session_custom = json.loads(DataGetter.get_custom_form_elements(event_id).first().session_form)
+            for key in SESSION_POST:
+                if key in session_custom:
+                    if session_custom[key]['require'] == 1:
+                        SESSION_POST[key].required = True
+                    elif session_custom[key]['require'] == 0:
+                        SESSION_POST[key].required = False
         data = self.validate(data)
         payload = self.fix_payload_post(event_id, data)
         return ServiceDAO.create(self, event_id, payload, url, validate=False)
