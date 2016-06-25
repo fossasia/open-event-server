@@ -3,7 +3,7 @@
 Event Sponsors
 {% endblock %}
 {% block addon_link %}
-<button onclick="addSponsor();" class="btn btn-info pull-right" style="color: #FFFFFF; height: 30px; width: 100px; margin: 0; padding-left: 10px;" data-target="#add-role">Add Sponsor</button>
+<button onclick="addSponsor();" class="btn btn-info pull-right" style="color: #FFFFFF; margin: 0; padding-left: 10px;" data-target="#add-role">Add Sponsor</button>
 {% endblock %}
 {% block panel_content %}
 <div class="col-md-12">
@@ -15,7 +15,7 @@ Event Sponsors
             <th>Name</th>
             <th>Type</th>
             <th>Level</th>
-
+            <th>Options</th>
         </tr>
         </thead>
         <tbody>
@@ -24,11 +24,17 @@ Event Sponsors
             <td>
                 <img style="width: 50px; height:50px;" src="{{ sponsor.logo }}" class="user-photo" onerror="imgError(this);">
             </td>
-            <td>{{sponsor.name}}</td>
-            <td>{{ sponsor.type }}</td>
+            <td>
+            {% if sponsor.url %}
+              <a href="{{ sponsor.url }}" target="_blank">{{ sponsor.name }}</a>
+            {% else %}
+              {{ sponsor.name }}
+            {% endif %}
+            </td>
+            <td>{{ sponsor.sponsor_type }}</td>
             <td>{{ sponsor.level }}</td>
             <td>
-                <a class="icon" title="Edit Sponsor" href="/events/{{ event.id }}/edit#step=2">
+                <a class="icon" title="Edit Sponsor" href="/events/{{ event.id }}/edit/sponsors">
                     <span class="glyphicon glyphicon-pencil"></span>
                 </a>
                 <a title="Delete Sponsor" onclick="return confirm('Are you sure you want to delete this record?');" href="{{ get_url('event_sponsors.delete_view', event_id=event.id,sponsor_id=sponsor.id)}}">
