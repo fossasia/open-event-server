@@ -14,6 +14,7 @@ from open_event.views.admin.models_views.invite import InviteView
 from open_event.views.admin.models_views.sessions import SessionsView
 from open_event.views.admin.models_views.speakers import SpeakersView
 from open_event.views.admin.home import MyHomeView
+from open_event.views.admin.models_views.sponsors import SponsorsView
 from open_event.views.public.event_detail import EventDetailView
 from open_event.views.public.browse import BrowseView
 from open_event.views.public.pages import BasicPagesView
@@ -49,6 +50,7 @@ class AdminView(object):
         self.admin.add_view(MySessionView(name='MySessions', url='/events/mysessions', endpoint="my_sessions"))
         self.admin.add_view(EventsView(name='Events', url='/events', endpoint="events"))
         self.admin.add_view(SpeakersView(name='Speakers', url='/events/<event_id>/speakers', endpoint="event_speakers"))
+        self.admin.add_view(SponsorsView(name='Sponsors', url='/events/<event_id>/sponsors', endpoint="event_sponsors"))
         self.admin.add_view(SessionsView(name='Sessions', url='/events/<event_id>/sessions', endpoint="event_sessions"))
         self.admin.add_view(SchedulerView(name='Scheduler', url='/events/<event_id>/scheduler', endpoint="event_scheduler"))
         self.admin.add_view(RoleView(name='Role', url='/events/<event_id>/roles', endpoint="event_roles"))
