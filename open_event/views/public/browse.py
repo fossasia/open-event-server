@@ -15,10 +15,18 @@ class BrowseView(BaseView):
 
     @expose('/s', methods=('GET', 'POST'))
     def browses(self, location):
-        results = DataGetter.get_all_events()
+        results = marshal(EventDAO.list(location_name=location, privacy='public', state='Published'), EVENT)
         if request.method == "POST":
-            url = urlparse(request.url)
             word = request.form['word']
+            event_type = request.args.get('event_type', '')
+            if location and word and event_type:
+                results = marshal(
+                    EventDAO.list(location_name=location,
+                                  __event_contains=word,
+                                  privacy='public',
+                                  state='Published',
+                                  type=event_type),
+                    EVENT)
             if location and word:
                 results = marshal(EventDAO.list(location_name=location, __event_contains=word, privacy='public', state='Published'), EVENT)
             elif location:
