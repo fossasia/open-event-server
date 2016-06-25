@@ -6,6 +6,9 @@ from .helpers.helpers import get_paginated_list, requires_auth
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
 from .helpers import custom_fields as fields
+from open_event.helpers.data_getter import DataGetter
+
+import json
 
 api = Namespace('speakers', description='Speakers', path='/')
 
@@ -44,7 +47,16 @@ del SPEAKER_POST['sessions']  # don't allow adding sessions
 
 # Create DAO
 class SpeakerDAO(ServiceDAO):
-    pass
+    def create(self, event_id, data, url):
+        speaker_custom = json.loads(DataGetter.get_custom_form_elements(event_id).first().speaker_form)
+        for key in SPEAKER_POST:
+            if key in speaker_custom:
+                if speaker_custom[key]['require'] == 1:
+                    SPEAKER_POST[key].required = True
+                elif speaker_custom[key]['require'] == 0:
+                    SPEAKER_POST[key].required = False
+        data = self.validate(data)
+        return ServiceDAO.create(self, event_id, data, url, validate=False)
 
 DAO = SpeakerDAO(SpeakerModel, SPEAKER_POST)
 
