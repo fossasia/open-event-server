@@ -11,7 +11,7 @@ def get_settings():
         return current_app.config['custom_settings']
     s = Setting.query.order_by(desc(Setting.id)).first()
     if s is None:
-        set_settings(secret='My default secret')
+        set_settings(secret='super secret key')
     else:
         current_app.config['custom_settings'] = make_dict(s)
     return current_app.config['custom_settings']
@@ -32,5 +32,4 @@ def make_dict(s):
     for name, column in s.__mapper__.columns.items():
         if not (column.primary_key or column.unique):
             arguments[name] = getattr(s, name)
-    print arguments
     return arguments
