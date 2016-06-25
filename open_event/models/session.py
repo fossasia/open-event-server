@@ -10,6 +10,7 @@ speakers_sessions = db.Table('speakers_sessions', db.Column(
 class Session(db.Model):
     """Session model class"""
     __tablename__ = 'session'
+    __versioned__ = {}
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     subtitle = db.Column(db.String)

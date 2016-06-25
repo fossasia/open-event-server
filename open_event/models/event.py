@@ -1,8 +1,8 @@
 """Copyright 2015 Rafal Kowalski"""
+
 from open_event.helpers.date_formatter import DateFormatter
 from . import db
 from sqlalchemy_utils import ColorType
-
 
 class EventsUsers(db.Model):
     """Many to Many table Event Users"""
@@ -19,6 +19,7 @@ class EventsUsers(db.Model):
 class Event(db.Model):
     """Event object table"""
     __tablename__ = 'events'
+    __versioned__ = {}
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     email = db.Column(db.String)

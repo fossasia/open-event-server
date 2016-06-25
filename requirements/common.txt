@@ -28,3 +28,4 @@ humanize==0.5.1
 geoip2
 Flask-HTMLmin
 pytz
+SQLAlchemy-Continuum

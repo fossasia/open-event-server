@@ -19,6 +19,9 @@ from datetime import timedelta
 
 from icalendar import Calendar, Event
 import humanize
+from sqlalchemy_continuum import make_versioned
+from sqlalchemy_continuum.plugins import FlaskPlugin
+import sqlalchemy as sa
 
 from open_event.helpers.flask_helpers import SilentUndefined
 from open_event.helpers.helpers import string_empty
@@ -79,6 +82,8 @@ def create_app():
     with app.app_context():
         from open_event.api import api_v2
         app.register_blueprint(api_v2)
+
+    sa.orm.configure_mappers()
 
     return app, manager, db, jwt
 
