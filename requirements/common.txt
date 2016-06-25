@@ -30,3 +30,4 @@ Flask-HTMLmin
 pytz
 SQLAlchemy-Continuum
 diff-match-patch
+arrow
