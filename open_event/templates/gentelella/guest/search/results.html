@@ -17,6 +17,13 @@
     <div class="col-md-8">
         <h1>{{location}} Events</h1>
 
+        <div>
+            <ul class="list-inline prod_size">
+                {%for filter in filters %}
+                    <li><button type="button" class="btn btn-default btn-xs">{{filter[1]}}</button></li>
+                {%endfor%}
+             </ul>
+        </div>
         {%for event in results %}
         <div class="thumbnail" onclick="location.href='/e/{{ event.id }}'">
             <div class="left">

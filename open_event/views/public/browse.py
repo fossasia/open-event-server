@@ -16,6 +16,7 @@ class BrowseView(BaseView):
     @expose('/s', methods=('GET', 'POST'))
     def browses(self, location):
         results = marshal(EventDAO.list(location_name=location, privacy='public', state='Published'), EVENT)
+        filters = request.args.items()
         if request.method == "POST":
             word = request.form['word']
             event_type = request.args.get('event_type', '')
@@ -33,6 +34,6 @@ class BrowseView(BaseView):
                 results = marshal(EventDAO.list(location_name=location, privacy='public', state='Published'), EVENT)
             elif word:
                 results = marshal(EventDAO.list(__event_contains=word, privacy='public', state='Published'), EVENT)
-            return self.render('/gentelella/guest/search/results.html', results=results, location=location)
-        return self.render('/gentelella/guest/search/results.html', results=results, location=location)
+            return self.render('/gentelella/guest/search/results.html', results=results, location=location, filters=filters)
+        return self.render('/gentelella/guest/search/results.html', results=results, location=location, filters=filters)
 
