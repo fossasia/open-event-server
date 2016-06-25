@@ -2,20 +2,20 @@ import os
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 
-
-BUCKET_NAME = os.environ.get('BUCKET_NAME')
-if BUCKET_NAME:
-    S3_URL = 'https://%s.s3.amazonaws.com/' % (BUCKET_NAME)
-AWS_KEY = os.environ.get('AWS_KEY')
-AWS_SECRET = os.environ.get('AWS_SECRET')
+from open_event.settings import get_settings
 
 
 def upload(file, key, **kwargs):
     """
     Upload handler
     """
-    if BUCKET_NAME and AWS_KEY and AWS_SECRET:
-        return upload_to_aws(file, key, **kwargs)
+    # refresh settings
+    bucket_name = get_settings()['aws_bucket_name']
+    aws_key = get_settings()['aws_key']
+    aws_secret = get_settings()['aws_secret']
+    # upload
+    if bucket_name and aws_key and aws_secret:
+        return upload_to_aws(bucket_name, aws_key, aws_secret, file, key, **kwargs)
     else:
         return upload_local(file, key, **kwargs)
 
@@ -33,13 +33,13 @@ def upload_local(file, key, **kwargs):
     return '/serve_' + file_path
 
 
-def upload_to_aws(file, key, acl='public-read'):
+def upload_to_aws(bucket_name, aws_key, aws_secret, file, key, acl='public-read'):
     """
     Uploads to AWS at key
     http://{bucket}.s3.amazonaws.com/{key}
     """
-    conn = S3Connection(AWS_KEY, AWS_SECRET)
-    bucket = conn.get_bucket(BUCKET_NAME)
+    conn = S3Connection(aws_key, aws_secret)
+    bucket = conn.get_bucket(bucket_name)
     k = Key(bucket)
     # generate key using key + extension
     basename, ext = os.path.splitext(file.filename)  # includes dot
@@ -55,11 +55,7 @@ def upload_to_aws(file, key, acl='public-read'):
         }
     )
     k.set_acl(acl)
+    s3_url = 'https://%s.s3.amazonaws.com/' % (bucket_name)
     if sent == size:
-        return S3_URL + k.key
+        return s3_url + k.key
     return False
-
-
-if __name__ == '__main__':
-    f = open('storage.py', 'r')
-    upload_to_aws(f, 'test')
