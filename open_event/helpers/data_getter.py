@@ -503,11 +503,3 @@ class DataGetter:
         """
         activities = Activity.query.order_by(desc(Activity.time)).all()
         return activities[:count]
-
-    @staticmethod
-    def get_system_setting():
-        """
-        Get System Setting
-        """
-        setting = Setting.query.order_by(desc(Setting.id)).first()
-        return setting

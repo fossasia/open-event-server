@@ -1,11 +1,12 @@
 from flask import request
 from urlparse import urlparse
 
+from open_event.settings import get_settings
+
+
 class OAuth(object):
     """Google Credentials"""
 
-    CLIENT_ID = '449612261522-1eg34prt23l0454et59qgqno3rjd8muq.apps.googleusercontent.com'
-    CLIENT_SECRET = 'aq8XaUlxCfhwwMyZyNw8kS-D'
     AUTH_URI = 'https://accounts.google.com/o/oauth2/auth'
     TOKEN_URI = 'https://accounts.google.com/o/oauth2/token'
     USER_INFO = 'https://www.googleapis.com/userinfo/v2/me'
@@ -13,11 +14,11 @@ class OAuth(object):
 
     @classmethod
     def get_client_id(self):
-        return self.CLIENT_ID
+        return get_settings()['google_client_id']
 
     @classmethod
     def get_client_secret(self):
-        return self.CLIENT_SECRET
+        return get_settings()['google_client_secret']
 
     @classmethod
     def get_redirect_uri(self):
@@ -40,9 +41,6 @@ class OAuth(object):
 
 class FbOAuth(object):
     """Facebook Credentials"""
-
-    Fb_CLIENT_ID = '1790977354468723'
-    Fb_CLIENT_SECRET = '830da5c5ab66f0b2224a9ad5efa7cdb4'
     Fb_AUTH_URI = 'https://www.facebook.com/dialog/oauth'
     Fb_TOKEN_URI = 'https://graph.facebook.com/oauth/access_token'
     Fb_USER_INFO = 'https://graph.facebook.com/me?fields=email,id,name,picture'
@@ -50,11 +48,11 @@ class FbOAuth(object):
 
     @classmethod
     def get_client_id(self):
-        return self.Fb_CLIENT_ID
+        return get_settings()['fb_client_id']
 
     @classmethod
     def get_client_secret(self):
-        return self.Fb_CLIENT_SECRET
+        return get_settings()['fb_client_secret']
 
     @classmethod
     def get_redirect_uri(self):

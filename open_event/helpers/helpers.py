@@ -9,6 +9,7 @@ from itsdangerous import Serializer
 from flask.ext import login
 
 from open_event.helpers.flask_helpers import get_real_ip
+from open_event.settings import get_settings
 from ..models.track import Track
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
     USER_REGISTER, PASSWORD_RESET, EVENT_ROLE, Mail
@@ -32,11 +33,6 @@ def is_track_name_unique_in_event(form, event_id, *args):
         for track in tracks.all():
             return str(track.id) == track_id
         return True
-
-HEADERS = {
-    "Authorization": ("Bearer SG.55ztiWJxQYuYK7ToThxDPA.rAc929FzcDQsyj"
-                      "VwmIvKlPoc1YVpKCSOwhEFWZvxFT8")
-}
 
 
 def send_email_invitation(email, event_name, link):
@@ -115,6 +111,13 @@ def send_email(to, action, subject, html):
     """
     Sends email and records it in DB
     """
+    key = get_settings()['sendgrid_key']
+    if not key:
+        print 'Sendgrid key not defined'
+        return
+    headers = {
+        "Authorization": ("Bearer " + key)
+    }
     payload = {
         'to': to,
         'from': 'open-event@googlegroups.com',
@@ -123,7 +126,7 @@ def send_email(to, action, subject, html):
     }
     requests.post("https://api.sendgrid.com/api/mail.send.json",
                   data=payload,
-                  headers=HEADERS)
+                  headers=headers)
     # record_mail(to, action, subject, html)
     mail = Mail(
         recipient=to, action=action, subject=subject,
