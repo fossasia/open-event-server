@@ -13,7 +13,12 @@ Events
 
 {% block content %}
 
-<iframe style="width:100%; height: 500px" src="https://longboard-classic.heroku.com/logs?logplexUrl={{log_url}}"></iframe>
+{% if log_url %}
+  <iframe style="width:100%; height: 500px" src="https://longboard-classic.heroku.com/logs?logplexUrl={{ log_url }}"></iframe>
+{% else %}
+<div>Either the Heroku API Token is invalid or it has not been set. Please set a valid <code>API_TOKEN_HEROKU</code> environment variable.</div>
+{% endif %}
+
 
 
 {% endblock %}
