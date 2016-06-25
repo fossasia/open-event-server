@@ -1,6 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 
 from open_event.helpers.date_formatter import DateFormatter
+from open_event.helpers.versioning import clean_up_string
 from . import db
 from sqlalchemy_utils import ColorType
 
@@ -19,7 +20,9 @@ class EventsUsers(db.Model):
 class Event(db.Model):
     """Event object table"""
     __tablename__ = 'events'
-    __versioned__ = {}
+    __versioned__ = {
+        'exclude': ['creator_id', 'schedule_published_on']
+    }
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     email = db.Column(db.String)
@@ -88,11 +91,11 @@ class Event(db.Model):
         self.latitude = latitude
         self.longitude = longitude
         self.location_name = location_name
-        self.description = description
+        self.description = clean_up_string(description)
         self.event_url = event_url
         self.background_url = background_url
         self.organizer_name = organizer_name
-        self.organizer_description = organizer_description
+        self.organizer_description = clean_up_string(organizer_description)
         self.state = state
         self.privacy = privacy
         self.closing_datetime = closing_datetime
@@ -110,6 +113,12 @@ class Event(db.Model):
 
     def __unicode__(self):
         return self.name
+
+    def __setattr__(self, name, value):
+        if name == 'organizer_description' or name == 'description':
+            super(Event, self).__setattr__(name, clean_up_string(value))
+        else:
+            super(Event, self).__setattr__(name, value)
 
     @property
     def serialize(self):

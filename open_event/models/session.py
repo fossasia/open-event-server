@@ -1,4 +1,5 @@
 """Copyright 2015 Rafal Kowalski"""
+from open_event.helpers.versioning import clean_up_string
 from . import db
 from open_event.helpers.date_formatter import DateFormatter
 
@@ -10,7 +11,9 @@ speakers_sessions = db.Table('speakers_sessions', db.Column(
 class Session(db.Model):
     """Session model class"""
     __tablename__ = 'session'
-    __versioned__ = {}
+    __versioned__ = {
+        'exclude': []
+    }
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     subtitle = db.Column(db.String)
@@ -109,6 +112,12 @@ class Session(db.Model):
 
     def __str__(self):
         return unicode(self).encode('utf-8')
+
+    def __setattr__(self, name, value):
+        if name == 'short_abstract' or name == 'long_abstract' or name == 'comments':
+            super(Session, self).__setattr__(name, clean_up_string(value))
+        else:
+            super(Session, self).__setattr__(name, value)
 
     def __unicode__(self):
         return self.title
