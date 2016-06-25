@@ -7,13 +7,9 @@ from open_event.helpers.data import save_to_db
 from open_event.models.call_for_papers import CallForPaper
 from tests.object_mother import ObjectMother
 from tests.utils import OpenEventTestCase
-from tests.setup_database import Setup
 from open_event import current_app as app
 
-
 class TestGuestEventPage(OpenEventTestCase):
-    def setUp(self):
-        self.app = Setup.create_app()
 
     def test_published_event_view(self):
         with app.test_request_context():
