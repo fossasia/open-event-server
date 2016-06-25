@@ -1,4 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
+import arrow
+from dateutil import tz
 from flask.ext.htmlmin import HTMLMIN
 import logging
 import os.path
@@ -15,7 +17,7 @@ from flask.ext.login import current_user
 from flask import render_template
 from flask import request
 from flask.ext.jwt import JWT
-from datetime import timedelta
+from datetime import timedelta, time
 
 from icalendar import Calendar, Event
 import humanize
@@ -61,8 +63,8 @@ def create_app():
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     app.logger.setLevel(logging.INFO)
     app.jinja_env.add_extension('jinja2.ext.do')
+    app.jinja_env.add_extension('jinja2.ext.loopcontrols')
     app.jinja_env.undefined = SilentUndefined
-    app.jinja_env.filters['humanize'] = humanize.naturaltime
     app.jinja_env.filters['operation_name'] = operation_name
     # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
@@ -130,6 +132,17 @@ def event_types():
     event_types = DataGetter.get_event_types()
     return dict(event_typo=event_types[:10])
 
+@app.template_filter('pretty_name')
+def pretty_name_filter(s):
+    s = str(s)
+    s = s.replace('_', ' ')
+    s = s.title()
+    return s
+
+@app.template_filter('humanize')
+def humanize_filter(time):
+    return arrow.get(time).humanize()
+
 @app.context_processor
 def versioning_manager():
     def count_versions(model_object):
@@ -140,18 +153,18 @@ def versioning_manager():
         from sqlalchemy_continuum import changeset
         return changeset(model_object)
 
-    def transaction_class(model_object):
+    def transaction_class(version_object):
         from sqlalchemy_continuum import transaction_class
-        return transaction_class(model_object)
+        transaction = transaction_class(version_object)
+        return transaction.query.get(version_object.transaction_id)
 
     def version_class(model_object):
         from sqlalchemy_continuum import version_class
         return version_class(model_object)
 
-    def user_name(transaction_object):
-        print transaction_object
-        user = DataGetter.get_user(transaction_object[0].user_id)
-        return user.name
+    def get_user_name(transaction_object):
+        user = DataGetter.get_user(transaction_object.user_id)
+        return user.email
 
     def side_by_side_diff(changeset_entry):
         from open_event.helpers.versioning import side_by_side_diff
@@ -163,7 +176,7 @@ def versioning_manager():
                 transaction_class=transaction_class,
                 version_class=version_class,
                 side_by_side_diff=side_by_side_diff,
-                user_name=user_name)
+                get_user_name=get_user_name)
 
 # http://stackoverflow.com/questions/26724623/
 @app.before_request
