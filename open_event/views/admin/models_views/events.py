@@ -162,7 +162,6 @@ class EventsView(BaseView):
         call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
         sponsors = DataGetter.get_sponsors(event_id)
         custom_forms = DataGetter.get_custom_form_elements(event_id)
-        print custom_forms
         speaker_form = json.loads(custom_forms.speaker_form)
         session_form = json.loads(custom_forms.session_form)
 
