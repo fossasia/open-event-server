@@ -111,18 +111,17 @@ class DataManager(object):
         """
         Settings will be toggled to database with proper User id
         """
-        email_notification_settings = DataGetter.get_email_notification_settings(user_id)
-        if email_notification_settings:
-            for email_notification in email_notification_settings:
+        events = DataGetter.get_all_events()
+        for event in events:
+            email_notification = DataGetter.get_email_notification_settings_by_event_id(user_id, event.id)
+            if email_notification:
                 email_notification.next_event = value
                 email_notification.new_paper = value
                 email_notification.session_schedule = value
                 email_notification.session_accept_reject = value
 
-                save_to_db(email_notification, "EmailSettings Toggles")
-        else:
-            events = DataGetter.get_all_events()
-            for event in events:
+                save_to_db(email_notification, "EmailSettings Toggled")
+            else:
                 new_email_notification_setting = EmailNotification(next_event=0,
                                                                    new_paper=0,
                                                                    session_schedule=0,
