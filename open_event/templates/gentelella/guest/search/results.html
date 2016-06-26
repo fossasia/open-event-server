@@ -151,17 +151,22 @@
         );
 
         $(".categories input").each(function( index ) {
-            if ($( this ).val() === params['event_type'].replace(/\+/g, ' ')){
-                $( this ).parent().css('color', 'black');
-                $('#collapse1').collapse()
+            if(params['event_type'] != null){
+                if ($( this ).val() === params['event_type'].replace(/\+/g, ' ')){
+                    $(this).prop( "checked", true );
+                    $( this ).parent().css('color', 'black');
+                    $('#collapse1').collapse()
+                }
             }
         })
-        <!--$(".days input").each(function( index ) {-->
-            <!--if ($( this ).val() === params['day'].replace(/\+/g, ' ')){-->
-                <!--$( this ).parent().css('color', 'black');-->
-                <!--$('#collapse3').collapse()-->
-            <!--}-->
-        <!--})-->
+        $(".days input").each(function( index ) {
+            if(params['day'] != null){
+                if ($( this ).val() === params['day'].replace(/\+/g, ' ')){
+                    $( this ).parent().css('color', 'black');
+                    $('#collapse3').collapse()
+                }
+            }
+        })
 
         $('.filtering .fa-close').click(function (){
             key = $(this).attr('name')
