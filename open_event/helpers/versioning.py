@@ -6,11 +6,11 @@ from HTMLParser import HTMLParser
 
 
 def remove_line_breaks(target_string):
-    return str(target_string).replace('\r', '')
+    return target_string.replace('\r', '')
 
 
 def strip_line_breaks(target_string):
-    return str(target_string).replace('\n', '').replace('\r', '')
+    return target_string.replace('\n', '').replace('\r', '')
 
 
 def clean_up_string(target_string):
@@ -54,8 +54,8 @@ def side_by_side_diff(old_text, new_text):
     if not new_text:
         new_text = ''
 
-    old_text = strip_tags(strip_line_breaks(str(old_text)))
-    new_text = strip_tags(strip_line_breaks(str(new_text)))
+    old_text = strip_tags(strip_line_breaks(unicode(old_text).encode('utf-8', errors='ignore')))
+    new_text = strip_tags(strip_line_breaks(unicode(new_text).encode('utf-8', errors='ignore')))
 
     def yield_open_entry(open_entry):
         """ Yield all open changes. """
