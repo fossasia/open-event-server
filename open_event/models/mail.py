@@ -6,9 +6,12 @@ from . import db
 USER_REGISTER = 'User Registration'
 USER_CONFIRM = 'User Confirmation'
 INVITE_PAPERS = 'Invitation For Papers'
+NEXT_EVENT = 'Next Event'
 NEW_SESSION = 'New Session Proposal'
 PASSWORD_RESET = 'Reset Password'
 EVENT_ROLE = 'Event Role Invitation'
+SESSION_ACCEPT_REJECT = 'Session Accept or Reject'
+SESSION_SCHEDULE = 'Session Schedule Change'
 
 
 class Mail(db.Model):

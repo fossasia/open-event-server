@@ -113,18 +113,14 @@ class SessionsView(BaseView):
     @can_accept_and_reject
     def accept_session(self, event_id, session_id):
         session = get_session_or_throw(session_id)
-        session.state = 'accepted'
-        save_to_db(session, 'Session Accepted')
-        flash("The session has been accepted")
+        DataManager.session_accept_reject(session, event_id, 'accepted')
         return redirect(url_for('.index_view', event_id=event_id))
 
     @expose('/<int:session_id>/reject', methods=('GET',))
     @can_accept_and_reject
     def reject_session(self, event_id, session_id):
         session = get_session_or_throw(session_id)
-        session.state = 'rejected'
-        save_to_db(session, 'Session Rejected')
-        flash("The session has been rejected")
+        DataManager.session_accept_reject(session, event_id, 'rejected')
         return redirect(url_for('.index_view', event_id=event_id))
 
     @expose('/<int:session_id>/delete', methods=('GET',))
