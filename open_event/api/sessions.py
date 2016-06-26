@@ -139,7 +139,7 @@ class SessionDAO(ServiceDAO):
         data_copy = data.copy()
         data_copy = self.fix_payload_post(event_id, data_copy)
         data = self._delete_fields(data)
-        obj = ServiceDAO.update(self, event_id, service_id, data)
+        obj = ServiceDAO.update(self, event_id, service_id, data, validate=False)
         obj.track = data_copy['track']
         obj.microlocation = data_copy['microlocation']
         obj.speakers = data_copy['speakers']
