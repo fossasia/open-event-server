@@ -71,10 +71,9 @@ class DataGetter:
         return Permission.query.filter_by(role=role, service=service).first()
 
     @staticmethod
-    def get_event_role_invite(user_id, event_id, hash):
-        return RoleInvite.query.filter_by(user_id=user_id,
-                                          event_id=event_id,
-                                          hash=hash).first()
+    def get_event_role_invite(event_id, hash, **kwargs):
+        return RoleInvite.query.filter_by(event_id=event_id,
+                                          hash=hash, **kwargs).first()
 
     @staticmethod
     def get_all_owner_events():
@@ -143,7 +142,7 @@ class DataGetter:
         """
         return CustomForms.query.filter_by(
             event_id=event_id
-        )
+        ).first()
 
     @staticmethod
     def get_sessions_of_user_by_id(session_id, user=login.current_user):

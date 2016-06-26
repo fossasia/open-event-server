@@ -2,7 +2,7 @@
 from datetime import datetime
 
 from open_event.models.call_for_papers import CallForPaper
-from open_event.models.custom_forms import CustomForms
+from open_event.models.custom_forms import CustomForms, session_form_str, speaker_form_str
 from open_event.models.track import Track
 from open_event.models.event import Event
 from open_event.models.session import Session
@@ -43,20 +43,8 @@ class ObjectMother(object):
     @staticmethod
     def get_custom_form(event_id=1):
         return CustomForms(event_id=event_id,
-                           session_form='{"title":{"include":1,"require":1},"subtitle":{"include":0,"require":0},'
-                                        '"short_abstract":{"include":1,"require":0},"long_abstract":{"include":0,'
-                                        '"require":0},"comments":{"include":1,"require":0},"track":{"include":0,'
-                                        '"require":0},"session_type":{"include":0,"require":0},"language":{"include":0,'
-                                        '"require":0},"slides":{"include":1,"require":0},"video":{"include":0,'
-                                        '"require":0},"audio":{"include":0,"require":0}}',
-                           speaker_form='{"name":{"include":1,"require":1},"email":{"include":1,"require":1},'
-                                        '"photo":{"include":1,"require":0},"organisation":{"include":1,'
-                                        '"require":0},"position":{"include":1,"require":0},"country":{"include":1,'
-                                        '"require":0},"short_biography":{"include":1,"require":0},"long_biography"'
-                                        ':{"include":0,"require":0},"mobile":{"include":0,"require":0},'
-                                        '"website":{"include":1,"require":0},"facebook":{"include":0,"require":0},'
-                                        '"twitter":{"include":1,"require":0},"github":{"include":0,"require":0},'
-                                        '"linkedin":{"include":0,"require":0}}')
+                           session_form=session_form_str,
+                           speaker_form=speaker_form_str)
 
     @staticmethod
     def get_speaker():

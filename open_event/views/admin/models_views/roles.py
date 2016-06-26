@@ -1,6 +1,6 @@
 from flask.ext.admin import BaseView
 from flask_admin import expose
-from flask import request, url_for, redirect, flash
+from flask import request, url_for, redirect
 from ....helpers.data import DataManager
 from ....helpers.data_getter import DataGetter
 from open_event.helpers.permission_decorators import is_organizer
@@ -14,7 +14,6 @@ class RoleView(BaseView):
     @is_organizer
     def create_view(self, event_id):
         if request.method == 'POST':
-            flash('An email invitation has been sent to user')
             DataManager.add_event_role_invite(request.form, event_id)
         return redirect(url_for('events.details_view', event_id=event_id))
 

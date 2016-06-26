@@ -3,6 +3,8 @@ import os
 from flask.ext.admin import BaseView
 from flask.ext.restplus import abort
 from flask_admin import expose
+
+from open_event import db
 from open_event.helpers.permission_decorators import *
 from flask.ext import login
 from flask import request, url_for, redirect, flash
@@ -37,7 +39,7 @@ class SessionsView(BaseView):
     def session_display_view(self, event_id, session_id):
         session = get_session_or_throw(session_id)
         event = DataGetter.get_event(event_id)
-        form_elems = DataGetter.get_custom_form_elements(event_id).first()
+        form_elems = DataGetter.get_custom_form_elements(event_id)
         if not form_elems:
             flash("Speaker and Session forms have been incorrectly configured for this event."
                   " Session creation has been disabled", "danger")
@@ -58,7 +60,7 @@ class SessionsView(BaseView):
                 return redirect(url_for('event_speakers.index_view', event_id=event_id))
             return redirect(url_for('.index_view', event_id=event_id))
 
-        form_elems = DataGetter.get_custom_form_elements(event_id).first()
+        form_elems = DataGetter.get_custom_form_elements(event_id)
         if not form_elems:
             flash("Speaker and Session forms have been incorrectly configured for this event."
                   " Session creation has been disabled", "danger")
@@ -79,7 +81,7 @@ class SessionsView(BaseView):
             DataManager.edit_session(request, session)
             return redirect(url_for('.index_view', event_id=event_id))
 
-        form_elems = DataGetter.get_custom_form_elements(event_id).first()
+        form_elems = DataGetter.get_custom_form_elements(event_id)
         if not form_elems:
             flash("Speaker and Session forms have been incorrectly configured for this event."
                   " Session creation has been disabled", "danger")
@@ -103,8 +105,9 @@ class SessionsView(BaseView):
     @expose('/<int:session_id>/invited/', methods=('GET', 'POST'))
     def invited_view(self, event_id, session_id):
         session = DataGetter.get_session(session_id)
+        event = DataGetter.get_event(event_id)
         return self.render('/gentelella/admin/event/sessions/invited.html',
-                           session=session, event_id=event_id)
+                           session=session, event_id=event_id, event=event)
 
     @expose('/<int:session_id>/accept', methods=('GET',))
     @can_accept_and_reject
@@ -130,3 +133,20 @@ class SessionsView(BaseView):
         delete_from_db(session, 'Session Rejected')
         flash("The session has been deleted", "danger")
         return redirect(url_for('.index_view', event_id=event_id))
+
+    @expose('/<int:session_id>/restore/', methods=('GET',))
+    def restore_session_view(self, event_id, session_id):
+        session = get_session_or_throw(session_id)
+        event = DataGetter.get_event(event_id)
+        return self.render('/gentelella/admin/event/sessions/browse_revisions.html',
+                           session=session, event_id=event_id, event=event)
+
+    @expose('/<int:session_id>/restore/<int:version_id>', methods=('GET',))
+    def restore_session_revision(self, event_id, session_id, version_id):
+        session = get_session_or_throw(session_id)
+        version = session.versions[version_id]
+        version.revert()
+        db.session.commit()
+        flash("The session has been restored.", "success")
+        return redirect(url_for('.index_view', event_id=event_id))
+

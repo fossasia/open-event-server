@@ -1,0 +1,130 @@
+{% extends 'gentelella/admin/event/event_base.html' %}
+{% block title %}
+    Browse revisions - {{ event.name }}
+{% endblock %}
+
+{% set active_page = "sessions" %}
+
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='admin/lib/nouislider/distribute/nouislider.min.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/versioning.css') }}"/>
+{% endblock %}
+{% set versions_count = count_versions(session) %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div style="text-align: center">
+                <h3>Browse Revisions</h3>
+            </div>
+            <br>
+            <div class="row">
+                <div id="revision-slider" class="col-xs-4 col-xs-push-4"></div>
+            </div>
+            <br>
+            <div id="versions-holder">
+                {% for version_number in range(versions_count-1, -1, -1) %}
+                    {% set version = session.versions[version_number] %}
+                    {% set changeset = version.changeset %}
+                    {% set transaction = transaction_class(version) %}
+                    {% set user_name = get_user_name(transaction) %}
+                    <div class="version-entry" id="version-{{ version_number }}"
+                         style="{% if loop.index > 1 %}display:none{% endif %}" data-user="{{ user_name }}"
+                         data-date="{{ transaction.issued_at | humanize }}">
+
+                        <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
+                            <div class="col-xs-6">
+                                Revision by <strong>{{ user_name }}</strong><br>
+                                {{ transaction.issued_at | humanize }}
+                                ({{ transaction.issued_at.strftime('%B %d @ %I:%M %p') }})
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                {% if version_number != versions_count-1 %}
+                                    <a href="{{ url_for('event_sessions.restore_session_revision', event_id=event.id, session_id=session.id, version_id=version_number) }}"
+                                       class="btn btn-info">Restore this revision</a>
+                                {% else %}
+                                    <button disabled class="btn btn-success">Current revision</button>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        {% for name in changeset %}
+                            {% set diff_result = [] %}
+                            {% for diff in side_by_side_diff(changeset[name]) %}
+                                {% do diff_result.append(diff) %}
+                            {% endfor %}
+                            {% for diff in diff_result %}
+                                {% if diff[0] %}
+                                    <div class="row diff-title-row"><h4>{{ name | pretty_name }}</h4></div>
+                                    {% break %}
+                                {% endif %}
+                            {% endfor %}
+                            {% for diff in diff_result %}
+                                {% if diff[0] %}
+                                    <div class="row diff-row">
+                                        <div class="col-xs-6 col-sm-6 col-md-6">
+                                            <pre>{{ diff[1] | default('', true) | safe }}</pre>
+                                        </div>
+                                        <div class="col-xs-6 col-sm-6 col-md-6">
+                                            <pre>{{ diff[2] | default('', true) | safe }}</pre>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='admin/lib/nouislider/distribute/nouislider.min.js') }}"></script>
+
+    {% if versions_count > 1 %}
+    <script type="text/javascript">
+        $(function () {
+            var slider = document.getElementById('revision-slider');
+            noUiSlider.create(slider, {
+                start: [{{ versions_count-1 }}],
+                step: 1,
+                range: {
+                    'min': 0,
+                    'max': {{ versions_count-1 }}
+                }
+            });
+
+            var $sliderHandle = $(".noUi-handle");
+            $sliderHandle.popover({
+                animation: false,
+                trigger: 'hover',
+                placement: 'top',
+                html: true
+            });
+
+            var $revisionsHolder = $("#versions-holder");
+            var show = false;
+            slider.noUiSlider.on('update', function (values, handle) {
+                var value = Math.round(values[handle]);
+                $sliderHandle.popover("show");
+                $revisionsHolder.find(".version-entry").hide();
+                var $currentVersion = $revisionsHolder.find("#version-" + value);
+                $currentVersion.show();
+                $sliderHandle.attr("data-content", "Revised by <strong>" + $currentVersion.data("user") + "</strong><br>" + $currentVersion.data('date'));
+                if (show) {
+                    $sliderHandle.popover("show");
+                }
+            });
+
+            $sliderHandle.popover("hide");
+            show = true;
+        });
+
+    </script>
+    {% endif %}
+
+{% endblock %}

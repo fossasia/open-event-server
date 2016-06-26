@@ -1,0 +1,22 @@
+ins {
+    color: #4CAF50;
+}
+
+del {
+    color: #f44336;
+}
+
+.diff-row pre {
+    overflow: hidden;
+    font-family: 'Roboto', sans-serif;
+    min-height: 39px;
+}
+
+.diff-title-row {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.diff-title-row > h4 {
+    font-weight: 300;
+}

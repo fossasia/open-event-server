@@ -7,12 +7,17 @@
 {% block head_css %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/nouislider/distribute/nouislider.min.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/versioning.css') }}"/>
+
     <style type="text/css">
         .alert-unused {
             color: #E9EDEF;
             background-color: rgba(150, 150, 150, 0.88);
             border-color: rgba(120, 120, 120, 0.88);
         }
+
+
     </style>
 {% endblock %}
 
@@ -31,8 +36,38 @@
     {{ super() }}
     <script src="{{ url_for('static', filename='admin/lib/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/nouislider/distribute/nouislider.min.js') }}"></script>
+
     <script type="text/javascript">
-        $('.role-table').DataTable();
+        $.fn.dataTable.ext.search.push(
+            function (settings, data, dataIndex) {
+                var user_option = $("input[name=role_status]:checked").val();
+                console.log(user_option);
+                var state = data[0].trim();
+                console.log(state, data[1]);
+                if (user_option === state) {
+                    return true;
+                }
+                return false;
+            }
+        );
+        var roleTable = $('.role-table').DataTable({
+            "bInfo": false, 
+            "bPaginate": false,
+            "dom": '<"row"<"toolbar col-md-6"><"col-md-6"f>>tip',
+            "scrollX": false,
+            "bAutoWidth": false
+        });
+        $("div.toolbar").prepend($("#toolbar-holder").html());
+
+        $("input[name=role_status]").change(function () {
+            roleTable.draw();
+        });
+
+        roleTable.on('draw', function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
         $('.sponsor-table').DataTable();
     </script>
 

@@ -6,39 +6,77 @@
 {% endblock %}
 
 {% block body %}
-<div class="row">
-    <div class="col-md-1">
+    <div class="row">
+        <div class="col-md-1">
 
-    </div>
-    <div class="col-md-2">
-        <div id="map" class="hidden-xs" style="width:100%; height:250px"></div>
-        {{filtering.add_search()}}
-    </div>
-    <div class="col-md-8">
-        <h1>{{location}} Events</h1>
-
-        {%for event in results %}
-        <div class="thumbnail" onclick="location.href='/e/{{ event.id }}'">
-            <div class="left">
-        <img src="{{ url_for('static', filename='img/image-800x500.png') }}" style="width:300px; height: 180px" />
-    </div>
-
-            <div class="left" style="margin-left: 20px">
-                <p>{{ event.start_time.strftime('%B %d, %Y - %I:%M %p') }}</p>
-                <h3>{{ event.name }}</h3>
-                <p>{{ event.location_name }}</p>
-                <p>
-                    #tech, #conference
-                </p>
-            </div>
-            <div style="clear:both"></div>
         </div>
-        {% endfor %}
+        <div class="col-md-2">
+            <div id="map" class="hidden-xs" style="width:100%; height:250px"></div>
+            {{ filtering.add_search() }}
+        </div>
+        <div class="col-md-8">
+            <h1>{{ location }} Events</h1>
+            <div>
+                <ul class="list-inline prod_size filtering">
+                    {% for filter in filters %}
+                        <li>
+                            <button type="button" class="btn btn-default btn-xs">{{ filter[1] }}
+                                <i class="fa fa-close" name="{{ filter[0] }}" style="margin-left:3px"></i></button>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% for event in results.results %}
+                <div class="thumbnail" onclick="location.href='/e/{{ event.id }}'">
+                    <div class="left">
+                        <img src="{{ url_for('static', filename='img/image-800x500.png') }}"
+                             style="width:300px; height: 180px"/>
+                    </div>
+
+                    <div class="left" style="margin-left: 20px">
+                        <p>{{ event.start_time.strftime('%B %d, %Y - %I:%M %p') }}</p>
+                        <h3>{{ event.name }}</h3>
+                        <p>{{ event.location_name }}</p>
+                        <p>
+                            #tech, #conference
+                        </p>
+                    </div>
+                    <div style="clear:both"></div>
+                </div>
+            {% endfor %}
+            <br>
+            {% set pages = results.count/results.limit %}<br>
+            {% set pages = pages | int %}
+            <nav>
+                <ul class="pagination pagination-lg">
+                    {% if results.previous %}
+                        <li>
+                            <a href="{{ set_query_parameter('page',current_page - 1) }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                        {% for page in range(1, pages + 1) %}
+                            {% if page == current_page %}
+                                <li class="active"><a href="{{ set_query_parameter('page',page) }}">{{ page }}</a></li>
+                            {% else %}
+                                <li><a href="{{ set_query_parameter('page',page) }}">{{ page }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    {% if results.next %}
+                        <li>
+                            <a href="{{ set_query_parameter('page',current_page + 1 ) }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
     </div>
-</div>
 
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 
 {% endblock %}
 
@@ -46,95 +84,131 @@
     {{ super() }}
 
     <script>
-    var marker;
-    var init_marker;
-    var $latitudeInput = $('#latitude');
-    var $longitudeInput = $('#longitude');
-    var $locationInput = "{{location}}"
-    function initMap() {
-        var latitude = $latitudeInput.val();
-        var longitude = $longitudeInput.val();
-        var latlng = new google.maps.LatLng(latitude, longitude);
-        var map = new google.maps.Map($("#map")[0], {
-            zoom: 1,
-            center: latlng
-        });
+        var marker;
+        var init_marker;
+        var $latitudeInput = $('#latitude');
+        var $longitudeInput = $('#longitude');
+        var $locationInput = "{{location}}"
+        function initMap() {
+            var latitude = $latitudeInput.val();
+            var longitude = $longitudeInput.val();
+            var latlng = new google.maps.LatLng(latitude, longitude);
+            var map = new google.maps.Map($("#map")[0], {
+                zoom: 1,
+                center: latlng
+            });
 
-        var geocoder = new google.maps.Geocoder();
-        init_marker = new google.maps.Marker({
-            draggable: true,
-            position: latlng,
-            map: map,
-            zoom: 15
-        });
+            var geocoder = new google.maps.Geocoder();
+            init_marker = new google.maps.Marker({
+                draggable: true,
+                position: latlng,
+                map: map,
+                zoom: 15
+            });
 
 
-        geocodeAddress(geocoder, map, "{{location}}");
-        $("#inputSuccess3").bind('input', function() {
-            geocodeAddress(geocoder, map, $(this).val())
-        });
+            geocodeAddress(geocoder, map, "{{location}}");
+            $("#inputSuccess3").bind('input', function () {
+                geocodeAddress(geocoder, map, $(this).val())
+            });
 
-    }
-    function geocodeAddress(geocoder, resultsMap, address) {
-        var address = address;
-        geocoder.geocode({'address': address}, function (results, status) {
-            if (status === google.maps.GeocoderStatus.OK) {
-                $latitudeInput.val(results[0].geometry.location.lat());
-                $longitudeInput.val(results[0].geometry.location.lng());
-                resultsMap.setCenter(results[0].geometry.location);
-                resultsMap.setZoom(5);
-                init_marker.setMap(null);
-                if (marker == null) {
-                    marker = new google.maps.Marker({
-                        map: resultsMap,
-                        draggable: true,
-                        position: results[0].geometry.location
-                    });
+        }
+        function geocodeAddress(geocoder, resultsMap, address) {
+            var address = address;
+            geocoder.geocode({'address': address}, function (results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    $latitudeInput.val(results[0].geometry.location.lat());
+                    $longitudeInput.val(results[0].geometry.location.lng());
+                    resultsMap.setCenter(results[0].geometry.location);
+                    resultsMap.setZoom(5);
+                    init_marker.setMap(null);
+                    if (marker == null) {
+                        marker = new google.maps.Marker({
+                            map: resultsMap,
+                            draggable: true,
+                            position: results[0].geometry.location
+                        });
+                    }
+                    else {
+                        marker.setMap(null);
+                        marker = new google.maps.Marker({
+                            map: resultsMap,
+                            draggable: true,
+                            position: results[0].geometry.location
+                        });
+                    }
+                } else {
+                    if (status === 'ZERO_RESULTS') {
+                        resultsMap.setZoom(1);
+                        $latitudeInput.val(0.0);
+                        $longitudeInput.val(0.0);
+                    }
+                    console.log('Geocode was not successful for the following reason: ' + status);
                 }
-                else {
-                    marker.setMap(null);
-                    marker = new google.maps.Marker({
-                        map: resultsMap,
-                        draggable: true,
-                        position: results[0].geometry.location
-                    });
+            });
+        }
+
+        function removeParam(key, sourceURL) {
+            var rtn = sourceURL.split("?")[0],
+                    param,
+                    params_arr = [],
+                    queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
+            if (queryString !== "") {
+                params_arr = queryString.split("&");
+                for (var i = params_arr.length - 1; i >= 0; i -= 1) {
+                    param = params_arr[i].split("=")[0];
+                    if (param === key) {
+                        params_arr.splice(i, 1);
+                    }
                 }
-            } else {
-                if (status === 'ZERO_RESULTS') {
-                    resultsMap.setZoom(1);
-                    $latitudeInput.val(0.0);
-                    $longitudeInput.val(0.0);
-                }
-                console.log('Geocode was not successful for the following reason: ' + status);
+                rtn = rtn + "?" + params_arr.join("&");
             }
+            return rtn;
+        }
+
+        $(document).ready(function () {
+            $("#search-form").change(function (e) {
+                e.preventDefault();
+                $('#search-form').attr('action', "/" + $("#inputSuccess3").val() + "/events/s").submit();
+
+            });
+
+            var params = {};
+            decodeURIComponent(window.location.search)
+                    .replace(/[?&]+([^=&]+)=([^&]*)/gi, function (str, key, value) {
+                                params[key] = value;
+                            }
+                    );
+
+            $(".categories input").each(function (index) {
+                if (params['event_type'] != null) {
+                    if ($(this).val() === params['event_type'].replace(/\+/g, ' ')) {
+                        $(this).prop("checked", true);
+                        $(this).parent().css('color', 'black');
+                        $('#collapse1').collapse()
+                    }
+                }
+            })
+            $(".days input").each(function (index) {
+                if (params['day'] != null) {
+                    if ($(this).val() === params['day'].replace(/\+/g, ' ')) {
+                        $(this).parent().css('color', 'black');
+                        $('#collapse3').collapse()
+                    }
+                }
+            })
+
+            $('.filtering .fa-close').click(function () {
+                key = $(this).attr('name')
+                var url = removeParam(key, window.location.href)
+                console.log(url)
+                window.location.href = url
+            })
+
         });
-    }
 
-    $( document ).ready(function() {
-        $("#search-form").change(function(e) {
-            e.preventDefault();
-            $('#search-form').attr('action', "/" + $("#inputSuccess3").val() + "/events/s").submit();
-
-        });
-
-        var params={};
-        decodeURIComponent(window.location.search)
-          .replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str,key,value) {
-            params[key] = value;
-          }
-        );
-
-        $(".categories input").each(function( index ) {
-            console.log(params['event_type'].replace(/\+/g, ' '))
-            if ($( this ).val() === params['event_type'].replace(/\+/g, ' ')){
-                $( this ).parent().css('color', 'black');
-                $('#collapse1').collapse()
-            }
-        })
-
-    });
-
-</script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHdXg0Y_zk-wCNpslbBqcezLdHniaEwkI&callback=initMap" async defer></script>
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHdXg0Y_zk-wCNpslbBqcezLdHniaEwkI&callback=initMap"
+            async defer></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap/collapse-search.js') }}"></script>
 {% endblock %}

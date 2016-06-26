@@ -1,4 +1,5 @@
 import json
+import datetime
 
 import pytz
 from flask import request, flash
@@ -6,11 +7,11 @@ from flask.ext.restplus import abort
 from flask.ext.admin import BaseView
 from flask_admin import expose
 
+from open_event import db
 from open_event.helpers.permission_decorators import *
 from open_event.helpers.helpers import fields_not_empty, string_empty
-from ....helpers.data import DataManager, save_to_db, record_activity
+from ....helpers.data import DataManager, save_to_db, record_activity, delete_from_db
 from ....helpers.data_getter import DataGetter
-import datetime
 from werkzeug.datastructures import ImmutableMultiDict
 
 
@@ -160,7 +161,7 @@ class EventsView(BaseView):
         microlocations = DataGetter.get_microlocations(event_id).all()
         call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
         sponsors = DataGetter.get_sponsors(event_id)
-        custom_forms = DataGetter.get_custom_form_elements(event_id).first()
+        custom_forms = DataGetter.get_custom_form_elements(event_id)
         speaker_form = json.loads(custom_forms.speaker_form)
         session_form = json.loads(custom_forms.session_form)
 
@@ -263,6 +264,15 @@ class EventsView(BaseView):
         flash("Your event has been unpublished.", "warning")
         return redirect(url_for('.details_view', event_id=event_id))
 
+    @expose('/<int:event_id>/restore/<int:version_id>', methods=('GET',))
+    def restore_event_revision(self, event_id, version_id):
+        event = DataGetter.get_event(event_id)
+        version = event.versions[version_id]
+        version.revert()
+        db.session.commit()
+        flash("Your event has been restored.", "success")
+        return redirect(url_for('.details_view', event_id=event_id))
+
     @expose('/<int:event_id>/copy/', methods=('GET',))
     def copy_event(self, event_id):
         event = DataGetter.get_event(event_id)
@@ -284,12 +294,38 @@ class EventsView(BaseView):
                                                        hash=hash)
 
         if role_invite:
+            # Check if invitation link has expired (it expires after 24 hours)
+            if datetime.datetime.now() > role_invite.create_time + datetime.timedelta(hours=24):
+                delete_from_db(role_invite, 'Deleted RoleInvite')
+
+                flash('Sorry, the invitation link has expired.', 'error')
+                return redirect(url_for('.details_view', event_id=event.id))
+
             role = role_invite.role
             data = dict()
             data['user_email'] = role_invite.user.email
             data['user_role'] = role.name
             DataManager.add_role_to_event(data, event.id)
+
+            # Delete Role Invite after it has been accepted
+            delete_from_db(role_invite, 'Deleted RoleInvite')
+
             flash('You have been added as a %s' % role.title_name)
+            return redirect(url_for('.details_view', event_id=event.id))
+        else:
+            abort(404)
+
+    @expose('/<int:event_id>/role-invite/delete/<hash>', methods=('GET', 'POST'))
+    @is_organizer
+    def delete_user_role_invite(self, event_id, hash):
+        event = DataGetter.get_event(event_id)
+        role_invite = DataGetter.get_event_role_invite(event_id=event.id,
+                                                       hash=hash)
+
+        if role_invite:
+            delete_from_db(role_invite, 'Deleted RoleInvite')
+
+            flash('Invitation link has been successfully deleted.')
             return redirect(url_for('.details_view', event_id=event.id))
         else:
             abort(404)

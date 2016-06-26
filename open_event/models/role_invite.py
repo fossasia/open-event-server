@@ -11,17 +11,19 @@ class RoleInvite(db.Model):
 
     event_id = db.Column(
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
-    event = db.relationship('Event')
+    event = db.relationship('Event', back_populates='role_invites')
 
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
     role = db.relationship("Role")
 
     hash = db.Column(db.String)
+    create_time = db.Column(db.DateTime)
 
-    def __init__(self, user, event, role):
+    def __init__(self, user, event, role, create_time):
         self.user = user
         self.event = event
         self.role = role
+        self.create_time = create_time
 
     def __repr__(self):
         return '<RoleInvite %r:%r:%r>' % (self.user,

@@ -70,6 +70,7 @@
                 </thead>
                 <tbody>
                 {% for session in sessions %}
+                    {% set versions_count = count_versions(session) %}
                     <tr>
                         <td>
                             <span class="label label-{{ 'success' if session.state == 'accepted' else 'warning' }}">{{ session.state }}</span>
@@ -100,7 +101,12 @@
                                    href="{{ session.id }}/delete" class="btn btn-default">
                                     <i class="fa fa-trash"></i>
                                 </a>
-
+                                {% if versions_count > 0 %}
+                                    <a data-toggle="tooltip" data-placement="left" title="Browse {{ versions_count }} revision(s)"
+                                       href="{{ session.id }}/restore/" class="btn btn-default">
+                                        <i class="fa fa-history"></i>
+                                    </a>
+                                {% endif %}
                             </div>
 
                         </td>

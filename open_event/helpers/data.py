@@ -6,7 +6,7 @@ import traceback
 import json
 from datetime import datetime, timedelta
 
-from flask import flash, request, url_for, g
+from flask import flash, request, url_for, g, redirect
 from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from sqlalchemy.orm.collections import InstrumentedList
@@ -38,7 +38,6 @@ from ..models.users_events_roles import UsersEventsRoles
 from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
 from ..models.track import Track
-from ..models.email_notifications import EmailNotification
 from open_event.helpers.oauth import OAuth, FbOAuth
 from requests_oauthlib import OAuth2Session
 from ..models.invite import Invite
@@ -60,9 +59,16 @@ class DataManager(object):
         :param event_id: Event id
         """
         user = User.query.filter_by(email=form['user_email']).first()
+        if not user:
+            flash('No such user in database.', 'error')
+            return redirect(url_for('events.details_view', event_id=event_id))
+
         role = Role.query.filter_by(name=form['user_role']).first()
         event = Event.query.get(event_id)
-        role_invite = RoleInvite(user=user, event=event, role=role)
+        role_invite = RoleInvite(user=user,
+                                 event=event,
+                                 role=role,
+                                 create_time=datetime.now())
         hash = random.getrandbits(128)
         role_invite.hash = '%032x' % hash
         save_to_db(role_invite, "Role Invite saved")
@@ -72,6 +78,8 @@ class DataManager(object):
                        hash=role_invite.hash,
                        _external=True)
 
+        # print link
+        flash('An email invitation has been sent to user')
         Helper.send_email_for_event_role_invite(user.email,
                                                 role.title_name,
                                                 event.name,
@@ -107,11 +115,36 @@ class DataManager(object):
         update_version(event_id, False, "tracks_ver")
 
     @staticmethod
+    def toggle_email_notification_settings(user_id, value):
+        """
+        Settings will be toggled to database with proper User id
+        """
+        events = DataGetter.get_all_events()
+        for event in events:
+            email_notification = DataGetter.get_email_notification_settings_by_event_id(user_id, event.id)
+            if email_notification:
+                email_notification.next_event = value
+                email_notification.new_paper = value
+                email_notification.session_schedule = value
+                email_notification.session_accept_reject = value
+
+                save_to_db(email_notification, "EmailSettings Toggled")
+            else:
+                new_email_notification_setting = EmailNotification(next_event=0,
+                                                                   new_paper=0,
+                                                                   session_schedule=0,
+                                                                   session_accept_reject=0,
+                                                                   user_id=user_id,
+                                                                   event_id=event.id)
+                save_to_db(new_email_notification_setting, "EmailSetting Toggled")
+
+    @staticmethod
     def add_email_notification_settings(form, user_id, event_id):
         """
-        Track will be saved to database with proper Event id
+        Settings will be saved to database with proper Event id and User id
         :param form: view data form
-        :param event_id: Track belongs to Event by event id
+        :param event_id: Settings belongs to Event by event id
+        :param user_id: Settings belongs to User by user id
         """
         email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(user_id, event_id)
         if email_notification_setting:
@@ -262,29 +295,33 @@ class DataManager(object):
             for organizer in organizers:
                 send_new_session_organizer(organizer.user.email, event.name, link)
 
-        slide_url = ""
+        speaker_modified = False
+        session_modified = False
         if slide_file != "":
             slide_url = upload(slide_file,
                                'events/%d/session/%d/slide' % (int(event_id), int(new_session.id)))
-        audio_url = ""
+            new_session.slides = slide_url
+            session_modified = True
         if audio_file != "":
             audio_url = upload(audio_file,
                                'events/%d/session/%d/audio' % (int(event_id), int(new_session.id)))
-        video_url = ""
+            new_session.audio = audio_url
+            session_modified = True
         if video_file != "":
             video_url = upload(video_file,
                                'events/%d/session/%d/video' % (int(event_id), int(new_session.id)))
-        speaker_img = ""
+            new_session.video = video_url
+            session_modified = True
         if speaker_img_file != "":
             speaker_img = upload(speaker_img_file,
                                  'events/%d/speaker/%d/photo' % (int(event_id), int(speaker.id)))
+            speaker.photo = speaker_img
+            speaker_modified = True
 
-        speaker.photo = speaker_img
-        new_session.audio = audio_url
-        new_session.video = video_url
-        new_session.slides = slide_url
-        save_to_db(new_session, "Session saved")
-        save_to_db(speaker, "Speaker saved")
+        if session_modified:
+            save_to_db(new_session, "Session saved")
+        if speaker_modified:
+            save_to_db(speaker, "Speaker saved")
         record_activity('create_session', session=new_session, event_id=event_id)
 
         invite_emails = form.getlist("speakers[email]")
@@ -406,12 +443,20 @@ class DataManager(object):
         session.short_abstract = form.get('short_abstract', '')
 
         existing_speaker_ids = form.getlist("speakers[]")
+        current_speaker_ids = []
 
-        session.speakers = []
+        for current_speaker in session.speakers:
+            current_speaker_ids.append(str(current_speaker.id))
+
+        for current_speaker_id in current_speaker_ids:
+            if current_speaker_id not in existing_speaker_ids:
+                current_speaker = DataGetter.get_speaker(current_speaker_id)
+                session.speakers.remove(current_speaker)
 
         for existing_speaker_id in existing_speaker_ids:
             existing_speaker = DataGetter.get_speaker(existing_speaker_id)
-            session.speakers.append(existing_speaker)
+            if existing_speaker not in session.speakers:
+                session.speakers.append(existing_speaker)
 
         save_to_db(session, 'Session Updated')
         record_activity('update_session', session=session, event_id=event_id)
@@ -795,8 +840,9 @@ class DataManager(object):
                 elif name == "speaker_form":
                     speaker_form = custom_forms_value[index]
 
-            custom_form = CustomForms(session_form=session_form, speaker_form=speaker_form, event_id=event.id)
-            db.session.add(custom_form)
+            update_or_create(
+                CustomForms, event_id=event.id,
+                session_form=session_form, speaker_form=speaker_form)
 
             if form.get('call_for_speakers_state', u'off') == u'on':
                 call_for_speakers = CallForPaper(announcement=form['announcement'],
@@ -932,11 +978,9 @@ class DataManager(object):
             elif name == "speaker_form":
                 speaker_form = custom_forms_value[index]
 
-        custom_form, c = get_or_create(CustomForms,
-                                       session_form=session_form,
-                                       speaker_form=speaker_form,
-                                       event_id=event.id)
-        db.session.add(custom_form)
+        update_or_create(
+            CustomForms, event_id=event.id,
+            session_form=session_form, speaker_form=speaker_form)
 
         if form.get('call_for_speakers_state', u'off') == u'on':
             call_for_speakers, c = get_or_create(CallForPaper,
@@ -1183,6 +1227,22 @@ def get_or_create(model, **kwargs):
         db.session.commit()
         was_created = True
         return instance, was_created
+
+
+def update_or_create(model, event_id, **kwargs):
+    """
+    Update or create an item based on event id as PK
+    """
+    was_created = False
+    instance = db.session.query(model).filter_by(event_id=event_id).first()
+    if instance:
+        db.session.query(model).filter_by(event_id=event_id).update(kwargs)
+    else:
+        was_created = True
+        instance = model(event_id=event_id, **kwargs)
+    db.session.add(instance)
+    db.session.commit()
+    return instance, was_created
 
 
 def update_role_to_admin(form, user_id):

@@ -1,4 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
+import arrow
+from dateutil import tz
 from flask.ext.htmlmin import HTMLMIN
 import logging
 import os.path
@@ -15,14 +17,18 @@ from flask.ext.login import current_user
 from flask import render_template
 from flask import request
 from flask.ext.jwt import JWT
-from datetime import timedelta
+from datetime import timedelta, time
 
 from icalendar import Calendar, Event
 import humanize
+import sqlalchemy as sa
+from urllib import urlencode
+from urlparse import parse_qs, urlsplit, urlunsplit
 
 from open_event.helpers.flask_helpers import SilentUndefined
 from open_event.helpers.helpers import string_empty
 from open_event.models import db
+from open_event.models.user import User
 from open_event.views.admin.admin import AdminView
 from helpers.jwt import jwt_authenticate, jwt_identity
 from helpers.formatter import operation_name
@@ -59,8 +65,8 @@ def create_app():
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     app.logger.setLevel(logging.INFO)
     app.jinja_env.add_extension('jinja2.ext.do')
+    app.jinja_env.add_extension('jinja2.ext.loopcontrols')
     app.jinja_env.undefined = SilentUndefined
-    app.jinja_env.filters['humanize'] = humanize.naturaltime
     app.jinja_env.filters['operation_name'] = operation_name
     # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
@@ -79,6 +85,8 @@ def create_app():
     with app.app_context():
         from open_event.api import api_v2
         app.register_blueprint(api_v2)
+
+    sa.orm.configure_mappers()
 
     return app, manager, db, jwt
 
@@ -125,6 +133,70 @@ def locations():
 def event_types():
     event_types = DataGetter.get_event_types()
     return dict(event_typo=event_types[:10])
+
+@app.template_filter('pretty_name')
+def pretty_name_filter(s):
+    s = str(s)
+    s = s.replace('_', ' ')
+    s = s.title()
+    return s
+
+@app.template_filter('humanize')
+def humanize_filter(time):
+    return arrow.get(time).humanize()
+
+@app.context_processor
+def pagination_helpers():
+    def set_query_parameter(param_name, param_value, url=request.url):
+        """Given a URL, set or replace a query parameter and return the
+        modified URL.
+        """
+        scheme, netloc, path, query_string, fragment = urlsplit(url)
+        query_params = parse_qs(query_string)
+
+        query_params[param_name] = [param_value]
+        new_query_string = urlencode(query_params, doseq=True)
+
+        return urlunsplit((scheme, netloc, path, new_query_string, fragment))
+
+    return dict(set_query_parameter=set_query_parameter)
+
+@app.context_processor
+def versioning_manager():
+    def count_versions(model_object):
+        from sqlalchemy_continuum.utils import count_versions
+        return count_versions(model_object)
+
+    def changeset(model_object):
+        from sqlalchemy_continuum import changeset
+        return changeset(model_object)
+
+    def transaction_class(version_object):
+        from sqlalchemy_continuum import transaction_class
+        transaction = transaction_class(version_object)
+        return transaction.query.get(version_object.transaction_id)
+
+    def version_class(model_object):
+        from sqlalchemy_continuum import version_class
+        return version_class(model_object)
+
+    def get_user_name(transaction_object):
+        if transaction_object and transaction_object.user_id:
+            user = DataGetter.get_user(transaction_object.user_id)
+            return user.email
+        return 'unconfigured@example.com'
+
+    def side_by_side_diff(changeset_entry):
+        from open_event.helpers.versioning import side_by_side_diff
+        for side_by_side_diff_entry in side_by_side_diff(changeset_entry[0], changeset_entry[1]):
+            yield side_by_side_diff_entry
+
+    return dict(count_versions=count_versions,
+                changeset=changeset,
+                transaction_class=transaction_class,
+                version_class=version_class,
+                side_by_side_diff=side_by_side_diff,
+                get_user_name=get_user_name)
 
 # http://stackoverflow.com/questions/26724623/
 @app.before_request

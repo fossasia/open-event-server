@@ -1,7 +1,7 @@
 {% extends 'gentelella/admin/super_admin/dashboard.html' %}
 
 {% block title %}
-Mails
+System Mails
 {% endblock %}
 
 {% set active_page = "mails" %}
@@ -13,43 +13,31 @@ Mails
 
 {% block content %}
 
-<table id="mailTable" class="table table-striped with-datatable">
+<div class="table-responsive col-md-10">
+<table class="table table-striped table-hover no-global-dt">
 <thead>
-    <tr>
-    <th class="col-md-3">To</th>
-    <th class="col-md-2">Time</th>
-    <th class="col-md-2">Action</th>
-    <th class="col-md-5">Message</th>
+    <tr style="font-size: 1.2em;">
+    <th class="col-md-2 col-sm-3">Recipient</th>
+    <th class="col-md-3 col-sm-3">Trigger</th>
+    <th class="col-md-7 col-sm-6">Message</th>
     </tr>
 </thead>
 <tbody>
     {% for mail in mails %}
-        <tr>
-        <td>{{ mail.recipient }}</td>
-        <td data-toggle="tooltip" data-placement="bottom" title="{{ mail.time }}"
-            data-delay='{"show":"500", "hide":"300"}'>{{ mail.time | humanize }}</td>
-        <td>{{ mail.action }}</td>
-        <td><strong>{{ mail.subject }}</strong><br>{{ mail.message }}</td>
-        </tr>
+    <tr>
+    <td>{{ mails[mail]['recipient'] }}</td>
+    <td>{{ mail }}</td>
+    <td><strong>{{ mails[mail]['subject'] }}</strong><br>{{ mails[mail]['message']|safe }}</td>
+    </tr>
     {% endfor %}
 </tbody>
-
 </table>
+</div>
 
 
 {% endblock %}
 
 {% block tail_js %}
-    <script>
-
-    $(document).ready( function() {
-        $("#mailTable").dataTable().fnDestroy();
-        $('#mailTable').dataTable({
-            /* Disable initial sort */
-            "aaSorting": []
-        });
-    })
-    </script>
     {{ super() }}
 {% endblock %}
 

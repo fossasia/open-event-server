@@ -76,7 +76,7 @@ class TestSpeakers(OpenEventViewTestCase):
             save_to_db(speaker, "Speaker saved")
             url = url_for('event_speakers.edit_view', event_id=event.id, speaker_id=speaker.id)
             rv = self.app.get(url, follow_redirects=True)
-            self.assertTrue("Speaker form has been incorrectly configured for this event. Editing has been disabled" in rv.data, msg=rv.data)
+            self.assertFalse("incorrectly configured" in rv.data, msg=rv.data)
 
 if __name__ == '__main__':
     unittest.main()

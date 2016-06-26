@@ -13,6 +13,7 @@ from open_event.settings import get_settings
 from ..models.track import Track
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
     USER_REGISTER, PASSWORD_RESET, EVENT_ROLE, Mail
+from system_mails import MAILS
 
 
 def get_event_id():
@@ -40,10 +41,12 @@ def send_email_invitation(email, event_name, link):
     send_email(
         to=email,
         action=INVITE_PAPERS,
-        subject='Invitation to Submit Papers for ' + event_name,
-        html=("Hi %s<br/>" % str(email) +
-              "You are invited to submit papers for event: %s" % str(event_name) +
-              "<br/> Visit this link to fill up details: %s" % link)
+        subject=MAILS[INVITE_PAPERS]['subject'].format(event_name=event_name),
+        html=MAILS[INVITE_PAPERS]['message'].format(
+            email=str(email),
+            event_name=str(event_name),
+            link=link
+        )
     )
 
 
@@ -52,10 +55,12 @@ def send_new_session_organizer(email, event_name, link):
     send_email(
         to=email,
         action=NEW_SESSION,
-        subject="New session proposal for " + event_name,
-        html=("Hi %s<br/>" % str(email) +
-              "The event <strong>%s</strong> has received a new session proposal. " % str(event_name) +
-              "<br/> Visit this link to view the session: %s" % link)
+        subject=MAILS[NEW_SESSION]['subject'].format(event_name=event_name),
+        html=MAILS[NEW_SESSION]['message'].format(
+            email=str(email),
+            event_name=str(event_name),
+            link=link
+        )
     )
 
 
@@ -64,20 +69,21 @@ def send_email_after_account_create(form):
     send_email(
         to=form['email'],
         action=USER_REGISTER,
-        subject="Account Created on Open Event",
-        html=("Your Account Has Been Created! Congratulations!"
-              "<br/> Your login: ") + form['email']
+        subject=MAILS[USER_REGISTER]['subject'],
+        html=MAILS[USER_REGISTER]['message'].format(email=form['email'])
     )
 
 
 def send_email_confirmation(form, link):
     """account confirmation"""
+    print form
     send_email(
         to=form['email'],
         action=USER_CONFIRM,
-        subject="Email Confirmation to Create Account for Open-Event",
-        html=("Hi %s<br/>" % str(form['email']) +
-              "<br/> Please visit this link to confirm your email: %s" % link)
+        subject=MAILS[USER_CONFIRM]['subject'],
+        html=MAILS[USER_CONFIRM]['message'].format(
+            email=form['email'], link=link
+        )
     )
 
 
@@ -86,8 +92,8 @@ def send_email_with_reset_password_hash(email, link):
     send_email(
         to=email,
         action=PASSWORD_RESET,
-        subject="Please click to below link",
-        html="Change password now " + link
+        subject=MAILS[PASSWORD_RESET]['subject'],
+        html=MAILS[PASSWORD_RESET]['message'].format(link=link)
     )
 
 
@@ -95,10 +101,13 @@ def send_email_for_event_role_invite(email, role, event, link):
     """
     Send Email to users for Event Role invites.
     """
-    subject = 'Invitation to be {} at {}'.format(role, event)
-    message = ("Hello {},<br><br>".format(email) +
-        "You've been invited to be a {} at {}. ".format(role, event) +
-        "Please follow the link to accept the role: {}".format(link))
+    subject = MAILS[EVENT_ROLE]['subject'].format(role=role, event=event)
+    message = MAILS[EVENT_ROLE]['message'].format(
+        email=email,
+        role=role,
+        event=event,
+        link=link
+    )
     send_email(
         to=email,
         action=EVENT_ROLE,

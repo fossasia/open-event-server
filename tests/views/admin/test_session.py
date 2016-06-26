@@ -103,7 +103,7 @@ class TestSessionApi(OpenEventViewTestCase):
             save_to_db(session, "Session Saved")
             url = url_for('event_sessions.session_display_view', event_id=event.id, session_id=session.id)
             rv = self.app.get(url, follow_redirects=True)
-            self.assertTrue("Short Abstract" in rv.data, msg=rv.data)
+            self.assertTrue("Short abstract" in rv.data, msg=rv.data)
 
     def test_wrong_form_config(self):
         with app.test_request_context():
@@ -111,7 +111,7 @@ class TestSessionApi(OpenEventViewTestCase):
             save_to_db(event, "Event saved")
             url = url_for('event_sessions.create_view', event_id=event.id)
             rv = self.app.get(url, follow_redirects=True)
-            self.assertTrue("incorrectly configured" in rv.data, msg=rv.data)
+            self.assertFalse("incorrectly configured" in rv.data, msg=rv.data)
 
 if __name__ == '__main__':
     unittest.main()
