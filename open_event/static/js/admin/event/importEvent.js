@@ -5,6 +5,7 @@ function importEventZip(){
         data.append('file', file);
     });
 
+    $('#import_status').text('Working...');
     jQuery.ajax({
         url: '/api/v2/events/import/json',
         data: data,
@@ -20,6 +21,7 @@ function importEventZip(){
         error: function(x){
             obj = JSON.parse(x.responseText);
             console.log(obj);
+            $('#import_status').text('');
             $('#import_error').text(obj['message']);
         }
     });
