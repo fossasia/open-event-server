@@ -48,9 +48,9 @@ del SPEAKER_POST['sessions']  # don't allow adding sessions
 # Create DAO
 class SpeakerDAO(ServiceDAO):
     def update(self, event_id, service_id, data):
-        form = DataGetter.get_custom_form_elements(event_id).first()
+        form = DataGetter.get_custom_form_elements(event_id)
         if form:
-            speaker_custom = json.loads(DataGetter.get_custom_form_elements(event_id).first().speaker_form)
+            speaker_custom = json.loads(DataGetter.get_custom_form_elements(event_id).speaker_form)
             for key in SPEAKER_POST:
                 if key in speaker_custom:
                     if speaker_custom[key]['require'] == 1:
@@ -63,9 +63,9 @@ class SpeakerDAO(ServiceDAO):
         return obj
 
     def create(self, event_id, data, url):
-        form = DataGetter.get_custom_form_elements(event_id).first()
+        form = DataGetter.get_custom_form_elements(event_id)
         if form:
-            speaker_custom = json.loads(DataGetter.get_custom_form_elements(event_id).first().speaker_form)
+            speaker_custom = json.loads(DataGetter.get_custom_form_elements(event_id).speaker_form)
             for key in SPEAKER_POST:
                 if key in speaker_custom:
                     if speaker_custom[key]['require'] == 1:

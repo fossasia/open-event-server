@@ -136,9 +136,9 @@ class SessionDAO(ServiceDAO):
         return data
 
     def update(self, event_id, service_id, data):
-        form = DataGetter.get_custom_form_elements(event_id).first()
+        form = DataGetter.get_custom_form_elements(event_id)
         if form:
-            session_custom = json.loads(DataGetter.get_custom_form_elements(event_id).first().session_form)
+            session_custom = json.loads(DataGetter.get_custom_form_elements(event_id).session_form)
             for key in SESSION_POST:
                 if key in session_custom:
                     if session_custom[key]['require'] == 1:
@@ -158,9 +158,9 @@ class SessionDAO(ServiceDAO):
         return obj
 
     def create(self, event_id, data, url):
-        form = DataGetter.get_custom_form_elements(event_id).first()
+        form = DataGetter.get_custom_form_elements(event_id)
         if form:
-            session_custom = json.loads(DataGetter.get_custom_form_elements(event_id).first().session_form)
+            session_custom = json.loads(DataGetter.get_custom_form_elements(event_id).session_form)
             for key in SESSION_POST:
                 if key in session_custom:
                     if session_custom[key]['require'] == 1:
