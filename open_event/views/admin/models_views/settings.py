@@ -31,3 +31,11 @@ class SettingsView(BaseView):
         event = DataGetter.get_event(event_id)
         settings = DataGetter.get_email_notification_settings_by_event_id(login.current_user.id, event_id)
         return self.render('/gentelella/admin/settings/edit.html', settings=settings, event=event)
+
+    @expose('/toggle', methods=('GET', 'POST'))
+    def toggle_view(self):
+        if request.method == 'POST':
+            value = request.form.get('value')
+            print value
+            settings = DataManager.toggle_email_notification_settings(login.current_user.id, value)
+            return "success"

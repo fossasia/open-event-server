@@ -107,11 +107,36 @@ class DataManager(object):
         update_version(event_id, False, "tracks_ver")
 
     @staticmethod
+    def toggle_email_notification_settings(user_id, value):
+        """
+        Settings will be toggled to database with proper User id
+        """
+        events = DataGetter.get_all_events()
+        for event in events:
+            email_notification = DataGetter.get_email_notification_settings_by_event_id(user_id, event.id)
+            if email_notification:
+                email_notification.next_event = value
+                email_notification.new_paper = value
+                email_notification.session_schedule = value
+                email_notification.session_accept_reject = value
+
+                save_to_db(email_notification, "EmailSettings Toggled")
+            else:
+                new_email_notification_setting = EmailNotification(next_event=0,
+                                                                   new_paper=0,
+                                                                   session_schedule=0,
+                                                                   session_accept_reject=0,
+                                                                   user_id=user_id,
+                                                                   event_id=event.id)
+                save_to_db(new_email_notification_setting, "EmailSetting Toggled")
+
+    @staticmethod
     def add_email_notification_settings(form, user_id, event_id):
         """
-        Track will be saved to database with proper Event id
+        Settings will be saved to database with proper Event id and User id
         :param form: view data form
-        :param event_id: Track belongs to Event by event id
+        :param event_id: Settings belongs to Event by event id
+        :param user_id: Settings belongs to User by user id
         """
         email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(user_id, event_id)
         if email_notification_setting:
