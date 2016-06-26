@@ -760,6 +760,7 @@ class DataManager(object):
                       ticket_url=form['ticket_url'],
                       organizer_name=form['organizer_name'],
                       organizer_description=form['organizer_description'],
+                      code_of_conduct=form['code_of_conduct'],
                       creator=login.current_user)
 
         state = form.get('state', None)
@@ -882,6 +883,7 @@ class DataManager(object):
         event.privacy = form.get('privacy', 'public')
         event.organizer_name = form['organizer_name']
         event.organizer_description = form['organizer_description']
+        event.code_of_conduct = form['code_of_conduct']
         event.ticket_url = form['ticket_url']
 
         state = form.get('state', None)

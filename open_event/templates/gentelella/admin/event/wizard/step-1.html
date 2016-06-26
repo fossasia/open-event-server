@@ -131,9 +131,9 @@
         <div class="item form-group">
             <label>Organizer Description
             </label>
-                <textarea name="organizer_description" class="form-control">
-                    {{ event.organizer_description | default('', true) }}
-                </textarea>
+                <textarea
+                        name="organizer_description"
+                        class="form-control">{{ event.organizer_description | default('', true) }}</textarea>
         </div>
         <div class="item form-group">
             <label>Ticket URL
@@ -214,6 +214,12 @@
                     <option value="{{ topic }}" {{ "selected" if event and event.topic == topic else '' }}>{{ topic }}</option>
                 {% endfor %}
             </select>
+        </div>
+
+        <div class="item form-group">
+            <label>Code of Conduct
+            </label>
+                <textarea name="code_of_conduct" class="form-control">{{ event.code_of_conduct | default('', true) }}</textarea>
         </div>
 
     </div>
@@ -303,19 +309,19 @@
 
     function geolocate() {
         if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
-            var geolocation = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
-            var circle = new google.maps.Circle({
-              center: geolocation,
-              radius: position.coords.accuracy
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var geolocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var circle = new google.maps.Circle({
+                    center: geolocation,
+                    radius: position.coords.accuracy
+                });
+                autocomplete.setBounds(circle.getBounds());
             });
-            autocomplete.setBounds(circle.getBounds());
-          });
         }
-      }
+    }
 
     $(document).ready(function () {
 
@@ -334,8 +340,7 @@
             'defaultTimeDelta': 3600000
         });
 
-        $("textarea[name=description]").summernote(summernoteConfig);
-        $("textarea[name=organizer_description]").summernote(summernoteConfig);
+        $("textarea").summernote(summernoteConfig);
 
         $('select[name=timezone]').selectize({
             create: false,
