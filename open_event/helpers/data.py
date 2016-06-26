@@ -6,7 +6,7 @@ import traceback
 import json
 from datetime import datetime, timedelta
 
-from flask import flash, request, url_for, g
+from flask import flash, request, url_for, g, redirect
 from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from sqlalchemy.orm.collections import InstrumentedList
@@ -38,7 +38,6 @@ from ..models.users_events_roles import UsersEventsRoles
 from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
 from ..models.track import Track
-from ..models.email_notifications import EmailNotification
 from open_event.helpers.oauth import OAuth, FbOAuth
 from requests_oauthlib import OAuth2Session
 from ..models.invite import Invite
@@ -60,6 +59,10 @@ class DataManager(object):
         :param event_id: Event id
         """
         user = User.query.filter_by(email=form['user_email']).first()
+        if not user:
+            flash('No such user in database.', 'error')
+            return redirect(url_for('events.details_view', event_id=event_id))
+
         role = Role.query.filter_by(name=form['user_role']).first()
         event = Event.query.get(event_id)
         role_invite = RoleInvite(user=user,
@@ -76,6 +79,7 @@ class DataManager(object):
                        _external=True)
 
         # print link
+        flash('An email invitation has been sent to user')
         Helper.send_email_for_event_role_invite(user.email,
                                                 role.title_name,
                                                 event.name,
