@@ -10,13 +10,12 @@ from open_event.helpers.data import record_activity
 from open_event.helpers.data_getter import DataGetter
 
 from .helpers.helpers import get_paginated_list, requires_auth, \
-    save_db_model, get_object_in_event
+    save_db_model, get_object_in_event, model_custom_form
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO,\
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
 from .helpers import custom_fields as fields
 from .helpers.special_fields import SessionLanguageField, SessionStateField
 
-import json
 
 api = Namespace('sessions', description='Sessions', path='/')
 
@@ -136,16 +135,7 @@ class SessionDAO(ServiceDAO):
         return data
 
     def update(self, event_id, service_id, data):
-        form = DataGetter.get_custom_form_elements(event_id)
-        if form:
-            session_custom = json.loads(DataGetter.get_custom_form_elements(event_id).session_form)
-            for key in SESSION_POST:
-                if key in session_custom:
-                    if session_custom[key]['require'] == 1:
-                        SESSION_POST[key].required = True
-                    elif session_custom[key]['require'] == 0:
-                        SESSION_POST[key].required = False
-        data = self.validate(data)
+        data = self.validate(data, event_id)
         data_copy = data.copy()
         data_copy = self.fix_payload_post(event_id, data_copy)
         data = self._delete_fields(data)
@@ -158,18 +148,15 @@ class SessionDAO(ServiceDAO):
         return obj
 
     def create(self, event_id, data, url):
-        form = DataGetter.get_custom_form_elements(event_id)
-        if form:
-            session_custom = json.loads(DataGetter.get_custom_form_elements(event_id).session_form)
-            for key in SESSION_POST:
-                if key in session_custom:
-                    if session_custom[key]['require'] == 1:
-                        SESSION_POST[key].required = True
-                    elif session_custom[key]['require'] == 0:
-                        SESSION_POST[key].required = False
-        data = self.validate(data)
+        data = self.validate(data, event_id)
         payload = self.fix_payload_post(event_id, data)
         return ServiceDAO.create(self, event_id, payload, url, validate=False)
+
+    def validate(self, data, event_id, model=None):
+        form = DataGetter.get_custom_form_elements(event_id)
+        if form:
+            model = model_custom_form(form.session_form, self.post_api_model)
+        return ServiceDAO.validate(self, data, model)
 
 
 DAO = SessionDAO(SessionModel, SESSION_POST)
