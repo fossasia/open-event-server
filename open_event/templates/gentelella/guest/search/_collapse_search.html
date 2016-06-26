@@ -37,18 +37,20 @@
                 </h4>
             </div>
             <div id="collapse3" class="panel-collapse collapse">
-                <ul class="list-group">
+                <ul class="list-group days">
 
-                    {% for name in ['All Dates', 'Today', 'Tomorrow' ,'This Week', 'This Weekend', 'Next Week', 'This
-                    Month', 'Custom Date'] %}
-                    <li class="list-group-item">
-                        <div class="checkbox">
-                            <label>
-
-                                {{name}}
-                            </label>
-                        </div>
-                    </li>
+                    {% for day_item in [('all_date', 'All Dates'), ('today', 'Today'),
+                                     ('tommorow', 'Tomorrow') ,('this_week', 'This Week'),
+                                     ('this_weekend', 'This Weekend'), ('next_week', 'Next Week'),
+                                     ('this_month', 'This Month'), ('custom_date', 'Custom Date')] %}
+                        <li class="list-group-item">
+                            <div class="checkbox">
+                                <label>
+                                    <input name="day" type="checkbox" value="{{day_item[0]}}" hidden>
+                                    {{day_item[1]}}
+                                </label>
+                            </div>
+                        </li>
                     {% endfor %}
 
                 </ul>
