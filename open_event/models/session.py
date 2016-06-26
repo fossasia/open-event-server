@@ -39,6 +39,7 @@ class Session(db.Model):
     event_id = db.Column(
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     state = db.Column(db.String, default="pending")
+    created_at = db.Column(db.DateTime, nullable=False)
 
     def __init__(self,
                  title=None,

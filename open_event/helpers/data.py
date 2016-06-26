@@ -262,7 +262,7 @@ class DataManager(object):
                               event_id=event_id,
                               short_abstract=form.get('short_abstract', ''),
                               state=state)
-
+        new_session.created_at = datetime.now()
         speaker = Speaker.query.filter_by(email=form.get('email', '')).filter_by(event_id=event_id).first()
         if not speaker:
             speaker = Speaker(name=form.get('name', ''),
