@@ -62,7 +62,10 @@ class DataManager(object):
         user = User.query.filter_by(email=form['user_email']).first()
         role = Role.query.filter_by(name=form['user_role']).first()
         event = Event.query.get(event_id)
-        role_invite = RoleInvite(user=user, event=event, role=role)
+        role_invite = RoleInvite(user=user,
+                                 event=event,
+                                 role=role,
+                                 create_time=datetime.now())
         hash = random.getrandbits(128)
         role_invite.hash = '%032x' % hash
         save_to_db(role_invite, "Role Invite saved")
