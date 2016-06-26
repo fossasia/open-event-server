@@ -11,7 +11,7 @@ from flask.ext import login
 from open_event.helpers.flask_helpers import get_real_ip
 from open_event.settings import get_settings
 from ..models.track import Track
-from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
+from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, NEXT_EVENT, \
     USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, Mail
 from system_mails import MAILS
 
@@ -88,6 +88,20 @@ def send_schedule_change(email, session_name, link):
         html=MAILS[SESSION_SCHEDULE]['message'].format(
             email=str(email),
             session_name=str(session_name),
+            link=link
+        )
+    )
+
+
+def send_next_event(email, event_name, link):
+    """Send next event"""
+    send_email(
+        to=email,
+        action=NEXT_EVENT,
+        subject=MAILS[NEXT_EVENT]['subject'].format(event_name=event_name),
+        html=MAILS[NEXT_EVENT]['message'].format(
+            email=str(email),
+            event_name=str(event_name),
             link=link
         )
     )

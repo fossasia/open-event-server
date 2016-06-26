@@ -4,7 +4,7 @@ Register a mail here before using it
 """
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
     USER_REGISTER, PASSWORD_RESET, EVENT_ROLE, SESSION_ACCEPT_REJECT, \
-    SESSION_SCHEDULE
+    SESSION_SCHEDULE, NEXT_EVENT
 
 
 MAILS = {
@@ -33,6 +33,15 @@ MAILS = {
             "Hi {email},<br/>" +
             "The schedule for session <strong>{session_name}</strong> has been changed. " +
             "<br/> Visit this link to view the session: {link}"
+        )
+    },
+    NEXT_EVENT: {
+        'recipient': 'Organizer, Speaker',
+        'subject': 'Event {event_name} is coming soon',
+        'message': (
+            "Hi {email},<br/>" +
+            "Event {event_name} is coming soon. Get ready!! " +
+            "<br/> Visit this link to view the event: {link}"
         )
     },
     NEW_SESSION: {
