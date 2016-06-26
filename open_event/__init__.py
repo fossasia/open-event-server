@@ -22,7 +22,8 @@ from datetime import timedelta, time
 from icalendar import Calendar, Event
 import humanize
 import sqlalchemy as sa
-from markupsafe import Markup
+from urllib import urlencode
+from urlparse import parse_qs, urlsplit, urlunsplit
 
 from open_event.helpers.flask_helpers import SilentUndefined
 from open_event.helpers.helpers import string_empty
@@ -143,6 +144,22 @@ def pretty_name_filter(s):
 @app.template_filter('humanize')
 def humanize_filter(time):
     return arrow.get(time).humanize()
+
+@app.context_processor
+def pagination_helpers():
+    def set_query_parameter(param_name, param_value, url=request.url):
+        """Given a URL, set or replace a query parameter and return the
+        modified URL.
+        """
+        scheme, netloc, path, query_string, fragment = urlsplit(url)
+        query_params = parse_qs(query_string)
+
+        query_params[param_name] = [param_value]
+        new_query_string = urlencode(query_params, doseq=True)
+
+        return urlunsplit((scheme, netloc, path, new_query_string, fragment))
+
+    return dict(set_query_parameter=set_query_parameter)
 
 @app.context_processor
 def versioning_manager():
