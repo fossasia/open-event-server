@@ -42,17 +42,15 @@
         $.fn.dataTable.ext.search.push(
             function (settings, data, dataIndex) {
                 var user_option = $("input[name=role_status]:checked").val();
-                console.log(user_option);
                 var state = data[0].trim();
-                console.log(state, data[1]);
-                if (user_option === state) {
+                if (user_option === state || state === "") {
                     return true;
                 }
                 return false;
             }
         );
         var roleTable = $('.role-table').DataTable({
-            "bInfo": false, 
+            "bInfo": false,
             "bPaginate": false,
             "dom": '<"row"<"toolbar col-md-6"><"col-md-6"f>>tip',
             "scrollX": false,
