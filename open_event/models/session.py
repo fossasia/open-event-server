@@ -59,7 +59,8 @@ class Session(db.Model):
                  video=None,
                  audio=None,
                  signup_url=None,
-                 session_type=None):
+                 session_type=None,
+                 created_at=None):
         self.title = title
         self.subtitle = subtitle
         self.short_abstract = short_abstract
@@ -78,6 +79,7 @@ class Session(db.Model):
         self.audio = audio
         self.signup_url = signup_url
         self.session_type = session_type
+        self.created_at = created_at
 
     @staticmethod
     def get_service_name():
