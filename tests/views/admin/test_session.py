@@ -111,7 +111,7 @@ class TestSessionApi(OpenEventViewTestCase):
             save_to_db(event, "Event saved")
             url = url_for('event_sessions.create_view', event_id=event.id)
             rv = self.app.get(url, follow_redirects=True)
-            self.assertTrue("incorrectly configured" in rv.data, msg=rv.data)
+            self.assertFalse("incorrectly configured" in rv.data, msg=rv.data)
 
 if __name__ == '__main__':
     unittest.main()

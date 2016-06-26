@@ -1,3 +1,4 @@
+import json
 from . import db
 
 
@@ -31,6 +32,9 @@ SPEAKER_FORM = {
     "github": {"include": 0, "require": 0},
     "linkedin": {"include": 0, "require": 0}
 }
+
+session_form_str = json.dumps(SESSION_FORM, separators=(',', ':'))
+speaker_form_str = json.dumps(SPEAKER_FORM, separators=(',', ':'))
 
 
 class CustomForms(db.Model):

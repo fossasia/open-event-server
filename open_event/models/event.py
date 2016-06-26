@@ -4,7 +4,7 @@ import json
 
 from open_event.helpers.date_formatter import DateFormatter
 from open_event.helpers.versioning import clean_up_string
-from custom_forms import CustomForms, SESSION_FORM, SPEAKER_FORM
+from custom_forms import CustomForms, session_form_str, speaker_form_str
 from . import db
 from sqlalchemy_utils import ColorType
 
@@ -157,7 +157,7 @@ class Event(db.Model):
 def receive_init(mapper, conn, target):
     custom_form = CustomForms(
         event_id=target.id,
-        session_form=json.dumps(SESSION_FORM, separators=(',', ':')),
-        speaker_form=json.dumps(SPEAKER_FORM, separators=(',', ':'))
+        session_form=session_form_str,
+        speaker_form=speaker_form_str
     )
     target.custom_forms.append(custom_form)
