@@ -307,3 +307,18 @@ class EventsView(BaseView):
             return redirect(url_for('.details_view', event_id=event.id))
         else:
             abort(404)
+
+    @expose('/<int:event_id>/role-invite/delete/<hash>', methods=('GET', 'POST'))
+    @is_organizer
+    def delete_user_role_invite(self, event_id, hash):
+        event = DataGetter.get_event(event_id)
+        role_invite = DataGetter.get_event_role_invite(event_id=event.id,
+                                                       hash=hash)
+
+        if role_invite:
+            delete_from_db(role_invite, 'Deleted RoleInvite')
+
+            flash('Invitation link has been successfully deleted.')
+            return redirect(url_for('.details_view', event_id=event.id))
+        else:
+            abort(404)
