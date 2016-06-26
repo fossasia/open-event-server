@@ -1,6 +1,5 @@
 from flask.ext.restplus import abort
 from flask_admin import BaseView, expose
-from objbrowser import browse
 
 from open_event.api.helpers.helpers import get_paginated_list
 from open_event.models.event import Event
