@@ -293,7 +293,9 @@ class DataManager(object):
                            event_id=event.id, session_id=new_session.id, _external=True)
             organizers = DataGetter.get_user_event_roles_by_role_name(event.id, 'organizer')
             for organizer in organizers:
-                send_new_session_organizer(organizer.user.email, event.name, link)
+                email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(organizer.user.id, event.id)
+                if email_notification_setting and email_notification_setting.new_paper == 1:
+                    send_new_session_organizer(organizer.user.email, event.name, link)
 
         speaker_modified = False
         session_modified = False

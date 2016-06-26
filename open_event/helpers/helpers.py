@@ -12,7 +12,7 @@ from open_event.helpers.flask_helpers import get_real_ip
 from open_event.settings import get_settings
 from ..models.track import Track
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
-    USER_REGISTER, PASSWORD_RESET, EVENT_ROLE, Mail
+    USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, Mail
 from system_mails import MAILS
 
 
@@ -59,6 +59,35 @@ def send_new_session_organizer(email, event_name, link):
         html=MAILS[NEW_SESSION]['message'].format(
             email=str(email),
             event_name=str(event_name),
+            link=link
+        )
+    )
+
+
+def send_session_accept_reject(email, session_name, acceptance, link):
+    """Send session accepted or rejected"""
+    send_email(
+        to=email,
+        action=SESSION_ACCEPT_REJECT,
+        subject=MAILS[SESSION_ACCEPT_REJECT]['subject'].format(session_name=session_name, acceptance=acceptance),
+        html=MAILS[SESSION_ACCEPT_REJECT]['message'].format(
+            email=str(email),
+            session_name=str(session_name),
+            acceptance=str(acceptance),
+            link=link
+        )
+    )
+
+
+def send_schedule_change(email, session_name, link):
+    """Send schedule change in session"""
+    send_email(
+        to=email,
+        action=SESSION_SCHEDULE,
+        subject=MAILS[SESSION_SCHEDULE]['subject'].format(session_name=session_name),
+        html=MAILS[SESSION_SCHEDULE]['message'].format(
+            email=str(email),
+            session_name=str(session_name),
             link=link
         )
     )
