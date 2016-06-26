@@ -8,7 +8,7 @@ POST_EVENT_DATA = {
     "end_time": "2016-05-30T12:12:43",
     "timezone": "UTC",
     "latitude": 0,
-    "location_name": "TestEvent",
+    "location_name": "Berlin",
     "logo": "http://imgur.com/image.png",
     "longitude": 0,
     "name": "TestEvent",

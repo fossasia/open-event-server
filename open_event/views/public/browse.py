@@ -57,7 +57,7 @@ class BrowseView(BaseView):
             current_page = 1
         else:
             current_page = int(current_page)
-        results = get_paginated(location_name=location, privacy='public', state='Published')
+        results = get_paginated(location=location, privacy='public', state='Published')
         filters = request.args.items()
         erase_from_dict(filters, 'page')
         if request.method == "POST":
@@ -65,16 +65,16 @@ class BrowseView(BaseView):
             event_type = request.args.get('event_type', '')
             if location and word and event_type:
                 results = marshal(
-                    EventDAO.list(location_name=location,
+                    EventDAO.list(location=location,
                                   __event_contains=word,
                                   privacy='public',
                                   state='Published',
                                   type=event_type),
                     EVENT)
             if location and word:
-                results = get_paginated(location_name=location, __event_contains=word, privacy='public', state='Published')
+                results = get_paginated(location=location, __event_contains=word, privacy='public', state='Published')
             elif location:
-                results = get_paginated(location_name=location, privacy='public', state='Published')
+                results = get_paginated(location=location, privacy='public', state='Published')
             elif word:
                 results = get_paginated(__event_contains=word, privacy='public', state='Published')
 
