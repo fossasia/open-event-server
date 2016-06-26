@@ -34,7 +34,7 @@ class SpeakersView(BaseView):
     def edit_view(self, event_id, speaker_id):
         speaker = get_speaker_or_throw(speaker_id)
         event = DataGetter.get_event(event_id)
-        form_elems = DataGetter.get_custom_form_elements(event_id).first()
+        form_elems = DataGetter.get_custom_form_elements(event_id)
         if not form_elems:
             flash("Speaker form has been incorrectly configured for this event. Editing has been disabled", "danger")
             return redirect(url_for('.index_view', event_id=event_id))

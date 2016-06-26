@@ -832,8 +832,9 @@ class DataManager(object):
                 elif name == "speaker_form":
                     speaker_form = custom_forms_value[index]
 
-            custom_form = CustomForms(session_form=session_form, speaker_form=speaker_form, event_id=event.id)
-            db.session.add(custom_form)
+            update_or_create(
+                CustomForms, event_id=event.id,
+                session_form=session_form, speaker_form=speaker_form)
 
             if form.get('call_for_speakers_state', u'off') == u'on':
                 call_for_speakers = CallForPaper(announcement=form['announcement'],
@@ -969,11 +970,9 @@ class DataManager(object):
             elif name == "speaker_form":
                 speaker_form = custom_forms_value[index]
 
-        custom_form, c = get_or_create(CustomForms,
-                                       session_form=session_form,
-                                       speaker_form=speaker_form,
-                                       event_id=event.id)
-        db.session.add(custom_form)
+        update_or_create(
+            CustomForms, event_id=event.id,
+            session_form=session_form, speaker_form=speaker_form)
 
         if form.get('call_for_speakers_state', u'off') == u'on':
             call_for_speakers, c = get_or_create(CallForPaper,
@@ -1220,6 +1219,22 @@ def get_or_create(model, **kwargs):
         db.session.commit()
         was_created = True
         return instance, was_created
+
+
+def update_or_create(model, event_id, **kwargs):
+    """
+    Update or create an item based on event id as PK
+    """
+    was_created = False
+    instance = db.session.query(model).filter_by(event_id=event_id).first()
+    if instance:
+        db.session.query(model).filter_by(event_id=event_id).update(kwargs)
+    else:
+        was_created = True
+        instance = model(event_id=event_id, **kwargs)
+    db.session.add(instance)
+    db.session.commit()
+    return instance, was_created
 
 
 def update_role_to_admin(form, user_id):

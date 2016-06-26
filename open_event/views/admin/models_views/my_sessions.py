@@ -28,7 +28,7 @@ class MySessionView(BaseView):
         session = DataGetter.get_sessions_of_user_by_id(session_id)
         if not session:
             abort(404)
-        form_elems = DataGetter.get_custom_form_elements(session.event_id).first()
+        form_elems = DataGetter.get_custom_form_elements(session.event_id)
         if not form_elems:
             flash("Speaker and Session forms have been incorrectly configured for this event."
                   " Session creation has been disabled", "danger")

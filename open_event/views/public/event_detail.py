@@ -59,7 +59,7 @@ class EventDetailView(BaseView):
         if not call_for_speakers:
             abort(404)
 
-        form_elems = DataGetter.get_custom_form_elements(event_id).first()
+        form_elems = DataGetter.get_custom_form_elements(event_id)
         speaker_form = json.loads(form_elems.speaker_form)
         session_form = json.loads(form_elems.session_form)
 

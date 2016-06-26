@@ -39,7 +39,7 @@ class SessionsView(BaseView):
     def session_display_view(self, event_id, session_id):
         session = get_session_or_throw(session_id)
         event = DataGetter.get_event(event_id)
-        form_elems = DataGetter.get_custom_form_elements(event_id).first()
+        form_elems = DataGetter.get_custom_form_elements(event_id)
         if not form_elems:
             flash("Speaker and Session forms have been incorrectly configured for this event."
                   " Session creation has been disabled", "danger")
@@ -60,7 +60,7 @@ class SessionsView(BaseView):
                 return redirect(url_for('event_speakers.index_view', event_id=event_id))
             return redirect(url_for('.index_view', event_id=event_id))
 
-        form_elems = DataGetter.get_custom_form_elements(event_id).first()
+        form_elems = DataGetter.get_custom_form_elements(event_id)
         if not form_elems:
             flash("Speaker and Session forms have been incorrectly configured for this event."
                   " Session creation has been disabled", "danger")
@@ -81,7 +81,7 @@ class SessionsView(BaseView):
             DataManager.edit_session(request, session)
             return redirect(url_for('.index_view', event_id=event_id))
 
-        form_elems = DataGetter.get_custom_form_elements(event_id).first()
+        form_elems = DataGetter.get_custom_form_elements(event_id)
         if not form_elems:
             flash("Speaker and Session forms have been incorrectly configured for this event."
                   " Session creation has been disabled", "danger")

@@ -7,7 +7,6 @@ from open_event.models.session import Session
 from open_event.models.speaker import Speaker
 from . import db
 from user_detail import UserDetail
-from setting import Setting
 from .role import Role
 from .service import Service
 from .permission import Permission

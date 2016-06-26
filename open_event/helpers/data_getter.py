@@ -143,7 +143,7 @@ class DataGetter:
         """
         return CustomForms.query.filter_by(
             event_id=event_id
-        )
+        ).first()
 
     @staticmethod
     def get_sessions_of_user_by_id(session_id, user=login.current_user):

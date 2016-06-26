@@ -1,9 +1,13 @@
 """Copyright 2015 Rafal Kowalski"""
+from sqlalchemy import event
+import json
 
 from open_event.helpers.date_formatter import DateFormatter
 from open_event.helpers.versioning import clean_up_string
+from custom_forms import CustomForms, session_form_str, speaker_form_str
 from . import db
 from sqlalchemy_utils import ColorType
+
 
 class EventsUsers(db.Model):
     """Many to Many table Event Users"""
@@ -145,3 +149,15 @@ class Event(db.Model):
             'ticket_url': self.ticket_url,
             'schedule_published_on': self.schedule_published_on
         }
+
+
+# LISTENERS
+
+@event.listens_for(Event, 'after_insert')
+def receive_init(mapper, conn, target):
+    custom_form = CustomForms(
+        event_id=target.id,
+        session_form=session_form_str,
+        speaker_form=speaker_form_str
+    )
+    target.custom_forms.append(custom_form)

@@ -161,7 +161,7 @@ class EventsView(BaseView):
         microlocations = DataGetter.get_microlocations(event_id).all()
         call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
         sponsors = DataGetter.get_sponsors(event_id)
-        custom_forms = DataGetter.get_custom_form_elements(event_id).first()
+        custom_forms = DataGetter.get_custom_form_elements(event_id)
         speaker_form = json.loads(custom_forms.speaker_form)
         session_form = json.loads(custom_forms.session_form)
 
