@@ -2,10 +2,13 @@ from flask.ext.restplus import Resource, Namespace
 
 from open_event.models.speaker import Speaker as SpeakerModel
 
-from .helpers.helpers import get_paginated_list, requires_auth
+from .helpers.helpers import get_paginated_list, requires_auth, save_db_model
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
 from .helpers import custom_fields as fields
+from open_event.helpers.data_getter import DataGetter
+
+import json
 
 api = Namespace('speakers', description='Speakers', path='/')
 
@@ -44,7 +47,33 @@ del SPEAKER_POST['sessions']  # don't allow adding sessions
 
 # Create DAO
 class SpeakerDAO(ServiceDAO):
-    pass
+    def update(self, event_id, service_id, data):
+        form = DataGetter.get_custom_form_elements(event_id).first()
+        if form:
+            speaker_custom = json.loads(DataGetter.get_custom_form_elements(event_id).first().speaker_form)
+            for key in SPEAKER_POST:
+                if key in speaker_custom:
+                    if speaker_custom[key]['require'] == 1:
+                        SPEAKER_POST[key].required = True
+                    elif speaker_custom[key]['require'] == 0:
+                        SPEAKER_POST[key].required = False
+        data = self.validate(data)
+        obj = ServiceDAO.update(self, event_id, service_id, data)
+        obj = save_db_model(obj, SpeakerModel.__name__, event_id)
+        return obj
+
+    def create(self, event_id, data, url):
+        form = DataGetter.get_custom_form_elements(event_id).first()
+        if form:
+            speaker_custom = json.loads(DataGetter.get_custom_form_elements(event_id).first().speaker_form)
+            for key in SPEAKER_POST:
+                if key in speaker_custom:
+                    if speaker_custom[key]['require'] == 1:
+                        SPEAKER_POST[key].required = True
+                    elif speaker_custom[key]['require'] == 0:
+                        SPEAKER_POST[key].required = False
+        data = self.validate(data)
+        return ServiceDAO.create(self, event_id, data, url, validate=False)
 
 DAO = SpeakerDAO(SpeakerModel, SPEAKER_POST)
 
