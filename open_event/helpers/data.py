@@ -72,6 +72,7 @@ class DataManager(object):
                        hash=role_invite.hash,
                        _external=True)
 
+        # print link
         Helper.send_email_for_event_role_invite(user.email,
                                                 role.title_name,
                                                 event.name,

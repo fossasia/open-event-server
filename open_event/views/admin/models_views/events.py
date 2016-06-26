@@ -9,7 +9,7 @@ from flask_admin import expose
 from open_event import db
 from open_event.helpers.permission_decorators import *
 from open_event.helpers.helpers import fields_not_empty, string_empty
-from ....helpers.data import DataManager, save_to_db, record_activity
+from ....helpers.data import DataManager, save_to_db, record_activity, delete_from_db
 from ....helpers.data_getter import DataGetter
 import datetime
 from werkzeug.datastructures import ImmutableMultiDict
@@ -299,6 +299,10 @@ class EventsView(BaseView):
             data['user_email'] = role_invite.user.email
             data['user_role'] = role.name
             DataManager.add_role_to_event(data, event.id)
+
+            # Delete Role Invite after it has been accepted
+            delete_from_db(role_invite, 'Deleted RoleInvite')
+
             flash('You have been added as a %s' % role.title_name)
             return redirect(url_for('.details_view', event_id=event.id))
         else:

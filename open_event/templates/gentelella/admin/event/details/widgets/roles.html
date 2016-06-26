@@ -54,7 +54,11 @@ Manage Roles
             <td style="display:none;">invited</td>
             <td>{{ invite.user.email }}</td>
             <td>{{ invite.role.title_name }}</td>
-            <td></td>
+            <td>
+                <a href="{{ url_for('events.user_role_invite', event_id=event.id, hash=invite.hash) }}" title="Link sent to the user">
+                    Invitation Link
+                </a>
+            </td>
         </tr>
         {% endfor %}
         </tbody>
