@@ -17,10 +17,10 @@
     <div class="col-md-8">
         <h1>{{location}} Events</h1>
         <div>
-            <ul class="list-inline prod_size">
+            <ul class="list-inline prod_size filtering">
                 {%for filter in filters %}
                     <li><button type="button" class="btn btn-default btn-xs">{{filter[1]}}
-                        <i class="fa fa-close" style="margin-left:3px"></i></button>
+                        <i class="fa fa-close" name="{{filter[0]}}" style="margin-left:3px"></i></button>
                     </li>
                 {%endfor%}
              </ul>
@@ -118,6 +118,24 @@
         });
     }
 
+    function removeParam(key, sourceURL) {
+        var rtn = sourceURL.split("?")[0],
+            param,
+            params_arr = [],
+            queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
+        if (queryString !== "") {
+            params_arr = queryString.split("&");
+            for (var i = params_arr.length - 1; i >= 0; i -= 1) {
+                param = params_arr[i].split("=")[0];
+                if (param === key) {
+                    params_arr.splice(i, 1);
+                }
+            }
+            rtn = rtn + "?" + params_arr.join("&");
+        }
+        return rtn;
+    }
+
     $( document ).ready(function() {
         $("#search-form").change(function(e) {
             e.preventDefault();
@@ -138,11 +156,18 @@
                 $('#collapse1').collapse()
             }
         })
-        $(".days input").each(function( index ) {
-            if ($( this ).val() === params['day'].replace(/\+/g, ' ')){
-                $( this ).parent().css('color', 'black');
-                $('#collapse3').collapse()
-            }
+        <!--$(".days input").each(function( index ) {-->
+            <!--if ($( this ).val() === params['day'].replace(/\+/g, ' ')){-->
+                <!--$( this ).parent().css('color', 'black');-->
+                <!--$('#collapse3').collapse()-->
+            <!--}-->
+        <!--})-->
+
+        $('.filtering .fa-close').click(function (){
+            key = $(this).attr('name')
+            var url = removeParam(key, window.location.href)
+            console.log(url)
+             window.location.href = url
         })
 
     });
