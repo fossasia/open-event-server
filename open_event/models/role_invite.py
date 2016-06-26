@@ -17,11 +17,13 @@ class RoleInvite(db.Model):
     role = db.relationship("Role")
 
     hash = db.Column(db.String)
+    create_time = db.Column(db.DateTime)
 
-    def __init__(self, user, event, role):
+    def __init__(self, user, event, role, create_time):
         self.user = user
         self.event = event
         self.role = role
+        self.create_time = create_time
 
     def __repr__(self):
         return '<RoleInvite %r:%r:%r>' % (self.user,
