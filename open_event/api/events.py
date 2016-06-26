@@ -131,7 +131,7 @@ DAO = EventDAO(EventModel, EVENT_POST)
 # DEFINE PARAMS
 
 EVENT_PARAMS = {
-    'location_name': {
+    'location': {
         'type': str
     },
     'contains': {
@@ -164,7 +164,7 @@ class EventResource():
     Event Resource Base class
     """
     event_parser = reqparse.RequestParser()
-    event_parser.add_argument('location_name', type=str)
+    event_parser.add_argument('location', type=str, dest='__event_location')
     event_parser.add_argument('contains', type=str, dest='__event_contains')
     event_parser.add_argument('state', type=str)
     event_parser.add_argument('privacy', type=str)
