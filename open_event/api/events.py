@@ -53,6 +53,7 @@ EVENT = api.model('Event', {
     'ticket_url': fields.Uri(),
     'creator': fields.Nested(EVENT_CREATOR, allow_null=True),
     'schedule_published_on': fields.DateTime(),
+    'code_of_conduct': fields.String(),
     'social_links': fields.List(fields.Nested(EVENT_SOCIAL), attribute='social_link')
 })
 

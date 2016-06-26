@@ -24,6 +24,7 @@ POST_EVENT_DATA = {
     "topic": "Science & Technology",
     "privacy": "public",
     "ticket_url": "http://site.com/tickets",
+    "code_of_conduct": "Thou shalt be kind",
     "schedule_published_on": None
 }
 
