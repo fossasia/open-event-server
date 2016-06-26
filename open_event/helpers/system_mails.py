@@ -22,7 +22,8 @@ MAILS = {
         'subject': 'Session {session_name} has been {acceptance}',
         'message': (
             "Hi {email},<br/>" +
-            "The session <strong>{session_name}</strong> has been <strong>{acceptance}</strong> by the organizer. "
+            "The session <strong>{session_name}</strong> has been <strong>{acceptance}</strong> by the organizer. " +
+            "<br/> Visit this link to view the session: {link}"
         )
     },
     SESSION_SCHEDULE: {

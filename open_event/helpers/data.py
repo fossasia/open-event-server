@@ -401,6 +401,19 @@ class DataManager(object):
         save_to_db(session, "Session Speaker saved")
 
     @staticmethod
+    def session_accept_reject(session, event_id, state):
+        session.state = state
+        save_to_db(session, 'Session State Updated')
+        link = url_for('event_sessions.session_display_view',
+                       event_id=event_id, session_id=session.id, _external=True)
+        for speaker in session.speakers:
+            print speaker.name
+            email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(speaker.user_id, event_id)
+            if email_notification_setting and email_notification_setting.session_accept_reject == 1:
+                Helper.send_session_accept_reject(speaker.email, session.title, state, link)
+        flash("The session has been %s" % state)
+
+    @staticmethod
     def edit_session(request, session):
         form = request.form
         event_id = session.event_id
