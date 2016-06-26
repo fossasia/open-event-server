@@ -16,12 +16,12 @@
     </div>
     <div class="col-md-8">
         <h1>{{location}} Events</h1>
-
         <div>
             <ul class="list-inline prod_size">
                 {%for filter in filters %}
                     <li><button type="button" class="btn btn-default btn-xs">{{filter[1]}}
-                        <i class="fa fa-close" style="margin-left:3px"></i></button></li>
+                        <i class="fa fa-close" style="margin-left:3px"></i></button>
+                    </li>
                 {%endfor%}
              </ul>
         </div>
@@ -133,10 +133,15 @@
         );
 
         $(".categories input").each(function( index ) {
-            console.log(params['event_type'].replace(/\+/g, ' '))
             if ($( this ).val() === params['event_type'].replace(/\+/g, ' ')){
                 $( this ).parent().css('color', 'black');
                 $('#collapse1').collapse()
+            }
+        })
+        $(".days input").each(function( index ) {
+            if ($( this ).val() === params['day'].replace(/\+/g, ' ')){
+                $( this ).parent().css('color', 'black');
+                $('#collapse3').collapse()
             }
         })
 
