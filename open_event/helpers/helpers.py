@@ -3,7 +3,7 @@ import json
 import os
 import re
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask import request
 from itsdangerous import Serializer
 from flask.ext import login
@@ -260,3 +260,53 @@ def get_request_stats():
         'version': request.user_agent.version,
         'language': request.user_agent.language
     }
+
+
+def get_date_range(day_filter):
+    date_now = datetime.now()
+    start, end = None, None
+    if day_filter == 'all_date':
+        pass
+    elif day_filter == 'Today':
+        start = date_now.replace(hour=00, minute=00)
+        end = date_now.replace(hour=23, minute=59)
+    elif day_filter == 'Tommorow':
+        date_now += timedelta(days=1)
+        start = date_now.replace(hour=00, minute=00)
+        end = date_now.replace(hour=23, minute=59)
+    elif day_filter == 'This Week':
+        weekday = date_now.weekday()
+        date_now -= timedelta(days=weekday)
+        start = date_now.replace(hour=00, minute=00)
+        date_now += timedelta(days=6)
+        end = date_now.replace(hour=23, minute=59)
+    elif day_filter == 'This Weekend':
+        weekday = date_now.weekday()
+        date_now += timedelta(days=5 - weekday)
+        start = date_now.replace(hour=00, minute=00)
+        date_now += timedelta(days=1)
+        end = date_now.replace(hour=23, minute=59)
+    elif day_filter == 'Next Week':
+        weekday = date_now.weekday()
+        date_now -= timedelta(days=weekday)
+        start = date_now.replace(hour=00, minute=00)
+        date_now += timedelta(days=6)
+        end = date_now.replace(hour=23, minute=59)
+    elif day_filter == 'This Month':
+        start = first_day_of_month(date_now.replace(hour=00, minute=00))
+        end = last_day_of_month(date_now.replace(hour=23, minute=59))
+    elif day_filter == 'Custom Date':
+        pass
+    return start, end
+
+
+def last_day_of_month(date):
+    if date.month == 12:
+        return date.replace(day=31)
+    return date.replace(month=date.month+1, day=1) - timedelta(days=1)
+
+
+def first_day_of_month(date):
+    ddays = int(date.strftime("%d"))-1
+    delta = timedelta(days=ddays)
+    return date - delta

@@ -2,6 +2,7 @@ from flask.ext.restplus import abort
 from flask_admin import BaseView, expose
 
 from open_event.api.helpers.helpers import get_paginated_list
+from open_event.helpers.helpers import get_date_range
 from open_event.models.event import Event
 from flask import request
 from flask_restplus import marshal
@@ -52,33 +53,31 @@ class BrowseView(BaseView):
 
     @expose('/s', methods=('GET', 'POST'))
     def browses(self, location):
+        print location
         current_page = request.args.get('page')
         if not current_page:
             current_page = 1
         else:
             current_page = int(current_page)
-        results = get_paginated(__event_location=location, privacy='public', state='Published')
+
+        filtering = {'privacy': 'public', 'state': 'Published'}
+        word = request.form.get('word', '')
+        event_type = request.args.get('event_type', '')
+        day_filter = request.args.get('day', '')
+        start, end = get_date_range(day_filter)
+        if location:
+            filtering['__event_location'] = location
+        if word:
+            filtering['__event_contains'] = word
+        if event_type:
+            filtering['type'] = event_type
+        if start:
+            filtering['__event_start_time_gt'] = start
+        if end:
+            filtering['__event_end_time_lt'] = end
         filters = request.args.items()
         erase_from_dict(filters, 'page')
-        if request.method == "POST":
-            word = request.form['word']
-            event_type = request.args.get('event_type', '')
-            day_filter = request.args.get('day', '')
-            if location and word and event_type:
-                results = marshal(
-                    EventDAO.list(__event_location=location,
-                                  __event_contains=word,
-                                  privacy='public',
-                                  state='Published',
-                                  type=event_type),
-                    EVENT)
-            if location and word:
-                results = get_paginated(__event_location=location, __event_contains=word, privacy='public', state='Published')
-            elif location:
-                results = get_paginated(__event_location=location, privacy='public', state='Published')
-
-            elif word:
-                results = get_paginated(__event_contains=word, privacy='public', state='Published')
+        results = get_paginated(**filtering)
 
         return self.render('/gentelella/guest/search/results.html',
                            results=results,
@@ -86,5 +85,3 @@ class BrowseView(BaseView):
                            filters=filters,
                            current_page=current_page)
 
-def get_date_range(day_filter):
-    pass
