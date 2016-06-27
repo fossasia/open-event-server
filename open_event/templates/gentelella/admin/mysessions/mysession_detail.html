@@ -47,26 +47,56 @@
                         <i>(to)</i> {{ session.event.end_time.strftime('%B %d, %Y - %I:%M %p') }}
                     </h4>
                     <br>
+                    {% if session.short_abstract %}
                     <h5>Short Abstract</h5>
                     <p style="text-align: justify;"><i class="short_abstract">
                         {{ session.short_abstract | safe }}
                     </i></p>
                     <br>
+                    {% endif %}
+                    {% if session.long_abstract %}
                     <h5>Long Abstract</h5>
                     <p style="text-align: justify" class="long_abstract">
                         {{ session.long_abstract | safe }}
                     </p>
                     <br>
+                    {% endif %}
                     <div class="row" style="text-align: center; font-size: 16px;">
+                        {% if session.microlocation %}
                         <div class="col-md-2 col-md-push-1">
                             <strong>Microlocation</strong><br>
                             {{ session.microlocation.name }}
                         </div>
+                        {% endif %}
+                        {% if session.track %}
                         <div class="col-md-2 col-md-push-1">
                             <strong>Track</strong><br>
                             {{ session.track.name }}
                         </div>
+                        {% endif %}
                     </div>
+                    {% if session.slides or session.video or session.audio %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Media</h4>
+                        </div>
+                        {% if session.slides %}
+                            <div class="col-md-4">
+                                <h5>Slide</h5><a href="{{ session.slides }}" download>Download</a>
+                            </div>
+                        {% endif %}
+                        {% if session.video %}
+                            <div class="col-md-4">
+                                <h5>Video</h5><a href="{{ session.video }}" download>Download</a>
+                            </div>
+                        {% endif %}
+                        {% if session.audio %}
+                            <div class="col-md-4">
+                                <h5>Audio</h5><a href="{{ session.audio }}" download>Download</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
                     <br>
                     <br>
                 </div>
