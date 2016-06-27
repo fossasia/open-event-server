@@ -1008,6 +1008,13 @@ class DataManager(object):
         db.session.commit()
 
     @staticmethod
+    def trash_event(e_id):
+        event = Event.query.get(e_id)
+        event.in_trash = 'True'
+        save_to_db(event, "Event Added to Trash")
+        return event
+
+    @staticmethod
     def create_file():
         """
         File from request will be saved to database

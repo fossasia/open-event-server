@@ -8,6 +8,18 @@ Users
 
 {% block head_css %}
 {{ super() }}
+<style type="text/css">
+    #event-tabs {
+        position: absolute;
+        background: transparent;
+        top: 9px;
+        width: auto;
+    }
+
+    table.table {
+        margin-top: 20px !important;
+    }
+    </style>
 {% endblock %}
 
 {% macro users_row(user_list) %}

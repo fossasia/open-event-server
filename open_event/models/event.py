@@ -43,6 +43,7 @@ class Event(db.Model):
     background_url = db.Column(db.String)
     organizer_name = db.Column(db.String)
     organizer_description = db.Column(db.String)
+    in_trash = db.Column(db.Boolean, default=False)
     track = db.relationship('Track', backref="event")
     microlocation = db.relationship('Microlocation', backref="event")
     session = db.relationship('Session', backref="event")

@@ -9,7 +9,18 @@ Events
 {% block head_css %}
 {{ super() }}
 <link href="{{ url_for('static', filename='css/admin/mysessions.css') }}" rel="stylesheet">
+<style type="text/css">
+    #event-tabs {
+        position: absolute;
+        background: transparent;
+        top: 9px;
+        width: auto;
+    }
 
+    table.table {
+        margin-top: 20px !important;
+    }
+    </style>
 {% endblock %}
 
 {% macro session_rows(sessions) %}
@@ -161,7 +172,7 @@ Events
 {{ super() }}
 <script type="text/javascript">
         var table = $('.table.no-global-dt').DataTable({
-            "dom": '<"row"<"toolbar col-md-5"><"col-md-3"l><"col-md-3 pull-right"f>>tip',
+            "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
             "lengthMenu": [25, 50, 100, 200],
             "pageLength": 50,
             "language": {

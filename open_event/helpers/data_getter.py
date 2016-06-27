@@ -346,12 +346,12 @@ class DataGetter:
     def get_live_events():
         return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
             .filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
-            .filter(Event.state == 'Published')
+            .filter(Event.state == 'Published').filter(Event.in_trash == False)
 
     @staticmethod
     def get_draft_events():
         return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
-            .filter(Event.state == 'Draft')
+            .filter(Event.state == 'Draft').filter(Event.in_trash == False)
 
     @staticmethod
     def get_past_events():
@@ -502,3 +502,7 @@ class DataGetter:
         """
         activities = Activity.query.order_by(desc(Activity.time)).all()
         return activities[:count]
+
+    @staticmethod
+    def get_trash_events():
+        return Event.query.filter_by(in_trash=True)       
