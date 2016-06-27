@@ -37,3 +37,11 @@ class ProfileView(BaseView):
             return redirect(url_for('.index_view'))
         profile = DataGetter.get_user(int(user_id))
         return self.render('/gentelella/admin/profile/edit.html', profile=profile)
+
+    @expose('/notifications/', methods=('GET', 'POST'))
+    def notifications(self):
+        user = login.current_user
+        notifications = DataGetter.get_all_user_notifications(user)
+
+        return self.render('/gentelella/admin/profile/notifications.html',
+                           notifications=notifications)
