@@ -52,25 +52,6 @@ class DataManager(object):
     """Main class responsible for DataBase managing"""
 
     @staticmethod
-    def create_user_notification(user, title, message):
-        """
-        Create a User Notification
-        :param user: User object to send the notification to
-        :param title: The message title
-        :param message: The message
-        """
-        notification = Notification(user=user,
-                                    title=title,
-                                    message=message,
-                                    received_at=datetime.now())
-        save_to_db(notification, 'User notification saved')
-
-    @staticmethod
-    def mark_user_notification_as_read(notification):
-        notification.has_read = True
-        save_to_db(notification, 'Mark notification as read')
-
-    @staticmethod
     def add_event_role_invite(form, event_id):
         """
         Event Role Invite will be saved in the database and an email will
