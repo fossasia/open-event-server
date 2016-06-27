@@ -14,6 +14,7 @@ from sqlalchemy.sql.expression import exists
 from werkzeug import secure_filename
 from wtforms import ValidationError
 
+from open_event.models.notifications import Notification
 from open_event.helpers.helpers import string_empty, send_new_session_organizer
 from ..helpers.update_version import VersionUpdater
 from ..helpers.data_getter import DataGetter
