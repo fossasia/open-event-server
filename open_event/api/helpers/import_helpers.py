@@ -192,14 +192,16 @@ def import_event_json(zip_path):
             service_ids[item[0]] = changed_ids.copy()
             CUR_ID = None
     except BaseError as e:
+        EventDAO.delete(new_event.id)
         raise make_error(item[0], er=e, id_=CUR_ID)
     except IOError:
+        EventDAO.delete(new_event.id)
         raise NotFoundError('File %s.json missing in event zip' % item[0])
     except ValueError:
+        EventDAO.delete(new_event.id)
         raise make_error(item[0], er=ServerError('Invalid json'))
     except Exception:
-        raise make_error(item[0], id_=CUR_ID)
-    finally:
         EventDAO.delete(new_event.id)
+        raise make_error(item[0], id_=CUR_ID)
     # return
     return new_event
