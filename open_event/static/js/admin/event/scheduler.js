@@ -891,37 +891,9 @@ $(document)
     .on("click", ".session.scheduled > .edit-btn", function () {
         var $sessionElement = $(this).parent();
         var session = $sessionElement.data("session");
-        $editSessionForm.bindObject(session, time.format);
-        $editSessionModal.modal('show');
+        location.href = "/events/" + window.mainEvent.id + "/sessions/" + session.id + "/edit/";
     })
     .on("click", ".clear-overlaps-button", removeOverlaps);
-
-if (!isReadOnly()) {
-    $(".date-picker").daterangepicker({
-        "singleDatePicker": true,
-        "showDropdowns": true,
-        "timePicker": true,
-        "timePicker24Hour": true,
-        "startDate": $editSessionModal.data("start-date"),
-        locale: {
-            format: time.format
-        }
-    });
-}
-
-$editSessionForm.submit(function () {
-    var session = $editSessionForm.data("object");
-    session.start_time = moment.utc($editSessionForm.find("input[name=start_time]").val());
-    session.end_time = moment.utc($editSessionForm.find("input[name=end_time]").val());
-    session.title = $editSessionForm.find("input[name=title]").val();
-    session.long_abstract = $editSessionForm.find("input[name=long_abstract]").text();
-    session.short_abstract = $editSessionForm.find("input[name=short_abstract]").val();
-    $(document).trigger({
-        type: "scheduling:change",
-        session: session
-    });
-    $editSessionModal.modal("hide");
-});
 
 /**
  * Initialize the Scheduler UI on document ready
