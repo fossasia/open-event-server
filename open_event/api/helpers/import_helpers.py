@@ -172,11 +172,15 @@ def import_event_json(zip_path):
     with zipfile.ZipFile(zip_path, "r") as z:
         z.extractall('static/temp/import_event')
     # create event
-    data = json.loads(open(path + '/event.json', 'r').read())
-    _, data = _trim_id(data)
-    data = _delete_fields(('event', EventDAO), data)
-    new_event = EventDAO.create(data, 'dont')[0]
-
+    try:
+        data = json.loads(open(path + '/event.json', 'r').read())
+        _, data = _trim_id(data)
+        data = _delete_fields(('event', EventDAO), data)
+        new_event = EventDAO.create(data, 'dont')[0]
+    except BaseError as e:
+        raise make_error('event', er=e)
+    except Exception:
+        raise make_error('event')
     # create other services
     try:
         service_ids = {}
