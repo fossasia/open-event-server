@@ -32,7 +32,6 @@
                            style="color: #46b8da!important; font-weight:bold">Create
                         Event</a></li>
                     {% if current_user.is_authenticated %}
-                        
                         <li>
                             <a href="#" class="user-profile dropdown-toggle" data-toggle="dropdown"
                                aria-expanded="false">
@@ -62,12 +61,6 @@
                                 <li><a href="/logout/"><i class="fa fa-sign-out pull-right"></i> Logout</a>
                                 </li>
                             </ul>
-                        </li>
-                        <li>
-                            <a href="{{ url_for('profile.notifications_view') }}" class="info-number">
-                                <i class="fa fa-envelope-o"></i>
-                                <span class="badge bg-green">{{ current_user.get_unread_notif_count() | default('', true) }}</span>
-                            </a>
                         </li>
                     {% else %}
                         <li><a href="/login" class="user-profile">Login</a></li>
