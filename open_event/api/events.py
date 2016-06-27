@@ -12,7 +12,8 @@ from .helpers.helpers import get_paginated_list, requires_auth, parse_args
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, BaseDAO, ServiceDAO
 from .helpers import custom_fields as fields
-from helpers.special_fields import EventTypeField, EventTopicField
+from helpers.special_fields import EventTypeField, EventTopicField, \
+    EventPrivacyField
 
 
 api = Namespace('events', description='Events')
@@ -49,7 +50,7 @@ EVENT = api.model('Event', {
     'closing_datetime': fields.DateTime(),
     'type': EventTypeField(),
     'topic': EventTopicField(),
-    'privacy': fields.String(),
+    'privacy': EventPrivacyField(),
     'ticket_url': fields.Uri(),
     'creator': fields.Nested(EVENT_CREATOR, allow_null=True),
     'schedule_published_on': fields.DateTime(),
