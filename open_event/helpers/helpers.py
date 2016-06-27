@@ -263,6 +263,7 @@ def get_request_stats():
 
 
 def get_date_range(day_filter):
+    format = "%Y-%m-%dT%H:%M:%S"
     date_now = datetime.now()
     start, end = None, None
     if day_filter == 'all_date':
@@ -270,7 +271,7 @@ def get_date_range(day_filter):
     elif day_filter == 'Today':
         start = date_now.replace(hour=00, minute=00)
         end = date_now.replace(hour=23, minute=59)
-    elif day_filter == 'Tommorow':
+    elif day_filter == 'Tomorrow':
         date_now += timedelta(days=1)
         start = date_now.replace(hour=00, minute=00)
         end = date_now.replace(hour=23, minute=59)
@@ -297,7 +298,7 @@ def get_date_range(day_filter):
         end = last_day_of_month(date_now.replace(hour=23, minute=59))
     elif day_filter == 'Custom Date':
         pass
-    return start, end
+    return start.strftime(format), end.strftime(format)
 
 
 def last_day_of_month(date):
