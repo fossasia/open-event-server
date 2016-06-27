@@ -53,7 +53,6 @@ class BrowseView(BaseView):
 
     @expose('/s', methods=('GET', 'POST'))
     def browses(self, location):
-        print location
         current_page = request.args.get('page')
         if not current_page:
             current_page = 1
@@ -61,10 +60,12 @@ class BrowseView(BaseView):
             current_page = int(current_page)
 
         filtering = {'privacy': 'public', 'state': 'Published'}
+        start, end = None, None
         word = request.form.get('word', '')
         event_type = request.args.get('event_type', '')
         day_filter = request.args.get('day', '')
-        start, end = get_date_range(day_filter)
+        if day_filter:
+            start, end = get_date_range(day_filter)
         if location:
             filtering['__event_location'] = location
         if word:
