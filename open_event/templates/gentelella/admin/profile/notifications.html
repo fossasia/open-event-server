@@ -1,0 +1,106 @@
+{% extends 'gentelella/admin/base.html' %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block body %}
+
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="x_panel" style="min-height: 500px;">
+            <div class="x_title">
+                <h2>Notifications</h2>
+
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="row">
+                    <div class="col-sm-3 col-xs-12">
+                        <div id="toolbar-holder">
+                            <div class="btn-group pull-left" data-toggle="buttons">
+                                <label class="btn btn-default active btn-responsive">
+                                    <input type="radio" name="notif_status" autocomplete="off" value="unread" checked> Unread
+                                </label>
+                                <label class="btn btn-default btn-responsive">
+                                    <input type="radio" name="notif_status" autocomplete="off" value="all"> All
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-9 col-xs-12">
+                        <table class="notif-table table table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="display:none;">Status</th>
+                                    <th>Message</th>
+                                    <th>Received At</th>
+                                    <th>Options</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for notif in notifications %}
+                                <tr class="{{ '' if notif.has_read else 'success' }}">
+                                    <td style="display: none;">{{ 'read' if notif.has_read else 'unread' }}</td>
+                                    <td>{{ notif.message | safe }}</td>
+                                    <td>{{ notif.received_at | humanize }}</td>
+                                    <td>
+                                    {% if not notif.has_read %}
+                                        <button type="button" class="btn btn-info btn-xs">Mark as Read</button>
+                                    {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='admin/lib/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/nouislider/distribute/nouislider.min.js') }}"></script>
+
+    <script type="text/javascript">
+        $.fn.dataTable.ext.search.push(
+            function (settings, data, dataIndex) {
+                var user_option = $("input[name=notif_status]:checked").val();
+                var state = data[0].trim() || 'unread';
+                if (user_option === "all") {
+                    return true;
+                }
+                if (user_option === state || state === "") {
+                    return true;
+                }
+                return false;
+            }
+        );
+
+        var notifTable = $('.notif-table').DataTable({
+            "bInfo": false,
+            "bPaginate": false,
+            "scrollX": false,
+            "bAutoWidth": false,
+        });
+
+        $(".dataTables_filter").hide();
+        $(".notif-table thead").hide();
+
+        $("input[name=notif_status]").change(function () {
+            notifTable.draw();
+        });
+
+        notifTable.on('draw', function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+    </script>
+
+{% endblock %}
