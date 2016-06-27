@@ -42,6 +42,10 @@ class DataGetter:
         return Notification.query.filter_by(user=user).all()
 
     @staticmethod
+    def get_user_notification(notification_id):
+        return Notification.query.filter_by(id=notification_id).first()
+
+    @staticmethod
     def get_invite_by_user_id(user_id):
         invite = Invite.query.filter_by(user_id=user_id)
         if invite:

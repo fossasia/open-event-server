@@ -66,6 +66,11 @@ class DataManager(object):
         save_to_db(notification, 'User notification saved')
 
     @staticmethod
+    def mark_user_notification_as_read(notification):
+        notification.has_read = True
+        save_to_db(notification, 'Mark notification as read')
+
+    @staticmethod
     def add_event_role_invite(form, event_id):
         """
         Event Role Invite will be saved in the database and an email will

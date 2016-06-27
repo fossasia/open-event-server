@@ -1,4 +1,4 @@
-from flask import request, url_for, redirect
+from flask import request, url_for, redirect, abort
 from flask.ext.admin import BaseView
 from flask_admin import expose
 from flask.ext import login
@@ -39,9 +39,20 @@ class ProfileView(BaseView):
         return self.render('/gentelella/admin/profile/edit.html', profile=profile)
 
     @expose('/notifications/', methods=('GET', 'POST'))
-    def notifications(self):
+    def notifications_view(self):
         user = login.current_user
         notifications = DataGetter.get_all_user_notifications(user)
 
         return self.render('/gentelella/admin/profile/notifications.html',
                            notifications=notifications)
+
+    @expose('/notifications/read/<notification_id>/', methods=('GET', 'POST'))
+    def mark_notification_as_read(self, notification_id):
+        user = login.current_user
+        notification = DataGetter.get_user_notification(notification_id)
+
+        if notification and notification.user == user:
+            DataManager.mark_user_notification_as_read(notification)
+            return redirect(url_for('.notifications_view'))
+        else:
+            abort(404)

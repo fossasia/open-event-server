@@ -7,7 +7,7 @@
 
 <div class="row">
     <div class="col-xs-12">
-        <div class="x_panel" style="min-height: 500px;">
+        <div class="x_panel" style="min-height: 700px;">
             <div class="x_title">
                 <h2>Notifications</h2>
 
@@ -48,7 +48,7 @@
                                     <td>{{ notif.received_at | humanize }}</td>
                                     <td>
                                     {% if not notif.has_read %}
-                                        <button type="button" class="btn btn-info btn-xs">Mark as Read</button>
+                                        <a class="btn btn-default btn-xs" href="{{ url_for('profile.mark_notification_as_read', notification_id=notif.id) }}">Mark as Read</a>
                                     {% endif %}
                                     </td>
                                 </tr>
@@ -91,6 +91,9 @@
             "bPaginate": false,
             "scrollX": false,
             "bAutoWidth": false,
+            "language": {
+                "zeroRecords": "You don't have any new notifications"
+            }
         });
 
         $(".dataTables_filter").hide();
