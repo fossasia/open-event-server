@@ -8,7 +8,7 @@ POST_EVENT_DATA = {
     "end_time": "2016-05-30T12:12:43",
     "timezone": "UTC",
     "latitude": 0,
-    "location_name": "TestEvent",
+    "location_name": "Berlin",
     "logo": "http://imgur.com/image.png",
     "longitude": 0,
     "name": "TestEvent",
@@ -24,6 +24,7 @@ POST_EVENT_DATA = {
     "topic": "Science & Technology",
     "privacy": "public",
     "ticket_url": "http://site.com/tickets",
+    "code_of_conduct": "Thou shalt be kind",
     "schedule_published_on": None
 }
 

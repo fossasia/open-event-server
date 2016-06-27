@@ -6,15 +6,13 @@ from flask import request
 from errors import NotFoundError
 from werkzeug import secure_filename
 
-from open_event.helpers.data import save_to_db
-from open_event.models.custom_forms import CustomForms, speaker_form_str, \
-    session_form_str
 from ..events import DAO as EventDAO, LinkDAO as SocialLinkDAO
 from ..microlocations import DAO as MicrolocationDAO
 from ..sessions import DAO as SessionDAO, TypeDAO as SessionTypeDAO
 from ..speakers import DAO as SpeakerDAO
 from ..sponsors import DAO as SponsorDAO
 from ..tracks import DAO as TrackDAO
+from .non_apis import CustomFormDAO
 
 from errors import BaseError, ServerError
 
@@ -25,7 +23,8 @@ IMPORT_SERIES = [
     ('speakers', SpeakerDAO),
     ('tracks', TrackDAO),
     ('session_types', SessionTypeDAO),
-    ('sessions', SessionDAO)
+    ('sessions', SessionDAO),
+    ('custom_forms', CustomFormDAO)
 ]
 
 DELETE_FIELDS = {
@@ -177,10 +176,4 @@ def import_event_json(zip_path):
     except Exception:
         EventDAO.delete(new_event.id)
         raise ServerError()
-
-    custom_form = CustomForms(event_id=new_event.id,
-                              session_form=session_form_str,
-                              speaker_form=speaker_form_str)
-    save_to_db(custom_form, "Custom form saved")
-
     return new_event

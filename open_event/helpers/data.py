@@ -14,6 +14,7 @@ from sqlalchemy.sql.expression import exists
 from werkzeug import secure_filename
 from wtforms import ValidationError
 
+from open_event.models.notifications import Notification
 from open_event.helpers.helpers import string_empty, send_new_session_organizer
 from ..helpers.update_version import VersionUpdater
 from ..helpers.data_getter import DataGetter
@@ -293,7 +294,9 @@ class DataManager(object):
                            event_id=event.id, session_id=new_session.id, _external=True)
             organizers = DataGetter.get_user_event_roles_by_role_name(event.id, 'organizer')
             for organizer in organizers:
-                send_new_session_organizer(organizer.user.email, event.name, link)
+                email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(organizer.user.id, event.id)
+                if email_notification_setting and email_notification_setting.new_paper == 1:
+                    send_new_session_organizer(organizer.user.email, event.name, link)
 
         speaker_modified = False
         session_modified = False
@@ -397,6 +400,19 @@ class DataManager(object):
         session = DataGetter.get_session(session_id)
         session.speakers.append(speaker)
         save_to_db(session, "Session Speaker saved")
+
+    @staticmethod
+    def session_accept_reject(session, event_id, state):
+        session.state = state
+        save_to_db(session, 'Session State Updated')
+        link = url_for('event_sessions.session_display_view',
+                       event_id=event_id, session_id=session.id, _external=True)
+        for speaker in session.speakers:
+            print speaker.name
+            email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(speaker.user_id, event_id)
+            if email_notification_setting and email_notification_setting.session_accept_reject == 1:
+                Helper.send_session_accept_reject(speaker.email, session.title, state, link)
+        flash("The session has been %s" % state)
 
     @staticmethod
     def edit_session(request, session):
@@ -760,6 +776,7 @@ class DataManager(object):
                       ticket_url=form['ticket_url'],
                       organizer_name=form['organizer_name'],
                       organizer_description=form['organizer_description'],
+                      code_of_conduct=form['code_of_conduct'],
                       creator=login.current_user)
 
         state = form.get('state', None)
@@ -882,6 +899,7 @@ class DataManager(object):
         event.privacy = form.get('privacy', 'public')
         event.organizer_name = form['organizer_name']
         event.organizer_description = form['organizer_description']
+        event.code_of_conduct = form['code_of_conduct']
         event.ticket_url = form['ticket_url']
 
         state = form.get('state', None)

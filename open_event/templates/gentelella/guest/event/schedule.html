@@ -50,6 +50,9 @@
             <li role="presentation" class="active"><a href="/e/{{ event.id }}/schedule">Schedule</a></li>
             <li role="presentation"><a href="/e/{{ event.id }}/#organizer">Organizer</a></li>
             <li role="presentation"><a href="/e/{{ event.id }}/#getting-here">Getting Here</a></li>
+            {% if event.code_of_conduct and event.code_of_conduct != '' and event.code_of_conduct != ' ' %}
+                <li><a href="/e/{{ event.id }}/coc">Code of Conduct</a></li>
+            {% endif %}
         </ul>
     </div>
     <div class="carousel slide" style="margin-bottom: 0;">

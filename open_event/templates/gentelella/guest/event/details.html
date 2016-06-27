@@ -69,18 +69,21 @@
 {% block body %}
     <div class="scrollspy hidden-xs hidden-sm" id="scrollspy">
         <ul class="nav nav-pills nav-stacked">
-            <li role="presentation" class="active"><a href="#info">Info</a></li>
-            <li role="presentation"><a href="#speakers">Speakers</a></li>
-            <li role="presentation"><a href="#sponsors">Sponsors</a></li>
-            <li role="presentation"><a href="/e/{{ event.id }}/sessions">Sessions</a></li>
+            <li class="active"><a href="#info">Info</a></li>
+            <li><a href="#speakers">Speakers</a></li>
+            <li><a href="#sponsors">Sponsors</a></li>
+            <li><a href="/e/{{ event.id }}/sessions">Sessions</a></li>
             {% if call_for_speakers %}
-                <li role="presentation"><a href="/e/{{ event.id }}/cfs">Call for speakers</a></li>
+                <li><a href="/e/{{ event.id }}/cfs">Call for speakers</a></li>
             {% endif %}
             {% if event.schedule_published_on %}
-                <li role="presentation"><a href="/e/{{ event.id }}/schedule">Schedule</a></li>
+                <li><a href="/e/{{ event.id }}/schedule">Schedule</a></li>
             {% endif %}
-            <li role="presentation"><a href="#organizer">Organizer</a></li>
-            <li role="presentation"><a href="#getting-here">Getting Here</a></li>
+            <li><a href="#organizer">Organizer</a></li>
+            <li><a href="#getting-here">Getting Here</a></li>
+            {% if event.code_of_conduct and event.code_of_conduct != '' and event.code_of_conduct != ' ' %}
+                <li><a href="/e/{{ event.id }}/coc">Code of Conduct</a></li>
+            {% endif %}
         </ul>
     </div>
     <div class="carousel slide" style="margin-bottom: 0;">

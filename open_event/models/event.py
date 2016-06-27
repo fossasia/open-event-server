@@ -61,6 +61,7 @@ class Event(db.Model):
     creator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     creator = db.relationship('User')
     db.UniqueConstraint('track.name')
+    code_of_conduct = db.Column(db.String)
     schedule_published_on = db.Column(db.DateTime)
 
     def __init__(self,
@@ -86,6 +87,7 @@ class Event(db.Model):
                  topic=None,
                  ticket_url=None,
                  creator=None,
+                 code_of_conduct=None,
                  schedule_published_on=None):
         self.name = name
         self.logo = logo
@@ -109,6 +111,7 @@ class Event(db.Model):
         self.topic = topic
         self.ticket_url = ticket_url
         self.creator = creator
+        self.code_of_conduct = code_of_conduct
         self.schedule_published_on = schedule_published_on
 
     def __repr__(self):
@@ -121,7 +124,7 @@ class Event(db.Model):
         return self.name
 
     def __setattr__(self, name, value):
-        if name == 'organizer_description' or name == 'description':
+        if name == 'organizer_description' or name == 'description' or name == 'code_of_conduct':
             super(Event, self).__setattr__(name, clean_up_string(value))
         else:
             super(Event, self).__setattr__(name, value)
@@ -148,6 +151,7 @@ class Event(db.Model):
             'organizer_description': self.organizer_description,
             'privacy': self.privacy,
             'ticket_url': self.ticket_url,
+            'code_of_conduct': self.code_of_conduct,
             'schedule_published_on': self.schedule_published_on
         }
 

@@ -24,16 +24,17 @@ class TestGetListQueries(OpenEventTestCase):
         """
         send a post request to a url
         """
-        return self.app.post(
+        resp = self.app.post(
             path,
             data=json.dumps(data),
             headers={'content-type': 'application/json'}
         )
+        self.assertEqual(resp.status_code, 201)
+        return resp
 
     def test_event_queries(self):
         path = get_path()
         resp = self._post(path, POST_EVENT_DATA)
-        self.assertEqual(resp.status_code, 201)
         # check no return
         resp = self.app.get(path + '?state=r@nd0m')
         self.assertEqual(len(resp.data), 3, msg=resp.data)
@@ -54,13 +55,28 @@ class TestGetListQueries(OpenEventTestCase):
         self.assertIn('TestEvent0', resp.data)
         # add one more event of May 16
         resp = self._post(path, POST_EVENT_DATA)
-        self.assertEqual(resp.status_code, 201)
         # test
         resp = self.app.get(path + '?start_time_lt=2016-05-31T23:59:59')
         self.assertEqual(len(json.loads(resp.data)), 2, msg=resp.data)
         resp = self.app.get(path + '?end_time_gt=2016-05-01T00:00:00')
         self.assertIn('"TestEvent"', resp.data)
         self.assertNotIn('TestEvent0', resp.data)
+
+    def test_event_location_queries(self):
+        path = get_path()
+        resp = self._post(path, POST_EVENT_DATA)
+        # check location smart queries
+        resp = self.app.get(path + '?location=SomeBuilding,Berlin')
+        self.assertIn('Berlin', resp.data)
+        # add another event
+        data = POST_EVENT_DATA.copy()
+        data['location_name'] = 'SomeBuilding'
+        self._post(path, data)
+        # get
+        resp = self.app.get(path + '?location=SomeBuilding,Berlin')
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn('SomeBuilding', resp.data)
+        self.assertIn('Berlin', resp.data)
 
 
 if __name__ == '__main__':

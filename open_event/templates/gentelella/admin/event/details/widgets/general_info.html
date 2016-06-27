@@ -114,10 +114,10 @@
                                         {% if diff[0] %}
                                             <div class="row diff-row">
                                                 <div class="col-xs-6 col-sm-6 col-md-6">
-                                                    <pre>{{ diff[1] | default('', true) | safe }}</pre>
+                                                    <pre>{{ diff[1].decode('utf-8') | default('', true) | safe }}</pre>
                                                 </div>
                                                 <div class="col-xs-6 col-sm-6 col-md-6">
-                                                    <pre>{{ diff[2] | default('', true) | safe }}</pre>
+                                                    <pre>{{ diff[2].decode('utf-8') | default('', true) | safe }}</pre>
                                                 </div>
                                             </div>
                                         {% endif %}
