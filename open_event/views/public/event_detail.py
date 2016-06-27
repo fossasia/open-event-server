@@ -84,6 +84,11 @@ class EventDetailView(BaseView):
             flash(Markup("Your session proposal has been submitted. Please login/register with <strong><u>" + email + "</u></strong> to manage it."), "success")
             return redirect(url_for('admin.login_view', next=url_for('my_sessions.display_my_sessions_view')))
 
+    @expose('/<int:event_id>/coc/', methods=('GET',))
+    def display_event_coc(self, event_id):
+        event = get_published_event_or_abort(event_id)
+        return self.render('/gentelella/guest/event/code_of_conduct.html', event=event)
+
     # SLUGGED PATHS
 
     @expose('/<int:event_id>/<slug>/')

@@ -76,6 +76,7 @@ class BrowseView(BaseView):
                 results = get_paginated(__event_location=location, __event_contains=word, privacy='public', state='Published')
             elif location:
                 results = get_paginated(__event_location=location, privacy='public', state='Published')
+
             elif word:
                 results = get_paginated(__event_contains=word, privacy='public', state='Published')
 

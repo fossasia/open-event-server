@@ -15,10 +15,10 @@ class EmailNotification(db.Model):
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
 
     def __init__(self,
-                 next_event=None,
-                 new_paper=None,
-                 session_accept_reject=None,
-                 session_schedule=None,
+                 next_event=0,
+                 new_paper=0,
+                 session_accept_reject=0,
+                 session_schedule=0,
                  user_id=None,
                  event_id=None):
         self.next_event = next_event

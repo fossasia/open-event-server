@@ -1,0 +1,65 @@
+{
+    "background_url": null,
+    "closing_datetime": "2016-03-21 00:00:00",
+    "color": null,
+    "creator": {
+        "email": "super_admin@gmail.com",
+        "id": 1
+    },
+    "description": "FOSSASIA is the premier Free and Open Source technology event in Asia for developers, start-ups, and contributors. Projects at FOSSASIA range from open hardware, to design, graphics and software. FOSSASIA was established in 2009. Previous events took place in Cambodia and Vietnam.",
+    "email": "contact@fossasia.org",
+    "start_time": "2016-03-18 00:00:00",
+    "event_url": "http://2016.fossasia.org/",
+    "id": 1,
+    "latitude": 1.346,
+    "location_name": "Singapore",
+    "logo": "http://2016.fossasia.org/img/fossasia-dark.png",
+    "longitude": 103.686,
+    "name": "FOSSASIA 2016",
+    "organizer_description": "The Internet of Things for Me at Asia's Premier Open Technology Event",
+    "organizer_name": "FOSSASIA",
+    "privacy": "public",
+    "schedule_published_on": "2016-03-18 00:00:00",
+    "social_links": [
+            {
+                "id": 1,
+                "link": "https://twitter.com/fossasia",
+                "name": "Twitter"
+            },
+            {
+                "id": 2,
+                "link": "https://github.com/fossasia",
+                "name": "Github"
+            },
+            {
+                "id": 3,
+                "link": "https://www.facebook.com/fossasia",
+                "name": "Facebook"
+            },
+            {
+                "id": 4,
+                "link": "https://www.flickr.com/photos/fossasia",
+                "name": "Flickr"
+            },
+            {
+                "id": 5,
+                "link": "https://plus.google.com/108920596016838318216",
+                "name": "Google Plus"
+            },
+            {
+                "id": 6,
+                "link": "https://www.youtube.com/channel/UCQprMsG-raCIMlBudm20iLQ",
+                "name": "YouTube"
+            },
+            {
+                "id": 7,
+                "link": "https://www.linkedin.com/groups/FOSSASIA-3762811",
+                "name": "Linkedin"
+            }
+    ],
+    "end_time": "2016-03-22 00:00:00",
+    "state": "Completed",
+    "ticket_url": null,
+    "topic": "Science & Technology",
+    "type": "Conference"
+}
