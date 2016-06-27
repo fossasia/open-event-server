@@ -41,7 +41,10 @@
                             {% for notif in notifications %}
                                 <tr class="{{ '' if notif.has_read else 'success' }}">
                                     <td style="display: none;">{{ 'read' if notif.has_read else 'unread' }}</td>
-                                    <td>{{ notif.message | safe }}</td>
+                                    <td>
+                                        <h4>{{ notif.title }}</h4>
+                                        <p>{{ notif.message | safe }}</p>
+                                    </td>
                                     <td>{{ notif.received_at | humanize }}</td>
                                     <td>
                                     {% if not notif.has_read %}
