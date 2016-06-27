@@ -2,6 +2,7 @@
 from open_event.helpers.versioning import clean_up_string
 from . import db
 from open_event.helpers.date_formatter import DateFormatter
+import datetime
 
 speakers_sessions = db.Table('speakers_sessions', db.Column(
     'speaker_id', db.Integer, db.ForeignKey('speaker.id')), db.Column(
@@ -39,7 +40,7 @@ class Session(db.Model):
     event_id = db.Column(
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     state = db.Column(db.String, default="pending")
-    created_at = db.Column(db.DateTime, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
     def __init__(self,
                  title=None,
