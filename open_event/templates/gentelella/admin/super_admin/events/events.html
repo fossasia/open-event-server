@@ -8,7 +8,14 @@
 
 {% block head_css %}
     {{ super() }}
-
+    <style type="text/css">
+        #event-tabs {
+            position: absolute;
+            background: transparent;
+            top: 9px;
+            width: auto;
+        }
+    </style>
 {% endblock %}
 
 {% macro events_row(events) %}
@@ -55,7 +62,6 @@
             <li class="active"><a href="#tab_content1" id="home-tab" data-toggle="tab">All Live</a></li>
             <li class=""><a href="#tab_content2" id="profile-tab" data-toggle="tab">All Drafts</a></li>
             <li class=""><a href="#tab_content3" id="profile-tab2" data-toggle="tab">All Past</a></li>
-            <li class=""><a href="#tab_content5" id="profile-tab3" data-toggle="tab">Deleted Events</a></li>
             <li class=""><a href="#" id="all-tab" data-toggle="modal" data-target="#importModal">Import</a></li>
         </ul>
         <div id="myTabContent" class="tab-content">
@@ -129,24 +135,6 @@
                     </thead>
                     <tbody>
                     {{ events_row(past_events) }}
-                    </tbody>
-                </table>
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="tab_content5" aria-labelledby="profile-tab">
-                <table class="table table-striped no-global-dt">
-                    <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>State</th>
-                        <th>Url</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Options</th>
-
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {{ events_row(deleted_events) }}
                     </tbody>
                 </table>
             </div>
