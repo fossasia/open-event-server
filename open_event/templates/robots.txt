@@ -6,3 +6,7 @@ Disallow: /fCallback
 Disallow: /gCallback
 Disallow: /admin/
 Disallow: /events/
+
+# Allow google images access to images and other media
+User-agent: Googlebot-Image
+Allow: /serve_static/media
