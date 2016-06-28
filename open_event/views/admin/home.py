@@ -1,5 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 import logging
+import os
+from urllib2 import urlopen
 
 from flask import url_for, redirect, request, session, flash
 from flask.ext import login
@@ -8,6 +10,7 @@ from flask_admin.base import AdminIndexView
 from flask.ext.scrypt import generate_password_hash
 from wtforms import ValidationError
 
+from open_event.helpers.flask_helpers import get_real_ip, slugify
 from ...helpers.data import DataManager, save_to_db, get_google_auth, get_facebook_auth, create_user_password, \
     user_logged_in, record_activity
 from ...helpers.data_getter import DataGetter
@@ -15,7 +18,7 @@ from ...helpers.helpers import send_email_with_reset_password_hash, send_email_c
     get_serializer, get_request_stats
 from open_event.helpers.oauth import OAuth, FbOAuth
 from open_event.models.user import User
-
+import geoip2.database
 
 def intended_url():
     return request.args.get('next') or url_for('.index')
@@ -180,3 +183,16 @@ class MyHomeView(AdminIndexView):
     @expose('/forbidden/', methods=('GET',))
     def forbidden_view(self):
         return self.render('/gentelella/admin/forbidden.html')
+
+    @expose('/browse/', methods=('GET',))
+    def browse_view(self):
+        reader = geoip2.database.Reader(os.path.realpath('.') + '/static/data/GeoLite2-Country.mmdb')
+        ip = get_real_ip()
+        if ip == '127.0.0.1' or ip == '0.0.0.0':
+            ip = urlopen('http://ip.42.pl/raw').read()  # On local test environments
+        try:
+            response = reader.country(ip)
+            country = response.country.name
+        except:
+            country = "United States"
+        return redirect(url_for('search_results.browses', location=slugify(country)))
