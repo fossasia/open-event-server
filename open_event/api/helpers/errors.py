@@ -48,6 +48,15 @@ class ValidationError(BaseError):
         self.field = field
 
 
+class CustomFormError(BaseError):
+    def __init__(self, field, message='Invalid custom form field'):
+        BaseError.__init__(self)
+        self.code = 400
+        self.message = message
+        self.status = 'INVALID_CUSTOM_FORM_FIELD'
+        self.field = field
+
+
 class InvalidServiceError(BaseError):
     def __init__(self, message='Service does not belong to event'):
         BaseError.__init__(self)

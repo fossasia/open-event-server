@@ -24,6 +24,11 @@ class ValidationStatus(Raw):
     __schema_example__ = 'INVALID_FIELD'
 
 
+class InvalidCustomFormStatus(Raw):
+    __schema_type__ = 'string'
+    __schema_example__ = 'INVALID_CUSTOM_FORM_FIELD'
+
+
 class InvalidServiceStatus(Raw):
     __schema_type__ = 'string'
     __schema_example__ = 'INVALID_SERVICE'
@@ -50,6 +55,11 @@ class PermissionDeniedCode(Raw):
 
 
 class ValidationCode(Raw):
+    __schema_type__ = 'integer'
+    __schema_example__ = 400
+
+
+class InvalidCustomFormCode(Raw):
     __schema_type__ = 'integer'
     __schema_example__ = 400
 
@@ -89,6 +99,13 @@ validation_error_model = api.model('ValidationError', {
     'code': ValidationCode,
     'message': fields.String,
     'status': ValidationStatus,
+    'field': fields.String,
+})
+
+validation_error_model = api.model('ValidationError', {
+    'code': InvalidCustomFormCode,
+    'message': fields.String,
+    'status': InvalidCustomFormStatus,
     'field': fields.String,
 })
 
