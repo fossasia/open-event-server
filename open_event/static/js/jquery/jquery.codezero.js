@@ -370,11 +370,11 @@ function recreateNode(el, withChildren) {
  * An enhanced file upload button styled using css.
  */
 function superFileUploadButton() {
-    var inputs = document.querySelectorAll('.upload-btn');
+    var inputs = document.querySelectorAll('.upload-btn:not(.no-js)');
     Array.prototype.forEach.call(inputs, function (input) {
         recreateNode(input);
     });
-    inputs = document.querySelectorAll('.upload-btn');
+    inputs = document.querySelectorAll('.upload-btn:not(.no-js)');
     Array.prototype.forEach.call(inputs, function (input) {
         var label = input.nextElementSibling,
             labelVal = label.innerHTML;
