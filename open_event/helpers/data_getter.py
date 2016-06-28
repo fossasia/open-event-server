@@ -513,4 +513,8 @@ class DataGetter:
 
     @staticmethod
     def get_active_users():
-        return User.query.filter_by(in_trash=False)    
+        return User.query.filter_by(in_trash=False)
+
+    @staticmethod
+    def get_trash_sessions():
+        return Session.query.filter_by(in_trash=True)

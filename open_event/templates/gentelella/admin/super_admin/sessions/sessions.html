@@ -43,11 +43,18 @@ Events
                class="btn btn-default">
                 <i class="fa fa-pencil"></i>
             </a>
+            {% if session.in_trash == False %}
+            <a data-toggle="tooltip" data-placement="top" title="Delete"
+               href="/events/{{session.event.id}}/sessions/{{ session.id }}/trash" class="btn btn-default">
+                <i class="fa fa-trash"></i>
+            </a>
+            {% endif %}
+            {% if session.in_trash == True %}
             <a data-toggle="tooltip" data-placement="top" title="Delete"
                href="/events/{{session.event.id}}/sessions/{{ session.id }}/delete" class="btn btn-default">
                 <i class="fa fa-trash"></i>
             </a>
-
+            {% endif %}
         </div>
         {% endif %}
     </td>
@@ -64,7 +71,7 @@ Events
         <li class="active"><a href="#tab_content1" id="home-tab" data-toggle="tab">All Pending</a></li>
         <li class=""><a href="#tab_content2" id="profile-tab" data-toggle="tab">All Accepted</a></li>
         <li class=""><a href="#tab_content3" id="profile-tab2" data-toggle="tab">All Rejected</a></li>
-        <li class=""><a href="#tab_content3" id="profile-tab3" data-toggle="tab">Deleted Sessions</a></li>
+        <li class=""><a href="#tab_content5" id="profile-tab3" data-toggle="tab">All Deleted Sessions</a></li>
     </ul>
     <div id="myTabContent" class="tab-content">
         <div role="tabpanel" class="tab-pane fade" id="tab_content4"
@@ -144,7 +151,7 @@ Events
                 </tbody>
             </table>
         </div>
-        <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
+        <div role="tabpanel" class="tab-pane fade" id="tab_content5" aria-labelledby="profile-tab">
             <table class="table table-striped no-global-dt">
                 <thead>
                 <tr>
@@ -159,7 +166,7 @@ Events
                 </tr>
                 </thead>
                 <tbody>
-                {{session_rows(deleted_sessions)}}
+                {{session_rows(all_trashed)}}
                 </tbody>
             </table>
         </div>
