@@ -1,7 +1,8 @@
 """Copyright 2015 Rafal Kowalski"""
 from datetime import datetime
 
-from open_event.models.custom_forms import CustomForms
+from open_event.models.call_for_papers import CallForPaper
+from open_event.models.custom_forms import CustomForms, session_form_str, speaker_form_str
 from open_event.models.track import Track
 from open_event.models.event import Event
 from open_event.models.session import Session
@@ -18,44 +19,33 @@ class ObjectMother(object):
                      end_time=datetime(2003, 9, 4, 12, 30, 45))
 
     @staticmethod
-    def get_track():
+    def get_track(event_id=1):
         return Track(name="name",
-                     event_id=1,
+                     event_id=event_id,
                      description="description",
                      color="red")
 
     @staticmethod
-    def get_session():
+    def get_session(event_id=1):
         return Session(title='test',
                        long_abstract='dsad',
                        start_time=datetime(2003, 8, 4, 12, 30, 45),
                        end_time=datetime(2003, 8, 4, 12, 30, 45),
-                       event_id=1,
+                       event_id=event_id,
                        state='pending')
 
     @staticmethod
-    def get_microlocation():
+    def get_microlocation(event_id=1):
         return Microlocation(name="name",
                              latitude=1.0,
                              longitude=1.0,
-                             event_id=1)
+                             event_id=event_id)
     @staticmethod
-    def get_custom_form():
-        return CustomForms(event_id=1,
-                           session_form='{"title":{"include":1,"require":1},"subtitle":{"include":0,"require":0},'
-                                        '"short_abstract":{"include":1,"require":0},"long_abstract":{"include":0,'
-                                        '"require":0},"comments":{"include":1,"require":0},"track":{"include":0,'
-                                        '"require":0},"session_type":{"include":0,"require":0},"language":{"include":0,'
-                                        '"require":0},"slides":{"include":1,"require":0},"video":{"include":0,'
-                                        '"require":0},"audio":{"include":0,"require":0}}',
-                           speaker_form='{"name":{"include":1,"require":1},"email":{"include":1,"require":1},'
-                                        '"photo":{"include":1,"require":0},"organisation":{"include":1,'
-                                        '"require":0},"position":{"include":1,"require":0},"country":{"include":1,'
-                                        '"require":0},"short_biography":{"include":1,"require":0},"long_biography"'
-                                        ':{"include":0,"require":0},"mobile":{"include":0,"require":0},'
-                                        '"website":{"include":1,"require":0},"facebook":{"include":0,"require":0},'
-                                        '"twitter":{"include":1,"require":0},"github":{"include":0,"require":0},'
-                                        '"linkedin":{"include":0,"require":0}}')
+    def get_custom_form(event_id=1):
+        return CustomForms(event_id=event_id,
+                           session_form=session_form_str,
+                           speaker_form=speaker_form_str)
+
     @staticmethod
     def get_speaker():
         return Speaker( name="name",
@@ -68,3 +58,11 @@ class ObjectMother(object):
         return User(password="test",
                     email="email@gmail.com",
                     is_admin=False)
+
+    @staticmethod
+    def get_cfs(event_id=1):
+        return CallForPaper(start_date=datetime(2003, 8, 4, 12, 30, 45),
+                            end_date=datetime(2003, 9, 4, 12, 30, 45),
+                            announcement="Hello there!",
+                            event_id=event_id)
+

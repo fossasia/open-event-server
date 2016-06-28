@@ -32,6 +32,12 @@ class UserDetail(db.Model):
     def __repr__(self):
         return '<UserDetail %r>' % self.id
 
+    def __str__(self):
+        return unicode(self).encode('utf-8')
+
+    def __unicode__(self):
+        return self.fullname
+
     @property
     def serialize(self):
         """Return object data in easily serializeable format"""

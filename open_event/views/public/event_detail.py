@@ -59,7 +59,7 @@ class EventDetailView(BaseView):
         if not call_for_speakers:
             abort(404)
 
-        form_elems = DataGetter.get_custom_form_elements(event_id).first()
+        form_elems = DataGetter.get_custom_form_elements(event_id)
         speaker_form = json.loads(form_elems.speaker_form)
         session_form = json.loads(form_elems.session_form)
 
@@ -69,33 +69,25 @@ class EventDetailView(BaseView):
             state = "past"
         elif call_for_speakers.start_date > now:
             sate = "future"
-
+        speakers = DataGetter.get_speakers(event_id).all()
         return self.render('/gentelella/guest/event/cfs.html', event=event, speaker_form=speaker_form,
-                           session_form=session_form, call_for_speakers=call_for_speakers, state=state)
+                           session_form=session_form, call_for_speakers=call_for_speakers, state=state, speakers=speakers)
 
     @expose('/<int:event_id>/cfs/', methods=('POST',))
     def process_event_cfs(self, event_id):
         email = request.form['email']
-        speaker_img_file = ""
-        slide_file = ""
-        video_file = ""
-        audio_file = ""
-        if 'slides' in request.files and request.files['slides'].filename != '':
-            slide_file = request.files['slides']
-        if 'video' in request.files and request.files['video'].filename != '':
-            video_file = request.files['video']
-        if 'audio' in request.files and request.files['audio'].filename != '':
-            audio_file = request.files['audio']
-        if 'photo' in request.files and request.files['photo'].filename != '':
-            speaker_img_file = request.files['photo']
-        DataManager.add_session_to_event(request.form, event_id, speaker_img_file,
-                                         slide_file, audio_file, video_file)
+        DataManager.add_session_to_event(request, event_id)
         if login.current_user.is_authenticated:
             flash("Your session proposal has been submitted", "success")
             return redirect(url_for('my_sessions.display_my_sessions_view', event_id=event_id))
         else:
             flash(Markup("Your session proposal has been submitted. Please login/register with <strong><u>" + email + "</u></strong> to manage it."), "success")
             return redirect(url_for('admin.login_view', next=url_for('my_sessions.display_my_sessions_view')))
+
+    @expose('/<int:event_id>/coc/', methods=('GET',))
+    def display_event_coc(self, event_id):
+        event = get_published_event_or_abort(event_id)
+        return self.render('/gentelella/guest/event/code_of_conduct.html', event=event)
 
     # SLUGGED PATHS
 

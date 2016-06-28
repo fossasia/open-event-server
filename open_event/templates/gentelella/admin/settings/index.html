@@ -1,0 +1,88 @@
+{% extends 'gentelella/admin/base.html' %}
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/switchery/dist/switchery.min.css') }}" />
+{% endblock %}
+{% block head_js %}
+    {{ super() }}
+{% endblock %}
+{% block body %}
+
+{% set settings_notifications={'email': 'off'} %}
+{% for setting in settings %}
+    {% if setting.next_event==1 or setting.new_paper==1 or setting.session_schedule==1 or setting.session_accept_reject==1 %}
+        {% if settings_notifications.update({'email': 'on'}) %} {% endif %}
+    {% endif %}
+{% endfor %}
+
+<div class="page-title settings-title" style="float:left;width:20%;text-align:right; ">
+    <h3>Settings</h3>
+    <h5 class="active">Email Updates |<h5>
+</div>
+<div class="row" style="padding:1%;">
+    <div class="col-md-8 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h1 style="float:none;">Email Updates
+                </h1>
+                <button class="btn btn-default email-toggle" id="email-{{ settings_notifications.email }}" style="float:right;">Turn
+                    {% if settings_notifications.email == 'off' %} On{% else %} Off{%endif%}
+                </button>
+                <br>
+                <h4 style="margin-left:10px;" id="email-toggle-text"> Email Updates are {{settings_notifications.email}}</h4>
+
+
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <h3>Updates About Your Events</h3>
+                <div class="row" style="margin:10px;">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        {% for event in events %}
+                            <span style="font-size: 1.3em;">{{ event.name }}</span>
+                            <a href="{{ url_for('settings.edit_view', event_id=event.id) }}" style="float:right; cursor:pointer;" id="{{ event.id }}">Edit</a>
+                            <hr>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='admin/lib/switchery/dist/switchery.min.js') }}"></script>
+    <script type="text/javascript">
+        $('.email-toggle').click(function(){
+            if ($(this).attr('id').replace('email-','') == 'off') {
+                var posting = $.ajax({
+                    type: "POST",
+                    url: "{{ url_for('settings.toggle_view') }}",
+                    data: {"value": 1},
+                })
+
+                posting.done(function(result){
+                    console.log(result);
+                });
+                $(this).attr('id', 'email-on');
+                $('#email-toggle-text').html('Email Updates are on');
+                $(this).html('Turn Off');
+            } else if ($(this).attr('id').replace('email-','') == 'on') {
+                var posting = $.ajax({
+                    type: "POST",
+                    url: "{{ url_for('settings.toggle_view') }}",
+                    data: {"value": 0},
+                })
+
+                posting.done(function(result){
+                    console.log(result);
+                });
+                $(this).attr('id', 'email-off');
+                $('#email-toggle-text').html('Email Updates are off');
+                $(this).html('Turn On');
+            }
+        })
+    </script>
+{% endblock %}

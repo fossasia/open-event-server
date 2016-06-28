@@ -7,6 +7,7 @@ from flask.ext.cors import cross_origin
 from flask.ext import login
 from flask.ext.migrate import upgrade
 
+from open_event.helpers.flask_helpers import get_real_ip
 from ..models.track import Track
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
@@ -386,7 +387,7 @@ def callback():
             else:
                 login.login_user(user)
                 user_logged_in(user)
-                return redirect(url_for('admin.index'))
+                return redirect(intended_url())
         return 'did not find user info'
 
 
@@ -425,7 +426,7 @@ def facebook_callback():
             else:
                 login.login_user(user)
                 user_logged_in(user)
-                return redirect(url_for('admin.index'))
+                return redirect(intended_url())
         return 'did not find user info'
 
 
@@ -460,21 +461,24 @@ def documentation():
 @app.route('/api/location/', methods=('GET', 'POST'))
 def location():
     reader = geoip2.database.Reader(os.path.realpath('.') + '/static/data/GeoLite2-Country.mmdb')
-    ip = request.remote_addr
+    ip = get_real_ip()
     if ip == '127.0.0.1' or ip == '0.0.0.0':
-        ip = urlopen('http://ip.42.pl/raw').read()
+        ip = urlopen('http://ip.42.pl/raw').read()  # On local test environments
     try:
         response = reader.country(ip)
         return jsonify({
             'status': 'ok',
             'name': response.country.name,
-            'code': response.country.iso_code
+            'code': response.country.iso_code,
+            'ip': ip
         })
     except:
         return jsonify({
             'status': 'ok',
+            'silent_error': 'look_up_failed',
             'name': 'United States',
-            'code': 'US'
+            'code': 'US',
+            'ip': ip
         })
 
 @app.route('/migrate/', methods=('GET', 'POST'))
@@ -484,3 +488,6 @@ def run_migrations():
     except:
         print "Migrations have been run"
     return jsonify({'status': 'ok'})
+
+def intended_url():
+    return request.args.get('next') or url_for('admin.index')

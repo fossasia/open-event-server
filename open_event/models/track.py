@@ -7,7 +7,7 @@ class Track(db.Model):
     __tablename__ = 'tracks'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
-    description = db.Column(db.Text, nullable=False)
+    description = db.Column(db.Text)
     track_image_url = db.Column(db.Text)
     color = db.Column(db.String, nullable=False)
     location = db.Column(db.String)

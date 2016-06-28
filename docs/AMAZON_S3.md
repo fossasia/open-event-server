@@ -71,6 +71,11 @@ This makes S3 easy and flexible for data storage.
             "Effect": "Allow",
             "Action": "*",
             "Resource": "arn:aws:s3:::opevbucketname/*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "s3:ListAllMyBuckets",
+            "Resource": "arn:aws:s3:::*"
         }
     ]
 }

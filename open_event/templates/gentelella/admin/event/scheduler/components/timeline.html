@@ -1,5 +1,7 @@
 
 <div class="timeline" id="timeline" data-event-id="{{ event.id }}"
+     data-event-start="{{ event.start_time }}"
+     data-event-end="{{ event.end_time }}"
      style="margin-top: 10px; margin-left: 10px; width: 100%; overflow-x: hidden;">
     <table class="timeline-table table" style="width: 100%">
         <tbody>
@@ -18,5 +20,5 @@
     </table>
 </div>
 <div style="float: right; margin-top: 10px;">
-    All the timings are in UTC
+    All the timings are in {{ event.timezone | default('UTC', true) }}
 </div>

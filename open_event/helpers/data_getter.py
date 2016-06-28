@@ -1,15 +1,24 @@
 """Copyright 2015 Rafal Kowalski"""
+import pytz
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from open_event.models.role import Role
 from ..models.event import Event, EventsUsers
 from ..models.session import Session
+# User Notifications
+from ..models.notifications import Notification
 from ..models.track import Track
 from ..models.invite import Invite
 from ..models.speaker import Speaker
+from ..models.setting import Setting
+from ..models.email_notifications import EmailNotification
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
 from ..models.users_events_roles import UsersEventsRoles
+from ..models.role import Role
+from ..models.role_invite import RoleInvite
+from ..models.service import Service
+from ..models.permission import Permission
 from ..models.user import User
 from ..models.file import File
 from ..models.session_type import SessionType
@@ -17,15 +26,25 @@ from ..models.social_link import SocialLink
 from ..models.call_for_papers import CallForPaper
 from ..models.custom_forms import CustomForms
 from ..models.mail import Mail
+from ..models.activity import Activity
+from ..models.setting import Setting
 from .language_list import LANGUAGE_LIST
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
-from flask import flash
+from flask import flash, current_app
 import datetime
-from sqlalchemy import desc
+from sqlalchemy import desc, asc
 
 
 class DataGetter:
+    @staticmethod
+    def get_all_user_notifications(user):
+        return Notification.query.filter_by(user=user).all()
+
+    @staticmethod
+    def get_user_notification(notification_id):
+        return Notification.query.filter_by(id=notification_id).first()
+
     @staticmethod
     def get_invite_by_user_id(user_id):
         invite = Invite.query.filter_by(user_id=user_id)
@@ -50,10 +69,39 @@ class DataGetter:
         return UsersEventsRoles.query.filter_by(user_id=user_id)
 
     @staticmethod
+    def get_roles():
+        return Role.query.all()
+
+    @staticmethod
+    def get_role_by_name(role_name):
+        return Role.query.filter_by(name=role_name).first()
+
+    @staticmethod
+    def get_services():
+        return Service.query.all()
+
+    @staticmethod
+    def get_permission_by_role_service(role, service):
+        return Permission.query.filter_by(role=role, service=service).first()
+
+    @staticmethod
+    def get_event_role_invite(event_id, hash, **kwargs):
+        return RoleInvite.query.filter_by(event_id=event_id,
+                                          hash=hash, **kwargs).first()
+
+    @staticmethod
     def get_all_owner_events():
         """Method return all owner events"""
         # return Event.query.filter_by(owner=owner_id)
         return login.current_user.events_assocs
+
+    @staticmethod
+    def get_email_notification_settings(user_id):
+        return EmailNotification.query.filter_by(user_id=user_id)
+
+    @staticmethod
+    def get_email_notification_settings_by_event_id(user_id, event_id):
+        return EmailNotification.query.filter_by(user_id=user_id).filter_by(event_id=event_id).first()
 
     @staticmethod
     def get_sessions_by_event_id(event_id):
@@ -108,7 +156,7 @@ class DataGetter:
         """
         return CustomForms.query.filter_by(
             event_id=event_id
-        )
+        ).first()
 
     @staticmethod
     def get_sessions_of_user_by_id(session_id, user=login.current_user):
@@ -151,7 +199,7 @@ class DataGetter:
         :param event_id: Event id
         :return: Speaker objects filter by event_id
         """
-        return Speaker.query.filter_by(event_id=event_id)
+        return Speaker.query.filter_by(event_id=event_id).order_by(asc(Speaker.name))
 
     @staticmethod
     def get_speaker_columns():
@@ -446,3 +494,25 @@ class DataGetter:
         """
         mails = Mail.query.order_by(desc(Mail.time)).all()
         return mails[:count]
+
+    @staticmethod
+    def get_all_timezones():
+        """
+        Get all available timezones
+        :return:
+        """
+        return [(item, "(UTC" + datetime.datetime.now(pytz.timezone(item)).strftime('%z') + ") " + item) for item
+                in
+                pytz.common_timezones]
+
+    @staticmethod
+    def get_sponsor(sponsor_id):
+        return Sponsor.query.get(sponsor_id)
+
+    @staticmethod
+    def get_all_activities(count=300):
+        """
+        Get all activities by recent first
+        """
+        activities = Activity.query.order_by(desc(Activity.time)).all()
+        return activities[:count]

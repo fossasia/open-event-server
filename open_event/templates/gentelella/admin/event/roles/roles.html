@@ -7,7 +7,7 @@ Manage Roles
 {% block panel_content %}
 <div class="col-md-12">
     <h4>Permissions List</h4>
-    <table class="role-table table table-striped">
+    <table class="role-table table table-striped table-responsive">
         <thead>
         <tr>
             <th>User Email</th>
@@ -51,10 +51,10 @@ Manage Roles
                 <form action="/events/{{event.id}}/roles/new/" method="POST" role="form">
                     <p>
                         <label>User email:</label>
-                        <input name="user_email" placeholder="User" class="form-control">
+                        <input name="user_email" type="email" placeholder="User" class="form-control" required>
                     </p>
                     <p> <label>Permissions:</label>
-                        <select name="user_role" id="heard" class="form-control" required="">
+                        <select name="user_role" id="heard" class="form-control" required>
                             <option value="">Choose..</option>
                             <option value="track_organizer">Track Organizer</option>
                             <option value="coorganizer">Co-Organizer</option>

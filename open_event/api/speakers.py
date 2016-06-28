@@ -2,10 +2,13 @@ from flask.ext.restplus import Resource, Namespace
 
 from open_event.models.speaker import Speaker as SpeakerModel
 
-from .helpers.helpers import get_paginated_list, requires_auth
-from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
+from .helpers.helpers import get_paginated_list, requires_auth, \
+    model_custom_form
+from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO,\
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
 from .helpers import custom_fields as fields
+from open_event.helpers.data_getter import DataGetter
+
 
 api = Namespace('speakers', description='Speakers', path='/')
 
@@ -44,7 +47,19 @@ del SPEAKER_POST['sessions']  # don't allow adding sessions
 
 # Create DAO
 class SpeakerDAO(ServiceDAO):
-    pass
+    def create(self, event_id, data, url):
+        data = self.validate(data, event_id)
+        return ServiceDAO.create(self, event_id, data, url, validate=False)
+
+    def update(self, event_id, service_id, data):
+        data = self.validate(data, event_id)
+        return ServiceDAO.update(self, event_id, service_id, data, validate=False)
+
+    def validate(self, data, event_id, model=None):
+        form = DataGetter.get_custom_form_elements(event_id)
+        if form:
+            model = model_custom_form(form.speaker_form, self.post_api_model)
+        return ServiceDAO.validate(self, data, model)
 
 DAO = SpeakerDAO(SpeakerModel, SPEAKER_POST)
 

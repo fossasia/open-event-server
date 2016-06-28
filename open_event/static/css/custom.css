@@ -155,6 +155,9 @@
   margin-bottom: 10px;
   float: left;
 }
+.settings-title h5.active{
+  color:blue;
+}
 .main_menu span.fa {
   float: right;
   text-align: center;
@@ -163,6 +166,61 @@
   min-width: inherit;
   color: #C4CFDA;
 }
+
+.search_bar {
+  width:200px
+}
+
+.hide-small {
+  display:block !important;
+}
+.hide-large {
+  display: none !important;
+}
+
+@media (max-width: 640px) {
+  .search_bar {
+    width:auto;
+    max-width: 5%;
+  }
+  .navbar-nav > li {
+    float:left;
+  }
+  .navbar-nav {
+    float:left;
+  }
+  .hide-small {
+    display:none !important;
+  }
+  .hide-large {
+    display: block !important;
+  }
+  .search_bar #search-text {
+    display: none;
+    position: absolute;
+    margin: 50px -160px;
+  }
+  .search-button {
+    border-radius:3px !important;
+  }
+}
+
+@media (max-width: 980px) and (min-width: 640px) {
+  .search_bar {
+    width:45%;
+  }
+  .navbar-nav > li {
+    float:left;
+  }
+  .navbar-nav {
+    float:left;
+    max-width: 55%;
+  }
+  .search_bar #search-text {
+    display: block;
+  }
+}
+
 .active a span.fa {
   text-align: right !important;
   margin-right: 4px;
@@ -250,6 +308,31 @@ body .container.body .right_col {
 }
 .left_col .mCSB_dragger {
   max-height: 400px !important;
+}
+
+.table-responsive {
+  width:100%;
+}
+
+@media (max-width: 768px) {
+  .btn-responsive {
+    font-size:80%;
+    line-height: 1;
+    border-radius:3px;
+  }
+  .pull-right {
+    float: left!important;
+  }
+  .btn-group {
+    margin-bottom: 10px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 992px) {
+  .btn-responsive {
+    font-size:90%;
+    line-height: 1.2;
+  }
 }
 /**  ------------------------------------------  **/
 
@@ -464,7 +547,6 @@ a:hover, a:focus {
 }
 .top_nav .navbar-right {
   margin: 0;
-  width: 70%;
   float: right;
 }
 .top_nav .navbar-right li {

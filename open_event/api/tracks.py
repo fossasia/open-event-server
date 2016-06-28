@@ -17,7 +17,7 @@ TRACK_SESSION = api.model('TrackSession', {
 TRACK = api.model('Track', {
     'id': fields.Integer(required=True),
     'name': fields.String(required=True),
-    'description': fields.String(required=True),
+    'description': fields.String(),
     'color': fields.Color(required=True),
     'track_image_url': fields.ImageUri(),
     'location': fields.String(),

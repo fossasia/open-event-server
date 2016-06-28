@@ -130,7 +130,7 @@ class TestGetApiPaginatedEvents(OpenEventTestCase):
     def test_api_filters(self):
         with app.test_request_context():
             create_event()
-        path = get_path('page') + '?location_name=r@nd0m'
+        path = get_path('page') + '?location=r@nd0m'
         resp = self.app.get(path)
         self.assertEqual(resp.status_code, 404)
 

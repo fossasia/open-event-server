@@ -14,7 +14,7 @@ Users
 {% block content %}
 
 
-<table class="table table-striped">
+<table class="table table-striped with-datatable">
     <thead>
     <tr>
         <th>Name</th>
@@ -54,13 +54,20 @@ Users
         <td>{{ user['user'].created_date|humanize }}</td>
         <td>{{ user['user'].last_access_time|humanize }}</td>
         <td>
-            <a href="{{ get_url('sadmin_users.details_view', user_id=user['user'].id)}}" title="Edit record">
-            <span class="glyphicon glyphicon-pencil"></span>
-        </a>
-        <a onclick="return confirm('Are you sure you want to delete this record?');"
-           href="{{ get_url('sadmin_users.delete_view', user_id=user['user'].id)}}" title="Delete record">
-            <span class="glyphicon glyphicon-trash"></span>
-        </a>
+        <div class="btn-group btn-group-sm">
+            {% if not user['user'].is_super_admin %}
+            <a class="btn btn-default" href='#' data-toggle="modal" data-target="#importModal" title="Edit role" data-user-id="{{user['user'].id}}">
+                <i class="glyphicon glyphicon-pencil"></i>
+            </a>
+            {% endif %}
+            <a data-toggle="tooltip" data-placement="top" class="btn btn-default" href="{{ get_url('sadmin_users.details_view', user_id=user['user'].id)}}" title="View details">
+                <i class="glyphicon glyphicon-eye-open"></i>
+            </a>
+            <a data-toggle="tooltip" data-placement="top" class="btn btn-default" onclick="return confirm('Are you sure you want to delete this record?');"
+               href="{{ get_url('sadmin_users.delete_view', user_id=user['user'].id)}}" title="Delete record">
+                <i class="glyphicon glyphicon-trash"></i>
+            </a>
+        </div>
 
 
         </td>
@@ -68,12 +75,43 @@ Users
     {%endfor%}
     </tbody>
 </table>
-
+          <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Change Role</h4>
+      </div>
+      <div class="modal-body">
+        <h5>Provide Admin Access ?</h5><br>
+        <form id="give-admin-access" method="post" >
+            <!-- <label class="btn btn-default btn-file"> -->
+            {% if user.is_admin %}
+                <input type="radio" checked name="admin_perm" value="isAdmin">Yes
+                <input type="radio" name="admin_perm" value="isNotAdmin">No
+            {% endif %}
+            {% if not user.is_admin %}
+                <input type="radio" name="admin_perm" value="isAdmin">Yes
+                <input type="radio" checked name="admin_perm" value="isNotAdmin">No
+            {% endif %}
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Done</button>
+      </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock %}
 
 {% block tail_js %}
 {{ super() }}
-
+<script type="text/javascript">
+        $(document).on('click', 'a[data-target="#importModal"]',function(){
+            var userId = $(this).data('user-id');
+            $("#importModal").find("form").attr("action","/admin/users/" + userId + "/edit/");
+        });
+    </script>
 {% endblock %}
 

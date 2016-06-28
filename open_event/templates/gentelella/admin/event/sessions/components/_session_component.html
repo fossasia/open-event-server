@@ -1,0 +1,38 @@
+{% set textarea_session_fields = ['short_abstract', 'long_abstract', 'comments'] %}
+{% set media_session_fields = ['slides', 'video', 'audio'] %}
+
+{% set session_fields = ['title', 'subtitle', 'short_abstract', 'long_abstract', 'comments', 'track', 'session_type', 'language', 'slides', 'video', 'audio'] %}
+
+{% macro session_form_field(identifier, require=0) %}
+    {% set name = identifier | replace('_id','') %}
+    {% set pretty_name = name | replace('_',' ') | capitalize %}
+    <div class="item form-group speaker-fields">
+        <label class="control-label">
+            {{ pretty_name }}
+            {% if require==1 %}
+                <span class="required">*</span>
+            {% endif %}
+        </label>
+        {% if identifier in textarea_session_fields %}
+            <textarea {% if require==1 %}
+                required="required"
+            {% endif %}
+                name="{{ identifier }}" class="form-control col-md-7 col-xs-12">{{ session[identifier] | default('', true) }}</textarea>
+        {% elif identifier in media_session_fields %}
+            <br><input {% if require==1 %}
+            required="required"
+        {% endif %}
+            type="file" id="speaker-file-{{ identifier | default(1) }}" name="{{ identifier }}"
+            class="upload-btn"/>
+            <label class="file-label" for="speaker-file-{{ identifier | default(1) }}">
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                Choose a file</label>
+        {% else %}
+            <input {% if require==1 %}
+                required="required"
+            {% endif %}
+                name="{{ identifier }}" class="form-control col-md-7 col-xs-12"
+                value="{{ session[identifier] | default('', true) }}" />
+        {% endif %}
+    </div>
+{% endmacro %}

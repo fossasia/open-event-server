@@ -3,105 +3,164 @@
 
 {% block head_css %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/jt.timepicker/jquery.timepicker.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/switchery/dist/switchery.min.css') }}" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}" />
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/switchery/dist/switchery.min.css') }}"/>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='admin/lib/selectize/dist/css/selectize.bootstrap3.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
 {% endblock %}
 {% block head_js %}
     {{ super() }}
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
 {% endblock %}
 
+
+{% macro button_bar(show_prev=true, show_next=true) %}
+    <div class="clearfix"></div>
+    <div class="btn-toolbar pull-right" style="margin-top: 25px;">
+        <div class="btn-group btn-group-lg">
+            {% if show_prev %}
+                <button type="button" class="btn btn-default prev-step"><i class="fa fa-chevron-left"></i> Previous
+                </button>
+            {% endif %}
+            {% if show_next %}
+                <button type="button" class="btn btn-default next-step">Next <i class="fa fa-chevron-right"></i>
+                </button>
+            {% endif %}
+
+        </div>
+        <button type="button" class="btn btn-lg btn-default save-event">Save</button>
+        {% if event and event.state == 'Published' and not is_copy %}
+            <button type="button" class="btn btn-lg btn-danger publish-unpublish-event">Unpublish event</button>
+        {% else %}
+            <button type="button" class="btn btn-lg btn-success publish-unpublish-event">Make your event live</button>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% set step = step if step else '' %}
+
 {% block body %}
     <div class="page-title">
-    <div class="title_left">
-        <h3>{{ self.title() }}</h3>
+        <div class="title_left">
+            <h3>{{ self.title() }}</h3>
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="x_panel">
-            <div class="row">
-                <form enctype="multipart/form-data" action="{% if event and not is_copy %}/events/{{ event.id }}/edit/{% else %}/events/create/{% endif %}" method="POST" role="form"
-                      class="admin-form form-horizontal" id="event-wizard-form">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="wizard" id="wizard" data-state="{{ event.state | default('', true) }}"
+                     data-id="{{ event.id | default('', true) }}">
+                    <div class="wizard-inner">
+                        <div class="connecting-line"></div>
+                        <ul class="nav nav-tabs">
+                            <li {% if step == '' %}class="active"{% endif %}>
+                                <a href="#step1" data-toggle="tab" title="Basic Details" data-href="./">
+                                    <span class="round-tab">
+                                        <i class="fa fa-info"></i>
+                                    </span>
+                                </a>
+                                <span class="description hidden-xs">Basic Details</span>
+                            </li>
 
-                    {% if csrf_token %}
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                    {% endif %}
-                    <div id="wizard" data-state='{% if event %}{{ event.state }}{% endif %}' data-id='{% if event %}{{ event.id }}{% endif %}' class="form_wizard wizard_horizontal">
-                        <ul class="wizard_steps anchor">
-                            <li>
-                                <a href="#step-1" class="selected" isdone="1" rel="1">
-                                    <span class="step_no">1</span>
-                                    <span class="step_descr">
-                                        Basic Details <br>
+                            <li {% if step == 'sponsors' %}class="active"{% endif %}>
+                                <a href="#step2" data-toggle="tab" title="Sponsors" data-href="./sponsors">
+                                    <span class="round-tab">
+                                        <i class="fa fa-usd"></i>
                                     </span>
                                 </a>
+                                <span class="description hidden-xs">Sponsors</span>
                             </li>
-                            <li>
-                                <a href="#step-2" class="disabled" isdone="0" rel="2">
-                                    <span class="step_no">2</span>
-                                    <span class="step_descr">
-                                        Sponsors<br>
+                            <li {% if step == 'sessions-tracks-rooms' %}class="active"{% endif %}>
+                                <a href="#step3" data-toggle="tab" title="Session, Tracks, Rooms"
+                                   data-href="./sessions-tracks-rooms">
+                                    <span class="round-tab">
+                                        <i class="fa fa-list-ol"></i>
                                     </span>
                                 </a>
+                                <span class="description hidden-xs">Session, Tracks, Rooms</span>
                             </li>
-                            <li>
-                                <a href="#step-3" class="disabled" isdone="0" rel="3">
-                                    <span class="step_no">3</span>
-                                    <span class="step_descr">
-                                        Sessions, Tracks, Rooms<br>
+
+                            <li {% if step == 'call-for-speakers' %}class="active"{% endif %}>
+                                <a href="#step4" data-toggle="tab" title="Call for Speakers"
+                                   data-href="./call-for-speakers">
+                                    <span class="round-tab">
+                                        <i class="fa fa-bullhorn"></i>
                                     </span>
                                 </a>
+                                <span class="description hidden-xs">Call for Speakers</span>
                             </li>
-                            <li>
-                                <a href="#step-4" class="disabled" isdone="0" rel="4">
-                                    <span class="step_no">4</span>
-                                    <span class="step_descr">
-                                        Call for Speakers<br>
+                            <li {% if step == 'form-customization' %}class="active"{% endif %}>
+                                <a href="#step5" data-toggle="tab" title="Create session forms"
+                                   data-href="./form-customization">
+                                    <span class="round-tab">
+                                        <i class="fa fa-check-square-o"></i>
                                     </span>
                                 </a>
+                                <span class="description hidden-xs">Create session forms</span>
                             </li>
-                            <li>
-                                <a href="#step-5" class="disabled" isdone="0" rel="5">
-                                    <span class="step_no">5</span>
-                                    <span class="step_descr">
-                                        Create Session Forms<br>
-                                    </span>
-                                </a>
-                            </li>
+
                         </ul>
-
-                            {% include 'gentelella/admin/event/wizard/step-1.html' %}
-                            {% include 'gentelella/admin/event/wizard/step-2.html' %}
-                            {% include 'gentelella/admin/event/wizard/step-3.html' %}
-                            {% include 'gentelella/admin/event/wizard/step-4.html' %}
-                            {% include 'gentelella/admin/event/wizard/step-5.html' %}
-
                     </div>
-                </form>
+
+                    <form enctype="multipart/form-data"
+                          action="{% if event and not is_copy %}/events/{{ event.id }}/edit/{% else %}/events/create/{% endif %}"
+                          method="POST" role="form"
+                          class="admin-form form-horizontal" id="event-wizard-form">
+                        {% if csrf_token %}
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        {% endif %}
+
+                        <div class="tab-content">
+                            <div class="tab-pane fade {% if step == '' %}in active{% endif %}" id="step1">
+                                {% include 'gentelella/admin/event/wizard/step-1.html' %}
+                                {{ button_bar(show_prev=false) }}
+                            </div>
+                            <div class="tab-pane fade {% if step == 'sponsors' %}in active{% endif %}" id="step2">
+                                {% include 'gentelella/admin/event/wizard/step-2.html' %}
+                                {{ button_bar() }}
+                            </div>
+                            <div class="tab-pane fade {% if step == 'sessions-tracks-rooms' %}in active{% endif %}"
+                                 id="step3">
+                                {% include 'gentelella/admin/event/wizard/step-3.html' %}
+                                {{ button_bar() }}
+                            </div>
+                            <div class="tab-pane fade {% if step == 'call-for-speakers' %}in active{% endif %}"
+                                 id="step4">
+                                {% include 'gentelella/admin/event/wizard/step-4.html' %}
+                                {{ button_bar() }}
+                            </div>
+                            <div class="tab-pane fade {% if step == 'form-customization' %}in active{% endif %}"
+                                 id="step5">
+                                {% include 'gentelella/admin/event/wizard/step-5.html' %}
+                                {{ button_bar(show_next=false) }}
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
 {% endblock %}
 {% block tail_js %}
     {{ super() }}
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHdXg0Y_zk-wCNpslbBqcezLdHniaEwkI&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHdXg0Y_zk-wCNpslbBqcezLdHniaEwkI&callback=initPlacesApi&libraries=places"
+            async defer></script>
 
-    <script src="{{ url_for('static', filename='admin/lib/jQuery-Smart-Wizard/js/jquery.smartWizard.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/jt.timepicker/jquery.timepicker.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/datepair.js/dist/datepair.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/datepair.js/dist/jquery.datepair.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='admin/lib/switchery/dist/switchery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/bootstrap-validator/dist/validator.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js') }}"></script>
-
-    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/new.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/selectize/dist/js/standalone/selectize.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/event_wizard.js') }}"></script>
 {% endblock %}
