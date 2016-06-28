@@ -50,7 +50,10 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**topic** | string | Optional | Public |
 |**ticket_url** | string | Optional | Public |
 |**closing_datetime** | string | Optional | Public |
+|**schedule\_published\_on** | string | Optional | Public |
 |**creator** | **EventCreator** | Required | Public |
+|**social_links** | **EventSocial** | Optional | Public |
+
 
 #### EventCreator
 
@@ -58,6 +61,14 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 | --- | --- | --- |
 |**id** | integer | Required |
 |**email** | string | Required |
+
+#### EventSocial
+
+| Field | Datatype | Requirement |
+| --- | --- | --- |
+|**id** | integer | Required |
+|**name** | string | Required |
+|**link** | string | Required |
 
 
 ### 2. Microlocation
@@ -178,7 +189,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 | --- | --- | --- | --- |
 |**id** | integer | Required | Public |
 |**name** | string | Required | Public |
-|**description** | string | Required | Public |
+|**description** | string | Optional | Public |
 |**color** | string | Required | Public |
 |**track_image_url** | string | Optional | Public |
 |**location** | string | Optional | Public |

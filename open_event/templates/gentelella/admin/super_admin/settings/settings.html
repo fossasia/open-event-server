@@ -1,0 +1,104 @@
+{% extends 'gentelella/admin/super_admin/dashboard.html' %}
+
+{% block title %}
+    Settings
+{% endblock %}
+
+{% set active_page = "settings" %}
+
+{% block head_css %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block content %}
+
+<form method="post" class="form-horizontal form-label-left">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <h4>Google Tokens</h4>
+            See <a href="https://auth0.com/docs/connections/social/google">here</a> on how to obtain these tokens.<br><br>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">Client ID</label>
+                <div class=" col-md-9 col-xs-12">
+                    <input name="google_client_id" class="form-control" value="{{ settings.google_client_id|default('', True) }}" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">Client secret</label>
+                <div class=" col-md-9 col-xs-12">
+                    <input name="google_client_secret" class="form-control" value="{{ settings.google_client_secret|default('', True) }}" >
+                </div>
+            </div>
+            <br>
+            <h4>Facebook Tokens</h4>
+            See <a href="https://developers.facebook.com/docs/apps/register">here</a> on how to obtain these tokens.<br><br>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">Client ID</label>
+                <div class=" col-md-9 col-xs-12">
+                    <input name="fb_client_id" class="form-control col-md-6 col-xs-6" value="{{ settings.fb_client_id|default('', True) }}" >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">Client secret</label>
+                <div class=" col-md-9 col-xs-12">
+                    <input name="fb_client_secret" class="form-control col-md-6 col-xs-6" value="{{ settings.fb_client_secret|default('', True) }}">
+                </div>
+            </div>
+            <br>
+            <h4>Amazon S3 Credentials</h4>
+            See <a href="http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/AWSCredentials.html">here</a> on how to obtains these keys.<br>
+            Files will be stored on running server in case these tokens are not provided. <br><br>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">Bucket name</label>
+                <div class=" col-md-9 col-xs-12">
+                    <input name="aws_bucket_name" class="form-control col-md-6 col-xs-6" value="{{ settings.aws_bucket_name|default('', True) }}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">Key</label>
+                <div class=" col-md-9 col-xs-12">
+                    <input name="aws_key" class="form-control col-md-6 col-xs-6" value="{{ settings.aws_key|default('', True) }}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">Secret</label>
+                <div class=" col-md-9 col-xs-12">
+                    <input name="aws_secret" class="form-control col-md-6 col-xs-6" value="{{ settings.aws_secret|default('', True) }}">
+                </div>
+            </div>
+            <br>
+            <h4>Sendgrid Token</h4>
+            See <a href="https://sendgrid.com/docs/User_Guide/Settings/api_keys.html">here</a> on how to get this token.<br><br>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">Token</label>
+                <div class=" col-md-9 col-xs-12">
+                    <input name="sendgrid_key" class="form-control col-md-6 col-xs-6" value="{{ settings.sendgrid_key|default('', True) }}" >
+                </div>
+            </div>
+            <br>
+            <h4>App secret key</h4>
+            Secret key for the application. Recommended is a random string minimum 20 characters in length.<br><br>
+            <div class="item form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">Secret</label>
+                <div class=" col-md-9 col-xs-12">
+                    <input name="secret" class="form-control col-md-6 col-xs-6" value="{{ settings.secret|default('', True) }}">
+                </div>
+            </div>
+            <br>
+            <div class="ln_solid"></div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">Save</button>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+
+{% endblock %}

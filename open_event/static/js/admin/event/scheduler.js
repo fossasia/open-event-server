@@ -3,6 +3,21 @@
  */
 
 /**
+ *
+ * The Scheduler UI.
+ * ================
+ *
+ * The scheduler supports two modes:
+ * 1. Editable mode - The user can drag-drop and resize sessions
+ * 2. Readonly mode - The sessions are displayed on the timeline, but cannot be edited.
+ *
+ * The Editable mode is turned on by default. To switch to Readonly mode, set the variable
+ *      window.scheduler_readonly = true;
+ * Before including this file.
+ *
+ */
+
+/**
  *  TIME CONFIGURATION & MANIPULATION
  *  =================================
  *
@@ -27,7 +42,28 @@ var time = {
     format: "YYYY-MM-DD HH:mm:ss"
 };
 
+window.dayLevelTime = {
+    start: {
+        hours: parseInt(time.start.hours),
+        minutes: parseInt(time.start.minutes)
+    },
+    end: {
+        hours: parseInt(time.end.hours),
+        minutes: parseInt(time.end.minutes)
+    }
+};
 
+//noinspection JSValidateTypes
+/**
+ * @type {{id: number, start_time: moment.Moment, end_time: moment.Moment}}
+ */
+window.mainEvent = {};
+
+
+/**
+ * Whether the scheduler is to be run in readonly mode or not.
+ * @returns {boolean}
+ */
 function isReadOnly() {
     return !(_.isUndefined(window.scheduler_readonly) || _.isNull(window.scheduler_readonly) || window.scheduler_readonly !== true)
 }
@@ -72,7 +108,6 @@ var days = [];
 var sessionsStore = [];
 var microlocationsStore = [];
 var unscheduledStore = [];
-var eventId;
 
 /**
  * jQuery OBJECT REFERENCES
@@ -377,7 +412,7 @@ function isSessionOverTimeline($sessionElement) {
  * @param {jQuery} $sessionElement the target session element
  */
 function updateSessionTimeOnTooltip($sessionElement) {
-    var topTime = moment.utc({hour: time.start.hours, minute: time.start.minutes});
+    var topTime = moment.utc({hour: dayLevelTime.start.hours, minute: dayLevelTime.start.minutes});
     var mins = pixelsToMinutes($sessionElement.outerHeight(false));
     var topInterval = pixelsToMinutes($sessionElement.data("temp-top"), true);
 
@@ -401,7 +436,7 @@ function updateSessionTime($sessionElement, session) {
         session = $sessionElement.data("session");
         saveSession = true;
     }
-    var topTime = moment.utc({hour: time.start.hours, minute: time.start.minutes});
+    var topTime = moment.utc({hour: dayLevelTime.start.hours, minute: dayLevelTime.start.minutes});
     var mins = pixelsToMinutes($sessionElement.outerHeight(false));
     var topInterval = pixelsToMinutes($sessionElement.data("temp-top"), true);
 
@@ -439,9 +474,10 @@ function addMicrolocationToTimeline(microlocation) {
  * Generate timeunits for the timeline
  */
 function generateTimeUnits() {
-    var start = moment.utc().hour(time.start.hours).minute(time.start.minutes).second(0);
-    var end = moment.utc().hour(time.end.hours).minute(time.end.minutes).second(0);
+    var start = moment.utc().hour(window.dayLevelTime.start.hours).minute(window.dayLevelTime.start.minutes).second(0);
+    var end = moment.utc().hour(window.dayLevelTime.end.hours).minute(window.dayLevelTime.end.minutes).second(0);
     var $timeUnitsHolder = $(".timeunits");
+    $timeUnitsHolder.html('<div class="timeunit"></div>');
     var timeUnitsCount = 1;
     while (start <= end) {
         var timeUnitDiv = $("<div class='timeunit'>" + start.format('HH:mm') + "</div>");
@@ -616,14 +652,21 @@ function initializeInteractables() {
  */
 function processMicrolocationSession(microlocations, sessions, callback) {
 
-    var topTime = moment.utc({hour: time.start.hours, minute: time.start.minutes});
     _.each(sessions, function (session) {
         if (session.state === 'accepted') {
+
+
             session = _.cloneDeep(session);
 
             var startTime = moment.utc(session.start_time);
             var endTime = moment.utc(session.end_time);
 
+            if (startTime.isSame(mainEvent.start_time, "day")) {
+                window.dayLevelTime.start.hours = mainEvent.start_time.hours();
+                window.dayLevelTime.start.minutes = mainEvent.start_time.minutes();
+            }
+
+            var topTime = moment.utc({hour: dayLevelTime.start.hours, minute: dayLevelTime.start.minutes});
 
             var duration = moment.duration(endTime.diff(startTime));
 
@@ -685,6 +728,18 @@ function loadDateButtons() {
  * @param {string} day
  */
 function loadMicrolocationsToTimeline(day) {
+
+    var parsedDay = moment.utc(day, "Do MMMM YYYY");
+    if (parsedDay.isSame(mainEvent.start_time, "day")) {
+        window.dayLevelTime.start.hours = mainEvent.start_time.hours();
+        window.dayLevelTime.start.minutes = mainEvent.start_time.minutes();
+    }
+    if (parsedDay.isSame(mainEvent.end_time, "day")) {
+        window.dayLevelTime.end.hours = mainEvent.end_time.hours();
+        window.dayLevelTime.end.minutes = mainEvent.end_time.minutes();
+    }
+
+    generateTimeUnits();
 
     var dayIndex = _.indexOf(days, day);
 
@@ -798,13 +853,13 @@ $addMicrolocationForm.submit(function (event) {
         "floor": parseInt($addMicrolocationForm.find("input[name=floor]").val())
     };
 
-    api.microlocations.post_microlocation_list({event_id: eventId, payload: payload}, function (success) {
+    api.microlocations.post_microlocation_list({event_id: mainEvent.id, payload: payload}, function (success) {
         addMicrolocationToTimeline(success.obj);
         $addMicrolocationForm.find(".modal").modal("hide");
         $addMicrolocationForm.find("input, textarea").val("");
         createSnackbar("Microlocation has been created successfully.");
     }, function (error) {
-        console.log('failed with the following: ' + error.statusText);
+        logError('failed with the following: ' + error.statusText, error);
         createSnackbar("An error occurred while creating microlocation.", "Try Again", function () {
             $addMicrolocationForm.trigger("submit");
         });
@@ -836,45 +891,18 @@ $(document)
     .on("click", ".session.scheduled > .edit-btn", function () {
         var $sessionElement = $(this).parent();
         var session = $sessionElement.data("session");
-        $editSessionForm.bindObject(session, time.format);
-        $editSessionModal.modal('show');
+        location.href = "/events/" + window.mainEvent.id + "/sessions/" + session.id + "/edit/";
     })
     .on("click", ".clear-overlaps-button", removeOverlaps);
-
-if (!isReadOnly()) {
-    $(".date-picker").daterangepicker({
-        "singleDatePicker": true,
-        "showDropdowns": true,
-        "timePicker": true,
-        "timePicker24Hour": true,
-        "startDate": $editSessionModal.data("start-date"),
-        locale: {
-            format: time.format
-        }
-    });
-}
-
-$editSessionForm.submit(function () {
-    var session = $editSessionForm.data("object");
-    session.start_time = moment.utc($editSessionForm.find("input[name=start_time]").val());
-    session.end_time = moment.utc($editSessionForm.find("input[name=end_time]").val());
-    session.title = $editSessionForm.find("input[name=title]").val();
-    session.long_abstract = $editSessionForm.find("input[name=long_abstract]").text();
-    session.short_abstract = $editSessionForm.find("input[name=short_abstract]").val();
-    $(document).trigger({
-        type: "scheduling:change",
-        session: session
-    });
-    $editSessionModal.modal("hide");
-});
 
 /**
  * Initialize the Scheduler UI on document ready
  */
 $(document).ready(function () {
-    eventId = parseInt($timeline.data("event-id"));
-    generateTimeUnits();
-    initializeTimeline(eventId);
+    window.mainEvent.id = parseInt($timeline.data("event-id"));
+    window.mainEvent.start_time = moment.utc($timeline.data("event-start"));
+    window.mainEvent.end_time = moment.utc($timeline.data("event-end"));
+    initializeTimeline(window.mainEvent.id);
 });
 
 $(document).on("scheduling:change", function (e) {
@@ -898,9 +926,10 @@ $(document).on("scheduling:change", function (e) {
     delete session.top;
     delete session.id;
 
-    api.sessions.put_session({event_id: eventId, session_id: session_id, payload: session}, function (success) {
+    api.sessions.put_session({event_id: mainEvent.id, session_id: session_id, payload: session}, function (success) {
         createSnackbar("Changes have been saved.", "Dismiss", null, 1000);
     }, function (error) {
+        logError('failed with the following: ' + error.statusText, error);
         createSnackbar("An error occurred while saving the changes.", "Try Again", function () {
             $(document).trigger({
                 type: "scheduling:change",

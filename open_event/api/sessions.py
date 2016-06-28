@@ -6,13 +6,16 @@ from open_event.models.track import Track as TrackModel
 from open_event.models.microlocation import Microlocation as MicrolocationModel
 from open_event.models.speaker import Speaker as SpeakerModel
 from open_event.models.session_type import SessionType as SessionTypeModel
+from open_event.helpers.data import record_activity
+from open_event.helpers.data_getter import DataGetter
 
 from .helpers.helpers import get_paginated_list, requires_auth, \
-    save_db_model, get_object_in_event
+    save_db_model, get_object_in_event, model_custom_form
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO,\
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
 from .helpers import custom_fields as fields
 from .helpers.special_fields import SessionLanguageField, SessionStateField
+
 
 api = Namespace('sessions', description='Sessions', path='/')
 
@@ -132,11 +135,11 @@ class SessionDAO(ServiceDAO):
         return data
 
     def update(self, event_id, service_id, data):
-        data = self.validate(data)
+        data = self.validate(data, event_id)
         data_copy = data.copy()
         data_copy = self.fix_payload_post(event_id, data_copy)
         data = self._delete_fields(data)
-        obj = ServiceDAO.update(self, event_id, service_id, data)
+        obj = ServiceDAO.update(self, event_id, service_id, data, validate=False)
         obj.track = data_copy['track']
         obj.microlocation = data_copy['microlocation']
         obj.speakers = data_copy['speakers']
@@ -145,9 +148,15 @@ class SessionDAO(ServiceDAO):
         return obj
 
     def create(self, event_id, data, url):
-        data = self.validate(data)
+        data = self.validate(data, event_id)
         payload = self.fix_payload_post(event_id, data)
         return ServiceDAO.create(self, event_id, payload, url, validate=False)
+
+    def validate(self, data, event_id, model=None):
+        form = DataGetter.get_custom_form_elements(event_id)
+        if form:
+            model = model_custom_form(form.session_form, self.post_api_model)
+        return ServiceDAO.validate(self, data, model)
 
 
 DAO = SessionDAO(SessionModel, SESSION_POST)
@@ -195,11 +204,13 @@ class SessionList(Resource):
     @api.expect(SESSION_POST)
     def post(self, event_id):
         """Create a session"""
-        return DAO.create(
+        item = DAO.create(
             event_id,
             self.api.payload,
             self.api.url_for(self, event_id=event_id)
         )
+        record_activity('create_session', session=item[0], event_id=event_id)
+        return item
 
 
 @api.route('/events/<int:event_id>/sessions/page')

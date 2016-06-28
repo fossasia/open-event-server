@@ -19,7 +19,7 @@ class ApiValidationTestCase():
             'event',
             POST_EVENT_DATA,
             ['color', 'email', 'logo', 'event_url', 'background_url',
-                'type', 'topic']
+                'type', 'topic', 'privacy']
         )
 
     def test_speaker_api(self):

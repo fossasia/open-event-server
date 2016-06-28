@@ -1,0 +1,111 @@
+[
+    {
+        "id": 1,
+        "name": "Google",
+        "logo": "https://developers.google.com/open-source/",
+        "url": "http://2016.fossasia.org/img/ScienceCentre.png",
+        "description": null,
+        "level": null,
+        "sponsor_type": null
+    },
+    {
+        "id": 2,
+        "name": "RedHat",
+        "logo": "http://2016.fossasia.org/img/RedHat.png",
+        "url": "http://redhat.com",
+        "description": null,
+        "level": null,
+        "sponsor_type": null
+    },
+    {
+        "id": 3,
+        "name": "GitHub",
+        "logo": "http://2016.fossasia.org/img/GitHub_Logo.png",
+        "url": "http://github.com",
+        "description": null,
+        "level": null,
+        "sponsor_type": null
+    },
+    {
+        "id": 4,
+        "name": "MySQL",
+        "logo": "http://2016.fossasia.org/img/MySQL.png",
+        "url": "http://mysql.com",
+        "description": null,
+        "level": null,
+        "sponsor_type": null
+    },
+    {
+        "id": 5,
+        "name": "FOSSASIA",
+        "logo": "https://raw.githubusercontent.com/fossasia/2016.fossasia.org/gh-pages/img/fossasia-dark.png",
+        "url": "http://blog.fossasia.org/",
+        "twitter": "http://twitter.com/fossasia",
+        "description": null,
+        "level": null,
+        "sponsor_type": null
+    },
+    {
+        "id": 6,
+        "name": "UNESCO",
+        "logo": "http://2016.fossasia.org/img/UNESCO.png",
+        "url": "http://www.unesco.org/new/en/communication-and-information/access-to-knowledge/free-and-open-source-software-foss/",
+        "description": null,
+        "level": null,
+        "sponsor_type": null
+    },
+    {
+        "id": 7,
+        "name": "MBM",
+        "logo": "http://2016.fossasia.org/img/mbm_logo.png",
+        "url": "http://mbm.asia/",
+        "description": null,
+        "level": null,
+        "sponsor_type": null
+    },
+    {
+        "id": 8,
+        "name": "hackerspace.sg",
+        "logo": "http://2016.fossasia.org/img/hackerspacesg.png",
+        "url": "https://hackerspace.sg/",
+        "description": null,
+        "level": null,
+        "sponsor_type": null
+    },
+    {
+        "id": 9,
+        "name": "NUS Enterprise",
+        "logo": "http://2016.fossasia.org/img/nus_enterpriselogo.png",
+        "url": "http://enterprise.nus.edu.sg/",
+        "description": null,
+        "level": null,
+        "sponsor_type": null
+    },
+    {
+        "id": 10,
+        "name": "Python",
+        "logo": "http://2016.fossasia.org/img/python-logo-generic.png",
+        "url": "https://www.python.org/",
+        "description": null,
+        "level": null,
+        "sponsor_type": null
+    },
+    {
+        "id": 11,
+        "name": "Science Centre Singapore",
+        "logo": "http://2016.fossasia.org/img/ScienceCentre.png",
+        "url": "http://www.science.edu.sg/",
+        "description": null,
+        "level": null,
+        "sponsor_type": null
+    },
+    {
+        "id": 12,
+        "name": "Youth Mobile",
+        "logo": "http://2016.fossasia.org/img/YouthMobileUnesco.png",
+        "url": "http://www.youthmobile.org/",
+        "description": null,
+        "level": null,
+        "sponsor_type": null  
+    }
+]

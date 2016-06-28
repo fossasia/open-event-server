@@ -5,24 +5,27 @@ This file contains sample POST data
 POST_EVENT_DATA = {
     "color": "red",
     "email": "event@gmail.com",
-    "end_time": "2016-05-30 12:12:43",
+    "end_time": "2016-05-30T12:12:43",
+    "timezone": "UTC",
     "latitude": 0,
-    "location_name": "TestEvent",
+    "location_name": "Berlin",
     "logo": "http://imgur.com/image.png",
     "longitude": 0,
     "name": "TestEvent",
     'event_url': "http://site.com",
     'background_url': "http://imgur.com/image.png",
     'description': "blah blah",
-    "start_time": "2016-05-25 12:12:43",
-    "closing_datetime": "2016-05-22 12:12:43",
+    "start_time": "2016-05-25T12:12:43",
+    "closing_datetime": "2016-05-22T12:12:43",
     "organizer_name": "FOSSASIA",
     "organizer_description": "Promoting Open Source culture around the world",
     "state": "pending",
     "type": "Conference",
     "topic": "Science & Technology",
     "privacy": "public",
-    "ticket_url": "http://site.com/tickets"
+    "ticket_url": "http://site.com/tickets",
+    "code_of_conduct": "Thou shalt be kind",
+    "schedule_published_on": None
 }
 
 POST_MICROLOCATION_DATA = {
@@ -36,10 +39,10 @@ POST_MICROLOCATION_DATA = {
 POST_SESSION_DATA = {
     "short_abstract": "TestSession",
     "long_abstract": "TestSession",
-    "end_time": "2016-05-30 09:47:37",
+    "end_time": "2016-05-30T09:47:37",
     "microlocation_id": None,
     "speaker_ids": [],
-    "start_time": "2016-05-30 08:47:37",
+    "start_time": "2016-05-30T08:47:37",
     "subtitle": "TestSession",
     "comments": "Comments",
     "title": "TestSession",

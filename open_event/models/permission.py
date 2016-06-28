@@ -20,8 +20,13 @@ class Permission(db.Model):
     can_update = db.Column(db.Boolean, nullable=False)
     can_delete = db.Column(db.Boolean, nullable=False)
 
-    def __init__(self, role, service, can_create, can_read, can_update,
-                 can_delete):
+    def __init__(self,
+                 role,
+                 service,
+                 can_create=False,
+                 can_read=False,
+                 can_update=False,
+                 can_delete=False):
         self.role = role
         self.service = service
         self.can_create = can_create
@@ -32,3 +37,10 @@ class Permission(db.Model):
     def __repr__(self):
         return '<Perm %r for %r>' % (self.role,
                                      self.service, )
+
+    def __str__(self):
+        return unicode(self).encode('utf-8')
+
+    def __unicode__(self):
+        return 'Perm %r for %r' % (self.role,
+                                   self.service, )

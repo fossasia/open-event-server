@@ -17,6 +17,7 @@ from helpers.error_docs import api as error_models
 from helpers.errors import (
     NotFoundError,
     NotAuthorizedError,
+    PermissionDeniedError,
     ValidationError,
     InvalidServiceError,
     ServerError,
@@ -52,6 +53,7 @@ def custom_ui():
 
 @api.errorhandler(NotFoundError)
 @api.errorhandler(NotAuthorizedError)
+@api.errorhandler(PermissionDeniedError)
 @api.errorhandler(ValidationError)
 @api.errorhandler(InvalidServiceError)
 def handle_error(error):

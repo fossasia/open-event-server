@@ -1,6 +1,8 @@
 """Copyright 2015 Rafal Kowalski"""
+from open_event.helpers.versioning import clean_up_string
 from . import db
 from open_event.helpers.date_formatter import DateFormatter
+import datetime
 
 speakers_sessions = db.Table('speakers_sessions', db.Column(
     'speaker_id', db.Integer, db.ForeignKey('speaker.id')), db.Column(
@@ -10,11 +12,14 @@ speakers_sessions = db.Table('speakers_sessions', db.Column(
 class Session(db.Model):
     """Session model class"""
     __tablename__ = 'session'
+    __versioned__ = {
+        'exclude': []
+    }
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     subtitle = db.Column(db.String)
     short_abstract = db.Column(db.Text)
-    long_abstract = db.Column(db.Text, nullable=False)
+    long_abstract = db.Column(db.Text)
     comments = db.Column(db.Text)
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
@@ -35,6 +40,7 @@ class Session(db.Model):
     event_id = db.Column(
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     state = db.Column(db.String, default="pending")
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
     def __init__(self,
                  title=None,
@@ -54,7 +60,8 @@ class Session(db.Model):
                  video=None,
                  audio=None,
                  signup_url=None,
-                 session_type=None):
+                 session_type=None,
+                 created_at=None):
         self.title = title
         self.subtitle = subtitle
         self.short_abstract = short_abstract
@@ -73,6 +80,7 @@ class Session(db.Model):
         self.audio = audio
         self.signup_url = signup_url
         self.session_type = session_type
+        self.created_at = created_at
 
     @staticmethod
     def get_service_name():
@@ -108,6 +116,12 @@ class Session(db.Model):
 
     def __str__(self):
         return unicode(self).encode('utf-8')
+
+    def __setattr__(self, name, value):
+        if name == 'short_abstract' or name == 'long_abstract' or name == 'comments':
+            super(Session, self).__setattr__(name, clean_up_string(value))
+        else:
+            super(Session, self).__setattr__(name, value)
 
     def __unicode__(self):
         return self.title

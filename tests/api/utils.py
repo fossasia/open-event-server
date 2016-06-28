@@ -8,6 +8,7 @@ from open_event.models.speaker import Speaker
 from open_event.models.sponsor import Sponsor
 from open_event.models.microlocation import Microlocation
 from open_event.models.session_type import SessionType
+from open_event.models.social_link import SocialLink
 from open_event.models.track import Track
 
 
@@ -16,8 +17,8 @@ def create_event(name='TestEvent', creator_email=None):
     :param name Name of Event
     """
     event = Event(name=name,
-                  start_time=datetime(2013, 8, 4, 12, 30, 45),
-                  end_time=datetime(2016, 9, 4, 12, 30, 45))
+                  start_time=datetime(2016, 4, 8, 12, 30, 45),
+                  end_time=datetime(2016, 4, 9, 12, 30, 45))
     if creator_email:
         event.creator = User.query.filter_by(email=creator_email).first()
     save_to_db(event, 'Event saved')
@@ -56,6 +57,7 @@ def create_services(event_id, serial_no=''):
     test_sponsor = 'TestSponsor{}_{}'.format(serial_no, event_id)
     test_sponsor_type = 'TestSponsorType{}_{}'.format(serial_no, event_id)
     test_session_type = 'TestSessionType{}_{}'.format(serial_no, event_id)
+    test_social_link = 'TestSocialLink{}_{}'.format(serial_no, event_id)
 
     microlocation = Microlocation(name=test_micro, event_id=event_id)
     track = Track(
@@ -82,7 +84,13 @@ def create_services(event_id, serial_no=''):
                       event_id=event_id)
     sponsor = Sponsor(name=test_sponsor, sponsor_type=test_sponsor_type,
                       event_id=event_id, level='level')
+    social_link = SocialLink(
+        name=test_social_link,
+        link='http://fb.com',
+        event_id=event_id
+    )
 
+    save_to_db(social_link, 'SocialLink saved')
     save_to_db(session_type, 'SessionType saved')
     save_to_db(microlocation, 'Microlocation saved')
     save_to_db(track, 'Track saved')

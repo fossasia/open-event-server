@@ -46,13 +46,14 @@
         <div style="width: 100%; text-align: center">
             {% if call_for_speakers %}
                 <h2 style="font-weight: 300;">Turn <span class="state">off</span> call for speakers</h2>
-                <input type="checkbox" class="js-switch" name="call_for_speakers_state"
+                <input type="checkbox" class="toggle-switch" name="call_for_speakers_state"
                        value="on" id="call-for-speakers-switch" checked/>
             {% else %}
                 <h2 style="font-weight: 300;">Turn <span class="state">on</span> call for speakers</h2>
-                <input type="checkbox" class="js-switch" name="call_for_speakers_state"
+                <input type="checkbox" class="toggle-switch" name="call_for_speakers_state"
                        value="on" id="call-for-speakers-switch"/>
             {% endif %}
+            <label for="call-for-speakers-switch"></label>
         </div>
         <div id="call-for-speakers-holder" style="{% if not call_for_speakers %}display: none;{% endif %}">
             {% if call_for_speakers %}
@@ -76,12 +77,9 @@
             if (onOffSwitch.checked) {
                 $callForSpeakersHolder.fadeIn();
                 $state.text("off");
-                $(".form_wizard").smartWizard('fixHeight');
 
             } else {
-                $callForSpeakersHolder.fadeOut(function () {
-                    $(".form_wizard").smartWizard('fixHeight');
-                });
+                $callForSpeakersHolder.fadeOut();
                 $state.text("on");
             }
         };

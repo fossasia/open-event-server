@@ -1,0 +1,110 @@
+{% extends 'gentelella/admin/super_admin/dashboard.html' %}
+
+{% block title %}
+Logs
+{% endblock %}
+
+{% set active_page = "logs" %}
+
+{% block head_css %}
+    {{ super() }}
+    <style type="text/css">
+    #event-tabs {
+        position: absolute;
+        background: transparent;
+        top: 9px;
+        width: auto;
+    }
+
+    table.table {
+        margin-top: 20px !important;
+    }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+
+<div>
+    <ul id="event-tabs" class="nav nav-tabs bar_tabs" role="tablist">
+        <li class="active"><a href="#activity_div" data-toggle="tab">Activity</a></li>
+        <li class=""><a href="#mail_div" data-toggle="tab">Mails</a></li>
+    </ul>
+    <!-- tab contents -->
+    <div id="myTabContent" class="tab-content">
+        <!-- activity tab -->
+        <div role="tabpanel" class="tab-pane fade active in" id="activity_div"
+             aria-labelledby="all-tab">
+            <table id="activity_table" class="table table-striped with-datatable no-global-dt">
+                <thead>
+                <tr>
+                    <th>Actor</th>
+                    <th>Time</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for activity in activities %}
+                        <tr>
+                        <td>{{ activity.actor }}</td>
+                        <td data-toggle="tooltip" data-placement="bottom" title="{{ activity.time }}"
+                            data-delay='{"show":"500", "hide":"300"}'>{{ activity.time | humanize }}</td>
+                        <td>{{ activity.action }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!-- mails tab -->
+        <div role="tabpanel" class="tab-pane fade" id="mail_div"
+             aria-labelledby="mail-tab">
+            <table id="mail_table" class="table table-striped with-datatable no-global-dt">
+                <thead>
+                <tr>
+                    <th>To</th>
+                    <th>Time</th>
+                    <th>Action</th>
+                    <th>Message</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for mail in mails %}
+                        <tr>
+                        <td>{{ mail.recipient }}</td>
+                        <td data-toggle="tooltip" data-placement="bottom" title="{{ mail.time }}"
+                            data-delay='{"show":"500", "hide":"300"}'>{{ mail.time | humanize }}</td>
+                        <td>{{ mail.action }}</td>
+                        <td><strong>{{ mail.subject }}</strong><br>{{ mail.message }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+
+<script type="text/javascript">
+    $('#activity_table').DataTable({
+        "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+        "lengthMenu": [25, 50, 100, 200],
+        "pageLength": 25,
+        "aaSorting": []
+        // "language": {
+        //     "lengthMenu": "Show _MENU_ Results"
+        //   }
+    });
+    $('#mail_table').dataTable({
+        "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+        /* Disable initial sort */
+        "aaSorting": []
+    });
+</script>
+
+{% endblock %}

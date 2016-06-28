@@ -2,7 +2,7 @@ from flask.ext.restplus import Resource, Namespace
 
 from open_event.models.user import User as UserModel
 from open_event.models.user_detail import UserDetail as UserDetailModel
-from open_event.helpers.data import DataManager
+from open_event.helpers.data import DataManager, record_activity
 
 from .helpers.helpers import get_paginated_list, requires_auth
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, BaseDAO, \
@@ -97,7 +97,9 @@ class User(Resource):
     @api.expect(USER_PUT)
     def put(self, user_id):
         """Update a user given its id"""
-        return DAO.update(user_id, self.api.payload)
+        user = DAO.update(user_id, self.api.payload)
+        record_activity('update_user', user=user)
+        return user
 
 
 @api.route('/users')

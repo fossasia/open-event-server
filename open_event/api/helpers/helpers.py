@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 from sqlalchemy import func
 from functools import wraps, update_wrapper
@@ -344,3 +345,15 @@ def parse_args(parser, keep_none=False):
     if not keep_none:
         args = {k: v for k, v in args.items() if v is not None}
     return args
+
+
+def model_custom_form(cf_data, model):
+    """
+    Sets required setting in a model a/c Custom Form
+    """
+    tmp = model.clone('TempModel')
+    cf = json.loads(cf_data)
+    for key in tmp:
+        if key in cf and cf[key]['require'] == 1:
+            tmp[key].required = True
+    return tmp

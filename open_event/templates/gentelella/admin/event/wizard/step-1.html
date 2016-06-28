@@ -15,7 +15,7 @@
     </div>
 {% endmacro %}
 
-<div id="step-1" class="wizard_content" style="display: block;">
+<div>
     <div class="col-md-1">
 
     </div>
@@ -83,7 +83,19 @@
 
             </div>
         </div>
-
+        <div class="form-group">
+            <label>Timezone <span class="required">*</span></label>
+            <select name="timezone" class="form-control">
+                {% for value, text in timezones %}
+                    {% if event %}
+                        <option value="{{ value }}"
+                                {% if event.timezone == value %}selected{% endif %}>{{ text }}</option>
+                    {% else %}
+                        <option value="{{ value }}" {% if value == 'UTC' %}selected{% endif %}>{{ text }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
         <div class="item form-group">
             <label>Description</label>
             <textarea name="description"
@@ -106,7 +118,8 @@
 
         <div class="item form-group">
             <label>Event Url</label>
-            <input value="" name="event_url" class="form-control"/>
+            <input value="{{ event.event_url | default('', true) }}" name="event_url"
+                   class="form-control"/>
         </div>
 
         <div class="item form-group">
@@ -118,9 +131,9 @@
         <div class="item form-group">
             <label>Organizer Description
             </label>
-                <textarea name="organizer_description" class="form-control">
-                    {{ event.organizer_description | default('', true) }}
-                </textarea>
+                <textarea
+                        name="organizer_description"
+                        class="form-control">{{ event.organizer_description | default('', true) }}</textarea>
         </div>
         <div class="item form-group">
             <label>Ticket URL
@@ -147,6 +160,8 @@
                     {% if social_links %}
                         {% for social_link in social_links %}
                             {{ social_entry(social_link) }}
+                        {% else %}
+                            {{ social_entry() }}
                         {% endfor %}
                     {% else %}
                         {{ social_entry() }}
@@ -178,7 +193,7 @@
 
         <div class="item form-group">
             <label class="control-label">Event Type</label>
-            <select class="form-control" name="event_type">
+            <select class="form-control" name="type">
                 {% if not event or not event.type %}
                     <option value="">Choose..</option>
                 {% endif %}
@@ -201,6 +216,12 @@
             </select>
         </div>
 
+        <div class="item form-group">
+            <label>Code of Conduct
+            </label>
+                <textarea name="code_of_conduct" class="form-control">{{ event.code_of_conduct | default('', true) }}</textarea>
+        </div>
+
     </div>
     <input type="hidden" name="latitude" id="latitude" value="{{ event.latitude | default(0.00, true) }}"/>
     <input type="hidden" name="longitude" id="longitude" value="{{ event.longitude | default(0.00, true) }}"/>
@@ -209,10 +230,19 @@
 <script>
     var marker;
     var init_marker;
+    var placeSearch, autocomplete;
+    var componentForm = {
+        street_number: 'short_name',
+        route: 'long_name',
+        locality: 'long_name',
+        administrative_area_level_1: 'short_name',
+        country: 'long_name',
+        postal_code: 'short_name'
+    };
     var $latitudeInput = $('#latitude');
     var $longitudeInput = $('#longitude');
     var $locationInput = $("#location");
-    function initMap() {
+    function initPlacesApi() {
         var latitude = $latitudeInput.val();
         var longitude = $longitudeInput.val();
         var latlng = new google.maps.LatLng(latitude, longitude);
@@ -229,10 +259,18 @@
             zoom: 15
         });
 
-        $locationInput.valueChange(function () {
+        var geocodeHandler = function () {
             $locationInput.closest(".form-group").removeClass("has-warning");
             geocodeAddress(geocoder, map);
-        });
+        };
+
+        $locationInput.valueChange(geocodeHandler);
+
+        autocomplete = new google.maps.places.Autocomplete((document.getElementById('location')), {types: ['geocode']});
+        geolocate();
+
+        autocomplete.addListener('place_changed', geocodeHandler);
+
     }
     function geocodeAddress(geocoder, resultsMap) {
         var address = $locationInput.val();
@@ -269,6 +307,22 @@
         });
     }
 
+    function geolocate() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var geolocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var circle = new google.maps.Circle({
+                    center: geolocation,
+                    radius: position.coords.accuracy
+                });
+                autocomplete.setBounds(circle.getBounds());
+            });
+        }
+    }
+
     $(document).ready(function () {
 
         $('.time').timepicker({
@@ -286,15 +340,18 @@
             'defaultTimeDelta': 3600000
         });
 
-        $("textarea[name=description]").summernote(summernoteConfig);
-        $("textarea[name=organizer_description]").summernote(summernoteConfig);
+        $("textarea").summernote(summernoteConfig);
+
+        $('select[name=timezone]').selectize({
+            create: false,
+            sortField: 'text'
+        });
     });
 
     $(document).on("click", '.add-social-links', function () {
         var $element = $($(".social-link-holder")[0]).clone();
         $element.find("input").val('').attr("value", "");
         $('.social-links > div').append($element);
-        $(".form_wizard").smartWizard('fixHeight');
     });
 
     $(document).on("click", ".remove-social-links", function () {

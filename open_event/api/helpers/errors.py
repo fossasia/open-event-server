@@ -31,6 +31,14 @@ class NotAuthorizedError(BaseError):
         self.status = 'NOT_AUTHORIZED'
 
 
+class PermissionDeniedError(BaseError):
+    def __init__(self, message='Permission denied'):
+        BaseError.__init__(self)
+        self.code = 403
+        self.message = message
+        self.status = 'PERMISSION_DENIED'
+
+
 class ValidationError(BaseError):
     def __init__(self, field, message='Invalid field'):
         BaseError.__init__(self)

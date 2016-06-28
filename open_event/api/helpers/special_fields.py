@@ -21,6 +21,16 @@ class EventTopicField(fields.ChoiceString):
             **kwargs)
 
 
+class EventPrivacyField(fields.ChoiceString):
+    __schema_example__ = 'public'
+
+    def __init__(self, **kwargs):
+        super(EventPrivacyField, self).__init__(
+            choice_list=['public', 'private'],
+            **kwargs
+        )
+
+
 class SessionLanguageField(fields.ChoiceString):
     __schema_example__ = DataGetter.get_language_list()[51]
 

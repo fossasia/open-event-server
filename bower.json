@@ -10,17 +10,12 @@
   ],
   "license": "GNU GPL v3",
   "dependencies": {
-    "chosen": "1.5.1",
     "jquery-migrate": "1.4.0",
-    "bootstrap-material-design": "0.5.9",
     "bootstrap-colorpicker": "2.3.3",
     "font-awesome": "^4.6.3",
-    "prism": "1.4.1",
     "moment": "^2.13.0",
     "interact": "^1.2.6",
     "lodash": "^4.13.1",
-    "bootstrap-daterangepicker": "^2.1.20",
-    "jQuery-Smart-Wizard": "~3.3.1",
     "google-material-color": "~1.2.6",
     "datatables.net": "^1.10.12",
     "datatables.net-bs": "^1.10.12",
@@ -34,6 +29,9 @@
     "bootstrap-validator": "^0.10.2",
     "switchery": "^0.8.1",
     "summernote": "^0.8.1",
-    "sticky-kit": "^1.1.2"
+    "sticky-kit": "^1.1.2",
+    "multiselect": "^0.9.12",
+    "selectize": "^0.12.1",
+    "nouislider": "^8.5.1"
   }
 }

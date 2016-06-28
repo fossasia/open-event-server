@@ -1,11 +1,13 @@
 /**
- * Created by Niranjan on 29-May-16.
+ * Created by Niranjan (@niranjan94) on 29-May-16.
+ *
+ * Lot of helper/utility functions used throughout this project
  */
 
-/**
- * An extended jQuery method to call a callback on an input change
- */
 jQuery.fn.extend({
+    /**
+     * An extended jQuery method to call a callback on an input change
+     */
     valueChange: function (callback) {
         return this.each(function () {
             var elem = $(this);
@@ -18,6 +20,12 @@ jQuery.fn.extend({
             });
         });
     },
+    /**
+     * Append an element at a position
+     * @param $element
+     * @param index
+     * @returns {*}
+     */
     appendAt: function ($element, index) {
         return this.each(function () {
             var elem = $(this);
@@ -31,7 +39,12 @@ jQuery.fn.extend({
             elem.find("div:nth-child(" + (index) + ")").after($element);
         });
     },
-
+    /**
+     * Load an object data onto a jQuery element.
+     * @param object
+     * @param timeParseFormat
+     * @returns {*}
+     */
     bindObject: function (object, timeParseFormat) {
         return this.each(function () {
             var $elem = $(this);
@@ -47,6 +60,10 @@ jQuery.fn.extend({
             });
         });
     },
+    /**
+     * Disable a jQuery element
+     * @returns {*}
+     */
     disable: function () {
         return this.each(function () {
             if (!$(this).hasClass("nt")) {
@@ -55,6 +72,10 @@ jQuery.fn.extend({
             }
         });
     },
+    /**
+     * Enable a jQuery element
+     * @returns {*}
+     */
     enable: function () {
         return this.each(function () {
             if (!$(this).hasClass("nt")) {
@@ -63,14 +84,25 @@ jQuery.fn.extend({
             }
         });
     },
+    /**
+     * Disable all input,textarea of a form
+     * @returns {*}
+     */
     lockForm: function () {
         return this.each(function () {
             $(this).find("select,input,textarea,button").disable();
+            $(this).find(".note-editable").attr("contenteditable", "false").css("background-color", "#ffffff")
+
         });
     },
+    /**
+     * Enable all input, textarea of a form
+     * @returns {*}
+     */
     unlockForm: function () {
         return this.each(function () {
             $(this).find("select,input,textarea,button").enable();
+            $(this).find(".note-editable").attr("contenteditable", "true")
         });
     }
 });
@@ -124,20 +156,17 @@ function fuzzyMatch(str, pattern) {
  * @returns {int}
  */
 function roundOffToMultiple(val, multiple) {
-    return val;
-    if (!multiple) {
-        multiple = 6;
+    if (isUndefinedOrNull(multiple)) {
+        return val;
     }
     if (val > 0) {
         var roundUp = Math.ceil(val / multiple) * multiple;
         var roundDown = Math.floor(val / multiple) * multiple;
-
         if (val >= roundDown + 12) {
             return roundUp;
         } else {
             return roundDown;
         }
-
     } else {
         return multiple;
     }
@@ -202,7 +231,7 @@ function collision($div1, $div2) {
  * @param {Object} [ref] a reference object that will be printed along with the message
  */
 function logError(message, ref) {
-    if (_.isUndefined(ref)) {
+    if (isUndefinedOrNull(ref)) {
         console.log("[E] " + message);
     } else {
         console.log("[E] " + message + ". Ref ↴");
@@ -216,7 +245,7 @@ function logError(message, ref) {
  * @param {Object} [ref] a reference object that will be printed along with the message
  */
 function logDebug(message, ref) {
-    if (_.isUndefined(ref)) {
+    if (isUndefinedOrNull(ref)) {
         console.log("[D] " + message);
     } else {
         console.log("[D] " + message + ". Ref ↴");
@@ -236,8 +265,8 @@ function isUndefinedOrNull(variable) {
 
 /**
  * Get the value of a cookie (Original JavaScript code by Chirp Internet: www.chirp.com.au)
- * @param name
- * @returns {string}
+ * @param name The name of the cookie
+ * @returns {string} the cookie's value
  */
 function getCookie(name) {
     var re = new RegExp(name + "=([^;]+)");
@@ -246,11 +275,18 @@ function getCookie(name) {
 }
 
 /**
- * Create a material design snackbar to display simple notifications
+ * A simple function to create a material design Snackbar with an action button
+ * @param {string} message The message to be displayed
+ * @param {string} [actionText=Dismiss] The action text to be displayed
+ * @param {callback} [action] The callback to execute when pressing the action button
+ * @param {number} [delay=5000] The delay for the snackbar
  */
 var createSnackbar = (function () {
     var previous = null;
 
+    /**
+     *
+     */
     return function (message, actionText, action, delay) {
         if (previous) {
             previous.dismiss();
@@ -298,6 +334,7 @@ var createSnackbar = (function () {
 
         snackbar.addEventListener('transitionend', function (event, elapsed) {
             if (event.propertyName === 'opacity' && this.style.opacity == 0) {
+                window.snackbar_elapsed = elapsed;
                 this.parentElement.removeChild(this);
                 if (previous === this) {
                     previous = null;
@@ -307,7 +344,7 @@ var createSnackbar = (function () {
 
         previous = snackbar;
         document.body.appendChild(snackbar);
-        getComputedStyle(snackbar).bottom;
+        window.snackbar_bottom = getComputedStyle(snackbar).bottom;
         snackbar.style.bottom = '0px';
         snackbar.style.left = '0px';
         snackbar.style.opacity = 1;
@@ -316,8 +353,8 @@ var createSnackbar = (function () {
 
 /**
  * Recreate a node
- * @param el
- * @param withChildren
+ * @param {Node} el the DOM node to be recreated
+ * @param {boolean} [withChildren] whether to recreate children too
  */
 function recreateNode(el, withChildren) {
     if (withChildren) {
@@ -329,7 +366,9 @@ function recreateNode(el, withChildren) {
     }
 }
 
-
+/**
+ * An enhanced file upload button styled using css.
+ */
 function superFileUploadButton() {
     var inputs = document.querySelectorAll('.upload-btn');
     Array.prototype.forEach.call(inputs, function (input) {
@@ -339,7 +378,6 @@ function superFileUploadButton() {
     Array.prototype.forEach.call(inputs, function (input) {
         var label = input.nextElementSibling,
             labelVal = label.innerHTML;
-
 
         input.addEventListener('change', function (e) {
             var fileName = '';

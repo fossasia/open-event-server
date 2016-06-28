@@ -1,5 +1,7 @@
 import unittest
 import json
+import shutil
+import os
 from StringIO import StringIO
 
 from tests.setup_database import Setup
@@ -73,6 +75,11 @@ class TestEventImport(OpenEventTestCase):
         dic = json.loads(resp.data)
         self.assertEqual(dic['id'], 2)
         self.assertEqual(dic['name'], 'TestEvent')
+        self.assertIn('fb.com', json.dumps(dic['social_links']), dic)
+        # get to check final
+        resp = self.app.get(get_path(2))
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn('TestEvent', resp.data)
         # No errors generally means everything went fine
         # The method will crash and return 500 in case of any problem
 
@@ -88,6 +95,32 @@ class TestEventImport(OpenEventTestCase):
                 1, '5', track=2, speakers=[1]
             )
         self._test_import_success()
+
+
+class TestImportOTS(OpenEventTestCase):
+    """
+    Tests import of OTS sample
+    """
+    def setUp(self):
+        self.app = Setup.create_app()
+        with app.test_request_context():
+            register(self.app, u'test@example.com', u'test')
+
+    def _upload(self, data, url, filename='anything'):
+        return self.app.post(
+            url,
+            data={'file': (StringIO(data), filename)}
+        )
+
+    def _test_import_ots(self):
+        dir_path = 'samples/ots16'
+        shutil.make_archive(dir_path, 'zip', dir_path)
+        file = open(dir_path + '.zip', 'r').read()
+        os.remove(dir_path + '.zip')
+        upload_path = get_path('import', 'json')
+        resp = self._upload(file, upload_path, 'event.zip')
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn('Open Tech Summit', resp.data)
 
 
 if __name__ == '__main__':

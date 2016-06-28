@@ -1,0 +1,56 @@
+{% set email_disabled = false if (current_user.is_authenticated and (current_user.is_admin or current_user.is_super_admin or current_user.is_organizer(event.id) or current_user.is_coorganizer(event.id) or current_user.is_track_organizer(event.id))) else true %}
+
+{% set textarea_speaker_fields = ['short_biography', 'long_biography'] %}
+{% set media_speaker_fields = ['photo'] %}
+
+{% set speaker_fields = ['name', 'email','photo', 'organisation', 'position', 'country', 'short_biography', 'long_biography', 'mobile', 'website', 'facebook', 'twitter', 'github', 'linkedin'] %}
+
+{% macro speaker_form_field(identifier, require=0) %}
+    {% set name = identifier | replace('_id','') %}
+    {% set pretty_name = name | replace('_',' ') | capitalize %}
+    <div class="item form-group speaker-fields">
+        <label class="control-label">
+            {{ pretty_name }}
+            {% if require==1 %}
+                <span class="required">*</span>
+            {% endif %}
+        </label>
+        {% if identifier in textarea_speaker_fields %}
+            <textarea {% if require==1 %}
+                required="required"
+            {% endif %}
+                name="{{ identifier }}" class="form-control col-md-7 col-xs-12">{{ speaker[identifier] | default('', true) }}</textarea>
+        {% elif identifier in media_speaker_fields %}
+            <br><input {% if require==1 %}
+            required="required"
+        {% endif %}
+            type="file" id="speaker-file-{{ identifier | default(1) }}" name="{{ identifier }}"
+            class="upload-btn"/>
+            <label class="file-label" for="speaker-file-{{ identifier | default(1) }}">
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                Choose a file</label>
+        {% else %}
+            <input {% if require==1 %}
+                required="required"
+            {% endif %}
+                name="{{ "email-old" if identifier=="email" and email_disabled else identifier }}"
+                    {% if identifier=="email" %}
+                        {% if email_disabled %}
+                            value="{{ current_user.email }}" disabled
+                        {% else %}
+                            value="{{ speaker[identifier] | default('', true) }}"
+                        {% endif %}
+                    {% else %}
+                        value="{{ speaker[identifier] | default('', true) }}"
+                    {% endif %}
+                class="form-control col-md-7 col-xs-12"/>
+            {% if identifier=="email" %}
+                {% if email_disabled %}
+                   <input type="hidden" name="email" value="{{ current_user.email }}">
+                {% endif %}
+            {% endif %}
+
+        {% endif %}
+    </div>
+{% endmacro %}
+

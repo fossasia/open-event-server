@@ -1,5 +1,10 @@
 """Copyright 2015 Rafal Kowalski"""
+from sqlalchemy import event
+import json
+
 from open_event.helpers.date_formatter import DateFormatter
+from open_event.helpers.versioning import clean_up_string
+from custom_forms import CustomForms, session_form_str, speaker_form_str
 from . import db
 from sqlalchemy_utils import ColorType
 
@@ -19,6 +24,9 @@ class EventsUsers(db.Model):
 class Event(db.Model):
     """Event object table"""
     __tablename__ = 'events'
+    __versioned__ = {
+        'exclude': ['creator_id', 'schedule_published_on']
+    }
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     email = db.Column(db.String)
@@ -26,6 +34,7 @@ class Event(db.Model):
     logo = db.Column(db.String)
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
+    timezone = db.Column(db.String, nullable=False, default="UTC")
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     location_name = db.Column(db.String)
@@ -41,6 +50,7 @@ class Event(db.Model):
     sponsor = db.relationship('Sponsor', backref="event")
     users = db.relationship("EventsUsers", backref="event")
     roles = db.relationship("UsersEventsRoles", backref="event")
+    role_invites = db.relationship('RoleInvite', back_populates='event')
     privacy = db.Column(db.String, default="public")
     state = db.Column(db.String, default="Draft")
     closing_datetime = db.Column(db.DateTime)
@@ -50,6 +60,7 @@ class Event(db.Model):
     creator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     creator = db.relationship('User')
     db.UniqueConstraint('track.name')
+    code_of_conduct = db.Column(db.String)
     schedule_published_on = db.Column(db.DateTime)
 
     def __init__(self,
@@ -57,6 +68,7 @@ class Event(db.Model):
                  logo=None,
                  start_time=None,
                  end_time=None,
+                 timezone='UTC',
                  latitude=None,
                  longitude=None,
                  location_name=None,
@@ -74,6 +86,7 @@ class Event(db.Model):
                  topic=None,
                  ticket_url=None,
                  creator=None,
+                 code_of_conduct=None,
                  schedule_published_on=None):
         self.name = name
         self.logo = logo
@@ -81,14 +94,15 @@ class Event(db.Model):
         self.color = color
         self.start_time = start_time
         self.end_time = end_time
+        self.timezone = timezone
         self.latitude = latitude
         self.longitude = longitude
         self.location_name = location_name
-        self.description = description
+        self.description = clean_up_string(description)
         self.event_url = event_url
         self.background_url = background_url
         self.organizer_name = organizer_name
-        self.organizer_description = organizer_description
+        self.organizer_description = clean_up_string(organizer_description)
         self.state = state
         self.privacy = privacy
         self.closing_datetime = closing_datetime
@@ -96,6 +110,7 @@ class Event(db.Model):
         self.topic = topic
         self.ticket_url = ticket_url
         self.creator = creator
+        self.code_of_conduct = code_of_conduct
         self.schedule_published_on = schedule_published_on
 
     def __repr__(self):
@@ -107,6 +122,12 @@ class Event(db.Model):
     def __unicode__(self):
         return self.name
 
+    def __setattr__(self, name, value):
+        if name == 'organizer_description' or name == 'description' or name == 'code_of_conduct':
+            super(Event, self).__setattr__(name, clean_up_string(value))
+        else:
+            super(Event, self).__setattr__(name, value)
+
     @property
     def serialize(self):
         """Return object data in easily serializeable format"""
@@ -116,6 +137,7 @@ class Event(db.Model):
             'logo': self.logo,
             'begin': DateFormatter().format_date(self.start_time),
             'end': DateFormatter().format_date(self.end_time),
+            'timezone': self.timezone,
             'latitude': self.latitude,
             'longitude': self.longitude,
             'location_name': self.location_name,
@@ -128,5 +150,18 @@ class Event(db.Model):
             'organizer_description': self.organizer_description,
             'privacy': self.privacy,
             'ticket_url': self.ticket_url,
+            'code_of_conduct': self.code_of_conduct,
             'schedule_published_on': self.schedule_published_on
         }
+
+
+# LISTENERS
+
+@event.listens_for(Event, 'after_insert')
+def receive_init(mapper, conn, target):
+    custom_form = CustomForms(
+        event_id=target.id,
+        session_form=session_form_str,
+        speaker_form=speaker_form_str
+    )
+    target.custom_forms.append(custom_form)
