@@ -81,11 +81,15 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="past-events-tab">
-                            {% for session in past_events_sessions %}
-                                {{ session_element(session) }}
-                            {% else %}
-                                <span class="message">No session proposals for past events found</span>
-                            {% endfor %}
+                            <div class="row">
+                                {% for session in past_events_sessions %}
+                                    <div class="col-md-6">
+                                        {{ session_element(session) }}
+                                    </div>
+                                {% else %}
+                                    <span class="message">No session proposals for past events found</span>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                 </div>
