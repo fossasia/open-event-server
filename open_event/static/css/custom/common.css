@@ -34,3 +34,11 @@
 .upload-btn + label {
     cursor: pointer; /* "hand" cursor */
 }
+
+.social-links {
+    padding: 0;
+}
+
+.social-links > li {
+    display: inline;
+}

@@ -38,3 +38,7 @@ def slugify(text, delim=u'-'):
 
 def deslugify(text, delim='-'):
     return text.replace(delim, " ")
+
+def camel_case(text):
+    text = deslugify(slugify(text))
+    return ''.join(x for x in text.title() if not x.isspace())
