@@ -454,9 +454,11 @@ def serve_static(filename):
     """
     return send_from_directory(os.path.realpath('.') + '/static/', filename)
 
+
 @app.route('/documentation')
 def documentation():
     return auto.html()
+
 
 @app.route('/api/location/', methods=('GET', 'POST'))
 def location():
@@ -481,6 +483,7 @@ def location():
             'ip': ip
         })
 
+
 @app.route('/migrate/', methods=('GET', 'POST'))
 def run_migrations():
     try:
@@ -488,6 +491,7 @@ def run_migrations():
     except:
         print "Migrations have been run"
     return jsonify({'status': 'ok'})
+
 
 def intended_url():
     return request.args.get('next') or url_for('admin.index')
