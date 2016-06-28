@@ -21,10 +21,10 @@ class BasicPagesView(BaseView):
         title = "Mobile Apps"
         return self.render('/gentelella/guest/page.html', title=title)
 
-    @expose('/sitemap', methods=('GET', 'POST'))
-    def sitemap(self):
-        title = "SiteMap"
-        return self.render('/gentelella/guest/page.html', title=title)
+    # @expose('/sitemap', methods=('GET', 'POST'))
+    # def sitemap(self):
+    #     title = "SiteMap"
+    #     return self.render('/gentelella/guest/page.html', title=title)
 
     @expose('/about', methods=('GET', 'POST'))
     def about(self):
