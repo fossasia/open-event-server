@@ -34,7 +34,7 @@
 
         </div>
         <button type="button" class="btn btn-lg btn-default save-event">Save</button>
-        {% if event and event.state == 'Published' %}
+        {% if event and event.state == 'Published' and not is_copy %}
             <button type="button" class="btn btn-lg btn-danger publish-unpublish-event">Unpublish event</button>
         {% else %}
             <button type="button" class="btn btn-lg btn-success publish-unpublish-event">Make your event live</button>
