@@ -2,6 +2,7 @@ from flask.ext.restplus import abort
 from flask_admin import BaseView, expose
 
 from open_event.api.helpers.helpers import get_paginated_list
+from open_event.helpers.flask_helpers import deslugify
 from open_event.helpers.helpers import get_date_range
 from open_event.models.event import Event
 from flask import request
@@ -53,6 +54,7 @@ class BrowseView(BaseView):
 
     @expose('/s', methods=('GET', 'POST'))
     def browses(self, location):
+        location = deslugify(location)
         current_page = request.args.get('page')
         if not current_page:
             current_page = 1

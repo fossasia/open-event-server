@@ -34,6 +34,7 @@ from helpers.jwt import jwt_authenticate, jwt_identity
 from helpers.formatter import operation_name
 from open_event.helpers.data_getter import DataGetter
 from open_event.views.api_v1_views import app as api_v1_routes
+from open_event.views.sitemap import app as sitemap_routes
 import requests
 
 
@@ -47,6 +48,7 @@ def create_app():
     event = Event()
 
     app.register_blueprint(api_v1_routes)
+    app.register_blueprint(sitemap_routes)
     migrate = Migrate(app, db)
 
     app.config.from_object(environ.get('APP_CONFIG', 'config.ProductionConfig'))
