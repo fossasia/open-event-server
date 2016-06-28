@@ -30,7 +30,7 @@ class TestRoles(OpenEventViewTestCase):
 
             # Check if user has been sent a Role Invite
             role = Role.query.filter_by(name='coorganizer').first()
-            ri = RoleInvite.query.filter_by(user=user, event=event, role=role).first()
+            ri = RoleInvite.query.filter_by(email=user.email, event=event, role=role).first()
             self.assertTrue(ri is not None, msg=rv.data)
 
     def test_role_delete(self):
