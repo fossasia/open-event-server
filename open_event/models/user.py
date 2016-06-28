@@ -11,6 +11,7 @@ from .role import Role
 from .service import Service
 from .permission import Permission
 from .users_events_roles import UsersEventsRoles
+from .notifications import Notification
 
 # System-wide
 ADMIN = 'admin'
@@ -146,6 +147,10 @@ class User(db.Model):
     @property
     def is_staff(self):
         return self.is_super_admin or self.is_admin
+
+    def get_unread_notif_count(self):
+        return len(Notification.query.filter_by(user=self,
+                                                has_read=False).all())
 
     # update last access time
     def update_lat(self):

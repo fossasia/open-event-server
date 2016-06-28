@@ -80,9 +80,9 @@ MAILS = {
         'recipient': 'User',
         'subject': 'Invitation to be {role} at {event}',
         'message': (
-            "Hello {email},<br>" +
-            "You've been invited to be a {role} at {event}. " +
-            "Please follow the link to accept the role: {link}"
+            "Hello {email},<br><br>" +
+            "You've been invited to be a <strong>{role}</strong> at <strong>{event}</strong>.<br>" +
+            "To accept the role please sign up using the following link: <a href='{link}' target='_blank'>Link</a>."
         )
     }
 }

@@ -1,9 +1,11 @@
 from flask.ext.admin import BaseView
 from flask_admin import expose
-from flask import request, url_for, redirect
+from flask import request, url_for, redirect, flash
 from ....helpers.data import DataManager
 from ....helpers.data_getter import DataGetter
 from open_event.helpers.permission_decorators import is_organizer
+from open_event.helpers import helpers as Helper
+
 
 class RoleView(BaseView):
     @expose('/', methods=('GET', 'POST'))
@@ -14,7 +16,50 @@ class RoleView(BaseView):
     @is_organizer
     def create_view(self, event_id):
         if request.method == 'POST':
-            DataManager.add_event_role_invite(request.form, event_id)
+            email = request.form.get('user_email')
+            role_name = request.form.get('user_role')
+
+            event = DataGetter.get_event(event_id)
+            role = DataGetter.get_role_by_name(role_name)
+
+            user = DataGetter.get_user_by_email(email)
+
+            invite_link = DataManager.add_event_role_invite(email, role_name, event_id)
+
+            if not user:
+                # Send an email with the signup-invitation link
+                signup_invite_link = url_for('admin.register_view',
+                                             next=invite_link,
+                                             _external=True)
+                Helper.send_email_for_event_role_invite(email,
+                                                        role.title_name,
+                                                        event.name,
+                                                        signup_invite_link)
+                print signup_invite_link
+
+                flash('An email invitation has been sent to user')
+            else:
+                # Send a notification with the invitation link
+
+                title = 'Invitation to be {role} at {event}'.format(
+                    role=role.title_name,
+                    event=event.name
+                )
+                message = ("You've been invited to be a <strong>{role}</strong>"
+                " at <strong>{event}</strong>.<br>Please follow the link to"
+                " accept the role: <a href='{link}'>Link</a>.").format(
+                    email=email,
+                    role=role.title_name,
+                    event=event.name,
+                    link=invite_link
+                )
+
+                DataManager.create_user_notification(user=user,
+                                                     title=title,
+                                                     message=message)
+
+                flash('A notification has been sent to user')
+
         return redirect(url_for('events.details_view', event_id=event_id))
 
     @expose('/<int:uer_id>/delete/', methods=('GET',))
