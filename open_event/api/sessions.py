@@ -15,6 +15,7 @@ from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO,\
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
 from .helpers import custom_fields as fields
 from .helpers.special_fields import SessionLanguageField, SessionStateField
+from .helpers.error_docs import customform_error_model
 
 
 api = Namespace('sessions', description='Sessions', path='/')
@@ -182,6 +183,7 @@ class Session(Resource):
         return DAO.delete(event_id, session_id)
 
     @requires_auth
+    @api.response(400, 'Custom form error', customform_error_model)
     @api.doc('update_session', responses=PUT_RESPONSES)
     @api.marshal_with(SESSION)
     @api.expect(SESSION_POST)
@@ -199,6 +201,7 @@ class SessionList(Resource):
         return DAO.list(event_id)
 
     @requires_auth
+    @api.response(400, 'Custom form error', customform_error_model)
     @api.doc('create_session', responses=POST_RESPONSES)
     @api.marshal_with(SESSION)
     @api.expect(SESSION_POST)
