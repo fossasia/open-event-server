@@ -55,9 +55,16 @@ Manage Roles
             <td>{{ invite.email }}</td>
             <td>{{ invite.role.title_name }}</td>
             <td>
+            {% if invite.has_expired() %}
+                <del>
+                    <a href="javascript:;" title="The invitation link has expired">Invitation Link</a>
+                </del>
+            {% else %}
                 <a href="{{ url_for('events.user_role_invite', event_id=event.id, hash=invite.hash) }}" title="Link sent to the user">
                     Invitation Link
                 </a>
+            {% endif %}
+
                 <a title="Delete invitation" onclick="return confirm('Are you sure you want to delete the invitation link? After the link has been deleted the user will no longer be able to use it to accept the role.');"
                 href="{{ url_for('events.delete_user_role_invite', event_id=event.id, hash=invite.hash) }}">
                     <span class="glyphicon glyphicon-trash"></span>

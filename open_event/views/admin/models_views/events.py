@@ -294,8 +294,7 @@ class EventsView(BaseView):
                                                        hash=hash)
 
         if role_invite:
-            # Check if invitation link has expired (it expires after 24 hours)
-            if datetime.datetime.now() > role_invite.create_time + datetime.timedelta(hours=24):
+            if role_invite.has_expired():
                 delete_from_db(role_invite, 'Deleted RoleInvite')
 
                 flash('Sorry, the invitation link has expired.', 'error')
