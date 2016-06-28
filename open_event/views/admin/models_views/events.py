@@ -283,7 +283,8 @@ class EventsView(BaseView):
             is_copy=True,
             start_date=datetime.datetime.now() + datetime.timedelta(days=10),
             event_types=DataGetter.get_event_types(),
-            event_topics=DataGetter.get_event_topics())
+            event_topics=DataGetter.get_event_topics(),
+            timezones=DataGetter.get_all_timezones())
 
     @expose('/<int:event_id>/role-invite/<hash>', methods=('GET', 'POST'))
     def user_role_invite(self, event_id, hash):
