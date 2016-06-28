@@ -1,5 +1,5 @@
 from flask import url_for, render_template, make_response, request, \
-    Blueprint
+    Blueprint, abort
 from math import ceil
 
 from open_event.models.event import Event
@@ -22,6 +22,7 @@ static_pages = [
     'how_it_works',
     'pricing',
     'about'
+    # TODO: add more when the pages are built
 ]
 
 
@@ -60,6 +61,8 @@ def render_event_pages(num):
     start = (num - 1) * PER_PAGE_EVENTS
     end = PER_PAGE_EVENTS * num
     events = get_indexable_events()[start:end]
+    if len(events) == 0:
+        abort(404)
 
     for e in events:
         urls = [
@@ -67,7 +70,7 @@ def render_event_pages(num):
             for view in event_details_pages
         ]
         main_urls += urls
-    return make_sitemap_response(urls)
+    return make_sitemap_response(main_urls)
 
 ##########
 # Helpers
