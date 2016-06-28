@@ -1284,3 +1284,10 @@ def update_role_to_admin(form, user_id):
             'system_admin', user=user,
             status='Assigned' if user.is_admin else 'Unassigned'
         )
+
+
+def trash_user(user_id):
+  user = DataGetter.get_user(user_id)
+  user.in_trash = True
+  save_to_db(user, 'User has been added to trash')
+  return user

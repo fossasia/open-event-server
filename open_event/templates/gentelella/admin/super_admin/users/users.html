@@ -27,7 +27,11 @@ Users
     <tr>
         <td>{{ 'Not Available' if not user['user'].user_detail.fullname else user['user'].user_detail.fullname }}</td>
         <td>{{ user['user'].email }}</td>
-        <td>{{ 'Active' if user['user'].is_active() else 'Inactive' }}</td>
+        {% if user['user'].in_trash == False %}
+        <td>Active</td>
+        {% else %}
+        <td>Deleted</td>
+        {% endif %}
         <td>
           <ul style="padding-left:0;">
           {% if user['user'].is_super_admin %}
@@ -57,10 +61,18 @@ Users
             <a data-toggle="tooltip" data-placement="top" class="btn btn-default" href="{{ get_url('sadmin_users.details_view', user_id=user['user'].id)}}" title="View details">
                 <i class="glyphicon glyphicon-eye-open"></i>
             </a>
+            {% if user['user'].in_trash == False %}
+            <a data-toggle="tooltip" data-placement="top" class="btn btn-default" onclick="return confirm('Are you sure you want to delete this record?');"
+               href="{{ get_url('sadmin_users.trash_view', user_id=user['user'].id)}}" title="Delete record">
+                <i class="glyphicon glyphicon-trash"></i>
+            </a>
+            {% endif %}
+            {% if user['user'].in_trash == True %}
             <a data-toggle="tooltip" data-placement="top" class="btn btn-default" onclick="return confirm('Are you sure you want to delete this record?');"
                href="{{ get_url('sadmin_users.delete_view', user_id=user['user'].id)}}" title="Delete record">
                 <i class="glyphicon glyphicon-trash"></i>
             </a>
+            {% endif %}
         </div>
         </td>
     </tr>
@@ -90,7 +102,7 @@ Users
                     </tr>
                     </thead>
                     <tbody>
-                    {{ users_row(user_list) }}
+                    {{ users_row(active_user_list) }}
                     </tbody>
                 </table>
             </div>
@@ -110,13 +122,13 @@ Users
                     </tr>
                     </thead>
                     <tbody>
-                        
+                        {{ users_row(trash_user_list) }}
                     </tbody>
                 </table>
             </div>
         </div>
 </div>
-  
+
           <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">

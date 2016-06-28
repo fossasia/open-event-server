@@ -505,4 +505,12 @@ class DataGetter:
 
     @staticmethod
     def get_trash_events():
-        return Event.query.filter_by(in_trash=True)       
+        return Event.query.filter_by(in_trash=True)
+
+    @staticmethod
+    def get_trash_users():
+        return User.query.filter_by(in_trash=True)
+
+    @staticmethod
+    def get_active_users():
+        return User.query.filter_by(in_trash=False)    
