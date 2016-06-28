@@ -289,7 +289,7 @@ class EventsView(BaseView):
     def user_role_invite(self, event_id, hash):
         event = DataGetter.get_event(event_id)
         user = login.current_user
-        role_invite = DataGetter.get_event_role_invite(user_id=user.id,
+        role_invite = DataGetter.get_event_role_invite(email=user.email,
                                                        event_id=event.id,
                                                        hash=hash)
 
@@ -303,7 +303,7 @@ class EventsView(BaseView):
 
             role = role_invite.role
             data = dict()
-            data['user_email'] = role_invite.user.email
+            data['user_email'] = role_invite.email
             data['user_role'] = role.name
             DataManager.add_role_to_event(data, event.id)
 

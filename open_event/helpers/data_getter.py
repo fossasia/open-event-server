@@ -73,6 +73,10 @@ class DataGetter:
         return Role.query.all()
 
     @staticmethod
+    def get_role_by_name(role_name):
+        return Role.query.filter_by(name=role_name).first()
+
+    @staticmethod
     def get_services():
         return Service.query.all()
 

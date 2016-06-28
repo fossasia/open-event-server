@@ -6,8 +6,7 @@ class RoleInvite(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship('User')
+    email = db.Column(db.String)
 
     event_id = db.Column(
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
@@ -19,14 +18,14 @@ class RoleInvite(db.Model):
     hash = db.Column(db.String)
     create_time = db.Column(db.DateTime)
 
-    def __init__(self, user, event, role, create_time):
-        self.user = user
+    def __init__(self, email, event, role, create_time):
+        self.email = email
         self.event = event
         self.role = role
         self.create_time = create_time
 
     def __repr__(self):
-        return '<RoleInvite %r:%r:%r>' % (self.user,
+        return '<RoleInvite %r:%r:%r>' % (self.email,
                                           self.event,
                                           self.role, )
 
@@ -34,6 +33,6 @@ class RoleInvite(db.Model):
         return unicode(self).encode('utf-8')
 
     def __unicode__(self):
-        return 'Invite %r: %r for %r' % (self.user,
-                                         self.event,
-                                         self.role, )
+        return 'Invite for %r' % (self.email,
+                                  self.event,
+                                  self.role, )

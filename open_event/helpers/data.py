@@ -6,7 +6,7 @@ import traceback
 import json
 from datetime import datetime, timedelta
 
-from flask import flash, request, url_for, g, redirect
+from flask import flash, request, url_for, g
 from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from sqlalchemy.orm.collections import InstrumentedList
@@ -71,39 +71,31 @@ class DataManager(object):
         save_to_db(notification, 'Mark notification as read')
 
     @staticmethod
-    def add_event_role_invite(form, event_id):
+    def add_event_role_invite(email, role_name, event_id):
         """
-        Event Role Invite will be saved in the database and an email will
-        be sent to the user.
-        :param form: Form with 'user_email' and 'user_role'
+        Save an event role invite to database and return invitation link.
+        :param email: Email for the invite
+        :param role_name: Role name for the invite
         :param event_id: Event id
         """
-        user = User.query.filter_by(email=form['user_email']).first()
-        if not user:
-            flash('No such user in database.', 'error')
-            return redirect(url_for('events.details_view', event_id=event_id))
+        role = Role.query.filter_by(name=role_name).first()
 
-        role = Role.query.filter_by(name=form['user_role']).first()
         event = Event.query.get(event_id)
-        role_invite = RoleInvite(user=user,
+        role_invite = RoleInvite(email=email,
                                  event=event,
                                  role=role,
                                  create_time=datetime.now())
+
         hash = random.getrandbits(128)
         role_invite.hash = '%032x' % hash
+
         save_to_db(role_invite, "Role Invite saved")
 
         link = url_for('events.user_role_invite',
                        event_id=event_id,
-                       hash=role_invite.hash,
-                       _external=True)
+                       hash=role_invite.hash)
 
-        # print link
-        flash('An email invitation has been sent to user')
-        Helper.send_email_for_event_role_invite(user.email,
-                                                role.title_name,
-                                                event.name,
-                                                link)
+        return link
 
     @staticmethod
     def add_invite_to_event(user_id, event_id):
@@ -630,7 +622,7 @@ class DataManager(object):
         uer = UsersEventsRoles.query.get(uer_id)
         record_activity('delete_role', role=uer.role, user=uer.user, event_id=uer.event_id)
         delete_from_db(uer, "UER deleted")
-        flash('You successfully delete role')
+        flash("You've successfully deleted role.")
 
     @staticmethod
     def create_microlocation(form, event_id):
