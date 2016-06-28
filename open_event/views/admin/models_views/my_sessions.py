@@ -15,8 +15,8 @@ class MySessionView(BaseView):
     def display_my_sessions_view(self):
         upcoming_events_sessions = DataGetter.get_sessions_of_user(upcoming_events=True)
         past_events_sessions = DataGetter.get_sessions_of_user(upcoming_events=False)
-        page_content = {"tab_upcoming_events": "Upcoming Events",
-                        "tab_past_events": "Past Events",
+        page_content = {"tab_upcoming_events": "Upcoming Sessions",
+                        "tab_past_events": "Past Sessions",
                         "title": "My Session Proposals"}
         return self.render('/gentelella/admin/mysessions/mysessions_list.html',
                            upcoming_events_sessions=upcoming_events_sessions, past_events_sessions=past_events_sessions,
