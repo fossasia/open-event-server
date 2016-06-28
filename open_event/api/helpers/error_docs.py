@@ -24,7 +24,7 @@ class ValidationStatus(Raw):
     __schema_example__ = 'INVALID_FIELD'
 
 
-class InvalidCustomFormStatus(Raw):
+class CustomFormStatus(Raw):
     __schema_type__ = 'string'
     __schema_example__ = 'INVALID_CUSTOM_FORM_FIELD'
 
@@ -59,7 +59,7 @@ class ValidationCode(Raw):
     __schema_example__ = 400
 
 
-class InvalidCustomFormCode(Raw):
+class CustomFormCode(Raw):
     __schema_type__ = 'integer'
     __schema_example__ = 400
 
@@ -102,10 +102,10 @@ validation_error_model = api.model('ValidationError', {
     'field': fields.String,
 })
 
-validation_error_model = api.model('ValidationError', {
-    'code': InvalidCustomFormCode,
+customform_error_model = api.model('CustomFormError', {
+    'code': CustomFormCode,
     'message': fields.String,
-    'status': InvalidCustomFormStatus,
+    'status': CustomFormStatus,
     'field': fields.String,
 })
 

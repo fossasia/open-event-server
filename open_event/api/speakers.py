@@ -1,13 +1,14 @@
 from flask.ext.restplus import Resource, Namespace
 
 from open_event.models.speaker import Speaker as SpeakerModel
+from open_event.helpers.data_getter import DataGetter
 
 from .helpers.helpers import get_paginated_list, requires_auth, \
     model_custom_form
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO,\
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
 from .helpers import custom_fields as fields
-from open_event.helpers.data_getter import DataGetter
+from .helpers.error_docs import customform_error_model
 
 
 api = Namespace('speakers', description='Speakers', path='/')
@@ -81,6 +82,7 @@ class Speaker(Resource):
         return DAO.delete(event_id, speaker_id)
 
     @requires_auth
+    @api.response(400, 'Custom form error', customform_error_model)
     @api.doc('update_speaker', responses=PUT_RESPONSES)
     @api.marshal_with(SPEAKER)
     @api.expect(SPEAKER_POST)
@@ -98,6 +100,7 @@ class SpeakerList(Resource):
         return DAO.list(event_id)
 
     @requires_auth
+    @api.response(400, 'Custom form error', customform_error_model)
     @api.doc('create_speaker', responses=POST_RESPONSES)
     @api.marshal_with(SPEAKER)
     @api.expect(SPEAKER_POST)

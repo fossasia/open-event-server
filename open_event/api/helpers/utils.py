@@ -21,7 +21,7 @@ POST_RESPONSES = {
 }
 
 PUT_RESPONSES = {
-    400: ('Validation Error', validation_error_model),
+    400: ('Validation error', validation_error_model),
     401: ('Authentication failure', notauthorized_error_model),
     404: ('Object/Event not found', notfound_error_model)
 }

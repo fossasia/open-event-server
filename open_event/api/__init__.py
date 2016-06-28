@@ -19,6 +19,7 @@ from helpers.errors import (
     NotAuthorizedError,
     PermissionDeniedError,
     ValidationError,
+    CustomFormError,
     InvalidServiceError,
     ServerError,
 )
@@ -55,6 +56,7 @@ def custom_ui():
 @api.errorhandler(NotAuthorizedError)
 @api.errorhandler(PermissionDeniedError)
 @api.errorhandler(ValidationError)
+@api.errorhandler(CustomFormError)
 @api.errorhandler(InvalidServiceError)
 def handle_error(error):
     return error.to_dict(), getattr(error, 'code')
