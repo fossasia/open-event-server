@@ -32,6 +32,7 @@
     "sticky-kit": "^1.1.2",
     "multiselect": "^0.9.12",
     "selectize": "^0.12.1",
-    "nouislider": "^8.5.1"
+    "nouislider": "^8.5.1",
+    "Croppie": "croppie#^2.2.0"
   }
 }
