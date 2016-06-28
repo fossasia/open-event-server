@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /serve_static
+Disallow: /api/
+Allow: /api/v2/$
+Disallow: /fCallback
+Disallow: /gCallback
+Disallow: /admin/
+Disallow: /events/

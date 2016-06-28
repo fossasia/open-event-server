@@ -2,7 +2,8 @@
 import os
 from urllib2 import urlopen
 
-from flask import jsonify, url_for, redirect, request, send_from_directory
+from flask import jsonify, url_for, redirect, request, send_from_directory, \
+    render_template, make_response
 from flask.ext.cors import cross_origin
 from flask.ext import login
 from flask.ext.migrate import upgrade
@@ -495,3 +496,10 @@ def run_migrations():
 
 def intended_url():
     return request.args.get('next') or url_for('admin.index')
+
+
+@app.route('/robots.txt', methods=('GET', 'POST'))
+def robots_txt():
+    resp = make_response(render_template('robots.txt'))
+    resp.headers['Content-type'] = 'text/plain'
+    return resp
