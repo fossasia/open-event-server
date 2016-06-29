@@ -10,14 +10,17 @@ Events
 {{ super() }}
 <link href="{{ url_for('static', filename='css/admin/mysessions.css') }}" rel="stylesheet">
 <style type="text/css">
-        #event-tabs {
-            position: absolute;
-            background: transparent;
-            top: 9px;
-            width: auto;
-        }
+    #event-tabs {
+        position: absolute;
+        background: transparent;
+        top: 9px;
+        width: auto;
+    }
 
-</style>
+    table.table {
+        margin-top: 20px !important;
+    }
+    </style>
 {% endblock %}
 
 {% macro session_rows(sessions) %}
@@ -26,7 +29,7 @@ Events
     <td>{{session.event}}</td>
     <td>{{session.title}}</td>
     <td>{{session.speaker}}</td>
-    <td>{{session.created_at}}</td>
+    <td>Not implemented</td>
     <td>{{session.event.start_time }} - {{ session.event.end_time}}</td>
     <td>{{session.event.organizer_name}}</td>
     <td>
@@ -40,11 +43,18 @@ Events
                class="btn btn-default">
                 <i class="fa fa-pencil"></i>
             </a>
+            {% if session.in_trash == False %}
+            <a data-toggle="tooltip" data-placement="top" title="Delete"
+               href="/events/{{session.event.id}}/sessions/{{ session.id }}/trash" class="btn btn-default">
+                <i class="fa fa-trash"></i>
+            </a>
+            {% endif %}
+            {% if session.in_trash == True %}
             <a data-toggle="tooltip" data-placement="top" title="Delete"
                href="/events/{{session.event.id}}/sessions/{{ session.id }}/delete" class="btn btn-default">
                 <i class="fa fa-trash"></i>
             </a>
-
+            {% endif %}
         </div>
         {% endif %}
     </td>
@@ -61,6 +71,7 @@ Events
         <li class="active"><a href="#tab_content1" id="home-tab" data-toggle="tab">All Pending</a></li>
         <li class=""><a href="#tab_content2" id="profile-tab" data-toggle="tab">All Accepted</a></li>
         <li class=""><a href="#tab_content3" id="profile-tab2" data-toggle="tab">All Rejected</a></li>
+        <li class=""><a href="#tab_content5" id="profile-tab3" data-toggle="tab">All Deleted Sessions</a></li>
     </ul>
     <div id="myTabContent" class="tab-content">
         <div role="tabpanel" class="tab-pane fade" id="tab_content4"
@@ -140,6 +151,25 @@ Events
                 </tbody>
             </table>
         </div>
+        <div role="tabpanel" class="tab-pane fade" id="tab_content5" aria-labelledby="profile-tab">
+            <table class="table table-striped no-global-dt">
+                <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Title</th>
+                    <th>Speaker</th>
+                    <th>Date of Submission</th>
+                    <th>Date of Event</th>
+                    <th>Organizer</th>
+                    <th>Options</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {{session_rows(all_trashed)}}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -149,7 +179,7 @@ Events
 {{ super() }}
 <script type="text/javascript">
         var table = $('.table.no-global-dt').DataTable({
-            "dom": '<"row"<"toolbar col-md-5"><"col-md-3"l><"col-md-3 pull-right"f>>tip',
+            "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
             "lengthMenu": [25, 50, 100, 200],
             "pageLength": 50,
             "language": {
