@@ -16,7 +16,7 @@
                 </h4>
             </div>
             <div id="category-collapse" class="panel-collapse collapse">
-                <ul class="list-group categories" data-filter-type="sub_category">
+                <ul class="list-group categories" data-filter-type="sub-category">
                     <li class="list-group-item filter-item all-filter active">
                         All Categories
                     </li>
@@ -30,7 +30,7 @@
                                 </h4>
                             </div>
                             <div id="category-{{ category | slugify }}-collapse" class="panel-collapse collapse">
-                                <ul class="list-group sub-categories" data-filter-type="sub_category">
+                                <ul class="list-group sub-categories" data-filter-type="sub-category">
                                     {% for sub_category in sub_categories %}
                                         <li class="list-group-item filter-item">
                                             {{ sub_category }}
@@ -52,7 +52,7 @@
                 </h4>
             </div>
             <div id="type-collapse" class="panel-collapse collapse">
-                <ul class="list-group types" data-filter-type="event_type">
+                <ul class="list-group types" data-filter-type="type">
                     <li class="list-group-item filter-item all-filter active">
                         All Event Types
                     </li>
@@ -71,7 +71,7 @@
                 </h4>
             </div>
             <div id="days-collapse" class="panel-collapse collapse">
-                <ul class="list-group days" data-filter-type="day">
+                <ul class="list-group days" data-filter-type="period">
                     {% for day_item in [('all_date', 'All Dates'), ('today', 'Today'),
                                      ('tommorow', 'Tomorrow') ,('this_week', 'This Week'),
                                      ('this_weekend', 'This Weekend'), ('next_week', 'Next Week'),

@@ -2,6 +2,8 @@
  * Created by Niranjan on 29-Jun-16.
  */
 
+var LIMIT_PER_PAGE = 10;
+
 window.queryString = (function (a) {
     if (a == "") return {};
     var b = {};
@@ -34,6 +36,10 @@ function slugify(text) {
         splitWord[key] = partSlugify(value);
     });
     return splitWord.join('--');
+}
+
+function camelCase(text) {
+    return _.upperFirst(_.camelCase(text));
 }
 
 $(document).on('click', '.filter-item', function () {
@@ -81,30 +87,100 @@ function runFilter(type, value) {
         delete window.queryString[type];
     }
 
-    if(type === 'location') {
+    if (type === 'location') {
         $(".location-name").text(value);
     }
     var baseUrl = window.location.href.split('?')[0];
     if (type === 'location') {
         baseUrl = '/explore/' + slugify(value) + '/events'
     }
-    console.log(window.queryString);
     baseUrl = baseUrl + '?' + $.param(window.queryString);
     history.replaceState(null, null, baseUrl);
     loadResults();
 }
 
-function loadResults() {
+function queryHas(param) {
+    return window.queryString.hasOwnProperty(param)
+}
+
+function getQuery(param) {
+    return window.queryString[param];
+}
+
+var eventTemplate = $("#event-template").html();
+var filterTagTemplate = $("#filter-tag-template").html();
+var $filterTagsHolder = $(".filtering");
+var $eventsHolder = $("#events-holder");
+
+function addFilterTag(type, value) {
+    var $tag = $(filterTagTemplate);
+    $tag.find(".value").text(value);
+    $tag.find(".filter-tag-btn").attr("data-filter-type", type);
+    $filterTagsHolder.append($tag);
+}
+
+function addEvent(event) {
+    var $eventElement = $(eventTemplate);
+    $eventElement.find("a").attr("href", "/e/" + event.id);
+    $eventElement.find(".event-image").attr('src', event.background_url);
+    $eventElement.find(".name").text(event.name);
+    $eventElement.find(".location_name").text(event.location_name.split(",")[0]);
+    $eventElement.find(".share-btn").attr("data-event-id", event.id).attr("data-title", event.name);
+    $eventElement.find(".time").text(moment(event.start_time).format('ddd, MMM DD HH:mm A'));
+    var tags = "";
+    if (!_.isEmpty(event.type)) {
+        tags += " #" + camelCase(event.type);
+    }
+
+    if (!_.isEmpty(event.topic)) {
+        tags += " #" + camelCase(event.topic);
+    }
+    $eventElement.find(".tags").prepend(tags);
+    $eventsHolder.append($eventElement);
+}
+
+function loadResults(start) {
+
+    if (isUndefinedOrNull(start)) {
+        start = 1
+    }
+
+    $filterTagsHolder.html('');
     initializeSwaggerClient(function () {
+
         var params = {
+            start: start,
+            limit: LIMIT_PER_PAGE,
             privacy: 'public',
-            state: 'Published'
+            state: 'Published',
+            location: $locationField.val()
         };
 
-        api.events.get_event_list_paginated({
+        if (queryHas('period')) {
+            params['time_period'] = getQuery('period');
+            addFilterTag('period', getQuery('period'))
+        }
 
-        }, function(response){
+        if (queryHas('type')) {
+            params['type'] = getQuery('type');
+            addFilterTag('type', getQuery('type'))
+        }
+
+        if (queryHas('query')) {
+            params['contains'] = getQuery('query');
+        }
+
+        if (queryHas('sub-category')) {
+            params['sub_topic'] = getQuery('sub-category');
+            addFilterTag('sub-category', getQuery('sub-category'))
+        }
+
+        api.events.get_event_list_paginated(params, function (response) {
+            $eventsHolder.html("");
             response = response.obj;
+            _(response.results).forEach(function (event) {
+                addEvent(event);
+            });
         })
     });
 }
