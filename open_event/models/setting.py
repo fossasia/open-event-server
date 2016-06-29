@@ -18,11 +18,13 @@ class Setting(db.Model):
     sendgrid_key = db.Column(db.String)
     # App secret
     secret = db.Column(db.String)
+    # storage place, local, aws, .. can be more in future
+    storage_place = db.Column(db.String)
 
     def __init__(self, aws_key=None, aws_secret=None, aws_bucket_name=None,
                  google_client_id=None, google_client_secret=None,
                  fb_client_id=None, fb_client_secret=None, sendgrid_key=None,
-                 secret=None):
+                 secret=None, storage_place=None):
         self.aws_key = aws_key
         self.aws_secret = aws_secret
         self.aws_bucket_name = aws_bucket_name
@@ -32,6 +34,7 @@ class Setting(db.Model):
         self.fb_client_secret = fb_client_secret
         self.sendgrid_key = sendgrid_key
         self.secret = secret
+        self.storage_place = storage_place
 
     def __repr__(self):
         return 'Settings'
