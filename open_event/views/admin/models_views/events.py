@@ -228,6 +228,8 @@ class EventsView(BaseView):
         if request.method == "GET":
             event = DataManager.trash_event(event_id)
         flash("Your event has been deleted.", "danger")
+        if login.current_user.is_super_admin == True:
+            return redirect(url_for('sadmin_events.index_view'))    
         return redirect(url_for('.index_view'))
 
     @expose('/<event_id>/delete/', methods=('GET',))
