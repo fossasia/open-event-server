@@ -1,5 +1,6 @@
 from sqlalchemy import or_, func
 
+from open_event.helpers.helpers import get_date_range
 from open_event.models.event import Event
 from custom_fields import DateTime
 
@@ -69,6 +70,13 @@ def event_end_time_gt(value, query):
 def event_end_time_lt(value, query):
     return query.filter(Event.end_time <= DateTime().from_str(value))
 
+def event_time_period(value, query):
+    start, end = get_date_range(value)
+    if start:
+        query = event_start_time_gt(start, query)
+    if end:
+        query = event_end_time_lt(end, query)
+    return query
 
 #######
 # ADD CUSTOM FILTERS TO LIST
@@ -82,4 +90,5 @@ FILTERS_LIST = {
     '__event_start_time_lt': event_start_time_lt,
     '__event_end_time_gt': event_end_time_gt,
     '__event_end_time_lt': event_end_time_lt,
+    '__event_time_period': event_time_period,
 }

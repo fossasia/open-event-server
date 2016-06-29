@@ -159,7 +159,10 @@ EVENT_PARAMS = {
     'start_time_gt': {},
     'start_time_lt': {},
     'end_time_gt': {},
-    'end_time_lt': {}
+    'end_time_lt': {},
+    'time_period': {
+        'type': str
+    }
 }
 
 
@@ -182,6 +185,7 @@ class EventResource():
     event_parser.add_argument('start_time_lt', dest='__event_start_time_lt')
     event_parser.add_argument('end_time_gt', dest='__event_end_time_gt')
     event_parser.add_argument('end_time_lt', dest='__event_end_time_lt')
+    event_parser.add_argument('time_period', type=str, dest='__event_time_period')
 
 
 @api.route('/<int:event_id>')
