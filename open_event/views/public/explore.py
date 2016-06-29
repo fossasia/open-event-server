@@ -7,7 +7,7 @@ from open_event.helpers.helpers import get_date_range
 from open_event.models.event import Event
 from flask import request, redirect, url_for
 
-RESULTS_PER_PAGE = 2
+RESULTS_PER_PAGE = 10
 
 def get_paginated(**kwargs):
 
