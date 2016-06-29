@@ -8,11 +8,23 @@
  */
 // Full URL is necessary for proper port handling -@niranjan94
 var swaggerConfigUrl = window.location.protocol + "//" + window.location.host + "/api/v2/swagger.json";
+window.swagger_loaded = false;
 function initializeSwaggerClient(callback) {
-    window.api = new SwaggerClient({
-        url: swaggerConfigUrl,
-        success: function () {
+    if (!window.swagger_loaded) {
+        window.api = new SwaggerClient({
+            url: swaggerConfigUrl,
+            success: function () {
+                window.swagger_loaded = true;
+                if (callback) {
+                    callback();
+                }
+
+            }
+        });
+    } else {
+        if (callback) {
             callback();
         }
-    });
+    }
 }
+initializeSwaggerClient();

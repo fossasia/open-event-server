@@ -12,16 +12,6 @@
 {% block title %}
 Explore
 {% endblock %}
-
-{% block head_js %}
-    {{ super() }}
-    <script type="text/javascript">
-        window.swagger_loaded = false;
-        initializeSwaggerClient(function () {
-            window.swagger_loaded = true;
-        });
-    </script>
-{% endblock %}
 {% macro event_block(event) %}
     <a href="/e/{{ event.id }}">
         <div class="col-xs-12 event-holder">

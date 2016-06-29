@@ -95,9 +95,16 @@ function runFilter(type, value) {
 }
 
 function loadResults() {
-    if(window.swagger_loaded) {
+    initializeSwaggerClient(function () {
+        var params = {
+            privacy: 'public',
+            state: 'Published'
+        };
 
-        
+        api.events.get_event_list_paginated({
 
-    }
+        }, function(response){
+            response = response.obj;
+        })
+    });
 }
