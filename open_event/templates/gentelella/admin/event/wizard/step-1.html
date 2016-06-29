@@ -101,12 +101,34 @@
             <textarea name="description"
                       class="form-control">{{ event.description | default('', true) }}</textarea>
         </div>
+        <input type="hidden" name="background_url" id="background_url">
 
-        <div class="item form-group">
-            <label>Background image URL
-            </label>
-            <input value="{{ event.background_url | default('', true) }}" name="background_url"
-                   class="form-control"/>
+        <div class="item form-group" id="image-upload-group" {% if event and event.background_url and event.background_url != '' %}style="display: none;"{% endif %}>
+            <label>Event Image</label><br>
+            <input type="file" id="event-image-upload" name="event-image-upload" class="upload-btn no-js"
+                   accept="image/*"/>
+            <label class="file-label" for="event-image-upload" style="margin-top: 0;">
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Event Image
+            </label><br>
+            <span class="text-muted" style="color: #a2a2a2;">
+                We recommend using at least a 2160x1080px (2:1 ratio) image<br>that's no larger than 10MB.
+            </span>
+        </div>
+
+        <div class="item form-group" id="image-view-group" {% if not event or not event.background_url or event.background_url == '' %}style="display: none;"{% endif %}>
+            <label>Event Image</label><br>
+            <img src="{{ event.background_url | default('', true) }}" style="width: 350px; height: 175px;"><br><br>
+            {% if not event %}
+            <button type="button" class="btn btn-sm btn-default" data-target="#cropper-modal" data-toggle="modal">
+                <i class="fa fa-arrows" aria-hidden="true"></i>
+                Adjust
+            </button>
+            {% endif %}
+            <button type="button" class="btn btn-sm btn-default" id="remove-image-btn">
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                Remove
+            </button>
+            <br>
         </div>
 
         <div class="item form-group">
@@ -232,13 +254,38 @@
         <div class="item form-group">
             <label>Code of Conduct
             </label>
-                <textarea name="code_of_conduct" class="form-control">{{ event.code_of_conduct | default('', true) }}</textarea>
+            <textarea name="code_of_conduct"
+                      class="form-control">{{ event.code_of_conduct | default('', true) }}</textarea>
         </div>
 
     </div>
     <input type="hidden" name="latitude" id="latitude" value="{{ event.latitude | default(0.00, true) }}"/>
     <input type="hidden" name="longitude" id="longitude" value="{{ event.longitude | default(0.00, true) }}"/>
 
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="cropper-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Crop your image</h4>
+            </div>
+            <div class="modal-body">
+                <div id="upload-cropper">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="save-crop" class="btn btn-success">Done</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
 <script>
     var marker;
@@ -336,6 +383,7 @@
         }
     }
 
+    var $uploadCropper = $('#upload-cropper');
     $(document).ready(function () {
 
         $('.time').timepicker({
@@ -359,6 +407,7 @@
             create: false,
             sortField: 'text'
         });
+
 
         var sub_topics = {'Auto, Boat & Air': ['Air','Auto','Boat','Motorcycle/ATV','Other'],
                          'Business & Professional':
@@ -406,6 +455,68 @@
         $("#sub_topic").val("{{event.sub_topic}}");
     }
 
+
+        $uploadCropper = $('#upload-cropper').croppie({
+            viewport: {
+                width: 490,
+                height: 245,
+                type: 'square'
+            },
+            boundary: {
+                width: 508,
+                height: 350
+            }
+        });
+
+        $("#event-image-upload").unbind("change").on('change', function () {
+            var input = this;
+            console.log(input);
+            console.log(input.files);
+            if (input.files && input.files[0]) {
+                if (input.files[0].size > 10485760) {
+                    createSnackbar("Image must be less than 10 MB in size");
+                    resetFormElement(input);
+                } else {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $("#cropper-modal").modal("show");
+                        $uploadCropper.croppie('bind', {
+                            url: e.target.result
+                        });
+
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            else {
+                logError("No FileReader support");
+            }
+
+        });
+    });
+
+    $("#save-crop").click(function () {
+        $uploadCropper.croppie('result', {
+            type: 'canvas',
+            size: 'original'
+        }).then(function (resp) {
+            $("#background_url").val(resp);
+            $("#image-view-group").show().find("img").attr("src", resp);
+            $("#image-upload-group").hide();
+            $('#cropper-modal').modal('hide')
+        });
+    });
+
+    $("#remove-image-btn").click(function () {
+        $("#image-view-group").hide();
+        $("#image-upload-group").show();
+        $("#background_url").val('');
+    });
+
+    $('#cropper-modal').on('shown.bs.modal', function (e) {
+        $uploadCropper.croppie('bind');
+        resetFormElement($("#event-image-upload"));
+
     });
 
     $(document).on("click", '.add-social-links', function () {
@@ -419,6 +530,12 @@
             $(this).closest(".social-link-holder").remove();
         }
     });
+
+
+    function resetFormElement(e) {
+        e.wrap('<form>').closest('form').get(0).reset();
+        e.unwrap();
+    }
 
 </script>
 

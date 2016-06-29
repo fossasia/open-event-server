@@ -4,7 +4,9 @@ import os.path
 import random
 import traceback
 import json
+import types
 from datetime import datetime, timedelta
+import time
 
 from flask import flash, request, url_for, g
 from flask.ext import login
@@ -15,10 +17,10 @@ from werkzeug import secure_filename
 from wtforms import ValidationError
 
 from open_event.models.notifications import Notification
-from open_event.helpers.helpers import string_empty, send_new_session_organizer
+from open_event.helpers.helpers import string_empty, send_new_session_organizer, string_not_empty
 from ..helpers.update_version import VersionUpdater
 from ..helpers.data_getter import DataGetter
-from open_event.helpers.storage import upload
+from open_event.helpers.storage import upload, UploadedFile
 from ..helpers import helpers as Helper
 from ..models import db
 from ..models.event import Event, EventsUsers
@@ -781,7 +783,6 @@ class DataManager(object):
                       location_name=form['location_name'],
                       description=form['description'],
                       event_url=form['event_url'],
-                      background_url=form['background_url'],
                       type=form['type'],
                       topic=form['topic'],
                       sub_topic=form['sub_topic'],
@@ -825,6 +826,17 @@ class DataManager(object):
 
             custom_forms_name = form.getlist('custom_form[name]')
             custom_forms_value = form.getlist('custom_form[value]')
+
+            background_image = form['background_url']
+            if string_not_empty(background_image):
+                filename = str(time.time()) + '.png'
+                file_path = os.path.realpath('.') + '/static/temp/' + filename
+                fh = open(file_path, "wb")
+                fh.write(background_image.split(",")[1].decode('base64'))
+                fh.close()
+                background_file = UploadedFile(file_path, filename)
+                background_url = upload(background_file, 'events/%d/background_image' % (int(event.id)))
+                event.background_url = background_url
 
             for index, name in enumerate(session_type_names):
                 if not string_empty(name):
@@ -906,7 +918,6 @@ class DataManager(object):
         event.location_name = form['location_name']
         event.description = form['description']
         event.event_url = form['event_url']
-        event.background_url = form['background_url']
         event.type = form['type']
         event.topic = form['topic']
         event.sub_topic = form['sub_topic']
@@ -915,6 +926,17 @@ class DataManager(object):
         event.organizer_description = form['organizer_description']
         event.code_of_conduct = form['code_of_conduct']
         event.ticket_url = form['ticket_url']
+
+        background_image = form['background_url']
+        if string_not_empty(background_image):
+            filename = str(time.time()) + '.png'
+            file_path = os.path.realpath('.') + '/static/temp/' + filename
+            fh = open(file_path, "wb")
+            fh.write(background_image.split(",")[1].decode('base64'))
+            fh.close()
+            background_file = UploadedFile(file_path, filename)
+            background_url = upload(background_file, 'events/%d/background_image' % (int(event.id)))
+            event.background_url = background_url
 
         state = form.get('state', None)
         if state and ((state == u'Published' and not string_empty(

@@ -13,7 +13,7 @@ POST_EVENT_DATA = {
     "longitude": 0,
     "name": "TestEvent",
     'event_url': "http://site.com",
-    'background_url': "http://imgur.com/image.png",
+    'background_url': "",
     'description': "blah blah",
     "start_time": "2016-05-25T12:12:43",
     "closing_datetime": "2016-05-22T12:12:43",
