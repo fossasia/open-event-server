@@ -9,7 +9,7 @@ footer{
 
 footer h4 {
     font-size: 16px;
-    color: #45494E
+    color: #75767B;
 }
 
 footer ul
@@ -32,18 +32,53 @@ footer ul a, footer a:hover, footer ul a:hover {
 
 #footer-menu{
     height: 80px;
-    border-top: 1px solid #666A73;
-    border-bottom: 1px solid #666A73;
+    border-top: 1px solid #75767B;
+    border-bottom: 1px solid #75767B;
 
 }
 
 #footer-menu select {margin-top: 10px}
 
 
-#footer-menu a{color: #666A73; font-size: 16px; margin: 10px; line-height: 55px}
+#footer-menu a{color: #75767B; font-size: 16px; margin: 10px; line-height: 55px}
 footer .copyright{
     text-align: center;
-    color:#666A73;
+    color:#75767B;
     margin-top: 10px}
 
-#footer-menu select {background: #282C35; border-color:#666A73; color: #666A73  }
+#footer-menu select {background: #282C35; border-color:#75767B; color: #75767B  }
+
+.footer-dropdown {
+    border: 1px solid #75767B;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 16px;
+    background: #282C35;
+    color: #75767B
+}
+
+.footer-dropdown .dropdown-text {
+    margin-left: 10%;
+}
+
+.footer-dropdown .fa-chevron-down {
+    float:right;
+}
+
+.dropdown-menu {
+    width:100%;
+}
+
+@media (max-width: 900px) {
+    #footer-menu {
+        border: 0px;
+        height: auto;
+    }
+    .hide-large {
+        display:inline-block !important;
+    }
+    .dropup {
+        width:80%;
+    }
+}

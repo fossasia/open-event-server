@@ -177,6 +177,12 @@
 .hide-large {
   display: none !important;
 }
+.hide-medium {
+  display: block !important;
+}
+.show-medium {
+  display: none !important;
+}
 
 @media (max-width: 640px) {
   .search_bar {
@@ -208,7 +214,7 @@
   }
 }
 
-@media (max-width: 980px) and (min-width: 640px) {
+@media (max-width: 975px) and (min-width: 640px) {
   .search_bar {
     width:45%;
   }
@@ -227,6 +233,15 @@
   }
   .user-profile .user-text {
     display:none;
+  }
+  .hide-medium {
+    display:none !important;
+  }
+  .hide-large {
+    display: block !important;
+  }
+  .show-medium {
+    display: block !important;
   }
 }
 
