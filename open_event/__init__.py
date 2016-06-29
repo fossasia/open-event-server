@@ -25,7 +25,7 @@ import sqlalchemy as sa
 from urllib import urlencode
 from urlparse import parse_qs, urlsplit, urlunsplit
 
-from open_event.helpers.flask_helpers import SilentUndefined, camel_case
+from open_event.helpers.flask_helpers import SilentUndefined, camel_case, slugify
 from open_event.helpers.helpers import string_empty
 from open_event.models import db
 from open_event.models.user import User
@@ -146,6 +146,10 @@ def pretty_name_filter(s):
 @app.template_filter('camel_case')
 def camel_case_filter(s):
     return camel_case(s)
+
+@app.template_filter('slugify')
+def slugify_filter(s):
+    return slugify(s)
 
 @app.template_filter('humanize')
 def humanize_filter(time):
