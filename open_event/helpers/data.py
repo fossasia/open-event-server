@@ -1054,6 +1054,8 @@ class DataManager(object):
         SessionType.query.filter_by(event_id=e_id).delete()
         SocialLink.query.filter_by(event_id=e_id).delete()
         Track.query.filter_by(id=e_id).delete()
+        Invite.query.filter_by(event_id=e_id).delete()
+        Session.query.filter_by(event_id=e_id).delete()
         Event.query.filter_by(id=e_id).delete()
         record_activity('delete_event', event_id=e_id)
         db.session.commit()
