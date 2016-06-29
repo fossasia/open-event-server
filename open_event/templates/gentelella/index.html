@@ -148,7 +148,8 @@
                 </div>
                 <div class="modal-body" style="text-align: center;">
                     {% include 'gentelella/components/social_buttons.html' %}
-                    <input id="share-url-box" type="text" class="form-control" onClick="this.select();" value="{{ request.url }}">
+                    <input id="share-url-box" type="text" class="form-control" onClick="this.select();"
+                           value="{{ request.url }}">
                 </div>
             </div>
         </div>
@@ -158,12 +159,13 @@
 
 {% block tail_js %}
     {{ super() }}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
     <script type="text/javascript">
         $(document).on("click", ".share-btn", function (event) {
             event.stopImmediatePropagation();
             event.stopPropagation();
             event.preventDefault();
-            var eventUrl = location.href + "e/" + $(this).data("event-id");
+            var eventUrl = location.href + "e/" + $(this).data("event-id") + "/" + slugify($(this).data("title"));
             $("#share-url-box").val(eventUrl);
             setSocialLinks(eventUrl, $(this).data("title"));
             $("#share-modal").modal('show');

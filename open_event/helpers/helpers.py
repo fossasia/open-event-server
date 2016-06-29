@@ -263,40 +263,41 @@ def get_request_stats():
 
 
 def get_date_range(day_filter):
+    day_filter = day_filter.lower()  # Use lower case for match
     format = "%Y-%m-%dT%H:%M:%S"
     date_now = datetime.now()
     start, end = None, None
-    if day_filter == 'all_date':
+    if day_filter == 'all days':
         pass
-    elif day_filter == 'Today':
+    elif day_filter == 'today':
         start = date_now.replace(hour=00, minute=00)
         end = date_now.replace(hour=23, minute=59)
-    elif day_filter == 'Tomorrow':
+    elif day_filter == 'tomorrow':
         date_now += timedelta(days=1)
         start = date_now.replace(hour=00, minute=00)
         end = date_now.replace(hour=23, minute=59)
-    elif day_filter == 'This Week':
+    elif day_filter == 'this week':
         weekday = date_now.weekday()
         date_now -= timedelta(days=weekday)
         start = date_now.replace(hour=00, minute=00)
         date_now += timedelta(days=6)
         end = date_now.replace(hour=23, minute=59)
-    elif day_filter == 'This Weekend':
+    elif day_filter == 'this weekend':
         weekday = date_now.weekday()
         date_now += timedelta(days=5 - weekday)
         start = date_now.replace(hour=00, minute=00)
         date_now += timedelta(days=1)
         end = date_now.replace(hour=23, minute=59)
-    elif day_filter == 'Next Week':
+    elif day_filter == 'next week':
         weekday = date_now.weekday()
         date_now -= timedelta(days=weekday)
         start = date_now.replace(hour=00, minute=00)
         date_now += timedelta(days=6)
         end = date_now.replace(hour=23, minute=59)
-    elif day_filter == 'This Month':
+    elif day_filter == 'this month':
         start = first_day_of_month(date_now.replace(hour=00, minute=00))
         end = last_day_of_month(date_now.replace(hour=23, minute=59))
-    elif day_filter == 'Custom Date':
+    elif day_filter == 'custom date':
         pass
     return start.strftime(format), end.strftime(format)
 

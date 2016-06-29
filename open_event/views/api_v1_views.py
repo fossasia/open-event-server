@@ -8,7 +8,7 @@ from flask.ext.cors import cross_origin
 from flask.ext import login
 from flask.ext.migrate import upgrade
 
-from open_event.helpers.flask_helpers import get_real_ip
+from open_event.helpers.flask_helpers import get_real_ip, slugify
 from ..models.track import Track
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
@@ -473,6 +473,7 @@ def location():
             'status': 'ok',
             'name': response.country.name,
             'code': response.country.iso_code,
+            'slug': slugify(response.country.name),
             'ip': ip
         })
     except:
@@ -480,6 +481,7 @@ def location():
             'status': 'ok',
             'silent_error': 'look_up_failed',
             'name': 'United States',
+            'slug': slugify('United States'),
             'code': 'US',
             'ip': ip
         })

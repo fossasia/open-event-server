@@ -44,7 +44,7 @@ class ExploreView(BaseView):
     def explore_base(self):
         return redirect(url_for('admin.browse_view'))
 
-    @expose('/<location>/events', methods=('GET', 'POST'))
+    @expose('/<location>/events/', methods=('GET', 'POST'))
     def explore_view(self, location):
         location = deslugify(location)
         current_page = request.args.get('page')
@@ -55,15 +55,18 @@ class ExploreView(BaseView):
 
         filtering = {'privacy': 'public', 'state': 'Published'}
         start, end = None, None
-        word = request.form.get('word', '')
-        event_type = request.args.get('event_type', '')
-        day_filter = request.args.get('day', '')
+        word = request.args.get('query', '')
+        event_type = request.args.get('type', '')
+        day_filter = request.args.get('period', '')
+        sub_category = request.args.get('sub-category', '')
         if day_filter:
             start, end = get_date_range(day_filter)
         if location:
             filtering['__event_location'] = location
         if word:
             filtering['__event_contains'] = word
+        if sub_category:
+            filtering['sub_topic'] = sub_category
         if event_type:
             filtering['type'] = event_type
         if start:

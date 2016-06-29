@@ -10,13 +10,12 @@
 
                     </li>
                     <li style="margin-left: 10px; line-height:32px;" class="search_bar">
-                        <form action="/Germany/events/s" method="POST" role="form" id="event_browse">
-
+                        <form action="/browse" method="GET" role="form" id="event_browse">
                             {% if csrf_token %}
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                             {% endif %}
                             <div class="input-group" style="margin-top:12px; margin-bottom:6px">
-                                <input type="text" id="search-text" class="form-control" name="word" placeholder="Search for..." />
+                                <input type="text" id="search-text" class="form-control" name="query" placeholder="Search for..." />
                               <span class="input-group-btn">
                                 <button class="btn btn-default search-button" type="submit">
                                     <i class="glyphicon glyphicon-search"></i>
@@ -32,7 +31,7 @@
                            style="color: #46b8da!important; font-weight:bold">Create
                         Event</a></li>
                     {% if current_user.is_authenticated %}
-                        
+
                         <li>
                             <a href="#" class="user-profile dropdown-toggle" data-toggle="dropdown"
                                aria-expanded="false">
@@ -84,7 +83,7 @@
             url: requestUrl,
             type: 'POST',
             success: function (json) {
-                $("#event_browse").attr("action", "/" + json.name + "/events/s")
+                $("#event_browse").attr("action", "/explore/" + json.slug + "/events/")
             },
             error: function (err) {
                 console.log("Request failed, error= " + err);
