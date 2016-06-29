@@ -79,28 +79,40 @@
     <a href="/e/{{ event.id }}">
         <div class="col-xs-12 event-holder">
             <div class="thumbnail row">
-                <div class="img-box pull-left col-md-3">
-                    <img class="event-image" src="{{ event.background_url }}" onerror="imgError(this, true)">
+                <div class="img-box col-md-3 col-sm-3 col-xs-3">
+                    <img class="event-image" src="{{ event.background_url | default('', true) }}"
+                         onerror="imgError(this, true)">
                 </div>
-                <div class="caption pull-left col-md-9">
-                    <small class="time">{{ event.start_time.strftime('%a, %B %d %I:%M %p') }}</small>
+                <div class="caption col-md-9 col-sm-9 col-xs-9">
+                    <small class="time">
+                        {% if event %}{{ event.start_time.strftime('%a, %B %d %I:%M %p') }}{% endif %}</small>
                     <h4 class="name">{{ event.name }}</h4>
-                    <small class="location_name">{{ event.location_name.split(",")[0] }}</small>
+                    <small class="location_name">
+                        {% if event %}{{ event.location_name.split(",")[0] }}{% endif %}</small>
                     <hr>
                     <p class="tags">
-                        {% if event.type %}
-                            #{{ event.type | camel_case }}
+                        {% if event and event.type %}
+                            #{{ event.type | default('', true) |  camel_case }}
                         {% endif %}
-                        {% if event.topic %}
-                            #{{ event.topic | camel_case }}
+                        {% if event and event.topic %}
+                            #{{ event.topic | default('', true) | camel_case }}
                         {% endif %}
-                        <i data-event-id="{{ event.id }}" data-title="{{ event.name }}"
+                        <i data-event-id="{{ event.id | default('', true) }}"
+                           data-title="{{ event.name | default('', true) }}"
                            class="share-btn fa fa-share-alt pull-right"></i>
                     </p>
                 </div>
             </div>
         </div>
     </a>
+{% endmacro %}
+
+
+{% macro filter_tags(filter) %}
+    <li>
+        <a class="btn btn-default btn-xs">{{ filter[1] | default('', true) }}<i class="fa fa-close"
+                                                                                style="margin-left:3px"></i></a>
+    </li>
 {% endmacro %}
 
 {% block body %}
@@ -117,10 +129,7 @@
             <div>
                 <ul class="list-inline prod_size filtering">
                     {% for filter in filters %}
-                        <li>
-                            <a class="btn btn-default btn-xs">{{ filter[1] }}
-                                <i class="fa fa-close" name="{{ filter[0] }}" style="margin-left:3px"></i></a>
-                        </li>
+                        {{ filter_tags(filter) }}
                     {% endfor %}
                 </ul>
             </div>
@@ -158,8 +167,13 @@
         </div>
     </div>
 
+    <script id="event-template" type="text/x-template">
+        {{ event_block(None) }}
+    </script>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <script id="filter-tag-template" type="text/x-template">
+        {{ filter_tags(None) }}
+    </script>
 
 {% endblock %}
 
@@ -245,4 +259,5 @@
             });
         }
     </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/guest/explore.js') }}"></script>
 {% endblock %}
