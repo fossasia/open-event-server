@@ -360,7 +360,7 @@
             sortField: 'text'
         });
 
-        var sub_topics = {"Auto, Boat & Air": ['Air','Auto','Boat','Motorcycle/ATV','Other'],
+        var sub_topics = {'Auto, Boat & Air': ['Air','Auto','Boat','Motorcycle/ATV','Other'],
                          'Business & Professional':
                             ['Career','Design', 'Educators', 'Environment &amp; Sustainability', 'Finance', 'Media', 'Non Profit &amp; NGOs', 'Other', 'Real Estate', 'Sales &amp; Marketing', 'Startups &amp; Small Business'],
                          'Charity & Causes': ['Animal Welfare', 'Disaster Relief','Education','Environment','Healthcare', 'Human Rights', 			'International Aid', 'Other', 'Poverty'],
@@ -387,15 +387,24 @@
 
 
 
-$("#topic").change(function(){
-    $('#sub_topic')
-        .find('option').remove().end().append('<option value="">Choose..</option>')
-    ;
-    $.each(sub_topics[$(this).val()], function() {
-        $("#sub_topic").append($("<option />").val(this).text(this));
-    });
+    $("#topic").change(function(){
+        $('#sub_topic')
+            .find('option').remove().end().append('<option value="">Choose..</option>');
+        $.each(sub_topics[$(this).val()], function() {
+            $("#sub_topic").append($("<option />").val(this).text(this));
+        });
+    })
 
-})
+    if ($("#topic").val() !== ""){
+        console.log($("#topic").val())
+        $('#sub_topic')
+            .find('option').remove().end().append('<option value="">Choose..</option>');
+
+        $.each(sub_topics[$("#topic").val()], function() {
+            $("#sub_topic").append($("<option />").val(this).text(this));
+        });
+        $("#sub_topic").val("{{event.sub_topic}}");
+    }
 
     });
 
