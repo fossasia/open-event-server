@@ -25,7 +25,7 @@ import sqlalchemy as sa
 from urllib import urlencode
 from urlparse import parse_qs, urlsplit, urlunsplit
 
-from open_event.helpers.flask_helpers import SilentUndefined
+from open_event.helpers.flask_helpers import SilentUndefined, camel_case
 from open_event.helpers.helpers import string_empty
 from open_event.models import db
 from open_event.models.user import User
@@ -34,6 +34,7 @@ from helpers.jwt import jwt_authenticate, jwt_identity
 from helpers.formatter import operation_name
 from open_event.helpers.data_getter import DataGetter
 from open_event.views.api_v1_views import app as api_v1_routes
+from open_event.views.sitemap import app as sitemap_routes
 import requests
 
 
@@ -47,6 +48,7 @@ def create_app():
     event = Event()
 
     app.register_blueprint(api_v1_routes)
+    app.register_blueprint(sitemap_routes)
     migrate = Migrate(app, db)
 
     app.config.from_object(environ.get('APP_CONFIG', 'config.ProductionConfig'))
@@ -140,6 +142,10 @@ def pretty_name_filter(s):
     s = s.replace('_', ' ')
     s = s.title()
     return s
+
+@app.template_filter('camel_case')
+def camel_case_filter(s):
+    return camel_case(s)
 
 @app.template_filter('humanize')
 def humanize_filter(time):

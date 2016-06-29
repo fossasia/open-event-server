@@ -76,6 +76,10 @@ class TestEventImport(OpenEventTestCase):
         self.assertEqual(dic['id'], 2)
         self.assertEqual(dic['name'], 'TestEvent')
         self.assertIn('fb.com', json.dumps(dic['social_links']), dic)
+        # get to check final
+        resp = self.app.get(get_path(2))
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn('TestEvent', resp.data)
         # No errors generally means everything went fine
         # The method will crash and return 500 in case of any problem
 

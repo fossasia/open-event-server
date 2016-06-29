@@ -1,9 +1,27 @@
 import os
+from shutil import copyfile
+
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 
 from open_event.settings import get_settings
 
+
+class UploadedFile(object):
+
+    def __init__(self, file_path, filename):
+        self.file_path = file_path
+        self.filename = filename
+        self.file = open(file_path)
+
+    def save(self, new_path):
+        copyfile(self.file_path, new_path)
+
+    def read(self):
+        return self.file.read()
+
+    def __exit__(self, *args, **kwargs):
+        self.file.close()
 
 def upload(file, key, **kwargs):
     """

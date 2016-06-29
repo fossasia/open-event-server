@@ -10,8 +10,6 @@
 {% block head_css %}
     {{ super() }}
     <link href="{{ url_for('static', filename='css/admin/scheduler.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='admin/lib/bootstrap-daterangepicker/daterangepicker.css') }}"
-          rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -210,7 +208,6 @@
     <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/google-material-color/dist/palette.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/lodash/dist/lodash.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='admin/lib/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/blob/Blob.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/file-saver/FileSaver.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/html2canvas/build/html2canvas.min.js') }}"></script>

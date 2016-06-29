@@ -25,6 +25,7 @@
                 </a>
             </div>
             {% include 'gentelella/admin/event/sessions/components/session_form.html' %}
+            {% if session.slides or session.video or session.audio %}
             <div class="row">
                 <div class="col-md-12">
                     <h4>Media</h4>
@@ -45,6 +46,7 @@
                     </div>
                 {% endif %}
             </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

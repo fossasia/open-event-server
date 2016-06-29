@@ -3,7 +3,6 @@ import os
 import shutil
 import json
 from flask import request
-from errors import NotFoundError
 from werkzeug import secure_filename
 
 from ..events import DAO as EventDAO, LinkDAO as SocialLinkDAO
@@ -14,7 +13,8 @@ from ..sponsors import DAO as SponsorDAO
 from ..tracks import DAO as TrackDAO
 from .non_apis import CustomFormDAO
 
-from errors import BaseError, ServerError
+from errors import BaseError, ServerError, NotFoundError
+
 
 IMPORT_SERIES = [
     ('social_links', SocialLinkDAO),
@@ -42,6 +42,8 @@ RELATED_FIELDS = {
     ]
 }
 
+CUR_ID = None
+
 
 def _allowed_file(filename, ext):
     return '.' in filename and filename.rsplit('.', 1)[1] in ext
@@ -62,6 +64,16 @@ def get_file_from_request(ext=[], folder='static/temp/', name='file'):
     path = folder + filename
     file.save(path)
     return path
+
+
+def make_error(file, er=None, id_=None):
+    if er is None:
+        er = ServerError()
+    istr = 'File %s.json' % file
+    if id_ is not None:
+        istr = '%s, ID %s' % (istr, id_)
+    er.message = '%s, %s' % (istr, er.message)
+    return er
 
 
 def _trim_id(data):
@@ -126,6 +138,7 @@ def create_service_from_json(data, srv, event_id, service_ids={}):
     :service_ids are the mapping of ids of already created services.
         Used for mapping old ids to new
     """
+    global CUR_ID
     # sort by id
     data.sort(key=lambda k: k['id'])
     ids = {}
@@ -133,6 +146,7 @@ def create_service_from_json(data, srv, event_id, service_ids={}):
     for obj in data:
         # trim id field
         old_id, obj = _trim_id(obj)
+        CUR_ID = old_id
         # delete not needed fields
         obj = _delete_fields(srv, obj)
         # related
@@ -148,6 +162,8 @@ def import_event_json(zip_path):
     """
     Imports and creates event from json zip
     """
+    global CUR_ID
+
     path = 'static/temp/import_event'
     # delete existing files
     if os.path.isdir(path):
@@ -156,11 +172,15 @@ def import_event_json(zip_path):
     with zipfile.ZipFile(zip_path, "r") as z:
         z.extractall('static/temp/import_event')
     # create event
-    data = json.loads(open(path + '/event.json', 'r').read())
-    _, data = _trim_id(data)
-    data = _delete_fields(('event', EventDAO), data)
-    new_event = EventDAO.create(data, 'dont')[0]
-
+    try:
+        data = json.loads(open(path + '/event.json', 'r').read())
+        _, data = _trim_id(data)
+        data = _delete_fields(('event', EventDAO), data)
+        new_event = EventDAO.create(data, 'dont')[0]
+    except BaseError as e:
+        raise make_error('event', er=e)
+    except Exception:
+        raise make_error('event')
     # create other services
     try:
         service_ids = {}
@@ -170,10 +190,18 @@ def import_event_json(zip_path):
             changed_ids = create_service_from_json(
                 dic, item, new_event.id, service_ids)
             service_ids[item[0]] = changed_ids.copy()
+            CUR_ID = None
     except BaseError as e:
         EventDAO.delete(new_event.id)
-        raise e
+        raise make_error(item[0], er=e, id_=CUR_ID)
+    except IOError:
+        EventDAO.delete(new_event.id)
+        raise NotFoundError('File %s.json missing in event zip' % item[0])
+    except ValueError:
+        EventDAO.delete(new_event.id)
+        raise make_error(item[0], er=ServerError('Invalid json'))
     except Exception:
         EventDAO.delete(new_event.id)
-        raise ServerError()
+        raise make_error(item[0], id_=CUR_ID)
+    # return
     return new_event

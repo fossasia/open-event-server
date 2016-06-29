@@ -5,6 +5,8 @@ from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from open_event.models.role import Role
 from ..models.event import Event, EventsUsers
 from ..models.session import Session
+# User Notifications
+from ..models.notifications import Notification
 from ..models.track import Track
 from ..models.invite import Invite
 from ..models.speaker import Speaker
@@ -36,6 +38,14 @@ from sqlalchemy import desc, asc
 
 class DataGetter:
     @staticmethod
+    def get_all_user_notifications(user):
+        return Notification.query.filter_by(user=user).all()
+
+    @staticmethod
+    def get_user_notification(notification_id):
+        return Notification.query.filter_by(id=notification_id).first()
+
+    @staticmethod
     def get_invite_by_user_id(user_id):
         invite = Invite.query.filter_by(user_id=user_id)
         if invite:
@@ -61,6 +71,10 @@ class DataGetter:
     @staticmethod
     def get_roles():
         return Role.query.all()
+
+    @staticmethod
+    def get_role_by_name(role_name):
+        return Role.query.filter_by(name=role_name).first()
 
     @staticmethod
     def get_services():
