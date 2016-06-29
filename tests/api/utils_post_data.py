@@ -22,6 +22,7 @@ POST_EVENT_DATA = {
     "state": "pending",
     "type": "Conference",
     "topic": "Science & Technology",
+    "sub_topic": "Other",
     "privacy": "public",
     "ticket_url": "http://site.com/tickets",
     "code_of_conduct": "Thou shalt be kind",
