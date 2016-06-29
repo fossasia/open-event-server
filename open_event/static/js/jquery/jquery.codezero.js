@@ -393,3 +393,39 @@ function superFileUploadButton() {
         });
     });
 }
+
+/**
+ * Slugify a word.
+ * @param text
+ * @returns {string}
+ */
+function partSlugify(text) {
+    return text.toString().toLowerCase()
+        .replace(/\s+/g, '-')           // Replace spaces with -
+        .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+        .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+        .replace(/^-+/, '')             // Trim - from start of text
+        .replace(/-+$/, '');            // Trim - from end of text
+}
+
+/**
+ * Trim text and remove all start and end whitespace
+ * @param text
+ * @returns {*}
+ */
+function trimText(text) {
+    return text.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+}
+
+/**
+ * Slugify a word
+ * @param text
+ * @returns {string}
+ */
+function slugify(text) {
+    var splitWord = text.split(",");
+    for (var index = 0; index < splitWord.length; ++index) {
+        splitWord[index] = partSlugify(splitWord[index]);
+    }
+    return splitWord.join('--');
+}

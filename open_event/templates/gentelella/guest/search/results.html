@@ -75,14 +75,23 @@
             <div>
                 <ul class="list-inline prod_size filtering">
                     {% for filter in filters %}
+                        {% if filter[1] != '' %}
                         {{ filter_tags(filter) }}
+                        {% endif %}
                     {% endfor %}
                 </ul>
             </div>
-            <div id="events-holder">
+            <div style="overflow: hidden">
+                <div class="loader" style="display: none;">Loading...</div>
+            </div>
+
+            <div id="events-holder" {% if results.count <= 0 %}style="display: none;"{% endif %}>
                 {% for event in results.results %}
                     {{ event_block(event) }}
                 {% endfor %}
+            </div>
+            <div id="no-results" {% if results.count > 0 %}style="display: none;"{% endif %}>
+                <h2 style="font-weight: 100; font-size: 26px;">No events found for the selected parameters.</h2>
             </div>
             <br>
             <div id="pagination"></div>
@@ -208,7 +217,11 @@
             event.stopImmediatePropagation();
             event.stopPropagation();
             event.preventDefault();
-            var eventUrl = location.href + "e/" + $(this).data("event-id");
+            var pathArray = location.href.split('/');
+            var protocol = pathArray[0];
+            var host = pathArray[2];
+            var url = protocol + '//' + host;
+            var eventUrl = url + "/e/" + $(this).data("event-id") + "/" + slugify($(this).data("title"));
             $("#share-url-box").val(eventUrl);
             setSocialLinks(eventUrl, $(this).data("title"));
             $("#share-modal").modal('show');

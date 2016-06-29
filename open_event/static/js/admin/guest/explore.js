@@ -4,6 +4,10 @@
 
 var LIMIT_PER_PAGE = 10;
 
+/**
+ * Function that loads the current query string into a javascript object
+ * @type object
+ */
 window.queryString = (function (a) {
     if (a == "") return {};
     var b = {};
@@ -17,27 +21,36 @@ window.queryString = (function (a) {
     return b;
 })(window.location.search.substr(1).split('&'));
 
-function partSlugify(text) {
-    return text.toString().toLowerCase()
-        .replace(/\s+/g, '-')           // Replace spaces with -
-        .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
-        .replace(/\-\-+/g, '-')         // Replace multiple - with single -
-        .replace(/^-+/, '')             // Trim - from start of text
-        .replace(/-+$/, '');            // Trim - from end of text
+/**
+ * Check if the query object has a parameter
+ * @param param
+ * @returns {boolean}
+ */
+function queryHas(param) {
+    return window.queryString.hasOwnProperty(param)
 }
 
-function trimText(text) {
-    return text.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+/**
+ * Get a parameter's value from the query object
+ * @param param
+ * @param [defaultVal] A default value to return if not found
+ * @returns {*}
+ */
+function getQuery(param, defaultVal) {
+    if (!queryHas(param)) {
+        return defaultVal;
+    }
+    return window.queryString[param];
 }
 
-function slugify(text) {
-    var splitWord = text.split(",");
-    _.forEach(splitWord, function (value, key) {
-        splitWord[key] = partSlugify(value);
-    });
-    return splitWord.join('--');
+if(queryHas('query') && getQuery('query') == '') {
+    delete window.queryString['query'];
 }
 
+/**
+ * Convert text to UpperCamelCase
+ * @param text
+ */
 function camelCase(text) {
     return _.upperFirst(_.camelCase(text));
 }
@@ -79,11 +92,20 @@ $(document).on('click', '.filter-tag-btn', function (e) {
     $(this).parent().remove();
 });
 
+/**
+ * Run the filter for a given type and value
+ * @param type
+ * @param value
+ */
 function runFilter(type, value) {
     value = trimText(value);
     if (type !== 'location' && value !== 'All Categories' && value !== 'All Event Types' && value !== 'All Dates' && value !== '') {
         window.queryString[type] = value;
     } else {
+        delete window.queryString[type];
+    }
+
+    if (type === 'page' && value === '1') {
         delete window.queryString[type];
     }
 
@@ -99,19 +121,19 @@ function runFilter(type, value) {
     loadResults();
 }
 
-function queryHas(param) {
-    return window.queryString.hasOwnProperty(param)
-}
-
-function getQuery(param) {
-    return window.queryString[param];
-}
-
 var eventTemplate = $("#event-template").html();
 var filterTagTemplate = $("#filter-tag-template").html();
 var $filterTagsHolder = $(".filtering");
 var $eventsHolder = $("#events-holder");
+var $loader = $(".loader");
+var $pagination = $('#pagination');
+var $noEvents = $("#no-results");
 
+/**
+ * Add the filter tag to the UI
+ * @param type
+ * @param value
+ */
 function addFilterTag(type, value) {
     var $tag = $(filterTagTemplate);
     $tag.find(".value").text(value);
@@ -119,9 +141,13 @@ function addFilterTag(type, value) {
     $filterTagsHolder.append($tag);
 }
 
+/**
+ * Add event to the UI
+ * @param event
+ */
 function addEvent(event) {
     var $eventElement = $(eventTemplate);
-    $eventElement.find("a").attr("href", "/e/" + event.id);
+    $eventElement.attr("href", "/e/" + event.id);
     $eventElement.find(".event-image").attr('src', event.background_url);
     $eventElement.find(".name").text(event.name);
     $eventElement.find(".location_name").text(event.location_name.split(",")[0]);
@@ -139,8 +165,14 @@ function addEvent(event) {
     $eventsHolder.append($eventElement);
 }
 
+/**
+ * Load results
+ * @param [start] the start index to load from
+ */
 function loadResults(start) {
-
+    $loader.show();
+    $eventsHolder.hide();
+    $noEvents.hide();
     if (isUndefinedOrNull(start)) {
         start = 1
     }
@@ -161,6 +193,10 @@ function loadResults(start) {
             addFilterTag('period', getQuery('period'))
         }
 
+        if (queryHas('page')) {
+            params['start'] = ((parseInt(getQuery('page', 1)) - 1) * LIMIT_PER_PAGE) + 1
+        }
+
         if (queryHas('type')) {
             params['type'] = getQuery('type');
             addFilterTag('type', getQuery('type'))
@@ -176,11 +212,24 @@ function loadResults(start) {
         }
 
         api.events.get_event_list_paginated(params, function (response) {
-            $eventsHolder.html("");
-            response = response.obj;
-            _(response.results).forEach(function (event) {
-                addEvent(event);
-            });
-        })
+                $eventsHolder.html("");
+                response = response.obj;
+                _(response.results).forEach(function (event) {
+                    addEvent(event);
+                });
+                $loader.hide();
+                $eventsHolder.show();
+                $pagination.show();
+                $pagination.bootpag({
+                    page: parseInt(getQuery('page', 1)),
+                    total: Math.ceil(response.count / response.limit)
+                });
+            }, function (error) {
+                if(error.status === 404) {
+                    $noEvents.show();
+                    $loader.hide();
+                    $pagination.hide();
+                }
+            })
     });
 }
