@@ -27,17 +27,17 @@ class SilentUndefined(Undefined):
         __float__ = __complex__ = __pow__ = __rpow__ = \
         _fail_with_undefined_error
 
-_punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
+_punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|}.]+')
 
 def slugify(text, delim=u'-'):
     """Generates an ASCII-only slug."""
     result = []
     for word in _punct_re.split(text.lower()):
         result.extend(unidecode(word).split())
-    return unicode(delim.join(result))
+    return unicode(delim.join(result).replace(',', '--'))
 
-def deslugify(text, delim='-'):
-    return text.replace(delim, " ")
+def deslugify(text):
+    return text.replace('--', ',').replace('-', " ")
 
 def camel_case(text):
     text = deslugify(slugify(text))

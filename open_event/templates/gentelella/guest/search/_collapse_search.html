@@ -1,88 +1,83 @@
 {% macro add_search() %}
-<form action="" id="search-form">
     <div id="accordion" class="panel panel-primary behclick-panel">
         <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback" style="margin-top:10px">
-            <input type="text" class="form-control" id="inputSuccess3" name="location" placeholder="Location" value="{{location}}">
-            <span class="fa fa-map-marker form-control-feedback right" aria-hidden="true"></span>
+            <form id="location-search-form">
+                <input type="text" class="form-control" id="location" name="location" placeholder="Location"
+                       value="{{ location }}">
+            </form>
+            <span class="fa fa-map-marker form-control-feedback right"></span>
         </div>
-        <div class="panel-body">
-
+        <div class="panel-body" style="margin-top: 55px;">
             <div class="panel-heading ">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse" href="#collapse2">
-                        Categories <i class="indicator fa fa-caret-right" style="float:right" aria-hidden="true"></i>
+                    <a data-toggle="collapse" href="#category-collapse">
+                        Categories <i class="indicator fa fa-caret-right" style="float:right"></i>
                     </a>
                 </h4>
             </div>
-            <div id="collapse2" class="panel-collapse collapse">
-                <ul class="list-group categories">
-
-                    {% for category, sub_categories in categories.iteritems() %}
-                    <li class="list-group-item">
-                        <div class="checkbox">
-                            <label style="font-size: 15px">
-                                <input name="category" type="checkbox" value="{{category}}" hidden>
-                                {{category}}
-                            </label>
-                        </div>
-
-                            {% for sub_category in sub_categories %}
-                                <p class="checkbox" style="margin-left: 10px; font-size: 14px">
-                                    <label>
-                                        <input name="sub_category" type="checkbox" value="{{sub_category}}" hidden>
-                                        {{sub_category}}
-                                    </label>
-                                </p>
-                            {%endfor%}
-
+            <div id="category-collapse" class="panel-collapse collapse">
+                <ul class="list-group categories" data-filter-type="sub_category">
+                    <li class="list-group-item filter-item all-filter active">
+                        All Categories
                     </li>
-                    {%endfor%}
+                    {% for category, sub_categories in categories.iteritems() %}
+                        <li class="list-group-item">
+                            <div class="panel-heading ">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" href="#category-{{ category | slugify }}-collapse">
+                                        {{ category }} <i class="indicator fa fa-caret-right" style="float:right"></i>
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="category-{{ category | slugify }}-collapse" class="panel-collapse collapse">
+                                <ul class="list-group sub-categories" data-filter-type="sub_category">
+                                    {% for sub_category in sub_categories %}
+                                        <li class="list-group-item filter-item">
+                                            {{ sub_category }}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                        </li>
+                    {% endfor %}
                 </ul>
             </div>
 
             <div class="panel-heading ">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse" href="#collapse1">
-                        Event Type <i class="indicator fa fa-caret-right" style="float:right" aria-hidden="true"></i>
+                    <a data-toggle="collapse" href="#type-collapse">
+                        Event Type <i class="indicator fa fa-caret-right" style="float:right"></i>
                     </a>
                 </h4>
             </div>
-            <div id="collapse1" class="panel-collapse collapse">
-                <ul class="list-group categories">
-
-                    {% for event_type in event_typo%}
-                    <li class="list-group-item">
-                        <div class="checkbox">
-                            <label>
-                                <input name="event_type" type="checkbox" value="{{event_type}}" hidden>
-                                {{event_type}}
-                            </label>
-                        </div>
+            <div id="type-collapse" class="panel-collapse collapse">
+                <ul class="list-group types" data-filter-type="event_type">
+                    <li class="list-group-item filter-item all-filter active">
+                        All Event Types
                     </li>
-                    {%endfor%}
+                    {% for event_type in event_typo %}
+                        <li class="list-group-item filter-item">
+                            {{ event_type }}
+                        </li>
+                    {% endfor %}
                 </ul>
             </div>
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse" href="#collapse3">
-                        Date<i class="indicator fa fa-caret-right" style="float:right" aria-hidden="true"></i>
+                    <a data-toggle="collapse" href="#days-collapse">
+                        Date<i class="indicator fa fa-caret-right" style="float:right"></i>
                     </a>
                 </h4>
             </div>
-            <div id="collapse3" class="panel-collapse collapse">
-                <ul class="list-group days">
-
+            <div id="days-collapse" class="panel-collapse collapse">
+                <ul class="list-group days" data-filter-type="day">
                     {% for day_item in [('all_date', 'All Dates'), ('today', 'Today'),
                                      ('tommorow', 'Tomorrow') ,('this_week', 'This Week'),
                                      ('this_weekend', 'This Weekend'), ('next_week', 'Next Week'),
                                      ('this_month', 'This Month'), ('custom_date', 'Custom Date')] %}
-                        <li class="list-group-item">
-                            <div class="checkbox">
-                                <label>
-                                    <input name="day" type="checkbox" value="{{day_item[1]}}" hidden>
-                                    {{day_item[1]}}
-                                </label>
-                            </div>
+                        <li class="list-group-item filter-item">
+                            {{ day_item[1] }}
                         </li>
                     {% endfor %}
 
@@ -90,7 +85,6 @@
             </div>
 
         </div>
-</div>
-</form>
+    </div>
 
 {% endmacro %}
