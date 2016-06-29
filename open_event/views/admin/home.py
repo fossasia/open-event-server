@@ -23,12 +23,6 @@ import geoip2.database
 def intended_url():
     return request.args.get('next') or url_for('.index')
 
-def chunks(l, n):
-    """Yield successive n-sized chunks from l."""
-    for i in xrange(0, len(l), n):
-        yield l[i:i + n]
-
-
 def record_user_login_logout(template, user):
     req_stats = get_request_stats()
     record_activity(
@@ -37,17 +31,15 @@ def record_user_login_logout(template, user):
         **req_stats
     )
 
-
 class MyHomeView(AdminIndexView):
 
     @expose('/')
     def index(self):
-        call_for_papers_evs = DataGetter.get_call_for_speakers_events().all()
-        published_events = DataGetter.get_all_published_events().all()
-        # Provide data as chunks of 6 for the UI to render in a proper way
+        call_for_speakers_events = DataGetter.get_call_for_speakers_events().limit(12).all()
+        upcoming_events = DataGetter.get_all_published_events().limit(12).all()
         return self.render('gentelella/index.html',
-                           call_for_papers_evs=list(chunks(call_for_papers_evs, 6)),
-                           published_events=list(chunks(published_events, 6)))
+                           call_for_speakers_events=call_for_speakers_events,
+                           upcoming_events=upcoming_events)
 
     @expose('/login/', methods=('GET', 'POST'))
     def login_view(self):
