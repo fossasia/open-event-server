@@ -18,7 +18,7 @@ class Setting(db.Model):
     sendgrid_key = db.Column(db.String)
     # App secret
     secret = db.Column(db.String)
-    # storage place, local, aws, .. can be more in future
+    # storage place, local, s3, .. can be more in future
     storage_place = db.Column(db.String)
 
     def __init__(self, aws_key=None, aws_secret=None, aws_bucket_name=None,
