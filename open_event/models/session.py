@@ -5,8 +5,8 @@ from open_event.helpers.date_formatter import DateFormatter
 import datetime
 
 speakers_sessions = db.Table('speakers_sessions', db.Column(
-    'speaker_id', db.Integer, db.ForeignKey('speaker.id')), db.Column(
-        'session_id', db.Integer, db.ForeignKey('session.id')))
+    'speaker_id', db.Integer, db.ForeignKey('speaker.id', ondelete='CASCADE')), db.Column(
+        'session_id', db.Integer, db.ForeignKey('session.id', ondelete='CASCADE')))
 
 
 class Session(db.Model):
