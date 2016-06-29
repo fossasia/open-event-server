@@ -34,7 +34,8 @@
     "selectize": "^0.12.1",
     "nouislider": "^8.5.1",
     "Croppie": "croppie#^2.2.0",
-    "bootstrap-social": "^5.0.0"
+    "bootstrap-social": "^5.0.0",
+    "bootpag": "^1.0.7"
   },
   "resolutions": {
     "font-awesome": "^4.6.3"
