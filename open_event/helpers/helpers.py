@@ -206,6 +206,19 @@ def is_event_admin(event_id, users):
     return is_admin
 
 
+def ensure_social_link(website, link):
+    """
+    converts usernames of social profiles to full profile links
+    if link is username, prepend website to it else return the link
+    """
+    if link == '' or link is None:
+        return link
+    if link.find('/') != -1: # has backslash, so not a username
+        return link
+    else:
+        return website + '/' + link
+
+
 def get_serializer(secret_key=None):
     return Serializer('secret_key')
 
@@ -228,6 +241,7 @@ def get_commit_info(commit_number):
     response = requests.get("https://api.github.com/repos/fossasia/open-event-orga-server/commits/" + commit_number)
     return json.loads(response.text)
 
+
 def string_empty(string):
     if type(string) is not str and type(string) is not unicode:
         return False
@@ -236,8 +250,10 @@ def string_empty(string):
     else:
         return True
 
+
 def string_not_empty(string):
     return not string_empty(string)
+
 
 def fields_not_empty(obj, fields):
     for field in fields:
@@ -311,3 +327,4 @@ def first_day_of_month(date):
     ddays = int(date.strftime("%d"))-1
     delta = timedelta(days=ddays)
     return date - delta
+

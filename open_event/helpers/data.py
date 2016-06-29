@@ -564,6 +564,7 @@ class DataManager(object):
             .update(dict(data))
         speaker.sessions = InstrumentedList(
             form.sessions.data if form.sessions.data else [])
+        speaker.ensure_social_links()
         save_to_db(speaker, "Speaker updated")
         record_activity('update_speaker', speaker=speaker, event_id=speaker.event_id)
         update_version(speaker.event_id, False, "speakers_ver")
@@ -784,6 +785,7 @@ class DataManager(object):
                       event_url=form['event_url'],
                       type=form['type'],
                       topic=form['topic'],
+                      sub_topic=form['sub_topic'],
                       privacy=form.get('privacy', u'public'),
                       ticket_url=form['ticket_url'],
                       organizer_name=form['organizer_name'],
@@ -918,6 +920,7 @@ class DataManager(object):
         event.event_url = form['event_url']
         event.type = form['type']
         event.topic = form['topic']
+        event.sub_topic = form['sub_topic']
         event.privacy = form.get('privacy', 'public')
         event.organizer_name = form['organizer_name']
         event.organizer_description = form['organizer_description']
