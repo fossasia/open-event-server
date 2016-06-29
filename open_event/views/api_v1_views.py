@@ -2,7 +2,8 @@
 import os
 from urllib2 import urlopen
 
-from flask import jsonify, url_for, redirect, request, send_from_directory
+from flask import jsonify, url_for, redirect, request, send_from_directory, \
+    render_template, make_response
 from flask.ext.cors import cross_origin
 from flask.ext import login
 from flask.ext.migrate import upgrade
@@ -454,9 +455,11 @@ def serve_static(filename):
     """
     return send_from_directory(os.path.realpath('.') + '/static/', filename)
 
+
 @app.route('/documentation')
 def documentation():
     return auto.html()
+
 
 @app.route('/api/location/', methods=('GET', 'POST'))
 def location():
@@ -481,6 +484,7 @@ def location():
             'ip': ip
         })
 
+
 @app.route('/migrate/', methods=('GET', 'POST'))
 def run_migrations():
     try:
@@ -489,5 +493,13 @@ def run_migrations():
         print "Migrations have been run"
     return jsonify({'status': 'ok'})
 
+
 def intended_url():
     return request.args.get('next') or url_for('admin.index')
+
+
+@app.route('/robots.txt', methods=('GET', 'POST'))
+def robots_txt():
+    resp = make_response(render_template('robots.txt'))
+    resp.headers['Content-type'] = 'text/plain'
+    return resp

@@ -101,12 +101,34 @@
             <textarea name="description"
                       class="form-control">{{ event.description | default('', true) }}</textarea>
         </div>
+        <input type="hidden" name="background_url" id="background_url">
 
-        <div class="item form-group">
-            <label>Background image URL
-            </label>
-            <input value="{{ event.background_url | default('', true) }}" name="background_url"
-                   class="form-control"/>
+        <div class="item form-group" id="image-upload-group" {% if event and event.background_url and event.background_url != '' %}style="display: none;"{% endif %}>
+            <label>Event Image</label><br>
+            <input type="file" id="event-image-upload" name="event-image-upload" class="upload-btn no-js"
+                   accept="image/*"/>
+            <label class="file-label" for="event-image-upload" style="margin-top: 0;">
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Event Image
+            </label><br>
+            <span class="text-muted" style="color: #a2a2a2;">
+                We recommend using at least a 2160x1080px (2:1 ratio) image<br>that's no larger than 10MB.
+            </span>
+        </div>
+
+        <div class="item form-group" id="image-view-group" {% if not event or not event.background_url or event.background_url == '' %}style="display: none;"{% endif %}>
+            <label>Event Image</label><br>
+            <img src="{{ event.background_url | default('', true) }}" style="width: 350px; height: 175px;"><br><br>
+            {% if not event %}
+            <button type="button" class="btn btn-sm btn-default" data-target="#cropper-modal" data-toggle="modal">
+                <i class="fa fa-arrows" aria-hidden="true"></i>
+                Adjust
+            </button>
+            {% endif %}
+            <button type="button" class="btn btn-sm btn-default" id="remove-image-btn">
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                Remove
+            </button>
+            <br>
         </div>
 
         <div class="item form-group">
@@ -206,7 +228,7 @@
         <div class="item form-group">
             <label class="control-label">Event Topic
             </label>
-            <select class="form-control" name='topic'>
+            <select class="form-control" id="topic" name='topic'>
                 {% if not event or not event.topic %}
                     <option value="">Choose..</option>
                 {% endif %}
@@ -217,15 +239,53 @@
         </div>
 
         <div class="item form-group">
+            <label class="control-label">Event Sub-Topic
+            </label>
+            <select class="form-control" id="sub_topic" name='sub_topic'>
+                {% if not event or not event.sub_topic %}
+                    <option value="">Choose..</option>
+                {% endif %}
+                {% for sub_topic in event_sub_topics %}
+                    <option value="{{ sub_topic }}" {{ "selected" if event and event.sub_topic == sub_topic else '' }}>{{ sub_topic }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="item form-group">
             <label>Code of Conduct
             </label>
-                <textarea name="code_of_conduct" class="form-control">{{ event.code_of_conduct | default('', true) }}</textarea>
+            <textarea name="code_of_conduct"
+                      class="form-control">{{ event.code_of_conduct | default('', true) }}</textarea>
         </div>
 
     </div>
     <input type="hidden" name="latitude" id="latitude" value="{{ event.latitude | default(0.00, true) }}"/>
     <input type="hidden" name="longitude" id="longitude" value="{{ event.longitude | default(0.00, true) }}"/>
 
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="cropper-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Crop your image</h4>
+            </div>
+            <div class="modal-body">
+                <div id="upload-cropper">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="save-crop" class="btn btn-success">Done</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
 <script>
     var marker;
@@ -323,6 +383,7 @@
         }
     }
 
+    var $uploadCropper = $('#upload-cropper');
     $(document).ready(function () {
 
         $('.time').timepicker({
@@ -346,6 +407,118 @@
             create: false,
             sortField: 'text'
         });
+
+
+        var sub_topics = {'Auto, Boat & Air': ['Air','Auto','Boat','Motorcycle/ATV','Other'],
+                         'Business & Professional':
+                            ['Career','Design', 'Educators', 'Environment &amp; Sustainability', 'Finance', 'Media', 'Non Profit &amp; NGOs', 'Other', 'Real Estate', 'Sales &amp; Marketing', 'Startups &amp; Small Business'],
+                         'Charity & Causes': ['Animal Welfare', 'Disaster Relief','Education','Environment','Healthcare', 'Human Rights', 			'International Aid', 'Other', 'Poverty'],
+                         'Community & Culture': ['City/Town', 'County', 'Heritage', 'LGBT', 'Language', 'Medieval', 'Nationality', 'Other', 'Renaissance','State'],
+                         'Family & Education':['Alumni', 'Baby', 'Children &amp; Youth', 'Education', 'Other', 'Parenting', 'Parents Association', 'Reunion'],
+                         'Fashion & Beauty': ['Accessories', 'Beauty', 'Bridal', 'Fashion', 'Other'],
+                         'Film, Media & Entertainment': ['Adult', 'Anime', 'Comedy', 'Comics', 'Film', 'Gaming', 'Other', 'TV'],
+                         'Food & Drink': ["Beer", "Food", "Other", "Spirits", "Wine"],
+                         'Government & Politics': ["County/Municipal Government ", "Democratic Party", "Federal Government", "Non-partisan", "Other", "Other Party", "Republican Party", "State Government"],
+                         'Health & Wellness': ["Medical", "Mental health", "Other", "Personal health", "Spa", "Yoga"],
+                         'Hobbies & Special Interest': ["Adult", "Anime/Comics", "Books", "DIY", "Drawing & Painting", "Gaming", "Knitting", "Other", "Photography"],
+                         'Home & Lifestyle': ["Dating", "Home & Garden", "Other", "Pets & Animals"],
+                         'Music': ["Alternative", "Blues & Jazz", "Classical", "Country", "Cultural", "EDM / Electronic", "Folk", "Hip Hop / Rap", "Indie", "Latin", "Metal", "Opera", "Other", "Pop", "R&B", "Reggae", "Religious/Spiritual", "Rock", "Top 40"],
+                         'Other':[],
+                         'Performing & Visual Arts': ["Ballet", "Comedy", "Craft", "Dance", "Fine Art", "Literary Arts", "Musical", "Opera", "Orchestra", "Other", "Theatre"],
+                         'Religion & Spirituality': ["Buddhism", "Christianity", "Eastern Religion", "Islam", "Judaism", "Mormonism", "Mysticism and Occult", "New Age", "Other", "Sikhism"],
+                         'Science & Technology': ["Biotech", "High Tech", "Medicine", "Mobile", "Other", "Robotics", "Science", "Social Media"],
+                         'Seasonal & Holiday': ["Channukah", "Christmas", "Easter", "Fall events", "Halloween/Haunt", "Independence Day", "New Years Eve", "Other", "St Patricks Day", "Thanksgiving"],
+                         'Sports & Fitness': ["Baseball", "Basketball", "Cycling", "Exercise", "Fighting & Martial Arts", "Football", "Golf", "Hockey", "Motorsports", "Mountain Biking", "Obstacles", "Other", "Rugby", "Running", "Snow Sports", "Soccer", "Swimming & Water Sports", "Tennis", "Volleyball", "Walking", "Yoga"],
+                         'Travel & Outdoor': ["Canoeing", "Climbing", "Hiking", "Kayaking", "Other", "Rafting", "Travel"]
+                        }
+
+
+
+
+
+    $("#topic").change(function(){
+        $('#sub_topic')
+            .find('option').remove().end().append('<option value="">Choose..</option>');
+        console.log($(this).val())
+        console.log(sub_topics[$(this).val()])
+        $.each(sub_topics[$(this).val()], function() {
+            $("#sub_topic").append($("<option />").val(this).text(this));
+        });
+    })
+
+    if ($("#topic").val() !== ""){
+        console.log($("#topic").val())
+        $('#sub_topic')
+            .find('option').remove().end().append('<option value="">Choose..</option>');
+
+        $.each(sub_topics[$("#topic").val()], function() {
+            $("#sub_topic").append($("<option />").val(this).text(this));
+        });
+        $("#sub_topic").val("{{event.sub_topic}}");
+    }
+
+
+        $uploadCropper = $('#upload-cropper').croppie({
+            viewport: {
+                width: 490,
+                height: 245,
+                type: 'square'
+            },
+            boundary: {
+                width: 508,
+                height: 350
+            }
+        });
+
+        $("#event-image-upload").unbind("change").on('change', function () {
+            var input = this;
+            console.log(input);
+            console.log(input.files);
+            if (input.files && input.files[0]) {
+                if (input.files[0].size > 10485760) {
+                    createSnackbar("Image must be less than 10 MB in size");
+                    resetFormElement(input);
+                } else {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $("#cropper-modal").modal("show");
+                        $uploadCropper.croppie('bind', {
+                            url: e.target.result
+                        });
+
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            else {
+                logError("No FileReader support");
+            }
+
+        });
+    });
+
+    $("#save-crop").click(function () {
+        $uploadCropper.croppie('result', {
+            type: 'canvas',
+            size: 'original'
+        }).then(function (resp) {
+            $("#background_url").val(resp);
+            $("#image-view-group").show().find("img").attr("src", resp);
+            $("#image-upload-group").hide();
+            $('#cropper-modal').modal('hide')
+        });
+    });
+
+    $("#remove-image-btn").click(function () {
+        $("#image-view-group").hide();
+        $("#image-upload-group").show();
+        $("#background_url").val('');
+    });
+
+    $('#cropper-modal').on('shown.bs.modal', function (e) {
+        $uploadCropper.croppie('bind');
+        resetFormElement($("#event-image-upload"));
+
     });
 
     $(document).on("click", '.add-social-links', function () {
@@ -359,6 +532,12 @@
             $(this).closest(".social-link-holder").remove();
         }
     });
+
+
+    function resetFormElement(e) {
+        e.wrap('<form>').closest('form').get(0).reset();
+        e.unwrap();
+    }
 
 </script>
 

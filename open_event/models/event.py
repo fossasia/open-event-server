@@ -56,6 +56,7 @@ class Event(db.Model):
     closing_datetime = db.Column(db.DateTime)
     type = db.Column(db.String)
     topic = db.Column(db.String)
+    sub_topic = db.Column(db.String)
     ticket_url = db.Column(db.String)
     creator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     creator = db.relationship('User')
@@ -84,6 +85,7 @@ class Event(db.Model):
                  type=None,
                  privacy=None,
                  topic=None,
+                 sub_topic=None,
                  ticket_url=None,
                  creator=None,
                  code_of_conduct=None,
@@ -108,6 +110,7 @@ class Event(db.Model):
         self.closing_datetime = closing_datetime
         self.type = type
         self.topic = topic
+        self.sub_topic = sub_topic
         self.ticket_url = ticket_url
         self.creator = creator
         self.code_of_conduct = code_of_conduct
