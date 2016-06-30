@@ -173,14 +173,13 @@ def import_event_json(zip_path):
         z.extractall('static/temp/import_event')
     # create event
     try:
-        # z.namelist()[0] first element it's a folder name
-        data = json.loads(open(path + "/" + z.namelist()[0] + '/event.json', 'r').read())
+        data = json.loads(open(path + '/event.json', 'r').read())
         _, data = _trim_id(data)
         data = _delete_fields(('event', EventDAO), data)
         new_event = EventDAO.create(data, 'dont')[0]
     except BaseError as e:
         raise make_error('event', er=e)
-    except Exception as error:
+    except Exception:
         raise make_error('event')
     # create other services
     try:
