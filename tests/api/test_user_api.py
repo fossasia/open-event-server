@@ -2,6 +2,7 @@ import unittest
 import json
 
 from open_event import current_app as app
+from open_event.models.user import User
 
 from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
@@ -98,6 +99,10 @@ class TestUserApiWritable(TestUserApi):
         self.assertIn('em1', resp.data)
         resp = self.app.get(path)
         self.assertEqual(resp.status_code, 404)
+        # test existance in database (in trash)
+        user = User.query.get(1)
+        self.assertNotEqual(user, None)
+        self.assertEqual(user.in_trash, True)
 
 
 if __name__ == '__main__':
