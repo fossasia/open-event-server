@@ -32,3 +32,4 @@ SQLAlchemy-Continuum
 diff-match-patch
 arrow
 unidecode
+unicode-slugify

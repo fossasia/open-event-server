@@ -1,7 +1,7 @@
 {% macro add_search() %}
     <div id="accordion" class="panel panel-primary behclick-panel">
         <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback" style="margin-top:10px">
-            <form id="location-search-form">
+            <form id="location-search-form" method="GET" action="">
                 <input type="text" class="form-control" id="location" name="location" placeholder="Location"
                        value="{{ location }}">
             </form>

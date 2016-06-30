@@ -78,8 +78,10 @@ $locationField.on('autocomplete', function () {
     runFilter('location', $locationField.val());
 });
 
-$("#location-search-form").submit(function (e) {
+$("form#location-search-form").submit(function (e) {
     e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
     runFilter('location', $locationField.val())
 });
 
@@ -116,7 +118,7 @@ function runFilter(type, value) {
         $(".location-name").text(value);
     }
     var baseUrl = window.location.href.split('?')[0];
-    if (type === 'location') {
+    if (type === 'location' && value != "") {
         baseUrl = '/explore/' + slugify(value) + '/events'
     }
     baseUrl = baseUrl + '?' + $.param(window.queryString);
