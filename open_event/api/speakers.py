@@ -20,7 +20,7 @@ SPEAKER_SESSION = api.model('SpeakerSession', {
 SPEAKER = api.model('Speaker', {
     'id': fields.Integer(required=True),
     'name': fields.String(),
-    'photo': fields.ImageUri(),
+    'photo': fields.Upload(),
     'short_biography': fields.String(),
     'long_biography': fields.String(),
     'email': fields.Email(),

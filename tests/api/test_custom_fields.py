@@ -50,7 +50,8 @@ class TestCustomFieldsValidation(OpenEventTestCase):
         field = DateTime()
         self._test_common(field)
         self.assertTrue(field.validate('2014-12-31 23:11:44'))
-        self.assertFalse(field.validate('2014-31-12 23:11:44'))
+        self.assertTrue(field.validate('2014-12-31T23:11:44'))
+        self.assertFalse(field.validate('2014-31-12T23:11:44'))
         self.assertFalse(field.validate('2014-12-32'))
         self.assertFalse(field.validate('2014-06-30 12:00'))
 
