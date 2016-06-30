@@ -1,8 +1,8 @@
 import re
 from flask import request
 from jinja2 import Undefined
-from unidecode import unidecode
-
+from slugify import slugify as unicode_slugify
+from slugify import SLUG_OK
 
 def get_real_ip():
     try:
@@ -29,12 +29,9 @@ class SilentUndefined(Undefined):
 
 _punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|}.]+')
 
-def slugify(text, delim=u'-'):
+def slugify(text):
     """Generates an ASCII-only slug."""
-    result = []
-    for word in _punct_re.split(text.lower()):
-        result.extend(unidecode(word).split())
-    return unicode(delim.join(result).replace(',', '--'))
+    return unicode(unicode_slugify(text, ok=SLUG_OK + ',').replace(',', '--'))
 
 def deslugify(text):
     return text.replace('--', ',').replace('-', " ")

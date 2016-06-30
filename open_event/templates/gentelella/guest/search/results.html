@@ -173,8 +173,6 @@
 
             geocodeAddress(geocoder, map, "{{location}}");
             autocomplete.addListener('place_changed', function () {
-                console.log(autocomplete.getPlace()['formatted_address']);
-                $('#location').val(autocomplete.getPlace()['formatted_address']).trigger('autocomplete');
                 geocodeAddress(geocoder, map, autocomplete.getPlace()['formatted_address']);
             });
 
@@ -182,6 +180,7 @@
         function geocodeAddress(geocoder, resultsMap, address) {
             geocoder.geocode({'address': address}, function (results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
+                    $('#location').val(address).trigger('autocomplete');
                     $latitudeInput.val(results[0].geometry.location.lat());
                     $longitudeInput.val(results[0].geometry.location.lng());
                     resultsMap.setCenter(results[0].geometry.location);
