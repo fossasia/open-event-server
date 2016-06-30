@@ -178,10 +178,10 @@ class DataGetter:
         """
         if upcoming_events:
             return Session.query.filter(Session.speakers.any(Speaker.user_id == login.current_user.id)).filter(
-                Event.state != 'Completed')
+                Session.start_time >= datetime.datetime.now())
         else:
             return Session.query.filter(Session.speakers.any(Speaker.user_id == login.current_user.id)).filter(
-                Event.state == 'Completed')
+                Session.start_time < datetime.datetime.now())
 
     @staticmethod
     def get_all_sessions_of_user(upcoming_events=True):
