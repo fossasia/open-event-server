@@ -76,7 +76,7 @@
                                      ('tommorow', 'Tomorrow') ,('this_week', 'This Week'),
                                      ('this_weekend', 'This Weekend'), ('next_week', 'Next Week'),
                                      ('this_month', 'This Month'), ('custom_date', 'Custom Date')] %}
-                        <li class="list-group-item filter-item">
+                        <li class="list-group-item filter-item" id="{{'custom_date' if 'custom_date' == day_item[0] else ''}}">
                             {{ day_item[1] }}
                         </li>
                     {% endfor %}
