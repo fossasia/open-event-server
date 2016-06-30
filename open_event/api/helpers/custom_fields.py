@@ -1,6 +1,7 @@
 import re
 import colour
 from datetime import datetime
+from flask import request
 from flask.ext.restplus.fields import Raw, Nested, List
 
 
@@ -90,6 +91,20 @@ class ImageUri(Uri):
     Image URL (url ends with image.ext) field
     """
     __schema_example__ = 'http://website.com/image.ext'
+
+
+class Upload(Uri):
+    """
+    Upload resource (image, slides whatever)
+    """
+    __schema_example__ = 'http://website.com/image.ext'
+
+    def format(self, value):
+        if not value:
+            return value
+        if value.startswith('/'):  # relative link
+            value = request.url_root.strip('/') + value
+        return unicode(value)
 
 
 class Color(CustomField):

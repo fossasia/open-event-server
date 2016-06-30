@@ -1,6 +1,6 @@
 import unittest
 from open_event.api.helpers.custom_fields import Color, Email, Uri,\
-    ImageUri, DateTime, Integer, Float, ChoiceString
+    ImageUri, DateTime, Integer, Float, ChoiceString, Upload
 
 
 class TestCustomFieldsValidation(unittest.TestCase):
@@ -70,6 +70,16 @@ class TestCustomFieldsValidation(unittest.TestCase):
         self.assertTrue(field.validate('a'))
         self.assertFalse(field.validate('d'))
         self.assertFalse(field.validate('ab'))
+
+    def test_upload_field(self):
+        field = Upload()
+        self._test_common(field)
+        link = '/static/1'
+        self.assertFalse(field.validate(link))
+        z = field.format(link)
+        self.assertNotEqual(link, z)
+        self.assertTrue(field.validate(z))
+        self.assertEqual('http://site.co/1', field.format('http://site.co/1'))
 
 
 if __name__ == '__main__':
