@@ -36,6 +36,8 @@ class TestCustomFieldsValidation(OpenEventTestCase):
         self.assertFalse(field.validate('somestring'))
         self.assertFalse(field.validate('website.com'))
         self.assertFalse(field.validate('www.website.com'))
+        self.assertFalse(field.validate('http://bazooka'))
+        self.assertTrue(field.validate('http://localhost/file'))
         self.assertTrue(field.validate('http://website.com'))
         self.assertTrue(field.validate('ftp://domain.com/blah'))
 
