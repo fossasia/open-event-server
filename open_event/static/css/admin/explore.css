@@ -69,7 +69,7 @@
     font-size: 13px;
 }
 
-.filter-item {
+.filter-item:not(.parent) {
     color: #46b8da !important;
     padding-left: 20px !important;
     cursor: pointer;

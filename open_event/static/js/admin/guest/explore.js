@@ -66,7 +66,10 @@ $(document).on('click', '.filter-item', function () {
     }
     $filterItem.addClass('active');
     $filterItem.siblings().removeClass('active');
-    runFilter(type, $filterItem.text())
+    runFilter(type, $filterItem.text());
+    if($filterItem.parent().hasAttr("data-parent-filter-type")) {
+        runFilter($filterItem.parent().data("parent-filter-type"), $filterItem.parent().data("parent-filter-value"));
+    }
 });
 
 var $locationField = $("#location");
@@ -200,6 +203,11 @@ function loadResults(start) {
         if (queryHas('type')) {
             params['type'] = getQuery('type');
             addFilterTag('type', getQuery('type'))
+        }
+
+        if (queryHas('category')) {
+            params['topic'] = getQuery('category');
+            addFilterTag('category', getQuery('category'))
         }
 
         if (queryHas('query')) {
