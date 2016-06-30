@@ -222,13 +222,24 @@ class EventsView(BaseView):
 
             return redirect(url_for('.details_view', event_id=event_id))
 
-    @expose('/<event_id>/delete/', methods=('GET',))
+    @expose('/<event_id>/trash/', methods=('GET',))
     @can_access
+    def trash_view(self, event_id):
+        if request.method == "GET":
+            event = DataManager.trash_event(event_id)
+        flash("Your event has been deleted.", "danger")
+        if login.current_user.is_super_admin == True:
+            return redirect(url_for('sadmin_events.index_view'))    
+        return redirect(url_for('.index_view'))
+
+    @expose('/<event_id>/delete/', methods=('GET',))
+    @is_super_admin
     def delete_view(self, event_id):
         if request.method == "GET":
-            DataManager.delete_event(event_id)
-        flash("Your event has been deleted.", "danger")
-        return redirect(url_for('.index_view'))
+            event = DataManager.delete_event(event_id)
+        flash("Your event has been permanently deleted.", "danger")
+        return redirect(url_for('sadmin_events.index_view'))
+
 
     @expose('/<int:event_id>/update/', methods=('POST',))
     def save_closing_date(self, event_id):

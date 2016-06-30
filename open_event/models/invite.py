@@ -9,7 +9,7 @@ class Invite(db.Model):
     user = db.relationship("User", backref="invite")
     event_id = db.Column(
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
-    session_id = db.Column(db.Integer, db.ForeignKey('session.id'))
+    session_id = db.Column(db.Integer, db.ForeignKey('session.id', ondelete='CASCADE'))
     session = db.relationship("Session", backref="invite")
     hash = db.Column(db.String, nullable=False)
 

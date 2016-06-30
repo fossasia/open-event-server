@@ -187,4 +187,4 @@ class MyHomeView(AdminIndexView):
             country = response.country.name
         except:
             country = "United States"
-        return redirect(url_for('search_results.browses', location=slugify(country)))
+        return redirect(url_for('explore.explore_view', location=slugify(country)))

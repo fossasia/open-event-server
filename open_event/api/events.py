@@ -15,7 +15,6 @@ from .helpers import custom_fields as fields
 from helpers.special_fields import EventTypeField, EventTopicField, \
     EventPrivacyField
 
-
 api = Namespace('events', description='Events')
 
 EVENT_CREATOR = api.model('EventCreator', {
@@ -50,6 +49,7 @@ EVENT = api.model('Event', {
     'closing_datetime': fields.DateTime(),
     'type': EventTypeField(),
     'topic': EventTopicField(),
+    'sub_topic': fields.String(),
     'privacy': EventPrivacyField(),
     'ticket_url': fields.Uri(),
     'creator': fields.Nested(EVENT_CREATOR, allow_null=True),
@@ -71,6 +71,7 @@ del EVENT_POST['social_links']
 
 del SOCIAL_LINK_POST['id']
 
+
 # ###################
 # Data Access Objects
 # ###################
@@ -87,6 +88,7 @@ class EventDAO(BaseDAO):
     """
     Event DAO
     """
+
     def fix_payload(self, data):
         """
         Fixes the payload data.
@@ -129,7 +131,6 @@ class EventDAO(BaseDAO):
 LinkDAO = SocialLinkDAO(SocialLinkModel, SOCIAL_LINK_POST)
 DAO = EventDAO(EventModel, EVENT_POST)
 
-
 # DEFINE PARAMS
 
 EVENT_PARAMS = {
@@ -152,11 +153,18 @@ EVENT_PARAMS = {
     'topic': {
         'type': str
     },
+    'sub_topic': {
+        'type': str
+    },
     'start_time_gt': {},
     'start_time_lt': {},
     'end_time_gt': {},
-    'end_time_lt': {}
+    'end_time_lt': {},
+    'time_period': {
+        'type': str
+    }
 }
+
 
 # DEFINE RESOURCES
 
@@ -172,10 +180,12 @@ class EventResource():
     event_parser.add_argument('privacy', type=str)
     event_parser.add_argument('type', type=str)
     event_parser.add_argument('topic', type=str)
+    event_parser.add_argument('sub_topic', type=str)
     event_parser.add_argument('start_time_gt', dest='__event_start_time_gt')
     event_parser.add_argument('start_time_lt', dest='__event_start_time_lt')
     event_parser.add_argument('end_time_gt', dest='__event_end_time_gt')
     event_parser.add_argument('end_time_lt', dest='__event_end_time_lt')
+    event_parser.add_argument('time_period', type=str, dest='__event_time_period')
 
 
 @api.route('/<int:event_id>')

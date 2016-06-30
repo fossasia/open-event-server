@@ -5,11 +5,9 @@ from open_event.api.helpers.helpers import get_paginated_list
 from open_event.helpers.flask_helpers import deslugify
 from open_event.helpers.helpers import get_date_range
 from open_event.models.event import Event
-from flask import request
-from flask_restplus import marshal
-from open_event.api.events import DAO as EventDAO, EVENT
+from flask import request, redirect, url_for
 
-RESULTS_PER_PAGE = 2
+RESULTS_PER_PAGE = 10
 
 def get_paginated(**kwargs):
 
@@ -39,6 +37,53 @@ def erase_from_dict(d, k):
         if k in d.keys():
             d.pop(k)
             print(d)
+
+class ExploreView(BaseView):
+
+    @expose('/', methods=('GET', 'POST'))
+    def explore_base(self):
+        return redirect(url_for('admin.browse_view'))
+
+    @expose('/<location>/events/', methods=('GET', 'POST'))
+    def explore_view(self, location):
+        location = deslugify(location)
+        current_page = request.args.get('page')
+        if not current_page:
+            current_page = 1
+        else:
+            current_page = int(current_page)
+
+        filtering = {'privacy': 'public', 'state': 'Published'}
+        start, end = None, None
+        word = request.args.get('query', '')
+        event_type = request.args.get('type', '')
+        day_filter = request.args.get('period', '')
+        sub_category = request.args.get('sub-category', '')
+        if day_filter:
+            start, end = get_date_range(day_filter)
+        if location:
+            filtering['__event_location'] = location
+        if word:
+            filtering['__event_contains'] = word
+        if sub_category:
+            filtering['sub_topic'] = sub_category
+        if event_type:
+            filtering['type'] = event_type
+        if start:
+            filtering['__event_start_time_gt'] = start
+        if end:
+            filtering['__event_end_time_lt'] = end
+        filters = request.args.items()
+        erase_from_dict(filters, 'page')
+        results = get_paginated(**filtering)
+
+        return self.render('/gentelella/guest/search/results.html',
+                           results=results,
+                           location=location,
+                           filters=filters,
+                           current_page=current_page,
+                           categories=CATEGORIES)
+
 
 CATEGORIES = {'Auto, Boat & Air': ['Air', 'Auto', 'Boat', 'Motorcycle/ATV', 'Other'],
               'Business & Professional':
@@ -78,54 +123,3 @@ CATEGORIES = {'Auto, Boat & Air': ['Air', 'Auto', 'Boat', 'Motorcycle/ATV', 'Oth
                                    "Tennis", "Volleyball", "Walking", "Yoga"],
               'Travel & Outdoor': ["Canoeing", "Climbing", "Hiking", "Kayaking", "Other", "Rafting", "Travel"]
               }
-
-
-class BrowseView(BaseView):
-    @expose('/', methods=('GET', 'POST'))
-    def browse(self, location):
-        current_page = request.args.get('page')
-        if not current_page:
-            current_page = 1
-        else:
-            current_page = int(current_page)
-        results = get_paginated(privacy='public', state='Published')
-        return self.render('/gentelella/guest/search/results.html', results=results, location=location,
-                           current_page=current_page)
-
-    @expose('/s', methods=('GET', 'POST'))
-    def browses(self, location):
-        location = deslugify(location)
-        current_page = request.args.get('page')
-        if not current_page:
-            current_page = 1
-        else:
-            current_page = int(current_page)
-
-        filtering = {'privacy': 'public', 'state': 'Published'}
-        start, end = None, None
-        word = request.form.get('word', '')
-        event_type = request.args.get('event_type', '')
-        day_filter = request.args.get('day', '')
-        if day_filter:
-            start, end = get_date_range(day_filter)
-        if location:
-            filtering['__event_location'] = location
-        if word:
-            filtering['__event_contains'] = word
-        if event_type:
-            filtering['type'] = event_type
-        if start:
-            filtering['__event_start_time_gt'] = start
-        if end:
-            filtering['__event_end_time_lt'] = end
-        filters = request.args.items()
-        erase_from_dict(filters, 'page')
-        results = get_paginated(**filtering)
-
-        return self.render('/gentelella/guest/search/results.html',
-                           results=results,
-                           location=location,
-                           filters=filters,
-                           current_page=current_page,
-                           categories=CATEGORIES)
-
