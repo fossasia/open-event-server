@@ -42,6 +42,10 @@ class TestTrashedItems404(OpenEventTestCase):
         resp = self.app.get(path)
         self.assertEqual(resp.status_code, 404)
         self.assertNotIn('Test', resp.data)
+        # get item list and check empty
+        resp = self.app.get(path[:-2])
+        self.assertEqual(resp.status_code, 200)
+        self.assertNotIn('Test', resp.data)
 
     def test_event_api(self):
         self._test_model('event', Event)

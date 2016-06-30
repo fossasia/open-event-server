@@ -100,9 +100,10 @@ class TestUserApiWritable(TestUserApi):
         resp = self.app.get(path)
         self.assertEqual(resp.status_code, 404)
         # test existance in database (in trash)
-        user = User.query.get(1)
-        self.assertNotEqual(user, None)
-        self.assertEqual(user.in_trash, True)
+        with app.test_request_context():
+            user = User.query.get(1)
+            self.assertNotEqual(user, None)
+            self.assertEqual(user.in_trash, True)
 
 
 if __name__ == '__main__':
