@@ -203,6 +203,9 @@
   .search-button {
     border-radius:3px !important;
   }
+  .user-profile .user-text {
+    display:none;
+  }
 }
 
 @media (max-width: 980px) and (min-width: 640px) {
@@ -212,12 +215,18 @@
   .navbar-nav > li {
     float:left;
   }
+  .navbar-right > li > a{
+    font-size: 12px !important;
+  }
   .navbar-nav {
     float:left;
-    max-width: 55%;
+    max-width: 50%;
   }
   .search_bar #search-text {
     display: block;
+  }
+  .user-profile .user-text {
+    display:none;
   }
 }
 
@@ -557,6 +566,7 @@ a:hover, a:focus {
 @media (min-width: 480px) {
   .top_nav .navbar-right li {
     position: relative;
+    border-left: 1px solid #D2D6DF;
   }
 }
 .top_nav .dropdown-menu li {
@@ -565,6 +575,7 @@ a:hover, a:focus {
 .top_nav .dropdown-menu li a {
   width: 100%;
   padding: 12px 20px;
+  font-size:15px;
 }
 .top_nav li a i {
   font-size: 15px
@@ -670,10 +681,15 @@ a:hover, a:focus {
   box-shadow: rgba(0, 0, 0, 0.25) 0 1px 0, inset rgba(255, 255, 255, 0.16) 0 1px 0;
 }
 .navbar-brand, .navbar-nav>li>a {
-  font-weight: 500;
+  font-weight: 400;
   color: #ECF0F1 !important;
   margin-left: 0 !important;
   line-height: 32px;
+  font-size: 13px;
+}
+.navbar-right>li>a {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 .site_title {
   text-overflow: ellipsis;
