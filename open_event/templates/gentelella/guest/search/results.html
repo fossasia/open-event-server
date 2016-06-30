@@ -230,12 +230,15 @@
         });
 
         $(document).ready(function (){
+
+
+
             var custom_date = '';
             var start_label = '<label>Start Date</label>'
-            var start_input = '<input name="start" id="custom_start" class="form-control date-picker"/>'
+            var start_input = '<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">  <input name="start" id="custom_start" class="form-control date-picker"/>  <span class="fa fa-calendar-o form-control-feedback right"></span> </div>'
             var end_label = '<label >End Date</label>'
-            var end_input = '<input name="end" id="custom_end" class="form-control date-picker"/>'
-            custom_date = "<div style='margin:10px' class='custom_date_form'>" + start_label + start_input + end_label + end_input + "</div>"
+            var end_input = '<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback" style="margin-top:10px">  <input name="end" id="custom_end" class="form-control date-picker"/> <span class="fa fa-calendar-o form-control-feedback right"></span> </div>'
+            custom_date = "<div style='' class='custom_date_form'>" + start_label + start_input + end_label + end_input + "</div>"
             $("#custom_date").append(custom_date)
             $('#custom_start').datepicker({
                 'format': 'mm/dd/yyyy',
