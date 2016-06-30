@@ -82,10 +82,31 @@ Users
 {% block content %}
 <div>
     <ul id="event-tabs" class="nav nav-tabs bar_tabs" role="tablist">
+            <li class=""><a href="#tab_content1" id="all-users-tab" data-toggle="tab">All Users</a></li>
             <li class=""><a href="#tab_content1" id="live-users-tab" data-toggle="tab">Active Users</a></li>
             <li class="active"><a href="#tab_content2" id="deleted-users-tab" data-toggle="tab">Deleted Users</a></li>
     </ul>
     <div id="myTabContent" class="tab-content">
+            <div role="tabpanel" class="tab-pane fade" id="tab_content0"
+                 aria-labelledby="all-users-tab">
+                <table class="table table-striped no-global-dt" id="all_users_table">
+                    <thead>
+                   <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>System Roles</th>
+                        <th>Event Roles</th>
+                        <th>Member Since</th>
+                        <th>Last Access</th>
+                        <th>Options</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {{ users_row(all_user_list) }}
+                    </tbody>
+                </table>
+            </div>
             <div role="tabpanel" class="tab-pane fade" id="tab_content1"
                  aria-labelledby="live-users-tab">
                 <table class="table table-striped no-global-dt" id="active_users_table">
@@ -102,7 +123,7 @@ Users
                     </tr>
                     </thead>
                     <tbody>
-                    {{ users_row(active_user_list) }}
+                        {{ users_row(active_user_list) }}
                     </tbody>
                 </table>
             </div>
@@ -172,6 +193,11 @@ Users
         "aaSorting": []
     });
     $('#deleted_users_table').dataTable({
+        "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+        /* Disable initial sort */
+        "aaSorting": []
+    });
+    $('#all_users_table').dataTable({
         "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
         /* Disable initial sort */
         "aaSorting": []
