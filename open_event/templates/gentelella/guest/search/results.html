@@ -229,11 +229,11 @@
 
         $(document).ready(function (){
             var custom_date = '';
-            var start_label = '<label class="form-control">Start Date</label>'
+            var start_label = '<label>Start Date</label>'
             var start_input = '<input class="form-control"/>'
-            var end_label = '<label class="form-control">End Date</label>'
+            var end_label = '<label >End Date</label>'
             var end_input = '<input class="form-control"/>'
-            custom_date = "<div>" + start_label + start_input + end_label + end_input + "</div>"
+            custom_date = "<div style='margin:10px' class='custom_date_form'>" + start_label + start_input + end_label + end_input + "</div>"
             $("#custom_date").after(custom_date)
         })
     </script>
