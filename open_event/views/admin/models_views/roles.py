@@ -5,7 +5,8 @@ from ....helpers.data import DataManager
 from ....helpers.data_getter import DataGetter
 from open_event.helpers.permission_decorators import is_organizer
 from open_event.helpers import helpers as Helper
-from open_event.helpers.system_notifications import EVENT_ROLE_INVITE
+from open_event.models.notifications import EVENT_ROLE_INVITE
+from open_event.helpers.system_notifications import NOTIFS
 
 
 class RoleView(BaseView):
@@ -41,12 +42,13 @@ class RoleView(BaseView):
                 flash('An email invitation has been sent to user')
             else:
                 # Send a notification with the invitation link
+                notif = NOTIFS[EVENT_ROLE_INVITE]
 
-                title = EVENT_ROLE_INVITE['title'].format(
+                title = notif['title'].format(
                     role=role.title_name,
                     event=event.name
                 )
-                message = EVENT_ROLE_INVITE['message'].format(
+                message = notif['message'].format(
                     email=email,
                     role=role.title_name,
                     event=event.name,
