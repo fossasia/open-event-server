@@ -133,11 +133,30 @@
             <br>
         </div>
 
-        <div class="item form-group">
-            <label>Logo URL
-            </label>
-            <input value="{{ event.logo | default('', true) }}" name="logo"
-                   class="form-control"/>
+        <input type="hidden" name="logo" id="logo">
+
+        <div class="item form-group" id="logo-upload-group"
+             {% if event and event.logo and event.logo != '' %}style="display: none;"{% endif %}>
+            <label>Logo</label><br>
+            <input type="file" id="logo-upload" name="logo-upload" class="upload-btn no-js"
+                   accept="image/*"/>
+            <label class="file-label" for="logo-upload" style="margin-top: 0;">
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Logo
+            </label><br>
+            <span class="text-muted" style="color: #a2a2a2;">
+                Logo size must be less than 1MB.
+            </span>
+        </div>
+
+        <div class="item form-group" id="logo-view-group"
+             {% if not event or not event.logo or event.logo == '' %}style="display: none;"{% endif %}>
+            <label>Logo</label><br>
+            <img src="{{ event.logo | default('', true) }}" style="width: 350px;"><br><br>
+            <button type="button" class="btn btn-sm btn-default" id="remove-logo-btn">
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                Remove
+            </button>
+            <br>
         </div>
 
         <div class="item form-group">
@@ -488,6 +507,29 @@
             }
 
         });
+
+        $("#logo-upload").unbind("change").on('change', function () {
+            var input = this;
+            if (input.files && input.files[0]) {
+                if (input.files[0].size > 1048576) {
+                    createSnackbar("Image must be less than 1 MB in size");
+                    resetFormElement(input);
+                } else {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        resetFormElement(input);
+                        $("#logo").val(e.target.result);
+                        $("#logo-view-group").show().find("img").attr("src", e.target.result);
+                        $("#logo-upload-group").hide();
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            else {
+                logError("No FileReader support");
+            }
+
+        });
     });
 
     $("#save-crop").click(function () {
@@ -508,6 +550,12 @@
         $("#background_url").val('');
     });
 
+    $("#remove-logo-btn").click(function () {
+        $("#logo-view-group").hide();
+        $("#logo-upload-group").show();
+        $("#logo").val('');
+    });
+
     $('#cropper-modal').on('shown.bs.modal', function (e) {
         $uploadCropper.croppie('bind');
         resetFormElement($("#event-image-upload"));
@@ -526,8 +574,8 @@
         }
     });
 
-
     function resetFormElement(e) {
+        e = $(e);
         e.wrap('<form>').closest('form').get(0).reset();
         e.unwrap();
     }
