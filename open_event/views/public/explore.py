@@ -55,16 +55,19 @@ class ExploreView(BaseView):
 
         filtering = {'privacy': 'public', 'state': 'Published'}
         start, end = None, None
-        word = request.args.get('query', '')
-        event_type = request.args.get('type', '')
-        day_filter = request.args.get('period', '')
-        sub_category = request.args.get('sub-category', '')
+        word = request.args.get('query', None)
+        event_type = request.args.get('type', None)
+        day_filter = request.args.get('period', None)
+        sub_category = request.args.get('sub-category', None)
+        category = request.args.get('category', None)
         if day_filter:
             start, end = get_date_range(day_filter)
         if location:
             filtering['__event_location'] = location
         if word:
             filtering['__event_contains'] = word
+        if category:
+            filtering['topic'] = category
         if sub_category:
             filtering['sub_topic'] = sub_category
         if event_type:

@@ -23,14 +23,14 @@
                     {% for category, sub_categories in categories.iteritems() %}
                         <li class="list-group-item">
                             <div class="panel-heading ">
-                                <h4 class="panel-title">
-                                    <a data-toggle="collapse" href="#category-{{ category | slugify }}-collapse">
+                                <h4 class="panel-title" data-filter-type="category">
+                                    <a data-toggle="collapse" class="filter-item parent" href="#category-{{ category | slugify }}-collapse">
                                         {{ category }} <i class="indicator fa fa-caret-right" style="float:right"></i>
                                     </a>
                                 </h4>
                             </div>
                             <div id="category-{{ category | slugify }}-collapse" class="panel-collapse collapse">
-                                <ul class="list-group sub-categories" data-filter-type="sub-category">
+                                <ul class="list-group sub-categories" data-filter-type="sub-category" data-parent-filter-type="category" data-parent-filter-value="{{ category }}">
                                     {% for sub_category in sub_categories %}
                                         <li class="list-group-item filter-item">
                                             {{ sub_category }}
