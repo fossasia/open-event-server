@@ -231,6 +231,7 @@ def delete_model(model, item_id, event_id=None):
         item = get_object_or_404(model, item_id)
     if hasattr(item, 'in_trash'):
         item.in_trash = True
+        save_to_db(item, '{} moved to trash'.format(model.__name__))
     else:
         delete_from_db(item, '{} deleted'.format(model.__name__))
     return item

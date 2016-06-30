@@ -51,9 +51,10 @@ class TestDeleteApi(OpenEventTestCase):
         self.assertIn('does not exist', response.data)
 
     def _test_trashed(self, model):
-        item = model.query.get(1)
-        self.assertNotEqual(item, None)
-        self.assertEqual(item.in_trash, True)
+        with app.test_request_context():
+            item = model.query.get(1)
+            self.assertNotEqual(item, None)
+            self.assertEqual(item.in_trash, True)
 
     def test_event_api(self):
         self._test_model('event', POST_EVENT_DATA)
