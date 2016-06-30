@@ -6,7 +6,7 @@ from flask.ext.restplus.fields import Raw, Nested, List
 
 
 EMAIL_REGEX = re.compile(r'\S+@\S+\.\S+')
-URI_REGEX = re.compile(r'(http|https|ftp)://\S+\.\S+')
+URI_REGEX = re.compile(r'(http|https|ftp)://\S*(\S+\.|localhost/)\S+')
 
 
 class CustomField(Raw):
@@ -97,7 +97,7 @@ class Upload(Uri):
     """
     Upload resource (image, slides whatever)
     """
-    __schema_example__ = 'http://website.com/image.ext'
+    __schema_example__ = 'http://website.com/item.ext'
 
     def format(self, value):
         if not value:

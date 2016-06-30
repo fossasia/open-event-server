@@ -1,6 +1,5 @@
 """Copyright 2015 Rafal Kowalski"""
 from sqlalchemy import event
-import json
 
 from open_event.helpers.date_formatter import DateFormatter
 from open_event.helpers.versioning import clean_up_string
