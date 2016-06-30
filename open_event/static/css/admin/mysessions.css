@@ -53,3 +53,15 @@ span.message {
     padding: 8px;
     border-radius: 1px;
 }
+
+@media (max-width: 640px) {
+    .session {
+        height: 360px;
+    }
+    ul.bar_tabs {
+        padding-left: 0;
+    }
+    ul.bar_tabs > li a {
+        padding: 10px 7px;
+    }
+}
