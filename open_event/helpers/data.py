@@ -952,7 +952,7 @@ class DataManager(object):
             filename = str(time.time()) + '.png'
             file_path = os.path.realpath('.') + '/static/temp/' + filename
             fh = open(file_path, "wb")
-            fh.write(background_image.split(",")[1].decode('base64'))
+            fh.write(logo.split(",")[1].decode('base64'))
             fh.close()
             logo_file = UploadedFile(file_path, filename)
             logo = upload(logo_file, 'events/%d/logo' % (int(event.id)))
