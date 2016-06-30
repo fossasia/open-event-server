@@ -773,7 +773,6 @@ class DataManager(object):
         event = Event(name=form['name'],
                       email=form.get('email', u'test@example.com'),
                       color=form.get('color', u'black'),
-                      logo=form['logo'],
                       start_time=datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M'),
                       end_time=datetime.strptime(form['end_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M'),
                       timezone=form['timezone'],
@@ -836,6 +835,17 @@ class DataManager(object):
                 background_file = UploadedFile(file_path, filename)
                 background_url = upload(background_file, 'events/%d/background_image' % (int(event.id)))
                 event.background_url = background_url
+
+            logo = form['logo']
+            if string_not_empty(logo):
+                filename = str(time.time()) + '.png'
+                file_path = os.path.realpath('.') + '/static/temp/' + filename
+                fh = open(file_path, "wb")
+                fh.write(logo.split(",")[1].decode('base64'))
+                fh.close()
+                logo_file = UploadedFile(file_path, filename)
+                logo = upload(logo_file, 'events/%d/logo' % (int(event.id)))
+                event.logo = logo
 
             for index, name in enumerate(session_type_names):
                 if not string_empty(name):
@@ -936,6 +946,17 @@ class DataManager(object):
             background_file = UploadedFile(file_path, filename)
             background_url = upload(background_file, 'events/%d/background_image' % (int(event.id)))
             event.background_url = background_url
+
+        logo = form['logo']
+        if string_not_empty(logo):
+            filename = str(time.time()) + '.png'
+            file_path = os.path.realpath('.') + '/static/temp/' + filename
+            fh = open(file_path, "wb")
+            fh.write(background_image.split(",")[1].decode('base64'))
+            fh.close()
+            logo_file = UploadedFile(file_path, filename)
+            logo = upload(logo_file, 'events/%d/logo' % (int(event.id)))
+            event.logo = logo
 
         state = form.get('state', None)
         if state and ((state == u'Published' and not string_empty(
