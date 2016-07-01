@@ -17,7 +17,7 @@ from flask.ext.login import current_user
 from flask import render_template
 from flask import request
 from flask.ext.jwt import JWT
-from datetime import timedelta, time
+from datetime import timedelta, time, datetime
 
 from icalendar import Calendar, Event
 import humanize
@@ -156,20 +156,15 @@ def humanize_filter(time):
     return arrow.get(time).humanize()
 
 @app.context_processor
-def pagination_helpers():
-    def set_query_parameter(param_name, param_value, url=request.url):
-        """Given a URL, set or replace a query parameter and return the
-        modified URL.
-        """
-        scheme, netloc, path, query_string, fragment = urlsplit(url)
-        query_params = parse_qs(query_string)
+def flask_helpers():
+    def string_empty(string):
+        from open_event.helpers.helpers import string_empty
+        return string_empty(string)
 
-        query_params[param_name] = [param_value]
-        new_query_string = urlencode(query_params, doseq=True)
+    def current_date(format='%a, %B %d %I:%M %p', **kwargs):
+        return (datetime.now() + timedelta(**kwargs)).strftime(format)
 
-        return urlunsplit((scheme, netloc, path, new_query_string, fragment))
-
-    return dict(set_query_parameter=set_query_parameter)
+    return dict(string_empty=string_empty, current_date=current_date)
 
 @app.context_processor
 def versioning_manager():
