@@ -13,7 +13,7 @@ SPONSOR = api.model('Sponsor', {
     'id': fields.Integer(required=True),
     'name': fields.String(required=True),
     'url': fields.Uri(),
-    'logo': fields.ImageUri(),
+    'logo': fields.Upload(),
     'description': fields.String(),
     'level': fields.String(),
     'sponsor_type': fields.String(),
