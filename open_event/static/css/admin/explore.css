@@ -71,7 +71,7 @@
 
 .filter-item:not(.parent) {
     color: #46b8da !important;
-    padding-left: 20px !important;
+    padding-left: 20px;
     cursor: pointer;
 }
 

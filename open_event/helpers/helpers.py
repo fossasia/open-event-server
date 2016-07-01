@@ -303,6 +303,8 @@ def get_date_range(day_filter):
             start = datetime.strptime(from_string, '%m-%d-%Y').replace(hour=00, minute=00)
             end = datetime.strptime(to_string, '%m-%d-%Y').replace(hour=23, minute=59)
         except:
+            start = date_now.replace(hour=00, minute=00)
+            end = date_now.replace(hour=23, minute=59)
             pass
     return start.strftime(format), end.strftime(format)
 

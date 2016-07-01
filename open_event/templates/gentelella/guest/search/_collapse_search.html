@@ -34,7 +34,7 @@
                                 <ul class="list-group sub-categories" data-filter-type="sub-category"
                                     data-parent-filter-type="category" data-parent-filter-value="{{ category }}">
                                     {% for sub_category in sub_categories %}
-                                        <li class="list-group-item filter-item">
+                                        <li class="list-group-item filter-item child">
                                             {{ sub_category }}
                                         </li>
                                     {% endfor %}
@@ -84,16 +84,16 @@
                         href="#custom-date-collapse">
                         Custom Dates
                     </li>
-                    <li id="custom-date-collapse">
+                    <li id="custom-date-collapse" class="collapse filter-item no-click" style="padding-right: 20px;padding-left: 32px;">
                         <div class="form-group" style="margin-top: 6px;">
-                            <label for="custom-start">Start Date</label>
-                            <input data-provide="datepicker" data-date-format="mm-dd-yyyy" type="text" class="form-control" id="custom-start" placeholder="DD-MM-YYYY">
+                            <label for="custom-start" style="font-weight: 300;">Start Date</label>
+                            <input type="text" class="form-control input-sm date start" id="custom-start" placeholder="DD-MM-YYYY" value="{{ current_date('%m-%d-%Y') }}">
                         </div>
                         <div class="form-group">
-                            <label for="custom-end">End Date</label>
-                            <input data-provide="datepicker" data-date-format="mm-dd-yyyy" type="text" class="form-control" id="custom-end" placeholder="DD-MM-YYYY">
+                            <label for="custom-end" style="font-weight: 300;">End Date</label>
+                            <input type="text" class="form-control input-sm date end" id="custom-end" placeholder="DD-MM-YYYY" value="{{ current_date('%m-%d-%Y', days=1) }}">
                         </div>
-                        <button type="submit" class="btn btn-default">Filter</button>
+                        <button type="submit" id="custom-date-filter-btn" class="btn btn-default">Filter</button>
                     </li>
                 </ul>
             </div>

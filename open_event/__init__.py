@@ -17,7 +17,7 @@ from flask.ext.login import current_user
 from flask import render_template
 from flask import request
 from flask.ext.jwt import JWT
-from datetime import timedelta, time
+from datetime import timedelta, time, datetime
 
 from icalendar import Calendar, Event
 import humanize
@@ -161,7 +161,10 @@ def flask_helpers():
         from open_event.helpers.helpers import string_empty
         return string_empty(string)
 
-    return dict(string_empty=string_empty)
+    def current_date(format='%a, %B %d %I:%M %p', **kwargs):
+        return (datetime.now() + timedelta(**kwargs)).strftime(format)
+
+    return dict(string_empty=string_empty, current_date=current_date)
 
 @app.context_processor
 def versioning_manager():
