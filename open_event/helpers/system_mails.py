@@ -40,7 +40,7 @@ MAILS = {
         'subject': 'Event {event_name} is coming soon',
         'message': (
             "Hi {email},<br/>" +
-            "Event {event_name} is coming soon. Get ready!! " +
+            "Here are the upcoming events: {up_coming_events} .Get ready!! " +
             "<br/> Visit this link to view the event: {link}"
         )
     },

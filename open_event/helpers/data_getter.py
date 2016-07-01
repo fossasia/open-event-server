@@ -532,3 +532,16 @@ class DataGetter:
     @staticmethod
     def get_trash_sessions():
         return Session.query.filter_by(in_trash=True)
+
+    @staticmethod
+    def get_upcoming_events(event_id):
+        up_coming_events = []
+        events = DataGetter.get_all_events()
+        relative_event = DataGetter.get_event(event_id)
+        for event in events:
+            if event.start_time >= relative_event.start_time:
+                up_coming_events.append(event.name)
+
+        return up_coming_events
+
+
