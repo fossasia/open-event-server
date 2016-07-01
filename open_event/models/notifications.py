@@ -1,5 +1,7 @@
 from . import db
 
+EVENT_ROLE_INVITE = 'Event Role Invitation'
+
 
 class Notification(db.Model):
     """
