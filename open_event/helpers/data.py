@@ -904,20 +904,6 @@ class DataManager(object):
 
             uer = UsersEventsRoles(login.current_user, event, role)
 
-            organizers = DataGetter.get_user_event_roles_by_role_name(event.id, 'organizer')
-            speakers = DataGetter.get_user_event_roles_by_role_name(event.id, 'speaker')
-            link = url_for('events.details_view',
-                           event_id=event.id, _external=True)
-            up_coming_events = DataGetter.get_upcoming_events(event.id)
-            for organizer in organizers:
-                send_next_event(organizer.user.email, event.name, link, up_coming_events)
-
-            for speaker in speakers:
-                if speaker.user.email == login.current_user.email:
-                    continue
-                else:
-                    send_next_event(speaker.user.email, event.name, link, up_coming_events)
-
             if save_to_db(uer, "Event saved"):
                 return event
         else:

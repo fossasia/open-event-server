@@ -535,13 +535,7 @@ class DataGetter:
 
     @staticmethod
     def get_upcoming_events(event_id):
-        up_coming_events = []
-        events = DataGetter.get_all_events()
-        relative_event = DataGetter.get_event(event_id)
-        for event in events:
-            if event.start_time >= relative_event.start_time:
-                up_coming_events.append(event.name)
-
-        return up_coming_events
-
+        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
+            .filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
+            .filter(Event.in_trash == False)
 

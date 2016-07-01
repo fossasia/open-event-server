@@ -4,7 +4,7 @@ import os
 import re
 import requests
 from datetime import datetime, timedelta
-from flask import request
+from flask import request, url_for
 from itsdangerous import Serializer
 from flask.ext import login
 
@@ -95,6 +95,12 @@ def send_schedule_change(email, session_name, link):
 
 def send_next_event(email, event_name, link, up_coming_events):
     """Send next event"""
+    upcoming_event_html = "<ul>"
+    for event in up_coming_events:
+        upcoming_event_html += "<a href='%s'><li> %s </li></a>" % (url_for('events.details_view',
+                                                                   event_id=event.id, _external=True),
+                                                                   event.name)
+    upcoming_event_html += "</ul><br/>"
     send_email(
         to=email,
         action=NEXT_EVENT,
@@ -103,7 +109,7 @@ def send_next_event(email, event_name, link, up_coming_events):
             email=str(email),
             event_name=str(event_name),
             link=link,
-            up_coming_events=up_coming_events
+            up_coming_events=upcoming_event_html
         )
     )
 
