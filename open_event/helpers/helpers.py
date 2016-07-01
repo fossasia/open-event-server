@@ -93,7 +93,7 @@ def send_schedule_change(email, session_name, link):
     )
 
 
-def send_next_event(email, event_name, link):
+def send_next_event(email, event_name, link, up_coming_events):
     """Send next event"""
     send_email(
         to=email,
@@ -102,7 +102,8 @@ def send_next_event(email, event_name, link):
         html=MAILS[NEXT_EVENT]['message'].format(
             email=str(email),
             event_name=str(event_name),
-            link=link
+            link=link,
+            up_coming_events=up_coming_events
         )
     )
 
