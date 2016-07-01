@@ -9,7 +9,7 @@ footer{
 
 footer h4 {
     font-size: 16px;
-    color: #969191;
+    color: #D2D6DF;
 }
 
 footer ul
@@ -27,7 +27,6 @@ footer ul li
 
 footer ul a, footer a:hover, footer ul a:hover {
     color: white;
-    color: #D2D6DF
 }
 
 footer .row {
@@ -37,31 +36,31 @@ footer .row {
 
 #footer-menu{
     height: 80px;
-    border-top: 1px solid #969191;
-    border-bottom: 1px solid #969191;
+    border-top: 1px solid #D2D6DF;
+    border-bottom: 1px solid #D2D6DF;
 
 }
 
 #footer-menu select {margin-top: 10px}
 
 
-#footer-menu a{color: #D2D6DF; font-size: 16px; margin: 10px; line-height: 55px}
+#footer-menu a{color: white; font-size: 16px; margin: 10px; line-height: 55px}
 
 footer .copyright{
     text-align: center;
-    color:#969191;
+    color:#D2D6DF;
     margin-top: 10px}
 
-#footer-menu select {background: #282C35; border-color:#969191; color: #969191  }
+#footer-menu select {background: #282C35; border-color:#D2D6DF; color: #D2D6DF  }
 
 .footer-dropdown {
-    border: 1px solid #969191;
+    border: 1px solid #D2D6DF;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
     padding: 16px;
     background: #282C35;
-    color: #969191
+    color: #D2D6DF
 }
 
 .footer-dropdown .dropdown-text {
@@ -87,6 +86,7 @@ footer .copyright{
     }
     .dropup {
         width:100%;
+        margin-top: 25px;
     }
     #footer-menu a{
         line-height: 1.9;
