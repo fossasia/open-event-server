@@ -75,7 +75,7 @@ footer .dropdown-menu {
     width:100%;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 991px) {
     #footer-menu {
         border: 0;
         height: auto;
