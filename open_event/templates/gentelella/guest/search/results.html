@@ -139,8 +139,9 @@
         });
 
         var marker;
-        var init_marker;
         var placeSearch, autocomplete;
+        var geocoder;
+        var map;
         var componentForm = {
             street_number: 'short_name',
             route: 'long_name',
@@ -149,61 +150,81 @@
             country: 'long_name',
             postal_code: 'short_name'
         };
-        var $latitudeInput = $('#latitude');
-        var $longitudeInput = $('#longitude');
         var $locationInput = "{{location | title}}";
-        function initMap() {
-            var latitude = $latitudeInput.val();
-            var longitude = $longitudeInput.val();
-            var latlng = new google.maps.LatLng(latitude, longitude);
-            var map = new google.maps.Map($("#map")[0], {
-                zoom: 1,
-                center: latlng
-            });
 
-            var geocoder = new google.maps.Geocoder();
-            init_marker = new google.maps.Marker({
-                draggable: true,
-                position: latlng,
-                map: map,
-                zoom: 15
-            });
+        function CenterControl(controlDiv) {
+            // Set CSS for the control border.
+            var controlUI = document.createElement('div');
+            controlUI.style.backgroundColor = '#fff';
+            controlUI.style.border = '2px solid #fff';
+            controlUI.style.borderRadius = '3px';
+            controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+            controlUI.style.cursor = 'pointer';
+            controlUI.style.marginBottom = '5px';
+            controlUI.style.textAlign = 'center';
+            controlUI.title = 'Search this Area';
+            controlDiv.appendChild(controlUI);
 
-            autocomplete = new google.maps.places.Autocomplete((document.getElementById('location')), {types: ['geocode']});
+            // Set CSS for the control interior.
+            var controlText = document.createElement('div');
+            controlText.style.color = 'rgb(25,25,25)';
+            controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+            controlText.style.fontSize = '12px';
+            controlText.style.lineHeight = '38px';
+            controlText.style.paddingLeft = '5px';
+            controlText.style.paddingRight = '5px';
+            controlText.innerHTML = 'Search this Area';
+            controlUI.appendChild(controlText);
 
-            geocodeAddress(geocoder, map, "{{location}}");
-            autocomplete.addListener('place_changed', function () {
-                geocodeAddress(geocoder, map, autocomplete.getPlace()['formatted_address']);
+            // Setup the click event listeners: simply set the map to Chicago.
+            controlUI.addEventListener('click', function () {
+                geocoder.geocode({'location': map.getCenter()}, function (results, status) {
+                    if (status === google.maps.GeocoderStatus.OK) {
+                        var address = results[1].formatted_address.replace(/[0-9]/g, '');
+                        $('#location').val(address).trigger('autocomplete');
+                    } else {
+                         console.log('Geocode was not successful for the following reason: ' + status);
+                    }
+                });
             });
 
         }
-        function geocodeAddress(geocoder, resultsMap, address) {
+
+        function initMap() {
+            var latlng = new google.maps.LatLng(0, 0);
+            map = new google.maps.Map($("#map")[0], {
+                zoom: 1,
+                center: latlng,
+                streetViewControl: false,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+
+            var centerControlDiv = document.createElement('div');
+            new CenterControl(centerControlDiv, map);
+
+            centerControlDiv.index = 1;
+            map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(centerControlDiv);
+
+            geocoder = new google.maps.Geocoder();
+
+            autocomplete = new google.maps.places.Autocomplete((document.getElementById('location')), {types: ['geocode']});
+
+            geocodeAddress("{{location}}");
+            autocomplete.addListener('place_changed', function () {
+                geocodeAddress(autocomplete.getPlace()['formatted_address']);
+            });
+
+        }
+        function geocodeAddress(address) {
             geocoder.geocode({'address': address}, function (results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
                     $('#location').val(address).trigger('autocomplete');
-                    $latitudeInput.val(results[0].geometry.location.lat());
-                    $longitudeInput.val(results[0].geometry.location.lng());
-                    resultsMap.setCenter(results[0].geometry.location);
-                    resultsMap.setZoom(5);
-                    init_marker.setMap(null);
-                    if (marker == null) {
-                        marker = new google.maps.Marker({
-                            map: resultsMap,
-                            draggable: true,
-                            position: results[0].geometry.location
-                        });
-                    }
-                    else {
-                        marker.setMap(null);
-                        marker = new google.maps.Marker({
-                            map: resultsMap,
-                            draggable: true,
-                            position: results[0].geometry.location
-                        });
-                    }
+                    map.setCenter(results[0].geometry.location);
+                    map.setZoom(10);
+                    $("div[title='Search this Area']").parent().css("z-index", 512000000000000000);
                 } else {
                     if (status === 'ZERO_RESULTS') {
-                        resultsMap.setZoom(1);
+                        map.setZoom(1);
                         $latitudeInput.val(0.0);
                         $longitudeInput.val(0.0);
                     }
