@@ -9,7 +9,7 @@ footer{
 
 footer h4 {
     font-size: 16px;
-    color: #D2D6DF;
+    color: #AAAAAA;
 }
 
 footer ul
@@ -36,8 +36,8 @@ footer .row {
 
 #footer-menu{
     height: 80px;
-    border-top: 1px solid #D2D6DF;
-    border-bottom: 1px solid #D2D6DF;
+    border-top: 1px solid #AAAAAA;
+    border-bottom: 1px solid #AAAAAA;
 
 }
 
@@ -48,19 +48,19 @@ footer .row {
 
 footer .copyright{
     text-align: center;
-    color:#D2D6DF;
+    color:#AAAAAA;
     margin-top: 10px}
 
-#footer-menu select {background: #282C35; border-color:#D2D6DF; color: #D2D6DF  }
+#footer-menu select {background: #282C35; border-color:#AAAAAA; color: #AAAAAA  }
 
 .footer-dropdown {
-    border: 1px solid #D2D6DF;
+    border: 1px solid #AAAAAA;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
     padding: 16px;
     background: #282C35;
-    color: #D2D6DF
+    color: #AAAAAA
 }
 
 .footer-dropdown .dropdown-text {
