@@ -161,7 +161,7 @@
 
         <div class="item form-group">
             <label>Event Url</label>
-            <input value="{{ event.event_url | default('', true) }}" name="event_url"
+            <input type="url" pattern="https?://.+" value="{{ event.event_url | default('', true) }}" name="event_url"
                    class="form-control"/>
         </div>
 

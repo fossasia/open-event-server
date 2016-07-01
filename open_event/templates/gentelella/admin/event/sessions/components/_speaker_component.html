@@ -2,6 +2,7 @@
 
 {% set textarea_speaker_fields = ['short_biography', 'long_biography'] %}
 {% set media_speaker_fields = ['photo'] %}
+{% set url_speaker_fields = ['website', 'facebook', 'twitter', 'github', 'linkedin'] %}
 
 {% set speaker_fields = ['name', 'email','photo', 'organisation', 'position', 'country', 'short_biography', 'long_biography', 'mobile', 'website', 'facebook', 'twitter', 'github', 'linkedin'] %}
 
@@ -33,6 +34,9 @@
             <input {% if require==1 %}
                 required="required"
             {% endif %}
+            {% if identifier in url_speaker_fields %}
+                type="url" pattern="https?://.+"
+            {% endif %}
                 name="{{ "email-old" if identifier=="email" and email_disabled else identifier }}"
                     {% if identifier=="email" %}
                         {% if email_disabled %}
@@ -40,6 +44,7 @@
                         {% else %}
                             value="{{ speaker[identifier] | default('', true) }}"
                         {% endif %}
+                        type="email"
                     {% else %}
                         value="{{ speaker[identifier] | default('', true) }}"
                     {% endif %}
