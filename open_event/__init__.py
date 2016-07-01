@@ -156,20 +156,12 @@ def humanize_filter(time):
     return arrow.get(time).humanize()
 
 @app.context_processor
-def pagination_helpers():
-    def set_query_parameter(param_name, param_value, url=request.url):
-        """Given a URL, set or replace a query parameter and return the
-        modified URL.
-        """
-        scheme, netloc, path, query_string, fragment = urlsplit(url)
-        query_params = parse_qs(query_string)
+def flask_helpers():
+    def string_empty(string):
+        from open_event.helpers.helpers import string_empty
+        return string_empty(string)
 
-        query_params[param_name] = [param_value]
-        new_query_string = urlencode(query_params, doseq=True)
-
-        return urlunsplit((scheme, netloc, path, new_query_string, fragment))
-
-    return dict(set_query_parameter=set_query_parameter)
+    return dict(string_empty=string_empty)
 
 @app.context_processor
 def versioning_manager():

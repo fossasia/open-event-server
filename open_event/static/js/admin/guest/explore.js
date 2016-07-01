@@ -43,7 +43,7 @@ function getQuery(param, defaultVal) {
     return window.queryString[param];
 }
 
-if(queryHas('query') && getQuery('query') == '') {
+if (queryHas('query') && getQuery('query') == '') {
     delete window.queryString['query'];
 }
 
@@ -55,7 +55,7 @@ function camelCase(text) {
     return _.upperFirst(_.camelCase(text));
 }
 
-$(document).on('click', '.filter-item', function () {
+$(document).on('click', '.filter-item:not(.no-click)', function () {
     var $filterItem = $(this);
     var type = $filterItem.parent().data('filter-type');
     if (type == "sub_category") {
@@ -67,7 +67,7 @@ $(document).on('click', '.filter-item', function () {
     $filterItem.addClass('active');
     $filterItem.siblings().removeClass('active');
     runFilter(type, $filterItem.text());
-    if($filterItem.parent().hasAttr("data-parent-filter-type")) {
+    if ($filterItem.parent().hasAttr("data-parent-filter-type")) {
         runFilter($filterItem.parent().data("parent-filter-type"), $filterItem.parent().data("parent-filter-value"));
     }
 });
@@ -146,6 +146,14 @@ function addFilterTag(type, value) {
     $filterTagsHolder.append($tag);
 }
 
+function isImageInvalid(url) {
+    if (_.isUndefined(url) || _.isNull(url) || _.isEmpty(url)) {
+        return true;
+    }
+    url = trimText(url);
+    return !!(url === 'null' || url === '' || url === ' ');
+}
+
 /**
  * Add event to the UI
  * @param event
@@ -153,7 +161,11 @@ function addFilterTag(type, value) {
 function addEvent(event) {
     var $eventElement = $(eventTemplate);
     $eventElement.attr("href", "/e/" + event.id);
-    $eventElement.find(".event-image").attr('src', event.background_url);
+    if (isImageInvalid(event.background_url)) {
+        $eventElement.find(".event-image").attr('src', '/static/img/trans_white.png');
+    } else {
+        $eventElement.find(".event-image").attr('src', event.background_url);
+    }
     $eventElement.find(".name").text(event.name);
     $eventElement.find(".location_name").text(event.location_name.split(",")[0]);
     $eventElement.find(".share-btn").attr("data-event-id", event.id).attr("data-title", event.name);
@@ -222,24 +234,24 @@ function loadResults(start) {
         }
 
         api.events.get_event_list_paginated(params, function (response) {
-                $eventsHolder.html("");
-                response = response.obj;
-                _(response.results).forEach(function (event) {
-                    addEvent(event);
-                });
+            $eventsHolder.html("");
+            response = response.obj;
+            _(response.results).forEach(function (event) {
+                addEvent(event);
+            });
+            $loader.hide();
+            $eventsHolder.show();
+            $pagination.show();
+            $pagination.bootpag({
+                page: parseInt(getQuery('page', 1)),
+                total: Math.ceil(response.count / response.limit)
+            });
+        }, function (error) {
+            if (error.status === 404) {
+                $noEvents.show();
                 $loader.hide();
-                $eventsHolder.show();
-                $pagination.show();
-                $pagination.bootpag({
-                    page: parseInt(getQuery('page', 1)),
-                    total: Math.ceil(response.count / response.limit)
-                });
-            }, function (error) {
-                if(error.status === 404) {
-                    $noEvents.show();
-                    $loader.hide();
-                    $pagination.hide();
-                }
-            })
+                $pagination.hide();
+            }
+        })
     });
 }

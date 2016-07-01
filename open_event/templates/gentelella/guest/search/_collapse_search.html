@@ -24,13 +24,15 @@
                         <li class="list-group-item">
                             <div class="panel-heading ">
                                 <h4 class="panel-title" data-filter-type="category">
-                                    <a data-toggle="collapse" class="filter-item parent" href="#category-{{ category | slugify }}-collapse">
+                                    <a data-toggle="collapse" class="filter-item parent"
+                                       href="#category-{{ category | slugify }}-collapse">
                                         {{ category }} <i class="indicator fa fa-caret-right" style="float:right"></i>
                                     </a>
                                 </h4>
                             </div>
                             <div id="category-{{ category | slugify }}-collapse" class="panel-collapse collapse">
-                                <ul class="list-group sub-categories" data-filter-type="sub-category" data-parent-filter-type="category" data-parent-filter-value="{{ category }}">
+                                <ul class="list-group sub-categories" data-filter-type="sub-category"
+                                    data-parent-filter-type="category" data-parent-filter-value="{{ category }}">
                                     {% for sub_category in sub_categories %}
                                         <li class="list-group-item filter-item">
                                             {{ sub_category }}
@@ -72,15 +74,27 @@
             </div>
             <div id="days-collapse" class="panel-collapse collapse">
                 <ul class="list-group days" data-filter-type="period">
-                    {% for day_item in [('all_date', 'All Dates'), ('today', 'Today'),
-                                     ('tommorow', 'Tomorrow') ,('this_week', 'This Week'),
-                                     ('this_weekend', 'This Weekend'), ('next_week', 'Next Week'),
-                                     ('this_month', 'This Month'), ('custom_date', 'Custom Date')] %}
-                        <li class="list-group-item filter-item" id="{{'custom_date' if 'custom_date' == day_item[0] else ''}}">
-                            {{ day_item[1] }}
+                    {% for day_item in ['All Dates', 'Today', 'Tomorrow',
+                                        'This Week', 'This Weekend', 'Next Week', 'This Month'] %}
+                        <li class="list-group-item filter-item">
+                            {{ day_item }}
                         </li>
                     {% endfor %}
-
+                    <li class="list-group-item filter-item no-click" data-toggle="collapse"
+                        href="#custom-date-collapse">
+                        Custom Dates
+                    </li>
+                    <li id="custom-date-collapse">
+                        <div class="form-group" style="margin-top: 6px;">
+                            <label for="custom-start">Start Date</label>
+                            <input data-provide="datepicker" data-date-format="mm-dd-yyyy" type="text" class="form-control" id="custom-start" placeholder="DD-MM-YYYY">
+                        </div>
+                        <div class="form-group">
+                            <label for="custom-end">End Date</label>
+                            <input data-provide="datepicker" data-date-format="mm-dd-yyyy" type="text" class="form-control" id="custom-end" placeholder="DD-MM-YYYY">
+                        </div>
+                        <button type="submit" class="btn btn-default">Filter</button>
+                    </li>
                 </ul>
             </div>
 
