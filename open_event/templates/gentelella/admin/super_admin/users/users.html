@@ -40,6 +40,13 @@ Users
           {% if user['user'].is_admin %}
             <li>Admin</li>
           {% endif %}
+              <li>
+                  {% if user['user'].is_verified %}
+                      Registered User
+                  {% else %}
+                      Unverified User
+                  {% endif %}
+              </li>
           </ul>
         </td>
         <td>
