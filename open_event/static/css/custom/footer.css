@@ -30,6 +30,11 @@ footer ul a, footer a:hover, footer ul a:hover {
     color: #D2D6DF
 }
 
+footer .row {
+    margin:0;
+    padding:10px;
+}
+
 #footer-menu{
     height: 80px;
     border-top: 1px solid #969191;
