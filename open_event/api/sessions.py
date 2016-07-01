@@ -6,7 +6,7 @@ from open_event.models.track import Track as TrackModel
 from open_event.models.microlocation import Microlocation as MicrolocationModel
 from open_event.models.speaker import Speaker as SpeakerModel
 from open_event.models.session_type import SessionType as SessionTypeModel
-from open_event.helpers.data import record_activity, save_to_db
+from open_event.helpers.data import record_activity, save_to_db, get_or_create
 from open_event.helpers.data_getter import DataGetter
 
 from .helpers.helpers import get_paginated_list, requires_auth, \
@@ -154,12 +154,14 @@ class SessionDAO(ServiceDAO):
         # Handle SessionTypes separately
         st_data = data.get('session_type')
         if st_data:
-            session_type = SessionTypeModel(
+            session_type, created = get_or_create(
+                SessionTypeModel,
                 name=st_data['name'],
                 length=st_data['length'],
                 event_id=event_id
             )
-            save_to_db(session_type, 'SessionType saved')
+            if not created:
+                save_to_db(session_type, 'SessionType saved')
             payload['session_type'] = session_type
 
         return ServiceDAO.create(self, event_id, payload, url, validate=False)

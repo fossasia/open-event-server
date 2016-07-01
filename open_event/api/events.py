@@ -6,7 +6,8 @@ from open_event.models.social_link import SocialLink as SocialLinkModel
 from open_event.models.users_events_roles import UsersEventsRoles
 from open_event.models.role import Role
 from open_event.models.user import ORGANIZER
-from open_event.helpers.data import save_to_db, update_version, record_activity
+from open_event.helpers.data import save_to_db, update_version, record_activity, \
+    get_or_create
 
 from .helpers.helpers import get_paginated_list, requires_auth, parse_args, handle_extra_payload
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
@@ -112,9 +113,14 @@ class EventDAO(BaseDAO):
         for sl in social_links:
             del sl['id']
             handle_extra_payload(sl, SOCIAL_LINK_POST)
-            link = SocialLinkModel(**sl)
-            link.event_id = new_event.id
-            save_to_db(link, 'Save social link')
+            link, created = get_or_create(
+                SocialLinkModel,
+                event_id=new_event.id,
+                **sl
+            )
+            if not created:
+                link.event_id = new_event.id
+                save_to_db(link, 'Save social link')
 
         # set organizer
         role = Role.query.filter_by(name=ORGANIZER).first()
@@ -146,7 +152,12 @@ class EventDAO(BaseDAO):
         data, social_links = self.validate(data)
         payload = self.fix_payload(data)
         for link in social_links:
-            save_to_db(link, 'Save social link')
+            sl, created = get_or_create(
+                SocialLinkModel,
+                **link
+            )
+            if not created:
+                save_to_db(sl, 'Save social link')
         return BaseDAO.update(self, event_id, payload, validate=False)
 
 
