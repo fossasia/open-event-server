@@ -87,11 +87,17 @@
                     <li id="custom-date-collapse" class="collapse filter-item no-click" style="padding-right: 20px;padding-left: 32px;">
                         <div class="form-group" style="margin-top: 6px;">
                             <label for="custom-start" style="font-weight: 300;">Start Date</label>
-                            <input type="text" class="form-control input-sm date start" id="custom-start" placeholder="DD-MM-YYYY" value="{{ current_date('%m-%d-%Y') }}">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                <input type="text" class="form-control input-sm date start" id="custom-start" placeholder="DD-MM-YYYY" value="{{ current_date('%m-%d-%Y') }}">
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="custom-end" style="font-weight: 300;">End Date</label>
-                            <input type="text" class="form-control input-sm date end" id="custom-end" placeholder="DD-MM-YYYY" value="{{ current_date('%m-%d-%Y', days=1) }}">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                <input type="text" class="form-control input-sm date end" id="custom-end" placeholder="DD-MM-YYYY" value="{{ current_date('%m-%d-%Y', days=1) }}">
+                            </div>
                         </div>
                         <button type="submit" id="custom-date-filter-btn" class="btn btn-default">Filter</button>
                     </li>
