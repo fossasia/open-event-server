@@ -194,6 +194,7 @@
   }
   .navbar-nav {
     float:left;
+    margin:0 -15px;
   }
   .hide-small {
     display:none !important;
@@ -204,7 +205,7 @@
   .search_bar #search-text {
     display: none;
     position: absolute;
-    margin: 50px -160px;
+    margin: 40px -160px;
   }
   .search-button {
     border-radius:3px !important;
