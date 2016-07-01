@@ -74,7 +74,6 @@ SESSION_POST = api.clone('SessionPost', SESSION, {
     'track_id': fields.Integer(),
     'speaker_ids': fields.List(fields.Integer()),
     'microlocation_id': fields.Integer(),
-    'session_type_id': fields.Integer()
 })
 
 SESSION_TYPE_POST = api.clone('SessionTypePost', SESSION_TYPE_FULL)
@@ -101,7 +100,7 @@ class SessionTypeDAO(ServiceDAO):
 class SessionDAO(ServiceDAO):
     def _delete_fields(self, data):
         data = self._del(data, ['speaker_ids', 'track_id',
-                         'microlocation_id', 'session_type_id'])
+                         'microlocation_id'])
         data['start_time'] = SESSION_POST['start_time'].from_str(
             data.get('start_time'))
         data['end_time'] = SESSION_POST['end_time'].from_str(
@@ -124,8 +123,6 @@ class SessionDAO(ServiceDAO):
             TrackModel, data.get('track_id'), event_id)
         data['microlocation'] = self.get_object(
             MicrolocationModel, data.get('microlocation_id'), event_id)
-        # data['session_type'] = self.get_object(
-        #     SessionTypeModel, data.get('session_type_id'), event_id)
         data['event_id'] = event_id
         data['speakers'] = InstrumentedList(
             SpeakerModel.query.get(_) for _ in data['speaker_ids']

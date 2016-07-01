@@ -154,6 +154,7 @@ class EventDAO(BaseDAO):
         for link in social_links:
             sl, created = get_or_create(
                 SocialLinkModel,
+                event_id=event_id,
                 **link
             )
             if not created:
