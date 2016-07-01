@@ -12,7 +12,7 @@ from open_event.helpers.flask_helpers import get_real_ip
 from open_event.settings import get_settings
 from ..models.track import Track
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, NEXT_EVENT, \
-    USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, Mail
+    USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, EVENT_PUBLISH, Mail
 from system_mails import MAILS
 
 
@@ -100,6 +100,21 @@ def send_next_event(email, event_name, link):
         action=NEXT_EVENT,
         subject=MAILS[NEXT_EVENT]['subject'].format(event_name=event_name),
         html=MAILS[NEXT_EVENT]['message'].format(
+            email=str(email),
+            event_name=str(event_name),
+            link=link
+        )
+    )
+
+
+def send_event_publish(email, event_name, link):
+    """Send email on publishing event"""
+    print 'hELOOO'
+    send_email(
+        to=email,
+        action=NEXT_EVENT,
+        subject=MAILS[EVENT_PUBLISH]['subject'].format(event_name=event_name),
+        html=MAILS[EVENT_PUBLISH]['message'].format(
             email=str(email),
             event_name=str(event_name),
             link=link
@@ -228,6 +243,7 @@ def get_commit_info(commit_number):
     response = requests.get("https://api.github.com/repos/fossasia/open-event-orga-server/commits/" + commit_number)
     return json.loads(response.text)
 
+
 def string_empty(string):
     if type(string) is not str and type(string) is not unicode:
         return False
@@ -236,8 +252,10 @@ def string_empty(string):
     else:
         return True
 
+
 def string_not_empty(string):
     return not string_empty(string)
+
 
 def fields_not_empty(obj, fields):
     for field in fields:
@@ -305,10 +323,10 @@ def get_date_range(day_filter):
 def last_day_of_month(date):
     if date.month == 12:
         return date.replace(day=31)
-    return date.replace(month=date.month+1, day=1) - timedelta(days=1)
+    return date.replace(month=date.month + 1, day=1) - timedelta(days=1)
 
 
 def first_day_of_month(date):
-    ddays = int(date.strftime("%d"))-1
+    ddays = int(date.strftime("%d")) - 1
     delta = timedelta(days=ddays)
     return date - delta

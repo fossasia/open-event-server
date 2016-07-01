@@ -13,7 +13,7 @@ from open_event.helpers.helpers import fields_not_empty, string_empty
 from ....helpers.data import DataManager, save_to_db, record_activity, delete_from_db
 from ....helpers.data_getter import DataGetter
 from werkzeug.datastructures import ImmutableMultiDict
-
+from open_event.helpers.helpers import send_event_publish
 
 def is_verified_user():
     return login.current_user.is_verified
@@ -229,7 +229,7 @@ class EventsView(BaseView):
             event = DataManager.trash_event(event_id)
         flash("Your event has been deleted.", "danger")
         if login.current_user.is_super_admin == True:
-            return redirect(url_for('sadmin_events.index_view'))    
+            return redirect(url_for('sadmin_events.index_view'))
         return redirect(url_for('.index_view'))
 
     @expose('/<event_id>/delete/', methods=('GET',))
@@ -249,6 +249,7 @@ class EventsView(BaseView):
         return self.render('/gentelella/admin/event/details/details.html',
                            event=event)
 
+
     @expose('/<int:event_id>/publish/', methods=('GET',))
     def publish_event(self, event_id):
         event = DataGetter.get_event(event_id)
@@ -262,8 +263,19 @@ class EventsView(BaseView):
             return redirect(url_for('.details_view', event_id=event_id))
         event.state = 'Published'
         save_to_db(event, 'Event Published')
+        print event.state
+        organizers = DataGetter.get_user_event_roles_by_role_name(event_id, 'organizer')
+        speakers = DataGetter.get_user_event_roles_by_role_name(event_id, 'speaker')
+        link = url_for('.details_view', event_id=event_id, _external=True)
+
+        for organizer in organizers:
+            send_event_publish(organizer.user.email, event.name, link)
+        for speaker in speakers:
+            send_event_publish(speaker.user.email, event.name, link)
+
         record_activity('publish_event', event_id=event.id, status='published')
         flash("Your event has been published.", "success")
+        print 'helooo'
         return redirect(url_for('.details_view', event_id=event_id))
 
     @expose('/<int:event_id>/unpublish/', methods=('GET',))
