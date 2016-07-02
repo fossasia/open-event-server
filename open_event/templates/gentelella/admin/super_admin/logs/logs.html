@@ -29,6 +29,7 @@ Logs
     <ul id="event-tabs" class="nav nav-tabs bar_tabs" role="tablist">
         <li class="active"><a href="#activity_div" data-toggle="tab">Activity</a></li>
         <li class=""><a href="#mail_div" data-toggle="tab">Mails</a></li>
+        <li class=""><a href="#notif_div" data-toggle="tab">Notifications</a></li>
     </ul>
     <!-- tab contents -->
     <div id="myTabContent" class="tab-content">
@@ -80,6 +81,34 @@ Logs
                 </tbody>
             </table>
         </div>
+        <!-- notifications tab -->
+        <div role="tabpanel" class="tab-pane fade" id="notif_div"
+             aria-labelledby="notif-tab">
+            <table id="notif_table" class="table table-striped with-datatable no-global-dt">
+                <thead>
+                <tr>
+                    <th>To</th>
+                    <th>Time</th>
+                    <th>Action</th>
+                    <th>Message</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for notif in notifications %}
+                        <tr>
+                        <td>{{ notif.user.email }}</td>
+                        <td data-toggle="tooltip" data-placement="bottom" title="{{ notif.received_at }}"
+                            data-delay='{"show":"500", "hide":"300"}'>{{ notif.received_at | humanize }}</td>
+                        <td>{{ notif.action }}</td>
+                        <td>
+                            <strong>{{ notif.title }}</strong><br>
+                            {{ notif.message }}
+                        </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 
 </div>
@@ -101,6 +130,11 @@ Logs
         //   }
     });
     $('#mail_table').dataTable({
+        "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+        /* Disable initial sort */
+        "aaSorting": []
+    });
+    $('#notif_table').dataTable({
         "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
         /* Disable initial sort */
         "aaSorting": []

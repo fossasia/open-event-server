@@ -496,6 +496,15 @@ class DataGetter:
         return mails
 
     @staticmethod
+    def get_all_notifications(count=300):
+        """
+        Get all notfications, latest first.
+        """
+        notifications = Notification.query.order_by(desc(
+            Notification.received_at)).limit(count).all()
+        return notifications
+
+    @staticmethod
     def get_all_timezones():
         """
         Get all available timezones
