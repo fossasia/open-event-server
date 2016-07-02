@@ -1,12 +1,12 @@
-from flask import request, url_for, redirect, abort
+from flask import request, url_for, redirect, abort, flash
 from flask.ext.admin import BaseView
 from flask_admin import expose
 from flask.ext import login
 
+from open_event.views.admin.models_views.events import is_verified_user
 from ....helpers.data import DataManager
 from ....helpers.data_getter import DataGetter
 from open_event.helpers.storage import upload
-
 
 class ProfileView(BaseView):
 
@@ -19,6 +19,9 @@ class ProfileView(BaseView):
 
     @expose('/')
     def index_view(self):
+        if not is_verified_user():
+            flash("Your account is unverified. "
+                  "Please verify by clicking on the confirmation link that has been emailed to you.")
         profile = DataGetter.get_user(login.current_user.id)
         return self.render('/gentelella/admin/profile/index.html',
                            profile=profile)
