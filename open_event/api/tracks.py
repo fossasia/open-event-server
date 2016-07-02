@@ -19,7 +19,7 @@ TRACK = api.model('Track', {
     'name': fields.String(required=True),
     'description': fields.String(),
     'color': fields.Color(required=True),
-    'track_image_url': fields.ImageUri(),
+    'track_image_url': fields.Upload(),
     'location': fields.String(),
     'sessions': fields.List(fields.Nested(TRACK_SESSION)),
 })

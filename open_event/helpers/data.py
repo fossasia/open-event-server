@@ -48,7 +48,7 @@ from ..models.call_for_papers import CallForPaper
 from ..models.custom_forms import CustomForms
 from ..models.ticket import Ticket, BookedTicket
 from ..models.activity import Activity, ACTIVITIES
-
+from open_event.helpers.helpers import send_next_event
 
 class DataManager(object):
     """Main class responsible for DataBase managing"""
@@ -773,7 +773,6 @@ class DataManager(object):
         event = Event(name=form['name'],
                       email=form.get('email', u'test@example.com'),
                       color=form.get('color', u'black'),
-                      logo=form['logo'],
                       start_time=datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M'),
                       end_time=datetime.strptime(form['end_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M'),
                       timezone=form['timezone'],
@@ -837,6 +836,17 @@ class DataManager(object):
                 background_url = upload(background_file, 'events/%d/background_image' % (int(event.id)))
                 event.background_url = background_url
 
+            logo = form['logo']
+            if string_not_empty(logo):
+                filename = str(time.time()) + '.png'
+                file_path = os.path.realpath('.') + '/static/temp/' + filename
+                fh = open(file_path, "wb")
+                fh.write(logo.split(",")[1].decode('base64'))
+                fh.close()
+                logo_file = UploadedFile(file_path, filename)
+                logo = upload(logo_file, 'events/%d/logo' % (int(event.id)))
+                event.logo = logo
+
             for index, name in enumerate(session_type_names):
                 if not string_empty(name):
                     session_type = SessionType(name=name, length=session_type_length[index], event_id=event.id)
@@ -893,6 +903,21 @@ class DataManager(object):
                 save_to_db(call_for_speakers, "Call for speakers saved")
 
             uer = UsersEventsRoles(login.current_user, event, role)
+
+            organizers = DataGetter.get_user_event_roles_by_role_name(event.id, 'organizer')
+            speakers = DataGetter.get_user_event_roles_by_role_name(event.id, 'speaker')
+            link = url_for('events.details_view',
+                           event_id=event.id, _external=True)
+            up_coming_events = DataGetter.get_upcoming_events(event.id)
+            for organizer in organizers:
+                send_next_event(organizer.user.email, event.name, link, up_coming_events)
+
+            for speaker in speakers:
+                if speaker.user.email == login.current_user.email:
+                    continue
+                else:
+                    send_next_event(speaker.user.email, event.name, link, up_coming_events)
+
             if save_to_db(uer, "Event saved"):
                 return event
         else:
@@ -936,6 +961,17 @@ class DataManager(object):
             background_file = UploadedFile(file_path, filename)
             background_url = upload(background_file, 'events/%d/background_image' % (int(event.id)))
             event.background_url = background_url
+
+        logo = form['logo']
+        if string_not_empty(logo):
+            filename = str(time.time()) + '.png'
+            file_path = os.path.realpath('.') + '/static/temp/' + filename
+            fh = open(file_path, "wb")
+            fh.write(logo.split(",")[1].decode('base64'))
+            fh.close()
+            logo_file = UploadedFile(file_path, filename)
+            logo = upload(logo_file, 'events/%d/logo' % (int(event.id)))
+            event.logo = logo
 
         state = form.get('state', None)
         if state and ((state == u'Published' and not string_empty(

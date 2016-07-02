@@ -59,9 +59,9 @@ SESSION = api.model('Session', {
     'speakers': fields.List(fields.Nested(SESSION_SPEAKER)),
     'language': SessionLanguageField(),
     'microlocation': fields.Nested(SESSION_MICROLOCATION, allow_null=True),
-    'slides': fields.String(),
-    'video': fields.String(),
-    'audio': fields.String(),
+    'slides': fields.Upload(),
+    'video': fields.Upload(),
+    'audio': fields.Upload(),
     'signup_url': fields.Uri(),
     'state': SessionStateField(),
     'session_type': fields.Nested(SESSION_TYPE, allow_null=True)

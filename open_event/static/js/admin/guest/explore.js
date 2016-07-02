@@ -43,7 +43,7 @@ function getQuery(param, defaultVal) {
     return window.queryString[param];
 }
 
-if(queryHas('query') && getQuery('query') == '') {
+if (queryHas('query') && getQuery('query') == '') {
     delete window.queryString['query'];
 }
 
@@ -55,18 +55,29 @@ function camelCase(text) {
     return _.upperFirst(_.camelCase(text));
 }
 
+$(document).on('click', '#custom-date-filter-btn', function () {
+    runFilter('period', $('#custom-start').val() + ' to ' + $('#custom-end').val());
+
+});
+
 $(document).on('click', '.filter-item', function () {
     var $filterItem = $(this);
     var type = $filterItem.parent().data('filter-type');
-    if (type == "sub_category") {
-        $filterItem.closest('.categories').find('.filter-item').removeClass('active');
-    }
-    if ($filterItem.hasClass('all-filter')) {
-        $filterItem.parent().find('.filter-item').removeClass('active');
+    if ($filterItem.hasClass('child')) {
+        $("#category-collapse").find('.filter-item').removeClass('active');
+    } else {
+        $filterItem.closest('.panel-collapse').find('.filter-item').removeClass('active');
     }
     $filterItem.addClass('active');
-    $filterItem.siblings().removeClass('active');
-    runFilter(type, $filterItem.text())
+    if (!$filterItem.hasClass('no-click')) {
+        if(type === 'period') {
+            $("#custom-date-collapse").collapse('hide');
+        }
+        runFilter(type, $filterItem.text());
+        if ($filterItem.parent()[0].hasAttribute("data-parent-filter-type")) {
+            runFilter($filterItem.parent().data("parent-filter-type"), $filterItem.parent().data("parent-filter-value"));
+        }
+    }
 });
 
 var $locationField = $("#location");
@@ -75,8 +86,10 @@ $locationField.on('autocomplete', function () {
     runFilter('location', $locationField.val());
 });
 
-$("#location-search-form").submit(function (e) {
+$("form#location-search-form").submit(function (e) {
     e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
     runFilter('location', $locationField.val())
 });
 
@@ -92,6 +105,16 @@ $(document).on('click', '.filter-tag-btn', function (e) {
     $(this).parent().remove();
 });
 
+var $customDateCollapse = $('#custom-date-collapse');
+$customDateCollapse.find('.date').datepicker({
+    'format': 'mm-dd-yyyy',
+    'autoclose': true
+});
+
+var datePair = new Datepair($customDateCollapse[0], {
+    'defaultDateDelta': 1
+});
+
 /**
  * Run the filter for a given type and value
  * @param type
@@ -103,6 +126,9 @@ function runFilter(type, value) {
         window.queryString[type] = value;
     } else {
         delete window.queryString[type];
+        if (value === 'All Categories') {
+            delete window.queryString['category'];
+        }
     }
 
     if (type === 'page' && value === '1') {
@@ -113,7 +139,7 @@ function runFilter(type, value) {
         $(".location-name").text(value);
     }
     var baseUrl = window.location.href.split('?')[0];
-    if (type === 'location') {
+    if (type === 'location' && value != "") {
         baseUrl = '/explore/' + slugify(value) + '/events'
     }
     baseUrl = baseUrl + '?' + $.param(window.queryString);
@@ -141,6 +167,14 @@ function addFilterTag(type, value) {
     $filterTagsHolder.append($tag);
 }
 
+function isImageInvalid(url) {
+    if (_.isUndefined(url) || _.isNull(url) || _.isEmpty(url)) {
+        return true;
+    }
+    url = trimText(url);
+    return !!(url === 'null' || url === '' || url === ' ');
+}
+
 /**
  * Add event to the UI
  * @param event
@@ -148,7 +182,11 @@ function addFilterTag(type, value) {
 function addEvent(event) {
     var $eventElement = $(eventTemplate);
     $eventElement.attr("href", "/e/" + event.id);
-    $eventElement.find(".event-image").attr('src', event.background_url);
+    if (isImageInvalid(event.background_url)) {
+        $eventElement.find(".event-image").attr('src', '/static/img/trans_white.png');
+    } else {
+        $eventElement.find(".event-image").attr('src', event.background_url);
+    }
     $eventElement.find(".name").text(event.name);
     $eventElement.find(".location_name").text(event.location_name.split(",")[0]);
     $eventElement.find(".share-btn").attr("data-event-id", event.id).attr("data-title", event.name);
@@ -202,6 +240,11 @@ function loadResults(start) {
             addFilterTag('type', getQuery('type'))
         }
 
+        if (queryHas('category')) {
+            params['topic'] = getQuery('category');
+            addFilterTag('category', getQuery('category'))
+        }
+
         if (queryHas('query')) {
             params['contains'] = getQuery('query');
         }
@@ -212,24 +255,24 @@ function loadResults(start) {
         }
 
         api.events.get_event_list_paginated(params, function (response) {
-                $eventsHolder.html("");
-                response = response.obj;
-                _(response.results).forEach(function (event) {
-                    addEvent(event);
-                });
+            $eventsHolder.html("");
+            response = response.obj;
+            _(response.results).forEach(function (event) {
+                addEvent(event);
+            });
+            $loader.hide();
+            $eventsHolder.show();
+            $pagination.show();
+            $pagination.bootpag({
+                page: parseInt(getQuery('page', 1)),
+                total: Math.ceil(response.count / response.limit)
+            });
+        }, function (error) {
+            if (error.status === 404) {
+                $noEvents.show();
                 $loader.hide();
-                $eventsHolder.show();
-                $pagination.show();
-                $pagination.bootpag({
-                    page: parseInt(getQuery('page', 1)),
-                    total: Math.ceil(response.count / response.limit)
-                });
-            }, function (error) {
-                if(error.status === 404) {
-                    $noEvents.show();
-                    $loader.hide();
-                    $pagination.hide();
-                }
-            })
+                $pagination.hide();
+            }
+        })
     });
 }

@@ -4,7 +4,7 @@ import json
 
 from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
-from tests.api.utils import create_event, get_path
+from tests.api.utils import create_event, get_path, Event, Session
 from tests.api.utils_post_data import *
 from tests.auth_helper import register
 from open_event import current_app as app
@@ -50,9 +50,15 @@ class TestDeleteApi(OpenEventTestCase):
         self.assertEqual(response.status_code, 404)
         self.assertIn('does not exist', response.data)
 
+    def _test_trashed(self, model):
+        with app.test_request_context():
+            item = model.query.get(1)
+            self.assertNotEqual(item, None)
+            self.assertEqual(item.in_trash, True)
+
     def test_event_api(self):
-        data = POST_EVENT_DATA.copy()
-        self._test_model('event', data)
+        self._test_model('event', POST_EVENT_DATA)
+        self._test_trashed(Event)
 
     def test_track_api(self):
         self._test_model('track', POST_TRACK_DATA)
@@ -61,8 +67,8 @@ class TestDeleteApi(OpenEventTestCase):
         self._test_model('microlocation', POST_MICROLOCATION_DATA)
 
     def test_session_api(self):
-        data = POST_SESSION_DATA.copy()
-        self._test_model('session', data)
+        self._test_model('session', POST_SESSION_DATA)
+        self._test_trashed(Session)
 
     def test_speaker_api(self):
         self._test_model('speaker', POST_SPEAKER_DATA)

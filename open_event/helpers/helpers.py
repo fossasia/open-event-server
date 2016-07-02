@@ -93,7 +93,7 @@ def send_schedule_change(email, session_name, link):
     )
 
 
-def send_next_event(email, event_name, link):
+def send_next_event(email, event_name, link, up_coming_events):
     """Send next event"""
     send_email(
         to=email,
@@ -102,7 +102,8 @@ def send_next_event(email, event_name, link):
         html=MAILS[NEXT_EVENT]['message'].format(
             email=str(email),
             event_name=str(event_name),
-            link=link
+            link=link,
+            up_coming_events=up_coming_events
         )
     )
 
@@ -297,8 +298,15 @@ def get_date_range(day_filter):
     elif day_filter == 'this month':
         start = first_day_of_month(date_now.replace(hour=00, minute=00))
         end = last_day_of_month(date_now.replace(hour=23, minute=59))
-    elif day_filter == 'custom date':
-        pass
+    else:
+        try:
+            from_string, to_string = day_filter.split(" to ")
+            start = datetime.strptime(from_string, '%m-%d-%Y').replace(hour=00, minute=00)
+            end = datetime.strptime(to_string, '%m-%d-%Y').replace(hour=23, minute=59)
+        except:
+            start = date_now.replace(hour=00, minute=00)
+            end = date_now.replace(hour=23, minute=59)
+            pass
     return start.strftime(format), end.strftime(format)
 
 

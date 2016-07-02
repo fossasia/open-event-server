@@ -9,13 +9,22 @@ from open_event.helpers.data import DataManager, trash_user
 from sqlalchemy_continuum import transaction_class
 from open_event.models.event import Event
 
+
 class SuperAdminUsersView(SuperAdminBaseView):
     @expose('/')
     def index_view(self):
         active_user_list = []
         trash_user_list = []
+        all_user_list = []
         active_users = DataGetter.get_active_users()
         trash_users = DataGetter.get_trash_users()
+        all_users = DataGetter.get_all_users()
+        for user in all_users:
+            event_roles = DataGetter.get_event_roles_for_user(user.id)
+            all_user_list.append({
+                'user': user,
+                'event_roles': event_roles}
+            )
         for user in active_users:
             event_roles = DataGetter.get_event_roles_for_user(user.id)
             active_user_list.append({
@@ -28,7 +37,7 @@ class SuperAdminUsersView(SuperAdminBaseView):
                 'user': user,
                 'event_roles': event_roles,}
             )
-        return self.render('/gentelella/admin/super_admin/users/users.html', active_user_list=active_user_list, trash_user_list=trash_user_list)
+        return self.render('/gentelella/admin/super_admin/users/users.html', active_user_list=active_user_list, trash_user_list=trash_user_list, all_user_list=all_user_list)
 
     @expose('/<user_id>/edit/', methods=('GET', 'POST'))
     def edit_view(self, user_id):

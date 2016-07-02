@@ -9,7 +9,7 @@ POST_EVENT_DATA = {
     "timezone": "UTC",
     "latitude": 0,
     "location_name": "Berlin",
-    "logo": "http://imgur.com/image.png",
+    "logo": "",
     "longitude": 0,
     "name": "TestEvent",
     'event_url': "http://site.com",

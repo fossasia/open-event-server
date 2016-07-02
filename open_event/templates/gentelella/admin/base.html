@@ -12,6 +12,8 @@
         <meta name="description" content="">
         <meta name="author" content="">
     {% endblock %}
+    <link rel="shortcut icon" href="/favicon.ico?v1.1">
+
     {% block head_css %}
         <link rel="stylesheet" href="{{ url_for('static', filename='css/roboto.css') }}"/>
         <link rel="stylesheet"
@@ -64,7 +66,7 @@
                 if (window.screen.width <= 640 && ($searchText.val() == "")) {
                     e.preventDefault();
                     $searchText.toggle();
-                    $searchText.width(0.9 * window.screen.width);
+                    $searchText.width(0.8 * window.screen.width);
                 }
             });
         });

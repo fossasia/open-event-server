@@ -1,7 +1,7 @@
 {% macro add_search() %}
     <div id="accordion" class="panel panel-primary behclick-panel">
         <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback" style="margin-top:10px">
-            <form id="location-search-form">
+            <form id="location-search-form" method="GET" action="">
                 <input type="text" class="form-control" id="location" name="location" placeholder="Location"
                        value="{{ location }}">
             </form>
@@ -23,16 +23,18 @@
                     {% for category, sub_categories in categories.iteritems() %}
                         <li class="list-group-item">
                             <div class="panel-heading ">
-                                <h4 class="panel-title">
-                                    <a data-toggle="collapse" href="#category-{{ category | slugify }}-collapse">
+                                <h4 class="panel-title" data-filter-type="category">
+                                    <a data-toggle="collapse" class="filter-item parent"
+                                       href="#category-{{ category | slugify }}-collapse">
                                         {{ category }} <i class="indicator fa fa-caret-right" style="float:right"></i>
                                     </a>
                                 </h4>
                             </div>
                             <div id="category-{{ category | slugify }}-collapse" class="panel-collapse collapse">
-                                <ul class="list-group sub-categories" data-filter-type="sub-category">
+                                <ul class="list-group sub-categories" data-filter-type="sub-category"
+                                    data-parent-filter-type="category" data-parent-filter-value="{{ category }}">
                                     {% for sub_category in sub_categories %}
-                                        <li class="list-group-item filter-item">
+                                        <li class="list-group-item filter-item child">
                                             {{ sub_category }}
                                         </li>
                                     {% endfor %}
@@ -72,15 +74,33 @@
             </div>
             <div id="days-collapse" class="panel-collapse collapse">
                 <ul class="list-group days" data-filter-type="period">
-                    {% for day_item in [('all_date', 'All Dates'), ('today', 'Today'),
-                                     ('tommorow', 'Tomorrow') ,('this_week', 'This Week'),
-                                     ('this_weekend', 'This Weekend'), ('next_week', 'Next Week'),
-                                     ('this_month', 'This Month'), ('custom_date', 'Custom Date')] %}
+                    {% for day_item in ['All Dates', 'Today', 'Tomorrow',
+                                        'This Week', 'This Weekend', 'Next Week', 'This Month'] %}
                         <li class="list-group-item filter-item">
-                            {{ day_item[1] }}
+                            {{ day_item }}
                         </li>
                     {% endfor %}
-
+                    <li class="list-group-item filter-item no-click" data-toggle="collapse"
+                        href="#custom-date-collapse">
+                        Custom Dates
+                    </li>
+                    <li id="custom-date-collapse" class="collapse filter-item no-click" style="padding-right: 20px;padding-left: 32px;">
+                        <div class="form-group" style="margin-top: 6px;">
+                            <label for="custom-start" style="font-weight: 300;">Start Date</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                <input type="text" class="form-control input-sm date start" id="custom-start" placeholder="DD-MM-YYYY" value="{{ current_date('%m-%d-%Y') }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="custom-end" style="font-weight: 300;">End Date</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                <input type="text" class="form-control input-sm date end" id="custom-end" placeholder="DD-MM-YYYY" value="{{ current_date('%m-%d-%Y', days=1) }}">
+                            </div>
+                        </div>
+                        <button type="submit" id="custom-date-filter-btn" class="btn btn-default">Filter</button>
+                    </li>
                 </ul>
             </div>
 

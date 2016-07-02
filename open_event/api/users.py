@@ -15,7 +15,7 @@ api = Namespace('users', description='Users', path='/')
 USER_DETAIL = api.model('UserDetail', {
     'fullname': fields.String(),
     'details': fields.String(),
-    'avatar': fields.ImageUri(),
+    'avatar': fields.Upload(),
     'contact': fields.String(),
     'facebook': fields.String(),
     'twitter': fields.String()
