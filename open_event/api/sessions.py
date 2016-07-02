@@ -6,11 +6,12 @@ from open_event.models.track import Track as TrackModel
 from open_event.models.microlocation import Microlocation as MicrolocationModel
 from open_event.models.speaker import Speaker as SpeakerModel
 from open_event.models.session_type import SessionType as SessionTypeModel
-from open_event.helpers.data import record_activity, save_to_db, get_or_create
+from open_event.helpers.data import record_activity, save_to_db, get_or_create, \
+    delete_from_db
 from open_event.helpers.data_getter import DataGetter
 
 from .helpers.helpers import get_paginated_list, requires_auth, \
-    save_db_model, get_object_in_event, model_custom_form
+    save_db_model, get_object_in_event, model_custom_form, delete_model, get_object_or_404
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO,\
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
 from .helpers import custom_fields as fields
@@ -134,14 +135,19 @@ class SessionDAO(ServiceDAO):
     def update(self, event_id, service_id, data):
         data = self.validate(data, event_id)
         data_copy = data.copy()
-        st = data_copy.get('session_type')
+        st_data = data_copy.copy().get('session_type')
+
+        session_type = self.get_object(
+            SessionTypeModel, st_data['id'], event_id)
+
         data_copy = self.fix_payload_post(event_id, data_copy)
         data = self._delete_fields(data)
+        del data['session_type']
         obj = ServiceDAO.update(self, event_id, service_id, data, validate=False)
         obj.track = data_copy['track']
         obj.microlocation = data_copy['microlocation']
         obj.speakers = data_copy['speakers']
-        obj.session_type = st
+        obj.session_type = session_type
         obj = save_db_model(obj, SessionModel.__name__, event_id)
         return obj
 
@@ -162,6 +168,13 @@ class SessionDAO(ServiceDAO):
             payload['session_type'] = session_type
 
         return ServiceDAO.create(self, event_id, payload, url, validate=False)
+
+    def delete(self, event_id, service_id):
+        session = get_object_or_404(SessionModel, service_id)
+        session_type = get_object_or_404(SessionTypeModel, session.session_type_id)
+        delete_from_db(session_type, 'Delete Sessiontype')
+        item = delete_model(self.model, service_id, event_id=event_id)
+        return item
 
     def validate(self, data, event_id, model=None):
         form = DataGetter.get_custom_form_elements(event_id)

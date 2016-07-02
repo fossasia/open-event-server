@@ -3,7 +3,7 @@ import json
 
 from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
-from tests.api.utils import create_event, get_path, create_services
+from tests.api.utils import create_event, get_path
 from tests.api.utils_post_data import *
 from tests.auth_helper import register
 from open_event import current_app as app
@@ -16,8 +16,7 @@ class TestPutApiBase(OpenEventTestCase):
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
-            event_id = create_event(name='TestEvent_1')
-            create_services(event_id)
+            create_event()
 
     def _login_user(self):
         """
@@ -46,15 +45,19 @@ class TestPutApi(TestPutApiBase):
         2. Login and match 200 response code and make sure that
             data changed
         """
+        self._login_user()
+        path = get_path() if name == 'event' else get_path(1, name + 's')
+        response = self.app.post(
+            path,
+            data=json.dumps(data),
+            headers={'Content-Type': 'application/json'}
+        )
+        self.assertEqual(response.status_code, 201)
+
         path = get_path(1) if name == 'event' else get_path(1, name + 's', 1)
         response = self._put(path, data)
-        self.assertEqual(401, response.status_code, msg=response.data)
-        # login and send the request again
-        self._login_user()
-        response = self._put(path, data)
-        self.assertEqual(200, response.status_code, msg=response.data)
-        # surrounded by quotes for strict checking
-        self.assertIn('"Test%s"' % str(name).title(), response.data)
+        self.assertEqual(response.status_code, 200, msg=response.data)
+        self.assertIn('Test' + str(name).title(), response.data)
 
     def test_event_api(self):
         self._test_model('event', POST_EVENT_DATA)

@@ -43,7 +43,7 @@ class TestDeleteApi(OpenEventTestCase):
 
         path = get_path(1) if name == 'event' else get_path(1, name + 's', 1)
         response = self.app.delete(path)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200, msg=response.data)
         self.assertIn('Test' + str(name).title(), response.data)
 
         response = self.app.get(path)
@@ -51,7 +51,8 @@ class TestDeleteApi(OpenEventTestCase):
         self.assertIn('does not exist', response.data)
 
     def test_event_api(self):
-        self._test_model('event', POST_EVENT_DATA)
+        data = POST_EVENT_DATA.copy()
+        self._test_model('event', data)
 
     def test_track_api(self):
         self._test_model('track', POST_TRACK_DATA)
@@ -60,7 +61,8 @@ class TestDeleteApi(OpenEventTestCase):
         self._test_model('microlocation', POST_MICROLOCATION_DATA)
 
     def test_session_api(self):
-        self._test_model('session', POST_SESSION_DATA)
+        data = POST_SESSION_DATA.copy()
+        self._test_model('session', data)
 
     def test_speaker_api(self):
         self._test_model('speaker', POST_SPEAKER_DATA)

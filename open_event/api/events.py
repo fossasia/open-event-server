@@ -9,7 +9,8 @@ from open_event.models.user import ORGANIZER
 from open_event.helpers.data import save_to_db, update_version, record_activity, \
     get_or_create
 
-from .helpers.helpers import get_paginated_list, requires_auth, parse_args, handle_extra_payload
+from .helpers.helpers import get_paginated_list, requires_auth, parse_args, handle_extra_payload, \
+    get_object_or_404
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, BaseDAO, ServiceDAO
 from .helpers import custom_fields as fields
@@ -141,10 +142,7 @@ class EventDAO(BaseDAO):
         social_links = data.get('social_links', [])
 
         # Remove social links from original data
-        try:
-            del data['social_links']
-        except KeyError:
-            pass
+        del data['social_links']
         data = BaseDAO.validate(self, data, model)
         return data, social_links
 
@@ -152,13 +150,10 @@ class EventDAO(BaseDAO):
         data, social_links = self.validate(data)
         payload = self.fix_payload(data)
         for link in social_links:
-            sl, created = get_or_create(
-                SocialLinkModel,
-                event_id=event_id,
-                **link
-            )
-            if not created:
-                save_to_db(sl, 'Save social link')
+            sl = get_object_or_404(SocialLinkModel, link['id'])
+            sl.name = link.get('name')
+            sl.link = link.get('link')
+            save_to_db(sl, 'Save social link')
         return BaseDAO.update(self, event_id, payload, validate=False)
 
 
