@@ -56,6 +56,7 @@ class RoleView(BaseView):
                 )
 
                 DataManager.create_user_notification(user=user,
+                                                     action=EVENT_ROLE_INVITE,
                                                      title=title,
                                                      message=message)
 
