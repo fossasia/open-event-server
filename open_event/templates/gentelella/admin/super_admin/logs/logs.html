@@ -75,7 +75,12 @@ Logs
                         <td data-toggle="tooltip" data-placement="bottom" title="{{ mail.time }}"
                             data-delay='{"show":"500", "hide":"300"}'>{{ mail.time | humanize }}</td>
                         <td>{{ mail.action }}</td>
-                        <td><strong>{{ mail.subject }}</strong><br>{{ mail.message }}</td>
+                        <td>
+                            <strong>{{ mail.subject }}</strong><br>
+                            <div>
+                                {{ mail.message | safe }}
+                            </div>
+                        </td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -102,7 +107,9 @@ Logs
                         <td>{{ notif.action }}</td>
                         <td>
                             <strong>{{ notif.title }}</strong><br>
-                            {{ notif.message }}
+                            <div>
+                            {{ notif.message | safe }}
+                            </div>
                         </td>
                         </tr>
                     {% endfor %}
