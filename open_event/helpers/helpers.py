@@ -116,7 +116,6 @@ def send_next_event(email, event_name, link, up_coming_events):
 
 def send_event_publish(email, event_name, link):
     """Send email on publishing event"""
-    print 'hELOOO'
     send_email(
         to=email,
         action=NEXT_EVENT,
