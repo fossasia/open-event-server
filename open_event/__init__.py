@@ -35,6 +35,7 @@ from helpers.formatter import operation_name
 from open_event.helpers.data_getter import DataGetter
 from open_event.views.api_v1_views import app as api_v1_routes
 from open_event.views.sitemap import app as sitemap_routes
+from open_event.settings import get_settings
 import requests
 
 
@@ -203,14 +204,19 @@ def versioning_manager():
                 side_by_side_diff=side_by_side_diff,
                 get_user_name=get_user_name)
 
+
 # http://stackoverflow.com/questions/26724623/
 @app.before_request
 def track_user():
     if current_user.is_authenticated:
         current_user.update_lat()
 
-
 current_app, manager, database, jwt = create_app()
+
+
+@app.before_first_request
+def set_secret():
+    current_app.secret_key = get_settings()['secret']
 
 
 if __name__ == '__main__':
