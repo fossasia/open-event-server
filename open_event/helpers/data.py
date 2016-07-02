@@ -48,20 +48,22 @@ from ..models.call_for_papers import CallForPaper
 from ..models.custom_forms import CustomForms
 from ..models.ticket import Ticket, BookedTicket
 from ..models.activity import Activity, ACTIVITIES
-
+from open_event.helpers.helpers import send_next_event
 
 class DataManager(object):
     """Main class responsible for DataBase managing"""
 
     @staticmethod
-    def create_user_notification(user, title, message):
+    def create_user_notification(user, action, title, message):
         """
         Create a User Notification
         :param user: User object to send the notification to
+        :param action: Action being performed
         :param title: The message title
         :param message: The message
         """
         notification = Notification(user=user,
+                                    action=action,
                                     title=title,
                                     message=message,
                                     received_at=datetime.now())
@@ -903,6 +905,7 @@ class DataManager(object):
                 save_to_db(call_for_speakers, "Call for speakers saved")
 
             uer = UsersEventsRoles(login.current_user, event, role)
+
             if save_to_db(uer, "Event saved"):
                 return event
         else:

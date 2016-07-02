@@ -34,6 +34,7 @@
                                     <th style="display:none;">Status</th>
                                     <th>Message</th>
                                     <th>Received At</th>
+                                    <th>Received At (Humanized)</th>
                                     <th>Options</th>
                                 </tr>
                             </thead>
@@ -44,6 +45,10 @@
                                     <td>
                                         <h4>{{ notif.title }}</h4>
                                         <p>{{ notif.message | safe }}</p>
+                                    </td>
+                                    <td style="display: none;">
+                                    <!-- Used only for sorting notifications -->
+                                    {{ notif.received_at }}
                                     </td>
                                     <td>{{ notif.received_at | humanize }}</td>
                                     <td>
@@ -93,7 +98,8 @@
             "bAutoWidth": false,
             "language": {
                 "zeroRecords": "You don't have any new notifications"
-            }
+            },
+            "order": [[2, "desc"]]
         });
 
         $(".dataTables_filter").hide();
