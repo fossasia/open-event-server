@@ -245,8 +245,7 @@ class EventListPaginated(Resource, PaginatedResourceBase, EventResource):
     def get(self):
         """List events in a paginated manner"""
         args = self.parser.parse_args()
-        url = self.api.url_for(self)  # WARN: undocumented way
         return get_paginated_list(
-            EventModel, url, args=args,
+            EventModel, args=args,
             **parse_args(self.event_parser)
         )
