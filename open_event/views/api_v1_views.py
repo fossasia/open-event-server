@@ -456,6 +456,11 @@ def serve_static(filename):
     return send_from_directory(os.path.realpath('.') + '/static/', filename)
 
 
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.dirname(os.path.dirname(__file__)) + '/static/', 'favicon.ico',
+                               mimetype='image/vnd.microsoft.icon')
+
 @app.route('/documentation')
 def documentation():
     return auto.html()
