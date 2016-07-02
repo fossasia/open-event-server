@@ -492,8 +492,8 @@ class DataGetter:
         """
         Get All Mails by latest first
         """
-        mails = Mail.query.order_by(desc(Mail.time)).all()
-        return mails[:count]
+        mails = Mail.query.order_by(desc(Mail.time)).limit(count).all()
+        return mails
 
     @staticmethod
     def get_all_timezones():
@@ -514,8 +514,8 @@ class DataGetter:
         """
         Get all activities by recent first
         """
-        activities = Activity.query.order_by(desc(Activity.time)).all()
-        return activities[:count]
+        activities = Activity.query.order_by(desc(Activity.time)).limit(count).all()
+        return activities
 
     @staticmethod
     def get_trash_events():
