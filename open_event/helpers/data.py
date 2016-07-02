@@ -54,14 +54,16 @@ class DataManager(object):
     """Main class responsible for DataBase managing"""
 
     @staticmethod
-    def create_user_notification(user, title, message):
+    def create_user_notification(user, action, title, message):
         """
         Create a User Notification
         :param user: User object to send the notification to
+        :param action: Action being performed
         :param title: The message title
         :param message: The message
         """
         notification = Notification(user=user,
+                                    action=action,
                                     title=title,
                                     message=message,
                                     received_at=datetime.now())
