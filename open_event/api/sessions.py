@@ -221,7 +221,6 @@ class SessionListPaginated(Resource, PaginatedResourceBase):
         """List sessions in a paginated manner"""
         return get_paginated_list(
             SessionModel,
-            self.api.url_for(self, event_id=event_id),
             args=self.parser.parse_args(),
             event_id=event_id
         )

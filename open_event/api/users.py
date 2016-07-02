@@ -127,6 +127,5 @@ class UserListPaginated(Resource, PaginatedResourceBase):
         """List users in a paginated manner"""
         return get_paginated_list(
             UserModel,
-            self.api.url_for(self),
             args=self.parser.parse_args()
         )

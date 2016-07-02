@@ -94,7 +94,6 @@ class TrackListPaginated(Resource, PaginatedResourceBase):
         """List tracks in a paginated manner"""
         return get_paginated_list(
             TrackModel,
-            self.api.url_for(self, event_id=event_id),
             args=self.parser.parse_args(),
             event_id=event_id
         )

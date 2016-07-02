@@ -105,6 +105,7 @@ class TestGetApiPaginatedUrls(OpenEventTestCase, PaginatedApiTestCase):
         data = self._json_from_url(path + '?start=2')
         self.assertIn('limit=1', data['previous'])
         self.assertEqual(data['next'], '')
+        self.assertIn('http', data['previous'])  # check absolute link
 
     def test_event_api(self):
         self._test_model('event')
