@@ -205,6 +205,18 @@
             offset_top: 20
         });
 
+        $scrollSpy.on('sticky_kit:unbottom', function () {
+            $scrollSpy.parent().css("position", "static");
+        });
+
+        $scrollSpy.on('sticky_kit:bottom', function () {
+            $scrollSpy.parent().css("bottom", "16px");
+        });
+
+        $scrollSpy.on('sticky_kit:unstick', function () {
+            $scrollSpy.parent().css("position", "static");
+        });
+
         $('body').scrollspy({target: '.scrollspy'});
 
         $('a[href*="#"]:not([href="#"])').click(function () {
