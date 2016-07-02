@@ -31,28 +31,28 @@ class TestProfile(OpenEventViewTestCase):
     def test_notifications(self):
         with app.test_request_context():
             user = get_or_create_super_admin()
-            notif_title = 'Test Notif Title'
-            notif_msg = 'Test Notif Message'
-            DataManager.create_user_notification(user=user,
-                                                 title=notif_title,
-                                                 message=notif_msg)
+            notif = {
+                'title': 'Test Notif Title',
+                'message': 'Test Notif Message',
+                'action': 'Testing Notifications'
+            }
+            DataManager.create_user_notification(user=user, **notif)
 
             rv = self.app.get(url_for('profile.notifications_view'))
-            self.assertIn(notif_title, rv.data, msg=rv.data)
-            self.assertIn(notif_msg, rv.data, msg=rv.data)
+            self.assertIn(notif['title'], rv.data, msg=rv.data)
+            self.assertIn(notif['message'], rv.data, msg=rv.data)
 
     def test_notification_read(self):
         with app.test_request_context():
             user = get_or_create_super_admin()
-            notif_title = 'Test Notif Title'
-            notif_msg = 'Test Notif Message'
-            DataManager.create_user_notification(user=user,
-                                                 title=notif_title,
-                                                 message=notif_msg)
+            notif = {
+                'title': 'Test Notif Title',
+                'message': 'Test Notif Message',
+                'action': 'Testing Notifications'
+            }
+            DataManager.create_user_notification(user=user, **notif)
 
-            notification = Notification.query.filter_by(user=user,
-                                                        title=notif_title,
-                                                        message=notif_msg).first()
+            notification = Notification.query.filter_by(user=user, **notif).first()
 
             rv = self.app.get(url_for('profile.mark_notification_as_read',
                                       notification_id=notification.id))
