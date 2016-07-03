@@ -5,7 +5,7 @@ from open_event.views.admin.super_admin.super_admin_base import SuperAdminBaseVi
 from ....helpers.data_getter import DataGetter
 from ....helpers.data import update_role_to_admin, delete_from_db
 from flask import request, url_for, redirect, flash
-from open_event.helpers.data import DataManager, trash_user
+from open_event.helpers.data import DataManager, trash_user, save_to_db
 from sqlalchemy_continuum import transaction_class
 from open_event.models.event import Event
 
@@ -73,6 +73,13 @@ class SuperAdminUsersView(SuperAdminBaseView):
         flash("User" + user_id + " has been deleted.", "danger")
         return redirect(url_for('.index_view'))
 
+    @expose('/<user_id>/restore/', methods=('GET',))
+    def restore_view(self, user_id):
+        user = DataGetter.get_user(user_id)
+        user.in_trash = False
+        save_to_db(user, "User restored from trash")
+        flash("User" + user_id + " has been restored.", "success")
+        return redirect(url_for('.index_view'))
 
     @expose('/<user_id>/delete/', methods=('GET',))
     def delete_view(self, user_id):
