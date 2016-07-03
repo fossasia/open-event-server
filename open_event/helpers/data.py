@@ -1089,7 +1089,7 @@ class DataManager(object):
     @staticmethod
     def trash_event(e_id):
         event = Event.query.get(e_id)
-        event.in_trash = 'True'
+        event.in_trash = True
         save_to_db(event, "Event Added to Trash")
         return event
 
@@ -1147,7 +1147,7 @@ class DataManager(object):
         record_activity('update_role', role=role, user=user, event_id=uer.event_id)
 
 
-def save_to_db(item, msg="Saved to db"):
+def save_to_db(item, msg="Saved to db", print_error=True):
     """Convenience function to wrap a proper DB save
     :param item: will be saved to database
     :param msg: Message to log
@@ -1159,9 +1159,10 @@ def save_to_db(item, msg="Saved to db"):
         db.session.commit()
         return True
     except Exception, e:
-        print e
+        if print_error:
+            print e
+            traceback.print_exc()
         logging.error('DB Exception! %s' % e)
-        traceback.print_exc()
         db.session.rollback()
         return False
 
