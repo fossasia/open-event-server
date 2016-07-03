@@ -105,6 +105,13 @@ $(document).on('click', '.filter-tag-btn', function (e) {
     $(this).parent().remove();
 });
 
+$(document).on('click', '.filter-hashtag', function (e) {
+    e.preventDefault();
+    var name = $(this).data('name');
+    var value = $(this).data('value');
+    runFilter(name, value);
+});
+
 var $customDateCollapse = $('#custom-date-collapse');
 $customDateCollapse.find('.date').datepicker({
     'format': 'mm-dd-yyyy',
