@@ -180,7 +180,12 @@
             controlUI.addEventListener('click', function () {
                 geocoder.geocode({'location': map.getCenter()}, function (results, status) {
                     if (status === google.maps.GeocoderStatus.OK) {
-                        var address = results[1].formatted_address.replace(/[0-9]/g, '');
+                        var address;
+                        if(map.getZoom() > 4) {
+                            address = results[1].formatted_address.replace(/[0-9]/g, '');
+                        } else {
+                            address = results[results.length-1].formatted_address.replace(/[0-9]/g, '');
+                        }
                         $('#location').val(address).trigger('autocomplete');
                     } else {
                          console.log('Geocode was not successful for the following reason: ' + status);
