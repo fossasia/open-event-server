@@ -6,6 +6,7 @@ from flask.ext.restplus import abort
 from flask_admin import BaseView, expose
 
 from open_event.helpers.data import DataManager
+from open_event.views.admin.models_views.events import is_verified_user
 from ....helpers.data_getter import DataGetter
 
 class MySessionView(BaseView):
@@ -18,6 +19,9 @@ class MySessionView(BaseView):
         page_content = {"tab_upcoming_events": "Upcoming Sessions",
                         "tab_past_events": "Past Sessions",
                         "title": "My Session Proposals"}
+        if not is_verified_user():
+            flash("Your account is unverified. "
+                  "Please verify by clicking on the confirmation link that has been emailed to you.")
         return self.render('/gentelella/admin/mysessions/mysessions_list.html',
                            upcoming_events_sessions=upcoming_events_sessions, past_events_sessions=past_events_sessions,
                            page_content=page_content)

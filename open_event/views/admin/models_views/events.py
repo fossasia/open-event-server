@@ -34,6 +34,9 @@ class EventsView(BaseView):
         draft_events = DataGetter.get_draft_events()
         past_events = DataGetter.get_past_events()
         all_events = DataGetter.get_all_events()
+        if not is_verified_user():
+            flash("Your account is unverified. "
+                  "Please verify by clicking on the confirmation link that has been emailed to you.")
         return self.render('/gentelella/admin/event/index.html',
                            live_events=live_events,
                            draft_events=draft_events,
@@ -140,7 +143,7 @@ class EventsView(BaseView):
         checklist["5"] = 'success'
         if not is_verified_user():
             flash("To make your event live, please verify your email by "
-                  "clicking on the confirmation link sent to you.")
+                  "clicking on the confirmation link that has been emailed to you.")
         return self.render('/gentelella/admin/event/details/details.html',
                            event=event,
                            checklist=checklist)
