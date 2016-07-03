@@ -94,7 +94,7 @@ def get_object_in_event(klass, id_, event_id):
     return obj
 
 
-def get_paginated_list(klass, url, args={}, **kwargs):
+def get_paginated_list(klass, url=None, args={}, **kwargs):
     """
     Returns a paginated response object
 
@@ -106,6 +106,9 @@ def get_paginated_list(klass, url, args={}, **kwargs):
     """
     if 'event_id' in kwargs:
         get_object_or_404(EventModel, kwargs['event_id'])
+    # auto-get url
+    if url is None:
+        url = request.base_url
     # get page bounds
     start = args['start']
     limit = args['limit']

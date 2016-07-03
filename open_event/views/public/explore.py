@@ -20,7 +20,7 @@ def get_paginated(**kwargs):
         current_page = 0
 
     try:
-        return get_paginated_list(Event, request.path, {
+        return get_paginated_list(Event, url=request.path, args={
             'start': (current_page * RESULTS_PER_PAGE) + 1,
             'limit': RESULTS_PER_PAGE,
         }, **kwargs)

@@ -43,7 +43,7 @@ def create_session(event_id, serial_no='', **kwargs):
         event_id=event_id,
         **kwargs
     )
-    save_to_db(session, 'Session saved')
+    save_to_db(session, 'Session saved', print_error=False)
 
 
 def create_services(event_id, serial_no=''):

@@ -271,7 +271,6 @@ class EventsView(BaseView):
             return redirect(url_for('.details_view', event_id=event_id))
         event.state = 'Published'
         save_to_db(event, 'Event Published')
-        print event.state
         organizers = DataGetter.get_user_event_roles_by_role_name(event_id, 'organizer')
         speakers = DataGetter.get_user_event_roles_by_role_name(event_id, 'speaker')
         link = url_for('.details_view', event_id=event_id, _external=True)
@@ -283,7 +282,6 @@ class EventsView(BaseView):
 
         record_activity('publish_event', event_id=event.id, status='published')
         flash("Your event has been published.", "success")
-        print 'helooo'
         return redirect(url_for('.details_view', event_id=event_id))
 
     @expose('/<int:event_id>/unpublish/', methods=('GET',))
