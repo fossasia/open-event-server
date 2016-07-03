@@ -1,6 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 import logging
 import os
+import urllib
 from urllib2 import urlopen
 
 from flask import url_for, redirect, request, session, send_from_directory
@@ -187,8 +188,5 @@ class MyHomeView(AdminIndexView):
             country = response.country.name
         except:
             country = "United States"
-        return redirect(url_for('explore.explore_view', location=slugify(country)))
-
-
-
-
+        return redirect(url_for('explore.explore_view', location=slugify(country)) + '?' +
+                        urllib.urlencode(request.args))

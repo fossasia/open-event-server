@@ -33,10 +33,10 @@
                     <hr>
                     <p class="tags">
                         {% if event and event.type %}
-                            #{{ event.type | default('', true) |  camel_case }}
+                            <span class="filter-hashtag" data-name="type" data-value="{{ event.type }}">#{{ event.type | default('', true) |  camel_case }}</span>
                         {% endif %}
                         {% if event and event.topic %}
-                            #{{ event.topic | default('', true) | camel_case }}
+                            <span class="filter-hashtag" data-name="category" data-value="{{ event.topic }}">#{{ event.topic | default('', true) | camel_case }}</span>
                         {% endif %}
                         <i data-event-id="{{ event.id | default('', true) }}"
                            data-title="{{ event.name | default('', true) }}"
@@ -128,9 +128,7 @@
 {% block tail_js %}
     {{ super() }}
     <script>
-        var pages =
-        {{ results.count }}/
-        {{ results.limit }};
+        var pages = {{ results.count }}/ {{ results.limit }};
         $('#pagination').bootpag({
             total: Math.ceil(pages),
             page: {{ current_page }}

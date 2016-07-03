@@ -62,6 +62,14 @@
             margin-right: 1px;
             color: #393939;
         }
+
+        .filter-hashtag {
+            cursor: pointer;
+        }
+
+        .filter-hashtag:hover {
+            text-decoration: underline;
+        }
     </style>
 {% endblock %}
 {% block title %}
@@ -79,10 +87,12 @@
                     <hr>
                     <p class="tags">
                         {% if event.type %}
-                            #{{ event.type | camel_case }}
+                            <span class="filter-hashtag" data-name="type"
+                                  data-value="{{ event.type }}">#{{ event.type | default('', true) |  camel_case }}</span>
                         {% endif %}
                         {% if event.topic %}
-                            #{{ event.topic | camel_case }}
+                            <span class="filter-hashtag" data-name="category"
+                                  data-value="{{ event.topic }}">#{{ event.topic | default('', true) | camel_case }}</span>
                         {% endif %}
                         <i data-event-id="{{ event.id }}" data-title="{{ event.name }}"
                            class="share-btn fa fa-share-alt pull-right"></i>
@@ -170,5 +180,14 @@
             setSocialLinks(eventUrl, $(this).data("title"));
             $("#share-modal").modal('show');
         });
+
+        $(document).on('click', '.filter-hashtag', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var name = $(this).data('name');
+            var value = $(this).data('value');
+            location.href = "{{ url_for("admin.browse_view") }}?"+name+"="+encodeURI(value);
+        });
+
     </script>
 {% endblock %}
