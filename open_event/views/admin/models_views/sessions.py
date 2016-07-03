@@ -130,8 +130,16 @@ class SessionsView(BaseView):
         save_to_db(session, "Session added to Trash")
         flash("The session has been deleted", "danger")
         if login.current_user.is_super_admin == True:
-            return redirect(url_for('sadmin_sessions.display_my_sessions_view', event_id=event_id)) 
+            return redirect(url_for('sadmin_sessions.display_my_sessions_view', event_id=event_id))
         return redirect(url_for('.index_view', event_id=event_id))
+
+    @expose('/<int:session_id>/restore_trash', methods=('GET',))
+    def restore_session(self, event_id, session_id):
+        session = get_session_or_throw(session_id)
+        session.in_trash = False
+        save_to_db(session, "Session restored from trash")
+        flash("The session has been restored", "success")
+        return redirect(url_for('sadmin_sessions.display_my_sessions_view', event_id=event_id))
 
     @expose('/<int:session_id>/delete', methods=('GET',))
     def delete_session(self, event_id, session_id):

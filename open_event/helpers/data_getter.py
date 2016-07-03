@@ -115,11 +115,11 @@ class DataGetter:
         """
         :return: All Sessions with correct event_id
         """
-        return Session.query.filter_by(state=state)
+        return Session.query.filter(Session.state == state).filter(Session.in_trash == False)
 
     @staticmethod
     def get_all_sessions():
-        return Session.query.all()
+        return Session.query.filter(Session.in_trash == False).all()
 
     @staticmethod
     def get_tracks(event_id):
