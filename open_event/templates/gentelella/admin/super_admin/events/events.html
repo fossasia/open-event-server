@@ -62,6 +62,13 @@
                                title="Export Event">
                                 <i class="glyphicon glyphicon glyphicon-share"></i>
                             </a>
+                            {% if event.in_trash == True %}
+                            <a class="btn btn-success" href="/events/{{ event.id }}/restore/"
+                               data-toggle="tooltip" data-placement="top"
+                               title="Restore Event">
+                                <i>Restore Event</i>
+                            </a>
+                            {% endif %}
                         </div>
                     {% endif %}</td>
         </tr>

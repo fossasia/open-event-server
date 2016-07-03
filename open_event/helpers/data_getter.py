@@ -57,7 +57,7 @@ class DataGetter:
     @staticmethod
     def get_all_events():
         """Method return all events"""
-        return Event.query.order_by(desc(Event.id)).all()
+        return Event.query.order_by(desc(Event.id)).filter(Event.in_trash == False).all()
 
     @staticmethod
     def get_all_users_events_roles():
@@ -333,7 +333,8 @@ class DataGetter:
             events = Event.query.filter(Event.state == 'Published')
         else:
             events = Event.query.filter(Event.state == 'Published').filter(Event.privacy != 'private')
-        events = events.filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now())
+        events = events.filter(Event.start_time >= datetime.datetime.now()).filter(
+            Event.end_time >= datetime.datetime.now())
         return events
 
     @staticmethod
@@ -358,33 +359,34 @@ class DataGetter:
 
     @staticmethod
     def get_live_events():
-        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
+        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
             .filter(Event.state == 'Published').filter(Event.in_trash == False)
 
     @staticmethod
     def get_draft_events():
-        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
+        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.state == 'Draft').filter(Event.in_trash == False)
 
     @staticmethod
     def get_past_events():
-        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
+        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.end_time <= datetime.datetime.now()).filter(Event.state == 'Published')
 
     @staticmethod
     def get_all_live_events():
-        return Event.query.filter(Event.start_time >= datetime.datetime.now())\
+        return Event.query.filter(Event.start_time >= datetime.datetime.now()) \
             .filter(Event.end_time >= datetime.datetime.now()) \
-            .filter(Event.state == 'Published')
+            .filter(Event.state == 'Published').filter(Event.in_trash == False)
 
     @staticmethod
     def get_all_draft_events():
-        return Event.query.filter(Event.state == 'Draft')
+        return Event.query.filter(Event.state == 'Draft').filter(Event.in_trash == False)
 
     @staticmethod
     def get_all_past_events():
-        return Event.query.filter(Event.end_time <= datetime.datetime.now()).filter(Event.state == 'Published')
+        return Event.query.filter(Event.end_time <= datetime.datetime.now()).filter(Event.state == 'Published').filter(
+            Event.in_trash == False)
 
     @staticmethod
     def get_session(session_id):
@@ -544,7 +546,6 @@ class DataGetter:
 
     @staticmethod
     def get_upcoming_events(event_id):
-        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)\
+        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
             .filter(Event.in_trash == False)
-
