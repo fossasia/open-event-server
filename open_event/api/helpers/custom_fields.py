@@ -15,6 +15,7 @@ class CustomField(Raw):
     """
     __schema_type__ = 'string'
     validation_error = 'Validation of %s field failed'
+    payload = {}
 
     def __init__(self, *args, **kwargs):
         super(CustomField, self).__init__(**kwargs)

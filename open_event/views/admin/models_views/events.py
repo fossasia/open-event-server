@@ -71,6 +71,7 @@ class EventsView(BaseView):
             start_date=datetime.datetime.now() + datetime.timedelta(days=10),
             event_types=DataGetter.get_event_types(),
             event_topics=DataGetter.get_event_topics(),
+            event_sub_topics=DataGetter.get_event_subtopics(),
             timezones=DataGetter.get_all_timezones())
 
     @expose('/<int:event_id>/', methods=('GET', 'POST'))
@@ -194,6 +195,7 @@ class EventsView(BaseView):
                                sponsors=sponsors,
                                event_types=DataGetter.get_event_types(),
                                event_topics=DataGetter.get_event_topics(),
+                               event_sub_topics=DataGetter.get_event_subtopics(),
                                preselect=preselect,
                                timezones=DataGetter.get_all_timezones(),
                                step=step,
@@ -317,6 +319,7 @@ class EventsView(BaseView):
             start_date=datetime.datetime.now() + datetime.timedelta(days=10),
             event_types=DataGetter.get_event_types(),
             event_topics=DataGetter.get_event_topics(),
+            event_sub_topics=DataGetter.get_event_subtopics(),
             timezones=DataGetter.get_all_timezones())
 
     @expose('/<int:event_id>/role-invite/<hash>', methods=('GET', 'POST'))
