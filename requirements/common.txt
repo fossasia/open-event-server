@@ -33,3 +33,4 @@ diff-match-patch
 arrow
 unidecode
 unicode-slugify
+bleach

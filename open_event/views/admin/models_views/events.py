@@ -144,6 +144,7 @@ class EventsView(BaseView):
         if not is_verified_user():
             flash("To make your event live, please verify your email by "
                   "clicking on the confirmation link that has been emailed to you.")
+
         return self.render('/gentelella/admin/event/details/details.html',
                            event=event,
                            checklist=checklist)

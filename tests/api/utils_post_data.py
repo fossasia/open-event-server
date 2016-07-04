@@ -3,7 +3,6 @@ This file contains sample POST data
 """
 
 POST_EVENT_DATA = {
-    "color": "red",
     "email": "event@gmail.com",
     "end_time": "2016-05-30T12:12:43",
     "timezone": "UTC",

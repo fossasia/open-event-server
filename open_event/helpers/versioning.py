@@ -1,8 +1,13 @@
 import itertools
 
+import bleach
 import diff_match_patch
 import re
 from HTMLParser import HTMLParser
+
+import unicodedata
+
+from bleach.callbacks import target_blank, nofollow
 
 
 def remove_line_breaks(target_string):
@@ -21,23 +26,32 @@ def clean_up_string(target_string):
             return remove_line_breaks(target_string).strip()
     return target_string
 
-
-class MLStripper(HTMLParser):
-    def __init__(self):
-        HTMLParser.__init__(self)
-        self.reset()
-        self.fed = []
-
-    def handle_data(self, d):
-        self.fed.append(d)
-
-    def get_data(self):
-        return ''.join(self.fed)
+def clean_html(html):
+    tags = [
+        'b',
+        'strong',
+        'span',
+        'p',
+        'em',
+        'i',
+        'u',
+        'center',
+        'sup',
+        'sub',
+        'ul',
+        'ol',
+        'li',
+        'strike'
+    ]
+    attrs = {
+        '*': ['style']
+    }
+    styles = ['text-align', 'font-weight', 'text-decoration']
+    cleaned = bleach.clean(html, tags=tags, attributes=attrs, styles=styles, strip=True)
+    return bleach.linkify(cleaned, callbacks=[nofollow, target_blank], parse_email=True)
 
 def strip_tags(html):
-    s = MLStripper()
-    s.feed(html)
-    return s.get_data()
+    return bleach.clean(html, tags=[], attributes={}, styles=[], strip=True)
 
 def side_by_side_diff(old_text, new_text):
     """
@@ -56,6 +70,9 @@ def side_by_side_diff(old_text, new_text):
 
     old_text = strip_tags(strip_line_breaks(unicode(old_text).encode('utf-8', errors='ignore')))
     new_text = strip_tags(strip_line_breaks(unicode(new_text).encode('utf-8', errors='ignore')))
+
+    old_text = unicodedata.normalize("NFKD", old_text)
+    new_text = unicodedata.normalize("NFKD", new_text)
 
     def yield_open_entry(open_entry):
         """ Yield all open changes. """
