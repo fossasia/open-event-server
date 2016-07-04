@@ -43,7 +43,7 @@ class TestDeleteApi(OpenEventTestCase):
 
         path = get_path(1) if name == 'event' else get_path(1, name + 's', 1)
         response = self.app.delete(path)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200, msg=response.data)
         self.assertIn('Test' + str(name).title(), response.data)
 
         response = self.app.get(path)

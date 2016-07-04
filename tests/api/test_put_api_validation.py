@@ -1,7 +1,9 @@
 import unittest
 
-from tests.api.utils import get_path
+from tests.api.utils import get_path, create_services, create_event
 from test_put_api import TestPutApiBase
+from open_event import current_app as app
+from tests.setup_database import Setup
 from test_post_api_validation import ApiValidationTestCase
 
 
@@ -9,6 +11,13 @@ class TestPutApiValidation(TestPutApiBase, ApiValidationTestCase):
     """
     Tests the input validation in PUT API
     """
+    def setUp(self):
+        self.app = Setup.create_app()
+        with app.test_request_context():
+            event_id = create_event(name='TestEvent_1')
+            create_services(event_id)
+
+
     def _test_model(self, name, data, fields=[]):
         """
         Sets a random value to each of the :fields in :data and makes

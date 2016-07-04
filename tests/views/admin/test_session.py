@@ -38,7 +38,8 @@ class TestSessionApi(OpenEventViewTestCase):
             save_to_db(event, "Event saved")
             custom_form = ObjectMother.get_custom_form(event.id)
             save_to_db(custom_form, "Custom form saved")
-            data = POST_SESSION_DATA
+            data = POST_SESSION_DATA.copy()
+            del data['session_type']
             data.update(POST_SPEAKER_DATA)
             url = url_for('event_sessions.create_view', event_id=event.id)
             rv = self.app.post(url, follow_redirects=True, buffered=True, content_type='multipart/form-data', data=data)
@@ -64,7 +65,8 @@ class TestSessionApi(OpenEventViewTestCase):
             save_to_db(custom_form, "Custom form saved")
             session = ObjectMother.get_session(event.id)
             save_to_db(session, "Session saved")
-            data = POST_SESSION_DATA
+            data = POST_SESSION_DATA.copy()
+            del data['session_type']
             data['title'] = 'TestSession2'
             url = url_for('event_sessions.edit_view', event_id=event.id, session_id=session.id)
             rv = self.app.post(url, follow_redirects=True, buffered=True, content_type='multipart/form-data', data=data)

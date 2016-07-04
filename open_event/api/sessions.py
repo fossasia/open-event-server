@@ -6,11 +6,12 @@ from open_event.models.track import Track as TrackModel
 from open_event.models.microlocation import Microlocation as MicrolocationModel
 from open_event.models.speaker import Speaker as SpeakerModel
 from open_event.models.session_type import SessionType as SessionTypeModel
-from open_event.helpers.data import record_activity
+from open_event.helpers.data import record_activity, save_to_db, get_or_create, \
+    delete_from_db
 from open_event.helpers.data_getter import DataGetter
 
 from .helpers.helpers import get_paginated_list, requires_auth, \
-    save_db_model, get_object_in_event, model_custom_form
+    save_db_model, get_object_in_event, model_custom_form, delete_model, get_object_or_404
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO,\
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
 from .helpers import custom_fields as fields
@@ -43,7 +44,7 @@ SESSION_TYPE_FULL = api.model('SessionTypeFull', {
 })
 
 SESSION_TYPE = api.clone('SessionType', SESSION_TYPE_FULL)
-del SESSION_TYPE['length']
+# del SESSION_TYPE['length']
 
 SESSION = api.model('Session', {
     'id': fields.Integer(required=True),
@@ -74,7 +75,6 @@ SESSION_POST = api.clone('SessionPost', SESSION, {
     'track_id': fields.Integer(),
     'speaker_ids': fields.List(fields.Integer()),
     'microlocation_id': fields.Integer(),
-    'session_type_id': fields.Integer()
 })
 
 SESSION_TYPE_POST = api.clone('SessionTypePost', SESSION_TYPE_FULL)
@@ -83,7 +83,7 @@ del SESSION_POST['id']
 del SESSION_POST['track']
 del SESSION_POST['speakers']
 del SESSION_POST['microlocation']
-del SESSION_POST['session_type']
+# del SESSION_POST['session_type']
 
 del SESSION_TYPE_POST['id']
 
@@ -101,7 +101,7 @@ class SessionTypeDAO(ServiceDAO):
 class SessionDAO(ServiceDAO):
     def _delete_fields(self, data):
         data = self._del(data, ['speaker_ids', 'track_id',
-                         'microlocation_id', 'session_type_id'])
+                         'microlocation_id'])
         data['start_time'] = SESSION_POST['start_time'].from_str(
             data.get('start_time'))
         data['end_time'] = SESSION_POST['end_time'].from_str(
@@ -124,8 +124,6 @@ class SessionDAO(ServiceDAO):
             TrackModel, data.get('track_id'), event_id)
         data['microlocation'] = self.get_object(
             MicrolocationModel, data.get('microlocation_id'), event_id)
-        data['session_type'] = self.get_object(
-            SessionTypeModel, data.get('session_type_id'), event_id)
         data['event_id'] = event_id
         data['speakers'] = InstrumentedList(
             SpeakerModel.query.get(_) for _ in data['speaker_ids']
@@ -137,20 +135,46 @@ class SessionDAO(ServiceDAO):
     def update(self, event_id, service_id, data):
         data = self.validate(data, event_id)
         data_copy = data.copy()
+        st_data = data_copy.copy().get('session_type')
+
+        session_type = self.get_object(
+            SessionTypeModel, st_data['id'], event_id)
+
         data_copy = self.fix_payload_post(event_id, data_copy)
         data = self._delete_fields(data)
+        del data['session_type']
         obj = ServiceDAO.update(self, event_id, service_id, data, validate=False)
         obj.track = data_copy['track']
         obj.microlocation = data_copy['microlocation']
         obj.speakers = data_copy['speakers']
-        obj.session_type = data_copy['session_type']
+        obj.session_type = session_type
         obj = save_db_model(obj, SessionModel.__name__, event_id)
         return obj
 
     def create(self, event_id, data, url):
         data = self.validate(data, event_id)
         payload = self.fix_payload_post(event_id, data)
+        # Handle SessionTypes separately
+        st_data = data.get('session_type')
+        if st_data:
+            session_type, created = get_or_create(
+                SessionTypeModel,
+                name=st_data['name'],
+                length=st_data['length'],
+                event_id=event_id
+            )
+            if not created:
+                save_to_db(session_type, 'SessionType saved')
+            payload['session_type'] = session_type
+
         return ServiceDAO.create(self, event_id, payload, url, validate=False)
+
+    def delete(self, event_id, service_id):
+        session = get_object_or_404(SessionModel, service_id)
+        session_type = get_object_or_404(SessionTypeModel, session.session_type_id)
+        delete_from_db(session_type, 'Delete Sessiontype')
+        item = delete_model(self.model, service_id, event_id=event_id)
+        return item
 
     def validate(self, data, event_id, model=None):
         form = DataGetter.get_custom_form_elements(event_id)

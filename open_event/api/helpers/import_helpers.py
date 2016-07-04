@@ -5,9 +5,9 @@ import json
 from flask import request
 from werkzeug import secure_filename
 
-from ..events import DAO as EventDAO, LinkDAO as SocialLinkDAO
+from ..events import DAO as EventDAO
 from ..microlocations import DAO as MicrolocationDAO
-from ..sessions import DAO as SessionDAO, TypeDAO as SessionTypeDAO
+from ..sessions import DAO as SessionDAO
 from ..speakers import DAO as SpeakerDAO
 from ..sponsors import DAO as SponsorDAO
 from ..tracks import DAO as TrackDAO
@@ -17,18 +17,17 @@ from errors import BaseError, ServerError, NotFoundError
 
 
 IMPORT_SERIES = [
-    ('social_links', SocialLinkDAO),
     ('microlocations', MicrolocationDAO),
     ('sponsors', SponsorDAO),
     ('speakers', SpeakerDAO),
     ('tracks', TrackDAO),
-    ('session_types', SessionTypeDAO),
+    # ('session_types', SessionTypeDAO),
     ('sessions', SessionDAO),
     ('custom_forms', CustomFormDAO)
 ]
 
 DELETE_FIELDS = {
-    'event': ['creator', 'social_links'],
+    'event': ['creator'],
     'tracks': ['sessions'],
     'speakers': ['sessions']
 }
@@ -38,7 +37,6 @@ RELATED_FIELDS = {
         ('track', 'track_id', 'tracks'),
         ('microlocation', 'microlocation_id', 'microlocations'),
         ('speakers', 'speaker_ids', 'speakers'),
-        ('session_type', 'session_type_id', 'session_types')
     ]
 }
 

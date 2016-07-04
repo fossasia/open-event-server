@@ -11,7 +11,7 @@
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
         "session_type": {
-            "id": 1, 
+            "id": 1, "length": 0.3,
             "name": "Ganzt\u00e4giger L\u00f6tworkshop / Soldering Workshop"
         }, 
         "short_abstract": "", 
@@ -46,7 +46,7 @@
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
         "session_type": {
-            "id": 2, 
+            "id": 2, "length": 0.3,
             "name": "Workshop/Ausstellung/Exhibition"
         }, 
         "short_abstract": "", 
@@ -81,7 +81,7 @@
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
         "session_type": {
-            "id": 3, 
+            "id": 3, "length": 0.3,
             "name": "Infotisch, Ausstellung, Exhibition, Gem\u00fctliche Kissenecke"
         }, 
         "short_abstract": "", 
@@ -116,7 +116,7 @@
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
         "session_type": {
-            "id": 4, 
+            "id": 4, "length": 0.3,
             "name": "Workshop und Infotisch"
         }, 
         "short_abstract": "", 
@@ -151,7 +151,7 @@
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
         "session_type": {
-            "id": 5, 
+            "id": 5, "length": 0.3,
             "name": "Infotisch mit Workshops / Info table and Workshops"
         }, 
         "short_abstract": "", 
@@ -186,7 +186,7 @@
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
         "session_type": {
-            "id": 6, 
+            "id": 6, "length": 0.3,
             "name": "Hackspace-Infotisch, Exhibition"
         }, 
         "short_abstract": "", 
@@ -221,7 +221,7 @@
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
         "session_type": {
-            "id": 7, 
+            "id": 7, "length": 0.3,
             "name": "Freie Software-Infoecke / Information Corner"
         }, 
         "short_abstract": "", 
@@ -256,7 +256,7 @@
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
         "session_type": {
-            "id": 8, 
+            "id": 8, "length": 0.3,
             "name": "Infotisch/Info Table"
         }, 
         "short_abstract": "", 
@@ -291,7 +291,7 @@
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
         "session_type": {
-            "id": 9, 
+            "id": 9, "length": 0.3,
             "name": "Hardware Hacks"
         }, 
         "short_abstract": "", 
@@ -326,7 +326,7 @@
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
         "session_type": {
-            "id": 10, 
+            "id": 10, "length": 0.3,
             "name": "Workshop mit befreiten Strickmaschinen / Knitting Machines with Open Source"
         }, 
         "short_abstract": "", 
@@ -366,7 +366,7 @@
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
         "session_type": {
-            "id": 11, 
+            "id": 11, "length": 0.3,
             "name": "Infotisch / Showcase Table"
         }, 
         "short_abstract": "", 
@@ -401,7 +401,7 @@
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
         "session_type": {
-            "id": 12, 
+            "id": 12, "length": 0.3,
             "name": "Awesome Workshop"
         }, 
         "short_abstract": "", 
@@ -436,7 +436,7 @@
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
         "session_type": {
-            "id": 13, 
+            "id": 13, "length": 0.3,
             "name": "Workshop und Infotisch / Showcase Table"
         }, 
         "short_abstract": "", 
@@ -476,7 +476,7 @@
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
         "session_type": {
-            "id": 13, 
+            "id": 13, "length": 0.3,
             "name": "Workshop und Infotisch / Showcase Table"
         }, 
         "short_abstract": "", 
@@ -511,7 +511,7 @@
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
         "session_type": {
-            "id": 14, 
+            "id": 14, "length": 0.3,
             "name": "Workshop, 2h"
         }, 
         "short_abstract": "", 
@@ -546,7 +546,7 @@
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
         "session_type": {
-            "id": 15, 
+            "id": 15, "length": 0.3,
             "name": "Workshop, 5h"
         }, 
         "short_abstract": "", 
@@ -596,7 +596,7 @@
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
         "session_type": {
-            "id": 16, 
+            "id": 16, "length": 0.3,
             "name": "Workshop"
         }, 
         "short_abstract": "", 
@@ -631,7 +631,7 @@
             "name": "Erdgeschoss, Hoflounge / Ground Floor, Hoflounge Room"
         }, 
         "session_type": {
-            "id": 17, 
+            "id": 17, "length": 0.3,
             "name": "Workshop und Developer Meetup, 2h"
         }, 
         "short_abstract": "", 
@@ -671,7 +671,7 @@
             "name": "Ebene 1, Raum 4 / First Floor, Room 4"
         }, 
         "session_type": {
-            "id": 14, 
+            "id": 14, "length": 0.3,
             "name": "Workshop, 2h"
         }, 
         "short_abstract": "", 
@@ -706,7 +706,7 @@
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
         "session_type": {
-            "id": 16, 
+            "id": 16, "length": 0.3,
             "name": "Workshop"
         }, 
         "short_abstract": "", 
@@ -741,7 +741,7 @@
             "name": "Ebene 1, Raum 1 / First Floor, Room 1"
         }, 
         "session_type": {
-            "id": 18, 
+            "id": 18, "length": 0.3,
             "name": "Workshop, 1h"
         }, 
         "short_abstract": "", 
@@ -776,7 +776,7 @@
             "name": "Erdgeschoss, Hoflounge / Ground Floor, Hoflounge Room"
         }, 
         "session_type": {
-            "id": 19, 
+            "id": 19, "length": 0.3,
             "name": "Workshop, 1/2 h"
         }, 
         "short_abstract": "", 
@@ -816,7 +816,7 @@
             "name": "Erdgeschoss, Hoflounge / Ground Floor, Hoflounge Room"
         }, 
         "session_type": {
-            "id": 19, 
+            "id": 19, "length": 0.3,
             "name": "Workshop, 1/2 h"
         }, 
         "short_abstract": "", 
@@ -856,7 +856,7 @@
             "name": "Ebene 1, Raum 1 / First Floor, Room 1"
         }, 
         "session_type": {
-            "id": 14, 
+            "id": 14, "length": 0.3,
             "name": "Workshop, 2h"
         }, 
         "short_abstract": "", 
@@ -891,7 +891,7 @@
             "name": "Erdgeschoss, Hoflounge / Ground Floor, Hoflounge Room"
         }, 
         "session_type": {
-            "id": 17, 
+            "id": 17, "length": 0.3,
             "name": "Workshop und Developer Meetup, 2h"
         }, 
         "short_abstract": "", 
@@ -931,7 +931,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 20, 
+            "id": 20, "length": 0.3,
             "name": "Lightning Talk"
         }, 
         "short_abstract": "", 
@@ -966,7 +966,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 20, 
+            "id": 20, "length": 0.3,
             "name": "Lightning Talk"
         }, 
         "short_abstract": "", 
@@ -1006,7 +1006,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 20, 
+            "id": 20, "length": 0.3,
             "name": "Lightning Talk"
         }, 
         "short_abstract": "", 
@@ -1041,7 +1041,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 20, 
+            "id": 20, "length": 0.3,
             "name": "Lightning Talk"
         }, 
         "short_abstract": "", 
@@ -1081,7 +1081,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 20, 
+            "id": 20, "length": 0.3,
             "name": "Lightning Talk"
         }, 
         "short_abstract": "", 
@@ -1116,7 +1116,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 20, 
+            "id": 20, "length": 0.3,
             "name": "Lightning Talk"
         }, 
         "short_abstract": "", 
@@ -1151,7 +1151,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 20, 
+            "id": 20, "length": 0.3,
             "name": "Lightning Talk"
         }, 
         "short_abstract": "", 
@@ -1186,7 +1186,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 20, 
+            "id": 20, "length": 0.3,
             "name": "Lightning Talk"
         }, 
         "short_abstract": "", 
@@ -1221,7 +1221,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 20, 
+            "id": 20, "length": 0.3,
             "name": "Lightning Talk"
         }, 
         "short_abstract": "", 
@@ -1256,7 +1256,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 20, 
+            "id": 20, "length": 0.3,
             "name": "Lightning Talk"
         }, 
         "short_abstract": "", 
@@ -1296,7 +1296,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 20, 
+            "id": 20, "length": 0.3,
             "name": "Lightning Talk"
         }, 
         "short_abstract": "", 
@@ -1336,7 +1336,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 12, 
+            "id": 12, "length": 0.3,
             "name": "Awesome Workshop"
         }, 
         "short_abstract": "", 
@@ -1371,7 +1371,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -1406,7 +1406,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -1441,7 +1441,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -1476,7 +1476,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -1511,7 +1511,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -1546,7 +1546,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -1581,7 +1581,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 22, 
+            "id": 22, "length": 0.3,
             "name": "Lightning Talks"
         }, 
         "short_abstract": "", 
@@ -1616,7 +1616,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -1651,7 +1651,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -1686,7 +1686,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -1721,7 +1721,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 23, 
+            "id": 23, "length": 0.3,
             "name": "Panel"
         }, 
         "short_abstract": "", 
@@ -1771,7 +1771,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -1806,7 +1806,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -1841,7 +1841,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -1881,7 +1881,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -1916,7 +1916,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -1951,7 +1951,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -1986,7 +1986,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -2021,7 +2021,7 @@
             "name": "Ebene 2, Loft / Floor 2"
         }, 
         "session_type": {
-            "id": 25, 
+            "id": 25, "length": 0.3,
             "name": "Talk mit Live-Hack (20 Minuten)"
         }, 
         "short_abstract": "", 
@@ -2056,7 +2056,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -2091,7 +2091,7 @@
             "name": "Ebene 1, Galerie / Floor 1"
         }, 
         "session_type": {
-            "id": 24, 
+            "id": 24, "length": 0.3,
             "name": "Danke und Lounge"
         }, 
         "short_abstract": "", 
@@ -2126,7 +2126,7 @@
             "name": "Ebene 2, Loft / Floor 2"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -2161,7 +2161,7 @@
             "name": "Ebene 2, Loft / Floor 2"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -2201,7 +2201,7 @@
             "name": "Ebene 2, Loft / Floor 2"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -2236,7 +2236,7 @@
             "name": "Ebene 2, Loft / Floor 2"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -2271,7 +2271,7 @@
             "name": "Ebene 2, Loft / Floor 2"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -2306,7 +2306,7 @@
             "name": "Ebene 2, Loft / Floor 2"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -2341,7 +2341,7 @@
             "name": "Ebene 2, Loft / Floor 2"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -2376,7 +2376,7 @@
             "name": "Ebene 2, Loft / Floor 2"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -2411,7 +2411,7 @@
             "name": "Ebene 2, Loft / Floor 2"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -2446,7 +2446,7 @@
             "name": "Ebene 2, Loft / Floor 2"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -2481,7 +2481,7 @@
             "name": "Ebene 2, Loft / Floor 2"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -2516,7 +2516,7 @@
             "name": "Ebene 2, Loft / Floor 2"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -2551,7 +2551,7 @@
             "name": "Ebene 2, Loft / Floor 2"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -2586,7 +2586,7 @@
             "name": "Ebene 2, Loft / Floor 2"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -2621,7 +2621,7 @@
             "name": "Ebene 2, Loft / Floor 2"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -2656,7 +2656,7 @@
             "name": "Ebene 2, Loft / Floor 2"
         }, 
         "session_type": {
-            "id": 21, 
+            "id": 21, "length": 0.3,
             "name": "Vortrag/Talk"
         }, 
         "short_abstract": "", 
@@ -2691,7 +2691,7 @@
             "name": "Ebene 2, Loft / Floor 2"
         }, 
         "session_type": {
-            "id": 26, 
+            "id": 26, "length": 0.3,
             "name": "Talk of 25 minutes"
         }, 
         "short_abstract": "", 
@@ -2726,7 +2726,7 @@
             "name": "Ebene 2, Loft / Floor 2"
         }, 
         "session_type": {
-            "id": 24, 
+            "id": 24, "length": 0.3,
             "name": "Danke und Lounge"
         }, 
         "short_abstract": "", 
@@ -2755,7 +2755,7 @@
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
         "session_type": {
-            "id": 27, 
+            "id": 27, "length": 0.3,
             "name": "Kids Workshops, Ganzt\u00e4gig / Whole day"
         }, 
         "short_abstract": "", 
@@ -2790,7 +2790,7 @@
             "name": "Ebene 1, Raum 2 und Raum 3 / Floor 1, Room 2 and Room 3"
         }, 
         "session_type": {
-            "id": 27, 
+            "id": 27, "length": 0.3,
             "name": "Kids Workshops, Ganzt\u00e4gig / Whole day"
         }, 
         "short_abstract": "", 
@@ -2830,7 +2830,7 @@
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
         "session_type": {
-            "id": 28, 
+            "id": 28, "length": 0.3,
             "name": "Ausstellung/Vorstellung/ Exhibition"
         }, 
         "short_abstract": "", 
@@ -2880,7 +2880,7 @@
             "name": "Erdgeschoss, Saal / Ground Floor"
         }, 
         "session_type": {
-            "id": 28, 
+            "id": 28, "length": 0.3,
             "name": "Ausstellung/Vorstellung/ Exhibition"
         }, 
         "short_abstract": "", 
@@ -2915,7 +2915,7 @@
             "name": "Ebene 2, Raum 4"
         }, 
         "session_type": {
-            "id": 29, 
+            "id": 29, "length": 0.3,
             "name": "Zertifizierung"
         }, 
         "short_abstract": "", 
@@ -2950,7 +2950,7 @@
             "name": "Ebene 2, Raum 4"
         }, 
         "session_type": {
-            "id": 29, 
+            "id": 29, "length": 0.3,
             "name": "Zertifizierung"
         }, 
         "short_abstract": "", 

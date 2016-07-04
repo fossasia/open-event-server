@@ -27,7 +27,8 @@ class TestEvents(OpenEventViewTestCase):
         with app.test_request_context():
             custom_forms = ObjectMother.get_custom_form()
             url = url_for('events.create_view')
-            data = POST_EVENT_DATA
+            data = POST_EVENT_DATA.copy()
+            del data['social_links']
             data['start_date'] = '07/04/2016'
             data['start_time'] = '19:00'
             data['end_date'] = '07/04/2016'
@@ -41,7 +42,8 @@ class TestEvents(OpenEventViewTestCase):
     def test_events_create_post_publish(self):
         with app.test_request_context():
             url = url_for('events.create_view')
-            data = POST_EVENT_DATA
+            data = POST_EVENT_DATA.copy()
+            del data['social_links']
             data['start_date'] = '07/04/2016'
             data['start_time'] = '19:00'
             data['end_date'] = '07/04/2016'
@@ -55,7 +57,8 @@ class TestEvents(OpenEventViewTestCase):
         with app.test_request_context():
             custom_forms = ObjectMother.get_custom_form()
             url = url_for('events.create_view')
-            data = POST_EVENT_DATA
+            data = POST_EVENT_DATA.copy()
+            del data['social_links']
             data['start_date'] = '07/04/2016'
             data['start_time'] = '19:00'
             data['end_date'] = '07/04/2016'
@@ -75,7 +78,8 @@ class TestEvents(OpenEventViewTestCase):
             custom_forms = ObjectMother.get_custom_form(event.id)
             save_to_db(custom_forms, "Custom forms saved")
             url = url_for('events.edit_view', event_id=event.id)
-            data = POST_EVENT_DATA
+            data = POST_EVENT_DATA.copy()
+            del data['social_links']
             data['start_date'] = '07/04/2016'
             data['start_time'] = '19:00'
             data['end_date'] = '07/04/2016'

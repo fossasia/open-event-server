@@ -25,7 +25,11 @@ POST_EVENT_DATA = {
     "privacy": "public",
     "ticket_url": "http://site.com/tickets",
     "code_of_conduct": "Thou shalt be kind",
-    "schedule_published_on": None
+    "schedule_published_on": "2016-05-21T12:12:43",
+    "social_links": [
+        {"link": "http://example.com", "id": 1, "name": "ExampleSN"},
+        {"link": "http://example.com", "id": 2, "name": "Social"}
+    ]
 }
 
 POST_MICROLOCATION_DATA = {
@@ -52,7 +56,11 @@ POST_SESSION_DATA = {
     "video": "http://example.com/video",
     "audio": "http://example.com/audio",
     "signup_url": "http://example.com/signup",
-    "session_type_id": None
+    "session_type": {
+        "name": "example session type",
+        "id": 1,
+        "length": 0.4
+    }
 }
 
 POST_SPEAKER_DATA = {

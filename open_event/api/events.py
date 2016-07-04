@@ -6,9 +6,11 @@ from open_event.models.social_link import SocialLink as SocialLinkModel
 from open_event.models.users_events_roles import UsersEventsRoles
 from open_event.models.role import Role
 from open_event.models.user import ORGANIZER
-from open_event.helpers.data import save_to_db, update_version, record_activity
+from open_event.helpers.data import save_to_db, update_version, record_activity, \
+    get_or_create
 
-from .helpers.helpers import get_paginated_list, requires_auth, parse_args
+from .helpers.helpers import get_paginated_list, requires_auth, parse_args, handle_extra_payload, \
+    get_object_or_404
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, BaseDAO, ServiceDAO
 from .helpers import custom_fields as fields
@@ -66,7 +68,7 @@ SOCIAL_LINK_POST = api.clone('SocialLinkPost', EVENT_SOCIAL)
 
 del EVENT_POST['id']
 del EVENT_POST['creator']
-del EVENT_POST['social_links']
+# del EVENT_POST['social_links']
 
 del SOCIAL_LINK_POST['id']
 
@@ -102,11 +104,24 @@ class EventDAO(BaseDAO):
         return data
 
     def create(self, data, url):
-        data = self.validate(data)
+        data, social_links = self.validate(data)
         payload = self.fix_payload(data)
         new_event = self.model(**payload)
         new_event.creator = g.user
         save_to_db(new_event, "Event saved")
+        # Bind Social Links to event
+        for sl in social_links:
+            del sl['id']
+            handle_extra_payload(sl, SOCIAL_LINK_POST)
+            link, created = get_or_create(
+                SocialLinkModel,
+                event_id=new_event.id,
+                **sl
+            )
+            if not created:
+                link.event_id = new_event.id
+                save_to_db(link, 'Save social link')
+
         # set organizer
         role = Role.query.filter_by(name=ORGANIZER).first()
         uer = UsersEventsRoles(g.user, new_event, role)
@@ -121,9 +136,23 @@ class EventDAO(BaseDAO):
         resource_location = url + '/' + str(new_event.id)
         return self.get(new_event.id), 201, {'Location': resource_location}
 
+    def validate(self, data, model=None):
+        # Validate Social links separately
+        social_links = data.get('social_links', [])
+
+        # Remove social links from original data
+        del data['social_links']
+        data = BaseDAO.validate(self, data, model)
+        return data, social_links
+
     def update(self, event_id, data):
-        data = self.validate(data)
+        data, social_links = self.validate(data)
         payload = self.fix_payload(data)
+        for link in social_links:
+            sl = get_object_or_404(SocialLinkModel, link['id'])
+            sl.name = link.get('name')
+            sl.link = link.get('link')
+            save_to_db(sl, 'Save social link')
         return BaseDAO.update(self, event_id, payload, validate=False)
 
 
