@@ -254,6 +254,12 @@ class EventListPaginated(Resource, PaginatedResourceBase, EventResource):
 @api.route('/<int:event_id>/links')
 @api.param('event_id')
 class SocialLinkList(Resource):
+    @api.doc('list_social_links')
+    @api.marshal_list_with(SOCIAL_LINK)
+    def get(self, event_id):
+        """List all social links"""
+        return SocialLinkDAO.list(event_id)
+
     @requires_auth
     @api.doc('create_social_link', responses=POST_RESPONSES)
     @api.marshal_with(SOCIAL_LINK_POST)

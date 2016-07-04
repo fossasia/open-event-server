@@ -29,6 +29,11 @@ POST_EVENT_DATA = {
     "schedule_published_on": None
 }
 
+POST_SOCIAL_LINK_DATA = {
+    "name": "TestSocialLink",
+    "link": "http://example.com"
+}
+
 POST_MICROLOCATION_DATA = {
     "floor": 1,
     "latitude": 1,

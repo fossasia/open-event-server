@@ -74,6 +74,39 @@ class TestPutApi(TestPutApiBase):
     def test_sponsor_api(self):
         self._test_model('sponsor', POST_SPONSOR_DATA)
 
+    def test_social_link_api(self):
+        self._login_user()
+        # Create an event first
+        path = get_path()
+        data = POST_EVENT_DATA
+        response = self.app.post(
+            path,
+            data=json.dumps(data),
+            headers={'Content-Type': 'application/json'}
+        )
+        self.assertEqual(response.status_code, 201)
+
+        # Create a social link
+        path = get_path(1, 'links')
+        data = POST_SOCIAL_LINK_DATA
+        response = self.app.post(
+            path,
+            data=json.dumps(data),
+            headers={'Content-Type': 'application/json'}
+        )
+        self.assertEqual(response.status_code, 201)
+
+        # Update the social link
+        path = get_path(1, 'links', 1)
+        data['name'] = 'UpdatedSocialLink'
+        response = self.app.put(
+            path,
+            data=json.dumps(data),
+            headers={'Content-Type': 'application/json'}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('UpdatedSocialLink', response.data)
+
 
 if __name__ == '__main__':
     unittest.main()
