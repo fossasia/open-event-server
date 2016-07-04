@@ -162,7 +162,8 @@
         <div class="item form-group">
             <label>Event Url</label>
             <input type="url" pattern="https?://.+" value="{{ event.event_url | default('', true) }}" name="event_url"
-                   class="form-control"/>
+                   class="form-control" data-error="Please enter a valid URL"/>
+            <div class="help-block with-errors"></div>
         </div>
 
         <div class="item form-group">
