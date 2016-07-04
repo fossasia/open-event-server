@@ -22,11 +22,14 @@ EVENT_CREATOR = api.model('EventCreator', {
     'email': fields.Email()
 })
 
-EVENT_SOCIAL = api.model('EventSocial', {
+SOCIAL_LINK = api.model('SocialLink', {
     'id': fields.Integer(),
     'name': fields.String(),
     'link': fields.String()
 })
+
+SOCIAL_LINK_POST = api.clone('SocialLinkPost', SOCIAL_LINK)
+del SOCIAL_LINK_POST['id']
 
 EVENT = api.model('Event', {
     'id': fields.Integer(required=True),
@@ -54,7 +57,7 @@ EVENT = api.model('Event', {
     'creator': fields.Nested(EVENT_CREATOR, allow_null=True),
     'schedule_published_on': fields.DateTime(),
     'code_of_conduct': fields.String(),
-    'social_links': fields.List(fields.Nested(EVENT_SOCIAL), attribute='social_link')
+    'social_links': fields.List(fields.Nested(SOCIAL_LINK), attribute='social_link')
 })
 
 EVENT_PAGINATED = api.clone('EventPaginated', PAGINATED_MODEL, {
@@ -62,13 +65,10 @@ EVENT_PAGINATED = api.clone('EventPaginated', PAGINATED_MODEL, {
 })
 
 EVENT_POST = api.clone('EventPost', EVENT)
-SOCIAL_LINK_POST = api.clone('SocialLinkPost', EVENT_SOCIAL)
-
 del EVENT_POST['id']
 del EVENT_POST['creator']
 del EVENT_POST['social_links']
 
-del SOCIAL_LINK_POST['id']
 
 
 # ###################
@@ -211,7 +211,7 @@ class Event(Resource):
     @api.marshal_with(EVENT)
     @api.expect(EVENT_POST)
     def put(self, event_id):
-        """Update a event given its id"""
+        """Update an event given its id"""
         event = DAO.update(event_id, self.api.payload)
         record_activity('update_event', event_id=event_id)
         return event
@@ -248,3 +248,43 @@ class EventListPaginated(Resource, PaginatedResourceBase, EventResource):
             EventModel, args=args,
             **parse_args(self.event_parser)
         )
+
+
+@api.route('/<int:event_id>/links')
+@api.param('event_id')
+class SocialLinkList(Resource):
+    @api.doc('list_social_links')
+    @api.marshal_list_with(SOCIAL_LINK)
+    def get(self, event_id):
+        """List all social links"""
+        return LinkDAO.list(event_id)
+
+    @requires_auth
+    @api.doc('create_social_link', responses=POST_RESPONSES)
+    @api.marshal_with(SOCIAL_LINK_POST)
+    @api.expect(SOCIAL_LINK_POST)
+    def post(self, event_id):
+        """Create a social link"""
+        return LinkDAO.create(
+            event_id,
+            self.api.payload,
+            self.api.url_for(self, event_id=event_id)
+        )
+
+
+@api.route('/<int:event_id>/links/<int:link_id>')
+class SocialLink(Resource):
+    @requires_auth
+    @api.doc('delete_social_link')
+    @api.marshal_with(SOCIAL_LINK)
+    def delete(self, event_id, link_id):
+        """Delete a social link given its id"""
+        return LinkDAO.delete(event_id, link_id)
+
+    @requires_auth
+    @api.doc('update_social_link', responses=PUT_RESPONSES)
+    @api.marshal_with(SOCIAL_LINK_POST)
+    @api.expect(SOCIAL_LINK_POST)
+    def put(self, event_id, link_id):
+        """Update a social link given its id"""
+        return LinkDAO.update(event_id, link_id, self.api.payload)

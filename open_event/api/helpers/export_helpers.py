@@ -4,10 +4,10 @@ import shutil
 from flask_restplus import marshal
 
 from ..events import DAO as EventDAO, EVENT, \
-    LinkDAO as SocialLinkDAO, EVENT_SOCIAL
+    LinkDAO as SocialLinkDAO, SOCIAL_LINK
 from ..microlocations import DAO as MicrolocationDAO, MICROLOCATION
 from ..sessions import DAO as SessionDAO, SESSION, \
-    TypeDAO as SessionTypeDAO, SESSION_TYPE_FULL
+    TypeDAO as SessionTypeDAO, SESSION_TYPE
 from ..speakers import DAO as SpeakerDAO, SPEAKER
 from ..sponsors import DAO as SponsorDAO, SPONSOR
 from ..tracks import DAO as TrackDAO, TRACK
@@ -21,8 +21,8 @@ EXPORTS = [
     ('speakers', SpeakerDAO, SPEAKER),
     ('sponsors', SponsorDAO, SPONSOR),
     ('tracks', TrackDAO, TRACK),
-    ('session_types', SessionTypeDAO, SESSION_TYPE_FULL),
-    ('social_links', SocialLinkDAO, EVENT_SOCIAL),
+    ('session_types', SessionTypeDAO, SESSION_TYPE),
+    ('social_links', SocialLinkDAO, SOCIAL_LINK),
     ('custom_forms', CustomFormDAO, CUSTOM_FORM)
 ]
 
