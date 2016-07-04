@@ -1,6 +1,5 @@
 {% import "gentelella/admin/event/sessions/components/_session_component.html" as _session_component with context %}
 {% import "gentelella/admin/event/sessions/components/_speaker_component.html" as _speaker_component with context %}
-
 <form enctype="multipart/form-data" action="" method="POST" class="form-horizontal" id="session-create-form">
     {% if csrf_token %}
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
