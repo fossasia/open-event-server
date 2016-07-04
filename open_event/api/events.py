@@ -128,7 +128,7 @@ class EventDAO(BaseDAO):
         return BaseDAO.update(self, event_id, payload, validate=False)
 
 
-SocialLinkDAO = SocialLinkDAO(SocialLinkModel, SOCIAL_LINK_POST)
+LinkDAO = SocialLinkDAO(SocialLinkModel, SOCIAL_LINK_POST)
 DAO = EventDAO(EventModel, EVENT_POST)
 
 # DEFINE PARAMS
@@ -258,7 +258,7 @@ class SocialLinkList(Resource):
     @api.marshal_list_with(SOCIAL_LINK)
     def get(self, event_id):
         """List all social links"""
-        return SocialLinkDAO.list(event_id)
+        return LinkDAO.list(event_id)
 
     @requires_auth
     @api.doc('create_social_link', responses=POST_RESPONSES)
@@ -266,7 +266,7 @@ class SocialLinkList(Resource):
     @api.expect(SOCIAL_LINK_POST)
     def post(self, event_id):
         """Create a social link"""
-        return SocialLinkDAO.create(
+        return LinkDAO.create(
             event_id,
             self.api.payload,
             self.api.url_for(self, event_id=event_id)
@@ -280,7 +280,7 @@ class SocialLink(Resource):
     @api.marshal_with(SOCIAL_LINK)
     def delete(self, event_id, link_id):
         """Delete a social link given its id"""
-        return SocialLinkDAO.delete(event_id, link_id)
+        return LinkDAO.delete(event_id, link_id)
 
     @requires_auth
     @api.doc('update_social_link', responses=PUT_RESPONSES)
@@ -288,4 +288,4 @@ class SocialLink(Resource):
     @api.expect(SOCIAL_LINK_POST)
     def put(self, event_id, link_id):
         """Update a social link given its id"""
-        return SocialLinkDAO.update(event_id, link_id, self.api.payload)
+        return LinkDAO.update(event_id, link_id, self.api.payload)
