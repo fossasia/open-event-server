@@ -140,7 +140,6 @@ class Event(db.Model):
             'longitude': self.longitude,
             'location_name': self.location_name,
             'email': self.email,
-            'color': self.color.get_hex() if self.color else '',
             'description': self.description,
             'event_url': self.event_url,
             'background_url': self.background_url,
