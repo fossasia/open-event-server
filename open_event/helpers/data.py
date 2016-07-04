@@ -1134,6 +1134,7 @@ class DataManager(object):
         update_or_create(
             CustomForms, event_id=event.id,
             session_form=session_form, speaker_form=speaker_form)
+
         if form.get('call_for_speakers_state', u'off') == u'on':
             if call_for_papers:
                 call_for_papers.announcement = form['announcement']
