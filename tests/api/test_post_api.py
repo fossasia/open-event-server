@@ -88,24 +88,10 @@ class TestPostApi(TestPostApiBase):
 
     def test_social_link_api(self):
         self._login_user()
-        # Create an event first
-        path = get_path()
-        data = POST_EVENT_DATA
-        response = self.app.post(
-            path,
-            data=json.dumps(data),
-            headers={'Content-Type': 'application/json'}
-        )
-        self.assertEqual(response.status_code, 201)
-
         # Create a social link
         path = get_path(1, 'links')
         data = POST_SOCIAL_LINK_DATA
-        response = self.app.post(
-            path,
-            data=json.dumps(data),
-            headers={'Content-Type': 'application/json'}
-        )
+        response = self.post_request(path, data)
         self.assertEqual(response.status_code, 201)
 
         path = get_path(1, 'links')

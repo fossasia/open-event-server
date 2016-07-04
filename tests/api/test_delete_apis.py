@@ -78,16 +78,6 @@ class TestDeleteApi(OpenEventTestCase):
 
     def test_social_link_api(self):
         self._login_user()
-        # Create an event first
-        path = get_path()
-        data = POST_EVENT_DATA
-        response = self.app.post(
-            path,
-            data=json.dumps(data),
-            headers={'Content-Type': 'application/json'}
-        )
-        self.assertEqual(response.status_code, 201)
-
         # Create a social link
         path = get_path(1, 'links')
         data = POST_SOCIAL_LINK_DATA
@@ -104,7 +94,7 @@ class TestDeleteApi(OpenEventTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('TestSocialLink', response.data)
 
-        # Test if it's still in the links
+        # Test if it's in event-links
         path = get_path(1, 'links')
         response = self.app.get(path)
         self.assertEqual(response.status_code, 200)
