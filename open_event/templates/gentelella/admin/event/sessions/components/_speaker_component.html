@@ -20,7 +20,7 @@
             <textarea {% if require==1 %}
                 required="required"
             {% endif %}
-                name="{{ identifier }}" class="form-control col-md-7 col-xs-12">{{ speaker[identifier] | default('', true) }}</textarea>
+                name="{{ identifier }}" class="form-control col-md-7 col-xs-12">{% if speaker %}{{ speaker[identifier] }}{% elif speakers %}{{ speakers[0][identifier] }}{% endif %}</textarea>
         {% elif identifier in media_speaker_fields %}
             <br><input {% if require==1 %}
             required="required"
@@ -42,11 +42,11 @@
                         {% if email_disabled %}
                             value="{{ current_user.email }}" disabled
                         {% else %}
-                            value="{{ speaker[identifier] | default('', true) }}"
+                            value="{% if speaker %}{{ speaker[identifier] }}{% elif speakers %}{{ speakers[0][identifier] }}{% endif %} "
                         {% endif %}
                         type="email"
                     {% else %}
-                        value="{{ speaker[identifier] | default('', true) }}"
+                        value="{% if speaker %}{{ speaker[identifier] }}{% elif speakers %}{{ speakers[0][identifier] }}{% endif %}"
                     {% endif %}
                 class="form-control col-md-7 col-xs-12"/>
             {% if identifier=="email" %}
