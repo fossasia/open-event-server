@@ -1,4 +1,5 @@
 """Copyright 2015 Rafal Kowalski"""
+from open_event.helpers.versioning import clean_up_string, clean_html
 from . import db
 
 
@@ -71,6 +72,12 @@ class Speaker(db.Model):
 
     def __unicode__(self):
         return self.name
+
+    def __setattr__(self, name, value):
+        if name == 'short_biography' or name == 'long_biography':
+            super(Speaker, self).__setattr__(name, clean_html(clean_up_string(value)))
+        else:
+            super(Speaker, self).__setattr__(name, value)
 
     @property
     def serialize(self):

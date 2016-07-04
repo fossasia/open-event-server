@@ -8,7 +8,8 @@ var summernoteConfig = {
         ['para', ['ul', 'ol', 'paragraph']]
     ],
     height: 150,
-    disableDragAndDrop: true
+    disableDragAndDrop: true,
+    styleWithSpan: false
 };
 
 function imgError(image, transparent) {
