@@ -21,6 +21,12 @@ class EventTopicField(fields.ChoiceString):
             **kwargs)
 
 
+class EventSubTopicField(fields.ChoiceString):
+    __schema_example__ = DataGetter.get_event_subtopics()[
+        DataGetter.get_event_topics()[0]
+    ][0]
+
+
 class EventPrivacyField(fields.ChoiceString):
     __schema_example__ = 'public'
 
