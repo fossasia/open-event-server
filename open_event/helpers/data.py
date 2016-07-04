@@ -849,7 +849,7 @@ class DataManager(object):
             track_color = form.getlist('tracks[color]')
 
             room_name = form.getlist('rooms[name]')
-            room_color = form.getlist('rooms[color]')
+            room_floor = form.getlist('rooms[floor]')
 
             sponsor_name = form.getlist('sponsors[name]')
             sponsor_url = form.getlist('sponsors[url]')
@@ -899,7 +899,7 @@ class DataManager(object):
 
             for index, name in enumerate(room_name):
                 if not string_empty(name):
-                    room = Microlocation(name=name, event_id=event.id)
+                    room = Microlocation(name=name, floor=room_floor[index], event_id=event.id)
                     db.session.add(room)
 
             for index, name in enumerate(sponsor_name):
@@ -1040,7 +1040,7 @@ class DataManager(object):
         track_color = form.getlist('tracks[color]')
 
         room_name = form.getlist('rooms[name]')
-        room_color = form.getlist('rooms[color]')
+        room_floor = form.getlist('rooms[floor]')
 
         sponsor_name = form.getlist('sponsors[name]')
         sponsor_logo_url = []
@@ -1091,7 +1091,7 @@ class DataManager(object):
 
         for index, name in enumerate(room_name):
             if not string_empty(name):
-                room, c = get_or_create(Microlocation, name=name, event_id=event.id)
+                room, c = get_or_create(Microlocation, name=name, floor=room_floor[index], event_id=event.id)
                 db.session.add(room)
 
         for sponsor in sponsors:
