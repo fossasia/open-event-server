@@ -190,6 +190,7 @@ def validate_payload(payload, api_model):
         else:
             data = [payload[key]]
         if isinstance(field, CustomField) and hasattr(field, 'validate'):
+            field.payload = payload
             for i in data:
                 if not field.validate(i):
                     raise ValidationError(field=key,
