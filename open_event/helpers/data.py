@@ -1065,7 +1065,6 @@ class DataManager(object):
         session_form = ""
         speaker_form = ""
         for index, name in enumerate(custom_forms_name):
-            print name
             if name == "session_form":
                 session_form = custom_forms_value[index]
             elif name == "speaker_form":
@@ -1075,8 +1074,6 @@ class DataManager(object):
             CustomForms, event_id=event.id,
             session_form=session_form, speaker_form=speaker_form)
 
-        print call_for_papers
-        print form['announcement']
         delete_from_db(call_for_papers, "CallForPaper Deleted")
 
         if form.get('call_for_speakers_state', u'off') == u'on':
