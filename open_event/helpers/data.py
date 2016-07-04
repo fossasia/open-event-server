@@ -1075,6 +1075,10 @@ class DataManager(object):
             CustomForms, event_id=event.id,
             session_form=session_form, speaker_form=speaker_form)
 
+        print call_for_papers
+        print form['announcement']
+        delete_from_db(call_for_papers, "CallForPaper Deleted")
+
         if form.get('call_for_speakers_state', u'off') == u'on':
             call_for_speakers, c = get_or_create(CallForPaper,
                                                  announcement=form['announcement'],

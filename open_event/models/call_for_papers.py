@@ -27,7 +27,7 @@ class CallForPaper(db.Model):
         return unicode(self).encode('utf-8')
 
     def __unicode__(self):
-        return self.name
+        return self.announcement
 
     @property
     def serialize(self):
