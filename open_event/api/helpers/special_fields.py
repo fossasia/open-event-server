@@ -26,6 +26,12 @@ class EventSubTopicField(fields.ChoiceString):
         DataGetter.get_event_topics()[0]
     ][0]
 
+    def __init__(self, **kwargs):
+        super(EventSubTopicField, self).__init__(
+            choice_list=DataGetter.get_event_subtopics()[
+                DataGetter.get_event_topics()[0]],
+            **kwargs)
+
 
 class EventPrivacyField(fields.ChoiceString):
     __schema_example__ = 'public'
