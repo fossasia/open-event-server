@@ -50,6 +50,7 @@ from ..models.ticket import Ticket, BookedTicket
 from ..models.activity import Activity, ACTIVITIES
 from open_event.helpers.helpers import send_next_event
 
+
 class DataManager(object):
     """Main class responsible for DataBase managing"""
 
@@ -174,7 +175,8 @@ class DataManager(object):
             new_email_notification_setting = EmailNotification(next_event=int(form.get('next_event', 0)),
                                                                new_paper=int(form.get('new_paper', 0)),
                                                                session_schedule=int(form.get('session_schedule', 0)),
-                                                               session_accept_reject=int(form.get('session_accept_reject', 0)),
+                                                               session_accept_reject=int(
+                                                                   form.get('session_accept_reject', 0)),
                                                                user_id=user_id,
                                                                event_id=event_id)
             save_to_db(new_email_notification_setting, "EmailSetting Saved")
@@ -309,7 +311,8 @@ class DataManager(object):
                            event_id=event.id, session_id=new_session.id, _external=True)
             organizers = DataGetter.get_user_event_roles_by_role_name(event.id, 'organizer')
             for organizer in organizers:
-                email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(organizer.user.id, event.id)
+                email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(organizer.user.id,
+                                                                                                    event.id)
                 if email_notification_setting and email_notification_setting.new_paper == 1:
                     send_new_session_organizer(organizer.user.email, event.name, link)
 
@@ -424,7 +427,8 @@ class DataManager(object):
                        event_id=event_id, session_id=session.id, _external=True)
         for speaker in session.speakers:
             print speaker.name
-            email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(speaker.user_id, event_id)
+            email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(speaker.user_id,
+                                                                                                event_id)
             if email_notification_setting and email_notification_setting.session_accept_reject == 1:
                 Helper.send_session_accept_reject(speaker.email, session.title, state, link)
         flash("The session has been %s" % state)
@@ -1349,7 +1353,14 @@ def update_role_to_admin(form, user_id):
 
 
 def trash_user(user_id):
-  user = DataGetter.get_user(user_id)
-  user.in_trash = True
-  save_to_db(user, 'User has been added to trash')
-  return user
+    user = DataGetter.get_user(user_id)
+    user.in_trash = True
+    save_to_db(user, 'User has been added to trash')
+    return user
+
+
+def trash_session(session_id):
+    session = DataGetter.get_session(session_id)
+    session.in_trash = True
+    save_to_db(session, "Session added to Trash")
+    return session
