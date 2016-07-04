@@ -29,6 +29,7 @@ from ..models.mail import Mail
 from ..models.activity import Activity
 from ..models.setting import Setting
 from .language_list import LANGUAGE_LIST
+from .static import EVENT_SUB_TOPICS
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
 from flask import flash, current_app
@@ -488,6 +489,10 @@ class DataGetter:
                 'Seasonal & Holiday',
                 'Sports & Fitness',
                 'Travel & Outdoor']
+
+    @staticmethod
+    def get_event_subtopics():
+        return EVENT_SUB_TOPICS
 
     @staticmethod
     def get_all_mails(count=300):
