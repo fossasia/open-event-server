@@ -74,6 +74,36 @@ class TestPutApi(TestPutApiBase):
     def test_sponsor_api(self):
         self._test_model('sponsor', POST_SPONSOR_DATA)
 
+    def test_social_link_api(self):
+        self._login_user()
+        # Update the social link
+        data = POST_SOCIAL_LINK_DATA
+        data['name'] = 'UpdatedSocialLink'
+        path = get_path(1, 'links', 1)
+        response = self._put(path, data)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('UpdatedSocialLink', response.data)
+
+        path = get_path(1, 'links')
+        response = self.app.get(path)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('UpdatedSocialLink', response.data)
+
+    def test_session_type_api(self):
+        self._login_user()
+        # Update the session type
+        data = POST_SESSION_TYPE_DATA
+        data['name'] = 'UpdatedSessionType'
+        path = get_path(1, 'sessions', 'types', 1)
+        response = self._put(path, data)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('UpdatedSessionType', response.data)
+
+        path = get_path(1, 'sessions', 'types')
+        response = self.app.get(path)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('UpdatedSessionType', response.data)
+
 
 if __name__ == '__main__':
     unittest.main()
