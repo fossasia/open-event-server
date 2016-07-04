@@ -2,11 +2,9 @@
 from sqlalchemy import event
 
 from open_event.helpers.date_formatter import DateFormatter
-from open_event.helpers.versioning import clean_up_string
+from open_event.helpers.versioning import clean_up_string, clean_html
 from custom_forms import CustomForms, session_form_str, speaker_form_str
 from . import db
-from sqlalchemy_utils import ColorType
-
 
 class EventsUsers(db.Model):
     """Many to Many table Event Users"""
@@ -29,7 +27,6 @@ class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     email = db.Column(db.String)
-    color = db.Column(ColorType)
     logo = db.Column(db.String)
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
@@ -74,7 +71,6 @@ class Event(db.Model):
                  longitude=None,
                  location_name=None,
                  email=None,
-                 color=None,
                  description=None,
                  event_url=None,
                  background_url=None,
@@ -93,7 +89,6 @@ class Event(db.Model):
         self.name = name
         self.logo = logo
         self.email = email
-        self.color = color
         self.start_time = start_time
         self.end_time = end_time
         self.timezone = timezone
@@ -127,13 +122,13 @@ class Event(db.Model):
 
     def __setattr__(self, name, value):
         if name == 'organizer_description' or name == 'description' or name == 'code_of_conduct':
-            super(Event, self).__setattr__(name, clean_up_string(value))
+            super(Event, self).__setattr__(name, clean_html(clean_up_string(value)))
         else:
             super(Event, self).__setattr__(name, value)
 
     @property
     def serialize(self):
-        """Return object data in easily serializeable format"""
+        """Return object data in easily serializable format"""
         return {
             'id': self.id,
             'name': self.name,

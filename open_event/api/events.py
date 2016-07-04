@@ -32,7 +32,6 @@ EVENT = api.model('Event', {
     'id': fields.Integer(required=True),
     'name': fields.String(required=True),
     'email': fields.Email(),
-    'color': fields.Color(),
     'logo': fields.Upload(),
     'start_time': fields.DateTime(required=True),
     'end_time': fields.DateTime(required=True),

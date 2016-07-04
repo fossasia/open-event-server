@@ -1,5 +1,5 @@
 """Copyright 2015 Rafal Kowalski"""
-from open_event.helpers.versioning import clean_up_string
+from open_event.helpers.versioning import clean_up_string, clean_html
 from . import db
 from open_event.helpers.date_formatter import DateFormatter
 import datetime
@@ -120,7 +120,7 @@ class Session(db.Model):
 
     def __setattr__(self, name, value):
         if name == 'short_abstract' or name == 'long_abstract' or name == 'comments':
-            super(Session, self).__setattr__(name, clean_up_string(value))
+            super(Session, self).__setattr__(name, clean_html(clean_up_string(value)))
         else:
             super(Session, self).__setattr__(name, value)
 

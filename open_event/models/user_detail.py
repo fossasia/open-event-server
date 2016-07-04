@@ -1,3 +1,4 @@
+from open_event.helpers.versioning import clean_up_string, clean_html
 from . import db
 
 
@@ -37,6 +38,12 @@ class UserDetail(db.Model):
 
     def __unicode__(self):
         return self.fullname
+
+    def __setattr__(self, name, value):
+        if name == 'details':
+            super(UserDetail, self).__setattr__(name, clean_html(clean_up_string(value)))
+        else:
+            super(UserDetail, self).__setattr__(name, value)
 
     @property
     def serialize(self):
