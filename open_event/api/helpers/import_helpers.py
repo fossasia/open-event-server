@@ -5,7 +5,7 @@ import json
 from flask import request
 from werkzeug import secure_filename
 
-from ..events import DAO as EventDAO, LinkDAO as SocialLinkDAO
+from ..events import DAO as EventDAO, SocialLinkDAO
 from ..microlocations import DAO as MicrolocationDAO
 from ..sessions import DAO as SessionDAO, TypeDAO as SessionTypeDAO
 from ..speakers import DAO as SpeakerDAO
