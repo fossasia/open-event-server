@@ -24,6 +24,7 @@ from open_event.helpers.storage import upload, UploadedFile
 from ..helpers import helpers as Helper
 from ..models import db
 from ..models.event import Event, EventsUsers
+from ..models.event_copyright import EventCopyright
 from ..models.file import File
 from ..models.microlocation import Microlocation
 from ..models.session import Session
