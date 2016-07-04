@@ -83,6 +83,7 @@
             url: requestUrl,
             type: 'POST',
             success: function (json) {
+                $("#location").val(json.name);
                 $("#event_browse").attr("action", "/explore/" + json.slug + "/events/")
             },
             error: function (err) {
