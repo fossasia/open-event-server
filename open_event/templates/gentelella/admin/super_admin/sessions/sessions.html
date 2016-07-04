@@ -55,6 +55,13 @@ Events
                 <i class="fa fa-trash"></i>
             </a>
             {% endif %}
+            {% if session.in_trash == True %}
+                            <a class="btn btn-success" href="/events/{{ session.event.id }}/sessions/{{ session.id }}/restore_trash"
+                               data-toggle="tooltip" data-placement="top"
+                               title="Restore Session">
+                                <i>Restore Session</i>
+                            </a>
+            {% endif %}
         </div>
         {% endif %}
     </td>

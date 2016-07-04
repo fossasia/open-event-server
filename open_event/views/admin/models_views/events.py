@@ -244,6 +244,14 @@ class EventsView(BaseView):
         flash("Your event has been permanently deleted.", "danger")
         return redirect(url_for('sadmin_events.index_view'))
 
+    @expose('/<event_id>/restore/', methods=('GET',))
+    @is_super_admin
+    def restore_event_view(self, event_id):
+        event = DataGetter.get_event(event_id)
+        event.in_trash = False
+        save_to_db(event, "Event restored from Trash")
+        flash("Your event has been restored", "success")
+        return redirect(url_for('sadmin_events.index_view'))
 
     @expose('/<int:event_id>/update/', methods=('POST',))
     def save_closing_date(self, event_id):

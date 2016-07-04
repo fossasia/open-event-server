@@ -80,6 +80,13 @@ Users
                 <i class="glyphicon glyphicon-trash"></i>
             </a>
             {% endif %}
+            {% if user['user'].in_trash == True %}
+                            <a class="btn btn-success" href="{{ get_url('sadmin_users.restore_view', user_id=user['user'].id)}}"
+                               data-toggle="tooltip" data-placement="top"
+                               title="Restore User">
+                                <i>Restore User</i>
+                            </a>
+            {% endif %}
         </div>
         </td>
     </tr>
