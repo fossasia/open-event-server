@@ -2,9 +2,9 @@
 # Module for helper static variables
 ##
 
-# Event sub topics
+# Event Topics with sub topics
 
-EVENT_SUB_TOPICS = {
+EVENT_TOPICS = {
     'Auto, Boat & Air': ['Air', 'Auto', 'Boat', 'Motorcycle/ATV', 'Other'],
     'Business & Professional': [
         'Career', 'Design', 'Educators', 'Environment &amp; Sustainability',
