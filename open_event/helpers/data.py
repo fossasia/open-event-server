@@ -774,7 +774,6 @@ class DataManager(object):
         """
         event = Event(name=form['name'],
                       email=form.get('email', u'test@example.com'),
-                      color=form.get('color', u'black'),
                       start_time=datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M'),
                       end_time=datetime.strptime(form['end_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M'),
                       timezone=form['timezone'],
