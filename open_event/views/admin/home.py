@@ -12,6 +12,7 @@ from flask.ext.scrypt import generate_password_hash
 from wtforms import ValidationError
 
 from open_event.helpers.flask_helpers import get_real_ip, slugify
+from open_event.views.public.explore import erase_from_dict
 from ...helpers.data import DataManager, save_to_db, get_google_auth, get_facebook_auth, create_user_password, \
     user_logged_in, record_activity
 from ...helpers.data_getter import DataGetter
@@ -179,14 +180,21 @@ class MyHomeView(AdminIndexView):
 
     @expose('/browse/', methods=('GET',))
     def browse_view(self):
-        try:
-            reader = geoip2.database.Reader(os.path.realpath('.') + '/static/data/GeoLite2-Country.mmdb')
-            ip = get_real_ip()
-            if ip == '127.0.0.1' or ip == '0.0.0.0':
-                ip = urlopen('http://ip.42.pl/raw').read()  # On local test environments
-            response = reader.country(ip)
-            country = response.country.name
-        except:
-            country = "United States"
+        if not request.args.get("location"):
+            try:
+                reader = geoip2.database.Reader(os.path.realpath('.') + '/static/data/GeoLite2-Country.mmdb')
+                ip = get_real_ip()
+                if ip == '127.0.0.1' or ip == '0.0.0.0':
+                    ip = urlopen('http://ip.42.pl/raw').read()  # On local test environments
+                response = reader.country(ip)
+                country = response.country.name
+            except:
+                country = "United States"
+        else:
+            country = request.args.get("location")
+
+        params = request.args.items()
+        erase_from_dict(params, 'location')
+        params = dict((k, v) for k, v in params if v)
         return redirect(url_for('explore.explore_view', location=slugify(country)) + '?' +
-                        urllib.urlencode(request.args))
+                        urllib.urlencode(params))
