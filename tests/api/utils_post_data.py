@@ -61,6 +61,11 @@ POST_SESSION_DATA = {
     "session_type_id": None
 }
 
+POST_SESSION_TYPE_DATA = {
+    'name': 'TestSessionType',
+    'length': '5.12'
+}
+
 POST_SPEAKER_DATA = {
     "short_biography": "TestSpeaker",
     "long_biography": "TestSpeaker",
