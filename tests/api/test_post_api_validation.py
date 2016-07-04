@@ -18,7 +18,7 @@ class ApiValidationTestCase():
         return self._test_model(
             'event',
             POST_EVENT_DATA,
-            ['color', 'email', 'logo', 'event_url', 'background_url',
+            ['email', 'logo', 'event_url', 'background_url',
                 'type', 'topic', 'privacy']
         )
 
