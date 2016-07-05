@@ -218,6 +218,8 @@ def create_model(model, data, event_id=None):
     if event_id is not None:
         get_object_or_404(EventModel, event_id)
         data['event_id'] = event_id
+    if data is None:
+        data = dict()
     new_model = model(**data)
     save_to_db(new_model, "Model %s saved" % model.__name__)
     if event_id:
