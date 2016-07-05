@@ -19,7 +19,7 @@ class TestGetApi(OpenEventTestCase):
             # Associate services to event_id
             create_services(event_id)
 
-    def _test_path(self, path, string):
+    def _test_path(self, path, *strings):
         """Helper function.
         Test response for 200 status code. Also test if response body
         contains event/service name.
@@ -27,11 +27,12 @@ class TestGetApi(OpenEventTestCase):
         with app.test_request_context():
             response = self.app.get(path, follow_redirects=True)
             self.assertEqual(response.status_code, 200)
-            self.assertIn(string, response.data)
+            for string in strings:
+                self.assertIn(string, response.data)
 
     def test_event_api(self):
         path = get_path(1)
-        self._test_path(path, 'TestEvent')
+        self._test_path(path, 'TestEvent', "'copyright': null")
 
     def test_track_api(self):
         path = get_path(1, 'tracks', 1)
