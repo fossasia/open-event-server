@@ -139,6 +139,7 @@ class DataManager(object):
         """
         events = DataGetter.get_all_events()
         user = DataGetter.get_user(user_id)
+        notification_ids = []
         for event in events:
             if user.is_speaker_at_event(event.id) or user.is_organizer(event.id):
                 email_notification = DataGetter.get_email_notification_settings_by_event_id(user_id, event.id)
@@ -148,6 +149,7 @@ class DataManager(object):
                     email_notification.session_schedule = value
                     email_notification.session_accept_reject = value
                     save_to_db(email_notification, "EmailSettings Toggled")
+                    notification_ids.append(email_notification.id)
                 else:
                     new_email_notification_setting = EmailNotification(next_event=value,
                                                                        new_paper=value,
@@ -156,6 +158,8 @@ class DataManager(object):
                                                                        user_id=user_id,
                                                                        event_id=event.id)
                     save_to_db(new_email_notification_setting, "EmailSetting Toggled")
+                    new_email_notification_setting.append(email_notification.id)
+        return notification_ids
 
     @staticmethod
     def add_email_notification_settings(form, user_id, event_id):

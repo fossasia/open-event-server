@@ -8,21 +8,23 @@ from open_event.helpers.data import DataManager, save_to_db
 from open_event.models.email_notifications import EmailNotification
 from ....helpers.data_getter import DataGetter
 
+
 def get_or_create_notification_settings(event_id):
     email_notification = DataGetter \
         .get_email_notification_settings_by_event_id(login.current_user.id, event_id)
     if email_notification:
         return email_notification
     else:
-        email_notification = EmailNotification()
-        email_notification.next_event = 1
-        email_notification.new_paper = 1
-        email_notification.session_schedule = 1
-        email_notification.session_accept_reject = 1
+        email_notification = EmailNotification(next_event=1,
+                                               new_paper=1,
+                                               session_schedule=1,
+                                               session_accept_reject=1,
+                                               user_id=login.current_user.id,
+                                               event_id=event_id)
         return email_notification
 
-class SettingsView(BaseView):
 
+class SettingsView(BaseView):
     def is_accessible(self):
         return login.current_user.is_authenticated
 
@@ -50,15 +52,18 @@ class SettingsView(BaseView):
             event_id = request.form.get('event_id')
 
             message = ''
+
             if name == 'global_email':
-                DataManager.toggle_email_notification_settings(login.current_user.id, value)
+                ids = DataManager.toggle_email_notification_settings(login.current_user.id, value)
             else:
                 name = unicodedata.normalize('NFKD', name).encode('ascii', 'ignore')
                 email_notification = get_or_create_notification_settings(event_id)
                 setattr(email_notification, name, value)
                 save_to_db(email_notification, "EmailSettings Toggled")
+                ids = [email_notification.id]
 
             return jsonify({
                 'status': 'ok',
-                'message': message
+                'message': message,
+                'notification_setting_ids': ids
             })
