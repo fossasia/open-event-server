@@ -77,21 +77,18 @@ class MyHomeView(AdminIndexView):
         if request.method == 'GET':
             return self.render('/gentelella/admin/login/register.html')
         if request.method == 'POST':
-            return True
-            users = DataGetter.get_all_users()
-            if True == False:
-                logging.info("Registration under process")
-                s = get_serializer()
-                data = [request.form['email'], request.form['password']]
-                user = DataManager.create_user(data)
-                form_hash = s.dumps(data)
-                link = url_for('.create_account_after_confirmation_view', hash=form_hash, _external=True)
-                send_email_confirmation(request.form, link)
-                login.login_user(user)
-                record_user_login_logout('user_login', user)
-                logging.info('logged successfully')
-                user_logged_in(user)
-                return redirect(intended_url())
+            logging.info("Registration under process")
+            s = get_serializer()
+            data = [request.form['email'], request.form['password']]
+            user = DataManager.create_user(data)
+            form_hash = s.dumps(data)
+            link = url_for('.create_account_after_confirmation_view', hash=form_hash, _external=True)
+            send_email_confirmation(request.form, link)
+            login.login_user(user)
+            record_user_login_logout('user_login', user)
+            logging.info('logged successfully')
+            user_logged_in(user)
+            return redirect(intended_url())
 
     @expose('/account/create/<hash>', methods=('GET',))
     def create_account_after_confirmation_view(self, hash):

@@ -52,11 +52,6 @@ def get_events_per_page(page):
     )
 
 
-@app.route('/check_email<email>', methods=['GET'])
-@cross_origin
-def check_email(self):
-    print request.args
-
 @app.route('/api/v1/event/<int:event_id>', methods=['GET'])
 @auto.doc()
 @cross_origin()
