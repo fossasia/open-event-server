@@ -118,8 +118,11 @@ class EventDAO(BaseDAO):
         # Extract and save copyright info
         copyright_data = payload.get('copyright')
         payload.pop('copyright', None)
-        copyright = EventCopyright(**copyright_data)
-        save_to_db(copyright, 'Copyright info saved')
+        if copyright_data is not None:
+            copyright = EventCopyright(**copyright_data)
+            save_to_db(copyright, 'Copyright info saved')
+        else:
+            copyright = None
 
         new_event = self.model(**payload)
         save_to_db(new_event, "Event saved")
