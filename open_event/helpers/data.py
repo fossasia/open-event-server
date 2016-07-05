@@ -1066,18 +1066,18 @@ class DataManager(object):
             if call_for_papers:
                 call_for_papers.announcement = form['announcement']
                 call_for_papers.start_date = datetime.strptime(
-                                                     form['cfs_start_date'], '%m/%d/%Y')
+                    form['cfs_start_date'], '%m/%d/%Y')
                 call_for_papers.end_date = datetime.strptime(
-                                                     form['cfs_end_date'], '%m/%d/%Y')
+                    form['cfs_end_date'], '%m/%d/%Y')
                 call_for_papers.event_id = event.id
                 save_to_db(call_for_papers)
             else:
                 call_for_speakers, c = get_or_create(CallForPaper,
                                                      announcement=form['announcement'],
                                                      start_date=datetime.strptime(
-                                                        form['cfs_start_date'], '%m/%d/%Y'),
+                                                         form['cfs_start_date'], '%m/%d/%Y'),
                                                      end_date=datetime.strptime(
-                                                        form['cfs_end_date'], '%m/%d/%Y'),
+                                                         form['cfs_end_date'], '%m/%d/%Y'),
                                                      event_id=event.id)
                 save_to_db(call_for_speakers)
 
@@ -1372,3 +1372,21 @@ def trash_session(session_id):
     session.in_trash = True
     save_to_db(session, "Session added to Trash")
     return session
+
+
+def restore_event(event_id):
+    event = DataGetter.get_event(event_id)
+    event.in_trash = False
+    save_to_db(event, "Event restored from Trash")
+
+
+def restore_user(user_id):
+    user = DataGetter.get_user(user_id)
+    user.in_trash = False
+    save_to_db(user, "User restored from Trash")
+
+
+def restore_session(session_id):
+    session = DataGetter.get_session(session_id)
+    session.in_trash = False
+    save_to_db(session, "Session restored from Trash")
