@@ -20,6 +20,7 @@ from ...helpers.helpers import send_email_with_reset_password_hash, send_email_c
 from open_event.helpers.oauth import OAuth, FbOAuth
 from open_event.models.user import User
 import geoip2.database
+from flask import abort
 
 def intended_url():
     return request.args.get('next') or url_for('.index')
@@ -75,22 +76,21 @@ class MyHomeView(AdminIndexView):
         if request.method == 'GET':
             return self.render('/gentelella/admin/login/register.html')
         if request.method == 'POST':
+            return True
             users = DataGetter.get_all_users()
-            for user in users:
-                if user.email == request.form['email']:
-                    raise ValidationError('Email already exists')
-            logging.info("Registration under process")
-            s = get_serializer()
-            data = [request.form['email'], request.form['password']]
-            user = DataManager.create_user(data)
-            form_hash = s.dumps(data)
-            link = url_for('.create_account_after_confirmation_view', hash=form_hash, _external=True)
-            send_email_confirmation(request.form, link)
-            login.login_user(user)
-            record_user_login_logout('user_login', user)
-            logging.info('logged successfully')
-            user_logged_in(user)
-            return redirect(intended_url())
+            if True == False:
+                logging.info("Registration under process")
+                s = get_serializer()
+                data = [request.form['email'], request.form['password']]
+                user = DataManager.create_user(data)
+                form_hash = s.dumps(data)
+                link = url_for('.create_account_after_confirmation_view', hash=form_hash, _external=True)
+                send_email_confirmation(request.form, link)
+                login.login_user(user)
+                record_user_login_logout('user_login', user)
+                logging.info('logged successfully')
+                user_logged_in(user)
+                return redirect(intended_url())
 
     @expose('/account/create/<hash>', methods=('GET',))
     def create_account_after_confirmation_view(self, hash):
@@ -190,3 +190,13 @@ class MyHomeView(AdminIndexView):
             country = "United States"
         return redirect(url_for('explore.explore_view', location=slugify(country)) + '?' +
                         urllib.urlencode(request.args))
+
+    @expose('/check_email/', methods=('POST', 'GET'))
+    def check_duplicate_email(self):
+        if request.method == 'GET':
+            email = request.args['email']
+            user = DataGetter.get_user_by_email(email)
+            if user is None:
+                return '200 OK'
+            else:
+                return abort(404)
