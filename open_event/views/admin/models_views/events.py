@@ -10,7 +10,7 @@ from flask_admin import expose
 from open_event import db
 from open_event.helpers.permission_decorators import *
 from open_event.helpers.helpers import fields_not_empty, string_empty
-from ....helpers.data import DataManager, save_to_db, record_activity, delete_from_db
+from ....helpers.data import DataManager, save_to_db, record_activity, delete_from_db, restore_event
 from ....helpers.data_getter import DataGetter
 from werkzeug.datastructures import ImmutableMultiDict
 from open_event.helpers.helpers import send_event_publish
@@ -249,9 +249,7 @@ class EventsView(BaseView):
     @expose('/<event_id>/restore/', methods=('GET',))
     @is_super_admin
     def restore_event_view(self, event_id):
-        event = DataGetter.get_event(event_id)
-        event.in_trash = False
-        save_to_db(event, "Event restored from Trash")
+        restore_event(event_id)
         flash("Your event has been restored", "success")
         return redirect(url_for('sadmin_events.index_view'))
 
