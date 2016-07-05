@@ -29,6 +29,7 @@ from ..models.mail import Mail
 from ..models.activity import Activity
 from ..models.setting import Setting
 from .language_list import LANGUAGE_LIST
+from .static import EVENT_TOPICS
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
 from flask import flash, current_app
@@ -468,26 +469,11 @@ class DataGetter:
 
     @staticmethod
     def get_event_topics():
-        return ['Auto, Boat & Air',
-                'Business & Professional',
-                'Charity & Causes',
-                'Community & Culture',
-                'Family & Education',
-                'Fashion & Beauty',
-                'Film, Media & Entertainment',
-                'Food & Drink',
-                'Government & Politics',
-                'Health & Wellness',
-                'Hobbies & Special Interest',
-                'Home & Lifestyle',
-                'Music',
-                'Other',
-                'Performing & Visual Arts',
-                'Religion & Spirituality',
-                'Science & Technology',
-                'Seasonal & Holiday',
-                'Sports & Fitness',
-                'Travel & Outdoor']
+        return sorted([k for k in EVENT_TOPICS])
+
+    @staticmethod
+    def get_event_subtopics():
+        return EVENT_TOPICS
 
     @staticmethod
     def get_all_mails(count=300):

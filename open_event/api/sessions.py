@@ -36,14 +36,14 @@ SESSION_MICROLOCATION = api.model('SessionMicrolocation', {
     'name': fields.String(),
 })
 
-SESSION_TYPE_FULL = api.model('SessionTypeFull', {
+SESSION_TYPE = api.model('SessionType', {
     'id': fields.Integer(required=True),
     'name': fields.String(required=True),
     'length': fields.Float(required=True)
 })
 
-SESSION_TYPE = api.clone('SessionType', SESSION_TYPE_FULL)
-del SESSION_TYPE['length']
+SESSION_TYPE_POST = api.clone('SessionTypePost', SESSION_TYPE)
+del SESSION_TYPE_POST['id']
 
 SESSION = api.model('Session', {
     'id': fields.Integer(required=True),
@@ -77,15 +77,12 @@ SESSION_POST = api.clone('SessionPost', SESSION, {
     'session_type_id': fields.Integer()
 })
 
-SESSION_TYPE_POST = api.clone('SessionTypePost', SESSION_TYPE_FULL)
-
 del SESSION_POST['id']
 del SESSION_POST['track']
 del SESSION_POST['speakers']
 del SESSION_POST['microlocation']
 del SESSION_POST['session_type']
 
-del SESSION_TYPE_POST['id']
 
 
 # Create DAO
@@ -224,3 +221,42 @@ class SessionListPaginated(Resource, PaginatedResourceBase):
             args=self.parser.parse_args(),
             event_id=event_id
         )
+
+
+@api.route('/events/<int:event_id>/sessions/types')
+class SessionTypeList(Resource):
+    @api.doc('list_session_types')
+    @api.marshal_list_with(SESSION_TYPE)
+    def get(self, event_id):
+        """List all session types"""
+        return TypeDAO.list(event_id)
+
+    @requires_auth
+    @api.doc('create_session_type', responses=POST_RESPONSES)
+    @api.marshal_with(SESSION_TYPE_POST)
+    @api.expect(SESSION_TYPE_POST)
+    def post(self, event_id):
+        """Create a session type"""
+        return TypeDAO.create(
+            event_id,
+            self.api.payload,
+            self.api.url_for(self, event_id=event_id)
+        )
+
+
+@api.route('/events/<int:event_id>/sessions/types/<int:type_id>')
+class SessionType(Resource):
+    @requires_auth
+    @api.doc('delete_session_type')
+    @api.marshal_with(SESSION_TYPE)
+    def delete(self, event_id, type_id):
+        """Delete a session type given its id"""
+        return TypeDAO.delete(event_id, type_id)
+
+    @requires_auth
+    @api.doc('update_session_type', responses=PUT_RESPONSES)
+    @api.marshal_with(SESSION_TYPE_POST)
+    @api.expect(SESSION_TYPE_POST)
+    def put(self, event_id, type_id):
+        """Update a session type given its id"""
+        return TypeDAO.update(event_id, type_id, self.api.payload)

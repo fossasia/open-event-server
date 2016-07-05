@@ -1,3 +1,5 @@
+from sqlalchemy.orm import backref
+
 from . import db
 
 
@@ -10,7 +12,7 @@ class CallForPaper(db.Model):
     end_date = db.Column(db.DateTime, nullable=False)
     event_id = db.Column(
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
-    events = db.relationship("Event", backref="call_for_papers")
+    events = db.relationship("Event", backref=backref("call_for_papers", uselist=False))
 
     def __init__(self, announcement=None, start_date=None, end_date=None, event_id=None):
         self.announcement = announcement

@@ -86,6 +86,32 @@ class TestPostApi(TestPostApiBase):
     def test_sponsor_api(self):
         self._test_model('sponsor', POST_SPONSOR_DATA)
 
+    def test_social_link_api(self):
+        self._login_user()
+        # Create a social link
+        path = get_path(1, 'links')
+        data = POST_SOCIAL_LINK_DATA
+        response = self.post_request(path, data)
+        self.assertEqual(response.status_code, 201)
+
+        path = get_path(1, 'links')
+        response = self.app.get(path)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('TestSocialLink', response.data)
+
+    def test_session_type_api(self):
+        self._login_user()
+        # Create a session type
+        path = get_path(1, 'sessions', 'types')
+        data = POST_SESSION_TYPE_DATA
+        response = self.post_request(path, data)
+        self.assertEqual(response.status_code, 201)
+
+        path = get_path(1, 'sessions', 'types')
+        response = self.app.get(path)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('TestSessionType', response.data)
+
 
 if __name__ == '__main__':
     unittest.main()
