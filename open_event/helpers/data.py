@@ -1062,16 +1062,24 @@ class DataManager(object):
         update_or_create(
             CustomForms, event_id=event.id,
             session_form=session_form, speaker_form=speaker_form)
-
         if form.get('call_for_speakers_state', u'off') == u'on':
-            call_for_speakers, c = get_or_create(CallForPaper,
-                                                 announcement=form['announcement'],
-                                                 start_date=datetime.strptime(
-                                                     form['cfs_start_date'], '%m/%d/%Y'),
-                                                 end_date=datetime.strptime(
-                                                     form['cfs_end_date'], '%m/%d/%Y'),
-                                                 event_id=event.id)
-            save_to_db(call_for_speakers)
+            if call_for_papers:
+                call_for_papers.announcement = form['announcement']
+                call_for_papers.start_date = datetime.strptime(
+                                                     form['cfs_start_date'], '%m/%d/%Y')
+                call_for_papers.end_date = datetime.strptime(
+                                                     form['cfs_end_date'], '%m/%d/%Y')
+                call_for_papers.event_id = event.id
+                save_to_db(call_for_papers)
+            else:
+                call_for_speakers, c = get_or_create(CallForPaper,
+                                                     announcement=form['announcement'],
+                                                     start_date=datetime.strptime(
+                                                        form['cfs_start_date'], '%m/%d/%Y'),
+                                                     end_date=datetime.strptime(
+                                                        form['cfs_end_date'], '%m/%d/%Y'),
+                                                     event_id=event.id)
+                save_to_db(call_for_speakers)
 
         save_to_db(event, "Event saved")
         record_activity('update_event', event_id=event.id)
