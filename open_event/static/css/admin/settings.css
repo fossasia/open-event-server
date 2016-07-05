@@ -1,0 +1,76 @@
+#events-accordion > .panel > .panel-heading {
+    background-color: #FFFFFF;
+}
+
+#events-accordion .panel, #events-accordion .panel-heading, #events-accordion .panel-body, #events-accordion .panel-collapse {
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    border-color: #ebebeb;
+}
+
+#events-accordion {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#events-accordion > .panel > .panel-heading > .panel-title > a {
+    font-weight: 300;
+}
+
+#events-accordion .badge {
+    font-weight: 300;
+    text-transform: uppercase;
+}
+
+.badge-success {
+    background-color: #5cb85c !important;
+}
+
+.badge-warning {
+    background-color: #f0ad4e !important;
+}
+
+nav.settings {
+    width: 100%;
+    text-align: right;
+    z-index: 100;
+    overflow: hidden;
+}
+
+nav.settings > .divider {
+    content: '';
+    border-bottom: 1px solid rgb(230, 230, 230);
+    max-height: 1px;
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+nav.settings > ul {
+    list-style: none;
+}
+
+nav.settings > ul > li {
+    margin: 5px 0;
+}
+
+nav.settings > ul > li > a {
+    color: rgb(163, 163, 163);
+    border-right: solid 2px transparent;
+    padding-right: 4px;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+nav.settings > ul > li.active > a {
+    color: rgb(51, 51, 51);
+    text-decoration: none;
+    border-right: 2px solid #000000;
+}
+
+nav.settings > ul > li > a:hover {
+    color: rgb(51, 51, 51);
+    text-decoration: none;
+    border-right: solid 2px #000000;
+}

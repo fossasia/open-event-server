@@ -98,7 +98,7 @@ class DataGetter:
 
     @staticmethod
     def get_email_notification_settings(user_id):
-        return EmailNotification.query.filter_by(user_id=user_id)
+        return EmailNotification.query.filter_by(user_id=user_id).all()
 
     @staticmethod
     def get_email_notification_settings_by_event_id(user_id, event_id):
