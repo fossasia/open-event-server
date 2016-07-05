@@ -15,6 +15,7 @@ class TestEvents(OpenEventViewTestCase):
         with app.test_request_context():
             url = url_for('events.index_view')
             rv = self.app.get(url, follow_redirects=True)
+
             self.assertTrue("Manage Events" in rv.data, msg=rv.data)
 
     def test_events_create(self):
