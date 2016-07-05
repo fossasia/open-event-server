@@ -15,20 +15,24 @@
 {% macro event_item(event) %}
 
     {% set notification_settings = event.notification_settings() %}
-    {% set event_notifications_val={'email': 'off'} %}
-    {% if current_user.is_speaker_at_event(event.id) %}
-        {% for key,value in email_speaker_fields.iteritems() %}
-            {% if notification_settings[key] == 1 %}
-                {% if event_notifications_val.update({'email': 'on'}) %} {% endif %}
-            {% endif %}
-        {% endfor %}
-    {% endif %}
-    {% if current_user.is_organizer(event.id) %}
-        {% for key,value in email_organizer_fields.iteritems() %}
-            {% if notification_settings[key] == 1 %}
-                {% if event_notifications_val.update({'email': 'on'}) %} {% endif %}
-            {% endif %}
-        {% endfor %}
+    {% if notification_settings %}
+        {% set event_notifications_val={'email': 'off'} %}
+        {% if current_user.is_speaker_at_event(event.id) %}
+            {% for key,value in email_speaker_fields.iteritems() %}
+                {% if notification_settings[key] == 1 %}
+                    {% if event_notifications_val.update({'email': 'on'}) %} {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        {% if current_user.is_organizer(event.id) %}
+            {% for key,value in email_organizer_fields.iteritems() %}
+                {% if notification_settings[key] == 1 %}
+                    {% if event_notifications_val.update({'email': 'on'}) %} {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% else %}
+        {% set event_notifications_val={'email': 'on'} %}
     {% endif %}
 
     <div class="panel panel-default" data-event-id="{{ event.id }}">
@@ -52,10 +56,10 @@
                     {% for key,value in email_speaker_fields.iteritems() %}
                         <div class="col-xs-12 input-group">
                             <span style="font-weight: 300; font-size: 15px;">{{ value }}</span>
-                            <input type="checkbox" name="{{ key }}" id="{{ key }}-switch"
+                            <input type="checkbox" name="{{ key }}" id="{{ key }}"
                                    class="toggle-switch setting-toggle"
-                                   {% if notification_settings[key] == 1 %}checked{% endif %}/>
-                            <label class="pull-right" for="{{ key }}-switch"></label>
+                                   {% if notification_settings[key] == 1 or not notification_settings %}checked{% endif %}/>
+                            <label class="pull-right" for="{{ key }}"></label>
                         </div>
                     {% endfor %}
                     <br>
@@ -66,10 +70,10 @@
                     {% for key,value in email_organizer_fields.iteritems() %}
                         <div class="col-xs-12 input-group">
                             <span style="font-weight: 300; font-size: 15px;">{{ value }}</span>
-                            <input type="checkbox" name="{{ key }}" id="{{ key }}-switch"
+                            <input type="checkbox" name="{{ key }}" id="{{ key }}"
                                    class="toggle-switch setting-toggle"
-                                   {% if notification_settings[key] == 1 %}checked{% endif %}/>
-                            <label class="pull-right" for="{{ key }}-switch"></label>
+                                   {% if notification_settings[key] == 1 or not notification_settings %}checked{% endif %}/>
+                            <label class="pull-right" for="{{ key }}"></label>
                         </div>
                     {% endfor %}
                 {% endif %}
@@ -113,7 +117,9 @@
     <div class="row">
         <div class="panel-group" id="events-accordion">
             {% for event in events %}
-                {{ event_item(event) }}
+                {% if current_user.is_speaker_at_event(event.id) or current_user.is_organizer(event.id) %}
+                    {{ event_item(event) }}
+                {% endif %}
             {% endfor %}
         </div>
     </div>

@@ -8,6 +8,18 @@ from open_event.helpers.data import DataManager, save_to_db
 from open_event.models.email_notifications import EmailNotification
 from ....helpers.data_getter import DataGetter
 
+def get_or_create_notification_settings(event_id):
+    email_notification = DataGetter \
+        .get_email_notification_settings_by_event_id(login.current_user.id, event_id)
+    if email_notification:
+        return email_notification
+    else:
+        email_notification = EmailNotification()
+        email_notification.next_event = 1
+        email_notification.new_paper = 1
+        email_notification.session_schedule = 1
+        email_notification.session_accept_reject = 1
+        return email_notification
 
 class SettingsView(BaseView):
 
@@ -39,17 +51,10 @@ class SettingsView(BaseView):
 
             message = ''
             if name == 'global_email':
-                email_notifications = EmailNotification.query.filter_by(user_id=login.current_user.id).all()
-                for email_notification in email_notifications:
-                    email_notification.next_event = value
-                    email_notification.new_paper = value
-                    email_notification.session_schedule = value
-                    email_notification.session_accept_reject = value
-                    save_to_db(email_notification, "EmailSettings Toggled")
+                DataManager.toggle_email_notification_settings(login.current_user.id, value)
             else:
                 name = unicodedata.normalize('NFKD', name).encode('ascii', 'ignore')
-                email_notification = DataGetter\
-                    .get_email_notification_settings_by_event_id(login.current_user.id, event_id)
+                email_notification = get_or_create_notification_settings(event_id)
                 setattr(email_notification, name, value)
                 save_to_db(email_notification, "EmailSettings Toggled")
 
