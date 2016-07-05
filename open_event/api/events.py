@@ -142,9 +142,10 @@ class EventDAO(BaseDAO):
         event = self.get(event_id)
         # update/create copyright
         if payload.get('copyright'):
-            payload['copyright']['event_id'] = event_id
-            if event.copyright is None:
-                CopyrightDAO.create(payload['copyright'])
+            payload['copyright']['event'] = event
+            if not event.copyright:
+                # validate=False to not delete event key
+                CopyrightDAO.create(payload['copyright'], validate=False)
             else:
                 CopyrightDAO.update(event.copyright.id, payload['copyright'])
         # delete related fields
