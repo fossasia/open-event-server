@@ -820,7 +820,7 @@ class DataManager(object):
             track_color = form.getlist('tracks[color]')
 
             room_name = form.getlist('rooms[name]')
-            room_color = form.getlist('rooms[color]')
+            room_floor = form.getlist('rooms[floor]')
 
             sponsor_name = form.getlist('sponsors[name]')
             sponsor_url = form.getlist('sponsors[url]')
@@ -870,7 +870,7 @@ class DataManager(object):
 
             for index, name in enumerate(room_name):
                 if not string_empty(name):
-                    room = Microlocation(name=name, event_id=event.id)
+                    room = Microlocation(name=name, floor=room_floor[index], event_id=event.id)
                     db.session.add(room)
 
             for index, name in enumerate(sponsor_name):
@@ -980,7 +980,7 @@ class DataManager(object):
         track_color = form.getlist('tracks[color]')
 
         room_name = form.getlist('rooms[name]')
-        room_color = form.getlist('rooms[color]')
+        room_floor = form.getlist('rooms[floor]')
 
         sponsor_name = form.getlist('sponsors[name]')
         sponsor_logo_url = []
@@ -993,6 +993,9 @@ class DataManager(object):
         custom_forms_value = form.getlist('custom_form[value]')
 
         # save the edited info to database
+        for session_type in session_types:
+            delete_from_db(session_type, "Session Type Deleted")
+
         for index, name in enumerate(session_type_names):
             if not string_empty(name):
                 session_type, c = get_or_create(SessionType,
@@ -1000,6 +1003,9 @@ class DataManager(object):
                                                 length=session_type_length[index],
                                                 event_id=event.id)
                 db.session.add(session_type)
+
+        for social_link in social_links:
+            delete_from_db(social_link, "SocialLink Deleted")
 
         for index, name in enumerate(social_link_name):
             if not string_empty(social_link_link[index]):
@@ -1009,6 +1015,9 @@ class DataManager(object):
                                                event_id=event.id)
                 db.session.add(social_link)
 
+        for track in tracks:
+            delete_from_db(track, "Tracks Deleted")
+
         for index, name in enumerate(track_name):
             if not string_empty(name):
                 track, c = get_or_create(Track,
@@ -1017,9 +1026,12 @@ class DataManager(object):
                                          event_id=event.id)
                 db.session.add(track)
 
+        for microlocation in microlocations:
+            delete_from_db(microlocation, "Microlocation Deleted")
+
         for index, name in enumerate(room_name):
             if not string_empty(name):
-                room, c = get_or_create(Microlocation, name=name, event_id=event.id)
+                room, c = get_or_create(Microlocation, name=name, floor=room_floor[index], event_id=event.id)
                 db.session.add(room)
 
         for sponsor in sponsors:
@@ -1053,7 +1065,6 @@ class DataManager(object):
         session_form = ""
         speaker_form = ""
         for index, name in enumerate(custom_forms_name):
-            print name
             if name == "session_form":
                 session_form = custom_forms_value[index]
             elif name == "speaker_form":
@@ -1062,6 +1073,8 @@ class DataManager(object):
         update_or_create(
             CustomForms, event_id=event.id,
             session_form=session_form, speaker_form=speaker_form)
+
+        delete_from_db(call_for_papers, "CallForPaper Deleted")
 
         if form.get('call_for_speakers_state', u'off') == u'on':
             call_for_speakers, c = get_or_create(CallForPaper,
