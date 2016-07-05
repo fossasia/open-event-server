@@ -25,7 +25,15 @@ POST_EVENT_DATA = {
     "privacy": "public",
     "ticket_url": "http://site.com/tickets",
     "code_of_conduct": "Thou shalt be kind",
-    "schedule_published_on": None
+    "schedule_published_on": None,
+    "copyright": {
+        "holder": "FOSSASIA",
+        "holder_url": "http://fossasia.org",
+        "licence": "Test licence",
+        "licence_url": "http://example.com",
+        "year": 2016,
+        "logo": ""
+    }
 }
 
 POST_SOCIAL_LINK_DATA = {
