@@ -29,4 +29,4 @@ class EmailNotification(db.Model):
         self.event_id = event_id
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        return 'User:' + unicode(self.user_id).encode('utf-8') + ' Event: ' + unicode(self.event_id).encode('utf-8')
