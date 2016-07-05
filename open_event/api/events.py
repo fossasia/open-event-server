@@ -70,7 +70,6 @@ del EVENT_POST['creator']
 del EVENT_POST['social_links']
 
 
-
 # ###################
 # Data Access Objects
 # ###################
@@ -93,12 +92,12 @@ class EventDAO(BaseDAO):
         Fixes the payload data.
         Here converts string time from datetime obj
         """
-        data['start_time'] = EVENT_POST['start_time'].from_str(data['start_time'])
-        data['end_time'] = EVENT_POST['end_time'].from_str(data['end_time'])
-        data['closing_datetime'] = EVENT_POST['closing_datetime'].from_str(
-            data['closing_datetime'])
-        data['schedule_published_on'] = EVENT_POST['schedule_published_on'].from_str(
-            data['schedule_published_on'])
+        datetime_fields = [
+            'start_time', 'end_time', 'closing_datetime',
+            'schedule_published_on'
+        ]
+        for i in datetime_fields:
+            data[i] = EVENT_POST[i].from_str(data.get(i))
         return data
 
     def create(self, data, url):
@@ -133,35 +132,20 @@ DAO = EventDAO(EventModel, EVENT_POST)
 # DEFINE PARAMS
 
 EVENT_PARAMS = {
-    'location': {
-        'type': str
-    },
+    'location': {},
     'contains': {
-        'description': 'Contains the string in name and description',
-        'type': str
+        'description': 'Contains the string in name and description'
     },
-    'state': {
-        'type': str
-    },
-    'privacy': {
-        'type': str
-    },
-    'type': {
-        'type': str
-    },
-    'topic': {
-        'type': str
-    },
-    'sub_topic': {
-        'type': str
-    },
+    'state': {},
+    'privacy': {},
+    'type': {},
+    'topic': {},
+    'sub_topic': {},
     'start_time_gt': {},
     'start_time_lt': {},
     'end_time_gt': {},
     'end_time_lt': {},
-    'time_period': {
-        'type': str
-    }
+    'time_period': {}
 }
 
 
