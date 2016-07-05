@@ -9,8 +9,7 @@ from open_event.models.role import Role
 from open_event.models.user import ORGANIZER
 from open_event.helpers.data import save_to_db, update_version, record_activity
 
-from .helpers.helpers import get_paginated_list, requires_auth, parse_args, \
-    update_model, get_object_or_404
+from .helpers.helpers import get_paginated_list, requires_auth, parse_args
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, BaseDAO, ServiceDAO
 from .helpers import custom_fields as fields
@@ -116,21 +115,12 @@ class EventDAO(BaseDAO):
         data = self.validate(data)
         payload = self.fix_payload(data)
         # Extract and save copyright info
-        copyright_data = payload.get('copyright')
-        payload.pop('copyright', None)
-        if copyright_data is not None:
-            copyright = EventCopyright(**copyright_data)
-            save_to_db(copyright, 'Copyright info saved')
-        else:
-            copyright = None
-
+        if payload.get('copyright'):
+            payload['copyright'] = CopyrightDAO.create(payload['copyright'])
+        # save event
         new_event = self.model(**payload)
-        save_to_db(new_event, "Event saved")
-        # Set event creator
         new_event.creator = g.user
-        # Set copyright info
-        new_event.copyright = copyright
-
+        save_to_db(new_event, "Event saved")
         # set organizer
         role = Role.query.filter_by(name=ORGANIZER).first()
         uer = UsersEventsRoles(g.user, new_event, role)
@@ -148,22 +138,23 @@ class EventDAO(BaseDAO):
     def update(self, event_id, data):
         data = self.validate(data)
         payload = self.fix_payload(data)
-        # Extract and update copyright info
-        copyright_data = payload.get('copyright')
-        event = get_object_or_404(EventModel, event_id)
-        copyright = update_model(
-            EventCopyright,
-            event.copyright.id,
-            copyright_data,
-            event_id
-        )
-        save_to_db(copyright)
-        payload.pop('copyright', None)
+        # get event
+        event = self.get(event_id)
+        # update/create copyright
+        if payload.get('copyright'):
+            payload['copyright']['event_id'] = event_id
+            if event.copyright is None:
+                CopyrightDAO.create(payload['copyright'])
+            else:
+                CopyrightDAO.update(event.copyright.id, payload['copyright'])
+        # delete related fields
+        payload.pop('copyright')
         return BaseDAO.update(self, event_id, payload, validate=False)
 
 
 LinkDAO = SocialLinkDAO(SocialLinkModel, SOCIAL_LINK_POST)
 DAO = EventDAO(EventModel, EVENT_POST)
+CopyrightDAO = BaseDAO(EventCopyright, EVENT_COPYRIGHT)
 
 # DEFINE PARAMS
 
