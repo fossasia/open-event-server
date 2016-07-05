@@ -145,7 +145,6 @@ class DataManager(object):
                 email_notification.new_paper = value
                 email_notification.session_schedule = value
                 email_notification.session_accept_reject = value
-
                 save_to_db(email_notification, "EmailSettings Toggled")
             else:
                 new_email_notification_setting = EmailNotification(next_event=0,
@@ -911,6 +910,14 @@ class DataManager(object):
             uer = UsersEventsRoles(login.current_user, event, role)
 
             if save_to_db(uer, "Event saved"):
+                # Save event notification setting
+                new_email_notification_setting = EmailNotification(next_event=1,
+                                                                   new_paper=1,
+                                                                   session_schedule=1,
+                                                                   session_accept_reject=1,
+                                                                   user_id=login.current_user.id,
+                                                                   event_id=event.id)
+                save_to_db(new_email_notification_setting, "EmailSetting Saved")
                 return event
         else:
             raise ValidationError("start date greater than end date")
