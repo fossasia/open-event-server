@@ -5,8 +5,9 @@
                    value="{{ social_link.name | default('Twitter', true) }}">
         </div>
         <div class="col-sm-8 input-group">
-            <input type="text" class="form-control" name="social[link]" placeholder="Link"
+            <input data-error="Please enter a valid URL" type="url" class="form-control" name="social[link]" placeholder="Link"
                    value="{{ social_link.link | default('', true) }}">
+            <div class="help-block with-errors"></div>
             <span class="input-group-btn">
                 <button type="button" class="btn btn-danger remove-social-links">-</button>
                 <button type="button" class="btn btn-primary add-social-links">+</button>
@@ -182,8 +183,9 @@
         <div class="item form-group">
             <label>Ticket URL
             </label>
-            <input name="ticket_url" class="form-control"
-                   value="{{ event.ticket_url | default('', true) }}"/>
+            <input type="url" pattern="https?://.+" name="ticket_url" class="form-control"
+                   value="{{ event.ticket_url | default('', true) }}" data-error="Please enter a valid URL"/>
+            <div class="help-block with-errors"></div>
         </div>
 
     </div>
