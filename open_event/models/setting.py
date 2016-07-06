@@ -14,6 +14,9 @@ class Setting(db.Model):
     # FB
     fb_client_id = db.Column(db.String)
     fb_client_secret = db.Column(db.String)
+    # twitter
+    tw_consumer_key = db.Column(db.String)
+    tw_consumer_secret = db.Column(db.String)
     # Sendgrid
     sendgrid_key = db.Column(db.String)
     # App secret
@@ -23,7 +26,8 @@ class Setting(db.Model):
 
     def __init__(self, aws_key=None, aws_secret=None, aws_bucket_name=None,
                  google_client_id=None, google_client_secret=None,
-                 fb_client_id=None, fb_client_secret=None, sendgrid_key=None,
+                 fb_client_id=None, fb_client_secret=None, tw_consumer_key=None,
+                 tw_consumer_secret=None, sendgrid_key=None,
                  secret=None, storage_place=None):
         self.aws_key = aws_key
         self.aws_secret = aws_secret
@@ -32,6 +36,8 @@ class Setting(db.Model):
         self.google_client_secret = google_client_secret
         self.fb_client_id = fb_client_id
         self.fb_client_secret = fb_client_secret
+        self.tw_consumer_key = tw_consumer_key
+        self.tw_consumer_secret = tw_consumer_secret
         self.sendgrid_key = sendgrid_key
         self.secret = secret
         self.storage_place = storage_place
