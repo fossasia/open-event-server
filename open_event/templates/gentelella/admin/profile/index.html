@@ -5,7 +5,7 @@
 {% block body %}
 
 
-<div class="page-title">
+<div class="page-title col-md-offset-1">
     <div class="title_left">
         <h3>Profile</h3>
     </div>
@@ -13,12 +13,13 @@
 <div class="clearfix"></div>
 
 <div class="row">
-    <div class="col-md-12 col-sm-12 col-xs-12">
+
 
         <form name="test" action="/profile/edit/{{user_id}}" method="POST" role="form"
               class="admin-form form-horizontal event-create-form" enctype='multipart/form-data'>
 
-            <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
+
+            <div class="col-md-2 col-sm-2 col-xs-12 profile_left col-md-offset-1">
 
                 <div class="profile_img">
 
@@ -26,9 +27,9 @@
                     <div id="crop-avatar">
                         <!-- Current avatar -->
                         {% if profile.user_detail.avatar_uploaded %}
-                        <img src="{{profile.user_detail.avatar_uploaded}}" class="profile_avatar">
+                            <img src="{{profile.user_detail.avatar_uploaded}}" class="profile_avatar" >
                         {% else %}
-                        <img src="{{ url_for('static', filename='img/avatar.png') }}" class="profile_avatar">
+                            <img src="{{ url_for('static', filename='img/avatar.png') }}" class="profile_avatar">
                         {% endif %}
 
 
@@ -78,7 +79,7 @@
 
 
             </div>
-            <div class="col-md-9 col-sm-9 col-xs-12">
+            <div class="col-md-8 col-sm-8 col-xs-12">
 
 
                 {% include '/gentelella/admin/profile/_form.html' %}
