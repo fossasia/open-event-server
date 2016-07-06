@@ -31,7 +31,9 @@
                 {% endif %}
             </div>
         </div>
+        <h3>Integrate Social Networks</h3>
         <div class="row" style="margin-bottom:20px">
+
             <div class="col-md-6 col-xs-6">
                 <label >Facebook:
                 </label>
@@ -44,8 +46,10 @@
                 {% endif %}
             </div>
 
+        </div>
+        <div class="row" style="margin-bottom:20px">
             <div class="col-md-6 col-xs-6">
-                <label >Twitter:
+            <label >Twitter:
                 </label>
 
                 {% if profile.user_detail.twitter %}
@@ -53,7 +57,19 @@
                 {% else %}
                 <input type="url" pattern="https?://.+" name="twitter" class="form-control"/>
                 {% endif %}
-            </div>
+                </div>
+        </div>
+        <div class="row" style="margin-bottom:20px">
+            <div class="col-md-6 col-xs-6">
+            <label >Instagram:
+                </label>
+
+                {% if profile.user_detail.instagram %}
+                <input type="url" pattern="https?://.+" name="instagram" class="form-control" value="{{profile.user_detail.instagram}}"/>
+                {% else %}
+                <input type="url" pattern="https?://.+" name="instagram" class="form-control"/>
+                {% endif %}
+                </div>
         </div>
     </div>
 
