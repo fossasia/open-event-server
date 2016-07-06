@@ -787,15 +787,16 @@ class DataManager(object):
         non_empty = lambda val, val2: val2 if val == '' else val
 
         # Filter Copyright info
+        # If copyright_holder not set, make organizer_name the holder
         holder = non_empty(form['copyright_holder'],
                            form['organizer_name'])
         holder_url = form['copyright_holder_url']
+        # If copyright year not set, make current year the copyright year
         year = non_empty(form['copyright_year'],
                          datetime.now().year)
         licence_name = form['copyright_licence']
         # Ignoring Licence description
-        _, licence_url, logo = EVENT_LICENCES.get(licence_name,
-                                                  (None, None, None))
+        _, licence_url, logo = EVENT_LICENCES.get(licence_name, ('', '', ''))
 
         copyright = EventCopyright(holder=holder,
                                    holder_url=holder_url,
@@ -978,6 +979,25 @@ class DataManager(object):
         event.organizer_description = form['organizer_description']
         event.code_of_conduct = form['code_of_conduct']
         event.ticket_url = form['ticket_url']
+
+        # Returns val2 if val is empty
+        non_empty = lambda val, val2: val2 if val == '' else val
+
+        # Filter Copyright info
+        # If copyright_holder not set, make organizer_name the holder
+        event.copyright.holder = non_empty(form['copyright_holder'],
+                           form['organizer_name'])
+        event.copyright.holder_url = form['copyright_holder_url']
+        # If copyright year not set, make current year the copyright year
+        event.copyright.year = non_empty(form['copyright_year'],
+                         datetime.now().year)
+        licence_name = form['copyright_licence']
+        # Ignoring Licence description
+        _, licence_url, logo = EVENT_LICENCES.get(licence_name, ('', '', ''))
+
+        event.copyright.licence = licence_name
+        event.copyright.licence_url = licence_url
+        event.copyright.logo = logo
 
         background_image = form['background_url']
         if string_not_empty(background_image):
