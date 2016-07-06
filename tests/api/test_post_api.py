@@ -8,6 +8,13 @@ from tests.api.utils_post_data import *
 from tests.auth_helper import register
 from open_event import current_app as app
 
+from open_event.api.events import EVENT_POST
+from open_event.api.tracks import TRACK_POST
+from open_event.api.microlocations import MICROLOCATION_POST
+from open_event.api.sessions import SESSION_POST
+from open_event.api.speakers import SPEAKER_POST
+from open_event.api.sponsors import SPONSOR_POST
+
 
 class TestPostApiBase(OpenEventTestCase):
     """
@@ -114,6 +121,43 @@ class TestPostApi(TestPostApiBase):
         response = self.app.get(path)
         self.assertEqual(response.status_code, 200)
         self.assertIn('TestSessionType', response.data)
+
+
+class TestPostApiMin(TestPostApiBase):
+    """
+    Test POST API with minimum payload
+    Only required payloads are kept
+    """
+    def _test_model(self, name, data, api_model):
+        # scrune data
+        data = data.copy()
+        for i in api_model:
+            if not api_model[i].required:
+                data.pop(i, None)
+        # test
+        path = get_path() if name == 'event' else get_path(1, name + 's')
+        self._login_user()
+        response = self.post_request(path, data)
+        self.assertEqual(201, response.status_code, msg=response.data)
+        self.assertIn('Test' + str(name).title(), response.data)
+
+    def test_event_api(self):
+        self._test_model('event', POST_EVENT_DATA, EVENT_POST)
+
+    def test_track_api(self):
+        self._test_model('track', POST_TRACK_DATA, TRACK_POST)
+
+    def test_microlocation_api(self):
+        self._test_model('microlocation', POST_MICROLOCATION_DATA, MICROLOCATION_POST)
+
+    def test_session_api(self):
+        self._test_model('session', POST_SESSION_DATA, SESSION_POST)
+
+    def test_speaker_api(self):
+        self._test_model('speaker', POST_SPEAKER_DATA, SPEAKER_POST)
+
+    def test_sponsor_api(self):
+        self._test_model('sponsor', POST_SPONSOR_DATA, SPONSOR_POST)
 
 
 if __name__ == '__main__':

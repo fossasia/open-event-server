@@ -52,8 +52,8 @@ SESSION = api.model('Session', {
     'short_abstract': fields.String(),
     'long_abstract': fields.String(),
     'comments': fields.String(),
-    'start_time': fields.DateTime(),
-    'end_time': fields.DateTime(),
+    'start_time': fields.DateTime(required=True),
+    'end_time': fields.DateTime(required=True),
     'track': fields.Nested(SESSION_TRACK, allow_null=True),
     'speakers': fields.List(fields.Nested(SESSION_SPEAKER)),
     'language': SessionLanguageField(),
@@ -82,7 +82,6 @@ del SESSION_POST['track']
 del SESSION_POST['speakers']
 del SESSION_POST['microlocation']
 del SESSION_POST['session_type']
-
 
 
 # Create DAO
@@ -125,7 +124,7 @@ class SessionDAO(ServiceDAO):
             SessionTypeModel, data.get('session_type_id'), event_id)
         data['event_id'] = event_id
         data['speakers'] = InstrumentedList(
-            SpeakerModel.query.get(_) for _ in data['speaker_ids']
+            SpeakerModel.query.get(_) for _ in data.get('speaker_ids', [])
             if self.get_object(SpeakerModel, _, event_id) is not None
         )
         data = self._delete_fields(data)
