@@ -8,7 +8,7 @@ from open_event import db
 from open_event.helpers.permission_decorators import *
 from flask.ext import login
 from flask import request, url_for, redirect, flash
-from ....helpers.data import DataManager, save_to_db, delete_from_db
+from ....helpers.data import DataManager, save_to_db, delete_from_db, trash_session
 from ....helpers.data_getter import DataGetter
 from werkzeug.utils import secure_filename
 import json
@@ -123,12 +123,29 @@ class SessionsView(BaseView):
         DataManager.session_accept_reject(session, event_id, 'rejected')
         return redirect(url_for('.index_view', event_id=event_id))
 
+    @expose('/<int:session_id>/trash', methods=('GET',))
+    def trash_session(self, event_id, session_id):
+        session = get_session_or_throw(session_id)
+        session = trash_session(session_id)
+        flash("The session has been deleted", "danger")
+        if login.current_user.is_super_admin == True:
+            return redirect(url_for('sadmin_sessions.display_my_sessions_view', event_id=event_id))
+        return redirect(url_for('.index_view', event_id=event_id))
+
+    @expose('/<int:session_id>/restore_trash', methods=('GET',))
+    def restore_session(self, event_id, session_id):
+        session = get_session_or_throw(session_id)
+        session.in_trash = False
+        save_to_db(session, "Session restored from trash")
+        flash("The session has been restored", "success")
+        return redirect(url_for('sadmin_sessions.display_my_sessions_view', event_id=event_id))
+
     @expose('/<int:session_id>/delete', methods=('GET',))
     def delete_session(self, event_id, session_id):
         session = get_session_or_throw(session_id)
-        delete_from_db(session, 'Session Rejected')
-        flash("The session has been deleted", "danger")
-        return redirect(url_for('.index_view', event_id=event_id))
+        delete_from_db(session, 'Session Deleted')
+        flash("The session has been permanently deleted", "danger")
+        return redirect(url_for('sadmin_sessions.display_my_sessions_view', event_id=event_id))
 
     @expose('/<int:session_id>/restore/', methods=('GET',))
     def restore_session_view(self, event_id, session_id):

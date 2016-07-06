@@ -4,10 +4,19 @@ Register a mail here before using it
 """
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
     USER_REGISTER, PASSWORD_RESET, EVENT_ROLE, SESSION_ACCEPT_REJECT, \
-    SESSION_SCHEDULE, NEXT_EVENT
+    SESSION_SCHEDULE, NEXT_EVENT, EVENT_PUBLISH
 
 
 MAILS = {
+    EVENT_PUBLISH: {
+        'recipient': 'Organizer, Speaker',
+        'subject': '{event_name} is Live',
+        'message': (
+            "Hi {email}<br/>" +
+            "Event, {event_name}, is up and running and ready for action. Go ahead and check it out." +
+            "<br/> Visit this link to view it: {link}"
+        )
+    },
     INVITE_PAPERS: {
         'recipient': 'Speaker',
         'subject': 'Invitation to Submit Papers for {event_name}',
@@ -40,7 +49,7 @@ MAILS = {
         'subject': 'Event {event_name} is coming soon',
         'message': (
             "Hi {email},<br/>" +
-            "Event {event_name} is coming soon. Get ready!! " +
+            "Here are the upcoming events: {up_coming_events} .Get ready!! " +
             "<br/> Visit this link to view the event: {link}"
         )
     },

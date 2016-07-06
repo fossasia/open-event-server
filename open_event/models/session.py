@@ -1,12 +1,12 @@
 """Copyright 2015 Rafal Kowalski"""
-from open_event.helpers.versioning import clean_up_string
+from open_event.helpers.versioning import clean_up_string, clean_html
 from . import db
 from open_event.helpers.date_formatter import DateFormatter
 import datetime
 
 speakers_sessions = db.Table('speakers_sessions', db.Column(
-    'speaker_id', db.Integer, db.ForeignKey('speaker.id')), db.Column(
-        'session_id', db.Integer, db.ForeignKey('session.id')))
+    'speaker_id', db.Integer, db.ForeignKey('speaker.id', ondelete='CASCADE')), db.Column(
+        'session_id', db.Integer, db.ForeignKey('session.id', ondelete='CASCADE')))
 
 
 class Session(db.Model):
@@ -40,6 +40,7 @@ class Session(db.Model):
     event_id = db.Column(
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     state = db.Column(db.String, default="pending")
+    in_trash = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
     def __init__(self,
@@ -61,7 +62,8 @@ class Session(db.Model):
                  audio=None,
                  signup_url=None,
                  session_type=None,
-                 created_at=None):
+                 created_at=None,
+                 in_trash=None):
         self.title = title
         self.subtitle = subtitle
         self.short_abstract = short_abstract
@@ -81,6 +83,7 @@ class Session(db.Model):
         self.signup_url = signup_url
         self.session_type = session_type
         self.created_at = created_at
+        self.in_trash=in_trash
 
     @staticmethod
     def get_service_name():
@@ -119,7 +122,7 @@ class Session(db.Model):
 
     def __setattr__(self, name, value):
         if name == 'short_abstract' or name == 'long_abstract' or name == 'comments':
-            super(Session, self).__setattr__(name, clean_up_string(value))
+            super(Session, self).__setattr__(name, clean_html(clean_up_string(value)))
         else:
             super(Session, self).__setattr__(name, value)
 

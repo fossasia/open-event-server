@@ -8,12 +8,11 @@
 
 {% block head_css %}
     {{ super() }}
-
 {% endblock %}
 
 {% block content %}
 
-<form method="post" class="form-horizontal form-label-left">
+<form id="settings_form" method="post" class="form-horizontal form-label-left">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
             <h4>Google Tokens</h4>
@@ -46,28 +45,49 @@
                 </div>
             </div>
             <br>
-            <h4>Amazon S3 Credentials</h4>
-            See <a href="http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/AWSCredentials.html">here</a> on how to obtains these keys.<br>
-            Files will be stored on running server in case these tokens are not provided. <br><br>
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12">Bucket name</label>
-                <div class=" col-md-9 col-xs-12">
-                    <input name="aws_bucket_name" class="form-control col-md-6 col-xs-6" value="{{ settings.aws_bucket_name|default('', True) }}">
+            <h4>Storage</h4>
+            Where to store data ?
+            <div class="form-group col-md-offset-1">
+                <div class="radio">
+                    <label>
+                    <input type="radio" name="storage_place" id="storage_local" class="radio_storage" value="local" {% if settings.storage_place != "s3" %}checked{% endif %}>
+                    Local <small style="margin-left: 5px;">(stored in /static/media/ folder)</small>
+                    </label>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12">Key</label>
-                <div class=" col-md-9 col-xs-12">
-                    <input name="aws_key" class="form-control col-md-6 col-xs-6" value="{{ settings.aws_key|default('', True) }}">
+                <div class="radio">
+                    <label>
+                    <input type="radio" name="storage_place" id="storage_aws" class="radio_storage" value="s3" {% if settings.storage_place == "s3" %}checked{% endif %}>
+                    Amazon S3
+                    <!-- <span style="line-height: 2em;"> -->
+                    <small style="margin-left: 5px;">
+                    (See <a href="http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/AWSCredentials.html">here</a> on how to obtain these keys)
+                    </small>
+                    <!-- </span> -->
+                    </label>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12">Secret</label>
-                <div class=" col-md-9 col-xs-12">
-                    <input name="aws_secret" class="form-control col-md-6 col-xs-6" value="{{ settings.aws_secret|default('', True) }}">
+                <!-- s3 form -->
+                <br>
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Bucket name</label>
+                    <div class=" col-md-9 col-xs-12">
+                        <input name="aws_bucket_name" class="form-control col-md-6 col-xs-6" value="{{ settings.aws_bucket_name|default('', True) }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Key</label>
+                    <div class=" col-md-9 col-xs-12">
+                        <input name="aws_key" class="form-control col-md-6 col-xs-6" value="{{ settings.aws_key|default('', True) }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Secret</label>
+                    <div class=" col-md-9 col-xs-12">
+                        <input name="aws_secret" class="form-control col-md-6 col-xs-6" value="{{ settings.aws_secret|default('', True) }}">
+                    </div>
                 </div>
             </div>
             <br>
+
             <h4>Sendgrid Token</h4>
             See <a href="https://sendgrid.com/docs/User_Guide/Settings/api_keys.html">here</a> on how to get this token.<br><br>
             <div class="form-group">
@@ -100,5 +120,25 @@
 
 {% block tail_js %}
     {{ super() }}
+    <script type="text/javascript">
+    // manage the storage form events
+    function storage_form(){
+        sel_opt = $('input[name=storage_place]:checked', '#settings_form').val();
+        if (sel_opt == 'local')
+            disable = true;
+        else
+            disable = false;
+        $('[name^=aws_]').prop("readonly", disable);
+        $('[name^=aws_]').prop("required", ~disable);
+    }
+
+    $('.radio_storage').click(function(event){
+        storage_form();
+    });
+
+    $(document).ready(function(){
+        storage_form();
+    });
+    </script>
 
 {% endblock %}

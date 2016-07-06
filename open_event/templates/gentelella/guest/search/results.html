@@ -3,7 +3,60 @@
 {% block head_css %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/collapse-search.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/explore.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}">
 {% endblock %}
+
+{% block head_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='admin/lib/bootpag/lib/jquery.bootpag.min.js') }}"></script>
+{% endblock %}
+
+{% block title %}
+    Explore
+{% endblock %}
+{% macro event_block(event) %}
+    <a href="/e/{{ event.id }}">
+        <div class="col-xs-12 event-holder">
+            <div class="thumbnail row">
+                <div class="img-box col-md-3 col-sm-3 col-xs-3">
+                    <img class="event-image" src="{{ event.background_url | default('', true) }}"
+                         onerror="imgError(this, true)">
+                </div>
+                <div class="caption col-md-9 col-sm-9 col-xs-9">
+                    <small class="time">
+                        {% if event %}{{ event.start_time.strftime('%a, %B %d %I:%M %p') }}{% endif %}</small>
+                    <h4 class="name">{{ event.name }}</h4>
+                    <small class="location_name">
+                        {% if event %}{{ event.location_name.split(",")[0] }}{% endif %}</small>
+                    <hr>
+                    <p class="tags">
+                        {% if event and event.type %}
+                            <span class="filter-hashtag" data-name="type" data-value="{{ event.type }}">#{{ event.type | default('', true) |  camel_case }}</span>
+                        {% endif %}
+                        {% if event and event.topic %}
+                            <span class="filter-hashtag" data-name="category" data-value="{{ event.topic }}">#{{ event.topic | default('', true) | camel_case }}</span>
+                        {% endif %}
+                        <i data-event-id="{{ event.id | default('', true) }}"
+                           data-title="{{ event.name | default('', true) }}"
+                           class="share-btn fa fa-share-alt pull-right"></i>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </a>
+{% endmacro %}
+
+
+{% macro filter_tags(filter) %}
+    <li>
+        <a class="filter-tag-btn btn btn-default btn-xs" data-filter-type="{{ filter[0] | default('', true) }}">
+            <span class="value">{{ filter[1] | default('', true) }}</span>
+            <i class="fa fa-close" style="margin-left:3px"></i>
+        </a>
+    </li>
+{% endmacro %}
 
 {% block body %}
     <div class="row">
@@ -15,131 +68,166 @@
             {{ filtering.add_search() }}
         </div>
         <div class="col-md-8">
-            <h1>{{ location }} Events</h1>
+            <h1 style="font-weight: 300;"><span class="location-name"
+                                                style="text-transform: capitalize;">{{ location | title }}</span> Events
+            </h1>
             <div>
                 <ul class="list-inline prod_size filtering">
                     {% for filter in filters %}
-                        <li>
-                            <button type="button" class="btn btn-default btn-xs">{{ filter[1] }}
-                                <i class="fa fa-close" name="{{ filter[0] }}" style="margin-left:3px"></i></button>
-                        </li>
+                        {% if filter[1] != '' %}
+                            {{ filter_tags(filter) }}
+                        {% endif %}
                     {% endfor %}
                 </ul>
             </div>
-            {% for event in results.results %}
-                <div class="thumbnail" onclick="location.href='/e/{{ event.id }}'">
-                    <div class="left">
-                        <img src="{{ url_for('static', filename='img/image-800x500.png') }}"
-                             style="width:300px; height: 180px"/>
-                    </div>
+            <div style="overflow: hidden">
+                <div class="loader" style="display: none;">Loading...</div>
+            </div>
 
-                    <div class="left" style="margin-left: 20px">
-                        <p>{{ event.start_time.strftime('%B %d, %Y - %I:%M %p') }}</p>
-                        <h3>{{ event.name }}</h3>
-                        <p>{{ event.location_name }}</p>
-                        <p>
-                            #tech, #conference
-                        </p>
-                    </div>
-                    <div style="clear:both"></div>
-                </div>
-            {% endfor %}
+            <div id="events-holder" {% if results.count <= 0 %}style="display: none;"{% endif %}>
+                {% for event in results.results %}
+                    {{ event_block(event) }}
+                {% endfor %}
+            </div>
+            <div id="no-results" {% if results.count > 0 %}style="display: none;"{% endif %}>
+                <h2 style="font-weight: 100; font-size: 26px;">No events found for the selected parameters.</h2>
+            </div>
             <br>
-            {% set pages = results.count/results.limit %}<br>
-            {% set pages = pages | int %}
-            <nav>
-                <ul class="pagination pagination-lg">
-                    {% if results.previous %}
-                        <li>
-                            <a href="{{ set_query_parameter('page',current_page - 1) }}" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                    {% endif %}
-                        {% for page in range(1, pages + 1) %}
-                            {% if page == current_page %}
-                                <li class="active"><a href="{{ set_query_parameter('page',page) }}">{{ page }}</a></li>
-                            {% else %}
-                                <li><a href="{{ set_query_parameter('page',page) }}">{{ page }}</a></li>
-                            {% endif %}
-                        {% endfor %}
-                    {% if results.next %}
-                        <li>
-                            <a href="{{ set_query_parameter('page',current_page + 1 ) }}" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </nav>
+            <div id="pagination"></div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="share-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4>Share this event</h4>
+                </div>
+                <div class="modal-body" style="text-align: center;">
+                    {% include 'gentelella/components/social_buttons.html' %}
+                    <input id="share-url-box" type="text" class="form-control" onClick="this.select();"
+                           value="{{ request.url }}">
+                </div>
+            </div>
         </div>
     </div>
 
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <script id="event-template" type="text/x-template">
+        {{ event_block(None) }}
+    </script>
+
+    <script id="filter-tag-template" type="text/x-template">
+        {{ filter_tags(None) }}
+    </script>
 
 {% endblock %}
 
 {% block tail_js %}
     {{ super() }}
-
     <script>
+        var pages = {{ results.count }}/ {{ results.limit }};
+        $('#pagination').bootpag({
+            total: Math.ceil(pages),
+            page: {{ current_page }}
+        }).on("page", function (event, num) {
+            runFilter('page', '' + num);
+        });
+
         var marker;
-        var init_marker;
-        var $latitudeInput = $('#latitude');
-        var $longitudeInput = $('#longitude');
-        var $locationInput = "{{location}}"
-        function initMap() {
-            var latitude = $latitudeInput.val();
-            var longitude = $longitudeInput.val();
-            var latlng = new google.maps.LatLng(latitude, longitude);
-            var map = new google.maps.Map($("#map")[0], {
-                zoom: 1,
-                center: latlng
-            });
+        var placeSearch, autocomplete;
+        var geocoder;
+        var map;
+        var componentForm = {
+            street_number: 'short_name',
+            route: 'long_name',
+            locality: 'long_name',
+            administrative_area_level_1: 'short_name',
+            country: 'long_name',
+            postal_code: 'short_name'
+        };
+        var $locationInput = "{{location | title}}";
 
-            var geocoder = new google.maps.Geocoder();
-            init_marker = new google.maps.Marker({
-                draggable: true,
-                position: latlng,
-                map: map,
-                zoom: 15
-            });
+        function CenterControl(controlDiv) {
+            // Set CSS for the control border.
+            var controlUI = document.createElement('div');
+            controlUI.style.backgroundColor = '#fff';
+            controlUI.style.border = '2px solid #fff';
+            controlUI.style.borderRadius = '3px';
+            controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+            controlUI.style.cursor = 'pointer';
+            controlUI.style.marginBottom = '5px';
+            controlUI.style.textAlign = 'center';
+            controlUI.title = 'Search this Area';
+            controlDiv.appendChild(controlUI);
 
+            // Set CSS for the control interior.
+            var controlText = document.createElement('div');
+            controlText.style.color = 'rgb(25,25,25)';
+            controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+            controlText.style.fontSize = '12px';
+            controlText.style.lineHeight = '38px';
+            controlText.style.paddingLeft = '5px';
+            controlText.style.paddingRight = '5px';
+            controlText.innerHTML = 'Search this Area';
+            controlUI.appendChild(controlText);
 
-            geocodeAddress(geocoder, map, "{{location}}");
-            $("#inputSuccess3").bind('input', function () {
-                geocodeAddress(geocoder, map, $(this).val())
+            // Setup the click event listeners: simply set the map to Chicago.
+            controlUI.addEventListener('click', function () {
+                geocoder.geocode({'location': map.getCenter()}, function (results, status) {
+                    if (status === google.maps.GeocoderStatus.OK) {
+                        var address;
+                        if(map.getZoom() > 4) {
+                            address = results[1].formatted_address.replace(/[0-9]/g, '');
+                        } else {
+                            address = results[results.length-1].formatted_address.replace(/[0-9]/g, '');
+                        }
+                        $('#location').val(address).trigger('autocomplete');
+                    } else {
+                         console.log('Geocode was not successful for the following reason: ' + status);
+                    }
+                });
             });
 
         }
-        function geocodeAddress(geocoder, resultsMap, address) {
-            var address = address;
+
+        function initMap() {
+            var latlng = new google.maps.LatLng(0, 0);
+            map = new google.maps.Map($("#map")[0], {
+                zoom: 1,
+                center: latlng,
+                streetViewControl: false,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+
+            var centerControlDiv = document.createElement('div');
+            new CenterControl(centerControlDiv, map);
+
+            centerControlDiv.index = 1;
+            map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(centerControlDiv);
+
+            geocoder = new google.maps.Geocoder();
+
+            autocomplete = new google.maps.places.Autocomplete((document.getElementById('location')), {types: ['geocode']});
+
+            geocodeAddress("{{location}}");
+            autocomplete.addListener('place_changed', function () {
+                geocodeAddress(autocomplete.getPlace()['formatted_address']);
+            });
+
+        }
+        function geocodeAddress(address) {
             geocoder.geocode({'address': address}, function (results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
-                    $latitudeInput.val(results[0].geometry.location.lat());
-                    $longitudeInput.val(results[0].geometry.location.lng());
-                    resultsMap.setCenter(results[0].geometry.location);
-                    resultsMap.setZoom(5);
-                    init_marker.setMap(null);
-                    if (marker == null) {
-                        marker = new google.maps.Marker({
-                            map: resultsMap,
-                            draggable: true,
-                            position: results[0].geometry.location
-                        });
-                    }
-                    else {
-                        marker.setMap(null);
-                        marker = new google.maps.Marker({
-                            map: resultsMap,
-                            draggable: true,
-                            position: results[0].geometry.location
-                        });
-                    }
+                    $('#location').val(address).trigger('autocomplete');
+                    map.setCenter(results[0].geometry.location);
+                    map.setZoom(10);
+                    $("div[title='Search this Area']").parent().css("z-index", 512000000000000000);
                 } else {
                     if (status === 'ZERO_RESULTS') {
-                        resultsMap.setZoom(1);
+                        map.setZoom(1);
                         $latitudeInput.val(0.0);
                         $longitudeInput.val(0.0);
                     }
@@ -148,67 +236,28 @@
             });
         }
 
-        function removeParam(key, sourceURL) {
-            var rtn = sourceURL.split("?")[0],
-                    param,
-                    params_arr = [],
-                    queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
-            if (queryString !== "") {
-                params_arr = queryString.split("&");
-                for (var i = params_arr.length - 1; i >= 0; i -= 1) {
-                    param = params_arr[i].split("=")[0];
-                    if (param === key) {
-                        params_arr.splice(i, 1);
-                    }
-                }
-                rtn = rtn + "?" + params_arr.join("&");
-            }
-            return rtn;
-        }
-
-        $(document).ready(function () {
-            $("#search-form").change(function (e) {
-                e.preventDefault();
-                $('#search-form').attr('action', "/" + $("#inputSuccess3").val() + "/events/s").submit();
-
-            });
-
-            var params = {};
-            decodeURIComponent(window.location.search)
-                    .replace(/[?&]+([^=&]+)=([^&]*)/gi, function (str, key, value) {
-                                params[key] = value;
-                            }
-                    );
-
-            $(".categories input").each(function (index) {
-                if (params['event_type'] != null) {
-                    if ($(this).val() === params['event_type'].replace(/\+/g, ' ')) {
-                        $(this).prop("checked", true);
-                        $(this).parent().css('color', 'black');
-                        $('#collapse1').collapse()
-                    }
-                }
-            })
-            $(".days input").each(function (index) {
-                if (params['day'] != null) {
-                    if ($(this).val() === params['day'].replace(/\+/g, ' ')) {
-                        $(this).parent().css('color', 'black');
-                        $('#collapse3').collapse()
-                    }
-                }
-            })
-
-            $('.filtering .fa-close').click(function () {
-                key = $(this).attr('name')
-                var url = removeParam(key, window.location.href)
-                console.log(url)
-                window.location.href = url
-            })
-
+        $(document).on("click", ".share-btn", function (event) {
+            event.stopImmediatePropagation();
+            event.stopPropagation();
+            event.preventDefault();
+            var pathArray = location.href.split('/');
+            var protocol = pathArray[0];
+            var host = pathArray[2];
+            var url = protocol + '//' + host;
+            var eventUrl = url + "/e/" + $(this).data("event-id") + "/" + slugify($(this).data("title"));
+            $("#share-url-box").val(eventUrl);
+            setSocialLinks(eventUrl, $(this).data("title"));
+            $("#share-modal").modal('show');
         });
 
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHdXg0Y_zk-wCNpslbBqcezLdHniaEwkI&callback=initMap"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHdXg0Y_zk-wCNpslbBqcezLdHniaEwkI&callback=initMap&libraries=places"
             async defer></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap/collapse-search.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/datepair.js/dist/datepair.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/lodash/dist/lodash.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/guest/explore.js') }}"></script>
 {% endblock %}

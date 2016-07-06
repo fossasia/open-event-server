@@ -125,7 +125,7 @@ class TestEvents(OpenEventViewTestCase):
         with app.test_request_context():
             event = ObjectMother.get_event()
             save_to_db(event, "Event saved")
-            url = url_for('events.delete_view', event_id=event.id)
+            url = url_for('events.trash_view', event_id=event.id)
             rv = self.app.get(url, follow_redirects=True)
             self.assertTrue("Your event has been deleted" in rv.data, msg=rv.data)
 

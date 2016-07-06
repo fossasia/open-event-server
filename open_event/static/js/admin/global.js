@@ -8,11 +8,27 @@ var summernoteConfig = {
         ['para', ['ul', 'ol', 'paragraph']]
     ],
     height: 150,
-    disableDragAndDrop: true
+    disableDragAndDrop: true,
+    styleWithSpan: false
 };
 
-function imgError(image) {
+function imgError(image, transparent) {
     image.onerror = "";
-    image.src = '/static/img/avatar.png';
+    if(transparent) {
+        image.src = '/static/img/trans_white.png';
+    } else {
+        image.src = '/static/img/avatar.png';
+    }
     return true;
+}
+
+function setSocialLinks(url, title) {
+    var $socialLinks = $(".social-links").find("a");
+    $.each($socialLinks, function (index, $link) {
+        $link = $($link);
+        var linkUrl = $link.attr("data-href");
+        linkUrl = linkUrl.replace("{url}", url);
+        linkUrl = linkUrl.replace("{title}", title);
+        $link.attr("href", linkUrl);
+    });
 }

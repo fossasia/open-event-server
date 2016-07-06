@@ -4,7 +4,9 @@ import os.path
 import random
 import traceback
 import json
+import types
 from datetime import datetime, timedelta
+import time
 
 from flask import flash, request, url_for, g
 from flask.ext import login
@@ -15,13 +17,14 @@ from werkzeug import secure_filename
 from wtforms import ValidationError
 
 from open_event.models.notifications import Notification
-from open_event.helpers.helpers import string_empty, send_new_session_organizer
+from open_event.helpers.helpers import string_empty, send_new_session_organizer, string_not_empty
 from ..helpers.update_version import VersionUpdater
 from ..helpers.data_getter import DataGetter
-from open_event.helpers.storage import upload
+from open_event.helpers.storage import upload, UploadedFile
 from ..helpers import helpers as Helper
 from ..models import db
 from ..models.event import Event, EventsUsers
+from ..models.event_copyright import EventCopyright
 from ..models.file import File
 from ..models.microlocation import Microlocation
 from ..models.session import Session
@@ -46,20 +49,23 @@ from ..models.call_for_papers import CallForPaper
 from ..models.custom_forms import CustomForms
 from ..models.ticket import Ticket, BookedTicket
 from ..models.activity import Activity, ACTIVITIES
+from open_event.helpers.helpers import send_next_event
 
 
 class DataManager(object):
     """Main class responsible for DataBase managing"""
 
     @staticmethod
-    def create_user_notification(user, title, message):
+    def create_user_notification(user, action, title, message):
         """
         Create a User Notification
         :param user: User object to send the notification to
+        :param action: Action being performed
         :param title: The message title
         :param message: The message
         """
         notification = Notification(user=user,
+                                    action=action,
                                     title=title,
                                     message=message,
                                     received_at=datetime.now())
@@ -170,7 +176,8 @@ class DataManager(object):
             new_email_notification_setting = EmailNotification(next_event=int(form.get('next_event', 0)),
                                                                new_paper=int(form.get('new_paper', 0)),
                                                                session_schedule=int(form.get('session_schedule', 0)),
-                                                               session_accept_reject=int(form.get('session_accept_reject', 0)),
+                                                               session_accept_reject=int(
+                                                                   form.get('session_accept_reject', 0)),
                                                                user_id=user_id,
                                                                event_id=event_id)
             save_to_db(new_email_notification_setting, "EmailSetting Saved")
@@ -305,7 +312,8 @@ class DataManager(object):
                            event_id=event.id, session_id=new_session.id, _external=True)
             organizers = DataGetter.get_user_event_roles_by_role_name(event.id, 'organizer')
             for organizer in organizers:
-                email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(organizer.user.id, event.id)
+                email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(organizer.user.id,
+                                                                                                    event.id)
                 if email_notification_setting and email_notification_setting.new_paper == 1:
                     send_new_session_organizer(organizer.user.email, event.name, link)
 
@@ -420,7 +428,8 @@ class DataManager(object):
                        event_id=event_id, session_id=session.id, _external=True)
         for speaker in session.speakers:
             print speaker.name
-            email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(speaker.user_id, event_id)
+            email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(speaker.user_id,
+                                                                                                event_id)
             if email_notification_setting and email_notification_setting.session_accept_reject == 1:
                 Helper.send_session_accept_reject(speaker.email, session.title, state, link)
         flash("The session has been %s" % state)
@@ -771,8 +780,6 @@ class DataManager(object):
         """
         event = Event(name=form['name'],
                       email=form.get('email', u'test@example.com'),
-                      color=form.get('color', u'black'),
-                      logo=form['logo'],
                       start_time=datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M'),
                       end_time=datetime.strptime(form['end_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M'),
                       timezone=form['timezone'],
@@ -781,9 +788,9 @@ class DataManager(object):
                       location_name=form['location_name'],
                       description=form['description'],
                       event_url=form['event_url'],
-                      background_url=form['background_url'],
                       type=form['type'],
                       topic=form['topic'],
+                      sub_topic=form['sub_topic'],
                       privacy=form.get('privacy', u'public'),
                       ticket_url=form['ticket_url'],
                       organizer_name=form['organizer_name'],
@@ -824,6 +831,28 @@ class DataManager(object):
 
             custom_forms_name = form.getlist('custom_form[name]')
             custom_forms_value = form.getlist('custom_form[value]')
+
+            background_image = form['background_url']
+            if string_not_empty(background_image):
+                filename = str(time.time()) + '.png'
+                file_path = os.path.realpath('.') + '/static/temp/' + filename
+                fh = open(file_path, "wb")
+                fh.write(background_image.split(",")[1].decode('base64'))
+                fh.close()
+                background_file = UploadedFile(file_path, filename)
+                background_url = upload(background_file, 'events/%d/background_image' % (int(event.id)))
+                event.background_url = background_url
+
+            logo = form['logo']
+            if string_not_empty(logo):
+                filename = str(time.time()) + '.png'
+                file_path = os.path.realpath('.') + '/static/temp/' + filename
+                fh = open(file_path, "wb")
+                fh.write(logo.split(",")[1].decode('base64'))
+                fh.close()
+                logo_file = UploadedFile(file_path, filename)
+                logo = upload(logo_file, 'events/%d/logo' % (int(event.id)))
+                event.logo = logo
 
             for index, name in enumerate(session_type_names):
                 if not string_empty(name):
@@ -881,6 +910,7 @@ class DataManager(object):
                 save_to_db(call_for_speakers, "Call for speakers saved")
 
             uer = UsersEventsRoles(login.current_user, event, role)
+
             if save_to_db(uer, "Event saved"):
                 return event
         else:
@@ -905,14 +935,36 @@ class DataManager(object):
         event.location_name = form['location_name']
         event.description = form['description']
         event.event_url = form['event_url']
-        event.background_url = form['background_url']
         event.type = form['type']
         event.topic = form['topic']
+        event.sub_topic = form['sub_topic']
         event.privacy = form.get('privacy', 'public')
         event.organizer_name = form['organizer_name']
         event.organizer_description = form['organizer_description']
         event.code_of_conduct = form['code_of_conduct']
         event.ticket_url = form['ticket_url']
+
+        background_image = form['background_url']
+        if string_not_empty(background_image):
+            filename = str(time.time()) + '.png'
+            file_path = os.path.realpath('.') + '/static/temp/' + filename
+            fh = open(file_path, "wb")
+            fh.write(background_image.split(",")[1].decode('base64'))
+            fh.close()
+            background_file = UploadedFile(file_path, filename)
+            background_url = upload(background_file, 'events/%d/background_image' % (int(event.id)))
+            event.background_url = background_url
+
+        logo = form['logo']
+        if string_not_empty(logo):
+            filename = str(time.time()) + '.png'
+            file_path = os.path.realpath('.') + '/static/temp/' + filename
+            fh = open(file_path, "wb")
+            fh.write(logo.split(",")[1].decode('base64'))
+            fh.close()
+            logo_file = UploadedFile(file_path, filename)
+            logo = upload(logo_file, 'events/%d/logo' % (int(event.id)))
+            event.logo = logo
 
         state = form.get('state', None)
         if state and ((state == u'Published' and not string_empty(
@@ -1011,16 +1063,24 @@ class DataManager(object):
         update_or_create(
             CustomForms, event_id=event.id,
             session_form=session_form, speaker_form=speaker_form)
-
         if form.get('call_for_speakers_state', u'off') == u'on':
-            call_for_speakers, c = get_or_create(CallForPaper,
-                                                 announcement=form['announcement'],
-                                                 start_date=datetime.strptime(
-                                                     form['cfs_start_date'], '%m/%d/%Y'),
-                                                 end_date=datetime.strptime(
-                                                     form['cfs_end_date'], '%m/%d/%Y'),
-                                                 event_id=event.id)
-            save_to_db(call_for_speakers)
+            if call_for_papers:
+                call_for_papers.announcement = form['announcement']
+                call_for_papers.start_date = datetime.strptime(
+                                                     form['cfs_start_date'], '%m/%d/%Y')
+                call_for_papers.end_date = datetime.strptime(
+                                                     form['cfs_end_date'], '%m/%d/%Y')
+                call_for_papers.event_id = event.id
+                save_to_db(call_for_papers)
+            else:
+                call_for_speakers, c = get_or_create(CallForPaper,
+                                                     announcement=form['announcement'],
+                                                     start_date=datetime.strptime(
+                                                        form['cfs_start_date'], '%m/%d/%Y'),
+                                                     end_date=datetime.strptime(
+                                                        form['cfs_end_date'], '%m/%d/%Y'),
+                                                     event_id=event.id)
+                save_to_db(call_for_speakers)
 
         save_to_db(event, "Event saved")
         record_activity('update_event', event_id=event.id)
@@ -1033,9 +1093,18 @@ class DataManager(object):
         SessionType.query.filter_by(event_id=e_id).delete()
         SocialLink.query.filter_by(event_id=e_id).delete()
         Track.query.filter_by(id=e_id).delete()
+        Invite.query.filter_by(event_id=e_id).delete()
+        Session.query.filter_by(event_id=e_id).delete()
         Event.query.filter_by(id=e_id).delete()
         record_activity('delete_event', event_id=e_id)
         db.session.commit()
+
+    @staticmethod
+    def trash_event(e_id):
+        event = Event.query.get(e_id)
+        event.in_trash = True
+        save_to_db(event, "Event Added to Trash")
+        return event
 
     @staticmethod
     def create_file():
@@ -1091,7 +1160,7 @@ class DataManager(object):
         record_activity('update_role', role=role, user=user, event_id=uer.event_id)
 
 
-def save_to_db(item, msg="Saved to db"):
+def save_to_db(item, msg="Saved to db", print_error=True):
     """Convenience function to wrap a proper DB save
     :param item: will be saved to database
     :param msg: Message to log
@@ -1103,9 +1172,10 @@ def save_to_db(item, msg="Saved to db"):
         db.session.commit()
         return True
     except Exception, e:
-        print e
+        if print_error:
+            print e
+            traceback.print_exc()
         logging.error('DB Exception! %s' % e)
-        traceback.print_exc()
         db.session.rollback()
         return False
 
@@ -1289,3 +1359,17 @@ def update_role_to_admin(form, user_id):
             'system_admin', user=user,
             status='Assigned' if user.is_admin else 'Unassigned'
         )
+
+
+def trash_user(user_id):
+    user = DataGetter.get_user(user_id)
+    user.in_trash = True
+    save_to_db(user, 'User has been added to trash')
+    return user
+
+
+def trash_session(session_id):
+    session = DataGetter.get_session(session_id)
+    session.in_trash = True
+    save_to_db(session, "Session added to Trash")
+    return session

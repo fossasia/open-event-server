@@ -78,6 +78,7 @@ class MicrolocationList(Resource):
             self.api.url_for(self, event_id=event_id)
         )
 
+
 @api.route('/events/<int:event_id>/microlocations/page')
 class MicrolocationListPaginated(Resource, PaginatedResourceBase):
     @api.doc('list_microlocations_paginated', params=PAGE_PARAMS)
@@ -86,7 +87,6 @@ class MicrolocationListPaginated(Resource, PaginatedResourceBase):
         """List microlocations in a paginated manner"""
         return get_paginated_list(
             MicrolocationModel,
-            self.api.url_for(self, event_id=event_id),
             args=self.parser.parse_args(),
             event_id=event_id
         )

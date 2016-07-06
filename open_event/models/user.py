@@ -38,6 +38,7 @@ class User(db.Model):
     is_verified = db.Column(db.Boolean, default=False)
     signup_time = db.Column(db.DateTime)
     last_access_time = db.Column(db.DateTime)
+    in_trash = db.Column(db.Boolean, default=False)
     user_detail = db.relationship("UserDetail", uselist=False, backref="user")
     created_date = db.Column(db.DateTime, default=datetime.now())
 

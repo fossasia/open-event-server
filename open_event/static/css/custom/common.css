@@ -34,3 +34,20 @@
 .upload-btn + label {
     cursor: pointer; /* "hand" cursor */
 }
+
+.social-links {
+    padding: 0;
+}
+
+.social-links > li {
+    display: inline;
+}
+
+.gmnoprint a, .gmnoprint span {
+    display: none;
+}
+
+a[title='Click to see this area on Google Maps'] img {
+    width: 50px !important;
+    height: 20px !important;
+}

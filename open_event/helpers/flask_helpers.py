@@ -1,5 +1,8 @@
+import re
 from flask import request
 from jinja2 import Undefined
+from slugify import slugify as unicode_slugify
+from slugify import SLUG_OK
 
 def get_real_ip():
     try:
@@ -24,3 +27,15 @@ class SilentUndefined(Undefined):
         __float__ = __complex__ = __pow__ = __rpow__ = \
         _fail_with_undefined_error
 
+_punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|}.]+')
+
+def slugify(text):
+    """Generates an ASCII-only slug."""
+    return unicode(unicode_slugify(text, ok=SLUG_OK + ',').replace(',', '--'))
+
+def deslugify(text):
+    return text.replace('--', ',').replace('-', " ")
+
+def camel_case(text):
+    text = deslugify(slugify(text))
+    return ''.join(x for x in text.title() if not x.isspace())

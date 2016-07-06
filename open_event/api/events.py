@@ -13,8 +13,7 @@ from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, BaseDAO, ServiceDAO
 from .helpers import custom_fields as fields
 from helpers.special_fields import EventTypeField, EventTopicField, \
-    EventPrivacyField
-
+    EventPrivacyField, EventSubTopicField
 
 api = Namespace('events', description='Events')
 
@@ -23,25 +22,27 @@ EVENT_CREATOR = api.model('EventCreator', {
     'email': fields.Email()
 })
 
-EVENT_SOCIAL = api.model('EventSocial', {
+SOCIAL_LINK = api.model('SocialLink', {
     'id': fields.Integer(),
     'name': fields.String(),
     'link': fields.String()
 })
 
+SOCIAL_LINK_POST = api.clone('SocialLinkPost', SOCIAL_LINK)
+del SOCIAL_LINK_POST['id']
+
 EVENT = api.model('Event', {
     'id': fields.Integer(required=True),
     'name': fields.String(required=True),
     'email': fields.Email(),
-    'color': fields.Color(),
-    'logo': fields.ImageUri(),
+    'logo': fields.Upload(),
     'start_time': fields.DateTime(required=True),
     'end_time': fields.DateTime(required=True),
     'timezone': fields.String(),
     'latitude': fields.Float(),
     'longitude': fields.Float(),
     'event_url': fields.Uri(),
-    'background_url': fields.ImageUri(),
+    'background_url': fields.Upload(),
     'description': fields.String(),
     'location_name': fields.String(),
     'organizer_name': fields.String(),
@@ -50,12 +51,13 @@ EVENT = api.model('Event', {
     'closing_datetime': fields.DateTime(),
     'type': EventTypeField(),
     'topic': EventTopicField(),
+    'sub_topic': EventSubTopicField(),
     'privacy': EventPrivacyField(),
     'ticket_url': fields.Uri(),
     'creator': fields.Nested(EVENT_CREATOR, allow_null=True),
     'schedule_published_on': fields.DateTime(),
     'code_of_conduct': fields.String(),
-    'social_links': fields.List(fields.Nested(EVENT_SOCIAL), attribute='social_link')
+    'social_links': fields.List(fields.Nested(SOCIAL_LINK), attribute='social_link')
 })
 
 EVENT_PAGINATED = api.clone('EventPaginated', PAGINATED_MODEL, {
@@ -63,13 +65,10 @@ EVENT_PAGINATED = api.clone('EventPaginated', PAGINATED_MODEL, {
 })
 
 EVENT_POST = api.clone('EventPost', EVENT)
-SOCIAL_LINK_POST = api.clone('SocialLinkPost', EVENT_SOCIAL)
-
 del EVENT_POST['id']
 del EVENT_POST['creator']
 del EVENT_POST['social_links']
 
-del SOCIAL_LINK_POST['id']
 
 # ###################
 # Data Access Objects
@@ -87,17 +86,18 @@ class EventDAO(BaseDAO):
     """
     Event DAO
     """
+
     def fix_payload(self, data):
         """
         Fixes the payload data.
         Here converts string time from datetime obj
         """
-        data['start_time'] = EVENT_POST['start_time'].from_str(data['start_time'])
-        data['end_time'] = EVENT_POST['end_time'].from_str(data['end_time'])
-        data['closing_datetime'] = EVENT_POST['closing_datetime'].from_str(
-            data['closing_datetime'])
-        data['schedule_published_on'] = EVENT_POST['schedule_published_on'].from_str(
-            data['schedule_published_on'])
+        datetime_fields = [
+            'start_time', 'end_time', 'closing_datetime',
+            'schedule_published_on'
+        ]
+        for i in datetime_fields:
+            data[i] = EVENT_POST[i].from_str(data.get(i))
         return data
 
     def create(self, data, url):
@@ -129,34 +129,25 @@ class EventDAO(BaseDAO):
 LinkDAO = SocialLinkDAO(SocialLinkModel, SOCIAL_LINK_POST)
 DAO = EventDAO(EventModel, EVENT_POST)
 
-
 # DEFINE PARAMS
 
 EVENT_PARAMS = {
-    'location': {
-        'type': str
-    },
+    'location': {},
     'contains': {
-        'description': 'Contains the string in name and description',
-        'type': str
+        'description': 'Contains the string in name and description'
     },
-    'state': {
-        'type': str
-    },
-    'privacy': {
-        'type': str
-    },
-    'type': {
-        'type': str
-    },
-    'topic': {
-        'type': str
-    },
+    'state': {},
+    'privacy': {},
+    'type': {},
+    'topic': {},
+    'sub_topic': {},
     'start_time_gt': {},
     'start_time_lt': {},
     'end_time_gt': {},
-    'end_time_lt': {}
+    'end_time_lt': {},
+    'time_period': {}
 }
+
 
 # DEFINE RESOURCES
 
@@ -172,10 +163,12 @@ class EventResource():
     event_parser.add_argument('privacy', type=str)
     event_parser.add_argument('type', type=str)
     event_parser.add_argument('topic', type=str)
+    event_parser.add_argument('sub_topic', type=str)
     event_parser.add_argument('start_time_gt', dest='__event_start_time_gt')
     event_parser.add_argument('start_time_lt', dest='__event_start_time_lt')
     event_parser.add_argument('end_time_gt', dest='__event_end_time_gt')
     event_parser.add_argument('end_time_lt', dest='__event_end_time_lt')
+    event_parser.add_argument('time_period', type=str, dest='__event_time_period')
 
 
 @api.route('/<int:event_id>')
@@ -202,7 +195,7 @@ class Event(Resource):
     @api.marshal_with(EVENT)
     @api.expect(EVENT_POST)
     def put(self, event_id):
-        """Update a event given its id"""
+        """Update an event given its id"""
         event = DAO.update(event_id, self.api.payload)
         record_activity('update_event', event_id=event_id)
         return event
@@ -235,8 +228,47 @@ class EventListPaginated(Resource, PaginatedResourceBase, EventResource):
     def get(self):
         """List events in a paginated manner"""
         args = self.parser.parse_args()
-        url = self.api.url_for(self)  # WARN: undocumented way
         return get_paginated_list(
-            EventModel, url, args=args,
+            EventModel, args=args,
             **parse_args(self.event_parser)
         )
+
+
+@api.route('/<int:event_id>/links')
+@api.param('event_id')
+class SocialLinkList(Resource):
+    @api.doc('list_social_links')
+    @api.marshal_list_with(SOCIAL_LINK)
+    def get(self, event_id):
+        """List all social links"""
+        return LinkDAO.list(event_id)
+
+    @requires_auth
+    @api.doc('create_social_link', responses=POST_RESPONSES)
+    @api.marshal_with(SOCIAL_LINK_POST)
+    @api.expect(SOCIAL_LINK_POST)
+    def post(self, event_id):
+        """Create a social link"""
+        return LinkDAO.create(
+            event_id,
+            self.api.payload,
+            self.api.url_for(self, event_id=event_id)
+        )
+
+
+@api.route('/<int:event_id>/links/<int:link_id>')
+class SocialLink(Resource):
+    @requires_auth
+    @api.doc('delete_social_link')
+    @api.marshal_with(SOCIAL_LINK)
+    def delete(self, event_id, link_id):
+        """Delete a social link given its id"""
+        return LinkDAO.delete(event_id, link_id)
+
+    @requires_auth
+    @api.doc('update_social_link', responses=PUT_RESPONSES)
+    @api.marshal_with(SOCIAL_LINK_POST)
+    @api.expect(SOCIAL_LINK_POST)
+    def put(self, event_id, link_id):
+        """Update a social link given its id"""
+        return LinkDAO.update(event_id, link_id, self.api.payload)

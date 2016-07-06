@@ -17,7 +17,7 @@
                 <label>Email:<span class="required">*</span>
                 </label>
 
-                <input required="required" name="email" class="form-control"
+                <input required="required" name="email" type="email" class="form-control"
                        value="{{profile.email}}"/>
            </div>
            <div class="col-md-6 col-xs-6">
@@ -37,10 +37,10 @@
                 </label>
 
                 {% if profile.user_detail.facebook %}
-                <input name="facebook" class="form-control"
+                <input type="url" pattern="https?://.+" name="facebook" class="form-control"
                        value="{{profile.user_detail.facebook}}"/>
                 {% else %}
-                <input name="facebook" class="form-control"/>
+                <input type="url" pattern="https?://.+" name="facebook" class="form-control"/>
                 {% endif %}
             </div>
 
@@ -49,9 +49,9 @@
                 </label>
 
                 {% if profile.user_detail.twitter %}
-                <input name="twitter" class="form-control" value="{{profile.user_detail.twitter}}"/>
+                <input type="url" pattern="https?://.+" name="twitter" class="form-control" value="{{profile.user_detail.twitter}}"/>
                 {% else %}
-                <input name="twitter" class="form-control"/>
+                <input type="url" pattern="https?://.+" name="twitter" class="form-control"/>
                 {% endif %}
             </div>
         </div>

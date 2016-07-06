@@ -13,7 +13,7 @@
 {% macro session_element(session) -%}
     <div class="session row"
          onclick="window.location.href='{{ url_for('my_sessions.display_session_view',session_id=session.id) }}'">
-        <div class="col col-xs-2" style="line-height:155px;">
+        <div class="col col-md-4 col-sm-4 col-xs-12" style="line-height:155px;">
             {% if session.event.logo %}
                 <img src="{{ session.event.logo }}" style="width: 100%;">
             {% else %}
@@ -21,7 +21,7 @@
                      style="width: 100%;">
             {% endif %}
         </div>
-        <div class="col col-xs-8" style="position: relative;">
+        <div class="col col-md-5 col-sm-5  col-xs-12" style="position: relative;">
             <h3 class="title">{{ session.title }}</h3>
             <span class="time">
                 {% if session.start_time %}
@@ -32,7 +32,7 @@
             </span><br><br>
             <span class="event-name">{{ session.event.name }}</span>
         </div>
-        <div class="col col-xs-2">
+        <div class="col col-md-3 col-sm-3 col-xs-12">
             {% if session.state == 'pending' %}
                 <span class="status label label-warning pull-right">Under Review</span>
             {% elif session.state == 'draft' %}
@@ -57,7 +57,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel" style="min-height:600px;">
                 <div class="x_content">
                     <ul class="nav nav-tabs bar_tabs" style="background-color: white;">
@@ -70,18 +70,26 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane fade active in" id="upcoming-events-tab">
-                            {% for session in upcoming_events_sessions %}
-                                {{ session_element(session) }}
-                            {% else %}
-                                <span class="message">No session proposals for upcoming events found</span>
-                            {% endfor %}
+                            <div class="row">
+                                {% for session in upcoming_events_sessions %}
+                                    <div class="col-md-6 col-sm-12 col-xs-12">
+                                        {{ session_element(session) }}
+                                    </div>
+                                {% else %}
+                                    <span class="message">No session proposals for upcoming events found</span>
+                                {% endfor %}
+                            </div>
                         </div>
                         <div class="tab-pane fade" id="past-events-tab">
-                            {% for session in past_events_sessions %}
-                                {{ session_element(session) }}
-                            {% else %}
-                                <span class="message">No session proposals for past events found</span>
-                            {% endfor %}
+                            <div class="row">
+                                {% for session in past_events_sessions %}
+                                    <div class="col-md-6 col-sm-12 col-xs-12">
+                                        {{ session_element(session) }}
+                                    </div>
+                                {% else %}
+                                    <span class="message">No session proposals for past events found</span>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -13,7 +13,7 @@ SPONSOR = api.model('Sponsor', {
     'id': fields.Integer(required=True),
     'name': fields.String(required=True),
     'url': fields.Uri(),
-    'logo': fields.ImageUri(),
+    'logo': fields.Upload(),
     'description': fields.String(),
     'level': fields.String(),
     'sponsor_type': fields.String(),
@@ -101,7 +101,6 @@ class SponsorListPaginated(Resource, PaginatedResourceBase):
         """List sponsors in a paginated manner"""
         return get_paginated_list(
             SponsorModel,
-            self.api.url_for(self, event_id=event_id),
             args=self.parser.parse_args(),
             event_id=event_id
         )

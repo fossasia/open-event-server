@@ -20,7 +20,7 @@ SPEAKER_SESSION = api.model('SpeakerSession', {
 SPEAKER = api.model('Speaker', {
     'id': fields.Integer(required=True),
     'name': fields.String(),
-    'photo': fields.ImageUri(),
+    'photo': fields.Upload(),
     'short_biography': fields.String(),
     'long_biography': fields.String(),
     'email': fields.Email(),
@@ -117,7 +117,6 @@ class SpeakerListPaginated(Resource, PaginatedResourceBase):
         """List speakers in a paginated manner"""
         return get_paginated_list(
             SpeakerModel,
-            self.api.url_for(self, event_id=event_id),
             args=self.parser.parse_args(),
             event_id=event_id
         )

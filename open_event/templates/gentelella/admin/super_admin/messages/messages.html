@@ -1,0 +1,103 @@
+{% extends 'gentelella/admin/super_admin/dashboard.html' %}
+
+{% block title %}
+System Messages
+{% endblock %}
+
+{% set active_page = "messages" %}
+
+{% block head_css %}
+    {{ super() }}
+    <style type="text/css">
+        #secondary-tabs {
+            position: absolute;
+            background: transparent;
+            top: 9px;
+            width: auto;
+        }
+
+        table.table {
+            margin-top: 20px !important;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+
+<div>
+    <ul id="secondary-tabs" class="nav nav-tabs bar_tabs" role="tablist">
+        <li class="active"><a href="#mails_tab" data-toggle="tab">Mails</a></li>
+        <li class=""><a href="#notifs_tab" data-toggle="tab">Notifications</a></li>
+    </ul>
+    <div id="tab_contents" class="tab-content">
+        <!-- Mails -->
+        <div role="tabpanel" class="tab-pane fade active in" id="mails_tab" aria-labelledby="all-tab">
+            <div class="table-responsive col-md-10">
+                <table id="mails_table" class="table table-striped table-hover with-datatable no-global-dt">
+                    <thead>
+                        <tr style="font-size: 1.2em;">
+                        <th class="col-md-2 col-sm-3">Recipient</th>
+                        <th class="col-md-3 col-sm-3">Trigger</th>
+                        <th class="col-md-7 col-sm-6">Message</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for mail in mails %}
+                        <tr>
+                        <td>{{ mails[mail]['recipient'] }}</td>
+                        <td>{{ mail }}</td>
+                        <td><strong>{{ mails[mail]['subject'] }}</strong><br>{{ mails[mail]['message']|safe }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- Notifications -->
+        <div role="tabpanel" class="tab-pane fade" id="notifs_tab" aria-labelledby="notif-tab">
+            <div class="table-responsive col-md-10">
+                <table id="notifs_table" class="table table-striped table-hover with-datatable no-global-dt">
+                    <thead>
+                        <tr style="font-size: 1.2em;">
+                        <th class="col-md-2 col-sm-3">Recipient</th>
+                        <th class="col-md-3 col-sm-3">Trigger</th>
+                        <th class="col-md-7 col-sm-6">Message</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for notif in notifications %}
+                        <tr>
+                        <td>{{ notifications[notif]['recipient'] }}</td>
+                        <td>{{ notif }}</td>
+                        <td><strong>{{ notifications[notif]['title'] }}</strong><br>{{ notifications[notif]['message']|safe }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+
+  <script type="text/javascript">
+    $('#mails_table').DataTable({
+        "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+        "pageLength": 25,
+        "aaSorting": []
+    });
+    $('#notifs_table').DataTable({
+        "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+        "aaSorting": []
+    });
+  </script>
+{% endblock %}
+

@@ -150,10 +150,13 @@ def can_access(f):
                 if user.can_update(Microlocation, event_id) is True:
                     return f(*args, **kwargs)
             abort(403)
-        if '/delete/' in url:
+        if '/delete/' in url or '/trash/' in url:
             if 'events/' + event_id + '/delete/' in url:
                 if user.is_organizer(event_id) is True or user.is_coorganizer(event_id) is True:
                     return f(*args, **kwargs)
+            if 'events/' + event_id + '/trash/' in url:
+                if user.is_organizer(event_id) is True or user.is_coorganizer(event_id) is True:
+                    return f(*args, **kwargs)        
             if 'session' in url:
                 if user.can_delete(Session, event_id) is True:
                     return f(*args, **kwargs)
