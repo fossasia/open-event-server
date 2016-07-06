@@ -22,6 +22,7 @@ from ..helpers.update_version import VersionUpdater
 from ..helpers.data_getter import DataGetter
 from open_event.helpers.storage import upload, UploadedFile
 from ..helpers import helpers as Helper
+from ..helpers.static import EVENT_LICENCES
 from ..models import db
 from ..models.event import Event, EventsUsers
 from ..models.event_copyright import EventCopyright
@@ -782,6 +783,27 @@ class DataManager(object):
         :param img_files:
         :param form: view data form
         """
+        # Returns val2 if val is empty
+        non_empty = lambda val, val2: val2 if val == '' else val
+
+        # Filter Copyright info
+        holder = non_empty(form['copyright_holder'],
+                           form['organizer_name'])
+        holder_url = form['copyright_holder_url']
+        year = non_empty(form['copyright_year'],
+                         datetime.now().year)
+        licence_name = form['copyright_licence']
+        # Ignoring Licence description
+        _, licence_url, logo = EVENT_LICENCES.get(licence_name,
+                                                  (None, None, None))
+
+        copyright = EventCopyright(holder=holder,
+                                   holder_url=holder_url,
+                                   year=year,
+                                   licence=licence_name,
+                                   licence_url=licence_url,
+                                   logo=logo)
+
         event = Event(name=form['name'],
                       email=form.get('email', u'test@example.com'),
                       start_time=datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M'),
@@ -799,6 +821,7 @@ class DataManager(object):
                       ticket_url=form['ticket_url'],
                       organizer_name=form['organizer_name'],
                       organizer_description=form['organizer_description'],
+                      copyright=copyright,
                       code_of_conduct=form['code_of_conduct'],
                       creator=login.current_user)
 

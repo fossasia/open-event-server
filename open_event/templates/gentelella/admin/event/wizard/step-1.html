@@ -187,13 +187,13 @@
         </div>
         <div class="item form-group">
             <label>Copyright</label>
-            <input type="text" class="form-control" placeholder="Holder" ><br>
-            <input type="url" class="form-control" placeholder="Holder Link"><br>
-            <input type="integer" class="form-control" placeholder="Year">
+            <input type="text" class="form-control" placeholder="Holder" name="copyright_holder" value="{{ event.copyright.holder | default('', true) }}"><br>
+            <input type="url" class="form-control" placeholder="Holder Link" name="copyright_holder_url" value="{{ event.copyright.holder_url | default('', true) }}"><br>
+            <input type="integer" class="form-control" placeholder="Year" name="copyright_year" value="{{ event.copyright.year | default('', true) }}">
         </div>
         <div class="item form-group">
             <label>Licence <a class="btn btn-info btn-xs licence-help" data-toggle="licence-modal" data-target="#licence_modal">?</a></label>
-            <select name="" class="form-control">
+            <select name="copyright_licence" class="form-control">
                 <option value="">Choose Licence</option>
                 {% for licence in event_licences.keys() %}
                     <option value="{{ licence }}" {{ "selected" if event and event.copyright.licence == licence else '' }}>
