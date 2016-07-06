@@ -115,7 +115,8 @@ class EventDAO(BaseDAO):
         data = self.validate(data)
         payload = self.fix_payload(data)
         # save copyright info
-        payload['copyright'] = CopyrightDAO.create(payload.get('copyright'),
+        payload['copyright'] = CopyrightDAO.create(payload['copyright']
+                                                   if payload.get('copyright') else {},
                                                    validate=False)
         # save event
         new_event = self.model(**payload)
@@ -140,10 +141,12 @@ class EventDAO(BaseDAO):
         payload = self.fix_payload(data)
         # get event
         event = self.get(event_id)
-        # update/create copyright
-        CopyrightDAO.update(event.copyright.id, payload['copyright'])
-        # delete related fields
-        payload.pop('copyright')
+        # update copyright if key exists
+        if 'copyright' in payload:
+            CopyrightDAO.update(event.copyright.id, payload['copyright']
+                                if payload['copyright'] else {})
+            payload.pop('copyright')
+
         return BaseDAO.update(self, event_id, payload, validate=False)
 
 
