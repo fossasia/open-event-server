@@ -46,17 +46,17 @@
             </div>
             <br>
             <h4>Twitter Tokens</h4>
-            See <a href="https://developers.facebook.com/docs/apps/register">here</a> on how to obtain these tokens.<br><br>
+            See <a href="https://dev.twitter.com/overview/documentation">here</a> on how to obtain these tokens.<br><br>
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12">Client ID</label>
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">Consumer key</label>
                 <div class=" col-md-9 col-xs-12">
-                    <input name="fb_client_id" class="form-control col-md-6 col-xs-6" value="{{ settings.fb_client_id|default('', True) }}" >
+                    <input name="fb_client_id" class="form-control col-md-6 col-xs-6" value="{{ settings.tw_consumer_key|default('', True) }}" >
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12">Client secret</label>
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">Consumer secret</label>
                 <div class=" col-md-9 col-xs-12">
-                    <input name="fb_client_secret" class="form-control col-md-6 col-xs-6" value="{{ settings.fb_client_secret|default('', True) }}">
+                    <input name="fb_client_secret" class="form-control col-md-6 col-xs-6" value="{{ settings.tw_consumer_secret|default('', True) }}">
                 </div>
             </div>
             <br>
