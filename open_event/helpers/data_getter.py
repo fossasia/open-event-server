@@ -29,7 +29,7 @@ from ..models.mail import Mail
 from ..models.activity import Activity
 from ..models.setting import Setting
 from .language_list import LANGUAGE_LIST
-from .static import EVENT_TOPICS
+from .static import EVENT_TOPICS, EVENT_LICENCES
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
 from flask import flash, current_app
@@ -466,6 +466,10 @@ class DataGetter:
                 'Tour',
                 'Tournament',
                 'Tradeshow, Consumer Show, or Expo']
+
+    @staticmethod
+    def get_event_licences():
+        return EVENT_LICENCES
 
     @staticmethod
     def get_language_list():
