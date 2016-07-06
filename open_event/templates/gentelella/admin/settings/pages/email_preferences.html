@@ -44,7 +44,6 @@
                     <span class="badge pull-right {% if event_notifications_val.email == 'on' %}badge-success{% else %}badge-warning{% endif %}">
                         {{ event_notifications_val.email }}
                     </span>
-
                 </a>
             </h4>
         </div>
@@ -56,10 +55,10 @@
                     {% for key,value in email_speaker_fields.iteritems() %}
                         <div class="col-xs-12 input-group">
                             <span style="font-weight: 300; font-size: 15px;">{{ value }}</span>
-                            <input type="checkbox" name="{{ key }}" id="{{ key }}"
+                            <input type="checkbox" name="{{ key }}" id="speaker-{{ key }}-{{ event.id }}"
                                    class="toggle-switch setting-toggle"
                                    {% if notification_settings[key] == 1 or not notification_settings %}checked{% endif %}/>
-                            <label class="pull-right" for="{{ key }}"></label>
+                            <label class="pull-right" for="speaker-{{ key }}-{{ event.id }}"></label>
                         </div>
                     {% endfor %}
                     <br>
@@ -70,10 +69,10 @@
                     {% for key,value in email_organizer_fields.iteritems() %}
                         <div class="col-xs-12 input-group">
                             <span style="font-weight: 300; font-size: 15px;">{{ value }}</span>
-                            <input type="checkbox" name="{{ key }}" id="{{ key }}"
+                            <input type="checkbox" name="{{ key }}" id="organizer-{{ key }}-{{ event.id }}"
                                    class="toggle-switch setting-toggle"
                                    {% if notification_settings[key] == 1 or not notification_settings %}checked{% endif %}/>
-                            <label class="pull-right" for="{{ key }}"></label>
+                            <label class="pull-right" for="organizer-{{ key }}-{{ event.id }}"></label>
                         </div>
                     {% endfor %}
                 {% endif %}
