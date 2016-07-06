@@ -34,8 +34,8 @@ EVENT_COPYRIGHT = api.model('EventCopyright', {
 
 SOCIAL_LINK = api.model('SocialLink', {
     'id': fields.Integer(),
-    'name': fields.String(),
-    'link': fields.String()
+    'name': fields.String(required=True),
+    'link': fields.String(required=True)
 })
 
 SOCIAL_LINK_POST = api.clone('SocialLinkPost', SOCIAL_LINK)
