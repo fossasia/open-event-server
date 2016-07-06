@@ -8,10 +8,10 @@ from tests.api.utils_post_data import *
 from tests.auth_helper import register
 from open_event import current_app as app
 
-from open_event.api.events import EVENT_POST
+from open_event.api.events import EVENT_POST, SOCIAL_LINK_POST
 from open_event.api.tracks import TRACK_POST
 from open_event.api.microlocations import MICROLOCATION_POST
-from open_event.api.sessions import SESSION_POST
+from open_event.api.sessions import SESSION_POST, SESSION_TYPE_POST
 from open_event.api.speakers import SPEAKER_POST
 from open_event.api.sponsors import SPONSOR_POST
 
@@ -49,7 +49,7 @@ class TestPostApi(TestPostApiBase):
     Test POST APIs against 401 (unauthorized) and
     201 (successful) status codes
     """
-    def _test_model(self, name, data, checks=[]):
+    def _test_model(self, name, data, path=None, checks=[]):
         """
         Tests -
         1. Without login, try to do a POST request and catch 401 error
@@ -57,7 +57,8 @@ class TestPostApi(TestPostApiBase):
         Param:
             checks - list of strings to assert in successful response data
         """
-        path = get_path() if name == 'event' else get_path(1, name + 's')
+        if not path:
+            path = get_path() if name == 'event' else get_path(1, name + 's')
         response = self.post_request(path, data)
         self.assertEqual(401, response.status_code, msg=response.data)
         # login and send the request again
@@ -65,15 +66,14 @@ class TestPostApi(TestPostApiBase):
         response = self.post_request(path, data)
         self.assertEqual(201, response.status_code, msg=response.data)
         self.assertIn('location', response.headers)
-        self.assertIn('Test' + str(name).title(), response.data)
+        self.assertIn('Test' + name[0].upper() + name[1:], response.data)
         for string in checks:
             self.assertIn(string, response.data, msg=string)
-        return response
 
     def test_event_api(self):
         self._test_model(
             'event', POST_EVENT_DATA,
-            ['test@example.com', 'Test licence']
+            checks=['test@example.com', 'Test licence']
         )
 
     def test_track_api(self):
@@ -97,30 +97,15 @@ class TestPostApi(TestPostApiBase):
         self._test_model('sponsor', POST_SPONSOR_DATA)
 
     def test_social_link_api(self):
-        self._login_user()
-        # Create a social link
-        path = get_path(1, 'links')
-        data = POST_SOCIAL_LINK_DATA
-        response = self.post_request(path, data)
-        self.assertEqual(response.status_code, 201)
-
-        path = get_path(1, 'links')
-        response = self.app.get(path)
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('TestSocialLink', response.data)
+        self._test_model(
+            'socialLink', POST_SOCIAL_LINK_DATA, path=get_path(1, 'links')
+        )
 
     def test_session_type_api(self):
-        self._login_user()
-        # Create a session type
-        path = get_path(1, 'sessions', 'types')
-        data = POST_SESSION_TYPE_DATA
-        response = self.post_request(path, data)
-        self.assertEqual(response.status_code, 201)
-
-        path = get_path(1, 'sessions', 'types')
-        response = self.app.get(path)
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('TestSessionType', response.data)
+        self._test_model(
+            'sessionType', POST_SESSION_TYPE_DATA,
+            path=get_path(1, 'sessions', 'types')
+        )
 
 
 class TestPostApiMin(TestPostApiBase):
@@ -128,18 +113,19 @@ class TestPostApiMin(TestPostApiBase):
     Test POST API with minimum payload
     Only required payloads are kept
     """
-    def _test_model(self, name, data, api_model):
+    def _test_model(self, name, data, api_model, path=None):
         # strip data
         data = data.copy()
         for i in api_model:
             if not api_model[i].required:
                 data.pop(i, None)
         # test
-        path = get_path() if name == 'event' else get_path(1, name + 's')
+        if not path:
+            path = get_path() if name == 'event' else get_path(1, name + 's')
         self._login_user()
         response = self.post_request(path, data)
         self.assertEqual(201, response.status_code, msg=response.data)
-        self.assertIn('Test' + str(name).title(), response.data)
+        self.assertIn('Test' + name[0].upper() + name[1:], response.data)
 
     def test_event_api(self):
         self._test_model('event', POST_EVENT_DATA, EVENT_POST)
@@ -158,6 +144,18 @@ class TestPostApiMin(TestPostApiBase):
 
     def test_sponsor_api(self):
         self._test_model('sponsor', POST_SPONSOR_DATA, SPONSOR_POST)
+
+    def test_social_link_api(self):
+        self._test_model(
+            'socialLink', POST_SOCIAL_LINK_DATA,
+            SOCIAL_LINK_POST, path=get_path(1, 'links')
+        )
+
+    def test_session_type_api(self):
+        self._test_model(
+            'sessionType', POST_SESSION_TYPE_DATA,
+            SESSION_TYPE_POST, path=get_path(1, 'sessions', 'types')
+        )
 
 
 if __name__ == '__main__':
