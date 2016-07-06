@@ -19,20 +19,20 @@ SPEAKER_SESSION = api.model('SpeakerSession', {
 
 SPEAKER = api.model('Speaker', {
     'id': fields.Integer(required=True),
-    'name': fields.String(),
+    'name': fields.String(required=True),
     'photo': fields.Upload(),
     'short_biography': fields.String(),
     'long_biography': fields.String(),
-    'email': fields.Email(),
+    'email': fields.Email(required=True),
     'mobile': fields.String(),
     'website': fields.Uri(),
     'twitter': fields.String(),  # not sure for now whether uri or string field
     'facebook': fields.String(),
     'github': fields.String(),
     'linkedin': fields.String(),
-    'organisation': fields.String(),
+    'organisation': fields.String(required=True),
     'position': fields.String(),
-    'country': fields.String(),
+    'country': fields.String(required=True),
     'sessions': fields.List(fields.Nested(SPEAKER_SESSION)),
 })
 

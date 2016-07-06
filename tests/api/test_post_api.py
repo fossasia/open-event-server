@@ -129,7 +129,7 @@ class TestPostApiMin(TestPostApiBase):
     Only required payloads are kept
     """
     def _test_model(self, name, data, api_model):
-        # scrune data
+        # strip data
         data = data.copy()
         for i in api_model:
             if not api_model[i].required:

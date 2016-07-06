@@ -159,9 +159,6 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**sessions** | Array[**SpeakerSession**] | Optional | Public |
 
 
-
-
-
 #### SpeakerSession
 
 | Field | Datatype | Requirement |
