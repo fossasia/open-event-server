@@ -45,6 +45,36 @@
                 </div>
             </div>
             <br>
+            <h4>Twitter Tokens</h4>
+            See <a href="https://developers.facebook.com/docs/apps/register">here</a> on how to obtain these tokens.<br><br>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">Client ID</label>
+                <div class=" col-md-9 col-xs-12">
+                    <input name="fb_client_id" class="form-control col-md-6 col-xs-6" value="{{ settings.fb_client_id|default('', True) }}" >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">Client secret</label>
+                <div class=" col-md-9 col-xs-12">
+                    <input name="fb_client_secret" class="form-control col-md-6 col-xs-6" value="{{ settings.fb_client_secret|default('', True) }}">
+                </div>
+            </div>
+            <br>
+            <h4>Instagram Tokens</h4>
+            See <a href="https://www.instagram.com/developer/authentication/">here</a> on how to obtain these tokens.<br><br>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">Client ID</label>
+                <div class=" col-md-9 col-xs-12">
+                    <input name="fb_client_id" class="form-control col-md-6 col-xs-6" value="{{ settings.fb_client_id|default('', True) }}" >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">Client secret</label>
+                <div class=" col-md-9 col-xs-12">
+                    <input name="fb_client_secret" class="form-control col-md-6 col-xs-6" value="{{ settings.fb_client_secret|default('', True) }}">
+                </div>
+            </div>
+            <br>
             <h4>Storage</h4>
             Where to store data ?
             <div class="form-group col-md-offset-1">
