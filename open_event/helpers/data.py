@@ -788,13 +788,13 @@ class DataManager(object):
 
         # Filter Copyright info
         # If copyright_holder not set, make organizer_name the holder
-        holder = non_empty(form['copyright_holder'],
-                           form['organizer_name'])
-        holder_url = form['copyright_holder_url']
+        holder = non_empty(form.get('copyright_holder'),
+                           form.get('organizer_name'))
+        holder_url = form.get('copyright_holder_url')
         # If copyright year not set, make current year the copyright year
-        year = non_empty(form['copyright_year'],
+        year = non_empty(form.get('copyright_year'),
                          datetime.now().year)
-        licence_name = form['copyright_licence']
+        licence_name = form.get('copyright_licence')
         # Ignoring Licence description
         _, licence_url, logo = EVENT_LICENCES.get(licence_name, ('', '', ''))
 
@@ -983,15 +983,19 @@ class DataManager(object):
         # Returns val2 if val is empty
         non_empty = lambda val, val2: val2 if val == '' else val
 
+        if not event.copyright:
+            # It is possible that the copyright is set as None before.
+            # Set it as an `EventCopyright` object
+            event.copyright = EventCopyright()
         # Filter Copyright info
         # If copyright_holder not set, make organizer_name the holder
-        event.copyright.holder = non_empty(form['copyright_holder'],
-                           form['organizer_name'])
-        event.copyright.holder_url = form['copyright_holder_url']
+        event.copyright.holder = non_empty(form.get('copyright_holder'),
+                                           form.get('organizer_name'))
+        event.copyright.holder_url = form.get('copyright_holder_url')
         # If copyright year not set, make current year the copyright year
-        event.copyright.year = non_empty(form['copyright_year'],
-                         datetime.now().year)
-        licence_name = form['copyright_licence']
+        event.copyright.year = non_empty(form.get('copyright_year'),
+                                         datetime.now().year)
+        licence_name = form.get('copyright_licence')
         # Ignoring Licence description
         _, licence_url, logo = EVENT_LICENCES.get(licence_name, ('', '', ''))
 

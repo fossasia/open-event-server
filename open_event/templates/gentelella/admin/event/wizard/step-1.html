@@ -195,7 +195,8 @@
             <label>Licence <a class="btn btn-info btn-xs licence-help" data-toggle="licence-modal" data-target="#licence_modal">?</a></label>
             <select name="copyright_licence" class="form-control">
                 <option value="">Choose Licence</option>
-                {% for licence in event_licences.keys() %}
+                {{ event_licences }}
+                {% for licence in event_licences %}
                     <option value="{{ licence }}" {{ "selected" if event and event.copyright.licence == licence else '' }}>
                     {{ licence }}
                     </option>
