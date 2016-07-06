@@ -131,7 +131,7 @@ class SessionDAO(ServiceDAO):
         return data
 
     def update(self, event_id, service_id, data):
-        data = self.validate(data, event_id)
+        data = self.validate(data, event_id, check_required=False)
         data_copy = data.copy()
         data_copy = self.fix_payload_post(event_id, data_copy)
         data = self._delete_fields(data)
@@ -148,11 +148,13 @@ class SessionDAO(ServiceDAO):
         payload = self.fix_payload_post(event_id, data)
         return ServiceDAO.create(self, event_id, payload, url, validate=False)
 
-    def validate(self, data, event_id, model=None):
+    def validate(self, data, event_id, check_required=True):
         form = DataGetter.get_custom_form_elements(event_id)
+        model = None
         if form:
             model = model_custom_form(form.session_form, self.post_api_model)
-        return ServiceDAO.validate(self, data, model)
+        return ServiceDAO.validate(
+            self, data, model=model, check_required=check_required)
 
 
 DAO = SessionDAO(SessionModel, SESSION_POST)

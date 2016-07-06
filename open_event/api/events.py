@@ -137,7 +137,7 @@ class EventDAO(BaseDAO):
         return self.get(new_event.id), 201, {'Location': resource_location}
 
     def update(self, event_id, data):
-        data = self.validate(data)
+        data = self.validate_put(data)
         payload = self.fix_payload(data)
         # get event
         event = self.get(event_id)

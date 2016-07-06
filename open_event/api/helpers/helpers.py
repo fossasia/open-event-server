@@ -166,7 +166,7 @@ def handle_extra_payload(payload, api_model):
     return data
 
 
-def validate_payload(payload, api_model):
+def validate_payload(payload, api_model, check_required=True):
     """
     Validate payload against an api_model. Aborts in case of failure
     - This function is for custom fields as they can't be validated by
@@ -174,11 +174,12 @@ def validate_payload(payload, api_model):
     - This is to be called at the start of a post or put method
     """
     # check if any reqd fields are missing in payload
-    for key in api_model:
-        if api_model[key].required and key not in payload:
-            raise ValidationError(
-                field=key,
-                message='Required field \'{}\' missing'.format(key))
+    if check_required:
+        for key in api_model:
+            if api_model[key].required and key not in payload:
+                raise ValidationError(
+                    field=key,
+                    message='Required field \'{}\' missing'.format(key))
     # check payload
     for key in payload:
         field = api_model[key]
