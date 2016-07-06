@@ -64,7 +64,10 @@ class TestPostApi(TestPostApiBase):
         return response
 
     def test_event_api(self):
-        self._test_model('event', POST_EVENT_DATA, ['test@example.com'])
+        self._test_model(
+            'event', POST_EVENT_DATA,
+            ['test@example.com', 'Test licence']
+        )
 
     def test_track_api(self):
         self._test_model('track', POST_TRACK_DATA)

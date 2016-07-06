@@ -6,11 +6,11 @@ from open_event.models.event import Event
 from open_event.models.session import Session
 from open_event.models.speaker import Speaker
 from open_event.models.sponsor import Sponsor
-from open_event.models.event_copyright import EventCopyright as Copyright
 from open_event.models.microlocation import Microlocation
 from open_event.models.session_type import SessionType
 from open_event.models.social_link import SocialLink
 from open_event.models.track import Track
+from open_event.models.event_copyright import EventCopyright as Copyright
 
 
 def create_event(name='TestEvent', creator_email=None):

@@ -1,0 +1,215 @@
+{% extends 'gentelella/admin/settings/base.html' %}
+
+{% block title %}
+    Email Preferences - Settings
+{% endblock %}
+
+{% set active_page = "email_preferences" %}
+
+{% set email_speaker_fields={'session_accept_reject': 'Your Session is Accepted or Rejected',
+                             'session_schedule': 'Change in Schedule of your Session'} %}
+{% set email_organizer_fields={'next_event': 'Reminder for Next Event',
+                               'new_paper': 'New Paper is Submitted to your Event',
+                               'session_schedule': 'Change in Schedule of Sessions in your Event'} %}
+
+{% macro event_item(event) %}
+
+    {% set notification_settings = event.notification_settings() %}
+    {% if notification_settings %}
+        {% set event_notifications_val={'email': 'off'} %}
+        {% if current_user.is_speaker_at_event(event.id) %}
+            {% for key,value in email_speaker_fields.iteritems() %}
+                {% if notification_settings[key] == 1 %}
+                    {% if event_notifications_val.update({'email': 'on'}) %} {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        {% if current_user.is_organizer(event.id) %}
+            {% for key,value in email_organizer_fields.iteritems() %}
+                {% if notification_settings[key] == 1 %}
+                    {% if event_notifications_val.update({'email': 'on'}) %} {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% else %}
+        {% set event_notifications_val={'email': 'on'} %}
+    {% endif %}
+
+    <div class="panel panel-default" data-event-id="{{ event.id }}">
+        <div class="panel-heading" role="tab" id="event-heading-{{ event.id }}">
+            <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#events-accordion"
+                   href="#event-{{ event.id }}">
+                    {{ event.name }}
+                    <span class="badge pull-right {% if event_notifications_val.email == 'on' %}badge-success{% else %}badge-warning{% endif %}">
+                        {{ event_notifications_val.email }}
+                    </span>
+                </a>
+            </h4>
+        </div>
+        <div id="event-{{ event.id }}" class="panel-collapse collapse">
+            <div class="panel-body" style="overflow: hidden;">
+                {% if current_user.is_speaker_at_event(event.id) %}
+                    <h4 style="font-weight: 400;">Speaker Notifications</h4>
+                    <hr style="margin-top: 0;">
+                    {% for key,value in email_speaker_fields.iteritems() %}
+                        <div class="col-xs-12 input-group">
+                            <span style="font-weight: 300; font-size: 15px;">{{ value }}</span>
+                            <input type="checkbox" name="{{ key }}" id="speaker-{{ key }}-{{ event.id }}"
+                                   class="toggle-switch setting-toggle"
+                                   {% if notification_settings[key] == 1 or not notification_settings %}checked{% endif %}/>
+                            <label class="pull-right" for="speaker-{{ key }}-{{ event.id }}"></label>
+                        </div>
+                    {% endfor %}
+                    <br>
+                {% endif %}
+                {% if current_user.is_organizer(event.id) %}
+                    <h4 style="font-weight: 400;">Organizer Notifications</h4>
+                    <hr style="margin-top: 0;">
+                    {% for key,value in email_organizer_fields.iteritems() %}
+                        <div class="col-xs-12 input-group">
+                            <span style="font-weight: 300; font-size: 15px;">{{ value }}</span>
+                            <input type="checkbox" name="{{ key }}" id="organizer-{{ key }}-{{ event.id }}"
+                                   class="toggle-switch setting-toggle"
+                                   {% if notification_settings[key] == 1 or not notification_settings %}checked{% endif %}/>
+                            <label class="pull-right" for="organizer-{{ key }}-{{ event.id }}"></label>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+{% block content %}
+
+    {% set settings_notifications={'email': 'off'} %}
+    {% for setting in settings %}
+        {% if current_user.is_speaker_at_event(setting.event_id) %}
+            {% for key,value in email_speaker_fields.iteritems() %}
+                {% if setting[key] == 1 %}
+                    {% if settings_notifications.update({'email': 'on'}) %} {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        {% if current_user.is_organizer(setting.event_id) %}
+            {% for key,value in email_organizer_fields.iteritems() %}
+                {% if setting[key] == 1 %}
+                    {% if settings_notifications.update({'email': 'on'}) %} {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+    {% endfor %}
+    <h4 style="font-weight: 300;" class="pull-left" id="email-toggle-text"> Email Updates
+        are <span class="global-email-stat"
+                  style="color: #73879C;">{{ settings_notifications.email }}</span>
+    </h4>
+    <input type="checkbox" name="global_email" id="email-switch" class="toggle-switch setting-toggle"
+           {% if settings_notifications.email == 'on' %}checked{% endif %}/>
+    <label class="pull-right" for="email-switch"> </label>
+
+    <div class="clearfix"></div>
+    <hr style="margin-top: 10px; margin-bottom: 16px;">
+    <h3 style="font-weight: 300;margin-bottom: 0;font-size: 22px;">Updates about events</h3>
+    <br>
+    <div class="row">
+        <div class="panel-group" id="events-accordion">
+            {% for event in events %}
+                {% if current_user.is_speaker_at_event(event.id) or current_user.is_organizer(event.id) %}
+                    {{ event_item(event) }}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script type="text/javascript">
+
+        var $eventsAccordion = $("#events-accordion");
+        var $globalEmailStat = $(".global-email-stat");
+        function updateEventStatus($eventPanel) {
+            var allOff = true;
+            $.each($eventPanel.find('.setting-toggle'), function (index, toggle) {
+                if (toggle.checked) {
+                    allOff = false;
+                }
+            });
+            var $badge = $eventPanel.find(".badge");
+            if (allOff) {
+                $badge.text('off');
+                $badge.addClass('badge-warning').removeClass('badge-success');
+            } else {
+                $badge.text('on');
+                $badge.addClass('badge-success').removeClass('badge-warning');
+            }
+        }
+
+        function updateAllCheckBoxes(isChecked) {
+            if (isChecked) {
+                $globalEmailStat.text('on');
+            } else {
+                $globalEmailStat.text('off');
+            }
+            $.each($eventsAccordion.find('.panel'), function (index, $eventPanel) {
+                $eventPanel = $($eventPanel);
+                $.each($eventPanel.find('.setting-toggle'), function (index, toggle) {
+                    toggle.checked = isChecked;
+                });
+                var $badge = $eventPanel.find(".badge");
+                if (isChecked) {
+                    $badge.text('on');
+                    $badge.addClass('badge-success').removeClass('badge-warning');
+                } else {
+                    $badge.text('off');
+                    $badge.addClass('badge-warning').removeClass('badge-success');
+
+                }
+            });
+        }
+
+
+        $(document).on('click', '.setting-toggle', function () {
+            var $toggle = $(this);
+            var isChecked = this.checked;
+            var name = $toggle.attr('name');
+
+            var payload = {
+                name: name,
+                value: isChecked ? 1 : 0
+            };
+
+            if (name != 'global_email') {
+                var $eventPanel = $toggle.closest('.panel');
+                payload.event_id = $eventPanel.data('event-id');
+                updateEventStatus($eventPanel);
+            } else {
+                updateAllCheckBoxes(isChecked);
+            }
+
+            $.ajax({
+                url: "{{ url_for('settings.email_toggle_view') }}",
+                type: 'POST',
+                data: payload,
+                success: function (json) {
+                    if (json.status === 'ok') {
+                        if (json.hasOwnProperty('message') && json.message !== '') {
+                            createSnackbar(message);
+                        } else {
+                            createSnackbar("Settings have been updated");
+                        }
+                    } else {
+                        createSnackbar("An error occurred while saving your settings.");
+                    }
+                },
+                error: function (err) {
+                    console.log("Request failed, error= " + err);
+                    createSnackbar("An error occurred while saving your settings.");
+                }
+            });
+        });
+    </script>
+{% endblock %}
