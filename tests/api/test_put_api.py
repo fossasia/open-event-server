@@ -39,7 +39,7 @@ class TestPutApi(TestPutApiBase):
     Test PUT APIs against 401 (unauthorized) and
     200 (successful) status codes
     """
-    def _test_model(self, name, data):
+    def _test_model(self, name, data, *args):
         """
         Tests -
         1. Without login, try to do a PUT request and catch 401 error
@@ -55,9 +55,12 @@ class TestPutApi(TestPutApiBase):
         self.assertEqual(200, response.status_code, msg=response.data)
         # surrounded by quotes for strict checking
         self.assertIn('"Test%s"' % str(name).title(), response.data)
+        # check more things
+        for _ in args:
+            self.assertIn(_, response.data, response.data)
 
     def test_event_api(self):
-        self._test_model('event', POST_EVENT_DATA)
+        self._test_model('event', POST_EVENT_DATA, 'Test licence')
 
     def test_track_api(self):
         self._test_model('track', POST_TRACK_DATA)
