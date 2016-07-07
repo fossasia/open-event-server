@@ -31,7 +31,7 @@
 
         <div class="form-group">
             <label>Location</label>
-            <input value="{{ event.location_name | default('', true) }}" name="location_name" id="location"
+            <input value="{{ event.location_name | default('', true) }}" name="location_name" id="location_name"
                    placeholder="Location is required to make event live"
                    class="form-control col-md-7 col-xs-12"/>
         </div>
@@ -323,7 +323,7 @@
     };
     var $latitudeInput = $('#latitude');
     var $longitudeInput = $('#longitude');
-    var $locationInput = $("#location");
+    var $locationInput = $("#location_name");
     function initPlacesApi() {
         var latitude = $latitudeInput.val();
         var longitude = $longitudeInput.val();
