@@ -22,6 +22,7 @@ from ..helpers.update_version import VersionUpdater
 from ..helpers.data_getter import DataGetter
 from open_event.helpers.storage import upload, UploadedFile
 from ..helpers import helpers as Helper
+from ..helpers.static import EVENT_LICENCES
 from ..models import db
 from ..models.event import Event, EventsUsers
 from ..models.event_copyright import EventCopyright
@@ -782,6 +783,28 @@ class DataManager(object):
         :param img_files:
         :param form: view data form
         """
+        # Returns val2 if val is empty
+        non_empty = lambda val, val2: val2 if val == '' else val
+
+        # Filter Copyright info
+        # If copyright_holder not set, make organizer_name the holder
+        holder = non_empty(form.get('copyright_holder'),
+                           form.get('organizer_name'))
+        holder_url = form.get('copyright_holder_url')
+        # If copyright year not set, make current year the copyright year
+        year = non_empty(form.get('copyright_year'),
+                         datetime.now().year)
+        licence_name = form.get('copyright_licence')
+        # Ignoring Licence description
+        _, licence_url, logo = EVENT_LICENCES.get(licence_name, ('', '', ''))
+
+        copyright = EventCopyright(holder=holder,
+                                   holder_url=holder_url,
+                                   year=year,
+                                   licence=licence_name,
+                                   licence_url=licence_url,
+                                   logo=logo)
+
         event = Event(name=form['name'],
                       email=form.get('email', u'test@example.com'),
                       start_time=datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M'),
@@ -799,6 +822,7 @@ class DataManager(object):
                       ticket_url=form['ticket_url'],
                       organizer_name=form['organizer_name'],
                       organizer_description=form['organizer_description'],
+                      copyright=copyright,
                       code_of_conduct=form['code_of_conduct'],
                       creator=login.current_user)
 
@@ -955,6 +979,29 @@ class DataManager(object):
         event.organizer_description = form['organizer_description']
         event.code_of_conduct = form['code_of_conduct']
         event.ticket_url = form['ticket_url']
+
+        # Returns val2 if val is empty
+        non_empty = lambda val, val2: val2 if val == '' else val
+
+        if not event.copyright:
+            # It is possible that the copyright is set as None before.
+            # Set it as an `EventCopyright` object
+            event.copyright = EventCopyright()
+        # Filter Copyright info
+        # If copyright_holder not set, make organizer_name the holder
+        event.copyright.holder = non_empty(form.get('copyright_holder'),
+                                           form.get('organizer_name'))
+        event.copyright.holder_url = form.get('copyright_holder_url')
+        # If copyright year not set, make current year the copyright year
+        event.copyright.year = non_empty(form.get('copyright_year'),
+                                         datetime.now().year)
+        licence_name = form.get('copyright_licence')
+        # Ignoring Licence description
+        _, licence_url, logo = EVENT_LICENCES.get(licence_name, ('', '', ''))
+
+        event.copyright.licence = licence_name
+        event.copyright.licence_url = licence_url
+        event.copyright.logo = logo
 
         background_image = form['background_url']
         if string_not_empty(background_image):

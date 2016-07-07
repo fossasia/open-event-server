@@ -187,6 +187,55 @@
                    value="{{ event.ticket_url | default('', true) }}" data-error="Please enter a valid URL"/>
             <div class="help-block with-errors"></div>
         </div>
+        <div class="item form-group">
+            <label>Copyright</label>
+            <input type="text" class="form-control" placeholder="Holder" name="copyright_holder" value="{{ event.copyright.holder | default('', true) }}"><br>
+            <input type="url" class="form-control" placeholder="Holder Link" name="copyright_holder_url" value="{{ event.copyright.holder_url | default('', true) }}"><br>
+            <input type="integer" class="form-control" placeholder="Year" name="copyright_year" value="{{ event.copyright.year | default('', true) }}">
+        </div>
+        <div class="item form-group">
+            <label>Licence <a class="btn btn-info btn-xs licence-help" data-toggle="licence-modal" data-target="#licence_modal">?</a></label>
+            <select name="copyright_licence" class="form-control">
+                <option value="">Choose Licence</option>
+                {{ event_licences }}
+                {% for licence in event_licences %}
+                    <option value="{{ licence }}" {{ "selected" if event and event.copyright.licence == licence else '' }}>
+                    {{ licence }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <!-- Licences Modal -->
+            <div id="licence_modal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Licences</h4>
+                      </div>
+                      <div class="modal-body">
+                      {% for licence_name, info in event_licences.iteritems() %}
+                         <div class="row">
+                             <div class="col-sm-9">
+                                <h5>{{ licence_name }}</h5>
+                                <p>{{ info.0 }}
+                                    {% if info.1 %}
+                                    <a href="{{ info.1 }}" target="_blank" style="color:#1a75ff;">Read more.</a>
+                                    {% endif %}
+                                </p>
+                             </div>
+                             <div class="col-sm-3">
+                            {% if info.2 %}
+                                <img src="{{ info.2 }}" alt="{{ licence_name }}" class="pull-right">
+                            {% endif %}
+                             </div>
+                         </div>
+                      {% endfor %}
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
     <div class="col-md-1">
@@ -432,6 +481,9 @@
             sortField: 'text'
         });
 
+        $(".licence-help").click(function () {
+            $("#licence_modal").modal('show');
+        });
 
         var sub_topics = {{event_sub_topics|safe}};
 

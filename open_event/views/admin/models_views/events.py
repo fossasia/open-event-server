@@ -70,6 +70,7 @@ class EventsView(BaseView):
             '/gentelella/admin/event/new/new.html',
             start_date=datetime.datetime.now() + datetime.timedelta(days=10),
             event_types=DataGetter.get_event_types(),
+            event_licences=DataGetter.get_event_licences(),
             event_topics=DataGetter.get_event_topics(),
             event_sub_topics=DataGetter.get_event_subtopics(),
             timezones=DataGetter.get_all_timezones())
@@ -194,6 +195,7 @@ class EventsView(BaseView):
                                call_for_speakers=call_for_speakers,
                                sponsors=sponsors,
                                event_types=DataGetter.get_event_types(),
+                               event_licences=DataGetter.get_event_licences(),
                                event_topics=DataGetter.get_event_topics(),
                                event_sub_topics=DataGetter.get_event_subtopics(),
                                preselect=preselect,
@@ -317,6 +319,7 @@ class EventsView(BaseView):
             start_date=datetime.datetime.now() + datetime.timedelta(days=10),
             event_types=DataGetter.get_event_types(),
             event_topics=DataGetter.get_event_topics(),
+            event_licences=DataGetter.get_event_licences(),
             event_sub_topics=DataGetter.get_event_subtopics(),
             timezones=DataGetter.get_all_timezones())
 
