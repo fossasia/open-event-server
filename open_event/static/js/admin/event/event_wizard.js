@@ -13,18 +13,22 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".save-event", function () {
-        $wizardForm.submit();
+        if(!validate()) {
+            $wizardForm.submit();
+        }
     });
 
     $(document).on("click", ".publish-unpublish-event", function () {
-        if (state === 'Published') {
-            location.href = "/events/" + eventId + "/unpublish/";
-        } else {
-            var input = $("<input>")
-                .attr("type", "hidden")
-                .attr("name", "state").val("Published");
-            $wizardForm.append($(input));
-            $wizardForm.submit();
+        if (!validate()) {
+            if (state === 'Published') {
+                location.href = "/events/" + eventId + "/unpublish/";
+            } else {
+                var input = $("<input>")
+                    .attr("type", "hidden")
+                    .attr("name", "state").val("Published");
+                $wizardForm.append($(input));
+                $wizardForm.submit();
+            }
         }
     });
 
@@ -69,7 +73,7 @@ function validate() {
     });
 
     $wizardForm.validator('validate');
-    return $wizardForm.data('bs.validator').hasErrors()
+    return $wizardForm.data('bs.validator').hasErrors();
 }
 
 function nextTab(elem) {
