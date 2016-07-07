@@ -1,13 +1,13 @@
 import unicodedata
-from flask import request, url_for, redirect, jsonify
+from flask import request, url_for, redirect, jsonify, flash
 from flask.ext.admin import BaseView
+from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from flask_admin import expose
 from flask.ext import login
 
 from open_event.helpers.data import DataManager, save_to_db
 from open_event.models.email_notifications import EmailNotification
 from ....helpers.data_getter import DataGetter
-
 
 def get_or_create_notification_settings(event_id):
     email_notification = DataGetter \
@@ -37,14 +37,32 @@ class SettingsView(BaseView):
         # TODO Settings landing page
         return redirect(url_for('.email_preferences_view'))
 
-    @expose('/email-preferences')
+    @expose('/password/', methods=('POST', 'GET'))
+    def password_view(self):
+        if request.method == 'POST':
+            user = login.current_user
+            if user.password == generate_password_hash(request.form['current_password'], user.salt):
+                if request.form['new_password'] == request.form['repeat_password']:
+                    salt = generate_random_salt()
+                    user.password = generate_password_hash(request.form['new_password'], salt)
+                    user.salt = salt
+                    save_to_db(user, "password changed")
+                    flash('Password changed successfully.', 'success')
+                else:
+                    flash('The new password and the repeat don\'t match.', 'danger')
+            else:
+                flash('The current password is incorrect.', 'danger')
+
+        return self.render('/gentelella/admin/settings/pages/password.html')
+
+    @expose('/email-preferences/')
     def email_preferences_view(self):
         events = DataGetter.get_all_events()
         settings = DataGetter.get_email_notification_settings(login.current_user.id)
         return self.render('/gentelella/admin/settings/pages/email_preferences.html',
                            settings=settings, events=events)
 
-    @expose('/email/toggle', methods=('POST',))
+    @expose('/email/toggle/', methods=('POST',))
     def email_toggle_view(self):
         if request.method == 'POST':
             name = request.form.get('name')
