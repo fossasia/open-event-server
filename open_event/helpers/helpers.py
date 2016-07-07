@@ -14,6 +14,16 @@ from ..models.track import Track
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, NEXT_EVENT, \
     USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, EVENT_PUBLISH, Mail
 from system_mails import MAILS
+from open_event.models.notifications import (
+    # Prepended with `NOTIF_` to differentiate from mails
+    EVENT_ROLE_INVITE as NOTIF_EVENT_ROLE,
+    NEW_SESSION as NOTIF_NEW_SESSION,
+    SESSION_SCHEDULE as NOTIF_SESSION_SCHEDULE,
+    NEXT_EVENT as NOTIF_NEXT_EVENT,
+    SESSION_ACCEPT_REJECT as NOTIF_SESSION_ACCEPT_REJECT,
+    INVITE_PAPERS as NOTIF_INVITE_PAPERS,
+)
+from system_notifications import NOTIFS
 
 
 def get_event_id():
@@ -208,6 +218,46 @@ def send_email(to, action, subject, html):
     from data import save_to_db
     save_to_db(mail, 'Mail Recorded')
     return
+
+
+# Notifications
+NOTIF_EVENT_ROLE
+NOTIF_NEW_SESSION
+NOTIF_SESSION_SCHEDULE
+NOTIF_NEXT_EVENT
+NOTIF_SESSION_ACCEPT_REJECT
+NOTIF_INVITE_PAPERS
+
+
+def send_notification(user, action, title, message):
+    # DataManager imported here to prevent circular dependency
+    from open_event.helpers.data import DataManager
+    DataManager.create_user_notification(user, action, title, message)
+
+
+def send_notif_event_role(user, role_name, event_name, link):
+    notif = NOTIFS[NOTIF_EVENT_ROLE]
+    action = NOTIF_EVENT_ROLE
+    title = notif['title'].format(
+        role_name=role_name,
+        event_name=event_name
+    )
+    message = notif['message'].format(
+        role_name=role_name,
+        event_name=event_name,
+        link=link
+    )
+
+    send_notification(user, action, title, message)
+
+
+def send_notif_new_session_organizer(user, event_name, link):
+    notif = NOTIFS[NOTIF_NEW_SESSION]
+    action = NOTIF_NEW_SESSION
+    title = notif['title'].format(event_name=event_name)
+    message = notif['message'].format(event_name=event_name, link=link)
+
+    send_notification(user, action, title, message)
 
 
 def is_event_admin(event_id, users):

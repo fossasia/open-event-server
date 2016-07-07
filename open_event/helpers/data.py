@@ -17,7 +17,8 @@ from werkzeug import secure_filename
 from wtforms import ValidationError
 
 from open_event.models.notifications import Notification
-from open_event.helpers.helpers import string_empty, send_new_session_organizer, string_not_empty
+from open_event.helpers.helpers import string_empty, send_new_session_organizer, \
+    string_not_empty, send_notif_new_session_organizer
 from ..helpers.update_version import VersionUpdater
 from ..helpers.data_getter import DataGetter
 from open_event.helpers.storage import upload, UploadedFile
@@ -322,6 +323,8 @@ class DataManager(object):
                                                                                                     event.id)
                 if email_notification_setting and email_notification_setting.new_paper == 1:
                     send_new_session_organizer(organizer.user.email, event.name, link)
+                # Send notification
+                send_notif_new_session_organizer(organizer.user, event.name, link)
 
         speaker_modified = False
         session_modified = False
