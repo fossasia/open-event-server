@@ -12,10 +12,10 @@
 {% endblock %}
 
 {% set navigation_bar = [
-    ('/settings/', 'contact_info', 'Contact Info'),
-    ('/settings/', 'password', 'Password'),
-    ('/admin/email-preferences/', 'email_preferences', 'Email Preferences'),
-    ('/settings/', 'account_info', 'Account Information')
+    ('/settings/', 'contact_info', 'Contact Info', 'Contact Info'),
+    ('/settings/password/', 'password', 'Password', 'Your Password'),
+    ('/settings/email-preferences/', 'email_preferences', 'Email Preferences', 'Email Preferences'),
+    ('/settings/', 'account_info', 'Account Information', 'Account Information')
 ] -%}
 
 {% set active_page = active_page|default('account_info') -%}
@@ -26,7 +26,7 @@
             <h2 style="font-weight: 300; font-size: 24px;">Settings</h2>
             <nav class="settings">
                 <ul>
-                    {% for href, id, title in navigation_bar %}
+                    {% for href, id, title, page_title in navigation_bar %}
                     <li
                     {% if id == active_page %} class="active"{% endif %}><a href="{{ href|e }}">{{ title }}</a></li>
                     {% endfor %}
@@ -37,7 +37,7 @@
             <div class="x_panel" >
                 <div class="x_title">
                     <h2 style="font-weight: 400; font-size: 24px;">
-                         {% for href, id, page_title in navigation_bar %}
+                         {% for href, id, title, page_title in navigation_bar %}
                             {% if id == active_page %}
                                 {{ page_title }}
                             {% endif %}
