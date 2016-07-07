@@ -46,6 +46,10 @@ def is_track_name_unique_in_event(form, event_id, *args):
         return True
 
 
+#########
+# Mails #
+#########
+
 def send_email_invitation(email, event_name, link):
     """Send email for submit papers"""
     send_email(
@@ -219,15 +223,9 @@ def send_email(to, action, subject, html):
     save_to_db(mail, 'Mail Recorded')
     return
 
-
-# Notifications
-NOTIF_EVENT_ROLE
-NOTIF_NEW_SESSION
-NOTIF_SESSION_SCHEDULE
-NOTIF_NEXT_EVENT
-NOTIF_SESSION_ACCEPT_REJECT
-NOTIF_INVITE_PAPERS
-
+#################
+# Notifications #
+#################
 
 def send_notification(user, action, title, message):
     # DataManager imported here to prevent circular dependency
@@ -254,6 +252,49 @@ def send_notif_event_role(user, role_name, event_name, link):
 def send_notif_new_session_organizer(user, event_name, link):
     notif = NOTIFS[NOTIF_NEW_SESSION]
     action = NOTIF_NEW_SESSION
+    title = notif['title'].format(event_name=event_name)
+    message = notif['message'].format(event_name=event_name, link=link)
+
+    send_notification(user, action, title, message)
+
+
+def send_notif_session_schedule(user, session_name, link):
+    notif = NOTIFS[NOTIF_SESSION_SCHEDULE]
+    action = NOTIF_SESSION_SCHEDULE
+    title = notif['title'].format(session_name=session_name)
+    message = notif['message'].format(session_name=session_name, link=link)
+
+    send_notification(user, action, title, message)
+
+
+def send_notif_next_event(user, event_name, up_coming_events, link):
+    notif = NOTIFS[NOTIF_NEXT_EVENT]
+    action = NOTIF_NEXT_EVENT
+    title = notif['title'].format(event_name=event_name)
+    message = notif['message'].format(up_coming_events=up_coming_events,
+                                      link=link)
+
+    send_notification(user, action, title, message)
+
+
+def send_notif_next_session_accept_reject(user, session_name, acceptance,
+        link):
+    notif = NOTIFS[NOTIF_SESSION_ACCEPT_REJECT]
+    action = NOTIF_SESSION_ACCEPT_REJECT
+    title = notif['title'].format(session_name=session_name,
+                                  acceptance=acceptance)
+    message = notif['message'].format(
+        session_name=session_name,
+        acceptance=acceptance,
+        link=link
+    )
+
+    send_notification(user, action, title, message)
+
+
+def send_notif_invite_papers(user, event_name, link):
+    notif = NOTIFS[NOTIF_INVITE_PAPERS]
+    action = NOTIF_INVITE_PAPERS
     title = notif['title'].format(event_name=event_name)
     message = notif['message'].format(event_name=event_name, link=link)
 
