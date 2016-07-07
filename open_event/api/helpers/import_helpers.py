@@ -5,6 +5,7 @@ import json
 from flask import request
 from werkzeug import secure_filename
 
+from flask import current_app as app
 from ..events import DAO as EventDAO, LinkDAO as SocialLinkDAO
 from ..microlocations import DAO as MicrolocationDAO
 from ..sessions import DAO as SessionDAO, TypeDAO as SessionTypeDAO
@@ -49,10 +50,13 @@ def _allowed_file(filename, ext):
     return '.' in filename and filename.rsplit('.', 1)[1] in ext
 
 
-def get_file_from_request(ext=[], folder='static/temp/', name='file'):
+def get_file_from_request(ext=[], folder='/static/temp/', name='file'):
     """
     Get file from a request, save it locally and return its path
     """
+    with app.app_context():
+        folder = app.config['BASE_DIR'] + folder
+
     if 'file' not in request.files:
         raise NotFoundError('File not found')
     file = request.files['file']
@@ -164,13 +168,14 @@ def import_event_json(zip_path):
     """
     global CUR_ID
 
-    path = 'static/temp/import_event'
+    with app.app_context():
+        path = app.config['BASE_DIR'] + '/static/temp/import_event'
     # delete existing files
     if os.path.isdir(path):
         shutil.rmtree(path, ignore_errors=True)
     # extract files from zip
     with zipfile.ZipFile(zip_path, "r") as z:
-        z.extractall('static/temp/import_event')
+        z.extractall(path)
     # create event
     try:
         data = json.loads(open(path + '/event.json', 'r').read())
