@@ -34,7 +34,7 @@
 
         <div class="col-xs-7 input-group form-group">
             <div class="input-group">
-                <input type="number" class="form-control" name="rooms[floor]"
+                <input type="number" class="form-control" required="required" name="rooms[floor]"
                        placeholder="Floor"
                        title="rooms-floor"
                        value="{{ microlocation.floor | default(0) if not empty else '' }}"/>
