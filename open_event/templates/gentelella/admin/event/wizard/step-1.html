@@ -400,7 +400,7 @@
 
         $locationInput.valueChange(geocodeHandler);
 
-        autocomplete = new google.maps.places.Autocomplete((document.getElementById('location')), {types: ['geocode']});
+        autocomplete = new google.maps.places.Autocomplete($locationInput[0], {types: ['geocode']});
         geolocate();
 
         autocomplete.addListener('place_changed', geocodeHandler);
