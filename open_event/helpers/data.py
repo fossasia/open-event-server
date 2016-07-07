@@ -1031,16 +1031,20 @@ class DataManager(object):
             event.state = state
 
         session_type_names = form.getlist('session_type[name]')
+        session_type_id = form.getlist('session_type[id]')
         session_type_length = form.getlist('session_type[length]')
 
         social_link_name = form.getlist('social[name]')
         social_link_link = form.getlist('social[link]')
+        social_link_id = form.getlist('social[id]')
 
         track_name = form.getlist('tracks[name]')
         track_color = form.getlist('tracks[color]')
+        track_id = form.getlist('tracks[id]')
 
         room_name = form.getlist('rooms[name]')
         room_floor = form.getlist('rooms[floor]')
+        room_id = form.getlist('rooms[id]')
 
         sponsor_name = form.getlist('sponsors[name]')
         sponsor_logo_url = []
@@ -1053,45 +1057,66 @@ class DataManager(object):
         custom_forms_value = form.getlist('custom_form[value]')
 
         # save the edited info to database
-        for session_type in session_types:
-            delete_from_db(session_type, "Session Type Deleted")
 
         for index, name in enumerate(session_type_names):
             if not string_empty(name):
-                session_type, c = get_or_create(SessionType,
-                                                name=name,
-                                                length=session_type_length[index],
-                                                event_id=event.id)
+                print session_type_id[index]
+                if session_type_id[index] != '':
+                    session_type, c = get_or_create(SessionType,
+                                                    id=session_type_id[index],
+                                                    event_id=event.id)
+                    session_type.name = name
+                    session_type.length = session_type_length[index]
+                else:
+                    session_type, c = get_or_create(SessionType,
+                                                    name=name,
+                                                    length=session_type_length[index],
+                                                    event_id=event.id)
                 db.session.add(session_type)
-
-        for social_link in social_links:
-            delete_from_db(social_link, "SocialLink Deleted")
 
         for index, name in enumerate(social_link_name):
             if not string_empty(social_link_link[index]):
-                social_link, c = get_or_create(SocialLink,
-                                               name=name,
-                                               link=social_link_link[index],
-                                               event_id=event.id)
+                if social_link_id[index] != '':
+                    social_link, c = get_or_create(SocialLink,
+                                                   id=social_link_id[index],
+                                                   event_id=event.id)
+                    social_link.name = name
+                    social_link.link = social_link_link[index]
+                else:
+                    social_link, c = get_or_create(SocialLink,
+                                                   name=name,
+                                                   link=social_link_link[index],
+                                                   event_id=event.id)
                 db.session.add(social_link)
-
-        for track in tracks:
-            delete_from_db(track, "Tracks Deleted")
 
         for index, name in enumerate(track_name):
             if not string_empty(name):
-                track, c = get_or_create(Track,
-                                         name=name,
-                                         color=track_color[index].upper(),
-                                         event_id=event.id)
+                if track_id[index] != '':
+                    track, c = get_or_create(Track,
+                                             id=track_id[index],
+                                             event_id=event.id)
+                    track.name = name
+                    track.color = track_color[index].upper()
+                else:
+                    track, c = get_or_create(Track,
+                                             name=name,
+                                             color=track_color[index].upper(),
+                                             event_id=event.id)
                 db.session.add(track)
-
-        for microlocation in microlocations:
-            delete_from_db(microlocation, "Microlocation Deleted")
 
         for index, name in enumerate(room_name):
             if not string_empty(name):
-                room, c = get_or_create(Microlocation, name=name, floor=room_floor[index], event_id=event.id)
+                if room_id[index] != '':
+                    room, c = get_or_create(Microlocation,
+                                            id=room_id[index],
+                                            event_id=event.id)
+                    room.name = name
+                    room.floor = room_floor[index]
+                else:
+                    room, c = get_or_create(Microlocation,
+                                            name=name,
+                                            floor=room_floor[index],
+                                            event_id=event.id)
                 db.session.add(room)
 
         for sponsor in sponsors:
