@@ -107,8 +107,9 @@ class EventDAO(BaseDAO):
             'start_time', 'end_time', 'closing_datetime',
             'schedule_published_on'
         ]
-        for i in datetime_fields:
-            data[i] = EVENT_POST[i].from_str(data.get(i))
+        for f in datetime_fields:
+            if f in data:
+                data[f] = EVENT_POST[f].from_str(data.get(f))
         return data
 
     def create(self, data, url):
@@ -137,7 +138,7 @@ class EventDAO(BaseDAO):
         return self.get(new_event.id), 201, {'Location': resource_location}
 
     def update(self, event_id, data):
-        data = self.validate(data)
+        data = self.validate_put(data)
         payload = self.fix_payload(data)
         # get event
         event = self.get(event_id)
@@ -270,7 +271,7 @@ class SocialLinkList(Resource):
 
     @requires_auth
     @api.doc('create_social_link', responses=POST_RESPONSES)
-    @api.marshal_with(SOCIAL_LINK_POST)
+    @api.marshal_with(SOCIAL_LINK)
     @api.expect(SOCIAL_LINK_POST)
     def post(self, event_id):
         """Create a social link"""
@@ -292,8 +293,14 @@ class SocialLink(Resource):
 
     @requires_auth
     @api.doc('update_social_link', responses=PUT_RESPONSES)
-    @api.marshal_with(SOCIAL_LINK_POST)
+    @api.marshal_with(SOCIAL_LINK)
     @api.expect(SOCIAL_LINK_POST)
     def put(self, event_id, link_id):
         """Update a social link given its id"""
         return LinkDAO.update(event_id, link_id, self.api.payload)
+
+    @api.hide
+    @api.marshal_with(SOCIAL_LINK)
+    def get(self, event_id, link_id):
+        """Fetch a social link given its id"""
+        return LinkDAO.get(event_id, link_id)

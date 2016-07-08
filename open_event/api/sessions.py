@@ -98,10 +98,10 @@ class SessionDAO(ServiceDAO):
     def _delete_fields(self, data):
         data = self._del(data, ['speaker_ids', 'track_id',
                          'microlocation_id', 'session_type_id'])
-        data['start_time'] = SESSION_POST['start_time'].from_str(
-            data.get('start_time'))
-        data['end_time'] = SESSION_POST['end_time'].from_str(
-            data.get('end_time'))
+        # convert datetime fields
+        for _ in ['start_time', 'end_time']:
+            if _ in data:
+                data[_] = SESSION_POST[_].from_str(data[_])
         return data
 
     def get_object(self, model, sid, event_id):
@@ -116,30 +116,33 @@ class SessionDAO(ServiceDAO):
         """
         Fixes payload of POST request
         """
-        data['track'] = self.get_object(
-            TrackModel, data.get('track_id'), event_id)
-        data['microlocation'] = self.get_object(
-            MicrolocationModel, data.get('microlocation_id'), event_id)
-        data['session_type'] = self.get_object(
-            SessionTypeModel, data.get('session_type_id'), event_id)
+        if 'track_id' in data:
+            data['track'] = self.get_object(
+                TrackModel, data.get('track_id'), event_id)
+        if 'microlocation_id' in data:
+            data['microlocation'] = self.get_object(
+                MicrolocationModel, data.get('microlocation_id'), event_id)
+        if 'session_type_id' in data:
+            data['session_type'] = self.get_object(
+                SessionTypeModel, data.get('session_type_id'), event_id)
+        if 'speaker_ids' in data:
+            data['speakers'] = InstrumentedList(
+                SpeakerModel.query.get(_) for _ in data.get('speaker_ids', [])
+                if self.get_object(SpeakerModel, _, event_id) is not None
+            )
         data['event_id'] = event_id
-        data['speakers'] = InstrumentedList(
-            SpeakerModel.query.get(_) for _ in data.get('speaker_ids', [])
-            if self.get_object(SpeakerModel, _, event_id) is not None
-        )
         data = self._delete_fields(data)
         return data
 
     def update(self, event_id, service_id, data):
-        data = self.validate(data, event_id)
+        data = self.validate(data, event_id, check_required=False)
         data_copy = data.copy()
         data_copy = self.fix_payload_post(event_id, data_copy)
         data = self._delete_fields(data)
         obj = ServiceDAO.update(self, event_id, service_id, data, validate=False)
-        obj.track = data_copy['track']
-        obj.microlocation = data_copy['microlocation']
-        obj.speakers = data_copy['speakers']
-        obj.session_type = data_copy['session_type']
+        for f in ['track', 'microlocation', 'speakers', 'session_type']:
+            if f in data_copy:
+                setattr(obj, f, data_copy[f])
         obj = save_db_model(obj, SessionModel.__name__, event_id)
         return obj
 
@@ -148,11 +151,13 @@ class SessionDAO(ServiceDAO):
         payload = self.fix_payload_post(event_id, data)
         return ServiceDAO.create(self, event_id, payload, url, validate=False)
 
-    def validate(self, data, event_id, model=None):
+    def validate(self, data, event_id, check_required=True):
         form = DataGetter.get_custom_form_elements(event_id)
+        model = None
         if form:
             model = model_custom_form(form.session_form, self.post_api_model)
-        return ServiceDAO.validate(self, data, model)
+        return ServiceDAO.validate(
+            self, data, model=model, check_required=check_required)
 
 
 DAO = SessionDAO(SessionModel, SESSION_POST)
@@ -232,7 +237,7 @@ class SessionTypeList(Resource):
 
     @requires_auth
     @api.doc('create_session_type', responses=POST_RESPONSES)
-    @api.marshal_with(SESSION_TYPE_POST)
+    @api.marshal_with(SESSION_TYPE)
     @api.expect(SESSION_TYPE_POST)
     def post(self, event_id):
         """Create a session type"""
@@ -254,8 +259,14 @@ class SessionType(Resource):
 
     @requires_auth
     @api.doc('update_session_type', responses=PUT_RESPONSES)
-    @api.marshal_with(SESSION_TYPE_POST)
+    @api.marshal_with(SESSION_TYPE)
     @api.expect(SESSION_TYPE_POST)
     def put(self, event_id, type_id):
         """Update a session type given its id"""
         return TypeDAO.update(event_id, type_id, self.api.payload)
+
+    @api.hide
+    @api.marshal_with(SESSION_TYPE)
+    def get(self, event_id, type_id):
+        """Fetch a session type given its id"""
+        return TypeDAO.get(event_id, type_id)

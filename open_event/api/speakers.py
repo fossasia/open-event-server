@@ -52,14 +52,16 @@ class SpeakerDAO(ServiceDAO):
         return ServiceDAO.create(self, event_id, data, url, validate=False)
 
     def update(self, event_id, service_id, data):
-        data = self.validate(data, event_id)
+        data = self.validate(data, event_id, False)
         return ServiceDAO.update(self, event_id, service_id, data, validate=False)
 
-    def validate(self, data, event_id, model=None):
+    def validate(self, data, event_id, check_required=True):
         form = DataGetter.get_custom_form_elements(event_id)
+        model = None
         if form:
             model = model_custom_form(form.speaker_form, self.post_api_model)
-        return ServiceDAO.validate(self, data, model)
+        return ServiceDAO.validate(
+            self, data, model, check_required=check_required)
 
 DAO = SpeakerDAO(SpeakerModel, SPEAKER_POST)
 

@@ -63,7 +63,7 @@ class UserDAO(BaseDAO):
         return user
 
     def update(self, id_, data):
-        data = self.validate(data, self.put_api_model)
+        data = self.validate_put(data, self.put_api_model)
         user_detail = data.get('user_detail', {})
         del data['user_detail']
         item = BaseDAO.update(self, id_, data, validate=False)
