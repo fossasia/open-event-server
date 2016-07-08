@@ -4,9 +4,11 @@ from flask_admin import expose
 from flask.ext import login
 
 from open_event.views.admin.models_views.events import is_verified_user
-from ....helpers.data import DataManager
+from ....helpers.data import DataManager, get_facebook_auth
 from ....helpers.data_getter import DataGetter
 from open_event.helpers.storage import upload
+from open_event.helpers.oauth import OAuth, FbOAuth
+
 
 class ProfileView(BaseView):
 
@@ -59,3 +61,9 @@ class ProfileView(BaseView):
             return redirect(url_for('.notifications_view'))
         else:
             abort(404)
+
+    @expose('/fb_connect', methods=('GET', 'POST'))
+    def connect_facebook(self):
+        facebook = get_facebook_auth()
+        fb_auth_url, state = facebook.authorization_url(FbOAuth.get_auth_uri(), access_type='offline')
+        return redirect(fb_auth_url)
