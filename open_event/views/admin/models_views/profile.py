@@ -4,10 +4,10 @@ from flask_admin import expose
 from flask.ext import login
 
 from open_event.views.admin.models_views.events import is_verified_user
-from ....helpers.data import DataManager, get_facebook_auth
+from ....helpers.data import DataManager, get_facebook_auth, get_instagram_auth
 from ....helpers.data_getter import DataGetter
 from open_event.helpers.storage import upload
-from open_event.helpers.oauth import OAuth, FbOAuth
+from open_event.helpers.oauth import OAuth, FbOAuth, InstagramOAuth
 
 
 class ProfileView(BaseView):
@@ -70,4 +70,7 @@ class ProfileView(BaseView):
 
     @expose('/instagram_connect', methods=('GET', 'POST'))
     def connect_instagram(self):
-        pass
+        instagram = get_instagram_auth()
+        print InstagramOAuth.get_auth_uri()
+        instagram_auth_url, state = instagram.authorization_url(InstagramOAuth.get_auth_uri(), access_type='offline')
+        return redirect(instagram_auth_url)

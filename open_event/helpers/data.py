@@ -42,7 +42,7 @@ from ..models.users_events_roles import UsersEventsRoles
 from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
 from ..models.track import Track
-from open_event.helpers.oauth import OAuth, FbOAuth
+from open_event.helpers.oauth import OAuth, FbOAuth, InstagramOAuth
 from requests_oauthlib import OAuth2Session
 from ..models.invite import Invite
 from ..models.call_for_papers import CallForPaper
@@ -1227,6 +1227,16 @@ def get_facebook_auth(state=None, token=None):
         return OAuth2Session(FbOAuth.get_client_id(), state=state, scope=FbOAuth.SCOPE,
                              redirect_uri=FbOAuth.get_redirect_uri())
     oauth = OAuth2Session(FbOAuth.get_client_id(), scope=FbOAuth.SCOPE, redirect_uri=FbOAuth.get_redirect_uri())
+    return oauth
+
+def get_instagram_auth(state=None, token=None):
+    if token:
+        return OAuth2Session(InstagramOAuth.get_client_id(), token=token)
+    if state:
+        return OAuth2Session(InstagramOAuth.get_client_id(), state=state, scope=InstagramOAuth.SCOPE,
+                             redirect_uri=InstagramOAuth.get_redirect_uri())
+    scope = "+".join(InstagramOAuth.SCOPE)
+    oauth = OAuth2Session(InstagramOAuth.get_client_id(), redirect_uri=InstagramOAuth.get_redirect_uri())
     return oauth
 
 

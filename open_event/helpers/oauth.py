@@ -75,7 +75,7 @@ class FbOAuth(object):
 
 class InstagramOAuth(object):
     INSTAGRAM_OAUTH_URI = "https://api.instagram.com/oauth/authorize/"
-
+    SCOPE = ['basic', 'public_content ']
     @classmethod
     def get_client_id(self):
         return get_settings()['in_client_id']
