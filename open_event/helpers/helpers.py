@@ -12,7 +12,7 @@ from open_event.helpers.flask_helpers import get_real_ip
 from open_event.settings import get_settings
 from ..models.track import Track
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, NEXT_EVENT, \
-    USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, EVENT_PUBLISH, Mail
+    USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, EVENT_PUBLISH, Mail, AFTER_EVENT
 from system_mails import MAILS
 from open_event.models.notifications import (
     # Prepended with `NOTIF_` to differentiate from mails
@@ -127,6 +127,25 @@ def send_next_event(email, event_name, link, up_coming_events):
         )
     )
 
+def send_after_event(email, event_name, upcoming_events):
+    """Send after event mail"""
+    upcoming_event_html = "<ul>"
+    for event in upcoming_events:
+        upcoming_event_html += "<a href='%s'><li> %s </li></a>" % (url_for('events.details_view',
+                                                                           event_id=event.id, _external=True),
+                                                                   event.name)
+    upcoming_event_html += "</ul><br/>"
+    send_email(
+        to=email,
+        action=AFTER_EVENT,
+        subject=MAILS[AFTER_EVENT]['subject'].format(event_name=event_name),
+        html=MAILS[AFTER_EVENT]['message'].format(
+            email=str(email),
+            event_name=str(event_name),
+            link=link,
+            up_coming_events=upcoming_event_html
+        )
+    )
 
 def send_event_publish(email, event_name, link):
     """Send email on publishing event"""
