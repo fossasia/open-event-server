@@ -128,10 +128,6 @@ class TestPutApiMin(TestPutApiBase):
             resp = self._put(path, {i: data_copy[i]})
             self.assertEqual(200, resp.status_code,
                              msg='Key: %s\nMsg: %s' % (i, resp.data))
-            # the following test ensures that name field is not nullified/empty
-            # even in case of PUT request without 'name' as payload
-            self.assertIn('Test' + name[0].upper() + name[1:], resp.data,
-                          msg='Key: %s\nMsg: %s' % (i, resp.data))
             # check persistence
             status = self._test_change_json(resp_old.data, resp.data, i)
             if status:
