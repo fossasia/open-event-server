@@ -227,6 +227,36 @@ class Event(Resource):
         return event
 
 
+@api.route('/<int:event_id>/event')
+@api.param('event_id')
+@api.response(404, 'Event not found')
+class EventWebapp(Resource):
+    @api.doc('get_event')
+    @api.marshal_with(EVENT)
+    def get(self, event_id):
+        """Fetch an event given its id"""
+        return DAO.get(event_id)
+
+    @requires_auth
+    @api.doc('delete_event')
+    @api.marshal_with(EVENT)
+    def delete(self, event_id):
+        """Delete an event given its id"""
+        event = DAO.delete(event_id)
+        record_activity('delete_event', event_id=event_id)
+        return event
+
+    @requires_auth
+    @api.doc('update_event', responses=PUT_RESPONSES)
+    @api.marshal_with(EVENT)
+    @api.expect(EVENT_POST)
+    def put(self, event_id):
+        """Update an event given its id"""
+        event = DAO.update(event_id, self.api.payload)
+        record_activity('update_event', event_id=event_id)
+        return event
+
+
 @api.route('')
 class EventList(Resource, EventResource):
     @api.doc('list_events', params=EVENT_PARAMS)
