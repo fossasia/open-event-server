@@ -18,7 +18,8 @@ from wtforms import ValidationError
 
 from open_event.models.notifications import Notification
 from open_event.helpers.helpers import string_empty, send_new_session_organizer, \
-    string_not_empty, send_notif_new_session_organizer
+    string_not_empty, send_notif_new_session_organizer, send_notif_session_accept_reject, \
+    send_notif_invite_papers
 from ..helpers.update_version import VersionUpdater
 from ..helpers.data_getter import DataGetter
 from open_event.helpers.storage import upload, UploadedFile
@@ -323,6 +324,7 @@ class DataManager(object):
                                                                                                     event.id)
                 if email_notification_setting and email_notification_setting.new_paper == 1:
                     send_new_session_organizer(organizer.user.email, event.name, link)
+                    send_notif_new_session_organizer(organizer.user, event.name, link)
                 # Send notification
                 send_notif_new_session_organizer(organizer.user, event.name, link)
 
@@ -365,6 +367,11 @@ class DataManager(object):
 
             link = url_for('event_sessions.invited_view', session_id=new_session.id, event_id=event_id, _external=True)
             Helper.send_email_invitation(email, new_session.title, link)
+            # If a user is registered by the email, send a notification as well
+            user = DataGetter.get_user_by_email(email)
+            if user:
+                Helper.send_notif_invite_papers(user, event.name, link)
+
 
     @staticmethod
     def add_speaker_to_event(request, event_id, user=login.current_user):
@@ -441,6 +448,11 @@ class DataManager(object):
                                                                                                 event_id)
             if email_notification_setting and email_notification_setting.session_accept_reject == 1:
                 Helper.send_session_accept_reject(speaker.email, session.title, state, link)
+                # Send notification
+                send_notif_session_accept_reject(speaker.user,
+                                                 session.title,
+                                                 state,
+                                                 link)
         flash("The session has been %s" % state)
 
     @staticmethod

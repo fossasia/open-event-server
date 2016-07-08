@@ -277,7 +277,7 @@ def send_notif_next_event(user, event_name, up_coming_events, link):
     send_notification(user, action, title, message)
 
 
-def send_notif_next_session_accept_reject(user, session_name, acceptance,
+def send_notif_session_accept_reject(user, session_name, acceptance,
         link):
     notif = NOTIFS[NOTIF_SESSION_ACCEPT_REJECT]
     action = NOTIF_SESSION_ACCEPT_REJECT
