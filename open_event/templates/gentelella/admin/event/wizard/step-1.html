@@ -206,7 +206,7 @@
         </div>
         <div class="item form-group">
             <label>Copyright Year</label>
-            <input type="integer" class="form-control" name="copyright_year" value="{{ event.copyright.year | default('', true) }}" pattern="[0-9]{4,4}" data-error="Please enter a valid year">
+            <input type="integer" class="form-control" name="copyright_year" value="{{ event.copyright.year | default('2016', true) }}" pattern="[0-9]{4,4}" data-error="Please enter a valid year">
             <div class="help-block with-errors"></div>
         </div>
         <div class="item form-group">
@@ -499,6 +499,18 @@
 
         $(".licence-help").click(function () {
             $("#licence_modal").modal('show');
+        });
+
+        /* Copy Organizer Name to Copyright Holder */
+        var organizer_name = $("[name='organizer_name']");
+        organizer_name.on("input", function () {
+            $("[name='copyright_holder']").val(organizer_name.val());
+        });
+
+        /* Copy Organizer URL to Copyright Holder URL */
+        var organizer_url = $("[name='organizer_url']");
+        organizer_url.on("input", function () {
+            $("[name='copyright_holder_url']").val(organizer_url.val());
         });
 
         var sub_topics = {{event_sub_topics|safe}};
