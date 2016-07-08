@@ -1,7 +1,12 @@
 from . import db
 
 EVENT_ROLE_INVITE = 'Event Role Invitation'
-
+NEW_SESSION = 'New Session Proposal'
+SESSION_SCHEDULE = 'Session Schedule Change'
+NEXT_EVENT = 'Next Event'
+SESSION_ACCEPT_REJECT = 'Session Accept or Reject'
+INVITE_PAPERS = 'Invitation For Papers'
+AFTER_EVENT = 'After Event'
 
 class Notification(db.Model):
     """

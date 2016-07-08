@@ -10,15 +10,18 @@ from open_event.models.microlocation import Microlocation
 from open_event.models.session_type import SessionType
 from open_event.models.social_link import SocialLink
 from open_event.models.track import Track
+from open_event.models.event_copyright import EventCopyright as Copyright
 
 
 def create_event(name='TestEvent', creator_email=None):
     """Creates Event and returns its `id`.
     :param name Name of Event
     """
+    copyright = Copyright(holder='copyright holder')
     event = Event(name=name,
                   start_time=datetime(2016, 4, 8, 12, 30, 45),
-                  end_time=datetime(2016, 4, 9, 12, 30, 45))
+                  end_time=datetime(2016, 4, 9, 12, 30, 45),
+                  copyright=copyright)
     if creator_email:
         event.creator = User.query.filter_by(email=creator_email).first()
     save_to_db(event, 'Event saved')

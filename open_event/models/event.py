@@ -1,9 +1,11 @@
 """Copyright 2015 Rafal Kowalski"""
 from sqlalchemy import event
 
+from flask.ext import login
 from open_event.helpers.date_formatter import DateFormatter
 from open_event.helpers.versioning import clean_up_string, clean_html
 from custom_forms import CustomForms, session_form_str, speaker_form_str
+from open_event.models.email_notifications import EmailNotification
 from . import db
 
 class EventsUsers(db.Model):
@@ -84,6 +86,7 @@ class Event(db.Model):
                  sub_topic=None,
                  ticket_url=None,
                  creator=None,
+                 copyright=None,
                  code_of_conduct=None,
                  schedule_published_on=None,
                  in_trash=None):
@@ -109,6 +112,7 @@ class Event(db.Model):
         self.sub_topic = sub_topic
         self.ticket_url = ticket_url
         self.creator = creator
+        self.copyright = copyright
         self.code_of_conduct = code_of_conduct
         self.schedule_published_on = schedule_published_on
         self.in_trash = in_trash
@@ -127,6 +131,12 @@ class Event(db.Model):
             super(Event, self).__setattr__(name, clean_html(clean_up_string(value)))
         else:
             super(Event, self).__setattr__(name, value)
+
+    def notification_settings(self):
+        try:
+            return EmailNotification.query.filter_by(user_id=login.current_user.id).filter_by(event_id=self.id).first()
+        except:
+            return None
 
     @property
     def serialize(self):

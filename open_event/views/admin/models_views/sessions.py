@@ -8,7 +8,7 @@ from open_event import db
 from open_event.helpers.permission_decorators import *
 from flask.ext import login
 from flask import request, url_for, redirect, flash
-from ....helpers.data import DataManager, save_to_db, delete_from_db, trash_session
+from ....helpers.data import DataManager, save_to_db, delete_from_db, trash_session, restore_session
 from ....helpers.data_getter import DataGetter
 from werkzeug.utils import secure_filename
 import json
@@ -134,9 +134,7 @@ class SessionsView(BaseView):
 
     @expose('/<int:session_id>/restore_trash', methods=('GET',))
     def restore_session(self, event_id, session_id):
-        session = get_session_or_throw(session_id)
-        session.in_trash = False
-        save_to_db(session, "Session restored from trash")
+        restore_session(session_id)
         flash("The session has been restored", "success")
         return redirect(url_for('sadmin_sessions.display_my_sessions_view', event_id=event_id))
 

@@ -23,20 +23,20 @@ class EventCopyright(db.Model):
         'Event', backref=backref('copyright', uselist=False))
 
     def __init__(self,
-                 event,
-                 holder,
+                 holder=None,
                  holder_url=None,
                  licence=None,
                  licence_url=None,
                  year=None,
-                 logo=None):
-        self.event = event
+                 logo=None,
+                 event=None):
         self.holder = holder
         self.holder_url = holder_url
         self.licence = licence
         self.licence_url = licence_url
         self.year = year
         self.logo = logo
+        self.event = event
 
     def __repr__(self):
         return '<Copyright %r>' % self.holder

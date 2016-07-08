@@ -29,7 +29,7 @@ from ..models.mail import Mail
 from ..models.activity import Activity
 from ..models.setting import Setting
 from .language_list import LANGUAGE_LIST
-from .static import EVENT_TOPICS
+from .static import EVENT_TOPICS, EVENT_LICENCES
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
 from flask import flash, current_app
@@ -97,8 +97,12 @@ class DataGetter:
         return login.current_user.events_assocs
 
     @staticmethod
+    def get_email_notification_settings_by_id(id):
+        return EmailNotification.query.get(id)
+
+    @staticmethod
     def get_email_notification_settings(user_id):
-        return EmailNotification.query.filter_by(user_id=user_id)
+        return EmailNotification.query.filter_by(user_id=user_id).all()
 
     @staticmethod
     def get_email_notification_settings_by_event_id(user_id, event_id):
@@ -265,12 +269,12 @@ class DataGetter:
 
     @staticmethod
     def get_user_by_email(email):
-        user = User.query.filter_by(email=email)
-        if user:
-            return user.first()
-        else:
+        user = User.query.filter_by(email=email).first()
+        if not user:
             flash("User doesn't exist")
             return None
+        else:
+            return user
 
     @staticmethod
     def get_all_users():
@@ -464,6 +468,10 @@ class DataGetter:
                 'Tradeshow, Consumer Show, or Expo']
 
     @staticmethod
+    def get_event_licences():
+        return EVENT_LICENCES
+
+    @staticmethod
     def get_language_list():
         return [i[1] for i in LANGUAGE_LIST]
 
@@ -535,3 +543,4 @@ class DataGetter:
         return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
             .filter(Event.in_trash == False)
+

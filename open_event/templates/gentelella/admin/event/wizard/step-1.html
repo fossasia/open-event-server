@@ -4,9 +4,11 @@
             <input type="text" class="form-control" name="social[name]" placeholder="Name"
                    value="{{ social_link.name | default('Twitter', true) }}">
         </div>
+        <input type="hidden" name="social[id]" value="{{ social_link.id | default('') }}">
         <div class="col-sm-8 input-group">
-            <input type="text" class="form-control" name="social[link]" placeholder="Link"
+            <input data-error="Please enter a valid URL" type="url" class="form-control" name="social[link]" placeholder="Link"
                    value="{{ social_link.link | default('', true) }}">
+            <div class="help-block with-errors"></div>
             <span class="input-group-btn">
                 <button type="button" class="btn btn-danger remove-social-links">-</button>
                 <button type="button" class="btn btn-primary add-social-links">+</button>
@@ -31,7 +33,7 @@
 
         <div class="form-group">
             <label>Location</label>
-            <input value="{{ event.location_name | default('', true) }}" name="location_name" id="location"
+            <input value="{{ event.location_name | default('', true) }}" name="location_name" id="location_name"
                    placeholder="Location is required to make event live"
                    class="form-control col-md-7 col-xs-12"/>
         </div>
@@ -182,8 +184,58 @@
         <div class="item form-group">
             <label>Ticket URL
             </label>
-            <input name="ticket_url" class="form-control"
-                   value="{{ event.ticket_url | default('', true) }}"/>
+            <input type="url" pattern="https?://.+" name="ticket_url" class="form-control"
+                   value="{{ event.ticket_url | default('', true) }}" data-error="Please enter a valid URL"/>
+            <div class="help-block with-errors"></div>
+        </div>
+        <div class="item form-group">
+            <label>Copyright</label>
+            <input type="text" class="form-control" placeholder="Holder" name="copyright_holder" value="{{ event.copyright.holder | default('', true) }}"><br>
+            <input type="url" class="form-control" placeholder="Holder Link" name="copyright_holder_url" value="{{ event.copyright.holder_url | default('', true) }}"><br>
+            <input type="integer" class="form-control" placeholder="Year" name="copyright_year" value="{{ event.copyright.year | default('', true) }}">
+        </div>
+        <div class="item form-group">
+            <label>Licence <a class="btn btn-info btn-xs licence-help" data-toggle="licence-modal" data-target="#licence_modal">?</a></label>
+            <select name="copyright_licence" class="form-control">
+                <option value="">Choose Licence</option>
+                {{ event_licences }}
+                {% for licence in event_licences %}
+                    <option value="{{ licence }}" {{ "selected" if event and event.copyright.licence == licence else '' }}>
+                    {{ licence }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <!-- Licences Modal -->
+            <div id="licence_modal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Licences</h4>
+                      </div>
+                      <div class="modal-body">
+                      {% for licence_name, info in event_licences.iteritems() %}
+                         <div class="row">
+                             <div class="col-sm-9">
+                                <h5>{{ licence_name }}</h5>
+                                <p>{{ info.0 }}
+                                    {% if info.1 %}
+                                    <a href="{{ info.1 }}" target="_blank" style="color:#1a75ff;">Read more.</a>
+                                    {% endif %}
+                                </p>
+                             </div>
+                             <div class="col-sm-3">
+                            {% if info.2 %}
+                                <img src="{{ info.2 }}" alt="{{ licence_name }}" class="pull-right">
+                            {% endif %}
+                             </div>
+                         </div>
+                      {% endfor %}
+                      </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -323,7 +375,7 @@
     };
     var $latitudeInput = $('#latitude');
     var $longitudeInput = $('#longitude');
-    var $locationInput = $("#location");
+    var $locationInput = $("#location_name");
     function initPlacesApi() {
         var latitude = $latitudeInput.val();
         var longitude = $longitudeInput.val();
@@ -348,7 +400,7 @@
 
         $locationInput.valueChange(geocodeHandler);
 
-        autocomplete = new google.maps.places.Autocomplete((document.getElementById('location')), {types: ['geocode']});
+        autocomplete = new google.maps.places.Autocomplete($locationInput[0], {types: ['geocode']});
         geolocate();
 
         autocomplete.addListener('place_changed', geocodeHandler);
@@ -430,6 +482,9 @@
             sortField: 'text'
         });
 
+        $(".licence-help").click(function () {
+            $("#licence_modal").modal('show');
+        });
 
         var sub_topics = {{event_sub_topics|safe}};
 

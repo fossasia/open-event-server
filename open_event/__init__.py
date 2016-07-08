@@ -17,13 +17,11 @@ from flask.ext.login import current_user
 from flask import render_template
 from flask import request
 from flask.ext.jwt import JWT
-from datetime import timedelta, time, datetime
+from datetime import timedelta, datetime
+import humanize
 
 from icalendar import Calendar, Event
-import humanize
 import sqlalchemy as sa
-from urllib import urlencode
-from urlparse import parse_qs, urlsplit, urlunsplit
 
 from open_event.helpers.flask_helpers import SilentUndefined, camel_case, slugify
 from open_event.helpers.helpers import string_empty
@@ -155,6 +153,10 @@ def slugify_filter(s):
 @app.template_filter('humanize')
 def humanize_filter(time):
     return arrow.get(time).humanize()
+
+@app.template_filter('humanize_alt')
+def humanize_filter(time):
+    return humanize.naturaltime(datetime.now() - time)
 
 @app.context_processor
 def flask_helpers():

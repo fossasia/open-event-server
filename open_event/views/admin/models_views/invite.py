@@ -24,5 +24,6 @@ class InviteView(BaseView):
                 hash = DataGetter.get_invite_by_user_id(user.id).hash
                 link = url_for('event_sessions.new_view', event_id=event_id, user_id=user.id, hash=hash, _external=True)
                 Helper.send_email_invitation(email, event.name, link)
+                Helper.send_notif_invite_papers(user, event.name, link)
 
         return redirect(url_for('events.details_view', event_id=event_id))
