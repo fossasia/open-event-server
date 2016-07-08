@@ -175,6 +175,13 @@
                    value="{{ event.organizer_name | default('', true) }}"/>
         </div>
         <div class="item form-group">
+            <label>Organizer URL
+            </label>
+            <input name="organizer_url" class="form-control" type="url" pattern="https?://.+"
+                data-error="Please enter a valid URL" value="{{ event.organizer_url | default('', true) }}"/>
+            <div class="help-block with-errors"></div>
+        </div>
+        <div class="item form-group">
             <label>Organizer Description
             </label>
                 <textarea
@@ -189,10 +196,18 @@
             <div class="help-block with-errors"></div>
         </div>
         <div class="item form-group">
-            <label>Copyright</label>
-            <input type="text" class="form-control" placeholder="Holder" name="copyright_holder" value="{{ event.copyright.holder | default('', true) }}"><br>
-            <input type="url" class="form-control" placeholder="Holder Link" name="copyright_holder_url" value="{{ event.copyright.holder_url | default('', true) }}"><br>
-            <input type="integer" class="form-control" placeholder="Year" name="copyright_year" value="{{ event.copyright.year | default('', true) }}">
+            <label>Copyright Holder</label>
+            <input type="text" class="form-control" name="copyright_holder" value="{{ event.copyright.holder | default('', true) }}">
+        </div>
+        <div class="item form-group">
+            <label>Copyright Holder url</label>
+            <input type="url" class="form-control" name="copyright_holder_url" value="{{ event.copyright.holder_url | default('', true) }}" pattern="https?://.+" data-error="Please enter a valid URL">
+            <div class="help-block with-errors"></div>
+        </div>
+        <div class="item form-group">
+            <label>Copyright Year</label>
+            <input type="integer" class="form-control" name="copyright_year" value="{{ event.copyright.year | default('', true) }}" pattern="[0-9]{4,4}" data-error="Please enter a valid year">
+            <div class="help-block with-errors"></div>
         </div>
         <div class="item form-group">
             <label>Licence <a class="btn btn-info btn-xs licence-help" data-toggle="licence-modal" data-target="#licence_modal">?</a></label>
