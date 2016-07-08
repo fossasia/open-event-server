@@ -4,8 +4,7 @@ Register a mail here before using it
 """
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
     USER_REGISTER, PASSWORD_RESET, EVENT_ROLE, SESSION_ACCEPT_REJECT, \
-    SESSION_SCHEDULE, NEXT_EVENT, EVENT_PUBLISH
-
+    SESSION_SCHEDULE, NEXT_EVENT, EVENT_PUBLISH, AFTER_EVENT
 
 MAILS = {
     EVENT_PUBLISH: {
@@ -51,6 +50,15 @@ MAILS = {
             "Hi {email},<br/>" +
             "Here are the upcoming events: {up_coming_events} .Get ready!! " +
             "<br/> Visit this link to view the event: {link}"
+        )
+    },
+    AFTER_EVENT: {
+        'recipient': 'Organizer, Speaker',
+        'subject': 'Event {event_name} is over',
+        'message': (
+            "Hi {email},<br/>" +
+            "Thank You for participating in our event. We hope you enjoyed it. Please check the list of more upcoming events" +
+            "Here are the upcoming events: {up_coming_events} .Get ready!! "
         )
     },
     NEW_SESSION: {

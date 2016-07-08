@@ -543,3 +543,4 @@ class DataGetter:
         return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
             .filter(Event.in_trash == False)
+
