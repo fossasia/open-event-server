@@ -9,7 +9,7 @@ footer{
 
 footer h4 {
     font-size: 16px;
-    color: #45494E
+    color: #AAAAAA;
 }
 
 footer ul
@@ -27,23 +27,70 @@ footer ul li
 
 footer ul a, footer a:hover, footer ul a:hover {
     color: white;
-    color: #D2D6DF
+}
+
+footer .row {
+    margin:0;
+    padding:10px;
 }
 
 #footer-menu{
-    height: 80px;
-    border-top: 1px solid #666A73;
-    border-bottom: 1px solid #666A73;
+    height: auto;
+    border-top: 1px solid #AAAAAA;
+    border-bottom: 1px solid #AAAAAA;
 
 }
 
 #footer-menu select {margin-top: 10px}
 
 
-#footer-menu a{color: #666A73; font-size: 16px; margin: 10px; line-height: 55px}
+#footer-menu a{color: white; font-size: 16px; margin: 10px; line-height: 55px}
+
 footer .copyright{
     text-align: center;
-    color:#666A73;
+    color:#AAAAAA;
     margin-top: 10px}
 
-#footer-menu select {background: #282C35; border-color:#666A73; color: #666A73  }
+#footer-menu select {background: #282C35; border-color:#AAAAAA; color: #AAAAAA  }
+
+.footer-dropdown {
+    border: 1px solid #AAAAAA;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px 16px;
+    background: #282C35;
+    color: #AAAAAA;
+    margin-top: 5px;
+    text-align: left;
+}
+
+.footer-dropdown .dropdown-text {
+    margin-left: 10px;
+}
+
+.footer-dropdown .fa-chevron-down {
+    float:right;
+}
+
+footer .dropdown-menu {
+    width:100%;
+}
+
+@media (max-width: 991px) {
+    #footer-menu {
+        border: 0;
+        height: auto;
+        text-align: center;
+    }
+    .hide-large {
+        display: inline !important;
+    }
+    .dropup {
+        min-width:250px;
+        margin-top: 25px;
+    }
+    #footer-menu a{
+        line-height: 1.9;
+    }
+}

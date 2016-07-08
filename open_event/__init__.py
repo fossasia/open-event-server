@@ -17,15 +17,13 @@ from flask.ext.login import current_user
 from flask import render_template
 from flask import request
 from flask.ext.jwt import JWT
-from datetime import timedelta, time
+from datetime import timedelta, datetime
+import humanize
 
 from icalendar import Calendar, Event
-import humanize
 import sqlalchemy as sa
-from urllib import urlencode
-from urlparse import parse_qs, urlsplit, urlunsplit
 
-from open_event.helpers.flask_helpers import SilentUndefined
+from open_event.helpers.flask_helpers import SilentUndefined, camel_case, slugify
 from open_event.helpers.helpers import string_empty
 from open_event.models import db
 from open_event.models.user import User
@@ -34,6 +32,8 @@ from helpers.jwt import jwt_authenticate, jwt_identity
 from helpers.formatter import operation_name
 from open_event.helpers.data_getter import DataGetter
 from open_event.views.api_v1_views import app as api_v1_routes
+from open_event.views.sitemap import app as sitemap_routes
+from open_event.settings import get_settings
 import requests
 
 
@@ -47,6 +47,7 @@ def create_app():
     event = Event()
 
     app.register_blueprint(api_v1_routes)
+    app.register_blueprint(sitemap_routes)
     migrate = Migrate(app, db)
 
     app.config.from_object(environ.get('APP_CONFIG', 'config.ProductionConfig'))
@@ -141,25 +142,32 @@ def pretty_name_filter(s):
     s = s.title()
     return s
 
+@app.template_filter('camel_case')
+def camel_case_filter(s):
+    return camel_case(s)
+
+@app.template_filter('slugify')
+def slugify_filter(s):
+    return slugify(s)
+
 @app.template_filter('humanize')
 def humanize_filter(time):
     return arrow.get(time).humanize()
 
+@app.template_filter('humanize_alt')
+def humanize_filter(time):
+    return humanize.naturaltime(datetime.now() - time)
+
 @app.context_processor
-def pagination_helpers():
-    def set_query_parameter(param_name, param_value, url=request.url):
-        """Given a URL, set or replace a query parameter and return the
-        modified URL.
-        """
-        scheme, netloc, path, query_string, fragment = urlsplit(url)
-        query_params = parse_qs(query_string)
+def flask_helpers():
+    def string_empty(string):
+        from open_event.helpers.helpers import string_empty
+        return string_empty(string)
 
-        query_params[param_name] = [param_value]
-        new_query_string = urlencode(query_params, doseq=True)
+    def current_date(format='%a, %B %d %I:%M %p', **kwargs):
+        return (datetime.now() + timedelta(**kwargs)).strftime(format)
 
-        return urlunsplit((scheme, netloc, path, new_query_string, fragment))
-
-    return dict(set_query_parameter=set_query_parameter)
+    return dict(string_empty=string_empty, current_date=current_date)
 
 @app.context_processor
 def versioning_manager():
@@ -198,14 +206,19 @@ def versioning_manager():
                 side_by_side_diff=side_by_side_diff,
                 get_user_name=get_user_name)
 
+
 # http://stackoverflow.com/questions/26724623/
 @app.before_request
 def track_user():
     if current_user.is_authenticated:
         current_user.update_lat()
 
-
 current_app, manager, database, jwt = create_app()
+
+
+@app.before_first_request
+def set_secret():
+    current_app.secret_key = get_settings()['secret']
 
 
 if __name__ == '__main__':

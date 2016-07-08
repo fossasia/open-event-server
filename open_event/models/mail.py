@@ -12,7 +12,8 @@ PASSWORD_RESET = 'Reset Password'
 EVENT_ROLE = 'Event Role Invitation'
 SESSION_ACCEPT_REJECT = 'Session Accept or Reject'
 SESSION_SCHEDULE = 'Session Schedule Change'
-
+EVENT_PUBLISH = 'Event Published'
+AFTER_EVENT = 'After Event'
 
 class Mail(db.Model):
     __tablename__ = 'mails'

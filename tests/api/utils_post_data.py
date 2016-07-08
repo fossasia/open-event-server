@@ -3,17 +3,16 @@ This file contains sample POST data
 """
 
 POST_EVENT_DATA = {
-    "color": "red",
     "email": "event@gmail.com",
     "end_time": "2016-05-30T12:12:43",
     "timezone": "UTC",
     "latitude": 0,
     "location_name": "Berlin",
-    "logo": "http://imgur.com/image.png",
+    "logo": "",
     "longitude": 0,
     "name": "TestEvent",
     'event_url': "http://site.com",
-    'background_url': "http://imgur.com/image.png",
+    'background_url': "",
     'description': "blah blah",
     "start_time": "2016-05-25T12:12:43",
     "closing_datetime": "2016-05-22T12:12:43",
@@ -22,10 +21,24 @@ POST_EVENT_DATA = {
     "state": "pending",
     "type": "Conference",
     "topic": "Science & Technology",
+    "sub_topic": "Other",
     "privacy": "public",
     "ticket_url": "http://site.com/tickets",
     "code_of_conduct": "Thou shalt be kind",
-    "schedule_published_on": None
+    "schedule_published_on": None,
+    "copyright": {
+        "holder": "FOSSASIA",
+        "holder_url": "http://fossasia.org",
+        "licence": "Test licence",
+        "licence_url": "http://example.com",
+        "year": 2016,
+        "logo": ""
+    }
+}
+
+POST_SOCIAL_LINK_DATA = {
+    "name": "TestSocialLink",
+    "link": "http://example.com"
 }
 
 POST_MICROLOCATION_DATA = {
@@ -53,6 +66,11 @@ POST_SESSION_DATA = {
     "audio": "http://example.com/audio",
     "signup_url": "http://example.com/signup",
     "session_type_id": None
+}
+
+POST_SESSION_TYPE_DATA = {
+    'name': 'TestSessionType',
+    'length': '5.12'
 }
 
 POST_SPEAKER_DATA = {

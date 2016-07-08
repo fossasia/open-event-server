@@ -19,20 +19,20 @@ SPEAKER_SESSION = api.model('SpeakerSession', {
 
 SPEAKER = api.model('Speaker', {
     'id': fields.Integer(required=True),
-    'name': fields.String(),
-    'photo': fields.ImageUri(),
+    'name': fields.String(required=True),
+    'photo': fields.Upload(),
     'short_biography': fields.String(),
     'long_biography': fields.String(),
-    'email': fields.Email(),
+    'email': fields.Email(required=True),
     'mobile': fields.String(),
     'website': fields.Uri(),
     'twitter': fields.String(),  # not sure for now whether uri or string field
     'facebook': fields.String(),
     'github': fields.String(),
     'linkedin': fields.String(),
-    'organisation': fields.String(),
+    'organisation': fields.String(required=True),
     'position': fields.String(),
-    'country': fields.String(),
+    'country': fields.String(required=True),
     'sessions': fields.List(fields.Nested(SPEAKER_SESSION)),
 })
 
@@ -52,14 +52,16 @@ class SpeakerDAO(ServiceDAO):
         return ServiceDAO.create(self, event_id, data, url, validate=False)
 
     def update(self, event_id, service_id, data):
-        data = self.validate(data, event_id)
+        data = self.validate(data, event_id, False)
         return ServiceDAO.update(self, event_id, service_id, data, validate=False)
 
-    def validate(self, data, event_id, model=None):
+    def validate(self, data, event_id, check_required=True):
         form = DataGetter.get_custom_form_elements(event_id)
+        model = None
         if form:
             model = model_custom_form(form.speaker_form, self.post_api_model)
-        return ServiceDAO.validate(self, data, model)
+        return ServiceDAO.validate(
+            self, data, model, check_required=check_required)
 
 DAO = SpeakerDAO(SpeakerModel, SPEAKER_POST)
 
@@ -117,7 +119,6 @@ class SpeakerListPaginated(Resource, PaginatedResourceBase):
         """List speakers in a paginated manner"""
         return get_paginated_list(
             SpeakerModel,
-            self.api.url_for(self, event_id=event_id),
             args=self.parser.parse_args(),
             event_id=event_id
         )

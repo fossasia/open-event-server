@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/switchery/dist/switchery.min.css') }}"/>
     <link rel="stylesheet"
           href="{{ url_for('static', filename='admin/lib/selectize/dist/css/selectize.bootstrap3.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/Croppie/croppie.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
 {% endblock %}
 {% block head_js %}
@@ -31,14 +32,15 @@
                 <button type="button" class="btn btn-default next-step">Next <i class="fa fa-chevron-right"></i>
                 </button>
             {% endif %}
-
-        </div>
-        <button type="button" class="btn btn-lg btn-default save-event">Save</button>
+            <button type="button" class="btn btn-default save-event">Save</button>
         {% if event and event.state == 'Published' and not is_copy %}
             <button type="button" class="btn btn-lg btn-danger publish-unpublish-event">Unpublish event</button>
         {% else %}
             <button type="button" class="btn btn-lg btn-success publish-unpublish-event">Make your event live</button>
         {% endif %}
+
+        </div>
+        
     </div>
 {% endmacro %}
 
@@ -162,5 +164,7 @@
     <script src="{{ url_for('static', filename='admin/lib/bootstrap-validator/dist/validator.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/selectize/dist/js/standalone/selectize.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/Croppie/croppie.min.js') }}"></script>
+
     <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/event_wizard.js') }}"></script>
 {% endblock %}

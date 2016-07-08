@@ -8,32 +8,30 @@ Users
 
 {% block head_css %}
 {{ super() }}
+ <style type="text/css">
+    #event-tabs {
+        position: absolute;
+        background: transparent;
+        top: 9px;
+        width: auto;
+    }
+
+    table.table {
+        margin-top: 20px !important;
+    }
+    </style>
 {% endblock %}
 
-
-{% block content %}
-
-
-<table class="table table-striped with-datatable">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Status</th>
-        <th>System Roles</th>
-        <th>Event Roles</th>
-        <th>Member Since</th>
-        <th>Last Access</th>
-        <th>Options</th>
-
-    </tr>
-    </thead>
-    <tbody>
-    {% for user in user_list %}
+{% macro users_row(user_list) %}
+       {% for user in user_list %}
     <tr>
         <td>{{ 'Not Available' if not user['user'].user_detail.fullname else user['user'].user_detail.fullname }}</td>
         <td>{{ user['user'].email }}</td>
-        <td>{{ 'Active' if user['user'].is_active() else 'Inactive' }}</td>
+        {% if user['user'].in_trash == False %}
+        <td>Active</td>
+        {% else %}
+        <td>Deleted</td>
+        {% endif %}
         <td>
           <ul style="padding-left:0;">
           {% if user['user'].is_super_admin %}
@@ -42,6 +40,13 @@ Users
           {% if user['user'].is_admin %}
             <li>Admin</li>
           {% endif %}
+              <li>
+                  {% if user['user'].is_verified %}
+                      Registered User
+                  {% else %}
+                      Unverified User
+                  {% endif %}
+              </li>
           </ul>
         </td>
         <td>
@@ -63,18 +68,102 @@ Users
             <a data-toggle="tooltip" data-placement="top" class="btn btn-default" href="{{ get_url('sadmin_users.details_view', user_id=user['user'].id)}}" title="View details">
                 <i class="glyphicon glyphicon-eye-open"></i>
             </a>
+            {% if user['user'].in_trash == False %}
+            <a data-toggle="tooltip" data-placement="top" class="btn btn-default" onclick="return confirm('Are you sure you want to delete this record?');"
+               href="{{ get_url('sadmin_users.trash_view', user_id=user['user'].id)}}" title="Delete record">
+                <i class="glyphicon glyphicon-trash"></i>
+            </a>
+            {% endif %}
+            {% if user['user'].in_trash == True %}
             <a data-toggle="tooltip" data-placement="top" class="btn btn-default" onclick="return confirm('Are you sure you want to delete this record?');"
                href="{{ get_url('sadmin_users.delete_view', user_id=user['user'].id)}}" title="Delete record">
                 <i class="glyphicon glyphicon-trash"></i>
             </a>
+            {% endif %}
+            {% if user['user'].in_trash == True %}
+                            <a class="btn btn-success" href="{{ get_url('sadmin_users.restore_view', user_id=user['user'].id)}}"
+                               data-toggle="tooltip" data-placement="top"
+                               title="Restore User">
+                                <i>Restore User</i>
+                            </a>
+            {% endif %}
         </div>
-
-
         </td>
     </tr>
     {%endfor%}
-    </tbody>
-</table>
+{% endmacro %}
+
+{% block content %}
+<div>
+    <ul id="event-tabs" class="nav nav-tabs bar_tabs" role="tablist">
+            <li class="active"><a href="#tab_content1" id="all-users-tab" data-toggle="tab">All Users</a></li>
+            <li class=""><a href="#tab_content1" id="live-users-tab" data-toggle="tab">Active Users</a></li>
+            <li class=""><a href="#tab_content2" id="deleted-users-tab" data-toggle="tab">Deleted Users</a></li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="tab_content0"
+                 aria-labelledby="all-users-tab">
+                <table class="table table-striped no-global-dt" id="all_users_table">
+                    <thead>
+                   <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>System Roles</th>
+                        <th>Event Roles</th>
+                        <th>Member Since</th>
+                        <th>Last Access</th>
+                        <th>Options</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {{ users_row(all_user_list) }}
+                    </tbody>
+                </table>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="tab_content1"
+                 aria-labelledby="live-users-tab">
+                <table class="table table-striped no-global-dt" id="active_users_table">
+                    <thead>
+                   <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>System Roles</th>
+                        <th>Event Roles</th>
+                        <th>Member Since</th>
+                        <th>Last Access</th>
+                        <th>Options</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {{ users_row(active_user_list) }}
+                    </tbody>
+                </table>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="tab_content2"
+                 aria-labelledby="deleted-users-tab">
+                <table class="table table-striped no-global-dt" id="deleted_users_table">
+                     <thead>
+                   <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>System Roles</th>
+                        <th>Event Roles</th>
+                        <th>Member Since</th>
+                        <th>Last Access</th>
+                        <th>Options</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {{ users_row(trash_user_list) }}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+</div>
+
           <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -112,6 +201,36 @@ Users
             var userId = $(this).data('user-id');
             $("#importModal").find("form").attr("action","/admin/users/" + userId + "/edit/");
         });
+        $('#active_users_table').dataTable({
+        "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+        "lengthMenu": [25, 50, 100, 200],
+        "pageLength": 50,
+        "language": {
+            "lengthMenu": "Show _MENU_ Users"
+          },
+        /* Disable initial sort */
+        "aaSorting": []
+    });
+    $('#deleted_users_table').dataTable({
+        "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+        "lengthMenu": [25, 50, 100, 200],
+        "pageLength": 50,
+        "language": {
+            "lengthMenu": "Show _MENU_ Users"
+        },
+        /* Disable initial sort */
+        "aaSorting": []
+    });
+    $('#all_users_table').dataTable({
+        "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+        "lengthMenu": [25, 50, 100, 200],
+        "pageLength": 50,
+        "language": {
+            "lengthMenu": "Show _MENU_ Users",
+        },
+        /* Disable initial sort */
+        "aaSorting": []
+    });
     </script>
 {% endblock %}
 

@@ -4,9 +4,11 @@
             <input type="text" class="form-control" name="social[name]" placeholder="Name"
                    value="{{ social_link.name | default('Twitter', true) }}">
         </div>
+        <input type="hidden" name="social[id]" value="{{ social_link.id | default('') }}">
         <div class="col-sm-8 input-group">
-            <input type="text" class="form-control" name="social[link]" placeholder="Link"
+            <input data-error="Please enter a valid URL" type="url" class="form-control" name="social[link]" placeholder="Link"
                    value="{{ social_link.link | default('', true) }}">
+            <div class="help-block with-errors"></div>
             <span class="input-group-btn">
                 <button type="button" class="btn btn-danger remove-social-links">-</button>
                 <button type="button" class="btn btn-primary add-social-links">+</button>
@@ -31,7 +33,7 @@
 
         <div class="form-group">
             <label>Location</label>
-            <input value="{{ event.location_name | default('', true) }}" name="location_name" id="location"
+            <input value="{{ event.location_name | default('', true) }}" name="location_name" id="location_name"
                    placeholder="Location is required to make event live"
                    class="form-control col-md-7 col-xs-12"/>
         </div>
@@ -101,25 +103,69 @@
             <textarea name="description"
                       class="form-control">{{ event.description | default('', true) }}</textarea>
         </div>
+        <input type="hidden" name="background_url" id="background_url">
 
-        <div class="item form-group">
-            <label>Background image URL
-            </label>
-            <input value="{{ event.background_url | default('', true) }}" name="background_url"
-                   class="form-control"/>
+        <div class="item form-group" id="image-upload-group"
+             {% if event and event.background_url and event.background_url != '' %}style="display: none;"{% endif %}>
+            <label>Event Image</label><br>
+            <input type="file" id="event-image-upload" name="event-image-upload" class="upload-btn no-js"
+                   accept="image/*"/>
+            <label class="file-label" for="event-image-upload" style="margin-top: 0;">
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Event Image
+            </label><br>
+            <span class="text-muted" style="color: #a2a2a2;">
+                We recommend using at least a 2160x1080px (2:1 ratio) image<br>that's no larger than 10MB.
+            </span>
         </div>
 
-        <div class="item form-group">
-            <label>Logo URL
-            </label>
-            <input value="{{ event.logo | default('', true) }}" name="logo"
-                   class="form-control"/>
+        <div class="item form-group" id="image-view-group"
+             {% if not event or not event.background_url or event.background_url == '' %}style="display: none;"{% endif %}>
+            <label>Event Image</label><br>
+            <img src="{{ event.background_url | default('', true) }}" style="width: 350px; height: 175px;"><br><br>
+            {% if not event %}
+                <button type="button" class="btn btn-sm btn-default" data-target="#cropper-modal" data-toggle="modal">
+                    <i class="fa fa-arrows" aria-hidden="true"></i>
+                    Adjust
+                </button>
+            {% endif %}
+            <button type="button" class="btn btn-sm btn-default" id="remove-image-btn">
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                Remove
+            </button>
+            <br>
+        </div>
+
+        <input type="hidden" name="logo" id="logo">
+
+        <div class="item form-group" id="logo-upload-group"
+             {% if event and event.logo and event.logo != '' %}style="display: none;"{% endif %}>
+            <label>Logo</label><br>
+            <input type="file" id="logo-upload" name="logo-upload" class="upload-btn no-js"
+                   accept="image/*"/>
+            <label class="file-label" for="logo-upload" style="margin-top: 0;">
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Logo
+            </label><br>
+            <span class="text-muted" style="color: #a2a2a2;">
+                Logo size must be less than 1MB.
+            </span>
+        </div>
+
+        <div class="item form-group" id="logo-view-group"
+             {% if not event or not event.logo or event.logo == '' %}style="display: none;"{% endif %}>
+            <label>Logo</label><br>
+            <img src="{{ event.logo | default('', true) }}" style="width: 350px;"><br><br>
+            <button type="button" class="btn btn-sm btn-default" id="remove-logo-btn">
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                Remove
+            </button>
+            <br>
         </div>
 
         <div class="item form-group">
             <label>Event Url</label>
-            <input value="{{ event.event_url | default('', true) }}" name="event_url"
-                   class="form-control"/>
+            <input type="url" pattern="https?://.+" value="{{ event.event_url | default('', true) }}" name="event_url"
+                   class="form-control" data-error="Please enter a valid URL"/>
+            <div class="help-block with-errors"></div>
         </div>
 
         <div class="item form-group">
@@ -138,8 +184,58 @@
         <div class="item form-group">
             <label>Ticket URL
             </label>
-            <input name="ticket_url" class="form-control"
-                   value="{{ event.ticket_url | default('', true) }}"/>
+            <input type="url" pattern="https?://.+" name="ticket_url" class="form-control"
+                   value="{{ event.ticket_url | default('', true) }}" data-error="Please enter a valid URL"/>
+            <div class="help-block with-errors"></div>
+        </div>
+        <div class="item form-group">
+            <label>Copyright</label>
+            <input type="text" class="form-control" placeholder="Holder" name="copyright_holder" value="{{ event.copyright.holder | default('', true) }}"><br>
+            <input type="url" class="form-control" placeholder="Holder Link" name="copyright_holder_url" value="{{ event.copyright.holder_url | default('', true) }}"><br>
+            <input type="integer" class="form-control" placeholder="Year" name="copyright_year" value="{{ event.copyright.year | default('', true) }}">
+        </div>
+        <div class="item form-group">
+            <label>Licence <a class="btn btn-info btn-xs licence-help" data-toggle="licence-modal" data-target="#licence_modal">?</a></label>
+            <select name="copyright_licence" class="form-control">
+                <option value="">Choose Licence</option>
+                {{ event_licences }}
+                {% for licence in event_licences %}
+                    <option value="{{ licence }}" {{ "selected" if event and event.copyright.licence == licence else '' }}>
+                    {{ licence }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <!-- Licences Modal -->
+            <div id="licence_modal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Licences</h4>
+                      </div>
+                      <div class="modal-body">
+                      {% for licence_name, info in event_licences.iteritems() %}
+                         <div class="row">
+                             <div class="col-sm-9">
+                                <h5>{{ licence_name }}</h5>
+                                <p>{{ info.0 }}
+                                    {% if info.1 %}
+                                    <a href="{{ info.1 }}" target="_blank" style="color:#1a75ff;">Read more.</a>
+                                    {% endif %}
+                                </p>
+                             </div>
+                             <div class="col-sm-3">
+                            {% if info.2 %}
+                                <img src="{{ info.2 }}" alt="{{ licence_name }}" class="pull-right">
+                            {% endif %}
+                             </div>
+                         </div>
+                      {% endfor %}
+                      </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -206,7 +302,7 @@
         <div class="item form-group">
             <label class="control-label">Event Topic
             </label>
-            <select class="form-control" name='topic'>
+            <select class="form-control" id="topic" name='topic'>
                 {% if not event or not event.topic %}
                     <option value="">Choose..</option>
                 {% endif %}
@@ -217,15 +313,53 @@
         </div>
 
         <div class="item form-group">
+            <label class="control-label">Event Sub-Topic
+            </label>
+            <select class="form-control" id="sub_topic" name='sub_topic'>
+                {% if not event or not event.sub_topic %}
+                    <option value="">Choose..</option>
+                {% endif %}
+                {% for sub_topic in event_sub_topics %}
+                    <option value="{{ sub_topic }}" {{ "selected" if event and event.sub_topic == sub_topic else '' }}>{{ sub_topic }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="item form-group">
             <label>Code of Conduct
             </label>
-                <textarea name="code_of_conduct" class="form-control">{{ event.code_of_conduct | default('', true) }}</textarea>
+            <textarea name="code_of_conduct"
+                      class="form-control">{{ event.code_of_conduct | default('', true) }}</textarea>
         </div>
 
     </div>
     <input type="hidden" name="latitude" id="latitude" value="{{ event.latitude | default(0.00, true) }}"/>
     <input type="hidden" name="longitude" id="longitude" value="{{ event.longitude | default(0.00, true) }}"/>
 
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="cropper-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Crop your image</h4>
+            </div>
+            <div class="modal-body">
+                <div id="upload-cropper">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="save-crop" class="btn btn-success">Done</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
 <script>
     var marker;
@@ -241,7 +375,7 @@
     };
     var $latitudeInput = $('#latitude');
     var $longitudeInput = $('#longitude');
-    var $locationInput = $("#location");
+    var $locationInput = $("#location_name");
     function initPlacesApi() {
         var latitude = $latitudeInput.val();
         var longitude = $longitudeInput.val();
@@ -266,7 +400,7 @@
 
         $locationInput.valueChange(geocodeHandler);
 
-        autocomplete = new google.maps.places.Autocomplete((document.getElementById('location')), {types: ['geocode']});
+        autocomplete = new google.maps.places.Autocomplete($locationInput[0], {types: ['geocode']});
         geolocate();
 
         autocomplete.addListener('place_changed', geocodeHandler);
@@ -323,6 +457,7 @@
         }
     }
 
+    var $uploadCropper = $('#upload-cropper');
     $(document).ready(function () {
 
         $('.time').timepicker({
@@ -346,6 +481,120 @@
             create: false,
             sortField: 'text'
         });
+
+        $(".licence-help").click(function () {
+            $("#licence_modal").modal('show');
+        });
+
+        var sub_topics = {{event_sub_topics|safe}};
+
+        var $topic = $("#topic");
+        var $subTopic = $('#sub_topic');
+        $topic.change(function () {
+            $subTopic.find('option').remove().end().append('<option value="">Choose..</option>');
+            $.each(sub_topics[$(this).val()], function () {
+                $subTopic.append($("<option />").val(this).text(this));
+            });
+        });
+
+        if ($topic.val() !== "") {
+            $subTopic.find('option').remove().end().append('<option value="">Choose..</option>');
+
+            $.each(sub_topics[$topic.val()], function () {
+                $subTopic.append($("<option />").val(this).text(this));
+            });
+            $subTopic.val("{{event.sub_topic}}");
+        }
+
+
+        $uploadCropper = $('#upload-cropper').croppie({
+            viewport: {
+                width: 490,
+                height: 245,
+                type: 'square'
+            },
+            boundary: {
+                width: 508,
+                height: 350
+            }
+        });
+
+        $("#event-image-upload").unbind("change").on('change', function () {
+            var input = this;
+            if (input.files && input.files[0]) {
+                if (input.files[0].size > 10485760) {
+                    createSnackbar("Image must be less than 10 MB in size");
+                    resetFormElement(input);
+                } else {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $("#cropper-modal").modal("show");
+                        $uploadCropper.croppie('bind', {
+                            url: e.target.result
+                        });
+
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            else {
+                logError("No FileReader support");
+            }
+
+        });
+
+        $("#logo-upload").unbind("change").on('change', function () {
+            var input = this;
+            if (input.files && input.files[0]) {
+                if (input.files[0].size > 1048576) {
+                    createSnackbar("Image must be less than 1 MB in size");
+                    resetFormElement(input);
+                } else {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        resetFormElement(input);
+                        $("#logo").val(e.target.result);
+                        $("#logo-view-group").show().find("img").attr("src", e.target.result);
+                        $("#logo-upload-group").hide();
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            else {
+                logError("No FileReader support");
+            }
+
+        });
+    });
+
+    $("#save-crop").click(function () {
+        $uploadCropper.croppie('result', {
+            type: 'canvas',
+            size: 'original'
+        }).then(function (resp) {
+            $("#background_url").val(resp);
+            $("#image-view-group").show().find("img").attr("src", resp);
+            $("#image-upload-group").hide();
+            $('#cropper-modal').modal('hide')
+        });
+    });
+
+    $("#remove-image-btn").click(function () {
+        $("#image-view-group").hide();
+        $("#image-upload-group").show();
+        $("#background_url").val('');
+    });
+
+    $("#remove-logo-btn").click(function () {
+        $("#logo-view-group").hide();
+        $("#logo-upload-group").show();
+        $("#logo").val('');
+    });
+
+    $('#cropper-modal').on('shown.bs.modal', function (e) {
+        $uploadCropper.croppie('bind');
+        resetFormElement($("#event-image-upload"));
+
     });
 
     $(document).on("click", '.add-social-links', function () {
@@ -359,6 +608,12 @@
             $(this).closest(".social-link-holder").remove();
         }
     });
+
+    function resetFormElement(e) {
+        e = $(e);
+        e.wrap('<form>').closest('form').get(0).reset();
+        e.unwrap();
+    }
 
 </script>
 

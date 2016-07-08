@@ -2,6 +2,7 @@
 
 {% set textarea_speaker_fields = ['short_biography', 'long_biography'] %}
 {% set media_speaker_fields = ['photo'] %}
+{% set url_speaker_fields = ['website', 'facebook', 'twitter', 'github', 'linkedin'] %}
 
 {% set speaker_fields = ['name', 'email','photo', 'organisation', 'position', 'country', 'short_biography', 'long_biography', 'mobile', 'website', 'facebook', 'twitter', 'github', 'linkedin'] %}
 
@@ -19,7 +20,7 @@
             <textarea {% if require==1 %}
                 required="required"
             {% endif %}
-                name="{{ identifier }}" class="form-control col-md-7 col-xs-12">{{ speaker[identifier] | default('', true) }}</textarea>
+                name="{{ identifier }}" class="form-control col-md-7 col-xs-12">{% if speaker %}{{ speaker[identifier] }}{% elif speakers %}{{ speakers[0][identifier] }}{% endif %}</textarea>
         {% elif identifier in media_speaker_fields %}
             <br><input {% if require==1 %}
             required="required"
@@ -33,15 +34,19 @@
             <input {% if require==1 %}
                 required="required"
             {% endif %}
+            {% if identifier in url_speaker_fields %}
+                type="url" pattern="https?://.+"
+            {% endif %}
                 name="{{ "email-old" if identifier=="email" and email_disabled else identifier }}"
                     {% if identifier=="email" %}
                         {% if email_disabled %}
                             value="{{ current_user.email }}" disabled
                         {% else %}
-                            value="{{ speaker[identifier] | default('', true) }}"
+                            value="{% if speaker %}{{ speaker[identifier] }}{% elif speakers %}{{ speakers[0][identifier] }}{% endif %} "
                         {% endif %}
+                        type="email"
                     {% else %}
-                        value="{{ speaker[identifier] | default('', true) }}"
+                        value="{% if speaker %}{{ speaker[identifier] }}{% elif speakers %}{{ speakers[0][identifier] }}{% endif %}"
                     {% endif %}
                 class="form-control col-md-7 col-xs-12"/>
             {% if identifier=="email" %}

@@ -1,9 +1,27 @@
 import os
+from shutil import copyfile
+
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 
 from open_event.settings import get_settings
 
+
+class UploadedFile(object):
+
+    def __init__(self, file_path, filename):
+        self.file_path = file_path
+        self.filename = filename
+        self.file = open(file_path)
+
+    def save(self, new_path):
+        copyfile(self.file_path, new_path)
+
+    def read(self):
+        return self.file.read()
+
+    def __exit__(self, *args, **kwargs):
+        self.file.close()
 
 def upload(file, key, **kwargs):
     """
@@ -13,8 +31,9 @@ def upload(file, key, **kwargs):
     bucket_name = get_settings()['aws_bucket_name']
     aws_key = get_settings()['aws_key']
     aws_secret = get_settings()['aws_secret']
+    storage_place = get_settings()['storage_place']
     # upload
-    if bucket_name and aws_key and aws_secret:
+    if bucket_name and aws_key and aws_secret and storage_place == 's3':
         return upload_to_aws(bucket_name, aws_key, aws_secret, file, key, **kwargs)
     else:
         return upload_local(file, key, **kwargs)

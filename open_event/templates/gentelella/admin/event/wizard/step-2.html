@@ -14,8 +14,13 @@
                    class="form-control col-md-7 col-xs-12"/></td>
         <td><input name="sponsors[type]" class="form-control col-md-7 col-xs-12"
                    value="{{ sponsor.sponsor_type | default('', true) }}"/></td>
-        <td><input value="{{ sponsor.url | default('') }}" name="sponsors[url]"
-                   class="form-control col-md-7 col-xs-12"/></td>
+        <td>
+            <div class="form-group">
+                <input type="url" value="{{ sponsor.url | default('') }}" name="sponsors[url]"
+                   class="form-control col-md-7 col-xs-12" data-error="Please enter a valid URL"/>
+                <div class="help-block with-errors"></div>
+            </div>
+        </td>
         <td><textarea name="sponsors[description]"
                   class="form-control col-md-7 col-xs-12">{{ sponsor.description }}</textarea></td>
         <td><span class="glyphicon glyphicon-remove remove-sponsor" style="display:none;cursor: pointer;"></span></td>
@@ -52,6 +57,7 @@
         </span>
     </div>
 </div>
+<script src="{{ url_for('static', filename='admin/lib/bootstrap-validator/dist/validator.min.js') }}"></script>
 <script type="text/javascript">
     var sponsor_counter = 1;
     $(document).on("click", ".add-sponsor", function () {
@@ -73,7 +79,7 @@
         $('.sponsors').find('.row-sponsor td:nth-child(1)').each(function() {
             $(this).text(ctr);
             ctr += 1;
-        })
+        });
         if (sponsor_counter == 1) {
             $('.remove-sponsor').hide();
         }

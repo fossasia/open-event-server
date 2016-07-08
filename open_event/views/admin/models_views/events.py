@@ -10,10 +10,11 @@ from flask_admin import expose
 from open_event import db
 from open_event.helpers.permission_decorators import *
 from open_event.helpers.helpers import fields_not_empty, string_empty
-from ....helpers.data import DataManager, save_to_db, record_activity, delete_from_db
+from ....helpers.data import DataManager, save_to_db, record_activity, delete_from_db, restore_event
 from ....helpers.data_getter import DataGetter
 from werkzeug.datastructures import ImmutableMultiDict
-
+from open_event.helpers.helpers import send_event_publish
+from open_event.models.event import Event
 
 def is_verified_user():
     return login.current_user.is_verified
@@ -34,6 +35,9 @@ class EventsView(BaseView):
         draft_events = DataGetter.get_draft_events()
         past_events = DataGetter.get_past_events()
         all_events = DataGetter.get_all_events()
+        if not is_verified_user():
+            flash("Your account is unverified. "
+                  "Please verify by clicking on the confirmation link that has been emailed to you.")
         return self.render('/gentelella/admin/event/index.html',
                            live_events=live_events,
                            draft_events=draft_events,
@@ -67,7 +71,9 @@ class EventsView(BaseView):
             '/gentelella/admin/event/new/new.html',
             start_date=datetime.datetime.now() + datetime.timedelta(days=10),
             event_types=DataGetter.get_event_types(),
+            event_licences=DataGetter.get_event_licences(),
             event_topics=DataGetter.get_event_topics(),
+            event_sub_topics=DataGetter.get_event_subtopics(),
             timezones=DataGetter.get_all_timezones())
 
     @expose('/<int:event_id>/', methods=('GET', 'POST'))
@@ -140,7 +146,8 @@ class EventsView(BaseView):
         checklist["5"] = 'success'
         if not is_verified_user():
             flash("To make your event live, please verify your email by "
-                  "clicking on the confirmation link sent to you.")
+                  "clicking on the confirmation link that has been emailed to you.")
+
         return self.render('/gentelella/admin/event/details/details.html',
                            event=event,
                            checklist=checklist)
@@ -189,7 +196,9 @@ class EventsView(BaseView):
                                call_for_speakers=call_for_speakers,
                                sponsors=sponsors,
                                event_types=DataGetter.get_event_types(),
+                               event_licences=DataGetter.get_event_licences(),
                                event_topics=DataGetter.get_event_topics(),
+                               event_sub_topics=DataGetter.get_event_subtopics(),
                                preselect=preselect,
                                timezones=DataGetter.get_all_timezones(),
                                step=step,
@@ -222,13 +231,30 @@ class EventsView(BaseView):
 
             return redirect(url_for('.details_view', event_id=event_id))
 
-    @expose('/<event_id>/delete/', methods=('GET',))
+    @expose('/<event_id>/trash/', methods=('GET',))
     @can_access
+    def trash_view(self, event_id):
+        if request.method == "GET":
+            event = DataManager.trash_event(event_id)
+        flash("Your event has been deleted.", "danger")
+        if login.current_user.is_super_admin == True:
+            return redirect(url_for('sadmin_events.index_view'))
+        return redirect(url_for('.index_view'))
+
+    @expose('/<event_id>/delete/', methods=('GET',))
+    @is_super_admin
     def delete_view(self, event_id):
         if request.method == "GET":
-            DataManager.delete_event(event_id)
-        flash("Your event has been deleted.", "danger")
-        return redirect(url_for('.index_view'))
+            event = DataManager.delete_event(event_id)
+        flash("Your event has been permanently deleted.", "danger")
+        return redirect(url_for('sadmin_events.index_view'))
+
+    @expose('/<event_id>/restore/', methods=('GET',))
+    @is_super_admin
+    def restore_event_view(self, event_id):
+        restore_event(event_id)
+        flash("Your event has been restored", "success")
+        return redirect(url_for('sadmin_events.index_view'))
 
     @expose('/<int:event_id>/update/', methods=('POST',))
     def save_closing_date(self, event_id):
@@ -237,6 +263,7 @@ class EventsView(BaseView):
         save_to_db(event, 'Closing Datetime Updated')
         return self.render('/gentelella/admin/event/details/details.html',
                            event=event)
+
 
     @expose('/<int:event_id>/publish/', methods=('GET',))
     def publish_event(self, event_id):
@@ -251,6 +278,15 @@ class EventsView(BaseView):
             return redirect(url_for('.details_view', event_id=event_id))
         event.state = 'Published'
         save_to_db(event, 'Event Published')
+        organizers = DataGetter.get_user_event_roles_by_role_name(event_id, 'organizer')
+        speakers = DataGetter.get_user_event_roles_by_role_name(event_id, 'speaker')
+        link = url_for('.details_view', event_id=event_id, _external=True)
+
+        for organizer in organizers:
+            send_event_publish(organizer.user.email, event.name, link)
+        for speaker in speakers:
+            send_event_publish(speaker.user.email, event.name, link)
+
         record_activity('publish_event', event_id=event.id, status='published')
         flash("Your event has been published.", "success")
         return redirect(url_for('.details_view', event_id=event_id))
@@ -275,16 +311,27 @@ class EventsView(BaseView):
 
     @expose('/<int:event_id>/copy/', methods=('GET',))
     def copy_event(self, event_id):
-        event = DataGetter.get_event(event_id)
-        event.name = "Copy of " + event.name
-        return self.render(
-            '/gentelella/admin/event/new/new.html',
-            event=event,
-            is_copy=True,
-            start_date=datetime.datetime.now() + datetime.timedelta(days=10),
-            event_types=DataGetter.get_event_types(),
-            event_topics=DataGetter.get_event_topics(),
-            timezones=DataGetter.get_all_timezones())
+        event = DataManager.create_event_copy(event_id)
+        session_types = DataGetter.get_session_types_by_event_id(event_id).all(
+        )
+        tracks = DataGetter.get_tracks(event_id).all()
+        social_links = DataGetter.get_social_links_by_event_id(event_id)
+        microlocations = DataGetter.get_microlocations(event_id).all()
+        call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
+        sponsors = DataGetter.get_sponsors(event_id)
+        return self.render('/gentelella/admin/event/copy/copy.html',
+                           event=event,
+                           session_types=session_types,
+                           tracks=tracks,
+                           social_links=social_links,
+                           microlocations=microlocations,
+                           call_for_speakers=call_for_speakers,
+                           sponsors=sponsors,
+                           event_types=DataGetter.get_event_types(),
+                           event_licences=DataGetter.get_event_licences(),
+                           event_topics=DataGetter.get_event_topics(),
+                           event_sub_topics=DataGetter.get_event_subtopics(),
+                           timezones=DataGetter.get_all_timezones())
 
     @expose('/<int:event_id>/role-invite/<hash>', methods=('GET', 'POST'))
     def user_role_invite(self, event_id, hash):

@@ -37,6 +37,8 @@ def get_object_list(klass, **kwargs):
     `klass` can be a model such as a Track, Event, Session, etc.
     """
     queryset = _get_queryset(klass)
+    if hasattr(klass, 'in_trash'):
+        queryset = queryset.filter(klass.in_trash != True)
     kwargs, specials = extract_special_queries(kwargs)
     # case insenstive filter
     for i in kwargs:
@@ -68,7 +70,7 @@ def get_object_or_404(klass, id_):
     """
     queryset = _get_queryset(klass)
     obj = queryset.get(id_)
-    if obj is None:
+    if obj is None or (hasattr(klass, 'in_trash') and obj.in_trash):
         raise NotFoundError(message='{} does not exist'.format(klass.__name__))
     return obj
 
@@ -92,7 +94,7 @@ def get_object_in_event(klass, id_, event_id):
     return obj
 
 
-def get_paginated_list(klass, url, args={}, **kwargs):
+def get_paginated_list(klass, url=None, args={}, **kwargs):
     """
     Returns a paginated response object
 
@@ -104,6 +106,9 @@ def get_paginated_list(klass, url, args={}, **kwargs):
     """
     if 'event_id' in kwargs:
         get_object_or_404(EventModel, kwargs['event_id'])
+    # auto-get url
+    if url is None:
+        url = request.base_url
     # get page bounds
     start = args['start']
     limit = args['limit']
@@ -161,7 +166,7 @@ def handle_extra_payload(payload, api_model):
     return data
 
 
-def validate_payload(payload, api_model):
+def validate_payload(payload, api_model, check_required=True):
     """
     Validate payload against an api_model. Aborts in case of failure
     - This function is for custom fields as they can't be validated by
@@ -169,11 +174,12 @@ def validate_payload(payload, api_model):
     - This is to be called at the start of a post or put method
     """
     # check if any reqd fields are missing in payload
-    for key in api_model:
-        if api_model[key].required and key not in payload:
-            raise ValidationError(
-                field=key,
-                message='Required field \'{}\' missing'.format(key))
+    if check_required:
+        for key in api_model:
+            if api_model[key].required and key not in payload:
+                raise ValidationError(
+                    field=key,
+                    message='Required field \'{}\' missing'.format(key))
     # check payload
     for key in payload:
         field = api_model[key]
@@ -181,10 +187,12 @@ def validate_payload(payload, api_model):
             field = field.container
             data = payload[key]
         elif isinstance(field, fields.Nested):
-            validate_payload(payload[key], field.model)
+            if payload[key]:  # not null
+                validate_payload(payload[key], field.model)
         else:
             data = [payload[key]]
         if isinstance(field, CustomField) and hasattr(field, 'validate'):
+            field.payload = payload
             for i in data:
                 if not field.validate(i):
                     raise ValidationError(field=key,
@@ -227,7 +235,11 @@ def delete_model(model, item_id, event_id=None):
         item = get_object_in_event(model, item_id, event_id)
     else:
         item = get_object_or_404(model, item_id)
-    delete_from_db(item, '{} deleted'.format(model.__name__))
+    if hasattr(item, 'in_trash'):
+        item.in_trash = True
+        save_to_db(item, '{} moved to trash'.format(model.__name__))
+    else:
+        delete_from_db(item, '{} deleted'.format(model.__name__))
     return item
 
 
@@ -239,6 +251,11 @@ def update_model(model, item_id, data, event_id=None):
         item = get_object_in_event(model, item_id, event_id)
     else:
         item = get_object_or_404(model, item_id)
+    # if no data in payload, happens when only related models were
+    # changed through the API
+    if len(data) == 0:
+        return item
+    # update data
     db.session.query(model).filter_by(id=item_id).update(dict(data))
     # model.__table__.update().where(model.id==item_id).values(**data)
     save_to_db(item, "%s updated" % model.__name__)

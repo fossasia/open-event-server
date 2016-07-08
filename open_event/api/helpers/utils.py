@@ -90,7 +90,7 @@ class BaseDAO:
 
     def update(self, id_, data, validate=True):
         if validate:
-            data = self.validate(data, self.put_api_model)
+            data = self.validate_put(data, self.put_api_model)
         item = update_model(self.model, id_, data)
         return item
 
@@ -98,13 +98,19 @@ class BaseDAO:
         item = delete_model(self.model, id_)
         return item
 
-    def validate(self, data, model=None):
+    def validate(self, data, model=None, check_required=True):
         if not model:
             model = self.post_api_model
         if model:
             data = handle_extra_payload(data, model)
-            validate_payload(data, model)
+            validate_payload(data, model, check_required=check_required)
         return data
+
+    def validate_put(self, data, model=None):
+        """
+        Abstraction over validate with check_required set to False
+        """
+        return self.validate(data, model=model, check_required=False)
 
     # Helper functions
     def _del(self, data, fields):
@@ -144,7 +150,7 @@ class ServiceDAO(BaseDAO):
 
     def update(self, event_id, service_id, data, validate=True):
         if validate:
-            data = self.validate(data)
+            data = self.validate_put(data)
         item = update_model(self.model, service_id, data, event_id)
         return item
 

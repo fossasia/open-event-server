@@ -15,6 +15,7 @@ class TestEvents(OpenEventViewTestCase):
         with app.test_request_context():
             url = url_for('events.index_view')
             rv = self.app.get(url, follow_redirects=True)
+
             self.assertTrue("Manage Events" in rv.data, msg=rv.data)
 
     def test_events_create(self):
@@ -27,7 +28,8 @@ class TestEvents(OpenEventViewTestCase):
         with app.test_request_context():
             custom_forms = ObjectMother.get_custom_form()
             url = url_for('events.create_view')
-            data = POST_EVENT_DATA
+            data = POST_EVENT_DATA.copy()
+            del data['copyright']
             data['start_date'] = '07/04/2016'
             data['start_time'] = '19:00'
             data['end_date'] = '07/04/2016'
@@ -41,7 +43,8 @@ class TestEvents(OpenEventViewTestCase):
     def test_events_create_post_publish(self):
         with app.test_request_context():
             url = url_for('events.create_view')
-            data = POST_EVENT_DATA
+            data = POST_EVENT_DATA.copy()
+            del data['copyright']
             data['start_date'] = '07/04/2016'
             data['start_time'] = '19:00'
             data['end_date'] = '07/04/2016'
@@ -55,7 +58,8 @@ class TestEvents(OpenEventViewTestCase):
         with app.test_request_context():
             custom_forms = ObjectMother.get_custom_form()
             url = url_for('events.create_view')
-            data = POST_EVENT_DATA
+            data = POST_EVENT_DATA.copy()
+            del data['copyright']
             data['start_date'] = '07/04/2016'
             data['start_time'] = '19:00'
             data['end_date'] = '07/04/2016'
@@ -75,7 +79,8 @@ class TestEvents(OpenEventViewTestCase):
             custom_forms = ObjectMother.get_custom_form(event.id)
             save_to_db(custom_forms, "Custom forms saved")
             url = url_for('events.edit_view', event_id=event.id)
-            data = POST_EVENT_DATA
+            data = POST_EVENT_DATA.copy()
+            del data['copyright']
             data['start_date'] = '07/04/2016'
             data['start_time'] = '19:00'
             data['end_date'] = '07/04/2016'
@@ -125,7 +130,7 @@ class TestEvents(OpenEventViewTestCase):
         with app.test_request_context():
             event = ObjectMother.get_event()
             save_to_db(event, "Event saved")
-            url = url_for('events.delete_view', event_id=event.id)
+            url = url_for('events.trash_view', event_id=event.id)
             rv = self.app.get(url, follow_redirects=True)
             self.assertTrue("Your event has been deleted" in rv.data, msg=rv.data)
 

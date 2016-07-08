@@ -1,40 +1,40 @@
 {% extends 'gentelella/admin/login/base.html' %}
 {% block login %}
     <div class="animate form login_form">
-        <section class="login_content">
-            <form method="post" style="left:-200px;">
-              <h1>Login Form</h1>
-              <div>
-                <input name="email" type="email" class="form-control" placeholder="Email" required="" />
-              </div>
-              <div>
-                <input name="password" type="password" class="form-control" placeholder="Password" required="" />
-              </div>
-              <div>
-                  <button type="submit" class="btn btn-default" >Log in</button>
-                  <a class="reset_pass" href="/password/reset">Lost your password?</a>
-                </div>
-
-              <div class="clearfix"></div>
-
-              <div class="separator">
-                <p class="change_link">New to site?
-                  <a href="{{ url_for('admin.register_view', next='shit') }}" class="to_register"> Create Account </a>
-                </p>
-
-                <div class="clearfix"></div>
-                <br />
-
-              </div>
-            </form>
-          </section>
-        </div>
-        <div class="col-md-6 col-sm-6 col-xs-12" style="margin: 75px 250px;">
-              <a href="{{ auth_url }}">
-                <img src="{{ url_for('static', filename='img/google.png') }}">
-              </a>
-              <a href="{{ fb_auth_url }}">
-                <img src="{{ url_for('static', filename='img/fb.png') }}">
-              </a>
+      <section class="login_content">
+        <form method="post" id="login-form">
+          <h1>Login Form</h1>
+          <div>
+            <input name="email" type="email" class="form-control" placeholder="Email" required="" />
+          </div>
+          <div>
+            <input name="password" type="password" class="form-control" placeholder="Password" required="" />
+          </div>
+          <div>
+              <button type="submit" class="btn btn-default" >Log in</button>
+              <a class="reset_pass" href="/password/reset">Lost your password?</a>
             </div>
+
+          <div class="clearfix"></div>
+
+          <div class="separator">
+            <p class="change_link">New to site?
+              <a href="{{ url_for('admin.register_view') }}" class="to_register"> Create Account </a>
+            </p>
+
+            <div class="clearfix"></div>
+            <br />
+
+          </div>
+        </form>
+      </section>
+    </div>
+    <div class="col-md-6 col-sm-12 col-xs-12 login-with">
+      <a href="{{ auth_url }}">
+        <img src="{{ url_for('static', filename='img/google.png') }}">
+      </a>
+      <a href="{{ fb_auth_url }}">
+        <img src="{{ url_for('static', filename='img/fb.png') }}">
+      </a>
+    </div>
 {% endblock %}

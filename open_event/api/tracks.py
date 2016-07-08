@@ -19,7 +19,7 @@ TRACK = api.model('Track', {
     'name': fields.String(required=True),
     'description': fields.String(),
     'color': fields.Color(required=True),
-    'track_image_url': fields.ImageUri(),
+    'track_image_url': fields.Upload(),
     'location': fields.String(),
     'sessions': fields.List(fields.Nested(TRACK_SESSION)),
 })
@@ -94,7 +94,6 @@ class TrackListPaginated(Resource, PaginatedResourceBase):
         """List tracks in a paginated manner"""
         return get_paginated_list(
             TrackModel,
-            self.api.url_for(self, event_id=event_id),
             args=self.parser.parse_args(),
             event_id=event_id
         )

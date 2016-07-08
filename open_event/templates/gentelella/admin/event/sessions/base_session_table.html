@@ -70,6 +70,7 @@
                 </thead>
                 <tbody>
                 {% for session in sessions %}
+                    {% if session.in_trash == False %}
                     {% set versions_count = count_versions(session) %}
                     <tr>
                         <td>
@@ -98,7 +99,7 @@
                                     <i class="fa fa-pencil"></i>
                                 </a>
                                 <a data-toggle="tooltip" data-placement="left" title="Delete"
-                                   href="{{ session.id }}/delete" class="btn btn-default">
+                                   href="{{ session.id }}/trash" class="btn btn-default">
                                     <i class="fa fa-trash"></i>
                                 </a>
                                 {% if versions_count > 0 %}
@@ -121,6 +122,7 @@
                             </div>
                         </td>
                     </tr>
+                    {% endif %}
                 {% endfor %}
                 </tbody>
             </table>

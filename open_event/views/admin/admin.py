@@ -16,13 +16,13 @@ from open_event.views.admin.models_views.speakers import SpeakersView
 from open_event.views.admin.home import MyHomeView
 from open_event.views.admin.models_views.sponsors import SponsorsView
 from open_event.views.public.event_detail import EventDetailView
-from open_event.views.public.browse import BrowseView
+from open_event.views.public.explore import ExploreView
 from open_event.views.public.pages import BasicPagesView
 from open_event.views.admin.super_admin.super_admin import SuperAdminView
 from open_event.views.admin.super_admin.events import SuperAdminEventsView
 from open_event.views.admin.super_admin.my_sessions import SuperAdminMySessionView
 from open_event.views.admin.super_admin.users import SuperAdminUsersView
-from open_event.views.admin.super_admin.mails import SuperAdminMailsView
+from open_event.views.admin.super_admin.messages import SuperAdminMessagesView
 from open_event.views.admin.super_admin.permissions import SuperAdminPermissionsView
 from open_event.views.admin.super_admin.reports import SuperAdminReportsView
 from open_event.views.admin.super_admin.logs import SuperAdminLogsView
@@ -46,7 +46,7 @@ class AdminView(object):
     def _add_views(self):
 
         self.admin.add_view(EventDetailView(name='Event Detail', url='/e', endpoint="event_detail"))
-        self.admin.add_view(BrowseView(name='Search Results', url='/<location>/events', endpoint="search_results"))
+        self.admin.add_view(ExploreView(name='Explore', url='/explore', endpoint="explore"))
         self.admin.add_view(BasicPagesView(name='Page', url='/'))
         self.admin.add_view(MySessionView(name='MySessions', url='/events/mysessions', endpoint="my_sessions"))
         self.admin.add_view(EventsView(name='Events', url='/events', endpoint="events"))
@@ -67,7 +67,7 @@ class AdminView(object):
         self.admin.add_view(SuperAdminReportsView(name='Reports', url='/admin/reports', endpoint="sadmin_reports"))
         self.admin.add_view(SuperAdminLogsView(name='Logs', url='/admin/logs', endpoint="sadmin_logs"))
         self.admin.add_view(SuperAdminSettingsView(name='Settings', url='/admin/settings', endpoint="sadmin_settings"))
-        self.admin.add_view(SuperAdminMailsView(name='Mails', url='/admin/mails', endpoint="sadmin_mails"))
+        self.admin.add_view(SuperAdminMessagesView(name='Messages', url='/admin/messages', endpoint="sadmin_messages"))
 
     @staticmethod
     def init_login(app):

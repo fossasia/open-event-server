@@ -2,30 +2,128 @@
 {% block head_css %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom/index.css') }}"/>
+    <style type="text/css">
+        .event-holder {
+            cursor: pointer;
+
+        }
+
+        .event-holder:hover > .thumbnail > .caption {
+            background-color: #f7f7f7;
+        }
+
+        .event-holder hr {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .event-holder img {
+            width: 100%;
+            height: 165px;
+            background: url('{{ url_for('static', filename='img/sativa.png') }}');
+            border: none;
+        }
+
+        .event-holder .thumbnail {
+            padding: 0;
+        }
+
+        .event-holder .time {
+            text-transform: uppercase;
+        }
+
+        .event-holder .name {
+            height: 40px;
+            text-overflow: ellipsis;
+        }
+
+        .event-holder .location_name {
+
+        }
+
+        .event-holder .tags {
+            height: 18px;
+        }
+
+        .event-holder .caption {
+            background-color: #FFFFFF;
+            transition: background-color 0.5s;
+        }
+
+        .event-holder .share-btn {
+            margin-top: 5px;
+            margin-right: 1px;
+            color: #868686;
+            transition: color 0.5s;
+        }
+
+        .event-holder .share-btn:hover {
+            margin-top: 5px;
+            margin-right: 1px;
+            color: #393939;
+        }
+
+        .filter-hashtag {
+            cursor: pointer;
+        }
+
+        .filter-hashtag:hover {
+            text-decoration: underline;
+        }
+
+        .home-search {
+            padding: 0 20px;
+        }
+
+        .home-search .form-group {
+            padding: 0;
+        }
+
+        .home-search .btn {
+            margin: 0;
+            border-bottom-left-radius: 0;
+            border-top-left-radius: 0;
+            -webkit-border-top-left-radius: 0;
+            -webkit-border-bottom-left-radius: 0;
+            font-weight: 300;
+            text-transform: uppercase;
+        }
+    </style>
 {% endblock %}
 {% block title %}
-Home
+    Home
 {% endblock %}
 {% macro event_box(event) %}
-    <div class="col-md-2" style="cursor: pointer;" onclick="location.href='/e/{{ event.id }}';">
-        <div class="thumbnail">
-            <img src="{{ url_for('static', filename='img/image-800x500.png') }}" style="width:100%;">
-            <div class="caption">
-                <small>{{ event.start_time.strftime('%B %d, %Y - %I:%M %p') }}</small>
-                <h4>{{ event.name }}</h4>
-                <small>{{ event.location_name }}</small>
-                <hr>
-                <p>
-                    #tech, #conference
-                </p>
+    <a href="/e/{{ event.id }}">
+        <div class="col-md-4 col-xs-12 col-sm-6 event-holder">
+            <div class="thumbnail">
+                <img src="{{ event.background_url }}" onerror="imgError(this, true)">
+                <div class="caption">
+                    <small class="time">{{ event.start_time.strftime('%a, %B %d %I:%M %p') }}</small>
+                    <h4 class="name">{{ event.name }}</h4>
+                    <small class="location_name">{{ event.location_name.split(",")[0] }}</small>
+                    <hr>
+                    <p class="tags">
+                        {% if event.type %}
+                            <span class="filter-hashtag" data-name="type"
+                                  data-value="{{ event.type }}">#{{ event.type | default('', true) |  camel_case }}</span>
+                        {% endif %}
+                        {% if event.topic %}
+                            <span class="filter-hashtag" data-name="category"
+                                  data-value="{{ event.topic }}">#{{ event.topic | default('', true) | camel_case }}</span>
+                        {% endif %}
+                        <i data-event-id="{{ event.id }}" data-title="{{ event.name }}"
+                           class="share-btn fa fa-share-alt pull-right"></i>
+                    </p>
+                </div>
             </div>
         </div>
-    </div>
+    </a>
 {% endmacro %}
 
 
 {% block body %}
-    <div class="carousel slide">
+    <div class="carousel slide" style="margin-bottom: 10px;">
         <div class="carousel-inner">
             <div class="item active">
                 <div class="container">
@@ -40,30 +138,122 @@ Home
         </div>
     </div>
     <div class="row">
-        <h3 class="section-header" style="margin-left: 10px; margin-bottom: 0;">Upcoming Events</h3>
-    </div>
-    {% for published_events_chunk in published_events %}
-        <div class="row">
-            {% for published_event in published_events_chunk %}
-                {{ event_box(published_event) }}
-            {% endfor %}
-        </div>
-    {% else %}
-        <div class="row no-data-message">No upcoming events available at this time</div>
-    {% endfor %}
+        <div class="col-md-10 col-md-push-1">
+            <form class="form-inline row home-search" method="get" action="/browse">
+                <div class="form-group col-sm-4 col-xs-10">
+                    <input type="text" name="query" class="form-control input-lg" style="width: 100%;"
+                           placeholder="Search for events">
+                </div>
+                <div class="form-group col-sm-3 hidden-xs">
+                    <input type="text" name="location" id="location" class="form-control input-lg" style="width: 100%;"
+                           placeholder="Location">
+                </div>
+                <div class="form-group col-sm-3 hidden-xs">
+                    <select class="form-control input-lg" name="period" style="width: 100%;">
+                        <option value="" selected="selected">All Dates</option>
+                        <option value="Today">Today</option>
+                        <option value="Tomorrow">Tomorrow</option>
+                        <option value="This Week">This Week</option>
+                        <option value="This Weekend">This Weekend</option>
+                        <option value="Next Week">Next Week</option>
+                        <option value="This Month">This Month</option>
+                    </select>
+                </div>
+                <button type="submit" class="col-sm-2 col-xs-2 btn btn-lg btn-info" style="margin-bottom: 0;">
+                    <span class="visible-xs"><i class="fa fa-search"></i> </span><span class="hidden-xs"> Search</span>
+                </button>
+            </form>
+            <div class="row">
+                <h3 class="section-header" style="margin-left: 10px; margin-bottom: 0;">Upcoming Events</h3>
+            </div>
+            <div class="row">
+                {% for upcoming_event in upcoming_events %}
+                    {{ event_box(upcoming_event) }}
+                {% else %}
+                    <div class="row no-data-message">No upcoming events available at this time</div>
+                {% endfor %}
+            </div>
 
-    <div class="row">
-        <h3 class="section-header" style="margin-left: 10px; margin-bottom: 0;">Call for Speakers</h3>
-    </div>
-    {% for call_for_papers_evs_chunk in call_for_papers_evs %}
-        <div class="row">
-            {% for call_for_papers_evs in call_for_papers_evs_chunk %}
-                {{ event_box(call_for_papers_evs) }}
-            {% endfor %}
+            <div class="row">
+                <h3 class="section-header" style="margin-left: 10px; margin-bottom: 0;">Call for Speakers</h3>
+            </div>
+            <div class="row">
+                {% for call_for_speakers_event in call_for_speakers_events %}
+                    {{ event_box(call_for_speakers_event) }}
+                {% else %}
+                    <div class="row no-data-message">No call for speakers open at this time</div>
+                {% endfor %}
+            </div>
+
         </div>
-    {% else %}
-        <div class="row no-data-message">No call for speakers open at this time</div>
-    {% endfor %}
+
+    </div>
     <br>
     <br>
+    <div class="modal fade" id="share-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4>Share this event</h4>
+                </div>
+                <div class="modal-body" style="text-align: center;">
+                    {% include 'gentelella/components/social_buttons.html' %}
+                    <input id="share-url-box" type="text" class="form-control" onClick="this.select();"
+                           value="{{ request.url }}">
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+
+    <script type="text/javascript">
+        var $locationInput = $("#location");
+        var placeSearch, autocomplete;
+        var componentForm = {
+            street_number: 'short_name',
+            route: 'long_name',
+            locality: 'long_name',
+            administrative_area_level_1: 'short_name',
+            country: 'long_name',
+            postal_code: 'short_name'
+        };
+
+        function initPlacesApi() {
+            autocomplete = new google.maps.places.Autocomplete(($locationInput[0]), {types: ['geocode']});
+            autocomplete.addListener('place_changed', geocodeHandler);
+            var geocodeHandler = function () {
+
+            };
+
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHdXg0Y_zk-wCNpslbBqcezLdHniaEwkI&callback=initPlacesApi&libraries=places"
+            async defer></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
+    <script type="text/javascript">
+        $(document).on("click", ".share-btn", function (event) {
+            event.stopImmediatePropagation();
+            event.stopPropagation();
+            event.preventDefault();
+            var eventUrl = location.href + "e/" + $(this).data("event-id") + "/" + slugify($(this).data("title"));
+            $("#share-url-box").val(eventUrl);
+            setSocialLinks(eventUrl, $(this).data("title"));
+            $("#share-modal").modal('show');
+        });
+
+        $(document).on('click', '.filter-hashtag', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var name = $(this).data('name');
+            var value = $(this).data('value');
+            location.href = "{{ url_for("admin.browse_view") }}?" + name + "=" + encodeURI(value);
+        });
+
+    </script>
 {% endblock %}

@@ -9,12 +9,16 @@
 {% block head_css %}
     {{ super() }}
     <style type="text/css">
-        #event-tabs {
-            position: absolute;
-            background: transparent;
-            top: 9px;
-            width: auto;
-        }
+    #event-tabs {
+        position: absolute;
+        background: transparent;
+        top: 9px;
+        width: auto;
+    }
+
+    table.table {
+        margin-top: 20px !important;
+    }
     </style>
 {% endblock %}
 
@@ -32,12 +36,22 @@
                                title="Edit record">
                                 <i class="glyphicon glyphicon-pencil"></i>
                             </a>
+                            {% if event.in_trash == True %}
                             <a class="btn btn-default"
                                data-toggle="tooltip" data-placement="top"
                                onclick="return confirm('Are you sure you want to delete this record?');"
                                href="{{ get_url('events.delete_view', event_id=event.id) }}" title="Delete record">
                                 <i class="glyphicon glyphicon-trash"></i>
                             </a>
+                            {% endif %}
+                            {% if event.in_trash == False %}
+                            <a class="btn btn-default"
+                               data-toggle="tooltip" data-placement="top"
+                               onclick="return confirm('Are you sure you want to delete this record?');"
+                               href="{{ get_url('events.trash_view', event_id=event.id) }}" title="Delete record">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </a>
+                            {% endif %}
                             <a class="btn btn-default" href="{{ get_url('events.details_view', event_id=event.id) }}"
                                data-toggle="tooltip" data-placement="top"
                                title="View Event Details">
@@ -48,6 +62,13 @@
                                title="Export Event">
                                 <i class="glyphicon glyphicon glyphicon-share"></i>
                             </a>
+                            {% if event.in_trash == True %}
+                            <a class="btn btn-success" href="/events/{{ event.id }}/restore/"
+                               data-toggle="tooltip" data-placement="top"
+                               title="Restore Event">
+                                <i>Restore Event</i>
+                            </a>
+                            {% endif %}
                         </div>
                     {% endif %}</td>
         </tr>
@@ -62,6 +83,7 @@
             <li class="active"><a href="#tab_content1" id="home-tab" data-toggle="tab">All Live</a></li>
             <li class=""><a href="#tab_content2" id="profile-tab" data-toggle="tab">All Drafts</a></li>
             <li class=""><a href="#tab_content3" id="profile-tab2" data-toggle="tab">All Past</a></li>
+            <li class=""><a href="#tab_content5" id="profile-tab3" data-toggle="tab">All Deleted Events</a></li>
             <li class=""><a href="#" id="all-tab" data-toggle="modal" data-target="#importModal">Import</a></li>
         </ul>
         <div id="myTabContent" class="tab-content">
@@ -138,6 +160,24 @@
                     </tbody>
                 </table>
             </div>
+            <div role="tabpanel" class="tab-pane fade" id="tab_content5" aria-labelledby="profile-tab">
+                <table class="table table-striped no-global-dt">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>State</th>
+                        <th>Url</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Options</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{ events_row(trash_events) }}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -150,7 +190,7 @@
     {{ super() }}
     <script type="text/javascript">
         var table = $('.table.no-global-dt').DataTable({
-            "dom": '<"row"<"toolbar col-md-5"><"col-md-3"l><"col-md-3 pull-right"f>>tip',
+            "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
             "lengthMenu": [25, 50, 100, 200],
             "pageLength": 50,
             "language": {

@@ -4,7 +4,7 @@ import os
 import re
 import requests
 from datetime import datetime, timedelta
-from flask import request
+from flask import request, url_for
 from itsdangerous import Serializer
 from flask.ext import login
 
@@ -12,8 +12,18 @@ from open_event.helpers.flask_helpers import get_real_ip
 from open_event.settings import get_settings
 from ..models.track import Track
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, NEXT_EVENT, \
-    USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, Mail
+    USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, EVENT_PUBLISH, Mail, AFTER_EVENT
 from system_mails import MAILS
+from open_event.models.notifications import (
+    # Prepended with `NOTIF_` to differentiate from mails
+    EVENT_ROLE_INVITE as NOTIF_EVENT_ROLE,
+    NEW_SESSION as NOTIF_NEW_SESSION,
+    SESSION_SCHEDULE as NOTIF_SESSION_SCHEDULE,
+    NEXT_EVENT as NOTIF_NEXT_EVENT,
+    SESSION_ACCEPT_REJECT as NOTIF_SESSION_ACCEPT_REJECT,
+    INVITE_PAPERS as NOTIF_INVITE_PAPERS,
+)
+from system_notifications import NOTIFS
 
 
 def get_event_id():
@@ -35,6 +45,10 @@ def is_track_name_unique_in_event(form, event_id, *args):
             return str(track.id) == track_id
         return True
 
+
+#########
+# Mails #
+#########
 
 def send_email_invitation(email, event_name, link):
     """Send email for submit papers"""
@@ -93,13 +107,53 @@ def send_schedule_change(email, session_name, link):
     )
 
 
-def send_next_event(email, event_name, link):
+def send_next_event(email, event_name, link, up_coming_events):
     """Send next event"""
+    upcoming_event_html = "<ul>"
+    for event in up_coming_events:
+        upcoming_event_html += "<a href='%s'><li> %s </li></a>" % (url_for('events.details_view',
+                                                                   event_id=event.id, _external=True),
+                                                                   event.name)
+    upcoming_event_html += "</ul><br/>"
     send_email(
         to=email,
         action=NEXT_EVENT,
         subject=MAILS[NEXT_EVENT]['subject'].format(event_name=event_name),
         html=MAILS[NEXT_EVENT]['message'].format(
+            email=str(email),
+            event_name=str(event_name),
+            link=link,
+            up_coming_events=upcoming_event_html
+        )
+    )
+
+def send_after_event(email, event_name, upcoming_events):
+    """Send after event mail"""
+    upcoming_event_html = "<ul>"
+    for event in upcoming_events:
+        upcoming_event_html += "<a href='%s'><li> %s </li></a>" % (url_for('events.details_view',
+                                                                           event_id=event.id, _external=True),
+                                                                   event.name)
+    upcoming_event_html += "</ul><br/>"
+    send_email(
+        to=email,
+        action=AFTER_EVENT,
+        subject=MAILS[AFTER_EVENT]['subject'].format(event_name=event_name),
+        html=MAILS[AFTER_EVENT]['message'].format(
+            email=str(email),
+            event_name=str(event_name),
+            link=link,
+            up_coming_events=upcoming_event_html
+        )
+    )
+
+def send_event_publish(email, event_name, link):
+    """Send email on publishing event"""
+    send_email(
+        to=email,
+        action=NEXT_EVENT,
+        subject=MAILS[EVENT_PUBLISH]['subject'].format(event_name=event_name),
+        html=MAILS[EVENT_PUBLISH]['message'].format(
             email=str(email),
             event_name=str(event_name),
             link=link
@@ -187,6 +241,83 @@ def send_email(to, action, subject, html):
     from data import save_to_db
     save_to_db(mail, 'Mail Recorded')
     return
+
+#################
+# Notifications #
+#################
+
+def send_notification(user, action, title, message):
+    # DataManager imported here to prevent circular dependency
+    from open_event.helpers.data import DataManager
+    DataManager.create_user_notification(user, action, title, message)
+
+
+def send_notif_event_role(user, role_name, event_name, link):
+    notif = NOTIFS[NOTIF_EVENT_ROLE]
+    action = NOTIF_EVENT_ROLE
+    title = notif['title'].format(
+        role_name=role_name,
+        event_name=event_name
+    )
+    message = notif['message'].format(
+        role_name=role_name,
+        event_name=event_name,
+        link=link
+    )
+
+    send_notification(user, action, title, message)
+
+
+def send_notif_new_session_organizer(user, event_name, link):
+    notif = NOTIFS[NOTIF_NEW_SESSION]
+    action = NOTIF_NEW_SESSION
+    title = notif['title'].format(event_name=event_name)
+    message = notif['message'].format(event_name=event_name, link=link)
+
+    send_notification(user, action, title, message)
+
+
+def send_notif_session_schedule(user, session_name, link):
+    notif = NOTIFS[NOTIF_SESSION_SCHEDULE]
+    action = NOTIF_SESSION_SCHEDULE
+    title = notif['title'].format(session_name=session_name)
+    message = notif['message'].format(session_name=session_name, link=link)
+
+    send_notification(user, action, title, message)
+
+
+def send_notif_next_event(user, event_name, up_coming_events, link):
+    notif = NOTIFS[NOTIF_NEXT_EVENT]
+    action = NOTIF_NEXT_EVENT
+    title = notif['title'].format(event_name=event_name)
+    message = notif['message'].format(up_coming_events=up_coming_events,
+                                      link=link)
+
+    send_notification(user, action, title, message)
+
+
+def send_notif_session_accept_reject(user, session_name, acceptance,
+        link):
+    notif = NOTIFS[NOTIF_SESSION_ACCEPT_REJECT]
+    action = NOTIF_SESSION_ACCEPT_REJECT
+    title = notif['title'].format(session_name=session_name,
+                                  acceptance=acceptance)
+    message = notif['message'].format(
+        session_name=session_name,
+        acceptance=acceptance,
+        link=link
+    )
+
+    send_notification(user, action, title, message)
+
+
+def send_notif_invite_papers(user, event_name, link):
+    notif = NOTIFS[NOTIF_INVITE_PAPERS]
+    action = NOTIF_INVITE_PAPERS
+    title = notif['title'].format(event_name=event_name)
+    message = notif['message'].format(event_name=event_name, link=link)
+
+    send_notification(user, action, title, message)
 
 
 def is_event_admin(event_id, users):
@@ -279,52 +410,60 @@ def get_request_stats():
 
 
 def get_date_range(day_filter):
+    day_filter = day_filter.lower()  # Use lower case for match
     format = "%Y-%m-%dT%H:%M:%S"
     date_now = datetime.now()
     start, end = None, None
-    if day_filter == 'all_date':
+    if day_filter == 'all days':
         pass
-    elif day_filter == 'Today':
+    elif day_filter == 'today':
         start = date_now.replace(hour=00, minute=00)
         end = date_now.replace(hour=23, minute=59)
-    elif day_filter == 'Tomorrow':
+    elif day_filter == 'tomorrow':
         date_now += timedelta(days=1)
         start = date_now.replace(hour=00, minute=00)
         end = date_now.replace(hour=23, minute=59)
-    elif day_filter == 'This Week':
+    elif day_filter == 'this week':
         weekday = date_now.weekday()
         date_now -= timedelta(days=weekday)
         start = date_now.replace(hour=00, minute=00)
         date_now += timedelta(days=6)
         end = date_now.replace(hour=23, minute=59)
-    elif day_filter == 'This Weekend':
+    elif day_filter == 'this weekend':
         weekday = date_now.weekday()
         date_now += timedelta(days=5 - weekday)
         start = date_now.replace(hour=00, minute=00)
         date_now += timedelta(days=1)
         end = date_now.replace(hour=23, minute=59)
-    elif day_filter == 'Next Week':
+    elif day_filter == 'next week':
         weekday = date_now.weekday()
         date_now -= timedelta(days=weekday)
         start = date_now.replace(hour=00, minute=00)
         date_now += timedelta(days=6)
         end = date_now.replace(hour=23, minute=59)
-    elif day_filter == 'This Month':
+    elif day_filter == 'this month':
         start = first_day_of_month(date_now.replace(hour=00, minute=00))
         end = last_day_of_month(date_now.replace(hour=23, minute=59))
-    elif day_filter == 'Custom Date':
-        pass
+    else:
+        try:
+            from_string, to_string = day_filter.split(" to ")
+            start = datetime.strptime(from_string, '%m-%d-%Y').replace(hour=00, minute=00)
+            end = datetime.strptime(to_string, '%m-%d-%Y').replace(hour=23, minute=59)
+        except:
+            start = date_now.replace(hour=00, minute=00)
+            end = date_now.replace(hour=23, minute=59)
+            pass
     return start.strftime(format), end.strftime(format)
 
 
 def last_day_of_month(date):
     if date.month == 12:
         return date.replace(day=31)
-    return date.replace(month=date.month+1, day=1) - timedelta(days=1)
+    return date.replace(month=date.month + 1, day=1) - timedelta(days=1)
 
 
 def first_day_of_month(date):
-    ddays = int(date.strftime("%d"))-1
+    ddays = int(date.strftime("%d")) - 1
     delta = timedelta(days=ddays)
     return date - delta
 

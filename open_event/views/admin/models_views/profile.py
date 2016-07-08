@@ -1,11 +1,13 @@
-from flask import request, url_for, redirect, abort
+from flask import request, url_for, redirect, abort, flash
 from flask.ext.admin import BaseView
 from flask_admin import expose
 from flask.ext import login
 
-from ....helpers.data import DataManager
+from open_event.views.admin.models_views.events import is_verified_user
+from ....helpers.data import DataManager, get_facebook_auth, get_instagram_auth
 from ....helpers.data_getter import DataGetter
 from open_event.helpers.storage import upload
+from open_event.helpers.oauth import OAuth, FbOAuth, InstagramOAuth
 
 
 class ProfileView(BaseView):
@@ -19,6 +21,9 @@ class ProfileView(BaseView):
 
     @expose('/')
     def index_view(self):
+        if not is_verified_user():
+            flash("Your account is unverified. "
+                  "Please verify by clicking on the confirmation link that has been emailed to you.")
         profile = DataGetter.get_user(login.current_user.id)
         return self.render('/gentelella/admin/profile/index.html',
                            profile=profile)
@@ -56,3 +61,16 @@ class ProfileView(BaseView):
             return redirect(url_for('.notifications_view'))
         else:
             abort(404)
+
+    @expose('/fb_connect', methods=('GET', 'POST'))
+    def connect_facebook(self):
+        facebook = get_facebook_auth()
+        fb_auth_url, state = facebook.authorization_url(FbOAuth.get_auth_uri(), access_type='offline')
+        return redirect(fb_auth_url)
+
+    @expose('/instagram_connect', methods=('GET', 'POST'))
+    def connect_instagram(self):
+        instagram = get_instagram_auth()
+        print InstagramOAuth.get_auth_uri()
+        instagram_auth_url, state = instagram.authorization_url(InstagramOAuth.get_auth_uri(), access_type='offline')
+        return redirect(instagram_auth_url)

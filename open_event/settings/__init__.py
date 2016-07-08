@@ -24,6 +24,7 @@ def set_settings(**kwargs):
     setting = Setting(**kwargs)
     from open_event.helpers.data import save_to_db
     save_to_db(setting, 'Setting saved')
+    current_app.secret_key = setting.secret
     current_app.config['custom_settings'] = make_dict(setting)
 
 

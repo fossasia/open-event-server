@@ -1,0 +1,59 @@
+{% extends 'gentelella/admin/base.html' %}
+
+{% block title %}
+    Settings
+{% endblock %}
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/settings.css') }}"/>
+{% endblock %}
+{% block head_js %}
+    {{ super() }}
+{% endblock %}
+
+{% set navigation_bar = [
+    ('/settings/', 'contact_info', 'Contact Info', 'Contact Info'),
+    ('/settings/password/', 'password', 'Password', 'Your Password'),
+    ('/settings/email-preferences/', 'email_preferences', 'Email Preferences', 'Email Preferences'),
+    ('/settings/', 'account_info', 'Account Information', 'Account Information')
+] -%}
+
+{% set active_page = active_page|default('account_info') -%}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-push-1 col-md-2 col-sm-2 hidden-xs" style="text-align: right">
+            <h2 style="font-weight: 300; font-size: 24px;">Settings</h2>
+            <nav class="settings">
+                <ul>
+                    {% for href, id, title, page_title in navigation_bar %}
+                    <li
+                    {% if id == active_page %} class="active"{% endif %}><a href="{{ href|e }}">{{ title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </nav>
+        </div>
+        <div class="col-md-push-1 col-md-8 col-sm-8 col-xs-12">
+            <div class="x_panel" >
+                <div class="x_title">
+                    <h2 style="font-weight: 400; font-size: 24px;">
+                         {% for href, id, title, page_title in navigation_bar %}
+                            {% if id == active_page %}
+                                {{ page_title }}
+                            {% endif %}
+                        {% endfor %}
+                    </h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    {% block content %}
+
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+{% endblock %}

@@ -5,7 +5,7 @@
 {% block body %}
 
 
-<div class="page-title">
+<div class="page-title col-md-offset-1">
     <div class="title_left">
         <h3>Profile</h3>
     </div>
@@ -13,91 +13,80 @@
 <div class="clearfix"></div>
 
 <div class="row">
-    <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="x_panel">
-            <div class="x_title">
-                <h2>User Report
-                </h2>
 
-                <div class="clearfix"></div>
-            </div>
-            <div class="x_content">
-                <form name="test" action="/profile/edit/{{user_id}}" method="POST" role="form"
-      class="admin-form form-horizontal event-create-form" enctype='multipart/form-data'>
 
-                <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
+        <form name="test" action="/profile/edit/{{user_id}}" method="POST" role="form"
+              class="admin-form form-horizontal event-create-form" enctype='multipart/form-data'>
 
-                    <div class="profile_img">
 
-                        <!-- end of image cropping -->
-                        <div id="crop-avatar">
-                            <!-- Current avatar -->
-                            {% if profile.user_detail.avatar_uploaded %}
-                            <img src="{{profile.user_detail.avatar_uploaded}}" class="profile_avatar">
-                            {% else %}
+            <div class="col-md-2 col-sm-2 col-xs-12 profile_left col-md-offset-1">
+
+                <div class="profile_img">
+
+                    <!-- end of image cropping -->
+                    <div id="crop-avatar">
+                        <!-- Current avatar -->
+                        {% if profile.user_detail.avatar_uploaded %}
+                            <img src="{{profile.user_detail.avatar_uploaded}}" class="profile_avatar" >
+                        {% else %}
                             <img src="{{ url_for('static', filename='img/avatar.png') }}" class="profile_avatar">
-                            {% endif %}
+                        {% endif %}
 
-
-                        </div>
-                        <!-- end of image cropping -->
-                        <div id="avatar-button" style="padding: 10px 0px;">
-                            <input type="file" id="profile-avatar" name="avatar"
-                                               class="upload-btn"/>
-                            <label class="file-label" for="profile-avatar">
-                                        <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-                                        Upload New
-                            </label>
-                        </div>
 
                     </div>
-                    <h3>{{profile.user_detail.fullname}}</h3>
-
-                    <ul class="list-unstyled user_data">
-
-                        {% if profile.user_detail.facebook %}
-                        <li class="m-top-xs">
-                            <i class="fa fa-external-link user-profile-icon"></i>
-                            <a href={{profile.user_detail.facebook}}
-                               target="_blank">{{profile.user_detail.facebook}}</a>
-                        </li>
-                        {% endif %}
-                        {% if profile.user_detail.twitter %}
-                        <li class="m-top-xs">
-                            <i class="fa fa-external-link user-profile-icon"></i>
-                            <a href={{profile.user_detail.twitter}} target="_blank">{{profile.user_detail.twitter}}</a>
-                        </li>
-                        {% endif %}
-                        {% if profile.email %}
-                        <li>
-                            <i class="glyphicon glyphicon-envelope"></i> {{profile.email}}
-                        </li>
-
-                        {% endif %}
-                        {% if profile.user_detail.contact %}
-                        <li>
-                            <i class="glyphicon glyphicon-earphone"></i> {{profile.user_detail.contact}}
-                        </li>
-                        {% endif %}
-
-                    </ul>
-
-
-                </div>
-                <div class="col-md-9 col-sm-9 col-xs-12">
-
-                    <div class="profile_title">
-                        <div class="col-md-6">
-                            <h2>User Details</h2>
-                        </div>
-
+                    <!-- end of image cropping -->
+                    <div id="avatar-button" style="padding: 10px 0px;">
+                        <input type="file" id="profile-avatar" name="avatar"
+                               class="upload-btn"/>
+                        <label class="file-label" for="profile-avatar">
+                            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                            Upload New
+                        </label>
                     </div>
-                    {% include '/gentelella/admin/profile/_form.html' %}
 
                 </div>
-                </form>
+                <h3>{{profile.user_detail.fullname}}</h3>
+
+                <ul class="list-unstyled user_data">
+
+                    {% if profile.user_detail.facebook %}
+                    <li class="m-top-xs">
+                        <i class="fa fa-external-link user-profile-icon"></i>
+                        <a href={{profile.user_detail.facebook}}
+                           target="_blank">{{profile.user_detail.facebook}}</a>
+                    </li>
+                    {% endif %}
+                    {% if profile.user_detail.twitter %}
+                    <li class="m-top-xs">
+                        <i class="fa fa-external-link user-profile-icon"></i>
+                        <a href={{profile.user_detail.twitter}}
+                           target="_blank">{{profile.user_detail.twitter}}</a>
+                    </li>
+                    {% endif %}
+                    {% if profile.email %}
+                    <li>
+                        <i class="glyphicon glyphicon-envelope"></i> {{profile.email}}
+                    </li>
+
+                    {% endif %}
+                    {% if profile.user_detail.contact %}
+                    <li>
+                        <i class="glyphicon glyphicon-earphone"></i> {{profile.user_detail.contact}}
+                    </li>
+                    {% endif %}
+
+                </ul>
+
+
             </div>
-        </div>
+            <div class="col-md-8 col-sm-8 col-xs-12">
+
+
+                {% include '/gentelella/admin/profile/_form.html' %}
+
+            </div>
+        </form>
+
     </div>
 </div>
 

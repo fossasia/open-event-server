@@ -12,6 +12,7 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     ERROR_404_HELP = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///../app.db')
+    BASE_DIR = _basedir
 
 
 class ProductionConfig(Config):

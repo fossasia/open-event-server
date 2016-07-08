@@ -1,5 +1,12 @@
 from . import db
 
+EVENT_ROLE_INVITE = 'Event Role Invitation'
+NEW_SESSION = 'New Session Proposal'
+SESSION_SCHEDULE = 'Session Schedule Change'
+NEXT_EVENT = 'Next Event'
+SESSION_ACCEPT_REJECT = 'Session Accept or Reject'
+INVITE_PAPERS = 'Invitation For Papers'
+AFTER_EVENT = 'After Event'
 
 class Notification(db.Model):
     """
@@ -13,13 +20,21 @@ class Notification(db.Model):
 
     title = db.Column(db.String)
     message = db.Column(db.Text)
+    action = db.Column(db.String)
     received_at = db.Column(db.DateTime)
     has_read = db.Column(db.Boolean)
 
-    def __init__(self, user, title, message, received_at, has_read=False):
+    def __init__(self,
+                 user,
+                 title,
+                 message,
+                 action,
+                 received_at,
+                 has_read=False):
         self.user = user
         self.title = title
         self.message = message
+        self.action = action
         self.received_at = received_at
         self.has_read = has_read
 
