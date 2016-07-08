@@ -24,10 +24,13 @@ from flask import Blueprint
 from flask.ext.autodoc import Autodoc
 from icalendar import Calendar
 import icalendar
-from open_event.helpers.oauth import OAuth, FbOAuth
+from open_event.helpers.oauth import OAuth, FbOAuth, InstagramOAuth
 from requests.exceptions import HTTPError
-from ..helpers.data import get_google_auth, create_user_oauth, get_facebook_auth, user_logged_in
+from ..helpers.data import get_google_auth, create_user_oauth, get_facebook_auth, user_logged_in, get_instagram_auth
 import geoip2.database
+import time
+from open_event.helpers.storage import upload, UploadedFile
+
 
 auto = Autodoc()
 
@@ -433,6 +436,29 @@ def facebook_callback():
 
 @app.route('/iCallback/', methods=('GET', 'POST'))
 def instagram_callback():
+    instagram = get_instagram_auth()
+    state = instagram.authorization_url(InstagramOAuth.get_auth_uri(), access_type='offline')
+    instagram = get_instagram_auth(state=state)
+    if 'code' in request.url:
+        code_url = (((request.url.split('&'))[0]).split('='))[1]
+        token = instagram.fetch_token(InstagramOAuth.get_token_uri(),
+                                      authorization_url=request.url,
+                                      code=code_url,
+                                      client_secret=InstagramOAuth.get_client_secret())
+        response = instagram.get('https://api.instagram.com/v1/users/self/media/recent/?access_token=' + token.get('access_token', '')).json()
+        for el in response.get('data'):
+            response_file = urlopen(el['images']['standard_resolution']['url'])
+
+            filename = str(time.time()) + '.jpg'
+            file_path = os.path.realpath('.') + '/static/temp/' + filename
+            fh = open(file_path, "wb")
+            fh.write(response_file.read())
+            fh.close()
+            img = UploadedFile(file_path, filename)
+            print img
+            background_url = upload(img, '/image/' + filename)
+            print background_url
+
     return 'Not implemented'
 
 @app.route('/pic/<path:filename>')
