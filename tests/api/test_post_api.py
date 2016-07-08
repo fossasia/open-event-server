@@ -86,9 +86,30 @@ class TestPostApi(TestPostApiBase):
         self._test_model('session', POST_SESSION_DATA)
 
     def test_session_api_extra_payload(self):
+        """
+        Test to make sure extra key added in payload is removed
+        """
         extraData = POST_SESSION_DATA.copy()
         extraData['new_key_2'] = 'value'
         self._test_model('session', extraData)
+
+    def test_session_api_extended(self):
+        self._login_user()
+        path = get_path(1, 'tracks')
+        self.post_request(path, POST_TRACK_DATA)
+        path = get_path(1, 'microlocations')
+        self.post_request(path, POST_MICROLOCATION_DATA)
+        path = get_path(1, 'speakers')
+        self.post_request(path, POST_SPEAKER_DATA)
+        # create session json
+        data = POST_SESSION_DATA.copy()
+        data['track_id'] = 1
+        data['microlocation_id'] = 1
+        data['speaker_ids'] = [1]
+        resp = self.post_request(get_path(1, 'sessions'), data)
+        self.assertEqual(resp.status_code, 201)
+        for i in ['TestTrack', 'TestSpeaker', 'TestMicrolocation']:
+            self.assertIn(i, resp.data, i)
 
     def test_speaker_api(self):
         self._test_model('speaker', POST_SPEAKER_DATA)
