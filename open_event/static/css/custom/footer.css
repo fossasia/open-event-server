@@ -58,13 +58,15 @@ footer .copyright{
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    padding: 16px;
+    padding: 10px 16px;
     background: #282C35;
-    color: #AAAAAA
+    color: #AAAAAA;
+    margin-top: 5px;
+    text-align: left;
 }
 
 .footer-dropdown .dropdown-text {
-    margin-left: 10%;
+    margin-left: 10px;
 }
 
 .footer-dropdown .fa-chevron-down {
@@ -85,7 +87,7 @@ footer .dropdown-menu {
         display: inline !important;
     }
     .dropup {
-        min-width:200px;
+        min-width:250px;
         margin-top: 25px;
     }
     #footer-menu a{
