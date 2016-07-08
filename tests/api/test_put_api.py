@@ -95,14 +95,36 @@ class TestPutApiMin(TestPutApiBase):
     """
     Test PUT API with payload as just one field.
     """
+    def _test_change_json(self, old, new, field):
+        old = json.loads(old)
+        new = json.loads(new)
+        if field.endswith('_id'):
+            field = field[:-3]
+        for i in old:
+            newdata = new[i]
+            olddata = old[i]
+            if type(newdata) in [dict, list]:
+                newdata = ''.join(sorted(json.dumps(newdata)))
+            if type(olddata) in [dict, list]:
+                olddata = ''.join(sorted(json.dumps(olddata)))
+            # compare
+            if i != field and newdata != olddata:
+                return i
+        return False
+
     def _test_model(self, name, data, path=None, exclude=[]):
         if not path:
             path = get_path(1) if name == 'event' else get_path(1, name + 's', 1)
         self._login_user()
         data_copy = data.copy()
+        # loop over keys
         for i in data_copy:
             if i in exclude:
                 continue
+            # get old
+            resp_old = self.app.get(path)
+            self.assertEqual(resp_old.status_code, 200)
+            # update
             resp = self._put(path, {i: data_copy[i]})
             self.assertEqual(200, resp.status_code,
                              msg='Key: %s\nMsg: %s' % (i, resp.data))
@@ -110,6 +132,10 @@ class TestPutApiMin(TestPutApiBase):
             # even in case of PUT request without 'name' as payload
             self.assertIn('Test' + name[0].upper() + name[1:], resp.data,
                           msg='Key: %s\nMsg: %s' % (i, resp.data))
+            # check persistence
+            status = self._test_change_json(resp_old.data, resp.data, i)
+            if status:
+                self.assertTrue(0, msg='Key %s changed in %s' % (status, i))
 
     def test_event_api(self):
         self._test_model('event', POST_EVENT_DATA, exclude=['sub_topic'])

@@ -237,7 +237,7 @@ class SessionTypeList(Resource):
 
     @requires_auth
     @api.doc('create_session_type', responses=POST_RESPONSES)
-    @api.marshal_with(SESSION_TYPE_POST)
+    @api.marshal_with(SESSION_TYPE)
     @api.expect(SESSION_TYPE_POST)
     def post(self, event_id):
         """Create a session type"""
@@ -259,8 +259,14 @@ class SessionType(Resource):
 
     @requires_auth
     @api.doc('update_session_type', responses=PUT_RESPONSES)
-    @api.marshal_with(SESSION_TYPE_POST)
+    @api.marshal_with(SESSION_TYPE)
     @api.expect(SESSION_TYPE_POST)
     def put(self, event_id, type_id):
         """Update a session type given its id"""
         return TypeDAO.update(event_id, type_id, self.api.payload)
+
+    @api.hide
+    @api.marshal_with(SESSION_TYPE)
+    def get(self, event_id, type_id):
+        """Fetch a session type given its id"""
+        return TypeDAO.get(event_id, type_id)
