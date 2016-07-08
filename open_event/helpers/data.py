@@ -1233,7 +1233,7 @@ def get_instagram_auth(state=None, token=None):
     if token:
         return OAuth2Session(InstagramOAuth.get_client_id(), token=token)
     if state:
-        return OAuth2Session(InstagramOAuth.get_client_id(), state=state, scope=InstagramOAuth.SCOPE,
+        return OAuth2Session(InstagramOAuth.get_client_id(), state=state,
                              redirect_uri=InstagramOAuth.get_redirect_uri())
     scope = "+".join(InstagramOAuth.SCOPE)
     oauth = OAuth2Session(InstagramOAuth.get_client_id(), redirect_uri=InstagramOAuth.get_redirect_uri())
