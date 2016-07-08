@@ -107,8 +107,9 @@ class EventDAO(BaseDAO):
             'start_time', 'end_time', 'closing_datetime',
             'schedule_published_on'
         ]
-        for i in datetime_fields:
-            data[i] = EVENT_POST[i].from_str(data.get(i))
+        for f in datetime_fields:
+            if f in data:
+                data[f] = EVENT_POST[f].from_str(data.get(f))
         return data
 
     def create(self, data, url):

@@ -98,10 +98,10 @@ class SessionDAO(ServiceDAO):
     def _delete_fields(self, data):
         data = self._del(data, ['speaker_ids', 'track_id',
                          'microlocation_id', 'session_type_id'])
-        data['start_time'] = SESSION_POST['start_time'].from_str(
-            data.get('start_time'))
-        data['end_time'] = SESSION_POST['end_time'].from_str(
-            data.get('end_time'))
+        # convert datetime fields
+        for _ in ['start_time', 'end_time']:
+            if _ in data:
+                data[_] = SESSION_POST[_].from_str(data[_])
         return data
 
     def get_object(self, model, sid, event_id):
@@ -116,17 +116,21 @@ class SessionDAO(ServiceDAO):
         """
         Fixes payload of POST request
         """
-        data['track'] = self.get_object(
-            TrackModel, data.get('track_id'), event_id)
-        data['microlocation'] = self.get_object(
-            MicrolocationModel, data.get('microlocation_id'), event_id)
-        data['session_type'] = self.get_object(
-            SessionTypeModel, data.get('session_type_id'), event_id)
+        if 'track_id' in data:
+            data['track'] = self.get_object(
+                TrackModel, data.get('track_id'), event_id)
+        if 'microlocation_id' in data:
+            data['microlocation'] = self.get_object(
+                MicrolocationModel, data.get('microlocation_id'), event_id)
+        if 'session_type_id' in data:
+            data['session_type'] = self.get_object(
+                SessionTypeModel, data.get('session_type_id'), event_id)
+        if 'speaker_ids' in data:
+            data['speakers'] = InstrumentedList(
+                SpeakerModel.query.get(_) for _ in data.get('speaker_ids', [])
+                if self.get_object(SpeakerModel, _, event_id) is not None
+            )
         data['event_id'] = event_id
-        data['speakers'] = InstrumentedList(
-            SpeakerModel.query.get(_) for _ in data.get('speaker_ids', [])
-            if self.get_object(SpeakerModel, _, event_id) is not None
-        )
         data = self._delete_fields(data)
         return data
 
@@ -136,10 +140,9 @@ class SessionDAO(ServiceDAO):
         data_copy = self.fix_payload_post(event_id, data_copy)
         data = self._delete_fields(data)
         obj = ServiceDAO.update(self, event_id, service_id, data, validate=False)
-        obj.track = data_copy['track']
-        obj.microlocation = data_copy['microlocation']
-        obj.speakers = data_copy['speakers']
-        obj.session_type = data_copy['session_type']
+        for f in ['track', 'microlocation', 'speakers', 'session_type']:
+            if f in data_copy:
+                setattr(obj, f, data_copy[f])
         obj = save_db_model(obj, SessionModel.__name__, event_id)
         return obj
 

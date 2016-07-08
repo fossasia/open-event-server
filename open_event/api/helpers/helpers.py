@@ -251,6 +251,11 @@ def update_model(model, item_id, data, event_id=None):
         item = get_object_in_event(model, item_id, event_id)
     else:
         item = get_object_or_404(model, item_id)
+    # if no data in payload, happens when only related models were
+    # changed through the API
+    if len(data) == 0:
+        return item
+    # update data
     db.session.query(model).filter_by(id=item_id).update(dict(data))
     # model.__table__.update().where(model.id==item_id).values(**data)
     save_to_db(item, "%s updated" % model.__name__)
