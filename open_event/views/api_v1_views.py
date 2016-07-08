@@ -431,6 +431,10 @@ def facebook_callback():
         return 'did not find user info'
 
 
+@app.route('/iCallback/', methods=('GET', 'POST'))
+def instagram_callback():
+    return 'Not implemented'
+
 @app.route('/pic/<path:filename>')
 @auto.doc()
 def send_pic(filename):
