@@ -67,3 +67,7 @@ class ProfileView(BaseView):
         facebook = get_facebook_auth()
         fb_auth_url, state = facebook.authorization_url(FbOAuth.get_auth_uri(), access_type='offline')
         return redirect(fb_auth_url)
+
+    @expose('/instagram_connect', methods=('GET', 'POST'))
+    def connect_instagram(self):
+        pass

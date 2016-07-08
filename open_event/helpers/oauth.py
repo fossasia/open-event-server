@@ -71,3 +71,25 @@ class FbOAuth(object):
     @classmethod
     def get_user_info(self):
         return self.Fb_USER_INFO
+
+
+class InstagramOAuth(object):
+    INSTAGRAM_OAUTH_URI = "https://api.instagram.com/oauth/authorize/"
+
+    @classmethod
+    def get_client_id(self):
+        return get_settings()['in_client_id']
+
+    @classmethod
+    def get_client_secret(self):
+        return get_settings()['in_client_secret']
+
+    @classmethod
+    def get_redirect_uri(self):
+        url = urlparse(request.url)
+        i_redirect_uri = url.scheme + '://' + url.netloc + '/iCallback'
+        return i_redirect_uri
+
+    @classmethod
+    def get_auth_uri(self):
+        return self.INSTAGRAM_OAUTH_URI
