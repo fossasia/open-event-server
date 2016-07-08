@@ -257,7 +257,7 @@ class EventWebapp(Resource):
         return event
 
 
-@api.route('')
+@api.route('/')
 class EventList(Resource, EventResource):
     @api.doc('list_events', params=EVENT_PARAMS)
     @api.marshal_list_with(EVENT)
