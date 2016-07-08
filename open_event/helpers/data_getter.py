@@ -269,12 +269,12 @@ class DataGetter:
 
     @staticmethod
     def get_user_by_email(email):
-        user = User.query.filter_by(email=email)
-        if user:
-            return user.first()
-        else:
+        user = User.query.filter_by(email=email).first()
+        if not user:
             flash("User doesn't exist")
             return None
+        else:
+            return user
 
     @staticmethod
     def get_all_users():
