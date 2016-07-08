@@ -24,9 +24,9 @@ from flask import Blueprint
 from flask.ext.autodoc import Autodoc
 from icalendar import Calendar
 import icalendar
-from open_event.helpers.oauth import OAuth, FbOAuth
+from open_event.helpers.oauth import OAuth, FbOAuth, InstagramOAuth
 from requests.exceptions import HTTPError
-from ..helpers.data import get_google_auth, create_user_oauth, get_facebook_auth, user_logged_in
+from ..helpers.data import get_google_auth, create_user_oauth, get_facebook_auth, user_logged_in, get_instagram_auth
 import geoip2.database
 
 auto = Autodoc()
@@ -433,6 +433,29 @@ def facebook_callback():
 
 @app.route('/iCallback/', methods=('GET', 'POST'))
 def instagram_callback():
+    instagram = get_instagram_auth()
+    state = instagram.authorization_url(InstagramOAuth.get_auth_uri(), access_type='offline')
+    instagram = get_instagram_auth(state=state)
+    if 'code' in request.url:
+        code_url = (((request.url.split('&'))[0]).split('='))[1]
+        # import requests
+        # response = requests.post(InstagramOAuth.get_token_uri(), data={'client_id': InstagramOAuth.get_client_id(),
+        #                                                     'client_secret': InstagramOAuth.get_client_secret(),
+        #                                                     'grant_type': 'authorization_code',
+        #                                                     'redirect_uri': InstagramOAuth.get_redirect_uri(),
+        #                                                           'code': code_url}).json()
+        # access_token = response.get('access_token', None)
+        token = instagram.fetch_token(InstagramOAuth.get_token_uri(),
+                                      authorization_url=request.url,
+                                      code=code_url,
+                                      client_secret=InstagramOAuth.get_client_secret())
+        response = instagram.get('https://api.instagram.com/v1/users/self/media/recent/?access_token=' + token.get('access_token', '')).json()
+        for el in response.get('data'):
+            print el['images']['standard_resolution']['url']
+        # print token
+        # instagram = get_instagram_auth(token=token)
+
+    # response = instagram.get(InstagramOAuth.get_user_info())
     return 'Not implemented'
 
 @app.route('/pic/<path:filename>')
