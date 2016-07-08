@@ -61,15 +61,9 @@
         </div>
         <div class="row" style="margin-bottom:20px">
             <div class="col-md-6 col-xs-6">
-            <label >Instagram:
-                </label>
-
-                {% if profile.user_detail.instagram %}
-                <input type="url" pattern="https?://.+" name="instagram" class="form-control" value="{{profile.user_detail.instagram}}"/>
-                {% else %}
-                <input type="url" pattern="https?://.+" name="instagram" class="form-control"/>
-                {% endif %}
-                </div>
+            <label >Instagram:</label>
+                <br />
+                <a class="btn btn-info" href="/profile/instagram_connect">Connect Account</a>
         </div>
     </div>
 
