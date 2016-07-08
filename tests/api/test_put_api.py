@@ -93,21 +93,26 @@ class TestPutApi(TestPutApiBase):
 
 class TestPutApiMin(TestPutApiBase):
     """
-    Test PUT API with single fields as payloads.
-    Will find most bugs
+    Test PUT API with payload as just one field.
     """
-    def _test_model(self, name, data, exclude=[]):
-        path = get_path(1) if name == 'event' else get_path(1, name + 's', 1)
+    def _test_model(self, name, data, path=None, exclude=[]):
+        if not path:
+            path = get_path(1) if name == 'event' else get_path(1, name + 's', 1)
         self._login_user()
         data_copy = data.copy()
         for i in data_copy:
             if i in exclude:
                 continue
             resp = self._put(path, {i: data_copy[i]})
-            self.assertEqual(200, resp.status_code, msg='Key: %s\nMsg: %s' % (i, resp.data))
+            self.assertEqual(200, resp.status_code,
+                             msg='Key: %s\nMsg: %s' % (i, resp.data))
+            # the following test ensures that name field is not nullified/empty
+            # even in case of PUT request without 'name' as payload
+            self.assertIn('Test' + name[0].upper() + name[1:], resp.data,
+                          msg='Key: %s\nMsg: %s' % (i, resp.data))
 
     def test_event_api(self):
-        self._test_model('event', POST_EVENT_DATA, ['sub_topic'])
+        self._test_model('event', POST_EVENT_DATA, exclude=['sub_topic'])
 
     def test_track_api(self):
         self._test_model('track', POST_TRACK_DATA)
@@ -123,6 +128,17 @@ class TestPutApiMin(TestPutApiBase):
 
     def test_sponsor_api(self):
         self._test_model('sponsor', POST_SPONSOR_DATA)
+
+    def test_social_link_api(self):
+        self._test_model(
+            'socialLink', POST_SOCIAL_LINK_DATA, path=get_path(1, 'links', 1)
+        )
+
+    def test_session_type_api(self):
+        self._test_model(
+            'sessionType', POST_SESSION_TYPE_DATA,
+            path=get_path(1, 'sessions', 'types', 1)
+        )
 
 
 if __name__ == '__main__':
