@@ -455,7 +455,8 @@ def instagram_callback():
             fh.write(response_file.read())
             fh.close()
             img = UploadedFile(file_path, filename)
-            background_url = upload(img, 'events/%d/background_image' % (int(1)))
+            print img
+            background_url = upload(img, '/image/' + filename)
             print background_url
 
     return 'Not implemented'
