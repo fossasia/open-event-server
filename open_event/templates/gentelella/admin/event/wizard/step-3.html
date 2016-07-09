@@ -34,10 +34,10 @@
 
         <div class="col-xs-7 input-group form-group">
             <div class="input-group">
-                <input type="number" class="form-control" required="required" name="rooms[floor]"
+                <input type="number" class="form-control" name="rooms[floor]"
                        placeholder="Floor"
                        title="rooms-floor"
-                       value="{{ microlocation.floor | default(0) if not empty else '' }}"/>
+                       value="{{ microlocation.floor | default('') }}"/>
                         <span class="input-group-btn">
                             <button type="button" class="btn btn-danger remove-rooms">-</button>
                             <button type="button" class="btn btn-primary add-rooms">+</button>
