@@ -92,7 +92,7 @@ Logs
             <table id="notif_table" class="table table-striped with-datatable no-global-dt">
                 <thead>
                 <tr>
-                    <th>To</th>
+                    <th>For</th>
                     <th>Time</th>
                     <th>Action</th>
                     <th>Message</th>
@@ -101,7 +101,7 @@ Logs
                 <tbody>
                     {% for notif in notifications %}
                         <tr>
-                        <td>{{ notif.user.email }}</td>
+                        <td>{{ notif.user.user_detail.fullname | default(notif.user.email, true) }}</td>
                         <td data-toggle="tooltip" data-placement="bottom" title="{{ notif.received_at }}"
                             data-delay='{"show":"500", "hide":"300"}'>{{ notif.received_at | humanize }}</td>
                         <td>{{ notif.action }}</td>
