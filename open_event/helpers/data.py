@@ -161,7 +161,7 @@ class DataManager(object):
                                                                        user_id=user_id,
                                                                        event_id=event.id)
                     save_to_db(new_email_notification_setting, "EmailSetting Toggled")
-                    new_email_notification_setting.append(email_notification.id)
+                    notification_ids.append(new_email_notification_setting.id)
         return notification_ids
 
     @staticmethod
