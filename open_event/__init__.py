@@ -1,6 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 import arrow
 from dateutil import tz
+from celery import Celery
 from flask.ext.htmlmin import HTMLMIN
 import logging
 import os.path
@@ -76,6 +77,10 @@ def create_app():
     app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=24*60*60)
     app.config['JWT_AUTH_URL_RULE'] = None
     jwt = JWT(app, jwt_authenticate, jwt_identity)
+
+    # setup celery
+    app.config['CELERY_BROKER_URL'] = environ.get('REDISTOGO_URL', 'redis://localhost:6379/0')
+    app.config['CELERY_RESULT_BACKEND'] = app.config['CELERY_BROKER_URL']
 
     HTMLMIN(app)
     admin_view = AdminView("Open Event")
@@ -214,6 +219,9 @@ def track_user():
         current_user.update_lat()
 
 current_app, manager, database, jwt = create_app()
+
+celery = Celery(current_app.name, broker=current_app.config['CELERY_BROKER_URL'])
+celery.conf.update(app.config)
 
 
 @app.before_first_request

@@ -34,3 +34,4 @@ arrow
 unidecode
 unicode-slugify
 bleach
+celery==3.1.23
