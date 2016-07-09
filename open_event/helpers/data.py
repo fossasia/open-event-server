@@ -907,7 +907,9 @@ class DataManager(object):
 
             for index, name in enumerate(room_name):
                 if not string_empty(name):
-                    room = Microlocation(name=name, floor=room_floor[index], event_id=event.id)
+                    room = Microlocation(name=name,
+                                         floor=room_floor[index] if room_floor[index] != '' else None,
+                                         event_id=event.id)
                     db.session.add(room)
 
             for index, name in enumerate(sponsor_name):
@@ -1003,7 +1005,7 @@ class DataManager(object):
             save_to_db(track_new, "Track copy saved")
 
         for room in rooms_old:
-            room_new = Microlocation(name=room.name, event_id=event.id)
+            room_new = Microlocation(name=room.name, floor=room.floor, event_id=event.id)
             save_to_db(room_new, "Room copy saved")
 
         if call_for_papers_old:
@@ -1168,11 +1170,11 @@ class DataManager(object):
                                             id=room_id[index],
                                             event_id=event.id)
                     room.name = name
-                    room.floor = room_floor[index]
+                    room.floor = room_floor[index] if room_floor[index] != '' else None
                 else:
                     room, c = get_or_create(Microlocation,
                                             name=name,
-                                            floor=room_floor[index],
+                                            floor=room_floor[index] if room_floor[index] != '' else None,
                                             event_id=event.id)
                 db.session.add(room)
 
