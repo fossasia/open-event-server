@@ -27,6 +27,10 @@ class TestProfile(OpenEventViewTestCase):
             rv = self.app.post(url_for('profile.edit_view'), follow_redirects=True, buffered=True,
                                content_type='multipart/form-data', data=data)
             self.assertIn("Super Hero", rv.data, msg=rv.data)
+            data['full_name'] = 'SuperMan'
+            rv = self.app.post(url_for('profile.edit_view'), follow_redirects=True, buffered=True,
+                               content_type='multipart/form-data', data=data)
+            self.assertIn("SuperMan", rv.data, msg=rv.data)
 
     def test_notifications(self):
         with app.test_request_context():

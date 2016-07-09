@@ -8,7 +8,7 @@ from open_event.helpers.data_getter import DataGetter
 from flask import url_for
 
 from tests.views.view_test_case import OpenEventViewTestCase
-
+from werkzeug.datastructures import ImmutableMultiDict
 
 class TestEvents(OpenEventViewTestCase):
     def test_events_list(self):
@@ -30,15 +30,25 @@ class TestEvents(OpenEventViewTestCase):
             url = url_for('events.create_view')
             data = POST_EVENT_DATA.copy()
             del data['copyright']
+            data['sponsors[name]'] = ['Sponsor 1', 'Sponsor 2']
+            data['sponsors[type]'] = ['Gold', 'Silver']
+            data['sponsors[url]'] = ["", ""]
+            data['sponsors[description]'] = ["", ""]
+            data['sponsors[level]'] = ["", ""]
             data['start_date'] = '07/04/2016'
             data['start_time'] = '19:00'
             data['end_date'] = '07/04/2016'
             data['end_time'] = '22:00'
             data['custom_form[name]'] = ['session_form', 'speaker_form']
             data['custom_form[value]'] = [custom_forms.session_form, custom_forms.speaker_form]
+            data = ImmutableMultiDict(data)
             rv = self.app.post(url, follow_redirects=True, buffered=True, content_type='multipart/form-data',
                                data=data)
             self.assertTrue(POST_EVENT_DATA['name'] in rv.data, msg=rv.data)
+
+            rv2 = self.app.get(url_for('events.details_view', event_id=1))
+            self.assertTrue(data['sponsors[name]'] in rv2.data, msg=rv2.data)
+
 
     def test_events_create_post_publish(self):
         with app.test_request_context():
@@ -81,15 +91,24 @@ class TestEvents(OpenEventViewTestCase):
             url = url_for('events.edit_view', event_id=event.id)
             data = POST_EVENT_DATA.copy()
             del data['copyright']
+            data['sponsors[name]'] = ['Sponsor 1', 'Sponsor 2']
+            data['sponsors[type]'] = ['Gold', 'Silver']
+            data['sponsors[url]'] = ["", ""]
+            data['sponsors[description]'] = ["", ""]
+            data['sponsors[level]'] = ["", ""]
+            data['name'] = 'EditTestName'
             data['start_date'] = '07/04/2016'
             data['start_time'] = '19:00'
             data['end_date'] = '07/04/2016'
             data['end_time'] = '22:00'
             data['custom_form[name]'] = ['session_form', 'speaker_form']
             data['custom_form[value]'] = [custom_forms.session_form, custom_forms.speaker_form]
+            data = ImmutableMultiDict(data)
             rv = self.app.post(url, follow_redirects=True, buffered=True, content_type='multipart/form-data',
                                data=data)
-            self.assertTrue(POST_EVENT_DATA['name'] in rv.data, msg=rv.data)
+            self.assertTrue('EditTestName' in rv.data, msg=rv.data)
+            self.assertTrue(data['sponsors[name]'] in rv.data, msg=rv.data)
+
 
     def test_event_view(self):
         with app.test_request_context():

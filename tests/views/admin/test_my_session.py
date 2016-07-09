@@ -24,7 +24,7 @@ class TestMySession(OpenEventViewTestCase):
                               user=self.super_admin,
                               country="India")
             save_to_db(speaker, "Speaker saved")
-            session = Session(title='test',
+            session = Session(title='test session',
                               long_abstract='dsad',
                               start_time=datetime(2003, 8, 4, 12, 30, 45),
                               end_time=datetime(2003, 8, 4, 12, 30, 45),
@@ -33,7 +33,7 @@ class TestMySession(OpenEventViewTestCase):
                               state='pending')
             save_to_db(session, "Session saved")
             rv = self.app.get(url_for('my_sessions.display_session_view', session_id=session.id), follow_redirects=True)
-            self.assertTrue("mysessions" in rv.data, msg=rv.data)
+            self.assertTrue("test session" in rv.data, msg=rv.data)
 
     def test_my_session_unauthorized_access(self):
         with app.test_request_context():

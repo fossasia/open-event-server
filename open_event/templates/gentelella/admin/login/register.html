@@ -4,7 +4,7 @@
   <form data-toggle="validator" method="post">
     <h1>Registration Form</h1>
     <div class="form-group has-feedback">
-      <input type="email" name="email" class="form-control" id="email" placeholder="Email" data-remote="{{ url_for('admin.check_duplicate_email') }}" data-error="Email Address already exists" required="">
+      <input type="email" name="email" class="form-control" id="email" placeholder="Email" data-remote="{{ url_for('admin.check_duplicate_email') }}" data-remote-error="Email Address already exists" required="">
       <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
       <div class="help-block with-errors"></div>
     </div>

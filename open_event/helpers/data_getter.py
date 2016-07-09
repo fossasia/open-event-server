@@ -268,11 +268,14 @@ class DataGetter:
         return files
 
     @staticmethod
-    def get_user_by_email(email):
+    def get_user_by_email(email, role_method=None):
         user = User.query.filter_by(email=email).first()
         if not user:
-            flash("User doesn't exist")
-            return None
+            if role_method == True:
+                return None
+            else:
+                flash("User doesn't exist")
+                return None
         else:
             return user
 

@@ -40,7 +40,6 @@
         {% endif %}
 
         </div>
-        
     </div>
 {% endmacro %}
 
@@ -116,7 +115,6 @@
                         {% if csrf_token %}
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                         {% endif %}
-
                         <div class="tab-content">
                             <div class="tab-pane fade {% if step == '' %}in active{% endif %}" id="step1">
                                 {% include 'gentelella/admin/event/wizard/step-1.html' %}

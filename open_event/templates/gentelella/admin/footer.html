@@ -5,7 +5,6 @@
             <div class="col-md-3 col-sm-3">
                 <h4 class="footer-header">Use Open Event</h4>
                 <ul>
-
                     <li><a href="/how_it_works">How it Works</a></li>
                     <li><a href="/pricing">Pricing</a></li>
                     <li><a href="/mobile_apps">Mobile Apps</a></li>
@@ -17,14 +16,14 @@
                 <ul>
 
                     {% for event_type in event_typo%}
-                    <li><a href="/how_it_works">{{event_type}}</a></li>
+                    <li><a href="{{ url_for('admin.browse_view',type=event_type) }}">{{event_type}}</a></li>
                     {%endfor%}
                 </ul>
             </div>
             <div class="col-md-3 col-sm-3"><h4>Locations</h4>
                 <ul>
                     {% for location in locations%}
-                    <li><a href="/explore/{{location}}/events/">{{location}}</a></li>
+                    <li><a href="/explore/{{ location | slugify }}/events/">{{location}}</a></li>
                     {%endfor%}
                 </ul>
             </div>
