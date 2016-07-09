@@ -80,7 +80,6 @@ class TestEvents(OpenEventViewTestCase):
             save_to_db(custom_forms, "Custom forms saved")
             url = url_for('events.edit_view', event_id=event.id)
             data = POST_EVENT_DATA.copy()
-            print data
             del data['copyright']
             data['name'] = 'EditTestName'
             data['start_date'] = '07/04/2016'
@@ -89,7 +88,6 @@ class TestEvents(OpenEventViewTestCase):
             data['end_time'] = '22:00'
             data['custom_form[name]'] = ['session_form', 'speaker_form']
             data['custom_form[value]'] = [custom_forms.session_form, custom_forms.speaker_form]
-            print data
             rv = self.app.post(url, follow_redirects=True, buffered=True, content_type='multipart/form-data',
                                data=data)
             self.assertTrue('EditTestName' in rv.data, msg=rv.data)
