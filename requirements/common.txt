@@ -17,7 +17,7 @@ requests==2.10.0
 WTForms-Components==0.10.0
 WTForms==2.1
 colour==0.1.2
-psycopg2==2.6.1
+psycopg2==2.6.2
 xlrd==1.0.0
 mock==2.0.0
 SQLAlchemy-Utils==0.32.7

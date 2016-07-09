@@ -6,7 +6,7 @@ from flask.exthook import ExtDeprecationWarning
 warnings.simplefilter('ignore', ExtDeprecationWarning)
 # Keep it before flask extensions are imported
 import arrow
-    from flask.ext.htmlmin import HTMLMIN
+from flask.ext.htmlmin import HTMLMIN
 import logging
 import os.path
 from os import environ
