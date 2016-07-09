@@ -321,6 +321,7 @@ class EventsView(BaseView):
         sponsors = DataGetter.get_sponsors(event_id)
         return self.render('/gentelella/admin/event/copy/copy.html',
                            event=event,
+                           is_copy=1,
                            session_types=session_types,
                            tracks=tracks,
                            social_links=social_links,
