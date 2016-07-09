@@ -1,7 +1,12 @@
 """Copyright 2015 Rafal Kowalski"""
+
+# Ignore ExtDeprecationWarnings for Flask 0.11 - see http://stackoverflow.com/a/38080580
+import warnings
+from flask.exthook import ExtDeprecationWarning
+warnings.simplefilter('ignore', ExtDeprecationWarning)
+# Keep it before flask extensions are imported
 import arrow
-from dateutil import tz
-from flask.ext.htmlmin import HTMLMIN
+    from flask.ext.htmlmin import HTMLMIN
 import logging
 import os.path
 from os import environ
