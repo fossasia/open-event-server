@@ -21,6 +21,7 @@ class TestSessionApi(OpenEventViewTestCase):
             url = url_for('event_sessions.index_view', event_id=event.id, session_id=session.id)
             rv = self.app.get(url, follow_redirects=True)
             self.assertTrue("Sessions" in rv.data, msg=rv.data)
+            self.assertTrue("test" in rv.data, msg=rv.data)
 
     def test_session_create(self):
         with app.test_request_context():
