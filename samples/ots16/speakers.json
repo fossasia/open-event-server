@@ -219,7 +219,7 @@
         "website": "http://rootz.one"
     }, 
     {
-        "country": "", 
+        "country": "Not available",
         "email": "email@domain.com", 
         "facebook": null, 
         "github": "", 
@@ -242,7 +242,7 @@
         "website": ""
     }, 
     {
-        "country": "", 
+        "country": "Not available",
         "email": "email@domain.com", 
         "facebook": null, 
         "github": "", 
@@ -319,7 +319,7 @@
         "website": "http://www.neurofox.com"
     }, 
     {
-        "country": "", 
+        "country": "Not available",
         "email": "email@domain.com", 
         "facebook": null, 
         "github": "", 
@@ -731,7 +731,7 @@
         "website": "http://openculture.agency"
     }, 
     {
-        "country": "", 
+        "country": "Not available",
         "email": "email@domain.com", 
         "facebook": null, 
         "github": "", 
@@ -904,7 +904,7 @@
         "website": "http://flowedoo.de"
     }, 
     {
-        "country": "", 
+        "country": "Not available",
         "email": "email@domain.com", 
         "facebook": null, 
         "github": "", 
@@ -913,7 +913,7 @@
         "long_biography": "", 
         "mobile": null, 
         "name": "OpenTechSummit 2016", 
-        "organisation": "", 
+        "organisation": "Not available",
         "photo": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/programm/", 
         "position": null, 
         "sessions": [
@@ -996,7 +996,7 @@
         "website": "http://www.tursics.de/projects/"
     }, 
     {
-        "country": "", 
+        "country": "Not available",
         "email": "email@domain.com", 
         "facebook": null, 
         "github": "", 
@@ -1023,7 +1023,7 @@
         "website": "http://ibm.com"
     }, 
     {
-        "country": "", 
+        "country": "Not available",
         "email": "email@domain.com", 
         "facebook": null, 
         "github": "", 
@@ -1215,7 +1215,7 @@
         "website": "http://public.beuth-hochschule.de/~rweis/"
     }, 
     {
-        "country": "", 
+        "country": "Not available",
         "email": "email@domain.com", 
         "facebook": null, 
         "github": "", 
@@ -1353,7 +1353,7 @@
         "website": "http://www.bioflux.eu/"
     }, 
     {
-        "country": "", 
+        "country": "Not available",
         "email": "email@domain.com", 
         "facebook": null, 
         "github": "", 
@@ -1788,7 +1788,7 @@
         "long_biography": "", 
         "mobile": null, 
         "name": "David Weber", 
-        "organisation": "", 
+        "organisation": "Not available",
         "photo": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/programm/", 
         "position": null, 
         "sessions": [
@@ -1811,7 +1811,7 @@
         "long_biography": "", 
         "mobile": null, 
         "name": "Roman Kobosil", 
-        "organisation": "", 
+        "organisation": "Not available",
         "photo": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/programm/", 
         "position": null, 
         "sessions": [
@@ -1834,7 +1834,7 @@
         "long_biography": "", 
         "mobile": null, 
         "name": "Paula Glaser", 
-        "organisation": "", 
+        "organisation": "Not available",
         "photo": "https://raw.githubusercontent.com/OpenTechSummit/2016.opentechsummit.net/gh-pages/programm/", 
         "position": null, 
         "sessions": [

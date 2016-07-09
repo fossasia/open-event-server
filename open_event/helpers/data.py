@@ -161,7 +161,7 @@ class DataManager(object):
                                                                        user_id=user_id,
                                                                        event_id=event.id)
                     save_to_db(new_email_notification_setting, "EmailSetting Toggled")
-                    new_email_notification_setting.append(email_notification.id)
+                    notification_ids.append(new_email_notification_setting.id)
         return notification_ids
 
     @staticmethod
@@ -798,17 +798,10 @@ class DataManager(object):
         :param img_files:
         :param form: view data form
         """
-        # Returns val2 if val is empty
-        non_empty = lambda val, val2: val2 if val == '' else val
-
-        # Filter Copyright info
-        # If copyright_holder not set, make organizer_name the holder
-        holder = non_empty(form.get('copyright_holder'),
-                           form.get('organizer_name'))
+        # Filter out Copyright info
+        holder = form.get('copyright_holder')
         holder_url = form.get('copyright_holder_url')
-        # If copyright year not set, make current year the copyright year
-        year = non_empty(form.get('copyright_year'),
-                         datetime.now().year)
+        year = form.get('copyright_year')
         licence_name = form.get('copyright_licence')
         # Ignoring Licence description
         _, licence_url, logo = EVENT_LICENCES.get(licence_name, ('', '', ''))
@@ -1051,21 +1044,14 @@ class DataManager(object):
         event.code_of_conduct = form['code_of_conduct']
         event.ticket_url = form['ticket_url']
 
-        # Returns val2 if val is empty
-        non_empty = lambda val, val2: val2 if val == '' else val
-
         if not event.copyright:
             # It is possible that the copyright is set as None before.
             # Set it as an `EventCopyright` object
             event.copyright = EventCopyright()
-        # Filter Copyright info
-        # If copyright_holder not set, make organizer_name the holder
-        event.copyright.holder = non_empty(form.get('copyright_holder'),
-                                           form.get('organizer_name'))
+        # Filter out Copyright info
+        event.copyright.holder = form.get('copyright_holder')
         event.copyright.holder_url = form.get('copyright_holder_url')
-        # If copyright year not set, make current year the copyright year
-        event.copyright.year = non_empty(form.get('copyright_year'),
-                                         datetime.now().year)
+        event.copyright.year = form.get('copyright_year')
         licence_name = form.get('copyright_licence')
         # Ignoring Licence description
         _, licence_url, logo = EVENT_LICENCES.get(licence_name, ('', '', ''))
@@ -1390,7 +1376,7 @@ def get_instagram_auth(state=None, token=None):
     if token:
         return OAuth2Session(InstagramOAuth.get_client_id(), token=token)
     if state:
-        return OAuth2Session(InstagramOAuth.get_client_id(), state=state, scope=InstagramOAuth.SCOPE,
+        return OAuth2Session(InstagramOAuth.get_client_id(), state=state,
                              redirect_uri=InstagramOAuth.get_redirect_uri())
     scope = "+".join(InstagramOAuth.SCOPE)
     oauth = OAuth2Session(InstagramOAuth.get_client_id(), redirect_uri=InstagramOAuth.get_redirect_uri())
