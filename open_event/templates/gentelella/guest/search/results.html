@@ -236,14 +236,15 @@
             });
         }
 
+        var pathArray = location.href.split('/');
+        var protocol = pathArray[0];
+        var host = pathArray[2];
+        var url = protocol + '//' + host;
+
         $(document).on("click", ".share-btn", function (event) {
             event.stopImmediatePropagation();
             event.stopPropagation();
             event.preventDefault();
-            var pathArray = location.href.split('/');
-            var protocol = pathArray[0];
-            var host = pathArray[2];
-            var url = protocol + '//' + host;
             var eventUrl = url + "/e/" + $(this).data("event-id") + "/" + slugify($(this).data("title"));
             $("#share-url-box").val(eventUrl);
             setSocialLinks(eventUrl, $(this).data("title"));

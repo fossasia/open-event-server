@@ -1,4 +1,4 @@
 -r common.txt
 
-gunicorn==19.5.0
+gunicorn==19.6.0
 Fabric==1.11.1

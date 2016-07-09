@@ -16,7 +16,11 @@ class ObjectMother(object):
     def get_event():
         return Event(name="event1",
                      start_time=datetime(2003, 8, 4, 12, 30, 45),
-                     end_time=datetime(2003, 9, 4, 12, 30, 45))
+                     end_time=datetime(2003, 9, 4, 12, 30, 45),
+                     location_name='India',
+                     topic='Travel & Outdoor',
+                     sub_topic='Climbing',
+                     type='Camp, Trip, or Retreat')
 
     @staticmethod
     def get_track(event_id=1):
