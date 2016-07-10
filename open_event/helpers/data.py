@@ -1053,7 +1053,6 @@ class DataManager(object):
             event.copyright = EventCopyright()
         # Filter out Copyright info
         event.copyright.holder = form.get('organizer_name')
-        event.copyright.holder_url = form.get('organizer_url')
         licence_name = form.get('copyright_licence')
         # Ignoring Licence description
         _, licence_url, logo = EVENT_LICENCES.get(licence_name, ('', '', ''))
