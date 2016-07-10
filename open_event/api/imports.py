@@ -1,9 +1,10 @@
 from flask.ext.restplus import Resource, Namespace, marshal
-from flask import jsonify, url_for
+from flask import jsonify, url_for, current_app
 
 from open_event.helpers.data import record_activity
 from helpers.import_helpers import get_file_from_request, import_event_json
 from helpers.helpers import requires_auth
+from helpers.utils import TASK_RESULTS
 from events import EVENT
 
 
@@ -20,6 +21,12 @@ class EventImportJson(Resource):
         task = import_event_task.delay(file)
         # http://stackoverflow.com/questions/26379026/resolving-
         # task = celery.current_app.send_task('import.event', [file])
+        if current_app.config.get('CELERY_ALWAYS_EAGER'):
+            TASK_RESULTS[task.id] = {
+                'result': task.get(),
+                'state': task.state
+            }
+            print TASK_RESULTS[task.id]
         return jsonify(
             task_id=task.id,
             task_url=url_for('api.extras_celery_task', task_id=task.id)
