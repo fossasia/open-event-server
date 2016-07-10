@@ -804,7 +804,7 @@ class DataManager(object):
         year = datetime.now().year
         licence_name = form.get('copyright_licence')
         # Ignoring Licence long name, description and compact logo
-        _, _, licence_url, logo, _ = EVENT_LICENCES.get(licence_name, ('', '', ''))
+        _, _, licence_url, logo, _ = EVENT_LICENCES.get(licence_name, ('',)*5)
 
         copyright = EventCopyright(holder=holder,
                                    year=year,
@@ -1055,7 +1055,7 @@ class DataManager(object):
         event.copyright.holder = form.get('organizer_name')
         licence_name = form.get('copyright_licence')
         # Ignoring Licence description
-        _, _, licence_url, logo, _ = EVENT_LICENCES.get(licence_name, ('', '', ''))
+        _, _, licence_url, logo, _ = EVENT_LICENCES.get(licence_name, ('',)*5)
 
         event.copyright.licence = licence_name
         event.copyright.licence_url = licence_url
