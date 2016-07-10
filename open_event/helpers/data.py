@@ -1115,10 +1115,12 @@ class DataManager(object):
         custom_forms_value = form.getlist('custom_form[value]')
 
         # save the edited info to database
+        for session_type in session_types:
+            if str(session_type.id) not in session_type_id:
+                delete_from_db(session_type, "SessionType Deleted")
 
         for index, name in enumerate(session_type_names):
             if not string_empty(name):
-                print session_type_id[index]
                 if session_type_id[index] != '':
                     session_type, c = get_or_create(SessionType,
                                                     id=session_type_id[index],
@@ -1131,6 +1133,10 @@ class DataManager(object):
                                                     length=session_type_length[index],
                                                     event_id=event.id)
                 db.session.add(session_type)
+
+        for social_link in social_links:
+            if str(social_link.id) not in social_link_id:
+                delete_from_db(social_link, "SocialLink Deleted")
 
         for index, name in enumerate(social_link_name):
             if not string_empty(social_link_link[index]):
@@ -1147,6 +1153,10 @@ class DataManager(object):
                                                    event_id=event.id)
                 db.session.add(social_link)
 
+        for track in tracks:
+            if str(track.id) not in track_id:
+                delete_from_db(track, "Track Deleted")
+
         for index, name in enumerate(track_name):
             if not string_empty(name):
                 if track_id[index] != '':
@@ -1161,6 +1171,10 @@ class DataManager(object):
                                              color=track_color[index].upper(),
                                              event_id=event.id)
                 db.session.add(track)
+
+        for room in microlocations:
+            if str(room.id) not in room_id:
+                delete_from_db(room, "Room Deleted")
 
         for index, name in enumerate(room_name):
             if not string_empty(name):
