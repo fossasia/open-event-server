@@ -200,7 +200,7 @@ class MyHomeView(AdminIndexView):
     def check_duplicate_email(self):
         if request.method == 'GET':
             email = request.args['email']
-            user = DataGetter.get_user_by_email(email)
+            user = DataGetter.get_user_by_email(email, no_flash=True)
             if user is None:
                 return '200 OK'
             else:
