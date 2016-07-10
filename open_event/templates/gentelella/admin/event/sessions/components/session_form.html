@@ -28,6 +28,9 @@
 
         <br>
         <button type="submit" class="btn btn-success">Save Session</button>
+        {% if session.state == "draft" %}
+            <button type="submit" class="btn btn-primary" name="state" value="pending">Submit Session</button>
+        {% endif %}
     </div>
 </form>
 
