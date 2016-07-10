@@ -26,13 +26,23 @@ class Setting(db.Model):
     secret = db.Column(db.String)
     # storage place, local, s3, .. can be more in future
     storage_place = db.Column(db.String)
+    #social links
+    google_url = db.Column(db.String)
+    github_url = db.Column(db.String)
+    twitter_url = db.Column(db.String)
+    support_url = db.Column(db.String)
+    facebook_url = db.Column(db.String)
+    youtube_url = db.Column(db.String)
 
     def __init__(self, aws_key=None, aws_secret=None, aws_bucket_name=None,
                  google_client_id=None, google_client_secret=None,
                  fb_client_id=None, fb_client_secret=None, tw_consumer_key=None,
                  in_client_id=None, in_client_secret=None,
                  tw_consumer_secret=None, sendgrid_key=None,
-                 secret=None, storage_place=None):
+                 secret=None, storage_place=None,
+                 google_url=None, github_url=None,
+                 twitter_url=None, support_url=None,
+                 facebook_url=None, youtube_url=None):
         self.aws_key = aws_key
         self.aws_secret = aws_secret
         self.aws_bucket_name = aws_bucket_name
@@ -47,6 +57,12 @@ class Setting(db.Model):
         self.sendgrid_key = sendgrid_key
         self.secret = secret
         self.storage_place = storage_place
+        self.google_url = google_url
+        self.github_url = github_url
+        self.twitter_url = twitter_url
+        self.support_url = support_url
+        self.facebook_url = facebook_url
+        self.youtube_url = youtube_url
 
     def __repr__(self):
         return 'Settings'
