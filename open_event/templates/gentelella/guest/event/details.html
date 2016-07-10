@@ -175,9 +175,13 @@
                         <h5>{{ event.name }} is licenced under {{ licence_details['name'] }}</h5>
                         <div style="font-size: 13px;">
                             <p>About {{ licence_details['name'] }}</p>
-                            <img src="{{ licence_details['logo'] }}" class="pull-right" style="margin-left: 5px;">
+                            {% if licence_details['url'] != '' %}
+                                <img src="{{ licence_details['logo'] }}" class="pull-right" style="margin-left: 5px;">
+                            {% endif %}
                             {{ licence_details['description'] }}
-                            <a href="{{ licence_details['url'] }}" target="_blank" style="color:#1a75ff;">Read more.</a>
+                            {% if licence_details['url'] != '' %}
+                                <a href="{{ licence_details['url'] }}" target="_blank" style="color:#1a75ff;">Read more.</a>
+                            {% endif %}
                         </div>
                     </div>
                 {% endif %}
