@@ -30,12 +30,24 @@
             <div class="col-md-3 col-sm-3">
                 <h4>Connect With Us</h4>
                 <ul>
-                    <li><i class="fa fa-info"></i> <a href="/support">Support</a></li>
-                    <li><i class="fa fa-twitter"></i> <a href="/twitter">Twitter</a></li>
-                    <li><i class="fa fa-facebook"></i> <a href="/facebook">Facebook</a></li>
-                    <li><i class="fa fa-google-plus"></i> <a href="/google +">Google</a></li>
-                    <li><i class="fa fa-youtube-play"></i> <a href="/youtube +">Youtube</a></li>
-                    <li><i class="fa fa-github"></i> <a href="/google +">Github</a></li>
+                    {% if settings.support_url %}
+                        <li><i class="fa fa-info"></i> <a href="{{settings.support_url}}">Support</a></li>
+                    {% endif %}
+                    {% if settings.twitter_url %}
+                        <li><i class="fa fa-twitter"></i> <a href="{{settings.twitter_url}}">Twitter</a></li>
+                    {% endif %}
+                    {% if settings.facebook_url %}
+                        <li><i class="fa fa-facebook"></i> <a href="{{settings.facebook_url}}">Facebook</a></li>
+                    {% endif %}
+                    {% if settings.google_url %}
+                        <li><i class="fa fa-google-plus"></i> <a href="{{settings.google_url}}">Google</a></li>
+                    {% endif %}
+                    {% if settings.youtube_url %}
+                        <li><i class="fa fa-youtube-play"></i> <a href="{{settings.youtube_url}}">Youtube</a></li>
+                    {% endif %}
+                    {% if settings.github_url %}
+                        <li><i class="fa fa-github"></i> <a href="{{settings.github_url}}">Github</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
