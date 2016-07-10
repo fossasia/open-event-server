@@ -24,6 +24,13 @@ class SuperAdminSettingsView(SuperAdminBaseView):
             settings=settings
         )
 
+    @expose('/save_social', methods=['POST'])
+    def save_social_links(self):
+        print request.form
+        return self.render(
+            '/gentelella/admin/super_admin/settings/settings.html',
+            settings=settings)
+
     # @expose('/update', methods=('POST'))
     # def update_view(self):
     #     print request.form
