@@ -1,5 +1,6 @@
 import re
 import sys
+from getpass import getpass
 
 from open_event import current_app
 from open_event.models import db
@@ -24,7 +25,7 @@ def create_default_user():
     print "Your login is 'super_admin'."
     email = raw_input("Enter email for super_admin    : ")
     _validate_email(email)
-    password = raw_input("Enter password for super_admin : ")
+    password = getpass("Enter password for super_admin : ")
     _validate_password(password)
     DataManager.create_super_admin(email, password)
 
