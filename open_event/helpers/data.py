@@ -815,7 +815,6 @@ class DataManager(object):
                                    logo=logo)
 
         event = Event(name=form['name'],
-                      email=form.get('email', u'test@example.com'),
                       start_time=datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M'),
                       end_time=datetime.strptime(form['end_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M'),
                       timezone=form['timezone'],
@@ -968,7 +967,6 @@ class DataManager(object):
 
         event_old = DataGetter.get_event(event_id)
         event = Event(name='Copy of ' + event_old.name,
-                      email=event_old.email,
                       start_time=event_old.start_time,
                       end_time=event_old.end_time,
                       timezone=event_old.timezone,
