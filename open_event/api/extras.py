@@ -25,10 +25,10 @@ class CeleryTask(Resource):
             if type(result.info) == dict:
                 # check if is error
                 if '__error' in result.info:
-                    return result.info.get('result'), result.info['result']['code']
+                    return result.info['result'], result.info['result']['code']
             # return normal
-            return result.get()
+            return jsonify(state='SUCCESS', result=result.get())
         elif result.state == 'FAILURE':
             return jsonify(state=result.state)
         else:
-            return jsonify(status=result.state)
+            return jsonify(state=result.state)

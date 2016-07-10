@@ -34,13 +34,13 @@ class RequestContextTask(Task):
 
         # set context
         context = kwargs.pop(self.CONTEXT_ARG_NAME, None)
-        print 'asdf'
+        gl = kwargs.pop(self.GLOBALS_ARG_NAME, {})
+
         if context is None or has_request_context():
             return call()
-        print 'absd'
+
         with app.test_request_context(**context):
             # set globals
-            gl = kwargs.pop(self.GLOBALS_ARG_NAME, {})
             for i in gl:
                 setattr(g, i, gl[i])
             # call
