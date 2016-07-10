@@ -37,6 +37,16 @@ class TestGuestEventPage(OpenEventTestCase):
                               follow_redirects=True)
             self.assertEqual(rv.status_code, 404)
 
+    def test_soft_deleted_event_view_attempt(self):
+        with app.test_request_context():
+            event = ObjectMother.get_event()
+            event.state = 'Published'
+            event.in_trash = True
+            save_to_db(event, "Event Saved")
+            rv = self.app.get(url_for('event_detail.display_event_detail_home', event_id=event.id),
+                              follow_redirects=True)
+            self.assertEqual(rv.status_code, 404)
+
     def test_published_event_sessions_view(self):
         with app.test_request_context():
             event = ObjectMother.get_event()

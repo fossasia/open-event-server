@@ -23,7 +23,7 @@ class RoleView(BaseView):
             event = DataGetter.get_event(event_id)
             role = DataGetter.get_role_by_name(role_name)
 
-            user = DataGetter.get_user_by_email(email)
+            user = DataGetter.get_user_by_email(email, no_flash=True)
 
             invite_link = DataManager.add_event_role_invite(email, role_name, event_id)
 

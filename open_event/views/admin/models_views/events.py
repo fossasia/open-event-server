@@ -220,9 +220,8 @@ class EventsView(BaseView):
                 request, event_id, event, session_types, tracks, social_links,
                 microlocations, call_for_speakers, sponsors, custom_forms, img_files, old_sponsor_logos, old_sponsor_names)
 
-
-            if request.form.get('state',
-                                u'Draft') == u'Published' and string_empty(
+            if (request.form.get('state',
+                                u'Draft') == u'Published' or event.state == 'Draft') and string_empty(
                                 event.location_name):
                 flash(
                     "Your event was saved. To publish your event please review the highlighted fields below.",
@@ -273,7 +272,7 @@ class EventsView(BaseView):
                 "Your event was saved. To publish your event please review the highlighted fields below.",
                 "warning")
             return redirect(url_for('.edit_view',
-                                    event_id=event.id) + "#step=location_name")
+                                    event_id=event.id) + "#highlight=location_name")
         if not is_verified_user():
             return redirect(url_for('.details_view', event_id=event_id))
         event.state = 'Published'
@@ -321,6 +320,7 @@ class EventsView(BaseView):
         sponsors = DataGetter.get_sponsors(event_id)
         return self.render('/gentelella/admin/event/copy/copy.html',
                            event=event,
+                           is_copy=1,
                            session_types=session_types,
                            tracks=tracks,
                            social_links=social_links,

@@ -4,7 +4,7 @@ import os
 import urllib
 from urllib2 import urlopen
 
-from flask import url_for, redirect, request, session, send_from_directory
+from flask import url_for, redirect, request, session, flash, send_from_directory
 from flask.ext import login
 from flask_admin import expose
 from flask_admin.base import AdminIndexView
@@ -64,6 +64,7 @@ class MyHomeView(AdminIndexView):
                 return redirect(url_for('admin.login_view'))
             if user.password != generate_password_hash(request.form['password'], user.salt):
                 logging.info('Password Incorrect')
+                flash('Incorrect Password', 'danger')
                 return redirect(url_for('admin.login_view'))
             login.login_user(user)
             record_user_login_logout('user_login', user)
@@ -200,7 +201,7 @@ class MyHomeView(AdminIndexView):
     def check_duplicate_email(self):
         if request.method == 'GET':
             email = request.args['email']
-            user = DataGetter.get_user_by_email(email)
+            user = DataGetter.get_user_by_email(email, no_flash=True)
             if user is None:
                 return '200 OK'
             else:

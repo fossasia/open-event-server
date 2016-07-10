@@ -227,6 +227,19 @@ class Event(Resource):
         return event
 
 
+@api.route('/<int:event_id>/event')
+@api.param('event_id')
+@api.response(404, 'Event not found')
+class EventWebapp(Resource):
+    @api.doc('get_event_for_webapp')
+    @api.marshal_with(EVENT)
+    def get(self, event_id):
+        """Fetch an event given its id.
+        Alternate endpoint for fetching an event.
+        """
+        return DAO.get(event_id)
+
+
 @api.route('')
 class EventList(Resource, EventResource):
     @api.doc('list_events', params=EVENT_PARAMS)
