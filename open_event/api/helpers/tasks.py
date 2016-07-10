@@ -9,7 +9,11 @@ from errors import BaseError
 from ..imports import import_event_task_base
 
 
-@celery.task(base=RequestContextTask, name='import.event', bind=True,
-             throws=(BaseError,))
+@celery.task(base=RequestContextTask, name='import.event', bind=True, throws=(BaseError,))
 def import_event_task(self, file):
-    return import_event_task_base(file)
+    try:
+        item = import_event_task_base(file)
+        return item
+    except BaseError as e:
+        # self.update_state(state='API_FAILURE', meta=e.to_dict())
+        return {'__error': True, 'result': e.to_dict()}

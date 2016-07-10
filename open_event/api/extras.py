@@ -9,9 +9,6 @@ from flask.ext.restplus import Resource, Namespace
 from celery.result import AsyncResult
 from flask import jsonify
 
-from helpers.errors import BaseError, ServerError
-
-
 api = Namespace('extras', description='Extras', path='/')
 
 
@@ -25,13 +22,13 @@ class CeleryTask(Resource):
         from open_event import celery
         result = AsyncResult(id=task_id, app=celery)
         if result.state == 'SUCCESS':
+            if type(result.info) == dict:
+                # check if is error
+                if '__error' in result.info:
+                    return result.info.get('result'), result.info['result']['code']
+            # return normal
             return result.get()
         elif result.state == 'FAILURE':
-            r = result.result
-            if isinstance(r, BaseError):
-                print r, 'hi'
-                raise r
-            else:
-                raise ServerError()
+            return jsonify(state=result.state)
         else:
             return jsonify(status=result.state)
