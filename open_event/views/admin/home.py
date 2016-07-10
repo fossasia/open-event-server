@@ -64,7 +64,7 @@ class MyHomeView(AdminIndexView):
                 return redirect(url_for('admin.login_view'))
             if user.password != generate_password_hash(request.form['password'], user.salt):
                 logging.info('Password Incorrect')
-                flash('Incorrect Password')
+                flash('Incorrect Password', 'danger')
                 return redirect(url_for('admin.login_view'))
             login.login_user(user)
             record_user_login_logout('user_login', user)
