@@ -480,9 +480,11 @@ class DataGetter:
         if licence:
             licence_details = {
                 'name': licence_name,
-                'description': licence[0],
-                'url': licence[1],
-                'logo': licence[2],
+                'long_name': licence[0],
+                'description': licence[1],
+                'url': licence[2],
+                'logo': licence[3],
+                'compact_logo': licence[4],
             }
         else:
             licence_details = None

@@ -172,15 +172,14 @@
                 {# Licence Info #}
                 {% if licence_details %}
                     <div>
-                        <h5>{{ event.name }} is licenced under {{ licence_details['name'] }}</h5>
-                        <div style="font-size: 13px;">
-                            <p>About {{ licence_details['name'] }}</p>
+                        {% if licence_details['compact_logo'] != '' %}
+                            <img src="{{ licence_details['compact_logo'] }}">
+                        {% endif %}
+                        <div style="font-size: 14px;">This event is licenced under
                             {% if licence_details['url'] != '' %}
-                                <img src="{{ licence_details['logo'] }}" class="pull-right" style="margin-left: 5px;">
-                            {% endif %}
-                            {{ licence_details['description'] }}
-                            {% if licence_details['url'] != '' %}
-                                <a href="{{ licence_details['url'] }}" target="_blank" style="color:#1a75ff;">Read more.</a>
+                                <a href="{{ licence_details['url'] }}" target="_blank" style="color:#1a75ff;">{{ licence_details['long_name'] }}</a>
+                            {% else %}
+                                {{ licence_details['long_name'] }}
                             {% endif %}
                         </div>
                     </div>
