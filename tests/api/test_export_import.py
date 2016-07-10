@@ -76,20 +76,15 @@ class TestEventImport(OpenEventTestCase):
         self.assertIn('task_url', resp.data)
         task_url = json.loads(resp.data)['task_url']
         # wait for done
-        ct = 0
         while True:
             resp = self.app.get(task_url)
             if 'SUCCESS' in resp.data:
+                self.assertIn('result', resp.data)
                 dic = json.loads(resp.data)['result']
                 break
-            logging.info(task_url)
             logging.info(resp.data)
             time.sleep(2)
-            ct += 1
-            if ct == 4:
-                break
         # check internals
-        # dic = json.loads(resp.data)
         self.assertEqual(dic['id'], 2)
         self.assertEqual(dic['name'], 'TestEvent')
         self.assertIn('fb.com', json.dumps(dic['social_links']), dic)
