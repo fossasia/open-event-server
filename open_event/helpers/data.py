@@ -330,7 +330,6 @@ class DataManager(object):
                                                                                                     event.id)
                 if email_notification_setting and email_notification_setting.new_paper == 1:
                     send_new_session_organizer(organizer.user.email, event.name, link)
-                    send_notif_new_session_organizer(organizer.user, event.name, link)
                 # Send notification
                 send_notif_new_session_organizer(organizer.user, event.name, link)
 
@@ -498,6 +497,7 @@ class DataManager(object):
             organizers = DataGetter.get_user_event_roles_by_role_name(event_id, 'organizer')
             for organizer in organizers:
                 send_new_session_organizer(organizer.user.email, session.event.name, link)
+                send_notif_new_session_organizer(organizer.user, session.event.name, link)
             session.state = form_state
 
         session.title = form.get('title', '')
