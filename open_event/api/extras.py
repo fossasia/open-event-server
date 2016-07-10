@@ -22,14 +22,16 @@ class CeleryTask(Resource):
         """
         Get CeleryTask status of an APIv2 based task
         """
-        from open_event import celery
-        result = AsyncResult(id=task_id, app=celery)
-        state = result.state
-        info = result.info
-        # in case of always eager, get results
+        # in case of always eager, get results. don't call AsyncResult
+        # which rather looks in redis
         if current_app.config.get('CELERY_ALWAYS_EAGER'):
             state = TASK_RESULTS[task_id]['state']
             info = TASK_RESULTS[task_id]['result']
+        else:
+            from open_event import celery
+            result = AsyncResult(id=task_id, app=celery)
+            state = result.state
+            info = result.info
         # check
         if state == 'SUCCESS':
             if type(info) == dict:
