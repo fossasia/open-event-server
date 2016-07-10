@@ -91,5 +91,6 @@ class RequestContextTask(Task):
     def _include_global(self, kwargs):
         d = {}
         for z in self.GLOBAL_KEYS:
-            d[z] = getattr(g, z)
+            if hasattr(g, z):
+                d[z] = getattr(g, z)
         kwargs[self.GLOBALS_ARG_NAME] = d
