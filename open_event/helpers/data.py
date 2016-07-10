@@ -368,7 +368,7 @@ class DataManager(object):
             link = url_for('event_sessions.invited_view', session_id=new_session.id, event_id=event_id, _external=True)
             Helper.send_email_invitation(email, new_session.title, link)
             # If a user is registered by the email, send a notification as well
-            user = DataGetter.get_user_by_email(email)
+            user = DataGetter.get_user_by_email(email, no_flash=True)
             if user:
                 Helper.send_notif_invite_papers(user, event.name, link)
 
