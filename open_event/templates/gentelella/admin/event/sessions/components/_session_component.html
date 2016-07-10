@@ -1,7 +1,7 @@
 {% set textarea_session_fields = ['short_abstract', 'long_abstract', 'comments'] %}
 {% set media_session_fields = ['slides', 'video', 'audio'] %}
-
-{% set session_fields = ['title', 'subtitle', 'short_abstract', 'long_abstract', 'comments', 'track', 'session_type', 'language', 'slides', 'video', 'audio'] %}
+{% set dropdown_fields = ['track', 'session_type'] %}
+{% set session_fields = ['title', 'subtitle', 'short_abstract', 'long_abstract', 'track', 'session_type', 'comments', 'language', 'slides', 'video', 'audio'] %}
 
 {% macro session_form_field(identifier, require=0) %}
     {% set name = identifier | replace('_id','') %}
@@ -18,6 +18,22 @@
                 required="required"
             {% endif %}
                 name="{{ identifier }}" class="form-control col-md-7 col-xs-12">{{ session[identifier] | default('', true) }}</textarea>
+        {% elif identifier in dropdown_fields %}
+            {% if identifier == 'track' %}
+                {% set data_set = event.track %}
+            {% else %}
+                {% set data_set = event.session_type %}
+            {% endif %}
+            <select {% if require==1 %}required="required"{% endif %}  name="{{ identifier }}"  class="form-control col-md-7 col-xs-12">
+                <option value="" {% if not session %}selected{% endif %}>Select {{ pretty_name }}</option>
+                {% for data in data_set %}
+                    {% if session and session[identifier + '_id'] == data.id %}
+                        <option value="{{ data.id }}" selected>{{ data.name }}</option>
+                    {% else %}
+                        <option value="{{ data.id }}">{{ data.name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
         {% elif identifier in media_session_fields %}
             <br><input {% if require==1 %}
             required="required"
