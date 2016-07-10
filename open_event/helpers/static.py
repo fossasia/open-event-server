@@ -9,39 +9,39 @@
 EVENT_LICENCES = {
     # Licence Name : ( Description, Licence URL, Licence Logo )
     'All rights reserved': (
-        u'You, the copyright holder reserves, or holds for their own use, all the rights provided by copyright law under one specific copyright treaty.',
+        u'The copyright holder reserves, or holds for their own use, all the rights provided by copyright law under one specific copyright treaty.',
         '',
         ''),
     'Attribution': (
-        u'This license lets others distribute, remix, tweak, and build upon your work, even commercially, as long as they credit you for the original creation.',
+        u'This license lets others distribute, remix, tweak, and build upon the work, even commercially, as long as they credit the copyright holder for the original creation.',
         'https://creativecommons.org/licenses/by/4.0',
         'https://licensebuttons.net/l/by/3.0/88x31.png'),
     'Attribution-ShareAlike': (
-        u'This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms.',
+        u'This license lets others remix, tweak, and build upon the work even for commercial purposes, as long as they credit the copyright holder and license their new creations under the identical terms.',
         'https://creativecommons.org/licenses/by-sa/4.0',
         'https://licensebuttons.net/l/by-sa/3.0/88x31.png'),
     'Attribution-NoDerivs': (
-        u'This license allows for redistribution, commercial and non-commercial, as long as it is passed along unchanged and in whole, with credit to you.',
+        u'This license allows for redistribution, commercial and non-commercial, as long as it is passed along unchanged and in whole, with credit to the copyright holder.',
         'https://creativecommons.org/licenses/by-nd/4.0',
         'https://licensebuttons.net/l/by-nd/3.0/88x31.png'),
     'Attribution-NonCommercial': (
-        u'This license lets others remix, tweak, and build upon your work non-commercially, and although their new works must also acknowledge you and be non-commercial, they don’t have to license their derivative works on the same terms.',
+        u'This license lets others remix, tweak, and build upon the work non-commercially, and although their new works must also acknowledge the copyright holder and be non-commercial, they don’t have to license their derivative works on the same terms.',
         'https://creativecommons.org/licenses/by-nc/4.0',
         'https://licensebuttons.net/l/by-nc/3.0/88x31.png'),
     'Attribution-NonCommercial-NoDerivs': (
-        u'It only allows others to download your works and share them with others as long as they credit you, but they can’t change them in any way or use them commercially.',
+        u'This license only allows others to download the work and share them with others as long as they credit the copyright holder, but they can’t change them in any way or use them commercially.',
         'https://creativecommons.org/licenses/by-nc-nd/4.0',
         'https://licensebuttons.net/l/by-nc-nd/3.0/88x31.png'),
     'Attribution-NonCommercial-ShareAlike': (
-        u'This license lets others remix, tweak, and build upon your work non-commercially, as long as they credit you and license their new creations under the identical terms.',
+        u'This license lets others remix, tweak, and build upon the work non-commercially, as long as they credit the copyright holder and license their new creations under the identical terms.',
         'https://creativecommons.org/licenses/by-nc-sa/4.0',
         'https://licensebuttons.net/l/by-nc-sa/3.0/88x31.png'),
     'Public Domain Dedication (CC0)': (
-        u'You, the copyright holder, waive your interest in your work and place the work as completely as possible in the public domain so others may freely exploit and use the work without restriction under copyright or database law.',
+        u'The copyright holder waives his interest in his work and places the work as completely as possible in the public domain so others may freely exploit and use the work without restriction under copyright or database law.',
         'https://creativecommons.org/publicdomain/zero/1.0/',
         'http://i.creativecommons.org/p/zero/1.0/88x31.png'),
     'Public Domain Work': (
-        u'It enables works that are no longer restricted by copyright to be marked as such in a standard and simple way, making them easily discoverable and available to others.',
+        u'This license enables works that are no longer restricted by copyright to be marked as such in a standard and simple way, making them easily discoverable and available to others.',
         'https://creativecommons.org/publicdomain/mark/1.0/',
         'https://licensebuttons.net/p/mark/1.0/88x31.png')
 }
