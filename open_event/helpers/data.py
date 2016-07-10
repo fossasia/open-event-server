@@ -800,7 +800,6 @@ class DataManager(object):
         """
         # Filter out Copyright info
         holder = form.get('organizer_name')
-        holder_url = form.get('organizer_url')
         # Current year
         year = datetime.now().year
         licence_name = form.get('copyright_licence')
@@ -808,7 +807,6 @@ class DataManager(object):
         _, licence_url, logo = EVENT_LICENCES.get(licence_name, ('', '', ''))
 
         copyright = EventCopyright(holder=holder,
-                                   holder_url=holder_url,
                                    year=year,
                                    licence=licence_name,
                                    licence_url=licence_url,
@@ -829,7 +827,6 @@ class DataManager(object):
                       privacy=form.get('privacy', u'public'),
                       ticket_url=form['ticket_url'],
                       organizer_name=form['organizer_name'],
-                      organizer_url=form['organizer_url'],
                       organizer_description=form['organizer_description'],
                       copyright=copyright,
                       code_of_conduct=form['code_of_conduct'],
@@ -898,6 +895,10 @@ class DataManager(object):
 
             for index, name in enumerate(social_link_name):
                 if not string_empty(social_link_link[index]):
+                    # If 'Website' has been provided,
+                    # save it as Holder URL for Copyright
+                    if name.lower() == 'website':
+                        event.copyright.holder_url = social_link_link[index]
                     social_link = SocialLink(name=name, link=social_link_link[index], event_id=event.id)
                     db.session.add(social_link)
 
@@ -1042,7 +1043,6 @@ class DataManager(object):
         event.sub_topic = form['sub_topic']
         event.privacy = form.get('privacy', 'public')
         event.organizer_name = form['organizer_name']
-        event.organizer_url = form['organizer_url']
         event.organizer_description = form['organizer_description']
         event.code_of_conduct = form['code_of_conduct']
         event.ticket_url = form['ticket_url']
@@ -1135,6 +1135,11 @@ class DataManager(object):
 
         for index, name in enumerate(social_link_name):
             if not string_empty(social_link_link[index]):
+                # If 'Website' has been provided,
+                # save it as Holder URL for Copyright
+                if name.lower() == 'website':
+                    event.copyright.holder_url = social_link_link[index]
+
                 if social_link_id[index] != '':
                     social_link, c = get_or_create(SocialLink,
                                                    id=social_link_id[index],
