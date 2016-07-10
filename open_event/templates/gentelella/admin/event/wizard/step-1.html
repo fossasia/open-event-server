@@ -174,13 +174,6 @@
                    value="{{ event.organizer_name | default('', true) }}"/>
         </div>
         <div class="item form-group">
-            <label>Organizer URL
-            </label>
-            <input name="organizer_url" class="form-control" type="url" pattern="https?://.+"
-                data-error="Please enter a valid URL" value="{{ event.organizer_url | default('', true) }}"/>
-            <div class="help-block with-errors"></div>
-        </div>
-        <div class="item form-group">
             <label>Organizer Description
             </label>
                 <textarea
