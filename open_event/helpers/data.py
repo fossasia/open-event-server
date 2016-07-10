@@ -800,9 +800,10 @@ class DataManager(object):
         :param form: view data form
         """
         # Filter out Copyright info
-        holder = form.get('copyright_holder')
-        holder_url = form.get('copyright_holder_url')
-        year = form.get('copyright_year')
+        holder = form.get('organizer_name')
+        holder_url = form.get('organizer_url')
+        # Current year
+        year = datetime.now().year
         licence_name = form.get('copyright_licence')
         # Ignoring Licence description
         _, licence_url, logo = EVENT_LICENCES.get(licence_name, ('', '', ''))
@@ -829,6 +830,7 @@ class DataManager(object):
                       privacy=form.get('privacy', u'public'),
                       ticket_url=form['ticket_url'],
                       organizer_name=form['organizer_name'],
+                      organizer_url=form['organizer_url'],
                       organizer_description=form['organizer_description'],
                       copyright=copyright,
                       code_of_conduct=form['code_of_conduct'],
@@ -1041,18 +1043,18 @@ class DataManager(object):
         event.sub_topic = form['sub_topic']
         event.privacy = form.get('privacy', 'public')
         event.organizer_name = form['organizer_name']
+        event.organizer_url = form['organizer_url']
         event.organizer_description = form['organizer_description']
         event.code_of_conduct = form['code_of_conduct']
         event.ticket_url = form['ticket_url']
 
         if not event.copyright:
             # It is possible that the copyright is set as None before.
-            # Set it as an `EventCopyright` object
+            # Set it as an `EventCopyright` object.
             event.copyright = EventCopyright()
         # Filter out Copyright info
-        event.copyright.holder = form.get('copyright_holder')
-        event.copyright.holder_url = form.get('copyright_holder_url')
-        event.copyright.year = form.get('copyright_year')
+        event.copyright.holder = form.get('organizer_name')
+        event.copyright.holder_url = form.get('organizer_url')
         licence_name = form.get('copyright_licence')
         # Ignoring Licence description
         _, licence_url, logo = EVENT_LICENCES.get(licence_name, ('', '', ''))
