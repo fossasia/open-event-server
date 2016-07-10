@@ -71,7 +71,7 @@
 <div id="step-3" class="wizard_content" style="display: block;">
     <div class="col-md-10 col-md-push-1">
         <div style="width: 100%; text-align: center">
-            {% if tracks or microlocations or session_types %}
+            {% if tracks or microlocations or session_types or not event %}
                 <h2 style="font-weight: 300;">Turn <span class="str-state">off</span> sessions, tracks, rooms</h2>
                 <input type="checkbox" class="toggle-switch" name="sessions_tracks_rooms_state"
                        value="on" id="session-tracks-rooms-switch" checked/>
@@ -84,7 +84,7 @@
         </div>
 
         <div class="row" id="session-tracks-rooms-holder"
-             style="{% if not tracks and not microlocations and not session_types %}display:none;{% endif %}">
+             style="{% if not tracks and not microlocations and not session_types and event %}display:none;{% endif %}">
             <div class="col-md-4 tracks">
                 <h2 class="label-header">Tracks</h2>
                 {% if tracks %}
