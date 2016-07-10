@@ -290,6 +290,12 @@ class DataManager(object):
                               short_abstract=form.get('short_abstract', ''),
                               state=state)
 
+        if form.get('track', None) != "":
+            new_session.track_id = form.get('track', None)
+
+        if form.get('session_type', None) != "":
+            new_session.session_type_id = form.get('session_type', None)
+
         speaker = Speaker.query.filter_by(email=form.get('email', '')).filter_by(event_id=event_id).first()
         if not speaker:
             speaker = Speaker(name=form.get('name', ''),
@@ -498,6 +504,16 @@ class DataManager(object):
         session.subtitle = form.get('subtitle', '')
         session.long_abstract = form.get('long_abstract', '')
         session.short_abstract = form.get('short_abstract', '')
+
+        if form.get('track', None) != "":
+            session.track_id = form.get('track', None)
+        else:
+            session.track_id = None
+
+        if form.get('session_type', None) != "":
+            session.session_type_id = form.get('session_type', None)
+        else:
+            session.session_type_id = None
 
         existing_speaker_ids = form.getlist("speakers[]")
         current_speaker_ids = []
