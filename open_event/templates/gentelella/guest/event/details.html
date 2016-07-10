@@ -144,6 +144,7 @@
                 </div>
             </div>
             <div class="col-md-4">
+                <div>
                 <!--{% if event.email %}
                     <i class="fa fa-envelope fa-fw"></i> {{ event.email }}<br>
                 {% endif %}-->
@@ -168,6 +169,18 @@
                 {% for twitterLink in twitter %}
                     <a class="twitter-timeline" href="{{ twitterLink }}" data-height="500">Tweets</a>
                 {% endfor %}
+                {# Licence Info #}
+                {% if licence_details %}
+                    <div>
+                        <h5>{{ event.name }} is licenced under {{ licence_details['name'] }}</h5>
+                        <div style="font-size: 13px;">
+                            <p>About {{ licence_details['name'] }}</p>
+                            <img src="{{ licence_details['logo'] }}" class="pull-right" style="margin-left: 5px;">
+                            {{ licence_details['description'] }}
+                            <a href="{{ licence_details['url'] }}" target="_blank" style="color:#1a75ff;">Read more.</a>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
