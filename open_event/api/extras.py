@@ -7,7 +7,10 @@ that are not important to the end-user
 
 from flask.ext.restplus import Resource, Namespace
 from celery.result import AsyncResult
-from flask import jsonify
+from flask import jsonify, current_app
+
+from helpers.utils import TASK_RESULTS
+
 
 api = Namespace('extras', description='Extras', path='/')
 
@@ -21,14 +24,21 @@ class CeleryTask(Resource):
         """
         from open_event import celery
         result = AsyncResult(id=task_id, app=celery)
-        if result.state == 'SUCCESS':
-            if type(result.info) == dict:
+        state = result.state
+        info = result.info
+        # in case of always eager, get results
+        if current_app.config.get('CELERY_ALWAYS_EAGER'):
+            state = TASK_RESULTS[task_id]['state']
+            info = TASK_RESULTS[task_id]['result']
+        # check
+        if state == 'SUCCESS':
+            if type(info) == dict:
                 # check if is error
-                if '__error' in result.info:
-                    return result.info['result'], result.info['result']['code']
+                if '__error' in info:
+                    return info['result'], info['result']['code']
             # return normal
-            return jsonify(state='SUCCESS', result=result.get())
-        elif result.state == 'FAILURE':
-            return jsonify(state=result.state)
+            return jsonify(state='SUCCESS', result=info)
+        elif state == 'FAILURE':
+            return jsonify(state=state)
         else:
-            return jsonify(state=result.state)
+            return jsonify(state=state)

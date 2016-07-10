@@ -9,7 +9,8 @@ from errors import BaseError
 from ..imports import import_event_task_base
 
 
-@celery.task(base=RequestContextTask, name='import.event', bind=True, throws=(BaseError,))
+@celery.task(base=RequestContextTask, name='import.event', bind=True,
+             throws=(BaseError,))
 def import_event_task(self, file):
     try:
         item = import_event_task_base(file)
