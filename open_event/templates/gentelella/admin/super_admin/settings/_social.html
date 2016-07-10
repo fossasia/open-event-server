@@ -1,11 +1,11 @@
-<form id="settings_form" method="post" class="form-horizontal form-label-left" action="/admin/settings/save_social">
+<form id="settings_form" method="post" class="form-horizontal form-label-left" >
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
 
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Support</label>
                 <div class=" col-md-9 col-xs-12">
-                    <input name="support_url" class="form-control" value="{{ settings.google_client_id|default('', True) }}" />
+                    <input name="support_url" class="form-control" value="{{ settings.support_url|default('', True) }}" />
                 </div>
             </div>
 
@@ -14,7 +14,7 @@
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Twitter</label>
                 <div class=" col-md-9 col-xs-12">
-                    <input name="twitter_url" class="form-control" value="{{ settings.google_client_id|default('', True) }}" />
+                    <input name="twitter_url" class="form-control" value="{{ settings.twitter_url|default('', True) }}" />
                 </div>
             </div>
 
@@ -22,7 +22,7 @@
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Facebook</label>
                 <div class=" col-md-9 col-xs-12">
-                    <input name="facebook_url" class="form-control" value="{{ settings.google_client_id|default('', True) }}" />
+                    <input name="facebook_url" class="form-control" value="{{ settings.facebook_url|default('', True) }}" />
                 </div>
             </div>
 
@@ -30,7 +30,7 @@
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Google + </label>
                 <div class=" col-md-9 col-xs-12">
-                    <input name="google_url" class="form-control" value="{{ settings.google_client_id|default('', True) }}" />
+                    <input name="google_url" class="form-control" value="{{ settings.google_url|default('', True) }}" />
                 </div>
             </div>
 
@@ -38,7 +38,7 @@
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Youtube</label>
                 <div class=" col-md-9 col-xs-12">
-                    <input name="youtube_url" class="form-control" value="{{ settings.google_client_id|default('', True) }}" />
+                    <input name="youtube_url" class="form-control" value="{{ settings.youtube_url|default('', True) }}" />
                 </div>
             </div>
 
@@ -46,7 +46,7 @@
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Github</label>
                 <div class=" col-md-9 col-xs-12">
-                    <input name="github_url" class="form-control" value="{{ settings.google_client_id|default('', True) }}" />
+                    <input name="github_url" class="form-control" value="{{ settings.github_url|default('', True) }}" />
                 </div>
             </div>
 
