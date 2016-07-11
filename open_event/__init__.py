@@ -146,6 +146,11 @@ def event_types():
     event_types = DataGetter.get_event_types()
     return dict(event_typo=event_types[:10])
 
+@app.context_processor
+def social_settings():
+    settings = get_settings()
+    return dict(settings=settings)
+
 @app.template_filter('pretty_name')
 def pretty_name_filter(s):
     s = str(s)

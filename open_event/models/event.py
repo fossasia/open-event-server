@@ -36,6 +36,7 @@ class Event(db.Model):
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     location_name = db.Column(db.String)
+    searchable_location_name = db.Column(db.String)
     description = db.Column(db.Text)
     event_url = db.Column(db.String)
     background_url = db.Column(db.String)
