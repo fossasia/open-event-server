@@ -35,9 +35,12 @@ class SessionsView(BaseView):
         return self.render('/gentelella/admin/event/sessions/base_session_table.html',
                            sessions=sessions, event_id=event_id, event=event)
 
-    @expose('/<int:session_id>/')
+    @expose('/<int:session_id>/', methods=('GET', 'POST'))
     def session_display_view(self, event_id, session_id):
         session = get_session_or_throw(session_id)
+        if request.method == 'POST':
+            DataManager.edit_session(request, session)
+            return redirect(url_for('.index_view', event_id=event_id))
         event = DataGetter.get_event(event_id)
         form_elems = DataGetter.get_custom_form_elements(event_id)
         if not form_elems:
