@@ -365,18 +365,19 @@ class DataManager(object):
 
         invite_emails = form.getlist("speakers[email]")
         for index, email in enumerate(invite_emails):
-            new_invite = Invite(event_id=event_id,
-                                session_id=new_session.id)
-            hash = random.getrandbits(128)
-            new_invite.hash = "%032x" % hash
-            save_to_db(new_invite, "Invite saved")
+            if not string_empty(email):
+                new_invite = Invite(event_id=event_id,
+                                    session_id=new_session.id)
+                hash = random.getrandbits(128)
+                new_invite.hash = "%032x" % hash
+                save_to_db(new_invite, "Invite saved")
 
-            link = url_for('event_sessions.invited_view', session_id=new_session.id, event_id=event_id, _external=True)
-            Helper.send_email_invitation(email, new_session.title, link)
-            # If a user is registered by the email, send a notification as well
-            user = DataGetter.get_user_by_email(email, no_flash=True)
-            if user:
-                Helper.send_notif_invite_papers(user, event.name, link)
+                link = url_for('event_sessions.invited_view', session_id=new_session.id, event_id=event_id, _external=True)
+                Helper.send_email_invitation(email, new_session.title, link)
+                # If a user is registered by the email, send a notification as well
+                user = DataGetter.get_user_by_email(email, no_flash=True)
+                if user:
+                    Helper.send_notif_invite_papers(user, event.name, link)
 
 
     @staticmethod

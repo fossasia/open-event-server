@@ -217,29 +217,30 @@ def send_email(to, action, subject, html):
     """
     Sends email and records it in DB
     """
-    key = get_settings()['sendgrid_key']
-    if not key:
-        print 'Sendgrid key not defined'
-        return
-    headers = {
-        "Authorization": ("Bearer " + key)
-    }
-    payload = {
-        'to': to,
-        'from': 'open-event@googlegroups.com',
-        'subject': subject,
-        'html': html
-    }
-    requests.post("https://api.sendgrid.com/api/mail.send.json",
-                  data=payload,
-                  headers=headers)
-    # record_mail(to, action, subject, html)
-    mail = Mail(
-        recipient=to, action=action, subject=subject,
-        message=html, time=datetime.now()
-    )
-    from data import save_to_db
-    save_to_db(mail, 'Mail Recorded')
+    if not string_empty(to):
+        key = get_settings()['sendgrid_key']
+        if not key:
+            print 'Sendgrid key not defined'
+            return
+        headers = {
+            "Authorization": ("Bearer " + key)
+        }
+        payload = {
+            'to': to,
+            'from': 'open-event@googlegroups.com',
+            'subject': subject,
+            'html': html
+        }
+        requests.post("https://api.sendgrid.com/api/mail.send.json",
+                      data=payload,
+                      headers=headers)
+        # record_mail(to, action, subject, html)
+        mail = Mail(
+            recipient=to, action=action, subject=subject,
+            message=html, time=datetime.now()
+        )
+        from data import save_to_db
+        save_to_db(mail, 'Mail Recorded')
     return
 
 #################
