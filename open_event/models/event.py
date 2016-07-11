@@ -90,7 +90,7 @@ class Event(db.Model):
                  copyright=None,
                  code_of_conduct=None,
                  schedule_published_on=None,
-                 in_trash=None,
+                 in_trash=False,
                  searchable_location_name=None):
         self.name = name
         self.logo = logo
