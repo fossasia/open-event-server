@@ -50,4 +50,4 @@ class MySessionView(BaseView):
         session = DataGetter.get_sessions_of_user_by_id(session_id)
         DataManager.edit_session(request, session)
         flash("The session has been updated successfully", "success")
-        return redirect(url_for('.display_session_view', event_id=session.event_id, session_id=session_id))
+        return redirect(url_for('.display_session_view', session_id=session_id))

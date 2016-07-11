@@ -488,12 +488,16 @@ class DataManager(object):
 
         existing_speaker_ids = form.getlist("speakers[]")
         current_speaker_ids = []
+        existing_speaker_ids_by_email = []
+
+        for existing_speaker in DataGetter.get_speaker_by_email(form.get("email")).all():
+            existing_speaker_ids_by_email.append(str(existing_speaker.id))
 
         for current_speaker in session.speakers:
             current_speaker_ids.append(str(current_speaker.id))
 
         for current_speaker_id in current_speaker_ids:
-            if current_speaker_id not in existing_speaker_ids:
+            if current_speaker_id not in existing_speaker_ids and current_speaker_id not in existing_speaker_ids_by_email:
                 current_speaker = DataGetter.get_speaker(current_speaker_id)
                 session.speakers.remove(current_speaker)
 
