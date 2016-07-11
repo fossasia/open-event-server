@@ -111,6 +111,10 @@ def can_access(f):
         url = request.url
         if user.is_staff is True:
             return f(*args, **kwargs)
+        if 'events/' + event_id + '/' in url:
+            if user.is_organizer(event_id) is True or user.is_track_organizer(event_id) is True or user.is_coorganizer(event_id) is True:
+                return f(*args, **kwargs)
+            abort(403)
         if '/create/' in url or '/new/' in url:
             if '/events/create/' in url:
                 return f(*args, **kwargs)
@@ -156,7 +160,7 @@ def can_access(f):
                     return f(*args, **kwargs)
             if 'events/' + event_id + '/trash/' in url:
                 if user.is_organizer(event_id) is True or user.is_coorganizer(event_id) is True:
-                    return f(*args, **kwargs)        
+                    return f(*args, **kwargs)
             if 'session' in url:
                 if user.can_delete(Session, event_id) is True:
                     return f(*args, **kwargs)
