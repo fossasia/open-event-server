@@ -9,7 +9,7 @@ from StringIO import StringIO
 from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
 from tests.api.utils import create_event, get_path, create_services,\
-    create_session
+    create_session, save_to_db, Speaker
 from tests.auth_helper import register
 from open_event import current_app as app
 
@@ -95,6 +95,29 @@ class TestEventImport(OpenEventTestCase):
         # No errors generally means everything went fine
         # The method will crash and return 500 in case of any problem
 
+    def _test_import_error(self, checks=[]):
+        # first export
+        path = get_path(1, 'export', 'json')
+        resp = self.app.get(path)
+        file = resp.data
+        self.assertEqual(resp.status_code, 200)
+        # import
+        upload_path = get_path('import', 'json')
+        resp = self._upload(file, upload_path, 'event.zip')
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn('task_url', resp.data)
+        task_url = json.loads(resp.data)['task_url']
+        # wait for done
+        while True:
+            resp = self.app.get(task_url)
+            if resp.status_code != 200:
+                break
+            logging.info(resp.data)
+            time.sleep(2)
+        # checks
+        for i in checks:
+            self.assertIn(i, resp.data, resp.data)
+
     def test_import_simple(self):
         self._test_import_success()
 
@@ -107,6 +130,23 @@ class TestEventImport(OpenEventTestCase):
                 1, '5', track=2, speakers=[1]
             )
         self._test_import_success()
+
+    def test_import_validation_error(self):
+        """
+        tests if error is returned correctly.
+        Needed after task was run through celery
+        """
+        with app.test_request_context():
+            speaker = Speaker(
+                name='SP',
+                email='invalid_email',
+                organisation='org',
+                country='japan',
+                event_id=1)
+            save_to_db(speaker, 'speaker invalid saved')
+        self._test_import_error(
+            checks=['Invalid', 'email', '400']
+        )
 
 
 class TestImportOTS(OpenEventTestCase):
