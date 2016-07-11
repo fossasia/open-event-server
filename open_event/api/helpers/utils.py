@@ -157,3 +157,7 @@ class ServiceDAO(BaseDAO):
     def delete(self, event_id, service_id):
         item = delete_model(self.model, service_id, event_id=event_id)
         return item
+
+# store task results in case of testing
+# state and info
+TASK_RESULTS = {}

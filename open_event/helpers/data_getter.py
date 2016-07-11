@@ -268,10 +268,10 @@ class DataGetter:
         return files
 
     @staticmethod
-    def get_user_by_email(email, role_method=None):
+    def get_user_by_email(email, no_flash=None):
         user = User.query.filter_by(email=email).first()
         if not user:
-            if role_method == True:
+            if no_flash == True:
                 return None
             else:
                 flash("User doesn't exist")
@@ -347,11 +347,21 @@ class DataGetter:
 
     @staticmethod
     def get_call_for_speakers_events(include_private=False):
+        results = []
         if include_private:
-            events = Event.query.filter(Event.state == 'Call for papers')
+            events = DataGetter.get_all_published_events(include_private)
+            for e in events:
+                call_for_speakers = DataGetter.get_call_for_papers(e.id).first()
+                if call_for_speakers:
+                    results.append(e)
+
         else:
-            events = Event.query.filter(Event.state == 'Call for papers').filter(Event.privacy != 'private')
-        return events
+            events = DataGetter.get_all_published_events()
+            for e in events:
+                call_for_speakers = DataGetter.get_call_for_papers(e.id).first()
+                if call_for_speakers:
+                    results.append(e)
+        return results[:12]
 
     @staticmethod
     def get_published_events():
@@ -473,6 +483,23 @@ class DataGetter:
     @staticmethod
     def get_event_licences():
         return EVENT_LICENCES
+
+    @staticmethod
+    def get_licence_details(licence_name):
+        licence = EVENT_LICENCES.get(licence_name)
+        if licence:
+            licence_details = {
+                'name': licence_name,
+                'long_name': licence[0],
+                'description': licence[1],
+                'url': licence[2],
+                'logo': licence[3],
+                'compact_logo': licence[4],
+            }
+        else:
+            licence_details = None
+
+        return licence_details
 
     @staticmethod
     def get_language_list():

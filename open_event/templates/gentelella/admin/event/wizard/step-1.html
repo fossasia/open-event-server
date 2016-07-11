@@ -169,17 +169,9 @@
         </div>
 
         <div class="item form-group">
-            <label>Organizer name
-            </label>
+            <label>Organizer name</label>
             <input name="organizer_name" class="form-control"
                    value="{{ event.organizer_name | default('', true) }}"/>
-        </div>
-        <div class="item form-group">
-            <label>Organizer URL
-            </label>
-            <input name="organizer_url" class="form-control" type="url" pattern="https?://.+"
-                data-error="Please enter a valid URL" value="{{ event.organizer_url | default('', true) }}"/>
-            <div class="help-block with-errors"></div>
         </div>
         <div class="item form-group">
             <label>Organizer Description
@@ -193,20 +185,6 @@
             </label>
             <input type="url" pattern="https?://.+" name="ticket_url" class="form-control"
                    value="{{ event.ticket_url | default('', true) }}" data-error="Please enter a valid URL"/>
-            <div class="help-block with-errors"></div>
-        </div>
-        <div class="item form-group">
-            <label>Copyright Holder</label>
-            <input type="text" class="form-control" name="copyright_holder" value="{{ event.copyright.holder | default('', true) }}">
-        </div>
-        <div class="item form-group">
-            <label>Copyright Holder url</label>
-            <input type="url" class="form-control" name="copyright_holder_url" value="{{ event.copyright.holder_url | default('', true) }}" pattern="https?://.+" data-error="Please enter a valid URL">
-            <div class="help-block with-errors"></div>
-        </div>
-        <div class="item form-group">
-            <label>Copyright Year</label>
-            <input type="integer" class="form-control" name="copyright_year" value="{{ event.copyright.year | default('2016', true) }}" pattern="[0-9]{4,4}" data-error="Please enter a valid year">
             <div class="help-block with-errors"></div>
         </div>
         <div class="item form-group">
@@ -234,15 +212,15 @@
                          <div class="row">
                              <div class="col-sm-9">
                                 <h5>{{ licence_name }}</h5>
-                                <p>{{ info.0 }}
-                                    {% if info.1 %}
-                                    <a href="{{ info.1 }}" target="_blank" style="color:#1a75ff;">Read more.</a>
+                                <p>{{ info.1 }}
+                                    {% if info.2 %}
+                                    <a href="{{ info.2 }}" target="_blank" style="color:#1a75ff;">Read more.</a>
                                     {% endif %}
                                 </p>
                              </div>
                              <div class="col-sm-3">
-                            {% if info.2 %}
-                                <img src="{{ info.2 }}" alt="{{ licence_name }}" class="pull-right">
+                            {% if info.3 %}
+                                <img src="{{ info.3 }}" alt="{{ licence_name }}" class="pull-right">
                             {% endif %}
                              </div>
                          </div>
@@ -499,18 +477,6 @@
 
         $(".licence-help").click(function () {
             $("#licence_modal").modal('show');
-        });
-
-        /* Copy Organizer Name to Copyright Holder */
-        var organizer_name = $("[name='organizer_name']");
-        organizer_name.on("input", function () {
-            $("[name='copyright_holder']").val(organizer_name.val());
-        });
-
-        /* Copy Organizer URL to Copyright Holder URL */
-        var organizer_url = $("[name='organizer_url']");
-        organizer_url.on("input", function () {
-            $("[name='copyright_holder_url']").val(organizer_url.val());
         });
 
         var sub_topics = {{event_sub_topics|safe}};

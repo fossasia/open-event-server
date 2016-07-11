@@ -36,11 +36,11 @@ class Event(db.Model):
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     location_name = db.Column(db.String)
+    searchable_location_name = db.Column(db.String)
     description = db.Column(db.Text)
     event_url = db.Column(db.String)
     background_url = db.Column(db.String)
     organizer_name = db.Column(db.String)
-    organizer_url = db.Column(db.String)
     organizer_description = db.Column(db.String)
     in_trash = db.Column(db.Boolean, default=False)
     track = db.relationship('Track', backref="event")
@@ -90,7 +90,8 @@ class Event(db.Model):
                  copyright=None,
                  code_of_conduct=None,
                  schedule_published_on=None,
-                 in_trash=None):
+                 in_trash=None,
+                 searchable_location_name=None):
         self.name = name
         self.logo = logo
         self.email = email
@@ -117,6 +118,7 @@ class Event(db.Model):
         self.code_of_conduct = code_of_conduct
         self.schedule_published_on = schedule_published_on
         self.in_trash = in_trash
+        self.searchable_location_name = searchable_location_name
 
     def __repr__(self):
         return '<Event %r>' % self.name

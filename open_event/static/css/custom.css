@@ -195,7 +195,7 @@
   .navbar-nav {
     float:left;
     margin:0 -15px;
-    max-width: 50%;
+    max-width: 60%;
   }
   .hide-small {
     display:none !important;
@@ -229,7 +229,7 @@
   .navbar-nav {
     float:left;
     margin:0 -15px;
-    max-width:60%;
+    max-width:50%;
   }
   .navbar-right {
     max-width:100%;

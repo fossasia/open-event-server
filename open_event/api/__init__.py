@@ -12,6 +12,7 @@ from .login import api as login_api
 from .exports import api as exports_api
 from .imports import api as imports_api
 from .users import api as users_api
+from .extras import api as extras_api
 
 from helpers.error_docs import api as error_models
 from helpers.errors import (
@@ -38,6 +39,7 @@ api.add_namespace(login_api)
 api.add_namespace(exports_api)
 api.add_namespace(imports_api)
 api.add_namespace(users_api)
+api.add_namespace(extras_api)
 
 api.add_namespace(error_models)
 

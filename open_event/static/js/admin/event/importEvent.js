@@ -6,6 +6,8 @@ function importEventZip(){
     });
 
     $('#import_status').text('Working...');
+    $('#import_error').text('');
+    $('#btnImportEvent').prop('disabled', true);
     jQuery.ajax({
         url: '/api/v2/events/import/json',
         data: data,
@@ -16,12 +18,41 @@ function importEventZip(){
         success: function(data){
             console.log(data);
             // redirect to created event
-            document.location = '/events/' + data['id'];
+            // document.location = '/events/' + data['id'];
+            setTimeout(function(){
+                importTask(data['task_url']);
+            }, 1000);
         },
         error: function(x){
             obj = JSON.parse(x.responseText);
             console.log(obj);
             $('#import_status').text('');
+            $('#import_error').text(obj['message']);
+        }
+    });
+}
+
+
+function importTask(url){
+    jQuery.ajax({
+        url: url,
+        type: 'GET',
+        success: function(data){
+            console.log(data);
+            if (data['state'] != 'SUCCESS'){
+                $('#import_status').text('Status: ' + data['state']);
+                setTimeout(function(){
+                    importTask(url);
+                }, 3000);
+            } else {
+                document.location = '/events/' + data['result']['id'];
+            }
+        },
+        error: function(x){
+            obj = JSON.parse(x.responseText);
+            console.log(obj);
+            $('#import_status').text('');
+            $('#btnImportEvent').prop('disabled', false);
             $('#import_error').text(obj['message']);
         }
     });
