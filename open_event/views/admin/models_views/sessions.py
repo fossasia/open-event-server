@@ -48,9 +48,11 @@ class SessionsView(BaseView):
                   " Session creation has been disabled", "danger")
             return redirect(url_for('.index_view', event_id=event_id))
         session_form = json.loads(form_elems.session_form)
+        speakers = DataGetter.get_speakers(event_id).all()
 
-        return self.render('/gentelella/admin/event/sessions/display.html',
-                           session=session, session_form=session_form, event_id=event_id, event=event)
+        return self.render('/gentelella/admin/event/sessions/edit.html',
+                           session=session, session_form=session_form, event_id=event_id,
+                           event=event, speakers=speakers)
 
     @expose('/create/', methods=('GET', 'POST'))
     @can_access

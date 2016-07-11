@@ -12,7 +12,7 @@ def trigger_new_session_notifications(session_id, event_id=None, event=None):
         event = DataGetter.get_event(event_id)
 
     link = url_for('event_sessions.session_display_view',
-                   event_id=event_id, session_id=session_id, _external=True)
+                   event_id=event.id, session_id=session_id, _external=True)
 
     organizers = DataGetter.get_user_event_roles_by_role_name(event_id, 'organizer')
     for organizer in organizers:
