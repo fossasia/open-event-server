@@ -12,7 +12,7 @@ from open_event.models.event import Event as EventModel
 from open_event.models import db
 from custom_fields import CustomField
 from .errors import NotFoundError, InvalidServiceError, ValidationError, \
-    NotAuthorizedError
+    NotAuthorizedError, ServerError, PermissionDeniedError
 from open_event.models.user import User as UserModel
 from open_event.helpers.data import save_to_db, update_version, delete_from_db
 
@@ -376,3 +376,70 @@ def model_custom_form(cf_data, model):
         if key in cf and cf[key]['require'] == 1:
             tmp[key].required = True
     return tmp
+
+
+######################################
+# Permission Decorators For Services #
+######################################
+
+
+def can_create(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        user = UserModel.query.get(login.current_user.id)
+        event_id = args[1]
+        if not event_id:
+            raise ServerError()
+        service_class = args[0].model
+        if user.can_create(service_class, event_id):
+            return f(*args, **kwargs)
+        else:
+            raise PermissionDeniedError()
+    return decorated
+
+
+def can_read(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        user = UserModel.query.get(login.current_user.id)
+        event_id = args[1]
+        if not event_id:
+            raise ServerError()
+        service_class = args[0].model
+        if user.can_read(service_class, event_id):
+            return f(*args, **kwargs)
+        else:
+            raise PermissionDeniedError()
+    return decorated
+
+
+def can_update(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        user = UserModel.query.get(login.current_user.id)
+        event_id = args[1]
+        if not event_id:
+            raise ServerError()
+        service_class = args[0].model
+        if user.can_update(service_class, event_id):
+            print service_class
+            return f(*args, **kwargs)
+        else:
+            raise PermissionDeniedError()
+    return decorated
+
+
+def can_delete(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        user = UserModel.query.get(login.current_user.id)
+        event_id = args[1]
+        if not event_id:
+            raise ServerError()
+        service_class = args[0].model
+        if user.can_delete(service_class, event_id):
+            print service_class
+            return f(*args, **kwargs)
+        else:
+            raise PermissionDeniedError()
+    return decorated
