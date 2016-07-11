@@ -219,21 +219,23 @@ def send_email(to, action, subject, html):
     """
     if not string_empty(to):
         key = get_settings()['sendgrid_key']
-        if not key:
+        if not key and not current_app.config['TESTING']:
             print 'Sendgrid key not defined'
             return
-        headers = {
-            "Authorization": ("Bearer " + key)
-        }
-        payload = {
-            'to': to,
-            'from': 'open-event@googlegroups.com',
-            'subject': subject,
-            'html': html
-        }
-        requests.post("https://api.sendgrid.com/api/mail.send.json",
-                      data=payload,
-                      headers=headers)
+
+        if not current_app.config['TESTING']:
+            headers = {
+                "Authorization": ("Bearer " + key)
+            }
+            payload = {
+                'to': to,
+                'from': 'open-event@googlegroups.com',
+                'subject': subject,
+                'html': html
+            }
+            requests.post("https://api.sendgrid.com/api/mail.send.json",
+                          data=payload,
+                          headers=headers)
         # record_mail(to, action, subject, html)
         mail = Mail(
             recipient=to, action=action, subject=subject,
