@@ -347,11 +347,21 @@ class DataGetter:
 
     @staticmethod
     def get_call_for_speakers_events(include_private=False):
+        results = []
         if include_private:
-            events = Event.query.filter(Event.state == 'Call for papers')
+            events = DataGetter.get_all_published_events(include_private)
+            for e in events:
+                call_for_speakers = DataGetter.get_call_for_papers(e.id).first()
+                if call_for_speakers:
+                    results.append(e)
+
         else:
-            events = Event.query.filter(Event.state == 'Call for papers').filter(Event.privacy != 'private')
-        return events
+            events = DataGetter.get_all_published_events()
+            for e in events:
+                call_for_speakers = DataGetter.get_call_for_papers(e.id).first()
+                if call_for_speakers:
+                    results.append(e)
+        return results[:12]
 
     @staticmethod
     def get_published_events():
