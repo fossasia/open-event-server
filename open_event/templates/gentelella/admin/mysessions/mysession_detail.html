@@ -122,6 +122,7 @@
 {% block tail_js %}
     {{ super() }}
     <script src="{{ url_for('static', filename='js/jquery/jquery.multi-select.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/session/new.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $("textarea").summernote(summernoteConfig);
