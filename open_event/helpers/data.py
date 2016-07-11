@@ -7,6 +7,7 @@ import json
 import types
 from datetime import datetime, timedelta
 import time
+import requests
 
 from flask import flash, request, url_for, g
 from flask.ext import login
@@ -828,14 +829,21 @@ class DataManager(object):
                                    licence=licence_name,
                                    licence_url=licence_url,
                                    logo=logo)
-
+        loc_name = ''
+        response = requests.get(
+            "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(form['latitude']) + "," + str(
+                form['longitude'])).json()
+        if response['status'] == u'OK':
+            for addr in response['results'][0]['address_components']:
+                if addr['types'] == ['locality', 'political']:
+                    loc_name = addr['short_name']
         event = Event(name=form['name'],
                       start_time=datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M'),
                       end_time=datetime.strptime(form['end_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M'),
                       timezone=form['timezone'],
                       latitude=form['latitude'],
                       longitude=form['longitude'],
-                      location_name=form['location_name'],
+                      location_name=loc_name,
                       description=form['description'],
                       event_url=form['event_url'],
                       type=form['type'],
