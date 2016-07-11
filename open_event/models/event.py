@@ -90,7 +90,8 @@ class Event(db.Model):
                  copyright=None,
                  code_of_conduct=None,
                  schedule_published_on=None,
-                 in_trash=None):
+                 in_trash=None,
+                 searchable_location_name=None):
         self.name = name
         self.logo = logo
         self.email = email
@@ -117,6 +118,7 @@ class Event(db.Model):
         self.code_of_conduct = code_of_conduct
         self.schedule_published_on = schedule_published_on
         self.in_trash = in_trash
+        self.searchable_location_name = searchable_location_name
 
     def __repr__(self):
         return '<Event %r>' % self.name

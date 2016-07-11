@@ -38,7 +38,7 @@ class MyHomeView(AdminIndexView):
 
     @expose('/')
     def index(self):
-        call_for_speakers_events = DataGetter.get_call_for_speakers_events().limit(12).all()
+        call_for_speakers_events = DataGetter.get_call_for_speakers_events()
         upcoming_events = DataGetter.get_all_published_events().limit(12).all()
         return self.render('gentelella/index.html',
                            call_for_speakers_events=call_for_speakers_events,
