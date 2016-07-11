@@ -815,15 +815,14 @@ class DataManager(object):
         :param form: view data form
         """
         # Filter out Copyright info
-        holder = form.get('copyright_holder')
-        holder_url = form.get('copyright_holder_url')
-        year = form.get('copyright_year')
+        holder = form.get('organizer_name')
+        # Current year
+        year = datetime.now().year
         licence_name = form.get('copyright_licence')
-        # Ignoring Licence description
-        _, licence_url, logo = EVENT_LICENCES.get(licence_name, ('', '', ''))
+        # Ignoring Licence long name, description and compact logo
+        _, _, licence_url, logo, _ = EVENT_LICENCES.get(licence_name, ('',)*5)
 
         copyright = EventCopyright(holder=holder,
-                                   holder_url=holder_url,
                                    year=year,
                                    licence=licence_name,
                                    licence_url=licence_url,
@@ -912,6 +911,10 @@ class DataManager(object):
 
             for index, name in enumerate(social_link_name):
                 if not string_empty(social_link_link[index]):
+                    # If 'Website' has been provided,
+                    # save it as Holder URL for Copyright
+                    if name.lower() == 'website':
+                        event.copyright.holder_url = social_link_link[index]
                     social_link = SocialLink(name=name, link=social_link_link[index], event_id=event.id)
                     db.session.add(social_link)
 
@@ -1062,15 +1065,13 @@ class DataManager(object):
 
         if not event.copyright:
             # It is possible that the copyright is set as None before.
-            # Set it as an `EventCopyright` object
+            # Set it as an `EventCopyright` object.
             event.copyright = EventCopyright()
         # Filter out Copyright info
-        event.copyright.holder = form.get('copyright_holder')
-        event.copyright.holder_url = form.get('copyright_holder_url')
-        event.copyright.year = form.get('copyright_year')
+        event.copyright.holder = form.get('organizer_name')
         licence_name = form.get('copyright_licence')
         # Ignoring Licence description
-        _, licence_url, logo = EVENT_LICENCES.get(licence_name, ('', '', ''))
+        _, _, licence_url, logo, _ = EVENT_LICENCES.get(licence_name, ('',)*5)
 
         event.copyright.licence = licence_name
         event.copyright.licence_url = licence_url
@@ -1155,6 +1156,11 @@ class DataManager(object):
 
         for index, name in enumerate(social_link_name):
             if not string_empty(social_link_link[index]):
+                # If 'Website' has been provided,
+                # save it as Holder URL for Copyright
+                if name.lower() == 'website':
+                    event.copyright.holder_url = social_link_link[index]
+
                 if social_link_id[index] != '':
                     social_link, c = get_or_create(SocialLink,
                                                    id=social_link_id[index],

@@ -13,6 +13,7 @@ from werkzeug.utils import redirect, secure_filename
 from open_event.helpers.data import DataManager
 from ...helpers.data_getter import DataGetter
 
+
 def get_published_event_or_abort(event_id):
     event = DataGetter.get_event(event_id=event_id)
     if not event or event.state != u'Published':
@@ -37,7 +38,15 @@ class EventDetailView(BaseView):
         call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
         event = get_published_event_or_abort(event_id)
         accepted_sessions = DataGetter.get_sessions(event_id)
-        return self.render('/gentelella/guest/event/details.html', event=event, accepted_sessions=accepted_sessions, call_for_speakers=call_for_speakers)
+        if event.copyright:
+            licence_details = DataGetter.get_licence_details(event.copyright.licence)
+        else:
+            licence_details = None
+        return self.render('/gentelella/guest/event/details.html',
+                           event=event,
+                           accepted_sessions=accepted_sessions,
+                           call_for_speakers=call_for_speakers,
+                           licence_details=licence_details)
 
     @expose('/<int:event_id>/sessions/')
     def display_event_sessions(self, event_id):

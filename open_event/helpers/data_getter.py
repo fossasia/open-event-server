@@ -475,6 +475,23 @@ class DataGetter:
         return EVENT_LICENCES
 
     @staticmethod
+    def get_licence_details(licence_name):
+        licence = EVENT_LICENCES.get(licence_name)
+        if licence:
+            licence_details = {
+                'name': licence_name,
+                'long_name': licence[0],
+                'description': licence[1],
+                'url': licence[2],
+                'logo': licence[3],
+                'compact_logo': licence[4],
+            }
+        else:
+            licence_details = None
+
+        return licence_details
+
+    @staticmethod
     def get_language_list():
         return [i[1] for i in LANGUAGE_LIST]
 

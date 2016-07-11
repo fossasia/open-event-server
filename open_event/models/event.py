@@ -40,7 +40,6 @@ class Event(db.Model):
     event_url = db.Column(db.String)
     background_url = db.Column(db.String)
     organizer_name = db.Column(db.String)
-    organizer_url = db.Column(db.String)
     organizer_description = db.Column(db.String)
     in_trash = db.Column(db.Boolean, default=False)
     track = db.relationship('Track', backref="event")
