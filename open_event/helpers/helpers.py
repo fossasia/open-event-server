@@ -4,7 +4,7 @@ import os
 import re
 import requests
 from datetime import datetime, timedelta
-from flask import request, url_for
+from flask import request, url_for, current_app
 from itsdangerous import Serializer
 from flask.ext import login
 
@@ -127,7 +127,7 @@ def send_next_event(email, event_name, link, up_coming_events):
         )
     )
 
-def send_after_event(email, event_name, upcoming_events):
+def send_after_event(email, event_name, upcoming_events, link=None):
     """Send after event mail"""
     upcoming_event_html = "<ul>"
     for event in upcoming_events:
@@ -394,7 +394,6 @@ def fields_not_empty(obj, fields):
         if string_empty(getattr(obj, field)):
             return False
     return True
-
 
 def get_request_stats():
     """
