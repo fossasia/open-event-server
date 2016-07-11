@@ -70,18 +70,20 @@ Logs
                 </thead>
                 <tbody>
                     {% for mail in mails %}
-                        <tr>
-                        <td>{{ mail.recipient }}</td>
-                        <td data-toggle="tooltip" data-placement="bottom" title="{{ mail.time }}"
-                            data-delay='{"show":"500", "hide":"300"}'>{{ mail.time | humanize }}</td>
-                        <td>{{ mail.action }}</td>
-                        <td>
-                            <strong>{{ mail.subject }}</strong><br>
-                            <div>
-                                {{ mail.message | safe }}
-                            </div>
-                        </td>
-                        </tr>
+                        {% if mail.recipient %}
+                            <tr>
+                            <td>{{ mail.recipient }}</td>
+                            <td data-toggle="tooltip" data-placement="bottom" title="{{ mail.time }}"
+                                data-delay='{"show":"500", "hide":"300"}'>{{ mail.time | humanize }}</td>
+                            <td>{{ mail.action }}</td>
+                            <td>
+                                <strong>{{ mail.subject }}</strong><br>
+                                <div>
+                                    {{ mail.message | safe }}
+                                </div>
+                            </td>
+                            </tr>
+                        {% endif %}
                     {% endfor %}
                 </tbody>
             </table>
