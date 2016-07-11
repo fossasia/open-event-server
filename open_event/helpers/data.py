@@ -851,6 +851,15 @@ class DataManager(object):
                       code_of_conduct=form['code_of_conduct'],
                       creator=login.current_user)
 
+        if event.latitude and event.longitude:
+            response = requests.get(
+                "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
+                    event.longitude)).json()
+            if response['status'] == u'OK':
+                for addr in response['results'][0]['address_components']:
+                    if addr['types'] == ['locality', 'political']:
+                        event.searchable_location_name = addr['short_name']
+
         state = form.get('state', None)
         if state and ((state == u'Published' and not string_empty(
             event.location_name)) or state != u'Published') and login.current_user.is_verified:
@@ -1065,6 +1074,15 @@ class DataManager(object):
         event.organizer_description = form['organizer_description']
         event.code_of_conduct = form['code_of_conduct']
         event.ticket_url = form['ticket_url']
+
+        if event.latitude and event.longitude:
+            response = requests.get(
+                "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
+                    event.longitude)).json()
+            if response['status'] == u'OK':
+                for addr in response['results'][0]['address_components']:
+                    if addr['types'] == ['locality', 'political']:
+                        event.searchable_location_name = addr['short_name']
 
         if not event.copyright:
             # It is possible that the copyright is set as None before.
