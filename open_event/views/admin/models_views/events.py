@@ -221,7 +221,7 @@ class EventsView(BaseView):
                 microlocations, call_for_speakers, sponsors, custom_forms, img_files, old_sponsor_logos, old_sponsor_names)
 
             if (request.form.get('state',
-                                u'Draft') == u'Published' or event.state == 'Draft') and string_empty(
+                                u'Draft') == u'Published') and string_empty(
                                 event.location_name):
                 flash(
                     "Your event was saved. To publish your event please review the highlighted fields below.",
