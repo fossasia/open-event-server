@@ -6,6 +6,8 @@ function importEventZip(){
     });
 
     $('#import_status').text('Working...');
+    $('#import_error').text('');
+    $('#btnImportEvent').prop('disabled', true);
     jQuery.ajax({
         url: '/api/v2/events/import/json',
         data: data,
@@ -22,6 +24,7 @@ function importEventZip(){
             obj = JSON.parse(x.responseText);
             console.log(obj);
             $('#import_status').text('');
+            $('#btnImportEvent').prop('disabled', false);
             $('#import_error').text(obj['message']);
         }
     });

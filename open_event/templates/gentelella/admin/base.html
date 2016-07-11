@@ -63,10 +63,10 @@
         $(document).ready(function () {
             var $searchText = $('#search-text');
             $('.search-button').click(function (e) {
-                if (window.screen.width <= 640 && ($searchText.val() == "")) {
+                if (window.innerWidth <= 711 && ($searchText.val() == "")) {
                     e.preventDefault();
                     $searchText.toggle();
-                    $searchText.width(0.8 * window.screen.width);
+                    $searchText.width(0.8 * window.innerWidth);
                 }
             });
         });

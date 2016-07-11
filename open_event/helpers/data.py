@@ -290,6 +290,12 @@ class DataManager(object):
                               short_abstract=form.get('short_abstract', ''),
                               state=state)
 
+        if form.get('track', None) != "":
+            new_session.track_id = form.get('track', None)
+
+        if form.get('session_type', None) != "":
+            new_session.session_type_id = form.get('session_type', None)
+
         speaker = Speaker.query.filter_by(email=form.get('email', '')).filter_by(event_id=event_id).first()
         if not speaker:
             speaker = Speaker(name=form.get('name', ''),
@@ -324,7 +330,6 @@ class DataManager(object):
                                                                                                     event.id)
                 if email_notification_setting and email_notification_setting.new_paper == 1:
                     send_new_session_organizer(organizer.user.email, event.name, link)
-                    send_notif_new_session_organizer(organizer.user, event.name, link)
                 # Send notification
                 send_notif_new_session_organizer(organizer.user, event.name, link)
 
@@ -368,7 +373,7 @@ class DataManager(object):
             link = url_for('event_sessions.invited_view', session_id=new_session.id, event_id=event_id, _external=True)
             Helper.send_email_invitation(email, new_session.title, link)
             # If a user is registered by the email, send a notification as well
-            user = DataGetter.get_user_by_email(email)
+            user = DataGetter.get_user_by_email(email, no_flash=True)
             if user:
                 Helper.send_notif_invite_papers(user, event.name, link)
 
@@ -492,12 +497,23 @@ class DataManager(object):
             organizers = DataGetter.get_user_event_roles_by_role_name(event_id, 'organizer')
             for organizer in organizers:
                 send_new_session_organizer(organizer.user.email, session.event.name, link)
+                send_notif_new_session_organizer(organizer.user, session.event.name, link)
             session.state = form_state
 
         session.title = form.get('title', '')
         session.subtitle = form.get('subtitle', '')
         session.long_abstract = form.get('long_abstract', '')
         session.short_abstract = form.get('short_abstract', '')
+
+        if form.get('track', None) != "":
+            session.track_id = form.get('track', None)
+        else:
+            session.track_id = None
+
+        if form.get('session_type', None) != "":
+            session.session_type_id = form.get('session_type', None)
+        else:
+            session.session_type_id = None
 
         existing_speaker_ids = form.getlist("speakers[]")
         current_speaker_ids = []
@@ -814,7 +830,6 @@ class DataManager(object):
                                    logo=logo)
 
         event = Event(name=form['name'],
-                      email=form.get('email', u'test@example.com'),
                       start_time=datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M'),
                       end_time=datetime.strptime(form['end_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M'),
                       timezone=form['timezone'],
@@ -907,7 +922,9 @@ class DataManager(object):
 
             for index, name in enumerate(room_name):
                 if not string_empty(name):
-                    room = Microlocation(name=name, floor=room_floor[index], event_id=event.id)
+                    room = Microlocation(name=name,
+                                         floor=room_floor[index] if room_floor[index] != '' else None,
+                                         event_id=event.id)
                     db.session.add(room)
 
             for index, name in enumerate(sponsor_name):
@@ -965,7 +982,6 @@ class DataManager(object):
 
         event_old = DataGetter.get_event(event_id)
         event = Event(name='Copy of ' + event_old.name,
-                      email=event_old.email,
                       start_time=event_old.start_time,
                       end_time=event_old.end_time,
                       timezone=event_old.timezone,
@@ -1003,7 +1019,7 @@ class DataManager(object):
             save_to_db(track_new, "Track copy saved")
 
         for room in rooms_old:
-            room_new = Microlocation(name=room.name, event_id=event.id)
+            room_new = Microlocation(name=room.name, floor=room.floor, event_id=event.id)
             save_to_db(room_new, "Room copy saved")
 
         if call_for_papers_old:
@@ -1114,10 +1130,12 @@ class DataManager(object):
         custom_forms_value = form.getlist('custom_form[value]')
 
         # save the edited info to database
+        for session_type in session_types:
+            if str(session_type.id) not in session_type_id:
+                delete_from_db(session_type, "SessionType Deleted")
 
         for index, name in enumerate(session_type_names):
             if not string_empty(name):
-                print session_type_id[index]
                 if session_type_id[index] != '':
                     session_type, c = get_or_create(SessionType,
                                                     id=session_type_id[index],
@@ -1130,6 +1148,10 @@ class DataManager(object):
                                                     length=session_type_length[index],
                                                     event_id=event.id)
                 db.session.add(session_type)
+
+        for social_link in social_links:
+            if str(social_link.id) not in social_link_id:
+                delete_from_db(social_link, "SocialLink Deleted")
 
         for index, name in enumerate(social_link_name):
             if not string_empty(social_link_link[index]):
@@ -1146,6 +1168,10 @@ class DataManager(object):
                                                    event_id=event.id)
                 db.session.add(social_link)
 
+        for track in tracks:
+            if str(track.id) not in track_id:
+                delete_from_db(track, "Track Deleted")
+
         for index, name in enumerate(track_name):
             if not string_empty(name):
                 if track_id[index] != '':
@@ -1161,6 +1187,10 @@ class DataManager(object):
                                              event_id=event.id)
                 db.session.add(track)
 
+        for room in microlocations:
+            if str(room.id) not in room_id:
+                delete_from_db(room, "Room Deleted")
+
         for index, name in enumerate(room_name):
             if not string_empty(name):
                 if room_id[index] != '':
@@ -1168,11 +1198,11 @@ class DataManager(object):
                                             id=room_id[index],
                                             event_id=event.id)
                     room.name = name
-                    room.floor = room_floor[index]
+                    room.floor = room_floor[index] if room_floor[index] != '' else None
                 else:
                     room, c = get_or_create(Microlocation,
                                             name=name,
-                                            floor=room_floor[index],
+                                            floor=room_floor[index] if room_floor[index] != '' else None,
                                             event_id=event.id)
                 db.session.add(room)
 

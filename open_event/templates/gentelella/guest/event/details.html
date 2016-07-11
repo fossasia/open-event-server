@@ -144,9 +144,9 @@
                 </div>
             </div>
             <div class="col-md-4">
-                {% if event.email %}
+                <!--{% if event.email %}
                     <i class="fa fa-envelope fa-fw"></i> {{ event.email }}<br>
-                {% endif %}
+                {% endif %}-->
                 {% set twitter = [] %}
                 {% for social_link in event.social_link %}
                     {% set social_name = social_link.name.strip().lower() %}
