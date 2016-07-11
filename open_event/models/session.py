@@ -63,7 +63,7 @@ class Session(db.Model):
                  signup_url=None,
                  session_type=None,
                  created_at=None,
-                 in_trash=None):
+                 in_trash=False):
         self.title = title
         self.subtitle = subtitle
         self.short_abstract = short_abstract
