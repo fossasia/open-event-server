@@ -421,7 +421,7 @@ def facebook_callback():
         if response.status_code == 200:
             user_info = response.json()
             email = user_info['email']
-            user_email = DataGetter.get_user_by_email(email)
+            user_email = DataGetter.get_user_by_email(email, no_flash=True)
             user = create_user_oauth(user_email, user_info, token=token, method='Facebook')
             if user.password is None:
                 s = get_serializer()
