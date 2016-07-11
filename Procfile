@@ -1,2 +1,2 @@
-web: gunicorn open_event:app
+web: sh heroku.sh
 migrate: python manage.py db upgrade
