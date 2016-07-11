@@ -382,7 +382,7 @@ def callback():
         if resp.status_code == 200:
             user_data = resp.json()
             email = user_data['email']
-            user = DataGetter.get_user_by_email(email)
+            user = DataGetter.get_user_by_email(email, no_flash=True)
             user = create_user_oauth(user, user_data, token=token, method='Google')
             if user.password is None:
                 s = get_serializer()
