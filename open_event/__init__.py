@@ -6,6 +6,8 @@ from flask.exthook import ExtDeprecationWarning
 warnings.simplefilter('ignore', ExtDeprecationWarning)
 # Keep it before flask extensions are imported
 import arrow
+from dateutil import tz
+from celery import Celery
 from flask.ext.htmlmin import HTMLMIN
 import logging
 import os.path
@@ -81,6 +83,10 @@ def create_app():
     app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=24*60*60)
     app.config['JWT_AUTH_URL_RULE'] = None
     jwt = JWT(app, jwt_authenticate, jwt_identity)
+
+    # setup celery
+    app.config['CELERY_BROKER_URL'] = environ.get('REDISTOGO_URL', 'redis://localhost:6379/0')
+    app.config['CELERY_RESULT_BACKEND'] = app.config['CELERY_BROKER_URL']
 
     HTMLMIN(app)
     admin_view = AdminView("Open Event")
@@ -219,6 +225,25 @@ def track_user():
         current_user.update_lat()
 
 current_app, manager, database, jwt = create_app()
+
+
+def make_celery(app):
+    celery = Celery(app.import_name, broker=app.config['CELERY_BROKER_URL'])
+    celery.conf.update(app.config)
+    TaskBase = celery.Task
+
+    class ContextTask(TaskBase):
+        abstract = True
+
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return TaskBase.__call__(self, *args, **kwargs)
+    celery.Task = ContextTask
+    return celery
+
+celery = make_celery(current_app)
+
+import api.helpers.tasks
 
 
 @app.before_first_request

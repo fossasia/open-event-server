@@ -297,7 +297,9 @@ def requires_auth(f):
         # used in swagger UI
         if not success:
             if login.current_user.is_authenticated:
-                g.user = login.current_user
+                g.user = UserModel.query.get(login.current_user.id)
+                # ^^ this is because login.current_user becomes old, detached
+                # and not pickable which causes problems in celery
                 success = True
         else:
             g.user.update_lat()
