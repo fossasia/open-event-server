@@ -76,7 +76,8 @@ class EventsView(BaseView):
             event_sub_topics=DataGetter.get_event_subtopics(),
             timezones=DataGetter.get_all_timezones())
 
-    @expose('/<int:event_id>/', methods=('GET', 'POST'))
+    @expose('/<event_id>/', methods=('GET', 'POST'))
+    @can_access
     def details_view(self, event_id):
         event = DataGetter.get_event(event_id)
 
