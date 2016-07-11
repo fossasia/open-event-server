@@ -85,7 +85,7 @@ def create_app():
     jwt = JWT(app, jwt_authenticate, jwt_identity)
 
     # setup celery
-    app.config['CELERY_BROKER_URL'] = environ.get('REDISTOGO_URL', 'redis://localhost:6379/0')
+    app.config['CELERY_BROKER_URL'] = environ.get('REDIS_URL', 'redis://localhost:6379/0')
     app.config['CELERY_RESULT_BACKEND'] = app.config['CELERY_BROKER_URL']
 
     HTMLMIN(app)
