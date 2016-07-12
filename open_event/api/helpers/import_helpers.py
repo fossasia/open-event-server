@@ -1,12 +1,13 @@
 import zipfile
 import os
 import shutil
+import requests
 import json
 from flask import request
 from werkzeug import secure_filename
 
 from flask import current_app as app
-from open_event.helpers.storage import UploadedFile, upload
+from open_event.helpers.storage import UploadedFile, upload, UploadedMemory
 from open_event.helpers.data import save_to_db
 
 from ..events import DAO as EventDAO, LinkDAO as SocialLinkDAO
@@ -160,8 +161,10 @@ def _upload_media_queue(srv, obj):
         return
     for i in UPLOAD_PATHS[srv[0]]:
         path = getattr(obj, i)
-        if not path or not path.startswith('/'):
+        if not path:
             continue
+        # if not path.startswith('/'):  # relative
+        #     continue
         # file OK
         UPLOAD_QUEUE.append({
             'srv': srv,
@@ -186,9 +189,23 @@ def _upload_media(event_id, base_path):
             item = dao.get(event_id, id_)
         # get cur file
         field = i['field']
-        path = base_path + getattr(item, field)
-        filename = path.rsplit('/', 1)[1]
-        file = UploadedFile(path, filename)
+        path = getattr(item, field)
+        if path.startswith('/'):
+            # relative files
+            path = base_path + path
+            filename = path.rsplit('/', 1)[1]
+            file = UploadedFile(path, filename)
+        else:
+            # absolute links
+            try:
+                filename = UPLOAD_PATHS[name][field][1].rsplit('/', 1)[1]
+                r = requests.get(path)
+                file = UploadedMemory(r.content, filename)
+            except:
+                file = None
+        # check if valid file
+        if not file:
+            continue
         # upload
         try:
             key = UPLOAD_PATHS[name][field][1]
