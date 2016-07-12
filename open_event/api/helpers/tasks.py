@@ -14,7 +14,7 @@ from ..imports import import_event_task_base
              throws=(BaseError,))
 def import_event_task(self, file):
     try:
-        item = import_event_task_base(file)
+        item = import_event_task_base(self, file)
         return item
     except BaseError as e:
         print traceback.format_exc()

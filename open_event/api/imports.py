@@ -31,7 +31,7 @@ class EventImportJson(Resource):
         )
 
 
-def import_event_task_base(file):
-    new_event = import_event_json(file)
+def import_event_task_base(task_handle, file):
+    new_event = import_event_json(task_handle, file)
     record_activity('import_event', event_id=new_event.id)
     return marshal(new_event, EVENT)
