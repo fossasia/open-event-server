@@ -161,6 +161,15 @@
                     {% elif social_name == "google plus" %}
                         <i class="fa fa-google-plus-square fa-fw" style="color: #dd4b39"></i>
                         <a class="social-link" href="{{ social_link.link }}">Google +</a><br>
+                    {% elif social_name == "github" %}
+                        <i class="fa fa-github-square fa-fw"></i>
+                        <a class="social-link" href="{{ social_link.link }}">Github</a><br>
+                    {% elif social_name == "youtube" %}
+                        <i class="fa fa-youtube-play fa-fw" style="color: #dd4b39"></i>
+                        <a class="social-link" href="{{ social_link.link }}">Youtube</a><br>
+                    {% elif social_name == "flickr" %}
+                        <i class="fa fa-flickr fa-fw"></i>
+                        <a class="social-link" href="{{ social_link.link }}">Flickr</a><br>
                     {% else %}
                         <i class="fa square-o fa-fw" style="color: #8d8d8d"></i>
                         <a class="social-link" href="{{ social_link.link }}">{{ social_link.name }}</a><br>
