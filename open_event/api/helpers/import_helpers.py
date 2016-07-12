@@ -11,6 +11,7 @@ from flask import current_app as app
 from open_event.helpers.storage import UploadedFile, upload, UploadedMemory, \
     UPLOAD_PATHS
 from open_event.helpers.data import save_to_db
+from open_event.helpers.helpers import update_state
 
 from ..events import DAO as EventDAO, LinkDAO as SocialLinkDAO
 from ..microlocations import DAO as MicrolocationDAO
@@ -142,7 +143,7 @@ def _upload_media(task_handle, event_id, base_path):
     for i in UPLOAD_QUEUE:
         # update progress
         ct += 1
-        task_handle.update_state(state='UPLOADING MEDIA (%d/%d)' % (ct, total))
+        update_state(task_handle, 'UPLOADING MEDIA (%d/%d)' % (ct, total))
         # get upload infos
         name, dao = i['srv']
         id_ = i['id']
@@ -266,7 +267,7 @@ def import_event_json(task_handle, zip_path):
     """
     global CUR_ID, UPLOAD_QUEUE
     UPLOAD_QUEUE = []
-    task_handle.update_state(state='IMPORTING')
+    update_state(task_handle, 'IMPORTING')
 
     with app.app_context():
         path = app.config['BASE_DIR'] + '/static/temp/import_event'
