@@ -8,7 +8,8 @@ from flask import request
 from werkzeug import secure_filename
 
 from flask import current_app as app
-from open_event.helpers.storage import UploadedFile, upload, UploadedMemory
+from open_event.helpers.storage import UploadedFile, upload, UploadedMemory, \
+    UPLOAD_PATHS
 from open_event.helpers.data import save_to_db
 
 from ..events import DAO as EventDAO, LinkDAO as SocialLinkDAO
@@ -46,51 +47,6 @@ RELATED_FIELDS = {
         ('speakers', 'speaker_ids', 'speakers'),
         ('session_type', 'session_type_id', 'session_types')
     ]
-}
-
-UPLOAD_PATHS = {
-    'sessions': {
-        'video': [
-            '/videos/sessions/%s',
-            'events/{event_id}/sessions/{id}/video'
-        ],
-        'audio': [
-            '/audios/sessions/%s',
-            'events/{event_id}/audios/{id}/audio'
-        ],
-        'slides': [
-            '/slides/sessions/%s',
-            'events/{event_id}/slides/{id}/slide'
-        ]
-    },
-    'speakers': {
-        'photo': [
-            '/images/speakers/%s',
-            'events/{event_id}/speakers/{id}/photo'
-        ]
-    },
-    'event': {
-        'logo': [
-            '/images/event/%s',
-            'events/{event_id}/logo'
-        ],
-        'background_url': [
-            '/images/event/%s',
-            'events/{event_id}/background'  # see
-        ]
-    },
-    'sponsors': {
-        'logo': [
-            '/images/sponsors/%s',
-            'events/{event_id}/sponsors/{id}/logo'
-        ]
-    },
-    'tracks': {
-        'track_image_url': [
-            '/images/tracks/%s',
-            'events/{event_id}/tracks/{id}/track_image'
-        ]
-    }
 }
 
 UPLOAD_QUEUE = []
@@ -202,7 +158,7 @@ def _upload_media(event_id, base_path):
         else:
             # absolute links
             try:
-                filename = UPLOAD_PATHS[name][field][1].rsplit('/', 1)[1]
+                filename = UPLOAD_PATHS[name][field].rsplit('/', 1)[1]
                 r = requests.get(path)
                 file = UploadedMemory(r.content, filename)
             except:
@@ -214,7 +170,7 @@ def _upload_media(event_id, base_path):
         try:
             if file == '':
                 raise Exception()
-            key = UPLOAD_PATHS[name][field][1]
+            key = UPLOAD_PATHS[name][field]
             if name == 'event':
                 key = key.format(event_id=event_id)
             else:
