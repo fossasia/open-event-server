@@ -1,6 +1,9 @@
 from flask.ext.restplus import Resource, Namespace
 from sqlalchemy.orm.collections import InstrumentedList
 
+from open_event.helpers.notification_email_triggers import trigger_new_session_notifications, \
+    trigger_session_schedule_change_notifications
+from open_event.helpers.notification_email_triggers import trigger_session_state_change_notifications
 from open_event.models.session import Session as SessionModel
 from open_event.models.track import Track as TrackModel
 from open_event.models.microlocation import Microlocation as MicrolocationModel
@@ -139,7 +142,19 @@ class SessionDAO(ServiceDAO):
         data_copy = data.copy()
         data_copy = self.fix_payload_post(event_id, data_copy)
         data = self._delete_fields(data)
-        obj = ServiceDAO.update(self, event_id, service_id, data, validate=False)
+        session = DataGetter.get_session(service_id)  # session before any updates are made
+        obj = ServiceDAO.update(self, event_id, service_id, data, validate=False)  # session after update
+
+        if 'state' in data:
+            if data['state'] == 'pending' and session.state == 'draft':
+                trigger_new_session_notifications(session.id, event_id=event_id)
+
+            if (data['state'] == 'accepted' and session.state != 'accepted') or (data['state'] == 'rejected' and session.state != 'rejected'):
+                trigger_session_state_change_notifications(obj, event_id=event_id, state=data['state'])
+
+        if session.start_time != obj.start_time or session.end_time != obj.end_time:
+            trigger_session_schedule_change_notifications(obj, event_id)
+
         for f in ['track', 'microlocation', 'speakers', 'session_type']:
             if f in data_copy:
                 setattr(obj, f, data_copy[f])
@@ -149,7 +164,10 @@ class SessionDAO(ServiceDAO):
     def create(self, event_id, data, url):
         data = self.validate(data, event_id)
         payload = self.fix_payload_post(event_id, data)
-        return ServiceDAO.create(self, event_id, payload, url, validate=False)
+        session, status_code, location = ServiceDAO.create(self, event_id, payload, url, validate=False)
+        if session.state == 'pending':
+            trigger_new_session_notifications(session.id, event_id=event_id)
+        return session, status_code, location
 
     def validate(self, data, event_id, check_required=True):
         form = DataGetter.get_custom_form_elements(event_id)

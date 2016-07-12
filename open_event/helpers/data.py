@@ -1,59 +1,55 @@
 """Copyright 2015 Rafal Kowalski"""
+import json
 import logging
 import os.path
 import random
-import traceback
-import json
-import types
-from datetime import datetime, timedelta
 import time
-import requests
+import traceback
+from datetime import datetime, timedelta
 
+import requests
 from flask import flash, request, url_for, g
 from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
+from requests_oauthlib import OAuth2Session
 from sqlalchemy.orm.collections import InstrumentedList
 from sqlalchemy.sql.expression import exists
 from werkzeug import secure_filename
 from wtforms import ValidationError
 
-from open_event.models.notifications import Notification
-from open_event.helpers.helpers import string_empty, send_new_session_organizer, \
-    string_not_empty, send_notif_new_session_organizer, send_notif_session_accept_reject, \
-    send_notif_invite_papers
-from ..helpers.update_version import VersionUpdater
-from ..helpers.data_getter import DataGetter
+from open_event.helpers.helpers import string_empty, string_not_empty
+from open_event.helpers.notification_email_triggers import trigger_new_session_notifications, \
+    trigger_session_state_change_notifications
+from open_event.helpers.oauth import OAuth, FbOAuth, InstagramOAuth
 from open_event.helpers.storage import upload, UploadedFile
+from open_event.models.notifications import Notification
 from ..helpers import helpers as Helper
+from ..helpers.data_getter import DataGetter
 from ..helpers.static import EVENT_LICENCES
+from ..helpers.update_version import VersionUpdater
 from ..models import db
+from ..models.activity import Activity, ACTIVITIES
+from ..models.call_for_papers import CallForPaper
+from ..models.custom_forms import CustomForms
+from ..models.email_notifications import EmailNotification
 from ..models.event import Event, EventsUsers
 from ..models.event_copyright import EventCopyright
 from ..models.file import File
+from ..models.invite import Invite
 from ..models.microlocation import Microlocation
-from ..models.session import Session
-from ..models.speaker import Speaker
-from ..models.sponsor import Sponsor
-from ..models.user import User, ORGANIZER
-from ..models.user_detail import UserDetail
+from ..models.permission import Permission
 from ..models.role import Role
 from ..models.role_invite import RoleInvite
-from ..models.setting import Setting
-from ..models.email_notifications import EmailNotification
 from ..models.service import Service
-from ..models.permission import Permission
-from ..models.users_events_roles import UsersEventsRoles
+from ..models.session import Session
 from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
+from ..models.speaker import Speaker
+from ..models.sponsor import Sponsor
 from ..models.track import Track
-from open_event.helpers.oauth import OAuth, FbOAuth, InstagramOAuth
-from requests_oauthlib import OAuth2Session
-from ..models.invite import Invite
-from ..models.call_for_papers import CallForPaper
-from ..models.custom_forms import CustomForms
-from ..models.ticket import Ticket, BookedTicket
-from ..models.activity import Activity, ACTIVITIES
-from open_event.helpers.helpers import send_next_event
+from ..models.user import User, ORGANIZER
+from ..models.user_detail import UserDetail
+from ..models.users_events_roles import UsersEventsRoles
 
 
 class DataManager(object):
@@ -323,16 +319,7 @@ class DataManager(object):
         save_to_db(new_session, "Session saved")
 
         if state == 'pending':
-            link = url_for('event_sessions.session_display_view',
-                           event_id=event.id, session_id=new_session.id, _external=True)
-            organizers = DataGetter.get_user_event_roles_by_role_name(event.id, 'organizer')
-            for organizer in organizers:
-                email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(organizer.user.id,
-                                                                                                    event.id)
-                if email_notification_setting and email_notification_setting.new_paper == 1:
-                    send_new_session_organizer(organizer.user.email, event.name, link)
-                # Send notification
-                send_notif_new_session_organizer(organizer.user, event.name, link)
+            trigger_new_session_notifications(new_session.id, event=event)
 
         speaker_modified = False
         session_modified = False
@@ -365,18 +352,19 @@ class DataManager(object):
 
         invite_emails = form.getlist("speakers[email]")
         for index, email in enumerate(invite_emails):
-            new_invite = Invite(event_id=event_id,
-                                session_id=new_session.id)
-            hash = random.getrandbits(128)
-            new_invite.hash = "%032x" % hash
-            save_to_db(new_invite, "Invite saved")
+            if not string_empty(email):
+                new_invite = Invite(event_id=event_id,
+                                    session_id=new_session.id)
+                hash = random.getrandbits(128)
+                new_invite.hash = "%032x" % hash
+                save_to_db(new_invite, "Invite saved")
 
-            link = url_for('event_sessions.invited_view', session_id=new_session.id, event_id=event_id, _external=True)
-            Helper.send_email_invitation(email, new_session.title, link)
-            # If a user is registered by the email, send a notification as well
-            user = DataGetter.get_user_by_email(email, no_flash=True)
-            if user:
-                Helper.send_notif_invite_papers(user, event.name, link)
+                link = url_for('event_sessions.invited_view', session_id=new_session.id, event_id=event_id, _external=True)
+                Helper.send_email_invitation(email, new_session.title, link)
+                # If a user is registered by the email, send a notification as well
+                user = DataGetter.get_user_by_email(email, no_flash=True)
+                if user:
+                    Helper.send_notif_invite_papers(user, event.name, link)
 
 
     @staticmethod
@@ -446,19 +434,7 @@ class DataManager(object):
     def session_accept_reject(session, event_id, state):
         session.state = state
         save_to_db(session, 'Session State Updated')
-        link = url_for('event_sessions.session_display_view',
-                       event_id=event_id, session_id=session.id, _external=True)
-        for speaker in session.speakers:
-            print speaker.name
-            email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(speaker.user_id,
-                                                                                                event_id)
-            if email_notification_setting and email_notification_setting.session_accept_reject == 1:
-                Helper.send_session_accept_reject(speaker.email, session.title, state, link)
-                # Send notification
-                send_notif_session_accept_reject(speaker.user,
-                                                 session.title,
-                                                 state,
-                                                 link)
+        trigger_session_state_change_notifications(session, event_id)
         flash("The session has been %s" % state)
 
     @staticmethod
@@ -493,13 +469,7 @@ class DataManager(object):
             session.video = video_url
 
         if form_state == 'pending' and session.state != 'pending' and session.state != 'accepted' and session.state != 'rejected':
-            link = url_for('event_sessions.session_display_view',
-                           event_id=event_id, session_id=session.id, _external=True)
-            organizers = DataGetter.get_user_event_roles_by_role_name(event_id, 'organizer')
-            for organizer in organizers:
-                send_new_session_organizer(organizer.user.email, session.event.name, link)
-                send_notif_new_session_organizer(organizer.user, session.event.name, link)
-            session.state = form_state
+            trigger_new_session_notifications(session.id, event_id=event_id)
 
         session.title = form.get('title', '')
         session.subtitle = form.get('subtitle', '')
@@ -518,12 +488,16 @@ class DataManager(object):
 
         existing_speaker_ids = form.getlist("speakers[]")
         current_speaker_ids = []
+        existing_speaker_ids_by_email = []
+
+        for existing_speaker in DataGetter.get_speaker_by_email(form.get("email")).all():
+            existing_speaker_ids_by_email.append(str(existing_speaker.id))
 
         for current_speaker in session.speakers:
             current_speaker_ids.append(str(current_speaker.id))
 
         for current_speaker_id in current_speaker_ids:
-            if current_speaker_id not in existing_speaker_ids:
+            if current_speaker_id not in existing_speaker_ids and current_speaker_id not in existing_speaker_ids_by_email:
                 current_speaker = DataGetter.get_speaker(current_speaker_id)
                 session.speakers.remove(current_speaker)
 
@@ -816,15 +790,14 @@ class DataManager(object):
         :param form: view data form
         """
         # Filter out Copyright info
-        holder = form.get('copyright_holder')
-        holder_url = form.get('copyright_holder_url')
-        year = form.get('copyright_year')
+        holder = form.get('organizer_name')
+        # Current year
+        year = datetime.now().year
         licence_name = form.get('copyright_licence')
-        # Ignoring Licence description
-        _, licence_url, logo = EVENT_LICENCES.get(licence_name, ('', '', ''))
+        # Ignoring Licence long name, description and compact logo
+        _, _, licence_url, logo, _ = EVENT_LICENCES.get(licence_name, ('',)*5)
 
         copyright = EventCopyright(holder=holder,
-                                   holder_url=holder_url,
                                    year=year,
                                    licence=licence_name,
                                    licence_url=licence_url,
@@ -922,6 +895,10 @@ class DataManager(object):
 
             for index, name in enumerate(social_link_name):
                 if not string_empty(social_link_link[index]):
+                    # If 'Website' has been provided,
+                    # save it as Holder URL for Copyright
+                    if name.lower() == 'website':
+                        event.copyright.holder_url = social_link_link[index]
                     social_link = SocialLink(name=name, link=social_link_link[index], event_id=event.id)
                     db.session.add(social_link)
 
@@ -1081,15 +1058,13 @@ class DataManager(object):
 
         if not event.copyright:
             # It is possible that the copyright is set as None before.
-            # Set it as an `EventCopyright` object
+            # Set it as an `EventCopyright` object.
             event.copyright = EventCopyright()
         # Filter out Copyright info
-        event.copyright.holder = form.get('copyright_holder')
-        event.copyright.holder_url = form.get('copyright_holder_url')
-        event.copyright.year = form.get('copyright_year')
+        event.copyright.holder = form.get('organizer_name')
         licence_name = form.get('copyright_licence')
         # Ignoring Licence description
-        _, licence_url, logo = EVENT_LICENCES.get(licence_name, ('', '', ''))
+        _, _, licence_url, logo, _ = EVENT_LICENCES.get(licence_name, ('',)*5)
 
         event.copyright.licence = licence_name
         event.copyright.licence_url = licence_url
@@ -1174,6 +1149,11 @@ class DataManager(object):
 
         for index, name in enumerate(social_link_name):
             if not string_empty(social_link_link[index]):
+                # If 'Website' has been provided,
+                # save it as Holder URL for Copyright
+                if name.lower() == 'website':
+                    event.copyright.holder_url = social_link_link[index]
+
                 if social_link_id[index] != '':
                     social_link, c = get_or_create(SocialLink,
                                                    id=social_link_id[index],

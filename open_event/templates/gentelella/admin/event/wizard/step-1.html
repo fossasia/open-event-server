@@ -18,10 +18,10 @@
 {% endmacro %}
 
 <div>
-    <div class="col-md-1">
+    <div class="col-md-2">
 
     </div>
-    <div class="col-md-5">
+    <div class="col-md-8">
         <div class="item form-group">
             <label>Name <span class="required">*</span></label>
             <input required="required"
@@ -37,6 +37,13 @@
                    placeholder="Location is required to make event live"
                    class="form-control col-md-7 col-xs-12"/>
         </div>
+
+        <div class="item form-group hidden-xs">
+            <label>Geolocation</label>
+        </div>
+        <div id="map" class="hidden-xs" style="width:100%; height:300px"></div>
+        <br>
+        <br>
 
         <div class="row event-date-picker">
             <div class="col-md-6">
@@ -103,62 +110,67 @@
             <textarea name="description"
                       class="form-control">{{ event.description | default('', true) }}</textarea>
         </div>
-        <input type="hidden" name="background_url" id="background_url">
+        <div class="row">
+            <div class="col-md-6">
+                <input type="hidden" name="background_url" id="background_url">
+                <div class="item form-group" id="image-upload-group"
+                     {% if event and event.background_url and event.background_url != '' %}style="display: none;"{% endif %}>
+                    <label>Event Image</label><br>
+                    <input type="file" id="event-image-upload" name="event-image-upload" class="upload-btn no-js"
+                           accept="image/*"/>
+                    <label class="file-label" for="event-image-upload" style="margin-top: 0;">
+                        <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Event Image
+                    </label><br>
+                    <span class="text-muted" style="color: #a2a2a2;">
+                        We recommend using at least a 2160x1080px (2:1 ratio) image<br>that's no larger than 10MB.
+                    </span>
+                </div>
 
-        <div class="item form-group" id="image-upload-group"
-             {% if event and event.background_url and event.background_url != '' %}style="display: none;"{% endif %}>
-            <label>Event Image</label><br>
-            <input type="file" id="event-image-upload" name="event-image-upload" class="upload-btn no-js"
-                   accept="image/*"/>
-            <label class="file-label" for="event-image-upload" style="margin-top: 0;">
-                <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Event Image
-            </label><br>
-            <span class="text-muted" style="color: #a2a2a2;">
-                We recommend using at least a 2160x1080px (2:1 ratio) image<br>that's no larger than 10MB.
-            </span>
-        </div>
+                <div class="item form-group" id="image-view-group"
+                     {% if not event or not event.background_url or event.background_url == '' %}style="display: none;"{% endif %}>
+                    <label>Event Image</label><br>
+                    <img src="{{ event.background_url | default('', true) }}" style="width: 350px; height: 175px;"><br><br>
+                    {% if not event %}
+                        <button type="button" class="btn btn-sm btn-default" data-target="#cropper-modal" data-toggle="modal">
+                            <i class="fa fa-arrows" aria-hidden="true"></i>
+                            Adjust
+                        </button>
+                    {% endif %}
+                    <button type="button" class="btn btn-sm btn-default" id="remove-image-btn">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                        Remove
+                    </button>
+                    <br>
+                </div>
+            </div>
+            <div class="col-md-6">
 
-        <div class="item form-group" id="image-view-group"
-             {% if not event or not event.background_url or event.background_url == '' %}style="display: none;"{% endif %}>
-            <label>Event Image</label><br>
-            <img src="{{ event.background_url | default('', true) }}" style="width: 350px; height: 175px;"><br><br>
-            {% if not event %}
-                <button type="button" class="btn btn-sm btn-default" data-target="#cropper-modal" data-toggle="modal">
-                    <i class="fa fa-arrows" aria-hidden="true"></i>
-                    Adjust
-                </button>
-            {% endif %}
-            <button type="button" class="btn btn-sm btn-default" id="remove-image-btn">
-                <i class="fa fa-trash-o" aria-hidden="true"></i>
-                Remove
-            </button>
-            <br>
-        </div>
+                <input type="hidden" name="logo" id="logo">
 
-        <input type="hidden" name="logo" id="logo">
+                <div class="item form-group" id="logo-upload-group"
+                     {% if event and event.logo and event.logo != '' %}style="display: none;"{% endif %}>
+                    <label>Logo</label><br>
+                    <input type="file" id="logo-upload" name="logo-upload" class="upload-btn no-js"
+                           accept="image/*"/>
+                    <label class="file-label" for="logo-upload" style="margin-top: 0;">
+                        <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Logo
+                    </label><br>
+                    <span class="text-muted" style="color: #a2a2a2;">
+                        Logo size must be less than 1MB.
+                    </span>
+                </div>
 
-        <div class="item form-group" id="logo-upload-group"
-             {% if event and event.logo and event.logo != '' %}style="display: none;"{% endif %}>
-            <label>Logo</label><br>
-            <input type="file" id="logo-upload" name="logo-upload" class="upload-btn no-js"
-                   accept="image/*"/>
-            <label class="file-label" for="logo-upload" style="margin-top: 0;">
-                <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Logo
-            </label><br>
-            <span class="text-muted" style="color: #a2a2a2;">
-                Logo size must be less than 1MB.
-            </span>
-        </div>
-
-        <div class="item form-group" id="logo-view-group"
-             {% if not event or not event.logo or event.logo == '' %}style="display: none;"{% endif %}>
-            <label>Logo</label><br>
-            <img src="{{ event.logo | default('', true) }}" style="width: 350px;"><br><br>
-            <button type="button" class="btn btn-sm btn-default" id="remove-logo-btn">
-                <i class="fa fa-trash-o" aria-hidden="true"></i>
-                Remove
-            </button>
-            <br>
+                <div class="item form-group" id="logo-view-group"
+                     {% if not event or not event.logo or event.logo == '' %}style="display: none;"{% endif %}>
+                    <label>Logo</label><br>
+                    <img src="{{ event.logo | default('', true) }}" style="width: 350px;"><br><br>
+                    <button type="button" class="btn btn-sm btn-default" id="remove-logo-btn">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                        Remove
+                    </button>
+                    <br>
+                </div>
+            </div>
         </div>
 
         <div class="item form-group">
@@ -169,17 +181,9 @@
         </div>
 
         <div class="item form-group">
-            <label>Organizer name
-            </label>
+            <label>Organizer name</label>
             <input name="organizer_name" class="form-control"
                    value="{{ event.organizer_name | default('', true) }}"/>
-        </div>
-        <div class="item form-group">
-            <label>Organizer URL
-            </label>
-            <input name="organizer_url" class="form-control" type="url" pattern="https?://.+"
-                data-error="Please enter a valid URL" value="{{ event.organizer_url | default('', true) }}"/>
-            <div class="help-block with-errors"></div>
         </div>
         <div class="item form-group">
             <label>Organizer Description
@@ -193,20 +197,6 @@
             </label>
             <input type="url" pattern="https?://.+" name="ticket_url" class="form-control"
                    value="{{ event.ticket_url | default('', true) }}" data-error="Please enter a valid URL"/>
-            <div class="help-block with-errors"></div>
-        </div>
-        <div class="item form-group">
-            <label>Copyright Holder</label>
-            <input type="text" class="form-control" name="copyright_holder" value="{{ event.copyright.holder | default('', true) }}">
-        </div>
-        <div class="item form-group">
-            <label>Copyright Holder url</label>
-            <input type="url" class="form-control" name="copyright_holder_url" value="{{ event.copyright.holder_url | default('', true) }}" pattern="https?://.+" data-error="Please enter a valid URL">
-            <div class="help-block with-errors"></div>
-        </div>
-        <div class="item form-group">
-            <label>Copyright Year</label>
-            <input type="integer" class="form-control" name="copyright_year" value="{{ event.copyright.year | default('2016', true) }}" pattern="[0-9]{4,4}" data-error="Please enter a valid year">
             <div class="help-block with-errors"></div>
         </div>
         <div class="item form-group">
@@ -234,15 +224,15 @@
                          <div class="row">
                              <div class="col-sm-9">
                                 <h5>{{ licence_name }}</h5>
-                                <p>{{ info.0 }}
-                                    {% if info.1 %}
-                                    <a href="{{ info.1 }}" target="_blank" style="color:#1a75ff;">Read more.</a>
+                                <p>{{ info.1 }}
+                                    {% if info.2 %}
+                                    <a href="{{ info.2 }}" target="_blank" style="color:#1a75ff;">Read more.</a>
                                     {% endif %}
                                 </p>
                              </div>
                              <div class="col-sm-3">
-                            {% if info.2 %}
-                                <img src="{{ info.2 }}" alt="{{ licence_name }}" class="pull-right">
+                            {% if info.3 %}
+                                <img src="{{ info.3 }}" alt="{{ licence_name }}" class="pull-right">
                             {% endif %}
                              </div>
                          </div>
@@ -252,18 +242,6 @@
                 </div>
             </div>
         </div>
-
-    </div>
-    <div class="col-md-1">
-
-    </div>
-    <div class="col-md-4">
-        <div class="item form-group hidden-xs">
-            <label>Geolocation</label>
-        </div>
-        <div id="map" class="hidden-xs" style="width:100%; height:300px"></div>
-        <br>
-        <br>
         <div class="item form-group">
             <label>Social Links</label>
             <div class="row social-links">
@@ -347,6 +325,12 @@
                       class="form-control">{{ event.code_of_conduct | default('', true) }}</textarea>
         </div>
 
+    </div>
+    <div class="col-md-1">
+
+    </div>
+    <div class="col-md-4">
+        
     </div>
     <input type="hidden" name="latitude" id="latitude" value="{{ event.latitude | default(0.00, true) }}"/>
     <input type="hidden" name="longitude" id="longitude" value="{{ event.longitude | default(0.00, true) }}"/>
@@ -499,18 +483,6 @@
 
         $(".licence-help").click(function () {
             $("#licence_modal").modal('show');
-        });
-
-        /* Copy Organizer Name to Copyright Holder */
-        var organizer_name = $("[name='organizer_name']");
-        organizer_name.on("input", function () {
-            $("[name='copyright_holder']").val(organizer_name.val());
-        });
-
-        /* Copy Organizer URL to Copyright Holder URL */
-        var organizer_url = $("[name='organizer_url']");
-        organizer_url.on("input", function () {
-            $("[name='copyright_holder_url']").val(organizer_url.val());
         });
 
         var sub_topics = {{event_sub_topics|safe}};

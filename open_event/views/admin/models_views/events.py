@@ -76,7 +76,8 @@ class EventsView(BaseView):
             event_sub_topics=DataGetter.get_event_subtopics(),
             timezones=DataGetter.get_all_timezones())
 
-    @expose('/<int:event_id>/', methods=('GET', 'POST'))
+    @expose('/<event_id>/', methods=('GET', 'POST'))
+    @can_access
     def details_view(self, event_id):
         event = DataGetter.get_event(event_id)
 
@@ -221,7 +222,7 @@ class EventsView(BaseView):
                 microlocations, call_for_speakers, sponsors, custom_forms, img_files, old_sponsor_logos, old_sponsor_names)
 
             if (request.form.get('state',
-                                u'Draft') == u'Published' or event.state == 'Draft') and string_empty(
+                                u'Draft') == u'Published') and string_empty(
                                 event.location_name):
                 flash(
                     "Your event was saved. To publish your event please review the highlighted fields below.",
