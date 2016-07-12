@@ -131,13 +131,19 @@ def _upload_media_queue(srv, obj):
     return
 
 
-def _upload_media(event_id, base_path):
+def _upload_media(task_handle, event_id, base_path):
     """
     Actually uploads the resources
     """
     global UPLOAD_QUEUE
+    total = len(UPLOAD_QUEUE)
+    ct = 0
 
     for i in UPLOAD_QUEUE:
+        # update progress
+        ct += 1
+        task_handle.update_state(state='UPLOADING MEDIA (%d/%d)' % (ct, total))
+        # get upload infos
         name, dao = i['srv']
         id_ = i['id']
         if name == 'event':
@@ -160,7 +166,7 @@ def _upload_media(event_id, base_path):
             try:
                 filename = UPLOAD_PATHS[name][field].rsplit('/', 1)[1]
                 if is_downloadable(path):
-                    r = requests.get(path)
+                    r = requests.get(path, allow_redirects=True)
                     file = UploadedMemory(r.content, filename)
                 else:
                     file = None
@@ -254,12 +260,13 @@ def create_service_from_json(data, srv, event_id, service_ids={}):
     return ids
 
 
-def import_event_json(zip_path):
+def import_event_json(task_handle, zip_path):
     """
     Imports and creates event from json zip
     """
     global CUR_ID, UPLOAD_QUEUE
     UPLOAD_QUEUE = []
+    task_handle.update_state(state='IMPORTING')
 
     with app.app_context():
         path = app.config['BASE_DIR'] + '/static/temp/import_event'
@@ -304,7 +311,7 @@ def import_event_json(zip_path):
         EventDAO.delete(new_event.id)
         raise make_error(item[0], id_=CUR_ID)
     # run uploads
-    _upload_media(new_event.id, path)
+    _upload_media(task_handle, new_event.id, path)
     # return
     return new_event
 
@@ -317,7 +324,7 @@ def is_downloadable(url):
     """
     Does the url contain a downloadable resource
     """
-    h = requests.head(url)
+    h = requests.head(url, allow_redirects=True)
     header = h.headers
     content_type = header.get('content-type')
     # content_length = header.get('content-length', 1e10)
