@@ -37,6 +37,11 @@ class UploadedMemory(object):
     def read(self):
         return self.data
 
+    def save(self, path):
+        f = open(path, 'w')
+        f.write(self.data)
+        f.close()
+
 
 def upload(file, key, **kwargs):
     """

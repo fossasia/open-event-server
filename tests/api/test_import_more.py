@@ -90,6 +90,7 @@ class TestImportUploads(OpenEventTestCase):
                 self.assertIn('result', resp.data)
                 dic = json.loads(resp.data)['result']
                 break
+            time.sleep(2)
         return dic
 
     def test_media_successful_uploads(self):
@@ -124,8 +125,18 @@ class TestImportUploads(OpenEventTestCase):
         self.assertNotEqual(logo, 'http://google.com/favicon.ico')
         resp = self.app.get(logo)
         self.assertEqual(resp.status_code, 200)
-        resp2 = self.app.get('http://google.com/favicon.ico')
-        self.assertEqual(resp.data, resp2.data, 'img resource mismatch')
+
+    def test_non_existant_media_import(self):
+        """
+        Tests when relative link to a media if non-existant
+        """
+        self._create_set()
+        self._update_json('event', 'background_url', '/non.png')
+        # import
+        data = self._make_zip_from_dir()
+        event_dic = self._do_succesful_import(data)
+        # check
+        self.assertEqual(event_dic['background_url'], None)
 
 
 if __name__ == '__main__':

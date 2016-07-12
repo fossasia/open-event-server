@@ -2,6 +2,7 @@ import zipfile
 import os
 import shutil
 import requests
+import traceback
 import json
 from flask import request
 from werkzeug import secure_filename
@@ -221,6 +222,7 @@ def _upload_media(event_id, base_path):
             print key
             new_url = upload(file, key)
         except Exception:
+            print traceback.format_exc()
             new_url = None
         setattr(item, field, new_url)
         save_to_db(item, msg='Url updated')
