@@ -378,6 +378,39 @@ def model_custom_form(cf_data, model):
     return tmp
 
 
+###################################
+# Permission Decorators for Event #
+###################################
+
+
+def staff_only(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        user = UserModel.query.get(login.current_user.id)
+        if user.is_staff:
+            return func(*args, **kwargs)
+        else:
+            raise PermissionDeniedError()
+    return wrapper
+
+
+def can_access(func):
+    """Check if User can Read/Update/Delete an Event.
+    This is done by checking if the User has a Role in an Event.
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        user = UserModel.query.get(login.current_user.id)
+        event_id = kwargs.get('event_id')
+        if not event_id:
+            raise ServerError()
+        if user.has_role(event_id):
+            return func(*args, **kwargs)
+        else:
+            raise PermissionDeniedError()
+    return wrapper
+
+
 ######################################
 # Permission Decorators For Services #
 ######################################
