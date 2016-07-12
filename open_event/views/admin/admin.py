@@ -27,7 +27,7 @@ from open_event.views.admin.super_admin.permissions import SuperAdminPermissions
 from open_event.views.admin.super_admin.reports import SuperAdminReportsView
 from open_event.views.admin.super_admin.logs import SuperAdminLogsView
 from open_event.views.admin.super_admin.dep_settings import SuperAdminSettingsView
-
+from open_event.views.admin.super_admin.pages import SuperAdminPagesView
 
 class AdminView(object):
     """Main Admin class View"""
@@ -68,7 +68,7 @@ class AdminView(object):
         self.admin.add_view(SuperAdminLogsView(name='Logs', url='/admin/logs', endpoint="sadmin_logs"))
         self.admin.add_view(SuperAdminSettingsView(name='Settings', url='/admin/settings', endpoint="sadmin_settings"))
         self.admin.add_view(SuperAdminMessagesView(name='Messages', url='/admin/messages', endpoint="sadmin_messages"))
-
+        self.admin.add_view(SuperAdminPagesView(name='Pages', url='/admin/pages', endpoint="sadmin_pages"))
     @staticmethod
     def init_login(app):
         from flask import request, url_for, redirect

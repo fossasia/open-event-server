@@ -1,0 +1,37 @@
+{% extends 'gentelella/admin/super_admin/dashboard.html' %}
+
+{% block title %}
+    Pages
+{% endblock %}
+
+{% set active_page = "pages" %}
+
+{% block head_css %}
+    {{ super() }}
+    <style type="text/css">
+    #event-tabs {
+        position: absolute;
+        background: transparent;
+        top: 9px;
+        width: auto;
+    }
+
+    table.table {
+        margin-top: 20px !important;
+    }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+<div class="">
+
+</div>
+
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+
+{% endblock %}
+
