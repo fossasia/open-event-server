@@ -383,63 +383,69 @@ def model_custom_form(cf_data, model):
 ######################################
 
 
-def can_create(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        user = UserModel.query.get(login.current_user.id)
-        event_id = args[1]
-        if not event_id:
-            raise ServerError()
-        service_class = args[0].model
-        if user.can_create(service_class, event_id):
-            return f(*args, **kwargs)
-        else:
-            raise PermissionDeniedError()
-    return decorated
+def can_create(DAO):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            user = UserModel.query.get(login.current_user.id)
+            event_id = kwargs.get('event_id')
+            if not event_id:
+                raise ServerError()
+            service_class = DAO.model
+            if user.can_create(service_class, event_id):
+                return func(*args, **kwargs)
+            else:
+                raise PermissionDeniedError()
+        return wrapper
+    return decorator
 
 
-def can_read(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        user = UserModel.query.get(login.current_user.id)
-        event_id = args[1]
-        if not event_id:
-            raise ServerError()
-        service_class = args[0].model
-        if user.can_read(service_class, event_id):
-            return f(*args, **kwargs)
-        else:
-            raise PermissionDeniedError()
-    return decorated
+def can_read(DAO):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            user = UserModel.query.get(login.current_user.id)
+            event_id = kwargs.get('event_id')
+            if not event_id:
+                raise ServerError()
+            service_class = DAO.model
+            if user.can_read(service_class, event_id):
+                return func(*args, **kwargs)
+            else:
+                raise PermissionDeniedError()
+        return wrapper
+    return decorator
 
 
-def can_update(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        user = UserModel.query.get(login.current_user.id)
-        event_id = args[1]
-        if not event_id:
-            raise ServerError()
-        service_class = args[0].model
-        if user.can_update(service_class, event_id):
-            print service_class
-            return f(*args, **kwargs)
-        else:
-            raise PermissionDeniedError()
-    return decorated
+def can_update(DAO):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            user = UserModel.query.get(login.current_user.id)
+            event_id = kwargs.get('event_id')
+            if not event_id:
+                raise ServerError()
+            service_class = DAO.model
+            if user.can_update(service_class, event_id):
+                return func(*args, **kwargs)
+            else:
+                raise PermissionDeniedError()
+        return wrapper
+    return decorator
 
 
-def can_delete(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        user = UserModel.query.get(login.current_user.id)
-        event_id = args[1]
-        if not event_id:
-            raise ServerError()
-        service_class = args[0].model
-        if user.can_delete(service_class, event_id):
-            print service_class
-            return f(*args, **kwargs)
-        else:
-            raise PermissionDeniedError()
-    return decorated
+def can_delete(DAO):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            user = UserModel.query.get(login.current_user.id)
+            event_id = kwargs.get('event_id')
+            if not event_id:
+                raise ServerError()
+            service_class = DAO.model
+            if user.can_delete(service_class, event_id):
+                return func(*args, **kwargs)
+            else:
+                raise PermissionDeniedError()
+        return wrapper
+    return decorator
