@@ -159,8 +159,11 @@ def _upload_media(event_id, base_path):
             # absolute links
             try:
                 filename = UPLOAD_PATHS[name][field].rsplit('/', 1)[1]
-                r = requests.get(path)
-                file = UploadedMemory(r.content, filename)
+                if is_downloadable(path):
+                    r = requests.get(path)
+                    file = UploadedMemory(r.content, filename)
+                else:
+                    file = None
             except:
                 file = None
         # don't update current file setting
@@ -304,3 +307,22 @@ def import_event_json(zip_path):
     _upload_media(new_event.id, path)
     # return
     return new_event
+
+
+##########
+# HELPERS
+##########
+
+def is_downloadable(url):
+    """
+    Does the url contain a downloadable resource
+    """
+    h = requests.head(url)
+    header = h.headers
+    content_type = header.get('content-type')
+    # content_length = header.get('content-length', 1e10)
+    if 'text' in content_type.lower():
+        return False
+    if 'html' in content_type.lower():
+        return False
+    return True
