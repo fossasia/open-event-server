@@ -585,4 +585,8 @@ class DataGetter:
     def get_all_pages():
         return Page.query.all()
 
+    @staticmethod
+    def get_page_by_id(page_id):
+        return Page.query.get(page_id)
+
 
