@@ -32,7 +32,7 @@ from .language_list import LANGUAGE_LIST
 from .static import EVENT_TOPICS, EVENT_LICENCES
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
-from flask import flash, current_app
+from flask import flash, current_app, abort
 import datetime
 from sqlalchemy import desc, asc
 
@@ -311,7 +311,13 @@ class DataGetter:
 
     @staticmethod
     def get_event(event_id):
-        return Event.query.get(event_id)
+        """Returns an Event given its id.
+        Aborts with a 404 if event not found.
+        """
+        event = Event.query.get(event_id)
+        if event is None:
+            abort(404)
+        return event
 
     @staticmethod
     def get_user_events_roles(event_id):
