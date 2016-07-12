@@ -4,56 +4,57 @@
     {% if csrf_token %}
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     {% endif %}
-    <div class="col-md-1 col-sm-1 col-xs-12">
-
-    </div>
-    <div class="col-md-5 col-sm-5 col-xs-12 session_form" style="margin-right: 25px;">
-        <h4>Session Details</h4>
-        {% for elem in _session_component.session_fields %}
-            {% if session_form[elem].include==1 %}
-                {{ _session_component.session_form_field(elem, session_form[elem].require) }}
-            {% endif %}
-        {% endfor %}
-        <div class="item form-group">
-            <label>Choose from existing speakers</label>
-            <select multiple="multiple" id="speakers" name="speakers[]">
-                {% for existing_speaker in speakers %}
-                    <option value="{{ existing_speaker.id }}" {% if session and existing_speaker in session.speaker %}selected{% endif %}
-                            data-html-addon="<img src='{{ existing_speaker.photo }}' onerror='imgError(this);' style='width: 2rem; height: 2rem;border-radius: 50%;'>">
-                        {{ existing_speaker.name }}
-                    </option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-    <div class="col-md-5 col-sm-5 col-xs-12 speaker_form">
-        <h4>Speaker Details</h4>
-        {% for elem in _speaker_component.speaker_fields %}
-            {% if speaker_form[elem].include==1 %}
-                {{ _speaker_component.speaker_form_field(elem, speaker_form[elem].require) }}
-            {% endif %}
-        {% endfor %}
-        <div class="speakers">
-            <hr>
-            <br><h4>Invite Speakers</h4>
+    <div class="row">
+        <div class="col-md-8 col-sm-8 col-xs-12 col-md-offset-2 col-sm-offset-2 session_form" style="margin-right: 25px;">
+            <h4>Session Details</h4>
+            {% for elem in _session_component.session_fields %}
+                {% if session_form[elem].include==1 %}
+                    {{ _session_component.session_form_field(elem, session_form[elem].require) }}
+                {% endif %}
+            {% endfor %}
             <div class="item form-group">
-                <label class="control-label">Email </label>
-                <div class="">
-                    <input type="email" class="form-control col-md-7 col-sm-7" name="speakers[email]"
-                           placeholder="Email Address of Speaker" style="width:60%;">
-                </div>
+                <label>Choose from existing speakers</label>
+                <select multiple="multiple" id="speakers" name="speakers[]">
+                    {% for existing_speaker in speakers %}
+                        <option value="{{ existing_speaker.id }}" {% if session and existing_speaker in session.speaker %}selected{% endif %}
+                                data-html-addon="<img src='{{ existing_speaker.photo }}' onerror='imgError(this);' style='width: 2rem; height: 2rem;border-radius: 50%;'>">
+                            {{ existing_speaker.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="col-md-8 col-sm-8 col-xs-12 col-md-offset-2 col-sm-offset-2 speaker_form">
+            <hr><h4>Speaker Details</h4>
+            {% for elem in _speaker_component.speaker_fields %}
+                {% if speaker_form[elem].include==1 %}
+                    {{ _speaker_component.speaker_form_field(elem, speaker_form[elem].require) }}
+                {% endif %}
+            {% endfor %}
+            <div class="speakers">
+                <hr>
+                <br><h4>Invite Speakers</h4>
+                <div class="item form-group">
+                    <label class="control-label">Email </label>
+                    <div class="">
+                        <input type="email" class="form-control col-md-7 col-sm-7" name="speakers[email]"
+                               placeholder="Email Address of Speaker" style="width:60%;">
+                    </div>
 
-                <div class="col-sm-1 col-md-1 input-group">
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-primary" id="add-speakers">+</button>
-                                    </span>
+                    <div class="col-sm-1 col-md-1 input-group">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-primary" id="add-speakers">+</button>
+                                        </span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div style="text-align: center;">
-        <button type="submit" class="btn btn-primary" name="state" value="draft">Save as Draft</button>
-        <button type="submit" class="btn btn-success" name="state" value="pending">Submit Session</button>
+    <div class="row">
+        <div style="text-align: center;">
+            <button type="submit" class="btn btn-primary" name="state" value="draft">Save as Draft</button>
+            <button type="submit" class="btn btn-success" name="state" value="pending">Submit Session</button>
+        </div>
     </div>
 </form>
 

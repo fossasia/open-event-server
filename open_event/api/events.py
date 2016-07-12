@@ -55,6 +55,7 @@ EVENT = api.model('Event', {
     'background_url': fields.Upload(),
     'description': fields.String(),
     'location_name': fields.String(),
+    'searchable_location_name': fields.String(),
     'organizer_name': fields.String(),
     'organizer_description': fields.String(),
     'state': fields.String(),
@@ -183,7 +184,7 @@ class EventResource():
     Event Resource Base class
     """
     event_parser = reqparse.RequestParser()
-    event_parser.add_argument('location', type=str, dest='__event_location')
+    event_parser.add_argument('location', type=str, dest='__event_search_location')
     event_parser.add_argument('contains', type=str, dest='__event_contains')
     event_parser.add_argument('state', type=str)
     event_parser.add_argument('privacy', type=str)

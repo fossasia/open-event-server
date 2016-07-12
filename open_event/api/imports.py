@@ -19,8 +19,6 @@ class EventImportJson(Resource):
         file = get_file_from_request(['zip'])
         from helpers.tasks import import_event_task
         task = import_event_task.delay(file)
-        # http://stackoverflow.com/questions/26379026/resolving-
-        # task = celery.current_app.send_task('import.event', [file])
         if current_app.config.get('CELERY_ALWAYS_EAGER'):
             TASK_RESULTS[task.id] = {
                 'result': task.get(),
@@ -33,7 +31,7 @@ class EventImportJson(Resource):
         )
 
 
-def import_event_task_base(file):
-    new_event = import_event_json(file)
+def import_event_task_base(task_handle, file):
+    new_event = import_event_json(task_handle, file)
     record_activity('import_event', event_id=new_event.id)
     return marshal(new_event, EVENT)

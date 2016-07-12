@@ -60,10 +60,11 @@ class ExploreView(BaseView):
         day_filter = request.args.get('period', None)
         sub_category = request.args.get('sub-category', None)
         category = request.args.get('category', None)
+        print location
         if day_filter:
             start, end = get_date_range(day_filter)
         if location:
-            filtering['__event_location'] = location
+            filtering['__event_search_location'] = location
         if word:
             filtering['__event_contains'] = word
         if category:
