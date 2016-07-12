@@ -6,6 +6,9 @@ from flask import request
 from werkzeug import secure_filename
 
 from flask import current_app as app
+from open_event.helpers.storage import UploadedFile, upload
+from open_event.helpers.data import save_to_db
+
 from ..events import DAO as EventDAO, LinkDAO as SocialLinkDAO
 from ..microlocations import DAO as MicrolocationDAO
 from ..sessions import DAO as SessionDAO, TypeDAO as SessionTypeDAO
@@ -42,6 +45,53 @@ RELATED_FIELDS = {
         ('session_type', 'session_type_id', 'session_types')
     ]
 }
+
+UPLOAD_PATHS = {
+    'sessions': {
+        'video': [
+            '/videos/sessions/%s',
+            '/events/{event_id}/sessions/{id}/video'
+        ],
+        'audio': [
+            '/audios/sessions/%s',
+            '/events/{event_id}/audios/{id}/audio'
+        ],
+        'slides': [
+            '/slides/sessions/%s',
+            '/events/{event_id}/slides/{id}/slide'
+        ]
+    },
+    'speakers': {
+        'photo': [
+            '/images/speakers/%s',
+            '/events/{event_id}/speakers/{id}/photo'
+        ]
+    },
+    'event': {
+        'logo': [
+            '/images/event/%s',
+            '/events/{event_id}/logo'
+        ],
+        'background_url': [
+            '/images/event/%s',
+            '/events/{event_id}/background'  # see
+        ]
+    },
+    'sponsors': {
+        'logo': [
+            '/images/sponsors/%s',
+            '/events/{event_id}/sponsors/{id}/logo'
+        ]
+    },
+    'tracks': {
+        'track_image_url': [
+            '/images/tracks/%s',
+            '/events/{event_id}/tracks/{id}/track_image'
+        ]
+    }
+}
+
+UPLOAD_QUEUE = []
 
 CUR_ID = None
 
@@ -98,6 +148,65 @@ def _delete_fields(srv, data):
             if i in data:
                 del data[i]
     return data
+
+
+def _upload_media_queue(srv, obj):
+    """
+    Add media uploads to queue
+    """
+    global UPLOAD_QUEUE
+
+    if srv[0] not in UPLOAD_PATHS:
+        return
+    for i in UPLOAD_PATHS[srv[0]]:
+        path = getattr(obj, i)
+        if not path or not path.startswith('/'):
+            return
+        # file OK
+        UPLOAD_QUEUE.append({
+            'srv': srv,
+            'id': obj.id,
+            'field': i
+        })
+    return
+
+
+def _upload_media(event_id, base_path):
+    """
+    Actually uploads the resources
+    """
+    global UPLOAD_QUEUE
+
+    for i in UPLOAD_QUEUE:
+        name, dao = i['srv']
+        id_ = i['id']
+        if 'name' == 'event':
+            item = dao.get(event_id)
+        else:
+            item = dao.get(event_id, id_)
+        # get cur file
+        field = i['field']
+        path = base_path + getattr(item, field)
+        print path
+        filename = path.rsplit('/', 1)[1]
+        print filename
+        file = UploadedFile(path, filename)
+        # upload
+        try:
+            key = UPLOAD_PATHS[srv[0]][field][1]
+            if name == 'event':
+                key = key.format(event_id=event_id)
+            else:
+                key = key.format(event_id=event_id, id=id_)
+            print key
+            new_url = upload(file, key)
+        except Exception:
+            new_url = None
+        setattr(item, field, new_url)
+        save_to_db(item, msg='Url updated')
+    # clear queue
+    UPLOAD_QUEUE = []
+    return
 
 
 def _fix_related_fields(srv, data, service_ids):
@@ -158,6 +267,8 @@ def create_service_from_json(data, srv, event_id, service_ids={}):
         # create object
         new_obj = srv[1].create(event_id, obj, 'dont')[0]
         ids[old_id] = new_obj.id
+        # add uploads to queue
+        _upload_media_queue(srv, new_obj)
 
     return ids
 
@@ -166,7 +277,8 @@ def import_event_json(zip_path):
     """
     Imports and creates event from json zip
     """
-    global CUR_ID
+    global CUR_ID, UPLOAD_QUEUE
+    UPLOAD_QUEUE = []
 
     with app.app_context():
         path = app.config['BASE_DIR'] + '/static/temp/import_event'
@@ -180,8 +292,10 @@ def import_event_json(zip_path):
     try:
         data = json.loads(open(path + '/event.json', 'r').read())
         _, data = _trim_id(data)
-        data = _delete_fields(('event', EventDAO), data)
+        srv = ('event', EventDAO)
+        data = _delete_fields(srv, data)
         new_event = EventDAO.create(data, 'dont')[0]
+        _upload_media_queue(srv, new_event)
     except BaseError as e:
         raise make_error('event', er=e)
     except Exception:
@@ -208,5 +322,7 @@ def import_event_json(zip_path):
     except Exception:
         EventDAO.delete(new_event.id)
         raise make_error(item[0], id_=CUR_ID)
+    # run uploads
+    # _upload_media(new_event.id, path)
     # return
     return new_event
