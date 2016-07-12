@@ -19,8 +19,6 @@ class EventImportJson(Resource):
         file = get_file_from_request(['zip'])
         from helpers.tasks import import_event_task
         task = import_event_task.delay(file)
-        # http://stackoverflow.com/questions/26379026/resolving-
-        # task = celery.current_app.send_task('import.event', [file])
         if current_app.config.get('CELERY_ALWAYS_EAGER'):
             TASK_RESULTS[task.id] = {
                 'result': task.get(),

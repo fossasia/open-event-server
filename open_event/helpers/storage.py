@@ -9,7 +9,7 @@ from open_event.settings import get_settings
 
 class UploadedFile(object):
     """
-    Class to replicate request.files[ITEM] class
+    Helper for a disk-file to replicate request.files[ITEM] class
     """
     def __init__(self, file_path, filename):
         self.file_path = file_path
@@ -24,6 +24,18 @@ class UploadedFile(object):
 
     def __exit__(self, *args, **kwargs):
         self.file.close()
+
+
+class UploadedMemory(object):
+    """
+    Helper for a memory file to replicate request.files[ITEM] class
+    """
+    def __init__(self, data, filename):
+        self.data = data
+        self.filename = filename
+
+    def read(self):
+        return self.data
 
 
 def upload(file, key, **kwargs):
