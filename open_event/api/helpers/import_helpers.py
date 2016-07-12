@@ -50,43 +50,43 @@ UPLOAD_PATHS = {
     'sessions': {
         'video': [
             '/videos/sessions/%s',
-            '/events/{event_id}/sessions/{id}/video'
+            'events/{event_id}/sessions/{id}/video'
         ],
         'audio': [
             '/audios/sessions/%s',
-            '/events/{event_id}/audios/{id}/audio'
+            'events/{event_id}/audios/{id}/audio'
         ],
         'slides': [
             '/slides/sessions/%s',
-            '/events/{event_id}/slides/{id}/slide'
+            'events/{event_id}/slides/{id}/slide'
         ]
     },
     'speakers': {
         'photo': [
             '/images/speakers/%s',
-            '/events/{event_id}/speakers/{id}/photo'
+            'events/{event_id}/speakers/{id}/photo'
         ]
     },
     'event': {
         'logo': [
             '/images/event/%s',
-            '/events/{event_id}/logo'
+            'events/{event_id}/logo'
         ],
         'background_url': [
             '/images/event/%s',
-            '/events/{event_id}/background'  # see
+            'events/{event_id}/background'  # see
         ]
     },
     'sponsors': {
         'logo': [
             '/images/sponsors/%s',
-            '/events/{event_id}/sponsors/{id}/logo'
+            'events/{event_id}/sponsors/{id}/logo'
         ]
     },
     'tracks': {
         'track_image_url': [
             '/images/tracks/%s',
-            '/events/{event_id}/tracks/{id}/track_image'
+            'events/{event_id}/tracks/{id}/track_image'
         ]
     }
 }
@@ -161,7 +161,7 @@ def _upload_media_queue(srv, obj):
     for i in UPLOAD_PATHS[srv[0]]:
         path = getattr(obj, i)
         if not path or not path.startswith('/'):
-            return
+            continue
         # file OK
         UPLOAD_QUEUE.append({
             'srv': srv,
@@ -180,20 +180,18 @@ def _upload_media(event_id, base_path):
     for i in UPLOAD_QUEUE:
         name, dao = i['srv']
         id_ = i['id']
-        if 'name' == 'event':
+        if name == 'event':
             item = dao.get(event_id)
         else:
             item = dao.get(event_id, id_)
         # get cur file
         field = i['field']
         path = base_path + getattr(item, field)
-        print path
         filename = path.rsplit('/', 1)[1]
-        print filename
         file = UploadedFile(path, filename)
         # upload
         try:
-            key = UPLOAD_PATHS[srv[0]][field][1]
+            key = UPLOAD_PATHS[name][field][1]
             if name == 'event':
                 key = key.format(event_id=event_id)
             else:
@@ -323,6 +321,6 @@ def import_event_json(zip_path):
         EventDAO.delete(new_event.id)
         raise make_error(item[0], id_=CUR_ID)
     # run uploads
-    # _upload_media(new_event.id, path)
+    _upload_media(new_event.id, path)
     # return
     return new_event
