@@ -455,3 +455,13 @@ def first_day_of_month(date):
     ddays = int(date.strftime("%d")) - 1
     delta = timedelta(days=ddays)
     return date - delta
+
+
+def update_state(task_handle, state, result={}):
+    """
+    Update state of celery task
+    """
+    if not current_app.config.get('CELERY_ALWAYS_EAGER'):
+        task_handle.update_state(
+            state=state, meta=result
+        )

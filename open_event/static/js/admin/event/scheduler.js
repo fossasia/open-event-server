@@ -126,6 +126,8 @@ var $addMicrolocationForm = $('#add-microlocation-form');
 var $editSessionModal = $('#edit-session-modal');
 var $editSessionForm = $("#edit-session-form");
 
+var $mobileTimeline = $("#mobile-timeline");
+
 /**
  * TEMPLATE STRINGS
  * ================
@@ -136,7 +138,8 @@ var microlocationTemplate = $("#microlocation-template").html();
 var sessionTemplate = $("#session-template").html();
 var dayButtonTemplate = $("#date-change-button-template").html();
 
-
+var mobileMicrolocationTemplate = $("#mobile-microlocation-template").html();
+var mobileSessionTemplate =  $("#mobile-session-template").html();
 /**
  * Data Getters
  * ============
@@ -251,6 +254,11 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
 
     updateSessionTimeOnTooltip(sessionRefObject.$sessionElement);
     updateColor(sessionRefObject.$sessionElement);
+
+    var $mobileSessionElement = $(mobileSessionTemplate);
+    $mobileSessionElement.find('.time').text(sessionRefObject.session.start_time.format('hh:mm A'));
+    $mobileSessionElement.find('.event').text(sessionRefObject.session.title);
+    $mobileTimeline.find(".mobile-microlocation[data-microlocation-id=" + sessionRefObject.session.microlocation.id + "] > .mobile-sessions-holder").append($mobileSessionElement);
 
     if (isUndefinedOrNull(shouldBroadcast) || shouldBroadcast) {
         if (!sessionRefObject.newElement) {
@@ -468,6 +476,11 @@ function addMicrolocationToTimeline(microlocation) {
     $microlocationElement.find(".microlocation-header").html(microlocation.name + "&nbsp;&nbsp;&nbsp;<span class='badge'>0</span>");
     $microlocationElement.find(".microlocation-inner").css("height", time.unit.count * time.unit.pixels + "px");
     $microlocationsHolder.append($microlocationElement);
+
+    var $mobileMicrolocationElement = $(mobileMicrolocationTemplate);
+    $mobileMicrolocationElement.find('.name').text(microlocation.name);
+    $mobileMicrolocationElement.attr("data-microlocation-id", microlocation.id);
+    $mobileTimeline.append($mobileMicrolocationElement);
 }
 
 /**
@@ -723,6 +736,8 @@ function loadDateButtons() {
     loadMicrolocationsToTimeline(sortedDays[0]);
 }
 
+
+
 /**
  * Load all the sessions of a given day into the timeline
  * @param {string} day
@@ -745,6 +760,7 @@ function loadMicrolocationsToTimeline(day) {
 
     $microlocationsHolder.empty();
     $unscheduledSessionsHolder.empty();
+    $mobileTimeline.empty();
     $noSessionsInfoBox.show();
 
     _.each(microlocationsStore, addMicrolocationToTimeline);
@@ -758,6 +774,13 @@ function loadMicrolocationsToTimeline(day) {
             if (!isReadOnly()) {
                 addSessionToUnscheduled(session, false, false);
             }
+        }
+    });
+
+    _.each($mobileTimeline.find('.mobile-microlocation'), function($mobileMicrolocation){
+        $mobileMicrolocation = $($mobileMicrolocation);
+        if($mobileMicrolocation.find(".mobile-sessions-holder").children().length == 0) {
+            $mobileMicrolocation.remove();
         }
     });
 

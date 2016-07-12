@@ -45,6 +45,7 @@ function importTask(url){
                     importTask(url);
                 }, 3000);
             } else {
+                $('#import_status').text('Status: ' + data['state']);
                 document.location = '/events/' + data['result']['id'];
             }
         },

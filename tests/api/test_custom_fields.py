@@ -81,7 +81,7 @@ class TestCustomFieldsValidation(OpenEventTestCase):
             field = Upload()
             self._test_common(field)
             link = '/static/1'
-            self.assertFalse(field.validate(link))
+            self.assertTrue(field.validate(link))
             z = field.format(link)
             self.assertNotEqual(link, z)
             self.assertTrue(field.validate(z), msg=z)
