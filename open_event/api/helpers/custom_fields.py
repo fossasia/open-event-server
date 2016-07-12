@@ -107,6 +107,12 @@ class Upload(Uri):
             value = request.url_root.strip('/') + value
         return unicode(value)
 
+    def validate(self, value):
+        r = super(Upload, self).validate(value)
+        if not r and value and value.startswith('/'):  # relative link
+            r = True
+        return r
+
 
 class Color(CustomField):
     """

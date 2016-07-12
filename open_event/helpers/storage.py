@@ -7,8 +7,40 @@ from boto.s3.key import Key
 from open_event.settings import get_settings
 
 
-class UploadedFile(object):
+#################
+# STORAGE SCHEMA
+#################
 
+UPLOAD_PATHS = {
+    'sessions': {
+        'video': 'events/{event_id}/sessions/{id}/video',
+        'audio': 'events/{event_id}/audios/{id}/audio',
+        'slides': 'events/{event_id}/slides/{id}/slides'
+    },
+    'speakers': {
+        'photo': 'events/{event_id}/speakers/{id}/photo'
+    },
+    'event': {
+        'logo': 'events/{event_id}/logo',
+        'background_url': 'events/{event_id}/background'
+    },
+    'sponsors': {
+        'logo': 'events/{event_id}/sponsors/{id}/logo'
+    },
+    'tracks': {
+        'track_image_url': 'events/{event_id}/tracks/{id}/track_image'
+    }
+}
+
+
+################
+# HELPER CLASSES
+################
+
+class UploadedFile(object):
+    """
+    Helper for a disk-file to replicate request.files[ITEM] class
+    """
     def __init__(self, file_path, filename):
         self.file_path = file_path
         self.filename = filename
@@ -22,6 +54,28 @@ class UploadedFile(object):
 
     def __exit__(self, *args, **kwargs):
         self.file.close()
+
+
+class UploadedMemory(object):
+    """
+    Helper for a memory file to replicate request.files[ITEM] class
+    """
+    def __init__(self, data, filename):
+        self.data = data
+        self.filename = filename
+
+    def read(self):
+        return self.data
+
+    def save(self, path):
+        f = open(path, 'w')
+        f.write(self.data)
+        f.close()
+
+
+#########
+# MAIN
+#########
 
 def upload(file, key, **kwargs):
     """
