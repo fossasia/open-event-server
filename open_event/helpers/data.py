@@ -1352,6 +1352,14 @@ class DataManager(object):
                     url=form.get('url', ''), place=form.get('place', ''))
         save_to_db(page, "Page created")
 
+    def update_page(self, page, form):
+        page.name = form.get('name', '')
+        page.title = form.get('title', '')
+        page.description = form.get('description', '')
+        page.url = form.get('url', '')
+        page.place = form.get('place', '')
+        save_to_db(page, "Page updated")
+
 def save_to_db(item, msg="Saved to db", print_error=True):
     """Convenience function to wrap a proper DB save
     :param item: will be saved to database

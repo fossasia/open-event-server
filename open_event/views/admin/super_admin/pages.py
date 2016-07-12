@@ -14,3 +14,15 @@ class SuperAdminPagesView(SuperAdminBaseView):
     def create_view(self):
         DataManager.create_page(request.form)
         return redirect(url_for('sadmin_pages.index_view'))
+
+    @expose('/<page_id>', methods=['GET', 'POST'])
+    def details_view(self, page_id):
+        page = DataGetter.get_page_by_id(page_id)
+        if request.method == 'POST':
+            print request.form
+            DataManager().update_page(page, request.form)
+            return redirect(url_for('sadmin_pages.details_view', page_id=page_id ))
+        pages = DataGetter.get_all_pages()
+        return self.render('/gentelella/admin/super_admin/pages/pages.html',
+                           pages=pages,
+                           current_page=page)

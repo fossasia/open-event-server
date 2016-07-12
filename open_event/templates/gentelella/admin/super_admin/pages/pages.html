@@ -30,36 +30,36 @@
             <button class="btn btn-info pull-right" style="color: #FFFFFF; margin: 0;" data-toggle="modal" data-target="#importModal">Create Page</button><div style="clear:both"></div>
             <ul class="list-group">
                 {% for page in pages %}
-                    <li class="list-group-item">{{page.url}}</li>
+                    <a href="/admin/pages/{{page.id}}"><li class="list-group-item {{ 'active' if current_page.id==page.id else '' }}">{{page.url}}</li></a>
                 {% endfor %}
             </ul>
         </div>
         <div class="col-md-8">
-            <form class="admin-form form-horizontal">
+            <form class="admin-form form-horizontal" action="/admin/pages/{{current_page.id}}" method="POST">
                 <div class="item form-group">
                     <label>NAME</label>
-                    <input type="text" class="form-control col-md-7 col-xs-12" name="name"/>
+                    <input type="text" class="form-control col-md-7 col-xs-12" name="name" value="{{current_page.name}}"/>
                 </div>
                 <div class="item form-group">
                     <label>TITLE</label>
-                    <input type="text" class="form-control col-md-7 col-xs-12" name="title"/>
+                    <input type="text" class="form-control col-md-7 col-xs-12" name="title" value="{{current_page.title}}"/>
                 </div>
                 <div class="item form-group">
                     <label>URL</label>
-                    <input type="text" class="form-control col-md-7 col-xs-12" name="url"/>
+                    <input type="text" class="form-control col-md-7 col-xs-12" name="url" value="{{current_page.url}}"/>
                 </div>
                 <div class="item form-group">
                     <label>DESCRIPTION</label>
-                    <textarea type="text" class="form-control col-md-7 col-xs-12" name="description"> </textarea>
+                    <textarea type="text" class="form-control col-md-7 col-xs-12" name="description">{{current_page.description}}</textarea>
                 </div>
                 <div class="item form-group">
                     <label>PLACE</label>
-                    <select type="text" class="form-control col-md-7 col-xs-12" name="place">
+                    <select type="text" class="form-control col-md-7 col-xs-12" name="place" value="{{current_page.place}}">
                         <option value="use_open_event">Use Open Event</option>
                         <option value="footer_menu">Footer Menu</option>
                     </select>
                 </div>
-
+                <button class="btn btn-success">Update</button>
             </form>
         </div>
     </div>
