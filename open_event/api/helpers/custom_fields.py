@@ -109,7 +109,7 @@ class Upload(Uri):
 
     def validate(self, value):
         r = super(Upload, self).validate(value)
-        if not r and value.startswith('/'):  # relative link
+        if not r and value and value.startswith('/'):  # relative link
             r = True
         return r
 
