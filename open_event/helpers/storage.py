@@ -7,6 +7,36 @@ from boto.s3.key import Key
 from open_event.settings import get_settings
 
 
+#################
+# STORAGE SCHEMA
+#################
+
+UPLOAD_PATHS = {
+    'sessions': {
+        'video': 'events/{event_id}/sessions/{id}/video',
+        'audio': 'events/{event_id}/audios/{id}/audio',
+        'slides': 'events/{event_id}/slides/{id}/slides'
+    },
+    'speakers': {
+        'photo': 'events/{event_id}/speakers/{id}/photo'
+    },
+    'event': {
+        'logo': 'events/{event_id}/logo',
+        'background_url': 'events/{event_id}/background'
+    },
+    'sponsors': {
+        'logo': 'events/{event_id}/sponsors/{id}/logo'
+    },
+    'tracks': {
+        'track_image_url': 'events/{event_id}/tracks/{id}/track_image'
+    }
+}
+
+
+################
+# HELPER CLASSES
+################
+
 class UploadedFile(object):
     """
     Helper for a disk-file to replicate request.files[ITEM] class
@@ -42,6 +72,10 @@ class UploadedMemory(object):
         f.write(self.data)
         f.close()
 
+
+#########
+# MAIN
+#########
 
 def upload(file, key, **kwargs):
     """
