@@ -2,7 +2,7 @@ from flask import redirect, request, url_for
 from flask_admin import expose
 from open_event.views.admin.super_admin.super_admin_base import SuperAdminBaseView
 from ....helpers.data_getter import DataGetter
-from ....helpers.data import DataManager
+from ....helpers.data import DataManager, delete_from_db
 
 class SuperAdminPagesView(SuperAdminBaseView):
     @expose('/')
@@ -26,3 +26,9 @@ class SuperAdminPagesView(SuperAdminBaseView):
         return self.render('/gentelella/admin/super_admin/pages/pages.html',
                            pages=pages,
                            current_page=page)
+
+    @expose('/<page_id>/trash', methods=['GET'])
+    def trash_view(self, page_id):
+        page = DataGetter.get_page_by_id(page_id)
+        delete_from_db(page, "Page has already deleted")
+        return redirect(url_for('sadmin_pages.index_view'))
