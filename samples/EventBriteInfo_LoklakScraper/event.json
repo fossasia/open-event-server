@@ -1,0 +1,36 @@
+{
+  "creator": {
+    "id": "1",
+    "email": ""
+  },
+  "background_url": "https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F21534086%2F177234908216%2F1%2Foriginal.jpg?w=1000&rect=0%2C469%2C5632%2C2816&s=81edaa83bc2abed4284a343341f68fc9",
+  "social_links": [
+    {
+      "name": "Facebook",
+      "link": "https://www.facebook.com/EHealthAfrica",
+      "id": "1"
+    },
+    {
+      "name": "Twitter",
+      "link": "https://twitter.com/eHealth_africa",
+      "id": "2"
+    }
+  ],
+  "latitude": 52.51074,
+  "end_time": "2016-06-30T22:00:00",
+  "description": "Topic Recent outbreaks of Zika in the Americas, and Ebola in West Africa have exposed vulnerabilities in the global health system. West Africa often presents a particular challenge, with its growing population, often poor infrastructure, and vulnerable health systems. This leads to increasingly visible dangers which can no longer be ignored by Europe due to its geographical vicinity and growing exchange of people and goods with the African continent. In order to facilitate a productive exchange on the topic, we are pleased to invite you to an interactive and involving discussion that is, among others, to address these questions: Is a global pandemic likely to start in Africa? What are the possible implications on the political and economic stability in the world? What can be done by Europe and by Africa to lower the probability of an outbreak? How well is Germany prepared for the arrival of a pandemic? Agenda 19h00 Welcome by Geerd-Dietger Hoffmann, eHealth Africa 19h05 Panel discussion moderated by Julius Murke, Young Leaders for Health Prof. Dr. Heinz Zeichhardt, Vice President, German Association for the Control of Viral Diseases Dr. Annamarie Bindenagel Šehović, Researcher, EL-CSID, Horizon2020, University of Warwick Dr. Tim Eckmanns, Head Unit Healthcare-associated Infections, Surveillance of Antibiotic Resistance and Consumption, Robert Koch Institute Geerd-Dietger Hoffmann, CTO, eHealth Africa 19h40 Interactive group discussions with the audience 20h15 Drinks and snacks PROUDLY SUPPORTED BY WeWork EL-CSID (European Leadership in Cultural, Science and Innovation Diplomacy) For questions, please refer to Natalya Nepomnyashcha (natalya.nepomnyashcha@ehealthafrica.org). Facebook event can be found here.",
+  "privacy": "public",
+  "type": "",
+  "ticket_url": "https://www.eventbrite.de/e/global-health-security-focus-africa-tickets-25740798421#tickets",
+  "event_url": "https://www.eventbrite.de/e/global-health-security-focus-africa-tickets-25740798421",
+  "start_time": "2016-06-30T19:00:00",
+  "location_name": "Kemperplatz 1, 10785 Berlin, Germany",
+  "name": "Global Health Security \u2013 Focus Africa",
+  "logo": "https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F21534086%2F177234908216%2F1%2Foriginal.jpg?w=1000&rect=0%2C469%2C5632%2C2816&s=81edaa83bc2abed4284a343341f68fc9",
+  "organizer_description": "eHealth Africa is one of the leading providers of digital health information systems in West Africa. The software we built ranges from mobile applications to help contain the Ebola outbreak, dashboards for tracking of vaccinations and new Polio cases in order to make Africa a Polio-free continent, emergency call center software to comprehensive health and disease information systems for whole countries.",
+  "topic": "",
+  "id": "25740798421",
+  "organizer_name": " eHealth Africa",
+  "state": "completed",
+  "longitude": 13.37233
+}
