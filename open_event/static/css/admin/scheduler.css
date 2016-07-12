@@ -252,3 +252,61 @@
     padding: 0;
     min-width: min-content;
 }
+
+/**
+ * For mobile version
+ **/
+.event {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    border-left: 1px solid transparent;
+    border-radius: 4px;
+    border-right: 1px solid rgba(0, 0, 0, 0.15);
+    border-top: 1px solid transparent;
+    cursor: pointer;
+    display: block;
+    margin: 0 12px 12px 0;
+    position: relative;
+    background: rgba(0, 150, 136, 0.75);
+    width: auto;
+    margin-left: 4%;
+    max-width: 500px;
+    color: #FFFFFF;
+    padding: 5px;
+    font-size: 15px;
+}
+
+@media (max-width: 660px) {
+    .event {
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 660px) {
+    .event {
+        max-width: 270px;
+    }
+}
+
+#track-list {
+    margin-top: 8%;
+    margin-bottom: 8%;
+}
+
+.height {
+    min-height: 70px;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.mobile-text {
+    color: #999;
+    font-weight: 300;
+}
+
+.mobile-text.time {
+    text-align: right;
+}
+
+.active {
+    color: #757575 !important;
+    font-weight: bold;
+}
