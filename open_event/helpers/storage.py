@@ -47,7 +47,6 @@ def upload(file, key, **kwargs):
     aws_key = get_settings()['aws_key']
     aws_secret = get_settings()['aws_secret']
     storage_place = get_settings()['storage_place']
-    print bucket_name, aws_key, aws_secret
     # upload
     if bucket_name and aws_key and aws_secret and storage_place == 's3':
         return upload_to_aws(bucket_name, aws_key, aws_secret, file, key, **kwargs)

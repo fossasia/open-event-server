@@ -193,8 +193,11 @@ def _upload_media(event_id, base_path):
         if path.startswith('/'):
             # relative files
             path = base_path + path
-            filename = path.rsplit('/', 1)[1]
-            file = UploadedFile(path, filename)
+            if os.path.isfile(path):
+                filename = path.rsplit('/', 1)[1]
+                file = UploadedFile(path, filename)
+            else:
+                file = ''  # remove current file setting
         else:
             # absolute links
             try:
@@ -203,11 +206,13 @@ def _upload_media(event_id, base_path):
                 file = UploadedMemory(r.content, filename)
             except:
                 file = None
-        # check if valid file
-        if not file:
+        # don't update current file setting
+        if file is None:
             continue
         # upload
         try:
+            if file == '':
+                raise Exception()
             key = UPLOAD_PATHS[name][field][1]
             if name == 'event':
                 key = key.format(event_id=event_id)
