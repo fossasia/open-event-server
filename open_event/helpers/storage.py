@@ -8,7 +8,9 @@ from open_event.settings import get_settings
 
 
 class UploadedFile(object):
-
+    """
+    Class to replicate request.files[ITEM] class
+    """
     def __init__(self, file_path, filename):
         self.file_path = file_path
         self.filename = filename
@@ -23,6 +25,7 @@ class UploadedFile(object):
     def __exit__(self, *args, **kwargs):
         self.file.close()
 
+
 def upload(file, key, **kwargs):
     """
     Upload handler
@@ -32,6 +35,7 @@ def upload(file, key, **kwargs):
     aws_key = get_settings()['aws_key']
     aws_secret = get_settings()['aws_secret']
     storage_place = get_settings()['storage_place']
+    print bucket_name, aws_key, aws_secret
     # upload
     if bucket_name and aws_key and aws_secret and storage_place == 's3':
         return upload_to_aws(bucket_name, aws_key, aws_secret, file, key, **kwargs)

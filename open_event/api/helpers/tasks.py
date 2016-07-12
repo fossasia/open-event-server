@@ -4,7 +4,7 @@ This is done to resolve circular imports
 """
 from open_event import celery
 from open_event.helpers.request_context_task import RequestContextTask
-from errors import BaseError
+from errors import BaseError, ServerError
 
 from ..imports import import_event_task_base
 
@@ -16,5 +16,6 @@ def import_event_task(self, file):
         item = import_event_task_base(file)
         return item
     except BaseError as e:
-        # self.update_state(state='API_FAILURE', meta=e.to_dict())
         return {'__error': True, 'result': e.to_dict()}
+    except Exception:
+        return {'__error': True, 'result': ServerError().to_dict()}
