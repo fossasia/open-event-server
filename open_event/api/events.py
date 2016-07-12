@@ -55,6 +55,7 @@ EVENT = api.model('Event', {
     'background_url': fields.Upload(),
     'description': fields.String(),
     'location_name': fields.String(),
+    'searchable_location_name': fields.String(),
     'organizer_name': fields.String(),
     'organizer_description': fields.String(),
     'state': fields.String(),
