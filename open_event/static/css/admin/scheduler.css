@@ -302,6 +302,10 @@
     font-weight: 300;
 }
 
+.mobile-text.time {
+    text-align: right;
+}
+
 .active {
     color: #757575 !important;
     font-weight: bold;
