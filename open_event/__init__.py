@@ -34,6 +34,7 @@ from open_event.helpers.flask_helpers import SilentUndefined, camel_case, slugif
 from open_event.helpers.helpers import string_empty
 from open_event.models import db
 from open_event.models.user import User
+from open_event.models.ticket import Ticket, BookedTicket
 from open_event.views.admin.admin import AdminView
 from helpers.jwt import jwt_authenticate, jwt_identity
 from helpers.formatter import operation_name
