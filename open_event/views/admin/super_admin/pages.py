@@ -1,8 +1,16 @@
+from flask import redirect, request, url_for
 from flask_admin import expose
 from open_event.views.admin.super_admin.super_admin_base import SuperAdminBaseView
-
+from ....helpers.data_getter import DataGetter
+from ....helpers.data import DataManager
 
 class SuperAdminPagesView(SuperAdminBaseView):
     @expose('/')
     def index_view(self):
-        return self.render('/gentelella/admin/super_admin/pages/pages.html')
+        pages = DataGetter.get_all_pages()
+        return self.render('/gentelella/admin/super_admin/pages/pages.html', pages=pages)
+
+    @expose('/create', methods=['POST'])
+    def create_view(self):
+        DataManager.create_page(request.form)
+        return redirect(url_for('sadmin_pages.index_view'))

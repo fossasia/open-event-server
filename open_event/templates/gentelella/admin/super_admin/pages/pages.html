@@ -29,32 +29,34 @@
             <h3 class="pull-left">Pages</h3>
             <button class="btn btn-info pull-right" style="color: #FFFFFF; margin: 0;" data-toggle="modal" data-target="#importModal">Create Page</button><div style="clear:both"></div>
             <ul class="list-group">
-                <li class="list-group-item">/how_it_works</li>
-                <li class="list-group-item">/pricing</li>
-                <li class="list-group-item">/mobile_apps</li>
-                <li class="list-group-item">/sitemaps</li>
-                <li class="list-group-item active">/about</li>
+                {% for page in pages %}
+                    <li class="list-group-item">{{page.url}}</li>
+                {% endfor %}
             </ul>
         </div>
         <div class="col-md-8">
             <form class="admin-form form-horizontal">
                 <div class="item form-group">
+                    <label>NAME</label>
+                    <input type="text" class="form-control col-md-7 col-xs-12" name="name"/>
+                </div>
+                <div class="item form-group">
                     <label>TITLE</label>
-                    <input type="text" class="form-control col-md-7 col-xs-12"/>
+                    <input type="text" class="form-control col-md-7 col-xs-12" name="title"/>
                 </div>
                 <div class="item form-group">
                     <label>URL</label>
-                    <input type="text" class="form-control col-md-7 col-xs-12"/>
+                    <input type="text" class="form-control col-md-7 col-xs-12" name="url"/>
                 </div>
                 <div class="item form-group">
                     <label>DESCRIPTION</label>
-                    <textarea type="text" class="form-control col-md-7 col-xs-12"> </textarea>
+                    <textarea type="text" class="form-control col-md-7 col-xs-12" name="description"> </textarea>
                 </div>
                 <div class="item form-group">
                     <label>PLACE</label>
-                    <select type="text" class="form-control col-md-7 col-xs-12">
-                        <option>Use Open Event</option>
-                        <option>Footer Menu</option>
+                    <select type="text" class="form-control col-md-7 col-xs-12" name="place">
+                        <option value="use_open_event">Use Open Event</option>
+                        <option value="footer_menu">Footer Menu</option>
                     </select>
                 </div>
 

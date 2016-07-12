@@ -1,66 +1,52 @@
 <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Page Details</h4>
-      </div>
-      <div class="modal-body">
-        <form class="admin-form form-horizontal">
-            <div class="item form-group">
-                <label>TITLE</label>
-                <input type="text" class="form-control col-md-7 col-xs-12"/>
-            </div>
-            <div class="item form-group">
-                <label>URL</label>
-                <input type="text" class="form-control col-md-7 col-xs-12"/>
-            </div>
-            <div class="item form-group">
-                <label>DESCRIPTION</label>
-                <textarea type="text" class="form-control col-md-7 col-xs-12"> </textarea>
-            </div>
-            <div class="item form-group">
-                <label>PLACE</label>
-                <select type="text" class="form-control col-md-7 col-xs-12">
-                    <option>Use Open Event</option>
-                    <option>Footer Menu</option>
-                </select>
-            </div>
+    <form class="admin-form form-horizontal" action="/admin/pages/create" method="POST">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Page Details</h4>
+                </div>
+                <div class="modal-body">
 
-        </form>
-        <br>
-        <span id="import_status"></span>
-        <span id="import_error" class="red"></span>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="btnImportEvent" onclick="importEventZip();">Create Page</button>
-      </div>
-    </div>
-  </div>
+                    <div class="item form-group">
+                        <label>NAME</label>
+                        <input type="text" class="form-control col-md-7 col-xs-12" name="name"/>
+                    </div>
+                    <div class="item form-group">
+                        <label>TITLE</label>
+                        <input type="text" class="form-control col-md-7 col-xs-12" name="title"/>
+                    </div>
+                    <div class="item form-group">
+                        <label>URL</label>
+                        <input type="text" class="form-control col-md-7 col-xs-12" name="url"/>
+                    </div>
+                    <div class="item form-group">
+                        <label>DESCRIPTION</label>
+                        <textarea type="text" class="form-control col-md-7 col-xs-12" name="description"> </textarea>
+                    </div>
+                    <div class="item form-group">
+                        <label>PLACE</label>
+                        <select type="text" class="form-control col-md-7 col-xs-12" name="place">
+                            <option value="use_open_event">Use Open Event</option>
+                            <option value="footer_menu">Footer Menu</option>
+                        </select>
+                    </div>
+
+
+                    <br>
+                    <span id="import_status"></span>
+                    <span id="import_error" class="red"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="btnImportEvent" onclick="">Create Page</button>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
+
 <script>
 
-function importEventZip(){
-    var data = new FormData();
-
-    jQuery.ajax({
-        url: '/api/v2/events/import/json',
-        data: data,
-        cache: false,
-        contentType: false,
-        processData: false,
-        type: 'POST',
-        success: function(data){
-            console.log(data);
-            // redirect to created event
-            document.location = '/events/' + data['id'];
-        },
-        error: function(x){
-            obj = JSON.parse(x.responseText);
-            console.log(obj);
-            $('#import_error').text(obj['message']);
-        }
-    });
-}
 
 </script>
