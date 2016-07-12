@@ -1346,7 +1346,9 @@ class DataManager(object):
 
     @staticmethod
     def create_page(form):
-        page = Page(**form)
+
+        page = Page(name=form.get('name', ''), title=form.get('title', ''), description=form.get('description', ''),
+                    url=form.get('url', ''), place=form.get('place', ''))
         save_to_db(page, "Page created")
 
 def save_to_db(item, msg="Saved to db", print_error=True):
