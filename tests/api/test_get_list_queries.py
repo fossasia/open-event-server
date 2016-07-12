@@ -71,6 +71,7 @@ class TestGetListQueries(OpenEventTestCase):
         # add another event
         data = POST_EVENT_DATA.copy()
         data['location_name'] = 'SomeBuilding'
+        data['searchable_location_name'] = 'SomeBuilding'
         self._post(path, data)
         # get
         resp = self.app.get(path + '?location=SomeBuilding,Berlin')

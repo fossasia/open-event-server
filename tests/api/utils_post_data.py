@@ -8,6 +8,7 @@ POST_EVENT_DATA = {
     "timezone": "UTC",
     "latitude": 0,
     "location_name": "Berlin",
+    "searchable_location_name": "Berlin",
     "logo": "",
     "longitude": 0,
     "name": "TestEvent",
