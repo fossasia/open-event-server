@@ -53,13 +53,8 @@ class EventDetailView(BaseView):
         call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
         event = get_published_event_or_abort(event_id)
         tracks = DataGetter.get_tracks(event_id)
-<<<<<<< HEAD
         accepted_sessions = DataGetter.get_sessions(event_id)
         return self.render('/gentelella/guest/event/sessions.html', event=event, sessions=accepted_sessions, tracks=tracks, call_for_speakers=call_for_speakers)
-=======
-        sessions = DataGetter.get_sessions_by_event_id(event_id)
-        return self.render('/gentelella/guest/event/sessions.html', event=event, sessions=sessions, tracks=tracks, call_for_speakers=call_for_speakers)
->>>>>>> 281456714eea1c46477beed984c215d22f1461e2
 
     @expose('/<int:event_id>/schedule/')
     def display_event_schedule(self, event_id):
