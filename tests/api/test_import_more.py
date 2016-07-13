@@ -1,6 +1,5 @@
 import unittest
 import json
-import logging
 import zipfile
 import shutil
 import time
@@ -8,14 +7,13 @@ import os
 from StringIO import StringIO
 
 from tests.setup_database import Setup
-from tests.utils import OpenEventTestCase
-from tests.api.utils import create_event, get_path, create_services,\
-    create_session, save_to_db, Speaker
+from tests.api.utils import create_event, get_path, create_services
 from tests.auth_helper import register
 from open_event import current_app as app
+from test_export_import import ImportExportBase
 
 
-class TestImportUploads(OpenEventTestCase):
+class TestImportUploads(ImportExportBase):
     """
     Test Import for media uploads
     """
@@ -26,17 +24,9 @@ class TestImportUploads(OpenEventTestCase):
             create_event(creator_email='test@example.com')
             create_services(1, '1')
 
-    def _upload(self, data, url, filename='anything'):
-        return self.app.post(
-            url,
-            data={'file': (StringIO(data), filename)}
-        )
-
     def _create_set(self):
         # export
-        path = get_path(1, 'export', 'json')
-        resp = self.app.get(path)
-        self.assertEqual(resp.status_code, 200)
+        resp = self._do_successful_export(1)
         zip_file = StringIO()
         zip_file.write(resp.data)
         # extract

@@ -77,8 +77,9 @@
                                title="View Event Details">
                                 <i class="glyphicon glyphicon-eye-open"></i>
                             </a>
-                            <a class="btn btn-default" href="/api/v2/events/{{ event.id }}/export/json"
-                               title="Export Event">
+                            <a class="btn btn-default" href="#" onclick="exportEvent({{event.id}})"
+                               data-toggle="modal" data-target="#exportModal"
+                               title="Export Event" data-event-id="{{event.id}}">
                                 <i class="glyphicon glyphicon glyphicon-share"></i>
                             </a>
                         </div>
