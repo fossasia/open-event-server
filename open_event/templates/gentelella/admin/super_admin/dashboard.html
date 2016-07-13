@@ -7,6 +7,17 @@
 {{ super() }}
 <link rel="stylesheet"
           href="{{ url_for('static', filename='admin/lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"/>
+<style type="text/css">
+#admin-title {
+    width:0;
+}
+
+@media (max-width: 1000px) {
+    #admin-title {
+        width:100%;
+    }
+}
+</style>
 {% endblock %}
 
 {% set navigation_bar = [
@@ -39,7 +50,7 @@
 <div class="row">
 
     <div class="col-md-12">
-        <div class="page-title left" style="width:0">
+        <div class="page-title left" id="admin-title">
             <div class="title_left">
                 {% for href, id, caption, page_title in navigation_bar %}
                     {% if id == active_page %}
