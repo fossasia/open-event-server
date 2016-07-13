@@ -589,4 +589,8 @@ class DataGetter:
     def get_page_by_id(page_id):
         return Page.query.get(page_id)
 
+    @staticmethod
+    def get_page_by_url(url):
+        return Page.query.filter_by(url=url).one()
+
 
