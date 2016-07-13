@@ -3,6 +3,7 @@ from flask import url_for, render_template, make_response, request, \
 from math import ceil
 
 from open_event.models.event import Event
+from open_event.helpers.data_getter import DataGetter
 
 app = Blueprint('sitemaps', __name__)
 
@@ -50,7 +51,7 @@ def render_sitemap():
 @app.route('/sitemaps/pages.xml.gz', methods=('GET', 'POST'))
 def render_pages_sitemap():
     urls = [
-        full_url(url_for('basicpagesview.' + page)) for page in static_pages
+        full_url(url_for('basicpagesview.url_view', url=page.url)) for page in DataGetter.get_all_pages()
     ]
     return make_sitemap_response(urls)
 
