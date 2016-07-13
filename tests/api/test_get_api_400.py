@@ -2,6 +2,7 @@ import unittest
 
 from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
+from tests.auth_helper import register, login
 from tests.api.utils import get_path, create_event, create_services
 
 from open_event import current_app as app
@@ -23,8 +24,9 @@ class TestGetApiUnrelatedServices(OpenEventTestCase):
         """
         self.app = Setup.create_app()
         with app.test_request_context():
+            register(self.app, u'test@example.com', u'test')
             # `event_id` is going to be 1
-            event_id = create_event()
+            event_id = create_event(creator_email=u'test@example.com')
             # Associate services to event_id=2
             # No need to create the event though
             create_services(event_id+1)
@@ -34,6 +36,7 @@ class TestGetApiUnrelatedServices(OpenEventTestCase):
         contains 'does not belong to event' string.
         """
         with app.test_request_context():
+            login(self.app, u'test@example.com', u'test')
             response = self.app.get(path)
             self.assertEqual(response.status_code, 400)
             self.assertIn('does not belong to event', response.data)
