@@ -1,6 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 import os
 
+from populate_db import populate
 from open_event import current_app as app, celery
 from open_event.models import db
 
@@ -25,6 +26,7 @@ class Setup(object):
         celery.conf.update(app.config)
         with app.test_request_context():
             db.create_all()
+            populate()
 
         return app.test_client()
 
