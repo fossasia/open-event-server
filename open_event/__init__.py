@@ -148,6 +148,11 @@ def event_types():
     return dict(event_typo=event_types[:10])
 
 @app.context_processor
+def pages():
+    pages = DataGetter.get_all_pages()
+    return dict(system_pages=pages)
+
+@app.context_processor
 def social_settings():
     settings = get_settings()
     return dict(settings=settings)
