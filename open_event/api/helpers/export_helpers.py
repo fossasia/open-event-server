@@ -26,6 +26,28 @@ EXPORTS = [
     ('custom_forms', CustomFormDAO, CUSTOM_FORM)
 ]
 
+# keep sync with storage.UPLOAD_PATHS
+DOWNLOAD_FIEDLS = {
+    'sessions': {
+        'video': '/videos/session_%d',
+        'audio': '/audios/session_%d',
+        'slides': '/slides/session_%d'
+    },
+    'speakers': {
+        'photo': '/images/speakers/photo_%d'
+    },
+    'event': {
+        'logo': '/images/logo',
+        'background_url': '/images/background'
+    },
+    'sponsors': {
+        'logo': '/images/sponsors/logo_%d'
+    },
+    'tracks': {
+        'track_image_url': '/images/tracks/image_%d'
+    }
+}
+
 
 def export_event_json(event_id):
     """

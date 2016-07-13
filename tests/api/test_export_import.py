@@ -14,7 +14,38 @@ from tests.auth_helper import register
 from open_event import current_app as app
 
 
-class TestEventExport(OpenEventTestCase):
+class ImportExportBase(OpenEventTestCase):
+    """
+    Helper functions to test import/export
+    """
+    def _upload(self, data, url, filename='anything'):
+        return self.app.post(
+            url,
+            data={'file': (StringIO(data), filename)}
+        )
+
+    def _do_successful_export(self, event_id):
+        path = get_path(event_id, 'export', 'json')
+        resp = self.app.get(path)
+        self.assertEqual(resp.status_code, 200)
+        # watch task
+        self.assertIn('task_url', resp.data)
+        task_url = json.loads(resp.data)['task_url']
+        # wait for done
+        while True:
+            resp = self.app.get(task_url)
+            if 'SUCCESS' in resp.data:
+                self.assertIn('download_url', resp.data)
+                dl = json.loads(resp.data)['result']['download_url']
+                break
+            time.sleep(1)
+        # get event
+        resp = self.app.get(dl)
+        self.assertEqual(resp.status_code, 200)
+        return resp
+
+
+class TestEventExport(ImportExportBase):
     """
     Test export of event
     """
@@ -25,26 +56,26 @@ class TestEventExport(OpenEventTestCase):
             create_services(1)
 
     def test_export_success(self):
-        path = get_path(1, 'export', 'json')
-        resp = self.app.get(path)
-        self.assertEqual(resp.status_code, 200)
+        resp = self._do_successful_export(1)
         self.assertIn('event1.zip', resp.headers['Content-Disposition'])
         size = len(resp.data)
         with app.test_request_context():
             create_services(1, '2')
             create_services(1, '3')
         # check if size increased
-        resp = self.app.get(path)
+        resp = self._do_successful_export(1)
         self.assertEqual(resp.status_code, 200)
         self.assertTrue(len(resp.data) > size)
 
     def test_export_no_event(self):
         path = get_path(2, 'export', 'json')
         resp = self.app.get(path)
+        task_url = json.loads(resp.data)['task_url']
+        resp = self.app.get(task_url)
         self.assertEqual(resp.status_code, 404)
 
 
-class TestEventImport(OpenEventTestCase):
+class TestEventImport(ImportExportBase):
     """
     Test import of event
     """
@@ -57,18 +88,10 @@ class TestEventImport(OpenEventTestCase):
             create_services(1, '2')
             create_services(1, '3')
 
-    def _upload(self, data, url, filename='anything'):
-        return self.app.post(
-            url,
-            data={'file': (StringIO(data), filename)}
-        )
-
     def _test_import_success(self):
         # first export
-        path = get_path(1, 'export', 'json')
-        resp = self.app.get(path)
+        resp = self._do_successful_export(1)
         file = resp.data
-        self.assertEqual(resp.status_code, 200)
         # import
         upload_path = get_path('import', 'json')
         resp = self._upload(file, upload_path, 'event.zip')
@@ -97,10 +120,8 @@ class TestEventImport(OpenEventTestCase):
 
     def _test_import_error(self, checks=[]):
         # first export
-        path = get_path(1, 'export', 'json')
-        resp = self.app.get(path)
+        resp = self._do_successful_export(1)
         file = resp.data
-        self.assertEqual(resp.status_code, 200)
         # import
         upload_path = get_path('import', 'json')
         resp = self._upload(file, upload_path, 'event.zip')
@@ -149,7 +170,7 @@ class TestEventImport(OpenEventTestCase):
         )
 
 
-class TestImportOTS(OpenEventTestCase):
+class TestImportOTS(ImportExportBase):
     """
     Tests import of OTS sample
     """
@@ -157,12 +178,6 @@ class TestImportOTS(OpenEventTestCase):
         self.app = Setup.create_app()
         with app.test_request_context():
             register(self.app, u'test@example.com', u'test')
-
-    def _upload(self, data, url, filename='anything'):
-        return self.app.post(
-            url,
-            data={'file': (StringIO(data), filename)}
-        )
 
     def _test_import_ots(self):
         dir_path = 'samples/ots16'
