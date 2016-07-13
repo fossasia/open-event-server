@@ -171,18 +171,26 @@
 {% block body %}
     <div class="scrollspy hidden-xs hidden-sm">
         <ul class="nav nav-pills nav-stacked">
-            <li role="presentation"><a href="/e/{{ event.id }}">Info</a></li>
-            <li role="presentation"><a href="/e/{{ event.id }}/#speakers">Speakers</a></li>
-            <li role="presentation"><a href="/e/{{ event.id }}/#sponsors">Sponsors</a></li>
-            <li role="presentation" class="active"><a href="/e/{{ event.id }}/sessions">Sessions</a></li>
+            {% if event.description %}
+                <li><a href="/e/{{ event.id }}#info">Info</a></li>
+            {% endif %}
+            <li><a href="/e/{{ event.id }}#speakers">Speakers</a></li>
+            {% if event.sponsor[0] %}
+                <li><a href="/e/{{ event.id }}#sponsors">Sponsors</a></li>
+            {% endif %}
+            <li class="active"><a href="/e/{{ event.id }}/sessions">Sessions</a></li>
             {% if call_for_speakers %}
-                <li role="presentation"><a href="/e/{{ event.id }}/cfs">Call for speakers</a></li>
+                <li><a href="/e/{{ event.id }}/cfs">Call for speakers</a></li>
             {% endif %}
             {% if event.schedule_published_on %}
-                <li role="presentation"><a href="/e/{{ event.id }}/schedule">Schedule</a></li>
+                <li><a href="/e/{{ event.id }}/schedule">Schedule</a></li>
             {% endif %}
-            <li role="presentation"><a href="/e/{{ event.id }}/#organizer">Organizer</a></li>
-            <li role="presentation"><a href="/e/{{ event.id }}/#getting-here">Getting Here</a></li>
+            {% if event.organizer_name %}
+                <li><a href="/e/{{ event.id }}#organizer">Organizer</a></li>
+            {% endif %}
+            {% if event.location_name %}
+                <li><a href="/e/{{ event.id }}#getting-here">Getting Here</a></li>
+            {% endif %}
             {% if event.code_of_conduct and event.code_of_conduct != '' and event.code_of_conduct != ' ' %}
                 <li><a href="/e/{{ event.id }}/coc">Code of Conduct</a></li>
             {% endif %}
@@ -205,43 +213,29 @@
     <div class="event-info container" style="min-height: 600px;">
         <div class="row">
             <div class="col-md-12">
-                {% if sessions[0] %}
-                    <nav id="track-navbar" class="navbar navbar-default track-navbar">
-                        <div class="container-fluid">
-                            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                                <ul class="nav navbar-nav">
-                                    {% for track in tracks %}
-                                        <li class="track-link"><a href="#track-{{ track.id }}">{{ track.name }}</a></li>
-                                    {% endfor %}
-                                    <li class="track-link"><a href="#track-other">Other</a></li>
-
-                                </ul>
-                            </div>
-                        </div>
-                    </nav>
-                    <ul class="list-group session-list">
-                        {% for track in tracks %}
-                            <h3 style="font-weight: 300;" id="track-{{ track.id }}">{{ track.name }}</h3>
-                            {% for session in track.sessions %}
-                                {% if session in sessions %}
-                                    {{ session_element(session, loop.index) }}
-                                {% endif %}
-                            {% endfor %}
-                            <hr><br>
-                        {% endfor %}
-
-                        <h3 style="font-weight: 300;" id="track-other">Other</h3>
-                            {% for session in sessions %}
+                <nav id="track-navbar" class="navbar navbar-default track-navbar">
+                    <div class="container-fluid">
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                            <ul class="nav navbar-nav">
                                 {% for track in tracks %}
-                                    {% if session not in track.sessions %}
-                                        {{ session_element(session, loop.index) }}
-                                    {% endif %}
+                                    <li class="track-link"><a href="#track-{{ track.id }}">{{ track.name }}</a></li>
                                 {% endfor %}
-                            {% endfor %}
-                    </ul>
-                {% else %}
-                    No sessions have been published yet
-                {% endif %}
+
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+                <ul class="list-group session-list">
+                    {% for track in tracks %}
+                        <h3 style="font-weight: 300;" id="track-{{ track.id }}">{{ track.name }}</h3>
+                        {% for session in track.sessions %}
+                            {% if session in accepted_sessions %}
+                                {{ session_element(session, loop.index) }}
+                            {% endif %}
+                        {% endfor %}
+                        <hr><br>
+                    {% endfor %}
+                </ul>
             </div>
         </div>
     </div>

@@ -69,10 +69,18 @@
 {% block body %}
     <div class="scrollspy hidden-xs hidden-sm" id="scrollspy">
         <ul class="nav nav-pills nav-stacked">
-            <li class="active"><a href="#info">Info</a></li>
-            <li><a href="#speakers">Speakers</a></li>
-            <li><a href="#sponsors">Sponsors</a></li>
-            <li><a href="/e/{{ event.id }}/sessions">Sessions</a></li>
+            {% if event.description %}
+                <li class="active"><a href="#info">Info</a></li>
+            {% endif %}
+            {% if accepted_sessions[0] %}
+                <li><a href="#speakers">Speakers</a></li>
+            {% endif %}
+            {% if event.sponsor[0] %}
+                <li><a href="#sponsors">Sponsors</a></li>
+            {% endif %}
+            {% if accepted_sessions[0] %}
+                <li><a href="/e/{{ event.id }}/sessions">Sessions</a></li>
+            {% endif %}
             {% if call_for_speakers %}
                 <li><a href="/e/{{ event.id }}/cfs">Call for speakers</a></li>
             {% endif %}
@@ -112,30 +120,34 @@
                     <br>
                     <br>
                 {% endif %}
-                <h3 id="speakers">Speakers</h3>
-                <div class="row">
-                    <div class="col-sm-12">
-                        {% for session in accepted_sessions %}
-                            {% for speaker in session.speakers %}
-                                {{ speaker_info(speaker) }}
+                {% if accepted_sessions[0] %}
+                    <h3 id="speakers">Speakers</h3>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            {% for session in accepted_sessions %}
+                                {% for speaker in session.speakers %}
+                                    {{ speaker_info(speaker) }}
+                                {% endfor %}
+                            {% else %}
+                                No sessions have been published yet
                             {% endfor %}
-                        {% else %}
-                            No sessions have been published yet
-                        {% endfor %}
+                        </div>
                     </div>
-                </div>
-                <br>
-                <h3 id="sponsors">Sponsors</h3>
-                <div class="row">
-                    <div class="col-sm-12">
-                        {% for sponsor in event.sponsor %}
-                            {{ sponsor_info(sponsor) }}
-                        {% else %}
-                            Sponsors info unavailable
-                        {% endfor %}
+                    <br>
+                {% endif %}
+                {% if event.sponsor[0] %}
+                    <h3 id="sponsors">Sponsors</h3>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            {% for sponsor in event.sponsor %}
+                                {{ sponsor_info(sponsor) }}
+                            {% else %}
+                                Sponsors info unavailable
+                            {% endfor %}
+                        </div>
                     </div>
-                </div>
-                <br>
+                    <br>
+                {% endif %}
                 {% if event.organizer_name %}
                     <h3 id="organizer">Organized by {{ event.organizer_name }}</h3>
                     <p>{{ event.organizer_description }}</p>
