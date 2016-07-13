@@ -79,7 +79,9 @@
             {% if event.schedule_published_on %}
                 <li><a href="/e/{{ event.id }}/schedule">Schedule</a></li>
             {% endif %}
-            <li><a href="#organizer">Organizer</a></li>
+            {% if event.organizer_name %}
+                <li><a href="#organizer">Organizer</a></li>
+            {% endif %}
             <li><a href="#getting-here">Getting Here</a></li>
             {% if event.code_of_conduct and event.code_of_conduct != '' and event.code_of_conduct != ' ' %}
                 <li><a href="/e/{{ event.id }}/coc">Code of Conduct</a></li>
@@ -103,9 +105,11 @@
     <div class="event-info container">
         <div class="row">
             <div class="col-md-8">
-                {{ event.description | safe }}
-                <br>
-                <br>
+                {% if event.description %}
+                    {{ event.description | safe }}
+                    <br>
+                    <br>
+                {% endif %}
                 <h3 id="speakers">Speakers</h3>
                 <div class="row">
                     <div class="col-sm-12">
@@ -130,9 +134,11 @@
                     </div>
                 </div>
                 <br>
-                <h3 id="organizer">Organized by {{ event.organizer_name }}</h3>
-                <p>{{ event.organizer_description }}</p>
-                <br>
+                {% if event.organizer_name %}
+                    <h3 id="organizer">Organized by {{ event.organizer_name }}</h3>
+                    <p>{{ event.organizer_description }}</p>
+                    <br>
+                {% endif %}
                 <h3 id="getting-here">Getting Here</h3>
                 <div class="row">
                     <div id="map"
