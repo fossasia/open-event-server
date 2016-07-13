@@ -105,6 +105,7 @@ function pixelsToMinutes(pixels, fromTop) {
  * @type {Array}
  */
 var days = [];
+var tracks = [];
 var sessionsStore = [];
 var microlocationsStore = [];
 var unscheduledStore = [];
@@ -127,7 +128,7 @@ var $editSessionModal = $('#edit-session-modal');
 var $editSessionForm = $("#edit-session-form");
 
 var $mobileTimeline = $("#mobile-timeline");
-
+var $tracksTimeline = $("#tracks-timeline");
 /**
  * TEMPLATE STRINGS
  * ================
@@ -139,7 +140,7 @@ var sessionTemplate = $("#session-template").html();
 var dayButtonTemplate = $("#date-change-button-template").html();
 
 var mobileMicrolocationTemplate = $("#mobile-microlocation-template").html();
-var mobileSessionTemplate =  $("#mobile-session-template").html();
+var mobileSessionTemplate = $("#mobile-session-template").html();
 /**
  * Data Getters
  * ============
@@ -259,6 +260,8 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
     $mobileSessionElement.find('.time').text(sessionRefObject.session.start_time.format('hh:mm A'));
     $mobileSessionElement.find('.event').text(sessionRefObject.session.title);
     $mobileTimeline.find(".mobile-microlocation[data-microlocation-id=" + sessionRefObject.session.microlocation.id + "] > .mobile-sessions-holder").append($mobileSessionElement);
+
+    $tracksTimeline.find(".mobile-microlocation[data-track-id=" + sessionRefObject.session.track.id + "] > .mobile-sessions-holder").append($mobileSessionElement.clone());
 
     if (isUndefinedOrNull(shouldBroadcast) || shouldBroadcast) {
         if (!sessionRefObject.newElement) {
@@ -668,7 +671,6 @@ function processMicrolocationSession(microlocations, sessions, callback) {
     _.each(sessions, function (session) {
         if (session.state === 'accepted') {
 
-
             session = _.cloneDeep(session);
 
             var startTime = moment.utc(session.start_time);
@@ -692,6 +694,10 @@ function processMicrolocationSession(microlocations, sessions, callback) {
 
             if (!_.includes(days, dayString)) {
                 days.push(dayString);
+            }
+
+            if (!_.some(tracks, session.track)) {
+                tracks.push(session.track);
             }
 
             session.start_time = startTime;
@@ -737,7 +743,6 @@ function loadDateButtons() {
 }
 
 
-
 /**
  * Load all the sessions of a given day into the timeline
  * @param {string} day
@@ -765,6 +770,13 @@ function loadMicrolocationsToTimeline(day) {
 
     _.each(microlocationsStore, addMicrolocationToTimeline);
 
+    _.each(tracks, function (track) {
+        var $trackElement = $(mobileMicrolocationTemplate);
+        $trackElement.find('.name').text(track.name);
+        $trackElement.attr("data-track-id", track.id);
+        $tracksTimeline.append($trackElement);
+    });
+
     _.each(sessionsStore[dayIndex], function (session) {
         // Add session elements, but do not broadcast.
 
@@ -777,9 +789,16 @@ function loadMicrolocationsToTimeline(day) {
         }
     });
 
-    _.each($mobileTimeline.find('.mobile-microlocation'), function($mobileMicrolocation){
+    _.each($mobileTimeline.find('.mobile-microlocation'), function ($mobileMicrolocation) {
         $mobileMicrolocation = $($mobileMicrolocation);
-        if($mobileMicrolocation.find(".mobile-sessions-holder").children().length == 0) {
+        if ($mobileMicrolocation.find(".mobile-sessions-holder").children().length == 0) {
+            $mobileMicrolocation.remove();
+        }
+    });
+
+    _.each($tracksTimeline.find('.mobile-microlocation'), function ($mobileMicrolocation) {
+        $mobileMicrolocation = $($mobileMicrolocation);
+        if ($mobileMicrolocation.find(".mobile-sessions-holder").children().length == 0) {
             $mobileMicrolocation.remove();
         }
     });
@@ -816,6 +835,7 @@ function initializeTimeline(eventId) {
                 $('.edit-btn').hide();
                 $('.remove-btn').hide();
             }
+            $(".rooms-view").addClass('active');
 
             $('.microlocation-container').css("width", $(".microlocations.x1").width() + "px")
         });
@@ -916,6 +936,18 @@ $(document)
         var session = $sessionElement.data("session");
         location.href = "/events/" + window.mainEvent.id + "/sessions/" + session.id + "/edit/";
     })
+    .on("click", ".rooms-view", function(){
+        $timeline.removeClass('hidden');
+        $mobileTimeline.removeClass('hidden');
+        $tracksTimeline.addClass('hidden');
+        $(this).addClass("active").siblings().removeClass("active");
+    })
+    .on("click", ".tracks-view", function(){
+        $timeline.addClass('hidden');
+        $mobileTimeline.addClass('hidden');
+        $tracksTimeline.removeClass('hidden');
+        $(this).addClass("active").siblings().removeClass("active");
+    })
     .on("click", ".clear-overlaps-button", removeOverlaps);
 
 /**
@@ -929,35 +961,40 @@ $(document).ready(function () {
 });
 
 $(document).on("scheduling:change", function (e) {
+    if (!isReadOnly()) {
+        // Make a deep clone of the session object
+        var session = _.cloneDeep(e.session);
+        var session_id = session.id;
 
-    // Make a deep clone of the session object
-    var session = _.cloneDeep(e.session);
-    var session_id = session.id;
+        // Format the payload to match API requirements
+        session.start_time = session.start_time.format(time.format);
+        session.end_time = session.end_time.format(time.format);
+        session.track_id = (_.isNull(session.track) || _.isNull(session.track.id)) ? null : session.track.id;
+        session.microlocation_id = (_.isNull(session.microlocation) || _.isNull(session.microlocation.id)) ? null : session.microlocation.id;
+        session.speaker_ids = _.map(session.speakers, 'id');
 
-    // Format the payload to match API requirements
-    session.start_time = session.start_time.format(time.format);
-    session.end_time = session.end_time.format(time.format);
-    session.track_id = (_.isNull(session.track) || _.isNull(session.track.id)) ? null : session.track.id;
-    session.microlocation_id = (_.isNull(session.microlocation) || _.isNull(session.microlocation.id)) ? null : session.microlocation.id;
-    session.speaker_ids = _.map(session.speakers, 'id');
+        // Clean up the payload
+        delete session.language;
+        delete session.speakers;
+        delete session.microlocation;
+        delete session.duration;
+        delete session.top;
+        delete session.id;
 
-    // Clean up the payload
-    delete session.language;
-    delete session.speakers;
-    delete session.microlocation;
-    delete session.duration;
-    delete session.top;
-    delete session.id;
-
-    api.sessions.put_session({event_id: mainEvent.id, session_id: session_id, payload: session}, function (success) {
-        createSnackbar("Changes have been saved.", "Dismiss", null, 1000);
-    }, function (error) {
-        logError('failed with the following: ' + error.statusText, error);
-        createSnackbar("An error occurred while saving the changes.", "Try Again", function () {
-            $(document).trigger({
-                type: "scheduling:change",
-                session: e.session
+        api.sessions.put_session({
+            event_id: mainEvent.id,
+            session_id: session_id,
+            payload: session
+        }, function (success) {
+            createSnackbar("Changes have been saved.", "Dismiss", null, 1000);
+        }, function (error) {
+            logError('failed with the following: ' + error.statusText, error);
+            createSnackbar("An error occurred while saving the changes.", "Try Again", function () {
+                $(document).trigger({
+                    type: "scheduling:change",
+                    session: e.session
+                });
             });
         });
-    });
+    }
 });
