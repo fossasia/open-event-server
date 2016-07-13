@@ -666,7 +666,7 @@ function initializeInteractables() {
  * @param {object} sessions The sessions json object
  * @param {postProcessCallback} callback The post-process callback
  */
-function processMicrolocationSession(microlocations, sessions, callback) {
+function processMicrolocationSession(microlocations, tracks_, sessions, callback) {
 
     _.each(sessions, function (session) {
         if (session.state === 'accepted') {
@@ -696,9 +696,11 @@ function processMicrolocationSession(microlocations, sessions, callback) {
                 days.push(dayString);
             }
 
-            if (!_.some(tracks, session.track)) {
-                tracks.push(session.track);
-            }
+            _.each(tracks_, function (track) {
+                if (!_.some(tracks, track)) {
+                    tracks.push(track);
+                }
+            });
 
             session.start_time = startTime;
             session.end_time = endTime;
@@ -710,7 +712,7 @@ function processMicrolocationSession(microlocations, sessions, callback) {
             if (_.isArray(sessionsStore[dayIndex])) {
                 sessionsStore[dayIndex].push(session);
             } else {
-                sessionsStore[dayIndex] = [session]
+                sessionsStore[dayIndex] = [session];
             }
         }
     });
@@ -815,8 +817,10 @@ function loadMicrolocationsToTimeline(day) {
 function loadData(eventId, callback) {
     api.microlocations.get_microlocation_list({event_id: eventId}, function (microlocationsData) {
         api.sessions.get_session_list({event_id: eventId}, function (sessionData) {
-            processMicrolocationSession(microlocationsData.obj, sessionData.obj, callback);
-        })
+            api.tracks.get_track_list({event_id: eventId}, function (trackData) {
+                processMicrolocationSession(microlocationsData.obj, trackData.obj, sessionData.obj, callback);
+            });
+        });
     });
 }
 
