@@ -54,20 +54,24 @@ class EventDetailView(BaseView):
         event = get_published_event_or_abort(event_id)
         tracks = DataGetter.get_tracks(event_id)
         accepted_sessions = DataGetter.get_sessions(event_id)
-        return self.render('/gentelella/guest/event/sessions.html', event=event, sessions=accepted_sessions, tracks=tracks, call_for_speakers=call_for_speakers)
+        if not accepted_sessions:
+            abort(404)
+        return self.render('/gentelella/guest/event/sessions.html', event=event, accepted_sessions=accepted_sessions, tracks=tracks, call_for_speakers=call_for_speakers)
 
     @expose('/<int:event_id>/schedule/')
     def display_event_schedule(self, event_id):
         call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
         event = get_published_event_or_abort(event_id)
+        accepted_sessions = DataGetter.get_sessions(event_id)
         if not event.schedule_published_on:
             abort(404)
-        return self.render('/gentelella/guest/event/schedule.html', event=event, call_for_speakers=call_for_speakers)
+        return self.render('/gentelella/guest/event/schedule.html', event=event, accepted_sessions=accepted_sessions, call_for_speakers=call_for_speakers)
 
     @expose('/<int:event_id>/cfs/', methods=('GET',))
     def display_event_cfs(self, event_id):
         event = get_published_event_or_abort(event_id)
         call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
+        accepted_sessions = DataGetter.get_sessions(event_id)
 
         if not call_for_speakers:
             abort(404)
@@ -83,7 +87,7 @@ class EventDetailView(BaseView):
         elif call_for_speakers.start_date > now:
             sate = "future"
         speakers = DataGetter.get_speakers(event_id).all()
-        return self.render('/gentelella/guest/event/cfs.html', event=event, speaker_form=speaker_form,
+        return self.render('/gentelella/guest/event/cfs.html', event=event, accepted_sessions=accepted_sessions, speaker_form=speaker_form,
                            session_form=session_form, call_for_speakers=call_for_speakers, state=state, speakers=speakers)
 
     @expose('/<int:event_id>/cfs/', methods=('POST',))
@@ -100,7 +104,10 @@ class EventDetailView(BaseView):
     @expose('/<int:event_id>/coc/', methods=('GET',))
     def display_event_coc(self, event_id):
         event = get_published_event_or_abort(event_id)
-        return self.render('/gentelella/guest/event/code_of_conduct.html', event=event)
+        accepted_sessions = DataGetter.get_sessions(event_id)
+        if not (event.code_of_conduct and event.code_of_conduct != '' and event.code_of_conduct != ' '):
+            abort(404)
+        return self.render('/gentelella/guest/event/code_of_conduct.html', event=event, accepted_sessions=accepted_sessions)
 
     # SLUGGED PATHS
 
