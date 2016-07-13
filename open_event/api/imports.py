@@ -24,9 +24,7 @@ class EventImportJson(Resource):
                 'result': task.get(),
                 'state': task.state
             }
-            print TASK_RESULTS[task.id]
         return jsonify(
-            task_id=task.id,
             task_url=url_for('api.extras_celery_task', task_id=task.id)
         )
 
