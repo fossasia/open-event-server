@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from open_event.helpers.data import save_to_db
-from open_event.models.user import User
+from open_event.helpers.data import save_to_db, DataManager
+from open_event.models.user import User, ORGANIZER
 from open_event.models.event import Event
 from open_event.models.session import Session
 from open_event.models.speaker import Speaker
@@ -24,7 +24,17 @@ def create_event(name='TestEvent', creator_email=None):
                   copyright=copyright)
     if creator_email:
         event.creator = User.query.filter_by(email=creator_email).first()
+
     save_to_db(event, 'Event saved')
+
+    if creator_email:
+        # Add creator as Organizer
+        data = {
+            'user_email': creator_email,
+            'user_role': ORGANIZER,
+        }
+        DataManager.add_role_to_event(data, event.id, record=False)
+
     return event.id
 
 

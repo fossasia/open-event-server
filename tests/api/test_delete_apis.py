@@ -6,7 +6,7 @@ from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
 from tests.api.utils import create_event, get_path, Event, Session
 from tests.api.utils_post_data import *
-from tests.auth_helper import register
+from tests.auth_helper import register, login
 from open_event import current_app as app
 
 
@@ -17,14 +17,15 @@ class TestDeleteApi(OpenEventTestCase):
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
-            create_event()
+            register(self.app, u'test@example.com', u'test')
+            create_event(creator_email=u'test@example.com')
 
     def _login_user(self):
         """
         Registers an email and logs in.
         """
         with app.test_request_context():
-            register(self.app, u'test@example.com', u'test')
+            login(self.app, u'test@example.com', u'test')
 
     def _test_model(self, name, data):
         """
