@@ -82,7 +82,9 @@
             {% if event.organizer_name %}
                 <li><a href="#organizer">Organizer</a></li>
             {% endif %}
-            <li><a href="#getting-here">Getting Here</a></li>
+            {% if event.location_name %}
+                <li><a href="#getting-here">Getting Here</a></li>
+            {% endif %}
             {% if event.code_of_conduct and event.code_of_conduct != '' and event.code_of_conduct != ' ' %}
                 <li><a href="/e/{{ event.id }}/coc">Code of Conduct</a></li>
             {% endif %}
@@ -139,15 +141,17 @@
                     <p>{{ event.organizer_description }}</p>
                     <br>
                 {% endif %}
-                <h3 id="getting-here">Getting Here</h3>
-                <div class="row">
-                    <div id="map"
-                         class="col-md-8 {% if event.latitude == 0 or event.longitude ==0 %}hidden{% endif %}"></div>
-                    <div class="col-md-4" style="text-align: left;">
-                        <h4>Address</h4>
-                        {{ event.location_name }}
+                {% if event.location_name %}
+                    <h3 id="getting-here">Getting Here</h3>
+                    <div class="row">
+                        <div id="map"
+                             class="col-md-8 {% if event.latitude == 0 or event.longitude ==0 %}hidden{% endif %}"></div>
+                        <div class="col-md-4" style="text-align: left;">
+                            <h4>Address</h4>
+                            {{ event.location_name }}
+                        </div>
                     </div>
-                </div>
+                {% endif %}
             </div>
             <div class="col-md-4">
                 <div>
