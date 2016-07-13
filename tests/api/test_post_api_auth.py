@@ -6,7 +6,7 @@ from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
 from tests.api.utils import create_event, get_path
 from tests.api.utils_post_data import *
-from tests.auth_helper import register
+from tests.auth_helper import register, login
 from open_event import current_app as app
 
 
@@ -18,22 +18,23 @@ class TestPostApiBasicAuth(OpenEventTestCase):
         self.app = Setup.create_app()
         with app.test_request_context():
             register(self.app, u'myemail@gmail.com', u'test')
-            create_event()
+            create_event(creator_email=u'myemail@gmail.com')
 
     def _test_model(self, name, data):
-        path = get_path() if name == 'event' else get_path(1, name + 's')
-        response = self.app.post(
-            path,
-            data=json.dumps(data),
-            headers={
-                'content-type': 'application/json',
-                'Authorization': 'Basic %s' %
-                base64.b64encode('myemail@gmail.com:test')
-            }
-        )
-        self.assertNotEqual(response.status_code, 401)
-        self.assertEqual(response.status_code, 201)
-        self.assertIn('Test' + str(name).title(), response.data)
+        with app.test_request_context():
+            path = get_path() if name == 'event' else get_path(1, name + 's')
+            response = self.app.post(
+                path,
+                data=json.dumps(data),
+                headers={
+                    'content-type': 'application/json',
+                    'Authorization': 'Basic %s' %
+                    base64.b64encode('myemail@gmail.com:test')
+                }
+            )
+            self.assertNotEqual(response.status_code, 401)
+            self.assertEqual(response.status_code, 201)
+            self.assertIn('Test' + str(name).title(), response.data)
 
     def test_event_api(self):
         self._test_model('event', POST_EVENT_DATA)

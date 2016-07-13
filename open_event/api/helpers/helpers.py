@@ -404,6 +404,8 @@ def can_access(func):
         event_id = kwargs.get('event_id')
         if not event_id:
             raise ServerError()
+        # Check if event exists
+        get_object_or_404(EventModel, event_id)
         if user.has_role(event_id):
             return func(*args, **kwargs)
         else:
@@ -424,6 +426,8 @@ def can_create(DAO):
             event_id = kwargs.get('event_id')
             if not event_id:
                 raise ServerError()
+            # Check if event exists
+            get_object_or_404(EventModel, event_id)
             service_class = DAO.model
             if user.can_create(service_class, event_id):
                 return func(*args, **kwargs)
@@ -441,6 +445,8 @@ def can_read(DAO):
             event_id = kwargs.get('event_id')
             if not event_id:
                 raise ServerError()
+            # Check if event exists
+            get_object_or_404(EventModel, event_id)
             service_class = DAO.model
             if user.can_read(service_class, event_id):
                 return func(*args, **kwargs)
@@ -458,6 +464,8 @@ def can_update(DAO):
             event_id = kwargs.get('event_id')
             if not event_id:
                 raise ServerError()
+            # Check if event exists
+            get_object_or_404(EventModel, event_id)
             service_class = DAO.model
             if user.can_update(service_class, event_id):
                 return func(*args, **kwargs)
@@ -475,6 +483,8 @@ def can_delete(DAO):
             event_id = kwargs.get('event_id')
             if not event_id:
                 raise ServerError()
+            # Check if event exists
+            get_object_or_404(EventModel, event_id)
             service_class = DAO.model
             if user.can_delete(service_class, event_id):
                 return func(*args, **kwargs)
