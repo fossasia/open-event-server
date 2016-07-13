@@ -149,6 +149,17 @@
             </div>
             <div class="hidden-xs">
                 <p class="session-location">
+                    {% if session.state == 'pending' %}
+                        <span class="detail-status label label-warning">Under Review</span>
+                    {% elif session.state == 'draft' %}
+                        <span class="detail-status label label-warning">Draft</span>
+                    {% elif session.state == 'accepted' %}
+                        <span class="detail-status label label-success">Accepted</span>
+                    {% elif session.state == 'rejected' %}
+                        <span class="detail-status label label-danger">Rejected</span>
+                    {% else %}
+                        <span class="detail-status label label-info">N/A</span>
+                    {% endif %}
                     {{ session.microlocation.name }} <i class="fa fa-map-marker fa-fw"></i><br>
                     {{ session.start_time.strftime('%I:%M %p') }} <i class="fa fa-clock-o fa-fw"></i>
                 </p>
@@ -194,27 +205,43 @@
     <div class="event-info container" style="min-height: 600px;">
         <div class="row">
             <div class="col-md-12">
+                {% if sessions[0] %}
+                    <nav id="track-navbar" class="navbar navbar-default track-navbar">
+                        <div class="container-fluid">
+                            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                <ul class="nav navbar-nav">
+                                    {% for track in tracks %}
+                                        <li class="track-link"><a href="#track-{{ track.id }}">{{ track.name }}</a></li>
+                                    {% endfor %}
+                                    <li class="track-link"><a href="#track-other">Other</a></li>
 
-                <nav id="track-navbar" class="navbar navbar-default track-navbar">
-                    <div class="container-fluid">
-                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                            <ul class="nav navbar-nav">
-                                {% for track in tracks %}
-                                    <li class="track-link"><a href="#track-{{ track.id }}">{{ track.name }}</a></li>
-                                {% endfor %}
-
-                            </ul>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                </nav>
-                <ul class="list-group session-list">
-                    {% for track in tracks %}
-                        <h3 style="font-weight: 300;" id="track-{{ track.id }}">{{ track.name }}</h3>
-                        {% for session in track.sessions %}
-                            {{ session_element(session, loop.index) }}
+                    </nav>
+                    <ul class="list-group session-list">
+                        {% for track in tracks %}
+                            <h3 style="font-weight: 300;" id="track-{{ track.id }}">{{ track.name }}</h3>
+                            {% for session in track.sessions %}
+                                {% if session in sessions %}
+                                    {{ session_element(session, loop.index) }}
+                                {% endif %}
+                            {% endfor %}
+                            <hr><br>
                         {% endfor %}
-                    {% endfor %}
-                </ul>
+
+                        <h3 style="font-weight: 300;" id="track-other">Other</h3>
+                            {% for session in sessions %}
+                                {% for track in tracks %}
+                                    {% if session not in track.sessions %}
+                                        {{ session_element(session, loop.index) }}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                    </ul>
+                {% else %}
+                    No sessions have been published yet
+                {% endif %}
             </div>
         </div>
     </div>
