@@ -28,10 +28,6 @@ class TestSitemaps(OpenEventTestCase):
         resp = self.app.get('/sitemap.xml')
         self.assertIn('1.xml.gz', resp.data)
 
-    def test_pages(self):
-        resp = self.app.get('/sitemaps/pages.xml.gz')
-        self.assertIn('about', resp.data)
-
     def test_event_page(self):
         with app.test_request_context():
             event = ObjectMother.get_event()
