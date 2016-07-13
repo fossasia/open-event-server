@@ -50,6 +50,7 @@ from ..models.track import Track
 from ..models.user import User, ORGANIZER
 from ..models.user_detail import UserDetail
 from ..models.users_events_roles import UsersEventsRoles
+from ..models.page import Page
 
 
 class DataManager(object):
@@ -1343,6 +1344,20 @@ class DataManager(object):
         save_to_db(uer, "Event saved")
         record_activity('update_role', role=role, user=user, event_id=uer.event_id)
 
+    @staticmethod
+    def create_page(form):
+
+        page = Page(name=form.get('name', ''), title=form.get('title', ''), description=form.get('description', ''),
+                    url=form.get('url', ''), place=form.get('place', ''))
+        save_to_db(page, "Page created")
+
+    def update_page(self, page, form):
+        page.name = form.get('name', '')
+        page.title = form.get('title', '')
+        page.description = form.get('description', '')
+        page.url = form.get('url', '')
+        page.place = form.get('place', '')
+        save_to_db(page, "Page updated")
 
 def save_to_db(item, msg="Saved to db", print_error=True):
     """Convenience function to wrap a proper DB save

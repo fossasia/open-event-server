@@ -28,6 +28,7 @@ from ..models.custom_forms import CustomForms
 from ..models.mail import Mail
 from ..models.activity import Activity
 from ..models.setting import Setting
+from ..models.page import Page
 from .language_list import LANGUAGE_LIST
 from .static import EVENT_TOPICS, EVENT_LICENCES
 from open_event.helpers.helpers import get_event_id
@@ -579,4 +580,13 @@ class DataGetter:
         return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
             .filter(Event.in_trash == False)
+
+    @staticmethod
+    def get_all_pages():
+        return Page.query.all()
+
+    @staticmethod
+    def get_page_by_id(page_id):
+        return Page.query.get(page_id)
+
 
