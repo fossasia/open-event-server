@@ -251,7 +251,6 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
     sessionRefObject.$sessionElement.css("height", minutesToPixels(sessionRefObject.session.duration) + "px");
     $microlocationsHolder.find(".microlocation[data-microlocation-id=" + sessionRefObject.session.microlocation.id + "] > .microlocation-inner").append(sessionRefObject.$sessionElement);
 
-    sessionRefObject.$sessionElement.ellipsis().ellipsis();
 
     updateSessionTimeOnTooltip(sessionRefObject.$sessionElement);
     updateColor(sessionRefObject.$sessionElement);
@@ -282,6 +281,8 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
     _.remove(unscheduledStore, function (sessionTemp) {
         return sessionTemp.id === sessionRefObject.session.id
     });
+
+    sessionRefObject.$sessionElement.ellipsis().ellipsis();
 }
 
 /**
@@ -823,6 +824,7 @@ function initializeTimeline(eventId) {
         loadData(eventId, function () {
             $(".flash-message-holder").hide();
             $(".scheduler-holder").show();
+            $(".session").ellipsis();
             if (!isReadOnly()) {
                 initializeInteractables();
             } else {
