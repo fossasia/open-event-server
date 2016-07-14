@@ -405,6 +405,10 @@ class DataGetter:
             .filter(Event.state == 'Published').filter(Event.in_trash == False)
 
     @staticmethod
+    def get_live_and_public_events():
+        return DataGetter.get_all_live_events().filter(Event.privacy != 'private')
+
+    @staticmethod
     def get_all_draft_events():
         return Event.query.filter(Event.state == 'Draft').filter(Event.in_trash == False)
 
@@ -591,6 +595,9 @@ class DataGetter:
 
     @staticmethod
     def get_page_by_url(url):
-        return Page.query.filter_by(url=url).one()
+        results =  Page.query.filter_by(url=url)
+        if results:
+            return results.one()
+        return results
 
 
