@@ -129,7 +129,8 @@ class MyHomeView(AdminIndexView):
             if user:
                 link = request.host + url_for(".change_password_view", hash=user.reset_password)
                 send_email_with_reset_password_hash(email, link)
-            return redirect(intended_url())
+                flash('Please go to the link sent to your email to reset your password')
+            return redirect(url_for('.login_view'))
 
     @expose('/reset_password/<hash>', methods=('GET', 'POST'))
     def change_password_view(self, hash):

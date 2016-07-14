@@ -34,14 +34,30 @@
 {% block body %}
     <div class="scrollspy hidden-xs hidden-sm">
         <ul class="nav nav-pills nav-stacked">
-            <li><a href="/e/{{ event.id }}">Info</a></li>
-            <li><a href="/e/{{ event.id }}/#speakers">Speakers</a></li>
-            <li><a href="/e/{{ event.id }}/#sponsors">Sponsors</a></li>
-            <li><a href="/e/{{ event.id }}/cfs">Call for speakers</a></li>
-            <li><a href="/e/{{ event.id }}/sessions">Sessions</a></li>
-            <li><a href="/e/{{ event.id }}/schedule">Schedule</a></li>
-            <li><a href="/e/{{ event.id }}/#organizer">Organizer</a></li>
-            <li><a href="/e/{{ event.id }}/#getting-here">Getting Here</a></li>
+            {% if event.description %}
+                <li><a href="/e/{{ event.id }}#info">Info</a></li>
+            {% endif %}
+            {% if accepted_sessions[0] %}
+                <li><a href="/e/{{ event.id }}#speakers">Speakers</a></li>
+            {% endif %}
+            {% if event.sponsor[0] %}
+                <li><a href="/e/{{ event.id }}#sponsors">Sponsors</a></li>
+            {% endif %}
+            {% if accepted_sessions[0] %}
+                <li><a href="/e/{{ event.id }}/sessions">Sessions</a></li>
+            {% endif %}
+            {% if call_for_speakers %}
+                <li><a href="/e/{{ event.id }}/cfs">Call for speakers</a></li>
+            {% endif %}
+            {% if event.schedule_published_on %}
+                <li><a href="/e/{{ event.id }}/schedule">Schedule</a></li>
+            {% endif %}
+            {% if event.organizer_name %}
+                <li><a href="/e/{{ event.id }}#organizer">Organizer</a></li>
+            {% endif %}
+            {% if event.location_name %}
+                <li><a href="/e/{{ event.id }}#getting-here">Getting Here</a></li>
+            {% endif %}
             <li class="active"><a href="/e/{{ event.id }}/coc">Code of Conduct</a></li>
         </ul>
     </div>

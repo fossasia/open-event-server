@@ -57,9 +57,9 @@
                                title="View Event Details">
                                 <i class="glyphicon glyphicon-eye-open"></i>
                             </a>
-                            <a class="btn btn-default" href="/api/v2/events/{{ event.id }}/export/json"
-                               data-toggle="tooltip" data-placement="top"
-                               title="Export Event">
+                            <a class="btn btn-default" href="#" onclick="exportEvent({{event.id}})"
+                               data-toggle="modal" data-target="#exportModal"
+                               title="Export Event" data-event-id="{{event.id}}">
                                 <i class="glyphicon glyphicon glyphicon-share"></i>
                             </a>
                             {% if event.in_trash == True %}
@@ -183,11 +183,13 @@
 
 
     {% include 'gentelella/admin/event/_import_modal.html' %}
+    {% include 'gentelella/admin/event/_export_modal.html' %}
 
 {% endblock %}
 
 {% block tail_js %}
     {{ super() }}
+    <script src="{{ url_for('static', filename='js/admin/event/importEvent.js') }}"></script>
     <script type="text/javascript">
         var table = $('.table.no-global-dt').DataTable({
             "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',

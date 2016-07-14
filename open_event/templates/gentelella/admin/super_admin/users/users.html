@@ -68,11 +68,13 @@ Users
             <a data-toggle="tooltip" data-placement="top" class="btn btn-default" href="{{ get_url('sadmin_users.details_view', user_id=user['user'].id)}}" title="View details">
                 <i class="glyphicon glyphicon-eye-open"></i>
             </a>
-            {% if user['user'].in_trash == False %}
-            <a data-toggle="tooltip" data-placement="top" class="btn btn-default" onclick="return confirm('Are you sure you want to delete this record?');"
-               href="{{ get_url('sadmin_users.trash_view', user_id=user['user'].id)}}" title="Delete record">
-                <i class="glyphicon glyphicon-trash"></i>
-            </a>
+            {% if user['user'].is_super_admin == False %}
+                {% if user['user'].in_trash == False %}
+                <a data-toggle="tooltip" data-placement="top" class="btn btn-default" onclick="return confirm('Are you sure you want to delete this record?');"
+                   href="{{ get_url('sadmin_users.trash_view', user_id=user['user'].id)}}" title="Delete record">
+                    <i class="glyphicon glyphicon-trash"></i>
+                </a>
+                {% endif %}
             {% endif %}
             {% if user['user'].in_trash == True %}
             <a data-toggle="tooltip" data-placement="top" class="btn btn-default" onclick="return confirm('Are you sure you want to delete this record?');"
