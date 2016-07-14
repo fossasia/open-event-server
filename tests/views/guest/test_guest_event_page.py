@@ -24,10 +24,20 @@ class TestGuestEventPage(OpenEventTestCase):
         with app.test_request_context():
             event = ObjectMother.get_event()
             event.state = 'Published'
+            event.code_of_conduct = 'Test Code of Conduct'
             save_to_db(event, "Event Saved")
             rv = self.app.get(url_for('event_detail.display_event_coc', event_id=event.id),
                               follow_redirects=True)
             self.assertTrue("Code of Conduct" in rv.data, msg=rv.data)
+
+    def test_unpublished_event_view_coc(self):
+        with app.test_request_context():
+            event = ObjectMother.get_event()
+            event.state = 'Published'
+            save_to_db(event, "Event Saved")
+            rv = self.app.get(url_for('event_detail.display_event_coc', event_id=event.id),
+                              follow_redirects=True)
+            self.assertEqual(rv.status_code, 404)
 
     def test_unpublished_event_view_attempt(self):
         with app.test_request_context():
