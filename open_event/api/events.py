@@ -285,12 +285,11 @@ class EventListPaginated(Resource, PaginatedResourceBase, EventResource):
         )
 
 
-# TODO: Permissions for Social Links. HowTo?
-
 @api.route('/<int:event_id>/links')
 @api.param('event_id')
 class SocialLinkList(Resource):
     @requires_auth
+    @can_access
     @api.doc('list_social_links')
     @api.marshal_list_with(SOCIAL_LINK)
     def get(self, event_id):
@@ -298,6 +297,7 @@ class SocialLinkList(Resource):
         return LinkDAO.list(event_id)
 
     @requires_auth
+    @can_access
     @api.doc('create_social_link', responses=POST_RESPONSES)
     @api.marshal_with(SOCIAL_LINK)
     @api.expect(SOCIAL_LINK_POST)
@@ -313,6 +313,7 @@ class SocialLinkList(Resource):
 @api.route('/<int:event_id>/links/<int:link_id>')
 class SocialLink(Resource):
     @requires_auth
+    @can_access
     @api.doc('delete_social_link')
     @api.marshal_with(SOCIAL_LINK)
     def delete(self, event_id, link_id):
@@ -320,6 +321,7 @@ class SocialLink(Resource):
         return LinkDAO.delete(event_id, link_id)
 
     @requires_auth
+    @can_access
     @api.doc('update_social_link', responses=PUT_RESPONSES)
     @api.marshal_with(SOCIAL_LINK)
     @api.expect(SOCIAL_LINK_POST)
@@ -328,6 +330,7 @@ class SocialLink(Resource):
         return LinkDAO.update(event_id, link_id, self.api.payload)
 
     @requires_auth
+    @can_access
     @api.hide
     @api.marshal_with(SOCIAL_LINK)
     def get(self, event_id, link_id):
