@@ -14,6 +14,12 @@ from open_event.helpers.data_getter import DataGetter
 
 from .helpers.helpers import get_paginated_list, requires_auth, \
     save_db_model, get_object_in_event, model_custom_form
+from .helpers.helpers import (
+    can_create,
+    can_read,
+    can_update,
+    can_delete
+)
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO,\
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
 from .helpers import custom_fields as fields
@@ -187,6 +193,8 @@ TypeDAO = SessionTypeDAO(SessionTypeModel, SESSION_TYPE_POST)
 @api.route('/events/<int:event_id>/sessions/<int:session_id>')
 @api.doc(responses=SERVICE_RESPONSES)
 class Session(Resource):
+    @requires_auth
+    @can_read(DAO)
     @api.doc('get_session')
     @api.marshal_with(SESSION)
     def get(self, event_id, session_id):
@@ -194,6 +202,7 @@ class Session(Resource):
         return DAO.get(event_id, session_id)
 
     @requires_auth
+    @can_delete(DAO)
     @api.doc('delete_session')
     @api.marshal_with(SESSION)
     def delete(self, event_id, session_id):
@@ -201,6 +210,7 @@ class Session(Resource):
         return DAO.delete(event_id, session_id)
 
     @requires_auth
+    @can_update(DAO)
     @api.doc('update_session', responses=PUT_RESPONSES)
     @api.marshal_with(SESSION)
     @api.expect(SESSION_POST)
@@ -211,6 +221,8 @@ class Session(Resource):
 
 @api.route('/events/<int:event_id>/sessions')
 class SessionList(Resource):
+    @requires_auth
+    @can_read(DAO)
     @api.doc('list_sessions')
     @api.marshal_list_with(SESSION)
     def get(self, event_id):
@@ -218,6 +230,7 @@ class SessionList(Resource):
         return DAO.list(event_id)
 
     @requires_auth
+    @can_create(DAO)
     @api.doc('create_session', responses=POST_RESPONSES)
     @api.marshal_with(SESSION)
     @api.expect(SESSION_POST)
@@ -234,6 +247,8 @@ class SessionList(Resource):
 
 @api.route('/events/<int:event_id>/sessions/page')
 class SessionListPaginated(Resource, PaginatedResourceBase):
+    @requires_auth
+    @can_read(DAO)
     @api.doc('list_sessions_paginated', params=PAGE_PARAMS)
     @api.marshal_with(SESSION_PAGINATED)
     def get(self, event_id):
@@ -245,8 +260,12 @@ class SessionListPaginated(Resource, PaginatedResourceBase):
         )
 
 
+# Use Session DAO to check for permission
+
 @api.route('/events/<int:event_id>/sessions/types')
 class SessionTypeList(Resource):
+    @requires_auth
+    @can_read(DAO)
     @api.doc('list_session_types')
     @api.marshal_list_with(SESSION_TYPE)
     def get(self, event_id):
@@ -254,6 +273,7 @@ class SessionTypeList(Resource):
         return TypeDAO.list(event_id)
 
     @requires_auth
+    @can_create(DAO)
     @api.doc('create_session_type', responses=POST_RESPONSES)
     @api.marshal_with(SESSION_TYPE)
     @api.expect(SESSION_TYPE_POST)
@@ -269,6 +289,7 @@ class SessionTypeList(Resource):
 @api.route('/events/<int:event_id>/sessions/types/<int:type_id>')
 class SessionType(Resource):
     @requires_auth
+    @can_delete(DAO)
     @api.doc('delete_session_type')
     @api.marshal_with(SESSION_TYPE)
     def delete(self, event_id, type_id):
@@ -276,6 +297,7 @@ class SessionType(Resource):
         return TypeDAO.delete(event_id, type_id)
 
     @requires_auth
+    @can_update(DAO)
     @api.doc('update_session_type', responses=PUT_RESPONSES)
     @api.marshal_with(SESSION_TYPE)
     @api.expect(SESSION_TYPE_POST)
@@ -283,6 +305,8 @@ class SessionType(Resource):
         """Update a session type given its id"""
         return TypeDAO.update(event_id, type_id, self.api.payload)
 
+    @requires_auth
+    @can_read(DAO)
     @api.hide
     @api.marshal_with(SESSION_TYPE)
     def get(self, event_id, type_id):
