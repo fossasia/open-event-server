@@ -111,16 +111,18 @@
                       class="form-control">{{ event.description | default('', true) }}</textarea>
         </div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <input type="hidden" name="background_url" id="background_url">
                 <div class="item form-group" id="image-upload-group"
                      {% if event and event.background_url and event.background_url != '' %}style="display: none;"{% endif %}>
                     <label>Event Image</label><br>
-                    <input type="file" id="event-image-upload" name="event-image-upload" class="upload-btn no-js"
-                           accept="image/*"/>
-                    <label class="file-label" for="event-image-upload" style="margin-top: 0;">
-                        <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Event Image
-                    </label><br>
+                    <div class="image-box">
+                        <input type="file" id="event-image-upload" name="event-image-upload" class="image-upload-btn no-js"
+                               accept="image/*"/>
+                        <label class="file-label" for="event-image-upload">
+                            <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Event Image
+                        </label><br>
+                    </div>
                     <span class="text-muted" style="color: #a2a2a2;">
                         We recommend using at least a 2160x1080px (2:1 ratio) image<br>that's no larger than 10MB.
                     </span>
@@ -143,18 +145,22 @@
                     <br>
                 </div>
             </div>
-            <div class="col-md-6">
+        </div>
+        <div class="row">
+            <div class="col-md-7">
 
                 <input type="hidden" name="logo" id="logo">
 
                 <div class="item form-group" id="logo-upload-group"
                      {% if event and event.logo and event.logo != '' %}style="display: none;"{% endif %}>
                     <label>Logo</label><br>
-                    <input type="file" id="logo-upload" name="logo-upload" class="upload-btn no-js"
-                           accept="image/*"/>
-                    <label class="file-label" for="logo-upload" style="margin-top: 0;">
-                        <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Logo
-                    </label><br>
+                    <div class="image-box">
+                        <input type="file" id="logo-upload" name="logo-upload" class="image-upload-btn no-js"
+                               accept="image/*"/>
+                        <label class="file-label" for="logo-upload">
+                            <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Logo
+                        </label><br>
+                    </div>
                     <span class="text-muted" style="color: #a2a2a2;">
                         Logo size must be less than 1MB.
                     </span>
