@@ -129,6 +129,7 @@ var $editSessionForm = $("#edit-session-form");
 
 var $mobileTimeline = $("#mobile-timeline");
 var $tracksTimeline = $("#tracks-timeline");
+var $sessionViewHolder = $("#session-view-holder");
 /**
  * TEMPLATE STRINGS
  * ================
@@ -282,6 +283,7 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
         return sessionTemp.id === sessionRefObject.session.id
     });
 
+    addInfoBox(sessionRefObject.$sessionElement, sessionRefObject.session);
     sessionRefObject.$sessionElement.ellipsis().ellipsis();
 }
 
@@ -314,7 +316,8 @@ function addSessionToUnscheduled(sessionRef, isFiltering, shouldBroadcast) {
     sessionRefObject.$sessionElement.data("session", session);
     $unscheduledSessionsHolder.append(sessionRefObject.$sessionElement);
 
-    sessionRefObject.$sessionElement.addClass('unscheduled').removeClass('scheduled').tooltip("hide").attr("data-original-title", "");
+    sessionRefObject.$sessionElement.addClass('unscheduled').removeClass('scheduled');
+    resetTooltip(sessionRefObject.$sessionElement);
     sessionRefObject.$sessionElement.css({
         "-webkit-transform": "",
         "transform": "",
@@ -341,6 +344,11 @@ function addSessionToUnscheduled(sessionRef, isFiltering, shouldBroadcast) {
         }
         unscheduledStore.push(sessionRefObject.session);
     }
+
+    try {
+        sessionRefObject.$sessionElement.popover('destroy');
+    } catch(ignored) { }
+
 }
 
 /**
@@ -449,8 +457,22 @@ function updateSessionTimeOnTooltip($sessionElement) {
     var startTimeString = topTime.add(topInterval, 'm').format("LT");
     var endTimeString = topTime.add(mins, "m").format("LT");
 
-    $sessionElement.attr("data-original-title", startTimeString + " to " + endTimeString);
+    $sessionElement.tooltip('destroy').tooltip({
+        placement : 'top',
+        title : startTimeString + " to " + endTimeString
+    });
     $sessionElement.tooltip("show");
+}
+
+/**
+ * Clear a tooltip on a session element.
+ * @param {jQuery} $sessionElement the target session element
+ */
+function resetTooltip($sessionElement) {
+    $sessionElement.tooltip("hide").tooltip({
+        placement : 'top',
+        title : ""
+    });
 }
 
 /**
@@ -486,6 +508,36 @@ function updateSessionTime($sessionElement, session) {
 
     return session;
 }
+
+/**
+ * Add info Box to the session element
+ * @param {jQuery} $sessionElement The session element to update
+ * @param {object} [session] the session object to work on
+ */
+function addInfoBox($sessionElement, session) {
+    if(isReadOnly()) {
+        $sessionElement.css('cursor', 'pointer');
+    }
+    $sessionElement.popover({
+        trigger: 'manual',
+        placement: 'bottom',
+        html: true,
+        title: session.title
+    });
+    var speakers = _.map(session.speakers, 'name');
+    var content = "";
+    if(speakers.length > 0) {
+        content += "By " + _.join(speakers, ', ') + "<br><br>"
+    }
+    if(!_.isNull(session.track)) {
+        content += "<strong>Track:</strong> " + session.track.name + "<br>";
+    }
+    if(!_.isNull(session.microlocation)) {
+        content += "<strong>Room:</strong> " + session.microlocation.name + "<br>";
+    }
+    $sessionElement.attr("data-content", content);
+}
+
 
 /**
  * Add a new microlocation to the timeline
@@ -568,7 +620,7 @@ function initializeInteractables() {
                 if (isSessionOverTimeline($sessionElement)) {
                     updateSessionTimeOnTooltip($sessionElement);
                 } else {
-                    $sessionElement.tooltip("hide").attr("data-original-title", "");
+                    resetTooltip($sessionElement);
                 }
 
             },
@@ -657,7 +709,8 @@ function initializeInteractables() {
                     "-webkit-transform": "",
                     "transform": "",
                     "background-color": ""
-                }).removeData("x").removeData("y").tooltip("hide").attr("data-original-title", "");
+                }).removeData("x").removeData("y");
+                resetTooltip($sessionElement);
             }
         }
     });
@@ -849,7 +902,12 @@ function initializeTimeline(eventId) {
             }
             $(".rooms-view").addClass('active');
 
-            $('.microlocation-container').css("width", $(".microlocations.x1").width() + "px")
+            $('.microlocation-container').css("width", $(".microlocations.x1").width() + "px");
+
+            $(document).trigger({
+                type: "scheduling:recount",
+                microlocations: _.map(microlocationsStore, 'id')
+            });
         });
     });
 }
@@ -943,22 +1001,41 @@ $(document)
     .on("click", ".session.scheduled > .remove-btn", function () {
         addSessionToUnscheduled($(this).parent());
     })
+    .on("click", ".session.scheduled", function () {
+        try {
+            $('.session.scheduled').not(this).popover('hide');
+            $(this).popover('toggle');
+        } catch (ignored) { }
+    })
     .on("click", ".session.scheduled > .edit-btn", function () {
         var $sessionElement = $(this).parent();
         var session = $sessionElement.data("session");
         location.href = "/events/" + window.mainEvent.id + "/sessions/" + session.id + "/edit/";
     })
     .on("click", ".rooms-view", function(){
+        $dayButtonsHolder.show();
         $timeline.removeClass('hidden');
         $mobileTimeline.removeClass('hidden');
         $tracksTimeline.addClass('hidden');
+        $sessionViewHolder.addClass('hidden');
         $(this).addClass("active").siblings().removeClass("active");
     })
     .on("click", ".tracks-view", function(){
+        $dayButtonsHolder.show();
         $timeline.addClass('hidden');
         $mobileTimeline.addClass('hidden');
         $tracksTimeline.removeClass('hidden');
+        $sessionViewHolder.addClass('hidden');
         $(this).addClass("active").siblings().removeClass("active");
+    })
+    .on("click", ".sessions-view", function() {
+        $dayButtonsHolder.hide();
+        $sessionViewHolder.removeClass('hidden');
+        $timeline.addClass('hidden');
+        $mobileTimeline.addClass('hidden');
+        $tracksTimeline.addClass('hidden');
+        $(this).addClass("active").siblings().removeClass("active");
+
     })
     .on("click", ".clear-overlaps-button", removeOverlaps);
 
@@ -970,6 +1047,14 @@ $(document).ready(function () {
     window.mainEvent.start_time = moment.utc($timeline.data("event-start"));
     window.mainEvent.end_time = moment.utc($timeline.data("event-end"));
     initializeTimeline(window.mainEvent.id);
+});
+
+$(document).on("scheduling:recount", function(e) {
+    var microlocations = _.cloneDeep(e.microlocations);
+    _.each(microlocations, function(microlocation_id){
+        var $microlocationColumn = $microlocationsHolder.find(".microlocation[data-microlocation-id=" + microlocation_id + "]");
+        $microlocationColumn.find(".microlocation-header").find(".badge").text($microlocationColumn.find(".session.scheduled").length)
+    });
 });
 
 $(document).on("scheduling:change", function (e) {
