@@ -98,10 +98,10 @@ class SponsorList(Resource):
         )
 
 
-# TODO: How to handle Sponsor-types permissions
-
 @api.route('/events/<int:event_id>/sponsors/types')
 class SponsorTypesList(Resource):
+    @requires_auth
+    @can_read(DAO)
     @api.doc('list_sponsor_types', model=[fields.String()])
     def get(self, event_id):
         """List all sponsor types"""

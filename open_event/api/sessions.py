@@ -260,10 +260,12 @@ class SessionListPaginated(Resource, PaginatedResourceBase):
         )
 
 
-# TODO: Add service types to Service classes
+# Use Session DAO to check for permission
+
 @api.route('/events/<int:event_id>/sessions/types')
 class SessionTypeList(Resource):
     @requires_auth
+    @can_read(DAO)
     @api.doc('list_session_types')
     @api.marshal_list_with(SESSION_TYPE)
     def get(self, event_id):
@@ -271,6 +273,7 @@ class SessionTypeList(Resource):
         return TypeDAO.list(event_id)
 
     @requires_auth
+    @can_create(DAO)
     @api.doc('create_session_type', responses=POST_RESPONSES)
     @api.marshal_with(SESSION_TYPE)
     @api.expect(SESSION_TYPE_POST)
@@ -286,6 +289,7 @@ class SessionTypeList(Resource):
 @api.route('/events/<int:event_id>/sessions/types/<int:type_id>')
 class SessionType(Resource):
     @requires_auth
+    @can_delete(DAO)
     @api.doc('delete_session_type')
     @api.marshal_with(SESSION_TYPE)
     def delete(self, event_id, type_id):
@@ -293,6 +297,7 @@ class SessionType(Resource):
         return TypeDAO.delete(event_id, type_id)
 
     @requires_auth
+    @can_update(DAO)
     @api.doc('update_session_type', responses=PUT_RESPONSES)
     @api.marshal_with(SESSION_TYPE)
     @api.expect(SESSION_TYPE_POST)
@@ -301,6 +306,7 @@ class SessionType(Resource):
         return TypeDAO.update(event_id, type_id, self.api.payload)
 
     @requires_auth
+    @can_read(DAO)
     @api.hide
     @api.marshal_with(SESSION_TYPE)
     def get(self, event_id, type_id):
