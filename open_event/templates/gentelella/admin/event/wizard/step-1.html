@@ -1,11 +1,11 @@
 {% macro social_entry(social_link=None) %}
     <div class="social-link-holder">
-        <div class=" col-sm-4" style="padding-left: 0;">
+        <div class=" col-sm-3" style="padding-left: 0;">
             <input type="text" class="form-control" name="social[name]" placeholder="Name"
                    value="{{ social_link.name | default('Twitter', true) }}">
         </div>
         <input type="hidden" name="social[id]" value="{{ social_link.id | default('') }}">
-        <div class="col-sm-8 input-group">
+        <div class="col-sm-5 input-group">
             <input data-error="Please enter a valid URL" type="url" class="form-control" name="social[link]" placeholder="Link"
                    value="{{ social_link.link | default('', true) }}">
             <div class="help-block with-errors"></div>
@@ -179,25 +179,26 @@
                    class="form-control" data-error="Please enter a valid URL"/>
             <div class="help-block with-errors"></div>
         </div>
-
         <div class="item form-group">
-            <label>Organizer name</label>
-            <input name="organizer_name" class="form-control"
-                   value="{{ event.organizer_name | default('', true) }}"/>
-        </div>
-        <div class="item form-group">
-            <label>Organizer Description
+            <label><span class="organizer-state">Add</span> Organizer Information
             </label>
-                <textarea
-                        name="organizer_description"
-                        class="form-control">{{ event.organizer_description | default('', true) }}</textarea>
+            <input type="checkbox" class="toggle-switch" name="organizer_state"
+                       value="on" id="organizer-switch"/>
+            <label for="organizer-switch" style="margin-left:0;"></label>
         </div>
-        <div class="item form-group">
-            <label>Ticket URL
-            </label>
-            <input type="url" pattern="https?://.+" name="ticket_url" class="form-control"
-                   value="{{ event.ticket_url | default('', true) }}" data-error="Please enter a valid URL"/>
-            <div class="help-block with-errors"></div>
+        <div id="organizer-holder" style="display:none;">
+            <div class="item form-group">
+                <label>Organizer name</label>
+                <input name="organizer_name" class="form-control"
+                       value="{{ event.organizer_name | default('', true) }}"/>
+            </div>
+            <div class="item form-group">
+                <label>Organizer Description
+                </label>
+                    <textarea
+                            name="organizer_description"
+                            class="form-control">{{ event.organizer_description | default('', true) }}</textarea>
+            </div>
         </div>
         <div class="item form-group">
             <label>Licence <a class="btn btn-info btn-xs licence-help" data-toggle="licence-modal" data-target="#licence_modal">?</a></label>
@@ -259,8 +260,23 @@
 
             </div>
         </div>
-        <h2 style="font-weight: 300; text-transform: uppercase; margin-top: 20px;">Additional Details</h2>
-        <hr style="margin:0;">
+        <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
+            <i class="fa fa-ticket"></i>
+            Ticket Details
+            <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+        </h2>
+        <div class="item form-group">
+            <label>Ticket URL
+            </label>
+            <input type="url" pattern="https?://.+" name="ticket_url" class="form-control"
+                   value="{{ event.ticket_url | default('', true) }}" data-error="Please enter a valid URL"/>
+            <div class="help-block with-errors"></div>
+        </div>
+        <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color: #5bc0de;">
+            <i class="fa fa-plus-circle"></i>
+            Additional Details
+            <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+        </h2>
         <div class="item form-group">
             <label class="control-label">Listing Privacy</label>
             <div class="radio">
@@ -324,20 +340,22 @@
                 </div>
             </div>
         </div>
-
         <div class="item form-group">
-            <label>Code of Conduct
+            <label><span class="coc-state">Add</span> Code of Conduct
             </label>
-            <textarea name="code_of_conduct"
+            <input type="checkbox" class="toggle-switch" name="coc_state"
+                       value="on" id="coc-switch"/>
+            <label for="coc-switch" style="margin-left:0;"></label>
+            <div id="coc-holder" style="display:none;">
+                <textarea name="code_of_conduct"
                       class="form-control">{{ event.code_of_conduct | default('', true) }}</textarea>
+            </div>
         </div>
 
     </div>
     <div class="col-md-1">
-
     </div>
     <div class="col-md-4">
-        
     </div>
     <input type="hidden" name="latitude" id="latitude" value="{{ event.latitude | default(0.00, true) }}"/>
     <input type="hidden" name="longitude" id="longitude" value="{{ event.longitude | default(0.00, true) }}"/>
@@ -621,5 +639,36 @@
         e.unwrap();
     }
 
+    $(function () {
+        var $cocHolder = $("#coc-holder");
+        var $cocState = $(".coc-state");
+
+        var coc_onOffSwitch = document.getElementById('coc-switch');
+
+        coc_onOffSwitch.onchange = function () {
+            if (coc_onOffSwitch.checked) {
+                $cocHolder.fadeIn();
+                $cocState.text("Remove");
+            } else {
+                $cocHolder.fadeOut();
+                $cocState.text("Add");
+            }
+        };
+
+        var $organizerHolder = $("#organizer-holder");
+        var $organizerState = $(".organizer-state");
+
+        var organizer_onOffSwitch = document.getElementById('organizer-switch');
+
+        organizer_onOffSwitch.onchange = function () {
+            if (organizer_onOffSwitch.checked) {
+                $organizerHolder.fadeIn();
+                $organizerState.text("Remove");
+            } else {
+                $organizerHolder.fadeOut();
+                $organizerState.text("Add");
+            }
+        };
+    });
 </script>
 
