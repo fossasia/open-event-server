@@ -492,3 +492,24 @@ def can_delete(DAO):
                 raise PermissionDeniedError()
         return wrapper
     return decorator
+
+
+#######################################
+# Permission Decorators for User APIs #
+#######################################
+
+
+def can_access_account(func):
+    """Check if User can access account information.
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        user = UserModel.query.get(login.current_user.id)
+        user_id = kwargs.get('user_id')
+        # Check if user with user_id exists
+        get_object_or_404(UserModel, user_id)
+        if user.id == user_id:
+            return func(*args, **kwargs)
+        else:
+            raise PermissionDeniedError()
+    return wrapper
