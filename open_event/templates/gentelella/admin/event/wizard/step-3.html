@@ -2,7 +2,7 @@
     <div class="track-holder">
         <div class=" col-xs-5 form-group">
             <input type="text" class="form-control" name="tracks[name]" placeholder="Name" required="required"
-                   value="{{ track.name | default('Track 1') if not empty else '' }}">
+                   value="{{ track.name | default('Default Track') if not empty else '' }}">
         </div>
         <input type="hidden" name="tracks[id]" value="{{ track.id | default('') }}">
 

@@ -1,4 +1,4 @@
-{% set required_list = ['title', 'name', 'email'] %}
+{% set required_list = ['title', 'name', 'email', 'track'] %}
 {% set preselect_list = preselect | default(['short_abstract', 'comments', 'slides', 'photo', 'short_biography', 'website', 'twitter', 'organisation', 'position', 'country', 'track', 'session_type']) %}
 
 {% set session_fields = ['title', 'subtitle', 'short_abstract', 'long_abstract', 'comments', 'track', 'session_type', 'language', 'slides', 'video', 'audio'] %}
@@ -9,11 +9,14 @@
     {% set name = identifier | replace('_id','') %}
     {% set pretty_name = name | replace('_',' ') | capitalize %}
     <tr data-identifier="{{ name }}" data-group="{{ group }}"
-            {% if not tracks and not microlocations and not session_types and event %}
+            {% if not microlocations and not session_types and event %}
         data-toggle="tooltip"
             {% endif %}
-            {% if (identifier == 'track' or identifier == 'session_type') %}
+            {% if (identifier == 'session_type') %}
         data-placement="left" title="You need to enable Tracks in Step 3 to activate this option"
+            {% endif %}
+            {% if identifier == 'track' %}
+            style="display:none;"
             {% endif %}>
         <td>
             {{ pretty_name }}
@@ -22,15 +25,15 @@
         <td>
             <input type="checkbox" class="toggle-switch include-switch" data-group="{{ group }}" id="{{ identifier }}-include"
                    {% if identifier not in required_list %}onclick="includeClick(this)"{% endif %}
-                   {% if (include or identifier in preselect_list or identifier in required_list or identifier in required) and ((identifier != 'track' and identifier != 'session_type') or tracks or microlocations or session_types or not event) %}checked="checked"{% endif %}
-                   {% if (identifier in required_list) or ((identifier == 'track' or identifier == 'session_type') and not tracks and not microlocations and not session_types and event) %}disabled{% endif %}/>
+                   {% if (include or identifier in preselect_list or identifier in required_list or identifier in required) and ((identifier != 'session_type') or microlocations or session_types or not event) %}checked="checked"{% endif %}
+                   {% if (identifier in required_list) or ((identifier == 'session_type') and not microlocations and not session_types and event) %}disabled{% endif %}/>
             <label for="{{ identifier }}-include"> </label>
         </td>
         <td>
             <input type="checkbox" class="toggle-switch require-switch" data-group="{{ group }}" id="{{ identifier }}-require"
                    {% if identifier not in required_list %}onclick="requireClick(this)"{% endif %}
                    {% if (include or identifier in required_list or identifier in required) and ((identifier != 'track' and identifier != 'session_type') or tracks or microlocations or session_types or not event) %}checked="checked"{% endif %}
-                   {% if (identifier in required_list) or ((identifier == 'track' or identifier == 'session_type') and not tracks and not microlocations and not session_types and event) %}disabled{% endif %}/>
+                   {% if (identifier in required_list) or ((identifier == 'session_type') and not microlocations and not session_types and event) %}disabled{% endif %}/>
             <label for="{{ identifier }}-require"> </label>
         </td>
     </tr>

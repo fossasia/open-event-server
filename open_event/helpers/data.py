@@ -855,6 +855,9 @@ class DataManager(object):
 
             track_name = form.getlist('tracks[name]')
             track_color = form.getlist('tracks[color]')
+            if len(track_name) == 0:
+                track_name.append("Default Track")
+                track_color.append("#ffffff")
 
             room_name = form.getlist('rooms[name]')
             room_floor = form.getlist('rooms[floor]')
