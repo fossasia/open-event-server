@@ -260,7 +260,9 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
     $mobileSessionElement.find('.event').text(sessionRefObject.session.title);
     $mobileTimeline.find(".mobile-microlocation[data-microlocation-id=" + sessionRefObject.session.microlocation.id + "] > .mobile-sessions-holder").append($mobileSessionElement);
 
-    $tracksTimeline.find(".mobile-microlocation[data-track-id=" + sessionRefObject.session.track.id + "] > .mobile-sessions-holder").append($mobileSessionElement.clone());
+    if(sessionRefObject.session.hasOwnProperty('track') && !_.isNull(sessionRefObject.session.track)) {
+        $tracksTimeline.find(".mobile-microlocation[data-track-id=" + sessionRefObject.session.track.id + "] > .mobile-sessions-holder").append($mobileSessionElement.clone());
+    }
 
     if (isUndefinedOrNull(shouldBroadcast) || shouldBroadcast) {
         if (!sessionRefObject.newElement) {
@@ -526,23 +528,7 @@ function generateTimeUnits() {
  *
  *
  *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
  */
-
 
 /**
  * Initialize all the interactables necessary (drag-drop and resize)
@@ -605,8 +591,12 @@ function initializeInteractables() {
                     x = (parseFloat(target.getAttribute("data-x")) || 0),
                     y = (parseFloat(target.getAttribute("data-y")) || 0);
 
-                target.style.width = roundOffToMultiple(event.rect.width) + "px";
-                target.style.height = roundOffToMultiple(event.rect.height) + "px";
+                if(roundOffToMultiple(event.rect.height) < time.unit.pixels) {
+                    target.style.height = time.unit.pixels + "px"
+                } else {
+                    target.style.height = roundOffToMultiple(event.rect.height) + "px";
+                }
+
                 $(event.target).ellipsis();
                 updateSessionTimeOnTooltip($(event.target));
             }
@@ -683,7 +673,7 @@ function initializeInteractables() {
  * @param {object} sessions The sessions json object
  * @param {postProcessCallback} callback The post-process callback
  */
-function processMicrolocationSession(microlocations, tracks_, sessions, callback) {
+function processMicrolocationSession(microlocations, sessions, callback) {
 
     _.each(sessions, function (session) {
         if (session.state === 'accepted') {
@@ -713,11 +703,11 @@ function processMicrolocationSession(microlocations, tracks_, sessions, callback
                 days.push(dayString);
             }
 
-            _.each(tracks_, function (track) {
-                if (!_.some(tracks, track)) {
-                    tracks.push(track);
-                }
-            });
+            if(session.hasOwnProperty('track') && !_.isNull(session.track)) {
+                if (!_.some(tracks, session.track)) {
+                   tracks.push(session.track);
+               }
+            }
 
             session.start_time = startTime;
             session.end_time = endTime;
@@ -790,10 +780,12 @@ function loadMicrolocationsToTimeline(day) {
     _.each(microlocationsStore, addMicrolocationToTimeline);
 
     _.each(tracks, function (track) {
-        var $trackElement = $(mobileMicrolocationTemplate);
-        $trackElement.find('.name').text(track.name);
-        $trackElement.attr("data-track-id", track.id);
-        $tracksTimeline.append($trackElement);
+        if(!_.isNull(track)) {
+            var $trackElement = $(mobileMicrolocationTemplate);
+            $trackElement.find('.name').text(track.name);
+            $trackElement.attr("data-track-id", track.id);
+            $tracksTimeline.append($trackElement);
+        }
     });
 
     _.each(sessionsStore[dayIndex], function (session) {
@@ -834,9 +826,7 @@ function loadMicrolocationsToTimeline(day) {
 function loadData(eventId, callback) {
     api.microlocations.get_microlocation_list({event_id: eventId}, function (microlocationsData) {
         api.sessions.get_session_list({event_id: eventId}, function (sessionData) {
-            api.tracks.get_track_list({event_id: eventId}, function (trackData) {
-                processMicrolocationSession(microlocationsData.obj, trackData.obj, sessionData.obj, callback);
-            });
+            processMicrolocationSession(microlocationsData.obj, sessionData.obj, callback);
         });
     });
 }
