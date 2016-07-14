@@ -13,7 +13,7 @@
     "id": 1,
     "latitude": 52.52,
     "location_name": "Berlin",
-    "logo": "http://2016.opentechsummit.net/img/Logo_OpenTecSummit_TXT_grey.png",
+    "logo": "/images/Logo_OpenTecSummit_TXT_grey.png",
     "longitude": 13.405,
     "name": "Open Tech Summit",
     "organizer_description": "Promoting open source ideas and technology throughout the world",
