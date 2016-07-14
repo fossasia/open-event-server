@@ -312,10 +312,10 @@ class DataManager(object):
 
         new_session.speakers.append(speaker)
 
-        existing_speaker_ids = form.getlist("speakers[]")
-        for existing_speaker_id in existing_speaker_ids:
-            existing_speaker = DataGetter.get_speaker(existing_speaker_id)
-            new_session.speakers.append(existing_speaker)
+        # existing_speaker_ids = form.getlist("speakers[]")
+        # for existing_speaker_id in existing_speaker_ids:
+        #     existing_speaker = DataGetter.get_speaker(existing_speaker_id)
+        #     new_session.speakers.append(existing_speaker)
 
         save_to_db(new_session, "Session saved")
 
@@ -366,7 +366,6 @@ class DataManager(object):
                 user = DataGetter.get_user_by_email(email, no_flash=True)
                 if user:
                     Helper.send_notif_invite_papers(user, event.name, link)
-
 
     @staticmethod
     def add_speaker_to_event(request, event_id, user=login.current_user):
