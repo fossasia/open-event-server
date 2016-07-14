@@ -18,10 +18,7 @@
 {% endmacro %}
 
 <div>
-    <div class="col-md-2">
-
-    </div>
-    <div class="col-md-8">
+    <div class="col-md-7 col-md-offset-1">
         <div class="item form-group">
             <label>Name <span class="required">*</span></label>
             <input required="required"
@@ -46,7 +43,7 @@
         <br>
 
         <div class="row event-date-picker">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="item form-group">
                     <label>Starts <span class="required">*</span></label>
                     <br>
@@ -68,7 +65,7 @@
                 </div>
 
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="item form-group">
                     <label>Ends <span class="required">*</span></label>
                     <br>
@@ -91,19 +88,22 @@
                 </div>
 
             </div>
-        </div>
-        <div class="form-group">
-            <label>Timezone <span class="required">*</span></label>
-            <select name="timezone" class="form-control">
-                {% for value, text in timezones %}
-                    {% if event %}
-                        <option value="{{ value }}"
-                                {% if event.timezone == value %}selected{% endif %}>{{ text }}</option>
-                    {% else %}
-                        <option value="{{ value }}" {% if value == 'UTC' %}selected{% endif %}>{{ text }}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Timezone <span class="required">*</span></label>
+                    <select name="timezone" class="form-control">
+                        {% for value, text in timezones %}
+                            {% if event %}
+                                <option value="{{ value }}"
+                                        {% if event.timezone == value %}selected{% endif %}>{{ text }}</option>
+                            {% else %}
+                                <option value="{{ value }}" {% if value == 'UTC' %}selected{% endif %}>{{ text }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+
+            </div>
         </div>
         <div class="item form-group">
             <label>Description</label>
@@ -291,31 +291,38 @@
                 {% endfor %}
             </select>
         </div>
-
-        <div class="item form-group">
-            <label class="control-label">Event Topic
-            </label>
-            <select class="form-control" id="topic" name='topic'>
-                {% if not event or not event.topic %}
-                    <option value="">Choose..</option>
-                {% endif %}
-                {% for topic in event_topics %}
-                    <option value="{{ topic }}" {{ "selected" if event and event.topic == topic else '' }}>{{ topic }}</option>
-                {% endfor %}
-            </select>
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="item form-group">
+                    <label class="control-label">Event Topic
+                    </label>
+                    <select class="form-control" id="topic" name='topic'>
+                        {% if not event or not event.topic %}
+                            <option value="">Choose..</option>
+                        {% endif %}
+                        {% for topic in event_topics %}
+                            <option value="{{ topic }}" {{ "selected" if event and event.topic == topic else '' }}>{{ topic }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
         </div>
 
-        <div class="item form-group">
-            <label class="control-label">Event Sub-Topic
-            </label>
-            <select class="form-control" id="sub_topic" name='sub_topic'>
-                {% if not event or not event.sub_topic %}
-                    <option value="">Choose..</option>
-                {% endif %}
-                {% for sub_topic in event_sub_topics %}
-                    <option value="{{ sub_topic }}" {{ "selected" if event and event.sub_topic == sub_topic else '' }}>{{ sub_topic }}</option>
-                {% endfor %}
-            </select>
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="item form-group">
+                    <label class="control-label">Event Sub-Topic
+                    </label>
+                    <select class="form-control" id="sub_topic" name='sub_topic'>
+                        {% if not event or not event.sub_topic %}
+                            <option value="">Choose..</option>
+                        {% endif %}
+                        {% for sub_topic in event_sub_topics %}
+                            <option value="{{ sub_topic }}" {{ "selected" if event and event.sub_topic == sub_topic else '' }}>{{ sub_topic }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
         </div>
 
         <div class="item form-group">
