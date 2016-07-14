@@ -21,9 +21,15 @@ Event Sponsors
         <tbody>
         {% for sponsor in event.sponsor %}
         <tr>
+            {% if sponsor.logo != "" %}
             <td>
                 <img style="width: 50px; height:50px;" src="{{ sponsor.logo }}" class="user-photo" onerror="imgError(this);">
             </td>
+            {% else %}
+            <td>
+                <img style="width: 50px; height:50px;" src="{{ url_for('static', filename='img/avatar.png') }}" class="user-photo" onerror="imgError(this);">
+            </td>
+            {% endif %}
             <td>
             {% if sponsor.url %}
               <a href="{{ sponsor.url }}" target="_blank">{{ sponsor.name }}</a>
