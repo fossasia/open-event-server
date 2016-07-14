@@ -253,7 +253,7 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
 
 
     updateSessionTimeOnTooltip(sessionRefObject.$sessionElement);
-    updateColor(sessionRefObject.$sessionElement);
+    updateColor(sessionRefObject.$sessionElement, sessionRefObject.session.track);
 
     var $mobileSessionElement = $(mobileSessionTemplate);
     $mobileSessionElement.find('.time').text(sessionRefObject.session.start_time.format('hh:mm A'));
@@ -358,8 +358,24 @@ function updateMicrolocationSessionsCounterBadges(microlocationIds) {
 /**
  * Randomly generate and set a background color for an element
  * @param {jQuery} $element the element to be colored
+ * @param [track]
  */
-function updateColor($element) {
+function updateColor($element, track) {
+    if(!_.isUndefined(track)) {
+        if(_.isNull(track)) {
+            Math.seedrandom('null');
+        } else {
+            Math.seedrandom(track.name+track.id);
+            if(!_.isNull(track.color) && !_.isEmpty(track.color)) {
+                $element.css("background-color", track.color.trim());
+                $element.css("background-color", track.color.trim());
+                return;
+            }
+        }
+    } else {
+        Math.seedrandom();
+    }
+
     $element.css("background-color", palette.random("800"));
     $element.css("background-color", palette.random("800"));
 }
