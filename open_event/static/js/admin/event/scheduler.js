@@ -21,7 +21,7 @@
  *  TIME CONFIGURATION & MANIPULATION
  *  =================================
  *
- *  24px === 15 minutes
+ *  48px === 15 minutes
  *  (Smallest unit of measurement is 15 minutes)
  *
  */
@@ -36,7 +36,7 @@ var time = {
     },
     unit: {
         minutes: 15,
-        pixels: 24,
+        pixels: 48,
         count: 0
     },
     format: "YYYY-MM-DD HH:mm:ss"
