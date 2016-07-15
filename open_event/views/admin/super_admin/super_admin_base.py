@@ -12,5 +12,5 @@ class SuperAdminBaseView(BaseView):
         if not self.is_accessible():
             return redirect(url_for('admin.login_view', next=request.url))
         else:
-            if not login.current_user.is_super_admin:
+            if not login.current_user.is_staff:
                 abort(403)
