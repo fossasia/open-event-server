@@ -75,9 +75,9 @@
 }
 
 .timeline .timeunits.x1 .timeunit {
-    height: 24px;
+    height: 48px;
     font-size: 10px;
-    line-height: 24px;
+    line-height: 48px;
 }
 
 .timeline .timeunits .timeunit {
@@ -137,8 +137,8 @@
 }
 
 .timeline .microlocations.x1 .microlocation-header {
-    height: 23px;
-    line-height: 23px;
+    height: 47px;
+    line-height: 47px;
 }
 
 .timeline .microlocations .microlocation-header {
@@ -184,7 +184,7 @@
     width: 215px;
     display: block;
     font-size: 12px;
-    min-height: 24px;
+    min-height: 48px;
 }
 
 .microlocation-inner.drop-now {

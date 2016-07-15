@@ -12,7 +12,7 @@ from open_event.models.event import Event as EventModel
 from open_event.models import db
 from custom_fields import CustomField
 from .errors import NotFoundError, InvalidServiceError, ValidationError, \
-    NotAuthorizedError
+    NotAuthorizedError, ServerError, PermissionDeniedError
 from open_event.models.user import User as UserModel
 from open_event.helpers.data import save_to_db, update_version, delete_from_db
 
@@ -376,3 +376,140 @@ def model_custom_form(cf_data, model):
         if key in cf and cf[key]['require'] == 1:
             tmp[key].required = True
     return tmp
+
+
+###################################
+# Permission Decorators for Event #
+###################################
+
+
+def staff_only(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        user = UserModel.query.get(login.current_user.id)
+        if user.is_staff:
+            return func(*args, **kwargs)
+        else:
+            raise PermissionDeniedError()
+    return wrapper
+
+
+def can_access(func):
+    """Check if User can Read/Update/Delete an Event.
+    This is done by checking if the User has a Role in an Event.
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        user = UserModel.query.get(login.current_user.id)
+        event_id = kwargs.get('event_id')
+        if not event_id:
+            raise ServerError()
+        # Check if event exists
+        get_object_or_404(EventModel, event_id)
+        if user.has_role(event_id):
+            return func(*args, **kwargs)
+        else:
+            raise PermissionDeniedError()
+    return wrapper
+
+
+######################################
+# Permission Decorators For Services #
+######################################
+
+
+def can_create(DAO):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            user = UserModel.query.get(login.current_user.id)
+            event_id = kwargs.get('event_id')
+            if not event_id:
+                raise ServerError()
+            # Check if event exists
+            get_object_or_404(EventModel, event_id)
+            service_class = DAO.model
+            if user.can_create(service_class, event_id):
+                return func(*args, **kwargs)
+            else:
+                raise PermissionDeniedError()
+        return wrapper
+    return decorator
+
+
+def can_read(DAO):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            user = UserModel.query.get(login.current_user.id)
+            event_id = kwargs.get('event_id')
+            if not event_id:
+                raise ServerError()
+            # Check if event exists
+            get_object_or_404(EventModel, event_id)
+            service_class = DAO.model
+            if user.can_read(service_class, event_id):
+                return func(*args, **kwargs)
+            else:
+                raise PermissionDeniedError()
+        return wrapper
+    return decorator
+
+
+def can_update(DAO):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            user = UserModel.query.get(login.current_user.id)
+            event_id = kwargs.get('event_id')
+            if not event_id:
+                raise ServerError()
+            # Check if event exists
+            get_object_or_404(EventModel, event_id)
+            service_class = DAO.model
+            if user.can_update(service_class, event_id):
+                return func(*args, **kwargs)
+            else:
+                raise PermissionDeniedError()
+        return wrapper
+    return decorator
+
+
+def can_delete(DAO):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            user = UserModel.query.get(login.current_user.id)
+            event_id = kwargs.get('event_id')
+            if not event_id:
+                raise ServerError()
+            # Check if event exists
+            get_object_or_404(EventModel, event_id)
+            service_class = DAO.model
+            if user.can_delete(service_class, event_id):
+                return func(*args, **kwargs)
+            else:
+                raise PermissionDeniedError()
+        return wrapper
+    return decorator
+
+
+#######################################
+# Permission Decorators for User APIs #
+#######################################
+
+
+def can_access_account(func):
+    """Check if User can access account information.
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        user = UserModel.query.get(login.current_user.id)
+        user_id = kwargs.get('user_id')
+        # Check if user with user_id exists
+        get_object_or_404(UserModel, user_id)
+        if user.id == user_id:
+            return func(*args, **kwargs)
+        else:
+            raise PermissionDeniedError()
+    return wrapper

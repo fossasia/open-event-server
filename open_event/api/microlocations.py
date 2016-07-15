@@ -3,6 +3,12 @@ from flask.ext.restplus import Resource, Namespace
 from open_event.models.microlocation import Microlocation as MicrolocationModel
 
 from .helpers.helpers import get_paginated_list, requires_auth
+from .helpers.helpers import (
+    can_create,
+    can_read,
+    can_update,
+    can_delete
+)
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
 from .helpers import custom_fields as fields
@@ -36,6 +42,8 @@ DAO = MicrolocationDAO(MicrolocationModel, MICROLOCATION_POST)
 @api.route('/events/<int:event_id>/microlocations/<int:microlocation_id>')
 @api.doc(responses=SERVICE_RESPONSES)
 class Microlocation(Resource):
+    @requires_auth
+    @can_read(DAO)
     @api.doc('get_microlocation')
     @api.marshal_with(MICROLOCATION)
     def get(self, event_id, microlocation_id):
@@ -43,6 +51,7 @@ class Microlocation(Resource):
         return DAO.get(event_id, microlocation_id)
 
     @requires_auth
+    @can_delete(DAO)
     @api.doc('delete_microlocation')
     @api.marshal_with(MICROLOCATION)
     def delete(self, event_id, microlocation_id):
@@ -50,6 +59,7 @@ class Microlocation(Resource):
         return DAO.delete(event_id, microlocation_id)
 
     @requires_auth
+    @can_update(DAO)
     @api.doc('update_microlocation', responses=PUT_RESPONSES)
     @api.marshal_with(MICROLOCATION)
     @api.expect(MICROLOCATION_POST)
@@ -60,6 +70,8 @@ class Microlocation(Resource):
 
 @api.route('/events/<int:event_id>/microlocations')
 class MicrolocationList(Resource):
+    @requires_auth
+    @can_read(DAO)
     @api.doc('list_microlocations')
     @api.marshal_list_with(MICROLOCATION)
     def get(self, event_id):
@@ -67,6 +79,7 @@ class MicrolocationList(Resource):
         return DAO.list(event_id)
 
     @requires_auth
+    @can_create(DAO)
     @api.doc('create_microlocation', responses=POST_RESPONSES)
     @api.marshal_with(MICROLOCATION)
     @api.expect(MICROLOCATION_POST)
@@ -81,6 +94,8 @@ class MicrolocationList(Resource):
 
 @api.route('/events/<int:event_id>/microlocations/page')
 class MicrolocationListPaginated(Resource, PaginatedResourceBase):
+    @requires_auth
+    @can_read(DAO)
     @api.doc('list_microlocations_paginated', params=PAGE_PARAMS)
     @api.marshal_with(MICROLOCATION_PAGINATED)
     def get(self, event_id):

@@ -3,6 +3,12 @@ from flask.ext.restplus import Resource, Namespace
 from open_event.models.track import Track as TrackModel
 
 from .helpers.helpers import get_paginated_list, requires_auth
+from .helpers.helpers import (
+    can_create,
+    can_read,
+    can_update,
+    can_delete
+)
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
 from .helpers import custom_fields as fields
@@ -43,6 +49,8 @@ DAO = TrackDAO(TrackModel, TRACK_POST)
 @api.route('/events/<int:event_id>/tracks/<int:track_id>')
 @api.doc(responses=SERVICE_RESPONSES)
 class Track(Resource):
+    @requires_auth
+    @can_create(DAO)
     @api.doc('get_track')
     @api.marshal_with(TRACK)
     def get(self, event_id, track_id):
@@ -50,6 +58,7 @@ class Track(Resource):
         return DAO.get(event_id, track_id)
 
     @requires_auth
+    @can_delete(DAO)
     @api.doc('delete_track')
     @api.marshal_with(TRACK)
     def delete(self, event_id, track_id):
@@ -57,6 +66,7 @@ class Track(Resource):
         return DAO.delete(event_id, track_id)
 
     @requires_auth
+    @can_update(DAO)
     @api.doc('update_track', responses=PUT_RESPONSES)
     @api.marshal_with(TRACK)
     @api.expect(TRACK_POST)
@@ -67,6 +77,8 @@ class Track(Resource):
 
 @api.route('/events/<int:event_id>/tracks')
 class TrackList(Resource):
+    @requires_auth
+    @can_read(DAO)
     @api.doc('list_tracks')
     @api.marshal_list_with(TRACK)
     def get(self, event_id):
@@ -74,6 +86,7 @@ class TrackList(Resource):
         return DAO.list(event_id)
 
     @requires_auth
+    @can_create(DAO)
     @api.doc('create_track', responses=POST_RESPONSES)
     @api.marshal_with(TRACK)
     @api.expect(TRACK_POST)
@@ -88,6 +101,8 @@ class TrackList(Resource):
 
 @api.route('/events/<int:event_id>/tracks/page')
 class TrackListPaginated(Resource, PaginatedResourceBase):
+    @requires_auth
+    @can_read(DAO)
     @api.doc('list_tracks_paginated', params=PAGE_PARAMS)
     @api.marshal_with(TRACK_PAGINATED)
     def get(self, event_id):

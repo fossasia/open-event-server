@@ -8,6 +8,7 @@ from tests.auth_helper import register
 from tests.api.utils import get_path, create_event, create_services, \
     Event, Session
 from open_event import current_app as app
+from open_event.helpers.data import update_role_to_admin
 
 
 class TestTrashedItems404(OpenEventTestCase):
@@ -19,6 +20,7 @@ class TestTrashedItems404(OpenEventTestCase):
         self.app = Setup.create_app()
         with app.test_request_context():
             register(self.app, u'Test@example.com', u'test')
+            update_role_to_admin({'admin_perm': 'isAdmin'}, user_id=1)
             event_id = create_event(creator_email='Test@example.com')
             create_services(event_id)
 

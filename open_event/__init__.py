@@ -42,6 +42,7 @@ from open_event.helpers.data_getter import DataGetter
 from open_event.views.api_v1_views import app as api_v1_routes
 from open_event.views.sitemap import app as sitemap_routes
 from open_event.settings import get_settings
+from open_event.api.helpers.errors import NotFoundError
 import requests
 
 
@@ -107,7 +108,8 @@ def create_app():
 @app.errorhandler(404)
 def page_not_found(e):
     if request_wants_json():
-        return json.dumps({"error": "not_found"}), 404
+        error = NotFoundError()
+        return json.dumps(error.to_dict()), getattr(error, 'code', 404)
     return render_template('404.html'), 404
 
 @app.errorhandler(403)
@@ -128,7 +130,7 @@ def request_wants_json():
 @app.context_processor
 def locations():
     names = []
-    for event in DataGetter.get_all_live_events():
+    for event in DataGetter.get_live_and_public_events():
         if not string_empty(event.location_name) and not string_empty(event.latitude) and not string_empty(event.longitude):
             response = requests.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
                 event.longitude)).json()
