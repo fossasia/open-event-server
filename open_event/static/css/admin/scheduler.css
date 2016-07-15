@@ -44,7 +44,7 @@
     top: 120px;
     color: white;
     z-index: 2;
-    border: none;
+    border: 1px solid rgba(0, 0, 0, 0.4);
     padding-right: 10px;
 }
 
