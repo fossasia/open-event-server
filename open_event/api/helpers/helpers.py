@@ -406,7 +406,7 @@ def can_access(func):
             raise ServerError()
         # Check if event exists
         get_object_or_404(EventModel, event_id)
-        if user.has_role(event_id):
+        if user.has_role(event_id) or user.is_staff:
             return func(*args, **kwargs)
         else:
             raise PermissionDeniedError()
@@ -429,7 +429,7 @@ def can_create(DAO):
             # Check if event exists
             get_object_or_404(EventModel, event_id)
             service_class = DAO.model
-            if user.can_create(service_class, event_id):
+            if user.can_create(service_class, event_id) or user.is_staff:
                 return func(*args, **kwargs)
             else:
                 raise PermissionDeniedError()
@@ -448,7 +448,7 @@ def can_read(DAO):
             # Check if event exists
             get_object_or_404(EventModel, event_id)
             service_class = DAO.model
-            if user.can_read(service_class, event_id):
+            if user.can_read(service_class, event_id) or user.is_staff:
                 return func(*args, **kwargs)
             else:
                 raise PermissionDeniedError()
@@ -467,7 +467,7 @@ def can_update(DAO):
             # Check if event exists
             get_object_or_404(EventModel, event_id)
             service_class = DAO.model
-            if user.can_update(service_class, event_id):
+            if user.can_update(service_class, event_id) or user.is_staff:
                 return func(*args, **kwargs)
             else:
                 raise PermissionDeniedError()
@@ -486,7 +486,7 @@ def can_delete(DAO):
             # Check if event exists
             get_object_or_404(EventModel, event_id)
             service_class = DAO.model
-            if user.can_delete(service_class, event_id):
+            if user.can_delete(service_class, event_id) or user.is_staff:
                 return func(*args, **kwargs)
             else:
                 raise PermissionDeniedError()
@@ -508,7 +508,7 @@ def can_access_account(func):
         user_id = kwargs.get('user_id')
         # Check if user with user_id exists
         get_object_or_404(UserModel, user_id)
-        if user.id == user_id:
+        if user.id == user_id or user.is_staff:
             return func(*args, **kwargs)
         else:
             raise PermissionDeniedError()
