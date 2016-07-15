@@ -18,7 +18,7 @@
 {% endmacro %}
 
 <div>
-    <div class="col-md-7 col-md-offset-1">
+    <div class="col-md-7 col-sm-7 col-md-offset-2 step-1">
         <div class="item form-group">
             <label>Name <span class="required">*</span></label>
             <input required="required"
@@ -88,7 +88,7 @@
                 </div>
 
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 col-xs-8">
                 <div class="form-group">
                     <label>Timezone <span class="required">*</span></label>
                     <select name="timezone" class="form-control">
@@ -207,49 +207,6 @@
             </div>
         </div>
         <div class="item form-group">
-            <label>Licence <a class="btn btn-info btn-xs licence-help" data-toggle="licence-modal" data-target="#licence_modal">?</a></label>
-            <select name="copyright_licence" class="form-control">
-                <option value="">Choose Licence</option>
-                {{ event_licences }}
-                {% for licence in event_licences %}
-                    <option value="{{ licence }}" {{ "selected" if event and event.copyright.licence == licence else '' }}>
-                    {{ licence }}
-                    </option>
-                {% endfor %}
-            </select>
-
-            <!-- Licences Modal -->
-            <div id="licence_modal" class="modal fade" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Licences</h4>
-                      </div>
-                      <div class="modal-body">
-                      {% for licence_name, info in event_licences.iteritems() %}
-                         <div class="row">
-                             <div class="col-sm-9">
-                                <h5>{{ licence_name }}</h5>
-                                <p>{{ info.1 }}
-                                    {% if info.2 %}
-                                    <a href="{{ info.2 }}" target="_blank" style="color:#1a75ff;">Read more.</a>
-                                    {% endif %}
-                                </p>
-                             </div>
-                             <div class="col-sm-3">
-                            {% if info.3 %}
-                                <img src="{{ info.3 }}" alt="{{ licence_name }}" class="pull-right">
-                            {% endif %}
-                             </div>
-                         </div>
-                      {% endfor %}
-                      </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="item form-group">
             <label>Social Links</label>
             <div class="row social-links">
                 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -355,6 +312,49 @@
             <div id="coc-holder" style="display:none;">
                 <textarea name="code_of_conduct"
                       class="form-control">{{ event.code_of_conduct | default('', true) }}</textarea>
+            </div>
+        </div>
+        <div class="item form-group">
+            <label>License of Event Data and Content <a class="btn btn-info btn-xs licence-help" data-toggle="licence-modal" data-target="#licence_modal">?</a></label>
+            <select name="copyright_licence" class="form-control">
+                <option value="">Choose Licence</option>
+                {{ event_licences }}
+                {% for licence in event_licences %}
+                    <option value="{{ licence }}" {{ "selected" if event and event.copyright.licence == licence else '' }}>
+                    {{ licence }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <!-- Licences Modal -->
+            <div id="licence_modal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Licences</h4>
+                      </div>
+                      <div class="modal-body">
+                      {% for licence_name, info in event_licences.iteritems() %}
+                         <div class="row">
+                             <div class="col-sm-9">
+                                <h5>{{ licence_name }}</h5>
+                                <p>{{ info.1 }}
+                                    {% if info.2 %}
+                                    <a href="{{ info.2 }}" target="_blank" style="color:#1a75ff;">Read more.</a>
+                                    {% endif %}
+                                </p>
+                             </div>
+                             <div class="col-sm-3">
+                            {% if info.3 %}
+                                <img src="{{ info.3 }}" alt="{{ licence_name }}" class="pull-right">
+                            {% endif %}
+                             </div>
+                         </div>
+                      {% endfor %}
+                      </div>
+                    </div>
+                </div>
             </div>
         </div>
 
