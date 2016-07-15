@@ -10,7 +10,7 @@ from open_event.models.user import ORGANIZER
 from open_event.helpers.data import save_to_db, update_version, record_activity
 
 from .helpers.helpers import get_paginated_list, requires_auth, parse_args, \
-    can_access, staff_only
+    can_access
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, BaseDAO, ServiceDAO
 from .helpers import custom_fields as fields
@@ -251,7 +251,6 @@ class EventWebapp(Resource):
 @api.route('')
 class EventList(Resource, EventResource):
     @requires_auth
-    @staff_only
     @api.doc('list_events', params=EVENT_PARAMS)
     @api.marshal_list_with(EVENT)
     def get(self):
@@ -272,7 +271,6 @@ class EventList(Resource, EventResource):
 @api.route('/page')
 class EventListPaginated(Resource, PaginatedResourceBase, EventResource):
     @requires_auth
-    @staff_only
     @api.doc('list_events_paginated', params=PAGE_PARAMS)
     @api.doc(params=EVENT_PARAMS)
     @api.marshal_with(EVENT_PAGINATED)
