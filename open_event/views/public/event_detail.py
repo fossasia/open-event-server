@@ -60,12 +60,12 @@ class EventDetailView(BaseView):
 
     @expose('/<int:event_id>/schedule/')
     def display_event_schedule(self, event_id):
-        call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
         event = get_published_event_or_abort(event_id)
+        tracks = DataGetter.get_tracks(event_id)
         accepted_sessions = DataGetter.get_sessions(event_id)
-        if not event.schedule_published_on:
+        if not accepted_sessions or not event.schedule_published_on:
             abort(404)
-        return self.render('/gentelella/guest/event/schedule.html', event=event, accepted_sessions=accepted_sessions, call_for_speakers=call_for_speakers)
+        return self.render('/gentelella/guest/event/schedule.html', event=event, accepted_sessions=accepted_sessions, tracks=tracks)
 
     @expose('/<int:event_id>/cfs/', methods=('GET',))
     def display_event_cfs(self, event_id):
