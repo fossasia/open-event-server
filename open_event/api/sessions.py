@@ -12,7 +12,7 @@ from open_event.models.session_type import SessionType as SessionTypeModel
 from open_event.helpers.data import record_activity
 from open_event.helpers.data_getter import DataGetter
 
-from .helpers.helpers import get_paginated_list, requires_auth, \
+from .helpers.helpers import requires_auth, \
     save_db_model, get_object_in_event, model_custom_form
 from .helpers.helpers import (
     can_create,
@@ -253,11 +253,8 @@ class SessionListPaginated(Resource, PaginatedResourceBase):
     @api.marshal_with(SESSION_PAGINATED)
     def get(self, event_id):
         """List sessions in a paginated manner"""
-        return get_paginated_list(
-            SessionModel,
-            args=self.parser.parse_args(),
-            event_id=event_id
-        )
+        args = self.parser.parse_args()
+        return DAO.paginated_list(args=args, event_id=event_id)
 
 
 # Use Session DAO to check for permission
