@@ -80,7 +80,6 @@ class Speaker(Resource):
         """Fetch a speaker given its id"""
         return DAO.get(event_id, speaker_id)
 
-    @requires_auth
     @can_delete(DAO)
     @api.doc('delete_speaker')
     @api.marshal_with(SPEAKER)
@@ -88,7 +87,6 @@ class Speaker(Resource):
         """Delete a speaker given its id"""
         return DAO.delete(event_id, speaker_id)
 
-    @requires_auth
     @can_update(DAO)
     @api.doc('update_speaker', responses=PUT_RESPONSES)
     @api.marshal_with(SPEAKER)
@@ -106,7 +104,6 @@ class SpeakerList(Resource):
         """List all speakers"""
         return DAO.list(event_id)
 
-    @requires_auth
     @can_create(DAO)
     @api.doc('create_speaker', responses=POST_RESPONSES)
     @api.marshal_with(SPEAKER)

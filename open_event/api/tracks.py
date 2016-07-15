@@ -55,7 +55,6 @@ class Track(Resource):
         """Fetch a track given its id"""
         return DAO.get(event_id, track_id)
 
-    @requires_auth
     @can_delete(DAO)
     @api.doc('delete_track')
     @api.marshal_with(TRACK)
@@ -63,7 +62,6 @@ class Track(Resource):
         """Delete a track given its id"""
         return DAO.delete(event_id, track_id)
 
-    @requires_auth
     @can_update(DAO)
     @api.doc('update_track', responses=PUT_RESPONSES)
     @api.marshal_with(TRACK)
@@ -81,7 +79,6 @@ class TrackList(Resource):
         """List all tracks"""
         return DAO.list(event_id)
 
-    @requires_auth
     @can_create(DAO)
     @api.doc('create_track', responses=POST_RESPONSES)
     @api.marshal_with(TRACK)
