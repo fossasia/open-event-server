@@ -42,8 +42,6 @@ DAO = MicrolocationDAO(MicrolocationModel, MICROLOCATION_POST)
 @api.route('/events/<int:event_id>/microlocations/<int:microlocation_id>')
 @api.doc(responses=SERVICE_RESPONSES)
 class Microlocation(Resource):
-    @requires_auth
-    @can_read(DAO)
     @api.doc('get_microlocation')
     @api.marshal_with(MICROLOCATION)
     def get(self, event_id, microlocation_id):
@@ -70,8 +68,6 @@ class Microlocation(Resource):
 
 @api.route('/events/<int:event_id>/microlocations')
 class MicrolocationList(Resource):
-    @requires_auth
-    @can_read(DAO)
     @api.doc('list_microlocations')
     @api.marshal_list_with(MICROLOCATION)
     def get(self, event_id):
@@ -94,8 +90,6 @@ class MicrolocationList(Resource):
 
 @api.route('/events/<int:event_id>/microlocations/page')
 class MicrolocationListPaginated(Resource, PaginatedResourceBase):
-    @requires_auth
-    @can_read(DAO)
     @api.doc('list_microlocations_paginated', params=PAGE_PARAMS)
     @api.marshal_with(MICROLOCATION_PAGINATED)
     def get(self, event_id):

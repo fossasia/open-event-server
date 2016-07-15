@@ -48,8 +48,6 @@ DAO = SponsorDAO(SponsorModel, SPONSOR_POST)
 @api.route('/events/<int:event_id>/sponsors/<int:sponsor_id>')
 @api.doc(responses=SERVICE_RESPONSES)
 class Sponsor(Resource):
-    @requires_auth
-    @can_read(DAO)
     @api.doc('get_sponsor')
     @api.marshal_with(SPONSOR)
     def get(self, event_id, sponsor_id):
@@ -76,8 +74,6 @@ class Sponsor(Resource):
 
 @api.route('/events/<int:event_id>/sponsors')
 class SponsorList(Resource):
-    @requires_auth
-    @can_read(DAO)
     @api.doc('list_sponsors')
     @api.marshal_list_with(SPONSOR)
     def get(self, event_id):
@@ -110,8 +106,6 @@ class SponsorTypesList(Resource):
 
 @api.route('/events/<int:event_id>/sponsors/page')
 class SponsorListPaginated(Resource, PaginatedResourceBase):
-    @requires_auth
-    @can_read(DAO)
     @api.doc('list_sponsors_paginated', params=PAGE_PARAMS)
     @api.marshal_with(SPONSOR_PAGINATED)
     def get(self, event_id):
