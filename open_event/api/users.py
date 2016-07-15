@@ -4,7 +4,7 @@ from open_event.models.user import User as UserModel
 from open_event.models.user_detail import UserDetail as UserDetailModel
 from open_event.helpers.data import DataManager, record_activity
 
-from .helpers.helpers import get_paginated_list, requires_auth, can_access_account, staff_only
+from .helpers.helpers import requires_auth, can_access_account, staff_only
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, BaseDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
 from .helpers import custom_fields as fields
@@ -132,7 +132,5 @@ class UserListPaginated(Resource, PaginatedResourceBase):
     @api.marshal_with(USER_PAGINATED)
     def get(self):
         """List users in a paginated manner"""
-        return get_paginated_list(
-            UserModel,
-            args=self.parser.parse_args()
-        )
+        args = self.parser.parse_args()
+        return DAO.paginated_list(args=args)
