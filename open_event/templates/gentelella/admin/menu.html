@@ -53,7 +53,7 @@
                                 <li class="divider"></li>
                                 <li><a href="/profile"> Profile</a></li>
                                 <li><a href="/settings"> Settings</a></li>
-                                {% if current_user.is_super_admin %}
+                                {% if current_user.is_staff %}
                                     <li><a href="/admin"> Admin</a></li>
                                 {% endif %}
                                 <li class="divider"></li>
