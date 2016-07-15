@@ -184,6 +184,12 @@
   display: none !important;
 }
 
+@media (min-width: 768px) {
+  .step-1 {
+    margin-left: 20.7%;
+  }
+}
+
 @media (max-width: 710px) {
   .search_bar {
     width:auto;
