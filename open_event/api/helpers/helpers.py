@@ -391,7 +391,7 @@ def staff_only(func):
             return func(*args, **kwargs)
         else:
             raise PermissionDeniedError()
-    return wrapper
+    return requires_auth(wrapper)
 
 
 def can_access(func):
@@ -410,7 +410,7 @@ def can_access(func):
             return func(*args, **kwargs)
         else:
             raise PermissionDeniedError()
-    return wrapper
+    return requires_auth(wrapper)
 
 
 ######################################
@@ -433,7 +433,7 @@ def can_create(DAO):
                 return func(*args, **kwargs)
             else:
                 raise PermissionDeniedError()
-        return wrapper
+        return requires_auth(wrapper)
     return decorator
 
 
@@ -452,7 +452,7 @@ def can_read(DAO):
                 return func(*args, **kwargs)
             else:
                 raise PermissionDeniedError()
-        return wrapper
+        return requires_auth(wrapper)
     return decorator
 
 
@@ -471,7 +471,7 @@ def can_update(DAO):
                 return func(*args, **kwargs)
             else:
                 raise PermissionDeniedError()
-        return wrapper
+        return requires_auth(wrapper)
     return decorator
 
 
@@ -490,7 +490,7 @@ def can_delete(DAO):
                 return func(*args, **kwargs)
             else:
                 raise PermissionDeniedError()
-        return wrapper
+        return requires_auth(wrapper)
     return decorator
 
 
@@ -512,4 +512,4 @@ def can_access_account(func):
             return func(*args, **kwargs)
         else:
             raise PermissionDeniedError()
-    return wrapper
+    return requires_auth(wrapper)

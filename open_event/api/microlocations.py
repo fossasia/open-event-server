@@ -48,7 +48,6 @@ class Microlocation(Resource):
         """Fetch a microlocation given its id"""
         return DAO.get(event_id, microlocation_id)
 
-    @requires_auth
     @can_delete(DAO)
     @api.doc('delete_microlocation')
     @api.marshal_with(MICROLOCATION)
@@ -56,7 +55,6 @@ class Microlocation(Resource):
         """Delete a microlocation given its id"""
         return DAO.delete(event_id, microlocation_id)
 
-    @requires_auth
     @can_update(DAO)
     @api.doc('update_microlocation', responses=PUT_RESPONSES)
     @api.marshal_with(MICROLOCATION)
@@ -74,7 +72,6 @@ class MicrolocationList(Resource):
         """List all microlocations"""
         return DAO.list(event_id)
 
-    @requires_auth
     @can_create(DAO)
     @api.doc('create_microlocation', responses=POST_RESPONSES)
     @api.marshal_with(MICROLOCATION)

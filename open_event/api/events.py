@@ -209,7 +209,6 @@ class Event(Resource):
         """Fetch an event given its id"""
         return DAO.get(event_id)
 
-    @requires_auth
     @can_access
     @api.doc('delete_event')
     @api.marshal_with(EVENT)
@@ -219,7 +218,6 @@ class Event(Resource):
         record_activity('delete_event', event_id=event_id)
         return event
 
-    @requires_auth
     @can_access
     @api.doc('update_event', responses=PUT_RESPONSES)
     @api.marshal_with(EVENT)
@@ -286,7 +284,6 @@ class SocialLinkList(Resource):
         """List all social links"""
         return LinkDAO.list(event_id)
 
-    @requires_auth
     @can_access
     @api.doc('create_social_link', responses=POST_RESPONSES)
     @api.marshal_with(SOCIAL_LINK)
@@ -302,7 +299,6 @@ class SocialLinkList(Resource):
 
 @api.route('/<int:event_id>/links/<int:link_id>')
 class SocialLink(Resource):
-    @requires_auth
     @can_access
     @api.doc('delete_social_link')
     @api.marshal_with(SOCIAL_LINK)
@@ -310,7 +306,6 @@ class SocialLink(Resource):
         """Delete a social link given its id"""
         return LinkDAO.delete(event_id, link_id)
 
-    @requires_auth
     @can_access
     @api.doc('update_social_link', responses=PUT_RESPONSES)
     @api.marshal_with(SOCIAL_LINK)
