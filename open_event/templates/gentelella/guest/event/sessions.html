@@ -33,23 +33,23 @@
 {% macro social_link(link, what) %}
     {% if link and link != '' and link != 'None' %}
         {% if what == 'website' %}
-            <a class="social speaker-social" href="{{ link }}">
+            <a class="social speaker-social" href="{{ link }}" target="_blank">
                 <i class="fa fa-home"></i> {{ what | capitalize }}
             </a>
         {% elif what == 'facebook' %}
-            <a class="social speaker-social" href="{{ link }}">
+            <a class="social speaker-social" href="{{ link }}" target="_blank">
                 <i class="fa fa-facebook"></i> {{ what | capitalize }}
             </a>
         {% elif what == 'twitter' %}
-            <a class="social speaker-social" href="{{ link }}">
+            <a class="social speaker-social" href="{{ link }}" target="_blank">
                 <i class="fa fa-twitter"></i> {{ what | capitalize }}
             </a>
         {% elif what == 'github' %}
-            <a class="social speaker-social" href="{{ link }}">
+            <a class="social speaker-social" href="{{ link }}" target="_blank">
                 <i class="fa fa-github"></i> {{ what | capitalize }}
             </a>
         {% elif what == 'linkedin' %}
-            <a class="social speaker-social" href="{{ link }}">
+            <a class="social speaker-social" href="{{ link }}" target="_blank">
                 <i class="fa fa-linkedin"></i> {{ what | capitalize }}
             </a>
         {% endif %}
@@ -116,8 +116,8 @@
                 <div id="session-extra-{{ session.id }}">
                     <p class="collapse">
                         <span class="session-description">
-                            <i>{{ session.short_abstract }}</i><br>
-                            {{ session.long_abstract }}</span>
+                            <i>{{ session.short_abstract | safe }}</i><br>
+                            {{ session.long_abstract | safe }}</span>
                     </p>
                     <div class="session-speakers-list collapse">
 
@@ -128,10 +128,10 @@
                                 </p>
                                 <div class="session-speakers-more">
                                     <p>
-                                        {{ speaker.short_biography if speaker.short_biography and speaker.short_biography != 'None' }}
+                                        {{ speaker.short_biography | safe if speaker.short_biography and speaker.short_biography != 'None' }}
                                     </p>
                                     <p>
-                                        {{ speaker.long_biography if speaker.long_biography and speaker.long_biography != 'None' }}
+                                        {{ speaker.long_biography | safe if speaker.long_biography and speaker.long_biography != 'None' }}
                                     </p>
                                     <p class="session-speaker-social">
                                         {{ social_link(speaker.website, 'website') }}
