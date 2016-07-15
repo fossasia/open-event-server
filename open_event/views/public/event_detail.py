@@ -63,7 +63,7 @@ class EventDetailView(BaseView):
         event = get_published_event_or_abort(event_id)
         tracks = DataGetter.get_tracks(event_id)
         accepted_sessions = DataGetter.get_sessions(event_id)
-        if not accepted_sessions:
+        if not accepted_sessions or not event.schedule_published_on:
             abort(404)
         return self.render('/gentelella/guest/event/schedule.html', event=event, accepted_sessions=accepted_sessions, tracks=tracks)
 
