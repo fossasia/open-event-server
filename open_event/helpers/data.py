@@ -1249,7 +1249,6 @@ class DataManager(object):
             CustomForms, event_id=event.id,
             session_form=session_form, speaker_form=speaker_form)
 
-        delete_from_db(call_for_papers, "CallForPaper Deleted")
 
         if form.get('call_for_speakers_state', u'off') == u'on':
             if call_for_papers:
@@ -1269,6 +1268,10 @@ class DataManager(object):
                                                          form['cfs_end_date'], '%m/%d/%Y'),
                                                      event_id=event.id)
                 save_to_db(call_for_speakers)
+        else:
+            if call_for_papers:
+                delete_from_db(call_for_papers, "Cfs deleted")
+
 
         save_to_db(event, "Event saved")
         record_activity('update_event', event_id=event.id)
