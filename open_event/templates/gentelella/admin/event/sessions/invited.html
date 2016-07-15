@@ -15,8 +15,8 @@ Session Invitation
             	<center>
                     <h3>You have been invited for session: </h3><br>
                     <h4>{{session.title}}</h4>
-                    <p><b>{{session.short_abstract}}</b></p>
-                    <p>{{session.long_abstract}}</p>
+                    <p><b>{{session.short_abstract|striptags}}</b></p>
+                    <p>{{session.long_abstract|striptags}}</p>
                 </center>
             </div>
             <div class="row">

@@ -74,8 +74,6 @@ DAO = SpeakerDAO(SpeakerModel, SPEAKER_POST)
 @api.route('/events/<int:event_id>/speakers/<int:speaker_id>')
 @api.doc(responses=SERVICE_RESPONSES)
 class Speaker(Resource):
-    @requires_auth
-    @can_read(DAO)
     @api.doc('get_speaker')
     @api.marshal_with(SPEAKER)
     def get(self, event_id, speaker_id):
@@ -102,8 +100,6 @@ class Speaker(Resource):
 
 @api.route('/events/<int:event_id>/speakers')
 class SpeakerList(Resource):
-    @requires_auth
-    @can_read(DAO)
     @api.doc('list_speakers')
     @api.marshal_list_with(SPEAKER)
     def get(self, event_id):
@@ -125,8 +121,6 @@ class SpeakerList(Resource):
 
 @api.route('/events/<int:event_id>/speakers/page')
 class SpeakerListPaginated(Resource, PaginatedResourceBase):
-    @requires_auth
-    @can_read(DAO)
     @api.doc('list_speakers_paginated', params=PAGE_PARAMS)
     @api.marshal_with(SPEAKER_PAGINATED)
     def get(self, event_id):

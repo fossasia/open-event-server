@@ -10,7 +10,7 @@ from open_event.models.user import ORGANIZER
 from open_event.helpers.data import save_to_db, update_version, record_activity
 
 from .helpers.helpers import requires_auth, parse_args, \
-    can_access, staff_only
+    can_access
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, BaseDAO, ServiceDAO
 from .helpers import custom_fields as fields
@@ -203,8 +203,6 @@ class EventResource():
 @api.param('event_id')
 @api.response(404, 'Event not found')
 class Event(Resource):
-    @requires_auth
-    @can_access
     @api.doc('get_event')
     @api.marshal_with(EVENT)
     def get(self, event_id):
@@ -237,8 +235,6 @@ class Event(Resource):
 @api.param('event_id')
 @api.response(404, 'Event not found')
 class EventWebapp(Resource):
-    @requires_auth
-    @can_access
     @api.doc('get_event_for_webapp')
     @api.marshal_with(EVENT)
     def get(self, event_id):
@@ -250,8 +246,6 @@ class EventWebapp(Resource):
 
 @api.route('')
 class EventList(Resource, EventResource):
-    @requires_auth
-    @staff_only
     @api.doc('list_events', params=EVENT_PARAMS)
     @api.marshal_list_with(EVENT)
     def get(self):
@@ -271,8 +265,6 @@ class EventList(Resource, EventResource):
 
 @api.route('/page')
 class EventListPaginated(Resource, PaginatedResourceBase, EventResource):
-    @requires_auth
-    @staff_only
     @api.doc('list_events_paginated', params=PAGE_PARAMS)
     @api.doc(params=EVENT_PARAMS)
     @api.marshal_with(EVENT_PAGINATED)
@@ -285,8 +277,6 @@ class EventListPaginated(Resource, PaginatedResourceBase, EventResource):
 @api.route('/<int:event_id>/links')
 @api.param('event_id')
 class SocialLinkList(Resource):
-    @requires_auth
-    @can_access
     @api.doc('list_social_links')
     @api.marshal_list_with(SOCIAL_LINK)
     def get(self, event_id):
@@ -326,8 +316,6 @@ class SocialLink(Resource):
         """Update a social link given its id"""
         return LinkDAO.update(event_id, link_id, self.api.payload)
 
-    @requires_auth
-    @can_access
     @api.hide
     @api.marshal_with(SOCIAL_LINK)
     def get(self, event_id, link_id):

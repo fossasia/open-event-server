@@ -193,8 +193,6 @@ TypeDAO = SessionTypeDAO(SessionTypeModel, SESSION_TYPE_POST)
 @api.route('/events/<int:event_id>/sessions/<int:session_id>')
 @api.doc(responses=SERVICE_RESPONSES)
 class Session(Resource):
-    @requires_auth
-    @can_read(DAO)
     @api.doc('get_session')
     @api.marshal_with(SESSION)
     def get(self, event_id, session_id):
@@ -221,8 +219,6 @@ class Session(Resource):
 
 @api.route('/events/<int:event_id>/sessions')
 class SessionList(Resource):
-    @requires_auth
-    @can_read(DAO)
     @api.doc('list_sessions')
     @api.marshal_list_with(SESSION)
     def get(self, event_id):
@@ -247,8 +243,6 @@ class SessionList(Resource):
 
 @api.route('/events/<int:event_id>/sessions/page')
 class SessionListPaginated(Resource, PaginatedResourceBase):
-    @requires_auth
-    @can_read(DAO)
     @api.doc('list_sessions_paginated', params=PAGE_PARAMS)
     @api.marshal_with(SESSION_PAGINATED)
     def get(self, event_id):
@@ -261,8 +255,6 @@ class SessionListPaginated(Resource, PaginatedResourceBase):
 
 @api.route('/events/<int:event_id>/sessions/types')
 class SessionTypeList(Resource):
-    @requires_auth
-    @can_read(DAO)
     @api.doc('list_session_types')
     @api.marshal_list_with(SESSION_TYPE)
     def get(self, event_id):
@@ -302,8 +294,6 @@ class SessionType(Resource):
         """Update a session type given its id"""
         return TypeDAO.update(event_id, type_id, self.api.payload)
 
-    @requires_auth
-    @can_read(DAO)
     @api.hide
     @api.marshal_with(SESSION_TYPE)
     def get(self, event_id, type_id):
