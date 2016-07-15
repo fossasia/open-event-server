@@ -49,8 +49,6 @@ DAO = TrackDAO(TrackModel, TRACK_POST)
 @api.route('/events/<int:event_id>/tracks/<int:track_id>')
 @api.doc(responses=SERVICE_RESPONSES)
 class Track(Resource):
-    @requires_auth
-    @can_create(DAO)
     @api.doc('get_track')
     @api.marshal_with(TRACK)
     def get(self, event_id, track_id):
@@ -77,8 +75,6 @@ class Track(Resource):
 
 @api.route('/events/<int:event_id>/tracks')
 class TrackList(Resource):
-    @requires_auth
-    @can_read(DAO)
     @api.doc('list_tracks')
     @api.marshal_list_with(TRACK)
     def get(self, event_id):
@@ -101,8 +97,6 @@ class TrackList(Resource):
 
 @api.route('/events/<int:event_id>/tracks/page')
 class TrackListPaginated(Resource, PaginatedResourceBase):
-    @requires_auth
-    @can_read(DAO)
     @api.doc('list_tracks_paginated', params=PAGE_PARAMS)
     @api.marshal_with(TRACK_PAGINATED)
     def get(self, event_id):
