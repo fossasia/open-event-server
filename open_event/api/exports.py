@@ -4,13 +4,15 @@ from flask.ext.restplus import Resource, Namespace
 
 from open_event.helpers.data import record_activity
 from helpers.export_helpers import export_event_json
-from helpers.helpers import nocache
+from helpers.helpers import nocache, can_access, requires_auth
 from helpers.utils import TASK_RESULTS
 
 
 api = Namespace('exports', description='Exports', path='/')
 
 
+@requires_auth
+@can_access
 @nocache
 @api.route('/events/<int:event_id>/export/json')
 @api.hide

@@ -1329,13 +1329,14 @@ class DataManager(object):
         flash("File removed")
 
     @staticmethod
-    def add_role_to_event(form, event_id):
+    def add_role_to_event(form, event_id, record=True):
         user = User.query.filter_by(email=form['user_email']).first()
         role = Role.query.filter_by(name=form['user_role']).first()
         uer = UsersEventsRoles(event=Event.query.get(event_id),
                                user=user, role=role)
-        save_to_db(uer, "Event saved")
-        record_activity('create_role', role=role, user=user, event_id=event_id)
+        save_to_db(uer, "UserEventRole saved")
+        if record:
+            record_activity('create_role', role=role, user=user, event_id=event_id)
 
     @staticmethod
     def update_user_event_role(form, uer):

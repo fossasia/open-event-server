@@ -5,7 +5,7 @@ from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
 from tests.api.utils import create_event, get_path
 from tests.api.utils_post_data import *
-from tests.auth_helper import register
+from tests.auth_helper import register, login, logout
 from open_event import current_app as app
 
 from open_event.api.events import EVENT_POST, SOCIAL_LINK_POST
@@ -24,14 +24,16 @@ class TestPostApiBase(OpenEventTestCase):
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
-            create_event()
+            register(self.app, u'test@example.com', u'test')
+            logout(self.app)
+            create_event(creator_email=u'test@example.com')
 
     def _login_user(self):
         """
         Registers an email and logs in.
         """
         with app.test_request_context():
-            register(self.app, u'test@example.com', u'test')
+            login(self.app, u'test@example.com', u'test')
 
     def post_request(self, path, data):
         """
