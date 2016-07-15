@@ -83,10 +83,10 @@ footer .dropdown-menu {
         height: auto;
         text-align: center;
     }
-    .hide-large {
+    #footer-menu .hide-large {
         display: inline !important;
     }
-    .dropup {
+    #footer-menu .dropup {
         min-width:180px;
         margin-top: 25px;
     }
