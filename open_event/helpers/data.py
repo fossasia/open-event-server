@@ -1354,7 +1354,7 @@ class DataManager(object):
     def create_page(form):
 
         page = Page(name=form.get('name', ''), title=form.get('title', ''), description=form.get('description', ''),
-                    url=form.get('url', ''), place=form.get('place', ''))
+                    url=form.get('url', ''), place=form.get('place', ''), index=form.get('index', 0))
         save_to_db(page, "Page created")
 
     def update_page(self, page, form):
@@ -1363,6 +1363,7 @@ class DataManager(object):
         page.description = form.get('description', '')
         page.url = form.get('url', '')
         page.place = form.get('place', '')
+        page.index = form.get('index', '')
         save_to_db(page, "Page updated")
 
 def save_to_db(item, msg="Saved to db", print_error=True):
