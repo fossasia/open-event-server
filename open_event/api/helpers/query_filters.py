@@ -1,4 +1,6 @@
-from sqlalchemy import or_, func
+import requests
+
+from sqlalchemy import or_, func, and_
 
 from open_event.helpers.helpers import get_date_range
 from open_event.models.event import Event
@@ -63,10 +65,26 @@ def event_search_location(value, query):
     """
     locations = list(value.split(','))
     queries = []
-    print locations
+    print locations, queries
+
     for i in locations:
-        queries.append(func.lower(Event.searchable_location_name).contains(i.lower()))
+        response = requests.get(
+            "https://maps.googleapis.com/maps/api/geocode/json?address=" + str(i)).json()
+        lng = float(response["results"][0]["geometry"]["location"]["lng"])
+        lat = float(response["results"][0]["geometry"]["location"]["lat"])
+        queries.append(get_query_close_area(lng, lat))
     return query.filter(or_(*queries))
+
+
+def get_query_close_area(lng, lat):
+    up_lng, up_lat = lng, lat + 0.249788
+    bottom_lng, bottom_lat = lng, lat - 0.249788
+    left_lng, left_lat = lng - 0.249788, lat
+    right_lng, right_lat = lng + 0.249788, lat
+    return and_(Event.latitude <= up_lat,
+           Event.latitude >= bottom_lat,
+           Event.longitude >= left_lng,
+           Event.longitude <= right_lng)
 
 
 def event_start_time_gt(value, query):
