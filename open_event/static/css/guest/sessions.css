@@ -50,6 +50,6 @@
     z-index: 9999999999;
 }
 
-.sessions-list .popover {
-    max-width: 330px;
+.audio-btn + .popover {
+    max-width: 330px !important;
 }
