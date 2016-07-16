@@ -70,9 +70,10 @@ def event_search_location(value, query):
     for i in locations:
         response = requests.get(
             "https://maps.googleapis.com/maps/api/geocode/json?address=" + str(i)).json()
-        lng = float(response["results"][0]["geometry"]["location"]["lng"])
-        lat = float(response["results"][0]["geometry"]["location"]["lat"])
-        queries.append(get_query_close_area(lng, lat))
+        if response["results"]:
+            lng = float(response["results"][0]["geometry"]["location"]["lng"])
+            lat = float(response["results"][0]["geometry"]["location"]["lat"])
+            queries.append(get_query_close_area(lng, lat))
     return query.filter(or_(*queries))
 
 
