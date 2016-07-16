@@ -31,14 +31,19 @@ class ProfileView(BaseView):
     @expose('/edit/', methods=('GET', 'POST'))
     @expose('/edit/<user_id>', methods=('GET', 'POST'))
     def edit_view(self, user_id=None):
+        admin = None
         if not user_id:
             user_id = login.current_user.id
+        else:
+            admin = True
         if request.method == 'POST':
             url = ""
             if 'avatar' in request.files and request.files['avatar'].filename != "":
                 avatar_img = request.files['avatar']
                 url = upload(avatar_img, 'users/%d/avatar' % int(user_id))
             profile = DataManager.update_user(request.form, int(user_id), url)
+            if admin:
+                return redirect(url_for('sadmin_users.details_view', user_id=user_id))
             return redirect(url_for('.index_view'))
         profile = DataGetter.get_user(int(user_id))
         return self.render('/gentelella/admin/profile/edit.html', profile=profile)
