@@ -2,7 +2,7 @@ from flask.ext.restplus import Resource, Namespace
 
 from open_event.models.track import Track as TrackModel
 
-from .helpers.helpers import get_paginated_list, requires_auth
+from .helpers.helpers import requires_auth
 from .helpers.helpers import (
     can_create,
     can_read,
@@ -101,8 +101,5 @@ class TrackListPaginated(Resource, PaginatedResourceBase):
     @api.marshal_with(TRACK_PAGINATED)
     def get(self, event_id):
         """List tracks in a paginated manner"""
-        return get_paginated_list(
-            TrackModel,
-            args=self.parser.parse_args(),
-            event_id=event_id
-        )
+        args = self.parser.parse_args()
+        return DAO.paginated_list(args=args, event_id=event_id)

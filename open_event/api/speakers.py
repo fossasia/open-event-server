@@ -2,8 +2,7 @@ from flask.ext.restplus import Resource, Namespace
 
 from open_event.models.speaker import Speaker as SpeakerModel
 
-from .helpers.helpers import get_paginated_list, requires_auth, \
-    model_custom_form
+from .helpers.helpers import requires_auth, model_custom_form
 from .helpers.helpers import (
     can_create,
     can_read,
@@ -126,8 +125,5 @@ class SpeakerListPaginated(Resource, PaginatedResourceBase):
     @api.marshal_with(SPEAKER_PAGINATED)
     def get(self, event_id):
         """List speakers in a paginated manner"""
-        return get_paginated_list(
-            SpeakerModel,
-            args=self.parser.parse_args(),
-            event_id=event_id
-        )
+        args = self.parser.parse_args()
+        return DAO.paginated_list(args=args, event_id=event_id)
