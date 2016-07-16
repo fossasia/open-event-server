@@ -33,14 +33,27 @@
             <input value="{{ event.location_name | default('', true) }}" name="location_name" id="location_name"
                    placeholder="Location is required to make event live"
                    class="form-control col-md-7 col-xs-12"/>
+            <div class="checkbox">
+                <label style="padding-left:0; margin-top: 5px;">
+                  <input type="checkbox" class="flat" checked="checked"> Show map on event page
+                </label>
+            </div>
         </div>
-
-        <div class="item form-group hidden-xs">
-            <label>Geolocation</label>
+        <div class="item form-group">
+            <label><span class="map-state">Use</span> Geolocation
+            </label>
+            <input type="checkbox" class="toggle-switch" name="map_state"
+                       value="on" id="map-switch"/>
+            <label for="map-switch" style="margin-left:0;"></label>
         </div>
-        <div id="map" class="hidden-xs" style="width:100%; height:300px"></div>
-        <br>
-        <br>
+        <div id="map-holder" style="display:none;">
+            <div class="item form-group hidden-xs">
+                <label>Geolocation</label>
+            </div>
+            <div id="map" class="hidden-xs" style="width:100%; height:300px"></div>
+            <br>
+            <br>
+        </div>
 
         <div class="row event-date-picker">
             <div class="col-md-4">
@@ -651,6 +664,19 @@
             } else {
                 $organizerHolder.fadeOut();
                 $organizerState.text("Add");
+            }
+        };
+
+        var $mapHolder = $("#map-holder");
+        var $mapState = $(".map-state");
+
+        var map_onOffSwitch = document.getElementById('map-switch');
+
+        map_onOffSwitch.onchange = function () {
+            if (map_onOffSwitch.checked) {
+                $mapHolder.fadeIn();
+            } else {
+                $mapHolder.fadeOut();
             }
         };
     });
