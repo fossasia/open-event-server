@@ -9,8 +9,8 @@ from custom_fields import DateTime
 
 def extract_special_queries(queries):
     """
-    Separate special queries from normal queries
-    """
+   Separate special queries from normal queries
+   """
     specials = {}
     dc = queries.copy()
     for i in queries:
@@ -22,9 +22,9 @@ def extract_special_queries(queries):
 
 def apply_special_queries(query, specials):
     """
-    Apply all special queries on the current
-    existing :query (set)
-    """
+   Apply all special queries on the current
+   existing :query (set)
+   """
     for i in specials:
         query = FILTERS_LIST[i](specials[i], query)
     return query
@@ -46,10 +46,10 @@ def event_contains(value, query):
 
 def event_location(value, query):
     """
-    Return all queries which contain either A or B or C
-    when location is A,B,C
-    TODO: Proper ordering of results a/c proximity
-    """
+   Return all queries which contain either A or B or C
+   when location is A,B,C
+   TODO: Proper ordering of results a/c proximity
+   """
     locations = list(value.split(','))
     queries = []
     for i in locations:
@@ -59,10 +59,10 @@ def event_location(value, query):
 
 def event_search_location(value, query):
     """
-    Return all queries which contain either A or B or C
-    when location is A,B,C
-    TODO: Proper ordering of results a/c proximity
-    """
+   Return all queries which contain either A or B or C
+   when location is A,B,C
+   TODO: Proper ordering of results a/c proximity
+   """
     locations = list(value.split(','))
     queries = []
 
@@ -73,7 +73,7 @@ def event_search_location(value, query):
             lng = float(response["results"][0]["geometry"]["location"]["lng"])
             lat = float(response["results"][0]["geometry"]["location"]["lat"])
             queries.append(get_query_close_area(lng, lat))
-            queries.append(func.lower(Event.searchable_location_name).contains(i.lower()))
+        queries.append(func.lower(Event.searchable_location_name).contains(i.lower()))
     return query.filter(or_(*queries))
 
 
@@ -82,10 +82,13 @@ def get_query_close_area(lng, lat):
     bottom_lng, bottom_lat = lng, lat - 0.249788
     left_lng, left_lat = lng - 0.249788, lat
     right_lng, right_lat = lng + 0.249788, lat
-    return and_(Event.latitude <= up_lat,
-           Event.latitude >= bottom_lat,
-           Event.longitude >= left_lng,
-           Event.longitude <= right_lng)
+    if Event.latitude and Event.longitude:
+        return and_(Event.latitude <= up_lat,
+                    Event.latitude >= bottom_lat,
+                    Event.longitude >= left_lng,
+                    Event.longitude <= right_lng)
+    else:
+        return None
 
 
 def event_start_time_gt(value, query):
@@ -103,6 +106,7 @@ def event_end_time_gt(value, query):
 def event_end_time_lt(value, query):
     return query.filter(Event.end_time <= DateTime().from_str(value))
 
+
 def event_time_period(value, query):
     start, end = get_date_range(value)
     if start:
@@ -110,6 +114,7 @@ def event_time_period(value, query):
     if end:
         query = event_end_time_lt(end, query)
     return query
+
 
 #######
 # ADD CUSTOM FILTERS TO LIST
