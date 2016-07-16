@@ -5,6 +5,8 @@
     {{ super() }}
     <link rel="stylesheet"
           href="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/bootstrap/green.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/jt.timepicker/jquery.timepicker.css') }}">
     <link rel="stylesheet"
           href="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}">
@@ -175,4 +177,5 @@
     <script src="{{ url_for('static', filename='admin/lib/Croppie/croppie.min.js') }}"></script>
 
     <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/event_wizard.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap/icheck.js') }}"></script>
 {% endblock %}
