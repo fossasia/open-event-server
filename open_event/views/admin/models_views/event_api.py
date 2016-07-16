@@ -1,3 +1,5 @@
+import json
+
 import flask_login
 from flask import flash
 from open_event.api import api
@@ -12,7 +14,7 @@ class EventApiView(BaseView):
     @flask_login.login_required
     def display_api_view(self, event_id):
         event = DataGetter.get_event(event_id)
-        data = api.__schema__
+        data = json.loads(json.dumps(api.__schema__))  # Yep. What you're seeing was intentional.
         events_data = {}
         paths = []
         ctr = 0
