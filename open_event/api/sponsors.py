@@ -54,7 +54,6 @@ class Sponsor(Resource):
         """Fetch a sponsor given its id"""
         return DAO.get(event_id, sponsor_id)
 
-    @requires_auth
     @can_delete(DAO)
     @api.doc('delete_sponsor')
     @api.marshal_with(SPONSOR)
@@ -62,7 +61,6 @@ class Sponsor(Resource):
         """Delete a sponsor given its id"""
         return DAO.delete(event_id, sponsor_id)
 
-    @requires_auth
     @can_update(DAO)
     @api.doc('update_sponsor', responses=PUT_RESPONSES)
     @api.marshal_with(SPONSOR)
@@ -80,7 +78,6 @@ class SponsorList(Resource):
         """List all sponsors"""
         return DAO.list(event_id)
 
-    @requires_auth
     @can_create(DAO)
     @api.doc('create_sponsor', responses=POST_RESPONSES)
     @api.marshal_with(SPONSOR)
