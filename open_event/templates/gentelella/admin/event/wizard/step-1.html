@@ -316,6 +316,15 @@
         </div>
         <div class="item form-group">
             <label>License of Event Data and Content <a class="btn btn-info btn-xs licence-help" data-toggle="licence-modal" data-target="#licence_modal">?</a></label>
+            <div id="licence-list" style="display: none;">
+                <ul style="background-color: #f2f2f2; padding-left: 28px; padding-bottom: 5px; padding-top: 5px; border-radius: 1px;">
+                {% for licence_name, info in event_licences.iteritems() %}
+                    <li>
+                        <a href="{{ info.2 }}" target="_blank">{{ licence_name }}</a>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
             <select name="copyright_licence" class="form-control">
                 <option value="">Choose Licence</option>
                 {{ event_licences }}
@@ -325,37 +334,6 @@
                     </option>
                 {% endfor %}
             </select>
-
-            <!-- Licences Modal -->
-            <div id="licence_modal" class="modal fade" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Licences</h4>
-                      </div>
-                      <div class="modal-body">
-                      {% for licence_name, info in event_licences.iteritems() %}
-                         <div class="row">
-                             <div class="col-sm-9">
-                                <h5>{{ licence_name }}</h5>
-                                <p>{{ info.1 }}
-                                    {% if info.2 %}
-                                    <a href="{{ info.2 }}" target="_blank" style="color:#1a75ff;">Read more.</a>
-                                    {% endif %}
-                                </p>
-                             </div>
-                             <div class="col-sm-3">
-                            {% if info.3 %}
-                                <img src="{{ info.3 }}" alt="{{ licence_name }}" class="pull-right">
-                            {% endif %}
-                             </div>
-                         </div>
-                      {% endfor %}
-                      </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
     </div>
@@ -513,7 +491,7 @@
         });
 
         $(".licence-help").click(function () {
-            $("#licence_modal").modal('show');
+            $("#licence-list").slideToggle();
         });
 
         var sub_topics = {{event_sub_topics|safe}};
