@@ -2,7 +2,7 @@ from flask.ext.restplus import Resource, Namespace
 
 from open_event.models.sponsor import Sponsor as SponsorModel
 
-from .helpers.helpers import get_paginated_list, requires_auth
+from .helpers.helpers import requires_auth
 from .helpers.helpers import (
     can_create,
     can_read,
@@ -54,7 +54,6 @@ class Sponsor(Resource):
         """Fetch a sponsor given its id"""
         return DAO.get(event_id, sponsor_id)
 
-    @requires_auth
     @can_delete(DAO)
     @api.doc('delete_sponsor')
     @api.marshal_with(SPONSOR)
@@ -62,7 +61,6 @@ class Sponsor(Resource):
         """Delete a sponsor given its id"""
         return DAO.delete(event_id, sponsor_id)
 
-    @requires_auth
     @can_update(DAO)
     @api.doc('update_sponsor', responses=PUT_RESPONSES)
     @api.marshal_with(SPONSOR)
@@ -80,7 +78,6 @@ class SponsorList(Resource):
         """List all sponsors"""
         return DAO.list(event_id)
 
-    @requires_auth
     @can_create(DAO)
     @api.doc('create_sponsor', responses=POST_RESPONSES)
     @api.marshal_with(SPONSOR)
@@ -110,8 +107,5 @@ class SponsorListPaginated(Resource, PaginatedResourceBase):
     @api.marshal_with(SPONSOR_PAGINATED)
     def get(self, event_id):
         """List sponsors in a paginated manner"""
-        return get_paginated_list(
-            SponsorModel,
-            args=self.parser.parse_args(),
-            event_id=event_id
-        )
+        args = self.parser.parse_args()
+        return DAO.paginated_list(args=args, event_id=event_id)

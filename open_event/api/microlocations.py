@@ -2,7 +2,7 @@ from flask.ext.restplus import Resource, Namespace
 
 from open_event.models.microlocation import Microlocation as MicrolocationModel
 
-from .helpers.helpers import get_paginated_list, requires_auth
+from .helpers.helpers import requires_auth
 from .helpers.helpers import (
     can_create,
     can_read,
@@ -48,7 +48,6 @@ class Microlocation(Resource):
         """Fetch a microlocation given its id"""
         return DAO.get(event_id, microlocation_id)
 
-    @requires_auth
     @can_delete(DAO)
     @api.doc('delete_microlocation')
     @api.marshal_with(MICROLOCATION)
@@ -56,7 +55,6 @@ class Microlocation(Resource):
         """Delete a microlocation given its id"""
         return DAO.delete(event_id, microlocation_id)
 
-    @requires_auth
     @can_update(DAO)
     @api.doc('update_microlocation', responses=PUT_RESPONSES)
     @api.marshal_with(MICROLOCATION)
@@ -74,7 +72,6 @@ class MicrolocationList(Resource):
         """List all microlocations"""
         return DAO.list(event_id)
 
-    @requires_auth
     @can_create(DAO)
     @api.doc('create_microlocation', responses=POST_RESPONSES)
     @api.marshal_with(MICROLOCATION)
@@ -94,8 +91,5 @@ class MicrolocationListPaginated(Resource, PaginatedResourceBase):
     @api.marshal_with(MICROLOCATION_PAGINATED)
     def get(self, event_id):
         """List microlocations in a paginated manner"""
-        return get_paginated_list(
-            MicrolocationModel,
-            args=self.parser.parse_args(),
-            event_id=event_id
-        )
+        args = self.parser.parse_args()
+        return DAO.paginated_list(args=args, event_id=event_id)

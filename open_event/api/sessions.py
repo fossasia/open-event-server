@@ -12,7 +12,7 @@ from open_event.models.session_type import SessionType as SessionTypeModel
 from open_event.helpers.data import record_activity
 from open_event.helpers.data_getter import DataGetter
 
-from .helpers.helpers import get_paginated_list, requires_auth, \
+from .helpers.helpers import requires_auth, \
     save_db_model, get_object_in_event, model_custom_form
 from .helpers.helpers import (
     can_create,
@@ -199,7 +199,6 @@ class Session(Resource):
         """Fetch a session given its id"""
         return DAO.get(event_id, session_id)
 
-    @requires_auth
     @can_delete(DAO)
     @api.doc('delete_session')
     @api.marshal_with(SESSION)
@@ -207,7 +206,6 @@ class Session(Resource):
         """Delete a session given its id"""
         return DAO.delete(event_id, session_id)
 
-    @requires_auth
     @can_update(DAO)
     @api.doc('update_session', responses=PUT_RESPONSES)
     @api.marshal_with(SESSION)
@@ -225,7 +223,6 @@ class SessionList(Resource):
         """List all sessions"""
         return DAO.list(event_id)
 
-    @requires_auth
     @can_create(DAO)
     @api.doc('create_session', responses=POST_RESPONSES)
     @api.marshal_with(SESSION)
@@ -247,11 +244,8 @@ class SessionListPaginated(Resource, PaginatedResourceBase):
     @api.marshal_with(SESSION_PAGINATED)
     def get(self, event_id):
         """List sessions in a paginated manner"""
-        return get_paginated_list(
-            SessionModel,
-            args=self.parser.parse_args(),
-            event_id=event_id
-        )
+        args = self.parser.parse_args()
+        return DAO.paginated_list(args=args, event_id=event_id)
 
 
 # Use Session DAO to check for permission
@@ -264,7 +258,6 @@ class SessionTypeList(Resource):
         """List all session types"""
         return TypeDAO.list(event_id)
 
-    @requires_auth
     @can_create(DAO)
     @api.doc('create_session_type', responses=POST_RESPONSES)
     @api.marshal_with(SESSION_TYPE)
@@ -280,7 +273,6 @@ class SessionTypeList(Resource):
 
 @api.route('/events/<int:event_id>/sessions/types/<int:type_id>')
 class SessionType(Resource):
-    @requires_auth
     @can_delete(DAO)
     @api.doc('delete_session_type')
     @api.marshal_with(SESSION_TYPE)
@@ -288,7 +280,6 @@ class SessionType(Resource):
         """Delete a session type given its id"""
         return TypeDAO.delete(event_id, type_id)
 
-    @requires_auth
     @can_update(DAO)
     @api.doc('update_session_type', responses=PUT_RESPONSES)
     @api.marshal_with(SESSION_TYPE)

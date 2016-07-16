@@ -4,7 +4,7 @@ from open_event.models.user import User as UserModel
 from open_event.models.user_detail import UserDetail as UserDetailModel
 from open_event.helpers.data import DataManager, record_activity
 
-from .helpers.helpers import get_paginated_list, requires_auth, can_access_account, staff_only
+from .helpers.helpers import requires_auth, can_access_account, staff_only
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, BaseDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
 from .helpers import custom_fields as fields
@@ -78,7 +78,6 @@ DetailDAO = UserDetailDAO(UserDetailModel, USER_DETAIL)
 @api.route('/users/<int:user_id>')
 @api.response(404, 'User not found')
 class User(Resource):
-    @requires_auth
     @can_access_account
     @api.doc('get_user')
     @api.marshal_with(USER)
@@ -86,7 +85,6 @@ class User(Resource):
         """Fetch a user given its id"""
         return DAO.get(user_id)
 
-    @requires_auth
     @can_access_account
     @api.doc('delete_user')
     @api.marshal_with(USER)
@@ -94,7 +92,6 @@ class User(Resource):
         """Delete a user given its id"""
         return DAO.delete(user_id)
 
-    @requires_auth
     @can_access_account
     @api.doc('update_user', responses=PUT_RESPONSES)
     @api.marshal_with(USER)
@@ -132,7 +129,5 @@ class UserListPaginated(Resource, PaginatedResourceBase):
     @api.marshal_with(USER_PAGINATED)
     def get(self):
         """List users in a paginated manner"""
-        return get_paginated_list(
-            UserModel,
-            args=self.parser.parse_args()
-        )
+        args = self.parser.parse_args()
+        return DAO.paginated_list(args=args)
