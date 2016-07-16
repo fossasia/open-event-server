@@ -30,19 +30,19 @@
     {% if link and link != '' and link != 'None' %}
         {% if what == 'video' %}
             <a href="{{ link }}" class="btn btn-default" data-toggle="tooltip" data-placement="right"
-               title="{{ what | capitalize }}"><i
+               title="{{ what | capitalize }}" target="_blank"><i
                     class="fa fa-youtube-play fa-fw"></i></a>
         {% elif what == 'audio' %}
-            <a href="{{ link }}" class="btn btn-default" data-toggle="tooltip" data-placement="right"
-               title="{{ what | capitalize }}"><i
+            <a href="{{ link }}" class="btn btn-default audio-btn" data-toggle="tooltip" data-placement="right"
+               title="{{ what | capitalize }}" data-content="<audio controls preload='none'><source src='{{link}}' type='audio/mpeg'></audio>" target="_blank"><i
                     class="fa fa-volume-up fa-fw"></i></a>
         {% elif what == 'slides' %}
             <a href="{{ link }}" class="btn btn-default" data-toggle="tooltip" data-placement="right"
-               title="{{ what | capitalize }}"><i
+               title="{{ what | capitalize }}" target="_blank"><i
                     class="fa fa-slideshare fa-fw"></i></a>
         {% elif what == 'sign up' %}
             <a href="{{ link }}" class="btn btn-default" data-toggle="tooltip" data-placement="right"
-               title="{{ what | capitalize }}"><i
+               title="{{ what | capitalize }}" target="_blank"><i
                     class="fa fa-sign-in fa-fw"></i></a>
         {% endif %}
     {% endif %}
