@@ -1,30 +1,23 @@
-import json
-import urllib2
-import re
-
 import flask_login
-from flask import flash, redirect, url_for, request
-from flask.ext.restplus import abort
+from flask import flash
+from open_event.api import api
 from flask_admin import BaseView, expose
 
-from open_event.helpers.data import DataManager
 from open_event.views.admin.models_views.events import is_verified_user
 from ....helpers.data_getter import DataGetter
-
 
 class EventApiView(BaseView):
 
     @expose('/')
     @flask_login.login_required
     def display_api_view(self, event_id):
-        response = urllib2.urlopen('http://open-event-dev.herokuapp.com/api/v2/swagger.json')
         event = DataGetter.get_event(event_id)
-        data = json.load(response)
+        data = api.__schema__
         events_data = {}
         paths = []
         ctr = 0
         for path in data['paths']:
-            if re.match(r"\/events\/{event_id}(\/\w*)*", path):
+            if path.startswith('/events/{event_id}'):
                 path_modified = path.replace('{event_id}', str(event_id))
                 paths.append(path_modified)
                 events_data[path_modified] = data['paths'][path]
