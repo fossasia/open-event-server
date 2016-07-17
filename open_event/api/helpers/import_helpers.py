@@ -59,6 +59,21 @@ def _allowed_file(filename, ext):
     return '.' in filename and filename.rsplit('.', 1)[1] in ext
 
 
+def _available_path(folder, filename):
+    """
+    takes filename and folder and returns available path
+    """
+    path = folder + filename
+    if not os.path.isfile(path):
+        return path
+    path += str(1)
+    ct = 1
+    while os.path.isfile(path):
+        ct += 1
+        path = folder + filename + str(ct)
+    return path
+
+
 def get_file_from_request(ext=[], folder='/static/temp/', name='file'):
     """
     Get file from a request, save it locally and return its path
@@ -74,7 +89,7 @@ def get_file_from_request(ext=[], folder='/static/temp/', name='file'):
     if not _allowed_file(file.filename, ext):
         raise NotFoundError('Invalid file type')
     filename = secure_filename(file.filename)
-    path = folder + filename
+    path = _available_path(folder, filename)
     file.save(path)
     return path
 
