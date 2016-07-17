@@ -39,20 +39,20 @@
         <div id="map-holder" style="display:none;">
             <div class="col-md-6">
                 <div class="item form-group">
-                    <input value="" name="street_number" id="street_number" class="form-control col-md-3 col-xs-12" placeholder="Street Address"/>
-                    <input value="" name="route" id="route" class="form-control col-md-7 col-xs-12" placeholder="Street Address"/>
+                    <input value="" name="street_number" id="street_number" class="form-control col-md-3 col-xs-12" placeholder="Street Address line 1" onchange="address_update();"/>
+                    <input value="" name="route" id="route" class="form-control col-md-7 col-xs-12" placeholder="Street Address line 2" onchange="address_update();"/>
                 </div>
                 <div class="item form-group">
-                    <input value="" name="locality" id="locality" class="form-control col-md-7 col-xs-12" placeholder="City"/>
+                    <input value="" name="locality" id="locality" class="form-control col-md-7 col-xs-12" placeholder="City" onchange="address_update();"/>
                 </div>
                 <div class="item form-group">
-                    <input value="" name="state" id="administrative_area_level_1" class="form-control col-md-7 col-xs-12" placeholder="States"/>
+                    <input value="" name="state" id="administrative_area_level_1" class="form-control col-md-7 col-xs-12" placeholder="States" onchange="address_update();"/>
                 </div>
                 <div class="item form-group">
-                    <input value="" name="postal_code" id="postal_code" class="form-control col-md-7 col-xs-12" placeholder="Zip Code"/>
+                    <input value="" name="postal_code" id="postal_code" class="form-control col-md-7 col-xs-12" placeholder="Zip Code" onchange="address_update();"/>
                 </div>
                 <div class="item form-group">
-                    <input value="" name="country" id="country" class="form-control col-md-7 col-xs-12" placeholder="Country"/>
+                    <input value="" name="country" id="country" class="form-control col-md-7 col-xs-12" placeholder="Country" onchange="address_update();"/>
                 </div>
                 <div class="col-md-4">
                     <a id="reset_addr" onclick="remove_map_holder();" style="cursor:pointer;">Reset Location</a>
@@ -449,9 +449,6 @@
         var place = autocomplete.getPlace();
         // Get each component of the address from the place details
         // and fill the corresponding field on the form.
-        for (var component in componentForm) {
-          document.getElementById(component).value = '';
-        }
 
         for (var i = 0; i < place.address_components.length; i++) {
           var addressType = place.address_components[i].types[0];
@@ -540,6 +537,16 @@
         $('#location_name').show();
         $('#map-holder').hide();
         $('#show_addr').show();
+    }
+
+    function address_update() {
+        autocomplete.set('place',void(0));
+        var location = "";
+        for (component in componentForm) {
+            location += $('#'+component).get(0).value + " ";
+        }
+        $('#location_name').get(0).value = location;
+        $('#location_name').click();
     }
 
     var $uploadCropper = $('#upload-cropper');
