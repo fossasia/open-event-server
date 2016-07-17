@@ -2,8 +2,8 @@
     {
         "id": 1,
         "name": "Google",
-        "logo": "https://developers.google.com/open-source/",
-        "url": "http://2016.fossasia.org/img/ScienceCentre.png",
+        "logo": "http://2016.fossasia.org/img/Google.png",
+        "url": "https://developers.google.com/open-source/",
         "description": null,
         "level": null,
         "sponsor_type": null
