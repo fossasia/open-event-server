@@ -134,7 +134,7 @@
   {
     "github": "bunnie",
     "country": "USA",
-    "photo": "https://en.wikipedia.org/wiki/Andrew_Huang#/media/File:Bunnie_portrait_cropped_screenres.jpg",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/a/a2/Bunnie_portrait_cropped_screenres.jpg",
     "id": 5,
     "short_biography": null,
     "email": "email@domain.com",
@@ -180,7 +180,7 @@
   {
     "github": "",
     "country": "France",
-    "photo": "http://unesco-ci.org/youthmobile/wp-content/uploads/2014/03/YM_Logo_v3-011d2.png",
+    "photo": "",
     "id": 7,
     "short_biography": null,
     "email": "email@domain.com",
@@ -412,7 +412,7 @@
   {
     "github": "",
     "country": "Malaysia",
-    "photo": "https://sg.linkedin.com/in/willhooi",
+    "photo": "",
     "id": 15,
     "short_biography": null,
     "email": "email@domain.com",
@@ -613,7 +613,7 @@
   {
     "github": "https://github.com/sarvesh-ranjan",
     "country": "India",
-    "photo": "https://drive.google.com/open?id=0B2fJneP7GWRKc1hoNXQ3THZuYVU",
+    "photo": "",
     "id": 22,
     "short_biography": null,
     "email": "email@domain.com",
@@ -751,7 +751,7 @@
   {
     "github": "https://github.com/rajatu",
     "country": "India",
-    "photo": "http://1drv.ms/20i3QX0",
+    "photo": "",
     "id": 28,
     "short_biography": null,
     "email": "email@domain.com",
@@ -901,7 +901,7 @@
   {
     "github": "",
     "country": "Hyderabad",
-    "photo": "Lightning Talk (5-10 minutes)",
+    "photo": "",
     "id": 34,
     "short_biography": null,
     "email": "email@domain.com",
@@ -947,7 +947,7 @@
   {
     "github": "github.com/jig08",
     "country": "India",
-    "photo": "https://goo.gl/vJXXZt",
+    "photo": "",
     "id": 36,
     "short_biography": null,
     "email": "email@domain.com",
@@ -997,7 +997,7 @@
   {
     "github": "phuctanpham",
     "country": "Vietnam",
-    "photo": "https://gcall.vn",
+    "photo": "",
     "id": 38,
     "short_biography": null,
     "email": "email@domain.com",
@@ -1089,7 +1089,7 @@
   {
     "github": "https://github.com/sunbiz",
     "country": "United States",
-    "photo": "https://soic.iupui.edu/people/saptarshi-purkayastha/",
+    "photo": "https://soic.iupui.edu/files/saptarshi-purkayastha-340x340.jpg",
     "id": 42,
     "short_biography": null,
     "email": "email@domain.com",
@@ -1332,7 +1332,7 @@
   {
     "github": "https://github.com/juslee",
     "country": "Singapore",
-    "photo": "https://www.facebook.com/photo/download/?fbid=10151152341253123",
+    "photo": "",
     "id": 51,
     "short_biography": null,
     "email": "email@domain.com",
@@ -1401,7 +1401,7 @@
   {
     "github": "https://github.com/michael-cannon/",
     "country": "United States",
-    "photo": "https://axelerant.com/wp-content/uploads/2014/10/Michael-Cannon-Axelerant-Retreat-2015.jpg",
+    "photo": "",
     "id": 54,
     "short_biography": null,
     "email": "email@domain.com",
@@ -1470,7 +1470,7 @@
   {
     "github": "https://github.com/tusuzu",
     "country": "United States",
-    "photo": "https://www.linkedin.com/in/susan-spencer-3b502516?trk=hp-identity-photo",
+    "photo": "https://media.licdn.com/media/AAEAAQAAAAAAAAP8AAAAJDJkM2Y5YjFlLTg3MDAtNDJhYy04YjVhLWM4MzY2MzE2MTUwMA.jpg",
     "id": 57,
     "short_biography": null,
     "email": "email@domain.com",
@@ -1540,7 +1540,7 @@
   {
     "github": "",
     "country": "Germany",
-    "photo": "http://images.google.de/imgres?imgurl=http%3A%2F%2Fwww.somethingelse-off.com%2Fwp-content%2Fuploads%2F2015%2F11%2FNora-Al-Badri-Portrait2.jpg&imgrefurl=http%3A%2F%2Fwww.somethingelse-off.com%2Fportfolio%2Fnora-al-badri%2F&h=1200&w=960&tbnid=Z9AsePA4mJoiCM%3A&docid=HQjIks_bkgeJRM&ei=4CzlVrHDEsWfaJbGoeAE&tbm=isch&client=safari&iact=rc&uact=3&dur=871&page=1&start=0&ndsp=17&ved=0ahUKEwixs4aAp73LAhXFDxoKHRZjCEwQrQMIHjAA",
+    "photo": "http://www.somethingelse-off.com/wp-content/uploads/2015/11/Nora-Al-Badri-Portrait2.jpg",
     "id": 59,
     "short_biography": null,
     "email": "email@domain.com",
@@ -1769,7 +1769,7 @@
   {
     "github": "MetanoiaSherman",
     "country": "Singapore",
-    "photo": "https://www.facebook.com/photo.php?fbid=448414585355732&l=92ff76736e",
+    "photo": "",
     "id": 66,
     "short_biography": null,
     "email": "email@domain.com",
@@ -1992,7 +1992,7 @@
   {
     "github": "",
     "country": "Singapore",
-    "photo": "https://www.facebook.com/groundupinitiative/photos/pb.107655739315072.-2207520000.1455796067./1023161874431116/?type=3&theater",
+    "photo": "",
     "id": 75,
     "short_biography": null,
     "email": "email@domain.com",
@@ -2146,7 +2146,7 @@
   {
     "github": "",
     "country": "Sri Lanka",
-    "photo": "https://lk.linkedin.com/in/jaminy-prabaharan-3a393672",
+    "photo": "https://media.licdn.com/media/AAEAAQAAAAAAAAJCAAAAJGM4Mzc5M2M0LTRkOTAtNDJkZS1iNzUxLWFkZDhmMWE4N2UwNQ.jpg",
     "id": 81,
     "short_biography": null,
     "email": "email@domain.com",
@@ -2192,7 +2192,7 @@
   {
     "github": "github.com/TusiGeeks",
     "country": "India",
-    "photo": "https://drive.google.com/file/d/0B1MfOE5aG1HCV3VzZHlFcnUyWDg/view?usp=sharing",
+    "photo": "",
     "id": 83,
     "short_biography": null,
     "email": "email@domain.com",
@@ -2284,7 +2284,7 @@
   {
     "github": "",
     "country": "Japan",
-    "photo": "http://ch.nicovideo.jp/tks/blomaga/ar701264",
+    "photo": "",
     "id": 87,
     "short_biography": null,
     "email": "email@domain.com",
@@ -2518,7 +2518,7 @@
   {
     "github": "https://github.com/RahulMahale",
     "country": "India",
-    "photo": "https://www.dropbox.com/s/4snq5r2r5jwucbi/me.jpg?dl=0",
+    "photo": "https://www.dropbox.com/s/4snq5r2r5jwucbi/mefa.jpg",
     "id": 97,
     "short_biography": null,
     "email": "email@domain.com",
@@ -2564,7 +2564,7 @@
   {
     "github": "https://github.com/coala-analyzer",
     "country": "India",
-    "photo": "http://imgur.com/o7hDkIq",
+    "photo": "https://i.imgur.com/o7hDkIq.jpg",
     "id": 99,
     "short_biography": null,
     "email": "email@domain.com",
@@ -2610,7 +2610,7 @@
   {
     "github": "https://github.com/anarang",
     "country": "India",
-    "photo": "https://www.facebook.com/photo.php?fbid=10152204641577738&set=pb.545822737.-2207520000.1451558197.&type=3&theater",
+    "photo": "",
     "id": 101,
     "short_biography": null,
     "email": "email@domain.com",
@@ -2679,7 +2679,7 @@
   {
     "github": "rishiloyola",
     "country": "India",
-    "photo": "https://flic.kr/p/CEjaas",
+    "photo": "",
     "id": 104,
     "short_biography": null,
     "email": "email@domain.com",
@@ -2702,7 +2702,7 @@
   {
     "github": "http://github.com/so0k",
     "country": "Belgium",
-    "photo": "https://www.flickr.com/photos/95949760@N07/21952855164/in/album-72157660080743540/",
+    "photo": "",
     "id": 105,
     "short_biography": null,
     "email": "email@domain.com",
@@ -2748,7 +2748,7 @@
   {
     "github": "https://github.com/dilumn",
     "country": "Sri Lanka",
-    "photo": "https://scontent-hkg3-1.xx.fbcdn.net/hphotos-xft1/v/t1.0-9/10417561_10204672485323300_819182022288122758_n.jpg?oh=9683254877a21f74bcdbe8c229d8c305&oe=56E2E885",
+    "photo": "",
     "id": 107,
     "short_biography": null,
     "email": "email@domain.com",
@@ -2817,7 +2817,7 @@
   {
     "github": "github.com/ariestiyansyah",
     "country": "Indonesia",
-    "photo": "https://pbs.twimg.com/profile_images/683931873077100544/Mcy7uWaB_400x400.jpg",
+    "photo": "",
     "id": 110,
     "short_biography": null,
     "email": "email@domain.com",
@@ -2863,7 +2863,7 @@
   {
     "github": "",
     "country": "Philippines",
-    "photo": "https://www.dropbox.com/s/h30ouesf7hg37ly/bob-profile-pic-formal-headshot.JPG?dl=0",
+    "photo": "https://www.dropbox.com/s/h30ouesf7hg37ly/bob-profile-pic-formal-headshot.JPG",
     "id": 112,
     "short_biography": null,
     "email": "email@domain.com",
@@ -2886,7 +2886,7 @@
   {
     "github": "aladine",
     "country": "Vietnam",
-    "photo": "https://flic.kr/p/DbWUXz",
+    "photo": "https://flic.kr/p/24409079575_8826a9be66_m.jpg",
     "id": 113,
     "short_biography": null,
     "email": "email@domain.com",
@@ -2978,7 +2978,7 @@
   {
     "github": "http://github.com/gurumukhi",
     "country": "India",
-    "photo": "https://drive.google.com/file/d/0BwSJ3iypPCFfTktxdEU3bzlDSzg/view?usp=sharing",
+    "photo": "",
     "id": 117,
     "short_biography": null,
     "email": "email@domain.com",
@@ -3001,7 +3001,7 @@
   {
     "github": "soareschen",
     "country": "Malaysia",
-    "photo": "http://www.meetup.com/Singapore-JS/photos/12333132/436066145/",
+    "photo": "",
     "id": 118,
     "short_biography": null,
     "email": "email@domain.com",
@@ -3060,7 +3060,7 @@
   {
     "github": "notthetup",
     "country": "Singapore",
-    "photo": "https://github.com/voodootikigod/logo.js/blob/master/webaudio/webaudio-js.png",
+    "photo": "",
     "id": 121,
     "short_biography": null,
     "email": "email@domain.com",
@@ -3340,7 +3340,7 @@
   {
     "github": "",
     "country": "India",
-    "photo": "https://commons.wikimedia.org/wiki/File:Satdeep-gill_01.JPG",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/7/7e/Satdeep-gill_01.JPG",
     "id": 133,
     "short_biography": null,
     "email": "email@domain.com",
@@ -3436,7 +3436,7 @@
   {
     "github": "https://github.com/hotosm",
     "country": "Indonesia",
-    "photo": "https://github.com/mataharimhairi/images/blob/master/profile_pic.png",
+    "photo": "https://raw.githubusercontent.com/mataharimhairi/images/master/profile_pic.png",
     "id": 137,
     "short_biography": null,
     "email": "email@domain.com",
@@ -3459,7 +3459,7 @@
   {
     "github": "https://github.com/geoicon",
     "country": "Singapore",
-    "photo": "https://goo.gl/R5Hibc",
+    "photo": "https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAIvAAAAJDFjYzA0NjQyLTVjN2QtNDg3YS1iNTk1LTRkMzg4OTMyOTcyMg.jpg",
     "id": 138,
     "short_biography": null,
     "email": "email@domain.com",
@@ -3532,7 +3532,7 @@
   {
     "github": "724738945",
     "country": "https://www.linkedin.com/in/rafa%C5%82-kowalski-545a1464",
-    "photo": "Wroclaw",
+    "photo": "",
     "id": 141,
     "short_biography": null,
     "email": "email@domain.com",
@@ -3762,7 +3762,7 @@
   {
     "github": "",
     "country": "India",
-    "photo": "https://goo.gl/photos/PvkeNwNRTGFfJsQy6",
+    "photo": "https://goo.gl/photos/DSC_0110.JPG",
     "id": 151,
     "short_biography": null,
     "email": "email@domain.com",
@@ -3992,7 +3992,7 @@
   {
     "github": "github.com/sayanee",
     "country": "Singapore",
-    "photo": "https://www.flickr.com/photos/jurvistan/23015512439/in/album-72157661087124089/",
+    "photo": "",
     "id": 161,
     "short_biography": null,
     "email": "email@domain.com",
@@ -4015,7 +4015,7 @@
   {
     "github": "anivar",
     "country": "India",
-    "photo": "https://commons.wikimedia.org/wiki/File%3AAnivar_Aravind_%2815182117864%29.jpg",
+    "photo": "https://upload.wikimedia.org/wikipedia/commons/b/be/Anivar_Aravind_(15182117864).jpg",
     "id": 162,
     "short_biography": null,
     "email": "email@domain.com",
@@ -4061,7 +4061,7 @@
   {
     "github": "",
     "country": "India",
-    "photo": "http://anweshadas.in/content/images/2015/03/479357_510013835681502_1332101143_o.jpg",
+    "photo": "",
     "id": 164,
     "short_biography": null,
     "email": "email@domain.com",
@@ -4261,7 +4261,7 @@
   {
     "github": "",
     "country": "Philippines",
-    "photo": "http://mrebultan.simplesite.com/423728083",
+    "photo": "http://cdn.simplesite.com/i/df/c4/285134157009503455/i285134164407251532._szw480h1280_.jpg",
     "id": 172,
     "short_biography": null,
     "email": "email@domain.com",
@@ -4474,7 +4474,7 @@
   {
     "github": "github.com/omerjerk",
     "country": "India",
-    "photo": "http://procesaing.org",
+    "photo": "",
     "id": 179,
     "short_biography": null,
     "email": "email@domain.com",
@@ -4566,7 +4566,7 @@
   {
     "github": "piratefsh",
     "country": "Malaysia",
-    "photo": "https://goo.gl/photos/JJNoMmKMzHweD8CJ7",
+    "photo": "",
     "id": 183,
     "short_biography": null,
     "email": "email@domain.com",
@@ -4686,7 +4686,7 @@
   {
     "github": "",
     "country": "France",
-    "photo": "http://unesco-ci.org/youthmobile/wp-content/uploads/2014/03/YM_Logo_v3-011d2.png",
+    "photo": "",
     "id": 187,
     "short_biography": null,
     "email": "email@domain.com",
