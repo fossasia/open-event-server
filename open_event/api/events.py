@@ -9,7 +9,7 @@ from open_event.models.role import Role
 from open_event.models.user import ORGANIZER
 from open_event.helpers.data import save_to_db, update_version, record_activity
 
-from .helpers.helpers import get_paginated_list, requires_auth, parse_args, \
+from .helpers.helpers import requires_auth, parse_args, \
     can_access
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, BaseDAO, ServiceDAO

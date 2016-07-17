@@ -33,24 +33,41 @@
             <input value="{{ event.location_name | default('', true) }}" name="location_name" id="location_name"
                    placeholder="Location is required to make event live"
                    class="form-control col-md-7 col-xs-12"/>
-            <div class="checkbox">
-                <label style="padding-left:0; margin-top: 5px;">
-                  <input type="checkbox" class="flat" checked="checked"> Show map on event page
-                </label>
-            </div>
         </div>
-        <div class="item form-group">
-            <label><span class="map-state">Use</span> Geolocation
-            </label>
-            <input type="checkbox" class="toggle-switch" name="map_state"
-                       value="on" id="map-switch"/>
-            <label for="map-switch" style="margin-left:0;"></label>
-        </div>
+        <a id="show_addr" onclick="show_map_holder();" style="cursor:pointer;">Fill Address Form</a>
+
         <div id="map-holder" style="display:none;">
-            <div class="item form-group hidden-xs">
-                <label>Geolocation</label>
+            <div class="col-md-6">
+                <div class="item form-group">
+                    <input value="" name="street_number" id="street_number" class="form-control col-md-3 col-xs-12" placeholder="Street Address"/>
+                    <input value="" name="route" id="route" class="form-control col-md-7 col-xs-12" placeholder="Street Address"/>
+                </div>
+                <div class="item form-group">
+                    <input value="" name="locality" id="locality" class="form-control col-md-7 col-xs-12" placeholder="City"/>
+                </div>
+                <div class="item form-group">
+                    <input value="" name="state" id="administrative_area_level_1" class="form-control col-md-7 col-xs-12" placeholder="States"/>
+                </div>
+                <div class="item form-group">
+                    <input value="" name="postal_code" id="postal_code" class="form-control col-md-7 col-xs-12" placeholder="Zip Code"/>
+                </div>
+                <div class="item form-group">
+                    <input value="" name="country" id="country" class="form-control col-md-7 col-xs-12" placeholder="Country"/>
+                </div>
+                <div class="col-md-4">
+                    <a id="reset_addr" onclick="remove_map_holder();" style="cursor:pointer;">Reset Location</a>
+                </div>
+                <div class="col-md-8">
+                    <div class="checkbox" style="padding-top:0;">
+                        <label style="padding-left:0;">
+                          <input type="checkbox" class="flat" checked="checked"> Show map on event page
+                        </label>
+                    </div>
+                </div>
             </div>
-            <div id="map" class="hidden-xs" style="width:100%; height:300px"></div>
+            <div class="col-md-6">
+                <div id="map" class="hidden-xs" style="width:100%; height:300px"></div>
+            </div>
             <br>
             <br>
         </div>
@@ -383,7 +400,7 @@
     </div>
 </div>
 <script>
-    var marker;
+    var marker, map;
     var init_marker;
     var placeSearch, autocomplete;
     var componentForm = {
@@ -427,6 +444,35 @@
         autocomplete.addListener('place_changed', geocodeHandler);
 
     }
+    function fillInAddress(map) {
+        // Get the place details from the autocomplete object.
+        var place = autocomplete.getPlace();
+        // Get each component of the address from the place details
+        // and fill the corresponding field on the form.
+        for (var component in componentForm) {
+          document.getElementById(component).value = '';
+        }
+
+        for (var i = 0; i < place.address_components.length; i++) {
+          var addressType = place.address_components[i].types[0];
+          if (componentForm[addressType]) {
+            console.log(addressType);
+            var val = place.address_components[i][componentForm[addressType]];
+            document.getElementById(addressType).value = val;
+          }
+        }
+        $('#location_name').hide();
+        $('#show_addr').hide();
+        $('#map-holder').show();
+        resizeMap(map);
+    }
+
+    function resizeMap(map) {
+        google.maps.event.trigger(map,'resize');
+        map.setZoom( map.getZoom() );
+        map.setCenter( map.getCenter() );
+    }
+
     function geocodeAddress(geocoder, resultsMap) {
         var address = $locationInput.val();
         geocoder.geocode({'address': address}, function (results, status) {
@@ -451,6 +497,7 @@
                         position: results[0].geometry.location
                     });
                 }
+                fillInAddress(resultsMap);
             } else {
                 if (status === 'ZERO_RESULTS') {
                     resultsMap.setZoom(1);
@@ -476,6 +523,23 @@
                 autocomplete.setBounds(circle.getBounds());
             });
         }
+    }
+
+    function show_map_holder() {
+        $('#location_name').hide();
+        $('#map-holder').show();
+        $('#show_addr').hide();
+    }
+
+    function remove_map_holder() {
+        for (var component in componentForm) {
+          document.getElementById(component).value = '';
+        }
+        autocomplete.set('place',void(0));
+        $('#location_name').get(0).value='';
+        $('#location_name').show();
+        $('#map-holder').hide();
+        $('#show_addr').show();
     }
 
     var $uploadCropper = $('#upload-cropper');
@@ -667,7 +731,7 @@
             }
         };
 
-        var $mapHolder = $("#map-holder");
+        /*var $mapHolder = $("#map-holder");
         var $mapState = $(".map-state");
 
         var map_onOffSwitch = document.getElementById('map-switch');
@@ -678,7 +742,7 @@
             } else {
                 $mapHolder.fadeOut();
             }
-        };
+        };*/
     });
 </script>
 

@@ -27,7 +27,6 @@ function importEventZip(){
             obj = JSON.parse(x.responseText);
             console.log(obj);
             $('#import_status').text('');
-            $('#btnImportEvent').prop('disabled', false);
             $('#import_error').text(obj['message']);
         }
     });
@@ -54,6 +53,7 @@ function importTask(url){
             obj = JSON.parse(x.responseText);
             console.log(obj);
             $('#import_status').text('');
+            $('#btnImportEvent').prop('disabled', false);
             $('#import_error').text(obj['message']);
         }
     });
