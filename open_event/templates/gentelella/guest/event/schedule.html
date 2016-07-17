@@ -41,7 +41,6 @@
 {% block body %}
     <div class="scrollspy hidden-xs hidden-sm">
         <ul class="nav nav-pills nav-stacked">
-            <ul class="nav nav-pills nav-stacked">
             {% if event.description %}
                 <li><a href="/e/{{ event.id }}#info">Info</a></li>
             {% endif %}
@@ -67,7 +66,6 @@
             {% if event.code_of_conduct and event.code_of_conduct != '' and event.code_of_conduct != ' ' %}
                 <li><a href="/e/{{ event.id }}/coc">Code of Conduct</a></li>
             {% endif %}
-        </ul>
         </ul>
     </div>
     <div class="carousel slide" style="margin-bottom: 0;">
