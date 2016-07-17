@@ -129,6 +129,7 @@ var $editSessionForm = $("#edit-session-form");
 
 var $mobileTimeline = $("#mobile-timeline");
 var $tracksTimeline = $("#tracks-timeline");
+var $sessionViewHolder = $("#session-view-holder");
 /**
  * TEMPLATE STRINGS
  * ================
@@ -1007,16 +1008,29 @@ $(document)
         location.href = "/events/" + window.mainEvent.id + "/sessions/" + session.id + "/edit/";
     })
     .on("click", ".rooms-view", function(){
+        $dayButtonsHolder.show();
         $timeline.removeClass('hidden');
         $mobileTimeline.removeClass('hidden');
         $tracksTimeline.addClass('hidden');
+        $sessionViewHolder.addClass('hidden');
         $(this).addClass("active").siblings().removeClass("active");
     })
     .on("click", ".tracks-view", function(){
+        $dayButtonsHolder.show();
         $timeline.addClass('hidden');
         $mobileTimeline.addClass('hidden');
         $tracksTimeline.removeClass('hidden');
+        $sessionViewHolder.addClass('hidden');
         $(this).addClass("active").siblings().removeClass("active");
+    })
+    .on("click", ".sessions-view", function() {
+        $dayButtonsHolder.hide();
+        $sessionViewHolder.removeClass('hidden');
+        $timeline.addClass('hidden');
+        $mobileTimeline.addClass('hidden');
+        $tracksTimeline.addClass('hidden');
+        $(this).addClass("active").siblings().removeClass("active");
+
     })
     .on("click", ".clear-overlaps-button", removeOverlaps);
 

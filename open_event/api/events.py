@@ -9,8 +9,8 @@ from open_event.models.role import Role
 from open_event.models.user import ORGANIZER
 from open_event.helpers.data import save_to_db, update_version, record_activity
 
-from .helpers.helpers import get_paginated_list, requires_auth, parse_args, \
-    can_access, staff_only
+from .helpers.helpers import requires_auth, parse_args, \
+    can_access
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, BaseDAO, ServiceDAO
 from .helpers import custom_fields as fields
@@ -203,15 +203,12 @@ class EventResource():
 @api.param('event_id')
 @api.response(404, 'Event not found')
 class Event(Resource):
-    @requires_auth
-    @can_access
     @api.doc('get_event')
     @api.marshal_with(EVENT)
     def get(self, event_id):
         """Fetch an event given its id"""
         return DAO.get(event_id)
 
-    @requires_auth
     @can_access
     @api.doc('delete_event')
     @api.marshal_with(EVENT)
@@ -221,7 +218,6 @@ class Event(Resource):
         record_activity('delete_event', event_id=event_id)
         return event
 
-    @requires_auth
     @can_access
     @api.doc('update_event', responses=PUT_RESPONSES)
     @api.marshal_with(EVENT)
@@ -237,8 +233,6 @@ class Event(Resource):
 @api.param('event_id')
 @api.response(404, 'Event not found')
 class EventWebapp(Resource):
-    @requires_auth
-    @can_access
     @api.doc('get_event_for_webapp')
     @api.marshal_with(EVENT)
     def get(self, event_id):
@@ -250,8 +244,6 @@ class EventWebapp(Resource):
 
 @api.route('')
 class EventList(Resource, EventResource):
-    @requires_auth
-    @staff_only
     @api.doc('list_events', params=EVENT_PARAMS)
     @api.marshal_list_with(EVENT)
     def get(self):
@@ -271,32 +263,24 @@ class EventList(Resource, EventResource):
 
 @api.route('/page')
 class EventListPaginated(Resource, PaginatedResourceBase, EventResource):
-    @requires_auth
-    @staff_only
     @api.doc('list_events_paginated', params=PAGE_PARAMS)
     @api.doc(params=EVENT_PARAMS)
     @api.marshal_with(EVENT_PAGINATED)
     def get(self):
         """List events in a paginated manner"""
         args = self.parser.parse_args()
-        return get_paginated_list(
-            EventModel, args=args,
-            **parse_args(self.event_parser)
-        )
+        return DAO.paginated_list(args=args, **parse_args(self.event_parser))
 
 
 @api.route('/<int:event_id>/links')
 @api.param('event_id')
 class SocialLinkList(Resource):
-    @requires_auth
-    @can_access
     @api.doc('list_social_links')
     @api.marshal_list_with(SOCIAL_LINK)
     def get(self, event_id):
         """List all social links"""
         return LinkDAO.list(event_id)
 
-    @requires_auth
     @can_access
     @api.doc('create_social_link', responses=POST_RESPONSES)
     @api.marshal_with(SOCIAL_LINK)
@@ -312,7 +296,6 @@ class SocialLinkList(Resource):
 
 @api.route('/<int:event_id>/links/<int:link_id>')
 class SocialLink(Resource):
-    @requires_auth
     @can_access
     @api.doc('delete_social_link')
     @api.marshal_with(SOCIAL_LINK)
@@ -320,7 +303,6 @@ class SocialLink(Resource):
         """Delete a social link given its id"""
         return LinkDAO.delete(event_id, link_id)
 
-    @requires_auth
     @can_access
     @api.doc('update_social_link', responses=PUT_RESPONSES)
     @api.marshal_with(SOCIAL_LINK)
@@ -329,8 +311,6 @@ class SocialLink(Resource):
         """Update a social link given its id"""
         return LinkDAO.update(event_id, link_id, self.api.payload)
 
-    @requires_auth
-    @can_access
     @api.hide
     @api.marshal_with(SOCIAL_LINK)
     def get(self, event_id, link_id):

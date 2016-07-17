@@ -8,6 +8,7 @@
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/details.css') }}"/>
     <link href="{{ url_for('static', filename='css/admin/scheduler.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/sessions.css') }}"/>
     <style type="text/css">
         .carousel .item {
             height: {{ carousel_height }}px;
@@ -53,7 +54,7 @@
             {% if accepted_sessions[0] %}
                 <li><a href="/e/{{ event.id }}/sessions">Sessions</a></li>
             {% endif %}
-            {% if call_for_speakers %}
+            {% if event.call_for_papers %}
                 <li><a href="/e/{{ event.id }}/cfs">Call for speakers</a></li>
             {% endif %}
             <li class="active"><a href="/e/{{ event.id }}/schedule">Schedule</a></li>
@@ -101,6 +102,7 @@
                      <div class="btn-group pull-right" role="group">
                         <button type="button" class="btn btn-default rooms-view">Rooms View</button>
                         <button type="button" class="btn btn-default tracks-view">Tracks View</button>
+                        <button type="button" class="btn btn-default sessions-view">Sessions View</button>
                     </div>
                 </div>
 
@@ -108,7 +110,12 @@
                     <span class="text-muted message loading-text" style="font-weight: 100; font-size: 30px;">Sessions loading ...</span>
                 </div>
                 <div class="scheduler-holder" style="display: none;">
+                    <div id="session-view-holder" class="hidden">
+                        <br>
+                        {% include 'gentelella/guest/event/_sessions_list.html' %}
+                    </div>
                     {% include 'gentelella/admin/event/scheduler/components/timeline.html' %}
+
                 </div>
 
             </div>
@@ -127,4 +134,13 @@
     <script src="{{ url_for('static', filename='js/jquery/jquery.ellipsis.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/scheduler.js') }}"></script>
+    <script type="text/javascript">
+        $(".audio-btn").popover({
+            html: true,
+            placement: 'top'
+        }).click(function(e){
+            e.preventDefault();
+        });
+
+    </script>
 {% endblock %}
