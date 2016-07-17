@@ -68,7 +68,7 @@ class ProfileView(BaseView):
             abort(404)
 
     @expose('/notifications/allread/', methods=('GET', 'POST'))
-    def mark_all_notification_as_read(self, notification_id):
+    def mark_all_notification_as_read(self):
         user = login.current_user
         DataManager.mark_all_user_notification_as_read(user)
 
