@@ -1,7 +1,7 @@
 [
   {
     "github": "http://github.com/hpdang",
-    "country": "",
+    "country": "Not available",
     "photo": "",
     "id": 1,
     "short_biography": null,
@@ -44,7 +44,7 @@
   },
   {
     "github": "http://github.com/mariobehling",
-    "country": "",
+    "country": "Not available",
     "photo": "",
     "id": 2,
     "short_biography": null,
@@ -67,7 +67,7 @@
   },
   {
     "github": "",
-    "country": "",
+    "country": "Not available",
     "photo": "",
     "id": 3,
     "short_biography": null,
@@ -1423,14 +1423,14 @@
   },
   {
     "github": "",
-    "country": "",
+    "country": "Not available",
     "photo": "",
     "id": 55,
     "short_biography": null,
     "email": "email@domain.com",
     "long_biography": "",
     "facebook": null,
-    "organisation": "",
+    "organisation": "Not available",
     "linkedin": "",
     "sessions": [
       {
@@ -1574,7 +1574,7 @@
   },
   {
     "github": "",
-    "country": "",
+    "country": "Not available",
     "photo": "",
     "id": 60,
     "short_biography": null,
@@ -2398,7 +2398,7 @@
   },
   {
     "github": "",
-    "country": "",
+    "country": "Not available",
     "photo": "",
     "id": 92,
     "short_biography": null,
@@ -3023,7 +3023,7 @@
   },
   {
     "github": "",
-    "country": "",
+    "country": "Not available",
     "photo": "",
     "id": 119,
     "short_biography": null,
@@ -3041,7 +3041,7 @@
   },
   {
     "github": "",
-    "country": "",
+    "country": "Not available",
     "photo": "",
     "id": 120,
     "short_biography": null,
@@ -3715,14 +3715,14 @@
   },
   {
     "github": "",
-    "country": "",
+    "country": "Not available",
     "photo": "",
     "id": 149,
     "short_biography": null,
     "email": "email@domain.com",
     "long_biography": "",
     "facebook": null,
-    "organisation": "",
+    "organisation": "Not available",
     "linkedin": "",
     "sessions": [
       {
@@ -3922,7 +3922,7 @@
   },
   {
     "github": "",
-    "country": "",
+    "country": "Not available",
     "photo": "",
     "id": 158,
     "short_biography": null,
@@ -4283,7 +4283,7 @@
   },
   {
     "github": "",
-    "country": "",
+    "country": "Not available",
     "photo": "",
     "id": 173,
     "short_biography": null,
@@ -4306,14 +4306,14 @@
   },
   {
     "github": "",
-    "country": "",
+    "country": "Not available",
     "photo": "",
     "id": 174,
     "short_biography": null,
     "email": "email@domain.com",
     "long_biography": "Science Hackers from all over the world who enjoy open knowledge and sharing.",
     "facebook": null,
-    "organisation": "",
+    "organisation": "Not available",
     "linkedin": "",
     "sessions": [
       {
