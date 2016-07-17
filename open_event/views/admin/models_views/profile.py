@@ -67,6 +67,13 @@ class ProfileView(BaseView):
         else:
             abort(404)
 
+    @expose('/notifications/allread/', methods=('GET', 'POST'))
+    def mark_all_notification_as_read(self, notification_id):
+        user = login.current_user
+        DataManager.mark_all_user_notification_as_read(user)
+
+        return redirect(url_for('.notifications_view'))
+
     @expose('/fb_connect', methods=('GET', 'POST'))
     def connect_facebook(self):
         facebook = get_facebook_auth()
