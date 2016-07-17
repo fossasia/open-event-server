@@ -74,8 +74,23 @@ class DataManager(object):
 
     @staticmethod
     def mark_user_notification_as_read(notification):
+        """Mark a particular notification read.
+        """
         notification.has_read = True
         save_to_db(notification, 'Mark notification as read')
+
+    @staticmethod
+    def mark_all_user_notification_as_read(user):
+        """Mark all notifications for a User as read.
+        """
+        unread_notifs = Notification.query.filter_by(user=user,
+                                                     has_read=False)
+
+        for notif in unread_notifs:
+            notif.has_read = True
+            db.session.add(notif)
+
+        db.session.commit()
 
     @staticmethod
     def add_event_role_invite(email, role_name, event_id):

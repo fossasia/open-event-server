@@ -902,7 +902,12 @@ function initializeTimeline(eventId) {
             }
             $(".rooms-view").addClass('active');
 
-            $('.microlocation-container').css("width", $(".microlocations.x1").width() + "px")
+            $('.microlocation-container').css("width", $(".microlocations.x1").width() + "px");
+
+            $(document).trigger({
+                type: "scheduling:recount",
+                microlocations: _.map(microlocationsStore, 'id')
+            });
         });
     });
 }
@@ -1042,6 +1047,14 @@ $(document).ready(function () {
     window.mainEvent.start_time = moment.utc($timeline.data("event-start"));
     window.mainEvent.end_time = moment.utc($timeline.data("event-end"));
     initializeTimeline(window.mainEvent.id);
+});
+
+$(document).on("scheduling:recount", function(e) {
+    var microlocations = _.cloneDeep(e.microlocations);
+    _.each(microlocations, function(microlocation_id){
+        var $microlocationColumn = $microlocationsHolder.find(".microlocation[data-microlocation-id=" + microlocation_id + "]");
+        $microlocationColumn.find(".microlocation-header").find(".badge").text($microlocationColumn.find(".session.scheduled").length)
+    });
 });
 
 $(document).on("scheduling:change", function (e) {
