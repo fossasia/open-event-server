@@ -1,9 +1,9 @@
 import unittest
 import json
 
-from open_event import current_app as app
-from open_event.models.user import User
-from open_event.helpers.data import update_role_to_admin
+from app import current_app as app
+from app.models.user import User
+from app.helpers.data import update_role_to_admin
 
 from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase

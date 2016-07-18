@@ -3,7 +3,7 @@ import unittest
 from flask import url_for
 
 from tests.auth_helper import logout, login, register
-from open_event import current_app as app
+from app import current_app as app
 from tests.views.view_test_case import OpenEventViewTestCase
 
 

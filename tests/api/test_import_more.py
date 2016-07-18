@@ -9,7 +9,7 @@ from StringIO import StringIO
 from tests.setup_database import Setup
 from tests.api.utils import create_event, get_path, create_services
 from tests.auth_helper import register
-from open_event import current_app as app
+from app import current_app as app
 from test_export_import import ImportExportBase
 
 

@@ -2,10 +2,10 @@ import unittest
 
 from flask import url_for
 
-from open_event import current_app as app
+from app import current_app as app
 from tests.views.view_test_case import OpenEventViewTestCase
 from tests.object_mother import ObjectMother
-from open_event.helpers.data import save_to_db
+from app.helpers.data import save_to_db
 
 
 class TestSuperAdminViews(OpenEventViewTestCase):

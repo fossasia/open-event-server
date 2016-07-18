@@ -2,10 +2,10 @@ import unittest
 
 from tests.utils import OpenEventTestCase
 from tests.setup_database import Setup
-from open_event import current_app as app
+from app import current_app as app
 from oauthlib.oauth2 import WebApplicationClient
-from open_event.helpers.oauth import OAuth
-from open_event.helpers.data import get_google_auth
+from app.helpers.oauth import OAuth
+from app.helpers.data import get_google_auth
 from tests.auth_helper import login, logout, register
 
 

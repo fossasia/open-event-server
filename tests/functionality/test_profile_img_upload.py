@@ -2,7 +2,7 @@ import unittest
 from tests.utils import OpenEventTestCase
 from tests.setup_database import Setup
 from StringIO import StringIO
-from open_event import current_app as app
+from app import current_app as app
 
 
 class TestImageUpload(OpenEventTestCase):

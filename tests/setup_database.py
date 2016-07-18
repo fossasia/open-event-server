@@ -2,8 +2,8 @@
 import os
 
 from populate_db import populate
-from open_event import current_app as app, celery
-from open_event.models import db
+from app import current_app as app, celery
+from app.models import db
 
 _basedir = os.path.abspath(os.path.dirname(__file__))
 

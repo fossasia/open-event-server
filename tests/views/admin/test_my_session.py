@@ -3,11 +3,11 @@ from datetime import datetime
 
 from flask import url_for
 
-from open_event.helpers.data import save_to_db
-from open_event.models.session import Session
-from open_event.models.speaker import Speaker
+from app.helpers.data import save_to_db
+from app.models.session import Session
+from app.models.speaker import Speaker
 from tests.object_mother import ObjectMother
-from open_event import current_app as app
+from app import current_app as app
 from tests.views.view_test_case import OpenEventViewTestCase
 
 

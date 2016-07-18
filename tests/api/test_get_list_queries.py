@@ -1,14 +1,14 @@
 import unittest
 import json
 
-from open_event.helpers.data import update_role_to_admin
+from app.helpers.data import update_role_to_admin
 from tests.auth_helper import register, login
 from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
 from tests.api.utils import get_path, create_event
 from utils_post_data import *
 
-from open_event import current_app as app
+from app import current_app as app
 
 
 class TestGetListQueries(OpenEventTestCase):

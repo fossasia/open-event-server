@@ -4,7 +4,7 @@ import unittest
 from tests.utils import OpenEventTestCase
 from tests.setup_database import Setup
 from tests.auth_helper import register, logout, login
-from open_event import current_app as app
+from app import current_app as app
 
 
 class TestLogin(OpenEventTestCase):

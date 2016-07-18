@@ -1,6 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
-from open_event import manager
-from open_event import current_app as app
+from app import manager
+from app import current_app as app
 
 
 @manager.command

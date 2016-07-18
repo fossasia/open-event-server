@@ -2,8 +2,8 @@ import unittest
 from tests.utils import OpenEventTestCase
 from tests.setup_database import Setup
 from tests.object_mother import ObjectMother
-from open_event import current_app as app
-from open_event.helpers.data import save_to_db
+from app import current_app as app
+from app.helpers.data import save_to_db
 
 class TestGetSpeakerById(OpenEventTestCase):
 

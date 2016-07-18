@@ -1,17 +1,17 @@
-from open_event import current_app
+from app import current_app
 
-from open_event.models.role import Role
-from open_event.models.service import Service
-from open_event.models.permission import Permission
+from app.models.role import Role
+from app.models.service import Service
+from app.models.permission import Permission
 
-from open_event.models.track import Track
-from open_event.models.session import Session
-from open_event.models.speaker import Speaker
-from open_event.models.sponsor import Sponsor
-from open_event.models.microlocation import Microlocation
+from app.models.track import Track
+from app.models.session import Session
+from app.models.speaker import Speaker
+from app.models.sponsor import Sponsor
+from app.models.microlocation import Microlocation
 
-from open_event.helpers.data import get_or_create
-from open_event.models.user import ORGANIZER, COORGANIZER, TRACK_ORGANIZER, MODERATOR
+from app.helpers.data import get_or_create
+from app.models.user import ORGANIZER, COORGANIZER, TRACK_ORGANIZER, MODERATOR
 
 
 def create_roles():

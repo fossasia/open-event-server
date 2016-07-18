@@ -7,7 +7,7 @@ from tests.utils import OpenEventTestCase
 from tests.api.utils import create_event, get_path
 from tests.api.utils_post_data import *
 from tests.auth_helper import register, login
-from open_event import current_app as app
+from app import current_app as app
 
 
 class TestPostApiBasicAuth(OpenEventTestCase):

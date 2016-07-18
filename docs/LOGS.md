@@ -20,9 +20,9 @@ These are -
 
 ## How to log information
 
-From the `open_event.helpers.data` module, import `record_activity` .
+From the `app.helpers.data` module, import `record_activity` .
 Then call it using the identifier of the activity-type and the parameters.
-The list of identifiers is located in `open_event.models.activity`. At the time of writing, it looks like -
+The list of identifiers is located in `app.models.activity`. At the time of writing, it looks like -
 
 ```python
 ACTIVITIES = {
