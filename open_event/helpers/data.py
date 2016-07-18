@@ -1003,7 +1003,7 @@ class DataManager(object):
                       sub_topic=event_old.sub_topic,
                       privacy=event_old.privacy,
                       ticket_url=event_old.ticket_url,
-                      show_map=1 if form.get('show_map') == "on" else 0,
+                      show_map=event_old.show_map,
                       organizer_name=event_old.organizer_name,
                       organizer_description=event_old.organizer_description)
 
