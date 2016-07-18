@@ -1363,6 +1363,11 @@ class DataManager(object):
             record_activity('create_role', role=role, user=user, event_id=event_id)
 
     @staticmethod
+    def decline_role_invite(role_invite):
+        role_invite.declined = True
+        save_to_db(role_invite)
+
+    @staticmethod
     def update_user_event_role(form, uer):
         role = Role.query.filter_by(name=form['user_role']).first()
         user = User.query.filter_by(email=form['user_email']).first()
