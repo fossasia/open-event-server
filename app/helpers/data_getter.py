@@ -1,5 +1,8 @@
 """Copyright 2015 Rafal Kowalski"""
+from collections import Counter
+
 import pytz
+import requests
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from app.models.role import Role
@@ -31,7 +34,7 @@ from ..models.setting import Setting
 from ..models.page import Page
 from .language_list import LANGUAGE_LIST
 from .static import EVENT_TOPICS, EVENT_LICENCES
-from app.helpers.helpers import get_event_id
+from app.helpers.helpers import get_event_id, string_empty
 from flask.ext import login
 from flask import flash, current_app, abort
 import datetime
@@ -599,5 +602,23 @@ class DataGetter:
         if results:
             return results.one()
         return results
+
+    @staticmethod
+    def get_locations_of_events():
+        names = []
+        for event in DataGetter.get_live_and_public_events():
+            if not string_empty(event.location_name) and not string_empty(event.latitude) and not string_empty(event.longitude):
+                response = requests.get(
+                    "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
+                        event.longitude)).json()
+                if response['status'] == u'OK':
+                    for addr in response['results'][0]['address_components']:
+                        if addr['types'] == ['locality', 'political']:
+                            names.append(addr['short_name'])
+
+        cnt = Counter()
+        for location in names:
+            cnt[location] += 1
+        return [v for v, k in cnt.most_common()][:10]
 
 

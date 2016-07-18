@@ -1,5 +1,6 @@
 import re
 from flask import request
+from flask.json import JSONEncoder
 from jinja2 import Undefined
 from slugify import slugify as unicode_slugify
 from slugify import SLUG_OK
@@ -12,6 +13,12 @@ def get_real_ip():
             return request.remote_addr or 'untrackable'
     except:
         return 'untrackable'
+
+
+class MiniJSONEncoder(JSONEncoder):
+    """Minify JSON output."""
+    item_separator = ','
+    key_separator = ':'
 
 class SilentUndefined(Undefined):
     """
