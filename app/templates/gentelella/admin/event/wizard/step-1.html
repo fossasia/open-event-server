@@ -34,7 +34,7 @@
                    placeholder="Location is required to make event live"
                    class="form-control col-md-7 col-xs-12"/>
         </div>
-        <a id="show_addr" onclick="show_map_holder();" style="cursor:pointer;">Fill Address Form</a>
+        <a id="show_addr" onclick="show_map_holder();" style="cursor:pointer;">Enter Address</a>
 
         <div id="map-holder" style="display:none;">
             <div class="col-md-6">
@@ -46,7 +46,7 @@
                     <input value="" name="locality" id="locality" class="form-control col-md-7 col-xs-12" placeholder="City" onchange="address_update();"/>
                 </div>
                 <div class="item form-group">
-                    <input value="" name="state" id="administrative_area_level_1" class="form-control col-md-7 col-xs-12" placeholder="States" onchange="address_update();"/>
+                    <input value="" name="state_area" id="administrative_area_level_1" class="form-control col-md-7 col-xs-12" placeholder="States" onchange="address_update();"/>
                 </div>
                 <div class="item form-group">
                     <input value="" name="postal_code" id="postal_code" class="form-control col-md-7 col-xs-12" placeholder="Zip Code" onchange="address_update();"/>
@@ -418,7 +418,7 @@
         var latitude = $latitudeInput.val();
         var longitude = $longitudeInput.val();
         var latlng = new google.maps.LatLng(latitude, longitude);
-        var map = new google.maps.Map($("#map")[0], {
+        map = new google.maps.Map($("#map")[0], {
             zoom: 1,
             center: latlng
         });
@@ -465,9 +465,10 @@
     }
 
     function resizeMap(map) {
+        var center = map.getCenter();
         google.maps.event.trigger(map,'resize');
         map.setZoom( map.getZoom() );
-        map.setCenter( map.getCenter() );
+        map.setCenter( center );
     }
 
     function geocodeAddress(geocoder, resultsMap) {
@@ -523,9 +524,25 @@
     }
 
     function show_map_holder() {
+        if ($('#location_name').get(0).value != '') {
+            var url = "https://maps.googleapis.com/maps/api/geocode/json?address="+$('#location_name').get(0).value+"&key=AIzaSyAHdXg0Y_zk-wCNpslbBqcezLdHniaEwkI"
+            $.getJSON( url, function( data ) {
+                google.maps.event.trigger(autocomplete, 'place_changed');
+                var place = data.results[0];
+                for (var i = 0; i < place.address_components.length; i++) {
+                  var addressType = place.address_components[i].types[0];
+                  if (componentForm[addressType]) {
+                    console.log(addressType);
+                    var val = place.address_components[i][componentForm[addressType]];
+                    document.getElementById(addressType).value = val;
+                  }
+                }
+            });
+        }
         $('#location_name').hide();
         $('#map-holder').show();
         $('#show_addr').hide();
+        resizeMap(map);
     }
 
     function remove_map_holder() {
