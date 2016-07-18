@@ -34,7 +34,7 @@
                    placeholder="Location is required to make event live"
                    class="form-control col-md-7 col-xs-12"/>
         </div>
-        <a id="show_addr" onclick="show_map_holder();" style="cursor:pointer;">Fill Address Form</a>
+        <a id="show_addr" onclick="show_map_holder();" style="cursor:pointer;">Enter Address</a>
 
         <div id="map-holder" style="display:none;">
             <div class="col-md-6">
@@ -465,9 +465,10 @@
     }
 
     function resizeMap(map) {
+        var center = map.getCenter();
         google.maps.event.trigger(map,'resize');
         map.setZoom( map.getZoom() );
-        map.setCenter( map.getCenter() );
+        map.setCenter( center );
     }
 
     function geocodeAddress(geocoder, resultsMap) {
