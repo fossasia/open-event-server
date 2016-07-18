@@ -2,7 +2,7 @@ from flask.ext.restplus import Resource, Namespace
 
 from open_event.models.track import Track as TrackModel
 
-from .helpers.helpers import get_paginated_list, requires_auth
+from .helpers.helpers import requires_auth
 from .helpers.helpers import (
     can_create,
     can_read,
@@ -49,15 +49,12 @@ DAO = TrackDAO(TrackModel, TRACK_POST)
 @api.route('/events/<int:event_id>/tracks/<int:track_id>')
 @api.doc(responses=SERVICE_RESPONSES)
 class Track(Resource):
-    @requires_auth
-    @can_create(DAO)
     @api.doc('get_track')
     @api.marshal_with(TRACK)
     def get(self, event_id, track_id):
         """Fetch a track given its id"""
         return DAO.get(event_id, track_id)
 
-    @requires_auth
     @can_delete(DAO)
     @api.doc('delete_track')
     @api.marshal_with(TRACK)
@@ -65,7 +62,6 @@ class Track(Resource):
         """Delete a track given its id"""
         return DAO.delete(event_id, track_id)
 
-    @requires_auth
     @can_update(DAO)
     @api.doc('update_track', responses=PUT_RESPONSES)
     @api.marshal_with(TRACK)
@@ -77,15 +73,12 @@ class Track(Resource):
 
 @api.route('/events/<int:event_id>/tracks')
 class TrackList(Resource):
-    @requires_auth
-    @can_read(DAO)
     @api.doc('list_tracks')
     @api.marshal_list_with(TRACK)
     def get(self, event_id):
         """List all tracks"""
         return DAO.list(event_id)
 
-    @requires_auth
     @can_create(DAO)
     @api.doc('create_track', responses=POST_RESPONSES)
     @api.marshal_with(TRACK)
@@ -101,14 +94,9 @@ class TrackList(Resource):
 
 @api.route('/events/<int:event_id>/tracks/page')
 class TrackListPaginated(Resource, PaginatedResourceBase):
-    @requires_auth
-    @can_read(DAO)
     @api.doc('list_tracks_paginated', params=PAGE_PARAMS)
     @api.marshal_with(TRACK_PAGINATED)
     def get(self, event_id):
         """List tracks in a paginated manner"""
-        return get_paginated_list(
-            TrackModel,
-            args=self.parser.parse_args(),
-            event_id=event_id
-        )
+        args = self.parser.parse_args()
+        return DAO.paginated_list(args=args, event_id=event_id)

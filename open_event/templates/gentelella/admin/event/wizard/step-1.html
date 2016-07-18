@@ -1,11 +1,11 @@
 {% macro social_entry(social_link=None) %}
     <div class="social-link-holder">
-        <div class=" col-sm-4" style="padding-left: 0;">
+        <div class=" col-sm-3" style="padding-left: 0;">
             <input type="text" class="form-control" name="social[name]" placeholder="Name"
                    value="{{ social_link.name | default('Twitter', true) }}">
         </div>
         <input type="hidden" name="social[id]" value="{{ social_link.id | default('') }}">
-        <div class="col-sm-8 input-group">
+        <div class="col-sm-5 input-group">
             <input data-error="Please enter a valid URL" type="url" class="form-control" name="social[link]" placeholder="Link"
                    value="{{ social_link.link | default('', true) }}">
             <div class="help-block with-errors"></div>
@@ -18,10 +18,7 @@
 {% endmacro %}
 
 <div>
-    <div class="col-md-2">
-
-    </div>
-    <div class="col-md-8">
+    <div class="col-md-7 col-sm-7 col-md-offset-2 step-1">
         <div class="item form-group">
             <label>Name <span class="required">*</span></label>
             <input required="required"
@@ -37,16 +34,46 @@
                    placeholder="Location is required to make event live"
                    class="form-control col-md-7 col-xs-12"/>
         </div>
+        <a id="show_addr" onclick="show_map_holder();" style="cursor:pointer;">Fill Address Form</a>
 
-        <div class="item form-group hidden-xs">
-            <label>Geolocation</label>
+        <div id="map-holder" style="display:none;">
+            <div class="col-md-6">
+                <div class="item form-group">
+                    <input value="" name="street_number" id="street_number" class="form-control col-md-3 col-xs-12" placeholder="Street Address"/>
+                    <input value="" name="route" id="route" class="form-control col-md-7 col-xs-12" placeholder="Street Address"/>
+                </div>
+                <div class="item form-group">
+                    <input value="" name="locality" id="locality" class="form-control col-md-7 col-xs-12" placeholder="City"/>
+                </div>
+                <div class="item form-group">
+                    <input value="" name="state" id="administrative_area_level_1" class="form-control col-md-7 col-xs-12" placeholder="States"/>
+                </div>
+                <div class="item form-group">
+                    <input value="" name="postal_code" id="postal_code" class="form-control col-md-7 col-xs-12" placeholder="Zip Code"/>
+                </div>
+                <div class="item form-group">
+                    <input value="" name="country" id="country" class="form-control col-md-7 col-xs-12" placeholder="Country"/>
+                </div>
+                <div class="col-md-4">
+                    <a id="reset_addr" onclick="remove_map_holder();" style="cursor:pointer;">Reset Location</a>
+                </div>
+                <div class="col-md-8">
+                    <div class="checkbox" style="padding-top:0;">
+                        <label style="padding-left:0;">
+                          <input type="checkbox" class="flat" checked="checked"> Show map on event page
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div id="map" class="hidden-xs" style="width:100%; height:300px"></div>
+            </div>
+            <br>
+            <br>
         </div>
-        <div id="map" class="hidden-xs" style="width:100%; height:300px"></div>
-        <br>
-        <br>
 
         <div class="row event-date-picker">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="item form-group">
                     <label>Starts <span class="required">*</span></label>
                     <br>
@@ -68,7 +95,7 @@
                 </div>
 
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="item form-group">
                     <label>Ends <span class="required">*</span></label>
                     <br>
@@ -91,19 +118,22 @@
                 </div>
 
             </div>
-        </div>
-        <div class="form-group">
-            <label>Timezone <span class="required">*</span></label>
-            <select name="timezone" class="form-control">
-                {% for value, text in timezones %}
-                    {% if event %}
-                        <option value="{{ value }}"
-                                {% if event.timezone == value %}selected{% endif %}>{{ text }}</option>
-                    {% else %}
-                        <option value="{{ value }}" {% if value == 'UTC' %}selected{% endif %}>{{ text }}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
+            <div class="col-md-4 col-xs-8">
+                <div class="form-group">
+                    <label>Timezone <span class="required">*</span></label>
+                    <select name="timezone" class="form-control">
+                        {% for value, text in timezones %}
+                            {% if event %}
+                                <option value="{{ value }}"
+                                        {% if event.timezone == value %}selected{% endif %}>{{ text }}</option>
+                            {% else %}
+                                <option value="{{ value }}" {% if value == 'UTC' %}selected{% endif %}>{{ text }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+
+            </div>
         </div>
         <div class="item form-group">
             <label>Description</label>
@@ -111,16 +141,18 @@
                       class="form-control">{{ event.description | default('', true) }}</textarea>
         </div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <input type="hidden" name="background_url" id="background_url">
                 <div class="item form-group" id="image-upload-group"
                      {% if event and event.background_url and event.background_url != '' %}style="display: none;"{% endif %}>
                     <label>Event Image</label><br>
-                    <input type="file" id="event-image-upload" name="event-image-upload" class="upload-btn no-js"
-                           accept="image/*"/>
-                    <label class="file-label" for="event-image-upload" style="margin-top: 0;">
-                        <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Event Image
-                    </label><br>
+                    <div class="image-box">
+                        <input type="file" id="event-image-upload" name="event-image-upload" class="image-upload-btn no-js"
+                               accept="image/*"/>
+                        <label class="file-label" for="event-image-upload">
+                            <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Event Image
+                        </label><br>
+                    </div>
                     <span class="text-muted" style="color: #a2a2a2;">
                         We recommend using at least a 2160x1080px (2:1 ratio) image<br>that's no larger than 10MB.
                     </span>
@@ -143,18 +175,22 @@
                     <br>
                 </div>
             </div>
-            <div class="col-md-6">
+        </div>
+        <div class="row">
+            <div class="col-md-7">
 
                 <input type="hidden" name="logo" id="logo">
 
                 <div class="item form-group" id="logo-upload-group"
                      {% if event and event.logo and event.logo != '' %}style="display: none;"{% endif %}>
                     <label>Logo</label><br>
-                    <input type="file" id="logo-upload" name="logo-upload" class="upload-btn no-js"
-                           accept="image/*"/>
-                    <label class="file-label" for="logo-upload" style="margin-top: 0;">
-                        <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Logo
-                    </label><br>
+                    <div class="image-box">
+                        <input type="file" id="logo-upload" name="logo-upload" class="image-upload-btn no-js"
+                               accept="image/*"/>
+                        <label class="file-label" for="logo-upload">
+                            <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Logo
+                        </label><br>
+                    </div>
                     <span class="text-muted" style="color: #a2a2a2;">
                         Logo size must be less than 1MB.
                     </span>
@@ -179,67 +215,25 @@
                    class="form-control" data-error="Please enter a valid URL"/>
             <div class="help-block with-errors"></div>
         </div>
-
         <div class="item form-group">
-            <label>Organizer name</label>
-            <input name="organizer_name" class="form-control"
-                   value="{{ event.organizer_name | default('', true) }}"/>
-        </div>
-        <div class="item form-group">
-            <label>Organizer Description
+            <label><span class="organizer-state">Add</span> Organizer Information
             </label>
-                <textarea
-                        name="organizer_description"
-                        class="form-control">{{ event.organizer_description | default('', true) }}</textarea>
+            <input type="checkbox" class="toggle-switch" name="organizer_state"
+                       value="on" id="organizer-switch"/>
+            <label for="organizer-switch" style="margin-left:0;"></label>
         </div>
-        <div class="item form-group">
-            <label>Ticket URL
-            </label>
-            <input type="url" pattern="https?://.+" name="ticket_url" class="form-control"
-                   value="{{ event.ticket_url | default('', true) }}" data-error="Please enter a valid URL"/>
-            <div class="help-block with-errors"></div>
-        </div>
-        <div class="item form-group">
-            <label>Licence <a class="btn btn-info btn-xs licence-help" data-toggle="licence-modal" data-target="#licence_modal">?</a></label>
-            <select name="copyright_licence" class="form-control">
-                <option value="">Choose Licence</option>
-                {{ event_licences }}
-                {% for licence in event_licences %}
-                    <option value="{{ licence }}" {{ "selected" if event and event.copyright.licence == licence else '' }}>
-                    {{ licence }}
-                    </option>
-                {% endfor %}
-            </select>
-
-            <!-- Licences Modal -->
-            <div id="licence_modal" class="modal fade" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Licences</h4>
-                      </div>
-                      <div class="modal-body">
-                      {% for licence_name, info in event_licences.iteritems() %}
-                         <div class="row">
-                             <div class="col-sm-9">
-                                <h5>{{ licence_name }}</h5>
-                                <p>{{ info.1 }}
-                                    {% if info.2 %}
-                                    <a href="{{ info.2 }}" target="_blank" style="color:#1a75ff;">Read more.</a>
-                                    {% endif %}
-                                </p>
-                             </div>
-                             <div class="col-sm-3">
-                            {% if info.3 %}
-                                <img src="{{ info.3 }}" alt="{{ licence_name }}" class="pull-right">
-                            {% endif %}
-                             </div>
-                         </div>
-                      {% endfor %}
-                      </div>
-                    </div>
-                </div>
+        <div id="organizer-holder" style="display:none;">
+            <div class="item form-group">
+                <label>Organizer name</label>
+                <input name="organizer_name" class="form-control"
+                       value="{{ event.organizer_name | default('', true) }}"/>
+            </div>
+            <div class="item form-group">
+                <label>Organizer Description
+                </label>
+                    <textarea
+                            name="organizer_description"
+                            class="form-control">{{ event.organizer_description | default('', true) }}</textarea>
             </div>
         </div>
         <div class="item form-group">
@@ -259,8 +253,23 @@
 
             </div>
         </div>
-        <h2 style="font-weight: 300; text-transform: uppercase; margin-top: 20px;">Additional Details</h2>
-        <hr style="margin:0;">
+        <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
+            <i class="fa fa-ticket"></i>
+            Ticket Details
+            <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+        </h2>
+        <div class="item form-group">
+            <label>Ticket URL
+            </label>
+            <input type="url" pattern="https?://.+" name="ticket_url" class="form-control"
+                   value="{{ event.ticket_url | default('', true) }}" data-error="Please enter a valid URL"/>
+            <div class="help-block with-errors"></div>
+        </div>
+        <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color: #5bc0de;">
+            <i class="fa fa-plus-circle"></i>
+            Additional Details
+            <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+        </h2>
         <div class="item form-group">
             <label class="control-label">Listing Privacy</label>
             <div class="radio">
@@ -291,46 +300,76 @@
                 {% endfor %}
             </select>
         </div>
-
-        <div class="item form-group">
-            <label class="control-label">Event Topic
-            </label>
-            <select class="form-control" id="topic" name='topic'>
-                {% if not event or not event.topic %}
-                    <option value="">Choose..</option>
-                {% endif %}
-                {% for topic in event_topics %}
-                    <option value="{{ topic }}" {{ "selected" if event and event.topic == topic else '' }}>{{ topic }}</option>
-                {% endfor %}
-            </select>
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="item form-group">
+                    <label class="control-label">Event Topic
+                    </label>
+                    <select class="form-control" id="topic" name='topic'>
+                        {% if not event or not event.topic %}
+                            <option value="">Choose..</option>
+                        {% endif %}
+                        {% for topic in event_topics %}
+                            <option value="{{ topic }}" {{ "selected" if event and event.topic == topic else '' }}>{{ topic }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
         </div>
 
-        <div class="item form-group">
-            <label class="control-label">Event Sub-Topic
-            </label>
-            <select class="form-control" id="sub_topic" name='sub_topic'>
-                {% if not event or not event.sub_topic %}
-                    <option value="">Choose..</option>
-                {% endif %}
-                {% for sub_topic in event_sub_topics %}
-                    <option value="{{ sub_topic }}" {{ "selected" if event and event.sub_topic == sub_topic else '' }}>{{ sub_topic }}</option>
-                {% endfor %}
-            </select>
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="item form-group">
+                    <label class="control-label">Event Sub-Topic
+                    </label>
+                    <select class="form-control" id="sub_topic" name='sub_topic'>
+                        {% if not event or not event.sub_topic %}
+                            <option value="">Choose..</option>
+                        {% endif %}
+                        {% for sub_topic in event_sub_topics %}
+                            <option value="{{ sub_topic }}" {{ "selected" if event and event.sub_topic == sub_topic else '' }}>{{ sub_topic }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
         </div>
-
         <div class="item form-group">
-            <label>Code of Conduct
+            <label><span class="coc-state">Add</span> Code of Conduct
             </label>
-            <textarea name="code_of_conduct"
+            <input type="checkbox" class="toggle-switch" name="coc_state"
+                       value="on" id="coc-switch"/>
+            <label for="coc-switch" style="margin-left:0;"></label>
+            <div id="coc-holder" style="display:none;">
+                <textarea name="code_of_conduct"
                       class="form-control">{{ event.code_of_conduct | default('', true) }}</textarea>
+            </div>
+        </div>
+        <div class="item form-group">
+            <label>License of Event Data and Content <a class="btn btn-info btn-xs licence-help" data-toggle="licence-modal" data-target="#licence_modal">?</a></label>
+            <div id="licence-list" style="display: none;">
+                <ul style="background-color: #f2f2f2; padding-left: 28px; padding-bottom: 5px; padding-top: 5px; border-radius: 1px;">
+                {% for licence_name, info in event_licences.iteritems() %}
+                    <li>
+                        <a href="{{ info.2 }}" target="_blank">{{ licence_name }}</a>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+            <select name="copyright_licence" class="form-control">
+                <option value="">Choose Licence</option>
+                {{ event_licences }}
+                {% for licence in event_licences %}
+                    <option value="{{ licence }}" {{ "selected" if event and event.copyright.licence == licence else '' }}>
+                    {{ licence }}
+                    </option>
+                {% endfor %}
+            </select>
         </div>
 
     </div>
     <div class="col-md-1">
-
     </div>
     <div class="col-md-4">
-        
     </div>
     <input type="hidden" name="latitude" id="latitude" value="{{ event.latitude | default(0.00, true) }}"/>
     <input type="hidden" name="longitude" id="longitude" value="{{ event.longitude | default(0.00, true) }}"/>
@@ -361,7 +400,7 @@
     </div>
 </div>
 <script>
-    var marker;
+    var marker, map;
     var init_marker;
     var placeSearch, autocomplete;
     var componentForm = {
@@ -405,6 +444,35 @@
         autocomplete.addListener('place_changed', geocodeHandler);
 
     }
+    function fillInAddress(map) {
+        // Get the place details from the autocomplete object.
+        var place = autocomplete.getPlace();
+        // Get each component of the address from the place details
+        // and fill the corresponding field on the form.
+        for (var component in componentForm) {
+          document.getElementById(component).value = '';
+        }
+
+        for (var i = 0; i < place.address_components.length; i++) {
+          var addressType = place.address_components[i].types[0];
+          if (componentForm[addressType]) {
+            console.log(addressType);
+            var val = place.address_components[i][componentForm[addressType]];
+            document.getElementById(addressType).value = val;
+          }
+        }
+        $('#location_name').hide();
+        $('#show_addr').hide();
+        $('#map-holder').show();
+        resizeMap(map);
+    }
+
+    function resizeMap(map) {
+        google.maps.event.trigger(map,'resize');
+        map.setZoom( map.getZoom() );
+        map.setCenter( map.getCenter() );
+    }
+
     function geocodeAddress(geocoder, resultsMap) {
         var address = $locationInput.val();
         geocoder.geocode({'address': address}, function (results, status) {
@@ -429,6 +497,7 @@
                         position: results[0].geometry.location
                     });
                 }
+                fillInAddress(resultsMap);
             } else {
                 if (status === 'ZERO_RESULTS') {
                     resultsMap.setZoom(1);
@@ -454,6 +523,23 @@
                 autocomplete.setBounds(circle.getBounds());
             });
         }
+    }
+
+    function show_map_holder() {
+        $('#location_name').hide();
+        $('#map-holder').show();
+        $('#show_addr').hide();
+    }
+
+    function remove_map_holder() {
+        for (var component in componentForm) {
+          document.getElementById(component).value = '';
+        }
+        autocomplete.set('place',void(0));
+        $('#location_name').get(0).value='';
+        $('#location_name').show();
+        $('#map-holder').hide();
+        $('#show_addr').show();
     }
 
     var $uploadCropper = $('#upload-cropper');
@@ -482,7 +568,7 @@
         });
 
         $(".licence-help").click(function () {
-            $("#licence_modal").modal('show');
+            $("#licence-list").slideToggle();
         });
 
         var sub_topics = {{event_sub_topics|safe}};
@@ -614,5 +700,49 @@
         e.unwrap();
     }
 
+    $(function () {
+        var $cocHolder = $("#coc-holder");
+        var $cocState = $(".coc-state");
+
+        var coc_onOffSwitch = document.getElementById('coc-switch');
+
+        coc_onOffSwitch.onchange = function () {
+            if (coc_onOffSwitch.checked) {
+                $cocHolder.fadeIn();
+                $cocState.text("Remove");
+            } else {
+                $cocHolder.fadeOut();
+                $cocState.text("Add");
+            }
+        };
+
+        var $organizerHolder = $("#organizer-holder");
+        var $organizerState = $(".organizer-state");
+
+        var organizer_onOffSwitch = document.getElementById('organizer-switch');
+
+        organizer_onOffSwitch.onchange = function () {
+            if (organizer_onOffSwitch.checked) {
+                $organizerHolder.fadeIn();
+                $organizerState.text("Remove");
+            } else {
+                $organizerHolder.fadeOut();
+                $organizerState.text("Add");
+            }
+        };
+
+        /*var $mapHolder = $("#map-holder");
+        var $mapState = $(".map-state");
+
+        var map_onOffSwitch = document.getElementById('map-switch');
+
+        map_onOffSwitch.onchange = function () {
+            if (map_onOffSwitch.checked) {
+                $mapHolder.fadeIn();
+            } else {
+                $mapHolder.fadeOut();
+            }
+        };*/
+    });
 </script>
 

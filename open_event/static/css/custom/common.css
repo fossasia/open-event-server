@@ -8,6 +8,34 @@
     z-index: -1;
 }
 
+.image-box {
+    width: 100%;
+    height: 200px;
+    background-color: rgb(245, 245, 245);
+    border-radius: 2%;
+    border: 2px dashed rgb(146, 176, 179);
+}
+
+.image-box label {
+    width: 100%;
+    height: 100%;
+    padding: 25% 33%;
+    cursor: pointer;
+}
+
+.image-box.is-dragover {
+  background-color: #fff;
+}
+
+.image-upload-btn {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
 .upload-btn + label {
     font-size: 14px;
     font-weight: 200;

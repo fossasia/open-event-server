@@ -129,6 +129,7 @@ var $editSessionForm = $("#edit-session-form");
 
 var $mobileTimeline = $("#mobile-timeline");
 var $tracksTimeline = $("#tracks-timeline");
+var $sessionViewHolder = $("#session-view-holder");
 /**
  * TEMPLATE STRINGS
  * ================
@@ -901,7 +902,12 @@ function initializeTimeline(eventId) {
             }
             $(".rooms-view").addClass('active');
 
-            $('.microlocation-container').css("width", $(".microlocations.x1").width() + "px")
+            $('.microlocation-container').css("width", $(".microlocations.x1").width() + "px");
+
+            $(document).trigger({
+                type: "scheduling:recount",
+                microlocations: _.map(microlocationsStore, 'id')
+            });
         });
     });
 }
@@ -1007,16 +1013,29 @@ $(document)
         location.href = "/events/" + window.mainEvent.id + "/sessions/" + session.id + "/edit/";
     })
     .on("click", ".rooms-view", function(){
+        $dayButtonsHolder.show();
         $timeline.removeClass('hidden');
         $mobileTimeline.removeClass('hidden');
         $tracksTimeline.addClass('hidden');
+        $sessionViewHolder.addClass('hidden');
         $(this).addClass("active").siblings().removeClass("active");
     })
     .on("click", ".tracks-view", function(){
+        $dayButtonsHolder.show();
         $timeline.addClass('hidden');
         $mobileTimeline.addClass('hidden');
         $tracksTimeline.removeClass('hidden');
+        $sessionViewHolder.addClass('hidden');
         $(this).addClass("active").siblings().removeClass("active");
+    })
+    .on("click", ".sessions-view", function() {
+        $dayButtonsHolder.hide();
+        $sessionViewHolder.removeClass('hidden');
+        $timeline.addClass('hidden');
+        $mobileTimeline.addClass('hidden');
+        $tracksTimeline.addClass('hidden');
+        $(this).addClass("active").siblings().removeClass("active");
+
     })
     .on("click", ".clear-overlaps-button", removeOverlaps);
 
@@ -1028,6 +1047,14 @@ $(document).ready(function () {
     window.mainEvent.start_time = moment.utc($timeline.data("event-start"));
     window.mainEvent.end_time = moment.utc($timeline.data("event-end"));
     initializeTimeline(window.mainEvent.id);
+});
+
+$(document).on("scheduling:recount", function(e) {
+    var microlocations = _.cloneDeep(e.microlocations);
+    _.each(microlocations, function(microlocation_id){
+        var $microlocationColumn = $microlocationsHolder.find(".microlocation[data-microlocation-id=" + microlocation_id + "]");
+        $microlocationColumn.find(".microlocation-header").find(".badge").text($microlocationColumn.find(".session.scheduled").length)
+    });
 });
 
 $(document).on("scheduling:change", function (e) {

@@ -11,7 +11,7 @@ EVENT_LICENCES = {
     'All rights reserved': (
         'All rights reserved',
         u'The copyright holder reserves, or holds for their own use, all the rights provided by copyright law under one specific copyright treaty.',
-        '',
+        'https://en.wikipedia.org/wiki/All_rights_reserved',
         '',
         ''),
     'Attribution': (

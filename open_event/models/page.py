@@ -11,12 +11,14 @@ class Page(db.Model):
     url = db.Column(db.String, nullable=False)
     description = db.Column(db.String)
     place = db.Column(db.String)
-    def __init__(self, name=None,title=None, description=None, url=None, place=None):
+    index = db.Column(db.Integer, default=0)
+    def __init__(self, name=None,title=None, description=None, url=None, place=None, index=None):
         self.name = name
         self.description = description
         self.title = title
         self.url = url
         self.place = place
+        self.index = index
 
     def __repr__(self):
         return '<Page %r>' % self.name

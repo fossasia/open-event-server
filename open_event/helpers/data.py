@@ -74,8 +74,23 @@ class DataManager(object):
 
     @staticmethod
     def mark_user_notification_as_read(notification):
+        """Mark a particular notification read.
+        """
         notification.has_read = True
         save_to_db(notification, 'Mark notification as read')
+
+    @staticmethod
+    def mark_all_user_notification_as_read(user):
+        """Mark all notifications for a User as read.
+        """
+        unread_notifs = Notification.query.filter_by(user=user,
+                                                     has_read=False)
+
+        for notif in unread_notifs:
+            notif.has_read = True
+            db.session.add(notif)
+
+        db.session.commit()
 
     @staticmethod
     def add_event_role_invite(email, role_name, event_id):
@@ -583,6 +598,7 @@ class DataManager(object):
             .update(dict(data))
         speaker.sessions = InstrumentedList(
             form.sessions.data if form.sessions.data else [])
+        speaker.ensure_social_links()
         save_to_db(speaker, "Speaker updated")
         record_activity('update_speaker', speaker=speaker, event_id=speaker.event_id)
         update_version(speaker.event_id, False, "speakers_ver")
@@ -1248,7 +1264,6 @@ class DataManager(object):
             CustomForms, event_id=event.id,
             session_form=session_form, speaker_form=speaker_form)
 
-        delete_from_db(call_for_papers, "CallForPaper Deleted")
 
         if form.get('call_for_speakers_state', u'off') == u'on':
             if call_for_papers:
@@ -1268,6 +1283,10 @@ class DataManager(object):
                                                          form['cfs_end_date'], '%m/%d/%Y'),
                                                      event_id=event.id)
                 save_to_db(call_for_speakers)
+        else:
+            if call_for_papers:
+                delete_from_db(call_for_papers, "Cfs deleted")
+
 
         save_to_db(event, "Event saved")
         record_activity('update_event', event_id=event.id)
@@ -1352,7 +1371,7 @@ class DataManager(object):
     def create_page(form):
 
         page = Page(name=form.get('name', ''), title=form.get('title', ''), description=form.get('description', ''),
-                    url=form.get('url', ''), place=form.get('place', ''))
+                    url=form.get('url', ''), place=form.get('place', ''), index=form.get('index', 0))
         save_to_db(page, "Page created")
 
     def update_page(self, page, form):
@@ -1361,6 +1380,7 @@ class DataManager(object):
         page.description = form.get('description', '')
         page.url = form.get('url', '')
         page.place = form.get('place', '')
+        page.index = form.get('index', '')
         save_to_db(page, "Page updated")
 
 def save_to_db(item, msg="Saved to db", print_error=True):

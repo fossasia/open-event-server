@@ -92,6 +92,9 @@ class User(db.Model):
             # If `service_class` does not have `get_service_name()`
             return False
 
+        if self.is_super_admin:
+            return True
+
         service = Service.query.filter_by(name=service_name).first()
 
         uer_querylist = UsersEventsRoles.query.filter_by(user=self,

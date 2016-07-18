@@ -587,7 +587,7 @@ class DataGetter:
 
     @staticmethod
     def get_all_pages():
-        return Page.query.all()
+        return Page.query.order_by(desc(Page.index)).all()
 
     @staticmethod
     def get_page_by_id(page_id):
