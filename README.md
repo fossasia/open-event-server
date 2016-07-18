@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/fossasia/open-event-orga-server.svg?branch=master)](https://travis-ci.org/fossasia/open-event-orga-server)
 [![Dependency Status](https://gemnasium.com/badges/github.com/fossasia/open-event-orga-server.svg)](https://gemnasium.com/github.com/fossasia/open-event-orga-server)
-[![Codacy Badge](https://api.codacy.com/project/badge/grade/645630f8334b40dd93ba804956908a42)](https://www.codacy.com/app/triplez/open-event-orga-server)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1ac554483fac462797ffa5a8b9adf2fa)](https://www.codacy.com/app/fossasia/open-event-orga-server?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fossasia/open-event-orga-server&amp;utm_campaign=Badge_Grade)
 [![Issue Count](https://codeclimate.com/github/fossasia/open-event-orga-server/badges/issue_count.svg)](https://codeclimate.com/github/fossasia/open-event-orga-server)
 [![Test Coverage](https://codeclimate.com/github/fossasia/open-event-orga-server/badges/coverage.svg)](https://codeclimate.com/github/fossasia/open-event-orga-server/coverage)
 [![Coverage Status](https://coveralls.io/repos/github/fossasia/open-event-orga-server/badge.svg?branch=master)](https://coveralls.io/github/fossasia/open-event-orga-server?branch=master)
