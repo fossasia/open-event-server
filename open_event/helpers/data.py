@@ -805,6 +805,7 @@ class DataManager(object):
         :param img_files:
         :param form: view data form
         """
+        print form.get('show_map')
         # Filter out Copyright info
         holder = form.get('organizer_name')
         # Current year
@@ -837,6 +838,7 @@ class DataManager(object):
                       organizer_description=form['organizer_description'],
                       copyright=copyright,
                       code_of_conduct=form['code_of_conduct'],
+                      show_map=1 if form.get('show_map') == "on" else 0,
                       creator=login.current_user)
 
         if event.latitude and event.longitude:
@@ -1001,6 +1003,7 @@ class DataManager(object):
                       sub_topic=event_old.sub_topic,
                       privacy=event_old.privacy,
                       ticket_url=event_old.ticket_url,
+                      show_map=event_old.show_map,
                       organizer_name=event_old.organizer_name,
                       organizer_description=event_old.organizer_description)
 
@@ -1059,6 +1062,7 @@ class DataManager(object):
         event.event_url = form['event_url']
         event.type = form['type']
         event.topic = form['topic']
+        event.show_map = 1 if form.get('show_map') == "on" else 0
         event.sub_topic = form['sub_topic']
         event.privacy = form.get('privacy', 'public')
         event.organizer_name = form['organizer_name']
