@@ -105,9 +105,12 @@ class EventDetailView(BaseView):
     def display_event_coc(self, event_id):
         event = get_published_event_or_abort(event_id)
         accepted_sessions = DataGetter.get_sessions(event_id)
+        call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
         if not (event.code_of_conduct and event.code_of_conduct != '' and event.code_of_conduct != ' '):
             abort(404)
-        return self.render('/gentelella/guest/event/code_of_conduct.html', event=event, accepted_sessions=accepted_sessions)
+        return self.render('/gentelella/guest/event/code_of_conduct.html', event=event,
+                           accepted_sessions=accepted_sessions,
+                           call_for_speakers=call_for_speakers)
 
     # SLUGGED PATHS
 
