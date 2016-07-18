@@ -255,7 +255,7 @@ def send_notification(user, action, title, message):
     DataManager.create_user_notification(user, action, title, message)
 
 
-def send_notif_event_role(user, role_name, event_name, link):
+def send_notif_event_role(user, role_name, event_name, accept_link, decline_link):
     notif = NOTIFS[NOTIF_EVENT_ROLE]
     action = NOTIF_EVENT_ROLE
     title = notif['title'].format(
@@ -265,7 +265,8 @@ def send_notif_event_role(user, role_name, event_name, link):
     message = notif['message'].format(
         role_name=role_name,
         event_name=event_name,
-        link=link
+        accept_link=accept_link,
+        decline_link=decline_link
     )
 
     send_notification(user, action, title, message)
