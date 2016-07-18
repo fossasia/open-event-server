@@ -805,7 +805,6 @@ class DataManager(object):
         :param img_files:
         :param form: view data form
         """
-        print form.get('show_map')
         # Filter out Copyright info
         holder = form.get('organizer_name')
         # Current year
@@ -851,8 +850,9 @@ class DataManager(object):
                         event.searchable_location_name = addr['short_name']
 
         state = form.get('state', None)
+        print state
         if state and ((state == u'Published' and not string_empty(
-            event.location_name)) or state != u'Published') and login.current_user.is_verified:
+                       event.location_name)) or state != u'Published') and login.current_user.is_verified:
             event.state = state
 
         if event.start_time <= event.end_time:
