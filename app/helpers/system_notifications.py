@@ -13,9 +13,10 @@ from app.models.notifications import (
 NOTIFS = {
     EVENT_ROLE_INVITE: {
         'title': 'Invitation to be {role_name} at {event_name}',
-        'message': ("You've been invited to be a <strong>{role_name}</strong>"
-            " at <strong>{event_name}</strong>.<br>Please follow the link to"
-            " accept the role: <a href='{link}'>Link</a>."),
+        'message': """You've been invited to be a <strong>{role_name}</strong>
+            at <strong>{event_name}</strong>.<br><br>
+            <a href='{accept_link}' class='btn btn-success btn-sm'>Accept</a>
+            <a href='{decline_link}' class='btn btn-danger btn-sm'>Decline</a>""",
         'recipient': 'User',
     },
     NEW_SESSION: {
