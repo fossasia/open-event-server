@@ -51,7 +51,7 @@ from ..models.user import User, ORGANIZER
 from ..models.user_detail import UserDetail
 from ..models.users_events_roles import UsersEventsRoles
 from ..models.page import Page
-
+from ..models.email_notifications import EmailNotification
 
 class DataManager(object):
     """Main class responsible for DataBase managing"""
@@ -1296,6 +1296,7 @@ class DataManager(object):
     def delete_event(e_id):
         EventsUsers.query.filter_by(event_id=e_id).delete()
         UsersEventsRoles.query.filter_by(event_id=e_id).delete()
+        EmailNotification.query.filter_by(event_id=e_id).delete()
         SessionType.query.filter_by(event_id=e_id).delete()
         SocialLink.query.filter_by(event_id=e_id).delete()
         Track.query.filter_by(id=e_id).delete()
