@@ -41,6 +41,7 @@ class Event(db.Model):
     event_url = db.Column(db.String)
     background_url = db.Column(db.String)
     organizer_name = db.Column(db.String)
+    show_map = db.Column(db.Integer)
     organizer_description = db.Column(db.String)
     in_trash = db.Column(db.Boolean, default=False)
     track = db.relationship('Track', backref="event")
@@ -91,6 +92,7 @@ class Event(db.Model):
                  code_of_conduct=None,
                  schedule_published_on=None,
                  in_trash=False,
+                 show_map=1,
                  searchable_location_name=None):
         self.name = name
         self.logo = logo
@@ -107,6 +109,7 @@ class Event(db.Model):
         self.organizer_name = organizer_name
         self.organizer_description = clean_up_string(organizer_description)
         self.state = state
+        self.show_map = show_map
         self.privacy = privacy
         self.closing_datetime = closing_datetime
         self.type = type
