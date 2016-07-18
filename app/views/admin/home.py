@@ -179,6 +179,14 @@ class MyHomeView(AdminIndexView):
 
     @expose('/browse/', methods=('GET',))
     def browse_view(self):
+        params = request.args.items()
+        params = dict((k, v) for k, v in params if v)
+
+        def test_and_remove(key):
+            if request.args.get(key):
+                if request.args.get(key).lower() == request.args.get("query").lower():
+                    erase_from_dict(params, 'query')
+
         if not request.args.get("location"):
             try:
                 reader = geoip2.database.Reader(os.path.realpath('.') + '/static/data/GeoLite2-Country.mmdb')
@@ -192,11 +200,12 @@ class MyHomeView(AdminIndexView):
         else:
             country = request.args.get("location")
 
-        params = request.args.items()
+        test_and_remove("location")
+        test_and_remove("category")
         erase_from_dict(params, 'location')
-        params = dict((k, v) for k, v in params if v)
+
         return redirect(url_for('explore.explore_view', location=slugify(country)) + '?' +
-                        urllib.urlencode(request.args))
+                        urllib.urlencode(params))
 
     @expose('/check_email/', methods=('POST', 'GET'))
     def check_duplicate_email(self):
