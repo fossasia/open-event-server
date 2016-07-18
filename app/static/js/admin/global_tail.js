@@ -21,7 +21,7 @@ $(document).ready(function () {
         success: function (json) {
             $("#location").val(json.name);
             $locationField.val(json.name);
-            initializeSearchAutoComplete('india'); // TODO use json.slug instead of india
+            initializeSearchAutoComplete(json.name);
         },
         error: function (err) {
             console.log("Request failed, error= " + err);
