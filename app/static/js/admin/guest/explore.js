@@ -70,7 +70,7 @@ $(document).on('click', '.filter-item', function () {
     }
     $filterItem.addClass('active');
     if (!$filterItem.hasClass('no-click')) {
-        if(type === 'period') {
+        if (type === 'period') {
             $("#custom-date-collapse").collapse('hide');
         }
         runFilter(type, $filterItem.text());
@@ -96,6 +96,18 @@ $("form#location-search-form").submit(function (e) {
 $("#event_browse").submit(function (e) {
     e.preventDefault();
     runFilter('query', $('#search-text').val());
+}).bind('typeahead:select', function (ev, suggestion) {
+    ev.preventDefault();
+    switch (suggestion.type) {
+        case 'category':
+            runFilter('category', suggestion.value);
+            break;
+        case 'location':
+            runFilter('location', suggestion.value);
+            break;
+        default:
+            runFilter('query', suggestion.value);
+    }
 });
 
 $(document).on('click', '.filter-tag-btn', function (e) {

@@ -59,19 +59,8 @@
     <script src="{{ url_for('static', filename='admin/lib/typeahead.js/dist/typeahead.bundle.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/bootstrap/dist/js/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/summernote/dist/summernote.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin/global_tail.js') }}"></script>
     <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            var $searchText = $('#search-text');
-            $('.search-button').click(function (e) {
-                if (window.innerWidth <= 711 && ($searchText.val() == "")) {
-                    e.preventDefault();
-                    $searchText.toggle();
-                    $searchText.width(0.8 * window.innerWidth);
-                }
-            });
-        });
-    </script>
 {% endblock %}
 </body>
 </html>

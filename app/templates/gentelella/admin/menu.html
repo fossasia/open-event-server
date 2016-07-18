@@ -14,6 +14,8 @@
                             {% if csrf_token %}
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                             {% endif %}
+                            <input type="hidden" name="location" value="">
+                            <input type="hidden" name="category" value="">
                             <div class="input-group" style="margin-top:12px; margin-bottom:6px">
                                 <input type="text" id="search-text" class="form-control" name="query" placeholder="Search for..." />
                               <span class="input-group-btn">
@@ -76,19 +78,4 @@
             </nav>
         </div>
     </div>
-
-    <script>
-        var requestUrl = "/api/location/";
-        $.ajax({
-            url: requestUrl,
-            type: 'POST',
-            success: function (json) {
-                $("#location").val(json.name);
-                $("#event_browse").attr("action", "/explore/" + json.slug + "/events/")
-            },
-            error: function (err) {
-                console.log("Request failed, error= " + err);
-            }
-        });
-    </script>
 {% endmacro %}
