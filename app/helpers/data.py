@@ -95,7 +95,7 @@ class DataManager(object):
     @staticmethod
     def add_event_role_invite(email, role_name, event_id):
         """
-        Save an event role invite to database and return invitation link.
+        Save an event role invite to database and return accept and decline links.
         :param email: Email for the invite
         :param role_name: Role name for the invite
         :param event_id: Event id
@@ -113,11 +113,14 @@ class DataManager(object):
 
         save_to_db(role_invite, "Role Invite saved")
 
-        link = url_for('events.user_role_invite',
-                       event_id=event_id,
-                       hash=role_invite.hash)
+        accept_link = url_for('events.user_role_invite',
+                               event_id=event_id,
+                               hash=role_invite.hash)
+        decline_link = url_for('events.user_role_invite_decline',
+                               event_id=event_id,
+                               hash=role_invite.hash)
 
-        return link
+        return accept_link, decline_link
 
     @staticmethod
     def add_invite_to_event(user_id, event_id):
@@ -1361,6 +1364,11 @@ class DataManager(object):
         save_to_db(uer, "UserEventRole saved")
         if record:
             record_activity('create_role', role=role, user=user, event_id=event_id)
+
+    @staticmethod
+    def decline_role_invite(role_invite):
+        role_invite.declined = True
+        save_to_db(role_invite)
 
     @staticmethod
     def update_user_event_role(form, uer):

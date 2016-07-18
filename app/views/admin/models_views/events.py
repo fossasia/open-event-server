@@ -336,6 +336,8 @@ class EventsView(BaseView):
 
     @expose('/<int:event_id>/role-invite/<hash>', methods=('GET', 'POST'))
     def user_role_invite(self, event_id, hash):
+        """Accept User-Role invite for the event.
+        """
         event = DataGetter.get_event(event_id)
         user = login.current_user
         role_invite = DataGetter.get_event_role_invite(email=user.email,
@@ -359,6 +361,30 @@ class EventsView(BaseView):
             delete_from_db(role_invite, 'Deleted RoleInvite')
 
             flash('You have been added as a %s' % role.title_name)
+            return redirect(url_for('.details_view', event_id=event.id))
+        else:
+            abort(404)
+
+    @expose('/<int:event_id>/role-invite/decline/<hash>', methods=('GET', 'POST'))
+    def user_role_invite_decline(self, event_id, hash):
+        """Decline User-Role invite for the event.
+        """
+        event = DataGetter.get_event(event_id)
+        user = login.current_user
+        role_invite = DataGetter.get_event_role_invite(email=user.email,
+                                                       event_id=event.id,
+                                                       hash=hash)
+
+        if role_invite:
+            if role_invite.has_expired():
+                delete_from_db(role_invite, 'Deleted RoleInvite')
+
+                flash('Sorry, the invitation link has expired.', 'error')
+                return redirect(url_for('.details_view', event_id=event.id))
+
+            DataManager.decline_role_invite(role_invite)
+
+            flash('You have declined the role invite.')
             return redirect(url_for('.details_view', event_id=event.id))
         else:
             abort(404)

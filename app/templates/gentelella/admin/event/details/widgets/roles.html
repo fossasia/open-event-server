@@ -57,7 +57,15 @@ Manage Roles
             <td>
             {% if invite.has_expired() %}
                 <del>
-                    <a href="javascript:;" title="The invitation link has expired">Invitation Link</a>
+                    <a href="javascript:;" data-toggle="tooltip" data-placement="left" data-original-title="Invitation expired">
+                        Invitation Link
+                    </a>
+                </del>
+            {% elif invite.declined %}
+                <del>
+                    <a href="javascript:;" data-toggle="tooltip" data-placement="left" data-original-title="Invitation declined">
+                        Invitation Link
+                    </a>
                 </del>
             {% else %}
                 <a href="{{ url_for('events.user_role_invite', event_id=event.id, hash=invite.hash) }}" title="Link sent to the user">

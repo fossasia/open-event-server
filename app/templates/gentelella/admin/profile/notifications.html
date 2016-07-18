@@ -7,13 +7,15 @@ Notifications
 {% block head_css %}
     {{ super() }}
     <style type="text/css">
+    /*
         .notification {
             cursor: pointer;
         }
+    */
     </style>
 {% endblock %}
 {% block body %}
-
+    
 
     <div class="row">
         <div class="col-xs-12 col-sm-10 col-sm-push-1 col-md-8 col-md-push-2">
@@ -125,6 +127,7 @@ Notifications
             $('[data-toggle="tooltip"]').tooltip();
         });
 
+        /*
         $(document).on('click', '.notification', function (e) {
             var link = $(this).find("p.clickable-link-holder").find("a").attr("href").trim();
             var readLink = $(this).find(".read-btn").attr("href").trim();
@@ -138,6 +141,7 @@ Notifications
                 }
             }
         });
+        */
     </script>
 
 {% endblock %}
