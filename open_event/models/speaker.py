@@ -1,6 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 from open_event.helpers.versioning import clean_up_string, clean_html
 from . import db
+from ..helpers.helpers import ensure_social_link
 
 
 class Speaker(db.Model):
@@ -58,6 +59,8 @@ class Speaker(db.Model):
         self.position = position
         self.country = country
         self.event_id = event_id
+        # ensure links are in social fields
+        self.ensure_social_links()
         self.user = user
 
     @staticmethod
@@ -104,3 +107,10 @@ class Speaker(db.Model):
             'country': self.country,
             'sessions': session_data
         }
+
+    def ensure_social_links(self):
+        """convert usernames in social network fields to full links"""
+        self.twitter = ensure_social_link('https://twitter.com', self.twitter)
+        self.facebook = ensure_social_link('https://www.facebook.com', self.facebook)
+        self.github = ensure_social_link('https://github.com', self.github)
+        self.linkedin = ensure_social_link('https://www.linkedin.com/in', self.linkedin)

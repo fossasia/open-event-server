@@ -79,7 +79,7 @@ For steps regarding how to deploy your version of the Open-Event Server to Herok
 
 ## Demo version
 
-[Go to demo version](http://open-event.herokuapp.com/admin/)
+[Go to demo version](http://open-event.herokuapp.com/)
 
 ## License
 

@@ -4,8 +4,8 @@ from flask.ext.restplus import Resource, Namespace
 
 from open_event.helpers.data import record_activity
 from helpers.export_helpers import export_event_json
-from helpers.helpers import nocache, can_access, requires_auth
 from helpers.utils import TASK_RESULTS
+from helpers.helpers import nocache, can_access, requires_auth
 
 
 api = Namespace('exports', description='Exports', path='/')
