@@ -35,9 +35,12 @@ class SessionsView(BaseView):
         return self.render('/gentelella/admin/event/sessions/base_session_table.html',
                            sessions=sessions, event_id=event_id, event=event)
 
-    @expose('/<int:session_id>/')
+    @expose('/<int:session_id>/', methods=('GET', 'POST'))
     def session_display_view(self, event_id, session_id):
         session = get_session_or_throw(session_id)
+        if request.method == 'POST':
+            DataManager.edit_session(request, session)
+            return redirect(url_for('.index_view', event_id=event_id))
         event = DataGetter.get_event(event_id)
         form_elems = DataGetter.get_custom_form_elements(event_id)
         if not form_elems:
@@ -45,9 +48,11 @@ class SessionsView(BaseView):
                   " Session creation has been disabled", "danger")
             return redirect(url_for('.index_view', event_id=event_id))
         session_form = json.loads(form_elems.session_form)
+        speakers = DataGetter.get_speakers(event_id).all()
 
-        return self.render('/gentelella/admin/event/sessions/display.html',
-                           session=session, session_form=session_form, event_id=event_id, event=event)
+        return self.render('/gentelella/admin/event/sessions/edit.html',
+                           session=session, session_form=session_form, event_id=event_id,
+                           event=event, speakers=speakers)
 
     @expose('/create/', methods=('GET', 'POST'))
     @can_access
@@ -108,6 +113,23 @@ class SessionsView(BaseView):
         event = DataGetter.get_event(event_id)
         return self.render('/gentelella/admin/event/sessions/invited.html',
                            session=session, event_id=event_id, event=event)
+
+    @expose('/<int:session_id>/add_speaker/', methods=('GET', 'POST'))
+    def add_speaker_view(self, event_id, session_id):
+        session = DataGetter.get_session(session_id)
+        event = DataGetter.get_event(event_id)
+        form_elems = DataGetter.get_custom_form_elements(event_id)
+        if not form_elems:
+            flash("Speaker form has been incorrectly configured for this event. Editing has been disabled", "danger")
+            return redirect(url_for('.index_view', event_id=event_id))
+        speaker_form = json.loads(form_elems.speaker_form)
+        if request.method == 'GET':
+            return self.render('/gentelella/admin/event/speakers/edit.html', event_id=event_id,
+                               event=event, speaker_form=speaker_form)
+        if request.method == 'POST':
+            DataManager.add_speaker_to_session(request, event_id, session_id)
+            flash("The speaker has been added to session")
+            return redirect(url_for('.index_view', event_id=event_id))
 
     @expose('/<int:session_id>/accept', methods=('GET',))
     @can_accept_and_reject

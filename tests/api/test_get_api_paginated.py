@@ -3,9 +3,11 @@ import json
 
 from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
+from tests.auth_helper import register, login
 from tests.api.utils import create_event, create_services, get_path
 
 from open_event import current_app as app
+from open_event.helpers.data import update_role_to_admin
 
 
 class PaginatedApiTestCase:
@@ -41,13 +43,15 @@ class TestGetApiPaginated(OpenEventTestCase, PaginatedApiTestCase):
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
-            create_event()
+            register(self.app, u'test@example.com', u'test')
+            create_event(creator_email=u'test@example.com')
 
     def _test_model(self, name):
         """
         Tests the 404 response, then add item
         and test the success response
         """
+        login(self.app, u'test@example.com', u'test')
         path = get_path(1, name + 's', 'page')
         response = self.app.get(path, follow_redirects=True)
         # check for 404 in no data
@@ -68,7 +72,11 @@ class TestGetApiPaginatedUrls(OpenEventTestCase, PaginatedApiTestCase):
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
-            event_id = create_event()
+            register(self.app, u'test@example.com', u'test')
+            # User must be part of the staff to access listed events
+            update_role_to_admin({'admin_perm': 'isAdmin'}, user_id=1)
+
+            event_id = create_event(creator_email=u'test@example.com')
             create_services(event_id)
 
     def _json_from_url(self, url):
@@ -87,6 +95,7 @@ class TestGetApiPaginatedUrls(OpenEventTestCase, PaginatedApiTestCase):
             next is not empty
         3. start from position 2 and see if prev is not empty
         """
+        login(self.app, u'test@example.com', u'test')
         if name == 'event':
             path = get_path('page')
         else:
@@ -117,8 +126,13 @@ class TestGetApiPaginatedEvents(OpenEventTestCase):
     """
     def setUp(self):
         self.app = Setup.create_app()
+        with app.test_request_context():
+            register(self.app, u'test@example.com', u'test')
+            # User must be part of the staff to access listed events
+            update_role_to_admin({'admin_perm': 'isAdmin'}, user_id=1)
 
     def test_api(self):
+        login(self.app, u'test@example.com', u'test')
         path = get_path('page')
         response = self.app.get(path)
         self.assertEqual(response.status_code, 404, msg=response.data)
@@ -130,7 +144,7 @@ class TestGetApiPaginatedEvents(OpenEventTestCase):
 
     def test_api_filters(self):
         with app.test_request_context():
-            create_event()
+            create_event(creator_email=u'test@example.com')
         path = get_path('page') + '?location=r@nd0m'
         resp = self.app.get(path)
         self.assertEqual(resp.status_code, 404)

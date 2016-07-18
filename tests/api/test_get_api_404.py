@@ -2,6 +2,7 @@ import unittest
 
 from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
+from tests.auth_helper import register, login
 from tests.api.utils import get_path, create_event
 
 from open_event import current_app as app
@@ -12,12 +13,16 @@ class TestGetApiNonExistingEvent(OpenEventTestCase):
     """
 
     def test_event_api(self):
-        # Non existing event
-        event_id = 1
-        path = get_path(event_id)
-        response = self.app.get(path)
-        self.assertEqual(response.status_code, 404)
-        self.assertIn('does not exist', response.data)
+        self.app = Setup.create_app()
+        with app.test_request_context():
+            register(self.app, u'test@example.com', u'test')
+            login(self.app, u'test@example.com', u'test')
+            # Non existing event
+            event_id = 1
+            path = get_path(event_id)
+            response = self.app.get(path)
+            self.assertEqual(response.status_code, 404)
+            self.assertIn('does not exist', response.data)
 
 
 class TestGetApiNonExistingServices(OpenEventTestCase):
@@ -30,8 +35,9 @@ class TestGetApiNonExistingServices(OpenEventTestCase):
         """
         self.app = Setup.create_app()
         with app.test_request_context():
+            register(self.app, u'test@example.com', u'test')
             # Created event will have id=1
-            create_event()
+            create_event(creator_email=u'test@example.com')
 
     def _test_path(self, path):
         """Helper function.
@@ -39,6 +45,7 @@ class TestGetApiNonExistingServices(OpenEventTestCase):
         contains 'does no exist' string.
         """
         with app.test_request_context():
+            login(self.app, u'test@example.com', u'test')
             response = self.app.get(path)
             self.assertEqual(response.status_code, 404)
             self.assertIn('does not exist', response.data)

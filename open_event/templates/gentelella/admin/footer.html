@@ -5,10 +5,11 @@
             <div class="col-md-3 col-sm-3">
                 <h4 class="footer-header">Use Open Event</h4>
                 <ul>
-                    <li><a href="/how_it_works">How it Works</a></li>
-                    <li><a href="/pricing">Pricing</a></li>
-                    <li><a href="/mobile_apps">Mobile Apps</a></li>
-                    <li><a href="/sitemap.xml">Sitemap</a></li>
+                    {% for page in system_pages %}
+                        {% if page.place == 'use_open_event'%}
+                            <li><a href="{{page.url}}">{{page.name}}</a></li>
+                        {% endif %}
+                    {% endfor %}
                 </ul>
             </div>
             <div class="col-md-3 col-sm-3">
@@ -31,22 +32,22 @@
                 <h4>Connect With Us</h4>
                 <ul>
                     {% if settings.support_url %}
-                        <li><i class="fa fa-info"></i> <a href="{{settings.support_url}}">Support</a></li>
+                        <li><i class="fa fa-info fa-fw"></i> <a href="{{settings.support_url}}">Support</a></li>
                     {% endif %}
                     {% if settings.twitter_url %}
-                        <li><i class="fa fa-twitter"></i> <a href="{{settings.twitter_url}}">Twitter</a></li>
+                        <li><i class="fa fa-twitter fa-fw"></i> <a href="{{settings.twitter_url}}">Twitter</a></li>
                     {% endif %}
                     {% if settings.facebook_url %}
-                        <li><i class="fa fa-facebook"></i> <a href="{{settings.facebook_url}}">Facebook</a></li>
+                        <li><i class="fa fa-facebook fa-fw"></i> <a href="{{settings.facebook_url}}">Facebook</a></li>
                     {% endif %}
                     {% if settings.google_url %}
-                        <li><i class="fa fa-google-plus"></i> <a href="{{settings.google_url}}">Google</a></li>
+                        <li><i class="fa fa-google-plus fa-fw"></i> <a href="{{settings.google_url}}">Google</a></li>
                     {% endif %}
                     {% if settings.youtube_url %}
-                        <li><i class="fa fa-youtube-play"></i> <a href="{{settings.youtube_url}}">Youtube</a></li>
+                        <li><i class="fa fa-youtube-play fa-fw"></i> <a href="{{settings.youtube_url}}">Youtube</a></li>
                     {% endif %}
                     {% if settings.github_url %}
-                        <li><i class="fa fa-github"></i> <a href="{{settings.github_url}}">Github</a></li>
+                        <li><i class="fa fa-github fa-fw"></i> <a href="{{settings.github_url}}">Github</a></li>
                     {% endif %}
                 </ul>
             </div>
@@ -57,17 +58,11 @@
         <div class="col-md-10 col-sm-12 col-md-offset-1" id="footer-menu">
             <div class="row">
                 <div class="col-md-9 col-sm-12">
-                    <a href="/about">About</a>
-                    <a href="/how_it_works" class="hide-large">How it Works</a></li>
-                    <a href="/pricing" class="hide-large">Pricing</a>
-                    <a href="https://opev.wordpress.com/">Blog</a>
-                    <a href="/support">Help</a>
-                    <a href="/press">Press</a>
-                    <a href="/security">Security</a>
-                    <a href="/developers">Developers</a>
-                    <a href="/privacy">Privacy</a>
-                    <a href="/cookies">Cookies</a>
-                    <a href="/sitemap.xml" class="hide-large">Sitemap</a>
+                    {% for page in system_pages %}
+                        {% if page.place == 'footer_menu'%}
+                            <a href="{{page.url}}">{{page.name}}</a>
+                        {% endif %}
+                    {% endfor %}
                 </div>
                 <div class="col-md-3 col-sm-4 col-xs-8 dropup col-xs-offset-2 col-sm-offset-4 col-md-offset-0">
                     <div class="dropdown-toggle footer-dropdown" data-toggle="dropdown">

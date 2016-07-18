@@ -1,11 +1,18 @@
 import zipfile
 import os
 import shutil
+import requests
+import traceback
 import json
 from flask import request
 from werkzeug import secure_filename
 
 from flask import current_app as app
+from open_event.helpers.storage import UploadedFile, upload, UploadedMemory, \
+    UPLOAD_PATHS
+from open_event.helpers.data import save_to_db
+from open_event.helpers.helpers import update_state
+
 from ..events import DAO as EventDAO, LinkDAO as SocialLinkDAO
 from ..microlocations import DAO as MicrolocationDAO
 from ..sessions import DAO as SessionDAO, TypeDAO as SessionTypeDAO
@@ -43,11 +50,28 @@ RELATED_FIELDS = {
     ]
 }
 
+UPLOAD_QUEUE = []
+
 CUR_ID = None
 
 
 def _allowed_file(filename, ext):
     return '.' in filename and filename.rsplit('.', 1)[1] in ext
+
+
+def _available_path(folder, filename):
+    """
+    takes filename and folder and returns available path
+    """
+    path = folder + filename
+    if not os.path.isfile(path):
+        return path
+    path += str(1)
+    ct = 1
+    while os.path.isfile(path):
+        ct += 1
+        path = folder + filename + str(ct)
+    return path
 
 
 def get_file_from_request(ext=[], folder='/static/temp/', name='file'):
@@ -65,7 +89,7 @@ def get_file_from_request(ext=[], folder='/static/temp/', name='file'):
     if not _allowed_file(file.filename, ext):
         raise NotFoundError('Invalid file type')
     filename = secure_filename(file.filename)
-    path = folder + filename
+    path = _available_path(folder, filename)
     file.save(path)
     return path
 
@@ -98,6 +122,94 @@ def _delete_fields(srv, data):
             if i in data:
                 del data[i]
     return data
+
+
+def _upload_media_queue(srv, obj):
+    """
+    Add media uploads to queue
+    """
+    global UPLOAD_QUEUE
+
+    if srv[0] not in UPLOAD_PATHS:
+        return
+    for i in UPLOAD_PATHS[srv[0]]:
+        path = getattr(obj, i)
+        if not path:
+            continue
+        # if not path.startswith('/'):  # relative
+        #     continue
+        # file OK
+        UPLOAD_QUEUE.append({
+            'srv': srv,
+            'id': obj.id,
+            'field': i
+        })
+    return
+
+
+def _upload_media(task_handle, event_id, base_path):
+    """
+    Actually uploads the resources
+    """
+    global UPLOAD_QUEUE
+    total = len(UPLOAD_QUEUE)
+    ct = 0
+
+    for i in UPLOAD_QUEUE:
+        # update progress
+        ct += 1
+        update_state(task_handle, 'UPLOADING MEDIA (%d/%d)' % (ct, total))
+        # get upload infos
+        name, dao = i['srv']
+        id_ = i['id']
+        if name == 'event':
+            item = dao.get(event_id)
+        else:
+            item = dao.get(event_id, id_)
+        # get cur file
+        field = i['field']
+        path = getattr(item, field)
+        if path.startswith('/'):
+            # relative files
+            path = base_path + path
+            if os.path.isfile(path):
+                filename = path.rsplit('/', 1)[1]
+                file = UploadedFile(path, filename)
+            else:
+                file = ''  # remove current file setting
+        else:
+            # absolute links
+            try:
+                filename = UPLOAD_PATHS[name][field].rsplit('/', 1)[1]
+                if is_downloadable(path):
+                    r = requests.get(path, allow_redirects=True)
+                    file = UploadedMemory(r.content, filename)
+                else:
+                    file = None
+            except:
+                file = None
+        # don't update current file setting
+        if file is None:
+            continue
+        # upload
+        try:
+            if file == '':
+                raise Exception()
+            key = UPLOAD_PATHS[name][field]
+            if name == 'event':
+                key = key.format(event_id=event_id)
+            else:
+                key = key.format(event_id=event_id, id=id_)
+            print key
+            new_url = upload(file, key)
+        except Exception:
+            print traceback.format_exc()
+            new_url = None
+        setattr(item, field, new_url)
+        save_to_db(item, msg='Url updated')
+    # clear queue
+    UPLOAD_QUEUE = []
+    return
 
 
 def _fix_related_fields(srv, data, service_ids):
@@ -158,15 +270,19 @@ def create_service_from_json(data, srv, event_id, service_ids={}):
         # create object
         new_obj = srv[1].create(event_id, obj, 'dont')[0]
         ids[old_id] = new_obj.id
+        # add uploads to queue
+        _upload_media_queue(srv, new_obj)
 
     return ids
 
 
-def import_event_json(zip_path):
+def import_event_json(task_handle, zip_path):
     """
     Imports and creates event from json zip
     """
-    global CUR_ID
+    global CUR_ID, UPLOAD_QUEUE
+    UPLOAD_QUEUE = []
+    update_state(task_handle, 'IMPORTING')
 
     with app.app_context():
         path = app.config['BASE_DIR'] + '/static/temp/import_event'
@@ -180,8 +296,10 @@ def import_event_json(zip_path):
     try:
         data = json.loads(open(path + '/event.json', 'r').read())
         _, data = _trim_id(data)
-        data = _delete_fields(('event', EventDAO), data)
+        srv = ('event', EventDAO)
+        data = _delete_fields(srv, data)
         new_event = EventDAO.create(data, 'dont')[0]
+        _upload_media_queue(srv, new_event)
     except BaseError as e:
         raise make_error('event', er=e)
     except Exception:
@@ -208,5 +326,26 @@ def import_event_json(zip_path):
     except Exception:
         EventDAO.delete(new_event.id)
         raise make_error(item[0], id_=CUR_ID)
+    # run uploads
+    _upload_media(task_handle, new_event.id, path)
     # return
     return new_event
+
+
+##########
+# HELPERS
+##########
+
+def is_downloadable(url):
+    """
+    Does the url contain a downloadable resource
+    """
+    h = requests.head(url, allow_redirects=True)
+    header = h.headers
+    content_type = header.get('content-type')
+    # content_length = header.get('content-length', 1e10)
+    if 'text' in content_type.lower():
+        return False
+    if 'html' in content_type.lower():
+        return False
+    return True

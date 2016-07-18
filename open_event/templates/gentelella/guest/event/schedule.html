@@ -8,6 +8,7 @@
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/details.css') }}"/>
     <link href="{{ url_for('static', filename='css/admin/scheduler.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/sessions.css') }}"/>
     <style type="text/css">
         .carousel .item {
             height: {{ carousel_height }}px;
@@ -40,16 +41,28 @@
 {% block body %}
     <div class="scrollspy hidden-xs hidden-sm">
         <ul class="nav nav-pills nav-stacked">
-            <li role="presentation"><a href="/e/{{ event.id }}">Info</a></li>
-            <li role="presentation"><a href="/e/{{ event.id }}/#speakers">Speakers</a></li>
-            <li role="presentation"><a href="/e/{{ event.id }}/#sponsors">Sponsors</a></li>
-            <li role="presentation"><a href="/e/{{ event.id }}/sessions">Sessions</a></li>
-            {% if call_for_speakers %}
-                <li role="presentation"><a href="/e/{{ event.id }}/cfs">Call for speakers</a></li>
+            {% if event.description %}
+                <li><a href="/e/{{ event.id }}#info">Info</a></li>
             {% endif %}
-            <li role="presentation" class="active"><a href="/e/{{ event.id }}/schedule">Schedule</a></li>
-            <li role="presentation"><a href="/e/{{ event.id }}/#organizer">Organizer</a></li>
-            <li role="presentation"><a href="/e/{{ event.id }}/#getting-here">Getting Here</a></li>
+            {% if accepted_sessions[0] %}
+                <li><a href="/e/{{ event.id }}#speakers">Speakers</a></li>
+            {% endif %}
+            {% if event.sponsor[0] %}
+                <li><a href="/e/{{ event.id }}#sponsors">Sponsors</a></li>
+            {% endif %}
+            {% if accepted_sessions[0] %}
+                <li><a href="/e/{{ event.id }}/sessions">Sessions</a></li>
+            {% endif %}
+            {% if event.call_for_papers %}
+                <li><a href="/e/{{ event.id }}/cfs">Call for speakers</a></li>
+            {% endif %}
+            <li class="active"><a href="/e/{{ event.id }}/schedule">Schedule</a></li>
+            {% if event.organizer_name %}
+                <li><a href="/e/{{ event.id }}#organizer">Organizer</a></li>
+            {% endif %}
+            {% if event.location_name %}
+                <li><a href="/e/{{ event.id }}#getting-here">Getting Here</a></li>
+            {% endif %}
             {% if event.code_of_conduct and event.code_of_conduct != '' and event.code_of_conduct != ' ' %}
                 <li><a href="/e/{{ event.id }}/coc">Code of Conduct</a></li>
             {% endif %}
@@ -84,8 +97,25 @@
                     <div id="date-change-btn-holder" class="btn-group date-change-btn-holder" role="group">
 
                     </div>
+                     <div class="btn-group pull-right" role="group">
+                        <button type="button" class="btn btn-default rooms-view">Rooms View</button>
+                        <button type="button" class="btn btn-default tracks-view">Tracks View</button>
+                        <button type="button" class="btn btn-default sessions-view">Sessions View</button>
+                    </div>
                 </div>
-                {% include 'gentelella/admin/event/scheduler/components/timeline.html' %}
+
+                <div class="flash-message-holder" style="width: 100%; text-align: center;">
+                    <span class="text-muted message loading-text" style="font-weight: 100; font-size: 30px;">Sessions loading ...</span>
+                </div>
+                <div class="scheduler-holder" style="display: none;">
+                    <div id="session-view-holder" class="hidden">
+                        <br>
+                        {% include 'gentelella/guest/event/_sessions_list.html' %}
+                    </div>
+                    {% include 'gentelella/admin/event/scheduler/components/timeline.html' %}
+
+                </div>
+
             </div>
         </div>
     </div>
@@ -95,10 +125,20 @@
 
 {% block tail_js %}
     {{ super() }}
+    <script src="{{ url_for('static', filename='admin/lib/seedrandom/seedrandom.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/google-material-color/dist/palette.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/lodash/dist/lodash.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery/jquery.ellipsis.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/scheduler.js') }}"></script>
+    <script type="text/javascript">
+        $(".audio-btn").popover({
+            html: true,
+            placement: 'top'
+        }).click(function(e){
+            e.preventDefault();
+        });
+
+    </script>
 {% endblock %}

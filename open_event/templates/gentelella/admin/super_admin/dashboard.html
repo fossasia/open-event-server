@@ -7,6 +7,17 @@
 {{ super() }}
 <link rel="stylesheet"
           href="{{ url_for('static', filename='admin/lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"/>
+<style type="text/css">
+#admin-title {
+    width:0;
+}
+
+@media (max-width: 1000px) {
+    #admin-title {
+        width:100%;
+    }
+}
+</style>
 {% endblock %}
 
 {% set navigation_bar = [
@@ -18,7 +29,8 @@
 ('/admin/messages/', 'messages', 'Messages', 'See all System Messages'),
 ('/admin/logs/', 'logs', 'Logs', 'See System Logs'),
 ('/admin/reports/', 'reports', 'Reports', 'Manage All Reports'),
-('/admin/settings/', 'settings', 'Settings', 'Manage All Settings')
+('/admin/settings/', 'settings', 'Settings', 'Manage All Settings'),
+('/admin/pages/', 'pages', 'Pages', 'Manage All Pages')
 ] -%}
 
 {% set active_page = active_page|default('home') -%}
@@ -39,7 +51,7 @@
 <div class="row">
 
     <div class="col-md-12">
-        <div class="page-title left" style="width:0">
+        <div class="page-title left" id="admin-title">
             <div class="title_left">
                 {% for href, id, caption, page_title in navigation_bar %}
                     {% if id == active_page %}

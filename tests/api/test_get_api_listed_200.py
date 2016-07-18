@@ -2,9 +2,11 @@ import unittest
 
 from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
+from tests.auth_helper import register, login
 from tests.api.utils import get_path, create_event, create_services
 
 from open_event import current_app as app
+from open_event.helpers.data import update_role_to_admin
 
 
 class TestGetApiListed(OpenEventTestCase):
@@ -15,12 +17,15 @@ class TestGetApiListed(OpenEventTestCase):
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
+            register(self.app, u'test@example.com', u'test')
+            # User must be part of the staff to access listed events
+            update_role_to_admin({'admin_perm': 'isAdmin'}, user_id=1)
             # Create two instances of event/services
 
             # event_id is going to be 1
-            event_id1 = create_event('TestEvent_1')
+            event_id1 = create_event('TestEvent_1', creator_email=u'test@example.com')
             # event_id is going to be 2
-            create_event('TestEvent_2')
+            create_event('TestEvent_2', creator_email=u'test@example.com')
 
             # Associate services to event_id1
             create_services(event_id1, serial_no=1)
@@ -32,6 +37,7 @@ class TestGetApiListed(OpenEventTestCase):
         contains event/service name.
         """
         with app.test_request_context():
+            login(self.app, u'test@example.com', u'test')
             response = self.app.get(path, follow_redirects=True)
             self.assertEqual(response.status_code, 200)
             self.assertIn(service1, response.data)

@@ -1,6 +1,9 @@
 from flask.ext.restplus import Resource, Namespace
 from sqlalchemy.orm.collections import InstrumentedList
 
+from open_event.helpers.notification_email_triggers import trigger_new_session_notifications, \
+    trigger_session_schedule_change_notifications
+from open_event.helpers.notification_email_triggers import trigger_session_state_change_notifications
 from open_event.models.session import Session as SessionModel
 from open_event.models.track import Track as TrackModel
 from open_event.models.microlocation import Microlocation as MicrolocationModel
@@ -9,8 +12,14 @@ from open_event.models.session_type import SessionType as SessionTypeModel
 from open_event.helpers.data import record_activity
 from open_event.helpers.data_getter import DataGetter
 
-from .helpers.helpers import get_paginated_list, requires_auth, \
+from .helpers.helpers import requires_auth, \
     save_db_model, get_object_in_event, model_custom_form
+from .helpers.helpers import (
+    can_create,
+    can_read,
+    can_update,
+    can_delete
+)
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO,\
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
 from .helpers import custom_fields as fields
@@ -139,7 +148,19 @@ class SessionDAO(ServiceDAO):
         data_copy = data.copy()
         data_copy = self.fix_payload_post(event_id, data_copy)
         data = self._delete_fields(data)
-        obj = ServiceDAO.update(self, event_id, service_id, data, validate=False)
+        session = DataGetter.get_session(service_id)  # session before any updates are made
+        obj = ServiceDAO.update(self, event_id, service_id, data, validate=False)  # session after update
+
+        if 'state' in data:
+            if data['state'] == 'pending' and session.state == 'draft':
+                trigger_new_session_notifications(session.id, event_id=event_id)
+
+            if (data['state'] == 'accepted' and session.state != 'accepted') or (data['state'] == 'rejected' and session.state != 'rejected'):
+                trigger_session_state_change_notifications(obj, event_id=event_id, state=data['state'])
+
+        if session.start_time != obj.start_time or session.end_time != obj.end_time:
+            trigger_session_schedule_change_notifications(obj, event_id)
+
         for f in ['track', 'microlocation', 'speakers', 'session_type']:
             if f in data_copy:
                 setattr(obj, f, data_copy[f])
@@ -149,7 +170,10 @@ class SessionDAO(ServiceDAO):
     def create(self, event_id, data, url):
         data = self.validate(data, event_id)
         payload = self.fix_payload_post(event_id, data)
-        return ServiceDAO.create(self, event_id, payload, url, validate=False)
+        session, status_code, location = ServiceDAO.create(self, event_id, payload, url, validate=False)
+        if session.state == 'pending':
+            trigger_new_session_notifications(session.id, event_id=event_id)
+        return session, status_code, location
 
     def validate(self, data, event_id, check_required=True):
         form = DataGetter.get_custom_form_elements(event_id)
@@ -175,14 +199,14 @@ class Session(Resource):
         """Fetch a session given its id"""
         return DAO.get(event_id, session_id)
 
-    @requires_auth
+    @can_delete(DAO)
     @api.doc('delete_session')
     @api.marshal_with(SESSION)
     def delete(self, event_id, session_id):
         """Delete a session given its id"""
         return DAO.delete(event_id, session_id)
 
-    @requires_auth
+    @can_update(DAO)
     @api.doc('update_session', responses=PUT_RESPONSES)
     @api.marshal_with(SESSION)
     @api.expect(SESSION_POST)
@@ -199,7 +223,7 @@ class SessionList(Resource):
         """List all sessions"""
         return DAO.list(event_id)
 
-    @requires_auth
+    @can_create(DAO)
     @api.doc('create_session', responses=POST_RESPONSES)
     @api.marshal_with(SESSION)
     @api.expect(SESSION_POST)
@@ -220,12 +244,11 @@ class SessionListPaginated(Resource, PaginatedResourceBase):
     @api.marshal_with(SESSION_PAGINATED)
     def get(self, event_id):
         """List sessions in a paginated manner"""
-        return get_paginated_list(
-            SessionModel,
-            args=self.parser.parse_args(),
-            event_id=event_id
-        )
+        args = self.parser.parse_args()
+        return DAO.paginated_list(args=args, event_id=event_id)
 
+
+# Use Session DAO to check for permission
 
 @api.route('/events/<int:event_id>/sessions/types')
 class SessionTypeList(Resource):
@@ -235,7 +258,7 @@ class SessionTypeList(Resource):
         """List all session types"""
         return TypeDAO.list(event_id)
 
-    @requires_auth
+    @can_create(DAO)
     @api.doc('create_session_type', responses=POST_RESPONSES)
     @api.marshal_with(SESSION_TYPE)
     @api.expect(SESSION_TYPE_POST)
@@ -250,14 +273,14 @@ class SessionTypeList(Resource):
 
 @api.route('/events/<int:event_id>/sessions/types/<int:type_id>')
 class SessionType(Resource):
-    @requires_auth
+    @can_delete(DAO)
     @api.doc('delete_session_type')
     @api.marshal_with(SESSION_TYPE)
     def delete(self, event_id, type_id):
         """Delete a session type given its id"""
         return TypeDAO.delete(event_id, type_id)
 
-    @requires_auth
+    @can_update(DAO)
     @api.doc('update_session_type', responses=PUT_RESPONSES)
     @api.marshal_with(SESSION_TYPE)
     @api.expect(SESSION_TYPE_POST)

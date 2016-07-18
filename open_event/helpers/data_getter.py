@@ -28,11 +28,12 @@ from ..models.custom_forms import CustomForms
 from ..models.mail import Mail
 from ..models.activity import Activity
 from ..models.setting import Setting
+from ..models.page import Page
 from .language_list import LANGUAGE_LIST
 from .static import EVENT_TOPICS, EVENT_LICENCES
 from open_event.helpers.helpers import get_event_id
 from flask.ext import login
-from flask import flash, current_app
+from flask import flash, current_app, abort
 import datetime
 from sqlalchemy import desc, asc
 
@@ -268,10 +269,10 @@ class DataGetter:
         return files
 
     @staticmethod
-    def get_user_by_email(email, role_method=None):
+    def get_user_by_email(email, no_flash=None):
         user = User.query.filter_by(email=email).first()
         if not user:
-            if role_method == True:
+            if no_flash == True:
                 return None
             else:
                 flash("User doesn't exist")
@@ -311,7 +312,13 @@ class DataGetter:
 
     @staticmethod
     def get_event(event_id):
-        return Event.query.get(event_id)
+        """Returns an Event given its id.
+        Aborts with a 404 if event not found.
+        """
+        event = Event.query.get(event_id)
+        if event is None:
+            abort(404)
+        return event
 
     @staticmethod
     def get_user_events_roles(event_id):
@@ -347,11 +354,21 @@ class DataGetter:
 
     @staticmethod
     def get_call_for_speakers_events(include_private=False):
+        results = []
         if include_private:
-            events = Event.query.filter(Event.state == 'Call for papers')
+            events = DataGetter.get_all_published_events(include_private)
+            for e in events:
+                call_for_speakers = DataGetter.get_call_for_papers(e.id).first()
+                if call_for_speakers:
+                    results.append(e)
+
         else:
-            events = Event.query.filter(Event.state == 'Call for papers').filter(Event.privacy != 'private')
-        return events
+            events = DataGetter.get_all_published_events()
+            for e in events:
+                call_for_speakers = DataGetter.get_call_for_papers(e.id).first()
+                if call_for_speakers:
+                    results.append(e)
+        return results[:12]
 
     @staticmethod
     def get_published_events():
@@ -386,6 +403,10 @@ class DataGetter:
         return Event.query.filter(Event.start_time >= datetime.datetime.now()) \
             .filter(Event.end_time >= datetime.datetime.now()) \
             .filter(Event.state == 'Published').filter(Event.in_trash == False)
+
+    @staticmethod
+    def get_live_and_public_events():
+        return DataGetter.get_all_live_events().filter(Event.privacy != 'private')
 
     @staticmethod
     def get_all_draft_events():
@@ -475,6 +496,23 @@ class DataGetter:
         return EVENT_LICENCES
 
     @staticmethod
+    def get_licence_details(licence_name):
+        licence = EVENT_LICENCES.get(licence_name)
+        if licence:
+            licence_details = {
+                'name': licence_name,
+                'long_name': licence[0],
+                'description': licence[1],
+                'url': licence[2],
+                'logo': licence[3],
+                'compact_logo': licence[4],
+            }
+        else:
+            licence_details = None
+
+        return licence_details
+
+    @staticmethod
     def get_language_list():
         return [i[1] for i in LANGUAGE_LIST]
 
@@ -546,4 +584,20 @@ class DataGetter:
         return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
             .filter(Event.in_trash == False)
+
+    @staticmethod
+    def get_all_pages():
+        return Page.query.order_by(desc(Page.index)).all()
+
+    @staticmethod
+    def get_page_by_id(page_id):
+        return Page.query.get(page_id)
+
+    @staticmethod
+    def get_page_by_url(url):
+        results =  Page.query.filter_by(url=url)
+        if results:
+            return results.one()
+        return results
+
 

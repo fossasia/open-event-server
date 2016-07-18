@@ -15,8 +15,8 @@ Session Invitation
             	<center>
                     <h3>You have been invited for session: </h3><br>
                     <h4>{{session.title}}</h4>
-                    <p><b>{{session.short_abstract}}</b></p>
-                    <p>{{session.long_abstract}}</p>
+                    <p><b>{{session.short_abstract|striptags}}</b></p>
+                    <p>{{session.long_abstract|striptags}}</p>
                 </center>
             </div>
             <div class="row">
@@ -37,7 +37,7 @@ Session Invitation
     <script type="text/javascript">
         function accepted(value) {
             if (value == 1) {
-                window.location = "{{ url_for('event_sessions.speaker_view', event_id=event_id, session_id=session.id) }}";
+                window.location = "{{ url_for('event_sessions.add_speaker_view', event_id=event_id, session_id=session.id) }}";
             } else {
                 window.location = "/";
             }

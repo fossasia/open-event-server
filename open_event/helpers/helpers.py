@@ -4,7 +4,7 @@ import os
 import re
 import requests
 from datetime import datetime, timedelta
-from flask import request, url_for
+from flask import request, url_for, current_app
 from itsdangerous import Serializer
 from flask.ext import login
 
@@ -127,7 +127,7 @@ def send_next_event(email, event_name, link, up_coming_events):
         )
     )
 
-def send_after_event(email, event_name, upcoming_events):
+def send_after_event(email, event_name, upcoming_events, link=None):
     """Send after event mail"""
     upcoming_event_html = "<ul>"
     for event in upcoming_events:
@@ -217,29 +217,32 @@ def send_email(to, action, subject, html):
     """
     Sends email and records it in DB
     """
-    key = get_settings()['sendgrid_key']
-    if not key:
-        print 'Sendgrid key not defined'
-        return
-    headers = {
-        "Authorization": ("Bearer " + key)
-    }
-    payload = {
-        'to': to,
-        'from': 'open-event@googlegroups.com',
-        'subject': subject,
-        'html': html
-    }
-    requests.post("https://api.sendgrid.com/api/mail.send.json",
-                  data=payload,
-                  headers=headers)
-    # record_mail(to, action, subject, html)
-    mail = Mail(
-        recipient=to, action=action, subject=subject,
-        message=html, time=datetime.now()
-    )
-    from data import save_to_db
-    save_to_db(mail, 'Mail Recorded')
+    if not string_empty(to):
+        key = get_settings()['sendgrid_key']
+        if not key and not current_app.config['TESTING']:
+            print 'Sendgrid key not defined'
+            return
+
+        if not current_app.config['TESTING']:
+            headers = {
+                "Authorization": ("Bearer " + key)
+            }
+            payload = {
+                'to': to,
+                'from': 'open-event@googlegroups.com',
+                'subject': subject,
+                'html': html
+            }
+            requests.post("https://api.sendgrid.com/api/mail.send.json",
+                          data=payload,
+                          headers=headers)
+        # record_mail(to, action, subject, html)
+        mail = Mail(
+            recipient=to, action=action, subject=subject,
+            message=html, time=datetime.now()
+        )
+        from data import save_to_db
+        save_to_db(mail, 'Mail Recorded')
     return
 
 #################
@@ -392,7 +395,6 @@ def fields_not_empty(obj, fields):
             return False
     return True
 
-
 def get_request_stats():
     """
     Get IP, Browser, Platform, Version etc
@@ -467,3 +469,12 @@ def first_day_of_month(date):
     delta = timedelta(days=ddays)
     return date - delta
 
+
+def update_state(task_handle, state, result={}):
+    """
+    Update state of celery task
+    """
+    if not current_app.config.get('CELERY_ALWAYS_EAGER'):
+        task_handle.update_state(
+            state=state, meta=result
+        )

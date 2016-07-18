@@ -14,6 +14,9 @@ class BaseError(Exception):
                 'status': self.status,
                 'field': self.field, }
 
+    def __str__(self):
+        return self.message
+
 
 class NotFoundError(BaseError):
     def __init__(self, message='Not found'):

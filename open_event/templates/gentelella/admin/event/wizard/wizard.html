@@ -5,6 +5,8 @@
     {{ super() }}
     <link rel="stylesheet"
           href="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/bootstrap/green.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/jt.timepicker/jquery.timepicker.css') }}">
     <link rel="stylesheet"
           href="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}">
@@ -118,26 +120,36 @@
                         <div class="tab-content">
                             <div class="tab-pane fade {% if step == '' %}in active{% endif %}" id="step1">
                                 {% include 'gentelella/admin/event/wizard/step-1.html' %}
-                                {{ button_bar(show_prev=false) }}
+                                <div class="col-md-7 col-sm-7 step-1">
+                                    {{ button_bar(show_prev=false) }}
+                                </div>
                             </div>
                             <div class="tab-pane fade {% if step == 'sponsors' %}in active{% endif %}" id="step2">
                                 {% include 'gentelella/admin/event/wizard/step-2.html' %}
-                                {{ button_bar() }}
+                                <div class="col-md-10 col-md-push-1">
+                                    {{ button_bar() }}
+                                </div>
                             </div>
                             <div class="tab-pane fade {% if step == 'sessions-tracks-rooms' %}in active{% endif %}"
                                  id="step3">
                                 {% include 'gentelella/admin/event/wizard/step-3.html' %}
-                                {{ button_bar() }}
+                                <div class="col-md-10 col-md-push-1">
+                                    {{ button_bar() }}
+                                </div>
                             </div>
                             <div class="tab-pane fade {% if step == 'call-for-speakers' %}in active{% endif %}"
                                  id="step4">
                                 {% include 'gentelella/admin/event/wizard/step-4.html' %}
-                                {{ button_bar() }}
+                                <div class="col-md-6 col-xs-12 col-md-offset-3">
+                                    {{ button_bar() }}
+                                </div>
                             </div>
                             <div class="tab-pane fade {% if step == 'form-customization' %}in active{% endif %}"
                                  id="step5">
                                 {% include 'gentelella/admin/event/wizard/step-5.html' %}
-                                {{ button_bar(show_next=false) }}
+                                <div class="col-md-8 col-xs-12 col-md-offset-2">
+                                    {{ button_bar(show_next=false) }}
+                                </div>
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -165,4 +177,5 @@
     <script src="{{ url_for('static', filename='admin/lib/Croppie/croppie.min.js') }}"></script>
 
     <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/event_wizard.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap/icheck.js') }}"></script>
 {% endblock %}

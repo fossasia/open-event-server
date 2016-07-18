@@ -9,7 +9,8 @@ from open_event.models.role import Role
 from open_event.models.user import ORGANIZER
 from open_event.helpers.data import save_to_db, update_version, record_activity
 
-from .helpers.helpers import get_paginated_list, requires_auth, parse_args
+from .helpers.helpers import requires_auth, parse_args, \
+    can_access
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, BaseDAO, ServiceDAO
 from .helpers import custom_fields as fields
@@ -55,6 +56,7 @@ EVENT = api.model('Event', {
     'background_url': fields.Upload(),
     'description': fields.String(),
     'location_name': fields.String(),
+    'searchable_location_name': fields.String(),
     'organizer_name': fields.String(),
     'organizer_description': fields.String(),
     'state': fields.String(),
@@ -183,8 +185,8 @@ class EventResource():
     Event Resource Base class
     """
     event_parser = reqparse.RequestParser()
-    event_parser.add_argument('location', type=str, dest='__event_location')
-    event_parser.add_argument('contains', type=str, dest='__event_contains')
+    event_parser.add_argument('location', type=unicode, dest='__event_search_location')
+    event_parser.add_argument('contains', type=unicode, dest='__event_contains')
     event_parser.add_argument('state', type=str)
     event_parser.add_argument('privacy', type=str)
     event_parser.add_argument('type', type=str)
@@ -207,7 +209,7 @@ class Event(Resource):
         """Fetch an event given its id"""
         return DAO.get(event_id)
 
-    @requires_auth
+    @can_access
     @api.doc('delete_event')
     @api.marshal_with(EVENT)
     def delete(self, event_id):
@@ -216,7 +218,7 @@ class Event(Resource):
         record_activity('delete_event', event_id=event_id)
         return event
 
-    @requires_auth
+    @can_access
     @api.doc('update_event', responses=PUT_RESPONSES)
     @api.marshal_with(EVENT)
     @api.expect(EVENT_POST)
@@ -267,10 +269,7 @@ class EventListPaginated(Resource, PaginatedResourceBase, EventResource):
     def get(self):
         """List events in a paginated manner"""
         args = self.parser.parse_args()
-        return get_paginated_list(
-            EventModel, args=args,
-            **parse_args(self.event_parser)
-        )
+        return DAO.paginated_list(args=args, **parse_args(self.event_parser))
 
 
 @api.route('/<int:event_id>/links')
@@ -282,7 +281,7 @@ class SocialLinkList(Resource):
         """List all social links"""
         return LinkDAO.list(event_id)
 
-    @requires_auth
+    @can_access
     @api.doc('create_social_link', responses=POST_RESPONSES)
     @api.marshal_with(SOCIAL_LINK)
     @api.expect(SOCIAL_LINK_POST)
@@ -297,14 +296,14 @@ class SocialLinkList(Resource):
 
 @api.route('/<int:event_id>/links/<int:link_id>')
 class SocialLink(Resource):
-    @requires_auth
+    @can_access
     @api.doc('delete_social_link')
     @api.marshal_with(SOCIAL_LINK)
     def delete(self, event_id, link_id):
         """Delete a social link given its id"""
         return LinkDAO.delete(event_id, link_id)
 
-    @requires_auth
+    @can_access
     @api.doc('update_social_link', responses=PUT_RESPONSES)
     @api.marshal_with(SOCIAL_LINK)
     @api.expect(SOCIAL_LINK_POST)

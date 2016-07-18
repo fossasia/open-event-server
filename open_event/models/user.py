@@ -42,7 +42,18 @@ class User(db.Model):
     user_detail = db.relationship("UserDetail", uselist=False, backref="user")
     created_date = db.Column(db.DateTime, default=datetime.now())
 
+    def has_role(self, event_id):
+        """Checks if user has any of the Roles at an Event.
+        """
+        uer = UsersEventsRoles.query.filter_by(user=self, event_id=event_id).first()
+        if uer is None:
+            return False
+        else:
+            return True
+
     def _is_role(self, role_name, event_id):
+        """Checks if a user has a particular Role at an Event.
+        """
         role = Role.query.filter_by(name=role_name).first()
         uer = UsersEventsRoles.query.filter_by(user=self,
                                                event_id=event_id,
@@ -80,6 +91,9 @@ class User(db.Model):
         except AttributeError:
             # If `service_class` does not have `get_service_name()`
             return False
+
+        if self.is_super_admin:
+            return True
 
         service = Service.query.filter_by(name=service_name).first()
 

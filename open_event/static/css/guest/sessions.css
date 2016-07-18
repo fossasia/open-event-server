@@ -49,3 +49,7 @@
     margin-bottom: 26px;
     z-index: 9999999999;
 }
+
+.audio-btn + .popover {
+    max-width: 330px !important;
+}

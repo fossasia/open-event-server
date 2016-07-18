@@ -1,5 +1,5 @@
 
-<div class="timeline" id="timeline" data-event-id="{{ event.id }}"
+<div class="timeline hidden-xs" id="timeline" data-event-id="{{ event.id }}"
      data-event-start="{{ event.start_time }}"
      data-event-end="{{ event.end_time }}"
      style="margin-top: 10px; margin-left: 10px; width: 100%; overflow-x: hidden;">
@@ -19,6 +19,15 @@
         </tbody>
     </table>
 </div>
+
+<div id="tracks-timeline" class="hidden" data-event-id="{{ event.id }}" data-event-start="{{ event.start_time }}" data-event-end="{{ event.end_time }}">
+
+</div>
+
+<div id="mobile-timeline" class="visible-xs" data-event-id="{{ event.id }}" data-event-start="{{ event.start_time }}" data-event-end="{{ event.end_time }}">
+
+</div>
+
 <div style="float: right; margin-top: 10px;">
     All the timings are in {{ event.timezone | default('UTC', true) }}
 </div>

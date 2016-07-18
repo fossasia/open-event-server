@@ -4,7 +4,7 @@ import os
 import urllib
 from urllib2 import urlopen
 
-from flask import url_for, redirect, request, session, send_from_directory
+from flask import url_for, redirect, request, session, flash, send_from_directory
 from flask.ext import login
 from flask_admin import expose
 from flask_admin.base import AdminIndexView
@@ -38,7 +38,7 @@ class MyHomeView(AdminIndexView):
 
     @expose('/')
     def index(self):
-        call_for_speakers_events = DataGetter.get_call_for_speakers_events().limit(12).all()
+        call_for_speakers_events = DataGetter.get_call_for_speakers_events()
         upcoming_events = DataGetter.get_all_published_events().limit(12).all()
         return self.render('gentelella/index.html',
                            call_for_speakers_events=call_for_speakers_events,
@@ -64,6 +64,7 @@ class MyHomeView(AdminIndexView):
                 return redirect(url_for('admin.login_view'))
             if user.password != generate_password_hash(request.form['password'], user.salt):
                 logging.info('Password Incorrect')
+                flash('Incorrect Password', 'danger')
                 return redirect(url_for('admin.login_view'))
             login.login_user(user)
             record_user_login_logout('user_login', user)
@@ -128,7 +129,8 @@ class MyHomeView(AdminIndexView):
             if user:
                 link = request.host + url_for(".change_password_view", hash=user.reset_password)
                 send_email_with_reset_password_hash(email, link)
-            return redirect(intended_url())
+                flash('Please go to the link sent to your email to reset your password')
+            return redirect(url_for('.login_view'))
 
     @expose('/reset_password/<hash>', methods=('GET', 'POST'))
     def change_password_view(self, hash):
@@ -200,7 +202,7 @@ class MyHomeView(AdminIndexView):
     def check_duplicate_email(self):
         if request.method == 'GET':
             email = request.args['email']
-            user = DataGetter.get_user_by_email(email)
+            user = DataGetter.get_user_by_email(email, no_flash=True)
             if user is None:
                 return '200 OK'
             else:

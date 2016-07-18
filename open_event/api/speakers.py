@@ -2,8 +2,13 @@ from flask.ext.restplus import Resource, Namespace
 
 from open_event.models.speaker import Speaker as SpeakerModel
 
-from .helpers.helpers import get_paginated_list, requires_auth, \
-    model_custom_form
+from .helpers.helpers import requires_auth, model_custom_form
+from .helpers.helpers import (
+    can_create,
+    can_read,
+    can_update,
+    can_delete
+)
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO,\
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
 from .helpers import custom_fields as fields
@@ -75,14 +80,14 @@ class Speaker(Resource):
         """Fetch a speaker given its id"""
         return DAO.get(event_id, speaker_id)
 
-    @requires_auth
+    @can_delete(DAO)
     @api.doc('delete_speaker')
     @api.marshal_with(SPEAKER)
     def delete(self, event_id, speaker_id):
         """Delete a speaker given its id"""
         return DAO.delete(event_id, speaker_id)
 
-    @requires_auth
+    @can_update(DAO)
     @api.doc('update_speaker', responses=PUT_RESPONSES)
     @api.marshal_with(SPEAKER)
     @api.expect(SPEAKER_POST)
@@ -99,7 +104,7 @@ class SpeakerList(Resource):
         """List all speakers"""
         return DAO.list(event_id)
 
-    @requires_auth
+    @can_create(DAO)
     @api.doc('create_speaker', responses=POST_RESPONSES)
     @api.marshal_with(SPEAKER)
     @api.expect(SPEAKER_POST)
@@ -117,8 +122,5 @@ class SpeakerListPaginated(Resource, PaginatedResourceBase):
     @api.marshal_with(SPEAKER_PAGINATED)
     def get(self, event_id):
         """List speakers in a paginated manner"""
-        return get_paginated_list(
-            SpeakerModel,
-            args=self.parser.parse_args(),
-            event_id=event_id
-        )
+        args = self.parser.parse_args()
+        return DAO.paginated_list(args=args, event_id=event_id)

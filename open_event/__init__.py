@@ -6,6 +6,8 @@ from flask.exthook import ExtDeprecationWarning
 warnings.simplefilter('ignore', ExtDeprecationWarning)
 # Keep it before flask extensions are imported
 import arrow
+from dateutil import tz
+from celery import Celery
 from flask.ext.htmlmin import HTMLMIN
 import logging
 import os.path
@@ -32,6 +34,7 @@ from open_event.helpers.flask_helpers import SilentUndefined, camel_case, slugif
 from open_event.helpers.helpers import string_empty
 from open_event.models import db
 from open_event.models.user import User
+from open_event.models.ticket import Ticket, BookedTicket
 from open_event.views.admin.admin import AdminView
 from helpers.jwt import jwt_authenticate, jwt_identity
 from helpers.formatter import operation_name
@@ -39,6 +42,7 @@ from open_event.helpers.data_getter import DataGetter
 from open_event.views.api_v1_views import app as api_v1_routes
 from open_event.views.sitemap import app as sitemap_routes
 from open_event.settings import get_settings
+from open_event.api.helpers.errors import NotFoundError
 import requests
 
 
@@ -82,6 +86,10 @@ def create_app():
     app.config['JWT_AUTH_URL_RULE'] = None
     jwt = JWT(app, jwt_authenticate, jwt_identity)
 
+    # setup celery
+    app.config['CELERY_BROKER_URL'] = environ.get('REDIS_URL', 'redis://localhost:6379/0')
+    app.config['CELERY_RESULT_BACKEND'] = app.config['CELERY_BROKER_URL']
+
     HTMLMIN(app)
     admin_view = AdminView("Open Event")
     admin_view.init(app)
@@ -100,7 +108,8 @@ def create_app():
 @app.errorhandler(404)
 def page_not_found(e):
     if request_wants_json():
-        return json.dumps({"error": "not_found"}), 404
+        error = NotFoundError()
+        return json.dumps(error.to_dict()), getattr(error, 'code', 404)
     return render_template('404.html'), 404
 
 @app.errorhandler(403)
@@ -121,7 +130,7 @@ def request_wants_json():
 @app.context_processor
 def locations():
     names = []
-    for event in DataGetter.get_all_live_events():
+    for event in DataGetter.get_live_and_public_events():
         if not string_empty(event.location_name) and not string_empty(event.latitude) and not string_empty(event.longitude):
             response = requests.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
                 event.longitude)).json()
@@ -139,6 +148,11 @@ def locations():
 def event_types():
     event_types = DataGetter.get_event_types()
     return dict(event_typo=event_types[:10])
+
+@app.context_processor
+def pages():
+    pages = DataGetter.get_all_pages()
+    return dict(system_pages=pages)
 
 @app.context_processor
 def social_settings():
@@ -224,6 +238,25 @@ def track_user():
         current_user.update_lat()
 
 current_app, manager, database, jwt = create_app()
+
+
+def make_celery(app):
+    celery = Celery(app.import_name, broker=app.config['CELERY_BROKER_URL'])
+    celery.conf.update(app.config)
+    TaskBase = celery.Task
+
+    class ContextTask(TaskBase):
+        abstract = True
+
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return TaskBase.__call__(self, *args, **kwargs)
+    celery.Task = ContextTask
+    return celery
+
+celery = make_celery(current_app)
+
+import api.helpers.tasks
 
 
 @app.before_first_request

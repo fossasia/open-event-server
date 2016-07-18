@@ -73,6 +73,8 @@ class TestSessionApi(OpenEventViewTestCase):
 
     def test_session_accept(self):
         with app.test_request_context():
+            event = ObjectMother.get_event()
+            save_to_db(event, "Event Saved")
             session = ObjectMother.get_session()
             save_to_db(session, "Session Saved")
             url = url_for('event_sessions.accept_session', event_id=1, session_id=session.id)
@@ -81,6 +83,8 @@ class TestSessionApi(OpenEventViewTestCase):
 
     def test_session_reject(self):
         with app.test_request_context():
+            event = ObjectMother.get_event()
+            save_to_db(event, "Event Saved")
             session = ObjectMother.get_session()
             save_to_db(session, "Session Saved")
             url = url_for('event_sessions.reject_session', event_id=1, session_id=session.id)

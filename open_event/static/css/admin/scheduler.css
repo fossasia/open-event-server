@@ -44,7 +44,7 @@
     top: 120px;
     color: white;
     z-index: 2;
-    border: none;
+    border: 1px solid rgba(0, 0, 0, 0.4);
     padding-right: 10px;
 }
 
@@ -75,9 +75,9 @@
 }
 
 .timeline .timeunits.x1 .timeunit {
-    height: 24px;
+    height: 48px;
     font-size: 10px;
-    line-height: 24px;
+    line-height: 48px;
 }
 
 .timeline .timeunits .timeunit {
@@ -137,8 +137,8 @@
 }
 
 .timeline .microlocations.x1 .microlocation-header {
-    height: 23px;
-    line-height: 23px;
+    height: 47px;
+    line-height: 47px;
 }
 
 .timeline .microlocations .microlocation-header {
@@ -184,7 +184,7 @@
     width: 215px;
     display: block;
     font-size: 12px;
-    min-height: 24px;
+    min-height: 48px;
 }
 
 .microlocation-inner.drop-now {
@@ -251,4 +251,62 @@
     margin: 0 0 0 24px;
     padding: 0;
     min-width: min-content;
+}
+
+/**
+ * For mobile version
+ **/
+.event {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    border-left: 1px solid transparent;
+    border-radius: 4px;
+    border-right: 1px solid rgba(0, 0, 0, 0.15);
+    border-top: 1px solid transparent;
+    cursor: pointer;
+    display: block;
+    margin: 0 12px 12px 0;
+    position: relative;
+    background: rgba(0, 150, 136, 0.75);
+    width: auto;
+    margin-left: 4%;
+    max-width: 500px;
+    color: #FFFFFF;
+    padding: 5px;
+    font-size: 15px;
+}
+
+@media (max-width: 660px) {
+    .event {
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 660px) {
+    .event {
+        max-width: 270px;
+    }
+}
+
+#track-list {
+    margin-top: 8%;
+    margin-bottom: 8%;
+}
+
+.height {
+    min-height: 70px;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.mobile-text {
+    color: #999;
+    font-weight: 300;
+}
+
+.mobile-text.time {
+    text-align: right;
+}
+
+.active {
+    color: #757575 !important;
+    font-weight: bold;
 }

@@ -76,7 +76,8 @@ class EventsView(BaseView):
             event_sub_topics=DataGetter.get_event_subtopics(),
             timezones=DataGetter.get_all_timezones())
 
-    @expose('/<int:event_id>/', methods=('GET', 'POST'))
+    @expose('/<event_id>/', methods=('GET', 'POST'))
+    @can_access
     def details_view(self, event_id):
         event = DataGetter.get_event(event_id)
 
@@ -220,9 +221,8 @@ class EventsView(BaseView):
                 request, event_id, event, session_types, tracks, social_links,
                 microlocations, call_for_speakers, sponsors, custom_forms, img_files, old_sponsor_logos, old_sponsor_names)
 
-
-            if request.form.get('state',
-                                u'Draft') == u'Published' and string_empty(
+            if (request.form.get('state',
+                                u'Draft') == u'Published') and string_empty(
                                 event.location_name):
                 flash(
                     "Your event was saved. To publish your event please review the highlighted fields below.",
@@ -273,7 +273,7 @@ class EventsView(BaseView):
                 "Your event was saved. To publish your event please review the highlighted fields below.",
                 "warning")
             return redirect(url_for('.edit_view',
-                                    event_id=event.id) + "#step=location_name")
+                                    event_id=event.id) + "#highlight=location_name")
         if not is_verified_user():
             return redirect(url_for('.details_view', event_id=event_id))
         event.state = 'Published'

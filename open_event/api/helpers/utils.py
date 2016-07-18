@@ -1,7 +1,7 @@
 from flask_restplus import Model, fields, reqparse
 from .helpers import get_object_list, get_object_or_404, get_object_in_event, \
     create_model, validate_payload, delete_model, update_model, \
-    handle_extra_payload
+    handle_extra_payload, get_paginated_list
 from open_event.models.event import Event as EventModel
 from .error_docs import (
     notfound_error_model,
@@ -82,6 +82,9 @@ class BaseDAO:
     def list(self, **kwargs):
         return get_object_list(self.model, **kwargs)
 
+    def paginated_list(self, url=None, args={}, **kwargs):
+        return get_paginated_list(self.model, url=url, args=args, **kwargs)
+
     def create(self, data, validate=True):
         if validate:
             data = self.validate(data, self.post_api_model)
@@ -138,6 +141,9 @@ class ServiceDAO(BaseDAO):
         get_object_or_404(EventModel, event_id)
         return get_object_list(self.model, event_id=event_id, **kwargs)
 
+    def paginated_list(self, url=None, args={}, **kwargs):
+        return get_paginated_list(self.model, url=url, args=args, **kwargs)
+
     def create(self, event_id, data, url, validate=True):
         if validate:
             data = self.validate(data)
@@ -157,3 +163,7 @@ class ServiceDAO(BaseDAO):
     def delete(self, event_id, service_id):
         item = delete_model(self.model, service_id, event_id=event_id)
         return item
+
+# store task results in case of testing
+# state and info
+TASK_RESULTS = {}

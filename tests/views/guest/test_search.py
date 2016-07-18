@@ -16,6 +16,7 @@ def get_event():
     event.start_time = datetime.now() + timedelta(days=5)
     event.end_time = event.start_time + timedelta(days=5)
     event.location_name = 'India'
+    event.searchable_location_name = 'India'
     event.state = 'Published'
     return event
 
@@ -48,6 +49,7 @@ class TestSearchEventPage(OpenEventTestCase):
             save_to_db(event, "Event Saved")
             event = get_event_two()
             event.location_name = 'United States'
+            event.searchable_location_name = 'United States'
             save_to_db(event, "Event Saved")
             rv = self.app.get(url_for('explore.explore_view', location=slugify('India')), follow_redirects=True)
             self.assertTrue("Super Event" in rv.data, msg=rv.data)
