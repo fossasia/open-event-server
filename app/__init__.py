@@ -30,7 +30,7 @@ import humanize
 from icalendar import Calendar, Event
 import sqlalchemy as sa
 
-from app.helpers.flask_helpers import SilentUndefined, camel_case, slugify
+from app.helpers.flask_helpers import SilentUndefined, camel_case, slugify, MiniJSONEncoder
 from app.helpers.helpers import string_empty
 from app.models import db
 from app.models.user import User
@@ -66,6 +66,8 @@ def create_app():
 
     cors = CORS(app)
     app.secret_key = 'super secret key'
+    app.json_encoder = MiniJSONEncoder
+    app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
     app.config['UPLOADS_FOLDER'] = os.path.realpath('.') + '/static/'
     app.config['FILE_SYSTEM_STORAGE_FILE_VIEW'] = 'static'
     app.config['STATIC_URL'] = '/static/'
@@ -129,20 +131,7 @@ def request_wants_json():
 
 @app.context_processor
 def locations():
-    names = []
-    for event in DataGetter.get_live_and_public_events():
-        if not string_empty(event.location_name) and not string_empty(event.latitude) and not string_empty(event.longitude):
-            response = requests.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
-                event.longitude)).json()
-            if response['status'] == u'OK':
-                for addr in response['results'][0]['address_components']:
-                    if addr['types'] == ['locality', 'political']:
-                        names.append(addr['short_name'])
-
-    cnt = Counter()
-    for location in names:
-        cnt[location] += 1
-    return dict(locations=[v for v, k in cnt.most_common()][:10])
+    return dict(locations=DataGetter.get_locations_of_events())
 
 @app.context_processor
 def event_types():
