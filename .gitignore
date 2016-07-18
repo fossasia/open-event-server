@@ -16,7 +16,7 @@ app.db
 .idea/
 .bundle/
 
-# Static files at 'open_event/static/admin/lib'
+# Static files at 'app/static/admin/lib'
 lib/
 node_modules
 

@@ -1,11 +1,11 @@
 import unittest
 
-from open_event.helpers.data import save_to_db
+from app.helpers.data import save_to_db
 from tests.object_mother import ObjectMother
 from tests.auth_helper import register
 from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
-from open_event import current_app as app
+from app import current_app as app
 
 
 class TestSitemaps(OpenEventTestCase):

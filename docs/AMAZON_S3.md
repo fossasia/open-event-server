@@ -103,11 +103,11 @@ This makes S3 easy and flexible for data storage.
 
 ## Using the (S3) storage module in code
 
-S3 works on the concept of keys. Using the same idea, `open_event.helpers.storage` module has been created to allow uploading files to both S3 and local server.
+S3 works on the concept of keys. Using the same idea, `app.helpers.storage` module has been created to allow uploading files to both S3 and local server.
 Here is a basic example.
 
 ```python
-from open_event.helpers.storage import upload
+from app.helpers.storage import upload
 
 @app.route('/users/upload/', methods=('POST'))
     def view(self):

@@ -2,9 +2,9 @@ import unittest
 
 from flask import url_for
 
-from open_event import current_app as app
-from open_event.models.notifications import Notification
-from open_event.helpers.data import DataManager
+from app import current_app as app
+from app.models.notifications import Notification
+from app.helpers.data import DataManager
 from tests.views.view_test_case import OpenEventViewTestCase, get_or_create_super_admin
 
 

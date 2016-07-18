@@ -1,8 +1,8 @@
 """Copyright 2015 Rafal Kowalski"""
 from flask import url_for
 
-from open_event.helpers.helpers import get_serializer
-from open_event.helpers.data import DataManager, save_to_db
+from app.helpers.helpers import get_serializer
+from app.helpers.data import DataManager, save_to_db
 
 
 def login(app, email, password):

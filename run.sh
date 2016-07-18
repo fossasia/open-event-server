@@ -8,6 +8,6 @@ python create_db.py
 # first to have it downloaded.
 bash run_redis.sh &
 # run worker
-celery worker -A open_event.celery &
+celery worker -A app.celery &
 # run app
 python manage.py runserver -h 0.0.0.0 -p 5000

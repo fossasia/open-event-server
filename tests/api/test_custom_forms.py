@@ -1,8 +1,8 @@
 import unittest
 import json
 
-from open_event.helpers.data import update_or_create
-from open_event.models.custom_forms import CustomForms, SESSION_FORM, \
+from app.helpers.data import update_or_create
+from app.models.custom_forms import CustomForms, SESSION_FORM, \
     SPEAKER_FORM
 
 from tests.auth_helper import register
@@ -11,7 +11,7 @@ from tests.utils import OpenEventTestCase
 from tests.api.utils import get_path, create_event
 from utils_post_data import *
 
-from open_event import current_app as app
+from app import current_app as app
 
 
 class TestCustomForms(OpenEventTestCase):

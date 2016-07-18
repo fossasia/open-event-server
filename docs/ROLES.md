@@ -12,9 +12,9 @@ The Super Admin can access all user features.
 | --- | --- | --- | --- | --- | --- |
 | MANAGE OWN PROFILE | Super Admin | YES | YES | YES | /profile
 | MANAGE OWN EVENTS | Super Admin | YES | YES | YES | /create, /events, /events/ID
-| IMPORT/EXPORT OWN EVENTS | Super Admin | YES | YES | YES | 
-| MANAGE OWN SESSIONS | Super Admin | YES | YES | YES | 
-| MANAGE SESSIONS OF OWN EVENTS | Super Admin | YES | YES | YES | 
+| IMPORT/EXPORT OWN EVENTS | Super Admin | YES | YES | YES |
+| MANAGE OWN SESSIONS | Super Admin | YES | YES | YES |
+| MANAGE SESSIONS OF OWN EVENTS | Super Admin | YES | YES | YES |
 
 ### 1.2 Access to Admin Features
 
@@ -175,7 +175,7 @@ user.is_speaker_at_session(session_id)
 ## Example code
 
 ```
->>> from open_event.models.permission import Permission
+>>> from app.models.permission import Permission
 >>> for p in Permission.query.all():
 ...  create = 'Create' if p.can_create else ''
 ...  read = 'Read' if p.can_read else ''
@@ -223,8 +223,8 @@ user.can_delete(service, event_id)
 
 e.g.
 ```
->>> from open_event.models.user import User
->>> from open_event.models.track import Track
+>>> from app.models.user import User
+>>> from app.models.track import Track
 >>> u = User.query.all()[0]
 >>> u.can_create(Track, event_id=1)
 True
@@ -240,21 +240,21 @@ You can define a user's role for an event in `UsersEventsRoles`.
 Here's an example showing how a user is assigned as a Track Organizer for an Event (with `event_id = 1`).
 
 ```
->>> from open_event.models.users_events_roles import UsersEventsRoles as UER
->>> from open_event.models.user import User
->>> from open_event.models.event import Event
->>> from open_event.models.role import Role
+>>> from app.models.users_events_roles import UsersEventsRoles as UER
+>>> from app.models.user import User
+>>> from app.models.event import Event
+>>> from app.models.role import Role
 >>> r = Role.query.filter_by(name='track_organizer').first()
 >>> e = Event.query.get(1)
->>> from open_event.helpers.data import save_to_db
+>>> from app.helpers.data import save_to_db
 >>> u = User(email='asd@email.com')
 >>> save_to_db(u, 'asfd')
 True
 >>> uer = UER(user=u, event=e, role=r)
 >>> save_to_db(uer, 'asdf')
 True
->>> from open_event.models.session import Session
->>> from open_event.models.track import Track
+>>> from app.models.session import Session
+>>> from app.models.track import Track
 # 'u' is a track organizer and can only update and read tracks for an event.
 >>> u.can_create(Track, 1)
 False

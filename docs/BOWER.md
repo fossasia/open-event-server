@@ -16,13 +16,13 @@ Note: If you are working from within a proxied network of an organization/instit
 * The contents of .bowerrc will be something like this:
 ```
 {
-	"directory": "open_event/static/admin/lib"
+	"directory": "app/static/admin/lib"
 }
 ```
 * Modify the file to add "proxy" and "https-proxy" properties like this:
 ```
 {
-	"directory": "open_event/static/admin/lib",
+	"directory": "app/static/admin/lib",
 	"proxy": "http://172.31.1.23:8080",
 	"https-proxy": "http://172.31.1.23:8080"
 }

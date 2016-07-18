@@ -25,3 +25,7 @@ ratings:
 exclude_paths:
 - tests/
 - migrations/versions/
+- app/static/js/jquery/
+- app/static/js/bootstrap/
+- app/static/css/bootstrap/
+

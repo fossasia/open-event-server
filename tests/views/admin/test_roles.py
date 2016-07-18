@@ -2,15 +2,15 @@ import unittest
 
 from flask import url_for
 
-from open_event.helpers.data import save_to_db
-from open_event.models.role import Role
-from open_event.models.role_invite import RoleInvite
+from app.helpers.data import save_to_db
+from app.models.role import Role
+from app.models.role_invite import RoleInvite
 from populate_db import populate
-from open_event.helpers.data_getter import DataGetter
+from app.helpers.data_getter import DataGetter
 from tests.object_mother import ObjectMother
-from open_event import current_app as app
+from app import current_app as app
 from tests.views.view_test_case import OpenEventViewTestCase
-from open_event.models.users_events_roles import UsersEventsRoles
+from app.models.users_events_roles import UsersEventsRoles
 
 class TestRoles(OpenEventViewTestCase):
 
