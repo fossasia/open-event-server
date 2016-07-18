@@ -78,10 +78,10 @@ def event_search_location(value, query):
 
 
 def get_query_close_area(lng, lat):
-    up_lng, up_lat = lng, lat + 0.249788
-    bottom_lng, bottom_lat = lng, lat - 0.249788
-    left_lng, left_lat = lng - 0.249788, lat
-    right_lng, right_lat = lng + 0.249788, lat
+    up_lat =  lat + 0.249788
+    bottom_lat = lat - 0.249788
+    left_lng = lng - 0.249788
+    right_lng = lng + 0.249788
     if Event.latitude and Event.longitude:
         return and_(Event.latitude <= up_lat,
                     Event.latitude >= bottom_lat,
