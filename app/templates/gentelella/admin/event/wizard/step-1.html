@@ -418,7 +418,7 @@
         var latitude = $latitudeInput.val();
         var longitude = $longitudeInput.val();
         var latlng = new google.maps.LatLng(latitude, longitude);
-        var map = new google.maps.Map($("#map")[0], {
+        map = new google.maps.Map($("#map")[0], {
             zoom: 1,
             center: latlng
         });
@@ -524,9 +524,25 @@
     }
 
     function show_map_holder() {
+        if ($('#location_name').get(0).value != '') {
+            var url = "https://maps.googleapis.com/maps/api/geocode/json?address="+$('#location_name').get(0).value+"&key=AIzaSyAHdXg0Y_zk-wCNpslbBqcezLdHniaEwkI"
+            $.getJSON( url, function( data ) {
+                google.maps.event.trigger(autocomplete, 'place_changed');
+                var place = data.results[0];
+                for (var i = 0; i < place.address_components.length; i++) {
+                  var addressType = place.address_components[i].types[0];
+                  if (componentForm[addressType]) {
+                    console.log(addressType);
+                    var val = place.address_components[i][componentForm[addressType]];
+                    document.getElementById(addressType).value = val;
+                  }
+                }
+            });
+        }
         $('#location_name').hide();
         $('#map-holder').show();
         $('#show_addr').hide();
+        resizeMap(map);
     }
 
     function remove_map_holder() {
