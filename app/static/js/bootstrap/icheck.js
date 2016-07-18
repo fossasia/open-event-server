@@ -14,16 +14,16 @@
             for (var f in e) e[f] ? x(a, f, !0) : q(a, f, !0);
         else if (!b || "toggle" == d) {
             if (!b) a[_callback]("ifClicked");
-            e ? c[_type] !== r && q(a, g) : x(a, g)
+            e ? c[_type] !== r && q(a, g) : x(a, g);
         }
     }
 
     function x(a, b, d) {
         var c = a[0],
             g = a.parent(),
-            e = b == k,
-            u = b == _indeterminate,
-            v = b == n,
+            e = b === k,
+            u = b === _indeterminate,
+            v = b === n,
             s = u ? _determinate : e ? y : "enabled",
             F = l(a, s + t(c[_type])),
             B = l(a, b + t(c[_type]));
@@ -60,7 +60,7 @@
         }!c[n] && l(a, _cursor, !0) && g.find("." + C).css(_cursor, "pointer");
         g[_remove](r || l(a, b) || "");
         g.attr("role") && !f && g.attr("aria-" + (m ? n : k), "false");
-        g[_add](q || l(a, s) || "")
+        g[_add](q || l(a, s) || "");
     }
 
     function E(a, b) {
