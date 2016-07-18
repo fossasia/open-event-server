@@ -11,7 +11,7 @@ from tests.utils import OpenEventTestCase
 from tests.api.utils import create_event, get_path, create_services,\
     create_session, save_to_db, Speaker
 from tests.auth_helper import register
-from open_event import current_app as app
+from app import current_app as app
 
 
 class ImportExportBase(OpenEventTestCase):

@@ -5,7 +5,7 @@ from tests.utils import OpenEventTestCase
 from tests.auth_helper import register, login
 from tests.api.utils import get_path, create_event
 
-from open_event import current_app as app
+from app import current_app as app
 
 
 class TestGetApiNonExistingEvent(OpenEventTestCase):

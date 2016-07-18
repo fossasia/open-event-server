@@ -1,5 +1,5 @@
-from open_event import current_app
-from open_event.models import db
+from app import current_app
+from app.models import db
 from sqlalchemy.engine import reflection
 from sqlalchemy.schema import (
     MetaData,

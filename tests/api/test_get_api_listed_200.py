@@ -5,8 +5,8 @@ from tests.utils import OpenEventTestCase
 from tests.auth_helper import register, login
 from tests.api.utils import get_path, create_event, create_services
 
-from open_event import current_app as app
-from open_event.helpers.data import update_role_to_admin
+from app import current_app as app
+from app.helpers.data import update_role_to_admin
 
 
 class TestGetApiListed(OpenEventTestCase):

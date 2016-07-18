@@ -1,9 +1,9 @@
 
-from open_event.helpers.data_getter import DataGetter
+from app.helpers.data_getter import DataGetter
 from tests import OpenEventTestCase
 from tests.auth_helper import create_super_admin, login
 from tests.setup_database import Setup
-from open_event import current_app as app
+from app import current_app as app
 
 def get_or_create_super_admin():
     user = DataGetter.get_user_by_email("test_super_admin@email.com")

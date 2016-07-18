@@ -6,14 +6,14 @@ from tests.utils import OpenEventTestCase
 from tests.api.utils import create_event, get_path
 from tests.api.utils_post_data import *
 from tests.auth_helper import register, login, logout
-from open_event import current_app as app
+from app import current_app as app
 
-from open_event.api.events import EVENT_POST, SOCIAL_LINK_POST
-from open_event.api.tracks import TRACK_POST
-from open_event.api.microlocations import MICROLOCATION_POST
-from open_event.api.sessions import SESSION_POST, SESSION_TYPE_POST
-from open_event.api.speakers import SPEAKER_POST
-from open_event.api.sponsors import SPONSOR_POST
+from app.api.events import EVENT_POST, SOCIAL_LINK_POST
+from app.api.tracks import TRACK_POST
+from app.api.microlocations import MICROLOCATION_POST
+from app.api.sessions import SESSION_POST, SESSION_TYPE_POST
+from app.api.speakers import SPEAKER_POST
+from app.api.sponsors import SPONSOR_POST
 
 
 class TestPostApiBase(OpenEventTestCase):

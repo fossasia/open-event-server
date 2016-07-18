@@ -4,11 +4,11 @@ from datetime import datetime,timedelta
 
 from flask import url_for
 
-from open_event.helpers.data import save_to_db
+from app.helpers.data import save_to_db
 from tests.object_mother import ObjectMother
 from tests.utils import OpenEventTestCase
-from open_event import current_app as app
-from open_event.helpers.flask_helpers import slugify
+from app import current_app as app
+from app.helpers.flask_helpers import slugify
 
 def get_event():
     event = ObjectMother.get_event()

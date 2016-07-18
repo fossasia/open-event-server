@@ -5,10 +5,10 @@ from mock import patch
 
 from tests.object_mother import ObjectMother
 from tests.setup_database import Setup
-from open_event import current_app as app
-from open_event.models import db
-from open_event.models.version import Version
-from open_event.helpers.data import DataManager, update_version, save_to_db
+from app import current_app as app
+from app.models import db
+from app.models.version import Version
+from app.helpers.data import DataManager, update_version, save_to_db
 
 
 class TestDataManager(OpenEventTestCase):

@@ -5,13 +5,13 @@ import unittest
 from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
 
-from open_event import current_app as app
-from open_event.helpers.data import save_to_db
-from open_event.models.event import Event
-from open_event.models.session import Session
-from open_event.models.speaker import Speaker
-from open_event.models.sponsor import Sponsor
-from open_event.models.microlocation import Microlocation
+from app import current_app as app
+from app.helpers.data import save_to_db
+from app.models.event import Event
+from app.models.session import Session
+from app.models.speaker import Speaker
+from app.models.sponsor import Sponsor
+from app.models.microlocation import Microlocation
 
 UNICODE_STRING = u'☺'
 
