@@ -1,22 +1,76 @@
 {% extends 'gentelella/admin/super_admin/dashboard.html' %}
 
+
 {% block title %}
     Modules
 {% endblock %}
 
 {% set active_page = "modules" %}
+{% set module_fields = ['ticketing', 'payments', 'donations'] %}
 
 {% block head_css %}
     {{ super() }}
 
 {% endblock %}
 
-{% block content %}
+{% macro field_switch(name, group, include=false, require=false ) %}
+    {% set identifier = name | replace(group + '.','') %}
+    {% set name = identifier | replace('_id','') %}
+    {% set pretty_name = name | replace('_',' ') | capitalize %}
+    <tr data-identifier="{{ name }}" data-group="{{ group }}"
+        data-toggle="tooltip">
+        <td>
+            <h4>{{ pretty_name }}</h4>
+        </td>
+        <td>
+            <input type="checkbox" class="toggle-switch include-switch" data-group="modules" id="{{ identifier }}-include"
+                   onclick="includeClick(this)">
+            <label for="{{ identifier }}-include"> </label>
+        </td>
+    </tr>
+{% endmacro %}
 
+
+{% macro options_table(columns, group) %}
+
+    <div style="width: 100%; text-align: center">
+        <h2 style="font-weight: 300; font-size: 40px;">Enable/Disable Modules</h2>
+    </div>
+
+    <table class="table table-bordered table-hover options-table modules-options-table">
+        <thead>
+        <tr>
+            <th><h3>Modules</h3></th>
+            <th><h3>Status</h3></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for column in columns %}
+            {{ field_switch(column, group) }}
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+{% endmacro %}
+
+{% block content %}
+<div id="module-settings" class="wizard_content" style="display: block;">
+    <div class="col-md-2 hidden-sm hidden-xs"></div>
+    <div class="col-md-8 col-sm-12 col-xs-12">
+        {{ options_table(module_fields, 'modules') }}
+    </div>
+
+    <input type="hidden" name="custom_form[name]" value="session_form">
+    <input type="hidden" name="custom_form[name]" value="speaker_form">
+
+    <input type="hidden" id="session-value-form" name="custom_form[value]" value="[]">
+    <input type="hidden" id="speaker-value-form" name="custom_form[value]" value="[]">
+</div>
 {% endblock %}
 
 {% block tail_js %}
-    {{ super() }}
+
 
 {% endblock %}
 
