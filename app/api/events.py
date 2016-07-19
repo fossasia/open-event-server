@@ -1,4 +1,4 @@
-from flask.ext.restplus import Resource, Namespace, reqparse
+from flask.ext.restplus import Namespace, reqparse
 from flask import g
 
 from app.models.event import Event as EventModel
@@ -13,6 +13,7 @@ from .helpers.helpers import requires_auth, parse_args, \
     can_access
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, BaseDAO, ServiceDAO
+from .helpers.utils import Resource
 from .helpers import custom_fields as fields
 from helpers.special_fields import EventTypeField, EventTopicField, \
     EventPrivacyField, EventSubTopicField
@@ -204,6 +205,7 @@ class EventResource():
 @api.response(404, 'Event not found')
 class Event(Resource):
     @api.doc('get_event')
+    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
     @api.marshal_with(EVENT)
     def get(self, event_id):
         """Fetch an event given its id"""
@@ -234,6 +236,7 @@ class Event(Resource):
 @api.response(404, 'Event not found')
 class EventWebapp(Resource):
     @api.doc('get_event_for_webapp')
+    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
     @api.marshal_with(EVENT)
     def get(self, event_id):
         """Fetch an event given its id.
@@ -245,6 +248,7 @@ class EventWebapp(Resource):
 @api.route('')
 class EventList(Resource, EventResource):
     @api.doc('list_events', params=EVENT_PARAMS)
+    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
     @api.marshal_list_with(EVENT)
     def get(self):
         """List all events"""
@@ -265,6 +269,7 @@ class EventList(Resource, EventResource):
 class EventListPaginated(Resource, PaginatedResourceBase, EventResource):
     @api.doc('list_events_paginated', params=PAGE_PARAMS)
     @api.doc(params=EVENT_PARAMS)
+    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
     @api.marshal_with(EVENT_PAGINATED)
     def get(self):
         """List events in a paginated manner"""
@@ -276,6 +281,7 @@ class EventListPaginated(Resource, PaginatedResourceBase, EventResource):
 @api.param('event_id')
 class SocialLinkList(Resource):
     @api.doc('list_social_links')
+    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
     @api.marshal_list_with(SOCIAL_LINK)
     def get(self, event_id):
         """List all social links"""
@@ -312,6 +318,7 @@ class SocialLink(Resource):
         return LinkDAO.update(event_id, link_id, self.api.payload)
 
     @api.hide
+    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
     @api.marshal_with(SOCIAL_LINK)
     def get(self, event_id, link_id):
         """Fetch a social link given its id"""
