@@ -39,9 +39,9 @@ class ImportExportBase(OpenEventTestCase):
             headers={'content-type': 'application/json'}
         )
 
-    def _do_successful_export(self, event_id):
+    def _do_successful_export(self, event_id, config={'image': True}):
         path = get_path(event_id, 'export', 'json')
-        resp = self._post(path, {})
+        resp = self._post(path, config)
         self.assertEqual(resp.status_code, 200)
         # watch task
         self.assertIn('task_url', resp.data)

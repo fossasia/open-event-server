@@ -1,6 +1,6 @@
 import os
 from flask import send_file, make_response, jsonify, url_for, current_app
-from flask.ext.restplus import Resource, Namespace
+from flask.ext.restplus import Resource, Namespace, marshal
 
 from app.helpers.data import record_activity
 from helpers.export_helpers import export_event_json
@@ -28,7 +28,8 @@ class EventExportJson(Resource):
     @api.expect(EXPORT_SETTING)
     def post(self, event_id):
         from helpers.tasks import export_event_task
-        task = export_event_task.delay(event_id, self.api.payload)
+        task = export_event_task.delay(
+            event_id, marshal(self.api.payload, EXPORT_SETTING))
         if current_app.config.get('CELERY_ALWAYS_EAGER'):
             TASK_RESULTS[task.id] = {
                 'result': task.get(),
