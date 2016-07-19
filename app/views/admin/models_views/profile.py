@@ -6,7 +6,7 @@ from flask.ext import login
 from app.views.admin.models_views.events import is_verified_user
 from ....helpers.data import DataManager, get_facebook_auth, get_instagram_auth
 from ....helpers.data_getter import DataGetter
-from app.helpers.storage import upload
+from app.helpers.storage import upload, UPLOAD_PATHS
 from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth
 
 
@@ -40,7 +40,11 @@ class ProfileView(BaseView):
             url = ""
             if 'avatar' in request.files and request.files['avatar'].filename != "":
                 avatar_img = request.files['avatar']
-                url = upload(avatar_img, 'users/%d/avatar' % int(user_id))
+                url = upload(
+                    avatar_img,
+                    UPLOAD_PATHS['user']['avatar'].format(
+                        user_id=int(user_id)
+                    ))
             profile = DataManager.update_user(request.form, int(user_id), url)
             if admin:
                 return redirect(url_for('sadmin_users.details_view', user_id=user_id))
