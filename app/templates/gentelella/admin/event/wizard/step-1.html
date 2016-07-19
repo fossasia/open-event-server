@@ -221,10 +221,10 @@
             <label><span class="organizer-state">Add</span> Organizer Information
             </label>
             <input type="checkbox" class="toggle-switch" name="organizer_state"
-                       value="on" id="organizer-switch"/>
+                       value="on" id="organizer-switch" {% if event.organizer_name or event.organizer_description %}checked="checked"{% endif %}/>
             <label for="organizer-switch" style="margin-left:0;"></label>
         </div>
-        <div id="organizer-holder" style="display:none;">
+        <div id="organizer-holder" {% if not event.organizer_name and not event.organizer_description %}style="display:none;"{% endif %}>
             <div class="item form-group">
                 <label>Organizer name</label>
                 <input name="organizer_name" class="form-control"
@@ -339,9 +339,9 @@
             <label><span class="coc-state">Add</span> Code of Conduct
             </label>
             <input type="checkbox" class="toggle-switch" name="coc_state"
-                       value="on" id="coc-switch"/>
+                       value="on" id="coc-switch" {% if event.code_of_conduct %}checked="checked"{% endif %}/>
             <label for="coc-switch" style="margin-left:0;"></label>
-            <div id="coc-holder" style="display:none;">
+            <div id="coc-holder" {% if not event.code_of_conduct %}style="display:none;"{% endif %}>
                 <textarea name="code_of_conduct"
                       class="form-control">{{ event.code_of_conduct | default('', true) }}</textarea>
             </div>
