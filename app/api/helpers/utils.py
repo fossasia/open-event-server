@@ -64,14 +64,14 @@ PAGINATED_MODEL = Model('PaginatedModel', {
 # Custom Resource Class
 class Resource(RestplusResource):
     def dispatch_request(self, *args, **kwargs):
-        rv = super(Resource, self).dispatch_request(*args, **kwargs)
+        resp = super(Resource, self).dispatch_request(*args, **kwargs)
 
         # ETag checking.
         # Check only for GET requests, for now.
         if request.method == 'GET':
             old_etag = request.headers.get('If-None-Match', '')
             # Generate hash
-            data = json.dumps(rv)
+            data = json.dumps(resp)
             new_etag = md5(data).hexdigest()
 
             if new_etag == old_etag:
@@ -79,9 +79,9 @@ class Resource(RestplusResource):
                 return '', 304
             else:
                 # Resource has changed, send new ETag value
-                return rv, 200, {'ETag': new_etag}
+                return resp, 200, {'ETag': new_etag}
 
-        return rv
+        return resp
 
 
 # Base class for Paginated Resource
