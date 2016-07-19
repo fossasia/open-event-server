@@ -99,6 +99,9 @@ class TestEventExport(ImportExportBase):
         self.assertEqual(resp.status_code, 404)
 
     def test_export_media(self):
+        """
+        test successful export of media
+        """
         resp = self._put(get_path(1), {'logo': 'https://placehold.it/350x150'})
         self.assertIn('placehold', resp.data, resp.data)
         self._create_set()

@@ -5,10 +5,18 @@ from flask.ext.restplus import Resource, Namespace
 from app.helpers.data import record_activity
 from helpers.export_helpers import export_event_json
 from helpers.utils import TASK_RESULTS
+from helpers import custom_fields as fields
 from helpers.helpers import nocache, can_access, requires_auth
 
 
 api = Namespace('exports', description='Exports', path='/')
+
+EXPORT_SETTING = api.model('ExportSetting', {
+    'image': fields.Boolean(default=False),
+    'video': fields.Boolean(default=False),
+    'document': fields.Boolean(default=False),
+    'audio': fields.Boolean(default=False)
+})
 
 
 @requires_auth
@@ -17,6 +25,7 @@ api = Namespace('exports', description='Exports', path='/')
 @api.route('/events/<int:event_id>/export/json')
 @api.hide
 class EventExportJson(Resource):
+    @api.expect(EXPORT_SETTING)
     def get(self, event_id):
         from helpers.tasks import export_event_task
         task = export_event_task.delay(event_id)

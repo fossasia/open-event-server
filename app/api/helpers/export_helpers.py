@@ -63,6 +63,8 @@ def _download_media(data, srv, dir_path):
         path = DOWNLOAD_FIEDLS[srv][i]
         if srv != 'event':
             path = path % (data['id'])
+        if data[i].find('.') > -1:  # add extension
+            path += '.' + data[i].rsplit('.', 1)[1]
         full_path = dir_path + path
         # make dir
         cdir = full_path.rsplit('/', 1)[0]
@@ -77,7 +79,6 @@ def _download_media(data, srv, dir_path):
             r = requests.get(url, allow_redirects=True)
             open(full_path, 'wb').write(r.content)
             data[i] = path
-            print data[i]
         except Exception:
             pass
 

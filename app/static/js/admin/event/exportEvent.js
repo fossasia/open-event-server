@@ -1,5 +1,7 @@
 // export event main
-function exportEvent(event_id){
+var event_id = 0;
+
+function exportEvent(){
     url = '/api/v2/events/' + event_id + '/export/json';
     $('#btnExportEvent').click();
     jQuery.ajax({
@@ -48,3 +50,10 @@ function exportTask(url){
     }
     });
 }
+
+
+$('#exportModal').on('show.bs.modal', function(event){
+    var button = $(event.relatedTarget);
+    event_id = button.data('event-id');
+    console.log(event_id);
+});
