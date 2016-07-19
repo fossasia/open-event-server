@@ -31,27 +31,27 @@ EXPORTS = [
 # keep sync with storage.UPLOAD_PATHS
 DOWNLOAD_FIEDLS = {
     'sessions': {
-        'video': '/videos/session_%d',
-        'audio': '/audios/session_%d',
-        'slides': '/slides/session_%d'
+        'video': ['video', '/videos/session_%d'],
+        'audio': ['audio', '/audios/session_%d'],
+        'slides': ['document', '/slides/session_%d']
     },
     'speakers': {
-        'photo': '/images/speakers/photo_%d'
+        'photo': ['image', '/images/speakers/photo_%d']
     },
     'event': {
-        'logo': '/images/logo',
-        'background_url': '/images/background'
+        'logo': ['image', '/images/logo'],
+        'background_url': ['image', '/images/background']
     },
     'sponsors': {
-        'logo': '/images/sponsors/logo_%d'
+        'logo': ['image', '/images/sponsors/logo_%d']
     },
     'tracks': {
-        'track_image_url': '/images/tracks/image_%d'
+        'track_image_url': ['image', '/images/tracks/image_%d']
     }
 }
 
 
-def _download_media(data, srv, dir_path):
+def _download_media(data, srv, dir_path, settings):
     """
     Downloads the media and saves it
     """
@@ -60,7 +60,9 @@ def _download_media(data, srv, dir_path):
     for i in DOWNLOAD_FIEDLS[srv]:
         if not data[i]:
             continue
-        path = DOWNLOAD_FIEDLS[srv][i]
+        if not settings[DOWNLOAD_FIEDLS[srv][i][0]]:
+            continue
+        path = DOWNLOAD_FIEDLS[srv][i][1]
         if srv != 'event':
             path = path % (data['id'])
         if data[i].find('.') > -1:  # add extension
@@ -83,7 +85,7 @@ def _download_media(data, srv, dir_path):
             pass
 
 
-def export_event_json(event_id):
+def export_event_json(event_id, settings):
     """
     Exports the event as a zip on the server and return its path
     """
@@ -96,11 +98,11 @@ def export_event_json(event_id):
     for e in EXPORTS:
         if e[0] == 'event':
             data = marshal(e[1].get(event_id), e[2])
-            _download_media(data, 'event', dir_path)
+            _download_media(data, 'event', dir_path, settings)
         else:
             data = marshal(e[1].list(event_id), e[2])
             for _ in data:
-                _download_media(_, e[0], dir_path)
+                _download_media(_, e[0], dir_path, settings)
         data_str = json.dumps(data, sort_keys=True, indent=4)
         fp = open(dir_path + '/' + e[0] + '.json', 'w')
         fp.write(data_str)

@@ -9,7 +9,7 @@ function exportEvent(){
     for (i=0; i<4; i++){
         payload[fields[i]] = $('#exportForm [name=' + fields[i] + ']').is(':checked') ? true : false;
     }
-    $('#btnExportEvent').click();
+    $('#btnExportEvent').unbind('click');
 
     jQuery.ajax({
         url: url,

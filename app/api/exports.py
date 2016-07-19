@@ -27,9 +27,8 @@ EXPORT_SETTING = api.model('ExportSetting', {
 class EventExportJson(Resource):
     @api.expect(EXPORT_SETTING)
     def post(self, event_id):
-        print self.api.payload
         from helpers.tasks import export_event_task
-        task = export_event_task.delay(event_id)
+        task = export_event_task.delay(event_id, self.api.payload)
         if current_app.config.get('CELERY_ALWAYS_EAGER'):
             TASK_RESULTS[task.id] = {
                 'result': task.get(),
@@ -55,8 +54,8 @@ class ExportDownload(Resource):
         return response
 
 
-def event_export_task_base(event_id):
-    path = export_event_json(event_id)
+def event_export_task_base(event_id, settings):
+    path = export_event_json(event_id, settings)
     if path.startswith('/'):
         path = path[1:]
     return path
