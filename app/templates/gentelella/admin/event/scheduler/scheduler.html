@@ -29,9 +29,15 @@
     <div class="row scheduler-holder" style="display: none;">
         <div class="col-xs-3 sessions-holder">
             <div class="btn-group" role="group">
-                <a type="button" class="btn btn-success" href="publish">
-                    Publish Schedule
-                </a>
+                {% if event.schedule_published_on %}
+                    <a type="button" class="btn btn-warning" href="unpublish">
+                        Unpublish Schedule
+                    </a>
+                {% else %}
+                    <a type="button" class="btn btn-success" href="publish">
+                        Publish Schedule
+                    </a>
+                {% endif %}
             </div>
             <h2 style="margin-top: 20px;">Unscheduled Sessions</h2>
             <div class="input-group" style="margin-top: 20px;">
