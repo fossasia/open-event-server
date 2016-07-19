@@ -1,6 +1,5 @@
 from flask.ext.restplus import Resource, Namespace, reqparse, marshal
 from flask import g
-from flask.ext.restplus.utils import merge
 
 from app.api.microlocations import MICROLOCATION
 from app.api.sessions import SESSION
@@ -252,7 +251,7 @@ class Event(Resource, SingleEventResource):
     @fake_marshal_with(EVENT_COMPLETE)  # Fake marshal decorator to add response model to swagger doc
     def get(self, event_id):
         """Fetch an event given its id"""
-        includes = parse_args(self.event_parser)['include'].split(',')
+        includes = parse_args(self.event_parser).get('include', '').split(',')
         return marshal(DAO.get(event_id), get_extended_event_model(includes))
 
     @can_access
@@ -285,7 +284,7 @@ class EventWebapp(Resource, SingleEventResource):
         """Fetch an event given its id.
         Alternate endpoint for fetching an event.
         """
-        includes = parse_args(self.event_parser)['include'].split(',')
+        includes = parse_args(self.event_parser).get('include', '').split(',')
         return marshal(DAO.get(event_id), get_extended_event_model(includes))
 
 @api.route('')

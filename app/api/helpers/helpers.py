@@ -1,8 +1,6 @@
 import json
 from datetime import datetime
 
-import flask
-from flask.ext.restplus import marshal_with
 from flask.ext.restplus.utils import merge
 from sqlalchemy import func
 from functools import wraps, update_wrapper
@@ -11,7 +9,6 @@ from flask.ext.restplus import fields
 from flask.ext import login
 from flask.ext.scrypt import check_password_hash
 from flask_jwt import jwt_required, JWTError, current_identity
-import custom_fields as custom_fields
 
 from app.models.event import Event as EventModel
 from app.models import db
@@ -321,10 +318,10 @@ def auth_jwt():
     """
     g.user = current_identity
 
-def erase_from_dict(d, k):
-    if isinstance(d, dict):
-        if k in d.keys():
-            d.pop(k)
+def erase_from_dict(dct, key):
+    if isinstance(dct, dict):
+        if key in dct.keys():
+            dct.pop(key)
 
 
 def auth_basic():
