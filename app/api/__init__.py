@@ -43,7 +43,6 @@ api.add_namespace(extras_api)
 
 api.add_namespace(error_models)
 
-
 @api.documentation
 def custom_ui():
     return render_template(

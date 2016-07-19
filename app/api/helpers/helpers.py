@@ -1,5 +1,9 @@
 import json
 from datetime import datetime
+
+import flask
+from flask.ext.restplus import marshal_with
+from flask.ext.restplus.utils import merge
 from sqlalchemy import func
 from functools import wraps, update_wrapper
 from flask import request, g, make_response
@@ -7,6 +11,7 @@ from flask.ext.restplus import fields
 from flask.ext import login
 from flask.ext.scrypt import check_password_hash
 from flask_jwt import jwt_required, JWTError, current_identity
+import custom_fields as custom_fields
 
 from app.models.event import Event as EventModel
 from app.models import db
@@ -61,7 +66,6 @@ def get_list_or_404(klass, **kwargs):
     if not obj_list:
         raise NotFoundError(message='Object list is empty')
     return obj_list
-
 
 def get_object_or_404(klass, id_):
     """Returns a specific object of a model class given its identifier. In case
@@ -317,6 +321,11 @@ def auth_jwt():
     """
     g.user = current_identity
 
+def erase_from_dict(d, k):
+    if isinstance(d, dict):
+        if k in d.keys():
+            d.pop(k)
+
 
 def auth_basic():
     """
@@ -337,6 +346,21 @@ def auth_basic():
         return (False, 'Authentication failed. Wrong username or password')
     g.user = user
     return (True, '')
+
+def fake_marshal_with(fields, as_list=False, code=200, description=None, **kwargs):
+    def wrapper(func):
+        doc = {
+            'responses': {
+                code: (description, [fields]) if as_list else (description, fields)
+            },
+            '__mask__': kwargs.get('mask', True),  # Mask values can't be determined outside app context
+        }
+        func.__apidoc__ = merge(getattr(func, '__apidoc__', {}), doc)
+        return func
+    return wrapper
+
+def fake_marshal_list_with(fields, as_list=False, code=200, description=None, **kwargs):
+    return fake_marshal_with(fields, True, **kwargs)
 
 
 # Disable caching in a view
