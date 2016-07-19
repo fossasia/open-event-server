@@ -23,7 +23,7 @@
            <div class="col-md-6 col-xs-6">
                 <label>Phone:
                 </label>
-                <input name="contact" type="tel" class="form-control" value="{{profile.user_detail.contact | default('', true) }}"/>
+                <input name="contact" type="tel" pattern="^[+-]\d(\d|-)+\d$" class="form-control" value="{{profile.user_detail.contact | default('', true) }}" title="Not a valid phone number."/>
             </div>
         </div>
         <h3>Integrate Social Networks</h3>
