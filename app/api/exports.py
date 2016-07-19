@@ -26,7 +26,8 @@ EXPORT_SETTING = api.model('ExportSetting', {
 @api.hide
 class EventExportJson(Resource):
     @api.expect(EXPORT_SETTING)
-    def get(self, event_id):
+    def post(self, event_id):
+        print self.api.payload
         from helpers.tasks import export_event_task
         task = export_event_task.delay(event_id)
         if current_app.config.get('CELERY_ALWAYS_EAGER'):

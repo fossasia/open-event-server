@@ -3,10 +3,21 @@ var event_id = 0;
 
 function exportEvent(){
     url = '/api/v2/events/' + event_id + '/export/json';
+    // generate payload
+    fields = ['image', 'video', 'audio', 'document'];
+    payload = {};
+    for (i=0; i<4; i++){
+        payload[fields[i]] = $('#exportForm [name=' + fields[i] + ']').is(':checked') ? true : false;
+    }
     $('#btnExportEvent').click();
+
     jQuery.ajax({
         url: url,
-        type: 'GET',
+        type: 'POST',
+        data: JSON.stringify(payload),
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        cache: false,
         success: function(data){
             $('#export_status').text('Status: Queued');
             setTimeout(function(){
