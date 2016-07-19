@@ -48,8 +48,9 @@ NOTIFS = {
     },
     INVITE_PAPERS: {
         'title': 'Invitation to Submit Papers for {event_name}',
-        'message': ("You have been invited to submit papers for {event_name}."
-            "<br/> Please visit this link to fill up details: <a href='{link}'>Link</a>."),
+        'message': """You have been invited to submit papers for <strong>{event_name}</strong>.<br><br>
+            <a href='{cfs_link}' class='btn btn-info btn-sm'>View Call for Speakers</a>
+            <a href='{submit_link}' class='btn btn-success btn-sm'>Submit</a>""",
         'recipient': 'Speaker',
     },
 }
