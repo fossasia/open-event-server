@@ -1,4 +1,10 @@
+import json
+from hashlib import md5
+
+from flask import request
+from flask.ext.restplus import Resource as RestplusResource
 from flask_restplus import Model, fields, reqparse
+
 from .helpers import get_object_list, get_object_or_404, get_object_in_event, \
     create_model, validate_payload, delete_model, update_model, \
     handle_extra_payload, get_paginated_list
@@ -53,6 +59,29 @@ PAGINATED_MODEL = Model('PaginatedModel', {
     'next': fields.String,
     'previous': fields.String
 })
+
+
+# Custom Resource Class
+class Resource(RestplusResource):
+    def dispatch_request(self, *args, **kwargs):
+        rv = super(Resource, self).dispatch_request(*args, **kwargs)
+
+        # ETag checking.
+        # Check only for GET requests, for now.
+        if request.method == 'GET':
+            old_etag = request.headers.get('If-None-Match', '')
+            # Generate hash
+            data = json.dumps(rv)
+            new_etag = md5(data).hexdigest()
+
+            if new_etag == old_etag:
+                # Resource has not changed
+                return '', 304
+            else:
+                # Resource has changed, send new ETag value
+                return rv, 200, {'ETag': new_etag}
+
+        return rv
 
 
 # Base class for Paginated Resource
