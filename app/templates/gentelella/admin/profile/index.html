@@ -34,14 +34,18 @@
 
 
                     </div>
-                    <!-- end of image cropping -->
-                    <div id="avatar-button" style="padding: 10px 0px;">
-                        <input type="file" id="profile-avatar" name="avatar"
-                               class="upload-btn"/>
-                        <label class="file-label" for="profile-avatar">
-                            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-                            Upload New
-                        </label>
+
+                    <div class="item form-group" id="image-upload-group" style="margin-top:10px">
+                        <div class="image-box" style="height: 90px">
+                            <input type="file" id="event-image-upload" name="avatar" class="image-upload-btn no-js"
+                                   accept="image/*"/>
+                            <label class="file-label" for="event-image-upload" style="padding: 10% 33%;">
+                                <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Profile Image
+                            </label><br>
+                        </div>
+                        <span class="text-muted" style="color: #a2a2a2;">
+                            Image no larger than 10MB.
+                        </span>
                     </div>
 
                 </div>
@@ -89,5 +93,33 @@
 
     </div>
 </div>
+
+<script>
+    $(document).ready(function (){
+        $("#event-image-upload").unbind("change").on('change', function () {
+            var input = this;
+            if (input.files && input.files[0]) {
+                if (input.files[0].size > 10485760) {
+                    createSnackbar("Image must be less than 10 MB in size");
+                    resetFormElement(input);
+                } else {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $("#cropper-modal").modal("show");
+                        $uploadCropper.croppie('bind', {
+                            url: e.target.result
+                        });
+
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            else {
+                logError("No FileReader support");
+            }
+
+        });
+    })
+</script>
 
 {% endblock %}
