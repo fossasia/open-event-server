@@ -8,4 +8,4 @@ class SuperAdminModulesView(SuperAdminBaseView):
 
     @expose('/')
     def index_view(self):
-        return ''
+        return self.render('/gentelella/admin/super_admin/modules/modules.html')
