@@ -2,6 +2,7 @@ import unittest
 import json
 import logging
 import shutil
+import zipfile
 import time
 import os
 from StringIO import StringIO
@@ -24,6 +25,13 @@ class ImportExportBase(OpenEventTestCase):
             data={'file': (StringIO(data), filename)}
         )
 
+    def _put(self, path, data):
+        return self.app.put(
+            path,
+            data=json.dumps(data),
+            headers={'content-type': 'application/json'}
+        )
+
     def _do_successful_export(self, event_id):
         path = get_path(event_id, 'export', 'json')
         resp = self.app.get(path)
@@ -44,6 +52,21 @@ class ImportExportBase(OpenEventTestCase):
         self.assertEqual(resp.status_code, 200)
         return resp
 
+    def _create_set(self):
+        """
+        exports and extracts in static/temp/test_event_import
+        """
+        # export
+        resp = self._do_successful_export(1)
+        zip_file = StringIO()
+        zip_file.write(resp.data)
+        # extract
+        path = 'static/temp/test_event_import'
+        if os.path.isdir(path):
+            shutil.rmtree(path, ignore_errors=True)
+        with zipfile.ZipFile(zip_file) as z:
+            z.extractall(path)
+
 
 class TestEventExport(ImportExportBase):
     """
@@ -52,7 +75,8 @@ class TestEventExport(ImportExportBase):
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
-            create_event()
+            register(self.app, u'test@example.com', u'test')
+            create_event(creator_email=u'test@example.com')
             create_services(1)
 
     def test_export_success(self):
@@ -73,6 +97,17 @@ class TestEventExport(ImportExportBase):
         task_url = json.loads(resp.data)['task_url']
         resp = self.app.get(task_url)
         self.assertEqual(resp.status_code, 404)
+
+    def test_export_media(self):
+        resp = self._put(get_path(1), {'logo': 'https://placehold.it/350x150'})
+        self.assertIn('placehold', resp.data, resp.data)
+        self._create_set()
+        dr = 'static/temp/test_event_import'
+        data = open(dr + '/event.json', 'r').read()
+        self.assertIn('images/logo', data)
+        obj = json.loads(data)
+        logo_data = open(dr + obj['logo'], 'r').read()
+        self.assertTrue(len(logo_data) > 10)
 
 
 class TestEventImport(ImportExportBase):
