@@ -33,7 +33,7 @@ class ImportExportBase(OpenEventTestCase):
         )
 
     def _post(self, path, data):
-        return self.app.put(
+        return self.app.post(
             path,
             data=json.dumps(data),
             headers={'content-type': 'application/json'}
