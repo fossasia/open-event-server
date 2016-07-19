@@ -1,6 +1,7 @@
 import json
 import os
 import shutil
+import requests
 from flask_restplus import marshal
 
 from ..events import DAO as EventDAO, EVENT, \
@@ -12,6 +13,7 @@ from ..speakers import DAO as SpeakerDAO, SPEAKER
 from ..sponsors import DAO as SponsorDAO, SPONSOR
 from ..tracks import DAO as TrackDAO, TRACK
 from .non_apis import CustomFormDAO, CUSTOM_FORM
+from import_helpers import is_downloadable
 
 
 EXPORTS = [
@@ -49,6 +51,37 @@ DOWNLOAD_FIEDLS = {
 }
 
 
+def _download_media(data, srv, dir_path):
+    """
+    Downloads the media and saves it
+    """
+    if srv not in DOWNLOAD_FIEDLS:
+        return
+    for i in DOWNLOAD_FIEDLS[srv]:
+        if not data[i]:
+            continue
+        path = DOWNLOAD_FIEDLS[srv][i]
+        if srv != 'event':
+            path = path % (data['id'])
+        full_path = dir_path + path
+        # make dir
+        cdir = full_path.rsplit('/', 1)[0]
+        if not os.path.isdir(cdir):
+            os.makedirs(cdir)
+        # download and set
+        url = data[i]
+        print url
+        if not is_downloadable(url):
+            continue
+        try:
+            r = requests.get(url, allow_redirects=True)
+            open(full_path, 'wb').write(r.content)
+            data[i] = path
+            print data[i]
+        except Exception:
+            pass
+
+
 def export_event_json(event_id):
     """
     Exports the event as a zip on the server and return its path
@@ -62,8 +95,11 @@ def export_event_json(event_id):
     for e in EXPORTS:
         if e[0] == 'event':
             data = marshal(e[1].get(event_id), e[2])
+            _download_media(data, 'event', dir_path)
         else:
             data = marshal(e[1].list(event_id), e[2])
+            for _ in data:
+                _download_media(_, e[0], dir_path)
         data_str = json.dumps(data, sort_keys=True, indent=4)
         fp = open(dir_path + '/' + e[0] + '.json', 'w')
         fp.write(data_str)
