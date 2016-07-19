@@ -169,9 +169,11 @@ var $noEvents = $("#no-results");
  */
 function addFilterTag(type, value) {
     var $tag = $(filterTagTemplate);
-    $tag.find(".value").text(value);
-    $tag.find(".filter-tag-btn").attr("data-filter-type", type);
-    $filterTagsHolder.append($tag);
+    if (value !== '') {
+        $tag.find(".value").text(value);
+        $tag.find(".filter-tag-btn").attr("data-filter-type", type);
+        $filterTagsHolder.append($tag);
+    }
 }
 
 function isImageInvalid(url) {
