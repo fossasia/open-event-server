@@ -3,16 +3,44 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="myModalLabel">Exporting Event</h4>
+        <h4 class="modal-title" id="myModalLabel">Export Event</h4>
       </div>
       <div class="modal-body">
-        <b>Please wait while event is being exported</b>
-        <br><br>
-        <span id="export_status">Working...</span>
+        <b>Select which media files you want in the zip</b><br>
+        <form id="exportForm">
+          <div class="checkbox">
+            <label>
+            <input type="checkbox" name="image">
+            Image
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+            <input type="checkbox" name="video">
+            Video
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+            <input type="checkbox" name="audio">
+            Audio
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+            <input type="checkbox" name="document">
+            Document
+            </label>
+          </div>
+        </form>
+
+        <br>
+        <span id="export_status"></span>
         <span id="export_error" class="red"></span>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="btnExportEvent" disabled="disabled">Download</button>
+        <button type="button" class="btn btn-primary" id="btnStartExport" onclick="exportEvent()" style="margin-bottom: 0px;">Start</button>
+        <button type="button" class="btn" id="btnExportEvent" disabled="disabled">Download</button>
       </div>
     </div>
   </div>
