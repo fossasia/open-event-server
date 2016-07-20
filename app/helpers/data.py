@@ -1636,3 +1636,6 @@ def restore_session(session_id):
     session = DataGetter.get_session(session_id)
     session.in_trash = False
     save_to_db(session, "Session restored from Trash")
+
+def create_modules(form):
+    return ''

@@ -52,21 +52,23 @@
         </tbody>
     </table>
 
-    <a class="btn btn-lg btn-success save-modules" href="">Save</a>
+    <a class="btn btn-lg btn-success save-modules" href="/admin/modules/save/">Save</a>
 {% endmacro %}
 
 {% block content %}
-<div id="module-settings" class="wizard_content" style="display: block;">
-    <div class="col-md-2 hidden-sm hidden-xs"></div>
-    <div class="col-md-8 col-sm-12 col-xs-12">
-        {{ options_table(module_fields, 'modules') }}
-    </div>
+    <form action="/admin/modules/save"
+                          method="POST" role="form"
+                          class="admin-form form-horizontal" id="modules-form">
+        <div id="module-settings" class="wizard_content" style="display: block;">
+            <div class="col-md-2 hidden-sm hidden-xs"></div>
+            <div class="col-md-8 col-sm-12 col-xs-12">
+                {{ options_table(module_fields, 'modules') }}
+            </div>
 
-    <input type="hidden" name="custom_form[name]" value="session_form">
-    <input type="hidden" name="custom_form[name]" value="speaker_form">
+            <input type="hidden" name="modules_form[name]" value="modules_form">
 
-    <input type="hidden" id="modules-value-form" name="custom_form[value]" value="[]">
-</div>
+            <input type="hidden" id="modules-value-form" name="custom_form[value]" value="[]">
+        </div>
 {% endblock %}
 
 {% block tail_js %}
