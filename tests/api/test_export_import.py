@@ -59,12 +59,12 @@ class ImportExportBase(OpenEventTestCase):
         self.assertEqual(resp.status_code, 200)
         return resp
 
-    def _create_set(self):
+    def _create_set(self, event_id=1, config={'image': True}):
         """
         exports and extracts in static/temp/test_event_import
         """
         # export
-        resp = self._do_successful_export(1)
+        resp = self._do_successful_export(event_id, config)
         zip_file = StringIO()
         zip_file.write(resp.data)
         # extract
@@ -118,6 +118,21 @@ class TestEventExport(ImportExportBase):
         obj = json.loads(data)
         logo_data = open(dr + obj['logo'], 'r').read()
         self.assertTrue(len(logo_data) > 10)
+
+    def test_export_settings_marshal(self):
+        """
+        test if export settings are marshalled by default properly
+        Also check when settings are all False, nothing is exported
+        """
+        resp = self._put(get_path(1), {'logo': 'https://placehold.it/350x150'})
+        self.assertIn('placehold', resp.data, resp.data)
+        self._create_set(1, {})
+        dr = 'static/temp/test_event_import'
+        data = open(dr + '/event.json', 'r').read()
+        obj = json.loads(data)
+        self.assertIn('placehold', obj['logo'])
+        if os.path.isdir(dr + '/images'):
+            self.assertFalse(1, 'Image Dir Exists')
 
 
 class TestEventImport(ImportExportBase):
