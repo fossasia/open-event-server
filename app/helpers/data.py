@@ -793,8 +793,8 @@ class DataManager(object):
         user_detail.contact = form['contact']
         user_detail.twitter = form['twitter']
         user_detail.details = form['details']
-        logo = form['logo']
-        if string_not_empty(logo):
+        logo = form.get('logo', None)
+        if string_not_empty(logo) and logo:
             filename = str(time.time()) + '.png'
             file_path = os.path.realpath('.') + '/static/temp/' + filename
             fh = open(file_path, "wb")
