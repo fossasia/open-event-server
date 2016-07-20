@@ -13,7 +13,7 @@ from ..speakers import DAO as SpeakerDAO, SPEAKER
 from ..sponsors import DAO as SponsorDAO, SPONSOR
 from ..tracks import DAO as TrackDAO, TRACK
 from .non_apis import CustomFormDAO, CUSTOM_FORM
-from import_helpers import is_downloadable
+from import_helpers import is_downloadable, get_filename_from_cd
 
 
 EXPORTS = [
@@ -66,7 +66,9 @@ def _download_media(data, srv, dir_path, settings):
         if srv != 'event':
             path = path % (data['id'])
         if data[i].find('.') > -1:  # add extension
-            path += '.' + data[i].rsplit('.', 1)[1]
+            ext = data[i].rsplit('.', 1)[1]
+            if ext.find('/') == -1:
+                path += '.' + ext
         full_path = dir_path + path
         # make dir
         cdir = full_path.rsplit('/', 1)[0]
@@ -74,11 +76,13 @@ def _download_media(data, srv, dir_path, settings):
             os.makedirs(cdir)
         # download and set
         url = data[i]
-        print url
         if not is_downloadable(url):
             continue
         try:
             r = requests.get(url, allow_redirects=True)
+            ext = get_filename_from_cd(r.headers.get('content-disposition'))[1]
+            full_path += ext
+            path += ext
             open(full_path, 'wb').write(r.content)
             data[i] = path
         except Exception:
