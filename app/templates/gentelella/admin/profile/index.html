@@ -14,7 +14,6 @@
 
 <div class="row">
 
-
         <form name="test" action="/profile/edit/{{user_id}}" method="POST" role="form"
               class="admin-form form-horizontal event-create-form" enctype='multipart/form-data'>
 
@@ -35,17 +34,39 @@
 
                     </div>
 
-                    <div class="item form-group" id="image-upload-group" style="margin-top:10px">
-                        <div class="image-box" style="height: 90px">
-                            <input type="file" id="event-image-upload" name="avatar" class="image-upload-btn no-js"
-                                   accept="image/*"/>
-                            <label class="file-label" for="event-image-upload" style="padding: 10% 33%;">
-                                <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Profile Image
-                            </label><br>
+
+
+                    <div class="row">
+                        <div class="col-md-7">
+
+                            <input type="hidden" name="logo" id="logo">
+
+                            <div class="item form-group" id="logo-upload-group"
+                                 {% if profile and profile.user_detail.avatar_uploaded and profile.user_detail.avatar_uploaded != '' %}style="display: none;"{% endif %}>
+                                <label>Logo</label><br>
+                                <div class="image-box">
+                                    <input type="file" id="logo-upload" name="logo-upload" class="image-upload-btn no-js"
+                                           accept="image/*"/>
+                                    <label class="file-label" for="logo-upload">
+                                        <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Logo
+                                    </label><br>
+                                </div>
+                                <span class="text-muted" style="color: #a2a2a2;">
+                                    Logo size must be less than 1MB.
+                                </span>
+                            </div>
+
+                            <div class="item form-group" id="logo-view-group"
+                                 {% if not profile or not profile.user_detail.avatar_uploaded or profile.user_detail.avatar_uploaded == '' %}style="display: none;"{% endif %}>
+                                <label>Logo</label><br>
+                                <img src="{{ profile.user_detail.avatar_uploaded | default('', true) }}" style="width: 350px;"><br><br>
+                                <button type="button" class="btn btn-sm btn-default" id="remove-logo-btn">
+                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    Remove
+                                </button>
+                                <br>
+                            </div>
                         </div>
-                        <span class="text-muted" style="color: #a2a2a2;">
-                            Image no larger than 10MB.
-                        </span>
                     </div>
 
                 </div>
@@ -96,20 +117,19 @@
 
 <script>
     $(document).ready(function (){
-        $("#event-image-upload").unbind("change").on('change', function () {
+        $("#logo-upload").unbind("change").on('change', function () {
             var input = this;
             if (input.files && input.files[0]) {
-                if (input.files[0].size > 10485760) {
-                    createSnackbar("Image must be less than 10 MB in size");
+                if (input.files[0].size > 1048576) {
+                    createSnackbar("Image must be less than 1 MB in size");
                     resetFormElement(input);
                 } else {
                     var reader = new FileReader();
                     reader.onload = function (e) {
-                        $("#cropper-modal").modal("show");
-                        $uploadCropper.croppie('bind', {
-                            url: e.target.result
-                        });
-
+                        resetFormElement(input);
+                        $("#logo").val(e.target.result);
+                        $("#logo-view-group").show().find("img").attr("src", e.target.result);
+                        $("#logo-upload-group").hide();
                     };
                     reader.readAsDataURL(input.files[0]);
                 }
@@ -117,8 +137,19 @@
             else {
                 logError("No FileReader support");
             }
-
         });
+
+        $("#remove-logo-btn").click(function () {
+            $("#logo-view-group").hide();
+            $("#logo-upload-group").show();
+            $("#logo").val('');
+        });
+
+        function resetFormElement(e) {
+            e = $(e);
+            e.wrap('<form>').closest('form').get(0).reset();
+            e.unwrap();
+        }
     })
 </script>
 
