@@ -4,9 +4,14 @@
 var summernoteConfig = {
     toolbar: [
         ['style', ['bold', 'italic', 'underline', 'clear']],
-        ['font', ['strikethrough', 'superscript', 'subscript']],
-        ['para', ['ul', 'ol', 'paragraph']]
+        ['insert', ['link']],
+        ['para', ['ul', 'ol']]
     ],
+    popover: {
+        link: [
+            ['link', ['linkDialogShow', 'unlink']]
+        ]
+    },
     height: 150,
     disableDragAndDrop: true,
     styleWithSpan: false
