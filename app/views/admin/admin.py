@@ -6,7 +6,7 @@ from app.models import db
 from app.models.user import User
 from app.views.admin.models_views.events import EventsView
 from app.views.admin.models_views.my_sessions import MySessionView
-from app.views.admin.models_views.event_api import EventApiView
+from app.views.admin.models_views.export import ExportView
 from app.views.admin.models_views.roles import RoleView
 from app.views.admin.models_views.profile import ProfileView
 from app.views.admin.models_views.settings import SettingsView
@@ -29,6 +29,7 @@ from app.views.admin.super_admin.reports import SuperAdminReportsView
 from app.views.admin.super_admin.logs import SuperAdminLogsView
 from app.views.admin.super_admin.dep_settings import SuperAdminSettingsView
 from app.views.admin.super_admin.pages import SuperAdminPagesView
+from app.views.admin.super_admin.modules import SuperAdminModulesView
 
 class AdminView(object):
     """Main Admin class View"""
@@ -55,7 +56,7 @@ class AdminView(object):
         self.admin.add_view(SponsorsView(name='Sponsors', url='/events/<event_id>/sponsors', endpoint="event_sponsors"))
         self.admin.add_view(SessionsView(name='Sessions', url='/events/<event_id>/sessions', endpoint="event_sessions"))
         self.admin.add_view(SchedulerView(name='Scheduler', url='/events/<event_id>/scheduler', endpoint="event_scheduler"))
-        self.admin.add_view(EventApiView(name='Api', url='/events/<event_id>/api', endpoint="event_api"))
+        self.admin.add_view(ExportView(name='Export', url='/events/<event_id>/export', endpoint="event_export"))
         self.admin.add_view(RoleView(name='Role', url='/events/<event_id>/roles', endpoint="event_roles"))
         self.admin.add_view(ProfileView(name='Profile', url='/profile', endpoint="profile"))
         self.admin.add_view(InviteView(name='Invite', url='/events/<event_id>/invite', endpoint="event_invites"))
@@ -71,6 +72,8 @@ class AdminView(object):
         self.admin.add_view(SuperAdminSettingsView(name='Settings', url='/admin/settings', endpoint="sadmin_settings"))
         self.admin.add_view(SuperAdminMessagesView(name='Messages', url='/admin/messages', endpoint="sadmin_messages"))
         self.admin.add_view(SuperAdminPagesView(name='Pages', url='/admin/pages', endpoint="sadmin_pages"))
+        self.admin.add_view(SuperAdminModulesView(name='Modules', url='/admin/modules', endpoint="sadmin_modules"))
+
     @staticmethod
     def init_login(app):
         from flask import request, url_for, redirect

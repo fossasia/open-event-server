@@ -7,9 +7,9 @@
 
     <div style="display: block;">
 
-        <label class="control-label">Full name:<span class="required">*</span></label>
+        <label class="control-label">Full Name:<span class="required">*</span></label>
         <input style="margin-bottom:20px" required="required" name="full_name" class="form-control" value="{{ profile.user_detail.fullname | default('', true) }}"/>
-        <label>Details about user:</label>
+        <label>Details about User:</label>
         <textarea name="details" id="summernote">{{profile.user_detail.details | default('', true) }}</textarea>
 
         <div class="row" style="margin-bottom:20px">
@@ -21,14 +21,9 @@
                        value="{{profile.email}}"/>
            </div>
            <div class="col-md-6 col-xs-6">
-                <label>Contact:
+                <label>Phone:
                 </label>
-
-                {% if profile.user_detail.contact %}
-                <input name="contact" class="form-control" value="{{profile.user_detail.contact}}"/>
-                {% else %}
-                <input name="contact" class="form-control"/>
-                {% endif %}
+                <input name="contact" type="tel" pattern="^[+-]\d(\d|-)+\d$" class="form-control" value="{{profile.user_detail.contact | default('', true) }}" title="Not a valid phone number."/>
             </div>
         </div>
         <h3>Integrate Social Networks</h3>
@@ -37,13 +32,8 @@
             <div class="col-md-6 col-xs-6">
                 <label >Facebook:
                 </label>
-
-                {% if profile.user_detail.facebook %}
-                <input type="url" pattern="https?://.+" name="facebook" class="form-control"
-                       value="{{profile.user_detail.facebook}}"/>
-                {% else %}
-                <input type="url" pattern="https?://.+" name="facebook" class="form-control"/>
-                {% endif %}
+                <input type="url" pattern="https?://.+facebook\..+" name="facebook" class="form-control"
+                       value="{{profile.user_detail.facebook|default('', true)}}" title="Not a valid facebook profile link"/>
             </div>
 
         </div>
@@ -51,13 +41,8 @@
             <div class="col-md-6 col-xs-6">
             <label >Twitter:
                 </label>
-
-                {% if profile.user_detail.twitter %}
-                <input type="url" pattern="https?://.+" name="twitter" class="form-control" value="{{profile.user_detail.twitter}}"/>
-                {% else %}
-                <input type="url" pattern="https?://.+" name="twitter" class="form-control"/>
-                {% endif %}
-                </div>
+                <input type="url" pattern="https?://.+twitter\..+" name="twitter" class="form-control" value="{{profile.user_detail.twitter|default('', true)}}" title="Not a valid twitter profile link"/>
+            </div>
         </div>
         <div class="row" style="margin-bottom:20px">
             <div class="col-md-6 col-xs-6">
@@ -79,7 +64,7 @@
 $(document).ready(function() {
   $('#summernote').summernote(summernoteConfig);
 
-$('#summernote').val("aaaa");
+$('#summernote').val("");
 });
 
 </script>
