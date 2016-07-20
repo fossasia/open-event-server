@@ -107,7 +107,7 @@ class TestEventExport(ImportExportBase):
 
     def test_export_media(self):
         """
-        test successful export of media
+        test successful export of media (and more)
         """
         resp = self._put(get_path(1), {'logo': 'https://placehold.it/350x150'})
         self.assertIn('placehold', resp.data, resp.data)
@@ -118,6 +118,9 @@ class TestEventExport(ImportExportBase):
         obj = json.loads(data)
         logo_data = open(dr + obj['logo'], 'r').read()
         self.assertTrue(len(logo_data) > 10)
+        # test meta.json
+        data = open(dr + '/meta.json', 'r').read()
+        self.assertIn('http', data)
 
     def test_export_settings_marshal(self):
         """

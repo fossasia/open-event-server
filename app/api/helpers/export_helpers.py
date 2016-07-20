@@ -2,6 +2,7 @@ import json
 import os
 import shutil
 import requests
+from flask import request
 from flask_restplus import marshal
 
 from ..events import DAO as EventDAO, EVENT, \
@@ -89,6 +90,15 @@ def _download_media(data, srv, dir_path, settings):
             pass
 
 
+def _generate_meta():
+    """
+    Generate Meta information for export
+    """
+    d = {}
+    d['root_url'] = request.url_root
+    return d
+
+
 def export_event_json(event_id, settings):
     """
     Exports the event as a zip on the server and return its path
@@ -111,6 +121,11 @@ def export_event_json(event_id, settings):
         fp = open(dir_path + '/' + e[0] + '.json', 'w')
         fp.write(data_str)
         fp.close()
+    # add meta
+    data_str = json.dumps(_generate_meta(), sort_keys=True, indent=4)
+    fp = open(dir_path + '/meta.json', 'w')
+    fp.write(data_str)
+    fp.close()
     # make zip
     shutil.make_archive(dir_path, 'zip', dir_path)
     return os.path.realpath('.') + '/' + dir_path + '.zip'
