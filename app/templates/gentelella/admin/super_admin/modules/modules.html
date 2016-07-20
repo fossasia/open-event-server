@@ -52,6 +52,7 @@
         </tbody>
     </table>
 
+    <a class="btn btn-lg btn-success save-modules" href="">Save</a>
 {% endmacro %}
 
 {% block content %}
@@ -64,13 +65,49 @@
     <input type="hidden" name="custom_form[name]" value="session_form">
     <input type="hidden" name="custom_form[name]" value="speaker_form">
 
-    <input type="hidden" id="session-value-form" name="custom_form[value]" value="[]">
-    <input type="hidden" id="speaker-value-form" name="custom_form[value]" value="[]">
+    <input type="hidden" id="modules-value-form" name="custom_form[value]" value="[]">
 </div>
 {% endblock %}
 
 {% block tail_js %}
+<script type="text/javascript">
 
+    var modulesForm = [{}];
+
+    Array.prototype.setIncluded = function (field, state) {
+        this[0][field].include = state ? 1 : 0;
+    };
+
+
+    function includeClick(button) {
+        var $row = $(button).closest("tr");
+        var $button = $(button);
+
+        if ($button.data('group') === 'modules') {
+            modulesForm.setIncluded($row.data('identifier'), button.checked);
+        }
+        persistData();
+    }
+
+    $(function () {
+        $.each($(".modules-options-table").find('tr[data-identifier]'), function (key, row) {
+            var $row = $(row);
+            sessionForm[0][$row.data('identifier')] = {
+                include: $row.find('.include-switch')[0].checked ? 1 : 0
+            }
+        });
+
+        $('[data-toggle="tooltip"]').tooltip();
+
+        persistData();
+    });
+
+    function persistData() {
+        $("#modules-value-form").attr('value', JSON.stringify(modulesForm[0]));
+    }
+
+
+</script>
 
 {% endblock %}
 
