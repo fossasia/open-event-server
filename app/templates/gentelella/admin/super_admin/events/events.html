@@ -57,7 +57,7 @@
                                title="View Event Details">
                                 <i class="glyphicon glyphicon-eye-open"></i>
                             </a>
-                            <a class="btn btn-default" href="#" onclick="exportEvent({{event.id}})"
+                            <a class="btn btn-default" href="#"
                                data-toggle="modal" data-target="#exportModal"
                                title="Export Event" data-event-id="{{event.id}}">
                                 <i class="glyphicon glyphicon glyphicon-share"></i>
@@ -183,7 +183,6 @@
 
 
     {% include 'gentelella/admin/event/_import_modal.html' %}
-    {% include 'gentelella/admin/event/_export_modal.html' %}
 
 {% endblock %}
 

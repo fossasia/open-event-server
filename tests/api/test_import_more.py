@@ -24,18 +24,6 @@ class TestImportUploads(ImportExportBase):
             create_event(creator_email='test@example.com')
             create_services(1, '1')
 
-    def _create_set(self):
-        # export
-        resp = self._do_successful_export(1)
-        zip_file = StringIO()
-        zip_file.write(resp.data)
-        # extract
-        path = 'static/temp/test_event_import'
-        if os.path.isdir(path):
-            shutil.rmtree(path, ignore_errors=True)
-        with zipfile.ZipFile(zip_file) as z:
-            z.extractall(path)
-
     def _update_json(self, file, field, value, number=None):
         fp = 'static/temp/test_event_import/%s.json' % file
         ptr = open(fp)

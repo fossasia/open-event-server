@@ -29,6 +29,9 @@ UPLOAD_PATHS = {
     },
     'tracks': {
         'track_image_url': 'events/{event_id}/tracks/{id}/track_image'
+    },
+    'user': {
+        'avatar': 'users/{user_id}/avatar'
     }
 }
 

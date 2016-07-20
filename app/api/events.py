@@ -1,6 +1,11 @@
-from flask.ext.restplus import Resource, Namespace, reqparse
+from flask.ext.restplus import Resource, Namespace, reqparse, marshal
 from flask import g
 
+from app.api.microlocations import MICROLOCATION
+from app.api.sessions import SESSION
+from app.api.speakers import SPEAKER
+from app.api.sponsors import SPONSOR
+from app.api.tracks import TRACK
 from app.models.event import Event as EventModel
 from app.models.social_link import SocialLink as SocialLinkModel
 from app.models.users_events_roles import UsersEventsRoles
@@ -10,7 +15,7 @@ from app.models.user import ORGANIZER
 from app.helpers.data import save_to_db, update_version, record_activity
 
 from .helpers.helpers import requires_auth, parse_args, \
-    can_access
+    can_access, fake_marshal_with, fake_marshal_list_with, erase_from_dict
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, BaseDAO, ServiceDAO
 from .helpers import custom_fields as fields
@@ -70,7 +75,15 @@ EVENT = api.model('Event', {
     'copyright': fields.Nested(EVENT_COPYRIGHT, allow_null=True),
     'schedule_published_on': fields.DateTime(),
     'code_of_conduct': fields.String(),
-    'social_links': fields.List(fields.Nested(SOCIAL_LINK), attribute='social_link')
+    'social_links': fields.List(fields.Nested(SOCIAL_LINK), attribute='social_link', required=False),
+})
+
+EVENT_COMPLETE = api.clone('EventComplete', EVENT, {
+    'sessions': fields.List(fields.Nested(SESSION), attribute='session'),
+    'microlocations': fields.List(fields.Nested(MICROLOCATION), attribute='microlocation'),
+    'tracks': fields.List(fields.Nested(TRACK), attribute='microlocation'),
+    'sponsors': fields.List(fields.Nested(SPONSOR), attribute='sponsor'),
+    'speakers': fields.List(fields.Nested(SPEAKER), attribute='speaker'),
 })
 
 EVENT_PAGINATED = api.clone('EventPaginated', PAGINATED_MODEL, {
@@ -173,9 +186,35 @@ EVENT_PARAMS = {
     'start_time_lt': {},
     'end_time_gt': {},
     'end_time_lt': {},
-    'time_period': {}
+    'time_period': {},
+    'include': {
+        'description': 'Comma separated list of additional fields to load. '
+                       'Supported: sessions,tracks,microlocations,speakers,sponsors)'
+    },
 }
 
+SINGLE_EVENT_PARAMS = {
+    'include': {
+        'description': 'Comma separated list of additional fields to load. '
+                       'Supported: sessions,tracks,microlocations,speakers,sponsors)'
+    },
+}
+
+def get_extended_event_model(includes=None):
+    if includes is None:
+        includes = []
+    included_fields = {}
+    if 'sessions' in includes:
+        included_fields['sessions'] = fields.List(fields.Nested(SESSION), attribute='session')
+    if 'tracks' in includes:
+        included_fields['tracks'] = fields.List(fields.Nested(TRACK), attribute='track')
+    if 'microlocations' in includes:
+        included_fields['microlocations'] = fields.List(fields.Nested(MICROLOCATION), attribute='microlocation')
+    if 'sponsors' in includes:
+        included_fields['sponsors'] = fields.List(fields.Nested(SPONSOR), attribute='sponsor')
+    if 'speakers' in includes:
+        included_fields['speakers'] = fields.List(fields.Nested(SPEAKER), attribute='speaker')
+    return EVENT.extend('ExtendedEvent', included_fields)
 
 # DEFINE RESOURCES
 
@@ -197,17 +236,23 @@ class EventResource():
     event_parser.add_argument('end_time_gt', dest='__event_end_time_gt')
     event_parser.add_argument('end_time_lt', dest='__event_end_time_lt')
     event_parser.add_argument('time_period', type=str, dest='__event_time_period')
+    event_parser.add_argument('include', type=str)
 
+class SingleEventResource():
+    event_parser = reqparse.RequestParser()
+    event_parser.add_argument('include', type=str)
 
 @api.route('/<int:event_id>')
 @api.param('event_id')
 @api.response(404, 'Event not found')
-class Event(Resource):
-    @api.doc('get_event')
-    @api.marshal_with(EVENT)
+class Event(Resource, SingleEventResource):
+
+    @api.doc('get_event', params=SINGLE_EVENT_PARAMS)
+    @fake_marshal_with(EVENT_COMPLETE)  # Fake marshal decorator to add response model to swagger doc
     def get(self, event_id):
         """Fetch an event given its id"""
-        return DAO.get(event_id)
+        includes = parse_args(self.event_parser).get('include', '').split(',')
+        return marshal(DAO.get(event_id), get_extended_event_model(includes))
 
     @can_access
     @api.doc('delete_event')
@@ -232,23 +277,26 @@ class Event(Resource):
 @api.route('/<int:event_id>/event')
 @api.param('event_id')
 @api.response(404, 'Event not found')
-class EventWebapp(Resource):
+class EventWebapp(Resource, SingleEventResource):
     @api.doc('get_event_for_webapp')
-    @api.marshal_with(EVENT)
+    @fake_marshal_with(EVENT_COMPLETE)  # Fake marshal decorator to add response model to swagger doc
     def get(self, event_id):
         """Fetch an event given its id.
         Alternate endpoint for fetching an event.
         """
-        return DAO.get(event_id)
-
+        includes = parse_args(self.event_parser).get('include', '').split(',')
+        return marshal(DAO.get(event_id), get_extended_event_model(includes))
 
 @api.route('')
 class EventList(Resource, EventResource):
     @api.doc('list_events', params=EVENT_PARAMS)
-    @api.marshal_list_with(EVENT)
+    @fake_marshal_list_with(EVENT_COMPLETE)
     def get(self):
         """List all events"""
-        return DAO.list(**parse_args(self.event_parser))
+        parsed_args = parse_args(self.event_parser)
+        includes = parsed_args.get('include', '').split(',')
+        erase_from_dict(parsed_args, 'include')
+        return marshal(DAO.list(**parsed_args), get_extended_event_model(includes))
 
     @requires_auth
     @api.doc('create_event', responses=POST_RESPONSES)
@@ -316,3 +364,4 @@ class SocialLink(Resource):
     def get(self, event_id, link_id):
         """Fetch a social link given its id"""
         return LinkDAO.get(event_id, link_id)
+

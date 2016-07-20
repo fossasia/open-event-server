@@ -1,10 +1,23 @@
 // export event main
-function exportEvent(event_id){
+var event_id = 0;
+
+function exportEvent(){
     url = '/api/v2/events/' + event_id + '/export/json';
-    $('#btnExportEvent').click();
+    // generate payload
+    fields = ['image', 'video', 'audio', 'document'];
+    payload = {};
+    for (i=0; i<4; i++){
+        payload[fields[i]] = $('#exportForm [name=' + fields[i] + ']').is(':checked') ? true : false;
+    }
+    $('#btnExportEvent').unbind('click');
+
     jQuery.ajax({
         url: url,
-        type: 'GET',
+        type: 'POST',
+        data: JSON.stringify(payload),
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        cache: false,
         success: function(data){
             $('#export_status').text('Status: Queued');
             setTimeout(function(){
@@ -48,3 +61,10 @@ function exportTask(url){
     }
     });
 }
+
+
+$('#exportModal').on('show.bs.modal', function(event){
+    var button = $(event.relatedTarget);
+    event_id = button.data('event-id');
+    console.log(event_id);
+});
