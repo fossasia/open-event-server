@@ -107,7 +107,7 @@ class EventsView(BaseView):
 
         sponsors = DataGetter.get_sponsors(event_id).all()
         if not sponsors:
-            checklist["2"] = 'missing_main'
+            checklist["2"] = 'optional'
         else:
             for sponsor in sponsors:
                 if fields_not_empty(sponsor, ['name', 'description', 'url', 'level', 'logo']):
