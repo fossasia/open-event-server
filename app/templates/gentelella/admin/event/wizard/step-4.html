@@ -45,11 +45,11 @@
     <div class="col-md-6 col-xs-12">
         <div style="width: 100%; text-align: center">
             {% if call_for_speakers %}
-                <h2 style="font-weight: 300;">Turn <span class="state">off</span> call for speakers</h2>
+                <h2 style="font-weight: 300;">Turn <span class="cfs-state">off</span> call for speakers</h2>
                 <input type="checkbox" class="toggle-switch" name="call_for_speakers_state"
                        value="on" id="call-for-speakers-switch" checked/>
             {% else %}
-                <h2 style="font-weight: 300;">Turn <span class="state">on</span> call for speakers</h2>
+                <h2 style="font-weight: 300;">Turn <span class="cfs-state">on</span> call for speakers</h2>
                 <input type="checkbox" class="toggle-switch" name="call_for_speakers_state"
                        value="on" id="call-for-speakers-switch"/>
             {% endif %}
@@ -68,7 +68,7 @@
 <script>
     $(document).ready(function () {
         var $callForSpeakersHolder = $("#call-for-speakers-holder");
-        var $state = $(".state");
+        var $state = $(".cfs-state");
         $(".announcement").summernote(summernoteConfig);
 
         var onOffSwitch = document.getElementById('call-for-speakers-switch');
