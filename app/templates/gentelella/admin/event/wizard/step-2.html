@@ -21,8 +21,8 @@
                 <div class="help-block with-errors"></div>
             </div>
         </td>
-        <td><textarea name="sponsors[description]"
-                  class="form-control col-md-7 col-xs-12">{{ sponsor.description }}</textarea></td>
+        <td style="min-width: 205px;"><textarea name="sponsors[description]"
+                  class="form-control sponsor-textarea col-md-7 col-xs-12">{{ sponsor.description }}</textarea></td>
         <td><span class="glyphicon glyphicon-remove remove-sponsor" style="display:none;cursor: pointer;"></span></td>
 
     </tr>
@@ -59,6 +59,25 @@
 </div>
 <script src="{{ url_for('static', filename='admin/lib/bootstrap-validator/dist/validator.min.js') }}"></script>
 <script type="text/javascript">
+    $(document).ready(function () {
+        var summernoteConfigSponsors = {
+            toolbar: [
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['insert', ['link']]
+            ],
+            popover: {
+                link: [
+                    ['link', ['linkDialogShow', 'unlink']]
+                ]
+            },
+            height: 150,
+            width: 300,
+            disableDragAndDrop: true,
+            styleWithSpan: false
+        };
+        $("textarea.sponsor-textarea").summernote(summernoteConfigSponsors);
+    });
+
     var sponsor_counter = 1;
     $(document).on("click", ".add-sponsor", function () {
         sponsor_counter += 1;

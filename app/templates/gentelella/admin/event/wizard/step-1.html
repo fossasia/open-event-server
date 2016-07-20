@@ -140,7 +140,7 @@
         <div class="item form-group">
             <label>Description</label>
             <textarea name="description"
-                      class="form-control">{{ event.description | default('', true) }}</textarea>
+                      class="form-control event-textarea">{{ event.description | default('', true) }}</textarea>
         </div>
         <div class="row">
             <div class="col-md-7">
@@ -235,7 +235,7 @@
                 </label>
                     <textarea
                             name="organizer_description"
-                            class="form-control">{{ event.organizer_description | default('', true) }}</textarea>
+                            class="form-control event-textarea">{{ event.organizer_description | default('', true) }}</textarea>
             </div>
         </div>
         <div class="item form-group">
@@ -343,7 +343,7 @@
             <label for="coc-switch" style="margin-left:0;"></label>
             <div id="coc-holder" style="display:none;">
                 <textarea name="code_of_conduct"
-                      class="form-control">{{ event.code_of_conduct | default('', true) }}</textarea>
+                      class="form-control event-textarea">{{ event.code_of_conduct | default('', true) }}</textarea>
             </div>
         </div>
         <div class="item form-group">
@@ -586,7 +586,7 @@
             'defaultTimeDelta': 3600000
         });
 
-        $("textarea").summernote(summernoteConfig);
+        $("textarea.event-textarea").summernote(summernoteConfig);
 
         $('select[name=timezone]').selectize({
             create: false,
