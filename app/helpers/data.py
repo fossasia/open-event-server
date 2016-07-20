@@ -793,9 +793,17 @@ class DataManager(object):
         user_detail.contact = form['contact']
         user_detail.twitter = form['twitter']
         user_detail.details = form['details']
-        if avatar_img != "":
-            user_detail.avatar_uploaded = avatar_img
-        print user, user_detail, save_to_db(user, "User updated")
+        logo = form.get('logo', None)
+        if string_not_empty(logo) and logo:
+            filename = str(time.time()) + '.png'
+            file_path = os.path.realpath('.') + '/static/temp/' + filename
+            fh = open(file_path, "wb")
+            fh.write(logo.split(",")[1].decode('base64'))
+            fh.close()
+            logo_file = UploadedFile(file_path, filename)
+            logo = upload(logo_file, 'users/%d/avatar' % int(user_id))
+            user_detail.avatar_uploaded = logo
+        user, user_detail, save_to_db(user, "User updated")
         record_activity('update_user', user=user)
 
     @staticmethod
