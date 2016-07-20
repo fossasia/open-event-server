@@ -837,10 +837,7 @@ class DataManager(object):
                       sub_topic=form['sub_topic'],
                       privacy=form.get('privacy', u'public'),
                       ticket_url=form['ticket_url'],
-                      organizer_name=form['organizer_name'],
-                      organizer_description=form['organizer_description'],
                       copyright=copyright,
-                      code_of_conduct=form['code_of_conduct'],
                       show_map=1 if form.get('show_map') == "on" else 0,
                       creator=login.current_user)
 
@@ -852,6 +849,13 @@ class DataManager(object):
                 for addr in response['results'][0]['address_components']:
                     if addr['types'] == ['locality', 'political']:
                         event.searchable_location_name = addr['short_name']
+
+        if form.get('organizer_state', u'off') == u'on':
+            event.organizer_name = form['organizer_name']
+            event.organizer_description = form['organizer_description']
+
+        if form.get('coc_state', u'off') == u'on':
+            event.code_of_conduct = form['code_of_conduct']
 
         state = form.get('state', None)
         print state
@@ -1069,9 +1073,6 @@ class DataManager(object):
         event.show_map = 1 if form.get('show_map') == "on" else 0
         event.sub_topic = form['sub_topic']
         event.privacy = form.get('privacy', 'public')
-        event.organizer_name = form['organizer_name']
-        event.organizer_description = form['organizer_description']
-        event.code_of_conduct = form['code_of_conduct']
         event.ticket_url = form['ticket_url']
 
         if event.latitude and event.longitude:
@@ -1082,6 +1083,18 @@ class DataManager(object):
                 for addr in response['results'][0]['address_components']:
                     if addr['types'] == ['locality', 'political']:
                         event.searchable_location_name = addr['short_name']
+
+        if form.get('organizer_state', u'off') == u'on':
+            event.organizer_name = form['organizer_name']
+            event.organizer_description = form['organizer_description']
+        else:
+            event.organizer_name = ""
+            event.organizer_description = ""
+
+        if form.get('coc_state', u'off') == u'on':
+            event.code_of_conduct = form['code_of_conduct']
+        else:
+            event.code_of_conduct = ""
 
         if not event.copyright:
             # It is possible that the copyright is set as None before.
@@ -1271,7 +1284,6 @@ class DataManager(object):
         update_or_create(
             CustomForms, event_id=event.id,
             session_form=session_form, speaker_form=speaker_form)
-
 
         if form.get('call_for_speakers_state', u'off') == u'on':
             if call_for_papers:
