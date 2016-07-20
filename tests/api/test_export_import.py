@@ -2,6 +2,7 @@ import unittest
 import json
 import logging
 import shutil
+import zipfile
 import time
 import os
 from StringIO import StringIO
@@ -24,9 +25,23 @@ class ImportExportBase(OpenEventTestCase):
             data={'file': (StringIO(data), filename)}
         )
 
-    def _do_successful_export(self, event_id):
+    def _put(self, path, data):
+        return self.app.put(
+            path,
+            data=json.dumps(data),
+            headers={'content-type': 'application/json'}
+        )
+
+    def _post(self, path, data):
+        return self.app.post(
+            path,
+            data=json.dumps(data),
+            headers={'content-type': 'application/json'}
+        )
+
+    def _do_successful_export(self, event_id, config={'image': True}):
         path = get_path(event_id, 'export', 'json')
-        resp = self.app.get(path)
+        resp = self._post(path, config)
         self.assertEqual(resp.status_code, 200)
         # watch task
         self.assertIn('task_url', resp.data)
@@ -44,6 +59,21 @@ class ImportExportBase(OpenEventTestCase):
         self.assertEqual(resp.status_code, 200)
         return resp
 
+    def _create_set(self, event_id=1, config={'image': True}):
+        """
+        exports and extracts in static/temp/test_event_import
+        """
+        # export
+        resp = self._do_successful_export(event_id, config)
+        zip_file = StringIO()
+        zip_file.write(resp.data)
+        # extract
+        path = 'static/temp/test_event_import'
+        if os.path.isdir(path):
+            shutil.rmtree(path, ignore_errors=True)
+        with zipfile.ZipFile(zip_file) as z:
+            z.extractall(path)
+
 
 class TestEventExport(ImportExportBase):
     """
@@ -52,7 +82,8 @@ class TestEventExport(ImportExportBase):
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
-            create_event()
+            register(self.app, u'test@example.com', u'test')
+            create_event(creator_email=u'test@example.com')
             create_services(1)
 
     def test_export_success(self):
@@ -69,10 +100,39 @@ class TestEventExport(ImportExportBase):
 
     def test_export_no_event(self):
         path = get_path(2, 'export', 'json')
-        resp = self.app.get(path)
+        resp = self._post(path, {})
         task_url = json.loads(resp.data)['task_url']
         resp = self.app.get(task_url)
         self.assertEqual(resp.status_code, 404)
+
+    def test_export_media(self):
+        """
+        test successful export of media
+        """
+        resp = self._put(get_path(1), {'logo': 'https://placehold.it/350x150'})
+        self.assertIn('placehold', resp.data, resp.data)
+        self._create_set()
+        dr = 'static/temp/test_event_import'
+        data = open(dr + '/event.json', 'r').read()
+        self.assertIn('images/logo', data)
+        obj = json.loads(data)
+        logo_data = open(dr + obj['logo'], 'r').read()
+        self.assertTrue(len(logo_data) > 10)
+
+    def test_export_settings_marshal(self):
+        """
+        test if export settings are marshalled by default properly
+        Also check when settings are all False, nothing is exported
+        """
+        resp = self._put(get_path(1), {'logo': 'https://placehold.it/350x150'})
+        self.assertIn('placehold', resp.data, resp.data)
+        self._create_set(1, {})
+        dr = 'static/temp/test_event_import'
+        data = open(dr + '/event.json', 'r').read()
+        obj = json.loads(data)
+        self.assertIn('placehold', obj['logo'])
+        if os.path.isdir(dr + '/images'):
+            self.assertFalse(1, 'Image Dir Exists')
 
 
 class TestEventImport(ImportExportBase):

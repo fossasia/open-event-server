@@ -5,7 +5,7 @@
 {% block body %}
 
 
-<div class="page-title col-md-offset-1">
+<div class="page-title col-md-offset-1" style="width: auto;">
     <div class="title_left">
         <h3>Profile</h3>
     </div>
@@ -54,21 +54,6 @@
                 <h3>{{profile.user_detail.fullname}}</h3>
 
                 <ul class="list-unstyled user_data">
-
-                    {% if profile.user_detail.facebook %}
-                    <li class="m-top-xs">
-                        <i class="fa fa-external-link user-profile-icon"></i>
-                        <a href={{profile.user_detail.facebook}}
-                           target="_blank">{{profile.user_detail.facebook}}</a>
-                    </li>
-                    {% endif %}
-                    {% if profile.user_detail.twitter %}
-                    <li class="m-top-xs">
-                        <i class="fa fa-external-link user-profile-icon"></i>
-                        <a href={{profile.user_detail.twitter}}
-                           target="_blank">{{profile.user_detail.twitter}}</a>
-                    </li>
-                    {% endif %}
                     {% if profile.email %}
                     <li>
                         <i class="glyphicon glyphicon-envelope"></i> {{profile.email}}
@@ -80,6 +65,20 @@
                         <i class="glyphicon glyphicon-earphone"></i> {{profile.user_detail.contact}}
                     </li>
                     {% endif %}
+                    <div style="width: 100%">
+                        {% if profile.user_detail.facebook %}
+                        <li class="m-top-xs" style="float:left;margin-right: 3%;">
+                            <a href={{profile.user_detail.facebook}}
+                               target="_blank"><i class="fa fa-facebook-square fa-2x user-profile-icon"></i></a>
+                        </li>
+                        {% endif %}
+                        {% if profile.user_detail.twitter %}
+                        <li class="m-top-xs" style="float:left;margin-right: 3%;">
+                            <a href={{profile.user_detail.twitter}}
+                               target="_blank"><i class="fa fa-twitter-square fa-2x user-profile-icon"></i></a>
+                        </li>
+                        {% endif %}
+                    </div>
 
                 </ul>
 

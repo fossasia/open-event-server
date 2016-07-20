@@ -21,7 +21,7 @@ from app.helpers.helpers import string_empty, string_not_empty
 from app.helpers.notification_email_triggers import trigger_new_session_notifications, \
     trigger_session_state_change_notifications
 from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth
-from app.helpers.storage import upload, UploadedFile
+from app.helpers.storage import upload, UploadedFile, UPLOAD_PATHS
 from app.models.notifications import Notification
 from ..helpers import helpers as Helper
 from ..helpers.data_getter import DataGetter
@@ -343,23 +343,35 @@ class DataManager(object):
         speaker_modified = False
         session_modified = False
         if slide_file != "":
-            slide_url = upload(slide_file,
-                               'events/%d/session/%d/slide' % (int(event_id), int(new_session.id)))
+            slide_url = upload(
+                slide_file,
+                UPLOAD_PATHS['sessions']['slides'].format(
+                    event_id=int(event_id), id=int(new_session.id)
+                ))
             new_session.slides = slide_url
             session_modified = True
         if audio_file != "":
-            audio_url = upload(audio_file,
-                               'events/%d/session/%d/audio' % (int(event_id), int(new_session.id)))
+            audio_url = upload(
+                audio_file,
+                UPLOAD_PATHS['sessions']['audio'].format(
+                    event_id=int(event_id), id=int(new_session.id)
+                ))
             new_session.audio = audio_url
             session_modified = True
         if video_file != "":
-            video_url = upload(video_file,
-                               'events/%d/session/%d/video' % (int(event_id), int(new_session.id)))
+            video_url = upload(
+                video_file,
+                UPLOAD_PATHS['sessions']['video'].format(
+                    event_id=int(event_id), id=int(new_session.id)
+                ))
             new_session.video = video_url
             session_modified = True
         if speaker_img_file != "":
-            speaker_img = upload(speaker_img_file,
-                                 'events/%d/speaker/%d/photo' % (int(event_id), int(speaker.id)))
+            speaker_img = upload(
+                speaker_img_file,
+                UPLOAD_PATHS['speakers']['photo'].format(
+                    event_id=int(event_id), id=int(speaker.id)
+                ))
             speaker.photo = speaker_img
             speaker_modified = True
 
@@ -383,7 +395,8 @@ class DataManager(object):
                 # If a user is registered by the email, send a notification as well
                 user = DataGetter.get_user_by_email(email, no_flash=True)
                 if user:
-                    Helper.send_notif_invite_papers(user, event.name, link)
+                    cfs_link = url_for('event_detail.display_event_cfs', event_id=event.id)
+                    Helper.send_notif_invite_papers(user, event.name, cfs_link, link)
 
     @staticmethod
     def add_speaker_to_event(request, event_id, user=login.current_user):
@@ -411,8 +424,11 @@ class DataManager(object):
             record_activity('create_speaker', speaker=speaker, event_id=event_id)
         speaker_img = ""
         if speaker_img_file != "":
-            speaker_img = upload(speaker_img_file,
-                                 'events/%d/speaker/%d/photo' % (int(event_id), int(speaker.id)))
+            speaker_img = upload(
+                speaker_img_file,
+                UPLOAD_PATHS['speakers']['photo'].format(
+                    event_id=int(event_id), id=int(speaker.id)
+                ))
             speaker.photo = speaker_img
             save_to_db(speaker, "Speaker photo saved")
             record_activity('update_speaker', speaker=speaker, event_id=event_id)
@@ -473,17 +489,26 @@ class DataManager(object):
         form_state = form.get('state', 'draft')
 
         if slide_file != "":
-            slide_url = upload(slide_file,
-                               'events/%d/session/%d/slide' % (int(event_id), int(session.id)))
+            slide_url = upload(
+                slide_file,
+                UPLOAD_PATHS['sessions']['slides'].format(
+                    event_id=int(event_id), id=int(session.id)
+                ))
             session.slides = slide_url
 
         if audio_file != "":
-            audio_url = upload(audio_file,
-                               'events/%d/session/%d/audio' % (int(event_id), int(session.id)))
+            audio_url = upload(
+                audio_file,
+                UPLOAD_PATHS['sessions']['audio'].format(
+                    event_id=int(event_id), id=int(session.id)
+                ))
             session.audio = audio_url
         if video_file != "":
-            video_url = upload(video_file,
-                               'events/%d/session/%d/video' % (int(event_id), int(session.id)))
+            video_url = upload(
+                video_file,
+                UPLOAD_PATHS['sessions']['video'].format(
+                    event_id=int(event_id), id=int(session.id)
+                ))
             session.video = video_url
 
         if form_state == 'pending' and session.state != 'pending' and session.state != 'accepted' and session.state != 'rejected':
@@ -844,10 +869,7 @@ class DataManager(object):
                       sub_topic=form['sub_topic'],
                       privacy=form.get('privacy', u'public'),
                       ticket_url=form['ticket_url'],
-                      organizer_name=form['organizer_name'],
-                      organizer_description=form['organizer_description'],
                       copyright=copyright,
-                      code_of_conduct=form['code_of_conduct'],
                       show_map=1 if form.get('show_map') == "on" else 0,
                       creator=login.current_user)
 
@@ -859,6 +881,13 @@ class DataManager(object):
                 for addr in response['results'][0]['address_components']:
                     if addr['types'] == ['locality', 'political']:
                         event.searchable_location_name = addr['short_name']
+
+        if form.get('organizer_state', u'off') == u'on':
+            event.organizer_name = form['organizer_name']
+            event.organizer_description = form['organizer_description']
+
+        if form.get('coc_state', u'off') == u'on':
+            event.code_of_conduct = form['code_of_conduct']
 
         state = form.get('state', None)
         print state
@@ -906,7 +935,11 @@ class DataManager(object):
                 fh.write(background_image.split(",")[1].decode('base64'))
                 fh.close()
                 background_file = UploadedFile(file_path, filename)
-                background_url = upload(background_file, 'events/%d/background_image' % (int(event.id)))
+                background_url = upload(
+                    background_file,
+                    UPLOAD_PATHS['event']['background_url'].format(
+                        event_id=int(event.id)
+                    ))
                 event.background_url = background_url
 
             logo = form['logo']
@@ -917,7 +950,11 @@ class DataManager(object):
                 fh.write(logo.split(",")[1].decode('base64'))
                 fh.close()
                 logo_file = UploadedFile(file_path, filename)
-                logo = upload(logo_file, 'events/%d/logo' % (int(event.id)))
+                logo = upload(
+                    logo_file,
+                    UPLOAD_PATHS['event']['logo'].format(
+                        event_id=int(event.id)
+                    ))
                 event.logo = logo
 
             for index, name in enumerate(session_type_names):
@@ -953,8 +990,11 @@ class DataManager(object):
                                       event_id=event.id)
                     save_to_db(sponsor, "Sponsor created")
                     if len(img_files) != 0:
-                        img_url = upload(img_files[index],
-                                         'events/%d/sponsor/%d/image' % (int(event.id), int(sponsor.id)))
+                        img_url = upload(
+                            img_files[index],
+                            UPLOAD_PATHS['sponsors']['logo'].format(
+                                event_id=int(event.id), id=int(sponsor.id)
+                            ))
                         sponsor_logo_url.append(img_url)
                         sponsor.logo = sponsor_logo_url[index]
                     else:
@@ -1076,9 +1116,6 @@ class DataManager(object):
         event.show_map = 1 if form.get('show_map') == "on" else 0
         event.sub_topic = form['sub_topic']
         event.privacy = form.get('privacy', 'public')
-        event.organizer_name = form['organizer_name']
-        event.organizer_description = form['organizer_description']
-        event.code_of_conduct = form['code_of_conduct']
         event.ticket_url = form['ticket_url']
 
         if event.latitude and event.longitude:
@@ -1089,6 +1126,18 @@ class DataManager(object):
                 for addr in response['results'][0]['address_components']:
                     if addr['types'] == ['locality', 'political']:
                         event.searchable_location_name = addr['short_name']
+
+        if form.get('organizer_state', u'off') == u'on':
+            event.organizer_name = form['organizer_name']
+            event.organizer_description = form['organizer_description']
+        else:
+            event.organizer_name = ""
+            event.organizer_description = ""
+
+        if form.get('coc_state', u'off') == u'on':
+            event.code_of_conduct = form['code_of_conduct']
+        else:
+            event.code_of_conduct = ""
 
         if not event.copyright:
             # It is possible that the copyright is set as None before.
@@ -1112,7 +1161,11 @@ class DataManager(object):
             fh.write(background_image.split(",")[1].decode('base64'))
             fh.close()
             background_file = UploadedFile(file_path, filename)
-            background_url = upload(background_file, 'events/%d/background_image' % (int(event.id)))
+            background_url = upload(
+                background_file,
+                UPLOAD_PATHS['event']['background_url'].format(
+                    event_id=int(event.id)
+                ))
             event.background_url = background_url
 
         logo = form['logo']
@@ -1123,7 +1176,11 @@ class DataManager(object):
             fh.write(logo.split(",")[1].decode('base64'))
             fh.close()
             logo_file = UploadedFile(file_path, filename)
-            logo = upload(logo_file, 'events/%d/logo' % (int(event.id)))
+            logo = upload(
+                logo_file,
+                UPLOAD_PATHS['event']['logo'].format(
+                    event_id=int(event.id)
+                ))
             event.logo = logo
 
         state = form.get('state', None)
@@ -1250,8 +1307,11 @@ class DataManager(object):
                 save_to_db(sponsor, "Sponsor created")
                 if len(img_files) != 0:
                     if img_files[index]:
-                        img_url = upload(img_files[index],
-                                         'events/%d/sponsor/%d/image' % (int(event.id), int(sponsor.id)))
+                        img_url = upload(
+                            img_files[index],
+                            UPLOAD_PATHS['sponsors']['logo'].format(
+                                event_id=int(event.id), id=int(sponsor.id)
+                            ))
                         sponsor_logo_url.append(img_url)
                         sponsor.logo = sponsor_logo_url[index]
                     else:
@@ -1278,7 +1338,6 @@ class DataManager(object):
         update_or_create(
             CustomForms, event_id=event.id,
             session_form=session_form, speaker_form=speaker_form)
-
 
         if form.get('call_for_speakers_state', u'off') == u'on':
             if call_for_papers:

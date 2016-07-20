@@ -315,11 +315,15 @@ def send_notif_session_accept_reject(user, session_name, acceptance,
     send_notification(user, action, title, message)
 
 
-def send_notif_invite_papers(user, event_name, link):
+def send_notif_invite_papers(user, event_name, cfs_link, submit_link):
     notif = NOTIFS[NOTIF_INVITE_PAPERS]
     action = NOTIF_INVITE_PAPERS
     title = notif['title'].format(event_name=event_name)
-    message = notif['message'].format(event_name=event_name, link=link)
+    message = notif['message'].format(
+        event_name=event_name,
+        cfs_link=cfs_link,
+        submit_link=submit_link
+    )
 
     send_notification(user, action, title, message)
 
