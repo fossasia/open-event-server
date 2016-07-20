@@ -66,6 +66,43 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
 
+        function searchAcceptedRoles(email) {
+            var resp = null;
+            $(".role-table tbody tr").each(function () {
+                var first_td = $(this).children("td:first").text();
+                if (first_td == "accepted") {
+                    var second_td = $(this).children("td:nth-child(2)").text();
+                    if (second_td.indexOf(email) >= 0) {
+                        var edit_modal_id = $(this).children("td:nth-child(4)").children("a:first").attr("data-target");
+                        if (edit_modal_id !== undefined) {
+                            resp = edit_modal_id;
+                            return false;
+                        }
+                    }
+                }
+            });
+            return resp;
+        }
+
+        $("#add-role-form").submit(function() {
+            var user_email = $("#add-role-form input[name=user_email]").val().trim();
+            var res = searchAcceptedRoles(user_email);
+
+            if (res !== null) {
+                var addRoleAlertBox = $("#add-role-alert-box");
+                var msg = user_email + " has already been assigned a Role in the Event.<br>" +
+                    "Click <a href='#' style='color:white;text-decoration:underline;' onclick=\"openRoleEdit('"+res+"')\">here</a> to edit it.";
+                addRoleAlertBox.children("span").html(msg);
+                addRoleAlertBox.show();
+                return false;
+            }
+        });
+
+        function openRoleEdit(openId) {
+            $("#add-role").modal("hide");
+            $(openId).modal("show");
+        }
+
         $('.sponsor-table').DataTable();
     </script>
 

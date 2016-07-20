@@ -101,7 +101,13 @@ Manage Roles
                 <h4 class="modal-title">Add Role</h4>
             </div>
             <div class="modal-body">
-                <form action="/events/{{event.id}}/roles/new/" method="POST" role="form">
+                <div class="alert alert-danger" style="color: #FFFFFF;display: none;" id="add-role-alert-box">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <span></span>
+                </div>
+                <form action="/events/{{event.id}}/roles/new/" method="POST" role="form" id="add-role-form">
                     <p>
                         <label>User email:</label>
                         <input name="user_email" type="email" placeholder="User" class="form-control" required="">
