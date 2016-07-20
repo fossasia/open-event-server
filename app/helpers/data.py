@@ -975,23 +975,24 @@ class DataManager(object):
                                          event_id=event.id)
                     db.session.add(room)
 
-            for index, name in enumerate(sponsor_name):
-                if not string_empty(name):
-                    sponsor = Sponsor(name=name, url=sponsor_url[index],
-                                      level=sponsor_level[index], description=sponsor_description[index],
-                                      event_id=event.id)
-                    save_to_db(sponsor, "Sponsor created")
-                    if len(img_files) != 0:
-                        img_url = upload(
-                            img_files[index],
-                            UPLOAD_PATHS['sponsors']['logo'].format(
-                                event_id=int(event.id), id=int(sponsor.id)
-                            ))
-                        sponsor_logo_url.append(img_url)
-                        sponsor.logo = sponsor_logo_url[index]
-                    else:
-                        sponsor.logo = ""
-                    save_to_db(sponsor, "Sponsor updated")
+            if form.get('sponsors_state', u'off') == u'on':
+                for index, name in enumerate(sponsor_name):
+                    if not string_empty(name):
+                        sponsor = Sponsor(name=name, url=sponsor_url[index],
+                                          level=sponsor_level[index], description=sponsor_description[index],
+                                          event_id=event.id)
+                        save_to_db(sponsor, "Sponsor created")
+                        if len(img_files) != 0:
+                            img_url = upload(
+                                img_files[index],
+                                UPLOAD_PATHS['sponsors']['logo'].format(
+                                    event_id=int(event.id), id=int(sponsor.id)
+                                ))
+                            sponsor_logo_url.append(img_url)
+                            sponsor.logo = sponsor_logo_url[index]
+                        else:
+                            sponsor.logo = ""
+                        save_to_db(sponsor, "Sponsor updated")
 
             session_form = ""
             speaker_form = ""
@@ -1291,33 +1292,34 @@ class DataManager(object):
         for sponsor in sponsors:
             delete_from_db(sponsor, "Sponsor Deleted")
 
-        for index, name in enumerate(sponsor_name):
-            if not string_empty(name):
-                sponsor = Sponsor(name=name, url=sponsor_url[index],
-                                  level=sponsor_level[index], description=sponsor_description[index],
-                                  event_id=event.id, sponsor_type=sponsor_type[index])
-                save_to_db(sponsor, "Sponsor created")
-                if len(img_files) != 0:
-                    if img_files[index]:
-                        img_url = upload(
-                            img_files[index],
-                            UPLOAD_PATHS['sponsors']['logo'].format(
-                                event_id=int(event.id), id=int(sponsor.id)
-                            ))
-                        sponsor_logo_url.append(img_url)
-                        sponsor.logo = sponsor_logo_url[index]
+        if form.get('sponsors_state', u'off') == u'on':
+            for index, name in enumerate(sponsor_name):
+                if not string_empty(name):
+                    sponsor = Sponsor(name=name, url=sponsor_url[index],
+                                      level=sponsor_level[index], description=sponsor_description[index],
+                                      event_id=event.id, sponsor_type=sponsor_type[index])
+                    save_to_db(sponsor, "Sponsor created")
+                    if len(img_files) != 0:
+                        if img_files[index]:
+                            img_url = upload(
+                                img_files[index],
+                                UPLOAD_PATHS['sponsors']['logo'].format(
+                                    event_id=int(event.id), id=int(sponsor.id)
+                                ))
+                            sponsor_logo_url.append(img_url)
+                            sponsor.logo = sponsor_logo_url[index]
+                        else:
+                            if name in old_sponsor_names:
+                                sponsor.logo = old_sponsor_logos[index]
+                            else:
+                                sponsor.logo = ""
                     else:
                         if name in old_sponsor_names:
                             sponsor.logo = old_sponsor_logos[index]
                         else:
                             sponsor.logo = ""
-                else:
-                    if name in old_sponsor_names:
-                        sponsor.logo = old_sponsor_logos[index]
-                    else:
-                        sponsor.logo = ""
-                print sponsor.logo
-                save_to_db(sponsor, "Sponsor updated")
+                    print sponsor.logo
+                    save_to_db(sponsor, "Sponsor updated")
 
         session_form = ""
         speaker_form = ""

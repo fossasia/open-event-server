@@ -30,34 +30,48 @@
 
 <div id="step-2" class="wizard_content" >
     <div class="col-md-10 col-md-push-1">
-        <table class="table table-striped sponsor-table">
-            <thead>
-            <tr>
-                <th>Sl.</th>
-                <th>Name</th>
-                <th>Logo</th>
-                <th>Level</th>
-                <th>Type</th>
-                <th>URL</th>
-                <th>Description</th>
-            </tr>
-            </thead>
-            <tbody class="sponsors">
+    <div style="width: 100%; text-align: center">
             {% if sponsors and sponsors.count() > 0 %}
-                {% for sponsor in sponsors %}
-                    {{ sponsor_row(sponsor, loop.index) }}
-                {% endfor %}
+                <h2 style="font-weight: 300;">Turn <span class="state">off</span> call for speakers</h2>
+                <input type="checkbox" class="toggle-switch" name="sponsors_state"
+                       value="on" id="sponsors-switch" checked/>
             {% else %}
-                {{ sponsor_row() }}
+                <h2 style="font-weight: 300;">Turn <span class="state">on</span> call for speakers</h2>
+                <input type="checkbox" class="toggle-switch" name="sponsors_state"
+                       value="on" id="sponsors-switch"/>
             {% endif %}
-            </tbody>
-        </table>
+            <label for="sponsors-switch"></label>
+        </div>
+        <div id="sponsors-section-holder" {% if not sponsors or sponsors.count() <= 0 %}style="display: none;"{% endif %}>
+            <table class="table table-striped sponsor-table">
+                <thead>
+                <tr>
+                    <th>Sl.</th>
+                    <th>Name</th>
+                    <th>Logo</th>
+                    <th>Level</th>
+                    <th>Type</th>
+                    <th>URL</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody class="sponsors">
+                {% if sponsors and sponsors.count() > 0 %}
+                    {% for sponsor in sponsors %}
+                        {{ sponsor_row(sponsor, loop.index) }}
+                    {% endfor %}
+                {% else %}
+                    {{ sponsor_row() }}
+                {% endif %}
+                </tbody>
+            </table>
         <span class='input-group-btn'>
             <button type='button' class='btn btn-success add-sponsor'>Add Another Sponsor</button>
         </span>
+
+        </div>
     </div>
 </div>
-<script src="{{ url_for('static', filename='admin/lib/bootstrap-validator/dist/validator.min.js') }}"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         var summernoteConfigSponsors = {
@@ -77,6 +91,23 @@
         };
         $("textarea.sponsor-textarea").summernote(summernoteConfigSponsors);
     });
+
+    var $sponsorsSectionHolder = $("#sponsors-section-holder");
+    var $state = $(".cfs-state");
+
+    var onOffSwitch = document.getElementById('sponsors-switch');
+
+    onOffSwitch.onchange = function () {
+        if (onOffSwitch.checked) {
+            $sponsorsSectionHolder.fadeIn();
+            $state.text("off");
+
+        } else {
+            $sponsorsSectionHolder.fadeOut();
+            $state.text("on");
+        }
+    };
+
 
     var sponsor_counter = 1;
     $(document).on("click", ".add-sponsor", function () {
