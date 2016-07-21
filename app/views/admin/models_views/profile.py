@@ -38,13 +38,6 @@ class ProfileView(BaseView):
             admin = True
         if request.method == 'POST':
             url = ""
-            if 'avatar' in request.files and request.files['avatar'].filename != "":
-                avatar_img = request.files['avatar']
-                url = upload(
-                    avatar_img,
-                    UPLOAD_PATHS['user']['avatar'].format(
-                        user_id=int(user_id)
-                    ))
             profile = DataManager.update_user(request.form, int(user_id), url)
             if admin:
                 return redirect(url_for('sadmin_users.details_view', user_id=user_id))
