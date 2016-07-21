@@ -73,6 +73,7 @@
     position: relative;
     margin: 40px auto 0;
     border-bottom-color: #e0e0e0;
+  width: 66%;
 }
 
 .wizard > div.wizard-inner {
@@ -83,7 +84,7 @@
     height: 2px;
     background: #e0e0e0;
     position: absolute;
-    width: 80%;
+    width: 38%;
     margin: 0 auto;
     left: 0;
     right: 0;
@@ -134,6 +135,7 @@ span.round-tab:hover {
 
 .wizard .nav-tabs > li {
     width: 20%;
+    margin-left: 10%;
 }
 
 .wizard li:after {

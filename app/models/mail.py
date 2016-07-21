@@ -5,6 +5,7 @@ from . import db
 
 USER_REGISTER = 'User Registration'
 USER_CONFIRM = 'User Confirmation'
+USER_CHANGE_EMAIL = "User email"
 INVITE_PAPERS = 'Invitation For Papers'
 NEXT_EVENT = 'Next Event'
 NEW_SESSION = 'New Session Proposal'

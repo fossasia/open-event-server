@@ -4,7 +4,7 @@ Register a mail here before using it
 """
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
     USER_REGISTER, PASSWORD_RESET, EVENT_ROLE, SESSION_ACCEPT_REJECT, \
-    SESSION_SCHEDULE, NEXT_EVENT, EVENT_PUBLISH, AFTER_EVENT
+    SESSION_SCHEDULE, NEXT_EVENT, EVENT_PUBLISH, AFTER_EVENT, USER_CHANGE_EMAIL
 
 MAILS = {
     EVENT_PUBLISH: {
@@ -84,6 +84,14 @@ MAILS = {
         'message': (
             "Hi {email},<br/>" +
             "Please visit this link to confirm your email: {link}"
+        )
+    },
+    USER_CHANGE_EMAIL: {
+        'recipient': 'User',
+        'subject': 'Your email has been already changed',
+        'message': (
+            "Hi {email},<br/>" +
+            "Your email has been already changed from {email} to {new_email}. You should verified your new email"
         )
     },
     PASSWORD_RESET: {

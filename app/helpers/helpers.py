@@ -3,6 +3,8 @@ import json
 import os
 import re
 import requests
+import os.path
+import time
 from datetime import datetime, timedelta
 from flask import request, url_for, current_app
 from itsdangerous import Serializer
@@ -12,7 +14,8 @@ from app.helpers.flask_helpers import get_real_ip
 from app.settings import get_settings
 from ..models.track import Track
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, NEXT_EVENT, \
-    USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, EVENT_PUBLISH, Mail, AFTER_EVENT
+    USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, EVENT_PUBLISH, Mail,\
+    AFTER_EVENT, USER_CHANGE_EMAIL
 from system_mails import MAILS
 from app.models.notifications import (
     # Prepended with `NOTIF_` to differentiate from mails
@@ -24,7 +27,7 @@ from app.models.notifications import (
     INVITE_PAPERS as NOTIF_INVITE_PAPERS,
 )
 from system_notifications import NOTIFS
-
+from app.helpers.storage import UploadedFile
 
 def get_event_id():
     """Get event Id from request url"""
@@ -173,13 +176,24 @@ def send_email_after_account_create(form):
 
 def send_email_confirmation(form, link):
     """account confirmation"""
-    print form
     send_email(
         to=form['email'],
         action=USER_CONFIRM,
         subject=MAILS[USER_CONFIRM]['subject'],
         html=MAILS[USER_CONFIRM]['message'].format(
             email=form['email'], link=link
+        )
+    )
+
+
+def send_email_when_changes_email(old_email, new_email):
+    """account confirmation"""
+    send_email(
+        to=old_email,
+        action=USER_CHANGE_EMAIL,
+        subject=MAILS[USER_CHANGE_EMAIL]['subject'],
+        html=MAILS[USER_CHANGE_EMAIL]['message'].format(
+            email=old_email, new_email=new_email
         )
     )
 
@@ -483,3 +497,12 @@ def update_state(task_handle, state, result={}):
         task_handle.update_state(
             state=state, meta=result
         )
+
+
+def uploaded_file(extention='.png', file_content=None):
+    filename = str(time.time()) + extention
+    file_path = os.path.realpath('.') + '/static/temp/' + filename
+    file = open(file_path, "wb")
+    file.write(file_content.split(",")[1].decode('base64'))
+    file.close()
+    return UploadedFile(file_path, filename)

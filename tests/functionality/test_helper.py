@@ -33,7 +33,8 @@ class TestDataManager(OpenEventTestCase):
             self.assertEqual(Version.query.get(1).id, 1)
             self.assertEqual(Version.query.get(1).tracks_ver, 0)
             update_version(1, False, "tracks_ver")
-            self.assertEqual(Version.query.get(2).tracks_ver, 1)
+            self.assertEqual(Version.query.get(1).tracks_ver, 1)
+            self.assertEqual(Version.query.get(2), None)
 
     def test_increasing_version_after_update_version_called(self):
         with app.test_request_context():

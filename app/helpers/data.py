@@ -17,7 +17,7 @@ from sqlalchemy.sql.expression import exists
 from werkzeug import secure_filename
 from wtforms import ValidationError
 
-from app.helpers.helpers import string_empty, string_not_empty
+from app.helpers.helpers import string_empty, string_not_empty, uploaded_file
 from app.helpers.notification_email_triggers import trigger_new_session_notifications, \
     trigger_session_state_change_notifications
 from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth
@@ -787,15 +787,26 @@ class DataManager(object):
         if user.email != form['email']:
             record_activity('update_user_email',
                             user_id=user.id, old=user.email, new=form['email'])
-        user.email = form['email']
+        if user.email != form['email']:
+            user.is_verified = False
+            s = Helper.get_serializer()
+            data = [form['email']]
+            form_hash = s.dumps(data)
+            link = url_for('admin.create_account_after_confirmation_view', hash=form_hash, _external=True)
+            Helper.send_email_when_changes_email(user.email, form['email'])
+            Helper.send_email_confirmation(form, link)
+            user.email = form['email']
         user_detail.fullname = form['full_name']
         user_detail.facebook = form['facebook']
         user_detail.contact = form['contact']
         user_detail.twitter = form['twitter']
         user_detail.details = form['details']
-        if avatar_img != "":
-            user_detail.avatar_uploaded = avatar_img
-        print user, user_detail, save_to_db(user, "User updated")
+        logo = form.get('logo', None)
+        if string_not_empty(logo) and logo:
+            logo_file = uploaded_file(file_content=logo)
+            logo = upload(logo_file, 'users/%d/avatar' % int(user_id))
+            user_detail.avatar_uploaded = logo
+        user, user_detail, save_to_db(user, "User updated")
         record_activity('update_user', user=user)
 
     @staticmethod
@@ -921,12 +932,7 @@ class DataManager(object):
 
             background_image = form['background_url']
             if string_not_empty(background_image):
-                filename = str(time.time()) + '.png'
-                file_path = os.path.realpath('.') + '/static/temp/' + filename
-                fh = open(file_path, "wb")
-                fh.write(background_image.split(",")[1].decode('base64'))
-                fh.close()
-                background_file = UploadedFile(file_path, filename)
+                background_file = uploaded_file(file_content=background_image)
                 background_url = upload(
                     background_file,
                     UPLOAD_PATHS['event']['background_url'].format(
@@ -936,12 +942,7 @@ class DataManager(object):
 
             logo = form['logo']
             if string_not_empty(logo):
-                filename = str(time.time()) + '.png'
-                file_path = os.path.realpath('.') + '/static/temp/' + filename
-                fh = open(file_path, "wb")
-                fh.write(logo.split(",")[1].decode('base64'))
-                fh.close()
-                logo_file = UploadedFile(file_path, filename)
+                logo_file = uploaded_file(file_content=logo)
                 logo = upload(
                     logo_file,
                     UPLOAD_PATHS['event']['logo'].format(
@@ -1095,7 +1096,6 @@ class DataManager(object):
         """
         form = request.form
         event.name = form['name']
-        event.logo = form['logo']
         event.start_time = datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M')
         event.end_time = datetime.strptime(form['end_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M')
         event.timezone = form['timezone']
@@ -1148,12 +1148,7 @@ class DataManager(object):
 
         background_image = form['background_url']
         if string_not_empty(background_image):
-            filename = str(time.time()) + '.png'
-            file_path = os.path.realpath('.') + '/static/temp/' + filename
-            fh = open(file_path, "wb")
-            fh.write(background_image.split(",")[1].decode('base64'))
-            fh.close()
-            background_file = UploadedFile(file_path, filename)
+            background_file = uploaded_file(file_content=background_image)
             background_url = upload(
                 background_file,
                 UPLOAD_PATHS['event']['background_url'].format(
@@ -1163,12 +1158,7 @@ class DataManager(object):
 
         logo = form['logo']
         if string_not_empty(logo):
-            filename = str(time.time()) + '.png'
-            file_path = os.path.realpath('.') + '/static/temp/' + filename
-            fh = open(file_path, "wb")
-            fh.write(logo.split(",")[1].decode('base64'))
-            fh.close()
-            logo_file = UploadedFile(file_path, filename)
+            logo_file = uploaded_file(file_content=logo)
             logo = upload(
                 logo_file,
                 UPLOAD_PATHS['event']['logo'].format(
