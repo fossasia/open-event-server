@@ -52,6 +52,15 @@ $(document).ready(function () {
         $wizardForm.find("input[name=location_name]").closest(".form-group").addClass("has-warning");
     }
 
+    if(location.href.indexOf('call-for-speakers') > -1) {
+        $("#step-4 > div")[0].scrollIntoView();
+    }
+
+    if(location.href.indexOf('form-customization') > -1) {
+        $("#step-5 > div")[0].scrollIntoView();
+    }
+
+
 });
 
 function getHashValue(key) {

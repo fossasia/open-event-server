@@ -13,7 +13,7 @@
         data-toggle="tooltip"
             {% endif %}
             {% if (identifier == 'session_type') %}
-        data-placement="left" title="You need to enable Tracks in Step 3 to activate this option"
+        data-placement="left" title="You need to enable Session types to use this option"
             {% endif %}
             {% if identifier == 'track' %}
             style="display:none;"
@@ -65,11 +65,10 @@
 {% endmacro %}
 
 <div id="step-5" class="wizard_content" style="display: block;">
-    <div class="col-md-2 hidden-sm hidden-xs"></div>
-    <div class="col-md-4 col-sm-12 col-xs-12">
+    <div class="col-md-push-2 col-md-4 col-sm-12 col-xs-12">
         {{ options_table(session_fields, 'session') }}
     </div>
-    <div class="col-md-4 col-sm-12 col-xs-12">
+    <div class="col-md-push-2 col-md-4 col-sm-12 col-xs-12">
         {{ options_table(speaker_fields, 'speaker') }}
     </div>
     <input type="hidden" name="custom_form[name]" value="session_form">
