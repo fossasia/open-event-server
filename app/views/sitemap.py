@@ -19,13 +19,6 @@ event_details_pages = [
     'display_event_coc'
 ]
 
-static_pages = [
-    'how_it_works',
-    'pricing',
-    'about'
-    # TODO: add more when the pages are built
-]
-
 
 @app.route('/sitemap.xml', methods=('GET', 'POST'))
 def render_sitemap():
@@ -51,7 +44,9 @@ def render_sitemap():
 @app.route('/sitemaps/pages.xml.gz', methods=('GET', 'POST'))
 def render_pages_sitemap():
     urls = [
-        full_url(url_for('basicpagesview.url_view', url=page.url)) for page in DataGetter.get_all_pages()
+        page.url if page.url.find('://') > -1 else
+        full_url(url_for('basicpagesview.url_view', url=page.url))
+        for page in DataGetter.get_all_pages()
     ]
     return make_sitemap_response(urls)
 
