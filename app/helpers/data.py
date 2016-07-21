@@ -546,11 +546,13 @@ class DataManager(object):
                 if current_speaker_id not in existing_speaker_ids and current_speaker_id not in existing_speaker_ids_by_email:
                     current_speaker = DataGetter.get_speaker(current_speaker_id)
                     session.speakers.remove(current_speaker)
+                    db.session.commit()
 
             for existing_speaker_id in existing_speaker_ids:
                 existing_speaker = DataGetter.get_speaker(existing_speaker_id)
                 if existing_speaker not in session.speakers:
                     session.speakers.append(existing_speaker)
+                    db.session.commit()
 
             record_activity('update_session', session=session, event_id=event_id)
 
