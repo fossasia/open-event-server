@@ -28,7 +28,6 @@ from ..helpers.data_getter import DataGetter
 from ..helpers.static import EVENT_LICENCES
 from ..helpers.update_version import VersionUpdater
 from ..helpers.system_mails import MAILS
-from ..helpers.system_notifications import NOTIFS
 from ..models import db
 from ..models.activity import Activity, ACTIVITIES
 from ..models.call_for_papers import CallForPaper
