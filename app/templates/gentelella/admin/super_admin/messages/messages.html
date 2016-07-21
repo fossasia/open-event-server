@@ -53,19 +53,19 @@ System Messages
                     <td id="{{ mail }}">
                         <div class="checkbox" style="margin-top:10px;">
                             <label>
-                              <input type="checkbox" class="flat" {% if message_settings[mail].mail_status == 1 %}checked="checked"{% endif %} name="{{ mail }}_mail_status" onclick=""> Mail
+                              <input type="checkbox" class="flat" {% if message_settings[mail].mail_status != 0 or not message_settings[mail] %}checked="checked"{% endif %} name="{{ mail }}_mail_status" onclick=""> Mail
                             </label>
                         </div><br>
                         {% if notifications[mail] %}
                         <div class="checkbox" style="margin-top:10px;">
                             <label>
-                              <input type="checkbox" class="flat" {% if message_settings[mail].notif_status == 1 %}checked="checked"{% endif %} name="{{ mail }}_notif_status"> Notification
+                              <input type="checkbox" class="flat" {% if message_settings[mail].notif_status != 0 or not message_settings[mail] %}checked="checked"{% endif %} name="{{ mail }}_notif_status"> Notification
                             </label>
                         </div><br>
                         {% endif %}
                         <div class="checkbox" style="margin-top:10px;">
                             <label>
-                              <input type="checkbox" class="flat" {% if message_settings[mail].user_control_status == 1 %}checked="checked"{% endif %} name="{{ mail }}_user_control_status"> User Control
+                              <input type="checkbox" class="flat" {% if message_settings[mail].user_control_status != 0 or not message_settings[mail] %}checked="checked"{% endif %} name="{{ mail }}_user_control_status"> User Control
                             </label>
                         </div>
                     </td>

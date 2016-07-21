@@ -53,7 +53,8 @@ def is_track_name_unique_in_event(form, event_id, *args):
 
 def send_email_invitation(email, event_name, link):
     """Send email for submit papers"""
-    if MessageSettings.query.filter_by(action=INVITE_PAPERS).first().mail_status == 1:
+    message_settings = MessageSettings.query.filter_by(action=INVITE_PAPERS).first()
+    if not message_settings or message_settings.mail_status == 1:
         send_email(
             to=email,
             action=INVITE_PAPERS,
@@ -68,7 +69,8 @@ def send_email_invitation(email, event_name, link):
 
 def send_new_session_organizer(email, event_name, link):
     """Send email after new sesions proposal"""
-    if MessageSettings.query.filter_by(action=NEW_SESSION).first().mail_status == 1:
+    message_settings = MessageSettings.query.filter_by(action=NEW_SESSION).first().mail_status
+    if not message_settings or message_settings.mail_status == 1:
         send_email(
             to=email,
             action=NEW_SESSION,
@@ -83,7 +85,8 @@ def send_new_session_organizer(email, event_name, link):
 
 def send_session_accept_reject(email, session_name, acceptance, link):
     """Send session accepted or rejected"""
-    if MessageSettings.query.filter_by(action=SESSION_ACCEPT_REJECT).first().mail_status == 1:
+    message_settings = MessageSettings.query.filter_by(action=SESSION_ACCEPT_REJECT).first()
+    if not message_settings or message_settings.mail_status == 1:
         send_email(
             to=email,
             action=SESSION_ACCEPT_REJECT,
@@ -99,7 +102,8 @@ def send_session_accept_reject(email, session_name, acceptance, link):
 
 def send_schedule_change(email, session_name, link):
     """Send schedule change in session"""
-    if MessageSettings.query.filter_by(action=SESSION_SCHEDULE).first().mail_status == 1:
+    message_settings = MessageSettings.query.filter_by(action=SESSION_SCHEDULE).first()
+    if not message_settings or message_settings.mail_status == 1:
         send_email(
             to=email,
             action=SESSION_SCHEDULE,
@@ -114,7 +118,8 @@ def send_schedule_change(email, session_name, link):
 
 def send_next_event(email, event_name, link, up_coming_events):
     """Send next event"""
-    if MessageSettings.query.filter_by(action=NEXT_EVENT).first().mail_status == 1:
+    message_settings = MessageSettings.query.filter_by(action=NEXT_EVENT).first()
+    if not message_settings or message_settings.mail_status == 1:
         upcoming_event_html = "<ul>"
         for event in up_coming_events:
             upcoming_event_html += "<a href='%s'><li> %s </li></a>" % (url_for('events.details_view',
@@ -136,7 +141,8 @@ def send_next_event(email, event_name, link, up_coming_events):
 
 def send_after_event(email, event_name, upcoming_events, link=None):
     """Send after event mail"""
-    if MessageSettings.query.filter_by(action=AFTER_EVENT).first().mail_status == 1:
+    message_settings = MessageSettings.query.filter_by(action=AFTER_EVENT).first()
+    if not message_settings or message_settings.mail_status == 1:
         upcoming_event_html = "<ul>"
         for event in upcoming_events:
             upcoming_event_html += "<a href='%s'><li> %s </li></a>" % (url_for('events.details_view',
@@ -158,7 +164,8 @@ def send_after_event(email, event_name, upcoming_events, link=None):
 
 def send_event_publish(email, event_name, link):
     """Send email on publishing event"""
-    if MessageSettings.query.filter_by(action=NEXT_EVENT).first().mail_status == 1:
+    message_settings = MessageSettings.query.filter_by(action=NEXT_EVENT).first()
+    if not message_settings or message_settings.mail_status == 1:
         send_email(
             to=email,
             action=NEXT_EVENT,
@@ -173,7 +180,8 @@ def send_event_publish(email, event_name, link):
 
 def send_email_after_account_create(form):
     """Send email after account create"""
-    if MessageSettings.query.filter_by(action=USER_REGISTER).first().mail_status == 1:
+    message_settings = MessageSettings.query.filter_by(action=USER_REGISTER).first()
+    if not message_settings or message_settings.mail_status == 1:
         send_email(
             to=form['email'],
             action=USER_REGISTER,
@@ -184,7 +192,8 @@ def send_email_after_account_create(form):
 
 def send_email_confirmation(form, link):
     """account confirmation"""
-    if MessageSettings.query.filter_by(action=USER_CONFIRM).first().mail_status == 1:
+    message_settings = MessageSettings.query.filter_by(action=USER_CONFIRM).first()
+    if not message_settings or message_settings.mail_status == 1:
         send_email(
             to=form['email'],
             action=USER_CONFIRM,
@@ -197,7 +206,8 @@ def send_email_confirmation(form, link):
 
 def send_email_with_reset_password_hash(email, link):
     """Send email with reset password hash"""
-    if MessageSettings.query.filter_by(action=PASSWORD_RESET).first().mail_status == 1:
+    message_settings = MessageSettings.query.filter_by(action=PASSWORD_RESET).first()
+    if not message_settings or message_settings.mail_status == 1:
         send_email(
             to=email,
             action=PASSWORD_RESET,
@@ -210,7 +220,8 @@ def send_email_for_event_role_invite(email, role, event, link):
     """
     Send Email to users for Event Role invites.
     """
-    if MessageSettings.query.filter_by(action=EVENT_ROLE).first().mail_status == 1:
+    message_settings = MessageSettings.query.filter_by(action=EVENT_ROLE).first()
+    if not message_settings or message_settings.mail_status == 1:
         subject = MAILS[EVENT_ROLE]['subject'].format(role=role, event=event)
         message = MAILS[EVENT_ROLE]['message'].format(
             email=email,
@@ -269,7 +280,8 @@ def send_notification(user, action, title, message):
 
 
 def send_notif_event_role(user, role_name, event_name, accept_link, decline_link):
-    if MessageSettings.query.filter_by(action=NOTIF_EVENT_ROLE).first().notif_status == 1:
+    message_settings = MessageSettings.query.filter_by(action=NOTIF_EVENT_ROLE).first()
+    if not message_settings or message_settings.notif_status == 1:
         notif = NOTIFS[NOTIF_EVENT_ROLE]
         action = NOTIF_EVENT_ROLE
         title = notif['title'].format(
@@ -287,7 +299,8 @@ def send_notif_event_role(user, role_name, event_name, accept_link, decline_link
 
 
 def send_notif_new_session_organizer(user, event_name, link):
-    if MessageSettings.query.filter_by(action=NOTIF_NEW_SESSION).first().notif_status == 1:
+    message_settings = MessageSettings.query.filter_by(action=NOTIF_NEW_SESSION).first()
+    if not message_settings or message_settings.notif_status == 1:
         notif = NOTIFS[NOTIF_NEW_SESSION]
         action = NOTIF_NEW_SESSION
         title = notif['title'].format(event_name=event_name)
@@ -297,7 +310,8 @@ def send_notif_new_session_organizer(user, event_name, link):
 
 
 def send_notif_session_schedule(user, session_name, link):
-    if MessageSettings.query.filter_by(action=NOTIF_SESSION_SCHEDULE).first().notif_status == 1:
+    message_settings = MessageSettings.query.filter_by(action=NOTIF_SESSION_SCHEDULE).first()
+    if not message_settings or message_settings.notif_status == 1:
         notif = NOTIFS[NOTIF_SESSION_SCHEDULE]
         action = NOTIF_SESSION_SCHEDULE
         title = notif['title'].format(session_name=session_name)
@@ -307,7 +321,8 @@ def send_notif_session_schedule(user, session_name, link):
 
 
 def send_notif_next_event(user, event_name, up_coming_events, link):
-    if MessageSettings.query.filter_by(action=NOTIF_NEXT_EVENT).first().notif_status == 1:
+    message_settings = MessageSettings.query.filter_by(action=NOTIF_NEXT_EVENT).first()
+    if not message_settings or message_settings.notif_status == 1:
         notif = NOTIFS[NOTIF_NEXT_EVENT]
         action = NOTIF_NEXT_EVENT
         title = notif['title'].format(event_name=event_name)
@@ -318,7 +333,8 @@ def send_notif_next_event(user, event_name, up_coming_events, link):
 
 
 def send_notif_session_accept_reject(user, session_name, acceptance, link):
-    if MessageSettings.query.filter_by(action=NOTIF_SESSION_ACCEPT_REJECT).first().notif_status == 1:
+    message_settings = MessageSettings.query.filter_by(action=NOTIF_SESSION_ACCEPT_REJECT).first()
+    if not message_settings or message_settings.notif_status == 1:
         notif = NOTIFS[NOTIF_SESSION_ACCEPT_REJECT]
         action = NOTIF_SESSION_ACCEPT_REJECT
         title = notif['title'].format(session_name=session_name,
@@ -333,7 +349,8 @@ def send_notif_session_accept_reject(user, session_name, acceptance, link):
 
 
 def send_notif_invite_papers(user, event_name, cfs_link, submit_link):
-    if MessageSettings.query.filter_by(action=NOTIF_INVITE_PAPERS).first().notif_status == 1:
+    message_settings = MessageSettings.query.filter_by(action=NOTIF_INVITE_PAPERS).first()
+    if not message_settings or message_settings.notif_status == 1:
         notif = NOTIFS[NOTIF_INVITE_PAPERS]
         action = NOTIF_INVITE_PAPERS
         title = notif['title'].format(event_name=event_name)
