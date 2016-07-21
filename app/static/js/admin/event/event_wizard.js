@@ -1,44 +1,44 @@
-var $wizardForm = $("#event-wizard-form");
+var $wizardForm = $('#event-wizard-form');
 
 $(document).ready(function () {
-    var $wizard = $("#wizard");
+    var $wizard = $('#wizard');
     var state = $wizard.data('state');
     var eventId = $wizard.data('id');
 
-    $('a[data-toggle="tab"]').on('show.bs.tab', function (event) {
+    $('a[data-toggle=tab]').on('show.bs.tab', function () {
         return !validate();
     }).on('shown.bs.tab', function (event) {
         var activatedTab = $(event.target);
-        history.replaceState(null, null, activatedTab.data("href"));
+        history.replaceState(null, null, activatedTab.data('href'));
     });
 
-    $(document).on("click", ".save-event", function () {
-        if(!validate()) {
+    $(document).on('click', '.save-event', function () {
+        if (!validate()) {
             $wizardForm.submit();
         }
     });
 
-    $(document).on("click", ".publish-unpublish-event", function () {
+    $(document).on('click', '.publish-unpublish-event', function () {
         if (!validate()) {
             if (state === 'Published') {
-                location.href = "/events/" + eventId + "/unpublish/";
+                location.href = '/events/' + eventId + '/unpublish/';
             } else {
-                var input = $("<input>")
-                    .attr("type", "hidden")
-                    .attr("name", "state").val("Published");
+                var input = $('<input>')
+                    .attr('type', 'hidden')
+                    .attr('name', 'state').val('Published');
                 $wizardForm.append($(input));
                 $wizardForm.submit();
             }
         }
     });
 
-    $(document).on("click", ".next-step", function (e) {
+    $(document).on('click', '.next-step', function (e) {
         var $active = $('.wizard .nav-tabs li.active');
         $active.next().removeClass('disabled');
         nextTab($active);
     });
 
-    $(document).on("click", ".prev-step", function (e) {
+    $(document).on('click', '.prev-step', function (e) {
         var $active = $('.wizard .nav-tabs li.active');
         prevTab($active);
     });
@@ -48,19 +48,17 @@ $(document).ready(function () {
         highlight = getHashValue('highlight').trim();
     } catch (ignored) {
     }
-    if (highlight === "location_name") {
-        $wizardForm.find("input[name=location_name]").closest(".form-group").addClass("has-warning");
+    if (highlight === 'location_name') {
+        $wizardForm.find('input[name=location_name]').closest('.form-group').addClass('has-warning');
     }
 
-    if(location.href.indexOf('call-for-speakers') > -1) {
-        $("#step-4 > div")[0].scrollIntoView();
+    if (location.href.indexOf('call-for-speakers') > -1) {
+        $('#step-4').find('div')[0].scrollIntoView();
     }
 
-    if(location.href.indexOf('form-customization') > -1) {
-        $("#step-5 > div")[0].scrollIntoView();
+    if (location.href.indexOf('form-customization') > -1) {
+        $('#step-5').find('div')[0].scrollIntoView();
     }
-
-
 });
 
 function getHashValue(key) {
@@ -71,7 +69,8 @@ function getHashValue(key) {
 function validate() {
     try {
         $wizardForm.validator('destroy');
-    } catch (ignored) { }
+    } catch (ignored) {
+    }
 
     $wizardForm.validator({
         disable: false,
@@ -86,8 +85,8 @@ function validate() {
 }
 
 function nextTab(elem) {
-    $(elem).next().find('a[data-toggle="tab"]').click();
+    $(elem).next().find('a[data-toggle=tab]').click();
 }
 function prevTab(elem) {
-    $(elem).prev().find('a[data-toggle="tab"]').click();
+    $(elem).prev().find('a[data-toggle=tab]').click();
 }
