@@ -39,6 +39,15 @@ EVENT_COPYRIGHT = api.model('EventCopyright', {
     'logo': fields.String()
 })
 
+EVENT_VERSION = api.model('EventVersion', {
+    'event_ver': fields.Integer(),
+    'sessions_ver': fields.Integer(attribute='session_ver'),
+    'speakers_ver': fields.Integer(),
+    'tracks_ver': fields.Integer(),
+    'sponsors_ver': fields.Integer(),
+    'microlocations_ver': fields.Integer()
+})
+
 SOCIAL_LINK = api.model('SocialLink', {
     'id': fields.Integer(),
     'name': fields.String(required=True),
@@ -77,6 +86,7 @@ EVENT = api.model('Event', {
     'schedule_published_on': fields.DateTime(),
     'code_of_conduct': fields.String(),
     'social_links': fields.List(fields.Nested(SOCIAL_LINK), attribute='social_link', required=False),
+    'version': fields.Nested(EVENT_VERSION)
 })
 
 EVENT_COMPLETE = api.clone('EventComplete', EVENT, {
@@ -95,6 +105,7 @@ EVENT_POST = api.clone('EventPost', EVENT)
 del EVENT_POST['id']
 del EVENT_POST['creator']
 del EVENT_POST['social_links']
+del EVENT_POST['version']
 
 
 # ###################
@@ -239,9 +250,11 @@ class EventResource():
     event_parser.add_argument('time_period', type=str, dest='__event_time_period')
     event_parser.add_argument('include', type=str)
 
+
 class SingleEventResource():
     event_parser = reqparse.RequestParser()
     event_parser.add_argument('include', type=str)
+
 
 @api.route('/<int:event_id>')
 @api.param('event_id')
@@ -288,6 +301,7 @@ class EventWebapp(Resource, SingleEventResource):
         """
         includes = parse_args(self.event_parser).get('include', '').split(',')
         return marshal(DAO.get(event_id), get_extended_event_model(includes))
+
 
 @api.route('')
 class EventList(Resource, EventResource):
@@ -370,4 +384,3 @@ class SocialLink(Resource):
     def get(self, event_id, link_id):
         """Fetch a social link given its id"""
         return LinkDAO.get(event_id, link_id)
-
