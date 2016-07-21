@@ -24,6 +24,7 @@ Manage Roles
         <thead>
         <tr>
             <th style="display: none;">Status</th>
+            <th style="display: none;">User Email</th>
             <th>User (Email)</th>
             <th>Role</th>
             <th>Options</th>
@@ -34,6 +35,7 @@ Manage Roles
         {% for role in event.roles %}
         <tr>
             <td style="display: none;">accepted</td>
+            <td style="display: none;">{{ role.user.email }}</td>
             <td>
                 {% if not role.user.user_detail.fullname %}
                     {{ role.user.email }}
@@ -59,6 +61,7 @@ Manage Roles
         {% for invite in event.role_invites %}
         <tr>
             <td style="display:none;">invited</td>
+            <td style="display:none;">{{ invite.email }}</td>
             <td>{{ invite.email }}</td>
             <td>{{ invite.role.title_name }}</td>
             <td>
