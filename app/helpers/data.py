@@ -473,84 +473,86 @@ class DataManager(object):
 
     @staticmethod
     def edit_session(request, session):
-        form = request.form
-        event_id = session.event_id
+        with db.session.no_autoflush:
+            form = request.form
+            event_id = session.event_id
 
-        slide_file = ""
-        video_file = ""
-        audio_file = ""
-        if 'slides' in request.files and request.files['slides'].filename != '':
-            slide_file = request.files['slides']
-        if 'video' in request.files and request.files['video'].filename != '':
-            video_file = request.files['video']
-        if 'audio' in request.files and request.files['audio'].filename != '':
-            audio_file = request.files['audio']
+            slide_file = ""
+            video_file = ""
+            audio_file = ""
+            if 'slides' in request.files and request.files['slides'].filename != '':
+                slide_file = request.files['slides']
+            if 'video' in request.files and request.files['video'].filename != '':
+                video_file = request.files['video']
+            if 'audio' in request.files and request.files['audio'].filename != '':
+                audio_file = request.files['audio']
 
-        form_state = form.get('state', 'draft')
+            form_state = form.get('state', 'draft')
 
-        if slide_file != "":
-            slide_url = upload(
-                slide_file,
-                UPLOAD_PATHS['sessions']['slides'].format(
-                    event_id=int(event_id), id=int(session.id)
-                ))
-            session.slides = slide_url
+            if slide_file != "":
+                slide_url = upload(
+                    slide_file,
+                    UPLOAD_PATHS['sessions']['slides'].format(
+                        event_id=int(event_id), id=int(session.id)
+                    ))
+                session.slides = slide_url
 
-        if audio_file != "":
-            audio_url = upload(
-                audio_file,
-                UPLOAD_PATHS['sessions']['audio'].format(
-                    event_id=int(event_id), id=int(session.id)
-                ))
-            session.audio = audio_url
-        if video_file != "":
-            video_url = upload(
-                video_file,
-                UPLOAD_PATHS['sessions']['video'].format(
-                    event_id=int(event_id), id=int(session.id)
-                ))
-            session.video = video_url
+            if audio_file != "":
+                audio_url = upload(
+                    audio_file,
+                    UPLOAD_PATHS['sessions']['audio'].format(
+                        event_id=int(event_id), id=int(session.id)
+                    ))
+                session.audio = audio_url
+            if video_file != "":
+                video_url = upload(
+                    video_file,
+                    UPLOAD_PATHS['sessions']['video'].format(
+                        event_id=int(event_id), id=int(session.id)
+                    ))
+                session.video = video_url
 
-        if form_state == 'pending' and session.state != 'pending' and session.state != 'accepted' and session.state != 'rejected':
-            trigger_new_session_notifications(session.id, event_id=event_id)
+            if form_state == 'pending' and session.state != 'pending' and session.state != 'accepted' and session.state != 'rejected':
+                trigger_new_session_notifications(session.id, event_id=event_id)
 
-        session.title = form.get('title', '')
-        session.subtitle = form.get('subtitle', '')
-        session.long_abstract = form.get('long_abstract', '')
-        session.short_abstract = form.get('short_abstract', '')
+            session.title = form.get('title', '')
+            session.subtitle = form.get('subtitle', '')
+            session.long_abstract = form.get('long_abstract', '')
+            session.short_abstract = form.get('short_abstract', '')
 
-        if form.get('track', None) != "":
-            session.track_id = form.get('track', None)
-        else:
-            session.track_id = None
+            if form.get('track', None) != "":
+                session.track_id = form.get('track', None)
+            else:
+                session.track_id = None
 
-        if form.get('session_type', None) != "":
-            session.session_type_id = form.get('session_type', None)
-        else:
-            session.session_type_id = None
+            if form.get('session_type', None) != "":
+                session.session_type_id = form.get('session_type', None)
+            else:
+                session.session_type_id = None
 
-        existing_speaker_ids = form.getlist("speakers[]")
-        current_speaker_ids = []
-        existing_speaker_ids_by_email = []
+            existing_speaker_ids = form.getlist("speakers[]")
+            current_speaker_ids = []
+            existing_speaker_ids_by_email = []
 
-        for existing_speaker in DataGetter.get_speaker_by_email(form.get("email")).all():
-            existing_speaker_ids_by_email.append(str(existing_speaker.id))
+            save_to_db(session, 'Session Updated')
 
-        for current_speaker in session.speakers:
-            current_speaker_ids.append(str(current_speaker.id))
+            for existing_speaker in DataGetter.get_speaker_by_email(form.get("email")).all():
+                existing_speaker_ids_by_email.append(str(existing_speaker.id))
 
-        for current_speaker_id in current_speaker_ids:
-            if current_speaker_id not in existing_speaker_ids and current_speaker_id not in existing_speaker_ids_by_email:
-                current_speaker = DataGetter.get_speaker(current_speaker_id)
-                session.speakers.remove(current_speaker)
+            for current_speaker in session.speakers:
+                current_speaker_ids.append(str(current_speaker.id))
 
-        for existing_speaker_id in existing_speaker_ids:
-            existing_speaker = DataGetter.get_speaker(existing_speaker_id)
-            if existing_speaker not in session.speakers:
-                session.speakers.append(existing_speaker)
+            for current_speaker_id in current_speaker_ids:
+                if current_speaker_id not in existing_speaker_ids and current_speaker_id not in existing_speaker_ids_by_email:
+                    current_speaker = DataGetter.get_speaker(current_speaker_id)
+                    session.speakers.remove(current_speaker)
 
-        save_to_db(session, 'Session Updated')
-        record_activity('update_session', session=session, event_id=event_id)
+            for existing_speaker_id in existing_speaker_ids:
+                existing_speaker = DataGetter.get_speaker(existing_speaker_id)
+                if existing_speaker not in session.speakers:
+                    session.speakers.append(existing_speaker)
+
+            record_activity('update_session', session=session, event_id=event_id)
 
     @staticmethod
     def update_session(form, session):
