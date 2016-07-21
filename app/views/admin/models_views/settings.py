@@ -58,9 +58,10 @@ class SettingsView(BaseView):
     @expose('/email-preferences/')
     def email_preferences_view(self):
         events = DataGetter.get_all_events()
+        message_settings = DataGetter.get_all_message_setting()
         settings = DataGetter.get_email_notification_settings(login.current_user.id)
         return self.render('/gentelella/admin/settings/pages/email_preferences.html',
-                           settings=settings, events=events)
+                           settings=settings, events=events, message_settings=message_settings)
 
     @expose('/email/toggle/', methods=('POST',))
     def email_toggle_view(self):
