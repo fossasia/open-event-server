@@ -16,7 +16,8 @@ class VersionUpdater(object):
                                         .order_by(Version.id.desc()).first()
         if not previous_version:
             version = Version(event_id=self.event_id)
-            self._create_new_version(version)
+            db.session.add(version)
+            db.session.commit()
         else:
             self._create_new_version(previous_version)
 

@@ -70,12 +70,12 @@ class TestPostApi(TestPostApiBase):
         self.assertIn('location', response.headers)
         self.assertIn('Test' + name[0].upper() + name[1:], response.data)
         for string in checks:
-            self.assertIn(string, response.data, msg=string)
+            self.assertIn(string, response.data)
 
     def test_event_api(self):
         self._test_model(
             'event', POST_EVENT_DATA,
-            checks=['test@example.com', 'Test licence']
+            checks=['test@example.com', 'Test licence', '"event_ver": 0']
         )
 
     def test_track_api(self):
