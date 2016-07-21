@@ -17,7 +17,7 @@ from sqlalchemy.sql.expression import exists
 from werkzeug import secure_filename
 from wtforms import ValidationError
 
-from app.helpers.helpers import string_empty, string_not_empty
+from app.helpers.helpers import string_empty, string_not_empty, uploaded_file
 from app.helpers.notification_email_triggers import trigger_new_session_notifications, \
     trigger_session_state_change_notifications
 from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth
@@ -803,12 +803,7 @@ class DataManager(object):
         user_detail.details = form['details']
         logo = form.get('logo', None)
         if string_not_empty(logo) and logo:
-            filename = str(time.time()) + '.png'
-            file_path = os.path.realpath('.') + '/static/temp/' + filename
-            fh = open(file_path, "wb")
-            fh.write(logo.split(",")[1].decode('base64'))
-            fh.close()
-            logo_file = UploadedFile(file_path, filename)
+            logo_file = uploaded_file(file_content=logo)
             logo = upload(logo_file, 'users/%d/avatar' % int(user_id))
             user_detail.avatar_uploaded = logo
         user, user_detail, save_to_db(user, "User updated")
@@ -937,12 +932,7 @@ class DataManager(object):
 
             background_image = form['background_url']
             if string_not_empty(background_image):
-                filename = str(time.time()) + '.png'
-                file_path = os.path.realpath('.') + '/static/temp/' + filename
-                fh = open(file_path, "wb")
-                fh.write(background_image.split(",")[1].decode('base64'))
-                fh.close()
-                background_file = UploadedFile(file_path, filename)
+                background_file = uploaded_file(file_content=background_image)
                 background_url = upload(
                     background_file,
                     UPLOAD_PATHS['event']['background_url'].format(
@@ -952,12 +942,7 @@ class DataManager(object):
 
             logo = form['logo']
             if string_not_empty(logo):
-                filename = str(time.time()) + '.png'
-                file_path = os.path.realpath('.') + '/static/temp/' + filename
-                fh = open(file_path, "wb")
-                fh.write(logo.split(",")[1].decode('base64'))
-                fh.close()
-                logo_file = UploadedFile(file_path, filename)
+                logo_file = uploaded_file(file_content=logo)
                 logo = upload(
                     logo_file,
                     UPLOAD_PATHS['event']['logo'].format(
@@ -1163,12 +1148,7 @@ class DataManager(object):
 
         background_image = form['background_url']
         if string_not_empty(background_image):
-            filename = str(time.time()) + '.png'
-            file_path = os.path.realpath('.') + '/static/temp/' + filename
-            fh = open(file_path, "wb")
-            fh.write(background_image.split(",")[1].decode('base64'))
-            fh.close()
-            background_file = UploadedFile(file_path, filename)
+            background_file = uploaded_file(file_content=background_image)
             background_url = upload(
                 background_file,
                 UPLOAD_PATHS['event']['background_url'].format(
@@ -1178,12 +1158,7 @@ class DataManager(object):
 
         logo = form['logo']
         if string_not_empty(logo):
-            filename = str(time.time()) + '.png'
-            file_path = os.path.realpath('.') + '/static/temp/' + filename
-            fh = open(file_path, "wb")
-            fh.write(logo.split(",")[1].decode('base64'))
-            fh.close()
-            logo_file = UploadedFile(file_path, filename)
+            logo_file = uploaded_file(file_content=logo)
             logo = upload(
                 logo_file,
                 UPLOAD_PATHS['event']['logo'].format(
