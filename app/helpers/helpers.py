@@ -3,6 +3,8 @@ import json
 import os
 import re
 import requests
+import os.path
+import time
 from datetime import datetime, timedelta
 from flask import request, url_for, current_app
 from itsdangerous import Serializer
@@ -25,7 +27,7 @@ from app.models.notifications import (
     INVITE_PAPERS as NOTIF_INVITE_PAPERS,
 )
 from system_notifications import NOTIFS
-
+from app.helpers.storage import UploadedFile
 
 def get_event_id():
     """Get event Id from request url"""
@@ -495,3 +497,12 @@ def update_state(task_handle, state, result={}):
         task_handle.update_state(
             state=state, meta=result
         )
+
+
+def uploaded_file(extention='.png', file_content=None):
+    filename = str(time.time()) + extention
+    file_path = os.path.realpath('.') + '/static/temp/' + filename
+    file = open(file_path, "wb")
+    file.write(file_content.split(",")[1].decode('base64'))
+    file.close()
+    return UploadedFile(file_path, filename)
