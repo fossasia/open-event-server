@@ -173,7 +173,6 @@ def send_email_after_account_create(form):
 
 def send_email_confirmation(form, link):
     """account confirmation"""
-    print form
     send_email(
         to=form['email'],
         action=USER_CONFIRM,

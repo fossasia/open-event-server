@@ -787,7 +787,14 @@ class DataManager(object):
         if user.email != form['email']:
             record_activity('update_user_email',
                             user_id=user.id, old=user.email, new=form['email'])
-        user.email = form['email']
+        if user.email != form['email']:
+            user.is_verified = False
+            s = Helper.get_serializer()
+            data = [form['email']]
+            form_hash = s.dumps(data)
+            link = url_for('admin.create_account_after_confirmation_view', hash=form_hash, _external=True)
+            Helper.send_email_confirmation(form, link)
+            user.email = form['email']
         user_detail.fullname = form['full_name']
         user_detail.facebook = form['facebook']
         user_detail.contact = form['contact']
