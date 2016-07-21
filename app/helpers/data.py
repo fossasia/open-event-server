@@ -27,6 +27,8 @@ from ..helpers import helpers as Helper
 from ..helpers.data_getter import DataGetter
 from ..helpers.static import EVENT_LICENCES
 from ..helpers.update_version import VersionUpdater
+from ..helpers.system_mails import MAILS
+from ..helpers.system_notifications import NOTIFS
 from ..models import db
 from ..models.activity import Activity, ACTIVITIES
 from ..models.call_for_papers import CallForPaper
@@ -52,6 +54,7 @@ from ..models.user_detail import UserDetail
 from ..models.users_events_roles import UsersEventsRoles
 from ..models.page import Page
 from ..models.email_notifications import EmailNotification
+from ..models.message_settings import MessageSettings
 
 class DataManager(object):
     """Main class responsible for DataBase managing"""
@@ -1470,6 +1473,27 @@ class DataManager(object):
         page.place = form.get('place', '')
         page.index = form.get('index', '')
         save_to_db(page, "Page updated")
+
+    @staticmethod
+    def create_or_update_message_settings(form):
+
+        for mail in MAILS:
+            mail_status = 1 if form.get(mail+'_mail_status', 'off') == 'on' else 0
+            notif_status = 1 if form.get(mail+'_notif_status', 'off') == 'on' else 0
+            user_control_status = 1 if form.get(mail+'_user_control_status', 'off') == 'on' else 0
+            message_setting = MessageSettings.query.filter_by(action=mail).first()
+            if message_setting:
+                message_setting.mail_status = mail_status
+                message_setting.notif_status = notif_status
+                message_setting.user_control_status = user_control_status
+                save_to_db(message_setting, "Message Settings Updated")
+            else:
+                message_setting = MessageSettings(action=mail,
+                                                  mail_status=mail_status,
+                                                  notif_status=notif_status,
+                                                  user_control_status=user_control_status)
+                save_to_db(message_setting, "Message Settings Updated")
+
 
 def save_to_db(item, msg="Saved to db", print_error=True):
     """Convenience function to wrap a proper DB save
