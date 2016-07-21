@@ -9,7 +9,7 @@ from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models.microlocation import Microlocation
 from app.models.user import User
-from app.models.user import MessageSettings
+from app.models.message_settings import MessageSettings
 
 
 class ObjectMother(object):
