@@ -12,7 +12,8 @@ from app.helpers.flask_helpers import get_real_ip
 from app.settings import get_settings
 from ..models.track import Track
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, NEXT_EVENT, \
-    USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, EVENT_PUBLISH, Mail, AFTER_EVENT
+    USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, EVENT_PUBLISH, Mail,\
+    AFTER_EVENT, USER_CHANGE_EMAIL
 from system_mails import MAILS
 from app.models.notifications import (
     # Prepended with `NOTIF_` to differentiate from mails
@@ -179,6 +180,18 @@ def send_email_confirmation(form, link):
         subject=MAILS[USER_CONFIRM]['subject'],
         html=MAILS[USER_CONFIRM]['message'].format(
             email=form['email'], link=link
+        )
+    )
+
+
+def send_email_when_changes_email(old_email, new_email):
+    """account confirmation"""
+    send_email(
+        to=old_email,
+        action=USER_CHANGE_EMAIL,
+        subject=MAILS[USER_CHANGE_EMAIL]['subject'],
+        html=MAILS[USER_CHANGE_EMAIL]['message'].format(
+            email=old_email, new_email=new_email
         )
     )
 

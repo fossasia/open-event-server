@@ -793,6 +793,7 @@ class DataManager(object):
             data = [form['email']]
             form_hash = s.dumps(data)
             link = url_for('admin.create_account_after_confirmation_view', hash=form_hash, _external=True)
+            Helper.send_email_when_changes_email(user.email, form['email'])
             Helper.send_email_confirmation(form, link)
             user.email = form['email']
         user_detail.fullname = form['full_name']
