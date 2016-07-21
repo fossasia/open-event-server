@@ -1110,7 +1110,6 @@ class DataManager(object):
         """
         form = request.form
         event.name = form['name']
-        event.logo = form['logo']
         event.start_time = datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M')
         event.end_time = datetime.strptime(form['end_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M')
         event.timezone = form['timezone']
