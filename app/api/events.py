@@ -104,6 +104,7 @@ EVENT_POST = api.clone('EventPost', EVENT)
 del EVENT_POST['id']
 del EVENT_POST['creator']
 del EVENT_POST['social_links']
+del EVENT_POST['version']
 
 
 # ###################
