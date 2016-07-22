@@ -14,6 +14,7 @@ from requests_oauthlib import OAuth2Session
 from sqlalchemy.orm.collections import InstrumentedList
 from sqlalchemy.sql.expression import exists
 from werkzeug import secure_filename
+from werkzeug.datastructures import ImmutableMultiDict
 from wtforms import ValidationError
 
 from app.helpers.helpers import string_empty, string_not_empty, uploaded_file
@@ -51,8 +52,10 @@ from ..models.user import User, ORGANIZER
 from ..models.user_detail import UserDetail
 from ..models.users_events_roles import UsersEventsRoles
 from ..models.page import Page
+from ..models.modules import Module
 from ..models.email_notifications import EmailNotification
 from ..models.message_settings import MessageSettings
+
 
 class DataManager(object):
     """Main class responsible for DataBase managing"""
@@ -115,8 +118,8 @@ class DataManager(object):
         save_to_db(role_invite, "Role Invite saved")
 
         accept_link = url_for('events.user_role_invite',
-                               event_id=event_id,
-                               hash=role_invite.hash)
+                              event_id=event_id,
+                              hash=role_invite.hash)
         decline_link = url_for('events.user_role_invite_decline',
                                event_id=event_id,
                                hash=role_invite.hash)
@@ -391,7 +394,8 @@ class DataManager(object):
                 new_invite.hash = "%032x" % hash
                 save_to_db(new_invite, "Invite saved")
 
-                link = url_for('event_sessions.invited_view', session_id=new_session.id, event_id=event_id, _external=True)
+                link = url_for('event_sessions.invited_view', session_id=new_session.id, event_id=event_id,
+                               _external=True)
                 Helper.send_email_invitation(email, new_session.title, link)
                 # If a user is registered by the email, send a notification as well
                 user = DataGetter.get_user_by_email(email, no_flash=True)
@@ -863,7 +867,7 @@ class DataManager(object):
         year = datetime.now().year
         licence_name = form.get('copyright_licence')
         # Ignoring Licence long name, description and compact logo
-        _, _, licence_url, logo, _ = EVENT_LICENCES.get(licence_name, ('',)*5)
+        _, _, licence_url, logo, _ = EVENT_LICENCES.get(licence_name, ('',) * 5)
 
         copyright = EventCopyright(holder=holder,
                                    year=year,
@@ -908,7 +912,7 @@ class DataManager(object):
         state = form.get('state', None)
         print state
         if state and ((state == u'Published' and not string_empty(
-                       event.location_name)) or state != u'Published') and login.current_user.is_verified:
+            event.location_name)) or state != u'Published') and login.current_user.is_verified:
             event.state = state
 
         if event.start_time <= event.end_time:
@@ -1073,7 +1077,6 @@ class DataManager(object):
         rooms_old = DataGetter.get_microlocations(event_id)
         call_for_papers_old = DataGetter.get_call_for_papers(event_id)
 
-
         for sponsor in sponsors_old:
             sponsor_new = Sponsor(name=sponsor.name, url=sponsor.url,
                                   level=sponsor.level, description=sponsor.description,
@@ -1153,7 +1156,7 @@ class DataManager(object):
         event.copyright.holder = form.get('organizer_name')
         licence_name = form.get('copyright_licence')
         # Ignoring Licence description
-        _, _, licence_url, logo, _ = EVENT_LICENCES.get(licence_name, ('',)*5)
+        _, _, licence_url, logo, _ = EVENT_LICENCES.get(licence_name, ('',) * 5)
 
         event.copyright.licence = licence_name
         event.copyright.licence_url = licence_url
@@ -1358,7 +1361,6 @@ class DataManager(object):
             if call_for_papers:
                 delete_from_db(call_for_papers, "Cfs deleted")
 
-
         save_to_db(event, "Event saved")
         record_activity('update_event', event_id=event.id)
         return event
@@ -1459,6 +1461,7 @@ class DataManager(object):
         page.index = form.get('index', '')
         save_to_db(page, "Page updated")
 
+
     @staticmethod
     def create_or_update_message_settings(form):
 
@@ -1536,6 +1539,7 @@ def get_facebook_auth(state=None, token=None):
                              redirect_uri=FbOAuth.get_redirect_uri())
     oauth = OAuth2Session(FbOAuth.get_client_id(), scope=FbOAuth.SCOPE, redirect_uri=FbOAuth.get_redirect_uri())
     return oauth
+
 
 def get_instagram_auth(state=None, token=None):
     if token:
@@ -1721,3 +1725,34 @@ def restore_session(session_id):
     session = DataGetter.get_session(session_id)
     session.in_trash = False
     save_to_db(session, "Session restored from Trash")
+
+
+def create_modules(form):
+    modules_form_value = form.getlist('modules_form[value]')
+    module = DataGetter.get_module()
+
+    if module is None:
+        module = Module()
+
+    if str(modules_form_value[0][24]) == '1':
+        module.ticket_include = True
+    else:
+        module.ticket_include = False
+
+    if str(modules_form_value[0][49]) == '1':
+        module.payment_include = True
+    else:
+        module.payment_include = False
+
+    if str(modules_form_value[0][75]) == '1':
+        module.donation_include = True
+    else:
+        module.donation_include = False
+
+    save_to_db(module, "Module settings saved")
+    events = DataGetter.get_all_events()
+
+    if module.ticket_include:
+        for event in events:
+            event.ticket_include = True
+            save_to_db(event, "Event updated")
