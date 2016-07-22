@@ -28,3 +28,15 @@ class VersionUpdater(object):
         setattr(previous_version, self.column_to_increment, prv_value + 1)
         db.session.add(previous_version)
         db.session.commit()
+
+    def set(self, data):
+        """Set version info of an event to data"""
+        previous_version = Version.query.filter_by(event_id=self.event_id) \
+                                        .order_by(Version.id.desc()).first()
+        if not previous_version:
+            previous_version = Version(event_id=self.event_id, **data)
+        else:
+            for key in data:
+                setattr(previous_version, key, data[key])
+        db.session.add(previous_version)
+        db.session.commit()

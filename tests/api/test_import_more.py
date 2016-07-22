@@ -1,10 +1,8 @@
 import unittest
 import json
-import zipfile
 import shutil
 import time
 import os
-from StringIO import StringIO
 
 from tests.setup_database import Setup
 from tests.api.utils import create_event, get_path, create_services
@@ -68,6 +66,9 @@ class TestImportUploads(ImportExportBase):
                 self.assertIn('result', resp.data)
                 dic = json.loads(resp.data)['result']
                 break
+            if resp.status_code != 200:
+                dic = json.loads(resp.data)
+                break
             time.sleep(2)
         return dic
 
@@ -115,6 +116,21 @@ class TestImportUploads(ImportExportBase):
         event_dic = self._do_succesful_import(data)
         # check
         self.assertEqual(event_dic['background_url'], None)
+
+    def test_version_preserved(self):
+        """
+        Tests if version data is being preserved
+        """
+        self._create_set()
+        data_old = json.loads(open('static/temp/test_event_import/event.json').read())
+        # import
+        data = self._make_zip_from_dir()
+        event_dic = self._do_succesful_import(data)
+        for i in data_old['version']:
+            self.assertEqual(
+                data_old['version'][i], event_dic['version'][i],
+                json.dumps(data_old['version']) + json.dumps(event_dic['version'])
+            )
 
 
 if __name__ == '__main__':
