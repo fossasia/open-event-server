@@ -60,7 +60,7 @@
             <span id="export_error" class="red"></span>
             <br>
             <div class="btn-group">
-                <button type="button" class="btn btn-primary" id="btnStartExport" onclick="exportEvent()"
+                <button type="button" class="btn btn-primary" id="btnStartExport" onclick="exportEvent({{ event.id }})"
                         style="margin-bottom: 0px;">Start
                 </button>
                 <button type="button" class="btn btn-default" id="btnExportEvent" disabled="disabled">Download</button>
