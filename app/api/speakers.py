@@ -52,6 +52,8 @@ del SPEAKER_POST['sessions']  # don't allow adding sessions
 
 # Create DAO
 class SpeakerDAO(ServiceDAO):
+    version_key = 'speakers_ver'
+
     def create(self, event_id, data, url):
         data = self.validate(data, event_id)
         return ServiceDAO.create(self, event_id, data, url, validate=False)

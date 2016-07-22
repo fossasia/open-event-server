@@ -100,10 +100,12 @@ class SessionTypeDAO(ServiceDAO):
     SessionType DAO
     added for import/export feature
     """
-    pass
+    version_key = 'sessions_ver'
 
 
 class SessionDAO(ServiceDAO):
+    version_key = 'sessions_ver'
+
     def _delete_fields(self, data):
         data = self._del(data, ['speaker_ids', 'track_id',
                          'microlocation_id', 'session_type_id'])

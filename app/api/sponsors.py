@@ -34,6 +34,8 @@ del SPONSOR_POST['id']
 
 # Create DAO
 class SponsorDAO(ServiceDAO):
+    version_key = 'sponsors_ver'
+
     def list_types(self, event_id):
         sponsors = self.list(event_id)
         return list(set(

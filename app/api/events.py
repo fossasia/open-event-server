@@ -117,13 +117,14 @@ class SocialLinkDAO(ServiceDAO):
     """
     Social Link DAO
     """
-    pass
+    version_key = 'event_ver'
 
 
 class EventDAO(BaseDAO):
     """
     Event DAO
     """
+    version_key = 'event_ver'
 
     def fix_payload(self, data):
         """
