@@ -9,6 +9,8 @@ from .helpers import get_object_list, get_object_or_404, get_object_in_event, \
     create_model, validate_payload, delete_model, update_model, \
     handle_extra_payload, get_paginated_list
 from app.models.event import Event as EventModel
+from app.helpers.data import update_version
+
 from .error_docs import (
     notfound_error_model,
     notauthorized_error_model,
@@ -109,6 +111,8 @@ class BaseDAO:
     """
     DAO for a basic independent model
     """
+    version_key = 'base_ver'
+
     def __init__(self, model, post_api_model=None, put_api_model=None):
         self.model = model
         self.post_api_model = post_api_model
@@ -127,16 +131,19 @@ class BaseDAO:
         if validate:
             data = self.validate(data, self.post_api_model)
         item = create_model(self.model, data)
+        self.update_version(item.id)
         return item
 
     def update(self, id_, data, validate=True):
         if validate:
             data = self.validate_put(data, self.put_api_model)
         item = update_model(self.model, id_, data)
+        self.update_version(id_)
         return item
 
     def delete(self, id_):
         item = delete_model(self.model, id_)
+        self.update_version(id_)
         return item
 
     def validate(self, data, model=None, check_required=True):
@@ -152,6 +159,12 @@ class BaseDAO:
         Abstraction over validate with check_required set to False
         """
         return self.validate(data, model=model, check_required=False)
+
+    def update_version(self, event_id):
+        """
+        Update version of the component of the event
+        """
+        update_version(event_id, False, self.version_key)
 
     # Helper functions
     def _del(self, data, fields):
@@ -186,7 +199,7 @@ class ServiceDAO(BaseDAO):
         if validate:
             data = self.validate(data)
         item = create_model(self.model, data, event_id=event_id)
-
+        self.update_version(event_id)
         # Return created resource with a 201 status code and its Location
         # (url) in the header.
         resource_location = url + '/' + str(item.id)
@@ -196,10 +209,12 @@ class ServiceDAO(BaseDAO):
         if validate:
             data = self.validate_put(data)
         item = update_model(self.model, service_id, data, event_id)
+        self.update_version(event_id)
         return item
 
     def delete(self, event_id, service_id):
         item = delete_model(self.model, service_id, event_id=event_id)
+        self.update_version(event_id)
         return item
 
 # store task results in case of testing

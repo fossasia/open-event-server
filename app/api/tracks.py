@@ -40,7 +40,7 @@ del TRACK_POST['sessions']
 
 # Create DAO
 class TrackDAO(ServiceDAO):
-    pass
+    version_key = 'tracks_ver'
 
 DAO = TrackDAO(TrackModel, TRACK_POST)
 
