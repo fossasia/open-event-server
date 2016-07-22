@@ -1,3 +1,5 @@
+{% set ticket_include = ticket_include_setting %}
+
 {% macro social_entry(social_link=None) %}
     <div class="social-link-holder">
         <div class=" col-sm-3" style="padding-left: 0;">
@@ -255,6 +257,7 @@
 
             </div>
         </div>
+        {% if event.ticket_include == True or 'ticketing' in ticket_include %}
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
             <i class="fa fa-ticket"></i>
             Ticket Details
@@ -267,6 +270,7 @@
                    value="{{ event.ticket_url | default('', true) }}" data-error="Please enter a valid URL"/>
             <div class="help-block with-errors"></div>
         </div>
+        {% endif %}
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color: #5bc0de;">
             <i class="fa fa-plus-circle"></i>
             Additional Details

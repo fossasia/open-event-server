@@ -31,6 +31,7 @@ from ..models.custom_forms import CustomForms
 from ..models.mail import Mail
 from ..models.activity import Activity
 from ..models.setting import Setting
+from ..models.modules import Module
 from ..models.page import Page
 from .language_list import LANGUAGE_LIST
 from .static import EVENT_TOPICS, EVENT_LICENCES
@@ -624,3 +625,6 @@ class DataGetter:
         return [v for v, k in cnt.most_common()][:10]
 
 
+    @staticmethod
+    def get_module():
+        return Module.query.get(1)

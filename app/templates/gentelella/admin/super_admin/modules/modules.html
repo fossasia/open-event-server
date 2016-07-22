@@ -7,13 +7,13 @@
 
 {% set active_page = "modules" %}
 {% set module_fields = ['ticketing', 'payments', 'donations'] %}
-
+{% set included_list = include_settings %}
 {% block head_css %}
     {{ super() }}
 
 {% endblock %}
 
-{% macro field_switch(name, group, include=false, require=false ) %}
+{% macro field_switch(name, group, include=false) %}
     {% set identifier = name | replace(group + '.','') %}
     {% set name = identifier | replace('_id','') %}
     {% set pretty_name = name | replace('_',' ') | capitalize %}
@@ -23,8 +23,8 @@
             <h4>{{ pretty_name }}</h4>
         </td>
         <td>
-            <input type="checkbox" class="toggle-switch include-switch" data-group="modules" id="{{ identifier }}-include"
-                   onclick="includeClick(this)">
+            <input type="checkbox" class="toggle-switch include-switch" data-group="{{ group }}" id="{{ identifier }}-include"
+                   onclick="includeClick(this)" {% if identifier in included_list  %}checked="checked"{% endif %}>
             <label for="{{ identifier }}-include"> </label>
         </td>
     </tr>
@@ -32,12 +32,11 @@
 
 
 {% macro options_table(columns, group) %}
-
     <div style="width: 100%; text-align: center">
         <h2 style="font-weight: 300; font-size: 40px;">Enable/Disable Modules</h2>
     </div>
 
-    <table class="table table-bordered table-hover options-table modules-options-table">
+    <table class="table table-bordered table-hover modules-options-table">
         <thead>
         <tr>
             <th><h3>Modules</h3></th>
@@ -52,13 +51,11 @@
         </tbody>
     </table>
 
-    <a class="btn btn-lg btn-success save-modules" href="/admin/modules/save/">Save</a>
+    <input type="submit" class="btn btn-lg btn-success save-modules" value="Save">
 {% endmacro %}
 
 {% block content %}
-    <form action="/admin/modules/save"
-                          method="POST" role="form"
-                          class="admin-form form-horizontal" id="modules-form">
+<form action="/admin/modules/save" method="POST" role="form" class="admin-form form-horizontal" id="modules-form">
         <div id="module-settings" class="wizard_content" style="display: block;">
             <div class="col-md-2 hidden-sm hidden-xs"></div>
             <div class="col-md-8 col-sm-12 col-xs-12">
@@ -67,7 +64,7 @@
 
             <input type="hidden" name="modules_form[name]" value="modules_form">
 
-            <input type="hidden" id="modules-value-form" name="custom_form[value]" value="[]">
+            <input type="hidden" id="modules-value-form" name="modules_form[value]" value="[]">
         </div>
     </form>
 {% endblock %}
@@ -86,7 +83,7 @@
         var $row = $(button).closest("tr");
         var $button = $(button);
 
-        if ($button.data('group') === 'modules') {
+        if ($button.data('group') == 'modules') {
             modulesForm.setIncluded($row.data('identifier'), button.checked);
         }
         persistData();
@@ -95,7 +92,7 @@
     $(function () {
         $.each($(".modules-options-table").find('tr[data-identifier]'), function (key, row) {
             var $row = $(row);
-            sessionForm[0][$row.data('identifier')] = {
+            modulesForm[0][$row.data('identifier')] = {
                 include: $row.find('.include-switch')[0].checked ? 1 : 0
             }
         });

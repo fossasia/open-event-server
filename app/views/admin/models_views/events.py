@@ -50,6 +50,8 @@ class EventsView(BaseView):
 
     @expose('/create/', methods=('GET', 'POST'))
     def create_view(self,):
+        ticket_include = []
+
         if request.method == 'POST':
             img_files = []
             imd = ImmutableMultiDict(request.files)
@@ -67,6 +69,10 @@ class EventsView(BaseView):
                 return redirect(url_for('.details_view', event_id=event.id))
             return redirect(url_for('.index_view'))
 
+        module = DataGetter.get_module()
+        if module.ticket_include:
+            ticket_include.append('ticketing')
+
         return self.render(
             '/gentelella/admin/event/new/new.html',
             start_date=datetime.datetime.now() + datetime.timedelta(days=10),
@@ -74,7 +80,8 @@ class EventsView(BaseView):
             event_licences=DataGetter.get_event_licences(),
             event_topics=DataGetter.get_event_topics(),
             event_sub_topics=DataGetter.get_event_subtopics(),
-            timezones=DataGetter.get_all_timezones())
+            timezones=DataGetter.get_all_timezones(),
+            ticket_include_setting=ticket_include)
 
     @expose('/<event_id>/', methods=('GET', 'POST'))
     @can_access
