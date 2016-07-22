@@ -25,6 +25,7 @@ class RoleView(BaseView):
 
             user = DataGetter.get_user_by_email(email, no_flash=True)
 
+
             accept_link, decline_link = DataManager.add_event_role_invite(email, role_name, event_id)
 
             if not user:
@@ -40,6 +41,10 @@ class RoleView(BaseView):
 
                 flash('An email invitation has been sent to user')
             else:
+                if user.has_role(event.id):
+                    flash('{} is already assigned a Role in the Event.'.format(user.email))
+                    return redirect(url_for('events.details_view', event_id=event_id))
+
                 # Send a notification with the invitation link
                 send_notif_event_role(user, role.title_name, event.name,
                     accept_link, decline_link)

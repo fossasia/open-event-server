@@ -350,6 +350,10 @@ class EventsView(BaseView):
                 flash('Sorry, the invitation link has expired.', 'error')
                 return redirect(url_for('.details_view', event_id=event.id))
 
+            if user.has_role(event.id):
+                flash('You have already been assigned a Role in the Event.', 'warning')
+                return redirect(url_for('events.details_view', event_id=event_id))
+
             role = role_invite.role
             data = dict()
             data['user_email'] = role_invite.email

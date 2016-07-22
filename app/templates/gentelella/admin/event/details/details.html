@@ -66,6 +66,43 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
 
+        function searchAcceptedRoles(email) {
+            var resp = null;
+            $(".role-table tbody tr").each(function () {
+                var firstTd = $(this).children("td:first").text();
+                if (firstTd == "accepted") {
+                    var secondTd = $(this).children("td:nth-child(2)").text();
+                    if (secondTd == email) {
+                        var editModalId = $(this).children("td:nth-child(5)").children("a:first").attr("data-target");
+                        if (editModalId !== undefined) {
+                            resp = editModalId;
+                            return false;
+                        }
+                    }
+                }
+            });
+            return resp;
+        }
+
+        $("#add-role-form").submit(function() {
+            var userEmail = $("#add-role-form input[name=user_email]").val().trim();
+            var res = searchAcceptedRoles(userEmail);
+
+            if (res !== null) {
+                var addRoleAlertBox = $("#add-role-alert-box");
+                var msg = userEmail + " has already been assigned a Role in the Event.<br>" +
+                    "Click <a href='#' style='color:white;text-decoration:underline;' onclick=\"openRoleEdit('"+res+"')\">here</a> to edit it.";
+                addRoleAlertBox.children("span").html(msg);
+                addRoleAlertBox.show();
+                return false;
+            }
+        });
+
+        function openRoleEdit(openId) {
+            $("#add-role").modal("hide");
+            $(openId).modal("show");
+        }
+
         $('.sponsor-table').DataTable();
     </script>
 
