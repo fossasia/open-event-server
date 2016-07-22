@@ -6,7 +6,9 @@ from app.helpers.date_formatter import DateFormatter
 from app.helpers.versioning import clean_up_string, clean_html
 from custom_forms import CustomForms, session_form_str, speaker_form_str
 from app.models.email_notifications import EmailNotification
+from version import Version
 from . import db
+
 
 class EventsUsers(db.Model):
     """Many to Many table Event Users"""
@@ -180,3 +182,10 @@ def receive_init(mapper, conn, target):
         speaker_form=speaker_form_str
     )
     target.custom_forms.append(custom_form)
+
+
+@event.listens_for(Event, 'after_insert')
+def create_version_info(mapper, conn, target):
+    """create version instance after event created"""
+    version = Version(event_id=target.id)
+    target.version = version
