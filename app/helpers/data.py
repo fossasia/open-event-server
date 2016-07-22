@@ -797,9 +797,18 @@ class DataManager(object):
             Helper.send_email_confirmation(form, link)
             user.email = form['email']
         user_detail.fullname = form['full_name']
-        user_detail.facebook = form['facebook']
         user_detail.contact = form['contact']
-        user_detail.twitter = form['twitter']
+
+        if form['facebook'] != 'https://www.facebook.com/':
+            user_detail.facebook = form['facebook']
+        else:
+            user_detail.facebook = ''
+
+        if form['twitter'] != 'https://twitter.com/':
+            user_detail.twitter = form['twitter']
+        else:
+            user_detail.twitter = ''
+
         user_detail.details = form['details']
         logo = form.get('logo', None)
         if string_not_empty(logo) and logo:
