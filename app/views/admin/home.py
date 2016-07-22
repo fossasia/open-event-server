@@ -181,7 +181,7 @@ class MyHomeView(AdminIndexView):
     def browse_view(self):
         params = request.args.items()
         params = dict((k, v) for k, v in params if v)
-
+        print params
         def test_and_remove(key):
             if request.args.get(key):
                 if request.args.get(key).lower() == request.args.get("query").lower():
