@@ -1,7 +1,5 @@
 // export event main
-var event_id = 0;
-
-function exportEvent(){
+function exportEvent(event_id){
     url = '/api/v2/events/' + event_id + '/export/json';
     // generate payload
     fields = ['image', 'video', 'audio', 'document'];
@@ -61,10 +59,3 @@ function exportTask(url){
     }
     });
 }
-
-
-$('#exportModal').on('show.bs.modal', function(event){
-    var button = $(event.relatedTarget);
-    event_id = button.data('event-id');
-    console.log(event_id);
-});
