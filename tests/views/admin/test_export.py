@@ -6,8 +6,6 @@ from app.helpers.data import save_to_db
 from tests.object_mother import ObjectMother
 from app import current_app as app
 from tests.views.view_test_case import OpenEventViewTestCase
-from app.helpers.data_getter import DataGetter
-
 
 class TestExport(OpenEventViewTestCase):
     def test_export_view(self):
