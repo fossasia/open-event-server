@@ -4,7 +4,6 @@ import zipfile
 import shutil
 import time
 import os
-from StringIO import StringIO
 
 from tests.setup_database import Setup
 from tests.api.utils import create_event, get_path, create_services

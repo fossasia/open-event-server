@@ -1,9 +1,8 @@
 from flask.ext import login
 from functools import wraps
-from flask import url_for, redirect, request
+from flask import redirect, request
 from flask.ext.restplus import abort
 
-from app.models.user import User
 from app.models.session import Session
 from app.models.microlocation import Microlocation
 from app.models.track import Track

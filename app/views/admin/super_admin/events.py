@@ -3,8 +3,7 @@ from flask_admin import expose
 
 from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView
 from ....helpers.data_getter import DataGetter
-from flask import session
-from datetime import timedelta
+
 
 class SuperAdminEventsView(SuperAdminBaseView):
 

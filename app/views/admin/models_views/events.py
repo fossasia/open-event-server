@@ -1,7 +1,6 @@
 import json
 import datetime
 
-import pytz
 from flask import request, flash
 from flask.ext.restplus import abort
 from flask.ext.admin import BaseView

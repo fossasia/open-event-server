@@ -1,5 +1,3 @@
-import json
-
 import flask_login
 from flask import flash
 from app.api import api
