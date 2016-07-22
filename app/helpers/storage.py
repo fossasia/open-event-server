@@ -100,7 +100,7 @@ def upload_local(file, key, **kwargs):
     """
     Uploads file locally. Base dir - static/media/
     """
-    basename, ext = os.path.splitext(file.filename)
+    __, ext = os.path.splitext(file.filename)
     file_path = 'static/media/' + key + ext
     dir_path = file_path.rsplit('/', 1)[0]
     if not os.path.isdir(dir_path):
@@ -118,7 +118,7 @@ def upload_to_aws(bucket_name, aws_key, aws_secret, file, key, acl='public-read'
     bucket = conn.get_bucket(bucket_name)
     k = Key(bucket)
     # generate key using key + extension
-    basename, ext = os.path.splitext(file.filename)  # includes dot
+    __, ext = os.path.splitext(file.filename)  # includes dot
     k.key = key
     key_name = key.rsplit('/')[-1]
     # set object settings

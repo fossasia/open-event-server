@@ -1,6 +1,5 @@
 import unittest
 from tests.utils import OpenEventTestCase
-from tests.setup_database import Setup
 from tests.object_mother import ObjectMother
 from app import current_app as app
 from app.helpers.data import save_to_db

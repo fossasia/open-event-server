@@ -5,7 +5,7 @@ from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView
 from ....helpers.data_getter import DataGetter
 from ....helpers.data import update_role_to_admin, delete_from_db
 from flask import request, url_for, redirect, flash
-from app.helpers.data import DataManager, trash_user, save_to_db, restore_user
+from app.helpers.data import DataManager, trash_user, restore_user
 from sqlalchemy_continuum import transaction_class
 from app.models.event import Event
 

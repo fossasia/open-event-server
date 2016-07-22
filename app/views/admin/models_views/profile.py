@@ -6,8 +6,8 @@ from flask.ext import login
 from app.views.admin.models_views.events import is_verified_user
 from ....helpers.data import DataManager, get_facebook_auth, get_instagram_auth
 from ....helpers.data_getter import DataGetter
-from app.helpers.storage import upload, UPLOAD_PATHS
-from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth
+from app.helpers.storage import UPLOAD_PATHS
+from app.helpers.oauth import FbOAuth, InstagramOAuth
 
 
 class ProfileView(BaseView):
@@ -38,7 +38,7 @@ class ProfileView(BaseView):
             admin = True
         if request.method == 'POST':
             url = ""
-            profile = DataManager.update_user(request.form, int(user_id), url)
+            DataManager.update_user(request.form, int(user_id), url)
             if admin:
                 return redirect(url_for('sadmin_users.details_view', user_id=user_id))
             return redirect(url_for('.index_view'))

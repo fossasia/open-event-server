@@ -1,5 +1,3 @@
-import os
-
 from flask.ext.admin import BaseView
 from flask.ext.restplus import abort
 from flask_admin import expose
@@ -8,9 +6,8 @@ from app import db
 from app.helpers.permission_decorators import *
 from flask.ext import login
 from flask import request, url_for, redirect, flash
-from ....helpers.data import DataManager, save_to_db, delete_from_db, trash_session, restore_session
+from ....helpers.data import DataManager, delete_from_db, trash_session, restore_session
 from ....helpers.data_getter import DataGetter
-from werkzeug.utils import secure_filename
 import json
 
 def get_session_or_throw(session_id):

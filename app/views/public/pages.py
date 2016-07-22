@@ -1,5 +1,4 @@
 from flask_admin import BaseView, expose
-from app.helpers.data import DataManager
 from ...helpers.data_getter import DataGetter
 
 class BasicPagesView(BaseView):

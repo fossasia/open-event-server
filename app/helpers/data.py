@@ -3,7 +3,6 @@ import json
 import logging
 import os.path
 import random
-import time
 import traceback
 from datetime import datetime, timedelta
 
@@ -718,7 +717,6 @@ class DataManager(object):
         """
         data = form.data
         if "session" in data.keys():
-            session = data["session"]
             del data["session"]
         db.session.query(Microlocation) \
             .filter_by(id=microlocation.id) \

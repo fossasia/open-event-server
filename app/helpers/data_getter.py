@@ -13,7 +13,6 @@ from ..models.notifications import Notification
 from ..models.track import Track
 from ..models.invite import Invite
 from ..models.speaker import Speaker
-from ..models.setting import Setting
 from ..models.email_notifications import EmailNotification
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
