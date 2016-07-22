@@ -25,7 +25,8 @@ System Messages
 {% endblock %}
 
 {% block content %}
-
+<form id="message-settings-form" action="/admin/messages/update" method="POST">
+<input type="submit" value="Update Settings" class="btn btn-success">
 <div>
     <div class="table-responsive col-md-10">
         <table id="mails_table" class="table table-striped table-hover with-datatable no-global-dt">
@@ -49,20 +50,22 @@ System Messages
                         <strong>{{ notifications[mail]['title'] }}</strong><br>{{ notifications[mail]['message']|safe }}
                     {% endif %}
                     </td>
-                    <td>
+                    <td id="{{ mail }}">
                         <div class="checkbox" style="margin-top:10px;">
                             <label>
-                              <input type="checkbox" class="flat" checked="checked"> Mail
+                              <input type="checkbox" class="flat" {% if message_settings[mail].mail_status != 0 or not message_settings[mail] %}checked="checked"{% endif %} name="{{ mail }}_mail_status" onclick=""> Mail
                             </label>
                         </div><br>
+                        {% if notifications[mail] %}
                         <div class="checkbox" style="margin-top:10px;">
                             <label>
-                              <input type="checkbox" class="flat" checked="checked"> Notification
+                              <input type="checkbox" class="flat" {% if message_settings[mail].notif_status != 0 or not message_settings[mail] %}checked="checked"{% endif %} name="{{ mail }}_notif_status"> Notification
                             </label>
                         </div><br>
+                        {% endif %}
                         <div class="checkbox" style="margin-top:10px;">
                             <label>
-                              <input type="checkbox" class="flat" checked="checked"> User Control
+                              <input type="checkbox" class="flat" {% if message_settings[mail].user_control_status != 0 or not message_settings[mail] %}checked="checked"{% endif %} name="{{ mail }}_user_control_status"> User Control
                             </label>
                         </div>
                     </td>
@@ -72,6 +75,7 @@ System Messages
         </table>
     </div>
 </div>
+</form>
 
 
 
@@ -82,16 +86,16 @@ System Messages
     {{ super() }}
     <script src="{{ url_for('static', filename='js/bootstrap/icheck.js') }}"></script>
 
-  <script type="text/javascript">
-    $('#mails_table').DataTable({
-        "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
-        "pageLength": 25,
-        "aaSorting": []
-    });
-    $('#notifs_table').DataTable({
-        "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
-        "aaSorting": []
-    });
-  </script>
+    <script type="text/javascript">
+        $('#mails_table').DataTable({
+            "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+            "pageLength": 25,
+            "aaSorting": []
+        });
+        $('#notifs_table').DataTable({
+            "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+            "aaSorting": []
+        });
+    </script>
 {% endblock %}
 
