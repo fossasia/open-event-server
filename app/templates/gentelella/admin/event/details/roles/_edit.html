@@ -11,21 +11,28 @@
             <div class="modal-body">
                 <form action="/events/{{current_event.id}}/roles/{{role.id}}/update/" method="POST" role="form">
                     <p>
-                        <label>User email:</label>
-                        <input name="user_email" placeholder="User" class="form-control" value="{{role.user.email}}">
+                        <div style="font-size: 17px;">
+                        {% if not role.user.user_detail.fullname %}
+                            {{ role.user.email }}
+                        {% else %}
+                            {{ role.user.user_detail.fullname }} 
+                            <span style="color: #a9a9a9;font-size: 15px;">({{ role.user.email }})</span>
+                        {% endif %}
+                        </div>
+                        <input type="hidden" name="user_email" value="{{role.user.email}}">
                     </p>
-                    <p> <label>Permissions:</label>
-                        <select name="user_role" id="heard" class="form-control" required="">
+                    <p> 
+                        <select name="user_role" class="form-control" required="" style="width: 100%;">
                             <option value="track_organizer" {{'selected' if 'track_organizer' == role.role.name else '' }}>Track Organizer</option>
                             <option value="coorganizer" {{'selected' if 'coorganizer' == role.role.name else '' }}>Co-organizer</option>
                             <option value="moderator" {{'selected' if 'moderator' == role.role.name else '' }}>Moderator</option>
                         </select>
+                    </p><br>
+                    <p class="pull-right">
+                        <button type="submit" class="btn btn-warning">Update Role</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </p>
-                    <button type="submit" class="btn btn-warning">Update</button>
                 </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
