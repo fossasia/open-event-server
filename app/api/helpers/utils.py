@@ -67,7 +67,6 @@ class Resource(RestplusResource):
         resp = super(Resource, self).dispatch_request(*args, **kwargs)
 
         # ETag checking.
-        # Check only for GET requests, for now.
         if request.method == 'GET':
             old_etag = request.headers.get('If-None-Match', '')
             # Generate hash
@@ -80,6 +79,16 @@ class Resource(RestplusResource):
             else:
                 # Resource has changed, send new ETag value
                 return resp, 200, {'ETag': new_etag}
+        elif request.method == 'POST':
+            # Grab just the response data
+            # Exclude status code and headers
+            resp_data = resp[0]
+
+            data = json.dumps(resp_data)
+            etag = md5(data).hexdigest()
+
+            # Add ETag to response headers
+            resp[2].update({'ETag': etag})
 
         return resp
 
