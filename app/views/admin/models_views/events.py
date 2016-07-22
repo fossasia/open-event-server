@@ -70,8 +70,9 @@ class EventsView(BaseView):
             return redirect(url_for('.index_view'))
 
         module = DataGetter.get_module()
-        if module.ticket_include:
-            ticket_include.append('ticketing')
+        if module is not None:
+            if module.ticket_include:
+                ticket_include.append('ticketing')
 
         return self.render(
             '/gentelella/admin/event/new/new.html',
