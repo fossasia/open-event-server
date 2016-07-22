@@ -1,13 +1,10 @@
 """Copyright 2015 Rafal Kowalski"""
 import unittest
-from tests.auth_helper import register, login
+from tests.auth_helper import login
 from tests.setup_database import Setup
 from tests.object_mother import ObjectMother
 from app import current_app as app
 from app.helpers.data import save_to_db
-from app.models.session import Session
-from datetime import datetime
-from flask import url_for
 
 from tests.views.view_test_case import OpenEventViewTestCase
 

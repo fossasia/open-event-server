@@ -6,11 +6,16 @@
 
 {% set active_page = "email_preferences" %}
 
-{% set email_speaker_fields={'session_accept_reject': 'Your Session is Accepted or Rejected',
-                             'session_schedule': 'Change in Schedule of your Session'} %}
-{% set email_organizer_fields={'next_event': 'Reminder for Next Event',
-                               'new_paper': 'New Paper is Submitted to your Event',
-                               'session_schedule': 'Change in Schedule of Sessions in your Event'} %}
+{% set email_speaker_fields={'session_accept_reject': {'action': 'Session Accept or Reject',
+                                                       'message': 'Your Session is Accepted or Rejected'},
+                             'session_schedule': {'action': 'Session Schedule Change',
+                                                  'message': 'Change in Schedule of your Session'}} %}
+{% set email_organizer_fields={'next_event': {'action': 'Next Event',
+                                              'message': 'Reminder for Next Event'},
+                               'new_paper': {'action': 'New Session Proposal',
+                                             'message': 'New Paper is Submitted to your Event'},
+                               'session_schedule': {'action': 'Session Schedule Change',
+                                                    'message': 'Change in Schedule of Sessions in your Event'}} %}
 
 {% macro event_item(event) %}
 
@@ -53,13 +58,15 @@
                     <h4 style="font-weight: 400;">Speaker Notifications</h4>
                     <hr style="margin-top: 0;">
                     {% for key,value in email_speaker_fields.iteritems() %}
-                        <div class="col-xs-12 input-group">
-                            <span style="font-weight: 300; font-size: 15px;">{{ value }}</span>
-                            <input type="checkbox" name="{{ key }}" id="speaker-{{ key }}-{{ event.id }}"
-                                   class="toggle-switch setting-toggle"
-                                   {% if notification_settings[key] == 1 or not notification_settings %}checked{% endif %}/>
-                            <label class="pull-right" for="speaker-{{ key }}-{{ event.id }}"></label>
-                        </div>
+                        {% if message_settings[value['action']].user_control_status == 1 %}
+                            <div class="col-xs-12 input-group">
+                                <span style="font-weight: 300; font-size: 15px;">{{ value['message'] }}</span>
+                                <input type="checkbox" name="{{ key }}" id="speaker-{{ key }}-{{ event.id }}"
+                                       class="toggle-switch setting-toggle"
+                                       {% if notification_settings[key] == 1 or not notification_settings %}checked{% endif %}/>
+                                <label class="pull-right" for="speaker-{{ key }}-{{ event.id }}"></label>
+                            </div>
+                        {% endif %}
                     {% endfor %}
                     <br>
                 {% endif %}
@@ -67,13 +74,15 @@
                     <h4 style="font-weight: 400;">Organizer Notifications</h4>
                     <hr style="margin-top: 0;">
                     {% for key,value in email_organizer_fields.iteritems() %}
-                        <div class="col-xs-12 input-group">
-                            <span style="font-weight: 300; font-size: 15px;">{{ value }}</span>
-                            <input type="checkbox" name="{{ key }}" id="organizer-{{ key }}-{{ event.id }}"
-                                   class="toggle-switch setting-toggle"
-                                   {% if notification_settings[key] == 1 or not notification_settings %}checked{% endif %}/>
-                            <label class="pull-right" for="organizer-{{ key }}-{{ event.id }}"></label>
-                        </div>
+                        {% if message_settings[value['action']].user_control_status == 1 %}
+                            <div class="col-xs-12 input-group">
+                                <span style="font-weight: 300; font-size: 15px;">{{ value['message'] }}</span>
+                                <input type="checkbox" name="{{ key }}" id="organizer-{{ key }}-{{ event.id }}"
+                                       class="toggle-switch setting-toggle"
+                                       {% if notification_settings[key] == 1 or not notification_settings %}checked{% endif %}/>
+                                <label class="pull-right" for="organizer-{{ key }}-{{ event.id }}"></label>
+                            </div>
+                        {% endif %}
                     {% endfor %}
                 {% endif %}
 

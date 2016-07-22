@@ -1,4 +1,4 @@
-from flask.ext.restplus import Resource, Namespace
+from flask.ext.restplus import Namespace
 from sqlalchemy.orm.collections import InstrumentedList
 
 from app.helpers.notification_email_triggers import trigger_new_session_notifications, \
@@ -12,16 +12,16 @@ from app.models.session_type import SessionType as SessionTypeModel
 from app.helpers.data import record_activity
 from app.helpers.data_getter import DataGetter
 
-from .helpers.helpers import requires_auth, \
-    save_db_model, get_object_in_event, model_custom_form
+from .helpers.helpers import save_db_model, get_object_in_event, \
+    model_custom_form
 from .helpers.helpers import (
     can_create,
-    can_read,
     can_update,
     can_delete
 )
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO,\
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
+from .helpers.utils import Resource
 from .helpers import custom_fields as fields
 from .helpers.special_fields import SessionLanguageField, SessionStateField
 
@@ -100,10 +100,12 @@ class SessionTypeDAO(ServiceDAO):
     SessionType DAO
     added for import/export feature
     """
-    pass
+    version_key = 'sessions_ver'
 
 
 class SessionDAO(ServiceDAO):
+    version_key = 'sessions_ver'
+
     def _delete_fields(self, data):
         data = self._del(data, ['speaker_ids', 'track_id',
                          'microlocation_id', 'session_type_id'])
@@ -194,6 +196,7 @@ TypeDAO = SessionTypeDAO(SessionTypeModel, SESSION_TYPE_POST)
 @api.doc(responses=SERVICE_RESPONSES)
 class Session(Resource):
     @api.doc('get_session')
+    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
     @api.marshal_with(SESSION)
     def get(self, event_id, session_id):
         """Fetch a session given its id"""
@@ -218,6 +221,7 @@ class Session(Resource):
 @api.route('/events/<int:event_id>/sessions')
 class SessionList(Resource):
     @api.doc('list_sessions')
+    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
     @api.marshal_list_with(SESSION)
     def get(self, event_id):
         """List all sessions"""
@@ -241,6 +245,7 @@ class SessionList(Resource):
 @api.route('/events/<int:event_id>/sessions/page')
 class SessionListPaginated(Resource, PaginatedResourceBase):
     @api.doc('list_sessions_paginated', params=PAGE_PARAMS)
+    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
     @api.marshal_with(SESSION_PAGINATED)
     def get(self, event_id):
         """List sessions in a paginated manner"""
@@ -253,6 +258,7 @@ class SessionListPaginated(Resource, PaginatedResourceBase):
 @api.route('/events/<int:event_id>/sessions/types')
 class SessionTypeList(Resource):
     @api.doc('list_session_types')
+    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
     @api.marshal_list_with(SESSION_TYPE)
     def get(self, event_id):
         """List all session types"""
@@ -289,6 +295,7 @@ class SessionType(Resource):
         return TypeDAO.update(event_id, type_id, self.api.payload)
 
     @api.hide
+    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
     @api.marshal_with(SESSION_TYPE)
     def get(self, event_id, type_id):
         """Fetch a session type given its id"""

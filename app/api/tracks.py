@@ -1,17 +1,16 @@
-from flask.ext.restplus import Resource, Namespace
+from flask.ext.restplus import Namespace
 
 from app.models.track import Track as TrackModel
 
-from .helpers.helpers import requires_auth
 from .helpers.helpers import (
     can_create,
-    can_read,
     can_update,
     can_delete
 )
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
 from .helpers import custom_fields as fields
+from .helpers.utils import Resource
 
 api = Namespace('tracks', description='Tracks', path='/')
 
@@ -41,7 +40,7 @@ del TRACK_POST['sessions']
 
 # Create DAO
 class TrackDAO(ServiceDAO):
-    pass
+    version_key = 'tracks_ver'
 
 DAO = TrackDAO(TrackModel, TRACK_POST)
 
@@ -50,6 +49,7 @@ DAO = TrackDAO(TrackModel, TRACK_POST)
 @api.doc(responses=SERVICE_RESPONSES)
 class Track(Resource):
     @api.doc('get_track')
+    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
     @api.marshal_with(TRACK)
     def get(self, event_id, track_id):
         """Fetch a track given its id"""
@@ -74,6 +74,7 @@ class Track(Resource):
 @api.route('/events/<int:event_id>/tracks')
 class TrackList(Resource):
     @api.doc('list_tracks')
+    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
     @api.marshal_list_with(TRACK)
     def get(self, event_id):
         """List all tracks"""
@@ -95,6 +96,7 @@ class TrackList(Resource):
 @api.route('/events/<int:event_id>/tracks/page')
 class TrackListPaginated(Resource, PaginatedResourceBase):
     @api.doc('list_tracks_paginated', params=PAGE_PARAMS)
+    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
     @api.marshal_with(TRACK_PAGINATED)
     def get(self, event_id):
         """List tracks in a paginated manner"""

@@ -3,7 +3,6 @@ import itertools
 import bleach
 import diff_match_patch
 import re
-from HTMLParser import HTMLParser
 
 import unicodedata
 

@@ -91,7 +91,7 @@
                 </div>
                 <div class="item form-group">
                     <label>POSITION</label>
-                    <input type="text" class="form-control col-md-7 col-xs-12" name="index" value="{{current_page.index}}" />
+                    <input type="number" class="form-control col-md-7 col-xs-12" name="index" value="{{ current_page.index if current_page.index else '0' }}" />
                 </div>
                 <button class="btn btn-success">Update</button>
             </form>

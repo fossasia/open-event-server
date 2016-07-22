@@ -1,9 +1,8 @@
 from flask.ext import login
 from functools import wraps
-from flask import url_for, redirect, request
+from flask import redirect, request
 from flask.ext.restplus import abort
 
-from app.models.user import User
 from app.models.session import Session
 from app.models.microlocation import Microlocation
 from app.models.track import Track
@@ -14,7 +13,7 @@ from app.models.sponsor import Sponsor
 def is_super_admin(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        user = User.query.get(login.current_user.id)
+        user = login.current_user
         if user.is_super_admin is False:
             abort(403)
         return f(*args, **kwargs)
@@ -25,7 +24,7 @@ def is_super_admin(f):
 def is_admin(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        user = User.query.get(login.current_user.id)
+        user = login.current_user
         if user.is_admin is False:
             abort(403)
         return f(*args, **kwargs)
@@ -36,7 +35,7 @@ def is_admin(f):
 def is_organizer(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        user = User.query.get(login.current_user.id)
+        user = login.current_user
         event_id = kwargs['event_id']
         if user.is_staff is True:
             return f(*args, **kwargs)
@@ -50,7 +49,7 @@ def is_organizer(f):
 def is_coorganizer(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        user = User.query.get(login.current_user.id)
+        user = login.current_user
         event_id = kwargs['event_id']
         if user.is_staff is True:
             return f(*args, **kwargs)
@@ -64,7 +63,7 @@ def is_coorganizer(f):
 def is_track_organizer(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        user = User.query.get(login.current_user.id)
+        user = login.current_user
         event_id = kwargs['event_id']
         if user.is_staff is True:
             return f(*args, **kwargs)
@@ -78,7 +77,7 @@ def is_track_organizer(f):
 def is_moderator(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        user = User.query.get(login.current_user.id)
+        user = login.current_user
         event_id = kwargs['event_id']
         if user.is_staff is True:
             return f(*args, **kwargs)
@@ -92,7 +91,7 @@ def is_moderator(f):
 def can_accept_and_reject(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        user = User.query.get(login.current_user.id)
+        user = login.current_user
         event_id = kwargs['event_id']
         if user.is_staff is True:
             return f(*args, **kwargs)
@@ -106,7 +105,7 @@ def can_accept_and_reject(f):
 def can_access(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        user = User.query.get(login.current_user.id)
+        user = login.current_user
         event_id = kwargs['event_id']
         url = request.url
         if user.is_staff is True:

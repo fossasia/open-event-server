@@ -9,6 +9,7 @@ from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models.microlocation import Microlocation
 from app.models.user import User
+from app.models.message_settings import MessageSettings
 
 
 class ObjectMother(object):
@@ -70,3 +71,9 @@ class ObjectMother(object):
                             announcement="Hello there!",
                             event_id=event_id)
 
+    @staticmethod
+    def get_message_settings():
+        return MessageSettings(action="Next Event",
+                               mail_status=1,
+                               notif_status=1,
+                               user_control_status=1)

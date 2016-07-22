@@ -112,7 +112,8 @@ class TestPutApiMin(TestPutApiBase):
                 olddata = ''.join(sorted(json.dumps(olddata)))
             # compare
             if i != field and newdata != olddata:
-                return i
+                if i != 'version':  # event api version changes always
+                    return i
         return False
 
     def _test_model(self, name, data, path=None, exclude=[]):

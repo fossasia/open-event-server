@@ -111,7 +111,6 @@ class TestEvents(OpenEventViewTestCase):
             self.assertTrue('EditTestName' in rv.data, msg=rv.data)
             self.assertTrue(data['sponsors[name]'] in rv.data, msg=rv.data)
 
-
     def test_event_view(self):
         with app.test_request_context():
             event = ObjectMother.get_event()

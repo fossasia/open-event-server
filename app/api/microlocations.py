@@ -1,16 +1,15 @@
-from flask.ext.restplus import Resource, Namespace
+from flask.ext.restplus import Namespace
 
 from app.models.microlocation import Microlocation as MicrolocationModel
 
-from .helpers.helpers import requires_auth
 from .helpers.helpers import (
     can_create,
-    can_read,
     can_update,
     can_delete
 )
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
+from .helpers.utils import Resource
 from .helpers import custom_fields as fields
 
 api = Namespace('microlocations', description='Microlocations', path='/')
@@ -34,7 +33,7 @@ del MICROLOCATION_POST['id']
 
 # Create DAO
 class MicrolocationDAO(ServiceDAO):
-    pass
+    version_key = 'microlocations_ver'
 
 DAO = MicrolocationDAO(MicrolocationModel, MICROLOCATION_POST)
 
@@ -43,6 +42,7 @@ DAO = MicrolocationDAO(MicrolocationModel, MICROLOCATION_POST)
 @api.doc(responses=SERVICE_RESPONSES)
 class Microlocation(Resource):
     @api.doc('get_microlocation')
+    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
     @api.marshal_with(MICROLOCATION)
     def get(self, event_id, microlocation_id):
         """Fetch a microlocation given its id"""
@@ -67,6 +67,7 @@ class Microlocation(Resource):
 @api.route('/events/<int:event_id>/microlocations')
 class MicrolocationList(Resource):
     @api.doc('list_microlocations')
+    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
     @api.marshal_list_with(MICROLOCATION)
     def get(self, event_id):
         """List all microlocations"""
@@ -88,6 +89,7 @@ class MicrolocationList(Resource):
 @api.route('/events/<int:event_id>/microlocations/page')
 class MicrolocationListPaginated(Resource, PaginatedResourceBase):
     @api.doc('list_microlocations_paginated', params=PAGE_PARAMS)
+    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
     @api.marshal_with(MICROLOCATION_PAGINATED)
     def get(self, event_id):
         """List microlocations in a paginated manner"""

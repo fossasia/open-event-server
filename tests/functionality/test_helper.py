@@ -29,16 +29,19 @@ class TestDataManager(OpenEventTestCase):
 
     def test_update_version_function(self):
         with app.test_request_context():
-            update_version(1, True, "tracks_ver")
-            self.assertEqual(Version.query.get(1).id, 1)
-            self.assertEqual(Version.query.get(1).tracks_ver, 0)
             update_version(1, False, "tracks_ver")
-            self.assertEqual(Version.query.get(2).tracks_ver, 1)
+            self.assertEqual(Version.query.get(1).id, 1)
+            # tracks_ver was 0 at start
+            self.assertEqual(Version.query.get(1).tracks_ver, 1)
+            update_version(1, False, "tracks_ver")
+            self.assertEqual(Version.query.get(1).tracks_ver, 2)
+            self.assertEqual(Version.query.get(2), None)
 
-    def test_increasing_version_after_update_version_called(self):
+    def test_no_increasing_version_after_update_version_called(self):
         with app.test_request_context():
-            self.assertEqual(len(Version.query.all()), 0)
-            update_version(1, True, "tracks_ver")
+            # as event has been created so version is already created
+            self.assertEqual(len(Version.query.all()), 1)
+            update_version(1, False, "tracks_ver")
             self.assertEqual(len(Version.query.all()), 1)
 
 

@@ -1,5 +1,3 @@
-import json
-
 import flask_login
 from flask import flash
 from app.api import api
@@ -12,7 +10,7 @@ class ExportView(BaseView):
 
     @expose('/')
     @flask_login.login_required
-    def display_api_view(self, event_id):
+    def display_export_view(self, event_id):
         event = DataGetter.get_event(event_id)
         if not is_verified_user():
             flash("Your account is unverified. "

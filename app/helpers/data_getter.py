@@ -10,10 +10,10 @@ from ..models.event import Event, EventsUsers
 from ..models.session import Session
 # User Notifications
 from ..models.notifications import Notification
+from ..models.message_settings import MessageSettings
 from ..models.track import Track
 from ..models.invite import Invite
 from ..models.speaker import Speaker
-from ..models.setting import Setting
 from ..models.email_notifications import EmailNotification
 from ..models.sponsor import Sponsor
 from ..models.microlocation import Microlocation
@@ -601,10 +601,24 @@ class DataGetter:
 
     @staticmethod
     def get_page_by_url(url):
-        results =  Page.query.filter_by(url=url)
+        results = Page.query.filter_by(url=url)
         if results:
             return results.one()
         return results
+
+    @staticmethod
+    def get_all_message_setting():
+        settings_list = MessageSettings.query.all()
+        all_settings = {}
+        for index, d in enumerate(settings_list):
+            all_settings[settings_list[index].action] = {'mail_status': settings_list[index].mail_status,
+                                                         'notif_status': settings_list[index].notif_status,
+                                                         'user_control_status': settings_list[index].user_control_status}
+        return all_settings
+
+    @staticmethod
+    def get_message_setting_by_action(action):
+        return MessageSettings.query.filter_by(action=action).first()
 
     @staticmethod
     def get_locations_of_events():

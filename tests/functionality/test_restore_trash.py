@@ -1,15 +1,14 @@
 import unittest
 from datetime import datetime
-from tests.auth_helper import register, login
+from tests.auth_helper import login
 from tests.utils import OpenEventTestCase
 from tests.setup_database import Setup
 from tests.object_mother import ObjectMother
 from app import current_app as app
 from app.helpers.data import save_to_db
-from app.helpers.data_getter import DataGetter
 from flask import url_for
 from app.models.event import Event
-from app.helpers.data import DataManager, trash_user, trash_session, restore_event, restore_session, restore_user
+from app.helpers.data import DataManager, trash_session, restore_event, restore_session, restore_user
 from app.models.user import User
 from app.models.session import Session
 

@@ -53,6 +53,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**schedule\_published\_on** | string | Optional | Public |
 |**creator** | **EventCreator** | Required | Public |
 |**social_links** | **EventSocial** | Optional | Public |
+|**version** | **EventVersion** | Optional | Public |
 
 
 #### EventCreator
@@ -69,6 +70,17 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**id** | integer | Required |
 |**name** | string | Required |
 |**link** | string | Required |
+
+#### EventVersion
+
+| Field | Datatype | Requirement |
+| --- | --- | --- |
+|**event_ver** | integer | Required |
+|**sessions_ver** | integer | Required |
+|**speakers_ver** | integer | Required |
+|**tracks_ver** | integer | Required |
+|**sponsors_ver** | integer | Required |
+|**microlocations_ver** | integer | Required |
 
 
 ### 2. Microlocation

@@ -1,4 +1,4 @@
-from flask.ext.restplus import Resource, Namespace, reqparse, marshal
+from flask.ext.restplus import Namespace, reqparse, marshal
 from flask import g
 
 from app.api.microlocations import MICROLOCATION
@@ -18,6 +18,7 @@ from .helpers.helpers import requires_auth, parse_args, \
     can_access, fake_marshal_with, fake_marshal_list_with, erase_from_dict
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, BaseDAO, ServiceDAO
+from .helpers.utils import Resource
 from .helpers import custom_fields as fields
 from helpers.special_fields import EventTypeField, EventTopicField, \
     EventPrivacyField, EventSubTopicField
@@ -36,6 +37,15 @@ EVENT_COPYRIGHT = api.model('EventCopyright', {
     'licence_url': fields.Uri(),
     'year': fields.Integer(),
     'logo': fields.String()
+})
+
+EVENT_VERSION = api.model('EventVersion', {
+    'event_ver': fields.Integer(),
+    'sessions_ver': fields.Integer(),
+    'speakers_ver': fields.Integer(),
+    'tracks_ver': fields.Integer(),
+    'sponsors_ver': fields.Integer(),
+    'microlocations_ver': fields.Integer()
 })
 
 SOCIAL_LINK = api.model('SocialLink', {
@@ -76,6 +86,7 @@ EVENT = api.model('Event', {
     'schedule_published_on': fields.DateTime(),
     'code_of_conduct': fields.String(),
     'social_links': fields.List(fields.Nested(SOCIAL_LINK), attribute='social_link', required=False),
+    'version': fields.Nested(EVENT_VERSION)
 })
 
 EVENT_COMPLETE = api.clone('EventComplete', EVENT, {
@@ -94,6 +105,7 @@ EVENT_POST = api.clone('EventPost', EVENT)
 del EVENT_POST['id']
 del EVENT_POST['creator']
 del EVENT_POST['social_links']
+del EVENT_POST['version']
 
 
 # ###################
@@ -105,13 +117,14 @@ class SocialLinkDAO(ServiceDAO):
     """
     Social Link DAO
     """
-    pass
+    version_key = 'event_ver'
 
 
 class EventDAO(BaseDAO):
     """
     Event DAO
     """
+    version_key = 'event_ver'
 
     def fix_payload(self, data):
         """
@@ -142,11 +155,6 @@ class EventDAO(BaseDAO):
         role = Role.query.filter_by(name=ORGANIZER).first()
         uer = UsersEventsRoles(g.user, new_event, role)
         save_to_db(uer, 'UER saved')
-        update_version(
-            event_id=new_event.id,
-            is_created=True,
-            column_to_increment="event_ver"
-        )
         # Return created resource with a 201 status code and its Location
         # (url) in the header.
         resource_location = url + '/' + str(new_event.id)
@@ -238,16 +246,18 @@ class EventResource():
     event_parser.add_argument('time_period', type=str, dest='__event_time_period')
     event_parser.add_argument('include', type=str)
 
+
 class SingleEventResource():
     event_parser = reqparse.RequestParser()
     event_parser.add_argument('include', type=str)
+
 
 @api.route('/<int:event_id>')
 @api.param('event_id')
 @api.response(404, 'Event not found')
 class Event(Resource, SingleEventResource):
-
     @api.doc('get_event', params=SINGLE_EVENT_PARAMS)
+    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
     @fake_marshal_with(EVENT_COMPLETE)  # Fake marshal decorator to add response model to swagger doc
     def get(self, event_id):
         """Fetch an event given its id"""
@@ -279,6 +289,7 @@ class Event(Resource, SingleEventResource):
 @api.response(404, 'Event not found')
 class EventWebapp(Resource, SingleEventResource):
     @api.doc('get_event_for_webapp')
+    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
     @fake_marshal_with(EVENT_COMPLETE)  # Fake marshal decorator to add response model to swagger doc
     def get(self, event_id):
         """Fetch an event given its id.
@@ -287,9 +298,11 @@ class EventWebapp(Resource, SingleEventResource):
         includes = parse_args(self.event_parser).get('include', '').split(',')
         return marshal(DAO.get(event_id), get_extended_event_model(includes))
 
+
 @api.route('')
 class EventList(Resource, EventResource):
     @api.doc('list_events', params=EVENT_PARAMS)
+    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
     @fake_marshal_list_with(EVENT_COMPLETE)
     def get(self):
         """List all events"""
@@ -313,6 +326,7 @@ class EventList(Resource, EventResource):
 class EventListPaginated(Resource, PaginatedResourceBase, EventResource):
     @api.doc('list_events_paginated', params=PAGE_PARAMS)
     @api.doc(params=EVENT_PARAMS)
+    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
     @api.marshal_with(EVENT_PAGINATED)
     def get(self):
         """List events in a paginated manner"""
@@ -324,6 +338,7 @@ class EventListPaginated(Resource, PaginatedResourceBase, EventResource):
 @api.param('event_id')
 class SocialLinkList(Resource):
     @api.doc('list_social_links')
+    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
     @api.marshal_list_with(SOCIAL_LINK)
     def get(self, event_id):
         """List all social links"""
@@ -360,8 +375,8 @@ class SocialLink(Resource):
         return LinkDAO.update(event_id, link_id, self.api.payload)
 
     @api.hide
+    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
     @api.marshal_with(SOCIAL_LINK)
     def get(self, event_id, link_id):
         """Fetch a social link given its id"""
         return LinkDAO.get(event_id, link_id)
-

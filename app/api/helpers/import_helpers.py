@@ -13,6 +13,7 @@ from app.helpers.storage import UploadedFile, upload, UploadedMemory, \
     UPLOAD_PATHS
 from app.helpers.data import save_to_db
 from app.helpers.helpers import update_state
+from app.helpers.update_version import VersionUpdater
 
 from ..events import DAO as EventDAO, LinkDAO as SocialLinkDAO
 from ..microlocations import DAO as MicrolocationDAO
@@ -300,6 +301,7 @@ def import_event_json(task_handle, zip_path):
         srv = ('event', EventDAO)
         data = _delete_fields(srv, data)
         new_event = EventDAO.create(data, 'dont')[0]
+        version_data = data.get('version', {})
         _upload_media_queue(srv, new_event)
     except BaseError as e:
         raise make_error('event', er=e)
@@ -329,6 +331,8 @@ def import_event_json(task_handle, zip_path):
         raise make_error(item[0], id_=CUR_ID)
     # run uploads
     _upload_media(task_handle, new_event.id, path)
+    # set version
+    VersionUpdater(False, new_event.id, '').set(version_data)
     # return
     return new_event
 

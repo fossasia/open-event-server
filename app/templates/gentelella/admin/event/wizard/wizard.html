@@ -78,7 +78,7 @@
                                 </a>
                                 <span class="description hidden-xs">Sponsors</span>
                             </li>
-                            <li {% if step == 'sessions-tracks-rooms' %}class="active"{% endif %}>
+                            <li {% if step == 'sessions-tracks-rooms' or step == 'call-for-speakers' or step == 'form-customization' %}class="active"{% endif %}>
                                 <a href="#step3" data-toggle="tab" title="Session, Tracks, Rooms"
                                    data-href="./sessions-tracks-rooms">
                                     <span class="round-tab">
@@ -88,24 +88,6 @@
                                 <span class="description hidden-xs">Session, Tracks, Rooms</span>
                             </li>
 
-                            <li {% if step == 'call-for-speakers' %}class="active"{% endif %}>
-                                <a href="#step4" data-toggle="tab" title="Call for Speakers"
-                                   data-href="./call-for-speakers">
-                                    <span class="round-tab">
-                                        <i class="fa fa-bullhorn"></i>
-                                    </span>
-                                </a>
-                                <span class="description hidden-xs">Call for Speakers</span>
-                            </li>
-                            <li {% if step == 'form-customization' %}class="active"{% endif %}>
-                                <a href="#step5" data-toggle="tab" title="Create session forms"
-                                   data-href="./form-customization">
-                                    <span class="round-tab">
-                                        <i class="fa fa-check-square-o"></i>
-                                    </span>
-                                </a>
-                                <span class="description hidden-xs">Create session forms</span>
-                            </li>
 
                         </ul>
                     </div>
@@ -130,24 +112,18 @@
                                     {{ button_bar() }}
                                 </div>
                             </div>
-                            <div class="tab-pane fade {% if step == 'sessions-tracks-rooms' %}in active{% endif %}"
+                            <div class="tab-pane fade {% if step == 'sessions-tracks-rooms' or step == 'call-for-speakers' or step == 'form-customization' %}in active{% endif %}"
                                  id="step3">
                                 {% include 'gentelella/admin/event/wizard/step-3.html' %}
-                                <div class="col-md-10 col-md-push-1">
-                                    {{ button_bar() }}
+                                <div class="col-md-12">
+                                    <hr>
                                 </div>
-                            </div>
-                            <div class="tab-pane fade {% if step == 'call-for-speakers' %}in active{% endif %}"
-                                 id="step4">
                                 {% include 'gentelella/admin/event/wizard/step-4.html' %}
-                                <div class="col-md-6 col-xs-12 col-md-offset-3">
-                                    {{ button_bar() }}
+                                <div class="col-md-12">
+                                    <hr>
                                 </div>
-                            </div>
-                            <div class="tab-pane fade {% if step == 'form-customization' %}in active{% endif %}"
-                                 id="step5">
                                 {% include 'gentelella/admin/event/wizard/step-5.html' %}
-                                <div class="col-md-8 col-xs-12 col-md-offset-2">
+                                <div class="col-md-10 col-md-push-1">
                                     {{ button_bar(show_next=false) }}
                                 </div>
                             </div>

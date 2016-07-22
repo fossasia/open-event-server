@@ -206,8 +206,6 @@ def save_db_model(new_model, model_name, event_id=None):
     Save a new/modified model to database
     """
     save_to_db(new_model, "Model %s saved" % model_name)
-    if not event_id:
-        update_version(event_id, False, "session_ver")
     return new_model
 
 
@@ -222,8 +220,6 @@ def create_model(model, data, event_id=None):
         data['event_id'] = event_id
     new_model = model(**data)
     save_to_db(new_model, "Model %s saved" % model.__name__)
-    if event_id:
-        update_version(event_id, False, "session_ver")
     return new_model
 
 
@@ -260,8 +256,6 @@ def update_model(model, item_id, data, event_id=None):
     db.session.query(model).filter_by(id=item_id).update(dict(data))
     # model.__table__.update().where(model.id==item_id).values(**data)
     save_to_db(item, "%s updated" % model.__name__)
-    if event_id:
-        update_version(event_id, False, "session_ver")
     return item
 
 

@@ -24,7 +24,8 @@ Manage Roles
         <thead>
         <tr>
             <th style="display: none;">Status</th>
-            <th>User Email</th>
+            <th style="display: none;">User Email</th>
+            <th>User (Email)</th>
             <th>Role</th>
             <th>Options</th>
 
@@ -34,14 +35,22 @@ Manage Roles
         {% for role in event.roles %}
         <tr>
             <td style="display: none;">accepted</td>
-            <td>{{role.user.email}}</td>
+            <td style="display: none;">{{ role.user.email }}</td>
+            <td>
+                {% if not role.user.user_detail.fullname %}
+                    {{ role.user.email }}
+                {% else %}
+                    {{ role.user.user_detail.fullname }}
+                    <span style="color: #a9a9a9;">({{ role.user.email }})</span>
+                {% endif %}
+            </td>
             <td>{{ role.role.title_name }}</td>
             <td>
               {% if role.role.name != 'organizer' %}
-                <a class="icon" title="Edit Role" data-toggle="modal" data-target="#edit-role-{{role.id}}">
+                <a title="Edit Role" data-toggle="modal" data-target="#edit-role-{{role.id}}" style="cursor: pointer;">
                     <span class="glyphicon glyphicon-pencil"></span>
                 </a>
-                <a title="Delete record" onclick="return confirm('Are you sure you want to delete this record?');" href="{{ get_url('event_roles.delete_view', event_id=event.id,uer_id=role.id)}}">
+                <a title="Delete Role" onclick="return confirm('Are you sure you want to delete this record?');" href="{{ get_url('event_roles.delete_view', event_id=event.id,uer_id=role.id)}}">
                     <span class="glyphicon glyphicon-trash"></span>
                 </a>
                 {{editrole(event, role)}}
@@ -52,6 +61,7 @@ Manage Roles
         {% for invite in event.role_invites %}
         <tr>
             <td style="display:none;">invited</td>
+            <td style="display:none;">{{ invite.email }}</td>
             <td>{{ invite.email }}</td>
             <td>{{ invite.role.title_name }}</td>
             <td>
@@ -94,24 +104,30 @@ Manage Roles
                 <h4 class="modal-title">Add Role</h4>
             </div>
             <div class="modal-body">
-                <form action="/events/{{event.id}}/roles/new/" method="POST" role="form">
+                <div class="alert alert-danger" style="color: #FFFFFF;display: none;" id="add-role-alert-box">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <span></span>
+                </div>
+                <form action="/events/{{event.id}}/roles/new/" method="POST" role="form" id="add-role-form">
                     <p>
                         <label>User email:</label>
                         <input name="user_email" type="email" placeholder="User" class="form-control" required="">
                     </p>
-                    <p> <label>Permissions:</label>
+                    <p> <label>Role:</label>
                         <select name="user_role" id="heard" class="form-control" required="">
                             <option value="">Choose..</option>
                             <option value="track_organizer">Track Organizer</option>
                             <option value="coorganizer">Co-organizer</option>
                             <option value="moderator">Moderator</option>
                         </select>
+                    </p><br>
+                    <p class="pull-right">
+                        <button type="submit" class="btn btn-success">Add Role</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </p>
-                    <button type="submit" class="btn btn-success">Add</button>
                 </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

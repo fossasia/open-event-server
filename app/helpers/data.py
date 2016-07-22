@@ -3,7 +3,6 @@ import json
 import logging
 import os.path
 import random
-import time
 import traceback
 from datetime import datetime, timedelta
 
@@ -18,7 +17,7 @@ from werkzeug import secure_filename
 from werkzeug.datastructures import ImmutableMultiDict
 from wtforms import ValidationError
 
-from app.helpers.helpers import string_empty, string_not_empty
+from app.helpers.helpers import string_empty, string_not_empty, uploaded_file
 from app.helpers.notification_email_triggers import trigger_new_session_notifications, \
     trigger_session_state_change_notifications
 from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth
@@ -28,6 +27,7 @@ from ..helpers import helpers as Helper
 from ..helpers.data_getter import DataGetter
 from ..helpers.static import EVENT_LICENCES
 from ..helpers.update_version import VersionUpdater
+from ..helpers.system_mails import MAILS
 from ..models import db
 from ..models.activity import Activity, ACTIVITIES
 from ..models.call_for_papers import CallForPaper
@@ -54,6 +54,7 @@ from ..models.users_events_roles import UsersEventsRoles
 from ..models.page import Page
 from ..models.modules import Module
 from ..models.email_notifications import EmailNotification
+from ..models.message_settings import MessageSettings
 
 
 class DataManager(object):
@@ -271,7 +272,7 @@ class DataManager(object):
         new_session.track = form.track.data
         save_to_db(new_session, "Session saved")
         record_activity('create_session', session=new_session, event_id=event_id)
-        update_version(event_id, False, "session_ver")
+        update_version(event_id, False, "sessions_ver")
 
     @staticmethod
     def add_session_to_event(request, event_id, state=None):
@@ -477,84 +478,88 @@ class DataManager(object):
 
     @staticmethod
     def edit_session(request, session):
-        form = request.form
-        event_id = session.event_id
+        with db.session.no_autoflush:
+            form = request.form
+            event_id = session.event_id
 
-        slide_file = ""
-        video_file = ""
-        audio_file = ""
-        if 'slides' in request.files and request.files['slides'].filename != '':
-            slide_file = request.files['slides']
-        if 'video' in request.files and request.files['video'].filename != '':
-            video_file = request.files['video']
-        if 'audio' in request.files and request.files['audio'].filename != '':
-            audio_file = request.files['audio']
+            slide_file = ""
+            video_file = ""
+            audio_file = ""
+            if 'slides' in request.files and request.files['slides'].filename != '':
+                slide_file = request.files['slides']
+            if 'video' in request.files and request.files['video'].filename != '':
+                video_file = request.files['video']
+            if 'audio' in request.files and request.files['audio'].filename != '':
+                audio_file = request.files['audio']
 
-        form_state = form.get('state', 'draft')
+            form_state = form.get('state', 'draft')
 
-        if slide_file != "":
-            slide_url = upload(
-                slide_file,
-                UPLOAD_PATHS['sessions']['slides'].format(
-                    event_id=int(event_id), id=int(session.id)
-                ))
-            session.slides = slide_url
+            if slide_file != "":
+                slide_url = upload(
+                    slide_file,
+                    UPLOAD_PATHS['sessions']['slides'].format(
+                        event_id=int(event_id), id=int(session.id)
+                    ))
+                session.slides = slide_url
 
-        if audio_file != "":
-            audio_url = upload(
-                audio_file,
-                UPLOAD_PATHS['sessions']['audio'].format(
-                    event_id=int(event_id), id=int(session.id)
-                ))
-            session.audio = audio_url
-        if video_file != "":
-            video_url = upload(
-                video_file,
-                UPLOAD_PATHS['sessions']['video'].format(
-                    event_id=int(event_id), id=int(session.id)
-                ))
-            session.video = video_url
+            if audio_file != "":
+                audio_url = upload(
+                    audio_file,
+                    UPLOAD_PATHS['sessions']['audio'].format(
+                        event_id=int(event_id), id=int(session.id)
+                    ))
+                session.audio = audio_url
+            if video_file != "":
+                video_url = upload(
+                    video_file,
+                    UPLOAD_PATHS['sessions']['video'].format(
+                        event_id=int(event_id), id=int(session.id)
+                    ))
+                session.video = video_url
 
-        if form_state == 'pending' and session.state != 'pending' and session.state != 'accepted' and session.state != 'rejected':
-            trigger_new_session_notifications(session.id, event_id=event_id)
+            if form_state == 'pending' and session.state != 'pending' and session.state != 'accepted' and session.state != 'rejected':
+                trigger_new_session_notifications(session.id, event_id=event_id)
 
-        session.title = form.get('title', '')
-        session.subtitle = form.get('subtitle', '')
-        session.long_abstract = form.get('long_abstract', '')
-        session.short_abstract = form.get('short_abstract', '')
+            session.title = form.get('title', '')
+            session.subtitle = form.get('subtitle', '')
+            session.long_abstract = form.get('long_abstract', '')
+            session.short_abstract = form.get('short_abstract', '')
 
-        if form.get('track', None) != "":
-            session.track_id = form.get('track', None)
-        else:
-            session.track_id = None
+            if form.get('track', None) != "":
+                session.track_id = form.get('track', None)
+            else:
+                session.track_id = None
 
-        if form.get('session_type', None) != "":
-            session.session_type_id = form.get('session_type', None)
-        else:
-            session.session_type_id = None
+            if form.get('session_type', None) != "":
+                session.session_type_id = form.get('session_type', None)
+            else:
+                session.session_type_id = None
 
-        existing_speaker_ids = form.getlist("speakers[]")
-        current_speaker_ids = []
-        existing_speaker_ids_by_email = []
+            existing_speaker_ids = form.getlist("speakers[]")
+            current_speaker_ids = []
+            existing_speaker_ids_by_email = []
 
-        for existing_speaker in DataGetter.get_speaker_by_email(form.get("email")).all():
-            existing_speaker_ids_by_email.append(str(existing_speaker.id))
+            save_to_db(session, 'Session Updated')
 
-        for current_speaker in session.speakers:
-            current_speaker_ids.append(str(current_speaker.id))
+            for existing_speaker in DataGetter.get_speaker_by_email(form.get("email")).all():
+                existing_speaker_ids_by_email.append(str(existing_speaker.id))
 
-        for current_speaker_id in current_speaker_ids:
-            if current_speaker_id not in existing_speaker_ids and current_speaker_id not in existing_speaker_ids_by_email:
-                current_speaker = DataGetter.get_speaker(current_speaker_id)
-                session.speakers.remove(current_speaker)
+            for current_speaker in session.speakers:
+                current_speaker_ids.append(str(current_speaker.id))
 
-        for existing_speaker_id in existing_speaker_ids:
-            existing_speaker = DataGetter.get_speaker(existing_speaker_id)
-            if existing_speaker not in session.speakers:
-                session.speakers.append(existing_speaker)
+            for current_speaker_id in current_speaker_ids:
+                if current_speaker_id not in existing_speaker_ids and current_speaker_id not in existing_speaker_ids_by_email:
+                    current_speaker = DataGetter.get_speaker(current_speaker_id)
+                    session.speakers.remove(current_speaker)
+                    db.session.commit()
 
-        save_to_db(session, 'Session Updated')
-        record_activity('update_session', session=session, event_id=event_id)
+            for existing_speaker_id in existing_speaker_ids:
+                existing_speaker = DataGetter.get_speaker(existing_speaker_id)
+                if existing_speaker not in session.speakers:
+                    session.speakers.append(existing_speaker)
+                    db.session.commit()
+
+            record_activity('update_session', session=session, event_id=event_id)
 
     @staticmethod
     def update_session(form, session):
@@ -577,7 +582,7 @@ class DataManager(object):
         session.microlocation = microlocation
         session.track = track
         save_to_db(session, "Session updated")
-        update_version(session.event_id, False, "session_ver")
+        update_version(session.event_id, False, "sessions_ver")
         record_activity('update_session', session=session, event_id=session.event_id)
 
     @staticmethod
@@ -718,7 +723,6 @@ class DataManager(object):
         """
         data = form.data
         if "session" in data.keys():
-            session = data["session"]
             del data["session"]
         db.session.query(Microlocation) \
             .filter_by(id=microlocation.id) \
@@ -791,15 +795,35 @@ class DataManager(object):
         if user.email != form['email']:
             record_activity('update_user_email',
                             user_id=user.id, old=user.email, new=form['email'])
-        user.email = form['email']
+        if user.email != form['email']:
+            user.is_verified = False
+            s = Helper.get_serializer()
+            data = [form['email']]
+            form_hash = s.dumps(data)
+            link = url_for('admin.create_account_after_confirmation_view', hash=form_hash, _external=True)
+            Helper.send_email_when_changes_email(user.email, form['email'])
+            Helper.send_email_confirmation(form, link)
+            user.email = form['email']
         user_detail.fullname = form['full_name']
-        user_detail.facebook = form['facebook']
         user_detail.contact = form['contact']
-        user_detail.twitter = form['twitter']
+
+        if form['facebook'] != 'https://www.facebook.com/':
+            user_detail.facebook = form['facebook']
+        else:
+            user_detail.facebook = ''
+
+        if form['twitter'] != 'https://twitter.com/':
+            user_detail.twitter = form['twitter']
+        else:
+            user_detail.twitter = ''
+
         user_detail.details = form['details']
-        if avatar_img != "":
-            user_detail.avatar_uploaded = avatar_img
-        print user, user_detail, save_to_db(user, "User updated")
+        logo = form.get('logo', None)
+        if string_not_empty(logo) and logo:
+            logo_file = uploaded_file(file_content=logo)
+            logo = upload(logo_file, 'users/%d/avatar' % int(user_id))
+            user_detail.avatar_uploaded = logo
+        user, user_detail, save_to_db(user, "User updated")
         record_activity('update_user', user=user)
 
     @staticmethod
@@ -925,12 +949,7 @@ class DataManager(object):
 
             background_image = form['background_url']
             if string_not_empty(background_image):
-                filename = str(time.time()) + '.png'
-                file_path = os.path.realpath('.') + '/static/temp/' + filename
-                fh = open(file_path, "wb")
-                fh.write(background_image.split(",")[1].decode('base64'))
-                fh.close()
-                background_file = UploadedFile(file_path, filename)
+                background_file = uploaded_file(file_content=background_image)
                 background_url = upload(
                     background_file,
                     UPLOAD_PATHS['event']['background_url'].format(
@@ -940,12 +959,7 @@ class DataManager(object):
 
             logo = form['logo']
             if string_not_empty(logo):
-                filename = str(time.time()) + '.png'
-                file_path = os.path.realpath('.') + '/static/temp/' + filename
-                fh = open(file_path, "wb")
-                fh.write(logo.split(",")[1].decode('base64'))
-                fh.close()
-                logo_file = UploadedFile(file_path, filename)
+                logo_file = uploaded_file(file_content=logo)
                 logo = upload(
                     logo_file,
                     UPLOAD_PATHS['event']['logo'].format(
@@ -1098,7 +1112,6 @@ class DataManager(object):
         """
         form = request.form
         event.name = form['name']
-        event.logo = form['logo']
         event.start_time = datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M')
         event.end_time = datetime.strptime(form['end_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M')
         event.timezone = form['timezone']
@@ -1151,12 +1164,7 @@ class DataManager(object):
 
         background_image = form['background_url']
         if string_not_empty(background_image):
-            filename = str(time.time()) + '.png'
-            file_path = os.path.realpath('.') + '/static/temp/' + filename
-            fh = open(file_path, "wb")
-            fh.write(background_image.split(",")[1].decode('base64'))
-            fh.close()
-            background_file = UploadedFile(file_path, filename)
+            background_file = uploaded_file(file_content=background_image)
             background_url = upload(
                 background_file,
                 UPLOAD_PATHS['event']['background_url'].format(
@@ -1166,12 +1174,7 @@ class DataManager(object):
 
         logo = form['logo']
         if string_not_empty(logo):
-            filename = str(time.time()) + '.png'
-            file_path = os.path.realpath('.') + '/static/temp/' + filename
-            fh = open(file_path, "wb")
-            fh.write(logo.split(",")[1].decode('base64'))
-            fh.close()
-            logo_file = UploadedFile(file_path, filename)
+            logo_file = uploaded_file(file_content=logo)
             logo = upload(
                 logo_file,
                 UPLOAD_PATHS['event']['logo'].format(
@@ -1457,6 +1460,27 @@ class DataManager(object):
         page.place = form.get('place', '')
         page.index = form.get('index', '')
         save_to_db(page, "Page updated")
+
+
+    @staticmethod
+    def create_or_update_message_settings(form):
+
+        for mail in MAILS:
+            mail_status = 1 if form.get(mail+'_mail_status', 'off') == 'on' else 0
+            notif_status = 1 if form.get(mail+'_notif_status', 'off') == 'on' else 0
+            user_control_status = 1 if form.get(mail+'_user_control_status', 'off') == 'on' else 0
+            message_setting = MessageSettings.query.filter_by(action=mail).first()
+            if message_setting:
+                message_setting.mail_status = mail_status
+                message_setting.notif_status = notif_status
+                message_setting.user_control_status = user_control_status
+                save_to_db(message_setting, "Message Settings Updated")
+            else:
+                message_setting = MessageSettings(action=mail,
+                                                  mail_status=mail_status,
+                                                  notif_status=notif_status,
+                                                  user_control_status=user_control_status)
+                save_to_db(message_setting, "Message Settings Updated")
 
 
 def save_to_db(item, msg="Saved to db", print_error=True):

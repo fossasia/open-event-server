@@ -32,8 +32,8 @@
             <div class="col-md-6 col-xs-6">
                 <label >Facebook:
                 </label>
-                <input type="url" pattern="https?://.+facebook\..+" name="facebook" class="form-control"
-                       value="{{profile.user_detail.facebook|default('', true)}}" title="Not a valid facebook profile link"/>
+                <input type="url" pattern="https?://.*facebook\..+" name="facebook" class="form-control"
+                       value="{{profile.user_detail.facebook|default('https://www.facebook.com/', true)}}" title="Not a valid facebook profile link"/>
             </div>
 
         </div>
@@ -41,7 +41,7 @@
             <div class="col-md-6 col-xs-6">
             <label >Twitter:
                 </label>
-                <input type="url" pattern="https?://.+twitter\..+" name="twitter" class="form-control" value="{{profile.user_detail.twitter|default('', true)}}" title="Not a valid twitter profile link"/>
+                <input type="url" pattern="https?://.*twitter\..+" name="twitter" class="form-control" value="{{profile.user_detail.twitter|default('https://twitter.com/', true)}}" title="Not a valid twitter profile link"/>
             </div>
         </div>
         <div class="row" style="margin-bottom:20px">
@@ -59,13 +59,12 @@
     <div class="btn-toolbar" data-role="editor-toolbar"
         data-target="#editor">
     </div>
+    </div>
 
 <script>
 $(document).ready(function() {
   $('#summernote').summernote(summernoteConfig);
+  $('#summernote').val("");
 
-$('#summernote').val("");
 });
-
 </script>
-
