@@ -268,7 +268,7 @@ class DataManager(object):
         new_session.track = form.track.data
         save_to_db(new_session, "Session saved")
         record_activity('create_session', session=new_session, event_id=event_id)
-        update_version(event_id, False, "session_ver")
+        update_version(event_id, False, "sessions_ver")
 
     @staticmethod
     def add_session_to_event(request, event_id, state=None):
@@ -573,7 +573,7 @@ class DataManager(object):
         session.microlocation = microlocation
         session.track = track
         save_to_db(session, "Session updated")
-        update_version(session.event_id, False, "session_ver")
+        update_version(session.event_id, False, "sessions_ver")
         record_activity('update_session', session=session, event_id=session.event_id)
 
     @staticmethod

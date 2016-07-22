@@ -41,7 +41,7 @@ EVENT_COPYRIGHT = api.model('EventCopyright', {
 
 EVENT_VERSION = api.model('EventVersion', {
     'event_ver': fields.Integer(),
-    'sessions_ver': fields.Integer(attribute='session_ver'),
+    'sessions_ver': fields.Integer(),
     'speakers_ver': fields.Integer(),
     'tracks_ver': fields.Integer(),
     'sponsors_ver': fields.Integer(),
