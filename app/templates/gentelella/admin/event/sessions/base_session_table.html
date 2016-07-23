@@ -113,12 +113,16 @@
                         </td>
                         <td>
                             <div class="btn-group-vertical" role="group" aria-label="...">
+                                {% if session.state != 'accepted' %}
                                 <a href="{{ session.id }}/accept" class="btn btn-sm btn-success">
                                     <i class="fa fa-check"></i>
                                 </a>
+                                {% endif %}
+                                {% if session.state != 'rejected' %}
                                 <a href="{{ session.id }}/reject" class="btn btn-sm btn-danger">
                                     <i class="fa fa-times"></i>
                                 </a>
+                                {% endif %}
                             </div>
                         </td>
                     </tr>
