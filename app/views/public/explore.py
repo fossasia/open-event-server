@@ -68,6 +68,7 @@ class ExploreView(BaseView):
     def explore_view(self, location):
         location = deslugify(location)
         current_page = request.args.get('page')
+        query = request.args.get('query', '')
         if not current_page:
             current_page = 1
         else:
@@ -106,7 +107,7 @@ class ExploreView(BaseView):
                            location=location,
                            filters=filters,
                            current_page=current_page,
-                           categories=CATEGORIES)
+                           categories=CATEGORIES, query=query)
 
 
 CATEGORIES = {'Auto, Boat & Air': ['Air', 'Auto', 'Boat', 'Motorcycle/ATV', 'Other'],
