@@ -1030,8 +1030,9 @@ class DataManager(object):
 
             if form.get('call_for_speakers_state', u'off') == u'on':
                 call_for_speakers = CallForPaper(announcement=form['announcement'],
-                                                 start_date=datetime.strptime(form['cfs_start_date'], '%m/%d/%Y'),
-                                                 end_date=datetime.strptime(form['cfs_end_date'], '%m/%d/%Y'),
+                                                 start_date=datetime.strptime(form['cfs_start_date'] + ' ' + form['cfs_start_time'], '%m/%d/%Y %H:%M'),
+                                                 end_date=datetime.strptime(form['cfs_end_date'] + ' ' + form['cfs_end_time'], '%m/%d/%Y %H:%M'),
+                                                 timezone=form.get('cfs_timezone', 'UTC'),
                                                  event_id=event.id)
                 save_to_db(call_for_speakers, "Call for speakers saved")
 
@@ -1100,6 +1101,7 @@ class DataManager(object):
                 call_for_paper_new = CallForPaper(announcement=call_for_paper.announcement,
                                                   start_date=call_for_paper.start_date,
                                                   end_date=call_for_paper.end_date,
+                                                  timezone=call_for_paper.timezone,
                                                   event_id=event.id)
                 save_to_db(call_for_paper_new, "Call for speaker copy saved")
 
@@ -1355,9 +1357,12 @@ class DataManager(object):
                 call_for_speakers, c = get_or_create(CallForPaper,
                                                      announcement=form['announcement'],
                                                      start_date=datetime.strptime(
-                                                         form['cfs_start_date'], '%m/%d/%Y'),
+                                                         form['cfs_start_date'] + ' ' + form['cfs_start_time'],
+                                                         '%m/%d/%Y %H:%M'),
                                                      end_date=datetime.strptime(
-                                                         form['cfs_end_date'], '%m/%d/%Y'),
+                                                         form['cfs_end_date'] + ' ' + form['cfs_end_time'],
+                                                         '%m/%d/%Y %H:%M'),
+                                                     timezone=form.get('cfs_timezone', 'UTC'),
                                                      event_id=event.id)
                 save_to_db(call_for_speakers)
         else:
