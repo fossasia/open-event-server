@@ -5,6 +5,10 @@
     margin-top: 10px;
 }
 
+.input-group {
+  margin-bottom: 0;
+}
+
 .label-header {
     font-size: 18px;
     margin-left: 10px;
