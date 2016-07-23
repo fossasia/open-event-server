@@ -141,7 +141,7 @@
     {{ super() }}
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHdXg0Y_zk-wCNpslbBqcezLdHniaEwkI&callback=initPlacesApi&libraries=places"
             async defer></script>
-
+    <script src="{{ url_for('static', filename='admin/lib/google-material-color/dist/palette.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/jt.timepicker/jquery.timepicker.min.js') }}"></script>
