@@ -874,7 +874,10 @@ class DataManager(object):
                                    licence=licence_name,
                                    licence_url=licence_url,
                                    logo=logo)
-
+        if 'ticket_url' not in form:
+            ticket_url = ""
+        else:
+            ticket_url = form['ticket_url']
         event = Event(name=form['name'],
                       start_time=datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M'),
                       end_time=datetime.strptime(form['end_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M'),
@@ -888,7 +891,7 @@ class DataManager(object):
                       topic=form['topic'],
                       sub_topic=form['sub_topic'],
                       privacy=form.get('privacy', u'public'),
-                      ticket_url=form['ticket_url'],
+                      ticket_url=ticket_url,
                       copyright=copyright,
                       show_map=1 if form.get('show_map') == "on" else 0,
                       creator=login.current_user)
