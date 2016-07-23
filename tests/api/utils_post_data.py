@@ -57,6 +57,7 @@ POST_SESSION_DATA = {
     "microlocation_id": None,
     "speaker_ids": [],
     "start_time": "2016-05-30T08:47:37",
+    "timezone": "UTC",
     "subtitle": "TestSession",
     "comments": "Comments",
     "title": "TestSession",

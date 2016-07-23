@@ -63,6 +63,7 @@ SESSION = api.model('Session', {
     'comments': fields.String(),
     'start_time': fields.DateTime(required=True),
     'end_time': fields.DateTime(required=True),
+    'timezone': fields.String(),
     'track': fields.Nested(SESSION_TRACK, allow_null=True),
     'speakers': fields.List(fields.Nested(SESSION_SPEAKER)),
     'language': SessionLanguageField(),
