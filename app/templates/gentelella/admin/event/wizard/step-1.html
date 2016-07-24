@@ -262,6 +262,7 @@
             Ticket Details
             <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
         </h2>
+        {# Ticket URL when Ticket module is switched off 
         <div class="item form-group">
             <label>Ticket URL
             </label>
@@ -269,6 +270,87 @@
                    value="{{ event.ticket_url | default('', true) }}" data-error="Please enter a valid URL"/>
             <div class="help-block with-errors"></div>
         </div>
+        #}
+
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="item form-group">
+                    <label>Ticket Name</label>
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="item form-group">
+                    <label>Type</label>
+                    <select name="" id="ticket-type" class="form-control">
+                        <option value="free" selected>Free</option>
+                        <option value="paid">Paid</option>
+                        <option value="donation">Donation</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="item form-group">
+            <label>Description</label>
+            <textarea name="" class="form-control"></textarea>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 col-xs-8">
+                <div class="item form-group">
+                    <label>Price</label>
+                    <div id="ticket-type-price">
+                        <div class="form-control">Free</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="item form-group">
+                    <label>Sales Start</label><br>
+                    <div class="col-xs-8" style="padding-left: 0;">
+                        <input value="08/03/2016" class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY">
+                    </div>
+                    <div class="col-xs-4" style="padding-left: 0;">
+                        <input value="19:00" class="form-control col-xs-6 time start ui-timepicker-input" placeholder="HH:MM" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="item form-group">
+                    <label>Sales End</label><br>
+                    <div class="col-xs-8" style="padding-left: 0;">
+                        <input value="08/03/2016" class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY">
+                    </div>
+                    <div class="col-xs-4" style="padding-left: 0;">
+                        <input value="19:00" class="form-control col-xs-6 time end ui-timepicker-input" placeholder="HH:MM" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="item form-group">
+                    <label>Quantity</label>
+                    <input type="number" class="form-control" placeholder="100">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="item form-group">
+                    <label>Min Order</label>
+                    <input type="number" class="form-control" placeholder="1">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="item form-group">
+                    <label>Max Order</label>
+                    <input type="number" class="form-control" placeholder="10">
+                </div>
+            </div>
+        </div>
+
         {% endif %}
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color: #5bc0de;">
             <i class="fa fa-plus-circle"></i>
@@ -709,6 +791,19 @@
         $uploadCropper.croppie('bind');
         resetFormElement($("#event-image-upload"));
 
+    });
+
+    $("select#ticket-type").on("change", function(e) {
+        var type = $("option:selected", this).val();
+        var ticketTypePrice = $("#ticket-type-price");
+
+        if (type == "free") {
+            ticketTypePrice.html("<div class='form-control'>Free</div>");
+        } else if (type == "donation") {
+            ticketTypePrice.html("<div class='form-control'>Donation</div>");
+        } else if (type == "paid") {
+            ticketTypePrice.html("<input type='number' class='form-control' placeholder='Set your ticket price'>");
+        }
     });
 
     $(document).on("click", '.add-social-links', function () {
