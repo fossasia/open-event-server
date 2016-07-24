@@ -3,6 +3,8 @@
 # Ignore ExtDeprecationWarnings for Flask 0.11 - see http://stackoverflow.com/a/38080580
 import warnings
 from flask.exthook import ExtDeprecationWarning
+from pytz import utc
+
 warnings.simplefilter('ignore', ExtDeprecationWarning)
 # Keep it before flask extensions are imported
 import arrow
@@ -27,7 +29,7 @@ from flask.ext.jwt import JWT
 from datetime import timedelta, datetime
 import humanize
 
-from icalendar import Calendar, Event
+from icalendar import Calendar
 import sqlalchemy as sa
 
 from app.helpers.flask_helpers import SilentUndefined, camel_case, slugify, MiniJSONEncoder
@@ -35,6 +37,7 @@ from app.helpers.helpers import string_empty
 from app.models import db
 from app.models.user import User
 from app.models.ticket import Ticket, BookedTicket
+from app.models.event import Event
 from app.views.admin.admin import AdminView
 from helpers.jwt import jwt_authenticate, jwt_identity
 from helpers.formatter import operation_name
@@ -44,7 +47,9 @@ from app.views.sitemap import app as sitemap_routes
 from app.settings import get_settings
 from app.api.helpers.errors import NotFoundError
 import requests
-
+from apscheduler.schedulers.background import BackgroundScheduler
+from app.helpers.data import DataManager, delete_from_db
+from app.helpers.helpers import send_after_event
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -53,7 +58,6 @@ app = Flask(__name__)
 def create_app():
     auto = Autodoc(app)
     cal = Calendar()
-    event = Event()
 
     app.register_blueprint(api_v1_routes)
     app.register_blueprint(sitemap_routes)
@@ -252,6 +256,19 @@ import api.helpers.tasks
 def set_secret():
     current_app.secret_key = get_settings()['secret']
 
+
+def send_after_event_mail():
+    with app.app_context():
+        events = Event.query.all()
+        for event in events:
+            upcoming_events = DataGetter.get_upcoming_events(event.id)
+            if datetime.now() > event.end_time:
+                send_after_event('adityavyas17@gmail.com', event.id, upcoming_events)
+
+logging.basicConfig()
+sched = BackgroundScheduler(timezone=utc)
+sched.add_job(send_after_event_mail, 'interval', seconds=10)
+#sched.start()
 
 if __name__ == '__main__':
     current_app.run()
