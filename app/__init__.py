@@ -262,6 +262,7 @@ def set_secret():
 
 def empty_trash():
     with app.app_context():
+        print 'HELLO'
         events = Event.query.filter_by(in_trash=True)
         users = User.query.filter_by(in_trash=True)
         sessions = Session.query.filter_by(in_trash=True)
@@ -279,10 +280,10 @@ def empty_trash():
             if datetime.now() - session.trash_date >= timedelta(days=30):
                 delete_from_db(session, "Session deleted permanently")
 
-logging.basicConfig()
-sched = BackgroundScheduler(timezone=utc)
-sched.add_job(empty_trash, 'interval', seconds=10)
-sched.start()
+
+trash_sched = BackgroundScheduler(timezone=utc)
+trash_sched.add_job(empty_trash, 'cron', day_of_week='mon-fri', hour=5, minute=30)
+trash_sched.start()
 
 if __name__ == '__main__':
     current_app.run()
