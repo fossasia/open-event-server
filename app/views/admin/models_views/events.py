@@ -2,7 +2,7 @@ import json
 import datetime
 import random
 import string
-from _sha512 import sha512
+import os,binascii
 
 from flask import request, flash, url_for
 from flask.ext.restplus import abort
@@ -26,15 +26,8 @@ def is_verified_user():
 def is_accessible():
     return login.current_user.is_authenticated
 
-SIMPLE_CHARS = string.ascii_letters + string.digits
-
-def get_random_string(length=24):
-    return ''.join(random.choice(SIMPLE_CHARS) for i in xrange(length))
-
-def get_random_hash(length=24):
-    hash = sha512()
-    hash.update(get_random_string())
-    return hash.hexdigest()[:length]
+def get_random_hash():
+    return binascii.b2a_hex(os.urandom(20))
 
 class EventsView(BaseView):
     def _handle_view(self, name, **kwargs):
