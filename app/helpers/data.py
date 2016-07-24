@@ -787,7 +787,7 @@ class DataManager(object):
         save_to_db(user, "password resetted")
 
     @staticmethod
-    def update_user(form, user_id, avatar_img):
+    def update_user(form, user_id, avatar_img, contacts_only_update=False):
 
         user = User.query.filter_by(id=user_id).first()
         user_detail = UserDetail.query.filter_by(user_id=user_id).first()
@@ -804,25 +804,27 @@ class DataManager(object):
             Helper.send_email_when_changes_email(user.email, form['email'])
             Helper.send_email_confirmation(form, link)
             user.email = form['email']
-        user_detail.fullname = form['full_name']
+
         user_detail.contact = form['contact']
+        if not contacts_only_update:
+            user_detail.fullname = form['full_name']
 
-        if form['facebook'] != 'https://www.facebook.com/':
-            user_detail.facebook = form['facebook']
-        else:
-            user_detail.facebook = ''
+            if form['facebook'] != 'https://www.facebook.com/':
+                user_detail.facebook = form['facebook']
+            else:
+                user_detail.facebook = ''
 
-        if form['twitter'] != 'https://twitter.com/':
-            user_detail.twitter = form['twitter']
-        else:
-            user_detail.twitter = ''
+            if form['twitter'] != 'https://twitter.com/':
+                user_detail.twitter = form['twitter']
+            else:
+                user_detail.twitter = ''
 
-        user_detail.details = form['details']
-        logo = form.get('logo', None)
-        if string_not_empty(logo) and logo:
-            logo_file = uploaded_file(file_content=logo)
-            logo = upload(logo_file, 'users/%d/avatar' % int(user_id))
-            user_detail.avatar_uploaded = logo
+            user_detail.details = form['details']
+            logo = form.get('logo', None)
+            if string_not_empty(logo) and logo:
+                logo_file = uploaded_file(file_content=logo)
+                logo = upload(logo_file, 'users/%d/avatar' % int(user_id))
+                user_detail.avatar_uploaded = logo
         user, user_detail, save_to_db(user, "User updated")
         record_activity('update_user', user=user)
 
