@@ -1384,13 +1384,14 @@ class DataManager(object):
         Invite.query.filter_by(event_id=e_id).delete()
         Session.query.filter_by(event_id=e_id).delete()
         Event.query.filter_by(id=e_id).delete()
-        record_activity('delete_event', event_id=e_id)
+        #record_activity('delete_event', event_id=e_id)
         db.session.commit()
 
     @staticmethod
     def trash_event(e_id):
         event = Event.query.get(e_id)
         event.in_trash = True
+        event.trash_date = datetime.now()
         save_to_db(event, "Event Added to Trash")
         return event
 

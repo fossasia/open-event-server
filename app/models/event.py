@@ -67,6 +67,7 @@ class Event(db.Model):
     code_of_conduct = db.Column(db.String)
     schedule_published_on = db.Column(db.DateTime)
     ticket_include = db.Column(db.Boolean, default=False)
+    trash_date = db.Column(db.DateTime)
 
     def __init__(self,
                  name=None,
@@ -97,7 +98,8 @@ class Event(db.Model):
                  in_trash=False,
                  show_map=1,
                  searchable_location_name=None,
-                 ticket_include=None):
+                 ticket_include=None,
+                 trash_date=None):
         self.name = name
         self.logo = logo
         self.email = email
@@ -127,6 +129,7 @@ class Event(db.Model):
         self.in_trash = in_trash
         self.searchable_location_name = searchable_location_name
         self.ticket_include = ticket_include
+        self.trash_date = trash_date
 
     def __repr__(self):
         return '<Event %r>' % self.name
