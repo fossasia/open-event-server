@@ -90,7 +90,7 @@
     <div class="col-md-10 col-md-push-1">
 
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
-            <i class="fa fa-check-square-o"></i>
+            <i class="fa fa-list-ol"></i>
             Session, Microlocations, Session types
             <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
         </h2>
@@ -150,7 +150,7 @@
             if (onOffSwitch.checked) {
                 $sessionTracksRoomsHolder.fadeIn();
                 $strState.text("off");
-                $sessionTracksRoomsHolder.find("input").removeAttr('disabled');
+                $sessionTracksRoomsHolder.find("input:not(.nt)").removeAttr('disabled');
             } else {
                 $sessionTracksRoomsHolder.fadeOut();
                 $sessionTracksRoomsHolder.find("input").attr('disabled', 'disabled');

@@ -11,6 +11,7 @@ from markupsafe import Markup
 from werkzeug.utils import redirect, secure_filename
 
 from app.helpers.data import DataManager
+from app.models.call_for_papers import CallForPaper
 from ...helpers.data_getter import DataGetter
 
 
@@ -89,6 +90,13 @@ class EventDetailView(BaseView):
         speakers = DataGetter.get_speakers(event_id).all()
         return self.render('/gentelella/guest/event/cfs.html', event=event, accepted_sessions=accepted_sessions, speaker_form=speaker_form,
                            session_form=session_form, call_for_speakers=call_for_speakers, state=state, speakers=speakers)
+
+    @expose('/cfs/<hash>', methods=('GET',))
+    def display_event_cfs_via_hash(self, hash):
+        call_for_speakers = CallForPaper.query.filter_by(hash=hash).first()
+        if not call_for_speakers:
+            abort(404)
+        return self.display_event_cfs(call_for_speakers.event_id)
 
     @expose('/<int:event_id>/cfs/', methods=('POST',))
     def process_event_cfs(self, event_id):

@@ -1021,6 +1021,8 @@ class DataManager(object):
                                                  end_date=datetime.strptime(form['cfs_end_date'] + ' ' +
                                                                             form['cfs_end_time'], '%m/%d/%Y %H:%M'),
                                                  timezone=form.get('cfs_timezone', 'UTC'),
+                                                 hash=form['cfs_hash'],
+                                                 privacy=form['cfs_privacy'],
                                                  event_id=event.id)
                 save_to_db(call_for_speakers, "Call for speakers saved")
 
@@ -1309,10 +1311,12 @@ class DataManager(object):
 
             if call_for_papers:
                 call_for_papers.announcement = form['announcement']
+                call_for_papers.hash = form['cfs_hash']
                 call_for_papers.start_date = datetime.strptime(
                     form['cfs_start_date'], '%m/%d/%Y')
                 call_for_papers.end_date = datetime.strptime(
                     form['cfs_end_date'], '%m/%d/%Y')
+                call_for_papers.privacy = form['cfs_privacy']
                 call_for_papers.event_id = event.id
                 save_to_db(call_for_papers)
             else:
@@ -1324,6 +1328,8 @@ class DataManager(object):
                                                      end_date=datetime.strptime(
                                                          form['cfs_end_date'] + ' ' + form['cfs_end_time'],
                                                          '%m/%d/%Y %H:%M'),
+                                                     hash=form['cfs_hash'],
+                                                     privacy=form['cfs_privacy'],
                                                      timezone=form.get('cfs_timezone', 'UTC'),
                                                      event_id=event.id)
                 save_to_db(call_for_speakers)

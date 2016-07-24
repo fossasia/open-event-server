@@ -67,13 +67,42 @@
                 </div>
             </div>
     </div>
+    <div class="item form-group">
+        <label>Private link</label>
+        <input type="text"
+               name="name" class="nt form-control col-md-7 col-xs-12" onClick="this.select();"
+               style="margin-bottom: 5px;"
+               disabled="disabled"
+               value="{{ url_for('event_detail.display_event_cfs_via_hash', hash=cfs_hash if not call_for_speakers or not call_for_speakers.hash else call_for_speakers.hash, _external=True ) }}"/><br>
+        <span style="font-weight: 300;">Share this link to get private submission independently of open/closed Call for Speakers at any time</span>
+        <input type="hidden" name="cfs_hash" value="{{ cfs_hash if not call_for_speakers or not call_for_speakers.hash else call_for_speakers.hash }}">
+    </div>
+
+    <div class="item form-group">
+            <label class="control-label">Type</label>
+            <div class="radio">
+                <label style="font-weight: 300;">
+                    <input type="radio" name="cfs_privacy" value="public"
+                           {% if (call_for_speakers and call_for_speakers.privacy == 'public') or not event %}checked{% endif %}>
+                    <strong style="font-weight: 400;">Public:</strong> Display this publicly. Anybody will be able to submit a proposal
+                </label>
+            </div>
+            <div class="radio">
+                <label style="font-weight: 300;">
+                    <input type="radio" name="cfs_privacy" value="private"
+                           {% if (call_for_speakers and call_for_speakers.privacy == 'private') %}checked{% endif %}>
+                    <strong style="font-weight: 400;">Private:</strong> Do not display this publicly. Proposals can be submitted only using the private link.
+                </label>
+            </div>
+       </div>
+
 
 {% endmacro %}
 
 <div id="step-4" class="wizard_content" style="{% if event and event.has_session_speakers %}display: block;{% else %}display:none;{% endif %}">
     <div class="col-md-10 col-md-push-1">
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
-            <i class="fa fa-check-square-o"></i>
+            <i class="fa fa-bullhorn"></i>
             Call for Speakers
             <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
         </h2>
@@ -90,22 +119,6 @@
 
 <script>
     $(document).ready(function () {
-        var $callForSpeakersHolder = $("#call-for-speakers-holder");
-        var $state = $(".cfs-state");
         $(".announcement").summernote(summernoteConfig);
-
-        var onOffSwitch = document.getElementById('call-for-speakers-switch');
-
-        onOffSwitch.onchange = function () {
-            if (onOffSwitch.checked) {
-                $callForSpeakersHolder.fadeIn();
-                $state.text("off");
-
-            } else {
-                $callForSpeakersHolder.fadeOut();
-                $state.text("on");
-            }
-        };
-
     });
 </script>
