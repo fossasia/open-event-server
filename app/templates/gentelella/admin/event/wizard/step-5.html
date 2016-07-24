@@ -1,5 +1,5 @@
 {% set required_list = ['title', 'name', 'email', 'track'] %}
-{% set preselect_list = preselect | default(['short_abstract', 'comments', 'slides', 'photo', 'short_biography', 'website', 'twitter', 'organisation', 'position', 'country', 'track', 'session_type']) %}
+{% set preselect_list = preselect | default(['short_abstract', 'comments', 'slides', 'photo', 'short_biography', 'website', 'twitter', 'organisation', 'position', 'country', 'session_type']) %}
 
 {% set session_fields = ['title', 'subtitle', 'short_abstract', 'long_abstract', 'comments', 'track', 'session_type', 'language', 'slides', 'video', 'audio'] %}
 {% set speaker_fields = ['name', 'email','photo', 'organisation', 'position', 'country', 'short_biography', 'long_biography', 'mobile', 'website', 'facebook', 'twitter', 'github', 'linkedin'] %}
@@ -14,9 +14,6 @@
             {% endif %}
             {% if (identifier == 'session_type') %}
         data-placement="left" title="You need to enable Session types to use this option"
-            {% endif %}
-            {% if identifier == 'track' %}
-            style="display:none;"
             {% endif %}>
         <td>
             {{ pretty_name }}
@@ -32,7 +29,7 @@
         <td>
             <input type="checkbox" class="toggle-switch require-switch" data-group="{{ group }}" id="{{ identifier }}-require"
                    {% if identifier not in required_list %}onclick="requireClick(this)"{% endif %}
-                   {% if (include or identifier in required_list or identifier in required) and ((identifier != 'track' and identifier != 'session_type') or tracks or microlocations or session_types or not event) %}checked="checked"{% endif %}
+                   {% if (include or identifier in required_list or identifier in required) and ((identifier != 'session_type') or microlocations or session_types or not event) %}checked="checked"{% endif %}
                    {% if (identifier in required_list) or ((identifier == 'session_type') and not microlocations and not session_types and event) %}disabled{% endif %}/>
             <label for="{{ identifier }}-require"> </label>
         </td>
@@ -64,7 +61,7 @@
 
 {% endmacro %}
 
-<div id="step-5" class="wizard_content" style="display: block;">
+<div id="step-5" class="wizard_content" style="{% if event and event.has_session_speakers %}display: block;{% else %}display:none;{% endif %}">
     <div class="col-xs-12 col-md-push-1 col-md-10">
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
             <i class="fa fa-check-square-o"></i>

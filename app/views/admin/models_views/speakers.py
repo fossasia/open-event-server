@@ -22,6 +22,9 @@ class SpeakersView(BaseView):
     def _handle_view(self, name, **kwargs):
         if not self.is_accessible():
             return redirect(url_for('admin.login_view', next=request.url))
+        event = DataGetter.get_event(kwargs['event_id'])
+        if not event.has_session_speakers:
+            return self.render('/gentelella/admin/event/info/enable_module.html', active_page='speakers', title='Speakers', event=event)
 
     @expose('/')
     def index_view(self, event_id):
