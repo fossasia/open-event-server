@@ -40,6 +40,7 @@ class TestEvents(OpenEventViewTestCase):
             data['start_time'] = '19:00'
             data['end_date'] = '07/04/2016'
             data['end_time'] = '22:00'
+            data['has_session_speakers'] = 'no'
             data['custom_form[name]'] = ['session_form', 'speaker_form']
             data['custom_form[value]'] = [custom_forms.session_form, custom_forms.speaker_form]
             data = ImmutableMultiDict(data)
@@ -61,6 +62,7 @@ class TestEvents(OpenEventViewTestCase):
             data['end_date'] = '07/04/2016'
             data['end_time'] = '22:00'
             data['state'] = 'Published'
+            data['has_session_speakers'] = 'no'
             rv = self.app.post(url, follow_redirects=True, buffered=True, content_type='multipart/form-data',
                                data=data)
             self.assertTrue('unpublish' in rv.data, msg=rv.data)
@@ -77,6 +79,7 @@ class TestEvents(OpenEventViewTestCase):
             data['end_time'] = '22:00'
             data['location_name'] = ''
             data['state'] = u'Published'
+            data['has_session_speakers'] = 'no'
             data['custom_form[name]'] = ['session_form', 'speaker_form']
             data['custom_form[value]'] = [custom_forms.session_form, custom_forms.speaker_form]
             rv = self.app.post(url, follow_redirects=True, buffered=True, content_type='multipart/form-data',
@@ -101,8 +104,10 @@ class TestEvents(OpenEventViewTestCase):
             data['name'] = 'EditTestName'
             data['start_date'] = '07/04/2016'
             data['start_time'] = '19:00'
+            data['has_session_speakers'] = 'yes'
             data['end_date'] = '07/04/2016'
             data['end_time'] = '22:00'
+            data['has_session_speakers'] = 'no'
             data['custom_form[name]'] = ['session_form', 'speaker_form']
             data['custom_form[value]'] = [custom_forms.session_form, custom_forms.speaker_form]
             data = ImmutableMultiDict(data)

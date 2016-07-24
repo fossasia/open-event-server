@@ -44,16 +44,16 @@
             {% if event.description %}
                 <li><a href="/e/{{ event.id }}#info">Info</a></li>
             {% endif %}
-            {% if accepted_sessions[0] %}
+            {% if event.has_session_speakers and accepted_sessions[0] %}
                 <li><a href="/e/{{ event.id }}#speakers">Speakers</a></li>
             {% endif %}
             {% if event.sponsor[0] %}
                 <li><a href="/e/{{ event.id }}#sponsors">Sponsors</a></li>
             {% endif %}
-            {% if accepted_sessions[0] %}
+            {% if event.has_session_speakers and accepted_sessions[0] %}
                 <li><a href="/e/{{ event.id }}/sessions">Sessions</a></li>
             {% endif %}
-            {% if event.call_for_papers %}
+            {% if event.call_for_speakers and event.call_for_speakers.privacy == 'public' %}
                 <li><a href="/e/{{ event.id }}/cfs">Call for speakers</a></li>
             {% endif %}
             <li class="active"><a href="/e/{{ event.id }}/schedule">Schedule</a></li>
