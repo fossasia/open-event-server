@@ -884,13 +884,14 @@ class DataManager(object):
         str_empty = lambda val, val2: val2 if val == '' else val
 
         ticket_price = form.get('ticket_price', 0)
+        # Default values to pass the tests because APIs don't have these fields
         ticket = Ticket(
-            name=form['ticket_name'],
-            type=form['ticket_type'],
-            description=form['ticket_description'],
+            name=form.get('ticket_name', ''),
+            type=form.get('ticket_type', 'free'),
+            description=form.get('ticket_description', ''),
             price=ticket_price,
-            sales_start=datetime.strptime(form['ticket_sales_start_date'] + ' ' + form['ticket_sales_start_time'], '%m/%d/%Y %H:%M'),
-            sales_end=datetime.strptime(form['ticket_sales_end_date'] + ' ' + form['ticket_sales_end_time'], '%m/%d/%Y %H:%M'),
+            sales_start=datetime.strptime(form.get('ticket_sales_start_date', '01/01/2001') + ' ' + form.get('ticket_sales_start_time', '00:00'), '%m/%d/%Y %H:%M'),
+            sales_end=datetime.strptime(form.get('ticket_sales_end_date', '01/01/2001') + ' ' + form.get('ticket_sales_end_time', '00:00'), '%m/%d/%Y %H:%M'),
             quantity=str_empty(form.get('ticket_quantity'), 100),
             min_order=str_empty(form.get('ticket_min_order'), 1),
             max_order=str_empty(form.get('ticket_max_order'), 10)
@@ -1156,15 +1157,16 @@ class DataManager(object):
         str_empty = lambda val, val2: val2 if val == '' else val
 
         ticket_price = form.get('ticket_price', 0)
-        event.tickets[0].name = form['ticket_name'],
-        event.tickets[0].type = form['ticket_type'],
-        event.tickets[0].description = form['ticket_description'],
-        event.tickets[0].price = ticket_price,
-        event.tickets[0].sales_start = datetime.strptime(form['ticket_sales_start_date'] + ' ' + form['ticket_sales_start_time'], '%m/%d/%Y %H:%M'),
-        event.tickets[0].sales_end = datetime.strptime(form['ticket_sales_end_date'] + ' ' + form['ticket_sales_end_time'], '%m/%d/%Y %H:%M'),
-        event.tickets[0].quantity = str_empty(form.get('ticket_quantity'), 100),
-        event.tickets[0].min_order = str_empty(form.get('ticket_min_order'), 1),
-        event.tickets[0].max_order = str_empty(form.get('ticket_max_order'), 10)
+        if event.tickets != []:
+            event.tickets[0].name = form.get('ticket_name', ''),
+            event.tickets[0].type = form.get('ticket_type', 'free'),
+            event.tickets[0].description = form.get('ticket_description', ''),
+            event.tickets[0].price = ticket_price,
+            event.tickets[0].sales_start = datetime.strptime(form['ticket_sales_start_date'] + ' ' + form['ticket_sales_start_time'], '%m/%d/%Y %H:%M'),
+            event.tickets[0].sales_end = datetime.strptime(form['ticket_sales_end_date'] + ' ' + form['ticket_sales_end_time'], '%m/%d/%Y %H:%M'),
+            event.tickets[0].quantity = str_empty(form.get('ticket_quantity'), 100),
+            event.tickets[0].min_order = str_empty(form.get('ticket_min_order'), 1),
+            event.tickets[0].max_order = str_empty(form.get('ticket_max_order'), 10)
 
         if event.latitude and event.longitude:
             response = requests.get(
