@@ -14,14 +14,13 @@ from requests_oauthlib import OAuth2Session
 from sqlalchemy.orm.collections import InstrumentedList
 from sqlalchemy.sql.expression import exists
 from werkzeug import secure_filename
-from werkzeug.datastructures import ImmutableMultiDict
 from wtforms import ValidationError
 
 from app.helpers.helpers import string_empty, string_not_empty, uploaded_file
 from app.helpers.notification_email_triggers import trigger_new_session_notifications, \
     trigger_session_state_change_notifications
 from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth
-from app.helpers.storage import upload, UploadedFile, UPLOAD_PATHS
+from app.helpers.storage import upload, UPLOAD_PATHS
 from app.models.notifications import Notification
 from ..helpers import helpers as Helper
 from ..helpers.data_getter import DataGetter
@@ -32,7 +31,6 @@ from ..models import db
 from ..models.activity import Activity, ACTIVITIES
 from ..models.call_for_papers import CallForPaper
 from ..models.custom_forms import CustomForms
-from ..models.email_notifications import EmailNotification
 from ..models.event import Event, EventsUsers
 from ..models.event_copyright import EventCopyright
 from ..models.file import File
@@ -788,7 +786,7 @@ class DataManager(object):
         save_to_db(user, "password resetted")
 
     @staticmethod
-    def update_user(form, user_id, avatar_img):
+    def update_user(form, user_id, avatar_img, contacts_only_update=False):
 
         user = User.query.filter_by(id=user_id).first()
         user_detail = UserDetail.query.filter_by(user_id=user_id).first()
@@ -805,25 +803,27 @@ class DataManager(object):
             Helper.send_email_when_changes_email(user.email, form['email'])
             Helper.send_email_confirmation(form, link)
             user.email = form['email']
-        user_detail.fullname = form['full_name']
+
         user_detail.contact = form['contact']
+        if not contacts_only_update:
+            user_detail.fullname = form['full_name']
 
-        if form['facebook'] != 'https://www.facebook.com/':
-            user_detail.facebook = form['facebook']
-        else:
-            user_detail.facebook = ''
+            if form['facebook'] != 'https://www.facebook.com/':
+                user_detail.facebook = form['facebook']
+            else:
+                user_detail.facebook = ''
 
-        if form['twitter'] != 'https://twitter.com/':
-            user_detail.twitter = form['twitter']
-        else:
-            user_detail.twitter = ''
+            if form['twitter'] != 'https://twitter.com/':
+                user_detail.twitter = form['twitter']
+            else:
+                user_detail.twitter = ''
 
-        user_detail.details = form['details']
-        logo = form.get('logo', None)
-        if string_not_empty(logo) and logo:
-            logo_file = uploaded_file(file_content=logo)
-            logo = upload(logo_file, 'users/%d/avatar' % int(user_id))
-            user_detail.avatar_uploaded = logo
+            user_detail.details = form['details']
+            logo = form.get('logo', None)
+            if string_not_empty(logo) and logo:
+                logo_file = uploaded_file(file_content=logo)
+                logo = upload(logo_file, 'users/%d/avatar' % int(user_id))
+                user_detail.avatar_uploaded = logo
         user, user_detail, save_to_db(user, "User updated")
         record_activity('update_user', user=user)
 

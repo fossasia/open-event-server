@@ -6,9 +6,7 @@ from flask.ext import login
 from app.views.admin.models_views.events import is_verified_user
 from ....helpers.data import DataManager, get_facebook_auth, get_instagram_auth
 from ....helpers.data_getter import DataGetter
-from app.helpers.storage import UPLOAD_PATHS
 from app.helpers.oauth import FbOAuth, InstagramOAuth
-
 
 class ProfileView(BaseView):
 

@@ -27,6 +27,21 @@ def asset_notification(self, notification, value):
         self.assertEqual(getattr(notification, field), value)
 
 class TestSettings(OpenEventViewTestCase):
+
+    def test_contact_info_view(self):
+        with app.test_request_context():
+            rv = self.app.get(url_for('settings.contact_info_view'), follow_redirects=True)
+            self.assertTrue("test_super_admin@email.com" in rv.data, msg=rv.data)
+
+    def test_contact_info_change(self):
+        with app.test_request_context():
+            data = {
+                'email': 'test_super_admin@email.com',
+                'contact': '9622100100'
+            }
+            rv = self.app.post(url_for('settings.contact_info_view'), follow_redirects=True, data=data)
+            self.assertTrue("9622100100" in rv.data, msg=rv.data)
+
     def test_email_settings_view(self):
         with app.test_request_context():
             rv = self.app.get(url_for('settings.email_preferences_view'), follow_redirects=True)

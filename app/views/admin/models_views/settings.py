@@ -35,7 +35,7 @@ class SettingsView(BaseView):
     @expose('/')
     def index_view(self):
         # TODO Settings landing page
-        return redirect(url_for('.email_preferences_view'))
+        return redirect(url_for('.contact_info_view'))
 
     @expose('/password/', methods=('POST', 'GET'))
     def password_view(self):
@@ -62,6 +62,18 @@ class SettingsView(BaseView):
         settings = DataGetter.get_email_notification_settings(login.current_user.id)
         return self.render('/gentelella/admin/settings/pages/email_preferences.html',
                            settings=settings, events=events, message_settings=message_settings)
+
+    @expose('/contact-info/', methods=('POST', 'GET'))
+    def contact_info_view(self):
+        user_id = login.current_user.id
+        if request.method == 'POST':
+            url = ""
+            DataManager.update_user(request.form, int(user_id), url, contacts_only_update=True)
+            flash("Your contact info has been updated.", "success")
+            return redirect(url_for('.contact_info_view'))
+        profile = DataGetter.get_user(int(user_id))
+
+        return self.render('/gentelella/admin/settings/pages/contact_info.html', user=login.current_user)
 
     @expose('/email/toggle/', methods=('POST',))
     def email_toggle_view(self):
