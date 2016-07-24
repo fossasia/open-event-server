@@ -74,7 +74,7 @@ class EventDetailView(BaseView):
         return self.render('/gentelella/guest/event/schedule.html', event=event, accepted_sessions=accepted_sessions, tracks=tracks)
 
     @expose('/<int:event_id>/cfs/', methods=('GET',))
-    def display_event_cfs(self, event_id):
+    def display_event_cfs(self, event_id, via_hash=False):
         event = get_published_event_or_abort(event_id)
         if not event.has_session_speakers:
             abort(404)
@@ -82,11 +82,7 @@ class EventDetailView(BaseView):
         call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
         accepted_sessions = DataGetter.get_sessions(event_id)
 
-        if not call_for_speakers:
-            abort(404)
-
-        calling_frame = inspect.getouterframes(inspect.currentframe(), 2)
-        if call_for_speakers.privacy != 'public' and calling_frame[1][3] != 'display_event_cfs_via_hash':
+        if not call_for_speakers or (not via_hash and call_for_speakers.privacy == 'private'):
             abort(404)
 
         form_elems = DataGetter.get_custom_form_elements(event_id)
@@ -101,14 +97,14 @@ class EventDetailView(BaseView):
             sate = "future"
         speakers = DataGetter.get_speakers(event_id).all()
         return self.render('/gentelella/guest/event/cfs.html', event=event, accepted_sessions=accepted_sessions, speaker_form=speaker_form,
-                           session_form=session_form, call_for_speakers=call_for_speakers, state=state, speakers=speakers)
+                           session_form=session_form, call_for_speakers=call_for_speakers, state=state, speakers=speakers, via_hash=via_hash)
 
     @expose('/cfs/<hash>', methods=('GET',))
     def display_event_cfs_via_hash(self, hash):
         call_for_speakers = CallForPaper.query.filter_by(hash=hash).first()
         if not call_for_speakers:
             abort(404)
-        return self.display_event_cfs(call_for_speakers.event_id)
+        return self.display_event_cfs(call_for_speakers.event_id, True)
 
     @expose('/<int:event_id>/cfs/', methods=('POST',))
     def process_event_cfs(self, event_id):
