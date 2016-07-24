@@ -52,6 +52,7 @@ from app.api.helpers.errors import NotFoundError
 import requests
 from apscheduler.schedulers.background import BackgroundScheduler
 from app.helpers.data import DataManager, delete_from_db
+from sqlalchemy_continuum import transaction_class
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -270,15 +271,18 @@ def empty_trash():
 
         for user in users:
             if datetime.now() - user.trash_date >= timedelta(days=30):
-                SuperAdminUsersView.delete_view(user.id)
+                transaction = transaction_class(Event)
+                transaction.query.filter_by(user_id=user.id).delete()
+                delete_from_db(user, "User deleted permanently")
 
         for session in sessions:
             if datetime.now() - session.trash_date >= timedelta(days=30):
-                SessionsView.delete_session(session.id)
+                delete_from_db(session, "Session deleted permanently")
 
-scheduler8 = BackgroundScheduler(timezone=utc)
-scheduler8.add_job(empty_trash, 'interval', seconds=10)
-scheduler8.start()
+logging.basicConfig()
+sched = BackgroundScheduler(timezone=utc)
+sched.add_job(empty_trash, 'interval', seconds=10)
+sched.start()
 
 if __name__ == '__main__':
     current_app.run()

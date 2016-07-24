@@ -1707,6 +1707,7 @@ def update_role_to_admin(form, user_id):
 def trash_user(user_id):
     user = DataGetter.get_user(user_id)
     user.in_trash = True
+    user.trash_date = datetime.now()
     save_to_db(user, 'User has been added to trash')
     return user
 
@@ -1714,6 +1715,7 @@ def trash_user(user_id):
 def trash_session(session_id):
     session = DataGetter.get_session(session_id)
     session.in_trash = True
+    session.trash_date = datetime.now()
     save_to_db(session, "Session added to Trash")
     return session
 
