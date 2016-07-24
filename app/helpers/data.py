@@ -926,30 +926,6 @@ class DataManager(object):
             db.session.flush()
             db.session.refresh(event)
 
-            session_type_names = form.getlist('session_type[name]')
-            session_type_length = form.getlist('session_type[length]')
-
-            social_link_name = form.getlist('social[name]')
-            social_link_link = form.getlist('social[link]')
-
-            track_name = form.getlist('tracks[name]')
-            track_color = form.getlist('tracks[color]')
-            if len(track_name) == 0:
-                track_name.append("Default Track")
-                track_color.append("#ffffff")
-
-            room_name = form.getlist('rooms[name]')
-            room_floor = form.getlist('rooms[floor]')
-
-            sponsor_name = form.getlist('sponsors[name]')
-            sponsor_url = form.getlist('sponsors[url]')
-            sponsor_level = form.getlist('sponsors[level]')
-            sponsor_description = form.getlist('sponsors[description]')
-            sponsor_logo_url = []
-
-            custom_forms_name = form.getlist('custom_form[name]')
-            custom_forms_value = form.getlist('custom_form[value]')
-
             background_image = form['background_url']
             if string_not_empty(background_image):
                 background_file = uploaded_file(file_content=background_image)
@@ -970,31 +946,11 @@ class DataManager(object):
                     ))
                 event.logo = logo
 
-            for index, name in enumerate(session_type_names):
-                if not string_empty(name):
-                    session_type = SessionType(name=name, length=session_type_length[index], event_id=event.id)
-                    db.session.add(session_type)
-
-            for index, name in enumerate(social_link_name):
-                if not string_empty(social_link_link[index]):
-                    # If 'Website' has been provided,
-                    # save it as Holder URL for Copyright
-                    if name.lower() == 'website':
-                        event.copyright.holder_url = social_link_link[index]
-                    social_link = SocialLink(name=name, link=social_link_link[index], event_id=event.id)
-                    db.session.add(social_link)
-
-            for index, name in enumerate(track_name):
-                track = Track(name=name, description="", track_image_url="", color=track_color[index],
-                              event_id=event.id)
-                db.session.add(track)
-
-            for index, name in enumerate(room_name):
-                if not string_empty(name):
-                    room = Microlocation(name=name,
-                                         floor=room_floor[index] if room_floor[index] != '' else None,
-                                         event_id=event.id)
-                    db.session.add(room)
+            sponsor_name = form.getlist('sponsors[name]')
+            sponsor_url = form.getlist('sponsors[url]')
+            sponsor_level = form.getlist('sponsors[level]')
+            sponsor_description = form.getlist('sponsors[description]')
+            sponsor_logo_url = []
 
             if form.get('sponsors_state', u'off') == u'on':
                 for index, name in enumerate(sponsor_name):
@@ -1015,6 +971,62 @@ class DataManager(object):
                             sponsor.logo = ""
                         save_to_db(sponsor, "Sponsor updated")
 
+            social_link_name = form.getlist('social[name]')
+            social_link_link = form.getlist('social[link]')
+
+            for index, name in enumerate(social_link_name):
+                if not string_empty(social_link_link[index]):
+                    # If 'Website' has been provided,
+                    # save it as Holder URL for Copyright
+                    if name.lower() == 'website':
+                        event.copyright.holder_url = social_link_link[index]
+                    social_link = SocialLink(name=name, link=social_link_link[index], event_id=event.id)
+                    db.session.add(social_link)
+
+            event.has_session_speakers = False
+            if form.get('has_session_speakers', u'no') == u'yes':
+                event.has_session_speakers = True
+                session_type_names = form.getlist('session_type[name]')
+                session_type_length = form.getlist('session_type[length]')
+
+                track_name = form.getlist('tracks[name]')
+                track_color = form.getlist('tracks[color]')
+                if len(track_name) == 0:
+                    track_name.append("Main Track")
+                    track_color.append("#ffffff")
+
+                room_name = form.getlist('rooms[name]')
+                room_floor = form.getlist('rooms[floor]')
+
+                for index, name in enumerate(session_type_names):
+                    if not string_empty(name):
+                        session_type = SessionType(name=name, length=session_type_length[index], event_id=event.id)
+                        db.session.add(session_type)
+
+                for index, name in enumerate(track_name):
+                    track = Track(name=name, description="", track_image_url="", color=track_color[index],
+                                  event_id=event.id)
+                    db.session.add(track)
+
+                for index, name in enumerate(room_name):
+                    if not string_empty(name):
+                        room = Microlocation(name=name,
+                                             floor=room_floor[index] if room_floor[index] != '' else None,
+                                             event_id=event.id)
+                        db.session.add(room)
+
+                call_for_speakers = CallForPaper(announcement=form['announcement'],
+                                                 start_date=datetime.strptime(form['cfs_start_date'] + ' ' +
+                                                                              form['cfs_start_time'], '%m/%d/%Y %H:%M'),
+                                                 end_date=datetime.strptime(form['cfs_end_date'] + ' ' +
+                                                                            form['cfs_end_time'], '%m/%d/%Y %H:%M'),
+                                                 timezone=form.get('cfs_timezone', 'UTC'),
+                                                 event_id=event.id)
+                save_to_db(call_for_speakers, "Call for speakers saved")
+
+            custom_forms_name = form.getlist('custom_form[name]')
+            custom_forms_value = form.getlist('custom_form[value]')
+
             session_form = ""
             speaker_form = ""
             for index, name in enumerate(custom_forms_name):
@@ -1027,14 +1039,6 @@ class DataManager(object):
             update_or_create(
                 CustomForms, event_id=event.id,
                 session_form=session_form, speaker_form=speaker_form)
-
-            if form.get('call_for_speakers_state', u'off') == u'on':
-                call_for_speakers = CallForPaper(announcement=form['announcement'],
-                                                 start_date=datetime.strptime(form['cfs_start_date'] + ' ' + form['cfs_start_time'], '%m/%d/%Y %H:%M'),
-                                                 end_date=datetime.strptime(form['cfs_end_date'] + ' ' + form['cfs_end_time'], '%m/%d/%Y %H:%M'),
-                                                 timezone=form.get('cfs_timezone', 'UTC'),
-                                                 event_id=event.id)
-                save_to_db(call_for_speakers, "Call for speakers saved")
 
             uer = UsersEventsRoles(login.current_user, event, role)
 
@@ -1192,21 +1196,9 @@ class DataManager(object):
             event.location_name)) or state != u'Published') and login.current_user.is_verified:
             event.state = state
 
-        session_type_names = form.getlist('session_type[name]')
-        session_type_id = form.getlist('session_type[id]')
-        session_type_length = form.getlist('session_type[length]')
-
         social_link_name = form.getlist('social[name]')
         social_link_link = form.getlist('social[link]')
         social_link_id = form.getlist('social[id]')
-
-        track_name = form.getlist('tracks[name]')
-        track_color = form.getlist('tracks[color]')
-        track_id = form.getlist('tracks[id]')
-
-        room_name = form.getlist('rooms[name]')
-        room_floor = form.getlist('rooms[floor]')
-        room_id = form.getlist('rooms[id]')
 
         sponsor_name = form.getlist('sponsors[name]')
         sponsor_logo_url = []
@@ -1218,25 +1210,17 @@ class DataManager(object):
         custom_forms_name = form.getlist('custom_form[name]')
         custom_forms_value = form.getlist('custom_form[value]')
 
-        # save the edited info to database
-        for session_type in session_types:
-            if str(session_type.id) not in session_type_id:
-                delete_from_db(session_type, "SessionType Deleted")
+        session_type_names = form.getlist('session_type[name]')
+        session_type_id = form.getlist('session_type[id]')
+        session_type_length = form.getlist('session_type[length]')
 
-        for index, name in enumerate(session_type_names):
-            if not string_empty(name):
-                if session_type_id[index] != '':
-                    session_type, c = get_or_create(SessionType,
-                                                    id=session_type_id[index],
-                                                    event_id=event.id)
-                    session_type.name = name
-                    session_type.length = session_type_length[index]
-                else:
-                    session_type, c = get_or_create(SessionType,
-                                                    name=name,
-                                                    length=session_type_length[index],
-                                                    event_id=event.id)
-                db.session.add(session_type)
+        track_name = form.getlist('tracks[name]')
+        track_color = form.getlist('tracks[color]')
+        track_id = form.getlist('tracks[id]')
+
+        room_name = form.getlist('rooms[name]')
+        room_floor = form.getlist('rooms[floor]')
+        room_id = form.getlist('rooms[id]')
 
         for social_link in social_links:
             if str(social_link.id) not in social_link_id:
@@ -1262,43 +1246,101 @@ class DataManager(object):
                                                    event_id=event.id)
                 db.session.add(social_link)
 
-        for track in tracks:
-            if str(track.id) not in track_id:
-                delete_from_db(track, "Track Deleted")
 
-        for index, name in enumerate(track_name):
-            if not string_empty(name):
-                if track_id[index] != '':
-                    track, c = get_or_create(Track,
-                                             id=track_id[index],
-                                             event_id=event.id)
-                    track.name = name
-                    track.color = track_color[index].upper()
-                else:
-                    track, c = get_or_create(Track,
-                                             name=name,
-                                             color=track_color[index].upper(),
-                                             event_id=event.id)
-                db.session.add(track)
+        if form.get('has_session_speakers', u'no') == u'yes':
+            event.has_session_speakers = True
+            # save the edited info to database
+            for session_type in session_types:
+                if str(session_type.id) not in session_type_id:
+                    delete_from_db(session_type, "SessionType Deleted")
 
-        for room in microlocations:
-            if str(room.id) not in room_id:
-                delete_from_db(room, "Room Deleted")
+            for index, name in enumerate(session_type_names):
+                if not string_empty(name):
+                    if session_type_id[index] != '':
+                        session_type, c = get_or_create(SessionType,
+                                                        id=session_type_id[index],
+                                                        event_id=event.id)
+                        session_type.name = name
+                        session_type.length = session_type_length[index]
+                    else:
+                        session_type, c = get_or_create(SessionType,
+                                                        name=name,
+                                                        length=session_type_length[index],
+                                                        event_id=event.id)
+                    db.session.add(session_type)
 
-        for index, name in enumerate(room_name):
-            if not string_empty(name):
-                if room_id[index] != '':
-                    room, c = get_or_create(Microlocation,
-                                            id=room_id[index],
-                                            event_id=event.id)
-                    room.name = name
-                    room.floor = room_floor[index] if room_floor[index] != '' else None
-                else:
-                    room, c = get_or_create(Microlocation,
-                                            name=name,
-                                            floor=room_floor[index] if room_floor[index] != '' else None,
-                                            event_id=event.id)
-                db.session.add(room)
+            for track in tracks:
+                if str(track.id) not in track_id:
+                    delete_from_db(track, "Track Deleted")
+
+            for index, name in enumerate(track_name):
+                if not string_empty(name):
+                    if track_id[index] != '':
+                        track, c = get_or_create(Track,
+                                                 id=track_id[index],
+                                                 event_id=event.id)
+                        track.name = name
+                        track.color = track_color[index].upper()
+                    else:
+                        track, c = get_or_create(Track,
+                                                 name=name,
+                                                 color=track_color[index].upper(),
+                                                 event_id=event.id)
+                    db.session.add(track)
+
+            for room in microlocations:
+                if str(room.id) not in room_id:
+                    delete_from_db(room, "Room Deleted")
+
+            for index, name in enumerate(room_name):
+                if not string_empty(name):
+                    if room_id[index] != '':
+                        room, c = get_or_create(Microlocation,
+                                                id=room_id[index],
+                                                event_id=event.id)
+                        room.name = name
+                        room.floor = room_floor[index] if room_floor[index] != '' else None
+                    else:
+                        room, c = get_or_create(Microlocation,
+                                                name=name,
+                                                floor=room_floor[index] if room_floor[index] != '' else None,
+                                                event_id=event.id)
+                    db.session.add(room)
+
+            if call_for_papers:
+                call_for_papers.announcement = form['announcement']
+                call_for_papers.start_date = datetime.strptime(
+                    form['cfs_start_date'], '%m/%d/%Y')
+                call_for_papers.end_date = datetime.strptime(
+                    form['cfs_end_date'], '%m/%d/%Y')
+                call_for_papers.event_id = event.id
+                save_to_db(call_for_papers)
+            else:
+                call_for_speakers, c = get_or_create(CallForPaper,
+                                                     announcement=form['announcement'],
+                                                     start_date=datetime.strptime(
+                                                         form['cfs_start_date'] + ' ' + form['cfs_start_time'],
+                                                         '%m/%d/%Y %H:%M'),
+                                                     end_date=datetime.strptime(
+                                                         form['cfs_end_date'] + ' ' + form['cfs_end_time'],
+                                                         '%m/%d/%Y %H:%M'),
+                                                     timezone=form.get('cfs_timezone', 'UTC'),
+                                                     event_id=event.id)
+                save_to_db(call_for_speakers)
+        else:
+            event.has_session_speakers = False
+            for session in DataGetter.get_sessions_by_event_id(event.id):
+                delete_from_db(session, "Removed session")
+            for speaker in DataGetter.get_speakers(event.id):
+                delete_from_db(speaker, "Removed speaker")
+            if call_for_papers:
+                delete_from_db(call_for_papers, "Removed cfs")
+            for session_type in session_types:
+                delete_from_db(session_type, "session type removed")
+            for track in tracks:
+                delete_from_db(track, "track removed")
+            for microlocation in microlocations:
+                delete_from_db(microlocation, "microlocation removed")
 
         for sponsor in sponsors:
             delete_from_db(sponsor, "Sponsor Deleted")
@@ -1343,31 +1385,6 @@ class DataManager(object):
         update_or_create(
             CustomForms, event_id=event.id,
             session_form=session_form, speaker_form=speaker_form)
-
-        if form.get('call_for_speakers_state', u'off') == u'on':
-            if call_for_papers:
-                call_for_papers.announcement = form['announcement']
-                call_for_papers.start_date = datetime.strptime(
-                    form['cfs_start_date'], '%m/%d/%Y')
-                call_for_papers.end_date = datetime.strptime(
-                    form['cfs_end_date'], '%m/%d/%Y')
-                call_for_papers.event_id = event.id
-                save_to_db(call_for_papers)
-            else:
-                call_for_speakers, c = get_or_create(CallForPaper,
-                                                     announcement=form['announcement'],
-                                                     start_date=datetime.strptime(
-                                                         form['cfs_start_date'] + ' ' + form['cfs_start_time'],
-                                                         '%m/%d/%Y %H:%M'),
-                                                     end_date=datetime.strptime(
-                                                         form['cfs_end_date'] + ' ' + form['cfs_end_time'],
-                                                         '%m/%d/%Y %H:%M'),
-                                                     timezone=form.get('cfs_timezone', 'UTC'),
-                                                     event_id=event.id)
-                save_to_db(call_for_speakers)
-        else:
-            if call_for_papers:
-                delete_from_db(call_for_papers, "Cfs deleted")
 
         save_to_db(event, "Event saved")
         record_activity('update_event', event_id=event.id)

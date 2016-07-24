@@ -115,13 +115,7 @@
                             <div class="tab-pane fade {% if step == 'sessions-tracks-rooms' or step == 'call-for-speakers' or step == 'form-customization' %}in active{% endif %}"
                                  id="step3">
                                 {% include 'gentelella/admin/event/wizard/step-3.html' %}
-                                <div class="col-md-12">
-                                    <hr>
-                                </div>
                                 {% include 'gentelella/admin/event/wizard/step-4.html' %}
-                                <div class="col-md-12">
-                                    <hr>
-                                </div>
                                 {% include 'gentelella/admin/event/wizard/step-5.html' %}
                                 <div class="col-md-10 col-md-push-1">
                                     {{ button_bar(show_next=false) }}

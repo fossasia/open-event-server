@@ -64,7 +64,7 @@
 
 {% endmacro %}
 
-<div id="step-5" class="wizard_content" style="display: block;">
+<div id="step-5" class="wizard_content" style="{% if event and event.has_session_speakers %}display: block;{% else %}display:none;{% endif %}">
     <div class="col-xs-12 col-md-push-1 col-md-10">
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
             <i class="fa fa-check-square-o"></i>

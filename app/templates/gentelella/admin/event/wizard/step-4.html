@@ -66,26 +66,19 @@
                     </select>
                 </div>
             </div>
-
     </div>
 
 {% endmacro %}
 
-<div id="step-4" class="wizard_content" style="display: block;">
+<div id="step-4" class="wizard_content" style="{% if event and event.has_session_speakers %}display: block;{% else %}display:none;{% endif %}">
     <div class="col-md-10 col-md-push-1">
-        <div style="width: 100%; text-align: center">
-            {% if call_for_speakers %}
-                <h2 style="font-weight: 300;">Turn <span class="cfs-state">off</span> call for speakers</h2>
-                <input type="checkbox" class="toggle-switch" name="call_for_speakers_state"
-                       value="on" id="call-for-speakers-switch" checked/>
-            {% else %}
-                <h2 style="font-weight: 300;">Turn <span class="cfs-state">on</span> call for speakers</h2>
-                <input type="checkbox" class="toggle-switch" name="call_for_speakers_state"
-                       value="on" id="call-for-speakers-switch"/>
-            {% endif %}
-            <label for="call-for-speakers-switch"></label>
-        </div>
-        <div id="call-for-speakers-holder" style="{% if not call_for_speakers %}display: none;{% endif %}">
+        <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
+            <i class="fa fa-check-square-o"></i>
+            Call for Speakers
+            <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+        </h2>
+
+        <div id="call-for-speakers-holder">
             {% if call_for_speakers %}
                 {{ call_for_speakers_display(call_for_speakers) }}
             {% else %}
