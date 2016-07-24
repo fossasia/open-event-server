@@ -14,14 +14,13 @@ from requests_oauthlib import OAuth2Session
 from sqlalchemy.orm.collections import InstrumentedList
 from sqlalchemy.sql.expression import exists
 from werkzeug import secure_filename
-from werkzeug.datastructures import ImmutableMultiDict
 from wtforms import ValidationError
 
 from app.helpers.helpers import string_empty, string_not_empty, uploaded_file
 from app.helpers.notification_email_triggers import trigger_new_session_notifications, \
     trigger_session_state_change_notifications
 from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth
-from app.helpers.storage import upload, UploadedFile, UPLOAD_PATHS
+from app.helpers.storage import upload, UPLOAD_PATHS
 from app.models.notifications import Notification
 from ..helpers import helpers as Helper
 from ..helpers.data_getter import DataGetter
@@ -32,7 +31,6 @@ from ..models import db
 from ..models.activity import Activity, ACTIVITIES
 from ..models.call_for_papers import CallForPaper
 from ..models.custom_forms import CustomForms
-from ..models.email_notifications import EmailNotification
 from ..models.event import Event, EventsUsers
 from ..models.event_copyright import EventCopyright
 from ..models.file import File
