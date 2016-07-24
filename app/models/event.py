@@ -45,6 +45,7 @@ class Event(db.Model):
     organizer_name = db.Column(db.String)
     show_map = db.Column(db.Integer)
     organizer_description = db.Column(db.String)
+    has_session_speakers = db.Column(db.Boolean, default=False)
     in_trash = db.Column(db.Boolean, default=False)
     track = db.relationship('Track', backref="event")
     microlocation = db.relationship('Microlocation', backref="event")
@@ -95,6 +96,7 @@ class Event(db.Model):
                  code_of_conduct=None,
                  schedule_published_on=None,
                  in_trash=False,
+                 has_session_speakers=False,
                  show_map=1,
                  searchable_location_name=None,
                  ticket_include=None):
@@ -125,6 +127,7 @@ class Event(db.Model):
         self.code_of_conduct = code_of_conduct
         self.schedule_published_on = schedule_published_on
         self.in_trash = in_trash
+        self.has_session_speakers = has_session_speakers
         self.searchable_location_name = searchable_location_name
         self.ticket_include = ticket_include
 
@@ -168,6 +171,7 @@ class Event(db.Model):
             'background_url': self.background_url,
             'organizer_name': self.organizer_name,
             'organizer_description': self.organizer_description,
+            'has_session_speakers': self.has_session_speakers,
             'privacy': self.privacy,
             'ticket_url': self.ticket_url,
             'code_of_conduct': self.code_of_conduct,

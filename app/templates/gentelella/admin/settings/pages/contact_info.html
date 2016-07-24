@@ -1,0 +1,37 @@
+{% extends 'gentelella/admin/settings/base.html' %}
+
+{% block title %}
+    Contact Info - Settings
+{% endblock %}
+
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
+{% endblock %}
+
+{% set active_page = 'contact_info' %}
+
+{% block content %}
+
+    <form class="col-md-6" data-toggle="validator" method="post" action="">
+        <div class="form-group">
+            <label for="email">Email ID</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="example@example.com" required value="{{user.email }}">
+            <div class="help-block with-errors"></div>
+        </div>
+        <div class="form-group">
+            <label for="contact">Phone</label>
+            <input type="tel" class="form-control" id="contact" value="{{user.user_detail.contact | default('', true) }}"  name="contact" maxlength="15" pattern="\d*" placeholder="Mobile number" data-pattern-error="Please enter a valid numeric phone/mobile number" required>
+            <div class="help-block with-errors"></div>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-info btn-lg">Save</button>
+    </form>
+
+
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='admin/lib/bootstrap-validator/dist/validator.min.js') }}"></script>
+{% endblock %}

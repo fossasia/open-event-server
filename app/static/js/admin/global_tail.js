@@ -94,3 +94,20 @@ function initializeSearchAutoComplete(location_slug) {
         $eventBrowseForm.submit();
     });
 }
+
+function handleDataTablePagination($table) {
+    var $paginator = $table.closest(".dataTables_wrapper").find(".dataTables_paginate");
+    if($paginator.find(".paginate_button").length > 3) {
+        $paginator.show();
+    } else {
+        $paginator.hide();
+    }
+}
+
+$(function () {
+    var $tables = $("table.dataTable");
+    $tables.on('draw.dt', function () {
+        handleDataTablePagination($(this))
+    });
+    handleDataTablePagination($tables);
+});

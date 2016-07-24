@@ -81,7 +81,7 @@
             {% if accepted_sessions[0] %}
                 <li><a href="/e/{{ event.id }}/sessions">Sessions</a></li>
             {% endif %}
-            {% if call_for_speakers %}
+            {% if call_for_speakers and call_for_speakers.privacy == 'public' %}
                 <li><a href="/e/{{ event.id }}/cfs">Call for speakers</a></li>
             {% endif %}
             {% if event.schedule_published_on %}

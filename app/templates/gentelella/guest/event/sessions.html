@@ -42,10 +42,10 @@
                 <li><a href="/e/{{ event.id }}#sponsors">Sponsors</a></li>
             {% endif %}
             <li class="active"><a href="/e/{{ event.id }}/sessions">Sessions</a></li>
-            {% if call_for_speakers %}
+            {% if call_for_speakers and call_for_speakers.privacy == 'public' %}
                 <li><a href="/e/{{ event.id }}/cfs">Call for speakers</a></li>
             {% endif %}
-            {% if event.schedule_published_on %}
+            {% if event.has_session_speakers and event.schedule_published_on %}
                 <li><a href="/e/{{ event.id }}/schedule">Schedule</a></li>
             {% endif %}
             {% if event.organizer_name %}

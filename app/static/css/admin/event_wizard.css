@@ -5,6 +5,10 @@
     margin-top: 10px;
 }
 
+.input-group {
+  margin-bottom: 0;
+}
+
 .label-header {
     font-size: 18px;
     margin-left: 10px;
@@ -224,3 +228,13 @@ span.round-tab:hover {
     }
 }
 
+@media (max-width: 1400px) {
+    .connecting-line {
+        width: 52% !important;
+    }
+
+    .wizard .nav-tabs {
+        width: 91% !important;
+    }
+
+}
