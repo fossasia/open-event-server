@@ -38,18 +38,22 @@ from app.models import db
 from app.models.user import User
 from app.models.ticket import Ticket, BookedTicket
 from app.models.event import Event
+from app.models.session import Session
 from app.views.admin.admin import AdminView
 from helpers.jwt import jwt_authenticate, jwt_identity
 from helpers.formatter import operation_name
 from app.helpers.data_getter import DataGetter
 from app.views.api_v1_views import app as api_v1_routes
 from app.views.sitemap import app as sitemap_routes
+from app.views.admin.super_admin.users import SuperAdminUsersView
+from app.views.admin.models_views.sessions import SessionsView
 from app.settings import get_settings
 from app.api.helpers.errors import NotFoundError
 import requests
 from apscheduler.schedulers.background import BackgroundScheduler
 from app.helpers.data import DataManager, delete_from_db
 from app.helpers.helpers import send_after_event
+from sqlalchemy_continuum import transaction_class
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -258,6 +262,7 @@ def set_secret():
     current_app.secret_key = get_settings()['secret']
 
 
+
 def send_after_event_mail():
     with app.app_context():
         events = Event.query.all()
@@ -275,6 +280,32 @@ def send_after_event_mail():
 sched = BackgroundScheduler(timezone=utc)
 sched.add_job(send_after_event_mail, 'cron', day_of_week='mon-fri', hour=5, minute=30)
 sched.start()
+
+def empty_trash():
+    with app.app_context():
+        print 'HELLO'
+        events = Event.query.filter_by(in_trash=True)
+        users = User.query.filter_by(in_trash=True)
+        sessions = Session.query.filter_by(in_trash=True)
+        for event in events:
+            if datetime.now() - event.trash_date >= timedelta(days=30):
+                DataManager.delete_event(event.id)
+
+        for user in users:
+            if datetime.now() - user.trash_date >= timedelta(days=30):
+                transaction = transaction_class(Event)
+                transaction.query.filter_by(user_id=user.id).delete()
+                delete_from_db(user, "User deleted permanently")
+
+        for session in sessions:
+            if datetime.now() - session.trash_date >= timedelta(days=30):
+                delete_from_db(session, "Session deleted permanently")
+
+
+trash_sched = BackgroundScheduler(timezone=utc)
+trash_sched.add_job(empty_trash, 'cron', day_of_week='mon-fri', hour=5, minute=30)
+trash_sched.start()
+
 
 if __name__ == '__main__':
     current_app.run()

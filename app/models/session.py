@@ -42,6 +42,7 @@ class Session(db.Model):
     state = db.Column(db.String, default="pending")
     in_trash = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    trash_date = db.Column(db.DateTime)
 
     def __init__(self,
                  title=None,
@@ -63,7 +64,8 @@ class Session(db.Model):
                  signup_url=None,
                  session_type=None,
                  created_at=None,
-                 in_trash=False):
+                 in_trash=False,
+                 trash_date=None):
         self.title = title
         self.subtitle = subtitle
         self.short_abstract = short_abstract
@@ -83,7 +85,8 @@ class Session(db.Model):
         self.signup_url = signup_url
         self.session_type = session_type
         self.created_at = created_at
-        self.in_trash=in_trash
+        self.in_trash = in_trash
+        self.trash_date = trash_date
 
     @staticmethod
     def get_service_name():

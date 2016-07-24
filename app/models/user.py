@@ -41,6 +41,7 @@ class User(db.Model):
     in_trash = db.Column(db.Boolean, default=False)
     user_detail = db.relationship("UserDetail", uselist=False, backref="user")
     created_date = db.Column(db.DateTime, default=datetime.now())
+    trash_date = db.Column(db.DateTime)
 
     def has_role(self, event_id):
         """Checks if user has any of the Roles at an Event.
