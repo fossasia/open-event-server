@@ -228,3 +228,13 @@ span.round-tab:hover {
     }
 }
 
+@media (max-width: 1400px) {
+    .connecting-line {
+        width: 52% !important;
+    }
+
+    .wizard .nav-tabs {
+        width: 91% !important;
+    }
+
+}
