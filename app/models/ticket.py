@@ -8,13 +8,14 @@ class Ticket(db.Model):
                                           name='name_event_uc'), )
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
+    name = db.Column(db.String)
     description = db.Column(db.String)
-    quantity = db.Column(db.Integer, nullable=False)
+    type = db.Column(db.String)
+    quantity = db.Column(db.Integer)
     price = db.Column(db.Integer)
 
-    sales_start = db.Column(db.DateTime, nullable=False)
-    sales_end = db.Column(db.DateTime, nullable=False)
+    sales_start = db.Column(db.DateTime)
+    sales_end = db.Column(db.DateTime)
 
     min_order = db.Column(db.Integer)
     max_order = db.Column(db.Integer)
