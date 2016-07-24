@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import url_for, flash
+from flask import url_for, flash, request
 from flask_admin import BaseView, expose
 from werkzeug.utils import redirect
 
@@ -8,6 +8,13 @@ from app.helpers.data import save_to_db
 from ....helpers.data_getter import DataGetter
 
 class SchedulerView(BaseView):
+
+    def _handle_view(self, name, **kwargs):
+        if not self.is_accessible():
+            return redirect(url_for('admin.login_view', next=request.url))
+        event = DataGetter.get_event(kwargs['event_id'])
+        if not event.has_session_speakers:
+            return self.render('/gentelella/admin/event/info/enable_module.html', active_page='scheduler', title='Scheduler', event=event)
 
     @expose('/')
     def display_view(self, event_id):

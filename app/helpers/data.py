@@ -874,10 +874,6 @@ class DataManager(object):
                                    licence=licence_name,
                                    licence_url=licence_url,
                                    logo=logo)
-        if 'ticket_url' not in form:
-            ticket_url = ""
-        else:
-            ticket_url = form['ticket_url']
         event = Event(name=form['name'],
                       start_time=datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M'),
                       end_time=datetime.strptime(form['end_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M'),
@@ -891,7 +887,7 @@ class DataManager(object):
                       topic=form['topic'],
                       sub_topic=form['sub_topic'],
                       privacy=form.get('privacy', u'public'),
-                      ticket_url=ticket_url,
+                      ticket_url=form.get('ticket_url', None),
                       copyright=copyright,
                       show_map=1 if form.get('show_map') == "on" else 0,
                       creator=login.current_user)
@@ -1133,10 +1129,10 @@ class DataManager(object):
         event.event_url = form['event_url']
         event.type = form['type']
         event.topic = form['topic']
-        event.show_map = 1 if form.get('show_map') == "on" else 0
+        event.show_map = 1 if form.get('show_map', 'on') == "on" else 0
         event.sub_topic = form['sub_topic']
         event.privacy = form.get('privacy', 'public')
-        event.ticket_url = form['ticket_url']
+        event.ticket_url = form.get('ticket_url', None)
 
         if event.latitude and event.longitude:
             response = requests.get(
@@ -1212,18 +1208,6 @@ class DataManager(object):
         custom_forms_name = form.getlist('custom_form[name]')
         custom_forms_value = form.getlist('custom_form[value]')
 
-        session_type_names = form.getlist('session_type[name]')
-        session_type_id = form.getlist('session_type[id]')
-        session_type_length = form.getlist('session_type[length]')
-
-        track_name = form.getlist('tracks[name]')
-        track_color = form.getlist('tracks[color]')
-        track_id = form.getlist('tracks[id]')
-
-        room_name = form.getlist('rooms[name]')
-        room_floor = form.getlist('rooms[floor]')
-        room_id = form.getlist('rooms[id]')
-
         for social_link in social_links:
             if str(social_link.id) not in social_link_id:
                 delete_from_db(social_link, "SocialLink Deleted")
@@ -1248,8 +1232,20 @@ class DataManager(object):
                                                    event_id=event.id)
                 db.session.add(social_link)
 
-
         if form.get('has_session_speakers', u'no') == u'yes':
+
+            session_type_names = form.getlist('session_type[name]')
+            session_type_id = form.getlist('session_type[id]')
+            session_type_length = form.getlist('session_type[length]')
+
+            track_name = form.getlist('tracks[name]')
+            track_color = form.getlist('tracks[color]')
+            track_id = form.getlist('tracks[id]')
+
+            room_name = form.getlist('rooms[name]')
+            room_floor = form.getlist('rooms[floor]')
+            room_id = form.getlist('rooms[id]')
+
             event.has_session_speakers = True
             # save the edited info to database
             for session_type in session_types:

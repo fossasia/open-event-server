@@ -150,10 +150,8 @@
             if (onOffSwitch.checked) {
                 $sessionTracksRoomsHolder.fadeIn();
                 $strState.text("off");
-                $sessionTracksRoomsHolder.find("input:not(.nt)").removeAttr('disabled');
             } else {
                 $sessionTracksRoomsHolder.fadeOut();
-                $sessionTracksRoomsHolder.find("input").attr('disabled', 'disabled');
                 $strState.text("on");
             }
         };

@@ -83,7 +83,7 @@
             <div class="radio">
                 <label style="font-weight: 300;">
                     <input type="radio" name="cfs_privacy" value="public"
-                           {% if (call_for_speakers and call_for_speakers.privacy == 'public') or not event %}checked{% endif %}>
+                           {% if (call_for_speakers and call_for_speakers.privacy == 'public') or not call_for_speakers %}checked{% endif %}>
                     <strong style="font-weight: 400;">Public:</strong> Display this publicly. Anybody will be able to submit a proposal
                 </label>
             </div>

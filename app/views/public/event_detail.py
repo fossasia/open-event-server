@@ -88,7 +88,7 @@ class EventDetailView(BaseView):
         calling_frame = inspect.getouterframes(inspect.currentframe(), 2)
         if call_for_speakers.privacy != 'public' and calling_frame[1][3] != 'display_event_cfs_via_hash':
             abort(404)
-            
+
         form_elems = DataGetter.get_custom_form_elements(event_id)
         speaker_form = json.loads(form_elems.speaker_form)
         session_form = json.loads(form_elems.session_form)
