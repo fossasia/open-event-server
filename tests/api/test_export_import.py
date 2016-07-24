@@ -113,13 +113,13 @@ class TestEventExport(ImportExportBase):
         self.assertIn('placehold', resp.data, resp.data)
         self._create_set()
         dr = 'static/temp/test_event_import'
-        data = open(dr + '/event.json', 'r').read()
+        data = open(dr + '/event', 'r').read()
         self.assertIn('images/logo', data)
         obj = json.loads(data)
         logo_data = open(dr + obj['logo'], 'r').read()
         self.assertTrue(len(logo_data) > 10)
         # test meta.json
-        data = open(dr + '/meta.json', 'r').read()
+        data = open(dr + '/meta', 'r').read()
         self.assertIn('http', data)
 
     def test_export_settings_marshal(self):
@@ -131,7 +131,7 @@ class TestEventExport(ImportExportBase):
         self.assertIn('placehold', resp.data, resp.data)
         self._create_set(1, {})
         dr = 'static/temp/test_event_import'
-        data = open(dr + '/event.json', 'r').read()
+        data = open(dr + '/event', 'r').read()
         obj = json.loads(data)
         self.assertIn('placehold', obj['logo'])
         if os.path.isdir(dr + '/images'):
