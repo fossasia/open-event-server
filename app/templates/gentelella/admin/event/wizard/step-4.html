@@ -69,12 +69,16 @@
     </div>
     <div class="item form-group">
         <label>Private link</label>
-        <input type="text"
-               name="name" class="nt form-control col-md-7 col-xs-12" onClick="this.select();"
-               style="margin-bottom: 5px;"
-               disabled="disabled"
-               value="{{ url_for('event_detail.display_event_cfs_via_hash', hash=cfs_hash if not call_for_speakers or not call_for_speakers.hash else call_for_speakers.hash, _external=True ) }}"/><br>
-        <span style="font-weight: 300;">Share this link to get private submission independently of open/closed Call for Speakers at any time</span>
+        <div class="input-group col-md-7 col-xs-12">
+            <input type="text"
+                   id="cfs_private_link"
+                   name="cfs_private_link" class="nt form-control"
+                   readonly="readonly"
+                   value="{{ url_for('event_detail.display_event_cfs_via_hash', hash=cfs_hash if not call_for_speakers or not call_for_speakers.hash else call_for_speakers.hash, _external=True ) }}"/>          <span class="input-group-btn">
+            <button class="btn btn-default btn-copy" type="button" data-clipboard-target="#cfs_private_link" data-toggle="tooltip" data-container="body" data-placement="top" title="Click to copy"><i class="fa fa-clipboard"></i></button>
+          </span>
+        </div>
+        <span style="font-weight: 300;">Share this link to get private submission independently of open/closed Call for Speakers at any time. <em>(the link will be active once the event is saved)</em></span>
         <input type="hidden" name="cfs_hash" value="{{ cfs_hash if not call_for_speakers or not call_for_speakers.hash else call_for_speakers.hash }}">
     </div>
 
@@ -83,8 +87,8 @@
             <div class="radio">
                 <label style="font-weight: 300;">
                     <input type="radio" name="cfs_privacy" value="public"
-                           {% if (call_for_speakers and call_for_speakers.privacy == 'public') or not call_for_speakers %}checked{% endif %}>
-                    <strong style="font-weight: 400;">Public:</strong> Display this publicly. Anybody will be able to submit a proposal
+                           {% if (call_for_speakers and call_for_speakers.privacy == 'public') or not call_for_speakers or not event %}checked{% endif %}>
+                    <strong style="font-weight: 400;">Public:</strong> Display this publicly. Anybody will be able to submit a proposal within the dates chosen, once the event is published.
                 </label>
             </div>
             <div class="radio">
@@ -119,6 +123,13 @@
 
 <script>
     $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        var clipboard = new Clipboard('.btn-copy');
+        clipboard.on('success', function(e) {
+
+            $(".btn-copy").attr("title", "Copied").attr("data-original-title", "Copied").tooltip('show').attr("title", "Click to copy").attr("data-original-title", "Click to copy");
+        });
+
         $(".announcement").summernote(summernoteConfig);
     });
 </script>
