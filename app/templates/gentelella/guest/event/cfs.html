@@ -81,7 +81,7 @@
         <div class="row">
             <div class="col-md-12">
                 <h1 style="font-weight: 300; font-size: 30px">Call for Speakers</h1>
-                <p>
+                <p {% if via_hash %}style="display:none;"{% endif %}>
                     {% if state == 'now' %}
                         <span class="label label-success">Open</span>
                     {% elif state == 'past' %}
@@ -94,14 +94,14 @@
                     to
                     <strong>{{ call_for_speakers.end_date.strftime('%a, %B %d at %I:%M %p') }}</strong></p>
                 {{ call_for_speakers.announcement | safe }}
-                {% if state == "now" %}
+                {% if state == "now" or via_hash %}
                     <button class="btn btn-success" data-toggle="modal" data-target="#session-model">Submit Proposal
                     </button>
                 {% endif %}
             </div>
         </div>
     </div>
-    {% if state == "now" %}
+    {% if state == "now" or via_hash %}
         <div class="modal fade" tabindex="-1" role="dialog" id="session-model">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
