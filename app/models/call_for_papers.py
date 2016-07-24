@@ -11,7 +11,7 @@ class CallForPaper(db.Model):
     start_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime, nullable=False)
     timezone = db.Column(db.String, nullable=False, default="UTC")
-    hash = db.Column(db.String, nullable=False)
+    hash = db.Column(db.String, nullable=True)
     privacy = db.Column(db.String, nullable=False)
     event_id = db.Column(
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))

@@ -1,11 +1,9 @@
 import json
 import datetime
-import random
-import string
-import os,binascii
+import os
+import binascii
 
-from flask import request, flash, url_for
-from flask.ext.restplus import abort
+from flask import flash, url_for
 from flask.ext.admin import BaseView
 from flask_admin import expose
 
@@ -17,7 +15,6 @@ from ....helpers.data import DataManager, save_to_db, record_activity, delete_fr
 from ....helpers.data_getter import DataGetter
 from werkzeug.datastructures import ImmutableMultiDict
 from app.helpers.helpers import send_event_publish
-from app.models.event import Event
 
 def is_verified_user():
     return login.current_user.is_verified
