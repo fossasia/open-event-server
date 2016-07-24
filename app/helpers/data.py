@@ -1150,7 +1150,21 @@ class DataManager(object):
         event.show_map = 1 if form.get('show_map') == "on" else 0
         event.sub_topic = form['sub_topic']
         event.privacy = form.get('privacy', 'public')
-        event.ticket_url = form['ticket_url']
+        event.ticket_url = form.get('ticket_url', '')
+
+        # Ticket
+        str_empty = lambda val, val2: val2 if val == '' else val
+
+        ticket_price = form.get('ticket_price', 0)
+        event.tickets[0].name = form['ticket_name'],
+        event.tickets[0].type = form['ticket_type'],
+        event.tickets[0].description = form['ticket_description'],
+        event.tickets[0].price = ticket_price,
+        event.tickets[0].sales_start = datetime.strptime(form['ticket_sales_start_date'] + ' ' + form['ticket_sales_start_time'], '%m/%d/%Y %H:%M'),
+        event.tickets[0].sales_end = datetime.strptime(form['ticket_sales_end_date'] + ' ' + form['ticket_sales_end_time'], '%m/%d/%Y %H:%M'),
+        event.tickets[0].quantity = str_empty(form.get('ticket_quantity'), 100),
+        event.tickets[0].min_order = str_empty(form.get('ticket_min_order'), 1),
+        event.tickets[0].max_order = str_empty(form.get('ticket_max_order'), 10)
 
         if event.latitude and event.longitude:
             response = requests.get(
