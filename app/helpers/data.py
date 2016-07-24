@@ -41,6 +41,7 @@ from ..models.microlocation import Microlocation
 from ..models.permission import Permission
 from ..models.role import Role
 from ..models.role_invite import RoleInvite
+from ..models.ticket import Ticket
 from ..models.service import Service
 from ..models.session import Session
 from ..models.session_type import SessionType
@@ -874,6 +875,29 @@ class DataManager(object):
                                    licence=licence_name,
                                    licence_url=licence_url,
                                    logo=logo)
+
+        # Add Ticket
+        str_empty = lambda val, val2: val2 if val == '' else val
+
+        ticket_price = form.get('ticket_price', 0)
+        # Default values to pass the tests because APIs don't have these fields
+        ticket = Ticket(
+            name=form.get('ticket_name', ''),
+            type=form.get('ticket_type', 'free'),
+            description=form.get('ticket_description', ''),
+            price=ticket_price,
+            sales_start=datetime.strptime(
+                form.get('ticket_sales_start_date', '01/01/2001') + ' ' +
+                form.get('ticket_sales_start_time', '00:00'),
+                '%m/%d/%Y %H:%M'),
+            sales_end=datetime.strptime(
+                form.get('ticket_sales_end_date', '01/01/2001') + ' ' +
+                form.get('ticket_sales_end_time', '00:00'), '%m/%d/%Y %H:%M'),
+            quantity=str_empty(form.get('ticket_quantity'), 100),
+            min_order=str_empty(form.get('ticket_min_order'), 1),
+            max_order=str_empty(form.get('ticket_max_order'), 10)
+        )
+
         event = Event(name=form['name'],
                       start_time=datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M'),
                       end_time=datetime.strptime(form['end_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M'),
@@ -891,6 +915,8 @@ class DataManager(object):
                       copyright=copyright,
                       show_map=1 if form.get('show_map') == "on" else 0,
                       creator=login.current_user)
+
+        event.tickets.append(ticket)
 
         if event.latitude and event.longitude:
             response = requests.get(
@@ -1132,6 +1158,25 @@ class DataManager(object):
         event.show_map = 1 if form.get('show_map', 'on') == "on" else 0
         event.sub_topic = form['sub_topic']
         event.privacy = form.get('privacy', 'public')
+
+        # Ticket
+        str_empty = lambda val, val2: val2 if val == '' else val
+
+        ticket_price = form.get('ticket_price', 0)
+        if event.tickets != []:
+            event.tickets[0].name = form.get('ticket_name', ''),
+            event.tickets[0].type = form.get('ticket_type', 'free'),
+            event.tickets[0].description = form.get('ticket_description', ''),
+            event.tickets[0].price = ticket_price,
+            event.tickets[0].sales_start = datetime.strptime(
+                form['ticket_sales_start_date'] + ' ' +
+                form['ticket_sales_start_time'], '%m/%d/%Y %H:%M'),
+            event.tickets[0].sales_end = datetime.strptime(
+                form['ticket_sales_end_date'] + ' ' +
+                form['ticket_sales_end_time'], '%m/%d/%Y %H:%M'),
+            event.tickets[0].quantity = str_empty(form.get('ticket_quantity'), 100),
+            event.tickets[0].min_order = str_empty(form.get('ticket_min_order'), 1),
+            event.tickets[0].max_order = str_empty(form.get('ticket_max_order'), 10)
         event.ticket_url = form.get('ticket_url', None)
 
         if event.latitude and event.longitude:
