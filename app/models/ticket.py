@@ -26,16 +26,18 @@ class Ticket(db.Model):
 
     def __init__(self,
                  name,
-                 quantity,
-                 event,
+                 type,
                  sales_start,
                  sales_end,
                  description=None,
+                 event=None,
+                 quantity=100,
                  price=0,
                  min_order=1,
                  max_order=10):
         self.name = name
         self.quantity = quantity
+        self.type = type
         self.event = event
         self.description = description
         self.price = price

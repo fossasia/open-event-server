@@ -41,6 +41,7 @@ from ..models.microlocation import Microlocation
 from ..models.permission import Permission
 from ..models.role import Role
 from ..models.role_invite import RoleInvite
+from ..models.ticket import Ticket
 from ..models.service import Service
 from ..models.session import Session
 from ..models.session_type import SessionType
@@ -878,6 +879,23 @@ class DataManager(object):
             ticket_url = ""
         else:
             ticket_url = form['ticket_url']
+
+        # Add Ticket
+        str_empty = lambda val, val2: val2 if val == '' else val
+
+        ticket_price = form.get('ticket_price', 0)
+        ticket = Ticket(
+            name=form['ticket_name'],
+            type=form['ticket_type'],
+            description=form['ticket_description'],
+            price=ticket_price,
+            sales_start=datetime.strptime(form['ticket_sales_start_date'] + ' ' + form['ticket_sales_start_time'], '%m/%d/%Y %H:%M'),
+            sales_end=datetime.strptime(form['ticket_sales_end_date'] + ' ' + form['ticket_sales_end_time'], '%m/%d/%Y %H:%M'),
+            quantity=str_empty(form.get('ticket_quantity'), 100),
+            min_order=str_empty(form.get('ticket_min_order'), 1),
+            max_order=str_empty(form.get('ticket_max_order'), 10)
+        )
+
         event = Event(name=form['name'],
                       start_time=datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M'),
                       end_time=datetime.strptime(form['end_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M'),
@@ -895,6 +913,8 @@ class DataManager(object):
                       copyright=copyright,
                       show_map=1 if form.get('show_map') == "on" else 0,
                       creator=login.current_user)
+
+        event.tickets.append(ticket)
 
         if event.latitude and event.longitude:
             response = requests.get(
