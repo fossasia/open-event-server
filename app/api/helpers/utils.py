@@ -111,7 +111,7 @@ class BaseDAO:
     """
     DAO for a basic independent model
     """
-    version_key = 'base_ver'
+    version_key = None
 
     def __init__(self, model, post_api_model=None, put_api_model=None):
         self.model = model
@@ -164,7 +164,8 @@ class BaseDAO:
         """
         Update version of the component of the event
         """
-        update_version(event_id, False, self.version_key)
+        if self.version_key:
+            update_version(event_id, False, self.version_key)
 
     # Helper functions
     def _del(self, data, fields):
