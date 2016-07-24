@@ -70,6 +70,7 @@ class MyHomeView(AdminIndexView):
             record_user_login_logout('user_login', user)
             logging.info('logged successfully')
             user_logged_in(user)
+            session['user_id'] = login.current_user.id
             return redirect(intended_url())
 
     @expose('/register/', methods=('GET', 'POST'))

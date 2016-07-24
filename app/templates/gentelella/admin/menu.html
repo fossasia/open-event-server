@@ -67,7 +67,7 @@
                         <li>
                             <a href="{{ url_for('profile.notifications_view') }}" class="info-number">
                                 <i class="fa fa-envelope-o"></i>
-                                <span class="badge bg-green">{{ current_user.get_unread_notif_count() | default('', true) }}</span>
+                                <span class="badge bg-green" id="notif_count">{{ current_user.get_unread_notif_count() | default('', true) }}</span>
                             </a>
                         </li>
                     {% else %}

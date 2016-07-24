@@ -62,5 +62,21 @@
     <script src="{{ url_for('static', filename='js/admin/global_tail.js') }}"></script>
     <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
 {% endblock %}
+
+{% if current_user.is_authenticated %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        namespace = '/notifs';
+
+        var socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
+
+        socket.on('response', function(msg) {
+            console.log(msg.data);
+            $("#notif_count").text(msg.data);
+        });
+    });
+</script>
+{% endif %}
 </body>
 </html>

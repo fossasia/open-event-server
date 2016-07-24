@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 
 import requests
 from flask import flash, request, url_for, g
+from flask_socketio import emit
 from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from requests_oauthlib import OAuth2Session
@@ -75,6 +76,18 @@ class DataManager(object):
                                     message=message,
                                     received_at=datetime.now())
         save_to_db(notification, 'User notification saved')
+
+    @staticmethod
+    def push_user_notification(user):
+        """
+        Push user notification using websockets.
+        TODO: Integrate `create_user_notification` inside it.
+        """
+        user_room = 'user_{}'.format(user.id)
+        emit('response',
+            {'data': user.get_unread_notif_count()+1},
+            room=user_room,
+            namespace='/notifs')
 
     @staticmethod
     def mark_user_notification_as_read(notification):

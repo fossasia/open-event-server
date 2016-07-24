@@ -15,7 +15,8 @@ from os import environ
 import sys
 import json
 from collections import Counter
-from flask import Flask
+from flask import Flask, session
+from flask_socketio import SocketIO, emit, join_room
 from flask.ext.autodoc import Autodoc
 from flask.ext.cors import CORS
 from flask.ext.migrate import Migrate, MigrateCommand
@@ -229,6 +230,21 @@ def track_user():
 current_app, manager, database, jwt = create_app()
 
 
+from eventlet import monkey_patch
+monkey_patch()
+
+# async_mode = 'eventlet'
+# socketio = SocketIO(current_app, async_mode=async_mode)
+
+socketio = SocketIO(current_app)
+
+@socketio.on('connect', namespace='/notifs')
+def test_connect():
+    user_room = 'user_{}'.format(session['user_id'])
+    join_room(user_room)
+    # emit('response', {'data': 'user in {}'.format(user_room)})
+
+
 def make_celery(app):
     celery = Celery(app.import_name, broker=app.config['CELERY_BROKER_URL'])
     celery.conf.update(app.config)
@@ -255,3 +271,4 @@ def set_secret():
 
 if __name__ == '__main__':
     current_app.run()
+    socketio.run(current_app, port=8001)
