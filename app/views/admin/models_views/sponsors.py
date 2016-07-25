@@ -1,8 +1,10 @@
+from flask import url_for, redirect
 from flask.ext.admin import BaseView
 from flask_admin import expose
 from ....helpers.data_getter import DataGetter
 from app.helpers.permission_decorators import *
 from app.helpers.data import delete_from_db
+
 
 class SponsorsView(BaseView):
     @expose('/', methods=('GET', 'POST'))
