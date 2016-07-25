@@ -30,6 +30,7 @@ from ..models.call_for_papers import CallForPaper
 from ..models.custom_forms import CustomForms
 from ..models.mail import Mail
 from ..models.activity import Activity
+from ..models.ticket import Ticket
 from ..models.setting import Setting
 from ..models.modules import Module
 from ..models.page import Page
@@ -638,6 +639,11 @@ class DataGetter:
             cnt[location] += 1
         return [v for v, k in cnt.most_common()][:10]
 
+    @staticmethod
+    def get_sales_open_tickets(event_id):
+        tickets = Ticket.query.filter(Ticket.event_id == event_id).filter(
+            Ticket.sales_start <= datetime.datetime.now()).filter(
+            Ticket.sales_end >= datetime.datetime.now())
 
     @staticmethod
     def get_module():
