@@ -6,8 +6,7 @@ Event Sponsors
 <button onclick="addSponsor();" class="btn btn-info pull-right" style="color: #FFFFFF; margin: 0; padding-left: 10px;" data-target="#add-role">Add Sponsor</button>
 {% endblock %}
 {% block panel_content %}
-<div class="col-md-12">
-    <h4>Sponsors List</h4>
+<div class="col-md-12 sponsor-widget">
     <table class="sponsor-table table table-striped">
         <thead>
         <tr>
@@ -63,8 +62,11 @@ Event Sponsors
     <script src="{{ url_for('static', filename='admin/lib/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script type="text/javascript">
-        $('.sponsor-table').DataTable();
 
+        $( document ).ready(function() {
+          $('.sponsor-table').DataTable();
+          $('.sponsor-widget #DataTables_Table_1_length').hide()
+        });
     </script>
 
 {% endblock %}
