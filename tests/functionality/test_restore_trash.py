@@ -1,17 +1,16 @@
 import unittest
 from datetime import datetime
-from tests.auth_helper import register, login
+from tests.auth_helper import login
 from tests.utils import OpenEventTestCase
 from tests.setup_database import Setup
 from tests.object_mother import ObjectMother
-from open_event import current_app as app
-from open_event.helpers.data import save_to_db
-from open_event.helpers.data_getter import DataGetter
+from app import current_app as app
+from app.helpers.data import save_to_db
 from flask import url_for
-from open_event.models.event import Event
-from open_event.helpers.data import DataManager, trash_user, trash_session, restore_event, restore_session, restore_user
-from open_event.models.user import User
-from open_event.models.session import Session
+from app.models.event import Event
+from app.helpers.data import DataManager, trash_session, restore_event, restore_session, restore_user
+from app.models.user import User
+from app.models.session import Session
 
 class TestAdminTrash(OpenEventTestCase):
     def setUp(self):

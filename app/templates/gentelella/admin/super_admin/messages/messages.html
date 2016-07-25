@@ -1,0 +1,101 @@
+{% extends 'gentelella/admin/super_admin/dashboard.html' %}
+
+{% block title %}
+System Messages
+{% endblock %}
+
+{% set active_page = "messages" %}
+
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/bootstrap/green.css') }}"/>
+    <style type="text/css">
+        #secondary-tabs {
+            position: absolute;
+            background: transparent;
+            top: 9px;
+            width: auto;
+        }
+
+        table.table {
+            margin-top: 20px !important;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<form id="message-settings-form" action="/admin/messages/update" method="POST">
+<div>
+    <div class="table-responsive col-md-10">
+        <table id="mails_table" class="table table-striped table-hover with-datatable no-global-dt">
+            <thead>
+                <tr>
+                    <th class="col-md-2 col-sm-2">Recipient</th>
+                    <th class="col-md-2 col-sm-2">Trigger</th>
+                    <th class="col-md-3 col-sm-3">Email Message</th>
+                    <th class="col-md-3 col-sm-3">Notification Message</th>
+                    <th class="col-md-2 col-sm-2">Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for notif in notifications %}
+                <tr>
+                    <td>{{ mails[notif]['recipient'] }}</td>
+                    <td>{{ notif }}</td>
+                    <td><strong>{{ mails[notif]['subject'] }}</strong><br>{{ mails[notif]['message']|safe }}</td>
+                    <td>
+                    {% if notifications[notif] %}
+                        <strong>{{ notifications[notif]['title'] }}</strong><br>{{ notifications[notif]['message']|safe }}
+                    {% endif %}
+                    </td>
+                    <td id="{{ notif }}">
+                        <div class="checkbox" style="margin-top:10px;">
+                            <label>
+                              <input type="checkbox" class="flat" {% if message_settings[notif].mail_status != 0 or not message_settings[notif] %}checked="checked"{% endif %} name="{{ notif }}_mail_status" onclick=""> Mail
+                            </label>
+                        </div><br>
+                        {% if notifications[notif] %}
+                        <div class="checkbox" style="margin-top:10px;">
+                            <label>
+                              <input type="checkbox" class="flat" {% if message_settings[notif].notif_status != 0 or not message_settings[notif] %}checked="checked"{% endif %} name="{{ notif }}_notif_status"> Notification
+                            </label>
+                        </div><br>
+                        {% endif %}
+                        <div class="checkbox" style="margin-top:10px;">
+                            <label>
+                              <input type="checkbox" class="flat" {% if message_settings[notif].user_control_status != 0 or not message_settings[notif] %}checked="checked"{% endif %} name="{{ notif }}_user_control_status"> User Control
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <input type="submit" value="Update Settings" class="btn btn-success" style="float:right;">
+</div>
+</form>
+
+
+
+
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/bootstrap/icheck.js') }}"></script>
+
+    <script type="text/javascript">
+        $('#mails_table').DataTable({
+            "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+            "pageLength": 25,
+            "aaSorting": []
+        });
+        $('#notifs_table').DataTable({
+            "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+            "aaSorting": []
+        });
+    </script>
+{% endblock %}
+

@@ -2,10 +2,11 @@ import unittest
 
 from flask import url_for
 
-from open_event import current_app as app
+from app import current_app as app
 from tests.views.view_test_case import OpenEventViewTestCase
 from tests.object_mother import ObjectMother
-from open_event.helpers.data import save_to_db
+from app.helpers.data import save_to_db
+from app.helpers.data_getter import DataGetter
 
 
 class TestSuperAdminViews(OpenEventViewTestCase):
@@ -20,6 +21,18 @@ class TestSuperAdminViews(OpenEventViewTestCase):
         with app.test_request_context():
             rv = self.app.get(url_for('sadmin_events.index_view'), follow_redirects=True)
             self.assertTrue("Manage All Events" in rv.data, msg=rv.data)
+
+    def test_admin_messages(self):
+        with app.test_request_context():
+            rv = self.app.get(url_for('sadmin_messages.index_view'), follow_redirects=True)
+            self.assertTrue("System Messages" in rv.data, msg=rv.data)
+
+    def test_admin_messages_edit(self):
+        with app.test_request_context():
+            setting = ObjectMother.get_message_settings()
+            save_to_db(setting, "Message Settings Updated")
+            data = DataGetter.get_message_setting_by_action("Next Event")
+            self.assertEqual(1, data.mail_status, msg=data.mail_status)
 
     def test_admin_users(self):
         with app.test_request_context():

@@ -1,0 +1,18 @@
+<div class="col-md-6 col-sm-6 col-xs-12">
+    <div class="x_panel tile fixed_height_390" style="overflow: auto;">
+        <div class="x_title">
+            <h2 style="font-weight: 400; text-transform: uppercase;">{% block panel_title %}{% endblock %}</h2>
+
+            {% block addon_link %}{% endblock %}
+
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="col-md-12 ">
+                {% block panel_content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+

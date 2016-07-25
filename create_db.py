@@ -2,10 +2,10 @@ import re
 import sys
 from getpass import getpass
 
-from open_event import current_app
-from open_event.models import db
+from app import current_app
+from app.models import db
 
-from open_event.helpers.data import DataManager
+from app.helpers.data import DataManager
 from populate_db import populate
 
 

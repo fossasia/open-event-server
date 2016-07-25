@@ -1,0 +1,147 @@
+{% extends 'gentelella/admin/base.html' %}
+
+{% block title %}
+Notifications
+{% endblock %}
+
+{% block head_css %}
+    {{ super() }}
+    <style type="text/css">
+    /*
+        .notification {
+            cursor: pointer;
+        }
+    */
+    </style>
+{% endblock %}
+{% block body %}
+    
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-10 col-sm-push-1 col-md-8 col-md-push-2">
+            <div class="x_panel" style="min-height: 700px;">
+                <div class="x_title">
+                    <h2>Notifications</h2>
+
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <div id="toolbar-holder">
+                                <div class="btn-group pull-left" data-toggle="buttons">
+                                    <label class="btn btn-default active btn-responsive">
+                                        <input type="radio" name="notif_status" autocomplete="off" value="unread"
+                                               checked> Unread
+                                    </label>
+                                    <label class="btn btn-default btn-responsive">
+                                        <input type="radio" name="notif_status" autocomplete="off" value="all"> All
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <a href="{{ url_for('profile.mark_all_notification_as_read') }}" class="btn btn-default pull-right">Mark all read</a>
+                        </div>
+                        <div class="col-xs-12">
+                            <table class="notif-table table table-hover" style="margin-top: 16px;">
+                                <thead>
+                                <tr>
+                                    <th style="display:none;">Status</th>
+                                    <th>Message</th>
+                                    <th>Received At</th>
+                                    <th>Received At (Humanized)</th>
+                                    <th>Options</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for notif in notifications %}
+                                    <tr class="notification {{ '' if notif.has_read else 'info' }}">
+                                        <td style="display: none;">{{ 'read' if notif.has_read else 'unread' }}</td>
+                                        <td>
+                                            <h4>{{ notif.title }}</h4>
+                                            <p class="clickable-link-holder">{{ notif.message | safe }}</p>
+                                        </td>
+                                        <td style="display: none;">
+                                            <!-- Used only for sorting notifications -->
+                                            {{ notif.received_at }}
+                                        </td>
+                                        <td>{{ notif.received_at | humanize_alt }}</td>
+                                        <td>
+                                            {% if not notif.has_read %}
+                                                <a class="read-btn btn btn-default btn-xs"
+                                                   href="{{ url_for('profile.mark_notification_as_read', notification_id=notif.id) }}">Mark
+                                                    as Read</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='admin/lib/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/nouislider/distribute/nouislider.min.js') }}"></script>
+
+    <script type="text/javascript">
+        $.fn.dataTable.ext.search.push(
+                function (settings, data, dataIndex) {
+                    var user_option = $("input[name=notif_status]:checked").val();
+                    var state = data[0].trim() || 'unread';
+                    if (user_option === "all") {
+                        return true;
+                    }
+                    return !!(user_option === state || state === "");
+                }
+        );
+
+        var notifTable = $('.notif-table').DataTable({
+            "bInfo": false,
+            "bPaginate": false,
+            "scrollX": false,
+            "bAutoWidth": false,
+            "language": {
+                "zeroRecords": "<span style='font-size: 20px; font-weight: 300;'>You don't have any new notifications</span>"
+            },
+            "order": [[2, "desc"]]
+        });
+
+        $(".dataTables_filter").hide();
+        $(".notif-table thead").hide();
+
+        $("input[name=notif_status]").change(function () {
+            notifTable.draw();
+        });
+
+        notifTable.on('draw', function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+        /*
+        $(document).on('click', '.notification', function (e) {
+            var link = $(this).find("p.clickable-link-holder").find("a").attr("href").trim();
+            var readLink = $(this).find(".read-btn").attr("href").trim();
+            if (link !== null && link !== '') {
+                $.get(readLink, function (data) {
+                    location.href = link;
+                });
+            } else {
+                if (readLink !== null && readLink !== '') {
+                    location.href = readLink;
+                }
+            }
+        });
+        */
+    </script>
+
+{% endblock %}

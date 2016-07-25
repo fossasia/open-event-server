@@ -1,0 +1,180 @@
+{% extends 'gentelella/admin/event/event_base.html' %}
+
+{% block title %}
+    {{ event.name }} - Export
+{% endblock %}
+
+{% set active_page = "export" %}
+
+{% block head_css %}
+    {{ super() }}
+    <style type="text/css">
+        .checkbox > label {
+            margin-left: 0;
+            margin-right: 0;
+            display: inline-block;
+        }
+
+        .checkbox > .checkbox-label {
+            position: absolute;
+            top: 5px;
+            left: 58px;
+            font-size: 15px;
+            font-weight: 300;
+            text-transform: uppercase;
+        }
+        .string { color: green; }
+        .number { color: darkorange; }
+        .boolean { color: blue; }
+        .null { color: magenta; }
+        .key { color: red; }
+
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-5 col-md-push-1">
+            <h3 style="font-weight: 300;">Select which media files you want in the zip</h3>
+            <form id="exportForm" style="margin-top:20px;">
+                <div class="checkbox">
+                    <input type="checkbox" class="toggle-switch" name="image" id="image">
+                    <label for="image"></label> <span class="checkbox-label">Image</span>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" class="toggle-switch" name="video" id="video">
+                    <label for="video"></label> <span class="checkbox-label">Video</span>
+
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" class="toggle-switch" name="audio" id="audio">
+                    <label for="audio"></label> <span class="checkbox-label">Audio</span>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" class="toggle-switch" name="document" id="document">
+                    <label for="document"></label> <span class="checkbox-label">Document</span>
+                </div>
+            </form>
+            <br>
+            <span id="export_status"></span>
+            <span id="export_error" class="red"></span>
+            <br>
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary" id="btnStartExport" onclick="exportEvent({{ event.id }})"
+                        style="margin-bottom: 0px;">Start
+                </button>
+                <button type="button" class="btn btn-default" id="btnExportEvent" disabled="disabled">Download</button>
+            </div>
+
+        </div>
+        <div class="col-md-5 col-md-push-1">
+            <h3 style="font-weight: 300;">Access event information via REST API</h3>
+            <form style="margin-top:20px;" id="api-form">
+                <div class="checkbox">
+                    <input type="checkbox" class="toggle-switch" name="basic_event_details" id="basic_event_details"
+                           checked disabled>
+                    <label for="basic_event_details"></label> <span class="checkbox-label">Basic Event Details</span>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" class="toggle-switch" name="event_sessions" id="event_sessions">
+                    <label for="event_sessions"></label> <span class="checkbox-label">Sessions</span>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" class="toggle-switch" name="event_microlocations" id="event_microlocations">
+                    <label for="event_microlocations"></label> <span class="checkbox-label">Microlocations</span>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" class="toggle-switch" name="event_tracks" id="event_tracks">
+                    <label for="event_tracks"></label> <span class="checkbox-label">Tracks</span>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" class="toggle-switch" name="event_speakers" id="event_speakers">
+                    <label for="event_speakers"></label> <span class="checkbox-label">Speakers</span>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" class="toggle-switch" name="event_sponsors" id="event_sponsors">
+                    <label for="event_sponsors"></label> <span class="checkbox-label">Sponsors</span>
+                </div>
+            </form>
+            <br>
+            <p>You can make a <code>GET</code> request to the following endpoint to access the selected information</p>
+            <pre><code id="endpoint-url-holder" data-event-id="{{ event.id }}"></code></pre>
+            <br>
+            <h4>Response</h4>
+            <pre id="json-response"></pre>
+        </div>
+    </div>
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/admin/event/exportEvent.js') }}"></script>
+
+    <script type="text/javascript">
+        function export_as_ical(evt) {
+            $.getJSON("/api/v1/event/" + {{event.id}} +"/export/ical", function (result) {
+                console.log(result["filename"]);
+                window.open("/calendar/" + result["filename"]);
+            });
+
+            return false;
+        }
+
+        function syntaxHighlight(json) {
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                var cls = 'number';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'key';
+                    } else {
+                        cls = 'string';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'boolean';
+                } else if (/null/.test(match)) {
+                    cls = 'null';
+                }
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
+        }
+
+
+        $(function () {
+            var $apiCheckboxes = $("#api-form").find("input[type=checkbox]");
+            var $endpointUrlHolder = $("#endpoint-url-holder");
+            var eventId = $endpointUrlHolder.data('event-id');
+            $apiCheckboxes.change(function () {
+                var includes = [];
+                $.each($apiCheckboxes, function (key, $apiCheckbox) {
+                    $apiCheckbox = $($apiCheckbox);
+                    var name = $apiCheckbox.attr('name');
+                    if (name != 'basic_event_details' && $apiCheckbox[0].checked) {
+                        includes.push(name.replace("event_", ""))
+                    }
+                });
+                var oldText = $endpointUrlHolder.text();
+                if (includes.length > 0) {
+                    includes = includes.join(',');
+                    var url = location.protocol + "//" + location.host + "/api/v2/events/" + eventId + "?include=" + includes;
+                    $endpointUrlHolder.text(url);
+                } else {
+                    $endpointUrlHolder.text(location.protocol + "//" + location.host + "/api/v2/events/" + eventId);
+                }
+                if($endpointUrlHolder.text() != oldText) {
+                    reloadSample($endpointUrlHolder.text());
+                }
+
+            });
+            $apiCheckboxes.trigger('change');
+        });
+
+        function reloadSample(url) {
+            $.getJSON(url, function(data) {
+                var str = JSON.stringify(data, undefined, 4);
+                $("#json-response").html(syntaxHighlight(str));
+            });
+        }
+    </script>
+
+{% endblock %}
+

@@ -1,15 +1,13 @@
 import unittest
 import json
-import zipfile
 import shutil
 import time
 import os
-from StringIO import StringIO
 
 from tests.setup_database import Setup
 from tests.api.utils import create_event, get_path, create_services
 from tests.auth_helper import register
-from open_event import current_app as app
+from app import current_app as app
 from test_export_import import ImportExportBase
 
 
@@ -24,20 +22,8 @@ class TestImportUploads(ImportExportBase):
             create_event(creator_email='test@example.com')
             create_services(1, '1')
 
-    def _create_set(self):
-        # export
-        resp = self._do_successful_export(1)
-        zip_file = StringIO()
-        zip_file.write(resp.data)
-        # extract
-        path = 'static/temp/test_event_import'
-        if os.path.isdir(path):
-            shutil.rmtree(path, ignore_errors=True)
-        with zipfile.ZipFile(zip_file) as z:
-            z.extractall(path)
-
     def _update_json(self, file, field, value, number=None):
-        fp = 'static/temp/test_event_import/%s.json' % file
+        fp = 'static/temp/test_event_import/%s' % file
         ptr = open(fp)
         data = json.loads(ptr.read())
         if file == 'event':
@@ -79,6 +65,9 @@ class TestImportUploads(ImportExportBase):
             if 'SUCCESS' in resp.data:
                 self.assertIn('result', resp.data)
                 dic = json.loads(resp.data)['result']
+                break
+            if resp.status_code != 200:
+                dic = json.loads(resp.data)
                 break
             time.sleep(2)
         return dic
@@ -127,6 +116,21 @@ class TestImportUploads(ImportExportBase):
         event_dic = self._do_succesful_import(data)
         # check
         self.assertEqual(event_dic['background_url'], None)
+
+    def test_version_preserved(self):
+        """
+        Tests if version data is being preserved
+        """
+        self._create_set()
+        data_old = json.loads(open('static/temp/test_event_import/event').read())
+        # import
+        data = self._make_zip_from_dir()
+        event_dic = self._do_succesful_import(data)
+        for i in data_old['version']:
+            self.assertEqual(
+                data_old['version'][i], event_dic['version'][i],
+                json.dumps(data_old['version']) + json.dumps(event_dic['version'])
+            )
 
 
 if __name__ == '__main__':

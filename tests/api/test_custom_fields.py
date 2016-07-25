@@ -1,8 +1,8 @@
 import unittest
-from open_event.api.helpers.custom_fields import Color, Email, Uri,\
+from app.api.helpers.custom_fields import Color, Email, Uri,\
     ImageUri, DateTime, Integer, Float, ChoiceString, Upload
 from tests.utils import OpenEventTestCase
-from open_event import current_app as app
+from app import current_app as app
 
 
 class TestCustomFieldsValidation(OpenEventTestCase):

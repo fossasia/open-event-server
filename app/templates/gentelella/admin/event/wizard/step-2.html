@@ -1,0 +1,141 @@
+{% macro sponsor_row(sponsor=None, count=1) %}
+    <tr class="row-sponsor">
+        <td>{{ count | default(1) }}</td>
+        <td><input value="{{ sponsor.name | default('') }}" name="sponsors[name]"
+                   class="form-control col-md-7 col-xs-12"/></td>
+        <td width="11%">
+            <input type="file" id="sponsors-logo-{{ sponsor.id | default(1) }}" name="sponsors[logo]"
+                   class="upload-btn" value="" />
+            <label class="file-label" for="sponsors-logo-{{ sponsor.id | default(1) }}">
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                Upload File</label>
+        </td>
+        <td><input type="number" value="{{ sponsor.level | default('') }}" name="sponsors[level]"
+                   class="form-control col-md-7 col-xs-12"/></td>
+        <td><input name="sponsors[type]" class="form-control col-md-7 col-xs-12"
+                   value="{{ sponsor.sponsor_type | default('', true) }}"/></td>
+        <td>
+            <div class="form-group">
+                <input type="url" value="{{ sponsor.url | default('') }}" name="sponsors[url]"
+                   class="form-control col-md-7 col-xs-12" data-error="Please enter a valid URL"/>
+                <div class="help-block with-errors"></div>
+            </div>
+        </td>
+        <td style="min-width: 205px;"><textarea name="sponsors[description]"
+                  class="form-control sponsor-textarea col-md-7 col-xs-12">{{ sponsor.description }}</textarea></td>
+        <td><span class="glyphicon glyphicon-remove remove-sponsor" style="display:none;cursor: pointer;"></span></td>
+
+    </tr>
+{% endmacro %}
+
+<div id="step-2" class="wizard_content" >
+    <div class="col-md-10 col-md-push-1">
+    <div style="width: 100%; text-align: center">
+            {% if sponsors and sponsors.count() > 0 %}
+                <h2 style="font-weight: 300;">Turn <span class="state">off</span> sponsors</h2>
+                <input type="checkbox" class="toggle-switch" name="sponsors_state"
+                       value="on" id="sponsors-switch" checked/>
+            {% else %}
+                <h2 style="font-weight: 300;">Turn <span class="state">on</span> sponsors</h2>
+                <input type="checkbox" class="toggle-switch" name="sponsors_state"
+                       value="on" id="sponsors-switch"/>
+            {% endif %}
+            <label for="sponsors-switch"></label>
+        </div>
+        <div id="sponsors-section-holder" {% if not sponsors or sponsors.count() <= 0 %}style="display: none;"{% endif %}>
+            <table class="table table-striped sponsor-table">
+                <thead>
+                <tr>
+                    <th>Sl.</th>
+                    <th>Name</th>
+                    <th>Logo</th>
+                    <th>Level</th>
+                    <th>Type</th>
+                    <th>URL</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody class="sponsors">
+                {% if sponsors and sponsors.count() > 0 %}
+                    {% for sponsor in sponsors %}
+                        {{ sponsor_row(sponsor, loop.index) }}
+                    {% endfor %}
+                {% else %}
+                    {{ sponsor_row() }}
+                {% endif %}
+                </tbody>
+            </table>
+        <span class='input-group-btn'>
+            <button type='button' class='btn btn-success add-sponsor'>Add Another Sponsor</button>
+        </span>
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var summernoteConfigSponsors = {
+            toolbar: [
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['insert', ['link']]
+            ],
+            popover: {
+                link: [
+                    ['link', ['linkDialogShow', 'unlink']]
+                ]
+            },
+            height: 150,
+            width: 300,
+            disableDragAndDrop: true,
+            styleWithSpan: false
+        };
+        $("textarea.sponsor-textarea").summernote(summernoteConfigSponsors);
+    });
+
+    var $sponsorsSectionHolder = $("#sponsors-section-holder");
+    var $state = $(".cfs-state");
+
+    var onOffSwitch = document.getElementById('sponsors-switch');
+
+    onOffSwitch.onchange = function () {
+        if (onOffSwitch.checked) {
+            $sponsorsSectionHolder.fadeIn();
+            $state.text("off");
+
+        } else {
+            $sponsorsSectionHolder.fadeOut();
+            $state.text("on");
+        }
+    };
+
+
+    var sponsor_counter = 1;
+    $(document).on("click", ".add-sponsor", function () {
+        sponsor_counter += 1;
+        var $element = $($(".row-sponsor")[0]).clone();
+        $element.find("td:nth-child(1)").text(sponsor_counter);
+        $element.find("input").val("").attr("value", "");
+        $element.find("input[type=file]").attr("id", "sponsors-logo-" + sponsor_counter);
+        $element.find(".file-label").attr("for", "sponsors-logo-" + sponsor_counter);
+        $('.sponsors').append($element);
+        $('.remove-sponsor').show();
+        superFileUploadButton();
+    });
+
+    $(document).on("click", ".remove-sponsor", function () {
+        sponsor_counter -= 1;
+        $(this).closest("tr").remove();
+        var ctr = 1;
+        $('.sponsors').find('.row-sponsor td:nth-child(1)').each(function() {
+            $(this).text(ctr);
+            ctr += 1;
+        });
+        if (sponsor_counter == 1) {
+            $('.remove-sponsor').hide();
+        }
+    });
+
+    $(function () {
+        superFileUploadButton();
+    });
+</script>

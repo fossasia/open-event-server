@@ -6,14 +6,14 @@ from tests.utils import OpenEventTestCase
 from tests.api.utils import create_event, get_path
 from tests.api.utils_post_data import *
 from tests.auth_helper import register, login, logout
-from open_event import current_app as app
+from app import current_app as app
 
-from open_event.api.events import EVENT_POST, SOCIAL_LINK_POST
-from open_event.api.tracks import TRACK_POST
-from open_event.api.microlocations import MICROLOCATION_POST
-from open_event.api.sessions import SESSION_POST, SESSION_TYPE_POST
-from open_event.api.speakers import SPEAKER_POST
-from open_event.api.sponsors import SPONSOR_POST
+from app.api.events import EVENT_POST, SOCIAL_LINK_POST
+from app.api.tracks import TRACK_POST
+from app.api.microlocations import MICROLOCATION_POST
+from app.api.sessions import SESSION_POST, SESSION_TYPE_POST
+from app.api.speakers import SPEAKER_POST
+from app.api.sponsors import SPONSOR_POST
 
 
 class TestPostApiBase(OpenEventTestCase):
@@ -70,12 +70,12 @@ class TestPostApi(TestPostApiBase):
         self.assertIn('location', response.headers)
         self.assertIn('Test' + name[0].upper() + name[1:], response.data)
         for string in checks:
-            self.assertIn(string, response.data, msg=string)
+            self.assertIn(string, response.data)
 
     def test_event_api(self):
         self._test_model(
             'event', POST_EVENT_DATA,
-            checks=['test@example.com', 'Test licence']
+            checks=['test@example.com', 'Test licence', '"event_ver": 0']
         )
 
     def test_track_api(self):

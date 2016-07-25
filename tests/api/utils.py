@@ -1,16 +1,16 @@
 from datetime import datetime
 
-from open_event.helpers.data import save_to_db, DataManager
-from open_event.models.user import User, ORGANIZER
-from open_event.models.event import Event
-from open_event.models.session import Session
-from open_event.models.speaker import Speaker
-from open_event.models.sponsor import Sponsor
-from open_event.models.microlocation import Microlocation
-from open_event.models.session_type import SessionType
-from open_event.models.social_link import SocialLink
-from open_event.models.track import Track
-from open_event.models.event_copyright import EventCopyright as Copyright
+from app.helpers.data import save_to_db, DataManager
+from app.models.user import User, ORGANIZER
+from app.models.event import Event
+from app.models.session import Session
+from app.models.speaker import Speaker
+from app.models.sponsor import Sponsor
+from app.models.microlocation import Microlocation
+from app.models.session_type import SessionType
+from app.models.social_link import SocialLink
+from app.models.track import Track
+from app.models.event_copyright import EventCopyright as Copyright
 
 
 def create_event(name='TestEvent', creator_email=None):

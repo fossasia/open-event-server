@@ -1,14 +1,15 @@
 """Copyright 2015 Rafal Kowalski"""
 from datetime import datetime
 
-from open_event.models.call_for_papers import CallForPaper
-from open_event.models.custom_forms import CustomForms, session_form_str, speaker_form_str
-from open_event.models.track import Track
-from open_event.models.event import Event
-from open_event.models.session import Session
-from open_event.models.speaker import Speaker
-from open_event.models.microlocation import Microlocation
-from open_event.models.user import User
+from app.models.call_for_papers import CallForPaper
+from app.models.custom_forms import CustomForms, session_form_str, speaker_form_str
+from app.models.track import Track
+from app.models.event import Event
+from app.models.session import Session
+from app.models.speaker import Speaker
+from app.models.microlocation import Microlocation
+from app.models.user import User
+from app.models.message_settings import MessageSettings
 
 
 class ObjectMother(object):
@@ -20,6 +21,7 @@ class ObjectMother(object):
                      location_name='India',
                      topic='Travel & Outdoor',
                      sub_topic='Climbing',
+                     has_session_speakers=True,
                      type='Camp, Trip, or Retreat')
 
     @staticmethod
@@ -70,3 +72,9 @@ class ObjectMother(object):
                             announcement="Hello there!",
                             event_id=event_id)
 
+    @staticmethod
+    def get_message_settings():
+        return MessageSettings(action="Next Event",
+                               mail_status=1,
+                               notif_status=1,
+                               user_control_status=1)

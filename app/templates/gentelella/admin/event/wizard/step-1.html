@@ -1,0 +1,883 @@
+{# set ticket_include = ticket_include_setting #}
+{% set ticket_include = 'ticketing' %}
+
+{% macro social_entry(social_link=None) %}
+    <div class="social-link-holder">
+        <div class=" col-sm-3" style="padding-left: 0;">
+            <input type="text" class="form-control" name="social[name]" placeholder="Name"
+                   value="{{ social_link.name | default('Twitter', true) }}">
+        </div>
+        <input type="hidden" name="social[id]" value="{{ social_link.id | default('') }}">
+        <div class="col-sm-5 input-group">
+            <input data-error="Please enter a valid URL" type="url" class="form-control" name="social[link]" placeholder="Link"
+                   value="{{ social_link.link | default('', true) }}">
+            <div class="help-block with-errors"></div>
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-danger remove-social-links">-</button>
+                <button type="button" class="btn btn-primary add-social-links">+</button>
+            </span>
+        </div>
+    </div>
+{% endmacro %}
+
+<div>
+    <div class="col-md-7 col-sm-7 col-md-offset-2 step-1">
+        <div class="item form-group">
+            <label>Name <span class="required">*</span></label>
+            <input required="required"
+                   data-error="Event name is required"
+                   name="name" class="form-control col-md-7 col-xs-12"
+                   value="{{ event.name | default('', true) }}"/>
+
+        </div>
+
+        <div class="form-group">
+            <label>Location</label>
+            <input value="{{ event.location_name | default('', true) }}" name="location_name" id="location_name"
+                   placeholder="Location is required to make event live"
+                   class="form-control col-md-7 col-xs-12"/>
+        </div>
+        <a id="show_addr" onclick="show_map_holder();" style="cursor:pointer;">Enter Address</a>
+
+        <div id="map-holder" style="display:none;">
+            <div class="col-md-6">
+                <div class="item form-group">
+                    <input value="" name="street_number" id="street_number" class="form-control col-md-3 col-xs-12" placeholder="Street Address line 1" onchange="address_update();"/>
+                </div>
+                <div class="item form-group">
+                    <input value="" name="route" id="route" class="form-control col-md-7 col-xs-12" placeholder="Street Address line 2" onchange="address_update();"/>
+                </div>
+                <div class="item form-group">
+                    <input value="" name="locality" id="locality" class="form-control col-md-7 col-xs-12" placeholder="City" onchange="address_update();"/>
+                </div>
+                <div class="item form-group">
+                    <input value="" name="state_area" id="administrative_area_level_1" class="form-control col-md-7 col-xs-12" placeholder="States" onchange="address_update();"/>
+                </div>
+                <div class="item form-group">
+                    <input value="" name="postal_code" id="postal_code" class="form-control col-md-7 col-xs-12" placeholder="Zip Code" onchange="address_update();"/>
+                </div>
+                <div class="item form-group">
+                    <input value="" name="country" id="country" class="form-control col-md-7 col-xs-12" placeholder="Country" onchange="address_update();"/>
+                </div>
+                <div class="col-md-4">
+                    <a id="reset_addr" onclick="remove_map_holder();" style="cursor:pointer;">Reset Location</a>
+                </div>
+                <div class="col-md-8">
+                    <div class="checkbox" style="padding-top:0;">
+                        <label style="padding-left:0;">
+                          <input type="checkbox" class="flat" name="show_map" {% if not event.show_map or event.show_map != 0 %}checked="checked"{% endif %}> Show map on event page
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div id="map" class="hidden-xs" style="width:100%; height:300px"></div>
+            </div>
+            <br>
+            <br>
+        </div>
+
+        <div class="row event-date-picker">
+            <div class="col-md-4">
+                <div class="item form-group">
+                    <label>Starts <span class="required">*</span></label>
+                    <br>
+                    <div class="col-xs-8" style="padding-left: 0;">
+                        <input required="required"
+                               name="start_date"
+                               data-error="Start date & time is required"
+                               value="{{ event.start_time.strftime('%m/%d/%Y') if event else start_date.strftime('%m/%d/%Y') }}"
+                               class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY"/>
+
+                    </div>
+                    <div class="col-xs-4" style="padding-left: 0;">
+                        <input required="required"
+                               name="start_time"
+                               value="{{ event.start_time.strftime('%H:%M') if event else '19:00' }}"
+                               class="form-control col-xs-6 time start" placeholder="HH:MM"/>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-4">
+                <div class="item form-group">
+                    <label>Ends <span class="required">*</span></label>
+                    <br>
+                    <div class="col-xs-8" style="padding-left: 0;">
+                        <input required="required"
+                               name="end_date"
+                               data-error="End date & time is required"
+                               value="{{ event.end_time.strftime('%m/%d/%Y') if event else start_date.strftime('%m/%d/%Y') }}"
+                               class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY"/>
+
+                    </div>
+                    <div class="col-xs-4" style="padding-left: 0;">
+                        <input required="required"
+                               name="end_time"
+                               value="{{ event.end_time.strftime('%H:%M') if event else '22:00' }}"
+                               class="form-control col-xs-6 time end" placeholder="HH:MM"/>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-md-4 col-xs-8">
+                <div class="form-group">
+                    <label>Timezone <span class="required">*</span></label>
+                    <select name="timezone" class="form-control">
+                        {% for value, text in timezones %}
+                            {% if event %}
+                                <option value="{{ value }}"
+                                        {% if event.timezone == value %}selected{% endif %}>{{ text }}</option>
+                            {% else %}
+                                <option value="{{ value }}" {% if value == 'UTC' %}selected{% endif %}>{{ text }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="item form-group">
+            <label>Description</label>
+            <textarea name="description"
+                      class="form-control event-textarea">{{ event.description | default('', true) }}</textarea>
+        </div>
+        <div class="row">
+            <div class="col-md-7">
+                <input type="hidden" name="background_url" id="background_url">
+                <div class="item form-group" id="image-upload-group"
+                     {% if event and event.background_url and event.background_url != '' %}style="display: none;"{% endif %}>
+                    <label>Event Image</label><br>
+                    <div class="image-box">
+                        <input type="file" id="event-image-upload" name="event-image-upload" class="image-upload-btn no-js"
+                               accept="image/*"/>
+                        <label class="file-label" for="event-image-upload">
+                            <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Event Image
+                        </label><br>
+                    </div>
+                    <span class="text-muted" style="color: #a2a2a2;">
+                        We recommend using at least a 2160x1080px (2:1 ratio) image<br>that's no larger than 10MB.
+                    </span>
+                </div>
+
+                <div class="item form-group" id="image-view-group"
+                     {% if not event or not event.background_url or event.background_url == '' %}style="display: none;"{% endif %}>
+                    <label>Event Image</label><br>
+                    <img src="{{ event.background_url | default('', true) }}" style="width: 350px; height: 175px;"><br><br>
+                    {% if not event %}
+                        <button type="button" class="btn btn-sm btn-default" data-target="#cropper-modal" data-toggle="modal">
+                            <i class="fa fa-arrows" aria-hidden="true"></i>
+                            Adjust
+                        </button>
+                    {% endif %}
+                    <button type="button" class="btn btn-sm btn-default" id="remove-image-btn">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                        Remove
+                    </button>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7">
+
+                <input type="hidden" name="logo" id="logo">
+
+                <div class="item form-group" id="logo-upload-group"
+                     {% if event and event.logo and event.logo != '' %}style="display: none;"{% endif %}>
+                    <label>Logo</label><br>
+                    <div class="image-box">
+                        <input type="file" id="logo-upload" name="logo-upload" class="image-upload-btn no-js"
+                               accept="image/*"/>
+                        <label class="file-label" for="logo-upload">
+                            <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Logo
+                        </label><br>
+                    </div>
+                    <span class="text-muted" style="color: #a2a2a2;">
+                        Logo size must be less than 1MB.
+                    </span>
+                </div>
+
+                <div class="item form-group" id="logo-view-group"
+                     {% if not event or not event.logo or event.logo == '' %}style="display: none;"{% endif %}>
+                    <label>Logo</label><br>
+                    <img src="{{ event.logo | default('', true) }}" style="width: 350px;"><br><br>
+                    <button type="button" class="btn btn-sm btn-default" id="remove-logo-btn">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                        Remove
+                    </button>
+                    <br>
+                </div>
+            </div>
+        </div>
+
+        <div class="item form-group">
+            <label>Event Url</label>
+            <input type="url" pattern="https?://.+" value="{{ event.event_url | default('', true) }}" name="event_url"
+                   class="form-control" data-error="Please enter a valid URL"/>
+            <div class="help-block with-errors"></div>
+        </div>
+        <div class="item form-group">
+            <label><span class="organizer-state">Add</span> Organizer Information
+            </label>
+            <input type="checkbox" class="toggle-switch" name="organizer_state"
+                       value="on" id="organizer-switch" {% if event.organizer_name or event.organizer_description %}checked="checked"{% endif %}/>
+            <label for="organizer-switch" style="margin-left:0;"></label>
+        </div>
+        <div id="organizer-holder" {% if not event.organizer_name and not event.organizer_description %}style="display:none;"{% endif %}>
+            <div class="item form-group">
+                <label>Organizer name</label>
+                <input name="organizer_name" class="form-control"
+                       value="{{ event.organizer_name | default('', true) }}"/>
+            </div>
+            <div class="item form-group">
+                <label>Organizer Description
+                </label>
+                    <textarea
+                            name="organizer_description"
+                            class="form-control event-textarea">{{ event.organizer_description | default('', true) }}</textarea>
+            </div>
+        </div>
+        <div class="item form-group">
+            <label>Social Links</label>
+            <div class="row social-links">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    {% if social_links %}
+                        {% for social_link in social_links %}
+                            {{ social_entry(social_link) }}
+                        {% else %}
+                            {{ social_entry() }}
+                        {% endfor %}
+                    {% else %}
+                        {{ social_entry() }}
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+        {% if event.ticket_include == True or 'ticketing' in ticket_include %}
+        <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
+            <i class="fa fa-ticket"></i>
+            Ticket Details
+            <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+        </h2>
+        {# Ticket URL when Ticket module is switched off 
+        <div class="item form-group">
+            <label>Ticket URL
+            </label>
+            <input type="url" pattern="https?://.+" name="ticket_url" class="form-control"
+                   value="{{ event.ticket_url | default('', true) }}" data-error="Please enter a valid URL"/>
+            <div class="help-block with-errors"></div>
+        </div>
+        #}
+
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="item form-group">
+                    <label>Ticket Name</label>
+                    <input type="text" name="ticket_name" class="form-control" value="{{ event.tickets[0].name | default('', true) }}">
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="item form-group">
+                    <label>Type</label>
+                    <select name="ticket_type" id="ticket-type" class="form-control">
+                        <option value="free" {{ 'selected' if event.tickets[0].type == 'free' else ''}}>Free</option>
+                        <option value="paid" {{ 'selected' if event.tickets[0].type == 'paid' else ''}}>Paid</option>
+                        <option value="donation" {{ 'selected' if event.tickets[0].type == 'donation' else ''}}>Donation</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="item form-group">
+            <label>Description</label>
+            <textarea name="ticket_description" class="form-control">{{ event.tickets[0].description | default('', true) }}</textarea>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 col-xs-8">
+                <div class="item form-group">
+                    <label>Price ($)</label>
+                    <div id="ticket-type-price">
+                    {% if event %}
+                        {% if event.tickets[0].type == 'free' %}
+                            <div class="form-control">Free</div>
+                        {% elif event.tickets[0].type == 'paid' %}
+                            <input type='number' class='form-control' placeholder='Set your ticket price' name='ticket_price' value="{{ event.tickets[0].price }}">
+                        {% elif event.tickets[0].type == 'donation' %}
+                            <div class="form-control">Donation</div>
+                        {% endif %}
+                    {% else %}
+                        <div class="form-control">Free</div>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="item form-group">
+                    <label>Sales Start</label><br>
+                    <div class="col-xs-8" style="padding-left: 0;">
+                        <input value="{{ event.tickets[0].sales_start.strftime('%m/%d/%Y') if event else start_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY" name="ticket_sales_start_date">
+                    </div>
+                    <div class="col-xs-4" style="padding-left: 0;">
+                        <input value="{{ event.tickets[0].sales_start.strftime('%H:%M') if event else '19:00' }}" class="form-control col-xs-6 time start ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="ticket_sales_start_time">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="item form-group">
+                    <label>Sales End</label><br>
+                    <div class="col-xs-8" style="padding-left: 0;">
+                        <input value="{{ event.tickets[0].sales_end.strftime('%m/%d/%Y') if event else start_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY" name="ticket_sales_end_date">
+                    </div>
+                    <div class="col-xs-4" style="padding-left: 0;">
+                        <input value="{{ event.tickets[0].sales_end.strftime('%H:%M') if event else '19:00' }}" class="form-control col-xs-6 time end ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="ticket_sales_end_time">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="item form-group">
+                    <label>Quantity</label>
+                    <input type="number" class="form-control" placeholder="100" name="ticket_quantity" value="{{ event.tickets[0].quantity | default(100, true) }}">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="item form-group">
+                    <label>Min Order</label>
+                    <input type="number" class="form-control" placeholder="1" name="ticket_min_order" value="{{ event.tickets[0].min_order | default(1, true) }}">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="item form-group">
+                    <label>Max Order</label>
+                    <input type="number" class="form-control" placeholder="10" name="ticket_max_order" value="{{ event.tickets[0].max_order | default(10, true) }}">
+                </div>
+            </div>
+        </div>
+
+        {% endif %}
+        <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color: #5bc0de;">
+            <i class="fa fa-plus-circle"></i>
+            Additional Details
+            <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+        </h2>
+        <div class="item form-group">
+            <label class="control-label">Listing Privacy</label>
+            <div class="radio">
+                <label style="font-weight: 300;">
+                    <input type="radio" name="privacy" value="public"
+                           {% if (event and event.privacy == 'public') or not event %}checked{% endif %}>
+                    <strong style="font-weight: 400;">Public page:</strong> list this event on Open Event and search
+                    engines
+                </label>
+            </div>
+            <div class="radio">
+                <label style="font-weight: 300;">
+                    <input type="radio" name="privacy" value="private"
+                           {% if (event and event.privacy == 'private') %}checked{% endif %}>
+                    <strong style="font-weight: 400;">Private page:</strong> do not list this event publicly
+                </label>
+            </div>
+        </div>
+
+        <div class="item form-group">
+            <label class="control-label">Event Type</label>
+            <select class="form-control" name="type">
+                {% if not event or not event.type %}
+                    <option value="">Choose..</option>
+                {% endif %}
+                {% for type in event_types %}
+                    <option value="{{ type }}" {{ "selected" if event and event.type == type else '' }}>{{ type }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="item form-group">
+                    <label class="control-label">Event Topic
+                    </label>
+                    <select class="form-control" id="topic" name='topic'>
+                        {% if not event or not event.topic %}
+                            <option value="">Choose..</option>
+                        {% endif %}
+                        {% for topic in event_topics %}
+                            <option value="{{ topic }}" {{ "selected" if event and event.topic == topic else '' }}>{{ topic }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="item form-group">
+                    <label class="control-label">Event Sub-Topic
+                    </label>
+                    <select class="form-control" id="sub_topic" name='sub_topic'>
+                        {% if not event or not event.sub_topic %}
+                            <option value="">Choose..</option>
+                        {% endif %}
+                        {% for sub_topic in event_sub_topics %}
+                            <option value="{{ sub_topic }}" {{ "selected" if event and event.sub_topic == sub_topic else '' }}>{{ sub_topic }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="item form-group">
+            <label><span class="coc-state">Add</span> Code of Conduct
+            </label>
+            <input type="checkbox" class="toggle-switch" name="coc_state"
+                       value="on" id="coc-switch" {% if event.code_of_conduct %}checked="checked"{% endif %}/>
+            <label for="coc-switch" style="margin-left:0;"></label>
+            <div id="coc-holder" {% if not event.code_of_conduct %}style="display:none;"{% endif %}>
+                <textarea name="code_of_conduct"
+                      class="form-control event-textarea">{{ event.code_of_conduct | default('', true) }}</textarea>
+            </div>
+        </div>
+        <div class="item form-group">
+            <label>License of Event Data and Content <a class="btn btn-info btn-xs licence-help" data-toggle="licence-modal" data-target="#licence_modal">?</a></label>
+            <div id="licence-list" style="display: none;">
+                <ul style="background-color: #f2f2f2; padding-left: 28px; padding-bottom: 5px; padding-top: 5px; border-radius: 1px;">
+                {% for licence_name, info in event_licences.iteritems() %}
+                    <li>
+                        <a href="{{ info.2 }}" target="_blank">{{ licence_name }}</a>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+            <select name="copyright_licence" class="form-control">
+                <option value="">Choose Licence</option>
+                {{ event_licences }}
+                {% for licence in event_licences %}
+                    <option value="{{ licence }}" {{ "selected" if event and event.copyright.licence == licence else '' }}>
+                    {{ licence }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+    </div>
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-4">
+    </div>
+    <input type="hidden" name="latitude" id="latitude" value="{{ event.latitude | default(0.00, true) }}"/>
+    <input type="hidden" name="longitude" id="longitude" value="{{ event.longitude | default(0.00, true) }}"/>
+
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="cropper-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Crop your image</h4>
+            </div>
+            <div class="modal-body">
+                <div id="upload-cropper">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="save-crop" class="btn btn-success">Done</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var marker, map;
+    var init_marker;
+    var placeSearch, autocomplete;
+    var componentForm = {
+        street_number: 'short_name',
+        route: 'long_name',
+        locality: 'long_name',
+        administrative_area_level_1: 'short_name',
+        country: 'long_name',
+        postal_code: 'short_name'
+    };
+    var $latitudeInput = $('#latitude');
+    var $longitudeInput = $('#longitude');
+    var $locationInput = $("#location_name");
+    function initPlacesApi() {
+        var latitude = $latitudeInput.val();
+        var longitude = $longitudeInput.val();
+        var latlng = new google.maps.LatLng(latitude, longitude);
+        map = new google.maps.Map($("#map")[0], {
+            zoom: 1,
+            center: latlng
+        });
+
+        var geocoder = new google.maps.Geocoder();
+        init_marker = new google.maps.Marker({
+            draggable: true,
+            position: latlng,
+            map: map,
+            zoom: 15
+        });
+
+        var geocodeHandler = function () {
+            $locationInput.closest(".form-group").removeClass("has-warning");
+            geocodeAddress(geocoder, map);
+        };
+
+        $locationInput.valueChange(geocodeHandler);
+
+        autocomplete = new google.maps.places.Autocomplete($locationInput[0], {types: ['geocode']});
+        geolocate();
+
+        autocomplete.addListener('place_changed', geocodeHandler);
+
+    }
+    function fillInAddress(map) {
+        // Get the place details from the autocomplete object.
+        var place = autocomplete.getPlace();
+        // Get each component of the address from the place details
+        // and fill the corresponding field on the form.
+
+        for (var i = 0; i < place.address_components.length; i++) {
+          var addressType = place.address_components[i].types[0];
+          if (componentForm[addressType]) {
+            console.log(addressType);
+            var val = place.address_components[i][componentForm[addressType]];
+            document.getElementById(addressType).value = val;
+          }
+        }
+        $('#location_name').hide();
+        $('#show_addr').hide();
+        $('#map-holder').show();
+        resizeMap(map);
+    }
+
+    function resizeMap(map) {
+        var center = map.getCenter();
+        google.maps.event.trigger(map,'resize');
+        map.setZoom( map.getZoom() );
+        map.setCenter( center );
+    }
+
+    function geocodeAddress(geocoder, resultsMap) {
+        var address = $locationInput.val();
+        geocoder.geocode({'address': address}, function (results, status) {
+            if (status === google.maps.GeocoderStatus.OK) {
+                $latitudeInput.val(results[0].geometry.location.lat());
+                $longitudeInput.val(results[0].geometry.location.lng());
+                resultsMap.setCenter(results[0].geometry.location);
+                resultsMap.setZoom(10);
+                init_marker.setMap(null);
+                if (marker == null) {
+                    marker = new google.maps.Marker({
+                        map: resultsMap,
+                        draggable: true,
+                        position: results[0].geometry.location
+                    });
+                }
+                else {
+                    marker.setMap(null);
+                    marker = new google.maps.Marker({
+                        map: resultsMap,
+                        draggable: true,
+                        position: results[0].geometry.location
+                    });
+                }
+                fillInAddress(resultsMap);
+            } else {
+                if (status === 'ZERO_RESULTS') {
+                    resultsMap.setZoom(1);
+                    $latitudeInput.val(0.0);
+                    $longitudeInput.val(0.0);
+                }
+                console.log('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    }
+
+    function geolocate() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var geolocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var circle = new google.maps.Circle({
+                    center: geolocation,
+                    radius: position.coords.accuracy
+                });
+                autocomplete.setBounds(circle.getBounds());
+            });
+        }
+    }
+
+    function show_map_holder() {
+        if ($('#location_name').get(0).value != '') {
+            var url = "https://maps.googleapis.com/maps/api/geocode/json?address="+$('#location_name').get(0).value+"&key=AIzaSyAHdXg0Y_zk-wCNpslbBqcezLdHniaEwkI"
+            $.getJSON( url, function( data ) {
+                google.maps.event.trigger(autocomplete, 'place_changed');
+                var place = data.results[0];
+                for (var i = 0; i < place.address_components.length; i++) {
+                  var addressType = place.address_components[i].types[0];
+                  if (componentForm[addressType]) {
+                    console.log(addressType);
+                    var val = place.address_components[i][componentForm[addressType]];
+                    document.getElementById(addressType).value = val;
+                  }
+                }
+            });
+        }
+        $('#location_name').hide();
+        $('#map-holder').show();
+        $('#show_addr').hide();
+        resizeMap(map);
+    }
+
+    function remove_map_holder() {
+        for (var component in componentForm) {
+          document.getElementById(component).value = '';
+        }
+        autocomplete.set('place',void(0));
+        $('#location_name').get(0).value='';
+        $('#location_name').show();
+        $('#map-holder').hide();
+        $('#show_addr').show();
+    }
+
+    function address_update() {
+        autocomplete.set('place',void(0));
+        var location = "";
+        for (component in componentForm) {
+            location += $('#'+component).get(0).value + " ";
+        }
+        $('#location_name').get(0).value = location;
+        $('#location_name').click();
+    }
+
+    var $uploadCropper = $('#upload-cropper');
+    $(document).ready(function () {
+
+        $('.time').timepicker({
+            'showDuration': true,
+            'timeFormat': 'H:i',
+            'scrollDefault': 'now'
+        });
+
+        $('.date').datepicker({
+            'format': 'mm/dd/yyyy',
+            'autoclose': true
+        });
+
+        $(".event-date-picker").datepair({
+            'defaultTimeDelta': 3600000
+        });
+
+        $("textarea.event-textarea").summernote(summernoteConfig);
+
+        $('select[name=timezone]').selectize({
+            create: false,
+            sortField: 'text'
+        });
+
+        $(".licence-help").click(function () {
+            $("#licence-list").slideToggle();
+        });
+
+        var sub_topics = {{event_sub_topics|safe}};
+
+        var $topic = $("#topic");
+        var $subTopic = $('#sub_topic');
+        $topic.change(function () {
+            $subTopic.find('option').remove().end().append('<option value="">Choose..</option>');
+            $.each(sub_topics[$(this).val()], function () {
+                $subTopic.append($("<option />").val(this).text(this));
+            });
+        });
+
+        if ($topic.val() !== "") {
+            $subTopic.find('option').remove().end().append('<option value="">Choose..</option>');
+
+            $.each(sub_topics[$topic.val()], function () {
+                $subTopic.append($("<option />").val(this).text(this));
+            });
+            $subTopic.val("{{event.sub_topic}}");
+        }
+
+
+        $uploadCropper = $('#upload-cropper').croppie({
+            viewport: {
+                width: 490,
+                height: 245,
+                type: 'square'
+            },
+            boundary: {
+                width: 508,
+                height: 350
+            }
+        });
+
+        $("#event-image-upload").unbind("change").on('change', function () {
+            var input = this;
+            if (input.files && input.files[0]) {
+                if (input.files[0].size > 10485760) {
+                    createSnackbar("Image must be less than 10 MB in size");
+                    resetFormElement(input);
+                } else {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $("#cropper-modal").modal("show");
+                        $uploadCropper.croppie('bind', {
+                            url: e.target.result
+                        });
+
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            else {
+                logError("No FileReader support");
+            }
+
+        });
+
+        $("#logo-upload").unbind("change").on('change', function () {
+            var input = this;
+            if (input.files && input.files[0]) {
+                if (input.files[0].size > 1048576) {
+                    createSnackbar("Image must be less than 1 MB in size");
+                    resetFormElement(input);
+                } else {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        resetFormElement(input);
+                        $("#logo").val(e.target.result);
+                        $("#logo-view-group").show().find("img").attr("src", e.target.result);
+                        $("#logo-upload-group").hide();
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            else {
+                logError("No FileReader support");
+            }
+
+        });
+    });
+
+    $("#save-crop").click(function () {
+        $uploadCropper.croppie('result', {
+            type: 'canvas',
+            size: 'original'
+        }).then(function (resp) {
+            $("#background_url").val(resp);
+            $("#image-view-group").show().find("img").attr("src", resp);
+            $("#image-upload-group").hide();
+            $('#cropper-modal').modal('hide')
+        });
+    });
+
+    $("#remove-image-btn").click(function () {
+        $("#image-view-group").hide();
+        $("#image-upload-group").show();
+        $("#background_url").val('');
+    });
+
+    $("#remove-logo-btn").click(function () {
+        $("#logo-view-group").hide();
+        $("#logo-upload-group").show();
+        $("#logo").val('');
+    });
+
+    $('#cropper-modal').on('shown.bs.modal', function (e) {
+        $uploadCropper.croppie('bind');
+        resetFormElement($("#event-image-upload"));
+
+    });
+
+    $("select#ticket-type").on("change", function(e) {
+        var type = $("option:selected", this).val();
+        var ticketTypePrice = $("#ticket-type-price");
+
+        if (type == "free") {
+            ticketTypePrice.html("<div class='form-control'>Free</div>");
+        } else if (type == "donation") {
+            ticketTypePrice.html("<div class='form-control'>Donation</div>");
+        } else if (type == "paid") {
+            ticketTypePrice.html("<input type='number' class='form-control' placeholder='Set your ticket price' name='ticket_price'>");
+        }
+    });
+
+    $(document).on("click", '.add-social-links', function () {
+        var $element = $($(".social-link-holder")[0]).clone();
+        $element.find("input").val('').attr("value", "");
+        $('.social-links > div').append($element);
+    });
+
+    $(document).on("click", ".remove-social-links", function () {
+        if ($('.social-links > div').children().length > 1) {
+            $(this).closest(".social-link-holder").remove();
+        }
+    });
+
+    function resetFormElement(e) {
+        e = $(e);
+        e.wrap('<form>').closest('form').get(0).reset();
+        e.unwrap();
+    }
+
+    $(function () {
+        var $cocHolder = $("#coc-holder");
+        var $cocState = $(".coc-state");
+
+        var coc_onOffSwitch = document.getElementById('coc-switch');
+
+        coc_onOffSwitch.onchange = function () {
+            if (coc_onOffSwitch.checked) {
+                $cocHolder.fadeIn();
+                $cocState.text("Remove");
+            } else {
+                $cocHolder.fadeOut();
+                $cocState.text("Add");
+            }
+        };
+
+        var $organizerHolder = $("#organizer-holder");
+        var $organizerState = $(".organizer-state");
+
+        var organizer_onOffSwitch = document.getElementById('organizer-switch');
+
+        organizer_onOffSwitch.onchange = function () {
+            if (organizer_onOffSwitch.checked) {
+                $organizerHolder.fadeIn();
+                $organizerState.text("Remove");
+            } else {
+                $organizerHolder.fadeOut();
+                $organizerState.text("Add");
+            }
+        };
+
+        /*var $mapHolder = $("#map-holder");
+        var $mapState = $(".map-state");
+
+        var map_onOffSwitch = document.getElementById('map-switch');
+
+        map_onOffSwitch.onchange = function () {
+            if (map_onOffSwitch.checked) {
+                $mapHolder.fadeIn();
+            } else {
+                $mapHolder.fadeOut();
+            }
+        };*/
+    });
+</script>
+

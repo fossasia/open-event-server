@@ -1,0 +1,135 @@
+{% extends 'gentelella/admin/base.html' %}
+
+{% set carousel_height = 300 -%}
+{% set scrollspy_top = (carousel_height + 95) ~ "px" %}
+{% set scheduler_readonly = true %}
+
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/details.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/multiselect/css/multi-select.css') }}"/>
+    <style type="text/css">
+        .carousel .item {
+            height: {{ carousel_height }}px;
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('{{ event.background_url }}');
+        }
+
+        .carousel {
+            height: {{ carousel_height }}px;
+        }
+
+        .scrollspy {
+            top: {{ scrollspy_top }};
+        }
+    </style>
+{% endblock %}
+{% block title %}
+    {{ event.name }}
+{% endblock %}
+
+{% block head_js %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block body %}
+    <div class="scrollspy hidden-xs hidden-sm">
+        <ul class="nav nav-pills nav-stacked">
+            {% if event.description %}
+                <li><a href="/e/{{ event.id }}#info">Info</a></li>
+            {% endif %}
+            {% if accepted_sessions[0] %}
+                <li><a href="/e/{{ event.id }}#speakers">Speakers</a></li>
+            {% endif %}
+            {% if event.sponsor[0] %}
+                <li><a href="/e/{{ event.id }}#sponsors">Sponsors</a></li>
+            {% endif %}
+            {% if accepted_sessions[0] %}
+                <li><a href="/e/{{ event.id }}/sessions">Sessions</a></li>
+            {% endif %}
+            <li class="active"><a href="/e/{{ event.id }}/cfs">Call for speakers</a></li>
+            {% if event.schedule_published_on %}
+                <li><a href="/e/{{ event.id }}/schedule">Schedule</a></li>
+            {% endif %}
+            {% if event.organizer_name %}
+                <li><a href="/e/{{ event.id }}#organizer">Organizer</a></li>
+            {% endif %}
+            {% if event.location_name %}
+                <li><a href="/e/{{ event.id }}#getting-here">Getting Here</a></li>
+            {% endif %}
+            {% if event.code_of_conduct and event.code_of_conduct != '' and event.code_of_conduct != ' ' %}
+                <li><a href="/e/{{ event.id }}/coc">Code of Conduct</a></li>
+            {% endif %}
+        </ul>
+    </div>
+    <div class="carousel slide" style="margin-bottom: 0;">
+        <div id="info" class="carousel-inner">
+            <div class="item active">
+                <div class="container">
+                    <div class="carousel-caption">
+                        <h4>{{ event.start_time.strftime('%a, %B %d at %I:%M %p') | upper }}</h4>
+                        <h1>{{ event.name }}</h1>
+                        <h4><i class="glyphicon glyphicon-map-marker"></i> {{ event.location_name | upper }}</h4>
+                        <p></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="event-info container" style="min-height: 600px;">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 style="font-weight: 300; font-size: 30px">Call for Speakers</h1>
+                <p {% if via_hash %}style="display:none;"{% endif %}>
+                    {% if state == 'now' %}
+                        <span class="label label-success">Open</span>
+                    {% elif state == 'past' %}
+                        <span class="label label-danger">Closed</span>
+                    {% elif state == 'future' %}
+                        <span class="label label-info">Yet to Open</span>
+                    {% endif %}
+                </p>
+                <p><strong>{{ call_for_speakers.start_date.strftime('%a, %B %d at %I:%M %p') }}</strong>
+                    to
+                    <strong>{{ call_for_speakers.end_date.strftime('%a, %B %d at %I:%M %p') }}</strong></p>
+                {{ call_for_speakers.announcement | safe }}
+                {% if state == "now" or via_hash %}
+                    <button class="btn btn-success" data-toggle="modal" data-target="#session-model">Submit Proposal
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% if state == "now" or via_hash %}
+        <div class="modal fade" tabindex="-1" role="dialog" id="session-model">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Submit Proposal</h4>
+                    </div>
+                    <div class="modal-body">
+                        {% include 'gentelella/admin/event/sessions/components/session_speaker_form.html' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}
+
+
+
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/jquery/jquery.multi-select.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/session/new.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("textarea").summernote(summernoteConfig);
+        });
+    </script>
+
+{% endblock %}

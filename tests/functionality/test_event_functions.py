@@ -1,13 +1,11 @@
 import unittest
 
-from tests.auth_helper import register, login
+from tests.auth_helper import login
 from tests.utils import OpenEventTestCase
 from tests.setup_database import Setup
 from tests.object_mother import ObjectMother
-from open_event import current_app as app
-from open_event.helpers.data import save_to_db
-from open_event.helpers.data_getter import DataGetter
-from flask import url_for
+from app import current_app as app
+from app.helpers.data import save_to_db
 
 
 class TestEventFunctions(OpenEventTestCase):

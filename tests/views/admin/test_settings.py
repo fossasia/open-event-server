@@ -3,11 +3,11 @@ import unittest
 
 from flask import url_for
 
-from open_event.helpers.data import save_to_db
+from app.helpers.data import save_to_db
 from tests.object_mother import ObjectMother
-from open_event import current_app as app
+from app import current_app as app
 from tests.views.view_test_case import OpenEventViewTestCase
-from open_event.helpers.data_getter import DataGetter
+from app.helpers.data_getter import DataGetter
 
 def basic_setup(super_admin):
     event = ObjectMother.get_event()
@@ -27,6 +27,21 @@ def asset_notification(self, notification, value):
         self.assertEqual(getattr(notification, field), value)
 
 class TestSettings(OpenEventViewTestCase):
+
+    def test_contact_info_view(self):
+        with app.test_request_context():
+            rv = self.app.get(url_for('settings.contact_info_view'), follow_redirects=True)
+            self.assertTrue("test_super_admin@email.com" in rv.data, msg=rv.data)
+
+    def test_contact_info_change(self):
+        with app.test_request_context():
+            data = {
+                'email': 'test_super_admin@email.com',
+                'contact': '9622100100'
+            }
+            rv = self.app.post(url_for('settings.contact_info_view'), follow_redirects=True, data=data)
+            self.assertTrue("9622100100" in rv.data, msg=rv.data)
+
     def test_email_settings_view(self):
         with app.test_request_context():
             rv = self.app.get(url_for('settings.email_preferences_view'), follow_redirects=True)

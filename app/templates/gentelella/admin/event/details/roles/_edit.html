@@ -1,0 +1,40 @@
+{% macro editrole(current_event, role) -%}
+<div class="modal fade" id="edit-role-{{role.id}}" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit Role</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/events/{{current_event.id}}/roles/{{role.id}}/update/" method="POST" role="form">
+                    <p>
+                        <div style="font-size: 17px;">
+                        {% if not role.user.user_detail.fullname %}
+                            {{ role.user.email }}
+                        {% else %}
+                            {{ role.user.user_detail.fullname }} 
+                            <span style="color: #a9a9a9;font-size: 15px;">({{ role.user.email }})</span>
+                        {% endif %}
+                        </div>
+                        <input type="hidden" name="user_email" value="{{role.user.email}}">
+                    </p>
+                    <p> 
+                        <select name="user_role" class="form-control" required="" style="width: 100%;">
+                            <option value="track_organizer" {{'selected' if 'track_organizer' == role.role.name else '' }}>Track Organizer</option>
+                            <option value="coorganizer" {{'selected' if 'coorganizer' == role.role.name else '' }}>Co-organizer</option>
+                            <option value="moderator" {{'selected' if 'moderator' == role.role.name else '' }}>Moderator</option>
+                        </select>
+                    </p><br>
+                    <p class="pull-right">
+                        <button type="submit" class="btn btn-warning">Update Role</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{%- endmacro %}

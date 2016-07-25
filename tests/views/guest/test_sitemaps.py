@@ -1,11 +1,12 @@
 import unittest
 
-from open_event.helpers.data import save_to_db
+from app.helpers.data import save_to_db
+from app.models.page import Page
 from tests.object_mother import ObjectMother
 from tests.auth_helper import register
 from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
-from open_event import current_app as app
+from app import current_app as app
 
 
 class TestSitemaps(OpenEventTestCase):
@@ -38,6 +39,16 @@ class TestSitemaps(OpenEventTestCase):
     def test_event_page_not_exist(self):
         resp = self.app.get('/sitemaps/events/2.xml.gz')
         self.assertEqual(resp.status_code, 404)
+
+    def test_basic_page(self):
+        with app.test_request_context():
+            page = Page(name='abc', url='abc')
+            save_to_db(page)
+            page2 = Page(name='def', url='http://def.com')
+            save_to_db(page2)
+        resp = self.app.get('/sitemaps/pages.xml.gz')
+        #self.assertIn('localhost/abc', resp.data)
+        self.assertIn('<loc>http://def.com', resp.data)
 
 
 if __name__ == '__main__':

@@ -1,0 +1,56 @@
+<div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <form class="admin-form form-horizontal" action="/admin/pages/create" method="POST">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Page Details</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="item form-group">
+                        <label>NAME</label>
+                        <input required type="text" class="form-control col-md-7 col-xs-12" name="name"/>
+                    </div>
+                    <div class="item form-group">
+                        <label>TITLE</label>
+                        <input type="text" class="form-control col-md-7 col-xs-12" name="title"/>
+                    </div>
+                    <div class="item form-group">
+                        <label>URL</label>
+                        <input required type="url" class="form-control col-md-7 col-xs-12" name="url" placeholder="/example or http://example.com"/>
+                    </div>
+                    <div class="item form-group">
+                        <label>DESCRIPTION</label>
+                        <textarea type="text" class="form-control col-md-7 col-xs-12" name="description"> </textarea>
+                    </div>
+                    <div class="item form-group">
+                        <label>PLACE</label>
+                        <select type="text" class="form-control col-md-7 col-xs-12" name="place">
+                            <option value="use_open_event">Use Open Event</option>
+                            <option value="footer_menu">Footer Menu</option>
+                        </select>
+                    </div>
+                    <div class="item form-group">
+                        <label>POSITION</label>
+                        <input type="number" class="form-control col-md-7 col-xs-12" name="index"  />
+                    </div>
+
+
+                    <br>
+                    <span id="import_status"></span>
+                    <span id="import_error" class="red"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="btnImportEvent" onclick="">Create Page</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+
+
+</script>
