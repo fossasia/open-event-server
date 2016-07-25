@@ -62,17 +62,18 @@
 {% endmacro %}
 
 <div id="step-5" class="wizard_content" style="{% if event and event.has_session_speakers %}display: block;{% else %}display:none;{% endif %}">
-    <div class="col-xs-12 col-md-push-1 col-md-10">
+    <div class="col-xs-12 col-md-8 col-md-push-2">
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
             <i class="fa fa-check-square-o"></i>
             Customize Registration Form
             <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
         </h2>
     </div>
-    <div class="col-md-push-1 col-md-5 col-sm-12 col-xs-12">
+    <div class="clearfix"></div>
+    <div class="col-md-push-2 col-md-4 col-sm-12 col-xs-12">
         {{ options_table(session_fields, 'session') }}
     </div>
-    <div class="col-md-push-1 col-md-5 col-sm-12 col-xs-12">
+    <div class="col-md-push-2 col-md-4 col-sm-12 col-xs-12">
         {{ options_table(speaker_fields, 'speaker') }}
     </div>
     <input type="hidden" name="custom_form[name]" value="session_form">
