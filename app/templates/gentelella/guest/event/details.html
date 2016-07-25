@@ -45,6 +45,9 @@
             <br>
             <br>
         {% endif %}
+        {% if module.ticket_include %}
+            {% include 'gentelella/guest/event/_ticketing_box.html' %}
+        {% endif %}
         {% if accepted_sessions[0] %}
             <h3 id="speakers">Speakers</h3>
             <div class="row">

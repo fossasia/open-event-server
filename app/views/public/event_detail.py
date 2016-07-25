@@ -44,11 +44,16 @@ class EventDetailView(BaseView):
             licence_details = DataGetter.get_licence_details(event.copyright.licence)
         else:
             licence_details = None
+
+        module = DataGetter.get_module()
+        tickets = DataGetter.get_sales_open_tickets(event_id)
         return self.render('/gentelella/guest/event/details.html',
                            event=event,
                            accepted_sessions=accepted_sessions,
                            call_for_speakers=call_for_speakers,
-                           licence_details=licence_details)
+                           licence_details=licence_details,
+                           module=module,
+                           tickets=tickets if tickets else [])
 
     @expose('/<int:event_id>/sessions/')
     def display_event_sessions(self, event_id):
