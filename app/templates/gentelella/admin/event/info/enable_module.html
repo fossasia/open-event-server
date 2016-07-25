@@ -1,0 +1,23 @@
+{% extends 'gentelella/admin/event/event_base.html' %}
+
+{% block title %}
+    {{ event.name }} - {{  title }}
+{% endblock %}
+
+{% block head_css %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div class="row" >
+        <div class="col-xs-12" style="font-size: 20px; font-weight: 300; min-height: 600px; text-align: center">
+            <br>
+            In order to use this feature activate "Sessions and Speakers" for the event.<br>Please <a href="/events/{{ event.id }}/edit/sessions-tracks-rooms" style="font-weight: 500 !important;">click here</a> to activate this module.
+        </div>
+    </div>
+
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+{% endblock %}
+

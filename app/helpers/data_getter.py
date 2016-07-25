@@ -587,7 +587,7 @@ class DataGetter:
 
     @staticmethod
     def get_upcoming_events(event_id):
-        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
+        return Event.query.join(Event.roles, aliased=True) \
             .filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
             .filter(Event.in_trash == False)
 

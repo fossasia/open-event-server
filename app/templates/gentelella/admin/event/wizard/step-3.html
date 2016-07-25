@@ -1,14 +1,15 @@
 {% macro track_entry(track=None, empty=False) %}
     <div class="track-holder">
+        <div class="clearfix"></div>
         <div class=" col-xs-5 form-group">
             <input type="text" class="form-control" name="tracks[name]" placeholder="Name" required="required"
-                   value="{{ track.name | default('Default Track') if not empty else '' }}">
+                   value="{{ track.name | default('Main Track') if not empty else '' }}">
         </div>
         <input type="hidden" name="tracks[id]" value="{{ track.id | default('') }}">
 
         <div class="col-xs-7 input-group form-group">
             <div class="input-group colorpicker-component" id="color">
-                <input type="text" value="{{ track.color | default('#7B1FA2') }}"
+                <input type="text" value="{{ track.color | default('#03A9F4') }}"
                        class="form-control color-picker-input"
                        placeholder="Color"
                        required="required"
@@ -26,13 +27,14 @@
 
 {% macro microlocation_entry(microlocation=None, empty=False) %}
     <div class="microlocation-holder">
+        <div class="clearfix"></div>
         <div class="col-xs-5 form-group">
             <input type="text" class="form-control" required="required" name="rooms[name]" placeholder="Name"
                    value="{{ microlocation.name | default('Room 1') if not empty else '' }}">
         </div>
         <input type="hidden" name="rooms[id]" value="{{ microlocation.id | default('') }}">
 
-        <div class="col-xs-7 input-group form-group">
+        <div class="col-xs-6 input-group form-group">
             <div class="input-group">
                 <input type="number" class="form-control" name="rooms[floor]"
                        placeholder="Floor"
@@ -50,13 +52,14 @@
 
 {% macro session_type_entry(session_type=None, empty=False) %}
     <div class="session-type-holder">
+        <div class="clearfix"></div>
         <div class="col-xs-5 form-group">
             <input type="text" class="form-control" required="required" name="session_type[name]" placeholder="Name"
                    value="{{ session_type.name | default('Talks') if not empty else '' }}">
         </div>
         <input type="hidden" name="session_type[id]" value="{{ session_type.id | default('') }}">
 
-        <div class="col-xs-7 input-group form-group">
+        <div class="col-xs-6 input-group form-group">
             <input type="text" required="required" class="form-control session-length" name="session_type[length]"
                    placeholder="Length (HH.MM)"
                    value="{{ '%1.2f' % session_type.length | default(0.30, true) | float }}">
@@ -68,23 +71,32 @@
     </div>
 {% endmacro %}
 
-<div id="step-3" class="wizard_content" style="display: block;">
+<div class="col-md-10 col-md-push-1">
+    <br>
+    <div style="width: 100%; text-align: center">
+        {% if event and event.has_session_speakers %}
+            <h2 style="font-weight: 300;">Turn <span class="str-state">off</span> Sessions and Speakers</h2>
+            <input type="checkbox" class="toggle-switch" name="has_session_speakers"
+                   value="yes" id="session-tracks-rooms-switch" checked/>
+        {% else %}
+            <h2 style="font-weight: 300;">Turn <span class="str-state">on</span> Sessions and Speakers</h2>
+            <input type="checkbox" class="toggle-switch" name="has_session_speakers"
+                   value="yes" id="session-tracks-rooms-switch"/>
+        {% endif %}
+        <label for="session-tracks-rooms-switch"></label>
+    </div>
+</div>
+<div id="step-3" class="wizard_content" style="{% if event and event.has_session_speakers %}display: block;{% else %}display:none;{% endif %}" >
     <div class="col-md-10 col-md-push-1">
-        <div style="width: 100%; text-align: center">
-            {% if tracks or microlocations or session_types or not event %}
-                <h2 style="font-weight: 300;">Turn <span class="str-state">off</span> sessions, tracks, rooms</h2>
-                <input type="checkbox" class="toggle-switch" name="sessions_tracks_rooms_state"
-                       value="on" id="session-tracks-rooms-switch" checked/>
-            {% else %}
-                <h2 style="font-weight: 300;">Turn <span class="str-state">on</span> sessions, tracks, rooms</h2>
-                <input type="checkbox" class="toggle-switch" name="sessions_tracks_rooms_state"
-                       value="on" id="session-tracks-rooms-switch"/>
-            {% endif %}
-            <label for="session-tracks-rooms-switch"></label>
-        </div>
 
-        <div class="row" id="session-tracks-rooms-holder"
-             style="{% if not tracks and not microlocations and not session_types and event %}display:none;{% endif %}">
+        <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
+            <i class="fa fa-list-ol"></i>
+            Session, Microlocations, Session types
+            <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+        </h2>
+
+
+        <div class="row" id="session-tracks-rooms-holder" >
             <div class="col-md-4 tracks">
                 <h2 class="label-header">Tracks</h2>
                 {% if tracks %}
@@ -96,7 +108,7 @@
                 {% endif %}
             </div>
             <div class="col-md-4 rooms">
-                <h2 class="label-header">Rooms</h2>
+                <h2 class="label-header">Microlocations</h2>
                 {% if microlocations %}
                     {% for microlocation in microlocations %}
                         {{ microlocation_entry(microlocation) }}
@@ -128,40 +140,17 @@
             'timeFormat': 'H.i'
         });
 
-        var $sessionTracksRoomsHolder = $("#session-tracks-rooms-holder");
+        var $sessionTracksRoomsHolder = $("#step-3,#step-4,#step-5");
         var $strState = $(".str-state");
-
-        var $sessionFormFieldRows = $("tr[data-identifier=track], tr[data-identifier=session_type]");
-
         var onOffSwitch = document.getElementById('session-tracks-rooms-switch');
 
         onOffSwitch.onchange = function () {
             if (onOffSwitch.checked) {
                 $sessionTracksRoomsHolder.fadeIn();
                 $strState.text("off");
-                $sessionTracksRoomsHolder.find("input").removeAttr('disabled');
-                $sessionFormFieldRows.tooltip('destroy');
-                $sessionFormFieldRows.css("pointer-events", "all");
-                $.each($sessionFormFieldRows.find('input'), function (index, elem) {
-                    if (elem.checked) {
-                        $(elem).click();
-                    }
-                    $(elem).siblings(".switchery").css("opacity", "1");
-                    elem.disabled = false;
-                });
-
             } else {
                 $sessionTracksRoomsHolder.fadeOut();
-                $sessionTracksRoomsHolder.find("input").attr('disabled', 'disabled');
                 $strState.text("on");
-                $.each($sessionFormFieldRows.find('input'), function (index, elem) {
-                    if (elem.checked) {
-                        $(elem).click();
-                    }
-                    $(elem).siblings(".switchery").css("opacity", "0.5");
-                    elem.disabled = "disabled";
-                });
-                $sessionFormFieldRows.tooltip();
             }
         };
 
@@ -192,6 +181,8 @@
         counter += 1;
         var $element = $($(".track-holder")[0]).clone();
         $element.find("input:not(.color-picker-input)").val('').attr("value", "");
+        var newColor = palette.random("800");
+        $element.find("input.color-picker-input").val(newColor).attr("value", newColor);
         $element.find(".colorpicker-component").attr("id", "color" + counter);
         $('.tracks').append($element);
         $('#color' + counter).colorpicker();

@@ -3,6 +3,8 @@
 # Ignore ExtDeprecationWarnings for Flask 0.11 - see http://stackoverflow.com/a/38080580
 import warnings
 from flask.exthook import ExtDeprecationWarning
+from pytz import utc
+
 warnings.simplefilter('ignore', ExtDeprecationWarning)
 # Keep it before flask extensions are imported
 import arrow
@@ -27,7 +29,7 @@ from flask.ext.jwt import JWT
 from datetime import timedelta, datetime
 import humanize
 
-from icalendar import Calendar, Event
+from icalendar import Calendar
 import sqlalchemy as sa
 
 from app.helpers.flask_helpers import SilentUndefined, camel_case, slugify, MiniJSONEncoder
@@ -35,16 +37,23 @@ from app.helpers.helpers import string_empty
 from app.models import db
 from app.models.user import User
 from app.models.ticket import Ticket, BookedTicket
+from app.models.event import Event
+from app.models.session import Session
 from app.views.admin.admin import AdminView
 from helpers.jwt import jwt_authenticate, jwt_identity
 from helpers.formatter import operation_name
 from app.helpers.data_getter import DataGetter
 from app.views.api_v1_views import app as api_v1_routes
 from app.views.sitemap import app as sitemap_routes
+from app.views.admin.super_admin.users import SuperAdminUsersView
+from app.views.admin.models_views.sessions import SessionsView
 from app.settings import get_settings
 from app.api.helpers.errors import NotFoundError
 import requests
-
+from apscheduler.schedulers.background import BackgroundScheduler
+from app.helpers.data import DataManager, delete_from_db
+from app.helpers.helpers import send_after_event
+from sqlalchemy_continuum import transaction_class
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -53,7 +62,6 @@ app = Flask(__name__)
 def create_app():
     auto = Autodoc(app)
     cal = Calendar()
-    event = Event()
 
     app.register_blueprint(api_v1_routes)
     app.register_blueprint(sitemap_routes)
@@ -74,6 +82,7 @@ def create_app():
     app.config['STATIC_ROOT'] = 'staticfiles'
     app.config['STATICFILES_DIRS'] = (os.path.join(BASE_DIR, 'static'),)
     app.config['SQLALCHEMY_RECORD_QUERIES'] = True
+    app.config['SERVER_NAME'] = 'open-event-dev.herokuapp.com'
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     app.logger.setLevel(logging.INFO)
     app.jinja_env.add_extension('jinja2.ext.do')
@@ -251,6 +260,51 @@ import api.helpers.tasks
 @app.before_first_request
 def set_secret():
     current_app.secret_key = get_settings()['secret']
+
+
+
+def send_after_event_mail():
+    with app.app_context():
+        events = Event.query.all()
+        for event in events:
+            upcoming_events = DataGetter.get_upcoming_events(event.id)
+            organizers = DataGetter.get_user_event_roles_by_role_name(event.id, 'organizer')
+            speakers = DataGetter.get_user_event_roles_by_role_name(event.id, 'speaker')
+            if datetime.now() > event.end_time:
+                for speaker in speakers:
+                    send_after_event(speaker.user.email, event.id, upcoming_events)
+                for organizer in organizers:
+                    send_after_event(organizer.user.email, event.id, upcoming_events)
+
+#logging.basicConfig()
+sched = BackgroundScheduler(timezone=utc)
+sched.add_job(send_after_event_mail, 'cron', day_of_week='mon-fri', hour=5, minute=30)
+sched.start()
+
+def empty_trash():
+    with app.app_context():
+        print 'HELLO'
+        events = Event.query.filter_by(in_trash=True)
+        users = User.query.filter_by(in_trash=True)
+        sessions = Session.query.filter_by(in_trash=True)
+        for event in events:
+            if datetime.now() - event.trash_date >= timedelta(days=30):
+                DataManager.delete_event(event.id)
+
+        for user in users:
+            if datetime.now() - user.trash_date >= timedelta(days=30):
+                transaction = transaction_class(Event)
+                transaction.query.filter_by(user_id=user.id).delete()
+                delete_from_db(user, "User deleted permanently")
+
+        for session in sessions:
+            if datetime.now() - session.trash_date >= timedelta(days=30):
+                delete_from_db(session, "Session deleted permanently")
+
+
+trash_sched = BackgroundScheduler(timezone=utc)
+trash_sched.add_job(empty_trash, 'cron', day_of_week='mon-fri', hour=5, minute=30)
+trash_sched.start()
 
 
 if __name__ == '__main__':

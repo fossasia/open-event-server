@@ -6,56 +6,112 @@
                   class="announcement form-control">{{ call_for_speakers.announcement | default('') }}</textarea>
     </div>
     <div class="row event-date-picker">
-        <div class="col-md-6 col-xs-6">
+        <div class="col-md-4 col-xs-6">
             <div class="item form-group">
                 <label>Starts <span class="required">*</span></label>
                 <br>
-                <div class="col-xs-12" style="padding-left: 0;">
-                    <input name="cfs_start_date"
-                           class="form-control col-xs-6 date start"
-                           required="required"
-                           value="{{ call_for_speakers.start_date.strftime('%m/%d/%Y')  if call_for_speakers else '' }}"
-                           placeholder="MM/DD/YYYY"/>
-                </div>
+                <div class="col-xs-8" style="padding-left: 0;">
+                        <input required="required"
+                               name="cfs_start_date"
+                               data-error="Start date & time is required"
+                               value="{{ call_for_speakers.start_date.strftime('%m/%d/%Y')  if call_for_speakers else '' }}"
+                               class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY"/>
+
+                    </div>
+                    <div class="col-xs-4" style="padding-left: 0;">
+                        <input required="required"
+                               name="cfs_start_time"
+                               value="{{ call_for_speakers.start_date.strftime('%H:%M') if call_for_speakers else '' }}"
+                               class="form-control col-xs-6 time start" placeholder="HH:MM"/>
+
+                    </div>
+
             </div>
 
         </div>
-        <div class="col-md-6 col-xs-6">
+        <div class="col-md-4 col-xs-6">
             <div class="item form-group">
                 <label>Ends <span class="required">*</span></label>
                 <br>
-                <div class="col-xs-12" style="padding-left: 0;">
-                    <input name="cfs_end_date"
-                           class="form-control col-xs-6 date end"
-                           required="required"
-                           value="{{ call_for_speakers.end_date.strftime('%m/%d/%Y')  if call_for_speakers else '' }}"
-                           placeholder="MM/DD/YYYY"/>
-                </div>
+                <div class="col-xs-8" style="padding-left: 0;">
+                        <input required="required"
+                               name="cfs_end_date"
+                               data-error="End date & time is required"
+                               value="{{ call_for_speakers.end_date.strftime('%m/%d/%Y') if call_for_speakers else '' }}"
+                               class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY"/>
+
+                    </div>
+                    <div class="col-xs-4" style="padding-left: 0;">
+                        <input required="required"
+                               name="cfs_end_time"
+                               value="{{ call_for_speakers.end_date.strftime('%H:%M') if call_for_speakers else '' }}"
+                               class="form-control col-xs-6 time end" placeholder="HH:MM"/>
+
+                    </div>
             </div>
 
         </div>
+        <div class="col-md-4 col-xs-8">
+                <div class="form-group">
+                    <label>Timezone <span class="required">*</span></label>
+                    <select name="cfs_timezone" class="form-control">
+                        {% for value, text in timezones %}
+                            {% if event %}
+                                <option value="{{ value }}"
+                                        {% if event.timezone == value %}selected{% endif %}>{{ text }}</option>
+                            {% else %}
+                                <option value="{{ value }}" {% if value == 'UTC' %}selected{% endif %}>{{ text }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
     </div>
+    <div class="item form-group">
+        <label>Private link</label>
+        <div class="input-group col-md-7 col-xs-12">
+            <input type="text"
+                   id="cfs_private_link"
+                   name="cfs_private_link" class="nt form-control"
+                   readonly="readonly"
+                   value="{{ url_for('event_detail.display_event_cfs_via_hash', hash=cfs_hash if not call_for_speakers or not call_for_speakers.hash else call_for_speakers.hash, _external=True ) }}"/>          <span class="input-group-btn">
+            <button class="btn btn-default btn-copy" type="button" data-clipboard-target="#cfs_private_link" data-toggle="tooltip" data-container="body" data-placement="top" title="Click to copy"><i class="fa fa-clipboard"></i></button>
+          </span>
+        </div>
+        <span style="font-weight: 300;">Share this link to get private submission independently of open/closed Call for Speakers at any time. <em>(the link will be active once the event is saved)</em></span>
+        <input type="hidden" name="cfs_hash" value="{{ cfs_hash if not call_for_speakers or not call_for_speakers.hash else call_for_speakers.hash }}">
+    </div>
+
+    <div class="item form-group">
+            <label class="control-label">Type</label>
+            <div class="radio">
+                <label style="font-weight: 300;">
+                    <input type="radio" name="cfs_privacy" value="public"
+                           {% if (call_for_speakers and call_for_speakers.privacy == 'public') or not call_for_speakers or not event %}checked{% endif %}>
+                    <strong style="font-weight: 400;">Public:</strong> Display this publicly. Anybody will be able to submit a proposal within the dates chosen, once the event is published.
+                </label>
+            </div>
+            <div class="radio">
+                <label style="font-weight: 300;">
+                    <input type="radio" name="cfs_privacy" value="private"
+                           {% if (call_for_speakers and call_for_speakers.privacy == 'private') %}checked{% endif %}>
+                    <strong style="font-weight: 400;">Private:</strong> Do not display this publicly. Proposals can be submitted only using the private link.
+                </label>
+            </div>
+       </div>
+
 
 {% endmacro %}
 
-<div id="step-4" class="wizard_content" style="display: block;">
-    <div class="col-md-3 col-xs-2">
+<div id="step-4" class="wizard_content" style="{% if event and event.has_session_speakers %}display: block;{% else %}display:none;{% endif %}">
+    <div class="col-md-10 col-md-push-1">
+        <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
+            <i class="fa fa-bullhorn"></i>
+            Call for Speakers
+            <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+        </h2>
 
-    </div>
-    <div class="col-md-6 col-xs-12">
-        <div style="width: 100%; text-align: center">
-            {% if call_for_speakers %}
-                <h2 style="font-weight: 300;">Turn <span class="cfs-state">off</span> call for speakers</h2>
-                <input type="checkbox" class="toggle-switch" name="call_for_speakers_state"
-                       value="on" id="call-for-speakers-switch" checked/>
-            {% else %}
-                <h2 style="font-weight: 300;">Turn <span class="cfs-state">on</span> call for speakers</h2>
-                <input type="checkbox" class="toggle-switch" name="call_for_speakers_state"
-                       value="on" id="call-for-speakers-switch"/>
-            {% endif %}
-            <label for="call-for-speakers-switch"></label>
-        </div>
-        <div id="call-for-speakers-holder" style="{% if not call_for_speakers %}display: none;{% endif %}">
+        <div id="call-for-speakers-holder">
             {% if call_for_speakers %}
                 {{ call_for_speakers_display(call_for_speakers) }}
             {% else %}
@@ -67,22 +123,13 @@
 
 <script>
     $(document).ready(function () {
-        var $callForSpeakersHolder = $("#call-for-speakers-holder");
-        var $state = $(".cfs-state");
+        $('[data-toggle="tooltip"]').tooltip();
+        var clipboard = new Clipboard('.btn-copy');
+        clipboard.on('success', function(e) {
+
+            $(".btn-copy").attr("title", "Copied").attr("data-original-title", "Copied").tooltip('show').attr("title", "Click to copy").attr("data-original-title", "Click to copy");
+        });
+
         $(".announcement").summernote(summernoteConfig);
-
-        var onOffSwitch = document.getElementById('call-for-speakers-switch');
-
-        onOffSwitch.onchange = function () {
-            if (onOffSwitch.checked) {
-                $callForSpeakersHolder.fadeIn();
-                $state.text("off");
-
-            } else {
-                $callForSpeakersHolder.fadeOut();
-                $state.text("on");
-            }
-        };
-
     });
 </script>
