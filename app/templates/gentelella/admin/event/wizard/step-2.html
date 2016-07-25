@@ -1,8 +1,9 @@
 {% macro sponsor_row(sponsor=None, count=1) %}
     <tr class="row-sponsor">
-        <td>{{ count | default(1) }}</td>
+        <td rowspan="2">{{ count | default(1) }}</td>
         <td><input value="{{ sponsor.name | default('') }}" name="sponsors[name]"
-                   class="form-control col-md-7 col-xs-12"/></td>
+                   class="form-control col-md-7 col-xs-12"/>
+        </td>
         <td width="11%">
             <input type="file" id="sponsors-logo-{{ sponsor.id | default(1) }}" name="sponsors[logo]"
                    class="upload-btn" value="" />
@@ -21,15 +22,22 @@
                 <div class="help-block with-errors"></div>
             </div>
         </td>
-        <td style="min-width: 205px;"><textarea name="sponsors[description]"
-                  class="form-control sponsor-textarea col-md-7 col-xs-12">{{ sponsor.description }}</textarea></td>
         <td><span class="glyphicon glyphicon-remove remove-sponsor" style="display:none;cursor: pointer;"></span></td>
+    </tr>
+    <tr class="row-sponsor-addon">
 
+           <td colspan="5">
+               <div class="form-group">
+                   <label>Description</label>
+                   <textarea name="sponsors[description]"
+                  class="form-control sponsor-textarea col-md-7 col-xs-12">{{ sponsor.description }}</textarea>
+               </div>
+           </td>
     </tr>
 {% endmacro %}
 
 <div id="step-2" class="wizard_content" >
-    <div class="col-md-10 col-md-push-1">
+    <div class="col-md-8 col-md-push-2">
     <div style="width: 100%; text-align: center">
             {% if sponsors and sponsors.count() > 0 %}
                 <h2 style="font-weight: 300;">Turn <span class="state">off</span> sponsors</h2>
@@ -43,7 +51,7 @@
             <label for="sponsors-switch"></label>
         </div>
         <div id="sponsors-section-holder" {% if not sponsors or sponsors.count() <= 0 %}style="display: none;"{% endif %}>
-            <table class="table table-striped sponsor-table">
+            <table class="table sponsor-table">
                 <thead>
                 <tr>
                     <th>Sl.</th>
@@ -52,7 +60,6 @@
                     <th>Level</th>
                     <th>Type</th>
                     <th>URL</th>
-                    <th>Description</th>
                 </tr>
                 </thead>
                 <tbody class="sponsors">
@@ -113,18 +120,22 @@
     $(document).on("click", ".add-sponsor", function () {
         sponsor_counter += 1;
         var $element = $($(".row-sponsor")[0]).clone();
+        var $addOnElement = $($(".row-sponsor-addon")[0]).clone();
         $element.find("td:nth-child(1)").text(sponsor_counter);
         $element.find("input").val("").attr("value", "");
+        $addOnElement.find("input").val("").attr("value", "");
         $element.find("input[type=file]").attr("id", "sponsors-logo-" + sponsor_counter);
         $element.find(".file-label").attr("for", "sponsors-logo-" + sponsor_counter);
-        $('.sponsors').append($element);
+        $('.sponsors').append($element).append($addOnElement);
         $('.remove-sponsor').show();
         superFileUploadButton();
     });
 
     $(document).on("click", ".remove-sponsor", function () {
         sponsor_counter -= 1;
-        $(this).closest("tr").remove();
+        var $row = $(this).closest("tr");
+        $row.next().remove();
+        $row.remove();
         var ctr = 1;
         $('.sponsors').find('.row-sponsor td:nth-child(1)').each(function() {
             $(this).text(ctr);

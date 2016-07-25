@@ -94,7 +94,7 @@ class EventDetailView(BaseView):
         if call_for_speakers.end_date < now:
             state = "past"
         elif call_for_speakers.start_date > now:
-            sate = "future"
+            state = "future"
         speakers = DataGetter.get_speakers(event_id).all()
         return self.render('/gentelella/guest/event/cfs.html', event=event, accepted_sessions=accepted_sessions, speaker_form=speaker_form,
                            session_form=session_form, call_for_speakers=call_for_speakers, state=state, speakers=speakers, via_hash=via_hash)
