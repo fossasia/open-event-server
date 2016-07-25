@@ -639,7 +639,7 @@ class DataGetter:
 
     @staticmethod
     def get_sales_open_tickets(event_id):
-        tickets = Ticket.query.filter(Ticket.event_id == event_id).filter(
+        return Ticket.query.filter(Ticket.event_id == event_id).filter(
             Ticket.sales_start <= datetime.datetime.now()).filter(
             Ticket.sales_end >= datetime.datetime.now())
 
