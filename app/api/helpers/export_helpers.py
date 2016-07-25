@@ -26,7 +26,7 @@ EXPORTS = [
     ('tracks', TrackDAO, TRACK),
     ('session_types', SessionTypeDAO, SESSION_TYPE),
     ('social_links', SocialLinkDAO, SOCIAL_LINK),
-    ('custom_forms', CustomFormDAO, CUSTOM_FORM)
+    ('forms', CustomFormDAO, CUSTOM_FORM)
 ]
 
 # keep sync with storage.UPLOAD_PATHS

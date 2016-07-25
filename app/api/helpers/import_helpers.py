@@ -34,7 +34,7 @@ IMPORT_SERIES = [
     ('tracks', TrackDAO),
     ('session_types', SessionTypeDAO),
     ('sessions', SessionDAO),
-    ('custom_forms', CustomFormDAO)
+    ('forms', CustomFormDAO)
 ]
 
 DELETE_FIELDS = {
