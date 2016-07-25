@@ -128,6 +128,15 @@ class DataGetter:
         return Session.query.filter(Session.state == state).filter(Session.in_trash == False)
 
     @staticmethod
+    def get_sessions_by_state_and_event_id(state, event_id):
+        """
+        :return: Filtering sessions by event id and session state
+        """
+        return Session.query.filter(Session.event_id == event_id)\
+            .filter(Session.state == state)\
+            .filter(Session.in_trash == False)
+
+    @staticmethod
     def get_all_sessions():
         return Session.query.filter(Session.in_trash == False).all()
 
