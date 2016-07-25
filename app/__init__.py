@@ -82,7 +82,7 @@ def create_app():
     app.config['STATIC_ROOT'] = 'staticfiles'
     app.config['STATICFILES_DIRS'] = (os.path.join(BASE_DIR, 'static'),)
     app.config['SQLALCHEMY_RECORD_QUERIES'] = True
-    app.config['SERVER_NAME'] = 'open-event-dev.herokuapp.com'
+    #app.config['SERVER_NAME'] = 'open-event-dev.herokuapp.com'
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     app.logger.setLevel(logging.INFO)
     app.jinja_env.add_extension('jinja2.ext.do')
@@ -279,7 +279,7 @@ def send_after_event_mail():
 #logging.basicConfig()
 sched = BackgroundScheduler(timezone=utc)
 sched.add_job(send_after_event_mail, 'cron', day_of_week='mon-fri', hour=5, minute=30)
-sched.start()
+#sched.start()
 
 def empty_trash():
     with app.app_context():
