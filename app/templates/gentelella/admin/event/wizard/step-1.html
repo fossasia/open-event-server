@@ -1,5 +1,4 @@
-{# set ticket_include = ticket_include_setting #}
-{% set ticket_include = 'ticketing' %}
+{% set included_items = included_settings %}
 
 {% macro social_entry(social_link=None) %}
     <div class="social-link-holder">
@@ -257,21 +256,20 @@
 
             </div>
         </div>
-        {% if event.ticket_include == True or 'ticketing' in ticket_include %}
+        {% if event.ticket_include == True or 'ticketing' in included_items %}
+         <div class="item form-group">
+            <label><span class="ticketing-state">Enable</span> Ticketing System
+            </label>
+            <input type="checkbox" class="toggle-switch" name="ticketing_system_state"
+                       value="on" id="ticketing_system_switch" />
+            <label for="ticketing_system_switch" style="margin-left:0;"></label>
+        </div>
+        <div id="ticketing_system_holder" style="display:none;">
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
             <i class="fa fa-ticket"></i>
             Ticket Details
             <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
         </h2>
-        {# Ticket URL when Ticket module is switched off 
-        <div class="item form-group">
-            <label>Ticket URL
-            </label>
-            <input type="url" pattern="https?://.+" name="ticket_url" class="form-control"
-                   value="{{ event.ticket_url | default('', true) }}" data-error="Please enter a valid URL"/>
-            <div class="help-block with-errors"></div>
-        </div>
-        #}
 
         <div class="row">
             <div class="col-xs-6">
@@ -285,13 +283,13 @@
                     <label>Type</label>
                     <select name="ticket_type" id="ticket-type" class="form-control">
                         <option value="free" {{ 'selected' if event.tickets[0].type == 'free' else ''}}>Free</option>
-                        <option value="paid" {{ 'selected' if event.tickets[0].type == 'paid' else ''}}>Paid</option>
-                        <option value="donation" {{ 'selected' if event.tickets[0].type == 'donation' else ''}}>Donation</option>
+                        {% if 'payments' in included_items %}<option value="paid" {{ 'selected' if event.tickets[0].type == 'paid' else ''}}>Paid</option>{% endif %}
+                        {% if 'donations' in included_items %}<option value="donation" {{ 'selected' if event.tickets[0].type == 'donation' else ''}}>Donation</option>{% endif %}
                     </select>
                 </div>
             </div>
         </div>
-        
+
 
         <div class="item form-group">
             <label>Description</label>
@@ -361,7 +359,20 @@
                 </div>
             </div>
         </div>
-
+            </div>
+        {% else %}
+            <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
+             <i class="fa fa-ticket"></i>
+                Add Ticket URL
+             <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+         </h2>
+         <div class="item form-group">
+             <label>Ticket URL
+             </label>
+             <input type="url" pattern="https?://.+" name="ticket_url" class="form-control"
+                    value="{{ event.ticket_url | default('', true) }}" data-error="Please enter a valid URL"/>
+             <div class="help-block with-errors"></div>
+         </div>
         {% endif %}
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color: #5bc0de;">
             <i class="fa fa-plus-circle"></i>
@@ -863,6 +874,21 @@
             } else {
                 $organizerHolder.fadeOut();
                 $organizerState.text("Add");
+            }
+        };
+
+        var $ticketingHolder = $("#ticketing_system_holder");
+        var $ticketingState = $(".ticketing-state");
+
+        var ticketing_system_onOffSwitch = document.getElementById('ticketing_system_switch');
+
+        ticketing_system_onOffSwitch.onchange = function () {
+            if (ticketin_system_onOffSwitch.checked) {
+                $ticketingHolder.fadeIn();
+                $ticketingState.text("Remove");
+            } else {
+                $ticketingHolder.fadeOut();
+                $ticketingState.text("Add");
             }
         };
 

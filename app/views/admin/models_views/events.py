@@ -52,7 +52,7 @@ class EventsView(BaseView):
 
     @expose('/create/', methods=('GET', 'POST'))
     def create_view(self,):
-        ticket_include = []
+        included_settings = []
 
         if request.method == 'POST':
             img_files = []
@@ -74,7 +74,11 @@ class EventsView(BaseView):
         module = DataGetter.get_module()
         if module is not None:
             if module.ticket_include:
-                ticket_include.append('ticketing')
+                included_settings.append('ticketing')
+            if module.payment_include:
+                included_settings.append('payments')
+            if module.donation_include:
+                included_settings.append('donations')
 
         hash = get_random_hash()
         if CallForPaper.query.filter_by(hash=hash).all():
@@ -89,7 +93,7 @@ class EventsView(BaseView):
             event_sub_topics=DataGetter.get_event_subtopics(),
             timezones=DataGetter.get_all_timezones(),
             cfs_hash=hash,
-            ticket_include_setting=ticket_include)
+            included_settings=included_settings)
 
     @expose('/<event_id>/', methods=('GET', 'POST'))
     @can_access
