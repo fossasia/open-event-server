@@ -2,12 +2,9 @@
     <div class="x_panel tile fixed_height_390" style="overflow: auto;">
         <div class="x_title">
             <h2 style="font-weight: 400; text-transform: uppercase;">{% block panel_title %}{% endblock %}</h2>
-            <ul class="nav navbar-right panel_toolbox" style="min-width: 0;">
-                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                <li>
-                    {% block addon_link %}{% endblock %}
-                </li>
-            </ul>
+
+            {% block addon_link %}{% endblock %}
+
             <div class="clearfix"></div>
         </div>
         <div class="x_content">
