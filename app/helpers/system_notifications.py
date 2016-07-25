@@ -8,9 +8,22 @@ from app.models.notifications import (
     NEXT_EVENT,
     SESSION_ACCEPT_REJECT,
     INVITE_PAPERS,
+    AFTER_EVENT,
+    EVENT_PUBLISH
 )
 
 NOTIFS = {
+    AFTER_EVENT: {
+        'title': 'Event {event_name} completed',
+        'message': """The event <strong>{event_name}</strong> has been completed.<br><br>""",
+        'recipient': 'User',
+    },
+    EVENT_PUBLISH: {
+        'title': 'Event {event_name} has been published',
+        'message': """The event <strong>{event_name}</strong> has been published.<br><br>
+                   <a href='{link}' class='btn btn-info btn-sm'>View Event</a>""",
+        'recipient': 'User',
+    },
     EVENT_ROLE_INVITE: {
         'title': 'Invitation to be {role_name} at {event_name}',
         'message': """You've been invited to be a <strong>{role_name}</strong>
