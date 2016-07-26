@@ -261,10 +261,10 @@
             <label><span class="ticket-state">Use Ticketing System</span>
             </label>
             <input type="checkbox" class="toggle-switch" name="ticket_state"
-                       value="on" id="ticket-switch" {% if event.organizer_name or event.organizer_description %}checked="checked"{% endif %}/>
+                       value="on" id="ticket-switch" {% if not event.ticket_url %}checked="checked"{% endif %}/>
             <label for="ticket-switch" style="margin-left:0;"></label>
         </div>
-         <div id="ticket-system-holder" class="item form-group">
+         <div id="ticket-system-holder" class="item form-group" {% if event.ticket_url %}style="display:none;"{% endif %}>
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
             <i class="fa fa-ticket"></i>
             Ticket Details
@@ -360,7 +360,7 @@
             </div>
         </div>
         </div>
-            <div id="ticket-url-holder" class="item form-group">
+            <div id="ticket-url-holder" class="item form-group" {% if not event.ticket_url %}style="display:none;"{% endif %}>
             <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
              <i class="fa fa-ticket"></i>
                 Add Ticket URL

@@ -191,6 +191,7 @@ class EventsView(BaseView):
     @expose('/<event_id>/edit/<step>', methods=('GET', 'POST'))
     @can_access
     def edit_view_stepped(self, event_id, step):
+
         event = DataGetter.get_event(event_id)
         session_types = DataGetter.get_session_types_by_event_id(event_id).all(
         )
@@ -202,6 +203,16 @@ class EventsView(BaseView):
         custom_forms = DataGetter.get_custom_form_elements(event_id)
         speaker_form = json.loads(custom_forms.speaker_form)
         session_form = json.loads(custom_forms.session_form)
+
+        included_setting = []
+        module = DataGetter.get_module()
+        if module is not None:
+            if module.ticket_include:
+                included_setting.append('ticketing')
+            if module.payment_include:
+                included_setting.append('payments')
+            if module.donation_include:
+                included_setting.append('donations')
 
         preselect = []
         required = []
@@ -239,7 +250,8 @@ class EventsView(BaseView):
                                timezones=DataGetter.get_all_timezones(),
                                cfs_hash=hash,
                                step=step,
-                               required=required)
+                               required=required,
+                               included_settings=included_setting)
         if request.method == "POST":
             img_files = []
             imd = ImmutableMultiDict(request.files)
