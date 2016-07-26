@@ -74,17 +74,20 @@ class DataManager(object):
                                     title=title,
                                     message=message,
                                     received_at=datetime.now())
-        save_to_db(notification, 'User notification saved')
+        saved = save_to_db(notification, 'User notification saved')
+
+        if saved:
+            DataManager.push_user_notification(user)
 
     @staticmethod
     def push_user_notification(user):
         """
         Push user notification using websockets.
-        TODO: Integrate `create_user_notification` inside it.
         """
         user_room = 'user_{}'.format(user.id)
         emit('response',
-            {'data': user.get_unread_notif_count()+1},
+            {'meta': 'New notification',
+                'notif_count': user.get_unread_notif_count()},
             room=user_room,
             namespace='/notifs')
 
@@ -1633,7 +1636,7 @@ def get_instagram_auth(state=None, token=None):
     if state:
         return OAuth2Session(InstagramOAuth.get_client_id(), state=state,
                              redirect_uri=InstagramOAuth.get_redirect_uri())
-    scope = "+".join(InstagramOAuth.SCOPE)
+    # scope = "+".join(InstagramOAuth.SCOPE)
     oauth = OAuth2Session(InstagramOAuth.get_client_id(), redirect_uri=InstagramOAuth.get_redirect_uri())
     return oauth
 

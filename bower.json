@@ -38,7 +38,8 @@
     "bootpag": "^1.0.7",
     "seedrandom": "^2.4.2",
     "typeahead.js": "^0.11.1",
-    "clipboard": "^1.5.12"
+    "clipboard": "^1.5.12",
+    "socket.io-client": "1.4.8"
   },
   "resolutions": {
     "font-awesome": "^4.6.3"

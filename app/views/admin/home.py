@@ -8,6 +8,7 @@ from flask import url_for, redirect, request, session, flash, send_from_director
 from flask.ext import login
 from flask_admin import expose
 from flask_admin.base import AdminIndexView
+from flask_socketio import join_room, emit
 from flask.ext.scrypt import generate_password_hash
 from wtforms import ValidationError
 
@@ -68,9 +69,12 @@ class MyHomeView(AdminIndexView):
                 return redirect(url_for('admin.login_view'))
             login.login_user(user)
             record_user_login_logout('user_login', user)
+
+            # Store user_id in session for socketio use
+            session['user_id'] = login.current_user.id
+
             logging.info('logged successfully')
             user_logged_in(user)
-            session['user_id'] = login.current_user.id
             return redirect(intended_url())
 
     @expose('/register/', methods=('GET', 'POST'))
