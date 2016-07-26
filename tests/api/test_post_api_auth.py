@@ -10,7 +10,7 @@ from tests.auth_helper import register, logout
 from app import current_app as app
 
 
-class TestPostApiAuthBase(OpenEventTestCase):
+class PostApiAuthTestCase:
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
@@ -37,7 +37,7 @@ class TestPostApiAuthBase(OpenEventTestCase):
         self._test_model('sponsor', POST_SPONSOR_DATA)
 
 
-class TestPostApiBasicAuth(TestPostApiAuthBase):
+class TestPostApiBasicAuth(PostApiAuthTestCase, OpenEventTestCase):
     """
     Tests the Basic Authorization in Post API
     """
@@ -58,7 +58,7 @@ class TestPostApiBasicAuth(TestPostApiAuthBase):
             self.assertIn('Test' + str(name).title(), response.data)
 
 
-class TestPostApiJWTAuth(TestPostApiAuthBase):
+class TestPostApiJWTAuth(PostApiAuthTestCase, OpenEventTestCase):
     """
     Tests the JWT Auth in Post API
     """

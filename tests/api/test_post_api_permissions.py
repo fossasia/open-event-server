@@ -4,7 +4,8 @@ import json
 from tests.setup_database import Setup
 from tests.api.utils import create_event, get_path
 from tests.api.utils_post_data import *
-from test_post_api_auth import TestPostApiAuthBase
+from tests.utils import OpenEventTestCase
+from test_post_api_auth import PostApiAuthTestCase
 from tests.auth_helper import register
 from app import current_app as app
 
@@ -13,7 +14,7 @@ from app import current_app as app
 # tested in test_post_api_auth
 
 
-class TestPostApiPermissionDenied(TestPostApiAuthBase):
+class TestPostApiPermissionDenied(PostApiAuthTestCase, OpenEventTestCase):
     """
     Test 403 permission denied in Post API
     """
@@ -26,7 +27,7 @@ class TestPostApiPermissionDenied(TestPostApiAuthBase):
 
     def _test_model(self, name, data):
         if name == 'event':
-            continue
+            return
         with app.test_request_context():
             path = get_path() if name == 'event' else get_path(1, name + 's')
             response = self.app.post(
