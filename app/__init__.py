@@ -251,7 +251,6 @@ def connect_handler():
     if current_user.is_authenticated():
         user_room = 'user_{}'.format(session['user_id'])
         join_room(user_room)
-        print '#'*100, user_room
         emit('response', {'meta': 'WS connected'})
 
 

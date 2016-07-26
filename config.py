@@ -31,7 +31,7 @@ class StagingConfig(Config):
 class DevelopmentConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
-    MINIFY_PAGE = True
+    MINIFY_PAGE = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', '')
     assert SQLALCHEMY_DATABASE_URI, '`DATABASE_URL` either not exported or empty'
 
