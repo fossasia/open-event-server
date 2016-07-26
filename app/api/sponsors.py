@@ -9,7 +9,7 @@ from .helpers.helpers import (
 )
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
-from .helpers.utils import Resource
+from .helpers.utils import Resource, ETAG_HEADER_DEFN
 from .helpers import custom_fields as fields
 
 api = Namespace('sponsors', description='Sponsors', path='/')
@@ -50,7 +50,7 @@ DAO = SponsorDAO(SponsorModel, SPONSOR_POST)
 @api.doc(responses=SERVICE_RESPONSES)
 class Sponsor(Resource):
     @api.doc('get_sponsor')
-    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
+    @api.header(*ETAG_HEADER_DEFN)
     @api.marshal_with(SPONSOR)
     def get(self, event_id, sponsor_id):
         """Fetch a sponsor given its id"""
@@ -75,7 +75,7 @@ class Sponsor(Resource):
 @api.route('/events/<int:event_id>/sponsors')
 class SponsorList(Resource):
     @api.doc('list_sponsors')
-    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
+    @api.header(*ETAG_HEADER_DEFN)
     @api.marshal_list_with(SPONSOR)
     def get(self, event_id):
         """List all sponsors"""
@@ -97,7 +97,7 @@ class SponsorList(Resource):
 @api.route('/events/<int:event_id>/sponsors/types')
 class SponsorTypesList(Resource):
     @api.doc('list_sponsor_types', model=[fields.String()])
-    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
+    @api.header(*ETAG_HEADER_DEFN)
     def get(self, event_id):
         """List all sponsor types"""
         return DAO.list_types(event_id)
@@ -106,7 +106,7 @@ class SponsorTypesList(Resource):
 @api.route('/events/<int:event_id>/sponsors/page')
 class SponsorListPaginated(Resource, PaginatedResourceBase):
     @api.doc('list_sponsors_paginated', params=PAGE_PARAMS)
-    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
+    @api.header(*ETAG_HEADER_DEFN)
     @api.marshal_with(SPONSOR_PAGINATED)
     def get(self, event_id):
         """List sponsors in a paginated manner"""
