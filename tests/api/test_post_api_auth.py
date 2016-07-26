@@ -6,7 +6,7 @@ from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
 from tests.api.utils import create_event, get_path
 from tests.api.utils_post_data import *
-from tests.auth_helper import register, login
+from tests.auth_helper import register, logout
 from app import current_app as app
 
 
@@ -19,6 +19,7 @@ class TestPostApiBasicAuth(OpenEventTestCase):
         with app.test_request_context():
             register(self.app, u'myemail@gmail.com', u'test')
             create_event(creator_email=u'myemail@gmail.com')
+            logout(self.app)
 
     def _test_model(self, name, data):
         with app.test_request_context():
@@ -33,7 +34,7 @@ class TestPostApiBasicAuth(OpenEventTestCase):
                 }
             )
             self.assertNotEqual(response.status_code, 401)
-            self.assertEqual(response.status_code, 201)
+            self.assertEqual(response.status_code, 201, response.data)
             self.assertIn('Test' + str(name).title(), response.data)
 
     def test_event_api(self):

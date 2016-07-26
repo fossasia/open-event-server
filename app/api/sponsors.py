@@ -5,7 +5,8 @@ from app.models.sponsor import Sponsor as SponsorModel
 from .helpers.helpers import (
     can_create,
     can_update,
-    can_delete
+    can_delete,
+    requires_auth
 )
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
@@ -56,6 +57,7 @@ class Sponsor(Resource):
         """Fetch a sponsor given its id"""
         return DAO.get(event_id, sponsor_id)
 
+    @requires_auth
     @can_delete(DAO)
     @api.doc('delete_sponsor')
     @api.marshal_with(SPONSOR)
@@ -63,6 +65,7 @@ class Sponsor(Resource):
         """Delete a sponsor given its id"""
         return DAO.delete(event_id, sponsor_id)
 
+    @requires_auth
     @can_update(DAO)
     @api.doc('update_sponsor', responses=PUT_RESPONSES)
     @api.marshal_with(SPONSOR)
@@ -81,6 +84,7 @@ class SponsorList(Resource):
         """List all sponsors"""
         return DAO.list(event_id)
 
+    @requires_auth
     @can_create(DAO)
     @api.doc('create_sponsor', responses=POST_RESPONSES)
     @api.marshal_with(SPONSOR)

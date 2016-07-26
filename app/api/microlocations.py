@@ -5,7 +5,8 @@ from app.models.microlocation import Microlocation as MicrolocationModel
 from .helpers.helpers import (
     can_create,
     can_update,
-    can_delete
+    can_delete,
+    requires_auth
 )
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
@@ -55,6 +56,7 @@ class Microlocation(Resource):
         """Delete a microlocation given its id"""
         return DAO.delete(event_id, microlocation_id)
 
+    @requires_auth
     @can_update(DAO)
     @api.doc('update_microlocation', responses=PUT_RESPONSES)
     @api.marshal_with(MICROLOCATION)
@@ -73,6 +75,7 @@ class MicrolocationList(Resource):
         """List all microlocations"""
         return DAO.list(event_id)
 
+    @requires_auth
     @can_create(DAO)
     @api.doc('create_microlocation', responses=POST_RESPONSES)
     @api.marshal_with(MICROLOCATION)
