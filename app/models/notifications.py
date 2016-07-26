@@ -7,6 +7,7 @@ NEXT_EVENT = 'Next Event'
 SESSION_ACCEPT_REJECT = 'Session Accept or Reject'
 INVITE_PAPERS = 'Invitation For Papers'
 AFTER_EVENT = 'After Event'
+EVENT_PUBLISH = 'Event Published'
 
 class Notification(db.Model):
     """

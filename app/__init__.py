@@ -52,6 +52,7 @@ from app.api.helpers.errors import NotFoundError
 import requests
 from apscheduler.schedulers.background import BackgroundScheduler
 from app.helpers.data import DataManager, delete_from_db
+from app.helpers.helpers import send_after_event
 from sqlalchemy_continuum import transaction_class
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -81,6 +82,7 @@ def create_app():
     app.config['STATIC_ROOT'] = 'staticfiles'
     app.config['STATICFILES_DIRS'] = (os.path.join(BASE_DIR, 'static'),)
     app.config['SQLALCHEMY_RECORD_QUERIES'] = True
+    #app.config['SERVER_NAME'] = 'open-event-dev.herokuapp.com'
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     app.logger.setLevel(logging.INFO)
     app.jinja_env.add_extension('jinja2.ext.do')
@@ -260,6 +262,25 @@ def set_secret():
     current_app.secret_key = get_settings()['secret']
 
 
+
+def send_after_event_mail():
+    with app.app_context():
+        events = Event.query.all()
+        for event in events:
+            upcoming_events = DataGetter.get_upcoming_events(event.id)
+            organizers = DataGetter.get_user_event_roles_by_role_name(event.id, 'organizer')
+            speakers = DataGetter.get_user_event_roles_by_role_name(event.id, 'speaker')
+            if datetime.now() > event.end_time:
+                for speaker in speakers:
+                    send_after_event(speaker.user.email, event.id, upcoming_events)
+                for organizer in organizers:
+                    send_after_event(organizer.user.email, event.id, upcoming_events)
+
+#logging.basicConfig()
+sched = BackgroundScheduler(timezone=utc)
+sched.add_job(send_after_event_mail, 'cron', day_of_week='mon-fri', hour=5, minute=30)
+#sched.start()
+
 def empty_trash():
     with app.app_context():
         print 'HELLO'
@@ -284,6 +305,7 @@ def empty_trash():
 trash_sched = BackgroundScheduler(timezone=utc)
 trash_sched.add_job(empty_trash, 'cron', day_of_week='mon-fri', hour=5, minute=30)
 trash_sched.start()
+
 
 if __name__ == '__main__':
     current_app.run()

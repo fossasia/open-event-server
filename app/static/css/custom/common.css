@@ -326,3 +326,12 @@ span.twitter-typeahead {
     font-weight: 300;
     font-size: 13px;
 }
+
+#ticketing-holder th {
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+#ticketing-holder select {
+  width: 50px;
+}

@@ -23,7 +23,7 @@ class TestImportUploads(ImportExportBase):
             create_services(1, '1')
 
     def _update_json(self, file, field, value, number=None):
-        fp = 'static/temp/test_event_import/%s.json' % file
+        fp = 'static/temp/test_event_import/%s' % file
         ptr = open(fp)
         data = json.loads(ptr.read())
         if file == 'event':
@@ -122,7 +122,7 @@ class TestImportUploads(ImportExportBase):
         Tests if version data is being preserved
         """
         self._create_set()
-        data_old = json.loads(open('static/temp/test_event_import/event.json').read())
+        data_old = json.loads(open('static/temp/test_event_import/event').read())
         # import
         data = self._make_zip_from_dir()
         event_dic = self._do_succesful_import(data)

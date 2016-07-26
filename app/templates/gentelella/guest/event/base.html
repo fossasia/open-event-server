@@ -1,0 +1,165 @@
+{% extends 'gentelella/admin/base.html' %}
+
+{% set active_page = active_page|default('info') -%}
+
+{% set carousel_height = 500 if event.background_url and active_page == 'info' else 300 -%}
+{% set scrollspy_top = (carousel_height + 95) ~ "px" %}
+
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/details.css') }}"/>
+    <style type="text/css">
+        .carousel .item {
+            height: {{ carousel_height }}px;
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('{{ event.background_url }}');
+        }
+
+        .carousel {
+            height: {{ carousel_height }}px;
+        }
+
+        .scrollspy {
+            top: {{ scrollspy_top }};
+        }
+    </style>
+{% endblock %}
+
+{% block head_js %}
+    {{ super() }}
+{% endblock %}
+
+{% block title %}
+    {{ event.name }}
+{% endblock %}
+
+
+{% block body %}
+    <div class="scrollspy hidden-xs hidden-sm" id="scrollspy">
+        <ul class="nav nav-pills nav-stacked">
+            <li {% if active_page == 'info' %}class="active"{% endif %}><a href="/e/{{ event.id }}/#info">Info</a></li>
+            {% if accepted_sessions[0] %}
+                <li><a href="/e/{{ event.id }}/#speakers">Speakers</a></li>
+            {% endif %}
+            {% if event.sponsor[0] %}
+                <li><a href="/e/{{ event.id }}/#sponsors">Sponsors</a></li>
+            {% endif %}
+            {% if accepted_sessions[0] %}
+                <li {% if active_page == 'sessions' %}class="active"{% endif %}><a href="/e/{{ event.id }}/sessions">Sessions</a>
+                </li>
+            {% endif %}
+            {% if call_for_speakers and call_for_speakers.privacy == 'public' %}
+                <li {% if active_page == 'cfs' %}class="active"{% endif %}><a href="/e/{{ event.id }}/cfs">Call for
+                    speakers</a></li>
+            {% endif %}
+            {% if event.schedule_published_on %}
+                <li {% if active_page == 'schedule' %}class="active"{% endif %}><a href="/e/{{ event.id }}/schedule">Schedule</a>
+                </li>
+            {% endif %}
+            {% if event.organizer_name %}
+                <li><a href="/e/{{ event.id }}/#organizer">Organizer</a></li>
+            {% endif %}
+            {% if event.location_name %}
+                <li><a href="/e/{{ event.id }}/#getting-here">Getting Here</a></li>
+            {% endif %}
+            {% if event.code_of_conduct and event.code_of_conduct != '' and event.code_of_conduct != ' ' %}
+                <li {% if active_page == 'coc' %}class="active"{% endif %}><a href="/e/{{ event.id }}/coc">Code of
+                    Conduct</a></li>
+            {% endif %}
+        </ul>
+    </div>
+    <div class="carousel slide" style="margin-bottom: 0;">
+        <div id="info" class="carousel-inner">
+            <div class="item active">
+                <div class="container">
+                    <div class="carousel-caption">
+                        <h4>{{ event.start_time.strftime('%a, %B %d at %I:%M %p') | upper }}</h4>
+                        <h1>{{ event.name }}</h1>
+                        <h4><i class="glyphicon glyphicon-map-marker"></i> {{ event.location_name | upper }}</h4>
+                        <p></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+    <div class="col-md-8 col-sm-12 col-xs-12 col-md-push-1 event-info-container-holder" style="min-height: 600px;">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+    <div class="col-md-2 col-md-push-1 hidden-xs hidden-sm">
+        <div>
+            {% set twitter = [] %}
+            {% for social_link in event.social_link %}
+                {% set social_name = social_link.name.strip().lower() %}
+                {% if social_name == "twitter" %}
+                    {% do twitter.append(social_link.link.strip()) %}
+                    <i class="fa fa-twitter-square fa-fw" style="color: #55acee"></i>
+                    <a class="social-link" href="{{ social_link.link }}">Twitter</a><br>
+                {% elif social_name == "facebook" %}
+                    <i class="fa fa-facebook-square fa-fw" style="color: #3b5999"></i>
+                    <a class="social-link" href="{{ social_link.link }}">Facebook</a><br>
+                {% elif social_name == "google plus" %}
+                    <i class="fa fa-google-plus-square fa-fw" style="color: #dd4b39"></i>
+                    <a class="social-link" href="{{ social_link.link }}">Google +</a><br>
+                {% elif social_name == "instagram" %}
+                    <i class="fa fa-instagram fa-fw" style="color: #dd4b39"></i>
+                    <a class="social-link" href="{{ social_link.link }}">Instagram</a><br>
+                {% elif social_name == "github" %}
+                    <i class="fa fa-github-square fa-fw"></i>
+                    <a class="social-link" href="{{ social_link.link }}">Github</a><br>
+                {% elif social_name == "youtube" %}
+                    <i class="fa fa-youtube-play fa-fw" style="color: #dd4b39"></i>
+                    <a class="social-link" href="{{ social_link.link }}">Youtube</a><br>
+                {% elif social_name == "flickr" %}
+                    <i class="fa fa-flickr fa-fw"></i>
+                    <a class="social-link" href="{{ social_link.link }}">Flickr</a><br>
+                {% elif social_name == "tumblr" %}
+                    <i class="fa fa-tumblr-square fa-fw"></i>
+                    <a class="social-link" href="{{ social_link.link }}">Tumblr</a><br>
+                {% elif social_name == "blog" %}
+                    <i class="fa fa-pencil fa-fw"></i>
+                    <a class="social-link" href="{{ social_link.link }}">Blog</a><br>
+                {% elif social_name == "website" %}
+                    <i class="fa fa-square-o fa-fw"></i>
+                    <a class="social-link" href="{{ social_link.link }}">Website</a><br>
+                {% else %}
+                    <i class="fa square-o fa-fw" style="color: #8d8d8d"></i>
+                    <a class="social-link" href="{{ social_link.link }}">{{ social_link.name }}</a><br>
+                {% endif %}
+            {% endfor %}
+            {% for twitterLink in twitter %}
+                <a class="twitter-timeline" href="{{ twitterLink }}" data-height="500">Tweets</a>
+            {% endfor %}
+            {# Licence Info #}
+            {% if licence_details %}
+                <div>
+                    {% if licence_details['compact_logo'] != '' %}
+                        <img src="{{ licence_details['compact_logo'] }}">
+                    {% endif %}
+                    <div style="font-size: 14px;">This event is licenced under
+                        {% if licence_details['url'] != '' %}
+                            <a href="{{ licence_details['url'] }}" target="_blank"
+                               style="color:#1a75ff;">{{ licence_details['long_name'] }}</a>
+                        {% else %}
+                            {{ licence_details['long_name'] }}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+    <script>!function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+        if (!d.getElementById(id)) {
+            js = d.createElement(s);
+            js.id = id;
+            js.src = p + "://platform.twitter.com/widgets.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }
+    }(document, "script", "twitter-wjs");</script>
+{% endblock %}

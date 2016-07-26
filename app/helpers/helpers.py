@@ -142,7 +142,7 @@ def send_next_event(email, event_name, link, up_coming_events):
         )
 
 
-def send_after_event(email, event_name, upcoming_events, link=None):
+def send_after_event(email, event_name, upcoming_events):
     """Send after event mail"""
     message_settings = MessageSettings.query.filter_by(action=AFTER_EVENT).first()
     if not message_settings or message_settings.mail_status == 1:
@@ -159,7 +159,6 @@ def send_after_event(email, event_name, upcoming_events, link=None):
             html=MAILS[AFTER_EVENT]['message'].format(
                 email=str(email),
                 event_name=str(event_name),
-                link=link,
                 up_coming_events=upcoming_event_html
             )
         )
