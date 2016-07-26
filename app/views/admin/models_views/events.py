@@ -173,9 +173,15 @@ class EventsView(BaseView):
             flash("To make your event live, please verify your email by "
                   "clicking on the confirmation link that has been emailed to you.")
 
+
+        sessions = {'pending': DataGetter.get_sessions_by_state_and_event_id('pending', event_id).count(),
+                    'accepted': DataGetter.get_sessions_by_state_and_event_id('accepted', event_id).count(),
+                    'rejected': DataGetter.get_sessions_by_state_and_event_id('rejected', event_id).count(),
+                    'draft': DataGetter.get_sessions_by_state_and_event_id('draft', event_id).count()}
         return self.render('/gentelella/admin/event/details/details.html',
                            event=event,
-                           checklist=checklist)
+                           checklist=checklist,
+                           sessions=sessions)
 
     @expose('/<event_id>/edit/', methods=('GET', 'POST'))
     @can_access
