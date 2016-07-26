@@ -8,6 +8,21 @@
 
     <table class="table table-striped">
         <tbody>
+
+        <tr style="font-size: 15px">
+
+          <td>
+            {% if event.state == 'Published' %}
+              Your event is live at
+              <a href="{{url_for('event_detail.display_event_detail_home', event_id=event.id) |replace('events', 'e') }}" >
+                {{request.base_url |replace('events', 'e') }}
+              </a>
+            {% else %}
+              Your event is not live yet. Make it live <b><a href="/events/{{event.id}}/publish">now</a></b>.
+            {% endif %}
+          </td><td></td>
+        </tr>
+
         <tr>
             <td><b>No. of Revisions </b></td>
             <td>
@@ -25,7 +40,7 @@
                 {% if event.location %}
                     {{ event.location }}
                 {% else %}
-                    <a href="{{ url_for("events.edit_view", event_id=event.id) }}">Click to set location</a>
+                    <a href="{{ url_for('events.edit_view', event_id=event.id) }}">Click to set location</a>
                 {% endif %}
             </td>
         </tr>
@@ -56,6 +71,29 @@
                     No social links added.
                     <a href="{{ url_for("events.edit_view", event_id=event.id) }}">Click to add.</a>
                 {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td><b>Number of Speakers</b></td>
+            <td>
+                {{event.speaker | length}}
+            </td>
+        </tr>
+        <tr>
+            <td><b>Number of Sessions</b></td>
+            <td>
+
+              <p><b>All:</b> {{event.session | length}}</p>
+              <p><b>Pending:</b> {{sessions.pending }}</p>
+              <p><b>Accepted:</b> {{sessions.accepted}}</p>
+              <p><b>Rejected:</b> {{sessions.rejected}}</p>
+              <p><b>Draft:</b> {{sessions.draft}}</p>
+            </td>
+        </tr>
+        <tr>
+            <td><b>Number of Sponsors</b></td>
+            <td>
+              {{event.sponsor | length}}
             </td>
         </tr>
         </tbody>
