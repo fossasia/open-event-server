@@ -471,6 +471,8 @@ class DataManager(object):
     @staticmethod
     def session_accept_reject(session, event_id, state):
         session.state = state
+        session.submission_date = datetime.now()
+        session.submission_modifier = login.current_user.email
         save_to_db(session, 'Session State Updated')
         trigger_session_state_change_notifications(session, event_id)
         flash("The session has been %s" % state)
