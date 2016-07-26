@@ -10,7 +10,7 @@ from .helpers.helpers import (
 )
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO,\
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
-from .helpers.utils import Resource
+from .helpers.utils import Resource, ETAG_HEADER_DEFN
 from .helpers import custom_fields as fields
 from app.helpers.data_getter import DataGetter
 
@@ -77,7 +77,7 @@ DAO = SpeakerDAO(SpeakerModel, SPEAKER_POST)
 @api.doc(responses=SERVICE_RESPONSES)
 class Speaker(Resource):
     @api.doc('get_speaker')
-    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
+    @api.header(*ETAG_HEADER_DEFN)
     @api.marshal_with(SPEAKER)
     def get(self, event_id, speaker_id):
         """Fetch a speaker given its id"""
@@ -104,7 +104,7 @@ class Speaker(Resource):
 @api.route('/events/<int:event_id>/speakers')
 class SpeakerList(Resource):
     @api.doc('list_speakers')
-    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
+    @api.header(*ETAG_HEADER_DEFN)
     @api.marshal_list_with(SPEAKER)
     def get(self, event_id):
         """List all speakers"""
@@ -123,10 +123,11 @@ class SpeakerList(Resource):
             self.api.url_for(self, event_id=event_id)
         )
 
+
 @api.route('/events/<int:event_id>/speakers/page')
 class SpeakerListPaginated(Resource, PaginatedResourceBase):
     @api.doc('list_speakers_paginated', params=PAGE_PARAMS)
-    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
+    @api.header(*ETAG_HEADER_DEFN)
     @api.marshal_with(SPEAKER_PAGINATED)
     def get(self, event_id):
         """List speakers in a paginated manner"""

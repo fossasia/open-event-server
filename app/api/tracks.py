@@ -11,7 +11,7 @@ from .helpers.helpers import (
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
 from .helpers import custom_fields as fields
-from .helpers.utils import Resource
+from .helpers.utils import Resource, ETAG_HEADER_DEFN
 
 api = Namespace('tracks', description='Tracks', path='/')
 
@@ -50,7 +50,7 @@ DAO = TrackDAO(TrackModel, TRACK_POST)
 @api.doc(responses=SERVICE_RESPONSES)
 class Track(Resource):
     @api.doc('get_track')
-    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
+    @api.header(*ETAG_HEADER_DEFN)
     @api.marshal_with(TRACK)
     def get(self, event_id, track_id):
         """Fetch a track given its id"""
@@ -77,7 +77,7 @@ class Track(Resource):
 @api.route('/events/<int:event_id>/tracks')
 class TrackList(Resource):
     @api.doc('list_tracks')
-    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
+    @api.header(*ETAG_HEADER_DEFN)
     @api.marshal_list_with(TRACK)
     def get(self, event_id):
         """List all tracks"""
@@ -100,7 +100,7 @@ class TrackList(Resource):
 @api.route('/events/<int:event_id>/tracks/page')
 class TrackListPaginated(Resource, PaginatedResourceBase):
     @api.doc('list_tracks_paginated', params=PAGE_PARAMS)
-    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
+    @api.header(*ETAG_HEADER_DEFN)
     @api.marshal_with(TRACK_PAGINATED)
     def get(self, event_id):
         """List tracks in a paginated manner"""
