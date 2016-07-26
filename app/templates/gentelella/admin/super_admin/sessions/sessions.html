@@ -29,8 +29,8 @@ Events
     <td>{{session.event}}</td>
     <td>{{session.title}}</td>
     <td>{{session.speaker}}</td>
-    <td>{{session.submission_modifier}}</td>
-    <td>{{session.submission_date}}</td>
+    <td>{{session.submission_modifier if session.submission_modifier != None}} </td>
+    <td>{{session.submission_date if session.submission_date != None }}</td>
     <td>{{session.event.start_time }} - {{ session.event.end_time}}</td>
     <td>
         {% if session %}
