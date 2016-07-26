@@ -238,3 +238,11 @@ span.round-tab:hover {
     }
 
 }
+
+.sponsor-table > thead > tr > th {
+  border-bottom: none !important;
+}
+
+.sponsor-table > tbody > tr > td:not(:nth-child(1)) {
+  vertical-align: middle;
+}
