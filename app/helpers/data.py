@@ -402,6 +402,7 @@ class DataManager(object):
                     cfs_link = url_for('event_detail.display_event_cfs', event_id=event.id)
                     Helper.send_notif_invite_papers(user, event.name, cfs_link, link)
 
+
     @staticmethod
     def add_speaker_to_event(request, event_id, user=login.current_user):
         form = request.form
