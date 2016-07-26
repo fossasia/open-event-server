@@ -882,6 +882,7 @@ class DataManager(object):
         # Add Ticket
         str_empty = lambda val, val2: val2 if val == '' else val
 
+
         ticket_price = form.get('ticket_price', 0)
         # Default values to pass the tests because APIs don't have these fields
         ticket = Ticket(
