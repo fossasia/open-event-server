@@ -78,6 +78,7 @@ DetailDAO = UserDetailDAO(UserDetailModel, USER_DETAIL)
 @api.route('/users/<int:user_id>')
 @api.response(404, 'User not found')
 class User(Resource):
+    @requires_auth
     @can_access_account
     @api.doc('get_user')
     @api.marshal_with(USER)
@@ -85,6 +86,7 @@ class User(Resource):
         """Fetch a user given its id"""
         return DAO.get(user_id)
 
+    @requires_auth
     @can_access_account
     @api.doc('delete_user')
     @api.marshal_with(USER)
@@ -92,6 +94,7 @@ class User(Resource):
         """Delete a user given its id"""
         return DAO.delete(user_id)
 
+    @requires_auth
     @can_access_account
     @api.doc('update_user', responses=PUT_RESPONSES)
     @api.marshal_with(USER)
