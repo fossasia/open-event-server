@@ -359,7 +359,7 @@ class DataGetter:
         else:
             events = Event.query.filter(Event.state == 'Published').filter(Event.privacy != 'private')
         events = events.filter(Event.start_time >= datetime.datetime.now()).filter(
-            Event.end_time >= datetime.datetime.now())
+            Event.end_time >= datetime.datetime.now()).filter(Event.in_trash == 'False')
         return events
 
     @staticmethod
@@ -369,14 +369,14 @@ class DataGetter:
             events = DataGetter.get_all_published_events(include_private)
             for e in events:
                 call_for_speakers = DataGetter.get_call_for_papers(e.id).first()
-                if call_for_speakers:
+                if call_for_speakers and not e.in_trash:
                     results.append(e)
 
         else:
             events = DataGetter.get_all_published_events()
             for e in events:
                 call_for_speakers = DataGetter.get_call_for_papers(e.id).first()
-                if call_for_speakers:
+                if call_for_speakers and not e.in_trash:
                     results.append(e)
         return results[:12]
 
