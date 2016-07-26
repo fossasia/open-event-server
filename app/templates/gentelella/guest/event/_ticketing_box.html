@@ -1,0 +1,81 @@
+<div id="ticketing-holder" class="col-md-6 col-sm-8 col-xs-12">
+    <form>
+        <div class="panel panel-default">
+            <div class="panel-heading" style="background-color: #ffffff;">
+                <h3 class="panel-title">Ticket Information</h3>
+            </div>
+            <div class="panel-body" style="padding-bottom: 10px;">
+                <table class="table" style="margin-bottom: 0;">
+                    <thead>
+                    <tr>
+                        <th>Ticket type</th>
+                        <th>Sales ends</th>
+                        <th>Price</th>
+                        <th>Fee</th>
+                        <th align="right" style="text-align: right">Quantity</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        {% for ticket in tickets %}
+                            <td>{{ ticket.type }}</td>
+                            <td>{{ ticket.sales_end.strftime('%a, %B %d') }}</td>
+                            <td>${{ ticket.price }}</td>
+                            <td>$0.00</td>
+                            <td align="right">
+                                <select name="quantity[{{ ticket.id }}]">
+                                    <option value="0" selected>0</option>
+                                    {% for quantity in range(ticket.min_order, ticket.max_order) %}
+                                        <option value="{{ quantity }}">{{ quantity }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        {% else %}
+                            <td colspan="5" style="text-align: center">
+                                No tickets available right now.
+                            </td>
+                        {% endfor %}
+                    </tr>
+                    </tbody>
+                </table>
+                <hr style="margin-top: 0;margin-bottom: 10px;">
+                <div class="" style="width: 100%; text-align: right;">
+                    <a href="#" class="promo-code-open" style="color: #2aa9dd;">Enter promotional code</a>
+                    <div class="col-md-5 pull-right promo-code-box" style="padding-right:0;display:none;">
+                        <div class="input-group" style="margin-bottom: 0;">
+                            <input type="text" name="promo_code" class="form-control" placeholder="Promotional code">
+                                      <span class="input-group-btn">
+                                        <button class="btn btn-default promo-close-btn" type="button"><i
+                                                class="fa fa-times"></i></button>
+                                      </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="panel-footer" style="background-color: #ffffff;">
+                <div class="pull-right">
+                    <img src="{{ url_for('static', filename='img/paymentlogoshorizontal.png') }}">
+                    <button class="btn btn-success" {% if tickets %}type="submit"{% else %} type="button" disabled{% endif %}>Order Now</button>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+    </form>
+</div>
+<div class="clearfix"></div>
+
+<script type="text/javascript">
+    $(".promo-code-open").click(function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).hide();
+        $(".promo-code-box").show();
+    });
+
+    $(".promo-close-btn").click(function () {
+        $('.promo-code-box').hide().find('input').val('');
+        $(".promo-code-open").show();
+    });
+</script>
