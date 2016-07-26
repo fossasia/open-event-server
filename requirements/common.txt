@@ -38,3 +38,4 @@ bleach
 celery==3.1.23
 redis==2.10.3
 gunicorn==19.6.0
+apscheduler==3.0.1

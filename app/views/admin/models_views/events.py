@@ -1,19 +1,20 @@
 import json
 import datetime
+import os
+import binascii
 
-from flask import request, flash, url_for
-from flask.ext.restplus import abort
+from flask import flash, url_for
 from flask.ext.admin import BaseView
 from flask_admin import expose
 
 from app import db
 from app.helpers.permission_decorators import *
 from app.helpers.helpers import fields_not_empty, string_empty
+from app.models.call_for_papers import CallForPaper
 from ....helpers.data import DataManager, save_to_db, record_activity, delete_from_db, restore_event
 from ....helpers.data_getter import DataGetter
 from werkzeug.datastructures import ImmutableMultiDict
 from app.helpers.helpers import send_event_publish
-from app.models.event import Event
 
 def is_verified_user():
     return login.current_user.is_verified
@@ -22,6 +23,8 @@ def is_verified_user():
 def is_accessible():
     return login.current_user.is_authenticated
 
+def get_random_hash():
+    return binascii.b2a_hex(os.urandom(20))
 
 class EventsView(BaseView):
     def _handle_view(self, name, **kwargs):
@@ -73,6 +76,10 @@ class EventsView(BaseView):
             if module.ticket_include:
                 ticket_include.append('ticketing')
 
+        hash = get_random_hash()
+        if CallForPaper.query.filter_by(hash=hash).all():
+            hash = get_random_hash()
+
         return self.render(
             '/gentelella/admin/event/new/new.html',
             start_date=datetime.datetime.now() + datetime.timedelta(days=10),
@@ -81,6 +88,7 @@ class EventsView(BaseView):
             event_topics=DataGetter.get_event_topics(),
             event_sub_topics=DataGetter.get_event_subtopics(),
             timezones=DataGetter.get_all_timezones(),
+            cfs_hash=hash,
             ticket_include_setting=ticket_include)
 
     @expose('/<event_id>/', methods=('GET', 'POST'))
@@ -122,43 +130,54 @@ class EventsView(BaseView):
                     break
                 else:
                     checklist["2"] = 'missing_some'
+        if event.has_session_speakers:
+            session_types = DataGetter.get_session_types_by_event_id(event_id)
+            tracks = DataGetter.get_tracks(event_id)
+            microlocations = DataGetter.get_microlocations(event_id)
 
-        session_types = DataGetter.get_session_types_by_event_id(event_id)
-        tracks = DataGetter.get_tracks(event_id)
-        microlocations = DataGetter.get_microlocations(event_id)
+            if not session_types and not tracks and not microlocations:
+                checklist["3"] = 'optional'
+            elif not session_types or not tracks or not microlocations:
+                checklist["3"] = 'missing_main'
+            else:
+                for session_type in session_types:
+                    if fields_not_empty(session_type, ['name', 'length']):
+                        checklist["3"] = 'success'
+                        break
+                    else:
+                        checklist["3"] = 'missing_some'
+                for microlocation in microlocations:
+                    if fields_not_empty(microlocation, ['name']):
+                        checklist["3"] = 'success'
+                        break
+                    else:
+                        checklist["3"] = 'missing_some'
+                for tracks in tracks:
+                    if fields_not_empty(tracks, ['name', 'color']):
+                        checklist["3"] = 'success'
+                        break
+                    else:
+                        checklist["3"] = 'missing_some'
 
-        if not session_types and not tracks and not microlocations:
-            checklist["3"] = 'optional'
-        elif not session_types or not tracks or not microlocations:
-            checklist["3"] = 'missing_main'
+            checklist["5"] = 'success'
         else:
-            for session_type in session_types:
-                if fields_not_empty(session_type, ['name', 'length']):
-                    checklist["3"] = 'success'
-                    break
-                else:
-                    checklist["3"] = 'missing_some'
-            for microlocation in microlocations:
-                if fields_not_empty(microlocation, ['name']):
-                    checklist["3"] = 'success'
-                    break
-                else:
-                    checklist["3"] = 'missing_some'
-            for tracks in tracks:
-                if fields_not_empty(tracks, ['name', 'color']):
-                    checklist["3"] = 'success'
-                    break
-                else:
-                    checklist["3"] = 'missing_some'
+            checklist["3"] = 'optional'
+            checklist["4"] = 'optional'
+            checklist["5"] = 'optional'
 
-        checklist["5"] = 'success'
         if not is_verified_user():
             flash("To make your event live, please verify your email by "
                   "clicking on the confirmation link that has been emailed to you.")
 
+
+        sessions = {'pending': DataGetter.get_sessions_by_state_and_event_id('pending', event_id).count(),
+                    'accepted': DataGetter.get_sessions_by_state_and_event_id('accepted', event_id).count(),
+                    'rejected': DataGetter.get_sessions_by_state_and_event_id('rejected', event_id).count(),
+                    'draft': DataGetter.get_sessions_by_state_and_event_id('draft', event_id).count()}
         return self.render('/gentelella/admin/event/details/details.html',
                            event=event,
-                           checklist=checklist)
+                           checklist=checklist,
+                           sessions=sessions)
 
     @expose('/<event_id>/edit/', methods=('GET', 'POST'))
     @can_access
@@ -195,6 +214,11 @@ class EventsView(BaseView):
         print preselect
 
         if request.method == 'GET':
+
+            hash = get_random_hash()
+            if CallForPaper.query.filter_by(hash=hash).all():
+                hash = get_random_hash()
+
             return self.render('/gentelella/admin/event/edit/edit.html',
                                event=event,
                                session_types=session_types,
@@ -209,6 +233,7 @@ class EventsView(BaseView):
                                event_sub_topics=DataGetter.get_event_subtopics(),
                                preselect=preselect,
                                timezones=DataGetter.get_all_timezones(),
+                               cfs_hash=hash,
                                step=step,
                                required=required)
         if request.method == "POST":

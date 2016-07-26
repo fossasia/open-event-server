@@ -34,7 +34,7 @@ IMPORT_SERIES = [
     ('tracks', TrackDAO),
     ('session_types', SessionTypeDAO),
     ('sessions', SessionDAO),
-    ('custom_forms', CustomFormDAO)
+    ('forms', CustomFormDAO)
 ]
 
 DELETE_FIELDS = {
@@ -99,7 +99,7 @@ def get_file_from_request(ext=[], folder='/static/temp/', name='file'):
 def make_error(file, er=None, id_=None):
     if er is None:
         er = ServerError()
-    istr = 'File %s.json' % file
+    istr = 'File %s' % file
     if id_ is not None:
         istr = '%s, ID %s' % (istr, id_)
     er.message = '%s, %s' % (istr, er.message)
@@ -296,7 +296,7 @@ def import_event_json(task_handle, zip_path):
         z.extractall(path)
     # create event
     try:
-        data = json.loads(open(path + '/event.json', 'r').read())
+        data = json.loads(open(path + '/event', 'r').read())
         _, data = _trim_id(data)
         srv = ('event', EventDAO)
         data = _delete_fields(srv, data)
@@ -311,7 +311,7 @@ def import_event_json(task_handle, zip_path):
     try:
         service_ids = {}
         for item in IMPORT_SERIES:
-            data = open(path + '/%s.json' % item[0], 'r').read()
+            data = open(path + '/%s' % item[0], 'r').read()
             dic = json.loads(data)
             changed_ids = create_service_from_json(
                 dic, item, new_event.id, service_ids)
@@ -322,7 +322,7 @@ def import_event_json(task_handle, zip_path):
         raise make_error(item[0], er=e, id_=CUR_ID)
     except IOError:
         EventDAO.delete(new_event.id)
-        raise NotFoundError('File %s.json missing in event zip' % item[0])
+        raise NotFoundError('File %s missing in event zip' % item[0])
     except ValueError:
         EventDAO.delete(new_event.id)
         raise make_error(item[0], er=ServerError('Invalid json'))

@@ -21,6 +21,7 @@ class ObjectMother(object):
                      location_name='India',
                      topic='Travel & Outdoor',
                      sub_topic='Climbing',
+                     has_session_speakers=True,
                      type='Camp, Trip, or Retreat')
 
     @staticmethod

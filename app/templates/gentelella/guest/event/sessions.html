@@ -1,81 +1,17 @@
-{% extends 'gentelella/admin/base.html' %}
+{% extends 'gentelella/guest/event/base.html' %}
 
-{% set carousel_height = 300 -%}
-{% set scrollspy_top = (carousel_height + 95) ~ "px" %}
+{% set active_page = 'sessions' %}
 
 {% block head_css %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/details.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/sessions.css') }}"/>
-    <style type="text/css">
-        .carousel .item {
-            height: {{ carousel_height }}px;
-            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('{{ event.background_url }}');
-        }
-
-        .carousel {
-            height: {{ carousel_height }}px;
-        }
-
-        .scrollspy {
-            top: {{ scrollspy_top }};
-        }
-    </style>
-{% endblock %}
-{% block title %}
-    {{ event.name }}
 {% endblock %}
 
-{% block head_js %}
-    {{ super() }}
-{% endblock %}
-
-
-{% block body %}
-    <div class="scrollspy hidden-xs hidden-sm">
-        <ul class="nav nav-pills nav-stacked">
-            {% if event.description %}
-                <li><a href="/e/{{ event.id }}#info">Info</a></li>
-            {% endif %}
-            <li><a href="/e/{{ event.id }}#speakers">Speakers</a></li>
-            {% if event.sponsor[0] %}
-                <li><a href="/e/{{ event.id }}#sponsors">Sponsors</a></li>
-            {% endif %}
-            <li class="active"><a href="/e/{{ event.id }}/sessions">Sessions</a></li>
-            {% if call_for_speakers %}
-                <li><a href="/e/{{ event.id }}/cfs">Call for speakers</a></li>
-            {% endif %}
-            {% if event.schedule_published_on %}
-                <li><a href="/e/{{ event.id }}/schedule">Schedule</a></li>
-            {% endif %}
-            {% if event.organizer_name %}
-                <li><a href="/e/{{ event.id }}#organizer">Organizer</a></li>
-            {% endif %}
-            {% if event.location_name %}
-                <li><a href="/e/{{ event.id }}#getting-here">Getting Here</a></li>
-            {% endif %}
-            {% if event.code_of_conduct and event.code_of_conduct != '' and event.code_of_conduct != ' ' %}
-                <li><a href="/e/{{ event.id }}/coc">Code of Conduct</a></li>
-            {% endif %}
-        </ul>
-    </div>
-    <div class="carousel slide" style="margin-bottom: 0;">
-        <div id="info" class="carousel-inner">
-            <div class="item active">
-                <div class="container">
-                    <div class="carousel-caption">
-                        <h4>{{ event.start_time.strftime('%a, %B %d at %I:%M %p') | upper }}</h4>
-                        <h1>{{ event.name }}</h1>
-                        <h4><i class="glyphicon glyphicon-map-marker"></i> {{ event.location_name | upper }}</h4>
-                        <p></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="event-info container" style="min-height: 600px;">
+{% block content %}
+    <div>
         <div class="row">
             <div class="col-md-12">
+                <h1 style="font-weight: 300; font-size: 30px">Sessions</h1>
                 {% include 'gentelella/guest/event/_sessions_list.html' %}
             </div>
         </div>

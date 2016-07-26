@@ -1,5 +1,4 @@
 from flask.ext.admin import BaseView
-from flask.ext.restplus import abort
 from flask_admin import expose
 
 from app import db
@@ -29,6 +28,9 @@ class SessionsView(BaseView):
     def index_view(self, event_id):
         sessions = DataGetter.get_sessions_by_event_id(event_id)
         event = DataGetter.get_event(event_id)
+        if not event.has_session_speakers:
+            return self.render('/gentelella/admin/event/info/enable_module.html', active_page='sessions',
+                               title='Sessions', event=event)
         return self.render('/gentelella/admin/event/sessions/base_session_table.html',
                            sessions=sessions, event_id=event_id, event=event)
 
@@ -39,6 +41,9 @@ class SessionsView(BaseView):
             DataManager.edit_session(request, session)
             return redirect(url_for('.index_view', event_id=event_id))
         event = DataGetter.get_event(event_id)
+        if not event.has_session_speakers:
+            return self.render('/gentelella/admin/event/info/enable_module.html', active_page='sessions',
+                               title='Sessions', event=event)
         form_elems = DataGetter.get_custom_form_elements(event_id)
         if not form_elems:
             flash("Speaker and Session forms have been incorrectly configured for this event."
@@ -54,6 +59,10 @@ class SessionsView(BaseView):
     @expose('/create/', methods=('GET', 'POST'))
     @can_access
     def create_view(self, event_id):
+        event = DataGetter.get_event(event_id)
+        if not event.has_session_speakers:
+            return self.render('/gentelella/admin/event/info/enable_module.html', active_page='sessions',
+                               title='Sessions', event=event)
         if request.method == 'POST':
             DataManager.add_session_to_event(request, event_id)
             flash("The session and speaker have been saved")
@@ -70,7 +79,6 @@ class SessionsView(BaseView):
         speaker_form = json.loads(form_elems.speaker_form)
         session_form = json.loads(form_elems.session_form)
         speakers = DataGetter.get_speakers(event_id).all()
-        event = DataGetter.get_event(event_id)
 
         return self.render('/gentelella/admin/event/sessions/new.html',
                            speaker_form=speaker_form, session_form=session_form, event=event, speakers=speakers)
@@ -78,6 +86,12 @@ class SessionsView(BaseView):
     @expose('/<int:session_id>/edit/', methods=('GET', 'POST'))
     @can_access
     def edit_view(self, event_id, session_id):
+
+        event = DataGetter.get_event(event_id)
+        if not event.has_session_speakers:
+            return self.render('/gentelella/admin/event/info/enable_module.html', active_page='sessions',
+                               title='Sessions', event=event)
+
         session = get_session_or_throw(session_id)
         if request.method == 'POST':
             DataManager.edit_session(request, session)
@@ -89,7 +103,6 @@ class SessionsView(BaseView):
                   " Session creation has been disabled", "danger")
             return redirect(url_for('.index_view', event_id=event_id))
         session_form = json.loads(form_elems.session_form)
-        event = DataGetter.get_event(event_id)
         speakers = DataGetter.get_speakers(event_id).all()
         return self.render('/gentelella/admin/event/sessions/edit.html', session=session,
                            session_form=session_form, event=event, speakers=speakers)
@@ -115,6 +128,9 @@ class SessionsView(BaseView):
     def add_speaker_view(self, event_id, session_id):
         session = DataGetter.get_session(session_id)
         event = DataGetter.get_event(event_id)
+        if not event.has_session_speakers:
+            return self.render('/gentelella/admin/event/info/enable_module.html', active_page='sessions',
+                               title='Sessions', event=event)
         form_elems = DataGetter.get_custom_form_elements(event_id)
         if not form_elems:
             flash("Speaker form has been incorrectly configured for this event. Editing has been disabled", "danger")
@@ -147,7 +163,7 @@ class SessionsView(BaseView):
         session = get_session_or_throw(session_id)
         session = trash_session(session_id)
         flash("The session has been deleted", "danger")
-        if login.current_user.is_super_admin == True:
+        if login.current_user.is_super_admin:
             return redirect(url_for('sadmin_sessions.display_my_sessions_view', event_id=event_id))
         return redirect(url_for('.index_view', event_id=event_id))
 

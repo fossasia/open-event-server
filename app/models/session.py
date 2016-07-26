@@ -23,7 +23,6 @@ class Session(db.Model):
     comments = db.Column(db.Text)
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
-    timezone = db.Column(db.String, nullable=False, default="UTC")
     track_id = db.Column(db.Integer, db.ForeignKey('tracks.id'))
     speakers = db.relationship(
         'Speaker',
@@ -43,6 +42,7 @@ class Session(db.Model):
     state = db.Column(db.String, default="pending")
     in_trash = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    trash_date = db.Column(db.DateTime)
 
     def __init__(self,
                  title=None,
@@ -52,7 +52,6 @@ class Session(db.Model):
                  comments=None,
                  start_time=None,
                  end_time=None,
-                 timezone="UTC",
                  track=None,
                  language=None,
                  microlocation=None,
@@ -65,7 +64,8 @@ class Session(db.Model):
                  signup_url=None,
                  session_type=None,
                  created_at=None,
-                 in_trash=False):
+                 in_trash=False,
+                 trash_date=None):
         self.title = title
         self.subtitle = subtitle
         self.short_abstract = short_abstract
@@ -73,7 +73,6 @@ class Session(db.Model):
         self.comments = comments
         self.start_time = start_time
         self.end_time = end_time
-        self.timezone = timezone
         self.track = track
         self.language = language
         self.microlocation = microlocation
@@ -86,7 +85,8 @@ class Session(db.Model):
         self.signup_url = signup_url
         self.session_type = session_type
         self.created_at = created_at
-        self.in_trash=in_trash
+        self.in_trash = in_trash
+        self.trash_date = trash_date
 
     @staticmethod
     def get_service_name():
@@ -108,7 +108,6 @@ class Session(db.Model):
             'comments': self.comments,
             'begin': DateFormatter().format_date(self.start_time),
             'end': DateFormatter().format_date(self.end_time),
-            'timezone': self.timezone,
             'track': self.track.id if self.track else None,
             'speakers': [
                 {'id': speaker.id,

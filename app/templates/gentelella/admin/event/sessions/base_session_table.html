@@ -144,7 +144,6 @@
         $.fn.dataTable.ext.search.push(
                 function (settings, data, dataIndex) {
                     var user_option = $("input[name=show_state]:checked").val();
-                    console.log(user_option);
                     var state = data[0].trim() || 'pending';
                     if (user_option === "all") {
                         return true;
@@ -173,6 +172,7 @@
         table.on('draw', function () {
             $('[data-toggle="tooltip"]').tooltip();
         });
+
 
 
     </script>

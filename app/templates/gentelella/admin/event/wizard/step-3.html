@@ -71,24 +71,33 @@
     </div>
 {% endmacro %}
 
-<div id="step-3" class="wizard_content" style="display: block;">
-    <div class="col-md-10 col-md-push-1">
-        <div style="width: 100%; text-align: center">
-            {% if tracks or microlocations or session_types or not event %}
-                <h2 style="font-weight: 300;">Turn <span class="str-state">off</span> sessions, tracks, rooms</h2>
-                <input type="checkbox" class="toggle-switch" name="sessions_tracks_rooms_state"
-                       value="on" id="session-tracks-rooms-switch" checked/>
-            {% else %}
-                <h2 style="font-weight: 300;">Turn <span class="str-state">on</span> sessions, tracks, rooms</h2>
-                <input type="checkbox" class="toggle-switch" name="sessions_tracks_rooms_state"
-                       value="on" id="session-tracks-rooms-switch"/>
-            {% endif %}
-            <label for="session-tracks-rooms-switch"></label>
-        </div>
+<div class="col-md-8 col-md-push-2">
+    <br>
+    <div style="width: 100%; text-align: center">
+        {% if event and event.has_session_speakers %}
+            <h2 style="font-weight: 300;">Turn <span class="str-state">off</span> Sessions and Speakers</h2>
+            <input type="checkbox" class="toggle-switch" name="has_session_speakers"
+                   value="yes" id="session-tracks-rooms-switch" checked/>
+        {% else %}
+            <h2 style="font-weight: 300;">Turn <span class="str-state">on</span> Sessions and Speakers</h2>
+            <input type="checkbox" class="toggle-switch" name="has_session_speakers"
+                   value="yes" id="session-tracks-rooms-switch"/>
+        {% endif %}
+        <label for="session-tracks-rooms-switch"></label>
+    </div>
+</div>
+<div id="step-3" class="wizard_content" style="{% if event and event.has_session_speakers %}display: block;{% else %}display:none;{% endif %}" >
+    <div class="col-md-8 col-md-push-2">
 
-        <div class="row" id="session-tracks-rooms-holder"
-             style="{% if not tracks and not microlocations and not session_types and event %}display:none;{% endif %}">
-            <div class="col-md-4 tracks">
+        <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
+            <i class="fa fa-list-ol"></i>
+            Session, Microlocations, Session types
+            <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+        </h2>
+
+
+        <div class="row" id="session-tracks-rooms-holder" >
+            <div class="col-md-7 tracks">
                 <h2 class="label-header">Tracks</h2>
                 {% if tracks %}
                     {% for track in tracks %}
@@ -98,7 +107,8 @@
                     {{ track_entry() }}
                 {% endif %}
             </div>
-            <div class="col-md-4 rooms">
+            <div class="clearfix"></div>
+            <div class="col-md-7 rooms">
                 <h2 class="label-header">Microlocations</h2>
                 {% if microlocations %}
                     {% for microlocation in microlocations %}
@@ -108,7 +118,8 @@
                     {{ microlocation_entry() }}
                 {% endif %}
             </div>
-            <div class="col-md-4 session-types">
+            <div class="clearfix"></div>
+            <div class="col-md-7 session-types">
                 <h2 class="label-header">Session Types</h2>
                 {% if session_types %}
                     {% for session_type in session_types %}
@@ -131,40 +142,17 @@
             'timeFormat': 'H.i'
         });
 
-        var $sessionTracksRoomsHolder = $("#session-tracks-rooms-holder");
+        var $sessionTracksRoomsHolder = $("#step-3,#step-4,#step-5");
         var $strState = $(".str-state");
-
-        var $sessionFormFieldRows = $("tr[data-identifier=track], tr[data-identifier=session_type]");
-
         var onOffSwitch = document.getElementById('session-tracks-rooms-switch');
 
         onOffSwitch.onchange = function () {
             if (onOffSwitch.checked) {
                 $sessionTracksRoomsHolder.fadeIn();
                 $strState.text("off");
-                $sessionTracksRoomsHolder.find("input").removeAttr('disabled');
-                $sessionFormFieldRows.tooltip('destroy');
-                $sessionFormFieldRows.css("pointer-events", "all");
-                $.each($sessionFormFieldRows.find('input'), function (index, elem) {
-                    if (elem.checked) {
-                        $(elem).click();
-                    }
-                    $(elem).siblings(".switchery").css("opacity", "1");
-                    elem.disabled = false;
-                });
-
             } else {
                 $sessionTracksRoomsHolder.fadeOut();
-                $sessionTracksRoomsHolder.find("input").attr('disabled', 'disabled');
                 $strState.text("on");
-                $.each($sessionFormFieldRows.find('input'), function (index, elem) {
-                    if (elem.checked) {
-                        $(elem).click();
-                    }
-                    $(elem).siblings(".switchery").css("opacity", "0.5");
-                    elem.disabled = "disabled";
-                });
-                $sessionFormFieldRows.tooltip();
             }
         };
 

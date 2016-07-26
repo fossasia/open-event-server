@@ -26,7 +26,7 @@ EXPORTS = [
     ('tracks', TrackDAO, TRACK),
     ('session_types', SessionTypeDAO, SESSION_TYPE),
     ('social_links', SocialLinkDAO, SOCIAL_LINK),
-    ('custom_forms', CustomFormDAO, CUSTOM_FORM)
+    ('forms', CustomFormDAO, CUSTOM_FORM)
 ]
 
 # keep sync with storage.UPLOAD_PATHS
@@ -118,12 +118,12 @@ def export_event_json(event_id, settings):
             for _ in data:
                 _download_media(_, e[0], dir_path, settings)
         data_str = json.dumps(data, sort_keys=True, indent=4)
-        fp = open(dir_path + '/' + e[0] + '.json', 'w')
+        fp = open(dir_path + '/' + e[0], 'w')
         fp.write(data_str)
         fp.close()
     # add meta
     data_str = json.dumps(_generate_meta(), sort_keys=True, indent=4)
-    fp = open(dir_path + '/meta.json', 'w')
+    fp = open(dir_path + '/meta', 'w')
     fp.write(data_str)
     fp.close()
     # make zip

@@ -9,7 +9,7 @@ from app.models.track import Track as TrackModel
 from app.models.microlocation import Microlocation as MicrolocationModel
 from app.models.speaker import Speaker as SpeakerModel
 from app.models.session_type import SessionType as SessionTypeModel
-from app.helpers.data import record_activity
+from app.helpers.data import record_activity, save_to_db
 from app.helpers.data_getter import DataGetter
 
 from .helpers.helpers import save_db_model, get_object_in_event, \
@@ -63,7 +63,6 @@ SESSION = api.model('Session', {
     'comments': fields.String(),
     'start_time': fields.DateTime(required=True),
     'end_time': fields.DateTime(required=True),
-    'timezone': fields.String(),
     'track': fields.Nested(SESSION_TRACK, allow_null=True),
     'speakers': fields.List(fields.Nested(SESSION_SPEAKER)),
     'language': SessionLanguageField(),
@@ -173,7 +172,11 @@ class SessionDAO(ServiceDAO):
     def create(self, event_id, data, url):
         data = self.validate(data, event_id)
         payload = self.fix_payload_post(event_id, data)
+        speakers = payload.pop('speakers', None)
         session, status_code, location = ServiceDAO.create(self, event_id, payload, url, validate=False)
+        if speakers:
+            session.speakers = speakers
+            save_to_db(session)
         if session.state == 'pending':
             trigger_new_session_notifications(session.id, event_id=event_id)
         return session, status_code, location
