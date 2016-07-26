@@ -37,8 +37,8 @@
         <tr>
             <td><b>Location </b></td>
             <td>
-                {% if event.location %}
-                    {{ event.location }}
+                {% if event.location_name %}
+                    {{ event.location_name }}
                 {% else %}
                     <a href="{{ url_for('events.edit_view', event_id=event.id) }}">Click to set location</a>
                 {% endif %}
