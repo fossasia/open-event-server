@@ -43,6 +43,8 @@ class Session(db.Model):
     in_trash = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     trash_date = db.Column(db.DateTime)
+    date_of_submission = db.Column(db.DateTime)
+    submission_modifier = db.Column(db.String)
 
     def __init__(self,
                  title=None,
