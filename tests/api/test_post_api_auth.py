@@ -10,32 +10,13 @@ from tests.auth_helper import register, logout
 from app import current_app as app
 
 
-class TestPostApiBasicAuth(OpenEventTestCase):
-    """
-    Tests the Basic Authorization in Post API
-    """
+class TestPostApiAuthBase(OpenEventTestCase):
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
             register(self.app, u'myemail@gmail.com', u'test')
             create_event(creator_email=u'myemail@gmail.com')
             logout(self.app)
-
-    def _test_model(self, name, data):
-        with app.test_request_context():
-            path = get_path() if name == 'event' else get_path(1, name + 's')
-            response = self.app.post(
-                path,
-                data=json.dumps(data),
-                headers={
-                    'content-type': 'application/json',
-                    'Authorization': 'Basic %s' %
-                    base64.b64encode('myemail@gmail.com:test')
-                }
-            )
-            self.assertNotEqual(response.status_code, 401)
-            self.assertEqual(response.status_code, 201, response.data)
-            self.assertIn('Test' + str(name).title(), response.data)
 
     def test_event_api(self):
         self._test_model('event', POST_EVENT_DATA)
@@ -56,7 +37,28 @@ class TestPostApiBasicAuth(OpenEventTestCase):
         self._test_model('sponsor', POST_SPONSOR_DATA)
 
 
-class TestPostApiJWTAuth(TestPostApiBasicAuth):
+class TestPostApiBasicAuth(TestPostApiAuthBase):
+    """
+    Tests the Basic Authorization in Post API
+    """
+    def _test_model(self, name, data):
+        with app.test_request_context():
+            path = get_path() if name == 'event' else get_path(1, name + 's')
+            response = self.app.post(
+                path,
+                data=json.dumps(data),
+                headers={
+                    'content-type': 'application/json',
+                    'Authorization': 'Basic %s' %
+                    base64.b64encode('myemail@gmail.com:test')
+                }
+            )
+            self.assertNotEqual(response.status_code, 401)
+            self.assertEqual(response.status_code, 201, response.data)
+            self.assertIn('Test' + str(name).title(), response.data)
+
+
+class TestPostApiJWTAuth(TestPostApiAuthBase):
     """
     Tests the JWT Auth in Post API
     """

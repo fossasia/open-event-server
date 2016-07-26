@@ -49,6 +49,7 @@ class Microlocation(Resource):
         """Fetch a microlocation given its id"""
         return DAO.get(event_id, microlocation_id)
 
+    @requires_auth
     @can_delete(DAO)
     @api.doc('delete_microlocation')
     @api.marshal_with(MICROLOCATION)
