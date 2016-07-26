@@ -87,6 +87,26 @@ class TestGetListQueries(OpenEventTestCase):
             self.assertIn('SomeBuilding', resp.data)
             self.assertIn('Berlin', resp.data)
 
+    def test_session_time_queries(self):
+        with app.test_request_context():
+            path = get_path(1, 'sessions')
+            resp = self._post(path, POST_SESSION_DATA)
+            # 2016-05-30 8:47 to 9:47
+            # normal
+            resp = self.app.get(path)
+            self.assertIn('TestSession', resp.data)
+            # check results when query exists
+            for _ in ['start_time_lt', 'end_time_lt']:
+                resp = self.app.get(path + '?%s=2014-05-12T00:00:00' % _)
+                self.assertNotIn('TestSession', resp.data)
+                resp = self.app.get(path + '?%s=2017-05-12T00:00:00' % _)
+                self.assertIn('TestSession', resp.data)
+            for _ in ['start_time_gt', 'end_time_gt']:
+                resp = self.app.get(path + '?%s=2018-05-12T00:00:00' % _)
+                self.assertNotIn('TestSession', resp.data)
+                resp = self.app.get(path + '?%s=2015-05-12T00:00:00' % _)
+                self.assertIn('TestSession', resp.data)
+
 
 if __name__ == '__main__':
     unittest.main()
