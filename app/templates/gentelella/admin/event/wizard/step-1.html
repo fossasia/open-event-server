@@ -256,17 +256,16 @@
 
             </div>
         </div>
-        {% if event.ticket_include == True or 'ticketing' in included_items %}
+        {% if event.ticket_include or 'ticketing' in included_items %}
          <div class="item form-group">
-            <label><span class="ticketing-state">Enable</span> Ticketing System
+            <label><span class="ticket-state">Add Ticket URL</span>
             </label>
-            <input type="checkbox" class="toggle-switch" name="ticketing_system_state"
-                       value="on" id="ticketing_system_switch" />
-            <label for="ticketing_system_switch" style="margin-left:0;"></label>
+            <input type="checkbox" class="toggle-switch" name="ticket_state"
+                       value="on" id="ticket-switch" {% if event.organizer_name or event.organizer_description %}checked="checked"{% endif %}/>
+            <label for="ticket-switch" style="margin-left:0;"></label>
         </div>
-         {% if $("#ticketing_system_switch").attr('checked') == True %}
-        <div id="ticketing_system_holder" style="display:none;">
-        <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
+        <div id="ticket-system-holder">
+            <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
             <i class="fa fa-ticket"></i>
             Ticket Details
             <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
@@ -360,6 +359,7 @@
             </div>
         </div>
             </div>
+        </div>
         {% else %}
             <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
              <i class="fa fa-ticket"></i>
@@ -877,20 +877,21 @@
             }
         };
 
-        var $ticketingHolder = $("#ticketing_system_holder");
-        var $ticketingState = $(".ticketing-state");
+        var $ticketHolder = $("#ticket-system-holder");
+        var $ticketState = $(".ticket-state");
 
-        var ticketing_system_onOffSwitch = document.getElementById('ticketing_system_switch');
+        var ticket_onOffSwitch = document.getElementById('ticket-switch');
 
-        ticketing_system_onOffSwitch.onchange = function () {
-            if (ticketin_system_onOffSwitch.checked) {
-                $ticketingHolder.fadeIn();
-                $ticketingState.text("Remove");
+        ticket_onOffSwitch.onchange = function () {
+            if (ticket_onOffSwitch.checked) {
+                $ticketHolder.fadeIn();
+                $ticketState.text("Add Ticket URL");
             } else {
-                $ticketingHolder.fadeOut();
-                $ticketingState.text("Add");
+                $ticketHolder.fadeOut();
+                $ticketState.text("Use Ticketing System");
             }
         };
+
 
         /*var $mapHolder = $("#map-holder");
         var $mapState = $(".map-state");
