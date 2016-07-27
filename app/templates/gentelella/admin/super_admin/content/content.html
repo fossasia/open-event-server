@@ -25,12 +25,14 @@
                 <a href="#tab_content1" class="accordion-link active"id="home-tab" data-toggle="tab">System Links</a>
                 <a href="#tab_content2" class="accordion-link"id="profile-tab" data-toggle="tab">Pages</a>
         </div>
-        <form id="settings_form" method="post" class="form-horizontal form-label-left">
+        <!--<form id="settings_form" method="post" class="form-horizontal form-label-left">-->
 
         <div id="myTabContent" class="tab-content">
 
             <div class="tab-pane fade in" id="tab_content2">
-              
+                  <form id="settings_form" method="post" class="form-horizontal form-label-left">
+                      {% include 'gentelella/admin/super_admin/content/_system.html' %}
+                  </form>
             </div>
             <div class="tab-pane fade in" id="tab_content3">
                  {% include 'gentelella/admin/super_admin/pages/pages.html' %}
