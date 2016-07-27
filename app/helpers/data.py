@@ -419,6 +419,7 @@ class DataManager(object):
                     cfs_link = url_for('event_detail.display_event_cfs', event_id=event.id)
                     Helper.send_notif_invite_papers(user, event.name, cfs_link, link)
 
+
     @staticmethod
     def add_speaker_to_event(request, event_id, user=login.current_user):
         form = request.form
@@ -488,6 +489,8 @@ class DataManager(object):
     @staticmethod
     def session_accept_reject(session, event_id, state):
         session.state = state
+        session.submission_date = datetime.now()
+        session.submission_modifier = login.current_user.email
         save_to_db(session, 'Session State Updated')
         trigger_session_state_change_notifications(session, event_id)
         flash("The session has been %s" % state)
@@ -895,6 +898,7 @@ class DataManager(object):
 
         # Add Ticket
         str_empty = lambda val, val2: val2 if val == '' else val
+
 
         ticket_price = form.get('ticket_price', 0)
         # Default values to pass the tests because APIs don't have these fields

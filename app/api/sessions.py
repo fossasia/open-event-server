@@ -1,4 +1,4 @@
-from flask.ext.restplus import Namespace
+from flask.ext.restplus import Namespace, reqparse
 from sqlalchemy.orm.collections import InstrumentedList
 
 from app.helpers.notification_email_triggers import trigger_new_session_notifications, \
@@ -13,7 +13,7 @@ from app.helpers.data import record_activity, save_to_db
 from app.helpers.data_getter import DataGetter
 
 from .helpers.helpers import save_db_model, get_object_in_event, \
-    model_custom_form
+    model_custom_form, requires_auth, parse_args
 from .helpers.helpers import (
     can_create,
     can_update,
@@ -21,7 +21,7 @@ from .helpers.helpers import (
 )
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO,\
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
-from .helpers.utils import Resource
+from .helpers.utils import Resource, ETAG_HEADER_DEFN
 from .helpers import custom_fields as fields
 from .helpers.special_fields import SessionLanguageField, SessionStateField
 
@@ -193,19 +193,42 @@ class SessionDAO(ServiceDAO):
 DAO = SessionDAO(SessionModel, SESSION_POST)
 TypeDAO = SessionTypeDAO(SessionTypeModel, SESSION_TYPE_POST)
 
+# Define Params
 
-# Create resources
+SESSIONS_PARAMS = {
+    'start_time_gt': {},
+    'start_time_lt': {},
+    'end_time_gt': {},
+    'end_time_lt': {},
+}
+
+# #########
+# Resources
+# #########
+
+
+class SessionResource():
+    """
+    Session Resource Base class
+    """
+    session_parser = reqparse.RequestParser()
+    session_parser.add_argument('start_time_gt', dest='__sessions_start_time_gt')
+    session_parser.add_argument('start_time_lt', dest='__sessions_start_time_lt')
+    session_parser.add_argument('end_time_gt', dest='__sessions_end_time_gt')
+    session_parser.add_argument('end_time_lt', dest='__sessions_end_time_lt')
+
 
 @api.route('/events/<int:event_id>/sessions/<int:session_id>')
 @api.doc(responses=SERVICE_RESPONSES)
 class Session(Resource):
     @api.doc('get_session')
-    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
+    @api.header(*ETAG_HEADER_DEFN)
     @api.marshal_with(SESSION)
     def get(self, event_id, session_id):
         """Fetch a session given its id"""
         return DAO.get(event_id, session_id)
 
+    @requires_auth
     @can_delete(DAO)
     @api.doc('delete_session')
     @api.marshal_with(SESSION)
@@ -213,6 +236,7 @@ class Session(Resource):
         """Delete a session given its id"""
         return DAO.delete(event_id, session_id)
 
+    @requires_auth
     @can_update(DAO)
     @api.doc('update_session', responses=PUT_RESPONSES)
     @api.marshal_with(SESSION)
@@ -223,14 +247,15 @@ class Session(Resource):
 
 
 @api.route('/events/<int:event_id>/sessions')
-class SessionList(Resource):
-    @api.doc('list_sessions')
-    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
+class SessionList(Resource, SessionResource):
+    @api.doc('list_sessions', params=SESSIONS_PARAMS)
+    @api.header(*ETAG_HEADER_DEFN)
     @api.marshal_list_with(SESSION)
     def get(self, event_id):
         """List all sessions"""
-        return DAO.list(event_id)
+        return DAO.list(event_id, **parse_args(self.session_parser))
 
+    @requires_auth
     @can_create(DAO)
     @api.doc('create_session', responses=POST_RESPONSES)
     @api.marshal_with(SESSION)
@@ -247,14 +272,17 @@ class SessionList(Resource):
 
 
 @api.route('/events/<int:event_id>/sessions/page')
-class SessionListPaginated(Resource, PaginatedResourceBase):
+class SessionListPaginated(Resource, PaginatedResourceBase, SessionResource):
     @api.doc('list_sessions_paginated', params=PAGE_PARAMS)
-    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
+    @api.doc(params=SESSIONS_PARAMS)
+    @api.header(*ETAG_HEADER_DEFN)
     @api.marshal_with(SESSION_PAGINATED)
     def get(self, event_id):
         """List sessions in a paginated manner"""
         args = self.parser.parse_args()
-        return DAO.paginated_list(args=args, event_id=event_id)
+        return DAO.paginated_list(
+            args=args, event_id=event_id, **parse_args(self.session_parser)
+        )
 
 
 # Use Session DAO to check for permission
@@ -262,12 +290,13 @@ class SessionListPaginated(Resource, PaginatedResourceBase):
 @api.route('/events/<int:event_id>/sessions/types')
 class SessionTypeList(Resource):
     @api.doc('list_session_types')
-    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
+    @api.header(*ETAG_HEADER_DEFN)
     @api.marshal_list_with(SESSION_TYPE)
     def get(self, event_id):
         """List all session types"""
         return TypeDAO.list(event_id)
 
+    @requires_auth
     @can_create(DAO)
     @api.doc('create_session_type', responses=POST_RESPONSES)
     @api.marshal_with(SESSION_TYPE)
@@ -283,6 +312,7 @@ class SessionTypeList(Resource):
 
 @api.route('/events/<int:event_id>/sessions/types/<int:type_id>')
 class SessionType(Resource):
+    @requires_auth
     @can_delete(DAO)
     @api.doc('delete_session_type')
     @api.marshal_with(SESSION_TYPE)
@@ -290,6 +320,7 @@ class SessionType(Resource):
         """Delete a session type given its id"""
         return TypeDAO.delete(event_id, type_id)
 
+    @requires_auth
     @can_update(DAO)
     @api.doc('update_session_type', responses=PUT_RESPONSES)
     @api.marshal_with(SESSION_TYPE)
@@ -299,7 +330,7 @@ class SessionType(Resource):
         return TypeDAO.update(event_id, type_id, self.api.payload)
 
     @api.hide
-    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
+    @api.header(*ETAG_HEADER_DEFN)
     @api.marshal_with(SESSION_TYPE)
     def get(self, event_id, type_id):
         """Fetch a session type given its id"""

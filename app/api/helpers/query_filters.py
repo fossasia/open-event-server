@@ -4,6 +4,7 @@ from sqlalchemy import or_, func, and_
 
 from app.helpers.helpers import get_date_range
 from app.models.event import Event
+from app.models.session import Session
 from custom_fields import DateTime
 
 
@@ -116,6 +117,22 @@ def event_time_period(value, query):
     return query
 
 
+def sessions_start_time_gt(value, query):
+    return query.filter(Session.start_time >= DateTime().from_str(value))
+
+
+def sessions_start_time_lt(value, query):
+    return query.filter(Session.start_time <= DateTime().from_str(value))
+
+
+def sessions_end_time_gt(value, query):
+    return query.filter(Session.end_time >= DateTime().from_str(value))
+
+
+def sessions_end_time_lt(value, query):
+    return query.filter(Session.end_time <= DateTime().from_str(value))
+
+
 #######
 # ADD CUSTOM FILTERS TO LIST
 #######
@@ -130,4 +147,9 @@ FILTERS_LIST = {
     '__event_end_time_gt': event_end_time_gt,
     '__event_end_time_lt': event_end_time_lt,
     '__event_time_period': event_time_period,
+    # sessions
+    '__sessions_start_time_gt': sessions_start_time_gt,
+    '__sessions_start_time_lt': sessions_start_time_lt,
+    '__sessions_end_time_gt': sessions_end_time_gt,
+    '__sessions_end_time_lt': sessions_end_time_lt,
 }

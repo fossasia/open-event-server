@@ -2,7 +2,7 @@ from flask.ext.restplus import Namespace
 
 from app.models.speaker import Speaker as SpeakerModel
 
-from .helpers.helpers import model_custom_form
+from .helpers.helpers import model_custom_form, requires_auth
 from .helpers.helpers import (
     can_create,
     can_update,
@@ -10,7 +10,7 @@ from .helpers.helpers import (
 )
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO,\
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
-from .helpers.utils import Resource
+from .helpers.utils import Resource, ETAG_HEADER_DEFN
 from .helpers import custom_fields as fields
 from app.helpers.data_getter import DataGetter
 
@@ -77,12 +77,13 @@ DAO = SpeakerDAO(SpeakerModel, SPEAKER_POST)
 @api.doc(responses=SERVICE_RESPONSES)
 class Speaker(Resource):
     @api.doc('get_speaker')
-    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
+    @api.header(*ETAG_HEADER_DEFN)
     @api.marshal_with(SPEAKER)
     def get(self, event_id, speaker_id):
         """Fetch a speaker given its id"""
         return DAO.get(event_id, speaker_id)
 
+    @requires_auth
     @can_delete(DAO)
     @api.doc('delete_speaker')
     @api.marshal_with(SPEAKER)
@@ -90,6 +91,7 @@ class Speaker(Resource):
         """Delete a speaker given its id"""
         return DAO.delete(event_id, speaker_id)
 
+    @requires_auth
     @can_update(DAO)
     @api.doc('update_speaker', responses=PUT_RESPONSES)
     @api.marshal_with(SPEAKER)
@@ -102,12 +104,13 @@ class Speaker(Resource):
 @api.route('/events/<int:event_id>/speakers')
 class SpeakerList(Resource):
     @api.doc('list_speakers')
-    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
+    @api.header(*ETAG_HEADER_DEFN)
     @api.marshal_list_with(SPEAKER)
     def get(self, event_id):
         """List all speakers"""
         return DAO.list(event_id)
 
+    @requires_auth
     @can_create(DAO)
     @api.doc('create_speaker', responses=POST_RESPONSES)
     @api.marshal_with(SPEAKER)
@@ -120,10 +123,11 @@ class SpeakerList(Resource):
             self.api.url_for(self, event_id=event_id)
         )
 
+
 @api.route('/events/<int:event_id>/speakers/page')
 class SpeakerListPaginated(Resource, PaginatedResourceBase):
     @api.doc('list_speakers_paginated', params=PAGE_PARAMS)
-    @api.header('If-None-Match', 'ETag saved by client for cached resource', required=False)
+    @api.header(*ETAG_HEADER_DEFN)
     @api.marshal_with(SPEAKER_PAGINATED)
     def get(self, event_id):
         """List speakers in a paginated manner"""
