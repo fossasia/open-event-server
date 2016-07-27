@@ -78,7 +78,7 @@
         setATagsInNotifMenuDropDown();
         var namespace = '/notifs';
 
-        var socket = io.connect('http://' + document.domain + ':' + location.port + namespace, {reconnection: false});
+        var socket = io.connect(location.protocol + "//" + location.host + namespace, {reconnection: false});
 
         socket.on('response', function(msg) {
             console.log(msg.meta);
