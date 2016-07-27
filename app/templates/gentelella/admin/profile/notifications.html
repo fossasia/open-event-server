@@ -15,7 +15,6 @@ Notifications
     </style>
 {% endblock %}
 {% block body %}
-    
 
     <div class="row">
         <div class="col-xs-12 col-sm-10 col-sm-push-1 col-md-8 col-md-push-2">
@@ -114,6 +113,19 @@ Notifications
                 "zeroRecords": "<span style='font-size: 20px; font-weight: 300;'>You don't have any new notifications</span>"
             },
             "order": [[2, "desc"]]
+        });
+
+        $("body").click(function(e) {
+            if($(e.target).is('a.read-btn')) {
+                return true;
+            }else if (e.target.class == "notification" || $(e.target).parents(".notification").size()) {
+                var read_button = $(e.target).parents(".notification").find('a.read-btn');
+                alert("Inside div", read_button.attr('href'));
+                $.getJSON(read_button.attr('href'), function(data){
+                    console.log(data['status']);
+                });
+                window.location = document.URL;
+            }
         });
 
         $(".dataTables_filter").hide();

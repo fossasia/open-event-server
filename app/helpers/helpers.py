@@ -322,6 +322,7 @@ def send_notif_event_role(user, role_name, event_name, accept_link, decline_link
 
 
 def send_notif_new_session_organizer(user, event_name, link):
+    print "sending"
     message_settings = MessageSettings.query.filter_by(action=NOTIF_NEW_SESSION).first()
     if not message_settings or message_settings.notif_status == 1:
         notif = NOTIFS[NOTIF_NEW_SESSION]
