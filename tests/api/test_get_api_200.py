@@ -2,7 +2,7 @@ import unittest
 
 from tests.setup_database import Setup
 from tests.utils import OpenEventTestCase
-from tests.auth_helper import register, login
+from tests.auth_helper import register, logout
 from tests.api.utils import get_path, create_event, create_services
 
 from app import current_app as app
@@ -27,7 +27,6 @@ class TestGetApi(OpenEventTestCase):
         contains event/service name.
         """
         with app.test_request_context():
-            login(self.app, u'test@example.com', u'test')
             response = self.app.get(path, follow_redirects=True)
             self.assertEqual(response.status_code, 200)
             for string in strings:
@@ -51,7 +50,13 @@ class TestGetApi(OpenEventTestCase):
 
     def test_speaker_api(self):
         path = get_path(1, 'speakers', 1)
-        self._test_path(path, 'TestSpeaker_1')
+        # logged in and check
+        self._test_path(path, 'TestSpeaker_1', 'email', 'mobile')
+        # logged out, private fields not present
+        logout(self.app)
+        resp = self.app.get(path)
+        self.assertNotIn('email', resp.data)
+        self.assertNotIn('mobile', resp.data)
 
     def test_sponsor_api(self):
         path = get_path(1, 'sponsors', 1)
