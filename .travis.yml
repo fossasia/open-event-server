@@ -3,6 +3,9 @@ python:
   - "2.7"
 # command to install dependencies
 install: "pip install -r requirements/tests.txt"
+# Environment variables
+env:
+- APP_CONFIG="config.TestingConfig"
 # command to run tests
 script: nosetests --with-coverage
 # upload coverage

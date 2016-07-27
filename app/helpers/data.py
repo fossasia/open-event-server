@@ -7,7 +7,8 @@ import traceback
 from datetime import datetime, timedelta
 
 import requests
-from flask import flash, request, url_for, g
+from flask import flash, request, url_for, g, current_app
+from flask_socketio import emit
 from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from requests_oauthlib import OAuth2Session
@@ -73,7 +74,25 @@ class DataManager(object):
                                     title=title,
                                     message=message,
                                     received_at=datetime.now())
-        save_to_db(notification, 'User notification saved')
+        saved = save_to_db(notification, 'User notification saved')
+
+        if saved:
+            DataManager.push_user_notification(user)
+
+    @staticmethod
+    def push_user_notification(user):
+        """
+        Push user notification using websockets.
+        """
+        if not current_app.config.get('PRODUCTION', False):
+            return False
+        user_room = 'user_{}'.format(user.id)
+        emit('response',
+            {'meta': 'New notifications',
+                'notif_count': user.get_unread_notif_count(),
+                'notifs': user.get_unread_notifs()},
+            room=user_room,
+            namespace='/notifs')
 
     @staticmethod
     def mark_user_notification_as_read(notification):
@@ -1624,7 +1643,7 @@ def get_instagram_auth(state=None, token=None):
     if state:
         return OAuth2Session(InstagramOAuth.get_client_id(), state=state,
                              redirect_uri=InstagramOAuth.get_redirect_uri())
-    scope = "+".join(InstagramOAuth.SCOPE)
+    # scope = "+".join(InstagramOAuth.SCOPE)
     oauth = OAuth2Session(InstagramOAuth.get_client_id(), redirect_uri=InstagramOAuth.get_redirect_uri())
     return oauth
 
