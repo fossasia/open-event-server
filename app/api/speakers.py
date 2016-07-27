@@ -1,4 +1,7 @@
-from flask.ext.restplus import Namespace
+from flask.ext.restplus import Namespace, marshal_with
+from flask_login import current_user
+from functools import wraps
+from flask import g
 
 from app.models.speaker import Speaker as SpeakerModel
 
@@ -49,6 +52,14 @@ SPEAKER_POST = api.clone('SpeakerPost', SPEAKER)
 del SPEAKER_POST['id']
 del SPEAKER_POST['sessions']  # don't allow adding sessions
 
+SPEAKER_PRIVATE = api.clone('SpeakerPrivate', SPEAKER)
+del SPEAKER_PRIVATE['email']
+del SPEAKER_PRIVATE['mobile']
+
+SPEAKER_PAGINATED_PRIVATE = api.clone('SpeakerPaginatedPrivate', PAGINATED_MODEL, {
+    'results': fields.List(fields.Nested(SPEAKER_PRIVATE))
+})
+
 
 # Create DAO
 class SpeakerDAO(ServiceDAO):
@@ -73,28 +84,58 @@ class SpeakerDAO(ServiceDAO):
 DAO = SpeakerDAO(SpeakerModel, SPEAKER_POST)
 
 
+# ############
+# Response Marshaller
+# ############
+
+def speakers_marshal_with(fields=None, fields_private=None):
+    """
+    Response marshalling for speakers. Doesn't update apidoc
+    """
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            user = getattr(g, 'user', None)
+            event_id = kwargs.get('event_id')
+            if user is None and current_user.is_authenticated:
+                # in case of GET requests. No requires_auth there
+                user = current_user
+            if user and (user.has_role(event_id) or user.is_staff):
+                model = fields if fields else SPEAKER
+            else:
+                model = fields_private if fields_private else SPEAKER_PRIVATE
+            func2 = marshal_with(model)(func)
+            return func2(*args, **kwargs)
+        return wrapper
+    return decorator
+
+
+# ############
+# API Resource
+# ############
+
 @api.route('/events/<int:event_id>/speakers/<int:speaker_id>')
 @api.doc(responses=SERVICE_RESPONSES)
 class Speaker(Resource):
-    @api.doc('get_speaker')
+    @api.doc('get_speaker', model=SPEAKER)
     @api.header(*ETAG_HEADER_DEFN)
-    @api.marshal_with(SPEAKER)
+    @speakers_marshal_with()
     def get(self, event_id, speaker_id):
         """Fetch a speaker given its id"""
         return DAO.get(event_id, speaker_id)
 
     @requires_auth
     @can_delete(DAO)
-    @api.doc('delete_speaker')
-    @api.marshal_with(SPEAKER)
+    @api.doc('delete_speaker', model=SPEAKER)
+    @speakers_marshal_with()
     def delete(self, event_id, speaker_id):
         """Delete a speaker given its id"""
         return DAO.delete(event_id, speaker_id)
 
     @requires_auth
     @can_update(DAO)
-    @api.doc('update_speaker', responses=PUT_RESPONSES)
-    @api.marshal_with(SPEAKER)
+    @api.doc('update_speaker', responses=PUT_RESPONSES, model=SPEAKER)
+    @speakers_marshal_with()
     @api.expect(SPEAKER_POST)
     def put(self, event_id, speaker_id):
         """Update a speaker given its id"""
@@ -103,17 +144,17 @@ class Speaker(Resource):
 
 @api.route('/events/<int:event_id>/speakers')
 class SpeakerList(Resource):
-    @api.doc('list_speakers')
+    @api.doc('list_speakers', model=[SPEAKER])
     @api.header(*ETAG_HEADER_DEFN)
-    @api.marshal_list_with(SPEAKER)
+    @speakers_marshal_with()
     def get(self, event_id):
         """List all speakers"""
         return DAO.list(event_id)
 
     @requires_auth
     @can_create(DAO)
-    @api.doc('create_speaker', responses=POST_RESPONSES)
-    @api.marshal_with(SPEAKER)
+    @api.doc('create_speaker', responses=POST_RESPONSES, model=SPEAKER)
+    @speakers_marshal_with()
     @api.expect(SPEAKER_POST)
     def post(self, event_id):
         """Create a speaker"""
@@ -127,8 +168,9 @@ class SpeakerList(Resource):
 @api.route('/events/<int:event_id>/speakers/page')
 class SpeakerListPaginated(Resource, PaginatedResourceBase):
     @api.doc('list_speakers_paginated', params=PAGE_PARAMS)
+    @api.doc(model=SPEAKER_PAGINATED)
     @api.header(*ETAG_HEADER_DEFN)
-    @api.marshal_with(SPEAKER_PAGINATED)
+    @speakers_marshal_with(fields=SPEAKER_PAGINATED, fields_private=SPEAKER_PAGINATED_PRIVATE)
     def get(self, event_id):
         """List speakers in a paginated manner"""
         args = self.parser.parse_args()

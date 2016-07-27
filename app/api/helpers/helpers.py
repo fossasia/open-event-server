@@ -64,6 +64,7 @@ def get_list_or_404(klass, **kwargs):
         raise NotFoundError(message='Object list is empty')
     return obj_list
 
+
 def get_object_or_404(klass, id_):
     """Returns a specific object of a model class given its identifier. In case
     the object is not found, 404 is returned.
