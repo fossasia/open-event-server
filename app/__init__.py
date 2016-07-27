@@ -178,11 +178,15 @@ def slugify_filter(s):
 
 @app.template_filter('humanize')
 def humanize_filter(time):
+    if time is None:
+        return "N/A"
     return arrow.get(time).humanize()
 
 
 @app.template_filter('humanize_alt')
-def humanize_alt_filter(time):
+def humanize_filter(time):
+    if time is None:
+        return "N/A"
     return humanize.naturaltime(datetime.now() - time)
 
 
