@@ -7,7 +7,7 @@ import traceback
 from datetime import datetime, timedelta
 
 import requests
-from flask import flash, request, url_for, g
+from flask import flash, request, url_for, g, current_app
 from flask_socketio import emit
 from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
@@ -84,6 +84,8 @@ class DataManager(object):
         """
         Push user notification using websockets.
         """
+        if not current_app.config.get('PRODUCTION', False):
+            return False
         user_room = 'user_{}'.format(user.id)
         emit('response',
             {'meta': 'New notifications',

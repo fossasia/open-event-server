@@ -18,9 +18,11 @@ class Config(object):
 class ProductionConfig(Config):
     DEBUG = False
     MINIFY_PAGE = True
+    PRODUCTION = True
     # you don't want production on default db
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', '')
-    assert SQLALCHEMY_DATABASE_URI, '`DATABASE_URL` either not exported or empty'
+    if not SQLALCHEMY_DATABASE_URI:
+        print '`DATABASE_URL` either not exported or empty'
 
 
 class StagingConfig(Config):
@@ -33,7 +35,8 @@ class DevelopmentConfig(Config):
     DEBUG = True
     MINIFY_PAGE = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', '')
-    assert SQLALCHEMY_DATABASE_URI, '`DATABASE_URL` either not exported or empty'
+    if not SQLALCHEMY_DATABASE_URI:
+        print '`DATABASE_URL` either not exported or empty'
 
 
 class TestingConfig(Config):

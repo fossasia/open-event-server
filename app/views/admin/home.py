@@ -4,13 +4,11 @@ import os
 import urllib
 from urllib2 import urlopen
 
-from flask import url_for, redirect, request, session, flash, send_from_directory
+from flask import url_for, redirect, request, session, flash
 from flask.ext import login
 from flask_admin import expose
 from flask_admin.base import AdminIndexView
-from flask_socketio import join_room, emit
 from flask.ext.scrypt import generate_password_hash
-from wtforms import ValidationError
 
 from app.helpers.flask_helpers import get_real_ip, slugify
 from app.views.public.explore import erase_from_dict
