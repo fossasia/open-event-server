@@ -8,6 +8,28 @@
     z-index: -1;
 }
 
+ul.msg_list li a .time {
+  font-size: 12px;
+  font-style: normal;
+  font-weight: bold;
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+}
+
+ul.msg_list li a .message {
+    font-size: 13px;
+    padding-bottom: 15px;
+}
+
+ul.msg_list li:last-child {
+    padding: 4px;
+}
+
+ul.msg_list li:last-child a {
+    font-size: 12px;
+}
+
 .image-box {
     width: 100%;
     height: 200px;

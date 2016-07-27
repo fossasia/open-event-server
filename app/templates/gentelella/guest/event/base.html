@@ -35,13 +35,13 @@
 
 {% block body %}
     <div class="scrollspy hidden-xs hidden-sm" id="scrollspy">
-        <ul class="nav nav-pills nav-stacked">
-            <li {% if active_page == 'info' %}class="active"{% endif %}><a href="/e/{{ event.id }}/#info">Info</a></li>
+        <ul class="nav nav-pills nav-stacked preview-menu">
+            <li {% if active_page == 'info' %}class="active"{% endif %} id="info-menu"><a href="/e/{{ event.id }}/#info">Info</a></li>
             {% if accepted_sessions[0] %}
-                <li><a href="/e/{{ event.id }}/#speakers">Speakers</a></li>
+                <li id="speakers-menu"><a href="/e/{{ event.id }}/#speakers">Speakers</a></li>
             {% endif %}
             {% if event.sponsor[0] %}
-                <li><a href="/e/{{ event.id }}/#sponsors">Sponsors</a></li>
+                <li id="sponsors-menu"><a href="/e/{{ event.id }}/#sponsors">Sponsors</a></li>
             {% endif %}
             {% if accepted_sessions[0] %}
                 <li {% if active_page == 'sessions' %}class="active"{% endif %}><a href="/e/{{ event.id }}/sessions">Sessions</a>
@@ -56,10 +56,10 @@
                 </li>
             {% endif %}
             {% if event.organizer_name %}
-                <li><a href="/e/{{ event.id }}/#organizer">Organizer</a></li>
+                <li id="organizer-menu"><a href="/e/{{ event.id }}/#organizer">Organizer</a></li>
             {% endif %}
             {% if event.location_name %}
-                <li><a href="/e/{{ event.id }}/#getting-here">Getting Here</a></li>
+                <li id="getting-here-menu"><a href="/e/{{ event.id }}/#getting-here">Getting Here</a></li>
             {% endif %}
             {% if event.code_of_conduct and event.code_of_conduct != '' and event.code_of_conduct != ' ' %}
                 <li {% if active_page == 'coc' %}class="active"{% endif %}><a href="/e/{{ event.id }}/coc">Code of
@@ -162,4 +162,18 @@
             fjs.parentNode.insertBefore(js, fjs);
         }
     }(document, "script", "twitter-wjs");</script>
+    <script type="text/javascript">
+        $('.preview-menu li a').click(function(){
+            $('.preview-menu li').removeClass('active');
+            $(this).parent().addClass('active');
+        });
+        $(document).ready(function(){
+            var url = document.URL;
+            var id = url.split('#')[1];
+            if (id != undefined) {
+                $('.preview-menu li').removeClass('active');
+                $('#'+id+'-menu').addClass('active');
+            }
+        });
+    </script>
 {% endblock %}

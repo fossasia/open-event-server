@@ -1,4 +1,4 @@
-from flask import request, url_for, redirect, abort, flash
+from flask import request, url_for, redirect, abort, flash, jsonify
 from flask.ext.admin import BaseView
 from flask_admin import expose
 from flask.ext import login
@@ -7,6 +7,7 @@ from app.views.admin.models_views.events import is_verified_user
 from ....helpers.data import DataManager, get_facebook_auth, get_instagram_auth
 from ....helpers.data_getter import DataGetter
 from app.helpers.oauth import FbOAuth, InstagramOAuth
+
 
 class ProfileView(BaseView):
 
@@ -58,7 +59,7 @@ class ProfileView(BaseView):
 
         if notification and notification.user == user:
             DataManager.mark_user_notification_as_read(notification)
-            return redirect(url_for('.notifications_view'))
+            return jsonify({'status': 'ok'})
         else:
             abort(404)
 

@@ -53,6 +53,11 @@ PAGE_PARAMS = {
     },
 }
 
+# ETag Header (required=False by default)
+ETAG_HEADER_DEFN = [
+    'If-None-Match', 'ETag saved by client for cached resource'
+]
+
 # Base Api Model for a paginated response
 PAGINATED_MODEL = Model('PaginatedModel', {
     'start': fields.Integer,

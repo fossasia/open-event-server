@@ -28,10 +28,15 @@ Events
 <tr>
     <td>{{session.event}}</td>
     <td>{{session.title}}</td>
-    <td>{{session.speaker}}</td>
-    <td>Not implemented</td>
+    <td>
+        <ol>
+            {% for speaker in session.speakers %}
+                <li>{{ speaker.name }}</li>
+            {% endfor %}
+        </ol>
+    </td>
+    <td>{{session.submission_date.strftime('%B %d, %Y %I:%M %p')  if session.submission_date != None }}</td>
     <td>{{session.event.start_time }} - {{ session.event.end_time}}</td>
-    <td>{{session.event.organizer_name}}</td>
     <td>
         {% if session %}
         <div class="btn-group btn-group-sm" role="group" aria-label="...">
@@ -88,10 +93,9 @@ Events
                 <tr>
                     <th>Event</th>
                     <th>Title</th>
-                    <th>Speaker</th>
+                    <th>Speakers</th>
                     <th>Date of Submission</th>
                     <th>Date of Event</th>
-                    <th>Organizer</th>
                     <th>Options</th>
                 </tr>
                 </thead>
@@ -107,10 +111,9 @@ Events
                 <tr>
                     <th>Event</th>
                     <th>Title</th>
-                    <th>Speaker</th>
+                    <th>Speakers</th>
                     <th>Date of Submission</th>
                     <th>Date of Event</th>
-                    <th>Organizer</th>
                     <th>Options</th>
 
                 </tr>
@@ -126,10 +129,9 @@ Events
                 <tr>
                     <th>Event</th>
                     <th>Title</th>
-                    <th>Speaker</th>
+                    <th>Speakers</th>
                     <th>Date of Submission</th>
                     <th>Date of Event</th>
-                    <th>Organizer</th>
                     <th>Options</th>
 
                 </tr>
@@ -145,10 +147,9 @@ Events
                 <tr>
                     <th>Event</th>
                     <th>Title</th>
-                    <th>Speaker</th>
+                    <th>Speakers</th>
                     <th>Date of Submission</th>
                     <th>Date of Event</th>
-                    <th>Organizer</th>
                     <th>Options</th>
 
                 </tr>
@@ -164,10 +165,9 @@ Events
                 <tr>
                     <th>Event</th>
                     <th>Title</th>
-                    <th>Speaker</th>
+                    <th>Speakers</th>
                     <th>Date of Submission</th>
                     <th>Date of Event</th>
-                    <th>Organizer</th>
                     <th>Options</th>
 
                 </tr>

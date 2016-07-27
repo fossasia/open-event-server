@@ -7,7 +7,8 @@ import traceback
 from datetime import datetime, timedelta
 
 import requests
-from flask import flash, request, url_for, g
+from flask import flash, request, url_for, g, current_app
+from flask_socketio import emit
 from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from requests_oauthlib import OAuth2Session
@@ -73,7 +74,25 @@ class DataManager(object):
                                     title=title,
                                     message=message,
                                     received_at=datetime.now())
-        save_to_db(notification, 'User notification saved')
+        saved = save_to_db(notification, 'User notification saved')
+
+        if saved:
+            DataManager.push_user_notification(user)
+
+    @staticmethod
+    def push_user_notification(user):
+        """
+        Push user notification using websockets.
+        """
+        if not current_app.config.get('PRODUCTION', False):
+            return False
+        user_room = 'user_{}'.format(user.id)
+        emit('response',
+            {'meta': 'New notifications',
+                'notif_count': user.get_unread_notif_count(),
+                'notifs': user.get_unread_notifs()},
+            room=user_room,
+            namespace='/notifs')
 
     @staticmethod
     def mark_user_notification_as_read(notification):
@@ -402,6 +421,7 @@ class DataManager(object):
                     cfs_link = url_for('event_detail.display_event_cfs', event_id=event.id)
                     Helper.send_notif_invite_papers(user, event.name, cfs_link, link)
 
+
     @staticmethod
     def add_speaker_to_event(request, event_id, user=login.current_user):
         form = request.form
@@ -471,6 +491,8 @@ class DataManager(object):
     @staticmethod
     def session_accept_reject(session, event_id, state):
         session.state = state
+        session.submission_date = datetime.now()
+        session.submission_modifier = login.current_user.email
         save_to_db(session, 'Session State Updated')
         trigger_session_state_change_notifications(session, event_id)
         flash("The session has been %s" % state)
@@ -878,6 +900,7 @@ class DataManager(object):
 
         # Add Ticket
         str_empty = lambda val, val2: val2 if val == '' else val
+
 
         ticket_price = form.get('ticket_price', 0)
         # Default values to pass the tests because APIs don't have these fields
@@ -1620,7 +1643,7 @@ def get_instagram_auth(state=None, token=None):
     if state:
         return OAuth2Session(InstagramOAuth.get_client_id(), state=state,
                              redirect_uri=InstagramOAuth.get_redirect_uri())
-    scope = "+".join(InstagramOAuth.SCOPE)
+    # scope = "+".join(InstagramOAuth.SCOPE)
     oauth = OAuth2Session(InstagramOAuth.get_client_id(), redirect_uri=InstagramOAuth.get_redirect_uri())
     return oauth
 

@@ -9,3 +9,5 @@ pep8==1.7.0
 pyOpenSSL==16.0.0
 ndg-httpsclient==0.4.0
 pyasn1==0.1.9
+
+gunicorn==19.6.0

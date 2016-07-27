@@ -4,12 +4,11 @@ import os
 import urllib
 from urllib2 import urlopen
 
-from flask import url_for, redirect, request, session, flash, send_from_directory
+from flask import url_for, redirect, request, session, flash
 from flask.ext import login
 from flask_admin import expose
 from flask_admin.base import AdminIndexView
 from flask.ext.scrypt import generate_password_hash
-from wtforms import ValidationError
 
 from app.helpers.flask_helpers import get_real_ip, slugify
 from app.views.public.explore import erase_from_dict
@@ -68,6 +67,10 @@ class MyHomeView(AdminIndexView):
                 return redirect(url_for('admin.login_view'))
             login.login_user(user)
             record_user_login_logout('user_login', user)
+
+            # Store user_id in session for socketio use
+            session['user_id'] = login.current_user.id
+
             logging.info('logged successfully')
             user_logged_in(user)
             return redirect(intended_url())
