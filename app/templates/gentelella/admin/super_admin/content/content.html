@@ -1,10 +1,10 @@
 {% extends 'gentelella/admin/super_admin/dashboard.html' %}
 
 {% block title %}
-    Settings
+    Content
 {% endblock %}
 
-{% set active_page = "settings" %}
+{% set active_page = "content" %}
 
 {% block head_css %}
     {{ super() }}
@@ -15,24 +15,26 @@
     <div class="responsive-tabs-container accordion-xs">
         <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist" style="background: #FFFFFF;">
             <li role="presentation">
-                <a href="#tab_content2" id="profile-tab" data-toggle="tab">System Tokens</a>
+                <a href="#tab_content2" id="profile-tab" data-toggle="tab">Social Links</a>
             </li>
             <li role="presentation">
-                <a href="#tab_content3" id="microservice-tab" data-toggle="tab">Microservices</a>
+                <a href="#tab_content3" id="microservice-tab" data-toggle="tab">Pages</a>
             </li>
         </ul>
         <div class="nav bar_tabs" role="tablist">
-                <a href="#tab_content2" class="accordion-link"id="profile-tab" data-toggle="tab">System Tokens</a>
-                <a href="#tab_content3" class="accordion-link" id="microservice-tab" data-toggle="tab">Microservices</a>
+                <a href="#tab_content1" class="accordion-link active"id="home-tab" data-toggle="tab">Social Links</a>
+                <a href="#tab_content2" class="accordion-link"id="profile-tab" data-toggle="tab">Pages</a>
         </div>
-        <form id="settings_form" method="post" class="form-horizontal form-label-left">
 
         <div id="myTabContent" class="tab-content">
+
             <div class="tab-pane fade in" id="tab_content2">
-                 {% include 'gentelella/admin/super_admin/settings/_system.html' %}
+                  <form id="settings_form" method="post" class="form-horizontal form-label-left">
+                      {% include 'gentelella/admin/super_admin/content/_social.html' %}
+                  </form>
             </div>
             <div class="tab-pane fade in" id="tab_content3">
-                 {% include 'gentelella/admin/super_admin/settings/_microservices.html' %}
+                 {% include 'gentelella/admin/super_admin/pages/pages.html' %}
             </div>
 
         </div>
