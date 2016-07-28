@@ -897,18 +897,19 @@
 
         var ticket_onOffSwitch = document.getElementById('ticket-switch');
 
-
-        ticket_onOffSwitch.onchange = function () {
-            if (ticket_onOffSwitch.checked) {
-                $ticketsystemHolder.fadeIn();
-                $ticketURLHolder.fadeOut();
-                $ticketState.text("Add Ticket URL");
-            } else {
-                $ticketsystemHolder.fadeOut();
-                $ticketURLHolder.fadeIn();
-                $ticketState.text("Use Ticketing System");
-            }
-        };
+        if(ticket_onOffSwitch != null) {
+            ticket_onOffSwitch.onchange = function () {
+                if (ticket_onOffSwitch.checked) {
+                    $ticketsystemHolder.fadeIn();
+                    $ticketURLHolder.fadeOut();
+                    $ticketState.text("Add Ticket URL");
+                } else {
+                    $ticketsystemHolder.fadeOut();
+                    $ticketURLHolder.fadeIn();
+                    $ticketState.text("Use Ticketing System");
+                }
+            };
+        }
 
 
         /*var $mapHolder = $("#map-holder");
