@@ -78,7 +78,7 @@
                                         After 10:00 minutes, the reservation we're holding will be released to others.
                                     </p>
                                 </div>
-                                <form class="form-horizontal">
+                                <form class="form-horizontal" data-toggle="validator" >
                                     <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
                                         <i class="fa fa-ticket"></i>
                                         Ticket Buyer
@@ -90,32 +90,32 @@
                                     </div>
                                     <br>
                                     <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-4 control-label">First name <span class="required">*</span></label>
+                                        <label for="firstname" class="col-sm-4 control-label">First name <span class="required">*</span></label>
                                         <div class="col-sm-6">
-                                            <input type="text" class="form-control" id="inputEmail3"
-                                                   placeholder="">
+                                            <input type="text" class="form-control" id="firstname" name="firstname" required>
+                                            <div class="help-block with-errors"></div>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-4 control-label">Last name <span class="required">*</span></label>
+                                        <label for="lastname" class="col-sm-4 control-label">Last name <span class="required">*</span></label>
                                         <div class="col-sm-6">
-                                            <input type="text" class="form-control" id="inputEmail3"
-                                                   placeholder="">
+                                            <input type="text" class="form-control" id="lastname" name="lastname" required>
+                                            <div class="help-block with-errors"></div>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-4 control-label">Email <span class="required">*</span></label>
+                                        <label for="email" class="col-sm-4 control-label">Email <span class="required">*</span></label>
                                         <div class="col-sm-6">
-                                            <input type="email" class="form-control" id="inputEmail3"
-                                                   placeholder="">
+                                            <input type="email" class="form-control" id="email" name="email" required>
+                                            <div class="help-block with-errors"></div>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-4 control-label">Comfirm Email <span class="required">*</span></label>
+                                        <label for="email_confirm" class="col-sm-4 control-label">Confirm Email <span class="required">*</span></label>
                                         <div class="col-sm-6">
-                                            <input type="email" class="form-control" id="inputEmail3"
-                                                   placeholder="">
+                                            <input type="email" class="form-control" id="email_confirm" data-match="#email" name="email_confirm" required>
+                                            <div class="help-block with-errors"></div>
                                         </div>
                                     </div>
                                     <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
@@ -125,39 +125,40 @@
                                     </h2>
                                     <br>
                                     <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-4 control-label">Country <span class="required">*</span></label>
+                                        <label for="country" class="col-sm-4 control-label">Country <span class="required">*</span></label>
                                         <div class="col-sm-6">
-                                            <select class="form-control">
+                                            <select class="form-control" name="country" id="country" required>
                                                 <option value="">Select country</option>
                                             </select>
+                                            <div class="help-block with-errors"></div>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-4 control-label">Address <span class="required">*</span></label>
+                                        <label for="address" class="col-sm-4 control-label">Address <span class="required">*</span></label>
                                         <div class="col-sm-6">
-                                            <input type="text" class="form-control" id="inputEmail3"
-                                                   placeholder="">
+                                            <textarea class="form-control" id="address" name="address" required></textarea>
+                                            <div class="help-block with-errors"></div>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-4 control-label">City <span class="required">*</span></label>
+                                        <label for="city" class="col-sm-4 control-label">City <span class="required">*</span></label>
                                         <div class="col-sm-6">
-                                            <input type="text" class="form-control" id="inputEmail3"
-                                                   placeholder="">
+                                            <input type="text" class="form-control" id="city" name="city" required>
+                                            <div class="help-block with-errors"></div>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-4 control-label">State/Province <span class="required">*</span></label>
+                                        <label for="state" class="col-sm-4 control-label">State/Province <span class="required">*</span></label>
                                         <div class="col-sm-6">
-                                            <input type="text" class="form-control" id="inputEmail3"
-                                                   placeholder="">
+                                            <input type="text" class="form-control" id="state" name="state" required>
+                                            <div class="help-block with-errors"></div>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-4 control-label">Zip Code <span class="required">*</span></label>
+                                        <label for="zipcode" class="col-sm-4 control-label">Zip Code <span class="required">*</span></label>
                                         <div class="col-sm-6">
-                                            <input type="text" class="form-control" id="inputEmail3"
-                                                   placeholder="">
+                                            <input type="text" class="form-control" id="zipcode" name="zipcode" required>
+                                            <div class="help-block with-errors"></div>
                                         </div>
                                     </div>
                                     <br>
@@ -165,7 +166,7 @@
                                         <label for="inputEmail3" class="col-sm-4 control-label"></label>
                                         <div class="col-sm-6">
                                             By clicking "Pay Now", I acknowledge that I have read and agree with the Open Event terms of service, and privacy policy.<br><br>
-                                            <button type="button" class="btn btn-success btn-lg">Pay now</button><br>
+                                            <button type="submit" class="btn btn-success btn-lg">Pay now</button><br>
                                             <img src="{{ url_for('static', filename='img/paymentlogoshorizontal.png') }}">
                                         </div>
                                     </div>
@@ -217,6 +218,7 @@
 {% block tail_js %}
     {{ super() }}
     <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/bootstrap-validator/dist/validator.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
     <script src="{{ url_for('static', filename='js/admin/guest/ticketing.js') }}"></script>
 {% endblock %}
