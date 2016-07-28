@@ -617,7 +617,7 @@ class DataGetter(object):
     def get_all_message_setting():
         settings_list = MessageSettings.query.all()
         all_settings = {}
-        for index, __ in enumerate(settings_list):
+        for index in range(len(settings_list)):
             all_settings[settings_list[index].action] = {'mail_status': settings_list[index].mail_status,
                                                          'notif_status': settings_list[index].notif_status,
                                                          'user_control_status': settings_list[
