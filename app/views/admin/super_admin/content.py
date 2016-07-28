@@ -2,8 +2,8 @@ from flask import redirect, request, url_for
 from flask_admin import expose
 from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView
 from ....helpers.data_getter import DataGetter
-from ....helpers.data import DataManager, delete_from_db, save_to_db
-from app.settings import get_settings, set_settings, get_settings_model
+from ....helpers.data import DataManager, delete_from_db
+from app.settings import get_settings, set_settings
 
 
 class SuperAdminContentView(SuperAdminBaseView):
