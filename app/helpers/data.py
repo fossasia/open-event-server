@@ -939,7 +939,8 @@ class DataManager(object):
                       show_map=1 if form.get('show_map') == "on" else 0,
                       creator=login.current_user,
                       payment_country=form.get('payment_country', ''),
-                      payment_currency=form.get('payment_currency', ''))
+                      payment_currency=form.get('payment_currency', ''),
+                      paypal_email=form.get('paypal_email', ''))
 
         event.tickets.append(ticket)
 

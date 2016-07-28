@@ -398,7 +398,7 @@
         <div class="row">
             <div class="col-xs-6">
                 <div class="item form-group">
-                    <label>Choose Country</label>
+                    <label>Choose Country<span class="required">*</span></label>
                     <select name="payment_country" id="payment_country_name" class="form-control">
                         {% if not event or not event.payment_country %}
                             <option value="">Choose a country for your payment</option>
@@ -411,7 +411,7 @@
             </div>
             <div class="col-xs-6">
                 <div class="item form-group">
-                    <label>Choose Currency</label>
+                    <label>Choose Currency<span class="required">*</span></label>
                     <select name="payment_currency" id="payment_currency_name" class="form-control">
                         {% if not event or not event.payment_currency %}
                             <option value="">Please select a currency</option>
@@ -422,6 +422,10 @@
                     </select>
                 </div>
             </div>
+            </div>
+            <div id="paypal-system-holder" class="item form-group" style="display:none;">
+            <label>PayPal Email<span class="required">*</span></label>
+                <input type="email" placeholder="PayPal Email" name="paypal_email" class="form-control" value="{{ event.paypal_email | default('', true) }}">
             </div>
         </div>
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color: #5bc0de;">
@@ -882,6 +886,20 @@
         } else if (type == "paid") {
             $paymentsystemHolder.fadeIn();
             ticketTypePrice.html("<input type='number' class='form-control' placeholder='Set your ticket price' name='ticket_price'>");
+        }
+    });
+
+
+    var $paymentCurrencySelect = $("#payment_currency_name");
+    var $paymentCountrySelect = $("#payment_country_name");
+    var $paypalHolder = $("#paypal-system-holder");
+
+    $("#payment_country_name, #payment_currency_name").change(function() {
+        if($paymentCountrySelect.val() === 'United States' && $paymentCurrencySelect.val() === 'U.S. Dollars $') {
+            $paypalHolder.fadeOut();
+        }
+        else {
+            $paypalHolder.fadeIn();
         }
     });
 
