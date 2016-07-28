@@ -140,3 +140,32 @@ EVENT_TOPICS = {
         "Canoeing", "Climbing", "Hiking", "Kayaking", "Other", "Rafting", "Travel"
     ]
 }
+PAYMENT_COUNTRIES = {
+    'America'
+}
+PAYMENT_CURRENCIES = {
+    'Argentine Peso $',
+    'Australian Dollars A$',
+    'Brazilian Real R$',
+    'Canadian Dollars C$',
+    'Czech Koruna Kč',
+    'Danish Krone Dkr',
+    'Euros €',
+    'Hong Kong Dollar HK$',
+    'Hungarian Forint Ft',
+    'Israeli Shekels ₪',
+    'Japanese Yen ¥',
+    'Malaysian Ringgits RM',
+    'Mexican Pesos Mex$',
+    'New Zealand Dollar NZ$',
+    'Norwegian Krone Nkr',
+    'Philippine Pesos ₱',
+    'Polish Zloty zł',
+    'Pounds Sterling £',
+    'Singapore Dollar SG$',
+    'Swedish Krona Skr',
+    'Swiss Franc Fr',
+    'Taiwan New Dollars NT$',
+    'Thai baht ฿',
+    'U.S. Dollars $',
+}

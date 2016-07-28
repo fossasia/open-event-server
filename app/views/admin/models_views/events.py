@@ -93,6 +93,8 @@ class EventsView(BaseView):
             event_sub_topics=DataGetter.get_event_subtopics(),
             timezones=DataGetter.get_all_timezones(),
             cfs_hash=hash,
+            payment_countries=DataGetter.get_payment_countries(),
+            payment_currencies=DataGetter.get_payment_currencies(),
             included_settings=included_settings)
 
     @expose('/<event_id>/', methods=('GET', 'POST'))

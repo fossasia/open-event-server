@@ -388,6 +388,39 @@
              <div class="help-block with-errors"></div>
          </div>
         {% endif %}
+        <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
+            <i class="fa fa-money"></i>
+            Add Payment details
+            <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+        </h2>
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="item form-group">
+                    <label>Choose Country</label>
+                    <select name="payment_country_name" id="payment_country_name" class="form-control">
+                        {% if not event or not event.payment_country %}
+                            <option value="">Choose a country for your payment</option>
+                        {% endif %}
+                        {% for country in payment_countries %}
+                            <option value="{{ country }}" {{ "selected" if event and event.payment_country == country else '' }}>{{ country }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="item form-group">
+                    <label>Choose Currency</label>
+                    <select name="payment_currency_name" id="payment_currency_name" class="form-control">
+                        {% if not event or not event.payment_currency %}
+                            <option value="">Please select a currency</option>
+                        {% endif %}
+                        {% for currency in payment_currencies %}
+                            <option value="{{ currency.decode('utf-8') }}" {{ "selected" if event and event.payment_currency == currency else '' }}>{{ currency.decode('utf-8') }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color: #5bc0de;">
             <i class="fa fa-plus-circle"></i>
             Additional Details

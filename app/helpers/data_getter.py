@@ -33,7 +33,7 @@ from ..models.ticket import Ticket
 from ..models.modules import Module
 from ..models.page import Page
 from .language_list import LANGUAGE_LIST
-from .static import EVENT_TOPICS, EVENT_LICENCES
+from .static import EVENT_TOPICS, EVENT_LICENCES, PAYMENT_COUNTRIES, PAYMENT_CURRENCIES
 from app.helpers.helpers import get_event_id, string_empty
 from flask.ext import login
 from flask import flash, abort
@@ -655,3 +655,11 @@ class DataGetter:
     @staticmethod
     def get_module():
         return Module.query.get(1)
+
+    @staticmethod
+    def get_payment_countries():
+        return sorted([k for k in PAYMENT_COUNTRIES])
+
+    @staticmethod
+    def get_payment_currencies():
+        return sorted([k for k in PAYMENT_CURRENCIES])
