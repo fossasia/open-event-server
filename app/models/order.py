@@ -2,12 +2,18 @@ import datetime
 
 from . import db
 
+class OrderTicket(db.Model):
+    __tablename__ = 'orders_tickets'
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.id'), primary_key=True)
+    ticket_id = db.Column(db.Integer, db.ForeignKey('ticket.id'), primary_key=True)
+    quantity = db.Column(db.Integer)
+    ticket = db.relationship('Ticket')
+
 class Order(db.Model):
     __tablename__ = "orders"
 
     id = db.Column(db.Integer, primary_key=True)
     identifier = db.Column(db.String, unique=True)
-    quantity = db.Column(db.Integer)
     amount = db.Column(db.Float)
     address = db.Column(db.String)
     city = db.Column(db.String)
@@ -15,14 +21,13 @@ class Order(db.Model):
     country = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
-    ticket_id = db.Column(db.Integer, db.ForeignKey('ticket.id'))
     created_at = db.Column(db.DateTime)
     expired_at = db.Column(db.DateTime, nullable=True, default=None)
     completed_at = db.Column(db.DateTime, nullable=True, default=None)
 
     event = db.relationship('Event', backref='orders')
-    ticket = db.relationship('Ticket', backref='orders')
     user = db.relationship('User', backref='orders')
+    tickets = db.relationship("OrderTicket")
 
     def __init__(self,
                  identifier=None,
@@ -33,8 +38,7 @@ class Order(db.Model):
                  state=None,
                  country=None,
                  user_id=None,
-                 event_id=None,
-                 ticket_id=None):
+                 event_id=None):
         self.identifier = identifier
         self.quantity = quantity
         self.amount = amount
@@ -43,7 +47,6 @@ class Order(db.Model):
         self.country = country
         self.user_id = user_id
         self.event_id = event_id
-        self.ticket_id = ticket_id
         self.created_at = datetime.datetime.now()
 
     def __repr__(self):
