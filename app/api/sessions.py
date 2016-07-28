@@ -157,7 +157,8 @@ class SessionDAO(ServiceDAO):
             if data['state'] == 'pending' and session.state == 'draft':
                 trigger_new_session_notifications(session.id, event_id=event_id)
 
-            if (data['state'] == 'accepted' and session.state != 'accepted') or (data['state'] == 'rejected' and session.state != 'rejected'):
+            if (data['state'] == 'accepted' and session.state != 'accepted') \
+                    or (data['state'] == 'rejected' and session.state != 'rejected'):
                 trigger_session_state_change_notifications(obj, event_id=event_id, state=data['state'])
 
         if session.start_time != obj.start_time or session.end_time != obj.end_time:
@@ -177,7 +178,7 @@ class SessionDAO(ServiceDAO):
         if speakers:
             session.speakers = speakers
             save_to_db(session)
-        if session.state == 'pending':
+        if not self.is_importing and session.state == 'pending':
             trigger_new_session_notifications(session.id, event_id=event_id)
         return session, status_code, location
 

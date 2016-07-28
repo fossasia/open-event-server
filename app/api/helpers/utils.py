@@ -117,6 +117,7 @@ class BaseDAO:
     DAO for a basic independent model
     """
     version_key = None
+    is_importing = False  # temp key to set to True when an import operation is underway
 
     def __init__(self, model, post_api_model=None, put_api_model=None):
         self.model = model

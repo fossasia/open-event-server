@@ -311,12 +311,14 @@ def import_event_json(task_handle, zip_path):
     try:
         service_ids = {}
         for item in IMPORT_SERIES:
+            item[1].is_importing = True
             data = open(path + '/%s' % item[0], 'r').read()
             dic = json.loads(data)
             changed_ids = create_service_from_json(
                 dic, item, new_event.id, service_ids)
             service_ids[item[0]] = changed_ids.copy()
             CUR_ID = None
+            item[1].is_importing = False
     except BaseError as e:
         EventDAO.delete(new_event.id)
         raise make_error(item[0], er=e, id_=CUR_ID)
