@@ -1,32 +1,4 @@
-{% extends 'gentelella/admin/super_admin/dashboard.html' %}
 
-{% block title %}
-    Pages
-{% endblock %}
-
-{% set active_page = "pages" %}
-
-{% block head_css %}
-    {{ super() }}
-    <style type="text/css">
-    #event-tabs {
-        position: absolute;
-        background: transparent;
-        top: 9px;
-        width: auto;
-    }
-
-    table.table {
-        margin-top: 20px !important;
-    }
-
-    .modal-dialog{
-        width:95%;
-    }
-    </style>
-{% endblock %}
-
-{% block content %}
 
     <div class="row">
         <div class="col-md-4">
@@ -36,11 +8,11 @@
             <ul class="list-group">
                 {% for page in pages %}
                     {% if page.place == 'use_open_event'%}
-                        <li class="list-group-item {{ 'active' if current_page.id==page.id else '' }}"><a href="/admin/pages/{{page.id}}" {{'style=color:white' if current_page.id==page.id else '' }}>{{page.url}} </a>
+                        <li class="list-group-item {{ 'active' if current_page.id==page.id else '' }}"><a href="/admin/content/pages/{{page.id}}" {{'style=color:white' if current_page.id==page.id else '' }}>{{page.url}} </a>
                                <a {{'style=color:white' if current_page.id==page.id else '' }} class="pull-right"
                                    data-toggle="tooltip" data-placement="top"
                                    onclick="return confirm('Are you sure you want to delete this record?');"
-                                   href="{{ get_url('sadmin_pages.trash_view', page_id=page.id) }}" title="Delete record">
+                                   href="{{ get_url('sadmin_content.trash_view', page_id=page.id) }}" title="Delete record">
                                     <i class="glyphicon glyphicon-trash"></i>
                             </a>
                         </li>
@@ -51,11 +23,11 @@
             <ul class="list-group">
                 {% for page in pages %}
                     {% if page.place == 'footer_menu'%}
-                        <li class="list-group-item {{ 'active' if current_page.id==page.id else '' }}"><a href="/admin/pages/{{page.id}}" {{'style=color:white' if current_page.id==page.id else '' }}>{{page.url}} </a>
+                        <li class="list-group-item {{ 'active' if current_page.id==page.id else '' }}"><a href="/admin/content/pages/{{page.id}}" {{'style=color:white' if current_page.id==page.id else '' }}>{{page.url}} </a>
                                <a {{'style=color:white' if current_page.id==page.id else '' }} class="pull-right"
                                    data-toggle="tooltip" data-placement="top"
                                    onclick="return confirm('Are you sure you want to delete this record?');"
-                                   href="{{ get_url('sadmin_pages.trash_view', page_id=page.id) }}" title="Delete record">
+                                   href="{{ get_url('sadmin_content.trash_view', page_id=page.id) }}" title="Delete record">
                                     <i class="glyphicon glyphicon-trash"></i>
                             </a>
                         </li>
@@ -65,7 +37,7 @@
         </div>
         <div class="col-md-8">
             {% if current_page %}
-            <form class="admin-form form-horizontal" action="/admin/pages/{{current_page.id}}" method="POST">
+            <form class="admin-form form-horizontal" action="/admin/content/pages/{{current_page.id}}" method="POST">
                 <div class="item form-group">
                     <label>NAME</label>
                     <input type="text" class="form-control col-md-7 col-xs-12" name="name" value="{{current_page.name}}"/>
@@ -99,14 +71,5 @@
         </div>
     </div>
     {% include 'gentelella/admin/super_admin/pages/_create_page_modal.html' %}
-{% endblock %}
 
-{% block tail_js %}
-    {{ super() }}
-<script>
-    $(document).ready(function () {
-        $("textarea").summernote(summernoteConfig);
-    });
-</script>
-{% endblock %}
 

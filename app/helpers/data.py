@@ -818,9 +818,9 @@ class DataManager(object):
                             user_id=user.id, old=user.email, new=form['email'])
         if user.email != form['email']:
             user.is_verified = False
-            s = Helper.get_serializer()
+            serializer = Helper.get_serializer()
             data = [form['email']]
-            form_hash = s.dumps(data)
+            form_hash = serializer.dumps(data)
             link = url_for('admin.create_account_after_confirmation_view', hash=form_hash, _external=True)
             Helper.send_email_when_changes_email(user.email, form['email'])
             Helper.send_email_confirmation(form, link)
@@ -1512,9 +1512,9 @@ class DataManager(object):
         """
         File from request will be removed from database
         """
-        file = File.query.get(file_id)
-        os.remove(os.path.join(os.path.realpath('.') + '/static/', file.name))
-        delete_from_db(file, "File removed")
+        file_obj = File.query.get(file_id)
+        os.remove(os.path.join(os.path.realpath('.') + '/static/', file_obj.name))
+        delete_from_db(file_obj, "File removed")
         flash("File removed")
 
     @staticmethod
@@ -1610,9 +1610,8 @@ def delete_from_db(item, msg):
         logging.info('removed from session')
         db.session.commit()
         return True
-    except Exception, e:
-        print e
-        logging.error('DB Exception! %s' % e)
+    except Exception, error:
+        logging.error('DB Exception! %s' % error)
         db.session.rollback()
         return False
 
@@ -1705,22 +1704,22 @@ def record_activity(template, login_user=None, **kwargs):
     else:
         actor = 'Anonymous'
     id_str = ' (%d)'
-    s = '"%s"'
+    sequence = '"%s"'
     # add more information for objects
     for k in kwargs:
         v = kwargs[k]
         if k.find('_id') > -1:
             kwargs[k] = str(v)
         elif k.startswith('user'):
-            kwargs[k] = s % v.email + id_str % v.id
+            kwargs[k] = sequence % v.email + id_str % v.id
         elif k.startswith('role'):
-            kwargs[k] = s % v.title_name
+            kwargs[k] = sequence % v.title_name
         elif k.startswith('session'):
-            kwargs[k] = s % v.title + id_str % v.id
+            kwargs[k] = sequence % v.title + id_str % v.id
         elif k.startswith('track'):
-            kwargs[k] = s % v.name + id_str % v.id
+            kwargs[k] = sequence % v.name + id_str % v.id
         elif k.startswith('speaker'):
-            kwargs[k] = s % v.name + id_str % v.id
+            kwargs[k] = sequence % v.name + id_str % v.id
         else:
             kwargs[k] = str(v)
     try:
