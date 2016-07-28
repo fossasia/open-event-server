@@ -24,7 +24,8 @@
                             <td>${{'%0.2f'| format(ticket.price|float)}}</td>
                             <td>$0.00</td>
                             <td align="right">
-                                <select name="quantity[{{ ticket.id }}]">
+                                <input type="hidden" name="tickets[id]" value="{{ ticket.id }}">
+                                <select name="tickets[quantity]">
                                     <option value="0" selected>0</option>
                                     {% for quantity in range(ticket.min_order - 1, ticket.max_order + 1) %}
                                         <option value="{{ quantity }}">{{ quantity }}</option>

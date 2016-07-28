@@ -1,9 +1,8 @@
 from flask_admin import BaseView, expose
-from flask import redirect, url_for
+from flask import redirect, url_for, request
 
-from app.models.order import Order
-from app.models.ticket_holder import TicketHolder
 from app.helpers.ticketing import TicketingManager
+from app.helpers.data_getter import DataGetter
 
 class TicketingView(BaseView):
     @expose('/', methods=('GET', 'POST'))
@@ -12,9 +11,11 @@ class TicketingView(BaseView):
 
     @expose('/create', methods=('POST', ))
     def create_order(self):
-        return redirect(url_for('.view_order', order_identifier='abc'))
+        order = TicketingManager.create_order(request.form)
+        return redirect(url_for('.view_order', order_identifier=order.identifier))
 
     @expose('/<order_identifier>', methods=('GET',))
     def view_order(self, order_identifier):
-        return self.render('/gentelella/guest/ticketing/summary.html')
+        order = TicketingManager.get_order_by_identifier(order_identifier)
+        return self.render('/gentelella/guest/ticketing/summary.html', order=order, event=order.event)
 
