@@ -30,6 +30,8 @@ from app.views.admin.super_admin.logs import SuperAdminLogsView
 from app.views.admin.super_admin.dep_settings import SuperAdminSettingsView
 from app.views.admin.super_admin.pages import SuperAdminPagesView
 from app.views.admin.super_admin.modules import SuperAdminModulesView
+from app.views.public.ticketing import TicketingView
+
 
 class AdminView(object):
     """Main Admin class View"""
@@ -47,9 +49,13 @@ class AdminView(object):
 
     def _add_views(self):
 
+        # Public pages
+        self.admin.add_view(BasicPagesView(name='Page', url='/'))
         self.admin.add_view(EventDetailView(name='Event Detail', url='/e', endpoint="event_detail"))
         self.admin.add_view(ExploreView(name='Explore', url='/explore', endpoint="explore"))
-        self.admin.add_view(BasicPagesView(name='Page', url='/'))
+        self.admin.add_view(TicketingView(name='Ticketing & Orders', url='/orders', endpoint="ticketing"))
+
+        # Accessible only after logging in
         self.admin.add_view(MySessionView(name='MySessions', url='/events/mysessions', endpoint="my_sessions"))
         self.admin.add_view(EventsView(name='Events', url='/events', endpoint="events"))
         self.admin.add_view(SpeakersView(name='Speakers', url='/events/<event_id>/speakers', endpoint="event_speakers"))
@@ -62,6 +68,7 @@ class AdminView(object):
         self.admin.add_view(InviteView(name='Invite', url='/events/<event_id>/invite', endpoint="event_invites"))
         self.admin.add_view(SettingsView(name='Settings', url='/settings', endpoint="settings"))
 
+        # Super Admin pages
         self.admin.add_view(SuperAdminView(name='Admin', url='/admin/', endpoint="sadmin"))
         self.admin.add_view(SuperAdminEventsView(name='Events', url='/admin/events', endpoint="sadmin_events"))
         self.admin.add_view(SuperAdminMySessionView(name='Sessions', url='/admin/sessions', endpoint="sadmin_sessions"))
