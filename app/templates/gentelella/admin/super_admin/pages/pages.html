@@ -8,7 +8,7 @@
             <ul class="list-group">
                 {% for page in pages %}
                     {% if page.place == 'use_open_event'%}
-                        <li class="list-group-item {{ 'active' if current_page.id==page.id else '' }}"><a href="/admin/pages/{{page.id}}" {{'style=color:white' if current_page.id==page.id else '' }}>{{page.url}} </a>
+                        <li class="list-group-item {{ 'active' if current_page.id==page.id else '' }}"><a href="/admin/content/pages/{{page.id}}" {{'style=color:white' if current_page.id==page.id else '' }}>{{page.url}} </a>
                                <a {{'style=color:white' if current_page.id==page.id else '' }} class="pull-right"
                                    data-toggle="tooltip" data-placement="top"
                                    onclick="return confirm('Are you sure you want to delete this record?');"
@@ -23,7 +23,7 @@
             <ul class="list-group">
                 {% for page in pages %}
                     {% if page.place == 'footer_menu'%}
-                        <li class="list-group-item {{ 'active' if current_page.id==page.id else '' }}"><a href="/admin/pages/{{page.id}}" {{'style=color:white' if current_page.id==page.id else '' }}>{{page.url}} </a>
+                        <li class="list-group-item {{ 'active' if current_page.id==page.id else '' }}"><a href="/admin/content/pages/{{page.id}}" {{'style=color:white' if current_page.id==page.id else '' }}>{{page.url}} </a>
                                <a {{'style=color:white' if current_page.id==page.id else '' }} class="pull-right"
                                    data-toggle="tooltip" data-placement="top"
                                    onclick="return confirm('Are you sure you want to delete this record?');"
@@ -37,7 +37,7 @@
         </div>
         <div class="col-md-8">
             {% if current_page %}
-            <form class="admin-form form-horizontal" action="/admin/pages/{{current_page.id}}" method="POST">
+            <form class="admin-form form-horizontal" action="/admin/content/pages/{{current_page.id}}" method="POST">
                 <div class="item form-group">
                     <label>NAME</label>
                     <input type="text" class="form-control col-md-7 col-xs-12" name="name" value="{{current_page.name}}"/>
