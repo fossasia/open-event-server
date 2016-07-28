@@ -5,13 +5,211 @@
 {% block head_css %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/ticketing.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
 {% endblock %}
 
 {% block body %}
     <div class="row">
-        <div class="col-md-12">
-            <h3>Order Summary</h3>
-            
+        <div class="col-md-10 col-lg-8 col-md-push-1 col-lg-push-2" style="min-height: 600px;">
+            <div class="row">
+                <div class="col-md-8">
+                    <h3>{{ event.name }}</h3>
+                    {{ event.start_time.strftime('%A, %B %d, %Y at %I:%M %p') }}
+                    - {{ event.end_time.strftime('%A, %B %d, %Y at %I:%M %p') }} ({{ event.timezone }})<br>
+                    {{ event.location_name }}
+                    <br>
+                    <br>
+                    <div id="order-summary-holder">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Order Summary</h3>
+                            </div>
+                            <div class="panel-body" style="padding-bottom: 10px;">
+                                <table class="table" style="margin-bottom: 0;">
+                                    <thead>
+                                    <tr>
+                                        <th>Ticket type</th>
+                                        <th>Price</th>
+                                        <th>Fee</th>
+                                        <th>Quantity</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        {% for ticket in event.tickets %}
+                                            <td>{{ ticket.type }}</td>
+                                            <td>${{ '%0.2f'| format(ticket.price|float) }}</td>
+                                            <td>$0.00</td>
+                                            <td>
+                                                5
+                                            </td>
+                                            <td>
+                                                $250.00
+                                            </td>
+                                        {% else %}
+                                            <td colspan="5" style="text-align: center">
+                                                No tickets available right now.
+                                            </td>
+                                        {% endfor %}
+                                    </tr>
+                                    <tr class="total-row">
+                                        <td colspan="4" style="text-align: right;"><strong>Order total:</strong></td>
+                                        <td><strong>$250.00</strong></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="registration-information-holder">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Registration Information</h3>
+                            </div>
+                            <div class="panel-body" style="padding-bottom: 10px;">
+                                <div class="alert alert-warning time-left-alert">
+                                    <div id="time-left" class="pull-left">
+                                        06:30
+                                    </div>
+                                    <p>
+                                        Please complete registration within 10:00 minutes.<br>
+                                        After 10:00 minutes, the reservation we're holding will be released to others.
+                                    </p>
+                                </div>
+                                <form class="form-horizontal">
+                                    <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
+                                        <i class="fa fa-ticket"></i>
+                                        Ticket Buyer
+                                        <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+                                    </h2>
+                                    <br>
+                                    <div style="width: 100%; text-align: center">
+                                        Have you used Open Event before? <a href="">Sign In</a> To Your Account to continue.
+                                    </div>
+                                    <br>
+                                    <div class="form-group">
+                                        <label for="inputEmail3" class="col-sm-4 control-label">First name <span class="required">*</span></label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="inputEmail3"
+                                                   placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputEmail3" class="col-sm-4 control-label">Last name <span class="required">*</span></label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="inputEmail3"
+                                                   placeholder="">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="inputEmail3" class="col-sm-4 control-label">Email <span class="required">*</span></label>
+                                        <div class="col-sm-6">
+                                            <input type="email" class="form-control" id="inputEmail3"
+                                                   placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputEmail3" class="col-sm-4 control-label">Comfirm Email <span class="required">*</span></label>
+                                        <div class="col-sm-6">
+                                            <input type="email" class="form-control" id="inputEmail3"
+                                                   placeholder="">
+                                        </div>
+                                    </div>
+                                    <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
+                                        <i class="fa fa-ticket"></i>
+                                        Billing Information
+                                        <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+                                    </h2>
+                                    <br>
+                                    <div class="form-group">
+                                        <label for="inputEmail3" class="col-sm-4 control-label">Country <span class="required">*</span></label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control">
+                                                <option value="">Select country</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputEmail3" class="col-sm-4 control-label">Address <span class="required">*</span></label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="inputEmail3"
+                                                   placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputEmail3" class="col-sm-4 control-label">City <span class="required">*</span></label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="inputEmail3"
+                                                   placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputEmail3" class="col-sm-4 control-label">State/Province <span class="required">*</span></label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="inputEmail3"
+                                                   placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputEmail3" class="col-sm-4 control-label">Zip Code <span class="required">*</span></label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="inputEmail3"
+                                                   placeholder="">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="form-group">
+                                        <label for="inputEmail3" class="col-sm-4 control-label"></label>
+                                        <div class="col-sm-6">
+                                            By clicking "Pay Now", I acknowledge that I have read and agree with the Open Event terms of service, and privacy policy.<br><br>
+                                            <button type="button" class="btn btn-success btn-lg">Pay now</button><br>
+                                            <img src="{{ url_for('static', filename='img/paymentlogoshorizontal.png') }}">
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="hidden-xs hidden-sm" style="height: 103px;">
+
+                    </div>
+                    <div id="when-where-holder">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">When & Where</h3>
+                            </div>
+                            <div class="panel-body" style="padding-bottom: 10px;">
+                                <strong>{{ event.location_name }}</strong><br>
+                                {{ event.start_time.strftime('%A, %B %d, %Y at %I:%M %p') }}
+                                - {{ event.end_time.strftime('%A, %B %d, %Y at %I:%M %p') }} ({{ event.timezone }})<br>
+                            </div>
+                        </div>
+                    </div>
+                    {% if event.organizer_name %}
+                        <div id="when-where-holder">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Organizer</h3>
+                                </div>
+                                <div class="panel-body" style="padding-bottom: 10px;">
+                                    <h4>{{ event.organizer_name }}</h4>
+                                    {% if event.email %}
+                                        <hr>
+                                        <a class="btn btn-default" href="mailto:{{ event.email }}" target="_blank">Contact
+                                            the organizer</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
