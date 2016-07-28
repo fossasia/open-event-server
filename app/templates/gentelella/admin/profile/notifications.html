@@ -120,7 +120,6 @@ Notifications
                 return true;
             }else if (e.target.class == "notification" || $(e.target).parents(".notification").size()) {
                 var read_button = $(e.target).parents(".notification").find('a.read-btn');
-                alert("Inside div", read_button.attr('href'));
                 $.getJSON(read_button.attr('href'), function(data){
                     console.log(data['status']);
                 });
