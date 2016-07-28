@@ -34,3 +34,7 @@ def make_dict(s):
         if not (column.primary_key or column.unique):
             arguments[name] = getattr(s, name)
     return arguments
+
+
+def get_settings_model():
+    return Setting.query.order_by(desc(Setting.id)).first()
