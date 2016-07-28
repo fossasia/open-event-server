@@ -1,5 +1,6 @@
 <div id="ticketing-holder" class="col-md-6 col-sm-8 col-xs-12">
-    <form>
+    <form method="POST" action="{{ url_for('ticketing.create_order') }}">
+        <input type="hidden" name="event_id" value="{{ event.id }}">
         <div class="panel panel-default">
             <div class="panel-heading" style="background-color: #ffffff;">
                 <h3 class="panel-title">Ticket Information</h3>
@@ -25,7 +26,7 @@
                             <td align="right">
                                 <select name="quantity[{{ ticket.id }}]">
                                     <option value="0" selected>0</option>
-                                    {% for quantity in range(ticket.min_order, ticket.max_order) %}
+                                    {% for quantity in range(ticket.min_order - 1, ticket.max_order + 1) %}
                                         <option value="{{ quantity }}">{{ quantity }}</option>
                                     {% endfor %}
                                 </select>
