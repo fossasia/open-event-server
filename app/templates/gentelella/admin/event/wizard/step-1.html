@@ -256,7 +256,7 @@
 
             </div>
         </div>
-        {% if 'ticketing' in included_items %}
+        {% if event.ticket_include or 'ticketing' in included_items %}
          <div class="item form-group">
             <label><span class="ticket-state">Use Ticketing System</span>
             </label>
@@ -265,115 +265,115 @@
             <label for="ticket-switch" style="margin-left:0;"></label>
         </div>
          <div id="ticket-system-holder" class="item form-group" {% if event.ticket_url %}style="display:none;"{% endif %}>
-            <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
-                <i class="fa fa-ticket"></i>
-                Ticket Details
-                <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
-            </h2>
+        <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
+            <i class="fa fa-ticket"></i>
+            Ticket Details
+            <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+        </h2>
 
-            <div class="row">
-                <div class="col-xs-6">
-                    <div class="item form-group">
-                        <label>Ticket Name</label>
-                        <input type="text" name="ticket_name" class="form-control" value="{{ event.tickets[0].name | default('', true) }}">
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="item form-group">
-                        <label>Type</label>
-                        <select name="ticket_type" id="ticket-type" class="form-control">
-                            <option value="free" {{ 'selected' if event.tickets[0].type == 'free' else ''}}>Free</option>
-                            <option value="paid" {{ 'selected' if event.tickets[0].type == 'paid' else ''}}>Paid</option>
-                            <option value="donation" {{ 'selected' if event.tickets[0].type == 'donation' else ''}}>Donation</option>
-                        </select>
-                    </div>
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="item form-group">
+                    <label>Ticket Name</label>
+                    <input type="text" name="ticket_name" class="form-control" value="{{ event.tickets[0].name | default('', true) }}">
                 </div>
             </div>
-
-
-            <div class="item form-group">
-                <label>Description</label>
-                <textarea name="ticket_description" class="form-control">{{ event.tickets[0].description | default('', true) }}</textarea>
+            <div class="col-xs-6">
+                <div class="item form-group">
+                    <label>Type</label>
+                    <select name="ticket_type" id="ticket-type" class="form-control">
+                        <option value="free" {{ 'selected' if event.tickets[0].type == 'free' else ''}}>Free</option>
+                        {% if 'payments' in included_items %}<option value="paid" {{ 'selected' if event.tickets[0].type == 'paid' else ''}}>Paid</option>{% endif %}
+                        {% if 'donations' in included_items %}<option value="donation" {{ 'selected' if event.tickets[0].type == 'donation' else ''}}>Donation</option>{% endif %}
+                    </select>
+                </div>
             </div>
+        </div>
 
-            <div class="row">
-                <div class="col-md-4 col-xs-8">
-                    <div class="item form-group">
-                        <label>Price ($)</label>
-                        <div id="ticket-type-price">
-                        {% if event %}
-                            {% if event.tickets[0].type == 'free' %}
-                                <div class="form-control">Free</div>
-                            {% elif event.tickets[0].type == 'paid' %}
-                                <input type='number' class='form-control' placeholder='Set your ticket price' name='ticket_price' value="{{ event.tickets[0].price }}">
-                            {% elif event.tickets[0].type == 'donation' %}
-                                <div class="form-control">Donation</div>
-                            {% endif %}
-                        {% else %}
+
+        <div class="item form-group">
+            <label>Description</label>
+            <textarea name="ticket_description" class="form-control">{{ event.tickets[0].description | default('', true) }}</textarea>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 col-xs-8">
+                <div class="item form-group">
+                    <label>Price ($)</label>
+                    <div id="ticket-type-price">
+                    {% if event %}
+                        {% if event.tickets[0].type == 'free' %}
                             <div class="form-control">Free</div>
+                        {% elif event.tickets[0].type == 'paid' %}
+                            <input type='number' class='form-control' placeholder='Set your ticket price' name='ticket_price' value="{{ event.tickets[0].price }}">
+                        {% elif event.tickets[0].type == 'donation' %}
+                            <div class="form-control">Donation</div>
                         {% endif %}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="item form-group">
-                        <label>Sales Start</label><br>
-                        <div class="col-xs-8" style="padding-left: 0;">
-                            <input value="{{ event.tickets[0].sales_start.strftime('%m/%d/%Y') if event else start_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY" name="ticket_sales_start_date">
-                        </div>
-                        <div class="col-xs-4" style="padding-left: 0;">
-                            <input value="{{ event.tickets[0].sales_start.strftime('%H:%M') if event else '19:00' }}" class="form-control col-xs-6 time start ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="ticket_sales_start_time">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="item form-group">
-                        <label>Sales End</label><br>
-                        <div class="col-xs-8" style="padding-left: 0;">
-                            <input value="{{ event.tickets[0].sales_end.strftime('%m/%d/%Y') if event else start_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY" name="ticket_sales_end_date">
-                        </div>
-                        <div class="col-xs-4" style="padding-left: 0;">
-                            <input value="{{ event.tickets[0].sales_end.strftime('%H:%M') if event else '19:00' }}" class="form-control col-xs-6 time end ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="ticket_sales_end_time">
-                        </div>
+                    {% else %}
+                        <div class="form-control">Free</div>
+                    {% endif %}
                     </div>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="item form-group">
-                        <label>Quantity</label>
-                        <input type="number" class="form-control" placeholder="100" name="ticket_quantity" value="{{ event.tickets[0].quantity | default(100, true) }}">
+            <div class="col-md-4">
+                <div class="item form-group">
+                    <label>Sales Start</label><br>
+                    <div class="col-xs-8" style="padding-left: 0;">
+                        <input value="{{ event.tickets[0].sales_start.strftime('%m/%d/%Y') if event else start_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY" name="ticket_sales_start_date">
+                    </div>
+                    <div class="col-xs-4" style="padding-left: 0;">
+                        <input value="{{ event.tickets[0].sales_start.strftime('%H:%M') if event else '19:00' }}" class="form-control col-xs-6 time start ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="ticket_sales_start_time">
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="item form-group">
-                        <label>Min Order</label>
-                        <input type="number" class="form-control" placeholder="1" name="ticket_min_order" value="{{ event.tickets[0].min_order | default(1, true) }}">
+            </div>
+            <div class="col-md-4">
+                <div class="item form-group">
+                    <label>Sales End</label><br>
+                    <div class="col-xs-8" style="padding-left: 0;">
+                        <input value="{{ event.tickets[0].sales_end.strftime('%m/%d/%Y') if event else start_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY" name="ticket_sales_end_date">
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="item form-group">
-                        <label>Max Order</label>
-                        <input type="number" class="form-control" placeholder="10" name="ticket_max_order" value="{{ event.tickets[0].max_order | default(10, true) }}">
+                    <div class="col-xs-4" style="padding-left: 0;">
+                        <input value="{{ event.tickets[0].sales_end.strftime('%H:%M') if event else '19:00' }}" class="form-control col-xs-6 time end ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="ticket_sales_end_time">
                     </div>
                 </div>
             </div>
         </div>
-        <div id="ticket-url-holder" class="item form-group" {% if not event.ticket_url %}style="display:none;"{% endif %}>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="item form-group">
+                    <label>Quantity</label>
+                    <input type="number" class="form-control" placeholder="100" name="ticket_quantity" value="{{ event.tickets[0].quantity | default(100, true) }}">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="item form-group">
+                    <label>Min Order</label>
+                    <input type="number" class="form-control" placeholder="1" name="ticket_min_order" value="{{ event.tickets[0].min_order | default(1, true) }}">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="item form-group">
+                    <label>Max Order</label>
+                    <input type="number" class="form-control" placeholder="10" name="ticket_max_order" value="{{ event.tickets[0].max_order | default(10, true) }}">
+                </div>
+            </div>
+        </div>
+        </div>
+            <div id="ticket-url-holder" class="item form-group" {% if not event.ticket_url %}style="display:none;"{% endif %}>
             <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
              <i class="fa fa-ticket"></i>
                 Add Ticket URL
              <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
             </h2>
-             <div class="item form-group">
-                 <label>Ticket URL
-                 </label>
-                 <input type="url" pattern="https?://.+" name="ticket_url" class="form-control"
-                        value="{{ event.ticket_url | default('', true) }}" data-error="Please enter a valid URL"/>
-                 <div class="help-block with-errors"></div>
-             </div>
-        </div>
+         <div class="item form-group">
+             <label>Ticket URL
+             </label>
+             <input type="url" pattern="https?://.+" name="ticket_url" class="form-control"
+                    value="{{ event.ticket_url | default('', true) }}" data-error="Please enter a valid URL"/>
+             <div class="help-block with-errors"></div>
+         </div>
+            </div>
         {% else %}
             <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
              <i class="fa fa-ticket"></i>
@@ -897,19 +897,18 @@
 
         var ticket_onOffSwitch = document.getElementById('ticket-switch');
 
-        if (ticket_onOffSwitch != null) {
-            ticket_onOffSwitch.onchange = function () {
-                if (ticket_onOffSwitch.checked) {
-                    $ticketsystemHolder.fadeIn();
-                    $ticketURLHolder.fadeOut();
-                    $ticketState.text("Add Ticket URL");
-                } else {
-                    $ticketsystemHolder.fadeOut();
-                    $ticketURLHolder.fadeIn();
-                    $ticketState.text("Use Ticketing System");
-                }
-            };
-        }
+
+        ticket_onOffSwitch.onchange = function () {
+            if (ticket_onOffSwitch.checked) {
+                $ticketsystemHolder.fadeIn();
+                $ticketURLHolder.fadeOut();
+                $ticketState.text("Add Ticket URL");
+            } else {
+                $ticketsystemHolder.fadeOut();
+                $ticketURLHolder.fadeIn();
+                $ticketState.text("Use Ticketing System");
+            }
+        };
 
 
         /*var $mapHolder = $("#map-holder");
