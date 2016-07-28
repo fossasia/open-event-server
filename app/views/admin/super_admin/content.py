@@ -11,17 +11,11 @@ class SuperAdminContentView(SuperAdminBaseView):
     def index_view(self):
         pages = DataGetter.get_all_pages()
         settings = get_settings()
-        print settings
         if request.method == 'POST':
-            setting = get_settings_model()
             dic = dict(request.form.copy())
             for key, value in dic.items():
-                # settings.__setattr__(key, value[0])
                 settings[key] = value[0]
                 set_settings(**settings)
-
-            # save_to_db(setting)
-        print settings
         return self.render(
             '/gentelella/admin/super_admin/content/content.html', pages=pages, settings=settings
         )
