@@ -389,7 +389,7 @@
          </div>
         {% endif %}
 
-        <div id="payment-system-holder" class="item form-group" {% if not event.payment_country or not event.payment_currency %}style="display:none;"{% endif %}>
+        <div id="payment-system-holder" class="item form-group" style="display:none;">
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
             <i class="fa fa-money"></i>
             Add Payment details
@@ -865,15 +865,22 @@
 
     });
 
+    var ticketType = document.getElementById("ticket-type");
+    var value = ticketType.options[ticketType.selectedIndex].value;
+    var $paymentsystemHolder = $("#payment-system-holder");
+
     $("select#ticket-type").on("change", function(e) {
         var type = $("option:selected", this).val();
         var ticketTypePrice = $("#ticket-type-price");
 
         if (type == "free") {
+            $paymentsystemHolder.fadeOut();
             ticketTypePrice.html("<div class='form-control'>Free</div>");
         } else if (type == "donation") {
+            $paymentsystemHolder.fadeIn();
             ticketTypePrice.html("<div class='form-control'>Donation</div>");
         } else if (type == "paid") {
+            $paymentsystemHolder.fadeIn();
             ticketTypePrice.html("<input type='number' class='form-control' placeholder='Set your ticket price' name='ticket_price'>");
         }
     });
@@ -946,18 +953,6 @@
             }
         };
 
-        var ticketType = document.getElementById("ticket-type");
-        var value = ticketType.options[ticketType.selectedIndex].value
-        var $paymentsystemHolder = $("#payment-system-holder");
-
-        $(document).ready(function () {
-            if (value == 'paid' || value == 'donation'){
-                $paymentsystemHolder.fadeIn();
-            }
-            else{
-                $paymentsystemHolder.fadeOut();
-            }
-        });
 
 
 

@@ -937,7 +937,9 @@ class DataManager(object):
                       ticket_url=form.get('ticket_url', None),
                       copyright=copyright,
                       show_map=1 if form.get('show_map') == "on" else 0,
-                      creator=login.current_user)
+                      creator=login.current_user,
+                      payment_country=form.get('payment_country', ''),
+                      payment_currency=form.get('payment_currency', ''))
 
         event.tickets.append(ticket)
 
