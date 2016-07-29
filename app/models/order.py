@@ -19,6 +19,7 @@ class Order(db.Model):
     city = db.Column(db.String)
     state = db.Column(db.String)
     country = db.Column(db.String)
+    zipcode = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
     created_at = db.Column(db.DateTime)
@@ -37,6 +38,7 @@ class Order(db.Model):
                  city=city,
                  state=None,
                  country=None,
+                 zipcode=None,
                  user_id=None,
                  event_id=None):
         self.identifier = identifier
@@ -45,6 +47,7 @@ class Order(db.Model):
         self.address = address
         self.state = state
         self.country = country
+        self.zipcode = zipcode
         self.user_id = user_id
         self.event_id = event_id
         self.created_at = datetime.datetime.now()
@@ -67,4 +70,5 @@ class Order(db.Model):
                 'amount': self.amount,
                 'address': self.address,
                 'state': self.state,
+                'zipcode': self.zipcode,
                 'country': self.country}

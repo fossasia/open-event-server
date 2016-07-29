@@ -83,7 +83,7 @@
                                         After 10:00 minutes, the reservation we're holding will be released to others.
                                     </p>
                                 </div>
-                                <form class="form-horizontal" data-toggle="validator">
+                                <form class="form-horizontal" data-toggle="validator" id="order-payment-form" action="{{ url_for('ticketing.initiate_order_payment') }}">
                                     <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
                                         <i class="fa fa-ticket"></i>
                                         Ticket Buyer
@@ -95,6 +95,7 @@
                                         continue.
                                     </div>
                                     <br>
+                                    <input type="hidden" name="identifier" value="{{ order.identifier }}">
                                     <div class="form-group">
                                         <label for="firstname" class="col-sm-4 control-label">First name <span
                                                 class="required">*</span></label>
@@ -142,7 +143,10 @@
                                                 class="required">*</span></label>
                                         <div class="col-sm-6">
                                             <select class="form-control" name="country" id="country" required>
-                                                <option value="">Select country</option>
+                                                <option value="" selected>Select country</option>
+                                                {% for country in countries %}
+                                                    <option value="{{ country.name }}">{{ country.name }}</option>
+                                                {% endfor %}
                                             </select>
                                             <div class="help-block with-errors"></div>
                                         </div>
@@ -192,7 +196,6 @@
                                             <img src="{{ url_for('static', filename='img/paymentlogoshorizontal.png') }}">
                                         </div>
                                     </div>
-
                                 </form>
                             </div>
                         </div>
@@ -235,6 +238,7 @@
             </div>
         </div>
     </div>
+    <button id="pay-via-stripe" type="button" style="display:none;">Pay Via Stripe</button>
 {% endblock %}
 
 {% block tail_js %}

@@ -16,7 +16,7 @@ from ..models.message_settings import MessageSettings
 from ..models.track import Track
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, NEXT_EVENT, \
     USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, EVENT_PUBLISH, Mail,\
-    AFTER_EVENT, USER_CHANGE_EMAIL
+    AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD
 from system_mails import MAILS
 from app.models.notifications import (
     # Prepended with `NOTIF_` to differentiate from mails
@@ -197,6 +197,18 @@ def send_email_after_account_create(form):
             action=USER_REGISTER,
             subject=MAILS[USER_REGISTER]['subject'],
             html=MAILS[USER_REGISTER]['message'].format(email=form['email'])
+        )
+
+def send_email_after_account_create_with_password(form):
+    """Send email after account create"""
+    message_settings = MessageSettings.query.filter_by(action=USER_REGISTER_WITH_PASSWORD).first()
+    if not message_settings or message_settings.mail_status == 1:
+        print "sending mail"
+        send_email(
+            to=form['email'],
+            action=USER_REGISTER_WITH_PASSWORD,
+            subject=MAILS[USER_REGISTER_WITH_PASSWORD]['subject'],
+            html=MAILS[USER_REGISTER_WITH_PASSWORD]['message'].format(email=form['email'], password=form['password'])
         )
 
 

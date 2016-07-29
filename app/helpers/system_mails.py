@@ -4,7 +4,7 @@ Register a mail here before using it
 """
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
     USER_REGISTER, PASSWORD_RESET, EVENT_ROLE, SESSION_ACCEPT_REJECT, \
-    SESSION_SCHEDULE, NEXT_EVENT, EVENT_PUBLISH, AFTER_EVENT, USER_CHANGE_EMAIL
+    SESSION_SCHEDULE, NEXT_EVENT, EVENT_PUBLISH, AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD
 
 MAILS = {
     EVENT_PUBLISH: {
@@ -76,6 +76,15 @@ MAILS = {
         'message': (
             "Your Account Has Been Created! Congratulations!" +
             "<br/> Your login: {email}"
+        )
+    },
+    USER_REGISTER_WITH_PASSWORD: {
+        'recipient': 'User',
+        'subject': 'Welcome to Open Event',
+        'message': (
+            "Your Account Has Been Created! Congratulations!" +
+            "<br/> <strong>Your login:</strong><br><strong>Email:</strong> {email}<br>"
+            "<strong>Password:</strong> {password}<br><br> Please login and change your password as soon as possible"
         )
     },
     USER_CONFIRM: {

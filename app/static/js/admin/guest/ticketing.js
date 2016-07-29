@@ -1,6 +1,19 @@
 /**
  * Created by niranjan94 on 28-Jul-16.
  */
+
+var handler = StripeCheckout.configure({
+    key: window.stripe_publishable_key,
+    locale: 'auto',
+    name: 'Open Event',
+    amount: window.order_amount,
+    description: window.event_name + ' tickets',
+    token: function (token) {
+        // You can access the token ID with `token.id`.
+        // Get the token ID to your server-side code for use.
+    }
+});
+
 window.order_created_at = moment(window.order_created_at);
 window.order_expires_at = window.order_created_at.clone();
 window.order_expires_at.add(10, 'minutes');
@@ -35,3 +48,41 @@ setInterval(function () {
     }
 
 }, 1000);
+
+var $orderPaymentForm = $("#order-payment-form");
+var $payViaStripe = $('#pay-via-stripe');
+var userEmail = '';
+
+$orderPaymentForm.submit(function (e) {
+    e.preventDefault();
+    var data = $orderPaymentForm.serialize();
+    $orderPaymentForm.lockForm();
+    $.ajax({
+        url: $orderPaymentForm.attr('action'),
+        type: 'post',
+        dataType: 'json',
+        data: data,
+        success: function (json) {
+            if(json.status == "ok") {
+                userEmail = json.email;
+                $payViaStripe.click();
+            } else {
+                
+            }
+
+        }
+    });
+});
+
+
+$payViaStripe.on('click', function (e) {
+    handler.open({
+        amount: window.order_amount,
+        email: userEmail
+    });
+    e.preventDefault();
+});
+
+$(window).on('popstate', function () {
+    handler.close();
+});

@@ -2,6 +2,9 @@ from flask.ext.restplus import abort
 from flask_admin import BaseView, expose
 from flask import redirect, url_for, request, jsonify
 
+import pycountry
+
+from app import get_settings
 from app.helpers.ticketing import TicketingManager
 
 class TicketingView(BaseView):
@@ -19,7 +22,26 @@ class TicketingView(BaseView):
         order = TicketingManager.get_and_set_expiry(order_identifier)
         if not order or order.state == 'expired':
             abort(404)
-        return self.render('/gentelella/guest/ticketing/summary.html', order=order, event=order.event)
+        return self.render('/gentelella/guest/ticketing/summary.html', order=order, event=order.event,
+                           countries=list(pycountry.countries),
+                           stripe_publishable_key=get_settings()['stripe_publishable_key'])
+
+    @expose('/initiate/payment/', methods=('POST',))
+    def initiate_order_payment(self):
+        result = TicketingManager.initiate_order_payment(request.form)
+        if result:
+            return jsonify({
+                "status": "ok",
+                "email": result.user.email
+            })
+        else:
+            return jsonify({
+                "status": "error"
+            })
+
+    @expose('/charge/payment/', methods=('POST',))
+    def charge_order_payment(self):
+        form = request.form
 
     @expose('/expire/<order_identifier>/', methods=('POST',))
     def expire_order(self, order_identifier):
