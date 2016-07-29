@@ -1,8 +1,10 @@
 import os
-from shutil import copyfile
-
+from base64 import b64encode
+from shutil import copyfile, rmtree
+from flask.ext.scrypt import generate_password_hash
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
+from werkzeug.utils import secure_filename
 
 from app.settings import get_settings
 
@@ -100,9 +102,17 @@ def upload_local(file, key, **kwargs):
     """
     Uploads file locally. Base dir - static/media/
     """
-    __, ext = os.path.splitext(file.filename)
-    file_path = 'static/media/' + key + ext
+    # __, ext = os.path.splitext(file.filename)
+    # file_path = 'static/media/' + key + ext
+    filename = secure_filename(file.filename)
+    file_path = 'static/media/' + key + '/' + generate_hash(key) + '/' + filename
     dir_path = file_path.rsplit('/', 1)[0]
+    # delete current
+    try:
+        rmtree(dir_path)
+    except OSError:
+        pass
+    # create dirs
     if not os.path.isdir(dir_path):
         os.makedirs(dir_path)
     file.save(file_path)
@@ -118,16 +128,21 @@ def upload_to_aws(bucket_name, aws_key, aws_secret, file, key, acl='public-read'
     bucket = conn.get_bucket(bucket_name)
     k = Key(bucket)
     # generate key using key + extension
-    __, ext = os.path.splitext(file.filename)  # includes dot
-    k.key = key
-    key_name = key.rsplit('/')[-1]
+    # __, ext = os.path.splitext(file.filename)  # includes dot
+    filename = secure_filename(file.filename)
+    key_dir = key + '/' + generate_hash(key) + '/'
+    k.key = key_dir + filename
+    # key_name = key.rsplit('/')[-1]
+    # delete old data
+    for item in bucket.list(prefix='/' + key_dir):
+        item.delete()
     # set object settings
     file_data = file.read()
     size = len(file_data)
     sent = k.set_contents_from_string(
         file_data,
         headers={
-            'Content-Disposition': 'attachment; filename=%s%s' % (key_name, ext)
+            'Content-Disposition': 'attachment; filename=%s' % filename
         }
     )
     k.set_acl(acl)
@@ -135,3 +150,15 @@ def upload_to_aws(bucket_name, aws_key, aws_secret, file, key, acl='public-read'
     if sent == size:
         return s3_url + k.key
     return False
+
+
+# ########
+# HELPERS
+# ########
+
+def generate_hash(key):
+    """
+    Generate hash for key
+    """
+    phash = generate_password_hash(key, get_settings()['secret'])
+    return b64encode(phash)[:10]  # limit len to 10, is sufficient
