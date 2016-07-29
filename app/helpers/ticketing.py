@@ -3,6 +3,8 @@ import binascii
 import os
 
 from datetime import timedelta, datetime
+
+import stripe
 from sqlalchemy import func
 
 from app.helpers.data import save_to_db
@@ -57,7 +59,7 @@ class TicketingManager(object):
 
     @staticmethod
     def get_order_by_identifier(identifier):
-        return Order.query.filter_by(identifier=identifier).one()
+        return Order.query.filter_by(identifier=identifier).first()
 
     @staticmethod
     def get_or_create_user_by_email(email, data=None):
@@ -143,6 +145,39 @@ class TicketingManager(object):
             order.zipcode = zipcode
             order.state = 'initialized'
             save_to_db(order)
+            return order
+        else:
+            return False
+
+    @staticmethod
+    def charge_order_payment(form):
+        order = TicketingManager.get_and_set_expiry(form['identifier'])
+
+        customer = stripe.Customer.create(
+            email=order.user.email,
+            source=form['stripe_token_id']
+        )
+
+        charge = stripe.Charge.create(
+            customer=customer.id,
+            amount=order.amount * 100,
+            currency='usd',
+            metadata={
+                'order_id': order.id,
+                'event': order.event.name,
+                'user_id': order.user_id,
+                'event_id': order.event_id
+            },
+            description=order.event.name + " ticket(s)"
+        )
+
+        if charge:
+            order.paid_via = 'stripe'
+            order.transaction_id = charge.id
+            order.state = 'completed'
+            order.completed_at = datetime.now()
+            save_to_db(order)
+
             return order
         else:
             return False

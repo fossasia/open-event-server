@@ -9,8 +9,7 @@ var handler = StripeCheckout.configure({
     amount: window.order_amount,
     description: window.event_name + ' tickets',
     token: function (token) {
-        // You can access the token ID with `token.id`.
-        // Get the token ID to your server-side code for use.
+        chargeOrderPayment(token.id);
     }
 });
 
@@ -67,17 +66,42 @@ $orderPaymentForm.submit(function (e) {
                 userEmail = json.email;
                 $payViaStripe.click();
             } else {
-                
+                $orderPaymentForm.unlockForm();
+                createSnackbar("An error occurred while initializing your payment.", "Try again", function () {
+                    $orderPaymentForm.submit();
+                });
             }
 
         }
     });
 });
 
+function chargeOrderPayment(tokenId) {
+    var data = {
+        stripe_token_id: tokenId,
+        identifier: window.order_identifier
+    };
+    $.ajax({
+        url: window.stripe_charge_at,
+        type: 'post',
+        dataType: 'json',
+        data: data,
+        success: function (json) {
+            if(json.status == "ok") {
+                userEmail = json.email;
+                $payViaStripe.click();
+            } else {
+                createSnackbar("An error occurred while processing your payment.", "Try again", function () {
+                    chargeOrderPayment(tokenId);
+                });
+            }
+        }
+    });
+}
 
 $payViaStripe.on('click', function (e) {
     handler.open({
-        amount: window.order_amount,
+        amount: window.order_amount *  100,
         email: userEmail
     });
     e.preventDefault();

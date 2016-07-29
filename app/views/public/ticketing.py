@@ -41,7 +41,16 @@ class TicketingView(BaseView):
 
     @expose('/charge/payment/', methods=('POST',))
     def charge_order_payment(self):
-        form = request.form
+        result = TicketingManager.charge_order_payment(request.form)
+        if result:
+            return jsonify({
+                "status": "ok",
+                "email": result.user.email
+            })
+        else:
+            return jsonify({
+                "status": "error"
+            })
 
     @expose('/expire/<order_identifier>/', methods=('POST',))
     def expire_order(self, order_identifier):

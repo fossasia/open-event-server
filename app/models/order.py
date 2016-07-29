@@ -23,8 +23,9 @@ class Order(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
     created_at = db.Column(db.DateTime)
-    expired_at = db.Column(db.DateTime, nullable=True, default=None)
     completed_at = db.Column(db.DateTime, nullable=True, default=None)
+    transaction_id = db.Column(db.String)
+    paid_via = db.Column(db.String)
 
     event = db.relationship('Event', backref='orders')
     user = db.relationship('User', backref='orders')
@@ -39,6 +40,8 @@ class Order(db.Model):
                  state=None,
                  country=None,
                  zipcode=None,
+                 transaction_id=None,
+                 paid_via=None,
                  user_id=None,
                  event_id=None):
         self.identifier = identifier
@@ -50,6 +53,8 @@ class Order(db.Model):
         self.zipcode = zipcode
         self.user_id = user_id
         self.event_id = event_id
+        self.transaction_id = transaction_id
+        self.paid_via = paid_via
         self.created_at = datetime.datetime.now()
 
     def __repr__(self):
