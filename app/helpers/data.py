@@ -915,31 +915,6 @@ class DataManager(object):
                       copyright=copyright,
                       show_map=1 if form.get('show_map') == "on" else 0,
                       creator=login.current_user)
-        # Add Ticket
-        str_empty = lambda val, val2: val2 if val == '' else val
-
-        module = DataGetter.get_module()
-        if module and module.ticket_include:
-            ticket_price = form.get('ticket_price', 0)
-            # Default values to pass the tests because APIs don't have these fields
-            ticket = Ticket(
-                name=form.get('ticket_name', ''),
-                type=form.get('ticket_type', 'free'),
-                description=form.get('ticket_description', ''),
-                price=ticket_price,
-                sales_start=datetime.strptime(
-                    form.get('ticket_sales_start_date', '01/01/2001') + ' ' +
-                    form.get('ticket_sales_start_time', '00:00'),
-                    '%m/%d/%Y %H:%M'),
-                sales_end=datetime.strptime(
-                    form.get('ticket_sales_end_date', '01/01/2001') + ' ' +
-                    form.get('ticket_sales_end_time', '00:00'), '%m/%d/%Y %H:%M'),
-                quantity=str_empty(form.get('ticket_quantity'), 100),
-                min_order=str_empty(form.get('ticket_min_order'), 1),
-                max_order=str_empty(form.get('ticket_max_order'), 10)
-            )
-
-            event.tickets.append(ticket)
 
         if event.latitude and event.longitude:
             response = requests.get(
@@ -990,6 +965,40 @@ class DataManager(object):
                         event_id=int(event.id)
                     ))
                 event.logo = logo
+
+            # Save Tickets
+            module = DataGetter.get_module()
+            if module and module.ticket_include:
+                ticket_names = form.getlist('tickets[name]')
+                ticket_types = form.getlist('tickets[type]')
+                ticket_prices = form.getlist('tickets[price]')
+                ticket_quantities = form.getlist('tickets[quantity]')
+                ticket_descriptions = form.getlist('tickets[description]')
+                ticket_sales_start_dates = form.getlist('tickets[sales_start_date]')
+                ticket_sales_start_times = form.getlist('tickets[sales_start_time]')
+                ticket_sales_end_dates = form.getlist('tickets[sales_end_date]')
+                ticket_sales_end_times = form.getlist('tickets[sales_end_time]')
+                ticket_min_orders = form.getlist('tickets[min_order]')
+                ticket_max_orders = form.getlist('tickets[max_order]')
+
+                for i, name in enumerate(ticket_names):
+                    if name.strip():
+                        ticket = Ticket(
+                            name=name,
+                            type=ticket_types[i],
+                            sales_start='{} {}'.format(ticket_sales_start_dates[i],
+                                ticket_sales_start_times[i]),
+                            sales_end='{} {}'.format(ticket_sales_end_dates[i],
+                                ticket_sales_end_times[i]),
+                            description=ticket_descriptions[i],
+                            quantity=ticket_quantities[i],
+                            price=ticket_prices[i] if type(ticket_prices[i]) == int else 0,
+                            min_order=ticket_min_orders[i],
+                            max_order=ticket_max_orders[i],
+                            event=event
+                        )
+
+                        db.session.add(ticket)
 
             sponsor_name = form.getlist('sponsors[name]')
             sponsor_url = form.getlist('sponsors[url]')
