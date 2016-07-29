@@ -38,3 +38,5 @@ bleach
 celery==3.1.23
 redis==2.10.3
 apscheduler==3.0.1
+pycountry
+stripe

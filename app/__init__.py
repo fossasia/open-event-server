@@ -30,6 +30,7 @@ import humanize
 
 import sqlalchemy as sa
 
+import stripe
 from app.helpers.flask_helpers import SilentUndefined, camel_case, slugify, MiniJSONEncoder
 from app.models import db
 from app.models.user import User
@@ -51,7 +52,6 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
 
-
 def create_app():
     Autodoc(app)
     # cal = Calendar()
@@ -67,6 +67,7 @@ def create_app():
     manager.add_command('db', MigrateCommand)
 
     CORS(app)
+    stripe.api_key = 'SomeStripeKey'
     app.secret_key = 'super secret key'
     app.json_encoder = MiniJSONEncoder
     app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
@@ -275,6 +276,9 @@ import api.helpers.tasks
 def set_secret():
     current_app.secret_key = get_settings()['secret']
 
+@app.before_first_request
+def set_stripe_key():
+    stripe.api_key = get_settings()['stripe_secret_key']
 
 def send_after_event_mail():
     with app.app_context():

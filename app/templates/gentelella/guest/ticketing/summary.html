@@ -241,9 +241,15 @@
     {{ super() }}
     <script type="text/javascript">
     window.order_created_at = "{{ order.created_at }}";
+    window.order_identifier = "{{ order.identifier }}";
     window.expire_url = "{{ url_for('ticketing.expire_order', order_identifier=order.identifier) }}";
-    window.expired_redirect = "{{ url_for('event_detail.display_event_detail_home', event_id=order.event_id, expired='yes') }}"
+    window.expired_redirect = "{{ url_for('event_detail.display_event_detail_home', event_id=order.event_id, expired='yes') }}";
+    window.stripe_charge_at = "{{ url_for('ticketing.charge_order_payment') }}";
+    window.stripe_publishable_key = "{{ stripe_publishable_key }}";
+    window.event_name = "{{ order.event.name }}";
+    window.order_amount = {{ order.amount }};
     </script>
+    <script src="https://checkout.stripe.com/checkout.js"></script>
     <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/bootstrap-validator/dist/validator.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
