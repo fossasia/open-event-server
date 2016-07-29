@@ -19,7 +19,7 @@
                                         <a>{{event.name}}</a>
                                     </h2>
                                     <div class="byline">
-                                        <span>Created</span> by {{event.organizer_name if event.organizer_name != None }}
+                                        <span>Created</span> by {{event.creator if event.creator != None }}
                                     </div>
                                     <p class="excerpt">{{event.description|striptags|truncate(100)}}
                                     </p>

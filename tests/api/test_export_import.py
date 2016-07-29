@@ -168,6 +168,8 @@ class TestEventImport(ImportExportBase):
                 self.assertIn('result', resp.data)
                 dic = json.loads(resp.data)['result']
                 break
+            if resp.status_code != 200:
+                self.assertTrue(False, 'FAIL')
             logging.info(resp.data)
             time.sleep(2)
         # check internals
