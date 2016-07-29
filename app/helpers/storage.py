@@ -102,8 +102,6 @@ def upload_local(file, key, **kwargs):
     """
     Uploads file locally. Base dir - static/media/
     """
-    # __, ext = os.path.splitext(file.filename)
-    # file_path = 'static/media/' + key + ext
     filename = secure_filename(file.filename)
     file_path = 'static/media/' + key + '/' + generate_hash(key) + '/' + filename
     dir_path = file_path.rsplit('/', 1)[0]
@@ -127,12 +125,10 @@ def upload_to_aws(bucket_name, aws_key, aws_secret, file, key, acl='public-read'
     conn = S3Connection(aws_key, aws_secret)
     bucket = conn.get_bucket(bucket_name)
     k = Key(bucket)
-    # generate key using key + extension
-    # __, ext = os.path.splitext(file.filename)  # includes dot
+    # generate key
     filename = secure_filename(file.filename)
     key_dir = key + '/' + generate_hash(key) + '/'
     k.key = key_dir + filename
-    # key_name = key.rsplit('/')[-1]
     # delete old data
     for item in bucket.list(prefix='/' + key_dir):
         item.delete()
