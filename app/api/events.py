@@ -205,9 +205,7 @@ class EventDAO(BaseDAO):
 LinkDAO = SocialLinkDAO(SocialLinkModel, SOCIAL_LINK_POST)
 DAO = EventDAO(EventModel, EVENT_POST)
 CopyrightDAO = BaseDAO(EventCopyright, EVENT_COPYRIGHT)
-CopyrightDAO.version_key = 'event_ver'
 CFSDAO = BaseDAO(EventCFS, EVENT_CFS)  # CFS = Call For Speakers
-CFSDAO.version_key = 'event_ver'
 
 # DEFINE PARAMS
 
