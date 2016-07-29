@@ -39,9 +39,11 @@ class TicketingManager(object):
     @staticmethod
     def create_order(form):
         order = Order()
+        order.state = 'pending'
         order.identifier = TicketingManager.get_new_order_identifier()
         order.event_id = form.get('event_id')
         ticket_ids = form.getlist('ticket_ids[]')
+
         ticket_quantity = form.getlist('ticket_quantities[]')
         amount = 0
         for index, id in enumerate(ticket_ids):

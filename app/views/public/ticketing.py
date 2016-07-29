@@ -1,3 +1,5 @@
+from datetime import timedelta, datetime
+from flask.ext.restplus import abort
 from flask_admin import BaseView, expose
 from flask import redirect, url_for, request
 
@@ -17,5 +19,9 @@ class TicketingView(BaseView):
     @expose('/<order_identifier>', methods=('GET',))
     def view_order(self, order_identifier):
         order = TicketingManager.get_order_by_identifier(order_identifier)
+        if not order:
+            abort(404)
+        elif order.state == 'pending' and (order.created_at + timedelta(minutes=10)) < datetime.now():
+            abort(404)
         return self.render('/gentelella/guest/ticketing/summary.html', order=order, event=order.event)
 
