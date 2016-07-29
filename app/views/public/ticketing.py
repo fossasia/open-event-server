@@ -8,9 +8,9 @@ from app import get_settings
 from app.helpers.ticketing import TicketingManager
 
 class TicketingView(BaseView):
-    @expose('/', methods=('GET', 'POST'))
+    @expose('/', methods=('GET',))
     def index(self):
-        pass
+        return redirect("/")
 
     @expose('/create/', methods=('POST', ))
     def create_order(self):
