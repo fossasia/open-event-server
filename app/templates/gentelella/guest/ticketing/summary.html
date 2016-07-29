@@ -240,7 +240,9 @@
 {% block tail_js %}
     {{ super() }}
     <script type="text/javascript">
-        window.order_created_at = "{{ order.created_at }}"
+    window.order_created_at = "{{ order.created_at }}";
+    window.expire_url = "{{ url_for('ticketing.expire_order', order_identifier=order.identifier) }}";
+    window.expired_redirect = "{{ url_for('event_detail.display_event_detail_home', event_id=order.event_id, expired='yes') }}"
     </script>
     <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/bootstrap-validator/dist/validator.min.js') }}"></script>

@@ -2,6 +2,7 @@
 import binascii
 import os
 
+from datetime import timedelta, datetime
 from sqlalchemy import func
 
 from app.helpers.data import save_to_db
@@ -16,8 +17,20 @@ def get_count(q):
     count = q.session.execute(count_q).scalar()
     return count
 
+def represents_int(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
+
+
 class TicketingManager(object):
     """All ticketing and orders related functions"""
+
+    @staticmethod
+    def get_order_expiry():
+        return 10
 
     @staticmethod
     def get_new_order_identifier():
@@ -33,8 +46,29 @@ class TicketingManager(object):
         return Ticket.query.get(ticket_id)
 
     @staticmethod
+    def get_order(order_id):
+        return Ticket.query.get(order_id)
+
+    @staticmethod
     def get_order_by_identifier(identifier):
         return Order.query.filter_by(identifier=identifier).one()
+
+    @staticmethod
+    def get_and_set_expiry(identifier, override=False):
+        if type(identifier) is Order:
+            order = identifier
+        elif represents_int(identifier):
+            order = TicketingManager.get_order(identifier)
+        else:
+            order = TicketingManager.get_order_by_identifier(identifier)
+
+        if order:
+            if override \
+                or (order.state == 'pending' and
+                    (order.created_at + timedelta(minutes=TicketingManager.get_order_expiry())) < datetime.now()):
+                order.state = 'expired'
+                save_to_db(order)
+        return order
 
     @staticmethod
     def create_order(form):
