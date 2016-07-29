@@ -141,18 +141,6 @@
             </div>
         </div>
     </div>
-    <div id="invoice-holder">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Invoice</h3>
-            </div>
-            <div class="panel-body" style="padding-bottom: 10px;">
-                <strong>{{ event.location_name }}</strong><br>
-                {{ event.start_time.strftime('%A, %B %d, %Y at %I:%M %p') }}
-                - {{ event.end_time.strftime('%A, %B %d, %Y at %I:%M %p') }} ({{ event.timezone }})<br>
-            </div>
-        </div>
-    </div>
 {% endblock %}
 
 {% block tail_js %}

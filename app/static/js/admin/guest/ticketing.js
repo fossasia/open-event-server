@@ -9,13 +9,14 @@ var handler = StripeCheckout.configure({
     amount: window.order_amount,
     description: window.event_name + ' tickets',
     token: function (token) {
+        console.log(token);
         chargeOrderPayment(token.id);
     }
 });
 
 window.order_created_at = moment(window.order_created_at);
 window.order_expires_at = window.order_created_at.clone();
-window.order_expires_at.add(10, 'minutes');
+window.order_expires_at.add(100, 'minutes');
 
 var $timeLeft = $("#time-left");
 
@@ -37,15 +38,16 @@ function executeOrderExpired() {
 }
 
 setInterval(function () {
-    var now = moment();
-    var diff = window.order_expires_at.diff(now, 'seconds');
-    if (diff >= 0) {
-        var duration = moment.duration(diff, 'seconds');
-        $timeLeft.text(pad(duration.minutes(), 2) + ":" + pad(duration.seconds(), 2));
-    } else {
-        executeOrderExpired();
+    if (typeof window.stop_timer === 'undefined' || window.stop_timer !== 'right_away') {
+        var now = moment();
+        var diff = window.order_expires_at.diff(now, 'seconds');
+        if (diff >= 0) {
+            var duration = moment.duration(diff, 'seconds');
+            $timeLeft.text(pad(duration.minutes(), 2) + ":" + pad(duration.seconds(), 2));
+        } else {
+            executeOrderExpired();
+        }
     }
-
 }, 1000);
 
 var $orderPaymentForm = $("#order-payment-form");
@@ -55,18 +57,18 @@ var userEmail = '';
 $orderPaymentForm.submit(function (e) {
     e.preventDefault();
     var data = $orderPaymentForm.serialize();
-    $orderPaymentForm.lockForm();
+    $orderPaymentForm.setFormLoading();
     $.ajax({
         url: $orderPaymentForm.attr('action'),
         type: 'post',
         dataType: 'json',
         data: data,
         success: function (json) {
-            if(json.status == "ok") {
+            if (json.status == "ok") {
                 userEmail = json.email;
                 $payViaStripe.click();
             } else {
-                $orderPaymentForm.unlockForm();
+                $orderPaymentForm.setFormLoading(false, 'Pay now');
                 createSnackbar("An error occurred while initializing your payment.", "Try again", function () {
                     $orderPaymentForm.submit();
                 });
@@ -87,9 +89,14 @@ function chargeOrderPayment(tokenId) {
         dataType: 'json',
         data: data,
         success: function (json) {
-            if(json.status == "ok") {
+            if (json.status == "ok") {
                 userEmail = json.email;
-                $payViaStripe.click();
+                createSnackbar("Your payment was a success. Redirecting ...");
+                setTimeout(function() {
+                    location.reload(true);
+                }, 1000);
+                window.stop_timer = "right_away";
+                $("#registration-information-holder").hide();
             } else {
                 createSnackbar("An error occurred while processing your payment.", "Try again", function () {
                     chargeOrderPayment(tokenId);
@@ -101,7 +108,7 @@ function chargeOrderPayment(tokenId) {
 
 $payViaStripe.on('click', function (e) {
     handler.open({
-        amount: window.order_amount *  100,
+        amount: window.order_amount * 100,
         email: userEmail
     });
     e.preventDefault();
