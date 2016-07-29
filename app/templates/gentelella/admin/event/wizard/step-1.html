@@ -810,11 +810,11 @@
         /* Set Ticket Price field */
         var html = null;
         if (type === "free") {
-            html = '<input type="text" name="tickets[price]" class="form-control" value="Free" disabled>';
+            html = '<input type="text" name="tickets[price]" class="form-control" value="Free" readonly>';
         } else if (type === "paid") {
             html = '<input type="text" name="tickets[price]" class="form-control" value="0">';
         } else if (type === "donation") {
-            html = '<input type="text" name="tickets[price]" class="form-control" value="Donation" disabled>';
+            html = '<input type="text" name="tickets[price]" class="form-control" value="Donation" readonly>';
         }
         $ticket.children("td:nth-child(2)").html(html);
 
