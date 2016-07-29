@@ -94,16 +94,16 @@ class TicketingManager(object):
 
         if order:
             if override \
-                or (order.state == 'pending' and
+                or (order.status != 'completed' and
                     (order.created_at + timedelta(minutes=TicketingManager.get_order_expiry())) < datetime.now()):
-                order.state = 'expired'
+                order.status = 'expired'
                 save_to_db(order)
         return order
 
     @staticmethod
     def create_order(form):
         order = Order()
-        order.state = 'pending'
+        order.status = 'pending'
         order.identifier = TicketingManager.get_new_order_identifier()
         order.event_id = form.get('event_id')
         ticket_ids = form.getlist('ticket_ids[]')
@@ -143,7 +143,7 @@ class TicketingManager(object):
             order.state = state
             order.country = country
             order.zipcode = zipcode
-            order.state = 'initialized'
+            order.status = 'initialized'
             save_to_db(order)
             return order
         else:
@@ -160,7 +160,7 @@ class TicketingManager(object):
 
         charge = stripe.Charge.create(
             customer=customer.id,
-            amount=order.amount * 100,
+            amount=int(order.amount * 100),
             currency='usd',
             metadata={
                 'order_id': order.id,
@@ -173,8 +173,13 @@ class TicketingManager(object):
 
         if charge:
             order.paid_via = 'stripe'
+            order.payment_mode = charge.source.object
+            order.brand = charge.source.brand
+            order.exp_month = charge.source.exp_month
+            order.exp_year = charge.source.exp_year
+            order.last4 = charge.source.last4
             order.transaction_id = charge.id
-            order.state = 'completed'
+            order.status = 'completed'
             order.completed_at = datetime.now()
             save_to_db(order)
 

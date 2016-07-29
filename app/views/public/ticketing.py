@@ -20,11 +20,20 @@ class TicketingView(BaseView):
     @expose('/<order_identifier>/', methods=('GET',))
     def view_order(self, order_identifier):
         order = TicketingManager.get_and_set_expiry(order_identifier)
-        if not order or order.state == 'expired':
+        if not order or order.status == 'expired':
             abort(404)
-        return self.render('/gentelella/guest/ticketing/summary.html', order=order, event=order.event,
+        if order.state == 'completed':
+            return redirect(url_for('.view_order_after_payment', order_identifier=order_identifier))
+        return self.render('/gentelella/guest/ticketing/order_pre_payment.html', order=order, event=order.event,
                            countries=list(pycountry.countries),
                            stripe_publishable_key=get_settings()['stripe_publishable_key'])
+
+    @expose('/<order_identifier>/view/', methods=('GET',))
+    def view_order_after_payment(self, order_identifier):
+        order = TicketingManager.get_and_set_expiry(order_identifier)
+        if not order or order.status != 'completed':
+            abort(404)
+        return self.render('/gentelella/guest/ticketing/order_post_payment.html', order=order, event=order.event)
 
     @expose('/initiate/payment/', methods=('POST',))
     def initiate_order_payment(self):
@@ -45,7 +54,7 @@ class TicketingView(BaseView):
         if result:
             return jsonify({
                 "status": "ok",
-                "email": result.user.email
+                "order": result
             })
         else:
             return jsonify({
