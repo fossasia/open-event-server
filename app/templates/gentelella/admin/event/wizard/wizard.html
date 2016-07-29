@@ -92,6 +92,89 @@
                         </ul>
                     </div>
 
+                    <!-- TicketTemplate -->
+                    <div id="ticket-template" style="display: none;">
+                    <table>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <input type="hidden" name="tickets[type]">
+                            <input type="text" name="tickets[name]" class="form-control" placeholder="Ticket Name">
+                        </td>
+                        <td>
+                            <input type="text" name="tickets[price]" class="form-control" placeholder="Price">
+                        </td>
+                        <td>
+                            <input type="text" name="tickets[quantity]" class="form-control" placeholder="Quantity">
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a class="btn btn-default">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                </a>
+                                <a class="btn btn-default">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="item form-group">
+                                        <label>Description</label>
+                                        <textarea name="tickets[description]" class="form-control" rows="5"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <div class="item form-group">
+                                                <label>Sales Start</label><br>
+                                                <div class="col-xs-7" style="padding: 0;">
+                                                    <input value="{{ start_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY" name="tickets[sales_start_date]">
+                                                </div>
+                                                <div class="col-xs-5" style="padding: 0;">
+                                                    <input value="19:00" class="form-control col-xs-6 time start ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="tickets[sales_start_time]">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <div class="item form-group">
+                                                <label>Sales End</label><br>
+                                                <div class="col-xs-7" style="padding: 0;">
+                                                    <input value="{{ start_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY" name="tickets[sales_end_date]">
+                                                </div>
+                                                <div class="col-xs-5" style="padding: 0;">
+                                                    <input value="19:00" class="form-control col-xs-6 time end ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="tickets[sales_end_time]">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="item form-group">
+                                                <label>Min Order</label>
+                                                <input type="number" class="form-control" placeholder="1" name="tickets[min_order]">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="item form-group">
+                                                <label>Max Order</label>
+                                                <input type="number" class="form-control" placeholder="10" name="tickets[max_order]">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    </table>
+                    </div>
+                    <!-- /TicketTemplate -->
+
                     <form enctype="multipart/form-data"
                           action="{% if event and not is_copy %}/events/{{ event.id }}/edit/{% else %}/events/create/{% endif %}"
                           method="POST" role="form"

@@ -271,94 +271,36 @@
             <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
         </h2>
 
+        <!-- TicketsTable -->
         <div class="row">
-            <div class="col-xs-6">
-                <div class="item form-group">
-                    <label>Ticket Name</label>
-                    <input type="text" name="ticket_name" class="form-control" value="{{ event.tickets[0].name | default('', true) }}">
-                </div>
-            </div>
-            <div class="col-xs-6">
-                <div class="item form-group">
-                    <label>Type</label>
-                    <select name="ticket_type" id="ticket-type" class="form-control">
-                        <option value="free" {{ 'selected' if event.tickets[0].type == 'free' else ''}}>Free</option>
-                        {% if 'payments' in included_items %}<option value="paid" {{ 'selected' if event.tickets[0].type == 'paid' else ''}}>Paid</option>{% endif %}
-                        {% if 'donations' in included_items %}<option value="donation" {{ 'selected' if event.tickets[0].type == 'donation' else ''}}>Donation</option>{% endif %}
-                    </select>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="item form-group">
-            <label>Description</label>
-            <textarea name="ticket_description" class="form-control">{{ event.tickets[0].description | default('', true) }}</textarea>
+            <table class="table tickets-table">
+                <thead>
+                    <tr>
+                        <th>Ticket Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Options</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
 
         <div class="row">
-            <div class="col-md-4 col-xs-8">
-                <div class="item form-group">
-                    <label>Price ($)</label>
-                    <div id="ticket-type-price">
-                    {% if event %}
-                        {% if event.tickets[0].type == 'free' %}
-                            <div class="form-control">Free</div>
-                        {% elif event.tickets[0].type == 'paid' %}
-                            <input type='number' class='form-control' placeholder='Set your ticket price' name='ticket_price' value="{{ event.tickets[0].price }}">
-                        {% elif event.tickets[0].type == 'donation' %}
-                            <div class="form-control">Donation</div>
-                        {% endif %}
-                    {% else %}
-                        <div class="form-control">Free</div>
-                    {% endif %}
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="item form-group">
-                    <label>Sales Start</label><br>
-                    <div class="col-xs-8" style="padding-left: 0;">
-                        <input value="{{ event.tickets[0].sales_start.strftime('%m/%d/%Y') if event else start_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY" name="ticket_sales_start_date">
-                    </div>
-                    <div class="col-xs-4" style="padding-left: 0;">
-                        <input value="{{ event.tickets[0].sales_start.strftime('%H:%M') if event else '19:00' }}" class="form-control col-xs-6 time start ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="ticket_sales_start_time">
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="item form-group">
-                    <label>Sales End</label><br>
-                    <div class="col-xs-8" style="padding-left: 0;">
-                        <input value="{{ event.tickets[0].sales_end.strftime('%m/%d/%Y') if event else start_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY" name="ticket_sales_end_date">
-                    </div>
-                    <div class="col-xs-4" style="padding-left: 0;">
-                        <input value="{{ event.tickets[0].sales_end.strftime('%H:%M') if event else '19:00' }}" class="form-control col-xs-6 time end ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="ticket_sales_end_time">
-                    </div>
-                </div>
+            <div class="text-center">
+                <a class="btn btn-info add-free-ticket">
+                    <i class="glyphicon glyphicon-plus-sign"></i> Free Ticket
+                </a>
+                <a class="btn btn-info add-paid-ticket">
+                    <i class="glyphicon glyphicon-plus-sign"></i> Paid Ticket
+                </a>
+                <a class="btn btn-info add-donation-ticket">
+                    <i class="glyphicon glyphicon-plus-sign"></i> Donation
+                </a>
             </div>
         </div>
+        <!-- /TicketsTable -->
 
-        <div class="row">
-            <div class="col-md-4">
-                <div class="item form-group">
-                    <label>Quantity</label>
-                    <input type="number" class="form-control" placeholder="100" name="ticket_quantity" value="{{ event.tickets[0].quantity | default(100, true) }}">
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="item form-group">
-                    <label>Min Order</label>
-                    <input type="number" class="form-control" placeholder="1" name="ticket_min_order" value="{{ event.tickets[0].min_order | default(1, true) }}">
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="item form-group">
-                    <label>Max Order</label>
-                    <input type="number" class="form-control" placeholder="10" name="ticket_max_order" value="{{ event.tickets[0].max_order | default(10, true) }}">
-                </div>
-            </div>
-        </div>
         </div>
             <div id="ticket-url-holder" class="item form-group" {% if not event.ticket_url %}style="display:none;"{% endif %}>
             <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
@@ -840,6 +782,60 @@
         } else if (type == "paid") {
             ticketTypePrice.html("<input type='number' class='form-control' placeholder='Set your ticket price' name='ticket_price'>");
         }
+    });
+
+    var $ticketsTable = $(".tickets-table").children("tbody");
+    var ticketsCount = 1;
+
+    function addTicket(type) {
+        /* Clone ticket from template */
+        var $tmpl = $("#ticket-template").clone().children("table").children("tbody").children("tr");
+        var $ticket = $($tmpl[0]).attr("id", "ticket_" + String(ticketsCount));
+        var $ticketMore = $($tmpl[1]).attr("id", "ticket-more_" + String(ticketsCount));
+
+        /* Bind events to Edit and Remove buttons */
+        var $ticketEdit = $ticket.children("td").last().children().children().first();
+        $ticketEdit.on("click", function() {
+            $ticketMore.fadeToggle("slow");
+        });
+        var $ticketRemove = $ticket.children("td").last().children().children().last();
+        $ticketRemove.on("click", function() {
+            $ticket.remove();
+            $ticketMore.remove();
+        });
+
+        /* Set Ticket Type field */
+        $ticket.children("td:nth-child(1)").children().first().val(type);
+
+        /* Set Ticket Price field */
+        var html = null;
+        if (type === "free") {
+            html = '<input type="text" name="tickets[price]" class="form-control" value="Free" disabled>';
+        } else if (type === "paid") {
+            html = '<input type="text" name="tickets[price]" class="form-control" value="0">';
+        } else if (type === "donation") {
+            html = '<input type="text" name="tickets[price]" class="form-control" value="Donation" disabled>';
+        }
+        $ticket.children("td:nth-child(2)").html(html);
+
+        /* Append ticket to table */
+        $ticket.hide();
+        $ticketMore.hide();
+        $ticketsTable.append($ticket, $ticketMore);
+        $ticket.show("slow");
+        ticketsCount += 1;
+    }
+
+    $(".add-free-ticket").click(function () {
+        addTicket("free");
+    });
+
+    $(".add-paid-ticket").click(function () {
+        addTicket("paid");
+    });
+
+    $(".add-donation-ticket").click(function () {
+        addTicket("donation");
     });
 
     $(document).on("click", '.add-social-links', function () {
