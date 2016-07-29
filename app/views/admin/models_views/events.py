@@ -205,6 +205,8 @@ class EventsView(BaseView):
         custom_forms = DataGetter.get_custom_form_elements(event_id)
         speaker_form = json.loads(custom_forms.speaker_form)
         session_form = json.loads(custom_forms.session_form)
+        tax = DataGetter.get_tax_options(event_id)
+
 
         included_setting = []
         module = DataGetter.get_module()
@@ -253,7 +255,11 @@ class EventsView(BaseView):
                                cfs_hash=hash,
                                step=step,
                                required=required,
-                               included_settings=included_setting)
+                               included_settings=included_setting,
+                               tax=tax,
+                               payment_countries=DataGetter.get_payment_countries(),
+                               payment_currencies=DataGetter.get_payment_currencies())
+
         if request.method == "POST":
             img_files = []
             imd = ImmutableMultiDict(request.files)
@@ -269,7 +275,7 @@ class EventsView(BaseView):
 
             event = DataManager.edit_event(
                 request, event_id, event, session_types, tracks, social_links,
-                microlocations, call_for_speakers, sponsors, custom_forms, img_files, old_sponsor_logos, old_sponsor_names)
+                microlocations, call_for_speakers, sponsors, custom_forms, img_files, old_sponsor_logos, old_sponsor_names, tax)
 
             if (request.form.get('state',
                                 u'Draft') == u'Published') and string_empty(
@@ -390,9 +396,8 @@ class EventsView(BaseView):
         """
         event = DataGetter.get_event(event_id)
         user = login.current_user
-        role_invite = DataGetter.get_event_role_invite(email=user.email,
-                                                       event_id=event.id,
-                                                       hash=hash)
+        role_invite = DataGetter.get_event_role_invite(event.id, hash,
+                                                       email=user.email)
 
         if role_invite:
             if role_invite.has_expired():
@@ -425,9 +430,8 @@ class EventsView(BaseView):
         """
         event = DataGetter.get_event(event_id)
         user = login.current_user
-        role_invite = DataGetter.get_event_role_invite(email=user.email,
-                                                       event_id=event.id,
-                                                       hash=hash)
+        role_invite = DataGetter.get_event_role_invite(event.id, hash,
+                                                       email=user.email)
 
         if role_invite:
             if role_invite.has_expired():
@@ -447,8 +451,7 @@ class EventsView(BaseView):
     @is_organizer
     def delete_user_role_invite(self, event_id, hash):
         event = DataGetter.get_event(event_id)
-        role_invite = DataGetter.get_event_role_invite(event_id=event.id,
-                                                       hash=hash)
+        role_invite = DataGetter.get_event_role_invite(event.id, hash)
 
         if role_invite:
             delete_from_db(role_invite, 'Deleted RoleInvite')

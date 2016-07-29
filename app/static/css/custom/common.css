@@ -30,6 +30,12 @@ ul.msg_list li:last-child a {
     font-size: 12px;
 }
 
+#notif-menu {
+    height: auto;
+    max-height: 300px;
+    overflow-x: hidden;
+}
+
 .image-box {
     width: 100%;
     height: 200px;

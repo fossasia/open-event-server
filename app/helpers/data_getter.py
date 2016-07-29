@@ -32,6 +32,7 @@ from ..models.activity import Activity
 from ..models.ticket import Ticket
 from ..models.modules import Module
 from ..models.page import Page
+from ..models.tax import Tax
 from .language_list import LANGUAGE_LIST
 from .static import EVENT_TOPICS, EVENT_LICENCES, PAYMENT_COUNTRIES, PAYMENT_CURRENCIES
 from app.helpers.helpers import get_event_id, string_empty
@@ -40,7 +41,8 @@ from flask import flash, abort
 import datetime
 from sqlalchemy import desc, asc, or_
 
-class DataGetter:
+
+class DataGetter(object):
     @staticmethod
     def get_all_user_notifications(user):
         return Notification.query.filter_by(user=user).all()
@@ -89,9 +91,9 @@ class DataGetter:
         return Permission.query.filter_by(role=role, service=service).first()
 
     @staticmethod
-    def get_event_role_invite(event_id, hash, **kwargs):
+    def get_event_role_invite(event_id, hash_code, **kwargs):
         return RoleInvite.query.filter_by(event_id=event_id,
-                                          hash=hash, **kwargs).first()
+                                          hash=hash_code, **kwargs).first()
 
     @staticmethod
     def get_all_owner_events():
@@ -100,8 +102,8 @@ class DataGetter:
         return login.current_user.events_assocs
 
     @staticmethod
-    def get_email_notification_settings_by_id(id):
-        return EmailNotification.query.get(id)
+    def get_email_notification_settings_by_id(email_id):
+        return EmailNotification.query.get(email_id)
 
     @staticmethod
     def get_email_notification_settings(user_id):
@@ -183,9 +185,9 @@ class DataGetter:
         try:
             return Session.query.filter(Session.speakers.any(Speaker.user_id == user.id)).filter(
                 Session.id == session_id).one()
-        except MultipleResultsFound, e:
+        except MultipleResultsFound:
             return None
-        except NoResultFound, e:
+        except NoResultFound:
             return None
 
     @staticmethod
@@ -268,7 +270,7 @@ class DataGetter:
         :return All files filtered by owner, Format [(test.png, test1.png)...]:
         """
         files = File.query.filter_by(owner_id=login.current_user.id)
-        return [(file.name, file.name) for file in files]
+        return [(file_obj.name, file_obj.name) for file_obj in files]
 
     @staticmethod
     def get_all_owner_files():
@@ -298,11 +300,11 @@ class DataGetter:
         return User.query.all()
 
     @staticmethod
-    def get_user(id):
+    def get_user(user_id):
         """
         :return: User
         """
-        return User.query.get(int(id))
+        return User.query.get(int(user_id))
 
     @staticmethod
     def get_association():
@@ -607,16 +609,16 @@ class DataGetter:
 
     @staticmethod
     def get_page_by_url(url):
-        results = Page.query.filter_by(url=url)
+        results = Page.query.filter(Page.url.contains(url))
         if results:
-            return results.one()
+            return results.first()
         return results
 
     @staticmethod
     def get_all_message_setting():
         settings_list = MessageSettings.query.all()
         all_settings = {}
-        for index, d in enumerate(settings_list):
+        for index in range(len(settings_list)):
             all_settings[settings_list[index].action] = {'mail_status': settings_list[index].mail_status,
                                                          'notif_status': settings_list[index].notif_status,
                                                          'user_control_status': settings_list[
@@ -644,7 +646,7 @@ class DataGetter:
         cnt = Counter()
         for location in names:
             cnt[location] += 1
-        return [v for v, k in cnt.most_common()][:10]
+        return [v for v, __ in cnt.most_common()][:10]
 
     @staticmethod
     def get_sales_open_tickets(event_id):
@@ -663,3 +665,9 @@ class DataGetter:
     @staticmethod
     def get_payment_currencies():
         return sorted([k for k in PAYMENT_CURRENCIES])
+
+    @staticmethod
+    def get_tax_options(event_id):
+        tax = Tax.query.filter_by(event_id=event_id)
+        for tax in tax:
+            return tax

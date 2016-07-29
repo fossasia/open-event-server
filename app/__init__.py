@@ -30,6 +30,8 @@ import humanize
 
 import sqlalchemy as sa
 
+from nameparser import HumanName
+import stripe
 from app.helpers.flask_helpers import SilentUndefined, camel_case, slugify, MiniJSONEncoder
 from app.models import db
 from app.models.user import User
@@ -51,7 +53,6 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
 
-
 def create_app():
     Autodoc(app)
     # cal = Calendar()
@@ -67,6 +68,7 @@ def create_app():
     manager.add_command('db', MigrateCommand)
 
     CORS(app)
+    stripe.api_key = 'SomeStripeKey'
     app.secret_key = 'super secret key'
     app.json_encoder = MiniJSONEncoder
     app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
@@ -137,7 +139,9 @@ def request_wants_json():
 
 @app.context_processor
 def locations():
-    return dict(locations=DataGetter.get_locations_of_events())
+    def get_locations_of_events():
+        return DataGetter.get_locations_of_events()
+    return dict(locations=get_locations_of_events)
 
 
 @app.context_processor
@@ -189,6 +193,17 @@ def humanize_filter(time):
         return "N/A"
     return humanize.naturaltime(datetime.now() - time)
 
+@app.template_filter('firstname')
+def firstname_filter(string):
+    return HumanName(string).first
+
+@app.template_filter('middlename')
+def middlename_filter(string):
+    return HumanName(string).middle
+
+@app.template_filter('lastname')
+def lastname_filter(string):
+    return HumanName(string).last
 
 @app.context_processor
 def flask_helpers():
@@ -275,6 +290,9 @@ import api.helpers.tasks
 def set_secret():
     current_app.secret_key = get_settings()['secret']
 
+@app.before_first_request
+def set_stripe_key():
+    stripe.api_key = get_settings()['stripe_secret_key']
 
 def send_after_event_mail():
     with app.app_context():

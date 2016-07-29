@@ -1,5 +1,7 @@
+{% if tickets.count() > 0 %}
 <div id="ticketing-holder" class="col-md-6 col-sm-8 col-xs-12">
-    <form>
+    <form method="POST" action="{{ url_for('ticketing.create_order') }}" enctype="multipart/form-data">
+        <input type="hidden" name="event_id" value="{{ event.id }}">
         <div class="panel panel-default">
             <div class="panel-heading" style="background-color: #ffffff;">
                 <h3 class="panel-title">Ticket Information</h3>
@@ -16,26 +18,32 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        {% for ticket in tickets %}
-                            <td>{{ ticket.type }}</td>
+                    {% for ticket in tickets %}
+                        <tr>
+
+                            <td>{{ ticket.name }} - {{ ticket.type }}</td>
                             <td>{{ ticket.sales_end.strftime('%a, %B %d') }}</td>
-                            <td>${{ ticket.price }}</td>
+                            <td>${{ '%0.2f'| format(ticket.price|float) }}</td>
                             <td>$0.00</td>
                             <td align="right">
-                                <select name="quantity[{{ ticket.id }}]">
-                                    <option value="0" selected>0</option>
-                                    {% for quantity in range(ticket.min_order, ticket.max_order) %}
+                                <input type="hidden" name="ticket_ids[]" value="{{ ticket.id }}">
+                                <select name="ticket_quantities[]" class="quantity-select" data-rate="{{ ticket.price }}">
+                                    {% if ticket.min_order > 1 %}
+                                        <option value="0" selected>0</option>
+                                    {% endif %}
+                                    {% for quantity in range(ticket.min_order - 1, ticket.max_order + 1) %}
                                         <option value="{{ quantity }}">{{ quantity }}</option>
                                     {% endfor %}
                                 </select>
                             </td>
-                        {% else %}
+                        </tr>
+                    {% else %}
+                        <tr>
                             <td colspan="5" style="text-align: center">
                                 No tickets available right now.
                             </td>
-                        {% endfor %}
-                    </tr>
+                        </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
                 <hr style="margin-top: 0;margin-bottom: 10px;">
@@ -43,7 +51,7 @@
                     <a href="#" class="promo-code-open" style="color: #2aa9dd;">Enter promotional code</a>
                     <div class="col-md-5 pull-right promo-code-box" style="padding-right:0;display:none;">
                         <div class="input-group" style="margin-bottom: 0;">
-                            <input type="text" name="promo_code" class="form-control" placeholder="Promotional code">
+                            <input type="text" name="promo_code" class="form-control" placeholder="Promotional code" value="">
                                       <span class="input-group-btn">
                                         <button class="btn btn-default promo-close-btn" type="button"><i
                                                 class="fa fa-times"></i></button>
@@ -54,9 +62,14 @@
                 <div class="clearfix"></div>
             </div>
             <div class="panel-footer" style="background-color: #ffffff;">
+                <div class="pull-left" id="total-holder" style="font-weight: 300; font-size: 16px;line-height: 39px;text-transform: uppercase; display: none;">
+                    Total <span style="font-weight: 500;" id="total-amount">$123.00</span>
+                </div>
                 <div class="pull-right">
                     <img src="{{ url_for('static', filename='img/paymentlogoshorizontal.png') }}">
-                    <button class="btn btn-success" {% if tickets %}type="submit"{% else %} type="button" disabled{% endif %}>Order Now</button>
+                    <button class="btn btn-success" {% if tickets %}type="submit"{% else %} type="button"
+                            disabled{% endif %} id="order-now-btn">Order Now
+                    </button>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -78,4 +91,40 @@
         $('.promo-code-box').hide().find('input').val('');
         $(".promo-code-open").show();
     });
+
+    var $quantitySelects = $(".quantity-select");
+    var $orderNowBtn = $("#order-now-btn");
+    var $totalHolder = $("#total-holder");
+    var $totalAmount = $("#total-amount");
+
+    $quantitySelects.change(function() {
+        var hasMoreThenZero = false;
+        var total = 0;
+        $.each($quantitySelects, function(index, $quantitySelect) {
+            $quantitySelect = $($quantitySelect);
+            if($quantitySelect.val() !== "0") {
+                total += parseInt($quantitySelect.data('rate')) * parseInt($quantitySelect.val());
+                hasMoreThenZero = true;
+            }
+        });
+
+        if(total > 0) {
+            $totalHolder.show();
+            $totalAmount.text("$" + total + ".00")
+        } else {
+            $totalHolder.hide();
+        }
+
+        if(hasMoreThenZero) {
+            $orderNowBtn.removeAttr("disabled");
+            $orderNowBtn.attr("type", "submit");
+        } else {
+            $orderNowBtn.attr("disabled", "disabled");
+            $orderNowBtn.attr("type", "button");
+        }
+    });
+
+    $quantitySelects.trigger("change");
+
 </script>
+{% endif %}

@@ -14,26 +14,25 @@
 <div>
     <div class="responsive-tabs-container accordion-xs">
         <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist" style="background: #FFFFFF;">
-            <li class="active">
-                <a href="#tab_content1" id="home-tab" data-toggle="tab">System Links</a>
+            <li role="presentation" class="active">
+                <a href="#tab_content2" id="profile-tab" data-toggle="tab">System Tokens</a>
             </li>
             <li role="presentation">
-                <a href="#tab_content2" id="profile-tab" data-toggle="tab">Social Links</a>
+                <a href="#tab_content3" id="microservice-tab" data-toggle="tab">Microservices</a>
             </li>
         </ul>
         <div class="nav bar_tabs" role="tablist">
-                <a href="#tab_content1" class="accordion-link active"id="home-tab" data-toggle="tab">System Links</a>
-                <a href="#tab_content2" class="accordion-link"id="profile-tab" data-toggle="tab">Social Links</a>
-
+                <a href="#tab_content2" class="accordion-link"id="profile-tab" data-toggle="tab">System Tokens</a>
+                <a href="#tab_content3" class="accordion-link" id="microservice-tab" data-toggle="tab">Microservices</a>
         </div>
         <form id="settings_form" method="post" class="form-horizontal form-label-left">
 
         <div id="myTabContent" class="tab-content">
-            <div class="tab-pane fade active in" id="tab_content1">
-                {% include 'gentelella/admin/super_admin/settings/_system.html' %}
+            <div class="tab-pane fade active in" id="tab_content2">
+                 {% include 'gentelella/admin/super_admin/settings/_system.html' %}
             </div>
-            <div class="tab-pane fade in" id="tab_content2">
-                 {% include 'gentelella/admin/super_admin/settings/_social.html' %}
+            <div class="tab-pane fade in" id="tab_content3">
+                 {% include 'gentelella/admin/super_admin/settings/_microservices.html' %}
             </div>
 
         </div>

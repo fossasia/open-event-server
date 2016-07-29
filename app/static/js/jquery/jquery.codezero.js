@@ -104,7 +104,26 @@ jQuery.fn.extend({
             $(this).find("select,input,textarea,button").enable();
             $(this).find(".note-editable").attr("contenteditable", "true")
         });
+    },
+    /**
+     * Enable all input, textarea of a form
+     * @returns {*}
+     */
+    setFormLoading: function (isLoading, text) {
+        return this.each(function () {
+            if (typeof flag === 'undefined') {
+                isLoading = true;
+            }
+            if(isLoading) {
+                $(this).lockForm();
+                $(this).find("button[type=submit]").html("<i class='fa fa-refresh fa-spin fa-fw'></i> Processing");
+            } else {
+                $(this).unlockForm();
+                $(this).find("button[type=submit]").html(text);
+            }
+        });
     }
+    
 });
 
 /**
