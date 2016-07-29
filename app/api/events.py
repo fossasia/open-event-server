@@ -10,6 +10,7 @@ from app.models.event import Event as EventModel
 from app.models.social_link import SocialLink as SocialLinkModel
 from app.models.users_events_roles import UsersEventsRoles
 from app.models.event_copyright import EventCopyright
+from app.models.call_for_papers import CallForPaper as EventCFS
 from app.models.role import Role
 from app.models.user import ORGANIZER
 from app.helpers.data import save_to_db, record_activity
@@ -41,10 +42,10 @@ EVENT_COPYRIGHT = api.model('EventCopyright', {
 
 EVENT_CFS = api.model('EventCFS', {
     'announcement': fields.String(),
-    'start_date': fields.String(),
-    'end_date': fields.String(),
+    'start_date': fields.DateTime(),
+    'end_date': fields.DateTime(),
     'timezone': fields.String(),
-    'privacy': fields.String()
+    'privacy': EventPrivacyField()  # [public, private]
 })
 
 EVENT_VERSION = api.model('EventVersion', {
@@ -93,7 +94,7 @@ EVENT = api.model('Event', {
     'copyright': fields.Nested(EVENT_COPYRIGHT, allow_null=True),
     'schedule_published_on': fields.DateTime(),
     'code_of_conduct': fields.String(),
-    'social_links': fields.List(fields.Nested(SOCIAL_LINK), attribute='social_link', required=False),
+    'social_links': fields.List(fields.Nested(SOCIAL_LINK), attribute='social_link'),
     'call_for_papers': fields.Nested(EVENT_CFS, allow_null=True),
     'version': fields.Nested(EVENT_VERSION)
 })
@@ -115,7 +116,6 @@ del EVENT_POST['id']
 del EVENT_POST['creator']
 del EVENT_POST['social_links']
 del EVENT_POST['version']
-del EVENT_POST['call_for_papers']
 
 
 # ###################
@@ -148,15 +148,25 @@ class EventDAO(BaseDAO):
         for f in datetime_fields:
             if f in data:
                 data[f] = EVENT_POST[f].from_str(data.get(f))
+        # cfs datetimes
+        if 'call_for_papers' in data:
+            for _ in ['start_date', 'end_date']:
+                if _ in data['call_for_papers']:
+                    data['call_for_papers'][_] = EVENT_POST['call_for_papers'][_].from_str(
+                        data['call_for_papers'].get(_))
         return data
 
     def create(self, data, url):
         data = self.validate(data)
         payload = self.fix_payload(data)
         # save copyright info
-        payload['copyright'] = CopyrightDAO.create(payload['copyright']
-                                                   if payload.get('copyright') else {},
-                                                   validate=False)
+        payload['copyright'] = CopyrightDAO.create(
+            payload['copyright'] if payload.get('copyright') else {},
+            validate=False)
+        # save cfs info
+        payload['call_for_papers'] = CFSDAO.create(
+            payload['call_for_papers'] if payload.get('call_for_papers') else {},
+            validate=False)
         # save event
         new_event = self.model(**payload)
         new_event.creator = g.user
@@ -180,13 +190,27 @@ class EventDAO(BaseDAO):
             CopyrightDAO.update(event.copyright.id, payload['copyright']
                                 if payload['copyright'] else {})
             payload.pop('copyright')
-
+        # update cfs
+        if 'call_for_papers' in payload:
+            cfs_data = payload.get('call_for_papers')
+            if event.call_for_papers:
+                if cfs_data:  # update existing
+                    CFSDAO.update(event.call_for_papers.id, cfs_data)
+                else:  # delete if null
+                    CFSDAO.delete(event.call_for_papers.id)
+            else:  # create new
+                CFSDAO.create(cfs_data, validate=False)
+            payload.pop('call_for_papers')
+        # master update
         return BaseDAO.update(self, event_id, payload, validate=False)
 
 
 LinkDAO = SocialLinkDAO(SocialLinkModel, SOCIAL_LINK_POST)
 DAO = EventDAO(EventModel, EVENT_POST)
 CopyrightDAO = BaseDAO(EventCopyright, EVENT_COPYRIGHT)
+CopyrightDAO.version_key = 'event_ver'
+CFSDAO = BaseDAO(EventCFS, EVENT_CFS)  # CFS = Call For Speakers
+CFSDAO.version_key = 'event_ver'
 
 # DEFINE PARAMS
 
@@ -217,6 +241,7 @@ SINGLE_EVENT_PARAMS = {
                        'Supported: sessions,tracks,microlocations,speakers,sponsors)'
     },
 }
+
 
 def get_extended_event_model(includes=None):
     if includes is None:
