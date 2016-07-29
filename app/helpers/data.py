@@ -7,7 +7,8 @@ import traceback
 from datetime import datetime, timedelta
 
 import requests
-from flask import flash, request, url_for, g
+from flask import flash, request, url_for, g, current_app
+from flask_socketio import emit
 from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from requests_oauthlib import OAuth2Session
@@ -73,7 +74,25 @@ class DataManager(object):
                                     title=title,
                                     message=message,
                                     received_at=datetime.now())
-        save_to_db(notification, 'User notification saved')
+        saved = save_to_db(notification, 'User notification saved')
+
+        if saved:
+            DataManager.push_user_notification(user)
+
+    @staticmethod
+    def push_user_notification(user):
+        """
+        Push user notification using websockets.
+        """
+        if not current_app.config.get('PRODUCTION', False):
+            return False
+        user_room = 'user_{}'.format(user.id)
+        emit('response',
+            {'meta': 'New notifications',
+                'notif_count': user.get_unread_notif_count(),
+                'notifs': user.get_unread_notifs()},
+            room=user_room,
+            namespace='/notifs')
 
     @staticmethod
     def mark_user_notification_as_read(notification):
@@ -401,6 +420,7 @@ class DataManager(object):
                 if user:
                     cfs_link = url_for('event_detail.display_event_cfs', event_id=event.id)
                     Helper.send_notif_invite_papers(user, event.name, cfs_link, link)
+
 
     @staticmethod
     def add_speaker_to_event(request, event_id, user=login.current_user):
@@ -798,9 +818,9 @@ class DataManager(object):
                             user_id=user.id, old=user.email, new=form['email'])
         if user.email != form['email']:
             user.is_verified = False
-            s = Helper.get_serializer()
+            serializer = Helper.get_serializer()
             data = [form['email']]
-            form_hash = s.dumps(data)
+            form_hash = serializer.dumps(data)
             link = url_for('admin.create_account_after_confirmation_view', hash=form_hash, _external=True)
             Helper.send_email_when_changes_email(user.email, form['email'])
             Helper.send_email_confirmation(form, link)
@@ -878,28 +898,6 @@ class DataManager(object):
                                    licence_url=licence_url,
                                    logo=logo)
 
-        # Add Ticket
-        str_empty = lambda val, val2: val2 if val == '' else val
-
-        ticket_price = form.get('ticket_price', 0)
-        # Default values to pass the tests because APIs don't have these fields
-        ticket = Ticket(
-            name=form.get('ticket_name', ''),
-            type=form.get('ticket_type', 'free'),
-            description=form.get('ticket_description', ''),
-            price=ticket_price,
-            sales_start=datetime.strptime(
-                form.get('ticket_sales_start_date', '01/01/2001') + ' ' +
-                form.get('ticket_sales_start_time', '00:00'),
-                '%m/%d/%Y %H:%M'),
-            sales_end=datetime.strptime(
-                form.get('ticket_sales_end_date', '01/01/2001') + ' ' +
-                form.get('ticket_sales_end_time', '00:00'), '%m/%d/%Y %H:%M'),
-            quantity=str_empty(form.get('ticket_quantity'), 100),
-            min_order=str_empty(form.get('ticket_min_order'), 1),
-            max_order=str_empty(form.get('ticket_max_order'), 10)
-        )
-
         event = Event(name=form['name'],
                       start_time=datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M'),
                       end_time=datetime.strptime(form['end_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M'),
@@ -917,8 +915,31 @@ class DataManager(object):
                       copyright=copyright,
                       show_map=1 if form.get('show_map') == "on" else 0,
                       creator=login.current_user)
+        # Add Ticket
+        str_empty = lambda val, val2: val2 if val == '' else val
 
-        event.tickets.append(ticket)
+        module = DataGetter.get_module()
+        if module and module.ticket_include:
+            ticket_price = form.get('ticket_price', 0)
+            # Default values to pass the tests because APIs don't have these fields
+            ticket = Ticket(
+                name=form.get('ticket_name', ''),
+                type=form.get('ticket_type', 'free'),
+                description=form.get('ticket_description', ''),
+                price=ticket_price,
+                sales_start=datetime.strptime(
+                    form.get('ticket_sales_start_date', '01/01/2001') + ' ' +
+                    form.get('ticket_sales_start_time', '00:00'),
+                    '%m/%d/%Y %H:%M'),
+                sales_end=datetime.strptime(
+                    form.get('ticket_sales_end_date', '01/01/2001') + ' ' +
+                    form.get('ticket_sales_end_time', '00:00'), '%m/%d/%Y %H:%M'),
+                quantity=str_empty(form.get('ticket_quantity'), 100),
+                min_order=str_empty(form.get('ticket_min_order'), 1),
+                max_order=str_empty(form.get('ticket_max_order'), 10)
+            )
+
+            event.tickets.append(ticket)
 
         if event.latitude and event.longitude:
             response = requests.get(
@@ -1491,9 +1512,9 @@ class DataManager(object):
         """
         File from request will be removed from database
         """
-        file = File.query.get(file_id)
-        os.remove(os.path.join(os.path.realpath('.') + '/static/', file.name))
-        delete_from_db(file, "File removed")
+        file_obj = File.query.get(file_id)
+        os.remove(os.path.join(os.path.realpath('.') + '/static/', file_obj.name))
+        delete_from_db(file_obj, "File removed")
         flash("File removed")
 
     @staticmethod
@@ -1589,9 +1610,8 @@ def delete_from_db(item, msg):
         logging.info('removed from session')
         db.session.commit()
         return True
-    except Exception, e:
-        print e
-        logging.error('DB Exception! %s' % e)
+    except Exception, error:
+        logging.error('DB Exception! %s' % error)
         db.session.rollback()
         return False
 
@@ -1622,7 +1642,7 @@ def get_instagram_auth(state=None, token=None):
     if state:
         return OAuth2Session(InstagramOAuth.get_client_id(), state=state,
                              redirect_uri=InstagramOAuth.get_redirect_uri())
-    scope = "+".join(InstagramOAuth.SCOPE)
+    # scope = "+".join(InstagramOAuth.SCOPE)
     oauth = OAuth2Session(InstagramOAuth.get_client_id(), redirect_uri=InstagramOAuth.get_redirect_uri())
     return oauth
 
@@ -1684,22 +1704,22 @@ def record_activity(template, login_user=None, **kwargs):
     else:
         actor = 'Anonymous'
     id_str = ' (%d)'
-    s = '"%s"'
+    sequence = '"%s"'
     # add more information for objects
     for k in kwargs:
         v = kwargs[k]
         if k.find('_id') > -1:
             kwargs[k] = str(v)
         elif k.startswith('user'):
-            kwargs[k] = s % v.email + id_str % v.id
+            kwargs[k] = sequence % v.email + id_str % v.id
         elif k.startswith('role'):
-            kwargs[k] = s % v.title_name
+            kwargs[k] = sequence % v.title_name
         elif k.startswith('session'):
-            kwargs[k] = s % v.title + id_str % v.id
+            kwargs[k] = sequence % v.title + id_str % v.id
         elif k.startswith('track'):
-            kwargs[k] = s % v.name + id_str % v.id
+            kwargs[k] = sequence % v.name + id_str % v.id
         elif k.startswith('speaker'):
-            kwargs[k] = s % v.name + id_str % v.id
+            kwargs[k] = sequence % v.name + id_str % v.id
         else:
             kwargs[k] = str(v)
     try:

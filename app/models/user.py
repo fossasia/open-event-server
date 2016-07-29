@@ -1,6 +1,7 @@
 from sqlalchemy import event
 from datetime import datetime
 
+import humanize
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from app.models.session import Session
@@ -167,6 +168,22 @@ class User(db.Model):
     def get_unread_notif_count(self):
         return len(Notification.query.filter_by(user=self,
                                                 has_read=False).all())
+
+    def get_unread_notifs(self, reverse=False):
+        """Get unread notifications with titles and humanized receiving time
+        """
+        notifs = []
+        unread_notifs = Notification.query.filter_by(user=self, has_read=False)
+        for notif in unread_notifs:
+            notifs.append({
+                'title': notif.title,
+                'received_at': humanize.naturaltime(datetime.now() - notif.received_at)
+            })
+
+        if reverse:
+            return list(reversed(notifs))
+        else:
+            return notifs
 
     # update last access time
     def update_lat(self):
