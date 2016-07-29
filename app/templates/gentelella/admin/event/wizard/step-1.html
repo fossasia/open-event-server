@@ -305,7 +305,7 @@
                         {% if event.tickets[0].type == 'free' %}
                             <div class="form-control">Free</div>
                         {% elif event.tickets[0].type == 'paid' %}
-                            <input type='number' class='form-control' placeholder='Set your ticket price' name='ticket_price' value="{{ event.tickets[0].price | default(0, true)}}">
+                            <input type='number' class='form-control' placeholder='Set your ticket price' name='ticket_price' value="{{ event.tickets[0].price | default(0, true)}}" required>
                         {% elif event.tickets[0].type == 'donation' %}
                             <div class="form-control">Donation</div>
                         {% endif %}
@@ -838,7 +838,7 @@
         } else if (type == "donation") {
             ticketTypePrice.html("<div class='form-control'>Donation</div>");
         } else if (type == "paid") {
-            ticketTypePrice.html("<input type='number' class='form-control' placeholder='Set your ticket price' name='ticket_price'>");
+            ticketTypePrice.html("<input type='number' class='form-control' placeholder='Set your ticket price' name='ticket_price' value='0' required>");
         }
     });
 
