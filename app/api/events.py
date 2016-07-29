@@ -12,7 +12,7 @@ from app.models.users_events_roles import UsersEventsRoles
 from app.models.event_copyright import EventCopyright
 from app.models.role import Role
 from app.models.user import ORGANIZER
-from app.helpers.data import save_to_db, update_version, record_activity
+from app.helpers.data import save_to_db, record_activity
 
 from .helpers.helpers import requires_auth, parse_args, \
     can_access, fake_marshal_with, fake_marshal_list_with, erase_from_dict
@@ -37,6 +37,14 @@ EVENT_COPYRIGHT = api.model('EventCopyright', {
     'licence_url': fields.Uri(),
     'year': fields.Integer(),
     'logo': fields.String()
+})
+
+EVENT_CFS = api.model('EventCFS', {
+    'announcement': fields.String(),
+    'start_date': fields.String(),
+    'end_date': fields.String(),
+    'timezone': fields.String(),
+    'privacy': fields.String()
 })
 
 EVENT_VERSION = api.model('EventVersion', {
@@ -86,6 +94,7 @@ EVENT = api.model('Event', {
     'schedule_published_on': fields.DateTime(),
     'code_of_conduct': fields.String(),
     'social_links': fields.List(fields.Nested(SOCIAL_LINK), attribute='social_link', required=False),
+    'call_for_papers': fields.Nested(EVENT_CFS, allow_null=True),
     'version': fields.Nested(EVENT_VERSION)
 })
 
@@ -106,6 +115,7 @@ del EVENT_POST['id']
 del EVENT_POST['creator']
 del EVENT_POST['social_links']
 del EVENT_POST['version']
+del EVENT_POST['call_for_papers']
 
 
 # ###################
