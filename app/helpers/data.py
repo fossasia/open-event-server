@@ -898,29 +898,6 @@ class DataManager(object):
                                    licence_url=licence_url,
                                    logo=logo)
 
-        # Add Ticket
-        str_empty = lambda val, val2: val2 if val == '' else val
-
-
-        ticket_price = form.get('ticket_price', 0)
-        # Default values to pass the tests because APIs don't have these fields
-        ticket = Ticket(
-            name=form.get('ticket_name', ''),
-            type=form.get('ticket_type', 'free'),
-            description=form.get('ticket_description', ''),
-            price=ticket_price,
-            sales_start=datetime.strptime(
-                form.get('ticket_sales_start_date', '01/01/2001') + ' ' +
-                form.get('ticket_sales_start_time', '00:00'),
-                '%m/%d/%Y %H:%M'),
-            sales_end=datetime.strptime(
-                form.get('ticket_sales_end_date', '01/01/2001') + ' ' +
-                form.get('ticket_sales_end_time', '00:00'), '%m/%d/%Y %H:%M'),
-            quantity=str_empty(form.get('ticket_quantity'), 100),
-            min_order=str_empty(form.get('ticket_min_order'), 1),
-            max_order=str_empty(form.get('ticket_max_order'), 10)
-        )
-
         event = Event(name=form['name'],
                       start_time=datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M'),
                       end_time=datetime.strptime(form['end_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M'),
@@ -938,8 +915,31 @@ class DataManager(object):
                       copyright=copyright,
                       show_map=1 if form.get('show_map') == "on" else 0,
                       creator=login.current_user)
+        # Add Ticket
+        str_empty = lambda val, val2: val2 if val == '' else val
 
-        event.tickets.append(ticket)
+        module = DataGetter.get_module()
+        if module and module.ticket_include:
+            ticket_price = form.get('ticket_price', 0)
+            # Default values to pass the tests because APIs don't have these fields
+            ticket = Ticket(
+                name=form.get('ticket_name', ''),
+                type=form.get('ticket_type', 'free'),
+                description=form.get('ticket_description', ''),
+                price=ticket_price,
+                sales_start=datetime.strptime(
+                    form.get('ticket_sales_start_date', '01/01/2001') + ' ' +
+                    form.get('ticket_sales_start_time', '00:00'),
+                    '%m/%d/%Y %H:%M'),
+                sales_end=datetime.strptime(
+                    form.get('ticket_sales_end_date', '01/01/2001') + ' ' +
+                    form.get('ticket_sales_end_time', '00:00'), '%m/%d/%Y %H:%M'),
+                quantity=str_empty(form.get('ticket_quantity'), 100),
+                min_order=str_empty(form.get('ticket_min_order'), 1),
+                max_order=str_empty(form.get('ticket_max_order'), 10)
+            )
+
+            event.tickets.append(ticket)
 
         if event.latitude and event.longitude:
             response = requests.get(
