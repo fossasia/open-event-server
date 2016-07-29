@@ -256,7 +256,7 @@
 
             </div>
         </div>
-        {% if 'ticketing' in included_items %}
+        {% if event.ticket_include or 'ticketing' in included_items %}
          <div class="item form-group">
             <label><span class="ticket-state">Use Ticketing System</span>
             </label>
@@ -283,8 +283,8 @@
                     <label>Type</label>
                     <select name="ticket_type" id="ticket-type" class="form-control">
                         <option value="free" {{ 'selected' if event.tickets[0].type == 'free' else ''}}>Free</option>
-                        <option value="paid" {{ 'selected' if event.tickets[0].type == 'paid' else ''}}>Paid</option>
-                        <option value="donation" {{ 'selected' if event.tickets[0].type == 'donation' else ''}}>Donation</option>
+                        {% if 'payments' in included_items %}<option value="paid" {{ 'selected' if event.tickets[0].type == 'paid' else ''}}>Paid</option>{% endif %}
+                        {% if 'donations' in included_items %}<option value="donation" {{ 'selected' if event.tickets[0].type == 'donation' else ''}}>Donation</option>{% endif %}
                     </select>
                 </div>
             </div>
@@ -897,18 +897,19 @@
 
         var ticket_onOffSwitch = document.getElementById('ticket-switch');
 
-
-        ticket_onOffSwitch.onchange = function () {
-            if (ticket_onOffSwitch.checked) {
-                $ticketsystemHolder.fadeIn();
-                $ticketURLHolder.fadeOut();
-                $ticketState.text("Add Ticket URL");
-            } else {
-                $ticketsystemHolder.fadeOut();
-                $ticketURLHolder.fadeIn();
-                $ticketState.text("Use Ticketing System");
-            }
-        };
+        if(ticket_onOffSwitch != null) {
+            ticket_onOffSwitch.onchange = function () {
+                if (ticket_onOffSwitch.checked) {
+                    $ticketsystemHolder.fadeIn();
+                    $ticketURLHolder.fadeOut();
+                    $ticketState.text("Add Ticket URL");
+                } else {
+                    $ticketsystemHolder.fadeOut();
+                    $ticketURLHolder.fadeIn();
+                    $ticketState.text("Use Ticketing System");
+                }
+            };
+        }
 
 
         /*var $mapHolder = $("#map-holder");

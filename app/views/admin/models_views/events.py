@@ -3,7 +3,7 @@ import datetime
 import os
 import binascii
 
-from flask import flash, url_for
+from flask import flash, url_for, redirect
 from flask.ext.admin import BaseView
 from flask_admin import expose
 
