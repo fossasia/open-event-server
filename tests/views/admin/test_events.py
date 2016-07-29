@@ -30,6 +30,7 @@ class TestEvents(OpenEventViewTestCase):
             url = url_for('events.create_view')
             data = POST_EVENT_DATA.copy()
             del data['copyright']
+            del data['call_for_papers']
             data['sponsors_state'] = 'on'
             data['sponsors[name]'] = ['Sponsor 1', 'Sponsor 2']
             data['sponsors[type]'] = ['Gold', 'Silver']
@@ -57,6 +58,7 @@ class TestEvents(OpenEventViewTestCase):
             url = url_for('events.create_view')
             data = POST_EVENT_DATA.copy()
             del data['copyright']
+            del data['call_for_papers']
             data['start_date'] = '07/04/2016'
             data['start_time'] = '19:00'
             data['end_date'] = '07/04/2016'
@@ -73,6 +75,7 @@ class TestEvents(OpenEventViewTestCase):
             url = url_for('events.create_view')
             data = POST_EVENT_DATA.copy()
             del data['copyright']
+            del data['call_for_papers']
             data['start_date'] = '07/04/2016'
             data['start_time'] = '19:00'
             data['end_date'] = '07/04/2016'
@@ -95,6 +98,7 @@ class TestEvents(OpenEventViewTestCase):
             url = url_for('events.edit_view', event_id=event.id)
             data = POST_EVENT_DATA.copy()
             del data['copyright']
+            del data['call_for_papers']
             data['sponsors_state'] = 'on'
             data['sponsors[name]'] = ['Sponsor 1', 'Sponsor 2']
             data['sponsors[type]'] = ['Gold', 'Silver']
