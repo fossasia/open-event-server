@@ -39,6 +39,10 @@
     </div>
 {% endblock %}
 
+{% block right_addon %}
+    <button type="button" class="btn btn-info hidden-print" onclick="window.print();"><i class="fa fa-print fa-fw"></i> Print Invoice</button>
+{% endblock %}
+
 {% block tail_js %}
     {{ super() }}
     <script type="text/javascript">

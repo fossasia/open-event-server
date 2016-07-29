@@ -72,7 +72,7 @@
                     {% endblock %}
                 </div>
                 <div class="col-md-4">
-                    <div class="hidden-xs hidden-sm" style="height: 103px;">
+                    <div class="hidden-xs hidden-sm hidden-print" style="height: 103px;">
 
                     </div>
                     <div id="when-where-holder">
@@ -89,7 +89,7 @@
                     </div>
                     {% if event.organizer_name %}
                         <div id="when-where-holder">
-                            <div class="panel panel-default">
+                            <div class="panel panel-default hidden-print">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Organizer</h3>
                                 </div>
@@ -104,6 +104,9 @@
                             </div>
                         </div>
                     {% endif %}
+                    {% block right_addon %}
+
+                    {% endblock %}
                 </div>
             </div>
         </div>
