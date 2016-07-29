@@ -75,7 +75,7 @@ class TestPostApi(TestPostApiBase):
     def test_event_api(self):
         self._test_model(
             'event', POST_EVENT_DATA,
-            checks=['test@example.com', 'Test licence', '"event_ver": 0']
+            checks=['test@example.com', 'Test licence', '"event_ver": 0', 'proposal']
         )
 
     def test_track_api(self):

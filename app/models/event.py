@@ -105,7 +105,8 @@ class Event(db.Model):
                  ticket_include=None,
                  trash_date=None,
                  payment_country=None,
-                 payment_currency=None):
+                 payment_currency=None,
+                 call_for_papers=None):
         self.name = name
         self.logo = logo
         self.email = email
@@ -139,6 +140,7 @@ class Event(db.Model):
         self.trash_date = trash_date
         self.payment_country = payment_country
         self.payment_currency = payment_currency
+        self.call_for_papers = call_for_papers
 
     def __repr__(self):
         return '<Event %r>' % self.name

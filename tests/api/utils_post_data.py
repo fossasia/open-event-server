@@ -34,6 +34,13 @@ POST_EVENT_DATA = {
         "licence_url": "http://example.com",
         "year": 2016,
         "logo": ""
+    },
+    "call_for_papers": {
+        "announcement": "<p>Wanna speak at our prestigious event. Send us a proposal</p>",
+        "end_date": "2016-06-29T20:30:00",
+        "privacy": "public",
+        "start_date": "2016-06-29T19:30:00",
+        "timezone": "UTC"
     }
 }
 
