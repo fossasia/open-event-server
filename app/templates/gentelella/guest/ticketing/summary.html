@@ -36,17 +36,18 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-
-                                    {% for ticket in event.tickets %}
+                                    {% set costs = [] %}
+                                    {% for ticket_order in order.tickets %}
                                         <tr>
-                                            <td>{{ ticket.type }}</td>
-                                            <td>${{ '%0.2f'| format(ticket.price|float) }}</td>
+                                            <td>{{ ticket_order.ticket.name }} - {{ ticket_order.ticket.type }}</td>
+                                            <td>${{ '%0.2f'| format(ticket_order.ticket.price|float) }}</td>
                                             <td>$0.00</td>
                                             <td>
-                                                5
+                                                {{ ticket_order.quantity }}
                                             </td>
                                             <td>
-                                                $250.00
+                                                ${{ '%0.2f'| format(ticket_order.ticket.price*ticket_order.quantity|float) }}
+                                                {% if costs.append(ticket_order.ticket.price*ticket_order.quantity) %}{% endif %}
                                             </td>
                                         </tr>
                                     {% else %}
@@ -59,7 +60,7 @@
 
                                     <tr class="total-row">
                                         <td colspan="4" style="text-align: right;"><strong>Order total:</strong></td>
-                                        <td><strong>$250.00</strong></td>
+                                        <td><strong>${{ '%0.2f'| format(order.amount|float) }}</strong></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -75,7 +76,7 @@
                             <div class="panel-body" style="padding-bottom: 10px;">
                                 <div class="alert alert-warning time-left-alert">
                                     <div id="time-left" class="pull-left">
-                                        06:30
+                                        09:59
                                     </div>
                                     <p>
                                         Please complete registration within 10:00 minutes.<br>
@@ -238,6 +239,9 @@
 
 {% block tail_js %}
     {{ super() }}
+    <script type="text/javascript">
+        window.order_created_at = "{{ order.created_at }}"
+    </script>
     <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/bootstrap-validator/dist/validator.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>

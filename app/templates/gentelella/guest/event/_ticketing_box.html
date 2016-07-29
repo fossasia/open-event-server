@@ -1,5 +1,5 @@
 <div id="ticketing-holder" class="col-md-6 col-sm-8 col-xs-12">
-    <form method="POST" action="{{ url_for('ticketing.create_order') }}">
+    <form method="POST" action="{{ url_for('ticketing.create_order') }}" enctype="multipart/form-data">
         <input type="hidden" name="event_id" value="{{ event.id }}">
         <div class="panel panel-default">
             <div class="panel-heading" style="background-color: #ffffff;">
@@ -25,8 +25,8 @@
                             <td>${{ '%0.2f'| format(ticket.price|float) }}</td>
                             <td>$0.00</td>
                             <td align="right">
-                                <input type="hidden" name="tickets[id]" value="{{ ticket.id }}">
-                                <select name="tickets[quantity]">
+                                <input type="hidden" name="ticket_ids[]" value="{{ ticket.id }}">
+                                <select name="ticket_quantities[]">
                                     {% if ticket.min_order > 1 %}
                                         <option value="0" selected>0</option>
                                     {% endif %}

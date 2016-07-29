@@ -41,15 +41,18 @@ class TicketingManager(object):
         order = Order()
         order.identifier = TicketingManager.get_new_order_identifier()
         order.event_id = form.get('event_id')
-        ticket_ids = form.getlist('rooms[name]')
-        ticket_quantity = form.getlist('rooms[floor]')
-
+        ticket_ids = form.getlist('ticket_ids[]')
+        ticket_quantity = form.getlist('ticket_quantities[]')
+        amount = 0
         for index, id in enumerate(ticket_ids):
             if not string_empty(id) and int(ticket_quantity[index]) > 0:
                 order_ticket = OrderTicket()
                 order_ticket.ticket = TicketingManager.get_ticket(id)
                 order_ticket.quantity = int(ticket_quantity[index])
                 order.tickets.append(order_ticket)
+                amount = amount + (order_ticket.ticket.price * order_ticket.quantity)
+
+        order.amount = amount
 
         save_to_db(order)
         return order
