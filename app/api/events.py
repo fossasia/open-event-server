@@ -152,7 +152,7 @@ class EventDAO(BaseDAO):
         if 'call_for_papers' in data:
             for _ in ['start_date', 'end_date']:
                 if _ in data['call_for_papers']:
-                    data['call_for_papers'][_] = EVENT_POST['call_for_papers'][_].from_str(
+                    data['call_for_papers'][_] = EVENT_CFS[_].from_str(
                         data['call_for_papers'].get(_))
         return data
 
@@ -160,13 +160,10 @@ class EventDAO(BaseDAO):
         data = self.validate(data)
         payload = self.fix_payload(data)
         # save copyright info
-        payload['copyright'] = CopyrightDAO.create(
-            payload['copyright'] if payload.get('copyright') else {},
-            validate=False)
+        payload['copyright'] = CopyrightDAO.create(payload.get('copyright', {}), validate=False)
         # save cfs info
-        payload['call_for_papers'] = CFSDAO.create(
-            payload['call_for_papers'] if payload.get('call_for_papers') else {},
-            validate=False)
+        if 'call_for_papers' in payload:
+            payload['call_for_papers'] = CFSDAO.create(payload['call_for_papers'], validate=False)
         # save event
         new_event = self.model(**payload)
         new_event.creator = g.user

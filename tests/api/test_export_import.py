@@ -161,12 +161,16 @@ class TestEventImport(ImportExportBase):
         self.assertEqual(resp.status_code, 200)
         self.assertIn('task_url', resp.data)
         task_url = json.loads(resp.data)['task_url']
+        ct = 0
         # wait for done
         while True:
             resp = self.app.get(task_url)
+            ct += 1
             if 'SUCCESS' in resp.data:
                 self.assertIn('result', resp.data)
                 dic = json.loads(resp.data)['result']
+                break
+            if ct > 3:
                 break
             logging.info(resp.data)
             time.sleep(2)
