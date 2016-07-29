@@ -1,0 +1,116 @@
+{% extends 'gentelella/admin/base.html' %}
+
+{% block title %}Your Order{% endblock %}
+
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/ticketing.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-10 col-lg-8 col-md-push-1 col-lg-push-2" style="min-height: 600px;">
+            <div class="row">
+                <div class="col-md-8">
+                    <h3>{{ event.name }}</h3>
+                    {{ event.start_time.strftime('%A, %B %d, %Y at %I:%M %p') }}
+                    - {{ event.end_time.strftime('%A, %B %d, %Y at %I:%M %p') }} ({{ event.timezone }})<br>
+                    {{ event.location_name }}
+                    <br>
+                    <br>
+                    <div id="order-summary-holder">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Order Summary</h3>
+                            </div>
+                            <div class="panel-body" style="padding-bottom: 10px;">
+                                <table class="table" style="margin-bottom: 0;">
+                                    <thead>
+                                    <tr>
+                                        <th>Ticket type</th>
+                                        <th>Price</th>
+                                        <th>Fee</th>
+                                        <th>Quantity</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% set costs = [] %}
+                                    {% for ticket_order in order.tickets %}
+                                        <tr>
+                                            <td>{{ ticket_order.ticket.name }} - {{ ticket_order.ticket.type }}</td>
+                                            <td>${{ '%0.2f'| format(ticket_order.ticket.price|float) }}</td>
+                                            <td>$0.00</td>
+                                            <td>
+                                                {{ ticket_order.quantity }}
+                                            </td>
+                                            <td>
+                                                ${{ '%0.2f'| format(ticket_order.ticket.price*ticket_order.quantity|float) }}
+                                                {% if costs.append(ticket_order.ticket.price*ticket_order.quantity) %}{% endif %}
+                                            </td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="5" style="text-align: center">
+                                                No tickets selected.
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+
+                                    <tr class="total-row">
+                                        <td colspan="4" style="text-align: right;"><strong>Order total:</strong></td>
+                                        <td><strong>${{ '%0.2f'| format(order.amount|float) }}</strong></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                    {% block inner_panel %}
+
+                    {% endblock %}
+                </div>
+                <div class="col-md-4">
+                    <div class="hidden-xs hidden-sm" style="height: 103px;">
+
+                    </div>
+                    <div id="when-where-holder">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">When & Where</h3>
+                            </div>
+                            <div class="panel-body" style="padding-bottom: 10px;">
+                                <strong>{{ event.location_name }}</strong><br>
+                                {{ event.start_time.strftime('%A, %B %d, %Y at %I:%M %p') }}
+                                - {{ event.end_time.strftime('%A, %B %d, %Y at %I:%M %p') }} ({{ event.timezone }})<br>
+                            </div>
+                        </div>
+                    </div>
+                    {% if event.organizer_name %}
+                        <div id="when-where-holder">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Organizer</h3>
+                                </div>
+                                <div class="panel-body" style="padding-bottom: 10px;">
+                                    <h4>{{ event.organizer_name }}</h4>
+                                    {% if event.email %}
+                                        <hr>
+                                        <a class="btn btn-default" href="mailto:{{ event.email }}" target="_blank">Contact
+                                            the organizer</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <button id="pay-via-stripe" type="button" style="display:none;">Pay Via Stripe</button>
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+{% endblock %}
