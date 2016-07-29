@@ -17,26 +17,32 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        {% for ticket in tickets %}
-                            <td>{{ ticket.type }}</td>
+                    {% for ticket in tickets %}
+                        <tr>
+
+                            <td>{{ ticket.name }} - {{ ticket.type }}</td>
                             <td>{{ ticket.sales_end.strftime('%a, %B %d') }}</td>
-                            <td>${{'%0.2f'| format(ticket.price|float)}}</td>
+                            <td>${{ '%0.2f'| format(ticket.price|float) }}</td>
                             <td>$0.00</td>
                             <td align="right">
                                 <input type="hidden" name="tickets[id]" value="{{ ticket.id }}">
                                 <select name="tickets[quantity]">
-                                    <option value="0" selected>0</option>
+                                    {% if ticket.min_order > 1 %}
+                                        <option value="0" selected>0</option>
+                                    {% endif %}
                                     {% for quantity in range(ticket.min_order - 1, ticket.max_order + 1) %}
                                         <option value="{{ quantity }}">{{ quantity }}</option>
                                     {% endfor %}
                                 </select>
                             </td>
-                        {% else %}
+                        </tr>
+                    {% else %}
+                        <tr>
                             <td colspan="5" style="text-align: center">
                                 No tickets available right now.
                             </td>
-                        {% endfor %}
+                        </tr>
+                    {% endfor %}
                     </tr>
                     </tbody>
                 </table>
@@ -58,7 +64,9 @@
             <div class="panel-footer" style="background-color: #ffffff;">
                 <div class="pull-right">
                     <img src="{{ url_for('static', filename='img/paymentlogoshorizontal.png') }}">
-                    <button class="btn btn-success" {% if tickets %}type="submit"{% else %} type="button" disabled{% endif %}>Order Now</button>
+                    <button class="btn btn-success" {% if tickets %}type="submit"{% else %} type="button"
+                            disabled{% endif %}>Order Now
+                    </button>
                 </div>
                 <div class="clearfix"></div>
             </div>

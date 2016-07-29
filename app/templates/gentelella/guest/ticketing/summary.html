@@ -36,8 +36,9 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        {% for ticket in event.tickets %}
+
+                                    {% for ticket in event.tickets %}
+                                        <tr>
                                             <td>{{ ticket.type }}</td>
                                             <td>${{ '%0.2f'| format(ticket.price|float) }}</td>
                                             <td>$0.00</td>
@@ -47,12 +48,15 @@
                                             <td>
                                                 $250.00
                                             </td>
-                                        {% else %}
+                                        </tr>
+                                    {% else %}
+                                        <tr>
                                             <td colspan="5" style="text-align: center">
-                                                No tickets available right now.
+                                                No tickets selected.
                                             </td>
-                                        {% endfor %}
-                                    </tr>
+                                        </tr>
+                                    {% endfor %}
+
                                     <tr class="total-row">
                                         <td colspan="4" style="text-align: right;"><strong>Order total:</strong></td>
                                         <td><strong>$250.00</strong></td>
@@ -78,7 +82,7 @@
                                         After 10:00 minutes, the reservation we're holding will be released to others.
                                     </p>
                                 </div>
-                                <form class="form-horizontal" data-toggle="validator" >
+                                <form class="form-horizontal" data-toggle="validator">
                                     <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
                                         <i class="fa fa-ticket"></i>
                                         Ticket Buyer
@@ -86,35 +90,43 @@
                                     </h2>
                                     <br>
                                     <div style="width: 100%; text-align: center">
-                                        Have you used Open Event before? <a href="">Sign In</a> To Your Account to continue.
+                                        Have you used Open Event before? <a href="">Sign In</a> To Your Account to
+                                        continue.
                                     </div>
                                     <br>
                                     <div class="form-group">
-                                        <label for="firstname" class="col-sm-4 control-label">First name <span class="required">*</span></label>
+                                        <label for="firstname" class="col-sm-4 control-label">First name <span
+                                                class="required">*</span></label>
                                         <div class="col-sm-6">
-                                            <input type="text" class="form-control" id="firstname" name="firstname" required>
+                                            <input type="text" class="form-control" id="firstname" name="firstname"
+                                                   required>
                                             <div class="help-block with-errors"></div>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="lastname" class="col-sm-4 control-label">Last name <span class="required">*</span></label>
+                                        <label for="lastname" class="col-sm-4 control-label">Last name <span
+                                                class="required">*</span></label>
                                         <div class="col-sm-6">
-                                            <input type="text" class="form-control" id="lastname" name="lastname" required>
+                                            <input type="text" class="form-control" id="lastname" name="lastname"
+                                                   required>
                                             <div class="help-block with-errors"></div>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="email" class="col-sm-4 control-label">Email <span class="required">*</span></label>
+                                        <label for="email" class="col-sm-4 control-label">Email <span
+                                                class="required">*</span></label>
                                         <div class="col-sm-6">
                                             <input type="email" class="form-control" id="email" name="email" required>
                                             <div class="help-block with-errors"></div>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="email_confirm" class="col-sm-4 control-label">Confirm Email <span class="required">*</span></label>
+                                        <label for="email_confirm" class="col-sm-4 control-label">Confirm Email <span
+                                                class="required">*</span></label>
                                         <div class="col-sm-6">
-                                            <input type="email" class="form-control" id="email_confirm" data-match="#email" name="email_confirm" required>
+                                            <input type="email" class="form-control" id="email_confirm"
+                                                   data-match="#email" name="email_confirm" required>
                                             <div class="help-block with-errors"></div>
                                         </div>
                                     </div>
@@ -125,7 +137,8 @@
                                     </h2>
                                     <br>
                                     <div class="form-group">
-                                        <label for="country" class="col-sm-4 control-label">Country <span class="required">*</span></label>
+                                        <label for="country" class="col-sm-4 control-label">Country <span
+                                                class="required">*</span></label>
                                         <div class="col-sm-6">
                                             <select class="form-control" name="country" id="country" required>
                                                 <option value="">Select country</option>
@@ -134,30 +147,36 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="address" class="col-sm-4 control-label">Address <span class="required">*</span></label>
+                                        <label for="address" class="col-sm-4 control-label">Address <span
+                                                class="required">*</span></label>
                                         <div class="col-sm-6">
-                                            <textarea class="form-control" id="address" name="address" required></textarea>
+                                            <textarea class="form-control" id="address" name="address"
+                                                      required></textarea>
                                             <div class="help-block with-errors"></div>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="city" class="col-sm-4 control-label">City <span class="required">*</span></label>
+                                        <label for="city" class="col-sm-4 control-label">City <span
+                                                class="required">*</span></label>
                                         <div class="col-sm-6">
                                             <input type="text" class="form-control" id="city" name="city" required>
                                             <div class="help-block with-errors"></div>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="state" class="col-sm-4 control-label">State/Province <span class="required">*</span></label>
+                                        <label for="state" class="col-sm-4 control-label">State/Province <span
+                                                class="required">*</span></label>
                                         <div class="col-sm-6">
                                             <input type="text" class="form-control" id="state" name="state" required>
                                             <div class="help-block with-errors"></div>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="zipcode" class="col-sm-4 control-label">Zip Code <span class="required">*</span></label>
+                                        <label for="zipcode" class="col-sm-4 control-label">Zip Code <span
+                                                class="required">*</span></label>
                                         <div class="col-sm-6">
-                                            <input type="text" class="form-control" id="zipcode" name="zipcode" required>
+                                            <input type="text" class="form-control" id="zipcode" name="zipcode"
+                                                   required>
                                             <div class="help-block with-errors"></div>
                                         </div>
                                     </div>
@@ -165,8 +184,10 @@
                                     <div class="form-group">
                                         <label for="inputEmail3" class="col-sm-4 control-label"></label>
                                         <div class="col-sm-6">
-                                            By clicking "Pay Now", I acknowledge that I have read and agree with the Open Event terms of service, and privacy policy.<br><br>
-                                            <button type="submit" class="btn btn-success btn-lg">Pay now</button><br>
+                                            By clicking "Pay Now", I acknowledge that I have read and agree with the
+                                            Open Event terms of service, and privacy policy.<br><br>
+                                            <button type="submit" class="btn btn-success btn-lg">Pay now</button>
+                                            <br>
                                             <img src="{{ url_for('static', filename='img/paymentlogoshorizontal.png') }}">
                                         </div>
                                     </div>
