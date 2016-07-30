@@ -1,11 +1,20 @@
+import os
+
 from flask.ext.restplus import abort
 from flask_admin import BaseView, expose
-from flask import redirect, url_for, request, jsonify
+from flask import redirect, url_for, request, jsonify, make_response, current_app
+from xhtml2pdf import pisa
+from cStringIO import StringIO
 
 import pycountry
 
 from app import get_settings
 from app.helpers.ticketing import TicketingManager
+
+def create_pdf(pdf_data):
+    pdf = StringIO()
+    pisa.CreatePDF(StringIO(pdf_data.encode('utf-8')), pdf)
+    return pdf
 
 class TicketingView(BaseView):
     @expose('/', methods=('GET',))
@@ -34,6 +43,19 @@ class TicketingView(BaseView):
         if not order or order.status != 'completed':
             abort(404)
         return self.render('/gentelella/guest/ticketing/order_post_payment.html', order=order, event=order.event)
+
+    @expose('/<order_identifier>/view/pdf/', methods=('GET',))
+    def view_order_after_payment_pdf(self, order_identifier):
+        order = TicketingManager.get_and_set_expiry(order_identifier)
+        if not order or order.status != 'completed':
+            abort(404)
+        pdf = create_pdf(self.render('/gentelella/guest/ticketing/invoice_pdf.html',
+                                     order=order, event=order.event))
+        response = make_response(pdf.getvalue())
+        response.headers['Content-Type'] = 'application/pdf'
+        response.headers['Content-Disposition'] = \
+            'inline; filename=%s.pdf' % order.get_invoice_number()
+        return response
 
     @expose('/initiate/payment/', methods=('POST',))
     def initiate_order_payment(self):

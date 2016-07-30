@@ -40,3 +40,4 @@ redis==2.10.3
 apscheduler==3.0.1
 pycountry
 stripe
+xhtml2pdf

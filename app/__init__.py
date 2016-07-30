@@ -138,7 +138,9 @@ def request_wants_json():
 
 @app.context_processor
 def locations():
-    return dict(locations=DataGetter.get_locations_of_events())
+    def get_locations_of_events():
+        return DataGetter.get_locations_of_events()
+    return dict(locations=get_locations_of_events)
 
 
 @app.context_processor

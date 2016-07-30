@@ -4,60 +4,18 @@
 
 {% block head_css %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
 {% endblock %}
 
 {% block inner_panel %}
-    <div id="invoice-holder">
-        <div class="row">
-            <div class="col-xs-12 col-md-6 col-lg-6 pull-left">
-                <div class="panel panel-default height">
-                    <div class="panel-heading"><h3 class="panel-title">Billing Details</h3></div>
-                    <div class="panel-body">
-                        <strong>{{ order.user.user_detail.fullname }}:</strong><br>
-                        {{ order.address }}<br>
-                        {{ order.city }}<br>
-                        {{ order.state }}<br>
-                        {{ order.country }}<br>
-                        <strong>{{ order.zipcode }}</strong><br>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-6 col-lg-6">
-                <div class="panel panel-default height">
-                    <div class="panel-heading"><h3 class="panel-title">Payment Information</h3></div>
-                    <div class="panel-body">
-                        <strong>Card Name:</strong> {{ order.brand }}<br>
-                        <strong>Card Number:</strong> ***** {{ order.last4 }}<br>
-                        <strong>Exp Date:</strong> {{ order.exp_month }}/{{ order.exp_year }}<br><br>
-                        <strong>Payment Date:</strong> {{ order.completed_at }}<br>
-                        <strong>Invoice number:</strong> {{ order.get_invoice_number() }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% include 'gentelella/guest/ticketing/components/_invoice.html' %}
+    {% include 'gentelella/guest/ticketing/components/_order_summary.html' %}
 {% endblock %}
 
 {% block right_addon %}
     <button type="button" class="btn btn-info hidden-print" onclick="window.print();"><i class="fa fa-print fa-fw"></i> Print Invoice</button>
+    <a href="{{ url_for('ticketing.view_order_after_payment_pdf', order_identifier=order.identifier) }}" class="btn btn-default hidden-print" target="_blank"><i class="fa fa-file-pdf-o fa-fw"></i> Download Invoice</a>
 {% endblock %}
 
 {% block tail_js %}
     {{ super() }}
-    <script type="text/javascript">
-        window.order_created_at = "{{ order.created_at }}";
-        window.order_identifier = "{{ order.identifier }}";
-        window.expire_url = "{{ url_for('ticketing.expire_order', order_identifier=order.identifier) }}";
-        window.expired_redirect = "{{ url_for('event_detail.display_event_detail_home', event_id=order.event_id, expired='yes') }}";
-        window.stripe_charge_at = "{{ url_for('ticketing.charge_order_payment') }}";
-        window.stripe_publishable_key = "{{ stripe_publishable_key }}";
-        window.event_name = "{{ order.event.name }}";
-        window.order_amount = {{ order.amount }};
-    </script>
-    <script src="https://checkout.stripe.com/checkout.js"></script>
-    <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='admin/lib/bootstrap-validator/dist/validator.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/admin/guest/ticketing.js') }}"></script>
 {% endblock %}

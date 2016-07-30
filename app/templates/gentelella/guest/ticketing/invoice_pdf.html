@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ order.get_invoice_number() }} - Order Invoice</title>
+    <style type="text/css">
+        {% include 'gentelella/guest/ticketing/components/bootstrap_pdf.css' %}
+        table th {
+            text-align: left;
+        }
+        table td {
+            text-align: left;
+        }
+        table {
+            margin-top: 20px;
+        }
+        .total-row {
+            margin-top: 25px;
+        }
+        .order-total {
+            margin-right: 50px;
+        }
+        h3 {
+            margin-left:0;
+        }
+    </style>
+</head>
+<body id="body">
+    <div class="container">
+        <div class="row">
+            <center><h3>Invoice # {{ order.get_invoice_number() }}</h3></center>
+            {% include 'gentelella/guest/ticketing/components/_invoice.html' %}
+            {% include 'gentelella/guest/ticketing/components/_order_summary.html' %}
+        </div>
+    </div>
+</body>
+</html>
