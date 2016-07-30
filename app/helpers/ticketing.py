@@ -67,9 +67,7 @@ class TicketingManager(object):
         user = DataGetter.get_user_by_email(email, False)
         if not user:
             password = binascii.b2a_hex(os.urandom(4))
-            user_data = []
-            user_data[0] = email
-            user_data[1] = password
+            user_data = [email, password]
             user = DataManager.create_user(user_data)
             send_email_after_account_create_with_password({
                 'email': email,
