@@ -2,7 +2,6 @@ from datetime import datetime
 
 from . import db
 
-
 USER_REGISTER = 'User Registration'
 USER_CONFIRM = 'User Confirmation'
 USER_CHANGE_EMAIL = "User email"
@@ -15,6 +14,8 @@ SESSION_ACCEPT_REJECT = 'Session Accept or Reject'
 SESSION_SCHEDULE = 'Session Schedule Change'
 EVENT_PUBLISH = 'Event Published'
 AFTER_EVENT = 'After Event'
+USER_REGISTER_WITH_PASSWORD = 'User Registration during Payment'
+TICKET_PURCHASED = 'Ticket(s) Purchased'
 
 class Mail(db.Model):
     __tablename__ = 'mails'

@@ -1,0 +1,49 @@
+<div id="order-summary-holder">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Order Summary</h3>
+        </div>
+        <div class="panel-body" style="padding-bottom: 10px;">
+            <table class="table" style="margin-bottom: 0;">
+                <thead>
+                <tr>
+                    <th align="left">Ticket type</th>
+                    <th align="left">Price</th>
+                    <th align="left">Fee</th>
+                    <th align="left">Quantity</th>
+                    <th align="left">Subtotal</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% set costs = [] %}
+                {% for ticket_order in order.tickets %}
+                    <tr>
+                        <td>{{ ticket_order.ticket.name }} - {{ ticket_order.ticket.type }}</td>
+                        <td>${{ '%0.2f'| format(ticket_order.ticket.price|float) }}</td>
+                        <td>$0.00</td>
+                        <td>
+                            {{ ticket_order.quantity }}
+                        </td>
+                        <td>
+                            ${{ '%0.2f'| format(ticket_order.ticket.price*ticket_order.quantity|float) }}
+                            {% if costs.append(ticket_order.ticket.price*ticket_order.quantity) %}{% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" style="text-align: center">
+                            No tickets selected.
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                <tr class="total-row">
+                    <td colspan="4" align="right" class="order-total"><strong>Order total:</strong></td>
+                    <td><strong>${{ '%0.2f'| format(order.amount|float) }}</strong></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>

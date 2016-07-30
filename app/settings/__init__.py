@@ -1,3 +1,4 @@
+import stripe
 from flask import current_app
 from sqlalchemy import desc
 from app.models.setting import Setting
@@ -25,6 +26,7 @@ def set_settings(**kwargs):
     from app.helpers.data import save_to_db
     save_to_db(setting, 'Setting saved')
     current_app.secret_key = setting.secret
+    stripe.api_key = setting.stripe_secret_key
     current_app.config['custom_settings'] = make_dict(setting)
 
 
