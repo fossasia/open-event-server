@@ -32,18 +32,20 @@
                         <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
                     </h2>
                     <br>
-                    <div style="width: 100%; text-align: center">
-                        Have you used Open Event before? <a href="">Sign In</a> To Your Account to
-                        continue.
-                    </div>
-                    <br>
+                    {% if not current_user.is_authenticated %}
+                        <div style="width: 100%; text-align: center">
+                            Have you used Open Event before? <a href="{{ url_for('admin.login_view', next=url_for('ticketing.view_order', order_identifier=order.identifier, _external=True)) }}">Sign In</a> To Your Account to
+                            continue.
+                        </div>
+                        <br>
+                    {% endif %}
                     <input type="hidden" name="identifier" value="{{ order.identifier }}">
                     <div class="form-group">
                         <label for="firstname" class="col-sm-4 control-label">First name <span
                                 class="required">*</span></label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="firstname" name="firstname"
-                                   required>
+                                   required value="{{ current_user.user_detail.fullname | default('', true) | firstname }}">
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -52,7 +54,7 @@
                                 class="required">*</span></label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="lastname" name="lastname"
-                                   required>
+                                   required value="{{ current_user.user_detail.fullname | default('', true) | lastname }}">
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -61,19 +63,24 @@
                         <label for="email" class="col-sm-4 control-label">Email <span
                                 class="required">*</span></label>
                         <div class="col-sm-6">
-                            <input type="email" class="form-control" id="email" name="email" required>
+                            <input type="email" class="form-control" {% if current_user.is_authenticated %} readonly {% else %} name="email" {% endif %}
+                                   id="email" required value="{{ current_user.email | default('', true) }}">
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="email_confirm" class="col-sm-4 control-label">Confirm Email <span
-                                class="required">*</span></label>
-                        <div class="col-sm-6">
-                            <input type="email" class="form-control" id="email_confirm"
-                                   data-match="#email" name="email_confirm" required>
-                            <div class="help-block with-errors"></div>
+                    {% if not current_user.is_authenticated %}
+                        <div class="form-group">
+                            <label for="email_confirm" class="col-sm-4 control-label">Confirm Email <span
+                                    class="required">*</span></label>
+                            <div class="col-sm-6">
+                                <input type="email" class="form-control" id="email_confirm"
+                                       data-match="#email" name="email_confirm" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
                         </div>
-                    </div>
+                    {% else %}
+                        <input type="hidden" name="email" value="{{ current_user.email | default('', true) }}">
+                    {% endif %}
                     <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
                         <i class="fa fa-ticket"></i>
                         Billing Information
