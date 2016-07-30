@@ -51,7 +51,9 @@
                     </div>
 
                 </div>
-                <h3>{{profile.user_detail.fullname}}</h3>
+                {% if profile.user_detail.fullname %}
+                  <h3>{{profile.user_detail.fullname}}</h3>
+                {% endif %}
 
                 <ul class="list-unstyled user_data">
                     {% if profile.email %}
