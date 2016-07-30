@@ -9,7 +9,6 @@ var handler = StripeCheckout.configure({
     amount: window.order_amount,
     description: window.event_name + ' tickets',
     token: function (token) {
-        console.log(token);
         chargeOrderPayment(token.id);
     }
 });
@@ -65,7 +64,7 @@ $orderPaymentForm.submit(function (e) {
         dataType: 'json',
         data: data,
         success: function (json) {
-            if (json.status == "ok") {
+            if (json.status === "ok") {
                 userEmail = json.email;
                 $payViaStripe.click();
             } else {
@@ -90,7 +89,7 @@ function chargeOrderPayment(tokenId) {
         dataType: 'json',
         data: data,
         success: function (json) {
-            if (json.status == "ok") {
+            if (json.status === "ok") {
                 userEmail = json.email;
                 createSnackbar("Your payment was a success. Redirecting ...");
                 setTimeout(function() {

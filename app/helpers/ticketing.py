@@ -144,6 +144,10 @@ class TicketingManager(object):
             order.zipcode = zipcode
             order.status = 'initialized'
             save_to_db(order)
+            ticket_holder = TicketHolder(name=user.user_detail.fullname,
+                                         email=email, address=address,
+                                         city=city, state=state, country=country, order_id=order.id)
+            save_to_db(ticket_holder)
             return order
         else:
             return False

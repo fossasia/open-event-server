@@ -2,7 +2,6 @@ from datetime import datetime
 
 from . import db
 
-
 USER_REGISTER = 'User Registration'
 USER_CONFIRM = 'User Confirmation'
 USER_CHANGE_EMAIL = "User email"

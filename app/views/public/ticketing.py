@@ -1,8 +1,6 @@
-import os
-
 from flask.ext.restplus import abort
 from flask_admin import BaseView, expose
-from flask import redirect, url_for, request, jsonify, make_response, current_app
+from flask import redirect, url_for, request, jsonify, make_response
 from xhtml2pdf import pisa
 from cStringIO import StringIO
 
