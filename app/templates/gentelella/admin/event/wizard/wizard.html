@@ -93,30 +93,36 @@
                     </div>
 
                     <!-- TicketTemplate -->
-                    {% macro ticket_template(name='', description='', sales_start='01/01/2001 00:00', sales_end='01/01/2001 23:00', price=0, type=None, quantity=100, min_order=1, max_order=10) %}
+                    {% macro ticket_template(sales_start=None, sales_end=None, name='', description='', price=0, type=None, quantity=100, min_order=1, max_order=10) %}
                     <tr>
                         <td>
                             <input type="hidden" name="tickets[type]" value="{{ type | default('', true) }}">
                             <input type="text" name="tickets[name]" class="form-control" placeholder="Ticket Name" value="{{ name }}">
                         </td>
                         <td>
-                            <input type="text" name="tickets[price]" class="form-control" placeholder="Price" value="{{ price }}">
+                        {% if type == "free" %}
+                            <input type="text" name="tickets[price]" class="form-control" value="Free" readonly>
+                        {% elif type == "paid" %}
+                            <input type="number" name="tickets[price]" class="form-control" placeholder="$" value="{{ price | default('', None) }}">
+                        {% elif type == "donation" %}
+                            <input type="text" name="tickets[price]" class="form-control" value="Donation" readonly>
+                        {% endif %}
                         </td>
                         <td>
                             <input type="text" name="tickets[quantity]" class="form-control" placeholder="Quantity" value="{{ quantity }}">
                         </td>
                         <td>
                             <div class="btn-group btn-group-sm">
-                                <a class="btn btn-default">
+                                <a class="btn btn-default edit-ticket-button">
                                     <i class="glyphicon glyphicon-pencil"></i>
                                 </a>
-                                <a class="btn btn-default">
+                                <a class="btn btn-default remove-ticket-button">
                                     <i class="glyphicon glyphicon-trash"></i>
                                 </a>
                             </div>
                         </td>
                     </tr>
-                    <tr>
+                    <tr style="display: none;">
                         <td colspan="4">
                             <div class="row">
                                 <div class="col-xs-6">
@@ -131,10 +137,10 @@
                                             <div class="item form-group">
                                                 <label>Sales Start</label><br>
                                                 <div class="col-xs-7" style="padding: 0;">
-                                                    <input value="{{ sales_start.split()[0] }}" class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY" name="tickets[sales_start_date]">
+                                                    <input value="{{ sales_start.strftime('%m/%d/%Y') if sales_start else '07/31/2016' }}" class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY" name="tickets[sales_start_date]">
                                                 </div>
                                                 <div class="col-xs-5" style="padding: 0;">
-                                                    <input value="{{ sales_start.split()[1] }}" class="form-control col-xs-6 time start ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="tickets[sales_start_time]">
+                                                    <input value="{{ sales_start.strftime('%H:%M') if sales_start else '19:00' }}" class="form-control col-xs-6 time start ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="tickets[sales_start_time]">
                                                 </div>
                                             </div>
                                         </div>
@@ -142,10 +148,10 @@
                                             <div class="item form-group">
                                                 <label>Sales End</label><br>
                                                 <div class="col-xs-7" style="padding: 0;">
-                                                    <input value="{{ sales_end.split()[0] }}" class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY" name="tickets[sales_end_date]">
+                                                    <input value="{{ sales_end.strftime('%m/%d/%Y') if sales_end else '07/31/2016' }}" class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY" name="tickets[sales_end_date]">
                                                 </div>
                                                 <div class="col-xs-5" style="padding: 0;">
-                                                    <input value="{{ sales_end.split()[1] }}" class="form-control col-xs-6 time end ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="tickets[sales_end_time]">
+                                                    <input value="{{ sales_end.strftime('%H:%M') if sales_end else '22:00' }}" class="form-control col-xs-6 time end ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="tickets[sales_end_time]">
                                                 </div>
                                             </div>
                                         </div>

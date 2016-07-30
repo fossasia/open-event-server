@@ -820,7 +820,7 @@
         if (type === "free") {
             html = '<input type="text" name="tickets[price]" class="form-control" value="Free" readonly>';
         } else if (type === "paid") {
-            html = '<input type="text" name="tickets[price]" class="form-control" value="0">';
+            html = '<input type="text" name="tickets[price]" class="form-control"  placeholder="$" value="">';
         } else if (type === "donation") {
             html = '<input type="text" name="tickets[price]" class="form-control" value="Donation" readonly>';
         }
@@ -833,6 +833,19 @@
         $ticket.show("slow");
         ticketsCount += 1;
     }
+
+    $(".edit-ticket-button").click(function() {
+        var $ticket = $(this).parent().parent().parent();
+        var $ticketMore = $ticket.next();
+        $ticketMore.fadeToggle("slow");
+    });
+
+    $(".remove-ticket-button").click(function() {
+        var $ticket = $(this).parent().parent().parent();
+        var $ticketMore = $ticket.next();
+        $ticket.remove();
+        $ticketMore.remove();
+    });
 
     $(".add-free-ticket").click(function () {
         addTicket("free");

@@ -992,7 +992,7 @@ class DataManager(object):
                                 ticket_sales_end_times[i]),
                             description=ticket_descriptions[i],
                             quantity=ticket_quantities[i],
-                            price=ticket_prices[i] if type(ticket_prices[i]) == int else 0,
+                            price=int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0,
                             min_order=ticket_min_orders[i],
                             max_order=ticket_max_orders[i],
                             event=event
@@ -1218,24 +1218,24 @@ class DataManager(object):
                             ticket_sales_end_times[i]),
                         description=ticket_descriptions[i],
                         quantity=ticket_quantities[i],
-                        price=ticket_prices[i] if type(ticket_prices[i]) == int else 0,
+                        price=int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0,
                         min_order=ticket_min_orders[i],
                         max_order=ticket_max_orders[i],
                         event=event
                     )
                 else:
                     # update
-                    ticket.name=name
-                    ticket.type=ticket_types[i]
-                    ticket.sales_start='{} {}'.format(ticket_sales_start_dates[i],
+                    ticket.name = name
+                    ticket.type = ticket_types[i]
+                    ticket.sales_start = '{} {}'.format(ticket_sales_start_dates[i],
                         ticket_sales_start_times[i])
-                    ticket.sales_end='{} {}'.format(ticket_sales_end_dates[i],
+                    ticket.sales_end = '{} {}'.format(ticket_sales_end_dates[i],
                         ticket_sales_end_times[i])
-                    ticket.description=ticket_descriptions[i]
-                    ticket.quantity=ticket_quantities[i]
-                    ticket.price=ticket_prices[i] if type(ticket_prices[i]) == int else 0
-                    ticket.min_order=ticket_min_orders[i]
-                    ticket.max_order=ticket_max_orders[i]
+                    ticket.description = ticket_descriptions[i]
+                    ticket.quantity = ticket_quantities[i]
+                    ticket.price = int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0
+                    ticket.min_order = ticket_min_orders[i]
+                    ticket.max_order = ticket_max_orders[i]
 
                 db.session.add(ticket)
 
