@@ -26,7 +26,7 @@
                             <td>$0.00</td>
                             <td align="right">
                                 <input type="hidden" name="ticket_ids[]" value="{{ ticket.id }}">
-                                <select name="ticket_quantities[]">
+                                <select name="ticket_quantities[]" class="quantity-select" data-rate="{{ ticket.price }}">
                                     {% if ticket.min_order > 1 %}
                                         <option value="0" selected>0</option>
                                     {% endif %}
@@ -51,7 +51,7 @@
                     <a href="#" class="promo-code-open" style="color: #2aa9dd;">Enter promotional code</a>
                     <div class="col-md-5 pull-right promo-code-box" style="padding-right:0;display:none;">
                         <div class="input-group" style="margin-bottom: 0;">
-                            <input type="text" name="promo_code" class="form-control" placeholder="Promotional code">
+                            <input type="text" name="promo_code" class="form-control" placeholder="Promotional code" value="">
                                       <span class="input-group-btn">
                                         <button class="btn btn-default promo-close-btn" type="button"><i
                                                 class="fa fa-times"></i></button>
@@ -62,10 +62,13 @@
                 <div class="clearfix"></div>
             </div>
             <div class="panel-footer" style="background-color: #ffffff;">
+                <div class="pull-left" id="total-holder" style="font-weight: 300; font-size: 16px;line-height: 39px;text-transform: uppercase; display: none;">
+                    Total <span style="font-weight: 500;" id="total-amount">$123.00</span>
+                </div>
                 <div class="pull-right">
                     <img src="{{ url_for('static', filename='img/paymentlogoshorizontal.png') }}">
                     <button class="btn btn-success" {% if tickets %}type="submit"{% else %} type="button"
-                            disabled{% endif %}>Order Now
+                            disabled{% endif %} id="order-now-btn">Order Now
                     </button>
                 </div>
                 <div class="clearfix"></div>
@@ -88,4 +91,39 @@
         $('.promo-code-box').hide().find('input').val('');
         $(".promo-code-open").show();
     });
+
+    var $quantitySelects = $(".quantity-select");
+    var $orderNowBtn = $("#order-now-btn");
+    var $totalHolder = $("#total-holder");
+    var $totalAmount = $("#total-amount");
+
+    $quantitySelects.change(function() {
+        var hasMoreThenZero = false;
+        var total = 0;
+        $.each($quantitySelects, function(index, $quantitySelect) {
+            $quantitySelect = $($quantitySelect);
+            if($quantitySelect.val() !== "0") {
+                total += parseInt($quantitySelect.data('rate')) * parseInt($quantitySelect.val());
+                hasMoreThenZero = true;
+            }
+        });
+
+        if(total > 0) {
+            $totalHolder.show();
+            $totalAmount.text("$" + total + ".00")
+        } else {
+            $totalHolder.hide();
+        }
+
+        if(hasMoreThenZero) {
+            $orderNowBtn.removeAttr("disabled");
+            $orderNowBtn.attr("type", "submit");
+        } else {
+            $orderNowBtn.attr("disabled", "disabled");
+            $orderNowBtn.attr("type", "button");
+        }
+    });
+
+    $quantitySelects.trigger("change");
+
 </script>
