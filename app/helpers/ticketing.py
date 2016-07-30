@@ -94,7 +94,7 @@ class TicketingManager(object):
         if order:
             if override \
                 or (order.status != 'completed' and
-                    (order.created_at + timedelta(minutes=TicketingManager.get_order_expiry())) < datetime.now()):
+                    (order.created_at + timedelta(minutes=TicketingManager.get_order_expiry())) < datetime.utcnow()):
                 order.status = 'expired'
                 save_to_db(order)
         return order
@@ -183,7 +183,7 @@ class TicketingManager(object):
                 order.last4 = charge.source.last4
                 order.transaction_id = charge.id
                 order.status = 'completed'
-                order.completed_at = datetime.now()
+                order.completed_at = datetime.utcnow()
                 save_to_db(order)
 
                 send_email_for_after_purchase(order.user.email, order.get_invoice_number(),

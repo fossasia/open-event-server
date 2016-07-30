@@ -49,7 +49,7 @@ class TestTicketingPage(OpenEventTestCase):
             event, ticket = get_event_ticket()
             response = self.app.get(url_for('event_detail.display_event_detail_home', event_id=event.id),
                                     follow_redirects=True)
-            self.assertTrue("Test Ticket" in response.data, msg=response.data)
+            self.assertTrue(str(ticket.name) in response.data, msg=response.data)
 
     def test_order_create(self):
         with app.test_request_context():
@@ -60,8 +60,9 @@ class TestTicketingPage(OpenEventTestCase):
             event, ticket, identifier = create_order(self)
             response = self.app.get(url_for('ticketing.view_order', order_identifier=identifier), follow_redirects=True)
             self.assertEqual(response.status_code, 200, msg=response.status_code)
+            self.assertTrue(str(event.name) in response.data, msg=response.data)
             order = TicketingManager.get_order_by_identifier(identifier)
-            order.created_at = datetime.now() - timedelta(minutes=11)
+            order.created_at = datetime.utcnow() - timedelta(minutes=11)
             save_to_db(order)
             response = self.app.get(url_for('ticketing.view_order', order_identifier=identifier), follow_redirects=True)
             self.assertEqual(response.status_code, 404, msg=response.status_code)
@@ -99,6 +100,8 @@ class TestTicketingPage(OpenEventTestCase):
             self.assertTrue("John" in response.data, msg=response.data)
             self.assertTrue("ACME Lane" in response.data, msg=response.data)
             self.assertTrue("1234" in response.data, msg=response.data)
+            self.assertTrue(str(event.name) in response.data, msg=response.data)
+            self.assertTrue(str(ticket.name) in response.data, msg=response.data)
             response = self.app.get(url_for('ticketing.view_order', order_identifier=identifier),
                                     follow_redirects=False)
             self.assertEqual(response.status_code, 302, msg=response.status_code)

@@ -65,7 +65,7 @@ class Order(db.Model):
         self.event_id = event_id
         self.transaction_id = transaction_id
         self.paid_via = paid_via
-        self.created_at = datetime.datetime.now()
+        self.created_at = datetime.datetime.utcnow()
 
     def __repr__(self):
         return '<Order %r>' % self.id

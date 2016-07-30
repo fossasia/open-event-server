@@ -194,17 +194,16 @@ def humanize_filter(time):
     return humanize.naturaltime(datetime.now() - time)
 
 @app.template_filter('firstname')
-def firstname_filter(s):
-    return HumanName(s).first
+def firstname_filter(string):
+    return HumanName(string).first
 
 @app.template_filter('middlename')
-def lastname_filter(s):
-    return HumanName(s).middle
+def middlename_filter(string):
+    return HumanName(string).middle
 
 @app.template_filter('lastname')
-def lastname_filter(s):
-    return HumanName(s).last
-
+def lastname_filter(string):
+    return HumanName(string).last
 
 @app.context_processor
 def flask_helpers():

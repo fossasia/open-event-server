@@ -13,7 +13,7 @@ var handler = StripeCheckout.configure({
     }
 });
 
-window.order_created_at = moment(window.order_created_at);
+window.order_created_at = moment.utc(window.order_created_at);
 window.order_expires_at = window.order_created_at.clone();
 window.order_expires_at.add(10, 'minutes');
 
@@ -39,7 +39,7 @@ function executeOrderExpired() {
 
 setInterval(function () {
     if (typeof window.stop_timer === 'undefined' || window.stop_timer !== 'right_away') {
-        var now = moment();
+        var now = moment.utc();
         var diff = window.order_expires_at.diff(now, 'seconds');
         if (diff >= 0) {
             var duration = moment.duration(diff, 'seconds');
