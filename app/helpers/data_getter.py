@@ -608,9 +608,9 @@ class DataGetter(object):
 
     @staticmethod
     def get_page_by_url(url):
-        results = Page.query.filter_by(url=url)
+        results = Page.query.filter(Page.url.contains(url))
         if results:
-            return results.one()
+            return results.first()
         return results
 
     @staticmethod

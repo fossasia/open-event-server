@@ -14,7 +14,7 @@
 <div>
     <div class="responsive-tabs-container accordion-xs">
         <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist" style="background: #FFFFFF;">
-            <li role="presentation">
+            <li role="presentation" class="active">
                 <a href="#tab_content2" id="profile-tab" data-toggle="tab">Social Links</a>
             </li>
             <li role="presentation">
@@ -22,13 +22,13 @@
             </li>
         </ul>
         <div class="nav bar_tabs" role="tablist">
-                <a href="#tab_content1" class="accordion-link active"id="home-tab" data-toggle="tab">Social Links</a>
-                <a href="#tab_content2" class="accordion-link"id="profile-tab" data-toggle="tab">Pages</a>
+                <a href="#tab_content2" class="accordion-link active"id="home-tab" data-toggle="tab">Social Links</a>
+                <a href="#tab_content3" class="accordion-link"id="profile-tab" data-toggle="tab">Pages</a>
         </div>
 
         <div id="myTabContent" class="tab-content">
 
-            <div class="tab-pane fade in" id="tab_content2">
+            <div class="tab-pane fade in active" id="tab_content2">
                   <form id="settings_form" method="post" class="form-horizontal form-label-left">
                       {% include 'gentelella/admin/super_admin/content/_social.html' %}
                   </form>
@@ -67,6 +67,7 @@
 
     $(document).ready(function(){
         storage_form();
+        $(".rich-area").summernote(summernoteConfig);
     });
     </script>
 
