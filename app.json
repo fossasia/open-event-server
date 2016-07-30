@@ -19,6 +19,18 @@
       "generator": "secret"
     }
   },
+  "addons":[
+      "heroku-postgresql:hobby-dev",
+      "heroku-redis:hobby-dev"
+  ],
+  "buildpacks":[
+      {
+          "url":"heroku/nodejs"
+      },
+      {
+          "url":"heroku/python"
+      }
+    ],
   "scripts": {
     "postdeploy": "python create_db.py"
   }
