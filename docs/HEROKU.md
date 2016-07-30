@@ -14,6 +14,10 @@
 * After setting env vars, create the heroku database.
     * ```heroku addons:create heroku-postgresql:hobby-dev```
     * ```heroku pg:promote <HEROKU_POSTGRESQL_COLOR_URL>```
+* Open Event uses Redis. Run the following to create a redis instance.
+    * ```heroku addons:create heroku-redis:hobby-dev```
+* Run `heroku config` to check the environment variables. `REDIS_URL` and `DATABASE_URL` should be set by now.
+If they are missing, some problem has occured in the previous steps.
 * Add python build pack to the app
     * ```heroku buildpacks:set heroku/python```
 * Add Node.js build pack to the app
