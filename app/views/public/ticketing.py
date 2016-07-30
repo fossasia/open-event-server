@@ -1,6 +1,6 @@
 from flask.ext.restplus import abort
 from flask_admin import BaseView, expose
-from flask import redirect, url_for, request, jsonify, make_response
+from flask import redirect, url_for, request, jsonify, make_response, flash
 from xhtml2pdf import pisa
 from cStringIO import StringIO
 
@@ -22,6 +22,8 @@ class TicketingView(BaseView):
     @expose('/create/', methods=('POST', ))
     def create_order(self):
         order = TicketingManager.create_order(request.form)
+        if request.form.get('promo_code', '') != '':
+            flash('The promotional code entered is valid. No offer has been applied to this order.', 'danger')
         return redirect(url_for('.view_order', order_identifier=order.identifier))
 
     @expose('/<order_identifier>/', methods=('GET',))
@@ -29,7 +31,7 @@ class TicketingView(BaseView):
         order = TicketingManager.get_and_set_expiry(order_identifier)
         if not order or order.status == 'expired':
             abort(404)
-        if order.state == 'completed':
+        if order.status == 'completed':
             return redirect(url_for('.view_order_after_payment', order_identifier=order_identifier))
         return self.render('/gentelella/guest/ticketing/order_pre_payment.html', order=order, event=order.event,
                            countries=list(pycountry.countries),
@@ -73,8 +75,7 @@ class TicketingView(BaseView):
         result = TicketingManager.charge_order_payment(request.form)
         if result:
             return jsonify({
-                "status": "ok",
-                "order": result
+                "status": "ok"
             })
         else:
             return jsonify({

@@ -20,7 +20,7 @@
                     <strong>Card Name:</strong> {{ order.brand }}<br>
                     <strong>Card Number:</strong> ***** {{ order.last4 }}<br>
                     <strong>Exp Date:</strong> {{ order.exp_month }}/{{ order.exp_year }}<br><br>
-                    <strong>Payment Date:</strong> {{ order.completed_at }}<br>
+                    <strong>Payment Date:</strong> {{ order.completed_at.strftime('%B %d, %Y %I:%M %p') }}<br>
                     <strong>Invoice number:</strong> {{ order.get_invoice_number() }}
                 </div>
             </div>

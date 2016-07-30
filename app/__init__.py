@@ -30,6 +30,7 @@ import humanize
 
 import sqlalchemy as sa
 
+from nameparser import HumanName
 import stripe
 from app.helpers.flask_helpers import SilentUndefined, camel_case, slugify, MiniJSONEncoder
 from app.models import db
@@ -191,6 +192,18 @@ def humanize_filter(time):
     if time is None:
         return "N/A"
     return humanize.naturaltime(datetime.now() - time)
+
+@app.template_filter('firstname')
+def firstname_filter(s):
+    return HumanName(s).first
+
+@app.template_filter('middlename')
+def lastname_filter(s):
+    return HumanName(s).middle
+
+@app.template_filter('lastname')
+def lastname_filter(s):
+    return HumanName(s).last
 
 
 @app.context_processor

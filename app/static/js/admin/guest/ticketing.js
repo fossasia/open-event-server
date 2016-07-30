@@ -15,7 +15,7 @@ var handler = StripeCheckout.configure({
 
 window.order_created_at = moment(window.order_created_at);
 window.order_expires_at = window.order_created_at.clone();
-window.order_expires_at.add(100, 'minutes');
+window.order_expires_at.add(10, 'minutes');
 
 var $timeLeft = $("#time-left");
 
@@ -92,7 +92,7 @@ function chargeOrderPayment(tokenId) {
             if (json.status === "ok") {
                 userEmail = json.email;
                 createSnackbar("Your payment was a success. Redirecting ...");
-                setTimeout(function() {
+                setTimeout(function () {
                     location.reload(true);
                 }, 1000);
                 window.stop_timer = "right_away";
@@ -102,6 +102,11 @@ function chargeOrderPayment(tokenId) {
                     chargeOrderPayment(tokenId);
                 });
             }
+        },
+        error: function () {
+            createSnackbar("An error occurred while processing your payment.", "Try again", function () {
+                chargeOrderPayment(tokenId);
+            });
         }
     });
 }
