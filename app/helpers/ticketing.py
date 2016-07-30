@@ -6,9 +6,10 @@ from datetime import timedelta, datetime
 
 import stripe
 from sqlalchemy import func
+from flask import url_for
 
 from app.helpers.data import save_to_db
-from app.helpers.helpers import string_empty
+from app.helpers.helpers import string_empty, send_email_for_after_purchase
 from app.models.order import Order
 from app.models.ticket import Ticket
 from app.helpers.data_getter import DataGetter
@@ -126,8 +127,6 @@ class TicketingManager(object):
     @staticmethod
     def initiate_order_payment(form):
         identifier = form['identifier']
-        first_name = form['firstname']
-        last_name = form['lastname']
         email = form['email']
         country = form['country']
         address = form['address']
@@ -152,37 +151,46 @@ class TicketingManager(object):
     @staticmethod
     def charge_order_payment(form):
         order = TicketingManager.get_and_set_expiry(form['identifier'])
+        order.token = form['stripe_token_id']
+        save_to_db(order)
+        try:
+            customer = stripe.Customer.create(
+                email=order.user.email,
+                source=form['stripe_token_id']
+            )
 
-        customer = stripe.Customer.create(
-            email=order.user.email,
-            source=form['stripe_token_id']
-        )
+            charge = stripe.Charge.create(
+                customer=customer.id,
+                amount=int(order.amount * 100),
+                currency='usd',
+                metadata={
+                    'order_id': order.id,
+                    'event': order.event.name,
+                    'user_id': order.user_id,
+                    'event_id': order.event_id
+                },
+                description=order.event.name + " ticket(s)"
+            )
 
-        charge = stripe.Charge.create(
-            customer=customer.id,
-            amount=int(order.amount * 100),
-            currency='usd',
-            metadata={
-                'order_id': order.id,
-                'event': order.event.name,
-                'user_id': order.user_id,
-                'event_id': order.event_id
-            },
-            description=order.event.name + " ticket(s)"
-        )
+            if charge:
+                order.paid_via = 'stripe'
+                order.payment_mode = charge.source.object
+                order.brand = charge.source.brand
+                order.exp_month = charge.source.exp_month
+                order.exp_year = charge.source.exp_year
+                order.last4 = charge.source.last4
+                order.transaction_id = charge.id
+                order.status = 'completed'
+                order.completed_at = datetime.now()
+                save_to_db(order)
 
-        if charge:
-            order.paid_via = 'stripe'
-            order.payment_mode = charge.source.object
-            order.brand = charge.source.brand
-            order.exp_month = charge.source.exp_month
-            order.exp_year = charge.source.exp_year
-            order.last4 = charge.source.last4
-            order.transaction_id = charge.id
-            order.status = 'completed'
-            order.completed_at = datetime.now()
-            save_to_db(order)
+                send_email_for_after_purchase(order.user.email, order.get_invoice_number(),
+                                              url_for('ticketing.view_order_after_payment',
+                                                      order_identifier=order.identifier, _external=True))
 
-            return order
-        else:
+                return order
+            else:
+                return False
+
+        except:
             return False

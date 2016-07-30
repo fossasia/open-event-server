@@ -4,7 +4,8 @@ Register a mail here before using it
 """
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
     USER_REGISTER, PASSWORD_RESET, EVENT_ROLE, SESSION_ACCEPT_REJECT, \
-    SESSION_SCHEDULE, NEXT_EVENT, EVENT_PUBLISH, AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD
+    SESSION_SCHEDULE, NEXT_EVENT, EVENT_PUBLISH, AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, \
+    TICKET_PURCHASED
 
 MAILS = {
     EVENT_PUBLISH: {
@@ -57,7 +58,8 @@ MAILS = {
         'subject': 'Event {event_name} is over',
         'message': (
             "Hi {email},<br/>" +
-            "Thank You for participating in our event. We hope you enjoyed it. Please check the list of more upcoming events" +
+            "Thank You for participating in our event. We hope you enjoyed it. "
+            "Please check the list of more upcoming events" +
             "Here are the upcoming events: {up_coming_events} .Get ready!! "
         )
     },
@@ -118,5 +120,14 @@ MAILS = {
             "You've been invited to be a <strong>{role}</strong> at <strong>{event}</strong>.<br>" +
             "To accept the role please sign up using the following link: <a href='{link}' target='_blank'>Link</a>."
         )
-    }
+    },
+    TICKET_PURCHASED: {
+        'recipient': 'User',
+        'subject': 'Your order invoice and tickets ({invoice_id})',
+        'message': (
+            "Your order has been processed successfully." +
+            "<br/> <a href='{order_url}'>Click here</a> to view/download your invoice."
+            "<br><br><em>Looking forward to seeing you at the event.</em>"
+        )
+    },
 }

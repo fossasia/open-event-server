@@ -16,7 +16,7 @@ from ..models.message_settings import MessageSettings
 from ..models.track import Track
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, NEXT_EVENT, \
     USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, EVENT_PUBLISH, Mail,\
-    AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD
+    AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, TICKET_PURCHASED
 from system_mails import MAILS
 from app.models.notifications import (
     # Prepended with `NOTIF_` to differentiate from mails
@@ -269,6 +269,17 @@ def send_email_for_event_role_invite(email, role, event, link):
             action=EVENT_ROLE,
             subject=subject,
             html=message
+        )
+
+def send_email_for_after_purchase(email, invoice_id, order_url):
+    """Send email with order invoice link after purchase"""
+    message_settings = MessageSettings.query.filter_by(action=TICKET_PURCHASED).first()
+    if not message_settings or message_settings.mail_status == 1:
+        send_email(
+            to=email,
+            action=TICKET_PURCHASED,
+            subject=MAILS[TICKET_PURCHASED]['subject'].format(invoice_id=invoice_id),
+            html=MAILS[TICKET_PURCHASED]['message'].format(order_url=order_url)
         )
 
 

@@ -28,7 +28,14 @@
 <body id="body">
     <div class="container">
         <div class="row">
-            <center><h3>Invoice # {{ order.get_invoice_number() }}</h3></center>
+            <center>
+                <h3>Invoice # {{ order.get_invoice_number() }}</h3>
+                <h5>{{ event.name }}</h5>
+                {{ event.start_time.strftime('%A, %B %d, %Y at %I:%M %p') }}
+                - {{ event.end_time.strftime('%A, %B %d, %Y at %I:%M %p') }} ({{ event.timezone }})<br>
+                {{ event.location_name }}
+            </center>
+
             {% include 'gentelella/guest/ticketing/components/_invoice.html' %}
             {% include 'gentelella/guest/ticketing/components/_order_summary.html' %}
         </div>
