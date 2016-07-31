@@ -117,7 +117,12 @@ Notifications
 
         $("body").click(function(e) {
             if($(e.target).is('a.read-btn')) {
-                return true;
+                e.preventDefault(); // prevent href behavior
+                $.getJSON($(e.target).attr('href'), function(data){
+                  console.log(data['status']);
+                  $(e.target).parents('.notification').removeClass('info'); // show notification as read
+                  $(e.target).remove(); // delete mark as read button
+                });
             }else if (e.target.class == "notification" || $(e.target).parents(".notification").size()) {
                 var read_button = $(e.target).parents(".notification").find('a.read-btn');
                 $.getJSON(read_button.attr('href'), function(data){
