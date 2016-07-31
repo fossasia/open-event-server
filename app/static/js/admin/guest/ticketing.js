@@ -76,8 +76,7 @@ $orderPaymentForm.submit(function (e) {
                     }, 1000);
 
                     window.stop_timer = "right_away";
-                    
-                $("#registration-information-holder").fadeOut();
+                    $("#registration-information-holder").fadeOut();
                 } else {
                     createSnackbar("An error occurred while initializing your payment.", "Try again", function () {
                         $orderPaymentForm.submit();
