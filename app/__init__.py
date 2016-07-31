@@ -78,7 +78,7 @@ def create_app():
     app.config['STATIC_ROOT'] = 'staticfiles'
     app.config['STATICFILES_DIRS'] = (os.path.join(BASE_DIR, 'static'), )
     app.config['SQLALCHEMY_RECORD_QUERIES'] = True
-    #app.config['SERVER_NAME'] = 'open-event-dev.herokuapp.com'
+    # app.config['SERVER_NAME'] = 'open-event-dev.herokuapp.com'
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     app.logger.setLevel(logging.INFO)
     app.jinja_env.add_extension('jinja2.ext.do')

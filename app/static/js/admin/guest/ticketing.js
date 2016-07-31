@@ -66,14 +66,17 @@ $orderPaymentForm.submit(function (e) {
         success: function (json) {
             if (json.status === "ok") {
                 userEmail = json.email;
-                if (json.order_status == "initialized") {
+                if (json.order_status === "initialized") {
                     $payViaStripe.click();
-                } else if (json.order_status == "initialized") {
+                } else if (json.order_status === "completed") {
                     createSnackbar("Your payment was a success. Redirecting ...");
+
                     setTimeout(function () {
                         location.reload(true);
                     }, 1000);
+
                     window.stop_timer = "right_away";
+                    
                 $("#registration-information-holder").fadeOut();
                 } else {
                     createSnackbar("An error occurred while initializing your payment.", "Try again", function () {
