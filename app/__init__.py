@@ -69,7 +69,10 @@ def create_app():
     manager = Manager(app)
     manager.add_command('db', MigrateCommand)
 
-    cache.init_app(app)
+    if app.config['CACHING']:
+        cache.init_app(app, config={'CACHE_TYPE': 'simple'})
+    else:
+        cache.init_app(app, config={'CACHE_TYPE': 'null'})
 
     CORS(app)
     stripe.api_key = 'SomeStripeKey'
