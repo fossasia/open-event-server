@@ -63,7 +63,8 @@ class TicketingView(BaseView):
         if result:
             return jsonify({
                 "status": "ok",
-                "email": result.user.email
+                "email": result.user.email,
+                "order_status": result.status
             })
         else:
             return jsonify({
