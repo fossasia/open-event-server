@@ -55,7 +55,7 @@ class EventStateField(fields.ChoiceString):
 
     def __init__(self, **kwargs):
         super(EventStateField, self).__init__(
-            choice_list=['Draft', 'Published', 'Completed', 'Call for papers'],
+            choice_list=['Draft', 'Published', 'Completed'],
             **kwargs
         )
 

@@ -384,7 +384,7 @@ class DataGetter(object):
     @staticmethod
     def get_published_events():
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
-            .filter(Event.state == 'Call for papers')
+            .filter(Event.state == 'Published')
         return events
 
     @staticmethod
