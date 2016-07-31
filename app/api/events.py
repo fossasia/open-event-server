@@ -22,7 +22,7 @@ from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
 from .helpers.utils import Resource, ETAG_HEADER_DEFN
 from .helpers import custom_fields as fields
 from helpers.special_fields import EventTypeField, EventTopicField, \
-    EventPrivacyField, EventSubTopicField
+    EventPrivacyField, EventSubTopicField, EventStateField
 
 api = Namespace('events', description='Events')
 
@@ -83,7 +83,7 @@ EVENT = api.model('Event', {
     'searchable_location_name': fields.String(),
     'organizer_name': fields.String(),
     'organizer_description': fields.String(),
-    'state': fields.String(),
+    'state': EventStateField(default='Draft'),
     'closing_datetime': fields.DateTime(),
     'type': EventTypeField(),
     'topic': EventTopicField(),
