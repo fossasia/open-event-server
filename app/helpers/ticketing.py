@@ -8,6 +8,7 @@ import stripe
 from sqlalchemy import func
 from flask import url_for
 
+from flask.ext import login
 from app.helpers.data import save_to_db
 from app.helpers.helpers import string_empty, send_email_for_after_purchase
 from app.models.order import Order
@@ -17,9 +18,9 @@ from app.helpers.data import DataManager
 
 from app.models.ticket_holder import TicketHolder
 from app.models.order import OrderTicket
+from app.models.event import Event
 from app.models.user_detail import UserDetail
 from app.helpers.helpers import send_email_after_account_create_with_password
-
 
 def get_count(q):
     count_q = q.statement.with_only_columns([func.count()]).order_by(None)
@@ -36,6 +37,22 @@ def represents_int(s):
 
 class TicketingManager(object):
     """All ticketing and orders related functions"""
+
+    @staticmethod
+    def get_orders_of_user(user_id=None, upcoming_events=True):
+        """
+        :return: Return all order objects with the current user
+        """
+        if not user_id:
+            user_id = login.current_user.id
+        if upcoming_events:
+            return Order.query.join(Order.event).filter(Order.user_id == user_id)\
+                .filter(Order.status == 'completed')\
+                .filter(Event.start_time >= datetime.now())
+        else:
+            return Order.query.join(Order.event).filter(Order.user_id == user_id)\
+                .filter(Order.status == 'completed')\
+                .filter(Event.end_time < datetime.now())
 
     @staticmethod
     def get_order_expiry():

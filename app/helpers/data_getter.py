@@ -599,7 +599,7 @@ class DataGetter(object):
             .filter(Event.in_trash is not True)
 
     @staticmethod
-    @cache.cached(timeout=21600, key_prefix='pages')
+    @cache.cached(timeout=604800, key_prefix='pages')
     def get_all_pages():
         return Page.query.order_by(desc(Page.index)).all()
 
