@@ -126,26 +126,36 @@ class TicketingManager(object):
     def initiate_order_payment(form):
         identifier = form['identifier']
         email = form['email']
-        country = form['country']
-        address = form['address']
-        city = form['city']
-        state = form['state']
-        zipcode = form['zipcode']
         order = TicketingManager.get_and_set_expiry(identifier)
+
         if order:
+
             user = TicketingManager.get_or_create_user_by_email(email, form)
             order.user_id = user.id
-            order.address = address
-            order.city = city
-            order.state = state
-            order.country = country
-            order.zipcode = zipcode
-            order.status = 'initialized'
+
+            if order.amount > 0:
+                country = form['country']
+                address = form['address']
+                city = form['city']
+                state = form['state']
+                zipcode = form['zipcode']
+                order.address = address
+                order.city = city
+                order.state = state
+                order.country = country
+                order.zipcode = zipcode
+                order.status = 'initialized'
+                ticket_holder = TicketHolder(name=user.user_detail.fullname,
+                                             email=email, address=address,
+                                             city=city, state=state, country=country, order_id=order.id)
+            else:
+                order.status = 'completed'
+                order.completed_at = datetime.utcnow()
+                ticket_holder = TicketHolder(name=user.user_detail.fullname, email=email, order_id=order.id)
+
             save_to_db(order)
-            ticket_holder = TicketHolder(name=user.user_detail.fullname,
-                                         email=email, address=address,
-                                         city=city, state=state, country=country, order_id=order.id)
             save_to_db(ticket_holder)
+
             return order
         else:
             return False

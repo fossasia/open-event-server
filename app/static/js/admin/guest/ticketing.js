@@ -66,7 +66,20 @@ $orderPaymentForm.submit(function (e) {
         success: function (json) {
             if (json.status === "ok") {
                 userEmail = json.email;
-                $payViaStripe.click();
+                if (json.order_status == "initialized") {
+                    $payViaStripe.click();
+                } else if (json.order_status == "initialized") {
+                    createSnackbar("Your payment was a success. Redirecting ...");
+                    setTimeout(function () {
+                        location.reload(true);
+                    }, 1000);
+                    window.stop_timer = "right_away";
+                $("#registration-information-holder").fadeOut();
+                } else {
+                    createSnackbar("An error occurred while initializing your payment.", "Try again", function () {
+                        $orderPaymentForm.submit();
+                    });
+                }
             } else {
                 $orderPaymentForm.setFormLoading(false, 'Pay now');
                 createSnackbar("An error occurred while initializing your payment.", "Try again", function () {
@@ -96,7 +109,7 @@ function chargeOrderPayment(tokenId) {
                     location.reload(true);
                 }, 1000);
                 window.stop_timer = "right_away";
-                $("#registration-information-holder").hide();
+                $("#registration-information-holder").fadeOut();
             } else {
                 createSnackbar("An error occurred while processing your payment.", "Try again", function () {
                     chargeOrderPayment(tokenId);
