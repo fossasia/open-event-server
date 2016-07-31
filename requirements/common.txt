@@ -42,3 +42,4 @@ pycountry
 stripe
 xhtml2pdf
 nameparser
+Flask-Cache
