@@ -2,6 +2,7 @@
 
 # Ignore ExtDeprecationWarnings for Flask 0.11 - see http://stackoverflow.com/a/38080580
 import warnings
+
 from flask.exthook import ExtDeprecationWarning
 from pytz import utc
 
@@ -47,6 +48,7 @@ from app.api.helpers.errors import NotFoundError
 from apscheduler.schedulers.background import BackgroundScheduler
 from app.helpers.data import DataManager, delete_from_db
 from app.helpers.helpers import send_after_event
+from app.helpers.cache import cache
 from sqlalchemy_continuum import transaction_class
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -67,6 +69,11 @@ def create_app():
     manager = Manager(app)
     manager.add_command('db', MigrateCommand)
 
+    if app.config['CACHING']:
+        cache.init_app(app, config={'CACHE_TYPE': 'simple'})
+    else:
+        cache.init_app(app, config={'CACHE_TYPE': 'null'})
+
     CORS(app)
     stripe.api_key = 'SomeStripeKey'
     app.secret_key = 'super secret key'
@@ -78,7 +85,7 @@ def create_app():
     app.config['STATIC_ROOT'] = 'staticfiles'
     app.config['STATICFILES_DIRS'] = (os.path.join(BASE_DIR, 'static'), )
     app.config['SQLALCHEMY_RECORD_QUERIES'] = True
-    #app.config['SERVER_NAME'] = 'open-event-dev.herokuapp.com'
+    # app.config['SERVER_NAME'] = 'open-event-dev.herokuapp.com'
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     app.logger.setLevel(logging.INFO)
     app.jinja_env.add_extension('jinja2.ext.do')
@@ -112,6 +119,7 @@ def create_app():
 
     return app, manager, db, jwt
 
+current_app, manager, database, jwt = create_app()
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -135,7 +143,6 @@ def request_wants_json():
     return best == 'application/json' and \
         request.accept_mimetypes[best] > \
         request.accept_mimetypes['text/html']
-
 
 @app.context_processor
 def locations():
@@ -255,16 +262,11 @@ def versioning_manager():
                 side_by_side_diff=side_by_side_diff,
                 get_user_name=get_user_name)
 
-
 # http://stackoverflow.com/questions/26724623/
 @app.before_request
 def track_user():
     if current_user.is_authenticated:
         current_user.update_lat()
-
-
-current_app, manager, database, jwt = create_app()
-
 
 def make_celery(app):
     celery = Celery(app.import_name, broker=app.config['CELERY_BROKER_URL'])
