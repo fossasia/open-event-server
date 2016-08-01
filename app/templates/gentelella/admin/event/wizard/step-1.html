@@ -1028,28 +1028,12 @@
             $paymentsystemHolder.fadeIn();
             ticketTypePrice.html("<div class='form-control'>Donation</div>");
         } else if (type == "paid") {
-<<<<<<< HEAD
             $paymentsystemHolder.fadeIn();
             ticketTypePrice.html("<input type='number' class='form-control' placeholder='Set your ticket price' name='ticket_price' required>");
         }
     });
 
 
-    var $paymentCurrencySelect = $("#payment_currency_name");
-    var $paymentCountrySelect = $("#payment_country_name");
-    var $paypalHolder = $("#paypal-system-holder");
-
-    $("#payment_country_name, #payment_currency_name").change(function() {
-        if($paymentCountrySelect.val() === 'United States' && $paymentCurrencySelect.val() === 'U.S. Dollars $') {
-            $paypalHolder.fadeOut();
-=======
-            ticketTypePrice.html("<input type='number' class='form-control' placeholder='Set your ticket price' name='ticket_price' required>");
->>>>>>> 9074dcf8a812d394b866ca8151228ed2318fe197
-        }
-        else {
-            $paypalHolder.fadeIn();
-        }
-    });
 
     var $taxformHolder = $("#tax-form-holder");
     $("#taxYes").on("click", function(e) {
