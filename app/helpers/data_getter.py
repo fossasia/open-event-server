@@ -39,7 +39,7 @@ from flask.ext import login
 from flask import flash, abort
 import datetime
 from sqlalchemy import desc, asc, or_
-
+from app.helpers.cache import cache
 
 class DataGetter(object):
     @staticmethod
@@ -384,7 +384,7 @@ class DataGetter(object):
     @staticmethod
     def get_published_events():
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
-            .filter(Event.state == 'Call for papers')
+            .filter(Event.state == 'Published')
         return events
 
     @staticmethod
@@ -408,7 +408,7 @@ class DataGetter(object):
     def get_past_events():
         return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.end_time <= datetime.datetime.now()).filter(
-            or_(Event.state == 'completed', Event.state == 'Published'))
+            or_(Event.state == 'Completed', Event.state == 'Published'))
 
     @staticmethod
     def get_all_live_events():
@@ -599,6 +599,7 @@ class DataGetter(object):
             .filter(Event.in_trash is not True)
 
     @staticmethod
+    @cache.cached(timeout=604800, key_prefix='pages')
     def get_all_pages():
         return Page.query.order_by(desc(Page.index)).all()
 
@@ -608,9 +609,9 @@ class DataGetter(object):
 
     @staticmethod
     def get_page_by_url(url):
-        results = Page.query.filter_by(url=url)
+        results = Page.query.filter(Page.url.contains(url))
         if results:
-            return results.one()
+            return results.first()
         return results
 
     @staticmethod
@@ -629,6 +630,7 @@ class DataGetter(object):
         return MessageSettings.query.filter_by(action=action).first()
 
     @staticmethod
+    @cache.cached(timeout=21600, key_prefix='event_locations')
     def get_locations_of_events():
         names = []
         for event in DataGetter.get_live_and_public_events():

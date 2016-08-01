@@ -34,6 +34,12 @@ table.tickets-table>tbody>tr>td {
     border-top: 0px !important;
 }
 
+#notif-menu {
+    height: auto;
+    max-height: 300px;
+    overflow-x: hidden;
+}
+
 .image-box {
     width: 100%;
     height: 200px;

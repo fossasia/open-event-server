@@ -1,5 +1,5 @@
 {% macro render_footer(test='') %}
-<footer>
+<footer class="hidden-print">
     <div class="row hide-small hide-medium">
         <div class="col-md-offset-1">
             <div class="col-md-3 col-sm-3">
@@ -23,7 +23,7 @@
             </div>
             <div class="col-md-3 col-sm-3"><h4>Locations</h4>
                 <ul>
-                    {% for location in locations%}
+                    {% for location in locations() %}
                     <li><a href="/explore/{{ location | slugify }}/events/">{{location}}</a></li>
                     {%endfor%}
                 </ul>

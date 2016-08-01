@@ -1,0 +1,23 @@
+{% extends 'gentelella/guest/ticketing/order_base.html' %}
+
+{% block title %}Your Order{% endblock %}
+
+{% block head_css %}
+    {{ super() }}
+{% endblock %}
+
+{% block inner_panel %}
+    {% if order.amount > 0 %}
+        {% include 'gentelella/guest/ticketing/components/_invoice.html' %}
+    {% endif %}
+    {% include 'gentelella/guest/ticketing/components/_order_summary.html' %}
+{% endblock %}
+
+{% block right_addon %}
+    <button type="button" class="btn btn-info hidden-print" onclick="window.print();"><i class="fa fa-print fa-fw"></i> Print Invoice</button>
+    <a href="{{ url_for('ticketing.view_order_after_payment_pdf', order_identifier=order.identifier) }}" class="btn btn-default hidden-print" target="_blank"><i class="fa fa-file-pdf-o fa-fw"></i> Download Invoice</a>
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+{% endblock %}
