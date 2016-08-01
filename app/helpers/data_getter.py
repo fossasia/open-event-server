@@ -32,6 +32,7 @@ from ..models.activity import Activity
 from ..models.ticket import Ticket
 from ..models.modules import Module
 from ..models.page import Page
+from ..models.export_jobs import ExportJob
 from .language_list import LANGUAGE_LIST
 from .static import EVENT_TOPICS, EVENT_LICENCES
 from app.helpers.helpers import get_event_id, string_empty
@@ -658,3 +659,8 @@ class DataGetter(object):
     @staticmethod
     def get_module():
         return Module.query.get(1)
+
+    @staticmethod
+    def get_export_jobs(event_id):
+        """get export job for an event"""
+        return ExportJob.query.filter_by(event_id=event_id).first()

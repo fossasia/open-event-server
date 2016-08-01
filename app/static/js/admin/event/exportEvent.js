@@ -1,5 +1,5 @@
 // export event main
-function exportEvent(event_id){
+function exportEvent(event_id, current_user_email=""){
     url = '/api/v2/events/' + event_id + '/export/json';
     // generate payload
     fields = ['image', 'video', 'audio', 'document'];
@@ -10,6 +10,10 @@ function exportEvent(event_id){
     $('#btnExportEvent').unbind('click');
     $('#btnExportEvent').prop('disabled', true); // in case of second export
     $('#btnStartExport').prop('disabled', true);
+    // set creator user
+    $('#export_creator').show();
+    $('#export_creator_email').text(current_user_email);
+    $('#export_creator_datetime').text('now');
 
     jQuery.ajax({
         url: url,
@@ -60,4 +64,22 @@ function exportTask(url){
         $('#btnStartExport').prop('disabled', false);
     }
     });
+}
+
+
+// load data about previous job
+function loadPreviousJob(task_url, user_email, start_time){
+    console.log(task_url);
+    console.log(user_email);
+    if (!task_url){
+        $('#btnStartExport').prop('disabled', false);
+    }
+    if (user_email){
+        $('#export_creator').show();
+        $('#export_creator_email').text(user_email);
+        $('#export_creator_datetime').text(start_time);
+    }
+    if (task_url){
+        exportTask(task_url);
+    }
 }
