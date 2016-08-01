@@ -8,18 +8,32 @@
     z-index: -1;
 }
 
+ul.msg_list li a {
+    cursor: default;
+    min-height: 55px;
+    padding-left: 2px !important;
+    padding-bottom: 2px !important;
+}
+
 ul.msg_list li a .time {
-  font-size: 12px;
-  font-style: normal;
-  font-weight: bold;
-  position: absolute;
-  right: 5px;
-  bottom: 5px;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: bold;
+    position: static;
+    margin-top: 10px;
+    float: right !important;
+}
+
+ul.msg_list li a .mark-as-read {
+    font-size: 10px;
+    font-style: normal;
+    margin: 0 !important;
 }
 
 ul.msg_list li a .message {
     font-size: 13px;
-    padding-bottom: 15px;
+    cursor: pointer;
+    margin-bottom: 15px;
 }
 
 ul.msg_list li:last-child {
