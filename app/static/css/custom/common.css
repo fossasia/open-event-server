@@ -30,8 +30,8 @@ ul.msg_list li:last-child a {
     font-size: 12px;
 }
 
-table.tickets-table>tbody>tr>td {
-    border-top: 0px !important;
+.tickets-table>tbody>tr>td {
+    border-top: 0 !important;
 }
 
 #notif-menu {
