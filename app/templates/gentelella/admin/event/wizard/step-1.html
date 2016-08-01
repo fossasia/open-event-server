@@ -339,8 +339,7 @@
          </div>
         {% endif %}
 
-
-        <div id="payment-system-holder" class="item form-group" {% if not event or event.tickets[0].type == 'free' %}style="display:none;"{% endif %}>
+        <div id="payment-system-holder" class="item form-group" {% if not event or ('paid' not in ticket_types and 'donation' not in ticket_types) or (not event.payment_country and not event.payment_currency) %}style="display:none;"{% endif %}>
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
             <i class="fa fa-money"></i>
             Add Payment details
@@ -384,7 +383,6 @@
                 </a>
             </div>
         </div>
-
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color: #5bc0de;">
             <i class="fa fa-plus-circle"></i>
             Additional Details
@@ -655,11 +653,11 @@
         </div>
     </div>
 </form>
-
 <script>
     var marker, map;
     var init_marker;
     var placeSearch, autocomplete;
+    var paid_tickets = 0;
     var componentForm = {
         street_number: 'short_name',
         route: 'long_name',
@@ -963,40 +961,22 @@
 
     });
 
-    var ticketType = document.getElementById("ticket-type");
-    var value = ticketType.options[ticketType.selectedIndex].value;
-    var $paymentsystemHolder = $("#payment-system-holder");
-
     $("select#ticket-type").on("change", function(e) {
         var type = $("option:selected", this).val();
         var ticketTypePrice = $("#ticket-type-price");
 
         if (type == "free") {
-            $paymentsystemHolder.fadeOut();
             ticketTypePrice.html("<div class='form-control'>Free</div>");
         } else if (type == "donation") {
-            $paymentsystemHolder.fadeIn();
             ticketTypePrice.html("<div class='form-control'>Donation</div>");
         } else if (type == "paid") {
-            $paymentsystemHolder.fadeIn();
             ticketTypePrice.html("<input type='number' class='form-control' placeholder='Set your ticket price' name='ticket_price' required>");
         }
     });
 
-
-
-
-    var $taxformHolder = $("#tax-form-holder");
-    $("#taxYes").on("click", function(e) {
-        $taxformHolder.fadeIn();
-    });
-    $("#taxNo").on("click", function(e) {
-        $taxformHolder.fadeOut();
-    });
-
-
     var $ticketsTable = $(".tickets-table").children("tbody");
     var ticketsCount = 1;
+    var $paymentsystemHolder = $("#payment-system-holder");
 
     function addTicket(type) {
         /* Clone ticket from template */
@@ -1006,7 +986,11 @@
 
         /* Bind datepicker to dates */
         $ticketMore.find("input.date").datepicker();
-        $ticketMore.find("input.time").timepicker();
+        $ticketMore.find("input.time").timepicker({
+            'showDuration': true,
+            'timeFormat': 'H:i',
+            'scrollDefault': 'now'
+        });
 
         /* Bind events to Edit and Remove buttons */
         var $ticketEdit = $ticket.children("td").last().children().children().first();
@@ -1018,6 +1002,12 @@
         var $ticketRemove = $ticket.children("td").last().children().children().last();
         $ticketRemove.tooltip();
         $ticketRemove.on("click", function() {
+            if (type == 'paid' || type == 'donation'){
+                paid_tickets = paid_tickets - 1;
+                if (paid_tickets == 0){
+                    $paymentsystemHolder.fadeOut();
+                }
+            }
             $ticket.remove();
             $ticketMore.remove();
         });
@@ -1044,6 +1034,7 @@
         ticketsCount += 1;
     }
 
+
     $(".edit-ticket-button").click(function() {
         var $ticket = $(this).parent().parent().parent();
         var $ticketMore = $ticket.next();
@@ -1063,11 +1054,35 @@
     });
 
     $(".add-paid-ticket").click(function () {
+        if (paid_tickets == 0){
+            $paymentsystemHolder.fadeIn();
+        }
+        paid_tickets += 1;
         addTicket("paid");
     });
 
     $(".add-donation-ticket").click(function () {
+        if (paid_tickets == 0){
+            $paymentsystemHolder.fadeIn();
+        }
+        paid_tickets += 1;
         addTicket("donation");
+    });
+
+    var $taxformHolder = $("#tax-form-holder");
+    $("#taxYes").on("click", function(e) {
+        $taxformHolder.fadeIn();
+    });
+    $("#taxNo").on("click", function(e) {
+        $taxformHolder.fadeOut();
+    });
+
+    var $taxinvoiceHolder = $("#tax-invoice-holder");
+    $("#tax_invoice").change(function() {
+        if($("#tax_invoice").is(":checked"))
+            $taxinvoiceHolder.fadeIn();
+        else
+            $taxinvoiceHolder.fadeOut();
     });
 
     $(document).on("click", '.add-social-links', function () {
@@ -1122,7 +1137,7 @@
         var $ticketsystemHolder = $("#ticket-system-holder");
         var $ticketURLHolder = $("#ticket-url-holder")
         var $ticketState = $(".ticket-state");
-        var $paymentsystemHolder = $("#payment-system-holder");
+
         var ticket_onOffSwitch = document.getElementById('ticket-switch');
 
         if(ticket_onOffSwitch != null) {
@@ -1134,19 +1149,11 @@
                 } else {
                     $ticketsystemHolder.fadeOut();
                     $ticketURLHolder.fadeIn();
-                    $paymentsystemHolder.fadeOut();
                     $ticketState.text("Use Ticketing System");
                 }
             };
         }
 
-        var $taxinvoiceHolder = $("#tax-invoice-holder");
-        $("#tax_invoice").change(function() {
-            if($("#tax_invoice").is(":checked"))
-                $taxinvoiceHolder.fadeIn();
-            else
-                $taxinvoiceHolder.fadeOut();
-        });
 
         /*var $mapHolder = $("#map-holder");
         var $mapState = $(".map-state");

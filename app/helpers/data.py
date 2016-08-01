@@ -1107,8 +1107,9 @@ class DataManager(object):
             update_or_create(
                 CustomForms, event_id=event.id,
                 session_form=session_form, speaker_form=speaker_form)
-
-            if module and (module.payment_include or module.donation_include) and form['ticket_type'] != 'free':
+            print 'HELLO'
+            if module and (module.payment_include or module.donation_include) \
+                and ('paid' or 'donation') in form.getlist('tickets[type]'):
 
                 if form['taxAllow'] == 'taxNo':
                     event.tax_allow = False
@@ -1301,7 +1302,7 @@ class DataManager(object):
 
         event.ticket_url = form.get('ticket_url', None)
 
-        if tax:
+        if not event.ticket_url and tax:
             if form['taxAllow'] == 'taxNo':
                 event.tax_allow = False
 

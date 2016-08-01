@@ -206,6 +206,7 @@ class EventsView(BaseView):
         speaker_form = json.loads(custom_forms.speaker_form)
         session_form = json.loads(custom_forms.session_form)
         tax = DataGetter.get_tax_options(event_id)
+        ticket_types = DataGetter.get_ticket_types(event_id)
 
 
         included_setting = []
@@ -258,7 +259,8 @@ class EventsView(BaseView):
                                included_settings=included_setting,
                                tax=tax,
                                payment_countries=DataGetter.get_payment_countries(),
-                               payment_currencies=DataGetter.get_payment_currencies())
+                               payment_currencies=DataGetter.get_payment_currencies(),
+                               ticket_types=ticket_types)
 
         if request.method == "POST":
             img_files = []

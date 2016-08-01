@@ -674,3 +674,11 @@ class DataGetter(object):
         tax = Tax.query.filter_by(event_id=event_id)
         for tax in tax:
             return tax
+
+    @staticmethod
+    def get_ticket_types(event_id):
+        ticket_types = []
+        tickets = Ticket.query.filter_by(event_id=event_id)
+        for ticket in tickets:
+            ticket_types.append(ticket.type)
+        return ticket_types
