@@ -989,13 +989,15 @@ class DataManager(object):
                         ticket_min_orders[i] = ticket_min_orders[i] if ticket_min_orders[i] != '' else 1
                         ticket_max_orders[i] = ticket_max_orders[i] if ticket_max_orders[i] != '' else 10
 
+                        sales_start_str = '{} {}'.format(ticket_sales_start_dates[i],
+                            ticket_sales_start_times[i])
+                        sales_end_str = '{} {}'.format(ticket_sales_end_dates[i],
+                            ticket_sales_end_times[i])
                         ticket = Ticket(
                             name=name,
                             type=ticket_types[i],
-                            sales_start='{} {}'.format(ticket_sales_start_dates[i],
-                                ticket_sales_start_times[i]),
-                            sales_end='{} {}'.format(ticket_sales_end_dates[i],
-                                ticket_sales_end_times[i]),
+                            sales_start=datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M'),
+                            sales_end=datetime.strptime(sales_end_str, '%m/%d/%Y %H:%M'),
                             description=ticket_descriptions[i],
                             quantity=ticket_quantities[i],
                             price=int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0,
@@ -1217,16 +1219,19 @@ class DataManager(object):
                 ticket_min_orders[i] = ticket_min_orders[i] if ticket_min_orders[i] != '' else 1
                 ticket_max_orders[i] = ticket_max_orders[i] if ticket_max_orders[i] != '' else 10
 
+                sales_start_str = '{} {}'.format(ticket_sales_start_dates[i],
+                    ticket_sales_start_times[i])
+                sales_end_str = '{} {}'.format(ticket_sales_end_dates[i],
+                    ticket_sales_end_times[i])
+
                 ticket = Ticket.query.filter_by(event=event, name=name).first()
                 if not ticket:
                     # create
                     ticket = Ticket(
                         name=name,
                         type=ticket_types[i],
-                        sales_start='{} {}'.format(ticket_sales_start_dates[i],
-                            ticket_sales_start_times[i]),
-                        sales_end='{} {}'.format(ticket_sales_end_dates[i],
-                            ticket_sales_end_times[i]),
+                        sales_start=datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M'),
+                        sales_end=datetime.strptime(sales_end_str, '%m/%d/%Y %H:%M'),
                         description=ticket_descriptions[i],
                         quantity=ticket_quantities[i],
                         price=int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0,
@@ -1238,10 +1243,8 @@ class DataManager(object):
                     # update
                     ticket.name = name
                     ticket.type = ticket_types[i]
-                    ticket.sales_start = '{} {}'.format(ticket_sales_start_dates[i],
-                        ticket_sales_start_times[i])
-                    ticket.sales_end = '{} {}'.format(ticket_sales_end_dates[i],
-                        ticket_sales_end_times[i])
+                    ticket.sales_start = datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M'),
+                    ticket.sales_end = datetime.strptime(sales_end_str, '%m/%d/%Y %H:%M'),
                     ticket.description = ticket_descriptions[i]
                     ticket.quantity = ticket_quantities[i]
                     ticket.price = int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0
