@@ -29,6 +29,12 @@
         .null { color: magenta; }
         .key { color: red; }
 
+        #export_creator {
+          opacity: 0.8;
+        }
+        #export_creator_email {
+          font-weight: 600;
+        }
     </style>
 {% endblock %}
 
@@ -55,15 +61,16 @@
                     <label for="document"></label> <span class="checkbox-label">Document</span>
                 </div>
             </form>
-            <span id="export_status"></span>
-            <br><br>
+            <br>
             <div class="btn-group">
                 <button type="button" class="btn btn-primary" id="btnStartExport" onclick="exportEvent({{ event.id }})"
                         style="margin-bottom: 0px; margin-right: 10px;">Start
                 </button>
                 <button type="button" class="btn btn-default" id="btnExportEvent" disabled="disabled">Download</button>
             </div>
-
+            <br><br>
+            <span id="export_status"></span><br>
+            <span id="export_creator">Started by <span id="export_creator_email">a@v.com</span></span>
         </div>
         <div class="col-md-5 col-md-push-1">
             <h3 style="font-weight: 300;">Access event information via REST API</h3>

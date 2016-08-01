@@ -3,6 +3,7 @@ from flask import send_file, make_response, jsonify, url_for, current_app
 from flask.ext.restplus import Resource, Namespace, marshal
 
 from app.helpers.data import record_activity
+from app.models.export_jobs import ExportJob
 from helpers.export_helpers import export_event_json
 from helpers.utils import TASK_RESULTS
 from helpers import custom_fields as fields
@@ -30,6 +31,7 @@ class EventExportJson(Resource):
         from helpers.tasks import export_event_task
         task = export_event_task.delay(
             event_id, marshal(self.api.payload, EXPORT_SETTING))
+        # create Job
         if current_app.config.get('CELERY_ALWAYS_EAGER'):
             TASK_RESULTS[task.id] = {
                 'result': task.get(),
