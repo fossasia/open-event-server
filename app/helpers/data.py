@@ -17,6 +17,7 @@ from sqlalchemy.sql.expression import exists
 from werkzeug import secure_filename
 from wtforms import ValidationError
 
+from app.helpers.cache import cache
 from app.helpers.helpers import string_empty, string_not_empty, uploaded_file
 from app.helpers.notification_email_triggers import trigger_new_session_notifications, \
     trigger_session_state_change_notifications
@@ -919,6 +920,7 @@ class DataManager(object):
                       payment_currency=form.get('payment_currency', ''),
                       paypal_email=form.get('paypal_email', ''))
 
+
         # Add Ticket
         str_empty = lambda val, val2: val2 if val == '' else val
 
@@ -1619,6 +1621,7 @@ class DataManager(object):
         page = Page(name=form.get('name', ''), title=form.get('title', ''), description=form.get('description', ''),
                     url=form.get('url', ''), place=form.get('place', ''), index=form.get('index', 0))
         save_to_db(page, "Page created")
+        cache.delete('pages')
 
     def update_page(self, page, form):
         page.name = form.get('name', '')
@@ -1628,6 +1631,7 @@ class DataManager(object):
         page.place = form.get('place', '')
         page.index = form.get('index', '')
         save_to_db(page, "Page updated")
+        cache.delete('pages')
 
     @staticmethod
     def create_or_update_message_settings(form):

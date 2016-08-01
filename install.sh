@@ -7,7 +7,7 @@ apt-get install -y libxml2-dev libxslt1-dev
 apt-get install -y nginx uwsgi uwsgi-plugin-python
 apt-get install -y postgresql postgresql-contrib libpq-dev
 apt-get install -y libffi-dev
-
+apt-get install libtiff5-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk
 # Edit the following to change the name of the database user that will be created:
 APP_DB_USER=open_event_user
 APP_DB_PASS=start

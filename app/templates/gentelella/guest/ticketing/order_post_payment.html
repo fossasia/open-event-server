@@ -7,7 +7,13 @@
 {% endblock %}
 
 {% block inner_panel %}
+<<<<<<< HEAD
     {% include 'gentelella/guest/ticketing/components/_invoice.html' %}
+=======
+    {% if order.amount > 0 %}
+        {% include 'gentelella/guest/ticketing/components/_invoice.html' %}
+    {% endif %}
+>>>>>>> 9074dcf8a812d394b866ca8151228ed2318fe197
     {% include 'gentelella/guest/ticketing/components/_order_summary.html' %}
 {% endblock %}
 
