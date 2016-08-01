@@ -803,10 +803,13 @@
 
         /* Bind events to Edit and Remove buttons */
         var $ticketEdit = $ticket.children("td").last().children().children().first();
+        $ticketEdit.tooltip();
         $ticketEdit.on("click", function() {
-            $ticketMore.fadeToggle("slow");
+            $ticketMore.toggle("slow");
+            $ticketMore.children().children(".row").slideToggle("slow");
         });
         var $ticketRemove = $ticket.children("td").last().children().children().last();
+        $ticketRemove.tooltip();
         $ticketRemove.on("click", function() {
             $ticket.remove();
             $ticketMore.remove();
@@ -828,7 +831,7 @@
 
         /* Append ticket to table */
         $ticket.hide();
-        $ticketMore.hide();
+        $ticketMore.children().children(".row").hide();
         $ticketsTable.append($ticket, $ticketMore);
         $ticket.show("slow");
         ticketsCount += 1;
@@ -837,7 +840,8 @@
     $(".edit-ticket-button").click(function() {
         var $ticket = $(this).parent().parent().parent();
         var $ticketMore = $ticket.next();
-        $ticketMore.fadeToggle("slow");
+        $ticketMore.toggle("slow");
+        $ticketMore.children().children(".row").slideToggle("slow");
     });
 
     $(".remove-ticket-button").click(function() {
