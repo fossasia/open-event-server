@@ -304,9 +304,8 @@ def send_email(to, action, subject, html):
                 'subject': subject,
                 'html': html
             }
-            requests.post("https://api.sendgrid.com/api/mail.send.json",
-                          data=payload,
-                          headers=headers)
+            from tasks import send_email_task
+            send_email_task.delay(payload, headers)
         # record_mail(to, action, subject, html)
         mail = Mail(
             recipient=to, action=action, subject=subject,
@@ -319,6 +318,7 @@ def send_email(to, action, subject, html):
 #################
 # Notifications #
 #################
+
 
 def send_notification(user, action, title, message):
     # DataManager imported here to prevent circular dependency
