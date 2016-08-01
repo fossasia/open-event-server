@@ -20,7 +20,7 @@
     <tr data-identifier="{{ name }}" data-group="{{ group }}"
         data-toggle="tooltip">
         <td>
-            <h4>{{ pretty_name }}</h4>
+            {{ pretty_name }}
         </td>
         <td>
             <input type="checkbox" class="toggle-switch include-switch" data-group="{{ group }}" id="{{ identifier }}-include"
@@ -32,15 +32,15 @@
 
 
 {% macro options_table(columns, group) %}
-    <div style="width: 100%; text-align: center">
-        <h2 style="font-weight: 300; font-size: 40px;">Enable/Disable Modules</h2>
-    </div>
+
+    <h2>Enable/Disable Modules <input type="submit" class="btn btn-success save-modules pull-right" value="Save"></h2>
+    <hr>
 
     <table class="table table-bordered table-hover modules-options-table">
         <thead>
         <tr>
-            <th><h3>Modules</h3></th>
-            <th><h3>Status</h3></th>
+            <th>Modules</th>
+            <th>Status</th>
         </tr>
         </thead>
         <tbody>
@@ -51,14 +51,14 @@
         </tbody>
     </table>
 
-    <input type="submit" class="btn btn-lg btn-success save-modules" value="Save">
+
 {% endmacro %}
 
 {% block content %}
 <form action="/admin/modules/save" method="POST" role="form" class="admin-form form-horizontal" id="modules-form">
         <div id="module-settings" class="wizard_content" style="display: block;">
-            <div class="col-md-2 hidden-sm hidden-xs"></div>
-            <div class="col-md-8 col-sm-12 col-xs-12">
+
+            <div class="col-md-12 col-sm-12 col-xs-12">
                 {{ options_table(module_fields, 'modules') }}
             </div>
 
