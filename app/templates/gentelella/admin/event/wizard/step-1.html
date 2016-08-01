@@ -801,6 +801,10 @@
         var $ticket = $($tmpl[0]).attr("id", "ticket_" + String(ticketsCount));
         var $ticketMore = $($tmpl[1]).attr("id", "ticket-more_" + String(ticketsCount));
 
+        /* Bind datepicker to dates */
+        $ticketMore.find("input.date").datepicker();
+        $ticketMore.find("input.time").timepicker();
+
         /* Bind events to Edit and Remove buttons */
         var $ticketEdit = $ticket.children("td").last().children().children().first();
         $ticketEdit.tooltip();
