@@ -983,6 +983,11 @@ class DataManager(object):
 
                 for i, name in enumerate(ticket_names):
                     if name.strip():
+                        ticket_prices[i] = ticket_prices[i] if ticket_prices[i] != '' else 0
+                        ticket_quantities[i] = ticket_quantities[i] if ticket_quantities[i] != '' else 100
+                        ticket_min_orders[i] = ticket_min_orders[i] if ticket_min_orders[i] != '' else 1
+                        ticket_max_orders[i] = ticket_max_orders[i] if ticket_max_orders[i] != '' else 10
+
                         ticket = Ticket(
                             name=name,
                             type=ticket_types[i],
@@ -1206,6 +1211,11 @@ class DataManager(object):
 
         for i, name in enumerate(ticket_names):
             if name.strip():
+                ticket_prices[i] = ticket_prices[i] if ticket_prices[i] != '' else 0
+                ticket_quantities[i] = ticket_quantities[i] if ticket_quantities[i] != '' else 100
+                ticket_min_orders[i] = ticket_min_orders[i] if ticket_min_orders[i] != '' else 1
+                ticket_max_orders[i] = ticket_max_orders[i] if ticket_max_orders[i] != '' else 10
+
                 ticket = Ticket.query.filter_by(event=event, name=name).first()
                 if not ticket:
                     # create

@@ -827,7 +827,7 @@
         if (type === "free") {
             html = '<input type="text" name="tickets[price]" class="form-control" value="Free" readonly>';
         } else if (type === "paid") {
-            html = '<input type="text" name="tickets[price]" class="form-control"  placeholder="$" value="">';
+            html = '<input type="number" min="0" name="tickets[price]" class="form-control"  placeholder="$" value="">';
         } else if (type === "donation") {
             html = '<input type="text" name="tickets[price]" class="form-control" value="Donation" readonly>';
         }

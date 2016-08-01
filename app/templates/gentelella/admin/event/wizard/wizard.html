@@ -103,13 +103,13 @@
                         {% if type == "free" %}
                             <input type="text" name="tickets[price]" class="form-control" value="Free" readonly>
                         {% elif type == "paid" %}
-                            <input type="number" name="tickets[price]" class="form-control" placeholder="$" value="{{ price | default('', None) }}">
+                            <input type="number" min="0" name="tickets[price]" class="form-control" placeholder="$" value="{{ price | default('', None) }}" required="required">
                         {% elif type == "donation" %}
                             <input type="text" name="tickets[price]" class="form-control" value="Donation" readonly>
                         {% endif %}
                         </td>
                         <td>
-                            <input type="text" name="tickets[quantity]" class="form-control" placeholder="Quantity" value="{{ quantity }}">
+                            <input type="number" min="0" name="tickets[quantity]" class="form-control" placeholder="100" value="{{ quantity }}">
                         </td>
                         <td>
                             <div class="btn-group">
@@ -160,13 +160,13 @@
                                         <div class="col-md-6">
                                             <div class="item form-group">
                                                 <label>Min Order</label>
-                                                <input type="number" class="form-control" value="{{ min_order }}" name="tickets[min_order]">
+                                                <input type="number" min="1" class="form-control" value="{{ min_order }}" placeholder="1" name="tickets[min_order]">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="item form-group">
                                                 <label>Max Order</label>
-                                                <input type="number" class="form-control" value="{{ max_order }}" name="tickets[max_order]">
+                                                <input type="number" min="1" class="form-control" value="{{ max_order }}" placeholder="10" name="tickets[max_order]">
                                             </div>
                                         </div>
                                     </div>
