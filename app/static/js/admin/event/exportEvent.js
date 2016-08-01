@@ -8,6 +8,8 @@ function exportEvent(event_id){
         payload[fields[i]] = $('#exportForm [name=' + fields[i] + ']').is(':checked') ? true : false;
     }
     $('#btnExportEvent').unbind('click');
+    $('#btnExportEvent').prop('disabled', true); // in case of second export
+    $('#btnStartExport').prop('disabled', true);
 
     jQuery.ajax({
         url: url,
@@ -25,8 +27,7 @@ function exportEvent(event_id){
         error: function(x){
             obj = JSON.parse(x.responseText);
             console.log(obj);
-            $('#export_status').text('');
-            $('#export_error').text(obj['message']);
+            $('#export_status').html('<span class="red">' + obj['message'] + '</span>');
         }
     });
 }
@@ -46,6 +47,7 @@ function exportTask(url){
         } else {
             $('#export_status').text('Status: ' + data['state']);
             $('#btnExportEvent').prop('disabled', false);
+            $('#btnStartExport').prop('disabled', false);
             $('#btnExportEvent').click(function(){
                 document.location = data['result']['download_url'];
             });
@@ -54,8 +56,8 @@ function exportTask(url){
     error: function(x){
         obj = JSON.parse(x.responseText);
         console.log(obj);
-        $('#export_status').text('');
-        $('#export_error').text(obj['message']);
+        $('#export_status').html('<span class="red">' + obj['message'] + '</span>');
+        $('#btnStartExport').prop('disabled', false);
     }
     });
 }
