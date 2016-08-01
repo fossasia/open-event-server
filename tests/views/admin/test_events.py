@@ -4,6 +4,7 @@ from tests.api.utils_post_data import POST_EVENT_DATA
 from tests.object_mother import ObjectMother
 from app import current_app as app
 from app.helpers.data import save_to_db
+from app.models.modules import Module
 from app.helpers.data_getter import DataGetter
 from flask import url_for
 
@@ -44,13 +45,36 @@ class TestEvents(OpenEventViewTestCase):
             data['has_session_speakers'] = 'no'
             data['custom_form[name]'] = ['session_form', 'speaker_form']
             data['custom_form[value]'] = [custom_forms.session_form, custom_forms.speaker_form]
-            data = ImmutableMultiDict(data)
+
+            # Add Module to include Ticketing System
+            save_to_db(Module(True, True, True))
+            # Add Tickets
+            data['tickets[name]'] = ['Free Ticket', 'Paid Ticket', 'Donation Ticket']
+            data['tickets[type]'] = ['free', 'paid', 'donation']
+            data['tickets[price]'] = ['', 999, '']
+            data['tickets[quantity]'] = [512, 512, 512]
+            data['tickets[description]'] = ['', '', '']
+            data['tickets[sales_start_date]'] = ['07/04/2016', '07/04/2016', '07/04/2016']
+            data['tickets[sales_start_time]'] = ['19:00', '19:00', '19:00']
+            data['tickets[sales_end_date]'] = ['07/04/2016', '07/04/2016', '07/04/2016']
+            data['tickets[sales_end_time]'] = ['22:00', '22:00', '22:00']
+            data['tickets[min_order]'] = [2, 3, 4]
+            data['tickets[max_order]'] = [5, 6, 7]
+
+            postdata = ImmutableMultiDict(data)
             rv = self.app.post(url, follow_redirects=True, buffered=True, content_type='multipart/form-data',
-                               data=data)
+                               data=postdata)
             self.assertTrue(POST_EVENT_DATA['name'] in rv.data, msg=rv.data)
 
+            # Test Tickets
+            event = DataGetter.get_event(1)
+            self.assertEqual(len(event.tickets), 3, msg=event.tickets)
+
+            for ticket in event.tickets:
+                self.assertIn(ticket.name, data['tickets[name]'], msg=data['tickets[name]'])
+
             rv2 = self.app.get(url_for('events.details_view', event_id=1))
-            self.assertTrue(data['sponsors[name]'] in rv2.data, msg=rv2.data)
+            self.assertTrue(postdata['sponsors[name]'] in rv2.data, msg=rv2.data)
 
 
     def test_events_create_post_publish(self):

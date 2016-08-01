@@ -30,6 +30,16 @@ ul.msg_list li:last-child a {
     font-size: 12px;
 }
 
+.tickets-table>tbody>tr>td {
+    border-top: 0 !important;
+}
+
+#notif-menu {
+    height: auto;
+    max-height: 300px;
+    overflow-x: hidden;
+}
+
 .image-box {
     width: 100%;
     height: 200px;

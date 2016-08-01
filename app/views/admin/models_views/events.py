@@ -388,9 +388,8 @@ class EventsView(BaseView):
         """
         event = DataGetter.get_event(event_id)
         user = login.current_user
-        role_invite = DataGetter.get_event_role_invite(email=user.email,
-                                                       event_id=event.id,
-                                                       hash=hash)
+        role_invite = DataGetter.get_event_role_invite(event.id, hash,
+                                                       email=user.email)
 
         if role_invite:
             if role_invite.has_expired():
@@ -423,9 +422,8 @@ class EventsView(BaseView):
         """
         event = DataGetter.get_event(event_id)
         user = login.current_user
-        role_invite = DataGetter.get_event_role_invite(email=user.email,
-                                                       event_id=event.id,
-                                                       hash=hash)
+        role_invite = DataGetter.get_event_role_invite(event.id, hash,
+                                                       email=user.email)
 
         if role_invite:
             if role_invite.has_expired():
@@ -445,8 +443,7 @@ class EventsView(BaseView):
     @is_organizer
     def delete_user_role_invite(self, event_id, hash):
         event = DataGetter.get_event(event_id)
-        role_invite = DataGetter.get_event_role_invite(event_id=event.id,
-                                                       hash=hash)
+        role_invite = DataGetter.get_event_role_invite(event.id, hash)
 
         if role_invite:
             delete_from_db(role_invite, 'Deleted RoleInvite')

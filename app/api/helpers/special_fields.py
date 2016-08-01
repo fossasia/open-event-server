@@ -50,6 +50,16 @@ class EventPrivacyField(fields.ChoiceString):
         )
 
 
+class EventStateField(fields.ChoiceString):
+    __schema_example__ = 'Draft'
+
+    def __init__(self, **kwargs):
+        super(EventStateField, self).__init__(
+            choice_list=['Draft', 'Published', 'Completed'],
+            **kwargs
+        )
+
+
 class SessionLanguageField(fields.ChoiceString):
     __schema_example__ = DataGetter.get_language_list()[51]
 

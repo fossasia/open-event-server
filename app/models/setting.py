@@ -11,6 +11,9 @@ class Setting(db.Model):
     # Google Auth
     google_client_id = db.Column(db.String)
     google_client_secret = db.Column(db.String)
+    # Stripe Keys
+    stripe_secret_key = db.Column(db.String)
+    stripe_publishable_key = db.Column(db.String)
     # FB
     fb_client_id = db.Column(db.String)
     fb_client_secret = db.Column(db.String)
@@ -26,7 +29,7 @@ class Setting(db.Model):
     secret = db.Column(db.String)
     # storage place, local, s3, .. can be more in future
     storage_place = db.Column(db.String)
-    #social links
+    # Social links
     google_url = db.Column(db.String)
     github_url = db.Column(db.String)
     twitter_url = db.Column(db.String)
@@ -37,6 +40,7 @@ class Setting(db.Model):
     def __init__(self, aws_key=None, aws_secret=None, aws_bucket_name=None,
                  google_client_id=None, google_client_secret=None,
                  fb_client_id=None, fb_client_secret=None, tw_consumer_key=None,
+                 stripe_secret_key=None, stripe_publishable_key=None,
                  in_client_id=None, in_client_secret=None,
                  tw_consumer_secret=None, sendgrid_key=None,
                  secret=None, storage_place=None,
@@ -63,6 +67,8 @@ class Setting(db.Model):
         self.support_url = support_url
         self.facebook_url = facebook_url
         self.youtube_url = youtube_url
+        self.stripe_publishable_key = stripe_publishable_key
+        self.stripe_secret_key = stripe_secret_key
 
     def __repr__(self):
         return 'Settings'

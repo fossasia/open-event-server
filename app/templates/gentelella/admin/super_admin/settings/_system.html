@@ -120,6 +120,23 @@
         </div>
         <br>
 
+        <h4>Stripe Keys</h4>
+        See <a href="https://stripe.com/docs/dashboard">here</a> on how to obtain these keys.<br><br>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Secret Key</label>
+            <div class=" col-md-9 col-xs-12">
+                <input name="stripe_secret_key" class="form-control col-md-6 col-xs-6"
+                       value="{{ settings.stripe_secret_key|default('', True) }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Publishable Key</label>
+            <div class=" col-md-9 col-xs-12">
+                <input name="stripe_publishable_key" class="form-control col-md-6 col-xs-6"
+                       value="{{ settings.stripe_publishable_key|default('', True) }}">
+            </div>
+        </div>
+        <br>
         <h4>Sendgrid Token</h4>
         See <a href="https://sendgrid.com/docs/User_Guide/Settings/api_keys.html">here</a> on how to get this token.<br><br>
         <div class="form-group">
