@@ -47,3 +47,5 @@ librabbitmq
 anyjson
 mako
 functools32
+Flask-Cache
+

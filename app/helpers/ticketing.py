@@ -8,6 +8,7 @@ import stripe
 from sqlalchemy import func
 from flask import url_for
 
+from flask.ext import login
 from app.helpers.data import save_to_db
 from app.helpers.helpers import string_empty, send_email_for_after_purchase
 from app.models.order import Order
@@ -17,9 +18,9 @@ from app.helpers.data import DataManager
 
 from app.models.ticket_holder import TicketHolder
 from app.models.order import OrderTicket
+from app.models.event import Event
 from app.models.user_detail import UserDetail
 from app.helpers.helpers import send_email_after_account_create_with_password
-
 
 def get_count(q):
     count_q = q.statement.with_only_columns([func.count()]).order_by(None)
@@ -36,6 +37,22 @@ def represents_int(s):
 
 class TicketingManager(object):
     """All ticketing and orders related functions"""
+
+    @staticmethod
+    def get_orders_of_user(user_id=None, upcoming_events=True):
+        """
+        :return: Return all order objects with the current user
+        """
+        if not user_id:
+            user_id = login.current_user.id
+        if upcoming_events:
+            return Order.query.join(Order.event).filter(Order.user_id == user_id)\
+                .filter(Order.status == 'completed')\
+                .filter(Event.start_time >= datetime.now())
+        else:
+            return Order.query.join(Order.event).filter(Order.user_id == user_id)\
+                .filter(Order.status == 'completed')\
+                .filter(Event.end_time < datetime.now())
 
     @staticmethod
     def get_order_expiry():
@@ -126,26 +143,36 @@ class TicketingManager(object):
     def initiate_order_payment(form):
         identifier = form['identifier']
         email = form['email']
-        country = form['country']
-        address = form['address']
-        city = form['city']
-        state = form['state']
-        zipcode = form['zipcode']
         order = TicketingManager.get_and_set_expiry(identifier)
+
         if order:
+
             user = TicketingManager.get_or_create_user_by_email(email, form)
             order.user_id = user.id
-            order.address = address
-            order.city = city
-            order.state = state
-            order.country = country
-            order.zipcode = zipcode
-            order.status = 'initialized'
+
+            if order.amount > 0:
+                country = form['country']
+                address = form['address']
+                city = form['city']
+                state = form['state']
+                zipcode = form['zipcode']
+                order.address = address
+                order.city = city
+                order.state = state
+                order.country = country
+                order.zipcode = zipcode
+                order.status = 'initialized'
+                ticket_holder = TicketHolder(name=user.user_detail.fullname,
+                                             email=email, address=address,
+                                             city=city, state=state, country=country, order_id=order.id)
+            else:
+                order.status = 'completed'
+                order.completed_at = datetime.utcnow()
+                ticket_holder = TicketHolder(name=user.user_detail.fullname, email=email, order_id=order.id)
+
             save_to_db(order)
-            ticket_holder = TicketHolder(name=user.user_detail.fullname,
-                                         email=email, address=address,
-                                         city=city, state=state, country=country, order_id=order.id)
             save_to_db(ticket_holder)
+
             return order
         else:
             return False

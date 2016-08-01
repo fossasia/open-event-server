@@ -35,8 +35,9 @@
                 - {{ event.end_time.strftime('%A, %B %d, %Y at %I:%M %p') }} ({{ event.timezone }})<br>
                 {{ event.location_name }}
             </center>
-
-            {% include 'gentelella/guest/ticketing/components/_invoice.html' %}
+            {% if order.amount > 0 %}
+                {% include 'gentelella/guest/ticketing/components/_invoice.html' %}
+            {% endif %}
             {% include 'gentelella/guest/ticketing/components/_order_summary.html' %}
         </div>
     </div>

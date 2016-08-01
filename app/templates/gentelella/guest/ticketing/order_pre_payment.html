@@ -81,68 +81,72 @@
                     {% else %}
                         <input type="hidden" name="email" value="{{ current_user.email | default('', true) }}">
                     {% endif %}
-                    <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
-                        <i class="fa fa-ticket"></i>
-                        Billing Information
-                        <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
-                    </h2>
-                    <br>
-                    <div class="form-group">
-                        <label for="country" class="col-sm-4 control-label">Country <span
-                                class="required">*</span></label>
-                        <div class="col-sm-6">
-                            <select class="form-control" name="country" id="country" required>
-                                <option value="" selected>Select country</option>
-                                {% for country in countries %}
-                                    <option value="{{ country.name }}">{{ country.name }}</option>
-                                {% endfor %}
-                            </select>
-                            <div class="help-block with-errors"></div>
+                    {% if order.amount > 0 %}
+                        <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
+                            <i class="fa fa-ticket"></i>
+                            Billing Information
+                            <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+                        </h2>
+                        <br>
+                        <div class="form-group">
+                            <label for="country" class="col-sm-4 control-label">Country <span
+                                    class="required">*</span></label>
+                            <div class="col-sm-6">
+                                <select class="form-control" name="country" id="country" required>
+                                    <option value="" selected>Select country</option>
+                                    {% for country in countries %}
+                                        <option value="{{ country.name }}">{{ country.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="help-block with-errors"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="address" class="col-sm-4 control-label">Address <span
-                                class="required">*</span></label>
-                        <div class="col-sm-6">
-                                            <textarea class="form-control" id="address" name="address"
-                                                      required></textarea>
-                            <div class="help-block with-errors"></div>
+                        <div class="form-group">
+                            <label for="address" class="col-sm-4 control-label">Address <span
+                                    class="required">*</span></label>
+                            <div class="col-sm-6">
+                                                <textarea class="form-control" id="address" name="address"
+                                                          required></textarea>
+                                <div class="help-block with-errors"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="city" class="col-sm-4 control-label">City <span
-                                class="required">*</span></label>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" id="city" name="city" required>
-                            <div class="help-block with-errors"></div>
+                        <div class="form-group">
+                            <label for="city" class="col-sm-4 control-label">City <span
+                                    class="required">*</span></label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="city" name="city" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="state" class="col-sm-4 control-label">State/Province <span
-                                class="required">*</span></label>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" id="state" name="state" required>
-                            <div class="help-block with-errors"></div>
+                        <div class="form-group">
+                            <label for="state" class="col-sm-4 control-label">State/Province <span
+                                    class="required">*</span></label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="state" name="state" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="zipcode" class="col-sm-4 control-label">Zip Code <span
-                                class="required">*</span></label>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" id="zipcode" name="zipcode"
-                                   required>
-                            <div class="help-block with-errors"></div>
+                        <div class="form-group">
+                            <label for="zipcode" class="col-sm-4 control-label">Zip Code <span
+                                    class="required">*</span></label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="zipcode" name="zipcode"
+                                       required>
+                                <div class="help-block with-errors"></div>
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
                     <br>
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-4 control-label"></label>
                         <div class="col-sm-6">
-                            By clicking "Pay Now", I acknowledge that I have read and agree with the
+                            By clicking "{% if order.amount > 0 %}Pay Now{% else %}Order Now{% endif %}", I acknowledge that I have read and agree with the
                             Open Event terms of service, and privacy policy.<br><br>
-                            <button type="submit" class="btn btn-success btn-lg">Pay now</button>
-                            <br>
-                            <img src="{{ url_for('static', filename='img/paymentlogoshorizontal.png') }}">
+                            <button type="submit" class="btn btn-success btn-lg">{% if order.amount > 0 %}Pay now{% else %}Order Now{% endif %}</button>
+                            {% if order.amount > 0 %}
+                                <br>
+                                <img src="{{ url_for('static', filename='img/paymentlogoshorizontal.png') }}">
+                            {% endif %}
                         </div>
                     </div>
                 </form>
