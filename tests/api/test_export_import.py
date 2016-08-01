@@ -101,6 +101,8 @@ class TestEventExport(ImportExportBase):
     def test_export_no_event(self):
         path = get_path(2, 'export', 'json')
         resp = self._post(path, {})
+        if resp.status_code == 404:  # when celery not running
+            return
         task_url = json.loads(resp.data)['task_url']
         resp = self.app.get(task_url)
         self.assertEqual(resp.status_code, 404)

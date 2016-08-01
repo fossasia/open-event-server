@@ -31,7 +31,10 @@ class EventExportJson(Resource):
         task = export_event_task.delay(
             event_id, marshal(self.api.payload, EXPORT_SETTING))
         # create Job
-        create_export_job(task.id, event_id)
+        try:
+            create_export_job(task.id, event_id)
+        except Exception:
+            pass
         # in case of testing
         if current_app.config.get('CELERY_ALWAYS_EAGER'):
             TASK_RESULTS[task.id] = {
