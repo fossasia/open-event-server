@@ -286,6 +286,7 @@ def make_celery(app):
 
 celery = make_celery(current_app)
 import api.helpers.tasks
+import helpers.tasks
 
 
 @app.before_first_request
