@@ -69,8 +69,6 @@ function exportTask(url){
 
 // load data about previous job
 function loadPreviousJob(task_url, user_email, start_time){
-    console.log(task_url);
-    console.log(user_email);
     if (!task_url){
         $('#btnStartExport').prop('disabled', false);
     }
