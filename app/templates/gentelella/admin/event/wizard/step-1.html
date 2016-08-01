@@ -803,7 +803,11 @@
 
         /* Bind datepicker to dates */
         $ticketMore.find("input.date").datepicker();
-        $ticketMore.find("input.time").timepicker();
+        $ticketMore.find("input.time").timepicker({
+            'showDuration': true,
+            'timeFormat': 'H:i',
+            'scrollDefault': 'now'
+        });
 
         /* Bind events to Edit and Remove buttons */
         var $ticketEdit = $ticket.children("td").last().children().children().first();
