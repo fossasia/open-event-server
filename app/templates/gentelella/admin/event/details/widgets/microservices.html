@@ -7,10 +7,18 @@ Microservices
 <div class="col-md-12 sponsor-widget">
     <div class="row" style="text-align:center">
         <div class="col-md-6">
-            <button class="btn btn-warning" href="">Generate Android App</button>
+          {%if settings.android_app_url%}
+              <button class="btn btn-warning" href="#">Generate Android App</button>
+          {% else %}
+              <code>AndroidApp URL</code> is not defined. Please inform system Administrator
+          {% endif %}
         </div>
         <div class="col-md-6">
-            <button class="btn btn-warning" href="">Generate Web App</button>
+          {%if settings.web_app_url%}
+              <button class="btn btn-warning" href="#">Generate Web App</button>
+          {% else %}
+              <code>WebApp URL</code> is not defined. Please inform system Administrator
+          {% endif %}
         </div>
     </div>
 </div>
