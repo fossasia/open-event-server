@@ -8,7 +8,7 @@
     z-index: -1;
 }
 
-ul.msg_list li a {
+ul.msg_list li.notif-menu-li a {
     cursor: default;
     min-height: 55px;
     padding-left: 2px !important;
@@ -28,6 +28,14 @@ ul.msg_list li a .mark-as-read {
     font-size: 10px;
     font-style: normal;
     margin: 0 !important;
+    border-radius: 1px;
+}
+
+.notif-mark-all-read {
+    font-size: 10px;
+    margin: 0 !important;
+    margin-left: 4px !important;
+    border-radius: 1px;
 }
 
 ul.msg_list li a .message {
