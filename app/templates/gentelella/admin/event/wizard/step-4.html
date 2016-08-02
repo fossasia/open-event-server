@@ -1,13 +1,13 @@
 {% macro call_for_speakers_display(call_for_speakers=None) %}
     <div class="item form-group">
-        <label class="control-label">Announcement <span class="required">*</span></label>
+        <label class="control-label">Announcement</label>
         <textarea name="announcement"
                   class="announcement form-control">{{ call_for_speakers.announcement | default('') }}</textarea>
     </div>
     <div class="row event-date-picker">
         <div class="col-md-4 col-xs-6">
             <div class="item form-group">
-                <label>Starts <span class="required">*</span></label>
+                <label>Starts</label>
                 <br>
                 <div class="col-xs-8" style="padding-left: 0;">
                         <input
@@ -30,7 +30,7 @@
         </div>
         <div class="col-md-4 col-xs-6">
             <div class="item form-group">
-                <label>Ends <span class="required">*</span></label>
+                <label>Ends</label>
                 <br>
                 <div class="col-xs-8" style="padding-left: 0;">
                         <input required="required"
