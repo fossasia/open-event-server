@@ -11,6 +11,7 @@ from flask import url_for
 from tests.views.view_test_case import OpenEventViewTestCase
 from werkzeug.datastructures import ImmutableMultiDict
 
+
 class TestEvents(OpenEventViewTestCase):
     def test_events_list(self):
         with app.test_request_context():
@@ -65,7 +66,19 @@ class TestEvents(OpenEventViewTestCase):
             data['tickets[min_order]'] = [2, 3, 4]
             data['tickets[max_order]'] = [5, 6, 7]
 
-            data['taxAllow'] = 'taxNo'
+            # Add tax form to event
+            data['taxAllow'] = 'taxYes'
+            data['tax_country'] = 'Tax Country'
+            data['tax_name'] = 'Tax Name'
+            data['tax_rate'] = 1
+            data['tax_id'] = 1
+            data['tax_invoice'] = 'invoiceYes'
+            data['registered_company'] = 'TestCompany'
+            data['buisness_address'] = 'TestAddress'
+            data['invoice_city'] = 'TestCity'
+            data['invoice_state'] = 'TestState'
+            data['tax_zip'] = 1234
+            data['tax_options'] = 'tax_include'
             postdata = ImmutableMultiDict(data)
             rv = self.app.post(url, follow_redirects=True, buffered=True, content_type='multipart/form-data',
                                data=postdata)
@@ -78,9 +91,13 @@ class TestEvents(OpenEventViewTestCase):
             for ticket in event.tickets:
                 self.assertIn(ticket.name, data['tickets[name]'], msg=data['tickets[name]'])
 
+            #Test Tax Form
+            tax = DataGetter.get_tax_options(1)
+            self.assertEqual(tax.country, data['tax_country'])
+            self.assertEqual(tax.tax_rate, data['tax_rate'])
+
             rv2 = self.app.get(url_for('events.details_view', event_id=1))
             self.assertTrue(postdata['sponsors[name]'] in rv2.data, msg=rv2.data)
-
 
     def test_events_create_post_publish(self):
         with app.test_request_context():
@@ -199,6 +216,8 @@ class TestEvents(OpenEventViewTestCase):
             url = url_for('events.copy_event', event_id=event.id)
             rv = self.app.get(url, follow_redirects=True)
             self.assertTrue("Copy of event1" in rv.data, msg=rv.data)
+
+
 
 if __name__ == '__main__':
     unittest.main()
