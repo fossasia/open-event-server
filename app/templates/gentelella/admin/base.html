@@ -83,7 +83,7 @@
         });
 
         function setATagsInNotifMenuDropDown() {
-            var notification_view_path = "{{ url_for('profile.notifications_view') }}";
+            var notification_view_path = "{{ url_for('notifications.index_view') }}";
             $("ul#notif-menu li.notif-menu-li").each(function (i, li) {
                 // Clicking on a message redirects to Notification page
                 $(li).children("a").children(".message").click(function() {

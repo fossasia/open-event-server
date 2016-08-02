@@ -180,7 +180,7 @@ class User(db.Model):
             notifs.append({
                 'title': notif.title,
                 'received_at': humanize.naturaltime(datetime.now() - notif.received_at),
-                'mark_read': url_for('profile.mark_notification_as_read', notification_id=notif.id)
+                'mark_read': url_for('notifications.mark_as_read', notification_id=notif.id)
             })
 
         if reverse:

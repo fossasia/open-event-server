@@ -42,7 +42,7 @@ class TestProfile(OpenEventViewTestCase):
             }
             DataManager.create_user_notification(user=user, **notif)
 
-            rv = self.app.get(url_for('profile.notifications_view'))
+            rv = self.app.get(url_for('notifications.index_view'))
             self.assertIn(notif['title'], rv.data, msg=rv.data)
             self.assertIn(notif['message'], rv.data, msg=rv.data)
 
@@ -58,7 +58,7 @@ class TestProfile(OpenEventViewTestCase):
 
             notification = Notification.query.filter_by(user=user, **notif).first()
 
-            rv = self.app.get(url_for('profile.mark_notification_as_read',
+            rv = self.app.get(url_for('notifications.mark_as_read',
                                       notification_id=notification.id))
 
             self.assertEqual(notification.has_read, True, msg=rv.data)

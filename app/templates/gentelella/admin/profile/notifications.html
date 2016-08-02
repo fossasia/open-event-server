@@ -40,7 +40,7 @@ Notifications
                             </div>
                         </div>
                         <div class="col-xs-4">
-                            <a href="{{ url_for('profile.mark_all_notification_as_read') }}" class="btn btn-default pull-right">Mark all read</a>
+                            <a href="{{ url_for('notifications.mark_all_read') }}" class="btn btn-default pull-right">Mark all read</a>
                         </div>
                         <div class="col-xs-12">
                             <table class="notif-table table table-hover" style="margin-top: 16px;">
@@ -69,7 +69,7 @@ Notifications
                                         <td>
                                             {% if not notif.has_read %}
                                                 <a class="read-btn btn btn-default btn-xs"
-                                                   href="{{ url_for('profile.mark_notification_as_read', notification_id=notif.id) }}">Mark
+                                                   href="{{ url_for('notifications.mark_as_read', notification_id=notif.id) }}">Mark
                                                     as Read</a>
                                             {% endif %}
                                         </td>
