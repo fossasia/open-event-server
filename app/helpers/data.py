@@ -1107,7 +1107,7 @@ class DataManager(object):
             update_or_create(
                 CustomForms, event_id=event.id,
                 session_form=session_form, speaker_form=speaker_form)
-            print 'HELLO'
+
             if module and (module.payment_include or module.donation_include) \
                 and ('paid' or 'donation') in form.getlist('tickets[type]'):
 
