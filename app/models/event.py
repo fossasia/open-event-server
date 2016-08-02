@@ -71,6 +71,8 @@ class Event(db.Model):
     trash_date = db.Column(db.DateTime)
     payment_country = db.Column(db.String)
     payment_currency = db.Column(db.String)
+    paypal_email = db.Column(db.String)
+    tax_allow = db.Column(db.Boolean, default=False)
 
     def __init__(self,
                  name=None,
@@ -106,7 +108,9 @@ class Event(db.Model):
                  trash_date=None,
                  payment_country=None,
                  payment_currency=None,
+                 paypal_email=None,
                  call_for_papers=None):
+
         self.name = name
         self.logo = logo
         self.email = email
@@ -140,6 +144,7 @@ class Event(db.Model):
         self.trash_date = trash_date
         self.payment_country = payment_country
         self.payment_currency = payment_currency
+        self.paypal_email = paypal_email
         self.call_for_papers = call_for_papers
 
     def __repr__(self):

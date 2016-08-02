@@ -66,6 +66,7 @@ class ExploreView(BaseView):
 
     @expose('/<location>/events/', methods=('GET', 'POST'))
     def explore_view(self, location):
+        placeholder_images = DataGetter.get_event_default_images()
         location = deslugify(location)
         current_page = request.args.get('page')
         query = request.args.get('query', '')
@@ -107,6 +108,7 @@ class ExploreView(BaseView):
                            location=location,
                            filters=filters,
                            current_page=current_page,
+                           placeholder_images=placeholder_images,
                            categories=CATEGORIES, query=query)
 
 

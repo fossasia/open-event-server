@@ -8,6 +8,7 @@ import stripe
 from sqlalchemy import func
 from flask import url_for
 
+
 from flask.ext import login
 from app.helpers.data import save_to_db
 from app.helpers.helpers import string_empty, send_email_for_after_purchase
@@ -21,6 +22,7 @@ from app.models.order import OrderTicket
 from app.models.event import Event
 from app.models.user_detail import UserDetail
 from app.helpers.helpers import send_email_after_account_create_with_password
+
 
 def get_count(q):
     count_q = q.statement.with_only_columns([func.count()]).order_by(None)
@@ -143,6 +145,7 @@ class TicketingManager(object):
     def initiate_order_payment(form):
         identifier = form['identifier']
         email = form['email']
+
         order = TicketingManager.get_and_set_expiry(identifier)
 
         if order:

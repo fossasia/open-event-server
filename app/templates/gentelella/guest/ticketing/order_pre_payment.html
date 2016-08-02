@@ -81,6 +81,7 @@
                     {% else %}
                         <input type="hidden" name="email" value="{{ current_user.email | default('', true) }}">
                     {% endif %}
+
                     {% if order.amount > 0 %}
                         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
                             <i class="fa fa-ticket"></i>

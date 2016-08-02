@@ -56,6 +56,7 @@ class AdminView(object):
         self.admin.add_view(TicketingView(name='Ticketing & Orders', url='/orders', endpoint="ticketing"))
 
         # Accessible only after logging in
+
         self.admin.add_view(MyTicketsView(name='MyTicketsView', url='/mytickets', endpoint="my_tickets"))
         self.admin.add_view(MySessionView(name='MySessions', url='/events/mysessions', endpoint="my_sessions"))
         self.admin.add_view(EventsView(name='Events', url='/events', endpoint="events"))

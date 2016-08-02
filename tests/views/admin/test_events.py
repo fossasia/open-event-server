@@ -32,6 +32,10 @@ class TestEvents(OpenEventViewTestCase):
             data = POST_EVENT_DATA.copy()
             del data['copyright']
             del data['call_for_papers']
+            data['name'] = 'TestEvent 1'
+            data['payment_country'] = 'Mycountry'
+            data['payment_currency'] = 'Dollars'
+            data['paypal_email'] = 'test@gmail.com'
             data['sponsors_state'] = 'on'
             data['sponsors[name]'] = ['Sponsor 1', 'Sponsor 2']
             data['sponsors[type]'] = ['Gold', 'Silver']
@@ -61,10 +65,11 @@ class TestEvents(OpenEventViewTestCase):
             data['tickets[min_order]'] = [2, 3, 4]
             data['tickets[max_order]'] = [5, 6, 7]
 
+            data['taxAllow'] = 'taxNo'
             postdata = ImmutableMultiDict(data)
             rv = self.app.post(url, follow_redirects=True, buffered=True, content_type='multipart/form-data',
                                data=postdata)
-            self.assertTrue(POST_EVENT_DATA['name'] in rv.data, msg=rv.data)
+            self.assertTrue('TestEvent 1' in rv.data, msg=rv.data)
 
             # Test Tickets
             event = DataGetter.get_event(1)

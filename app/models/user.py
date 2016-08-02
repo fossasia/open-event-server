@@ -3,6 +3,7 @@ from datetime import datetime
 
 import humanize
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+from flask import url_for
 
 from app.models.session import Session
 from app.models.speaker import Speaker
@@ -130,9 +131,9 @@ class User(db.Model):
                 return True
             else:
                 return False
-        except MultipleResultsFound, e:
+        except MultipleResultsFound:
             return False
-        except NoResultFound, e:
+        except NoResultFound:
             return False
 
     def is_speaker_at_event(self, event_id):
@@ -143,9 +144,9 @@ class User(db.Model):
                 return True
             else:
                 return False
-        except MultipleResultsFound, e:
+        except MultipleResultsFound:
             return False
-        except NoResultFound, e:
+        except NoResultFound:
             return False
 
     # Flask-Login integration
@@ -170,14 +171,16 @@ class User(db.Model):
                                                 has_read=False).all())
 
     def get_unread_notifs(self, reverse=False):
-        """Get unread notifications with titles and humanized receiving time
+        """Get unread notifications with titles, humanized receiving time
+        and Mark-as-read links.
         """
         notifs = []
         unread_notifs = Notification.query.filter_by(user=self, has_read=False)
         for notif in unread_notifs:
             notifs.append({
                 'title': notif.title,
-                'received_at': humanize.naturaltime(datetime.now() - notif.received_at)
+                'received_at': humanize.naturaltime(datetime.now() - notif.received_at),
+                'mark_read': url_for('profile.mark_notification_as_read', notification_id=notif.id)
             })
 
         if reverse:
