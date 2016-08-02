@@ -84,6 +84,11 @@ class TestEvents(OpenEventViewTestCase):
                                data=postdata)
             self.assertTrue('TestEvent 1' in rv.data, msg=rv.data)
 
+            #Test Payment Details
+            self.assertTrue(data['payment_country'] in rv.data, msg=rv.data)
+            self.assertTrue(data['payment_currency'] in rv.data, msg=rv.data)
+            self.assertTrue(data['paypal_email'] in rv.data, msg=rv.data)
+
             # Test Tickets
             event = DataGetter.get_event(1)
             self.assertEqual(len(event.tickets), 3, msg=event.tickets)
