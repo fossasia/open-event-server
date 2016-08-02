@@ -28,6 +28,14 @@
         .boolean { color: blue; }
         .null { color: magenta; }
         .key { color: red; }
+
+        #export_creator {
+          opacity: 0.8;
+        }
+        #export_creator_email {
+          font-weight: 600;
+        }
+
         #json-response {
           max-height: 650px;
         }
@@ -58,16 +66,17 @@
                 </div>
             </form>
             <br>
-            <span id="export_status"></span>
-            <span id="export_error" class="red"></span>
-            <br>
             <div class="btn-group">
-                <button type="button" class="btn btn-primary" id="btnStartExport" onclick="exportEvent({{ event.id }})"
-                        style="margin-bottom: 0px;">Start
+                <button type="button" class="btn btn-primary" id="btnStartExport" onclick="exportEvent({{ event.id }}, '{{current_user.email}}')"
+                        style="margin-bottom: 0px; margin-right: 10px;" disabled="disabled">Start
                 </button>
                 <button type="button" class="btn btn-default" id="btnExportEvent" disabled="disabled">Download</button>
             </div>
-
+            <br><br>
+            <span id="export_status"></span><br>
+            <span id="export_creator" style="display: none;">Started by <span id="export_creator_email">user_email</span>,
+              <span id="export_creator_datetime">datetime</span>
+            </span>
         </div>
         <div class="col-md-5 col-md-push-1">
             <h3 style="font-weight: 300;">Access event information via REST API</h3>
@@ -176,6 +185,12 @@
                 $("#json-response").html(syntaxHighlight(str));
             });
         }
+
+        loadPreviousJob(
+          task_url="{{ export_jobs.task }}",
+          user_email="{{ export_jobs.user_email }}",
+          start_time="{{ export_jobs.start_time | humanize_alt }}"
+        );
     </script>
 
 {% endblock %}

@@ -3,7 +3,7 @@ from flask import send_file, make_response, jsonify, url_for, current_app
 from flask.ext.restplus import Resource, Namespace, marshal
 
 from app.helpers.data import record_activity
-from helpers.export_helpers import export_event_json
+from helpers.export_helpers import export_event_json, create_export_job
 from helpers.utils import TASK_RESULTS
 from helpers import custom_fields as fields
 from helpers.helpers import nocache, can_access, requires_auth
@@ -19,17 +19,23 @@ EXPORT_SETTING = api.model('ExportSetting', {
 })
 
 
-@requires_auth
-@can_access
 @nocache
 @api.route('/events/<int:event_id>/export/json')
 @api.hide
 class EventExportJson(Resource):
+    @requires_auth
+    @can_access
     @api.expect(EXPORT_SETTING)
     def post(self, event_id):
         from helpers.tasks import export_event_task
         task = export_event_task.delay(
             event_id, marshal(self.api.payload, EXPORT_SETTING))
+        # create Job
+        try:
+            create_export_job(task.id, event_id)
+        except Exception:
+            pass
+        # in case of testing
         if current_app.config.get('CELERY_ALWAYS_EAGER'):
             TASK_RESULTS[task.id] = {
                 'result': task.get(),
