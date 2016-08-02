@@ -355,7 +355,7 @@ trash_sched.start()
 
 # Flask-SocketIO integration
 
-if current_app.config.get('PRODUCTION', False):
+if current_app.config.get('INTEGRATE_SOCKETIO', False):
     from eventlet import monkey_patch
     from flask_socketio import SocketIO, emit, join_room
 
@@ -373,7 +373,7 @@ if current_app.config.get('PRODUCTION', False):
 
 
 if __name__ == '__main__':
-    if current_app.config.get('PRODUCTION', False):
+    if current_app.config.get('INTEGRATE_SOCKETIO', False):
         socketio.run(current_app)
     else:
         current_app.run()
