@@ -16,7 +16,8 @@ from ..models.message_settings import MessageSettings
 from ..models.track import Track
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, NEXT_EVENT, \
     USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, EVENT_PUBLISH, Mail,\
-    AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, TICKET_PURCHASED
+    AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, TICKET_PURCHASED, EVENT_EXPORTED, \
+    EVENT_EXPORT_FAIL
 from system_mails import MAILS
 from app.models.notifications import (
     # Prepended with `NOTIF_` to differentiate from mails
@@ -272,6 +273,7 @@ def send_email_for_event_role_invite(email, role, event, link):
             html=message
         )
 
+
 def send_email_for_after_purchase(email, invoice_id, order_url):
     """Send email with order invoice link after purchase"""
     message_settings = MessageSettings.query.filter_by(action=TICKET_PURCHASED).first()
@@ -281,6 +283,24 @@ def send_email_for_after_purchase(email, invoice_id, order_url):
             action=TICKET_PURCHASED,
             subject=MAILS[TICKET_PURCHASED]['subject'].format(invoice_id=invoice_id),
             html=MAILS[TICKET_PURCHASED]['message'].format(order_url=order_url)
+        )
+
+
+def send_email_after_export(email, event_name, result):
+    """send email after event export"""
+    if '__error' in result:
+        send_email(
+            email,
+            action=EVENT_EXPORT_FAIL,
+            subject=MAILS[EVENT_EXPORT_FAIL]['subject'].format(event_name=event_name),
+            html=MAILS[EVENT_EXPORT_FAIL]['message'].format(error_text=result['result']['message'])
+        )
+    else:
+        send_email(
+            email,
+            action=EVENT_EXPORTED,
+            subject=MAILS[EVENT_EXPORTED]['subject'].format(event_name=event_name),
+            html=MAILS[EVENT_EXPORTED]['message'].format(download_url=result['download_url'])
         )
 
 

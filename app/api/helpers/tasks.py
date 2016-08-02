@@ -8,6 +8,7 @@ from flask import url_for
 from app import celery
 from app.helpers.request_context_task import RequestContextTask
 from errors import BaseError, ServerError
+from export_helpers import send_export_mail
 
 from ..imports import import_event_task_base
 from ..exports import event_export_task_base
@@ -32,13 +33,17 @@ def export_event_task(self, event_id, settings):
     try:
         path = event_export_task_base(event_id, settings)
         # task_id = self.request.id.__str__()  # str(async result)
-        return {
+        result = {
             'download_url': url_for(
                 'api.exports_export_download', event_id=event_id, path=path
             )
         }
     except BaseError as e:
-        return {'__error': True, 'result': e.to_dict()}
+        result = {'__error': True, 'result': e.to_dict()}
     except Exception:
         print traceback.format_exc()
-        return {'__error': True, 'result': ServerError().to_dict()}
+        result = {'__error': True, 'result': ServerError().to_dict()}
+    # send email
+    send_export_mail(event_id, result)
+    # return result
+    return result

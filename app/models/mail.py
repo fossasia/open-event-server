@@ -16,6 +16,9 @@ EVENT_PUBLISH = 'Event Published'
 AFTER_EVENT = 'After Event'
 USER_REGISTER_WITH_PASSWORD = 'User Registration during Payment'
 TICKET_PURCHASED = 'Ticket(s) Purchased'
+EVENT_EXPORTED = 'Event Exported'
+EVENT_EXPORT_FAIL = 'Event Export Failed'
+
 
 class Mail(db.Model):
     __tablename__ = 'mails'

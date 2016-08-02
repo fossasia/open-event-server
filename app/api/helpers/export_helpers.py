@@ -8,6 +8,8 @@ from flask_restplus import marshal
 from app.models.export_jobs import ExportJob
 from app.models.event import Event as EventModel
 from app.helpers.data import save_to_db
+from app.helpers.data_getter import DataGetter
+from app.helpers.helpers import send_email_after_export
 
 from ..events import DAO as EventDAO, EVENT, \
     LinkDAO as SocialLinkDAO, SOCIAL_LINK
@@ -153,3 +155,18 @@ def create_export_job(task_id, event_id):
             event=EventModel.query.get(event_id)
         )
     save_to_db(export_job, 'ExportJob saved')
+
+
+def send_export_mail(event_id, result):
+    """
+    send export event mail after the process is complete
+    """
+    job = DataGetter.get_export_jobs(event_id)
+    if not job:  # job not stored, happens in case of CELERY_ALWAYS_EAGER
+        return
+    event = EventModel.query.get(event_id)
+    if not event:
+        event_name = '(Undefined)'
+    else:
+        event_name = event.name
+    send_email_after_export(job.user_email, event_name, result)

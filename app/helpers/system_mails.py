@@ -5,7 +5,8 @@ Register a mail here before using it
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
     USER_REGISTER, PASSWORD_RESET, EVENT_ROLE, SESSION_ACCEPT_REJECT, \
     SESSION_SCHEDULE, NEXT_EVENT, EVENT_PUBLISH, AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, \
-    TICKET_PURCHASED
+    TICKET_PURCHASED, EVENT_EXPORTED, EVENT_EXPORT_FAIL
+
 
 MAILS = {
     EVENT_PUBLISH: {
@@ -130,4 +131,20 @@ MAILS = {
             "<br><br><em>Looking forward to seeing you at the event.</em>"
         )
     },
+    EVENT_EXPORTED: {
+        'recipient': 'User',
+        'subject': 'Event {event_name} has been exported',
+        'message': (
+            "Click on the following link to download the event." +
+            "<br> <a href='{download_url}'>Download</a>"
+        )
+    },
+    EVENT_EXPORT_FAIL: {
+        'recipient': 'User',
+        'subject': 'Export of event {event_name} failed',
+        'message': (
+            "The error was as follows - <br>" +
+            "<pre>{error_text}</pre>"
+        )
+    }
 }
