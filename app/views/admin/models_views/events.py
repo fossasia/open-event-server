@@ -15,6 +15,8 @@ from ....helpers.data import DataManager, save_to_db, record_activity, delete_fr
 from ....helpers.data_getter import DataGetter
 from werkzeug.datastructures import ImmutableMultiDict
 from app.helpers.helpers import send_event_publish
+from app.settings import get_settings
+
 
 def is_verified_user():
     return login.current_user.is_verified
@@ -54,8 +56,6 @@ class EventsView(BaseView):
 
     @expose('/create/', methods=('GET', 'POST'))
     def create_view(self,):
-        included_settings = []
-
         if request.method == 'POST':
             img_files = []
             imd = ImmutableMultiDict(request.files)
@@ -73,15 +73,6 @@ class EventsView(BaseView):
                 return redirect(url_for('.details_view', event_id=event.id))
             return redirect(url_for('.index_view'))
 
-        module = DataGetter.get_module()
-        if module is not None:
-            if module.ticket_include:
-                included_settings.append('ticketing')
-            if module.payment_include:
-                included_settings.append('payments')
-            if module.donation_include:
-                included_settings.append('donations')
-
         hash = get_random_hash()
         if CallForPaper.query.filter_by(hash=hash).all():
             hash = get_random_hash()
@@ -97,7 +88,7 @@ class EventsView(BaseView):
             cfs_hash=hash,
             payment_countries=DataGetter.get_payment_countries(),
             payment_currencies=DataGetter.get_payment_currencies(),
-            included_settings=included_settings)
+            included_settings=self.get_module_settings())
 
     @expose('/<event_id>/', methods=('GET', 'POST'))
     @can_access
@@ -182,10 +173,12 @@ class EventsView(BaseView):
                     'accepted': DataGetter.get_sessions_by_state_and_event_id('accepted', event_id).count(),
                     'rejected': DataGetter.get_sessions_by_state_and_event_id('rejected', event_id).count(),
                     'draft': DataGetter.get_sessions_by_state_and_event_id('draft', event_id).count()}
+
         return self.render('/gentelella/admin/event/details/details.html',
                            event=event,
                            checklist=checklist,
-                           sessions=sessions)
+                           sessions=sessions,
+                           settings=get_settings())
 
     @expose('/<event_id>/edit/', methods=('GET', 'POST'))
     @can_access
@@ -211,15 +204,6 @@ class EventsView(BaseView):
         ticket_types = DataGetter.get_ticket_types(event_id)
 
 
-        included_setting = []
-        module = DataGetter.get_module()
-        if module is not None:
-            if module.ticket_include:
-                included_setting.append('ticketing')
-            if module.payment_include:
-                included_setting.append('payments')
-            if module.donation_include:
-                included_setting.append('donations')
 
         preselect = []
         required = []
@@ -258,7 +242,7 @@ class EventsView(BaseView):
                                cfs_hash=hash,
                                step=step,
                                required=required,
-                               included_settings=included_setting,
+                               included_settings=self.get_module_settings(),
                                tax=tax,
                                payment_countries=DataGetter.get_payment_countries(),
                                payment_currencies=DataGetter.get_payment_currencies(),
@@ -464,3 +448,15 @@ class EventsView(BaseView):
             return redirect(url_for('.details_view', event_id=event.id))
         else:
             abort(404)
+
+    def get_module_settings(self):
+        included_setting = []
+        module = DataGetter.get_module()
+        if module is not None:
+            if module.ticket_include:
+                included_setting.append('ticketing')
+            if module.payment_include:
+                included_setting.append('payments')
+            if module.donation_include:
+                included_setting.append('donations')
+        return included_setting
