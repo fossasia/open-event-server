@@ -61,6 +61,7 @@ class EventDetailView(BaseView):
     @expose('/<int:event_id>/sessions/')
     def display_event_sessions(self, event_id):
         event = get_published_event_or_abort(event_id)
+        placeholder_images = DataGetter.get_event_default_images()
         if not event.has_session_speakers:
             abort(404)
         call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
@@ -68,22 +69,26 @@ class EventDetailView(BaseView):
         accepted_sessions = DataGetter.get_sessions(event_id)
         if not accepted_sessions:
             abort(404)
-        return self.render('/gentelella/guest/event/sessions.html', event=event, accepted_sessions=accepted_sessions, tracks=tracks, call_for_speakers=call_for_speakers)
+        return self.render('/gentelella/guest/event/sessions.html', event=event,
+                           placeholder_images=placeholder_images, accepted_sessions=accepted_sessions, tracks=tracks, call_for_speakers=call_for_speakers)
 
     @expose('/<int:event_id>/schedule/')
     def display_event_schedule(self, event_id):
         event = get_published_event_or_abort(event_id)
+        placeholder_images = DataGetter.get_event_default_images()
         if not event.has_session_speakers:
             abort(404)
         tracks = DataGetter.get_tracks(event_id)
         accepted_sessions = DataGetter.get_sessions(event_id)
         if not accepted_sessions or not event.schedule_published_on:
             abort(404)
-        return self.render('/gentelella/guest/event/schedule.html', event=event, accepted_sessions=accepted_sessions, tracks=tracks)
+        return self.render('/gentelella/guest/event/schedule.html', event=event,
+                           placeholder_images=placeholder_images, accepted_sessions=accepted_sessions, tracks=tracks)
 
     @expose('/<int:event_id>/cfs/', methods=('GET',))
     def display_event_cfs(self, event_id, via_hash=False):
         event = get_published_event_or_abort(event_id)
+        placeholder_images = DataGetter.get_event_default_images()
         if not event.has_session_speakers:
             abort(404)
 
@@ -105,7 +110,8 @@ class EventDetailView(BaseView):
             state = "future"
         speakers = DataGetter.get_speakers(event_id).all()
         return self.render('/gentelella/guest/event/cfs.html', event=event, accepted_sessions=accepted_sessions, speaker_form=speaker_form,
-                           session_form=session_form, call_for_speakers=call_for_speakers, state=state, speakers=speakers, via_hash=via_hash)
+                           session_form=session_form, call_for_speakers=call_for_speakers,
+                           placeholder_images=placeholder_images, state=state, speakers=speakers, via_hash=via_hash)
 
     @expose('/cfs/<hash>', methods=('GET',))
     def display_event_cfs_via_hash(self, hash):
@@ -131,11 +137,13 @@ class EventDetailView(BaseView):
     @expose('/<int:event_id>/coc/', methods=('GET',))
     def display_event_coc(self, event_id):
         event = get_published_event_or_abort(event_id)
+        placeholder_images = DataGetter.get_event_default_images()
         accepted_sessions = DataGetter.get_sessions(event_id)
         call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
         if not (event.code_of_conduct and event.code_of_conduct != '' and event.code_of_conduct != ' '):
             abort(404)
         return self.render('/gentelella/guest/event/code_of_conduct.html', event=event,
+                           placeholder_images=placeholder_images,
                            accepted_sessions=accepted_sessions,
                            call_for_speakers=call_for_speakers)
 
