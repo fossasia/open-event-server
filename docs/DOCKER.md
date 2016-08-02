@@ -12,10 +12,19 @@ sudo apt-get install docker-engine
 ```
 
 * Git clone the repository and cd into it.
- ```git clone https://github.com/fossasia/open-event-orga-server.git && cd open-event-orga-server```
 
-* Build the app
- ```docker build -t open-event-orga-server .```
+```bash
+git clone https://github.com/fossasia/open-event-orga-server.git && cd open-event-orga-server
+```
+
+* Build the app (the trailing dot is necessary)
+
+```bash
+docker build -t open-event-orga-server .
+```
 
 * Run the app
- ```docker run -p 80:5000 open-event-orga-server```
+
+```bash
+docker run -p 80:5000 open-event-orga-server
+```
