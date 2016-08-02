@@ -29,6 +29,7 @@ def get_published_event_or_abort(event_id):
         abort(404)
     return event
 
+
 class EventDetailView(BaseView):
 
     @expose('/')
@@ -38,6 +39,7 @@ class EventDetailView(BaseView):
     @expose('/<int:event_id>/')
     def display_event_detail_home(self, event_id):
         event = get_published_event_or_abort(event_id)
+        placeholder_images = DataGetter.get_event_default_images()
         call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
         accepted_sessions = DataGetter.get_sessions(event_id)
         if event.copyright:
@@ -49,6 +51,7 @@ class EventDetailView(BaseView):
         tickets = DataGetter.get_sales_open_tickets(event_id)
         return self.render('/gentelella/guest/event/details.html',
                            event=event,
+                           placeholder_images=placeholder_images,
                            accepted_sessions=accepted_sessions,
                            call_for_speakers=call_for_speakers,
                            licence_details=licence_details,

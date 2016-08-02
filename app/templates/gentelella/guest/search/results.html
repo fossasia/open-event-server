@@ -21,7 +21,7 @@
         <div class="col-xs-12 event-holder">
             <div class="thumbnail row">
                 <div class="img-box col-md-3 col-sm-3 col-xs-3">
-                    <img class="event-image" src="{{ event.background_url | default('', true) }}"
+                    <img class="event-image" src='{% if event.background_url %}{{ event.background_url }}{% elif event.topic%}{{ url_for("static", filename="placeholders/" + placeholder_images[event.topic])}}{% elif event.subtopic %}{{ url_for("static", filename="placeholders/" + placeholder_images[event.subtopic])}}{% else %}{{url_for("static", filename="placeholders/" + placeholder_images["Other"])}}{% endif %}'
                          onerror="imgError(this, true)">
                 </div>
                 <div class="caption col-md-9 col-sm-9 col-xs-9">
