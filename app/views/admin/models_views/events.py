@@ -23,8 +23,10 @@ def is_verified_user():
 def is_accessible():
     return login.current_user.is_authenticated
 
+
 def get_random_hash():
     return binascii.b2a_hex(os.urandom(20))
+
 
 class EventsView(BaseView):
     def _handle_view(self, name, **kwargs):

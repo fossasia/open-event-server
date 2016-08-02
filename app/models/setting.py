@@ -36,6 +36,8 @@ class Setting(db.Model):
     support_url = db.Column(db.String)
     facebook_url = db.Column(db.String)
     youtube_url = db.Column(db.String)
+    android_app_url = db.Column(db.String)
+    web_app_url = db.Column(db.String)
 
     def __init__(self, aws_key=None, aws_secret=None, aws_bucket_name=None,
                  google_client_id=None, google_client_secret=None,
@@ -46,7 +48,7 @@ class Setting(db.Model):
                  secret=None, storage_place=None,
                  google_url=None, github_url=None,
                  twitter_url=None, support_url=None,
-                 facebook_url=None, youtube_url=None):
+                 facebook_url=None, youtube_url=None, android_app_url=None, web_app_url=None):
         self.aws_key = aws_key
         self.aws_secret = aws_secret
         self.aws_bucket_name = aws_bucket_name
@@ -69,6 +71,8 @@ class Setting(db.Model):
         self.youtube_url = youtube_url
         self.stripe_publishable_key = stripe_publishable_key
         self.stripe_secret_key = stripe_secret_key
+        self.web_app_url = web_app_url
+        self.android_app_url = android_app_url
 
     def __repr__(self):
         return 'Settings'

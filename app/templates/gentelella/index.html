@@ -97,7 +97,7 @@
     <a href="/e/{{ event.id }}">
         <div class="col-md-4 col-xs-12 col-sm-6 event-holder">
             <div class="thumbnail">
-                <img src="{{ event.background_url | default('', true) }}" onerror="imgError(this, true)">
+                <img src='{% if event.background_url %}{{ event.background_url }}{% elif event.topic%}{{ url_for("static", filename="placeholders/" + placeholder_images[event.topic])}}{% elif event.subtopic %}{{ url_for("static", filename="placeholders/" + placeholder_images[event.subtopic])}}{% else %}{{url_for("static", filename="placeholders/" + placeholder_images["Other"])}}{% endif %}' onerror="imgError(this, true)">
                 <div class="caption">
                     <small class="time">{{ event.start_time.strftime('%a, %B %d %I:%M %p') }}</small>
                     <h4 class="name">{{ event.name }}</h4>
