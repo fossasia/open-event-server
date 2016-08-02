@@ -667,11 +667,11 @@ class DataGetter(object):
         return Module.query.get(1)
 
     @staticmethod
-<<<<<<< HEAD
     def get_export_jobs(event_id):
         """get export job for an event"""
         return ExportJob.query.filter_by(event_id=event_id).first()
-=======
+
+    @staticmethod
     def get_payment_countries():
         return sorted([k for k in PAYMENT_COUNTRIES])
 
@@ -692,4 +692,3 @@ class DataGetter(object):
         for ticket in tickets:
             ticket_types.append(ticket.type)
         return ticket_types
->>>>>>> base/development
