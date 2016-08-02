@@ -140,3 +140,28 @@ EVENT_TOPICS = {
         "Canoeing", "Climbing", "Hiking", "Kayaking", "Other", "Rafting", "Travel"
     ]
 }
+
+# Event Images with Event Topics
+
+DEFAULT_EVENT_IMAGES = {
+    'Auto, Boat & Air': 'auto.jpg',
+    'Business & Professional': 'business.jpg',
+    'Charity & Causes': 'charity.jpg',
+    'Community & Culture': 'culture.jpg',
+    'Family & Education': 'education.jpg',
+    'Fashion & Beauty': 'fashion.jpg',
+    'Film, Media & Entertainment': 'film.jpg',
+    'Food & Drink': 'food.jpg',
+    'Government & Politics': 'government.jpg',
+    'Health & Wellness': 'health.jpg',
+    'Hobbies & Special Interest': 'hobbies.jpg',
+    'Home & Lifestyle': 'home.jpg',
+    'Music': 'music.jpg',
+    'Other': 'generic.jpg',
+    'Performing & Visual Arts': 'perform.jpg',
+    'Religion & Spirituality': 'spiritual.jpg',
+    'Science & Technology': 'science.jpg',
+    'Seasonal & Holiday': 'holiday.jpg',
+    'Sports & Fitness': 'sport.jpg',
+    'Travel & Outdoor': 'travel.jpg'
+}

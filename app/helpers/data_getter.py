@@ -33,7 +33,7 @@ from ..models.ticket import Ticket
 from ..models.modules import Module
 from ..models.page import Page
 from .language_list import LANGUAGE_LIST
-from .static import EVENT_TOPICS, EVENT_LICENCES
+from .static import EVENT_TOPICS, EVENT_LICENCES, DEFAULT_EVENT_IMAGES
 from app.helpers.helpers import get_event_id, string_empty
 from flask.ext import login
 from flask import flash, abort
@@ -536,6 +536,10 @@ class DataGetter(object):
     @staticmethod
     def get_event_subtopics():
         return EVENT_TOPICS
+
+    @staticmethod
+    def get_event_default_images():
+        return DEFAULT_EVENT_IMAGES
 
     @staticmethod
     def get_all_mails(count=300):
