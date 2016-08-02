@@ -86,12 +86,12 @@
                                     <div class="row" style="padding-top: 10px; padding-bottom: 10px;">
                                         <div class="col-xs-6">
                                             <span class="notif-mark-all-read btn btn-default btn-xs"
-                                                data-markallread="{{ url_for('profile.mark_all_notification_as_read') }}">
+                                                data-markallread="{{ url_for('notifications.mark_all_read') }}">
                                                 Mark all read
                                             </span>
                                         </div>
                                         <div class="col-xs-6">
-                                            <a href="{{ url_for('profile.notifications_view') }}">
+                                            <a href="{{ url_for('notifications.index_view') }}">
                                                 See all notifications
                                                 <i class="fa fa-angle-right"></i>
                                             </a>

@@ -9,7 +9,7 @@ from app.views.admin.models_views.my_tickets import MyTicketsView
 from app.views.admin.models_views.my_sessions import MySessionView
 from app.views.admin.models_views.export import ExportView
 from app.views.admin.models_views.roles import RoleView
-from app.views.admin.models_views.profile import ProfileView
+from app.views.admin.models_views.profile import ProfileView, NotificationView
 from app.views.admin.models_views.settings import SettingsView
 from app.views.admin.models_views.scheduler import SchedulerView
 from app.views.admin.models_views.invite import InviteView
@@ -71,6 +71,7 @@ class AdminView(object):
         self.admin.add_view(ExportView(name='Export', url='/events/<int:event_id>/export', endpoint="event_export"))
         self.admin.add_view(RoleView(name='Role', url='/events/<int:event_id>/roles', endpoint="event_roles"))
         self.admin.add_view(ProfileView(name='Profile', url='/profile', endpoint="profile"))
+        self.admin.add_view(NotificationView(name='Notification', url='/notifications', endpoint='notifications'))
         self.admin.add_view(InviteView(name='Invite', url='/events/<int:event_id>/invite', endpoint="event_invites"))
         self.admin.add_view(TicketSalesView(name='Tickets', url='/events/<int:event_id>/tickets',
                                             endpoint="event_ticket_sales"))
