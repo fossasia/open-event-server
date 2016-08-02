@@ -17,6 +17,7 @@ from app.views.admin.models_views.sessions import SessionsView
 from app.views.admin.models_views.speakers import SpeakersView
 from app.views.admin.home import MyHomeView
 from app.views.admin.models_views.sponsors import SponsorsView
+from app.views.admin.models_views.ticket_sales import TicketSalesView
 from app.views.public.event_detail import EventDetailView
 from app.views.public.explore import ExploreView
 from app.views.public.pages import BasicPagesView
@@ -60,6 +61,8 @@ class AdminView(object):
         self.admin.add_view(MyTicketsView(name='MyTicketsView', url='/mytickets', endpoint="my_tickets"))
         self.admin.add_view(MySessionView(name='MySessions', url='/events/mysessions', endpoint="my_sessions"))
         self.admin.add_view(EventsView(name='Events', url='/events', endpoint="events"))
+
+        # Event level
         self.admin.add_view(SpeakersView(name='Speakers', url='/events/<int:event_id>/speakers', endpoint="event_speakers"))
         self.admin.add_view(SponsorsView(name='Sponsors', url='/events/<int:event_id>/sponsors', endpoint="event_sponsors"))
         self.admin.add_view(SessionsView(name='Sessions', url='/events/<int:event_id>/sessions', endpoint="event_sessions"))
@@ -69,6 +72,8 @@ class AdminView(object):
         self.admin.add_view(RoleView(name='Role', url='/events/<int:event_id>/roles', endpoint="event_roles"))
         self.admin.add_view(ProfileView(name='Profile', url='/profile', endpoint="profile"))
         self.admin.add_view(InviteView(name='Invite', url='/events/<int:event_id>/invite', endpoint="event_invites"))
+        self.admin.add_view(TicketSalesView(name='Tickets', url='/events/<int:event_id>/tickets',
+                                            endpoint="event_ticket_sales"))
         self.admin.add_view(SettingsView(name='Settings', url='/settings', endpoint="settings"))
 
         # Super Admin pages

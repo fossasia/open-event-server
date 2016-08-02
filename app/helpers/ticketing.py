@@ -57,6 +57,24 @@ class TicketingManager(object):
                 .filter(Event.end_time < datetime.now())
 
     @staticmethod
+    def get_orders(event_id=None, status=None):
+        if event_id:
+            if status:
+                orders = Order.query.filter_by(event_id=event_id).filter_by(status=status).all()
+            else:
+                orders = Order.query.filter_by(event_id=event_id).all()
+        else:
+            if status:
+                orders = Order.query.filter_by(status=status).all()
+            else:
+                orders = Order.query.all()
+        return orders
+
+    @staticmethod
+    def get_orders_count(event_id, status='completed'):
+        return get_count(Order.query.filter_by(event_id=event_id).filter_by(status=status))
+
+    @staticmethod
     def get_order_expiry():
         return 10
 
