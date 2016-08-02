@@ -1,0 +1,21 @@
+{% extends 'gentelella/admin/event/details/base_panel.html' %}
+{% block panel_title %}
+Microservices
+{% endblock %}
+
+{% block panel_content %}
+<div class="col-md-12 sponsor-widget">
+    <div class="row" style="text-align:center">
+        <div class="col-md-6">
+            <button class="btn btn-warning" href="">Generate Android App</button>
+        </div>
+        <div class="col-md-6">
+            <button class="btn btn-warning" href="">Generate Web App</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+{% endblock %}
