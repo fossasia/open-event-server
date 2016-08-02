@@ -15,6 +15,8 @@ from ....helpers.data import DataManager, save_to_db, record_activity, delete_fr
 from ....helpers.data_getter import DataGetter
 from werkzeug.datastructures import ImmutableMultiDict
 from app.helpers.helpers import send_event_publish
+from app.settings import get_settings
+
 
 def is_verified_user():
     return login.current_user.is_verified
@@ -182,10 +184,12 @@ class EventsView(BaseView):
                     'accepted': DataGetter.get_sessions_by_state_and_event_id('accepted', event_id).count(),
                     'rejected': DataGetter.get_sessions_by_state_and_event_id('rejected', event_id).count(),
                     'draft': DataGetter.get_sessions_by_state_and_event_id('draft', event_id).count()}
+
         return self.render('/gentelella/admin/event/details/details.html',
                            event=event,
                            checklist=checklist,
-                           sessions=sessions)
+                           sessions=sessions,
+                           settings=get_settings())
 
     @expose('/<event_id>/edit/', methods=('GET', 'POST'))
     @can_access
