@@ -71,32 +71,31 @@
                                 <span class="badge bg-green" id="notif_count">{{ current_user.get_unread_notif_count() | default('', true) }}</span>
                             </a>
                             <ul id="notif-menu" class="dropdown-menu list-unstyled menu msg_list">
-                            {% if current_user.get_unread_notifs() %}
-                            {% for notif in current_user.get_unread_notifs(reverse=True) %}
-                                <li class="notif-menu-li">
-                                    <a>
-                                        <span class="message">{{ notif.title }}</span>
-                                        <span class="time">{{ notif.received_at }}</span>
-                                        <span class="mark-as-read btn btn-default btn-xs" data-markread="{{ notif.mark_read }}">Mark as read</span>
-                                    </a>
+                                <li style="border: 0;">
+                                    <span><strong>Notifications</strong></span>
+                                    <span class="pull-right">
+                                        <a href="#" class="notif-mark-all-read"
+                                            data-markallread="{{ url_for('notifications.mark_all_read') }}">
+                                            Mark All as Read
+                                        </a>
+                                    </span>
                                 </li>
-                            {% endfor %}
+                            {% if current_user.get_unread_notifs() %}
+                                {% for notif in current_user.get_unread_notifs(reverse=True) %}
+                                    <li class="notif-menu-li">
+                                        <a>
+                                            <span class="message">{{ notif.title }}</span>
+                                            <span class="time">{{ notif.received_at }}</span>
+                                            <span class="mark-as-read btn btn-default btn-xs" data-markread="{{ notif.mark_read }}">Mark as read</span>
+                                        </a>
+                                    </li>
+                                {% endfor %}
                             {% endif %}
                                 <li>
-                                    <div class="row" style="padding-top: 10px; padding-bottom: 10px;">
-                                        <div class="col-xs-6">
-                                            <span class="notif-mark-all-read btn btn-default btn-xs"
-                                                data-markallread="{{ url_for('notifications.mark_all_read') }}">
-                                                Mark all read
-                                            </span>
-                                        </div>
-                                        <div class="col-xs-6">
-                                            <a href="{{ url_for('notifications.index_view') }}">
-                                                See all notifications
-                                                <i class="fa fa-angle-right"></i>
-                                            </a>
-                                        </div>
-                                    </div>
+                                    <a href="{{ url_for('notifications.index_view') }}">
+                                        See all notifications
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
                                 </li>
                             </ul>
                         </li>
