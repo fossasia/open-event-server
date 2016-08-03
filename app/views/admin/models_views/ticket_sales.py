@@ -75,3 +75,17 @@ class TicketSalesView(BaseView):
 
         return self.render('/gentelella/admin/event/tickets/tickets.html', event=event, event_id=event_id,
                            orders_summary=orders_summary, tickets_summary=tickets_summary)
+
+    @expose('/orders/')
+    @flask_login.login_required
+    def display_orders(self, event_id):
+        event = DataGetter.get_event(event_id)
+        orders = TicketingManager.get_orders(event_id)
+        return self.render('/gentelella/admin/event/tickets/orders.html', event=event, event_id=event_id, orders=orders)
+
+    @expose('/attendees/')
+    @flask_login.login_required
+    def display_attendees(self, event_id):
+        event = DataGetter.get_event(event_id)
+        orders = TicketingManager.get_orders(event_id)
+        return self.render('/gentelella/admin/event/tickets/attendees.html', event=event, event_id=event_id, orders=orders)
