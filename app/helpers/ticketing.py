@@ -60,14 +60,15 @@ class TicketingManager(object):
     def get_orders(event_id=None, status=None):
         if event_id:
             if status:
-                orders = Order.query.filter_by(event_id=event_id).filter_by(status=status).all()
+                orders = Order.query.filter_by(event_id=event_id).filter_by(status=status)\
+                    .filter(Order.user_id.isnot(None)).all()
             else:
-                orders = Order.query.filter_by(event_id=event_id).all()
+                orders = Order.query.filter_by(event_id=event_id).filter(Order.user_id.isnot(None)).all()
         else:
             if status:
-                orders = Order.query.filter_by(status=status).all()
+                orders = Order.query.filter_by(status=status).filter(Order.user_id.isnot(None)).all()
             else:
-                orders = Order.query.all()
+                orders = Order.query.filter(Order.user_id.isnot(None)).all()
         return orders
 
     @staticmethod
@@ -155,6 +156,9 @@ class TicketingManager(object):
                 amount = amount + (order_ticket.ticket.price * order_ticket.quantity)
 
         order.amount = amount
+
+        if login.current_user.is_authenticated:
+            order.user_id = login.current_user.id
 
         save_to_db(order)
         return order
