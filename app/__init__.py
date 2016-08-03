@@ -297,6 +297,13 @@ def set_secret():
 def set_stripe_key():
     stripe.api_key = get_settings()['stripe_secret_key']
 
+
+@app.context_processor
+def integrate_socketio():
+    integrate = current_app.config.get('INTEGRATE_SOCKETIO', False)
+    return dict(integrate_socketio=integrate)
+
+
 def send_after_event_mail():
     with app.app_context():
         events = Event.query.all()
@@ -355,7 +362,7 @@ trash_sched.start()
 
 # Flask-SocketIO integration
 
-if current_app.config.get('PRODUCTION', False):
+if current_app.config.get('INTEGRATE_SOCKETIO', False):
     from eventlet import monkey_patch
     from flask_socketio import SocketIO, emit, join_room
 
@@ -373,7 +380,7 @@ if current_app.config.get('PRODUCTION', False):
 
 
 if __name__ == '__main__':
-    if current_app.config.get('PRODUCTION', False):
+    if current_app.config.get('INTEGRATE_SOCKETIO', False):
         socketio.run(current_app)
     else:
         current_app.run()
