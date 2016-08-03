@@ -38,10 +38,7 @@ class DevelopmentConfig(Config):
     MINIFY_PAGE = False
     # If Env Var `INTEGRATE_SOCKETIO` is set to 'true', then integrate SocketIO
     socketio_integration = os.environ.get('INTEGRATE_SOCKETIO')
-    if socketio_integration == 'true':
-        INTEGRATE_SOCKETIO = True
-    else:
-        INTEGRATE_SOCKETIO = False
+    INTEGRATE_SOCKETIO = bool(socketio_integration == 'true')
 
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', '')
     if not SQLALCHEMY_DATABASE_URI:
