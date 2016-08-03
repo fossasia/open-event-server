@@ -1,27 +1,37 @@
-{% import 'admin/static.html' as admin_static with context %}
 <!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>You got 404'd</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap/dist/css/bootstrap.min.css') }}" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>You got 404'd - HTTP 404 - Page Not Found - Open Event</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/roboto.css') }}"/>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='admin/lib/bootstrap/dist/css/bootstrap.min.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='admin/lib/font-awesome/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom/common.css') }}"/>
+
 </head>
-<body>
-<div class="container">
-    <div class="row">
-        <div class="col-md-push-3 col-md-6" style="margin-top: 20px;">
-            <div class="jumbotron">
-                <h2 style="font-weight: 100; ">Page Not Found</h2>
-                <p class="lead">Oops, the page you're looking for does not exist.</p>
-                <p style="font-size: 14px;">
-                    You may want to head back to the homepage and restart your journey.
-                </p>
-                <a href="/" class="btn btn-large btn-info" style="background-color: #3f51b5;">
-                    <i class="glyphicon glyphicon-home"></i> Take Me Home
-                </a>
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+        <div class="col-md-12">
+            <div class="col-middle">
+                <div class="text-center text-center">
+                    <br><br><br><br><br><br>
+                    <h1 class="error-number" style="font-weight: 100">You got 404'd</h1>
+                    <h2 style="font-weight: 300; font-size: x-large;">Sorry but we couldn't find this page</h2>
+                    <p style="font-weight: 300; font-size: large;">This page you are looking for does not exist.
+                    </p>
+                </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 </body>
 </html>

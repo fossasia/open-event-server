@@ -21,4 +21,3 @@ class OpenEventViewTestCase(OpenEventTestCase):
         with app.test_request_context():
             self.super_admin = get_or_create_super_admin()
             login(self.app, "test_super_admin@email.com", "test_super_admin")
-

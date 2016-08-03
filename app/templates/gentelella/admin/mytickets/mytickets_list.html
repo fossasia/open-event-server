@@ -27,7 +27,7 @@
                     <hr>
                     <p class="tags">
                         <span class="filter-hashtag">
-                            {% if order.amount == 0 %}Free{% else %}${{ '%0.2f'| format(order.amount|float) }}{% endif %} order #{{ order.get_invoice_number() }} on {{ order.completed_at.strftime('%B %d, %Y %I:%M %p') }}
+                            {% if order.amount == 0 %}Free{% else %}${{ order.amount | money }}{% endif %} order #{{ order.get_invoice_number() }} on {{ order.completed_at.strftime('%B %d, %Y %I:%M %p') }}
                         </span>
                     </p>
                 </div>

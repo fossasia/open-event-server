@@ -202,15 +202,32 @@ def humanize_filter(time):
 
 @app.template_filter('firstname')
 def firstname_filter(string):
-    return HumanName(string).first
+    if string:
+        return HumanName(string).first
+    else:
+        return 'N/A'
 
 @app.template_filter('middlename')
 def middlename_filter(string):
-    return HumanName(string).middle
+    if string:
+        return HumanName(string).middle
+    else:
+        return 'N/A'
 
 @app.template_filter('lastname')
 def lastname_filter(string):
-    return HumanName(string).last
+    if string:
+        return HumanName(string).last
+    else:
+        return 'N/A'
+
+@app.template_filter('money')
+def money_filter(string):
+    return '{:20,.2f}'.format(float(string))
+
+@app.template_filter('datetime')
+def simple_datetime_display(date):
+    return date.strftime('%B %d, %Y %I:%M %p')
 
 @app.context_processor
 def flask_helpers():
