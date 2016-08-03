@@ -1,10 +1,7 @@
-{% extends 'gentelella/admin/event/event_base.html' %}
+{% extends 'gentelella/admin/event/tickets/tickets_base.html' %}
 
-{% block title %}
-    {{ event.name }} - Tickets
-{% endblock %}
+{% set active_side_page = "tickets" %}
 
-{% set active_page = "tickets" %}
 
 {% block head_css %}
     {{ super() }}
@@ -67,193 +64,187 @@
             border-right-color: transparent;
             border-left-color: transparent;
         }
-
-
     </style>
 {% endblock %}
 
-{% block content %}
-    <div class="row">
-        <div class="col-md-12">
-            <h3>Completed Orders</h3>
-            <div class="col-md-2">
-                <div class="panel panel-default stats-panel">
-                    <div class="panel-heading text-center">
-                        <h2 class="panel-title">Orders</h2>
-                    </div>
-                    <div class="panel-body text-center">
-                        {{ orders_summary.completed.orders_count }}
-                    </div>
-                    <div class="panel-footer text-right">
-                        <a href="./orders">View orders</a>
-                    </div>
-                </div>
+{% block inner_content %}
+    <h3>Completed Orders</h3>
+    <div class="col-md-2">
+        <div class="panel panel-default stats-panel">
+            <div class="panel-heading text-center">
+                <h2 class="panel-title">Orders</h2>
             </div>
-            <div class="col-md-2">
-                <div class="panel panel-default stats-panel">
-                    <div class="panel-heading text-center">
-                        <h2 class="panel-title">Sales</h2>
-                    </div>
-                    <div class="panel-body text-center">
-                        ${{ '%0.2f'| format(orders_summary.completed.total_sales|float) }}
-                    </div>
-                    <div class="panel-footer text-right" style="border-top: 1px solid #fff;">
-                        &nbsp;
-                    </div>
-                </div>
+            <div class="panel-body text-center">
+                {{ orders_summary.completed.orders_count }}
             </div>
-
-            <div class="col-md-2">
-                <div class="panel panel-default stats-panel">
-                    <div class="panel-heading text-center">
-                        <h2 class="panel-title">Tickets sold</h2>
-                    </div>
-                    <div class="panel-body text-center">
-                        {{ orders_summary.completed.tickets_count }}
-                    </div>
-                    <div class="panel-footer text-right">
-                        <a href="./attendees">View attendees</a>
-                    </div>
-                </div>
-            </div>
-            <div class="clearfix"></div>
-            <hr>
-            <h3>Orders Summary
-                <small> by order status</small>
-            </h3>
-            <div class="col-md-12">
-                <table class="table" id="order-summmary-table">
-                    <thead>
-                    <tr>
-                        <th>
-                            Order Status
-                        </th>
-                        <th>
-                            Total Tickets
-                        </th>
-                        <th>
-                            Total Orders
-                        </th>
-                        <th>
-                            Total Sales ($)
-                        </th>
-                        <th>
-                            View Reports
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for name , item in orders_summary.iteritems() %}
-                        <tr>
-                            <th>
-                                <span class="label label-{{ item.class }}">{{ name | capitalize }}</span>
-                            </th>
-                            <td>
-                                {{ item.tickets_count }}
-                            </td>
-                            <td>
-                                {{ item.orders_count }}
-                            </td>
-                            <td>
-                                ${{ '%0.2f'| format(item.total_sales|float) }}
-                            </td>
-                            <td>
-                                <a href="./orders">View orders</a> / <a href="./attendees">View attendees</a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <div class="clearfix"></div>
-            <hr>
-            <h3>Tickets Summary
-                <small> by order status</small>
-            </h3>
-            <div class="col-md-12">
-                <table class="table" id="tickets-summary-table">
-                    <thead>
-                    <tr>
-                        <th rowspan="2">
-                            Ticket Type
-                        </th>
-                        <th rowspan="2" class="active">
-                            Tickets Capacity Set
-                        </th>
-
-                        <th colspan="2" class="success">
-                            Completed Orders
-                        </th>
-                        <th colspan="2" class="warning">
-                            Pending Orders
-                        </th>
-                    </tr>
-                    <tr class="active">
-                        <th>
-                            Tickets
-                        </th>
-                        <th>
-                            Sales
-                        </th>
-                        <th>
-                            Tickets
-                        </th>
-                        <th>
-                            Sales
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for id, item in tickets_summary.iteritems() %}
-
-                        <tr>
-                            <td>
-                                {{ item.name }}
-                            </td>
-                            <td>
-                                {{ item.quantity }}
-                            </td>
-                            <td>
-                                {{ item.completed.tickets_count }}
-                            </td>
-                            <td>
-                                ${{ '%0.2f'| format(item.completed.sales|float) }}
-                            </td>
-                            <td>
-                                {{ item.pending.tickets_count }}
-                            </td>
-                            <td>
-                                ${{ '%0.2f'| format(item.pending.sales|float) }}
-                            </td>
-                        </tr>
-                    {% endfor %}
-
-                    </tbody>
-                    <tfoot>
-                    <tr>
-                        <th>
-                            Total
-                        </th>
-                        <th>
-
-                        </th>
-                        <th>
-                            {{ orders_summary.completed.tickets_count }}
-                        </th>
-                        <th>
-                            ${{ '%0.2f'| format(orders_summary.completed.total_sales|float) }}
-                        </th>
-                        <th>
-                            {{ orders_summary.pending.tickets_count }}
-                        </th>
-                        <th>
-                            ${{ '%0.2f'| format(orders_summary.pending.total_sales|float) }}
-                        </th>
-                    </tr>
-                    </tfoot>
-                </table>
+            <div class="panel-footer text-right">
+                <a href="./orders">View orders</a>
             </div>
         </div>
+    </div>
+    <div class="col-md-2">
+        <div class="panel panel-default stats-panel">
+            <div class="panel-heading text-center">
+                <h2 class="panel-title">Sales</h2>
+            </div>
+            <div class="panel-body text-center">
+                ${{ '%0.2f'| format(orders_summary.completed.total_sales|float) }}
+            </div>
+            <div class="panel-footer text-right" style="border-top: 1px solid #fff;">
+                &nbsp;
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="panel panel-default stats-panel">
+            <div class="panel-heading text-center">
+                <h2 class="panel-title">Tickets sold</h2>
+            </div>
+            <div class="panel-body text-center">
+                {{ orders_summary.completed.tickets_count }}
+            </div>
+            <div class="panel-footer text-right">
+                <a href="./attendees">View attendees</a>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <hr>
+    <h3>Orders Summary
+        <small> by order status</small>
+    </h3>
+    <div class="col-md-12">
+        <table class="table" id="order-summmary-table">
+            <thead>
+            <tr>
+                <th>
+                    Order Status
+                </th>
+                <th>
+                    Total Tickets
+                </th>
+                <th>
+                    Total Orders
+                </th>
+                <th>
+                    Total Sales ($)
+                </th>
+                <th>
+                    View Reports
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for name , item in orders_summary.iteritems() %}
+                <tr>
+                    <th>
+                        <span class="label label-{{ item.class }}">{{ name | capitalize }}</span>
+                    </th>
+                    <td>
+                        {{ item.tickets_count }}
+                    </td>
+                    <td>
+                        {{ item.orders_count }}
+                    </td>
+                    <td>
+                        ${{ '%0.2f'| format(item.total_sales|float) }}
+                    </td>
+                    <td>
+                        <a href="./orders">View orders</a> / <a href="./attendees">View attendees</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="clearfix"></div>
+    <hr>
+    <h3>Tickets Summary
+        <small> by order status</small>
+    </h3>
+    <div class="col-md-12">
+        <table class="table" id="tickets-summary-table">
+            <thead>
+            <tr>
+                <th rowspan="2">
+                    Ticket Type
+                </th>
+                <th rowspan="2" class="active">
+                    Tickets Capacity Set
+                </th>
+
+                <th colspan="2" class="success">
+                    Completed Orders
+                </th>
+                <th colspan="2" class="warning">
+                    Pending Orders
+                </th>
+            </tr>
+            <tr class="active">
+                <th>
+                    Tickets
+                </th>
+                <th>
+                    Sales
+                </th>
+                <th>
+                    Tickets
+                </th>
+                <th>
+                    Sales
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for id, item in tickets_summary.iteritems() %}
+
+                <tr>
+                    <td>
+                        {{ item.name }}
+                    </td>
+                    <td>
+                        {{ item.quantity }}
+                    </td>
+                    <td>
+                        {{ item.completed.tickets_count }}
+                    </td>
+                    <td>
+                        ${{ '%0.2f'| format(item.completed.sales|float) }}
+                    </td>
+                    <td>
+                        {{ item.pending.tickets_count }}
+                    </td>
+                    <td>
+                        ${{ '%0.2f'| format(item.pending.sales|float) }}
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+            <tfoot>
+            <tr>
+                <th>
+                    Total
+                </th>
+                <th>
+
+                </th>
+                <th>
+                    {{ orders_summary.completed.tickets_count }}
+                </th>
+                <th>
+                    ${{ '%0.2f'| format(orders_summary.completed.total_sales|float) }}
+                </th>
+                <th>
+                    {{ orders_summary.pending.tickets_count }}
+                </th>
+                <th>
+                    ${{ '%0.2f'| format(orders_summary.pending.total_sales|float) }}
+                </th>
+            </tr>
+            </tfoot>
+        </table>
     </div>
 {% endblock %}
 {% block tail_js %}
