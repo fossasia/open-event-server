@@ -554,25 +554,25 @@
                                                 <option value="">Choose a country for your tax payment</option>
                                             {% endif %}
                                             {% for country in payment_countries %}
-                                                <option value="{{ tax.country }}" {{ "selected" if event and event.payment_country == country else '' }}>{{ country }}</option>
+                                                <option value="{{ tax.country | default('', true) }}" {{ "selected" if event and event.payment_country == country else '' }}>{{ country }}</option>
                                             {% endfor %}
                                         </select>
                                 </div>
 
                                 <div class="col-sm-12 input-group">
                                     <label for="tax_name">Tax Name<span class="required">*</span></label>
-                                    <input type="text" id="tax_name" name="tax_name" class="form-control" value="{{ tax.tax_name }}">
+                                    <input type="text" id="tax_name" name="tax_name" class="form-control" value="{{ tax.tax_name | default('', true)  }}">
                                 </div>
 
                                 <div class="col-sm-12 input-group">
                                     <label for="tax_rate">Tax Rate<span class="required">*</span></label>
-                                    <input value="{{ tax.tax_rate }}" type="text" class="form-control" name="tax_rate" id="tax_rate"
+                                    <input value="{{ tax.tax_rate | default(0, true)  }}" type="text" class="form-control" name="tax_rate" id="tax_rate"
                                            placeholder="Enter Tax Rate" >
                                 </div>
 
                                 <div class="col-sm-12 input-group">
                                     <label for="tax_id">Tax ID<span class="required">*</span></label>
-                                    <input value="{{ tax.tax_id }}" type="text" class="form-control" name="tax_id" id="tax_id"
+                                    <input value="{{ tax.tax_id | default(0, true)  }}" type="text" class="form-control" name="tax_id" id="tax_id"
                                            placeholder="Enter Tax ID" >
                                 </div>
 
@@ -589,37 +589,37 @@
                                 <div id="tax-invoice-holder" {% if not tax.send_invoice %}style="display: none"{% endif %}>
                                     <div class="col-sm-12 input-group">
                                     <label for="registered_company">Registered Company<span class="required">*</span></label>
-                                    <input value="{{ tax.registered_company }}" type="text" class="form-control" name="regestered_company" id="regestered_company"
+                                    <input value="{{ tax.registered_company | default('', true)  }}" type="text" class="form-control" name="regestered_company" id="regestered_company"
                                            placeholder="Enter Comapny Name" >
                                     </div>
 
                                     <div class="col-sm-12 input-group">
                                     <label for="buisness_address">Buisness Address<span class="required">*</span></label>
-                                    <input value="{{ tax.address }}" type="text" class="form-control" name="buisness_address" id="buisness_address"
+                                    <input value="{{ tax.address | default('', true)  }}" type="text" class="form-control" name="buisness_address" id="buisness_address"
                                            placeholder="Enter Buisness Address" >
                                     </div>
 
                                     <div class="col-sm-12 input-group">
                                     <label for="invoice_city">City<span class="required">*</span></label>
-                                    <input value="{{ tax.city }}" type="text" class="form-control" name="invoice_city" id="invoice_city"
+                                    <input value="{{ tax.city | default('', true)  }}" type="text" class="form-control" name="invoice_city" id="invoice_city"
                                            placeholder="City" >
                                     </div>
 
                                     <div class="col-sm-12 input-group">
                                     <label for="invoice_state">State<span class="required">*</span></label>
-                                    <input value="{{ tax.state }}" type="text" class="form-control" name="invoice_state" id="invoice_state"
+                                    <input value="{{ tax.state | default('', true)  }}" type="text" class="form-control" name="invoice_state" id="invoice_state"
                                            placeholder="State" >
                                     </div>
 
                                     <div class="col-sm-12 input-group">
                                     <label for="invoice_zip">Zip<span class="required">*</span></label>
-                                    <input value="{{ tax.zip }}" type="text" class="form-control" name="invoice_zip" id="invoice_zip"
+                                    <input value="{{ tax.zip | default(0, true)  }}" type="text" class="form-control" name="invoice_zip" id="invoice_zip"
                                            placeholder="Zip" >
                                     </div>
 
                                     <div class="col-sm-12 input-group">
                                     <label for="invoice_footer">Optional Text for Invoice Footer<span class="required">*</span></label>
-                                    <textarea class="form-control" name="invoice_footer" id="invoice_footer">{{ tax.invoice_footer }}" </textarea>
+                                    <textarea class="form-control" name="invoice_footer" id="invoice_footer">{{ tax.invoice_footer | default('', true)  }}" </textarea>
                                     </div>
                                 </div>
 
