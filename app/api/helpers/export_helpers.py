@@ -2,6 +2,7 @@ import json
 import os
 import shutil
 import requests
+from datetime import datetime
 from flask import request, g, url_for
 from flask_restplus import marshal
 
@@ -149,6 +150,7 @@ def create_export_job(task_id, event_id):
         export_job.task = task_url
         export_job.user_email = g.user.email
         export_job.event = EventModel.query.get(event_id)
+        export_job.start_time = datetime.now()
     else:
         export_job = ExportJob(
             task=task_url, user_email=g.user.email,
