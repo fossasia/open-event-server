@@ -30,8 +30,12 @@ RUN echo "listen_addresses='*'" >> /etc/postgresql/$PG_VERSION/main/postgresql.c
 RUN echo "host    all             all             all                     md5" >> "/etc/postgresql/$PG_VERSION/main/pg_hba.conf"
 RUN echo "client_encoding = utf8" >> "/etc/postgresql/$PG_VERSION/main/postgresql.conf"
 EXPOSE 5432
-RUN service postgresql restart
-RUN localedef -v -c -i en_US -f UTF-8 en_US.UTF-8; exit 0
+# gen utf-8 locale
+#RUN localedef -v -c -i en_US -f UTF-8 en_US.UTF-8; exit 0
+RUN locale-gen en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 #add database user
 USER postgres
 RUN /etc/init.d/postgresql start \
@@ -40,6 +44,8 @@ RUN /etc/init.d/postgresql start \
 USER root
 #install dependencies
 RUN pip install -r requirements/prod.txt
+#setup redis
+RUN bash run_redis.sh
 #set environment
 EXPOSE 80 5000
 RUN chmod 0755 *.sh
