@@ -86,7 +86,7 @@ class DataManager(object):
         """
         Push user notification using websockets.
         """
-        if not current_app.config.get('PRODUCTION', False):
+        if not current_app.config.get('INTEGRATE_SOCKETIO', False):
             return False
         user_room = 'user_{}'.format(user.id)
         emit('response',

@@ -20,6 +20,7 @@ class ProductionConfig(Config):
     DEBUG = False
     MINIFY_PAGE = True
     PRODUCTION = True
+    INTEGRATE_SOCKETIO = True
     # you don't want production on default db
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', '')
     if not SQLALCHEMY_DATABASE_URI:
@@ -35,6 +36,10 @@ class DevelopmentConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
     MINIFY_PAGE = False
+    # If Env Var `INTEGRATE_SOCKETIO` is set to 'true', then integrate SocketIO
+    socketio_integration = os.environ.get('INTEGRATE_SOCKETIO')
+    INTEGRATE_SOCKETIO = bool(socketio_integration == 'true')
+
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', '')
     if not SQLALCHEMY_DATABASE_URI:
         print '`DATABASE_URL` either not exported or empty'
