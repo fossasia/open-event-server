@@ -297,6 +297,13 @@ def set_secret():
 def set_stripe_key():
     stripe.api_key = get_settings()['stripe_secret_key']
 
+
+@app.context_processor
+def integrate_socketio():
+    integrate = current_app.config.get('INTEGRATE_SOCKETIO', False)
+    return dict(integrate_socketio=integrate)
+
+
 def send_after_event_mail():
     with app.app_context():
         events = Event.query.all()

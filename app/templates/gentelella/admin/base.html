@@ -63,7 +63,7 @@
     <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
 {% endblock %}
 
-{% if current_user.is_authenticated %}
+{% if current_user.is_authenticated and integrate_socketio %}
 <script src="{{ url_for('static', filename='admin/lib/socket.io-client/socket.io.js') }}"></script>
 <script type="text/javascript">
     $(document).ready(function() {
