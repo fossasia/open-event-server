@@ -88,4 +88,5 @@ class TicketSalesView(BaseView):
     def display_attendees(self, event_id):
         event = DataGetter.get_event(event_id)
         orders = TicketingManager.get_orders(event_id)
-        return self.render('/gentelella/admin/event/tickets/attendees.html', event=event, event_id=event_id, orders=orders)
+        return self.render('/gentelella/admin/event/tickets/attendees.html', event=event,
+                           event_id=event_id, orders=orders)
