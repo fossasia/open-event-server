@@ -109,7 +109,8 @@
 
         setATagsInNotifMenuDropDown();
         // Add event handler to Mark-all-read notification button
-        $(".notif-mark-all-read").click(function() {
+        $(".notif-mark-all-read").click(function(e) {
+            e.preventDefault();
             var url = $(this).data("markallread");
             $.ajax({
                 url: url,
@@ -135,12 +136,13 @@
                 $("#notif-menu li.notif-menu-li").each(function(i, li) {
                     $(li).remove();
                 });
+                var html = '';
                 $.each(msg.notifs, function(i, notif) {
-                    var html = '<li class="notif-menu-li"><a><span class="message">'+ notif.title +
+                    html += '<li class="notif-menu-li"><a><span class="message">'+ notif.title +
                         '</span><span class="time">' + notif.received_at + '</span><span class="mark-as-read btn btn-default btn-xs"' +
                         ' data-markread="' + notif.mark_read + '">Mark as read</span>';
-                    $("ul#notif-menu").prepend(html);
                 });
+                $("ul#notif-menu li:first-child").after(html);
                 setATagsInNotifMenuDropDown();
             }
         });

@@ -92,7 +92,7 @@ class DataManager(object):
         emit('response',
              {'meta': 'New notifications',
               'notif_count': user.get_unread_notif_count(),
-              'notifs': user.get_unread_notifs()},
+              'notifs': user.get_unread_notifs(reverse=True)},
              room=user_room,
              namespace='/notifs')
 

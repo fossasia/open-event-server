@@ -32,7 +32,7 @@ ul.msg_list li a .mark-as-read {
 }
 
 .notif-mark-all-read {
-    font-size: 10px;
+    font-size: 12px !important;
     margin: 0 !important;
     margin-left: 4px !important;
     border-radius: 1px;
