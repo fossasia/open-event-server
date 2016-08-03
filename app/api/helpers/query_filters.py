@@ -75,6 +75,7 @@ def event_search_location(value, query):
             lat = float(response["results"][0]["geometry"]["location"]["lat"])
             queries.append(get_query_close_area(lng, lat))
         queries.append(func.lower(Event.searchable_location_name).contains(i.lower()))
+        queries.append(func.lower(Event.location_name).contains(i.lower()))
     return query.filter(or_(*queries))
 
 
