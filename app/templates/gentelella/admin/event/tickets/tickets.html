@@ -88,7 +88,7 @@
                 <h2 class="panel-title">Sales</h2>
             </div>
             <div class="panel-body text-center">
-                ${{ '%0.2f'| format(orders_summary.completed.total_sales|float) }}
+                ${{ orders_summary.completed.total_sales|money }}
             </div>
             <div class="panel-footer text-right" style="border-top: 1px solid #fff;">
                 &nbsp;
@@ -148,7 +148,7 @@
                         {{ item.orders_count }}
                     </td>
                     <td>
-                        ${{ '%0.2f'| format(item.total_sales|float) }}
+                        ${{ item.total_sales | money }}
                     </td>
                     <td>
                         <a href="./orders">View orders</a> / <a href="./attendees">View attendees</a>
@@ -210,13 +210,13 @@
                         {{ item.completed.tickets_count }}
                     </td>
                     <td>
-                        ${{ '%0.2f'| format(item.completed.sales|float) }}
+                        ${{ item.completed.sales | money }}
                     </td>
                     <td>
                         {{ item.pending.tickets_count }}
                     </td>
                     <td>
-                        ${{ '%0.2f'| format(item.pending.sales|float) }}
+                        ${{ item.pending.sales | money }}
                     </td>
                 </tr>
             {% endfor %}
@@ -234,13 +234,13 @@
                     {{ orders_summary.completed.tickets_count }}
                 </th>
                 <th>
-                    ${{ '%0.2f'| format(orders_summary.completed.total_sales|float) }}
+                    ${{ orders_summary.completed.total_sales | money }}
                 </th>
                 <th>
                     {{ orders_summary.pending.tickets_count }}
                 </th>
                 <th>
-                    ${{ '%0.2f'| format(orders_summary.pending.total_sales|float) }}
+                    ${{ orders_summary.pending.total_sales | money }}
                 </th>
             </tr>
             </tfoot>
