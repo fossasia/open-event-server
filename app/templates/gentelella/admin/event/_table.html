@@ -8,6 +8,7 @@
             <th>Roles</th>
             <th>Sessions</th>
             <th>Speakers</th>
+            <th>Tickets</th>
             <th>Public URL</th>
             <th></th>
         </tr>
@@ -60,6 +61,11 @@
 
                 </td>
                 <td>{{ event.speaker | length }}</td>
+                <td>
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-success" role="progressbar" data-transitiongoal="40"></div>
+                    </div>
+                </td>
                 <td><a href="{{ url }}" target="_blank">{{ url }}</a></td>
                 <td>
                     {% if event %}

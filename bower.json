@@ -22,6 +22,7 @@
     "html2canvas": "^0.4.1",
     "file-saver": "^1.3.1",
     "blob": "*",
+    "bootstrap-progressbar": "^0.8.1",
     "swagger-js": "^2.1.14",
     "bootstrap-datepicker": "^1.6.1",
     "datepair.js": "datepair#^0.4.14",

@@ -4,6 +4,8 @@
     {{ super() }}
     <link rel="stylesheet"
           href="{{ url_for('static', filename='admin/lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"/>
+    <link rel="stylesheet"
+              href="{{ url_for('static', filename='admin/lib/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css') }}">
 {% endblock %}
 
 {% block title %}
@@ -68,12 +70,16 @@
     {{ super() }}
     <script src="{{ url_for('static', filename='admin/lib/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/bootstrap-progressbar/bootstrap-progressbar.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/admin/event/importEvent.js') }}"></script>
     <script type="text/javascript">
         $('.table').DataTable();
+        $(document).ready(function() {
+          $('.progress .progress-bar').progressbar({display_text: 'fill', use_percentage: false});
+        });
         $('.accordion-link').click(function(){
             $('.accordion-link').removeClass('active');
             $(this).addClass('active');
-        })
+        });
     </script>
 {% endblock %}
