@@ -72,9 +72,13 @@
                             </a>
                             <ul id="notif-menu" class="dropdown-menu list-unstyled menu msg_list">
                                 <li style="border: 0;">
-                                    <span><strong>Notifications</strong></span>
+                                    <span>
+                                        <a href="{{ url_for('notifications.index_view') }}" style="font-size: 12px;" title="See all Notifications">
+                                            <strong>Notifications</strong>
+                                        </a>
+                                    </span>
                                     <span class="pull-right">
-                                        <a href="#" class="notif-mark-all-read"
+                                        <a class="notif-mark-all-read"
                                             data-markallread="{{ url_for('notifications.mark_all_read') }}">
                                             Mark All as Read
                                         </a>
@@ -91,12 +95,6 @@
                                     </li>
                                 {% endfor %}
                             {% endif %}
-                                <li>
-                                    <a href="{{ url_for('notifications.index_view') }}">
-                                        See all notifications
-                                        <i class="fa fa-angle-right"></i>
-                                    </a>
-                                </li>
                             </ul>
                         </li>
                     {% else %}
