@@ -32,7 +32,7 @@ class TicketingView(BaseView):
         if not order or order.status == 'expired':
             abort(404)
         if order.status == 'completed':
-            return redirect(url_for('.view_order_after_payment', order_identifier=order_identifier))
+            return redirect(url_for('ticketing.view_order_after_payment', order_identifier=order_identifier))
         return self.render('/gentelella/guest/ticketing/order_pre_payment.html', order=order, event=order.event,
                            countries=list(pycountry.countries),
                            stripe_publishable_key=get_settings()['stripe_publishable_key'])

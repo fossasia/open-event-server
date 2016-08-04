@@ -1,6 +1,12 @@
 import flask_login
+import pycountry
+from flask import abort
+from flask import redirect
+from flask import request
+from flask import url_for
 from flask_admin import BaseView, expose
 
+from app import get_settings
 from app.helpers.cache import cache
 from app.helpers.data_getter import DataGetter
 from app.helpers.ticketing import TicketingManager
@@ -90,3 +96,25 @@ class TicketSalesView(BaseView):
         orders = TicketingManager.get_orders(event_id)
         return self.render('/gentelella/admin/event/tickets/attendees.html', event=event,
                            event_id=event_id, orders=orders)
+
+    @expose('/add-order/', methods=('GET', 'POST'))
+    @flask_login.login_required
+    def add_order(self, event_id):
+
+        if request.method == 'POST':
+            order = TicketingManager.create_order(request.form, True)
+            return redirect(url_for('.proceed_order', event_id=event_id, order_identifier=order.identifier))
+
+        event = DataGetter.get_event(event_id)
+        return self.render('/gentelella/admin/event/tickets/add_order.html', event=event, event_id=event_id)
+
+    @expose('/<order_identifier>/', methods=('GET',))
+    def proceed_order(self, event_id, order_identifier):
+        order = TicketingManager.get_order_by_identifier(order_identifier)
+        if order.status == 'completed':
+            return redirect(url_for('ticketing.view_order_after_payment', order_identifier=order_identifier))
+        return self.render('/gentelella/guest/ticketing/order_pre_payment.html', order=order, event=order.event,
+                           countries=list(pycountry.countries),
+                           from_organizer=True,
+                           pay_via=order.paid_via,
+                           stripe_publishable_key=get_settings()['stripe_publishable_key'])

@@ -73,11 +73,13 @@ class TicketingManager(object):
 
     @staticmethod
     def get_orders_count(event_id, status='completed'):
-        return get_count(Order.query.filter_by(event_id=event_id).filter_by(status=status))
+        return get_count(Order.query.filter_by(event_id=event_id).filter(Order.user_id.isnot(None))
+                         .filter_by(status=status))
 
     @staticmethod
     def get_orders_count_by_type(event_id, type='free'):
-        return get_count(Order.query.filter_by(event_id=event_id).filter_by(status='completed').filter(Ticket.type == type))
+        return get_count(Order.query.filter_by(event_id=event_id).filter_by(status='completed')
+                         .filter(Ticket.type == type))
 
     @staticmethod
     def get_all_orders_count_by_type(type='free'):
@@ -154,14 +156,22 @@ class TicketingManager(object):
         return order
 
     @staticmethod
-    def create_order(form):
+    def create_order(form, from_organizer=False):
         order = Order()
         order.status = 'pending'
         order.identifier = TicketingManager.get_new_order_identifier()
         order.event_id = form.get('event_id')
-        ticket_ids = form.getlist('ticket_ids[]')
 
+        if from_organizer:
+            order.paid_via = form.get('payment_via')
+
+        ticket_ids = form.getlist('ticket_ids[]')
         ticket_quantity = form.getlist('ticket_quantities[]')
+
+        ticket_subtotals = []
+        if from_organizer:
+            ticket_subtotals = form.getlist('ticket_subtotals[]')
+
         amount = 0
         for index, id in enumerate(ticket_ids):
             if not string_empty(id) and int(ticket_quantity[index]) > 0:
@@ -169,7 +179,11 @@ class TicketingManager(object):
                 order_ticket.ticket = TicketingManager.get_ticket(id)
                 order_ticket.quantity = int(ticket_quantity[index])
                 order.tickets.append(order_ticket)
-                amount = amount + (order_ticket.ticket.price * order_ticket.quantity)
+
+                if from_organizer:
+                    amount += int(ticket_subtotals[index])
+                else:
+                    amount += (order_ticket.ticket.price * order_ticket.quantity)
 
         order.amount = amount
 
@@ -191,7 +205,12 @@ class TicketingManager(object):
             user = TicketingManager.get_or_create_user_by_email(email, form)
             order.user_id = user.id
 
-            if order.amount > 0:
+            if order.amount > 0 \
+                and (not order.paid_via
+                     or (order.paid_via
+                         and (order.paid_via == 'stripe'
+                              or order.paid_via == 'paypal'))):
+
                 country = form['country']
                 address = form['address']
                 city = form['city']
@@ -209,6 +228,8 @@ class TicketingManager(object):
             else:
                 order.status = 'completed'
                 order.completed_at = datetime.utcnow()
+                if not order.paid_via:
+                    order.paid_via = 'free'
                 ticket_holder = TicketHolder(name=user.user_detail.fullname, email=email, order_id=order.id)
 
             save_to_db(order)

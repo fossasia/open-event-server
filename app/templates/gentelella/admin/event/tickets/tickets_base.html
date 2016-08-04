@@ -10,8 +10,8 @@
     ('/events/' ~ event.id ~ '/tickets', 'tickets', 'Tickets'),
     ('/events/' ~ event.id ~ '/tickets/orders', 'orders', 'Orders'),
     ('/events/' ~ event.id ~ '/tickets/attendees', 'attendees', 'Attendees'),
-    ('/events/' ~ event.id ~ '/tickets/promotion', 'promotion', 'Promotion'),
-    ('/events/' ~ event.id ~ '/tickets/add-order', 'add-order', 'Add Order'),
+    ('/events/' ~ event.id ~ '/tickets/promotion', 'promotions', 'Promotions'),
+    ('/events/' ~ event.id ~ '/tickets/add-order', 'add_order', 'Add Order'),
 ] -%}
 
 {% set active_side_page = active_side_page|default('home') -%}
