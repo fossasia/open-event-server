@@ -1,25 +1,21 @@
 {% extends 'gentelella/admin/event/details/base_panel.html' %}
 {% block panel_title %}
-Microservices
+Apps
 {% endblock %}
 
 {% block panel_content %}
+
 <div class="col-md-12 sponsor-widget">
     <div class="row" style="text-align:center">
         <div class="col-md-6">
-          {%if settings.android_app_url%}
-              <button class="btn btn-warning" href="#">Generate Android App</button>
-          {% else %}
-              <code>AndroidApp URL</code> is not defined. <p>Please inform system Administrator</p>
-          {% endif %}
+            <form action="{{url_for('.generate_android_app', event_id=event.id)}}" method="post">
+                <button type="submit" class="btn btn-warning">Generate Android App</button>
+            </form>
         </div>
         <div class="col-md-6">
-          {%if settings.web_app_url%}
-              <button class="btn btn-warning" href="#">Generate Web App</button>
-          {% else %}
-              <code>WebApp URL</code> is not defined.
-          <p>Please inform system Administrator</p>
-          {% endif %}
+            <form action="" method="post">
+                <button class="btn btn-warning">Generate Web App</button>
+            </form>
         </div>
     </div>
 </div>
