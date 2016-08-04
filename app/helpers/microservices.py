@@ -1,6 +1,6 @@
 import requests
 from app.helpers.data_getter import DataGetter
-from flask import request
+from flask import request, flash
 from flask.ext import login
 from app.settings import get_settings
 
@@ -35,8 +35,12 @@ class AndroidAppCreator(AppCreator):
             "app_name": self.app_name,
             "endpoint": request.url_root + "api/v2/events/" + str(self.event.id)
         }
-        print data
         r = requests.post(self.app_link, data=data)
         print r.text
+        if r.status_code == 200:
+            flash("Your app is created and sent to your email", "info")
+        else:
+            flash(r.text, "warning")
+
     def __save(self):
         pass

@@ -16,6 +16,7 @@ from ....helpers.data_getter import DataGetter
 from werkzeug.datastructures import ImmutableMultiDict
 from app.helpers.helpers import send_event_publish
 from app.settings import get_settings
+from app.helpers.microservices import AndroidAppCreator
 
 
 def is_verified_user():
@@ -346,15 +347,7 @@ class EventsView(BaseView):
 
     @expose('/<int:event_id>/generate_android_app/', methods=('POST',))
     def generate_android_app(self, event_id):
-        print event_id
-        from app.helpers.microservices import AndroidAppCreator
-
         AndroidAppCreator(event_id).create()
-        # event = DataGetter.get_event(event_id)
-        # event.state = 'Draft'
-        # save_to_db(event, 'Event Unpublished')
-        # record_activity('publish_event', event_id=event.id, status='un-published')
-        flash("Your event has been unpublished.", "warning")
         return redirect(url_for('.details_view', event_id=event_id))
 
     @expose('/<int:event_id>/restore/<int:version_id>', methods=('GET',))
