@@ -655,21 +655,24 @@ class DataGetter(object):
     @cache.cached(timeout=21600, key_prefix='event_locations')
     def get_locations_of_events():
         names = []
-        for event in DataGetter.get_live_and_public_events():
-            if not string_empty(event.location_name) and not string_empty(event.latitude) and not string_empty(
-               event.longitude):
-                response = requests.get(
-                    "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
-                        event.longitude)).json()
-                if response['status'] == u'OK':
-                    for addr in response['results'][0]['address_components']:
-                        if addr['types'] == ['locality', 'political']:
-                            names.append(addr['short_name'])
+        try:
+            for event in DataGetter.get_live_and_public_events():
+                if not string_empty(event.location_name) and not string_empty(event.latitude) and not string_empty(
+                   event.longitude):
+                    response = requests.get(
+                        "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
+                            event.longitude)).json()
+                    if response['status'] == u'OK':
+                        for addr in response['results'][0]['address_components']:
+                            if addr['types'] == ['locality', 'political']:
+                                names.append(addr['short_name'])
 
-        cnt = Counter()
-        for location in names:
-            cnt[location] += 1
-        return [v for v, __ in cnt.most_common()][:10]
+            cnt = Counter()
+            for location in names:
+                cnt[location] += 1
+            return [v for v, __ in cnt.most_common()][:10]
+        except:
+            return names
 
     @staticmethod
     def get_sales_open_tickets(event_id):
