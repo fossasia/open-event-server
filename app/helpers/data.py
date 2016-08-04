@@ -89,12 +89,17 @@ class DataManager(object):
         if not current_app.config.get('INTEGRATE_SOCKETIO', False):
             return False
         user_room = 'user_{}'.format(user.id)
-        emit('response',
+        emit('notifs-response',
              {'meta': 'New notifications',
               'notif_count': user.get_unread_notif_count(),
               'notifs': user.get_unread_notifs(reverse=True)},
              room=user_room,
              namespace='/notifs')
+        emit('notifpage-response',
+             {'meta': 'New notifpage notifications',
+              'notif': DataGetter.get_latest_notif(user)},
+             room=user_room,
+             namespace='/notifpage')
 
     @staticmethod
     def mark_user_notification_as_read(notification):
