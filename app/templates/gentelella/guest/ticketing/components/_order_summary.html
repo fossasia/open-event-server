@@ -25,7 +25,7 @@
                             {{ ticket_order.quantity }}
                         </td>
                         <td>
-                            ${{ ticket_order.ticket.price*ticket_order.quantity | money }}
+                            ${{ (ticket_order.ticket.price*ticket_order.quantity) | money }}
                             {% if costs.append(ticket_order.ticket.price*ticket_order.quantity) %}{% endif %}
                         </td>
                     </tr>
