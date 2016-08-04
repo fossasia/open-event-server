@@ -389,11 +389,18 @@ if current_app.config.get('INTEGRATE_SOCKETIO', False):
     socketio = SocketIO(current_app, async_mode=async_mode)
 
     @socketio.on('connect', namespace='/notifs')
-    def connect_handler():
+    def connect_handler_notifs():
         if current_user.is_authenticated():
             user_room = 'user_{}'.format(session['user_id'])
             join_room(user_room)
-            emit('response', {'meta': 'WS connected'})
+            emit('notifs-response', {'meta': 'WS connected'}, namespace='/notifs')
+
+    @socketio.on('connect', namespace='/notifpage')
+    def connect_handler_notif_page():
+        if current_user.is_authenticated():
+            user_room = 'user_{}'.format(session['user_id'])
+            join_room(user_room)
+            emit('notifpage-response', {'meta': 'WS notifpage connected'}, namespace='/notifpage')
 
 
 if __name__ == '__main__':

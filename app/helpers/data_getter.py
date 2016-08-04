@@ -1,8 +1,10 @@
 """Copyright 2015 Rafal Kowalski"""
 from collections import Counter
 
+from flask import url_for
 import pytz
 import requests
+import humanize
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from ..models.event import Event, EventsUsers
@@ -52,6 +54,19 @@ class DataGetter(object):
     @staticmethod
     def get_user_notification(notification_id):
         return Notification.query.filter_by(id=notification_id).first()
+
+    @staticmethod
+    def get_latest_notif(user):
+        unread_notifs = Notification.query.filter_by(user=user, has_read=False)
+        notif = unread_notifs.order_by(desc(Notification.received_at)).first()
+        latest_notif = {
+            'title': notif.title,
+            'message': notif.message,
+            'received_at': str(notif.received_at),
+            'received_at_human': humanize.naturaltime(datetime.datetime.now() - notif.received_at),
+            'mark_read': url_for('notifications.mark_as_read', notification_id=notif.id)
+        }
+        return latest_notif
 
     @staticmethod
     def get_invite_by_user_id(user_id):
