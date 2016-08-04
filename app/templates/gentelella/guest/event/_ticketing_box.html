@@ -1,5 +1,5 @@
 {% if tickets.count() > 0 %}
-<div id="ticketing-holder" class="col-md-6 col-sm-8 col-xs-12">
+<div id="ticketing-holder" class="col-md-8 col-sm-8 col-xs-12">
     <form method="POST" action="{{ url_for('ticketing.create_order') }}" enctype="multipart/form-data">
         <input type="hidden" name="event_id" value="{{ event.id }}">
         <div class="panel panel-default">
