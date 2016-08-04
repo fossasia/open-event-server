@@ -69,6 +69,8 @@ class TicketSalesView(BaseView):
             }
 
         for order in orders:
+            if order.status == 'initialized':
+                order.status = 'pending'
             orders_summary[str(order.status)]['orders_count'] += 1
             orders_summary[str(order.status)]['total_sales'] += order.amount
             for order_ticket in order.tickets:
