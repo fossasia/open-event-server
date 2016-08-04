@@ -299,12 +299,16 @@
                 <a class="btn btn-info add-free-ticket">
                     <i class="glyphicon glyphicon-plus-sign"></i> Free Ticket
                 </a>
+                {% if 'payments' in included_items %}
                 <a class="btn btn-info add-paid-ticket">
                     <i class="glyphicon glyphicon-plus-sign"></i> Paid Ticket
                 </a>
+                {% endif %}
+                {% if 'donations' in included_items %}
                 <a class="btn btn-info add-donation-ticket">
                     <i class="glyphicon glyphicon-plus-sign"></i> Donation
                 </a>
+                {% endif %}
             </div>
         </div>
         <!-- /TicketsTable -->
