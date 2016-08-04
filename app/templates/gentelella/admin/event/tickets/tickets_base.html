@@ -23,7 +23,7 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-md-1">
+        <div class="col-md-2 col-xs-12">
             <div class="list-group">
                 {% for href, id, caption in side_bar %}
                     <a class="list-group-item {% if id == active_side_page %}active{% endif %}" href="{{ href|e }}">{{ caption|e }} <i class="fa fa-caret-right fa-lg pull-right" style="margin-top: 3px;"></i> </a>
@@ -31,7 +31,7 @@
             </div>
 
         </div>
-        <div class="col-md-11">
+        <div class="col-md-10 col-xs-12">
             {% block inner_content %}
 
             {% endblock %}
