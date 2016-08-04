@@ -1,6 +1,5 @@
 import flask_login
 import pycountry
-from flask import abort
 from flask import redirect
 from flask import request
 from flask import url_for
@@ -11,7 +10,6 @@ from app.helpers.cache import cache
 from app.helpers.data_getter import DataGetter
 from app.helpers.ticketing import TicketingManager
 from app.models.ticket import Ticket
-
 
 class TicketSalesView(BaseView):
     @cache.memoize(50)
