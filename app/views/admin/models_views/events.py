@@ -15,6 +15,7 @@ from ....helpers.data import DataManager, save_to_db, record_activity, delete_fr
 from ....helpers.data_getter import DataGetter
 from werkzeug.datastructures import ImmutableMultiDict
 from app.helpers.helpers import send_event_publish
+from app.helpers.ticketing import TicketingManager
 from app.settings import get_settings
 
 
@@ -41,6 +42,19 @@ class EventsView(BaseView):
         draft_events = DataGetter.get_draft_events()
         past_events = DataGetter.get_past_events()
         all_events = DataGetter.get_all_events()
+        free_ticket_count = {}
+        paid_ticket_count = {}
+        donation_ticket_count = {}
+        max_free_ticket = {}
+        max_paid_ticket = {}
+        max_donation_ticket = {}
+        for event in all_events:
+            free_ticket_count[event.id] = TicketingManager.get_orders_count_by_type(event.id, type='free')
+            max_free_ticket[event.id] = TicketingManager.get_max_orders_count(event.id, type='free')
+            paid_ticket_count[event.id] = TicketingManager.get_orders_count_by_type(event.id, type='paid')
+            max_paid_ticket[event.id] = TicketingManager.get_max_orders_count(event.id, type='paid')
+            donation_ticket_count[event.id] = TicketingManager.get_orders_count_by_type(event.id, type='donation')
+            max_donation_ticket[event.id] = TicketingManager.get_max_orders_count(event.id, type='donation')
         if not is_verified_user():
             flash("Your account is unverified. "
                   "Please verify by clicking on the confirmation link that has been emailed to you.")
@@ -48,7 +62,13 @@ class EventsView(BaseView):
                            live_events=live_events,
                            draft_events=draft_events,
                            past_events=past_events,
-                           all_events=all_events)
+                           all_events=all_events,
+                           free_ticket_count=free_ticket_count,
+                           paid_ticket_count=paid_ticket_count,
+                           donation_ticket_count=donation_ticket_count,
+                           max_free_ticket=max_free_ticket,
+                           max_paid_ticket=max_paid_ticket,
+                           max_donation_ticket=max_donation_ticket)
 
     @expose('/create/<step>', methods=('GET', 'POST'))
     def create_view_stepped(self, step):
