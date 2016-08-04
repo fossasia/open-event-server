@@ -195,3 +195,64 @@ if (typeof NProgress != 'undefined') {
     jQuery.fn[sr] = function(fn){  return fn ? this.bind('resize', debounce(fn)) : this.trigger(sr); };
 
 })(jQuery,'smartresize');
+
+// Add event handlers to anchor tags that are dynamically loaded
+function setATagsInNotifMenuDropDown(notificationViewPath) {
+    $("ul#notif-menu li.notif-menu-li").each(function (i, li) {
+        // Clicking on a message redirects to Notification page
+        $(li).children("a").children(".message").click(function() {
+            window.location = notificationViewPath;
+        });
+        // Mark-as-read button sends AJAX call to mark-notification-as-read GET endpoint
+        $(li).children("a").children(".mark-as-read").click(function() {
+            var url = $(this).data("markread");
+            $.ajax({
+                url: url,
+                success: function(data) {
+                    console.log(data.status);
+                    $(li).slideUp(500, function() {
+                        $(li).remove();
+                    });
+                    var notif_count = $("#notif_count").text();
+                    $("#notif_count").text(parseInt(notif_count) - 1);
+                }
+            });
+        });
+    });
+}
+
+/* Notification Dropdown list at Navbar
+ */
+$(document).ready(function() {
+    /* Handle Notification Dropdown toggle manually.
+     * https://stackoverflow.com/questions/25089297
+     */
+    $('li.dropdown.mega-dropdown a').on('click', function (event) {
+        $(this).parent().toggleClass('open');
+    });
+    $('body').on('click', function (e) {
+        if (!$('li.dropdown.mega-dropdown').is(e.target) &&
+            $('li.dropdown.mega-dropdown').has(e.target).length === 0 &&
+            $('.open').has(e.target).length === 0
+        ) {
+            $('li.dropdown.mega-dropdown').removeClass('open');
+        }
+    });
+
+    // Add event handler to Mark-all-read notification button
+    $(".notif-mark-all-read").click(function(e) {
+        e.preventDefault();
+        var url = $(this).data("markallread");
+        $.ajax({
+            url: url,
+            success: function(data) {
+                $("ul#notif-menu li.notif-menu-li").each(function(i, li) {
+                    $(li).slideUp(500, function() {
+                        $(li).remove();
+                    });
+                    $("#notif_count").text("");
+                });
+            }
+        });
+    });
+});

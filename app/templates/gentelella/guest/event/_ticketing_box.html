@@ -23,8 +23,8 @@
 
                             <td>{{ ticket.name }} - {{ ticket.type }}</td>
                             <td>{{ ticket.sales_end.strftime('%a, %B %d') }}</td>
-                            <td>${{ '%0.2f'| format(ticket.price|float) }}</td>
-                            <td>$0.00</td>
+                            <td>${{ ticket.price | money }}</td>
+                            <td>$ 0.00</td>
                             <td align="right">
                                 <input type="hidden" name="ticket_ids[]" value="{{ ticket.id }}">
                                 <select name="ticket_quantities[]" class="quantity-select" data-rate="{{ ticket.price }}">

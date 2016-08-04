@@ -63,67 +63,12 @@
     <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
 {% endblock %}
 
-{% if current_user.is_authenticated %}
+{% if current_user.is_authenticated and integrate_socketio %}
 <script src="{{ url_for('static', filename='admin/lib/socket.io-client/socket.io.js') }}"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        /* Handle Notification Dropdown toggle manually.
-         * https://stackoverflow.com/questions/25089297
-         */
-        $('li.dropdown.mega-dropdown a').on('click', function (event) {
-            $(this).parent().toggleClass('open');
-        });
-        $('body').on('click', function (e) {
-            if (!$('li.dropdown.mega-dropdown').is(e.target) &&
-                $('li.dropdown.mega-dropdown').has(e.target).length === 0 &&
-                $('.open').has(e.target).length === 0
-            ) {
-                $('li.dropdown.mega-dropdown').removeClass('open');
-            }
-        });
-
-        function setATagsInNotifMenuDropDown() {
-            var notification_view_path = "{{ url_for('notifications.index_view') }}";
-            $("ul#notif-menu li.notif-menu-li").each(function (i, li) {
-                // Clicking on a message redirects to Notification page
-                $(li).children("a").children(".message").click(function() {
-                    window.location = notification_view_path;
-                });
-                // Mark-as-read button sends AJAX call to mark-notification-as-read GET endpoint
-                $(li).children("a").children(".mark-as-read").click(function() {
-                    var url = $(this).data("markread");
-                    $.ajax({
-                        url: url,
-                        success: function(data) {
-                            console.log(data.status);
-                            $(li).slideUp(500, function() {
-                                $(li).remove();
-                            });
-                            var notif_count = $("#notif_count").text();
-                            $("#notif_count").text(parseInt(notif_count) - 1);
-                        }
-                    });
-                });
-            });
-        }
-
-        setATagsInNotifMenuDropDown();
-        // Add event handler to Mark-all-read notification button
-        $(".notif-mark-all-read").click(function() {
-            var url = $(this).data("markallread");
-            $.ajax({
-                url: url,
-                success: function(data) {
-                    $("ul#notif-menu li.notif-menu-li").each(function(i, li) {
-                        $(li).slideUp(500, function() {
-                            $(li).remove();
-                        });
-                        $("#notif_count").text("");
-                    });
-                }
-            });
-        });
-
+        var notificationViewPath = "{{ url_for('notifications.index_view') }}";
+        setATagsInNotifMenuDropDown(notificationViewPath);
         var namespace = '/notifs';
 
         var socket = io.connect(location.protocol + "//" + location.host + namespace, {reconnection: false});
@@ -135,13 +80,14 @@
                 $("#notif-menu li.notif-menu-li").each(function(i, li) {
                     $(li).remove();
                 });
+                var html = '';
                 $.each(msg.notifs, function(i, notif) {
-                    var html = '<li class="notif-menu-li"><a><span class="message">'+ notif.title +
+                    html += '<li class="notif-menu-li"><a><span class="message">'+ notif.title +
                         '</span><span class="time">' + notif.received_at + '</span><span class="mark-as-read btn btn-default btn-xs"' +
                         ' data-markread="' + notif.mark_read + '">Mark as read</span>';
-                    $("ul#notif-menu").prepend(html);
                 });
-                setATagsInNotifMenuDropDown();
+                $("ul#notif-menu li:first-child").after(html);
+                setATagsInNotifMenuDropDown(notificationViewPath);
             }
         });
     });

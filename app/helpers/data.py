@@ -86,13 +86,13 @@ class DataManager(object):
         """
         Push user notification using websockets.
         """
-        if not current_app.config.get('PRODUCTION', False):
+        if not current_app.config.get('INTEGRATE_SOCKETIO', False):
             return False
         user_room = 'user_{}'.format(user.id)
         emit('response',
              {'meta': 'New notifications',
               'notif_count': user.get_unread_notif_count(),
-              'notifs': user.get_unread_notifs()},
+              'notifs': user.get_unread_notifs(reverse=True)},
              room=user_room,
              namespace='/notifs')
 

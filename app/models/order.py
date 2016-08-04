@@ -77,7 +77,13 @@ class Order(db.Model):
         return self.identifier
 
     def get_invoice_number(self):
-        return str(int(time.mktime(self.completed_at.timetuple()))) + '-' + str(self.id)
+        return str(int(time.mktime(self.created_at.timetuple()))) + '-' + str(self.id)
+
+    def get_tickets_count(self):
+        count = 0
+        for order_ticket in self.tickets:
+            count += order_ticket.quantity
+        return count
 
     @property
     def serialize(self):
