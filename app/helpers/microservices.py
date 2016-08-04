@@ -35,8 +35,8 @@ class AndroidAppCreator(AppCreator):
             "app_name": self.app_name,
             "endpoint": request.url_root + "api/v2/events/" + str(self.event.id)
         }
-        r = requests.post(self.app_link, data=data)
-        print r.text
+        r = requests.post(self.app_link, json=data)
+
         if r.status_code == 200:
             flash("Your app is created and sent to your email", "info")
         else:
