@@ -145,7 +145,7 @@ class TicketingManager(object):
         else:
             order = TicketingManager.get_order_by_identifier(identifier)
 
-        if order:
+        if order and not order.paid_via:
             if override \
                 or (order.status != 'completed' and
                     (order.created_at + timedelta(minutes=TicketingManager.get_order_expiry())) < datetime.utcnow()):

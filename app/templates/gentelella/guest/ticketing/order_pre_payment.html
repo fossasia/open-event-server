@@ -15,15 +15,17 @@
                 <h3 class="panel-title">Registration Information</h3>
             </div>
             <div class="panel-body" style="padding-bottom: 10px;">
-                <div class="alert alert-warning time-left-alert">
-                    <div id="time-left" class="pull-left">
-                        09:59
+                {% if not from_organizer %}
+                    <div class="alert alert-warning time-left-alert">
+                        <div id="time-left" class="pull-left">
+                            09:59
+                        </div>
+                        <p>
+                            Please complete registration within 10:00 minutes.<br>
+                            After 10:00 minutes, the reservation we're holding will be released to others.
+                        </p>
                     </div>
-                    <p>
-                        Please complete registration within 10:00 minutes.<br>
-                        After 10:00 minutes, the reservation we're holding will be released to others.
-                    </p>
-                </div>
+                {% endif %}
                 <form class="form-horizontal" data-toggle="validator" id="order-payment-form"
                       action="{{ url_for('ticketing.initiate_order_payment') }}">
                     <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
