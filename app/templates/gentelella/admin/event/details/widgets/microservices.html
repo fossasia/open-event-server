@@ -8,12 +8,14 @@ Apps
 <div class="col-md-12 sponsor-widget">
     <div class="row" style="text-align:center">
         <div class="col-md-6">
-            <form action="" method="post">
-                <button class="btn btn-warning" href="#">Generate Android App</button>
+            <form action="{{url_for('.generate_android_app', event_id=event.id)}}" method="post">
+                <button type="submit" class="btn btn-warning">Generate Android App</button>
             </form>
         </div>
         <div class="col-md-6">
-            <button class="btn btn-warning" href="#">Generate Web App</button>
+            <form action="" method="post">
+                <button class="btn btn-warning">Generate Web App</button>
+            </form>
         </div>
     </div>
 </div>

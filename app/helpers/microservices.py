@@ -1,14 +1,22 @@
+import requests
+from app.helpers.data_getter import DataGetter
+from flask import request
+from flask.ext import login
+from app.settings import get_settings
+
+
 class AppCreator(object):
-    def __init__(self, api_link, app_name, email):
-        self.api_link = api_link
-        self.app_name = app_name
-        self.email = email
+    def __init__(self, event_id):
+        self.event = DataGetter.get_event(event_id)
+        self.app_link = ''
+        self.app_name = self.event.name
+        self.email = self.event.email
 
 
-class WebAppCreator(object):
-    def __init__(self, api_link, app_name, email):
-        super(WebAppCreator, self).__init__(api_link, app_name, email)
-
+class WebAppCreator(AppCreator):
+    def __init__(self, event_id):
+        super(WebAppCreator, self).__init__(event_id)
+        self.app_link = get_settings().get('web_app_url')
     def create(self):
         pass
 
@@ -16,12 +24,19 @@ class WebAppCreator(object):
         pass
 
 
-class AndroidAppCreator(object):
-    def __init__(self, api_link, app_name, email):
-        super(AndroidAppCreator, self).__init__(api_link, app_name, email)
+class AndroidAppCreator(AppCreator):
+    def __init__(self, event_id):
+        super(AndroidAppCreator, self).__init__(event_id)
+        self.app_link = get_settings().get('android_app_url')
 
     def create(self):
-        pass
-
+        data = {
+            "email": login.current_user.email,
+            "app_name": self.app_name,
+            "endpoint": request.url_root + "api/v2/events/" + str(self.event.id)
+        }
+        print data
+        r = requests.post(self.app_link, data=data)
+        print r.text
     def __save(self):
         pass
