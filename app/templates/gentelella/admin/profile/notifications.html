@@ -119,14 +119,14 @@ Notifications
             if($(e.target).is('a.read-btn')) {
                 e.preventDefault(); // prevent href behavior
                 $.getJSON($(e.target).attr('href'), function(data){
-                  console.log(data['status']);
+                  console.log(data.status);
                   $(e.target).parents('.notification').removeClass('info'); // show notification as read
                   $(e.target).remove(); // delete mark as read button
                 });
             }else if (e.target.class == "notification" || $(e.target).parents(".notification").size()) {
                 var read_button = $(e.target).parents(".notification").find('a.read-btn');
                 $.getJSON(read_button.attr('href'), function(data){
-                    console.log(data['status']);
+                    console.log(data.status);
                 });
                 window.location = document.URL;
             }
@@ -143,21 +143,29 @@ Notifications
             $('[data-toggle="tooltip"]').tooltip();
         });
 
-        /*
-        $(document).on('click', '.notification', function (e) {
-            var link = $(this).find("p.clickable-link-holder").find("a").attr("href").trim();
-            var readLink = $(this).find(".read-btn").attr("href").trim();
-            if (link !== null && link !== '') {
-                $.get(readLink, function (data) {
-                    location.href = link;
-                });
-            } else {
-                if (readLink !== null && readLink !== '') {
-                    location.href = readLink;
+        /* SocketIO Notification-Page messages
+         *
+         */
+         $(document).ready(function() {
+            var namespace = '/notifpage';
+            var socket = io.connect(location.protocol + "//" + location.host + namespace, {reconnection: false});
+
+            socket.on('notifpage-response', function(msg) {
+                console.log(msg.meta);
+                if (msg.hasOwnProperty("notif")) {
+                    var notif = msg.notif;
+                    html = '<tr class="notification info">' +
+                        '<td style="display: none;">unread</td>' +
+                        '<td><h4>'+ notif.title +'</h4><p class="clickable-link-holder">'+ notif.message +'</p></td>' +
+                        '<td style="display: none;">'+ notif.received_at +'</td>' +
+                        '<td>'+ notif.received_at_human +'</td>' +
+                        '<td><a class="read-btn btn btn-default btn-xs" href="'+ notif.mark_read +'">Mark as Read</a></td>' +
+                        '</tr>';
+                    $(".notif-table tbody").prepend(html);
                 }
-            }
-        });
-        */
+            });
+         });
+
     </script>
 
 {% endblock %}
