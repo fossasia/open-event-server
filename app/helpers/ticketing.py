@@ -76,6 +76,22 @@ class TicketingManager(object):
         return get_count(Order.query.filter_by(event_id=event_id).filter_by(status=status))
 
     @staticmethod
+    def get_orders_count_by_type(event_id, type='free'):
+        return get_count(Order.query.filter_by(event_id=event_id).filter_by(status='completed').filter(Ticket.type == type))
+
+    @staticmethod
+    def get_all_orders_count_by_type(type='free'):
+        return get_count(Order.query.filter_by(status='completed').filter(Ticket.type == type))
+
+    @staticmethod
+    def get_max_orders_count(event_id, type='free'):
+        ticket = Ticket.query.filter_by(event_id=event_id).filter_by(type=type).first()
+        if ticket:
+            return ticket.quantity
+        else:
+            return 0
+
+    @staticmethod
     def get_order_expiry():
         return 10
 
