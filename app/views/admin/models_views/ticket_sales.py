@@ -1,6 +1,6 @@
 import flask_login
 import pycountry
-from flask import redirect
+from flask import redirect, flash
 from flask import request
 from flask import url_for
 from flask_admin import BaseView, expose
@@ -111,10 +111,17 @@ class TicketSalesView(BaseView):
     @expose('/<order_identifier>/', methods=('GET',))
     def proceed_order(self, event_id, order_identifier):
         order = TicketingManager.get_order_by_identifier(order_identifier)
-        if order.status == 'completed':
-            return redirect(url_for('ticketing.view_order_after_payment', order_identifier=order_identifier))
-        return self.render('/gentelella/guest/ticketing/order_pre_payment.html', order=order, event=order.event,
-                           countries=list(pycountry.countries),
-                           from_organizer=True,
-                           pay_via=order.paid_via,
-                           stripe_publishable_key=get_settings()['stripe_publishable_key'])
+        if order:
+            if self.is_order_completed(order):
+                return redirect(url_for('ticketing.view_order_after_payment', order_identifier=order_identifier))
+            return self.render('/gentelella/guest/ticketing/order_pre_payment.html', order=order, event=order.event,
+                               countries=list(pycountry.countries),
+                               from_organizer=True,
+                               pay_via=order.paid_via,
+                               stripe_publishable_key=get_settings()['stripe_publishable_key'])
+        flash("Can't find order", 'warning')
+        return redirect(url_for('.display_ticket_stats', event_id=event_id))
+
+    @staticmethod
+    def is_order_completed(order):
+        return order.status == 'completed'
