@@ -142,6 +142,7 @@ body {
 
 .speaker-info {
   margin-bottom: 10px;
+  width: 145px !important;
 }
 
 .speaker-info h3, .speaker-info h4, .speaker-info h5 {
