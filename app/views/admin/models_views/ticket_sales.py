@@ -1,6 +1,6 @@
 import flask_login
 import pycountry
-from flask import abort
+from flask import abort, jsonify
 from flask import redirect, flash
 from flask import request
 from flask import url_for
@@ -11,6 +11,7 @@ from app.helpers.cache import cache
 from app.helpers.data_getter import DataGetter
 from app.helpers.ticketing import TicketingManager
 from app.models.ticket import Ticket
+
 
 class TicketSalesView(BaseView):
     @cache.memoize(50)
@@ -137,9 +138,23 @@ class TicketSalesView(BaseView):
     @flask_login.login_required
     def discount_codes_create(self, event_id):
         event = DataGetter.get_event(event_id)
+        if request.method == 'POST':
+            TicketingManager.create_discount_code(request.form, event_id)
+            flash("The discount code has been added.", "success")
+            return redirect(url_for('.discount_codes_view', event_id=event_id))
+
         return self.render('/gentelella/admin/event/tickets/discount_codes_create.html', event=event, event_id=event_id)
 
-    @expose('/discounts/check/duplicate/', methods=('POST', ))
+    @expose('/discounts/check/duplicate/', methods=('GET',))
     @flask_login.login_required
     def check_duplicate_discount_code(self, event_id):
-        return "Hello"
+        code = request.args.get('code')
+
+        if TicketingManager.get_discount_code(event_id, code):
+            return jsonify({
+                "status": "invalid"
+            }), 404
+
+        return jsonify({
+            "status": "valid"
+        }), 200

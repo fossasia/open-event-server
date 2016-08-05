@@ -13,6 +13,7 @@ class DiscountCode(db.Model):
     max_quantity = db.Column(db.Integer)
     valid_from = db.Column(db.DateTime)
     valid_till = db.Column(db.DateTime)
+    tickets = db.Column(db.String)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
     event = db.relationship('Event', backref='discount_codes')
 

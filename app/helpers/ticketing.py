@@ -125,6 +125,13 @@ class TicketingManager(object):
         return DiscountCode.query.filter_by(event_id=event_id).all()
 
     @staticmethod
+    def get_discount_code(event_id, discount_code):
+        if represents_int(discount_code):
+            return DiscountCode.query.get(discount_code)
+        else:
+            return DiscountCode.query.filter_by(code=discount_code).first()
+
+    @staticmethod
     def get_or_create_user_by_email(email, data=None):
         user = DataGetter.get_user_by_email(email, False)
         if not user:
@@ -291,3 +298,32 @@ class TicketingManager(object):
 
         except:
             return False
+
+    @staticmethod
+    def create_discount_code(form, event_id):
+        discount_code = DiscountCode()
+        discount_code.code = form.get('code')
+        discount_code.value = form.get('value')
+        discount_code.type = form.get('value_type')
+        discount_code.min_quantity = form.get('min_quantity')
+        discount_code.max_quantity = form.get('max_quantity')
+        discount_code.event_id = event_id
+
+        try:
+            discount_code.valid_from = datetime.strptime(form.get('start_date') + ' ' +
+                                                         form.get('start_time'), '%m/%d/%Y %H:%M')
+        except:
+            discount_code.valid_from = None
+
+        try:
+            discount_code.valid_till = datetime.strptime(form.get('end_date') + ' ' +
+                                                         form.get('end_time'), '%m/%d/%Y %H:%M')
+        except:
+            discount_code.valid_till = None
+
+        discount_code.tickets = ",".join(form.getlist('tickets[]'))
+
+        save_to_db(discount_code)
+
+        return discount_code
+

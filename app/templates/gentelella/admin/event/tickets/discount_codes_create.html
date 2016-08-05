@@ -85,7 +85,7 @@
                 <label for="code">Select Ticket(s) applied to the discount code <span class="required">*</span></label>
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" name="tickets" value="all" class="all-tickets" checked>
+                        <input type="checkbox" value="all" class="all-tickets" checked>
                         Select all Tickets Type
                     </label>
                 </div>
@@ -93,7 +93,7 @@
                 {% for ticket in event.tickets %}
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" name="tickets" class="single-ticket" value="{{ ticket.id }}" checked>
+                            <input type="checkbox" name="tickets[]" class="single-ticket" value="{{ ticket.id }}" checked>
                             {{ ticket.name }}
                         </label>
                     </div>
@@ -114,13 +114,13 @@
                         <div class="col-md-3">
                             <div class="input-group">
                                 <span class="input-group-addon">Min</span>
-                                <input type="number" class="form-control">
+                                <input type="number" class="form-control" name="min_quantity">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="input-group">
                                 <span class="input-group-addon">Max</span>
-                                <input type="number" class="form-control">
+                                <input type="number" class="form-control" name="max_quantity">
                             </div>
                         </div>
                     </div>
@@ -135,16 +135,14 @@
                                 <label>Valid from</label>
                                 <br>
                                 <div class="col-xs-8" style="padding-left: 0;">
-                                    <input required="required"
-                                           name="start_date"
+                                    <input name="start_date"
                                            data-error="Start date & time is required"
                                            value=""
                                            class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY"/>
 
                                 </div>
                                 <div class="col-xs-4" style="padding-left: 0;">
-                                    <input required="required"
-                                           name="start_time"
+                                    <input name="start_time"
                                            value=""
                                            class="form-control col-xs-6 time start" placeholder="HH:MM"/>
 
@@ -157,16 +155,14 @@
                                 <label>Expires on</label>
                                 <br>
                                 <div class="col-xs-8" style="padding-left: 0;">
-                                    <input required="required"
-                                           name="end_date"
+                                    <input name="end_date"
                                            data-error="End date & time is required"
                                            value=""
                                            class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY"/>
 
                                 </div>
                                 <div class="col-xs-4" style="padding-left: 0;">
-                                    <input required="required"
-                                           name="end_time"
+                                    <input name="end_time"
                                            value=""
                                            class="form-control col-xs-6 time end" placeholder="HH:MM"/>
 
