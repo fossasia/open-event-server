@@ -130,9 +130,10 @@ class TicketingManager(object):
                 'password': password
             })
         if user.user_detail:
-            user.user_detail.fullname = data['firstname'] + ' ' + data['lastname']
+            user.user_detail.firstname = data['firstname']
+            user.user_detail.lastname = data['lastname']
         else:
-            user_detail = UserDetail(fullname=data['firstname'] + ' ' + data['lastname'])
+            user_detail = UserDetail(firstname=data['firstname'], lastname=data['lastname'])
             user.user_detail = user_detail
 
         save_to_db(user)
