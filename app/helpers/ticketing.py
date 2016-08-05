@@ -300,8 +300,11 @@ class TicketingManager(object):
             return False
 
     @staticmethod
-    def create_discount_code(form, event_id):
-        discount_code = DiscountCode()
+    def create_edit_discount_code(form, event_id, discount_code_id=None):
+        if not discount_code_id:
+            discount_code = DiscountCode()
+        else:
+            discount_code = TicketingManager.get_discount_code(event_id, discount_code_id)
         discount_code.code = form.get('code')
         discount_code.value = form.get('value')
         discount_code.type = form.get('value_type')
