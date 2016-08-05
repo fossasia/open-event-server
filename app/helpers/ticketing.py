@@ -21,6 +21,8 @@ from app.models.ticket_holder import TicketHolder
 from app.models.order import OrderTicket
 from app.models.event import Event
 from app.models.user_detail import UserDetail
+from app.models.discount_code import DiscountCode
+
 from app.helpers.helpers import send_email_after_account_create_with_password
 
 
@@ -117,6 +119,17 @@ class TicketingManager(object):
     @staticmethod
     def get_order_by_identifier(identifier):
         return Order.query.filter_by(identifier=identifier).first()
+
+    @staticmethod
+    def get_discount_codes(event_id):
+        return DiscountCode.query.filter_by(event_id=event_id).all()
+
+    @staticmethod
+    def get_discount_code(event_id, discount_code):
+        if represents_int(discount_code):
+            return DiscountCode.query.get(discount_code)
+        else:
+            return DiscountCode.query.filter_by(code=discount_code).first()
 
     @staticmethod
     def get_or_create_user_by_email(email, data=None):
@@ -285,3 +298,42 @@ class TicketingManager(object):
 
         except:
             return False
+
+    @staticmethod
+    def create_edit_discount_code(form, event_id, discount_code_id=None):
+        if not discount_code_id:
+            discount_code = DiscountCode()
+        else:
+            discount_code = TicketingManager.get_discount_code(event_id, discount_code_id)
+        discount_code.code = form.get('code')
+        discount_code.value = form.get('value')
+        discount_code.type = form.get('value_type')
+        discount_code.min_quantity = form.get('min_quantity', None)
+        discount_code.max_quantity = form.get('max_quantity', None)
+        discount_code.tickets_number = form.get('tickets_number')
+        discount_code.event_id = event_id
+
+        if discount_code.min_quantity == "":
+            discount_code.min_quantity = None
+        if discount_code.max_quantity == "":
+            discount_code.max_quantity = None
+        if discount_code.tickets_number == "":
+            discount_code.tickets_number = None
+
+        try:
+            discount_code.valid_from = datetime.strptime(form.get('start_date', None) + ' ' +
+                                                         form.get('start_time', None), '%m/%d/%Y %H:%M')
+        except:
+            discount_code.valid_from = None
+
+        try:
+            discount_code.valid_till = datetime.strptime(form.get('end_date', None) + ' ' +
+                                                         form.get('end_time', None), '%m/%d/%Y %H:%M')
+        except:
+            discount_code.valid_till = None
+
+        discount_code.tickets = ",".join(form.getlist('tickets[]'))
+
+        save_to_db(discount_code)
+
+        return discount_code
