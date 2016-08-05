@@ -92,6 +92,9 @@ function validate() {
                 });
                 return validation;
             }
+        },
+        errors: {
+            uniqueticket: "Please enter a unique ticket name"
         }
     });
 
