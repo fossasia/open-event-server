@@ -10,6 +10,7 @@ from app.models.speaker import Speaker
 from app.models.microlocation import Microlocation
 from app.models.user import User
 from app.models.message_settings import MessageSettings
+from app.models.notifications import Notification
 
 
 class ObjectMother(object):
@@ -78,3 +79,13 @@ class ObjectMother(object):
                                mail_status=1,
                                notif_status=1,
                                user_control_status=1)
+
+    @staticmethod
+    def get_notification():
+        user = ObjectMother.get_user()
+        return Notification(
+                 user=user,
+                 title="test title",
+                 message="test msg",
+                 action="Testing",
+                 received_at=datetime.now())
