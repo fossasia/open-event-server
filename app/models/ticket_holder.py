@@ -1,5 +1,6 @@
 from . import db
 
+
 class TicketHolder(db.Model):
     __tablename__ = "ticket_holders"
 
