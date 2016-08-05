@@ -57,7 +57,13 @@
             <tr>
                 <td></td>
                 <td>{{ discount_code.code }}</td>
-                <td>{{ discount_code.value }}</td>
+                <td>
+                    {% if discount_code.type == 'amount' %}
+                        ${{ discount_code.value | money }}
+                    {% else %}
+                        {{ discount_code.value }} %
+                    {% endif %}
+                </td>
                 <td>
                     {% if discount_code.valid_from %}Valid from {% endif %}
                     {% if discount_code.valid_from %}{{ discount_code.valid_from | datetime }}{% endif %}

@@ -306,12 +306,19 @@ class TicketingManager(object):
         else:
             discount_code = TicketingManager.get_discount_code(event_id, discount_code_id)
         discount_code.code = form.get('code')
-        discount_code.value = int(form.get('value'))
+        discount_code.value = form.get('value')
         discount_code.type = form.get('value_type')
-        discount_code.min_quantity = int(form.get('min_quantity', None))
-        discount_code.max_quantity = int(form.get('max_quantity', None))
-        discount_code.tickets_number = int(form.get('tickets_number'))
+        discount_code.min_quantity = form.get('min_quantity', None)
+        discount_code.max_quantity = form.get('max_quantity', None)
+        discount_code.tickets_number = form.get('tickets_number')
         discount_code.event_id = event_id
+
+        if discount_code.min_quantity == "":
+            discount_code.min_quantity = None
+        if discount_code.max_quantity == "":
+            discount_code.max_quantity = None
+        if discount_code.tickets_number == "":
+            discount_code.tickets_number = None
 
         try:
             discount_code.valid_from = datetime.strptime(form.get('start_date', None) + ' ' +
