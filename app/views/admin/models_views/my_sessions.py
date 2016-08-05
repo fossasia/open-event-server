@@ -9,11 +9,13 @@ from app.helpers.data import DataManager
 from app.views.admin.models_views.events import is_verified_user
 from ....helpers.data_getter import DataGetter
 
+
 class MySessionView(BaseView):
 
     @expose('/')
     @flask_login.login_required
     def display_my_sessions_view(self):
+        placeholder_images = DataGetter.get_event_default_images()
         upcoming_events_sessions = DataGetter.get_sessions_of_user(upcoming_events=True)
         past_events_sessions = DataGetter.get_sessions_of_user(upcoming_events=False)
         page_content = {"tab_upcoming_events": "Upcoming Sessions",
@@ -24,7 +26,7 @@ class MySessionView(BaseView):
                   "Please verify by clicking on the confirmation link that has been emailed to you.")
         return self.render('/gentelella/admin/mysessions/mysessions_list.html',
                            upcoming_events_sessions=upcoming_events_sessions, past_events_sessions=past_events_sessions,
-                           page_content=page_content)
+                           page_content=page_content, placeholder_images=placeholder_images)
 
     @expose('/<int:session_id>/', methods=('GET',))
     @flask_login.login_required
