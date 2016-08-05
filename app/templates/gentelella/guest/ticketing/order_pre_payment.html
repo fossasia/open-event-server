@@ -47,7 +47,7 @@
                                 class="required">*</span></label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="firstname" name="firstname"
-                                   required value="{{ current_user.user_detail.fullname | default('', true) | firstname }}">
+                                   required value="{{ current_user.user_detail.firstname | default('', true) }}">
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -56,7 +56,7 @@
                                 class="required">*</span></label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="lastname" name="lastname"
-                                   required value="{{ current_user.user_detail.fullname | default('', true) | lastname }}">
+                                   required value="{{ current_user.user_detail.lastname | default('', true) }}">
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>

@@ -124,8 +124,8 @@
                     <td>$ {{ order_ticket.ticket.price | money }}</td>
                     <td>{{ order_ticket.quantity }}</td>
                     <td>$ {{ (order_ticket.quantity * order_ticket.ticket.price) | money }}</td>
-                    <td>{{ order.user.user_detail.fullname | firstname }}</td>
-                    <td>{{ order.user.user_detail.fullname | lastname }}</td>
+                    <td>{{ order.user.user_detail.firstname }}</td>
+                    <td>{{ order.user.user_detail.lastname }}</td>
                     <td>{{ order.user.email }}</td>
                 </tr>
             {% endfor %}

@@ -834,7 +834,8 @@ class DataManager(object):
 
         user_detail.contact = form['contact']
         if not contacts_only_update:
-            user_detail.fullname = form['full_name']
+            user_detail.firstname = form['firstname']
+            user_detail.lastname = form['lastname']
 
             if form['facebook'] != 'https://www.facebook.com/':
                 user_detail.facebook = form['facebook']
@@ -1798,7 +1799,7 @@ def create_user_oauth(user, user_data, token, method):
     save_to_db(user, "User created")
     user_detail = UserDetail.query.filter_by(user_id=user.id).first()
     user_detail.avatar_uploaded = user.avatar
-    user_detail.fullname = user_data['name']
+    user_detail.firstname = user_data['name']
     save_to_db(user, "User Details Updated")
     return user
 
