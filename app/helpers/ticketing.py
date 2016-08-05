@@ -21,6 +21,8 @@ from app.models.ticket_holder import TicketHolder
 from app.models.order import OrderTicket
 from app.models.event import Event
 from app.models.user_detail import UserDetail
+from app.models.discount_code import DiscountCode
+
 from app.helpers.helpers import send_email_after_account_create_with_password
 
 
@@ -117,6 +119,10 @@ class TicketingManager(object):
     @staticmethod
     def get_order_by_identifier(identifier):
         return Order.query.filter_by(identifier=identifier).first()
+
+    @staticmethod
+    def get_discount_codes(event_id):
+        return DiscountCode.query.filter_by(event_id=event_id).all()
 
     @staticmethod
     def get_or_create_user_by_email(email, data=None):
