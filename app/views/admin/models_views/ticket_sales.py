@@ -155,6 +155,8 @@ class TicketSalesView(BaseView):
     def check_duplicate_discount_code(self, event_id):
         code = request.args.get('code')
         current = request.args.get('current')
+        if not current:
+            current = ''
         discount_code = TicketingManager.get_discount_code(event_id, code)
         if (current == "" and discount_code) or (current != "" and discount_code and discount_code.id != int(current)):
             return jsonify({

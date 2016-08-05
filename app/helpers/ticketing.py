@@ -306,22 +306,22 @@ class TicketingManager(object):
         else:
             discount_code = TicketingManager.get_discount_code(event_id, discount_code_id)
         discount_code.code = form.get('code')
-        discount_code.value = form.get('value')
+        discount_code.value = int(form.get('value'))
         discount_code.type = form.get('value_type')
-        discount_code.min_quantity = form.get('min_quantity')
-        discount_code.max_quantity = form.get('max_quantity')
-        discount_code.tickets_number = form.get('tickets_number')
+        discount_code.min_quantity = int(form.get('min_quantity', None))
+        discount_code.max_quantity = int(form.get('max_quantity', None))
+        discount_code.tickets_number = int(form.get('tickets_number'))
         discount_code.event_id = event_id
 
         try:
-            discount_code.valid_from = datetime.strptime(form.get('start_date') + ' ' +
-                                                         form.get('start_time'), '%m/%d/%Y %H:%M')
+            discount_code.valid_from = datetime.strptime(form.get('start_date', None) + ' ' +
+                                                         form.get('start_time', None), '%m/%d/%Y %H:%M')
         except:
             discount_code.valid_from = None
 
         try:
-            discount_code.valid_till = datetime.strptime(form.get('end_date') + ' ' +
-                                                         form.get('end_time'), '%m/%d/%Y %H:%M')
+            discount_code.valid_till = datetime.strptime(form.get('end_date', None) + ' ' +
+                                                         form.get('end_time', None), '%m/%d/%Y %H:%M')
         except:
             discount_code.valid_till = None
 
@@ -330,4 +330,3 @@ class TicketingManager(object):
         save_to_db(discount_code)
 
         return discount_code
-
