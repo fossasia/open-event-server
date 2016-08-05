@@ -897,8 +897,8 @@ class DataManager(object):
                                    logo=logo)
 
         event = Event(name=form['name'],
-                      start_time=datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M'),
-                      end_time=datetime.strptime(form['end_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M'),
+                      start_time=DataManager.get_event_time_field_format(form, 'start'),
+                      end_time=DataManager.get_event_time_field_format(form, 'end'),
                       timezone=form['timezone'],
                       latitude=form['latitude'],
                       longitude=form['longitude'],
@@ -927,7 +927,6 @@ class DataManager(object):
             event.code_of_conduct = form['code_of_conduct']
 
         state = form.get('state', None)
-        print state
         if state and ((state == u'Published' and not string_empty(
             event.location_name)) or state != u'Published') and login.current_user.is_verified:
             event.state = state
@@ -1147,6 +1146,10 @@ class DataManager(object):
             raise ValidationError("start date greater than end date")
 
     @staticmethod
+    def get_event_time_field_format(form, field):
+        return datetime.strptime(form[field + '_date'] + ' ' + form[field + '_time'], '%m/%d/%Y %H:%M')
+
+    @staticmethod
     def update_searchable_location_name(event):
         if event.latitude and event.longitude:
             response = requests.get(
@@ -1223,8 +1226,8 @@ class DataManager(object):
         """
         form = request.form
         event.name = form['name']
-        event.start_time = datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M')
-        event.end_time = datetime.strptime(form['end_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M')
+        event.start_time = DataManager.get_event_time_field_format(form, 'start')
+        event.end_time = DataManager.get_event_time_field_format(form, 'end')
         event.timezone = form['timezone']
         event.latitude = form['latitude']
         event.longitude = form['longitude']
@@ -1239,8 +1242,6 @@ class DataManager(object):
         event.payment_country = form.get('payment_country')
         event.payment_currency = form.get('payment_currency')
         event.paypal_email = form.get('paypal_email')
-
-
 
         ticket_names = form.getlist('tickets[name]')
         ticket_types = form.getlist('tickets[type]')
