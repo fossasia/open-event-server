@@ -310,6 +310,7 @@ class TicketingManager(object):
         discount_code.type = form.get('value_type')
         discount_code.min_quantity = form.get('min_quantity')
         discount_code.max_quantity = form.get('max_quantity')
+        discount_code.tickets_number = form.get('tickets_number')
         discount_code.event_id = event_id
 
         try:

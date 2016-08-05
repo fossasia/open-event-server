@@ -48,7 +48,8 @@
                         <input type="number" class="form-control" required=""
                                {% if discount_code and discount_code.type != 'amount' %}disabled name="__value"
                                {% else %}name="value" {% endif %}
-                                value="{% if discount_code and discount_code.type == 'amount' %}{{ discount_code.value }}{% endif %}">
+                               value="
+                                       {% if discount_code and discount_code.type == 'amount' %}{{ discount_code.value }}{% endif %}">
                     </div>
                     <i class="glyphicon form-control-feedback" aria-hidden="true" style="margin-top: 14px;"></i>
                     <div class="help-block with-errors"></div>
@@ -65,7 +66,8 @@
                         <input type="number" class="form-control"
                                {% if not discount_code or (discount_code and discount_code.type != 'percent') %}disabled
                                required name="__value"{% else %} name="value" {% endif %}
-                               value="{% if discount_code and discount_code.type == 'percent' %}{{ discount_code.value }}{% endif %}">
+                               value="
+                                       {% if discount_code and discount_code.type == 'percent' %}{{ discount_code.value }}{% endif %}">
                     </div>
                     <i class="glyphicon form-control-feedback" aria-hidden="true" style="margin-top: 6px;"></i>
                     <div class="help-block with-errors"></div>
@@ -73,17 +75,28 @@
                 </div>
             </div>
             <div class="clearfix"></div>
+            <div class="form-group has-feedback col-md-6" style="padding-left: 0;">
+                <label for="tickets_number">Number of discount tickets <span class="required">*</span></label>
+                <input type="number" name="tickets_number" class="form-control" id="tickets_number"
+                       required
+                       value="{{ discount_code.tickets_number | default('', true) }}">
+                <i class="glyphicon form-control-feedback" aria-hidden="true" style="margin-top: 14px;"></i>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="clearfix"></div>
             <div class="form-group has-feedback">
                 <label for="code">Status <span class="required">*</span></label>
                 <div class="radio">
                     <label>
-                        <input type="radio" name="status" id="status_active" value="active" {% if not discount_code or discount_code.is_active %}checked{% endif %} required>
+                        <input type="radio" name="status" id="status_active" value="active"
+                               {% if not discount_code or discount_code.is_active %}checked{% endif %} required>
                         Active
                     </label>
                 </div>
                 <div class="radio">
                     <label>
-                        <input type="radio" name="status" id="status_inactive" value="in_active" {% if discount_code and not discount_code.is_active %}checked{% endif %} required>
+                        <input type="radio" name="status" id="status_inactive" value="in_active"
+                               {% if discount_code and not discount_code.is_active %}checked{% endif %} required>
                         Not Active
                     </label>
                 </div>
@@ -94,7 +107,8 @@
                 <label for="code">Select Ticket(s) applied to the discount code <span class="required">*</span></label>
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" value="all" class="all-tickets" {% if not discount_code %}checked{% endif %}>
+                        <input type="checkbox" value="all" class="all-tickets"
+                               {% if not discount_code %}checked{% endif %}>
                         Select all Tickets Type
                     </label>
                 </div>
@@ -124,13 +138,15 @@
                         <div class="col-md-3">
                             <div class="input-group">
                                 <span class="input-group-addon">Min</span>
-                                <input type="number" class="form-control" name="min_quantity" value="{{ discount_code.min_quantity | default('', true) }}">
+                                <input type="number" class="form-control" name="min_quantity"
+                                       value="{{ discount_code.min_quantity | default('', true) }}">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="input-group">
                                 <span class="input-group-addon">Max</span>
-                                <input type="number" class="form-control" name="max_quantity" value="{{ discount_code.max_quantity | default('', true) }}">
+                                <input type="number" class="form-control" name="max_quantity"
+                                       value="{{ discount_code.max_quantity | default('', true) }}">
                             </div>
                         </div>
                     </div>
@@ -147,13 +163,13 @@
                                 <div class="col-xs-8" style="padding-left: 0;">
                                     <input name="start_date"
                                            data-error="Start date & time is required"
-                                            value="{{ discount_code.valid_from.strftime('%m/%d/%Y') if discount_code.valid_from else '' | default('', true) }}"
-                                           class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY" />
+                                           value="{{ discount_code.valid_from.strftime('%m/%d/%Y') if discount_code.valid_from else '' | default('', true) }}"
+                                           class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY"/>
 
                                 </div>
                                 <div class="col-xs-4" style="padding-left: 0;">
                                     <input name="start_time"
-                                            value="{{ discount_code.valid_from.strftime('%H:%M') if discount_code.valid_from else '' | default('', true) }}"
+                                           value="{{ discount_code.valid_from.strftime('%H:%M') if discount_code.valid_from else '' | default('', true) }}"
                                            class="form-control col-xs-6 time start" placeholder="HH:MM"/>
 
                                 </div>
@@ -167,13 +183,13 @@
                                 <div class="col-xs-8" style="padding-left: 0;">
                                     <input name="end_date"
                                            data-error="End date & time is required"
-                                            value="{{ discount_code.valid_till.strftime('%m/%d/%Y') if discount_code.valid_till else '' | default('', true) }}"
+                                           value="{{ discount_code.valid_till.strftime('%m/%d/%Y') if discount_code.valid_till else '' | default('', true) }}"
                                            class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY"/>
 
                                 </div>
                                 <div class="col-xs-4" style="padding-left: 0;">
                                     <input name="end_time"
-                                            value="{{ discount_code.valid_till.strftime('%H:%M') if discount_code.valid_till else '' | default('', true) }}"
+                                           value="{{ discount_code.valid_till.strftime('%H:%M') if discount_code.valid_till else '' | default('', true) }}"
                                            class="form-control col-xs-6 time end" placeholder="HH:MM"/>
 
                                 </div>
