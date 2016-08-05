@@ -1,0 +1,245 @@
+{% extends 'gentelella/admin/event/tickets/tickets_base.html' %}
+
+{% set active_side_page = "discount_codes" %}
+
+
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='admin/lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/jt.timepicker/jquery.timepicker.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}">
+
+
+    <style type="text/css">
+
+    </style>
+{% endblock %}
+
+{% block inner_content %}
+    <h3>Create a new Discount </h3>
+    <div id="new-discount-form-holder" class="col-md-7">
+        <form method="post" data-toggle="validator" id="new-discount-form" data-delay="100" data-disable="true">
+            <div class="form-group has-feedback">
+                <label for="code">Discount Code <span class="required">*</span></label>
+                <input type="text" name="code" class="form-control" id="code" placeholder="Discount Code"
+                       data-remote="{{ url_for('event_ticket_sales.check_duplicate_discount_code', event_id=event.id) }}"
+                       pattern="^[\w-]+$"
+                       required
+                       data-error='Only alphanumeric, "-" and "_" are allowed. (E.g., INTRO10, PROMO_200)'
+                       data-required-error="A discount code is required"
+                       data-remote-error="Discount code already exists" >
+                <i class="glyphicon form-control-feedback" aria-hidden="true" style="margin-top: 14px;"></i>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="col-md-6" style="padding-left: 0;">
+                <div class="form-group has-feedback">
+                    <label for="code">Enter Discount <span class="required">*</span></label>
+                    <div class="input-group">
+                    <span class="input-group-addon radio">
+                        <label style="margin-bottom: -10px;">
+                            <input type="radio" name="value_type" value="amount" required checked> Amount ($)
+                        </label>
+                    </span>
+                        <input type="number" class="form-control" name="value" required="">
+                    </div>
+                    <i class="glyphicon form-control-feedback" aria-hidden="true" style="margin-top: 14px;"></i>
+                    <div class="help-block with-errors"></div>
+
+                </div>
+                <div class="form-group has-feedback">
+                    <div class="input-group">
+                    <span class="input-group-addon radio">
+                        <label style="margin-bottom: -10px;">
+                            <input type="radio" name="value_type" value="percent" required> Percent (%)
+                        </label>
+                    </span>
+                        <input type="number" class="form-control" disabled required="" name="__value">
+                    </div>
+                    <i class="glyphicon form-control-feedback" aria-hidden="true" style="margin-top: 6px;"></i>
+                    <div class="help-block with-errors"></div>
+
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="form-group has-feedback">
+                <label for="code">Status <span class="required">*</span></label>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="status" id="status_active" value="active" checked required>
+                        Active
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="status" id="status_inactive" value="in_active" required>
+                        Not Active
+                    </label>
+                </div>
+                <i class="glyphicon form-control-feedback" aria-hidden="true" style="margin-top: 14px;"></i>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-group has-feedback col-md-6" style="padding-left: 0;">
+                <label for="code">Select Ticket(s) applied to the discount code <span class="required">*</span></label>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="tickets" value="all" class="all-tickets" checked>
+                        Select all Tickets Type
+                    </label>
+                </div>
+                <hr>
+                {% for ticket in event.tickets %}
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="tickets" class="single-ticket" value="{{ ticket.id }}" checked>
+                            {{ ticket.name }}
+                        </label>
+                    </div>
+                {% endfor %}
+
+                <i class="glyphicon form-control-feedback" aria-hidden="true" style="margin-top: 14px;"></i>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="clearfix"></div>
+            <hr>
+            <a class="btn btn-link" data-toggle="collapse" href="#more-options" style="padding-left: 0;">Show other
+                options <i class="fa fa-chevron-down"></i> </a>
+            <div class="collapse" id="more-options">
+
+                <div class="form-group has-feedback">
+                    <label for="code">Set the min. and max. quantity allowed to purchase per order (optional)</label>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <span class="input-group-addon">Min</span>
+                                <input type="number" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <span class="input-group-addon">Max</span>
+                                <input type="number" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <i class="glyphicon form-control-feedback" aria-hidden="true" style="margin-top: 14px;"></i>
+                    <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group has-feedback">
+                    <label for="code">Validity period (optional)</label>
+                    <div class="row event-date-picker">
+                        <div class="col-md-5">
+                            <div class="item form-group">
+                                <label>Valid from</label>
+                                <br>
+                                <div class="col-xs-8" style="padding-left: 0;">
+                                    <input required="required"
+                                           name="start_date"
+                                           data-error="Start date & time is required"
+                                           value=""
+                                           class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY"/>
+
+                                </div>
+                                <div class="col-xs-4" style="padding-left: 0;">
+                                    <input required="required"
+                                           name="start_time"
+                                           value=""
+                                           class="form-control col-xs-6 time start" placeholder="HH:MM"/>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-5">
+                            <div class="item form-group">
+                                <label>Expires on</label>
+                                <br>
+                                <div class="col-xs-8" style="padding-left: 0;">
+                                    <input required="required"
+                                           name="end_date"
+                                           data-error="End date & time is required"
+                                           value=""
+                                           class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY"/>
+
+                                </div>
+                                <div class="col-xs-4" style="padding-left: 0;">
+                                    <input required="required"
+                                           name="end_time"
+                                           value=""
+                                           class="form-control col-xs-6 time end" placeholder="HH:MM"/>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <i class="glyphicon form-control-feedback" aria-hidden="true" style="margin-top: 14px;"></i>
+                    <div class="help-block with-errors"></div>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="clearfix"></div>
+            <div class="btn-group btn-group-lg" role="group">
+                <button type="button" class="btn btn-default">Cancel</button>
+                <button type="submit" class="btn btn-success">Add Discount</button>
+            </div>
+
+        </form>
+
+    </div>
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/bootstrap-validator/dist/validator.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/jt.timepicker/jquery.timepicker.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/datepair.js/dist/datepair.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/datepair.js/dist/jquery.datepair.min.js') }}"></script>
+
+    <script type="text/javascript">
+
+        $.fn.validator.Constructor.INPUT_SELECTOR = ':input:not([type="hidden"], [type="submit"], [type="reset"], button, [disabled])';
+
+        var $newDiscountForm = $("#new-discount-form");
+
+        $('.time').timepicker({
+            'showDuration': true,
+            'timeFormat': 'H:i',
+            'scrollDefault': 'now'
+        });
+
+        $('.date').datepicker({
+            'format': 'mm/dd/yyyy',
+            'autoclose': true
+        });
+
+        $(".event-date-picker").datepair({
+            'defaultTimeDelta': 3600000
+        });
+
+        $(".all-tickets").click(function () {
+            if(this.checked) {
+                $(".single-ticket").prop("checked", true);
+            }
+        });
+
+        $(".single-ticket").click(function () {
+           if(!this.checked) {
+               $(".all-tickets").prop("checked", false);
+           }
+        });
+
+        $("input[name=value_type]").click(function () {
+            $("input[name=value]").attr("disabled", "disabled").attr("name", "__value").val("");
+            $(this).closest(".input-group").find("input[name=__value]").removeAttr('disabled').attr("name", "value");
+            $newDiscountForm.validator('destroy');
+            $newDiscountForm.validator('update');
+            $newDiscountForm.validator('validate');
+        });
+
+    </script>
+{% endblock %}
+

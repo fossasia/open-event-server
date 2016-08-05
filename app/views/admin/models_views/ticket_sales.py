@@ -133,3 +133,13 @@ class TicketSalesView(BaseView):
                            discount_codes=discount_codes,
                            event_id=event_id)
 
+    @expose('/discounts/create/', methods=('GET', 'POST'))
+    @flask_login.login_required
+    def discount_codes_create(self, event_id):
+        event = DataGetter.get_event(event_id)
+        return self.render('/gentelella/admin/event/tickets/discount_codes_create.html', event=event, event_id=event_id)
+
+    @expose('/discounts/check/duplicate/', methods=('POST', ))
+    @flask_login.login_required
+    def check_duplicate_discount_code(self, event_id):
+        return "Hello"
