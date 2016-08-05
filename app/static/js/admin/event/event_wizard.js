@@ -77,6 +77,21 @@ function validate() {
         feedback: {
             success: "glyphicon-ok",
             error: "glyphicon-remove"
+        },
+        custom: {
+            uniqueticket: function($el) {
+                var validation = true;
+                /* Check for non-unique ticket names */
+                $("#event-wizard-form input[name='tickets[name]']").each(function(i, ticketName) {
+                    if (!$(ticketName).is($el)) {
+                        if ($(ticketName).val().trim() == $el.val().trim()) {
+                            validation = false;
+                            return false;
+                        }
+                    }
+                });
+                return validation;
+            }
         }
     });
 

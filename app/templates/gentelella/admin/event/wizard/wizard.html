@@ -97,7 +97,10 @@
                     <tr>
                         <td>
                             <input type="hidden" name="tickets[type]" value="{{ type | default('', true) }}">
-                            <input type="text" name="tickets[name]" class="form-control" placeholder="Ticket Name" value="{{ name }}">
+                            <div class="item form-group" style="margin-bottom: 0;">
+                                <input type="text" name="tickets[name]" class="form-control" placeholder="Ticket Name" value="{{ name }}"
+                                    required="required" data-uniqueticket="true">
+                            </div>
                         </td>
                         <td>
                         {% if type == "free" %}
