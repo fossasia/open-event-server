@@ -258,6 +258,12 @@ class TicketingManager(object):
         order = TicketingManager.get_and_set_expiry(form['identifier'])
         order.token = form['stripe_token_id']
         save_to_db(order)
+
+        if order.event.stripe:
+            stripe.api_key = order.event.stripe.stripe_secret_key
+        else:
+            stripe.api_key = "Key not Set"
+
         try:
             customer = stripe.Customer.create(
                 email=order.user.email,
