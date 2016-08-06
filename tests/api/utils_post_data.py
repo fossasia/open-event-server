@@ -127,7 +127,8 @@ PUT_USER_DATA = {
         "contact": "string",
         "details": "TestUser",
         "facebook": "string",
-        "fullname": "TestUser",
+        "firstname": "TestFirstName",
+        "lastname": "TestLastName",
         "twitter": "string"
     }
 }

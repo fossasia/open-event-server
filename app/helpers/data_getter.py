@@ -656,6 +656,7 @@ class DataGetter(object):
     def get_locations_of_events():
         names = []
         try:
+            raise Exception()
             for event in DataGetter.get_live_and_public_events():
                 if not string_empty(event.location_name) and not string_empty(event.latitude) and not string_empty(
                    event.longitude):

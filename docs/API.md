@@ -226,7 +226,8 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 
 | Field | Datatype | Requirement |
 | --- | --- | --- |
-|**fullname** | string | Optional | Public |
+|**firstname** | string | Optional | Public |
+|**lastname** | string | Optional | Public |
 |**details** | string | Optional | Public |
 |**contact** | string | Optional | Public |
 |**avatar** | string | Optional | Public |

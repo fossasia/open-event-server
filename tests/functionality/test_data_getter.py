@@ -56,5 +56,9 @@ class TestDataGetter(OpenEventTestCase):
     def test_get_roles_by_name(self):
         with app.test_request_context():
             self.assertTrue(DataGetter.get_role_by_name('organizer'))
+
+    def test_get_services(self):
+        with app.test_request_context():
+            self.assertTrue(DataGetter.get_services())
 if __name__ == '__main__':
     unittest.main()

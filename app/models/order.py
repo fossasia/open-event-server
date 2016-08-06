@@ -37,6 +37,10 @@ class Order(db.Model):
     token = db.Column(db.String)
     status = db.Column(db.String)
 
+    discount_code_id = db.Column(
+        db.Integer, db.ForeignKey('discount_codes.id', ondelete='SET NULL'), nullable=True, default=None)
+    discount_code = db.relationship('DiscountCode', backref='orders')
+
     event = db.relationship('Event', backref='orders')
     user = db.relationship('User', backref='orders')
     tickets = db.relationship("OrderTicket")
@@ -53,6 +57,7 @@ class Order(db.Model):
                  transaction_id=None,
                  paid_via=None,
                  user_id=None,
+                 discount_code_id=None,
                  event_id=None):
         self.identifier = identifier
         self.quantity = quantity
@@ -66,6 +71,7 @@ class Order(db.Model):
         self.transaction_id = transaction_id
         self.paid_via = paid_via
         self.created_at = datetime.datetime.utcnow()
+        self.discount_code_id = discount_code_id
 
     def __repr__(self):
         return '<Order %r>' % self.id
