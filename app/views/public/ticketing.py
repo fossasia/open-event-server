@@ -1,4 +1,5 @@
 import requests
+import stripe
 from flask.ext.restplus import abort
 from flask_admin import BaseView, expose
 from flask import redirect, url_for, request, jsonify, make_response, flash
@@ -34,9 +35,15 @@ class TicketingView(BaseView):
             abort(404)
         if order.status == 'completed':
             return redirect(url_for('ticketing.view_order_after_payment', order_identifier=order_identifier))
+
+        if order.event.stripe:
+            stripe_publishable_key = order.event.stripe.stripe_publishable_key
+        else:
+            stripe_publishable_key = "No Key Set"
+
         return self.render('/gentelella/guest/ticketing/order_pre_payment.html', order=order, event=order.event,
                            countries=list(pycountry.countries),
-                           stripe_publishable_key=get_settings()['stripe_publishable_key'])
+                           stripe_publishable_key=stripe_publishable_key)
 
     @expose('/<order_identifier>/view/', methods=('GET',))
     def view_order_after_payment(self, order_identifier):
