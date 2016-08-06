@@ -162,12 +162,10 @@ def pages():
     pages = DataGetter.get_all_pages()
     return dict(system_pages=pages)
 
-
 @app.context_processor
 def social_settings():
     settings = get_settings()
     return dict(settings=settings)
-
 
 @app.template_filter('pretty_name')
 def pretty_name_filter(s):
@@ -309,11 +307,6 @@ import helpers.tasks
 @app.before_first_request
 def set_secret():
     current_app.secret_key = get_settings()['secret']
-
-@app.before_first_request
-def set_stripe_key():
-    stripe.api_key = get_settings()['stripe_secret_key']
-
 
 @app.context_processor
 def integrate_socketio():

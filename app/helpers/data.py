@@ -24,6 +24,7 @@ from app.helpers.notification_email_triggers import trigger_new_session_notifica
 from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth
 from app.helpers.storage import upload, UPLOAD_PATHS
 from app.models.notifications import Notification
+from app.models.stripe_authorization import StripeAuthorization
 from ..helpers import helpers as Helper
 from ..helpers.data_getter import DataGetter
 from ..helpers.static import EVENT_LICENCES
@@ -551,6 +552,7 @@ class DataManager(object):
             session.subtitle = form.get('subtitle', '')
             session.long_abstract = form.get('long_abstract', '')
             session.short_abstract = form.get('short_abstract', '')
+            session.state = form_state
 
             if form.get('track', None) != "":
                 session.track_id = form.get('track', None)
@@ -926,7 +928,6 @@ class DataManager(object):
                       payment_currency=form.get('payment_currency', ''),
                       paypal_email=form.get('paypal_email', ''))
 
-
         if event.latitude and event.longitude:
             response = requests.get(
                 "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
@@ -1000,9 +1001,9 @@ class DataManager(object):
                         ticket_max_orders[i] = ticket_max_orders[i] if ticket_max_orders[i] != '' else 10
 
                         sales_start_str = '{} {}'.format(ticket_sales_start_dates[i],
-                            ticket_sales_start_times[i])
+                                                         ticket_sales_start_times[i])
                         sales_end_str = '{} {}'.format(ticket_sales_end_dates[i],
-                            ticket_sales_end_times[i])
+                                                       ticket_sales_end_times[i])
                         ticket = Ticket(
                             name=name,
                             type=ticket_types[i],
@@ -1023,6 +1024,17 @@ class DataManager(object):
             sponsor_level = form.getlist('sponsors[level]')
             sponsor_description = form.getlist('sponsors[description]')
             sponsor_logo_url = []
+
+            if form.get('stripe_added', u'no') == u'yes':
+                stripe_authorization = StripeAuthorization(
+                    stripe_secret_key=form.get('stripe_secret_key', ''),
+                    stripe_refresh_token=form.get('stripe_refresh_token', ''),
+                    stripe_publishable_key=form.get('stripe_publishable_key', ''),
+                    stripe_user_id=form.get('stripe_user_id', ''),
+                    stripe_email=form.get('stripe_email', ''),
+                    event_id=event.id
+                )
+                save_to_db(stripe_authorization)
 
             if form.get('sponsors_state', u'off') == u'on':
                 for index, name in enumerate(sponsor_name):
@@ -1145,7 +1157,6 @@ class DataManager(object):
                               tax_include_in_price=tax_include_in_price,
                               event_id=event.id)
 
-
                     save_to_db(tax, "Tax Options Saved")
 
             uer = UsersEventsRoles(login.current_user, event, role)
@@ -1224,7 +1235,19 @@ class DataManager(object):
                    sponsors, custom_forms, img_files, old_sponsor_logos, old_sponsor_names, tax):
         """
         Event will be updated in database
-        :param data: view data form
+        :param call_for_papers:
+        :param tax:
+        :param old_sponsor_names:
+        :param microlocations:
+        :param social_links:
+        :param tracks:
+        :param session_types:
+        :param event_id:
+        :param request:
+        :param sponsors:
+        :param custom_forms:
+        :param img_files:
+        :param old_sponsor_logos:
         :param event: object contains all earlier data
         """
         form = request.form
@@ -1246,8 +1269,6 @@ class DataManager(object):
         event.payment_currency = form.get('payment_currency')
         event.paypal_email = form.get('paypal_email')
 
-
-
         ticket_names = form.getlist('tickets[name]')
         ticket_types = form.getlist('tickets[type]')
         ticket_prices = form.getlist('tickets[price]')
@@ -1268,9 +1289,9 @@ class DataManager(object):
                 ticket_max_orders[i] = ticket_max_orders[i] if ticket_max_orders[i] != '' else 10
 
                 sales_start_str = '{} {}'.format(ticket_sales_start_dates[i],
-                    ticket_sales_start_times[i])
+                                                 ticket_sales_start_times[i])
                 sales_end_str = '{} {}'.format(ticket_sales_end_dates[i],
-                    ticket_sales_end_times[i])
+                                               ticket_sales_end_times[i])
 
                 ticket = Ticket.query.filter_by(event=event, name=name).first()
                 if not ticket:
@@ -1436,6 +1457,20 @@ class DataManager(object):
                                                    link=social_link_link[index],
                                                    event_id=event.id)
                 db.session.add(social_link)
+
+        if event.stripe:
+            delete_from_db(event.stripe, "Old stripe auth deleted")
+
+        if form.get('stripe_added', u'no') == u'yes':
+            stripe_authorization = StripeAuthorization(
+                stripe_secret_key=form.get('stripe_secret_key', ''),
+                stripe_refresh_token=form.get('stripe_refresh_token', ''),
+                stripe_publishable_key=form.get('stripe_publishable_key', ''),
+                stripe_user_id=form.get('stripe_user_id', ''),
+                stripe_email=form.get('stripe_email', ''),
+                event_id=event.id
+            )
+            save_to_db(stripe_authorization)
 
         if form.get('has_session_speakers', u'no') == u'yes':
 
