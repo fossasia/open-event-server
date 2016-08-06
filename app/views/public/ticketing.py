@@ -101,13 +101,18 @@ class TicketingView(BaseView):
     @expose('/stripe/callback/', methods=('GET',))
     def stripe_callback(self):
         code = request.args.get('code')
-        data = {
-            'client_secret': get_settings()['stripe_secret_key'],
-            'code': code,
-            'grant_type': 'authorization_code'
-        }
-        response = requests.post('https://connect.stripe.com/oauth/token', data=data)
-        response_json = response.json()
-        stripe.api_key = response_json['access_token']
-        account = stripe.Account.retrieve(response_json['stripe_user_id'])
-        return self.render('/gentelella/guest/ticketing/stripe_oauth_callback.html', response=response_json, account=account)
+        if code and code != "":
+            data = {
+                'client_secret': get_settings()['stripe_secret_key'],
+                'code': code,
+                'grant_type': 'authorization_code'
+            }
+            response = requests.post('https://connect.stripe.com/oauth/token', data=data)
+            if response.status_code == 200:
+                response_json = response.json()
+                stripe.api_key = response_json['access_token']
+                account = stripe.Account.retrieve(response_json['stripe_user_id'])
+                return self.render('/gentelella/guest/ticketing/stripe_oauth_callback.html', response=response_json,
+                                   account=account)
+
+        return "Error"
