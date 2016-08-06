@@ -12,6 +12,7 @@ class Setting(db.Model):
     google_client_id = db.Column(db.String)
     google_client_secret = db.Column(db.String)
     # Stripe Keys
+    stripe_client_id = db.Column(db.String)
     stripe_secret_key = db.Column(db.String)
     stripe_publishable_key = db.Column(db.String)
     # FB
@@ -42,6 +43,7 @@ class Setting(db.Model):
     def __init__(self, aws_key=None, aws_secret=None, aws_bucket_name=None,
                  google_client_id=None, google_client_secret=None,
                  fb_client_id=None, fb_client_secret=None, tw_consumer_key=None,
+                 stripe_client_id=None,
                  stripe_secret_key=None, stripe_publishable_key=None,
                  in_client_id=None, in_client_secret=None,
                  tw_consumer_secret=None, sendgrid_key=None,
@@ -69,6 +71,7 @@ class Setting(db.Model):
         self.support_url = support_url
         self.facebook_url = facebook_url
         self.youtube_url = youtube_url
+        self.stripe_client_id = stripe_client_id
         self.stripe_publishable_key = stripe_publishable_key
         self.stripe_secret_key = stripe_secret_key
         self.web_app_url = web_app_url

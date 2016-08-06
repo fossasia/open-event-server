@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Processing</title>
+    <script type="text/javascript">
+        window.oauth_response = {
+            'stripe_user_id': '{{ response.stripe_user_id }}',
+            'refresh_token': '{{ response.refresh_token }}',
+            'access_token': '{{ response.access_token }}',
+            'stripe_publishable_key': '{{ response.stripe_publishable_key }}',
+            'email': '{{ account.email }}',
+            'live_mode': {{ 'true' if response.livemode else 'false' }}
+        };
+        setTimeout(function () {
+            window.close();
+        }, 500)
+    </script>
+</head>
+<body>
+Processing ...
+</body>
+</html>
