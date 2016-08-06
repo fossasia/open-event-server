@@ -1007,14 +1007,17 @@
         var $ticketRemove = $ticket.children("td").last().children().children().last();
         $ticketRemove.tooltip();
         $ticketRemove.on("click", function() {
-            if (type == 'paid' || type == 'donation'){
-                paid_tickets = paid_tickets - 1;
-                if (paid_tickets == 0){
-                    $paymentsystemHolder.fadeOut();
+            var confirmRemove = confirm("Are you sure you want to remove the Ticket?");
+            if (confirmRemove) {
+                if (type == 'paid' || type == 'donation'){
+                    paid_tickets = paid_tickets - 1;
+                    if (paid_tickets == 0){
+                        $paymentsystemHolder.fadeOut();
+                    }
                 }
+                $ticket.remove();
+                $ticketMore.remove();
             }
-            $ticket.remove();
-            $ticketMore.remove();
         });
 
         /* Set Ticket Type field */
@@ -1039,7 +1042,6 @@
         ticketsCount += 1;
     }
 
-
     $(".edit-ticket-button").click(function() {
         var $ticket = $(this).parent().parent().parent();
         var $ticketMore = $ticket.next();
@@ -1048,10 +1050,13 @@
     });
 
     $(".remove-ticket-button").click(function() {
-        var $ticket = $(this).parent().parent().parent();
-        var $ticketMore = $ticket.next();
-        $ticket.remove();
-        $ticketMore.remove();
+        var confirmRemove = confirm("Are you sure you want to remove the Ticket?");
+        if (confirmRemove) {
+            var $ticket = $(this).parent().parent().parent();
+            var $ticketMore = $ticket.next();
+            $ticket.remove();
+            $ticketMore.remove();
+        }
     });
 
     $(".add-free-ticket").click(function () {

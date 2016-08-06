@@ -89,12 +89,17 @@ class DataManager(object):
         if not current_app.config.get('INTEGRATE_SOCKETIO', False):
             return False
         user_room = 'user_{}'.format(user.id)
-        emit('response',
+        emit('notifs-response',
              {'meta': 'New notifications',
               'notif_count': user.get_unread_notif_count(),
               'notifs': user.get_unread_notifs(reverse=True)},
              room=user_room,
              namespace='/notifs')
+        emit('notifpage-response',
+             {'meta': 'New notifpage notifications',
+              'notif': DataGetter.get_latest_notif(user)},
+             room=user_room,
+             namespace='/notifpage')
 
     @staticmethod
     def mark_user_notification_as_read(notification):
@@ -829,7 +834,8 @@ class DataManager(object):
 
         user_detail.contact = form['contact']
         if not contacts_only_update:
-            user_detail.fullname = form['full_name']
+            user_detail.firstname = form['firstname']
+            user_detail.lastname = form['lastname']
 
             if form['facebook'] != 'https://www.facebook.com/':
                 user_detail.facebook = form['facebook']
@@ -1793,7 +1799,7 @@ def create_user_oauth(user, user_data, token, method):
     save_to_db(user, "User created")
     user_detail = UserDetail.query.filter_by(user_id=user.id).first()
     user_detail.avatar_uploaded = user.avatar
-    user_detail.fullname = user_data['name']
+    user_detail.firstname = user_data['name']
     save_to_db(user, "User Details Updated")
     return user
 

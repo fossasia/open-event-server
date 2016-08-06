@@ -15,24 +15,26 @@
                 <h3 class="panel-title">Registration Information</h3>
             </div>
             <div class="panel-body" style="padding-bottom: 10px;">
-                <div class="alert alert-warning time-left-alert">
-                    <div id="time-left" class="pull-left">
-                        09:59
+                {% if not from_organizer %}
+                    <div class="alert alert-warning time-left-alert">
+                        <div id="time-left" class="pull-left">
+                            09:59
+                        </div>
+                        <p>
+                            Please complete registration within 10:00 minutes.<br>
+                            After 10:00 minutes, the reservation we're holding will be released to others.
+                        </p>
                     </div>
-                    <p>
-                        Please complete registration within 10:00 minutes.<br>
-                        After 10:00 minutes, the reservation we're holding will be released to others.
-                    </p>
-                </div>
+                {% endif %}
                 <form class="form-horizontal" data-toggle="validator" id="order-payment-form"
                       action="{{ url_for('ticketing.initiate_order_payment') }}">
                     <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
                         <i class="fa fa-ticket"></i>
-                        Ticket Buyer
+                        Ticket {% if from_organizer %}Holder{% else %}Buyer{% endif %}
                         <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
                     </h2>
                     <br>
-                    {% if not current_user.is_authenticated %}
+                    {% if not current_user.is_authenticated and not from_organizer %}
                         <div style="width: 100%; text-align: center">
                             Have you used Open Event before? <a href="{{ url_for('admin.login_view', next=url_for('ticketing.view_order', order_identifier=order.identifier, _external=True)) }}">Sign In</a> To Your Account to
                             continue.
@@ -45,7 +47,7 @@
                                 class="required">*</span></label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="firstname" name="firstname"
-                                   required value="{{ current_user.user_detail.fullname | default('', true) | firstname }}">
+                                   required value="{{ current_user.user_detail.firstname | default('', true) }}">
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -54,7 +56,7 @@
                                 class="required">*</span></label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="lastname" name="lastname"
-                                   required value="{{ current_user.user_detail.fullname | default('', true) | lastname }}">
+                                   required value="{{ current_user.user_detail.lastname | default('', true) }}">
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -63,12 +65,12 @@
                         <label for="email" class="col-sm-4 control-label">Email <span
                                 class="required">*</span></label>
                         <div class="col-sm-6">
-                            <input type="email" class="form-control" {% if current_user.is_authenticated %} readonly {% else %} name="email" {% endif %}
+                            <input type="email" class="form-control" {% if current_user.is_authenticated and not from_organizer %} readonly {% else %} name="email" {% endif %}
                                    id="email" required value="{{ current_user.email | default('', true) }}">
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
-                    {% if not current_user.is_authenticated %}
+                    {% if not current_user.is_authenticated or from_organizer %}
                         <div class="form-group">
                             <label for="email_confirm" class="col-sm-4 control-label">Confirm Email <span
                                     class="required">*</span></label>
@@ -141,9 +143,9 @@
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-4 control-label"></label>
                         <div class="col-sm-6">
-                            By clicking "{% if order.amount > 0 %}Pay Now{% else %}Order Now{% endif %}", I acknowledge that I have read and agree with the
+                            By clicking "{% if order.amount == 0 or (is_organizer and (pay_via == 'stripe' or pay_via == 'paypal')) %}Order Now{% else %}Pay Now{% endif %}", I acknowledge that I have read and agree with the
                             Open Event terms of service, and privacy policy.<br><br>
-                            <button type="submit" class="btn btn-success btn-lg">{% if order.amount > 0 %}Pay now{% else %}Order Now{% endif %}</button>
+                            <button type="submit" class="btn btn-success btn-lg">{% if order.amount == 0 or (is_organizer and (pay_via == 'stripe' or pay_via == 'paypal')) %}Order now{% else %}Pay Now{% endif %}</button>
                             {% if order.amount > 0 %}
                                 <br>
                                 <img src="{{ url_for('static', filename='img/paymentlogoshorizontal.png') }}">
@@ -167,6 +169,8 @@
         window.stripe_publishable_key = "{{ stripe_publishable_key }}";
         window.event_name = "{{ order.event.name }}";
         window.order_amount = {{ order.amount }};
+        window.paid_via = "{{ paid_via | default('', true) }}";
+        window.from_organzier = {{ from_organzier | default('false', true) }};
     </script>
     <script src="https://checkout.stripe.com/checkout.js"></script>
     <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>

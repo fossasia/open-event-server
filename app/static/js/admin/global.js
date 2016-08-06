@@ -82,6 +82,7 @@ var createSnackbar = (function () {
             if (hasAction) {
                 actionButton.addEventListener('click', function () {
                     action();
+                    snackbar.dismiss();
                     snackbar.dismiss.bind(snackbar);
                 });
             } else {

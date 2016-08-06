@@ -7,8 +7,11 @@
 
     <div style="display: block;">
 
-        <label class="control-label">Full Name:<span class="required">*</span></label>
-        <input style="margin-bottom:20px" required="required" name="full_name" class="form-control" value="{{ profile.user_detail.fullname | default('', true) }}"/>
+        <label class="control-label">First Name:<span class="required">*</span></label>
+        <input style="margin-bottom:20px" required="required" name="firstname" class="form-control" value="{{ profile.user_detail.firstname | default('', true) }}"/>
+        <label class="control-label">Family Name:<span class="required">*</span></label>
+        <input style="margin-bottom:20px" required="required" name="lastname" class="form-control" value="{{ profile.user_detail.lastname | default('', true) }}"/>
+
         <label>Details about User:</label>
         <textarea name="details" id="summernote">{{profile.user_detail.details | default('', true) }}</textarea>
 

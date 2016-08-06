@@ -1,8 +1,10 @@
 """Copyright 2015 Rafal Kowalski"""
 from collections import Counter
 
+from flask import url_for
 import pytz
 import requests
+import humanize
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from ..models.event import Event, EventsUsers
@@ -52,6 +54,19 @@ class DataGetter(object):
     @staticmethod
     def get_user_notification(notification_id):
         return Notification.query.filter_by(id=notification_id).first()
+
+    @staticmethod
+    def get_latest_notif(user):
+        unread_notifs = Notification.query.filter_by(user=user, has_read=False)
+        notif = unread_notifs.order_by(desc(Notification.received_at)).first()
+        latest_notif = {
+            'title': notif.title,
+            'message': notif.message,
+            'received_at': str(notif.received_at),
+            'received_at_human': humanize.naturaltime(datetime.datetime.now() - notif.received_at),
+            'mark_read': url_for('notifications.mark_as_read', notification_id=notif.id)
+        }
+        return latest_notif
 
     @staticmethod
     def get_invite_by_user_id(user_id):
@@ -640,21 +655,25 @@ class DataGetter(object):
     @cache.cached(timeout=21600, key_prefix='event_locations')
     def get_locations_of_events():
         names = []
-        for event in DataGetter.get_live_and_public_events():
-            if not string_empty(event.location_name) and not string_empty(event.latitude) and not string_empty(
-               event.longitude):
-                response = requests.get(
-                    "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
-                        event.longitude)).json()
-                if response['status'] == u'OK':
-                    for addr in response['results'][0]['address_components']:
-                        if addr['types'] == ['locality', 'political']:
-                            names.append(addr['short_name'])
+        try:
+            raise Exception()
+            for event in DataGetter.get_live_and_public_events():
+                if not string_empty(event.location_name) and not string_empty(event.latitude) and not string_empty(
+                   event.longitude):
+                    response = requests.get(
+                        "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
+                            event.longitude)).json()
+                    if response['status'] == u'OK':
+                        for addr in response['results'][0]['address_components']:
+                            if addr['types'] == ['locality', 'political']:
+                                names.append(addr['short_name'])
 
-        cnt = Counter()
-        for location in names:
-            cnt[location] += 1
-        return [v for v, __ in cnt.most_common()][:10]
+            cnt = Counter()
+            for location in names:
+                cnt[location] += 1
+            return [v for v, __ in cnt.most_common()][:10]
+        except:
+            return names
 
     @staticmethod
     def get_sales_open_tickets(event_id):
