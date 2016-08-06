@@ -1,6 +1,7 @@
 import flask_login
 from flask_admin import BaseView, expose
 from app.helpers.ticketing import TicketingManager
+from app.helpers.data_getter import DataGetter
 
 
 class MyTicketsView(BaseView):
