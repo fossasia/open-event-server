@@ -15,7 +15,7 @@ jQuery.fn.extend({
             elem.bind("propertychange change click keyup input paste", function (event) {
                 if (elem.data('oldVal') != elem.val()) {
                     elem.data('oldVal', elem.val());
-                    callback(elem.val(), event);
+                    callback(elem.val(), event, elem);
                 }
             });
         });
@@ -123,7 +123,7 @@ jQuery.fn.extend({
             }
         });
     }
-    
+
 });
 
 /**
@@ -384,4 +384,17 @@ function slugify(text) {
         splitWord[index] = partSlugify(splitWord[index]);
     }
     return splitWord.join('--');
+}
+
+/**
+ * Pad a number with zeros
+ * @param n
+ * @param width
+ * @param z
+ * @returns {*}
+ */
+function pad(n, width, z) {
+    z = z || '0';
+    n = n + '';
+    return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 }

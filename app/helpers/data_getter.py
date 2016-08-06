@@ -1,8 +1,10 @@
 """Copyright 2015 Rafal Kowalski"""
 from collections import Counter
 
+from flask import url_for
 import pytz
 import requests
+import humanize
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from ..models.event import Event, EventsUsers
@@ -32,14 +34,17 @@ from ..models.activity import Activity
 from ..models.ticket import Ticket
 from ..models.modules import Module
 from ..models.page import Page
+from ..models.export_jobs import ExportJob
+from ..models.tax import Tax
 from .language_list import LANGUAGE_LIST
-from .static import EVENT_TOPICS, EVENT_LICENCES
+from .static import EVENT_TOPICS, EVENT_LICENCES, PAYMENT_COUNTRIES, PAYMENT_CURRENCIES, DEFAULT_EVENT_IMAGES
 from app.helpers.helpers import get_event_id, string_empty
 from flask.ext import login
 from flask import flash, abort
 import datetime
 from sqlalchemy import desc, asc, or_
 from app.helpers.cache import cache
+
 
 class DataGetter(object):
     @staticmethod
@@ -49,6 +54,19 @@ class DataGetter(object):
     @staticmethod
     def get_user_notification(notification_id):
         return Notification.query.filter_by(id=notification_id).first()
+
+    @staticmethod
+    def get_latest_notif(user):
+        unread_notifs = Notification.query.filter_by(user=user, has_read=False)
+        notif = unread_notifs.order_by(desc(Notification.received_at)).first()
+        latest_notif = {
+            'title': notif.title,
+            'message': notif.message,
+            'received_at': str(notif.received_at),
+            'received_at_human': humanize.naturaltime(datetime.datetime.now() - notif.received_at),
+            'mark_read': url_for('notifications.mark_as_read', notification_id=notif.id)
+        }
+        return latest_notif
 
     @staticmethod
     def get_invite_by_user_id(user_id):
@@ -62,7 +80,7 @@ class DataGetter(object):
     @staticmethod
     def get_all_events():
         """Method return all events"""
-        return Event.query.order_by(desc(Event.id)).filter(Event.in_trash is not True).all()
+        return Event.query.order_by(desc(Event.id)).filter_by(in_trash=False).all()
 
     @staticmethod
     def get_all_users_events_roles():
@@ -397,38 +415,38 @@ class DataGetter(object):
     def get_live_events():
         return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
-            .filter(Event.state == 'Published').filter(Event.in_trash is not True)
+            .filter(Event.state == 'Published').filter(Event.in_trash == False)
 
     @staticmethod
     def get_draft_events():
         return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
-            .filter(Event.state == 'Draft').filter(Event.in_trash is not True)
+            .filter(Event.state == 'Draft').filter(Event.in_trash == False)
 
     @staticmethod
     def get_past_events():
         return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.end_time <= datetime.datetime.now()).filter(
-            or_(Event.state == 'Completed', Event.state == 'Published'))
+            or_(Event.state == 'Completed', Event.state == 'Published')).filter(Event.in_trash == False)
 
     @staticmethod
     def get_all_live_events():
         return Event.query.filter(Event.start_time >= datetime.datetime.now()) \
             .filter(Event.end_time >= datetime.datetime.now()) \
-            .filter(Event.state == 'Published').filter(Event.in_trash is not True)
+            .filter(Event.state == 'Published').filter(Event.in_trash == False)
 
     @staticmethod
     def get_live_and_public_events():
-        return DataGetter.get_all_live_events().filter(Event.privacy != 'private')
+        return DataGetter.get_all_live_events().filter(Event.privacy != 'private').filter(Event.in_trash == False)
 
     @staticmethod
     def get_all_draft_events():
-        return Event.query.filter(Event.state == 'Draft').filter(Event.in_trash is not True)
+        return Event.query.filter(Event.state == 'Draft').filter(Event.in_trash == False)
 
     @staticmethod
     def get_all_past_events():
         return Event.query.filter(Event.end_time <= datetime.datetime.now()).filter(
             or_(Event.state == 'Completed', Event.state == 'Published')).filter(
-            Event.in_trash is not True)
+            Event.in_trash is not True).filter(Event.in_trash == False)
 
     @staticmethod
     def get_session(session_id):
@@ -538,6 +556,10 @@ class DataGetter(object):
         return EVENT_TOPICS
 
     @staticmethod
+    def get_event_default_images():
+        return DEFAULT_EVENT_IMAGES
+
+    @staticmethod
     def get_all_mails(count=300):
         """
         Get All Mails by latest first
@@ -596,7 +618,7 @@ class DataGetter(object):
     def get_upcoming_events(event_id):
         return Event.query.join(Event.roles, aliased=True) \
             .filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
-            .filter(Event.in_trash is not True)
+            .filter_by(in_trash=False)
 
     @staticmethod
     @cache.cached(timeout=604800, key_prefix='pages')
@@ -633,21 +655,25 @@ class DataGetter(object):
     @cache.cached(timeout=21600, key_prefix='event_locations')
     def get_locations_of_events():
         names = []
-        for event in DataGetter.get_live_and_public_events():
-            if not string_empty(event.location_name) and not string_empty(event.latitude) and not string_empty(
-               event.longitude):
-                response = requests.get(
-                    "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
-                        event.longitude)).json()
-                if response['status'] == u'OK':
-                    for addr in response['results'][0]['address_components']:
-                        if addr['types'] == ['locality', 'political']:
-                            names.append(addr['short_name'])
+        try:
+            raise Exception()
+            for event in DataGetter.get_live_and_public_events():
+                if not string_empty(event.location_name) and not string_empty(event.latitude) and not string_empty(
+                   event.longitude):
+                    response = requests.get(
+                        "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
+                            event.longitude)).json()
+                    if response['status'] == u'OK':
+                        for addr in response['results'][0]['address_components']:
+                            if addr['types'] == ['locality', 'political']:
+                                names.append(addr['short_name'])
 
-        cnt = Counter()
-        for location in names:
-            cnt[location] += 1
-        return [v for v, __ in cnt.most_common()][:10]
+            cnt = Counter()
+            for location in names:
+                cnt[location] += 1
+            return [v for v, __ in cnt.most_common()][:10]
+        except:
+            return names
 
     @staticmethod
     def get_sales_open_tickets(event_id):
@@ -658,3 +684,30 @@ class DataGetter(object):
     @staticmethod
     def get_module():
         return Module.query.get(1)
+
+    @staticmethod
+    def get_export_jobs(event_id):
+        """get export job for an event"""
+        return ExportJob.query.filter_by(event_id=event_id).first()
+
+    @staticmethod
+    def get_payment_countries():
+        return sorted([k for k in PAYMENT_COUNTRIES])
+
+    @staticmethod
+    def get_payment_currencies():
+        return sorted([k for k in PAYMENT_CURRENCIES])
+
+    @staticmethod
+    def get_tax_options(event_id):
+        tax = Tax.query.filter_by(event_id=event_id)
+        for tax in tax:
+            return tax
+
+    @staticmethod
+    def get_ticket_types(event_id):
+        ticket_types = []
+        tickets = Ticket.query.filter_by(event_id=event_id)
+        for ticket in tickets:
+            ticket_types.append(ticket.type)
+        return ticket_types

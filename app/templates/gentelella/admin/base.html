@@ -59,40 +59,35 @@
     <script src="{{ url_for('static', filename='admin/lib/typeahead.js/dist/typeahead.bundle.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/bootstrap/dist/js/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/summernote/dist/summernote.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/socket.io-client/socket.io.js') }}"></script>
     <script src="{{ url_for('static', filename='js/admin/global_tail.js') }}"></script>
     <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
 {% endblock %}
 
-{% if current_user.is_authenticated %}
-<script src="{{ url_for('static', filename='admin/lib/socket.io-client/socket.io.js') }}"></script>
+{% if current_user.is_authenticated and integrate_socketio %}
 <script type="text/javascript">
     $(document).ready(function() {
-        function setATagsInNotifMenuDropDown() {
-            /* Set `href` of all `a` tags in notification message list as Notification view path */
-            var notification_view_path = "{{ url_for('profile.notifications_view') }}";
-            $("ul#notif-menu li").each(function (i, li) {
-                $(li).children("a").attr("href", notification_view_path);
-            });
-        }
-
-        setATagsInNotifMenuDropDown();
+        var notificationViewPath = "{{ url_for('notifications.index_view') }}";
+        setATagsInNotifMenuDropDown(notificationViewPath);
         var namespace = '/notifs';
 
         var socket = io.connect(location.protocol + "//" + location.host + namespace, {reconnection: false});
 
-        socket.on('response', function(msg) {
+        socket.on('notifs-response', function(msg) {
             console.log(msg.meta);
             if (msg.hasOwnProperty("notif_count") && msg.hasOwnProperty("notifs")) {
                 $("#notif_count").text(msg.notif_count);
                 $("#notif-menu li.notif-menu-li").each(function(i, li) {
                     $(li).remove();
                 });
+                var html = '';
                 $.each(msg.notifs, function(i, notif) {
-                    var html = '<li class="notif-menu-li"><a><span class="message">'+ notif.title +
-                        '</span><span class="time">' + notif.received_at + '</span></a></li>';
-                    $("ul#notif-menu").prepend(html);
+                    html += '<li class="notif-menu-li"><a><span class="message">'+ notif.title +
+                        '</span><span class="time">' + notif.received_at + '</span><span class="mark-as-read btn btn-default btn-xs"' +
+                        ' data-markread="' + notif.mark_read + '">Mark as read</span>';
                 });
-                setATagsInNotifMenuDropDown();
+                $("ul#notif-menu li:first-child").after(html);
+                setATagsInNotifMenuDropDown(notificationViewPath);
             }
         });
     });

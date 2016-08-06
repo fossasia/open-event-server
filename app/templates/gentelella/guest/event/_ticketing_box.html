@@ -1,5 +1,5 @@
 {% if tickets.count() > 0 %}
-<div id="ticketing-holder" class="col-md-6 col-sm-8 col-xs-12">
+<div id="ticketing-holder" class="col-md-8 col-sm-8 col-xs-12">
     <form method="POST" action="{{ url_for('ticketing.create_order') }}" enctype="multipart/form-data">
         <input type="hidden" name="event_id" value="{{ event.id }}">
         <div class="panel panel-default">
@@ -23,8 +23,8 @@
 
                             <td>{{ ticket.name }} - {{ ticket.type }}</td>
                             <td>{{ ticket.sales_end.strftime('%a, %B %d') }}</td>
-                            <td>${{ '%0.2f'| format(ticket.price|float) }}</td>
-                            <td>$0.00</td>
+                            <td>${{ ticket.price | money }}</td>
+                            <td>$ 0.00</td>
                             <td align="right">
                                 <input type="hidden" name="ticket_ids[]" value="{{ ticket.id }}">
                                 <select name="ticket_quantities[]" class="quantity-select" data-rate="{{ ticket.price }}">

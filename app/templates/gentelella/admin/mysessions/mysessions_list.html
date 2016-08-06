@@ -16,9 +16,14 @@
         <div class="col col-md-4 col-sm-4 col-xs-12" style="line-height:155px;">
             {% if session.event.logo %}
                 <img src="{{ session.event.logo }}" style="width: 100%;">
+            {% elif session.event.background_url %}
+                <img src="{{ session.event.background_url }}" style="width: 100%;">
+            {% elif session.event.topic %}
+                <img src="{{ url_for("static", filename="placeholders/" + placeholder_images[session.event.topic]) }}" style="width: 100%">
+            {% elif session.event.subtopic %}
+                <img src="{{ url_for("static", filename="placeholders/" + placeholder_images[session.event.subtopic]) }}" style="width: 100%">
             {% else %}
-                <img src="{{ url_for('static', filename='img/image-800x500.png') }}"
-                     style="width: 100%;">
+                <img src="{{ url_for("static", filename="placeholders/" + placeholder_images["Other"]) }}" style="width: 100%;">
             {% endif %}
         </div>
         <div class="col col-md-5 col-sm-5  col-xs-12" style="position: relative;">

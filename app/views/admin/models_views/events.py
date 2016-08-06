@@ -15,6 +15,10 @@ from ....helpers.data import DataManager, save_to_db, record_activity, delete_fr
 from ....helpers.data_getter import DataGetter
 from werkzeug.datastructures import ImmutableMultiDict
 from app.helpers.helpers import send_event_publish
+from app.helpers.ticketing import TicketingManager
+from app.settings import get_settings
+from app.helpers.microservices import AndroidAppCreator
+
 
 def is_verified_user():
     return login.current_user.is_verified
@@ -23,8 +27,10 @@ def is_verified_user():
 def is_accessible():
     return login.current_user.is_authenticated
 
+
 def get_random_hash():
     return binascii.b2a_hex(os.urandom(20))
+
 
 class EventsView(BaseView):
     def _handle_view(self, name, **kwargs):
@@ -37,6 +43,19 @@ class EventsView(BaseView):
         draft_events = DataGetter.get_draft_events()
         past_events = DataGetter.get_past_events()
         all_events = DataGetter.get_all_events()
+        free_ticket_count = {}
+        paid_ticket_count = {}
+        donation_ticket_count = {}
+        max_free_ticket = {}
+        max_paid_ticket = {}
+        max_donation_ticket = {}
+        for event in all_events:
+            free_ticket_count[event.id] = TicketingManager.get_orders_count_by_type(event.id, type='free')
+            max_free_ticket[event.id] = TicketingManager.get_max_orders_count(event.id, type='free')
+            paid_ticket_count[event.id] = TicketingManager.get_orders_count_by_type(event.id, type='paid')
+            max_paid_ticket[event.id] = TicketingManager.get_max_orders_count(event.id, type='paid')
+            donation_ticket_count[event.id] = TicketingManager.get_orders_count_by_type(event.id, type='donation')
+            max_donation_ticket[event.id] = TicketingManager.get_max_orders_count(event.id, type='donation')
         if not is_verified_user():
             flash("Your account is unverified. "
                   "Please verify by clicking on the confirmation link that has been emailed to you.")
@@ -44,7 +63,13 @@ class EventsView(BaseView):
                            live_events=live_events,
                            draft_events=draft_events,
                            past_events=past_events,
-                           all_events=all_events)
+                           all_events=all_events,
+                           free_ticket_count=free_ticket_count,
+                           paid_ticket_count=paid_ticket_count,
+                           donation_ticket_count=donation_ticket_count,
+                           max_free_ticket=max_free_ticket,
+                           max_paid_ticket=max_paid_ticket,
+                           max_donation_ticket=max_donation_ticket)
 
     @expose('/create/<step>', methods=('GET', 'POST'))
     def create_view_stepped(self, step):
@@ -52,8 +77,6 @@ class EventsView(BaseView):
 
     @expose('/create/', methods=('GET', 'POST'))
     def create_view(self,):
-        included_settings = []
-
         if request.method == 'POST':
             img_files = []
             imd = ImmutableMultiDict(request.files)
@@ -71,15 +94,6 @@ class EventsView(BaseView):
                 return redirect(url_for('.details_view', event_id=event.id))
             return redirect(url_for('.index_view'))
 
-        module = DataGetter.get_module()
-        if module is not None:
-            if module.ticket_include:
-                included_settings.append('ticketing')
-            if module.payment_include:
-                included_settings.append('payments')
-            if module.donation_include:
-                included_settings.append('donations')
-
         hash = get_random_hash()
         if CallForPaper.query.filter_by(hash=hash).all():
             hash = get_random_hash()
@@ -93,7 +107,9 @@ class EventsView(BaseView):
             event_sub_topics=DataGetter.get_event_subtopics(),
             timezones=DataGetter.get_all_timezones(),
             cfs_hash=hash,
-            included_settings=included_settings)
+            payment_countries=DataGetter.get_payment_countries(),
+            payment_currencies=DataGetter.get_payment_currencies(),
+            included_settings=self.get_module_settings())
 
     @expose('/<event_id>/', methods=('GET', 'POST'))
     @can_access
@@ -178,10 +194,12 @@ class EventsView(BaseView):
                     'accepted': DataGetter.get_sessions_by_state_and_event_id('accepted', event_id).count(),
                     'rejected': DataGetter.get_sessions_by_state_and_event_id('rejected', event_id).count(),
                     'draft': DataGetter.get_sessions_by_state_and_event_id('draft', event_id).count()}
+
         return self.render('/gentelella/admin/event/details/details.html',
                            event=event,
                            checklist=checklist,
-                           sessions=sessions)
+                           sessions=sessions,
+                           settings=get_settings())
 
     @expose('/<event_id>/edit/', methods=('GET', 'POST'))
     @can_access
@@ -203,16 +221,10 @@ class EventsView(BaseView):
         custom_forms = DataGetter.get_custom_form_elements(event_id)
         speaker_form = json.loads(custom_forms.speaker_form)
         session_form = json.loads(custom_forms.session_form)
+        tax = DataGetter.get_tax_options(event_id)
+        ticket_types = DataGetter.get_ticket_types(event_id)
 
-        included_setting = []
-        module = DataGetter.get_module()
-        if module is not None:
-            if module.ticket_include:
-                included_setting.append('ticketing')
-            if module.payment_include:
-                included_setting.append('payments')
-            if module.donation_include:
-                included_setting.append('donations')
+
 
         preselect = []
         required = []
@@ -251,7 +263,12 @@ class EventsView(BaseView):
                                cfs_hash=hash,
                                step=step,
                                required=required,
-                               included_settings=included_setting)
+                               included_settings=self.get_module_settings(),
+                               tax=tax,
+                               payment_countries=DataGetter.get_payment_countries(),
+                               payment_currencies=DataGetter.get_payment_currencies(),
+                               ticket_types=ticket_types)
+
         if request.method == "POST":
             img_files = []
             imd = ImmutableMultiDict(request.files)
@@ -267,7 +284,7 @@ class EventsView(BaseView):
 
             event = DataManager.edit_event(
                 request, event_id, event, session_types, tracks, social_links,
-                microlocations, call_for_speakers, sponsors, custom_forms, img_files, old_sponsor_logos, old_sponsor_names)
+                microlocations, call_for_speakers, sponsors, custom_forms, img_files, old_sponsor_logos, old_sponsor_names, tax)
 
             if (request.form.get('state',
                                 u'Draft') == u'Published') and string_empty(
@@ -346,6 +363,11 @@ class EventsView(BaseView):
         save_to_db(event, 'Event Unpublished')
         record_activity('publish_event', event_id=event.id, status='un-published')
         flash("Your event has been unpublished.", "warning")
+        return redirect(url_for('.details_view', event_id=event_id))
+
+    @expose('/<int:event_id>/generate_android_app/', methods=('POST',))
+    def generate_android_app(self, event_id):
+        AndroidAppCreator(event_id).create()
         return redirect(url_for('.details_view', event_id=event_id))
 
     @expose('/<int:event_id>/restore/<int:version_id>', methods=('GET',))
@@ -452,3 +474,15 @@ class EventsView(BaseView):
             return redirect(url_for('.details_view', event_id=event.id))
         else:
             abort(404)
+
+    def get_module_settings(self):
+        included_setting = []
+        module = DataGetter.get_module()
+        if module is not None:
+            if module.ticket_include:
+                included_setting.append('ticketing')
+            if module.payment_include:
+                included_setting.append('payments')
+            if module.donation_include:
+                included_setting.append('donations')
+        return included_setting

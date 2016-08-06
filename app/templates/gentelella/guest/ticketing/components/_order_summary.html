@@ -19,13 +19,13 @@
                 {% for ticket_order in order.tickets %}
                     <tr>
                         <td>{{ ticket_order.ticket.name }} - {{ ticket_order.ticket.type }}</td>
-                        <td>${{ '%0.2f'| format(ticket_order.ticket.price|float) }}</td>
+                        <td>${{ ticket_order.ticket.price | money }}</td>
                         <td>$0.00</td>
                         <td>
                             {{ ticket_order.quantity }}
                         </td>
                         <td>
-                            ${{ '%0.2f'| format(ticket_order.ticket.price*ticket_order.quantity|float) }}
+                            ${{ (ticket_order.ticket.price*ticket_order.quantity) | money }}
                             {% if costs.append(ticket_order.ticket.price*ticket_order.quantity) %}{% endif %}
                         </td>
                     </tr>
@@ -39,7 +39,7 @@
 
                 <tr class="total-row">
                     <td colspan="4" align="right" class="order-total"><strong>Order total:</strong></td>
-                    <td><strong>${{ '%0.2f'| format(order.amount|float) }}</strong></td>
+                    <td><strong>${{ order.amount | money }}</strong></td>
                 </tr>
                 </tbody>
             </table>

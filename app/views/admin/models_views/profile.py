@@ -44,32 +44,6 @@ class ProfileView(BaseView):
         profile = DataGetter.get_user(int(user_id))
         return self.render('/gentelella/admin/profile/edit.html', profile=profile)
 
-    @expose('/notifications/', methods=('GET', 'POST'))
-    def notifications_view(self):
-        user = login.current_user
-        notifications = DataGetter.get_all_user_notifications(user)
-
-        return self.render('/gentelella/admin/profile/notifications.html',
-                           notifications=notifications)
-
-    @expose('/notifications/read/<notification_id>/', methods=('GET', 'POST'))
-    def mark_notification_as_read(self, notification_id):
-        user = login.current_user
-        notification = DataGetter.get_user_notification(notification_id)
-
-        if notification and notification.user == user:
-            DataManager.mark_user_notification_as_read(notification)
-            return jsonify({'status': 'ok'})
-        else:
-            abort(404)
-
-    @expose('/notifications/allread/', methods=('GET', 'POST'))
-    def mark_all_notification_as_read(self):
-        user = login.current_user
-        DataManager.mark_all_user_notification_as_read(user)
-
-        return redirect(url_for('.notifications_view'))
-
     @expose('/fb_connect', methods=('GET', 'POST'))
     def connect_facebook(self):
         facebook = get_facebook_auth()
@@ -82,3 +56,38 @@ class ProfileView(BaseView):
         print InstagramOAuth.get_auth_uri()
         instagram_auth_url, state = instagram.authorization_url(InstagramOAuth.get_auth_uri(), access_type='offline')
         return redirect(instagram_auth_url)
+
+
+class NotificationView(BaseView):
+    def is_accessible(self):
+        return login.current_user.is_authenticated
+
+    def _handle_view(self, name, **kwargs):
+        if not self.is_accessible():
+            return redirect(url_for('admin.login_view', next=request.url))
+
+    @expose('/', methods=('GET', 'POST'))
+    def index_view(self):
+        user = login.current_user
+        notifications = DataGetter.get_all_user_notifications(user)
+
+        return self.render('/gentelella/admin/profile/notifications.html',
+                           notifications=notifications)
+
+    @expose('/read/<notification_id>/', methods=('GET', 'POST'))
+    def mark_as_read(self, notification_id):
+        user = login.current_user
+        notification = DataGetter.get_user_notification(notification_id)
+
+        if notification and notification.user == user:
+            DataManager.mark_user_notification_as_read(notification)
+            return jsonify({'status': 'ok'})
+        else:
+            abort(404)
+
+    @expose('/allread/', methods=('GET', 'POST'))
+    def mark_all_read(self):
+        user = login.current_user
+        DataManager.mark_all_user_notification_as_read(user)
+
+        return redirect(url_for('.index_view'))

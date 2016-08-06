@@ -18,7 +18,8 @@ class TestProfile(OpenEventViewTestCase):
         with app.test_request_context():
             data = {
                 'email': self.super_admin.email,
-                'full_name': 'Super Hero',
+                'firstname': 'Super',
+                'lastname': 'Hero',
                 'facebook': 'https://fb.me/super_hero',
                 'contact': '+9622100100',
                 'twitter': 'https://t.co/super_hero',
@@ -27,10 +28,10 @@ class TestProfile(OpenEventViewTestCase):
             rv = self.app.post(url_for('profile.edit_view'), follow_redirects=True, buffered=True,
                                content_type='multipart/form-data', data=data)
             self.assertIn("Super Hero", rv.data, msg=rv.data)
-            data['full_name'] = 'SuperMan'
+            data['lastname'] = 'Man'
             rv = self.app.post(url_for('profile.edit_view'), follow_redirects=True, buffered=True,
                                content_type='multipart/form-data', data=data)
-            self.assertIn("SuperMan", rv.data, msg=rv.data)
+            self.assertIn("Super Man", rv.data, msg=rv.data)
 
     def test_notifications(self):
         with app.test_request_context():
@@ -42,7 +43,7 @@ class TestProfile(OpenEventViewTestCase):
             }
             DataManager.create_user_notification(user=user, **notif)
 
-            rv = self.app.get(url_for('profile.notifications_view'))
+            rv = self.app.get(url_for('notifications.index_view'))
             self.assertIn(notif['title'], rv.data, msg=rv.data)
             self.assertIn(notif['message'], rv.data, msg=rv.data)
 
@@ -58,7 +59,7 @@ class TestProfile(OpenEventViewTestCase):
 
             notification = Notification.query.filter_by(user=user, **notif).first()
 
-            rv = self.app.get(url_for('profile.mark_notification_as_read',
+            rv = self.app.get(url_for('notifications.mark_as_read',
                                       notification_id=notification.id))
 
             self.assertEqual(notification.has_read, True, msg=rv.data)

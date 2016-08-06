@@ -1,17 +1,16 @@
 {% macro call_for_speakers_display(call_for_speakers=None) %}
     <div class="item form-group">
-        <label class="control-label">Announcement <span class="required">*</span></label>
+        <label class="control-label">Announcement</label>
         <textarea name="announcement"
-                  required="required"
                   class="announcement form-control">{{ call_for_speakers.announcement | default('') }}</textarea>
     </div>
     <div class="row event-date-picker">
         <div class="col-md-4 col-xs-6">
             <div class="item form-group">
-                <label>Starts <span class="required">*</span></label>
+                <label>Starts</label>
                 <br>
                 <div class="col-xs-8" style="padding-left: 0;">
-                        <input required="required"
+                        <input
                                name="cfs_start_date"
                                data-error="Start date & time is required"
                                value="{{ call_for_speakers.start_date.strftime('%m/%d/%Y')  if call_for_speakers else '' }}"
@@ -19,7 +18,7 @@
 
                     </div>
                     <div class="col-xs-4" style="padding-left: 0;">
-                        <input required="required"
+                        <input
                                name="cfs_start_time"
                                value="{{ call_for_speakers.start_date.strftime('%H:%M') if call_for_speakers else '' }}"
                                class="form-control col-xs-6 time start" placeholder="HH:MM"/>
@@ -31,7 +30,7 @@
         </div>
         <div class="col-md-4 col-xs-6">
             <div class="item form-group">
-                <label>Ends <span class="required">*</span></label>
+                <label>Ends</label>
                 <br>
                 <div class="col-xs-8" style="padding-left: 0;">
                         <input required="required"

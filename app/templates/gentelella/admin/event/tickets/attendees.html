@@ -1,0 +1,193 @@
+{% extends 'gentelella/admin/event/tickets/tickets_base.html' %}
+
+{% set active_side_page = "attendees" %}
+
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='admin/lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"/>
+    <style type="text/css">
+        #orders-table .order-link {
+            font-weight: 800;
+            font-size: larger;
+        }
+
+        #orders-table .order-link::before {
+            content: '#';
+            font-weight: 800;
+        }
+
+        #orders-table .payment-via {
+            font-weight: 600;
+        }
+
+        #orders-table .datetime {
+            color: #9a9a9a;
+        }
+
+        #orders-table .label {
+            font-size: 16px;
+            padding: 5px;
+            font-weight: 400;
+        }
+
+        #orders-table td {
+            vertical-align: middle;
+        }
+    </style>
+{% endblock %}
+
+{% block inner_content %}
+    <div id="toolbar-holder" style="display: none;">
+        <div class="btn-group pull-left" data-toggle="buttons">
+            <label class="btn btn-default active btn-responsive">
+                <input type="radio" name="show_state" autocomplete="off" value="all" checked> All
+            </label>
+            <label class="btn btn-default btn-responsive">
+                <input type="radio" name="show_state" autocomplete="off" value="Completed"> Completed
+            </label>
+            <label class="btn btn-default btn-responsive">
+                <input type="radio" name="show_state" autocomplete="off" value="Pending"> Pending
+            </label>
+            <label class="btn btn-default btn-responsive">
+                <input type="radio" name="show_state" autocomplete="off" value="Expired"> Expired
+            </label>
+        </div>
+    </div>
+
+    <h3>View Attendees</h3>
+    <br>
+    <table class="table with-datatable" id="orders-table">
+        <thead>
+        <tr>
+            <th>
+                #
+            </th>
+            <th>
+                Order
+            </th>
+            <th>
+                Order Status
+            </th>
+            <th>
+                Ticket Name
+            </th>
+            <th>
+                Ticket Price
+            </th>
+            <th>
+                Qty
+            </th>
+            <th>
+                Total
+            </th>
+            <th>
+                First Name
+            </th>
+            <th>
+                Last Name
+            </th>
+            <th>
+                Email
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+            {% for order_ticket in order.tickets %}
+                <tr>
+                    <td> </td>
+                    <td>
+                        <a href="#" class="order-link">{{ order.get_invoice_number() }}</a> -
+                        by {{ order.user.user_detail.fullname if order.user.user_detail and order.user.user_detail.fullname else order.user.email }}
+                        <br>
+                        {% if order.status == 'completed' %}
+                            <span class="payment-via">Payment via {{ order.paid_via | capitalize }}</span>
+                        {% endif %}
+                        {% if order.status == 'completed' %}
+                            <span class="datetime">{{ order.completed_at | datetime }} - {{ order.completed_at | humanize }}</span>
+                        {% else %}
+                            <span class="datetime">{{ order.created_at | datetime }} - {{ order.created_at | humanize }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if order.status == 'completed' %}
+                            <span class="label label-success">{{ order.status | capitalize }}</span>
+                        {% elif order.status == 'pending' %}
+                            <span class="label label-warning">{{ order.status | capitalize }}</span>
+                        {% else %}
+                            <span class="label label-danger">{{ order.status | capitalize }}</span>
+                        {% endif %}
+
+                    </td>
+                    <td>{{ order_ticket.ticket.name }}</td>
+                    <td>$ {{ order_ticket.ticket.price | money }}</td>
+                    <td>{{ order_ticket.quantity }}</td>
+                    <td>$ {{ (order_ticket.quantity * order_ticket.ticket.price) | money }}</td>
+                    <td>{{ order.user.user_detail.firstname }}</td>
+                    <td>{{ order.user.user_detail.lastname }}</td>
+                    <td>{{ order.user.email }}</td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='admin/lib/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script type="text/javascript">
+
+        $.fn.dataTable.ext.search.push(
+                function (settings, data, dataIndex) {
+                    var user_option = $("input[name=show_state]:checked").val();
+                    console.log(data);
+                    var state = data[2].trim() || 'pending';
+                    if (user_option === "all") {
+                        return true;
+                    } else if (user_option === state) {
+                        return true;
+                    }
+                    return false;
+                }
+        );
+
+        var table = $('.with-datatable').DataTable({
+            "dom": '<"row"<"toolbar col-md-12"<"pull-right"l>>>tip',
+            "columnDefs": [
+                {
+                    "searchable": false,
+                    "orderable": false,
+                    "width": "3%",
+                    "targets": 0
+                },
+                {"width": "30%", "targets": 1},
+                {"width": "10%", "targets": 3},
+                {"width": "15%", "targets": 9}
+            ],
+            "order": [[ 1, 'asc' ]],
+            "scrollX": true
+        });
+
+        $("div.toolbar").prepend($("#toolbar-holder").html());
+
+        $("input[name=show_state]").change(function () {
+            table.draw();
+        });
+
+        table.on('draw', function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+        table.on( 'order.dt search.dt', function () {
+            table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                cell.innerHTML = i+1;
+            } );
+        }).draw();
+
+
+    </script>
+
+{% endblock %}
+

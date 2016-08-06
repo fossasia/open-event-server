@@ -56,6 +56,7 @@ from ..models.page import Page
 from ..models.modules import Module
 from ..models.email_notifications import EmailNotification
 from ..models.message_settings import MessageSettings
+from ..models.tax import Tax
 
 
 class DataManager(object):
@@ -85,15 +86,20 @@ class DataManager(object):
         """
         Push user notification using websockets.
         """
-        if not current_app.config.get('PRODUCTION', False):
+        if not current_app.config.get('INTEGRATE_SOCKETIO', False):
             return False
         user_room = 'user_{}'.format(user.id)
-        emit('response',
-            {'meta': 'New notifications',
-                'notif_count': user.get_unread_notif_count(),
-                'notifs': user.get_unread_notifs()},
-            room=user_room,
-            namespace='/notifs')
+        emit('notifs-response',
+             {'meta': 'New notifications',
+              'notif_count': user.get_unread_notif_count(),
+              'notifs': user.get_unread_notifs(reverse=True)},
+             room=user_room,
+             namespace='/notifs')
+        emit('notifpage-response',
+             {'meta': 'New notifpage notifications',
+              'notif': DataGetter.get_latest_notif(user)},
+             room=user_room,
+             namespace='/notifpage')
 
     @staticmethod
     def mark_user_notification_as_read(notification):
@@ -421,7 +427,6 @@ class DataManager(object):
                 if user:
                     cfs_link = url_for('event_detail.display_event_cfs', event_id=event.id)
                     Helper.send_notif_invite_papers(user, event.name, cfs_link, link)
-
 
     @staticmethod
     def add_speaker_to_event(request, event_id, user=login.current_user):
@@ -829,7 +834,8 @@ class DataManager(object):
 
         user_detail.contact = form['contact']
         if not contacts_only_update:
-            user_detail.fullname = form['full_name']
+            user_detail.firstname = form['firstname']
+            user_detail.lastname = form['lastname']
 
             if form['facebook'] != 'https://www.facebook.com/':
                 user_detail.facebook = form['facebook']
@@ -915,7 +921,11 @@ class DataManager(object):
                       ticket_url=form.get('ticket_url', None),
                       copyright=copyright,
                       show_map=1 if form.get('show_map') == "on" else 0,
-                      creator=login.current_user)
+                      creator=login.current_user,
+                      payment_country=form.get('payment_country', ''),
+                      payment_currency=form.get('payment_currency', ''),
+                      paypal_email=form.get('paypal_email', ''))
+
 
         if event.latitude and event.longitude:
             response = requests.get(
@@ -1104,6 +1114,40 @@ class DataManager(object):
                 CustomForms, event_id=event.id,
                 session_form=session_form, speaker_form=speaker_form)
 
+            if module and (module.payment_include or module.donation_include) \
+                and ('paid' or 'donation') in form.getlist('tickets[type]'):
+
+                if form['taxAllow'] == 'taxNo':
+                    event.tax_allow = False
+
+                if form['taxAllow'] == 'taxYes':
+                    event.tax_allow = True
+
+                    tax_invoice = False
+                    if 'tax_invoice' in form:
+                        tax_invoice = True
+
+                    tax_include_in_price = False
+                    if form['tax_options'] == 'tax_include':
+                        tax_include_in_price = True
+
+                    tax = Tax(country=form['tax_country'],
+                              tax_name=form['tax_name'],
+                              tax_rate=form['tax_rate'],
+                              tax_id=form['tax_id'],
+                              send_invoice=tax_invoice,
+                              registered_company=form.get('registered_company', ''),
+                              address=form.get('buisness_address', ''),
+                              city=form.get('invoice_city', ''),
+                              state=form.get('invoice_state', ''),
+                              zip=form.get('tax_zip', 0),
+                              invoice_footer=form.get('invoice_footer', ''),
+                              tax_include_in_price=tax_include_in_price,
+                              event_id=event.id)
+
+
+                    save_to_db(tax, "Tax Options Saved")
+
             uer = UsersEventsRoles(login.current_user, event, role)
 
             if save_to_db(uer, "Event saved"):
@@ -1177,7 +1221,7 @@ class DataManager(object):
 
     @staticmethod
     def edit_event(request, event_id, event, session_types, tracks, social_links, microlocations, call_for_papers,
-                   sponsors, custom_forms, img_files, old_sponsor_logos, old_sponsor_names):
+                   sponsors, custom_forms, img_files, old_sponsor_logos, old_sponsor_names, tax):
         """
         Event will be updated in database
         :param data: view data form
@@ -1198,6 +1242,10 @@ class DataManager(object):
         event.show_map = 1 if form.get('show_map', 'on') == "on" else 0
         event.sub_topic = form['sub_topic']
         event.privacy = form.get('privacy', 'public')
+        event.payment_country = form.get('payment_country')
+        event.payment_currency = form.get('payment_currency')
+        event.paypal_email = form.get('paypal_email')
+
 
 
         ticket_names = form.getlist('tickets[name]')
@@ -1259,6 +1307,37 @@ class DataManager(object):
                 db.session.delete(ticket)
 
         event.ticket_url = form.get('ticket_url', None)
+
+        if not event.ticket_url and tax:
+            if form['taxAllow'] == 'taxNo':
+                event.tax_allow = False
+
+            if form['taxAllow'] == 'taxYes':
+                event.tax_allow = True
+
+                tax_invoice = False
+                if 'tax_invoice' in form:
+                    tax_invoice = True
+
+                tax_include_in_price = False
+                if form['tax_options'] == 'tax_include':
+                    tax_include_in_price = True
+
+                tax.country = form['tax_country'],
+                tax.tax_name = form['tax_name'],
+                tax.tax_rate = form['tax_rate'],
+                tax.tax_id = form['tax_id'],
+                tax.send_invoice = tax_invoice,
+                tax.registered_company = form.get('registered_company', ''),
+                tax.address = form.get('buisness_address', ''),
+                tax.city = form.get('invoice_city', ''),
+                tax.state = form.get('invoice_state', ''),
+                tax.zip = form.get('tax_zip', 0),
+                tax.invoice_footer = form.get('invoice_footer', ''),
+                tax.tax_include_in_price = tax_include_in_price,
+                tax.event_id = event.id
+
+                save_to_db(tax, "Tax Options Saved")
 
         if event.latitude and event.longitude:
             response = requests.get(
@@ -1529,7 +1608,7 @@ class DataManager(object):
         Invite.query.filter_by(event_id=e_id).delete()
         Session.query.filter_by(event_id=e_id).delete()
         Event.query.filter_by(id=e_id).delete()
-        #record_activity('delete_event', event_id=e_id)
+        # record_activity('delete_event', event_id=e_id)
         db.session.commit()
 
     @staticmethod
@@ -1617,14 +1696,13 @@ class DataManager(object):
         save_to_db(page, "Page updated")
         cache.delete('pages')
 
-
     @staticmethod
     def create_or_update_message_settings(form):
 
         for mail in MAILS:
-            mail_status = 1 if form.get(mail+'_mail_status', 'off') == 'on' else 0
-            notif_status = 1 if form.get(mail+'_notif_status', 'off') == 'on' else 0
-            user_control_status = 1 if form.get(mail+'_user_control_status', 'off') == 'on' else 0
+            mail_status = 1 if form.get(mail + '_mail_status', 'off') == 'on' else 0
+            notif_status = 1 if form.get(mail + '_notif_status', 'off') == 'on' else 0
+            user_control_status = 1 if form.get(mail + '_user_control_status', 'off') == 'on' else 0
             message_setting = MessageSettings.query.filter_by(action=mail).first()
             if message_setting:
                 message_setting.mail_status = mail_status
@@ -1721,7 +1799,7 @@ def create_user_oauth(user, user_data, token, method):
     save_to_db(user, "User created")
     user_detail = UserDetail.query.filter_by(user_id=user.id).first()
     user_detail.avatar_uploaded = user.avatar
-    user_detail.fullname = user_data['name']
+    user_detail.firstname = user_data['name']
     save_to_db(user, "User Details Updated")
     return user
 

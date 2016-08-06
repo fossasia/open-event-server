@@ -285,8 +285,8 @@
                 <tbody>
                 {% if event %}
                     {% for ticket in event.tickets %}
-                        {{ ticket_template(name=ticket.name, description=ticket.description, sales_start=ticket.sales_start, 
-                        sales_end=ticket.sales_end, price=ticket.price, type=ticket.type, quantity=ticket.quantity, 
+                        {{ ticket_template(name=ticket.name, description=ticket.description, sales_start=ticket.sales_start,
+                        sales_end=ticket.sales_end, price=ticket.price, type=ticket.type, quantity=ticket.quantity,
                         min_order=ticket.min_order, max_order=ticket.max_order) }}
                     {% endfor %}
                 {% endif %}
@@ -299,12 +299,16 @@
                 <a class="btn btn-info add-free-ticket">
                     <i class="glyphicon glyphicon-plus-sign"></i> Free Ticket
                 </a>
+                {% if 'payments' in included_items %}
                 <a class="btn btn-info add-paid-ticket">
                     <i class="glyphicon glyphicon-plus-sign"></i> Paid Ticket
                 </a>
+                {% endif %}
+                {% if 'donations' in included_items %}
                 <a class="btn btn-info add-donation-ticket">
                     <i class="glyphicon glyphicon-plus-sign"></i> Donation
                 </a>
+                {% endif %}
             </div>
         </div>
         <!-- /TicketsTable -->
@@ -338,6 +342,52 @@
              <div class="help-block with-errors"></div>
          </div>
         {% endif %}
+
+        <div id="payment-system-holder" class="item form-group" {% if not event or ('paid' not in ticket_types and 'donation' not in ticket_types) or (not event.payment_country and not event.payment_currency) %}style="display:none;"{% endif %}>
+        <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
+            <i class="fa fa-money"></i>
+            Add Payment details
+            <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+        </h2>
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="item form-group">
+                    <label>Choose Country<span class="required">*</span></label>
+                    <select name="payment_country" id="payment_country_name" class="form-control">
+                        {% if not event or not event.payment_country %}
+                            <option value="">Choose a country for your payment</option>
+                        {% endif %}
+                        {% for country in payment_countries %}
+                            <option value="{{ country }}" {{ "selected" if event and event.payment_country == country else '' }}>{{ country }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="item form-group">
+                    <label>Choose Currency<span class="required">*</span></label>
+                    <select name="payment_currency" id="payment_currency_name" class="form-control">
+                        {% if not event or not event.payment_currency %}
+                            <option value="">Please select a currency</option>
+                        {% endif %}
+                        {% for currency in payment_currencies %}
+                            <option value="{{ currency.decode('utf-8') }}" {{ "selected" if event and event.payment_currency == currency else '' }}>{{ currency.decode('utf-8') }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            </div>
+            <div class="item form-group">
+            <label>PayPal Email<span class="required">*</span></label>
+                <input type="email" placeholder="PayPal Email" name="paypal_email" class="form-control" value="{{ event.paypal_email | default('', true) }}">
+                <strong style="font-weight: 400;">Don't have a PayPal account?   </strong><a href="https://www.paypal.com/us/webapps/mpp/referral/paypal-express-checkout?partner_id=W9QW5TKUA246E" target="_blank">Create a free PayPal merchant account.</a>
+            </div>
+            <div class="">
+                <a  href='#' data-toggle="modal" data-target="#taxModal" title="Add tax option">
+                    <h5>+ Add Tax</h5>
+                </a>
+            </div>
+        </div>
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color: #5bc0de;">
             <i class="fa fa-plus-circle"></i>
             Additional Details
@@ -472,10 +522,147 @@
         </div>
     </div>
 </div>
+
+<form role="form" id="tax-form" action="/events/tax/include/" method="post">
+<div class="modal fade" id="taxModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                        </button>
+                        <h3 class="modal-title">Tax Options</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div id="tax-charge-holder">
+                                    <h3>Do you need to charge tax for this event ? <a href="#" data-toggle="tooltip" title="Some event organizers need to charge tax on their tickets.
+                                                            Please check with your tax advisor about your own situation" class="fa fa-info-circle"></a></h3>
+                                        <div class="radio">
+                                            <label style="font-weight: 300;">
+                                                <input type="radio" name="taxAllow" id="taxYes" value="taxYes" {% if event.tax_allow %}checked="checked"{% endif %}>
+                                                <h5>Yes</h5>
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label style="font-weight: 300;">
+                                                <input type="radio" name="taxAllow" id="taxNo" value="taxNo" {% if not event.tax_allow %}checked="checked"{% endif %}>
+                                                <h5>No</h5>
+                                            </label>
+                                        </div>
+                                </div>
+                                <div id="tax-form-holder" {% if not event.tax_allow %}style="display: none";{% endif %}>
+                                    <div class="col-sm-12 input-group">
+                                    <label>Country<span class="required">*</span></label>
+                                        <select name="tax_country" id="tax_country_name" class="form-control">
+                                            {% if not event or not event.payment_country %}
+                                                <option value="">Choose a country for your tax payment</option>
+                                            {% endif %}
+                                            {% for country in payment_countries %}
+                                                <option value="{{ tax.country | default('', true) }}" {{ "selected" if event and event.payment_country == country else '' }}>{{ country }}</option>
+                                            {% endfor %}
+                                        </select>
+                                </div>
+
+                                <div class="col-sm-12 input-group">
+                                    <label for="tax_name">Tax Name<span class="required">*</span></label>
+                                    <input type="text" id="tax_name" name="tax_name" class="form-control" value="{{ tax.tax_name | default('', true)  }}">
+                                </div>
+
+                                <div class="col-sm-12 input-group">
+                                    <label for="tax_rate">Tax Rate<span class="required">*</span></label>
+                                    <input value="{{ tax.tax_rate | default(0, true)  }}" type="text" class="form-control" name="tax_rate" id="tax_rate"
+                                           placeholder="Enter Tax Rate" >
+                                </div>
+
+                                <div class="col-sm-12 input-group">
+                                    <label for="tax_id">Tax ID<span class="required">*</span></label>
+                                    <input value="{{ tax.tax_id | default(0, true)  }}" type="text" class="form-control" name="tax_id" id="tax_id"
+                                           placeholder="Enter Tax ID" >
+                                </div>
+
+                                <div class="col-sm-12 input-group">
+                                    <label class="control-label">Tax Invoices:</label>
+                                    <div class="checkbox">
+                                        <label style="font-weight: 300;">
+                                            <input type="checkbox" name="tax_invoice" id="tax_invoice" value="invoiceYes" {% if tax.send_invoice %}checked="checked"{% endif %}>
+                                            <strong style="font-weight: 400;">Send tax invoice to attendees: </strong> Tax Invoices are sent to your attendees when you select this feature.
+                                            Enter your registered business company name and address to be included on the tax invoice
+                                        </label>
+                                    </div>
+                                </div>
+                                <div id="tax-invoice-holder" {% if not tax.send_invoice %}style="display: none"{% endif %}>
+                                    <div class="col-sm-12 input-group">
+                                    <label for="registered_company">Registered Company<span class="required">*</span></label>
+                                    <input value="{{ tax.registered_company | default('', true)  }}" type="text" class="form-control" name="regestered_company" id="regestered_company"
+                                           placeholder="Enter Comapny Name" >
+                                    </div>
+
+                                    <div class="col-sm-12 input-group">
+                                    <label for="buisness_address">Buisness Address<span class="required">*</span></label>
+                                    <input value="{{ tax.address | default('', true)  }}" type="text" class="form-control" name="buisness_address" id="buisness_address"
+                                           placeholder="Enter Buisness Address" >
+                                    </div>
+
+                                    <div class="col-sm-12 input-group">
+                                    <label for="invoice_city">City<span class="required">*</span></label>
+                                    <input value="{{ tax.city | default('', true)  }}" type="text" class="form-control" name="invoice_city" id="invoice_city"
+                                           placeholder="City" >
+                                    </div>
+
+                                    <div class="col-sm-12 input-group">
+                                    <label for="invoice_state">State<span class="required">*</span></label>
+                                    <input value="{{ tax.state | default('', true)  }}" type="text" class="form-control" name="invoice_state" id="invoice_state"
+                                           placeholder="State" >
+                                    </div>
+
+                                    <div class="col-sm-12 input-group">
+                                    <label for="invoice_zip">Zip<span class="required">*</span></label>
+                                    <input value="{{ tax.zip | default(0, true)  }}" type="text" class="form-control" name="invoice_zip" id="invoice_zip"
+                                           placeholder="Zip" >
+                                    </div>
+
+                                    <div class="col-sm-12 input-group">
+                                    <label for="invoice_footer">Optional Text for Invoice Footer<span class="required">*</span></label>
+                                    <textarea class="form-control" name="invoice_footer" id="invoice_footer">{{ tax.invoice_footer | default('', true)  }}" </textarea>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 input-group">
+                                    <label class="control-label">Add or Include:</label>
+                                    <div class="radio">
+                                        <label style="font-weight: 300;">
+                                            <input type="radio" name="tax_options" value="tax_separate" {% if not tax.tax_include_in_price %}checked="checked"{% endif %}>
+                                            <strong style="font-weight: 400;">Add tax as separate fee on top of the price</strong>
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label style="font-weight: 300;">
+                                            <input type="radio" name="tax_options" value="tax_include" {% if tax.tax_include_in_price %}checked="checked"{% endif %}>
+                                            <strong style="font-weight: 400;">Include tax in ticket price</strong>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="reset" id="close-tax-form" class="btn btn-default" data-dismiss="modal">
+                            Save
+                        </button>
+                    </div>
+            </div>
+        </div>
+    </div>
+</form>
 <script>
     var marker, map;
     var init_marker;
     var placeSearch, autocomplete;
+    var paid_tickets = 0;
     var componentForm = {
         street_number: 'short_name',
         route: 'long_name',
@@ -794,6 +981,7 @@
 
     var $ticketsTable = $(".tickets-table").children("tbody");
     var ticketsCount = 1;
+    var $paymentsystemHolder = $("#payment-system-holder");
 
     function addTicket(type) {
         /* Clone ticket from template */
@@ -819,8 +1007,17 @@
         var $ticketRemove = $ticket.children("td").last().children().children().last();
         $ticketRemove.tooltip();
         $ticketRemove.on("click", function() {
-            $ticket.remove();
-            $ticketMore.remove();
+            var confirmRemove = confirm("Are you sure you want to remove the Ticket?");
+            if (confirmRemove) {
+                if (type == 'paid' || type == 'donation'){
+                    paid_tickets = paid_tickets - 1;
+                    if (paid_tickets == 0){
+                        $paymentsystemHolder.fadeOut();
+                    }
+                }
+                $ticket.remove();
+                $ticketMore.remove();
+            }
         });
 
         /* Set Ticket Type field */
@@ -853,10 +1050,13 @@
     });
 
     $(".remove-ticket-button").click(function() {
-        var $ticket = $(this).parent().parent().parent();
-        var $ticketMore = $ticket.next();
-        $ticket.remove();
-        $ticketMore.remove();
+        var confirmRemove = confirm("Are you sure you want to remove the Ticket?");
+        if (confirmRemove) {
+            var $ticket = $(this).parent().parent().parent();
+            var $ticketMore = $ticket.next();
+            $ticket.remove();
+            $ticketMore.remove();
+        }
     });
 
     $(".add-free-ticket").click(function () {
@@ -864,11 +1064,35 @@
     });
 
     $(".add-paid-ticket").click(function () {
+        if (paid_tickets == 0){
+            $paymentsystemHolder.fadeIn();
+        }
+        paid_tickets += 1;
         addTicket("paid");
     });
 
     $(".add-donation-ticket").click(function () {
+        if (paid_tickets == 0){
+            $paymentsystemHolder.fadeIn();
+        }
+        paid_tickets += 1;
         addTicket("donation");
+    });
+
+    var $taxformHolder = $("#tax-form-holder");
+    $("#taxYes").on("click", function(e) {
+        $taxformHolder.fadeIn();
+    });
+    $("#taxNo").on("click", function(e) {
+        $taxformHolder.fadeOut();
+    });
+
+    var $taxinvoiceHolder = $("#tax-invoice-holder");
+    $("#tax_invoice").change(function() {
+        if($("#tax_invoice").is(":checked"))
+            $taxinvoiceHolder.fadeIn();
+        else
+            $taxinvoiceHolder.fadeOut();
     });
 
     $(document).on("click", '.add-social-links', function () {

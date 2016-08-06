@@ -2,8 +2,15 @@ import json
 import os
 import shutil
 import requests
-from flask import request
+from datetime import datetime
+from flask import request, g, url_for
 from flask_restplus import marshal
+
+from app.models.export_jobs import ExportJob
+from app.models.event import Event as EventModel
+from app.helpers.data import save_to_db
+from app.helpers.data_getter import DataGetter
+from app.helpers.helpers import send_email_after_export
 
 from ..events import DAO as EventDAO, EVENT, \
     LinkDAO as SocialLinkDAO, SOCIAL_LINK
@@ -129,3 +136,39 @@ def export_event_json(event_id, settings):
     # make zip
     shutil.make_archive(dir_path, 'zip', dir_path)
     return os.path.realpath('.') + '/' + dir_path + '.zip'
+
+
+# HELPERS
+
+def create_export_job(task_id, event_id):
+    """
+    Create export job for an export that is going to start
+    """
+    export_job = ExportJob.query.filter_by(event_id=event_id).first()
+    task_url = url_for('api.extras_celery_task', task_id=task_id)
+    if export_job:
+        export_job.task = task_url
+        export_job.user_email = g.user.email
+        export_job.event = EventModel.query.get(event_id)
+        export_job.start_time = datetime.now()
+    else:
+        export_job = ExportJob(
+            task=task_url, user_email=g.user.email,
+            event=EventModel.query.get(event_id)
+        )
+    save_to_db(export_job, 'ExportJob saved')
+
+
+def send_export_mail(event_id, result):
+    """
+    send export event mail after the process is complete
+    """
+    job = DataGetter.get_export_jobs(event_id)
+    if not job:  # job not stored, happens in case of CELERY_ALWAYS_EAGER
+        return
+    event = EventModel.query.get(event_id)
+    if not event:
+        event_name = '(Undefined)'
+    else:
+        event_name = event.name
+    send_email_after_export(job.user_email, event_name, result)

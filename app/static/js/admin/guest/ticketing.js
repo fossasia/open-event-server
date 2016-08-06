@@ -25,30 +25,33 @@ function pad(n, width, z) {
     return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 }
 
-var shownExpired = false;
+if (!window.from_organzier) {
+    var shownExpired = false;
 
-function executeOrderExpired() {
-    if (!shownExpired) {
-        shownExpired = true;
-        $.post(window.expire_url, {}, function () {
-            location.href = window.expired_redirect;
-        });
-        alert("You have exceeded the time limit and your reservation has been released. We apologize for the inconvenience.");
-    }
-}
-
-setInterval(function () {
-    if (typeof window.stop_timer === 'undefined' || window.stop_timer !== 'right_away') {
-        var now = moment.utc();
-        var diff = window.order_expires_at.diff(now, 'seconds');
-        if (diff >= 0) {
-            var duration = moment.duration(diff, 'seconds');
-            $timeLeft.text(pad(duration.minutes(), 2) + ":" + pad(duration.seconds(), 2));
-        } else {
-            executeOrderExpired();
+    function executeOrderExpired() {
+        if (!shownExpired) {
+            shownExpired = true;
+            $.post(window.expire_url, {}, function () {
+                location.href = window.expired_redirect;
+            });
+            alert("You have exceeded the time limit and your reservation has been released. We apologize for the inconvenience.");
         }
     }
-}, 1000);
+
+    setInterval(function () {
+        if (typeof window.stop_timer === 'undefined' || window.stop_timer !== 'right_away') {
+            var now = moment.utc();
+            var diff = window.order_expires_at.diff(now, 'seconds');
+            if (diff >= 0) {
+                var duration = moment.duration(diff, 'seconds');
+                $timeLeft.text(pad(duration.minutes(), 2) + ":" + pad(duration.seconds(), 2));
+            } else {
+                executeOrderExpired();
+            }
+        }
+    }, 1000);
+
+}
 
 var $orderPaymentForm = $("#order-payment-form");
 var $payViaStripe = $('#pay-via-stripe');
@@ -66,6 +69,7 @@ $orderPaymentForm.submit(function (e) {
         success: function (json) {
             if (json.status === "ok") {
                 userEmail = json.email;
+
                 if (json.order_status === "initialized") {
                     $payViaStripe.click();
                 } else if (json.order_status === "completed") {
@@ -82,6 +86,7 @@ $orderPaymentForm.submit(function (e) {
                         $orderPaymentForm.submit();
                     });
                 }
+
             } else {
                 $orderPaymentForm.setFormLoading(false, 'Pay now');
                 createSnackbar("An error occurred while initializing your payment.", "Try again", function () {
@@ -112,6 +117,7 @@ function chargeOrderPayment(tokenId) {
                 }, 1000);
                 window.stop_timer = "right_away";
                 $("#registration-information-holder").fadeOut();
+
             } else {
                 createSnackbar("An error occurred while processing your payment.", "Try again", function () {
                     chargeOrderPayment(tokenId);

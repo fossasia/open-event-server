@@ -189,28 +189,45 @@ def slugify_filter(s):
 
 @app.template_filter('humanize')
 def humanize_filter(time):
-    if time is None:
+    if not time:
         return "N/A"
     return arrow.get(time).humanize()
 
 
 @app.template_filter('humanize_alt')
 def humanize_filter(time):
-    if time is None:
+    if not time:
         return "N/A"
     return humanize.naturaltime(datetime.now() - time)
 
 @app.template_filter('firstname')
 def firstname_filter(string):
-    return HumanName(string).first
+    if string:
+        return HumanName(string).first
+    else:
+        return 'N/A'
 
 @app.template_filter('middlename')
 def middlename_filter(string):
-    return HumanName(string).middle
+    if string:
+        return HumanName(string).middle
+    else:
+        return 'N/A'
 
 @app.template_filter('lastname')
 def lastname_filter(string):
-    return HumanName(string).last
+    if string:
+        return HumanName(string).last
+    else:
+        return 'N/A'
+
+@app.template_filter('money')
+def money_filter(string):
+    return '{:20,.2f}'.format(float(string))
+
+@app.template_filter('datetime')
+def simple_datetime_display(date):
+    return date.strftime('%B %d, %Y %I:%M %p')
 
 @app.context_processor
 def flask_helpers():
@@ -297,6 +314,13 @@ def set_secret():
 def set_stripe_key():
     stripe.api_key = get_settings()['stripe_secret_key']
 
+
+@app.context_processor
+def integrate_socketio():
+    integrate = current_app.config.get('INTEGRATE_SOCKETIO', False)
+    return dict(integrate_socketio=integrate)
+
+
 def send_after_event_mail():
     with app.app_context():
         events = Event.query.all()
@@ -355,7 +379,7 @@ trash_sched.start()
 
 # Flask-SocketIO integration
 
-if current_app.config.get('PRODUCTION', False):
+if current_app.config.get('INTEGRATE_SOCKETIO', False):
     from eventlet import monkey_patch
     from flask_socketio import SocketIO, emit, join_room
 
@@ -365,15 +389,22 @@ if current_app.config.get('PRODUCTION', False):
     socketio = SocketIO(current_app, async_mode=async_mode)
 
     @socketio.on('connect', namespace='/notifs')
-    def connect_handler():
+    def connect_handler_notifs():
         if current_user.is_authenticated():
             user_room = 'user_{}'.format(session['user_id'])
             join_room(user_room)
-            emit('response', {'meta': 'WS connected'})
+            emit('notifs-response', {'meta': 'WS connected'}, namespace='/notifs')
+
+    @socketio.on('connect', namespace='/notifpage')
+    def connect_handler_notif_page():
+        if current_user.is_authenticated():
+            user_room = 'user_{}'.format(session['user_id'])
+            join_room(user_room)
+            emit('notifpage-response', {'meta': 'WS notifpage connected'}, namespace='/notifpage')
 
 
 if __name__ == '__main__':
-    if current_app.config.get('PRODUCTION', False):
+    if current_app.config.get('INTEGRATE_SOCKETIO', False):
         socketio.run(current_app)
     else:
         current_app.run()

@@ -42,7 +42,7 @@
                                 {% else %}
                                 <img src="{{ url_for('static', filename='img/avatar.png') }}" onerror="imgError(this)"/>
                                 {% endif %}
-                                <span class="user-text">{{ current_user.user_detail.fullname | default(current_user.email, true) }}</span>
+                                <span class="user-text">{{ current_user.user_detail.firstname | default(current_user.email, true) }}</span>
                                 <span class=" fa fa-angle-down"></span>
                             </a>
                             <ul class="dropdown-menu dropdown-usermenu pull-right">
@@ -65,30 +65,36 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="dropdown">
-                            <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown">
+                        <li class="dropdown mega-dropdown">
+                            <a href="javascript:;" class="dropdown-toggle info-number">
                                 <i class="fa fa-envelope-o"></i>
                                 <span class="badge bg-green" id="notif_count">{{ current_user.get_unread_notif_count() | default('', true) }}</span>
                             </a>
                             <ul id="notif-menu" class="dropdown-menu list-unstyled menu msg_list">
-                            {% if current_user.get_unread_notifs() %}
-                            {% for notif in current_user.get_unread_notifs(reverse=True) %}
-                                <li class="notif-menu-li">
-                                    <a>
-                                        <span class="message">{{ notif.title }}</span>
-                                        <span class="time">{{ notif.received_at }}</span>
-                                    </a>
-                                </li>
-                            {% endfor %}
-                            {% endif %}
-                                <li>
-                                    <div class="text-center">
-                                        <a href="{{ url_for('profile.notifications_view') }}">
-                                            See all unread notifications
-                                            <i class="fa fa-angle-right"></i>
+                                <li style="border: 0;">
+                                    <span>
+                                        <a href="{{ url_for('notifications.index_view') }}" style="font-size: 12px;" title="See all Notifications">
+                                            <strong>Notifications</strong>
                                         </a>
-                                    </div>
+                                    </span>
+                                    <span class="pull-right">
+                                        <a class="notif-mark-all-read"
+                                            data-markallread="{{ url_for('notifications.mark_all_read') }}">
+                                            Mark All as Read
+                                        </a>
+                                    </span>
                                 </li>
+                            {% if current_user.get_unread_notifs() %}
+                                {% for notif in current_user.get_unread_notifs(reverse=True) %}
+                                    <li class="notif-menu-li">
+                                        <a>
+                                            <span class="message">{{ notif.title }}</span>
+                                            <span class="time">{{ notif.received_at }}</span>
+                                            <span class="mark-as-read btn btn-default btn-xs" data-markread="{{ notif.mark_read }}">Mark as read</span>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            {% endif %}
                             </ul>
                         </li>
                     {% else %}

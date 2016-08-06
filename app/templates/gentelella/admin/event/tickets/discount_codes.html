@@ -1,0 +1,163 @@
+{% extends 'gentelella/admin/event/tickets/tickets_base.html' %}
+
+{% set active_side_page = "discount_codes" %}
+
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='admin/lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"/>
+
+    <style type="text/css">
+        .label {
+            font-size: 13px;
+            font-weight: 300;
+        }
+
+        .dataTables_filter input {
+            margin-right: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block inner_content %}
+    <h3 class="pull-left">Discount Codes </h3>
+    <a class="btn btn-info pull-right"
+       href="{{ url_for('event_ticket_sales.discount_codes_create', event_id=event.id) }}"><i
+            class="fa fa-plus fa-fw"></i> Create a discount</a>
+    <br>
+    <br>
+    <br>
+    <div id="toolbar-holder" style="display: none;">
+        <div class="btn-group pull-left" data-toggle="buttons">
+            <label class="btn btn-default active btn-responsive">
+                <input type="radio" name="show_state" autocomplete="off" value="all" checked> All
+            </label>
+            <label class="btn btn-default btn-responsive">
+                <input type="radio" name="show_state" autocomplete="off" value="active"> Active
+            </label>
+            <label class="btn btn-default btn-responsive">
+                <input type="radio" name="show_state" autocomplete="off" value="inactive"> Inactive
+            </label>
+        </div>
+    </div>
+
+    <table class="table with-datatable" width="100%">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Discount Code</th>
+            <th>Discount Per Ticket</th>
+            <th>Validity</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for discount_code in discount_codes %}
+            <tr>
+                <td></td>
+                <td>{{ discount_code.code }}</td>
+                <td>
+                    {% if discount_code.type == 'amount' %}
+                        ${{ discount_code.value | money }}
+                    {% else %}
+                        {{ discount_code.value }} %
+                    {% endif %}
+                </td>
+                <td>
+                    {% if discount_code.valid_from %}Valid from {% endif %}
+                    {% if discount_code.valid_from %}{{ discount_code.valid_from | datetime }}{% endif %}
+                    {% if discount_code.valid_from and discount_code.valid_till %} to {% endif %}
+                    {% if not discount_code.valid_from and discount_code.valid_till %}Valid till {% endif %}
+                    {% if discount_code.valid_till %}{{ discount_code.valid_till | datetime }}{% endif %}
+                    {% if not discount_code.valid_from and not discount_code.valid_till %}N/A{% endif %}
+                </td>
+                <td>
+                    {% if discount_code.is_active %}
+                        <span class="label label-success">Active</span>
+                    {% else %}
+                        <span class="label label-warning">Inactive</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="btn-group btn-group-xs" role="group">
+                        <a class="btn btn-default" data-toggle="tooltip" title="Edit"
+                           href="{{ url_for('event_ticket_sales.discount_codes_edit', event_id=event.id, discount_code_id=discount_code.id) }}"><i
+                                class="fa fa-pencil fa-fw"></i></a>
+                        {% if discount_code.is_active %}
+                            <a class="btn btn-default" data-toggle="tooltip" title="Deactivate"
+                             href="{{ url_for('event_ticket_sales.discount_codes_toggle', event_id=event.id, discount_code_id=discount_code.id) }}">
+                                <i class="fa fa-times fa-fw"></i></a>
+                        {% else %}
+                            <a class="btn btn-default" data-toggle="tooltip" title="Activate"
+                             href="{{ url_for('event_ticket_sales.discount_codes_toggle', event_id=event.id, discount_code_id=discount_code.id) }}">
+                                <i class="fa fa-check fa-fw"></i></a>
+                        {% endif %}
+                        <a class="btn btn-default" data-toggle="tooltip" title="Delete"
+                         href="{{ url_for('event_ticket_sales.discount_codes_delete', event_id=event.id, discount_code_id=discount_code.id) }}"><i
+                                class="fa fa-trash fa-fw"></i></a>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script type="text/javascript">
+
+        $.fn.dataTable.ext.search.push(
+                function (settings, data) {
+                    var user_option = $("input[name=show_state]:checked").val();
+                    console.log(data);
+                    var state = data[4].trim().toLowerCase() || 'inactive';
+                    if (user_option === "all") {
+                        return true;
+                    } else if (user_option === state) {
+                        return true;
+                    }
+                    return false;
+                }
+        );
+
+        var table = $('.with-datatable').DataTable({
+            "dom": '<"row"<"toolbar col-md-12"<"pull-right"l>f>>tip',
+            width: '100%',
+            "columnDefs": [
+                {
+                    "searchable": false,
+                    "orderable": false,
+                    "targets": 0
+                }
+            ],
+            "order": [[1, 'asc']],
+            "scrollX": true
+        });
+
+        $("div.toolbar").prepend($("#toolbar-holder").html());
+
+        $("input[name=show_state]").change(function () {
+            table.draw();
+        });
+
+        table.on('draw', function () {
+            $("[data-toggle=tooltip]").tooltip({
+                container: 'body'
+            });
+        });
+
+        table.on("order.dt search.dt", function () {
+            table.column(0, {search: "applied", order: "applied"}).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
+
+
+    </script>
+{% endblock %}
+

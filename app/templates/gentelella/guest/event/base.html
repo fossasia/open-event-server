@@ -2,7 +2,7 @@
 
 {% set active_page = active_page|default('info') -%}
 
-{% set carousel_height = 500 if event.background_url and active_page == 'info' else 300 -%}
+{% set carousel_height = 500 if active_page == 'info' else 300 -%}
 {% set scrollspy_top = (carousel_height + 95) ~ "px" %}
 
 {% block head_css %}
@@ -11,7 +11,8 @@
     <style type="text/css">
         .carousel .item {
             height: {{ carousel_height }}px;
-            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('{{ event.background_url }}');
+            background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)), url('{% if event.background_url %}{{ event.background_url }}{% elif event.topic%}{{ url_for("static", filename="placeholders/" + placeholder_images[event.topic])}}{% elif event.subtopic %}{{ url_for("static", filename="placeholders/" + placeholder_images[event.subtopic])}}{% else %}{{url_for("static", filename="placeholders/" + placeholder_images["Other"])}}{% endif %}');
+            background-size: cover;
         }
 
         .carousel {
