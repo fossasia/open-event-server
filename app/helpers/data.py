@@ -551,6 +551,7 @@ class DataManager(object):
             session.subtitle = form.get('subtitle', '')
             session.long_abstract = form.get('long_abstract', '')
             session.short_abstract = form.get('short_abstract', '')
+            session.state = form_state
 
             if form.get('track', None) != "":
                 session.track_id = form.get('track', None)
