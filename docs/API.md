@@ -20,6 +20,15 @@ The return will be as follows in case of success.
 Then use the `access_token` in a request by setting the header `Authorization` to `JWT <access_token>`.
 
 
+## Swagger Docs
+
+Swagger API documentation with live-testing feature is available at `/api/v2` endpoint of the server where Open Event is hosted.
+For the current dev deployement, it is at http://open-event-dev.herokuapp.com/api/v2/ and for the master deployement, it is at
+http://open-event.herokuapp.com/api/v2/
+
+Don't forget to login into the swagger UI (through the top right link) to get access to all authorized API methods (like POST, PUT).
+
+
 ## API Fields
 
 Serialized headers are main models (e.g. `Event`, `Session`, etc.). Others  are nested fields (e.g. `SessionSpeaker`, `TrackSession`, etc.).
