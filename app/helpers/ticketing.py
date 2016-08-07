@@ -264,23 +264,8 @@ class TicketingManager(object):
             stripe.api_key = "Key not Set"
 
         try:
-            customer = stripe.Customer.create(
-                email=order.user.email,
-                source=form['stripe_token_id']
-            )
 
-            charge = stripe.Charge.create(
-                customer=customer.id,
-                amount=int(order.amount * 100),
-                currency='usd',
-                metadata={
-                    'order_id': order.id,
-                    'event': order.event.name,
-                    'user_id': order.user_id,
-                    'event_id': order.event_id
-                },
-                description=order.event.name + " ticket(s)"
-            )
+            charge = TicketingManager.charge_user_via_stripe(order, form)
 
             if charge:
                 order.paid_via = 'stripe'
@@ -343,3 +328,26 @@ class TicketingManager(object):
         save_to_db(discount_code)
 
         return discount_code
+
+    @staticmethod
+    def charge_user_via_stripe(order, form):
+
+        customer = stripe.Customer.create(
+            email=order.user.email,
+            source=form['stripe_token_id']
+        )
+
+        charge = stripe.Charge.create(
+            customer=customer.id,
+            amount=int(order.amount * 100),
+            currency='usd',
+            metadata={
+                'order_id': order.id,
+                'event': order.event.name,
+                'user_id': order.user_id,
+                'event_id': order.event_id
+            },
+            description=order.event.name + " ticket(s)"
+        )
+
+        return charge
