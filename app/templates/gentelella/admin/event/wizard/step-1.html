@@ -1058,7 +1058,7 @@
             'scrollDefault': 'now'
         });
 
-        /* iCheck description toggle */
+        /* iCheck for Ticket description toggle checkbox */
         $ticketMore.find("input.checkbox.flat").iCheck({
             checkboxClass: 'icheckbox_flat-green',
             radioClass: 'iradio_flat-green'
@@ -1107,6 +1107,7 @@
         $ticketsTable.append($ticket, $ticketMore);
         $ticket.show("slow");
 
+        /* Set name attribute for all Ticket Description Toggle checkboxes */
         $("#event-wizard-form input[name*='tickets_description_toggle_']").each(function(i, el) {
             $(el).attr("name", "tickets_description_toggle_" + String(i));
         });

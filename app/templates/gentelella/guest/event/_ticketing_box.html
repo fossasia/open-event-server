@@ -22,7 +22,11 @@
                         {% for ticket in tickets %}
                             <tr>
 
-                                <td>{{ ticket.name }} - {{ ticket.type }}</td>
+                                <td>
+                                    <a data-toggle="tooltip" title="{{ ticket.description if ticket.description_toggle else '' }}" style="cursor: pointer;">
+                                        {{ ticket.name }} - {{ ticket.type }}
+                                    </a>
+                                </td>
                                 <td>{{ ticket.sales_end.strftime('%a, %B %d') }}</td>
                                 <td>${{ ticket.price | money }}</td>
                                 <td>$ 0.00</td>
