@@ -2,14 +2,27 @@
  * Created by niranjan94 on 28-Jul-16.
  */
 
+window.token_recieved = false;
 var handler = StripeCheckout.configure({
     key: window.stripe_publishable_key,
     locale: 'auto',
     name: 'Open Event',
     amount: window.order_amount,
+    currency: window.currency,
     description: window.event_name + ' tickets',
     token: function (token) {
+        window.token_recieved = true;
         chargeOrderPayment(token.id);
+    },
+    closed: function () {
+        if (window.token_recieved) {
+            window.token_recieved = false;
+        } else {
+            createSnackbar("The payment was cancelled. Processing ...");
+            setTimeout(function () {
+                location.reload(true);
+            }, 1000);
+        }
     }
 });
 
@@ -76,28 +89,28 @@ $orderPaymentForm.submit(function (e) {
                 }
 
                 switch (json.action) {
-                case "show_completed":
-                    createSnackbar("Your payment was a success. Redirecting ...");
-                    setTimeout(function () {
-                        location.reload(true);
-                    }, 1000);
-                    window.stop_timer = "right_away";
-                    $registrationInformationHolder.fadeOut();
-                    break;
-                case "start_stripe":
-                    $payViaStripe.click();
-                    break;
-                case "start_paypal":
-                    createSnackbar("Redirecting you to PayPal ...");
-                    $registrationInformationHolder.fadeOut();
-                    location.href = json.redirect_url;
-                    break;
-                default:
-                    $orderPaymentForm.setFormLoading(false, 'Pay now');
-                    createSnackbar("An error occurred while initializing your payment.", "Try again", function () {
-                        $orderPaymentForm.submit();
-                    });
-                    break;
+                    case "show_completed":
+                        createSnackbar("Your payment was a success. Redirecting ...");
+                        setTimeout(function () {
+                            location.reload(true);
+                        }, 1000);
+                        window.stop_timer = "right_away";
+                        $registrationInformationHolder.fadeOut();
+                        break;
+                    case "start_stripe":
+                        $payViaStripe.click();
+                        break;
+                    case "start_paypal":
+                        createSnackbar("Redirecting you to PayPal ...");
+                        $registrationInformationHolder.fadeOut();
+                        location.href = json.redirect_url;
+                        break;
+                    default:
+                        $orderPaymentForm.setFormLoading(false, 'Pay now');
+                        createSnackbar("An error occurred while initializing your payment.", "Try again", function () {
+                            $orderPaymentForm.submit();
+                        });
+                        break;
                 }
             } else {
                 $orderPaymentForm.setFormLoading(false, 'Pay now');

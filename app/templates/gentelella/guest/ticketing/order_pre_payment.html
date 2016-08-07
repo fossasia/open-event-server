@@ -195,6 +195,7 @@
         window.order_amount = {{ order.amount }};
         window.paid_via = "{{ paid_via | default('', true) }}";
         window.from_organzier = {{ from_organzier | default('false', true) }};
+        window.currency = "{{ order.event.payment_currency if order.event.payment_currency and order.event.payment_currency != "" else "USD" | default('USD', true) }}"
     </script>
     <script src="https://checkout.stripe.com/checkout.js"></script>
     <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>

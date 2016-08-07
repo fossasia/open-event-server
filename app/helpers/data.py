@@ -1273,7 +1273,12 @@ class DataManager(object):
         event.sub_topic = form['sub_topic']
         event.privacy = form.get('privacy', 'public')
         event.payment_country = form.get('payment_country')
-        event.payment_currency = form.get('payment_currency')
+
+        payment_currency = ''
+        if form['payment_currency'] != '':
+            payment_currency = form.get('payment_currency').split(' ')[0]
+
+        event.payment_currency = payment_currency
         event.paypal_email = form.get('paypal_email')
 
         ticket_names = form.getlist('tickets[name]')

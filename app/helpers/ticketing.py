@@ -275,6 +275,7 @@ class TicketingManager(object):
     def charge_paypal_order_payment(order):
         payment_details = PayPalPaymentsManager.get_approved_payment_details(order)
         capture_result = PayPalPaymentsManager.capture_payment(order, payment_details['PAYERID'])
+        raise Exception('')  # TODO Remove this
         order.paid_via = 'paypal'
         order.status = 'completed'
         order.completed_at = datetime.utcnow()

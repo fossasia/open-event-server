@@ -48,13 +48,19 @@ class StripePaymentsManager(object):
                 return None
 
     @staticmethod
-    def capture_payment(order):
+    def capture_payment(order, currency=None):
 
         credentials = StripePaymentsManager.get_credentials(order.event)
         if not credentials:
             raise Exception('Stripe is incorrectly configured')
 
         stripe.api_key = credentials['SECRET_KEY']
+
+        if not currency:
+            currency = order.event.payment_currency
+
+        if not currency or currency == "":
+            currency = "USD"
 
         try:
             customer = stripe.Customer.create(
@@ -65,7 +71,7 @@ class StripePaymentsManager(object):
             charge = stripe.Charge.create(
                 customer=customer.id,
                 amount=int(order.amount * 100),
-                currency='usd',
+                currency=currency.lower(),
                 metadata={
                     'order_id': order.id,
                     'event': order.event.name,
@@ -130,12 +136,18 @@ class PayPalPaymentsManager(object):
             return None
 
     @staticmethod
-    def get_checkout_url(order, currency='USD', credentials=None):
+    def get_checkout_url(order, currency=None, credentials=None):
         if not credentials:
             credentials = PayPalPaymentsManager.get_credentials(order.event)
 
         if not credentials:
             raise Exception('PayPal credentials have not be set correctly')
+
+        if not currency:
+            currency = order.event.payment_currency
+
+        if not currency or currency == "":
+            currency = "USD"
 
         data = {
             'USER': credentials['USER'],
@@ -192,12 +204,18 @@ class PayPalPaymentsManager(object):
         return dict(urlparse.parse_qsl(response.text))
 
     @staticmethod
-    def capture_payment(order, payer_id, currency='USD', credentials=None):
+    def capture_payment(order, payer_id, currency=None, credentials=None):
         if not credentials:
             credentials = PayPalPaymentsManager.get_credentials(order.event)
 
         if not credentials:
             raise Exception('PayPal credentials have not be set correctly')
+
+        if not currency:
+            currency = order.event.payment_currency
+
+        if not currency or currency == "":
+            currency = "USD"
 
         data = {
             'USER': credentials['USER'],
