@@ -73,6 +73,11 @@ class Event(db.Model):
     payment_currency = db.Column(db.String)
     paypal_email = db.Column(db.String)
     tax_allow = db.Column(db.Boolean, default=False)
+    pay_by_paypal = db.Column(db.Boolean, default=False)
+    pay_by_stripe = db.Column(db.Boolean, default=False)
+    pay_by_cheque = db.Column(db.Boolean, default=False)
+    pay_by_bank = db.Column(db.Boolean, default=False)
+    pay_onsite = db.Column(db.Boolean, default=False)
 
     def __init__(self,
                  name=None,
@@ -109,7 +114,12 @@ class Event(db.Model):
                  payment_country=None,
                  payment_currency=None,
                  paypal_email=None,
-                 call_for_papers=None):
+                 call_for_papers=None,
+                 pay_by_paypal=None,
+                 pay_by_stripe=None,
+                 pay_by_cheque=None,
+                 pay_by_bank=None,
+                 pay_onsite=None):
 
         self.name = name
         self.logo = logo
@@ -146,6 +156,11 @@ class Event(db.Model):
         self.payment_currency = payment_currency
         self.paypal_email = paypal_email
         self.call_for_papers = call_for_papers
+        self.pay_by_paypal = pay_by_paypal
+        self.pay_by_stripe = pay_by_stripe
+        self.pay_by_cheque = pay_by_cheque
+        self.pay_by_bank = pay_by_bank
+        self.pay_onsite = pay_onsite
 
     def __repr__(self):
         return '<Event %r>' % self.name

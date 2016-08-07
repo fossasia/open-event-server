@@ -903,6 +903,8 @@ class DataManager(object):
         if form['payment_currency'] != '':
             payment_currency = form.get('payment_currency').split(' ')[0]
 
+
+        paypal_email = ''
         event = Event(name=form['name'],
                       start_time=DataManager.get_event_time_field_format(form, 'start'),
                       end_time=DataManager.get_event_time_field_format(form, 'end'),
@@ -922,7 +924,20 @@ class DataManager(object):
                       creator=login.current_user,
                       payment_country=form.get('payment_country', ''),
                       payment_currency=payment_currency,
-                      paypal_email=form.get('paypal_email', ''))
+                      paypal_email=paypal_email)
+
+        if 'pay_by_paypal' in form:
+            event.paypal_email = form.get('paypal_email')
+            event.pay_by_paypal = True
+
+        if 'pay_by_cheque' in form:
+            event.pay_by_cheque = True
+
+        if 'pay_by_bank' in form:
+            event.pay_by_bank = True
+
+        if 'pay_onsite' in form:
+            event.pay_onsite = True
 
         event = DataManager.update_searchable_location_name(event)
 
@@ -1017,16 +1032,18 @@ class DataManager(object):
             sponsor_description = form.getlist('sponsors[description]')
             sponsor_logo_url = []
 
-            if form.get('stripe_added', u'no') == u'yes':
-                stripe_authorization = StripeAuthorization(
-                    stripe_secret_key=form.get('stripe_secret_key', ''),
-                    stripe_refresh_token=form.get('stripe_refresh_token', ''),
-                    stripe_publishable_key=form.get('stripe_publishable_key', ''),
-                    stripe_user_id=form.get('stripe_user_id', ''),
-                    stripe_email=form.get('stripe_email', ''),
-                    event_id=event.id
-                )
-                save_to_db(stripe_authorization)
+            if 'pay_by_stripe' in form:
+                if form.get('stripe_added', u'no') == u'yes':
+                    stripe_authorization = StripeAuthorization(
+                        stripe_secret_key=form.get('stripe_secret_key', ''),
+                        stripe_refresh_token=form.get('stripe_refresh_token', ''),
+                        stripe_publishable_key=form.get('stripe_publishable_key', ''),
+                        stripe_user_id=form.get('stripe_user_id', ''),
+                        stripe_email=form.get('stripe_email', ''),
+                        event_id=event.id
+                    )
+                    save_to_db(stripe_authorization)
+                event.pay_by_stripe = True
 
             if form.get('sponsors_state', u'off') == u'on':
                 for index, name in enumerate(sponsor_name):
@@ -1181,6 +1198,7 @@ class DataManager(object):
                     if addr['types'] == ['locality', 'political']:
                         event.searchable_location_name = addr['short_name']
         return event
+
     @staticmethod
     def create_event_copy(event_id):
 
