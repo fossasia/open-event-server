@@ -309,18 +309,10 @@ class DataManager(object):
         :param event_id: Session belongs to Event by event id
         """
         form = request.form
-        speaker_img_file = ""
-        slide_file = ""
-        video_file = ""
-        audio_file = ""
-        if 'slides' in request.files and request.files['slides'].filename != '':
-            slide_file = request.files['slides']
-        if 'video' in request.files and request.files['video'].filename != '':
-            video_file = request.files['video']
-        if 'audio' in request.files and request.files['audio'].filename != '':
-            audio_file = request.files['audio']
-        if 'photo' in request.files and request.files['photo'].filename != '':
-            speaker_img_file = request.files['photo']
+        slide_file = DataManager.get_files_from_request(request, 'slides')
+        video_file = DataManager.get_files_from_request(request, 'video')
+        audio_file = DataManager.get_files_from_request(request, 'audio')
+        speaker_img_file = DataManager.get_files_from_request(request, 'photo')
 
         if not state:
             state = form.get('state', 'draft')
@@ -430,6 +422,12 @@ class DataManager(object):
                     Helper.send_notif_invite_papers(user, event.name, cfs_link, link)
 
     @staticmethod
+    def get_files_from_request(request, file_type):
+        if file_type in request.files and request.files[file_type].filename != '':
+            return request.files[file_type]
+        return ""
+
+    @staticmethod
     def add_speaker_to_event(request, event_id, user=login.current_user):
         form = request.form
         speaker_img_file = ""
@@ -510,15 +508,9 @@ class DataManager(object):
             form = request.form
             event_id = session.event_id
 
-            slide_file = ""
-            video_file = ""
-            audio_file = ""
-            if 'slides' in request.files and request.files['slides'].filename != '':
-                slide_file = request.files['slides']
-            if 'video' in request.files and request.files['video'].filename != '':
-                video_file = request.files['video']
-            if 'audio' in request.files and request.files['audio'].filename != '':
-                audio_file = request.files['audio']
+            slide_file = DataManager.get_files_from_request(request, 'slides')
+            video_file = DataManager.get_files_from_request(request, 'video')
+            audio_file = DataManager.get_files_from_request(request, 'audio')
 
             form_state = form.get('state', 'draft')
 
@@ -908,8 +900,8 @@ class DataManager(object):
                                    logo=logo)
 
         event = Event(name=form['name'],
-                      start_time=datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M'),
-                      end_time=datetime.strptime(form['end_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M'),
+                      start_time=DataManager.get_event_time_field_format(form, 'start'),
+                      end_time=DataManager.get_event_time_field_format(form, 'end'),
                       timezone=form['timezone'],
                       latitude=form['latitude'],
                       longitude=form['longitude'],
@@ -928,14 +920,7 @@ class DataManager(object):
                       payment_currency=form.get('payment_currency', ''),
                       paypal_email=form.get('paypal_email', ''))
 
-        if event.latitude and event.longitude:
-            response = requests.get(
-                "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
-                    event.longitude)).json()
-            if response['status'] == u'OK':
-                for addr in response['results'][0]['address_components']:
-                    if addr['types'] == ['locality', 'political']:
-                        event.searchable_location_name = addr['short_name']
+        event = DataManager.update_searchable_location_name(event)
 
         if form.get('organizer_state', u'off') == u'on':
             event.organizer_name = form['organizer_name']
@@ -945,7 +930,6 @@ class DataManager(object):
             event.code_of_conduct = form['code_of_conduct']
 
         state = form.get('state', None)
-        print state
         if state and ((state == u'Published' and not string_empty(
             event.location_name)) or state != u'Published') and login.current_user.is_verified:
             event.state = state
@@ -1175,6 +1159,21 @@ class DataManager(object):
             raise ValidationError("start date greater than end date")
 
     @staticmethod
+    def get_event_time_field_format(form, field):
+        return datetime.strptime(form[field + '_date'] + ' ' + form[field + '_time'], '%m/%d/%Y %H:%M')
+
+    @staticmethod
+    def update_searchable_location_name(event):
+        if event.latitude and event.longitude:
+            response = requests.get(
+                "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
+                    event.longitude)).json()
+            if response['status'] == u'OK':
+                for addr in response['results'][0]['address_components']:
+                    if addr['types'] == ['locality', 'political']:
+                        event.searchable_location_name = addr['short_name']
+        return event
+    @staticmethod
     def create_event_copy(event_id):
 
         event_old = DataGetter.get_event(event_id)
@@ -1252,8 +1251,8 @@ class DataManager(object):
         """
         form = request.form
         event.name = form['name']
-        event.start_time = datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M')
-        event.end_time = datetime.strptime(form['end_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M')
+        event.start_time = DataManager.get_event_time_field_format(form, 'start')
+        event.end_time = DataManager.get_event_time_field_format(form, 'end')
         event.timezone = form['timezone']
         event.latitude = form['latitude']
         event.longitude = form['longitude']
@@ -1360,14 +1359,7 @@ class DataManager(object):
 
                 save_to_db(tax, "Tax Options Saved")
 
-        if event.latitude and event.longitude:
-            response = requests.get(
-                "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
-                    event.longitude)).json()
-            if response['status'] == u'OK':
-                for addr in response['results'][0]['address_components']:
-                    if addr['types'] == ['locality', 'political']:
-                        event.searchable_location_name = addr['short_name']
+        event = DataManager.update_searchable_location_name(event)
 
         if form.get('organizer_state', u'off') == u'on':
             event.organizer_name = form['organizer_name']

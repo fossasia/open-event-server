@@ -49,14 +49,13 @@ class TicketingManager(object):
         """
         if not user_id:
             user_id = login.current_user.id
+        query = Order.query.join(Order.event)\
+            .filter(Order.user_id == user_id)\
+            .filter(Order.status == 'completed')
         if upcoming_events:
-            return Order.query.join(Order.event).filter(Order.user_id == user_id)\
-                .filter(Order.status == 'completed')\
-                .filter(Event.start_time >= datetime.now())
+            return query.filter(Event.start_time >= datetime.now())
         else:
-            return Order.query.join(Order.event).filter(Order.user_id == user_id)\
-                .filter(Order.status == 'completed')\
-                .filter(Event.end_time < datetime.now())
+            return query.filter(Event.end_time < datetime.now())
 
     @staticmethod
     def get_orders(event_id=None, status=None):
