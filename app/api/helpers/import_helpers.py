@@ -302,6 +302,10 @@ def import_event_json(task_handle, zip_path):
         data = _delete_fields(srv, data)
         new_event = EventDAO.create(data, 'dont')[0]
         version_data = data.get('version', {})
+        write_file(
+            path + '/social_links',
+            json.dumps(data.get('social_links', []))
+        )  # save social_links
         _upload_media_queue(srv, new_event)
     except BaseError as e:
         raise make_error('event', er=e)
@@ -369,3 +373,10 @@ def get_filename_from_cd(cd):
         return '', ''
     fn = fname[0].rsplit('.', 1)
     return fn[0], '' if len(fn) == 1 else ('.' + fn[1])
+
+
+def write_file(file, data):
+    """simple write to file"""
+    fp = open(file, 'w')
+    fp.write(data)
+    fp.close()
