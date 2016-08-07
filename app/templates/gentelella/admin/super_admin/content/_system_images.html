@@ -1,0 +1,72 @@
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        {% for image in placeholder_images %}
+            <h4>{{ image }}</h4>
+            <div class="system-images" style="margin-left:50px;">
+                <img src='{{ url_for("static", filename="placeholders/" + placeholder_images[image]) }}' style="width:80%; "/><br>
+                <button class="btn btn-primary btn-sys" id="sys-{{ image }}" style="margin-top:10px;"> Change</button>
+            </div>
+            <br><hr>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="modal fade" id="system-image-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Update Image</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+            <input type="hidden" name="background_url" id="background_url">
+            <div class="item form-group" id="image-upload-group"
+                 {% if event and event.background_url and event.background_url != '' %}style="display: none;"{% endif %}>
+                <label>Event Image</label><br>
+                <div class="image-box">
+                    <input type="file" id="event-image-upload" name="event-image-upload"
+                           class="image-upload-btn no-js"
+                           accept="image/*"/>
+                    <label class="file-label" for="event-image-upload">
+                        <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Event Image
+                    </label><br>
+                </div>
+                <span class="text-muted" style="color: #a2a2a2;">
+                    We recommend using at least a 2160x1080px (2:1 ratio) image<br>that's no larger than 10MB.
+                </span>
+            </div>
+
+            <div class="item form-group" id="image-view-group"
+                 {% if not event or not event.background_url or event.background_url == '' %}style="display: none;"{% endif %}>
+                <label>Event Image</label><br>
+                <img src="{{ event.background_url | default('', true) }}"
+                     style="width: 350px; height: 175px;"><br><br>
+                {% if not event %}
+                    <button type="button" class="btn btn-sm btn-default" data-target="#cropper-modal"
+                            data-toggle="modal">
+                        <i class="fa fa-arrows" aria-hidden="true"></i>
+                        Adjust
+                    </button>
+                {% endif %}
+                <button type="button" class="btn btn-sm btn-default" id="remove-image-btn">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    Remove
+                </button>
+                <br>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary">Update</button>
+        <button class="btn" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+    $('.btn-sys').click(function(){
+        $('#system-image-modal').modal();
+    })
+</script>

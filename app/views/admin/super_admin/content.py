@@ -9,6 +9,7 @@ from app.settings import get_settings, set_settings
 class SuperAdminContentView(SuperAdminBaseView):
     @expose('/', methods=('GET', 'POST'))
     def index_view(self):
+        placeholder_images = DataGetter.get_event_default_images()
         pages = DataGetter.get_all_pages()
         settings = get_settings()
         if request.method == 'POST':
@@ -17,7 +18,8 @@ class SuperAdminContentView(SuperAdminBaseView):
                 settings[key] = value[0]
                 set_settings(**settings)
         return self.render(
-            '/gentelella/admin/super_admin/content/content.html', pages=pages, settings=settings
+            '/gentelella/admin/super_admin/content/content.html', pages=pages, settings=settings,
+            placeholder_images=placeholder_images
         )
 
     @expose('/pages/create', methods=['POST'])
