@@ -116,3 +116,10 @@ class TicketingView(BaseView):
                                    account=account)
 
         return "Error"
+
+    @expose('/<order_identifier>/paypal/<function>/', methods=('GET',))
+    def paypal_callback(self, order_identifier, function):
+        order = TicketingManager.get_and_set_expiry(order_identifier)
+        if not order:
+            abort(404)
+        return function

@@ -1,13 +1,20 @@
 """Copyright 2016 Niranjan Rajendran"""
+import urlparse
+from urllib import urlencode
+from flask import url_for
+
+import requests
+
+from app.helpers.data_getter import DataGetter
+from app.helpers.data import save_to_db
 from app.helpers.ticketing import represents_int
 from app.models.stripe_authorization import StripeAuthorization
 from app.settings import get_settings
 
-
-class PaymentsManager(object):
+class StripePaymentsManager(object):
 
     @staticmethod
-    def get_stripe_credentials(event=None):
+    def get_credentials(event=None):
         if not event:
             settings = get_settings()
             if settings.stripe_secret_key and settings.stripe_publishable_key and settings.stripe_secret_key != "" and \
@@ -31,8 +38,21 @@ class PaymentsManager(object):
             else:
                 return None
 
+class PayPalPaymentsManager(object):
+
+    api_version = 93
+
     @staticmethod
-    def get_paypal_credentials(override_mode=False, is_testing=False):
+    def get_credentials(event, override_mode=False, is_testing=False):
+        if represents_int(event):
+            event = DataGetter.get_event(event)
+
+        if not event:
+            return None
+
+        if not event.paypal_email or event.paypal_email == "":
+            return None
+
         settings = get_settings()
 
         if not override_mode:
@@ -48,13 +68,19 @@ class PaymentsManager(object):
             credentials = {
                 'USER': settings.paypal_sandbox_username,
                 'PWD': settings.paypal_sandbox_password,
-                'SIGNATURE': settings.paypal_sandbox_signature
+                'SIGNATURE': settings.paypal_sandbox_signature,
+                'SERVER': 'https://api-3t.sandbox.paypal.com/nvp',
+                'CHECKOUT_URL': 'https://www.sandbox.paypal.com/cgi-bin/webscr',
+                'EMAIL': event.paypal_email
             }
         else:
             credentials = {
                 'USER': settings.paypal_live_username,
                 'PWD': settings.paypal_live_password,
-                'SIGNATURE': settings.paypal_live_signature
+                'SIGNATURE': settings.paypal_live_signature,
+                'SERVER': 'https://api-3t.paypal.com/nvp',
+                'CHECKOUT_URL': 'https://www.paypal.com/cgi-bin/webscr',
+                'EMAIL': event.paypal_email
             }
 
         if credentials['USER'] and credentials['USER'] and credentials['USER'] and credentials['USER'] != "" and \
@@ -63,3 +89,82 @@ class PaymentsManager(object):
         else:
             return None
 
+    @staticmethod
+    def get_checkout_url(order, currency='USD', credentials=None):
+        if not credentials:
+            credentials = PayPalPaymentsManager.get_credentials(order.event)
+
+        if not credentials:
+            raise Exception('PayPal credentials have not be set correctly')
+
+        data = {
+            'USER': credentials['USER'],
+            'PWD': credentials['PWD'],
+            'SIGNATURE': credentials['SIGNATURE'],
+            'SUBJECT': credentials['EMAIL'],
+            'METHOD': 'SetExpressCheckout',
+            'VERSION': PayPalPaymentsManager.api_version,
+            'PAYMENTREQUEST_0_PAYMENTACTION': 'SALE',
+            'PAYMENTREQUEST_0_AMT': order.amount,
+            'PAYMENTREQUEST_0_CURRENCYCODE': currency,
+            'RETURNURL': url_for('ticketing.paypal_callback', order_identifier=order.identifier,
+                                 function='success', _external=True),
+            'CANCELURL': url_for('ticketing.paypal_callback', order_identifier=order.identifier,
+                                 function='cancel', _external=True)
+        }
+
+        response = requests.post(credentials['SERVER'], data=data)
+        token = dict(urlparse.parse_qsl(response.text))['TOKEN']
+        order.paypal_token = token
+        save_to_db(order)
+        return credentials['CHECKOUT_URL'] + "?" + urlencode({
+            'cmd': '_express-checkout',
+            'token': token
+        })
+
+    @staticmethod
+    def get_approved_payment_details(order, credentials=None):
+
+        if not credentials:
+            credentials = PayPalPaymentsManager.get_credentials(order.event)
+
+        if not credentials:
+            raise Exception('PayPal credentials have not be set correctly')
+
+        data = {
+            'USER': credentials['USER'],
+            'PWD': credentials['PWD'],
+            'SIGNATURE': credentials['SIGNATURE'],
+            'SUBJECT': credentials['EMAIL'],
+            'METHOD': 'GetExpressCheckoutDetails',
+            'VERSION': PayPalPaymentsManager.api_version,
+            'RETURNURL': order.paypal_token
+        }
+
+        response = requests.post(credentials['SERVER'], data=data)
+        return dict(urlparse.parse_qsl(response.text))
+
+    @staticmethod
+    def capture_payment(order, payer_id, currency='USD', credentials=None):
+        if not credentials:
+            credentials = PayPalPaymentsManager.get_credentials(order.event)
+
+        if not credentials:
+            raise Exception('PayPal credentials have not be set correctly')
+
+        data = {
+            'USER': credentials['USER'],
+            'PWD': credentials['PWD'],
+            'SIGNATURE': credentials['SIGNATURE'],
+            'SUBJECT': credentials['EMAIL'],
+            'METHOD': 'DoExpressCheckoutPayment',
+            'VERSION': PayPalPaymentsManager.api_version,
+            'TOKEN': order.paypal_token,
+            'PAYERID': payer_id,
+            'PAYMENTREQUEST_0_PAYMENTACTION': 'SALE',
+            'PAYMENTREQUEST_0_AMT': order.amount,
+            'PAYMENTREQUEST_0_CURRENCYCODE': currency,
+        }
+
+        response = requests.post(credentials['SERVER'], data=data)
+        return dict(urlparse.parse_qsl(response.text))
