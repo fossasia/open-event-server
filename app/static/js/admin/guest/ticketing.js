@@ -101,7 +101,7 @@ $orderPaymentForm.submit(function (e) {
                         $payViaStripe.click();
                         break;
                     case "start_paypal":
-                        createSnackbar("Redirecting you to PayPal ...");
+                        createSnackbar("Redirecting you to PayPal to complete the payment...");
                         $registrationInformationHolder.fadeOut();
                         location.href = json.redirect_url;
                         break;

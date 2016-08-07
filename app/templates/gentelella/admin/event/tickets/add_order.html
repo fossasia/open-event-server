@@ -43,7 +43,7 @@
                 {% for ticket in event.tickets %}
                     <tr>
                         <td>{{ ticket.name }}</td>
-                        <td>${{ ticket.price | money }}</td>
+                        <td>{{ event.payment_currency | currency_symbol }}{{ ticket.price | money }}</td>
                         <td>
                             <div class="form-group">
                                 <input type="hidden" name="ticket_ids[]" value="{{ ticket.id }}">

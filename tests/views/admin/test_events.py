@@ -34,8 +34,8 @@ class TestEvents(OpenEventViewTestCase):
             del data['copyright']
             del data['call_for_papers']
             data['name'] = 'TestEvent 1'
-            data['payment_country'] = 'Mycountry'
-            data['payment_currency'] = 'Dollars'
+            data['payment_country'] = 'United States'
+            data['payment_currency'] = 'USD United States Dollars $'
             data['paypal_email'] = 'test@gmail.com'
             data['sponsors_state'] = 'on'
             data['sponsors[name]'] = ['Sponsor 1', 'Sponsor 2']
@@ -110,7 +110,8 @@ class TestEvents(OpenEventViewTestCase):
             data = POST_EVENT_DATA.copy()
             del data['copyright']
             del data['call_for_papers']
-            data['payment_currency'] = ''
+            data['payment_country'] = 'United States'
+            data['payment_currency'] = 'USD United States Dollars $'
             data['start_date'] = '07/04/2016'
             data['start_time'] = '19:00'
             data['end_date'] = '07/04/2016'
@@ -128,7 +129,8 @@ class TestEvents(OpenEventViewTestCase):
             data = POST_EVENT_DATA.copy()
             del data['copyright']
             del data['call_for_papers']
-            data['payment_currency'] = ''
+            data['payment_country'] = 'United States'
+            data['payment_currency'] = 'USD United States Dollars $'
             data['start_date'] = '07/04/2016'
             data['start_time'] = '19:00'
             data['end_date'] = '07/04/2016'
@@ -152,6 +154,8 @@ class TestEvents(OpenEventViewTestCase):
             data = POST_EVENT_DATA.copy()
             del data['copyright']
             del data['call_for_papers']
+            data['payment_country'] = 'United States'
+            data['payment_currency'] = 'USD United States Dollars $'
             data['sponsors_state'] = 'on'
             data['sponsors[name]'] = ['Sponsor 1', 'Sponsor 2']
             data['sponsors[type]'] = ['Gold', 'Silver']

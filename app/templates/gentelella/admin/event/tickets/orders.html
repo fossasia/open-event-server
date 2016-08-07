@@ -107,7 +107,7 @@
                     {% endif %}
 
                 </td>
-                <td>$ {{ order.amount | money }}</td>
+                <td>{{ event.payment_currency | currency_symbol }}{{ order.amount | money }}</td>
                 <td>{{ order.get_tickets_count() }}</td>
                 <td>{{ order.user.email }}</td>
             </tr>
