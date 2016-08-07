@@ -107,6 +107,24 @@ class TestGetListQueries(OpenEventTestCase):
                 resp = self.app.get(path + '?%s=2015-05-12T00:00:00' % _)
                 self.assertIn('TestSession', resp.data)
 
+    def test_session_order_by(self):
+        with app.test_request_context():
+            path = get_path(1, 'sessions')
+            self._post(path, POST_SESSION_DATA)
+            # 2016-05-30 8:47 to 9:47
+            new_data = POST_SESSION_DATA.copy()
+            new_data['start_time'] = '2016-05-30T10:47:37'
+            new_data['end_time'] = '2016-05-30T11:47:37'
+            self._post(path, new_data)
+            # check ordering
+            data = json.loads(self.app.get(path + '?order_by=start_time.asc').data)
+            self.assertEqual(data[0]['id'], 1)
+            self.assertEqual(data[1]['id'], 2)
+            # order reverse
+            data = json.loads(self.app.get(path + '?order_by=start_time.desc').data)
+            self.assertEqual(data[0]['id'], 2)
+            self.assertEqual(data[1]['id'], 1)
+
 
 if __name__ == '__main__':
     unittest.main()
