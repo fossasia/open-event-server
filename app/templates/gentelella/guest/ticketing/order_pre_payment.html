@@ -36,7 +36,9 @@
                     <br>
                     {% if not current_user.is_authenticated and not from_organizer %}
                         <div style="width: 100%; text-align: center">
-                            Have you used Open Event before? <a href="{{ url_for('admin.login_view', next=url_for('ticketing.view_order', order_identifier=order.identifier, _external=True)) }}">Sign In</a> To Your Account to
+                            Have you used Open Event before? <a
+                                href="{{ url_for('admin.login_view', next=url_for('ticketing.view_order', order_identifier=order.identifier, _external=True)) }}">Sign
+                            In</a> To Your Account to
                             continue.
                         </div>
                         <br>
@@ -65,7 +67,9 @@
                         <label for="email" class="col-sm-4 control-label">Email <span
                                 class="required">*</span></label>
                         <div class="col-sm-6">
-                            <input type="email" class="form-control" {% if current_user.is_authenticated and not from_organizer %} readonly {% else %} name="email" {% endif %}
+                            <input type="email" class="form-control"
+                                    {% if current_user.is_authenticated and not from_organizer %} readonly {% else %}
+                                   name="email" {% endif %}
                                    id="email" required value="{{ current_user.email | default('', true) }}">
                             <div class="help-block with-errors"></div>
                         </div>
@@ -138,18 +142,38 @@
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="zipcode" class="col-sm-4 control-label">Pay Via <span
+                                    class="required">*</span></label>
+                            <div class="col-sm-6">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="pay_via_service" id="pay_via_service1" value="stripe" style="margin-top: 14px;"
+                                               checked>
+                                            <img src="{{ url_for('static', filename='img/stripe_logos.png') }}" alt="Pay with Stripe using your favorite card" />
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label style="margin-top: 10px;">
+                                        <input type="radio" name="pay_via_service" id="pay_via_service2" value="paypal" style="margin-top: 6px;">
+                                        <img src="{{ url_for('static', filename='img/paypal_logo.png') }}" alt="Pay with PayPal, PayPal Credit or any major credit card" />
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     {% endif %}
                     <br>
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-4 control-label"></label>
                         <div class="col-sm-6">
-                            By clicking "{% if order.amount == 0 or (is_organizer and (pay_via == 'stripe' or pay_via == 'paypal')) %}Order Now{% else %}Pay Now{% endif %}", I acknowledge that I have read and agree with the
+                            By clicking "
+                            {% if order.amount == 0 or (is_organizer and (pay_via == 'stripe' or pay_via == 'paypal')) %}
+                                Order Now{% else %}Pay Now{% endif %}", I acknowledge that I have read and agree with
+                            the
                             Open Event terms of service, and privacy policy.<br><br>
-                            <button type="submit" class="btn btn-success btn-lg">{% if order.amount == 0 or (is_organizer and (pay_via == 'stripe' or pay_via == 'paypal')) %}Order now{% else %}Pay Now{% endif %}</button>
-                            {% if order.amount > 0 %}
-                                <br>
-                                <img src="{{ url_for('static', filename='img/paymentlogoshorizontal.png') }}">
-                            {% endif %}
+                            <button type="submit" class="btn btn-success btn-lg">
+                                {% if order.amount == 0 or (is_organizer and (pay_via == 'stripe' or pay_via == 'paypal')) %}
+                                    Order now{% else %}Pay Now{% endif %}</button>
                         </div>
                     </div>
                 </form>

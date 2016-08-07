@@ -349,6 +349,4 @@ class TicketingManager(object):
             },
             description=order.event.name + " ticket(s)"
         )
-
         return charge
-

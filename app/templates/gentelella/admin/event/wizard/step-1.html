@@ -414,9 +414,7 @@
                     <input type="hidden" name="stripe_email" value="{{ event.stripe.stripe_email | default('', true) }}">
                     The stripe account <strong class="stripe-email">{{ event.stripe.stripe_email | default('', true) }}</strong> has been connected. <a href="#" class="stripe-delink">Click to De-link the account.</a><br><br>
                 </div>
-                <button type="button" class="btn btn-info stripe-connect" style="{% if event.stripe %}display:none;{% endif %}">
-                    <i class="fa fa-cc-stripe fa-lg fa-fw" aria-hidden="true"></i> Connect with Stripe
-                </button>
+                <a href="#" class="stripe-connect" style="{% if event.stripe %}display:none;{% endif %}"><span>Connect with Stripe</span></a>
             </div>
             <div class="">
                 <a href='#' data-toggle="modal" data-target="#taxModal" title="Add tax option">
@@ -1238,11 +1236,12 @@
         }
 
         var $stripeConnectedMessage = $("#stripe-connected-message");
-        $(".stripe-connect").click(function () {
+        $(".stripe-connect").click(function (e) {
+            e.preventDefault();
             $.oauthpopup({
                 path: "https://connect.stripe.com/oauth/authorize?response_type=code&client_id={{ settings.stripe_client_id }}&scope=read_write&redirect_uri={{ url_for('ticketing.stripe_callback', _external=true) }}",
                 callback: function () {
-                    // console.log(window.oauth_response);
+                    // TODO Disallow test accounts. Only accept live accounts.
                     if (1 || window.oauth_response.live_mode) {
                         $("input[name=stripe_added]").val("yes");
                         $stripeConnectedMessage.find("input[name=stripe_secret_key]").val(window.oauth_response.access_token);
