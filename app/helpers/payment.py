@@ -56,8 +56,8 @@ class PayPalPaymentsManager(object):
         settings = get_settings()
 
         if not override_mode:
-            if settings.paypal_mode and settings.paypal_mode != "":
-                if settings.paypal_mode == 'live':
+            if settings['paypal_mode'] and settings['paypal_mode'] != "":
+                if settings['paypal_mode'] == 'live':
                     is_testing = False
                 else:
                     is_testing = True
@@ -66,18 +66,18 @@ class PayPalPaymentsManager(object):
 
         if is_testing:
             credentials = {
-                'USER': settings.paypal_sandbox_username,
-                'PWD': settings.paypal_sandbox_password,
-                'SIGNATURE': settings.paypal_sandbox_signature,
+                'USER': settings['paypal_sandbox_username'],
+                'PWD': settings['paypal_sandbox_password'],
+                'SIGNATURE': settings['paypal_sandbox_signature'],
                 'SERVER': 'https://api-3t.sandbox.paypal.com/nvp',
                 'CHECKOUT_URL': 'https://www.sandbox.paypal.com/cgi-bin/webscr',
                 'EMAIL': event.paypal_email
             }
         else:
             credentials = {
-                'USER': settings.paypal_live_username,
-                'PWD': settings.paypal_live_password,
-                'SIGNATURE': settings.paypal_live_signature,
+                'USER': settings['paypal_live_username'],
+                'PWD': settings['paypal_live_password'],
+                'SIGNATURE': settings['paypal_live_signature'],
                 'SERVER': 'https://api-3t.paypal.com/nvp',
                 'CHECKOUT_URL': 'https://www.paypal.com/cgi-bin/webscr',
                 'EMAIL': event.paypal_email
