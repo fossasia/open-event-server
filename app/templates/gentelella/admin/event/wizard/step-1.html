@@ -389,7 +389,7 @@
                                 <option value="">Please select a currency</option>
                             {% endif %}
                             {% for currency in payment_currencies %}
-                                <option value="{{ currency.decode('utf-8') }}" {{ "selected" if event and event.payment_currency == currency else '' }}>{{ currency.decode('utf-8') }}</option>
+                                <option value="{{ currency.decode('utf-8') }}" {{ "selected" if event and event.payment_currency == currency.split(' ')[0] else '' }}>{{ currency.decode('utf-8') }}</option>
                             {% endfor %}
                         </select>
                     </div>

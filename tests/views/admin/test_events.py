@@ -110,6 +110,7 @@ class TestEvents(OpenEventViewTestCase):
             data = POST_EVENT_DATA.copy()
             del data['copyright']
             del data['call_for_papers']
+            data['payment_currency'] = ''
             data['start_date'] = '07/04/2016'
             data['start_time'] = '19:00'
             data['end_date'] = '07/04/2016'
@@ -127,6 +128,7 @@ class TestEvents(OpenEventViewTestCase):
             data = POST_EVENT_DATA.copy()
             del data['copyright']
             del data['call_for_papers']
+            data['payment_currency'] = ''
             data['start_date'] = '07/04/2016'
             data['start_time'] = '19:00'
             data['end_date'] = '07/04/2016'

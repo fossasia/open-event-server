@@ -899,6 +899,10 @@ class DataManager(object):
                                    licence_url=licence_url,
                                    logo=logo)
 
+        payment_currency = ''
+        if form['payment_currency'] != '':
+            payment_currency = form.get('payment_currency').split(' ')[0]
+
         event = Event(name=form['name'],
                       start_time=DataManager.get_event_time_field_format(form, 'start'),
                       end_time=DataManager.get_event_time_field_format(form, 'end'),
@@ -917,7 +921,7 @@ class DataManager(object):
                       show_map=1 if form.get('show_map') == "on" else 0,
                       creator=login.current_user,
                       payment_country=form.get('payment_country', ''),
-                      payment_currency=form.get('payment_currency', ''),
+                      payment_currency=payment_currency,
                       paypal_email=form.get('paypal_email', ''))
 
         event = DataManager.update_searchable_location_name(event)
