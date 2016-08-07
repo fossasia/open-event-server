@@ -9,7 +9,9 @@ from cStringIO import StringIO
 import pycountry
 
 from app import get_settings
+from app.helpers.data import save_to_db
 from app.helpers.ticketing import TicketingManager
+from app.helpers.payment import PayPalPaymentsManager
 
 def create_pdf(pdf_data):
     pdf = StringIO()
@@ -69,19 +71,27 @@ class TicketingView(BaseView):
     def initiate_order_payment(self):
         result = TicketingManager.initiate_order_payment(request.form)
         if result:
-            return jsonify({
-                "status": "ok",
-                "email": result.user.email,
-                "action": "start_stripe" if result.status == 'initialized' else "show_completed"
-            })
+            if request.form.get('pay_via_service', 'stripe') == 'stripe':
+                return jsonify({
+                    "status": "ok",
+                    "email": result.user.email,
+                    "action": "start_stripe" if result.status == 'initialized' else "show_completed"
+                })
+            else:
+                return jsonify({
+                    "status": "ok",
+                    "email": result.user.email,
+                    "action": "start_paypal",
+                    "redirect_url": PayPalPaymentsManager.get_checkout_url(result)
+                })
         else:
             return jsonify({
                 "status": "error"
             })
 
     @expose('/charge/payment/', methods=('POST',))
-    def charge_order_payment(self):
-        result = TicketingManager.charge_order_payment(request.form)
+    def charge_stripe_order_payment(self):
+        result = TicketingManager.charge_stripe_order_payment(request.form)
         if result:
             return jsonify({
                 "status": "ok"
@@ -119,7 +129,14 @@ class TicketingView(BaseView):
 
     @expose('/<order_identifier>/paypal/<function>/', methods=('GET',))
     def paypal_callback(self, order_identifier, function):
-        order = TicketingManager.get_and_set_expiry(order_identifier)
-        if not order:
+        order = TicketingManager.get_order_by_identifier(order_identifier)
+        if not order or order.status == 'expired':
             abort(404)
+        if function == 'cancel':
+            order.status = 'expired'
+            save_to_db(order)
+            return redirect(url_for('event_detail.display_event_detail_home', event_id=order.event_id))
+        elif function == 'success':
+            TicketingManager.charge_paypal_order_payment(order)
+            return redirect(url_for('.view_order', order_identifier=order_identifier))
         return function

@@ -149,13 +149,13 @@
                                 <div class="radio">
                                     <label>
                                         <input type="radio" name="pay_via_service" id="pay_via_service1" value="stripe" style="margin-top: 14px;"
-                                               checked>
+                                               checked required>
                                             <img src="{{ url_for('static', filename='img/stripe_logos.png') }}" alt="Pay with Stripe using your favorite card" />
                                     </label>
                                 </div>
                                 <div class="radio">
                                     <label style="margin-top: 10px;">
-                                        <input type="radio" name="pay_via_service" id="pay_via_service2" value="paypal" style="margin-top: 6px;">
+                                        <input type="radio" name="pay_via_service" id="pay_via_service2" value="paypal" style="margin-top: 6px;" required>
                                         <img src="{{ url_for('static', filename='img/paypal_logo.png') }}" alt="Pay with PayPal, PayPal Credit or any major credit card" />
                                     </label>
                                 </div>
@@ -189,7 +189,7 @@
         window.order_identifier = "{{ order.identifier }}";
         window.expire_url = "{{ url_for('ticketing.expire_order', order_identifier=order.identifier) }}";
         window.expired_redirect = "{{ url_for('event_detail.display_event_detail_home', event_id=order.event_id, expired='yes') }}";
-        window.stripe_charge_at = "{{ url_for('ticketing.charge_order_payment') }}";
+        window.stripe_charge_at = "{{ url_for('ticketing.charge_stripe_order_payment') }}";
         window.stripe_publishable_key = "{{ stripe_publishable_key }}";
         window.event_name = "{{ order.event.name }}";
         window.order_amount = {{ order.amount }};

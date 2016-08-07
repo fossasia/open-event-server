@@ -1,15 +1,24 @@
 """Copyright 2016 Niranjan Rajendran"""
 import urlparse
 from urllib import urlencode
+
+import stripe
 from flask import url_for
 
 import requests
 
 from app.helpers.data_getter import DataGetter
 from app.helpers.data import save_to_db
-from app.helpers.ticketing import represents_int
 from app.models.stripe_authorization import StripeAuthorization
 from app.settings import get_settings
+
+def represents_int(s):
+    try:
+        int(s)
+        return True
+    except:
+        return False
+
 
 class StripePaymentsManager(object):
 
@@ -37,6 +46,37 @@ class StripePaymentsManager(object):
                 }
             else:
                 return None
+
+    @staticmethod
+    def capture_payment(order):
+
+        credentials = StripePaymentsManager.get_credentials(order.event)
+        if not credentials:
+            raise Exception('Stripe is incorrectly configured')
+
+        stripe.api_key = credentials['SECRET_KEY']
+
+        try:
+            customer = stripe.Customer.create(
+                email=order.user.email,
+                source=order.stripe_token
+            )
+
+            charge = stripe.Charge.create(
+                customer=customer.id,
+                amount=int(order.amount * 100),
+                currency='usd',
+                metadata={
+                    'order_id': order.id,
+                    'event': order.event.name,
+                    'user_id': order.user_id,
+                    'event_id': order.event_id
+                },
+                description=order.event.name + " ticket(s)"
+            )
+            return charge
+        except:
+            return None
 
 class PayPalPaymentsManager(object):
 
