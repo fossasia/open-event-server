@@ -135,7 +135,11 @@ def sessions_end_time_lt(value, query):
 
 
 def sessions_order_by(value, query):
-    return query.order_by(value.replace('.', ' '))
+    col, direction = value.split('.')
+    col = getattr(Session, col)
+    if direction == 'desc':
+        col = col.desc()
+    return query.order_by(col)
 
 
 #######
