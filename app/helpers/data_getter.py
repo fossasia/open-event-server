@@ -683,6 +683,8 @@ class DataGetter(object):
 
     @staticmethod
     def get_module():
+        """Get Module with the largest id (latest Module).
+        """
         return Module.query.order_by(desc(Module.id)).first()
 
     @staticmethod
