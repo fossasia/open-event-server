@@ -113,6 +113,13 @@ class PayPalPaymentsManager(object):
                                  function='cancel', _external=True)
         }
 
+        count = 1
+        for ticket_order in order.tickets:
+            data['L_PAYMENTREQUEST_' + str(count) + '_NAMEm'] = ticket_order.ticket.name
+            data['L_PAYMENTREQUEST_' + str(count) + '_QTYm'] = ticket_order.quantity
+            data['L_PAYMENTREQUEST_' + str(count) + '_AMTm'] = ticket_order.ticket.price
+            count += 1
+
         response = requests.post(credentials['SERVER'], data=data)
         token = dict(urlparse.parse_qsl(response.text))['TOKEN']
         order.paypal_token = token
