@@ -12,9 +12,9 @@ from app.helpers.data import save_to_db
 from app.models.stripe_authorization import StripeAuthorization
 from app.settings import get_settings
 
-def represents_int(s):
+def represents_int(string):
     try:
-        int(s)
+        int(string)
         return True
     except:
         return False

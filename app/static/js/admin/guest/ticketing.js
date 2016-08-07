@@ -76,28 +76,28 @@ $orderPaymentForm.submit(function (e) {
                 }
 
                 switch (json.action) {
-                    case "show_completed":
-                        createSnackbar("Your payment was a success. Redirecting ...");
-                        setTimeout(function () {
-                            location.reload(true);
-                        }, 1000);
-                        window.stop_timer = "right_away";
-                        $registrationInformationHolder.fadeOut();
-                        break;
-                    case "start_stripe":
-                        $payViaStripe.click();
-                        break;
-                    case "start_paypal":
-                        createSnackbar("Redirecting you to PayPal ...");
-                        $registrationInformationHolder.fadeOut();
-                        location.href = json.redirect_url;
-                        break;
-                    default:
-                        $orderPaymentForm.setFormLoading(false, 'Pay now');
-                        createSnackbar("An error occurred while initializing your payment.", "Try again", function () {
-                            $orderPaymentForm.submit();
-                        });
-                        break;
+                case "show_completed":
+                    createSnackbar("Your payment was a success. Redirecting ...");
+                    setTimeout(function () {
+                        location.reload(true);
+                    }, 1000);
+                    window.stop_timer = "right_away";
+                    $registrationInformationHolder.fadeOut();
+                    break;
+                case "start_stripe":
+                    $payViaStripe.click();
+                    break;
+                case "start_paypal":
+                    createSnackbar("Redirecting you to PayPal ...");
+                    $registrationInformationHolder.fadeOut();
+                    location.href = json.redirect_url;
+                    break;
+                default:
+                    $orderPaymentForm.setFormLoading(false, 'Pay now');
+                    createSnackbar("An error occurred while initializing your payment.", "Try again", function () {
+                        $orderPaymentForm.submit();
+                    });
+                    break;
                 }
             } else {
                 $orderPaymentForm.setFormLoading(false, 'Pay now');
