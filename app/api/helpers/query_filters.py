@@ -80,7 +80,7 @@ def event_search_location(value, query):
 
 
 def get_query_close_area(lng, lat):
-    up_lat =  lat + 0.249788
+    up_lat = lat + 0.249788
     bottom_lat = lat - 0.249788
     left_lng = lng - 0.249788
     right_lng = lng + 0.249788
@@ -134,6 +134,10 @@ def sessions_end_time_lt(value, query):
     return query.filter(Session.end_time <= DateTime().from_str(value))
 
 
+def sessions_order_by(value, query):
+    return query.order_by(value.replace('.', ' '))
+
+
 #######
 # ADD CUSTOM FILTERS TO LIST
 #######
@@ -153,4 +157,5 @@ FILTERS_LIST = {
     '__sessions_start_time_lt': sessions_start_time_lt,
     '__sessions_end_time_gt': sessions_end_time_gt,
     '__sessions_end_time_lt': sessions_end_time_lt,
+    '__sessions_order_by': sessions_order_by
 }

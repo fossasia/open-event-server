@@ -201,6 +201,9 @@ SESSIONS_PARAMS = {
     'start_time_lt': {},
     'end_time_gt': {},
     'end_time_lt': {},
+    'order_by': {
+        'description': 'Order by a field, example "start_time.asc" or "end_time.desc"'
+    }
 }
 
 # #########
@@ -217,6 +220,7 @@ class SessionResource():
     session_parser.add_argument('start_time_lt', dest='__sessions_start_time_lt')
     session_parser.add_argument('end_time_gt', dest='__sessions_end_time_gt')
     session_parser.add_argument('end_time_lt', dest='__sessions_end_time_lt')
+    session_parser.add_argument('order_by', dest='__sessions_order_by')
 
 
 @api.route('/events/<int:event_id>/sessions/<int:session_id>')
