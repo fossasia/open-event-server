@@ -255,7 +255,7 @@ class TicketingManager(object):
     @staticmethod
     def charge_order_payment(form):
         order = TicketingManager.get_and_set_expiry(form['identifier'])
-        order.token = form['stripe_token_id']
+        order.stripe_token = form['stripe_token_id']
         save_to_db(order)
 
         if order.event.stripe:
@@ -351,3 +351,4 @@ class TicketingManager(object):
         )
 
         return charge
+
