@@ -12,8 +12,7 @@ from app.helpers.data import save_to_db
 from app.helpers.data_getter import DataGetter
 from app.helpers.helpers import send_email_after_export
 
-from ..events import DAO as EventDAO, EVENT, \
-    LinkDAO as SocialLinkDAO, SOCIAL_LINK
+from ..events import DAO as EventDAO, EVENT
 from ..microlocations import DAO as MicrolocationDAO, MICROLOCATION
 from ..sessions import DAO as SessionDAO, SESSION, \
     TypeDAO as SessionTypeDAO, SESSION_TYPE
@@ -32,7 +31,6 @@ EXPORTS = [
     ('sponsors', SponsorDAO, SPONSOR),
     ('tracks', TrackDAO, TRACK),
     ('session_types', SessionTypeDAO, SESSION_TYPE),
-    ('social_links', SocialLinkDAO, SOCIAL_LINK),
     ('forms', CustomFormDAO, CUSTOM_FORM)
 ]
 
