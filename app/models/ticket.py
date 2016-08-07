@@ -10,6 +10,7 @@ class Ticket(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     description = db.Column(db.String)
+    description_toggle = db.Column(db.Boolean)
     type = db.Column(db.String)
     quantity = db.Column(db.Integer)
     price = db.Column(db.Integer)
@@ -30,6 +31,7 @@ class Ticket(db.Model):
                  sales_start,
                  sales_end,
                  description=None,
+                 description_toggle=True,
                  event=None,
                  quantity=100,
                  price=0,
@@ -40,6 +42,7 @@ class Ticket(db.Model):
         self.type = type
         self.event = event
         self.description = description
+        self.description_toggle = description_toggle
         self.price = price
         self.sales_start = sales_start
         self.sales_end = sales_end

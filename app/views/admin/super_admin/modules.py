@@ -1,38 +1,25 @@
 from flask_admin import expose
 from flask import request
 from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView
-from app.helpers.data import create_modules
+from app.models.modules import Module
+from app.helpers.data import  save_to_db
 from app.helpers.data_getter import DataGetter
 
-class SuperAdminModulesView(SuperAdminBaseView):
 
-    @expose('/')
+class SuperAdminModulesView(SuperAdminBaseView):
+    @expose('/', methods=['GET', 'POST'])
     def index_view(self):
         module = DataGetter.get_module()
-        include_settings = []
+        if request.method == 'GET':
+            if not module:
+                module = Module()
+                save_to_db(module)
+        elif request.method == 'POST':
+            form = request.form
+            module.ticket_include = True if form.get('ticketing') == 'on' else False
+            module.payment_include = True if form.get('payments') == 'on' else False
+            module.donation_include = True if form.get('donations') == 'on' else False
+            save_to_db(module)
 
-        if module:
-            if module.ticket_include:
-                include_settings.append('ticketing')
-            if module.payment_include:
-                include_settings.append('payments')
-            if module.donation_include:
-                include_settings.append('donations')
-
-        return self.render('/gentelella/admin/super_admin/modules/modules.html', include_settings=include_settings)
-
-    @expose('/save', methods=['GET', 'POST'])
-    def modules_save_view(self):
-        create_modules(request.form)
-
-        include_settings = []
-        settings = request.form.getlist('modules_form[value]')
-
-        if settings[0][24] == '1':
-            include_settings.append('ticketing')
-        if settings[0][49] == '1':
-            include_settings.append('payments')
-        if settings[0][75] == '1':
-            include_settings.append('donations')
-
-        return self.render('/gentelella/admin/super_admin/modules/modules.html', include_settings=include_settings)
+        return self.render('/gentelella/admin/super_admin/modules/modules.html',
+            module=module)

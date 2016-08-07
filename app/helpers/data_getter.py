@@ -683,7 +683,9 @@ class DataGetter(object):
 
     @staticmethod
     def get_module():
-        return Module.query.get(1)
+        """Get Module with the largest id (latest Module).
+        """
+        return Module.query.order_by(desc(Module.id)).first()
 
     @staticmethod
     def get_export_jobs(event_id):
