@@ -1,0 +1,9 @@
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        {% for image in placeholder_images %}
+            <h4>{{ image }}</h4>
+            <img src='{{ url_for("static", filename="placeholders/" + placeholder_images[image]) }}' style="width:80%; margin-left:50px;"/>
+            <br><hr>
+        {% endfor %}
+    </div>
+</div>
