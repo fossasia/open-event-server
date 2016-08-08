@@ -43,7 +43,7 @@ class FbOAuth(object):
     """Facebook Credentials"""
     Fb_AUTH_URI = 'https://www.facebook.com/dialog/oauth'
     Fb_TOKEN_URI = 'https://graph.facebook.com/oauth/access_token'
-    Fb_USER_INFO = 'https://graph.facebook.com/me?fields=email,id,name,picture'
+    Fb_USER_INFO = 'https://graph.facebook.com/me?fields=email,id,name,picture,bio,last_name,first_name,link'
     SCOPE = ['public_profile', 'email']
 
     @classmethod
