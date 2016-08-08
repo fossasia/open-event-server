@@ -93,7 +93,7 @@
                     </div>
 
                     <!-- TicketTemplate -->
-                    {% macro ticket_template(sales_start=None, sales_end=None, name='', description='', price=0, type=None, quantity=100, min_order=1, max_order=10) %}
+                    {% macro ticket_template(serialno, sales_start=None, sales_end=None, name='', description='', description_toggle=True, price=0, type=None, quantity=100, min_order=1, max_order=10) %}
                     <tr>
                         <td>
                             <input type="hidden" name="tickets[type]" value="{{ type | default('', true) }}">
@@ -132,7 +132,7 @@
                                 <div class="col-xs-6">
                                     <div class="item form-group">
                                         <label>Description</label>
-                                        <textarea name="tickets[description]" class="form-control" rows="5">{{ description }}</textarea>
+                                        <textarea name="tickets[description]" class="form-control" rows="7" style="border-radius: 3px;" placeholder="Add a description for the Ticket">{{ description }}</textarea>
                                     </div>
                                 </div>
                                 <div class="col-xs-6">
@@ -171,6 +171,16 @@
                                             <div class="item form-group">
                                                 <label>Max Order</label>
                                                 <input type="number" min="1" class="form-control" value="{{ max_order }}" placeholder="10" name="tickets[max_order]">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="item form-group">
+                                                <label style="font-weight: normal;">
+                                                    <input type="checkbox" class="checkbox flat form-control" name="tickets_description_toggle_{{ serialno }}" {{ 'checked' if description_toggle else ''}}>
+                                                    Display Ticket description on event page
+                                                </label>
                                             </div>
                                         </div>
                                     </div>

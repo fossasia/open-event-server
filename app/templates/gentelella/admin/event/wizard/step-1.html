@@ -277,38 +277,38 @@
                 </label>
                 <input type="checkbox" class="toggle-switch" name="ticket_state"
                        value="on" id="ticket-switch" {% if not event.ticket_url %}checked="checked"{% endif %}/>
-                <label for="ticket-switch" style="margin-left:0;"></label>
-            </div>
-            <div id="ticket-system-holder" class="item form-group"
-                 {% if event.ticket_url %}style="display:none;"{% endif %}>
-                <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
-                    <i class="fa fa-ticket"></i>
-                    Ticket Details
-                    <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
-                </h2>
 
-                <!-- TicketsTable -->
-                <div class="row">
-                    <table class="table tickets-table">
-                        <thead>
-                        <tr>
-                            <th>Ticket Name</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Options</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% if event %}
-                            {% for ticket in event.tickets %}
-                                {{ ticket_template(name=ticket.name, description=ticket.description, sales_start=ticket.sales_start,
-                        sales_end=ticket.sales_end, price=ticket.price, type=ticket.type, quantity=ticket.quantity,
-                        min_order=ticket.min_order, max_order=ticket.max_order) }}
-                            {% endfor %}
-                        {% endif %}
-                        </tbody>
-                    </table>
-                </div>
+            <label for="ticket-switch" style="margin-left:0;"></label>
+        </div>
+        <div id="ticket-system-holder" class="item form-group" {% if event.ticket_url %}style="display:none;"{% endif %}>
+        <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
+            <i class="fa fa-ticket"></i>
+            Ticket Details
+            <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+        </h2>
+
+        <!-- TicketsTable -->
+        <div class="row">
+            <table class="table tickets-table">
+                <thead>
+                    <tr>
+                        <th>Ticket Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% if event %}
+                    {% for ticket in event.tickets %}
+                        {{ ticket_template(serialno=loop.index0, name=ticket.name, description=ticket.description, description_toggle=ticket.description_toggle,
+                        sales_start=ticket.sales_start, sales_end=ticket.sales_end, price=ticket.price, type=ticket.type,
+                        quantity=ticket.quantity, min_order=ticket.min_order, max_order=ticket.max_order) }}
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
 
                 <div class="row">
                     <div class="text-center">
@@ -389,7 +389,7 @@
                                 <option value="">Please select a currency</option>
                             {% endif %}
                             {% for currency in payment_currencies %}
-                                <option value="{{ currency.decode('utf-8') }}" {{ "selected" if event and event.payment_currency == currency else '' }}>{{ currency.decode('utf-8') }}</option>
+                                <option value="{{ currency.decode('utf-8') }}" {{ "selected" if event and event.payment_currency == currency.split(' ')[0] else '' }}>{{ currency.decode('utf-8') }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -1058,6 +1058,12 @@
             'scrollDefault': 'now'
         });
 
+        /* iCheck for Ticket description toggle checkbox */
+        $ticketMore.find("input.checkbox.flat").iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass: 'iradio_flat-green'
+        });
+
         /* Bind events to Edit and Remove buttons */
         var $ticketEdit = $ticket.children("td").last().children().children().first();
         $ticketEdit.tooltip();
@@ -1100,6 +1106,12 @@
         $ticketMore.children().children(".row").hide();
         $ticketsTable.append($ticket, $ticketMore);
         $ticket.show("slow");
+
+        /* Set name attribute for all Ticket Description Toggle checkboxes */
+        $("#event-wizard-form input[name*='tickets_description_toggle_']").each(function(i, el) {
+            $(el).attr("name", "tickets_description_toggle_" + String(i));
+        });
+
         ticketsCount += 1;
     }
 

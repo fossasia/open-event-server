@@ -38,7 +38,6 @@ session_types
 speakers
 sponsors
 tracks
-social_links
 ```
 
 The data they store corresponds to the GET APIs and has the same format as them. Here is the complete list -
@@ -50,7 +49,6 @@ The data they store corresponds to the GET APIs and has the same format as them.
 * `speakers` - /api/v2/events/{event_id}/speakers
 * `sponsors` - /api/v2/events/{event_id}/sponsors
 * `tracks` - /api/v2/events/{event_id}/tracks
-* `social_links` - /api/v2/events/{event_id}/links
 
 The files which are not related to APIs are described as follows -
 

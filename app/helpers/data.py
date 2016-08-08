@@ -899,6 +899,10 @@ class DataManager(object):
                                    licence_url=licence_url,
                                    logo=logo)
 
+        payment_currency = ''
+        if form['payment_currency'] != '':
+            payment_currency = form.get('payment_currency').split(' ')[0]
+
         event = Event(name=form['name'],
                       start_time=DataManager.get_event_time_field_format(form, 'start'),
                       end_time=DataManager.get_event_time_field_format(form, 'end'),
@@ -917,7 +921,7 @@ class DataManager(object):
                       show_map=1 if form.get('show_map') == "on" else 0,
                       creator=login.current_user,
                       payment_country=form.get('payment_country', ''),
-                      payment_currency=form.get('payment_currency', ''),
+                      payment_currency=payment_currency,
                       paypal_email=form.get('paypal_email', ''))
 
         event = DataManager.update_searchable_location_name(event)
@@ -988,12 +992,16 @@ class DataManager(object):
                                                          ticket_sales_start_times[i])
                         sales_end_str = '{} {}'.format(ticket_sales_end_dates[i],
                                                        ticket_sales_end_times[i])
+
+                        description_toggle = form.get('tickets_description_toggle_{}'.format(i), False)
+                        description_toggle = True if description_toggle == 'on' else False
                         ticket = Ticket(
                             name=name,
                             type=ticket_types[i],
                             sales_start=datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M'),
                             sales_end=datetime.strptime(sales_end_str, '%m/%d/%Y %H:%M'),
                             description=ticket_descriptions[i],
+                            description_toggle=description_toggle,
                             quantity=ticket_quantities[i],
                             price=int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0,
                             min_order=ticket_min_orders[i],
@@ -1292,6 +1300,8 @@ class DataManager(object):
                 sales_end_str = '{} {}'.format(ticket_sales_end_dates[i],
                                                ticket_sales_end_times[i])
 
+                description_toggle = form.get('tickets_description_toggle_{}'.format(i), False)
+                description_toggle = True if description_toggle == 'on' else False
                 ticket = Ticket.query.filter_by(event=event, name=name).first()
                 if not ticket:
                     # create
@@ -1301,6 +1311,7 @@ class DataManager(object):
                         sales_start=datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M'),
                         sales_end=datetime.strptime(sales_end_str, '%m/%d/%Y %H:%M'),
                         description=ticket_descriptions[i],
+                        description_toggle=description_toggle,
                         quantity=ticket_quantities[i],
                         price=int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0,
                         min_order=ticket_min_orders[i],
@@ -1314,6 +1325,7 @@ class DataManager(object):
                     ticket.sales_start = datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M'),
                     ticket.sales_end = datetime.strptime(sales_end_str, '%m/%d/%Y %H:%M'),
                     ticket.description = ticket_descriptions[i]
+                    ticket.description_toggle = description_toggle,
                     ticket.quantity = ticket_quantities[i]
                     ticket.price = int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0
                     ticket.min_order = ticket_min_orders[i]
