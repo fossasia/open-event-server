@@ -394,6 +394,26 @@
                 </div>
             </div>
             <div class="item form-group">
+            <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color: #5bc0de;">
+            <i class="fa fa-credit-card"></i>
+            Choose Payment Methods
+            <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+            </h2>
+            <label class="control-label" style="font-size: 20px;">Online Payments</label>
+            <div class="col-sm-12 input-group">
+                                    <label class="control-label">Payment by PayPal</label>
+                                    <div class="checkbox">
+                                        <label style="font-weight: 300;">
+                                            <input type="checkbox" name="pay_by_paypal" id="pay_by_paypal"
+                                                   value="paypalYes"
+                                                   {% if event.pay_by_paypal %}checked="checked"{% endif %}>
+                                            <strong style="font-weight: 400;">YES, accept payment through PayPal </strong><br>
+                                            Paypal accepts credit card, debit card and PayPal payments. To learn how it works
+                                            click <a href="">here.</a>
+                                        </label>
+                                    </div>
+            </div>
+            <div id="paypal-holder" class="item form-group" {% if not event.pay_by_paypal %}style="display: none"{% endif %}>
                 <label>PayPal Email <span class="required">*</span></label>
                 <input type="email" placeholder="PayPal Email" name="paypal_email" class="form-control"
                        value="{{ event.paypal_email | default('', true) }}">
@@ -401,7 +421,20 @@
                     href="https://www.paypal.com/us/webapps/mpp/referral/paypal-express-checkout?partner_id=W9QW5TKUA246E"
                     target="_blank">Create a free PayPal merchant account.</a>
             </div>
-            <div class="item form-group">
+            <div class="col-sm-12 input-group">
+                                    <label class="control-label">Payment by Stripe</label>
+                                    <div class="checkbox">
+                                        <label style="font-weight: 300;">
+                                            <input type="checkbox" name="pay_by_stripe" id="pay_by_stripe"
+                                                   value="stripeYes"
+                                                   {% if event.pay_by_stripe %}checked="checked"{% endif %}>
+                                            <strong style="font-weight: 400;">YES, accept payment through Stripe </strong><br>
+                                            Stripe accepts Visa, Master and Amex. To learn how it works click <a href="">here.</a>
+                                            Find out more about Stripe <a href="">here.</a>
+                                        </label>
+                                    </div>
+            </div>
+            <div id="stripe-holder" class="item form-group" {% if not event.pay_by_stripe %}style="display: none"{% endif %}>
                 <label>Use Stripe for payments <span class="required">*</span></label><br>
                 <input type="hidden" name="stripe_added" value="{% if event.stripe %}yes{% else %}no{% endif %}">
                 <div id="stripe-connected-message" style="{% if not event.stripe %}display: none;{% endif %}">
@@ -416,11 +449,40 @@
                     <i class="fa fa-cc-stripe fa-lg fa-fw" aria-hidden="true"></i> Connect with Stripe
                 </button>
             </div>
+            <label class="control-label" style="font-size: 20px;">Offline Payments</label>
+            <div class="col-sm-12 input-group">
+                                    <div class="checkbox">
+                                        <label style="font-weight: 300;">
+                                            <input type="checkbox" name="pay_by_cheque" id="pay_by_cheque"
+                                                   value="chequeYes"
+                                                   {% if event.pay_by_cheque %}checked="checked"{% endif %}>
+                                            <strong style="font-weight: 400;">YES, accept payment by Cheque </strong><br>
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label style="font-weight: 300;">
+                                            <input type="checkbox" name="pay_by_bank" id="pay_by_bank"
+                                                   value="bankYes"
+                                                   {% if event.pay_by_bank %}checked="checked"{% endif %}>
+                                            <strong style="font-weight: 400;">YES, accept payment by Telegraphic Transfer(TT) / Bank Transfer </strong><br>
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label style="font-weight: 300;">
+                                            <input type="checkbox" name="pay_onsite" id="pay_onsite"
+                                                   value="onsiteYes"
+                                                   {% if event.pay_onsite %}checked="checked"{% endif %}>
+                                            <strong style="font-weight: 400;">YES, accept payment at the event(on site) </strong><br>
+                                        </label>
+                                    </div>
+            </div>
+            <br>
             <div class="">
                 <a href='#' data-toggle="modal" data-target="#taxModal" title="Add tax option">
                     <h5>+ Add Tax</h5>
                 </a>
             </div>
+        </div>
         </div>
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color: #5bc0de;">
             <i class="fa fa-plus-circle"></i>
@@ -1268,6 +1330,21 @@
             $(".stripe-connect").show();
         });
 
+        var $paypalHolder = $("#paypal-holder");
+        $("#pay_by_paypal").change(function () {
+            if ($("#pay_by_paypal").is(":checked"))
+                $paypalHolder.fadeIn();
+            else
+                $paypalHolder.fadeOut();
+        });
+
+        var $stripeHolder = $("#stripe-holder");
+        $("#pay_by_stripe").change(function () {
+            if ($("#pay_by_stripe").is(":checked"))
+                $stripeHolder.fadeIn();
+            else
+                $stripeHolder.fadeOut();
+        });
 
     });
 </script>
