@@ -49,6 +49,12 @@ class Ticket(db.Model):
         self.min_order = min_order
         self.max_order = max_order
 
+    def has_order_tickets(self):
+        """Returns True if ticket has already placed orders.
+        Else False.
+        """
+        return bool(len(self.order_tickets) > 0)
+
     def __repr__(self):
         return '<Ticket %r>' % self.name
 
