@@ -74,9 +74,9 @@
                 <strong>Payment Type: </strong>
                 <select name="payment_via" class="form-control" id="payment-type" required style="margin-left: 5px;">
                     <option value="">Select payment type</option>
-                    {% if event.pay_by_cheque %}<option value="cheque">Cheque</option>{% endif %}
-                    {% if event.pay_by_bank %}<option value="transfer">Telegraphic Transfer (TT) / Bank Transfer</option>{% endif %}
-                    {% if event.pay_onsite %}<option value="onsite">Onsite / Cash</option>{% endif %}
+                    <option value="cheque">Cheque</option>
+                    <option value="transfer">Telegraphic Transfer (TT) / Bank Transfer</option>
+                    <option value="onsite">Onsite / Cash</option>
                     {% if event.pay_by_stripe %}<option value="stripe">Stripe</option>{% endif %}
                     <option value="free">Free Order</option>
                 </select>
