@@ -86,7 +86,6 @@ class TestEvents(OpenEventViewTestCase):
 
             #Test Payment Details
             self.assertTrue(data['payment_country'] in rv.data, msg=rv.data)
-            self.assertTrue(data['payment_currency'] in rv.data, msg=rv.data)
             self.assertTrue(data['paypal_email'] in rv.data, msg=rv.data)
 
             # Test Tickets

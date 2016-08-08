@@ -17,10 +17,10 @@
             <div class="panel panel-default height">
                 <div class="panel-heading"><h3 class="panel-title">Payment Information</h3></div>
                 <div class="panel-body">
-                    {% if paid_via == 'paypal' %}
+                    {% if order.paid_via == 'paypal' %}
                         <strong>Paid Via:</strong> PayPal<br>
                         <strong>Transaction ID:</strong> {{ order.transaction_id }}<br>
-                    {% elif paid_via == 'stripe' %}
+                    {% elif order.paid_via == 'stripe' %}
                         <strong>Card Name:</strong> {{ order.brand }}<br>
                         <strong>Card Number:</strong> ***** {{ order.last4 }}<br>
                         <strong>Exp Date:</strong> {{ order.exp_month }}/{{ order.exp_year }}<br><br>
