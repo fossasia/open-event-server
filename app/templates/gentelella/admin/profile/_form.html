@@ -17,15 +17,22 @@
 
         <input name="email" type="hidden" value="{{profile.email}}"/>
         <input name="contact" type="hidden" value="{{profile.user_detail.contact | default('', true) }}"/>
-        
+
         <h3>Integrate Social Networks</h3>
         <div class="row" style="margin-bottom:20px">
 
             <div class="col-md-6 col-xs-6">
-                <label >Facebook:
-                </label>
-                <input type="url" pattern="https?://.*facebook\..+" name="facebook" class="form-control"
+                <label >Facebook:</label>
+                <div class="input-group">
+                    <input type="url" pattern="https?://.*facebook\..+" name="facebook" class="form-control"
                        value="{{profile.user_detail.facebook|default('https://www.facebook.com/', true)}}" title="Not a valid facebook profile link"/>
+                    <div class="input-group-btn">
+                        <a type="button" class="btn btn-info" href="{{url_for('.connect_facebook')}}">Connect</a>
+                    </div>
+
+
+                </div>
+
             </div>
 
         </div>
