@@ -61,7 +61,6 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**ticket_url** | string | Optional | Public |
 |**timezone** | string | Optional | Public |
 |**privacy** | string | Optional | Public |
-|**closing_datetime** | string | Optional | Public |
 |**code_of_conduct** | string | Optional | Public |
 |**schedule\_published\_on** | string | Optional | Public |
 |**creator** | **EventCreator** | Required | Public |
