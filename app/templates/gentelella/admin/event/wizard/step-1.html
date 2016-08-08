@@ -1111,6 +1111,10 @@
         $("#event-wizard-form input[name*='tickets_description_toggle_']").each(function(i, el) {
             $(el).attr("name", "tickets_description_toggle_" + String(i));
         });
+        /* Set name attribute for all Ticket Stop Sales checkboxes */
+        $("#event-wizard-form input[name*='tickets_stop_sales_']").each(function(i, el) {
+            $(el).attr("name", "tickets_stop_sales_" + String(i));
+        });
 
         ticketsCount += 1;
     }

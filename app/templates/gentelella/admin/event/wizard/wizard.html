@@ -132,13 +132,12 @@
                                         <label>Description</label>
                                         <textarea name="tickets[description]" class="form-control" rows="7" style="border-radius: 3px;" placeholder="Add a description for the Ticket">{{ description }}</textarea>
                                     </div>
-
-                                            <div class="item form-group">
-                                                <label style="font-weight: normal;">
-                                                    <input type="checkbox" class="checkbox flat form-control" name="tickets_description_toggle_{{ serialno }}" {{ 'checked' if description_toggle else ''}}>
-                                                    Display Ticket description on event page
-                                                </label>
-                                            </div>
+                                    <div class="item form-group">
+                                        <label style="font-weight: normal;">
+                                            <input type="checkbox" class="checkbox flat form-control" name="tickets_description_toggle_{{ serialno }}" {{ 'checked' if description_toggle else ''}}>
+                                            Display Ticket description on event page
+                                        </label>
+                                    </div>
                                 </div>
                                 <div class="col-xs-6">
                                     <div class="row">
@@ -165,6 +164,14 @@
                                             </div>
                                         </div>
                                     </div>
+                                    {% if stop_sales != 'not_set' %}
+                                        <div class="item form-group">
+                                            <label style="font-weight: normal;">
+                                                <input type="checkbox" class="checkbox flat form-control" name="tickets_stop_sales_{{ serialno }}" {{ 'checked' if stop_sales else ''}}>
+                                                Hide ticket (Stop ticket sales)
+                                            </label>
+                                        </div>
+                                    {% endif %}
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="item form-group">

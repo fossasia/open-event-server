@@ -1300,6 +1300,9 @@ class DataManager(object):
                 sales_end_str = '{} {}'.format(ticket_sales_end_dates[i],
                                                ticket_sales_end_times[i])
 
+                stop_sales = form.get('tickets_stop_sales_{}'.format(i), False)
+                stop_sales = True if stop_sales == 'on' else False
+
                 description_toggle = form.get('tickets_description_toggle_{}'.format(i), False)
                 description_toggle = True if description_toggle == 'on' else False
                 ticket = Ticket.query.filter_by(event=event, name=name).first()
@@ -1310,6 +1313,7 @@ class DataManager(object):
                         type=ticket_types[i],
                         sales_start=datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M'),
                         sales_end=datetime.strptime(sales_end_str, '%m/%d/%Y %H:%M'),
+                        stop_sales=stop_sales,
                         description=ticket_descriptions[i],
                         description_toggle=description_toggle,
                         quantity=ticket_quantities[i],
@@ -1322,8 +1326,9 @@ class DataManager(object):
                     # update
                     ticket.name = name
                     ticket.type = ticket_types[i]
-                    ticket.sales_start = datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M'),
-                    ticket.sales_end = datetime.strptime(sales_end_str, '%m/%d/%Y %H:%M'),
+                    ticket.sales_start = datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M')
+                    ticket.sales_end = datetime.strptime(sales_end_str, '%m/%d/%Y %H:%M')
+                    ticket.stop_sales = stop_sales
                     ticket.description = ticket_descriptions[i]
                     ticket.description_toggle = description_toggle,
                     ticket.quantity = ticket_quantities[i]
