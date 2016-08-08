@@ -1,10 +1,10 @@
 {% set included_items = included_settings %}
 
-{% macro social_entry(social_link=None) %}
+{% macro social_entry(social_link=None, name='Twitter') %}
     <div class="social-link-holder">
         <div class=" col-sm-3" style="padding-left: 0;">
             <input type="text" class="form-control" name="social[name]" placeholder="Name"
-                   value="{{ social_link.name | default('Twitter', true) }}">
+                   value="{{ social_link.name | default(name, true) }}">
         </div>
         <input type="hidden" name="social[id]" value="{{ social_link.id | default('') }}">
         <div class="col-sm-5 input-group">
@@ -226,12 +226,6 @@
         </div>
 
         <div class="item form-group">
-            <label>Event Url</label>
-            <input type="url" pattern="https?://.+" value="{{ event.event_url | default('', true) }}" name="event_url"
-                   class="form-control" data-error="Please enter a valid URL"/>
-            <div class="help-block with-errors"></div>
-        </div>
-        <div class="item form-group">
             <label><span class="organizer-state">Add</span> Organizer Information
             </label>
             <input type="checkbox" class="toggle-switch" name="organizer_state"
@@ -255,17 +249,21 @@
             </div>
         </div>
         <div class="item form-group">
-            <label>Social Links</label>
+            <label>Links and Social Media</label>
             <div class="row social-links">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     {% if social_links %}
                         {% for social_link in social_links %}
                             {{ social_entry(social_link) }}
                         {% else %}
-                            {{ social_entry() }}
+                            {{ social_entry(None, 'Twitter') }}
+                            {{ social_entry(None, 'Facebook') }}
+                            {{ social_entry(None, 'External Event URL') }}
                         {% endfor %}
                     {% else %}
-                        {{ social_entry() }}
+                        {{ social_entry(None, 'Twitter') }}
+                        {{ social_entry(None, 'Facebook') }}
+                        {{ social_entry(None, 'External Event URL') }}
                     {% endif %}
                 </div>
 

@@ -76,7 +76,6 @@ EVENT = api.model('Event', {
     'timezone': fields.String(),
     'latitude': fields.Float(),
     'longitude': fields.Float(),
-    'event_url': fields.Uri(),
     'background_url': fields.Upload(),
     'description': fields.String(),
     'location_name': fields.String(),

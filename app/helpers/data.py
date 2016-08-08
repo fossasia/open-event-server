@@ -911,7 +911,6 @@ class DataManager(object):
                       longitude=form['longitude'],
                       location_name=form['location_name'],
                       description=form['description'],
-                      event_url=form['event_url'],
                       type=form['type'],
                       topic=form['topic'],
                       sub_topic=form['sub_topic'],
@@ -1193,7 +1192,6 @@ class DataManager(object):
                       longitude=event_old.longitude,
                       location_name=event_old.location_name,
                       description=event_old.description,
-                      event_url=event_old.event_url,
                       type=event_old.type,
                       topic=event_old.topic,
                       sub_topic=event_old.sub_topic,
@@ -1266,7 +1264,6 @@ class DataManager(object):
         event.longitude = form['longitude']
         event.location_name = form['location_name']
         event.description = form['description']
-        event.event_url = form['event_url']
         event.type = form['type']
         event.topic = form['topic']
         event.show_map = 1 if form.get('show_map', 'on') == "on" else 0
