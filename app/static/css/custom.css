@@ -211,8 +211,12 @@
   }
   .search_bar #search-text {
     display: none;
-    position: absolute;
-    margin: 40px -160px;
+    position: absolute !important;
+    margin: 40px -160px !important;
+    background-color: white !important;
+  }
+  .tt-menu {
+    margin: 40px -160px !important;
   }
   .search-button {
     border-radius:3px !important;
