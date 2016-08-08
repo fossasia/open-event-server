@@ -400,18 +400,23 @@ def callback():
 def facebook_callback():
     print request.args
     if login.current_user is not None and login.current_user.is_authenticated:
-        facebook, __ = get_fb_auth()
-        response = facebook.get(FbOAuth.get_user_info())
-        if response.status_code == 200:
-            user_info = response.json()
-            user = login.current_user
-            if not user.user_detail.facebook:
-                user.user_detail.facebook = user_info['link']
-            if not user.user_detail.firstname:
-                user.user_detail.firstname = user_info['first_name']
-            if not user.user_detail.lastname:
-                user.user_detail.lastname = user_info['last_name']
-            save_to_db(user)
+        try:
+            facebook, __ = get_fb_auth()
+            response = facebook.get(FbOAuth.get_user_info())
+            if response.status_code == 200:
+                user_info = response.json()
+                user = login.current_user
+                if not user.user_detail.facebook:
+                    user.user_detail.facebook = user_info['link']
+                if not user.user_detail.firstname:
+                    user.user_detail.firstname = user_info['first_name']
+                if not user.user_detail.lastname:
+                    user.user_detail.lastname = user_info['last_name']
+                if not user.user_detail.avatar_uploaded:
+                    user.user_detail.avatar_uploaded = save_file_provided_by_url(user_info['picture']['data']['url'])
+                save_to_db(user)
+        except Exception:
+            pass
         return redirect(url_for('admin.index'))
     elif 'error' in request.args:
         if request.args.get('error') == 'access denied':
@@ -463,19 +468,23 @@ def instagram_callback():
                                       client_secret=InstagramOAuth.get_client_secret())
         response = instagram.get('https://api.instagram.com/v1/users/self/media/recent/?access_token=' + token.get('access_token', '')).json()
         for el in response.get('data'):
-            response_file = urlopen(el['images']['standard_resolution']['url'])
-
-            filename = str(time.time()) + '.jpg'
-            file_path = os.path.realpath('.') + '/static/temp/' + filename
-            fh = open(file_path, "wb")
-            fh.write(response_file.read())
-            fh.close()
-            img = UploadedFile(file_path, filename)
-            print img
-            background_url = upload(img, '/image/' + filename)
+            background_url = save_file_provided_by_url(el['images']['standard_resolution']['url'])
             print background_url
 
     return 'Not implemented'
+
+
+def save_file_provided_by_url(url):
+    response_file = urlopen(url)
+    filename = str(time.time()) + '.jpg'
+    file_path = os.path.realpath('.') + '/static/temp/' + filename
+    fh = open(file_path, "wb")
+    fh.write(response_file.read())
+    fh.close()
+    img = UploadedFile(file_path, filename)
+    background_url = upload(img, '/image/' + filename)
+    return background_url
+
 
 @app.route('/pic/<path:filename>')
 @auto.doc()
