@@ -56,7 +56,6 @@ class Event(db.Model):
     role_invites = db.relationship('RoleInvite', back_populates='event')
     privacy = db.Column(db.String, default="public")
     state = db.Column(db.String, default="Draft")
-    closing_datetime = db.Column(db.DateTime)
     type = db.Column(db.String)
     topic = db.Column(db.String)
     sub_topic = db.Column(db.String)
@@ -93,7 +92,6 @@ class Event(db.Model):
                  organizer_name=None,
                  organizer_description=None,
                  state=None,
-                 closing_datetime=None,
                  type=None,
                  privacy=None,
                  topic=None,
@@ -135,7 +133,6 @@ class Event(db.Model):
         self.state = state
         self.show_map = show_map
         self.privacy = privacy
-        self.closing_datetime = closing_datetime
         self.type = type
         self.topic = topic
         self.sub_topic = sub_topic

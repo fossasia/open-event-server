@@ -321,15 +321,6 @@ class EventsView(BaseView):
         flash("Your event has been restored", "success")
         return redirect(url_for('sadmin_events.index_view'))
 
-    @expose('/<int:event_id>/update/', methods=('POST',))
-    def save_closing_date(self, event_id):
-        event = DataGetter.get_event(event_id)
-        event.closing_datetime = request.form['closing_datetime']
-        save_to_db(event, 'Closing Datetime Updated')
-        return self.render('/gentelella/admin/event/details/details.html',
-                           event=event)
-
-
     @expose('/<int:event_id>/publish/', methods=('GET',))
     def publish_event(self, event_id):
         event = DataGetter.get_event(event_id)

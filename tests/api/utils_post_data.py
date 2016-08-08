@@ -15,7 +15,6 @@ POST_EVENT_DATA = {
     'background_url': "",
     'description': "blah blah",
     "start_time": "2016-05-25T12:12:43",
-    "closing_datetime": "2016-05-22T12:12:43",
     "organizer_name": "FOSSASIA",
     "organizer_description": "Promoting Open Source culture around the world",
     "state": "Draft",
