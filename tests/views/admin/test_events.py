@@ -35,8 +35,8 @@ class TestEvents(OpenEventViewTestCase):
             del data['call_for_papers']
             data['pay_by_paypal'] = 'paypalYes'
             data['name'] = 'TestEvent 1'
-            data['payment_country'] = 'Mycountry'
-            data['payment_currency'] = 'Dollars'
+            data['payment_country'] = 'United States'
+            data['payment_currency'] = 'USD United States Dollars $'
             data['paypal_email'] = 'test@gmail.com'
             data['sponsors_state'] = 'on'
             data['sponsors[name]'] = ['Sponsor 1', 'Sponsor 2']
@@ -87,7 +87,6 @@ class TestEvents(OpenEventViewTestCase):
 
             #Test Payment Details
             self.assertTrue(data['payment_country'] in rv.data, msg=rv.data)
-            self.assertTrue(data['payment_currency'] in rv.data, msg=rv.data)
             self.assertTrue(data['paypal_email'] in rv.data, msg=rv.data)
 
             # Test Tickets
@@ -111,7 +110,8 @@ class TestEvents(OpenEventViewTestCase):
             data = POST_EVENT_DATA.copy()
             del data['copyright']
             del data['call_for_papers']
-            data['payment_currency'] = ''
+            data['payment_country'] = 'United States'
+            data['payment_currency'] = 'USD United States Dollars $'
             data['start_date'] = '07/04/2016'
             data['start_time'] = '19:00'
             data['end_date'] = '07/04/2016'
@@ -129,7 +129,8 @@ class TestEvents(OpenEventViewTestCase):
             data = POST_EVENT_DATA.copy()
             del data['copyright']
             del data['call_for_papers']
-            data['payment_currency'] = ''
+            data['payment_country'] = 'United States'
+            data['payment_currency'] = 'USD United States Dollars $'
             data['start_date'] = '07/04/2016'
             data['start_time'] = '19:00'
             data['end_date'] = '07/04/2016'
@@ -153,6 +154,8 @@ class TestEvents(OpenEventViewTestCase):
             data = POST_EVENT_DATA.copy()
             del data['copyright']
             del data['call_for_papers']
+            data['payment_country'] = 'United States'
+            data['payment_currency'] = 'USD United States Dollars $'
             data['sponsors_state'] = 'on'
             data['sponsors[name]'] = ['Sponsor 1', 'Sponsor 2']
             data['sponsors[type]'] = ['Gold', 'Silver']

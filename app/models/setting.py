@@ -15,6 +15,14 @@ class Setting(db.Model):
     stripe_client_id = db.Column(db.String)
     stripe_secret_key = db.Column(db.String)
     stripe_publishable_key = db.Column(db.String)
+    # PayPal Credentials
+    paypal_mode = db.Column(db.String)
+    paypal_sandbox_username = db.Column(db.String)
+    paypal_sandbox_password = db.Column(db.String)
+    paypal_sandbox_signature = db.Column(db.String)
+    paypal_live_username = db.Column(db.String)
+    paypal_live_password = db.Column(db.String)
+    paypal_live_signature = db.Column(db.String)
     # FB
     fb_client_id = db.Column(db.String)
     fb_client_secret = db.Column(db.String)
@@ -50,6 +58,13 @@ class Setting(db.Model):
                  secret=None, storage_place=None,
                  google_url=None, github_url=None,
                  twitter_url=None, support_url=None,
+                 paypal_mode=None,
+                 paypal_sandbox_username=None,
+                 paypal_sandbox_password=None,
+                 paypal_sandbox_signature=None,
+                 paypal_live_username=None,
+                 paypal_live_password=None,
+                 paypal_live_signature=None,
                  facebook_url=None, youtube_url=None, android_app_url=None, web_app_url=None):
         self.aws_key = aws_key
         self.aws_secret = aws_secret
@@ -76,6 +91,13 @@ class Setting(db.Model):
         self.stripe_secret_key = stripe_secret_key
         self.web_app_url = web_app_url
         self.android_app_url = android_app_url
+        self.paypal_mode = paypal_mode
+        self.paypal_sandbox_username = paypal_sandbox_username
+        self.paypal_sandbox_password = paypal_sandbox_password
+        self.paypal_sandbox_signature = paypal_sandbox_signature
+        self.paypal_live_username = paypal_live_username
+        self.paypal_live_password = paypal_live_password
+        self.paypal_live_signature = paypal_live_signature
 
     def __repr__(self):
         return 'Settings'

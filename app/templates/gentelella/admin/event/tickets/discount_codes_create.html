@@ -42,7 +42,7 @@
                     <span class="input-group-addon radio">
                         <label style="margin-bottom: -10px;">
                             <input type="radio" name="value_type" value="amount" required
-                                   {% if not discount_code or (discount_code and discount_code.type == 'amount') %}checked{% endif %}> Amount ($)
+                                   {% if not discount_code or (discount_code and discount_code.type == 'amount') %}checked{% endif %}> Amount ({{ event.payment_currency | currency_symbol }})
                         </label>
                     </span>
                         <input type="number" class="form-control" required=""

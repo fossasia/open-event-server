@@ -34,7 +34,8 @@ class Order(db.Model):
     exp_month = db.Column(db.Integer)
     exp_year = db.Column(db.Integer)
     last4 = db.Column(db.String)
-    token = db.Column(db.String)
+    stripe_token = db.Column(db.String)
+    paypal_token = db.Column(db.String)
     status = db.Column(db.String)
 
     discount_code_id = db.Column(

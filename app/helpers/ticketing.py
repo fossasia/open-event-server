@@ -4,10 +4,8 @@ import os
 
 from datetime import timedelta, datetime
 
-import stripe
 from sqlalchemy import func
 from flask import url_for
-
 
 from flask.ext import login
 from app.helpers.data import save_to_db
@@ -17,6 +15,7 @@ from app.models.ticket import Ticket
 from app.helpers.data_getter import DataGetter
 from app.helpers.data import DataManager
 
+from app.helpers.payment import StripePaymentsManager, represents_int, PayPalPaymentsManager
 from app.models.ticket_holder import TicketHolder
 from app.models.order import OrderTicket
 from app.models.event import Event
@@ -31,13 +30,6 @@ def get_count(q):
     count = q.session.execute(count_q).scalar()
     return count
 
-def represents_int(s):
-    try:
-        int(s)
-        return True
-    except ValueError:
-        return False
-
 
 class TicketingManager(object):
     """All ticketing and orders related functions"""
@@ -49,8 +41,8 @@ class TicketingManager(object):
         """
         if not user_id:
             user_id = login.current_user.id
-        query = Order.query.join(Order.event)\
-            .filter(Order.user_id == user_id)\
+        query = Order.query.join(Order.event) \
+            .filter(Order.user_id == user_id) \
             .filter(Order.status == 'completed')
         if upcoming_events:
             return query.filter(Event.start_time >= datetime.now())
@@ -61,7 +53,7 @@ class TicketingManager(object):
     def get_orders(event_id=None, status=None):
         if event_id:
             if status:
-                orders = Order.query.filter_by(event_id=event_id).filter_by(status=status)\
+                orders = Order.query.filter_by(event_id=event_id).filter_by(status=status) \
                     .filter(Order.user_id.isnot(None)).all()
             else:
                 orders = Order.query.filter_by(event_id=event_id).filter(Order.user_id.isnot(None)).all()
@@ -163,7 +155,8 @@ class TicketingManager(object):
         if order and not order.paid_via:
             if override \
                 or (order.status != 'completed' and
-                    (order.created_at + timedelta(minutes=TicketingManager.get_order_expiry())) < datetime.utcnow()):
+                            (order.created_at + timedelta(
+                                minutes=TicketingManager.get_order_expiry())) < datetime.utcnow()):
                 order.status = 'expired'
                 save_to_db(order)
         return order
@@ -253,57 +246,50 @@ class TicketingManager(object):
             return False
 
     @staticmethod
-    def charge_order_payment(form):
+    def charge_stripe_order_payment(form):
         order = TicketingManager.get_and_set_expiry(form['identifier'])
-        order.token = form['stripe_token_id']
+        order.stripe_token = form['stripe_token_id']
         save_to_db(order)
 
-        if order.event.stripe:
-            stripe.api_key = order.event.stripe.stripe_secret_key
+        charge = StripePaymentsManager.capture_payment(order)
+        if charge:
+            order.paid_via = 'stripe'
+            order.payment_mode = charge.source.object
+            order.brand = charge.source.brand
+            order.exp_month = charge.source.exp_month
+            order.exp_year = charge.source.exp_year
+            order.last4 = charge.source.last4
+            order.transaction_id = charge.id
+            order.status = 'completed'
+            order.completed_at = datetime.utcnow()
+            save_to_db(order)
+
+            send_email_for_after_purchase(order.user.email, order.get_invoice_number(),
+                                          url_for('ticketing.view_order_after_payment',
+                                                  order_identifier=order.identifier, _external=True))
+            return True, order
         else:
-            stripe.api_key = "Key not Set"
+            return False, 'Error'
 
-        try:
-            customer = stripe.Customer.create(
-                email=order.user.email,
-                source=form['stripe_token_id']
-            )
-
-            charge = stripe.Charge.create(
-                customer=customer.id,
-                amount=int(order.amount * 100),
-                currency='usd',
-                metadata={
-                    'order_id': order.id,
-                    'event': order.event.name,
-                    'user_id': order.user_id,
-                    'event_id': order.event_id
-                },
-                description=order.event.name + " ticket(s)"
-            )
-
-            if charge:
-                order.paid_via = 'stripe'
-                order.payment_mode = charge.source.object
-                order.brand = charge.source.brand
-                order.exp_month = charge.source.exp_month
-                order.exp_year = charge.source.exp_year
-                order.last4 = charge.source.last4
-                order.transaction_id = charge.id
+    @staticmethod
+    def charge_paypal_order_payment(order):
+        payment_details = PayPalPaymentsManager.get_approved_payment_details(order)
+        if 'PAYERID' in payment_details:
+            capture_result = PayPalPaymentsManager.capture_payment(order, payment_details['PAYERID'])
+            if capture_result['ACK'] == 'Success':
+                order.paid_via = 'paypal'
                 order.status = 'completed'
+                order.transaction_id = capture_result['PAYMENTINFO_0_TRANSACTIONID']
                 order.completed_at = datetime.utcnow()
                 save_to_db(order)
-
                 send_email_for_after_purchase(order.user.email, order.get_invoice_number(),
                                               url_for('ticketing.view_order_after_payment',
                                                       order_identifier=order.identifier, _external=True))
-
-                return order
+                return True, order
             else:
-                return False
-
-        except:
-            return False
+                return False, capture_result['L_SHORTMESSAGE0']
+        else:
+            return False, 'Payer ID missing. Payment flow tampered.'
 
     @staticmethod
     def create_edit_discount_code(form, event_id, discount_code_id=None):
