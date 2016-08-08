@@ -77,7 +77,7 @@
                     <option value="cheque">Cheque</option>
                     <option value="transfer">Telegraphic Transfer (TT) / Bank Transfer</option>
                     <option value="onsite">Onsite / Cash</option>
-                    <option value="stripe">Stripe</option>
+                    {% if event.pay_by_stripe %}<option value="stripe">Stripe</option>{% endif %}
                     <option value="free">Free Order</option>
                 </select>
             </div>

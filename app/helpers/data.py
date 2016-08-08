@@ -903,6 +903,8 @@ class DataManager(object):
         if form['payment_currency'] != '':
             payment_currency = form.get('payment_currency').split(' ')[0]
 
+
+        paypal_email = ''
         event = Event(name=form['name'],
                       start_time=DataManager.get_event_time_field_format(form, 'start'),
                       end_time=DataManager.get_event_time_field_format(form, 'end'),
@@ -911,7 +913,6 @@ class DataManager(object):
                       longitude=form['longitude'],
                       location_name=form['location_name'],
                       description=form['description'],
-                      event_url=form['event_url'],
                       type=form['type'],
                       topic=form['topic'],
                       sub_topic=form['sub_topic'],
@@ -922,7 +923,20 @@ class DataManager(object):
                       creator=login.current_user,
                       payment_country=form.get('payment_country', ''),
                       payment_currency=payment_currency,
-                      paypal_email=form.get('paypal_email', ''))
+                      paypal_email=paypal_email)
+
+        if 'pay_by_paypal' in form:
+            event.paypal_email = form.get('paypal_email')
+            event.pay_by_paypal = True
+
+        if 'pay_by_cheque' in form:
+            event.pay_by_cheque = True
+
+        if 'pay_by_bank' in form:
+            event.pay_by_bank = True
+
+        if 'pay_onsite' in form:
+            event.pay_onsite = True
 
         event = DataManager.update_searchable_location_name(event)
 
@@ -1017,16 +1031,18 @@ class DataManager(object):
             sponsor_description = form.getlist('sponsors[description]')
             sponsor_logo_url = []
 
-            if form.get('stripe_added', u'no') == u'yes':
-                stripe_authorization = StripeAuthorization(
-                    stripe_secret_key=form.get('stripe_secret_key', ''),
-                    stripe_refresh_token=form.get('stripe_refresh_token', ''),
-                    stripe_publishable_key=form.get('stripe_publishable_key', ''),
-                    stripe_user_id=form.get('stripe_user_id', ''),
-                    stripe_email=form.get('stripe_email', ''),
-                    event_id=event.id
-                )
-                save_to_db(stripe_authorization)
+            if 'pay_by_stripe' in form:
+                if form.get('stripe_added', u'no') == u'yes':
+                    stripe_authorization = StripeAuthorization(
+                        stripe_secret_key=form.get('stripe_secret_key', ''),
+                        stripe_refresh_token=form.get('stripe_refresh_token', ''),
+                        stripe_publishable_key=form.get('stripe_publishable_key', ''),
+                        stripe_user_id=form.get('stripe_user_id', ''),
+                        stripe_email=form.get('stripe_email', ''),
+                        event_id=event.id
+                    )
+                    save_to_db(stripe_authorization)
+                event.pay_by_stripe = True
 
             if form.get('sponsors_state', u'off') == u'on':
                 for index, name in enumerate(sponsor_name):
@@ -1181,6 +1197,7 @@ class DataManager(object):
                     if addr['types'] == ['locality', 'political']:
                         event.searchable_location_name = addr['short_name']
         return event
+
     @staticmethod
     def create_event_copy(event_id):
 
@@ -1193,7 +1210,6 @@ class DataManager(object):
                       longitude=event_old.longitude,
                       location_name=event_old.location_name,
                       description=event_old.description,
-                      event_url=event_old.event_url,
                       type=event_old.type,
                       topic=event_old.topic,
                       sub_topic=event_old.sub_topic,
@@ -1266,7 +1282,6 @@ class DataManager(object):
         event.longitude = form['longitude']
         event.location_name = form['location_name']
         event.description = form['description']
-        event.event_url = form['event_url']
         event.type = form['type']
         event.topic = form['topic']
         event.show_map = 1 if form.get('show_map', 'on') == "on" else 0
@@ -1309,7 +1324,7 @@ class DataManager(object):
                 description_toggle = True if description_toggle == 'on' else False
                 ticket = Ticket.query.filter_by(event=event, name=name).first()
                 if not ticket:
-                    # create
+                    # create new ticket
                     ticket = Ticket(
                         name=name,
                         type=ticket_types[i],
@@ -1324,7 +1339,7 @@ class DataManager(object):
                         event=event
                     )
                 else:
-                    # update
+                    # update existing ticket
                     ticket.name = name
                     ticket.type = ticket_types[i]
                     ticket.sales_start = datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M'),
@@ -1339,8 +1354,9 @@ class DataManager(object):
                 db.session.add(ticket)
 
         # Remove all the tickets that are not in form
+        # except those that already have placed orders
         for ticket in event.tickets:
-            if ticket.name not in ticket_names:
+            if ticket.name not in ticket_names and ticket.has_order_tickets():
                 db.session.delete(ticket)
 
         event.ticket_url = form.get('ticket_url', None)

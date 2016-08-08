@@ -12,7 +12,6 @@ POST_EVENT_DATA = {
     "logo": "",
     "longitude": 0,
     "name": "TestEvent",
-    'event_url': "http://site.com",
     'background_url': "",
     'description': "blah blah",
     "start_time": "2016-05-25T12:12:43",

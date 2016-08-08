@@ -42,10 +42,10 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**id** | integer | Required | Public |
 |**name** | string | Required | Public |
 |**description** | string | Optional | Public |
-|**event_url** | string | Optional | Public |
 |**color** | string | Optional | Public |
 |**logo** | string | Optional | Public |
 |**location_name** | string | Optional | Public |
+|**searchable_location_name** | string | Optional | Public |
 |**start_time** | string | Required | Public |
 |**end_time** | string | Required | Public |
 |**latitude** | number | Optional | Public |
@@ -57,11 +57,17 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**organizer_description** | string | Optional | Public |
 |**type** | string | Optional | Public |
 |**topic** | string | Optional | Public |
+|**sub_topic** | string | Optional | Public |
 |**ticket_url** | string | Optional | Public |
+|**timezone** | string | Optional | Public |
+|**privacy** | string | Optional | Public |
 |**closing_datetime** | string | Optional | Public |
+|**code_of_conduct** | string | Optional | Public |
 |**schedule\_published\_on** | string | Optional | Public |
 |**creator** | **EventCreator** | Required | Public |
+|**copyright** | **EventCopyright** | Optional | Public |
 |**social_links** | **EventSocial** | Optional | Public |
+|**call_for_papers** | **EventCFS** | Optional | Public |
 |**version** | **EventVersion** | Optional | Public |
 
 
@@ -79,6 +85,27 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**id** | integer | Required |
 |**name** | string | Required |
 |**link** | string | Required |
+
+#### EventCopyright
+
+| Field | Datatype | Requirement |
+| --- | --- | --- |
+|**holder** | string | Optional |
+|**holder_url** | string | Optional |
+|**licence** | string | Optional |
+|**licence_url** | string | Optional |
+|**logo** | string | Optional |
+|**year** | integer | Optional |
+
+#### EventCFS
+
+| Field | Datatype | Requirement |
+| --- | --- | --- |
+|**announcement** | string | Optional |
+|**end_date** | string | Optional |
+|**privacy** | string | Optional |
+|**start_date** | string | Optional |
+|**timezone** | string | Optional |
 
 #### EventVersion
 
@@ -167,10 +194,12 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**id** | integer | Required | Public |
 |**name** | string | Required | Public |
 |**email** | string | Required | Public |
-|**biography** | string | Optional | Public |
+|**short_biography** | string | Optional | Public |
+|**long_biography** | string | Optional | Public |
 |**organisation** | string | Required | Public |
 |**country** | string | Required | Public |
-|**web** | string | Optional | Public |
+|**mobile** | string | Optional | Public |
+|**website** | string | Optional | Public |
 |**github** | string | Optional | Public |
 |**photo** | string | Optional | Public |
 |**position** | string | Optional | Public |

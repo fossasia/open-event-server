@@ -320,7 +320,7 @@ def generate_icalendar_event(event_id):
     event.add('logo', matching_event.logo)
     event.add('email', matching_event.email)
     event.add('description', matching_event.description)
-    event.add('url', matching_event.event_url)
+    event.add('url', url_for('event_detail.display_event_detail_home', event_id=matching_event.id, _external=True))
     cal.add_component(event)
 
     #Saving ical in file

@@ -33,6 +33,7 @@ class TestEvents(OpenEventViewTestCase):
             data = POST_EVENT_DATA.copy()
             del data['copyright']
             del data['call_for_papers']
+            data['pay_by_paypal'] = 'paypalYes'
             data['name'] = 'TestEvent 1'
             data['payment_country'] = 'United States'
             data['payment_currency'] = 'USD United States Dollars $'

@@ -11,15 +11,30 @@
         {% include 'gentelella/guest/ticketing/components/_invoice.html' %}
     {% endif %}
     {% include 'gentelella/guest/ticketing/components/_order_summary.html' %}
-    {% if order.amount > 0 and order.event.tax %}
-        <br>
-        {{ order.event.tax.invoice_footer }}
+    {% if order.event.tax and order.amount > 0 %}
+        <div class="col-xs-12 col-md-6 col-lg-6 pull-left" style="padding-left: 0;">
+            <div class="panel panel-default height">
+                <div class="panel-heading"><h3 class="panel-title">From</h3></div>
+                <div class="panel-body">
+                    <strong>{{ order.event.tax.registered_company }}:</strong><br>
+                    {{ order.event.tax.address }}<br>
+                    {{ order.event.tax.city }}<br>
+                    {{ order.event.tax.state }}<br>
+                    {{ order.event.tax.country }}<br>
+                    <strong>{{ order.event.tax.zip }}</strong><br>
+                    (<strong>Tax ID:</strong> {{ order.event.tax.tax_id }})
+                </div>
+            </div>
+        </div>
     {% endif %}
 {% endblock %}
 
 {% block right_addon %}
-    <button type="button" class="btn btn-info hidden-print" onclick="window.print();"><i class="fa fa-print fa-fw"></i> Print Invoice</button>
-    <a href="{{ url_for('ticketing.view_order_after_payment_pdf', order_identifier=order.identifier) }}" class="btn btn-default hidden-print" target="_blank"><i class="fa fa-file-pdf-o fa-fw"></i> Download Invoice</a>
+    <button type="button" class="btn btn-info hidden-print" onclick="window.print();"><i class="fa fa-print fa-fw"></i>
+        Print Invoice
+    </button>
+    <a href="{{ url_for('ticketing.view_order_after_payment_pdf', order_identifier=order.identifier) }}"
+       class="btn btn-default hidden-print" target="_blank"><i class="fa fa-file-pdf-o fa-fw"></i> Download Invoice</a>
 {% endblock %}
 
 {% block tail_js %}
