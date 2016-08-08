@@ -11,7 +11,7 @@
         {% include 'gentelella/guest/ticketing/components/_invoice.html' %}
     {% endif %}
     {% include 'gentelella/guest/ticketing/components/_order_summary.html' %}
-    {% if order.event.tax %}
+    {% if order.event.tax and order.amount > 0 %}
         <div class="col-xs-12 col-md-6 col-lg-6 pull-left" style="padding-left: 0;">
             <div class="panel panel-default height">
                 <div class="panel-heading"><h3 class="panel-title">From</h3></div>
