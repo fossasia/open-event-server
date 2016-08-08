@@ -1307,7 +1307,7 @@ class DataManager(object):
                 description_toggle = True if description_toggle == 'on' else False
                 ticket = Ticket.query.filter_by(event=event, name=name).first()
                 if not ticket:
-                    # create
+                    # create new ticket
                     ticket = Ticket(
                         name=name,
                         type=ticket_types[i],
@@ -1323,7 +1323,7 @@ class DataManager(object):
                         event=event
                     )
                 else:
-                    # update
+                    # update existing ticket
                     ticket.name = name
                     ticket.type = ticket_types[i]
                     ticket.sales_start = datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M')
@@ -1339,8 +1339,9 @@ class DataManager(object):
                 db.session.add(ticket)
 
         # Remove all the tickets that are not in form
+        # except those that already have placed orders
         for ticket in event.tickets:
-            if ticket.name not in ticket_names:
+            if ticket.name not in ticket_names and ticket.has_order_tickets():
                 db.session.delete(ticket)
 
         event.ticket_url = form.get('ticket_url', None)

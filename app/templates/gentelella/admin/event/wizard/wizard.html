@@ -15,6 +15,11 @@
           href="{{ url_for('static', filename='admin/lib/selectize/dist/css/selectize.bootstrap3.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/Croppie/croppie.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
+    <style type="text/css">
+        .tooltip-inner {
+            min-width: 180px;
+        }
+    </style>
 {% endblock %}
 {% block head_js %}
     {{ super() }}
@@ -91,7 +96,7 @@
                     </div>
 
                     <!-- TicketTemplate -->
-                    {% macro ticket_template(serialno, sales_start=None, sales_end=None, stop_sales='not_set', name='', description='', description_toggle=True, price=0, type=None, quantity=100, min_order=1, max_order=10) %}
+                    {% macro ticket_template(serialno, sales_start=None, sales_end=None, stop_sales='not_set', name='', description='', description_toggle=True, price=0, type=None, quantity=100, min_order=1, max_order=10, has_orders=False) %}
                     <tr>
                         <td>
                             <input type="hidden" name="tickets[type]" value="{{ type | default('', true) }}">
@@ -118,9 +123,15 @@
                                 <a class="btn btn-info edit-ticket-button" data-toggle="tooltip" title="Settings">
                                     <i class="glyphicon glyphicon-cog"></i>
                                 </a>
-                                <a class="btn btn-info remove-ticket-button" data-toggle="tooltip" title="Remove">
-                                    <i class="glyphicon glyphicon-trash"></i>
-                                </a>
+                                {% if has_orders %}
+                                    <a class="btn btn-info" data-toggle="tooltip" title="Cannot remove ticket. Orders have been placed for it." disabled>
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </a>
+                                {% else %}
+                                    <a class="btn btn-info remove-ticket-button" data-toggle="tooltip" title="Remove">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </a>
+                                {% endif %}
                             </div>
                         </td>
                     </tr>
