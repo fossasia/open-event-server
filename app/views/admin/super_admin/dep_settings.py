@@ -3,7 +3,7 @@ from flask_admin import expose
 from super_admin_base import SuperAdminBaseView
 
 from app.settings import get_settings, set_settings
-
+from app.helpers.data_getter import DataGetter
 
 class SuperAdminSettingsView(SuperAdminBaseView):
     @expose('/', methods=('GET', 'POST'))
@@ -21,7 +21,8 @@ class SuperAdminSettingsView(SuperAdminBaseView):
         settings = get_settings()
         return self.render(
             '/gentelella/admin/super_admin/settings/settings.html',
-            settings=settings
+            settings=settings,
+            payment_currencies=DataGetter.get_payment_currencies(),
         )
 
     # @expose('/update', methods=('POST'))

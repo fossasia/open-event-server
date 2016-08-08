@@ -20,10 +20,14 @@
             <li role="presentation">
                 <a href="#tab_content3" id="microservice-tab" data-toggle="tab">Microservices</a>
             </li>
+            <li role="presentation">
+                <a href="#tab_content4" id="microservice-tab" data-toggle="tab">Ticket Fees</a>
+            </li>
         </ul>
         <div class="nav bar_tabs" role="tablist">
                 <a href="#tab_content2" class="accordion-link"id="profile-tab" data-toggle="tab">System Tokens</a>
                 <a href="#tab_content3" class="accordion-link" id="microservice-tab" data-toggle="tab">Microservices</a>
+                <a href="#tab_content4" class="accordion-link" id="microservice-tab" data-toggle="tab">Ticket Fees</a>
         </div>
         <form id="settings_form" method="post" class="form-horizontal form-label-left">
 
@@ -34,7 +38,9 @@
             <div class="tab-pane fade in" id="tab_content3">
                  {% include 'gentelella/admin/super_admin/settings/_microservices.html' %}
             </div>
-
+            <div class="tab-pane fade in" id="tab_content4">
+                 {% include 'gentelella/admin/super_admin/settings/ticket_fees.html' %}
+            </div>
         </div>
         </div>
     </div>

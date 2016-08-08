@@ -1,0 +1,64 @@
+<form role="form" action="/admin/fees/save" method="POST">
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <h4>Payment Currency</h4>
+        Lists the currency options available in Open-Event <br><br>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Currency</label>
+            <div class=" col-md-9 col-xs-12">
+                    <select name="payment_currency" id="payment_currency_name" class="form-control">
+                        {% if not fees.currency %}
+                            <option value="">Please select a currency</option>
+                        {% endif %}
+                        {% for currency in payment_currencies %}
+                            <option value="{{ currency.decode('utf-8') }}" {{ "selected" if fees.payment_currency == currency else '' }}>{{ currency.decode('utf-8') }}</option>
+                        {% endfor %}
+                    </select>
+            </div>
+        </div>
+        <br>
+        <h4>Service Fees</h4>
+        Choose a service fee and an extra fee in US $ for each currency <br><br>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Service Fee</label>
+            <div class=" col-md-9 col-xs-12">
+                <input type="text" name="ticket_service_fee" class="form-control col-md-6 col-xs-6"
+                       value="{{ fees.service_fee|default(0, True) }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Extra Fee</label>
+            <div class=" col-md-9 col-xs-12">
+                <input type="text" name="ticket_extra_fee" class="form-control col-md-6 col-xs-6"
+                       value="{{ fees.extra_fee|default(0, True) }}">
+            </div>
+        </div>
+        <br>
+        <h4>Maximum Fees</h4>
+        Select a maximum fee for each currency type <br><br>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Maximum Fee</label>
+            <div class=" col-md-9 col-xs-12">
+                <input type="text" name="ticket_maximum_fee" class="form-control col-md-6 col-xs-6"
+                       value="{{ fees.maximum_fee|default(0, True) }}">
+            </div>
+        </div>
+        <br>
+        <h4>Processing Fees</h4>
+        Select processing fee for each currency type <br><br>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Processing Fee</label>
+            <div class=" col-md-9 col-xs-12">
+                <input type="text" name="ticket_processing_fee" class="form-control col-md-6 col-xs-6"
+                       value="{{ fees.processing_fee|default(0, True) }}">
+            </div>
+        </div>
+        <br>
+        <div class="ln_solid"></div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success pull-right">Save</button>
+        </div>
+    </div>
+
+</div>
+</form>

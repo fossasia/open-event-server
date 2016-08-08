@@ -58,7 +58,7 @@ from ..models.modules import Module
 from ..models.email_notifications import EmailNotification
 from ..models.message_settings import MessageSettings
 from ..models.tax import Tax
-
+from ..models.ticket_fees import TicketFees
 
 class DataManager(object):
     """Main class responsible for DataBase managing"""
@@ -2031,3 +2031,31 @@ def create_modules(form):
         for event in events:
             event.ticket_include = True
             save_to_db(event, "Event updated")
+
+
+def save_ticketing_fees(form):
+    currency = form['payment_currency']
+    print currency
+    fees = DataGetter.get_fees_for_currency(currency)
+    if fees is None:
+        #print form['ticket_service_fee']
+        #print form['ticket_extra_fee']
+        fees = TicketFees(currency=form['payment_currency'],
+                          service_fee=form['ticket_service_fee'],
+                          extra_fee=form['ticket_extra_fee'],
+                          maximum_fee=form['ticket_maximum_fee'],
+                          processing_fee=form['ticket_processing_fee'])
+
+        print fees.service_fee
+        print 'HELO'
+        save_to_db(fees, "Fee options added")
+        return fees
+
+    fees.service_fee = form['ticket_service_fee'],
+    fees.extra_fee = form['ticket_extra_fee'],
+    fees.maximum_fee = form['ticket_maximum_fee'],
+    fees.processing_fee = form['ticket_processing_fee']
+    save_to_db(fees, "Fee options updated")
+
+    return fees
+

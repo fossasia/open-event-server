@@ -209,6 +209,7 @@ PAYMENT_CURRENCIES = {
     'THB Thai baht ฿',
     'USD U.S. Dollars $',
 }
+
 # Event Images with Event Topics
 
 DEFAULT_EVENT_IMAGES = {
