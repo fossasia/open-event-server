@@ -11,6 +11,10 @@
         {% include 'gentelella/guest/ticketing/components/_invoice.html' %}
     {% endif %}
     {% include 'gentelella/guest/ticketing/components/_order_summary.html' %}
+    {% if order.amount > 0 and order.event.tax %}
+        <br>
+        {{ order.event.tax.invoice_footer }}
+    {% endif %}
 {% endblock %}
 
 {% block right_addon %}
