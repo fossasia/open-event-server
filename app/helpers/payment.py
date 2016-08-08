@@ -3,7 +3,7 @@ import urlparse
 from urllib import urlencode
 
 import stripe
-from flask import url_for
+from flask import url_for, current_app
 
 import requests
 
@@ -143,6 +143,9 @@ class PayPalPaymentsManager(object):
         if not credentials:
             raise Exception('PayPal credentials have not be set correctly')
 
+        if current_app.config['TESTING']:
+            return credentials['CHECKOUT_URL']
+
         if not currency:
             currency = order.event.payment_currency
 
@@ -199,6 +202,9 @@ class PayPalPaymentsManager(object):
             'VERSION': PayPalPaymentsManager.api_version,
             'TOKEN': order.paypal_token
         }
+
+        if current_app.config['TESTING']:
+            return data
 
         response = requests.post(credentials['SERVER'], data=data)
         return dict(urlparse.parse_qsl(response.text))
