@@ -9,7 +9,7 @@ class OrderTicket(db.Model):
     order_id = db.Column(db.Integer, db.ForeignKey('orders.id'), primary_key=True)
     ticket_id = db.Column(db.Integer, db.ForeignKey('ticket.id'), primary_key=True)
     quantity = db.Column(db.Integer)
-    ticket = db.relationship('Ticket')
+    ticket = db.relationship('Ticket', backref='order_tickets')
 
 
 class Order(db.Model):
