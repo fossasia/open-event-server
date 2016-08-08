@@ -396,6 +396,21 @@
                 </div>
             </div>
             <div class="item form-group">
+            <label class="control-label">Choose Payment Method</label>
+            <div class="radio">
+                <label style="font-weight: 300;">
+                    <input type="radio" name="payment_method" value="paypalYes" id="paypalYes" {% if event.paypal_email != '' %}checked="checked"{% endif %}>
+                    <strong style="font-weight: 400;">Choose PayPal</strong>
+                </label>
+            </div>
+            <div class="radio">
+                <label style="font-weight: 300;">
+                    <input type="radio" name="payment_method" value="stripeYes" id="stripeYes" {% if event.paypal_email == '' %}checked="checked"{% endif %}>
+                    <strong style="font-weight: 400;">Choose Stripe</strong>
+                </label>
+            </div>
+            </div>
+            <div id="paypal-holder" class="item form-group" {% if event.paypal_email == '' %}style="display:none"{% endif %}>
                 <label>PayPal Email <span class="required">*</span></label>
                 <input type="email" placeholder="PayPal Email" name="paypal_email" class="form-control"
                        value="{{ event.paypal_email | default('', true) }}">
@@ -403,7 +418,7 @@
                     href="https://www.paypal.com/us/webapps/mpp/referral/paypal-express-checkout?partner_id=W9QW5TKUA246E"
                     target="_blank">Create a free PayPal merchant account.</a>
             </div>
-            <div class="item form-group">
+            <div id="stripe-holder" class="item form-group" {% if event.paypal_email != '' %}style="display:none"{% endif %}>
                 <label>Use Stripe for payments <span class="required">*</span></label><br>
                 <input type="hidden" name="stripe_added" value="{% if event.stripe %}yes{% else %}no{% endif %}">
                 <div id="stripe-connected-message" style="{% if not event.stripe %}display: none;{% endif %}">
@@ -1158,6 +1173,17 @@
     });
     $("#taxNo").on("click", function (e) {
         $taxformHolder.fadeOut();
+    });
+
+    var $paypalHolder = $("#paypal-holder");
+    var $stripeHolder = $("#stripe-holder");
+    $("#paypalYes").on("click", function (e) {
+        $paypalHolder.fadeIn();
+        $stripeHolder.fadeOut();
+    });
+    $("#stripeYes").on("click", function (e) {
+        $paypalHolder.fadeOut();
+        $stripeHolder.fadeIn();
     });
 
     var $taxinvoiceHolder = $("#tax-invoice-holder");
