@@ -197,7 +197,7 @@ class PayPalPaymentsManager(object):
             'SUBJECT': credentials['EMAIL'],
             'METHOD': 'GetExpressCheckoutDetails',
             'VERSION': PayPalPaymentsManager.api_version,
-            'RETURNURL': order.paypal_token
+            'TOKEN': order.paypal_token
         }
 
         response = requests.post(credentials['SERVER'], data=data)

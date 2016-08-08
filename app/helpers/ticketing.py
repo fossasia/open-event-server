@@ -267,24 +267,26 @@ class TicketingManager(object):
             send_email_for_after_purchase(order.user.email, order.get_invoice_number(),
                                           url_for('ticketing.view_order_after_payment',
                                                   order_identifier=order.identifier, _external=True))
-            return order
+            return True, order
         else:
-            return False
+            return False, 'Error'
 
     @staticmethod
     def charge_paypal_order_payment(order):
         payment_details = PayPalPaymentsManager.get_approved_payment_details(order)
         capture_result = PayPalPaymentsManager.capture_payment(order, payment_details['PAYERID'])
-        raise Exception('')  # TODO Remove this
-        order.paid_via = 'paypal'
-        order.status = 'completed'
-        order.completed_at = datetime.utcnow()
-        save_to_db(order)
-
-        send_email_for_after_purchase(order.user.email, order.get_invoice_number(),
-                                      url_for('ticketing.view_order_after_payment',
-                                              order_identifier=order.identifier, _external=True))
-        return order
+        if capture_result['ACK'] == 'Success':
+            order.paid_via = 'paypal'
+            order.status = 'completed'
+            order.transaction_id = capture_result['PAYMENTINFO_0_TRANSACTIONID']
+            order.completed_at = datetime.utcnow()
+            save_to_db(order)
+            send_email_for_after_purchase(order.user.email, order.get_invoice_number(),
+                                          url_for('ticketing.view_order_after_payment',
+                                                  order_identifier=order.identifier, _external=True))
+            return True, order
+        else:
+            return False, capture_result['L_SHORTMESSAGE0']
 
     @staticmethod
     def create_edit_discount_code(form, event_id, discount_code_id=None):

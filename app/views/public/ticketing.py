@@ -91,14 +91,16 @@ class TicketingView(BaseView):
 
     @expose('/charge/payment/', methods=('POST',))
     def charge_stripe_order_payment(self):
-        result = TicketingManager.charge_stripe_order_payment(request.form)
-        if result:
+        status, result = TicketingManager.charge_stripe_order_payment(request.form)
+        if status:
             return jsonify({
-                "status": "ok"
+                "status": "ok",
+                "message": result.transaction_id
             })
         else:
             return jsonify({
-                "status": "error"
+                "status": "error",
+                "message": result
             })
 
     @expose('/expire/<order_identifier>/', methods=('POST',))
@@ -124,8 +126,13 @@ class TicketingView(BaseView):
                 account = stripe.Account.retrieve(response_json['stripe_user_id'])
                 return self.render('/gentelella/guest/ticketing/stripe_oauth_callback.html', response=response_json,
                                    account=account)
-
         return "Error"
+
+    @expose('/<order_identifier>/error/', methods=('GET', 'POST'))
+    def show_transaction_error(self, order_identifier):
+        order = TicketingManager.get_order_by_identifier(order_identifier)
+        return self.render('/gentelella/guest/ticketing/order_post_payment_error.html', order=order,
+                           event=order.event)
 
     @expose('/<order_identifier>/paypal/<function>/', methods=('GET',))
     def paypal_callback(self, order_identifier, function):
@@ -137,6 +144,10 @@ class TicketingView(BaseView):
             save_to_db(order)
             return redirect(url_for('event_detail.display_event_detail_home', event_id=order.event_id))
         elif function == 'success':
-            TicketingManager.charge_paypal_order_payment(order)
-            return redirect(url_for('.view_order', order_identifier=order_identifier))
-        return function
+            status, result = TicketingManager.charge_paypal_order_payment(order)
+            if status:
+                return redirect(url_for('.view_order', order_identifier=order_identifier))
+            else:
+                flash("An error occurred while processing your transaction. " + str(result), "danger")
+                return redirect(url_for('.show_transaction_error', order_identifier=order_identifier))
+        abort(404)
