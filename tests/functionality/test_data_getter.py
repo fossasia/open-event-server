@@ -61,8 +61,5 @@ class TestDataGetter(OpenEventTestCase):
         with app.test_request_context():
             self.assertTrue(DataGetter.get_services())
 
-    def test_get_all_events_owners(self):
-        with app.test_request_context():
-            self.assertEquals(DataGetter.get_all_owner_events())
 if __name__ == '__main__':
     unittest.main()

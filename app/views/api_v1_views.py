@@ -404,12 +404,7 @@ def facebook_callback():
         response = facebook.get(FbOAuth.get_user_info())
         if response.status_code == 200:
             user_info = response.json()
-            print user_info
-            email = user_info['email']
-            user = DataGetter.get_user_by_email(email, no_flash=True)
-            print user
-            print user.user_detail.facebook
-            print user.user_detail.firstname
+            user = login.current_user
             if not user.user_detail.facebook:
                 user.user_detail.facebook = user_info['link']
             if not user.user_detail.firstname:
@@ -429,7 +424,6 @@ def facebook_callback():
         response = facebook.get(FbOAuth.get_user_info())
         if response.status_code == 200:
             user_info = response.json()
-            print user_info
             email = user_info['email']
             user_email = DataGetter.get_user_by_email(email, no_flash=True)
             user = create_user_oauth(user_email, user_info, token=token, method='Facebook')

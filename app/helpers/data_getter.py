@@ -113,12 +113,6 @@ class DataGetter(object):
                                           hash=hash_code, **kwargs).first()
 
     @staticmethod
-    def get_all_owner_events():
-        """Method return all owner events"""
-        # return Event.query.filter_by(owner=owner_id)
-        return login.current_user.events_assocs
-
-    @staticmethod
     def get_email_notification_settings_by_id(email_id):
         return EmailNotification.query.get(email_id)
 
