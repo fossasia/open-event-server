@@ -25,8 +25,11 @@ class WebAppCreator(AppCreator):
             "apiendpoint": request.url_root + "api/v2/events/" + str(self.event.id),
             "datasource": "eventapi"
         }
-        r = requests.post(self.app_link, json=data)
-
+        headers = {
+            'cache-control': "no-cache",
+            'content-type': "application/x-www-form-urlencoded"
+        }
+        requests.request("POST", self.app_link, data=data, headers=headers)
     def __save(self):
         pass
 
