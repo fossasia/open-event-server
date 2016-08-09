@@ -68,6 +68,12 @@ class Ticket(db.Model):
         """
         return bool(len(self.order_tickets) > 0)
 
+    def tags_csv(self):
+        """Return list of Tags in CSV.
+        """
+        tag_names = [tag.name for tag in self.tags]
+        return ','.join(tag_names)
+
     def __repr__(self):
         return '<Ticket %r>' % self.name
 
@@ -85,6 +91,12 @@ class TicketTag(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
+
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+
+    def __init__(self, name, event_id):
+        self.name = name
+        self.event_id = event_id
 
     def __repr__(self):
         return '<TicketTag %r>' % self.name

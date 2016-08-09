@@ -1102,6 +1102,15 @@
     var ticketsCount = 1;
     var $paymentsystemHolder = $("#payment-system-holder");
 
+    $(document).ready(function() {
+        $("#event-wizard-form .ticket-tags").selectize({
+            plugins: ['remove_button'],
+            persist: false,
+            createOnBlur: true,
+            create: true
+        });
+    });        
+
     function addTicket(type) {
         /* Clone ticket from template */
         var $tmpl = $("#ticket-template").clone().children("table").children("tbody").children("tr");
@@ -1120,6 +1129,13 @@
         $ticketMore.find("input.checkbox.flat").iCheck({
             checkboxClass: 'icheckbox_flat-green',
             radioClass: 'iradio_flat-green'
+        });
+
+        $ticketMore.find(".ticket-tags").selectize({
+            plugins: ['remove_button'],
+            persist: false,
+            createOnBlur: true,
+            create: true
         });
 
         /* Bind events to Edit and Remove buttons */
