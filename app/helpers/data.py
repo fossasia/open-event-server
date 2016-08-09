@@ -7,6 +7,7 @@ import traceback
 from datetime import datetime, timedelta
 
 import requests
+from requests.exceptions import ConnectionError
 from flask import flash, request, url_for, g, current_app
 from flask_socketio import emit
 from flask.ext import login
@@ -1189,9 +1190,16 @@ class DataManager(object):
     @staticmethod
     def update_searchable_location_name(event):
         if event.latitude and event.longitude:
-            response = requests.get(
-                "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
-                    event.longitude)).json()
+            url = 'https://maps.googleapis.com/maps/api/geocode/json'
+            latlng = '{},{}'.format(event.latitude, event.longitude)
+            params = {'latlng': latlng}
+            response = dict()
+
+            try:
+                response = requests.get(url, params).json()
+            except ConnectionError:
+                response['status'] = u'Error'
+
             if response['status'] == u'OK':
                 for addr in response['results'][0]['address_components']:
                     if addr['types'] == ['locality', 'political']:
