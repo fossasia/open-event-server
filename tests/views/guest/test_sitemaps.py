@@ -33,8 +33,8 @@ class TestSitemaps(OpenEventTestCase):
         with app.test_request_context():
             event = ObjectMother.get_event()
             save_to_db(event)
-        resp = self.app.get('/sitemaps/events/1.xml.gz')
-        self.assertIn('/1/', resp.data)
+            resp = self.app.get('/sitemaps/events/1.xml.gz')
+            self.assertIn('/' + str(event.identifier) + '/', resp.data)
 
     def test_event_page_not_exist(self):
         resp = self.app.get('/sitemaps/events/2.xml.gz')

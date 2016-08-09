@@ -6,6 +6,8 @@ import random
 import traceback
 from datetime import datetime, timedelta
 
+import binascii
+
 import requests
 from requests.exceptions import ConnectionError
 from flask import flash, request, url_for, g, current_app
@@ -419,7 +421,7 @@ class DataManager(object):
                 # If a user is registered by the email, send a notification as well
                 user = DataGetter.get_user_by_email(email, no_flash=True)
                 if user:
-                    cfs_link = url_for('event_detail.display_event_cfs', event_id=event.id)
+                    cfs_link = url_for('event_detail.display_event_cfs', identifier=event.identifier)
                     Helper.send_notif_invite_papers(user, event.name, cfs_link, link)
 
     @staticmethod

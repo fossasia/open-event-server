@@ -1,16 +1,14 @@
 """Copyright 2016 Niranjan Rajendran"""
 import binascii
 import os
-import uuid
 
 from datetime import timedelta, datetime
 
-from sqlalchemy import func
 from flask import url_for
 
 from flask.ext import login
 from app.helpers.data import save_to_db
-from app.helpers.helpers import string_empty, send_email_for_after_purchase
+from app.helpers.helpers import string_empty, send_email_for_after_purchase, get_count
 from app.models.order import Order
 from app.models.ticket import Ticket
 from app.helpers.data_getter import DataGetter
@@ -24,13 +22,6 @@ from app.models.user_detail import UserDetail
 from app.models.discount_code import DiscountCode
 
 from app.helpers.helpers import send_email_after_account_create_with_password
-
-
-def get_count(q):
-    count_q = q.statement.with_only_columns([func.count()]).order_by(None)
-    count = q.session.execute(count_q).scalar()
-    return count
-
 
 class TicketingManager(object):
     """All ticketing and orders related functions"""
@@ -93,7 +84,7 @@ class TicketingManager(object):
 
     @staticmethod
     def get_new_order_identifier():
-        identifier = str(uuid.uuid4())
+        identifier = binascii.b2a_hex(os.urandom(32))
         count = get_count(Order.query.filter_by(identifier=identifier))
         if count == 0:
             return identifier

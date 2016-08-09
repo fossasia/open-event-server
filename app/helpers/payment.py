@@ -9,16 +9,9 @@ import requests
 
 from app.helpers.data_getter import DataGetter
 from app.helpers.data import save_to_db
+from app.helpers.helpers import represents_int
 from app.models.stripe_authorization import StripeAuthorization
 from app.settings import get_settings
-
-def represents_int(string):
-    try:
-        int(string)
-        return True
-    except:
-        return False
-
 
 class StripePaymentsManager(object):
 

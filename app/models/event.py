@@ -1,13 +1,26 @@
 """Copyright 2015 Rafal Kowalski"""
+import binascii
+import os
+
 from sqlalchemy import event
 
 from flask.ext import login
 from app.helpers.date_formatter import DateFormatter
+from app.helpers.helpers import get_count
 from app.helpers.versioning import clean_up_string, clean_html
 from custom_forms import CustomForms, session_form_str, speaker_form_str
 from app.models.email_notifications import EmailNotification
 from version import Version
 from . import db
+
+
+def get_new_event_identifier(length=8):
+    identifier = binascii.b2a_hex(os.urandom(length / 2))
+    count = get_count(Event.query.filter_by(identifier=identifier))
+    if count == 0:
+        return identifier
+    else:
+        return get_new_event_identifier()
 
 
 class EventsUsers(db.Model):
@@ -29,6 +42,7 @@ class Event(db.Model):
         'exclude': ['creator_id', 'schedule_published_on']
     }
     id = db.Column(db.Integer, primary_key=True)
+    identifier = db.Column(db.String)
     name = db.Column(db.String, nullable=False)
     email = db.Column(db.String)
     logo = db.Column(db.String)
@@ -155,6 +169,7 @@ class Event(db.Model):
         self.pay_by_cheque = pay_by_cheque
         self.pay_by_bank = pay_by_bank
         self.pay_onsite = pay_onsite
+        self.identifier = get_new_event_identifier()
 
     def __repr__(self):
         return '<Event %r>' % self.name

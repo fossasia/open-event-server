@@ -67,7 +67,7 @@ class TestTicketingPage(OpenEventTestCase):
     def test_ticket_display(self):
         with app.test_request_context():
             event, ticket = get_event_ticket()
-            response = self.app.get(url_for('event_detail.display_event_detail_home', event_id=event.id),
+            response = self.app.get(url_for('event_detail.display_event_detail_home', identifier=event.identifier),
                                     follow_redirects=True)
             self.assertTrue(str(ticket.name) in response.data, msg=response.data)
 

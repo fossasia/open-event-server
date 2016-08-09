@@ -16,7 +16,7 @@
         <tbody>
         {% for event in events %}
 
-            {% set url = url_for('event_detail.display_event_detail_home', event_id = event.id, _external=True) %}
+            {% set url = url_for('event_detail.display_event_detail_home', identifier = event.identifier, _external=True) %}
 
             {% set drafts = {'count': 0} %}
             {% set accepted = {'count': 0} %}

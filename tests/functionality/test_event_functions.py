@@ -13,8 +13,8 @@ class TestEventFunctions(OpenEventTestCase):
         self.app = Setup.create_app()
 
     def test_add_event_to_db(self):
-        event = ObjectMother.get_event()
         with app.test_request_context():
+            event = ObjectMother.get_event()
             save_to_db(event, "Event saved")
             self.assertEqual(event.id, event.id)
 

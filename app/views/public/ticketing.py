@@ -142,7 +142,7 @@ class TicketingView(BaseView):
         if function == 'cancel':
             order.status = 'expired'
             save_to_db(order)
-            return redirect(url_for('event_detail.display_event_detail_home', event_id=order.event_id))
+            return redirect(url_for('event_detail.display_event_detail_home', identifier=order.event.identifier))
         elif function == 'success':
             status, result = TicketingManager.charge_paypal_order_payment(order)
             if status:
