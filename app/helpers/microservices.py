@@ -17,9 +17,19 @@ class WebAppCreator(AppCreator):
     def __init__(self, event_id):
         super(WebAppCreator, self).__init__(event_id)
         self.app_link = get_settings().get('web_app_url')
-    def create(self):
-        pass
 
+    def create(self):
+        data = {
+            "email": login.current_user.email,
+            "name": self.app_name,
+            "apiendpoint": request.url_root + "api/v2/events/" + str(self.event.id),
+            "datasource": "eventapi"
+        }
+        headers = {
+            'cache-control': "no-cache",
+            'content-type': "application/x-www-form-urlencoded"
+        }
+        requests.request("POST", self.app_link, data=data, headers=headers)
     def __save(self):
         pass
 

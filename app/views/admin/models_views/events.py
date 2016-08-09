@@ -17,7 +17,7 @@ from werkzeug.datastructures import ImmutableMultiDict
 from app.helpers.helpers import send_event_publish
 from app.helpers.ticketing import TicketingManager
 from app.settings import get_settings
-from app.helpers.microservices import AndroidAppCreator
+from app.helpers.microservices import AndroidAppCreator, WebAppCreator
 
 
 def is_verified_user():
@@ -359,6 +359,11 @@ class EventsView(BaseView):
     @expose('/<int:event_id>/generate_android_app/', methods=('POST',))
     def generate_android_app(self, event_id):
         AndroidAppCreator(event_id).create()
+        return redirect(url_for('.details_view', event_id=event_id))
+
+    @expose('/<int:event_id>/generate_web_app/', methods=('POST',))
+    def generate_web_app(self, event_id):
+        WebAppCreator(event_id).create()
         return redirect(url_for('.details_view', event_id=event_id))
 
     @expose('/<int:event_id>/restore/<int:version_id>', methods=('GET',))
