@@ -11,6 +11,7 @@ warnings.simplefilter('ignore', ExtDeprecationWarning)
 # Keep it before flask extensions are imported
 import arrow
 from celery import Celery
+from celery.signals import after_task_publish
 from flask.ext.htmlmin import HTMLMIN
 import logging
 import os.path
@@ -305,6 +306,19 @@ def make_celery(app):
 
 
 celery = make_celery(current_app)
+
+
+# http://stackoverflow.com/questions/9824172/find-out-whether-celery-task-exists
+@after_task_publish.connect
+def update_sent_state(sender=None, body=None, **kwargs):
+    # the task may not exist if sent using `send_task` which
+    # sends tasks by name, so fall back to the default result backend
+    # if that is the case.
+    task = celery.tasks.get(sender)
+    backend = task.backend if task else celery.backend
+    backend.store_result(body['id'], None, 'WAITING')
+
+
 import api.helpers.tasks
 import helpers.tasks
 
