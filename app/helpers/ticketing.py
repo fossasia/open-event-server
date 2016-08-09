@@ -1,6 +1,7 @@
 """Copyright 2016 Niranjan Rajendran"""
 import binascii
 import os
+import uuid
 
 from datetime import timedelta, datetime
 
@@ -92,7 +93,7 @@ class TicketingManager(object):
 
     @staticmethod
     def get_new_order_identifier():
-        identifier = binascii.b2a_hex(os.urandom(32))
+        identifier = str(uuid.uuid4())
         count = get_count(Order.query.filter_by(identifier=identifier))
         if count == 0:
             return identifier
