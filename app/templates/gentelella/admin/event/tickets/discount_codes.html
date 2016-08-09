@@ -59,7 +59,7 @@
                 <td>{{ discount_code.code }}</td>
                 <td>
                     {% if discount_code.type == 'amount' %}
-                        ${{ discount_code.value | money }}
+                        {{ event.payment_currency | currency_symbol }}{{ discount_code.value | money }}
                     {% else %}
                         {{ discount_code.value }} %
                     {% endif %}

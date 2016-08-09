@@ -29,8 +29,8 @@
                                     </a>
                                 </td>
                                 <td>{{ ticket.sales_end.strftime('%a, %B %d') }}</td>
-                                <td>${{ ticket.price | money }}</td>
-                                <td>$ 0.00</td>
+                                <td>{{ event.payment_currency | currency_symbol }}{{ ticket.price | money }}</td>
+                                <td>{{ event.payment_currency | currency_symbol }} 0.00</td>
                                 <td>
                                     <input type="hidden" name="ticket_ids[]" value="{{ ticket.id }}">
                                     <select name="ticket_quantities[]" class="quantity-select"
@@ -43,7 +43,7 @@
                                         {% endfor %}
                                     </select>
                                 </td>
-                                <td class="subtotal">${{ 0 | money }}</td>
+                                <td class="subtotal">{{ event.payment_currency | currency_symbol }}{{ 0 | money }}</td>
                             </tr>
                             {% endif %}
                             {% if loop.last %}
@@ -133,10 +133,10 @@
             });
 
             var subtotal = (parseInt($(this).data('rate')) + parseInt($(this).data('fee'))) * parseInt($(this).val());
-            $(this).closest("tr").find(".subtotal").text("$ " + subtotal + ".00");
+            $(this).closest("tr").find(".subtotal").text("{{ event.payment_currency | currency_symbol }} " + subtotal + ".00");
 
             $totalHolder.show();
-            $totalAmount.text("$" + total + ".00");
+            $totalAmount.text("{{ event.payment_currency | currency_symbol }} " + total + ".00");
 
             if (hasMoreThenZero) {
                 $orderNowBtn.removeAttr("disabled");

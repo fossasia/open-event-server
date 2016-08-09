@@ -1,4 +1,10 @@
 language: python
+addons:
+  apt:
+    packages:
+    - python-dev
+    - libssl-dev
+    - libffi-dev
 python:
   - "2.7"
 # command to install dependencies

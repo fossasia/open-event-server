@@ -4,6 +4,7 @@
 import warnings
 
 from flask.exthook import ExtDeprecationWarning
+from forex_python.converter import CurrencyCodes
 from pytz import utc
 
 warnings.simplefilter('ignore', ExtDeprecationWarning)
@@ -168,21 +169,25 @@ def social_settings():
     return dict(settings=settings)
 
 @app.template_filter('pretty_name')
-def pretty_name_filter(s):
-    s = str(s)
-    s = s.replace('_', ' ')
-    s = s.title()
-    return s
+def pretty_name_filter(string):
+    string = str(string)
+    string = string.replace('_', ' ')
+    string = string.title()
+    return string
 
+@app.template_filter('currency_symbol')
+def currency_symbol_filter(currency_code):
+    symbol = CurrencyCodes().get_symbol(currency_code)
+    return symbol if symbol else '$'
 
 @app.template_filter('camel_case')
-def camel_case_filter(s):
-    return camel_case(s)
+def camel_case_filter(string):
+    return camel_case(string)
 
 
 @app.template_filter('slugify')
-def slugify_filter(s):
-    return slugify(s)
+def slugify_filter(string):
+    return slugify(string)
 
 
 @app.template_filter('humanize')

@@ -40,7 +40,6 @@ class Event(db.Model):
     location_name = db.Column(db.String)
     searchable_location_name = db.Column(db.String)
     description = db.Column(db.Text)
-    event_url = db.Column(db.String)
     background_url = db.Column(db.String)
     organizer_name = db.Column(db.String)
     show_map = db.Column(db.Integer)
@@ -57,7 +56,6 @@ class Event(db.Model):
     role_invites = db.relationship('RoleInvite', back_populates='event')
     privacy = db.Column(db.String, default="public")
     state = db.Column(db.String, default="Draft")
-    closing_datetime = db.Column(db.DateTime)
     type = db.Column(db.String)
     topic = db.Column(db.String)
     sub_topic = db.Column(db.String)
@@ -73,6 +71,11 @@ class Event(db.Model):
     payment_currency = db.Column(db.String)
     paypal_email = db.Column(db.String)
     tax_allow = db.Column(db.Boolean, default=False)
+    pay_by_paypal = db.Column(db.Boolean, default=False)
+    pay_by_stripe = db.Column(db.Boolean, default=False)
+    pay_by_cheque = db.Column(db.Boolean, default=False)
+    pay_by_bank = db.Column(db.Boolean, default=False)
+    pay_onsite = db.Column(db.Boolean, default=False)
 
     def __init__(self,
                  name=None,
@@ -85,12 +88,10 @@ class Event(db.Model):
                  location_name=None,
                  email=None,
                  description=None,
-                 event_url=None,
                  background_url=None,
                  organizer_name=None,
                  organizer_description=None,
                  state=None,
-                 closing_datetime=None,
                  type=None,
                  privacy=None,
                  topic=None,
@@ -109,7 +110,12 @@ class Event(db.Model):
                  payment_country=None,
                  payment_currency=None,
                  paypal_email=None,
-                 call_for_papers=None):
+                 call_for_papers=None,
+                 pay_by_paypal=None,
+                 pay_by_stripe=None,
+                 pay_by_cheque=None,
+                 pay_by_bank=None,
+                 pay_onsite=None):
 
         self.name = name
         self.logo = logo
@@ -121,14 +127,12 @@ class Event(db.Model):
         self.longitude = longitude
         self.location_name = location_name
         self.description = clean_up_string(description)
-        self.event_url = event_url
         self.background_url = background_url
         self.organizer_name = organizer_name
         self.organizer_description = clean_up_string(organizer_description)
         self.state = state
         self.show_map = show_map
         self.privacy = privacy
-        self.closing_datetime = closing_datetime
         self.type = type
         self.topic = topic
         self.sub_topic = sub_topic
@@ -146,6 +150,11 @@ class Event(db.Model):
         self.payment_currency = payment_currency
         self.paypal_email = paypal_email
         self.call_for_papers = call_for_papers
+        self.pay_by_paypal = pay_by_paypal
+        self.pay_by_stripe = pay_by_stripe
+        self.pay_by_cheque = pay_by_cheque
+        self.pay_by_bank = pay_by_bank
+        self.pay_onsite = pay_onsite
 
     def __repr__(self):
         return '<Event %r>' % self.name
@@ -183,7 +192,6 @@ class Event(db.Model):
             'location_name': self.location_name,
             'email': self.email,
             'description': self.description,
-            'event_url': self.event_url,
             'background_url': self.background_url,
             'organizer_name': self.organizer_name,
             'organizer_description': self.organizer_description,
