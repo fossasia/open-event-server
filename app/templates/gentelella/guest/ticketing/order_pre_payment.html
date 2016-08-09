@@ -146,19 +146,23 @@
                             <label for="zipcode" class="col-sm-4 control-label">Pay Via <span
                                     class="required">*</span></label>
                             <div class="col-sm-6">
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="pay_via_service" id="pay_via_service1" value="stripe" style="margin-top: 14px;"
-                                               checked required>
-                                            <img src="{{ url_for('static', filename='img/stripe_logos.png') }}" alt="Pay with Stripe using your favorite card" />
-                                    </label>
-                                </div>
-                                <div class="radio">
-                                    <label style="margin-top: 10px;">
-                                        <input type="radio" name="pay_via_service" id="pay_via_service2" value="paypal" style="margin-top: 6px;" required>
-                                        <img src="{{ url_for('static', filename='img/paypal_logo.png') }}" alt="Pay with PayPal, PayPal Credit or any major credit card" />
-                                    </label>
-                                </div>
+                                {% if event.pay_by_stripe %}
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="pay_via_service" id="pay_via_service1" value="stripe" style="margin-top: 14px;"
+                                                   checked required>
+                                                <img src="{{ url_for('static', filename='img/stripe_logos.png') }}" alt="Pay with Stripe using your favorite card" />
+                                        </label>
+                                    </div>
+                                {% endif %}
+                                {% if event.pay_by_paypal %}
+                                    <div class="radio">
+                                        <label style="margin-top: 10px;">
+                                            <input type="radio" name="pay_via_service" id="pay_via_service2" value="paypal" style="margin-top: 6px;" {% if not event.pay_by_stripe %}checked{% endif %} required>
+                                            <img src="{{ url_for('static', filename='img/paypal_logo.png') }}" alt="Pay with PayPal, PayPal Credit or any major credit card" />
+                                        </label>
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     {% endif %}

@@ -904,7 +904,6 @@ class DataManager(object):
         if form['payment_currency'] != '':
             payment_currency = form.get('payment_currency').split(' ')[0]
 
-
         paypal_email = ''
         event = Event(name=form['name'],
                       start_time=DataManager.get_event_time_field_format(form, 'start'),
@@ -926,18 +925,16 @@ class DataManager(object):
                       payment_currency=payment_currency,
                       paypal_email=paypal_email)
 
+        event.pay_by_paypal = 'pay_by_paypal' in form
+        event.pay_by_cheque = 'pay_by_cheque' in form
+        event.pay_by_bank = 'pay_by_bank' in form
+        event.pay_onsite = 'pay_onsite' in form
+        event.pay_by_stripe = 'pay_by_stripe' in form
+
         if 'pay_by_paypal' in form:
             event.paypal_email = form.get('paypal_email')
-            event.pay_by_paypal = True
-
-        if 'pay_by_cheque' in form:
-            event.pay_by_cheque = True
-
-        if 'pay_by_bank' in form:
-            event.pay_by_bank = True
-
-        if 'pay_onsite' in form:
-            event.pay_onsite = True
+        else:
+            event.paypal_email = None
 
         event = DataManager.update_searchable_location_name(event)
 
@@ -1043,7 +1040,6 @@ class DataManager(object):
                         event_id=event.id
                     )
                     save_to_db(stripe_authorization)
-                event.pay_by_stripe = True
 
             if form.get('sponsors_state', u'off') == u'on':
                 for index, name in enumerate(sponsor_name):
@@ -1297,6 +1293,17 @@ class DataManager(object):
         event.privacy = form.get('privacy', 'public')
         event.payment_country = form.get('payment_country')
 
+        event.pay_by_paypal = 'pay_by_paypal' in form
+        event.pay_by_cheque = 'pay_by_cheque' in form
+        event.pay_by_bank = 'pay_by_bank' in form
+        event.pay_onsite = 'pay_onsite' in form
+        event.pay_by_stripe = 'pay_by_stripe' in form
+
+        if 'pay_by_paypal' in form:
+            event.paypal_email = form.get('paypal_email')
+        else:
+            event.paypal_email = None
+
         payment_currency = ''
         if form['payment_currency'] != '':
             payment_currency = form.get('payment_currency').split(' ')[0]
@@ -1500,16 +1507,17 @@ class DataManager(object):
         if event.stripe:
             delete_from_db(event.stripe, "Old stripe auth deleted")
 
-        if form.get('stripe_added', u'no') == u'yes':
-            stripe_authorization = StripeAuthorization(
-                stripe_secret_key=form.get('stripe_secret_key', ''),
-                stripe_refresh_token=form.get('stripe_refresh_token', ''),
-                stripe_publishable_key=form.get('stripe_publishable_key', ''),
-                stripe_user_id=form.get('stripe_user_id', ''),
-                stripe_email=form.get('stripe_email', ''),
-                event_id=event.id
-            )
-            save_to_db(stripe_authorization)
+        if 'pay_by_stripe' in form:
+            if form.get('stripe_added', u'no') == u'yes':
+                stripe_authorization = StripeAuthorization(
+                    stripe_secret_key=form.get('stripe_secret_key', ''),
+                    stripe_refresh_token=form.get('stripe_refresh_token', ''),
+                    stripe_publishable_key=form.get('stripe_publishable_key', ''),
+                    stripe_user_id=form.get('stripe_user_id', ''),
+                    stripe_email=form.get('stripe_email', ''),
+                    event_id=event.id
+                )
+                save_to_db(stripe_authorization)
 
         if form.get('has_session_speakers', u'no') == u'yes':
 

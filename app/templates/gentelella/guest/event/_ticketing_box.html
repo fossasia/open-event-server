@@ -90,7 +90,9 @@
                 </div>
                 <div class="panel-footer" style="background-color: #ffffff;">
                     <div class="pull-right">
-                        <img src="{{ url_for('static', filename='img/paymentlogoshorizontal.png') }}">
+                        {% if event.pay_by_paypal or event.pay_by_stripe %}
+                            <img src="{{ url_for('static', filename='img/paymentlogoshorizontal.png') }}">
+                        {% endif %}
                         <button class="btn btn-success" {% if tickets %}type="submit"{% else %} type="button"
                                 disabled{% endif %} id="order-now-btn">Order Now
                         </button>
