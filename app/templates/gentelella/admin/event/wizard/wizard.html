@@ -102,7 +102,7 @@
                             <input type="hidden" name="tickets[type]" value="{{ type | default('', true) }}">
                             <div class="item form-group" style="margin-bottom: 0;">
                                 <input type="text" name="tickets[name]" class="form-control" placeholder="Ticket Name" value="{{ name }}"
-                                    required="required" data-uniqueticket="true">
+                                    required="required" data-uniqueticket="true" {{ 'readonly' if has_orders else '' }}>
                                 <div class="help-block with-errors"></div>
                             </div>
                         </td>
@@ -110,7 +110,7 @@
                         {% if type == "free" %}
                             <input type="text" name="tickets[price]" class="form-control" value="Free" readonly>
                         {% elif type == "paid" %}
-                            <input type="number" min="0" name="tickets[price]" class="form-control" placeholder="$" value="{{ price | default('', None) }}" required="required">
+                            <input type="number" min="0" name="tickets[price]" class="form-control" placeholder="$" value="{{ price | default('', None) }}" required="required" {{ 'readonly' if has_orders else '' }}>
                         {% elif type == "donation" %}
                             <input type="text" name="tickets[price]" class="form-control" value="Donation" readonly>
                         {% endif %}
@@ -175,12 +175,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="item form-group">
-                                        <label style="font-weight: normal;">
-                                            <input type="checkbox" class="checkbox flat form-control" name="tickets_hide_{{ serialno }}" {{ 'checked' if hide else ''}}>
-                                            Hide Ticket
-                                        </label>
-                                    </div>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="item form-group">
@@ -194,6 +188,12 @@
                                                 <input type="number" min="1" class="form-control" value="{{ max_order }}" placeholder="10" name="tickets[max_order]">
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="item form-group">
+                                        <label style="font-weight: normal;">
+                                            <input type="checkbox" class="checkbox flat form-control" name="tickets_hide_{{ serialno }}" {{ 'checked' if hide else ''}}>
+                                            Hide Ticket
+                                        </label>
                                     </div>
                                 </div>
                             </div>
