@@ -60,5 +60,6 @@ class TestDataGetter(OpenEventTestCase):
     def test_get_services(self):
         with app.test_request_context():
             self.assertTrue(DataGetter.get_services())
+
 if __name__ == '__main__':
     unittest.main()
