@@ -359,7 +359,7 @@
         {% endif %}
 
         <div id="payment-system-holder" class="item form-group"
-             {% if not event or ('paid' not in ticket_types and 'donation' not in ticket_types) or (not event.payment_country and not event.payment_currency) %}style="display:none;"{% endif %}>
+             {% if not event or ('paid' not in ticket_types and 'donation' not in ticket_types) %}style="display:none;"{% endif %}>
             <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
                 <i class="fa fa-money"></i>
                 Add Payment details
