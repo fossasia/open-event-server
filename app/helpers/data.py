@@ -904,7 +904,6 @@ class DataManager(object):
         if form['payment_currency'] != '':
             payment_currency = form.get('payment_currency').split(' ')[0]
 
-
         paypal_email = ''
         event = Event(name=form['name'],
                       start_time=DataManager.get_event_time_field_format(form, 'start'),
@@ -1161,7 +1160,7 @@ class DataManager(object):
                               address=form.get('buisness_address', ''),
                               city=form.get('invoice_city', ''),
                               state=form.get('invoice_state', ''),
-                              zip=form.get('tax_zip', 0),
+                              zip=form.get('invoice_zip', 0),
                               invoice_footer=form.get('invoice_footer', ''),
                               tax_include_in_price=tax_include_in_price,
                               event_id=event.id)
@@ -1375,9 +1374,10 @@ class DataManager(object):
 
         event.ticket_url = form.get('ticket_url', None)
 
-        if not event.ticket_url and tax:
+        if not event.ticket_url:
             if form['taxAllow'] == 'taxNo':
                 event.tax_allow = False
+                delete_from_db(tax, "Tax options deleted")
 
             if form['taxAllow'] == 'taxYes':
                 event.tax_allow = True
@@ -1390,21 +1390,39 @@ class DataManager(object):
                 if form['tax_options'] == 'tax_include':
                     tax_include_in_price = True
 
-                tax.country = form['tax_country'],
-                tax.tax_name = form['tax_name'],
-                tax.tax_rate = form['tax_rate'],
-                tax.tax_id = form['tax_id'],
-                tax.send_invoice = tax_invoice,
-                tax.registered_company = form.get('registered_company', ''),
-                tax.address = form.get('buisness_address', ''),
-                tax.city = form.get('invoice_city', ''),
-                tax.state = form.get('invoice_state', ''),
-                tax.zip = form.get('tax_zip', 0),
-                tax.invoice_footer = form.get('invoice_footer', ''),
-                tax.tax_include_in_price = tax_include_in_price,
-                tax.event_id = event.id
+                if not tax:
+                    tax = Tax(country=form['tax_country'],
+                              tax_name=form['tax_name'],
+                              tax_rate=form['tax_rate'],
+                              tax_id=form['tax_id'],
+                              send_invoice=tax_invoice,
+                              registered_company=form.get('registered_company', ''),
+                              address=form.get('buisness_address', ''),
+                              city=form.get('invoice_city', ''),
+                              state=form.get('invoice_state', ''),
+                              zip=form.get('invoice_zip', 0),
+                              invoice_footer=form.get('invoice_footer', ''),
+                              tax_include_in_price=tax_include_in_price,
+                              event_id=event.id)
 
-                save_to_db(tax, "Tax Options Saved")
+                    save_to_db(tax, "Tax ")
+
+                if tax:
+                    tax.country = form['tax_country'],
+                    tax.tax_name = form['tax_name'],
+                    tax.tax_rate = form['tax_rate'],
+                    tax.tax_id = form['tax_id'],
+                    tax.send_invoice = tax_invoice,
+                    tax.registered_company = form.get('registered_company', ''),
+                    tax.address = form.get('buisness_address', ''),
+                    tax.city = form.get('invoice_city', ''),
+                    tax.state = form.get('invoice_state', ''),
+                    tax.zip = form.get('invoice_zip', 0),
+                    tax.invoice_footer = form.get('invoice_footer', ''),
+                    tax.tax_include_in_price = tax_include_in_price,
+                    tax.event_id = event.id
+
+                    save_to_db(tax, "Tax Options Updated")
 
         event = DataManager.update_searchable_location_name(event)
 
