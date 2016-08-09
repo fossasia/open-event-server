@@ -654,11 +654,11 @@
                                 <div class="col-sm-12 input-group">
                                     <label>Country<span class="required">*</span></label>
                                     <select name="tax_country" id="tax_country_name" class="form-control">
-                                        {% if not event or not event.payment_country %}
+                                        {% if not event or not tax.country %}
                                             <option value="">Choose a country for your tax payment</option>
                                         {% endif %}
                                         {% for country in payment_countries %}
-                                            <option value="{{ tax.country | default('', true) }}" {{ "selected" if event and event.payment_country == country else '' }}>{{ country }}</option>
+                                            <option value="{{ tax.country | default('', true) }}" {{ "selected" if event and tax.country == country else '' }}>{{ country }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -703,8 +703,8 @@
                                         <label for="registered_company">Registered Company<span
                                                 class="required">*</span></label>
                                         <input value="{{ tax.registered_company | default('', true) }}" type="text"
-                                               class="form-control" name="regestered_company" id="regestered_company"
-                                               placeholder="Enter Comapny Name">
+                                               class="form-control" name="registered_company" id="registered_company"
+                                               placeholder="Enter Company Name">
                                     </div>
 
                                     <div class="col-sm-12 input-group">
