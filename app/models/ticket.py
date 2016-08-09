@@ -1,6 +1,12 @@
 from . import db
 
 
+ticket_tags_table = db.Table('association', db.Model.metadata,
+    db.Column('ticket_id', db.Integer, db.ForeignKey('ticket.id')),
+    db.Column('ticket_tag_id', db.Integer, db.ForeignKey('ticket_tag.id'))
+)
+
+
 class Ticket(db.Model):
     __tablename__ = 'ticket'
     __table_args__ = (db.UniqueConstraint('name',
@@ -26,6 +32,8 @@ class Ticket(db.Model):
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref='tickets')
 
+    tags = db.relationship('TicketTag', secondary=ticket_tags_table, backref='tickets')
+
     def __init__(self,
                  name,
                  type,
@@ -38,7 +46,8 @@ class Ticket(db.Model):
                  quantity=100,
                  price=0,
                  min_order=1,
-                 max_order=10):
+                 max_order=10,
+                 tags=[]):
         self.name = name
         self.quantity = quantity
         self.type = type
@@ -51,6 +60,7 @@ class Ticket(db.Model):
         self.hide = hide
         self.min_order = min_order
         self.max_order = max_order
+        self.tags = tags
 
     def has_order_tickets(self):
         """Returns True if ticket has already placed orders.
@@ -60,6 +70,24 @@ class Ticket(db.Model):
 
     def __repr__(self):
         return '<Ticket %r>' % self.name
+
+    def __str__(self):
+        return unicode(self).encode('utf-8')
+
+    def __unicode__(self):
+        return self.name
+
+
+class TicketTag(db.Model):
+    """Tags to group tickets
+    """
+    __tablename__ = 'ticket_tag'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+
+    def __repr__(self):
+        return '<TicketTag %r>' % self.name
 
     def __str__(self):
         return unicode(self).encode('utf-8')
