@@ -117,6 +117,7 @@ class TestEventExport(ImportExportBase):
         dr = 'static/temp/test_event_import'
         data = open(dr + '/event', 'r').read()
         self.assertIn('images/logo', data)
+        self.assertEqual(json.loads(data)['creator'].get('id'), None)  # test no ID of creator
         obj = json.loads(data)
         logo_data = open(dr + obj['logo'], 'r').read()
         self.assertTrue(len(logo_data) > 10)
