@@ -17,6 +17,7 @@ class Ticket(db.Model):
 
     sales_start = db.Column(db.DateTime)
     sales_end = db.Column(db.DateTime)
+    hide = db.Column(db.Boolean)
 
     min_order = db.Column(db.Integer)
     max_order = db.Column(db.Integer)
@@ -30,6 +31,7 @@ class Ticket(db.Model):
                  type,
                  sales_start,
                  sales_end,
+                 hide=False,
                  description=None,
                  description_toggle=True,
                  event=None,
@@ -46,6 +48,7 @@ class Ticket(db.Model):
         self.price = price
         self.sales_start = sales_start
         self.sales_end = sales_end
+        self.hide = hide
         self.min_order = min_order
         self.max_order = max_order
 

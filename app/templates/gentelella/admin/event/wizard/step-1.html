@@ -300,7 +300,7 @@
                 {% if event %}
                     {% for ticket in event.tickets %}
                         {{ ticket_template(serialno=loop.index0, name=ticket.name, description=ticket.description, description_toggle=ticket.description_toggle,
-                        sales_start=ticket.sales_start, sales_end=ticket.sales_end, price=ticket.price, type=ticket.type,
+                        sales_start=ticket.sales_start, sales_end=ticket.sales_end, hide=ticket.hide, price=ticket.price, type=ticket.type,
                         quantity=ticket.quantity, min_order=ticket.min_order, max_order=ticket.max_order, has_orders=ticket.has_order_tickets()) }}
                     {% endfor %}
                 {% endif %}
@@ -1168,6 +1168,10 @@
         /* Set name attribute for all Ticket Description Toggle checkboxes */
         $("#event-wizard-form input[name*='tickets_description_toggle_']").each(function(i, el) {
             $(el).attr("name", "tickets_description_toggle_" + String(i));
+        });
+        /* Set name attribute for all Ticket Stop Sales checkboxes */
+        $("#event-wizard-form input[name*='tickets_hide_']").each(function(i, el) {
+            $(el).attr("name", "tickets_hide_" + String(i));
         });
 
         ticketsCount += 1;

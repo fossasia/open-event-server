@@ -20,6 +20,7 @@
                         </thead>
                         <tbody>
                         {% for ticket in tickets %}
+                            {% if not ticket.hide %}
                             <tr>
 
                                 <td>
@@ -44,6 +45,7 @@
                                 </td>
                                 <td class="subtotal">{{ event.payment_currency | currency_symbol }}{{ 0 | money }}</td>
                             </tr>
+                            {% endif %}
                             {% if loop.last %}
                                 <tr>
                                     <td colspan="5" class="text-right">
@@ -54,7 +56,7 @@
                                     <td>
                                         <div id="total-holder"
                                              style="font-weight: 300; font-size: 16px;line-height: 39px;text-transform: uppercase;">
-                                            <span style="font-weight: 500;" id="total-amount">$123.00</span>
+                                            <span style="font-weight: 500;" id="total-amount">$00.00</span>
                                         </div>
 
                                     </td>

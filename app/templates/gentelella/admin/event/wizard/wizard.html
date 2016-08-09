@@ -92,19 +92,17 @@
                                 </a>
                                 <span class="description hidden-xs hidden-sm">Sessions & Speakers</span>
                             </li>
-
-
                         </ul>
                     </div>
 
                     <!-- TicketTemplate -->
-                    {% macro ticket_template(serialno, sales_start=None, sales_end=None, name='', description='', description_toggle=True, price=0, type=None, quantity=100, min_order=1, max_order=10, has_orders=False) %}
+                    {% macro ticket_template(serialno, sales_start=None, sales_end=None, hide=False, name='', description='', description_toggle=True, price=0, type=None, quantity=100, min_order=1, max_order=10, has_orders=False) %}
                     <tr>
                         <td>
                             <input type="hidden" name="tickets[type]" value="{{ type | default('', true) }}">
                             <div class="item form-group" style="margin-bottom: 0;">
                                 <input type="text" name="tickets[name]" class="form-control" placeholder="Ticket Name" value="{{ name }}"
-                                    required="required" data-uniqueticket="true">
+                                    required="required" data-uniqueticket="true" {{ 'readonly' if has_orders else '' }}>
                                 <div class="help-block with-errors"></div>
                             </div>
                         </td>
@@ -112,7 +110,7 @@
                         {% if type == "free" %}
                             <input type="text" name="tickets[price]" class="form-control" value="Free" readonly>
                         {% elif type == "paid" %}
-                            <input type="number" min="0" name="tickets[price]" class="form-control" placeholder="$" value="{{ price | default('', None) }}" required="required">
+                            <input type="number" min="0" name="tickets[price]" class="form-control" placeholder="$" value="{{ price | default('', None) }}" required="required" {{ 'readonly' if has_orders else '' }}>
                         {% elif type == "donation" %}
                             <input type="text" name="tickets[price]" class="form-control" value="Donation" readonly>
                         {% endif %}
@@ -144,6 +142,12 @@
                                     <div class="item form-group">
                                         <label>Description</label>
                                         <textarea name="tickets[description]" class="form-control" rows="7" style="border-radius: 3px;" placeholder="Add a description for the Ticket">{{ description }}</textarea>
+                                    </div>
+                                    <div class="item form-group">
+                                        <label style="font-weight: normal;">
+                                            <input type="checkbox" class="checkbox flat form-control" name="tickets_description_toggle_{{ serialno }}" {{ 'checked' if description_toggle else ''}}>
+                                            Display Ticket description on event page
+                                        </label>
                                     </div>
                                 </div>
                                 <div class="col-xs-6">
@@ -185,15 +189,11 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            <div class="item form-group">
-                                                <label style="font-weight: normal;">
-                                                    <input type="checkbox" class="checkbox flat form-control" name="tickets_description_toggle_{{ serialno }}" {{ 'checked' if description_toggle else ''}}>
-                                                    Display Ticket description on event page
-                                                </label>
-                                            </div>
-                                        </div>
+                                    <div class="item form-group">
+                                        <label style="font-weight: normal;">
+                                            <input type="checkbox" class="checkbox flat form-control" name="tickets_hide_{{ serialno }}" {{ 'checked' if hide else ''}}>
+                                            Hide Ticket
+                                        </label>
                                     </div>
                                 </div>
                             </div>

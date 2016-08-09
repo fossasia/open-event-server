@@ -1320,6 +1320,9 @@ class DataManager(object):
                 sales_end_str = '{} {}'.format(ticket_sales_end_dates[i],
                                                ticket_sales_end_times[i])
 
+                hide = form.get('tickets_hide_{}'.format(i), False)
+                hide = True if hide == 'on' else False
+
                 description_toggle = form.get('tickets_description_toggle_{}'.format(i), False)
                 description_toggle = True if description_toggle == 'on' else False
                 ticket = Ticket.query.filter_by(event=event, name=name).first()
@@ -1330,6 +1333,7 @@ class DataManager(object):
                         type=ticket_types[i],
                         sales_start=datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M'),
                         sales_end=datetime.strptime(sales_end_str, '%m/%d/%Y %H:%M'),
+                        hide=hide,
                         description=ticket_descriptions[i],
                         description_toggle=description_toggle,
                         quantity=ticket_quantities[i],
@@ -1340,14 +1344,16 @@ class DataManager(object):
                     )
                 else:
                     # update existing ticket
-                    ticket.name = name
+                    if not ticket.has_order_tickets():
+                        ticket.name = name
+                        ticket.price = int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0
                     ticket.type = ticket_types[i]
-                    ticket.sales_start = datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M'),
-                    ticket.sales_end = datetime.strptime(sales_end_str, '%m/%d/%Y %H:%M'),
+                    ticket.sales_start = datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M')
+                    ticket.sales_end = datetime.strptime(sales_end_str, '%m/%d/%Y %H:%M')
+                    ticket.hide = hide
                     ticket.description = ticket_descriptions[i]
                     ticket.description_toggle = description_toggle,
                     ticket.quantity = ticket_quantities[i]
-                    ticket.price = int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0
                     ticket.min_order = ticket_min_orders[i]
                     ticket.max_order = ticket_max_orders[i]
 
@@ -1356,7 +1362,7 @@ class DataManager(object):
         # Remove all the tickets that are not in form
         # except those that already have placed orders
         for ticket in event.tickets:
-            if ticket.name not in ticket_names and ticket.has_order_tickets():
+            if ticket.name not in ticket_names and not ticket.has_order_tickets():
                 db.session.delete(ticket)
 
         event.ticket_url = form.get('ticket_url', None)
