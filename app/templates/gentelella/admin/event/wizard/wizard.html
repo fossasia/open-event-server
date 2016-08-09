@@ -96,7 +96,7 @@
                     </div>
 
                     <!-- TicketTemplate -->
-                    {% macro ticket_template(serialno, sales_start=None, sales_end=None, stop_sales='not_set', name='', description='', description_toggle=True, price=0, type=None, quantity=100, min_order=1, max_order=10, has_orders=False) %}
+                    {% macro ticket_template(serialno, sales_start=None, sales_end=None, hide=False, name='', description='', description_toggle=True, price=0, type=None, quantity=100, min_order=1, max_order=10, has_orders=False) %}
                     <tr>
                         <td>
                             <input type="hidden" name="tickets[type]" value="{{ type | default('', true) }}">
@@ -175,14 +175,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {% if stop_sales != 'not_set' %}
-                                        <div class="item form-group">
-                                            <label style="font-weight: normal;">
-                                                <input type="checkbox" class="checkbox flat form-control" name="tickets_stop_sales_{{ serialno }}" {{ 'checked' if stop_sales else ''}}>
-                                                Hide ticket (Stop ticket sales)
-                                            </label>
-                                        </div>
-                                    {% endif %}
+                                    <div class="item form-group">
+                                        <label style="font-weight: normal;">
+                                            <input type="checkbox" class="checkbox flat form-control" name="tickets_hide_{{ serialno }}" {{ 'checked' if hide else ''}}>
+                                            Hide Ticket
+                                        </label>
+                                    </div>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="item form-group">

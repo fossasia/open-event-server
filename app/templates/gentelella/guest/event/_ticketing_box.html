@@ -20,7 +20,7 @@
                         </thead>
                         <tbody>
                         {% for ticket in tickets %}
-                            {% if not ticket.stop_sales %}
+                            {% if not ticket.hide %}
                             <tr>
 
                                 <td>
