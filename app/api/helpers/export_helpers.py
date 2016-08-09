@@ -12,7 +12,7 @@ from app.helpers.data import save_to_db
 from app.helpers.data_getter import DataGetter
 from app.helpers.helpers import send_email_after_export
 
-from ..events import DAO as EventDAO, EVENT
+from ..events import DAO as EventDAO, EVENT as EVENT_MODEL
 from ..microlocations import DAO as MicrolocationDAO, MICROLOCATION
 from ..sessions import DAO as SessionDAO, SESSION, \
     TypeDAO as SessionTypeDAO, SESSION_TYPE
@@ -21,6 +21,12 @@ from ..sponsors import DAO as SponsorDAO, SPONSOR
 from ..tracks import DAO as TrackDAO, TRACK
 from .non_apis import CustomFormDAO, CUSTOM_FORM
 from import_helpers import is_downloadable, get_filename_from_cd
+
+
+# DELETE FIELDS
+# All fields to be deleted go here
+EVENT = EVENT_MODEL.clone('EventExport')
+del EVENT['creator'].model['id']
 
 
 EXPORTS = [
@@ -56,6 +62,8 @@ DOWNLOAD_FIEDLS = {
     }
 }
 
+
+# FUNCTIONS
 
 def _download_media(data, srv, dir_path, settings):
     """
