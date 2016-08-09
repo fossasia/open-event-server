@@ -495,6 +495,8 @@ class DataManager(object):
         session = DataGetter.get_session(session_id)
         session.speakers.append(speaker)
         save_to_db(session, "Session Speaker saved")
+        update_version(speaker.event_id, False, "speakers_ver")
+        update_version(session.event_id, False, "sessions_ver")
 
     @staticmethod
     def session_accept_reject(session, event_id, state):
