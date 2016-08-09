@@ -29,7 +29,7 @@ from app.models.stripe_authorization import StripeAuthorization
 from ..helpers import helpers as Helper
 from ..helpers.data_getter import DataGetter
 from ..helpers.static import EVENT_LICENCES
-from ..helpers.update_version import VersionUpdater
+from ..helpers.update_version import VersionUpdater, get_all_columns
 from ..helpers.system_mails import MAILS
 from ..models import db
 from ..models.activity import Activity, ACTIVITIES
@@ -403,6 +403,7 @@ class DataManager(object):
         if speaker_modified:
             save_to_db(speaker, "Speaker saved")
         record_activity('create_session', session=new_session, event_id=event_id)
+        update_version(event_id, False, 'sessions_ver')
 
         invite_emails = form.getlist("speakers[email]")
         for index, email in enumerate(invite_emails):
@@ -462,7 +463,7 @@ class DataManager(object):
             speaker.photo = speaker_img
             save_to_db(speaker, "Speaker photo saved")
             record_activity('update_speaker', speaker=speaker, event_id=event_id)
-
+        update_version(event_id, False, 'speakers_ver')
         return speaker
 
     @staticmethod
@@ -480,6 +481,7 @@ class DataManager(object):
         save_to_db(session, "Speaker saved")
         record_activity('add_speaker_to_session', speaker=speaker, session=session, event_id=event_id)
         update_version(event_id, False, "speakers_ver")
+        update_version(event_id, False, "sessions_ver")
 
     @staticmethod
     def create_speaker_session_relation(session_id, speaker_id, event_id):
@@ -582,6 +584,7 @@ class DataManager(object):
                     db.session.commit()
 
             record_activity('update_session', session=session, event_id=event_id)
+            update_version(event_id, False, "sessions_ver")
 
     @staticmethod
     def update_session(form, session):
@@ -617,6 +620,7 @@ class DataManager(object):
         delete_from_db(session, "Session deleted")
         flash('You successfully delete session')
         record_activity('delete_session', session=session, event_id=session.event_id)
+        update_version(session.event_id, False, "sessions_ver")
 
     @staticmethod
     def create_speaker(form, event_id, user=login.current_user):
@@ -671,6 +675,7 @@ class DataManager(object):
         speaker = Speaker.query.get(speaker_id)
         delete_from_db(speaker, "Speaker deleted")
         record_activity('delete_speaker', speaker=speaker, event_id=speaker.event_id)
+        update_version(speaker.event_id, False, "speakers_ver")
         flash('You successfully delete speaker')
 
     @staticmethod
@@ -1667,6 +1672,9 @@ class DataManager(object):
             CustomForms, event_id=event.id,
             session_form=session_form, speaker_form=speaker_form)
 
+        for _ in get_all_columns():  # update all columns; safe way
+            update_version(event.id, False, _)
+
         save_to_db(event, "Event saved")
         record_activity('update_event', event_id=event.id)
         return event
@@ -2015,6 +2023,7 @@ def trash_session(session_id):
     session.in_trash = True
     session.trash_date = datetime.now()
     save_to_db(session, "Session added to Trash")
+    update_version(session.event_id, False, 'sessions_ver')
     return session
 
 
@@ -2034,6 +2043,7 @@ def restore_session(session_id):
     session = DataGetter.get_session(session_id)
     session.in_trash = False
     save_to_db(session, "Session restored from Trash")
+    update_version(session.event_id, False, 'sessions_ver')
 
 
 def create_modules(form):

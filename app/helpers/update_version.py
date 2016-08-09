@@ -40,3 +40,10 @@ class VersionUpdater(object):
                 setattr(previous_version, key, data[key])
         db.session.add(previous_version)
         db.session.commit()
+
+
+def get_all_columns():
+    return [
+        'event_ver', 'sessions_ver', 'speakers_ver', 'sponsors_ver',
+        'tracks_ver', 'microlocations_ver'
+    ]
