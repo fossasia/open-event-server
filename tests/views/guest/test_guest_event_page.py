@@ -16,7 +16,7 @@ class TestGuestEventPage(OpenEventTestCase):
             event = ObjectMother.get_event()
             event.state = 'Published'
             save_to_db(event, "Event Saved")
-            rv = self.app.get(url_for('event_detail.display_event_detail_home', event_id=event.id),
+            rv = self.app.get(url_for('event_detail.display_event_detail_home', identifier=event.identifier),
                               follow_redirects=True)
             self.assertTrue("Open Event" in rv.data, msg=rv.data)
 
@@ -26,7 +26,7 @@ class TestGuestEventPage(OpenEventTestCase):
             event.state = 'Published'
             event.code_of_conduct = 'Test Code of Conduct'
             save_to_db(event, "Event Saved")
-            rv = self.app.get(url_for('event_detail.display_event_coc', event_id=event.id),
+            rv = self.app.get(url_for('event_detail.display_event_coc', identifier=event.identifier),
                               follow_redirects=True)
             self.assertTrue("Code of Conduct" in rv.data, msg=rv.data)
 
@@ -35,7 +35,7 @@ class TestGuestEventPage(OpenEventTestCase):
             event = ObjectMother.get_event()
             event.state = 'Published'
             save_to_db(event, "Event Saved")
-            rv = self.app.get(url_for('event_detail.display_event_coc', event_id=event.id),
+            rv = self.app.get(url_for('event_detail.display_event_coc', identifier=event.identifier),
                               follow_redirects=True)
             self.assertEqual(rv.status_code, 404)
 
@@ -43,7 +43,7 @@ class TestGuestEventPage(OpenEventTestCase):
         with app.test_request_context():
             event = ObjectMother.get_event()
             save_to_db(event, "Event Saved")
-            rv = self.app.get(url_for('event_detail.display_event_detail_home', event_id=event.id),
+            rv = self.app.get(url_for('event_detail.display_event_detail_home', identifier=event.identifier),
                               follow_redirects=True)
             self.assertEqual(rv.status_code, 404)
 
@@ -53,7 +53,7 @@ class TestGuestEventPage(OpenEventTestCase):
             event.state = 'Published'
             event.in_trash = True
             save_to_db(event, "Event Saved")
-            rv = self.app.get(url_for('event_detail.display_event_detail_home', event_id=event.id),
+            rv = self.app.get(url_for('event_detail.display_event_detail_home', identifier=event.identifier),
                               follow_redirects=True)
             self.assertEqual(rv.status_code, 404)
 
@@ -72,7 +72,8 @@ class TestGuestEventPage(OpenEventTestCase):
             session.event_id = event.id
             session.speakers = [speaker]
             save_to_db(speaker, "Session Saved")
-            rv = self.app.get(url_for('event_detail.display_event_sessions', event_id=event.id), follow_redirects=True)
+            rv = self.app.get(url_for('event_detail.display_event_sessions', identifier=event.identifier),
+                              follow_redirects=True)
             self.assertTrue("Sessions" in rv.data, msg=rv.data)
 
     def test_published_event_schedule_view(self):
@@ -94,7 +95,8 @@ class TestGuestEventPage(OpenEventTestCase):
             session.microlocation_id = microlocation.id
             session.speakers = [speaker]
             save_to_db(speaker, "Session Saved")
-            rv = self.app.get(url_for('event_detail.display_event_schedule', event_id=event.id), follow_redirects=True)
+            rv = self.app.get(url_for('event_detail.display_event_schedule', identifier=event.identifier),
+                              follow_redirects=True)
             self.assertTrue("Schedule" in rv.data, msg=rv.data)
 
     def test_published_event_unpublished_schedule_view_attempt(self):
@@ -115,7 +117,8 @@ class TestGuestEventPage(OpenEventTestCase):
             session.microlocation_id = microlocation.id
             session.speakers = [speaker]
             save_to_db(speaker, "Session Saved")
-            rv = self.app.get(url_for('event_detail.display_event_schedule', event_id=event.id), follow_redirects=True)
+            rv = self.app.get(url_for('event_detail.display_event_schedule', identifier=event.identifier),
+                              follow_redirects=True)
             self.assertEqual(rv.status_code, 404)
 
     def test_published_event_cfs_view(self):
@@ -136,7 +139,8 @@ class TestGuestEventPage(OpenEventTestCase):
 
             save_to_db(call_for_papers, "Call for papers saved")
 
-            rv = self.app.get(url_for('event_detail.display_event_cfs', event_id=event.id), follow_redirects=True)
+            rv = self.app.get(url_for('event_detail.display_event_cfs',
+                                      identifier=event.identifier), follow_redirects=True)
             self.assertTrue("Closed" in rv.data, msg=rv.data)
 
     def test_published_event_cfs_view_attempt(self):
@@ -144,7 +148,8 @@ class TestGuestEventPage(OpenEventTestCase):
             event = ObjectMother.get_event()
             event.state = 'Published'
             save_to_db(event, "Event Saved")
-            rv = self.app.get(url_for('event_detail.display_event_cfs', event_id=event.id), follow_redirects=True)
+            rv = self.app.get(url_for('event_detail.display_event_cfs',
+                                      identifier=event.identifier), follow_redirects=True)
             self.assertEqual(rv.status_code, 404)
 
 if __name__ == '__main__':

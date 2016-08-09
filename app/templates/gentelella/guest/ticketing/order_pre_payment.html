@@ -192,7 +192,7 @@
         window.order_created_at = "{{ order.created_at }}";
         window.order_identifier = "{{ order.identifier }}";
         window.expire_url = "{{ url_for('ticketing.expire_order', order_identifier=order.identifier) }}";
-        window.expired_redirect = "{{ url_for('event_detail.display_event_detail_home', event_id=order.event_id, expired='yes') }}";
+        window.expired_redirect = "{{ url_for('event_detail.display_event_detail_home', identifier=order.event.identifier, expired='yes') }}";
         window.stripe_charge_at = "{{ url_for('ticketing.charge_stripe_order_payment') }}";
         window.stripe_publishable_key = "{{ stripe_publishable_key }}";
         window.event_name = "{{ order.event.name }}";
