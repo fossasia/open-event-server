@@ -116,6 +116,22 @@ body {
   border-top: 2px solid #e4e4e4;
 }
 
+.mobile-menu > .nav-pills > li > a {
+  border-radius: 0;
+  color: #565656;
+  border-right: 2px solid #FFFFFF;
+  border-left: 2px solid #FFFFFF;
+  border-top: 2px solid #FFFFFF;
+}
+
+.mobile-menu > .nav-pills > li.active > a {
+  background-color: inherit;
+  color: inherit;
+  border-right: 2px solid #e4e4e4;
+  border-left: 2px solid #e4e4e4;
+  border-top: 2px solid #e4e4e4;
+}
+
 .img-circle {
   border-radius: 50%;
 }
