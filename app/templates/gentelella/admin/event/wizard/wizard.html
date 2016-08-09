@@ -96,7 +96,7 @@
                     </div>
 
                     <!-- TicketTemplate -->
-                    {% macro ticket_template(serialno, sales_start=None, sales_end=None, hide=False, name='', description='', description_toggle=True, price=0, type=None, quantity=100, min_order=1, max_order=10, has_orders=False) %}
+                    {% macro ticket_template(serialno, sales_start=None, sales_end=None, hide=False, name='', description='', description_toggle=True, price=0, type=None, quantity=100, min_order=1, max_order=10, has_orders=False, ticket_tags=[]) %}
                     <tr>
                         <td>
                             <input type="hidden" name="tickets[type]" value="{{ type | default('', true) }}">
@@ -191,7 +191,8 @@
                                     </div>
                                     <div class="item form-group">
                                         <label>Tag Group</label>
-                                        <input type="text" class="form-control ticket-tags" name="tickets[tags]" value="">
+                                        <input type="text" class="form-control ticket-tags" name="tickets[tags]"
+                                            value="{{ ticket_tags| join(',') }}">
                                     </div>
                                     <div class="item form-group">
                                         <label style="font-weight: normal;">

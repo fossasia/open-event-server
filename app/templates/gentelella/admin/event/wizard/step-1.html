@@ -299,7 +299,7 @@
                 <tbody>
                 {% if event %}
                     {% for ticket in event.tickets %}
-                        {{ ticket_template(serialno=loop.index0, name=ticket.name, description=ticket.description, description_toggle=ticket.description_toggle,
+                        {{ ticket_template(serialno=loop.index0, name=ticket.name, description=ticket.description, description_toggle=ticket.description_toggle, ticket_tags=ticket.tags,
                         sales_start=ticket.sales_start, sales_end=ticket.sales_end, hide=ticket.hide, price=ticket.price, type=ticket.type,
                         quantity=ticket.quantity, min_order=ticket.min_order, max_order=ticket.max_order, has_orders=ticket.has_order_tickets()) }}
                     {% endfor %}

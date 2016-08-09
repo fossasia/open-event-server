@@ -93,6 +93,7 @@ class TicketTag(db.Model):
     name = db.Column(db.String)
 
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    event = db.relationship('Event', backref='ticket_tags')
 
     def __init__(self, name, event_id):
         self.name = name
