@@ -66,6 +66,7 @@ class TestEvents(OpenEventViewTestCase):
             data['tickets[sales_end_time]'] = ['22:00', '22:00', '22:00']
             data['tickets[min_order]'] = [2, 3, 4]
             data['tickets[max_order]'] = [5, 6, 7]
+            data['tickets[tags]'] = ['session,talk', 'talk', 'session']
 
             # Add tax form to event
             data['taxAllow'] = 'taxYes'

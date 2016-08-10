@@ -45,7 +45,7 @@ from ..models.microlocation import Microlocation
 from ..models.permission import Permission
 from ..models.role import Role
 from ..models.role_invite import RoleInvite
-from ..models.ticket import Ticket
+from ..models.ticket import Ticket, TicketTag
 from ..models.service import Service
 from ..models.session import Session
 from ..models.session_type import SessionType
@@ -889,6 +889,17 @@ class DataManager(object):
                 save_to_db(perm, 'Permission saved')
 
     @staticmethod
+    def create_ticket_tags(tagnames_csv, event_id):
+        """Returns list of `TicketTag` objects.
+        """
+        tag_list = []
+        for tagname in tagnames_csv.split(','):
+            tag, _ = get_or_create(TicketTag, name=tagname, event_id=event_id)
+            tag_list.append(tag)
+
+        return tag_list
+
+    @staticmethod
     def create_event(form, img_files):
         """
         Event will be saved to database with proper Event id
@@ -1001,6 +1012,7 @@ class DataManager(object):
                 ticket_sales_end_times = form.getlist('tickets[sales_end_time]')
                 ticket_min_orders = form.getlist('tickets[min_order]')
                 ticket_max_orders = form.getlist('tickets[max_order]')
+                ticket_tags =  form.getlist('tickets[tags]')
 
                 for i, name in enumerate(ticket_names):
                     if name.strip():
@@ -1016,6 +1028,8 @@ class DataManager(object):
 
                         description_toggle = form.get('tickets_description_toggle_{}'.format(i), False)
                         description_toggle = True if description_toggle == 'on' else False
+
+                        tag_list = DataManager.create_ticket_tags(ticket_tags[i], event.id)
                         ticket = Ticket(
                             name=name,
                             type=ticket_types[i],
@@ -1027,6 +1041,7 @@ class DataManager(object):
                             price=int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0,
                             min_order=ticket_min_orders[i],
                             max_order=ticket_max_orders[i],
+                            tags=tag_list,
                             event=event
                         )
 
@@ -1331,6 +1346,7 @@ class DataManager(object):
         ticket_sales_end_times = form.getlist('tickets[sales_end_time]')
         ticket_min_orders = form.getlist('tickets[min_order]')
         ticket_max_orders = form.getlist('tickets[max_order]')
+        ticket_tags = form.getlist('tickets[tags]')
 
         for i, name in enumerate(ticket_names):
             if name.strip():
@@ -1349,6 +1365,9 @@ class DataManager(object):
 
                 description_toggle = form.get('tickets_description_toggle_{}'.format(i), False)
                 description_toggle = True if description_toggle == 'on' else False
+
+                tag_list = DataManager.create_ticket_tags(ticket_tags[i], event.id)
+
                 ticket = Ticket.query.filter_by(event=event, name=name).first()
                 if not ticket:
                     # create new ticket
@@ -1364,6 +1383,7 @@ class DataManager(object):
                         price=int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0,
                         min_order=ticket_min_orders[i],
                         max_order=ticket_max_orders[i],
+                        tags=tag_list,
                         event=event
                     )
                 else:
@@ -1380,6 +1400,7 @@ class DataManager(object):
                     ticket.quantity = ticket_quantities[i]
                     ticket.min_order = ticket_min_orders[i]
                     ticket.max_order = ticket_max_orders[i]
+                    ticket.tags = tag_list
 
                 db.session.add(ticket)
 
