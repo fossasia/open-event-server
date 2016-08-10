@@ -1824,14 +1824,13 @@ def get_instagram_auth(state=None, token=None):
     return oauth
 
 
-def get_twitter_auth(state=None, token=None):
-    if token:
-        return OAuth2Session(TwitterOAuth.get_client_id(), token=token)
-    if state:
-        return OAuth2Session(TwitterOAuth.get_client_id(), state=state,
-                             redirect_uri=TwitterOAuth.get_redirect_uri())
-    oauth = OAuth2Session(TwitterOAuth.get_client_id(), redirect_uri=TwitterOAuth.get_redirect_uri())
-    return oauth
+def get_twitter_auth_url():
+    import oauth2 as oauth
+    consumer = oauth.Consumer(key=TwitterOAuth.get_client_id(),
+                              secret=TwitterOAuth.get_client_secret())
+    client = oauth.Client(consumer)
+    rs, c = client.request('https://api.twitter.com/oauth/request_token', "GET")
+    return 'https://api.twitter.com/oauth/authenticate?' + c + "&redirect_uri" + TwitterOAuth.get_redirect_uri()
 
 
 def create_user_oauth(user, user_data, token, method):

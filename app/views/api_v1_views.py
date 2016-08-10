@@ -434,6 +434,11 @@ def facebook_callback():
         return 'did not find user info'
 
 
+@app.route('/tCallback/', methods=('GET', 'POST'))
+def twitter_callback():
+    print request
+    pass
+
 @app.route('/iCallback/', methods=('GET', 'POST'))
 def instagram_callback():
     instagram = get_instagram_auth()
