@@ -85,7 +85,7 @@
             <tr>
                 <td></td>
                 <td>
-                    <a href="#" class="order-link">{{ order.get_invoice_number() }}</a> -
+                    <a href="{{ url_for('ticketing.view_order_after_payment', order_identifier=order.identifier) if order.status == 'completed' else url_for('ticketing.show_transaction_error', order_identifier=order.identifier) }}" class="order-link">{{ order.get_invoice_number() }}</a> -
                     by {{ order.user.user_detail.fullname if order.user.user_detail and order.user.user_detail.fullname else order.user.email }}
                     <br>
                     {% if order.status == 'completed' %}

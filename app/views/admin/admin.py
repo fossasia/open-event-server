@@ -18,6 +18,7 @@ from app.views.admin.models_views.speakers import SpeakersView
 from app.views.admin.home import MyHomeView
 from app.views.admin.models_views.sponsors import SponsorsView
 from app.views.admin.models_views.ticket_sales import TicketSalesView
+from app.views.admin.super_admin.sales import SuperAdminSalesView
 from app.views.public.event_detail import EventDetailView
 from app.views.public.explore import ExploreView
 from app.views.public.pages import BasicPagesView
@@ -90,6 +91,7 @@ class AdminView(object):
         self.admin.add_view(SuperAdminMessagesView(name='Messages', url='/admin/messages', endpoint="sadmin_messages"))
         self.admin.add_view(SuperAdminModulesView(name='Modules', url='/admin/modules', endpoint="sadmin_modules"))
         self.admin.add_view(SuperAdminContentView(name='Content', url='/admin/content', endpoint="sadmin_content"))
+        self.admin.add_view(SuperAdminSalesView(name='Sales', url='/admin/sales', endpoint="sadmin_sales"))
 
     @staticmethod
     def init_login(app):

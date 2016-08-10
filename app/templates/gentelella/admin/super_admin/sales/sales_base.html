@@ -1,0 +1,44 @@
+{% extends 'gentelella/admin/super_admin/dashboard.html' %}
+
+{% block title %}
+    Sales
+{% endblock %}
+
+{% set active_page = "sales" %}
+
+{% set side_bar = [
+    ('/events/' ~ event.id ~ '/tickets', 'by_events', 'By Events'),
+    ('/events/' ~ event.id ~ '/tickets/orders', 'by_organizer', 'By Organizer'),
+    ('/events/' ~ event.id ~ '/tickets/attendees', 'by_location', 'By Location'),
+    ('/events/' ~ event.id ~ '/tickets/discounts', 'fees', 'Fees'),
+    ('/events/' ~ event.id ~ '/tickets/add-order', 'fees_status', 'Fees Status'),
+] -%}
+
+{% set active_side_page = active_side_page|default('home') -%}
+
+
+{% block head_css %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-2 col-xs-12">
+            <div class="list-group">
+                {% for href, id, caption in side_bar %}
+                    <a class="list-group-item {% if id == active_side_page %}active{% endif %}" href="{{ href|e }}">{{ caption|e }} <i class="fa fa-caret-right fa-lg pull-right" style="margin-top: 3px;"></i> </a>
+                {% endfor %}
+            </div>
+
+        </div>
+        <div class="col-md-10 col-xs-12">
+            {% block inner_content %}
+
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+{% endblock %}
+
