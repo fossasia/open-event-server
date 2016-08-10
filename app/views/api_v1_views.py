@@ -469,7 +469,15 @@ def twitter_callback():
     token.set_verifier(request.args.get('oauth_verifier', ''))
     client = oauth2.Client(consumer, token)
     resp, content = client.request("https://api.twitter.com/1.1/users/show.json?screen_name="+ request_token["screen_name"] +"&user_id=" + request_token["user_id"] , "GET")
-    print json.loads(content)
+    user_info = json.loads(content)
+    user = login.current_user
+    if not user.user_detail.firstname:
+        user.user_detail.firstname = user_info['name']
+    if not user.user_detail.avatar_uploaded:
+        user.user_detail.avatar_uploaded = save_file_provided_by_url(user_info['profile_image_url'])
+    if not user.user_detail.twitter:
+        user.user_detail.twitter = "https://twitter.com/" + request_token["screen_name"]
+    save_to_db(user)
     return redirect(url_for('profile.index_view'))
 
 @app.route('/iCallback/', methods=('GET', 'POST'))
