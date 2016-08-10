@@ -26,7 +26,8 @@ from icalendar import Calendar
 import icalendar
 from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth
 from requests.exceptions import HTTPError
-from ..helpers.data import get_google_auth, create_user_oauth, get_facebook_auth, user_logged_in, get_instagram_auth
+from ..helpers.data import get_google_auth, create_user_oauth, get_facebook_auth, user_logged_in, get_instagram_auth,\
+    get_twitter_auth_url
 import geoip2.database
 import time
 from app.helpers.storage import upload, UploadedFile
@@ -436,8 +437,25 @@ def facebook_callback():
 
 @app.route('/tCallback/', methods=('GET', 'POST'))
 def twitter_callback():
-    print request
-    pass
+    __, oauth_token, oauth_token_secret, consumer = get_twitter_auth_url()
+    print request.args.get('oauth_token', ''),request.args.get('oauth_verifier', '')
+    print oauth_token, oauth_token_secret
+    from flask import session
+    print session, dir(session)
+    import oauth2 as oauth
+    client = oauth.Client(consumer)
+    rs, c = client.request('https://api.twitter.com/oauth/access_token?oauth_verifier=' +request.args.get('oauth_verifier', '') + "&oauth_token=" + request.args.get('oauth_token', ''), "POST")
+    print "aaaa", c
+    token = oauth.Token(request.args.get('oauth_token', ''), oauth_token_secret)
+    client = oauth.Client(consumer)
+
+
+    import urlparse
+    request_token = dict(urlparse.parse_qsl(c))
+    print request_token
+    resp, content = client.request("https://api.twitter.com/1.1/account/verify_credentials.json", "GET")
+    print content
+    return ''
 
 @app.route('/iCallback/', methods=('GET', 'POST'))
 def instagram_callback():

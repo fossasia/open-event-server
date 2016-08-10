@@ -1830,7 +1830,14 @@ def get_twitter_auth_url():
                               secret=TwitterOAuth.get_client_secret())
     client = oauth.Client(consumer)
     rs, c = client.request('https://api.twitter.com/oauth/request_token', "GET")
-    return 'https://api.twitter.com/oauth/authenticate?' + c + "&redirect_uri" + TwitterOAuth.get_redirect_uri()
+    import urlparse
+    request_token = dict(urlparse.parse_qsl(c))
+    print request_token
+    print "Request Token:"
+    print "    - oauth_token        = %s" % request_token['oauth_token']
+    print "    - oauth_token_secret = %s" % request_token['oauth_token_secret']
+    return c + "&redirect_uri" + TwitterOAuth.get_redirect_uri(), request_token['oauth_token'], request_token['oauth_token_secret'], consumer
+
 
 
 def create_user_oauth(user, user_data, token, method):

@@ -52,8 +52,8 @@ class ProfileView(BaseView):
 
     @expose('/tw_connect', methods=('GET', 'POST'))
     def connect_twitter(self):
-        twitter_auth_url = get_twitter_auth_url()
-        return redirect(twitter_auth_url)
+        twitter_auth_url, __, __, __ = get_twitter_auth_url()
+        return redirect('https://api.twitter.com/oauth/authenticate?' + twitter_auth_url)
 
     @expose('/instagram_connect', methods=('GET', 'POST'))
     def connect_instagram(self):
