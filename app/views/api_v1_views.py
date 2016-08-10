@@ -438,22 +438,15 @@ def facebook_callback():
 @app.route('/tCallback/', methods=('GET', 'POST'))
 def twitter_callback():
     __, oauth_token, oauth_token_secret, consumer = get_twitter_auth_url()
-    print request.args.get('oauth_token', ''),request.args.get('oauth_verifier', '')
-    print oauth_token, oauth_token_secret
-    from flask import session
-    print session, dir(session)
     import oauth2 as oauth
     client = oauth.Client(consumer)
     rs, c = client.request('https://api.twitter.com/oauth/access_token?oauth_verifier=' +request.args.get('oauth_verifier', '') + "&oauth_token=" + request.args.get('oauth_token', ''), "POST")
-    print "aaaa", c
-    token = oauth.Token(request.args.get('oauth_token', ''), oauth_token_secret)
-    client = oauth.Client(consumer)
-
-
     import urlparse
     request_token = dict(urlparse.parse_qsl(c))
-    print request_token
-    resp, content = client.request("https://api.twitter.com/1.1/account/verify_credentials.json", "GET")
+    token = oauth.Token(request_token["oauth_token"], request_token["oauth_token_secret"])
+    token.set_verifier(request.args.get('oauth_verifier', ''))
+    client = oauth.Client(consumer, token)
+    resp, content = client.request("https://api.twitter.com/1.1/users/show.json?screen_name=RafaKowalski10&user_id=1046414798" , "GET")
     print content
     return ''
 
