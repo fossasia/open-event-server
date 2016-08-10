@@ -4,6 +4,7 @@ import logging
 import os.path
 import random
 import traceback
+import oauth2
 from datetime import datetime, timedelta
 
 import requests
@@ -1825,18 +1826,11 @@ def get_instagram_auth(state=None, token=None):
 
 
 def get_twitter_auth_url():
-    import oauth2 as oauth
-    consumer = oauth.Consumer(key=TwitterOAuth.get_client_id(),
-                              secret=TwitterOAuth.get_client_secret())
-    client = oauth.Client(consumer)
+    consumer = oauth2.Consumer(key=TwitterOAuth.get_client_id(),
+                               secret=TwitterOAuth.get_client_secret())
+    client = oauth2.Client(consumer)
     rs, c = client.request('https://api.twitter.com/oauth/request_token', "GET")
-    import urlparse
-    request_token = dict(urlparse.parse_qsl(c))
-    print request_token
-    print "Request Token:"
-    print "    - oauth_token        = %s" % request_token['oauth_token']
-    print "    - oauth_token_secret = %s" % request_token['oauth_token_secret']
-    return c + "&redirect_uri" + TwitterOAuth.get_redirect_uri(), request_token['oauth_token'], request_token['oauth_token_secret'], consumer
+    return c + "&redirect_uri" + TwitterOAuth.get_redirect_uri(), consumer
 
 
 

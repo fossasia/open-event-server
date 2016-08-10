@@ -30,6 +30,9 @@ from ..helpers.data import get_google_auth, create_user_oauth, get_facebook_auth
     get_twitter_auth_url
 import geoip2.database
 import time
+import oauth2
+import urlparse
+import json
 from app.helpers.storage import upload, UploadedFile
 
 
@@ -437,18 +440,16 @@ def facebook_callback():
 
 @app.route('/tCallback/', methods=('GET', 'POST'))
 def twitter_callback():
-    __, oauth_token, oauth_token_secret, consumer = get_twitter_auth_url()
-    import oauth2 as oauth
-    client = oauth.Client(consumer)
-    rs, c = client.request('https://api.twitter.com/oauth/access_token?oauth_verifier=' +request.args.get('oauth_verifier', '') + "&oauth_token=" + request.args.get('oauth_token', ''), "POST")
-    import urlparse
+    __, consumer = get_twitter_auth_url()
+    client = oauth2.Client(consumer)
+    rs, c = client.request('https://api.twitter.com/oauth/access_token?oauth_verifier=' + request.args.get('oauth_verifier', '') + "&oauth_token=" + request.args.get('oauth_token', ''), "POST")
     request_token = dict(urlparse.parse_qsl(c))
-    token = oauth.Token(request_token["oauth_token"], request_token["oauth_token_secret"])
+    token = oauth2.Token(request_token["oauth_token"], request_token["oauth_token_secret"])
     token.set_verifier(request.args.get('oauth_verifier', ''))
-    client = oauth.Client(consumer, token)
-    resp, content = client.request("https://api.twitter.com/1.1/users/show.json?screen_name=RafaKowalski10&user_id=1046414798" , "GET")
-    print content
-    return ''
+    client = oauth2.Client(consumer, token)
+    resp, content = client.request("https://api.twitter.com/1.1/users/show.json?screen_name="+ request_token["screen_name"] +"&user_id=" + request_token["user_id"] , "GET")
+    print json.loads(content)
+    return redirect(url_for('profile.index_view'))
 
 @app.route('/iCallback/', methods=('GET', 'POST'))
 def instagram_callback():
