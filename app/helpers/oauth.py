@@ -73,10 +73,34 @@ class FbOAuth(object):
         return self.Fb_USER_INFO
 
 
+class TwitterOAuth(object):
+    """Facebook Credentials"""
+    TW_AUTH_URI = 'https://api.twitter.com/oauth/authorize'
+    TW_ACCESS_TOKEN = 'https://api.twitter.com/oauth/access_token'
+
+    @classmethod
+    def get_client_id(self):
+        return get_settings()['tw_consumer_key']
+
+    @classmethod
+    def get_client_secret(self):
+        return get_settings()['tw_consumer_secret']
+
+    @classmethod
+    def get_redirect_uri(self):
+        url = urlparse(request.url)
+        tw_redirect_uri = url.scheme + '://' + url.netloc + '/tCallback'
+        return tw_redirect_uri
+
+    @classmethod
+    def get_auth_uri(self):
+        return self.TW_AUTH_URI + "?oauth_token=1046414798-5ESFTprfUxJalTckNGZv7jUxymXjt5V1HWSiAS3"
+
+
 class InstagramOAuth(object):
     INSTAGRAM_OAUTH_URI = "https://api.instagram.com/oauth/authorize/"
     INSTAGRAM_TOKEN_URI = "https://api.instagram.com/oauth/access_token"
-    SCOPE = ['basic', 'public_content ']
+    SCOPE = ['basic', 'public_content']
     @classmethod
     def get_client_id(self):
         return get_settings()['in_client_id']

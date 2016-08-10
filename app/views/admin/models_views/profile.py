@@ -4,9 +4,9 @@ from flask_admin import expose
 from flask.ext import login
 
 from app.views.admin.models_views.events import is_verified_user
-from ....helpers.data import DataManager, get_facebook_auth, get_instagram_auth
+from ....helpers.data import DataManager, get_facebook_auth, get_instagram_auth, get_twitter_auth
 from ....helpers.data_getter import DataGetter
-from app.helpers.oauth import FbOAuth, InstagramOAuth
+from app.helpers.oauth import FbOAuth, InstagramOAuth, TwitterOAuth
 
 
 class ProfileView(BaseView):
@@ -50,10 +50,29 @@ class ProfileView(BaseView):
         fb_auth_url, state = facebook.authorization_url(FbOAuth.get_auth_uri(), access_type='offline')
         return redirect(fb_auth_url)
 
+    @expose('/tw_connect', methods=('GET', 'POST'))
+    def connect_facebook(self):
+        twitter = get_twitter_auth()
+        # tw_auth_url, state = twitter.authorization_url(TwitterOAuth.get_auth_uri(), access_type='offline')
+        import oauth2 as oauth
+        consumer = oauth.Consumer(key="mmjjjhvam5M9e9dylLnsJch3t", secret="vsNVuIg7Ms4fiw3KGkVWDI8eVTwPtH4gjxiNSlFjoQu3MXsnTf")
+        access_token = oauth.Token(key="1046414798-5ESFTprfUxJalTckNGZv7jUxymXjt5V1HWSiAS3", secret="Ag8efdbMNH0KlP5EG1WWX6epZL6V2juJx3iH1wceMnZuo")
+        client = oauth.Client(consumer, access_token)
+        # print client
+        # print client.request(TwitterOAuth.get_auth_uri())
+        rs, c = client.request('https://api.twitter.com/oauth/request_token', "GET")
+        print rs, c
+        # consumer = oauth2.Consumer(key="mmjjjhvam5M9e9dylLnsJch3t", secret="vsNVuIg7Ms4fiw3KGkVWDI8eVTwPtH4gjxiNSlFjoQu3MXsnTf")
+        # token = oauth2.Token(key="1046414798-5ESFTprfUxJalTckNGZv7jUxymXjt5V1HWSiAS3", secret="Ag8efdbMNH0KlP5EG1WWX6epZL6V2juJx3iH1wceMnZuo")
+        # client = oauth2.Client(consumer, token)
+        # print client
+        # resp, content = client.request("https://api.twitter.com/oauth/authorize", method="GET", body="", headers=None)
+
+
+        return redirect('https://api.twitter.com/oauth/authorize?' + c)
     @expose('/instagram_connect', methods=('GET', 'POST'))
     def connect_instagram(self):
         instagram = get_instagram_auth()
-        print InstagramOAuth.get_auth_uri()
         instagram_auth_url, state = instagram.authorization_url(InstagramOAuth.get_auth_uri(), access_type='offline')
         return redirect(instagram_auth_url)
 
