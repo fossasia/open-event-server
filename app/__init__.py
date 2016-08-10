@@ -6,7 +6,6 @@ import warnings
 from flask.exthook import ExtDeprecationWarning
 from forex_python.converter import CurrencyCodes
 from pytz import utc
-
 warnings.simplefilter('ignore', ExtDeprecationWarning)
 # Keep it before flask extensions are imported
 import arrow
@@ -36,6 +35,7 @@ import sqlalchemy as sa
 from nameparser import HumanName
 import stripe
 from app.helpers.flask_helpers import SilentUndefined, camel_case, slugify, MiniJSONEncoder
+from app.helpers.payment import forex
 from app.models import db
 from app.models.user import User
 from app.models.event import Event
@@ -242,7 +242,7 @@ def flask_helpers():
     def current_date(format='%a, %B %d %I:%M %p', **kwargs):
         return (datetime.now() + timedelta(**kwargs)).strftime(format)
 
-    return dict(string_empty=string_empty, current_date=current_date)
+    return dict(string_empty=string_empty, current_date=current_date, forex=forex)
 
 
 @app.context_processor
