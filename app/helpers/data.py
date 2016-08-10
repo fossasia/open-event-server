@@ -1924,8 +1924,8 @@ def get_twitter_auth_url():
     consumer = oauth2.Consumer(key=TwitterOAuth.get_client_id(),
                                secret=TwitterOAuth.get_client_secret())
     client = oauth2.Client(consumer)
-    rs, c = client.request('https://api.twitter.com/oauth/request_token', "GET")
-    return c + "&redirect_uri" + TwitterOAuth.get_redirect_uri(), consumer
+    resp, content = client.request('https://api.twitter.com/oauth/request_token', "GET")
+    return content + "&redirect_uri" + TwitterOAuth.get_redirect_uri(), consumer
 
 
 

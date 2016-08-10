@@ -19,20 +19,17 @@ from ..models.version import Version
 from ..helpers.object_formatter import ObjectFormatter
 from ..helpers.helpers import get_serializer
 from ..helpers.data_getter import DataGetter
-from ..helpers.data import DataManager, save_to_db
+from ..helpers.data import save_to_db
 from views_helpers import event_status_code, api_response
 from flask import Blueprint
 from flask.ext.autodoc import Autodoc
 from icalendar import Calendar
 import icalendar
-from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth
+from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth, TwitterOAuth
 from requests.exceptions import HTTPError
-from ..helpers.data import get_google_auth, create_user_oauth, get_facebook_auth, user_logged_in, get_instagram_auth,\
-    get_twitter_auth_url
+from ..helpers.data import get_google_auth, create_user_oauth, get_facebook_auth, user_logged_in, get_instagram_auth
 import geoip2.database
 import time
-import oauth2
-import urlparse
 import json
 from app.helpers.storage import upload, UploadedFile
 
@@ -409,16 +406,10 @@ def facebook_callback():
             response = facebook.get(FbOAuth.get_user_info())
             if response.status_code == 200:
                 user_info = response.json()
-                user = login.current_user
-                if not user.user_detail.facebook:
-                    user.user_detail.facebook = user_info['link']
-                if not user.user_detail.firstname:
-                    user.user_detail.firstname = user_info['first_name']
-                if not user.user_detail.lastname:
-                    user.user_detail.lastname = user_info['last_name']
-                if not user.user_detail.avatar_uploaded:
-                    user.user_detail.avatar_uploaded = save_file_provided_by_url(user_info['picture']['data']['url'])
-                save_to_db(user)
+                update_user_details(first_name=user_info['first_name'],
+                                    last_name=user_info['last_name'],
+                                    facebook_link=user_info['link'],
+                                    file_url=user_info['picture']['data']['url'])
         except Exception:
             pass
         return redirect(url_for('admin.index'))
@@ -446,6 +437,22 @@ def facebook_callback():
                 return redirect(intended_url())
         return 'did not find user info'
 
+
+def update_user_details(first_name=None, last_name=None, facebook_link=None, twitter_link=None, file_url=None):
+    user = login.current_user
+    if not user.user_detail.facebook:
+        user.user_detail.facebook = facebook_link
+    if not user.user_detail.firstname:
+        user.user_detail.firstname = first_name
+    if not user.user_detail.lastname:
+        user.user_detail.lastname = last_name
+    if not user.user_detail.avatar_uploaded:
+        user.user_detail.avatar_uploaded = save_file_provided_by_url(file_url)
+    if not user.user_detail.twitter:
+        user.user_detail.twitter = twitter_link
+    save_to_db(user)
+
+
 def get_fb_auth():
     facebook = get_facebook_auth()
     state = facebook.authorization_url(FbOAuth.get_auth_uri(), access_type='offline')[1]
@@ -461,23 +468,15 @@ def get_fb_auth():
 
 @app.route('/tCallback/', methods=('GET', 'POST'))
 def twitter_callback():
-    __, consumer = get_twitter_auth_url()
-    client = oauth2.Client(consumer)
-    rs, c = client.request('https://api.twitter.com/oauth/access_token?oauth_verifier=' + request.args.get('oauth_verifier', '') + "&oauth_token=" + request.args.get('oauth_token', ''), "POST")
-    request_token = dict(urlparse.parse_qsl(c))
-    token = oauth2.Token(request_token["oauth_token"], request_token["oauth_token_secret"])
-    token.set_verifier(request.args.get('oauth_verifier', ''))
-    client = oauth2.Client(consumer, token)
-    resp, content = client.request("https://api.twitter.com/1.1/users/show.json?screen_name="+ request_token["screen_name"] +"&user_id=" + request_token["user_id"] , "GET")
+    oauth_verifier = request.args.get('oauth_verifier', '')
+    oauth_token = request.args.get('oauth_token', '')
+    client, access_token = TwitterOAuth().get_authorized_client(oauth_verifier,
+                                                                oauth_token)
+    resp, content = client.request("https://api.twitter.com/1.1/users/show.json?screen_name=" + access_token["screen_name"] +"&user_id=" + access_token["user_id"] , "GET")
     user_info = json.loads(content)
-    user = login.current_user
-    if not user.user_detail.firstname:
-        user.user_detail.firstname = user_info['name']
-    if not user.user_detail.avatar_uploaded:
-        user.user_detail.avatar_uploaded = save_file_provided_by_url(user_info['profile_image_url'])
-    if not user.user_detail.twitter:
-        user.user_detail.twitter = "https://twitter.com/" + request_token["screen_name"]
-    save_to_db(user)
+    update_user_details(first_name=user_info['name'],
+                        file_url=user_info['profile_image_url'],
+                        twitter_link="https://twitter.com/" + access_token["screen_name"])
     return redirect(url_for('profile.index_view'))
 
 @app.route('/iCallback/', methods=('GET', 'POST'))
