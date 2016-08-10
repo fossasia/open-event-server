@@ -141,12 +141,18 @@
                                 <div class="col-xs-6">
                                     <div class="item form-group">
                                         <label>Description</label>
-                                        <textarea name="tickets[description]" class="form-control" rows="7" style="border-radius: 3px;" placeholder="Add a description for the Ticket">{{ description }}</textarea>
+                                        <textarea name="tickets[description]" class="form-control" rows="4" style="height: 110px;" placeholder="Add a description for the Ticket" maxlength="160">{{ description }}</textarea>
                                     </div>
                                     <div class="item form-group">
-                                        <label style="font-weight: normal;">
+                                        <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1; margin-top: 0;">
                                             <input type="checkbox" class="checkbox flat form-control" name="tickets_description_toggle_{{ serialno }}" {{ 'checked' if description_toggle else ''}}>
                                             Display Ticket description on event page
+                                        </label>
+                                    </div>
+                                    <div class="item form-group">
+                                        <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1;  margin-top: 0;">
+                                            <input type="checkbox" class="checkbox flat form-control" name="tickets_hide_{{ serialno }}" {{ 'checked' if hide else ''}}>
+                                            Hide Ticket from the Events page
                                         </label>
                                     </div>
                                 </div>
@@ -193,12 +199,6 @@
                                         <label>Tag Group</label>
                                         <input type="text" class="form-control ticket-tags" name="tickets[tags]"
                                             value="{{ ticket_tags| join(',') }}">
-                                    </div>
-                                    <div class="item form-group">
-                                        <label style="font-weight: normal;">
-                                            <input type="checkbox" class="checkbox flat form-control" name="tickets_hide_{{ serialno }}" {{ 'checked' if hide else ''}}>
-                                            Hide Ticket
-                                        </label>
                                     </div>
                                 </div>
                             </div>

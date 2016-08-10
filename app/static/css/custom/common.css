@@ -389,3 +389,14 @@ span.twitter-typeahead {
 #ticketing-holder select {
   width: 50px;
 }
+
+.selectize-input {
+    border-radius: 0 !important;
+    -webkit-border-radius: 0 !important;
+}
+
+.selectize-input.focus {
+    border-color: #cccccc !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
