@@ -1,10 +1,10 @@
 {% set included_items = included_settings %}
 
-{% macro social_entry(social_link=None) %}
+{% macro social_entry(social_link=None, name='Twitter') %}
     <div class="social-link-holder">
         <div class=" col-sm-3" style="padding-left: 0;">
             <input type="text" class="form-control" name="social[name]" placeholder="Name"
-                   value="{{ social_link.name | default('Twitter', true) }}">
+                   value="{{ social_link.name | default(name, true) }}">
         </div>
         <input type="hidden" name="social[id]" value="{{ social_link.id | default('') }}">
         <div class="col-sm-5 input-group">
@@ -226,12 +226,6 @@
         </div>
 
         <div class="item form-group">
-            <label>Event Url</label>
-            <input type="url" pattern="https?://.+" value="{{ event.event_url | default('', true) }}" name="event_url"
-                   class="form-control" data-error="Please enter a valid URL"/>
-            <div class="help-block with-errors"></div>
-        </div>
-        <div class="item form-group">
             <label><span class="organizer-state">Add</span> Organizer Information
             </label>
             <input type="checkbox" class="toggle-switch" name="organizer_state"
@@ -255,17 +249,21 @@
             </div>
         </div>
         <div class="item form-group">
-            <label>Social Links</label>
+            <label>Links and Social Media</label>
             <div class="row social-links">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     {% if social_links %}
                         {% for social_link in social_links %}
                             {{ social_entry(social_link) }}
                         {% else %}
-                            {{ social_entry() }}
+                            {{ social_entry(None, 'Twitter') }}
+                            {{ social_entry(None, 'Facebook') }}
+                            {{ social_entry(None, 'External Event URL') }}
                         {% endfor %}
                     {% else %}
-                        {{ social_entry() }}
+                        {{ social_entry(None, 'Twitter') }}
+                        {{ social_entry(None, 'Facebook') }}
+                        {{ social_entry(None, 'External Event URL') }}
                     {% endif %}
                 </div>
 
@@ -301,9 +299,9 @@
                 <tbody>
                 {% if event %}
                     {% for ticket in event.tickets %}
-                        {{ ticket_template(serialno=loop.index0, name=ticket.name, description=ticket.description, description_toggle=ticket.description_toggle,
-                        sales_start=ticket.sales_start, sales_end=ticket.sales_end, price=ticket.price, type=ticket.type,
-                        quantity=ticket.quantity, min_order=ticket.min_order, max_order=ticket.max_order) }}
+                        {{ ticket_template(serialno=loop.index0, name=ticket.name, description=ticket.description, description_toggle=ticket.description_toggle, ticket_tags=ticket.tags,
+                        sales_start=ticket.sales_start, sales_end=ticket.sales_end, hide=ticket.hide, price=ticket.price, type=ticket.type,
+                        quantity=ticket.quantity, min_order=ticket.min_order, max_order=ticket.max_order, has_orders=ticket.has_order_tickets()) }}
                     {% endfor %}
                 {% endif %}
                 </tbody>
@@ -361,7 +359,7 @@
         {% endif %}
 
         <div id="payment-system-holder" class="item form-group"
-             {% if not event or ('paid' not in ticket_types and 'donation' not in ticket_types) or (not event.payment_country and not event.payment_currency) %}style="display:none;"{% endif %}>
+             {% if not event or ('paid' not in ticket_types and 'donation' not in ticket_types) %}style="display:none;"{% endif %}>
             <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
                 <i class="fa fa-money"></i>
                 Add Payment details
@@ -396,6 +394,26 @@
                 </div>
             </div>
             <div class="item form-group">
+            <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color: #5bc0de;">
+            <i class="fa fa-credit-card"></i>
+            Choose Payment Methods
+            <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+            </h2>
+            <label class="control-label" style="font-size: 20px;">Online Payments</label>
+            <div class="col-sm-12 input-group">
+                                    <label class="control-label">Payment by PayPal</label>
+                                    <div class="checkbox">
+                                        <label style="font-weight: 300;">
+                                            <input type="checkbox" name="pay_by_paypal" id="pay_by_paypal"
+                                                   value="paypalYes"
+                                                   {% if event.pay_by_paypal %}checked="checked"{% endif %}>
+                                            <strong style="font-weight: 400;">YES, accept payment through PayPal </strong><br>
+                                            Paypal accepts credit card, debit card and PayPal payments. To learn how it works
+                                            click <a href="">here.</a>
+                                        </label>
+                                    </div>
+            </div>
+            <div id="paypal-holder" class="item form-group" {% if not event.pay_by_paypal %}style="display: none"{% endif %}>
                 <label>PayPal Email <span class="required">*</span></label>
                 <input type="email" placeholder="PayPal Email" name="paypal_email" class="form-control"
                        value="{{ event.paypal_email | default('', true) }}">
@@ -403,7 +421,20 @@
                     href="https://www.paypal.com/us/webapps/mpp/referral/paypal-express-checkout?partner_id=W9QW5TKUA246E"
                     target="_blank">Create a free PayPal merchant account.</a>
             </div>
-            <div class="item form-group">
+            <div class="col-sm-12 input-group">
+                                    <label class="control-label">Payment by Stripe</label>
+                                    <div class="checkbox">
+                                        <label style="font-weight: 300;">
+                                            <input type="checkbox" name="pay_by_stripe" id="pay_by_stripe"
+                                                   value="stripeYes"
+                                                   {% if event.pay_by_stripe %}checked="checked"{% endif %}>
+                                            <strong style="font-weight: 400;">YES, accept payment through Stripe </strong><br>
+                                            Stripe accepts Visa, Master and Amex. To learn how it works click <a href="">here.</a>
+                                            Find out more about Stripe <a href="">here.</a>
+                                        </label>
+                                    </div>
+            </div>
+            <div id="stripe-holder" class="item form-group" {% if not event.pay_by_stripe %}style="display: none"{% endif %}>
                 <label>Use Stripe for payments <span class="required">*</span></label><br>
                 <input type="hidden" name="stripe_added" value="{% if event.stripe %}yes{% else %}no{% endif %}">
                 <div id="stripe-connected-message" style="{% if not event.stripe %}display: none;{% endif %}">
@@ -414,15 +445,42 @@
                     <input type="hidden" name="stripe_email" value="{{ event.stripe.stripe_email | default('', true) }}">
                     The stripe account <strong class="stripe-email">{{ event.stripe.stripe_email | default('', true) }}</strong> has been connected. <a href="#" class="stripe-delink">Click to De-link the account.</a><br><br>
                 </div>
-                <button type="button" class="btn btn-info stripe-connect" style="{% if event.stripe %}display:none;{% endif %}">
-                    <i class="fa fa-cc-stripe fa-lg fa-fw" aria-hidden="true"></i> Connect with Stripe
-                </button>
+                <a href="#" class="stripe-connect" style="{% if event.stripe %}display:none;{% endif %}"><span>Connect with Stripe</span></a>
             </div>
+            <label class="control-label" style="font-size: 20px;">Offline Payments</label>
+            <div class="col-sm-12 input-group">
+                                    <div class="checkbox">
+                                        <label style="font-weight: 300;">
+                                            <input type="checkbox" name="pay_by_cheque" id="pay_by_cheque"
+                                                   value="chequeYes"
+                                                   {% if event.pay_by_cheque %}checked="checked"{% endif %}>
+                                            <strong style="font-weight: 400;">YES, accept payment by Cheque </strong><br>
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label style="font-weight: 300;">
+                                            <input type="checkbox" name="pay_by_bank" id="pay_by_bank"
+                                                   value="bankYes"
+                                                   {% if event.pay_by_bank %}checked="checked"{% endif %}>
+                                            <strong style="font-weight: 400;">YES, accept payment by Telegraphic Transfer(TT) / Bank Transfer </strong><br>
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label style="font-weight: 300;">
+                                            <input type="checkbox" name="pay_onsite" id="pay_onsite"
+                                                   value="onsiteYes"
+                                                   {% if event.pay_onsite %}checked="checked"{% endif %}>
+                                            <strong style="font-weight: 400;">YES, accept payment at the event(on site) </strong><br>
+                                        </label>
+                                    </div>
+            </div>
+            <br>
             <div class="">
                 <a href='#' data-toggle="modal" data-target="#taxModal" title="Add tax option">
                     <h5>+ Add Tax</h5>
                 </a>
             </div>
+        </div>
         </div>
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color: #5bc0de;">
             <i class="fa fa-plus-circle"></i>
@@ -596,11 +654,11 @@
                                 <div class="col-sm-12 input-group">
                                     <label>Country<span class="required">*</span></label>
                                     <select name="tax_country" id="tax_country_name" class="form-control">
-                                        {% if not event or not event.payment_country %}
+                                        {% if not event or not tax.country %}
                                             <option value="">Choose a country for your tax payment</option>
                                         {% endif %}
                                         {% for country in payment_countries %}
-                                            <option value="{{ tax.country | default('', true) }}" {{ "selected" if event and event.payment_country == country else '' }}>{{ country }}</option>
+                                            <option value="{{ tax.country | default('', true) }}" {{ "selected" if event and tax.country == country else '' }}>{{ country }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -645,8 +703,8 @@
                                         <label for="registered_company">Registered Company<span
                                                 class="required">*</span></label>
                                         <input value="{{ tax.registered_company | default('', true) }}" type="text"
-                                               class="form-control" name="regestered_company" id="regestered_company"
-                                               placeholder="Enter Comapny Name">
+                                               class="form-control" name="registered_company" id="registered_company"
+                                               placeholder="Enter Company Name">
                                     </div>
 
                                     <div class="col-sm-12 input-group">
@@ -1044,6 +1102,15 @@
     var ticketsCount = 1;
     var $paymentsystemHolder = $("#payment-system-holder");
 
+    $(document).ready(function() {
+        $("#event-wizard-form .ticket-tags").selectize({
+            plugins: ['remove_button'],
+            persist: false,
+            createOnBlur: true,
+            create: true
+        });
+    });        
+
     function addTicket(type) {
         /* Clone ticket from template */
         var $tmpl = $("#ticket-template").clone().children("table").children("tbody").children("tr");
@@ -1062,6 +1129,13 @@
         $ticketMore.find("input.checkbox.flat").iCheck({
             checkboxClass: 'icheckbox_flat-green',
             radioClass: 'iradio_flat-green'
+        });
+
+        $ticketMore.find(".ticket-tags").selectize({
+            plugins: ['remove_button'],
+            persist: false,
+            createOnBlur: true,
+            create: true
         });
 
         /* Bind events to Edit and Remove buttons */
@@ -1110,6 +1184,10 @@
         /* Set name attribute for all Ticket Description Toggle checkboxes */
         $("#event-wizard-form input[name*='tickets_description_toggle_']").each(function(i, el) {
             $(el).attr("name", "tickets_description_toggle_" + String(i));
+        });
+        /* Set name attribute for all Ticket Stop Sales checkboxes */
+        $("#event-wizard-form input[name*='tickets_hide_']").each(function(i, el) {
+            $(el).attr("name", "tickets_hide_" + String(i));
         });
 
         ticketsCount += 1;
@@ -1238,11 +1316,12 @@
         }
 
         var $stripeConnectedMessage = $("#stripe-connected-message");
-        $(".stripe-connect").click(function () {
+        $(".stripe-connect").click(function (e) {
+            e.preventDefault();
             $.oauthpopup({
                 path: "https://connect.stripe.com/oauth/authorize?response_type=code&client_id={{ settings.stripe_client_id }}&scope=read_write&redirect_uri={{ url_for('ticketing.stripe_callback', _external=true) }}",
                 callback: function () {
-                    // console.log(window.oauth_response);
+                    // TODO Disallow test accounts. Only accept live accounts.
                     if (1 || window.oauth_response.live_mode) {
                         $("input[name=stripe_added]").val("yes");
                         $stripeConnectedMessage.find("input[name=stripe_secret_key]").val(window.oauth_response.access_token);
@@ -1270,6 +1349,21 @@
             $(".stripe-connect").show();
         });
 
+        var $paypalHolder = $("#paypal-holder");
+        $("#pay_by_paypal").change(function () {
+            if ($("#pay_by_paypal").is(":checked"))
+                $paypalHolder.fadeIn();
+            else
+                $paypalHolder.fadeOut();
+        });
+
+        var $stripeHolder = $("#stripe-holder");
+        $("#pay_by_stripe").change(function () {
+            if ($("#pay_by_stripe").is(":checked"))
+                $stripeHolder.fadeIn();
+            else
+                $stripeHolder.fadeOut();
+        });
 
     });
 </script>

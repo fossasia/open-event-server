@@ -14,7 +14,7 @@
           <div style="white-space: nowrap; padding: 8px; line-height: 1.42857143; vertical-align: top; border-top: 1px solid #ddd; background: #f9f9f9">
             {% if event.state == 'Published' %}
               Your event is live at
-              <a href="{{url_for('event_detail.display_event_detail_home', event_id=event.id) |replace('events', 'e') }}" >
+              <a href="{{url_for('event_detail.display_event_detail_home', identifier=event.identifier) |replace('events', 'e') }}" >
                 {{request.base_url |replace('events', 'e') }}
               </a>
             {% else %}
@@ -63,7 +63,7 @@
             </tr>
         {% endif %}
         <tr>
-            <td>Social Links </td>
+            <td>Links and Social Media </td>
             <td>
                 {% for socialLink in event.social_link %}
                     {% if loop.index > 1 %}, {% endif %}<a href="{{ socialLink.link }}">{{ socialLink.name }}</a>

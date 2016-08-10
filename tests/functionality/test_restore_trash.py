@@ -17,34 +17,37 @@ class TestAdminTrash(OpenEventTestCase):
         self.app = Setup.create_app()
 
     def test_restore_event_from_trash(self):
-        event = Event(name="event1",
-                      start_time=datetime(2003, 8, 4, 12, 30, 45),
-                      end_time=datetime(2003, 9, 4, 12, 30, 45),
-                      in_trash=True)
         with app.test_request_context():
+            event = Event(name="event1",
+                          start_time=datetime(2003, 8, 4, 12, 30, 45),
+                          end_time=datetime(2003, 9, 4, 12, 30, 45),
+                          in_trash=True)
+
             save_to_db(event, "Event saved")
             restore_event(1)
             self.assertEqual(event.in_trash, False)
 
     def test_restore_user_from_trash(self):
-        user = User(password="test",
-                    email="email@gmail.com",
-                    in_trash=True)
         with app.test_request_context():
+            user = User(password="test",
+                        email="email@gmail.com",
+                        in_trash=True)
+
             save_to_db(user, "User saved")
             restore_user(1)
             self.assertEqual(user.in_trash, False)
 
     def test_restore_session_from_trash(self):
-        event = ObjectMother.get_event()
-        session = Session(title='Session 1',
-                          long_abstract='dsad',
-                          start_time=datetime(2003, 8, 4, 12, 30, 45),
-                          end_time=datetime(2003, 8, 4, 12, 30, 45),
-                          event_id=1,
-                          state='pending',
-                          in_trash=True)
         with app.test_request_context():
+            event = ObjectMother.get_event()
+            session = Session(title='Session 1',
+                              long_abstract='dsad',
+                              start_time=datetime(2003, 8, 4, 12, 30, 45),
+                              end_time=datetime(2003, 8, 4, 12, 30, 45),
+                              event_id=1,
+                              state='pending',
+                              in_trash=True)
+
             save_to_db(event, "Event saved")
             save_to_db(session, "Session saved")
             restore_session(1)

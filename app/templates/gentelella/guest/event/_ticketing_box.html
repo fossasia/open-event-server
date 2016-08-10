@@ -20,6 +20,7 @@
                         </thead>
                         <tbody>
                         {% for ticket in tickets %}
+                            {% if not ticket.hide %}
                             <tr>
 
                                 <td>
@@ -28,8 +29,8 @@
                                     </a>
                                 </td>
                                 <td>{{ ticket.sales_end.strftime('%a, %B %d') }}</td>
-                                <td>${{ ticket.price | money }}</td>
-                                <td>$ 0.00</td>
+                                <td>{{ event.payment_currency | currency_symbol }}{{ ticket.price | money }}</td>
+                                <td>{{ event.payment_currency | currency_symbol }} 0.00</td>
                                 <td>
                                     <input type="hidden" name="ticket_ids[]" value="{{ ticket.id }}">
                                     <select name="ticket_quantities[]" class="quantity-select"
@@ -42,8 +43,9 @@
                                         {% endfor %}
                                     </select>
                                 </td>
-                                <td class="subtotal">${{ 0 | money }}</td>
+                                <td class="subtotal">{{ event.payment_currency | currency_symbol }}{{ 0 | money }}</td>
                             </tr>
+                            {% endif %}
                             {% if loop.last %}
                                 <tr>
                                     <td colspan="5" class="text-right">
@@ -54,7 +56,7 @@
                                     <td>
                                         <div id="total-holder"
                                              style="font-weight: 300; font-size: 16px;line-height: 39px;text-transform: uppercase;">
-                                            <span style="font-weight: 500;" id="total-amount">$123.00</span>
+                                            <span style="font-weight: 500;" id="total-amount">$00.00</span>
                                         </div>
 
                                     </td>
@@ -88,7 +90,9 @@
                 </div>
                 <div class="panel-footer" style="background-color: #ffffff;">
                     <div class="pull-right">
-                        <img src="{{ url_for('static', filename='img/paymentlogoshorizontal.png') }}">
+                        {% if event.pay_by_paypal or event.pay_by_stripe %}
+                            <img src="{{ url_for('static', filename='img/paymentlogoshorizontal.png') }}">
+                        {% endif %}
                         <button class="btn btn-success" {% if tickets %}type="submit"{% else %} type="button"
                                 disabled{% endif %} id="order-now-btn">Order Now
                         </button>
@@ -131,10 +135,10 @@
             });
 
             var subtotal = (parseInt($(this).data('rate')) + parseInt($(this).data('fee'))) * parseInt($(this).val());
-            $(this).closest("tr").find(".subtotal").text("$ " + subtotal + ".00");
+            $(this).closest("tr").find(".subtotal").text("{{ event.payment_currency | currency_symbol }} " + subtotal + ".00");
 
             $totalHolder.show();
-            $totalAmount.text("$" + total + ".00");
+            $totalAmount.text("{{ event.payment_currency | currency_symbol }} " + total + ".00");
 
             if (hasMoreThenZero) {
                 $orderNowBtn.removeAttr("disabled");

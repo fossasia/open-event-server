@@ -25,7 +25,7 @@
                             {{ ticket_order.quantity }}
                         </td>
                         <td>
-                            ${{ (ticket_order.ticket.price*ticket_order.quantity) | money }}
+                            {{ order.event.payment_currency | currency_symbol }}{{ (ticket_order.ticket.price*ticket_order.quantity) | money }}
                             {% if costs.append(ticket_order.ticket.price*ticket_order.quantity) %}{% endif %}
                         </td>
                     </tr>
@@ -39,7 +39,7 @@
 
                 <tr class="total-row">
                     <td colspan="4" align="right" class="order-total"><strong>Order total:</strong></td>
-                    <td><strong>${{ order.amount | money }}</strong></td>
+                    <td><strong>{{ order.event.payment_currency | currency_symbol }}{{ order.amount | money }}</strong></td>
                 </tr>
                 </tbody>
             </table>

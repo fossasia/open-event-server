@@ -7,7 +7,10 @@ import traceback
 import oauth2
 from datetime import datetime, timedelta
 
+import binascii
+
 import requests
+from requests.exceptions import ConnectionError
 from flask import flash, request, url_for, g, current_app
 from flask_socketio import emit
 from flask.ext import login
@@ -29,7 +32,7 @@ from app.models.stripe_authorization import StripeAuthorization
 from ..helpers import helpers as Helper
 from ..helpers.data_getter import DataGetter
 from ..helpers.static import EVENT_LICENCES
-from ..helpers.update_version import VersionUpdater
+from ..helpers.update_version import VersionUpdater, get_all_columns
 from ..helpers.system_mails import MAILS
 from ..models import db
 from ..models.activity import Activity, ACTIVITIES
@@ -43,7 +46,7 @@ from ..models.microlocation import Microlocation
 from ..models.permission import Permission
 from ..models.role import Role
 from ..models.role_invite import RoleInvite
-from ..models.ticket import Ticket
+from ..models.ticket import Ticket, TicketTag
 from ..models.service import Service
 from ..models.session import Session
 from ..models.session_type import SessionType
@@ -403,6 +406,7 @@ class DataManager(object):
         if speaker_modified:
             save_to_db(speaker, "Speaker saved")
         record_activity('create_session', session=new_session, event_id=event_id)
+        update_version(event_id, False, 'sessions_ver')
 
         invite_emails = form.getlist("speakers[email]")
         for index, email in enumerate(invite_emails):
@@ -419,7 +423,7 @@ class DataManager(object):
                 # If a user is registered by the email, send a notification as well
                 user = DataGetter.get_user_by_email(email, no_flash=True)
                 if user:
-                    cfs_link = url_for('event_detail.display_event_cfs', event_id=event.id)
+                    cfs_link = url_for('event_detail.display_event_cfs', identifier=event.identifier)
                     Helper.send_notif_invite_papers(user, event.name, cfs_link, link)
 
     @staticmethod
@@ -462,7 +466,7 @@ class DataManager(object):
             speaker.photo = speaker_img
             save_to_db(speaker, "Speaker photo saved")
             record_activity('update_speaker', speaker=speaker, event_id=event_id)
-
+        update_version(event_id, False, 'speakers_ver')
         return speaker
 
     @staticmethod
@@ -480,6 +484,7 @@ class DataManager(object):
         save_to_db(session, "Speaker saved")
         record_activity('add_speaker_to_session', speaker=speaker, session=session, event_id=event_id)
         update_version(event_id, False, "speakers_ver")
+        update_version(event_id, False, "sessions_ver")
 
     @staticmethod
     def create_speaker_session_relation(session_id, speaker_id, event_id):
@@ -493,6 +498,8 @@ class DataManager(object):
         session = DataGetter.get_session(session_id)
         session.speakers.append(speaker)
         save_to_db(session, "Session Speaker saved")
+        update_version(speaker.event_id, False, "speakers_ver")
+        update_version(session.event_id, False, "sessions_ver")
 
     @staticmethod
     def session_accept_reject(session, event_id, state):
@@ -582,6 +589,7 @@ class DataManager(object):
                     db.session.commit()
 
             record_activity('update_session', session=session, event_id=event_id)
+            update_version(event_id, False, "sessions_ver")
 
     @staticmethod
     def update_session(form, session):
@@ -617,6 +625,7 @@ class DataManager(object):
         delete_from_db(session, "Session deleted")
         flash('You successfully delete session')
         record_activity('delete_session', session=session, event_id=session.event_id)
+        update_version(session.event_id, False, "sessions_ver")
 
     @staticmethod
     def create_speaker(form, event_id, user=login.current_user):
@@ -671,6 +680,7 @@ class DataManager(object):
         speaker = Speaker.query.get(speaker_id)
         delete_from_db(speaker, "Speaker deleted")
         record_activity('delete_speaker', speaker=speaker, event_id=speaker.event_id)
+        update_version(speaker.event_id, False, "speakers_ver")
         flash('You successfully delete speaker')
 
     @staticmethod
@@ -880,6 +890,17 @@ class DataManager(object):
                 save_to_db(perm, 'Permission saved')
 
     @staticmethod
+    def create_ticket_tags(tagnames_csv, event_id):
+        """Returns list of `TicketTag` objects.
+        """
+        tag_list = []
+        for tagname in tagnames_csv.split(','):
+            tag, _ = get_or_create(TicketTag, name=tagname, event_id=event_id)
+            tag_list.append(tag)
+
+        return tag_list
+
+    @staticmethod
     def create_event(form, img_files):
         """
         Event will be saved to database with proper Event id
@@ -904,6 +925,7 @@ class DataManager(object):
         if form['payment_currency'] != '':
             payment_currency = form.get('payment_currency').split(' ')[0]
 
+        paypal_email = ''
         event = Event(name=form['name'],
                       start_time=DataManager.get_event_time_field_format(form, 'start'),
                       end_time=DataManager.get_event_time_field_format(form, 'end'),
@@ -912,7 +934,6 @@ class DataManager(object):
                       longitude=form['longitude'],
                       location_name=form['location_name'],
                       description=form['description'],
-                      event_url=form['event_url'],
                       type=form['type'],
                       topic=form['topic'],
                       sub_topic=form['sub_topic'],
@@ -923,7 +944,18 @@ class DataManager(object):
                       creator=login.current_user,
                       payment_country=form.get('payment_country', ''),
                       payment_currency=payment_currency,
-                      paypal_email=form.get('paypal_email', ''))
+                      paypal_email=paypal_email)
+
+        event.pay_by_paypal = 'pay_by_paypal' in form
+        event.pay_by_cheque = 'pay_by_cheque' in form
+        event.pay_by_bank = 'pay_by_bank' in form
+        event.pay_onsite = 'pay_onsite' in form
+        event.pay_by_stripe = 'pay_by_stripe' in form
+
+        if 'pay_by_paypal' in form:
+            event.paypal_email = form.get('paypal_email')
+        else:
+            event.paypal_email = None
 
         event = DataManager.update_searchable_location_name(event)
 
@@ -981,6 +1013,7 @@ class DataManager(object):
                 ticket_sales_end_times = form.getlist('tickets[sales_end_time]')
                 ticket_min_orders = form.getlist('tickets[min_order]')
                 ticket_max_orders = form.getlist('tickets[max_order]')
+                ticket_tags =  form.getlist('tickets[tags]')
 
                 for i, name in enumerate(ticket_names):
                     if name.strip():
@@ -996,6 +1029,8 @@ class DataManager(object):
 
                         description_toggle = form.get('tickets_description_toggle_{}'.format(i), False)
                         description_toggle = True if description_toggle == 'on' else False
+
+                        tag_list = DataManager.create_ticket_tags(ticket_tags[i], event.id)
                         ticket = Ticket(
                             name=name,
                             type=ticket_types[i],
@@ -1007,6 +1042,7 @@ class DataManager(object):
                             price=int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0,
                             min_order=ticket_min_orders[i],
                             max_order=ticket_max_orders[i],
+                            tags=tag_list,
                             event=event
                         )
 
@@ -1018,16 +1054,17 @@ class DataManager(object):
             sponsor_description = form.getlist('sponsors[description]')
             sponsor_logo_url = []
 
-            if form.get('stripe_added', u'no') == u'yes':
-                stripe_authorization = StripeAuthorization(
-                    stripe_secret_key=form.get('stripe_secret_key', ''),
-                    stripe_refresh_token=form.get('stripe_refresh_token', ''),
-                    stripe_publishable_key=form.get('stripe_publishable_key', ''),
-                    stripe_user_id=form.get('stripe_user_id', ''),
-                    stripe_email=form.get('stripe_email', ''),
-                    event_id=event.id
-                )
-                save_to_db(stripe_authorization)
+            if 'pay_by_stripe' in form:
+                if form.get('stripe_added', u'no') == u'yes':
+                    stripe_authorization = StripeAuthorization(
+                        stripe_secret_key=form.get('stripe_secret_key', ''),
+                        stripe_refresh_token=form.get('stripe_refresh_token', ''),
+                        stripe_publishable_key=form.get('stripe_publishable_key', ''),
+                        stripe_user_id=form.get('stripe_user_id', ''),
+                        stripe_email=form.get('stripe_email', ''),
+                        event_id=event.id
+                    )
+                    save_to_db(stripe_authorization)
 
             if form.get('sponsors_state', u'off') == u'on':
                 for index, name in enumerate(sponsor_name):
@@ -1145,7 +1182,7 @@ class DataManager(object):
                               address=form.get('buisness_address', ''),
                               city=form.get('invoice_city', ''),
                               state=form.get('invoice_state', ''),
-                              zip=form.get('tax_zip', 0),
+                              zip=form.get('invoice_zip', 0),
                               invoice_footer=form.get('invoice_footer', ''),
                               tax_include_in_price=tax_include_in_price,
                               event_id=event.id)
@@ -1174,14 +1211,22 @@ class DataManager(object):
     @staticmethod
     def update_searchable_location_name(event):
         if event.latitude and event.longitude:
-            response = requests.get(
-                "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
-                    event.longitude)).json()
+            url = 'https://maps.googleapis.com/maps/api/geocode/json'
+            latlng = '{},{}'.format(event.latitude, event.longitude)
+            params = {'latlng': latlng}
+            response = dict()
+
+            try:
+                response = requests.get(url, params).json()
+            except ConnectionError:
+                response['status'] = u'Error'
+
             if response['status'] == u'OK':
                 for addr in response['results'][0]['address_components']:
                     if addr['types'] == ['locality', 'political']:
                         event.searchable_location_name = addr['short_name']
         return event
+
     @staticmethod
     def create_event_copy(event_id):
 
@@ -1194,7 +1239,6 @@ class DataManager(object):
                       longitude=event_old.longitude,
                       location_name=event_old.location_name,
                       description=event_old.description,
-                      event_url=event_old.event_url,
                       type=event_old.type,
                       topic=event_old.topic,
                       sub_topic=event_old.sub_topic,
@@ -1267,14 +1311,29 @@ class DataManager(object):
         event.longitude = form['longitude']
         event.location_name = form['location_name']
         event.description = form['description']
-        event.event_url = form['event_url']
         event.type = form['type']
         event.topic = form['topic']
         event.show_map = 1 if form.get('show_map', 'on') == "on" else 0
         event.sub_topic = form['sub_topic']
         event.privacy = form.get('privacy', 'public')
         event.payment_country = form.get('payment_country')
-        event.payment_currency = form.get('payment_currency')
+
+        event.pay_by_paypal = 'pay_by_paypal' in form
+        event.pay_by_cheque = 'pay_by_cheque' in form
+        event.pay_by_bank = 'pay_by_bank' in form
+        event.pay_onsite = 'pay_onsite' in form
+        event.pay_by_stripe = 'pay_by_stripe' in form
+
+        if 'pay_by_paypal' in form:
+            event.paypal_email = form.get('paypal_email')
+        else:
+            event.paypal_email = None
+
+        payment_currency = ''
+        if form['payment_currency'] != '':
+            payment_currency = form.get('payment_currency').split(' ')[0]
+
+        event.payment_currency = payment_currency
         event.paypal_email = form.get('paypal_email')
 
         ticket_names = form.getlist('tickets[name]')
@@ -1288,6 +1347,7 @@ class DataManager(object):
         ticket_sales_end_times = form.getlist('tickets[sales_end_time]')
         ticket_min_orders = form.getlist('tickets[min_order]')
         ticket_max_orders = form.getlist('tickets[max_order]')
+        ticket_tags = form.getlist('tickets[tags]')
 
         for i, name in enumerate(ticket_names):
             if name.strip():
@@ -1301,49 +1361,62 @@ class DataManager(object):
                 sales_end_str = '{} {}'.format(ticket_sales_end_dates[i],
                                                ticket_sales_end_times[i])
 
+                hide = form.get('tickets_hide_{}'.format(i), False)
+                hide = True if hide == 'on' else False
+
                 description_toggle = form.get('tickets_description_toggle_{}'.format(i), False)
                 description_toggle = True if description_toggle == 'on' else False
+
+                tag_list = DataManager.create_ticket_tags(ticket_tags[i], event.id)
+
                 ticket = Ticket.query.filter_by(event=event, name=name).first()
                 if not ticket:
-                    # create
+                    # create new ticket
                     ticket = Ticket(
                         name=name,
                         type=ticket_types[i],
                         sales_start=datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M'),
                         sales_end=datetime.strptime(sales_end_str, '%m/%d/%Y %H:%M'),
+                        hide=hide,
                         description=ticket_descriptions[i],
                         description_toggle=description_toggle,
                         quantity=ticket_quantities[i],
                         price=int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0,
                         min_order=ticket_min_orders[i],
                         max_order=ticket_max_orders[i],
+                        tags=tag_list,
                         event=event
                     )
                 else:
-                    # update
-                    ticket.name = name
+                    # update existing ticket
+                    if not ticket.has_order_tickets():
+                        ticket.name = name
+                        ticket.price = int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0
                     ticket.type = ticket_types[i]
-                    ticket.sales_start = datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M'),
-                    ticket.sales_end = datetime.strptime(sales_end_str, '%m/%d/%Y %H:%M'),
+                    ticket.sales_start = datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M')
+                    ticket.sales_end = datetime.strptime(sales_end_str, '%m/%d/%Y %H:%M')
+                    ticket.hide = hide
                     ticket.description = ticket_descriptions[i]
                     ticket.description_toggle = description_toggle,
                     ticket.quantity = ticket_quantities[i]
-                    ticket.price = int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0
                     ticket.min_order = ticket_min_orders[i]
                     ticket.max_order = ticket_max_orders[i]
+                    ticket.tags = tag_list
 
                 db.session.add(ticket)
 
         # Remove all the tickets that are not in form
+        # except those that already have placed orders
         for ticket in event.tickets:
-            if ticket.name not in ticket_names:
+            if ticket.name not in ticket_names and not ticket.has_order_tickets():
                 db.session.delete(ticket)
 
         event.ticket_url = form.get('ticket_url', None)
 
-        if not event.ticket_url and tax:
+        if not event.ticket_url:
             if form['taxAllow'] == 'taxNo':
                 event.tax_allow = False
+                delete_from_db(tax, "Tax options deleted")
 
             if form['taxAllow'] == 'taxYes':
                 event.tax_allow = True
@@ -1356,21 +1429,39 @@ class DataManager(object):
                 if form['tax_options'] == 'tax_include':
                     tax_include_in_price = True
 
-                tax.country = form['tax_country'],
-                tax.tax_name = form['tax_name'],
-                tax.tax_rate = form['tax_rate'],
-                tax.tax_id = form['tax_id'],
-                tax.send_invoice = tax_invoice,
-                tax.registered_company = form.get('registered_company', ''),
-                tax.address = form.get('buisness_address', ''),
-                tax.city = form.get('invoice_city', ''),
-                tax.state = form.get('invoice_state', ''),
-                tax.zip = form.get('tax_zip', 0),
-                tax.invoice_footer = form.get('invoice_footer', ''),
-                tax.tax_include_in_price = tax_include_in_price,
-                tax.event_id = event.id
+                if not tax:
+                    tax = Tax(country=form['tax_country'],
+                              tax_name=form['tax_name'],
+                              tax_rate=form['tax_rate'],
+                              tax_id=form['tax_id'],
+                              send_invoice=tax_invoice,
+                              registered_company=form.get('registered_company', ''),
+                              address=form.get('buisness_address', ''),
+                              city=form.get('invoice_city', ''),
+                              state=form.get('invoice_state', ''),
+                              zip=form.get('invoice_zip', 0),
+                              invoice_footer=form.get('invoice_footer', ''),
+                              tax_include_in_price=tax_include_in_price,
+                              event_id=event.id)
 
-                save_to_db(tax, "Tax Options Saved")
+                    save_to_db(tax, "Tax ")
+
+                if tax:
+                    tax.country = form['tax_country'],
+                    tax.tax_name = form['tax_name'],
+                    tax.tax_rate = form['tax_rate'],
+                    tax.tax_id = form['tax_id'],
+                    tax.send_invoice = tax_invoice,
+                    tax.registered_company = form.get('registered_company', ''),
+                    tax.address = form.get('buisness_address', ''),
+                    tax.city = form.get('invoice_city', ''),
+                    tax.state = form.get('invoice_state', ''),
+                    tax.zip = form.get('invoice_zip', 0),
+                    tax.invoice_footer = form.get('invoice_footer', ''),
+                    tax.tax_include_in_price = tax_include_in_price,
+                    tax.event_id = event.id
+
+                    save_to_db(tax, "Tax Options Updated")
 
         event = DataManager.update_searchable_location_name(event)
 
@@ -1466,16 +1557,17 @@ class DataManager(object):
         if event.stripe:
             delete_from_db(event.stripe, "Old stripe auth deleted")
 
-        if form.get('stripe_added', u'no') == u'yes':
-            stripe_authorization = StripeAuthorization(
-                stripe_secret_key=form.get('stripe_secret_key', ''),
-                stripe_refresh_token=form.get('stripe_refresh_token', ''),
-                stripe_publishable_key=form.get('stripe_publishable_key', ''),
-                stripe_user_id=form.get('stripe_user_id', ''),
-                stripe_email=form.get('stripe_email', ''),
-                event_id=event.id
-            )
-            save_to_db(stripe_authorization)
+        if 'pay_by_stripe' in form:
+            if form.get('stripe_added', u'no') == u'yes':
+                stripe_authorization = StripeAuthorization(
+                    stripe_secret_key=form.get('stripe_secret_key', ''),
+                    stripe_refresh_token=form.get('stripe_refresh_token', ''),
+                    stripe_publishable_key=form.get('stripe_publishable_key', ''),
+                    stripe_user_id=form.get('stripe_user_id', ''),
+                    stripe_email=form.get('stripe_email', ''),
+                    event_id=event.id
+                )
+                save_to_db(stripe_authorization)
 
         if form.get('has_session_speakers', u'no') == u'yes':
 
@@ -1632,6 +1724,9 @@ class DataManager(object):
         update_or_create(
             CustomForms, event_id=event.id,
             session_form=session_form, speaker_form=speaker_form)
+
+        for _ in get_all_columns():  # update all columns; safe way
+            update_version(event.id, False, _)
 
         save_to_db(event, "Event saved")
         record_activity('update_event', event_id=event.id)
@@ -1989,6 +2084,7 @@ def trash_session(session_id):
     session.in_trash = True
     session.trash_date = datetime.now()
     save_to_db(session, "Session added to Trash")
+    update_version(session.event_id, False, 'sessions_ver')
     return session
 
 
@@ -2008,6 +2104,7 @@ def restore_session(session_id):
     session = DataGetter.get_session(session_id)
     session.in_trash = False
     save_to_db(session, "Session restored from Trash")
+    update_version(session.event_id, False, 'sessions_ver')
 
 
 def create_modules(form):

@@ -121,9 +121,9 @@
 
                     </td>
                     <td>{{ order_ticket.ticket.name }}</td>
-                    <td>$ {{ order_ticket.ticket.price | money }}</td>
+                    <td>{{ event.payment_currency | currency_symbol }}{{ order_ticket.ticket.price | money }}</td>
                     <td>{{ order_ticket.quantity }}</td>
-                    <td>$ {{ (order_ticket.quantity * order_ticket.ticket.price) | money }}</td>
+                    <td>{{ event.payment_currency | currency_symbol }}{{ (order_ticket.quantity * order_ticket.ticket.price) | money }}</td>
                     <td>{{ order.user.user_detail.firstname }}</td>
                     <td>{{ order.user.user_detail.lastname }}</td>
                     <td>{{ order.user.email }}</td>

@@ -1,0 +1,18 @@
+{% extends 'gentelella/guest/ticketing/order_base.html' %}
+
+{% block title %}Your Order{% endblock %}
+
+{% block head_css %}
+    {{ super() }}
+{% endblock %}
+
+{% block inner_panel %}
+    {% include 'gentelella/guest/ticketing/components/_order_summary.html' %}
+{% endblock %}
+
+{% block right_addon %}
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+{% endblock %}

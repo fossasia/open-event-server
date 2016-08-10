@@ -19,6 +19,7 @@ from ..models.version import Version
 from ..helpers.object_formatter import ObjectFormatter
 from ..helpers.helpers import get_serializer
 from ..helpers.data_getter import DataGetter
+from ..helpers.data import DataManager, save_to_db
 from views_helpers import event_status_code, api_response
 from flask import Blueprint
 from flask.ext.autodoc import Autodoc
@@ -324,7 +325,7 @@ def generate_icalendar_event(event_id):
     event.add('logo', matching_event.logo)
     event.add('email', matching_event.email)
     event.add('description', matching_event.description)
-    event.add('url', matching_event.event_url)
+    event.add('url', url_for('event_detail.display_event_detail_home', identifier=matching_event.identifier, _external=True))
     cal.add_component(event)
 
     #Saving ical in file
@@ -401,7 +402,25 @@ def callback():
 
 @app.route('/fCallback/', methods=('GET', 'POST'))
 def facebook_callback():
+    print request.args
     if login.current_user is not None and login.current_user.is_authenticated:
+        try:
+            facebook, __ = get_fb_auth()
+            response = facebook.get(FbOAuth.get_user_info())
+            if response.status_code == 200:
+                user_info = response.json()
+                user = login.current_user
+                if not user.user_detail.facebook:
+                    user.user_detail.facebook = user_info['link']
+                if not user.user_detail.firstname:
+                    user.user_detail.firstname = user_info['first_name']
+                if not user.user_detail.lastname:
+                    user.user_detail.lastname = user_info['last_name']
+                if not user.user_detail.avatar_uploaded:
+                    user.user_detail.avatar_uploaded = save_file_provided_by_url(user_info['picture']['data']['url'])
+                save_to_db(user)
+        except Exception:
+            pass
         return redirect(url_for('admin.index'))
     elif 'error' in request.args:
         if request.args.get('error') == 'access denied':
@@ -410,17 +429,7 @@ def facebook_callback():
     elif 'code' not in request.args and 'state' not in request.args:
         return redirect(url_for('admin.login_view'))
     else:
-        facebook = get_facebook_auth()
-        state = facebook.authorization_url(FbOAuth.get_auth_uri(), access_type='offline')[1]
-        facebook = get_facebook_auth(state=state)
-        if 'code' in request.url:
-            code_url = (((request.url.split('&'))[0]).split('='))[1]
-        try:
-            token = facebook.fetch_token(FbOAuth.get_token_uri(), authorization_url=request.url,
-                                         code=code_url, client_secret=FbOAuth.get_client_secret())
-        except HTTPError:
-            return 'HTTP Error occurred'
-        facebook = get_facebook_auth(token=token)
+        facebook, token = get_fb_auth()
         response = facebook.get(FbOAuth.get_user_info())
         if response.status_code == 200:
             user_info = response.json()
@@ -437,6 +446,18 @@ def facebook_callback():
                 return redirect(intended_url())
         return 'did not find user info'
 
+def get_fb_auth():
+    facebook = get_facebook_auth()
+    state = facebook.authorization_url(FbOAuth.get_auth_uri(), access_type='offline')[1]
+    facebook = get_facebook_auth(state=state)
+    if 'code' in request.url:
+        code_url = (((request.url.split('&'))[0]).split('='))[1]
+    try:
+        token = facebook.fetch_token(FbOAuth.get_token_uri(), authorization_url=request.url,
+                                     code=code_url, client_secret=FbOAuth.get_client_secret())
+    except HTTPError:
+        return 'HTTP Error occurred'
+    return get_facebook_auth(token=token), token
 
 @app.route('/tCallback/', methods=('GET', 'POST'))
 def twitter_callback():
@@ -464,19 +485,23 @@ def instagram_callback():
                                       client_secret=InstagramOAuth.get_client_secret())
         response = instagram.get('https://api.instagram.com/v1/users/self/media/recent/?access_token=' + token.get('access_token', '')).json()
         for el in response.get('data'):
-            response_file = urlopen(el['images']['standard_resolution']['url'])
-
-            filename = str(time.time()) + '.jpg'
-            file_path = os.path.realpath('.') + '/static/temp/' + filename
-            fh = open(file_path, "wb")
-            fh.write(response_file.read())
-            fh.close()
-            img = UploadedFile(file_path, filename)
-            print img
-            background_url = upload(img, '/image/' + filename)
+            background_url = save_file_provided_by_url(el['images']['standard_resolution']['url'])
             print background_url
 
     return 'Not implemented'
+
+
+def save_file_provided_by_url(url):
+    response_file = urlopen(url)
+    filename = str(time.time()) + '.jpg'
+    file_path = os.path.realpath('.') + '/static/temp/' + filename
+    fh = open(file_path, "wb")
+    fh.write(response_file.read())
+    fh.close()
+    img = UploadedFile(file_path, filename)
+    background_url = upload(img, '/image/' + filename)
+    return background_url
+
 
 @app.route('/pic/<path:filename>')
 @auto.doc()

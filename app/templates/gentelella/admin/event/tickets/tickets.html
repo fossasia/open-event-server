@@ -88,7 +88,7 @@
                 <h2 class="panel-title">Sales</h2>
             </div>
             <div class="panel-body text-center">
-                ${{ orders_summary.completed.total_sales|money }}
+                {{ event.payment_currency | currency_symbol }}{{ orders_summary.completed.total_sales|money }}
             </div>
             <div class="panel-footer text-right" style="border-top: 1px solid #fff;">
                 &nbsp;
@@ -128,7 +128,7 @@
                     Total Orders
                 </th>
                 <th>
-                    Total Sales ($)
+                    Total Sales ({{ event.payment_currency | currency_symbol }})
                 </th>
                 <th>
                     View Reports
@@ -148,7 +148,7 @@
                         {{ item.orders_count }}
                     </td>
                     <td>
-                        ${{ item.total_sales | money }}
+                        {{ event.payment_currency | currency_symbol }}{{ item.total_sales | money }}
                     </td>
                     <td>
                         <a href="./orders">View orders</a> / <a href="./attendees">View attendees</a>
@@ -210,13 +210,13 @@
                         {{ item.completed.tickets_count }}
                     </td>
                     <td>
-                        ${{ item.completed.sales | money }}
+                        {{ event.payment_currency | currency_symbol }}{{ item.completed.sales | money }}
                     </td>
                     <td>
                         {{ item.pending.tickets_count }}
                     </td>
                     <td>
-                        ${{ item.pending.sales | money }}
+                        {{ event.payment_currency | currency_symbol }}{{ item.pending.sales | money }}
                     </td>
                 </tr>
             {% endfor %}
@@ -234,13 +234,13 @@
                     {{ orders_summary.completed.tickets_count }}
                 </th>
                 <th>
-                    ${{ orders_summary.completed.total_sales | money }}
+                    {{ event.payment_currency | currency_symbol }}{{ orders_summary.completed.total_sales | money }}
                 </th>
                 <th>
                     {{ orders_summary.pending.tickets_count }}
                 </th>
                 <th>
-                    ${{ orders_summary.pending.total_sales | money }}
+                    {{ event.payment_currency | currency_symbol }}{{ orders_summary.pending.total_sales | money }}
                 </th>
             </tr>
             </tfoot>

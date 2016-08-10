@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 from flask import request, url_for, current_app
 from itsdangerous import Serializer
 from flask.ext import login
+from sqlalchemy import func
 
 from app.helpers.flask_helpers import get_real_ip
 from app.settings import get_settings
@@ -31,6 +32,18 @@ from app.models.notifications import (
 
 from system_notifications import NOTIFS
 from app.helpers.storage import UploadedFile
+
+def represents_int(string):
+    try:
+        int(string)
+        return True
+    except:
+        return False
+
+def get_count(q):
+    count_q = q.statement.with_only_columns([func.count()]).order_by(None)
+    count = q.session.execute(count_q).scalar()
+    return count
 
 def get_event_id():
     """Get event Id from request url"""
@@ -429,23 +442,6 @@ def send_notif_invite_papers(user, event_name, cfs_link, submit_link):
         )
 
         send_notification(user, action, title, message)
-
-
-def is_event_admin(event_id, users):
-    """
-    :param event_id: Event id
-    :param users: User id
-    :return: is user admin
-    """
-    is_admin = False
-    for user_obj in users:
-        if user_obj.user.id == login.current_user.id:
-            for ass in login.current_user.events_assocs:
-                if ass.event_id == int(event_id):
-                    is_admin = ass.admin
-                    if is_event_admin:
-                        return is_admin
-    return is_admin
 
 
 def ensure_social_link(website, link):

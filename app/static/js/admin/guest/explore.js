@@ -202,7 +202,7 @@ function isImageInvalid(url) {
  */
 function addEvent(event) {
     var $eventElement = $(eventTemplate);
-    $eventElement.attr("href", "/e/" + event.id);
+    $eventElement.attr("href", "/e/" + event.identifier);
     if (isImageInvalid(event.background_url)) {
         $eventElement.find(".event-image").attr('src', '/static/img/trans_white.png');
     } else {

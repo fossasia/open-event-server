@@ -76,7 +76,6 @@ EVENT = api.model('Event', {
     'timezone': fields.String(),
     'latitude': fields.Float(),
     'longitude': fields.Float(),
-    'event_url': fields.Uri(),
     'background_url': fields.Upload(),
     'description': fields.String(),
     'location_name': fields.String(),
@@ -84,7 +83,6 @@ EVENT = api.model('Event', {
     'organizer_name': fields.String(),
     'organizer_description': fields.String(),
     'state': EventStateField(default='Draft'),
-    'closing_datetime': fields.DateTime(),
     'type': EventTypeField(),
     'topic': EventTopicField(),
     'sub_topic': EventSubTopicField(),
@@ -141,10 +139,7 @@ class EventDAO(BaseDAO):
         Fixes the payload data.
         Here converts string time from datetime obj
         """
-        datetime_fields = [
-            'start_time', 'end_time', 'closing_datetime',
-            'schedule_published_on'
-        ]
+        datetime_fields = ['start_time', 'end_time', 'schedule_published_on']
         for f in datetime_fields:
             if f in data:
                 data[f] = EVENT_POST[f].from_str(data.get(f))

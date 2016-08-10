@@ -17,7 +17,7 @@
     Explore
 {% endblock %}
 {% macro event_block(event) %}
-    <a href="/e/{{ event.id }}">
+    <a href="/e/{{ event.identifier }}">
         <div class="col-xs-12 event-holder">
             <div class="thumbnail row">
                 <div class="img-box col-md-3 col-sm-3 col-xs-3">
@@ -38,7 +38,7 @@
                         {% if event and event.topic %}
                             <span class="filter-hashtag" data-name="category" data-value="{{ event.topic }}">#{{ event.topic | default('', true) | camel_case }}</span>
                         {% endif %}
-                        <i data-event-id="{{ event.id | default('', true) }}"
+                        <i data-event-id="{{ event.identifier | default('', true) }}"
                            data-title="{{ event.name | default('', true) }}"
                            class="share-btn fa fa-share-alt pull-right"></i>
                     </p>

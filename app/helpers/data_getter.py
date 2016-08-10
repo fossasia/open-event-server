@@ -38,7 +38,7 @@ from ..models.export_jobs import ExportJob
 from ..models.tax import Tax
 from .language_list import LANGUAGE_LIST
 from .static import EVENT_TOPICS, EVENT_LICENCES, PAYMENT_COUNTRIES, PAYMENT_CURRENCIES, DEFAULT_EVENT_IMAGES
-from app.helpers.helpers import get_event_id, string_empty
+from app.helpers.helpers import get_event_id, string_empty, represents_int
 from flask.ext import login
 from flask import flash, abort
 import datetime
@@ -111,12 +111,6 @@ class DataGetter(object):
     def get_event_role_invite(event_id, hash_code, **kwargs):
         return RoleInvite.query.filter_by(event_id=event_id,
                                           hash=hash_code, **kwargs).first()
-
-    @staticmethod
-    def get_all_owner_events():
-        """Method return all owner events"""
-        # return Event.query.filter_by(owner=owner_id)
-        return login.current_user.events_assocs
 
     @staticmethod
     def get_email_notification_settings_by_id(email_id):
@@ -340,11 +334,24 @@ class DataGetter(object):
         return db_model.query.get(object_id)
 
     @staticmethod
-    def get_event(event_id):
-        """Returns an Event given its id.
+    def get_event(event_id_or_identifier):
+        """Returns an Event given its id/identifier.
         Aborts with a 404 if event not found.
         """
-        event = Event.query.get(event_id)
+        if represents_int(event_id_or_identifier):
+            event = Event.query.get(event_id_or_identifier)
+        else:
+            event = Event.query.filter_by(identifier=event_id_or_identifier).first()
+        if event is None:
+            abort(404)
+        return event
+
+    @staticmethod
+    def get_event_by_identifier(identifier):
+        """Returns an Event given its /identifier.
+        Aborts with a 404 if event not found.
+        """
+        event = Event.query.filter_by(identifier=identifier).first()
         if event is None:
             abort(404)
         return event

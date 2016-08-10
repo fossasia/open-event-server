@@ -62,7 +62,7 @@ def render_event_pages(num):
 
     for e in events:
         urls = [
-            full_url(url_for('event_detail.' + view, event_id=e.id))
+            full_url(url_for('event_detail.' + view, identifier=e.identifier))
             for view in event_details_pages
         ]
         main_urls += urls

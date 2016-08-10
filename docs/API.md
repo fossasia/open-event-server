@@ -42,7 +42,6 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**id** | integer | Required | Public |
 |**name** | string | Required | Public |
 |**description** | string | Optional | Public |
-|**event_url** | string | Optional | Public |
 |**color** | string | Optional | Public |
 |**logo** | string | Optional | Public |
 |**location_name** | string | Optional | Public |
@@ -62,7 +61,6 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**ticket_url** | string | Optional | Public |
 |**timezone** | string | Optional | Public |
 |**privacy** | string | Optional | Public |
-|**closing_datetime** | string | Optional | Public |
 |**code_of_conduct** | string | Optional | Public |
 |**schedule\_published\_on** | string | Optional | Public |
 |**creator** | **EventCreator** | Required | Public |

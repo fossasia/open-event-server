@@ -4,12 +4,14 @@
 import warnings
 
 from flask.exthook import ExtDeprecationWarning
+from forex_python.converter import CurrencyCodes
 from pytz import utc
 
 warnings.simplefilter('ignore', ExtDeprecationWarning)
 # Keep it before flask extensions are imported
 import arrow
 from celery import Celery
+from celery.signals import after_task_publish
 from flask.ext.htmlmin import HTMLMIN
 import logging
 import os.path
@@ -168,21 +170,25 @@ def social_settings():
     return dict(settings=settings)
 
 @app.template_filter('pretty_name')
-def pretty_name_filter(s):
-    s = str(s)
-    s = s.replace('_', ' ')
-    s = s.title()
-    return s
+def pretty_name_filter(string):
+    string = str(string)
+    string = string.replace('_', ' ')
+    string = string.title()
+    return string
 
+@app.template_filter('currency_symbol')
+def currency_symbol_filter(currency_code):
+    symbol = CurrencyCodes().get_symbol(currency_code)
+    return symbol if symbol else '$'
 
 @app.template_filter('camel_case')
-def camel_case_filter(s):
-    return camel_case(s)
+def camel_case_filter(string):
+    return camel_case(string)
 
 
 @app.template_filter('slugify')
-def slugify_filter(s):
-    return slugify(s)
+def slugify_filter(string):
+    return slugify(string)
 
 
 @app.template_filter('humanize')
@@ -300,6 +306,19 @@ def make_celery(app):
 
 
 celery = make_celery(current_app)
+
+
+# http://stackoverflow.com/questions/9824172/find-out-whether-celery-task-exists
+@after_task_publish.connect
+def update_sent_state(sender=None, body=None, **kwargs):
+    # the task may not exist if sent using `send_task` which
+    # sends tasks by name, so fall back to the default result backend
+    # if that is the case.
+    task = celery.tasks.get(sender)
+    backend = task.backend if task else celery.backend
+    backend.store_result(body['id'], None, 'WAITING')
+
+
 import api.helpers.tasks
 import helpers.tasks
 

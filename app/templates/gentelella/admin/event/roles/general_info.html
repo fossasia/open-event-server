@@ -6,7 +6,7 @@ General Info
     <table class="table table-striped table-responsive">
         <tbody>
 	        <tr><td><b>Event ID: </b></td><td>{{event.id}}</td></tr>
-	        <tr><td><b>Event Url: </b></td><td>{{event.event_url}}</td></tr>
+	        <tr><td><b>Event Url: </b></td><td>{{ url_for('event_detail.display_event_detail_home', identifier=event.identifier, _external=True) }}</td></tr>
 	        <tr><td><b>Event Start Time: </b></td><td>{{event.start_time}}</td></tr>
 	        <tr><td><b>Event End Time: </b></td><td>{{event.end_time}}</td></tr>
 	        <tr><td><b>Event Session Types: </b></td>
@@ -16,7 +16,7 @@ General Info
 	        	{% endfor %}
 	        	</td>
 	        </tr>
-	        <tr><td><b>Event Social Links: </b></td>
+	        <tr><td><b>Event Links and Social media: </b></td>
 	        	<td>
 	        	{% for socialLink in event.social_link %}
 	        		<a href="{{socialLink.link}}">{{socialLink.name}}</a>,

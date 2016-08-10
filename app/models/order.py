@@ -9,7 +9,7 @@ class OrderTicket(db.Model):
     order_id = db.Column(db.Integer, db.ForeignKey('orders.id'), primary_key=True)
     ticket_id = db.Column(db.Integer, db.ForeignKey('ticket.id'), primary_key=True)
     quantity = db.Column(db.Integer)
-    ticket = db.relationship('Ticket')
+    ticket = db.relationship('Ticket', backref='order_tickets')
 
 
 class Order(db.Model):
@@ -34,7 +34,8 @@ class Order(db.Model):
     exp_month = db.Column(db.Integer)
     exp_year = db.Column(db.Integer)
     last4 = db.Column(db.String)
-    token = db.Column(db.String)
+    stripe_token = db.Column(db.String)
+    paypal_token = db.Column(db.String)
     status = db.Column(db.String)
 
     discount_code_id = db.Column(
