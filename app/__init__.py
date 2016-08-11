@@ -6,7 +6,6 @@ import warnings
 from flask.exthook import ExtDeprecationWarning
 from forex_python.converter import CurrencyCodes
 from pytz import utc
-
 warnings.simplefilter('ignore', ExtDeprecationWarning)
 # Keep it before flask extensions are imported
 import arrow
@@ -36,6 +35,7 @@ import sqlalchemy as sa
 from nameparser import HumanName
 import stripe
 from app.helpers.flask_helpers import SilentUndefined, camel_case, slugify, MiniJSONEncoder
+from app.helpers.payment import forex
 from app.models import db
 from app.models.user import User
 from app.models.event import Event
@@ -199,7 +199,7 @@ def humanize_filter(time):
 
 
 @app.template_filter('humanize_alt')
-def humanize_filter(time):
+def humanize_alt_filter(time):
     if not time:
         return "N/A"
     return humanize.naturaltime(datetime.now() - time)
@@ -242,7 +242,7 @@ def flask_helpers():
     def current_date(format='%a, %B %d %I:%M %p', **kwargs):
         return (datetime.now() + timedelta(**kwargs)).strftime(format)
 
-    return dict(string_empty=string_empty, current_date=current_date)
+    return dict(string_empty=string_empty, current_date=current_date, forex=forex)
 
 
 @app.context_processor
@@ -319,8 +319,8 @@ def update_sent_state(sender=None, body=None, **kwargs):
     backend.store_result(body['id'], None, 'WAITING')
 
 
-import api.helpers.tasks
-import helpers.tasks
+# import api.helpers.tasks
+# import helpers.tasks
 
 
 @app.before_first_request
@@ -363,7 +363,6 @@ sched.add_job(send_after_event_mail,
 
 def empty_trash():
     with app.app_context():
-        print 'HELLO'
         events = Event.query.filter_by(in_trash=True)
         users = User.query.filter_by(in_trash=True)
         sessions = Session.query.filter_by(in_trash=True)

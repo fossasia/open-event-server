@@ -36,6 +36,7 @@ from ..models.modules import Module
 from ..models.page import Page
 from ..models.export_jobs import ExportJob
 from ..models.tax import Tax
+from ..models.fees import TicketFees
 from .language_list import LANGUAGE_LIST
 from .static import EVENT_TOPICS, EVENT_LICENCES, PAYMENT_COUNTRIES, PAYMENT_CURRENCIES, DEFAULT_EVENT_IMAGES
 from app.helpers.helpers import get_event_id, string_empty, represents_int
@@ -720,3 +721,7 @@ class DataGetter(object):
         for ticket in tickets:
             ticket_types.append(ticket.type)
         return ticket_types
+
+    @staticmethod
+    def get_fee_settings():
+        return TicketFees.query.all()

@@ -81,7 +81,8 @@ class TicketSalesView(BaseView):
                 orders_summary[str(order.status)]['tickets_count'] += order_ticket.quantity
                 ticket = self.get_ticket(order_ticket.ticket_id)
                 tickets_summary[str(ticket.id)][str(order.status)]['tickets_count'] += order_ticket.quantity
-                tickets_summary[str(ticket.id)][str(order.status)]['sales'] += order_ticket.quantity * ticket.price
+                if order.paid_via != 'free' and order.amount > 0:
+                    tickets_summary[str(ticket.id)][str(order.status)]['sales'] += order_ticket.quantity * ticket.price
 
         return self.render('/gentelella/admin/event/tickets/tickets.html', event=event, event_id=event_id,
                            orders_summary=orders_summary, tickets_summary=tickets_summary)

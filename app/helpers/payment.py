@@ -6,12 +6,23 @@ import stripe
 from flask import url_for, current_app
 
 import requests
+from forex_python.converter import CurrencyRates
 
+from app.helpers.cache import cache
 from app.helpers.data_getter import DataGetter
 from app.helpers.data import save_to_db
 from app.helpers.helpers import represents_int
 from app.models.stripe_authorization import StripeAuthorization
 from app.settings import get_settings
+
+@cache.memoize(50)
+def forex(from_currency, to_currency, amount):
+    try:
+        currency_rates = CurrencyRates()
+        return currency_rates.convert(from_currency, to_currency, amount)
+    except:
+        return amount
+
 
 class StripePaymentsManager(object):
 
