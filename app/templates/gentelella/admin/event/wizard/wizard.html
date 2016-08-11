@@ -15,11 +15,6 @@
           href="{{ url_for('static', filename='admin/lib/selectize/dist/css/selectize.bootstrap3.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/Croppie/croppie.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
-    <style type="text/css">
-        .tooltip-inner {
-            min-width: 180px;
-        }
-    </style>
 {% endblock %}
 {% block head_js %}
     {{ super() }}
@@ -120,11 +115,11 @@
                         </td>
                         <td>
                             <div class="btn-group">
-                                <a class="btn btn-info edit-ticket-button" data-toggle="tooltip" title="Settings">
+                                <a class="btn btn-info edit-ticket-button" data-toggle="tooltip" title="Edit details">
                                     <i class="glyphicon glyphicon-cog"></i>
                                 </a>
                                 {% if has_orders %}
-                                    <a class="btn btn-info" data-toggle="tooltip" title="Cannot remove ticket. Orders have been placed for it." disabled>
+                                    <a class="btn btn-info" data-toggle="tooltip" data-container="body" title="Cannot remove ticket. Orders have been placed for it." disabled>
                                         <i class="glyphicon glyphicon-trash"></i>
                                     </a>
                                 {% else %}
