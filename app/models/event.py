@@ -44,6 +44,7 @@ class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     identifier = db.Column(db.String)
     name = db.Column(db.String, nullable=False)
+    event_url = db.Column(db.String)
     email = db.Column(db.String)
     logo = db.Column(db.String)
     start_time = db.Column(db.DateTime, nullable=False)
@@ -102,6 +103,7 @@ class Event(db.Model):
                  location_name=None,
                  email=None,
                  description=None,
+                 event_url=None,
                  background_url=None,
                  organizer_name=None,
                  organizer_description=None,
@@ -141,6 +143,7 @@ class Event(db.Model):
         self.longitude = longitude
         self.location_name = location_name
         self.description = clean_up_string(description)
+        self.event_url = event_url
         self.background_url = background_url
         self.organizer_name = organizer_name
         self.organizer_description = clean_up_string(organizer_description)
@@ -207,6 +210,7 @@ class Event(db.Model):
             'location_name': self.location_name,
             'email': self.email,
             'description': self.description,
+            'event_url': self.event_url,
             'background_url': self.background_url,
             'organizer_name': self.organizer_name,
             'organizer_description': self.organizer_description,

@@ -250,6 +250,22 @@
         </div>
         <div class="item form-group">
             <label>Links and Social Media</label>
+            <div >
+                <div class=" col-sm-3" style="padding-left: 0;">
+                    <input type="text" class="form-control" placeholder="External Event URL"
+                           value="External Event URL" readonly style="background-color: white;">
+                </div>
+                <div class="col-sm-5 input-group">
+                    <input data-error="Please enter a valid URL" type="url" class="form-control" name="event_url"
+                           placeholder="Link"
+                           value="{{ event.event_url | default('', true) }}">
+                    <div class="help-block with-errors"></div>
+                    <span class="input-group-btn" style="opacity: 0; pointer-events: none;">
+                        <button type="button" class="btn btn-danger remove-social-links">-</button>
+                        <button type="button" class="btn btn-primary add-social-links">+</button>
+                    </span>
+                </div>
+            </div>
             <div class="row social-links">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     {% if social_links %}
@@ -258,12 +274,10 @@
                         {% else %}
                             {{ social_entry(None, 'Twitter') }}
                             {{ social_entry(None, 'Facebook') }}
-                            {{ social_entry(None, 'External Event URL') }}
                         {% endfor %}
                     {% else %}
                         {{ social_entry(None, 'Twitter') }}
                         {{ social_entry(None, 'Facebook') }}
-                        {{ social_entry(None, 'External Event URL') }}
                     {% endif %}
                 </div>
 
@@ -1109,7 +1123,7 @@
             createOnBlur: true,
             create: true
         });
-    });        
+    });
 
     function addTicket(type) {
         /* Clone ticket from template */

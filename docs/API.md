@@ -42,6 +42,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**id** | integer | Required | Public |
 |**name** | string | Required | Public |
 |**description** | string | Optional | Public |
+|**event_url** | string | Optional | Public |
 |**color** | string | Optional | Public |
 |**logo** | string | Optional | Public |
 |**location_name** | string | Optional | Public |
