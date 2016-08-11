@@ -5,6 +5,7 @@ from super_admin_base import SuperAdminBaseView
 from app.settings import get_settings, set_settings
 from app.helpers.data_getter import DataGetter
 from werkzeug.datastructures import ImmutableMultiDict
+from app.views.admin.models_views.events import EventsView
 
 class SuperAdminSettingsView(SuperAdminBaseView):
     @expose('/', methods=('GET', 'POST'))
@@ -24,12 +25,14 @@ class SuperAdminSettingsView(SuperAdminBaseView):
 
         settings = get_settings()
         fees = DataGetter.get_fee_settings()
+        event_view = EventsView()
 
         return self.render(
             '/gentelella/admin/super_admin/settings/settings.html',
             settings=settings,
             fees=fees,
-            payment_currencies=DataGetter.get_payment_currencies()
+            payment_currencies=DataGetter.get_payment_currencies(),
+            included_settings=event_view.get_module_settings()
         )
 
     # @expose('/update', methods=('POST'))
