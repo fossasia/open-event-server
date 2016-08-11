@@ -5,8 +5,8 @@
     <form id="settings_form" method="post" class="form-horizontal form-label-left">
       <h3>List of Supported Currencies</h3>
         <br>
-        {% for currency in payment_currencies %}
-        <label class="control-label" >{{ currency.decode('utf-8') }}</label>
+        {% for code, has_paypal, has_stripe in payment_currencies %}
+        <label class="control-label" >{{ code }} - {{ code | currency_name }} ({{ code | currency_symbol }})</label>
         <br>
         <br>
         <div class="form-group">
@@ -20,7 +20,7 @@
         <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12" style="position:relative; top: 19px;">Maximum Fee</label>
             <div class=" col-md-9 col-xs-12">
-                <span style="position:relative; top: 27px; left: 85px">{{ currency.split(' ')[-1].decode('utf-8') }}</span>
+                <span style="position:relative; top: 27px; left: 93px">{{ code }}  {{ code | currency_name }} ({{ code | currency_symbol }})</span>
                 <input type="text" name="maximum_fee" class="form-control"
                        value="{{ fees[count].maximum_fee | default(0.0, true) }}" style="width: 120px">
             </div>

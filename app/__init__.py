@@ -181,6 +181,11 @@ def currency_symbol_filter(currency_code):
     symbol = CurrencyCodes().get_symbol(currency_code)
     return symbol if symbol else '$'
 
+@app.template_filter('currency_name')
+def currency_name_filter(currency_code):
+    name = CurrencyCodes().get_currency_name(currency_code)
+    return name if name else ''
+
 @app.template_filter('camel_case')
 def camel_case_filter(string):
     return camel_case(string)

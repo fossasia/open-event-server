@@ -400,8 +400,8 @@
                             {% if not event or not event.payment_currency %}
                                 <option value="">Please select a currency</option>
                             {% endif %}
-                            {% for currency in payment_currencies %}
-                                <option value="{{ currency.decode('utf-8') }}" {{ "selected" if event and event.payment_currency == currency.split(' ')[0] else '' }}>{{ currency.decode('utf-8') }}</option>
+                            {% for code,has_paypal,has_stripe in payment_currencies %}
+                                <option value="{{ code }}" data-has-paypal="{{ has_paypal }}" data-has-stripe="{{ has_stripe }}" {{ "selected" if event and event.payment_currency == code else '' }}>{{ code }} - {{ code | currency_name }} ({{ code | currency_symbol }})</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -414,52 +414,58 @@
             <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
             </h2>
             <label class="control-label" style="font-size: 20px;">Online Payments</label>
-            <div class="col-sm-12 input-group">
-                                    <label class="control-label">Payment by PayPal</label>
-                                    <div class="checkbox">
-                                        <label style="font-weight: 300;">
-                                            <input type="checkbox" name="pay_by_paypal" id="pay_by_paypal"
-                                                   value="paypalYes"
-                                                   {% if event.pay_by_paypal %}checked="checked"{% endif %}>
-                                            <strong style="font-weight: 400;">YES, accept payment through PayPal </strong><br>
-                                            Paypal accepts credit card, debit card and PayPal payments. To learn how it works
-                                            click <a href="">here.</a>
-                                        </label>
-                                    </div>
-            </div>
-            <div id="paypal-holder" class="item form-group" {% if not event.pay_by_paypal %}style="display: none"{% endif %}>
-                <label>PayPal Email <span class="required">*</span></label>
-                <input type="email" placeholder="PayPal Email" name="paypal_email" class="form-control"
-                       value="{{ event.paypal_email | default('', true) }}">
-                <strong style="font-weight: 400;">Don't have a PayPal account? </strong><a
-                    href="https://www.paypal.com/us/webapps/mpp/referral/paypal-express-checkout?partner_id=W9QW5TKUA246E"
-                    target="_blank">Create a free PayPal merchant account.</a>
-            </div>
-            <div class="col-sm-12 input-group">
-                                    <label class="control-label">Payment by Stripe</label>
-                                    <div class="checkbox">
-                                        <label style="font-weight: 300;">
-                                            <input type="checkbox" name="pay_by_stripe" id="pay_by_stripe"
-                                                   value="stripeYes"
-                                                   {% if event.pay_by_stripe %}checked="checked"{% endif %}>
-                                            <strong style="font-weight: 400;">YES, accept payment through Stripe </strong><br>
-                                            Stripe accepts Visa, Master and Amex. To learn how it works click <a href="">here.</a>
-                                            Find out more about Stripe <a href="">here.</a>
-                                        </label>
-                                    </div>
-            </div>
-            <div id="stripe-holder" class="item form-group" {% if not event.pay_by_stripe %}style="display: none"{% endif %}>
-                <label>Use Stripe for payments <span class="required">*</span></label><br>
-                <input type="hidden" name="stripe_added" value="{% if event.stripe %}yes{% else %}no{% endif %}">
-                <div id="stripe-connected-message" style="{% if not event.stripe %}display: none;{% endif %}">
-                    <input type="hidden" name="stripe_secret_key" value="{{ event.stripe.stripe_secret_key | default('', true) }}">
-                    <input type="hidden" name="stripe_refresh_token" value="{{ event.stripe.stripe_refresh_token | default('', true) }}">
-                    <input type="hidden" name="stripe_publishable_key" value="{{ event.stripe.stripe_publishable_key | default('', true) }}">
-                    <input type="hidden" name="stripe_user_id" value="{{ event.stripe.stripe_user_id | default('', true) }}">
-                    <input type="hidden" name="stripe_email" value="{{ event.stripe.stripe_email | default('', true) }}">
-                    The stripe account <strong class="stripe-email">{{ event.stripe.stripe_email | default('', true) }}</strong> has been connected. <a href="#" class="stripe-delink">Click to De-link the account.</a><br><br>
+            <div id="paypal-gateway">
+                <div class="col-sm-12 input-group">
+                        <label class="control-label">Payment by PayPal</label>
+                        <div class="checkbox">
+                            <label style="font-weight: 300;">
+                                <input type="checkbox" name="pay_by_paypal" id="pay_by_paypal"
+                                       value="paypalYes"
+                                       {% if event.pay_by_paypal %}checked="checked"{% endif %}>
+                                <strong style="font-weight: 400;">YES, accept payment through PayPal </strong><br>
+                                Paypal accepts credit card, debit card and PayPal payments. To learn how it works
+                                click <a href="">here.</a>
+                            </label>
+                        </div>
                 </div>
-                <a href="#" class="stripe-connect" style="{% if event.stripe %}display:none;{% endif %}"><span>Connect with Stripe</span></a>
+                <div id="paypal-holder" class="item form-group" {% if not event.pay_by_paypal %}style="display: none"{% endif %}>
+                    <label>PayPal Email <span class="required">*</span></label>
+                    <input type="email" placeholder="PayPal Email" name="paypal_email" class="form-control"
+                           value="{{ event.paypal_email | default('', true) }}">
+                    <strong style="font-weight: 400;">Don't have a PayPal account? </strong><a
+                        href="https://www.paypal.com/us/webapps/mpp/referral/paypal-express-checkout?partner_id=W9QW5TKUA246E"
+                        target="_blank">Create a free PayPal merchant account.</a>
+                </div>
+
+            </div>
+            <div id="stripe-gateway">
+                <div class="col-sm-12 input-group">
+                                        <label class="control-label">Payment by Stripe</label>
+                                        <div class="checkbox">
+                                            <label style="font-weight: 300;">
+                                                <input type="checkbox" name="pay_by_stripe" id="pay_by_stripe"
+                                                       value="stripeYes"
+                                                       {% if event.pay_by_stripe %}checked="checked"{% endif %}>
+                                                <strong style="font-weight: 400;">YES, accept payment through Stripe </strong><br>
+                                                Stripe accepts Visa, Master and Amex. To learn how it works click <a href="">here.</a>
+                                                Find out more about Stripe <a href="">here.</a>
+                                            </label>
+                                        </div>
+                </div>
+                <div id="stripe-holder" class="item form-group" {% if not event.pay_by_stripe %}style="display: none"{% endif %}>
+                    <label>Use Stripe for payments <span class="required">*</span></label><br>
+                    <input type="hidden" name="stripe_added" value="{% if event.stripe %}yes{% else %}no{% endif %}">
+                    <div id="stripe-connected-message" style="{% if not event.stripe %}display: none;{% endif %}">
+                        <input type="hidden" name="stripe_secret_key" value="{{ event.stripe.stripe_secret_key | default('', true) }}">
+                        <input type="hidden" name="stripe_refresh_token" value="{{ event.stripe.stripe_refresh_token | default('', true) }}">
+                        <input type="hidden" name="stripe_publishable_key" value="{{ event.stripe.stripe_publishable_key | default('', true) }}">
+                        <input type="hidden" name="stripe_user_id" value="{{ event.stripe.stripe_user_id | default('', true) }}">
+                        <input type="hidden" name="stripe_email" value="{{ event.stripe.stripe_email | default('', true) }}">
+                        The stripe account <strong class="stripe-email">{{ event.stripe.stripe_email | default('', true) }}</strong> has been connected. <a href="#" class="stripe-delink">Click to De-link the account.</a><br><br>
+                    </div>
+                    <a href="#" class="stripe-connect" style="{% if event.stripe %}display:none;{% endif %}"><span>Connect with Stripe</span></a>
+                </div>
+
             </div>
             <label class="control-label" style="font-size: 20px;">Offline Payments</label>
             <div class="col-sm-12 input-group">
@@ -1378,6 +1384,20 @@
             else
                 $stripeHolder.fadeOut();
         });
+
+        $("select[name=payment_currency]").change(function () {
+            var $selected = $(this).find(":selected");
+            if($selected.data("has-paypal") !== "True") {
+                $("#paypal-gateway").fadeOut().find("input").prop("checked", false).val("");
+            } else {
+                $("#paypal-gateway").fadeIn();
+            }
+            if($selected.data("has-stripe") !== "True") {
+                $("#stripe-gateway").fadeOut().find("input").prop("checked", false).val("");
+            } else {
+                $("#stripe-gateway").fadeIn();
+            }
+        }).trigger('change');
 
     });
 </script>
