@@ -1,0 +1,4 @@
+/** hide try out button */
+div.sandbox_header {
+	display: none !important;
+}
