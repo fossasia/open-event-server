@@ -1,0 +1,37 @@
+.vagrant/
+.DS_Store
+*.pyc
+*.pyo
+env
+env*
+dist
+build
+*.egg
+*.egg-info
+_mailinglist
+.tox
+.cache/
+test.db
+app.db
+.idea/
+.bundle/
+
+# Static files at 'app/static/admin/lib'
+lib/
+node_modules
+
+# event export files
+static/exports/event*
+
+# temp static files
+static/temp/*
+!static/temp/.gitkeep
+/tests/test.db-journal
+
+# uploads dir
+static/media/*
+!static/media/.gitkeep
+
+# redis
+redis-3.2.1/
+dump.rdb
