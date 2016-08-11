@@ -4,9 +4,9 @@ from flask_admin import expose
 from flask.ext import login
 
 from app.views.admin.models_views.events import is_verified_user
-from ....helpers.data import DataManager, get_facebook_auth, get_instagram_auth
+from ....helpers.data import DataManager, get_facebook_auth, get_instagram_auth, get_twitter_auth_url
 from ....helpers.data_getter import DataGetter
-from app.helpers.oauth import FbOAuth, InstagramOAuth
+from app.helpers.oauth import FbOAuth, InstagramOAuth, TwitterOAuth
 
 
 class ProfileView(BaseView):
@@ -50,10 +50,14 @@ class ProfileView(BaseView):
         fb_auth_url, state = facebook.authorization_url(FbOAuth.get_auth_uri(), access_type='offline')
         return redirect(fb_auth_url)
 
+    @expose('/tw_connect', methods=('GET', 'POST'))
+    def connect_twitter(self):
+        twitter_auth_url, __ = get_twitter_auth_url()
+        return redirect('https://api.twitter.com/oauth/authenticate?' + twitter_auth_url)
+
     @expose('/instagram_connect', methods=('GET', 'POST'))
     def connect_instagram(self):
         instagram = get_instagram_auth()
-        print InstagramOAuth.get_auth_uri()
         instagram_auth_url, state = instagram.authorization_url(InstagramOAuth.get_auth_uri(), access_type='offline')
         return redirect(instagram_auth_url)
 

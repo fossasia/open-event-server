@@ -4,6 +4,7 @@ import logging
 import os.path
 import random
 import traceback
+import oauth2
 from datetime import datetime, timedelta
 
 import binascii
@@ -24,7 +25,7 @@ from app.helpers.cache import cache
 from app.helpers.helpers import string_empty, string_not_empty, uploaded_file
 from app.helpers.notification_email_triggers import trigger_new_session_notifications, \
     trigger_session_state_change_notifications
-from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth
+from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth, TwitterOAuth
 from app.helpers.storage import upload, UPLOAD_PATHS
 from app.models.notifications import Notification
 from app.models.stripe_authorization import StripeAuthorization
@@ -1919,8 +1920,16 @@ def get_instagram_auth(state=None, token=None):
     return oauth
 
 
+def get_twitter_auth_url():
+    consumer = oauth2.Consumer(key=TwitterOAuth.get_client_id(),
+                               secret=TwitterOAuth.get_client_secret())
+    client = oauth2.Client(consumer)
+    resp, content = client.request('https://api.twitter.com/oauth/request_token', "GET")
+    return content + "&redirect_uri" + TwitterOAuth.get_redirect_uri(), consumer
+
+
+
 def create_user_oauth(user, user_data, token, method):
-    print user_data
     if user is None:
         user = User()
         user.email = user_data['email']

@@ -30,6 +30,7 @@ class WebAppCreator(AppCreator):
             'content-type': "application/x-www-form-urlencoded"
         }
         requests.request("POST", self.app_link, data=data, headers=headers)
+
     def __save(self):
         pass
 
