@@ -115,7 +115,6 @@ class EventsView(BaseView):
     @can_access
     def details_view(self, event_id):
         event = DataGetter.get_event(event_id)
-        print event.searchable_location_name
         checklist = {"": ""}
 
         if fields_not_empty(event,
