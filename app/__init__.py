@@ -199,7 +199,7 @@ def humanize_filter(time):
 
 
 @app.template_filter('humanize_alt')
-def humanize_filter(time):
+def humanize_alt_filter(time):
     if not time:
         return "N/A"
     return humanize.naturaltime(datetime.now() - time)
@@ -319,8 +319,8 @@ def update_sent_state(sender=None, body=None, **kwargs):
     backend.store_result(body['id'], None, 'WAITING')
 
 
-import api.helpers.tasks
-import helpers.tasks
+# import api.helpers.tasks
+# import helpers.tasks
 
 
 @app.before_first_request
@@ -363,7 +363,6 @@ sched.add_job(send_after_event_mail,
 
 def empty_trash():
     with app.app_context():
-        print 'HELLO'
         events = Event.query.filter_by(in_trash=True)
         users = User.query.filter_by(in_trash=True)
         sessions = Session.query.filter_by(in_trash=True)
