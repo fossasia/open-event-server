@@ -7,11 +7,11 @@
 {% set active_page = "sales" %}
 
 {% set side_bar = [
-    ('/events/' ~ event.id ~ '/tickets', 'by_events', 'By Events'),
-    ('/events/' ~ event.id ~ '/tickets/orders', 'by_organizer', 'By Organizer'),
-    ('/events/' ~ event.id ~ '/tickets/attendees', 'by_location', 'By Location'),
-    ('/events/' ~ event.id ~ '/tickets/discounts', 'fees', 'Fees'),
-    ('/events/' ~ event.id ~ '/tickets/add-order', 'fees_status', 'Fees Status'),
+    ('/admin/sales/events/', 'by_events', 'By Events'),
+    ('/admin/sales/organizers/', 'by_organizer', 'By Organizer'),
+    ('/admin/sales/locations/', 'by_location', 'By Location'),
+    ('/admin/sales/fees/', 'fees', 'Fees'),
+    ('/admin/sales/fees/status/', 'fees_status', 'Fees Status'),
 ] -%}
 
 {% set active_side_page = active_side_page|default('home') -%}

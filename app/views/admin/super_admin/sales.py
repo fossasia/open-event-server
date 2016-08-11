@@ -1,4 +1,9 @@
+import copy
+
+from flask import url_for
 from flask_admin import expose
+from werkzeug.exceptions import abort
+from werkzeug.utils import redirect
 
 from app import forex
 from app.helpers.data_getter import DataGetter
@@ -16,7 +21,11 @@ class SuperAdminSalesView(SuperAdminBaseView):
         return Ticket.query.get(ticket_id)
 
     @expose('/')
-    def sales_by_events_view(self):
+    def index(self):
+        return redirect(url_for('.sales_by_events_view'))
+
+    @expose('/<path>/')
+    def sales_by_events_view(self, path):
         events = DataGetter.get_all_events()
         orders = TicketingManager.get_orders()
 
@@ -45,9 +54,10 @@ class SuperAdminSalesView(SuperAdminBaseView):
             }
         }
 
-        tickets_summary = {}
+        tickets_summary_event_wise = {}
+        tickets_summary_organizer_wise = {}
         for event in events:
-            tickets_summary[str(event.id)] = {
+            tickets_summary_event_wise[str(event.id)] = {
                 'name': event.name,
                 'payment_currency': event.payment_currency,
                 'completed': {
@@ -64,6 +74,8 @@ class SuperAdminSalesView(SuperAdminBaseView):
                     'sales': 0
                 }
             }
+            tickets_summary_organizer_wise[str(event.creator_id)] = copy.deepcopy(tickets_summary_event_wise[str(event.id)])
+            tickets_summary_organizer_wise[str(event.creator_id)]['name'] = event.creator.email
 
         for order in orders:
             if order.status == 'initialized':
@@ -74,12 +86,24 @@ class SuperAdminSalesView(SuperAdminBaseView):
             for order_ticket in order.tickets:
                 orders_summary[str(order.status)]['tickets_count'] += order_ticket.quantity
                 ticket = self.get_ticket(order_ticket.ticket_id)
-                tickets_summary[str(order.event_id)][str(order.status)]['tickets_count'] += order_ticket.quantity
+                tickets_summary_event_wise[str(order.event_id)][str(order.status)]['tickets_count'] \
+                    += order_ticket.quantity
+                tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)]['tickets_count'] \
+                    += order_ticket.quantity
                 if order.paid_via != 'free' and order.amount > 0:
-                    tickets_summary[str(order.event_id)][str(order.status)]['sales'] += order_ticket.quantity \
-                                                                                        * ticket.price
-
-        return self.render('/gentelella/admin/super_admin/sales/by_events.html',
-                           tickets_summary=tickets_summary,
-                           display_currency=self.display_currency,
-                           orders_summary=orders_summary)
+                    tickets_summary_event_wise[str(order.event_id)][str(order.status)]['sales'] += \
+                        order_ticket.quantity * ticket.price
+                    tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)]['sales'] += \
+                        order_ticket.quantity * ticket.price
+        if path == 'events':
+            return self.render('/gentelella/admin/super_admin/sales/by_events.html',
+                               tickets_summary_event_wise=tickets_summary_event_wise,
+                               display_currency=self.display_currency,
+                               orders_summary=orders_summary)
+        elif path == 'organizers':
+            return self.render('/gentelella/admin/super_admin/sales/by_organizer.html',
+                               tickets_summary_organizer_wise=tickets_summary_organizer_wise,
+                               display_currency=self.display_currency,
+                               orders_summary=orders_summary)
+        else:
+            abort(404)

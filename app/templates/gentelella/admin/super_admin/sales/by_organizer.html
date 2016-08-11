@@ -1,6 +1,6 @@
 {% extends 'gentelella/admin/super_admin/sales/sales_base.html' %}
 
-{% set active_side_page = "by_events" %}
+{% set active_side_page = "by_organizer" %}
 
 
 {% block head_css %}
@@ -40,7 +40,7 @@
             border-right-color: transparent;
             border-left-color: transparent;
         }
-
+    
     </style>
 {% endblock %}
 
@@ -51,7 +51,7 @@
             <thead>
             <tr>
                 <th rowspan="2">
-                    Event
+                    Organizer
                 </th>
                 <th colspan="2" class="success">
                     Completed Orders
@@ -76,7 +76,7 @@
             </tr>
             </thead>
             <tbody>
-            {% for id, item in tickets_summary_event_wise.iteritems() %}
+            {% for id, item in tickets_summary_organizer_wise.iteritems() %}
 
                 <tr>
                     <td>
