@@ -393,6 +393,7 @@ span.twitter-typeahead {
 .selectize-input {
     border-radius: 0 !important;
     -webkit-border-radius: 0 !important;
+    -moz-box-shadow: none !important;
 }
 
 .selectize-input.focus {
