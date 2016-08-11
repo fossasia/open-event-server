@@ -26,11 +26,12 @@
       <div class="input-group">
         <input type="url" pattern="https?://.*facebook\..+" name="facebook" class="form-control"
                value="{{profile.user_detail.facebook|default('https://www.facebook.com/', true)}}"
-               title="Not a valid facebook profile link"/>
+               title="Not a valid facebook profile link" style="min-width: 400px"/>
+        {% if not user_id %}
         <div class="input-group-btn">
-          <a type="button" class="btn btn-info" href="{{url_for('.connect_facebook')}}">Connect</a>
+          <a type="button" class="btn btn-info" href="{{url_for('profile.connect_facebook')}}">Connect</a>
         </div>
-
+        {% endif %}
 
       </div>
 
@@ -43,10 +44,12 @@
       <div class="input-group">
         <input type="url" pattern="https?://.*twitter\..+" name="twitter" class="form-control"
                value="{{profile.user_detail.twitter|default('https://twitter.com/', true)}}"
-               title="Not a valid twitter profile link"/>
+               title="Not a valid twitter profile link" style="min-width: 400px"/>
+        {% if not user_id %}
         <div class="input-group-btn">
-          <a type="button" class="btn btn-info" href="{{url_for('.connect_twitter')}}">Connect</a>
+          <a type="button" class="btn btn-info" href="{{url_for('profile.connect_twitter')}}">Connect</a>
         </div>
+        {% endif %}
       </div>
     </div>
   </div>
