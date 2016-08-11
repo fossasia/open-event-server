@@ -35,3 +35,8 @@ static/media/*
 # redis
 redis-3.2.1/
 dump.rdb
+
+
+# Negatives
+# The master's branch .gitignore is kept because without that switching branches will become a pain to develop as lots of ignored files will become untracked.
+!/api/v2/lib
