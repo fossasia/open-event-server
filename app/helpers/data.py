@@ -7,8 +7,6 @@ import traceback
 import oauth2
 from datetime import datetime, timedelta
 
-import binascii
-
 import requests
 from requests.exceptions import ConnectionError
 from flask import flash, request, url_for, g, current_app
@@ -1367,49 +1365,30 @@ class DataManager(object):
                 description_toggle = form.get('tickets_description_toggle_{}'.format(i), False)
                 description_toggle = True if description_toggle == 'on' else False
 
-                tag_list = DataManager.create_ticket_tags(ticket_tags[i], event.id)
+                tag_list = DataManager.create_ticket_tags(ticket_tags[i], event.id,)
 
-                ticket = Ticket.query.filter_by(event=event, name=name).first()
-                if not ticket:
-                    # create new ticket
-                    ticket = Ticket(
-                        name=name,
-                        type=ticket_types[i],
-                        sales_start=datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M'),
-                        sales_end=datetime.strptime(sales_end_str, '%m/%d/%Y %H:%M'),
-                        hide=hide,
-                        description=ticket_descriptions[i],
-                        description_toggle=description_toggle,
-                        quantity=ticket_quantities[i],
-                        price=int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0,
-                        min_order=ticket_min_orders[i],
-                        max_order=ticket_max_orders[i],
-                        tags=tag_list,
-                        event=event
-                    )
-                else:
-                    # update existing ticket
-                    if not ticket.has_order_tickets():
-                        ticket.name = name
-                        ticket.price = int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0
+                ticket, _ = get_or_create(Ticket, name=name, event=event, type=ticket_types[i])
+
+                if not ticket.has_order_tickets():
+                    ticket.price = int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0
                     ticket.type = ticket_types[i]
-                    ticket.sales_start = datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M')
-                    ticket.sales_end = datetime.strptime(sales_end_str, '%m/%d/%Y %H:%M')
-                    ticket.hide = hide
-                    ticket.description = ticket_descriptions[i]
-                    ticket.description_toggle = description_toggle,
-                    ticket.quantity = ticket_quantities[i]
-                    ticket.min_order = ticket_min_orders[i]
-                    ticket.max_order = ticket_max_orders[i]
-                    ticket.tags = tag_list
+                ticket.sales_start = datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M')
+                ticket.sales_end = datetime.strptime(sales_end_str, '%m/%d/%Y %H:%M')
+                ticket.hide = hide
+                ticket.description = ticket_descriptions[i]
+                ticket.description_toggle = description_toggle
+                ticket.quantity = ticket_quantities[i]
+                ticket.min_order = ticket_min_orders[i]
+                ticket.max_order = ticket_max_orders[i]
+                ticket.tags = tag_list
 
-                db.session.add(ticket)
+                save_to_db(ticket)
 
         # Remove all the tickets that are not in form
         # except those that already have placed orders
         for ticket in event.tickets:
             if ticket.name not in ticket_names and not ticket.has_order_tickets():
-                db.session.delete(ticket)
+                delete_from_db(ticket, 'Delete ticket')
 
         event.ticket_url = form.get('ticket_url', None)
 
