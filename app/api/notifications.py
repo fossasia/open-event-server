@@ -16,7 +16,7 @@ api = Namespace('notifications', description='Notifications', path='/')
 
 NOTIFICATION = api.model('Notification', {
     'id': fields.Integer(required=True),
-    'user_id': fields.Integer(required=True),
+    'email': fields.String(required=True),
     'title': fields.String(),
     'message': fields.String(),
     'action': fields.String(),
@@ -36,9 +36,10 @@ class NotificationDAO(ServiceDAO):
     version_key = 'notifications_ver'
 
     def create_user_notify(self, payload):
-        user = DataGetter.get_user(payload['user_id'])
+        user = DataGetter.get_user_by_email(payload['email'])
         DataManager().create_user_notification(user, payload['action'], payload['title'], payload['message'])
         return user
+
 
 DAO = NotificationDAO(NotificationModel, NOTIFICATION_POST)
 
