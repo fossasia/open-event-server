@@ -24,6 +24,7 @@ ORGANIZER = 'organizer'
 COORGANIZER = 'coorganizer'
 TRACK_ORGANIZER = 'track_organizer'
 MODERATOR = 'moderator'
+ATTENDEE = 'attendee'
 
 
 class User(db.Model):

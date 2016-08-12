@@ -49,3 +49,4 @@ mako
 functools32
 Flask-Cache
 forex-python
+oauth2

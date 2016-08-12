@@ -15,11 +15,6 @@
           href="{{ url_for('static', filename='admin/lib/selectize/dist/css/selectize.bootstrap3.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/Croppie/croppie.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
-    <style type="text/css">
-        .tooltip-inner {
-            min-width: 180px;
-        }
-    </style>
 {% endblock %}
 {% block head_js %}
     {{ super() }}
@@ -120,11 +115,11 @@
                         </td>
                         <td>
                             <div class="btn-group">
-                                <a class="btn btn-info edit-ticket-button" data-toggle="tooltip" title="Settings">
+                                <a class="btn btn-info edit-ticket-button" data-toggle="tooltip" title="Edit details">
                                     <i class="glyphicon glyphicon-cog"></i>
                                 </a>
                                 {% if has_orders %}
-                                    <a class="btn btn-info" data-toggle="tooltip" title="Cannot remove ticket. Orders have been placed for it." disabled>
+                                    <a class="btn btn-info" data-toggle="tooltip" data-container="body" title="Cannot remove ticket. Orders have been placed for it." disabled>
                                         <i class="glyphicon glyphicon-trash"></i>
                                     </a>
                                 {% else %}
@@ -141,12 +136,18 @@
                                 <div class="col-xs-6">
                                     <div class="item form-group">
                                         <label>Description</label>
-                                        <textarea name="tickets[description]" class="form-control" rows="7" style="border-radius: 3px;" placeholder="Add a description for the Ticket">{{ description }}</textarea>
+                                        <textarea name="tickets[description]" class="form-control" rows="4" style="height: 110px;" placeholder="Add a description for the Ticket" maxlength="160">{{ description }}</textarea>
                                     </div>
                                     <div class="item form-group">
-                                        <label style="font-weight: normal;">
+                                        <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1; margin-top: 0;">
                                             <input type="checkbox" class="checkbox flat form-control" name="tickets_description_toggle_{{ serialno }}" {{ 'checked' if description_toggle else ''}}>
                                             Display Ticket description on event page
+                                        </label>
+                                    </div>
+                                    <div class="item form-group">
+                                        <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1;  margin-top: 0;">
+                                            <input type="checkbox" class="checkbox flat form-control" name="tickets_hide_{{ serialno }}" {{ 'checked' if hide else ''}}>
+                                            Hide Ticket from the Events page
                                         </label>
                                     </div>
                                 </div>
@@ -193,12 +194,6 @@
                                         <label>Tag Group</label>
                                         <input type="text" class="form-control ticket-tags" name="tickets[tags]"
                                             value="{{ ticket_tags| join(',') }}">
-                                    </div>
-                                    <div class="item form-group">
-                                        <label style="font-weight: normal;">
-                                            <input type="checkbox" class="checkbox flat form-control" name="tickets_hide_{{ serialno }}" {{ 'checked' if hide else ''}}>
-                                            Hide Ticket
-                                        </label>
                                     </div>
                                 </div>
                             </div>

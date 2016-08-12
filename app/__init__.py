@@ -6,7 +6,6 @@ import warnings
 from flask.exthook import ExtDeprecationWarning
 from forex_python.converter import CurrencyCodes
 from pytz import utc
-
 warnings.simplefilter('ignore', ExtDeprecationWarning)
 # Keep it before flask extensions are imported
 import arrow
@@ -36,6 +35,7 @@ import sqlalchemy as sa
 from nameparser import HumanName
 import stripe
 from app.helpers.flask_helpers import SilentUndefined, camel_case, slugify, MiniJSONEncoder
+from app.helpers.payment import forex
 from app.models import db
 from app.models.user import User
 from app.models.event import Event
@@ -181,6 +181,11 @@ def currency_symbol_filter(currency_code):
     symbol = CurrencyCodes().get_symbol(currency_code)
     return symbol if symbol else '$'
 
+@app.template_filter('currency_name')
+def currency_name_filter(currency_code):
+    name = CurrencyCodes().get_currency_name(currency_code)
+    return name if name else ''
+
 @app.template_filter('camel_case')
 def camel_case_filter(string):
     return camel_case(string)
@@ -199,7 +204,7 @@ def humanize_filter(time):
 
 
 @app.template_filter('humanize_alt')
-def humanize_filter(time):
+def humanize_alt_filter(time):
     if not time:
         return "N/A"
     return humanize.naturaltime(datetime.now() - time)
@@ -242,7 +247,7 @@ def flask_helpers():
     def current_date(format='%a, %B %d %I:%M %p', **kwargs):
         return (datetime.now() + timedelta(**kwargs)).strftime(format)
 
-    return dict(string_empty=string_empty, current_date=current_date)
+    return dict(string_empty=string_empty, current_date=current_date, forex=forex)
 
 
 @app.context_processor
@@ -319,6 +324,8 @@ def update_sent_state(sender=None, body=None, **kwargs):
     backend.store_result(body['id'], None, 'WAITING')
 
 
+# register celery tasks. removing them will cause the tasks to not function. so don't remove them
+# it is important to register them after celery is defined to resolve circular imports
 import api.helpers.tasks
 import helpers.tasks
 
@@ -328,6 +335,7 @@ def set_secret():
     url = request.url_root.split('//')[1].split('/')[0]
     current_app.secret_key = get_settings()['secret']
     current_app.config['SERVER_NAME'] = url
+
 
 @app.context_processor
 def integrate_socketio():
@@ -365,7 +373,6 @@ sched.add_job(send_after_event_mail,
 
 def empty_trash():
     with app.app_context():
-        print 'HELLO'
         events = Event.query.filter_by(in_trash=True)
         users = User.query.filter_by(in_trash=True)
         sessions = Session.query.filter_by(in_trash=True)

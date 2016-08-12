@@ -1,6 +1,7 @@
 """Copyright 2016 Niranjan Rajendran"""
 import binascii
 import os
+import uuid
 
 from datetime import timedelta, datetime
 
@@ -22,6 +23,7 @@ from app.models.user_detail import UserDetail
 from app.models.discount_code import DiscountCode
 
 from app.helpers.helpers import send_email_after_account_create_with_password
+
 
 class TicketingManager(object):
     """All ticketing and orders related functions"""
@@ -84,7 +86,7 @@ class TicketingManager(object):
 
     @staticmethod
     def get_new_order_identifier():
-        identifier = binascii.b2a_hex(os.urandom(32))
+        identifier = str(uuid.uuid4())
         count = get_count(Order.query.filter_by(identifier=identifier))
         if count == 0:
             return identifier
@@ -229,7 +231,9 @@ class TicketingManager(object):
                 if not order.paid_via:
                     order.paid_via = 'free'
                 ticket_holder = TicketHolder(name=user.user_detail.fullname, email=email, order_id=order.id)
-
+            # add attendee role to user
+            DataManager.add_attendee_role_to_event(user, order.event_id)
+            # save items
             save_to_db(order)
             save_to_db(ticket_holder)
 

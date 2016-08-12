@@ -38,6 +38,8 @@ class TestPagesUrls(OpenEventTestCase):
                         pass
                     except AttributeError:
                         pass
+                    except ValueError:
+                        pass
 
 if __name__ == '__main__':
     unittest.main()

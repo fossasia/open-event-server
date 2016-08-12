@@ -1,0 +1,127 @@
+{% extends 'gentelella/admin/super_admin/sales/sales_base.html' %}
+
+{% set active_side_page = "by_location" %}
+
+
+{% block head_css %}
+    {{ super() }}
+    <style type="text/css">
+            #tickets-summary-table tr, #tickets-summmary-table th {
+            text-align: right;
+            font-size: 15px;
+
+        }
+
+        #tickets-summary-table th {
+            text-align: center;
+            border-left: 1px solid #ddd;
+            border-top: 1px solid #ddd;
+        }
+
+        #tickets-summary-table th[rowspan="2"]:nth-child(1) {
+            text-align: left;
+            vertical-align: bottom;
+            border-left-color: transparent;
+            border-top-color: transparent;
+        }
+
+        #tickets-summary-table td {
+            text-align: center;
+            border-left: 1px solid #ddd;
+        }
+
+        #tickets-summary-table td:nth-child(1) {
+            text-align: left;
+            border-left-color: transparent;
+        }
+
+        #tickets-summary-table tfoot th {
+            border-top: 2px solid #ddd;
+            border-right-color: transparent;
+            border-left-color: transparent;
+        }
+
+    </style>
+{% endblock %}
+
+{% block inner_content %}
+    <h3>Tickets Summary</h3>
+    <div class="col-md-12">
+        <table class="table no-global-dt" id="tickets-summary-table">
+            <thead>
+            <tr>
+                <th rowspan="2">
+                    Location
+                </th>
+                <th colspan="2" class="success">
+                    Completed Orders
+                </th>
+                <th colspan="2" class="warning">
+                    Pending Orders
+                </th>
+            </tr>
+            <tr class="active">
+                <th>
+                    Tickets
+                </th>
+                <th>
+                    Sales
+                </th>
+                <th>
+                    Tickets
+                </th>
+                <th>
+                    Sales
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for id, item in tickets_summary_location_wise.iteritems() %}
+
+                <tr>
+                    <td>
+                        {{ item.name }}
+                    </td>
+                    <td>
+                        {{ item.completed.tickets_count }}
+                    </td>
+                    <td>
+                        {{ display_currency | currency_symbol }}{{ forex(item.payment_currency, display_currency, item.completed.sales) | money }}
+                    </td>
+                    <td>
+                        {{ item.pending.tickets_count }}
+                    </td>
+                    <td>
+                        {{ display_currency | currency_symbol }}{{ forex(item.payment_currency, display_currency, item.pending.sales) | money }}
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+            <tfoot>
+            <tr>
+                <th>
+                    Total
+                </th>
+                <th>
+                    {{ orders_summary.completed.tickets_count }}
+                </th>
+                <th>
+                    {{ display_currency | currency_symbol }}{{ orders_summary.completed.total_sales | money }}
+                </th>
+                <th>
+                    {{ orders_summary.pending.tickets_count }}
+                </th>
+                <th>
+                    {{ display_currency | currency_symbol }}{{ orders_summary.pending.total_sales | money }}
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+{% endblock %}
+

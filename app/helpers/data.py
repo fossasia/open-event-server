@@ -4,9 +4,8 @@ import logging
 import os.path
 import random
 import traceback
+import oauth2
 from datetime import datetime, timedelta
-
-import binascii
 
 import requests
 from requests.exceptions import ConnectionError
@@ -24,7 +23,7 @@ from app.helpers.cache import cache
 from app.helpers.helpers import string_empty, string_not_empty, uploaded_file
 from app.helpers.notification_email_triggers import trigger_new_session_notifications, \
     trigger_session_state_change_notifications
-from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth
+from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth, TwitterOAuth
 from app.helpers.storage import upload, UPLOAD_PATHS
 from app.models.notifications import Notification
 from app.models.stripe_authorization import StripeAuthorization
@@ -53,7 +52,7 @@ from ..models.social_link import SocialLink
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.track import Track
-from ..models.user import User, ORGANIZER
+from ..models.user import User, ORGANIZER, ATTENDEE
 from ..models.user_detail import UserDetail
 from ..models.users_events_roles import UsersEventsRoles
 from ..models.page import Page
@@ -933,6 +932,7 @@ class DataManager(object):
                       longitude=form['longitude'],
                       location_name=form['location_name'],
                       description=form['description'],
+                      event_url=form['event_url'],
                       type=form['type'],
                       topic=form['topic'],
                       sub_topic=form['sub_topic'],
@@ -1001,6 +1001,11 @@ class DataManager(object):
             # Save Tickets
             module = DataGetter.get_module()
             if module and module.ticket_include:
+
+                event.ticket_url = url_for('event_detail.display_event_tickets',
+                                           identifier=event.identifier,
+                                           _external=True)
+
                 ticket_names = form.getlist('tickets[name]')
                 ticket_types = form.getlist('tickets[type]')
                 ticket_prices = form.getlist('tickets[price]')
@@ -1238,11 +1243,12 @@ class DataManager(object):
                       longitude=event_old.longitude,
                       location_name=event_old.location_name,
                       description=event_old.description,
+                      event_url=event_old.event_url,
                       type=event_old.type,
                       topic=event_old.topic,
                       sub_topic=event_old.sub_topic,
                       privacy=event_old.privacy,
-                      ticket_url=event_old.ticket_url,
+                      ticket_url=None,
                       show_map=event_old.show_map,
                       organizer_name=event_old.organizer_name,
                       organizer_description=event_old.organizer_description)
@@ -1310,6 +1316,7 @@ class DataManager(object):
         event.longitude = form['longitude']
         event.location_name = form['location_name']
         event.description = form['description']
+        event.event_url = form['event_url']
         event.type = form['type']
         event.topic = form['topic']
         event.show_map = 1 if form.get('show_map', 'on') == "on" else 0
@@ -1366,53 +1373,38 @@ class DataManager(object):
                 description_toggle = form.get('tickets_description_toggle_{}'.format(i), False)
                 description_toggle = True if description_toggle == 'on' else False
 
-                tag_list = DataManager.create_ticket_tags(ticket_tags[i], event.id)
+                tag_list = DataManager.create_ticket_tags(ticket_tags[i], event.id,)
 
-                ticket = Ticket.query.filter_by(event=event, name=name).first()
-                if not ticket:
-                    # create new ticket
-                    ticket = Ticket(
-                        name=name,
-                        type=ticket_types[i],
-                        sales_start=datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M'),
-                        sales_end=datetime.strptime(sales_end_str, '%m/%d/%Y %H:%M'),
-                        hide=hide,
-                        description=ticket_descriptions[i],
-                        description_toggle=description_toggle,
-                        quantity=ticket_quantities[i],
-                        price=int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0,
-                        min_order=ticket_min_orders[i],
-                        max_order=ticket_max_orders[i],
-                        tags=tag_list,
-                        event=event
-                    )
-                else:
-                    # update existing ticket
-                    if not ticket.has_order_tickets():
-                        ticket.name = name
-                        ticket.price = int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0
+                ticket, _ = get_or_create(Ticket, name=name, event=event, type=ticket_types[i])
+
+                if not ticket.has_order_tickets():
+                    ticket.price = int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0
                     ticket.type = ticket_types[i]
-                    ticket.sales_start = datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M')
-                    ticket.sales_end = datetime.strptime(sales_end_str, '%m/%d/%Y %H:%M')
-                    ticket.hide = hide
-                    ticket.description = ticket_descriptions[i]
-                    ticket.description_toggle = description_toggle,
-                    ticket.quantity = ticket_quantities[i]
-                    ticket.min_order = ticket_min_orders[i]
-                    ticket.max_order = ticket_max_orders[i]
-                    ticket.tags = tag_list
+                ticket.sales_start = datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M')
+                ticket.sales_end = datetime.strptime(sales_end_str, '%m/%d/%Y %H:%M')
+                ticket.hide = hide
+                ticket.description = ticket_descriptions[i]
+                ticket.description_toggle = description_toggle
+                ticket.quantity = ticket_quantities[i]
+                ticket.min_order = ticket_min_orders[i]
+                ticket.max_order = ticket_max_orders[i]
+                ticket.tags = tag_list
 
-                db.session.add(ticket)
+                save_to_db(ticket)
 
         # Remove all the tickets that are not in form
         # except those that already have placed orders
         for ticket in event.tickets:
             if ticket.name not in ticket_names and not ticket.has_order_tickets():
-                db.session.delete(ticket)
+                delete_from_db(ticket, 'Delete ticket')
 
         event.ticket_url = form.get('ticket_url', None)
 
         if not event.ticket_url:
+
+            event.ticket_url = url_for('event_detail.display_event_tickets',
+                                       identifier=event.identifier,
+                                       _external=True)
             if form['taxAllow'] == 'taxNo':
                 event.tax_allow = False
                 delete_from_db(tax, "Tax options deleted")
@@ -1799,6 +1791,12 @@ class DataManager(object):
             record_activity('create_role', role=role, user=user, event_id=event_id)
 
     @staticmethod
+    def add_attendee_role_to_event(user, event_id):
+        role = Role.query.filter_by(name=ATTENDEE).first()
+        uer = UsersEventsRoles(event=Event.query.get(event_id), user=user, role=role)
+        save_to_db(uer, "Attendee saved")
+
+    @staticmethod
     def decline_role_invite(role_invite):
         role_invite.declined = True
         save_to_db(role_invite)
@@ -1919,8 +1917,16 @@ def get_instagram_auth(state=None, token=None):
     return oauth
 
 
+def get_twitter_auth_url():
+    consumer = oauth2.Consumer(key=TwitterOAuth.get_client_id(),
+                               secret=TwitterOAuth.get_client_secret())
+    client = oauth2.Client(consumer)
+    resp, content = client.request('https://api.twitter.com/oauth/request_token', "GET")
+    return content + "&redirect_uri" + TwitterOAuth.get_redirect_uri(), consumer
+
+
+
 def create_user_oauth(user, user_data, token, method):
-    print user_data
     if user is None:
         user = User()
         user.email = user_data['email']
