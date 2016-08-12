@@ -468,7 +468,10 @@ def get_latest_heroku_release():
         "Authorization": "Bearer " + token,
         "Range": "version ..; max=1, order=desc"
     }
-    response = requests.get("https://api.heroku.com/apps/open-event/releases", headers=headers)
+    response = requests.get(
+        "https://api.heroku.com/apps/%s/releases" % os.environ.get('HEROKU_APP_NAME', 'open-event'),
+        headers=headers
+    )
     try:
         return json.loads(response.text)[0]
     except:
