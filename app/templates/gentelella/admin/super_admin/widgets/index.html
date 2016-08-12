@@ -16,6 +16,14 @@ Home
     <div class="tab-pane fade active in" id="upcoming-events-tab">
         <div class="row">
             {% include 'gentelella/admin/super_admin/widgets/_heroku.html' %}
+            {% include 'gentelella/admin/super_admin/widgets/_events.html' %}
+            {% include 'gentelella/admin/super_admin/widgets/_users.html' %}
+
+        </div>
+        <div class="row">
+            {% include 'gentelella/admin/super_admin/widgets/_sessions.html' %}
+            {% include 'gentelella/admin/super_admin/widgets/_messages.html' %}
+
         </div>
     </div>
     <div class="tab-pane fade" id="past-events-tab">
