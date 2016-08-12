@@ -30,7 +30,7 @@ def set_settings(**kwargs):
         from app.helpers.data_getter import DataGetter
         from app.helpers.data import save_to_db
         currencies = DataGetter.get_payment_currencies()
-        for i, currency in enumerate(currencies):
+        for i, (currency, has_paypal, has_stripe) in enumerate(currencies):
             currency = currency.split(' ')[0]
             ticket_fee = TicketFees(currency=currency,
                                     service_fee=ticket_service_fees[i],
