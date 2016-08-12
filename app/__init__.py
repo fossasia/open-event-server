@@ -333,15 +333,6 @@ def set_secret():
     current_app.secret_key = get_settings()['secret']
 
 
-@app.before_first_request
-def set_server_name():
-    url = request.url_root.strip('/')
-    url = url.replace('http://', '')
-    url = url.replace('https://', '')
-    current_app.config['SERVER_NAME'] = url
-    print current_app.config['SERVER_NAME']
-
-
 @app.context_processor
 def integrate_socketio():
     integrate = current_app.config.get('INTEGRATE_SOCKETIO', False)
