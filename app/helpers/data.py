@@ -1482,26 +1482,6 @@ class DataManager(object):
         event.copyright.licence_url = licence_url
         event.copyright.logo = logo
 
-        background_image = form['background_url']
-        if string_not_empty(background_image):
-            background_file = uploaded_file(file_content=background_image)
-            background_url = upload(
-                background_file,
-                UPLOAD_PATHS['event']['background_url'].format(
-                    event_id=int(event.id)
-                ))
-            event.background_url = background_url
-
-        logo = form['logo']
-        if string_not_empty(logo):
-            logo_file = uploaded_file(file_content=logo)
-            logo = upload(
-                logo_file,
-                UPLOAD_PATHS['event']['logo'].format(
-                    event_id=int(event.id)
-                ))
-            event.logo = logo
-
         state = form.get('state', None)
         if state and ((state == u'Published' and not string_empty(
             event.location_name)) or state != u'Published') and login.current_user.is_verified:

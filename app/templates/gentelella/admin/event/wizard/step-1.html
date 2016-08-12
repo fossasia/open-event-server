@@ -155,7 +155,12 @@
         </div>
         <div class="row">
             <div class="col-md-7">
-                <input type="hidden" name="background_url" id="background_url">
+                {% if event %}
+                    <input type="hidden" name="background_url" id="background_url">
+                {% else %}
+                    <input type="hidden" id="background_url">
+                {% endif %}
+
                 <div class="item form-group" id="image-upload-group"
                      {% if event and event.background_url and event.background_url != '' %}style="display: none;"{% endif %}>
                     <label>Event Image</label><br>
@@ -195,7 +200,11 @@
         <div class="row">
             <div class="col-md-7">
 
-                <input type="hidden" name="logo" id="logo">
+                {% if event %}
+                    <input type="hidden" id="logo">
+                {% else %}
+                    <input type="hidden" name="logo" id="logo">
+                {% endif %}
 
                 <div class="item form-group" id="logo-upload-group"
                      {% if event and event.logo and event.logo != '' %}style="display: none;"{% endif %}>
@@ -1059,10 +1068,20 @@
                 } else {
                     var reader = new FileReader();
                     reader.onload = function (e) {
-                        resetFormElement(input);
-                        $("#logo").val(e.target.result);
-                        $("#logo-view-group").show().find("img").attr("src", e.target.result);
-                        $("#logo-upload-group").hide();
+                        $.ajax({
+                            type: 'POST',
+                            url: "{{ url_for('events.logo_upload', event_id=event.id) }}",
+                            data: {logo: e.target.result},
+                            dataType: 'json'
+                        }).done(function(data) {
+                            console.log(data);
+                            resetFormElement(input);
+                            $("#logo").val(e.target.result);
+                            $("#logo-upload-group").hide();
+                            $("#logo-view-group").show().find("img").attr("src", e.target.result);
+                        }).fail(function(data) {
+                            alert("Something went wrong. Please try again.");
+                        });
                     };
                     reader.readAsDataURL(input.files[0]);
                 }
@@ -1079,9 +1098,6 @@
             type: 'canvas',
             size: 'original'
         }).then(function (resp) {
-            $("#background_url").val(resp);
-            $("#image-view-group").show().find("img").attr("src", resp);
-            $("#image-upload-group").hide();
             $('#cropper-modal').modal('hide')
             $.ajax({
                 type: 'POST',
@@ -1090,6 +1106,9 @@
                 dataType: 'json'
             }).done(function(data) {
                 console.log(data);
+                $("#background_url").val(resp);
+                $("#image-view-group").show().find("img").attr("src", resp);
+                $("#image-upload-group").hide();
             }).fail(function(data) {
                 alert("Something went wrong. Please try again.");
             });
@@ -1097,15 +1116,33 @@
     });
 
     $("#remove-image-btn").click(function () {
-        $("#image-view-group").hide();
-        $("#image-upload-group").show();
-        $("#background_url").val('');
+        $.ajax({
+            type: 'DELETE',
+            url: "{{ url_for('events.bgimage_upload', event_id=event.id) }}",
+            dataType: 'json'
+        }).done(function(data) {
+            console.log(data);
+            $("#image-view-group").hide();
+            $("#image-upload-group").show();
+            $("#background_url").val('');
+        }).fail(function(data) {
+            alert("Something went wrong. Please try again.");
+        });
     });
 
     $("#remove-logo-btn").click(function () {
-        $("#logo-view-group").hide();
-        $("#logo-upload-group").show();
-        $("#logo").val('');
+        $.ajax({
+            type: 'DELETE',
+            url: "{{ url_for('events.logo_upload', event_id=event.id) }}",
+            dataType: 'json'
+        }).done(function(data) {
+            console.log(data);
+            $("#logo-view-group").hide();
+            $("#logo-upload-group").show();
+            $("#logo").val('');
+        }).fail(function(data) {
+            alert("Something went wrong. Please try again.");
+        });
     });
 
     $('#cropper-modal').on('shown.bs.modal', function (e) {

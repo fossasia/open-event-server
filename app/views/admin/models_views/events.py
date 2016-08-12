@@ -204,7 +204,7 @@ class EventsView(BaseView):
                            sessions=sessions,
                            settings=get_settings())
 
-    @expose('/<int:event_id>/editfiles/bgimage', methods=('POST','GET'))
+    @expose('/<int:event_id>/editfiles/bgimage', methods=('POST','DELETE'))
     def bgimage_upload(self, event_id):
         if request.method == 'POST':
             background_image = request.form['bgimage']
@@ -221,6 +221,34 @@ class EventsView(BaseView):
                 return jsonify({'status': 'ok'})
             else:
                 return jsonify({'status': 'no bgimage'})
+        elif request.method == 'DELETE':
+            event = DataGetter.get_event(event_id)
+            event.background_url = ''
+            save_to_db(event)
+            return jsonify({'status': 'ok'})
+
+    @expose('/<int:event_id>/editfiles/logo', methods=('POST','DELETE'))
+    def logo_upload(self, event_id):
+        if request.method == 'POST':
+            logo_image = request.form['logo']
+            if logo_image:
+                logo_file = uploaded_file(file_content=logo_image)
+                logo = upload(
+                    logo_file,
+                    UPLOAD_PATHS['event']['logo'].format(
+                        event_id=event_id
+                    ))
+                event = DataGetter.get_event(event_id)
+                event.logo = logo
+                save_to_db(event)
+                return jsonify({'status': 'ok'})
+            else:
+                return jsonify({'status': 'no bgimage'})
+        elif request.method == 'DELETE':
+            event = DataGetter.get_event(event_id)
+            event.logo = ''
+            save_to_db(event)
+            return jsonify({'status': 'ok'})
 
     @expose('/<event_id>/edit/', methods=('GET', 'POST'))
     @can_access
