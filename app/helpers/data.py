@@ -8,6 +8,8 @@ import oauth2
 import time
 from os import path
 from datetime import datetime, timedelta
+import PIL
+from PIL import Image
 
 import requests
 from requests.exceptions import ConnectionError
@@ -26,7 +28,7 @@ from app.helpers.helpers import string_empty, string_not_empty, uploaded_file
 from app.helpers.notification_email_triggers import trigger_new_session_notifications, \
     trigger_session_state_change_notifications
 from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth, TwitterOAuth
-from app.helpers.storage import upload, UPLOAD_PATHS, UploadedFile, download_file
+from app.helpers.storage import upload, UPLOAD_PATHS, UploadedFile, download_file, upload_local
 from app.models.notifications import Notification
 from app.models.stripe_authorization import StripeAuthorization
 from ..helpers import helpers as Helper
@@ -996,6 +998,16 @@ class DataManager(object):
                         event_id=event.id
                     ))
             event.background_url = background_url
+            temp_img_file = upload_local(temp_background,
+                                         UPLOAD_PATHS['event']['temp_folder'].format(event_id=int(event.id)))
+            temp_img_file = temp_img_file.replace('serve_', '')
+            print temp_img_file
+
+            basewidth = 300
+            img = Image.open(temp_img_file)
+            wpercent = (basewidth / float(img.size[0]))
+            hsize = int((float(img.size[1]) * float(wpercent)))
+            img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
 
             logo = ''
             temp_logo = form['logo']
