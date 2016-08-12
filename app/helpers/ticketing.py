@@ -23,6 +23,7 @@ from app.models.discount_code import DiscountCode
 
 from app.helpers.helpers import send_email_after_account_create_with_password
 
+
 class TicketingManager(object):
     """All ticketing and orders related functions"""
 
@@ -229,7 +230,9 @@ class TicketingManager(object):
                 if not order.paid_via:
                     order.paid_via = 'free'
                 ticket_holder = TicketHolder(name=user.user_detail.fullname, email=email, order_id=order.id)
-
+            # add attendee role to user
+            DataManager.add_attendee_role_to_event(user, order.event_id)
+            # save items
             save_to_db(order)
             save_to_db(ticket_holder)
 

@@ -52,7 +52,7 @@ from ..models.social_link import SocialLink
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.track import Track
-from ..models.user import User, ORGANIZER
+from ..models.user import User, ORGANIZER, ATTENDEE
 from ..models.user_detail import UserDetail
 from ..models.users_events_roles import UsersEventsRoles
 from ..models.page import Page
@@ -1780,6 +1780,12 @@ class DataManager(object):
         save_to_db(uer, "UserEventRole saved")
         if record:
             record_activity('create_role', role=role, user=user, event_id=event_id)
+
+    @staticmethod
+    def add_attendee_role_to_event(user, event_id):
+        role = Role.query.filter_by(name=ATTENDEE).first()
+        uer = UsersEventsRoles(event=Event.query.get(event_id), user=user, role=role)
+        save_to_db(uer, "Attendee saved")
 
     @staticmethod
     def decline_role_invite(role_invite):
