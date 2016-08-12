@@ -7,14 +7,19 @@ set -e
 git config --global user.name "Travis CI"
 git config --global user.email "noreply+travis@fossasia.org"
 
+if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_REPO_SLUG" != "fossasia/open-event-orga-server" ]; then
+    echo "Just a PR. No push"
+    exit 0
+fi
+
 # set ssh
-openssl aes-256-cbc -K $encrypted_512f7587e087_key -iv $encrypted_512f7587e087_iv -in opev_orga_mine.enc -out deploy_key -d
+openssl aes-256-cbc -K $encrypted_512f7587e087_key -iv $encrypted_512f7587e087_iv -in opev_orga.enc -out deploy_key -d
 chmod 600 deploy_key
 eval `ssh-agent -s`
 ssh-add deploy_key
 
 # clone and do
-git clone -b gh-pages "git@github.com:aviaryan/open-event-orga-server.git" gh-pages
+git clone -b gh-pages "git@github.com:fossasia/open-event-orga-server.git" gh-pages
 cp static/temp/swagger.json gh-pages/api/v2/swagger.json
 cd gh-pages
 git commit -m '[Auto] Updated API docs' api/v2/swagger.json || echo "no changes"
