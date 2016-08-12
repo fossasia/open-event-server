@@ -22,7 +22,7 @@ class SuperAdminSalesView(SuperAdminBaseView):
 
     @expose('/')
     def index(self):
-        return redirect(url_for('.sales_by_events_view'))
+        return redirect(url_for('.sales_by_events_view', path='events'))
 
     @expose('/<path>/')
     def sales_by_events_view(self, path):
