@@ -149,6 +149,23 @@ class EventDetailView(BaseView):
                            accepted_sessions=accepted_sessions,
                            call_for_speakers=call_for_speakers)
 
+    @expose('/<identifier>/tickets/')
+    def display_event_tickets(self, identifier):
+        event = get_published_event_or_abort(identifier)
+        placeholder_images = DataGetter.get_event_default_images()
+        if event.copyright:
+            licence_details = DataGetter.get_licence_details(event.copyright.licence)
+        else:
+            licence_details = None
+        module = DataGetter.get_module()
+        tickets = DataGetter.get_sales_open_tickets(event.id)
+        return self.render('/gentelella/guest/event/details.html',
+                           event=event,
+                           placeholder_images=placeholder_images,
+                           licence_details=licence_details,
+                           module=module,
+                           tickets=tickets if tickets else [])
+
     # SLUGGED PATHS
 
     @expose('/<identifier>/<slug>/')
