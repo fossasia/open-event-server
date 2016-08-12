@@ -19,6 +19,7 @@ after_success:
   - bash <(curl -s https://codecov.io/bash)
   - coveralls
   - codeclimate-test-reporter
+  - bash scripts/push_api_docs.sh
 addons:
   code_climate:
     repo_token: 753e4b10e96f82079b5b1f4f89bb8b68db6ddfb048adaf4b9ee65dcbe9aece34
