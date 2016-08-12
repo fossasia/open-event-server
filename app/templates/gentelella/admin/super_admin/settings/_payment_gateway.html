@@ -1,0 +1,97 @@
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <form id="settings_form" method="post" class="form-horizontal form-label-left">
+<h4>Stripe Keys</h4>
+        See <a href="https://stripe.com/docs/dashboard">here</a> on how to obtain these keys.<br><br>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Client ID</label>
+            <div class=" col-md-9 col-xs-12">
+                <input name="stripe_client_id" class="form-control col-md-6 col-xs-6"
+                       value="{{ settings.stripe_client_id|default('', True) }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Secret Key</label>
+            <div class=" col-md-9 col-xs-12">
+                <input name="stripe_secret_key" class="form-control col-md-6 col-xs-6"
+                       value="{{ settings.stripe_secret_key|default('', True) }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Publishable Key</label>
+            <div class=" col-md-9 col-xs-12">
+                <input name="stripe_publishable_key" class="form-control col-md-6 col-xs-6"
+                       value="{{ settings.stripe_publishable_key|default('', True) }}">
+            </div>
+        </div>
+        <br>
+        <h4>PayPal Credentials</h4>
+        See <a
+            href="https://developer.paypal.com/docs/classic/express-checkout/integration-guide/ECAPICredentials/?mark=lifecycle%20credentials">here</a>
+        on how to obtain these credentials.<br><br>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">PayPal Integration Mode</label>
+            <div class=" col-md-9 col-xs-12">
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="paypal_mode" id="paypal_mode_sandbox" value="sandbox" {% if settings.paypal_mode == "sandbox" %}checked{% endif %}>
+                        Sandbox mode - Used during development and testing
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="paypal_mode" id="paypal_mode_live" value="live" {% if settings.paypal_mode == "live" %}checked{% endif %}>
+                        Live mode - Used during production
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Sandbox username</label>
+            <div class=" col-md-9 col-xs-12">
+                <input name="paypal_sandbox_username" class="form-control col-md-6 col-xs-6"
+                       value="{{ settings.paypal_sandbox_username|default('', True) }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Sandbox password</label>
+            <div class=" col-md-9 col-xs-12">
+                <input name="paypal_sandbox_password" class="form-control col-md-6 col-xs-6"
+                       value="{{ settings.paypal_sandbox_password|default('', True) }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Sandbox signature</label>
+            <div class=" col-md-9 col-xs-12">
+                <input name="paypal_sandbox_signature" class="form-control col-md-6 col-xs-6"
+                       value="{{ settings.paypal_sandbox_signature|default('', True) }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Live username</label>
+            <div class=" col-md-9 col-xs-12">
+                <input name="paypal_live_username" class="form-control col-md-6 col-xs-6"
+                       value="{{ settings.paypal_live_username|default('', True) }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Live password</label>
+            <div class=" col-md-9 col-xs-12">
+                <input name="paypal_live_password" class="form-control col-md-6 col-xs-6"
+                       value="{{ settings.paypal_live_password|default('', True) }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Live signature</label>
+            <div class=" col-md-9 col-xs-12">
+                <input name="paypal_live_signature" class="form-control col-md-6 col-xs-6"
+                       value="{{ settings.paypal_live_signature|default('', True) }}">
+            </div>
+        </div>
+        <div class="ln_solid"></div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success pull-right">Save</button>
+        </div>
+    </form>
+  </div>
+</div>

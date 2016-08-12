@@ -52,7 +52,7 @@ from ..models.social_link import SocialLink
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.track import Track
-from ..models.user import User, ORGANIZER
+from ..models.user import User, ORGANIZER, ATTENDEE
 from ..models.user_detail import UserDetail
 from ..models.users_events_roles import UsersEventsRoles
 from ..models.page import Page
@@ -1001,6 +1001,11 @@ class DataManager(object):
             # Save Tickets
             module = DataGetter.get_module()
             if module and module.ticket_include:
+
+                event.ticket_url = url_for('event_detail.display_event_tickets',
+                                           identifier=event.identifier,
+                                           _external=True)
+
                 ticket_names = form.getlist('tickets[name]')
                 ticket_types = form.getlist('tickets[type]')
                 ticket_prices = form.getlist('tickets[price]')
@@ -1243,7 +1248,7 @@ class DataManager(object):
                       topic=event_old.topic,
                       sub_topic=event_old.sub_topic,
                       privacy=event_old.privacy,
-                      ticket_url=event_old.ticket_url,
+                      ticket_url=None,
                       show_map=event_old.show_map,
                       organizer_name=event_old.organizer_name,
                       organizer_description=event_old.organizer_description)
@@ -1396,6 +1401,10 @@ class DataManager(object):
         event.ticket_url = form.get('ticket_url', None)
 
         if not event.ticket_url:
+
+            event.ticket_url = url_for('event_detail.display_event_tickets',
+                                       identifier=event.identifier,
+                                       _external=True)
             if form['taxAllow'] == 'taxNo':
                 event.tax_allow = False
                 delete_from_db(tax, "Tax options deleted")
@@ -1780,6 +1789,12 @@ class DataManager(object):
         save_to_db(uer, "UserEventRole saved")
         if record:
             record_activity('create_role', role=role, user=user, event_id=event_id)
+
+    @staticmethod
+    def add_attendee_role_to_event(user, event_id):
+        role = Role.query.filter_by(name=ATTENDEE).first()
+        uer = UsersEventsRoles(event=Event.query.get(event_id), user=user, role=role)
+        save_to_db(uer, "Attendee saved")
 
     @staticmethod
     def decline_role_invite(role_invite):

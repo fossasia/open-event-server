@@ -11,16 +11,15 @@ from app.models.sponsor import Sponsor
 from app.models.microlocation import Microlocation
 
 from app.helpers.data import get_or_create
-from app.models.user import ORGANIZER, COORGANIZER, TRACK_ORGANIZER, MODERATOR
+from app.models.user import ORGANIZER, COORGANIZER, TRACK_ORGANIZER, MODERATOR, ATTENDEE
 
 
 def create_roles():
     get_or_create(Role, name=ORGANIZER, title_name='Organizer')
     get_or_create(Role, name=COORGANIZER, title_name='Co-organizer')
-    get_or_create(
-        Role, name=TRACK_ORGANIZER,
-             title_name='Track Organizer')
+    get_or_create(Role, name=TRACK_ORGANIZER, title_name='Track Organizer')
     get_or_create(Role, name=MODERATOR, title_name='Moderator')
+    get_or_create(Role, name=ATTENDEE, title_name='Attendee')
 
 
 def create_services():

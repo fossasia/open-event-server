@@ -28,6 +28,9 @@ http://open-event.herokuapp.com/api/v2/
 
 Don't forget to login into the swagger UI (through the top right link) to get access to all authorized API methods (like POST, PUT).
 
+**Note** - A static documentation with no live-testing feature is available at http://fossasia.github.io/open-event-orga-server/api/v2/. In case the above documentation links
+are down/dead, please refer to it. It will always contain docs of latest version of Open Event Orga Server.
+
 
 ## API Fields
 

@@ -324,13 +324,16 @@ def update_sent_state(sender=None, body=None, **kwargs):
     backend.store_result(body['id'], None, 'WAITING')
 
 
-# import api.helpers.tasks
-# import helpers.tasks
+# register celery tasks. removing them will cause the tasks to not function. so don't remove them
+# it is important to register them after celery is defined to resolve circular imports
+import api.helpers.tasks
+import helpers.tasks
 
 
 @app.before_first_request
 def set_secret():
     current_app.secret_key = get_settings()['secret']
+
 
 @app.context_processor
 def integrate_socketio():
