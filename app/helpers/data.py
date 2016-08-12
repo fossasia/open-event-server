@@ -1001,6 +1001,11 @@ class DataManager(object):
             # Save Tickets
             module = DataGetter.get_module()
             if module and module.ticket_include:
+
+                event.ticket_url = url_for('event_detail.display_event_tickets',
+                                           identifier=event.identifier,
+                                           _external=True)
+
                 ticket_names = form.getlist('tickets[name]')
                 ticket_types = form.getlist('tickets[type]')
                 ticket_prices = form.getlist('tickets[price]')
@@ -1243,7 +1248,7 @@ class DataManager(object):
                       topic=event_old.topic,
                       sub_topic=event_old.sub_topic,
                       privacy=event_old.privacy,
-                      ticket_url=event_old.ticket_url,
+                      ticket_url=None,
                       show_map=event_old.show_map,
                       organizer_name=event_old.organizer_name,
                       organizer_description=event_old.organizer_description)
@@ -1396,6 +1401,10 @@ class DataManager(object):
         event.ticket_url = form.get('ticket_url', None)
 
         if not event.ticket_url:
+
+            event.ticket_url = url_for('event_detail.display_event_tickets',
+                                       identifier=event.identifier,
+                                       _external=True)
             if form['taxAllow'] == 'taxNo':
                 event.tax_allow = False
                 delete_from_db(tax, "Tax options deleted")

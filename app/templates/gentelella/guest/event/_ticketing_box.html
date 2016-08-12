@@ -1,4 +1,3 @@
-{% if tickets.count() > 0 %}
     <div id="ticketing-holder" class="col-md-8 col-sm-8 col-xs-12">
         <form method="POST" action="{{ url_for('ticketing.create_order') }}" enctype="multipart/form-data">
             <input type="hidden" name="event_id" value="{{ event.id }}">
@@ -93,7 +92,7 @@
                         {% if event.pay_by_paypal or event.pay_by_stripe %}
                             <img src="{{ url_for('static', filename='img/paymentlogoshorizontal.png') }}">
                         {% endif %}
-                        <button class="btn btn-success" {% if tickets %}type="submit"{% else %} type="button"
+                        <button class="btn btn-success" {% if tickets and tickets.count() > 0 %}type="submit"{% else %} type="button"
                                 disabled{% endif %} id="order-now-btn">Order Now
                         </button>
                     </div>
@@ -152,4 +151,3 @@
         $quantitySelects.trigger("change");
 
     </script>
-{% endif %}
