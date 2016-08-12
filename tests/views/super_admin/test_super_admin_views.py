@@ -41,11 +41,6 @@ class TestSuperAdminViews(OpenEventViewTestCase):
             rv = self.app.get(url_for('sadmin_users.index_view'), follow_redirects=True)
             self.assertTrue('email@gmail.com' in rv.data, msg=rv.data)
 
-    def test_admin_logs(self):
-        with app.test_request_context():
-            rv = self.app.get(url_for('sadmin_logs.index_view'), follow_redirects=True)
-            self.assertTrue("See System Logs" in rv.data, msg=rv.data)
-
     def test_admin_my_sessions(self):
         with app.test_request_context():
             rv = self.app.get(url_for('sadmin_sessions.display_my_sessions_view'), follow_redirects=True)
