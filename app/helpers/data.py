@@ -980,27 +980,31 @@ class DataManager(object):
             db.session.flush()
             db.session.refresh(event)
 
+            background_url = ''
             temp_background = form['background_url']
-            # i know it's bad, will come up with better fixes later
-            filename = str(time.time()) + '.png'
-            filepath = path.realpath('.') + '/static' + temp_background[len('/serve_static'):]
-            background_file = UploadedFile(filepath, filename)
-            background_url = upload(
-                background_file,
-                UPLOAD_PATHS['event']['background_url'].format(
-                    event_id=event.id
-                ))
+            if temp_background:
+                # i know it's bad, will come up with better fixes later
+                filename = str(time.time()) + '.png'
+                filepath = path.realpath('.') + '/static' + temp_background[len('/serve_static'):]
+                background_file = UploadedFile(filepath, filename)
+                background_url = upload(
+                    background_file,
+                    UPLOAD_PATHS['event']['background_url'].format(
+                        event_id=event.id
+                    ))
             event.background_url = background_url
 
+            logo = ''
             temp_logo = form['logo']
-            filename = str(time.time()) + '.png'
-            filepath = path.realpath('.') + '/static' + temp_logo[len('/serve_static'):]
-            logo_file = UploadedFile(filepath, filename)
-            logo = upload(
-                logo_file,
-                UPLOAD_PATHS['event']['logo'].format(
-                    event_id=event.id
-                ))
+            if temp_logo:
+                filename = str(time.time()) + '.png'
+                filepath = path.realpath('.') + '/static' + temp_logo[len('/serve_static'):]
+                logo_file = UploadedFile(filepath, filename)
+                logo = upload(
+                    logo_file,
+                    UPLOAD_PATHS['event']['logo'].format(
+                        event_id=event.id
+                    ))
             event.logo = logo
 
 
