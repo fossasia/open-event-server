@@ -54,12 +54,12 @@ class TestSuperAdminViews(OpenEventViewTestCase):
     def test_admin_permissions(self):
         with app.test_request_context():
             rv = self.app.get(url_for('sadmin_permissions.index_view'), follow_redirects=True)
-            self.assertTrue("Manage All Permissions" in rv.data, msg=rv.data)
+            self.assertTrue("Permissions" in rv.data, msg=rv.data)
 
     def test_admin_settings(self):
         with app.test_request_context():
             rv = self.app.get(url_for('sadmin_settings.index_view'), follow_redirects=True)
-            self.assertTrue("Manage All Settings" in rv.data, msg=rv.data)
+            self.assertTrue("Settings" in rv.data, msg=rv.data)
 
 
 if __name__ == '__main__':
