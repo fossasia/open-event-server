@@ -2,6 +2,7 @@ import json
 import datetime
 import os
 import binascii
+from uuid import uuid4
 
 from flask import flash, url_for, redirect, request, jsonify
 from flask.ext import login
@@ -78,6 +79,34 @@ class EventsView(BaseView):
     @expose('/create/<step>', methods=('GET', 'POST'))
     def create_view_stepped(self, step):
         return redirect(url_for('.create_view'))
+
+    @expose('/create/files/bgimage', methods=('POST',))
+    def create_event_bgimage_upload(self):
+        if request.method == 'POST':
+            background_image = request.form['bgimage']
+            if background_image:
+                background_file = uploaded_file(file_content=background_image)
+                background_url = upload(
+                    background_file,
+                    UPLOAD_PATHS['temp']['event'].format(uuid=uuid4())
+                )
+                return jsonify({'status': 'ok', 'background_url': background_url})
+            else:
+                return jsonify({'status': 'no bgimage'})
+
+    @expose('/create/files/logo', methods=('POST',))
+    def create_event_logo_upload(self):
+        if request.method == 'POST':
+            logo_image = request.form['logo']
+            if logo_image:
+                logo_file = uploaded_file(file_content=logo_image)
+                logo = upload(
+                    logo_file,
+                    UPLOAD_PATHS['temp']['event'].format(uuid=uuid4())
+                )
+                return jsonify({'status': 'ok', 'logo': logo})
+            else:
+                return jsonify({'status': 'no logo'})
 
     @expose('/create/', methods=('GET', 'POST'))
     def create_view(self,):
@@ -218,7 +247,7 @@ class EventsView(BaseView):
                 event = DataGetter.get_event(event_id)
                 event.background_url = background_url
                 save_to_db(event)
-                return jsonify({'status': 'ok'})
+                return jsonify({'status': 'ok', 'background_url': background_url})
             else:
                 return jsonify({'status': 'no bgimage'})
         elif request.method == 'DELETE':
@@ -241,9 +270,9 @@ class EventsView(BaseView):
                 event = DataGetter.get_event(event_id)
                 event.logo = logo
                 save_to_db(event)
-                return jsonify({'status': 'ok'})
+                return jsonify({'status': 'ok', 'logo': logo})
             else:
-                return jsonify({'status': 'no bgimage'})
+                return jsonify({'status': 'no logo'})
         elif request.method == 'DELETE':
             event = DataGetter.get_event(event_id)
             event.logo = ''

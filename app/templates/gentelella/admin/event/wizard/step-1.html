@@ -158,7 +158,7 @@
                 {% if event %}
                     <input type="hidden" name="background_url" id="background_url">
                 {% else %}
-                    <input type="hidden" id="background_url">
+                    <input type="hidden" name="background_url" id="background_url">
                 {% endif %}
 
                 <div class="item form-group" id="image-upload-group"
@@ -1070,13 +1070,13 @@
                     reader.onload = function (e) {
                         $.ajax({
                             type: 'POST',
-                            url: "{{ url_for('events.logo_upload', event_id=event.id) }}",
+                            url: "{{ url_for('events.logo_upload', event_id=event.id) if event else url_for('events.create_event_logo_upload') }}",
                             data: {logo: e.target.result},
                             dataType: 'json'
                         }).done(function(data) {
                             console.log(data);
                             resetFormElement(input);
-                            $("#logo").val(e.target.result);
+                            $("#logo").val(data.logo);
                             $("#logo-upload-group").hide();
                             $("#logo-view-group").show().find("img").attr("src", e.target.result);
                         }).fail(function(data) {
@@ -1101,12 +1101,12 @@
             $('#cropper-modal').modal('hide')
             $.ajax({
                 type: 'POST',
-                url: "{{ url_for('events.bgimage_upload', event_id=event.id) }}",
+                url: "{{ url_for('events.bgimage_upload', event_id=event.id) if event else url_for('events.create_event_bgimage_upload') }}",
                 data: {bgimage: resp},
                 dataType: 'json'
             }).done(function(data) {
                 console.log(data);
-                $("#background_url").val(resp);
+                $("#background_url").val(data.background_url);
                 $("#image-view-group").show().find("img").attr("src", resp);
                 $("#image-upload-group").hide();
             }).fail(function(data) {
@@ -1115,6 +1115,7 @@
         });
     });
 
+    {% if event %}
     $("#remove-image-btn").click(function () {
         $.ajax({
             type: 'DELETE',
@@ -1144,6 +1145,19 @@
             alert("Something went wrong. Please try again.");
         });
     });
+    {% else %}
+    $("#remove-image-btn").click(function () {
+        $("#image-view-group").hide();
+        $("#image-upload-group").show();
+        $("#background_url").val('');
+    });
+
+    $("#remove-logo-btn").click(function () {
+        $("#logo-view-group").hide();
+        $("#logo-upload-group").show();
+        $("#logo").val('');
+    });
+    {% endif %}
 
     $('#cropper-modal').on('shown.bs.modal', function (e) {
         $uploadCropper.croppie('bind');
