@@ -9,7 +9,7 @@ class TestSwagger(OpenEventTestCase):
     """
     def test_swagger_ui(self):
         resp = self.app.get('/api/v2', follow_redirects=True)
-        self.assertIn('Open Event', resp.data)
+        self.assertIn('API', resp.data)
 
     def test_swagger_json(self):
         """
