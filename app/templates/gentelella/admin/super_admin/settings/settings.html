@@ -18,6 +18,10 @@
                 <a href="#tab_content2" id="profile-tab" data-toggle="tab">System Tokens</a>
             </li>
             <li role="presentation">
+                <a href="#tab_content1" id="payment-gateway-tab" data-toggle="tab">Payment Gateways</a>
+            </li>
+
+            <li role="presentation">
                 <a href="#tab_content3" id="microservice-tab" data-toggle="tab">Microservices</a>
             </li>
             {% if 'ticketing' in included_settings and 'payments' in included_settings %}
@@ -27,7 +31,8 @@
             {% endif %}
         </ul>
         <div class="nav bar_tabs" role="tablist">
-                <a href="#tab_content2" class="accordion-link"id="profile-tab" data-toggle="tab">System Tokens</a>
+                <a href="#tab_content2" class="accordion-link" id="profile-tab" data-toggle="tab">System Tokens</a>
+                <a href="#tab_content1" class="accordion-link" id="payment-gateway-tab" data-toggle="tab">Payment Gateways</a>
                 <a href="#tab_content3" class="accordion-link" id="microservice-tab" data-toggle="tab">Microservices</a>
                 {% if 'ticketing' in included_settings and 'payments' in included_settings %}<a href="#tab_content4" class="accordion-link" id="ticket-fees-tab" data-toggle="tab">Ticket Fees</a>{% endif %}
         </div>
@@ -36,6 +41,9 @@
         <div id="myTabContent" class="tab-content">
             <div class="tab-pane fade active in" id="tab_content2">
                  {% include 'gentelella/admin/super_admin/settings/_system.html' %}
+            </div>
+            <div class="tab-pane fade in" id="tab_content1">
+                 {% include 'gentelella/admin/super_admin/settings/_payment_gateway.html' %}
             </div>
             <div class="tab-pane fade in" id="tab_content3">
                  {% include 'gentelella/admin/super_admin/settings/_microservices.html' %}
