@@ -325,7 +325,9 @@ import helpers.tasks
 
 @app.before_first_request
 def set_secret():
+    url = request.url_root.split('//')[1].split('/')[0]
     current_app.secret_key = get_settings()['secret']
+    current_app.config['SERVER_NAME'] = url
 
 @app.context_processor
 def integrate_socketio():
