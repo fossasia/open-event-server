@@ -1040,7 +1040,6 @@
                         $uploadCropper.croppie('bind', {
                             url: e.target.result
                         });
-
                     };
                     reader.readAsDataURL(input.files[0]);
                 }
@@ -1084,6 +1083,16 @@
             $("#image-view-group").show().find("img").attr("src", resp);
             $("#image-upload-group").hide();
             $('#cropper-modal').modal('hide')
+            $.ajax({
+                type: 'POST',
+                url: "{{ url_for('events.bgimage_upload', event_id=event.id) }}",
+                data: {bgimage: resp},
+                dataType: 'json'
+            }).done(function(data) {
+                console.log(data);
+            }).fail(function(data) {
+                alert("Something went wrong. Please try again.");
+            });
         });
     });
 
