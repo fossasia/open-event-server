@@ -5,8 +5,7 @@ Register a mail here before using it
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
     USER_REGISTER, PASSWORD_RESET, EVENT_ROLE, SESSION_ACCEPT_REJECT, \
     SESSION_SCHEDULE, NEXT_EVENT, EVENT_PUBLISH, AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, \
-    TICKET_PURCHASED, EVENT_EXPORTED, EVENT_EXPORT_FAIL
-
+    TICKET_PURCHASED, EVENT_EXPORTED, EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS
 
 MAILS = {
     EVENT_PUBLISH: {
@@ -145,6 +144,15 @@ MAILS = {
         'message': (
             "The error was as follows - <br>" +
             "<pre>{error_text}</pre>"
+        )
+    },
+    MAIL_TO_EXPIRED_ORDERS: {
+        'recipient': 'User',
+        'subject': 'Tickets for {event_name} are still available ',
+        'message': (
+            "This is just a gentle reminder that the payment for your order {invoice_id} is still left." +
+            "<br/> The tickets for this event are still available. <a href='{order_url}'>Click here</a> to purchase your ticket for this event."
+            "<br><br><em>Looking forward to seeing you at the event.</em>"
         )
     }
 }
