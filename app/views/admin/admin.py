@@ -29,7 +29,6 @@ from app.views.admin.super_admin.users import SuperAdminUsersView
 from app.views.admin.super_admin.messages import SuperAdminMessagesView
 from app.views.admin.super_admin.permissions import SuperAdminPermissionsView
 from app.views.admin.super_admin.reports import SuperAdminReportsView
-from app.views.admin.super_admin.logs import SuperAdminLogsView
 from app.views.admin.super_admin.dep_settings import SuperAdminSettingsView
 from app.views.admin.super_admin.modules import SuperAdminModulesView
 from app.views.admin.super_admin.content import SuperAdminContentView
@@ -86,7 +85,6 @@ class AdminView(object):
         self.admin.add_view(SuperAdminPermissionsView(name='Permissions', url='/admin/permissions',
                                                       endpoint="sadmin_permissions"))
         self.admin.add_view(SuperAdminReportsView(name='Reports', url='/admin/reports', endpoint="sadmin_reports"))
-        self.admin.add_view(SuperAdminLogsView(name='Logs', url='/admin/logs', endpoint="sadmin_logs"))
         self.admin.add_view(SuperAdminSettingsView(name='Settings', url='/admin/settings', endpoint="sadmin_settings"))
         self.admin.add_view(SuperAdminMessagesView(name='Messages', url='/admin/messages', endpoint="sadmin_messages"))
         self.admin.add_view(SuperAdminModulesView(name='Modules', url='/admin/modules', endpoint="sadmin_modules"))
