@@ -41,7 +41,7 @@
                 <td>{{ event.start_time.strftime('%B %d, %Y - %I:%M %p') }}<br>(to)<br>{{ event.end_time.strftime('%B %d, %Y - %I:%M %p') }}</td>
                 <td>
                     <ol style="padding-left:0;">
-                        {% for role in event.roles %}
+                        {% for role in event.get_staff_roles() %}
                             <li>
                                 {{ role.user.user_detail.fullname if role.user.user_detail.fullname else role.user.email }}
                                 ({{ role.role.title_name }})
