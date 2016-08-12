@@ -56,6 +56,7 @@ class SuperAdminSalesView(SuperAdminBaseView):
 
         tickets_summary_event_wise = {}
         tickets_summary_organizer_wise = {}
+        tickets_summary_location_wise = {}
         for event in events:
             tickets_summary_event_wise[str(event.id)] = {
                 'name': event.name,
@@ -74,8 +75,13 @@ class SuperAdminSalesView(SuperAdminBaseView):
                     'sales': 0
                 }
             }
-            tickets_summary_organizer_wise[str(event.creator_id)] = copy.deepcopy(tickets_summary_event_wise[str(event.id)])
+            tickets_summary_organizer_wise[str(event.creator_id)] = \
+                copy.deepcopy(tickets_summary_event_wise[str(event.id)])
             tickets_summary_organizer_wise[str(event.creator_id)]['name'] = event.creator.email
+
+            tickets_summary_location_wise[str(event.searchable_location_name)] = \
+                copy.deepcopy(tickets_summary_event_wise[str(event.id)])
+            tickets_summary_location_wise[str(event.searchable_location_name)]['name'] = event.searchable_location_name
 
         for order in orders:
             if order.status == 'initialized':
@@ -90,11 +96,21 @@ class SuperAdminSalesView(SuperAdminBaseView):
                     += order_ticket.quantity
                 tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)]['tickets_count'] \
                     += order_ticket.quantity
+                tickets_summary_location_wise[str(order
+                                                  .event.searchable_location_name)][str(order
+                                                                                        .status)]['tickets_count'] \
+                    += order_ticket.quantity
+
                 if order.paid_via != 'free' and order.amount > 0:
                     tickets_summary_event_wise[str(order.event_id)][str(order.status)]['sales'] += \
                         order_ticket.quantity * ticket.price
                     tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)]['sales'] += \
                         order_ticket.quantity * ticket.price
+                    tickets_summary_location_wise[str(order.event.
+                                                      searchable_location_name)][str(order.
+                                                                                     status)]['sales'] += \
+                        order_ticket.quantity * ticket.price
+
         if path == 'events':
             return self.render('/gentelella/admin/super_admin/sales/by_events.html',
                                tickets_summary_event_wise=tickets_summary_event_wise,
@@ -105,5 +121,11 @@ class SuperAdminSalesView(SuperAdminBaseView):
                                tickets_summary_organizer_wise=tickets_summary_organizer_wise,
                                display_currency=self.display_currency,
                                orders_summary=orders_summary)
+        elif path == 'locations':
+            return self.render('/gentelella/admin/super_admin/sales/by_location.html',
+                               tickets_summary_location_wise=tickets_summary_location_wise,
+                               display_currency=self.display_currency,
+                               orders_summary=orders_summary)
+
         else:
             abort(404)
