@@ -147,6 +147,19 @@ def get_paginated_list(klass, url=None, args={}, **kwargs):
     return obj
 
 
+def fix_attribute_names(payload, api_model):
+    """
+    converts payload fields to their real names.
+    Uses the attribute parameter
+    """
+    data = payload.copy()
+    for key in payload:
+        if api_model[key].attribute:
+            data[api_model[key].attribute] = data[key]
+            del data[key]
+    return data
+
+
 def handle_extra_payload(payload, api_model):
     """
     Handles extra keys in payload
