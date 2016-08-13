@@ -26,7 +26,7 @@ from app.helpers.helpers import string_empty, string_not_empty, uploaded_file
 from app.helpers.notification_email_triggers import trigger_new_session_notifications, \
     trigger_session_state_change_notifications
 from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth, TwitterOAuth
-from app.helpers.storage import upload, UPLOAD_PATHS, UploadedFile
+from app.helpers.storage import upload, UPLOAD_PATHS, UploadedFile, download_file
 from app.models.notifications import Notification
 from app.models.stripe_authorization import StripeAuthorization
 from ..helpers import helpers as Helper
@@ -983,10 +983,13 @@ class DataManager(object):
             background_url = ''
             temp_background = form['background_url']
             if temp_background:
-                # i know it's bad, will come up with better fixes later
-                filename = str(time.time()) + '.png'
-                filepath = path.realpath('.') + '/static' + temp_background[len('/serve_static'):]
-                background_file = UploadedFile(filepath, filename)
+                if temp_background.startswith('/serve_static'):
+                    # Local file
+                    filename = str(time.time()) + '.png'
+                    filepath = path.realpath('.') + '/static' + temp_background[len('/serve_static'):]
+                    background_file = UploadedFile(filepath, filename)
+                else:
+                    background_file = download_file(temp_background)
                 background_url = upload(
                     background_file,
                     UPLOAD_PATHS['event']['background_url'].format(
@@ -997,9 +1000,13 @@ class DataManager(object):
             logo = ''
             temp_logo = form['logo']
             if temp_logo:
-                filename = str(time.time()) + '.png'
-                filepath = path.realpath('.') + '/static' + temp_logo[len('/serve_static'):]
-                logo_file = UploadedFile(filepath, filename)
+                if temp_logo.startswith('/serve_static'):
+                    # Local file
+                    filename = str(time.time()) + '.png'
+                    filepath = path.realpath('.') + '/static' + temp_logo[len('/serve_static'):]
+                    logo_file = UploadedFile(filepath, filename)
+                else:
+                    logo_file = download_file(temp_logo)
                 logo = upload(
                     logo_file,
                     UPLOAD_PATHS['event']['logo'].format(
