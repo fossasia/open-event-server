@@ -37,7 +37,14 @@ def set_settings(**kwargs):
                                     maximum_fee=ticket_maximum_fees[i])
             save_to_db(ticket_fee, "Ticket Fees settings saved")
     else:
-        setting = Setting(**kwargs)
+        setting = Setting.query.first()
+        if not setting:
+            print "adsadsa"
+            setting = Setting(**kwargs)
+        else:
+            "dsadsadsa"
+            for k, v in kwargs.iteritems():
+                setattr(setting, k, v)
         from app.helpers.data import save_to_db
         save_to_db(setting, 'Setting saved')
         current_app.secret_key = setting.secret
