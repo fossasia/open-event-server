@@ -5,6 +5,8 @@ import os.path
 import random
 import traceback
 import oauth2
+import time
+from os import path
 from datetime import datetime, timedelta
 
 import requests
@@ -24,7 +26,7 @@ from app.helpers.helpers import string_empty, string_not_empty, uploaded_file
 from app.helpers.notification_email_triggers import trigger_new_session_notifications, \
     trigger_session_state_change_notifications
 from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth, TwitterOAuth
-from app.helpers.storage import upload, UPLOAD_PATHS
+from app.helpers.storage import upload, UPLOAD_PATHS, UploadedFile
 from app.models.notifications import Notification
 from app.models.stripe_authorization import StripeAuthorization
 from ..helpers import helpers as Helper
@@ -978,25 +980,33 @@ class DataManager(object):
             db.session.flush()
             db.session.refresh(event)
 
-            background_image = form['background_url']
-            if string_not_empty(background_image):
-                background_file = uploaded_file(file_content=background_image)
+            background_url = ''
+            temp_background = form['background_url']
+            if temp_background:
+                # i know it's bad, will come up with better fixes later
+                filename = str(time.time()) + '.png'
+                filepath = path.realpath('.') + '/static' + temp_background[len('/serve_static'):]
+                background_file = UploadedFile(filepath, filename)
                 background_url = upload(
                     background_file,
                     UPLOAD_PATHS['event']['background_url'].format(
-                        event_id=int(event.id)
+                        event_id=event.id
                     ))
-                event.background_url = background_url
+            event.background_url = background_url
 
-            logo = form['logo']
-            if string_not_empty(logo):
-                logo_file = uploaded_file(file_content=logo)
+            logo = ''
+            temp_logo = form['logo']
+            if temp_logo:
+                filename = str(time.time()) + '.png'
+                filepath = path.realpath('.') + '/static' + temp_logo[len('/serve_static'):]
+                logo_file = UploadedFile(filepath, filename)
                 logo = upload(
                     logo_file,
                     UPLOAD_PATHS['event']['logo'].format(
-                        event_id=int(event.id)
+                        event_id=event.id
                     ))
-                event.logo = logo
+            event.logo = logo
+
 
             # Save Tickets
             module = DataGetter.get_module()
@@ -1481,26 +1491,6 @@ class DataManager(object):
         event.copyright.licence = licence_name
         event.copyright.licence_url = licence_url
         event.copyright.logo = logo
-
-        background_image = form['background_url']
-        if string_not_empty(background_image):
-            background_file = uploaded_file(file_content=background_image)
-            background_url = upload(
-                background_file,
-                UPLOAD_PATHS['event']['background_url'].format(
-                    event_id=int(event.id)
-                ))
-            event.background_url = background_url
-
-        logo = form['logo']
-        if string_not_empty(logo):
-            logo_file = uploaded_file(file_content=logo)
-            logo = upload(
-                logo_file,
-                UPLOAD_PATHS['event']['logo'].format(
-                    event_id=int(event.id)
-                ))
-            event.logo = logo
 
         state = form.get('state', None)
         if state and ((state == u'Published' and not string_empty(

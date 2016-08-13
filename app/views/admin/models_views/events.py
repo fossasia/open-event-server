@@ -2,13 +2,18 @@ import json
 import datetime
 import os
 import binascii
+from uuid import uuid4
 
-from flask import flash, url_for, redirect
+from flask import flash, url_for, redirect, request, jsonify
+from flask.ext import login
 from flask.ext.admin import BaseView
+from flask.ext.restplus import abort
 from flask_admin import expose
 
 from app import db
-from app.helpers.permission_decorators import *
+from app.helpers.storage import upload, UPLOAD_PATHS
+from app.helpers.helpers import uploaded_file
+from app.helpers.permission_decorators import is_organizer, is_super_admin, can_access
 from app.helpers.helpers import fields_not_empty, string_empty
 from app.models.call_for_papers import CallForPaper
 from ....helpers.data import DataManager, save_to_db, record_activity, delete_from_db, restore_event
@@ -74,6 +79,34 @@ class EventsView(BaseView):
     @expose('/create/<step>', methods=('GET', 'POST'))
     def create_view_stepped(self, step):
         return redirect(url_for('.create_view'))
+
+    @expose('/create/files/bgimage', methods=('POST',))
+    def create_event_bgimage_upload(self):
+        if request.method == 'POST':
+            background_image = request.form['bgimage']
+            if background_image:
+                background_file = uploaded_file(file_content=background_image)
+                background_url = upload(
+                    background_file,
+                    UPLOAD_PATHS['temp']['event'].format(uuid=uuid4())
+                )
+                return jsonify({'status': 'ok', 'background_url': background_url})
+            else:
+                return jsonify({'status': 'no bgimage'})
+
+    @expose('/create/files/logo', methods=('POST',))
+    def create_event_logo_upload(self):
+        if request.method == 'POST':
+            logo_image = request.form['logo']
+            if logo_image:
+                logo_file = uploaded_file(file_content=logo_image)
+                logo = upload(
+                    logo_file,
+                    UPLOAD_PATHS['temp']['event'].format(uuid=uuid4())
+                )
+                return jsonify({'status': 'ok', 'logo': logo})
+            else:
+                return jsonify({'status': 'no logo'})
 
     @expose('/create/', methods=('GET', 'POST'))
     def create_view(self,):
@@ -200,6 +233,52 @@ class EventsView(BaseView):
                            sessions=sessions,
                            settings=get_settings())
 
+    @expose('/<int:event_id>/editfiles/bgimage', methods=('POST','DELETE'))
+    def bgimage_upload(self, event_id):
+        if request.method == 'POST':
+            background_image = request.form['bgimage']
+            if background_image:
+                background_file = uploaded_file(file_content=background_image)
+                background_url = upload(
+                    background_file,
+                    UPLOAD_PATHS['event']['background_url'].format(
+                        event_id=event_id
+                    ))
+                event = DataGetter.get_event(event_id)
+                event.background_url = background_url
+                save_to_db(event)
+                return jsonify({'status': 'ok', 'background_url': background_url})
+            else:
+                return jsonify({'status': 'no bgimage'})
+        elif request.method == 'DELETE':
+            event = DataGetter.get_event(event_id)
+            event.background_url = ''
+            save_to_db(event)
+            return jsonify({'status': 'ok'})
+
+    @expose('/<int:event_id>/editfiles/logo', methods=('POST','DELETE'))
+    def logo_upload(self, event_id):
+        if request.method == 'POST':
+            logo_image = request.form['logo']
+            if logo_image:
+                logo_file = uploaded_file(file_content=logo_image)
+                logo = upload(
+                    logo_file,
+                    UPLOAD_PATHS['event']['logo'].format(
+                        event_id=event_id
+                    ))
+                event = DataGetter.get_event(event_id)
+                event.logo = logo
+                save_to_db(event)
+                return jsonify({'status': 'ok', 'logo': logo})
+            else:
+                return jsonify({'status': 'no logo'})
+        elif request.method == 'DELETE':
+            event = DataGetter.get_event(event_id)
+            event.logo = ''
+            save_to_db(event)
+            return jsonify({'status': 'ok'})
+
     @expose('/<event_id>/edit/', methods=('GET', 'POST'))
     @can_access
     def edit_view(self, event_id):
@@ -299,7 +378,7 @@ class EventsView(BaseView):
     @can_access
     def trash_view(self, event_id):
         if request.method == "GET":
-            event = DataManager.trash_event(event_id)
+            DataManager.trash_event(event_id)
         flash("Your event has been deleted.", "danger")
         if login.current_user.is_super_admin == True:
             return redirect(url_for('sadmin_events.index_view'))
@@ -309,7 +388,7 @@ class EventsView(BaseView):
     @is_super_admin
     def delete_view(self, event_id):
         if request.method == "GET":
-            event = DataManager.delete_event(event_id)
+            DataManager.delete_event(event_id)
         flash("Your event has been permanently deleted.", "danger")
         return redirect(url_for('sadmin_events.index_view'))
 

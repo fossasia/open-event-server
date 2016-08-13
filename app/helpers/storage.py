@@ -34,6 +34,9 @@ UPLOAD_PATHS = {
     },
     'user': {
         'avatar': 'users/{user_id}/avatar'
+    },
+    'temp': {
+        'event': 'events/temp/{uuid}'
     }
 }
 
