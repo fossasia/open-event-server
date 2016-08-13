@@ -168,7 +168,7 @@
                         <input type="file" id="event-image-upload" name="event-image-upload"
                                class="image-upload-btn no-js"
                                accept="image/*"/>
-                        <label class="file-label" for="event-image-upload">
+                        <label class="file-label" for="event-image-upload" id="event-image-upload-label">
                             <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Event Image
                         </label><br>
                     </div>
@@ -212,7 +212,7 @@
                     <div class="image-box">
                         <input type="file" id="logo-upload" name="logo-upload" class="image-upload-btn no-js"
                                accept="image/*"/>
-                        <label class="file-label" for="logo-upload">
+                        <label class="file-label" for="logo-upload" id="logo-upload-label">
                             <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Logo
                         </label><br>
                     </div>
@@ -1068,6 +1068,7 @@
                 } else {
                     var reader = new FileReader();
                     reader.onload = function (e) {
+                        $("#logo-upload-label").html(loadingImage);
                         $.ajax({
                             type: 'POST',
                             url: "{{ url_for('events.logo_upload', event_id=event.id) if event else url_for('events.create_event_logo_upload') }}",
@@ -1076,6 +1077,7 @@
                         }).done(function(data) {
                             console.log(data);
                             resetFormElement(input);
+                            $("#logo-upload-label").html('<i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Logo');
                             $("#logo").val(data.logo);
                             $("#logo-upload-group").hide();
                             $("#logo-view-group").show().find("img").attr("src", e.target.result);
@@ -1093,12 +1095,14 @@
         });
     });
 
+    var loadingImage = '<img src="' + "{{ url_for('static', filename='img/loading.gif') }}" + '" style="width: 25px;"> Loading';
     $("#save-crop").click(function () {
         $uploadCropper.croppie('result', {
             type: 'canvas',
             size: 'original'
         }).then(function (resp) {
             $('#cropper-modal').modal('hide')
+            $("#event-image-upload-label").html(loadingImage);
             $.ajax({
                 type: 'POST',
                 url: "{{ url_for('events.bgimage_upload', event_id=event.id) if event else url_for('events.create_event_bgimage_upload') }}",
@@ -1108,6 +1112,7 @@
                 console.log(data);
                 $("#background_url").val(data.background_url);
                 $("#image-view-group").show().find("img").attr("src", resp);
+                $("#event-image-upload-label").html('<i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Event Image');
                 $("#image-upload-group").hide();
             }).fail(function(data) {
                 alert("Something went wrong. Please try again.");
