@@ -77,7 +77,7 @@ The filename might be followed by an extension. Example - /videos/session_4.mp4
     },
     'event': {
         'logo': '/images/logo',
-        'background_url': '/images/background'
+        'background_image': '/images/background'
     },
     'sponsors': {
         'logo': '/images/sponsors/logo_ID'

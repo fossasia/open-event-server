@@ -78,7 +78,7 @@ class TestImportUploads(ImportExportBase):
         both types of media
         """
         self._create_set()
-        self._update_json('event', 'background_url', '/bg.png')
+        self._update_json('event', 'background_image', '/bg.png')
         self._create_file('bg.png')
         self._update_json('speakers', 'photo', '/spkr.png', 1)
         self._create_file('spkr.png')
@@ -87,7 +87,7 @@ class TestImportUploads(ImportExportBase):
         data = self._make_zip_from_dir()
         event_dic = self._do_succesful_import(data)
         # checks
-        resp = self.app.get(event_dic['background_url'])
+        resp = self.app.get(event_dic['background_image'])
         self.assertEqual(resp.status_code, 200)
         # speaker
         photo = self._get_event_value(
@@ -110,12 +110,12 @@ class TestImportUploads(ImportExportBase):
         Tests when relative link to a media if non-existant
         """
         self._create_set()
-        self._update_json('event', 'background_url', '/non.png')
+        self._update_json('event', 'background_image', '/non.png')
         # import
         data = self._make_zip_from_dir()
         event_dic = self._do_succesful_import(data)
         # check
-        self.assertEqual(event_dic['background_url'], None)
+        self.assertEqual(event_dic['background_image'], None)
 
     def test_version_preserved(self):
         """
