@@ -77,7 +77,8 @@ class SuperAdminSalesView(SuperAdminBaseView):
             }
             tickets_summary_organizer_wise[str(event.creator_id)] = \
                 copy.deepcopy(tickets_summary_event_wise[str(event.id)])
-            tickets_summary_organizer_wise[str(event.creator_id)]['name'] = event.creator.email
+            if event.creator:
+                tickets_summary_organizer_wise[str(event.creator_id)]['name'] = event.creator.email
 
             tickets_summary_location_wise[str(event.searchable_location_name)] = \
                 copy.deepcopy(tickets_summary_event_wise[str(event.id)])
