@@ -741,3 +741,62 @@ class DataGetter(object):
     def get_expired_orders():
         return Order.query.filter(Order.status != 'completed')
 
+    @staticmethod
+    def get_all_super_admins():
+        return len(User.query.filter_by(is_super_admin=True).all())
+
+    @staticmethod
+    def get_all_admins():
+        return len(User.query.filter_by(is_admin=True).all())
+
+    @staticmethod
+    def get_all_registered_users():
+        return len(User.query.filter_by(is_verified=True).all())
+
+    @staticmethod
+    def get_all_organizers():
+        events = Event.query.all()
+        users = User.query.all()
+        organizers = []
+        for event in events:
+            for user in users:
+                if user.is_organizer(event.id):
+                    organizers.append(user)
+
+        return len(organizers)
+
+    @staticmethod
+    def get_all_co_organizers():
+        events = Event.query.all()
+        users = User.query.all()
+        co_organizers = []
+        for event in events:
+            for user in users:
+                if user.is_coorganizer(event.id):
+                    co_organizers.append(user)
+
+        return len(co_organizers)
+
+    @staticmethod
+    def get_all_track_organizers():
+        events = Event.query.all()
+        users = User.query.all()
+        track_organizers = []
+        for event in events:
+            for user in users:
+                if user.is_track_organizer(event.id):
+                    track_organizers.append(user)
+
+        return len(track_organizers)
+
+    @staticmethod
+    def get_all_attendees():
+        events = Event.query.all()
+        users = User.query.all()
+        attendees = []
+        for event in events:
+            for user in users:
+                if user.is_attendee(event.id):
+                    attendees.append(user)
+
+        return len(attendees)

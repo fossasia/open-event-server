@@ -13,6 +13,13 @@ class SuperAdminView(SuperAdminBaseView):
         number_live_events = DataGetter.get_all_live_events().count()
         number_draft_events = DataGetter.get_all_draft_events().count()
         number_past_events = DataGetter.get_all_past_events().count()
+        super_admins = DataGetter.get_all_super_admins()
+        admins = DataGetter.get_all_admins()
+        registered_users = DataGetter.get_all_registered_users()
+        organizers = DataGetter.get_all_organizers()
+        co_organizers = DataGetter.get_all_co_organizers()
+        track_organizers = DataGetter.get_all_track_organizers()
+        attendees= DataGetter.get_all_attendees()
         version = get_latest_heroku_release()
         commit_number = None
         commit_info = None
@@ -25,4 +32,11 @@ class SuperAdminView(SuperAdminBaseView):
                            commit_info=commit_info,
                            number_live_events=number_live_events,
                            number_draft_events=number_draft_events,
-                           number_past_events=number_past_events)
+                           number_past_events=number_past_events,
+                           super_admins=super_admins,
+                           admins=admins,
+                           registered_users=registered_users,
+                           organizers=organizers,
+                           co_organizers=co_organizers,
+                           track_organizers=track_organizers,
+                           attendees=attendees)
