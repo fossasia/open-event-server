@@ -10,6 +10,7 @@ from app.helpers.helpers import get_count
 from app.helpers.versioning import clean_up_string, clean_html
 from custom_forms import CustomForms, session_form_str, speaker_form_str
 from app.models.email_notifications import EmailNotification
+from app.models.user import ATTENDEE
 from version import Version
 from . import db
 
@@ -194,6 +195,19 @@ class Event(db.Model):
             return EmailNotification.query.filter_by(user_id=login.current_user.id).filter_by(event_id=self.id).first()
         except:
             return None
+
+    def has_staff_access(self):
+        """does user have role other than attendee"""
+        access = False
+        for _ in self.roles:
+            if _.user_id == login.current_user.id:
+                if _.role.name != ATTENDEE:
+                    access = True
+        return access
+
+    def get_staff_roles(self):
+        """returns only roles which are staff i.e. not attendee"""
+        return [role for role in self.roles if role.role.name != ATTENDEE]
 
     @property
     def serialize(self):
