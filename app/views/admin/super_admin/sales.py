@@ -80,9 +80,9 @@ class SuperAdminSalesView(SuperAdminBaseView):
             if event.creator:
                 tickets_summary_organizer_wise[str(event.creator_id)]['name'] = event.creator.email
 
-            tickets_summary_location_wise[str(event.searchable_location_name)] = \
+            tickets_summary_location_wise[unicode(event.searchable_location_name)] = \
                 copy.deepcopy(tickets_summary_event_wise[str(event.id)])
-            tickets_summary_location_wise[str(event.searchable_location_name)]['name'] = event.searchable_location_name
+            tickets_summary_location_wise[unicode(event.searchable_location_name)]['name'] = event.searchable_location_name
 
         for order in orders:
             if order.status == 'initialized':
