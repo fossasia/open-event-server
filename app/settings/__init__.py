@@ -39,12 +39,10 @@ def set_settings(**kwargs):
     else:
         setting = Setting.query.first()
         if not setting:
-            print "adsadsa"
             setting = Setting(**kwargs)
         else:
-            "dsadsadsa"
-            for k, v in kwargs.iteritems():
-                setattr(setting, k, v)
+            for key, value in kwargs.iteritems():
+                setattr(setting, key, value)
         from app.helpers.data import save_to_db
         save_to_db(setting, 'Setting saved')
         current_app.secret_key = setting.secret
