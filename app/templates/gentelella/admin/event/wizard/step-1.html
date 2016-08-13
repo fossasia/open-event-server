@@ -155,7 +155,12 @@
         </div>
         <div class="row">
             <div class="col-md-7">
-                <input type="hidden" name="background_url" id="background_url">
+                {% if event %}
+                    <input type="hidden" name="background_url" id="background_url">
+                {% else %}
+                    <input type="hidden" name="background_url" id="background_url">
+                {% endif %}
+
                 <div class="item form-group" id="image-upload-group"
                      {% if event and event.background_url and event.background_url != '' %}style="display: none;"{% endif %}>
                     <label>Event Image</label><br>
@@ -163,7 +168,7 @@
                         <input type="file" id="event-image-upload" name="event-image-upload"
                                class="image-upload-btn no-js"
                                accept="image/*"/>
-                        <label class="file-label" for="event-image-upload">
+                        <label class="file-label" for="event-image-upload" id="event-image-upload-label">
                             <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Event Image
                         </label><br>
                     </div>
@@ -195,7 +200,11 @@
         <div class="row">
             <div class="col-md-7">
 
-                <input type="hidden" name="logo" id="logo">
+                {% if event %}
+                    <input type="hidden" id="logo">
+                {% else %}
+                    <input type="hidden" name="logo" id="logo">
+                {% endif %}
 
                 <div class="item form-group" id="logo-upload-group"
                      {% if event and event.logo and event.logo != '' %}style="display: none;"{% endif %}>
@@ -203,7 +212,7 @@
                     <div class="image-box">
                         <input type="file" id="logo-upload" name="logo-upload" class="image-upload-btn no-js"
                                accept="image/*"/>
-                        <label class="file-label" for="logo-upload">
+                        <label class="file-label" for="logo-upload" id="logo-upload-label">
                             <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Logo
                         </label><br>
                     </div>
@@ -1040,7 +1049,6 @@
                         $uploadCropper.croppie('bind', {
                             url: e.target.result
                         });
-
                     };
                     reader.readAsDataURL(input.files[0]);
                 }
@@ -1060,10 +1068,22 @@
                 } else {
                     var reader = new FileReader();
                     reader.onload = function (e) {
-                        resetFormElement(input);
-                        $("#logo").val(e.target.result);
-                        $("#logo-view-group").show().find("img").attr("src", e.target.result);
-                        $("#logo-upload-group").hide();
+                        $("#logo-upload-label").html(loadingImage);
+                        $.ajax({
+                            type: 'POST',
+                            url: "{{ url_for('events.logo_upload', event_id=event.id) if event else url_for('events.create_event_logo_upload') }}",
+                            data: {logo: e.target.result},
+                            dataType: 'json'
+                        }).done(function(data) {
+                            console.log(data);
+                            resetFormElement(input);
+                            $("#logo-upload-label").html('<i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Logo');
+                            $("#logo").val(data.logo);
+                            $("#logo-upload-group").hide();
+                            $("#logo-view-group").show().find("img").attr("src", e.target.result);
+                        }).fail(function(data) {
+                            alert("Something went wrong. Please try again.");
+                        });
                     };
                     reader.readAsDataURL(input.files[0]);
                 }
@@ -1075,18 +1095,62 @@
         });
     });
 
+    var loadingImage = '<img src="' + "{{ url_for('static', filename='img/loading.gif') }}" + '" style="width: 25px;"> Uploading';
     $("#save-crop").click(function () {
         $uploadCropper.croppie('result', {
             type: 'canvas',
             size: 'original'
         }).then(function (resp) {
-            $("#background_url").val(resp);
-            $("#image-view-group").show().find("img").attr("src", resp);
-            $("#image-upload-group").hide();
             $('#cropper-modal').modal('hide')
+            $("#event-image-upload-label").html(loadingImage);
+            $.ajax({
+                type: 'POST',
+                url: "{{ url_for('events.bgimage_upload', event_id=event.id) if event else url_for('events.create_event_bgimage_upload') }}",
+                data: {bgimage: resp},
+                dataType: 'json'
+            }).done(function(data) {
+                console.log(data);
+                $("#background_url").val(data.background_url);
+                $("#image-view-group").show().find("img").attr("src", resp);
+                $("#event-image-upload-label").html('<i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Event Image');
+                $("#image-upload-group").hide();
+            }).fail(function(data) {
+                alert("Something went wrong. Please try again.");
+            });
         });
     });
 
+    {% if event %}
+    $("#remove-image-btn").click(function () {
+        $.ajax({
+            type: 'DELETE',
+            url: "{{ url_for('events.bgimage_upload', event_id=event.id) }}",
+            dataType: 'json'
+        }).done(function(data) {
+            console.log(data);
+            $("#image-view-group").hide();
+            $("#image-upload-group").show();
+            $("#background_url").val('');
+        }).fail(function(data) {
+            alert("Something went wrong. Please try again.");
+        });
+    });
+
+    $("#remove-logo-btn").click(function () {
+        $.ajax({
+            type: 'DELETE',
+            url: "{{ url_for('events.logo_upload', event_id=event.id) }}",
+            dataType: 'json'
+        }).done(function(data) {
+            console.log(data);
+            $("#logo-view-group").hide();
+            $("#logo-upload-group").show();
+            $("#logo").val('');
+        }).fail(function(data) {
+            alert("Something went wrong. Please try again.");
+        });
+    });
+    {% else %}
     $("#remove-image-btn").click(function () {
         $("#image-view-group").hide();
         $("#image-upload-group").show();
@@ -1098,6 +1162,7 @@
         $("#logo-upload-group").show();
         $("#logo").val('');
     });
+    {% endif %}
 
     $('#cropper-modal').on('shown.bs.modal', function (e) {
         $uploadCropper.croppie('bind');

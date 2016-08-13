@@ -13,7 +13,7 @@ POST_EVENT_DATA = {
     "longitude": 0,
     "name": "TestEvent",
     'event_url': "http://site.com",
-    'background_url': "",
+    'background_image': "",
     'description': "blah blah",
     "start_time": "2016-05-25T12:12:43",
     "organizer_name": "FOSSASIA",

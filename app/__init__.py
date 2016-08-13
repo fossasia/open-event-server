@@ -17,7 +17,7 @@ import os.path
 from os import environ
 import sys
 import json
-from flask import Flask, session
+from flask import Flask, session, url_for
 from flask.ext.autodoc import Autodoc
 from app.settings import get_settings
 from flask.ext.cors import CORS
@@ -52,10 +52,12 @@ from app.helpers.data import DataManager, delete_from_db
 from app.helpers.helpers import send_after_event
 from app.helpers.cache import cache
 from sqlalchemy_continuum import transaction_class
+from helpers.helpers import send_email_for_expired_orders
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
+
 
 def create_app():
     Autodoc(app)
@@ -85,8 +87,9 @@ def create_app():
     app.config['FILE_SYSTEM_STORAGE_FILE_VIEW'] = 'static'
     app.config['STATIC_URL'] = '/static/'
     app.config['STATIC_ROOT'] = 'staticfiles'
-    app.config['STATICFILES_DIRS'] = (os.path.join(BASE_DIR, 'static'), )
+    app.config['STATICFILES_DIRS'] = (os.path.join(BASE_DIR, 'static'),)
     app.config['SQLALCHEMY_RECORD_QUERIES'] = True
+    #app.config['SERVER_NAME'] = 'http://127.0.0.1:8001'
     # app.config['SERVER_NAME'] = 'open-event-dev.herokuapp.com'
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     app.logger.setLevel(logging.INFO)
@@ -121,7 +124,9 @@ def create_app():
 
     return app, manager, db, jwt
 
+
 current_app, manager, database, jwt = create_app()
+
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -143,13 +148,15 @@ def request_wants_json():
     best = request.accept_mimetypes.best_match(
         ['application/json', 'text/html'])
     return best == 'application/json' and \
-        request.accept_mimetypes[best] > \
-        request.accept_mimetypes['text/html']
+           request.accept_mimetypes[best] > \
+           request.accept_mimetypes['text/html']
+
 
 @app.context_processor
 def locations():
     def get_locations_of_events():
         return DataGetter.get_locations_of_events()
+
     return dict(locations=get_locations_of_events)
 
 
@@ -164,10 +171,12 @@ def pages():
     pages = DataGetter.get_all_pages()
     return dict(system_pages=pages)
 
+
 @app.context_processor
 def social_settings():
     settings = get_settings()
     return dict(settings=settings)
+
 
 @app.template_filter('pretty_name')
 def pretty_name_filter(string):
@@ -176,10 +185,12 @@ def pretty_name_filter(string):
     string = string.title()
     return string
 
+
 @app.template_filter('currency_symbol')
 def currency_symbol_filter(currency_code):
     symbol = CurrencyCodes().get_symbol(currency_code)
     return symbol if symbol else '$'
+
 
 @app.template_filter('currency_name')
 def currency_name_filter(currency_code):
@@ -209,12 +220,14 @@ def humanize_alt_filter(time):
         return "N/A"
     return humanize.naturaltime(datetime.now() - time)
 
+
 @app.template_filter('firstname')
 def firstname_filter(string):
     if string:
         return HumanName(string).first
     else:
         return 'N/A'
+
 
 @app.template_filter('middlename')
 def middlename_filter(string):
@@ -223,6 +236,7 @@ def middlename_filter(string):
     else:
         return 'N/A'
 
+
 @app.template_filter('lastname')
 def lastname_filter(string):
     if string:
@@ -230,13 +244,16 @@ def lastname_filter(string):
     else:
         return 'N/A'
 
+
 @app.template_filter('money')
 def money_filter(string):
     return '{:20,.2f}'.format(float(string))
 
+
 @app.template_filter('datetime')
 def simple_datetime_display(date):
     return date.strftime('%B %d, %Y %I:%M %p')
+
 
 @app.context_processor
 def flask_helpers():
@@ -288,11 +305,13 @@ def versioning_manager():
                 side_by_side_diff=side_by_side_diff,
                 get_user_name=get_user_name)
 
+
 # http://stackoverflow.com/questions/26724623/
 @app.before_request
 def track_user():
     if current_user.is_authenticated:
         current_user.update_lat()
+
 
 def make_celery(app):
     celery = Celery(app.import_name, broker=app.config['CELERY_BROKER_URL'])
@@ -360,7 +379,8 @@ def send_after_event_mail():
                     send_after_event(organizer.user.email, event.id,
                                      upcoming_events)
 
-#logging.basicConfig()
+
+# logging.basicConfig()
 sched = BackgroundScheduler(timezone=utc)
 sched.add_job(send_after_event_mail,
               'cron',
@@ -368,8 +388,24 @@ sched.add_job(send_after_event_mail,
               hour=5,
               minute=30)
 
-#sched.start()
 
+# sched.start()
+
+def send_mail_to_expired_orders():
+    with app.app_context():
+        orders = DataGetter.get_expired_orders()
+        for order in orders:
+            send_email_for_expired_orders('adityavyas17@gmail.com', order.event.name, order.get_invoice_number(),
+                                          url_for('ticketing.view_order_after_payment',
+                                                  order_identifier=order.identifier, _external=True))
+
+order_sched = BackgroundScheduler(timezone=utc)
+order_sched.add_job(send_mail_to_expired_orders,
+                    'interval',
+                    hours=5)
+
+
+order_sched.start()
 
 def empty_trash():
     with app.app_context():
@@ -409,6 +445,7 @@ if current_app.config.get('INTEGRATE_SOCKETIO', False):
     async_mode = 'eventlet'
     socketio = SocketIO(current_app, async_mode=async_mode)
 
+
     @socketio.on('connect', namespace='/notifs')
     def connect_handler_notifs():
         if current_user.is_authenticated():
@@ -416,13 +453,13 @@ if current_app.config.get('INTEGRATE_SOCKETIO', False):
             join_room(user_room)
             emit('notifs-response', {'meta': 'WS connected'}, namespace='/notifs')
 
+
     @socketio.on('connect', namespace='/notifpage')
     def connect_handler_notif_page():
         if current_user.is_authenticated():
             user_room = 'user_{}'.format(session['user_id'])
             join_room(user_room)
             emit('notifpage-response', {'meta': 'WS notifpage connected'}, namespace='/notifpage')
-
 
 if __name__ == '__main__':
     if current_app.config.get('INTEGRATE_SOCKETIO', False):

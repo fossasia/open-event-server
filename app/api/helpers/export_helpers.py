@@ -52,7 +52,7 @@ DOWNLOAD_FIEDLS = {
     },
     'event': {
         'logo': ['image', '/images/logo'],
-        'background_url': ['image', '/images/background']
+        'background_image': ['image', '/images/background']
     },
     'sponsors': {
         'logo': ['image', '/images/sponsors/logo_%d']

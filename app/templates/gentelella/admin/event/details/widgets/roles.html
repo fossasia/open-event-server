@@ -31,7 +31,7 @@ Manage Roles
         </tr>
         </thead>
         <tbody>
-        {% for role in event.roles %}
+        {% for role in event.get_staff_roles() %}
         <tr>
             <td style="display: none;">accepted</td>
             <td style="display: none;">{{ role.user.email }}</td>

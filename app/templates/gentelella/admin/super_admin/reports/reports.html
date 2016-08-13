@@ -7,24 +7,43 @@ Events
 {% set active_page = "reports" %}
 
 {% block head_css %}
-    {{ super() }}
+{{ super() }}
+<style type="text/css">
+    #reports_tabs {
+        background: transparent;
+        width: auto;
+    }
+
+    </style>
 {% endblock %}
 
 
 {% block content %}
 
-{% if log_url %}
-  <iframe style="width:100%; height: 500px" src="https://longboard-classic.heroku.com/logs?logplexUrl={{ log_url }}"></iframe>
-{% else %}
-<div>Either the Heroku API Token is invalid or it has not been set. Please set a valid <code>API_TOKEN_HEROKU</code> environment variable.</div>
-{% endif %}
 
+<div>
+  <ul id="reports_tabs" class="nav nav-tabs bar_tabs" role="tablist">
+    <li class="active"><a href="#tab_content4" id="all-tab" data-toggle="tab">System Logs</a></li>
+    <li><a href="#tab_content1" id="home-tab" data-toggle="tab">Server Logs</a></li>
+  </ul>
+  <div id="myTabContent" class="tab-content">
+    <div role="tabpanel" class="tab-pane fade active in" id="tab_content4"
+         aria-labelledby="all-tab">
+      <div style="margin-top: 40px"></div>
+      {% include 'gentelella/admin/super_admin/reports/_system_logs.html' %}
+    </div>
+    <div role="tabpanel" class="tab-pane fade " id="tab_content1"
+         aria-labelledby="home-tab">
+      {% include 'gentelella/admin/super_admin/reports/_server_logs.html' %}
+    </div>
+  </div>
+</div>
 
 
 {% endblock %}
 
 {% block tail_js %}
-    {{ super() }}
+{{ super() }}
 
 {% endblock %}
 

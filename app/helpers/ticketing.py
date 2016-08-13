@@ -44,19 +44,24 @@ class TicketingManager(object):
             return query.filter(Event.end_time < datetime.now())
 
     @staticmethod
-    def get_orders(event_id=None, status=None):
+    def get_orders(event_id=None, status=None, from_date=None, to_date=None):
         if event_id:
             if status:
                 orders = Order.query.filter_by(event_id=event_id).filter_by(status=status) \
-                    .filter(Order.user_id.isnot(None)).all()
+                    .filter(Order.user_id.isnot(None))
             else:
-                orders = Order.query.filter_by(event_id=event_id).filter(Order.user_id.isnot(None)).all()
+                orders = Order.query.filter_by(event_id=event_id).filter(Order.user_id.isnot(None))
         else:
             if status:
-                orders = Order.query.filter_by(status=status).filter(Order.user_id.isnot(None)).all()
+                orders = Order.query.filter_by(status=status).filter(Order.user_id.isnot(None))
             else:
-                orders = Order.query.filter(Order.user_id.isnot(None)).all()
-        return orders
+                orders = Order.query.filter(Order.user_id.isnot(None))
+
+        if from_date:
+            orders = orders.filter(Order.created_at >= from_date)
+        if to_date:
+            orders = orders.filter(Order.created_at <= to_date)
+        return orders.all()
 
     @staticmethod
     def get_orders_count(event_id, status='completed'):

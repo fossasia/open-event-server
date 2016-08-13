@@ -54,7 +54,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**end_time** | string | Required | Public |
 |**latitude** | number | Optional | Public |
 |**longitude** | number | Optional | Public |
-|**background_url** | string | Optional | Public |
+|**background_image** | string | Optional | Public |
 |**state** | string | Optional | Public |
 |**email** | string | Optional | Public |
 |**organizer_name** | string | Optional | Public |

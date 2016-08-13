@@ -37,6 +37,7 @@ from ..models.page import Page
 from ..models.export_jobs import ExportJob
 from ..models.tax import Tax
 from ..models.fees import TicketFees
+from ..models.order import Order
 from .language_list import LANGUAGE_LIST
 from .static import EVENT_TOPICS, EVENT_LICENCES, PAYMENT_COUNTRIES, PAYMENT_CURRENCIES, DEFAULT_EVENT_IMAGES
 from app.helpers.helpers import get_event_id, string_empty, represents_int
@@ -377,7 +378,7 @@ class DataGetter(object):
     def get_completed_events():
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.state == 'Completed')
-        return events
+        return DataGetter.trim_attendee_events(events)
 
     @staticmethod
     def get_all_published_events(include_private=False):
@@ -408,33 +409,43 @@ class DataGetter(object):
         return results[:12]
 
     @staticmethod
+    def trim_attendee_events(events):
+        """
+        return only those events where current_user has non-attendee permissions access
+        """
+        return [_ for _ in events if _.has_staff_access()]
+
+    @staticmethod
     def get_published_events():
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.state == 'Published')
-        return events
+        return DataGetter.trim_attendee_events(events)
 
     @staticmethod
     def get_current_events():
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.state != 'Completed')
-        return events
+        return DataGetter.trim_attendee_events(events)
 
     @staticmethod
     def get_live_events():
-        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
+        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
             .filter(Event.state == 'Published').filter(Event.in_trash == False)
+        return DataGetter.trim_attendee_events(events)
 
     @staticmethod
     def get_draft_events():
-        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
+        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.state == 'Draft').filter(Event.in_trash == False)
+        return DataGetter.trim_attendee_events(events)
 
     @staticmethod
     def get_past_events():
-        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
+        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.end_time <= datetime.datetime.now()).filter(
             or_(Event.state == 'Completed', Event.state == 'Published')).filter(Event.in_trash == False)
+        return DataGetter.trim_attendee_events(events)
 
     @staticmethod
     def get_all_live_events():
@@ -725,3 +736,8 @@ class DataGetter(object):
     @staticmethod
     def get_fee_settings():
         return TicketFees.query.all()
+
+    @staticmethod
+    def get_expired_orders():
+        return Order.query.filter(Order.status != 'completed')
+
