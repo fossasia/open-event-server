@@ -983,7 +983,7 @@ class DataManager(object):
             background_url = ''
             temp_background = form['background_url']
             if temp_background:
-                if temp_background[:len('/serve_static')] == '/serve_static':
+                if temp_background.startswith('/serve_static'):
                     # Local file
                     filename = str(time.time()) + '.png'
                     filepath = path.realpath('.') + '/static' + temp_background[len('/serve_static'):]
@@ -1000,7 +1000,7 @@ class DataManager(object):
             logo = ''
             temp_logo = form['logo']
             if temp_logo:
-                if temp_logo[:len('/serve_static')] == '/serve_static':
+                if temp_logo.startswith('/serve_static'):
                     # Local file
                     filename = str(time.time()) + '.png'
                     filepath = path.realpath('.') + '/static' + temp_logo[len('/serve_static'):]
