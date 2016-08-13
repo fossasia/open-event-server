@@ -10,6 +10,8 @@ from os import path
 from datetime import datetime, timedelta
 import PIL
 from PIL import Image
+import base64
+import cStringIO
 
 import requests
 from requests.exceptions import ConnectionError
