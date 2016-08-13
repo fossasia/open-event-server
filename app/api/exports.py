@@ -43,6 +43,7 @@ class EventExportJson(Resource):
                 'result': task.get(),
                 'state': task.state
             }
+        print 'main thread'
         return jsonify(
             task_url=url_for('api.extras_celery_task', task_id=task.id)
         )

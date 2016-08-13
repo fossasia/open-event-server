@@ -31,8 +31,10 @@ def import_event_task(self, file):
 @celery.task(base=RequestContextTask, name='export.event', bind=True)
 def export_event_task(self, event_id, settings):
     try:
+        print 'export started'
         path = event_export_task_base(event_id, settings)
         # task_id = self.request.id.__str__()  # str(async result)
+        print 'export zip done'
         result = {
             'download_url': url_for(
                 'api.exports_export_download', event_id=event_id, path=path
@@ -43,6 +45,7 @@ def export_event_task(self, event_id, settings):
     except Exception:
         print traceback.format_exc()
         result = {'__error': True, 'result': ServerError().to_dict()}
+    print 'send email'
     # send email
     send_export_mail(event_id, result)
     # return result
