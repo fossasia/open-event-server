@@ -30,12 +30,7 @@ from app.helpers.helpers import string_empty, string_not_empty, uploaded_file
 from app.helpers.notification_email_triggers import trigger_new_session_notifications, \
     trigger_session_state_change_notifications
 from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth, TwitterOAuth
-<<<<<<< HEAD
 from app.helpers.storage import upload, UPLOAD_PATHS, UploadedFile, download_file, upload_local
-=======
-from app.helpers.storage import upload, upload_local, UPLOAD_PATHS
-from app.helpers.storage import UploadedFile
->>>>>>> Resized image saved
 from app.models.notifications import Notification
 from app.models.stripe_authorization import StripeAuthorization
 from ..helpers import helpers as Helper
@@ -990,6 +985,7 @@ class DataManager(object):
             db.session.refresh(event)
 
             background_url = ''
+            background_thumbnail_url = ''
             temp_background = form['background_url']
             if temp_background:
                 if temp_background.startswith('/serve_static'):
@@ -1004,25 +1000,26 @@ class DataManager(object):
                     UPLOAD_PATHS['event']['background_url'].format(
                         event_id=event.id
                     ))
-            event.background_url = background_url
-            temp_img_file = upload_local(temp_background,
-                                         UPLOAD_PATHS['event']['temp_folder'].format(event_id=int(event.id)))
-            temp_img_file = temp_img_file.replace('serve_', '')
-            print temp_img_file
 
-            basewidth = 300
-            img = Image.open(temp_img_file)
-            wpercent = (basewidth / float(img.size[0]))
-            hsize = int((float(img.size[1]) * float(wpercent)))
-            img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
-            img.save(temp_img_file)
-            file_name = temp_img_file.rsplit('/', 1)[1]
-            thumbnail_file = UploadedFile(file_path=temp_img_file, filename=file_name)
-            background_thumbnail_url = upload(
-                thumbnail_file,
-                UPLOAD_PATHS['event']['thumbnail'].format(
-                    event_id=int(event.id)
-                ))
+                temp_img_file = upload_local(background_file,
+                                             UPLOAD_PATHS['event']['temp_folder'].format(event_id=int(event.id)))
+                temp_img_file = temp_img_file.replace('/serve_', '')
+
+                basewidth = 300
+                img = Image.open(temp_img_file)
+                wpercent = (basewidth / float(img.size[0]))
+                hsize = int((float(img.size[1]) * float(wpercent)))
+                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+                img.save(temp_img_file)
+                file_name = temp_img_file.rsplit('/', 1)[1]
+                thumbnail_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+                background_thumbnail_url = upload(
+                    thumbnail_file,
+                    UPLOAD_PATHS['event']['thumbnail'].format(
+                        event_id=int(event.id)
+                    ))
+
+            event.background_url = background_url
             event.thumbnail = background_thumbnail_url
 
             logo = ''
