@@ -202,7 +202,7 @@ function isImageInvalid(url) {
  */
 function addEvent(event) {
     var $eventElement = $(eventTemplate);
-    $eventElement.attr("href", "/e/" + event.id);
+    $eventElement.attr("href", "/e/" + event.identifier);
     $eventElement.find(".event-image").attr('src', event.background_url);
     $eventElement.find(".name").text(event.name);
     $eventElement.find(".location_name").text(event.location_name.split(",")[0]);
@@ -275,6 +275,7 @@ function loadResults(start) {
             $eventsHolder.html("");
             response = response.obj;
             _(response.results).forEach(function (event) {
+                console.log(event)
                 addEvent(event);
             });
             $loader.hide();
