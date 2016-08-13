@@ -30,12 +30,21 @@ def set_settings(**kwargs):
         from app.helpers.data_getter import DataGetter
         from app.helpers.data import save_to_db
         currencies = DataGetter.get_payment_currencies()
-        for i, (currency, has_paypal, has_stripe) in enumerate(currencies):
-            currency = currency.split(' ')[0]
-            ticket_fee = TicketFees(currency=currency,
-                                    service_fee=ticket_service_fees[i],
-                                    maximum_fee=ticket_maximum_fees[i])
-            save_to_db(ticket_fee, "Ticket Fees settings saved")
+        ticket_fees = DataGetter.get_fee_settings()
+        if not ticket_fees:
+            for i, (currency, has_paypal, has_stripe) in enumerate(currencies):
+                currency = currency.split(' ')[0]
+                ticket_fee = TicketFees(currency=currency,
+                                        service_fee=ticket_service_fees[i],
+                                        maximum_fee=ticket_maximum_fees[i])
+                save_to_db(ticket_fee, "Ticket Fees settings saved")
+        else:
+            i = 0
+            for fee in ticket_fees:
+                fee.service_fee = ticket_service_fees[i]
+                fee.maximum_fee = ticket_maximum_fees[i]
+                save_to_db(fee, "Fee Options Updated")
+                i += 1
     else:
         setting = Setting(**kwargs)
         from app.helpers.data import save_to_db

@@ -67,7 +67,8 @@
 {% block tail_js %}
     {{ super() }}
     <script type="text/javascript">
-    // manage the storage form events
+    var id =0;
+        // manage the storage form events
     function storage_form(){
         sel_opt = $('input[name=storage_place]:checked', '#settings_form').val();
         if (sel_opt == 'local')
@@ -85,6 +86,8 @@
     $(document).ready(function(){
         storage_form();
     });
+
+    
     </script>
 
 {% endblock %}
