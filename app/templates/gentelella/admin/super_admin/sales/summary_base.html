@@ -1,0 +1,211 @@
+{% extends 'gentelella/admin/super_admin/sales/sales_base.html' %}
+
+{% set active_side_page = active_side_page|default('home') -%}
+{% set key_name = key_name|default('events') -%}
+
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/jt.timepicker/jquery.timepicker.css') }}">
+
+    <style type="text/css">
+        #tickets-summary-table tr, #tickets-summmary-table th {
+            text-align: right;
+            font-size: 15px;
+
+        }
+
+        #tickets-summary-table th {
+            text-align: center;
+            border-left: 1px solid #ddd;
+            border-top: 1px solid #ddd;
+        }
+
+        #tickets-summary-table th[rowspan="2"]:nth-child(1) {
+            text-align: left;
+            vertical-align: bottom;
+            border-left-color: transparent;
+            border-top-color: transparent;
+        }
+
+        #tickets-summary-table td {
+            text-align: center;
+            border-left: 1px solid #ddd;
+        }
+
+        #tickets-summary-table td:nth-child(1) {
+            text-align: left;
+            border-left-color: transparent;
+        }
+
+        #tickets-summary-table tfoot th {
+            border-top: 2px solid #ddd;
+            border-right-color: transparent;
+            border-left-color: transparent;
+        }
+
+        #filter-control-btn > .dropdown-menu > li > a {
+            padding-left: 10px;
+        }
+
+    </style>
+{% endblock %}
+
+{% block inner_content %}
+    <h3>Tickets Summary</h3>
+    <div class="col-md-12">
+        <div id="filter-control-holder" class="pull-right" style="font-size: 16px;">
+
+            <form class="form-inline" method="get" id="date-filter-form" {% if not from_date or not to_date %}style="display: none;"{% endif %}>
+                <input type="text" class="time start" style="display: none;">
+                <input type="text" class="time end" style="display: none;">
+                <div class="form-group">
+                    <input type="text" class="form-control start date" id="from_date" name="from_date"
+                           placeholder="DD/MM/YYYY" value="{{ from_date | default('', true) }}">
+                </div>
+                &nbsp;to&nbsp;
+                <div class="form-group">
+                    <input type="text" class="form-control end date" id="to_date" name="to_date"
+                           placeholder="DD/MM/YYYY" value="{{ to_date | default('', true) }}">
+                </div>
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-default" style="margin-bottom: 0;"><i
+                            class="fa fa-filter fa-fw"></i> Filter
+                    </button>
+                    <button type="button" class="btn btn-default filter-remove" style="margin-bottom: 0;"><i
+                            class="fa fa-times fa-fw"></i></button>
+                </div>
+
+            </form>
+            <div class="btn-group" id="filter-control-btn" {% if from_date and to_date %}style="display: none;"{% endif %}>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false">
+                    Showing all records <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" style="font-size: 14px;padding: 5px 0;">
+                    <li><a href="#" class="date-filter-open"><i class="fa fa-calendar fa-fw"></i> Filter by Date</a>
+                    </li>
+                    <li role="separator" class="divider"></li>
+                    <li class="disabled"><a href="#" class="filter-remove"><i class="fa fa-minus-circle fa-fw"></i>
+                        Remove Filters</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <table class="table no-global-dt" id="tickets-summary-table" style="margin-top: 50px;">
+            <thead>
+            <tr>
+                <th rowspan="2">
+                    {{ key_name | capitalize }}
+                </th>
+                <th colspan="2" class="success">
+                    Completed Orders
+                </th>
+                <th colspan="2" class="warning">
+                    Pending Orders
+                </th>
+            </tr>
+            <tr class="active">
+                <th>
+                    Tickets
+                </th>
+                <th>
+                    Sales
+                </th>
+                <th>
+                    Tickets
+                </th>
+                <th>
+                    Sales
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for id, item in tickets_summary.iteritems() %}
+
+                <tr>
+                    <td>
+                        {{ item.name }}
+                    </td>
+                    <td>
+                        {{ item.completed.tickets_count }}
+                    </td>
+                    <td>
+                        {{ display_currency | currency_symbol }}{{ forex(item.payment_currency, display_currency, item.completed.sales) | money }}
+                    </td>
+                    <td>
+                        {{ item.pending.tickets_count }}
+                    </td>
+                    <td>
+                        {{ display_currency | currency_symbol }}{{ forex(item.payment_currency, display_currency, item.pending.sales) | money }}
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+            <tfoot>
+            <tr>
+                <th>
+                    Total
+                </th>
+                <th>
+                    {{ orders_summary.completed.tickets_count }}
+                </th>
+                <th>
+                    {{ display_currency | currency_symbol }}{{ orders_summary.completed.total_sales | money }}
+                </th>
+                <th>
+                    {{ orders_summary.pending.tickets_count }}
+                </th>
+                <th>
+                    {{ display_currency | currency_symbol }}{{ orders_summary.pending.total_sales | money }}
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/jt.timepicker/jquery.timepicker.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/datepair.js/dist/datepair.min.js') }}"></script>
+    <script type="text/javascript">
+
+        var $dateFilterForm = $("#date-filter-form");
+        var $filterControlBtn = $("#filter-control-btn");
+
+        $dateFilterForm.find(".date").datepicker({
+            'format': 'dd/mm/yyyy',
+            'autoclose': true
+        });
+
+        $dateFilterForm.find(".time").timepicker({
+            'showDuration': true,
+            'timeFormat': 'g:ia'
+        });
+
+        new Datepair($dateFilterForm[0], {
+            'defaultDateDelta': 7
+        });
+
+        $(".date-filter-open").click(function () {
+            $dateFilterForm.show();
+            $dateFilterForm.find("input").val("");
+            $filterControlBtn.hide();
+        });
+
+        $(".filter-remove").click(function () {
+            $dateFilterForm.find("input").val("");
+            $dateFilterForm.submit();
+            $dateFilterForm.hide();
+            $filterControlBtn.show();
+        });
+
+    </script>
+{% endblock %}
+
