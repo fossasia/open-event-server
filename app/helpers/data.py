@@ -30,7 +30,12 @@ from app.helpers.helpers import string_empty, string_not_empty, uploaded_file
 from app.helpers.notification_email_triggers import trigger_new_session_notifications, \
     trigger_session_state_change_notifications
 from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth, TwitterOAuth
+<<<<<<< HEAD
 from app.helpers.storage import upload, UPLOAD_PATHS, UploadedFile, download_file, upload_local
+=======
+from app.helpers.storage import upload, upload_local, UPLOAD_PATHS
+from app.helpers.storage import UploadedFile
+>>>>>>> Resized image saved
 from app.models.notifications import Notification
 from app.models.stripe_authorization import StripeAuthorization
 from ..helpers import helpers as Helper
@@ -1010,6 +1015,15 @@ class DataManager(object):
             wpercent = (basewidth / float(img.size[0]))
             hsize = int((float(img.size[1]) * float(wpercent)))
             img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+            img.save(temp_img_file)
+            file_name = temp_img_file.rsplit('/', 1)[1]
+            thumbnail_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+            background_thumbnail_url = upload(
+                thumbnail_file,
+                UPLOAD_PATHS['event']['thumbnail'].format(
+                    event_id=int(event.id)
+                ))
+            event.thumbnail = background_thumbnail_url
 
             logo = ''
             temp_logo = form['logo']
@@ -1021,13 +1035,13 @@ class DataManager(object):
                     logo_file = UploadedFile(filepath, filename)
                 else:
                     logo_file = download_file(temp_logo)
+
                 logo = upload(
                     logo_file,
                     UPLOAD_PATHS['event']['logo'].format(
                         event_id=event.id
                     ))
             event.logo = logo
-
 
             # Save Tickets
             module = DataGetter.get_module()
