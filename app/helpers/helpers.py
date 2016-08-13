@@ -16,9 +16,9 @@ from app.settings import get_settings
 from ..models.message_settings import MessageSettings
 from ..models.track import Track
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, NEXT_EVENT, \
-    USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, EVENT_PUBLISH, Mail,\
+    USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, EVENT_PUBLISH, Mail, \
     AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, TICKET_PURCHASED, EVENT_EXPORTED, \
-    EVENT_EXPORT_FAIL
+    EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS
 from system_mails import MAILS
 from app.models.notifications import (
     # Prepended with `NOTIF_` to differentiate from mails
@@ -33,6 +33,7 @@ from app.models.notifications import (
 from system_notifications import NOTIFS
 from app.helpers.storage import UploadedFile
 
+
 def represents_int(string):
     try:
         int(string)
@@ -40,10 +41,12 @@ def represents_int(string):
     except:
         return False
 
+
 def get_count(q):
     count_q = q.statement.with_only_columns([func.count()]).order_by(None)
     count = q.session.execute(count_q).scalar()
     return count
+
 
 def get_event_id():
     """Get event Id from request url"""
@@ -146,7 +149,7 @@ def send_next_event(email, event_name, link, up_coming_events):
         upcoming_event_html = "<ul>"
         for event in up_coming_events:
             upcoming_event_html += "<a href='%s'><li> %s </li></a>" % (url_for('events.details_view',
-                                                                       event_id=event.id, _external=True),
+                                                                               event_id=event.id, _external=True),
                                                                        event.name)
         upcoming_event_html += "</ul><br/>"
         send_email(
@@ -213,6 +216,7 @@ def send_email_after_account_create(form):
             subject=MAILS[USER_REGISTER]['subject'],
             html=MAILS[USER_REGISTER]['message'].format(email=form['email'])
         )
+
 
 def send_email_after_account_create_with_password(form):
     """Send email after account create"""
@@ -299,6 +303,16 @@ def send_email_for_after_purchase(email, invoice_id, order_url):
         )
 
 
+def send_email_for_expired_orders(email, event_name, invoice_id, order_url):
+    """Send email with order invoice link after purchase"""
+    send_email(
+        to=email,
+        action=MAIL_TO_EXPIRED_ORDERS,
+        subject=MAILS[MAIL_TO_EXPIRED_ORDERS]['subject'].format(event_name=event_name),
+        html=MAILS[MAIL_TO_EXPIRED_ORDERS]['message'].format(invoice_id=invoice_id, order_url=order_url)
+    )
+
+
 def send_email_after_export(email, event_name, result):
     """send email after event export"""
     if '__error' in result:
@@ -347,6 +361,7 @@ def send_email(to, action, subject, html):
         from data import save_to_db
         save_to_db(mail, 'Mail Recorded')
     return
+
 
 #################
 # Notifications #
@@ -451,7 +466,7 @@ def ensure_social_link(website, link):
     """
     if link == '' or link is None:
         return link
-    if link.find('/') != -1: # has backslash, so not a username
+    if link.find('/') != -1:  # has backslash, so not a username
         return link
     else:
         return website + '/' + link
@@ -501,6 +516,7 @@ def fields_not_empty(obj, fields):
         if string_empty(getattr(obj, field)):
             return False
     return True
+
 
 def get_request_stats():
     """
