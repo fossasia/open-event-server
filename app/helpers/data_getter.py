@@ -800,3 +800,15 @@ class DataGetter(object):
                     attendees.append(user)
 
         return len(attendees)
+
+    @staticmethod
+    def get_all_accepted_sessions():
+        return len(Session.query.filter_by(state='accepted').all())
+
+    @staticmethod
+    def get_all_rejected_sessions():
+        return len(Session.query.filter_by(state='rejected').all())
+
+    @staticmethod
+    def get_all_draft_sessions():
+        return len(Session.query.filter_by(state='pending').all())

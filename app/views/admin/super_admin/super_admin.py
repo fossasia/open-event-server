@@ -20,6 +20,9 @@ class SuperAdminView(SuperAdminBaseView):
         co_organizers = DataGetter.get_all_co_organizers()
         track_organizers = DataGetter.get_all_track_organizers()
         attendees= DataGetter.get_all_attendees()
+        accepted_sessions = DataGetter.get_all_accepted_sessions()
+        rejected_sessions = DataGetter.get_all_rejected_sessions()
+        draft_sessions = DataGetter.get_all_draft_sessions()
         version = get_latest_heroku_release()
         commit_number = None
         commit_info = None
@@ -39,4 +42,7 @@ class SuperAdminView(SuperAdminBaseView):
                            organizers=organizers,
                            co_organizers=co_organizers,
                            track_organizers=track_organizers,
-                           attendees=attendees)
+                           attendees=attendees,
+                           accepted_sessions=accepted_sessions,
+                           rejected_sessions=rejected_sessions,
+                           draft_sessions=draft_sessions)
