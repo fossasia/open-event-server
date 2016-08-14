@@ -12,6 +12,7 @@ from user_detail import UserDetail
 from .role import Role
 from .service import Service
 from .permission import Permission
+from .admin_panels import PanelPermission
 from .users_events_roles import UsersEventsRoles
 from .notifications import Notification
 
@@ -166,6 +167,24 @@ class User(db.Model):
     @property
     def is_staff(self):
         return self.is_super_admin or self.is_admin
+
+    def _get_sys_roles(self):
+        sys_roles = []
+        if self.is_super_admin:
+            sys_roles.append(SUPERADMIN)
+        if self.is_admin:
+            sys_roles.append(ADMIN)
+        return sys_roles
+
+    def can_access_panel(self, panel_name):
+        sys_roles = self._get_sys_roles()
+        for role in sys_roles:
+            perm = PanelPermission.query.filter_by(role_name=role,
+                panel_name=panel_name).first()
+            if perm:
+                if perm.can_access:
+                    return True
+        return False
 
     def get_unread_notif_count(self):
         return len(Notification.query.filter_by(user=self,

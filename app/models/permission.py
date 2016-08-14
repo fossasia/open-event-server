@@ -2,6 +2,8 @@ from . import db
 
 
 class Permission(db.Model):
+    """Role-Service Permissions
+    """
     __tablename__ = 'permissions'
     __table_args__ = (db.UniqueConstraint('role_id',
                                           'service_id',
