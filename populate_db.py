@@ -16,9 +16,7 @@ from app.models.user import ORGANIZER, COORGANIZER, TRACK_ORGANIZER, MODERATOR, 
 # Admin Panels
 from app.models.admin_panels import PanelPermission
 from app.models.user import SUPERADMIN, ADMIN
-from app.views.admin.super_admin.super_admin_base import (
-    MODULES,
-)
+from app.views.admin.super_admin.super_admin_base import PANEL_LIST
 
 
 def create_roles():
@@ -77,8 +75,12 @@ def create_permissions():
 
 
 def create_panel_permissions():
-    SUPERADMIN
-    get_or_create(PanelPermission, role_name=ADMIN, panel_name=MODULES, can_access=True)
+    # For Super Admin
+    for panel in PANEL_LIST:
+        get_or_create(PanelPermission, role_name=SUPERADMIN, panel_name=panel, can_access=True)
+    # For Admin
+    for panel in PANEL_LIST:
+        get_or_create(PanelPermission, role_name=ADMIN, panel_name=panel, can_access=True)
 
 
 def populate():

@@ -1,11 +1,13 @@
 import os
 import requests
 from flask_admin import expose
-from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView
+from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView, REPORTS
 from app.helpers.data_getter import DataGetter
 
 
 class SuperAdminReportsView(SuperAdminBaseView):
+    PANEL_NAME = REPORTS
+
     @expose('/')
     def index_view(self):
         token = os.environ.get('API_TOKEN_HEROKU', None)

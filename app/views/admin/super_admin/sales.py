@@ -9,14 +9,13 @@ from werkzeug.utils import redirect
 
 from app import forex
 from app.helpers.data_getter import DataGetter
-from app.helpers.helpers import string_empty, string_not_empty
 from app.helpers.ticketing import TicketingManager
 from app.models.ticket import Ticket
-from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView
+from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView, SALES
 from app.helpers.cache import cache
 
 class SuperAdminSalesView(SuperAdminBaseView):
-
+    PANEL_NAME = SALES
     display_currency = 'USD'
 
     @cache.memoize(50)

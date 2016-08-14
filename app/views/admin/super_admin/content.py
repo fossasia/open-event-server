@@ -1,12 +1,14 @@
 from flask import redirect, request, url_for
 from flask_admin import expose
-from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView
+from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView, CONTENT
 from ....helpers.data_getter import DataGetter
 from ....helpers.data import DataManager, delete_from_db
 from app.settings import get_settings, set_settings
 
 
 class SuperAdminContentView(SuperAdminBaseView):
+    PANEL_NAME = CONTENT
+
     @expose('/', methods=('GET', 'POST'))
     def index_view(self):
         placeholder_images = DataGetter.get_event_default_images()

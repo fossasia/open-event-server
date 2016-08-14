@@ -1,12 +1,14 @@
 from flask import request
 from flask_admin import expose
 
-from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView
+from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView, PERMISSIONS
 from app.helpers.data_getter import DataGetter
 from app.helpers.data import DataManager
 
 
 class SuperAdminPermissionsView(SuperAdminBaseView):
+    PANEL_NAME = PERMISSIONS
+
     @expose('/', methods=('GET', 'POST'))
     def index_view(self):
         if request.method == 'POST':

@@ -4,7 +4,31 @@ from flask_admin import BaseView
 from flask.ext.login import current_user
 
 # Admin Panels
+BASE = 'base'
+EVENTS = 'events'
+SESSIONS = 'sessions'
+USERS = 'users'
+PERMISSIONS = 'permissions'
+REPORTS = 'reports'
+SETTINGS = 'settings'
+MESSAGES = 'messages'
 MODULES = 'modules'
+CONTENT = 'content'
+SALES = 'sales'
+
+PANEL_LIST = [
+    BASE,
+    EVENTS,
+    SESSIONS,
+    USERS,
+    PERMISSIONS,
+    REPORTS,
+    SETTINGS,
+    MESSAGES,
+    MODULES,
+    CONTENT,
+    SALES,
+]
 
 class SuperAdminBaseView(BaseView):
     PANEL_NAME = 'base'

@@ -1,12 +1,13 @@
 
 from flask_admin import expose
 
-from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView
+from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView, EVENTS
 from ....helpers.data_getter import DataGetter
 from ....helpers.ticketing import TicketingManager
 
 
 class SuperAdminEventsView(SuperAdminBaseView):
+    PANEL_NAME = EVENTS
 
     @expose('/')
     def index_view(self):
