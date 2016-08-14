@@ -121,7 +121,6 @@ def export_event_json(event_id, settings):
     if os.path.isdir(dir_path):
         shutil.rmtree(dir_path, ignore_errors=True)
     os.mkdir(dir_path)
-    print 'export base path'
     # save to directory
     for e in EXPORTS:
         if e[0] == 'event':
@@ -133,7 +132,6 @@ def export_event_json(event_id, settings):
                 _download_media(_, e[0], dir_path, settings)
         data_str = json.dumps(data, sort_keys=True, indent=4)
         fp = open(dir_path + '/' + e[0], 'w')
-        print 'export loop'
         fp.write(data_str)
         fp.close()
     # add meta
