@@ -1,92 +1,120 @@
 {% extends 'gentelella/admin/super_admin/dashboard.html' %}
 
 {% block title %}
-Events
+Permissions
 {% endblock %}
 
 {% set active_page = "permissions" %}
 
 {% block head_css %}
     {{ super() }}
+
+    <style type="text/css">
+    #perm-tabs {
+        position: absolute;
+        background: transparent;
+        top: 9px;
+        width: auto;
+    }
+
+    table.table {
+        margin-top: 20px !important;
+    }
+    </style>
 {% endblock %}
 
 
 {% block content %}
+<ul id="perm-tabs" class="nav nav-tabs bar_tabs" role="tablist">
+    <li class="active">
+      <a href="#tab_content0" id="system-roles-tab" data-toggle="tab">System Roles</a>
+    </li>
+    <li class="">
+      <a href="#tab_content1" id="event-roles-tab" data-toggle="tab">Event Roles</a>
+    </li>
+</ul>
+<div id="myTabContent" class="tab-content">
+    <div role="tabpanel" class="tab-pane fade active in" id="tab_content0" aria-labelledby="system-roles-tab">
 
-<form method="post">
+    </div>
+    <div role="tabpanel" class="tab-pane fade" id="tab_content1" aria-labelledby="event-roles-tab">
+      <form method="post" style="margin-top: 60px;">
+      <h2>
+        Event Roles
+      </h2>
+      <hr>
 
-<h2>
-  Event Roles
-</h2>
-<hr>
+      <table class="table table-bordered no-global-dt">
+        <thead>
+          <tr>
+            <th>ROLES</th>
+            <th>Track</th>
+            <th>Session</th>
+            <th>Speaker</th>
+            <th>Sponsor</th>
+            <th>Microlocation</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for role, perm in perms %}
+          <tr>
+            <th scope="row">{{ role.title_name }}</th>
+            <td>
+            {% for oper, val in perm['track'].iteritems() %}
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox"  name="{{ role.name + '-track' }}" value="{{ oper }}" {{ 'checked' if val else '' }}>{{ oper|operation_name }}
+                </label>
+              </div>
+            {% endfor %}
+            </td>
+            <td>
+            {% for oper, val in perm['session'].iteritems() %}
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox"  name="{{ role.name + '-session' }}" value="{{ oper }}" {{ 'checked' if val else '' }}>{{ oper|operation_name }}
+                </label>
+              </div>
+            {% endfor %}
+            </td>
+            <td>
+            {% for oper, val in perm['speaker'].iteritems() %}
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox"  name="{{ role.name + '-speaker' }}" value="{{ oper }}" {{ 'checked' if val else '' }}>{{ oper|operation_name }}
+                </label>
+              </div>
+            {% endfor %}
+            </td>
+            <td>
+            {% for oper, val in perm['sponsor'].iteritems() %}
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox"  name="{{ role.name + '-sponsor' }}" value="{{ oper }}" {{ 'checked' if val else '' }}>{{ oper|operation_name }}
+                </label>
+              </div>
+            {% endfor %}
+            </td>
+            <td>
+            {% for oper, val in perm['microlocation'].iteritems() %}
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox"  name="{{ role.name + '-microlocation' }}" value="{{ oper }}" {{ 'checked' if val else '' }}>{{ oper|operation_name }}
+                </label>
+              </div>
+            {% endfor %}
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+        <hr>
+      <button type="submit" class="btn btn-success pull-right">Save</button>
+      </form>
 
-<table class="table table-bordered no-global-dt">
-  <thead>
-    <tr>
-      <th>ROLES</th>
-      <th>Track</th>
-      <th>Session</th>
-      <th>Speaker</th>
-      <th>Sponsor</th>
-      <th>Microlocation</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for role, perm in perms %}
-    <tr>
-      <th scope="row">{{ role.title_name }}</th>
-      <td>
-      {% for oper, val in perm['track'].iteritems() %}
-        <div class="checkbox">
-          <label>
-            <input type="checkbox"  name="{{ role.name + '-track' }}" value="{{ oper }}" {{ 'checked' if val else '' }}>{{ oper|operation_name }}
-          </label>
-        </div>
-      {% endfor %}
-      </td>
-      <td>
-      {% for oper, val in perm['session'].iteritems() %}
-        <div class="checkbox">
-          <label>
-            <input type="checkbox"  name="{{ role.name + '-session' }}" value="{{ oper }}" {{ 'checked' if val else '' }}>{{ oper|operation_name }}
-          </label>
-        </div>
-      {% endfor %}
-      </td>
-      <td>
-      {% for oper, val in perm['speaker'].iteritems() %}
-        <div class="checkbox">
-          <label>
-            <input type="checkbox"  name="{{ role.name + '-speaker' }}" value="{{ oper }}" {{ 'checked' if val else '' }}>{{ oper|operation_name }}
-          </label>
-        </div>
-      {% endfor %}
-      </td>
-      <td>
-      {% for oper, val in perm['sponsor'].iteritems() %}
-        <div class="checkbox">
-          <label>
-            <input type="checkbox"  name="{{ role.name + '-sponsor' }}" value="{{ oper }}" {{ 'checked' if val else '' }}>{{ oper|operation_name }}
-          </label>
-        </div>
-      {% endfor %}
-      </td>
-      <td>
-      {% for oper, val in perm['microlocation'].iteritems() %}
-        <div class="checkbox">
-          <label>
-            <input type="checkbox"  name="{{ role.name + '-microlocation' }}" value="{{ oper }}" {{ 'checked' if val else '' }}>{{ oper|operation_name }}
-          </label>
-        </div>
-      {% endfor %}
-      </td>
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
-  <hr>
-<button type="submit" class="btn btn-success pull-right">Save</button>
-</form>
+    </div>
+</div>
+
 
 {% endblock %}
 
