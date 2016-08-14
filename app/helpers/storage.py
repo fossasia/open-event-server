@@ -25,7 +25,6 @@ UPLOAD_PATHS = {
     'event': {
         'logo': 'events/{event_id}/logo',
         'background_url': 'events/{event_id}/background',
-        'temp_folder': 'events/{event_id}/temp',
         'thumbnail': 'events/{event_id}/thumbnail'
     },
     'sponsors': {

@@ -10,8 +10,7 @@ from os import path
 from datetime import datetime, timedelta
 import PIL
 from PIL import Image
-import base64
-import cStringIO
+import shutil
 
 import requests
 from requests.exceptions import ConnectionError
@@ -1002,7 +1001,7 @@ class DataManager(object):
                     ))
 
                 temp_img_file = upload_local(background_file,
-                                             UPLOAD_PATHS['event']['temp_folder'].format(event_id=int(event.id)))
+                                             'events/{event_id}/temp'.format(event_id=int(event.id)))
                 temp_img_file = temp_img_file.replace('/serve_', '')
 
                 basewidth = 300
@@ -1018,6 +1017,7 @@ class DataManager(object):
                     UPLOAD_PATHS['event']['thumbnail'].format(
                         event_id=int(event.id)
                     ))
+                shutil.rmtree(path='static/media/' + 'events/{event_id}/temp'.format(event_id=int(event.id)))
 
             event.background_url = background_url
             event.thumbnail = background_thumbnail_url
