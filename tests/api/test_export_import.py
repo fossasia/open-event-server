@@ -113,6 +113,8 @@ class TestEventExport(ImportExportBase):
         """
         resp = self._put(get_path(1), {'logo': 'https://placehold.it/350x150'})
         self.assertIn('placehold', resp.data, resp.data)
+        # set speaker photo so that its export is checked
+        resp = self._put(get_path(1, 'speakers', 1), {'photo': 'https://placehold.it/350x150'})
         self._create_set()
         dr = 'static/temp/test_event_import'
         data = open(dr + '/event', 'r').read()
