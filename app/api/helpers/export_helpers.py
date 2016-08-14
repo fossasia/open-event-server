@@ -72,7 +72,7 @@ DOWNLOAD_FIEDLS = {
         'slides': ['document', '/slides/session_%d']
     },
     'speakers': {
-        'photo': ['image', '/images/speakers/photo_%d']
+        'photo': ['image', '/images/speakers/%s_%d']
     },
     'event': {
         'logo': ['image', '/images/logo'],
@@ -118,7 +118,9 @@ def _download_media(data, srv, dir_path, settings):
         if not settings[DOWNLOAD_FIEDLS[srv][i][0]]:
             continue
         path = DOWNLOAD_FIEDLS[srv][i][1]
-        if srv != 'event':
+        if srv == 'speakers':
+            path = path % (make_speaker_name(data['name']), data['id'])
+        elif srv != 'event':
             path = path % (data['id'])
         if data[i].find('.') > -1:  # add extension
             ext = data[i].rsplit('.', 1)[1]
@@ -220,3 +222,10 @@ def send_export_mail(event_id, result):
     else:
         event_name = event.name
     send_email_after_export(job.user_email, event_name, result)
+
+
+# FIELD DATA FORMATTERS
+
+def make_speaker_name(name):
+    """Make speaker image filename for export"""
+    return ''.join(s.title() for s in name.split() if s)
