@@ -21,6 +21,10 @@ class ProductionConfig(Config):
     MINIFY_PAGE = True
     PRODUCTION = True
     INTEGRATE_SOCKETIO = True
+    # if force off
+    socketio_integration = os.environ.get('INTEGRATE_SOCKETIO')
+    if socketio_integration == 'false':
+        INTEGRATE_SOCKETIO = False
     # you don't want production on default db
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', '')
     if not SQLALCHEMY_DATABASE_URI:

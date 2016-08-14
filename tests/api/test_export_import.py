@@ -140,6 +140,24 @@ class TestEventExport(ImportExportBase):
         if os.path.isdir(dr + '/images'):
             self.assertFalse(1, 'Image Dir Exists')
 
+    def test_export_order(self):
+        """
+        Tests order of export of fields in export files
+        """
+        self._create_set()
+        dr = 'static/temp/test_event_import'
+        # event
+        data = open(dr + '/event', 'r').read()
+        self.assertTrue(data.find('id') < data.find('background_image'))
+        self.assertTrue(data.find('location_name') < data.find('copyright'))
+        # sessions (a service)
+        data = open(dr + '/sessions', 'r').read()
+        self.assertTrue(data.find('id') < data.find('audio'))
+        self.assertTrue(data.find('short_abstract') < data.find('slides'))
+        # sponsors (a service)
+        data = open(dr + '/sponsors', 'r').read()
+        self.assertTrue(data.find('name') < data.find('description'))
+
 
 class TestEventImport(ImportExportBase):
     """

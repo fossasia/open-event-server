@@ -1,8 +1,8 @@
 {% extends 'gentelella/admin/super_admin/sales/filter_table_base.html' %}
 
-{% set active_side_page = active_side_page|default('home') -%}
+{% set active_side_page = 'fees' -%}
 {% set key_name = key_name|default('events') -%}
-{% set title = "Tickets Summary" -%}
+{% set title = "Fee Summary" -%}
 
 {% block head_css %}
     {{ super() }}
@@ -51,11 +51,8 @@
             <th rowspan="2">
                 {{ key_name | capitalize }}
             </th>
-            <th colspan="2" class="success">
+            <th colspan="3" class="success">
                 Completed Orders
-            </th>
-            <th colspan="2" class="warning">
-                Pending Orders
             </th>
         </tr>
         <tr class="active">
@@ -63,34 +60,29 @@
                 Tickets
             </th>
             <th>
-                Sales
+                Fee
             </th>
+
             <th>
-                Tickets
-            </th>
-            <th>
-                Sales
+                Revenue
             </th>
         </tr>
         </thead>
         <tbody>
-        {% for id, item in tickets_summary.iteritems() %}
+        {% for id, item in fee_summary.iteritems() %}
 
             <tr>
                 <td>
                     {{ item.name }}
                 </td>
                 <td>
-                    {{ item.completed.tickets_count }}
+                    {{ item.tickets_count }}
                 </td>
                 <td>
-                    {{ display_currency | currency_symbol }}{{ forex(item.payment_currency, display_currency, item.completed.sales) | money }}
+                    {{ item.fee_rate | money }}%
                 </td>
                 <td>
-                    {{ item.pending.tickets_count }}
-                </td>
-                <td>
-                    {{ display_currency | currency_symbol }}{{ forex(item.payment_currency, display_currency, item.pending.sales) | money }}
+                    {{ display_currency | currency_symbol }}{{ item.fee_amount | money }}
                 </td>
             </tr>
         {% endfor %}
@@ -102,16 +94,13 @@
                 Total
             </th>
             <th>
-                {{ orders_summary.completed.tickets_count }}
+                {{ tickets_total }}
             </th>
             <th>
-                {{ display_currency | currency_symbol }}{{ orders_summary.completed.total_sales | money }}
+
             </th>
             <th>
-                {{ orders_summary.pending.tickets_count }}
-            </th>
-            <th>
-                {{ display_currency | currency_symbol }}{{ orders_summary.pending.total_sales | money }}
+                {{ display_currency | currency_symbol }}{{ fee_total | money }}
             </th>
         </tr>
         </tfoot>

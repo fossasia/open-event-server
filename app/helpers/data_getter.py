@@ -151,8 +151,8 @@ class DataGetter(object):
         """
         :return: Filtering sessions by event id and session state
         """
-        return Session.query.filter(Session.event_id == event_id)\
-            .filter(Session.state == state)\
+        return Session.query.filter(Session.event_id == event_id) \
+            .filter(Session.state == state) \
             .filter(Session.in_trash == False)
 
     @staticmethod
@@ -684,7 +684,7 @@ class DataGetter(object):
             for event in DataGetter.get_live_and_public_events():
                 print event
                 if not string_empty(event.location_name) and not string_empty(event.latitude) and not string_empty(
-                   event.longitude):
+                    event.longitude):
                     response = requests.get(
                         "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
                             event.longitude)).json()
@@ -747,3 +747,95 @@ class DataGetter(object):
     def get_expired_orders():
         return Order.query.filter(Order.status != 'completed')
 
+    @staticmethod
+    def get_all_super_admins():
+        return len(User.query.filter_by(is_super_admin=True).all())
+
+    @staticmethod
+    def get_all_admins():
+        return len(User.query.filter_by(is_admin=True).all())
+
+    @staticmethod
+    def get_all_registered_users():
+        return len(User.query.filter_by(is_verified=True).all())
+
+    @staticmethod
+    def get_all_organizers():
+        events = Event.query.all()
+        users = User.query.all()
+        organizers = []
+        for event in events:
+            for user in users:
+                if user.is_organizer(event.id):
+                    organizers.append(user)
+
+        return len(organizers)
+
+    @staticmethod
+    def get_all_co_organizers():
+        events = Event.query.all()
+        users = User.query.all()
+        co_organizers = []
+        for event in events:
+            for user in users:
+                if user.is_coorganizer(event.id):
+                    co_organizers.append(user)
+
+        return len(co_organizers)
+
+    @staticmethod
+    def get_all_track_organizers():
+        events = Event.query.all()
+        users = User.query.all()
+        track_organizers = []
+        for event in events:
+            for user in users:
+                if user.is_track_organizer(event.id):
+                    track_organizers.append(user)
+
+        return len(track_organizers)
+
+    @staticmethod
+    def get_all_attendees():
+        events = Event.query.all()
+        users = User.query.all()
+        attendees = []
+        for event in events:
+            for user in users:
+                if user.is_attendee(event.id):
+                    attendees.append(user)
+
+        return len(attendees)
+
+    @staticmethod
+    def get_all_accepted_sessions():
+        return len(Session.query.filter_by(state='accepted').all())
+
+    @staticmethod
+    def get_all_rejected_sessions():
+        return len(Session.query.filter_by(state='rejected').all())
+
+    @staticmethod
+    def get_all_draft_sessions():
+        return len(Session.query.filter_by(state='pending').all())
+
+    @staticmethod
+    def get_email_by_times():
+        email_times = []
+        email_in_last_24 = len(
+            Mail.query.filter(datetime.datetime.now() - Mail.time <= datetime.timedelta(hours=24)).all())
+        email_in_last_3_days = len(
+            Mail.query.filter(datetime.datetime.now() - Mail.time <= datetime.timedelta(days=3)).all())
+        email_in_last_7_days = len(
+            Mail.query.filter(datetime.datetime.now() - Mail.time <= datetime.timedelta(days=7)).all())
+        email_in_last_30_days = len(
+            Mail.query.filter(datetime.datetime.now() - Mail.time <= datetime.timedelta(days=30)).all())
+        total_emails = len(Mail.query.all())
+
+        email_times.append(email_in_last_24)
+        email_times.append(email_in_last_3_days)
+        email_times.append(email_in_last_7_days)
+        email_times.append(email_in_last_30_days)
+        email_times.append(total_emails)
+
+        return email_times

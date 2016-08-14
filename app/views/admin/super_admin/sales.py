@@ -9,6 +9,7 @@ from werkzeug.utils import redirect
 
 from app import forex
 from app.helpers.data_getter import DataGetter
+from app.helpers.payment import get_fee
 from app.helpers.ticketing import TicketingManager
 from app.models.ticket import Ticket
 from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView, SALES
@@ -25,6 +26,60 @@ class SuperAdminSalesView(SuperAdminBaseView):
     @expose('/')
     def index(self):
         return redirect(url_for('.sales_by_events_view', path='events'))
+
+    @expose('/fees/')
+    def fees_by_events_view(self):
+        from_date = request.args.get('from_date')
+        to_date = request.args.get('to_date')
+
+        if ('from_date' in request.args and not from_date) or ('to_date' in request.args and not to_date) or \
+            ('from_date' in request.args and 'to_date' not in request.args) or \
+                ('to_date' in request.args and 'from_date' not in request.args):
+
+            return redirect(url_for('.fees_by_events_view'))
+
+        if from_date and to_date:
+            orders = TicketingManager.get_orders(
+                from_date=datetime.strptime(from_date, '%d/%m/%Y'),
+                to_date=datetime.strptime(to_date, '%d/%m/%Y'),
+                status='completed'
+            )
+        else:
+            orders = TicketingManager.get_orders(status='completed')
+
+        events = DataGetter.get_all_events()
+
+        fee_summary = {}
+        for event in events:
+            fee_summary[str(event.id)] = {
+                'name': event.name,
+                'payment_currency': event.payment_currency,
+                'fee_rate': get_fee(event.payment_currency),
+                'fee_amount': 0,
+                'tickets_count': 0
+            }
+
+        fee_total = 0
+        tickets_total = 0
+
+        for order in orders:
+            for order_ticket in order.tickets:
+                fee_summary[str(order.event.id)]['tickets_count'] += order_ticket.quantity
+                tickets_total += order_ticket.quantity
+                ticket = self.get_ticket(order_ticket.ticket_id)
+                if order.paid_via != 'free' and order.amount > 0 and ticket.price > 0:
+                    fee = ticket.price * (get_fee(order.event.payment_currency)/100)
+                    fee = forex(order.event.payment_currency, self.display_currency, fee)
+                    fee_summary[str(order.event.id)]['fee_amount'] += fee
+                    fee_total += fee
+
+        return self.render('/gentelella/admin/super_admin/sales/fees.html',
+                           fee_summary=fee_summary,
+                           display_currency=self.display_currency,
+                           from_date=from_date,
+                           to_date=to_date,
+                           tickets_total=tickets_total,
+                           fee_total=fee_total)
 
     @expose('/<path>/')
     def sales_by_events_view(self, path):
@@ -101,7 +156,8 @@ class SuperAdminSalesView(SuperAdminBaseView):
 
             tickets_summary_location_wise[unicode(event.searchable_location_name)] = \
                 copy.deepcopy(tickets_summary_event_wise[str(event.id)])
-            tickets_summary_location_wise[unicode(event.searchable_location_name)]['name'] = event.searchable_location_name
+            tickets_summary_location_wise[unicode(event.searchable_location_name)]['name'] = \
+                event.searchable_location_name
 
         for order in orders:
             if order.status == 'initialized':
