@@ -344,6 +344,7 @@ class EventsView(BaseView):
                                included_settings=self.get_module_settings(),
                                tax=tax,
                                payment_countries=DataGetter.get_payment_countries(),
+                               start_date=datetime.datetime.now() + datetime.timedelta(days=10),
                                payment_currencies=DataGetter.get_payment_currencies(),
                                ticket_types=ticket_types)
 
