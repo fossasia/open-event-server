@@ -32,6 +32,7 @@ from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth, TwitterOAuth
 from app.helpers.storage import upload, UPLOAD_PATHS, UploadedFile, download_file, upload_local
 from app.models.notifications import Notification
 from app.models.stripe_authorization import StripeAuthorization
+from app.views.admin.super_admin.super_admin_base import PANEL_LIST
 from ..helpers import helpers as Helper
 from ..helpers.data_getter import DataGetter
 from ..helpers.static import EVENT_LICENCES
@@ -40,6 +41,7 @@ from ..helpers.system_mails import MAILS
 from ..models import db
 from ..models.activity import Activity, ACTIVITIES
 from ..models.call_for_papers import CallForPaper
+from ..models.admin_panels import PanelPermission
 from ..models.custom_forms import CustomForms
 from ..models.event import Event, EventsUsers
 from ..models.event_copyright import EventCopyright
@@ -57,7 +59,7 @@ from ..models.social_link import SocialLink
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.track import Track
-from ..models.user import User, ORGANIZER, ATTENDEE
+from ..models.user import User, ORGANIZER, ATTENDEE, SUPERADMIN, ADMIN
 from ..models.user_detail import UserDetail
 from ..models.users_events_roles import UsersEventsRoles
 from ..models.page import Page
@@ -867,6 +869,19 @@ class DataManager(object):
     @staticmethod
     def add_owner_to_event(owner_id, event):
         event.owner = owner_id
+        db.session.commit()
+
+    @staticmethod
+    def update_panel_permissions(form):
+        for role in [SUPERADMIN, ADMIN]:
+            for panel in PANEL_LIST:
+                field_name = '{}-{}'.format(role, panel)
+                field_val = form.get(field_name)
+                perm, _ = get_or_create(PanelPermission, panel_name=panel,
+                    role_name=role, can_access=False)
+
+                perm.can_access = True if field_val == 'on' else False
+                db.session.add(perm)
         db.session.commit()
 
     @staticmethod

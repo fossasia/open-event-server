@@ -35,10 +35,42 @@ Permissions
 </ul>
 <div id="myTabContent" class="tab-content">
     <div role="tabpanel" class="tab-pane fade active in" id="tab_content0" aria-labelledby="system-roles-tab">
+      <form action="{{ url_for('sadmin_permissions.system_roles_view') }}" method="post" style="margin-top: 60px;">
+        <h2>System Roles</h2>
+        <hr>
 
+        <table class="table table-bordered no-global-dt">
+          <thead>
+            <tr>
+              <th>SYSTEM ROLE</th>
+              <th>PANELS</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for sys_role, panels in sys_perms.iteritems() %}
+            <tr>
+              <td>{{ sys_role.replace('_', ' ') | title }}</td>
+              <td>
+              {% for panel, can_access in panels.iteritems() %}
+                  <div class="col-md-3 col-xs-12">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" name="{{ sys_role + '-' + panel }}" {{ 'checked' if can_access else '' }}>{{ panel | capitalize }}
+                      </label>
+                    </div>
+                  </div>
+              {% endfor %}
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        <hr>
+        <button type="submit" class="btn btn-success pull-right">Save</button>
+      </form>
     </div>
     <div role="tabpanel" class="tab-pane fade" id="tab_content1" aria-labelledby="event-roles-tab">
-      <form method="post" style="margin-top: 60px;">
+      <form method="post" style="margin-top: 60px;" action="{{ url_for('sadmin_permissions.event_roles_view') }}">
       <h2>
         Event Roles
       </h2>
@@ -47,7 +79,7 @@ Permissions
       <table class="table table-bordered no-global-dt">
         <thead>
           <tr>
-            <th>ROLES</th>
+            <th>EVENT ROLE / SERVICE</th>
             <th>Track</th>
             <th>Session</th>
             <th>Speaker</th>
@@ -56,7 +88,7 @@ Permissions
           </tr>
         </thead>
         <tbody>
-        {% for role, perm in perms %}
+        {% for role, perm in event_perms %}
           <tr>
             <th scope="row">{{ role.title_name }}</th>
             <td>
