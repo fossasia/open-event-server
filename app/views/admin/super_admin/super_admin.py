@@ -23,6 +23,7 @@ class SuperAdminView(SuperAdminBaseView):
         accepted_sessions = DataGetter.get_all_accepted_sessions()
         rejected_sessions = DataGetter.get_all_rejected_sessions()
         draft_sessions = DataGetter.get_all_draft_sessions()
+        email_times = DataGetter.get_email_by_times()
         version = get_latest_heroku_release()
         commit_number = None
         commit_info = None
@@ -45,4 +46,5 @@ class SuperAdminView(SuperAdminBaseView):
                            attendees=attendees,
                            accepted_sessions=accepted_sessions,
                            rejected_sessions=rejected_sessions,
-                           draft_sessions=draft_sessions)
+                           draft_sessions=draft_sessions,
+                           email_times=email_times)
