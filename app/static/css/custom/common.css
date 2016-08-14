@@ -73,8 +73,13 @@ ul.msg_list li:last-child a {
 .image-box label {
     width: 100%;
     height: 100%;
-    padding: 25% 33%;
+    text-align: center;
+    padding-top: 10%;
     cursor: pointer;
+}
+
+.image-box label h3{
+    margin-top: 10px;
 }
 
 .image-box.is-dragover {
