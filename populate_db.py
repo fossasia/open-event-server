@@ -13,6 +13,13 @@ from app.models.microlocation import Microlocation
 from app.helpers.data import get_or_create
 from app.models.user import ORGANIZER, COORGANIZER, TRACK_ORGANIZER, MODERATOR, ATTENDEE
 
+# Admin Panels
+from app.models.admin_panels import PanelPermission
+from app.models.user import SUPERADMIN, ADMIN
+from app.views.admin.super_admin.super_admin_base import (
+    MODULES,
+)
+
 
 def create_roles():
     get_or_create(Role, name=ORGANIZER, title_name='Organizer')
@@ -69,6 +76,11 @@ def create_permissions():
     get_or_create(Permission, role=mod, service=track, can_create=False, can_read=True, can_update=False, can_delete=False)
 
 
+def create_panel_permissions():
+    SUPERADMIN
+    get_or_create(PanelPermission, role_name=ADMIN, panel_name=MODULES, can_access=True)
+
+
 def populate():
     """
     Create defined Roles, Services and Permissions.
@@ -80,6 +92,8 @@ def populate():
     create_services()
     print 'Creating permissions...'
     create_permissions()
+    print 'Creating admin panel permissions...'
+    create_panel_permissions()
 
 
 if __name__ == '__main__':

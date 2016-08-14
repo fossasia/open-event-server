@@ -1,12 +1,14 @@
 from flask_admin import expose
 from flask import request
-from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView
+from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView, MODULES
 from app.models.modules import Module
 from app.helpers.data import  save_to_db
 from app.helpers.data_getter import DataGetter
 
 
 class SuperAdminModulesView(SuperAdminBaseView):
+    PANEL_NAME = MODULES
+
     @expose('/', methods=['GET', 'POST'])
     def index_view(self):
         module = DataGetter.get_module()
