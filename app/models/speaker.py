@@ -20,6 +20,7 @@ class Speaker(db.Model):
     github = db.Column(db.String)
     linkedin = db.Column(db.String)
     organisation = db.Column(db.String, nullable=False)
+    featured = db.Column(db.Boolean, default=False)
     position = db.Column(db.String)
     country = db.Column(db.String, nullable=False)
     event_id = db.Column(
@@ -40,6 +41,7 @@ class Speaker(db.Model):
                  github=None,
                  linkedin=None,
                  organisation=None,
+                 featured=False,
                  position=None,
                  country=None,
                  event_id=None,
@@ -55,6 +57,7 @@ class Speaker(db.Model):
         self.facebook = facebook
         self.github = github
         self.linkedin = linkedin
+        self.featured = featured
         self.organisation = organisation
         self.position = position
         self.country = country
