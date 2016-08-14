@@ -58,6 +58,7 @@ class SpeakersView(BaseView):
             speaker.github = request.form.get('github', None)
             speaker.linkedin = request.form.get('linkedin', None)
             speaker.organisation = request.form.get('organisation', None)
+            speaker.featured = True if request.form.get('featured', 'false') == 'true' else False
             speaker.position = request.form.get('position', None)
             speaker.country = request.form.get('country', None)
             save_to_db(speaker, "Speaker has been updated")

@@ -33,6 +33,7 @@ SPEAKER = api.model('Speaker', {
     'long_biography': fields.String(),
     'email': fields.Email(required=True),
     'mobile': fields.String(),
+    'featured': fields.Boolean(),
     'website': fields.Uri(),
     'twitter': fields.String(),  # not sure for now whether uri or string field
     'facebook': fields.String(),

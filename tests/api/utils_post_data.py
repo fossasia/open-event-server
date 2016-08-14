@@ -89,6 +89,7 @@ POST_SPEAKER_DATA = {
     "facebook": "http://facebook.com/user",
     "github": "http://github.com/user",
     "linkedin": "http://in.linkedin.com/user",
+    "featured": True,
     "name": "TestSpeaker",
     "organisation": "TestSession",
     "photo": "http://imgur.com/skds.png",
