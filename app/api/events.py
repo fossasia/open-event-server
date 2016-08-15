@@ -78,7 +78,7 @@ EVENT = api.model('Event', {
     'timezone': fields.String(),
     'latitude': fields.Float(),
     'longitude': fields.Float(),
-    'background_url': fields.Upload(),
+    'background_image': fields.Upload(attribute='background_url'),
     'description': fields.String(),
     'location_name': fields.String(),
     'searchable_location_name': fields.String(),
@@ -102,7 +102,7 @@ EVENT = api.model('Event', {
 EVENT_COMPLETE = api.clone('EventComplete', EVENT, {
     'sessions': fields.List(fields.Nested(SESSION), attribute='session'),
     'microlocations': fields.List(fields.Nested(MICROLOCATION), attribute='microlocation'),
-    'tracks': fields.List(fields.Nested(TRACK), attribute='microlocation'),
+    'tracks': fields.List(fields.Nested(TRACK), attribute='track'),
     'sponsors': fields.List(fields.Nested(SPONSOR), attribute='sponsor'),
     'speakers': fields.List(fields.Nested(SPEAKER), attribute='speaker'),
 })
@@ -192,7 +192,7 @@ class EventDAO(BaseDAO):
                     CFSDAO.update(event.call_for_papers.id, cfs_data)
                 else:  # delete if null
                     CFSDAO.delete(event.call_for_papers.id)
-            else:  # create new
+            elif cfs_data:  # create new (only if data exists)
                 CFSDAO.create(cfs_data, validate=False)
             payload.pop('call_for_papers')
         # master update

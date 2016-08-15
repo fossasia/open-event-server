@@ -2,6 +2,7 @@ import json
 import os
 import shutil
 import requests
+from collections import OrderedDict
 from datetime import datetime
 from flask import request, g, url_for
 from flask_restplus import marshal
@@ -40,6 +41,29 @@ EXPORTS = [
     ('forms', CustomFormDAO, CUSTOM_FORM)
 ]
 
+# order of keys in export json
+FIELD_ORDER = {
+    'event': [
+        'id', 'name', 'latitude', 'longitude', 'location_name', 'start_time', 'end_time',
+        'timezone', 'description', 'background_image', 'logo', 'organizer_name',
+        'organizer_description', 'event_url', 'social_links', 'ticket_url', 'privacy', 'type',
+        'topic', 'sub_topic', 'code_of_conduct', 'copyright'
+    ],
+    'microlocations': ['id', 'name', 'floor'],
+    'sessions': [
+        'id', 'title', 'subtitle', 'short_abstract', 'long_abstract', 'start_time', 'end_time',
+        'session_type', 'track', 'comments', 'language', 'slides', 'audio', 'video'
+    ],
+    'speakers': [
+        'id', 'name', 'email', 'mobile', 'photo', 'organisation', 'position', 'country',
+        'short_biography', 'long_biography', 'website', 'twitter', 'facebook', 'github', 'linkedin'
+    ],
+    'sponsors': ['id', 'name', 'logo', 'level', 'sponsor_type', 'url', 'description'],
+    'tracks': ['id', 'name', 'color'],
+    'session_types': ['id', 'name', 'length'],
+    'forms': []
+}
+
 # keep sync with storage.UPLOAD_PATHS
 DOWNLOAD_FIEDLS = {
     'sessions': {
@@ -48,11 +72,11 @@ DOWNLOAD_FIEDLS = {
         'slides': ['document', '/slides/session_%d']
     },
     'speakers': {
-        'photo': ['image', '/images/speakers/photo_%d']
+        'photo': ['image', '/images/speakers/%s_%d']
     },
     'event': {
         'logo': ['image', '/images/logo'],
-        'background_url': ['image', '/images/background']
+        'background_image': ['image', '/images/background']
     },
     'sponsors': {
         'logo': ['image', '/images/sponsors/logo_%d']
@@ -64,6 +88,23 @@ DOWNLOAD_FIEDLS = {
 
 
 # FUNCTIONS
+
+def _order_json(data, srv):
+    """
+    sorts the data a/c FIELD_ORDER and returns.
+    If some keys are not included in FIELD_ORDER, they go at last, sorted alphabetically
+    """
+    new_data = OrderedDict()
+    for field in FIELD_ORDER[srv[0]]:
+        new_data[field] = data[field]
+        data.pop(field, None)
+    # remaining fields, sort and add
+    # https://docs.python.org/2/library/collections.html#collections.OrderedDict
+    data = OrderedDict(sorted(data.items(), key=lambda t: t[0]))
+    for key in data:
+        new_data[key] = data[key]
+    return new_data
+
 
 def _download_media(data, srv, dir_path, settings):
     """
@@ -77,7 +118,9 @@ def _download_media(data, srv, dir_path, settings):
         if not settings[DOWNLOAD_FIEDLS[srv][i][0]]:
             continue
         path = DOWNLOAD_FIEDLS[srv][i][1]
-        if srv != 'event':
+        if srv == 'speakers':
+            path = path % (make_speaker_name(data['name']), data['id'])
+        elif srv != 'event':
             path = path % (data['id'])
         if data[i].find('.') > -1:  # add extension
             ext = data[i].rsplit('.', 1)[1]
@@ -124,13 +167,14 @@ def export_event_json(event_id, settings):
     # save to directory
     for e in EXPORTS:
         if e[0] == 'event':
-            data = marshal(e[1].get(event_id), e[2])
+            data = _order_json(marshal(e[1].get(event_id), e[2]), e)
             _download_media(data, 'event', dir_path, settings)
         else:
             data = marshal(e[1].list(event_id), e[2])
-            for _ in data:
-                _download_media(_, e[0], dir_path, settings)
-        data_str = json.dumps(data, sort_keys=True, indent=4)
+            for count in range(len(data)):
+                data[count] = _order_json(data[count], e)
+                _download_media(data[count], e[0], dir_path, settings)
+        data_str = json.dumps(data, indent=4)
         fp = open(dir_path + '/' + e[0], 'w')
         fp.write(data_str)
         fp.close()
@@ -178,3 +222,10 @@ def send_export_mail(event_id, result):
     else:
         event_name = event.name
     send_email_after_export(job.user_email, event_name, result)
+
+
+# FIELD DATA FORMATTERS
+
+def make_speaker_name(name):
+    """Make speaker image filename for export"""
+    return ''.join(s.title() for s in name.split() if s)

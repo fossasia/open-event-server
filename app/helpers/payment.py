@@ -2,6 +2,7 @@
 import urlparse
 from urllib import urlencode
 
+import sqlalchemy
 import stripe
 from flask import url_for, current_app
 
@@ -12,10 +13,13 @@ from app.helpers.cache import cache
 from app.helpers.data_getter import DataGetter
 from app.helpers.data import save_to_db
 from app.helpers.helpers import represents_int
+from app.models.fees import TicketFees
 from app.models.stripe_authorization import StripeAuthorization
 from app.settings import get_settings
 
-@cache.memoize(50)
+DEFAULT_FEE = 0.0
+
+@cache.memoize(5)
 def forex(from_currency, to_currency, amount):
     try:
         currency_rates = CurrencyRates()
@@ -23,6 +27,13 @@ def forex(from_currency, to_currency, amount):
     except:
         return amount
 
+@cache.memoize(5)
+def get_fee(currency):
+    fee = TicketFees.query.filter_by(currency=currency).order_by(sqlalchemy.desc(TicketFees.id)).first()
+    if fee:
+        return fee.service_fee
+    else:
+        return DEFAULT_FEE
 
 class StripePaymentsManager(object):
 

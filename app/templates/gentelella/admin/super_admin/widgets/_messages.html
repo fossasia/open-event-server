@@ -7,7 +7,36 @@
         </div>
         <div class="x_content">
             <div class="dashboard-widget-content">
+                <div style="width: 100%; text-align: center;">
+                    <a style="font-size: 26px; font-weight: 300;">
+                        No. of Sent Mails
+                    </a>
+                </div>
 
+                <table class="table table-bordered" style="margin-top: 12px;">
+                    <tbody>
+                    <tr>
+                        <td>In last 24 hours</td>
+                        <td>{{ email_times[0] }}</td>
+                    </tr>
+                    <tr>
+                        <td>In last 3 days</td>
+                        <td>{{ email_times[1] }} </td>
+                    </tr>
+                    <tr>
+                        <td>In last 7 days</td>
+                        <td>{{ email_times[2] }} </td>
+                    </tr>
+                    <tr>
+                        <td>In last 1 month</td>
+                        <td>{{ email_times[3] }} </td>
+                    </tr>
+                    <tr>
+                        <td>Since installation</td>
+                        <td>{{ email_times[4] }} </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

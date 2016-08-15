@@ -1,0 +1,113 @@
+{% extends 'gentelella/admin/super_admin/sales/filter_table_base.html' %}
+
+{% set active_side_page = 'fees' -%}
+{% set key_name = key_name|default('events') -%}
+{% set title = "Fee Summary" -%}
+
+{% block head_css %}
+    {{ super() }}
+    <style type="text/css">
+        #tickets-summary-table tr, #tickets-summmary-table th {
+            text-align: right;
+            font-size: 15px;
+
+        }
+
+        #tickets-summary-table th {
+            text-align: center;
+            border-left: 1px solid #ddd;
+            border-top: 1px solid #ddd;
+        }
+
+        #tickets-summary-table th[rowspan="2"]:nth-child(1) {
+            text-align: left;
+            vertical-align: bottom;
+            border-left-color: transparent;
+            border-top-color: transparent;
+        }
+
+        #tickets-summary-table td {
+            text-align: center;
+            border-left: 1px solid #ddd;
+        }
+
+        #tickets-summary-table td:nth-child(1) {
+            text-align: left;
+            border-left-color: transparent;
+        }
+
+        #tickets-summary-table tfoot th {
+            border-top: 2px solid #ddd;
+            border-right-color: transparent;
+            border-left-color: transparent;
+        }
+    </style>
+{% endblock %}
+
+{% block inner_table %}
+    <table class="table no-global-dt" id="tickets-summary-table" style="margin-top: 50px;">
+        <thead>
+        <tr>
+            <th rowspan="2">
+                {{ key_name | capitalize }}
+            </th>
+            <th colspan="3" class="success">
+                Completed Orders
+            </th>
+        </tr>
+        <tr class="active">
+            <th>
+                Tickets
+            </th>
+            <th>
+                Fee
+            </th>
+
+            <th>
+                Revenue
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for id, item in fee_summary.iteritems() %}
+
+            <tr>
+                <td>
+                    {{ item.name }}
+                </td>
+                <td>
+                    {{ item.tickets_count }}
+                </td>
+                <td>
+                    {{ item.fee_rate | money }}%
+                </td>
+                <td>
+                    {{ display_currency | currency_symbol }}{{ item.fee_amount | money }}
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+        <tfoot>
+        <tr>
+            <th>
+                Total
+            </th>
+            <th>
+                {{ tickets_total }}
+            </th>
+            <th>
+
+            </th>
+            <th>
+                {{ display_currency | currency_symbol }}{{ fee_total | money }}
+            </th>
+        </tr>
+        </tfoot>
+    </table>
+
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+{% endblock %}
+

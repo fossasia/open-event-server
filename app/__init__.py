@@ -356,7 +356,6 @@ def set_secret():
     current_app.config['SERVER_NAME'] = url
 
 
-
 @app.context_processor
 def integrate_socketio():
     integrate = current_app.config.get('INTEGRATE_SOCKETIO', False)

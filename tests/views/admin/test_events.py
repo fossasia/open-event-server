@@ -6,6 +6,8 @@ from app import current_app as app
 from app.helpers.data import save_to_db
 from app.models.modules import Module
 from app.helpers.data_getter import DataGetter
+from app.api.helpers.helpers import fix_attribute_names
+from app.api.events import EVENT_POST
 from flask import url_for
 
 from tests.views.view_test_case import OpenEventViewTestCase
@@ -30,7 +32,7 @@ class TestEvents(OpenEventViewTestCase):
         with app.test_request_context():
             custom_forms = ObjectMother.get_custom_form()
             url = url_for('events.create_view')
-            data = POST_EVENT_DATA.copy()
+            data = fix_attribute_names(POST_EVENT_DATA.copy(), EVENT_POST)
             del data['copyright']
             del data['call_for_papers']
             data['pay_by_paypal'] = 'paypalYes'
@@ -108,7 +110,7 @@ class TestEvents(OpenEventViewTestCase):
     def test_events_create_post_publish(self):
         with app.test_request_context():
             url = url_for('events.create_view')
-            data = POST_EVENT_DATA.copy()
+            data = fix_attribute_names(POST_EVENT_DATA.copy(), EVENT_POST)
             del data['copyright']
             del data['call_for_papers']
             data['payment_country'] = 'United States'
@@ -127,7 +129,7 @@ class TestEvents(OpenEventViewTestCase):
         with app.test_request_context():
             custom_forms = ObjectMother.get_custom_form()
             url = url_for('events.create_view')
-            data = POST_EVENT_DATA.copy()
+            data = fix_attribute_names(POST_EVENT_DATA.copy(), EVENT_POST)
             del data['copyright']
             del data['call_for_papers']
             data['payment_country'] = 'United States'
@@ -152,7 +154,7 @@ class TestEvents(OpenEventViewTestCase):
             custom_forms = ObjectMother.get_custom_form(event.id)
             save_to_db(custom_forms, "Custom forms saved")
             url = url_for('events.edit_view', event_id=event.id)
-            data = POST_EVENT_DATA.copy()
+            data = fix_attribute_names(POST_EVENT_DATA.copy(), EVENT_POST)
             del data['copyright']
             del data['call_for_papers']
             data['payment_country'] = 'United States'
