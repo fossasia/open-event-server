@@ -177,12 +177,15 @@ def export_event_json(event_id, settings):
             for count in range(len(data)):
                 data[count] = _order_json(data[count], e)
                 _download_media(data[count], e[0], dir_path, settings)
-        data_str = json.dumps(data, indent=4)
+        data_str = json.dumps(data, indent=4, ensure_ascii=False).encode('utf-8')
         fp = open(dir_path + '/' + e[0], 'w')
         fp.write(data_str)
         fp.close()
     # add meta
-    data_str = json.dumps(_generate_meta(), sort_keys=True, indent=4)
+    data_str = json.dumps(
+        _generate_meta(), sort_keys=True,
+        indent=4, ensure_ascii=False
+    ).encode('utf-8')
     fp = open(dir_path + '/meta', 'w')
     fp.write(data_str)
     fp.close()
