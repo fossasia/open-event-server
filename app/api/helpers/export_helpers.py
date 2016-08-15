@@ -86,6 +86,9 @@ DOWNLOAD_FIEDLS = {
     }
 }
 
+# strings to remove in a filename
+FILENAME_EXCLUDE = '<>:"/\|?*;'
+
 
 # FUNCTIONS
 
@@ -228,4 +231,6 @@ def send_export_mail(event_id, result):
 
 def make_speaker_name(name):
     """Make speaker image filename for export"""
+    for _ in FILENAME_EXCLUDE:
+        name = name.replace(_, ' ')
     return ''.join(s.title() for s in name.split() if s)
