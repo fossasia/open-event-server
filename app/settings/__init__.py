@@ -34,6 +34,8 @@ def set_settings(**kwargs):
         if not ticket_fees:
             for i, (currency, has_paypal, has_stripe) in enumerate(currencies):
                 currency = currency.split(' ')[0]
+                if float(ticket_maximum_fees[i]) == 0.0:
+                    ticket_maximum_fees[i] = ticket_service_fees[i]
                 ticket_fee = TicketFees(currency=currency,
                                         service_fee=ticket_service_fees[i],
                                         maximum_fee=ticket_maximum_fees[i])
@@ -41,6 +43,8 @@ def set_settings(**kwargs):
         else:
             i = 0
             for fee in ticket_fees:
+                if float(ticket_maximum_fees[i]) == 0.0:
+                    ticket_maximum_fees[i] = ticket_service_fees[i]
                 fee.service_fee = ticket_service_fees[i]
                 fee.maximum_fee = ticket_maximum_fees[i]
                 save_to_db(fee, "Fee Options Updated")
