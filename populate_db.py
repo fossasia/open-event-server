@@ -111,9 +111,6 @@ def create_panel_permissions():
     panel_perm.can_access = True
     db.session.add(panel_perm)
 
-    db.session.commit()
-
-
 
 def populate():
     """
@@ -128,6 +125,8 @@ def populate():
     create_permissions()
     print 'Creating admin panel permissions...'
     create_panel_permissions()
+
+    db.session.commit()
 
 
 if __name__ == '__main__':
