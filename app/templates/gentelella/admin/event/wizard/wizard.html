@@ -91,7 +91,7 @@
                     </div>
 
                     <!-- TicketTemplate -->
-                    {% macro ticket_template(serialno, sales_start=None, sales_end=None, hide=False, name='', description='', dummy_date=None, description_toggle=True, price=0, type=None, quantity=100, min_order=1, max_order=10, has_orders=False, ticket_tags=[]) %}
+                    {% macro ticket_template(serialno, sales_start=None, sales_end=None, hide=False, name='', description='', start_date=None, description_toggle=True, price=0, type=None, quantity=100, min_order=1, max_order=10, has_orders=False, ticket_tags=[]) %}
                     <tr>
                         <td>
                             <input type="hidden" name="tickets[type]" value="{{ type | default('', true) }}">
@@ -157,7 +157,7 @@
                                             <div class="item form-group">
                                                 <label>Sales Start</label><br>
                                                 <div class="col-xs-7" style="padding: 0;">
-                                                    <input value="{{ sales_start.strftime('%m/%d/%Y') if sales_start else dummy_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY" name="tickets[sales_start_date]">
+                                                    <input value="{{ sales_start.strftime('%m/%d/%Y') if sales_start else start_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY" name="tickets[sales_start_date]">
                                                 </div>
                                                 <div class="col-xs-5" style="padding: 0;">
                                                     <input value="{{ sales_start.strftime('%H:%M') if sales_start else '19:00' }}" class="form-control col-xs-6 time start ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="tickets[sales_start_time]">
@@ -168,7 +168,7 @@
                                             <div class="item form-group">
                                                 <label>Sales End</label><br>
                                                 <div class="col-xs-7" style="padding: 0;">
-                                                    <input value="{{ sales_end.strftime('%m/%d/%Y') if sales_end else dummy_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY" name="tickets[sales_end_date]">
+                                                    <input value="{{ sales_end.strftime('%m/%d/%Y') if sales_end else start_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY" name="tickets[sales_end_date]">
                                                 </div>
                                                 <div class="col-xs-5" style="padding: 0;">
                                                     <input value="{{ sales_end.strftime('%H:%M') if sales_end else '22:00' }}" class="form-control col-xs-6 time end ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="tickets[sales_end_time]">
@@ -205,7 +205,7 @@
                     <div id="ticket-template" style="display: none;">
                         <table>
                             <tbody>
-                                {{ ticket_template(dummy_date=start_date) }}
+                                {{ ticket_template(start_date=start_date) }}
                             </tbody>
                         </table>
                     </div>
