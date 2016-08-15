@@ -131,6 +131,7 @@ class Event(db.Model):
                  pay_by_paypal=None,
                  pay_by_stripe=None,
                  pay_by_cheque=None,
+                 identifier=get_new_event_identifier(),
                  pay_by_bank=None,
                  pay_onsite=None):
 
@@ -173,7 +174,7 @@ class Event(db.Model):
         self.pay_by_cheque = pay_by_cheque
         self.pay_by_bank = pay_by_bank
         self.pay_onsite = pay_onsite
-        self.identifier = get_new_event_identifier()
+        self.identifier = identifier
 
     def __repr__(self):
         return '<Event %r>' % self.name
