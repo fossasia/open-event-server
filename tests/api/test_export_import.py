@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import unittest
 import json
 import logging
@@ -53,6 +55,8 @@ class ImportExportBase(OpenEventTestCase):
                 self.assertIn('download_url', resp.data)
                 dl = json.loads(resp.data)['result']['download_url']
                 break
+            if resp.status_code != 200:
+                self.assertTrue(False, 'Export fail')
             time.sleep(1)
         # get event
         resp = self.app.get(dl)
@@ -109,17 +113,24 @@ class TestEventExport(ImportExportBase):
 
     def test_export_media(self):
         """
-        test successful export of media (and more)
+        test successful export of media, unicode and more
         """
         resp = self._put(get_path(1), {'logo': 'https://placehold.it/350x150'})
         self.assertIn('placehold', resp.data, resp.data)
         # set speaker photo so that its export is checked
         resp = self._put(get_path(1, 'speakers', 1), {'photo': 'https://placehold.it/350x150'})
+        # set event title as unicode
+        resp = self._put(get_path(1), {'organizer_name': 'SandraMüllrick'})
+        # export and unzip files
         self._create_set()
         dr = 'static/temp/test_event_import'
         data = open(dr + '/event', 'r').read()
         self.assertIn('images/logo', data)
-        self.assertEqual(json.loads(data)['creator'].get('id'), None)  # test no ID of creator
+        # test unicode in file
+        self.assertIn('ü', data)
+        self.assertNotIn('\u', data)  # unicode escape
+        # test no ID of creator
+        self.assertEqual(json.loads(data)['creator'].get('id'), None)
         obj = json.loads(data)
         logo_data = open(dr + obj['logo'], 'r').read()
         self.assertTrue(len(logo_data) > 10)
