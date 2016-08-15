@@ -59,7 +59,7 @@ from ..models.social_link import SocialLink
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.track import Track
-from ..models.user import User, ORGANIZER, ATTENDEE, SUPERADMIN, ADMIN
+from ..models.user import User, ORGANIZER, ATTENDEE, SYS_ROLES_LIST
 from ..models.user_detail import UserDetail
 from ..models.users_events_roles import UsersEventsRoles
 from ..models.page import Page
@@ -873,12 +873,12 @@ class DataManager(object):
 
     @staticmethod
     def update_panel_permissions(form):
-        for role in [SUPERADMIN, ADMIN]:
+        for role in SYS_ROLES_LIST:
             for panel in PANEL_LIST:
                 field_name = '{}-{}'.format(role, panel)
                 field_val = form.get(field_name)
                 perm, _ = get_or_create(PanelPermission, panel_name=panel,
-                    role_name=role, can_access=False)
+                    role_name=role)
 
                 perm.can_access = True if field_val == 'on' else False
                 db.session.add(perm)
@@ -1906,7 +1906,7 @@ def save_to_db(item, msg="Saved to db", print_error=True):
         return False
 
 
-def delete_from_db(item, msg):
+def delete_from_db(item, msg='Deleted from db'):
     """Convenience function to wrap a proper DB delete
     :param item: will be removed from database
     :param msg: Message to log

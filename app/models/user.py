@@ -19,6 +19,13 @@ from .notifications import Notification
 # System-wide
 ADMIN = 'admin'
 SUPERADMIN = 'super_admin'
+SALES_ADMIN = 'sales_admin'
+
+SYS_ROLES_LIST = [
+    ADMIN,
+    SUPERADMIN,
+    SALES_ADMIN,
+]
 
 # Event-specific
 ORGANIZER = 'organizer'
@@ -39,6 +46,7 @@ class User(db.Model):
     tokens = db.Column(db.Text)
     is_super_admin = db.Column(db.Boolean, default=False)
     is_admin = db.Column(db.Boolean, default=False)
+    is_sales_admin = db.Column(db.Boolean, default=False)
     is_verified = db.Column(db.Boolean, default=False)
     signup_time = db.Column(db.DateTime)
     last_access_time = db.Column(db.DateTime)
@@ -177,6 +185,8 @@ class User(db.Model):
             sys_roles.append(SUPERADMIN)
         if self.is_admin:
             sys_roles.append(ADMIN)
+        if self.is_sales_admin:
+            sys_roles.append(SALES_ADMIN)
         return sys_roles
 
     def can_access_panel(self, panel_name):

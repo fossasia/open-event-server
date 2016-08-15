@@ -14,7 +14,7 @@ class PanelPermission(db.Model):
 
     can_access = db.Column(db.Boolean)
 
-    def __init__(self, panel_name, role_name, can_access):
+    def __init__(self, panel_name, role_name, can_access=True):
         self.panel_name = panel_name
         self.role_name = role_name
         self.can_access = can_access

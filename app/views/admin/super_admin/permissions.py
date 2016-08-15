@@ -2,7 +2,7 @@ from flask import request, redirect, url_for
 from flask_admin import expose
 
 from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView, PERMISSIONS, PANEL_LIST
-from app.models.user import SUPERADMIN, ADMIN
+from app.models.user import SYS_ROLES_LIST
 from app.helpers.data_getter import DataGetter
 from app.helpers.data import DataManager
 
@@ -14,16 +14,13 @@ class SuperAdminPermissionsView(SuperAdminBaseView):
     def index_view(self):
         # System-Role (Panel) Permissions
         sys_perms = dict()
-        sys_perms[SUPERADMIN] = dict()
-        sys_perms[ADMIN] = dict()
         get_panel_perm = DataGetter.get_panel_permission
 
-        for panel in PANEL_LIST:
-            p = get_panel_perm(role_name=SUPERADMIN, panel_name=panel)
-            sys_perms[SUPERADMIN][panel] = False if not p else p.can_access
-
-            p = get_panel_perm(role_name=ADMIN, panel_name=panel)
-            sys_perms[ADMIN][panel] = False if not p else p.can_access
+        for sys_role in SYS_ROLES_LIST:
+            sys_perms[sys_role] = dict()
+            for panel in PANEL_LIST:
+                p = get_panel_perm(role_name=sys_role, panel_name=panel)
+                sys_perms[sys_role][panel] = False if not p else p.can_access
 
         # Event-Role Permissions
         event_perms = dict()

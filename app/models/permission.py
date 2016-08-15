@@ -25,10 +25,10 @@ class Permission(db.Model):
     def __init__(self,
                  role,
                  service,
-                 can_create=False,
-                 can_read=False,
-                 can_update=False,
-                 can_delete=False):
+                 can_create=True,
+                 can_read=True,
+                 can_update=True,
+                 can_delete=True):
         self.role = role
         self.service = service
         self.can_create = can_create
