@@ -13,7 +13,7 @@ from .role import Role
 from .service import Service
 from .permission import Permission
 from .admin_panels import PanelPermission
-from .users_events_roles import UsersEventsRoles
+from .users_events_roles import UsersEventsRoles as UER
 from .notifications import Notification
 
 # System-wide
@@ -57,8 +57,11 @@ class User(db.Model):
 
     def has_role(self, event_id):
         """Checks if user has any of the Roles at an Event.
+        Exclude Attendee Role.
         """
-        uer = UsersEventsRoles.query.filter_by(user=self, event_id=event_id).first()
+        attendee_role = Role.query.filter_by(name=ATTENDEE).first()
+        uer = UER.query.filter(UER.user == self, UER.event_id == event_id,
+            UER.role != attendee_role).first()
         if uer is None:
             return False
         else:
@@ -68,7 +71,7 @@ class User(db.Model):
         """Checks if a user has a particular Role at an Event.
         """
         role = Role.query.filter_by(name=role_name).first()
-        uer = UsersEventsRoles.query.filter_by(user=self,
+        uer = UER.query.filter_by(user=self,
                                                event_id=event_id,
                                                role=role).first()
         if not uer:
@@ -113,7 +116,7 @@ class User(db.Model):
 
         service = Service.query.filter_by(name=service_name).first()
 
-        uer_querylist = UsersEventsRoles.query.filter_by(user=self,
+        uer_querylist = UER.query.filter_by(user=self,
                                                          event_id=event_id)
         for uer in uer_querylist:
             role = uer.role
