@@ -25,6 +25,7 @@ from ..models.service import Service
 from ..models.permission import Permission
 from ..models.user import User
 from ..models.file import File
+from ..models.admin_panels import PanelPermission
 from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
 from ..models.call_for_papers import CallForPaper
@@ -113,6 +114,11 @@ class DataGetter(object):
     def get_event_role_invite(event_id, hash_code, **kwargs):
         return RoleInvite.query.filter_by(event_id=event_id,
                                           hash=hash_code, **kwargs).first()
+
+    @staticmethod
+    def get_panel_permission(role_name, panel_name):
+        return PanelPermission.query.filter_by(role_name=role_name,
+                                               panel_name=panel_name).first()
 
     @staticmethod
     def get_email_notification_settings_by_id(email_id):

@@ -1,11 +1,13 @@
 import flask_login
 from flask_admin import expose
 
-from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView
+from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView, SESSIONS
 from ....helpers.data_getter import DataGetter
 
 
 class SuperAdminMySessionView(SuperAdminBaseView):
+    PANEL_NAME = SESSIONS
+
     @expose('/')
     @flask_login.login_required
     def display_my_sessions_view(self):

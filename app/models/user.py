@@ -12,12 +12,20 @@ from user_detail import UserDetail
 from .role import Role
 from .service import Service
 from .permission import Permission
+from .admin_panels import PanelPermission
 from .users_events_roles import UsersEventsRoles
 from .notifications import Notification
 
 # System-wide
 ADMIN = 'admin'
 SUPERADMIN = 'super_admin'
+SALES_ADMIN = 'sales_admin'
+
+SYS_ROLES_LIST = [
+    ADMIN,
+    SUPERADMIN,
+    SALES_ADMIN,
+]
 
 # Event-specific
 ORGANIZER = 'organizer'
@@ -38,6 +46,7 @@ class User(db.Model):
     tokens = db.Column(db.Text)
     is_super_admin = db.Column(db.Boolean, default=False)
     is_admin = db.Column(db.Boolean, default=False)
+    is_sales_admin = db.Column(db.Boolean, default=False)
     is_verified = db.Column(db.Boolean, default=False)
     signup_time = db.Column(db.DateTime)
     last_access_time = db.Column(db.DateTime)
@@ -169,6 +178,26 @@ class User(db.Model):
     @property
     def is_staff(self):
         return self.is_super_admin or self.is_admin
+
+    def _get_sys_roles(self):
+        sys_roles = []
+        if self.is_super_admin:
+            sys_roles.append(SUPERADMIN)
+        if self.is_admin:
+            sys_roles.append(ADMIN)
+        if self.is_sales_admin:
+            sys_roles.append(SALES_ADMIN)
+        return sys_roles
+
+    def can_access_panel(self, panel_name):
+        sys_roles = self._get_sys_roles()
+        for role in sys_roles:
+            perm = PanelPermission.query.filter_by(role_name=role,
+                panel_name=panel_name).first()
+            if perm:
+                if perm.can_access:
+                    return True
+        return False
 
     def get_unread_notif_count(self):
         return len(Notification.query.filter_by(user=self,

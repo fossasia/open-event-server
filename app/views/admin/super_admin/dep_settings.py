@@ -1,6 +1,6 @@
 from flask import request
 from flask_admin import expose
-from super_admin_base import SuperAdminBaseView
+from super_admin_base import SuperAdminBaseView, SETTINGS
 
 from app.settings import get_settings, set_settings
 from app.helpers.data_getter import DataGetter
@@ -8,6 +8,8 @@ from werkzeug.datastructures import ImmutableMultiDict
 from app.views.admin.models_views.events import EventsView
 
 class SuperAdminSettingsView(SuperAdminBaseView):
+    PANEL_NAME = SETTINGS
+
     @expose('/', methods=('GET', 'POST'))
     def index_view(self):
         if request.method == 'POST':
