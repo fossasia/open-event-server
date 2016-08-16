@@ -424,8 +424,8 @@
             Choose Payment Methods
             <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
             </h2>
-            <label class="control-label" style="font-size: 20px;">Online Payments</label>
             <div id="paypal-gateway">
+                <label class="control-label" style="font-size: 20px;">Online Payments</label>
                 <div class="col-sm-12 input-group">
                         <label class="control-label">Payment by PayPal</label>
                         <div class="checkbox">
@@ -476,8 +476,9 @@
                     </div>
                     <a href="#" class="stripe-connect" style="{% if event.stripe %}display:none;{% endif %}"><span>Connect with Stripe</span></a>
                 </div>
-
             </div>
+            <br>
+            <div id="offline-gateway">
             <label class="control-label" style="font-size: 20px;">Offline Payments</label>
             <div class="col-sm-12 input-group">
                                     <div class="checkbox">
@@ -504,6 +505,7 @@
                                             <strong style="font-weight: 400;">YES, accept payment at the event(on site) </strong><br>
                                         </label>
                                     </div>
+            </div>
             </div>
             <br>
             <div class="">
