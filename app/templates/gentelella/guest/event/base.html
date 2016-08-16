@@ -18,7 +18,7 @@
 
 {% block head_meta %}
     {# Facebook Open Graph Tags #}
-    <meta property="fb:app_id" content=""/>
+    <meta property="fb:app_id" content="{{ fb_app_id }}"/>
     <meta property="og:title" content="{{ event.name }}"/>
     <meta property="og:site_name" content="Organizer Server"/>
     <meta property="og:url" content="{{ request.url }}"/>

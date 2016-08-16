@@ -92,6 +92,9 @@ def create_app():
     app.config['SQLALCHEMY_RECORD_QUERIES'] = True
     #app.config['SERVER_NAME'] = 'http://127.0.0.1:8001'
     # app.config['SERVER_NAME'] = 'open-event-dev.herokuapp.com'
+
+    # Facebook APP ID
+    app.config['FB_APP_ID'] = os.getenv('FB_APP_ID', '')
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     app.logger.setLevel(logging.INFO)
     app.jinja_env.add_extension('jinja2.ext.do')
@@ -371,6 +374,12 @@ def set_secret():
 def integrate_socketio():
     integrate = current_app.config.get('INTEGRATE_SOCKETIO', False)
     return dict(integrate_socketio=integrate)
+
+
+@app.context_processor
+def fb_app_id():
+    app_id = current_app.config.get('FB_APP_ID')
+    return dict(fb_app_id=app_id)
 
 
 def send_after_event_mail():
