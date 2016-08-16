@@ -41,7 +41,7 @@ from ..models.fees import TicketFees
 from ..models.order import Order
 from .language_list import LANGUAGE_LIST
 from .static import EVENT_TOPICS, EVENT_LICENCES, PAYMENT_COUNTRIES, PAYMENT_CURRENCIES, DEFAULT_EVENT_IMAGES
-from app.helpers.helpers import get_event_id, string_empty, represents_int
+from app.helpers.helpers import get_event_id, string_empty, represents_int, get_count
 from flask.ext import login
 from flask import flash, abort
 import datetime
@@ -749,16 +749,17 @@ class DataGetter(object):
 
     @staticmethod
     def get_all_super_admins():
-        return len(User.query.filter_by(is_super_admin=True).all())
+        return get_count(User.query.filter_by(is_super_admin=True))
 
     @staticmethod
     def get_all_admins():
-        return len(User.query.filter_by(is_admin=True).all())
+        return get_count(User.query.filter_by(is_admin=True))
 
     @staticmethod
     def get_all_registered_users():
-        return len(User.query.filter_by(is_verified=True).all())
+        return get_count(User.query.filter_by(is_verified=True))
 
+    # TODO Make this more efficient
     @staticmethod
     def get_all_organizers():
         events = Event.query.all()
@@ -771,6 +772,7 @@ class DataGetter(object):
 
         return len(organizers)
 
+    # TODO Make this more efficient
     @staticmethod
     def get_all_co_organizers():
         events = Event.query.all()
@@ -783,6 +785,7 @@ class DataGetter(object):
 
         return len(co_organizers)
 
+    # TODO Make this more efficient
     @staticmethod
     def get_all_track_organizers():
         events = Event.query.all()
@@ -809,28 +812,28 @@ class DataGetter(object):
 
     @staticmethod
     def get_all_accepted_sessions():
-        return len(Session.query.filter_by(state='accepted').all())
+        return get_count(Session.query.filter_by(state='accepted'))
 
     @staticmethod
     def get_all_rejected_sessions():
-        return len(Session.query.filter_by(state='rejected').all())
+        return get_count(Session.query.filter_by(state='rejected'))
 
     @staticmethod
     def get_all_draft_sessions():
-        return len(Session.query.filter_by(state='pending').all())
+        return get_count(Session.query.filter_by(state='pending'))
 
     @staticmethod
     def get_email_by_times():
         email_times = []
-        email_in_last_24 = len(
-            Mail.query.filter(datetime.datetime.now() - Mail.time <= datetime.timedelta(hours=24)).all())
-        email_in_last_3_days = len(
-            Mail.query.filter(datetime.datetime.now() - Mail.time <= datetime.timedelta(days=3)).all())
-        email_in_last_7_days = len(
-            Mail.query.filter(datetime.datetime.now() - Mail.time <= datetime.timedelta(days=7)).all())
-        email_in_last_30_days = len(
-            Mail.query.filter(datetime.datetime.now() - Mail.time <= datetime.timedelta(days=30)).all())
-        total_emails = len(Mail.query.all())
+        email_in_last_24 = get_count(
+            Mail.query.filter(datetime.datetime.now() - Mail.time <= datetime.timedelta(hours=24)))
+        email_in_last_3_days = get_count(
+            Mail.query.filter(datetime.datetime.now() - Mail.time <= datetime.timedelta(days=3)))
+        email_in_last_7_days = get_count(
+            Mail.query.filter(datetime.datetime.now() - Mail.time <= datetime.timedelta(days=7)))
+        email_in_last_30_days = get_count(
+            Mail.query.filter(datetime.datetime.now() - Mail.time <= datetime.timedelta(days=30)))
+        total_emails = get_count(Mail.query)
 
         email_times.append(email_in_last_24)
         email_times.append(email_in_last_3_days)

@@ -19,7 +19,7 @@ class SuperAdminView(SuperAdminBaseView):
         organizers = DataGetter.get_all_organizers()
         co_organizers = DataGetter.get_all_co_organizers()
         track_organizers = DataGetter.get_all_track_organizers()
-        attendees= DataGetter.get_all_attendees()
+        attendees = DataGetter.get_all_attendees()
         accepted_sessions = DataGetter.get_all_accepted_sessions()
         rejected_sessions = DataGetter.get_all_rejected_sessions()
         draft_sessions = DataGetter.get_all_draft_sessions()
