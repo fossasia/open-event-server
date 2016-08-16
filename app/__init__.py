@@ -2,6 +2,7 @@
 
 # Ignore ExtDeprecationWarnings for Flask 0.11 - see http://stackoverflow.com/a/38080580
 import warnings
+import re
 
 from flask.exthook import ExtDeprecationWarning
 from forex_python.converter import CurrencyCodes
@@ -220,6 +221,16 @@ def humanize_alt_filter(time):
         return "N/A"
     return humanize.naturaltime(datetime.now() - time)
 
+
+@app.template_filter('external_url')
+def external_url(url):
+    url_pattern = r'^(https?)://.*$'
+    scheme = re.match(url_pattern, url)
+    if not scheme:
+        url_root = request.url_root.rstrip('/')
+        return '{}{}'.format(url_root, url)
+    else:
+        return url
 
 @app.template_filter('firstname')
 def firstname_filter(string):

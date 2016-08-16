@@ -5,18 +5,27 @@
 {% set carousel_height = 500 if active_page == 'info' else 300 -%}
 {% set scrollspy_top = (carousel_height + 95) ~ "px" %}
 
-
 {# Set `event_image` for use inside template #}
 {% if event.background_url %}
     {% set event_image = event.background_url %}
 {% elif event.topic %}
-    {% set event_image = url_for("static", filename="placeholders/" + placeholder_images[event.topic]) %}
+    {% set event_image = url_for("static", filename="placeholders/" + placeholder_images[event.topic], _external=True) %}
 {% elif event.subtopic %}
-    {% set event_image = url_for("static", filename="placeholders/" + placeholder_images[event.subtopic]) %}
+    {% set event_image = url_for("static", filename="placeholders/" + placeholder_images[event.subtopic], _external=True) %}
 {% else %}
-    {% set event_image = url_for("static", filename="placeholders/" + placeholder_images["Other"]) %}
+    {% set event_image = url_for("static", filename="placeholders/" + placeholder_images["Other"], _external=True) %}
 {% endif %}
 
+{% block head_meta %}
+    {# Facebook Open Graph Tags #}
+    <meta property="fb:app_id" content=""/>
+    <meta property="og:title" content="{{ event.name }}"/>
+    <meta property="og:site_name" content="Organizer Server"/>
+    <meta property="og:url" content="{{ request.url }}"/>
+    <meta property="og:description" content="{{ event.description }}"/>
+    <meta property="og:image" content="{{ event_image | external_url }}"/>
+    <meta property="og:type" content="events.event"/>
+{% endblock %}
 
 {% block head_css %}
     {{ super() }}
