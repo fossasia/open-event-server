@@ -2,7 +2,7 @@ from flask_admin import expose
 
 from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView
 from ....helpers.data_getter import DataGetter
-from app.helpers.helpers import get_latest_heroku_release, get_commit_info
+from app.helpers.helpers import get_latest_heroku_release, get_commit_info, get_count
 
 
 class SuperAdminView(SuperAdminBaseView):
@@ -10,16 +10,17 @@ class SuperAdminView(SuperAdminBaseView):
     @expose('/')
     def index_view(self):
         events = DataGetter.get_all_events()[:5]
-        number_live_events = DataGetter.get_all_live_events().count()
-        number_draft_events = DataGetter.get_all_draft_events().count()
-        number_past_events = DataGetter.get_all_past_events().count()
+        number_live_events = get_count(DataGetter.get_all_live_events())
+        number_draft_events = get_count(DataGetter.get_all_draft_events())
+        number_past_events = get_count(DataGetter.get_all_past_events())
         super_admins = DataGetter.get_all_super_admins()
         admins = DataGetter.get_all_admins()
         registered_users = DataGetter.get_all_registered_users()
-        organizers = DataGetter.get_all_organizers()
-        co_organizers = DataGetter.get_all_co_organizers()
-        track_organizers = DataGetter.get_all_track_organizers()
-        attendees= DataGetter.get_all_attendees()
+        # TODO Fix function and correct this
+        organizers = 0
+        co_organizers = 0
+        track_organizers = 0
+        attendees = 0
         accepted_sessions = DataGetter.get_all_accepted_sessions()
         rejected_sessions = DataGetter.get_all_rejected_sessions()
         draft_sessions = DataGetter.get_all_draft_sessions()
