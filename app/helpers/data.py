@@ -48,6 +48,7 @@ from ..models.event_copyright import EventCopyright
 from ..models.file import File
 from ..models.invite import Invite
 from ..models.microlocation import Microlocation
+from ..models.user_permissions import UserPermission
 from ..models.permission import Permission
 from ..models.role import Role
 from ..models.role_invite import RoleInvite
@@ -869,6 +870,19 @@ class DataManager(object):
     @staticmethod
     def add_owner_to_event(owner_id, event):
         event.owner = owner_id
+        db.session.commit()
+
+    @staticmethod
+    def update_user_permissions(form):
+        for perm in UserPermission.query.all():
+            ver_user = '{}-verified_user'.format(perm.name)
+            unver_user = '{}-unverified_user'.format(perm.name)
+            anon_user = '{}-anonymous_user'.format(perm.name)
+            perm.verified_user = True if form.get(ver_user) == 'on' else False
+            perm.unverified_user = True if form.get(unver_user) == 'on' else False
+            perm.anonymous_user = True if form.get(anon_user) == 'on' else False
+
+            db.session.add(perm)
         db.session.commit()
 
     @staticmethod
