@@ -16,10 +16,11 @@ class SuperAdminView(SuperAdminBaseView):
         super_admins = DataGetter.get_all_super_admins()
         admins = DataGetter.get_all_admins()
         registered_users = DataGetter.get_all_registered_users()
-        organizers = []
-        co_organizers = []
-        track_organizers = []
-        attendees = []
+        # TODO Fix function and correct this
+        organizers = 0
+        co_organizers = 0
+        track_organizers = 0
+        attendees = 0
         accepted_sessions = DataGetter.get_all_accepted_sessions()
         rejected_sessions = DataGetter.get_all_rejected_sessions()
         draft_sessions = DataGetter.get_all_draft_sessions()
