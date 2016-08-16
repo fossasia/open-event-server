@@ -1,4 +1,5 @@
 import unittest
+import json
 
 from tests.utils import OpenEventTestCase
 
@@ -18,8 +19,9 @@ class TestSwagger(OpenEventTestCase):
         """
         resp = self.app.get('/api/v2/swagger.json')
         self.assertIn('event', resp.data)
+        data = json.loads(resp.data)
         fp = open('static/temp/swagger.json', 'w')
-        fp.write(resp.data)
+        fp.write(json.dumps(data, indent=2, sort_keys=True))
         fp.close()
 
 
