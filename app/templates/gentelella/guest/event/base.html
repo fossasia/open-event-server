@@ -5,13 +5,26 @@
 {% set carousel_height = 500 if active_page == 'info' else 300 -%}
 {% set scrollspy_top = (carousel_height + 95) ~ "px" %}
 
+
+{# Set `event_image` for use inside template #}
+{% if event.background_url %}
+    {% set event_image = event.background_url %}
+{% elif event.topic %}
+    {% set event_image = url_for("static", filename="placeholders/" + placeholder_images[event.topic]) %}
+{% elif event.subtopic %}
+    {% set event_image = url_for("static", filename="placeholders/" + placeholder_images[event.subtopic]) %}
+{% else %}
+    {% set event_image = url_for("static", filename="placeholders/" + placeholder_images["Other"]) %}
+{% endif %}
+
+
 {% block head_css %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/details.css') }}"/>
     <style type="text/css">
         .carousel .item {
             height: {{ carousel_height }}px;
-            background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)), url('{% if event.background_url %}{{ event.background_url }}{% elif event.topic%}{{ url_for("static", filename="placeholders/" + placeholder_images[event.topic])}}{% elif event.subtopic %}{{ url_for("static", filename="placeholders/" + placeholder_images[event.subtopic])}}{% else %}{{url_for("static", filename="placeholders/" + placeholder_images["Other"])}}{% endif %}');
+            background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)), url('{{ event_image }}');
             background-size: cover;
         }
 
