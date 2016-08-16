@@ -68,6 +68,7 @@ del SOCIAL_LINK_POST['id']
 
 EVENT = api.model('Event', {
     'id': fields.Integer(required=True),
+    'identifier': fields.String(),
     'name': fields.String(required=True),
     'event_url': fields.Uri(),
     'email': fields.Email(),

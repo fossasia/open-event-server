@@ -133,6 +133,7 @@ class Event(db.Model):
                  pay_by_paypal=None,
                  pay_by_stripe=None,
                  pay_by_cheque=None,
+                 identifier=None,
                  pay_by_bank=None,
                  pay_onsite=None):
 

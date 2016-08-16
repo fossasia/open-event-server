@@ -159,6 +159,7 @@ class SuperAdminSalesView(SuperAdminBaseView):
             tickets_summary_location_wise[unicode(event.searchable_location_name)]['name'] = \
                 event.searchable_location_name
 
+
         for order in orders:
             if order.status == 'initialized':
                 order.status = 'pending'

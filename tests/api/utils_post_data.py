@@ -40,7 +40,8 @@ POST_EVENT_DATA = {
         "privacy": "public",
         "start_date": "2016-06-29T19:30:00",
         "timezone": "UTC"
-    }
+    },
+    "identifier": "23c0644e"
 }
 
 POST_SOCIAL_LINK_DATA = {
