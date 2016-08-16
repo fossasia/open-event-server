@@ -22,7 +22,8 @@
             <div class=" col-md-9 col-xs-12">
                 <span style="position:relative; top: 27px; left: 93px">{{ code }} </span>
                 <input type="text" name="maximum_fee" class="form-control"
-                       value="{{ fees[count].maximum_fee | default(0.0, true)}}" style="width: 125px">
+                       value="{{ fees[count].maximum_fee | default(0.0, true)}}" style="width: 125px"><a href="#" data-toggle="tooltip" title="If you keep the maximum fee as 0, it  would become unlimited. Kindly set the
+                       maximum fee to some value." class="fa fa-info-circle" style="position: relative; bottom: 28px;left: 135px"></a>
             </div>
         </div>
         <br>
