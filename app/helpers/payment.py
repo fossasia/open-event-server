@@ -14,6 +14,7 @@ from app.helpers.data_getter import DataGetter
 from app.helpers.data import save_to_db
 from app.helpers.helpers import represents_int
 from app.models.fees import TicketFees
+from app.models.order import Order
 from app.models.stripe_authorization import StripeAuthorization
 from app.settings import get_settings
 
@@ -63,37 +64,37 @@ class StripePaymentsManager(object):
                 return None
 
     @staticmethod
-    def capture_payment(order, currency=None):
-
-        credentials = StripePaymentsManager.get_credentials(order.event)
+    def capture_payment(order_invoice, currency=None, credentials=None):
+        if not credentials:
+            credentials = StripePaymentsManager.get_credentials(order_invoice.event)
         if not credentials:
             raise Exception('Stripe is incorrectly configured')
 
         stripe.api_key = credentials['SECRET_KEY']
 
         if not currency:
-            currency = order.event.payment_currency
+            currency = order_invoice.event.payment_currency
 
         if not currency or currency == "":
             currency = "USD"
 
         try:
             customer = stripe.Customer.create(
-                email=order.user.email,
-                source=order.stripe_token
+                email=order_invoice.user.email,
+                source=order_invoice.stripe_token
             )
 
             charge = stripe.Charge.create(
                 customer=customer.id,
-                amount=int(order.amount * 100),
+                amount=int(order_invoice.amount * 100),
                 currency=currency.lower(),
                 metadata={
-                    'order_id': order.id,
-                    'event': order.event.name,
-                    'user_id': order.user_id,
-                    'event_id': order.event_id
+                    'order_id': order_invoice.id,
+                    'event': order_invoice.event.name,
+                    'user_id': order_invoice.user_id,
+                    'event_id': order_invoice.event_id
                 },
-                description=order.event.name + " ticket(s)"
+                description=order_invoice.event.name
             )
             return charge
         except:
@@ -151,9 +152,9 @@ class PayPalPaymentsManager(object):
             return None
 
     @staticmethod
-    def get_checkout_url(order, currency=None, credentials=None):
+    def get_checkout_url(order_invoice, currency=None, credentials=None):
         if not credentials:
-            credentials = PayPalPaymentsManager.get_credentials(order.event)
+            credentials = PayPalPaymentsManager.get_credentials(order_invoice.event)
 
         if not credentials:
             raise Exception('PayPal credentials have not be set correctly')
@@ -162,7 +163,7 @@ class PayPalPaymentsManager(object):
             return credentials['CHECKOUT_URL']
 
         if not currency:
-            currency = order.event.payment_currency
+            currency = order_invoice.event.payment_currency
 
         if not currency or currency == "":
             currency = "USD"
@@ -171,29 +172,45 @@ class PayPalPaymentsManager(object):
             'USER': credentials['USER'],
             'PWD': credentials['PWD'],
             'SIGNATURE': credentials['SIGNATURE'],
-            'SUBJECT': credentials['EMAIL'],
+
             'METHOD': 'SetExpressCheckout',
             'VERSION': PayPalPaymentsManager.api_version,
             'PAYMENTREQUEST_0_PAYMENTACTION': 'SALE',
-            'PAYMENTREQUEST_0_AMT': order.amount,
+            'PAYMENTREQUEST_0_AMT': order_invoice.amount,
             'PAYMENTREQUEST_0_CURRENCYCODE': currency,
-            'RETURNURL': url_for('ticketing.paypal_callback', order_identifier=order.identifier,
+            'RETURNURL': url_for('ticketing.paypal_callback', order_identifier=order_invoice.identifier,
                                  function='success', _external=True),
-            'CANCELURL': url_for('ticketing.paypal_callback', order_identifier=order.identifier,
+            'CANCELURL': url_for('ticketing.paypal_callback', order_identifier=order_invoice.identifier,
                                  function='cancel', _external=True)
         }
 
+        if type(order_invoice) is Order:
+            data['SUBJECT'] = credentials['EMAIL']
+            data['RETURNURL'] = url_for('ticketing.paypal_callback', order_identifier=order_invoice.identifier,
+                                        function='success', _external=True),
+            data['CANCELURL'] = url_for('ticketing.paypal_callback', order_identifier=order_invoice.identifier,
+                                        function='cancel', _external=True)
+
+        else:
+            # TODO Change URL for
+            data['RETURNURL'] = url_for('ticketing.paypal_callback', order_identifier=order_invoice.identifier,
+                                        function='success', _external=True),
+            data['CANCELURL'] = url_for('ticketing.paypal_callback', order_identifier=order_invoice.identifier,
+                                        function='cancel', _external=True)
+
         count = 1
-        for ticket_order in order.tickets:
-            data['L_PAYMENTREQUEST_' + str(count) + '_NAMEm'] = ticket_order.ticket.name
-            data['L_PAYMENTREQUEST_' + str(count) + '_QTYm'] = ticket_order.quantity
-            data['L_PAYMENTREQUEST_' + str(count) + '_AMTm'] = ticket_order.ticket.price
-            count += 1
+
+        if type(order_invoice) is Order:
+            for ticket_order in order_invoice.tickets:
+                data['L_PAYMENTREQUEST_' + str(count) + '_NAMEm'] = ticket_order.ticket.name
+                data['L_PAYMENTREQUEST_' + str(count) + '_QTYm'] = ticket_order.quantity
+                data['L_PAYMENTREQUEST_' + str(count) + '_AMTm'] = ticket_order.ticket.price
+                count += 1
 
         response = requests.post(credentials['SERVER'], data=data)
         token = dict(urlparse.parse_qsl(response.text))['TOKEN']
-        order.paypal_token = token
-        save_to_db(order)
+        order_invoice.paypal_token = token
+        save_to_db(order_invoice)
         return credentials['CHECKOUT_URL'] + "?" + urlencode({
             'cmd': '_express-checkout',
             'token': token
