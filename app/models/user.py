@@ -69,6 +69,18 @@ class User(db.Model):
         else:
             return perm.unverified_user
 
+    def can_create_event(self):
+        """Checks if User can create an event
+        """
+        perm = UserPermission.query.filter_by(name='create_event').first()
+        if not perm:
+            return self.is_verified
+
+        if self.is_verified:
+            return perm.verified_user
+        else:
+            return perm.unverified_user
+
     def has_role(self, event_id):
         """Checks if user has any of the Roles at an Event.
         Exclude Attendee Role.

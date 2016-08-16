@@ -117,9 +117,16 @@ def create_panel_permissions():
 
 
 def create_user_permissions():
+    # Publish Event
     user_perm, _ = get_or_create(UserPermission, name='publish_event',
         description='Publish event (make event live)')
     user_perm.verified_user = True
+    db.session.add(user_perm)
+
+    # Create Event
+    user_perm, _ = get_or_create(UserPermission, name='create_event',
+        description='Create event')
+    user_perm.verified_user, user_perm.unverified_user = True, True
     db.session.add(user_perm)
 
 
