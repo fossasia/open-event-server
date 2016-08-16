@@ -3,9 +3,8 @@ from datetime import datetime, timedelta
 from flask import url_for
 from sqlalchemy_continuum import transaction_class
 
-from app import forex
-from app import send_after_event
-from app import send_email_for_expired_orders
+from app.helpers.helpers import send_after_event
+from app.helpers.helpers import send_email_for_expired_orders
 from app.helpers.data import DataManager, delete_from_db, save_to_db
 from app.helpers.data_getter import DataGetter
 from app.helpers.payment import get_fee

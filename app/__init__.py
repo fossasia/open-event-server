@@ -6,12 +6,12 @@ import warnings
 from flask.exthook import ExtDeprecationWarning
 from forex_python.converter import CurrencyCodes
 from pytz import utc
+warnings.simplefilter('ignore', ExtDeprecationWarning)
+# Keep it before flask extensions are imported
 
 from app.helpers.scheduled_jobs import send_mail_to_expired_orders, empty_trash, send_after_event_mail, \
     send_event_fee_notification, send_event_fee_notification_followup
 
-warnings.simplefilter('ignore', ExtDeprecationWarning)
-# Keep it before flask extensions are imported
 import arrow
 from celery import Celery
 from celery.signals import after_task_publish
