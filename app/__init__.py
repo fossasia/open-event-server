@@ -7,6 +7,7 @@ import re
 from flask.exthook import ExtDeprecationWarning
 from forex_python.converter import CurrencyCodes
 from pytz import utc
+
 warnings.simplefilter('ignore', ExtDeprecationWarning)
 # Keep it before flask extensions are imported
 import arrow
@@ -54,6 +55,10 @@ from app.helpers.helpers import send_after_event
 from app.helpers.cache import cache
 from sqlalchemy_continuum import transaction_class
 from helpers.helpers import send_email_for_expired_orders
+from werkzeug.contrib.profiler import ProfilerMiddleware
+
+from flask.ext.sqlalchemy import get_debug_queries
+from config import ProductionConfig
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -90,7 +95,7 @@ def create_app():
     app.config['STATIC_ROOT'] = 'staticfiles'
     app.config['STATICFILES_DIRS'] = (os.path.join(BASE_DIR, 'static'),)
     app.config['SQLALCHEMY_RECORD_QUERIES'] = True
-    #app.config['SERVER_NAME'] = 'http://127.0.0.1:8001'
+    # app.config['SERVER_NAME'] = 'http://127.0.0.1:8001'
     # app.config['SERVER_NAME'] = 'open-event-dev.herokuapp.com'
 
     # Facebook APP ID
@@ -118,6 +123,10 @@ def create_app():
     admin_view = AdminView("Open Event")
     admin_view.init(app)
     admin_view.init_login(app)
+
+    # Profiling
+    app.config['PROFILE'] = True
+    app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[30])
 
     # API version 2
     with app.app_context():
@@ -200,6 +209,7 @@ def currency_symbol_filter(currency_code):
 def currency_name_filter(currency_code):
     name = CurrencyCodes().get_currency_name(currency_code)
     return name if name else ''
+
 
 @app.template_filter('camel_case')
 def camel_case_filter(string):
@@ -382,6 +392,16 @@ def fb_app_id():
     return dict(fb_app_id=app_id)
 
 
+# Testing database performance
+@app.after_request
+def after_request(response):
+    for query in get_debug_queries():
+        if query.duration >= ProductionConfig.DATABASE_QUERY_TIMEOUT:
+            app.logger.warning("SLOW QUERY: %s\nParameters: %s\nDuration: %fs\nContext: %s\n" % (query.statement, query.parameters, query.duration, query.context))
+    return response
+
+
+
 def send_after_event_mail():
     with app.app_context():
         events = Event.query.all()
@@ -419,13 +439,14 @@ def send_mail_to_expired_orders():
                                           url_for('ticketing.view_order_after_payment',
                                                   order_identifier=order.identifier, _external=True))
 
+
 order_sched = BackgroundScheduler(timezone=utc)
 order_sched.add_job(send_mail_to_expired_orders,
                     'interval',
                     hours=5)
 
-
 order_sched.start()
+
 
 def empty_trash():
     with app.app_context():

@@ -21,6 +21,11 @@ class ProductionConfig(Config):
     MINIFY_PAGE = True
     PRODUCTION = True
     INTEGRATE_SOCKETIO = True
+
+    # Test database performance
+    SQLALCHEMY_RECORD_QUERIES = True
+    DATABASE_QUERY_TIMEOUT = 0.1
+
     # if force off
     socketio_integration = os.environ.get('INTEGRATE_SOCKETIO')
     if socketio_integration == 'false':
@@ -40,6 +45,11 @@ class DevelopmentConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
     MINIFY_PAGE = False
+
+    # Test database performance
+    SQLALCHEMY_RECORD_QUERIES = True
+    DATABASE_QUERY_TIMEOUT = 0.1
+
     # If Env Var `INTEGRATE_SOCKETIO` is set to 'true', then integrate SocketIO
     socketio_integration = os.environ.get('INTEGRATE_SOCKETIO')
     INTEGRATE_SOCKETIO = bool(socketio_integration == 'true')
