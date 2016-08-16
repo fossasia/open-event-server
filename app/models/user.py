@@ -13,6 +13,7 @@ from .role import Role
 from .service import Service
 from .permission import Permission
 from .admin_panels import PanelPermission
+from .user_permissions import UserPermission
 from .users_events_roles import UsersEventsRoles as UER
 from .notifications import Notification
 
@@ -54,6 +55,19 @@ class User(db.Model):
     user_detail = db.relationship("UserDetail", uselist=False, backref="user")
     created_date = db.Column(db.DateTime, default=datetime.now())
     trash_date = db.Column(db.DateTime)
+
+    # User Permissions
+    def can_publish_event(self):
+        """Checks if User can publish an event
+        """
+        perm = UserPermission.query.filter_by(name='publish_event').first()
+        if not perm:
+            return self.is_verified
+
+        if self.is_verified:
+            return perm.verified_user
+        else:
+            return perm.unverified_user
 
     def has_role(self, event_id):
         """Checks if user has any of the Roles at an Event.

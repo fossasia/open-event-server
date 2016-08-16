@@ -217,7 +217,7 @@ class EventsView(BaseView):
             checklist["4"] = 'optional'
             checklist["5"] = 'optional'
 
-        if not is_verified_user():
+        if not login.current_user.can_publish_event():
             flash("To make your event live, please verify your email by "
                   "clicking on the confirmation link that has been emailed to you.")
 
@@ -409,8 +409,7 @@ class EventsView(BaseView):
                 "warning")
             return redirect(url_for('.edit_view',
                                     event_id=event.id) + "#highlight=location_name")
-        can_publish = DataGetter.can_publish_event(login.current_user.is_verified)
-        if not is_verified_user() and not can_publish:
+        if not login.current_user.can_publish_event():
             return redirect(url_for('.details_view', event_id=event_id))
         event.state = 'Published'
         save_to_db(event, 'Event Published')
