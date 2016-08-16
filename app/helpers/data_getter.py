@@ -33,6 +33,7 @@ from ..models.custom_forms import CustomForms
 from ..models.mail import Mail
 from ..models.activity import Activity
 from ..models.ticket import Ticket
+from ..models.user_permissions import UserPermission
 from ..models.modules import Module
 from ..models.page import Page
 from ..models.export_jobs import ExportJob
@@ -119,6 +120,10 @@ class DataGetter(object):
     def get_panel_permission(role_name, panel_name):
         return PanelPermission.query.filter_by(role_name=role_name,
                                                panel_name=panel_name).first()
+
+    @staticmethod
+    def get_user_permissions():
+        return UserPermission.query.all()
 
     @staticmethod
     def get_email_notification_settings_by_id(email_id):
