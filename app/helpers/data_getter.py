@@ -765,55 +765,12 @@ class DataGetter(object):
         return get_count(User.query.filter_by(is_verified=True))
 
     # TODO Make this more efficient
-    @staticmethod
-    def get_all_organizers():
-        events = Event.query.all()
-        users = User.query.all()
-        organizers = []
-        for event in events:
-            for user in users:
-                if user.is_organizer(event.id):
-                    organizers.append(user)
-
-        return len(organizers)
-
-    # TODO Make this more efficient
-    @staticmethod
-    def get_all_co_organizers():
-        events = Event.query.all()
-        users = User.query.all()
-        co_organizers = []
-        for event in events:
-            for user in users:
-                if user.is_coorganizer(event.id):
-                    co_organizers.append(user)
-
-        return len(co_organizers)
-
-    # TODO Make this more efficient
-    @staticmethod
-    def get_all_track_organizers():
-        events = Event.query.all()
-        users = User.query.all()
-        track_organizers = []
-        for event in events:
-            for user in users:
-                if user.is_track_organizer(event.id):
-                    track_organizers.append(user)
-
-        return len(track_organizers)
 
     @staticmethod
-    def get_all_attendees():
-        events = Event.query.all()
-        users = User.query.all()
-        attendees = []
-        for event in events:
-            for user in users:
-                if user.is_attendee(event.id):
-                    attendees.append(user)
-
-        return len(attendees)
+    def get_all_user_roles(role_name):
+        role = Role.query.filter_by(name=role_name).first()
+        uers = UsersEventsRoles.query.filter_by(role=role)
+        return uers
 
     @staticmethod
     def get_all_accepted_sessions():
