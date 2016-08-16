@@ -18,7 +18,7 @@ from ..models.track import Track
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, NEXT_EVENT, \
     USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, EVENT_PUBLISH, Mail, \
     AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, TICKET_PURCHASED, EVENT_EXPORTED, \
-    EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS
+    EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_FOLLOWUP_EMAIL, MONTHLY_PAYMENT_EMAIL
 from system_mails import MAILS
 from app.models.notifications import (
     # Prepended with `NOTIF_` to differentiate from mails
@@ -310,6 +310,26 @@ def send_email_for_expired_orders(email, event_name, invoice_id, order_url):
         action=MAIL_TO_EXPIRED_ORDERS,
         subject=MAILS[MAIL_TO_EXPIRED_ORDERS]['subject'].format(event_name=event_name),
         html=MAILS[MAIL_TO_EXPIRED_ORDERS]['message'].format(invoice_id=invoice_id, order_url=order_url)
+    )
+
+def send_email_for_monthly_fee_payment(email, event_name, date, amount, payment_url):
+    """Send email every month with invoice to pay service fee"""
+    send_email(
+        to=email,
+        action=MONTHLY_PAYMENT_EMAIL,
+        subject=MAILS[MONTHLY_PAYMENT_EMAIL]['subject'].format(event_name=event_name, date=date),
+        html=MAILS[MONTHLY_PAYMENT_EMAIL]['message'].format(event_name=event_name, date=date,
+                                                            payment_url=payment_url, amount=amount)
+    )
+
+def send_followup_email_for_monthly_fee_payment(email, event_name, date, amount, payment_url):
+    """Send email every month with invoice to pay service fee"""
+    send_email(
+        to=email,
+        action=MONTHLY_PAYMENT_FOLLOWUP_EMAIL,
+        subject=MAILS[MONTHLY_PAYMENT_FOLLOWUP_EMAIL]['subject'].format(event_name=event_name, date=date),
+        html=MAILS[MONTHLY_PAYMENT_FOLLOWUP_EMAIL]['message'].format(event_name=event_name, date=date,
+                                                                     payment_url=payment_url, amount=amount)
     )
 
 

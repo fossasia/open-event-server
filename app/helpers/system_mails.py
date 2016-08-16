@@ -5,7 +5,8 @@ Register a mail here before using it
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
     USER_REGISTER, PASSWORD_RESET, EVENT_ROLE, SESSION_ACCEPT_REJECT, \
     SESSION_SCHEDULE, NEXT_EVENT, EVENT_PUBLISH, AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, \
-    TICKET_PURCHASED, EVENT_EXPORTED, EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS
+    TICKET_PURCHASED, EVENT_EXPORTED, EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_EMAIL, \
+    MONTHLY_PAYMENT_FOLLOWUP_EMAIL
 
 MAILS = {
     EVENT_PUBLISH: {
@@ -151,8 +152,29 @@ MAILS = {
         'subject': 'Tickets for {event_name} are still available ',
         'message': (
             "This is just a gentle reminder that the payment for your order {invoice_id} is still left." +
-            "<br/> The tickets for this event are still available. <a href='{order_url}'>Click here</a> to purchase your ticket for this event."
+            "<br/> The tickets for this event are still available. <a href='{order_url}'>Click here</a> to "
+            "purchase your ticket for this event."
             "<br><br><em>Looking forward to seeing you at the event.</em>"
         )
-    }
+    },
+    MONTHLY_PAYMENT_EMAIL: {
+        'recipient': 'Organizer',
+        'subject': '{date} - Monthly service fee invoice for {event_name}',
+        'message': (
+            "The total service fee for the ticket sales of {event_name} in the month of {date} is {amount}." +
+            "<br/> That payment for the same has to be made in two weeks. <a href='{payment_url}'>Click here</a> to "
+            "view your invoice and complete the payment."
+            "<br><br><em>Thank you for using Open Event.</em>"
+        )
+    },
+    MONTHLY_PAYMENT_FOLLOWUP_EMAIL: {
+        'recipient': 'Organizer',
+        'subject': 'Past Due: {date} - Monthly service fee invoice for {event_name}',
+        'message': (
+            "The total service fee for the ticket sales of {event_name} in the month of {date} is {amount}." +
+            "<br/> That payment for the same is past the due date. <a href='{payment_url}'>Click here</a> to "
+            "view your invoice and complete the payment to prevent loss of functionality."
+            "<br><br><em>Thank you for using Open Event.</em>"
+        )
+    },
 }
