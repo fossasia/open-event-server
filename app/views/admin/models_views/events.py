@@ -409,7 +409,8 @@ class EventsView(BaseView):
                 "warning")
             return redirect(url_for('.edit_view',
                                     event_id=event.id) + "#highlight=location_name")
-        if not is_verified_user():
+        can_publish = DataGetter.can_publish_event(login.current_user.is_verified)
+        if not is_verified_user() and not can_publish:
             return redirect(url_for('.details_view', event_id=event_id))
         event.state = 'Published'
         save_to_db(event, 'Event Published')

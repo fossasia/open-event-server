@@ -126,6 +126,17 @@ class DataGetter(object):
         return UserPermission.query.all()
 
     @staticmethod
+    def can_publish_event(is_verified):
+        perm = UserPermission.query.filter_by(name='live_event').first()
+        if not perm:
+            return False
+
+        if is_verified:
+            return perm.verified_user
+        else:
+            return perm.unverified_user
+
+    @staticmethod
     def get_email_notification_settings_by_id(email_id):
         return EmailNotification.query.get(email_id)
 
