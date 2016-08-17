@@ -21,7 +21,7 @@ import os.path
 from os import environ
 import sys
 import json
-from flask import Flask, session, url_for
+from flask import Flask, session
 from flask.ext.autodoc import Autodoc
 from app.settings import get_settings
 from flask.ext.cors import CORS
