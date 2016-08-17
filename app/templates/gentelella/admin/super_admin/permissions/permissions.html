@@ -32,6 +32,9 @@ Permissions
     <li class="">
       <a href="#tab_content1" id="event-roles-tab" data-toggle="tab">Event Roles</a>
     </li>
+    <li class="">
+      <a href="#tab_content2" id="user-roles-tab" data-toggle="tab">User Roles</a>
+    </li>
 </ul>
 <div id="myTabContent" class="tab-content">
     <div role="tabpanel" class="tab-pane fade active in" id="tab_content0" aria-labelledby="system-roles-tab">
@@ -74,58 +77,6 @@ Permissions
       </form>
       <br>
 
-      <form action="{{ url_for('sadmin_permissions.user_roles_view') }}" method="post">
-        <h2>
-          User Permissions
-          <button type="submit" class="btn btn-success pull-right">Save</button>
-        </h2>
-
-        <table class="table table-bordered no-global-dt">
-          <thead>
-            <tr>
-              <th>Permission</th>
-              <th>
-                <a data-toggle="tooltip" title="Registered user with verified email address">Verified User</a>
-              </th>
-              <th>
-                <a data-toggle="tooltip" title="Registered user with unverified email address">Unverified User</a>
-              </th>
-              <th>
-                <a data-toggle="tooltip" title="Unregistered user">Anonymous User</a>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-          {% for perm in user_perms %}
-            <tr>
-              <td>{{ perm.description }}</td>
-              <td>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" name="{{ perm.name + '-verified_user' }}" {{ 'checked' if perm.verified_user else '' }}> Verified User
-                  </label>
-                </div>
-              </td>
-              <td>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" name="{{ perm.name + '-unverified_user' }}" {{ 'checked' if perm.unverified_user else '' }}> Unverified User
-                  </label>
-                </div>
-              </td>
-              <td>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" name="{{ perm.name + '-anonymous_user' }}" {{ 'checked' if perm.anonymous_user else '' }} disabled> Anonymous User
-                  </label>
-                </div>
-                Account creation is necessary.
-              </td>
-            </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-      </form>
     </div>
     <div role="tabpanel" class="tab-pane fade" id="tab_content1" aria-labelledby="event-roles-tab">
       <form method="post" style="margin-top: 60px;" action="{{ url_for('sadmin_permissions.event_roles_view') }}">
@@ -202,6 +153,62 @@ Permissions
       </form>
 
     </div>
+
+  <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="user-roles-tab">
+    <form action="{{ url_for('sadmin_permissions.user_roles_view') }}" method="post" style="margin-top: 60px;">
+        <h2>
+          User Roles
+          <button type="submit" class="btn btn-success pull-right">Save</button>
+        </h2>
+
+        <table class="table table-bordered no-global-dt">
+          <thead>
+            <tr>
+              <th>Permission</th>
+              <th>
+                <a data-toggle="tooltip" title="Registered user with verified email address">Verified User</a>
+              </th>
+              <th>
+                <a data-toggle="tooltip" title="Registered user with unverified email address">Unverified User</a>
+              </th>
+              <th>
+                <a data-toggle="tooltip" title="Unregistered user">Anonymous User</a>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for perm in user_perms %}
+            <tr>
+              <td>{{ perm.description }}</td>
+              <td>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" name="{{ perm.name + '-verified_user' }}" {{ 'checked' if perm.verified_user else '' }}> Verified User
+                  </label>
+                </div>
+              </td>
+              <td>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" name="{{ perm.name + '-unverified_user' }}" {{ 'checked' if perm.unverified_user else '' }}> Unverified User
+                  </label>
+                </div>
+              </td>
+              <td>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" name="{{ perm.name + '-anonymous_user' }}" {{ 'checked' if perm.anonymous_user else '' }} disabled> Anonymous User
+                  </label>
+                </div>
+                Account creation is necessary.
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </form>
+    </div>
+
 </div>
 
 
