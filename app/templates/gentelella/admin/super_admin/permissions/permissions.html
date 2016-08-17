@@ -46,7 +46,6 @@ Permissions
 
         <h2>
           Panel Permissions
-          <button type="submit" class="btn btn-success pull-right">Save</button>
         </h2>
         <table class="table table-bordered no-global-dt">
           <thead>
@@ -74,15 +73,15 @@ Permissions
           {% endfor %}
           </tbody>
         </table>
+        <button type="submit" class="btn btn-success pull-right">Save</button>
       </form>
-      <br>
+      <br><br>
 
     </div>
     <div role="tabpanel" class="tab-pane fade" id="tab_content1" aria-labelledby="event-roles-tab">
       <form method="post" style="margin-top: 60px;" action="{{ url_for('sadmin_permissions.event_roles_view') }}">
       <h2>
         Event Roles
-        <button type="submit" class="btn btn-success pull-right">Save</button>
       </h2>
       <hr>
 
@@ -151,6 +150,7 @@ Permissions
         </tbody>
       </table>
       </form>
+      <button type="submit" class="btn btn-success pull-right">Save</button>
 
     </div>
 
@@ -158,7 +158,6 @@ Permissions
     <form action="{{ url_for('sadmin_permissions.user_roles_view') }}" method="post" style="margin-top: 60px;">
         <h2>
           User Roles
-          <button type="submit" class="btn btn-success pull-right">Save</button>
         </h2>
 
         <table class="table table-bordered no-global-dt">
@@ -207,6 +206,7 @@ Permissions
           </tbody>
         </table>
       </form>
+      <button type="submit" class="btn btn-success pull-right">Save</button>
     </div>
 
 </div>
