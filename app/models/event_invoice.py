@@ -1,5 +1,6 @@
 import uuid
-from datetime import datetime, time
+from datetime import datetime
+import time
 
 from app.helpers.helpers import get_count
 from . import db

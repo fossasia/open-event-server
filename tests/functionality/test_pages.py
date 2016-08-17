@@ -21,19 +21,19 @@ class TestPagesUrls(OpenEventTestCase):
 
             for rule in app.url_map.iter_rules():
                 methods = ','.join(rule.methods)
-                if "<" not in str(rule)  and\
+                if "<" not in str(rule) and\
                         "favicon" not in str(rule) and\
                         "check_email" not in str(rule) and \
                         "set_role" not in str(rule) and \
                         "GET" in methods:
                     try:
-                        status_code = self.app.get(request.url[:-1] + str(rule).replace('//', '/'),
-                                                   follow_redirects=True).status_code
-                        print str(rule), status_code, rule.endpoint
+                        response = self.app.get(request.url[:-1] + str(rule).replace('//', '/'),
+                                                follow_redirects=True)
+                        print str(rule), response.status_code, rule.endpoint
                         if 'api' in str(rule):
-                            self.assertTrue(status_code in [200, 302, 401, 404])
+                            self.assertTrue(response.status_code in [200, 302, 401, 404], msg=response.data)
                         else:
-                            self.assertTrue(status_code in [200, 302, 401])
+                            self.assertTrue(response.status_code in [200, 302, 401], msg=response.data)
                     except TemplateNotFound:
                         pass
                     except AttributeError:

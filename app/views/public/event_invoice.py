@@ -18,7 +18,6 @@ def create_pdf(pdf_data):
 class EventInvoicingView(BaseView):
     @expose('/', methods=('GET',))
     def index(self):
-        abort(404)
         return redirect("/")
 
     @expose('/<invoice_identifier>/', methods=('GET',))
