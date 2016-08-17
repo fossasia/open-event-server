@@ -97,9 +97,6 @@ def create_app():
     app.config['SQLALCHEMY_RECORD_QUERIES'] = True
     # app.config['SERVER_NAME'] = 'http://127.0.0.1:8001'
     # app.config['SERVER_NAME'] = 'open-event-dev.herokuapp.com'
-
-    # Facebook APP ID
-    app.config['FB_APP_ID'] = os.getenv('FB_APP_ID', '')
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     app.logger.setLevel(logging.INFO)
     app.jinja_env.add_extension('jinja2.ext.do')
@@ -388,8 +385,8 @@ def integrate_socketio():
 
 @app.context_processor
 def fb_app_id():
-    app_id = current_app.config.get('FB_APP_ID')
-    return dict(fb_app_id=app_id)
+    fb_app_id = get_settings()['fb_client_id']
+    return dict(fb_app_id=fb_app_id)
 
 
 # Testing database performance
