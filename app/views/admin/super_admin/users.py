@@ -60,8 +60,7 @@ class SuperAdminUsersView(SuperAdminBaseView):
                 'user': user,
                 'event_roles': event_roles,}
             )
-        return self.render('/gentelella/admin/super_admin/users/users.html', active_user_list=active_user_list, trash_user_list=trash_user_list)
-
+        return redirect(url_for('.index_view'))
     @expose('/<user_id>/', methods=('GET', 'POST'))
     def details_view(self, user_id):
         profile = DataGetter.get_user(user_id)
