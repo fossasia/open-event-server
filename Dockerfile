@@ -21,6 +21,7 @@ RUN npm install bower -g && npm cache clean
 COPY requirements.txt requirements.txt
 COPY requirements requirements
 COPY bower.json bower.json
+COPY .bowerrc .bowerrc
 COPY package.json package.json
 
 # install requirements
