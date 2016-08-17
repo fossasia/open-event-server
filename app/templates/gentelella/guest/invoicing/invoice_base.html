@@ -1,0 +1,35 @@
+{% extends 'gentelella/admin/base.html' %}
+
+{% block title %}Your Invoice{% endblock %}
+
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/ticketing.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-10 col-lg-8 col-md-push-1 col-lg-push-2" style="min-height: 600px;">
+            <div class="row">
+                <div class="col-md-8">
+                    <h3>{{ event.name }}</h3>
+                    <br>
+                    <br>
+                    {% block inner_panel %}
+
+                    {% endblock %}
+                </div>
+                <div class="col-md-4">
+                    <div class="hidden-xs hidden-sm hidden-print" style="height: 103px;">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button id="pay-via-stripe" type="button" style="display:none;">Pay Via Stripe</button>
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+{% endblock %}

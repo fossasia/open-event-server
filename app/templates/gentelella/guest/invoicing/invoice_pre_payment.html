@@ -1,0 +1,192 @@
+{% extends 'gentelella/guest/invoicing/invoice_base.html' %}
+
+{% block title %}Your Invoice{% endblock %}
+
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
+{% endblock %}
+
+{% block inner_panel %}
+    {% include 'gentelella/guest/invoicing/components/_invoice_summary.html' %}
+    <div id="registration-information-holder">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Registration Information</h3>
+            </div>
+            <div class="panel-body" style="padding-bottom: 10px;">
+                <form class="form-horizontal" data-toggle="validator" id="order-payment-form"
+                      action="{{ url_for('event_invoicing.initiate_invoice_payment') }}">
+                    <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
+                        <i class="fa fa-ticket"></i>
+                        Personal Information
+                        <hr style="margin:0;binvoice-width: 2px; binvoice-color: #5bc0de;">
+                    </h2>
+                    <br>
+                    {% if not current_user.is_authenticated and not from_organizer %}
+                        <div style="width: 100%; text-align: center">
+                            Have you used Open Event before? <a
+                                href="{{ url_for('admin.login_view', next=url_for('event_invoicing.view_invoice', invoice_identifier=invoice.identifier, _external=True)) }}">Sign
+                            In</a> To Your Account to
+                            continue.
+                        </div>
+                        <br>
+                    {% endif %}
+                    <input type="hidden" name="identifier" value="{{ invoice.identifier }}">
+                    <div class="form-group">
+                        <label for="firstname" class="col-sm-4 control-label">First name <span
+                                class="required">*</span></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="firstname" name="firstname"
+                                   required value="{{ current_user.user_detail.firstname | default('', true) }}">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastname" class="col-sm-4 control-label">Last name <span
+                                class="required">*</span></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="lastname" name="lastname"
+                                   required value="{{ current_user.user_detail.lastname | default('', true) }}">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="col-sm-4 control-label">Email <span
+                                class="required">*</span></label>
+                        <div class="col-sm-6">
+                            <input type="email" class="form-control"
+                                    {% if current_user.is_authenticated and not from_organizer %} readonly {% else %}
+                                   name="email" {% endif %}
+                                   id="email" required value="{{ current_user.email | default('', true) }}">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    {% if not current_user.is_authenticated or from_organizer %}
+                        <div class="form-group">
+                            <label for="email_confirm" class="col-sm-4 control-label">Confirm Email <span
+                                    class="required">*</span></label>
+                            <div class="col-sm-6">
+                                <input type="email" class="form-control" id="email_confirm"
+                                       data-match="#email" name="email_confirm" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <input type="hidden" name="email" value="{{ current_user.email | default('', true) }}">
+                    {% endif %}
+
+                    <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
+                        <i class="fa fa-ticket"></i>
+                        Billing Information
+                        <hr style="margin:0;binvoice-width: 2px; binvoice-color: #5bc0de;">
+                    </h2>
+                    <br>
+                    <div class="form-group">
+                        <label for="country" class="col-sm-4 control-label">Country <span
+                                class="required">*</span></label>
+                        <div class="col-sm-6">
+                            <select class="form-control" name="country" id="country" required>
+                                <option value="" selected>Select country</option>
+                                {% for country in countries %}
+                                    <option value="{{ country.name }}">{{ country.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="address" class="col-sm-4 control-label">Address <span
+                                class="required">*</span></label>
+                        <div class="col-sm-6">
+                            <textarea class="form-control" id="address" name="address"
+                                      required></textarea>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="city" class="col-sm-4 control-label">City <span
+                                class="required">*</span></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="city" name="city" required>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="state" class="col-sm-4 control-label">State/Province <span
+                                class="required">*</span></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="state" name="state" required>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="zipcode" class="col-sm-4 control-label">Zip Code <span
+                                class="required">*</span></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="zipcode" name="zipcode"
+                                   required>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="zipcode" class="col-sm-4 control-label">Pay Via <span
+                                class="required">*</span></label>
+                        <div class="col-sm-6">
+                            {% if pay_by_stripe %}
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="pay_via_service" id="pay_via_service1" value="stripe" style="margin-top: 14px;"
+                                               checked required>
+                                        <img src="{{ url_for('static', filename='img/stripe_logos.png') }}" alt="Pay with Stripe using your favorite card" />
+                                    </label>
+                                </div>
+                            {% endif %}
+                            {% if pay_by_paypal %}
+                                <div class="radio">
+                                    <label style="margin-top: 10px;">
+                                        <input type="radio" name="pay_via_service" id="pay_via_service2" value="paypal" style="margin-top: 6px;" {% if not pay_by_stripe %}checked{% endif %} required>
+                                        <img src="{{ url_for('static', filename='img/paypal_logo.png') }}" alt="Pay with PayPal, PayPal Credit or any major credit card" />
+                                    </label>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-4 control-label"></label>
+                        <div class="col-sm-6">
+                            By clicking "Pay Now", I acknowledge that I have read and agree with
+                            the
+                            Open Event terms of service, and privacy policy.<br><br>
+                            <button type="submit" class="btn btn-success btn-lg">Pay Now</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+    <script type="text/javascript">
+        window.order_created_at = "{{ invoice.created_at }}";
+        window.order_identifier = "{{ invoice.identifier }}";
+        window.expire_url = "/";
+        window.expired_redirect = "{{ url_for('event_detail.display_event_detail_home', identifier=invoice.event.identifier, expired='yes') }}";
+        window.stripe_charge_at = "{{ url_for('event_invoicing.charge_stripe_invoice_payment') }}";
+        window.stripe_publishable_key = "{{ stripe_publishable_key }}";
+        window.event_name = "{{ invoice.event.name }}";
+        window.order_amount = {{ invoice.amount }};
+        window.paid_via = "{{ paid_via | default('', true) }}";
+        window.from_organzier = true;
+        window.currency = "{{ invoice.event.payment_currency if invoice.event.payment_currency and invoice.event.payment_currency != "" else "USD" | default('USD', true) }}"
+    </script>
+    <script src="https://checkout.stripe.com/checkout.js"></script>
+    <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/bootstrap-validator/dist/validator.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin/guest/ticketing.js') }}"></script>
+{% endblock %}
