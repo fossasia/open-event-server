@@ -8,7 +8,6 @@ import time
 from datetime import datetime, timedelta
 from flask import request, url_for, current_app
 from itsdangerous import Serializer
-from flask.ext import login
 from sqlalchemy import func
 
 from app.helpers.flask_helpers import get_real_ip
@@ -42,6 +41,16 @@ def represents_int(string):
         return False
 
 
+# From http://stackoverflow.com/a/3425124
+def monthdelta(date, delta):
+    m, y = (date.month + delta) % 12, date.year + (date.month + delta - 1) // 12
+    if not m:
+        m = 12
+    d = min(date.day, [31,
+                       29 if y % 4 == 0 and not y % 400 == 0 else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m - 1])
+    return date.replace(day=d, month=m, year=y)
+
+
 def get_count(q):
     count_q = q.statement.with_only_columns([func.count()]).order_by(None)
     count = q.session.execute(count_q).scalar()
@@ -51,7 +60,7 @@ def get_count(q):
 def get_event_id():
     """Get event Id from request url"""
     url = request.url
-    result = re.search('event\/[0-9]*', url)
+    result = re.search('event/[0-9]*', url)
     return result.group(0).split('/')[1]
 
 
@@ -312,6 +321,7 @@ def send_email_for_expired_orders(email, event_name, invoice_id, order_url):
         html=MAILS[MAIL_TO_EXPIRED_ORDERS]['message'].format(invoice_id=invoice_id, order_url=order_url)
     )
 
+
 def send_email_for_monthly_fee_payment(email, event_name, date, amount, payment_url):
     """Send email every month with invoice to pay service fee"""
     send_email(
@@ -321,6 +331,7 @@ def send_email_for_monthly_fee_payment(email, event_name, date, amount, payment_
         html=MAILS[MONTHLY_PAYMENT_EMAIL]['message'].format(event_name=event_name, date=date,
                                                             payment_url=payment_url, amount=amount)
     )
+
 
 def send_followup_email_for_monthly_fee_payment(email, event_name, date, amount, payment_url):
     """Send email every month with invoice to pay service fee"""
@@ -613,10 +624,12 @@ def first_day_of_month(date):
     return date - delta
 
 
-def update_state(task_handle, state, result={}):
+def update_state(task_handle, state, result=None):
     """
     Update state of celery task
     """
+    if result is None:
+        result = {}
     if not current_app.config.get('CELERY_ALWAYS_EAGER'):
         task_handle.update_state(
             state=state, meta=result

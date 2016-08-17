@@ -3,8 +3,8 @@ from datetime import datetime, timedelta
 from flask import url_for
 from sqlalchemy_continuum import transaction_class
 
-from app.helpers.helpers import send_after_event
-from app.helpers.helpers import send_email_for_expired_orders
+from app.helpers.helpers import send_after_event, monthdelta
+from app.helpers.helpers import send_email_for_expired_orders, send_email_for_monthly_fee_payment
 from app.helpers.data import DataManager, delete_from_db, save_to_db
 from app.helpers.data_getter import DataGetter
 from app.helpers.payment import get_fee
@@ -86,6 +86,13 @@ def send_event_fee_notification():
             if fee_total > 0:
                 new_invoice = EventInvoice(amount=fee_total, event_id=event.id, user_id=event.creator_id)
                 save_to_db(new_invoice)
+                prev_month = monthdelta(new_invoice.created_at, 1).strftime("%b %Y")  # Displayed as Aug 2016
+                send_email_for_monthly_fee_payment(new_invoice.user.email,
+                                                   event.name,
+                                                   prev_month,
+                                                   new_invoice.amount,
+                                                   url_for('event_invoicing.view_invoice',
+                                                           invoice_identifier=new_invoice.identifier, _external=True))
 
 def send_event_fee_notification_followup():
     with app.app_context():

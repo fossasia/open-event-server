@@ -1,5 +1,5 @@
 """Copyright 2015 Rafal Kowalski"""
-from flask.ext import login
+import flask_login as login
 from flask_admin import Admin
 
 from app.models import db
@@ -20,6 +20,7 @@ from app.views.admin.models_views.sponsors import SponsorsView
 from app.views.admin.models_views.ticket_sales import TicketSalesView
 from app.views.admin.super_admin.sales import SuperAdminSalesView
 from app.views.public.event_detail import EventDetailView
+from app.views.public.event_invoice import EventInvoicingView
 from app.views.public.explore import ExploreView
 from app.views.public.pages import BasicPagesView
 from app.views.admin.super_admin.super_admin import SuperAdminView
@@ -55,6 +56,7 @@ class AdminView(object):
         self.admin.add_view(EventDetailView(name='Event Detail', url='/e', endpoint="event_detail"))
         self.admin.add_view(ExploreView(name='Explore', url='/explore', endpoint="explore"))
         self.admin.add_view(TicketingView(name='Ticketing & Orders', url='/orders', endpoint="ticketing"))
+        self.admin.add_view(EventInvoicingView(name='Event Invoicing', url='/invoices', endpoint="event_invoicing"))
 
         # Accessible only after logging in
 
@@ -63,9 +65,12 @@ class AdminView(object):
         self.admin.add_view(EventsView(name='Events', url='/events', endpoint="events"))
 
         # Event level
-        self.admin.add_view(SpeakersView(name='Speakers', url='/events/<int:event_id>/speakers', endpoint="event_speakers"))
-        self.admin.add_view(SponsorsView(name='Sponsors', url='/events/<int:event_id>/sponsors', endpoint="event_sponsors"))
-        self.admin.add_view(SessionsView(name='Sessions', url='/events/<int:event_id>/sessions', endpoint="event_sessions"))
+        self.admin.add_view(SpeakersView(name='Speakers', url='/events/<int:event_id>/speakers',
+                                         endpoint="event_speakers"))
+        self.admin.add_view(SponsorsView(name='Sponsors', url='/events/<int:event_id>/sponsors',
+                                         endpoint="event_sponsors"))
+        self.admin.add_view(SessionsView(name='Sessions', url='/events/<int:event_id>/sessions',
+                                         endpoint="event_sessions"))
         self.admin.add_view(SchedulerView(name='Scheduler', url='/events/<event_id>/scheduler',
                                           endpoint="event_scheduler"))
         self.admin.add_view(ExportView(name='Export', url='/events/<int:event_id>/export', endpoint="event_export"))

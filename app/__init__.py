@@ -6,6 +6,7 @@ import warnings
 from flask.exthook import ExtDeprecationWarning
 from forex_python.converter import CurrencyCodes
 from pytz import utc
+
 warnings.simplefilter('ignore', ExtDeprecationWarning)
 # Keep it before flask extensions are imported
 
@@ -92,15 +93,12 @@ def create_app():
     app.config['STATIC_ROOT'] = 'staticfiles'
     app.config['STATICFILES_DIRS'] = (os.path.join(BASE_DIR, 'static'),)
     app.config['SQLALCHEMY_RECORD_QUERIES'] = True
-    #app.config['SERVER_NAME'] = 'http://127.0.0.1:8001'
-    # app.config['SERVER_NAME'] = 'open-event-dev.herokuapp.com'
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     app.logger.setLevel(logging.INFO)
     app.jinja_env.add_extension('jinja2.ext.do')
     app.jinja_env.add_extension('jinja2.ext.loopcontrols')
     app.jinja_env.undefined = SilentUndefined
     app.jinja_env.filters['operation_name'] = operation_name
-    # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
     # set up jwt
     app.config['JWT_AUTH_USERNAME_KEY'] = 'email'
@@ -145,15 +143,11 @@ def forbidden(e):
         return json.dumps({"error": "forbidden"}), 403
     return render_template('gentelella/admin/forbidden.html'), 403
 
-
 # taken from http://flask.pocoo.org/snippets/45/
 def request_wants_json():
     best = request.accept_mimetypes.best_match(
         ['application/json', 'text/html'])
-    return best == 'application/json' and \
-           request.accept_mimetypes[best] > \
-           request.accept_mimetypes['text/html']
-
+    return best == 'application/json' and request.accept_mimetypes[best] > request.accept_mimetypes['text/html']
 
 @app.context_processor
 def locations():
@@ -199,6 +193,7 @@ def currency_symbol_filter(currency_code):
 def currency_name_filter(currency_code):
     name = CurrencyCodes().get_currency_name(currency_code)
     return name if name else ''
+
 
 @app.template_filter('camel_case')
 def camel_case_filter(string):
@@ -319,14 +314,14 @@ def track_user():
 def make_celery(app):
     celery = Celery(app.import_name, broker=app.config['CELERY_BROKER_URL'])
     celery.conf.update(app.config)
-    TaskBase = celery.Task
+    task_base = celery.Task
 
-    class ContextTask(TaskBase):
+    class ContextTask(task_base):
         abstract = True
 
         def __call__(self, *args, **kwargs):
             with app.app_context():
-                return TaskBase.__call__(self, *args, **kwargs)
+                return task_base.__call__(self, *args, **kwargs)
 
     celery.Task = ContextTask
     return celery
