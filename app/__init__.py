@@ -165,6 +165,14 @@ def locations():
 
     return dict(locations=get_locations_of_events)
 
+@app.context_processor
+def fee_helpers():
+    def get_fee(currency):
+        from app.helpers.payment import get_fee
+        return get_fee(currency)
+
+    return dict(get_fee=get_fee)
+
 
 @app.context_processor
 def event_types():
@@ -176,7 +184,6 @@ def event_types():
 def pages():
     pages = DataGetter.get_all_pages()
     return dict(system_pages=pages)
-
 
 @app.context_processor
 def social_settings():

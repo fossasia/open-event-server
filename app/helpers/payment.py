@@ -105,15 +105,10 @@ class PayPalPaymentsManager(object):
     api_version = 93
 
     @staticmethod
-    def get_credentials(event, override_mode=False, is_testing=False):
-        if represents_int(event):
+    def get_credentials(event=None, override_mode=False, is_testing=False):
+
+        if event and represents_int(event):
             event = DataGetter.get_event(event)
-
-        if not event:
-            return None
-
-        if not event.paypal_email or event.paypal_email == "":
-            return None
 
         settings = get_settings()
 
@@ -133,7 +128,7 @@ class PayPalPaymentsManager(object):
                 'SIGNATURE': settings['paypal_sandbox_signature'],
                 'SERVER': 'https://api-3t.sandbox.paypal.com/nvp',
                 'CHECKOUT_URL': 'https://www.sandbox.paypal.com/cgi-bin/webscr',
-                'EMAIL': event.paypal_email
+                'EMAIL': '' if not event or not event.paypal_email or event.paypal_email == "" else event.paypal_email
             }
         else:
             credentials = {
@@ -142,7 +137,7 @@ class PayPalPaymentsManager(object):
                 'SIGNATURE': settings['paypal_live_signature'],
                 'SERVER': 'https://api-3t.paypal.com/nvp',
                 'CHECKOUT_URL': 'https://www.paypal.com/cgi-bin/webscr',
-                'EMAIL': event.paypal_email
+                'EMAIL': '' if not event or not event.paypal_email or event.paypal_email == "" else event.paypal_email
             }
 
         if credentials['USER'] and credentials['USER'] and credentials['USER'] and credentials['USER'] != "" and \
@@ -192,10 +187,9 @@ class PayPalPaymentsManager(object):
                                         function='cancel', _external=True)
 
         else:
-            # TODO Change URL for
-            data['RETURNURL'] = url_for('ticketing.paypal_callback', order_identifier=order_invoice.identifier,
+            data['RETURNURL'] = url_for('event_invoicing.paypal_callback', invoice_identifier=order_invoice.identifier,
                                         function='success', _external=True),
-            data['CANCELURL'] = url_for('ticketing.paypal_callback', order_identifier=order_invoice.identifier,
+            data['CANCELURL'] = url_for('event_invoicing.paypal_callback', invoice_identifier=order_invoice.identifier,
                                         function='cancel', _external=True)
 
         count = 1
@@ -217,10 +211,10 @@ class PayPalPaymentsManager(object):
         })
 
     @staticmethod
-    def get_approved_payment_details(order, credentials=None):
+    def get_approved_payment_details(order_invoice, credentials=None):
 
         if not credentials:
-            credentials = PayPalPaymentsManager.get_credentials(order.event)
+            credentials = PayPalPaymentsManager.get_credentials(order_invoice.event)
 
         if not credentials:
             raise Exception('PayPal credentials have not be set correctly')
@@ -232,7 +226,7 @@ class PayPalPaymentsManager(object):
             'SUBJECT': credentials['EMAIL'],
             'METHOD': 'GetExpressCheckoutDetails',
             'VERSION': PayPalPaymentsManager.api_version,
-            'TOKEN': order.paypal_token
+            'TOKEN': order_invoice.paypal_token
         }
 
         if current_app.config['TESTING']:
@@ -242,15 +236,15 @@ class PayPalPaymentsManager(object):
         return dict(urlparse.parse_qsl(response.text))
 
     @staticmethod
-    def capture_payment(order, payer_id, currency=None, credentials=None):
+    def capture_payment(order_invoice, payer_id, currency=None, credentials=None):
         if not credentials:
-            credentials = PayPalPaymentsManager.get_credentials(order.event)
+            credentials = PayPalPaymentsManager.get_credentials(order_invoice.event)
 
         if not credentials:
             raise Exception('PayPal credentials have not be set correctly')
 
         if not currency:
-            currency = order.event.payment_currency
+            currency = order_invoice.event.payment_currency
 
         if not currency or currency == "":
             currency = "USD"
@@ -262,10 +256,10 @@ class PayPalPaymentsManager(object):
             'SUBJECT': credentials['EMAIL'],
             'METHOD': 'DoExpressCheckoutPayment',
             'VERSION': PayPalPaymentsManager.api_version,
-            'TOKEN': order.paypal_token,
+            'TOKEN': order_invoice.paypal_token,
             'PAYERID': payer_id,
             'PAYMENTREQUEST_0_PAYMENTACTION': 'SALE',
-            'PAYMENTREQUEST_0_AMT': order.amount,
+            'PAYMENTREQUEST_0_AMT': order_invoice.amount,
             'PAYMENTREQUEST_0_CURRENCYCODE': currency,
         }
 

@@ -84,7 +84,7 @@ class InvoicingManager(object):
         invoice.stripe_token = form['stripe_token_id']
         save_to_db(invoice)
 
-        charge = StripePaymentsManager.capture_payment(invoice)
+        charge = StripePaymentsManager.capture_payment(invoice, credentials=StripePaymentsManager.get_credentials())
         if charge:
             invoice.paid_via = 'stripe'
             invoice.payment_mode = charge.source.object
@@ -103,9 +103,14 @@ class InvoicingManager(object):
 
     @staticmethod
     def charge_paypal_invoice_payment(invoice):
-        payment_details = PayPalPaymentsManager.get_approved_payment_details(invoice)
+        payment_details = PayPalPaymentsManager\
+            .get_approved_payment_details(invoice, credentials=PayPalPaymentsManager.get_credentials())
+
         if 'PAYERID' in payment_details:
-            capture_result = PayPalPaymentsManager.capture_payment(invoice, payment_details['PAYERID'])
+            capture_result = PayPalPaymentsManager\
+                .capture_payment(invoice, payment_details['PAYERID'],
+                                 credentials=PayPalPaymentsManager.get_credentials())
+
             if capture_result['ACK'] == 'Success':
                 invoice.paid_via = 'paypal'
                 invoice.status = 'completed'

@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, time
 
 from app.helpers.helpers import get_count
 from . import db
@@ -68,6 +68,9 @@ class EventInvoice(db.Model):
         self.transaction_id = transaction_id
         self.paid_via = paid_via
         self.created_at = datetime.utcnow()
+
+    def get_invoice_number(self):
+        return 'I' + str(int(time.mktime(self.created_at.timetuple()))) + '-' + str(self.id)
 
     def __repr__(self):
         return '<EventInvoice %r>' % self.stripe_user_id

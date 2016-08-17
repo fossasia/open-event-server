@@ -8,7 +8,7 @@ import pycountry
 
 from app.helpers.data import save_to_db
 from app.helpers.invoicing import InvoicingManager
-from app.helpers.payment import PayPalPaymentsManager
+from app.helpers.payment import PayPalPaymentsManager, StripePaymentsManager
 
 def create_pdf(pdf_data):
     pdf = StringIO()
@@ -29,12 +29,22 @@ class EventInvoicingView(BaseView):
         if invoice.status == 'completed':
             return redirect(url_for('event_invoicing.view_invoice_after_payment', invoice_identifier=invoice_identifier))
 
-        stripe_publishable_key = get_settings()['stripe_publishable_key']
-        if not stripe_publishable_key or stripe_publishable_key != "":
-            stripe_publishable_key = "No Key Set"
+        pay_by_stripe = False
+        pay_by_paypal = False
 
-        return self.render('/gentelella/guest/ticketing/invoice_pre_payment.html', invoice=invoice, event=invoice.event,
+        stripe_publishable_key = "No Key Set"
+
+        if StripePaymentsManager.get_credentials():
+            pay_by_stripe = True
+            stripe_publishable_key = StripePaymentsManager.get_credentials()['PUBLISHABLE_KEY']
+
+        if PayPalPaymentsManager.get_credentials():
+            pay_by_paypal = True
+
+        return self.render('/gentelella/guest/invoicing/invoice_pre_payment.html', invoice=invoice, event=invoice.event,
                            countries=list(pycountry.countries),
+                           pay_by_stripe=pay_by_stripe,
+                           pay_by_paypal=pay_by_paypal,
                            stripe_publishable_key=stripe_publishable_key)
 
     @expose('/<invoice_identifier>/view/', methods=('GET',))
@@ -42,14 +52,14 @@ class EventInvoicingView(BaseView):
         invoice = InvoicingManager.get_invoice_by_identifier(invoice_identifier)
         if not invoice or invoice.status != 'completed':
             abort(404)
-        return self.render('/gentelella/guest/ticketing/invoice_post_payment.html', invoice=invoice, event=invoice.event)
+        return self.render('/gentelella/guest/invoicing/invoice_post_payment.html', invoice=invoice, event=invoice.event)
 
     @expose('/<invoice_identifier>/view/pdf/', methods=('GET',))
     def view_invoice_after_payment_pdf(self, invoice_identifier):
         invoice = InvoicingManager.get_invoice_by_identifier(invoice_identifier)
         if not invoice or invoice.status != 'completed':
             abort(404)
-        pdf = create_pdf(self.render('/gentelella/guest/ticketing/invoice_pdf.html',
+        pdf = create_pdf(self.render('/gentelella/guest/invoicing/invoice_pdf.html',
                                      invoice=invoice, event=invoice.event))
         response = make_response(pdf.getvalue())
         response.headers['Content-Type'] = 'application/pdf'
@@ -96,7 +106,7 @@ class EventInvoicingView(BaseView):
     @expose('/<invoice_identifier>/error/', methods=('GET', 'POST'))
     def show_transaction_error(self, invoice_identifier):
         invoice = InvoicingManager.get_invoice_by_identifier(invoice_identifier)
-        return self.render('/gentelella/guest/ticketing/invoice_post_payment_error.html', invoice=invoice,
+        return self.render('/gentelella/guest/invoicing/invoice_post_payment_error.html', invoice=invoice,
                            event=invoice.event)
 
     @expose('/<invoice_identifier>/paypal/<function>/', methods=('GET',))
