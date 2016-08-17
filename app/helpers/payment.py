@@ -42,11 +42,11 @@ class StripePaymentsManager(object):
     def get_credentials(event=None):
         if not event:
             settings = get_settings()
-            if settings.stripe_secret_key and settings.stripe_publishable_key and settings.stripe_secret_key != "" and \
-                    settings.stripe_publishable_key != "":
+            if settings['stripe_secret_key'] and settings["stripe_publishable_key"] and settings['stripe_secret_key'] != "" and \
+                    settings["stripe_publishable_key"] != "":
                 return {
-                    'SECRET_KEY': settings.stripe_secret_key,
-                    'PUBLISHABLE_KEY': settings.stripe_publishable_key
+                    'SECRET_KEY': settings['stripe_secret_key'],
+                    'PUBLISHABLE_KEY': settings["stripe_publishable_key"]
                 }
             else:
                 return None

@@ -30,8 +30,9 @@ from app.helpers.helpers import send_email_after_account_create_with_password
 class TicketingManager(object):
     """All ticketing and orders related functions"""
 
+    @staticmethod
     @cache.memoize(50)
-    def get_ticket(self, ticket_id):
+    def get_ticket(ticket_id):
         return Ticket.query.get(ticket_id)
 
     @staticmethod
@@ -103,10 +104,6 @@ class TicketingManager(object):
             return identifier
         else:
             return TicketingManager.get_new_order_identifier()
-
-    @staticmethod
-    def get_ticket(ticket_id):
-        return Ticket.query.get(ticket_id)
 
     @staticmethod
     def get_order(order_id):
