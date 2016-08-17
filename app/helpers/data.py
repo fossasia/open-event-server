@@ -41,7 +41,7 @@ from ..helpers.system_mails import MAILS
 from ..models import db
 from ..models.activity import Activity, ACTIVITIES
 from ..models.call_for_papers import CallForPaper
-from ..models.admin_panels import PanelPermission
+from ..models.panel_permissions import PanelPermission
 from ..models.custom_forms import CustomForms
 from ..models.event import Event, EventsUsers
 from ..models.event_copyright import EventCopyright
