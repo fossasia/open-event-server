@@ -14,6 +14,7 @@ from app.helpers.data_getter import DataGetter
 from app.helpers.data import save_to_db
 from app.helpers.helpers import represents_int
 from app.models.fees import TicketFees
+from app.models.order import Order
 from app.models.stripe_authorization import StripeAuthorization
 from app.settings import get_settings
 
@@ -41,11 +42,11 @@ class StripePaymentsManager(object):
     def get_credentials(event=None):
         if not event:
             settings = get_settings()
-            if settings.stripe_secret_key and settings.stripe_publishable_key and settings.stripe_secret_key != "" and \
-                    settings.stripe_publishable_key != "":
+            if settings['stripe_secret_key'] and settings["stripe_publishable_key"] and settings['stripe_secret_key'] != "" and \
+                    settings["stripe_publishable_key"] != "":
                 return {
-                    'SECRET_KEY': settings.stripe_secret_key,
-                    'PUBLISHABLE_KEY': settings.stripe_publishable_key
+                    'SECRET_KEY': settings['stripe_secret_key'],
+                    'PUBLISHABLE_KEY': settings["stripe_publishable_key"]
                 }
             else:
                 return None
@@ -63,37 +64,37 @@ class StripePaymentsManager(object):
                 return None
 
     @staticmethod
-    def capture_payment(order, currency=None):
-
-        credentials = StripePaymentsManager.get_credentials(order.event)
+    def capture_payment(order_invoice, currency=None, credentials=None):
+        if not credentials:
+            credentials = StripePaymentsManager.get_credentials(order_invoice.event)
         if not credentials:
             raise Exception('Stripe is incorrectly configured')
 
         stripe.api_key = credentials['SECRET_KEY']
 
         if not currency:
-            currency = order.event.payment_currency
+            currency = order_invoice.event.payment_currency
 
         if not currency or currency == "":
             currency = "USD"
 
         try:
             customer = stripe.Customer.create(
-                email=order.user.email,
-                source=order.stripe_token
+                email=order_invoice.user.email,
+                source=order_invoice.stripe_token
             )
 
             charge = stripe.Charge.create(
                 customer=customer.id,
-                amount=int(order.amount * 100),
+                amount=int(order_invoice.amount * 100),
                 currency=currency.lower(),
                 metadata={
-                    'order_id': order.id,
-                    'event': order.event.name,
-                    'user_id': order.user_id,
-                    'event_id': order.event_id
+                    'order_id': order_invoice.id,
+                    'event': order_invoice.event.name,
+                    'user_id': order_invoice.user_id,
+                    'event_id': order_invoice.event_id
                 },
-                description=order.event.name + " ticket(s)"
+                description=order_invoice.event.name
             )
             return charge
         except:
@@ -104,15 +105,10 @@ class PayPalPaymentsManager(object):
     api_version = 93
 
     @staticmethod
-    def get_credentials(event, override_mode=False, is_testing=False):
-        if represents_int(event):
+    def get_credentials(event=None, override_mode=False, is_testing=False):
+
+        if event and represents_int(event):
             event = DataGetter.get_event(event)
-
-        if not event:
-            return None
-
-        if not event.paypal_email or event.paypal_email == "":
-            return None
 
         settings = get_settings()
 
@@ -132,7 +128,7 @@ class PayPalPaymentsManager(object):
                 'SIGNATURE': settings['paypal_sandbox_signature'],
                 'SERVER': 'https://api-3t.sandbox.paypal.com/nvp',
                 'CHECKOUT_URL': 'https://www.sandbox.paypal.com/cgi-bin/webscr',
-                'EMAIL': event.paypal_email
+                'EMAIL': '' if not event or not event.paypal_email or event.paypal_email == "" else event.paypal_email
             }
         else:
             credentials = {
@@ -141,7 +137,7 @@ class PayPalPaymentsManager(object):
                 'SIGNATURE': settings['paypal_live_signature'],
                 'SERVER': 'https://api-3t.paypal.com/nvp',
                 'CHECKOUT_URL': 'https://www.paypal.com/cgi-bin/webscr',
-                'EMAIL': event.paypal_email
+                'EMAIL': '' if not event or not event.paypal_email or event.paypal_email == "" else event.paypal_email
             }
 
         if credentials['USER'] and credentials['USER'] and credentials['USER'] and credentials['USER'] != "" and \
@@ -151,9 +147,9 @@ class PayPalPaymentsManager(object):
             return None
 
     @staticmethod
-    def get_checkout_url(order, currency=None, credentials=None):
+    def get_checkout_url(order_invoice, currency=None, credentials=None):
         if not credentials:
-            credentials = PayPalPaymentsManager.get_credentials(order.event)
+            credentials = PayPalPaymentsManager.get_credentials(order_invoice.event)
 
         if not credentials:
             raise Exception('PayPal credentials have not be set correctly')
@@ -162,7 +158,7 @@ class PayPalPaymentsManager(object):
             return credentials['CHECKOUT_URL']
 
         if not currency:
-            currency = order.event.payment_currency
+            currency = order_invoice.event.payment_currency
 
         if not currency or currency == "":
             currency = "USD"
@@ -171,39 +167,54 @@ class PayPalPaymentsManager(object):
             'USER': credentials['USER'],
             'PWD': credentials['PWD'],
             'SIGNATURE': credentials['SIGNATURE'],
-            'SUBJECT': credentials['EMAIL'],
+
             'METHOD': 'SetExpressCheckout',
             'VERSION': PayPalPaymentsManager.api_version,
             'PAYMENTREQUEST_0_PAYMENTACTION': 'SALE',
-            'PAYMENTREQUEST_0_AMT': order.amount,
+            'PAYMENTREQUEST_0_AMT': order_invoice.amount,
             'PAYMENTREQUEST_0_CURRENCYCODE': currency,
-            'RETURNURL': url_for('ticketing.paypal_callback', order_identifier=order.identifier,
+            'RETURNURL': url_for('ticketing.paypal_callback', order_identifier=order_invoice.identifier,
                                  function='success', _external=True),
-            'CANCELURL': url_for('ticketing.paypal_callback', order_identifier=order.identifier,
+            'CANCELURL': url_for('ticketing.paypal_callback', order_identifier=order_invoice.identifier,
                                  function='cancel', _external=True)
         }
 
+        if type(order_invoice) is Order:
+            data['SUBJECT'] = credentials['EMAIL']
+            data['RETURNURL'] = url_for('ticketing.paypal_callback', order_identifier=order_invoice.identifier,
+                                        function='success', _external=True),
+            data['CANCELURL'] = url_for('ticketing.paypal_callback', order_identifier=order_invoice.identifier,
+                                        function='cancel', _external=True)
+
+        else:
+            data['RETURNURL'] = url_for('event_invoicing.paypal_callback', invoice_identifier=order_invoice.identifier,
+                                        function='success', _external=True),
+            data['CANCELURL'] = url_for('event_invoicing.paypal_callback', invoice_identifier=order_invoice.identifier,
+                                        function='cancel', _external=True)
+
         count = 1
-        for ticket_order in order.tickets:
-            data['L_PAYMENTREQUEST_' + str(count) + '_NAMEm'] = ticket_order.ticket.name
-            data['L_PAYMENTREQUEST_' + str(count) + '_QTYm'] = ticket_order.quantity
-            data['L_PAYMENTREQUEST_' + str(count) + '_AMTm'] = ticket_order.ticket.price
-            count += 1
+
+        if type(order_invoice) is Order:
+            for ticket_order in order_invoice.tickets:
+                data['L_PAYMENTREQUEST_' + str(count) + '_NAMEm'] = ticket_order.ticket.name
+                data['L_PAYMENTREQUEST_' + str(count) + '_QTYm'] = ticket_order.quantity
+                data['L_PAYMENTREQUEST_' + str(count) + '_AMTm'] = ticket_order.ticket.price
+                count += 1
 
         response = requests.post(credentials['SERVER'], data=data)
         token = dict(urlparse.parse_qsl(response.text))['TOKEN']
-        order.paypal_token = token
-        save_to_db(order)
+        order_invoice.paypal_token = token
+        save_to_db(order_invoice)
         return credentials['CHECKOUT_URL'] + "?" + urlencode({
             'cmd': '_express-checkout',
             'token': token
         })
 
     @staticmethod
-    def get_approved_payment_details(order, credentials=None):
+    def get_approved_payment_details(order_invoice, credentials=None):
 
         if not credentials:
-            credentials = PayPalPaymentsManager.get_credentials(order.event)
+            credentials = PayPalPaymentsManager.get_credentials(order_invoice.event)
 
         if not credentials:
             raise Exception('PayPal credentials have not be set correctly')
@@ -215,7 +226,7 @@ class PayPalPaymentsManager(object):
             'SUBJECT': credentials['EMAIL'],
             'METHOD': 'GetExpressCheckoutDetails',
             'VERSION': PayPalPaymentsManager.api_version,
-            'TOKEN': order.paypal_token
+            'TOKEN': order_invoice.paypal_token
         }
 
         if current_app.config['TESTING']:
@@ -225,15 +236,15 @@ class PayPalPaymentsManager(object):
         return dict(urlparse.parse_qsl(response.text))
 
     @staticmethod
-    def capture_payment(order, payer_id, currency=None, credentials=None):
+    def capture_payment(order_invoice, payer_id, currency=None, credentials=None):
         if not credentials:
-            credentials = PayPalPaymentsManager.get_credentials(order.event)
+            credentials = PayPalPaymentsManager.get_credentials(order_invoice.event)
 
         if not credentials:
             raise Exception('PayPal credentials have not be set correctly')
 
         if not currency:
-            currency = order.event.payment_currency
+            currency = order_invoice.event.payment_currency
 
         if not currency or currency == "":
             currency = "USD"
@@ -245,10 +256,10 @@ class PayPalPaymentsManager(object):
             'SUBJECT': credentials['EMAIL'],
             'METHOD': 'DoExpressCheckoutPayment',
             'VERSION': PayPalPaymentsManager.api_version,
-            'TOKEN': order.paypal_token,
+            'TOKEN': order_invoice.paypal_token,
             'PAYERID': payer_id,
             'PAYMENTREQUEST_0_PAYMENTACTION': 'SALE',
-            'PAYMENTREQUEST_0_AMT': order.amount,
+            'PAYMENTREQUEST_0_AMT': order_invoice.amount,
             'PAYMENTREQUEST_0_CURRENCYCODE': currency,
         }
 

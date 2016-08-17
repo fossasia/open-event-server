@@ -1,0 +1,35 @@
+<div id="invoice-holder">
+    <div class="row">
+        <div class="col-xs-12 col-md-6 col-lg-6 pull-left">
+            <div class="panel panel-default height">
+                <div class="panel-heading"><h3 class="panel-title">Billing Details</h3></div>
+                <div class="panel-body">
+                    <strong>{{ invoice.user.user_detail.fullname }}:</strong><br>
+                    {{ invoice.address }}<br>
+                    {{ invoice.city }}<br>
+                    {{ invoice.state }}<br>
+                    {{ invoice.country }}<br>
+                    <strong>{{ invoice.zipcode }}</strong><br>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-md-6 col-lg-6">
+            <div class="panel panel-default height">
+                <div class="panel-heading"><h3 class="panel-title">Payment Information</h3></div>
+                <div class="panel-body">
+                    {% if invoice.paid_via == 'paypal' %}
+                        <strong>Paid Via:</strong> PayPal<br>
+                        <strong>Transaction ID:</strong> {{ invoice.transaction_id }}<br>
+                    {% elif invoice.paid_via == 'stripe' %}
+                        <strong>Card Name:</strong> {{ invoice.brand }}<br>
+                        <strong>Card Number:</strong> ***** {{ invoice.last4 }}<br>
+                        <strong>Exp Date:</strong> {{ invoice.exp_month }}/{{ invoice.exp_year }}<br><br>
+                    {% endif %}
+                    <strong>Payment Date:</strong> {{ invoice.completed_at.strftime('%B %d, %Y %I:%M %p') }}<br>
+                    <strong>Invoice number:</strong> {{ invoice.get_invoice_number() }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

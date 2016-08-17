@@ -8,6 +8,8 @@ from datetime import timedelta, datetime
 from flask import url_for
 
 from flask.ext import login
+
+from app.helpers.cache import cache
 from app.helpers.data import save_to_db
 from app.helpers.helpers import string_empty, send_email_for_after_purchase, get_count
 from app.models.order import Order
@@ -27,6 +29,11 @@ from app.helpers.helpers import send_email_after_account_create_with_password
 
 class TicketingManager(object):
     """All ticketing and orders related functions"""
+
+    @staticmethod
+    @cache.memoize(50)
+    def get_ticket(ticket_id):
+        return Ticket.query.get(ticket_id)
 
     @staticmethod
     def get_orders_of_user(user_id=None, upcoming_events=True):
@@ -97,10 +104,6 @@ class TicketingManager(object):
             return identifier
         else:
             return TicketingManager.get_new_order_identifier()
-
-    @staticmethod
-    def get_ticket(ticket_id):
-        return Ticket.query.get(ticket_id)
 
     @staticmethod
     def get_order(order_id):

@@ -10,18 +10,12 @@ from werkzeug.utils import redirect
 from app import forex
 from app.helpers.data_getter import DataGetter
 from app.helpers.payment import get_fee
-from app.helpers.ticketing import TicketingManager
-from app.models.ticket import Ticket
 from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView, SALES
-from app.helpers.cache import cache
+from app.helpers.ticketing import TicketingManager
 
 class SuperAdminSalesView(SuperAdminBaseView):
     PANEL_NAME = SALES
     display_currency = 'USD'
-
-    @cache.memoize(50)
-    def get_ticket(self, ticket_id):
-        return Ticket.query.get(ticket_id)
 
     @expose('/')
     def index(self):
@@ -66,7 +60,7 @@ class SuperAdminSalesView(SuperAdminBaseView):
             for order_ticket in order.tickets:
                 fee_summary[str(order.event.id)]['tickets_count'] += order_ticket.quantity
                 tickets_total += order_ticket.quantity
-                ticket = self.get_ticket(order_ticket.ticket_id)
+                ticket = TicketingManager.get_ticket(order_ticket.ticket_id)
                 if order.paid_via != 'free' and order.amount > 0 and ticket.price > 0:
                     fee = ticket.price * (get_fee(order.event.payment_currency)/100)
                     fee = forex(order.event.payment_currency, self.display_currency, fee)
@@ -159,7 +153,6 @@ class SuperAdminSalesView(SuperAdminBaseView):
             tickets_summary_location_wise[unicode(event.searchable_location_name)]['name'] = \
                 event.searchable_location_name
 
-
         for order in orders:
             if order.status == 'initialized':
                 order.status = 'pending'
@@ -168,7 +161,7 @@ class SuperAdminSalesView(SuperAdminBaseView):
                                                                       self.display_currency, order.amount)
             for order_ticket in order.tickets:
                 orders_summary[str(order.status)]['tickets_count'] += order_ticket.quantity
-                ticket = self.get_ticket(order_ticket.ticket_id)
+                ticket = TicketingManager.get_ticket(order_ticket.ticket_id)
                 tickets_summary_event_wise[str(order.event_id)][str(order.status)]['tickets_count'] \
                     += order_ticket.quantity
                 tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)]['tickets_count'] \

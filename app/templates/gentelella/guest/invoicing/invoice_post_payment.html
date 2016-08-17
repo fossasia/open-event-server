@@ -1,0 +1,26 @@
+{% extends 'gentelella/guest/invoicing/invoice_base.html' %}
+
+{% block title %}Your Invoice{% endblock %}
+
+{% block head_css %}
+    {{ super() }}
+{% endblock %}
+
+{% block inner_panel %}
+    {% if order.amount > 0 %}
+        {% include 'gentelella/guest/invoicing/components/_invoice.html' %}
+    {% endif %}
+    {% include 'gentelella/guest/invoicing/components/_invoice_summary.html' %}
+{% endblock %}
+
+{% block right_addon %}
+    <button type="button" class="btn btn-info hidden-print" onclick="window.print();"><i class="fa fa-print fa-fw"></i>
+        Print Invoice
+    </button>
+    <a href="{{ url_for('event_invoicing.view_invoice_after_payment_pdf', invoice_identifier=invoice.identifier) }}"
+       class="btn btn-default hidden-print" target="_blank"><i class="fa fa-file-pdf-o fa-fw"></i> Download Invoice</a>
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+{% endblock %}
