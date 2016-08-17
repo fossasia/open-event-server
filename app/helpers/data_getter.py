@@ -33,6 +33,7 @@ from ..models.custom_forms import CustomForms
 from ..models.mail import Mail
 from ..models.activity import Activity
 from ..models.ticket import Ticket
+from ..models.user_permissions import UserPermission
 from ..models.modules import Module
 from ..models.page import Page
 from ..models.export_jobs import ExportJob
@@ -119,6 +120,10 @@ class DataGetter(object):
     def get_panel_permission(role_name, panel_name):
         return PanelPermission.query.filter_by(role_name=role_name,
                                                panel_name=panel_name).first()
+
+    @staticmethod
+    def get_user_permissions():
+        return UserPermission.query.all()
 
     @staticmethod
     def get_email_notification_settings_by_id(email_id):
@@ -760,55 +765,12 @@ class DataGetter(object):
         return get_count(User.query.filter_by(is_verified=True))
 
     # TODO Make this more efficient
-    @staticmethod
-    def get_all_organizers():
-        events = Event.query.all()
-        users = User.query.all()
-        organizers = []
-        for event in events:
-            for user in users:
-                if user.is_organizer(event.id):
-                    organizers.append(user)
-
-        return len(organizers)
-
-    # TODO Make this more efficient
-    @staticmethod
-    def get_all_co_organizers():
-        events = Event.query.all()
-        users = User.query.all()
-        co_organizers = []
-        for event in events:
-            for user in users:
-                if user.is_coorganizer(event.id):
-                    co_organizers.append(user)
-
-        return len(co_organizers)
-
-    # TODO Make this more efficient
-    @staticmethod
-    def get_all_track_organizers():
-        events = Event.query.all()
-        users = User.query.all()
-        track_organizers = []
-        for event in events:
-            for user in users:
-                if user.is_track_organizer(event.id):
-                    track_organizers.append(user)
-
-        return len(track_organizers)
 
     @staticmethod
-    def get_all_attendees():
-        events = Event.query.all()
-        users = User.query.all()
-        attendees = []
-        for event in events:
-            for user in users:
-                if user.is_attendee(event.id):
-                    attendees.append(user)
-
-        return len(attendees)
+    def get_all_user_roles(role_name):
+        role = Role.query.filter_by(name=role_name).first()
+        uers = UsersEventsRoles.query.filter_by(role=role)
+        return uers
 
     @staticmethod
     def get_all_accepted_sessions():

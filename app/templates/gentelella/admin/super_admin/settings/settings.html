@@ -12,51 +12,43 @@
 
 {% block content %}
 <div>
-    <div class="responsive-tabs-container accordion-xs">
-        <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist" style="background: #FFFFFF;">
-            <li role="presentation" class="active">
-                <a href="#tab_content2" id="profile-tab" data-toggle="tab">System Tokens</a>
+
+    <form id="settings_form" method="post" class="form-horizontal form-label-left">
+        <ul id="settings-tabs" class="nav nav-tabs bar_tabs" role="tablist" style="background: #FFFFFF;">
+            <li class="active">
+                <a href="#tab_content0" id="profile-tab" data-toggle="tab">System Tokens</a>
             </li>
-            <li role="presentation">
+            <li>
                 <a href="#tab_content1" id="payment-gateway-tab" data-toggle="tab">Payment Gateways</a>
             </li>
 
-            <li role="presentation">
-                <a href="#tab_content3" id="microservice-tab" data-toggle="tab">Microservices</a>
+            <li>
+                <a href="#tab_content2" id="microservice-tab" data-toggle="tab">Microservices</a>
             </li>
             {% if 'ticketing' in included_settings and 'payments' in included_settings %}
-            <li role="presentation">
-                <a href="#tab_content4" id="ticket-fees-tab" data-toggle="tab">Ticket Fees</a>
+            <li>
+                <a href="#tab_content3" id="ticket-fees-tab" data-toggle="tab">Ticket Fees</a>
             </li>
             {% endif %}
         </ul>
-        <div class="nav bar_tabs" role="tablist">
-                <a href="#tab_content2" class="accordion-link" id="profile-tab" data-toggle="tab">System Tokens</a>
-                <a href="#tab_content1" class="accordion-link" id="payment-gateway-tab" data-toggle="tab">Payment Gateways</a>
-                <a href="#tab_content3" class="accordion-link" id="microservice-tab" data-toggle="tab">Microservices</a>
-                {% if 'ticketing' in included_settings and 'payments' in included_settings %}<a href="#tab_content4" class="accordion-link" id="ticket-fees-tab" data-toggle="tab">Ticket Fees</a>{% endif %}
-        </div>
-        <form id="settings_form" method="post" class="form-horizontal form-label-left">
 
         <div id="myTabContent" class="tab-content">
-            <div class="tab-pane fade active in" id="tab_content2">
+            <div role="tabpanel" class="tab-pane fade active in" id="tab_content0" aria-labelledby="profile-tab">
                  {% include 'gentelella/admin/super_admin/settings/_system.html' %}
             </div>
-            <div class="tab-pane fade in" id="tab_content1">
+            <div role="tabpanel" class="tab-pane fade in" id="tab_content1" aria-labelledby="payment-gateway-tab">
                  {% include 'gentelella/admin/super_admin/settings/_payment_gateway.html' %}
             </div>
-            <div class="tab-pane fade in" id="tab_content3">
+            <div role="tabpanel" class="tab-pane fade in" id="tab_content2" aria-labelledby="microservice-tab">
                  {% include 'gentelella/admin/super_admin/settings/_microservices.html' %}
             </div>
             {% if 'ticketing' in included_settings and 'payments' in included_settings %}
-            <div class="tab-pane fade in" id="tab_content4">
+            <div role="tabpanel" class="tab-pane fade in" id="tab_content3" aria-labelledby="ticket-fees-tab">
                  {% include 'gentelella/admin/super_admin/settings/_ticket-fees.html' %}
             </div>
             {% endif %}
         </div>
-            </form>
-        </div>
-    </div>
+    </form>
 </div>
 
 
@@ -87,20 +79,6 @@
         storage_form();
     });
 
-    $('.nav-tabs a').click(function(e) {
-      e.preventDefault();
-      $(this).tab('show');
-    });
-
-    // store the currently selected tab in the hash value
-    $("ul.nav-tabs > li > a").on("shown.bs.tab", function(e) {
-      var id = $(e.target).attr("href").substr(1);
-      window.location.hash = id;
-    });
-
-    // on load of the page: switch to the currently selected tab
-    var hash = window.location.hash;
-    $('.nav-tabs a[href="' + hash + '"]').tab('show');
     </script>
 
 {% endblock %}

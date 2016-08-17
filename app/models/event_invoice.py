@@ -1,8 +1,6 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy.orm import backref
-
 from app.helpers.helpers import get_count
 from . import db
 

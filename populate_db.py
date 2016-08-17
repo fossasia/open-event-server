@@ -1,6 +1,8 @@
 from app import current_app
 from app.models import db
+from app.helpers.data import get_or_create#, save_to_db
 
+# Event Role-Service Permissions
 from app.models.role import Role
 from app.models.service import Service
 from app.models.permission import Permission
@@ -11,13 +13,15 @@ from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
 from app.models.microlocation import Microlocation
 
-from app.helpers.data import get_or_create#, save_to_db
 from app.models.user import ORGANIZER, COORGANIZER, TRACK_ORGANIZER, MODERATOR, ATTENDEE
 
-# Admin Panels
+# Admin Panel Permissions
 from app.models.admin_panels import PanelPermission
 from app.models.user import SUPERADMIN, ADMIN, SALES_ADMIN
 from app.views.admin.super_admin.super_admin_base import PANEL_LIST, SALES
+
+# User Permissions
+from app.models.user_permissions import UserPermission
 
 
 def create_roles():
@@ -112,6 +116,20 @@ def create_panel_permissions():
     db.session.add(panel_perm)
 
 
+def create_user_permissions():
+    # Publish Event
+    user_perm, _ = get_or_create(UserPermission, name='publish_event',
+        description='Publish event (make event live)')
+    user_perm.verified_user = True
+    db.session.add(user_perm)
+
+    # Create Event
+    user_perm, _ = get_or_create(UserPermission, name='create_event',
+        description='Create event')
+    user_perm.verified_user, user_perm.unverified_user = True, True
+    db.session.add(user_perm)
+
+
 def populate():
     """
     Create defined Roles, Services and Permissions.
@@ -125,6 +143,8 @@ def populate():
     create_permissions()
     print 'Creating admin panel permissions...'
     create_panel_permissions()
+    print 'Creating user permissions...'
+    create_user_permissions()
 
     db.session.commit()
 

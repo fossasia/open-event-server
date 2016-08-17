@@ -22,6 +22,9 @@ class SuperAdminPermissionsView(SuperAdminBaseView):
                 p = get_panel_perm(role_name=sys_role, panel_name=panel)
                 sys_perms[sys_role][panel] = False if not p else p.can_access
 
+        ## User Permissions
+        user_perms = DataGetter.get_user_permissions()
+
         # Event-Role Permissions
         event_perms = dict()
         roles = DataGetter.get_roles()
@@ -43,7 +46,7 @@ class SuperAdminPermissionsView(SuperAdminBaseView):
             '/gentelella/admin/super_admin/permissions/permissions.html',
             event_perms=sorted(event_perms.iteritems(),
                          key=lambda (k, v): k.name),
-            sys_perms=sys_perms)
+            sys_perms=sys_perms, user_perms=user_perms)
 
     @expose('/event-roles', methods=('POST','GET'))
     def event_roles_view(self):
@@ -51,8 +54,14 @@ class SuperAdminPermissionsView(SuperAdminBaseView):
             DataManager.update_permissions(request.form)
         return redirect(url_for('.index_view'))
 
-    @expose('/system-roles', methods=('POST','GET'))
+    @expose('/system-roles', methods=('POST', 'GET'))
     def system_roles_view(self):
         if request.method == 'POST':
             DataManager.update_panel_permissions(request.form)
+        return redirect(url_for('.index_view'))
+
+    @expose('/user-roles', methods=('POST', 'GET'))
+    def user_roles_view(self):
+        if request.method == 'POST':
+            DataManager.update_user_permissions(request.form)
         return redirect(url_for('.index_view'))

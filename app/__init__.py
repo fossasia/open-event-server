@@ -57,6 +57,10 @@ from app.helpers.data import DataManager, delete_from_db
 from app.helpers.helpers import send_after_event
 from app.helpers.cache import cache
 from helpers.helpers import send_email_for_expired_orders
+from werkzeug.contrib.profiler import ProfilerMiddleware
+
+from flask.ext.sqlalchemy import get_debug_queries
+from config import ProductionConfig
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -93,6 +97,7 @@ def create_app():
     app.config['STATIC_ROOT'] = 'staticfiles'
     app.config['STATICFILES_DIRS'] = (os.path.join(BASE_DIR, 'static'),)
     app.config['SQLALCHEMY_RECORD_QUERIES'] = True
+
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     app.logger.setLevel(logging.INFO)
     app.jinja_env.add_extension('jinja2.ext.do')
@@ -115,6 +120,10 @@ def create_app():
     admin_view = AdminView("Open Event")
     admin_view.init(app)
     admin_view.init_login(app)
+
+    # Profiling
+    app.config['PROFILE'] = True
+    app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[30])
 
     # API version 2
     with app.app_context():
@@ -359,7 +368,6 @@ def integrate_socketio():
     integrate = current_app.config.get('INTEGRATE_SOCKETIO', False)
     return dict(integrate_socketio=integrate)
 
-
 scheduler = BackgroundScheduler(timezone=utc)
 scheduler.add_job(send_mail_to_expired_orders, 'interval', hours=5)
 scheduler.add_job(empty_trash, 'cron', day_of_week='mon-fri', hour=5, minute=30)
@@ -367,6 +375,17 @@ scheduler.add_job(send_after_event_mail, 'cron', day_of_week='mon-fri', hour=5, 
 scheduler.add_job(send_event_fee_notification, 'cron', day=1)
 scheduler.add_job(send_event_fee_notification_followup, 'cron', day=15)
 scheduler.start()
+
+# Testing database performance
+@app.after_request
+def after_request(response):
+    for query in get_debug_queries():
+        if query.duration >= ProductionConfig.DATABASE_QUERY_TIMEOUT:
+            app.logger.warning("SLOW QUERY: %s\nParameters: %s\nDuration: %fs\nContext: %s\n" % (query.statement,
+                                                                                                 query.parameters,
+                                                                                                 query.duration,
+                                                                                                 query.context))
+    return response
 
 # Flask-SocketIO integration
 

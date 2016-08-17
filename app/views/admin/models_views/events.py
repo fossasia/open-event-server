@@ -5,7 +5,7 @@ import binascii
 from uuid import uuid4
 
 from flask import flash, url_for, redirect, request, jsonify
-from flask.ext import login
+from flask.ext.login import current_user
 from flask.ext.admin import BaseView
 from flask.ext.restplus import abort
 from flask_admin import expose
@@ -26,11 +26,11 @@ from app.helpers.microservices import AndroidAppCreator, WebAppCreator
 
 
 def is_verified_user():
-    return login.current_user.is_verified
+    return current_user.is_verified
 
 
 def is_accessible():
-    return login.current_user.is_authenticated
+    return current_user.is_authenticated
 
 
 def get_random_hash():
@@ -111,6 +111,9 @@ class EventsView(BaseView):
     @expose('/create/', methods=('GET', 'POST'))
     def create_view(self,):
         if request.method == 'POST':
+            if not current_user.can_create_event():
+                flash("You don't have permission to create event.")
+                return redirect(url_for('.index_view'))
             img_files = []
             imd = ImmutableMultiDict(request.files)
             if 'sponsors[logo]' in imd and request.files['sponsors[logo]'].filename != "":
@@ -217,7 +220,7 @@ class EventsView(BaseView):
             checklist["4"] = 'optional'
             checklist["5"] = 'optional'
 
-        if not is_verified_user():
+        if not current_user.can_publish_event() and not is_verified_user():
             flash("To make your event live, please verify your email by "
                   "clicking on the confirmation link that has been emailed to you.")
 
@@ -381,7 +384,7 @@ class EventsView(BaseView):
         if request.method == "GET":
             DataManager.trash_event(event_id)
         flash("Your event has been deleted.", "danger")
-        if login.current_user.is_super_admin == True:
+        if current_user.is_super_admin == True:
             return redirect(url_for('sadmin_events.index_view'))
         return redirect(url_for('.index_view'))
 
@@ -409,7 +412,8 @@ class EventsView(BaseView):
                 "warning")
             return redirect(url_for('.edit_view',
                                     event_id=event.id) + "#highlight=location_name")
-        if not is_verified_user():
+        if not current_user.can_publish_event():
+            flash("You don't have permission to publish event.")
             return redirect(url_for('.details_view', event_id=event_id))
         event.state = 'Published'
         save_to_db(event, 'Event Published')
@@ -485,7 +489,7 @@ class EventsView(BaseView):
         """Accept User-Role invite for the event.
         """
         event = DataGetter.get_event(event_id)
-        user = login.current_user
+        user = current_user
         role_invite = DataGetter.get_event_role_invite(event.id, hash,
                                                        email=user.email)
 
@@ -519,7 +523,7 @@ class EventsView(BaseView):
         """Decline User-Role invite for the event.
         """
         event = DataGetter.get_event(event_id)
-        user = login.current_user
+        user = current_user
         role_invite = DataGetter.get_event_role_invite(event.id, hash,
                                                        email=user.email)
 

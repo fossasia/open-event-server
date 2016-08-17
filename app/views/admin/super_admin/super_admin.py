@@ -3,7 +3,7 @@ from flask_admin import expose
 from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView
 from ....helpers.data_getter import DataGetter
 from app.helpers.helpers import get_latest_heroku_release, get_commit_info, get_count
-
+from app.models.user import ATTENDEE,TRACK_ORGANIZER, COORGANIZER, ORGANIZER
 
 class SuperAdminView(SuperAdminBaseView):
 
@@ -17,10 +17,10 @@ class SuperAdminView(SuperAdminBaseView):
         admins = DataGetter.get_all_admins()
         registered_users = DataGetter.get_all_registered_users()
         # TODO Fix function and correct this
-        organizers = 0
-        co_organizers = 0
-        track_organizers = 0
-        attendees = 0
+        organizers = get_count(DataGetter.get_all_user_roles(ORGANIZER))
+        co_organizers = get_count(DataGetter.get_all_user_roles(COORGANIZER))
+        track_organizers = get_count(DataGetter.get_all_user_roles(TRACK_ORGANIZER))
+        attendees = get_count(DataGetter.get_all_user_roles(ATTENDEE))
         accepted_sessions = DataGetter.get_all_accepted_sessions()
         rejected_sessions = DataGetter.get_all_rejected_sessions()
         draft_sessions = DataGetter.get_all_draft_sessions()
