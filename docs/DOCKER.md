@@ -22,10 +22,9 @@ So keeping `docker-compose up` active in one terminal window, open another termi
 
 ```bash
 docker-compose run postgres psql -h postgres -p 5432 -U postgres --password
-# psql -h localhost -p 5432 -U postgres --password
 ```
 
-* Write password as 'test' and ENTER. When inside psql shell, write the following commands.
+* Write 'test' as password and ENTER. When inside psql shell, write the following command -
 
 ```sql
 create database opev;
