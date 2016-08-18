@@ -1,9 +1,16 @@
-from flask import redirect, request, url_for
+from flask import redirect, request, url_for, jsonify
 from flask_admin import expose
 from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView, CONTENT
 from ....helpers.data_getter import DataGetter
-from ....helpers.data import DataManager, delete_from_db
+from ....helpers.data import DataManager, delete_from_db, save_to_db
+from ....models.custom_placeholder import CustomPlaceholder
 from app.settings import get_settings, set_settings
+from app.helpers.storage import upload, UploadedFile
+from app.helpers.helpers import uploaded_file
+import PIL
+from PIL import Image
+import shutil
+import os
 
 
 class SuperAdminContentView(SuperAdminBaseView):
@@ -23,6 +30,43 @@ class SuperAdminContentView(SuperAdminBaseView):
             '/gentelella/admin/super_admin/content/content.html', pages=pages, settings=settings,
             placeholder_images=placeholder_images
         )
+
+    @expose('/create/files/placeholder', methods=('POST',))
+    def placeholder_upload(self):
+        if request.method == 'POST':
+            placeholder_image = request.form['placeholder']
+            filename = request.form['file_name']
+            print filename
+            if placeholder_image:
+                placeholder_file = uploaded_file(file_content=placeholder_image)
+                placeholder = upload(
+                    placeholder_file,
+                    'placeholders/original/'+filename
+                )
+                temp_img_file = placeholder.replace('/serve_', '')
+
+                basewidth = 300
+                img = Image.open(temp_img_file)
+                wpercent = (basewidth / float(img.size[0]))
+                hsize = int((float(img.size[1]) * float(wpercent)))
+                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+                os.mkdir('static/media/temp/')
+                img.save('static/media/temp/temp.png')
+                file_name = temp_img_file.rsplit('/', 1)[1]
+                thumbnail_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+                background_thumbnail_url = upload(
+                    thumbnail_file,
+                    'placeholders/thumbnail/'+filename
+                )
+                shutil.rmtree(path='static/media/temp/')
+                placeholder_db = CustomPlaceholder(name=request.form['name'],
+                                                   url=placeholder,
+                                                   thumbnail=background_thumbnail_url)
+                save_to_db(placeholder_db, 'User notification saved')
+
+                return jsonify({'status': 'ok', 'placeholder': placeholder})
+            else:
+                return jsonify({'status': 'no logo'})
 
     @expose('/pages/create', methods=['POST'])
     def create_view(self):
