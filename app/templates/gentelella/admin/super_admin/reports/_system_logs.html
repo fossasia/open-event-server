@@ -30,7 +30,7 @@
         <tr>
           <td>{{ activity.actor }}</td>
           <td data-toggle="tooltip" data-placement="bottom" title="{{ activity.time }}"
-              data-delay='{"show":"500", "hide":"300"}'>{{ activity.time | humanize }}
+              data-delay='{"show":"500", "hide":"300"}'>{{ activity.time.strftime("%Y-%m-%d %H:%M") }}
           </td>
           <td>{{ activity.action }}</td>
         </tr>
@@ -56,7 +56,7 @@
         <tr>
           <td>{{ mail.recipient }}</td>
           <td data-toggle="tooltip" data-placement="bottom" title="{{ mail.time }}"
-              data-delay='{"show":"500", "hide":"300"}'>{{ mail.time | humanize }}
+              data-delay='{"show":"500", "hide":"300"}'>{{ mail.time.strftime("%Y-%m-%d %H:%M") }}
           </td>
           <td>{{ mail.action }}</td>
           <td>
@@ -88,7 +88,7 @@
         <tr>
           <td>{{ notif.user.user_detail.fullname | default(notif.user.email, true) }}</td>
           <td data-toggle="tooltip" data-placement="bottom" title="{{ notif.received_at }}"
-              data-delay='{"show":"500", "hide":"300"}'>{{ notif.received_at | humanize }}
+              data-delay='{"show":"500", "hide":"300"}'>{{ notif.received_at.strftime("%Y-%m-%d %H:%M") }}
           </td>
           <td>{{ notif.action }}</td>
           <td>
@@ -105,22 +105,24 @@
   </div>
 
 </div>
-
+<script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
 <script type="text/javascript">
   $( document ).ready(function() {
+
       $('#activity_table').DataTable({
           "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
           "lengthMenu": [25, 50, 100, 200],
           "pageLength": 25,
-          "aaSorting": []
+          "aaSorting": [],
           // "language": {
           //     "lengthMenu": "Show _MENU_ Results"
-          //   }
+          //   },
+
       });
       $('#mail_table').dataTable({
           "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
           /* Disable initial sort */
-          "aaSorting": []
+          "aaSorting": [],
       });
       $('#notif_table').dataTable({
           "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
