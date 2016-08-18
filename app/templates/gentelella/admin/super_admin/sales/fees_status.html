@@ -1,0 +1,75 @@
+{% extends 'gentelella/admin/super_admin/sales/filter_table_base.html' %}
+
+{% set active_side_page = 'fees_status' -%}
+{% set title = "Fee Status" -%}
+
+{% block head_css %}
+    {{ super() }}
+{% endblock %}
+
+{% block inner_table %}
+    <br><br>
+    <table class="table" style="margin-top: 50px;">
+        <thead>
+        <tr>
+            <th>
+                Invoice#
+            </th>
+            <th>
+                Event
+            </th>
+            <th>
+                Dated
+            </th>
+            <th>
+                Amount
+            </th>
+            <th>
+                Sent to
+            </th>
+            <th>
+                Status
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for invoice in invoices %}
+
+            <tr>
+                <td>
+                    {{ invoice.get_invoice_number() }}
+                </td>
+                <td>
+                    {{ invoice.event.name }}
+                </td>
+                <td>
+                    {{ invoice.created_at.strftime("%b %Y") }}%
+                </td>
+                <td>
+                    {{ display_currency | currency_symbol }}{{ forex(invoice.event.payment_currency, display_currency, invoice.amount) | money }}
+                </td>
+                <th>
+                    {{ invoice.user.email }}{% if invoice.user.user_detail and invoice.user.user_detail.firstname %} - {{ invoice.user.user_detail.firstname }} {% endif %}
+                </th>
+                <th>
+                    {% if invoice.status == 'completed' %}
+                        <span class="label label-success">Paid</span>
+                    {% else %}
+                        {% if current_date > overdue_date %}
+                            <span class="label label-danger">Overdue</span>
+                        {% else %}
+                            <span class="label label-success">Pending</span>
+                        {% endif %}
+                    {% endif %}
+                </th>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+{% endblock %}
+
