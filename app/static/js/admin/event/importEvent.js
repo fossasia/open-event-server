@@ -41,12 +41,12 @@ function importTask(url){
         success: function(data){
             console.log(data);
             if (data['state'] != 'SUCCESS'){
-                $('#import_status').text('Status: ' + data['state']);
+                $('#import_status').html('<b>Status:</b> ' + data['state']);
                 setTimeout(function(){
                     importTask(url);
                 }, 3000);
             } else {
-                $('#import_status').text('Status: ' + data['state']);
+                $('#import_status').html('<b>Status:</b> ' + data['state']);
                 document.location = '/events/' + data['result']['id'];
             }
         },
