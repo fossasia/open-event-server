@@ -25,7 +25,7 @@ from ..models.service import Service
 from ..models.permission import Permission
 from ..models.user import User
 from ..models.file import File
-from ..models.admin_panels import PanelPermission
+from ..models.panel_permissions import PanelPermission
 from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
 from ..models.call_for_papers import CallForPaper

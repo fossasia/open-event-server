@@ -4,7 +4,7 @@ from flask_admin import BaseView
 from flask.ext.login import current_user
 
 # Admin Panels
-BASE = 'base'
+BASE = 'admin'
 EVENTS = 'events'
 SESSIONS = 'sessions'
 USERS = 'users'
@@ -31,7 +31,7 @@ PANEL_LIST = [
 ]
 
 class SuperAdminBaseView(BaseView):
-    PANEL_NAME = 'base'
+    PANEL_NAME = BASE
 
     def is_accessible(self):
         return current_user.is_authenticated
