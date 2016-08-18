@@ -12,7 +12,7 @@ This guide will be using Docker to deploy open event on DigitalOcean. The basic 
 
 * Once droplet has been created, you will get email from DigitalOcean with its information IP Address, username and password.
 
-MAIL
+![droplet_email](https://cloud.githubusercontent.com/assets/4047597/17770515/e2ea6f4c-655b-11e6-9211-78257a083e82.png)
 
 * Open a terminal window and ssh into the server. The command is `ssh USERNAME@IP`. When run, it will ask for the password you got through email. Ctrl-Shift-V to paste the password and ENTER. An example has been given below.
 
@@ -27,7 +27,7 @@ Once this step is done, you will be running the droplet's shell.
 
 #### Phase 2
 
-The steps that will be mentioned now are sinalogus to [running Open Event on Docker](DOCKER.md) documentation. You are recommended to first go through to appreciate the
+The steps that will be mentioned now are analogous to [running Open Event on Docker](DOCKER.md) documentation. You are recommended to first go through to appreciate the
 similarities.
 
 * Now we are into our server. The first step is to install Docker. DigitalOcean has a
@@ -71,7 +71,7 @@ ssh USERNAME@IP
 # Enter the new password you set and Enter
 ```
 
-* First create the database and then create the tables.
+* In the new ssh window, run the following command -
 
 ```bash
 docker-compose run postgres psql -h postgres -p 5432 -U postgres --password
@@ -106,11 +106,15 @@ python manage.py db stamp head
 ### NOTES
 
 * For demonstration purposes, I ran the server in normal mode. ( `docker-compose up` )
-The server will die as soon as the first terminal window is closed. To not let that happen, start the the server as `docker-compose up -d`.
+The server will die as soon as the first terminal window is closed. To not let that happen, start the the server as daemon.
 
-* To serve the site on port 80 so that it is available on the Internet without port, edit `docker-compose.yml` and change the `5000:5000` to `80:5000`.
+```bash
+docker-compose up -d
+```
+
+* To serve the site on port 80 so that it is available on the Internet as just `$IP`, edit `docker-compose.yml` and change the `5000:5000` to `80:5000`.
 Then start the server. `docker-compose up -d`.
 
 * If you haven't added a domain name to your DO droplet and are accessing it through the IP, you might face the problem of not being able to login. This is a Chrome issue
-and can be found in other browsers too (haven't tested). Learn more about it in this [Stack Overflow answer](http://stackoverflow.com/a/27276450/2295672).
-
+and may exist in other browsers too (haven't tested). Learn more about it in this [Stack Overflow answer](http://stackoverflow.com/a/27276450/2295672). The only way to solve
+this is by attaching a domain name to your droplet.
