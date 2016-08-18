@@ -14,6 +14,9 @@ This is a step-by-step guide on how to run orga-server in your computer.
 
 Make sure you have the dependencies mentioned above installed before proceeding further.
 
+Run the commands mentioned below with the terminal active in the project's root directory.
+
+
 * **Step 1** - Install python requirements.
 
 ```sh
@@ -45,7 +48,7 @@ bower install
 ```
 
 
-* **Step 4** - Export Application environment variables.
+* **Step 4** - Create application environment variables.
 
 ```sh
 export DATABASE_URL=postgresql://open_event_user:start@127.0.0.1:5432/test
@@ -69,7 +72,8 @@ python manage.py db stamp head
 ```
 
 
-* **Step 7** - Start the application along with the needed services. The `&` at the end of the commands below make them run in background so that they don't hold the terminal.
+* **Step 7** - Start the application along with the needed services.
+The `&` at the end of the commands below make them run in background so that they don't hold the terminal. See [REDIS.md](REDIS.md) for more info.
 
 ```sh
 # download and run redis
