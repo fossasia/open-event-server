@@ -13,6 +13,7 @@ from ..models.session import Session
 from ..models.notifications import Notification
 from ..models.message_settings import MessageSettings
 from ..models.track import Track
+from ..models.custom_placeholder import CustomPlaceholder
 from ..models.invite import Invite
 from ..models.speaker import Speaker
 from ..models.email_notifications import EmailNotification
@@ -85,6 +86,10 @@ class DataGetter(object):
     def get_all_events():
         """Method return all events"""
         return Event.query.order_by(desc(Event.id)).filter_by(in_trash=False).all()
+
+    @staticmethod
+    def get_custom_placeholders():
+        return CustomPlaceholder.query.all()
 
     @staticmethod
     def get_all_users_events_roles():

@@ -40,6 +40,7 @@ class EventDetailView(BaseView):
     def display_event_detail_home(self, identifier):
         event = get_published_event_or_abort(identifier)
         placeholder_images = DataGetter.get_event_default_images()
+        custom_placeholder = DataGetter.get_custom_placeholders()
         call_for_speakers = DataGetter.get_call_for_papers(event.id).first()
         accepted_sessions = DataGetter.get_sessions(event.id)
         if event.copyright:
@@ -52,6 +53,7 @@ class EventDetailView(BaseView):
         return self.render('/gentelella/guest/event/details.html',
                            event=event,
                            placeholder_images=placeholder_images,
+                           custom_placeholder=custom_placeholder,
                            accepted_sessions=accepted_sessions,
                            call_for_speakers=call_for_speakers,
                            licence_details=licence_details,
@@ -62,6 +64,7 @@ class EventDetailView(BaseView):
     def display_event_sessions(self, identifier):
         event = get_published_event_or_abort(identifier)
         placeholder_images = DataGetter.get_event_default_images()
+        custom_placeholder = DataGetter.get_custom_placeholders()
         if not event.has_session_speakers:
             abort(404)
         call_for_speakers = DataGetter.get_call_for_papers(event.id).first()
@@ -71,12 +74,13 @@ class EventDetailView(BaseView):
             abort(404)
         return self.render('/gentelella/guest/event/sessions.html', event=event,
                            placeholder_images=placeholder_images, accepted_sessions=accepted_sessions, tracks=tracks,
-                           call_for_speakers=call_for_speakers)
+                           call_for_speakers=call_for_speakers, custom_placeholder=custom_placeholder)
 
     @expose('/<identifier>/schedule/')
     def display_event_schedule(self, identifier):
         event = get_published_event_or_abort(identifier)
         placeholder_images = DataGetter.get_event_default_images()
+        custom_placeholder = DataGetter.get_custom_placeholders()
         if not event.has_session_speakers:
             abort(404)
         tracks = DataGetter.get_tracks(event.id)
@@ -84,12 +88,14 @@ class EventDetailView(BaseView):
         if not accepted_sessions or not event.schedule_published_on:
             abort(404)
         return self.render('/gentelella/guest/event/schedule.html', event=event,
-                           placeholder_images=placeholder_images, accepted_sessions=accepted_sessions, tracks=tracks)
+                           placeholder_images=placeholder_images, accepted_sessions=accepted_sessions,
+                           tracks=tracks, custom_placeholder=custom_placeholder)
 
     @expose('/<identifier>/cfs/', methods=('GET',))
     def display_event_cfs(self, identifier, via_hash=False):
         event = get_published_event_or_abort(identifier)
         placeholder_images = DataGetter.get_event_default_images()
+        custom_placeholder = DataGetter.get_custom_placeholders()
         if not event.has_session_speakers:
             abort(404)
 
@@ -113,7 +119,8 @@ class EventDetailView(BaseView):
         return self.render('/gentelella/guest/event/cfs.html', event=event, accepted_sessions=accepted_sessions,
                            speaker_form=speaker_form,
                            session_form=session_form, call_for_speakers=call_for_speakers,
-                           placeholder_images=placeholder_images, state=state, speakers=speakers, via_hash=via_hash)
+                           placeholder_images=placeholder_images, state=state, speakers=speakers,
+                           via_hash=via_hash, custom_placeholder=custom_placeholder)
 
     @expose('/cfs/<hash>', methods=('GET',))
     def display_event_cfs_via_hash(self, hash):
@@ -140,12 +147,14 @@ class EventDetailView(BaseView):
     def display_event_coc(self, identifier):
         event = get_published_event_or_abort(identifier)
         placeholder_images = DataGetter.get_event_default_images()
+        custom_placeholder = DataGetter.get_custom_placeholders()
         accepted_sessions = DataGetter.get_sessions(event.id)
         call_for_speakers = DataGetter.get_call_for_papers(event.id).first()
         if not (event.code_of_conduct and event.code_of_conduct != '' and event.code_of_conduct != ' '):
             abort(404)
         return self.render('/gentelella/guest/event/code_of_conduct.html', event=event,
                            placeholder_images=placeholder_images,
+                           custom_placeholder=custom_placeholder,
                            accepted_sessions=accepted_sessions,
                            call_for_speakers=call_for_speakers)
 
@@ -153,6 +162,7 @@ class EventDetailView(BaseView):
     def display_event_tickets(self, identifier):
         event = get_published_event_or_abort(identifier)
         placeholder_images = DataGetter.get_event_default_images()
+        custom_placeholder = DataGetter.get_custom_placeholders()
         if event.copyright:
             licence_details = DataGetter.get_licence_details(event.copyright.licence)
         else:
@@ -162,6 +172,7 @@ class EventDetailView(BaseView):
         return self.render('/gentelella/guest/event/details.html',
                            event=event,
                            placeholder_images=placeholder_images,
+                           custom_placeholder=custom_placeholder,
                            licence_details=licence_details,
                            module=module,
                            tickets=tickets if tickets else [])

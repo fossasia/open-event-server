@@ -2,11 +2,21 @@
     <div class="col-md-8 col-md-offset-2">
         {% for image in placeholder_images %}
             <h4>{{ image }}</h4>
-            <div class="system-images" data-name="{{ image }}" style="margin-left:50px;">
-                <img src='{{ url_for("static", filename="placeholders/" + placeholder_images[image]) }}' style="width:80%; " id="image-{{ image | replace(',', '') | replace('&', '') | replace(' ','_')}}"/><br>
-                <button class="btn btn-primary btn-sys" id="sys-{{ image | replace(',', '') | replace('&', '') | replace(' ','_')}}" style="margin-top:10px;"> Change</button>
-            </div>
-            <br><hr>
+            {% set vars = {'foo': False} %}
+              <div class="system-images" data-name="{{ image }}" style="margin-left:50px;">
+              {% for custom_image in custom_placeholder %}
+                {% if custom_image.name == image %}
+                  <img src='{{ custom_image.url }}' style="width:80%; " id="image-{{ image | replace(',', '') | replace('&', '') | replace(' ','_')}}"/>
+                  {% if vars.update({'foo': True}) %} {% endif %}
+                {% endif %}
+              {% endfor %}
+                {% if not vars.foo %}
+                  <img src='{{ url_for("static", filename="placeholders/" + placeholder_images[image]) }}' style="width:80%; " id="image-{{ image | replace(',', '') | replace('&', '') | replace(' ','_')}}"/>
+                {% endif %}
+                <br>
+                <button class="btn btn-primary btn-sys" id="sys-{{ image | replace(',', '') |replace('&', '') | replace(' ','_')}}" style="margin-top:10px;"> Change</button>
+              </div>
+              <br><hr>
         {% endfor %}
     </div>
 </div>
@@ -52,7 +62,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary">Update</button>
+        <button class="btn btn-primary btn-update">Update</button>
         <button class="btn" data-dismiss="modal">Cancel</button>
       </div>
     </div>
@@ -60,11 +70,14 @@
 </div>
 <script type="text/javascript">
     var name='';
+    $('.btn-update').click(function(){
+        window.location = document.URL;
+    })
     $('.btn-sys').click(function(){
         $('#system-image-modal').modal();
         var id = $(this).attr("id").replace('sys-', '');
         id = '#image-' + id;
-        var name = $(this).parent().attr('data-name');
+        name = $(this).parent().attr('data-name');
         var filename = $(id).attr('src');
         filename = filename.substring(filename.lastIndexOf('/') + 1);
         console.log(name);
