@@ -52,7 +52,6 @@ bower install
 
 ```sh
 export DATABASE_URL=postgresql://open_event_user:start@127.0.0.1:5432/test
-export APP_CONFIG=config.DevelopmentConfig
 ```
 
 
@@ -79,8 +78,14 @@ The `&` at the end of the commands below make them run in background so that the
 # download and run redis
 bash run_redis.sh
 redis-3.2.1/src/redis-server &
+
 # run worker
+export INTEGRATE_SOCKETIO=false
+# socketio has problems with celery "blocking" tasks
+# also socketio is not used in a celery task so no problem to turn it off
 celery worker -A app.celery &
+unset INTEGRATE_SOCKETIO
+
 # run app
 python manage.py runserver
 ```

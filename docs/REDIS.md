@@ -15,7 +15,7 @@ To start the redis server, run the following command while at project's root dir
 redis-3.2.1/src/redis-server
 ```
 
-You can use ampersand (&) at the end of the above command if you want to start redis server as daemon (in background).
+You can use ampersand (&) at the end of the above command if you want to start redis server as daemon (i.e. in background).
 
 ```sh
 redis-3.2.1/src/redis-server &

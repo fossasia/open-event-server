@@ -21,19 +21,28 @@ The data is provided over the API endpoints as described [here](https://github.c
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 # Communication
+
 Please join our mailing list to discuss questions regarding the project: https://groups.google.com/forum/#!forum/open-event
 
 # Getting Started
 
-## How do I install Open-Event Server with Docker?:
+## How do I install Open-Event Server with Docker ?
+
 To install Open-Event Server with Docker please refer to [Docker installation](docs/DOCKER.md)
 
 
-## How do I install Open-Event Server with Vagrant?:
+## How do I install Open-Event Server with Vagrant ?
+
 For installation steps on how to deploy Open-Event Server using vagrant please refer to [Vagrant installation](docs/VAGRANT.md)
 
 
-## How to configure Bower? :
+## How do I run Open Event Server locally ?
+
+A step-by-step guide on how to run Orga server on a system can be found in [RUNNING.md](docs/RUNNING.md)
+
+
+## How to configure Bower ?
+
 In order to install and configure bower please refer to [Bower installation](docs/BOWER.md)
 
 
@@ -64,7 +73,8 @@ When writing changes to models. Use migrations.
 When checking in code for models, please update migrations as well.
 
 
-##How to run tests for Open-Event Server?:
+## How to run tests for Open-Event Server ?
+
 For steps regarding how to run tests please refer to [How to run tests](docs/TESTS.md)
 
 ## Stack
@@ -74,7 +84,8 @@ For steps regarding how to run tests please refer to [How to run tests](docs/TES
 * App server - uwsgi
 * Web framework - flask (particularly flask-admin)
 
-## How do I deploy Open-Event Server to Heroku?:
+## How do I deploy Open-Event Server to Heroku ?
+
 For steps regarding how to deploy your version of the Open-Event Server to Heroku, please refer [Heroku deployment](docs/HEROKU.md)
 
 ## Demo version
