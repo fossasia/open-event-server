@@ -28,17 +28,17 @@ Please join our mailing list to discuss questions regarding the project: https:/
 
 ## How do I install Open-Event Server with Docker ?
 
-To install Open-Event Server with Docker please refer to [Docker installation](docs/DOCKER.md)
+To install Open-Event Server with Docker please refer to [Docker installation](docs/INSTALLATION_DOCKER.md)
 
 
 ## How do I install Open-Event Server with Vagrant ?
 
-For installation steps on how to deploy Open-Event Server using vagrant please refer to [Vagrant installation](docs/VAGRANT.md)
+For installation steps on how to deploy Open-Event Server using vagrant please refer to [Vagrant installation](docs/INSTALLATION_VAGRANT.md)
 
 
 ## How do I run Open Event Server locally ?
 
-A step-by-step guide on how to run Orga server on a system can be found in [RUNNING.md](docs/RUNNING.md)
+A step-by-step guide on how to run Orga server on a system can be found in [INSTALLATION_LOCAL](docs/INSTALLATION_LOCAL.md)
 
 
 ## How to configure Bower ?
@@ -86,7 +86,7 @@ For steps regarding how to run tests please refer to [How to run tests](docs/TES
 
 ## How do I deploy Open-Event Server to Heroku ?
 
-For steps regarding how to deploy your version of the Open-Event Server to Heroku, please refer [Heroku deployment](docs/HEROKU.md)
+For steps regarding how to deploy your version of the Open-Event Server to Heroku, please refer [Heroku deployment](docs/INSTALLATION_HEROKU.md)
 
 ## Demo version
 
