@@ -88,7 +88,7 @@
         <tr>
           <td>{{ notif.user.user_detail.fullname | default(notif.user.email, true) }}</td>
           <td data-toggle="tooltip" data-placement="bottom" title="{{ notif.received_at }}"
-              data-delay='{"show":"500", "hide":"300"}'>{{ notif.received_at.strftime("%Y-%m-%d %H:%M") }}
+              data-delay='{"show":"500", "hide":"300"}'>{{ notif.received_at.strftime("%Y-%m-%d %H:%M")|time_format  }}
           </td>
           <td>{{ notif.action }}</td>
           <td>

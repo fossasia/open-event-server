@@ -231,6 +231,13 @@ def humanize_alt_filter(time):
     return humanize.naturaltime(datetime.now() - time)
 
 
+@app.template_filter('time_format')
+def time_filter(time):
+    if not time:
+        return "N/A"
+    return time
+
+
 @app.template_filter('firstname')
 def firstname_filter(string):
     if string:
