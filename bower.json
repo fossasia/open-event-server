@@ -13,7 +13,7 @@
     "jquery-migrate": "1.4.0",
     "bootstrap-colorpicker": "2.3.3",
     "font-awesome": "^4.6.3",
-    "moment": "^2.13.0",
+    "moment": "^2.14.1",
     "interact": "^1.2.6",
     "lodash": "^4.13.1",
     "google-material-color": "~1.2.6",

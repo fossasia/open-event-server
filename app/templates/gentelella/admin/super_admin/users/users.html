@@ -22,6 +22,7 @@ Users
     </style>
 {% endblock %}
 
+
 {% macro users_row(user_list) %}
        {% for user in user_list %}
     <tr>
@@ -56,8 +57,8 @@ Users
         {% endfor %}
         </ul>
         </td>
-        <td>{{ user['user'].created_date|humanize_alt }}</td>
-        <td>{{ user['user'].last_access_time|humanize_alt }}</td>
+        <td>{{ user['user'].created_date.strftime("%Y-%m-%d %H:%M") }}</td>
+        <td>{{ user['user'].last_access_time.strftime("%Y-%m-%d %H:%M") }}</td>
         <td>
         <div class="btn-group btn-group-sm">
             {% if not user['user'].is_super_admin %}
@@ -198,11 +199,13 @@ Users
 
 {% block tail_js %}
 {{ super() }}
+        <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
 <script type="text/javascript">
         $(document).on('click', 'a[data-target="#importModal"]',function(){
             var userId = $(this).data('user-id');
             $("#importModal").find("form").attr("action","/admin/users/" + userId + "/edit/");
         });
+
         $('#active_users_table').dataTable({
         "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
         "lengthMenu": [25, 50, 100, 200],
@@ -210,9 +213,32 @@ Users
         "language": {
             "lengthMenu": "Show _MENU_ Users"
           },
-        /* Disable initial sort */
-        "aaSorting": []
-    });
+        "columnDefs": [
+            {
+                "render": function ( data, type, row ) {
+                    var str_date = moment(row[5], "YYYY-MM-DD HH:mm").fromNow()
+                    if (str_date === 'Invalid date'){
+                        return ''
+                    }
+                    return str_date;
+                },
+                "targets": 5
+            },
+            {
+                "render": function ( data, type, row ) {
+                    var str_date = moment(row[6], "YYYY-MM-DD HH:mm").fromNow()
+                    if (str_date === 'Invalid date'){
+                        return ''
+                    }
+                    return str_date;
+                },
+                "targets": 6
+            },
+
+        ]
+
+        });
+
     $('#deleted_users_table').dataTable({
         "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
         "lengthMenu": [25, 50, 100, 200],
@@ -220,6 +246,29 @@ Users
         "language": {
             "lengthMenu": "Show _MENU_ Users"
         },
+        "columnDefs": [
+            {
+                "render": function ( data, type, row ) {
+                    var str_date = moment(row[5], "YYYY-MM-DD HH:mm").fromNow()
+                    if (str_date === 'Invalid date'){
+                        return ''
+                    }
+                    return str_date;
+                },
+                "targets": 5
+            },
+            {
+                "render": function ( data, type, row ) {
+                    var str_date = moment(row[6], "YYYY-MM-DD HH:mm").fromNow()
+                    if (str_date === 'Invalid date'){
+                        return ''
+                    }
+                    return str_date;
+                },
+                "targets": 6
+            },
+
+        ],
         /* Disable initial sort */
         "aaSorting": []
     });
@@ -230,6 +279,29 @@ Users
         "language": {
             "lengthMenu": "Show _MENU_ Users",
         },
+        "columnDefs": [
+            {
+                "render": function ( data, type, row ) {
+                    var str_date = moment(row[5], "YYYY-MM-DD HH:mm").fromNow()
+                    if (str_date === 'Invalid date'){
+                        return ''
+                    }
+                    return str_date;
+                },
+                "targets": 5
+            },
+            {
+                "render": function ( data, type, row ) {
+                    var str_date = moment(row[6], "YYYY-MM-DD HH:mm").fromNow()
+                    if (str_date === 'Invalid date'){
+                        return ''
+                    }
+                    return str_date;
+                },
+                "targets": 6
+            },
+
+        ],
         /* Disable initial sort */
         "aaSorting": []
     });
