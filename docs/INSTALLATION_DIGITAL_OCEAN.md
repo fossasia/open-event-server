@@ -27,7 +27,7 @@ Once this step is done, you will be running the droplet's shell.
 
 #### Phase 2
 
-The steps that will be mentioned now are analogous to [running Open Event on Docker](DOCKER.md) documentation. You are recommended to first go through it to appreciate the
+The steps that will be mentioned now are analogous to [running Open Event on Docker](INSTALLATION_DOCKER.md) documentation. You are recommended to first go through it to appreciate the
 similarities.
 
 * Now as we have just initialized our brand new server, the first step is to install Docker. DigitalOcean has a
@@ -51,7 +51,7 @@ sudo apt-get -y install python-pip
 sudo pip install docker-compose
 ```
 
-* Now that Docker and Compose are setup, it's time to build the image. The next steps are very similar to the [running Open Event on Docker](DOCKER.md) tutorial so please see
+* Now that Docker and Compose are setup, it's time to build the image. The next steps are very similar to the [running Open Event on Docker](INSTALLATION_DOCKER.md) tutorial so please see
 it.
 
 * We will start by cloning the GitHub Open Event Orga Server repo and cd'ing into it's directory. Then we will build and run the image.
