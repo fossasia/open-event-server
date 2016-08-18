@@ -25,6 +25,11 @@
             <li>
                 <a href="#tab_content2" id="microservice-tab" data-toggle="tab">Microservices</a>
             </li>
+
+            <li>
+                <a href="#tab_content4" id="microservice-tab" data-toggle="tab">Image Configurations</a>
+            </li>
+
             {% if 'ticketing' in included_settings and 'payments' in included_settings %}
             <li>
                 <a href="#tab_content3" id="ticket-fees-tab" data-toggle="tab">Ticket Fees</a>
@@ -41,6 +46,9 @@
             </div>
             <div role="tabpanel" class="tab-pane fade in" id="tab_content2" aria-labelledby="microservice-tab">
                  {% include 'gentelella/admin/super_admin/settings/_microservices.html' %}
+            </div>
+            <div role="tabpanel" class="tab-pane fade in" id="tab_content4" aria-labelledby="image-config-tab">
+                 {% include 'gentelella/admin/super_admin/settings/_image_config.html' %}
             </div>
             {% if 'ticketing' in included_settings and 'payments' in included_settings %}
             <div role="tabpanel" class="tab-pane fade in" id="tab_content3" aria-labelledby="ticket-fees-tab">
