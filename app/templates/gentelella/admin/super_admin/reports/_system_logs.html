@@ -88,7 +88,7 @@
         <tr>
           <td>{{ notif.user.user_detail.fullname | default(notif.user.email, true) }}</td>
           <td data-toggle="tooltip" data-placement="bottom" title="{{ notif.received_at }}"
-              data-delay='{"show":"500", "hide":"300"}'>{{ notif.received_at.strftime("%Y-%m-%d %H:%M")|time_format  }}
+              data-delay='{"show":"500", "hide":"300"}'>{{ notif.received_at.strftime("%Y-%m-%d %H:%M") }}
           </td>
           <td>{{ notif.action }}</td>
           <td>
@@ -109,6 +109,8 @@
 <script type="text/javascript">
   $( document ).ready(function() {
 
+
+
       $('#activity_table').DataTable({
           "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
           "lengthMenu": [25, 50, 100, 200],
@@ -119,15 +121,32 @@
           //   },
 
       });
+
+      change_column_time_to_humanize_format('#activity_table tr', 1)
+      $('#activity_table').on( 'draw.dt', function () {
+          change_column_time_to_humanize_format('#activity_table tr', 1)
+      } );
+
       $('#mail_table').dataTable({
           "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
           /* Disable initial sort */
           "aaSorting": [],
       });
+
+      change_column_time_to_humanize_format('#mail_table tr', 1)
+      $('#mail_table').on( 'draw.dt', function () {
+          change_column_time_to_humanize_format('#mail_table tr', 1)
+      } );
+
       $('#notif_table').dataTable({
           "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
           /* Disable initial sort */
           "aaSorting": []
       });
+
+      change_column_time_to_humanize_format('#notif_table tr', 1)
+      $('#notif_table').on( 'draw.dt', function () {
+          change_column_time_to_humanize_format('#notif_table tr', 1)
+      } );
   });
 </script>

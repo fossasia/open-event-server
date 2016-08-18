@@ -84,5 +84,19 @@
 <script type="text/javascript">
      $('.table:not(.no-global-dt)').DataTable({"lengthMenu": [ 25, 50, 100, 200 ], "pageLength": 50});
 
+     function change_column_time_to_humanize_format(datatable_name, column_id) {
+        $(datatable_name).each(function( key, value ) {
+          $(value).children().each(function( key1, value2 ) {
+             if(key1 === column_id ){
+                var current_value = $(value2).text().slice(0, 16);
+                var changed_value = moment(current_value, "YYYY-MM-DD hh:mm").fromNow()
+                var isValid = moment(current_value, "YYYY-MM-DD HH:mm", true).isValid()
+                if (changed_value !== current_value && isValid === true){
+                    $(value2).text(changed_value)
+                }
+            }
+        });
+      });
+    }
 </script>
 {% endblock %}
