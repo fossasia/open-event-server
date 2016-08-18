@@ -1,4 +1,5 @@
 import unittest
+import time
 
 from flask import url_for
 from werkzeug.contrib.profiler import ProfilerMiddleware
@@ -24,8 +25,9 @@ class TestEvents(OpenEventTestCase):
             db.create_all()
             populate()
 
-    def test_db(self):
+    def test_db_events(self):
         with app.test_request_context():
+            start = time.clock()
             for i in range(1, 10000):
                 event = ObjectMother.get_event()
                 event.name = 'Event' + str(i)
@@ -33,10 +35,44 @@ class TestEvents(OpenEventTestCase):
             db.session.commit()
             url = url_for('sadmin_events.index_view')
             self.app.get(url, follow_redirects=True)
+            print time.clock() - start
             for query in get_debug_queries():
                 if query.duration >= ProductionConfig.DATABASE_QUERY_TIMEOUT:
                     app.logger.warning("SLOW QUERY: %s\nParameters: %s\nDuration: %fs\nContext: %s\n" % (
                         query.statement, query.parameters, query.duration, query.context))
+
+    def test_db_sessions(self):
+        with app.test_request_context():
+            start = time.clock()
+            for i in range(1, 10000):
+                session = ObjectMother.get_session()
+                session.name = 'Session' + str(i)
+                db.session.add(session)
+            db.session.commit()
+            url = url_for('sadmin_sessions.display_my_sessions_view')
+            self.app.get(url, follow_redirects=True)
+            print time.clock() - start
+            for query in get_debug_queries():
+                if query.duration >= ProductionConfig.DATABASE_QUERY_TIMEOUT:
+                    app.logger.warning("SLOW QUERY: %s\nParameters: %s\nDuration: %fs\nContext: %s\n" % (
+                        query.statement, query.parameters, query.duration, query.context))
+
+    def test_db_users(self):
+        with app.test_request_context():
+            start = time.clock()
+            for i in range(1, 10000):
+                user = ObjectMother.get_user()
+                user.email = 'User' + str(i)
+                db.session.add(user)
+            db.session.commit()
+            url = url_for('sadmin_users.index_view')
+            self.app.get(url, follow_redirects=True)
+            print time.clock() - start
+            for query in get_debug_queries():
+                if query.duration >= ProductionConfig.DATABASE_QUERY_TIMEOUT:
+                    app.logger.warning("SLOW QUERY: %s\nParameters: %s\nDuration: %fs\nContext: %s\n" % (
+                        query.statement, query.parameters, query.duration, query.context))
+
 
     def tearDown(self):
         with app.test_request_context():
