@@ -1,11 +1,11 @@
-    <div id="ticketing-holder" class="col-md-8 col-sm-8 col-xs-12">
+    <div id="ticketing-holder" class="col-md-10 col-sm-10 col-xs-12">
         <form method="POST" action="{{ url_for('ticketing.create_order') }}" enctype="multipart/form-data">
             <input type="hidden" name="event_id" value="{{ event.id }}">
             <div class="panel panel-default">
                 <div class="panel-heading" style="background-color: #ffffff;">
                     <h3 class="panel-title">Ticket Information</h3>
                 </div>
-                <div class="panel-body" style="padding-bottom: 10px;">
+                <div class="panel-body" style="padding-bottom: 10px;overflow-x: scroll;overflow-y: hidden;">
                     <table class="table" style="margin-bottom: 0;">
                         <thead>
                         <tr>
