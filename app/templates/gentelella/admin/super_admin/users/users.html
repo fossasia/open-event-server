@@ -57,8 +57,8 @@ Users
         {% endfor %}
         </ul>
         </td>
-        <td>{{ user['user'].created_date.strftime("%Y-%m-%d %H:%M") }}</td>
-        <td>{{ user['user'].last_access_time.strftime("%Y-%m-%d %H:%M") }}</td>
+        <td>{{ user['user'].last_access_time.strftime("%Y-%m-%d %H:%M")|time_format }}</td>
+        <td>{{ user['user'].last_access_time.strftime("%Y-%m-%d %H:%M")|time_format }}</td>
         <td>
         <div class="btn-group btn-group-sm">
             {% if not user['user'].is_super_admin %}
@@ -213,30 +213,6 @@ Users
         "language": {
             "lengthMenu": "Show _MENU_ Users"
           },
-        "columnDefs": [
-            {
-                "render": function ( data, type, row ) {
-                    var str_date = moment(row[5], "YYYY-MM-DD HH:mm").fromNow()
-                    if (str_date === 'Invalid date'){
-                        return ''
-                    }
-                    return str_date;
-                },
-                "targets": 5
-            },
-            {
-                "render": function ( data, type, row ) {
-                    var str_date = moment(row[6], "YYYY-MM-DD HH:mm").fromNow()
-                    if (str_date === 'Invalid date'){
-                        return ''
-                    }
-                    return str_date;
-                },
-                "targets": 6
-            },
-
-        ]
-
         });
 
     $('#deleted_users_table').dataTable({
@@ -246,29 +222,6 @@ Users
         "language": {
             "lengthMenu": "Show _MENU_ Users"
         },
-        "columnDefs": [
-            {
-                "render": function ( data, type, row ) {
-                    var str_date = moment(row[5], "YYYY-MM-DD HH:mm").fromNow()
-                    if (str_date === 'Invalid date'){
-                        return ''
-                    }
-                    return str_date;
-                },
-                "targets": 5
-            },
-            {
-                "render": function ( data, type, row ) {
-                    var str_date = moment(row[6], "YYYY-MM-DD HH:mm").fromNow()
-                    if (str_date === 'Invalid date'){
-                        return ''
-                    }
-                    return str_date;
-                },
-                "targets": 6
-            },
-
-        ],
         /* Disable initial sort */
         "aaSorting": []
     });
@@ -279,29 +232,6 @@ Users
         "language": {
             "lengthMenu": "Show _MENU_ Users",
         },
-        "columnDefs": [
-            {
-                "render": function ( data, type, row ) {
-                    var str_date = moment(row[5], "YYYY-MM-DD HH:mm").fromNow()
-                    if (str_date === 'Invalid date'){
-                        return ''
-                    }
-                    return str_date;
-                },
-                "targets": 5
-            },
-            {
-                "render": function ( data, type, row ) {
-                    var str_date = moment(row[6], "YYYY-MM-DD HH:mm").fromNow()
-                    if (str_date === 'Invalid date'){
-                        return ''
-                    }
-                    return str_date;
-                },
-                "targets": 6
-            },
-
-        ],
         /* Disable initial sort */
         "aaSorting": []
     });
