@@ -16,7 +16,7 @@ from app.models.microlocation import Microlocation
 from app.models.user import ORGANIZER, COORGANIZER, TRACK_ORGANIZER, MODERATOR, ATTENDEE
 
 # Admin Panel Permissions
-from app.models.admin_panels import PanelPermission
+from app.models.panel_permissions import PanelPermission
 from app.models.user import SUPERADMIN, ADMIN, SALES_ADMIN
 from app.views.admin.super_admin.super_admin_base import PANEL_LIST, SALES
 

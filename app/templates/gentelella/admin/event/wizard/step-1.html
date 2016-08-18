@@ -71,9 +71,12 @@
                 <div class="col-md-8">
                     <div class="checkbox" style="padding-top:0;">
                         <label style="padding-left:0;">
-                            <input type="checkbox" class="flat" name="show_map"
-                                   {% if not event.show_map or event.show_map != 0 %}checked="checked"{% endif %}> Show
-                            map on event page
+                            {% if event %}
+                                <input type="checkbox" class="flat" name="show_map" {{ 'checked' if event.show_map == 1 else '' }}>
+                            {% else %}
+                                <input type="checkbox" class="flat" name="show_map" checked="checked">
+                            {% endif %}
+                            Show map on event page
                         </label>
                     </div>
                 </div>

@@ -19,6 +19,8 @@ TICKET_PURCHASED = 'Ticket(s) Purchased'
 EVENT_EXPORTED = 'Event Exported'
 EVENT_EXPORT_FAIL = 'Event Export Failed'
 MAIL_TO_EXPIRED_ORDERS = 'Mail Expired Orders'
+MONTHLY_PAYMENT_EMAIL = 'Monthly Payment Email'
+MONTHLY_PAYMENT_FOLLOWUP_EMAIL = 'Monthly Payment Follow Up Email'
 
 class Mail(db.Model):
     __tablename__ = 'mails'

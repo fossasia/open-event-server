@@ -12,7 +12,8 @@ class Page(db.Model):
     description = db.Column(db.String)
     place = db.Column(db.String)
     index = db.Column(db.Integer, default=0)
-    def __init__(self, name=None,title=None, description=None, url=None, place=None, index=None):
+
+    def __init__(self, name=None, title=None, description=None, url=None, place=None, index=None):
         self.name = name
         self.description = description
         self.title = title

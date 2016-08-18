@@ -41,7 +41,7 @@ from ..helpers.system_mails import MAILS
 from ..models import db
 from ..models.activity import Activity, ACTIVITIES
 from ..models.call_for_papers import CallForPaper
-from ..models.admin_panels import PanelPermission
+from ..models.panel_permissions import PanelPermission
 from ..models.custom_forms import CustomForms
 from ..models.event import Event, EventsUsers
 from ..models.event_copyright import EventCopyright
@@ -1390,7 +1390,7 @@ class DataManager(object):
         event.event_url = form['event_url']
         event.type = form['type']
         event.topic = form['topic']
-        event.show_map = 1 if form.get('show_map', 'on') == "on" else 0
+        event.show_map = 1 if form.get('show_map') == 'on' else 0
         event.sub_topic = form['sub_topic']
         event.privacy = form.get('privacy', 'public')
         event.payment_country = form.get('payment_country')

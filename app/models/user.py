@@ -12,7 +12,7 @@ from user_detail import UserDetail
 from .role import Role
 from .service import Service
 from .permission import Permission
-from .admin_panels import PanelPermission
+from .panel_permissions import PanelPermission
 from .user_permissions import UserPermission
 from .users_events_roles import UsersEventsRoles as UER
 from .notifications import Notification

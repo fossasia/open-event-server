@@ -1,52 +1,34 @@
-FROM ubuntu:latest
-MAINTAINER Scott Deng <scottdeng@live.cn>
-ENV DEBIAN_FRONTEND noninteractive
-ENV PG_VERSION 9.4
-ENV PG_CONF /etc/postgresql/$PG_VERSION/main/postgresql.conf
-ENV PG_HBA /etc/postgresql/$PG_VERSION/main/pg_hba.conf
-ENV PG_DIR /var/lib/postgresql/$PG_VERSION/main
-ENV DATABASE_URL postgresql://open_event_user:start@localhost:5432/test
-#Update
-RUN apt-get update
-RUN apt-get upgrade -y
+FROM python:2-slim
+MAINTAINER Avi Aryan <avi.aryan123@gmail.com>
 
-#Install proper dependencies
-RUN apt-get install -y git wget
-#add repo
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main" > "/etc/apt/sources.list.d/pgdg.list"
-RUN wget --quiet -O - http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | apt-key add -
+ENV INSTALL_PATH /open_event
+RUN mkdir -p $INSTALL_PATH
+
+WORKDIR $INSTALL_PATH
+
+# apt-get update
 RUN apt-get update
-#Clone the source
-RUN git clone https://github.com/fossasia/open-event-orga-server.git
-#cd into the dir
-WORKDIR open-event-orga-server
-#install psql and python
-RUN apt-get install -y build-essential python python-dev python-setuptools python-pip
-RUN apt-get install -y libxml2-dev libxslt1-dev
-RUN apt-get install -y nginx uwsgi uwsgi-plugin-python
-RUN apt-get install -y postgresql-$PG_VERSION postgresql-contrib-$PG_VERSION libpq-dev
-# RUN sed -i "s/#listen_addresses = .*/listen_addresses = '*'/" "/etc/postgresql/$PG_VERSION/main/postgresql.conf"
-RUN echo "listen_addresses='*'" >> /etc/postgresql/$PG_VERSION/main/postgresql.conf
-RUN echo "host    all             all             all                     md5" >> "/etc/postgresql/$PG_VERSION/main/pg_hba.conf"
-RUN echo "client_encoding = utf8" >> "/etc/postgresql/$PG_VERSION/main/postgresql.conf"
-EXPOSE 5432
-# gen utf-8 locale
-#RUN localedef -v -c -i en_US -f UTF-8 en_US.UTF-8; exit 0
-RUN locale-gen en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
-#add database user
-USER postgres
-RUN /etc/init.d/postgresql start \
-    && psql --command "CREATE USER open_event_user WITH PASSWORD 'start';" \
-    && psql --command "CREATE DATABASE test WITH OWNER=open_event_user LC_COLLATE='en_US.utf8' LC_CTYPE='en_US.utf8' ENCODING='UTF8' TEMPLATE=template0;"
-USER root
-#install dependencies
-RUN pip install -r requirements/prod.txt
-#setup redis
-RUN bash run_redis.sh
-#set environment
-EXPOSE 80 5000
-RUN chmod 0755 *.sh
-ENTRYPOINT ["./run.sh"]
+# update some packages
+RUN apt-get install -y wget git ca-certificates curl && update-ca-certificates && apt-get clean -y
+# install deps
+RUN apt-get install -y --no-install-recommends build-essential python-dev libpq-dev libevent-dev && apt-get clean -y
+# nodejs bower
+RUN curl -sL https://deb.nodesource.com/setup_4.x | bash && apt-get install -y --force-yes nodejs && apt-get clean -y
+# ^^ https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions
+RUN npm install bower -g && npm cache clean
+
+# copy just requirements
+COPY requirements.txt requirements.txt
+COPY requirements requirements
+COPY bower.json bower.json
+COPY .bowerrc .bowerrc
+COPY package.json package.json
+
+# install requirements
+RUN pip install --no-cache-dir -r requirements.txt
+RUN bower install --allow-root && bower cache clean --allow-root
+
+# copy remaining files
+COPY . .
+
+CMD bash docker_run.sh

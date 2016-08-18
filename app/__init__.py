@@ -6,8 +6,13 @@ import warnings
 from flask.exthook import ExtDeprecationWarning
 from forex_python.converter import CurrencyCodes
 from pytz import utc
+
 warnings.simplefilter('ignore', ExtDeprecationWarning)
 # Keep it before flask extensions are imported
+
+from app.helpers.scheduled_jobs import send_mail_to_expired_orders, empty_trash, send_after_event_mail, \
+    send_event_fee_notification, send_event_fee_notification_followup
+
 import arrow
 from celery import Celery
 from celery.signals import after_task_publish
@@ -17,7 +22,7 @@ import os.path
 from os import environ
 import sys
 import json
-from flask import Flask, session, url_for
+from flask import Flask, session
 from flask.ext.autodoc import Autodoc
 from app.settings import get_settings
 from flask.ext.cors import CORS
@@ -51,8 +56,11 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from app.helpers.data import DataManager, delete_from_db
 from app.helpers.helpers import send_after_event
 from app.helpers.cache import cache
-from sqlalchemy_continuum import transaction_class
 from helpers.helpers import send_email_for_expired_orders
+from werkzeug.contrib.profiler import ProfilerMiddleware
+
+from flask.ext.sqlalchemy import get_debug_queries
+from config import ProductionConfig
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -89,15 +97,13 @@ def create_app():
     app.config['STATIC_ROOT'] = 'staticfiles'
     app.config['STATICFILES_DIRS'] = (os.path.join(BASE_DIR, 'static'),)
     app.config['SQLALCHEMY_RECORD_QUERIES'] = True
-    #app.config['SERVER_NAME'] = 'http://127.0.0.1:8001'
-    # app.config['SERVER_NAME'] = 'open-event-dev.herokuapp.com'
+
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     app.logger.setLevel(logging.INFO)
     app.jinja_env.add_extension('jinja2.ext.do')
     app.jinja_env.add_extension('jinja2.ext.loopcontrols')
     app.jinja_env.undefined = SilentUndefined
     app.jinja_env.filters['operation_name'] = operation_name
-    # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
     # set up jwt
     app.config['JWT_AUTH_USERNAME_KEY'] = 'email'
@@ -114,6 +120,10 @@ def create_app():
     admin_view = AdminView("Open Event")
     admin_view.init(app)
     admin_view.init_login(app)
+
+    # Profiling
+    app.config['PROFILE'] = True
+    app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[30])
 
     # API version 2
     with app.app_context():
@@ -142,15 +152,11 @@ def forbidden(e):
         return json.dumps({"error": "forbidden"}), 403
     return render_template('gentelella/admin/forbidden.html'), 403
 
-
 # taken from http://flask.pocoo.org/snippets/45/
 def request_wants_json():
     best = request.accept_mimetypes.best_match(
         ['application/json', 'text/html'])
-    return best == 'application/json' and \
-           request.accept_mimetypes[best] > \
-           request.accept_mimetypes['text/html']
-
+    return best == 'application/json' and request.accept_mimetypes[best] > request.accept_mimetypes['text/html']
 
 @app.context_processor
 def locations():
@@ -158,6 +164,14 @@ def locations():
         return DataGetter.get_locations_of_events()
 
     return dict(locations=get_locations_of_events)
+
+@app.context_processor
+def fee_helpers():
+    def get_fee(currency):
+        from app.helpers.payment import get_fee
+        return get_fee(currency)
+
+    return dict(get_fee=get_fee)
 
 
 @app.context_processor
@@ -170,7 +184,6 @@ def event_types():
 def pages():
     pages = DataGetter.get_all_pages()
     return dict(system_pages=pages)
-
 
 @app.context_processor
 def social_settings():
@@ -196,6 +209,7 @@ def currency_symbol_filter(currency_code):
 def currency_name_filter(currency_code):
     name = CurrencyCodes().get_currency_name(currency_code)
     return name if name else ''
+
 
 @app.template_filter('camel_case')
 def camel_case_filter(string):
@@ -316,14 +330,14 @@ def track_user():
 def make_celery(app):
     celery = Celery(app.import_name, broker=app.config['CELERY_BROKER_URL'])
     celery.conf.update(app.config)
-    TaskBase = celery.Task
+    task_base = celery.Task
 
-    class ContextTask(TaskBase):
+    class ContextTask(task_base):
         abstract = True
 
         def __call__(self, *args, **kwargs):
             with app.app_context():
-                return TaskBase.__call__(self, *args, **kwargs)
+                return task_base.__call__(self, *args, **kwargs)
 
     celery.Task = ContextTask
     return celery
@@ -361,81 +375,28 @@ def integrate_socketio():
     integrate = current_app.config.get('INTEGRATE_SOCKETIO', False)
     return dict(integrate_socketio=integrate)
 
+scheduler = BackgroundScheduler(timezone=utc)
+scheduler.add_job(send_mail_to_expired_orders, 'interval', hours=5)
+scheduler.add_job(empty_trash, 'cron', day_of_week='mon-fri', hour=5, minute=30)
+scheduler.add_job(send_after_event_mail, 'cron', day_of_week='mon-fri', hour=5, minute=30)
+scheduler.add_job(send_event_fee_notification, 'cron', day=1)
+scheduler.add_job(send_event_fee_notification_followup, 'cron', day=15)
+scheduler.start()
 
-def send_after_event_mail():
-    with app.app_context():
-        events = Event.query.all()
-        for event in events:
-            upcoming_events = DataGetter.get_upcoming_events(event.id)
-            organizers = DataGetter.get_user_event_roles_by_role_name(
-                event.id, 'organizer')
-            speakers = DataGetter.get_user_event_roles_by_role_name(event.id,
-                                                                    'speaker')
-            if datetime.now() > event.end_time:
-                for speaker in speakers:
-                    send_after_event(speaker.user.email, event.id,
-                                     upcoming_events)
-                for organizer in organizers:
-                    send_after_event(organizer.user.email, event.id,
-                                     upcoming_events)
-
-
-# logging.basicConfig()
-sched = BackgroundScheduler(timezone=utc)
-sched.add_job(send_after_event_mail,
-              'cron',
-              day_of_week='mon-fri',
-              hour=5,
-              minute=30)
-
-
-# sched.start()
-
-def send_mail_to_expired_orders():
-    with app.app_context():
-        orders = DataGetter.get_expired_orders()
-        for order in orders:
-            send_email_for_expired_orders('adityavyas17@gmail.com', order.event.name, order.get_invoice_number(),
-                                          url_for('ticketing.view_order_after_payment',
-                                                  order_identifier=order.identifier, _external=True))
-
-order_sched = BackgroundScheduler(timezone=utc)
-order_sched.add_job(send_mail_to_expired_orders,
-                    'interval',
-                    hours=5)
-
-
-order_sched.start()
-
-def empty_trash():
-    with app.app_context():
-        events = Event.query.filter_by(in_trash=True)
-        users = User.query.filter_by(in_trash=True)
-        sessions = Session.query.filter_by(in_trash=True)
-        for event in events:
-            if datetime.now() - event.trash_date >= timedelta(days=30):
-                DataManager.delete_event(event.id)
-
-        for user in users:
-            if datetime.now() - user.trash_date >= timedelta(days=30):
-                transaction = transaction_class(Event)
-                transaction.query.filter_by(user_id=user.id).delete()
-                delete_from_db(user, "User deleted permanently")
-
-        for session_ in sessions:
-            if datetime.now() - session_.trash_date >= timedelta(days=30):
-                delete_from_db(session_, "Session deleted permanently")
-
-
-trash_sched = BackgroundScheduler(timezone=utc)
-trash_sched.add_job(
-    empty_trash, 'cron',
-    day_of_week='mon-fri',
-    hour=5, minute=30)
-trash_sched.start()
+# Testing database performance
+@app.after_request
+def after_request(response):
+    for query in get_debug_queries():
+        if query.duration >= ProductionConfig.DATABASE_QUERY_TIMEOUT:
+            app.logger.warning("SLOW QUERY: %s\nParameters: %s\nDuration: %fs\nContext: %s\n" % (query.statement,
+                                                                                                 query.parameters,
+                                                                                                 query.duration,
+                                                                                                 query.context))
+    return response
 
 # Flask-SocketIO integration
 
+socketio = None
 if current_app.config.get('INTEGRATE_SOCKETIO', False):
     from eventlet import monkey_patch
     from flask_socketio import SocketIO, emit, join_room
