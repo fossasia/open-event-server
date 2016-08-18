@@ -9,7 +9,7 @@ from flask import url_for
 
 from flask.ext import login
 
-from app import db
+from app.models import db
 from app.helpers.cache import cache
 from app.helpers.data import save_to_db
 from app.helpers.helpers import string_empty, send_email_for_after_purchase, get_count
