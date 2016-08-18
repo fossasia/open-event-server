@@ -13,7 +13,7 @@ install: "pip install -r requirements/tests.txt"
 env:
 - APP_CONFIG="config.TestingConfig"
 # command to run tests
-script: nosetests --with-coverage
+script: nosetests tests/unittests --with-coverage
 # upload coverage
 after_success:
   - bash <(curl -s https://codecov.io/bash)
