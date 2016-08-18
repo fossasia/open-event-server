@@ -2,11 +2,21 @@
     <div class="col-md-8 col-md-offset-2">
         {% for image in placeholder_images %}
             <h4>{{ image }}</h4>
-            <div class="system-images" style="margin-left:50px;">
-                <img src='{{ url_for("static", filename="placeholders/" + placeholder_images[image]) }}' style="width:80%; "/><br>
-                <button class="btn btn-primary btn-sys" id="sys-{{ image }}" style="margin-top:10px;"> Change</button>
-            </div>
-            <br><hr>
+            {% set vars = {'foo': False} %}
+              <div class="system-images" data-name="{{ image }}" style="margin-left:50px;">
+              {% for custom_image in custom_placeholder %}
+                {% if custom_image.name == image %}
+                  <img src='{{ custom_image.url }}' style="width:80%; " id="image-{{ image | replace(',', '') | replace('&', '') | replace(' ','_')}}"/>
+                  {% if vars.update({'foo': True}) %} {% endif %}
+                {% endif %}
+              {% endfor %}
+                {% if not vars.foo %}
+                  <img src='{{ url_for("static", filename="placeholders/" + placeholder_images[image]) }}' style="width:80%; " id="image-{{ image | replace(',', '') | replace('&', '') | replace(' ','_')}}"/>
+                {% endif %}
+                <br>
+                <button class="btn btn-primary btn-sys" id="sys-{{ image | replace(',', '') |replace('&', '') | replace(' ','_')}}" style="margin-top:10px;"> Change</button>
+              </div>
+              <br><hr>
         {% endfor %}
     </div>
 </div>
@@ -20,36 +30,30 @@
       </div>
       <div class="modal-body">
         <form>
-            <input type="hidden" name="background_url" id="background_url">
-            <div class="item form-group" id="image-upload-group"
-                 {% if event and event.background_url and event.background_url != '' %}style="display: none;"{% endif %}>
-                <label>Event Image</label><br>
+            <input type="hidden" name="placeholder" id="placeholder">
+            <input type="hidden" name="file_name" id="file_name">
+
+            <div class="item form-group" id="placeholder-upload-group"
+                 {% if event and event.placeholder and event.placeholder != '' %}style="display: none;"{% endif %}>
+                <label>Placeholder</label><br>
                 <div class="image-box">
-                    <input type="file" id="event-image-upload" name="event-image-upload"
-                           class="image-upload-btn no-js"
+                    <input type="file" id="placeholder-upload" name="placeholder-upload" class="image-upload-btn no-js"
                            accept="image/*"/>
-                    <label class="file-label" for="event-image-upload">
-                        <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Event Image
+                    <label class="file-label" for="placeholder-upload" id="placeholder-upload-label">
+                        <i class="fa fa-4x fa-file-image-o" aria-hidden="true"></i> <br>
+                        <h3>Select Placeholder</h3>
                     </label><br>
                 </div>
                 <span class="text-muted" style="color: #a2a2a2;">
-                    We recommend using at least a 2160x1080px (2:1 ratio) image<br>that's no larger than 10MB.
+                    Placeholder size must be less than 1MB.
                 </span>
             </div>
 
-            <div class="item form-group" id="image-view-group"
-                 {% if not event or not event.background_url or event.background_url == '' %}style="display: none;"{% endif %}>
-                <label>Event Image</label><br>
-                <img src="{{ event.background_url | default('', true) }}"
-                     style="width: 350px; height: 175px;"><br><br>
-                {% if not event %}
-                    <button type="button" class="btn btn-sm btn-default" data-target="#cropper-modal"
-                            data-toggle="modal">
-                        <i class="fa fa-arrows" aria-hidden="true"></i>
-                        Adjust
-                    </button>
-                {% endif %}
-                <button type="button" class="btn btn-sm btn-default" id="remove-image-btn">
+            <div class="item form-group" id="placeholder-view-group"
+                 {% if not event or not event.placeholder or event.placeholder == '' %}style="display: none;"{% endif %}>
+                <label>Placeholder</label><br>
+                <img src="{{ event.placeholder | default('', true) }}" style="width: 350px;"><br><br>
+                <button type="button" class="btn btn-sm btn-default" id="remove-placeholder-btn">
                     <i class="fa fa-trash-o" aria-hidden="true"></i>
                     Remove
                 </button>
@@ -58,15 +62,92 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary">Update</button>
+        <button class="btn btn-primary btn-update">Update</button>
         <button class="btn" data-dismiss="modal">Cancel</button>
       </div>
     </div>
   </div>
 </div>
-
 <script type="text/javascript">
+    var name='';
+    $('.btn-update').click(function(){
+        window.location = document.URL;
+    })
     $('.btn-sys').click(function(){
         $('#system-image-modal').modal();
-    })
+        var id = $(this).attr("id").replace('sys-', '');
+        id = '#image-' + id;
+        name = $(this).parent().attr('data-name');
+        var filename = $(id).attr('src');
+        filename = filename.substring(filename.lastIndexOf('/') + 1);
+        console.log(name);
+        $('#file_name').val(filename);
+    });
+    function resetFormElement(e) {
+        e = $(e);
+        e.wrap('<form>').closest('form').get(0).reset();
+        e.unwrap();
+    }
+
+    $("#placeholder-upload").unbind("change").on('change', function () {
+        var input = this;
+        if (input.files && input.files[0]) {
+            if (input.files[0].size > 1048576) {
+                createSnackbar("Image must be less than 1 MB in size");
+                resetFormElement(input);
+            } else {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $("#placeholder-upload-label").html(loadingImage);
+                    var filename = $('#file_name').val();
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ url_for('sadmin_content.placeholder_upload') }}",
+                        data: {placeholder: e.target.result, file_name: filename, name: name},
+                        dataType: 'json'
+                    }).done(function(data) {
+                        console.log(data);
+                        resetFormElement(input);
+                        $("#placeholder-upload-label").html('<i class="fa fa-4x fa-file-image-o" aria-hidden="true"></i> <br> <h3>Select placeholder</h3>');
+                        $("#placeholder").val(data.placeholder);
+                        $("#placeholder-upload-group").hide();
+                        $("#placeholder-view-group").show().find("img").attr("src", e.target.result);
+                    }).fail(function(data) {
+                        alert("Something went wrong. Please try again.");
+                    });
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        else {
+            logError("No FileReader support");
+        }
+
+    });
+    var loadingImage = '<img src="' + "{{ url_for('static', filename='img/loading.gif') }}" + '" style="width: 50px;"> <h3>Uploading</h3>';
+
+    {% if event %}
+
+    $("#remove-placeholder-btn").click(function () {
+        $.ajax({
+            type: 'DELETE',
+            url: "{{ url_for('sadmin_content.placeholder_upload', event_id=event.id) }}",
+            dataType: 'json'
+        }).done(function(data) {
+            console.log(data);
+            $("#placeholder-view-group").hide();
+            $("#placeholder-upload-group").show();
+            $("#placeholder").val('');
+        }).fail(function(data) {
+            alert("Something went wrong. Please try again.");
+        });
+    });
+    {% else %}
+
+    $("#remove-placeholder-btn").click(function () {
+        $("#placeholder-view-group").hide();
+        $("#placeholder-upload-group").show();
+        $("#placeholder").val('');
+    });
+    {% endif %}
 </script>

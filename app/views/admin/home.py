@@ -40,10 +40,12 @@ class MyHomeView(AdminIndexView):
         call_for_speakers_events = DataGetter.get_call_for_speakers_events()
         upcoming_events = DataGetter.get_all_published_events().limit(12).all()
         placeholder_images = DataGetter.get_event_default_images()
+        custom_placeholder = DataGetter.get_custom_placeholders()
         return self.render('gentelella/index.html',
                            call_for_speakers_events=call_for_speakers_events,
                            upcoming_events=upcoming_events,
-                           placeholder_images=placeholder_images)
+                           placeholder_images=placeholder_images,
+                           custom_placeholder=custom_placeholder)
 
     @expose('/login/', methods=('GET', 'POST'))
     def login_view(self):
