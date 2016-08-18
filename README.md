@@ -1,6 +1,6 @@
-#  Open-Event Server
+#  Open Event Orga Server
 
-This Open Event orga server enables organizers to manage events from concerts to conferences and meetups. It offers features for events with several tracks and venues. Event managers can create invitation forms for speakers and build schedules in a drag and drop interface. The event information is stored in a database, which can be a sqlite db file or saved in json itself. The schema for the database is provided in the [Database.md](/docs/DATABASE.md). The system provides API endpoints to fetch the data, and to modify and update it. Organizers can import and export event data in a standard compressed file format that includes the event data in JSON and binary media files like images and audio.
+The Open Event Orga Server enables organizers to manage events from concerts to conferences and meetups. It offers features for events with several tracks and venues. Event managers can create invitation forms for speakers and build schedules in a drag and drop interface. The event information is stored in a database, which can be a sqlite db file or saved in json itself. The schema for the database is provided in the [Database.md](/docs/DATABASE.md). The system provides API endpoints to fetch the data, and to modify and update it. Organizers can import and export event data in a standard compressed file format that includes the event data in JSON and binary media files like images and audio.
 
 [![Build Status](https://travis-ci.org/fossasia/open-event-orga-server.svg?branch=master)](https://travis-ci.org/fossasia/open-event-orga-server)
 [![Dependency Status](https://gemnasium.com/badges/github.com/fossasia/open-event-orga-server.svg)](https://gemnasium.com/github.com/fossasia/open-event-orga-server)
@@ -37,15 +37,15 @@ A step-by-step guide on how to run Orga server on a system can be found in [INST
 
 For installation steps on how to deploy Open-Event Server using vagrant please refer to [Vagrant installation](docs/INSTALLATION_VAGRANT.md)
 
-#### How do I install Web App Generator on Google Cloud
+### How do I install Web App Generator on Google Cloud
 
 To install the system on Google Cloud please refer to the [Google Cloud installation readme](/docs/INSTALLATION_GOOGLE.md).
 
-#### How do I install Web App Generator on AWS
+### How do I install Web App Generator on AWS
 
 To install the system on AWS please refer to the [AWS installation readme](/docs/INSTALLATION_AWS.md).
 
-#### How do I install Web App Generator on Digital Ocean
+### How do I install Web App Generator on Digital Ocean
 
 To install the system on Digital Ocean please refer to the [Digital Ocean installation readme](/docs/INSTALLATION_DIGITALOCEAN.md).
 
@@ -92,10 +92,6 @@ redis-3.2.1/src/redis-server &
 * App server - uwsgi
 * Web framework - flask (particularly flask-admin)
 
-## Roles
-
-The system has two kind of role type. 1. System roles are related to the Open Event organization and operator of the application. 2. Event Roles are related to the users of the system with their different permissions. Read more [here](/docs/ROLES.md).
-
 ### Dependencies
 
 ### Authentication OAuth
@@ -105,7 +101,7 @@ We are using it to get information from Facebook and Google account, and we allo
  2. Facebook https://graph.facebook.com/oauth
 
 ### Location
-We are based on Google maps to get information about location(info about country, city, latitude and longitude)https://maps.googleapis.com/maps/api/
+We are using on Google maps to get information about location(info about country, city, latitude and longitude)https://maps.googleapis.com/maps/api/
 We use it to get current location and display closes events.
 
 ### Local Storage and Amazon S3
@@ -124,8 +120,7 @@ and we also use Github to get info about commit (for example: commit message, au
 ### Env Variables Heroku
 
 To see our all enviroment variables you have to visit Heroku page
-https://dashboard-classic.heroku.com/apps/open-event/settings (You need access to see this page)
-
+https://dashboard-classic.heroku.com/apps/open-event/settings (You need access to see this page).
 
 ## API Access and Import/Export
 
@@ -133,6 +128,9 @@ The data of events is provided over API endpoints as described [here](/docs/API.
 
 It is also possible to export or import data matching the API structure as a compressed file with JSON and binary media files. Read more about this [here](/docs/IMPORT_EXPORT.md).
 
+## Roles
+
+The system has two kind of role type. 1. System roles are related to the Open Event organization and operator of the application. 2. Event Roles are related to the users of the system with their different permissions. Read more [here](/docs/ROLES.md).
 
 ## Configuration
 
