@@ -69,6 +69,7 @@ class EventInvoice(db.Model):
         self.transaction_id = transaction_id
         self.paid_via = paid_via
         self.created_at = datetime.utcnow()
+        self.status = 'pending'
 
     def get_invoice_number(self):
         return 'I' + str(int(time.mktime(self.created_at.timetuple()))) + '-' + str(self.id)

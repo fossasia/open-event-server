@@ -1,5 +1,5 @@
 import copy
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from flask import request
 from flask import url_for
@@ -12,6 +12,7 @@ from app.helpers.data_getter import DataGetter
 from app.helpers.payment import get_fee
 from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView, SALES
 from app.helpers.ticketing import TicketingManager
+from app.helpers.invoicing import InvoicingManager
 
 class SuperAdminSalesView(SuperAdminBaseView):
     PANEL_NAME = SALES
@@ -74,6 +75,33 @@ class SuperAdminSalesView(SuperAdminBaseView):
                            to_date=to_date,
                            tickets_total=tickets_total,
                            fee_total=fee_total)
+
+    @expose('/fees/status/')
+    def fees_status_view(self):
+        from_date = request.args.get('from_date')
+        to_date = request.args.get('to_date')
+
+        if ('from_date' in request.args and not from_date) or ('to_date' in request.args and not to_date) or \
+            ('from_date' in request.args and 'to_date' not in request.args) or \
+                ('to_date' in request.args and 'from_date' not in request.args):
+
+            return redirect(url_for('.fees_status_view'))
+
+        if from_date and to_date:
+            invoices = InvoicingManager.get_invoices(
+                from_date=datetime.strptime(from_date, '%d/%m/%Y'),
+                to_date=datetime.strptime(to_date, '%d/%m/%Y'),
+            )
+        else:
+            invoices = InvoicingManager.get_invoices()
+
+        return self.render('/gentelella/admin/super_admin/sales/fees_status.html',
+                           display_currency=self.display_currency,
+                           from_date=from_date,
+                           current_date=datetime.now(),
+                           overdue_date=datetime.now() + timedelta(days=15),
+                           invoices=invoices,
+                           to_date=to_date)
 
     @expose('/<path>/')
     def sales_by_events_view(self, path):
