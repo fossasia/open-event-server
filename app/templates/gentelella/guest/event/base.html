@@ -5,13 +5,35 @@
 {% set carousel_height = 500 if active_page == 'info' else 300 -%}
 {% set scrollspy_top = (carousel_height + 95) ~ "px" %}
 
+{# Set `event_image` for use inside template #}
+{% if event.background_url %}
+    {% set event_image = event.background_url %}
+{% elif event.topic %}
+    {% set event_image = url_for("static", filename="placeholders/" + placeholder_images[event.topic], _external=True) %}
+{% elif event.subtopic %}
+    {% set event_image = url_for("static", filename="placeholders/" + placeholder_images[event.subtopic], _external=True) %}
+{% else %}
+    {% set event_image = url_for("static", filename="placeholders/" + placeholder_images["Other"], _external=True) %}
+{% endif %}
+
+{% block head_meta %}
+    {# Facebook Open Graph Tags #}
+    <meta property="fb:app_id" content="{{ fb_app_id | default('', true) }}"/>
+    <meta property="og:title" content="{{ event.name }}"/>
+    <meta property="og:site_name" content="Organizer Server"/>
+    <meta property="og:url" content="{{ request.url }}"/>
+    <meta property="og:description" content="{{ event.description }}"/>
+    <meta property="og:image" content="{{ event_image | external_url }}"/>
+    <meta property="og:type" content="events.event"/>
+{% endblock %}
+
 {% block head_css %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/details.css') }}"/>
     <style type="text/css">
         .carousel .item {
             height: {{ carousel_height }}px;
-            background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)), url('{% if event.background_url %}{{ event.background_url }}{% elif event.topic%}{{ url_for("static", filename="placeholders/" + placeholder_images[event.topic])}}{% elif event.subtopic %}{{ url_for("static", filename="placeholders/" + placeholder_images[event.subtopic])}}{% else %}{{url_for("static", filename="placeholders/" + placeholder_images["Other"])}}{% endif %}');
+            background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)), url('{{ event_image }}');
             background-size: cover;
         }
 
