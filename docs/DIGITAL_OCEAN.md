@@ -1,6 +1,6 @@
 ## Deploying Open Event on Digital Ocean
 
-This guide will be using Docker to deploy open event on DigitalOcean. The basic idea is installing Docker on Digital Ocean droplet and then running Open Event in it.
+This guide will show you how to deploy Open Event on Digital Ocean. The basic idea is installing Docker on Digital Ocean droplet and then running Open Event in it.
 
 #### Phase 1
 
@@ -27,12 +27,12 @@ Once this step is done, you will be running the droplet's shell.
 
 #### Phase 2
 
-The steps that will be mentioned now are analogous to [running Open Event on Docker](DOCKER.md) documentation. You are recommended to first go through to appreciate the
+The steps that will be mentioned now are analogous to [running Open Event on Docker](DOCKER.md) documentation. You are recommended to first go through it to appreciate the
 similarities.
 
 * Now we are into our server. The first step is to install Docker. DigitalOcean has a
 [nice guide](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-16-04) on installing Docker in Ubuntu 16.04 so follow it.
-I took the commands from that guide and have written them here. You can copy paste the following into the droplet ssh shell.
+I took the commands from that guide and have written them here. You can copy paste the following into the droplet's ssh shell.
 
 ```bash
 sudo apt-get update
