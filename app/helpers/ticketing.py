@@ -9,6 +9,7 @@ from flask import url_for
 
 from flask.ext import login
 
+from app.models import db
 from app.helpers.cache import cache
 from app.helpers.data import save_to_db
 from app.helpers.helpers import string_empty, send_email_for_after_purchase, get_count
@@ -183,15 +184,16 @@ class TicketingManager(object):
         amount = 0
         for index, id in enumerate(ticket_ids):
             if not string_empty(id) and int(ticket_quantity[index]) > 0:
-                order_ticket = OrderTicket()
-                order_ticket.ticket = TicketingManager.get_ticket(id)
-                order_ticket.quantity = int(ticket_quantity[index])
-                order.tickets.append(order_ticket)
+                with db.session.no_autoflush:
+                    order_ticket = OrderTicket()
+                    order_ticket.ticket = TicketingManager.get_ticket(id)
+                    order_ticket.quantity = int(ticket_quantity[index])
+                    order.tickets.append(order_ticket)
 
-                if from_organizer:
-                    amount += int(ticket_subtotals[index])
-                else:
-                    amount += (order_ticket.ticket.price * order_ticket.quantity)
+                    if from_organizer:
+                        amount += int(ticket_subtotals[index])
+                    else:
+                        amount += (order_ticket.ticket.price * order_ticket.quantity)
 
         order.amount = amount
 
