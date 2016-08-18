@@ -31,7 +31,7 @@ Please check out [the documentation here](/docs/INSTALLATION.md).
 
 ### How do I run Open Event Server locally
 
-A step-by-step guide on how to run Orga server on a system can be found in [INSTALLATION_LOCAL](/docs/INSTALLATION_LOCAL.md)
+A step-by-step guide on how to run Orga Server on a system locally can be found in [Installations document](/docs/INSTALLATION_LOCAL.md)
 
 ### How do I install Open-Event Server with Vagrant
 
