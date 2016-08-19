@@ -92,35 +92,44 @@ redis-3.2.1/src/redis-server &
 * App server - uwsgi
 * Web framework - flask (particularly flask-admin)
 
-### Dependencies
+### Services and Dependencies
 
-### Authentication OAuth
+#### Authentication OAuth
 
-We are using it to get information from Facebook and Google account, and we allow to user sign in.
+OAuth is used to get information from Facebook and Google accounts, that enables users to sign in with their respective credentials:
  1. Google https://accounts.google.com/o/oauth2/auth
  2. Facebook https://graph.facebook.com/oauth
 
-### Location
-We are using on Google maps to get information about location(info about country, city, latitude and longitude)https://maps.googleapis.com/maps/api/
-We use it to get current location and display closes events.
+#### Twitter
 
-### Local Storage and Amazon S3
+The server integrates twitter on event pages. To obtain the required keys visit: https://dev.twitter.com/overview/documentation
+
+#### Instagram
+
+It is possible to extend the functionality and offer images from Instagram in the event service. To obtain required keys visit: https://www.instagram.com/developer/authentication/
+
+#### Google Maps
+
+We are using on Google maps to get information about location (info about country, city, latitude and longitude) https://maps.googleapis.com/maps/api/ We use it to get current location and display closes events.
+
+#### Local Storage and Amazon S3
 
 We are storing audio, avatars and logos either on local storage or Amazon S3. Read more about the set up of [Amazon S3 here](/docs/AMAZON_S3.md)
 
-### Sending Emails
+#### Sendgrid
 To send emails we are using sendgrid
 https://api.sendgrid.com/api/mail.send.json
 
-### Getting information about current version
+#### Heroku Logs
 
 We use heroku releases to see which version is deployed https://api.heroku.com/apps/open-event/releases
-and we also use Github to get info about commit (for example: commit message, author name) ahttps://api.github.com/repos/fossasia/open-event-orga-server/commits
+and we also use Github to get info about commit (for example: commit message, author name) at https://api.github.com/repos/fossasia/open-event-orga-server/commits
 
-### Env Variables Heroku
+#### Payment Gateways
 
-To see our all enviroment variables you have to visit Heroku page
-https://dashboard-classic.heroku.com/apps/open-event/settings (You need access to see this page).
+For ticket sales the service integrates payment gateways:
+ 1. Stripe
+ 2. Paypal
 
 ## API Access and Import/Export
 
