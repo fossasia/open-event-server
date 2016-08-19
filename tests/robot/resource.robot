@@ -10,4 +10,5 @@ Library           Selenium2Library
 ${SERVER}         localhost:5000
 ${BROWSER}        Firefox
 ${DELAY}          0
-
+${SUPERUSER_USERNAME}   open_event_test_user@fossasia.org
+${SUPERUSER_PASSWORD}   fossasia
