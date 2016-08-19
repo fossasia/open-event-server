@@ -8,6 +8,15 @@
     z-index: -1;
 }
 
+.top_nav .nav .open>a {
+    background: transparent;
+}
+
+.top_nav .nav .open>a:hover {
+    background: transparent;
+    background-color: transparent;
+}
+
 ul.msg_list li.notif-menu-li a {
     cursor: default;
     min-height: 55px;
