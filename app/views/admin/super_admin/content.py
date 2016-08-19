@@ -60,21 +60,33 @@ class SuperAdminContentView(SuperAdminBaseView):
                     'placeholders/thumbnail/'+filename
                 )
                 shutil.rmtree(path='static/media/temp/')
-                print request.form['name']
-                placeholder_db = CustomPlaceholder(name=request.form['name'],
-                                                   url=placeholder,
-                                                   thumbnail=background_thumbnail_url,
-                                                   copyright=request.form['copyright'],
-                                                   origin=request.form['origin'])
-                save_to_db(placeholder_db, 'User notification saved')
+                placeholder_db = DataGetter.get_custom_placeholder_by_name(request.form['name'])
+                if placeholder_db:
+                    placeholder_db.url = placeholder
+                    placeholder_db.thumbnail = background_thumbnail_url
+                else:
+                    placeholder_db = CustomPlaceholder(name=request.form['name'],
+                                                       url=placeholder,
+                                                       thumbnail=background_thumbnail_url)
+                save_to_db(placeholder_db, 'Custom Placeholder saved')
 
-                return jsonify({'status': 'ok', 'placeholder': placeholder})
+                return jsonify({'status': 'ok', 'placeholder': placeholder, 'id': placeholder_db.id})
             else:
                 return jsonify({'status': 'no logo'})
 
     @expose('/update_placeholder', methods=('POST',))
     def placeholder_upload_details(self):
-        pass
+        if request.method == 'POST':
+            print request.form
+            copyright_info = request.form['copyright']
+            origin_info = request.form['origin']
+            placeholder_id = request.form['placeholder_id']
+            placeholder_db = DataGetter.get_custom_placeholder_by_id(placeholder_id)
+            placeholder_db.copyright = copyright_info
+            placeholder_db.origin = origin_info
+            save_to_db(placeholder_db, 'Custom Placeholder updated')
+            return jsonify({'status': 'ok'})
+        return jsonify({'status': 'error'})
 
     @expose('/pages/create', methods=['POST'])
     def create_view(self):

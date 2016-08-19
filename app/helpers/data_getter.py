@@ -92,6 +92,14 @@ class DataGetter(object):
         return CustomPlaceholder.query.all()
 
     @staticmethod
+    def get_custom_placeholder_by_id(placeholder_id):
+        return CustomPlaceholder.query.filter_by(id=placeholder_id).first()
+
+    @staticmethod
+    def get_custom_placeholder_by_name(name):
+        return CustomPlaceholder.query.filter_by(name=name).first()
+
+    @staticmethod
     def get_all_users_events_roles():
         """Method return all events"""
         return UsersEventsRoles.query
