@@ -26,6 +26,7 @@ Then download the key. Keep it safe because if you lose it, you will lose access
 previous step. In my case, it was -
 
 ```sh
+chmod 400 mykey.pem
 ssh -i "mykey.pem" ubuntu@ec2-52-41-207-116.us-west-2.compute.amazonaws.com
 ```
 
@@ -40,7 +41,7 @@ sudo apt-get install language-pack-en
 
 The second phase is about installing Docker and Compose on our cloud Ubuntu instance.
 
-* The first step is to install Docker. For that, we followed the offical [installation instructions for Ubuntu](https://docs.docker.com/engine/installation/linux/ubuntulinux/).
+* The first step is to install Docker. For that, we followed the official [installation instructions for Ubuntu](https://docs.docker.com/engine/installation/linux/ubuntulinux/).
 
 ```sh
 sudo apt-get update
@@ -59,7 +60,7 @@ sudo apt-get -y install python-pip
 sudo pip install docker-compose
 ```
 
-* Finally you will have to add your current group to the `docker` group so that you can run commands with sudo.
+* Finally you will have to add your current group to the `docker` group so that you can run commands without sudo.
 ([Reference](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/docker-basics.html#install_docker))
 
 ```sh
@@ -92,7 +93,7 @@ docker-compose up
 
 ```sh
 ssh -i "mykey.pem" ubuntu@ec2-52-41-207-116.us-west-2.compute.amazonaws.com
-# This is just and example. Use the command you got from the Connect step in Phase 1
+# This is just an example. Use the command you got from the Connect step in Phase 1
 ```
 
 * In the new termnial, run the following command -
@@ -132,6 +133,7 @@ python manage.py db stamp head
 
 * [Amazon EC2 Getting Started](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance_linux)
 * [EC2 Docker Getting Started](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/docker-basics.html)
+* [Open Event Docker Manual](INSTALLATION_DOCKER.md)
 
 
 
