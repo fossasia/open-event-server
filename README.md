@@ -220,7 +220,7 @@ Certain information is being logged and stored in the database for future refere
 
 ## Contributions, Bug Reports, Feature Requests
 
-This is an Open Source project and we would be happy to see contributors who report bugs and file feature requests submitting pull requests as well. Please report issues here https://github.com/fossasia/open-event-android/issues
+This is an Open Source project and we would be happy to see contributors who report bugs and file feature requests submitting pull requests as well. Please report issues here https://github.com/fossasia/open-event-orga-server/issues
 
 
 ## Branch Policy
@@ -239,8 +239,3 @@ We have the following branches
 This project is currently licensed under the GNU General Public License v3. A
 copy of LICENSE.md should be present along with the source code. To obtain the
 software under a different license, please contact FOSSASIA.
-
-[1]: https://www.virtualbox.org/wiki/Downloads
-[2]: http://www.vagrantup.com/downloads.html
-[3]: https://blog.engineyard.com/2014/building-a-vagrant-box
-[4]: https://docs.vagrantup.com/v2/getting-started
