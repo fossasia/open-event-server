@@ -1,6 +1,6 @@
 #  Open Event Orga Server
 
-The Open Event Orga Server enables organizers to manage events from concerts to conferences and meetups. It offers features for events with several tracks and venues. Event managers can create invitation forms for speakers and build schedules in a drag and drop interface. The event information is stored in a database, which can be a sqlite db file or saved in json itself. The system provides API endpoints to fetch the data, and to modify and update it. Organizers can import and export event data in a standard compressed file format that includes the event data in JSON and binary media files like images and audio.
+The Open Event Orga Server enables organizers to manage events from concerts to conferences and meetups. It offers features for events with several tracks and venues. Event managers can create invitation forms for speakers and build schedules in a drag and drop interface. The event information is stored in a database. The system provides API endpoints to fetch the data, and to modify and update it. Organizers can import and export event data in a standard compressed file format that includes the event data in JSON and binary media files like images and audio.
 
 [![Build Status](https://travis-ci.org/fossasia/open-event-orga-server.svg?branch=master)](https://travis-ci.org/fossasia/open-event-orga-server)
 [![Dependency Status](https://gemnasium.com/badges/github.com/fossasia/open-event-orga-server.svg)](https://gemnasium.com/github.com/fossasia/open-event-orga-server)
@@ -25,7 +25,7 @@ A demo version is automatically deployed from our repositories:
 
 ## Installation
 
-### How do I install Web App Generator on a Server
+### How do I install the Open Event System on a Server
 
 Please check out [the documentation here](/docs/INSTALLATION.md).
 
@@ -37,25 +37,25 @@ A step-by-step guide on how to run Orga Server on a system locally can be found 
 
 For installation steps on how to deploy Open-Event Server using vagrant please refer to [Vagrant installation](docs/INSTALLATION_VAGRANT.md)
 
-### How do I install Web App Generator on Google Cloud
+### How do I install Open Event Orga Server on Google Cloud
 
 To install the system on Google Cloud please refer to the [Google Cloud installation readme](/docs/INSTALLATION_GOOGLE.md).
 
-### How do I install Web App Generator on AWS
+### How do I install the Open Event Orga Server on AWS
 
 To install the system on AWS please refer to the [AWS installation readme](/docs/INSTALLATION_AWS.md).
 
-### How do I install Web App Generator on Digital Ocean
+### How do I install Open Event Orga Server on Digital Ocean
 
 To install the system on Digital Ocean please refer to the [Digital Ocean installation readme](/docs/INSTALLATION_DIGITALOCEAN.md).
 
-### How do I install Open-Event Server with Docker
+### How do I install Open Event Server with Docker
 
 To install Open-Event Server with Docker please refer to [Docker installation](/docs/INSTALLATION_DOCKER.md)
 
-### How do I deploy Open-Event Server to Heroku ?
+### How do I deploy Open-Event Server to Heroku
 
-For steps regarding how to deploy your version of the Open-Event Server to Heroku, please refer [Heroku deployment](docs/INSTALLATION_HEROKU.md) or use the one button deployment.
+For steps regarding how to deploy your version of the Open Event Server to Heroku, please refer [Heroku deployment](docs/INSTALLATION_HEROKU.md) or use the one button deployment.
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
