@@ -63,12 +63,18 @@ class SuperAdminContentView(SuperAdminBaseView):
                 print request.form['name']
                 placeholder_db = CustomPlaceholder(name=request.form['name'],
                                                    url=placeholder,
-                                                   thumbnail=background_thumbnail_url)
+                                                   thumbnail=background_thumbnail_url,
+                                                   copyright=request.form['copyright'],
+                                                   origin=request.form['origin'])
                 save_to_db(placeholder_db, 'User notification saved')
 
                 return jsonify({'status': 'ok', 'placeholder': placeholder})
             else:
                 return jsonify({'status': 'no logo'})
+
+    @expose('/update_placeholder', methods=('POST',))
+    def placeholder_upload_details(self):
+        pass
 
     @expose('/pages/create', methods=['POST'])
     def create_view(self):

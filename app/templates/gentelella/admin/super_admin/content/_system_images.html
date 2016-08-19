@@ -45,7 +45,7 @@
                     </label><br>
                 </div>
                 <span class="text-muted" style="color: #a2a2a2;">
-                    Placeholder size must be less than 1MB.
+                    We recommend using at least a 1300x550px (2:1 ratio) image<br>that's no larger than 10MB.
                 </span>
             </div>
 
@@ -59,6 +59,18 @@
                 </button>
                 <br>
             </div>
+
+            <div class="item form-group">
+                <label>Copyright Information </label>
+                <input name="copyright" class="form-control col-md-7 col-xs-12"
+                       value=""/>
+            </div>
+            <div class="item form-group">
+                <label>Origin Information </label>
+                <input name="origin" class="form-control col-md-7 col-xs-12"
+                       value=""/>
+            </div>
+
         </form>
       </div>
       <div class="modal-footer">
@@ -71,7 +83,7 @@
 <script type="text/javascript">
     var name='';
     $('.btn-update').click(function(){
-        window.location = document.URL;
+        window.location=document.URL
     })
     $('.btn-sys').click(function(){
         $('#system-image-modal').modal();
