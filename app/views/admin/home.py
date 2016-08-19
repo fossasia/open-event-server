@@ -21,9 +21,12 @@ from app.helpers.oauth import OAuth, FbOAuth
 from app.models.user import User
 import geoip2.database
 from flask import abort
+from werkzeug.datastructures import ImmutableMultiDict
+
 
 def intended_url():
     return request.args.get('next') or url_for('.index')
+
 
 def record_user_login_logout(template, user):
     req_stats = get_request_stats()
@@ -33,8 +36,8 @@ def record_user_login_logout(template, user):
         **req_stats
     )
 
-class MyHomeView(AdminIndexView):
 
+class MyHomeView(AdminIndexView):
     @expose('/')
     def index(self):
         call_for_speakers_events = DataGetter.get_call_for_speakers_events()
@@ -187,6 +190,7 @@ class MyHomeView(AdminIndexView):
         params = request.args.items()
         params = dict((k, v) for k, v in params if v)
         print params
+
         def test_and_remove(key):
             if request.args.get(key):
                 if request.args.get(key).lower() == request.args.get("query").lower():
@@ -221,3 +225,15 @@ class MyHomeView(AdminIndexView):
                 return '200 OK'
             else:
                 return abort(404)
+
+    @expose('/resend_email/')
+    def resend_email_confirmation(self):
+        user = DataGetter.get_user(login.current_user.id)
+        s = get_serializer()
+        data = [user.email, user.password]
+        form_hash = s.dumps(data)
+        link = url_for('.create_account_after_confirmation_view', hash=form_hash, _external=True)
+        form = {"email": user.email, "password": user.password}
+        form = ImmutableMultiDict(form)
+        send_email_confirmation(form, link)
+        return redirect(url_for('events.index_view'))
