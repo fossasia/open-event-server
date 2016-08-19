@@ -774,7 +774,7 @@ class DataGetter(object):
     @staticmethod
     def get_all_user_roles(role_name):
         role = Role.query.filter_by(name=role_name).first()
-        uers = UsersEventsRoles.query.filter_by(role=role)
+        uers = UsersEventsRoles.query.join(UsersEventsRoles.event).join(UsersEventsRoles.role).filter(Event.in_trash == False).filter(UsersEventsRoles.role==role)
         return uers
 
     @staticmethod
