@@ -13,6 +13,8 @@ from ..models.session import Session
 from ..models.notifications import Notification
 from ..models.message_settings import MessageSettings
 from ..models.track import Track
+from ..models.image_config import ImageConfig
+from ..models.image_sizes import ImageSizes
 from ..models.custom_placeholder import CustomPlaceholder
 from ..models.invite import Invite
 from ..models.speaker import Speaker
@@ -195,6 +197,20 @@ class DataGetter(object):
             event_id=event_id,
             state=state
         )
+
+    @staticmethod
+    def get_image_sizes():
+        """
+        :return: Image Sizes
+        """
+        return ImageSizes.query.first()
+
+    @staticmethod
+    def get_image_configs():
+        """
+        :return: Image Configs
+        """
+        return ImageConfig.query.all()
 
     @staticmethod
     def get_custom_form_elements(event_id):
@@ -748,6 +764,10 @@ class DataGetter(object):
         for ticket in tickets:
             ticket_types.append(ticket.type)
         return ticket_types
+
+    @staticmethod
+    def get_fee_settings():
+        return TicketFees.query.all()
 
     @staticmethod
     def get_fee_settings():
