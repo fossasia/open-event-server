@@ -111,7 +111,8 @@ class MyHomeView(AdminIndexView):
         login.login_user(user)
         record_user_login_logout('user_login', user)
         user_logged_in(user)
-        return redirect(intended_url())
+        flash('Thank you. Your new email is now confirmed', 'success')
+        return redirect(url_for('settings.contact_info_view'))
 
     @expose('/password/new/<email>', methods=('GET', 'POST'))
     def create_password_after_oauth_login(self, email):
