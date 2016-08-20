@@ -25,9 +25,9 @@ cp report.html gh-pages/robot/report.html
 cp log.html gh-pages/robot/log.html
 cp output.xml gh-pages/robot/output.xml
 cd gh-pages
-git add gh-pages/robot/log.html
-git add gh-pages/robot/output.xml
-git add gh-pages/robot/report.html
+git add robot/log.html
+git add robot/output.xml
+git add robot/report.html
 git add api/v2/swagger.json
 git commit -m '[Auto] Updated API docs and robot test results'
 git push origin gh-pages
