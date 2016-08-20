@@ -6,6 +6,8 @@ from app.settings import get_settings, set_settings
 from app.helpers.data_getter import DataGetter
 from werkzeug.datastructures import ImmutableMultiDict
 from app.views.admin.models_views.events import EventsView
+from app.models.image_config import ImageConfig
+from app.models.image_sizes import ImageSizes
 
 class SuperAdminSettingsView(SuperAdminBaseView):
     PANEL_NAME = SETTINGS
@@ -13,6 +15,7 @@ class SuperAdminSettingsView(SuperAdminBaseView):
     @expose('/', methods=('GET', 'POST'))
     def index_view(self):
         if request.method == 'POST':
+            
             if 'service_fee' in request.form:
                 dic = ImmutableMultiDict(request.form)
             else:
