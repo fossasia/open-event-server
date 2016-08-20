@@ -221,13 +221,13 @@ pip install -r requirements/tests.txt
 
 * Next go to the project directory and run the following command:
 ```
-python -m unittest discover tests/
+python -m unittest discover tests/unittests/
 ```
 * It will run each test one by one.
 
 * You can also use the following command to run tests using nosetests :
 ```
-nosetests tests/
+nosetests tests/unittests/
 ```
 
 ### Running robot framework tests
