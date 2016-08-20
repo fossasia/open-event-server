@@ -62,7 +62,8 @@ MAILS = {
             "Thank You for participating in our event. We hope you enjoyed it. "
             "Please check the list of more upcoming events" +
             "Here are the upcoming events: {up_coming_events} .Get ready!! "
-        )
+        ),
+        'sent_at': '1 day after the event'
     },
     NEW_SESSION: {
         'recipient': 'Organizer',
@@ -165,7 +166,8 @@ MAILS = {
             "<br/> That payment for the same has to be made in two weeks. <a href='{payment_url}'>Click here</a> to "
             "view your invoice and complete the payment."
             "<br><br><em>Thank you for using Open Event.</em>"
-        )
+        ),
+        'sent_at': '1st day of the month'
     },
     MONTHLY_PAYMENT_FOLLOWUP_EMAIL: {
         'recipient': 'Organizer',
@@ -175,6 +177,7 @@ MAILS = {
             "<br/> That payment for the same is past the due date. <a href='{payment_url}'>Click here</a> to "
             "view your invoice and complete the payment to prevent loss of functionality."
             "<br><br><em>Thank you for using Open Event.</em>"
-        )
-    },
+        ),
+        'sent_at': '15th day of the month'
+    }
 }
