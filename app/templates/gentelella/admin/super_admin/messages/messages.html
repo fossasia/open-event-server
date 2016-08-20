@@ -31,11 +31,12 @@ System Messages
         <table id="mails_table" class="table table-striped table-hover with-datatable no-global-dt">
             <thead>
                 <tr>
-                    <th class="col-md-2 col-sm-2">Recipient</th>
+                    <th class="col-md-1 col-sm-1">Recipient</th>
                     <th class="col-md-2 col-sm-2">Trigger</th>
                     <th class="col-md-3 col-sm-3">Email Message</th>
                     <th class="col-md-3 col-sm-3">Notification Message</th>
-                    <th class="col-md-2 col-sm-2">Options</th>
+                    <th class="col-md-1 col-sm-1">Options</th>
+                    <th class="col-md-1 col-sm-1">Time/Date of Sent out</th>
                 </tr>
             </thead>
             <tbody>
@@ -67,6 +68,9 @@ System Messages
                             </label>
                         </div>
                         {% endif %}
+                    </td>
+                    <td>
+                        {{ mails[mail]['sent_at'] | default('N/A', true) }}
                     </td>
                 </tr>
                 {% endfor %}
