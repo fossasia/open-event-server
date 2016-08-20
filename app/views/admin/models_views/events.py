@@ -11,7 +11,7 @@ from flask.ext.restplus import abort
 from flask_admin import expose
 
 from app import db
-from app.helpers.storage import upload, UPLOAD_PATHS
+from app.helpers.storage import upload, upload_local, UPLOAD_PATHS
 from app.helpers.helpers import uploaded_file
 from app.helpers.permission_decorators import is_organizer, is_super_admin, can_access
 from app.helpers.helpers import fields_not_empty, string_empty
@@ -87,7 +87,7 @@ class EventsView(BaseView):
             background_image = request.form['bgimage']
             if background_image:
                 background_file = uploaded_file(file_content=background_image)
-                background_url = upload(
+                background_url = upload_local(
                     background_file,
                     UPLOAD_PATHS['temp']['event'].format(uuid=uuid4())
                 )
@@ -101,7 +101,7 @@ class EventsView(BaseView):
             logo_image = request.form['logo']
             if logo_image:
                 logo_file = uploaded_file(file_content=logo_image)
-                logo = upload(
+                logo = upload_local(
                     logo_file,
                     UPLOAD_PATHS['temp']['event'].format(uuid=uuid4())
                 )
