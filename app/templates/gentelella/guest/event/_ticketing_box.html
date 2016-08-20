@@ -1,3 +1,20 @@
+{% if (not tickets or tickets.count() == 0) and event.ticket_url and event.ticket_url != "" and event.identifier not in event.ticket_url %}
+    <div class="col-md-10 col-sm-10 col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="background-color: #ffffff;">
+                <h3 class="panel-title">Ticket Information</h3>
+            </div>
+            <div class="panel-body">
+                <a class="btn btn-success" href="{{ event.ticket_url }}">Click to order tickets</a>
+                <br><br>
+                <span style="color: #adadad;">
+                    You will be taken to {{ event.ticket_url }} to complete the purchase of the tickets
+                </span>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% if tickets and tickets.count() > 0 %}
     <div id="ticketing-holder" class="col-md-10 col-sm-10 col-xs-12">
         <form method="POST" action="{{ url_for('ticketing.create_order') }}" enctype="multipart/form-data">
             <input type="hidden" name="event_id" value="{{ event.id }}">
@@ -20,30 +37,42 @@
                         <tbody>
                         {% for ticket in tickets %}
                             {% if not ticket.hide %}
-                            <tr>
+                                <tr>
 
-                                <td>
-                                    <a data-toggle="tooltip" title="{{ ticket.description if ticket.description_toggle else '' }}" style="cursor: pointer;">
-                                        {{ ticket.name }} - {{ ticket.type }}
-                                    </a>
-                                </td>
-                                <td>{{ ticket.sales_end.strftime('%a, %B %d') }}</td>
-                                <td>{{ event.payment_currency | currency_symbol }}{{ ticket.price | money }}</td>
-                                <td>{{ event.payment_currency | currency_symbol }} 0.00</td>
-                                <td>
-                                    <input type="hidden" name="ticket_ids[]" value="{{ ticket.id }}">
-                                    <select name="ticket_quantities[]" class="quantity-select"
-                                            data-rate="{{ ticket.price }}" data-fee="0">
-                                        {% if ticket.min_order > 1 %}
-                                            <option value="0" selected>0</option>
+                                    <td>
+                                        <a data-toggle="tooltip"
+                                           title="{{ ticket.description if ticket.description_toggle else '' }}"
+                                           style="cursor: pointer;">
+                                            {{ ticket.name }} - {{ ticket.type }}
+                                        </a>
+                                    </td>
+                                    <td>{{ ticket.sales_end.strftime('%a, %B %d') }}</td>
+                                    <td>{{ event.payment_currency | currency_symbol }}{{ ticket.price | money }}</td>
+                                    <td>{{ event.payment_currency | currency_symbol }} 0.00</td>
+                                    {% if ticket.sales_start <= datetime_now and ticket.sales_end >= datetime_now %}
+                                        <td>
+                                            <input type="hidden" name="ticket_ids[]" value="{{ ticket.id }}">
+                                            <select name="ticket_quantities[]" class="quantity-select"
+                                                    data-rate="{{ ticket.price }}" data-fee="0">
+                                                {% if ticket.min_order > 1 %}
+                                                    <option value="0" selected>0</option>
+                                                {% endif %}
+                                                {% for quantity in range(ticket.min_order - 1, ticket.max_order + 1) %}
+                                                    <option value="{{ quantity }}">{{ quantity }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                        <td class="subtotal">
+                                            {{ event.payment_currency | currency_symbol }}{{ 0 | money }}</td>
+                                    {% else %}
+                                        {% if ticket.sales_end < datetime_now %}
+                                            <td colspan="2" style="color: #adadad;">This ticket's sale has ended</td>
+                                        {% elif ticket.sales_start >= datetime_now %}
+                                            <td colspan="2" style="color: #adadad;">This ticket's sale will start
+                                                on {{ ticket.sales_start | datetime }}</td>
                                         {% endif %}
-                                        {% for quantity in range(ticket.min_order - 1, ticket.max_order + 1) %}
-                                            <option value="{{ quantity }}">{{ quantity }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </td>
-                                <td class="subtotal">{{ event.payment_currency | currency_symbol }}{{ 0 | money }}</td>
-                            </tr>
+                                    {% endif %}
+                                </tr>
                             {% endif %}
                             {% if loop.last %}
                                 <tr>
@@ -92,7 +121,8 @@
                         {% if event.pay_by_paypal or event.pay_by_stripe %}
                             <img src="{{ url_for('static', filename='img/paymentlogoshorizontal.png') }}">
                         {% endif %}
-                        <button class="btn btn-success" {% if tickets and tickets.count() > 0 %}type="submit"{% else %} type="button"
+                        <button class="btn btn-success" {% if tickets and tickets.count() > 0 %}type="submit"{% else %}
+                                type="button"
                                 disabled{% endif %} id="order-now-btn">Order Now
                         </button>
                     </div>
@@ -151,3 +181,4 @@
         $quantitySelects.trigger("change");
 
     </script>
+{% endif %}

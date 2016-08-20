@@ -186,6 +186,10 @@ def pages():
     return dict(system_pages=pages)
 
 @app.context_processor
+def datetime_now():
+    return dict(datetime_now=datetime.now())
+
+@app.context_processor
 def social_settings():
     settings = get_settings()
     return dict(settings=settings)
