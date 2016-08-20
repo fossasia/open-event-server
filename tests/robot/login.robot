@@ -5,43 +5,23 @@ Documentation     A test suite with a single test for valid login.
 ...               the imported resource file.
 Resource          resource.robot
 
-*** Variables ***
-${LOGIN URL}      http://${SERVER}/login
-${WELCOME URL}     http://${SERVER}/
-*** Keywords ***
-Open Browser To Login Page
-    Open Browser    ${LOGIN URL}    ${BROWSER}
-    Maximize Browser Window
-    Set Selenium Speed    ${DELAY}
-    Login Page Should Be Open
-
-Login Page Should Be Open
-    Title Should Be    Login - Open Event
-
-Go To Login Page
-    Go To    ${LOGIN URL}
-    Login Page Should Be Open
-
-Input Username
-    [Arguments]    ${username}
-    Input Text    email    ${username}
-
-Input Password
-    [Arguments]    ${password}
-    Input Text    password    ${password}
-
-Submit Credentials
-    Click Button    Log in
-
-Welcome Page Should Be Open
-    Location Should Be    ${WELCOME URL}
-    Title Should Be    Home - Open Event
-
 *** Test Cases ***
 Valid Login
+    Login to Open Event
+    [Teardown]    Close Browser
+
+Invalid Login nonexistent user
+    Open Browser To Login Page
+    Input Username    some_random_email_id@fossasia.org
+    Input Password    some_random_password
+    Submit Credentials
+    Page Should Contain     User doesn't exist
+    [Teardown]    Close Browser
+
+Invalid Login wrong password
     Open Browser To Login Page
     Input Username    ${SUPERUSER_USERNAME}
-    Input Password    ${SUPERUSER_PASSWORD}
+    Input Password    some_random_password
     Submit Credentials
-    Welcome Page Should Be Open
+    Page Should Contain     Incorrect Password
     [Teardown]    Close Browser
