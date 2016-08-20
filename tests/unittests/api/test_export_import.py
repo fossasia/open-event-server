@@ -119,6 +119,8 @@ class TestEventExport(ImportExportBase):
         self.assertIn('placehold', resp.data, resp.data)
         # set speaker photo so that its export is checked
         resp = self._put(get_path(1, 'speakers', 1), {'photo': 'https://placehold.it/350x150'})
+        # set sponsor photo so that its export is checked
+        resp = self._put(get_path(1, 'sponsors', 1), {'photo': 'https://placehold.it/350x150'})
         # set event title as unicode
         resp = self._put(get_path(1), {'organizer_name': 'SandraMüllrick'})
         # export and unzip files

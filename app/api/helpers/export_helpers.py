@@ -79,7 +79,7 @@ DOWNLOAD_FIEDLS = {
         'background_image': ['image', '/images/background']
     },
     'sponsors': {
-        'logo': ['image', '/images/sponsors/logo_%d']
+        'logo': ['image', '/images/sponsors/%s_%d']
     },
     'tracks': {
         'track_image_url': ['image', '/images/tracks/image_%d']
@@ -122,7 +122,9 @@ def _download_media(data, srv, dir_path, settings):
             continue
         path = DOWNLOAD_FIEDLS[srv][i][1]
         if srv == 'speakers':
-            path = path % (make_speaker_name(data['name']), data['id'])
+            path = path % (make_filename(data['name']), data['id'])
+        elif srv == 'sponsors':
+            path = path % (make_filename(data['name']), data['id'])
         elif srv != 'event':
             path = path % (data['id'])
         if data[i].find('.') > -1:  # add extension
@@ -232,7 +234,7 @@ def send_export_mail(event_id, result):
 
 # FIELD DATA FORMATTERS
 
-def make_speaker_name(name):
+def make_filename(name):
     """Make speaker image filename for export"""
     for _ in FILENAME_EXCLUDE:
         name = name.replace(_, ' ')
