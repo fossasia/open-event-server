@@ -470,42 +470,41 @@ class DataGetter(object):
     @staticmethod
     def get_live_events():
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
-            .filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
-            .filter(Event.state == 'Published').filter(Event.in_trash == False)
+            .filter(Event.end_time >= datetime.datetime.now()) \
+            .filter(Event.state == 'Published').filter(not Event.in_trash)
         return DataGetter.trim_attendee_events(events)
 
     @staticmethod
     def get_draft_events():
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
-            .filter(Event.state == 'Draft').filter(Event.in_trash == False)
+            .filter(Event.state == 'Draft').filter(not Event.in_trash)
         return DataGetter.trim_attendee_events(events)
 
     @staticmethod
     def get_past_events():
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.end_time <= datetime.datetime.now()).filter(
-            or_(Event.state == 'Completed', Event.state == 'Published')).filter(Event.in_trash == False)
+            or_(Event.state == 'Completed', Event.state == 'Published')).filter(not Event.in_trash)
         return DataGetter.trim_attendee_events(events)
 
     @staticmethod
     def get_all_live_events():
-        return Event.query.filter(Event.start_time >= datetime.datetime.now()) \
-            .filter(Event.end_time >= datetime.datetime.now()) \
-            .filter(Event.state == 'Published').filter(Event.in_trash == False)
+        return Event.query.filter(Event.end_time >= datetime.datetime.now()) \
+            .filter(Event.state == 'Published').filter(not Event.in_trash)
 
     @staticmethod
     def get_live_and_public_events():
-        return DataGetter.get_all_live_events().filter(Event.privacy != 'private').filter(Event.in_trash == False)
+        return DataGetter.get_all_live_events().filter(Event.privacy != 'private').filter(not Event.in_trash)
 
     @staticmethod
     def get_all_draft_events():
-        return Event.query.filter(Event.state == 'Draft').filter(Event.in_trash == False)
+        return Event.query.filter(Event.state == 'Draft').filter(not Event.in_trash)
 
     @staticmethod
     def get_all_past_events():
         return Event.query.filter(Event.end_time <= datetime.datetime.now()).filter(
             or_(Event.state == 'Completed', Event.state == 'Published')).filter(
-            Event.in_trash is not True).filter(Event.in_trash == False)
+            Event.in_trash is not True).filter(not Event.in_trash)
 
     @staticmethod
     def get_session(session_id):
@@ -804,7 +803,8 @@ class DataGetter(object):
     @staticmethod
     def get_all_user_roles(role_name):
         role = Role.query.filter_by(name=role_name).first()
-        uers = UsersEventsRoles.query.join(UsersEventsRoles.event).join(UsersEventsRoles.role).filter(Event.in_trash == False).filter(UsersEventsRoles.role==role)
+        uers = UsersEventsRoles.query.join(UsersEventsRoles.event).join(UsersEventsRoles.role).filter(
+            Event.in_trash == False).filter(UsersEventsRoles.role == role)
         return uers
 
     @staticmethod
