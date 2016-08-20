@@ -40,7 +40,7 @@ create database test with owner=open_event_user;
 * Once database is created, exit the psql shell with `\q` followed by ENTER.
 
 
-* **Step 3** - Install bower and frontend requirements. Learn more at [BOWER.md](BOWER.md)
+* **Step 3** - Install bower and frontend requirements. Learn more at [BOWER.md](../README.md#how-to-configure-bower)
 
 ```sh
 npm install bower -g
@@ -72,7 +72,7 @@ python manage.py db stamp head
 
 
 * **Step 7** - Start the application along with the needed services.
-The `&` at the end of the commands below make them run in background so that they don't hold the terminal. See [REDIS.md](REDIS.md) for more info.
+The `&` at the end of the commands below make them run in background so that they don't hold the terminal. See [REDIS.md](../README.md#redis) for more info.
 
 ```sh
 # download and run redis

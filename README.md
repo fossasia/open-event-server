@@ -82,6 +82,9 @@ You can use ampersand (&) at the end of the above command if you want to start r
 redis-3.2.1/src/redis-server &
 ```
 
+If you want to use a different Redis server than the above, then you can provide the server url in `REDIS_URL` environment variable.
+The default value for `REDIS_URL` is `redis://localhost:6379/0` which is the same as that of local Redis server.
+
 
 ## Technology Stack
 
@@ -234,12 +237,12 @@ This is an Open Source project and we would be happy to see contributors who rep
 
 ## Branch Policy
 
-We have the following branches   
- * **development**   
+We have the following branches
+ * **development**
 	 All development goes on in this branch. If you're making a contribution,
 	 you are supposed to make a pull request to _development_.
 	 PRs to master must pass a build check and a unit-test check on Travis
- * **master**   
+ * **master**
    This contains shipped code. After significant features/bugfixes are accumulated on development, we make a version update, and make a release.
 
 
