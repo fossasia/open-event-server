@@ -211,9 +211,13 @@ When checking in code for models, please update migrations as well.
 
 ## Testing
 
-### How to run tests for Open Event Server
+First install the repo and set up the server according to the steps listed. Make sure you have installed are the dependencies required for testing by running
 
-* First install the repo and set up the server according to the steps listed.
+```
+pip install -r requirements/tests.txt
+```
+
+### Running unit tests
 
 * Next go to the project directory and run the following command:
 ```
@@ -225,6 +229,21 @@ python -m unittest discover tests/
 ```
 nosetests tests/
 ```
+
+### Running robot framework tests
+* Make sure you have FireFox installed
+* Start your local flask server instance.
+* Go to the project directory and Run the tests by using the following command.
+
+```
+robot -v SERVER:{server_name} -v SUPERUSER_USERNAME:{super_user_email_here} -v SUPERUSER_PASSWORD:{super_user_password} tests/robot
+```
+
+Change all the parameters inside `{}` as per your local server. The final command would look like:
+```
+robot -v SERVER:localhost:5000 -v SUPERUSER_USERNAME:test@opev.net -v SUPERUSER_PASSWORD:test_password tests/robot
+```
+* Once the tests are completed, a report and a log would be generated at `report.html` and `log.html` repectively in your root directory.
 
 ## Logging
 
