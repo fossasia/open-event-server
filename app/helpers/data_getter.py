@@ -735,7 +735,9 @@ class DataGetter(object):
             return names
 
     @staticmethod
-    def get_sales_open_tickets(event_id):
+    def get_sales_open_tickets(event_id, give_all=False):
+        if give_all:
+            return Ticket.query.filter(Ticket.event_id == event_id)
         return Ticket.query.filter(Ticket.event_id == event_id).filter(
             Ticket.sales_start <= datetime.datetime.now()).filter(
             Ticket.sales_end >= datetime.datetime.now())
