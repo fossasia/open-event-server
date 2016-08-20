@@ -692,7 +692,6 @@ class DataGetter(object):
         names = []
         try:
             for event in DataGetter.get_live_and_public_events():
-                print event
                 if not string_empty(event.location_name) and not string_empty(event.latitude) and not string_empty(
                     event.longitude):
                     response = requests.get(
