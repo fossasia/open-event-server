@@ -1,6 +1,7 @@
 
 <div>
-  <h4>Import Event</h4>
+
+  <h2>Import Event</h2>
 
   <div>
     <h5>Select event zip</h5><br>
@@ -14,6 +15,15 @@
 
   <div>
     <button type="button" class="btn btn-primary" id="btnImportEvent" onclick="importEventZip();">Create Event</button>
+  </div>
+
+
+  <h2>Previous Imports</h2>
+
+  <div>
+  {% for e in imported_events %}
+    {{ e.start_time | humanize_alt }}
+  {% endfor %}
   </div>
 
 </div>

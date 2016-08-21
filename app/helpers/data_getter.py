@@ -43,6 +43,7 @@ from ..models.export_jobs import ExportJob
 from ..models.tax import Tax
 from ..models.fees import TicketFees
 from ..models.order import Order
+from ..models.import_jobs import ImportJob
 from .language_list import LANGUAGE_LIST
 from .static import EVENT_TOPICS, EVENT_LICENCES, PAYMENT_COUNTRIES, PAYMENT_CURRENCIES, DEFAULT_EVENT_IMAGES
 from app.helpers.helpers import get_event_id, string_empty, represents_int, get_count
@@ -667,6 +668,15 @@ class DataGetter(object):
         """
         activities = Activity.query.order_by(desc(Activity.time)).limit(count).all()
         return activities
+
+    @staticmethod
+    def get_imports_by_user(count=50):
+        """
+        Get all imports by user by recent first
+        """
+        imports = ImportJob.query.filter_by(user=login.current_user) \
+            .order_by(desc(ImportJob.start_time)).limit(count).all()
+        return imports
 
     @staticmethod
     def get_trash_events():

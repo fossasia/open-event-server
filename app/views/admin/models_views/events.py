@@ -48,6 +48,7 @@ class EventsView(BaseView):
         draft_events = DataGetter.get_draft_events()
         past_events = DataGetter.get_past_events()
         all_events = DataGetter.get_all_events()
+        imported_events = DataGetter.get_imports_by_user()
         free_ticket_count = {}
         paid_ticket_count = {}
         donation_ticket_count = {}
@@ -75,7 +76,8 @@ class EventsView(BaseView):
                            donation_ticket_count=donation_ticket_count,
                            max_free_ticket=max_free_ticket,
                            max_paid_ticket=max_paid_ticket,
-                           max_donation_ticket=max_donation_ticket)
+                           max_donation_ticket=max_donation_ticket,
+                           imported_events=imported_events)
 
     @expose('/create/<step>', methods=('GET', 'POST'))
     def create_view_stepped(self, step):
