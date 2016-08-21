@@ -410,7 +410,8 @@ def send_notif_after_export(user, event_name, result):
             user=user,
             action=NOTIF_EVENT_EXPORTED,
             title=NOTIFS[NOTIF_EVENT_EXPORTED]['title'].format(event_name=event_name),
-            message=NOTIFS[NOTIF_EVENT_EXPORTED]['message'].format(download_url=result['download_url'])
+            message=NOTIFS[NOTIF_EVENT_EXPORTED]['message'].format(
+                event_name=event_name, download_url=result['download_url'])
         )
 
 
