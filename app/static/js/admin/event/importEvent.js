@@ -60,3 +60,33 @@ function importTask(url){
         }
     });
 }
+
+
+function importTaskTable(task, field_id){
+    console.log(task);
+    url = '/api/v2/tasks/' + task;
+    jQuery.ajax({
+        url: url,
+        type: 'GET',
+        success: function(data){
+            console.log(data);
+            if (data['state'] == 'PENDING'){ // task is lost
+                $(field_id).html('Failed');
+                return;
+            }
+            if (data['state'] != 'SUCCESS'){
+                $(field_id).html('<b>Status:</b> ' + data['state']);
+                setTimeout(function(){
+                    importTaskTable(task, field_id);
+                }, 3000);
+            } else {
+                $(field_id).html('<b>Status:</b> ' + data['state']);
+            }
+        },
+        error: function(x){
+            console.log(x.responseText);
+            obj = JSON.parse(x.responseText);
+            $(field_id).text(obj['message']);
+        }
+    });
+}

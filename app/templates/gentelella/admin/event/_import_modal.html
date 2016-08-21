@@ -1,4 +1,7 @@
 
+<script src="{{ url_for('static', filename='js/admin/event/importEvent.js') }}"></script>
+
+
 <div class="col-md-10 col-md-offset-1">
 
   <h3>Import Event</h3>
@@ -46,7 +49,7 @@
         <i class="fa fa-circle-o-notch yellow" aria-hidden="true"></i> Processing
       {% endif %}
       </td>
-      <td>
+      <td id="task_msg_{{e.id}}">
         {% if e.result_status == "SUCCESS" %}
           Check your event <a href="/events/{{ e.result }}">here</a>
         {% elif e.result %}
@@ -56,6 +59,13 @@
       <td>
       Started {{ e.start_time | humanize_alt }}
       </td>
+      <!-- start job -->
+      {% if not e.result_status %}
+        <script>
+          importTaskTable("{{e.task}}", "#task_msg_{{e.id}}");
+        </script>
+      {% endif %}
+      <!-- done -->
       </tr>
     {% endfor %}
   </table>
