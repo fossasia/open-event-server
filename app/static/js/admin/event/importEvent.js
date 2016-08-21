@@ -5,7 +5,7 @@ function importEventZip(){
         data.append('file', file);
     });
 
-    $('#import_status').text('Working...');
+    $('#import_status').text('Uploading file.. Please don\'t close this window');
     $('#import_error').text('');
     $('#btnImportEvent').prop('disabled', true);
     $('#import_file').prop('disabled', true);
