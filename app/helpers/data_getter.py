@@ -467,21 +467,22 @@ class DataGetter(object):
     def get_all_live_events():
         return Event.query.filter(Event.start_time >= datetime.datetime.now()) \
             .filter(Event.end_time >= datetime.datetime.now()) \
-            .filter(Event.state == 'Published').filter(Event.in_trash == False)
+            .filter(Event.state == 'Published').filter(Event.in_trash == False).filter_by(in_trash=False)
 
     @staticmethod
     def get_live_and_public_events():
-        return DataGetter.get_all_live_events().filter(Event.privacy != 'private').filter(Event.in_trash == False)
+        return DataGetter.get_all_live_events().filter(Event.privacy != 'private').filter(Event.in_trash == False)\
+            .filter_by(in_trash=False)
 
     @staticmethod
     def get_all_draft_events():
-        return Event.query.filter(Event.state == 'Draft').filter(Event.in_trash == False)
+        return Event.query.filter(Event.state == 'Draft').filter(Event.in_trash == False).filter_by(in_trash=False)
 
     @staticmethod
     def get_all_past_events():
         return Event.query.filter(Event.end_time <= datetime.datetime.now()).filter(
             or_(Event.state == 'Completed', Event.state == 'Published')).filter(
-            Event.in_trash is not True).filter(Event.in_trash == False)
+            Event.in_trash is not True).filter(Event.in_trash == False).filter_by(in_trash=False)
 
     @staticmethod
     def get_session(session_id):
