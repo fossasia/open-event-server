@@ -38,13 +38,33 @@
             <div class="help-block with-errors"></div>
         </div><hr>
         <div class="form-group">
+            <h4>Profile Image</h4>
+            <div class="col-md-4" style="margin-bottom:30px;">
+                <label>Width & Height(in px)</label>
+                <input type="number" class="form-control" id="front-page-w" name="icon_width" required value="75">
+            </div>
+            <div class="help-block with-errors"></div>
+        </div><hr>
+        <div class="form-group">
+            <h4>Logo Size (Event Wizard)</h4>
+            <div class="col-md-4" style="margin-bottom:30px;">
+                <label>Width (in px)</label>
+                <input type="number" class="form-control" id="front-page-w" name="icon_width" required value="75">
+            </div>
+            <div class="col-md-4" style="margin-bottom:30px;">
+                <label>Height (in px)</label>
+                <input type="number" class="form-control" id="front-page-h" name="icon_height" required value="30">
+            </div>
+            <div class="help-block with-errors"></div>
+        </div><hr>
+        <div class="form-group">
             <div class="item">
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <h4>Front Page</h4>
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-12" style="margin-top:15px;">
                     <div class="radio-group">
-                        <input type="radio" name="size_front" autocomplete="off" value="full"> Full Size
+                        <input type="radio" name="size_front" autocomplete="off" value="large"> Large Size
                         <input type="radio" name="size_front" autocomplete="off" value="icon"> Icon Size
                         <input type="radio" name="size_front" autocomplete="off" value="thumbnail" checked> Thumbnail
                     </div>
@@ -56,7 +76,7 @@
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-12" style="margin-top:15px;">
                     <div class="radio-group">
-                        <input type="radio" name="size_event" autocomplete="off" value="full" checked> Full Size
+                        <input type="radio" name="size_event" autocomplete="off" value="large" checked> Large Size
                         <input type="radio" name="size_event" autocomplete="off" value="icon"> Icon Size
                         <input type="radio" name="size_event" autocomplete="off" value="thumbnail"> Thumbnail
                     </div>
@@ -68,7 +88,7 @@
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="radio-group" style="margin-top:15px;">
-                        <input type="radio" name="size_mysession" autocomplete="off" value="full"> Full Size
+                        <input type="radio" name="size_mysession" autocomplete="off" value="large"> Large Size
                         <input type="radio" name="size_mysession" autocomplete="off" value="icon"> Icon Size
                         <input type="radio" name="size_mysession" autocomplete="off" value="thumbnail" checked> Thumbnail
                     </div>
@@ -81,7 +101,7 @@
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-12" style="margin-top:15px;">
                     <div class="radio-group">
-                        <input type="radio" name="size_speaker_event" autocomplete="off" value="full"> Full Size
+                        <input type="radio" name="size_speaker_event" autocomplete="off" value="large"> Large Size
                         <input type="radio" name="size_speaker_event" autocomplete="off" value="icon"> Icon Size
                         <input type="radio" name="size_speaker_event" autocomplete="off" value="thumbnail"checked> Thumbnail
                     </div>
@@ -93,7 +113,7 @@
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-12" style="margin-top:15px;">
                     <div class="radio-group">
-                        <input type="radio" name="size_speaker_dashboard" autocomplete="off" value="full"> Full Size
+                        <input type="radio" name="size_speaker_dashboard" autocomplete="off" value="large"> Large Size
                         <input type="radio" name="size_speaker_dashboard" autocomplete="off" value="icon" checked> Icon Size
                         <input type="radio" name="size_speaker_dashboard" autocomplete="off" value="thumbnail"> Thumbnail
                     </div>
