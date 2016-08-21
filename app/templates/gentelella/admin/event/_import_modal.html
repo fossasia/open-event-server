@@ -39,19 +39,24 @@
       <tr>
       <td>
       {% if e.result_status == "SUCCESS" %}
-        SUCC
+        <i class="fa fa-check-circle green" aria-hidden="true"></i> Success
       {% elif e.result_status %}
-        FAIL
+        <i class="fa fa-exclamation-circle red" aria-hidden="true"></i> {{e.result_status}}
       {% else %}
-        PENDING
+        <i class="fa fa-circle-o-notch yellow" aria-hidden="true"></i> Processing
       {% endif %}
       </td>
       <td>
-        {{ e.result }}
+        {% if e.result_status == "SUCCESS" %}
+          Check your event <a href="/events/{{ e.result }}">here</a>
+        {% elif e.result %}
+          {{ e.result }}
+        {% endif %}
       </td>
       <td>
       Started {{ e.start_time | humanize_alt }}
       </td>
+      </tr>
     {% endfor %}
   </table>
   </div>
