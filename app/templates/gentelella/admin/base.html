@@ -63,7 +63,7 @@
     <script src="{{ url_for('static', filename='js/admin/global_tail.js') }}"></script>
     <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
 {% endblock %}
-
+{% include 'gentelella/admin/analytics.html' %}
 <script type="text/javascript">
     $(document).ready(function() {
         var notificationViewPath = "{{ url_for('notifications.index_view') }}";
