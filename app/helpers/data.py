@@ -54,6 +54,7 @@ from ..models.role import Role
 from ..models.role_invite import RoleInvite
 from ..models.ticket import Ticket, TicketTag
 from ..models.service import Service
+from ..models.image_sizes import ImageSizes
 from ..models.session import Session
 from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
@@ -1018,10 +1019,18 @@ class DataManager(object):
             background_icon_url = ''
             temp_background = form['background_url']
             image_sizes = DataGetter.get_image_sizes()
+            if not image_sizes:
+                image_sizes = ImageSizes(full_width=1300,
+                                         full_height=500,
+                                         icon_width=75,
+                                         icon_height=30,
+                                         thumbnail_width=500,
+                                         thumbnail_height=200)
+                save_to_db(image_sizes, "Image Sizes Saved")
             if temp_background:
                 filename = '{}.png'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
-                    temp_background[len('/serve_static/'):])
+                           temp_background[len('/serve_static/'):])
                 background_file = UploadedFile(filepath, filename)
                 background_url = upload(
                     background_file,
