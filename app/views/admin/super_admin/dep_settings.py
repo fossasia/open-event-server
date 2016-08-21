@@ -36,7 +36,7 @@ class SuperAdminSettingsView(SuperAdminBaseView):
                 im_config = DataGetter.get_image_configs()
                 if im_config:
                     for config in im_config:
-                        config.size = request.form['size_' + config.name]
+                        config.size = request.form['size_' + config.page]
                         save_to_db(config, "Image Config Saved")
                 else:
                     config = ImageConfig(page='front',

@@ -1014,7 +1014,10 @@ class DataManager(object):
 
             background_url = ''
             background_thumbnail_url = ''
+            background_large_url = ''
+            background_icon_url = ''
             temp_background = form['background_url']
+            image_sizes = DataGetter.get_image_sizes()
             if temp_background:
                 filename = '{}.png'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
@@ -1030,7 +1033,21 @@ class DataManager(object):
                                              'events/{event_id}/temp'.format(event_id=int(event.id)))
                 temp_img_file = temp_img_file.replace('/serve_', '')
 
-                basewidth = 300
+                basewidth = image_sizes.full_width
+                img = Image.open(temp_img_file)
+                wpercent = (basewidth / float(img.size[0]))
+                hsize = int((float(img.size[1]) * float(wpercent)))
+                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+                img.save(temp_img_file)
+                file_name = temp_img_file.rsplit('/', 1)[1]
+                large_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+                background_large_url = upload(
+                    large_file,
+                    UPLOAD_PATHS['event']['large'].format(
+                        event_id=int(event.id)
+                    ))
+
+                basewidth = image_sizes.thumbnail_width
                 img = Image.open(temp_img_file)
                 wpercent = (basewidth / float(img.size[0]))
                 hsize = int((float(img.size[1]) * float(wpercent)))
@@ -1043,10 +1060,26 @@ class DataManager(object):
                     UPLOAD_PATHS['event']['thumbnail'].format(
                         event_id=int(event.id)
                     ))
+
+                basewidth = image_sizes.icon_width
+                img = Image.open(temp_img_file)
+                wpercent = (basewidth / float(img.size[0]))
+                hsize = int((float(img.size[1]) * float(wpercent)))
+                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+                img.save(temp_img_file)
+                file_name = temp_img_file.rsplit('/', 1)[1]
+                icon_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+                background_icon_url = upload(
+                    icon_file,
+                    UPLOAD_PATHS['event']['icon'].format(
+                        event_id=int(event.id)
+                    ))
                 shutil.rmtree(path='static/media/' + 'events/{event_id}/temp'.format(event_id=int(event.id)))
 
             event.background_url = background_url
             event.thumbnail = background_thumbnail_url
+            event.large = background_large_url
+            event.icon = background_icon_url
 
             logo = ''
             temp_logo = form['logo']

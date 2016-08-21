@@ -18,6 +18,11 @@ class MySessionView(BaseView):
         placeholder_images = DataGetter.get_event_default_images()
         custom_placeholder = DataGetter.get_custom_placeholders()
         upcoming_events_sessions = DataGetter.get_sessions_of_user(upcoming_events=True)
+        im_config = DataGetter.get_image_configs()
+        im_size = ''
+        for config in im_config:
+            if config.page == 'mysession':
+                im_size = config.size
         past_events_sessions = DataGetter.get_sessions_of_user(upcoming_events=False)
         page_content = {"tab_upcoming_events": "Upcoming Sessions",
                         "tab_past_events": "Past Sessions",
@@ -28,7 +33,7 @@ class MySessionView(BaseView):
         return self.render('/gentelella/admin/mysessions/mysessions_list.html',
                            upcoming_events_sessions=upcoming_events_sessions, past_events_sessions=past_events_sessions,
                            page_content=page_content, placeholder_images=placeholder_images,
-                           custom_placeholder=custom_placeholder)
+                           custom_placeholder=custom_placeholder, im_size=im_size)
 
     @expose('/<int:session_id>/', methods=('GET',))
     @flask_login.login_required

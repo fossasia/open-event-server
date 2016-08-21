@@ -58,6 +58,8 @@ class Event(db.Model):
     description = db.Column(db.Text)
     background_url = db.Column(db.String)
     thumbnail = db.Column(db.String)
+    large = db.Column(db.String)
+    icon = db.Column(db.String)
     organizer_name = db.Column(db.String)
     show_map = db.Column(db.Integer)
     organizer_description = db.Column(db.String)
@@ -108,6 +110,8 @@ class Event(db.Model):
                  event_url=None,
                  background_url=None,
                  thumbnail=None,
+                 large=None,
+                 icon=None,
                  organizer_name=None,
                  organizer_description=None,
                  state=None,
@@ -150,6 +154,8 @@ class Event(db.Model):
         self.event_url = event_url
         self.background_url = background_url
         self.thumbnail = thumbnail
+        self.large = large
+        self.icon = icon
         self.organizer_name = organizer_name
         self.organizer_description = clean_up_string(organizer_description)
         self.state = state
@@ -230,6 +236,9 @@ class Event(db.Model):
             'description': self.description,
             'event_url': self.event_url,
             'background_url': self.background_url,
+            'thumbnail': self.thumbnail,
+            'large': self.large,
+            'icon': self.icon,
             'organizer_name': self.organizer_name,
             'organizer_description': self.organizer_description,
             'has_session_speakers': self.has_session_speakers,
