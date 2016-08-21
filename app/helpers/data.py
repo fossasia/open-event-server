@@ -1014,6 +1014,8 @@ class DataManager(object):
 
             background_url = ''
             background_thumbnail_url = ''
+            background_large_url = ''
+            background_icon_url = ''
             temp_background = form['background_url']
             image_sizes = DataGetter.get_image_sizes()
             if temp_background:
