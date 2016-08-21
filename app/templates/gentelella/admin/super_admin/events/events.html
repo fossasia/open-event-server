@@ -111,7 +111,7 @@
             <li class=""><a href="#tab_content2" id="profile-tab" data-toggle="tab">All Drafts</a></li>
             <li class=""><a href="#tab_content3" id="profile-tab2" data-toggle="tab">All Past</a></li>
             <li class=""><a href="#tab_content5" id="profile-tab3" data-toggle="tab">All Deleted Events</a></li>
-            <li class=""><a href="#" id="all-tab" data-toggle="modal" data-target="#importModal">Import</a></li>
+            <li class=""><a href="#tab_content7" id="profile-tab7" data-toggle="tab">Import</a></li>
         </ul>
         <div id="myTabContent" class="tab-content">
             <div role="tabpanel" class="tab-pane fade" id="tab_content4"
@@ -210,17 +210,16 @@
                     </tbody>
                 </table>
             </div>
+            <div role="tabpanel" class="tab-pane fade" id="tab_content7" aria-labelledby="profile-tab">
+               {% include 'gentelella/admin/event/_import_modal.html' %}
+            </div>
         </div>
     </div>
-
-
-    {% include 'gentelella/admin/event/_import_modal.html' %}
 
 {% endblock %}
 
 {% block tail_js %}
     {{ super() }}
-    <script src="{{ url_for('static', filename='js/admin/event/importEvent.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/bootstrap-progressbar/bootstrap-progressbar.min.js') }}"></script>
     <script type="text/javascript">
         var table = $('.table.no-global-dt').DataTable({

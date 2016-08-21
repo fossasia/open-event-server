@@ -57,7 +57,7 @@
         {% endif %}
       </td>
       <td>
-      Started {{ e.start_time | humanize_alt }}
+      {{ e.start_time | humanize_alt }}
       </td>
       <!-- start job -->
       {% if not e.result_status %}
