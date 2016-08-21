@@ -1,56 +1,130 @@
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
-    <form data-toggle="validator" method="post" action="">
+    <form data-toggle="validator" method="post">
         <div class="form-group">
-            <h4>Front Page</h4>
-            <div class="col-md-6" style="margin-bottom:30px;">
+            <h4>Large Size</h4>
+            <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Width (in px)</label>
-                <input type="number" class="form-control" id="front-page-w" name="width" required value="300">
+                <input type="number" class="form-control" id="front-page-w" name="large_width" required value="1300">
             </div>
-            <div class="col-md-6" style="margin-bottom:30px;">
+            <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Height (in px)</label>
-                <input type="number" class="form-control" id="front-page-h" name="height" required value="300">
-            </div>
-            <div class="help-block with-errors"></div>
-        </div><br>
-        <div class="form-group">
-            <h4>My Session Page</h4>
-            <div class="col-md-6" style="margin-bottom:30px;">
-                <label>Width (in px)</label>
-                <input type="number" class="form-control" id="front-page-w" name="width" required value="300">
-            </div>
-            <div class="col-md-6" style="margin-bottom:30px;">
-                <label>Height (in px)</label>
-                <input type="number" class="form-control" id="front-page-h" name="height" required value="300">
-            </div>
-            <div class="help-block with-errors"></div>
-        </div><br>
-        <div class="form-group">
-            <h4>Speaker Image on Event Page</h4>
-            <div class="col-md-6" style="margin-bottom:30px;">
-                <label>Width (in px)</label>
-                <input type="number" class="form-control" id="front-page-w" name="width" required value="300">
-            </div>
-            <div class="col-md-6" style="margin-bottom:30px;">
-                <label>Height (in px)</label>
-                <input type="number" class="form-control" id="front-page-h" name="height" required value="300">
-            </div>
-            <div class="help-block with-errors"></div>
-        </div><br>
-        <div class="form-group">
-            <h4>Speaker Image in Event Dashboard</h4>
-            <div class="col-md-6" style="margin-bottom:30px;">
-                <label>Width (in px)</label>
-                <input type="number" class="form-control" id="front-page-w" name="width" required value="300">
-            </div>
-            <div class="col-md-6" style="margin-bottom:30px;">
-                <label>Height (in px)</label>
-                <input type="number" class="form-control" id="front-page-h" name="height" required value="300">
+                <input type="number" class="form-control" id="front-page-h" name="large_height" required value="500">
             </div>
             <div class="help-block with-errors"></div>
         </div>
+        <div class="form-group">
+            <h4>Thumbnail Size</h4>
+            <div class="col-md-4" style="margin-bottom:30px;">
+                <label>Width (in px)</label>
+                <input type="number" class="form-control" id="front-page-w" name="thumbnail_width" required value="500">
+            </div>
+            <div class="col-md-4" style="margin-bottom:30px;">
+                <label>Height (in px)</label>
+                <input type="number" class="form-control" id="front-page-h" name="thumbnail_height" required value="200">
+            </div>
+            <div class="help-block with-errors"></div>
+        </div>
+        <div class="form-group">
+            <h4>Icon Size</h4>
+            <div class="col-md-4" style="margin-bottom:30px;">
+                <label>Width (in px)</label>
+                <input type="number" class="form-control" id="front-page-w" name="icon_width" required value="75">
+            </div>
+            <div class="col-md-4" style="margin-bottom:30px;">
+                <label>Height (in px)</label>
+                <input type="number" class="form-control" id="front-page-h" name="icon_height" required value="30">
+            </div>
+            <div class="help-block with-errors"></div>
+        </div><hr>
+        <div class="form-group">
+            <h4>Profile Image</h4>
+            <div class="col-md-4" style="margin-bottom:30px;">
+                <label>Width & Height(in px)</label>
+                <input type="number" class="form-control" id="front-page-w" name="icon_width" required value="75">
+            </div>
+            <div class="help-block with-errors"></div>
+        </div><hr>
+        <div class="form-group">
+            <h4>Logo Size (Event Wizard)</h4>
+            <div class="col-md-4" style="margin-bottom:30px;">
+                <label>Width (in px)</label>
+                <input type="number" class="form-control" id="front-page-w" name="icon_width" required value="75">
+            </div>
+            <div class="col-md-4" style="margin-bottom:30px;">
+                <label>Height (in px)</label>
+                <input type="number" class="form-control" id="front-page-h" name="icon_height" required value="30">
+            </div>
+            <div class="help-block with-errors"></div>
+        </div><hr>
+        <div class="form-group">
+            <div class="item">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <h4>Front Page</h4>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12" style="margin-top:15px;">
+                    <div class="radio-group">
+                        <input type="radio" name="size_front" autocomplete="off" value="large"> Large Size
+                        <input type="radio" name="size_front" autocomplete="off" value="icon"> Icon Size
+                        <input type="radio" name="size_front" autocomplete="off" value="thumbnail" checked> Thumbnail
+                    </div>
+                </div>
+            </div><hr>
+            <div class="item">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <h4>Event Page</h4>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12" style="margin-top:15px;">
+                    <div class="radio-group">
+                        <input type="radio" name="size_event" autocomplete="off" value="large" checked> Large Size
+                        <input type="radio" name="size_event" autocomplete="off" value="icon"> Icon Size
+                        <input type="radio" name="size_event" autocomplete="off" value="thumbnail"> Thumbnail
+                    </div>
+                </div>
+            </div><hr>
+            <div class="item">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <h4>My Session Page</h4>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="radio-group" style="margin-top:15px;">
+                        <input type="radio" name="size_mysession" autocomplete="off" value="large"> Large Size
+                        <input type="radio" name="size_mysession" autocomplete="off" value="icon"> Icon Size
+                        <input type="radio" name="size_mysession" autocomplete="off" value="thumbnail" checked> Thumbnail
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="item">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <h4>Speaker Image in Event Page</h4>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12" style="margin-top:15px;">
+                    <div class="radio-group">
+                        <input type="radio" name="size_speaker_event" autocomplete="off" value="large"> Large Size
+                        <input type="radio" name="size_speaker_event" autocomplete="off" value="icon"> Icon Size
+                        <input type="radio" name="size_speaker_event" autocomplete="off" value="thumbnail"checked> Thumbnail
+                    </div>
+                </div>
+            </div><hr>
+            <div class="item">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <h4>Speaker Image in Event Dashboard</h4>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12" style="margin-top:15px;">
+                    <div class="radio-group">
+                        <input type="radio" name="size_speaker_dashboard" autocomplete="off" value="large"> Large Size
+                        <input type="radio" name="size_speaker_dashboard" autocomplete="off" value="icon" checked> Icon Size
+                        <input type="radio" name="size_speaker_dashboard" autocomplete="off" value="thumbnail"> Thumbnail
+                    </div>
+                </div>
+            </div><hr>
+        </div>
         <br>
-        <button type="submit" class="btn btn-info btn-lg">Save</button>
+        <div class="ln_solid"></div>
+        <div class="form-group">
+            <button id="fee-save" type="submit" name="image_config" class="btn btn-success pull-right">Save</button>
+        </div>
     </form>
   </div>
 </div>

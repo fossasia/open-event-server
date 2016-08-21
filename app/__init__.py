@@ -99,7 +99,7 @@ def create_app():
     app.config['SQLALCHEMY_RECORD_QUERIES'] = True
 
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
-    app.logger.setLevel(logging.INFO)
+    app.logger.setLevel(logging.WARNING)
     app.jinja_env.add_extension('jinja2.ext.do')
     app.jinja_env.add_extension('jinja2.ext.loopcontrols')
     app.jinja_env.undefined = SilentUndefined
@@ -184,6 +184,10 @@ def event_types():
 def pages():
     pages = DataGetter.get_all_pages()
     return dict(system_pages=pages)
+
+@app.context_processor
+def datetime_now():
+    return dict(datetime_now=datetime.now())
 
 @app.context_processor
 def social_settings():

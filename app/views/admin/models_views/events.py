@@ -4,14 +4,14 @@ import os
 import binascii
 from uuid import uuid4
 
-from flask import flash, url_for, redirect, request, jsonify
+from flask import flash, url_for, redirect, request, jsonify, Markup
 from flask.ext.login import current_user
 from flask.ext.admin import BaseView
 from flask.ext.restplus import abort
 from flask_admin import expose
 
 from app import db
-from app.helpers.storage import upload, UPLOAD_PATHS
+from app.helpers.storage import upload, upload_local, UPLOAD_PATHS
 from app.helpers.helpers import uploaded_file
 from app.helpers.permission_decorators import is_organizer, is_super_admin, can_access
 from app.helpers.helpers import fields_not_empty, string_empty
@@ -62,8 +62,9 @@ class EventsView(BaseView):
             donation_ticket_count[event.id] = TicketingManager.get_orders_count_by_type(event.id, type='donation')
             max_donation_ticket[event.id] = TicketingManager.get_max_orders_count(event.id, type='donation')
         if not is_verified_user():
-            flash("Your account is unverified. "
-                  "Please verify by clicking on the confirmation link that has been emailed to you.")
+            flash(Markup('Your account is unverified. '
+                         'Please verify by clicking on the confirmation link that has been emailed to you.<br>'
+                         'Did not get the email? Please <a href="/resend_email/" class="alert-link"> click here to resend the confirmation.</a>'))
         return self.render('/gentelella/admin/event/index.html',
                            live_events=live_events,
                            draft_events=draft_events,
@@ -86,7 +87,7 @@ class EventsView(BaseView):
             background_image = request.form['bgimage']
             if background_image:
                 background_file = uploaded_file(file_content=background_image)
-                background_url = upload(
+                background_url = upload_local(
                     background_file,
                     UPLOAD_PATHS['temp']['event'].format(uuid=uuid4())
                 )
@@ -100,7 +101,7 @@ class EventsView(BaseView):
             logo_image = request.form['logo']
             if logo_image:
                 logo_file = uploaded_file(file_content=logo_image)
-                logo = upload(
+                logo = upload_local(
                     logo_file,
                     UPLOAD_PATHS['temp']['event'].format(uuid=uuid4())
                 )
@@ -109,7 +110,7 @@ class EventsView(BaseView):
                 return jsonify({'status': 'no logo'})
 
     @expose('/create/', methods=('GET', 'POST'))
-    def create_view(self,):
+    def create_view(self, ):
         if request.method == 'POST':
             if not current_user.can_create_event():
                 flash("You don't have permission to create event.")
@@ -221,9 +222,9 @@ class EventsView(BaseView):
             checklist["5"] = 'optional'
 
         if not current_user.can_publish_event() and not is_verified_user():
-            flash("To make your event live, please verify your email by "
-                  "clicking on the confirmation link that has been emailed to you.")
-
+            flash(Markup('To make your event live, please verify your email by '
+                         'clicking on the confirmation link that has been emailed to you.<br>'
+                         'Did not get the email? Please <a href="/resend_email/" class="alert-link"> click here to resend the confirmation.</a>'))
 
         sessions = {'pending': DataGetter.get_sessions_by_state_and_event_id('pending', event_id).count(),
                     'accepted': DataGetter.get_sessions_by_state_and_event_id('accepted', event_id).count(),
@@ -236,7 +237,7 @@ class EventsView(BaseView):
                            sessions=sessions,
                            settings=get_settings())
 
-    @expose('/<int:event_id>/editfiles/bgimage', methods=('POST','DELETE'))
+    @expose('/<int:event_id>/editfiles/bgimage', methods=('POST', 'DELETE'))
     def bgimage_upload(self, event_id):
         if request.method == 'POST':
             background_image = request.form['bgimage']
@@ -259,7 +260,7 @@ class EventsView(BaseView):
             save_to_db(event)
             return jsonify({'status': 'ok'})
 
-    @expose('/<int:event_id>/editfiles/logo', methods=('POST','DELETE'))
+    @expose('/<int:event_id>/editfiles/logo', methods=('POST', 'DELETE'))
     def logo_upload(self, event_id):
         if request.method == 'POST':
             logo_image = request.form['logo']
@@ -304,8 +305,6 @@ class EventsView(BaseView):
         session_form = json.loads(custom_forms.session_form)
         tax = DataGetter.get_tax_options(event_id)
         ticket_types = DataGetter.get_ticket_types(event_id)
-
-
 
         preselect = []
         required = []
@@ -366,11 +365,12 @@ class EventsView(BaseView):
 
             event = DataManager.edit_event(
                 request, event_id, event, session_types, tracks, social_links,
-                microlocations, call_for_speakers, sponsors, custom_forms, img_files, old_sponsor_logos, old_sponsor_names, tax)
+                microlocations, call_for_speakers, sponsors, custom_forms, img_files, old_sponsor_logos,
+                old_sponsor_names, tax)
 
             if (request.form.get('state',
-                                u'Draft') == u'Published') and string_empty(
-                                event.location_name):
+                                 u'Draft') == u'Published') and string_empty(
+                event.location_name):
                 flash(
                     "Your event was saved. To publish your event please review the highlighted fields below.",
                     "warning")

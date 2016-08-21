@@ -1,7 +1,6 @@
 import os
 from base64 import b64encode
 from shutil import copyfile, rmtree
-import requests
 from flask.ext.scrypt import generate_password_hash
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
@@ -25,7 +24,9 @@ UPLOAD_PATHS = {
     'event': {
         'logo': 'events/{event_id}/logo',
         'background_url': 'events/{event_id}/background',
-        'thumbnail': 'events/{event_id}/thumbnail'
+        'thumbnail': 'events/{event_id}/thumbnail',
+        'large': 'events/{event_id}/large',
+        'icon': 'events/{event_id}/icon'
     },
     'sponsors': {
         'logo': 'events/{event_id}/sponsors/{id}/logo'
@@ -162,9 +163,3 @@ def generate_hash(key):
     """
     phash = generate_password_hash(key, get_settings()['secret'])
     return b64encode(phash)[:10]  # limit len to 10, is sufficient
-
-def download_file(file_url):
-    from app.helpers.helpers import uploaded_file
-
-    file_content = requests.get(file_url).content.encode('base64')
-    return uploaded_file(file_content='blah,'+file_content)

@@ -49,7 +49,7 @@ class EventDetailView(BaseView):
             licence_details = None
 
         module = DataGetter.get_module()
-        tickets = DataGetter.get_sales_open_tickets(event.id)
+        tickets = DataGetter.get_sales_open_tickets(event.id, True)
         return self.render('/gentelella/guest/event/details.html',
                            event=event,
                            placeholder_images=placeholder_images,
@@ -168,7 +168,7 @@ class EventDetailView(BaseView):
         else:
             licence_details = None
         module = DataGetter.get_module()
-        tickets = DataGetter.get_sales_open_tickets(event.id)
+        tickets = DataGetter.get_sales_open_tickets(event.id, True)
         return self.render('/gentelella/guest/event/details.html',
                            event=event,
                            placeholder_images=placeholder_images,

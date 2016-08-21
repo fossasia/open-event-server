@@ -13,6 +13,8 @@ from ..models.session import Session
 from ..models.notifications import Notification
 from ..models.message_settings import MessageSettings
 from ..models.track import Track
+from ..models.image_config import ImageConfig
+from ..models.image_sizes import ImageSizes
 from ..models.custom_placeholder import CustomPlaceholder
 from ..models.invite import Invite
 from ..models.speaker import Speaker
@@ -90,6 +92,14 @@ class DataGetter(object):
     @staticmethod
     def get_custom_placeholders():
         return CustomPlaceholder.query.all()
+
+    @staticmethod
+    def get_custom_placeholder_by_id(placeholder_id):
+        return CustomPlaceholder.query.filter_by(id=placeholder_id).first()
+
+    @staticmethod
+    def get_custom_placeholder_by_name(name):
+        return CustomPlaceholder.query.filter_by(name=name).first()
 
     @staticmethod
     def get_all_users_events_roles():
@@ -195,6 +205,20 @@ class DataGetter(object):
             event_id=event_id,
             state=state
         )
+
+    @staticmethod
+    def get_image_sizes():
+        """
+        :return: Image Sizes
+        """
+        return ImageSizes.query.first()
+
+    @staticmethod
+    def get_image_configs():
+        """
+        :return: Image Configs
+        """
+        return ImageConfig.query.all()
 
     @staticmethod
     def get_custom_form_elements(event_id):
@@ -446,21 +470,21 @@ class DataGetter(object):
     @staticmethod
     def get_live_events():
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
-            .filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
-            .filter(Event.state == 'Published').filter(Event.in_trash == False)
+            .filter(Event.end_time >= datetime.datetime.now()) \
+            .filter(Event.state == 'Published').filter(Event.in_trash is not True)
         return DataGetter.trim_attendee_events(events)
 
     @staticmethod
     def get_draft_events():
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
-            .filter(Event.state == 'Draft').filter(Event.in_trash == False)
+            .filter(Event.state == 'Draft').filter(Event.in_trash is not True)
         return DataGetter.trim_attendee_events(events)
 
     @staticmethod
     def get_past_events():
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.end_time <= datetime.datetime.now()).filter(
-            or_(Event.state == 'Completed', Event.state == 'Published')).filter(Event.in_trash == False)
+            or_(Event.state == 'Completed', Event.state == 'Published')).filter(Event.in_trash is not True)
         return DataGetter.trim_attendee_events(events)
 
     @staticmethod
@@ -479,10 +503,20 @@ class DataGetter(object):
         return Event.query.filter(Event.state == 'Draft').filter(Event.in_trash == False).filter_by(in_trash=False)
 
     @staticmethod
+    def get_live_and_public_events():
+        return DataGetter.get_all_live_events().filter(Event.privacy != 'private').filter(not Event.in_trash)
+
+    @staticmethod
+    def get_all_draft_events():
+        return Event.query.filter(Event.state == 'Draft').filter(Event.in_trash is not True)
+
+
+    @staticmethod
     def get_all_past_events():
         return Event.query.filter(Event.end_time <= datetime.datetime.now()).filter(
             or_(Event.state == 'Completed', Event.state == 'Published')).filter(
             Event.in_trash is not True).filter(Event.in_trash == False).filter_by(in_trash=False)
+
 
     @staticmethod
     def get_session(session_id):
@@ -711,7 +745,9 @@ class DataGetter(object):
             return names
 
     @staticmethod
-    def get_sales_open_tickets(event_id):
+    def get_sales_open_tickets(event_id, give_all=False):
+        if give_all:
+            return Ticket.query.filter(Ticket.event_id == event_id)
         return Ticket.query.filter(Ticket.event_id == event_id).filter(
             Ticket.sales_start <= datetime.datetime.now()).filter(
             Ticket.sales_end >= datetime.datetime.now())
@@ -754,6 +790,10 @@ class DataGetter(object):
         return TicketFees.query.all()
 
     @staticmethod
+    def get_fee_settings():
+        return TicketFees.query.all()
+
+    @staticmethod
     def get_expired_orders():
         return Order.query.filter(Order.status != 'completed')
 
@@ -774,7 +814,8 @@ class DataGetter(object):
     @staticmethod
     def get_all_user_roles(role_name):
         role = Role.query.filter_by(name=role_name).first()
-        uers = UsersEventsRoles.query.join(UsersEventsRoles.event).join(UsersEventsRoles.role).filter(Event.in_trash == False).filter(UsersEventsRoles.role==role)
+        uers = UsersEventsRoles.query.join(UsersEventsRoles.event).join(UsersEventsRoles.role).filter(
+            Event.in_trash == False).filter(UsersEventsRoles.role == role)
         return uers
 
     @staticmethod

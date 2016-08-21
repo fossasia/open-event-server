@@ -158,11 +158,7 @@
         </div>
         <div class="row">
             <div class="col-md-7">
-                {% if event %}
-                    <input type="hidden" name="background_url" id="background_url">
-                {% else %}
-                    <input type="hidden" name="background_url" id="background_url">
-                {% endif %}
+                <input type="hidden" name="background_url" id="background_url">
 
                 <div class="item form-group" id="image-upload-group"
                      {% if event and event.background_url and event.background_url != '' %}style="display: none;"{% endif %}>
@@ -1076,6 +1072,9 @@
                     var reader = new FileReader();
                     reader.onload = function (e) {
                         $("#logo-upload-label").html(loadingImage);
+                        /* Disable Save Event buttons */
+                        $(".save-event").prop("disabled", true);
+                        $(".publish-unpublish-event").prop("disabled", true);
                         $.ajax({
                             type: 'POST',
                             url: "{{ url_for('events.logo_upload', event_id=event.id) if event else url_for('events.create_event_logo_upload') }}",
@@ -1084,12 +1083,16 @@
                         }).done(function(data) {
                             console.log(data);
                             resetFormElement(input);
-                            $("#logo-upload-label").html('<i class="fa fa-4x fa-file-image-o" aria-hidden="true"></i> <br> <h3>Select Logo</h3>');
                             $("#logo").val(data.logo);
                             $("#logo-upload-group").hide();
                             $("#logo-view-group").show().find("img").attr("src", e.target.result);
                         }).fail(function(data) {
                             alert("Something went wrong. Please try again.");
+                        }).always(function() {
+                            $("#logo-upload-label").html('<i class="fa fa-4x fa-file-image-o" aria-hidden="true"></i> <br> <h3>Select Logo</h3>');
+                            /* Enable Save Event buttons */
+                            $(".save-event").prop("disabled", false);
+                            $(".publish-unpublish-event").prop("disabled", false);
                         });
                     };
                     reader.readAsDataURL(input.files[0]);
@@ -1110,6 +1113,9 @@
         }).then(function (resp) {
             $('#cropper-modal').modal('hide')
             $("#event-image-upload-label").html(loadingImage);
+            /* Disable Save Event buttons */
+            $(".save-event").prop("disabled", true);
+            $(".publish-unpublish-event").prop("disabled", true);
             $.ajax({
                 type: 'POST',
                 url: "{{ url_for('events.bgimage_upload', event_id=event.id) if event else url_for('events.create_event_bgimage_upload') }}",
@@ -1119,10 +1125,14 @@
                 console.log(data);
                 $("#background_url").val(data.background_url);
                 $("#image-view-group").show().find("img").attr("src", resp);
-                $("#event-image-upload-label").html('<i class="fa fa-4x fa-camera-retro" aria-hidden="true"></i> <br> <h3>Select Event Image</h3>');
                 $("#image-upload-group").hide();
             }).fail(function(data) {
                 alert("Something went wrong. Please try again.");
+            }).always(function() {
+                $("#event-image-upload-label").html('<i class="fa fa-4x fa-camera-retro" aria-hidden="true"></i><br><h3>Select Event Image</h3>');
+                /* Enable Save Event buttons */
+                $(".save-event").prop("disabled", false);
+                $(".publish-unpublish-event").prop("disabled", false);
             });
         });
     });

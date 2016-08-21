@@ -216,44 +216,34 @@ def send_event_publish(email, event_name, link):
 
 def send_email_after_account_create(form):
     """Send email after account create"""
-    message_settings = MessageSettings.query.filter_by(action=USER_REGISTER).first()
-    if not message_settings or message_settings.mail_status == 1:
-        print "sending mail"
-        send_email(
-            to=form['email'],
-            action=USER_REGISTER,
-            subject=MAILS[USER_REGISTER]['subject'],
-            html=MAILS[USER_REGISTER]['message'].format(email=form['email'])
-        )
+    send_email(
+        to=form['email'],
+        action=USER_REGISTER,
+        subject=MAILS[USER_REGISTER]['subject'],
+        html=MAILS[USER_REGISTER]['message'].format(email=form['email'])
+    )
 
 
 def send_email_after_account_create_with_password(form):
     """Send email after account create"""
-    message_settings = MessageSettings.query.filter_by(action=USER_REGISTER_WITH_PASSWORD).first()
-    if not message_settings or message_settings.mail_status == 1:
-        print "sending mail"
-        send_email(
-            to=form['email'],
-            action=USER_REGISTER_WITH_PASSWORD,
-            subject=MAILS[USER_REGISTER_WITH_PASSWORD]['subject'],
-            html=MAILS[USER_REGISTER_WITH_PASSWORD]['message'].format(email=form['email'], password=form['password'])
-        )
+    send_email(
+        to=form['email'],
+        action=USER_REGISTER_WITH_PASSWORD,
+        subject=MAILS[USER_REGISTER_WITH_PASSWORD]['subject'],
+        html=MAILS[USER_REGISTER_WITH_PASSWORD]['message'].format(email=form['email'], password=form['password'])
+    )
 
 
 def send_email_confirmation(form, link):
     """account confirmation"""
-    message_settings = MessageSettings.query.filter_by(action=USER_CONFIRM).first()
-    if not message_settings or message_settings.mail_status == 1:
-        print "sending mail"
-        send_email(
-            to=form['email'],
-            action=USER_CONFIRM,
-            subject=MAILS[USER_CONFIRM]['subject'],
-            html=MAILS[USER_CONFIRM]['message'].format(
-                email=form['email'], link=link
-            )
+    send_email(
+        to=form['email'],
+        action=USER_CONFIRM,
+        subject=MAILS[USER_CONFIRM]['subject'],
+        html=MAILS[USER_CONFIRM]['message'].format(
+            email=form['email'], link=link
         )
-
+    )
 
 def send_email_when_changes_email(old_email, new_email):
     """account confirmation"""
@@ -269,14 +259,12 @@ def send_email_when_changes_email(old_email, new_email):
 
 def send_email_with_reset_password_hash(email, link):
     """Send email with reset password hash"""
-    message_settings = MessageSettings.query.filter_by(action=PASSWORD_RESET).first()
-    if not message_settings or message_settings.mail_status == 1:
-        send_email(
-            to=email,
-            action=PASSWORD_RESET,
-            subject=MAILS[PASSWORD_RESET]['subject'],
-            html=MAILS[PASSWORD_RESET]['message'].format(link=link)
-        )
+    send_email(
+        to=email,
+        action=PASSWORD_RESET,
+        subject=MAILS[PASSWORD_RESET]['subject'],
+        html=MAILS[PASSWORD_RESET]['message'].format(link=link)
+    )
 
 
 def send_email_for_event_role_invite(email, role, event, link):
@@ -302,14 +290,12 @@ def send_email_for_event_role_invite(email, role, event, link):
 
 def send_email_for_after_purchase(email, invoice_id, order_url):
     """Send email with order invoice link after purchase"""
-    message_settings = MessageSettings.query.filter_by(action=TICKET_PURCHASED).first()
-    if not message_settings or message_settings.mail_status == 1:
-        send_email(
-            to=email,
-            action=TICKET_PURCHASED,
-            subject=MAILS[TICKET_PURCHASED]['subject'].format(invoice_id=invoice_id),
-            html=MAILS[TICKET_PURCHASED]['message'].format(order_url=order_url)
-        )
+    send_email(
+        to=email,
+        action=TICKET_PURCHASED,
+        subject=MAILS[TICKET_PURCHASED]['subject'].format(invoice_id=invoice_id),
+        html=MAILS[TICKET_PURCHASED]['message'].format(order_url=order_url)
+    )
 
 
 def send_email_for_expired_orders(email, event_name, invoice_id, order_url):

@@ -82,6 +82,9 @@ You can use ampersand (&) at the end of the above command if you want to start r
 redis-3.2.1/src/redis-server &
 ```
 
+If you want to use a different Redis server than the above, then you can provide the server url in `REDIS_URL` environment variable.
+The default value for `REDIS_URL` is `redis://localhost:6379/0` which is the same as that of local Redis server.
+
 
 ## Technology Stack
 
@@ -92,35 +95,44 @@ redis-3.2.1/src/redis-server &
 * App server - uwsgi
 * Web framework - flask (particularly flask-admin)
 
-### Dependencies
+### Services and Dependencies
 
-### Authentication OAuth
+#### Authentication OAuth
 
-We are using it to get information from Facebook and Google account, and we allow to user sign in.
+OAuth is used to get information from Facebook and Google accounts, that enables users to sign in with their respective credentials:
  1. Google https://accounts.google.com/o/oauth2/auth
  2. Facebook https://graph.facebook.com/oauth
 
-### Location
-We are using on Google maps to get information about location(info about country, city, latitude and longitude)https://maps.googleapis.com/maps/api/
-We use it to get current location and display closes events.
+#### Twitter
 
-### Local Storage and Amazon S3
+The server integrates twitter on event pages. To obtain the required keys visit: https://dev.twitter.com/overview/documentation
+
+#### Instagram
+
+It is possible to extend the functionality and offer images from Instagram in the event service. To obtain required keys visit: https://www.instagram.com/developer/authentication/
+
+#### Google Maps
+
+We are using on Google maps to get information about location (info about country, city, latitude and longitude) https://maps.googleapis.com/maps/api/ We use it to get current location and display closes events.
+
+#### Local Storage and Amazon S3
 
 We are storing audio, avatars and logos either on local storage or Amazon S3. Read more about the set up of [Amazon S3 here](/docs/AMAZON_S3.md)
 
-### Sending Emails
+#### Sendgrid
 To send emails we are using sendgrid
 https://api.sendgrid.com/api/mail.send.json
 
-### Getting information about current version
+#### Heroku Logs
 
 We use heroku releases to see which version is deployed https://api.heroku.com/apps/open-event/releases
-and we also use Github to get info about commit (for example: commit message, author name) ahttps://api.github.com/repos/fossasia/open-event-orga-server/commits
+and we also use Github to get info about commit (for example: commit message, author name) at https://api.github.com/repos/fossasia/open-event-orga-server/commits
 
-### Env Variables Heroku
+#### Payment Gateways
 
-To see our all enviroment variables you have to visit Heroku page
-https://dashboard-classic.heroku.com/apps/open-event/settings (You need access to see this page).
+For ticket sales the service integrates payment gateways:
+ 1. Stripe
+ 2. Paypal
 
 ## API Access and Import/Export
 
@@ -199,20 +211,39 @@ When checking in code for models, please update migrations as well.
 
 ## Testing
 
-### How to run tests for Open Event Server
+First install the repo and set up the server according to the steps listed. Make sure you have installed are the dependencies required for testing by running
 
-* First install the repo and set up the server according to the steps listed.
+```
+pip install -r requirements/tests.txt
+```
+
+### Running unit tests
 
 * Next go to the project directory and run the following command:
 ```
-python -m unittest discover tests/
+python -m unittest discover tests/unittests/
 ```
 * It will run each test one by one.
 
 * You can also use the following command to run tests using nosetests :
 ```
-nosetests tests/
+nosetests tests/unittests/
 ```
+
+### Running robot framework tests
+* Make sure you have FireFox installed
+* Start your local flask server instance.
+* Go to the project directory and Run the tests by using the following command.
+
+```
+robot -v SERVER:{server_name} -v SUPERUSER_USERNAME:{super_user_email_here} -v SUPERUSER_PASSWORD:{super_user_password} tests/robot
+```
+
+Change all the parameters inside `{}` as per your local server. The final command would look like:
+```
+robot -v SERVER:localhost:5000 -v SUPERUSER_USERNAME:test@opev.net -v SUPERUSER_PASSWORD:test_password tests/robot
+```
+* Once the tests are completed, a report and a log would be generated at `report.html` and `log.html` repectively in your root directory.
 
 ## Logging
 
@@ -225,12 +256,12 @@ This is an Open Source project and we would be happy to see contributors who rep
 
 ## Branch Policy
 
-We have the following branches   
- * **development**   
+We have the following branches
+ * **development**
 	 All development goes on in this branch. If you're making a contribution,
 	 you are supposed to make a pull request to _development_.
 	 PRs to master must pass a build check and a unit-test check on Travis
- * **master**   
+ * **master**
    This contains shipped code. After significant features/bugfixes are accumulated on development, we make a version update, and make a release.
 
 

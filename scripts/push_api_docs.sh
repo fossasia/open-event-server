@@ -21,8 +21,15 @@ ssh-add deploy_key
 # clone and do
 git clone -b gh-pages "git@github.com:fossasia/open-event-orga-server.git" gh-pages
 cp static/temp/swagger.json gh-pages/api/v2/swagger.json
+cp report.html gh-pages/robot/report.html
+cp log.html gh-pages/robot/log.html
+cp output.xml gh-pages/robot/output.xml
 cd gh-pages
-git commit -m '[Auto] Updated API docs' api/v2/swagger.json || echo "no changes"
+git add robot/log.html
+git add robot/output.xml
+git add robot/report.html
+git add api/v2/swagger.json
+git commit -m '[Auto] Updated API docs and robot test results'
 git push origin gh-pages
 
 exit 0
