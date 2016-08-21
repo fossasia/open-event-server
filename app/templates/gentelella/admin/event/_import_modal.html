@@ -1,29 +1,59 @@
 
-<div>
+<div class="col-md-10 col-md-offset-1">
 
-  <h2>Import Event</h2>
+  <h3>Import Event</h3>
+  <hr>
 
   <div>
-    <h5>Select event zip</h5><br>
+    <h5>Select event zip</h5>
     <form>
         <input type="file" name="file" id="import_file">
     </form>
-    <br>
+  </div>
+
+  <div style="margin-top: 15px;">
+    <button type="button" class="btn btn-primary" id="btnImportEvent" onclick="importEventZip();">Create Event</button>
+  </div>
+
+  <div style="margin-top: 10px;">
     <span id="import_status"></span>
     <span id="import_error" class="red"></span>
   </div>
 
-  <div>
-    <button type="button" class="btn btn-primary" id="btnImportEvent" onclick="importEventZip();">Create Event</button>
-  </div>
+  <br><br>
 
-
-  <h2>Previous Imports</h2>
+  <h3>Previous Imports</h3>
+  <hr>
 
   <div>
-  {% for e in imported_events %}
-    {{ e.start_time | humanize_alt }}
-  {% endfor %}
+
+  <table class="table table-striped">
+
+    <tr>
+      <th>State</th>
+      <th>Message</th>
+      <th>Started</th>
+    </tr>
+
+    {% for e in imported_events %}
+      <tr>
+      <td>
+      {% if e.result_status == "SUCCESS" %}
+        SUCC
+      {% elif e.result_status %}
+        FAIL
+      {% else %}
+        PENDING
+      {% endif %}
+      </td>
+      <td>
+        {{ e.result }}
+      </td>
+      <td>
+      Started {{ e.start_time | humanize_alt }}
+      </td>
+    {% endfor %}
+  </table>
   </div>
 
 </div>
