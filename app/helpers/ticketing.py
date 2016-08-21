@@ -12,7 +12,8 @@ from flask.ext import login
 from app.models import db
 from app.helpers.cache import cache
 from app.helpers.data import save_to_db
-from app.helpers.helpers import string_empty, send_email_for_after_purchase, get_count
+from app.helpers.helpers import string_empty, send_email_for_after_purchase, get_count, \
+    send_notif_for_after_purchase
 from app.models.order import Order
 from app.models.ticket import Ticket
 from app.helpers.data_getter import DataGetter
@@ -270,9 +271,14 @@ class TicketingManager(object):
             order.completed_at = datetime.utcnow()
             save_to_db(order)
 
-            send_email_for_after_purchase(order.user.email, order.get_invoice_number(),
-                                          url_for('ticketing.view_order_after_payment',
-                                                  order_identifier=order.identifier, _external=True))
+            invoice_id = order.get_invoice_number()
+            order_url = url_for('ticketing.view_order_after_payment',
+                                order_identifier=order.identifier,
+                                _external=True)
+
+            send_email_for_after_purchase(order.user.email, invoice_id, order_url)
+            send_notif_for_after_purchase(order.user, invoice_id, order_url)
+
             return True, order
         else:
             return False, 'Error'
@@ -288,9 +294,15 @@ class TicketingManager(object):
                 order.transaction_id = capture_result['PAYMENTINFO_0_TRANSACTIONID']
                 order.completed_at = datetime.utcnow()
                 save_to_db(order)
-                send_email_for_after_purchase(order.user.email, order.get_invoice_number(),
-                                              url_for('ticketing.view_order_after_payment',
-                                                      order_identifier=order.identifier, _external=True))
+
+                invoice_id = order.get_invoice_number()
+                order_url = url_for('ticketing.view_order_after_payment',
+                                    order_identifier=order.identifier,
+                                    _external=True)
+
+                send_email_for_after_purchase(order.user.email, invoice_id, order_url)
+                send_notif_for_after_purchase(order.user, invoice_id, order_url)
+
                 return True, order
             else:
                 return False, capture_result['L_SHORTMESSAGE0']

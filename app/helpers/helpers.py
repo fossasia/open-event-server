@@ -396,7 +396,7 @@ def send_notification(user, action, title, message):
     DataManager.create_user_notification(user, action, title, message)
 
 
-def send_notif_after_export(user, notif, event_name, result):
+def send_notif_after_export(user, event_name, result):
     """send notification after event export"""
     if '__error' in result:
         send_notification(
