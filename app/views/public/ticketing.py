@@ -1,3 +1,5 @@
+import base64
+
 import requests
 import stripe
 from flask.ext.restplus import abort
@@ -151,3 +153,19 @@ class TicketingView(BaseView):
                 flash("An error occurred while processing your transaction. " + str(result), "danger")
                 return redirect(url_for('.show_transaction_error', order_identifier=order_identifier))
         abort(404)
+
+    @expose('/pdf/', methods=('GET',))
+    def ticket_pdf_test(self):
+        import qrcode
+        img = qrcode.make('Some data here')
+        buffer = StringIO()
+        img.save(buffer, format="JPEG")
+        img_str = base64.b64encode(buffer.getvalue())
+
+        pdf = StringIO()
+        pisa.CreatePDF(StringIO(self.render('/gentelella/guest/ticketing/pdf/ticket.html', qr=img_str).encode('utf-8')), pdf)
+        response = make_response(pdf.getvalue())
+        response.headers['Content-Type'] = 'application/pdf'
+        response.headers['Content-Disposition'] = \
+            'inline; filename=%s.pdf' % "test"
+        return response

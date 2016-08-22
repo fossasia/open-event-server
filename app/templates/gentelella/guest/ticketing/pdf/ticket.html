@@ -1,0 +1,42 @@
+<html xmlns:pdf="https://github.com/xhtml2pdf/xhtml2pdf/blob/master/doc/usage.rst">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <style type="text/css">
+        @page {
+            size: a4 portrait;
+            background-image: url('F:\Projects\fossasia\open-event-orga-server\static\data\ticket-trans-notext.png');
+            margin: 2cm;
+        }
+
+    </style>
+</head>
+<body>
+<div id="ticket">
+    {% if event %}<img id="logo" src="data:image/png;base64,{{ event.logo_base64 }}"/>{% endif %}
+    <div id="event-info">
+        <span class="label">EVENT</span>
+        <span id="title" class="value">Event name</span>
+
+        <span class="label">LOCATION</span>
+        <span id="location" class="value">India</span>
+
+        <span class="label">DATE AND TIME</span>
+        <span class="value">21/21/21</span>
+        <span class="label">to</span>
+        <span class="value">21/21/21</span>
+    </div>
+<pdf:barcode value="BARCODE TEXT COMES HERE" type="code128" checksum="0" humanreadable="0" align="right" />
+
+    <div id="stub-info">
+        <span id="purchased-on">Purchased on 2/22/22</span>
+        <img id="qrcode" src="data:image/png;base64,{{ qr }}"/>
+        <span id="ticket-num" class="value">#22222</span>
+        <div id="attendee-info">
+            <span class="label">Attendee: Ticket</span>
+            <span id="name" class="value">JD</span>
+            <span id="email" class="value">js@example.com</span>
+        </div>
+    </div>
+</div>
+</body>
+</html>

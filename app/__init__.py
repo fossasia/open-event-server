@@ -121,9 +121,10 @@ def create_app():
     admin_view.init(app)
     admin_view.init_login(app)
 
-    # Profiling
-    app.config['PROFILE'] = True
-    app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[30])
+    if app.config['TESTING']:
+        # Profiling
+        app.config['PROFILE'] = True
+        app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[30])
 
     # API version 2
     with app.app_context():
