@@ -187,7 +187,7 @@ class TicketingManager(object):
         if order and not order.paid_via:
             if override \
                 or (order.status != 'completed' and
-                            (order.created_at + timedelta(
+                    (order.created_at + timedelta(
                                 minutes=TicketingManager.get_order_expiry())) < datetime.utcnow()):
                 order.status = 'expired'
                 save_to_db(order)
@@ -266,7 +266,6 @@ class TicketingManager(object):
                 order.completed_at = datetime.utcnow()
                 if not order.paid_via:
                     order.paid_via = 'free'
-                ticket_holder = TicketHolder(firstname=user.user_detail.fullname, email=email, order_id=order.id)
 
             holders_firstnames = form.getlist('holders[firstname]')
             holders_lastnames = form.getlist('holders[lastname]')
@@ -275,7 +274,7 @@ class TicketingManager(object):
 
             for i, firstname in enumerate(holders_firstnames):
                 data = {
-                    'firstname': holders_firstnames[i],
+                    'firstname': firstname,
                     'lastname': holders_lastnames[i]
                 }
                 holder_user = TicketingManager.get_or_create_user_by_email(holders_emails[i], data)
