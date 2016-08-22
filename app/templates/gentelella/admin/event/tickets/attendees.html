@@ -76,12 +76,6 @@
                 Ticket Price
             </th>
             <th>
-                Qty
-            </th>
-            <th>
-                Total
-            </th>
-            <th>
                 First Name
             </th>
             <th>
@@ -94,11 +88,11 @@
         </thead>
         <tbody>
         {% for order in orders %}
-            {% for order_ticket in order.tickets %}
+            {% for holder in order.ticket_holders %}
                 <tr>
                     <td> </td>
                     <td>
-                        <a href="#" class="order-link">{{ order.get_invoice_number() }}</a> -
+                        <a href="{{ url_for('ticketing.view_order_after_payment', order_identifier=order.identifier) if order.status == 'completed' else url_for('ticketing.show_transaction_error', order_identifier=order.identifier) }}" class="order-link">{{ order.get_invoice_number() }}</a> -
                         by {{ order.user.user_detail.fullname if order.user.user_detail and order.user.user_detail.fullname else order.user.email }}
                         <br>
                         {% if order.status == 'completed' %}
@@ -118,15 +112,12 @@
                         {% else %}
                             <span class="label label-danger">{{ order.status | capitalize }}</span>
                         {% endif %}
-
                     </td>
-                    <td>{{ order_ticket.ticket.name }}</td>
-                    <td>{{ event.payment_currency | currency_symbol }}{{ order_ticket.ticket.price | money }}</td>
-                    <td>{{ order_ticket.quantity }}</td>
-                    <td>{{ event.payment_currency | currency_symbol }}{{ (order_ticket.quantity * order_ticket.ticket.price) | money }}</td>
-                    <td>{{ order.user.user_detail.firstname }}</td>
-                    <td>{{ order.user.user_detail.lastname }}</td>
-                    <td>{{ order.user.email }}</td>
+                    <td>{{ holder.ticket.name }}</td>
+                    <td>{{ event.payment_currency | currency_symbol }}{{ holder.ticket.price | money }}</td>
+                    <td>{{ holder.firstname }}</td>
+                    <td>{{ holder.lastname }}</td>
+                    <td>{{ holder.email }}</td>
                 </tr>
             {% endfor %}
         {% endfor %}

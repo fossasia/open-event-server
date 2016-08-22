@@ -233,21 +233,35 @@ class TicketingManager(object):
                 order.country = country
                 order.zipcode = zipcode
                 order.status = 'initialized'
-                ticket_holder = TicketHolder(name=user.user_detail.fullname,
-                                             email=email, address=address,
-                                             city=city, state=state, country=country, order_id=order.id)
             else:
                 order.status = 'completed'
                 order.completed_at = datetime.utcnow()
                 if not order.paid_via:
                     order.paid_via = 'free'
-                ticket_holder = TicketHolder(name=user.user_detail.fullname, email=email, order_id=order.id)
+                ticket_holder = TicketHolder(firstname=user.user_detail.fullname, email=email, order_id=order.id)
+
+            holders_firstnames = form.getlist('holders[firstname]')
+            holders_lastnames = form.getlist('holders[lastname]')
+            holders_ticket_ids = form.getlist('holders[ticket_id]')
+            holders_emails = form.getlist('holders[email]')
+
+            for i, firstname in enumerate(holders_firstnames):
+                data = {
+                    'firstname': holders_firstnames[i],
+                    'lastname': holders_lastnames[i]
+                }
+                holder_user = TicketingManager.get_or_create_user_by_email(holders_emails[i], data)
+                ticket_holder = TicketHolder(firstname=data['firstname'],
+                                             lastname=data['lastname'],
+                                             ticket_id=int(holders_ticket_ids[i]),
+                                             email=holder_user.email, order_id=order.id)
+                DataManager.add_attendee_role_to_event(holder_user, order.event_id)
+                db.session.add(ticket_holder)
+
             # add attendee role to user
             DataManager.add_attendee_role_to_event(user, order.event_id)
             # save items
             save_to_db(order)
-            save_to_db(ticket_holder)
-
             return order
         else:
             return False
