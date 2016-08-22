@@ -762,6 +762,38 @@
       ], 
       "type": "object"
     }, 
+    "Order": {
+      "properties": {
+        "amount": {
+          "example": 0.0, 
+          "format": "float", 
+          "type": "number"
+        }, 
+        "completed_at": {
+          "example": "2016-06-06T11:22:33", 
+          "format": "date-time", 
+          "type": "string"
+        }, 
+        "id": {
+          "example": 0, 
+          "format": "int", 
+          "type": "integer"
+        }, 
+        "identifier": {
+          "type": "string"
+        }, 
+        "paid_via": {
+          "type": "string"
+        }, 
+        "payment_mode": {
+          "type": "string"
+        }, 
+        "status": {
+          "type": "string"
+        }
+      }, 
+      "type": "object"
+    }, 
     "Session": {
       "properties": {
         "audio": {
@@ -1349,6 +1381,60 @@
       "required": [
         "name"
       ], 
+      "type": "object"
+    }, 
+    "Ticket": {
+      "properties": {
+        "description": {
+          "type": "string"
+        }, 
+        "id": {
+          "example": 0, 
+          "format": "int", 
+          "type": "integer"
+        }, 
+        "name": {
+          "type": "string"
+        }, 
+        "price": {
+          "example": 0.0, 
+          "format": "float", 
+          "type": "number"
+        }, 
+        "type": {
+          "type": "string"
+        }
+      }, 
+      "type": "object"
+    }, 
+    "TicketHolder": {
+      "properties": {
+        "checked_in": {
+          "type": "boolean"
+        }, 
+        "email": {
+          "example": "email@domain.com", 
+          "format": "email", 
+          "type": "string"
+        }, 
+        "firstname": {
+          "type": "string"
+        }, 
+        "id": {
+          "example": 0, 
+          "format": "int", 
+          "type": "integer"
+        }, 
+        "lastname": {
+          "type": "string"
+        }, 
+        "order": {
+          "$ref": "#/definitions/Order"
+        }, 
+        "ticket": {
+          "$ref": "#/definitions/Ticket"
+        }
+      }, 
       "type": "object"
     }, 
     "Token": {
@@ -3710,6 +3796,189 @@
         ]
       }
     }, 
+    "/events/{event_id}/ticketing/check_in_toggle/{holder_identifier}": {
+      "parameters": [
+        {
+          "in": "path", 
+          "name": "event_id", 
+          "required": true, 
+          "type": "integer"
+        }, 
+        {
+          "in": "path", 
+          "name": "holder_identifier", 
+          "required": true, 
+          "type": "string"
+        }
+      ], 
+      "post": {
+        "operationId": "post_attendee_check_in_toggle", 
+        "parameters": [
+          {
+            "description": "An optional fields mask", 
+            "format": "mask", 
+            "in": "header", 
+            "name": "X-Fields", 
+            "type": "string"
+          }
+        ], 
+        "responses": {
+          "200": {
+            "description": "Success", 
+            "schema": {
+              "$ref": "#/definitions/TicketHolder"
+            }
+          }, 
+          "201": {
+            "description": "Resource created successfully"
+          }, 
+          "400": {
+            "description": "Validation error", 
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }, 
+          "401": {
+            "description": "Authentication failure", 
+            "schema": {
+              "$ref": "#/definitions/NotAuthorizedError"
+            }
+          }, 
+          "404": {
+            "description": "Event does not exist", 
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          }
+        }, 
+        "summary": "Toggle and Attendee's Checked in State", 
+        "tags": [
+          "ticketing"
+        ]
+      }
+    }, 
+    "/events/{event_id}/ticketing/check_in_toggle/{holder_identifier}/check_in": {
+      "parameters": [
+        {
+          "in": "path", 
+          "name": "event_id", 
+          "required": true, 
+          "type": "integer"
+        }, 
+        {
+          "in": "path", 
+          "name": "holder_identifier", 
+          "required": true, 
+          "type": "string"
+        }
+      ], 
+      "post": {
+        "operationId": "post_attendee_check_in", 
+        "parameters": [
+          {
+            "description": "An optional fields mask", 
+            "format": "mask", 
+            "in": "header", 
+            "name": "X-Fields", 
+            "type": "string"
+          }
+        ], 
+        "responses": {
+          "200": {
+            "description": "Success", 
+            "schema": {
+              "$ref": "#/definitions/TicketHolder"
+            }
+          }, 
+          "201": {
+            "description": "Resource created successfully"
+          }, 
+          "400": {
+            "description": "Validation error", 
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }, 
+          "401": {
+            "description": "Authentication failure", 
+            "schema": {
+              "$ref": "#/definitions/NotAuthorizedError"
+            }
+          }, 
+          "404": {
+            "description": "Event does not exist", 
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          }
+        }, 
+        "summary": "Check in attendee", 
+        "tags": [
+          "ticketing"
+        ]
+      }
+    }, 
+    "/events/{event_id}/ticketing/check_in_toggle/{holder_identifier}/check_out": {
+      "parameters": [
+        {
+          "in": "path", 
+          "name": "event_id", 
+          "required": true, 
+          "type": "integer"
+        }, 
+        {
+          "in": "path", 
+          "name": "holder_identifier", 
+          "required": true, 
+          "type": "string"
+        }
+      ], 
+      "post": {
+        "operationId": "post_attendee_check_out", 
+        "parameters": [
+          {
+            "description": "An optional fields mask", 
+            "format": "mask", 
+            "in": "header", 
+            "name": "X-Fields", 
+            "type": "string"
+          }
+        ], 
+        "responses": {
+          "200": {
+            "description": "Success", 
+            "schema": {
+              "$ref": "#/definitions/TicketHolder"
+            }
+          }, 
+          "201": {
+            "description": "Resource created successfully"
+          }, 
+          "400": {
+            "description": "Validation error", 
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }, 
+          "401": {
+            "description": "Authentication failure", 
+            "schema": {
+              "$ref": "#/definitions/NotAuthorizedError"
+            }
+          }, 
+          "404": {
+            "description": "Event does not exist", 
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          }
+        }, 
+        "summary": "Check out attendee", 
+        "tags": [
+          "ticketing"
+        ]
+      }
+    }, 
     "/events/{event_id}/tracks": {
       "get": {
         "operationId": "get_track_list", 
@@ -4338,6 +4607,10 @@
     {
       "description": "Error Responses", 
       "name": "errors"
+    }, 
+    {
+      "description": "Ticketing", 
+      "name": "ticketing"
     }
   ]
 }
