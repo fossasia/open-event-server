@@ -11,7 +11,7 @@ from app.models.export_jobs import ExportJob
 from app.models.event import Event as EventModel
 from app.helpers.data import save_to_db
 from app.helpers.data_getter import DataGetter
-from app.helpers.helpers import send_email_after_export
+from app.helpers.helpers import send_email_after_export, send_notif_after_export
 
 from ..events import DAO as EventDAO, EVENT as EVENT_MODEL
 from ..microlocations import DAO as MicrolocationDAO, MICROLOCATION
@@ -230,6 +230,8 @@ def send_export_mail(event_id, result):
     else:
         event_name = event.name
     send_email_after_export(job.user_email, event_name, result)
+    user = DataGetter.get_user_by_email(job.user_email)
+    send_notif_after_export(user, event_name, result)
 
 
 # FIELD DATA FORMATTERS

@@ -9,10 +9,45 @@ from app.models.notifications import (
     SESSION_ACCEPT_REJECT,
     INVITE_PAPERS,
     AFTER_EVENT,
-    EVENT_PUBLISH
+    EVENT_PUBLISH,
+    USER_CHANGE_EMAIL,
+    TICKET_PURCHASED,
+    EVENT_EXPORT_FAIL,
+    EVENT_EXPORTED,
 )
 
 NOTIFS = {
+    EVENT_EXPORTED: {
+        'recipient': 'User',
+        'title': 'Event {event_name} has been exported',
+        'message': (
+            "Event <strong>{event_name}</strong> has been exported successfully."
+            "<br><br><a href='{download_url}' class='btn btn-info btn-sm'>Download</a>"
+        )
+    },
+    EVENT_EXPORT_FAIL: {
+        'recipient': 'User',
+        'title': 'Export of event {event_name} failed',
+        'message': (
+            "The following error occured:<br>"
+            "<pre>{error_text}</pre>"
+        )
+    },
+    TICKET_PURCHASED: {
+        'recipient': 'User',
+        'title': 'Your order invoice and tickets ({invoice_id})',
+        'message': (
+            "Your order has been processed successfully."
+            "<br><br><a href='{order_url}' class='btn btn-info btn-sm'>View Invoice</a>"
+        )
+    },
+    USER_CHANGE_EMAIL: {
+        'recipient': 'User',
+        'title': 'Your email has been changed',
+        'message': (
+            "Your email has been changed from {email} to {new_email}.<br>Please verify your new email."
+        )
+    },
     AFTER_EVENT: {
         'title': 'Event {event_name} completed',
         'message': """The event <strong>{event_name}</strong> has been completed.<br><br>""",
@@ -48,7 +83,7 @@ NOTIFS = {
     },
     NEXT_EVENT: {
         'title': 'Event {event_name} is coming soon',
-        'message': """Here are the upcoming events: {up_coming_events}.<br><br>
+        'message': """Here are upcoming events: {up_coming_events}.<br><br>
             <a href='{link}' class='btn btn-info btn-sm'>View Event</a>""",
         'recipient': 'Organizer, Speaker',
     },

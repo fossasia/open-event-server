@@ -1,13 +1,18 @@
 from . import db
 
+USER_CHANGE_EMAIL = "User email"
+TICKET_PURCHASED = 'Ticket(s) Purchased'
 EVENT_ROLE_INVITE = 'Event Role Invitation'
 NEW_SESSION = 'New Session Proposal'
+EVENT_EXPORT_FAIL = 'Event Export Failed'
+EVENT_EXPORTED = 'Event Exported'
 SESSION_SCHEDULE = 'Session Schedule Change'
 NEXT_EVENT = 'Next Event'
 SESSION_ACCEPT_REJECT = 'Session Accept or Reject'
 INVITE_PAPERS = 'Invitation For Papers'
 AFTER_EVENT = 'After Event'
 EVENT_PUBLISH = 'Event Published'
+
 
 class Notification(db.Model):
     """

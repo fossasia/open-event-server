@@ -841,6 +841,7 @@ class DataManager(object):
             form_hash = serializer.dumps(data)
             link = url_for('admin.create_account_after_confirmation_view', hash=form_hash, _external=True)
             Helper.send_email_when_changes_email(user.email, form['email'])
+            Helper.send_notif_when_changes_email(user, user.email, form['email'])
             Helper.send_email_confirmation(form, link)
             user.email = form['email']
 

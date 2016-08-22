@@ -104,7 +104,7 @@ MAILS = {
         'subject': 'Your email has been already changed',
         'message': (
             "Hi {email},<br/>" +
-            "Your email has been already changed from {email} to {new_email}. You should verified your new email"
+            "Your email has been already changed from {email} to {new_email}. You should verify your new email"
         )
     },
     PASSWORD_RESET: {

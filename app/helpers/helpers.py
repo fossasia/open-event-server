@@ -27,6 +27,11 @@ from app.models.notifications import (
     NEXT_EVENT as NOTIF_NEXT_EVENT,
     SESSION_ACCEPT_REJECT as NOTIF_SESSION_ACCEPT_REJECT,
     INVITE_PAPERS as NOTIF_INVITE_PAPERS,
+    USER_CHANGE_EMAIL as NOTIF_USER_CHANGE_EMAIL,
+    TICKET_PURCHASED as NOTIF_TICKET_PURCHASED,
+    EVENT_EXPORT_FAIL as NOTIF_EVENT_EXPORT_FAIL,
+    EVENT_EXPORTED as NOTIF_EVENT_EXPORTED,
+
 )
 
 from system_notifications import NOTIFS
@@ -389,6 +394,46 @@ def send_notification(user, action, title, message):
     # DataManager imported here to prevent circular dependency
     from app.helpers.data import DataManager
     DataManager.create_user_notification(user, action, title, message)
+
+
+def send_notif_after_export(user, event_name, result):
+    """send notification after event export"""
+    if '__error' in result:
+        send_notification(
+            user=user,
+            action=NOTIF_EVENT_EXPORT_FAIL,
+            title=NOTIFS[NOTIF_EVENT_EXPORT_FAIL]['title'].format(event_name=event_name),
+            message=NOTIFS[NOTIF_EVENT_EXPORT_FAIL]['message'].format(error_text=result['result']['message'])
+        )
+    else:
+        send_notification(
+            user=user,
+            action=NOTIF_EVENT_EXPORTED,
+            title=NOTIFS[NOTIF_EVENT_EXPORTED]['title'].format(event_name=event_name),
+            message=NOTIFS[NOTIF_EVENT_EXPORTED]['message'].format(
+                event_name=event_name, download_url=result['download_url'])
+        )
+
+
+def send_notif_for_after_purchase(user, invoice_id, order_url):
+    """Send notification with order invoice link after purchase"""
+    send_notification(
+        user=user,
+        action=NOTIF_TICKET_PURCHASED,
+        title=NOTIFS[NOTIF_TICKET_PURCHASED]['title'].format(invoice_id=invoice_id),
+        message=NOTIFS[NOTIF_TICKET_PURCHASED]['message'].format(order_url=order_url)
+    )
+
+
+def send_notif_when_changes_email(user, old_email, new_email):
+    send_notification(
+        user=user,
+        action=NOTIF_USER_CHANGE_EMAIL,
+        title=NOTIFS[NOTIF_USER_CHANGE_EMAIL]['title'],
+        message=NOTIFS[NOTIF_USER_CHANGE_EMAIL]['message'].format(
+            email=old_email, new_email=new_email
+        )
+    )
 
 
 def send_notif_event_role(user, role_name, event_name, accept_link, decline_link):
