@@ -2,7 +2,7 @@ import re
 import colour
 from datetime import datetime
 from flask import request
-from flask.ext.restplus.fields import Raw, Nested, List, Boolean
+from flask.ext.restplus.fields import Raw, Nested, List
 
 
 EMAIL_REGEX = re.compile(r'\S+@\S+\.\S+')
@@ -221,6 +221,18 @@ class Float(CustomField):
         except Exception:
             self.validation_error = '%s should be a Number'
             return False
+
+
+class Boolean(CustomField):
+    """Custom Boolean Field"""
+    __schema_type__ = 'boolean'
+    __schema_example__ = False
+
+    def validate(self, value):
+        if type(value) != bool:
+            return False
+        else:
+            return True
 
 
 class ChoiceString(String):
