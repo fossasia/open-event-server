@@ -17,7 +17,8 @@ from ..models.track import Track
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, NEXT_EVENT, \
     USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, EVENT_PUBLISH, Mail, \
     AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, TICKET_PURCHASED, EVENT_EXPORTED, \
-    EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_FOLLOWUP_EMAIL, MONTHLY_PAYMENT_EMAIL
+    EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_FOLLOWUP_EMAIL, MONTHLY_PAYMENT_EMAIL, \
+    EVENT_IMPORTED, EVENT_IMPORT_FAIL
 from system_mails import MAILS
 from app.models.notifications import (
     # Prepended with `NOTIF_` to differentiate from mails
@@ -349,7 +350,29 @@ def send_email_after_export(email, event_name, result):
             email,
             action=EVENT_EXPORTED,
             subject=MAILS[EVENT_EXPORTED]['subject'].format(event_name=event_name),
-            html=MAILS[EVENT_EXPORTED]['message'].format(download_url=result['download_url'])
+            html=MAILS[EVENT_EXPORTED]['message'].format(
+                download_url=request.url_root.strip('/') + result['download_url']
+            )
+        )
+
+
+def send_email_after_import(email, result):
+    """send email after event import"""
+    if '__error' in result:
+        send_email(
+            email,
+            action=EVENT_IMPORT_FAIL,
+            subject=MAILS[EVENT_IMPORT_FAIL]['subject'],
+            html=MAILS[EVENT_IMPORT_FAIL]['message'].format(error_text=result['result']['message'])
+        )
+    else:
+        send_email(
+            email,
+            action=EVENT_IMPORTED,
+            subject=MAILS[EVENT_IMPORTED]['subject'].format(event_name=result['name']),
+            html=MAILS[EVENT_IMPORTED]['message'].format(
+                event_url=request.url_root.strip('/') + '/events/%d' % result['id']
+            )
         )
 
 

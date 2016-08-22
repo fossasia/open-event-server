@@ -6,7 +6,7 @@ from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
     USER_REGISTER, PASSWORD_RESET, EVENT_ROLE, SESSION_ACCEPT_REJECT, \
     SESSION_SCHEDULE, NEXT_EVENT, EVENT_PUBLISH, AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, \
     TICKET_PURCHASED, EVENT_EXPORTED, EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_EMAIL, \
-    MONTHLY_PAYMENT_FOLLOWUP_EMAIL
+    MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_IMPORTED, EVENT_IMPORT_FAIL
 
 MAILS = {
     EVENT_PUBLISH: {
@@ -179,5 +179,21 @@ MAILS = {
             "<br><br><em>Thank you for using Open Event.</em>"
         ),
         'sent_at': '15th day of the month'
+    },
+    EVENT_IMPORTED: {
+        'recipient': 'User',
+        'subject': 'Event {event_name} has been imported',
+        'message': (
+            "Click on the following link to manage your event" +
+            "<br> <a href='{event_url}'>Link</a>"
+        )
+    },
+    EVENT_IMPORT_FAIL: {
+        'recipient': 'User',
+        'subject': 'Import of event failed',
+        'message': (
+            "The error was as follows - <br>" +
+            "<pre>{error_text}</pre>"
+        )
     }
 }

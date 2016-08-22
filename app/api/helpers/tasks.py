@@ -10,7 +10,7 @@ from app import celery
 from app.helpers.request_context_task import RequestContextTask
 from errors import BaseError, ServerError
 from export_helpers import send_export_mail
-from import_helpers import update_import_job
+from import_helpers import update_import_job, send_import_mail
 
 from ..imports import import_event_task_base
 from ..exports import event_export_task_base
@@ -22,17 +22,21 @@ def import_event_task(self, file):
     """Import Event Task"""
     task_id = self.request.id.__str__()  # str(async result)
     try:
-        item = import_event_task_base(self, file)
-        update_import_job(task_id, item['id'], 'SUCCESS')
-        return item
+        result = import_event_task_base(self, file)
+        update_import_job(task_id, result['id'], 'SUCCESS')
+        # return item
     except BaseError as e:
         print traceback.format_exc()
         update_import_job(task_id, e.message, e.status)
-        return {'__error': True, 'result': e.to_dict()}
+        result = {'__error': True, 'result': e.to_dict()}
     except Exception:
         print traceback.format_exc()
         update_import_job(task_id, e.message, e.status)
-        return {'__error': True, 'result': ServerError().to_dict()}
+        result = {'__error': True, 'result': ServerError().to_dict()}
+    # send email
+    send_import_mail(task_id, result)
+    # return result
+    return result
 
 
 @celery.task(base=RequestContextTask, name='export.event', bind=True)

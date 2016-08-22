@@ -2,7 +2,8 @@ from flask.ext.restplus import Resource, Namespace, marshal
 from flask import jsonify, url_for, current_app
 
 from app.helpers.data import record_activity
-from helpers.import_helpers import get_file_from_request, import_event_json, create_import_job
+from helpers.import_helpers import get_file_from_request, import_event_json, create_import_job, \
+    send_import_mail
 from helpers.helpers import requires_auth
 from helpers.utils import TASK_RESULTS
 from events import EVENT
@@ -26,6 +27,7 @@ class EventImportJson(Resource):
             pass
         # if testing
         if current_app.config.get('CELERY_ALWAYS_EAGER'):
+            send_import_mail(task.id, task.get())
             TASK_RESULTS[task.id] = {
                 'result': task.get(),
                 'state': task.state
