@@ -13,7 +13,7 @@ from app.models.import_jobs import ImportJob
 from app.helpers.storage import UploadedFile, upload, UploadedMemory, \
     UPLOAD_PATHS
 from app.helpers.data import save_to_db
-from app.helpers.helpers import update_state
+from app.helpers.helpers import update_state, send_email_after_import
 from app.helpers.update_version import VersionUpdater
 
 from ..events import DAO as EventDAO, LinkDAO as SocialLinkDAO
@@ -399,8 +399,16 @@ def create_import_job(task):
 def update_import_job(task, result, result_status):
     """update import job status"""
     ij = ImportJob.query.filter_by(task=task).first()
-    if ij is None:
+    if not ij:
         return
     ij.result = result
     ij.result_status = result_status
     save_to_db(ij, 'Import job updated')
+
+
+def send_import_mail(task, result):
+    """send email after import"""
+    ij = ImportJob.query.filter_by(task=task).first()
+    if not ij:
+        return
+    send_email_after_import(email=ij.user.email, result=result)
