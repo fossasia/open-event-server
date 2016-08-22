@@ -34,6 +34,8 @@ class Setting(db.Model):
     in_client_secret = db.Column(db.String)
     # Sendgrid
     sendgrid_key = db.Column(db.String)
+    # Google Analytics
+    analytics_key = db.Column(db.String)
     # App secret
     secret = db.Column(db.String)
     # storage place, local, s3, .. can be more in future
@@ -58,6 +60,7 @@ class Setting(db.Model):
                  secret=None, storage_place=None,
                  google_url=None, github_url=None,
                  twitter_url=None, support_url=None,
+                 analytics_key=None,
                  paypal_mode=None,
                  paypal_sandbox_username=None,
                  paypal_sandbox_password=None,
@@ -78,6 +81,7 @@ class Setting(db.Model):
         self.in_client_id = in_client_id
         self.in_client_secret = in_client_secret
         self.sendgrid_key = sendgrid_key
+        self.analytics_key = analytics_key
         self.secret = secret
         self.storage_place = storage_place
         self.google_url = google_url
