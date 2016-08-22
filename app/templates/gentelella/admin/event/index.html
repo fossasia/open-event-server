@@ -36,14 +36,14 @@
                                     <a href="#tab_content3" id="profile-tab2" data-toggle="tab">Past</a>
                                 </li>
                                 <li role="presentation" class="">
-                                    <a href="#" id="all-tab" data-toggle="modal" data-target="#importModal">Import</a>
+                                    <a href="#tab_content4" id="profile-tab3" data-toggle="tab">Import</a>
                                 </li>
                             </ul>
                             <div class="nav bar_tabs" role="tablist">
-                                    <a href="#tab_content1" class="accordion-link active"id="home-tab" data-toggle="tab">Live</a>
-                                    <a href="#tab_content2" class="accordion-link"id="profile-tab" data-toggle="tab">Draft</a>
-                                    <a href="#tab_content3" class="accordion-link"id="profile-tab2" data-toggle="tab">Past</a>
-                                    <a href="#" id="all-tab" class="accordion-link"data-toggle="modal" data-target="#importModal">Import</a>
+                                    <a href="#tab_content1" class="accordion-link active" id="home-tab" data-toggle="tab">Live</a>
+                                    <a href="#tab_content2" class="accordion-link" id="profile-tab" data-toggle="tab">Draft</a>
+                                    <a href="#tab_content3" class="accordion-link" id="profile-tab2" data-toggle="tab">Past</a>
+                                    <a href="#tab_content4" class="accordion-link" id="profile-tab3" data-toggle="tab">Import</a>
                             </div>
                             <div id="myTabContent" class="tab-content">
                                 <div class="tab-pane fade active in" id="tab_content1">
@@ -55,6 +55,9 @@
                                 <div class="tab-pane fade in" id="tab_content3">
                                     {{ table.events_table(past_events) }}
                                 </div>
+                                <div class="tab-pane fade in" id="tab_content4">
+                                  {% include 'gentelella/admin/event/_import_modal.html' %}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -63,7 +66,6 @@
             </div>
         </div>
     </div>
-    {% include 'gentelella/admin/event/_import_modal.html' %}
 
 {% endblock %}
 {% block tail_js %}
@@ -71,7 +73,6 @@
     <script src="{{ url_for('static', filename='admin/lib/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/bootstrap-progressbar/bootstrap-progressbar.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/admin/event/importEvent.js') }}"></script>
     <script type="text/javascript">
         $('.table').DataTable();
         $(document).ready(function() {

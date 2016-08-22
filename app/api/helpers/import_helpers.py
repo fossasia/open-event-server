@@ -5,10 +5,11 @@ import re
 import requests
 import traceback
 import json
-from flask import request
+from flask import request, g
 from werkzeug import secure_filename
 
 from flask import current_app as app
+from app.models.import_jobs import ImportJob
 from app.helpers.storage import UploadedFile, upload, UploadedMemory, \
     UPLOAD_PATHS
 from app.helpers.data import save_to_db
@@ -387,3 +388,19 @@ def write_file(file, data):
     fp = open(file, 'w')
     fp.write(data)
     fp.close()
+
+
+def create_import_job(task):
+    """create import record in db"""
+    ij = ImportJob(task=task, user=g.user)
+    save_to_db(ij, 'Import job saved')
+
+
+def update_import_job(task, result, result_status):
+    """update import job status"""
+    ij = ImportJob.query.filter_by(task=task).first()
+    if ij is None:
+        return
+    ij.result = result
+    ij.result_status = result_status
+    save_to_db(ij, 'Import job updated')

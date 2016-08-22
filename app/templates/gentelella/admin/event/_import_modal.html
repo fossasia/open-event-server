@@ -1,26 +1,75 @@
-<!-- import event modal -->
-<div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Import Event</h4>
-      </div>
-      <div class="modal-body">
-        <h5>Select event zip</h5><br>
-        <form>
-            <!-- <label class="btn btn-default btn-file"> -->
-                <input type="file" name="file" id="import_file">
-            <!-- </label> -->
-        </form>
-        <br>
-        <span id="import_status"></span>
-        <span id="import_error" class="red"></span>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="btnImportEvent" onclick="importEventZip();">Create Event</button>
-      </div>
-    </div>
+
+<script src="{{ url_for('static', filename='js/admin/event/importEvent.js') }}"></script>
+
+
+<div class="col-md-10 col-md-offset-1">
+
+  <h3>Import Event</h3>
+  <hr>
+
+  <div>
+    <h5>Select event zip</h5>
+    <form>
+        <input type="file" name="file" id="import_file">
+    </form>
   </div>
+
+  <div style="margin-top: 15px;">
+    <button type="button" class="btn btn-primary" id="btnImportEvent" onclick="importEventZip();">Create Event</button>
+  </div>
+
+  <div style="margin-top: 10px;">
+    <span id="import_status"></span>
+    <span id="import_error" class="red"></span>
+  </div>
+
+  <br><br>
+
+  <h3>Previous Imports</h3>
+  <hr>
+
+  <div>
+
+  <table class="table table-striped">
+
+    <tr>
+      <th>State</th>
+      <th>Message</th>
+      <th>Started</th>
+    </tr>
+
+    {% for e in imported_events %}
+      <tr>
+      <td>
+      {% if e.result_status == "SUCCESS" %}
+        <i class="fa fa-check-circle green" aria-hidden="true"></i> Success
+      {% elif e.result_status %}
+        <i class="fa fa-exclamation-circle red" aria-hidden="true"></i> {{e.result_status}}
+      {% else %}
+        <i class="fa fa-circle-o-notch yellow" aria-hidden="true"></i> Processing
+      {% endif %}
+      </td>
+      <td id="task_msg_{{e.id}}">
+        {% if e.result_status == "SUCCESS" %}
+          Check your event <a href="/events/{{ e.result }}">here</a>
+        {% elif e.result %}
+          {{ e.result }}
+        {% endif %}
+      </td>
+      <td>
+      {{ e.start_time | humanize_alt }}
+      </td>
+      <!-- start job -->
+      {% if not e.result_status %}
+        <script>
+          importTaskTable("{{e.task}}", "#task_msg_{{e.id}}");
+        </script>
+      {% endif %}
+      <!-- done -->
+      </tr>
+    {% endfor %}
+  </table>
+  </div>
+
 </div>
 
