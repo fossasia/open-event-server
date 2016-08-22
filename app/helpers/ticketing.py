@@ -113,7 +113,7 @@ class TicketingManager(object):
     def attendee_check_in_out(id, state=None):
         holder = TicketingManager.get_attendee(id)
         if holder:
-            if state:
+            if state is not None:
                 holder.checked_in = state
             else:
                 holder.checked_in = not holder.checked_in
