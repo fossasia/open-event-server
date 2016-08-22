@@ -8,6 +8,7 @@ class Config(object):
     DEBUG = False
     TESTING = False
     CSRF_ENABLED = True
+    SERVER_NAME = os.getenv('SERVER_NAME')
     CORS_HEADERS = 'Content-Type'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     ERROR_404_HELP = False
