@@ -350,7 +350,9 @@ def send_email_after_export(email, event_name, result):
             email,
             action=EVENT_EXPORTED,
             subject=MAILS[EVENT_EXPORTED]['subject'].format(event_name=event_name),
-            html=MAILS[EVENT_EXPORTED]['message'].format(download_url=result['download_url'])
+            html=MAILS[EVENT_EXPORTED]['message'].format(
+                download_url=request.url_root.strip('/') + result['download_url']
+            )
         )
 
 
@@ -368,7 +370,9 @@ def send_email_after_import(email, result):
             email,
             action=EVENT_IMPORTED,
             subject=MAILS[EVENT_IMPORTED]['subject'].format(event_name=result['name']),
-            html=MAILS[EVENT_IMPORTED]['message'].format(event_url='/events/%d' % result['id'])
+            html=MAILS[EVENT_IMPORTED]['message'].format(
+                event_url=request.url_root.strip('/') + '/events/%d' % result['id']
+            )
         )
 
 
