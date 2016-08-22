@@ -1,8 +1,11 @@
 """Copyright 2015 Rafal Kowalski"""
 
 # Ignore ExtDeprecationWarnings for Flask 0.11 - see http://stackoverflow.com/a/38080580
+import base64
 import warnings
+from StringIO import StringIO
 
+import qrcode
 from flask.exthook import ExtDeprecationWarning
 from forex_python.converter import CurrencyCodes
 from pytz import utc
@@ -176,9 +179,32 @@ def fee_helpers():
 
 
 @app.context_processor
+def qrcode_generator():
+    def generate_qr(text):
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=0,
+        )
+        qr.add_data(text)
+        qr.make(fit=True)
+        img = qr.make_image()
+
+        buffer = StringIO()
+        img.save(buffer, format="JPEG")
+        img_str = base64.b64encode(buffer.getvalue())
+        return img_str
+    return dict(generate_qr=generate_qr)
+
+@app.context_processor
 def event_types():
     event_types = DataGetter.get_event_types()
     return dict(event_typo=event_types[:10])
+
+@app.context_processor
+def base_dir():
+    return dict(base_dir=app.config['BASE_DIR'])
 
 
 @app.context_processor

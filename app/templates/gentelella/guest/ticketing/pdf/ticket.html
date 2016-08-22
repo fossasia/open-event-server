@@ -1,42 +1,69 @@
+<!--suppress ALL -->
 <html xmlns:pdf="https://github.com/xhtml2pdf/xhtml2pdf/blob/master/doc/usage.rst">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    <style type="text/css">
+    <style>
         @page {
             size: a4 portrait;
-            background-image: url('F:\Projects\fossasia\open-event-orga-server\static\data\ticket-trans-notext.png');
-            margin: 2cm;
+            background-image: url('{{ base_dir }}/static/data/ticket-trans-notext.png');
+            margin: 0;
+
+            @frame col1_frame {             /* Content frame 1 */
+                left: 80pt;  top: 30pt; height: 140pt;
+            }
+
+            @frame qrcode {
+                left: 455pt;  top: 35pt;
+                width: 100pt; height: 120pt;
+            }
+            @frame number_frame {
+                 left: 455pt;  top: 25pt;
+                width: 100pt; height: 30pt;
+            }
+
+
+             @frame col2_frame {
+                left: 440pt; top: 170pt;
+            }
+        }
+
+        #qrcode {
+            -pdf-frame-break: true;
+        }
+
+        .label {
+            color: #858585;
         }
 
     </style>
 </head>
 <body>
-<div id="ticket">
-    {% if event %}<img id="logo" src="data:image/png;base64,{{ event.logo_base64 }}"/>{% endif %}
-    <div id="event-info">
-        <span class="label">EVENT</span>
-        <span id="title" class="value">Event name</span>
-
-        <span class="label">LOCATION</span>
-        <span id="location" class="value">India</span>
-
-        <span class="label">DATE AND TIME</span>
-        <span class="value">21/21/21</span>
-        <span class="label">to</span>
-        <span class="value">21/21/21</span>
-    </div>
-<pdf:barcode value="BARCODE TEXT COMES HERE" type="code128" checksum="0" humanreadable="0" align="right" />
-
-    <div id="stub-info">
-        <span id="purchased-on">Purchased on 2/22/22</span>
-        <img id="qrcode" src="data:image/png;base64,{{ qr }}"/>
-        <span id="ticket-num" class="value">#22222</span>
-        <div id="attendee-info">
-            <span class="label">Attendee: Ticket</span>
-            <span id="name" class="value">JD</span>
-            <span id="email" class="value">js@example.com</span>
-        </div>
-    </div>
-</div>
 </body>
 </html>
+{% for holder in order.ticket_holders %}
+        <span class="label">Event</span><br>
+        <span style="font-size: 20px;">{{ order.event.name }}</span><br><br>
+
+        <span class="label">Location</span><br>
+        <span style="font-size: 15px;">{{ order.event.location_name }}</span><br><br>
+
+        <span class="label">Date and Time</span><br>
+        <span  style="font-size: 15px;">{{ order.event.start_time | datetime }} to {{ order.event.end_time | datetime }}</span>
+        <br><br>
+
+        <span class="label">Type</span><br>
+        <span  style="font-size: 20px;">{{ holder.ticket.name }}</span>
+        <br><br>
+
+        <div id="qrcode">
+            <img src="data:image/png;base64,{{ holder.qr_code }}" />
+        </div>
+        <strong style="color: #ffffff; text-align: center">#{{ order.get_invoice_number() }}/{{ holder.id }}</strong>
+
+        <div>
+            <span>{{ holder.name }}</span><br>
+            <span>{{ holder.email }}</span>
+        </div>
+
+    <pdf:nextpage />
+{% endfor %}
