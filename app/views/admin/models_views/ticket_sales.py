@@ -98,7 +98,7 @@ class TicketSalesView(BaseView):
     @flask_login.login_required
     def display_attendees(self, event_id):
         event = DataGetter.get_event(event_id)
-        orders = TicketingManager.get_orders(event_id)
+        orders = TicketingManager.get_orders(event_id, status='completed')
         return self.render('/gentelella/admin/event/tickets/attendees.html', event=event,
                            event_id=event_id, orders=orders)
 
@@ -200,3 +200,17 @@ class TicketSalesView(BaseView):
         delete_from_db(discount_code, "Discount code deleted")
         flash("The discount code has been deleted.", "warning")
         return redirect(url_for('.discount_codes_view', event_id=event_id))
+
+    @expose('/attendees/check_in_toggle/<holder_id>/', methods=('POST',))
+    @flask_login.login_required
+    def attendee_check_in_toggle(self, event_id, holder_id):
+        holder = TicketingManager.attendee_check_in_out(holder_id)
+        if holder:
+            return jsonify({
+                'status': 'ok',
+                'checked_in': holder.checked_in
+            })
+
+        return jsonify({
+            'status': 'invalid_holder_id'
+        })

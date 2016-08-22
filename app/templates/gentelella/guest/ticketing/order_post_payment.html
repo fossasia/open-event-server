@@ -33,8 +33,8 @@
     <button type="button" class="btn btn-info hidden-print" onclick="window.print();"><i class="fa fa-print fa-fw"></i>
         Print Invoice
     </button>
-    <a href="{{ url_for('ticketing.view_order_after_payment_pdf', order_identifier=order.identifier) }}"
-       class="btn btn-default hidden-print" target="_blank"><i class="fa fa-file-pdf-o fa-fw"></i> Download Invoice</a>
+    <a href="{{ url_for('ticketing.view_order_tickets_after_payment_pdf', order_identifier=order.identifier) }}"
+       class="btn btn-default hidden-print" target="_blank"><i class="fa fa-file-pdf-o fa-fw"></i> Download Tickets</a>
 {% endblock %}
 
 {% block tail_js %}

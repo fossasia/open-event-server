@@ -95,6 +95,34 @@ class TicketingManager(object):
             return 0
 
     @staticmethod
+    def get_attendee(id):
+        holder = None
+        if represents_int(id):
+            holder = TicketHolder.query.get(id)
+        else:
+            id_splitted = id.split("/")
+            order_identifier = id_splitted[0]
+            holder_id = id_splitted[1]
+            order = TicketingManager.get_order_by_identifier(order_identifier)
+            attendee = TicketingManager.get_attendee(holder_id)
+            if attendee.order_id == order.id:
+                holder = attendee
+        return holder
+
+    @staticmethod
+    def attendee_check_in_out(id, state=None):
+        holder = TicketingManager.get_attendee(id)
+        if holder:
+            if state:
+                holder.checked_in = state
+            else:
+                holder.checked_in = not holder.checked_in
+            save_to_db(holder)
+            return holder
+        else:
+            return None
+
+    @staticmethod
     def get_order_expiry():
         return 10
 
