@@ -67,6 +67,18 @@ class TicketingView(BaseView):
             'inline; filename=%s.pdf' % order.get_invoice_number()
         return response
 
+    @expose('/<order_identifier>/view/tickets/pdf/', methods=('GET',))
+    def view_order_tickets_after_payment_pdf(self, order_identifier):
+        order = TicketingManager.get_and_set_expiry(order_identifier)
+        if not order or order.status != 'completed':
+            abort(404)
+        pdf = create_pdf(self.render('/gentelella/guest/ticketing/pdf/ticket.html', order=order))
+        response = make_response(pdf.getvalue())
+        response.headers['Content-Type'] = 'application/pdf'
+        response.headers['Content-Disposition'] = \
+            'inline; filename=%s.pdf' % "test"
+        return response
+
     @expose('/initiate/payment/', methods=('POST',))
     def initiate_order_payment(self):
         result = TicketingManager.initiate_order_payment(request.form)

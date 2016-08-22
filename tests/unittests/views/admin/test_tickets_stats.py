@@ -7,6 +7,7 @@ from flask import url_for
 from app.helpers.data import save_to_db
 from app.helpers.ticketing import TicketingManager
 from app import current_app as app
+from app.models.ticket_holder import TicketHolder
 from tests.unittests.object_mother import ObjectMother
 from tests.unittests.views.guest.test_ticketing import get_event_ticket
 from tests.unittests.views.view_test_case import OpenEventViewTestCase
@@ -59,6 +60,8 @@ class TestsTicketsStats(OpenEventViewTestCase):
         order.paid_via = "stripe"
         order.payment_mode = "card"
         save_to_db(order)
+        holder = TicketHolder(firstname="John", lastname="Doe", order_id=order.id, ticket_id=ticket.id)
+        save_to_db(holder)
         return order
 
     def test_tickets_view(self):

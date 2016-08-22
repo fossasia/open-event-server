@@ -95,6 +95,34 @@ class TicketingManager(object):
             return 0
 
     @staticmethod
+    def get_attendee(id):
+        holder = None
+        if represents_int(id):
+            holder = TicketHolder.query.get(id)
+        else:
+            id_splitted = id.split("/")
+            order_identifier = id_splitted[0]
+            holder_id = id_splitted[1]
+            order = TicketingManager.get_order_by_identifier(order_identifier)
+            attendee = TicketingManager.get_attendee(holder_id)
+            if attendee.order_id == order.id:
+                holder = attendee
+        return holder
+
+    @staticmethod
+    def attendee_check_in_out(id, state=None):
+        holder = TicketingManager.get_attendee(id)
+        if holder:
+            if state is not None:
+                holder.checked_in = state
+            else:
+                holder.checked_in = not holder.checked_in
+            save_to_db(holder)
+            return holder
+        else:
+            return None
+
+    @staticmethod
     def get_order_expiry():
         return 10
 
@@ -159,7 +187,7 @@ class TicketingManager(object):
         if order and not order.paid_via:
             if override \
                 or (order.status != 'completed' and
-                            (order.created_at + timedelta(
+                    (order.created_at + timedelta(
                                 minutes=TicketingManager.get_order_expiry())) < datetime.utcnow()):
                 order.status = 'expired'
                 save_to_db(order)
@@ -233,21 +261,34 @@ class TicketingManager(object):
                 order.country = country
                 order.zipcode = zipcode
                 order.status = 'initialized'
-                ticket_holder = TicketHolder(name=user.user_detail.fullname,
-                                             email=email, address=address,
-                                             city=city, state=state, country=country, order_id=order.id)
             else:
                 order.status = 'completed'
                 order.completed_at = datetime.utcnow()
                 if not order.paid_via:
                     order.paid_via = 'free'
-                ticket_holder = TicketHolder(name=user.user_detail.fullname, email=email, order_id=order.id)
+
+            holders_firstnames = form.getlist('holders[firstname]')
+            holders_lastnames = form.getlist('holders[lastname]')
+            holders_ticket_ids = form.getlist('holders[ticket_id]')
+            holders_emails = form.getlist('holders[email]')
+
+            for i, firstname in enumerate(holders_firstnames):
+                data = {
+                    'firstname': firstname,
+                    'lastname': holders_lastnames[i]
+                }
+                holder_user = TicketingManager.get_or_create_user_by_email(holders_emails[i], data)
+                ticket_holder = TicketHolder(firstname=data['firstname'],
+                                             lastname=data['lastname'],
+                                             ticket_id=int(holders_ticket_ids[i]),
+                                             email=holder_user.email, order_id=order.id)
+                DataManager.add_attendee_role_to_event(holder_user, order.event_id)
+                db.session.add(ticket_holder)
+
             # add attendee role to user
             DataManager.add_attendee_role_to_event(user, order.event_id)
             # save items
             save_to_db(order)
-            save_to_db(ticket_holder)
-
             return order
         else:
             return False
