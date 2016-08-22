@@ -92,16 +92,16 @@
 
                     <!-- TicketTemplate -->
                     {% macro ticket_template(serialno, sales_start=None, sales_end=None, hide=False, name='', description='', start_date=None, description_toggle=True, price=0, type=None, quantity=100, min_order=1, max_order=10, has_orders=False, ticket_tags=[]) %}
-                    <tr style="border: 1px solid #dcdcdc;">
-                        <td style="padding-bottom: 0;">
+                    <div class="row" style="border: 1px solid #dcdcdc;padding-top: 10px;">
+                        <div class="col-xs-4">
                             <input type="hidden" name="tickets[type]" value="{{ type | default('', true) }}">
                             <div class="item form-group" style="margin-bottom: 0;">
                                 <input type="text" name="tickets[name]" class="form-control" placeholder="Ticket Name" value="{{ name }}"
                                     required="required" data-uniqueticket="true" {{ 'readonly' if has_orders else '' }}>
                                 <div class="help-block with-errors"></div>
                             </div>
-                        </td>
-                        <td>
+                        </div>
+                        <div class="col-xs-3">
                         {% if type == "free" %}
                             <input type="text" name="tickets[price]" class="form-control" value="Free" readonly>
                         {% elif type == "paid" %}
@@ -109,11 +109,11 @@
                         {% elif type == "donation" %}
                             <input type="text" name="tickets[price]" class="form-control" value="Donation" readonly>
                         {% endif %}
-                        </td>
-                        <td>
+                        </div>
+                        <div class="col-xs-3">
                             <input type="number" min="0" name="tickets[quantity]" class="form-control" placeholder="100" value="{{ quantity }}">
-                        </td>
-                        <td>
+                        </div>
+                        <div class="col-xs-2">
                             <div class="btn-group">
                                 <a class="btn btn-default edit-ticket-button" data-toggle="tooltip" title="Settings">
                                     <i class="glyphicon glyphicon-cog" style="color: #46b8da;"></i>
@@ -128,11 +128,11 @@
                                     </a>
                                 {% endif %}
                             </div>
-                        </td>
-                    </tr>
-                    <tr style="display: none;background-color: #f2f2f2;border: 1px solid #dcdcdc;">
-                        <td colspan="4">
-                            <div class="col-xs-12 col-md-8" style="padding-left: 10px;padding-top: 5px;">
+                        </div>
+                    </div>
+                    <div class="row" style="display: none;background-color: #f2f2f2;border: 1px solid #dcdcdc;padding-left: 5px;padding-top: 8px;">
+
+                            <div class="col-xs-12 col-md-8">
                                 <div style="font-size: 15px;margin-bottom: 5px;">Settings</div>
                                 <hr style="margin-bottom: 0; margin-top: 0;">
                                 <div class="item form-group">
@@ -195,17 +195,13 @@
                                         value="{{ ticket_tags| join(',') }}" placeholder="None specified">
                                 </div>
                             </div>
-                        </td>
-                    </tr>
+
+                    </div>
                     {% endmacro %}
                     <!-- /TicketTemplate -->
 
                     <div id="ticket-template" style="display: none;">
-                        <table>
-                            <tbody>
-                                {{ ticket_template(start_date=start_date) }}
-                            </tbody>
-                        </table>
+                        {{ ticket_template(start_date=start_date) }}
                     </div>
 
                     <form enctype="multipart/form-data"

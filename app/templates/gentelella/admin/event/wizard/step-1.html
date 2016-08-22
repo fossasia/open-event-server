@@ -309,47 +309,51 @@
             <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
         </h2>
 
-        <!-- TicketsTable -->
-        <div class="row">
-            <table class="table tickets-table">
-                <thead>
-                    <tr>
-                        <th>Ticket Name <span class="required">*</span></th>
-                        <th>Price</th>
-                        <th>Quantity <span class="required">*</span></th>
-                        <th>Options</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% if event %}
-                    {% for ticket in event.tickets %}
-                        {{ ticket_template(serialno=loop.index0, name=ticket.name, description=ticket.description, description_toggle=ticket.description_toggle, ticket_tags=ticket.tags,
-                        sales_start=ticket.sales_start, sales_end=ticket.sales_end, hide=ticket.hide, price=ticket.price, type=ticket.type,
-                        quantity=ticket.quantity, min_order=ticket.min_order, max_order=ticket.max_order, has_orders=ticket.has_order_tickets()) }}
-                    {% endfor %}
-                {% endif %}
-                </tbody>
-            </table>
+        <!-- TicketsSegment -->
+        <div class="tickets-segment">
+            <div class="row">
+                <div class="col-xs-4">
+                    <h3 style="font-size: 15px;">Ticket Name <span class="required">*</span></h3>
+                </div>
+                <div class="col-xs-3">
+                    <h3 style="font-size: 15px;">Price</h3>
+                </div>
+                <div class="col-xs-3">
+                    <h3 style="font-size: 15px;">Quantity <span class="required">*</span></h3>
+                </div>
+                <div class="col-xs-2">
+                    <h3 style="font-size: 15px;">Options</h3>
+                </div>
+            </div>
+            <div class="tickets-holder" style="margin-bottom: 10px;">
+            {% if event %}
+                {% for ticket in event.tickets %}
+                    {{ ticket_template(serialno=loop.index0, name=ticket.name, description=ticket.description, description_toggle=ticket.description_toggle, ticket_tags=ticket.tags,
+                    sales_start=ticket.sales_start, sales_end=ticket.sales_end, hide=ticket.hide, price=ticket.price, type=ticket.type,
+                    quantity=ticket.quantity, min_order=ticket.min_order, max_order=ticket.max_order, has_orders=ticket.has_order_tickets()) }}
+                {% endfor %}
+            {% endif %}
+            </div>
         </div>
 
-                <div class="row">
-                    <div class="text-center">
-                        <a class="btn btn-info add-free-ticket">
-                            <i class="glyphicon glyphicon-plus-sign"></i> Free Ticket
-                        </a>
-                        {% if 'payments' in included_items %}
-                            <a class="btn btn-info add-paid-ticket">
-                                <i class="glyphicon glyphicon-plus-sign"></i> Paid Ticket
-                            </a>
-                        {% endif %}
-                        {% if 'donations' in included_items %}
-                            <a class="btn btn-info add-donation-ticket">
-                                <i class="glyphicon glyphicon-plus-sign"></i> Donation
-                            </a>
-                        {% endif %}
-                    </div>
-                </div>
-                <!-- /TicketsTable -->
+        <div class="row">
+            <div class="text-center">
+                <a class="btn btn-info add-free-ticket">
+                    <i class="glyphicon glyphicon-plus-sign"></i> Free Ticket
+                </a>
+                {% if 'payments' in included_items %}
+                    <a class="btn btn-info add-paid-ticket">
+                        <i class="glyphicon glyphicon-plus-sign"></i> Paid Ticket
+                    </a>
+                {% endif %}
+                {% if 'donations' in included_items %}
+                    <a class="btn btn-info add-donation-ticket">
+                        <i class="glyphicon glyphicon-plus-sign"></i> Donation
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        <!-- /TicketsSegment -->
 
             </div>
             <div id="ticket-url-holder" class="item form-group"
@@ -1200,7 +1204,7 @@
         }
     });
 
-    var $ticketsTable = $(".tickets-table").children("tbody");
+    var $ticketsHolder = $(".tickets-holder");
     var ticketsCount = 1;
     var $paymentsystemHolder = $("#payment-system-holder");
 
@@ -1215,7 +1219,7 @@
 
     function addTicket(type) {
         /* Clone ticket from template */
-        var $tmpl = $("#ticket-template").clone().children("table").children("tbody").children("tr");
+        var $tmpl = $("#ticket-template").clone().children("div");
         var $ticket = $($tmpl[0]).attr("id", "ticket_" + String(ticketsCount));
         var $ticketMore = $($tmpl[1]).attr("id", "ticket-more_" + String(ticketsCount));
 
@@ -1241,13 +1245,12 @@
         });
 
         /* Bind events to Edit and Remove buttons */
-        var $ticketEdit = $ticket.children("td").last().children().children().first();
+        var $ticketEdit = $ticket.find(".edit-ticket-button");
         $ticketEdit.tooltip();
         $ticketEdit.on("click", function () {
-            $ticketMore.toggle("slow");
-            $ticketMore.children().children(".row").slideToggle("slow");
+            $ticketMore.slideToggle("slow");
         });
-        var $ticketRemove = $ticket.children("td").last().children().children().last();
+        var $ticketRemove = $ticket.find(".remove-ticket-button");
         $ticketRemove.tooltip();
         $ticketRemove.on("click", function () {
             var confirmRemove = confirm("Are you sure you want to remove the Ticket?");
@@ -1264,24 +1267,24 @@
         });
 
         /* Set Ticket Type field */
-        $ticket.children("td:nth-child(1)").children().first().val(type);
+        $ticket.find("input[name='tickets[type]']").val(type);
 
         /* Set Ticket Price field */
         var html = null;
         if (type === "free") {
             html = '<input type="text" name="tickets[price]" class="form-control" value="Free" readonly>';
         } else if (type === "paid") {
-            html = '<input type="number" min="0" name="tickets[price]" class="form-control"  placeholder="$" value="">';
+            html = '<input type="number" min="0" name="tickets[price]" class="form-control"  placeholder="Price" value="">';
         } else if (type === "donation") {
             html = '<input type="text" name="tickets[price]" class="form-control" value="Donation" readonly>';
         }
-        $ticket.children("td:nth-child(2)").html(html);
+        $($ticket.children()[1]).html(html);
 
         /* Append ticket to table */
         $ticket.hide();
-        $ticketMore.children().children(".row").hide();
-        $ticketsTable.append($ticket, $ticketMore);
-        $ticket.show("slow");
+        $ticketMore.hide();
+        $ticketsHolder.append($ticket, $ticketMore);
+        $ticket.slideToggle();
 
         /* Set name attribute for all Ticket Description Toggle checkboxes */
         $("#event-wizard-form input[name*='tickets_description_toggle_']").each(function(i, el) {
@@ -1298,8 +1301,7 @@
     $(".edit-ticket-button").click(function () {
         var $ticket = $(this).parent().parent().parent();
         var $ticketMore = $ticket.next();
-        $ticketMore.toggle("slow");
-        $ticketMore.children().children(".row").slideToggle("slow");
+        $ticketMore.slideToggle("slow");
     });
 
     $(".remove-ticket-button").click(function () {
