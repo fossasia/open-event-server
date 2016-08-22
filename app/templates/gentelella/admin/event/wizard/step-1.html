@@ -22,109 +22,6 @@
 
 <div>
     <div class="col-md-8 col-md-push-2">
-        <div class="row">
-            <table class="table tickets-table">
-                <thead>
-                    <tr>
-                        <th>Ticket Name</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Options</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <tr>
-                        <td>
-                            <input type="hidden" name="tickets[type]" value="">
-                            <div class="item form-group" style="margin-bottom: 0;">
-                                <input type="text" name="tickets[name]" class="form-control" placeholder="Ticket Name" value=""
-                                    required="required" data-uniqueticket="true">
-                                <div class="help-block with-errors"></div>
-                            </div>
-                        </td>
-                        <td>
-                            <input type="number" min="0" name="tickets[price]" class="form-control" placeholder="$" value="" required="required">
-                        </td>
-                        <td>
-                            <input type="number" min="0" name="tickets[quantity]" class="form-control" placeholder="100" value="">
-                        </td>
-                        <td>
-                            <div class="btn-group">
-                                <a class="btn btn-info edit-ticket-button" data-toggle="tooltip" title="Edit details">
-                                    <i class="glyphicon glyphicon-cog"></i>
-                                </a>
-                                <a class="btn btn-info remove-ticket-button" data-toggle="tooltip" title="Remove">
-                                    <i class="glyphicon glyphicon-trash"></i>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr style="display: none;">
-                        <td colspan="4">
-                            <div class="col-xs-12 col-md-8" style="padding-left: 0;">
-                                <div class="item form-group">
-                                    <label>Ticket Description</label>
-                                    <textarea name="tickets[description]" class="form-control" rows="4" style="height: 90px;" placeholder="Add a description for the Ticket. This description would be available to the attendees." maxlength="160"></textarea>
-                                </div>
-                                <div class="item form-group">
-                                    <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1; margin-top: 0;">
-                                        <input type="checkbox" class="checkbox flat form-control" name="tickets_description_toggle_">
-                                        Display Ticket description on Public Events page
-                                    </label>
-                                </div>
-                                <br>
-                                <div class="item form-group">
-                                    <div style="font-size: 15px;margin-bottom: 5px;">Ticket visibility</div>
-                                    <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1;  margin-top: 0;">
-                                        <input type="checkbox" class="checkbox flat form-control" name="tickets_hide_">
-                                        Hide Ticket from the Public Events page
-                                    </label>
-                                    <div style="font-size: 13px; padding-left: 23px;">Ticket would still be available for sale to Organizers.</div>
-                                </div>
-                                <br>
-                                <div class="item form-group">
-                                    <label>Sales Start</label><br>
-                                    <div class="col-xs-7" style="padding: 0;">
-                                        <input value="" class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY" name="tickets[sales_start_date]">
-                                    </div>
-                                    <div class="col-xs-5">
-                                        <input value="" class="form-control col-xs-6 time start ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="tickets[sales_start_time]">
-                                    </div>
-                                </div>
-                                <div class="item form-group">
-                                    <label>Sales End</label><br>
-                                    <div class="col-xs-7" style="padding: 0;">
-                                        <input value="" class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY" name="tickets[sales_end_date]">
-                                    </div>
-                                    <div class="col-xs-5">
-                                        <input value="" class="form-control col-xs-6 time end ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="tickets[sales_end_time]">
-                                    </div>
-                                </div>
-                                <br>
-                                <div class="item form-group">
-                                    <div style="font-size: 15px;margin-bottom: 5px;">Ticket allowed per order</div>
-                                    <div class="col-xs-6" style="padding-left: 0;">
-                                        <label>Minimum Order</label>
-                                        <input type="number" min="1" class="form-control" value="" placeholder="1" name="tickets[min_order]">
-                                    </div>
-                                    <div class="col-xs-6" style="padding-left: 0;">
-                                        <label>Maximum Order</label>
-                                        <input type="number" min="1" class="form-control" value="" placeholder="10" name="tickets[max_order]">
-                                    </div>
-                                </div>
-                                <br>
-                                <div class="item form-group col-xs-12" style="padding-left: 0;">
-                                    <label>Ticket Code Group</label>
-                                    <input type="text" class="form-control ticket-tags" name="tickets[tags]"
-                                        value="" placeholder="None specified">
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
         <div class="item form-group">
             <label>Name <span class="required">*</span></label>
             <input required="required"
@@ -417,9 +314,9 @@
             <table class="table tickets-table">
                 <thead>
                     <tr>
-                        <th>Ticket Name</th>
+                        <th>Ticket Name <span class="required">*</span></th>
                         <th>Price</th>
-                        <th>Quantity</th>
+                        <th>Quantity <span class="required">*</span></th>
                         <th>Options</th>
                     </tr>
                 </thead>
