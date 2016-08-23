@@ -27,7 +27,7 @@ import sys
 import json
 from flask import Flask, session
 from flask.ext.autodoc import Autodoc
-from app.settings import get_settings
+from app.settings import get_settings, get_setts
 from flask.ext.cors import CORS
 from flask.ext.migrate import Migrate, MigrateCommand
 from flask.ext.script import Manager
@@ -218,8 +218,8 @@ def datetime_now():
 
 @app.context_processor
 def social_settings():
-    settings = get_settings()
-    return dict(settings=settings)
+    settings = get_setts()
+    return dict(settes=settings)
 
 
 @app.template_filter('pretty_name')

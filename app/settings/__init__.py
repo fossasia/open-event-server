@@ -1,6 +1,6 @@
 import stripe
 from flask import current_app
-from sqlalchemy import desc
+from sqlalchemy import asc, desc
 from app.models.setting import Setting
 from app.models.fees import TicketFees
 
@@ -18,6 +18,8 @@ def get_settings():
         current_app.config['custom_settings'] = make_dict(s)
     return current_app.config['custom_settings']
 
+def get_setts():
+    return Setting.query.order_by(desc(Setting.id)).first()
 
 def set_settings(**kwargs):
     """
@@ -50,7 +52,7 @@ def set_settings(**kwargs):
                 save_to_db(fee, "Fee Options Updated")
                 i += 1
     else:
-        setting = Setting.query.first()
+        setting = Setting.query.order_by(desc(Setting.id)).first()
         if not setting:
             setting = Setting(**kwargs)
         else:
