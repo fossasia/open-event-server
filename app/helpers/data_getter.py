@@ -412,8 +412,9 @@ class DataGetter(object):
         return UsersEventsRoles.query.filter_by(event_id=event_id).filter(Role.name == role_name)
 
     @staticmethod
-    def get_user_events():
-        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)
+    def get_user_events(user_id=None):
+        return Event.query.join(Event.roles, aliased=True)\
+            .filter_by(user_id=login.current_user.id if not user_id else user_id)
 
     @staticmethod
     def get_completed_events():
