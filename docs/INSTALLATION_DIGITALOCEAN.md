@@ -99,7 +99,7 @@ python create_db.py
 python manage.py db stamp head
 ```
 
-* That's it. Visit the `$IP:5000` (example 104.236.228.132:5000) to view the open event server. You can close the 2nd terminal window if you wish.
+* That's it. Visit the `$IP` (example 104.236.228.132) to view the open event server. You can close the 2nd terminal window if you wish.
 
 
 
@@ -111,9 +111,6 @@ The server will die as soon as the first terminal window is closed. To not let t
 ```bash
 docker-compose up -d
 ```
-
-* To serve the site on port 80 so that it is available on the Internet as just `$IP`, edit `docker-compose.yml` and change the `5000:5000` to `80:5000`.
-Then start the server. `docker-compose up -d`.
 
 * If you haven't added a domain name to your DO droplet and are accessing it through the IP, you might face the problem of not being able to login. This is a Chrome issue
 and may exist in other browsers too (haven't tested). Learn more about it in this [Stack Overflow answer](http://stackoverflow.com/a/27276450/2295672). The only way to solve
