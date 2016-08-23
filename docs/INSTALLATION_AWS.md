@@ -74,16 +74,14 @@ sudo usermod -a -G docker $(whoami)
 
 The third phase is about building the Open Event on the server and running it. The steps are very similar to the [Docker installation instructions](INSTALLATION_DOCKER.md) so it is very highly recommended you have a look at it and try to understand the process.
 
-* First you will have to build and run the server. This process can take some time.
+* First you will have to build the server. This process can take some time.
 
 ```sh
 git clone https://github.com/fossasia/open-event-orga-server.git && cd open-event-orga-server
 docker-compose build
 ```
 
-* The default port is 5000. To be able to serve it on the Internet, we would like the port 80. So open `docker-compose.yml` in `nano` and change `5000:5000` to `80:5000`.
-
-* After saving docker-compose.yml, start the server.
+* Then start the server.
 
 ```sh
 docker-compose up

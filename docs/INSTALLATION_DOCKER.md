@@ -43,7 +43,7 @@ python manage.py db stamp head
 
 * Close the application's shell by `exit` command.
 
-* That's it. Go to `localhost:5000` on the web browser and Open Event Orga Server will be live.
+* That's it. Go to `localhost:80` on the web browser and Open Event Orga Server will be live.
 
 
 ### Updating the Docker image
