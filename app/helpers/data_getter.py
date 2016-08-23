@@ -497,16 +497,11 @@ class DataGetter(object):
 
     @staticmethod
     def get_live_and_public_events():
-        return DataGetter.get_all_live_events().filter(Event.privacy != 'private').filter(Event.in_trash == False)\
-            .filter_by(in_trash=False)
+        return DataGetter.get_all_live_events().filter(Event.privacy != 'private')
 
     @staticmethod
     def get_all_draft_events():
         return Event.query.filter_by(state='Draft', in_trash=False)
-
-    @staticmethod
-    def get_live_and_public_events():
-        return DataGetter.get_all_live_events().filter(Event.privacy != 'private').filter(not Event.in_trash)
 
     @staticmethod
     def get_all_past_events():
