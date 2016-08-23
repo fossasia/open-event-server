@@ -39,6 +39,7 @@ import sqlalchemy as sa
 
 from nameparser import HumanName
 import stripe
+from app.settings import get_settings
 from app.helpers.flask_helpers import SilentUndefined, camel_case, slugify, MiniJSONEncoder
 from app.helpers.payment import forex
 from app.models import db
@@ -164,6 +165,13 @@ def locations():
         return DataGetter.get_locations_of_events()
 
     return dict(locations=get_locations_of_events)
+
+
+@app.context_processor
+def get_key_settings():
+    key_settings = get_settings()
+    return dict(key_settings=key_settings)
+
 
 @app.context_processor
 def fee_helpers():
