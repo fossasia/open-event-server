@@ -1,8 +1,13 @@
+from flask import g
 from flask.ext.restplus import Resource, Namespace
 
-from app.models.user import User as UserModel
+from app.api.events import EVENT
+from app.models.role import Role
+from app.models.user import User as UserModel, ATTENDEE
 from app.models.user_detail import UserDetail as UserDetailModel
 from app.helpers.data import DataManager, record_activity
+from app.helpers.data_getter import DataGetter
+from app.models.users_events_roles import UsersEventsRoles
 
 from .helpers.helpers import requires_auth, can_access_account, staff_only
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, BaseDAO, \
@@ -105,6 +110,29 @@ class User(Resource):
         user = DAO.update(user_id, self.api.payload)
         record_activity('update_user', user=user)
         return user
+
+@api.route('/users/me')
+@api.response(404, 'User not found')
+class UserSelf(Resource):
+    @requires_auth
+    @api.doc('get_self_user')
+    @api.marshal_with(USER)
+    def get(self):
+        """Fetch the current authenticated user"""
+        return getattr(g, 'user', None), 200
+
+@api.route('/users/me/events')
+@api.response(404, 'User not found')
+class UserSelfEvents(Resource):
+    @requires_auth
+    @api.doc('get_self_events')
+    @api.marshal_list_with(EVENT)
+    def get(self):
+        """Fetch the current authenticated user's events"""
+        user = getattr(g, 'user', None)
+        attendee_role = Role.query.filter_by(name=ATTENDEE).first()
+        events = DataGetter.get_user_events(user_id=user.id).filter(UsersEventsRoles.role_id != attendee_role.id).all()
+        return events, 200
 
 
 @api.route('/users')
