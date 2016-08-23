@@ -92,122 +92,116 @@
 
                     <!-- TicketTemplate -->
                     {% macro ticket_template(serialno, sales_start=None, sales_end=None, hide=False, name='', description='', start_date=None, description_toggle=True, price=0, type=None, quantity=100, min_order=1, max_order=10, has_orders=False, ticket_tags=[]) %}
-                    <tr>
-                        <td>
+                    <div class="row" style="border: 1px solid #dcdcdc;padding-top: 10px;">
+                        <div class="col-xs-4">
                             <input type="hidden" name="tickets[type]" value="{{ type | default('', true) }}">
                             <div class="item form-group" style="margin-bottom: 0;">
                                 <input type="text" name="tickets[name]" class="form-control" placeholder="Ticket Name" value="{{ name }}"
                                     required="required" data-uniqueticket="true" {{ 'readonly' if has_orders else '' }}>
                                 <div class="help-block with-errors"></div>
                             </div>
-                        </td>
-                        <td>
+                        </div>
+                        <div class="col-xs-3">
                         {% if type == "free" %}
                             <input type="text" name="tickets[price]" class="form-control" value="Free" readonly>
                         {% elif type == "paid" %}
-                            <input type="number" min="0" name="tickets[price]" class="form-control" placeholder="$" value="{{ price | default('', None) }}" required="required" {{ 'readonly' if has_orders else '' }}>
+                            <input type="number" min="0" name="tickets[price]" class="form-control" placeholder="Price" value="{{ price | default('', None) }}" required="required" {{ 'readonly' if has_orders else '' }}>
                         {% elif type == "donation" %}
                             <input type="text" name="tickets[price]" class="form-control" value="Donation" readonly>
                         {% endif %}
-                        </td>
-                        <td>
+                        </div>
+                        <div class="col-xs-3">
                             <input type="number" min="0" name="tickets[quantity]" class="form-control" placeholder="100" value="{{ quantity }}">
-                        </td>
-                        <td>
+                        </div>
+                        <div class="col-xs-2">
                             <div class="btn-group">
-                                <a class="btn btn-info edit-ticket-button" data-toggle="tooltip" title="Edit details">
-                                    <i class="glyphicon glyphicon-cog"></i>
+                                <a class="btn btn-default edit-ticket-button" data-toggle="tooltip" title="Settings">
+                                    <i class="glyphicon glyphicon-cog" style="color: #46b8da;"></i>
                                 </a>
                                 {% if has_orders %}
-                                    <a class="btn btn-info" data-toggle="tooltip" data-container="body" title="Cannot remove ticket. Orders have been placed for it." disabled>
-                                        <i class="glyphicon glyphicon-trash"></i>
+                                    <a class="btn btn-default" data-toggle="tooltip" data-container="body" title="Cannot remove ticket. Orders have been placed for it." disabled>
+                                        <i class="glyphicon glyphicon-trash" style="color: #46b8da;"></i>
                                     </a>
                                 {% else %}
-                                    <a class="btn btn-info remove-ticket-button" data-toggle="tooltip" title="Remove">
-                                        <i class="glyphicon glyphicon-trash"></i>
+                                    <a class="btn btn-default remove-ticket-button" data-toggle="tooltip" title="Remove">
+                                        <i class="glyphicon glyphicon-trash" style="color: #46b8da;"></i>
                                     </a>
                                 {% endif %}
                             </div>
-                        </td>
-                    </tr>
-                    <tr style="display: none;">
-                        <td colspan="4">
-                            <div class="row" style="display: none;">
-                                <div class="col-xs-6">
-                                    <div class="item form-group">
-                                        <label>Description</label>
-                                        <textarea name="tickets[description]" class="form-control" rows="4" style="height: 110px;" placeholder="Add a description for the Ticket" maxlength="160">{{ description }}</textarea>
-                                    </div>
-                                    <div class="item form-group">
-                                        <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1; margin-top: 0;">
-                                            <input type="checkbox" class="checkbox flat form-control" name="tickets_description_toggle_{{ serialno }}" {{ 'checked' if description_toggle else ''}}>
-                                            Display Ticket description on event page
-                                        </label>
-                                    </div>
-                                    <div class="item form-group">
-                                        <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1;  margin-top: 0;">
-                                            <input type="checkbox" class="checkbox flat form-control" name="tickets_hide_{{ serialno }}" {{ 'checked' if hide else ''}}>
-                                            Hide Ticket from the Events page
-                                        </label>
+                        </div>
+                    </div>
+                    <div class="row" style="display: none;background-color: #f2f2f2;border: 1px solid #dcdcdc;padding-left: 5px;padding-top: 8px;">
+
+                            <div class="col-xs-12 col-md-8">
+                                <div style="font-size: 15px;margin-bottom: 5px;">Settings</div>
+                                <hr style="margin-bottom: 0; margin-top: 0;">
+                                <div class="item form-group">
+                                    <label>Ticket Description</label>
+                                    <textarea name="tickets[description]" class="form-control" rows="4" style="height: 90px;" placeholder="This description would be available to the attendees when ordering tickets." maxlength="160">{{ description }}</textarea>
+                                </div>
+                                <div class="item form-group">
+                                    <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1; margin-top: 0;">
+                                        <input type="checkbox" class="checkbox flat form-control" name="tickets_description_toggle_{{ serialno }}" {{ 'checked' if description_toggle else ''}}>
+                                        Display Ticket description on Public Events page
+                                    </label>
+                                </div>
+                                <br>
+                                <div class="item form-group">
+                                    <div style="font-size: 15px;margin-bottom: 5px;">Ticket visibility</div>
+                                    <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1;  margin-top: 0;">
+                                        <input type="checkbox" class="checkbox flat form-control" name="tickets_hide_{{ serialno }}" {{ 'checked' if hide else ''}}>
+                                        Hide Ticket
+                                    </label>
+                                    <div style="font-size: 13px;">
+                                        Hides ticket from the Public Events page.<br>
+                                        Ticket would still be available for sale to Organizers.
                                     </div>
                                 </div>
-                                <div class="col-xs-6">
-                                    <div class="row">
-                                        <div class="col-xs-6">
-                                            <div class="item form-group">
-                                                <label>Sales Start</label><br>
-                                                <div class="col-xs-7" style="padding: 0;">
-                                                    <input value="{{ sales_start.strftime('%m/%d/%Y') if sales_start else start_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY" name="tickets[sales_start_date]">
-                                                </div>
-                                                <div class="col-xs-5" style="padding: 0;">
-                                                    <input value="{{ sales_start.strftime('%H:%M') if sales_start else '19:00' }}" class="form-control col-xs-6 time start ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="tickets[sales_start_time]">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-6">
-                                            <div class="item form-group">
-                                                <label>Sales End</label><br>
-                                                <div class="col-xs-7" style="padding: 0;">
-                                                    <input value="{{ sales_end.strftime('%m/%d/%Y') if sales_end else start_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY" name="tickets[sales_end_date]">
-                                                </div>
-                                                <div class="col-xs-5" style="padding: 0;">
-                                                    <input value="{{ sales_end.strftime('%H:%M') if sales_end else '22:00' }}" class="form-control col-xs-6 time end ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="tickets[sales_end_time]">
-                                                </div>
-                                            </div>
-                                        </div>
+                                <br>
+                                <div class="item form-group">
+                                    <label>Sales Start</label><br>
+                                    <div class="col-xs-7" style="padding: 0;">
+                                        <input value="{{ sales_start.strftime('%m/%d/%Y') if sales_start else start_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY" name="tickets[sales_start_date]">
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="item form-group">
-                                                <label>Min Order</label>
-                                                <input type="number" min="1" class="form-control" value="{{ min_order }}" placeholder="1" name="tickets[min_order]">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="item form-group">
-                                                <label>Max Order</label>
-                                                <input type="number" min="1" class="form-control" value="{{ max_order }}" placeholder="10" name="tickets[max_order]">
-                                            </div>
-                                        </div>
+                                    <div class="col-xs-5">
+                                        <input value="{{ sales_start.strftime('%H:%M') if sales_start else '19:00' }}" class="form-control col-xs-6 time start ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="tickets[sales_start_time]">
                                     </div>
-                                    <div class="item form-group">
-                                        <label>Tag Group</label>
-                                        <input type="text" class="form-control ticket-tags" name="tickets[tags]"
-                                            value="{{ ticket_tags| join(',') }}">
+                                </div>
+                                <div class="item form-group">
+                                    <label>Sales End</label><br>
+                                    <div class="col-xs-7" style="padding: 0;">
+                                        <input value="{{ sales_end.strftime('%m/%d/%Y') if sales_end else start_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY" name="tickets[sales_end_date]">
                                     </div>
+                                    <div class="col-xs-5">
+                                        <input value="{{ sales_end.strftime('%H:%M') if sales_end else '22:00' }}" class="form-control col-xs-6 time end ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="tickets[sales_end_time]">
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="item form-group">
+                                    <div style="font-size: 15px;margin-bottom: 5px;">Number of tickets allowed per order</div>
+                                    <div class="col-xs-6" style="padding-left: 0;">
+                                        <label style="font-weight: normal;">Minimum Order</label>
+                                        <input type="number" min="1" class="form-control" value="{{ min_order }}" placeholder="1" name="tickets[min_order]">
+                                    </div>
+                                    <div class="col-xs-6" style="padding-left: 0;">
+                                        <label style="font-weight: normal;">Maximum Order</label>
+                                        <input type="number" min="1" class="form-control" value="{{ max_order }}" placeholder="10" name="tickets[max_order]">
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="item form-group col-xs-12" style="padding-left: 0;">
+                                    <label>Ticket Code Group</label>
+                                    <input type="text" class="form-control ticket-tags" name="tickets[tags]"
+                                        value="{{ ticket_tags| join(',') }}" placeholder="None specified">
                                 </div>
                             </div>
-                        </td>
-                    </tr>
+
+                    </div>
                     {% endmacro %}
                     <!-- /TicketTemplate -->
 
                     <div id="ticket-template" style="display: none;">
-                        <table>
-                            <tbody>
-                                {{ ticket_template(start_date=start_date) }}
-                            </tbody>
-                        </table>
+                        {{ ticket_template(start_date=start_date) }}
                     </div>
 
                     <form enctype="multipart/form-data"
