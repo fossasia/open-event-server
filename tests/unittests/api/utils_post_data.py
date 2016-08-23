@@ -41,7 +41,8 @@ POST_EVENT_DATA = {
         "start_date": "2016-06-29T19:30:00",
         "timezone": "UTC"
     },
-    "identifier": "23c0644e"
+    "identifier": "23c0644e",
+    "has_session_speakers": True
 }
 
 POST_SOCIAL_LINK_DATA = {

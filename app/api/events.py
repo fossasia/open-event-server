@@ -96,7 +96,8 @@ EVENT = api.model('Event', {
     'code_of_conduct': fields.String(),
     'social_links': fields.List(fields.Nested(SOCIAL_LINK), attribute='social_link'),
     'call_for_papers': fields.Nested(EVENT_CFS, allow_null=True),
-    'version': fields.Nested(EVENT_VERSION)
+    'version': fields.Nested(EVENT_VERSION),
+    'has_session_speakers': fields.Boolean(default=False)
 })
 
 EVENT_COMPLETE = api.clone('EventComplete', EVENT, {
