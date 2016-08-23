@@ -22,7 +22,10 @@
                 <a href="#tab_content2" id="microservice-tab" data-toggle="tab">Microservices</a>
             </li>
             <li>
-                <a href="#tab_content4" id="microservice-tab" data-toggle="tab">Image Configurations</a>
+                <a href="#tab_content4" id="image-config-tab" data-toggle="tab">Image Configurations</a>
+            </li>
+            <li>
+                <a href="#tab_content5" id="analytics-tab" data-toggle="tab">Analytics Configurations</a>
             </li>
             <li>
                 <a href="#tab_content1" id="payment-gateway-tab" data-toggle="tab">Payment Gateways</a>
@@ -47,6 +50,9 @@
             </div>
             <div role="tabpanel" class="tab-pane fade in" id="tab_content4" aria-labelledby="image-config-tab">
                  {% include 'gentelella/admin/super_admin/settings/_image_config.html' %}
+            </div>
+            <div role="tabpanel" class="tab-pane fade in" id="tab_content5" aria-labelledby="analytics-tab">
+                 {% include 'gentelella/admin/super_admin/settings/_analytics.html' %}
             </div>
             {% if 'ticketing' in included_settings and 'payments' in included_settings %}
             <div role="tabpanel" class="tab-pane fade in" id="tab_content3" aria-labelledby="ticket-fees-tab">
