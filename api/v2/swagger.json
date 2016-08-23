@@ -41,6 +41,11 @@
           "format": "uri", 
           "type": "string"
         }, 
+        "has_session_speakers": {
+          "default": false, 
+          "example": false, 
+          "type": "boolean"
+        }, 
         "id": {
           "example": 0, 
           "format": "int", 
@@ -197,6 +202,11 @@
           "example": "http://website.com", 
           "format": "uri", 
           "type": "string"
+        }, 
+        "has_session_speakers": {
+          "default": false, 
+          "example": false, 
+          "type": "boolean"
         }, 
         "id": {
           "example": 0, 
@@ -426,6 +436,11 @@
           "example": "http://website.com", 
           "format": "uri", 
           "type": "string"
+        }, 
+        "has_session_speakers": {
+          "default": false, 
+          "example": false, 
+          "type": "boolean"
         }, 
         "identifier": {
           "type": "string"
@@ -1130,6 +1145,7 @@
           "type": "string"
         }, 
         "featured": {
+          "example": false, 
           "type": "boolean"
         }, 
         "github": {
@@ -1230,6 +1246,7 @@
           "type": "string"
         }, 
         "featured": {
+          "example": false, 
           "type": "boolean"
         }, 
         "github": {
@@ -1410,6 +1427,7 @@
     "TicketHolder": {
       "properties": {
         "checked_in": {
+          "example": false, 
           "type": "boolean"
         }, 
         "email": {
