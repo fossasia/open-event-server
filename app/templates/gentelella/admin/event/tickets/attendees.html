@@ -205,8 +205,10 @@
             var holderId = $btn.data("holder-id");
             $btn.prop("disabled", true);
             $btn.html('<i class="fa fa-cog fa-spin fa-fw"></i> Processing');
+            var url = "{{ url_for('.attendee_check_in_toggle', event_id=event.id, holder_id='') }}";
+            url = url.slice(0, -1);
             $.ajax({
-                url: "{{ url_for('.attendee_check_in_toggle', event_id=event.id, holder_id='') }}" + holderId + "/",
+                url: url + holderId + "/",
                 type: "POST",
                 dataType: 'json',
                 success: function (result) {
