@@ -4396,6 +4396,67 @@
         ]
       }
     }, 
+    "/users/me": {
+      "get": {
+        "operationId": "get_user_self", 
+        "parameters": [
+          {
+            "description": "An optional fields mask", 
+            "format": "mask", 
+            "in": "header", 
+            "name": "X-Fields", 
+            "type": "string"
+          }
+        ], 
+        "responses": {
+          "200": {
+            "description": "Success", 
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }, 
+          "404": {
+            "description": "User not found"
+          }
+        }, 
+        "summary": "Fetch the current authenticated user", 
+        "tags": [
+          "users"
+        ]
+      }
+    }, 
+    "/users/me/events": {
+      "get": {
+        "operationId": "get_user_self_events", 
+        "parameters": [
+          {
+            "description": "An optional fields mask", 
+            "format": "mask", 
+            "in": "header", 
+            "name": "X-Fields", 
+            "type": "string"
+          }
+        ], 
+        "responses": {
+          "200": {
+            "description": "Success", 
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Event"
+              }, 
+              "type": "array"
+            }
+          }, 
+          "404": {
+            "description": "User not found"
+          }
+        }, 
+        "summary": "Fetch the current authenticated user's events", 
+        "tags": [
+          "users"
+        ]
+      }
+    }, 
     "/users/page": {
       "get": {
         "operationId": "get_user_list_paginated", 
