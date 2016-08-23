@@ -52,6 +52,7 @@ bower install
 
 ```sh
 export DATABASE_URL=postgresql://open_event_user:start@127.0.0.1:5432/test
+export SERVER_NAME=localhost:5000
 ```
 
 
@@ -95,13 +96,13 @@ python manage.py runserver
 
 ## Flask-SocketIO development
 
-[Flask-SocketIO](https://flask-socketio.readthedocs.io/en/latest/) has been used in the project for displaying real-time notifications to the user. Although it's switched off by default. To integrate SocketIO you must set the `INTEGRATE_SOCKETIO` variable to `true` at bash. 
+[Flask-SocketIO](https://flask-socketio.readthedocs.io/en/latest/) has been used in the project for displaying real-time notifications to the user. Although it's switched off by default. To integrate SocketIO you must set the `INTEGRATE_SOCKETIO` variable to `true` at bash.
 
 ```bash
 export INTEGRATE_SOCKETIO="true"
 ```
 
-The development server is the one that Flask ships with. It's based on Werkzeug and does not support WebSockets. If you try to run it, you'll get a RunTime error, something like: `You need to use the eventlet server. `.  To test real-time notifications, you must use the Gunicorn web server with eventlet worker class. 
+The development server is the one that Flask ships with. It's based on Werkzeug and does not support WebSockets. If you try to run it, you'll get a RunTime error, something like: `You need to use the eventlet server. `.  To test real-time notifications, you must use the Gunicorn web server with eventlet worker class.
 
 If you've installed development requirements, you should have both `gunicorn` and `eventlet` installed. To run application on port 5000, execute the following instead of `python manage.py runserver`:
 
