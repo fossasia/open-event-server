@@ -17,7 +17,7 @@
     }
 
     table.table {
-        margin-top: 20px !important;
+        margin-top: 50px !important;
     }
     </style>
 {% endblock %}
@@ -211,7 +211,9 @@
                 </table>
             </div>
             <div role="tabpanel" class="tab-pane fade" id="tab_content7" aria-labelledby="profile-tab">
-               {% include 'gentelella/admin/event/_import_modal.html' %}
+                <div style="margin-top: 50px;">
+                    {% include 'gentelella/admin/event/_import_modal.html' %}
+                </div>
             </div>
         </div>
     </div>
