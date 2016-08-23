@@ -13,6 +13,13 @@
 git clone https://github.com/fossasia/open-event-orga-server.git && cd open-event-orga-server
 ```
 
+* Then set the required `SERVER_NAME` environment variable. `SERVER_NAME` should the same as the domain on which the server is running and it should not include 'http', 'https',
+'www' or the trailing slash (/) in the url. Examples - `domain.com`, `sub.domain.com`, `sub.domain.com:5000` etc
+
+```bash
+export SERVER_NAME=localhost;
+```
+
 * In the same terminal window, run `docker-compose build` to build open-event-orga-server's docker image. This process can take some time.
 
 * After build is done, run `docker-compose up` to start the server.
@@ -43,7 +50,7 @@ python manage.py db stamp head
 
 * Close the application's shell by `exit` command.
 
-* That's it. Go to `localhost:80` on the web browser and Open Event Orga Server will be live.
+* That's it. Go to `localhost` on the web browser and Open Event Orga Server will be live.
 
 
 ### Updating the Docker image
@@ -58,7 +65,7 @@ python manage.py db stamp head
 docker-compose run web python manage.py db upgrade
 ```
 
-* That should be all. Open `localhost:5000` in web browser to view the updated open-event-server.
+* That should be all. Open `localhost` in web browser to view the updated open-event-server.
 
 
 

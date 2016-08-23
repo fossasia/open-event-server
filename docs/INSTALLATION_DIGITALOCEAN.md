@@ -51,13 +51,14 @@ sudo apt-get -y install python-pip
 sudo pip install docker-compose
 ```
 
-* Now that Docker and Compose are setup, it's time to build the image. The next steps are very similar to the [running Open Event on Docker](INSTALLATION_DOCKER.md) tutorial so please see
-it.
+* Now that Docker and Compose are setup, it's time to build the image. The next steps are very similar to the [running Open Event on Docker](INSTALLATION_DOCKER.md)
+tutorial so please see it.
 
-* We will start by cloning the GitHub Open Event Orga Server repo and cd'ing into it's directory. Then we will build and run the image.
+* We will start by cloning the GitHub Open Event Orga Server repo and cd'ing into it's directory. Then we will set the `SERVER_NAME` and then build and run the image.
 
 ```bash
 git clone https://github.com/fossasia/open-event-orga-server.git && cd open-event-orga-server
+export SERVER_NAME=104.236.228.132
 docker-compose build
 docker-compose up
 ```
@@ -115,3 +116,6 @@ docker-compose up -d
 * If you haven't added a domain name to your DO droplet and are accessing it through the IP, you might face the problem of not being able to login. This is a Chrome issue
 and may exist in other browsers too (haven't tested). Learn more about it in this [Stack Overflow answer](http://stackoverflow.com/a/27276450/2295672). The only way to solve
 this is by attaching a domain name to your droplet.
+
+* `SERVER_NAME` should be the same as the domain on which the project is running. Don't include http, https, www etc in server name.
+Also don't include the trailing '/' in the domain name.

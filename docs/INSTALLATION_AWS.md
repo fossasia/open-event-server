@@ -74,7 +74,13 @@ sudo usermod -a -G docker $(whoami)
 
 The third phase is about building the Open Event on the server and running it. The steps are very similar to the [Docker installation instructions](INSTALLATION_DOCKER.md) so it is very highly recommended you have a look at it and try to understand the process.
 
-* First you will have to build the server. This process can take some time.
+* First we will set the `SERVER_NAME` config. (See [Docker instructions](INSTALLATION_DOCKER.md) for more info on this)
+
+```sh
+export SERVER_NAME="ec2-52-41-207-116.us-west-2.compute.amazonaws.com"
+```
+
+* Then we will build the server. This process can take some time.
 
 ```sh
 git clone https://github.com/fossasia/open-event-orga-server.git && cd open-event-orga-server
