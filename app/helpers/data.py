@@ -1029,6 +1029,11 @@ class DataManager(object):
                                          thumbnail_height=200)
                 save_to_db(image_sizes, "Image Sizes Saved")
             if temp_background:
+                im = Image.open(temp_background[len('/serve_'):])
+                out_im = temp_background[len('/serve_'):].replace('png', 'jpg')
+                bg = Image.new("RGB", im.size, (255, 255, 255))
+                bg.paste(im, (0, 0), im)
+                bg.save(out_im, quality=55)
                 filename = '{}.png'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
                            temp_background[len('/serve_static/'):])
@@ -1038,6 +1043,11 @@ class DataManager(object):
                     UPLOAD_PATHS['event']['background_url'].format(
                         event_id=event.id
                     ))
+
+                filename = '{}.jpg'.format(time.time())
+                filepath = '{}/static/{}'.format(path.realpath('.'),
+                           temp_background[len('/serve_static/'):])
+                background_file = UploadedFile(filepath, filename)
 
                 temp_img_file = upload_local(background_file,
                                              'events/{event_id}/temp'.format(event_id=int(event.id)))
