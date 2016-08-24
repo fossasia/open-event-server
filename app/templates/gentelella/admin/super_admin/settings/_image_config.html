@@ -1,15 +1,19 @@
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
     <form data-toggle="validator" method="post">
+        <h3>Event Images</h3>
         <div class="form-group">
             <h4>Large Size</h4>
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Width (in px)</label>
-                <input type="number" class="form-control" id="front-page-w" name="large_width" required value="1300">
+                <input type="number" class="form-control" id="event-front-page-w" name="event-large_width" required value="{{ image_sizes.full_width | default(1300) }}">
             </div>
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Height (in px)</label>
-                <input type="number" class="form-control" id="front-page-h" name="large_height" required value="500">
+                <input type="number" class="form-control" id="event-large-page-h" name="event-large_height" required value="{{ image_sizes.full_height | default(500) }}">
+            </div>
+            <div class="col-md-5">
+                <input type="checkbox" id="event-large-page-a" name="event-large_aspect" checked> Maintain Aspect Ratio
             </div>
             <div class="help-block with-errors"></div>
         </div>
@@ -17,11 +21,14 @@
             <h4>Thumbnail Size</h4>
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Width (in px)</label>
-                <input type="number" class="form-control" id="front-page-w" name="thumbnail_width" required value="500">
+                <input type="number" class="form-control" id="event-thumbnail-page-w" name="event-thumbnail_width" required value="{{ image_sizes.thumbnail_width | default(500) }}">
             </div>
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Height (in px)</label>
-                <input type="number" class="form-control" id="front-page-h" name="thumbnail_height" required value="200">
+                <input type="number" class="form-control" id="event-thumbnail-page-h" name="event-thumbnail_height" required value="{{ image_sizes.thumbnail_height | default(200) }}">
+            </div>
+            <div class="col-md-5">
+                <input type="checkbox" id="event-thumbnail-page-a" name="event-thumbnail_aspect" checked> Maintain Aspect Ratio
             </div>
             <div class="help-block with-errors"></div>
         </div>
@@ -29,19 +36,14 @@
             <h4>Icon Size</h4>
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Width (in px)</label>
-                <input type="number" class="form-control" id="front-page-w" name="icon_width" required value="75">
+                <input type="number" class="form-control" id="event-icon-page-w" name="event-icon_width" required value="{{ image_sizes.icon_width | default(75) }}">
             </div>
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Height (in px)</label>
-                <input type="number" class="form-control" id="front-page-h" name="icon_height" required value="30">
+                <input type="number" class="form-control" id="event-icon-page-h" name="event-icon_height" required value="{{ image_sizes.icon_height | default(30) }}">
             </div>
-            <div class="help-block with-errors"></div>
-        </div><hr>
-        <div class="form-group">
-            <h4>Profile Image</h4>
-            <div class="col-md-4" style="margin-bottom:30px;">
-                <label>Width & Height(in px)</label>
-                <input type="number" class="form-control" id="front-page-w" name="icon_width" required value="75">
+            <div class="col-md-5">
+                <input type="checkbox" id="event-icon-page-a" name="event-icon_aspect" checked> Maintain Aspect Ratio
             </div>
             <div class="help-block with-errors"></div>
         </div><hr>
@@ -49,11 +51,11 @@
             <h4>Logo Size (Event Wizard)</h4>
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Width (in px)</label>
-                <input type="number" class="form-control" id="front-page-w" name="icon_width" required value="75">
+                <input type="number" class="form-control" id="logo-page-w" name="logo_width" required value="{{ image_sizes.logo_width | default(500) }}">
             </div>
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Height (in px)</label>
-                <input type="number" class="form-control" id="front-page-h" name="icon_height" required value="30">
+                <input type="number" class="form-control" id="logo-page-h" name="logo_height" required value="{{ image_sizes.logo_height | default(200) }}">
             </div>
             <div class="help-block with-errors"></div>
         </div><hr>
@@ -95,21 +97,38 @@
                 </div>
             </div>
             <hr>
+        </div>
+        <br>
+        <div class="ln_solid"></div>
+        <h3>Profile/Speaker Images</h3>
+        <div class="form-group">
+            <h4>Large Size</h4>
+            <div class="col-md-4" style="margin-bottom:30px;">
+                <label>Width & Height(in px)</label>
+                <input type="number" class="form-control" id="profile-front-page-w" name="profile-large_width" required value="{{ image_sizes.full_width | default(1300) }}">
+            </div>
+            <div class="help-block with-errors"></div>
+        </div>
+        <div class="form-group">
+            <h4>Thumbnail Size</h4>
+            <div class="col-md-4" style="margin-bottom:30px;">
+                <label>Width & Height(in px)</label>
+                <input type="number" class="form-control" id="profile-thumbnail-page-w" name="profile-thumbnail_width" required value="{{ image_sizes.thumbnail_width | default(500) }}">
+            </div>
+            <div class="help-block with-errors"></div>
+        </div>
+        <div class="form-group">
+            <h4>Icon Size</h4>
+            <div class="col-md-4" style="margin-bottom:30px;">
+                <label>Width & Height(in px)</label>
+                <input type="number" class="form-control" id="profile-icon-page-w" name="profile-icon_width" required value="{{ image_sizes.icon_width | default(75) }}">
+            </div>
+            <div class="help-block with-errors"></div>
+        </div><hr>
+        <div class="form-group">
             <div class="item">
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <h4>Speaker Image in Event Page</h4>
-                </div>
-                <div class="col-md-6 col-sm-6 col-xs-12" style="margin-top:15px;">
-                    <div class="radio-group">
-                        <input type="radio" name="size_speaker_event" autocomplete="off" value="large"> Large Size
-                        <input type="radio" name="size_speaker_event" autocomplete="off" value="icon"> Icon Size
-                        <input type="radio" name="size_speaker_event" autocomplete="off" value="thumbnail"checked> Thumbnail
-                    </div>
-                </div>
-            </div><hr>
-            <div class="item">
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <h4>Speaker Image in Event Dashboard</h4>
+                    <h4>Event Dashboard</h4>
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-12" style="margin-top:15px;">
                     <div class="radio-group">
@@ -119,8 +138,20 @@
                     </div>
                 </div>
             </div><hr>
+            <div class="item">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <h4>Public Event Page</h4>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12" style="margin-top:15px;">
+                    <div class="radio-group">
+                        <input type="radio" name="size_speaker_event" autocomplete="off" value="large"> Large Size
+                        <input type="radio" name="size_speaker_event" autocomplete="off" value="icon"> Icon Size
+                        <input type="radio" name="size_speaker_event" autocomplete="off" value="thumbnail" checked> Thumbnail
+                    </div>
+                </div>
+            </div>
+            <hr>
         </div>
-        <br>
         <div class="ln_solid"></div>
         <div class="form-group">
             <button id="fee-save" type="submit" name="image_config" class="btn btn-success pull-right">Save</button>
