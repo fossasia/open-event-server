@@ -2037,7 +2037,9 @@ def create_user_oauth(user, user_data, token, method):
     user.is_verified = True
     save_to_db(user, "User created")
     user_detail = UserDetail.query.filter_by(user_id=user.id).first()
-    user_detail.avatar_uploaded = save_file_provided_by_url(user.avatar)
+    f_name, uploaded_file = uploaded_file_provided_by_url(user.avatar)
+    avatar = upload(uploaded_file, 'users/%d/avatar' % int(user.id))
+    user_detail.avatar_uploaded = avatar
     user_detail.firstname = user_data['name']
     save_to_db(user, "User Details Updated")
     return user
@@ -2234,13 +2236,13 @@ def create_modules(form):
             save_to_db(event, "Event updated")
 
 
-def save_file_provided_by_url(url):
+def uploaded_file_provided_by_url(url):
     response_file = urlopen(url)
     filename = str(time.time()) + '.jpg'
     file_path = os.path.realpath('.') + '/static/temp/' + filename
     fh = open(file_path, "wb")
     fh.write(response_file.read())
     fh.close()
-    img = UploadedFile(file_path, filename)
+    return filename, UploadedFile(file_path, filename)
     background_url = upload(img, '/image/' + filename)
     return background_url
