@@ -492,6 +492,15 @@
                                             <strong style="font-weight: 400;">YES, accept payment by Cheque </strong><br>
                                         </label>
                                     </div>
+                                    <div class="item form-group" id="cheque-instuctions-holder" {% if not event.pay_by_cheque %}style="display: none"{% endif %}>
+                                        <label>Enter your PayPal account name and payment details instructions to ticket buyers [See an
+                                               <a href='#' data-toggle="modal" data-target="#chequeModal" title="Show cheque instructions"><strong style="font-weight: 400;">example</strong></a> here]
+                                        </label>
+                                        <textarea placeholder="Enter account details and instructions for cheque payment"
+                                                name="cheque-details"
+                                                class="form-control" rows="6" cols="15">{{ event.cheque_details | default('', true) }}</textarea>
+                                    </div>
+
                                     <div class="checkbox">
                                         <label style="font-weight: 300;">
                                             <input type="checkbox" name="pay_by_bank" id="pay_by_bank"
@@ -500,6 +509,15 @@
                                             <strong style="font-weight: 400;">YES, accept payment by Telegraphic Transfer(TT) / Bank Transfer </strong><br>
                                         </label>
                                     </div>
+                                    <div class="item form-group" id="bank-instuctions-holder" {% if not event.pay_by_bank %}style="display: none"{% endif %}>
+                                        <label>Enter your bank details and instructions to ticket buyers [See an
+                                               <a href='#' data-toggle="modal" data-target="#bankModal" title="Show bank details instructions"><strong style="font-weight: 400;">example</strong></a> here]
+                                        </label>
+                                        <textarea placeholder="Enter account details and instructions for Telegraphic Transfer(TT) / Bank Transfer payment"
+                                                name="bank-details"
+                                                class="form-control" rows="6" cols="15">{{ event.bank_details | default('', true) }}</textarea>
+                                    </div>
+
                                     <div class="checkbox">
                                         <label style="font-weight: 300;">
                                             <input type="checkbox" name="pay_onsite" id="pay_onsite"
@@ -507,6 +525,12 @@
                                                    {% if event.pay_onsite %}checked="checked"{% endif %}>
                                             <strong style="font-weight: 400;">YES, accept payment at the event(on site) </strong><br>
                                         </label>
+                                    </div>
+                                    <div class="item form-group" id="onsite-instuctions-holder" {% if not event.pay_onsite %}style="display: none"{% endif %}>
+                                        <label>Enter payment instructions to ticket buyers to make payments onsite</label>
+                                        <textarea placeholder="Enter instructions for payment at door"
+                                                name="onsite-details"
+                                                class="form-control" rows="6" cols="15">{{ event.onsite_details | default('', true) }}</textarea>
                                     </div>
             </div>
             </div>
@@ -813,6 +837,67 @@
         </div>
     </div>
 </form>
+
+<form role="form" id="cheque-form" method="post">
+    <div class="modal fade" id="chequeModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                    </button>
+                    <h3 class="modal-title">Cheque Instructions</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div>
+                                <textarea class="form-control" rows="20">To be made in Singapore Dollars, payable to the A/C:&#13;&#10;Payee Name: ABC Pvt. Ltd&#13;&#10;&#13;&#10;Please mail the check to:&#13;Mailing Address:&#13;&#10;ABC Pvt Ltd&#13;&#10;71 Ayer Rajah Crescent #01-23&#13;&#10;Singapore 123456&#13;&#10;&#13;&#10;Note:&#13;&#10;1. The cheque should be crossed by drawing two parallel lines across the top
+left-hand corner of the cheque.&#13;&#10;2. Indicate the order ref. no. and company's name at the back of the cheque.
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="reset" id="close-cheque-form" class="btn btn-default" data-dismiss="modal">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form role="form" id="bank-form" method="post">
+    <div class="modal fade" id="bankModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                    </button>
+                    <h3 class="modal-title">Bank Instructions</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div>
+                                <textarea class="form-control" rows="20">Please make the full payment to the following account:&#13;&#10;&#13;&#10;Once you made the payment , kindly drop an email to enquiry@abc.com to inform your
+payment and indicate your order ref. no.&#13;&#10;&#13;&#10;Account Details&#13;==================&#13;&#10;Account Name: ABC Pvt Ltd&#13;&#10;Account Number: 591-497xxxx-xxxx(Current Account)&#13;&#10;Bank Name&#13;&#10;&#13;&#10;If you need further info:&#13;&#10;Bank Code: 1234&#13;&#10;Branch Code:123&#13;&#10;Bank Address: Some address&#13;&#10;Swift Code: OBCSDGCGC
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="reset" id="close-bank-form" class="btn btn-default" data-dismiss="modal">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
 <script>
     var marker, map;
     var init_marker;
@@ -1483,6 +1568,29 @@
             }
         }).trigger('change');
 
+        var $chequeHolder = $("#cheque-instuctions-holder");
+        $("#pay_by_cheque").change(function () {
+            if ($("#pay_by_cheque").is(":checked"))
+                $chequeHolder.fadeIn();
+            else
+                $chequeHolder.fadeOut();
+        });
+
+        var $bankHolder = $("#bank-instuctions-holder");
+        $("#pay_by_bank").change(function () {
+            if ($("#pay_by_bank").is(":checked"))
+                $bankHolder.fadeIn();
+            else
+                $bankHolder.fadeOut();
+        });
+
+        var $onsiteHolder = $("#onsite-instuctions-holder");
+        $("#pay_onsite").change(function () {
+            if ($("#pay_onsite").is(":checked"))
+                $onsiteHolder.fadeIn();
+            else
+                $onsiteHolder.fadeOut();
+        });
     });
 </script>
 
