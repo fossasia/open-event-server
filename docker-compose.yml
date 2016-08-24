@@ -1,0 +1,46 @@
+version: '2'
+
+services:
+  data:
+    image: postgres:9.5
+    environment:
+      POSTGRES_PASSWORD: 'test'
+    volumes:
+      - /var/lib/postgresql
+    command: echo true
+
+  postgres:
+    image: postgres:9.5
+    environment:
+      POSTGRES_PASSWORD: 'test'
+    volumes_from:
+      - data
+    ports:
+      - '5432:5432'
+
+  redis:
+    image: 'redis:3-alpine'
+    command: redis-server
+    volumes:
+      - 'redis:/var/lib/redis/data'
+    ports:
+      - '6379:6379'
+
+  web:
+    build: .
+    environment:
+      DATABASE_URL: postgresql://postgres:test@postgres:5432/opev
+      REDIS_URL: redis://redis:6379/0
+      C_FORCE_ROOT: "true"
+      SERVER_NAME: $SERVER_NAME
+    links:
+      - postgres:postgres
+      - redis:redis
+    volumes:
+      - 'storage:/open_event/static'
+    ports:
+      - '80:5000'
+
+volumes:
+  redis:
+  storage:

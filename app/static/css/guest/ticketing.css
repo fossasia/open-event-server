@@ -1,0 +1,30 @@
+body .container.body .right_col {
+  background-color: #FFFFFF !important;
+}
+
+#order-summary-holder {
+  padding-left: 0 !important;
+}
+
+#order-summary-holder th {
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+#order-summary-holder .total-row {
+  font-size: 14px;
+  padding-top: 14px;
+}
+
+#registration-information-holder .time-left-alert {
+  color: #FFFFFF !important;
+}
+
+#time-left {
+    font-size: 28px;
+    margin-right: 16px;
+}
+
+.form-group > label, .label-header {
+  margin-top: 0 !important;
+}

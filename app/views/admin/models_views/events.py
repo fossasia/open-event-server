@@ -2,29 +2,40 @@ import json
 import datetime
 import os
 import binascii
+from uuid import uuid4
 
-from flask import flash, url_for
+from flask import flash, url_for, redirect, request, jsonify, Markup
+from flask.ext.login import current_user
 from flask.ext.admin import BaseView
+from flask.ext.restplus import abort
 from flask_admin import expose
 
 from app import db
-from app.helpers.permission_decorators import *
+from app.helpers.storage import upload, upload_local, UPLOAD_PATHS
+from app.helpers.helpers import uploaded_file
+from app.helpers.permission_decorators import is_organizer, is_super_admin, can_access
 from app.helpers.helpers import fields_not_empty, string_empty
 from app.models.call_for_papers import CallForPaper
 from ....helpers.data import DataManager, save_to_db, record_activity, delete_from_db, restore_event
 from ....helpers.data_getter import DataGetter
 from werkzeug.datastructures import ImmutableMultiDict
 from app.helpers.helpers import send_event_publish
+from app.helpers.ticketing import TicketingManager
+from app.settings import get_settings
+from app.helpers.microservices import AndroidAppCreator, WebAppCreator
+
 
 def is_verified_user():
-    return login.current_user.is_verified
+    return current_user.is_verified
 
 
 def is_accessible():
-    return login.current_user.is_authenticated
+    return current_user.is_authenticated
+
 
 def get_random_hash():
     return binascii.b2a_hex(os.urandom(20))
+
 
 class EventsView(BaseView):
     def _handle_view(self, name, **kwargs):
@@ -37,24 +48,75 @@ class EventsView(BaseView):
         draft_events = DataGetter.get_draft_events()
         past_events = DataGetter.get_past_events()
         all_events = DataGetter.get_all_events()
+        imported_events = DataGetter.get_imports_by_user()
+        free_ticket_count = {}
+        paid_ticket_count = {}
+        donation_ticket_count = {}
+        max_free_ticket = {}
+        max_paid_ticket = {}
+        max_donation_ticket = {}
+        for event in all_events:
+            free_ticket_count[event.id] = TicketingManager.get_orders_count_by_type(event.id, type='free')
+            max_free_ticket[event.id] = TicketingManager.get_max_orders_count(event.id, type='free')
+            paid_ticket_count[event.id] = TicketingManager.get_orders_count_by_type(event.id, type='paid')
+            max_paid_ticket[event.id] = TicketingManager.get_max_orders_count(event.id, type='paid')
+            donation_ticket_count[event.id] = TicketingManager.get_orders_count_by_type(event.id, type='donation')
+            max_donation_ticket[event.id] = TicketingManager.get_max_orders_count(event.id, type='donation')
         if not is_verified_user():
-            flash("Your account is unverified. "
-                  "Please verify by clicking on the confirmation link that has been emailed to you.")
+            flash(Markup('Your account is unverified. '
+                         'Please verify by clicking on the confirmation link that has been emailed to you.<br>'
+                         'Did not get the email? Please <a href="/resend_email/" class="alert-link"> click here to resend the confirmation.</a>'))
         return self.render('/gentelella/admin/event/index.html',
                            live_events=live_events,
                            draft_events=draft_events,
                            past_events=past_events,
-                           all_events=all_events)
+                           all_events=all_events,
+                           free_ticket_count=free_ticket_count,
+                           paid_ticket_count=paid_ticket_count,
+                           donation_ticket_count=donation_ticket_count,
+                           max_free_ticket=max_free_ticket,
+                           max_paid_ticket=max_paid_ticket,
+                           max_donation_ticket=max_donation_ticket,
+                           imported_events=imported_events)
 
     @expose('/create/<step>', methods=('GET', 'POST'))
     def create_view_stepped(self, step):
         return redirect(url_for('.create_view'))
 
-    @expose('/create/', methods=('GET', 'POST'))
-    def create_view(self,):
-        ticket_include = []
-
+    @expose('/create/files/bgimage', methods=('POST',))
+    def create_event_bgimage_upload(self):
         if request.method == 'POST':
+            background_image = request.form['bgimage']
+            if background_image:
+                background_file = uploaded_file(file_content=background_image)
+                background_url = upload_local(
+                    background_file,
+                    UPLOAD_PATHS['temp']['event'].format(uuid=uuid4())
+                )
+                return jsonify({'status': 'ok', 'background_url': background_url})
+            else:
+                return jsonify({'status': 'no bgimage'})
+
+    @expose('/create/files/logo', methods=('POST',))
+    def create_event_logo_upload(self):
+        if request.method == 'POST':
+            logo_image = request.form['logo']
+            if logo_image:
+                logo_file = uploaded_file(file_content=logo_image)
+                logo = upload_local(
+                    logo_file,
+                    UPLOAD_PATHS['temp']['event'].format(uuid=uuid4())
+                )
+                return jsonify({'status': 'ok', 'logo': logo})
+            else:
+                return jsonify({'status': 'no logo'})
+
+    @expose('/create/', methods=('GET', 'POST'))
+    def create_view(self, ):
+        if request.method == 'POST':
+            if not current_user.can_create_event():
+                flash("You don't have permission to create event.")
+                return redirect(url_for('.index_view'))
             img_files = []
             imd = ImmutableMultiDict(request.files)
             if 'sponsors[logo]' in imd and request.files['sponsors[logo]'].filename != "":
@@ -71,11 +133,6 @@ class EventsView(BaseView):
                 return redirect(url_for('.details_view', event_id=event.id))
             return redirect(url_for('.index_view'))
 
-        module = DataGetter.get_module()
-        if module is not None:
-            if module.ticket_include:
-                ticket_include.append('ticketing')
-
         hash = get_random_hash()
         if CallForPaper.query.filter_by(hash=hash).all():
             hash = get_random_hash()
@@ -89,13 +146,14 @@ class EventsView(BaseView):
             event_sub_topics=DataGetter.get_event_subtopics(),
             timezones=DataGetter.get_all_timezones(),
             cfs_hash=hash,
-            ticket_include_setting=ticket_include)
+            payment_countries=DataGetter.get_payment_countries(),
+            payment_currencies=DataGetter.get_payment_currencies(),
+            included_settings=self.get_module_settings())
 
     @expose('/<event_id>/', methods=('GET', 'POST'))
     @can_access
     def details_view(self, event_id):
         event = DataGetter.get_event(event_id)
-
         checklist = {"": ""}
 
         if fields_not_empty(event,
@@ -165,13 +223,67 @@ class EventsView(BaseView):
             checklist["4"] = 'optional'
             checklist["5"] = 'optional'
 
-        if not is_verified_user():
-            flash("To make your event live, please verify your email by "
-                  "clicking on the confirmation link that has been emailed to you.")
+        if not current_user.can_publish_event() and not is_verified_user():
+            flash(Markup('To make your event live, please verify your email by '
+                         'clicking on the confirmation link that has been emailed to you.<br>'
+                         'Did not get the email? Please <a href="/resend_email/" class="alert-link"> click here to resend the confirmation.</a>'))
+
+        sessions = {'pending': DataGetter.get_sessions_by_state_and_event_id('pending', event_id).count(),
+                    'accepted': DataGetter.get_sessions_by_state_and_event_id('accepted', event_id).count(),
+                    'rejected': DataGetter.get_sessions_by_state_and_event_id('rejected', event_id).count(),
+                    'draft': DataGetter.get_sessions_by_state_and_event_id('draft', event_id).count()}
 
         return self.render('/gentelella/admin/event/details/details.html',
                            event=event,
-                           checklist=checklist)
+                           checklist=checklist,
+                           sessions=sessions,
+                           settings=get_settings())
+
+    @expose('/<int:event_id>/editfiles/bgimage', methods=('POST', 'DELETE'))
+    def bgimage_upload(self, event_id):
+        if request.method == 'POST':
+            background_image = request.form['bgimage']
+            if background_image:
+                background_file = uploaded_file(file_content=background_image)
+                background_url = upload(
+                    background_file,
+                    UPLOAD_PATHS['event']['background_url'].format(
+                        event_id=event_id
+                    ))
+                event = DataGetter.get_event(event_id)
+                event.background_url = background_url
+                save_to_db(event)
+                return jsonify({'status': 'ok', 'background_url': background_url})
+            else:
+                return jsonify({'status': 'no bgimage'})
+        elif request.method == 'DELETE':
+            event = DataGetter.get_event(event_id)
+            event.background_url = ''
+            save_to_db(event)
+            return jsonify({'status': 'ok'})
+
+    @expose('/<int:event_id>/editfiles/logo', methods=('POST', 'DELETE'))
+    def logo_upload(self, event_id):
+        if request.method == 'POST':
+            logo_image = request.form['logo']
+            if logo_image:
+                logo_file = uploaded_file(file_content=logo_image)
+                logo = upload(
+                    logo_file,
+                    UPLOAD_PATHS['event']['logo'].format(
+                        event_id=event_id
+                    ))
+                event = DataGetter.get_event(event_id)
+                event.logo = logo
+                save_to_db(event)
+                return jsonify({'status': 'ok', 'logo': logo})
+            else:
+                return jsonify({'status': 'no logo'})
+        elif request.method == 'DELETE':
+            event = DataGetter.get_event(event_id)
+            event.logo = ''
+            save_to_db(event)
+            return jsonify({'status': 'ok'})
 
     @expose('/<event_id>/edit/', methods=('GET', 'POST'))
     @can_access
@@ -181,6 +293,7 @@ class EventsView(BaseView):
     @expose('/<event_id>/edit/<step>', methods=('GET', 'POST'))
     @can_access
     def edit_view_stepped(self, event_id, step):
+
         event = DataGetter.get_event(event_id)
         session_types = DataGetter.get_session_types_by_event_id(event_id).all(
         )
@@ -192,6 +305,8 @@ class EventsView(BaseView):
         custom_forms = DataGetter.get_custom_form_elements(event_id)
         speaker_form = json.loads(custom_forms.speaker_form)
         session_form = json.loads(custom_forms.session_form)
+        tax = DataGetter.get_tax_options(event_id)
+        ticket_types = DataGetter.get_ticket_types(event_id)
 
         preselect = []
         required = []
@@ -229,7 +344,14 @@ class EventsView(BaseView):
                                timezones=DataGetter.get_all_timezones(),
                                cfs_hash=hash,
                                step=step,
-                               required=required)
+                               required=required,
+                               included_settings=self.get_module_settings(),
+                               tax=tax,
+                               payment_countries=DataGetter.get_payment_countries(),
+                               start_date=datetime.datetime.now() + datetime.timedelta(days=10),
+                               payment_currencies=DataGetter.get_payment_currencies(),
+                               ticket_types=ticket_types)
+
         if request.method == "POST":
             img_files = []
             imd = ImmutableMultiDict(request.files)
@@ -245,11 +367,12 @@ class EventsView(BaseView):
 
             event = DataManager.edit_event(
                 request, event_id, event, session_types, tracks, social_links,
-                microlocations, call_for_speakers, sponsors, custom_forms, img_files, old_sponsor_logos, old_sponsor_names)
+                microlocations, call_for_speakers, sponsors, custom_forms, img_files, old_sponsor_logos,
+                old_sponsor_names, tax)
 
             if (request.form.get('state',
-                                u'Draft') == u'Published') and string_empty(
-                                event.location_name):
+                                 u'Draft') == u'Published') and string_empty(
+                event.location_name):
                 flash(
                     "Your event was saved. To publish your event please review the highlighted fields below.",
                     "warning")
@@ -261,9 +384,9 @@ class EventsView(BaseView):
     @can_access
     def trash_view(self, event_id):
         if request.method == "GET":
-            event = DataManager.trash_event(event_id)
+            DataManager.trash_event(event_id)
         flash("Your event has been deleted.", "danger")
-        if login.current_user.is_super_admin == True:
+        if current_user.is_super_admin == True:
             return redirect(url_for('sadmin_events.index_view'))
         return redirect(url_for('.index_view'))
 
@@ -271,7 +394,7 @@ class EventsView(BaseView):
     @is_super_admin
     def delete_view(self, event_id):
         if request.method == "GET":
-            event = DataManager.delete_event(event_id)
+            DataManager.delete_event(event_id)
         flash("Your event has been permanently deleted.", "danger")
         return redirect(url_for('sadmin_events.index_view'))
 
@@ -282,15 +405,6 @@ class EventsView(BaseView):
         flash("Your event has been restored", "success")
         return redirect(url_for('sadmin_events.index_view'))
 
-    @expose('/<int:event_id>/update/', methods=('POST',))
-    def save_closing_date(self, event_id):
-        event = DataGetter.get_event(event_id)
-        event.closing_datetime = request.form['closing_datetime']
-        save_to_db(event, 'Closing Datetime Updated')
-        return self.render('/gentelella/admin/event/details/details.html',
-                           event=event)
-
-
     @expose('/<int:event_id>/publish/', methods=('GET',))
     def publish_event(self, event_id):
         event = DataGetter.get_event(event_id)
@@ -300,7 +414,8 @@ class EventsView(BaseView):
                 "warning")
             return redirect(url_for('.edit_view',
                                     event_id=event.id) + "#highlight=location_name")
-        if not is_verified_user():
+        if not current_user.can_publish_event():
+            flash("You don't have permission to publish event.")
             return redirect(url_for('.details_view', event_id=event_id))
         event.state = 'Published'
         save_to_db(event, 'Event Published')
@@ -324,6 +439,16 @@ class EventsView(BaseView):
         save_to_db(event, 'Event Unpublished')
         record_activity('publish_event', event_id=event.id, status='un-published')
         flash("Your event has been unpublished.", "warning")
+        return redirect(url_for('.details_view', event_id=event_id))
+
+    @expose('/<int:event_id>/generate_android_app/', methods=('POST',))
+    def generate_android_app(self, event_id):
+        AndroidAppCreator(event_id).create()
+        return redirect(url_for('.details_view', event_id=event_id))
+
+    @expose('/<int:event_id>/generate_web_app/', methods=('POST',))
+    def generate_web_app(self, event_id):
+        WebAppCreator(event_id).create()
         return redirect(url_for('.details_view', event_id=event_id))
 
     @expose('/<int:event_id>/restore/<int:version_id>', methods=('GET',))
@@ -357,6 +482,7 @@ class EventsView(BaseView):
                            event_types=DataGetter.get_event_types(),
                            event_licences=DataGetter.get_event_licences(),
                            event_topics=DataGetter.get_event_topics(),
+                           start_date=datetime.datetime.now() + datetime.timedelta(days=10),
                            event_sub_topics=DataGetter.get_event_subtopics(),
                            timezones=DataGetter.get_all_timezones())
 
@@ -365,10 +491,9 @@ class EventsView(BaseView):
         """Accept User-Role invite for the event.
         """
         event = DataGetter.get_event(event_id)
-        user = login.current_user
-        role_invite = DataGetter.get_event_role_invite(email=user.email,
-                                                       event_id=event.id,
-                                                       hash=hash)
+        user = current_user
+        role_invite = DataGetter.get_event_role_invite(event.id, hash,
+                                                       email=user.email)
 
         if role_invite:
             if role_invite.has_expired():
@@ -400,10 +525,9 @@ class EventsView(BaseView):
         """Decline User-Role invite for the event.
         """
         event = DataGetter.get_event(event_id)
-        user = login.current_user
-        role_invite = DataGetter.get_event_role_invite(email=user.email,
-                                                       event_id=event.id,
-                                                       hash=hash)
+        user = current_user
+        role_invite = DataGetter.get_event_role_invite(event.id, hash,
+                                                       email=user.email)
 
         if role_invite:
             if role_invite.has_expired():
@@ -423,8 +547,7 @@ class EventsView(BaseView):
     @is_organizer
     def delete_user_role_invite(self, event_id, hash):
         event = DataGetter.get_event(event_id)
-        role_invite = DataGetter.get_event_role_invite(event_id=event.id,
-                                                       hash=hash)
+        role_invite = DataGetter.get_event_role_invite(event.id, hash)
 
         if role_invite:
             delete_from_db(role_invite, 'Deleted RoleInvite')
@@ -433,3 +556,15 @@ class EventsView(BaseView):
             return redirect(url_for('.details_view', event_id=event.id))
         else:
             abort(404)
+
+    def get_module_settings(self):
+        included_setting = []
+        module = DataGetter.get_module()
+        if module is not None:
+            if module.ticket_include:
+                included_setting.append('ticketing')
+            if module.payment_include:
+                included_setting.append('payments')
+            if module.donation_include:
+                included_setting.append('donations')
+        return included_setting

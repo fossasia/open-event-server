@@ -1,7 +1,9 @@
 from sqlalchemy import event
 from datetime import datetime
 
+import humanize
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+from flask import url_for
 
 from app.models.session import Session
 from app.models.speaker import Speaker
@@ -10,18 +12,28 @@ from user_detail import UserDetail
 from .role import Role
 from .service import Service
 from .permission import Permission
-from .users_events_roles import UsersEventsRoles
+from .panel_permissions import PanelPermission
+from .user_permissions import UserPermission
+from .users_events_roles import UsersEventsRoles as UER
 from .notifications import Notification
 
 # System-wide
 ADMIN = 'admin'
 SUPERADMIN = 'super_admin'
+SALES_ADMIN = 'sales_admin'
+
+SYS_ROLES_LIST = [
+    ADMIN,
+    SUPERADMIN,
+    SALES_ADMIN,
+]
 
 # Event-specific
 ORGANIZER = 'organizer'
 COORGANIZER = 'coorganizer'
 TRACK_ORGANIZER = 'track_organizer'
 MODERATOR = 'moderator'
+ATTENDEE = 'attendee'
 
 
 class User(db.Model):
@@ -35,6 +47,7 @@ class User(db.Model):
     tokens = db.Column(db.Text)
     is_super_admin = db.Column(db.Boolean, default=False)
     is_admin = db.Column(db.Boolean, default=False)
+    is_sales_admin = db.Column(db.Boolean, default=False)
     is_verified = db.Column(db.Boolean, default=False)
     signup_time = db.Column(db.DateTime)
     last_access_time = db.Column(db.DateTime)
@@ -43,10 +56,38 @@ class User(db.Model):
     created_date = db.Column(db.DateTime, default=datetime.now())
     trash_date = db.Column(db.DateTime)
 
+    # User Permissions
+    def can_publish_event(self):
+        """Checks if User can publish an event
+        """
+        perm = UserPermission.query.filter_by(name='publish_event').first()
+        if not perm:
+            return self.is_verified
+
+        if self.is_verified:
+            return perm.verified_user
+        else:
+            return perm.unverified_user
+
+    def can_create_event(self):
+        """Checks if User can create an event
+        """
+        perm = UserPermission.query.filter_by(name='create_event').first()
+        if not perm:
+            return self.is_verified
+
+        if self.is_verified:
+            return perm.verified_user
+        else:
+            return perm.unverified_user
+
     def has_role(self, event_id):
         """Checks if user has any of the Roles at an Event.
+        Exclude Attendee Role.
         """
-        uer = UsersEventsRoles.query.filter_by(user=self, event_id=event_id).first()
+        attendee_role = Role.query.filter_by(name=ATTENDEE).first()
+        uer = UER.query.filter(UER.user == self, UER.event_id == event_id,
+            UER.role != attendee_role).first()
         if uer is None:
             return False
         else:
@@ -56,7 +97,7 @@ class User(db.Model):
         """Checks if a user has a particular Role at an Event.
         """
         role = Role.query.filter_by(name=role_name).first()
-        uer = UsersEventsRoles.query.filter_by(user=self,
+        uer = UER.query.filter_by(user=self,
                                                event_id=event_id,
                                                role=role).first()
         if not uer:
@@ -75,6 +116,9 @@ class User(db.Model):
 
     def is_moderator(self, event_id):
         return self._is_role(MODERATOR, event_id)
+
+    def is_attendee(self, event_id):
+        return self._is_role(ATTENDEE, event_id)
 
     def _has_perm(self, operation, service_class, event_id):
         # Operation names and their corresponding permission in `Permissions`
@@ -98,7 +142,7 @@ class User(db.Model):
 
         service = Service.query.filter_by(name=service_name).first()
 
-        uer_querylist = UsersEventsRoles.query.filter_by(user=self,
+        uer_querylist = UER.query.filter_by(user=self,
                                                          event_id=event_id)
         for uer in uer_querylist:
             role = uer.role
@@ -129,9 +173,9 @@ class User(db.Model):
                 return True
             else:
                 return False
-        except MultipleResultsFound, e:
+        except MultipleResultsFound:
             return False
-        except NoResultFound, e:
+        except NoResultFound:
             return False
 
     def is_speaker_at_event(self, event_id):
@@ -142,9 +186,9 @@ class User(db.Model):
                 return True
             else:
                 return False
-        except MultipleResultsFound, e:
+        except MultipleResultsFound:
             return False
-        except NoResultFound, e:
+        except NoResultFound:
             return False
 
     # Flask-Login integration
@@ -164,9 +208,47 @@ class User(db.Model):
     def is_staff(self):
         return self.is_super_admin or self.is_admin
 
+    def _get_sys_roles(self):
+        sys_roles = []
+        if self.is_super_admin:
+            sys_roles.append(SUPERADMIN)
+        if self.is_admin:
+            sys_roles.append(ADMIN)
+        if self.is_sales_admin:
+            sys_roles.append(SALES_ADMIN)
+        return sys_roles
+
+    def can_access_panel(self, panel_name):
+        sys_roles = self._get_sys_roles()
+        for role in sys_roles:
+            perm = PanelPermission.query.filter_by(role_name=role,
+                panel_name=panel_name).first()
+            if perm:
+                if perm.can_access:
+                    return True
+        return False
+
     def get_unread_notif_count(self):
         return len(Notification.query.filter_by(user=self,
                                                 has_read=False).all())
+
+    def get_unread_notifs(self, reverse=False):
+        """Get unread notifications with titles, humanized receiving time
+        and Mark-as-read links.
+        """
+        notifs = []
+        unread_notifs = Notification.query.filter_by(user=self, has_read=False)
+        for notif in unread_notifs:
+            notifs.append({
+                'title': notif.title,
+                'received_at': humanize.naturaltime(datetime.now() - notif.received_at),
+                'mark_read': url_for('notifications.mark_as_read', notification_id=notif.id)
+            })
+
+        if reverse:
+            return list(reversed(notifs))
+        else:
+            return notifs
 
     # update last access time
     def update_lat(self):

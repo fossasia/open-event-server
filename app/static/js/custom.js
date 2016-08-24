@@ -20,15 +20,15 @@ $(document).ready(function() {
         var $BOX_PANEL = $(this).closest('.x_panel'),
             $ICON = $(this).find('i'),
             $BOX_CONTENT = $BOX_PANEL.find('.x_content');
-        
+
         // fix for some div with hardcoded fix class
         if ($BOX_PANEL.attr('style')) {
             $BOX_CONTENT.slideToggle(200, function(){
                 $BOX_PANEL.removeAttr('style');
             });
         } else {
-            $BOX_CONTENT.slideToggle(200); 
-            $BOX_PANEL.css('height', 'auto');  
+            $BOX_CONTENT.slideToggle(200);
+            $BOX_PANEL.css('height', 'auto');
         }
 
         $ICON.toggleClass('fa-chevron-up fa-chevron-down');
@@ -51,9 +51,11 @@ $(document).ready(function() {
 // /Tooltip
 
 // Progressbar
-if ($(".progress .progress-bar")[0]) {
-    $('.progress .progress-bar').progressbar(); // bootstrap 3
-}
+$(document).ready(function() {
+    if ($(".progress .progress-bar")[0]) {
+        $('.progress .progress-bar').progressbar(); // bootstrap 3
+    }
+});
 // /Progressbar
 
 // Switchery
@@ -162,9 +164,9 @@ if (typeof NProgress != 'undefined') {
 
 /**
  * Resize function without multiple trigger
- * 
+ *
  * Usage:
- * $(window).smartresize(function(){  
+ * $(window).smartresize(function(){
  *     // code here
  * });
  */
@@ -179,7 +181,7 @@ if (typeof NProgress != 'undefined') {
             function delayed () {
                 if (!execAsap)
                     func.apply(obj, args);
-                timeout = null; 
+                timeout = null;
             }
 
             if (timeout)
@@ -187,11 +189,72 @@ if (typeof NProgress != 'undefined') {
             else if (execAsap)
                 func.apply(obj, args);
 
-            timeout = setTimeout(delayed, threshold || 100); 
+            timeout = setTimeout(delayed, threshold || 100);
         };
     };
 
-    // smartresize 
+    // smartresize
     jQuery.fn[sr] = function(fn){  return fn ? this.bind('resize', debounce(fn)) : this.trigger(sr); };
 
 })(jQuery,'smartresize');
+
+// Add event handlers to anchor tags that are dynamically loaded
+function setATagsInNotifMenuDropDown(notificationViewPath) {
+    $("ul#notif-menu li.notif-menu-li").each(function (i, li) {
+        // Clicking on a message redirects to Notification page
+        $(li).children("a").children(".message").click(function() {
+            window.location = notificationViewPath;
+        });
+        // Mark-as-read button sends AJAX call to mark-notification-as-read GET endpoint
+        $(li).children("a").children(".mark-as-read").click(function() {
+            var url = $(this).data("markread");
+            $.ajax({
+                url: url,
+                success: function(data) {
+                    console.log(data.status);
+                    $(li).slideUp(500, function() {
+                        $(li).remove();
+                    });
+                    var notif_count = $("#notif_count").text();
+                    $("#notif_count").text(parseInt(notif_count) - 1);
+                }
+            });
+        });
+    });
+}
+
+/* Notification Dropdown list at Navbar
+ */
+$(document).ready(function() {
+    /* Handle Notification Dropdown toggle manually.
+     * https://stackoverflow.com/questions/25089297
+     */
+    $('li.dropdown.mega-dropdown a').on('click', function (event) {
+        $(this).parent().toggleClass('open');
+    });
+    $('body').on('click', function (e) {
+        if (!$('li.dropdown.mega-dropdown').is(e.target) &&
+            $('li.dropdown.mega-dropdown').has(e.target).length === 0 &&
+            $('.open').has(e.target).length === 0
+        ) {
+            $('li.dropdown.mega-dropdown').removeClass('open');
+        }
+    });
+
+    // Add event handler to Mark-all-read notification button
+    $(".notif-mark-all-read").click(function(e) {
+        e.preventDefault();
+        var url = $(this).data("markallread");
+        $.ajax({
+            url: url,
+            success: function(data) {
+                $("ul#notif-menu li.notif-menu-li").each(function(i, li) {
+                    $(li).slideUp(500, function() {
+                        $(li).remove();
+                    });
+                    $("#notif_count").text("");
+                });
+            }
+        });
+    });
+});

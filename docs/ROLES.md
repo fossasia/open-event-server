@@ -1,3 +1,5 @@
+# ROLES
+
 The system has two kind of role type. 1. System roles are related to the Open Event organization and operator of the application. 2. Event Roles are related to the users of the system with their different permissions.
 
 ##1. System Roles

@@ -7,12 +7,15 @@ from flask.ext import login
 from flask import request, url_for, redirect, flash
 from ....helpers.data import delete_from_db, save_to_db
 from ....helpers.data_getter import DataGetter
+from ....helpers.storage import upload, UPLOAD_PATHS
+
 
 def get_speaker_or_throw(speaker_id):
     session = DataGetter.get_speaker(speaker_id)
     if not session:
         abort(404)
     return session
+
 
 class SpeakersView(BaseView):
 
@@ -47,6 +50,16 @@ class SpeakersView(BaseView):
                                speaker=speaker, event_id=event_id,
                                event=event, speaker_form=speaker_form)
         if request.method == 'POST':
+            # set photo
+            if 'photo' in request.files and request.files['photo'].filename != '':
+                speaker_img_file = request.files['photo']
+                speaker_img = upload(
+                    speaker_img_file,
+                    UPLOAD_PATHS['speakers']['photo'].format(
+                        event_id=int(event_id), id=int(speaker.id)
+                    ))
+                speaker.photo = speaker_img
+            # set other fields
             speaker.name = request.form.get('name', None)
             speaker.short_biography = request.form.get('short_biography', None)
             speaker.long_biography = request.form.get('long_biography', None)
@@ -58,6 +71,7 @@ class SpeakersView(BaseView):
             speaker.github = request.form.get('github', None)
             speaker.linkedin = request.form.get('linkedin', None)
             speaker.organisation = request.form.get('organisation', None)
+            speaker.featured = True if request.form.get('featured', 'false') == 'true' else False
             speaker.position = request.form.get('position', None)
             speaker.country = request.form.get('country', None)
             save_to_db(speaker, "Speaker has been updated")

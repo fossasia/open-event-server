@@ -21,7 +21,7 @@
         </div>
         <div class="form-group">
             <label for="contact">Phone</label>
-            <input type="tel" class="form-control" id="contact" value="{{user.user_detail.contact | default('', true) }}"  name="contact" maxlength="15" pattern="\d*" placeholder="Mobile number" data-pattern-error="Please enter a valid numeric phone/mobile number" required>
+            <input type="text" class="form-control" id="contact" value="{{user.user_detail.contact | default('', true) }}"  name="contact" maxlength="15" pattern='[\+]\d*[a-zA-Z0-9 ]+' placeholder="+123456789" data-pattern-error="Please enter the requested format, e.g. +123456789" data-error="Please enter the requested format, e.g. +123456789" required>
             <div class="help-block with-errors"></div>
         </div>
         <br>

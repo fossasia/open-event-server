@@ -1,49 +1,48 @@
-<div class="col-md-4 col-sm-4 col-xs-12">
-    <div class="x_panel" style="height: auto;">
-        <div class="x_title">
-            <h2>Heroku Info
-            </h2>
-            <div class="clearfix"></div>
-        </div>
-        <div class="x_content">
-            <div class="dashboard-widget-content">
+<div class="x_panel" style="height: auto;">
+  <div class="x_title">
+    <h2>Heroku Info
+    </h2>
+    <div class="clearfix"></div>
+  </div>
+  <div class="x_content">
+    <div class="dashboard-widget-content">
 
-                <div style="width: 100%; text-align: center;">
-                    <a href="https://github.com/fossasia/open-event-orga-server" target="_blank"
-                       style="font-size: 26px; font-weight: 300;">
-                        Open Event
-                    </a>
-                </div>
+      <div style="width: 100%; text-align: center;">
+        <a href="https://github.com/fossasia/open-event-orga-server" target="_blank"
+           style="font-size: 26px; font-weight: 300;">
+          Open Event
+        </a>
+      </div>
 
-                <table class="table table-bordered" style="margin-top: 12px;">
-                    <tbody>
-                    <tr>
-                        <td>Heroku Version</td>
-                        <td>{{ version.version }}</td>
-                    </tr>
-                    <tr>
-                        <td>Revision</td>
-                        <td><a href="{{ commit_info.html_url }}" target="_blank">{{ version.description }} <i
-                            class="fa fa-code-fork"></i></a></td>
-                    </tr>
-                    <tr>
-                        <td>Author Name</td>
-                        <td><a href="{{ commit_info.author.html_url }}" target="_blank">{{
-                            commit_info.commit.author.name }} <i class="fa fa-external-link"></i></a></td>
-                    </tr>
-                    <tr>
-                        <td>Email</td>
-                        <td><a href="mailto:{{ commit_info.commit.author.email }}" target="_blank">{{
-                            commit_info.commit.author.email }}</a></td>
-                    </tr>
-                    <tr>
-                        <td>Commit Message</td>
-                        <td><a href="{{ commit_info.html_url }}" target="_blank">{{ commit_info.commit.message }} <i
-                            class="fa fa-github"></i></a></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+      <table class="table table-bordered" style="margin-top: 12px;">
+        <tbody>
+        <tr>
+          <td>Heroku Version</td>
+          <td>{{ version.version }}</td>
+        </tr>
+        <tr>
+          <td>Revision</td>
+          <td><a href="{{ commit_info.html_url }}" target="_blank">{{ version.description }} <i
+            class="fa fa-code-fork"></i></a></td>
+        </tr>
+        <tr>
+          <td>Author Name</td>
+          <td><a href="{{ commit_info.author.html_url }}" target="_blank">{{
+            commit_info.commit.author.name }} <i class="fa fa-external-link"></i></a></td>
+        </tr>
+        <tr>
+          <td>Email</td>
+          <td><a href="mailto:{{ commit_info.commit.author.email }}" target="_blank">{{
+            commit_info.commit.author.email }}</a></td>
+        </tr>
+        <tr>
+          <td>Commit Message</td>
+          <td><a href="{{ commit_info.html_url }}" target="_blank">{{ commit_info.commit.message }} <i
+            class="fa fa-github"></i></a></td>
+        </tr>
+        </tbody>
+      </table>
     </div>
+  </div>
 </div>
+

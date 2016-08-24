@@ -5,14 +5,15 @@ import re
 import requests
 import traceback
 import json
-from flask import request
+from flask import request, g
 from werkzeug import secure_filename
 
 from flask import current_app as app
+from app.models.import_jobs import ImportJob
 from app.helpers.storage import UploadedFile, upload, UploadedMemory, \
     UPLOAD_PATHS
 from app.helpers.data import save_to_db
-from app.helpers.helpers import update_state
+from app.helpers.helpers import update_state, send_email_after_import
 from app.helpers.update_version import VersionUpdater
 
 from ..events import DAO as EventDAO, LinkDAO as SocialLinkDAO
@@ -38,7 +39,7 @@ IMPORT_SERIES = [
 ]
 
 DELETE_FIELDS = {
-    'event': ['creator', 'social_links'],
+    'event': ['creator'],
     'tracks': ['sessions'],
     'speakers': ['sessions']
 }
@@ -160,7 +161,7 @@ def _upload_media(task_handle, event_id, base_path):
     for i in UPLOAD_QUEUE:
         # update progress
         ct += 1
-        update_state(task_handle, 'UPLOADING MEDIA (%d/%d)' % (ct, total))
+        update_state(task_handle, 'Uploading media (%d/%d)' % (ct, total))
         # get upload infos
         name, dao = i['srv']
         id_ = i['id']
@@ -250,7 +251,7 @@ def _fix_related_fields(srv, data, service_ids):
     return data
 
 
-def create_service_from_json(data, srv, event_id, service_ids={}):
+def create_service_from_json(task_handle, data, srv, event_id, service_ids={}):
     """
     Given :data as json, create the service on server
     :service_ids are the mapping of ids of already created services.
@@ -260,8 +261,13 @@ def create_service_from_json(data, srv, event_id, service_ids={}):
     # sort by id
     data.sort(key=lambda k: k['id'])
     ids = {}
+    ct = 0
+    total = len(data)
     # start creating
     for obj in data:
+        # update status
+        ct += 1
+        update_state(task_handle, 'Importing %s (%d/%d)' % (srv[0], ct, total))
         # trim id field
         old_id, obj = _trim_id(obj)
         CUR_ID = old_id
@@ -284,7 +290,7 @@ def import_event_json(task_handle, zip_path):
     """
     global CUR_ID, UPLOAD_QUEUE
     UPLOAD_QUEUE = []
-    update_state(task_handle, 'IMPORTING')
+    update_state(task_handle, 'Started')
 
     with app.app_context():
         path = app.config['BASE_DIR'] + '/static/temp/import_event'
@@ -296,12 +302,17 @@ def import_event_json(task_handle, zip_path):
         z.extractall(path)
     # create event
     try:
+        update_state(task_handle, 'Importing event core')
         data = json.loads(open(path + '/event', 'r').read())
         _, data = _trim_id(data)
         srv = ('event', EventDAO)
         data = _delete_fields(srv, data)
         new_event = EventDAO.create(data, 'dont')[0]
         version_data = data.get('version', {})
+        write_file(
+            path + '/social_links',
+            json.dumps(data.get('social_links', []))
+        )  # save social_links
         _upload_media_queue(srv, new_event)
     except BaseError as e:
         raise make_error('event', er=e)
@@ -311,12 +322,14 @@ def import_event_json(task_handle, zip_path):
     try:
         service_ids = {}
         for item in IMPORT_SERIES:
+            item[1].is_importing = True
             data = open(path + '/%s' % item[0], 'r').read()
             dic = json.loads(data)
             changed_ids = create_service_from_json(
-                dic, item, new_event.id, service_ids)
+                task_handle, dic, item, new_event.id, service_ids)
             service_ids[item[0]] = changed_ids.copy()
             CUR_ID = None
+            item[1].is_importing = False
     except BaseError as e:
         EventDAO.delete(new_event.id)
         raise make_error(item[0], er=e, id_=CUR_ID)
@@ -327,6 +340,7 @@ def import_event_json(task_handle, zip_path):
         EventDAO.delete(new_event.id)
         raise make_error(item[0], er=ServerError('Invalid json'))
     except Exception:
+        print traceback.format_exc()
         EventDAO.delete(new_event.id)
         raise make_error(item[0], id_=CUR_ID)
     # run uploads
@@ -367,3 +381,34 @@ def get_filename_from_cd(cd):
         return '', ''
     fn = fname[0].rsplit('.', 1)
     return fn[0], '' if len(fn) == 1 else ('.' + fn[1])
+
+
+def write_file(file, data):
+    """simple write to file"""
+    fp = open(file, 'w')
+    fp.write(data)
+    fp.close()
+
+
+def create_import_job(task):
+    """create import record in db"""
+    ij = ImportJob(task=task, user=g.user)
+    save_to_db(ij, 'Import job saved')
+
+
+def update_import_job(task, result, result_status):
+    """update import job status"""
+    ij = ImportJob.query.filter_by(task=task).first()
+    if not ij:
+        return
+    ij.result = result
+    ij.result_status = result_status
+    save_to_db(ij, 'Import job updated')
+
+
+def send_import_mail(task, result):
+    """send email after import"""
+    ij = ImportJob.query.filter_by(task=task).first()
+    if not ij:
+        return
+    send_email_after_import(email=ij.user.email, result=result)

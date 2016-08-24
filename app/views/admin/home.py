@@ -4,12 +4,11 @@ import os
 import urllib
 from urllib2 import urlopen
 
-from flask import url_for, redirect, request, session, flash, send_from_directory
+from flask import url_for, redirect, request, session, flash
 from flask.ext import login
 from flask_admin import expose
 from flask_admin.base import AdminIndexView
 from flask.ext.scrypt import generate_password_hash
-from wtforms import ValidationError
 
 from app.helpers.flask_helpers import get_real_ip, slugify
 from app.views.public.explore import erase_from_dict
@@ -22,9 +21,12 @@ from app.helpers.oauth import OAuth, FbOAuth
 from app.models.user import User
 import geoip2.database
 from flask import abort
+from werkzeug.datastructures import ImmutableMultiDict
+
 
 def intended_url():
     return request.args.get('next') or url_for('.index')
+
 
 def record_user_login_logout(template, user):
     req_stats = get_request_stats()
@@ -34,15 +36,25 @@ def record_user_login_logout(template, user):
         **req_stats
     )
 
-class MyHomeView(AdminIndexView):
 
+class MyHomeView(AdminIndexView):
     @expose('/')
     def index(self):
         call_for_speakers_events = DataGetter.get_call_for_speakers_events()
         upcoming_events = DataGetter.get_all_published_events().limit(12).all()
+        placeholder_images = DataGetter.get_event_default_images()
+        custom_placeholder = DataGetter.get_custom_placeholders()
+        im_config = DataGetter.get_image_configs()
+        im_size = ''
+        for config in im_config:
+            if config.page == 'front':
+                im_size = config.size
         return self.render('gentelella/index.html',
                            call_for_speakers_events=call_for_speakers_events,
-                           upcoming_events=upcoming_events)
+                           upcoming_events=upcoming_events,
+                           placeholder_images=placeholder_images,
+                           custom_placeholder=custom_placeholder,
+                           im_size=im_size)
 
     @expose('/login/', methods=('GET', 'POST'))
     def login_view(self):
@@ -68,6 +80,10 @@ class MyHomeView(AdminIndexView):
                 return redirect(url_for('admin.login_view'))
             login.login_user(user)
             record_user_login_logout('user_login', user)
+
+            # Store user_id in session for socketio use
+            session['user_id'] = login.current_user.id
+
             logging.info('logged successfully')
             user_logged_in(user)
             return redirect(intended_url())
@@ -101,7 +117,8 @@ class MyHomeView(AdminIndexView):
         login.login_user(user)
         record_user_login_logout('user_login', user)
         user_logged_in(user)
-        return redirect(intended_url())
+        flash('Thank you. Your new email is now confirmed', 'success')
+        return redirect(url_for('settings.contact_info_view'))
 
     @expose('/password/new/<email>', methods=('GET', 'POST'))
     def create_password_after_oauth_login(self, email):
@@ -182,6 +199,7 @@ class MyHomeView(AdminIndexView):
         params = request.args.items()
         params = dict((k, v) for k, v in params if v)
         print params
+
         def test_and_remove(key):
             if request.args.get(key):
                 if request.args.get(key).lower() == request.args.get("query").lower():
@@ -216,3 +234,15 @@ class MyHomeView(AdminIndexView):
                 return '200 OK'
             else:
                 return abort(404)
+
+    @expose('/resend_email/')
+    def resend_email_confirmation(self):
+        user = DataGetter.get_user(login.current_user.id)
+        s = get_serializer()
+        data = [user.email, user.password]
+        form_hash = s.dumps(data)
+        link = url_for('.create_account_after_confirmation_view', hash=form_hash, _external=True)
+        form = {"email": user.email, "password": user.password}
+        form = ImmutableMultiDict(form)
+        send_email_confirmation(form, link)
+        return redirect(url_for('events.index_view'))

@@ -1,0 +1,151 @@
+{% extends 'gentelella/admin/event/tickets/tickets_base.html' %}
+
+{% set active_side_page = "add_order" %}
+
+
+{% block head_css %}
+    {{ super() }}
+    <style type="text/css">
+        #add-order-table td, #add-order-table th.text-right {
+            vertical-align: middle;
+        }
+
+        #add-order-table td:nth-child(3), #add-order-table td:nth-child(4) {
+            width: 80px;
+        }
+
+        #add-order-table input {
+            width: 70px;
+        }
+
+        #add-order-table .form-group, #add-order-table {
+            margin-bottom: 0;
+        }
+    </style>
+{% endblock %}
+
+{% block inner_content %}
+    <h3>Add Order</h3>
+    <br>
+    <div class="col-md-6">
+        <form class="form-inline" method="POST">
+            <input type="hidden" name="event_id" value="{{ event.id }}">
+            <table class="table" id="add-order-table">
+                <thead>
+                <tr>
+                    <th>Ticket Type</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Item Total</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for ticket in event.tickets %}
+                    <tr>
+                        <td>{{ ticket.name }}</td>
+                        <td>{{ event.payment_currency | currency_symbol }}{{ ticket.price | money }}</td>
+                        <td>
+                            <div class="form-group">
+                                <input type="hidden" name="ticket_ids[]" value="{{ ticket.id }}">
+                                <input type="number" min="0" class="form-control quantity-box"
+                                       name="ticket_quantities[]"
+                                       data-rate="{{ ticket.price }}" value="0">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <input type="number" min="0" class="form-control subtotal-box" name="ticket_subtotals[]"
+                                       value="0">
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th colspan="3" class="text-right" style="font-size: 17px;">
+                        Grand Total:
+                    </th>
+                    <th><input type="number" min="0" class="form-control" name="grand_total" readonly value="0"></th>
+                </tr>
+                </tfoot>
+            </table>
+            <div class="form-group">
+                <strong>Payment Type: </strong>
+                <select name="payment_via" class="form-control" id="payment-type" required style="margin-left: 5px;">
+                    <option value="">Select payment type</option>
+                    <option value="cheque">Cheque</option>
+                    <option value="transfer">Telegraphic Transfer (TT) / Bank Transfer</option>
+                    <option value="onsite">Onsite / Cash</option>
+                    {% if event.pay_by_stripe %}<option value="stripe">Stripe</option>{% endif %}
+                    <option value="free">Free Order</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success pull-right btn-lg" id="add-order-btn" style="margin-top: 30px;" disabled>Continue</button>
+        </form>
+    </div>
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
+    <script type="text/javascript">
+
+        var $paymentViaSelect = $("select[name=payment_via]");
+        function verifyQuantity() {
+            var total = 0;
+            $.each($("#add-order-table").find('.quantity-box'), function (index, $box) {
+                $box = $($box);
+                if ($box.val() === '') {
+                    $box.val(0);
+                }
+                total += parseInt($box.val());
+            });
+            if(total > 0) {
+                $("#add-order-btn").removeAttr('disabled');
+            } else {
+                $("#add-order-btn").attr('disabled', 'disabled');
+            }
+        }
+
+        $(".quantity-box").valueChange(function (value, e, elem) {
+            var price = parseInt(elem.data('rate'));
+            var quantity = parseInt(value);
+            elem.closest("tr").find('.subtotal-box').val(price * quantity);
+            recalculateTotal();
+            verifyQuantity();
+        });
+
+        $(".subtotal-box").valueChange(function (value, e) {
+            recalculateTotal();
+        });
+
+        function recalculateTotal() {
+            var grandTotal = 0;
+            $.each($("#add-order-table").find('.subtotal-box'), function (index, $box) {
+                $box = $($box);
+                if ($box.val() === '') {
+                    $box.val(0);
+                }
+                grandTotal += parseInt($box.val());
+            });
+            $("input[name=grand_total]").val(grandTotal);
+            if(grandTotal > 0 && $paymentViaSelect.val() == 'free') {
+                 $paymentViaSelect.val('')
+            }
+        }
+
+        $paymentViaSelect.change(function () {
+            var value = $(this).val();
+            if(value === 'free' && $("input[name=grand_total]").val() !== "0") {
+                $(this).val('');
+                createSnackbar("Item total has to be set to zero to choose the free option", "Set zero", function () {
+                    $(".subtotal-box").val('0');
+                    $paymentViaSelect.val('free');
+                    recalculateTotal();
+                    console.log(this);
+                });
+            }
+        });
+    </script>
+{% endblock %}
+

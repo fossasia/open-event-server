@@ -1,5 +1,5 @@
 {% macro render_menu(test='') %}
-    <div class="top_nav" style="margin-left:0">
+    <div class="top_nav hidden-print" style="margin-left:0">
         <div class="nav_menu" style="background-color: #FFFFFF;">
             <nav>
                 <ul class="nav navbar-nav">
@@ -42,7 +42,7 @@
                                 {% else %}
                                 <img src="{{ url_for('static', filename='img/avatar.png') }}" onerror="imgError(this)"/>
                                 {% endif %}
-                                <span class="user-text">{{ current_user.user_detail.fullname | default(current_user.email, true) }}</span>
+                                <span class="user-text">{{ current_user.user_detail.firstname | default(current_user.email, true) }}</span>
                                 <span class=" fa fa-angle-down"></span>
                             </a>
                             <ul class="dropdown-menu dropdown-usermenu pull-right">
@@ -50,9 +50,10 @@
                                    style="color: #46b8da!important; font-weight:bold">Create
                                 Event</a></li>
                                 <li class="divider hide-large"></li>
+                                <li><a href="/mytickets/">My Tickets</a></li>
                                 <li><a href="/events/mysessions/">My Sessions</a></li>
                                 <li><a href="/events/">Manage Events</a></li>
-                                <li class="divider"></li>
+                                <li class="divider" ></li>
                                 <li><a href="/profile"> Profile</a></li>
                                 <li><a href="/settings"> Settings</a></li>
                                 {% if current_user.is_staff %}
@@ -64,11 +65,41 @@
                                 </li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="{{ url_for('profile.notifications_view') }}" class="info-number">
+                        <li class="dropdown mega-dropdown">
+                            <a href="javascript:;" class="dropdown-toggle info-number">
                                 <i class="fa fa-envelope-o"></i>
-                                <span class="badge bg-green">{{ current_user.get_unread_notif_count() | default('', true) }}</span>
+                                <span class="badge bg-green" id="notif_count">{{ current_user.get_unread_notif_count() | default('', true) }}</span>
                             </a>
+                            <ul id="notif-menu" class="dropdown-menu list-unstyled menu msg_list">
+                                <li style="border: 0;">
+                                    <span>
+                                        <a href="{{ url_for('notifications.index_view') }}" style="font-size: 12px;" title="See all Notifications">
+                                            <strong>Notifications</strong>
+                                        </a>
+                                    </span>
+                                    <span class="pull-right">
+                                        <a class="notif-mark-all-read"
+                                            data-markallread="{{ url_for('notifications.mark_all_read') }}">
+                                            Mark All as Read
+                                        </a>
+                                    </span>
+                                </li>
+                            {% if current_user.get_unread_notifs() %}
+                                {% for notif in current_user.get_unread_notifs(reverse=True) %}
+                                    <li class="notif-menu-li">
+                                        <a>
+                                            <span class="message">{{ notif.title }}</span>
+                                            <span class="time">{{ notif.received_at }}</span>
+                                            <span class="mark-as-read btn btn-default btn-xs" data-markread="{{ notif.mark_read }}">Mark as read</span>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            {% else %}
+                                <li>
+                                    <div class="text-center">No new notifications</div>
+                                </li>
+                            {% endif %}
+                            </ul>
                         </li>
                     {% else %}
                         <li><a href="/login" class="user-profile">Login</a></li>

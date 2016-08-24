@@ -1,0 +1,152 @@
+<style type="text/css">
+    #system_logs {
+        position: absolute;
+        background: transparent;
+        width: auto;
+    }
+
+</style>
+<div>
+  <ul id="system_logs" class="nav nav-tabs bar_tabs" role="tablist">
+    <li class="active"><a href="#activity_div" data-toggle="tab">Activity</a></li>
+    <li class=""><a href="#mail_div" data-toggle="tab">Mails</a></li>
+    <li class=""><a href="#notif_div" data-toggle="tab">Notifications</a></li>
+  </ul>
+  <!-- tab contents -->
+  <div id="myTabContent" class="tab-content">
+    <!-- activity tab -->
+    <div role="tabpanel" class="tab-pane fade active in" id="activity_div"
+         aria-labelledby="all-tab">
+      <table id="activity_table" class="table table-striped with-datatable no-global-dt">
+        <thead>
+        <tr>
+          <th>Actor</th>
+          <th>Time</th>
+          <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for activity in activities %}
+        <tr>
+          <td>{{ activity.actor }}</td>
+          <td data-toggle="tooltip" data-placement="bottom" title="{{ activity.time }}"
+              data-delay='{"show":"500", "hide":"300"}'>{{ activity.time.strftime("%Y-%m-%d %H:%M") }}
+          </td>
+          <td>{{ activity.action }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <!-- mails tab -->
+    <div role="tabpanel" class="tab-pane fade" id="mail_div"
+         aria-labelledby="mail-tab">
+      <table id="mail_table" class="table table-striped with-datatable no-global-dt">
+        <thead>
+        <tr>
+          <th>To</th>
+          <th>Time</th>
+          <th>Action</th>
+          <th>Message</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for mail in mails %}
+        {% if mail.recipient %}
+        <tr>
+          <td>{{ mail.recipient }}</td>
+          <td data-toggle="tooltip" data-placement="bottom" title="{{ mail.time }}"
+              data-delay='{"show":"500", "hide":"300"}'>{{ mail.time.strftime("%Y-%m-%d %H:%M") }}
+          </td>
+          <td>{{ mail.action }}</td>
+          <td>
+            <strong>{{ mail.subject }}</strong><br>
+            <div>
+              {{ mail.message | safe }}
+            </div>
+          </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <!-- notifications tab -->
+    <div role="tabpanel" class="tab-pane fade" id="notif_div"
+         aria-labelledby="notif-tab">
+      <table id="notif_table" class="table table-striped with-datatable no-global-dt">
+        <thead>
+        <tr>
+          <th>For</th>
+          <th>Time</th>
+          <th>Action</th>
+          <th>Message</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for notif in notifications %}
+        <tr>
+          <td>{{ notif.user.user_detail.fullname | default(notif.user.email, true) }}</td>
+          <td data-toggle="tooltip" data-placement="bottom" title="{{ notif.received_at }}"
+              data-delay='{"show":"500", "hide":"300"}'>{{ notif.received_at.strftime("%Y-%m-%d %H:%M") }}
+          </td>
+          <td>{{ notif.action }}</td>
+          <td>
+            <strong>{{ notif.title }}</strong><br>
+            <div>
+              {{ notif.message | safe }}
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+<script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
+<script type="text/javascript">
+  $( document ).ready(function() {
+
+
+
+      $('#activity_table').DataTable({
+          "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+          "lengthMenu": [25, 50, 100, 200],
+          "pageLength": 25,
+          "aaSorting": [],
+          // "language": {
+          //     "lengthMenu": "Show _MENU_ Results"
+          //   },
+
+      });
+
+      change_column_time_to_humanize_format('#activity_table tr', 1)
+      $('#activity_table').on( 'draw.dt', function () {
+          change_column_time_to_humanize_format('#activity_table tr', 1)
+      } );
+
+      $('#mail_table').dataTable({
+          "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+          /* Disable initial sort */
+          "aaSorting": [],
+      });
+
+      change_column_time_to_humanize_format('#mail_table tr', 1)
+      $('#mail_table').on( 'draw.dt', function () {
+          change_column_time_to_humanize_format('#mail_table tr', 1)
+      } );
+
+      $('#notif_table').dataTable({
+          "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+          /* Disable initial sort */
+          "aaSorting": []
+      });
+
+      change_column_time_to_humanize_format('#notif_table tr', 1)
+      $('#notif_table').on( 'draw.dt', function () {
+          change_column_time_to_humanize_format('#notif_table tr', 1)
+      } );
+  });
+</script>

@@ -5,7 +5,8 @@ from . import db
 class UserDetail(db.Model):
     __tablename__ = "user_detail"
     id = db.Column(db.Integer, primary_key=True)
-    fullname = db.Column(db.String)
+    firstname = db.Column(db.String)
+    lastname = db.Column(db.String)
     details = db.Column(db.String)
     avatar = db.Column(db.String)
     contact = db.Column(db.String)
@@ -15,14 +16,14 @@ class UserDetail(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __init__(self,
-                 fullname=None,
+                 firstname=None,
+                 lastname=None,
                  avatar=None,
                  contact=None,
                  user_id=None,
                  facebook=None,
                  twitter=None,
                  avatar_uploaded=None):
-        self.fullname = fullname
         self.avatar = avatar
         self.contact = contact
         self.user_id = user_id
@@ -44,6 +45,15 @@ class UserDetail(db.Model):
             super(UserDetail, self).__setattr__(name, clean_html(clean_up_string(value)))
         else:
             super(UserDetail, self).__setattr__(name, value)
+
+    @property
+    def fullname(self):
+        firstname = self.firstname if self.firstname else ''
+        lastname = self.lastname if self.lastname else ''
+        if firstname and lastname:
+            return u'{} {}'.format(firstname, lastname)
+        else:
+            return ''
 
     @property
     def serialize(self):

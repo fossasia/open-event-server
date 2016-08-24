@@ -4,10 +4,18 @@ import logging
 import os.path
 import random
 import traceback
+import oauth2
+import time
+from os import path
 from datetime import datetime, timedelta
+import PIL
+from PIL import Image
+import shutil
 
 import requests
-from flask import flash, request, url_for, g
+from requests.exceptions import ConnectionError
+from flask import flash, request, url_for, g, current_app
+from flask_socketio import emit
 from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from requests_oauthlib import OAuth2Session
@@ -16,44 +24,51 @@ from sqlalchemy.sql.expression import exists
 from werkzeug import secure_filename
 from wtforms import ValidationError
 
+from app.helpers.cache import cache
 from app.helpers.helpers import string_empty, string_not_empty, uploaded_file
 from app.helpers.notification_email_triggers import trigger_new_session_notifications, \
     trigger_session_state_change_notifications
-from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth
-from app.helpers.storage import upload, UPLOAD_PATHS
+from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth, TwitterOAuth
+from app.helpers.storage import upload, UPLOAD_PATHS, UploadedFile, upload_local
 from app.models.notifications import Notification
+from app.models.stripe_authorization import StripeAuthorization
+from app.views.admin.super_admin.super_admin_base import PANEL_LIST
 from ..helpers import helpers as Helper
 from ..helpers.data_getter import DataGetter
 from ..helpers.static import EVENT_LICENCES
-from ..helpers.update_version import VersionUpdater
+from ..helpers.update_version import VersionUpdater, get_all_columns
 from ..helpers.system_mails import MAILS
 from ..models import db
 from ..models.activity import Activity, ACTIVITIES
 from ..models.call_for_papers import CallForPaper
+from ..models.panel_permissions import PanelPermission
 from ..models.custom_forms import CustomForms
 from ..models.event import Event, EventsUsers
 from ..models.event_copyright import EventCopyright
 from ..models.file import File
 from ..models.invite import Invite
 from ..models.microlocation import Microlocation
+from ..models.user_permissions import UserPermission
 from ..models.permission import Permission
 from ..models.role import Role
 from ..models.role_invite import RoleInvite
-from ..models.ticket import Ticket
+from ..models.ticket import Ticket, TicketTag
 from ..models.service import Service
+from ..models.image_sizes import ImageSizes
 from ..models.session import Session
 from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.track import Track
-from ..models.user import User, ORGANIZER
+from ..models.user import User, ORGANIZER, ATTENDEE, SYS_ROLES_LIST
 from ..models.user_detail import UserDetail
 from ..models.users_events_roles import UsersEventsRoles
 from ..models.page import Page
 from ..models.modules import Module
 from ..models.email_notifications import EmailNotification
 from ..models.message_settings import MessageSettings
+from ..models.tax import Tax
 
 
 class DataManager(object):
@@ -73,7 +88,30 @@ class DataManager(object):
                                     title=title,
                                     message=message,
                                     received_at=datetime.now())
-        save_to_db(notification, 'User notification saved')
+        saved = save_to_db(notification, 'User notification saved')
+
+        if saved:
+            DataManager.push_user_notification(user)
+
+    @staticmethod
+    def push_user_notification(user):
+        """
+        Push user notification using websockets.
+        """
+        if not current_app.config.get('INTEGRATE_SOCKETIO', False):
+            return False
+        user_room = 'user_{}'.format(user.id)
+        emit('notifs-response',
+             {'meta': 'New notifications',
+              'notif_count': user.get_unread_notif_count(),
+              'notifs': user.get_unread_notifs(reverse=True)},
+             room=user_room,
+             namespace='/notifs')
+        emit('notifpage-response',
+             {'meta': 'New notifpage notifications',
+              'notif': DataGetter.get_latest_notif(user)},
+             room=user_room,
+             namespace='/notifpage')
 
     @staticmethod
     def mark_user_notification_as_read(notification):
@@ -282,18 +320,10 @@ class DataManager(object):
         :param event_id: Session belongs to Event by event id
         """
         form = request.form
-        speaker_img_file = ""
-        slide_file = ""
-        video_file = ""
-        audio_file = ""
-        if 'slides' in request.files and request.files['slides'].filename != '':
-            slide_file = request.files['slides']
-        if 'video' in request.files and request.files['video'].filename != '':
-            video_file = request.files['video']
-        if 'audio' in request.files and request.files['audio'].filename != '':
-            audio_file = request.files['audio']
-        if 'photo' in request.files and request.files['photo'].filename != '':
-            speaker_img_file = request.files['photo']
+        slide_file = DataManager.get_files_from_request(request, 'slides')
+        video_file = DataManager.get_files_from_request(request, 'video')
+        audio_file = DataManager.get_files_from_request(request, 'audio')
+        speaker_img_file = DataManager.get_files_from_request(request, 'photo')
 
         if not state:
             state = form.get('state', 'draft')
@@ -383,6 +413,7 @@ class DataManager(object):
         if speaker_modified:
             save_to_db(speaker, "Speaker saved")
         record_activity('create_session', session=new_session, event_id=event_id)
+        update_version(event_id, False, 'sessions_ver')
 
         invite_emails = form.getlist("speakers[email]")
         for index, email in enumerate(invite_emails):
@@ -399,8 +430,14 @@ class DataManager(object):
                 # If a user is registered by the email, send a notification as well
                 user = DataGetter.get_user_by_email(email, no_flash=True)
                 if user:
-                    cfs_link = url_for('event_detail.display_event_cfs', event_id=event.id)
+                    cfs_link = url_for('event_detail.display_event_cfs', identifier=event.identifier)
                     Helper.send_notif_invite_papers(user, event.name, cfs_link, link)
+
+    @staticmethod
+    def get_files_from_request(request, file_type):
+        if file_type in request.files and request.files[file_type].filename != '':
+            return request.files[file_type]
+        return ""
 
     @staticmethod
     def add_speaker_to_event(request, event_id, user=login.current_user):
@@ -436,7 +473,7 @@ class DataManager(object):
             speaker.photo = speaker_img
             save_to_db(speaker, "Speaker photo saved")
             record_activity('update_speaker', speaker=speaker, event_id=event_id)
-
+        update_version(event_id, False, 'speakers_ver')
         return speaker
 
     @staticmethod
@@ -454,6 +491,7 @@ class DataManager(object):
         save_to_db(session, "Speaker saved")
         record_activity('add_speaker_to_session', speaker=speaker, session=session, event_id=event_id)
         update_version(event_id, False, "speakers_ver")
+        update_version(event_id, False, "sessions_ver")
 
     @staticmethod
     def create_speaker_session_relation(session_id, speaker_id, event_id):
@@ -467,10 +505,14 @@ class DataManager(object):
         session = DataGetter.get_session(session_id)
         session.speakers.append(speaker)
         save_to_db(session, "Session Speaker saved")
+        update_version(speaker.event_id, False, "speakers_ver")
+        update_version(session.event_id, False, "sessions_ver")
 
     @staticmethod
     def session_accept_reject(session, event_id, state):
         session.state = state
+        session.submission_date = datetime.now()
+        session.submission_modifier = login.current_user.email
         save_to_db(session, 'Session State Updated')
         trigger_session_state_change_notifications(session, event_id)
         flash("The session has been %s" % state)
@@ -481,15 +523,9 @@ class DataManager(object):
             form = request.form
             event_id = session.event_id
 
-            slide_file = ""
-            video_file = ""
-            audio_file = ""
-            if 'slides' in request.files and request.files['slides'].filename != '':
-                slide_file = request.files['slides']
-            if 'video' in request.files and request.files['video'].filename != '':
-                video_file = request.files['video']
-            if 'audio' in request.files and request.files['audio'].filename != '':
-                audio_file = request.files['audio']
+            slide_file = DataManager.get_files_from_request(request, 'slides')
+            video_file = DataManager.get_files_from_request(request, 'video')
+            audio_file = DataManager.get_files_from_request(request, 'audio')
 
             form_state = form.get('state', 'draft')
 
@@ -523,6 +559,7 @@ class DataManager(object):
             session.subtitle = form.get('subtitle', '')
             session.long_abstract = form.get('long_abstract', '')
             session.short_abstract = form.get('short_abstract', '')
+            session.state = form_state
 
             if form.get('track', None) != "":
                 session.track_id = form.get('track', None)
@@ -559,6 +596,7 @@ class DataManager(object):
                     db.session.commit()
 
             record_activity('update_session', session=session, event_id=event_id)
+            update_version(event_id, False, "sessions_ver")
 
     @staticmethod
     def update_session(form, session):
@@ -594,6 +632,7 @@ class DataManager(object):
         delete_from_db(session, "Session deleted")
         flash('You successfully delete session')
         record_activity('delete_session', session=session, event_id=session.event_id)
+        update_version(session.event_id, False, "sessions_ver")
 
     @staticmethod
     def create_speaker(form, event_id, user=login.current_user):
@@ -648,6 +687,7 @@ class DataManager(object):
         speaker = Speaker.query.get(speaker_id)
         delete_from_db(speaker, "Speaker deleted")
         record_activity('delete_speaker', speaker=speaker, event_id=speaker.event_id)
+        update_version(speaker.event_id, False, "speakers_ver")
         flash('You successfully delete speaker')
 
     @staticmethod
@@ -796,17 +836,19 @@ class DataManager(object):
                             user_id=user.id, old=user.email, new=form['email'])
         if user.email != form['email']:
             user.is_verified = False
-            s = Helper.get_serializer()
+            serializer = Helper.get_serializer()
             data = [form['email']]
-            form_hash = s.dumps(data)
+            form_hash = serializer.dumps(data)
             link = url_for('admin.create_account_after_confirmation_view', hash=form_hash, _external=True)
             Helper.send_email_when_changes_email(user.email, form['email'])
+            Helper.send_notif_when_changes_email(user, user.email, form['email'])
             Helper.send_email_confirmation(form, link)
             user.email = form['email']
 
         user_detail.contact = form['contact']
         if not contacts_only_update:
-            user_detail.fullname = form['full_name']
+            user_detail.firstname = form['firstname']
+            user_detail.lastname = form['lastname']
 
             if form['facebook'] != 'https://www.facebook.com/':
                 user_detail.facebook = form['facebook']
@@ -833,6 +875,32 @@ class DataManager(object):
         db.session.commit()
 
     @staticmethod
+    def update_user_permissions(form):
+        for perm in UserPermission.query.all():
+            ver_user = '{}-verified_user'.format(perm.name)
+            unver_user = '{}-unverified_user'.format(perm.name)
+            # anon_user = '{}-anonymous_user'.format(perm.name)
+            perm.verified_user = True if form.get(ver_user) == 'on' else False
+            perm.unverified_user = True if form.get(unver_user) == 'on' else False
+            # perm.anonymous_user = True if form.get(anon_user) == 'on' else False
+
+            db.session.add(perm)
+        db.session.commit()
+
+    @staticmethod
+    def update_panel_permissions(form):
+        for role in SYS_ROLES_LIST:
+            for panel in PANEL_LIST:
+                field_name = '{}-{}'.format(role, panel)
+                field_val = form.get(field_name)
+                perm, _ = get_or_create(PanelPermission, panel_name=panel,
+                    role_name=role)
+
+                perm.can_access = True if field_val == 'on' else False
+                db.session.add(perm)
+        db.session.commit()
+
+    @staticmethod
     def update_permissions(form):
         oper = {
             'c': 'can_create',
@@ -856,6 +924,17 @@ class DataManager(object):
                 save_to_db(perm, 'Permission saved')
 
     @staticmethod
+    def create_ticket_tags(tagnames_csv, event_id):
+        """Returns list of `TicketTag` objects.
+        """
+        tag_list = []
+        for tagname in tagnames_csv.split(','):
+            tag, _ = get_or_create(TicketTag, name=tagname, event_id=event_id)
+            tag_list.append(tag)
+
+        return tag_list
+
+    @staticmethod
     def create_event(form, img_files):
         """
         Event will be saved to database with proper Event id
@@ -876,31 +955,14 @@ class DataManager(object):
                                    licence_url=licence_url,
                                    logo=logo)
 
-        # Add Ticket
-        str_empty = lambda val, val2: val2 if val == '' else val
+        payment_currency = ''
+        if form['payment_currency'] != '':
+            payment_currency = form.get('payment_currency').split(' ')[0]
 
-        ticket_price = form.get('ticket_price', 0)
-        # Default values to pass the tests because APIs don't have these fields
-        ticket = Ticket(
-            name=form.get('ticket_name', ''),
-            type=form.get('ticket_type', 'free'),
-            description=form.get('ticket_description', ''),
-            price=ticket_price,
-            sales_start=datetime.strptime(
-                form.get('ticket_sales_start_date', '01/01/2001') + ' ' +
-                form.get('ticket_sales_start_time', '00:00'),
-                '%m/%d/%Y %H:%M'),
-            sales_end=datetime.strptime(
-                form.get('ticket_sales_end_date', '01/01/2001') + ' ' +
-                form.get('ticket_sales_end_time', '00:00'), '%m/%d/%Y %H:%M'),
-            quantity=str_empty(form.get('ticket_quantity'), 100),
-            min_order=str_empty(form.get('ticket_min_order'), 1),
-            max_order=str_empty(form.get('ticket_max_order'), 10)
-        )
-
+        paypal_email = ''
         event = Event(name=form['name'],
-                      start_time=datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M'),
-                      end_time=datetime.strptime(form['end_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M'),
+                      start_time=DataManager.get_event_time_field_format(form, 'start'),
+                      end_time=DataManager.get_event_time_field_format(form, 'end'),
                       timezone=form['timezone'],
                       latitude=form['latitude'],
                       longitude=form['longitude'],
@@ -914,18 +976,23 @@ class DataManager(object):
                       ticket_url=form.get('ticket_url', None),
                       copyright=copyright,
                       show_map=1 if form.get('show_map') == "on" else 0,
-                      creator=login.current_user)
+                      creator=login.current_user,
+                      payment_country=form.get('payment_country', ''),
+                      payment_currency=payment_currency,
+                      paypal_email=paypal_email)
 
-        event.tickets.append(ticket)
+        event.pay_by_paypal = 'pay_by_paypal' in form
+        event.pay_by_cheque = 'pay_by_cheque' in form
+        event.pay_by_bank = 'pay_by_bank' in form
+        event.pay_onsite = 'pay_onsite' in form
+        event.pay_by_stripe = 'pay_by_stripe' in form
 
-        if event.latitude and event.longitude:
-            response = requests.get(
-                "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
-                    event.longitude)).json()
-            if response['status'] == u'OK':
-                for addr in response['results'][0]['address_components']:
-                    if addr['types'] == ['locality', 'political']:
-                        event.searchable_location_name = addr['short_name']
+        if 'pay_by_paypal' in form:
+            event.paypal_email = form.get('paypal_email')
+        else:
+            event.paypal_email = None
+
+        event = DataManager.update_searchable_location_name(event)
 
         if form.get('organizer_state', u'off') == u'on':
             event.organizer_name = form['organizer_name']
@@ -935,7 +1002,6 @@ class DataManager(object):
             event.code_of_conduct = form['code_of_conduct']
 
         state = form.get('state', None)
-        print state
         if state and ((state == u'Published' and not string_empty(
             event.location_name)) or state != u'Published') and login.current_user.is_verified:
             event.state = state
@@ -948,31 +1014,168 @@ class DataManager(object):
             db.session.flush()
             db.session.refresh(event)
 
-            background_image = form['background_url']
-            if string_not_empty(background_image):
-                background_file = uploaded_file(file_content=background_image)
+            background_url = ''
+            background_thumbnail_url = ''
+            background_large_url = ''
+            background_icon_url = ''
+            temp_background = form['background_url']
+            image_sizes = DataGetter.get_image_sizes()
+            if not image_sizes:
+                image_sizes = ImageSizes(full_width=1300,
+                                         full_height=500,
+                                         icon_width=75,
+                                         icon_height=30,
+                                         thumbnail_width=500,
+                                         thumbnail_height=200)
+                save_to_db(image_sizes, "Image Sizes Saved")
+            if temp_background:
+                filename = '{}.png'.format(time.time())
+                filepath = '{}/static/{}'.format(path.realpath('.'),
+                           temp_background[len('/serve_static/'):])
+                background_file = UploadedFile(filepath, filename)
                 background_url = upload(
                     background_file,
                     UPLOAD_PATHS['event']['background_url'].format(
+                        event_id=event.id
+                    ))
+
+                temp_img_file = upload_local(background_file,
+                                             'events/{event_id}/temp'.format(event_id=int(event.id)))
+                temp_img_file = temp_img_file.replace('/serve_', '')
+
+                basewidth = image_sizes.full_width
+                img = Image.open(temp_img_file)
+                wpercent = (basewidth / float(img.size[0]))
+                hsize = int((float(img.size[1]) * float(wpercent)))
+                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+                img.save(temp_img_file)
+                file_name = temp_img_file.rsplit('/', 1)[1]
+                large_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+                background_large_url = upload(
+                    large_file,
+                    UPLOAD_PATHS['event']['large'].format(
                         event_id=int(event.id)
                     ))
-                event.background_url = background_url
 
-            logo = form['logo']
-            if string_not_empty(logo):
-                logo_file = uploaded_file(file_content=logo)
+                basewidth = image_sizes.thumbnail_width
+                img = Image.open(temp_img_file)
+                wpercent = (basewidth / float(img.size[0]))
+                hsize = int((float(img.size[1]) * float(wpercent)))
+                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+                img.save(temp_img_file)
+                file_name = temp_img_file.rsplit('/', 1)[1]
+                thumbnail_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+                background_thumbnail_url = upload(
+                    thumbnail_file,
+                    UPLOAD_PATHS['event']['thumbnail'].format(
+                        event_id=int(event.id)
+                    ))
+
+                basewidth = image_sizes.icon_width
+                img = Image.open(temp_img_file)
+                wpercent = (basewidth / float(img.size[0]))
+                hsize = int((float(img.size[1]) * float(wpercent)))
+                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+                img.save(temp_img_file)
+                file_name = temp_img_file.rsplit('/', 1)[1]
+                icon_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+                background_icon_url = upload(
+                    icon_file,
+                    UPLOAD_PATHS['event']['icon'].format(
+                        event_id=int(event.id)
+                    ))
+                shutil.rmtree(path='static/media/' + 'events/{event_id}/temp'.format(event_id=int(event.id)))
+
+            event.background_url = background_url
+            event.thumbnail = background_thumbnail_url
+            event.large = background_large_url
+            event.icon = background_icon_url
+
+            logo = ''
+            temp_logo = form['logo']
+            if temp_logo:
+                filename = '{}.png'.format(time.time())
+                filepath = '{}/static/{}'.format(path.realpath('.'),
+                    temp_logo[len('/serve_static/'):])
+                logo_file = UploadedFile(filepath, filename)
                 logo = upload(
                     logo_file,
                     UPLOAD_PATHS['event']['logo'].format(
-                        event_id=int(event.id)
+                        event_id=event.id
                     ))
-                event.logo = logo
+            event.logo = logo
+
+            # Save Tickets
+            module = DataGetter.get_module()
+            if module and module.ticket_include:
+
+                event.ticket_url = url_for('event_detail.display_event_tickets',
+                                           identifier=event.identifier,
+                                           _external=True)
+
+                ticket_names = form.getlist('tickets[name]')
+                ticket_types = form.getlist('tickets[type]')
+                ticket_prices = form.getlist('tickets[price]')
+                ticket_quantities = form.getlist('tickets[quantity]')
+                ticket_descriptions = form.getlist('tickets[description]')
+                ticket_sales_start_dates = form.getlist('tickets[sales_start_date]')
+                ticket_sales_start_times = form.getlist('tickets[sales_start_time]')
+                ticket_sales_end_dates = form.getlist('tickets[sales_end_date]')
+                ticket_sales_end_times = form.getlist('tickets[sales_end_time]')
+                ticket_min_orders = form.getlist('tickets[min_order]')
+                ticket_max_orders = form.getlist('tickets[max_order]')
+                ticket_tags =  form.getlist('tickets[tags]')
+
+                for i, name in enumerate(ticket_names):
+                    if name.strip():
+                        ticket_prices[i] = ticket_prices[i] if ticket_prices[i] != '' else 0
+                        ticket_quantities[i] = ticket_quantities[i] if ticket_quantities[i] != '' else 100
+                        ticket_min_orders[i] = ticket_min_orders[i] if ticket_min_orders[i] != '' else 1
+                        ticket_max_orders[i] = ticket_max_orders[i] if ticket_max_orders[i] != '' else 10
+
+                        sales_start_str = '{} {}'.format(ticket_sales_start_dates[i],
+                                                         ticket_sales_start_times[i])
+                        sales_end_str = '{} {}'.format(ticket_sales_end_dates[i],
+                                                       ticket_sales_end_times[i])
+
+                        description_toggle = form.get('tickets_description_toggle_{}'.format(i), False)
+                        description_toggle = True if description_toggle == 'on' else False
+
+                        tag_list = DataManager.create_ticket_tags(ticket_tags[i], event.id)
+                        ticket = Ticket(
+                            name=name,
+                            type=ticket_types[i],
+                            sales_start=datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M'),
+                            sales_end=datetime.strptime(sales_end_str, '%m/%d/%Y %H:%M'),
+                            description=ticket_descriptions[i],
+                            description_toggle=description_toggle,
+                            quantity=ticket_quantities[i],
+                            price=int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0,
+                            min_order=ticket_min_orders[i],
+                            max_order=ticket_max_orders[i],
+                            tags=tag_list,
+                            event=event
+                        )
+
+                        db.session.add(ticket)
 
             sponsor_name = form.getlist('sponsors[name]')
             sponsor_url = form.getlist('sponsors[url]')
             sponsor_level = form.getlist('sponsors[level]')
             sponsor_description = form.getlist('sponsors[description]')
             sponsor_logo_url = []
+
+            if 'pay_by_stripe' in form:
+                if form.get('stripe_added', u'no') == u'yes':
+                    stripe_authorization = StripeAuthorization(
+                        stripe_secret_key=form.get('stripe_secret_key', ''),
+                        stripe_refresh_token=form.get('stripe_refresh_token', ''),
+                        stripe_publishable_key=form.get('stripe_publishable_key', ''),
+                        stripe_user_id=form.get('stripe_user_id', ''),
+                        stripe_email=form.get('stripe_email', ''),
+                        event_id=event.id
+                    )
+                    save_to_db(stripe_authorization)
 
             if form.get('sponsors_state', u'off') == u'on':
                 for index, name in enumerate(sponsor_name):
@@ -1064,6 +1267,39 @@ class DataManager(object):
                 CustomForms, event_id=event.id,
                 session_form=session_form, speaker_form=speaker_form)
 
+            if module and (module.payment_include or module.donation_include) \
+                and ('paid' or 'donation') in form.getlist('tickets[type]'):
+
+                if form['taxAllow'] == 'taxNo':
+                    event.tax_allow = False
+
+                if form['taxAllow'] == 'taxYes':
+                    event.tax_allow = True
+
+                    tax_invoice = False
+                    if 'tax_invoice' in form:
+                        tax_invoice = True
+
+                    tax_include_in_price = False
+                    if form['tax_options'] == 'tax_include':
+                        tax_include_in_price = True
+
+                    tax = Tax(country=form['tax_country'],
+                              tax_name=form['tax_name'],
+                              tax_rate=form['tax_rate'],
+                              tax_id=form['tax_id'],
+                              send_invoice=tax_invoice,
+                              registered_company=form.get('registered_company', ''),
+                              address=form.get('buisness_address', ''),
+                              city=form.get('invoice_city', ''),
+                              state=form.get('invoice_state', ''),
+                              zip=form.get('invoice_zip', 0),
+                              invoice_footer=form.get('invoice_footer', ''),
+                              tax_include_in_price=tax_include_in_price,
+                              event_id=event.id)
+
+                    save_to_db(tax, "Tax Options Saved")
+
             uer = UsersEventsRoles(login.current_user, event, role)
 
             if save_to_db(uer, "Event saved"):
@@ -1078,6 +1314,29 @@ class DataManager(object):
                 return event
         else:
             raise ValidationError("start date greater than end date")
+
+    @staticmethod
+    def get_event_time_field_format(form, field):
+        return datetime.strptime(form[field + '_date'] + ' ' + form[field + '_time'], '%m/%d/%Y %H:%M')
+
+    @staticmethod
+    def update_searchable_location_name(event):
+        if event.latitude and event.longitude:
+            url = 'https://maps.googleapis.com/maps/api/geocode/json'
+            latlng = '{},{}'.format(event.latitude, event.longitude)
+            params = {'latlng': latlng}
+            response = dict()
+
+            try:
+                response = requests.get(url, params).json()
+            except ConnectionError:
+                response['status'] = u'Error'
+
+            if response['status'] == u'OK':
+                for addr in response['results'][0]['address_components']:
+                    if addr['types'] == ['locality', 'political']:
+                        event.searchable_location_name = addr['short_name']
+        return event
 
     @staticmethod
     def create_event_copy(event_id):
@@ -1096,7 +1355,7 @@ class DataManager(object):
                       topic=event_old.topic,
                       sub_topic=event_old.sub_topic,
                       privacy=event_old.privacy,
-                      ticket_url=event_old.ticket_url,
+                      ticket_url=None,
                       show_map=event_old.show_map,
                       organizer_name=event_old.organizer_name,
                       organizer_description=event_old.organizer_description)
@@ -1137,16 +1396,28 @@ class DataManager(object):
 
     @staticmethod
     def edit_event(request, event_id, event, session_types, tracks, social_links, microlocations, call_for_papers,
-                   sponsors, custom_forms, img_files, old_sponsor_logos, old_sponsor_names):
+                   sponsors, custom_forms, img_files, old_sponsor_logos, old_sponsor_names, tax):
         """
         Event will be updated in database
-        :param data: view data form
+        :param call_for_papers:
+        :param tax:
+        :param old_sponsor_names:
+        :param microlocations:
+        :param social_links:
+        :param tracks:
+        :param session_types:
+        :param event_id:
+        :param request:
+        :param sponsors:
+        :param custom_forms:
+        :param img_files:
+        :param old_sponsor_logos:
         :param event: object contains all earlier data
         """
         form = request.form
         event.name = form['name']
-        event.start_time = datetime.strptime(form['start_date'] + ' ' + form['start_time'], '%m/%d/%Y %H:%M')
-        event.end_time = datetime.strptime(form['end_date'] + ' ' + form['end_time'], '%m/%d/%Y %H:%M')
+        event.start_time = DataManager.get_event_time_field_format(form, 'start')
+        event.end_time = DataManager.get_event_time_field_format(form, 'end')
         event.timezone = form['timezone']
         event.latitude = form['latitude']
         event.longitude = form['longitude']
@@ -1155,38 +1426,142 @@ class DataManager(object):
         event.event_url = form['event_url']
         event.type = form['type']
         event.topic = form['topic']
-        event.show_map = 1 if form.get('show_map', 'on') == "on" else 0
+        event.show_map = 1 if form.get('show_map') == 'on' else 0
         event.sub_topic = form['sub_topic']
         event.privacy = form.get('privacy', 'public')
+        event.payment_country = form.get('payment_country')
 
-        # Ticket
-        str_empty = lambda val, val2: val2 if val == '' else val
+        event.pay_by_paypal = 'pay_by_paypal' in form
+        event.pay_by_cheque = 'pay_by_cheque' in form
+        event.pay_by_bank = 'pay_by_bank' in form
+        event.pay_onsite = 'pay_onsite' in form
+        event.pay_by_stripe = 'pay_by_stripe' in form
 
-        ticket_price = form.get('ticket_price', 0)
-        if event.tickets != []:
-            event.tickets[0].name = form.get('ticket_name', ''),
-            event.tickets[0].type = form.get('ticket_type', 'free'),
-            event.tickets[0].description = form.get('ticket_description', ''),
-            event.tickets[0].price = ticket_price,
-            event.tickets[0].sales_start = datetime.strptime(
-                form['ticket_sales_start_date'] + ' ' +
-                form['ticket_sales_start_time'], '%m/%d/%Y %H:%M'),
-            event.tickets[0].sales_end = datetime.strptime(
-                form['ticket_sales_end_date'] + ' ' +
-                form['ticket_sales_end_time'], '%m/%d/%Y %H:%M'),
-            event.tickets[0].quantity = str_empty(form.get('ticket_quantity'), 100),
-            event.tickets[0].min_order = str_empty(form.get('ticket_min_order'), 1),
-            event.tickets[0].max_order = str_empty(form.get('ticket_max_order'), 10)
+        if 'pay_by_paypal' in form:
+            event.paypal_email = form.get('paypal_email')
+        else:
+            event.paypal_email = None
+
+        payment_currency = ''
+        if form['payment_currency'] != '':
+            payment_currency = form.get('payment_currency').split(' ')[0]
+
+        event.payment_currency = payment_currency
+        event.paypal_email = form.get('paypal_email')
+
+        ticket_names = form.getlist('tickets[name]')
+        ticket_types = form.getlist('tickets[type]')
+        ticket_prices = form.getlist('tickets[price]')
+        ticket_quantities = form.getlist('tickets[quantity]')
+        ticket_descriptions = form.getlist('tickets[description]')
+        ticket_sales_start_dates = form.getlist('tickets[sales_start_date]')
+        ticket_sales_start_times = form.getlist('tickets[sales_start_time]')
+        ticket_sales_end_dates = form.getlist('tickets[sales_end_date]')
+        ticket_sales_end_times = form.getlist('tickets[sales_end_time]')
+        ticket_min_orders = form.getlist('tickets[min_order]')
+        ticket_max_orders = form.getlist('tickets[max_order]')
+        ticket_tags = form.getlist('tickets[tags]')
+
+        for i, name in enumerate(ticket_names):
+            if name.strip():
+                ticket_prices[i] = ticket_prices[i] if ticket_prices[i] != '' else 0
+                ticket_quantities[i] = ticket_quantities[i] if ticket_quantities[i] != '' else 100
+                ticket_min_orders[i] = ticket_min_orders[i] if ticket_min_orders[i] != '' else 1
+                ticket_max_orders[i] = ticket_max_orders[i] if ticket_max_orders[i] != '' else 10
+
+                sales_start_str = '{} {}'.format(ticket_sales_start_dates[i],
+                                                 ticket_sales_start_times[i])
+                sales_end_str = '{} {}'.format(ticket_sales_end_dates[i],
+                                               ticket_sales_end_times[i])
+
+                hide = form.get('tickets_hide_{}'.format(i), False)
+                hide = True if hide == 'on' else False
+
+                description_toggle = form.get('tickets_description_toggle_{}'.format(i), False)
+                description_toggle = True if description_toggle == 'on' else False
+
+                tag_list = DataManager.create_ticket_tags(ticket_tags[i], event.id,)
+
+                ticket, _ = get_or_create(Ticket, name=name, event=event, type=ticket_types[i])
+
+                if not ticket.has_order_tickets():
+                    ticket.price = int(ticket_prices[i]) if ticket_types[i] == 'paid' else 0
+                    ticket.type = ticket_types[i]
+                ticket.sales_start = datetime.strptime(sales_start_str, '%m/%d/%Y %H:%M')
+                ticket.sales_end = datetime.strptime(sales_end_str, '%m/%d/%Y %H:%M')
+                ticket.hide = hide
+                ticket.description = ticket_descriptions[i]
+                ticket.description_toggle = description_toggle
+                ticket.quantity = ticket_quantities[i]
+                ticket.min_order = ticket_min_orders[i]
+                ticket.max_order = ticket_max_orders[i]
+                ticket.tags = tag_list
+
+                save_to_db(ticket)
+
+        # Remove all the tickets that are not in form
+        # except those that already have placed orders
+        for ticket in event.tickets:
+            if ticket.name not in ticket_names and not ticket.has_order_tickets():
+                delete_from_db(ticket, 'Delete ticket')
+
         event.ticket_url = form.get('ticket_url', None)
 
-        if event.latitude and event.longitude:
-            response = requests.get(
-                "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
-                    event.longitude)).json()
-            if response['status'] == u'OK':
-                for addr in response['results'][0]['address_components']:
-                    if addr['types'] == ['locality', 'political']:
-                        event.searchable_location_name = addr['short_name']
+        if not event.ticket_url:
+
+            event.ticket_url = url_for('event_detail.display_event_tickets',
+                                       identifier=event.identifier,
+                                       _external=True)
+            if form['taxAllow'] == 'taxNo':
+                event.tax_allow = False
+                delete_from_db(tax, "Tax options deleted")
+
+            if form['taxAllow'] == 'taxYes':
+                event.tax_allow = True
+
+                tax_invoice = False
+                if 'tax_invoice' in form:
+                    tax_invoice = True
+
+                tax_include_in_price = False
+                if form['tax_options'] == 'tax_include':
+                    tax_include_in_price = True
+
+                if not tax:
+                    tax = Tax(country=form['tax_country'],
+                              tax_name=form['tax_name'],
+                              tax_rate=form['tax_rate'],
+                              tax_id=form['tax_id'],
+                              send_invoice=tax_invoice,
+                              registered_company=form.get('registered_company', ''),
+                              address=form.get('buisness_address', ''),
+                              city=form.get('invoice_city', ''),
+                              state=form.get('invoice_state', ''),
+                              zip=form.get('invoice_zip', 0),
+                              invoice_footer=form.get('invoice_footer', ''),
+                              tax_include_in_price=tax_include_in_price,
+                              event_id=event.id)
+
+                    save_to_db(tax, "Tax ")
+
+                if tax:
+                    tax.country = form['tax_country'],
+                    tax.tax_name = form['tax_name'],
+                    tax.tax_rate = form['tax_rate'],
+                    tax.tax_id = form['tax_id'],
+                    tax.send_invoice = tax_invoice,
+                    tax.registered_company = form.get('registered_company', ''),
+                    tax.address = form.get('buisness_address', ''),
+                    tax.city = form.get('invoice_city', ''),
+                    tax.state = form.get('invoice_state', ''),
+                    tax.zip = form.get('invoice_zip', 0),
+                    tax.invoice_footer = form.get('invoice_footer', ''),
+                    tax.tax_include_in_price = tax_include_in_price,
+                    tax.event_id = event.id
+
+                    save_to_db(tax, "Tax Options Updated")
+
+        event = DataManager.update_searchable_location_name(event)
 
         if form.get('organizer_state', u'off') == u'on':
             event.organizer_name = form['organizer_name']
@@ -1213,26 +1588,6 @@ class DataManager(object):
         event.copyright.licence = licence_name
         event.copyright.licence_url = licence_url
         event.copyright.logo = logo
-
-        background_image = form['background_url']
-        if string_not_empty(background_image):
-            background_file = uploaded_file(file_content=background_image)
-            background_url = upload(
-                background_file,
-                UPLOAD_PATHS['event']['background_url'].format(
-                    event_id=int(event.id)
-                ))
-            event.background_url = background_url
-
-        logo = form['logo']
-        if string_not_empty(logo):
-            logo_file = uploaded_file(file_content=logo)
-            logo = upload(
-                logo_file,
-                UPLOAD_PATHS['event']['logo'].format(
-                    event_id=int(event.id)
-                ))
-            event.logo = logo
 
         state = form.get('state', None)
         if state and ((state == u'Published' and not string_empty(
@@ -1276,6 +1631,21 @@ class DataManager(object):
                                                    link=social_link_link[index],
                                                    event_id=event.id)
                 db.session.add(social_link)
+
+        if event.stripe:
+            delete_from_db(event.stripe, "Old stripe auth deleted")
+
+        if 'pay_by_stripe' in form:
+            if form.get('stripe_added', u'no') == u'yes':
+                stripe_authorization = StripeAuthorization(
+                    stripe_secret_key=form.get('stripe_secret_key', ''),
+                    stripe_refresh_token=form.get('stripe_refresh_token', ''),
+                    stripe_publishable_key=form.get('stripe_publishable_key', ''),
+                    stripe_user_id=form.get('stripe_user_id', ''),
+                    stripe_email=form.get('stripe_email', ''),
+                    event_id=event.id
+                )
+                save_to_db(stripe_authorization)
 
         if form.get('has_session_speakers', u'no') == u'yes':
 
@@ -1433,6 +1803,9 @@ class DataManager(object):
             CustomForms, event_id=event.id,
             session_form=session_form, speaker_form=speaker_form)
 
+        for _ in get_all_columns():  # update all columns; safe way
+            update_version(event.id, False, _)
+
         save_to_db(event, "Event saved")
         record_activity('update_event', event_id=event.id)
         return event
@@ -1448,7 +1821,7 @@ class DataManager(object):
         Invite.query.filter_by(event_id=e_id).delete()
         Session.query.filter_by(event_id=e_id).delete()
         Event.query.filter_by(id=e_id).delete()
-        #record_activity('delete_event', event_id=e_id)
+        # record_activity('delete_event', event_id=e_id)
         db.session.commit()
 
     @staticmethod
@@ -1489,9 +1862,9 @@ class DataManager(object):
         """
         File from request will be removed from database
         """
-        file = File.query.get(file_id)
-        os.remove(os.path.join(os.path.realpath('.') + '/static/', file.name))
-        delete_from_db(file, "File removed")
+        file_obj = File.query.get(file_id)
+        os.remove(os.path.join(os.path.realpath('.') + '/static/', file_obj.name))
+        delete_from_db(file_obj, "File removed")
         flash("File removed")
 
     @staticmethod
@@ -1503,6 +1876,12 @@ class DataManager(object):
         save_to_db(uer, "UserEventRole saved")
         if record:
             record_activity('create_role', role=role, user=user, event_id=event_id)
+
+    @staticmethod
+    def add_attendee_role_to_event(user, event_id):
+        role = Role.query.filter_by(name=ATTENDEE).first()
+        uer = UsersEventsRoles(event=Event.query.get(event_id), user=user, role=role)
+        save_to_db(uer, "Attendee saved")
 
     @staticmethod
     def decline_role_invite(role_invite):
@@ -1524,6 +1903,7 @@ class DataManager(object):
         page = Page(name=form.get('name', ''), title=form.get('title', ''), description=form.get('description', ''),
                     url=form.get('url', ''), place=form.get('place', ''), index=form.get('index', 0))
         save_to_db(page, "Page created")
+        cache.delete('pages')
 
     def update_page(self, page, form):
         page.name = form.get('name', '')
@@ -1533,15 +1913,15 @@ class DataManager(object):
         page.place = form.get('place', '')
         page.index = form.get('index', '')
         save_to_db(page, "Page updated")
-
+        cache.delete('pages')
 
     @staticmethod
     def create_or_update_message_settings(form):
 
         for mail in MAILS:
-            mail_status = 1 if form.get(mail+'_mail_status', 'off') == 'on' else 0
-            notif_status = 1 if form.get(mail+'_notif_status', 'off') == 'on' else 0
-            user_control_status = 1 if form.get(mail+'_user_control_status', 'off') == 'on' else 0
+            mail_status = 1 if form.get(mail + '_mail_status', 'off') == 'on' else 0
+            notif_status = 1 if form.get(mail + '_notif_status', 'off') == 'on' else 0
+            user_control_status = 1 if form.get(mail + '_user_control_status', 'off') == 'on' else 0
             message_setting = MessageSettings.query.filter_by(action=mail).first()
             if message_setting:
                 message_setting.mail_status = mail_status
@@ -1576,7 +1956,7 @@ def save_to_db(item, msg="Saved to db", print_error=True):
         return False
 
 
-def delete_from_db(item, msg):
+def delete_from_db(item, msg='Deleted from db'):
     """Convenience function to wrap a proper DB delete
     :param item: will be removed from database
     :param msg: Message to log
@@ -1587,9 +1967,8 @@ def delete_from_db(item, msg):
         logging.info('removed from session')
         db.session.commit()
         return True
-    except Exception, e:
-        print e
-        logging.error('DB Exception! %s' % e)
+    except Exception, error:
+        logging.error('DB Exception! %s' % error)
         db.session.rollback()
         return False
 
@@ -1620,13 +1999,21 @@ def get_instagram_auth(state=None, token=None):
     if state:
         return OAuth2Session(InstagramOAuth.get_client_id(), state=state,
                              redirect_uri=InstagramOAuth.get_redirect_uri())
-    scope = "+".join(InstagramOAuth.SCOPE)
+    # scope = "+".join(InstagramOAuth.SCOPE)
     oauth = OAuth2Session(InstagramOAuth.get_client_id(), redirect_uri=InstagramOAuth.get_redirect_uri())
     return oauth
 
 
+def get_twitter_auth_url():
+    consumer = oauth2.Consumer(key=TwitterOAuth.get_client_id(),
+                               secret=TwitterOAuth.get_client_secret())
+    client = oauth2.Client(consumer)
+    resp, content = client.request('https://api.twitter.com/oauth/request_token', "GET")
+    return content + "&redirect_uri" + TwitterOAuth.get_redirect_uri(), consumer
+
+
+
 def create_user_oauth(user, user_data, token, method):
-    print user_data
     if user is None:
         user = User()
         user.email = user_data['email']
@@ -1639,7 +2026,7 @@ def create_user_oauth(user, user_data, token, method):
     save_to_db(user, "User created")
     user_detail = UserDetail.query.filter_by(user_id=user.id).first()
     user_detail.avatar_uploaded = user.avatar
-    user_detail.fullname = user_data['name']
+    user_detail.firstname = user_data['name']
     save_to_db(user, "User Details Updated")
     return user
 
@@ -1682,22 +2069,22 @@ def record_activity(template, login_user=None, **kwargs):
     else:
         actor = 'Anonymous'
     id_str = ' (%d)'
-    s = '"%s"'
+    sequence = '"%s"'
     # add more information for objects
     for k in kwargs:
         v = kwargs[k]
         if k.find('_id') > -1:
             kwargs[k] = str(v)
         elif k.startswith('user'):
-            kwargs[k] = s % v.email + id_str % v.id
+            kwargs[k] = sequence % v.email + id_str % v.id
         elif k.startswith('role'):
-            kwargs[k] = s % v.title_name
+            kwargs[k] = sequence % v.title_name
         elif k.startswith('session'):
-            kwargs[k] = s % v.title + id_str % v.id
+            kwargs[k] = sequence % v.title + id_str % v.id
         elif k.startswith('track'):
-            kwargs[k] = s % v.name + id_str % v.id
+            kwargs[k] = sequence % v.name + id_str % v.id
         elif k.startswith('speaker'):
-            kwargs[k] = s % v.name + id_str % v.id
+            kwargs[k] = sequence % v.name + id_str % v.id
         else:
             kwargs[k] = str(v)
     try:
@@ -1781,6 +2168,7 @@ def trash_session(session_id):
     session.in_trash = True
     session.trash_date = datetime.now()
     save_to_db(session, "Session added to Trash")
+    update_version(session.event_id, False, 'sessions_ver')
     return session
 
 
@@ -1800,6 +2188,7 @@ def restore_session(session_id):
     session = DataGetter.get_session(session_id)
     session.in_trash = False
     save_to_db(session, "Session restored from Trash")
+    update_version(session.event_id, False, 'sessions_ver')
 
 
 def create_modules(form):

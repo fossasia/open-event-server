@@ -31,49 +31,55 @@ System Messages
         <table id="mails_table" class="table table-striped table-hover with-datatable no-global-dt">
             <thead>
                 <tr>
-                    <th class="col-md-2 col-sm-2">Recipient</th>
+                    <th class="col-md-1 col-sm-1">Recipient</th>
                     <th class="col-md-2 col-sm-2">Trigger</th>
                     <th class="col-md-3 col-sm-3">Email Message</th>
                     <th class="col-md-3 col-sm-3">Notification Message</th>
-                    <th class="col-md-2 col-sm-2">Options</th>
+                    <th class="col-md-1 col-sm-1">Options</th>
+                    <th class="col-md-1 col-sm-1">Time/Date of Sent out</th>
                 </tr>
             </thead>
             <tbody>
-                {% for notif in notifications %}
+                {% for mail in mails %}
                 <tr>
-                    <td>{{ mails[notif]['recipient'] }}</td>
-                    <td>{{ notif }}</td>
-                    <td><strong>{{ mails[notif]['subject'] }}</strong><br>{{ mails[notif]['message']|safe }}</td>
+                    <td>{{ mails[mail]['recipient'] }}</td>
+                    <td>{{ mail }}</td>
+                    <td><strong>{{ mails[mail]['subject'] }}</strong><br>{{ mails[mail]['message']|safe }}</td>
                     <td>
-                    {% if notifications[notif] %}
-                        <strong>{{ notifications[notif]['title'] }}</strong><br>{{ notifications[notif]['message']|safe }}
+                    {% if notifications[mail] %}
+                        <strong>{{ notifications[mail]['title'] }}</strong><br>{{ notifications[mail]['message']|safe }}
                     {% endif %}
                     </td>
-                    <td id="{{ notif }}">
+                    <td id="{{ mail }}">
+                        {% if notifications[mail] %}
                         <div class="checkbox" style="margin-top:10px;">
                             <label>
-                              <input type="checkbox" class="flat" {% if message_settings[notif].mail_status != 0 or not message_settings[notif] %}checked="checked"{% endif %} name="{{ notif }}_mail_status" onclick=""> Mail
+                              <input type="checkbox" class="flat" {% if message_settings[mail].mail_status != 0 or not message_settings[mail] %}checked="checked"{% endif %} name="{{ mail }}_mail_status" onclick=""> Mail
                             </label>
                         </div><br>
-                        {% if notifications[notif] %}
                         <div class="checkbox" style="margin-top:10px;">
                             <label>
-                              <input type="checkbox" class="flat" {% if message_settings[notif].notif_status != 0 or not message_settings[notif] %}checked="checked"{% endif %} name="{{ notif }}_notif_status"> Notification
+                              <input type="checkbox" class="flat" {% if message_settings[mail].notif_status != 0 or not message_settings[mail] %}checked="checked"{% endif %} name="{{ mail }}_notif_status"> Notification
                             </label>
                         </div><br>
-                        {% endif %}
                         <div class="checkbox" style="margin-top:10px;">
                             <label>
-                              <input type="checkbox" class="flat" {% if message_settings[notif].user_control_status != 0 or not message_settings[notif] %}checked="checked"{% endif %} name="{{ notif }}_user_control_status"> User Control
+                              <input type="checkbox" class="flat" {% if message_settings[mail].user_control_status != 0 or not message_settings[mail] %}checked="checked"{% endif %} name="{{ mail }}_user_control_status"> User Control
                             </label>
                         </div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ mails[mail]['sent_at'] | default('N/A', true) }}
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+        <hr>
+        <input type="submit" value="Save" class="btn btn-success pull-right" style="float:right;">
     </div>
-    <input type="submit" value="Update Settings" class="btn btn-success" style="float:right;">
+
 </div>
 </form>
 

@@ -1,5 +1,6 @@
 {% import 'gentelella/admin/menu.html' as menu with context %}
 {% import 'gentelella/admin/footer.html' as footer with context %}
+{% import 'gentelella/admin/analytics.html' as analytics with context %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,7 +43,7 @@
 <div class="container body">
     <div class="main_container">
         {{ menu.render_menu() }}
-        <div role="main" class="right_col" style="margin-left:0;padding-top: 68px !important;">
+        <div role="main" class="right_col" style="margin-left:0;">
             <div class="clearfix"></div>
             <div>
                 {% include 'gentelella/admin/notifications.html' %}
@@ -59,8 +60,44 @@
     <script src="{{ url_for('static', filename='admin/lib/typeahead.js/dist/typeahead.bundle.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/bootstrap/dist/js/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/summernote/dist/summernote.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/socket.io-client/socket.io.js') }}"></script>
     <script src="{{ url_for('static', filename='js/admin/global_tail.js') }}"></script>
     <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
 {% endblock %}
+{{ analytics.render_analytics() }}
+<script type="text/javascript">
+    $(document).ready(function() {
+        var notificationViewPath = "{{ url_for('notifications.index_view') }}";
+        setATagsInNotifMenuDropDown(notificationViewPath);
+    });
+</script>
+
+{% if current_user.is_authenticated and integrate_socketio %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        var namespace = '/notifs';
+
+        var socket = io.connect(location.protocol + "//" + location.host + namespace, {reconnection: false});
+
+        socket.on('notifs-response', function(msg) {
+            console.log(msg.meta);
+            if (msg.hasOwnProperty("notif_count") && msg.hasOwnProperty("notifs")) {
+                $("#notif_count").text(msg.notif_count);
+                $("#notif-menu li.notif-menu-li").each(function(i, li) {
+                    $(li).remove();
+                });
+                var html = '';
+                $.each(msg.notifs, function(i, notif) {
+                    html += '<li class="notif-menu-li"><a><span class="message">'+ notif.title +
+                        '</span><span class="time">' + notif.received_at + '</span><span class="mark-as-read btn btn-default btn-xs"' +
+                        ' data-markread="' + notif.mark_read + '">Mark as read</span>';
+                });
+                $("ul#notif-menu li:first-child").after(html);
+                setATagsInNotifMenuDropDown(notificationViewPath);
+            }
+        });
+    });
+</script>
+{% endif %}
 </body>
 </html>

@@ -15,7 +15,7 @@ jQuery.fn.extend({
             elem.bind("propertychange change click keyup input paste", function (event) {
                 if (elem.data('oldVal') != elem.val()) {
                     elem.data('oldVal', elem.val());
-                    callback(elem.val(), event);
+                    callback(elem.val(), event, elem);
                 }
             });
         });
@@ -104,7 +104,26 @@ jQuery.fn.extend({
             $(this).find("select,input,textarea,button").enable();
             $(this).find(".note-editable").attr("contenteditable", "true")
         });
+    },
+    /**
+     * Enable all input, textarea of a form
+     * @returns {*}
+     */
+    setFormLoading: function (isLoading, text) {
+        return this.each(function () {
+            if (typeof flag === 'undefined') {
+                isLoading = true;
+            }
+            if(isLoading) {
+                $(this).lockForm();
+                $(this).find("button[type=submit]").html("<i class='fa fa-refresh fa-spin fa-fw'></i> Processing");
+            } else {
+                $(this).unlockForm();
+                $(this).find("button[type=submit]").html(text);
+            }
+        });
     }
+
 });
 
 /**
@@ -365,4 +384,17 @@ function slugify(text) {
         splitWord[index] = partSlugify(splitWord[index]);
     }
     return splitWord.join('--');
+}
+
+/**
+ * Pad a number with zeros
+ * @param n
+ * @param width
+ * @param z
+ * @returns {*}
+ */
+function pad(n, width, z) {
+    z = z || '0';
+    n = n + '';
+    return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 }

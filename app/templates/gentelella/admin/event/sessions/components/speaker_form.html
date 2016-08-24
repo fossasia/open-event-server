@@ -13,7 +13,13 @@
                 {{ _speaker_component.speaker_form_field(elem, speaker_form[elem].require) }}
             {% endif %}
         {% endfor %}
+        <div class="item form-group speaker-fields featured-toggle-holder" style="display: none;">
+            <label class="control-label">Featured Speaker</label>
+            <input type="checkbox" class="toggle-switch include-switch" name="featured" value="true" id="featured-switch" {% if speaker.featured %}checked{% endif %}/>
+            <label for="featured-switch" style="margin-left: 0;"> </label>
+        </div>
         <br>
+
         <button type="submit" class="btn btn-success">Save Speaker</button>
     </div>
     <div style="text-align: center;">

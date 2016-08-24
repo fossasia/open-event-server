@@ -16,7 +16,7 @@ from custom_fields import CustomField
 from .errors import NotFoundError, InvalidServiceError, ValidationError, \
     NotAuthorizedError, ServerError, PermissionDeniedError
 from app.models.user import User as UserModel
-from app.helpers.data import save_to_db, update_version, delete_from_db
+from app.helpers.data import save_to_db, delete_from_db
 
 from query_filters import extract_special_queries, apply_special_queries
 
@@ -63,6 +63,7 @@ def get_list_or_404(klass, **kwargs):
     if not obj_list:
         raise NotFoundError(message='Object list is empty')
     return obj_list
+
 
 def get_object_or_404(klass, id_):
     """Returns a specific object of a model class given its identifier. In case
@@ -144,6 +145,19 @@ def get_paginated_list(klass, url=None, args={}, **kwargs):
     obj['results'] = results[(start - 1):(start - 1 + limit)]
 
     return obj
+
+
+def fix_attribute_names(payload, api_model):
+    """
+    converts payload fields to their real names.
+    Uses the attribute parameter
+    """
+    data = payload.copy()
+    for key in payload:
+        if api_model[key].attribute:
+            data[api_model[key].attribute] = data[key]
+            del data[key]
+    return data
 
 
 def handle_extra_payload(payload, api_model):
@@ -262,7 +276,7 @@ def update_model(model, item_id, data, event_id=None):
 def requires_auth(f):
     """
     Custom decorator to restrict non-login access to views
-    g.user holds the successfully authenticated user
+    sets g.user to the successfully authenticated user
     Allows JWT token based access and Basic auth access
     Falls back to active session if both are not present
     """
@@ -312,6 +326,7 @@ def auth_jwt():
     """
     g.user = current_identity
 
+
 def erase_from_dict(dct, key):
     if isinstance(dct, dict):
         if key in dct.keys():
@@ -338,6 +353,7 @@ def auth_basic():
     g.user = user
     return (True, '')
 
+
 def fake_marshal_with(fields, as_list=False, code=200, description=None, **kwargs):
     def wrapper(func):
         doc = {
@@ -349,6 +365,7 @@ def fake_marshal_with(fields, as_list=False, code=200, description=None, **kwarg
         func.__apidoc__ = merge(getattr(func, '__apidoc__', {}), doc)
         return func
     return wrapper
+
 
 def fake_marshal_list_with(fields, as_list=False, code=200, description=None, **kwargs):
     return fake_marshal_with(fields, True, **kwargs)
@@ -397,16 +414,15 @@ def model_custom_form(cf_data, model):
 # Permission Decorators for Event #
 ###################################
 
-
 def staff_only(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        user = UserModel.query.get(login.current_user.id)
-        if user.is_staff:
+        user = getattr(g, 'user', None)
+        if user and user.is_staff:
             return func(*args, **kwargs)
         else:
             raise PermissionDeniedError()
-    return requires_auth(wrapper)
+    return wrapper
 
 
 def can_access(func):
@@ -415,40 +431,39 @@ def can_access(func):
     """
     @wraps(func)
     def wrapper(*args, **kwargs):
-        user = UserModel.query.get(login.current_user.id)
+        user = getattr(g, 'user', None)
         event_id = kwargs.get('event_id')
         if not event_id:
             raise ServerError()
         # Check if event exists
         get_object_or_404(EventModel, event_id)
-        if user.has_role(event_id) or user.is_staff:
+        if user and (user.has_role(event_id) or user.is_staff):
             return func(*args, **kwargs)
         else:
             raise PermissionDeniedError()
-    return requires_auth(wrapper)
+    return wrapper
 
 
 ######################################
 # Permission Decorators For Services #
 ######################################
 
-
 def can_create(DAO):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            user = UserModel.query.get(login.current_user.id)
+            user = getattr(g, 'user', None)
             event_id = kwargs.get('event_id')
             if not event_id:
                 raise ServerError()
             # Check if event exists
             get_object_or_404(EventModel, event_id)
             service_class = DAO.model
-            if user.can_create(service_class, event_id) or user.is_staff:
+            if user and (user.can_create(service_class, event_id) or user.is_staff):
                 return func(*args, **kwargs)
             else:
                 raise PermissionDeniedError()
-        return requires_auth(wrapper)
+        return wrapper
     return decorator
 
 
@@ -456,18 +471,18 @@ def can_read(DAO):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            user = UserModel.query.get(login.current_user.id)
+            user = getattr(g, 'user', None)
             event_id = kwargs.get('event_id')
             if not event_id:
                 raise ServerError()
             # Check if event exists
             get_object_or_404(EventModel, event_id)
             service_class = DAO.model
-            if user.can_read(service_class, event_id) or user.is_staff:
+            if user and (user.can_read(service_class, event_id) or user.is_staff):
                 return func(*args, **kwargs)
             else:
                 raise PermissionDeniedError()
-        return requires_auth(wrapper)
+        return wrapper
     return decorator
 
 
@@ -475,18 +490,18 @@ def can_update(DAO):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            user = UserModel.query.get(login.current_user.id)
+            user = getattr(g, 'user', None)
             event_id = kwargs.get('event_id')
             if not event_id:
                 raise ServerError()
             # Check if event exists
             get_object_or_404(EventModel, event_id)
             service_class = DAO.model
-            if user.can_update(service_class, event_id) or user.is_staff:
+            if user and (user.can_update(service_class, event_id) or user.is_staff):
                 return func(*args, **kwargs)
             else:
                 raise PermissionDeniedError()
-        return requires_auth(wrapper)
+        return wrapper
     return decorator
 
 
@@ -494,18 +509,18 @@ def can_delete(DAO):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            user = UserModel.query.get(login.current_user.id)
+            user = getattr(g, 'user', None)
             event_id = kwargs.get('event_id')
             if not event_id:
                 raise ServerError()
             # Check if event exists
             get_object_or_404(EventModel, event_id)
             service_class = DAO.model
-            if user.can_delete(service_class, event_id) or user.is_staff:
+            if user and (user.can_delete(service_class, event_id) or user.is_staff):
                 return func(*args, **kwargs)
             else:
                 raise PermissionDeniedError()
-        return requires_auth(wrapper)
+        return wrapper
     return decorator
 
 
@@ -519,12 +534,12 @@ def can_access_account(func):
     """
     @wraps(func)
     def wrapper(*args, **kwargs):
-        user = UserModel.query.get(login.current_user.id)
+        user = getattr(g, 'user', None)
         user_id = kwargs.get('user_id')
         # Check if user with user_id exists
         get_object_or_404(UserModel, user_id)
-        if user.id == user_id or user.is_staff:
+        if user and (user.id == user_id or user.is_staff):
             return func(*args, **kwargs)
         else:
             raise PermissionDeniedError()
-    return requires_auth(wrapper)
+    return wrapper

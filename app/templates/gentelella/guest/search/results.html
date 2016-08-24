@@ -17,11 +17,11 @@
     Explore
 {% endblock %}
 {% macro event_block(event) %}
-    <a href="/e/{{ event.id }}">
+    <a href="/e/{{ event.identifier }}">
         <div class="col-xs-12 event-holder">
             <div class="thumbnail row">
                 <div class="img-box col-md-3 col-sm-3 col-xs-3">
-                    <img class="event-image" src="{{ event.background_url | default('', true) }}"
+                    <img class="event-image" src='{% if event.background_url %}{{ event.thumbnail }}{% elif order.event.topic%}{% set vars = {"foo": False} %}{% for custom_image in custom_placeholder %}{% if custom_image.name == session.event.topic %}{{ custom_image.url }}{% if vars.update({"foo": True}) %} {% endif %}{% endif %}{% endfor %}{% if not vars.foo %}{{ url_for("static", filename="placeholders/" + placeholder_images[order.event.topic])}}{% endif %}{% elif order.event.subtopic %}{% set vars = {"foo": False} %}{% for custom_image in custom_placeholder %}{% if custom_image.name == session.event.subtopic %}{{ custom_image.url }}{% if vars.update({"foo": True}) %} {% endif %}{% endif %}{% endfor %}{% if not vars.foo %}{ url_for("static", filename="placeholders/" + placeholder_images[order.event.subtopic])}}{% endif %}{% else %}{% set vars = {"foo": False} %}{% for custom_image in custom_placeholder %}{% if custom_image.name == "Other" %}{{ custom_image.url }}{% if vars.update({"foo": True}) %} {% endif %}{% endif %}{% endfor %}{% if not vars.foo %}{{ url_for("static", filename="placeholders/" + placeholder_images["Other"])}}{% endif %}{% endif %}'
                          onerror="imgError(this, true)">
                 </div>
                 <div class="caption col-md-9 col-sm-9 col-xs-9">
@@ -38,7 +38,7 @@
                         {% if event and event.topic %}
                             <span class="filter-hashtag" data-name="category" data-value="{{ event.topic }}">#{{ event.topic | default('', true) | camel_case }}</span>
                         {% endif %}
-                        <i data-event-id="{{ event.id | default('', true) }}"
+                        <i data-event-id="{{ event.identifier | default('', true) }}"
                            data-title="{{ event.name | default('', true) }}"
                            class="share-btn fa fa-share-alt pull-right"></i>
                     </p>

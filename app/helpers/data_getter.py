@@ -1,17 +1,21 @@
 """Copyright 2015 Rafal Kowalski"""
 from collections import Counter
 
+from flask import url_for
 import pytz
 import requests
+import humanize
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
-from app.models.role import Role
 from ..models.event import Event, EventsUsers
 from ..models.session import Session
 # User Notifications
 from ..models.notifications import Notification
 from ..models.message_settings import MessageSettings
 from ..models.track import Track
+from ..models.image_config import ImageConfig
+from ..models.image_sizes import ImageSizes
+from ..models.custom_placeholder import CustomPlaceholder
 from ..models.invite import Invite
 from ..models.speaker import Speaker
 from ..models.email_notifications import EmailNotification
@@ -24,25 +28,33 @@ from ..models.service import Service
 from ..models.permission import Permission
 from ..models.user import User
 from ..models.file import File
+from ..models.panel_permissions import PanelPermission
 from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
 from ..models.call_for_papers import CallForPaper
 from ..models.custom_forms import CustomForms
 from ..models.mail import Mail
 from ..models.activity import Activity
-from ..models.setting import Setting
+from ..models.ticket import Ticket
+from ..models.user_permissions import UserPermission
 from ..models.modules import Module
 from ..models.page import Page
+from ..models.export_jobs import ExportJob
+from ..models.tax import Tax
+from ..models.fees import TicketFees
+from ..models.order import Order
+from ..models.import_jobs import ImportJob
 from .language_list import LANGUAGE_LIST
-from .static import EVENT_TOPICS, EVENT_LICENCES
-from app.helpers.helpers import get_event_id, string_empty
+from .static import EVENT_TOPICS, EVENT_LICENCES, PAYMENT_COUNTRIES, PAYMENT_CURRENCIES, DEFAULT_EVENT_IMAGES
+from app.helpers.helpers import get_event_id, string_empty, represents_int, get_count
 from flask.ext import login
-from flask import flash, current_app, abort
+from flask import flash, abort
 import datetime
 from sqlalchemy import desc, asc, or_
+from app.helpers.cache import cache
 
 
-class DataGetter:
+class DataGetter(object):
     @staticmethod
     def get_all_user_notifications(user):
         return Notification.query.filter_by(user=user).all()
@@ -50,6 +62,19 @@ class DataGetter:
     @staticmethod
     def get_user_notification(notification_id):
         return Notification.query.filter_by(id=notification_id).first()
+
+    @staticmethod
+    def get_latest_notif(user):
+        unread_notifs = Notification.query.filter_by(user=user, has_read=False)
+        notif = unread_notifs.order_by(desc(Notification.received_at)).first()
+        latest_notif = {
+            'title': notif.title,
+            'message': notif.message,
+            'received_at': str(notif.received_at),
+            'received_at_human': humanize.naturaltime(datetime.datetime.now() - notif.received_at),
+            'mark_read': url_for('notifications.mark_as_read', notification_id=notif.id)
+        }
+        return latest_notif
 
     @staticmethod
     def get_invite_by_user_id(user_id):
@@ -63,7 +88,19 @@ class DataGetter:
     @staticmethod
     def get_all_events():
         """Method return all events"""
-        return Event.query.order_by(desc(Event.id)).filter(Event.in_trash == False).all()
+        return Event.query.order_by(desc(Event.id)).filter_by(in_trash=False).all()
+
+    @staticmethod
+    def get_custom_placeholders():
+        return CustomPlaceholder.query.all()
+
+    @staticmethod
+    def get_custom_placeholder_by_id(placeholder_id):
+        return CustomPlaceholder.query.filter_by(id=placeholder_id).first()
+
+    @staticmethod
+    def get_custom_placeholder_by_name(name):
+        return CustomPlaceholder.query.filter_by(name=name).first()
 
     @staticmethod
     def get_all_users_events_roles():
@@ -91,19 +128,22 @@ class DataGetter:
         return Permission.query.filter_by(role=role, service=service).first()
 
     @staticmethod
-    def get_event_role_invite(event_id, hash, **kwargs):
+    def get_event_role_invite(event_id, hash_code, **kwargs):
         return RoleInvite.query.filter_by(event_id=event_id,
-                                          hash=hash, **kwargs).first()
+                                          hash=hash_code, **kwargs).first()
 
     @staticmethod
-    def get_all_owner_events():
-        """Method return all owner events"""
-        # return Event.query.filter_by(owner=owner_id)
-        return login.current_user.events_assocs
+    def get_panel_permission(role_name, panel_name):
+        return PanelPermission.query.filter_by(role_name=role_name,
+                                               panel_name=panel_name).first()
 
     @staticmethod
-    def get_email_notification_settings_by_id(id):
-        return EmailNotification.query.get(id)
+    def get_user_permissions():
+        return UserPermission.query.all()
+
+    @staticmethod
+    def get_email_notification_settings_by_id(email_id):
+        return EmailNotification.query.get(email_id)
 
     @staticmethod
     def get_email_notification_settings(user_id):
@@ -125,11 +165,20 @@ class DataGetter:
         """
         :return: All Sessions with correct event_id
         """
-        return Session.query.filter(Session.state == state).filter(Session.in_trash == False)
+        return Session.query.filter(Session.state == state).filter(Session.in_trash is not True)
+
+    @staticmethod
+    def get_sessions_by_state_and_event_id(state, event_id):
+        """
+        :return: Filtering sessions by event id and session state
+        """
+        return Session.query.filter(Session.event_id == event_id) \
+            .filter(Session.state == state) \
+            .filter(Session.in_trash == False)
 
     @staticmethod
     def get_all_sessions():
-        return Session.query.filter(Session.in_trash == False).all()
+        return Session.query.filter(Session.in_trash is not True).all()
 
     @staticmethod
     def get_tracks(event_id):
@@ -159,6 +208,20 @@ class DataGetter:
         )
 
     @staticmethod
+    def get_image_sizes():
+        """
+        :return: Image Sizes
+        """
+        return ImageSizes.query.first()
+
+    @staticmethod
+    def get_image_configs():
+        """
+        :return: Image Configs
+        """
+        return ImageConfig.query.all()
+
+    @staticmethod
     def get_custom_form_elements(event_id):
         """
         :param event_id: Event id
@@ -176,9 +239,9 @@ class DataGetter:
         try:
             return Session.query.filter(Session.speakers.any(Speaker.user_id == user.id)).filter(
                 Session.id == session_id).one()
-        except MultipleResultsFound, e:
+        except MultipleResultsFound:
             return None
-        except NoResultFound, e:
+        except NoResultFound:
             return None
 
     @staticmethod
@@ -234,7 +297,6 @@ class DataGetter:
     @staticmethod
     def get_microlocations_by_event_id():
         """
-        :param event_id: Event id
         :return: All Microlocation filtered by event_id
         """
         return Microlocation.query.filter_by(event_id=get_event_id())
@@ -262,7 +324,7 @@ class DataGetter:
         :return All files filtered by owner, Format [(test.png, test1.png)...]:
         """
         files = File.query.filter_by(owner_id=login.current_user.id)
-        return [(file.name, file.name) for file in files]
+        return [(file_obj.name, file_obj.name) for file_obj in files]
 
     @staticmethod
     def get_all_owner_files():
@@ -276,7 +338,7 @@ class DataGetter:
     def get_user_by_email(email, no_flash=None):
         user = User.query.filter_by(email=email).first()
         if not user:
-            if no_flash == True:
+            if no_flash:
                 return None
             else:
                 flash("User doesn't exist")
@@ -292,11 +354,11 @@ class DataGetter:
         return User.query.all()
 
     @staticmethod
-    def get_user(id):
+    def get_user(user_id):
         """
         :return: User
         """
-        return User.query.get(int(id))
+        return User.query.get(int(user_id))
 
     @staticmethod
     def get_association():
@@ -315,11 +377,24 @@ class DataGetter:
         return db_model.query.get(object_id)
 
     @staticmethod
-    def get_event(event_id):
-        """Returns an Event given its id.
+    def get_event(event_id_or_identifier):
+        """Returns an Event given its id/identifier.
         Aborts with a 404 if event not found.
         """
-        event = Event.query.get(event_id)
+        if represents_int(event_id_or_identifier):
+            event = Event.query.get(event_id_or_identifier)
+        else:
+            event = Event.query.filter_by(identifier=event_id_or_identifier).first()
+        if event is None:
+            abort(404)
+        return event
+
+    @staticmethod
+    def get_event_by_identifier(identifier):
+        """Returns an Event given its /identifier.
+        Aborts with a 404 if event not found.
+        """
+        event = Event.query.filter_by(identifier=identifier).first()
         if event is None:
             abort(404)
         return event
@@ -337,14 +412,15 @@ class DataGetter:
         return UsersEventsRoles.query.filter_by(event_id=event_id).filter(Role.name == role_name)
 
     @staticmethod
-    def get_user_events():
-        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id)
+    def get_user_events(user_id=None):
+        return Event.query.join(Event.roles, aliased=True)\
+            .filter_by(user_id=login.current_user.id if not user_id else user_id)
 
     @staticmethod
     def get_completed_events():
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.state == 'Completed')
-        return events
+        return DataGetter.trim_attendee_events(events)
 
     @staticmethod
     def get_all_published_events(include_private=False):
@@ -353,7 +429,7 @@ class DataGetter:
         else:
             events = Event.query.filter(Event.state == 'Published').filter(Event.privacy != 'private')
         events = events.filter(Event.start_time >= datetime.datetime.now()).filter(
-            Event.end_time >= datetime.datetime.now())
+            Event.end_time >= datetime.datetime.now()).filter(Event.in_trash == 'False')
         return events
 
     @staticmethod
@@ -363,51 +439,62 @@ class DataGetter:
             events = DataGetter.get_all_published_events(include_private)
             for e in events:
                 call_for_speakers = DataGetter.get_call_for_papers(e.id).first()
-                if call_for_speakers:
+                if call_for_speakers and not e.in_trash:
                     results.append(e)
 
         else:
             events = DataGetter.get_all_published_events()
             for e in events:
                 call_for_speakers = DataGetter.get_call_for_papers(e.id).first()
-                if call_for_speakers:
+                if call_for_speakers and not e.in_trash:
                     results.append(e)
         return results[:12]
 
     @staticmethod
+    def trim_attendee_events(events):
+        """
+        return only those events where current_user has non-attendee permissions access
+        """
+        return [_ for _ in events if _.has_staff_access()]
+
+    @staticmethod
     def get_published_events():
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
-            .filter(Event.state == 'Call for papers')
-        return events
+            .filter(Event.state == 'Published')
+        return DataGetter.trim_attendee_events(events)
 
     @staticmethod
     def get_current_events():
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.state != 'Completed')
-        return events
+        return DataGetter.trim_attendee_events(events)
 
     @staticmethod
     def get_live_events():
-        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
-            .filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
-            .filter(Event.state == 'Published').filter(Event.in_trash == False)
+        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
+            .filter(Event.end_time >= datetime.datetime.now()) \
+            .filter(Event.state == 'Published').filter(Event.in_trash is not True)
+        return DataGetter.trim_attendee_events(events)
 
     @staticmethod
     def get_draft_events():
-        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
-            .filter(Event.state == 'Draft').filter(Event.in_trash == False)
+        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
+            .filter(Event.state == 'Draft').filter(Event.in_trash is not True)
+        return DataGetter.trim_attendee_events(events)
 
     @staticmethod
     def get_past_events():
-        return Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
+        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.end_time <= datetime.datetime.now()).filter(
-            or_(Event.state == 'completed', Event.state == 'Published'))
+            or_(Event.state == 'Completed', Event.state == 'Published')).filter(Event.in_trash is not True)
+        return DataGetter.trim_attendee_events(events)
 
     @staticmethod
     def get_all_live_events():
-        return Event.query.filter(Event.start_time >= datetime.datetime.now()) \
-            .filter(Event.end_time >= datetime.datetime.now()) \
-            .filter(Event.state == 'Published').filter(Event.in_trash == False)
+        return Event.query.filter(Event.start_time >= datetime.datetime.now(),
+                                  Event.end_time >= datetime.datetime.now(),
+                                  Event.state == 'Published',
+                                  Event.in_trash == False)
 
     @staticmethod
     def get_live_and_public_events():
@@ -415,13 +502,14 @@ class DataGetter:
 
     @staticmethod
     def get_all_draft_events():
-        return Event.query.filter(Event.state == 'Draft').filter(Event.in_trash == False)
+        return Event.query.filter_by(state='Draft', in_trash=False)
 
     @staticmethod
     def get_all_past_events():
-        return Event.query.filter(Event.end_time <= datetime.datetime.now()).filter(
-            or_(Event.state == 'Completed', Event.state == 'Published')).filter(
-            Event.in_trash == False)
+        return Event.query.filter(Event.end_time <= datetime.datetime.now(),
+                                  Event.in_trash == False,
+                                  or_(Event.state == 'Completed', Event.state == 'Published'))
+
 
     @staticmethod
     def get_session(session_id):
@@ -531,6 +619,10 @@ class DataGetter:
         return EVENT_TOPICS
 
     @staticmethod
+    def get_event_default_images():
+        return DEFAULT_EVENT_IMAGES
+
+    @staticmethod
     def get_all_mails(count=300):
         """
         Get All Mails by latest first
@@ -570,6 +662,15 @@ class DataGetter:
         return activities
 
     @staticmethod
+    def get_imports_by_user(count=50):
+        """
+        Get all imports by user by recent first
+        """
+        imports = ImportJob.query.filter_by(user=login.current_user) \
+            .order_by(desc(ImportJob.start_time)).limit(count).all()
+        return imports
+
+    @staticmethod
     def get_trash_events():
         return Event.query.filter_by(in_trash=True)
 
@@ -589,9 +690,10 @@ class DataGetter:
     def get_upcoming_events(event_id):
         return Event.query.join(Event.roles, aliased=True) \
             .filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
-            .filter(Event.in_trash == False)
+            .filter_by(in_trash=False)
 
     @staticmethod
+    @cache.cached(timeout=604800, key_prefix='pages')
     def get_all_pages():
         return Page.query.order_by(desc(Page.index)).all()
 
@@ -601,19 +703,20 @@ class DataGetter:
 
     @staticmethod
     def get_page_by_url(url):
-        results = Page.query.filter_by(url=url)
+        results = Page.query.filter(Page.url.contains(url))
         if results:
-            return results.one()
+            return results.first()
         return results
 
     @staticmethod
     def get_all_message_setting():
         settings_list = MessageSettings.query.all()
         all_settings = {}
-        for index, d in enumerate(settings_list):
+        for index in range(len(settings_list)):
             all_settings[settings_list[index].action] = {'mail_status': settings_list[index].mail_status,
                                                          'notif_status': settings_list[index].notif_status,
-                                                         'user_control_status': settings_list[index].user_control_status}
+                                                         'user_control_status': settings_list[
+                                                             index].user_control_status}
         return all_settings
 
     @staticmethod
@@ -621,24 +724,131 @@ class DataGetter:
         return MessageSettings.query.filter_by(action=action).first()
 
     @staticmethod
+    @cache.cached(timeout=21600, key_prefix='event_locations')
     def get_locations_of_events():
         names = []
-        for event in DataGetter.get_live_and_public_events():
-            if not string_empty(event.location_name) and not string_empty(event.latitude) and not string_empty(event.longitude):
-                response = requests.get(
-                    "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
-                        event.longitude)).json()
-                if response['status'] == u'OK':
-                    for addr in response['results'][0]['address_components']:
-                        if addr['types'] == ['locality', 'political']:
-                            names.append(addr['short_name'])
+        try:
+            for event in DataGetter.get_live_and_public_events():
+                if not string_empty(event.location_name) and not string_empty(event.latitude) and not string_empty(
+                    event.longitude):
+                    response = requests.get(
+                        "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
+                            event.longitude)).json()
+                    if response['status'] == u'OK':
+                        for addr in response['results'][0]['address_components']:
+                            if addr['types'] == ['locality', 'political']:
+                                names.append(addr['short_name'])
 
-        cnt = Counter()
-        for location in names:
-            cnt[location] += 1
-        return [v for v, k in cnt.most_common()][:10]
+            cnt = Counter()
+            for location in names:
+                cnt[location] += 1
+            return [v for v, __ in cnt.most_common()][:10]
+        except:
+            return names
 
+    @staticmethod
+    def get_sales_open_tickets(event_id, give_all=False):
+        if give_all:
+            return Ticket.query.filter(Ticket.event_id == event_id)
+        return Ticket.query.filter(Ticket.event_id == event_id).filter(
+            Ticket.sales_start <= datetime.datetime.now()).filter(
+            Ticket.sales_end >= datetime.datetime.now())
 
     @staticmethod
     def get_module():
-        return Module.query.get(1)
+        """Get Module with the largest id (latest Module).
+        """
+        return Module.query.order_by(desc(Module.id)).first()
+
+    @staticmethod
+    def get_export_jobs(event_id):
+        """get export job for an event"""
+        return ExportJob.query.filter_by(event_id=event_id).first()
+
+    @staticmethod
+    def get_payment_countries():
+        return sorted([k for k in PAYMENT_COUNTRIES])
+
+    @staticmethod
+    def get_payment_currencies():
+        return sorted([k for k in PAYMENT_CURRENCIES])
+
+    @staticmethod
+    def get_tax_options(event_id):
+        tax = Tax.query.filter_by(event_id=event_id)
+        for tax in tax:
+            return tax
+
+    @staticmethod
+    def get_ticket_types(event_id):
+        ticket_types = []
+        tickets = Ticket.query.filter_by(event_id=event_id)
+        for ticket in tickets:
+            ticket_types.append(ticket.type)
+        return ticket_types
+
+    @staticmethod
+    def get_fee_settings():
+        return TicketFees.query.all()
+
+    @staticmethod
+    def get_fee_settings():
+        return TicketFees.query.all()
+
+    @staticmethod
+    def get_expired_orders():
+        return Order.query.filter(Order.status != 'completed')
+
+    @staticmethod
+    def get_all_super_admins():
+        return get_count(User.query.filter_by(is_super_admin=True))
+
+    @staticmethod
+    def get_all_admins():
+        return get_count(User.query.filter_by(is_admin=True))
+
+    @staticmethod
+    def get_all_registered_users():
+        return get_count(User.query.filter_by(is_verified=True))
+
+    # TODO Make this more efficient
+
+    @staticmethod
+    def get_all_user_roles(role_name):
+        role = Role.query.filter_by(name=role_name).first()
+        uers = UsersEventsRoles.query.join(UsersEventsRoles.event).join(UsersEventsRoles.role).filter(
+            Event.in_trash == False, UsersEventsRoles.role == role)
+        return uers
+
+    @staticmethod
+    def get_all_accepted_sessions():
+        return get_count(Session.query.filter_by(state='accepted'))
+
+    @staticmethod
+    def get_all_rejected_sessions():
+        return get_count(Session.query.filter_by(state='rejected'))
+
+    @staticmethod
+    def get_all_draft_sessions():
+        return get_count(Session.query.filter_by(state='pending'))
+
+    @staticmethod
+    def get_email_by_times():
+        email_times = []
+        email_in_last_24 = get_count(
+            Mail.query.filter(datetime.datetime.now() - Mail.time <= datetime.timedelta(hours=24)))
+        email_in_last_3_days = get_count(
+            Mail.query.filter(datetime.datetime.now() - Mail.time <= datetime.timedelta(days=3)))
+        email_in_last_7_days = get_count(
+            Mail.query.filter(datetime.datetime.now() - Mail.time <= datetime.timedelta(days=7)))
+        email_in_last_30_days = get_count(
+            Mail.query.filter(datetime.datetime.now() - Mail.time <= datetime.timedelta(days=30)))
+        total_emails = get_count(Mail.query)
+
+        email_times.append(email_in_last_24)
+        email_times.append(email_in_last_3_days)
+        email_times.append(email_in_last_7_days)
+        email_times.append(email_in_last_30_days)
+        email_times.append(total_emails)
+
+        return email_times

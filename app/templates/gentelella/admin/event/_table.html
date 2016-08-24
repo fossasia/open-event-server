@@ -8,6 +8,7 @@
             <th>Roles</th>
             <th>Sessions</th>
             <th>Speakers</th>
+            <th>Tickets</th>
             <th>Public URL</th>
             <th></th>
         </tr>
@@ -15,7 +16,7 @@
         <tbody>
         {% for event in events %}
 
-            {% set url = url_for('event_detail.display_event_detail_home', event_id = event.id, _external=True) %}
+            {% set url = url_for('event_detail.display_event_detail_home', identifier = event.identifier, _external=True) %}
 
             {% set drafts = {'count': 0} %}
             {% set accepted = {'count': 0} %}
@@ -40,7 +41,7 @@
                 <td>{{ event.start_time.strftime('%B %d, %Y - %I:%M %p') }}<br>(to)<br>{{ event.end_time.strftime('%B %d, %Y - %I:%M %p') }}</td>
                 <td>
                     <ol style="padding-left:0;">
-                        {% for role in event.roles %}
+                        {% for role in event.get_staff_roles() %}
                             <li>
                                 {{ role.user.user_detail.fullname if role.user.user_detail.fullname else role.user.email }}
                                 ({{ role.role.title_name }})
@@ -60,6 +61,36 @@
 
                 </td>
                 <td>{{ event.speaker | length }}</td>
+                <td>
+                    {% if (max_paid_ticket[event.id] == 0 and max_free_ticket[event.id] == 0 and max_donation_ticket[event.id] == 0) %}
+                        No Ticket Information
+                    {% else %}
+                        {% if max_paid_ticket[event.id] and max_paid_ticket[event.id] != 0 %}
+                        <div>
+                            <p>Paid</p>
+                            <div class="progress">
+                              <div class="progress-bar progress-bar-success" role="progressbar" data-transitiongoal="{{ paid_ticket_count[event.id] }}" aria-valuemin="0" aria-valuemax="{{ max_paid_ticket[event.id] }}"></div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if max_free_ticket[event.id] and max_free_ticket[event.id] != 0 %}
+                        <div>
+                            <p>Free</p>
+                            <div class="progress">
+                              <div class="progress-bar progress-bar-success" role="progressbar" data-transitiongoal="{{ free_ticket_count[event.id] }}" aria-valuemin="0" aria-valuemax="{{ max_free_ticket[event.id] }}"></div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if max_donation_ticket[event.id] and max_donation_ticket[event.id] != 0 %}
+                        <div>
+                            <p>Donation</p>
+                            <div class="progress">
+                              <div class="progress-bar progress-bar-success" role="progressbar" data-transitiongoal="{{ donation_ticket_count[event.id] }}" aria-valuemin="0" aria-valuemax="{{ max_donation_ticket[event.id] }}"></div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endif %}
+                </td>
                 <td><a href="{{ url }}" target="_blank">{{ url }}</a></td>
                 <td>
                     {% if event %}

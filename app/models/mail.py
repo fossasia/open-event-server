@@ -2,7 +2,6 @@ from datetime import datetime
 
 from . import db
 
-
 USER_REGISTER = 'User Registration'
 USER_CONFIRM = 'User Confirmation'
 USER_CHANGE_EMAIL = "User email"
@@ -15,6 +14,16 @@ SESSION_ACCEPT_REJECT = 'Session Accept or Reject'
 SESSION_SCHEDULE = 'Session Schedule Change'
 EVENT_PUBLISH = 'Event Published'
 AFTER_EVENT = 'After Event'
+USER_REGISTER_WITH_PASSWORD = 'User Registration during Payment'
+TICKET_PURCHASED = 'Ticket(s) Purchased'
+EVENT_EXPORTED = 'Event Exported'
+EVENT_EXPORT_FAIL = 'Event Export Failed'
+MAIL_TO_EXPIRED_ORDERS = 'Mail Expired Orders'
+MONTHLY_PAYMENT_EMAIL = 'Monthly Payment Email'
+MONTHLY_PAYMENT_FOLLOWUP_EMAIL = 'Monthly Payment Follow Up Email'
+EVENT_IMPORTED = 'Event Imported'
+EVENT_IMPORT_FAIL = 'Event Import Failed'
+
 
 class Mail(db.Model):
     __tablename__ = 'mails'

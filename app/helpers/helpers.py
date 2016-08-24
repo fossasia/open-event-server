@@ -8,15 +8,17 @@ import time
 from datetime import datetime, timedelta
 from flask import request, url_for, current_app
 from itsdangerous import Serializer
-from flask.ext import login
+from sqlalchemy import func
 
 from app.helpers.flask_helpers import get_real_ip
 from app.settings import get_settings
 from ..models.message_settings import MessageSettings
 from ..models.track import Track
 from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, NEXT_EVENT, \
-    USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, EVENT_PUBLISH, Mail,\
-    AFTER_EVENT, USER_CHANGE_EMAIL
+    USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, EVENT_PUBLISH, Mail, \
+    AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, TICKET_PURCHASED, EVENT_EXPORTED, \
+    EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_FOLLOWUP_EMAIL, MONTHLY_PAYMENT_EMAIL, \
+    EVENT_IMPORTED, EVENT_IMPORT_FAIL
 from system_mails import MAILS
 from app.models.notifications import (
     # Prepended with `NOTIF_` to differentiate from mails
@@ -26,14 +28,45 @@ from app.models.notifications import (
     NEXT_EVENT as NOTIF_NEXT_EVENT,
     SESSION_ACCEPT_REJECT as NOTIF_SESSION_ACCEPT_REJECT,
     INVITE_PAPERS as NOTIF_INVITE_PAPERS,
+    USER_CHANGE_EMAIL as NOTIF_USER_CHANGE_EMAIL,
+    TICKET_PURCHASED as NOTIF_TICKET_PURCHASED,
+    EVENT_EXPORT_FAIL as NOTIF_EVENT_EXPORT_FAIL,
+    EVENT_EXPORTED as NOTIF_EVENT_EXPORTED,
+
 )
+
 from system_notifications import NOTIFS
 from app.helpers.storage import UploadedFile
+
+
+def represents_int(string):
+    try:
+        int(string)
+        return True
+    except:
+        return False
+
+
+# From http://stackoverflow.com/a/3425124
+def monthdelta(date, delta):
+    m, y = (date.month + delta) % 12, date.year + (date.month + delta - 1) // 12
+    if not m:
+        m = 12
+    d = min(date.day, [31,
+                       29 if y % 4 == 0 and not y % 400 == 0 else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m - 1])
+    return date.replace(day=d, month=m, year=y)
+
+
+def get_count(q):
+    count_q = q.statement.with_only_columns([func.count()]).order_by(None)
+    count = q.session.execute(count_q).scalar()
+    return count
+
 
 def get_event_id():
     """Get event Id from request url"""
     url = request.url
-    result = re.search('event\/[0-9]*', url)
+    result = re.search('event/[0-9]*', url)
     return result.group(0).split('/')[1]
 
 
@@ -58,6 +91,7 @@ def send_email_invitation(email, event_name, link):
     """Send email for submit papers"""
     message_settings = MessageSettings.query.filter_by(action=INVITE_PAPERS).first()
     if not message_settings or message_settings.mail_status == 1:
+        print "sending mail"
         send_email(
             to=email,
             action=INVITE_PAPERS,
@@ -72,8 +106,9 @@ def send_email_invitation(email, event_name, link):
 
 def send_new_session_organizer(email, event_name, link):
     """Send email after new sesions proposal"""
-    message_settings = MessageSettings.query.filter_by(action=NEW_SESSION).first().mail_status
+    message_settings = MessageSettings.query.filter_by(action=NEW_SESSION).first()
     if not message_settings or message_settings.mail_status == 1:
+        print "sending mail"
         send_email(
             to=email,
             action=NEW_SESSION,
@@ -90,6 +125,7 @@ def send_session_accept_reject(email, session_name, acceptance, link):
     """Send session accepted or rejected"""
     message_settings = MessageSettings.query.filter_by(action=SESSION_ACCEPT_REJECT).first()
     if not message_settings or message_settings.mail_status == 1:
+        print "sending mail"
         send_email(
             to=email,
             action=SESSION_ACCEPT_REJECT,
@@ -107,6 +143,7 @@ def send_schedule_change(email, session_name, link):
     """Send schedule change in session"""
     message_settings = MessageSettings.query.filter_by(action=SESSION_SCHEDULE).first()
     if not message_settings or message_settings.mail_status == 1:
+        print "sending mail"
         send_email(
             to=email,
             action=SESSION_SCHEDULE,
@@ -123,10 +160,11 @@ def send_next_event(email, event_name, link, up_coming_events):
     """Send next event"""
     message_settings = MessageSettings.query.filter_by(action=NEXT_EVENT).first()
     if not message_settings or message_settings.mail_status == 1:
+        print "sending mail"
         upcoming_event_html = "<ul>"
         for event in up_coming_events:
             upcoming_event_html += "<a href='%s'><li> %s </li></a>" % (url_for('events.details_view',
-                                                                       event_id=event.id, _external=True),
+                                                                               event_id=event.id, _external=True),
                                                                        event.name)
         upcoming_event_html += "</ul><br/>"
         send_email(
@@ -146,6 +184,7 @@ def send_after_event(email, event_name, upcoming_events):
     """Send after event mail"""
     message_settings = MessageSettings.query.filter_by(action=AFTER_EVENT).first()
     if not message_settings or message_settings.mail_status == 1:
+        print "sending mail"
         upcoming_event_html = "<ul>"
         for event in upcoming_events:
             upcoming_event_html += "<a href='%s'><li> %s </li></a>" % (url_for('events.details_view',
@@ -168,6 +207,7 @@ def send_event_publish(email, event_name, link):
     """Send email on publishing event"""
     message_settings = MessageSettings.query.filter_by(action=NEXT_EVENT).first()
     if not message_settings or message_settings.mail_status == 1:
+        print "sending mail"
         send_email(
             to=email,
             action=NEXT_EVENT,
@@ -182,29 +222,34 @@ def send_event_publish(email, event_name, link):
 
 def send_email_after_account_create(form):
     """Send email after account create"""
-    message_settings = MessageSettings.query.filter_by(action=USER_REGISTER).first()
-    if not message_settings or message_settings.mail_status == 1:
-        send_email(
-            to=form['email'],
-            action=USER_REGISTER,
-            subject=MAILS[USER_REGISTER]['subject'],
-            html=MAILS[USER_REGISTER]['message'].format(email=form['email'])
-        )
+    send_email(
+        to=form['email'],
+        action=USER_REGISTER,
+        subject=MAILS[USER_REGISTER]['subject'],
+        html=MAILS[USER_REGISTER]['message'].format(email=form['email'])
+    )
+
+
+def send_email_after_account_create_with_password(form):
+    """Send email after account create"""
+    send_email(
+        to=form['email'],
+        action=USER_REGISTER_WITH_PASSWORD,
+        subject=MAILS[USER_REGISTER_WITH_PASSWORD]['subject'],
+        html=MAILS[USER_REGISTER_WITH_PASSWORD]['message'].format(email=form['email'], password=form['password'])
+    )
 
 
 def send_email_confirmation(form, link):
     """account confirmation"""
-    message_settings = MessageSettings.query.filter_by(action=USER_CONFIRM).first()
-    if not message_settings or message_settings.mail_status == 1:
-        send_email(
-            to=form['email'],
-            action=USER_CONFIRM,
-            subject=MAILS[USER_CONFIRM]['subject'],
-            html=MAILS[USER_CONFIRM]['message'].format(
-                email=form['email'], link=link
-            )
+    send_email(
+        to=form['email'],
+        action=USER_CONFIRM,
+        subject=MAILS[USER_CONFIRM]['subject'],
+        html=MAILS[USER_CONFIRM]['message'].format(
+            email=form['email'], link=link
         )
-
+    )
 
 def send_email_when_changes_email(old_email, new_email):
     """account confirmation"""
@@ -220,14 +265,12 @@ def send_email_when_changes_email(old_email, new_email):
 
 def send_email_with_reset_password_hash(email, link):
     """Send email with reset password hash"""
-    message_settings = MessageSettings.query.filter_by(action=PASSWORD_RESET).first()
-    if not message_settings or message_settings.mail_status == 1:
-        send_email(
-            to=email,
-            action=PASSWORD_RESET,
-            subject=MAILS[PASSWORD_RESET]['subject'],
-            html=MAILS[PASSWORD_RESET]['message'].format(link=link)
-        )
+    send_email(
+        to=email,
+        action=PASSWORD_RESET,
+        subject=MAILS[PASSWORD_RESET]['subject'],
+        html=MAILS[PASSWORD_RESET]['message'].format(link=link)
+    )
 
 
 def send_email_for_event_role_invite(email, role, event, link):
@@ -251,6 +294,88 @@ def send_email_for_event_role_invite(email, role, event, link):
         )
 
 
+def send_email_for_after_purchase(email, invoice_id, order_url):
+    """Send email with order invoice link after purchase"""
+    send_email(
+        to=email,
+        action=TICKET_PURCHASED,
+        subject=MAILS[TICKET_PURCHASED]['subject'].format(invoice_id=invoice_id),
+        html=MAILS[TICKET_PURCHASED]['message'].format(order_url=order_url)
+    )
+
+
+def send_email_for_expired_orders(email, event_name, invoice_id, order_url):
+    """Send email with order invoice link after purchase"""
+    send_email(
+        to=email,
+        action=MAIL_TO_EXPIRED_ORDERS,
+        subject=MAILS[MAIL_TO_EXPIRED_ORDERS]['subject'].format(event_name=event_name),
+        html=MAILS[MAIL_TO_EXPIRED_ORDERS]['message'].format(invoice_id=invoice_id, order_url=order_url)
+    )
+
+
+def send_email_for_monthly_fee_payment(email, event_name, date, amount, payment_url):
+    """Send email every month with invoice to pay service fee"""
+    send_email(
+        to=email,
+        action=MONTHLY_PAYMENT_EMAIL,
+        subject=MAILS[MONTHLY_PAYMENT_EMAIL]['subject'].format(event_name=event_name, date=date),
+        html=MAILS[MONTHLY_PAYMENT_EMAIL]['message'].format(event_name=event_name, date=date,
+                                                            payment_url=payment_url, amount=amount)
+    )
+
+
+def send_followup_email_for_monthly_fee_payment(email, event_name, date, amount, payment_url):
+    """Send email every month with invoice to pay service fee"""
+    send_email(
+        to=email,
+        action=MONTHLY_PAYMENT_FOLLOWUP_EMAIL,
+        subject=MAILS[MONTHLY_PAYMENT_FOLLOWUP_EMAIL]['subject'].format(event_name=event_name, date=date),
+        html=MAILS[MONTHLY_PAYMENT_FOLLOWUP_EMAIL]['message'].format(event_name=event_name, date=date,
+                                                                     payment_url=payment_url, amount=amount)
+    )
+
+
+def send_email_after_export(email, event_name, result):
+    """send email after event export"""
+    if '__error' in result:
+        send_email(
+            email,
+            action=EVENT_EXPORT_FAIL,
+            subject=MAILS[EVENT_EXPORT_FAIL]['subject'].format(event_name=event_name),
+            html=MAILS[EVENT_EXPORT_FAIL]['message'].format(error_text=result['result']['message'])
+        )
+    else:
+        send_email(
+            email,
+            action=EVENT_EXPORTED,
+            subject=MAILS[EVENT_EXPORTED]['subject'].format(event_name=event_name),
+            html=MAILS[EVENT_EXPORTED]['message'].format(
+                download_url=request.url_root.strip('/') + result['download_url']
+            )
+        )
+
+
+def send_email_after_import(email, result):
+    """send email after event import"""
+    if '__error' in result:
+        send_email(
+            email,
+            action=EVENT_IMPORT_FAIL,
+            subject=MAILS[EVENT_IMPORT_FAIL]['subject'],
+            html=MAILS[EVENT_IMPORT_FAIL]['message'].format(error_text=result['result']['message'])
+        )
+    else:
+        send_email(
+            email,
+            action=EVENT_IMPORTED,
+            subject=MAILS[EVENT_IMPORTED]['subject'].format(event_name=result['name']),
+            html=MAILS[EVENT_IMPORTED]['message'].format(
+                event_url=request.url_root.strip('/') + '/events/%d' % result['id']
+            )
+        )
+
+
 def send_email(to, action, subject, html):
     """
     Sends email and records it in DB
@@ -271,9 +396,8 @@ def send_email(to, action, subject, html):
                 'subject': subject,
                 'html': html
             }
-            requests.post("https://api.sendgrid.com/api/mail.send.json",
-                          data=payload,
-                          headers=headers)
+            from tasks import send_email_task
+            send_email_task.delay(payload, headers)
         # record_mail(to, action, subject, html)
         mail = Mail(
             recipient=to, action=action, subject=subject,
@@ -283,14 +407,56 @@ def send_email(to, action, subject, html):
         save_to_db(mail, 'Mail Recorded')
     return
 
+
 #################
 # Notifications #
 #################
+
 
 def send_notification(user, action, title, message):
     # DataManager imported here to prevent circular dependency
     from app.helpers.data import DataManager
     DataManager.create_user_notification(user, action, title, message)
+
+
+def send_notif_after_export(user, event_name, result):
+    """send notification after event export"""
+    if '__error' in result:
+        send_notification(
+            user=user,
+            action=NOTIF_EVENT_EXPORT_FAIL,
+            title=NOTIFS[NOTIF_EVENT_EXPORT_FAIL]['title'].format(event_name=event_name),
+            message=NOTIFS[NOTIF_EVENT_EXPORT_FAIL]['message'].format(error_text=result['result']['message'])
+        )
+    else:
+        send_notification(
+            user=user,
+            action=NOTIF_EVENT_EXPORTED,
+            title=NOTIFS[NOTIF_EVENT_EXPORTED]['title'].format(event_name=event_name),
+            message=NOTIFS[NOTIF_EVENT_EXPORTED]['message'].format(
+                event_name=event_name, download_url=result['download_url'])
+        )
+
+
+def send_notif_for_after_purchase(user, invoice_id, order_url):
+    """Send notification with order invoice link after purchase"""
+    send_notification(
+        user=user,
+        action=NOTIF_TICKET_PURCHASED,
+        title=NOTIFS[NOTIF_TICKET_PURCHASED]['title'].format(invoice_id=invoice_id),
+        message=NOTIFS[NOTIF_TICKET_PURCHASED]['message'].format(order_url=order_url)
+    )
+
+
+def send_notif_when_changes_email(user, old_email, new_email):
+    send_notification(
+        user=user,
+        action=NOTIF_USER_CHANGE_EMAIL,
+        title=NOTIFS[NOTIF_USER_CHANGE_EMAIL]['title'],
+        message=NOTIFS[NOTIF_USER_CHANGE_EMAIL]['message'].format(
+            email=old_email, new_email=new_email
+        )
+    )
 
 
 def send_notif_event_role(user, role_name, event_name, accept_link, decline_link):
@@ -313,6 +479,7 @@ def send_notif_event_role(user, role_name, event_name, accept_link, decline_link
 
 
 def send_notif_new_session_organizer(user, event_name, link):
+    print "sending"
     message_settings = MessageSettings.query.filter_by(action=NOTIF_NEW_SESSION).first()
     if not message_settings or message_settings.notif_status == 1:
         notif = NOTIFS[NOTIF_NEW_SESSION]
@@ -377,23 +544,6 @@ def send_notif_invite_papers(user, event_name, cfs_link, submit_link):
         send_notification(user, action, title, message)
 
 
-def is_event_admin(event_id, users):
-    """
-    :param event_id: Event id
-    :param users: User id
-    :return: is user admin
-    """
-    is_admin = False
-    for user_obj in users:
-        if user_obj.user.id == login.current_user.id:
-            for ass in login.current_user.events_assocs:
-                if ass.event_id == int(event_id):
-                    is_admin = ass.admin
-                    if is_event_admin:
-                        return is_admin
-    return is_admin
-
-
 def ensure_social_link(website, link):
     """
     converts usernames of social profiles to full profile links
@@ -401,7 +551,7 @@ def ensure_social_link(website, link):
     """
     if link == '' or link is None:
         return link
-    if link.find('/') != -1: # has backslash, so not a username
+    if link.find('/') != -1:  # has backslash, so not a username
         return link
     else:
         return website + '/' + link
@@ -418,7 +568,10 @@ def get_latest_heroku_release():
         "Authorization": "Bearer " + token,
         "Range": "version ..; max=1, order=desc"
     }
-    response = requests.get("https://api.heroku.com/apps/open-event/releases", headers=headers)
+    response = requests.get(
+        "https://api.heroku.com/apps/%s/releases" % os.environ.get('HEROKU_APP_NAME', 'open-event'),
+        headers=headers
+    )
     try:
         return json.loads(response.text)[0]
     except:
@@ -448,6 +601,7 @@ def fields_not_empty(obj, fields):
         if string_empty(getattr(obj, field)):
             return False
     return True
+
 
 def get_request_stats():
     """
@@ -524,10 +678,12 @@ def first_day_of_month(date):
     return date - delta
 
 
-def update_state(task_handle, state, result={}):
+def update_state(task_handle, state, result=None):
     """
     Update state of celery task
     """
+    if result is None:
+        result = {}
     if not current_app.config.get('CELERY_ALWAYS_EAGER'):
         task_handle.update_state(
             state=state, meta=result

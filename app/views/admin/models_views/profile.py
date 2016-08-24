@@ -1,12 +1,13 @@
-from flask import request, url_for, redirect, abort, flash
+from flask import request, url_for, redirect, abort, flash, jsonify
 from flask.ext.admin import BaseView
 from flask_admin import expose
 from flask.ext import login
 
 from app.views.admin.models_views.events import is_verified_user
-from ....helpers.data import DataManager, get_facebook_auth, get_instagram_auth
+from ....helpers.data import DataManager, get_facebook_auth, get_instagram_auth, get_twitter_auth_url
 from ....helpers.data_getter import DataGetter
-from app.helpers.oauth import FbOAuth, InstagramOAuth
+from app.helpers.oauth import FbOAuth, InstagramOAuth, TwitterOAuth
+
 
 class ProfileView(BaseView):
 
@@ -43,41 +44,54 @@ class ProfileView(BaseView):
         profile = DataGetter.get_user(int(user_id))
         return self.render('/gentelella/admin/profile/edit.html', profile=profile)
 
-    @expose('/notifications/', methods=('GET', 'POST'))
-    def notifications_view(self):
-        user = login.current_user
-        notifications = DataGetter.get_all_user_notifications(user)
-
-        return self.render('/gentelella/admin/profile/notifications.html',
-                           notifications=notifications)
-
-    @expose('/notifications/read/<notification_id>/', methods=('GET', 'POST'))
-    def mark_notification_as_read(self, notification_id):
-        user = login.current_user
-        notification = DataGetter.get_user_notification(notification_id)
-
-        if notification and notification.user == user:
-            DataManager.mark_user_notification_as_read(notification)
-            return redirect(url_for('.notifications_view'))
-        else:
-            abort(404)
-
-    @expose('/notifications/allread/', methods=('GET', 'POST'))
-    def mark_all_notification_as_read(self):
-        user = login.current_user
-        DataManager.mark_all_user_notification_as_read(user)
-
-        return redirect(url_for('.notifications_view'))
-
     @expose('/fb_connect', methods=('GET', 'POST'))
     def connect_facebook(self):
         facebook = get_facebook_auth()
         fb_auth_url, state = facebook.authorization_url(FbOAuth.get_auth_uri(), access_type='offline')
         return redirect(fb_auth_url)
 
+    @expose('/tw_connect', methods=('GET', 'POST'))
+    def connect_twitter(self):
+        twitter_auth_url, __ = get_twitter_auth_url()
+        return redirect('https://api.twitter.com/oauth/authenticate?' + twitter_auth_url)
+
     @expose('/instagram_connect', methods=('GET', 'POST'))
     def connect_instagram(self):
         instagram = get_instagram_auth()
-        print InstagramOAuth.get_auth_uri()
         instagram_auth_url, state = instagram.authorization_url(InstagramOAuth.get_auth_uri(), access_type='offline')
         return redirect(instagram_auth_url)
+
+
+class NotificationView(BaseView):
+    def is_accessible(self):
+        return login.current_user.is_authenticated
+
+    def _handle_view(self, name, **kwargs):
+        if not self.is_accessible():
+            return redirect(url_for('admin.login_view', next=request.url))
+
+    @expose('/', methods=('GET', 'POST'))
+    def index_view(self):
+        user = login.current_user
+        notifications = DataGetter.get_all_user_notifications(user)
+
+        return self.render('/gentelella/admin/profile/notifications.html',
+                           notifications=notifications)
+
+    @expose('/read/<notification_id>/', methods=('GET', 'POST'))
+    def mark_as_read(self, notification_id):
+        user = login.current_user
+        notification = DataGetter.get_user_notification(notification_id)
+
+        if notification and notification.user == user:
+            DataManager.mark_user_notification_as_read(notification)
+            return jsonify({'status': 'ok'})
+        else:
+            abort(404)
+
+    @expose('/allread/', methods=('GET', 'POST'))
+    def mark_all_read(self):
+        user = login.current_user
+        DataManager.mark_all_user_notification_as_read(user)
+
+        return redirect(url_for('.index_view'))

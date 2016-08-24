@@ -7,9 +7,24 @@
 {% block panel_content %}
 
     <table class="table table-striped">
-        <tbody>
+        <tbody style="white-space">
+
         <tr>
-            <td><b>No. of Revisions </b></td>
+
+          <div style="white-space: nowrap; padding: 8px; line-height: 1.42857143; vertical-align: top; border-top: 1px solid #ddd; background: #f9f9f9">
+            {% if event.state == 'Published' %}
+              Your event is live at
+              <a href="{{ url_for('event_detail.display_event_detail_home', identifier=event.identifier) |replace('events', 'e') }}" >
+                {{ url_for('event_detail.display_event_detail_home', identifier=event.identifier, _external=True) |replace('events', 'e') }}
+              </a>
+            {% else %}
+              Your event is not live yet. Make it live <a href="/events/{{event.id}}/publish">now</a>.
+            {% endif %}
+          </div>
+
+
+        <tr>
+            <td>No. of Revisions</td>
             <td>
                 {% if versions_count > 0 %}
                     {{ versions_count }}&nbsp;&nbsp;(
@@ -20,26 +35,26 @@
             </td>
         </tr>
         <tr>
-            <td><b>Location </b></td>
+            <td>Location </td>
             <td>
-                {% if event.location %}
-                    {{ event.location }}
+                {% if event.location_name %}
+                    {{ event.location_name }}
                 {% else %}
-                    <a href="{{ url_for("events.edit_view", event_id=event.id) }}">Click to set location</a>
+                    <a href="{{ url_for('events.edit_view', event_id=event.id) }}">Click to set location</a>
                 {% endif %}
             </td>
         </tr>
         <tr>
-            <td><b>Start Time </b></td>
+            <td>Start Time </td>
             <td>{{ event.start_time.strftime('%B %d, %Y %I:%M %p') }} ({{ event.timezone }})</td>
         </tr>
         <tr>
-            <td><b>End Time </b></td>
+            <td>End Time </td>
             <td>{{ event.end_time.strftime('%B %d, %Y %I:%M %p') }} ({{ event.timezone }})</td>
         </tr>
         {% if event.session_type %}
             <tr>
-                <td><b>Session Types </b></td>
+                <td>Session Types</td>
                 <td>
                     {% for sessionType in event.session_type %}
                         {% if loop.index > 1 %}, {% endif %}{{ sessionType.name }}
@@ -48,7 +63,7 @@
             </tr>
         {% endif %}
         <tr>
-            <td><b>Social Links </b></td>
+            <td>Links and Social Media </td>
             <td>
                 {% for socialLink in event.social_link %}
                     {% if loop.index > 1 %}, {% endif %}<a href="{{ socialLink.link }}">{{ socialLink.name }}</a>
@@ -56,6 +71,26 @@
                     No social links added.
                     <a href="{{ url_for("events.edit_view", event_id=event.id) }}">Click to add.</a>
                 {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>Number of Speakers</td>
+            <td>
+                {{event.speaker | length}}
+            </td>
+        </tr>
+        <tr>
+            <td>Number of Sessions</td>
+            <td>
+              <p>All: {{event.session | length}} Accepted: {{sessions.accepted}} Pending: {{sessions.pending }}</p>
+              <p>Rejected: {{sessions.rejected}}
+              Draft: {{sessions.draft}}</p>
+            </td>
+        </tr>
+        <tr>
+            <td>Number of Sponsors</td>
+            <td>
+              {{event.sponsor | length}}
             </td>
         </tr>
         </tbody>

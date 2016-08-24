@@ -1,0 +1,26 @@
+{% extends 'gentelella/admin/event/details/base_panel.html' %}
+{% block panel_title %}
+Apps
+{% endblock %}
+
+{% block panel_content %}
+
+<div class="col-md-12 sponsor-widget">
+    <div class="row" style="text-align:center">
+        <div class="col-md-6">
+            <form action="{{url_for('.generate_android_app', event_id=event.id)}}" method="post">
+                <button type="submit" class="btn btn-warning">Generate Android App</button>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <form action="{{url_for('.generate_web_app', event_id=event.id)}}" method="post">
+                <button class="btn btn-warning">Generate Web App</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+{% endblock %}

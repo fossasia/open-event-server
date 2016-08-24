@@ -1,16 +1,18 @@
 from flask import request
 from flask_admin import expose
 
-from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView
+from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView, USERS
 from ....helpers.data_getter import DataGetter
 from ....helpers.data import update_role_to_admin, delete_from_db
-from flask import request, url_for, redirect, flash
-from app.helpers.data import DataManager, trash_user, restore_user
+from flask import url_for, redirect, flash
+from app.helpers.data import trash_user, restore_user
 from sqlalchemy_continuum import transaction_class
 from app.models.event import Event
 
 
 class SuperAdminUsersView(SuperAdminBaseView):
+    PANEL_NAME = USERS
+
     @expose('/')
     def index_view(self):
         active_user_list = []
@@ -58,8 +60,7 @@ class SuperAdminUsersView(SuperAdminBaseView):
                 'user': user,
                 'event_roles': event_roles,}
             )
-        return self.render('/gentelella/admin/super_admin/users/users.html', active_user_list=active_user_list, trash_user_list=trash_user_list)
-
+        return redirect(url_for('.index_view'))
     @expose('/<user_id>/', methods=('GET', 'POST'))
     def details_view(self, user_id):
         profile = DataGetter.get_user(user_id)
@@ -69,7 +70,7 @@ class SuperAdminUsersView(SuperAdminBaseView):
 
     @expose('/<user_id>/trash/', methods=('GET',))
     def trash_view(self, user_id):
-        user = trash_user(user_id)
+        trash_user(user_id)
         flash("User" + user_id + " has been deleted.", "danger")
         return redirect(url_for('.index_view'))
 

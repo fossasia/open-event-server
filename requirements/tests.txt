@@ -3,3 +3,9 @@
 coverage==4.0.3
 coveralls==1.1.0
 codeclimate-test-reporter==0.1.1
+beautifulsoup4
+robotframework==3.0
+robotframework-faker==3.0.0
+robotframework-selenium2library==1.7.4
+robotframework-requests==0.4.5
+robotframework-databaselibrary==0.8.1

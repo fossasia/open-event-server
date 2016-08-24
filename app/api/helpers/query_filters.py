@@ -4,6 +4,7 @@ from sqlalchemy import or_, func, and_
 
 from app.helpers.helpers import get_date_range
 from app.models.event import Event
+from app.models.session import Session
 from custom_fields import DateTime
 
 
@@ -68,17 +69,18 @@ def event_search_location(value, query):
 
     for i in locations:
         response = requests.get(
-            "https://maps.googleapis.com/maps/api/geocode/json?address=" + str(i)).json()
+            "https://maps.googleapis.com/maps/api/geocode/json?address=" + unicode(i)).json()
         if response["results"]:
             lng = float(response["results"][0]["geometry"]["location"]["lng"])
             lat = float(response["results"][0]["geometry"]["location"]["lat"])
             queries.append(get_query_close_area(lng, lat))
         queries.append(func.lower(Event.searchable_location_name).contains(i.lower()))
+        queries.append(func.lower(Event.location_name).contains(i.lower()))
     return query.filter(or_(*queries))
 
 
 def get_query_close_area(lng, lat):
-    up_lat =  lat + 0.249788
+    up_lat = lat + 0.249788
     bottom_lat = lat - 0.249788
     left_lng = lng - 0.249788
     right_lng = lng + 0.249788
@@ -116,6 +118,30 @@ def event_time_period(value, query):
     return query
 
 
+def sessions_start_time_gt(value, query):
+    return query.filter(Session.start_time >= DateTime().from_str(value))
+
+
+def sessions_start_time_lt(value, query):
+    return query.filter(Session.start_time <= DateTime().from_str(value))
+
+
+def sessions_end_time_gt(value, query):
+    return query.filter(Session.end_time >= DateTime().from_str(value))
+
+
+def sessions_end_time_lt(value, query):
+    return query.filter(Session.end_time <= DateTime().from_str(value))
+
+
+def sessions_order_by(value, query):
+    col, direction = value.split('.')
+    col = getattr(Session, col)
+    if direction == 'desc':
+        col = col.desc()
+    return query.order_by(col)
+
+
 #######
 # ADD CUSTOM FILTERS TO LIST
 #######
@@ -130,4 +156,10 @@ FILTERS_LIST = {
     '__event_end_time_gt': event_end_time_gt,
     '__event_end_time_lt': event_end_time_lt,
     '__event_time_period': event_time_period,
+    # sessions
+    '__sessions_start_time_gt': sessions_start_time_gt,
+    '__sessions_start_time_lt': sessions_start_time_lt,
+    '__sessions_end_time_gt': sessions_end_time_gt,
+    '__sessions_end_time_lt': sessions_end_time_lt,
+    '__sessions_order_by': sessions_order_by
 }

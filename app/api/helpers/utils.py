@@ -7,7 +7,7 @@ from flask_restplus import Model, fields, reqparse
 
 from .helpers import get_object_list, get_object_or_404, get_object_in_event, \
     create_model, validate_payload, delete_model, update_model, \
-    handle_extra_payload, get_paginated_list
+    handle_extra_payload, get_paginated_list, fix_attribute_names
 from app.models.event import Event as EventModel
 from app.helpers.data import update_version
 
@@ -52,6 +52,11 @@ PAGE_PARAMS = {
         'default': DEFAULT_PAGE_LIMIT
     },
 }
+
+# ETag Header (required=False by default)
+ETAG_HEADER_DEFN = [
+    'If-None-Match', 'ETag saved by client for cached resource'
+]
 
 # Base Api Model for a paginated response
 PAGINATED_MODEL = Model('PaginatedModel', {
@@ -112,6 +117,7 @@ class BaseDAO:
     DAO for a basic independent model
     """
     version_key = None
+    is_importing = False  # temp key to set to True when an import operation is underway
 
     def __init__(self, model, post_api_model=None, put_api_model=None):
         self.model = model
@@ -152,6 +158,7 @@ class BaseDAO:
         if model:
             data = handle_extra_payload(data, model)
             validate_payload(data, model, check_required=check_required)
+            data = fix_attribute_names(data, model)
         return data
 
     def validate_put(self, data, model=None):

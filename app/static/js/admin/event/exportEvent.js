@@ -1,5 +1,5 @@
 // export event main
-function exportEvent(event_id){
+function exportEvent(event_id, current_user_email=""){
     url = '/api/v2/events/' + event_id + '/export/json';
     // generate payload
     fields = ['image', 'video', 'audio', 'document'];
@@ -8,6 +8,12 @@ function exportEvent(event_id){
         payload[fields[i]] = $('#exportForm [name=' + fields[i] + ']').is(':checked') ? true : false;
     }
     $('#btnExportEvent').unbind('click');
+    $('#btnExportEvent').prop('disabled', true); // in case of second export
+    $('#btnStartExport').prop('disabled', true);
+    // set creator user
+    $('#export_creator').show();
+    $('#export_creator_email').text(current_user_email);
+    $('#export_creator_datetime').text('now');
 
     jQuery.ajax({
         url: url,
@@ -25,8 +31,7 @@ function exportEvent(event_id){
         error: function(x){
             obj = JSON.parse(x.responseText);
             console.log(obj);
-            $('#export_status').text('');
-            $('#export_error').text(obj['message']);
+            $('#export_status').html('<span class="red">' + obj['message'] + '</span>');
         }
     });
 }
@@ -46,6 +51,7 @@ function exportTask(url){
         } else {
             $('#export_status').text('Status: ' + data['state']);
             $('#btnExportEvent').prop('disabled', false);
+            $('#btnStartExport').prop('disabled', false);
             $('#btnExportEvent').click(function(){
                 document.location = data['result']['download_url'];
             });
@@ -54,8 +60,55 @@ function exportTask(url){
     error: function(x){
         obj = JSON.parse(x.responseText);
         console.log(obj);
-        $('#export_status').text('');
-        $('#export_error').text(obj['message']);
+        $('#export_status').html('<span class="red">' + obj['message'] + '</span>');
+        $('#btnStartExport').prop('disabled', false);
     }
+    });
+}
+
+// load previous job data
+function loadPreviousJob(task_url, user_email, start_time){
+    $('#export_status').text('Loading...');
+    if (task_url){
+        isTaskInvalid(task_url, user_email, start_time);
+    } else {
+        noPreviousJob();
+    }
+}
+
+// no previous job
+function noPreviousJob(){
+    $('#btnStartExport').prop('disabled', false);
+    $('#export_status').text('');
+}
+
+// load data about previous job helper (real) function
+function loadPreviousJob_(task_url, user_email, start_time){
+    if (user_email){
+        $('#export_creator').show();
+        $('#export_creator_email').text(user_email);
+        $('#export_creator_datetime').text(start_time);
+    }
+    if (task_url){
+        exportTask(task_url);
+    }
+}
+
+// is task old and not available on redis
+function isTaskInvalid(task_url, user_email, start_time){
+    jQuery.ajax({
+        url: task_url,
+        type: 'GET',
+        success: function(data){
+            if (data['state'] == 'PENDING'){
+                noPreviousJob();
+            } else {
+                loadPreviousJob_(task_url, user_email, start_time);
+            }
+        },
+        error: function(x){
+            noPreviousJob();
+            loadPreviousJob_(task_url, user_email, start_time);
+        }
     });
 }

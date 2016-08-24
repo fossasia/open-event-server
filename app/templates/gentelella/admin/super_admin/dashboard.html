@@ -23,15 +23,15 @@
 {% set navigation_bar = [
 ('/admin/', 'home', 'Admin', 'Dashboard'),
 ('/admin/events/', 'events', 'Events', 'Manage All Events'),
+('/admin/sales/', 'sales', 'Sales', 'View all Sales'),
 ('/admin/sessions/', 'sessions', 'Sessions', 'Manage All Sessions'),
-('/admin/users/', 'users', 'Users', 'Manage All Users'),
-('/admin/permissions/', 'permissions', 'Permission', 'Manage All Permissions'),
-('/admin/messages/', 'messages', 'Messages', 'See System Messages'),
-('/admin/logs/', 'logs', 'Logs', 'See System Logs'),
-('/admin/reports/', 'reports', 'Reports', 'Manage All Reports'),
-('/admin/settings/', 'settings', 'Settings', 'Manage All Settings'),
-('/admin/pages/', 'pages', 'Pages', 'Manage All Pages'),
-('/admin/modules/', 'modules', 'Modules', 'Manage All Modules')
+('/admin/users/', 'users', 'Users', 'Users'),
+('/admin/permissions/', 'permissions', 'Permissions', 'Permissions'),
+('/admin/messages/', 'messages', 'Messages', 'System Messages'),
+('/admin/reports/', 'reports', 'Reports', 'Reports'),
+('/admin/settings/', 'settings', 'Settings', 'Settings'),
+('/admin/modules/', 'modules', 'Modules', 'Modules'),
+('/admin/content/', 'content', 'Content', 'Content')
 ] -%}
 
 {% set active_page = active_page|default('home') -%}
@@ -84,5 +84,19 @@
 <script type="text/javascript">
      $('.table:not(.no-global-dt)').DataTable({"lengthMenu": [ 25, 50, 100, 200 ], "pageLength": 50});
 
+     function change_column_time_to_humanize_format(datatable_name, column_id) {
+        $(datatable_name).each(function( key, value ) {
+          $(value).children().each(function( key1, value2 ) {
+             if(key1 === column_id ){
+                var current_value = $(value2).text().slice(0, 16);
+                var changed_value = moment(current_value, "YYYY-MM-DD hh:mm").fromNow()
+                var isValid = moment(current_value, "YYYY-MM-DD HH:mm", true).isValid()
+                if (changed_value !== current_value && isValid === true){
+                    $(value2).text(changed_value)
+                }
+            }
+        });
+      });
+    }
 </script>
 {% endblock %}

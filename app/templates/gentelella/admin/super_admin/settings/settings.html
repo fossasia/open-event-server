@@ -12,33 +12,55 @@
 
 {% block content %}
 <div>
-    <div class="responsive-tabs-container accordion-xs">
-        <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist" style="background: #FFFFFF;">
-            <li class="active">
-                <a href="#tab_content1" id="home-tab" data-toggle="tab">System Links</a>
-            </li>
-            <li role="presentation">
-                <a href="#tab_content2" id="profile-tab" data-toggle="tab">Social Links</a>
-            </li>
-        </ul>
-        <div class="nav bar_tabs" role="tablist">
-                <a href="#tab_content1" class="accordion-link active"id="home-tab" data-toggle="tab">System Links</a>
-                <a href="#tab_content2" class="accordion-link"id="profile-tab" data-toggle="tab">Social Links</a>
 
-        </div>
-        <form id="settings_form" method="post" class="form-horizontal form-label-left">
+    <form id="settings_form" method="post" class="form-horizontal form-label-left">
+        <ul id="settings-tabs" class="nav nav-tabs bar_tabs" role="tablist" style="background: #FFFFFF;">
+            <li class="active">
+                <a href="#tab_content0" id="profile-tab" data-toggle="tab">System Tokens</a>
+            </li>
+            <li>
+                <a href="#tab_content2" id="microservice-tab" data-toggle="tab">Microservices</a>
+            </li>
+            <li>
+                <a href="#tab_content4" id="image-config-tab" data-toggle="tab">Images</a>
+            </li>
+            <li>
+                <a href="#tab_content5" id="analytics-tab" data-toggle="tab">Analytics</a>
+            </li>
+            <li>
+                <a href="#tab_content1" id="payment-gateway-tab" data-toggle="tab">Payment Gateways</a>
+            </li>
+
+            {% if 'ticketing' in included_settings and 'payments' in included_settings %}
+            <li>
+                <a href="#tab_content3" id="ticket-fees-tab" data-toggle="tab">Ticket Fees</a>
+            </li>
+            {% endif %}
+        </ul>
 
         <div id="myTabContent" class="tab-content">
-            <div class="tab-pane fade active in" id="tab_content1">
-                {% include 'gentelella/admin/super_admin/settings/_system.html' %}
+            <div role="tabpanel" class="tab-pane fade active in" id="tab_content0" aria-labelledby="profile-tab">
+                 {% include 'gentelella/admin/super_admin/settings/_system.html' %}
             </div>
-            <div class="tab-pane fade in" id="tab_content2">
-                 {% include 'gentelella/admin/super_admin/settings/_social.html' %}
+            <div role="tabpanel" class="tab-pane fade in" id="tab_content1" aria-labelledby="payment-gateway-tab">
+                 {% include 'gentelella/admin/super_admin/settings/_payment_gateway.html' %}
             </div>
-
+            <div role="tabpanel" class="tab-pane fade in" id="tab_content2" aria-labelledby="microservice-tab">
+                 {% include 'gentelella/admin/super_admin/settings/_microservices.html' %}
+            </div>
+            <div role="tabpanel" class="tab-pane fade in" id="tab_content4" aria-labelledby="image-config-tab">
+                 {% include 'gentelella/admin/super_admin/settings/_image_config.html' %}
+            </div>
+            <div role="tabpanel" class="tab-pane fade in" id="tab_content5" aria-labelledby="analytics-tab">
+                 {% include 'gentelella/admin/super_admin/settings/_analytics.html' %}
+            </div>
+            {% if 'ticketing' in included_settings and 'payments' in included_settings %}
+            <div role="tabpanel" class="tab-pane fade in" id="tab_content3" aria-labelledby="ticket-fees-tab">
+                 {% include 'gentelella/admin/super_admin/settings/_ticket-fees.html' %}
+            </div>
+            {% endif %}
         </div>
-        </div>
-    </div>
+    </form>
 </div>
 
 
@@ -49,7 +71,8 @@
 {% block tail_js %}
     {{ super() }}
     <script type="text/javascript">
-    // manage the storage form events
+    var id =0;
+        // manage the storage form events
     function storage_form(){
         sel_opt = $('input[name=storage_place]:checked', '#settings_form').val();
         if (sel_opt == 'local')
@@ -67,6 +90,7 @@
     $(document).ready(function(){
         storage_form();
     });
+
     </script>
 
 {% endblock %}

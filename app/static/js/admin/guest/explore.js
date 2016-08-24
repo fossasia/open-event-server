@@ -90,7 +90,7 @@ $("form#location-search-form").submit(function (e) {
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
-    runFilter('location', $locationField.val())
+    runFilter('location', $locationField.val());
 });
 
 $("#event_browse").submit(function (e) {
@@ -202,12 +202,8 @@ function isImageInvalid(url) {
  */
 function addEvent(event) {
     var $eventElement = $(eventTemplate);
-    $eventElement.attr("href", "/e/" + event.id);
-    if (isImageInvalid(event.background_url)) {
-        $eventElement.find(".event-image").attr('src', '/static/img/trans_white.png');
-    } else {
-        $eventElement.find(".event-image").attr('src', event.background_url);
-    }
+    $eventElement.attr("href", "/e/" + event.identifier);
+    $eventElement.find(".event-image").attr('src', event.background_url);
     $eventElement.find(".name").text(event.name);
     $eventElement.find(".location_name").text(event.location_name.split(",")[0]);
     $eventElement.find(".share-btn").attr("data-event-id", event.id).attr("data-title", event.name);
@@ -279,6 +275,7 @@ function loadResults(start) {
             $eventsHolder.html("");
             response = response.obj;
             _(response.results).forEach(function (event) {
+                console.log(event)
                 addEvent(event);
             });
             $loader.hide();

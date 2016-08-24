@@ -1,15 +1,15 @@
-{# set ticket_include = ticket_include_setting #}
-{% set ticket_include = 'ticketing' %}
+{% set included_items = included_settings %}
 
-{% macro social_entry(social_link=None) %}
+{% macro social_entry(social_link=None, name='Twitter') %}
     <div class="social-link-holder">
         <div class=" col-sm-3" style="padding-left: 0;">
             <input type="text" class="form-control" name="social[name]" placeholder="Name"
-                   value="{{ social_link.name | default('Twitter', true) }}">
+                   value="{{ social_link.name | default(name, true) }}">
         </div>
         <input type="hidden" name="social[id]" value="{{ social_link.id | default('') }}">
         <div class="col-sm-5 input-group">
-            <input data-error="Please enter a valid URL" type="url" class="form-control" name="social[link]" placeholder="Link"
+            <input data-error="Please enter a valid URL" type="url" class="form-control" name="social[link]"
+                   placeholder="Link"
                    value="{{ social_link.link | default('', true) }}">
             <div class="help-block with-errors"></div>
             <span class="input-group-btn">
@@ -21,7 +21,7 @@
 {% endmacro %}
 
 <div>
-    <div class="col-md-7 col-sm-7 col-md-offset-2 step-1">
+    <div class="col-md-8 col-md-push-2">
         <div class="item form-group">
             <label>Name <span class="required">*</span></label>
             <input required="required"
@@ -42,22 +42,28 @@
         <div id="map-holder" style="display:none;">
             <div class="col-md-6">
                 <div class="item form-group">
-                    <input value="" name="street_number" id="street_number" class="form-control col-md-3 col-xs-12" placeholder="Street Address line 1" onchange="address_update();"/>
+                    <input value="" name="street_number" id="street_number" class="form-control col-md-3 col-xs-12"
+                           placeholder="Street Address line 1" onchange="address_update();"/>
                 </div>
                 <div class="item form-group">
-                    <input value="" name="route" id="route" class="form-control col-md-7 col-xs-12" placeholder="Street Address line 2" onchange="address_update();"/>
+                    <input value="" name="route" id="route" class="form-control col-md-7 col-xs-12"
+                           placeholder="Street Address line 2" onchange="address_update();"/>
                 </div>
                 <div class="item form-group">
-                    <input value="" name="locality" id="locality" class="form-control col-md-7 col-xs-12" placeholder="City" onchange="address_update();"/>
+                    <input value="" name="locality" id="locality" class="form-control col-md-7 col-xs-12"
+                           placeholder="City" onchange="address_update();"/>
                 </div>
                 <div class="item form-group">
-                    <input value="" name="state_area" id="administrative_area_level_1" class="form-control col-md-7 col-xs-12" placeholder="States" onchange="address_update();"/>
+                    <input value="" name="state_area" id="administrative_area_level_1"
+                           class="form-control col-md-7 col-xs-12" placeholder="States" onchange="address_update();"/>
                 </div>
                 <div class="item form-group">
-                    <input value="" name="postal_code" id="postal_code" class="form-control col-md-7 col-xs-12" placeholder="Zip Code" onchange="address_update();"/>
+                    <input value="" name="postal_code" id="postal_code" class="form-control col-md-7 col-xs-12"
+                           placeholder="Zip Code" onchange="address_update();"/>
                 </div>
                 <div class="item form-group">
-                    <input value="" name="country" id="country" class="form-control col-md-7 col-xs-12" placeholder="Country" onchange="address_update();"/>
+                    <input value="" name="country" id="country" class="form-control col-md-7 col-xs-12"
+                           placeholder="Country" onchange="address_update();"/>
                 </div>
                 <div class="col-md-4">
                     <a id="reset_addr" onclick="remove_map_holder();" style="cursor:pointer;">Reset Location</a>
@@ -65,7 +71,12 @@
                 <div class="col-md-8">
                     <div class="checkbox" style="padding-top:0;">
                         <label style="padding-left:0;">
-                          <input type="checkbox" class="flat" name="show_map" {% if not event.show_map or event.show_map != 0 %}checked="checked"{% endif %}> Show map on event page
+                            {% if event %}
+                                <input type="checkbox" class="flat" name="show_map" {{ 'checked' if event.show_map == 1 else '' }}>
+                            {% else %}
+                                <input type="checkbox" class="flat" name="show_map" checked="checked">
+                            {% endif %}
+                            Show map on event page
                         </label>
                     </div>
                 </div>
@@ -132,7 +143,8 @@
                                 <option value="{{ value }}"
                                         {% if event.timezone == value %}selected{% endif %}>{{ text }}</option>
                             {% else %}
-                                <option value="{{ value }}" {% if value == 'UTC' %}selected{% endif %}>{{ text }}</option>
+                                <option value="{{ value }}"
+                                        {% if value == 'UTC' %}selected{% endif %}>{{ text }}</option>
                             {% endif %}
                         {% endfor %}
                     </select>
@@ -147,14 +159,17 @@
         <div class="row">
             <div class="col-md-7">
                 <input type="hidden" name="background_url" id="background_url">
+
                 <div class="item form-group" id="image-upload-group"
                      {% if event and event.background_url and event.background_url != '' %}style="display: none;"{% endif %}>
                     <label>Event Image</label><br>
                     <div class="image-box">
-                        <input type="file" id="event-image-upload" name="event-image-upload" class="image-upload-btn no-js"
+                        <input type="file" id="event-image-upload" name="event-image-upload"
+                               class="image-upload-btn no-js"
                                accept="image/*"/>
-                        <label class="file-label" for="event-image-upload">
-                            <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Event Image
+                        <label class="file-label" for="event-image-upload" id="event-image-upload-label">
+                            <i class="fa fa-4x fa-camera-retro" aria-hidden="true"></i> <br>
+                            <h3>Select Event Image</h3>
                         </label><br>
                     </div>
                     <span class="text-muted" style="color: #a2a2a2;">
@@ -165,9 +180,11 @@
                 <div class="item form-group" id="image-view-group"
                      {% if not event or not event.background_url or event.background_url == '' %}style="display: none;"{% endif %}>
                     <label>Event Image</label><br>
-                    <img src="{{ event.background_url | default('', true) }}" style="width: 350px; height: 175px;"><br><br>
+                    <img src="{{ event.background_url | default('', true) }}"
+                         style="width: 350px; height: 175px;"><br><br>
                     {% if not event %}
-                        <button type="button" class="btn btn-sm btn-default" data-target="#cropper-modal" data-toggle="modal">
+                        <button type="button" class="btn btn-sm btn-default" data-target="#cropper-modal"
+                                data-toggle="modal">
                             <i class="fa fa-arrows" aria-hidden="true"></i>
                             Adjust
                         </button>
@@ -183,7 +200,11 @@
         <div class="row">
             <div class="col-md-7">
 
-                <input type="hidden" name="logo" id="logo">
+                {% if event %}
+                    <input type="hidden" id="logo">
+                {% else %}
+                    <input type="hidden" name="logo" id="logo">
+                {% endif %}
 
                 <div class="item form-group" id="logo-upload-group"
                      {% if event and event.logo and event.logo != '' %}style="display: none;"{% endif %}>
@@ -191,8 +212,9 @@
                     <div class="image-box">
                         <input type="file" id="logo-upload" name="logo-upload" class="image-upload-btn no-js"
                                accept="image/*"/>
-                        <label class="file-label" for="logo-upload">
-                            <i class="fa fa-cloud-upload" aria-hidden="true"></i> Select Logo
+                        <label class="file-label" for="logo-upload" id="logo-upload-label">
+                            <i class="fa fa-4x fa-file-image-o" aria-hidden="true"></i> <br>
+                            <h3>Select Logo</h3>
                         </label><br>
                     </div>
                     <span class="text-muted" style="color: #a2a2a2;">
@@ -214,19 +236,15 @@
         </div>
 
         <div class="item form-group">
-            <label>Event Url</label>
-            <input type="url" pattern="https?://.+" value="{{ event.event_url | default('', true) }}" name="event_url"
-                   class="form-control" data-error="Please enter a valid URL"/>
-            <div class="help-block with-errors"></div>
-        </div>
-        <div class="item form-group">
             <label><span class="organizer-state">Add</span> Organizer Information
             </label>
             <input type="checkbox" class="toggle-switch" name="organizer_state"
-                       value="on" id="organizer-switch" {% if event.organizer_name or event.organizer_description %}checked="checked"{% endif %}/>
+                   value="on" id="organizer-switch"
+                   {% if event.organizer_name or event.organizer_description %}checked="checked"{% endif %}/>
             <label for="organizer-switch" style="margin-left:0;"></label>
         </div>
-        <div id="organizer-holder" {% if not event.organizer_name and not event.organizer_description %}style="display:none;"{% endif %}>
+        <div id="organizer-holder"
+             {% if not event.organizer_name and not event.organizer_description %}style="display:none;"{% endif %}>
             <div class="item form-group">
                 <label>Organizer name</label>
                 <input name="organizer_name" class="form-control"
@@ -235,134 +253,271 @@
             <div class="item form-group">
                 <label>Organizer Description
                 </label>
-                    <textarea
-                            name="organizer_description"
-                            class="form-control event-textarea">{{ event.organizer_description | default('', true) }}</textarea>
+                <textarea
+                        name="organizer_description"
+                        class="form-control event-textarea">{{ event.organizer_description | default('', true) }}</textarea>
             </div>
         </div>
         <div class="item form-group">
-            <label>Social Links</label>
+            <label>Links and Social Media</label>
+            <div >
+                <div class=" col-sm-3" style="padding-left: 0;">
+                    <input type="text" class="form-control" placeholder="External Event URL"
+                           value="External Event URL" readonly style="background-color: white;">
+                </div>
+                <div class="col-sm-5 input-group">
+                    <input data-error="Please enter a valid URL" type="url" class="form-control" name="event_url"
+                           placeholder="Link"
+                           value="{{ event.event_url | default('', true) }}">
+                    <div class="help-block with-errors"></div>
+                    <span class="input-group-btn" style="opacity: 0; pointer-events: none;">
+                        <button type="button" class="btn btn-danger remove-social-links">-</button>
+                        <button type="button" class="btn btn-primary add-social-links">+</button>
+                    </span>
+                </div>
+            </div>
             <div class="row social-links">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     {% if social_links %}
                         {% for social_link in social_links %}
                             {{ social_entry(social_link) }}
                         {% else %}
-                            {{ social_entry() }}
+                            {{ social_entry(None, 'Twitter') }}
+                            {{ social_entry(None, 'Facebook') }}
                         {% endfor %}
                     {% else %}
-                        {{ social_entry() }}
+                        {{ social_entry(None, 'Twitter') }}
+                        {{ social_entry(None, 'Facebook') }}
                     {% endif %}
                 </div>
 
             </div>
         </div>
-        {% if event.ticket_include == True or 'ticketing' in ticket_include %}
+        {% if event.ticket_include or 'ticketing' in included_items %}
+            <div class="item form-group">
+                <label><span class="ticket-state">Use Ticketing System</span>
+                </label>
+                <input type="checkbox" class="toggle-switch" name="ticket_state"
+                       value="on" id="ticket-switch" {% if not event.ticket_url %}checked="checked"{% endif %}/>
+
+            <label for="ticket-switch" style="margin-left:0;"></label>
+        </div>
+        <div id="ticket-system-holder" class="item form-group" {% if event.ticket_url %}style="display:none;"{% endif %}>
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
             <i class="fa fa-ticket"></i>
             Ticket Details
             <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
         </h2>
-        {# Ticket URL when Ticket module is switched off 
-        <div class="item form-group">
-            <label>Ticket URL
-            </label>
-            <input type="url" pattern="https?://.+" name="ticket_url" class="form-control"
-                   value="{{ event.ticket_url | default('', true) }}" data-error="Please enter a valid URL"/>
-            <div class="help-block with-errors"></div>
-        </div>
-        #}
 
-        <div class="row">
-            <div class="col-xs-6">
-                <div class="item form-group">
-                    <label>Ticket Name</label>
-                    <input type="text" name="ticket_name" class="form-control" value="{{ event.tickets[0].name | default('', true) }}">
+        <!-- TicketsSegment -->
+        <div class="tickets-segment">
+            <div class="row">
+                <div class="col-xs-4">
+                    <h3 style="font-size: 15px;">Ticket Name <span class="required">*</span></h3>
+                </div>
+                <div class="col-xs-3">
+                    <h3 style="font-size: 15px;">Price</h3>
+                </div>
+                <div class="col-xs-3">
+                    <h3 style="font-size: 15px;">Quantity <span class="required">*</span></h3>
+                </div>
+                <div class="col-xs-2">
+                    <h3 style="font-size: 15px;">Options</h3>
                 </div>
             </div>
-            <div class="col-xs-6">
-                <div class="item form-group">
-                    <label>Type</label>
-                    <select name="ticket_type" id="ticket-type" class="form-control">
-                        <option value="free" {{ 'selected' if event.tickets[0].type == 'free' else ''}}>Free</option>
-                        <option value="paid" {{ 'selected' if event.tickets[0].type == 'paid' else ''}}>Paid</option>
-                        <option value="donation" {{ 'selected' if event.tickets[0].type == 'donation' else ''}}>Donation</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        
-
-        <div class="item form-group">
-            <label>Description</label>
-            <textarea name="ticket_description" class="form-control">{{ event.tickets[0].description | default('', true) }}</textarea>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4 col-xs-8">
-                <div class="item form-group">
-                    <label>Price ($)</label>
-                    <div id="ticket-type-price">
-                    {% if event %}
-                        {% if event.tickets[0].type == 'free' %}
-                            <div class="form-control">Free</div>
-                        {% elif event.tickets[0].type == 'paid' %}
-                            <input type='number' class='form-control' placeholder='Set your ticket price' name='ticket_price' value="{{ event.tickets[0].price }}">
-                        {% elif event.tickets[0].type == 'donation' %}
-                            <div class="form-control">Donation</div>
-                        {% endif %}
-                    {% else %}
-                        <div class="form-control">Free</div>
-                    {% endif %}
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="item form-group">
-                    <label>Sales Start</label><br>
-                    <div class="col-xs-8" style="padding-left: 0;">
-                        <input value="{{ event.tickets[0].sales_start.strftime('%m/%d/%Y') if event else start_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY" name="ticket_sales_start_date">
-                    </div>
-                    <div class="col-xs-4" style="padding-left: 0;">
-                        <input value="{{ event.tickets[0].sales_start.strftime('%H:%M') if event else '19:00' }}" class="form-control col-xs-6 time start ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="ticket_sales_start_time">
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="item form-group">
-                    <label>Sales End</label><br>
-                    <div class="col-xs-8" style="padding-left: 0;">
-                        <input value="{{ event.tickets[0].sales_end.strftime('%m/%d/%Y') if event else start_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY" name="ticket_sales_end_date">
-                    </div>
-                    <div class="col-xs-4" style="padding-left: 0;">
-                        <input value="{{ event.tickets[0].sales_end.strftime('%H:%M') if event else '19:00' }}" class="form-control col-xs-6 time end ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="ticket_sales_end_time">
-                    </div>
-                </div>
+            <div class="tickets-holder" style="margin-bottom: 10px;">
+            {% if event %}
+                {% for ticket in event.tickets %}
+                    {{ ticket_template(serialno=loop.index0, name=ticket.name, description=ticket.description, description_toggle=ticket.description_toggle, ticket_tags=ticket.tags,
+                    sales_start=ticket.sales_start, sales_end=ticket.sales_end, hide=ticket.hide, price=ticket.price, type=ticket.type,
+                    quantity=ticket.quantity, min_order=ticket.min_order, max_order=ticket.max_order, has_orders=ticket.has_order_tickets()) }}
+                {% endfor %}
+            {% endif %}
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-4">
-                <div class="item form-group">
-                    <label>Quantity</label>
-                    <input type="number" class="form-control" placeholder="100" name="ticket_quantity" value="{{ event.tickets[0].quantity | default(100, true) }}">
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="item form-group">
-                    <label>Min Order</label>
-                    <input type="number" class="form-control" placeholder="1" name="ticket_min_order" value="{{ event.tickets[0].min_order | default(1, true) }}">
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="item form-group">
-                    <label>Max Order</label>
-                    <input type="number" class="form-control" placeholder="10" name="ticket_max_order" value="{{ event.tickets[0].max_order | default(10, true) }}">
-                </div>
+            <div class="text-center">
+                <a class="btn btn-info add-free-ticket">
+                    <i class="glyphicon glyphicon-plus-sign"></i> Free Ticket
+                </a>
+                {% if 'payments' in included_items %}
+                    <a class="btn btn-info add-paid-ticket">
+                        <i class="glyphicon glyphicon-plus-sign"></i> Paid Ticket
+                    </a>
+                {% endif %}
+                {% if 'donations' in included_items %}
+                    <a class="btn btn-info add-donation-ticket">
+                        <i class="glyphicon glyphicon-plus-sign"></i> Donation
+                    </a>
+                {% endif %}
             </div>
         </div>
+        <!-- /TicketsSegment -->
 
+            </div>
+            <div id="ticket-url-holder" class="item form-group"
+                 {% if not event.ticket_url %}style="display:none;"{% endif %}>
+                <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
+                    <i class="fa fa-ticket"></i>
+                    Add Ticket URL
+                    <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+                </h2>
+                <div class="item form-group">
+                    <label>Ticket URL
+                    </label>
+                    <input type="url" pattern="https?://.+" name="ticket_url" class="form-control"
+                           value="{{ event.ticket_url | default('', true) }}" data-error="Please enter a valid URL"/>
+                    <div class="help-block with-errors"></div>
+                </div>
+            </div>
+        {% else %}
+            <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
+                <i class="fa fa-ticket"></i>
+                Add Ticket URL
+                <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+            </h2>
+            <div class="item form-group">
+                <label>Ticket URL
+                </label>
+                <input type="url" pattern="https?://.+" name="ticket_url" class="form-control"
+                       value="{{ event.ticket_url | default('', true) }}" data-error="Please enter a valid URL"/>
+                <div class="help-block with-errors"></div>
+            </div>
         {% endif %}
+
+        <div id="payment-system-holder" class="item form-group"
+             {% if not event or ('paid' not in ticket_types and 'donation' not in ticket_types) %}style="display:none;"{% endif %}>
+            <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
+                <i class="fa fa-money"></i>
+                Add Payment details
+                <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+            </h2>
+            <div class="row">
+                <div class="col-xs-6">
+                    <div class="item form-group">
+                        <label>Choose Country <span class="required">*</span></label>
+                        <select name="payment_country" id="payment_country_name" class="form-control">
+                            {% if not event or not event.payment_country %}
+                                <option value="">Choose a country for your payment</option>
+                            {% endif %}
+                            {% for country in payment_countries %}
+                                <option value="{{ country }}" {{ "selected" if event and event.payment_country == country else '' }}>{{ country }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="item form-group">
+                        <label>Choose Currency <span class="required">*</span></label>
+                        <select name="payment_currency" id="payment_currency_name" class="form-control">
+                            {% if not event or not event.payment_currency %}
+                                <option value="">Please select a currency</option>
+                            {% endif %}
+                            {% for code,has_paypal,has_stripe in payment_currencies %}
+                                <option value="{{ code }}" data-has-paypal="{{ has_paypal }}" data-has-stripe="{{ has_stripe }}" {{ "selected" if event and event.payment_currency == code else '' }}>{{ code }} - {{ code | currency_name }} ({{ code | currency_symbol }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="item form-group">
+            <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color: #5bc0de;">
+            <i class="fa fa-credit-card"></i>
+            Choose Payment Methods
+            <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+            </h2>
+            <div id="paypal-gateway">
+                <label class="control-label" style="font-size: 20px;">Online Payments</label>
+                <div class="col-sm-12 input-group">
+                        <label class="control-label">Payment by PayPal</label>
+                        <div class="checkbox">
+                            <label style="font-weight: 300;">
+                                <input type="checkbox" name="pay_by_paypal" id="pay_by_paypal"
+                                       value="paypalYes"
+                                       {% if event.pay_by_paypal %}checked="checked"{% endif %}>
+                                <strong style="font-weight: 400;">YES, accept payment through PayPal </strong><br>
+                                Paypal accepts credit card, debit card and PayPal payments. To learn how it works
+                                click <a href="">here.</a>
+                            </label>
+                        </div>
+                </div>
+                <div id="paypal-holder" class="item form-group" {% if not event.pay_by_paypal %}style="display: none"{% endif %}>
+                    <label>PayPal Email <span class="required">*</span></label>
+                    <input type="email" placeholder="PayPal Email" name="paypal_email" class="form-control"
+                           value="{{ event.paypal_email | default('', true) }}">
+                    <strong style="font-weight: 400;">Don't have a PayPal account? </strong><a
+                        href="https://www.paypal.com/us/webapps/mpp/referral/paypal-express-checkout?partner_id=W9QW5TKUA246E"
+                        target="_blank">Create a free PayPal merchant account.</a>
+                </div>
+
+            </div>
+            <div id="stripe-gateway">
+                <div class="col-sm-12 input-group">
+                                        <label class="control-label">Payment by Stripe</label>
+                                        <div class="checkbox">
+                                            <label style="font-weight: 300;">
+                                                <input type="checkbox" name="pay_by_stripe" id="pay_by_stripe"
+                                                       value="stripeYes"
+                                                       {% if event.pay_by_stripe %}checked="checked"{% endif %}>
+                                                <strong style="font-weight: 400;">YES, accept payment through Stripe </strong><br>
+                                                Stripe accepts Visa, Master and Amex. To learn how it works click <a href="">here.</a>
+                                                Find out more about Stripe <a href="">here.</a>
+                                            </label>
+                                        </div>
+                </div>
+                <div id="stripe-holder" class="item form-group" {% if not event.pay_by_stripe %}style="display: none"{% endif %}>
+                    <label>Use Stripe for payments <span class="required">*</span></label><br>
+                    <input type="hidden" name="stripe_added" value="{% if event.stripe %}yes{% else %}no{% endif %}">
+                    <div id="stripe-connected-message" style="{% if not event.stripe %}display: none;{% endif %}">
+                        <input type="hidden" name="stripe_secret_key" value="{{ event.stripe.stripe_secret_key | default('', true) }}">
+                        <input type="hidden" name="stripe_refresh_token" value="{{ event.stripe.stripe_refresh_token | default('', true) }}">
+                        <input type="hidden" name="stripe_publishable_key" value="{{ event.stripe.stripe_publishable_key | default('', true) }}">
+                        <input type="hidden" name="stripe_user_id" value="{{ event.stripe.stripe_user_id | default('', true) }}">
+                        <input type="hidden" name="stripe_email" value="{{ event.stripe.stripe_email | default('', true) }}">
+                        The stripe account <strong class="stripe-email">{{ event.stripe.stripe_email | default('', true) }}</strong> has been connected. <a href="#" class="stripe-delink">Click to De-link the account.</a><br><br>
+                    </div>
+                    <a href="#" class="stripe-connect" style="{% if event.stripe %}display:none;{% endif %}"><span>Connect with Stripe</span></a>
+                </div>
+            </div>
+            <br>
+            <div id="offline-gateway">
+            <label class="control-label" style="font-size: 20px;">Offline Payments</label>
+            <div class="col-sm-12 input-group">
+                                    <div class="checkbox">
+                                        <label style="font-weight: 300;">
+                                            <input type="checkbox" name="pay_by_cheque" id="pay_by_cheque"
+                                                   value="chequeYes"
+                                                   {% if event.pay_by_cheque %}checked="checked"{% endif %}>
+                                            <strong style="font-weight: 400;">YES, accept payment by Cheque </strong><br>
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label style="font-weight: 300;">
+                                            <input type="checkbox" name="pay_by_bank" id="pay_by_bank"
+                                                   value="bankYes"
+                                                   {% if event.pay_by_bank %}checked="checked"{% endif %}>
+                                            <strong style="font-weight: 400;">YES, accept payment by Telegraphic Transfer(TT) / Bank Transfer </strong><br>
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label style="font-weight: 300;">
+                                            <input type="checkbox" name="pay_onsite" id="pay_onsite"
+                                                   value="onsiteYes"
+                                                   {% if event.pay_onsite %}checked="checked"{% endif %}>
+                                            <strong style="font-weight: 400;">YES, accept payment at the event(on site) </strong><br>
+                                        </label>
+                                    </div>
+            </div>
+            </div>
+            <br>
+            <div class="">
+                <a href='#' data-toggle="modal" data-target="#taxModal" title="Add tax option">
+                    <h5>+ Add Tax</h5>
+                </a>
+            </div>
+        </div>
+        </div>
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color: #5bc0de;">
             <i class="fa fa-plus-circle"></i>
             Additional Details
@@ -435,22 +590,24 @@
             <label><span class="coc-state">Add</span> Code of Conduct
             </label>
             <input type="checkbox" class="toggle-switch" name="coc_state"
-                       value="on" id="coc-switch" {% if event.code_of_conduct %}checked="checked"{% endif %}/>
+                   value="on" id="coc-switch" {% if event.code_of_conduct %}checked="checked"{% endif %}/>
             <label for="coc-switch" style="margin-left:0;"></label>
             <div id="coc-holder" {% if not event.code_of_conduct %}style="display:none;"{% endif %}>
                 <textarea name="code_of_conduct"
-                      class="form-control event-textarea">{{ event.code_of_conduct | default('', true) }}</textarea>
+                          class="form-control event-textarea">{{ event.code_of_conduct | default('', true) }}</textarea>
             </div>
         </div>
         <div class="item form-group">
-            <label>License of Event Data and Content <a class="btn btn-info btn-xs licence-help" data-toggle="licence-modal" data-target="#licence_modal">?</a></label>
+            <label>License of Event Data and Content <a class="btn btn-info btn-xs licence-help"
+                                                        data-toggle="licence-modal"
+                                                        data-target="#licence_modal">?</a></label>
             <div id="licence-list" style="display: none;">
                 <ul style="background-color: #f2f2f2; padding-left: 28px; padding-bottom: 5px; padding-top: 5px; border-radius: 1px;">
-                {% for licence_name, info in event_licences.iteritems() %}
-                    <li>
-                        <a href="{{ info.2 }}" target="_blank">{{ licence_name }}</a>
-                    </li>
-                {% endfor %}
+                    {% for licence_name, info in event_licences.iteritems() %}
+                        <li>
+                            <a href="{{ info.2 }}" target="_blank">{{ licence_name }}</a>
+                        </li>
+                    {% endfor %}
                 </ul>
             </div>
             <select name="copyright_licence" class="form-control">
@@ -458,7 +615,7 @@
                 {{ event_licences }}
                 {% for licence in event_licences %}
                     <option value="{{ licence }}" {{ "selected" if event and event.copyright.licence == licence else '' }}>
-                    {{ licence }}
+                        {{ licence }}
                     </option>
                 {% endfor %}
             </select>
@@ -497,10 +654,170 @@
         </div>
     </div>
 </div>
+
+<form role="form" id="tax-form" action="/events/tax/include/" method="post">
+    <div class="modal fade" id="taxModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                    </button>
+                    <h3 class="modal-title">Tax Options</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div id="tax-charge-holder">
+                                <h3>Do you need to charge tax for this event ? <a href="#" data-toggle="tooltip" title="Some event organizers need to charge tax on their tickets.
+                                                            Please check with your tax advisor about your own situation"
+                                                                                  class="fa fa-info-circle"></a></h3>
+                                <div class="radio">
+                                    <label style="font-weight: 300;">
+                                        <input type="radio" name="taxAllow" id="taxYes" value="taxYes"
+                                               {% if event.tax_allow %}checked="checked"{% endif %}>
+                                        <h5>Yes</h5>
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label style="font-weight: 300;">
+                                        <input type="radio" name="taxAllow" id="taxNo" value="taxNo"
+                                               {% if not event.tax_allow %}checked="checked"{% endif %}>
+                                        <h5>No</h5>
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="tax-form-holder" {% if not event.tax_allow %}style="display: none";{% endif %}>
+                                <div class="col-sm-12 input-group">
+                                    <label>Country<span class="required">*</span></label>
+                                    <select name="tax_country" id="tax_country_name" class="form-control">
+                                        {% if not event or not tax.country %}
+                                            <option value="">Choose a country for your tax payment</option>
+                                        {% endif %}
+                                        {% for country in payment_countries %}
+                                            <option value="{{ tax.country | default('', true) }}" {{ "selected" if event and tax.country == country else '' }}>{{ country }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="col-sm-12 input-group">
+                                    <label for="tax_name">Tax Name<span class="required">*</span></label>
+                                    <input type="text" id="tax_name" name="tax_name" class="form-control"
+                                           value="{{ tax.tax_name | default('', true) }}">
+                                </div>
+
+                                <div class="col-sm-12 input-group">
+                                    <label for="tax_rate">Tax Rate<span class="required">*</span></label>
+                                    <input value="{{ tax.tax_rate | default(0, true) }}" type="text"
+                                           class="form-control" name="tax_rate" id="tax_rate"
+                                           placeholder="Enter Tax Rate">
+                                </div>
+
+                                <div class="col-sm-12 input-group">
+                                    <label for="tax_id">Tax ID<span class="required">*</span></label>
+                                    <input value="{{ tax.tax_id | default(0, true) }}" type="text" class="form-control"
+                                           name="tax_id" id="tax_id"
+                                           placeholder="Enter Tax ID">
+                                </div>
+
+                                <div class="col-sm-12 input-group">
+                                    <label class="control-label">Tax Invoices:</label>
+                                    <div class="checkbox">
+                                        <label style="font-weight: 300;">
+                                            <input type="checkbox" name="tax_invoice" id="tax_invoice"
+                                                   value="invoiceYes"
+                                                   {% if tax.send_invoice %}checked="checked"{% endif %}>
+                                            <strong style="font-weight: 400;">Send tax invoice to attendees: </strong>
+                                            Tax Invoices are sent to your attendees when you select this feature.
+                                            Enter your registered business company name and address to be included on
+                                            the tax invoice
+                                        </label>
+                                    </div>
+                                </div>
+                                <div id="tax-invoice-holder"
+                                     {% if not tax.send_invoice %}style="display: none"{% endif %}>
+                                    <div class="col-sm-12 input-group">
+                                        <label for="registered_company">Registered Company<span
+                                                class="required">*</span></label>
+                                        <input value="{{ tax.registered_company | default('', true) }}" type="text"
+                                               class="form-control" name="registered_company" id="registered_company"
+                                               placeholder="Enter Company Name">
+                                    </div>
+
+                                    <div class="col-sm-12 input-group">
+                                        <label for="buisness_address">Buisness Address<span
+                                                class="required">*</span></label>
+                                        <input value="{{ tax.address | default('', true) }}" type="text"
+                                               class="form-control" name="buisness_address" id="buisness_address"
+                                               placeholder="Enter Buisness Address">
+                                    </div>
+
+                                    <div class="col-sm-12 input-group">
+                                        <label for="invoice_city">City<span class="required">*</span></label>
+                                        <input value="{{ tax.city | default('', true) }}" type="text"
+                                               class="form-control" name="invoice_city" id="invoice_city"
+                                               placeholder="City">
+                                    </div>
+
+                                    <div class="col-sm-12 input-group">
+                                        <label for="invoice_state">State<span class="required">*</span></label>
+                                        <input value="{{ tax.state | default('', true) }}" type="text"
+                                               class="form-control" name="invoice_state" id="invoice_state"
+                                               placeholder="State">
+                                    </div>
+
+                                    <div class="col-sm-12 input-group">
+                                        <label for="invoice_zip">Zip<span class="required">*</span></label>
+                                        <input value="{{ tax.zip | default(0, true) }}" type="text" class="form-control"
+                                               name="invoice_zip" id="invoice_zip"
+                                               placeholder="Zip">
+                                    </div>
+
+                                    <div class="col-sm-12 input-group">
+                                        <label for="invoice_footer">Optional Text for Invoice Footer<span
+                                                class="required">*</span></label>
+                                        <textarea class="form-control" name="invoice_footer"
+                                                  id="invoice_footer">{{ tax.invoice_footer | default('', true) }}" </textarea>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 input-group">
+                                    <label class="control-label">Add or Include:</label>
+                                    <div class="radio">
+                                        <label style="font-weight: 300;">
+                                            <input type="radio" name="tax_options" value="tax_separate"
+                                                   {% if not tax.tax_include_in_price %}checked="checked"{% endif %}>
+                                            <strong style="font-weight: 400;">Add tax as separate fee on top of the
+                                                price</strong>
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label style="font-weight: 300;">
+                                            <input type="radio" name="tax_options" value="tax_include"
+                                                   {% if tax.tax_include_in_price %}checked="checked"{% endif %}>
+                                            <strong style="font-weight: 400;">Include tax in ticket price</strong>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="reset" id="close-tax-form" class="btn btn-default" data-dismiss="modal">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 <script>
     var marker, map;
     var init_marker;
     var placeSearch, autocomplete;
+    var paid_tickets = 0;
     var componentForm = {
         street_number: 'short_name',
         route: 'long_name',
@@ -549,12 +866,12 @@
         // and fill the corresponding field on the form.
 
         for (var i = 0; i < place.address_components.length; i++) {
-          var addressType = place.address_components[i].types[0];
-          if (componentForm[addressType]) {
-            console.log(addressType);
-            var val = place.address_components[i][componentForm[addressType]];
-            document.getElementById(addressType).value = val;
-          }
+            var addressType = place.address_components[i].types[0];
+            if (componentForm[addressType]) {
+                console.log(addressType);
+                var val = place.address_components[i][componentForm[addressType]];
+                document.getElementById(addressType).value = val;
+            }
         }
         $('#location_name').hide();
         $('#show_addr').hide();
@@ -564,9 +881,9 @@
 
     function resizeMap(map) {
         var center = map.getCenter();
-        google.maps.event.trigger(map,'resize');
-        map.setZoom( map.getZoom() );
-        map.setCenter( center );
+        google.maps.event.trigger(map, 'resize');
+        map.setZoom(map.getZoom());
+        map.setCenter(center);
     }
 
     function geocodeAddress(geocoder, resultsMap) {
@@ -623,17 +940,17 @@
 
     function show_map_holder() {
         if ($('#location_name').get(0).value != '') {
-            var url = "https://maps.googleapis.com/maps/api/geocode/json?address="+$('#location_name').get(0).value+"&key=AIzaSyAHdXg0Y_zk-wCNpslbBqcezLdHniaEwkI"
-            $.getJSON( url, function( data ) {
+            var url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + $('#location_name').get(0).value + "&key=AIzaSyAHdXg0Y_zk-wCNpslbBqcezLdHniaEwkI"
+            $.getJSON(url, function (data) {
                 google.maps.event.trigger(autocomplete, 'place_changed');
                 var place = data.results[0];
                 for (var i = 0; i < place.address_components.length; i++) {
-                  var addressType = place.address_components[i].types[0];
-                  if (componentForm[addressType]) {
-                    console.log(addressType);
-                    var val = place.address_components[i][componentForm[addressType]];
-                    document.getElementById(addressType).value = val;
-                  }
+                    var addressType = place.address_components[i].types[0];
+                    if (componentForm[addressType]) {
+                        console.log(addressType);
+                        var val = place.address_components[i][componentForm[addressType]];
+                        document.getElementById(addressType).value = val;
+                    }
                 }
             });
         }
@@ -645,20 +962,20 @@
 
     function remove_map_holder() {
         for (var component in componentForm) {
-          document.getElementById(component).value = '';
+            document.getElementById(component).value = '';
         }
-        autocomplete.set('place',void(0));
-        $('#location_name').get(0).value='';
+        autocomplete.set('place', void(0));
+        $('#location_name').get(0).value = '';
         $('#location_name').show();
         $('#map-holder').hide();
         $('#show_addr').show();
     }
 
     function address_update() {
-        autocomplete.set('place',void(0));
+        autocomplete.set('place', void(0));
         var location = "";
         for (component in componentForm) {
-            location += $('#'+component).get(0).value + " ";
+            location += $('#' + component).get(0).value + " ";
         }
         $('#location_name').get(0).value = location;
         $('#location_name').click();
@@ -739,7 +1056,6 @@
                         $uploadCropper.croppie('bind', {
                             url: e.target.result
                         });
-
                     };
                     reader.readAsDataURL(input.files[0]);
                 }
@@ -759,10 +1075,29 @@
                 } else {
                     var reader = new FileReader();
                     reader.onload = function (e) {
-                        resetFormElement(input);
-                        $("#logo").val(e.target.result);
-                        $("#logo-view-group").show().find("img").attr("src", e.target.result);
-                        $("#logo-upload-group").hide();
+                        $("#logo-upload-label").html(loadingImage);
+                        /* Disable Save Event buttons */
+                        $(".save-event").prop("disabled", true);
+                        $(".publish-unpublish-event").prop("disabled", true);
+                        $.ajax({
+                            type: 'POST',
+                            url: "{{ url_for('events.logo_upload', event_id=event.id) if event else url_for('events.create_event_logo_upload') }}",
+                            data: {logo: e.target.result},
+                            dataType: 'json'
+                        }).done(function(data) {
+                            console.log(data);
+                            resetFormElement(input);
+                            $("#logo").val(data.logo);
+                            $("#logo-upload-group").hide();
+                            $("#logo-view-group").show().find("img").attr("src", e.target.result);
+                        }).fail(function(data) {
+                            alert("Something went wrong. Please try again.");
+                        }).always(function() {
+                            $("#logo-upload-label").html('<i class="fa fa-4x fa-file-image-o" aria-hidden="true"></i> <br> <h3>Select Logo</h3>');
+                            /* Enable Save Event buttons */
+                            $(".save-event").prop("disabled", false);
+                            $(".publish-unpublish-event").prop("disabled", false);
+                        });
                     };
                     reader.readAsDataURL(input.files[0]);
                 }
@@ -774,18 +1109,69 @@
         });
     });
 
+    var loadingImage = '<img src="' + "{{ url_for('static', filename='img/loading.gif') }}" + '" style="width: 50px;"> <h3>Uploading</h3>';
     $("#save-crop").click(function () {
         $uploadCropper.croppie('result', {
             type: 'canvas',
             size: 'original'
         }).then(function (resp) {
-            $("#background_url").val(resp);
-            $("#image-view-group").show().find("img").attr("src", resp);
-            $("#image-upload-group").hide();
             $('#cropper-modal').modal('hide')
+            $("#event-image-upload-label").html(loadingImage);
+            /* Disable Save Event buttons */
+            $(".save-event").prop("disabled", true);
+            $(".publish-unpublish-event").prop("disabled", true);
+            $.ajax({
+                type: 'POST',
+                url: "{{ url_for('events.bgimage_upload', event_id=event.id) if event else url_for('events.create_event_bgimage_upload') }}",
+                data: {bgimage: resp},
+                dataType: 'json'
+            }).done(function(data) {
+                console.log(data);
+                $("#background_url").val(data.background_url);
+                $("#image-view-group").show().find("img").attr("src", resp);
+                $("#image-upload-group").hide();
+            }).fail(function(data) {
+                alert("Something went wrong. Please try again.");
+            }).always(function() {
+                $("#event-image-upload-label").html('<i class="fa fa-4x fa-camera-retro" aria-hidden="true"></i><br><h3>Select Event Image</h3>');
+                /* Enable Save Event buttons */
+                $(".save-event").prop("disabled", false);
+                $(".publish-unpublish-event").prop("disabled", false);
+            });
         });
     });
 
+    {% if event %}
+    $("#remove-image-btn").click(function () {
+        $.ajax({
+            type: 'DELETE',
+            url: "{{ url_for('events.bgimage_upload', event_id=event.id) }}",
+            dataType: 'json'
+        }).done(function(data) {
+            console.log(data);
+            $("#image-view-group").hide();
+            $("#image-upload-group").show();
+            $("#background_url").val('');
+        }).fail(function(data) {
+            alert("Something went wrong. Please try again.");
+        });
+    });
+
+    $("#remove-logo-btn").click(function () {
+        $.ajax({
+            type: 'DELETE',
+            url: "{{ url_for('events.logo_upload', event_id=event.id) }}",
+            dataType: 'json'
+        }).done(function(data) {
+            console.log(data);
+            $("#logo-view-group").hide();
+            $("#logo-upload-group").show();
+            $("#logo").val('');
+        }).fail(function(data) {
+            alert("Something went wrong. Please try again.");
+        });
+    });
+    {% else %}
     $("#remove-image-btn").click(function () {
         $("#image-view-group").hide();
         $("#image-upload-group").show();
@@ -797,6 +1183,7 @@
         $("#logo-upload-group").show();
         $("#logo").val('');
     });
+    {% endif %}
 
     $('#cropper-modal').on('shown.bs.modal', function (e) {
         $uploadCropper.croppie('bind');
@@ -804,7 +1191,7 @@
 
     });
 
-    $("select#ticket-type").on("change", function(e) {
+    $("select#ticket-type").on("change", function (e) {
         var type = $("option:selected", this).val();
         var ticketTypePrice = $("#ticket-type-price");
 
@@ -813,8 +1200,154 @@
         } else if (type == "donation") {
             ticketTypePrice.html("<div class='form-control'>Donation</div>");
         } else if (type == "paid") {
-            ticketTypePrice.html("<input type='number' class='form-control' placeholder='Set your ticket price' name='ticket_price'>");
+            ticketTypePrice.html("<input type='number' class='form-control' placeholder='Set your ticket price' name='ticket_price' required>");
         }
+    });
+
+    var $ticketsHolder = $(".tickets-holder");
+    var ticketsCount = 1;
+    var $paymentsystemHolder = $("#payment-system-holder");
+
+    $(document).ready(function() {
+        $("#event-wizard-form .ticket-tags").selectize({
+            plugins: ['remove_button'],
+            persist: false,
+            createOnBlur: true,
+            create: true
+        });
+    });
+
+    function addTicket(type) {
+        /* Clone ticket from template */
+        var $tmpl = $("#ticket-template").clone().children("div");
+        var $ticket = $($tmpl[0]).attr("id", "ticket_" + String(ticketsCount));
+        var $ticketMore = $($tmpl[1]).attr("id", "ticket-more_" + String(ticketsCount));
+
+        /* Bind datepicker to dates */
+        $ticketMore.find("input.date").datepicker();
+        $ticketMore.find("input.time").timepicker({
+            'showDuration': true,
+            'timeFormat': 'H:i',
+            'scrollDefault': 'now'
+        });
+
+        /* iCheck for Ticket description toggle checkbox */
+        $ticketMore.find("input.checkbox.flat").iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass: 'iradio_flat-green'
+        });
+
+        $ticketMore.find(".ticket-tags").selectize({
+            plugins: ['remove_button'],
+            persist: false,
+            createOnBlur: true,
+            create: true
+        });
+
+        /* Bind events to Edit and Remove buttons */
+        var $ticketEdit = $ticket.find(".edit-ticket-button");
+        $ticketEdit.tooltip();
+        $ticketEdit.on("click", function () {
+            $ticketMore.slideToggle("slow");
+        });
+        var $ticketRemove = $ticket.find(".remove-ticket-button");
+        $ticketRemove.tooltip();
+        $ticketRemove.on("click", function () {
+            var confirmRemove = confirm("Are you sure you want to remove the Ticket?");
+            if (confirmRemove) {
+                if (type == 'paid' || type == 'donation') {
+                    paid_tickets = paid_tickets - 1;
+                    if (paid_tickets == 0) {
+                        $paymentsystemHolder.fadeOut();
+                    }
+                }
+                $ticket.remove();
+                $ticketMore.remove();
+            }
+        });
+
+        /* Set Ticket Type field */
+        $ticket.find("input[name='tickets[type]']").val(type);
+
+        /* Set Ticket Price field */
+        var html = null;
+        if (type === "free") {
+            html = '<input type="text" name="tickets[price]" class="form-control" value="Free" readonly>';
+        } else if (type === "paid") {
+            html = '<input type="number" min="0" name="tickets[price]" class="form-control"  placeholder="Price" value="">';
+        } else if (type === "donation") {
+            html = '<input type="text" name="tickets[price]" class="form-control" value="Donation" readonly>';
+        }
+        $($ticket.children()[1]).html(html);
+
+        /* Append ticket to table */
+        $ticket.hide();
+        $ticketMore.hide();
+        $ticketsHolder.append($ticket, $ticketMore);
+        $ticket.slideToggle();
+
+        /* Set name attribute for all Ticket Description Toggle checkboxes */
+        $("#event-wizard-form input[name*='tickets_description_toggle_']").each(function(i, el) {
+            $(el).attr("name", "tickets_description_toggle_" + String(i));
+        });
+        /* Set name attribute for all Ticket Stop Sales checkboxes */
+        $("#event-wizard-form input[name*='tickets_hide_']").each(function(i, el) {
+            $(el).attr("name", "tickets_hide_" + String(i));
+        });
+
+        ticketsCount += 1;
+    }
+
+    $(".edit-ticket-button").click(function () {
+        var $ticket = $(this).parent().parent().parent();
+        var $ticketMore = $ticket.next();
+        $ticketMore.slideToggle("slow");
+    });
+
+    $(".remove-ticket-button").click(function () {
+        var confirmRemove = confirm("Are you sure you want to remove the Ticket?");
+        if (confirmRemove) {
+            var $ticket = $(this).parent().parent().parent();
+            var $ticketMore = $ticket.next();
+            $ticket.remove();
+            $ticketMore.remove();
+        }
+    });
+
+    $(".add-free-ticket").click(function () {
+        addTicket("free");
+    });
+
+    $(".add-paid-ticket").click(function () {
+        if (paid_tickets == 0) {
+            $paymentsystemHolder.fadeIn();
+        }
+        paid_tickets += 1;
+        addTicket("paid");
+    });
+
+    $(".add-donation-ticket").click(function () {
+        if (paid_tickets == 0) {
+            $paymentsystemHolder.fadeIn();
+        }
+        paid_tickets += 1;
+        addTicket("donation");
+    });
+
+    var $taxformHolder = $("#tax-form-holder");
+    $("#taxYes").on("click", function (e) {
+        $taxformHolder.fadeIn();
+    });
+    $("#taxNo").on("click", function (e) {
+        $taxformHolder.fadeOut();
+    });
+
+    var $taxinvoiceHolder = $("#tax-invoice-holder");
+    $("#tax_invoice").change(function () {
+        if ($("#tax_invoice").is(":checked"))
+            $taxinvoiceHolder.fadeIn();
+        else
+            $taxinvoiceHolder.fadeOut();
     });
 
     $(document).on("click", '.add-social-links', function () {
@@ -866,18 +1399,90 @@
             }
         };
 
-        /*var $mapHolder = $("#map-holder");
-        var $mapState = $(".map-state");
+        var $ticketsystemHolder = $("#ticket-system-holder");
+        var $ticketURLHolder = $("#ticket-url-holder")
+        var $ticketState = $(".ticket-state");
 
-        var map_onOffSwitch = document.getElementById('map-switch');
+        var ticket_onOffSwitch = document.getElementById('ticket-switch');
 
-        map_onOffSwitch.onchange = function () {
-            if (map_onOffSwitch.checked) {
-                $mapHolder.fadeIn();
+        if (ticket_onOffSwitch != null) {
+            ticket_onOffSwitch.onchange = function () {
+                if (ticket_onOffSwitch.checked) {
+                    $ticketsystemHolder.fadeIn();
+                    $ticketURLHolder.fadeOut();
+                    $ticketState.text("Add Ticket URL");
+                } else {
+                    $ticketsystemHolder.fadeOut();
+                    $ticketURLHolder.fadeIn();
+                    $ticketState.text("Use Ticketing System");
+                }
+            };
+        }
+
+        var $stripeConnectedMessage = $("#stripe-connected-message");
+        $(".stripe-connect").click(function (e) {
+            e.preventDefault();
+            $.oauthpopup({
+                path: "https://connect.stripe.com/oauth/authorize?response_type=code&client_id={{ settings.stripe_client_id }}&scope=read_write&redirect_uri={{ url_for('ticketing.stripe_callback', _external=true) }}",
+                callback: function () {
+                    // TODO Disallow test accounts. Only accept live accounts.
+                    if (1 || window.oauth_response.live_mode) {
+                        $("input[name=stripe_added]").val("yes");
+                        $stripeConnectedMessage.find("input[name=stripe_secret_key]").val(window.oauth_response.access_token);
+                        $stripeConnectedMessage.find("input[name=stripe_refresh_token]").val(window.oauth_response.refresh_token);
+                        $stripeConnectedMessage.find("input[name=stripe_publishable_key]").val(window.oauth_response.stripe_publishable_key);
+                        $stripeConnectedMessage.find("input[name=stripe_user_id]").val(window.oauth_response.stripe_user_id);
+                        $stripeConnectedMessage.find("input[name=stripe_email]").val(window.oauth_response.email);
+                        $stripeConnectedMessage.find(".stripe-email").text(window.oauth_response.email);
+                        $stripeConnectedMessage.show();
+                        $(".stripe-connect").hide();
+                    } else {
+                        createSnackbar('Your stripe account is not live. Only live accounts can be used for collecting payments.')
+                    }
+                }
+            });
+
+        });
+
+        $(".stripe-delink").click(function (e) {
+            e.preventDefault();
+            $("input[name=stripe_added]").val("no");
+            $stripeConnectedMessage.hide();
+            $stripeConnectedMessage.find("input").val("");
+            $stripeConnectedMessage.find(".stripe-email").text("");
+            $(".stripe-connect").show();
+        });
+
+        var $paypalHolder = $("#paypal-holder");
+        $("#pay_by_paypal").change(function () {
+            if ($("#pay_by_paypal").is(":checked"))
+                $paypalHolder.fadeIn();
+            else
+                $paypalHolder.fadeOut();
+        });
+
+        var $stripeHolder = $("#stripe-holder");
+        $("#pay_by_stripe").change(function () {
+            if ($("#pay_by_stripe").is(":checked"))
+                $stripeHolder.fadeIn();
+            else
+                $stripeHolder.fadeOut();
+        });
+
+        $("select[name=payment_currency]").change(function () {
+            var $selected = $(this).find(":selected");
+            if($selected.data("has-paypal") !== "True") {
+                $("#paypal-gateway").fadeOut().find("input").prop("checked", false).val("");
             } else {
-                $mapHolder.fadeOut();
+                $("#paypal-gateway").fadeIn();
             }
-        };*/
+            if($selected.data("has-stripe") !== "True") {
+                $("#stripe-gateway").fadeOut().find("input").prop("checked", false).val("");
+            } else {
+                $("#stripe-gateway").fadeIn();
+            }
+        }).trigger('change');
+
     });
 </script>
 
