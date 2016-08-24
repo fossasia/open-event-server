@@ -37,7 +37,6 @@ class SuperAdminContentView(SuperAdminBaseView):
         if request.method == 'POST':
             placeholder_image = request.form['placeholder']
             filename = request.form['file_name']
-            print filename
             if placeholder_image:
                 placeholder_file = uploaded_file(file_content=placeholder_image)
                 placeholder = upload(
@@ -77,7 +76,6 @@ class SuperAdminContentView(SuperAdminBaseView):
     @expose('/update_placeholder', methods=('POST',))
     def placeholder_upload_details(self):
         if request.method == 'POST':
-            print request.form
             copyright_info = request.form['copyright']
             origin_info = request.form['origin']
             placeholder_id = request.form['placeholder_id']
