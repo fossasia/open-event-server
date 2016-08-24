@@ -2037,9 +2037,11 @@ def create_user_oauth(user, user_data, token, method):
     user.is_verified = True
     save_to_db(user, "User created")
     user_detail = UserDetail.query.filter_by(user_id=user.id).first()
-    f_name, uploaded_file = uploaded_file_provided_by_url(user.avatar)
-    avatar = upload(uploaded_file, 'users/%d/avatar' % int(user.id))
-    user_detail.avatar_uploaded = avatar
+    if 'http' in user.avatar:
+        f_name, uploaded_file = uploaded_file_provided_by_url(user.avatar)
+        avatar = upload(uploaded_file, 'users/%d/avatar' % int(user.id))
+        user_detail.avatar_uploaded = avatar
+
     user_detail.firstname = user_data['name']
     save_to_db(user, "User Details Updated")
     return user
@@ -2244,5 +2246,3 @@ def uploaded_file_provided_by_url(url):
     fh.write(response_file.read())
     fh.close()
     return filename, UploadedFile(file_path, filename)
-    background_url = upload(img, '/image/' + filename)
-    return background_url
