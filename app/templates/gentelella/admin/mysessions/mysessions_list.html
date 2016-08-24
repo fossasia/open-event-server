@@ -16,12 +16,8 @@
         <div class="col col-md-4 col-sm-4 col-xs-12" style="line-height:155px;">
             {% if session.event.logo %}
                 <img src="{{ session.event.logo }}" style="height: 88%">
-            {% elif session.event.background_url and im_size=='large' %}
-                <img src="{{ session.event.large }}" style="height: 88%">
-            {% elif session.event.background_url and im_size=='thumbnail' %}
+            {% elif session.event.background_url %}
                 <img src="{{ session.event.thumbnail }}" style="height: 88%">
-            {% elif session.event.background_url and im_size=='icon' %}
-                <img src="{{ session.event.icon }}" style="height: 88%">
             {% elif session.event.topic %}
                 {% set vars = {'foo': False} %}
                 {% for custom_image in custom_placeholder %}

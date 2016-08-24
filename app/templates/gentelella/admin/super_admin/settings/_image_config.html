@@ -12,8 +12,19 @@
                 <label>Height (in px)</label>
                 <input type="number" class="form-control" id="event-large-page-h" name="event-large_height" required value="{{ event_image_sizes.full_height | default(500) }}">
             </div>
-            <div class="col-md-5">
-                <input type="checkbox" id="event-large-page-a" name="event-large_aspect" {% if event_image_sizes.full_aspect == 'on' %}checked{% endif %}> Maintain Aspect Ratio
+            <div class="col-md-4" style="margin-bottom:30px;">
+                <label>Quality (in %)</label>
+                <input type="number" class="form-control" id="event-large-page-q" name="event-large_quality" required value="{{ event_image_sizes.full_quality | default(100) }}">
+            </div>
+            <div class="col-md-12">
+                <input type="checkbox" id="event-large-page-a" name="event-large_aspect" {% if event_image_sizes.full_aspect == 'on' %}checked{% endif %}> Standard aspect ratio is 13:5. Tick to maintain aspect ratio.
+            </div><br><br>
+            <div class="col-md-12">
+                <p> Found in : <br>
+                    <ul>
+                        <li>Background Header Image in Public Event Page</li>
+                    </ul>
+                </p>
             </div>
             <div class="help-block with-errors"></div>
         </div>
@@ -27,8 +38,21 @@
                 <label>Height (in px)</label>
                 <input type="number" class="form-control" id="event-thumbnail-page-h" name="event-thumbnail_height" required value="{{ event_image_sizes.thumbnail_height | default(200) }}">
             </div>
-            <div class="col-md-5">
-                <input type="checkbox" id="event-thumbnail-page-a" name="event-thumbnail_aspect" {% if event_image_sizes.thumbnail_aspect == 'on' %}checked{% endif %}> Maintain Aspect Ratio
+            <div class="col-md-4" style="margin-bottom:30px;">
+                <label>Quality (in %)</label>
+                <input type="number" class="form-control" id="event-large-page-q" name="event-thumbnail_quality" required value="{{ event_image_sizes.full_quality | default(100) }}">
+            </div>
+            <div class="col-md-12">
+                <input type="checkbox" id="event-thumbnail-page-a" name="event-thumbnail_aspect" {% if event_image_sizes.thumbnail_aspect == 'on' %}checked{% endif %}> Standard aspect ratio is 5:2. Tick to maintain aspect ratio.
+            </div><br><br>
+            <div class="col-md-12">
+                <p> Found in : <br>
+                    <ul>
+                        <li>Home Page Event Images</li>
+                        <li>My Session Page Event Images</li>
+                        <li>My Ticket Page Event Images</li>
+                    </ul>
+                </p>
             </div>
             <div class="help-block with-errors"></div>
         </div>
@@ -42,8 +66,12 @@
                 <label>Height (in px)</label>
                 <input type="number" class="form-control" id="event-icon-page-h" name="event-icon_height" required value="{{ event_image_sizes.icon_height | default(30) }}">
             </div>
-            <div class="col-md-5">
-                <input type="checkbox" id="event-icon-page-a" name="event-icon_aspect" {% if event_image_sizes.icon_aspect == 'on' %}checked{% endif %}> Maintain Aspect Ratio
+            <div class="col-md-4" style="margin-bottom:30px;">
+                <label>Quality (in %)</label>
+                <input type="number" class="form-control" id="event-large-page-q" name="event-icon_quality" required value="{{ event_image_sizes.full_quality | default(100) }}">
+            </div>
+            <div class="col-md-12">
+                <input type="checkbox" id="event-icon-page-a" name="event-icon_aspect" {% if event_image_sizes.icon_aspect == 'on' %}checked{% endif %}> Standard aspect ratio is 5:2. Tick to maintain aspect ratio.
             </div>
             <div class="help-block with-errors"></div>
         </div><hr>
@@ -58,62 +86,45 @@
                 <input type="number" class="form-control" id="logo-page-h" name="logo_height" required value="{{ event_image_sizes.logo_height | default(200) }}">
             </div>
             <div class="help-block with-errors"></div>
-        </div><hr>
-        <div class="form-group">
-            <div class="item">
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <h4>Front Page</h4>
-                </div>
-                <div class="col-md-6 col-sm-6 col-xs-12" style="margin-top:15px;">
-                    <div class="radio-group">
-                        <input type="radio" name="size_front" autocomplete="off" value="large"> Large Size
-                        <input type="radio" name="size_front" autocomplete="off" value="icon"> Icon Size
-                        <input type="radio" name="size_front" autocomplete="off" value="thumbnail" checked> Thumbnail
-                    </div>
-                </div>
-            </div><hr>
-            <div class="item">
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <h4>Event Page</h4>
-                </div>
-                <div class="col-md-6 col-sm-6 col-xs-12" style="margin-top:15px;">
-                    <div class="radio-group">
-                        <input type="radio" name="size_event" autocomplete="off" value="large" checked> Large Size
-                        <input type="radio" name="size_event" autocomplete="off" value="icon"> Icon Size
-                        <input type="radio" name="size_event" autocomplete="off" value="thumbnail"> Thumbnail
-                    </div>
-                </div>
-            </div><hr>
-            <div class="item">
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <h4>My Session Page</h4>
-                </div>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <div class="radio-group" style="margin-top:15px;">
-                        <input type="radio" name="size_mysession" autocomplete="off" value="large"> Large Size
-                        <input type="radio" name="size_mysession" autocomplete="off" value="icon"> Icon Size
-                        <input type="radio" name="size_mysession" autocomplete="off" value="thumbnail" checked> Thumbnail
-                    </div>
-                </div>
-            </div>
-            <hr>
         </div>
         <br>
         <div class="ln_solid"></div>
         <h3>Profile/Speaker Images</h3>
         <div class="form-group">
-            <h4>Large Size</h4>
+            <h4>Thumbnail Size</h4>
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Width & Height(in px)</label>
-                <input type="number" class="form-control" id="profile-front-page-w" name="profile-large_width" required value="{{ profile_image_sizes.full_width | default(1300) }}">
+                <input type="number" class="form-control" id="profile-front-page-w" name="profile-large_width" required value="{{ profile_image_sizes.full_width | default(500) }}">
+            </div>
+            <div class="col-md-4" style="margin-bottom:30px;">
+                <label>Quality (in %)</label>
+                <input type="number" class="form-control" id="event-large-page-q" name="profile-large_quality" required value="{{ event_image_sizes.full_quality | default(100) }}">
+            </div>
+            <div class="col-md-12">
+                <p> Found in : <br>
+                    <ul>
+                        <li>Event Public Page</li>
+                    </ul>
+                </p>
             </div>
             <div class="help-block with-errors"></div>
         </div>
         <div class="form-group">
-            <h4>Thumbnail Size</h4>
+            <h4>Small Size</h4>
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Width & Height(in px)</label>
-                <input type="number" class="form-control" id="profile-thumbnail-page-w" name="profile-thumbnail_width" required value="{{ profile_image_sizes.thumbnail_width | default(500) }}">
+                <input type="number" class="form-control" id="profile-thumbnail-page-w" name="profile-thumbnail_width" required value="{{ profile_image_sizes.thumbnail_width | default(100) }}">
+            </div>
+            <div class="col-md-4" style="margin-bottom:30px;">
+                <label>Quality (in %)</label>
+                <input type="number" class="form-control" id="event-large-page-q" name="profile-thumbnail_quality" required value="{{ event_image_sizes.full_quality | default(100) }}">
+            </div>
+            <div class="col-md-12">
+                <p> Found in : <br>
+                    <ul>
+                        <li>Speaker Tab in Event Dashboard</li>
+                    </ul>
+                </p>
             </div>
             <div class="help-block with-errors"></div>
         </div>
@@ -121,37 +132,21 @@
             <h4>Icon Size</h4>
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Width & Height(in px)</label>
-                <input type="number" class="form-control" id="profile-icon-page-w" name="profile-icon_width" required value="{{ profile_image_sizes.icon_width | default(75) }}">
+                <input type="number" class="form-control" id="profile-icon-page-w" name="profile-icon_width" required value="{{ profile_image_sizes.icon_width | default(50) }}">
+            </div>
+            <div class="col-md-4" style="margin-bottom:30px;">
+                <label>Quality (in %)</label>
+                <input type="number" class="form-control" id="event-large-page-q" name="profile-icon_quality" required value="{{ event_image_sizes.full_quality | default(100) }}">
+            </div>
+            <div class="col-md-12">
+                <p> Found in : <br>
+                    <ul>
+                        <li>Top Bar Right Corner</li>
+                    </ul>
+                </p>
             </div>
             <div class="help-block with-errors"></div>
         </div><hr>
-        <div class="form-group">
-            <div class="item">
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <h4>Event Dashboard</h4>
-                </div>
-                <div class="col-md-6 col-sm-6 col-xs-12" style="margin-top:15px;">
-                    <div class="radio-group">
-                        <input type="radio" name="size_speaker_dashboard" autocomplete="off" value="large"> Large Size
-                        <input type="radio" name="size_speaker_dashboard" autocomplete="off" value="icon" checked> Icon Size
-                        <input type="radio" name="size_speaker_dashboard" autocomplete="off" value="thumbnail"> Thumbnail
-                    </div>
-                </div>
-            </div><hr>
-            <div class="item">
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <h4>Public Event Page</h4>
-                </div>
-                <div class="col-md-6 col-sm-6 col-xs-12" style="margin-top:15px;">
-                    <div class="radio-group">
-                        <input type="radio" name="size_speaker_event" autocomplete="off" value="large"> Large Size
-                        <input type="radio" name="size_speaker_event" autocomplete="off" value="icon"> Icon Size
-                        <input type="radio" name="size_speaker_event" autocomplete="off" value="thumbnail" checked> Thumbnail
-                    </div>
-                </div>
-            </div>
-            <hr>
-        </div>
         <div class="ln_solid"></div>
         <div class="form-group">
             <button id="fee-save" type="submit" name="image_config" class="btn btn-success pull-right">Save</button>

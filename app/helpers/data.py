@@ -1054,12 +1054,15 @@ class DataManager(object):
                                              'events/{event_id}/temp'.format(event_id=int(event.id)))
                 temp_img_file = temp_img_file.replace('/serve_', '')
 
-                WIDTH = 1300
-                HEIGHT = 500
+                width_ = 1300
+                height_ = 500
                 basewidth = image_sizes.full_width
                 img = Image.open(temp_img_file)
-                wpercent = (basewidth / float(WIDTH))
-                hsize = int((float(HEIGHT) * float(wpercent)))
+                if image_sizes.full_aspect == 'on':
+                    wpercent = (basewidth / float(width_))
+                    hsize = int((float(height_) * float(wpercent)))
+                else:
+                    hsize = image_sizes.full_height
                 img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
                 img.save(temp_img_file)
                 file_name = temp_img_file.rsplit('/', 1)[1]
@@ -1070,12 +1073,15 @@ class DataManager(object):
                         event_id=int(event.id)
                     ))
 
-                WIDTH = 500
-                HEIGHT = 200
+                width_ = 500
+                height_ = 200
                 basewidth = image_sizes.thumbnail_width
                 img = Image.open(temp_img_file)
-                wpercent = (basewidth / float(WIDTH))
-                hsize = int((float(HEIGHT) * float(wpercent)))
+                if image_sizes.thumbnail_aspect == 'on':
+                    wpercent = (basewidth / float(width_))
+                    hsize = int((float(height_) * float(wpercent)))
+                else:
+                    hsize = image_sizes.thumbnail_height
                 img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
                 img.save(temp_img_file)
                 file_name = temp_img_file.rsplit('/', 1)[1]
@@ -1085,12 +1091,15 @@ class DataManager(object):
                     UPLOAD_PATHS['event']['thumbnail'].format(
                         event_id=int(event.id)
                     ))
-                WIDTH = 75
-                HEIGHT = 30
+                width_ = 75
+                height_ = 30
                 basewidth = image_sizes.icon_width
                 img = Image.open(temp_img_file)
-                wpercent = (basewidth / float(WIDTH))
-                hsize = int((float(HEIGHT) * float(wpercent)))
+                if image_sizes.icon_aspect == 'on':
+                    wpercent = (basewidth / float(width_))
+                    hsize = int((float(height_) * float(wpercent)))
+                else:
+                    hsize = image_sizes.icon_height
                 img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
                 img.save(temp_img_file)
                 file_name = temp_img_file.rsplit('/', 1)[1]
