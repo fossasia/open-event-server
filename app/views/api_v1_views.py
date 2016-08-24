@@ -19,7 +19,7 @@ from ..models.version import Version
 from ..helpers.object_formatter import ObjectFormatter
 from ..helpers.helpers import get_serializer
 from ..helpers.data_getter import DataGetter
-from ..helpers.data import save_to_db
+from ..helpers.data import save_to_db, save_file_provided_by_url
 from views_helpers import event_status_code, api_response
 from flask import Blueprint
 from flask.ext.autodoc import Autodoc
@@ -399,7 +399,6 @@ def callback():
 
 @app.route('/fCallback/', methods=('GET', 'POST'))
 def facebook_callback():
-    print request.args
     if login.current_user is not None and login.current_user.is_authenticated:
         try:
             facebook, __ = get_fb_auth()
@@ -496,18 +495,6 @@ def instagram_callback():
             print background_url
 
     return 'Not implemented'
-
-
-def save_file_provided_by_url(url):
-    response_file = urlopen(url)
-    filename = str(time.time()) + '.jpg'
-    file_path = os.path.realpath('.') + '/static/temp/' + filename
-    fh = open(file_path, "wb")
-    fh.write(response_file.read())
-    fh.close()
-    img = UploadedFile(file_path, filename)
-    background_url = upload(img, '/image/' + filename)
-    return background_url
 
 
 @app.route('/pic/<path:filename>')

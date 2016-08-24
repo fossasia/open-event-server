@@ -21,6 +21,7 @@ from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from requests_oauthlib import OAuth2Session
 from sqlalchemy.orm.collections import InstrumentedList
 from sqlalchemy.sql.expression import exists
+from urllib2 import urlopen
 from werkzeug import secure_filename
 from wtforms import ValidationError
 
@@ -33,6 +34,7 @@ from app.helpers.storage import upload, UPLOAD_PATHS, UploadedFile, upload_local
 from app.models.notifications import Notification
 from app.models.stripe_authorization import StripeAuthorization
 from app.views.admin.super_admin.super_admin_base import PANEL_LIST
+# from app.views.api_v1_views import save_file_provided_by_url
 from ..helpers import helpers as Helper
 from ..helpers.data_getter import DataGetter
 from ..helpers.static import EVENT_LICENCES
@@ -2035,7 +2037,7 @@ def create_user_oauth(user, user_data, token, method):
     user.is_verified = True
     save_to_db(user, "User created")
     user_detail = UserDetail.query.filter_by(user_id=user.id).first()
-    user_detail.avatar_uploaded = user.avatar
+    user_detail.avatar_uploaded = save_file_provided_by_url(user.avatar)
     user_detail.firstname = user_data['name']
     save_to_db(user, "User Details Updated")
     return user
@@ -2230,3 +2232,15 @@ def create_modules(form):
         for event in events:
             event.ticket_include = True
             save_to_db(event, "Event updated")
+
+
+def save_file_provided_by_url(url):
+    response_file = urlopen(url)
+    filename = str(time.time()) + '.jpg'
+    file_path = os.path.realpath('.') + '/static/temp/' + filename
+    fh = open(file_path, "wb")
+    fh.write(response_file.read())
+    fh.close()
+    img = UploadedFile(file_path, filename)
+    background_url = upload(img, '/image/' + filename)
+    return background_url
