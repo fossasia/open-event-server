@@ -21,18 +21,32 @@ class SuperAdminSettingsView(SuperAdminBaseView):
                 if im_size and im_size[0].type:
                     for im in im_size:
                         im_type = im.type
-                        im.full_width = request.form[im_type + '-large_width']
-                        im.full_height = request.form[im_type + '-large_height']
-                        im.full_aspect = request.form.get(im_type + '-large_aspect', 'off')
-                        im.icon_width = request.form[im_type + '-icon_width']
-                        im.icon_height = request.form[im_type + '-icon_height']
-                        im.icon_aspect = request.form.get(im_type + '-icon_aspect', 'off')
-                        im.thumbnail_width = request.form[im_type + '-thumbnail_width']
-                        im.thumbnail_height = request.form[im_type + '-thumbnail_height']
-                        im.thumbnail_aspect = request.form.get(im_type + '-thumbnail_aspect', 'off')
-                        im.logo_width = request.form['logo_width']
-                        im.logo_height = request.form['logo_height']
-                        save_to_db(im, "Image Sizes saved")
+                        if im_type == 'profile':
+                            im.full_width = request.form[im_type + '-large_width']
+                            im.full_height = request.form[im_type + '-large_width']
+                            im.full_aspect = request.form.get(im_type + '-large_aspect', 'off')
+                            im.icon_width = request.form[im_type + '-icon_width']
+                            im.icon_height = request.form[im_type + '-icon_width']
+                            im.icon_aspect = request.form.get(im_type + '-icon_aspect', 'off')
+                            im.thumbnail_width = request.form[im_type + '-thumbnail_width']
+                            im.thumbnail_height = request.form[im_type + '-thumbnail_width']
+                            im.thumbnail_aspect = request.form.get(im_type + '-thumbnail_aspect', 'off')
+                            im.logo_width = None
+                            im.logo_height = None
+                            save_to_db(im, "Image Sizes saved")
+                        else:
+                            im.full_width = request.form[im_type + '-large_width']
+                            im.full_height = request.form[im_type + '-large_height']
+                            im.full_aspect = request.form.get(im_type + '-large_aspect', 'off')
+                            im.icon_width = request.form[im_type + '-icon_width']
+                            im.icon_height = request.form[im_type + '-icon_height']
+                            im.icon_aspect = request.form.get(im_type + '-icon_aspect', 'off')
+                            im.thumbnail_width = request.form[im_type + '-thumbnail_width']
+                            im.thumbnail_height = request.form[im_type + '-thumbnail_height']
+                            im.thumbnail_aspect = request.form.get(im_type + '-thumbnail_aspect', 'off')
+                            im.logo_width = request.form['logo_width']
+                            im.logo_height = request.form['logo_height']
+                            save_to_db(im, "Image Sizes saved")
                 else:
                     print request.form['profile-large_width']
                     im_size = ImageSizes(type='profile',
@@ -99,7 +113,8 @@ class SuperAdminSettingsView(SuperAdminBaseView):
         fees = DataGetter.get_fee_settings()
         event_view = EventsView()
         image_config = DataGetter.get_image_configs()
-        image_sizes = DataGetter.get_image_sizes()
+        event_image_sizes = DataGetter.get_image_sizes_by_type(type='event')
+        profile_image_sizes = DataGetter.get_image_sizes_by_type(type='profile')
 
         return self.render(
             '/gentelella/admin/super_admin/settings/settings.html',
@@ -108,7 +123,8 @@ class SuperAdminSettingsView(SuperAdminBaseView):
             payment_currencies=DataGetter.get_payment_currencies(),
             included_settings=event_view.get_module_settings(),
             image_config=image_config,
-            image_sizes=image_sizes
+            event_image_sizes=event_image_sizes,
+            profile_image_sizes=profile_image_sizes
         )
 
     # @expose('/update', methods=('POST'))

@@ -47,7 +47,7 @@ class ImageSizes(db.Model):
         self.logo_height = logo_height
 
     def __str__(self):
-        return 'Page:' + unicode(self.page).encode('utf-8')
+        return 'Page:' + unicode(self.id).encode('utf-8')
 
     def __unicode__(self):
         return unicode(self.id)
@@ -66,5 +66,7 @@ class ImageSizes(db.Model):
             'icon_aspect': self.icon_aspect,
             'thumbnail_width': self.thumbnail_width,
             'thumbnail_height': self.thumbnail_height,
-            'thumbnail_aspect': self.thumbnail_aspect
+            'thumbnail_aspect': self.thumbnail_aspect,
+            'logo_height': self.logo_height,
+            'logo_width': self.logo_width
         }
