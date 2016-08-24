@@ -145,7 +145,6 @@
                                         Display Ticket description on Public Events page
                                     </label>
                                 </div>
-                                <br>
                                 <div class="item form-group">
                                     <div style="font-size: 15px;margin-bottom: 5px;">Ticket visibility</div>
                                     <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1;  margin-top: 0;">
@@ -157,7 +156,6 @@
                                         Ticket would still be available for sale to Organizers.
                                     </div>
                                 </div>
-                                <br>
                                 <div class="item form-group">
                                     <label>Sales Start</label><br>
                                     <div class="col-xs-7" style="padding: 0;">
@@ -176,7 +174,6 @@
                                         <input value="{{ sales_end.strftime('%H:%M') if sales_end else '22:00' }}" class="form-control col-xs-6 time end ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="tickets[sales_end_time]">
                                     </div>
                                 </div>
-                                <br>
                                 <div class="item form-group">
                                     <div style="font-size: 15px;margin-bottom: 5px;">Number of tickets allowed per order</div>
                                     <div class="col-xs-6" style="padding-left: 0;">
@@ -188,7 +185,6 @@
                                         <input type="number" min="1" class="form-control" value="{{ max_order }}" placeholder="10" name="tickets[max_order]">
                                     </div>
                                 </div>
-                                <br>
                                 <div class="item form-group col-xs-12" style="padding-left: 0;">
                                     <label>Ticket Code Group</label>
                                     <input type="text" class="form-control ticket-tags" name="tickets[tags]"
