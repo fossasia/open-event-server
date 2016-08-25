@@ -95,6 +95,9 @@ class Event(db.Model):
     pay_by_cheque = db.Column(db.Boolean, default=False)
     pay_by_bank = db.Column(db.Boolean, default=False)
     pay_onsite = db.Column(db.Boolean, default=False)
+    cheque_details = db.Column(db.String)
+    bank_details = db.Column(db.String)
+    onsite_details = db.Column(db.String)
 
     def __init__(self,
                  name=None,
@@ -139,7 +142,10 @@ class Event(db.Model):
                  pay_by_cheque=None,
                  identifier=None,
                  pay_by_bank=None,
-                 pay_onsite=None):
+                 pay_onsite=None,
+                 cheque_details=None,
+                 bank_details=None,
+                 onsite_details=None):
 
         self.name = name
         self.logo = logo
@@ -184,6 +190,9 @@ class Event(db.Model):
         self.pay_by_bank = pay_by_bank
         self.pay_onsite = pay_onsite
         self.identifier = get_new_event_identifier()
+        self.cheque_details = cheque_details
+        self.bank_details = bank_details
+        self.onsite_details = onsite_details
 
     def __repr__(self):
         return '<Event %r>' % self.name

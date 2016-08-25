@@ -979,7 +979,10 @@ class DataManager(object):
                       creator=login.current_user,
                       payment_country=form.get('payment_country', ''),
                       payment_currency=payment_currency,
-                      paypal_email=paypal_email)
+                      paypal_email=paypal_email,
+                      cheque_details=form.get('cheque-details',''),
+                      bank_details=form.get('bank-details', ''),
+                      onsite_details=form.get('onsite-details', ''))
 
         event.pay_by_paypal = 'pay_by_paypal' in form
         event.pay_by_cheque = 'pay_by_cheque' in form
@@ -1441,6 +1444,13 @@ class DataManager(object):
             event.paypal_email = form.get('paypal_email')
         else:
             event.paypal_email = None
+
+        if 'pay_by_cheque' in form:
+            event.cheque_details = form.get('cheque-details', '')
+        if 'pay_by_bank' in form:
+            event.bank_details = form.get('bank-details', '')
+        if 'pay_onsite' in form:
+            event.onsite_details = form.get('onsite-details', '')
 
         payment_currency = ''
         if form['payment_currency'] != '':
