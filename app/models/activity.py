@@ -35,7 +35,8 @@ ACTIVITIES = {
     'add_speaker_to_session': 'Speaker {speaker} added to session {session} of event {event_id}',
 
     'invite_user': 'Invitation sent to user {user_id} for event {event_id}',
-    'system_admin': 'User {user} {status} system admin'
+    'system_admin': 'User {user} {status} system admin',
+    'mail_event': 'Mail send to {email}, action: {action}, subject: {subject}'
 }
 
 
