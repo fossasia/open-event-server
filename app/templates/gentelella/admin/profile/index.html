@@ -5,6 +5,7 @@
 {% block body %}
 
 
+<link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/Croppie/croppie.css') }}"/>
 <div class="page-title col-md-offset-1" style="width: auto;">
     <div class="title_left">
         <h3>Profile</h3>
@@ -24,7 +25,39 @@
 
                     <div id="crop-avatar">
                         <input type="hidden" name="logo" id="logo">
+                        <div class="item form-group" id="image-upload-group"
+                             {% if profile and profile.user_detail.avatar_uploaded and profile.user_detail.avatar_uploaded != '' %}style="display: none;"{% endif %}>
+                            <div class="image-box">
+                                <input type="file" id="event-image-upload" name="event-image-upload"
+                                       class="image-upload-btn no-js"
+                                       accept="image/*"/>
+                                <label class="file-label" for="event-image-upload" id="event-image-upload-label">
+                                    <i class="fa fa-4x fa-camera-retro" aria-hidden="true"></i> <br>
+                                    <h3>Select Avatar</h3>
+                                </label><br>
+                            </div>
+                            <span class="text-muted" style="color: #a2a2a2;">
+                                Avatar size must be less than 1MB.
+                            </span>
+                        </div>
 
+                        <div class="item form-group" id="image-view-group"
+                             {% if not profile or not profile.user_detail.avatar_uploaded or profile.user_detail.avatar_uploaded == '' %}style="display: none;"{% endif %}>
+                            <img src="{{ profile.user_detail.avatar_uploaded | default('', true) }}" class="profile_avatar"><br><br>
+                            {% if not profile.user_detail.avatar_uploaded %}
+                                <button type="button" class="btn btn-sm btn-default" data-target="#cropper-modal"
+                                        data-toggle="modal">
+                                    <i class="fa fa-arrows" aria-hidden="true"></i>
+                                    Adjust
+                                </button>
+                            {% endif %}
+                            <button type="button" class="btn btn-sm btn-default" id="remove-image-btn">
+                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                Remove
+                            </button>
+                            <br>
+                        </div>
+<!--
                         <div class="item form-group" id="logo-upload-group"
                              {% if profile and profile.user_detail.avatar_uploaded and profile.user_detail.avatar_uploaded != '' %}style="display: none;"{% endif %}>
                             <div class="image-box">
@@ -47,7 +80,7 @@
                                 Remove
                             </button>
                             <br>
-                        </div>
+                        </div>-->
                     </div>
 
                 </div>
@@ -97,8 +130,72 @@
     </div>
 </div>
 
+<div class="modal fade" tabindex="-1" role="dialog" id="cropper-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Crop your image</h4>
+            </div>
+            <div class="modal-body">
+                <div id="upload-cropper">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="save-crop" class="btn btn-success">Done</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='admin/lib/Croppie/croppie.min.js') }}"></script>
 <script>
+    function resetFormElement(e) {
+        e = $(e);
+        e.wrap('<form>').closest('form').get(0).reset();
+        e.unwrap();
+    }
     $(document).ready(function (){
+        $uploadCropper = $('#upload-cropper').croppie({
+            viewport: {
+                width: 190,
+                height: 190,
+                type: 'square'
+            },
+            boundary: {
+                width: 230,
+                height: 230
+            }
+        });
+
+        $("#event-image-upload").unbind("change").on('change', function () {
+            var input = this;
+            if (input.files && input.files[0]) {
+                if (input.files[0].size > 10485760) {
+                    createSnackbar("Image must be less than 10 MB in size");
+                    resetFormElement(input);
+                } else {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $("#cropper-modal").modal("show");
+                        $uploadCropper.croppie('bind', {
+                            url: e.target.result
+                        });
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            else {
+                logError("No FileReader support");
+            }
+
+        });
+
         $("#logo-upload").unbind("change").on('change', function () {
             var input = this;
             if (input.files && input.files[0]) {
@@ -132,7 +229,90 @@
             e.wrap('<form>').closest('form').get(0).reset();
             e.unwrap();
         }
-    })
+    });
+
+    var loadingImage = '<img src="' + "{{ url_for('static', filename='img/loading.gif') }}" + '" style="width: 50px;"> <h3>Uploading</h3>';
+    $("#save-crop").click(function () {
+        $uploadCropper.croppie('result', {
+            type: 'canvas',
+            size: 'original'
+        }).then(function (resp) {
+            $('#cropper-modal').modal('hide')
+            $("#event-image-upload-label").html(loadingImage);
+            /* Disable Save Event buttons */
+            $(".save-event").prop("disabled", true);
+            $(".publish-unpublish-event").prop("disabled", true);
+            $.ajax({
+                type: 'POST',
+                url: "{{ url_for('events.bgimage_upload', event_id=event.id) if event else url_for('events.create_event_bgimage_upload') }}",
+                data: {bgimage: resp},
+                dataType: 'json'
+            }).done(function(data) {
+                console.log(data);
+                $("#background_url").val(data.background_url);
+                $("#image-view-group").show().find("img").attr("src", resp);
+                $("#image-upload-group").hide();
+            }).fail(function(data) {
+                alert("Something went wrong. Please try again.");
+            }).always(function() {
+                $("#event-image-upload-label").html('<i class="fa fa-3x fa-camera-retro" aria-hidden="true"></i><br><h3>Select Avatar</h3>');
+                /* Enable Save Event buttons */
+                $(".save-event").prop("disabled", false);
+                $(".publish-unpublish-event").prop("disabled", false);
+            });
+        });
+    });
+
+    {% if profile.user_detail.avatar_uploaded %}
+    $("#remove-image-btn").click(function () {
+        $.ajax({
+            type: 'DELETE',
+            url: "{{ url_for('events.bgimage_upload', event_id=event.id) }}",
+            dataType: 'json'
+        }).done(function(data) {
+            console.log(data);
+            $("#image-view-group").hide();
+            $("#image-upload-group").show();
+            $("#background_url").val('');
+        }).fail(function(data) {
+            alert("Something went wrong. Please try again.");
+        });
+    });
+
+    $("#remove-logo-btn").click(function () {
+        $.ajax({
+            type: 'DELETE',
+            url: "{{ url_for('events.logo_upload', event_id=event.id) }}",
+            dataType: 'json'
+        }).done(function(data) {
+            console.log(data);
+            $("#logo-view-group").hide();
+            $("#logo-upload-group").show();
+            $("#logo").val('');
+        }).fail(function(data) {
+            alert("Something went wrong. Please try again.");
+        });
+    });
+    {% else %}
+    $("#remove-image-btn").click(function () {
+        $("#image-view-group").hide();
+        $("#image-upload-group").show();
+        $("#background_url").val('');
+    });
+
+    $("#remove-logo-btn").click(function () {
+        $("#logo-view-group").hide();
+        $("#logo-upload-group").show();
+        $("#logo").val('');
+    });
+    {% endif %}
+
+    $('#cropper-modal').on('shown.bs.modal', function (e) {
+        $uploadCropper.croppie('bind');
+        resetFormElement($("#event-image-upload"));
+
+    });
+
 </script>
 
 {% endblock %}
