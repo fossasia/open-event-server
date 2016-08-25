@@ -1,18 +1,12 @@
 from flask.ext.restplus import Namespace
 
 from app.helpers.ticketing import TicketingManager
-from app.models.sponsor import Sponsor as SponsorModel
-from app.models.ticket_holder import TicketHolder
 
 from .helpers.helpers import (
-    can_create,
-    can_update,
-    can_delete,
     requires_auth,
     can_access)
-from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
-    PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES, BaseDAO
-from .helpers.utils import Resource, ETAG_HEADER_DEFN
+from .helpers.utils import POST_RESPONSES
+from .helpers.utils import Resource
 from .helpers import custom_fields as fields
 
 api = Namespace('ticketing', description='Ticketing', path='/')
@@ -22,6 +16,7 @@ ORDER = api.model('Order', {
     'identifier': fields.String(),
     'amount': fields.Float(),
     'paid_via': fields.String(),
+    'invoice_number': fields.String(),
     'payment_mode': fields.String(),
     'status': fields.String(),
     'completed_at': fields.DateTime(),
@@ -41,11 +36,21 @@ TICKET_HOLDER = api.model('TicketHolder', {
     'lastname': fields.String(),
     'email': fields.Email(),
     'checked_in': fields.Boolean(),
-    'order': fields.Nested(ORDER, allow_null=True),
-    'ticket': fields.Nested(TICKET, allow_null=True)
+    'order': fields.Nested(ORDER, allow_null=False),
+    'ticket': fields.Nested(TICKET, allow_null=False)
 })
 
-@api.route('/events/<int:event_id>/ticketing/check_in_toggle/<holder_identifier>')
+@api.route('/events/<int:event_id>/attendees/')
+class AttendeesList(Resource):
+    @requires_auth
+    @can_access
+    @api.doc('check_in_toggle', responses=POST_RESPONSES)
+    @api.marshal_list_with(TICKET_HOLDER)
+    def get(self, event_id):
+        """Get attendees of the event"""
+        return TicketingManager.get_attendees(event_id), 200
+
+@api.route('/events/<int:event_id>/attendees/check_in_toggle/<holder_identifier>')
 class AttendeeCheckInToggle(Resource):
     @requires_auth
     @can_access
@@ -56,7 +61,7 @@ class AttendeeCheckInToggle(Resource):
         holder = TicketingManager.attendee_check_in_out(holder_identifier)
         return holder, 200
 
-@api.route('/events/<int:event_id>/ticketing/check_in_toggle/<holder_identifier>/check_in')
+@api.route('/events/<int:event_id>/attendees/check_in_toggle/<holder_identifier>/check_in')
 class AttendeeCheckIn(Resource):
     @requires_auth
     @can_access
@@ -67,7 +72,7 @@ class AttendeeCheckIn(Resource):
         holder = TicketingManager.attendee_check_in_out(holder_identifier, True)
         return holder, 200
 
-@api.route('/events/<int:event_id>/ticketing/check_in_toggle/<holder_identifier>/check_out')
+@api.route('/events/<int:event_id>/attendees/check_in_toggle/<holder_identifier>/check_out')
 class AttendeeCheckOut(Resource):
     @requires_auth
     @can_access

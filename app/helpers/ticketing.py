@@ -110,6 +110,11 @@ class TicketingManager(object):
         return holder
 
     @staticmethod
+    def get_attendees(event_id):
+        return TicketHolder.query.join(TicketHolder.order, aliased=True)\
+                .filter(Order.status == 'completed').filter(Order.event_id == event_id).all()
+
+    @staticmethod
     def attendee_check_in_out(id, state=None):
         holder = TicketingManager.get_attendee(id)
         if holder:
