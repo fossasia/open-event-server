@@ -25,6 +25,7 @@ from app.models.order import OrderTicket
 from app.models.event import Event
 from app.models.user_detail import UserDetail
 from app.models.discount_code import DiscountCode
+from sqlalchemy import or_
 
 from app.helpers.helpers import send_email_after_account_create_with_password
 
@@ -46,7 +47,7 @@ class TicketingManager(object):
             user_id = login.current_user.id
         query = Order.query.join(Order.event) \
             .filter(Order.user_id == user_id) \
-            .filter(Order.status == 'completed' or Order.status == 'placed')
+            .filter(or_(Order.status == 'completed', Order.status == 'placed'))
         if upcoming_events:
             return query.filter(Event.start_time >= datetime.now())
         else:
