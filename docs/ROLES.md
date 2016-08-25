@@ -1,10 +1,17 @@
 # ROLES
 
-The system has two kind of role type. 1. System roles are related to the Open Event organization and operator of the application. 2. Event Roles are related to the users of the system with their different permissions.
+The system has two kind of role types: System Roles and Event Roles.
+
+1. System roles are related to the Open Event organization and operators of the application.
+2. Event Roles are related to the users of the system with their different permissions for events.
 
 ##1. System Roles
 
-Currently the only system role of Super Admin.
+There are three System Roles:
+
+* Super Admin
+* Admin
+* Sales Admin
 
 ### 1.1 Access to User Features for Super Admin
 
@@ -18,20 +25,31 @@ The Super Admin can access all user features.
 | MANAGE OWN SESSIONS | Super Admin | YES | YES | YES |
 | MANAGE SESSIONS OF OWN EVENTS | Super Admin | YES | YES | YES |
 
-### 1.2 Access to Admin Features
+### 1.2 Access to Admin Panels
 
-The Super Admin can access all admin features.
+The Super Admin and Admin can access all admin panels.
 
 | Function | Role | View | Create, Edit, Assign, Unassign | Delete | BaseURLs |
 | --- | --- | --- | --- | --- | --- |
-| ALL ROLES PERMISSIONS | Super Admin | YES | YES |  YES | /admin/permissions
+| ALL ROLES PERMISSIONS | Super Admin / Admin | YES | YES |  YES | /admin/permissions
 | EVENTS AND SCHEDULES | Super Admin | YES | YES |  YES |
-| ADMINISTRATION | Super Admin | YES | YES |  YES | /admin/*
-| ALL EVENTS | Super Admin | YES | YES |  YES | /admin/events/
-| IMPORT/EXPORT OF ALL EVENTS | Super Admin | YES | YES |  YES | /admin/events/
-| ALL SESSIONS | Super Admin | YES | YES |  YES | /admin/sessions/
-| ALL USERS | Super Admin | YES | YES |  YES | /admin/users/
-| ALL REPORTS | Super Admin | YES | YES |  YES | /admin/reports
+| ADMINISTRATION | Super Admin / Admin | YES | YES |  YES | /admin/*
+| ALL EVENTS | Super Admin / Admin | YES | YES |  YES | /admin/events/
+| IMPORT/EXPORT OF ALL EVENTS / Admin | Super Admin | YES | YES |  YES | /admin/events/
+| ALL SESSIONS | Super Admin / Admin | YES | YES |  YES | /admin/sessions/
+| ALL USERS | Super Admin / Admin | YES | YES |  YES | /admin/users/
+| ALL REPORTS | Super Admin / Admin | YES | YES |  YES | /admin/reports
+| ALL SALES | Super Admin / Admin | YES | YES |  YES | /admin/sales
+| ALL MESSAGES | Super Admin / Admin | YES | YES |  YES | /admin/messages
+| ALL SETTINGS | Super Admin / Admin | YES | YES |  YES | /admin/settings
+| ALL MODULES | Super Admin / Admin | YES | YES |  YES | /admin/modules
+| ALL Content | Super Admin / Admin | YES | YES |  YES | /admin/content
+
+The Sales Admin can only access the Sales Panel.
+
+| Function | Role | View | Create, Edit, Assign, Unassign | Delete | BaseURLs |
+| --- | --- | --- | --- | --- | --- |
+| ALL SALES | Sales Admin | YES | YES |  YES | /admin/sales
 
 
 ##2. Event Roles
