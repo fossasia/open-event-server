@@ -47,6 +47,8 @@
 
 {% set step = step if step else '' %}
 
+
+
 {% block body %}
     <div class="page-title">
         <div class="title_left">
@@ -131,7 +133,6 @@
                         </div>
                     </div>
                     <div class="row" style="display: none;background-color: #f2f2f2;border: 1px solid #dcdcdc;padding-left: 5px;padding-top: 8px;">
-
                             <div class="col-xs-12 col-md-8">
                                 <div style="font-size: 15px;margin-bottom: 5px;">Settings</div>
                                 <hr style="margin-bottom: 0; margin-top: 0;">
@@ -159,16 +160,24 @@
                                 <div class="item form-group">
                                     <label>Sales Start</label><br>
                                     <div class="col-xs-7" style="padding: 0;">
-                                        <input value="{{ sales_start.strftime('%m/%d/%Y') if sales_start else start_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY" name="tickets[sales_start_date]">
+                                        <input value="{{ sales_start.strftime('%m/%d/%Y') if sales_start else current_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY" name="tickets[sales_start_date]">
                                     </div>
                                     <div class="col-xs-5">
                                         <input value="{{ sales_start.strftime('%H:%M') if sales_start else '19:00' }}" class="form-control col-xs-6 time start ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="tickets[sales_start_time]">
                                     </div>
                                 </div>
+                                {# Calculate default Ticket Sales End date #}
+                                {% if sales_end %}
+                                    {% set sales_end_date = sales_end.strftime('%m/%d/%Y') %}
+                                {% elif event %}
+                                    {% set sales_end_date = event.end_time.strftime('%m/%d/%Y') %}
+                                {% else %}
+                                    {% set sales_end_date = start_date.strftime('%m/%d/%Y') %}
+                                {% endif %}
                                 <div class="item form-group">
                                     <label>Sales End</label><br>
                                     <div class="col-xs-7" style="padding: 0;">
-                                        <input value="{{ sales_end.strftime('%m/%d/%Y') if sales_end else start_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY" name="tickets[sales_end_date]">
+                                        <input value="{{ sales_end_date }}" class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY" name="tickets[sales_end_date]">
                                     </div>
                                     <div class="col-xs-5">
                                         <input value="{{ sales_end.strftime('%H:%M') if sales_end else '22:00' }}" class="form-control col-xs-6 time end ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="tickets[sales_end_time]">
