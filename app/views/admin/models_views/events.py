@@ -139,6 +139,7 @@ class EventsView(BaseView):
 
         return self.render(
             '/gentelella/admin/event/new/new.html',
+            current_date=datetime.datetime.now(),
             start_date=datetime.datetime.now() + datetime.timedelta(days=10),
             event_types=DataGetter.get_event_types(),
             event_licences=DataGetter.get_event_licences(),
@@ -348,6 +349,7 @@ class EventsView(BaseView):
                                included_settings=self.get_module_settings(),
                                tax=tax,
                                payment_countries=DataGetter.get_payment_countries(),
+                               current_date=datetime.datetime.now(),
                                start_date=datetime.datetime.now() + datetime.timedelta(days=10),
                                payment_currencies=DataGetter.get_payment_currencies(),
                                ticket_types=ticket_types)
