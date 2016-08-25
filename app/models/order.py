@@ -86,6 +86,10 @@ class Order(db.Model):
     def get_invoice_number(self):
         return 'O' + str(int(time.mktime(self.created_at.timetuple()))) + '-' + str(self.id)
 
+    @property
+    def invoice_number(self):
+        return self.get_invoice_number()
+
     def get_tickets_count(self):
         count = 0
         for order_ticket in self.tickets:
