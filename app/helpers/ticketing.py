@@ -25,6 +25,7 @@ from app.models.order import OrderTicket
 from app.models.event import Event
 from app.models.user_detail import UserDetail
 from app.models.discount_code import DiscountCode
+from sqlalchemy import or_
 
 from app.helpers.helpers import send_email_after_account_create_with_password
 
@@ -46,7 +47,7 @@ class TicketingManager(object):
             user_id = login.current_user.id
         query = Order.query.join(Order.event) \
             .filter(Order.user_id == user_id) \
-            .filter(Order.status == 'completed')
+            .filter(or_(Order.status == 'completed', Order.status == 'placed'))
         if upcoming_events:
             return query.filter(Event.start_time >= datetime.now())
         else:
@@ -161,7 +162,7 @@ class TicketingManager(object):
 
     @staticmethod
     def get_or_create_user_by_email(email, data=None):
-        user = DataGetter.get_user_by_email(email, False)
+        user = DataGetter.get_user_by_email(email, True)
         if not user:
             password = binascii.b2a_hex(os.urandom(4))
             user_data = [email, password]
@@ -191,7 +192,7 @@ class TicketingManager(object):
 
         if order and not order.paid_via:
             if override \
-                or (order.status != 'completed' and
+                or (order.status != 'completed' and order.status != 'placed' and
                     (order.created_at + timedelta(
                                 minutes=TicketingManager.get_order_expiry())) < datetime.utcnow()):
                 order.status = 'expired'
@@ -238,7 +239,7 @@ class TicketingManager(object):
         return order
 
     @staticmethod
-    def initiate_order_payment(form):
+    def initiate_order_payment(form, paid_via=None):
         identifier = form['identifier']
         email = form['email']
 
@@ -255,6 +256,9 @@ class TicketingManager(object):
                          and (order.paid_via == 'stripe'
                               or order.paid_via == 'paypal'))):
 
+                if paid_via:
+                    order.paid_via = paid_via
+
                 country = form['country']
                 address = form['address']
                 city = form['city']
@@ -265,7 +269,12 @@ class TicketingManager(object):
                 order.state = state
                 order.country = country
                 order.zipcode = zipcode
-                order.status = 'initialized'
+
+                if paid_via == 'transfer' or paid_via == 'onsite' or paid_via == 'cheque':
+                    order.status = 'placed'
+                else:
+                    order.status = 'initialized'
+
             else:
                 order.status = 'completed'
                 order.completed_at = datetime.utcnow()

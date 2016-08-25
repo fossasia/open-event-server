@@ -101,24 +101,28 @@
                             <h4 class="col-sm-6 col-sm-push-4"
                                 style="font-weight:300;  margin-top: 20px; margin-bottom: 20px; color:#5bc0de;">
                                 <i class="fa fa-user"></i>
-                                 {{ ticket_order.ticket.name }} Ticket Holder {{ loop.index }}
+                                {{ ticket_order.ticket.name }} Ticket Holder {{ loop.index }}
                             </h4>
                             <div class="clearfix"></div>
                             <input type="hidden" name="holders[ticket_id]" value="{{ ticket_order.ticket_id }}">
                             <div class="form-group">
-                                <label for="{{ loop.index }}-holders[firstname]" class="col-sm-4 control-label">First name <span
-                                        class="required">*</span></label>
+                                <label for="{{ loop.index }}-holders[firstname]" class="col-sm-4 control-label">First
+                                    name <span
+                                            class="required">*</span></label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" id="{{ loop.index }}-holders[firstname]" name="holders[firstname]"
+                                    <input type="text" class="form-control" id="{{ loop.index }}-holders[firstname]"
+                                           name="holders[firstname]"
                                            required>
                                     <div class="help-block with-errors"></div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="{{ loop.index }}-holders[lastname]" class="col-sm-4 control-label">Last name <span
-                                        class="required">*</span></label>
+                                <label for="{{ loop.index }}-holders[lastname]" class="col-sm-4 control-label">Last name
+                                    <span
+                                            class="required">*</span></label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" id="{{ loop.index }}-holders[lastname]" name="holders[lastname]"
+                                    <input type="text" class="form-control" id="{{ loop.index }}-holders[lastname]"
+                                           name="holders[lastname]"
                                            required>
                                     <div class="help-block with-errors"></div>
                                 </div>
@@ -195,7 +199,7 @@
                         <div class="form-group">
                             <label for="zipcode" class="col-sm-4 control-label">Pay Via <span
                                     class="required">*</span></label>
-                            <div class="col-sm-6">
+                            <div class="col-sm-8">
                                 {% if event.pay_by_stripe %}
                                     <div class="radio">
                                         <label>
@@ -215,6 +219,42 @@
                                                    {% if not event.pay_by_stripe %}checked{% endif %} required>
                                             <img src="{{ url_for('static', filename='img/paypal_logo.png') }}"
                                                  alt="Pay with PayPal, PayPal Credit or any major credit card"/>
+                                        </label>
+                                    </div>
+                                {% endif %}
+                                {% if event.pay_by_cheque %}
+                                    <div class="radio">
+                                        <label style="margin-top: 10px;">
+                                            <input type="radio" name="pay_via_service" id="pay_via_service3"
+                                                   value="cheque" required class="offline-payment-service">
+                                                Cheque
+                                             {% if event.cheque_details and event.cheque_details != "" %}
+                                                    <pre style="margin-top: 12px; display: none;">{{ event.cheque_details }}</pre>
+                                                {% endif %}
+                                        </label>
+                                    </div>
+                                {% endif %}
+                                {% if event.pay_by_bank %}
+                                    <div class="radio">
+                                        <label style="margin-top: 10px;">
+                                            <input type="radio" name="pay_via_service" id="pay_via_service4"
+                                                   value="transfer" required class="offline-payment-service">
+                                                Telegraphic Transfer(TT) / Bank Transfer<br>
+                                                {% if event.bank_details and event.bank_details != "" %}
+                                                    <pre style="margin-top: 12px; display: none;">{{ event.bank_details }}</pre>
+                                                {% endif %}
+                                        </label>
+                                    </div>
+                                {% endif %}
+                                {% if event.pay_onsite %}
+                                    <div class="radio">
+                                        <label style="margin-top: 10px;">
+                                            <input type="radio" name="pay_via_service" id="pay_via_service5"
+                                                   value="onsite" required class="offline-payment-service">
+                                            Onsite/Cash
+                                             {% if event.onsite_details and event.onsite_details != "" %}
+                                                    <pre style="margin-top: 12px; display: none;">{{ event.onsite_details }}</pre>
+                                                {% endif %}
                                         </label>
                                     </div>
                                 {% endif %}
@@ -261,4 +301,12 @@
     <script src="{{ url_for('static', filename='admin/lib/bootstrap-validator/dist/validator.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
     <script src="{{ url_for('static', filename='js/admin/guest/ticketing.js') }}"></script>
+    <script type="text/javascript">
+        $("input[name=pay_via_service]").click(function () {
+            $(this).closest('.form-group').find("pre").hide();
+            if(this.checked) {
+                $(this).closest('label').find("pre").fadeIn();
+            }
+        });
+    </script>
 {% endblock %}
