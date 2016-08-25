@@ -358,8 +358,10 @@ def send_email(to, action, subject, html):
             recipient=to, action=action, subject=subject,
             message=html, time=datetime.now()
         )
-        from data import save_to_db
+
+        from data import save_to_db, record_activity
         save_to_db(mail, 'Mail Recorded')
+        record_activity('mail_event', email=to, action=action, subject=subject)
     return
 
 
