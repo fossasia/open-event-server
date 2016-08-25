@@ -28,6 +28,7 @@ TICKET = api.model('Ticket', {
     'description': fields.String(),
     'type': fields.String(),
     'price': fields.Float(),
+    'quantity': fields.Integer(),
 })
 
 TICKET_HOLDER = api.model('TicketHolder', {
