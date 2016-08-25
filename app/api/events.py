@@ -5,6 +5,7 @@ from app.api.microlocations import MICROLOCATION
 from app.api.sessions import SESSION
 from app.api.speakers import SPEAKER
 from app.api.sponsors import SPONSOR
+from app.api.ticketing import TICKET
 from app.api.tracks import TRACK
 from app.models.event import Event as EventModel
 from app.models.social_link import SocialLink as SocialLinkModel
@@ -106,6 +107,7 @@ EVENT_COMPLETE = api.clone('EventComplete', EVENT, {
     'tracks': fields.List(fields.Nested(TRACK), attribute='track'),
     'sponsors': fields.List(fields.Nested(SPONSOR), attribute='sponsor'),
     'speakers': fields.List(fields.Nested(SPEAKER), attribute='speaker'),
+    'tickets': fields.List(fields.Nested(TICKET), attribute='tickets'),
 })
 
 EVENT_PAGINATED = api.clone('EventPaginated', PAGINATED_MODEL, {
@@ -231,7 +233,7 @@ EVENT_PARAMS = {
 SINGLE_EVENT_PARAMS = {
     'include': {
         'description': 'Comma separated list of additional fields to load. '
-                       'Supported: sessions,tracks,microlocations,speakers,sponsors)'
+                       'Supported: sessions,tracks,microlocations,speakers,sponsors,tickets)'
     },
 }
 
@@ -250,6 +252,8 @@ def get_extended_event_model(includes=None):
         included_fields['sponsors'] = fields.List(fields.Nested(SPONSOR), attribute='sponsor')
     if 'speakers' in includes:
         included_fields['speakers'] = fields.List(fields.Nested(SPEAKER), attribute='speaker')
+    if 'tickets' in includes:
+        included_fields['tickets'] = fields.List(fields.Nested(TICKET), attribute='tickets')
     return EVENT.extend('ExtendedEvent', included_fields)
 
 # DEFINE RESOURCES
