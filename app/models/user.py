@@ -206,7 +206,7 @@ class User(db.Model):
 
     @property
     def is_staff(self):
-        return self.is_super_admin or self.is_admin
+        return self.is_super_admin or self.is_admin or self.is_sales_admin
 
     def _get_sys_roles(self):
         sys_roles = []
