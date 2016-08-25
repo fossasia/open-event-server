@@ -24,6 +24,24 @@
 
 {% macro events_row(events) %}
     {% for event in events %}
+        {# Calculate Session-Status counts #}
+        {% set drafts = {'count': 0} %}
+        {% set accepted = {'count': 0} %}
+        {% set pending = {'count': 0} %}
+        {% set rejected = {'count': 0} %}
+
+        {% for session in event.session %}
+            {% if session.state == 'accepted' %}
+                {% if accepted.update({ 'count': accepted.count + 1 }) %} {% endif %}
+            {% elif session.state == 'drafts' %}
+                {% if drafts.update({ 'count': drafts.count + 1 }) %} {% endif %}
+            {% elif session.state == 'pending' %}
+                {% if pending.update({ 'count': pending.count + 1 }) %} {% endif %}
+            {% elif session.state == 'rejected' %}
+                {% if rejected.update({ 'count': rejected.count + 1 }) %} {% endif %}
+            {% endif %}
+        {% endfor %}
+
         <tr>
             <td>{{event.name}}</td>
             <td>{{event.state}}</td>
@@ -32,6 +50,28 @@
             </td>
             <td>{{event.start_time}}</td>
             <td>{{event.end_time}}</td>
+            <td>
+                <ol style="padding-left:0;">
+                    {% for role in event.get_staff_roles() %}
+                        <li>
+                            {{ role.user.user_detail.fullname if role.user.user_detail.fullname else role.user.email }}
+                            ({{ role.role.title_name }})
+                        </li>
+                    {% endfor %}
+                </ol>
+            </td>
+            <td>
+                <ol style="padding-left:0;">
+                    <li>Drafts: {{ drafts.count }}</li>
+                    <li>Submitted: {{ event.session | length }}</li>
+                    <li>Accepted: {{ accepted.count }}</li>
+                    <li>Pending: {{ pending.count }}</li>
+                    <li>Rejected: {{ rejected.count }}</li>
+                </ol>
+            </td>
+            <td>
+                {{ event.speaker | length }}
+            </td>
             <td>
                 {% if (max_paid_ticket[event.id] == 0 and max_free_ticket[event.id] == 0 and max_donation_ticket[event.id] == 0) %}
                     No Ticket Information
@@ -124,6 +164,9 @@
                         <th>Public URL</th>
                         <th>Start Date</th>
                         <th>End Date</th>
+                        <th>Roles</th>
+                        <th>Sessions</th>
+                        <th>Speakers</th>
                         <th>Tickets</th>
                         <th>Options</th>
                     </tr>
@@ -143,6 +186,9 @@
                         <th>Public URL</th>
                         <th>Start Date</th>
                         <th>End Date</th>
+                        <th>Roles</th>
+                        <th>Sessions</th>
+                        <th>Speakers</th>
                         <th>Tickets</th>
                         <th>Options</th>
 
@@ -162,6 +208,9 @@
                         <th>Public URL</th>
                         <th>Start Date</th>
                         <th>End Date</th>
+                        <th>Roles</th>
+                        <th>Sessions</th>
+                        <th>Speakers</th>
                         <th>Tickets</th>
                         <th>Options</th>
 
@@ -181,6 +230,9 @@
                         <th>Public URL</th>
                         <th>Start Date</th>
                         <th>End Date</th>
+                        <th>Roles</th>
+                        <th>Sessions</th>
+                        <th>Speakers</th>
                         <th>Tickets</th>
                         <th>Options</th>
 
@@ -200,6 +252,9 @@
                         <th>Public URL</th>
                         <th>Start Date</th>
                         <th>End Date</th>
+                        <th>Roles</th>
+                        <th>Sessions</th>
+                        <th>Speakers</th>
                         <th>Tickets</th>
                         <th>Options</th>
 
