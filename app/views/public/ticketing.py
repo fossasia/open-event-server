@@ -33,7 +33,7 @@ class TicketingView(BaseView):
     @expose('/<order_identifier>/', methods=('GET',))
     def view_order(self, order_identifier):
         order = TicketingManager.get_and_set_expiry(order_identifier)
-        if not order or order.status == 'expired':
+        if not order or order.status == 'expired' or order.status == 'placed':
             abort(404)
         if order.status == 'completed':
             return redirect(url_for('ticketing.view_order_after_payment', order_identifier=order_identifier))
@@ -50,7 +50,7 @@ class TicketingView(BaseView):
     @expose('/<order_identifier>/view/', methods=('GET',))
     def view_order_after_payment(self, order_identifier):
         order = TicketingManager.get_and_set_expiry(order_identifier)
-        if not order or order.status != 'completed':
+        if not order or (order.status != 'completed' and order.status != 'placed'):
             abort(404)
         return self.render('/gentelella/guest/ticketing/order_post_payment.html', order=order, event=order.event)
 
@@ -81,13 +81,16 @@ class TicketingView(BaseView):
 
     @expose('/initiate/payment/', methods=('POST',))
     def initiate_order_payment(self):
-        result = TicketingManager.initiate_order_payment(request.form)
+        paid_via = request.form.get('pay_via_service', 'stripe')
+        result = TicketingManager.initiate_order_payment(request.form, paid_via)
         if result:
-            if request.form.get('pay_via_service', 'stripe') == 'stripe':
+            if request.form.get('pay_via_service', 'stripe') != 'paypal':
                 return jsonify({
                     "status": "ok",
                     "email": result.user.email,
-                    "action": "start_stripe" if result.status == 'initialized' else "show_completed"
+                    "action": "start_stripe"
+                    if result.status == 'initialized' and paid_via == 'stripe'
+                    else "show_completed"
                 })
             else:
                 return jsonify({
