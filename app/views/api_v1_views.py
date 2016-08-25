@@ -19,7 +19,7 @@ from ..models.version import Version
 from ..helpers.object_formatter import ObjectFormatter
 from ..helpers.helpers import get_serializer
 from ..helpers.data_getter import DataGetter
-from ..helpers.data import save_to_db
+from ..helpers.data import save_to_db, uploaded_file_provided_by_url
 from views_helpers import event_status_code, api_response
 from flask import Blueprint
 from flask.ext.autodoc import Autodoc
@@ -399,7 +399,6 @@ def callback():
 
 @app.route('/fCallback/', methods=('GET', 'POST'))
 def facebook_callback():
-    print request.args
     if login.current_user is not None and login.current_user.is_authenticated:
         try:
             facebook, __ = get_fb_auth()
@@ -447,7 +446,9 @@ def update_user_details(first_name=None, last_name=None, facebook_link=None, twi
     if not user.user_detail.lastname:
         user.user_detail.lastname = last_name
     if not user.user_detail.avatar_uploaded:
-        user.user_detail.avatar_uploaded = save_file_provided_by_url(file_url)
+        filename, img = uploaded_file_provided_by_url(file_url)
+        background_url = upload(img, '/image/' + filename)
+        user.user_detail.avatar_uploaded = background_url
     if not user.user_detail.twitter:
         user.user_detail.twitter = twitter_link
     save_to_db(user)
@@ -492,22 +493,10 @@ def instagram_callback():
                                       client_secret=InstagramOAuth.get_client_secret())
         response = instagram.get('https://api.instagram.com/v1/users/self/media/recent/?access_token=' + token.get('access_token', '')).json()
         for el in response.get('data'):
-            background_url = save_file_provided_by_url(el['images']['standard_resolution']['url'])
-            print background_url
+            filename, uploaded_file = uploaded_file_provided_by_url(el['images']['standard_resolution']['url'])
+            upload(uploaded_file, '/image/' + filename)
 
     return 'Not implemented'
-
-
-def save_file_provided_by_url(url):
-    response_file = urlopen(url)
-    filename = str(time.time()) + '.jpg'
-    file_path = os.path.realpath('.') + '/static/temp/' + filename
-    fh = open(file_path, "wb")
-    fh.write(response_file.read())
-    fh.close()
-    img = UploadedFile(file_path, filename)
-    background_url = upload(img, '/image/' + filename)
-    return background_url
 
 
 @app.route('/pic/<path:filename>')
