@@ -31,13 +31,14 @@
   <div>
 
   <table class="table table-striped">
-
+  <thead>
     <tr>
       <th>State</th>
       <th>Message</th>
       <th>Started</th>
     </tr>
-
+  </thead>
+  <tbody>
     {% for e in imported_events %}
       <tr>
       <td>
@@ -68,6 +69,7 @@
       <!-- done -->
       </tr>
     {% endfor %}
+  </tbody>
   </table>
   </div>
 
