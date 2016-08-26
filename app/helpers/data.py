@@ -864,8 +864,12 @@ class DataManager(object):
 
             user_detail.details = form['details']
             logo = form.get('logo', None)
+            print logo
             if string_not_empty(logo) and logo:
-                logo_file = uploaded_file(file_content=logo)
+                filename = '{}.png'.format(time.time())
+                filepath = '{}/static/{}'.format(path.realpath('.'),
+                           logo[len('/serve_static/'):])
+                logo_file = UploadedFile(filepath, filename)
                 logo = upload(logo_file, 'users/%d/avatar' % int(user_id))
                 user_detail.avatar_uploaded = logo
         user, user_detail, save_to_db(user, "User updated")

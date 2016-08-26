@@ -244,12 +244,12 @@
             $(".publish-unpublish-event").prop("disabled", true);
             $.ajax({
                 type: 'POST',
-                url: "{{ url_for('events.bgimage_upload', event_id=event.id) if event else url_for('events.create_event_bgimage_upload') }}",
+                url: "{{ url_for('profile.bgimage_upload', user_id=profile.user_detail.id) if event else url_for('profile.create_event_bgimage_upload') }}",
                 data: {bgimage: resp},
                 dataType: 'json'
             }).done(function(data) {
                 console.log(data);
-                $("#background_url").val(data.background_url);
+                $("#logo").val(data.background_url);
                 $("#image-view-group").show().find("img").attr("src", resp);
                 $("#image-upload-group").hide();
             }).fail(function(data) {
@@ -267,13 +267,13 @@
     $("#remove-image-btn").click(function () {
         $.ajax({
             type: 'DELETE',
-            url: "{{ url_for('events.bgimage_upload', event_id=event.id) }}",
+            url: "{{ url_for('profile.bgimage_upload', user_id=profile.user_detail.id) }}",
             dataType: 'json'
         }).done(function(data) {
             console.log(data);
             $("#image-view-group").hide();
             $("#image-upload-group").show();
-            $("#background_url").val('');
+            $("#logo").val('');
         }).fail(function(data) {
             alert("Something went wrong. Please try again.");
         });
@@ -297,7 +297,7 @@
     $("#remove-image-btn").click(function () {
         $("#image-view-group").hide();
         $("#image-upload-group").show();
-        $("#background_url").val('');
+        $("#logo").val('');
     });
 
     $("#remove-logo-btn").click(function () {
