@@ -30,19 +30,20 @@
 <script type="text/javascript">
 
 var $uploadCropper = $('#upload-cropper');
+var is_image_changed = false;
 
  $(document).ready(function () {
 
 
   $uploadCropper = $('#upload-cropper').croppie({
         viewport: {
-            width: 400,
-            height: 400,
+            width: 340,
+            height: 340,
             type: 'square'
         },
         boundary: {
-            width: 550,
-            height: 450
+            width: 460,
+            height: 380
         }
     });
 
@@ -70,28 +71,30 @@ var $uploadCropper = $('#upload-cropper');
   });
 
 
-  var loadingImage = '<img src="' + "{{ url_for('static', filename='img/loading.gif') }}" + '" style="width: 50px;"> <h3>Uploading</h3>';
+  // var loadingImage = '<img src="' + "{{ url_for('static', filename='img/loading.gif') }}" + '" style="width: 50px;"> <h3>Uploading</h3>';
     $("#save-crop").click(function () {
         $uploadCropper.croppie('result', {
             type: 'canvas',
             size: 'original'
         }).then(function (resp) {
             $('#cropper-modal').modal('hide')
-            $("#logo-upload-label").html(loadingImage);
+            // $("#logo-upload-label").html(loadingImage);
             /* Disable Save Event buttons */
             // $(".save-event").prop("disabled", true);
+            is_image_changed = true;
             $("#speaker-file-photo").val(resp);
             $("#logo-view-group").show().find("img").attr("src", resp);
             $("#logo-upload-group").hide();
 
             // $("#logo-upload-label").html('<i class="fa fa-4x fa-camera-retro" aria-hidden="true"></i><br><h3>Select Speaker Image</h3>');
-                /* Enable Save Event buttons */
-                // $(".save-event").prop("disabled", false);
+            /* Enable Save Event buttons */
+            // $(".save-event").prop("disabled", false);
         });
     });
 
 
     $("#remove-logo-btn").click(function () {
+        is_image_changed = true;
         $("#logo-view-group").hide();
         $("#logo-upload-group").show();
         $("#speaker-file-photo").val('');
@@ -113,7 +116,14 @@ function resetFormElement(e) {
 }
 
 
+/**
+ * Manual uploading Photo
+ */
+
 $('#session-create-form').submit(function(ev) {
+    if (!is_image_changed){
+        return true;
+    }
     var resp = $('#speaker-file-photo').val();
     // ev.preventDefault(); // to stop the form from submitting
     // this.submit(); // If all the validations succeeded
