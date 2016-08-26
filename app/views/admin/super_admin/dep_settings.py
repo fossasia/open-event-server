@@ -16,44 +16,77 @@ class SuperAdminSettingsView(SuperAdminBaseView):
     @expose('/', methods=('GET', 'POST'))
     def index_view(self):
         if request.method == 'POST':
-            if 'thumbnail_width' in request.form:
+            if 'event-thumbnail_width' in request.form:
                 im_size = DataGetter.get_image_sizes()
-                if im_size:
-                    im_size.full_width = request.form['large_width']
-                    im_size.full_height = request.form['large_height']
-                    im_size.icon_width = request.form['icon_width']
-                    im_size.icon_height = request.form['icon_height']
-                    im_size.thumbnail_width = request.form['thumbnail_width']
-                    im_size.thumbnail_height = request.form['thumbnail_height']
+                if im_size and im_size[0].type:
+                    for im in im_size:
+                        im_type = im.type
+                        if im_type == 'profile':
+                            im.full_width = request.form[im_type + '-large_width']
+                            im.full_height = request.form[im_type + '-large_width']
+                            im.full_aspect = request.form.get(im_type + '-large_aspect', 'off')
+                            im.full_quality = request.form[im_type + '-large_quality']
+                            im.icon_width = request.form[im_type + '-icon_width']
+                            im.icon_height = request.form[im_type + '-icon_width']
+                            im.icon_aspect = request.form.get(im_type + '-icon_aspect', 'off')
+                            im.icon_quality = request.form[im_type + '-icon_quality']
+                            im.thumbnail_width = request.form[im_type + '-thumbnail_width']
+                            im.thumbnail_height = request.form[im_type + '-thumbnail_width']
+                            im.thumbnail_aspect = request.form.get(im_type + '-thumbnail_aspect', 'off')
+                            im.thumbnail_quality = request.form[im_type + '-thumbnail_quality']
+                            im.logo_width = None
+                            im.logo_height = None
+                            save_to_db(im, "Image Sizes saved")
+                        else:
+                            im.full_width = request.form[im_type + '-large_width']
+                            im.full_height = request.form[im_type + '-large_height']
+                            im.full_aspect = request.form.get(im_type + '-large_aspect', 'off')
+                            im.full_quality = request.form[im_type + '-large_quality']
+                            im.icon_width = request.form[im_type + '-icon_width']
+                            im.icon_height = request.form[im_type + '-icon_height']
+                            im.icon_aspect = request.form.get(im_type + '-icon_aspect', 'off')
+                            im.icon_quality = request.form[im_type + '-icon_quality']
+                            im.thumbnail_width = request.form[im_type + '-thumbnail_width']
+                            im.thumbnail_height = request.form[im_type + '-thumbnail_height']
+                            im.thumbnail_aspect = request.form.get(im_type + '-thumbnail_aspect', 'off')
+                            im.thumbnail_quality = request.form[im_type + '-thumbnail_quality']
+                            im.logo_width = request.form['logo_width']
+                            im.logo_height = request.form['logo_height']
+                            save_to_db(im, "Image Sizes saved")
                 else:
-                    im_size = ImageSizes(full_width=request.form['large_width'],
-                                         full_height=request.form['large_height'],
-                                         icon_width=request.form['icon_width'],
-                                         icon_height=request.form['icon_width'],
-                                         thumbnail_width=request.form['thumbnail_width'],
-                                         thumbnail_height=request.form['thumbnail_width'])
-                save_to_db(im_size, "Image Sizes saved")
-                im_config = DataGetter.get_image_configs()
-                if im_config:
-                    for config in im_config:
-                        config.size = request.form['size_' + config.page]
-                        save_to_db(config, "Image Config Saved")
-                else:
-                    config = ImageConfig(page='front',
-                                         size=request.form['size_front'])
-                    save_to_db(config, "Image Config Saved")
-                    config = ImageConfig(page='mysession',
-                                         size=request.form['size_mysession'])
-                    save_to_db(config, "Image Config Saved")
-                    config = ImageConfig(page='event',
-                                         size=request.form['size_event'])
-                    save_to_db(config, "Image Config Saved")
-                    config = ImageConfig(page='speaker_event',
-                                         size=request.form['size_speaker_event'])
-                    save_to_db(config, "Image Config Saved")
-                    config = ImageConfig(page='speaker_dashboard',
-                                         size=request.form['size_speaker_dashboard'])
-                    save_to_db(config, "Image Config Saved")
+                    print request.form['profile-large_width']
+                    im_size = ImageSizes(type='profile',
+                                         full_width=request.form['profile-large_width'],
+                                         full_height=request.form['profile-large_width'],
+                                         full_aspect=request.form.get('profile-large_aspect', 'off'),
+                                         full_quality=request.form['profile-large_quality'],
+                                         icon_width=request.form['profile-icon_width'],
+                                         icon_height=request.form['profile-icon_width'],
+                                         icon_aspect=request.form.get('profile-icon_aspect', 'off'),
+                                         icon_quality=request.form['profile-icon_quality'],
+                                         thumbnail_width=request.form['profile-thumbnail_width'],
+                                         thumbnail_height=request.form['profile-thumbnail_width'],
+                                         thumbnail_aspect=request.form.get('profile-thumbnail_aspect', 'off'),
+                                         thumbnail_quality=request.form['profile-thumbnail_quality'],
+                                         logo_width=None,
+                                         logo_height=None)
+                    save_to_db(im_size, "Image Sizes saved")
+                    im_size = ImageSizes(type='event',
+                                         full_width=request.form['event-large_width'],
+                                         full_height=request.form['event-large_height'],
+                                         full_aspect=request.form.get('event-large_aspect', 'off'),
+                                         full_quality=request.form['profile-large_quality'],
+                                         icon_width=request.form['event-icon_width'],
+                                         icon_height=request.form['event-icon_height'],
+                                         icon_aspect=request.form.get('event-icon_aspect', 'off'),
+                                         icon_quality=request.form['profile-icon_quality'],
+                                         thumbnail_width=request.form['event-thumbnail_width'],
+                                         thumbnail_height=request.form['event-thumbnail_height'],
+                                         thumbnail_aspect=request.form.get('event-thumbnail_aspect', 'off'),
+                                         thumbnail_quality=request.form['profile-thumbnail_quality'],
+                                         logo_width=request.form['logo_width'],
+                                         logo_height=request.form['logo_height'])
+                    save_to_db(im_size, "Image Sizes saved")
 
             if 'service_fee' in request.form:
                 dic = ImmutableMultiDict(request.form)
@@ -70,13 +103,19 @@ class SuperAdminSettingsView(SuperAdminBaseView):
         settings = get_settings()
         fees = DataGetter.get_fee_settings()
         event_view = EventsView()
+        image_config = DataGetter.get_image_configs()
+        event_image_sizes = DataGetter.get_image_sizes_by_type(type='event')
+        profile_image_sizes = DataGetter.get_image_sizes_by_type(type='profile')
 
         return self.render(
             '/gentelella/admin/super_admin/settings/settings.html',
             settings=settings,
             fees=fees,
             payment_currencies=DataGetter.get_payment_currencies(),
-            included_settings=event_view.get_module_settings()
+            included_settings=event_view.get_module_settings(),
+            image_config=image_config,
+            event_image_sizes=event_image_sizes,
+            profile_image_sizes=profile_image_sizes
         )
 
     # @expose('/update', methods=('POST'))

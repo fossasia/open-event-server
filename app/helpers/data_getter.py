@@ -212,7 +212,14 @@ class DataGetter(object):
         """
         :return: Image Sizes
         """
-        return ImageSizes.query.first()
+        return ImageSizes.query.all()
+
+    @staticmethod
+    def get_image_sizes_by_type(type):
+        """
+        :return: Image Sizes
+        """
+        return ImageSizes.query.filter_by(type=type).first()
 
     @staticmethod
     def get_image_configs():

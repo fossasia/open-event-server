@@ -1024,14 +1024,15 @@ class DataManager(object):
             background_large_url = ''
             background_icon_url = ''
             temp_background = form['background_url']
-            image_sizes = DataGetter.get_image_sizes()
+            image_sizes = DataGetter.get_image_sizes_by_type(type='event')
             if not image_sizes:
                 image_sizes = ImageSizes(full_width=1300,
                                          full_height=500,
                                          icon_width=75,
                                          icon_height=30,
                                          thumbnail_width=500,
-                                         thumbnail_height=200)
+                                         thumbnail_height=200,
+                                         type='event')
                 save_to_db(image_sizes, "Image Sizes Saved")
             if temp_background:
                 im = Image.open(temp_background[len('/serve_'):])
@@ -1058,10 +1059,15 @@ class DataManager(object):
                                              'events/{event_id}/temp'.format(event_id=int(event.id)))
                 temp_img_file = temp_img_file.replace('/serve_', '')
 
+                width_ = 1300
+                height_ = 500
                 basewidth = image_sizes.full_width
                 img = Image.open(temp_img_file)
-                wpercent = (basewidth / float(img.size[0]))
-                hsize = int((float(img.size[1]) * float(wpercent)))
+                if image_sizes.full_aspect == 'on':
+                    wpercent = (basewidth / float(width_))
+                    hsize = int((float(height_) * float(wpercent)))
+                else:
+                    hsize = image_sizes.full_height
                 img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
                 img.save(temp_img_file)
                 file_name = temp_img_file.rsplit('/', 1)[1]
@@ -1072,10 +1078,15 @@ class DataManager(object):
                         event_id=int(event.id)
                     ))
 
+                width_ = 500
+                height_ = 200
                 basewidth = image_sizes.thumbnail_width
                 img = Image.open(temp_img_file)
-                wpercent = (basewidth / float(img.size[0]))
-                hsize = int((float(img.size[1]) * float(wpercent)))
+                if image_sizes.thumbnail_aspect == 'on':
+                    wpercent = (basewidth / float(width_))
+                    hsize = int((float(height_) * float(wpercent)))
+                else:
+                    hsize = image_sizes.thumbnail_height
                 img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
                 img.save(temp_img_file)
                 file_name = temp_img_file.rsplit('/', 1)[1]
@@ -1085,11 +1096,15 @@ class DataManager(object):
                     UPLOAD_PATHS['event']['thumbnail'].format(
                         event_id=int(event.id)
                     ))
-
+                width_ = 75
+                height_ = 30
                 basewidth = image_sizes.icon_width
                 img = Image.open(temp_img_file)
-                wpercent = (basewidth / float(img.size[0]))
-                hsize = int((float(img.size[1]) * float(wpercent)))
+                if image_sizes.icon_aspect == 'on':
+                    wpercent = (basewidth / float(width_))
+                    hsize = int((float(height_) * float(wpercent)))
+                else:
+                    hsize = image_sizes.icon_height
                 img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
                 img.save(temp_img_file)
                 file_name = temp_img_file.rsplit('/', 1)[1]
@@ -1139,7 +1154,7 @@ class DataManager(object):
                 ticket_sales_end_times = form.getlist('tickets[sales_end_time]')
                 ticket_min_orders = form.getlist('tickets[min_order]')
                 ticket_max_orders = form.getlist('tickets[max_order]')
-                ticket_tags =  form.getlist('tickets[tags]')
+                ticket_tags = form.getlist('tickets[tags]')
 
                 for i, name in enumerate(ticket_names):
                     if name.strip():
