@@ -1,6 +1,7 @@
 import json
 import datetime
 import os
+import traceback
 import binascii
 from uuid import uuid4
 
@@ -294,7 +295,6 @@ class EventsView(BaseView):
     @expose('/<event_id>/edit/<step>', methods=('GET', 'POST'))
     @can_access
     def edit_view_stepped(self, event_id, step):
-
         event = DataGetter.get_event(event_id)
         session_types = DataGetter.get_session_types_by_event_id(event_id).all(
         )
@@ -367,10 +367,13 @@ class EventsView(BaseView):
                 old_sponsor_logos.append(sponsor.logo)
                 old_sponsor_names.append(sponsor.name)
 
-            event = DataManager.edit_event(
-                request, event_id, event, session_types, tracks, social_links,
-                microlocations, call_for_speakers, sponsors, custom_forms, img_files, old_sponsor_logos,
-                old_sponsor_names, tax)
+            try:
+                event = DataManager.edit_event(
+                    request, event_id, event, session_types, tracks, social_links,
+                    microlocations, call_for_speakers, sponsors, custom_forms, img_files, old_sponsor_logos,
+                    old_sponsor_names, tax)
+            except Exception:
+                traceback.print_exc()
 
             if (request.form.get('state',
                                  u'Draft') == u'Published') and string_empty(

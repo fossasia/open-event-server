@@ -6,7 +6,7 @@ from flask.ext.restplus.fields import Raw, Nested, List
 
 
 EMAIL_REGEX = re.compile(r'\S+@\S+\.\S+')
-URI_REGEX = re.compile(r'(http|https|ftp)://\S*(\S+\.|localhost/)\S+')
+URI_REGEX = re.compile(r'(http|https|ftp)://\S*(\S+\.|localhost(\:\d+)?/)\S+')
 
 
 class CustomField(Raw):

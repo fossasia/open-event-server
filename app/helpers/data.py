@@ -1439,10 +1439,10 @@ class DataManager(object):
         event.location_name = form['location_name']
         event.description = form['description']
         event.event_url = form['event_url']
-        event.type = form['type']
-        event.topic = form['topic']
+        event.type = form.get('type')
+        event.topic = form.get('topic')
         event.show_map = 1 if form.get('show_map') == 'on' else 0
-        event.sub_topic = form['sub_topic']
+        event.sub_topic = form.get('sub_topic')
         event.privacy = form.get('privacy', 'public')
         event.payment_country = form.get('payment_country')
 
