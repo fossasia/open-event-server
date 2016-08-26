@@ -23,13 +23,15 @@
                 name="{{ identifier }}" class="form-control col-md-7 col-xs-12">{% if speaker %}{{ speaker[identifier] }}{% elif session.speakers %}{{ session.speakers[0][identifier] }}{% endif %}</textarea>
           <!-- photo Selector -->
         {% elif identifier in media_speaker_fields %}
-            <!--
-            <br><input {% if require==1 %}required="required"{% endif %}
-            type="file" id="speaker-file-{{ identifier | default(1) }}" name="{{ identifier }}"
-            class="upload-btn"/>
-            <label class="file-label" for="speaker-file-{{ identifier | default(1) }}">
-                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-                Choose a file</label> -->
+            {% if not speaker %}
+            <!-- no cropper -->
+              <br><input {% if require==1 %}required="required"{% endif %}
+              type="file" id="speaker-file-{{ identifier | default(1) }}" name="{{ identifier }}"
+              class="upload-btn"/>
+              <label class="file-label" for="speaker-file-{{ identifier | default(1) }}">
+                  <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                  Choose a file</label>
+            {% else %}
             <!-- photo button -->
             <!-- id="event-image-upload" name="event-image-upload" -->
             <div class="row">
@@ -75,8 +77,9 @@
                   </div>
               </div>
             </div>
-
             {% include 'gentelella/admin/event/sessions/components/_speaker_croppie.html' %}
+
+            {% endif %}
 
             <!-- end photo selector -->
         {% else %}
