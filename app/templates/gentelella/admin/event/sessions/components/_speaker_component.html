@@ -21,15 +21,67 @@
                 required="required"
             {% endif %}
                 name="{{ identifier }}" class="form-control col-md-7 col-xs-12">{% if speaker %}{{ speaker[identifier] }}{% elif session.speakers %}{{ session.speakers[0][identifier] }}{% endif %}</textarea>
+          <!-- photo Selector -->
         {% elif identifier in media_speaker_fields %}
-            <br><input {% if require==1 %}
-            required="required"
-        {% endif %}
-            type="file" id="speaker-file-{{ identifier | default(1) }}" name="{{ identifier }}"
-            class="upload-btn"/>
-            <label class="file-label" for="speaker-file-{{ identifier | default(1) }}">
-                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-                Choose a file</label>
+            {% if not speaker %}
+            <!-- no cropper -->
+              <br><input {% if require==1 %}required="required"{% endif %}
+              type="file" id="speaker-file-{{ identifier | default(1) }}" name="{{ identifier }}"
+              class="upload-btn"/>
+              <label class="file-label" for="speaker-file-{{ identifier | default(1) }}">
+                  <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                  Choose a file</label>
+            {% else %}
+            <!-- photo button -->
+            <!-- id="event-image-upload" name="event-image-upload" -->
+            <div class="row">
+              <div class="col-md-7">
+                  <input type="hidden" id="speaker-file-{{ identifier | default(1) }}" name="old-{{ identifier }}" class="form-control" />
+
+                  <div class="item form-group" id="logo-upload-group"
+                       {% if speaker and speaker.photo and speaker.photo != '' %}style="display: none;"{% endif %}>
+                      <!-- <label>Speaker Image</label><br> -->
+                      <div class="image-box">
+                          <input type="file"
+                                id="logo-upload" name="photo"
+                                 class="image-upload-btn no-js"
+                                 {% if require==1 %}required="required"{% endif %}
+                                 accept="image/*"/>
+                          <label class="file-label" for="logo-upload" id="logo-upload-label">
+                              <i class="fa fa-4x fa-camera-retro" aria-hidden="true"></i> <br>
+                              <h3>Select Speaker Image</h3>
+                          </label><br>
+                      </div>
+                      <span class="text-muted" style="color: #a2a2a2;">
+                         We recommended atleast a 640x640 image.
+                      </span>
+                  </div>
+
+                  <div class="item form-group" id="logo-view-group"
+                       {% if not speaker or not speaker.photo or speaker.photo == '' %}style="display: none;"{% endif %}>
+                      <!-- <label>Speaker Image</label> --> <br>
+                      <img src="{{ speaker.photo | default('', true) }}"
+                           style="max-width: 350px; max-height: 350px;"><br><br>
+                      {% if not speaker %}
+                          <button type="button" class="btn btn-sm btn-default" data-target="#cropper-modal"
+                                  data-toggle="modal">
+                              <i class="fa fa-arrows" aria-hidden="true"></i>
+                              Adjust
+                          </button>
+                      {% endif %}
+                      <button type="button" class="btn btn-sm btn-default" id="remove-logo-btn">
+                          <i class="fa fa-trash-o" aria-hidden="true"></i>
+                          Remove
+                      </button>
+                      <br>
+                  </div>
+              </div>
+            </div>
+            {% include 'gentelella/admin/event/sessions/components/_speaker_croppie.html' %}
+
+            {% endif %}
+
+            <!-- end photo selector -->
         {% else %}
             <input {% if require==1 %}
                 required="required"
@@ -58,4 +110,3 @@
         {% endif %}
     </div>
 {% endmacro %}
-

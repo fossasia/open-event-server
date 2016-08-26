@@ -4,10 +4,11 @@ from flask.ext.admin import BaseView
 from flask.ext.restplus import abort
 from flask_admin import expose
 from flask.ext import login
-from flask import request, url_for, redirect, flash
+from flask import request, url_for, redirect, flash, jsonify
 from ....helpers.data import delete_from_db, save_to_db
 from ....helpers.data_getter import DataGetter
 from ....helpers.storage import upload, UPLOAD_PATHS
+from app.helpers.helpers import uploaded_file
 
 
 def get_speaker_or_throw(speaker_id):
@@ -85,3 +86,23 @@ class SpeakersView(BaseView):
         delete_from_db(speaker, 'Speaker Rejected')
         flash("The speaker has been deleted", "danger")
         return redirect(url_for('.index_view', event_id=event_id))
+
+    @expose('/<int:speaker_id>/photo_upload', methods=('POST',))
+    def photo_upload(self, event_id, speaker_id):
+        speaker = get_speaker_or_throw(speaker_id)
+        event = DataGetter.get_event(event_id)
+        photo = request.form['photo']
+        if photo:
+            photo_file = uploaded_file(file_content=photo)
+            photo = upload(
+                photo_file,
+                UPLOAD_PATHS['speakers']['photo'].format(
+                        event_id=int(event_id), id=int(speaker.id)
+                ))
+            speaker.photo = photo
+            save_to_db(speaker)
+            return jsonify({'status': 'ok', 'photo': photo})
+        else:
+            speaker.photo = None
+            save_to_db(speaker)
+            return jsonify({'status': 'Removed'})
