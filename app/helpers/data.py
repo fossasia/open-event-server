@@ -106,7 +106,7 @@ class DataManager(object):
         emit('notifs-response',
              {'meta': 'New notifications',
               'notif_count': user.get_unread_notif_count(),
-              'notifs': user.get_unread_notifs(reverse=True)},
+              'notifs': user.get_unread_notifs()},
              room=user_room,
              namespace='/notifs')
         emit('notifpage-response',
