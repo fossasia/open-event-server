@@ -85,7 +85,7 @@
                                     </span>
                                 </li>
                             {% if current_user.get_unread_notifs() %}
-                                {% for notif in current_user.get_unread_notifs(reverse=True) %}
+                                {% for notif in current_user.get_unread_notifs() %}
                                     <li class="notif-menu-li">
                                         <a>
                                             <span class="message">{{ notif.title }}</span>

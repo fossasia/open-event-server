@@ -1,4 +1,4 @@
-from sqlalchemy import event
+from sqlalchemy import event, desc
 from datetime import datetime
 
 import humanize
@@ -232,12 +232,13 @@ class User(db.Model):
         return len(Notification.query.filter_by(user=self,
                                                 has_read=False).all())
 
-    def get_unread_notifs(self, reverse=False):
+    def get_unread_notifs(self):
         """Get unread notifications with titles, humanized receiving time
         and Mark-as-read links.
         """
         notifs = []
-        unread_notifs = Notification.query.filter_by(user=self, has_read=False)
+        unread_notifs = Notification.query.filter_by(user=self, has_read=False).order_by(
+            desc(Notification.received_at))
         for notif in unread_notifs:
             notifs.append({
                 'title': notif.title,
@@ -245,10 +246,7 @@ class User(db.Model):
                 'mark_read': url_for('notifications.mark_as_read', notification_id=notif.id)
             })
 
-        if reverse:
-            return list(reversed(notifs))
-        else:
-            return notifs
+        return notifs
 
     # update last access time
     def update_lat(self):
