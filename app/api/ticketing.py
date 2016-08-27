@@ -49,7 +49,7 @@ class AttendeesList(Resource):
     @api.marshal_list_with(TICKET_HOLDER)
     def get(self, event_id):
         """Get attendees of the event"""
-        return TicketingManager.get_attendees(event_id), 200
+        return TicketingManager.get_attendees(event_id)
 
 @api.route('/events/<int:event_id>/attendees/check_in_toggle/<holder_identifier>')
 class AttendeeCheckInToggle(Resource):
