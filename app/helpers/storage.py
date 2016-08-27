@@ -35,7 +35,10 @@ UPLOAD_PATHS = {
         'track_image_url': 'events/{event_id}/tracks/{id}/track_image'
     },
     'user': {
-        'avatar': 'users/{user_id}/avatar'
+        'avatar': 'users/{user_id}/avatar',
+        'thumbnail': 'users/{user_id}/thumbnail',
+        'small': 'users/{user_id}/small',
+        'icon': 'users/{user_id}/icon'
     },
     'temp': {
         'event': 'events/temp/{uuid}'
