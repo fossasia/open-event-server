@@ -14,7 +14,7 @@
             </div>
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Quality (in %)</label>
-                <input type="number" class="form-control" id="event-large-page-q" name="event-large_quality" required value="{{ event_image_sizes.full_quality | default(100) }}">
+                <input type="number" class="form-control" id="event-large-page-q" name="event-large_quality" required value="{{ event_image_sizes.full_quality | default(80) }}">
             </div>
             <div class="col-md-12">
                 <input type="checkbox" id="event-large-page-a" name="event-large_aspect" {% if event_image_sizes.full_aspect == 'on' %}checked{% endif %}> Standard aspect ratio is 13:5. Tick to maintain aspect ratio.
@@ -40,7 +40,7 @@
             </div>
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Quality (in %)</label>
-                <input type="number" class="form-control" id="event-large-page-q" name="event-thumbnail_quality" required value="{{ event_image_sizes.full_quality | default(100) }}">
+                <input type="number" class="form-control" id="event-large-page-q" name="event-thumbnail_quality" required value="{{ event_image_sizes.thumbnail_quality | default(80) }}">
             </div>
             <div class="col-md-12">
                 <input type="checkbox" id="event-thumbnail-page-a" name="event-thumbnail_aspect" {% if event_image_sizes.thumbnail_aspect == 'on' %}checked{% endif %}> Standard aspect ratio is 5:2. Tick to maintain aspect ratio.
@@ -68,7 +68,7 @@
             </div>
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Quality (in %)</label>
-                <input type="number" class="form-control" id="event-large-page-q" name="event-icon_quality" required value="{{ event_image_sizes.full_quality | default(100) }}">
+                <input type="number" class="form-control" id="event-large-page-q" name="event-icon_quality" required value="{{ event_image_sizes.icon_quality | default(80) }}">
             </div>
             <div class="col-md-12">
                 <input type="checkbox" id="event-icon-page-a" name="event-icon_aspect" {% if event_image_sizes.icon_aspect == 'on' %}checked{% endif %}> Standard aspect ratio is 5:2. Tick to maintain aspect ratio.
@@ -94,11 +94,11 @@
             <h4>Thumbnail Size</h4>
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Width & Height(in px)</label>
-                <input type="number" class="form-control" id="profile-front-page-w" name="profile-large_width" required value="{{ profile_image_sizes.full_width | default(500) }}">
+                <input type="number" class="form-control" id="profile-front-page-w" name="profile-large_width" required value="{{ profile_image_sizes.full_width | default(150) }}">
             </div>
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Quality (in %)</label>
-                <input type="number" class="form-control" id="event-large-page-q" name="profile-large_quality" required value="{{ event_image_sizes.full_quality | default(100) }}">
+                <input type="number" class="form-control" id="event-large-page-q" name="profile-large_quality" required value="{{ event_image_sizes.full_quality | default(80) }}">
             </div>
             <div class="col-md-12">
                 <p> Found in : <br>
@@ -113,11 +113,11 @@
             <h4>Small Size</h4>
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Width & Height(in px)</label>
-                <input type="number" class="form-control" id="profile-thumbnail-page-w" name="profile-thumbnail_width" required value="{{ profile_image_sizes.thumbnail_width | default(100) }}">
+                <input type="number" class="form-control" id="profile-thumbnail-page-w" name="profile-thumbnail_width" required value="{{ profile_image_sizes.thumbnail_width | default(50) }}">
             </div>
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Quality (in %)</label>
-                <input type="number" class="form-control" id="event-large-page-q" name="profile-thumbnail_quality" required value="{{ event_image_sizes.full_quality | default(100) }}">
+                <input type="number" class="form-control" id="event-large-page-q" name="profile-thumbnail_quality" required value="{{ event_image_sizes.full_quality | default(80) }}">
             </div>
             <div class="col-md-12">
                 <p> Found in : <br>
@@ -132,11 +132,11 @@
             <h4>Icon Size</h4>
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Width & Height(in px)</label>
-                <input type="number" class="form-control" id="profile-icon-page-w" name="profile-icon_width" required value="{{ profile_image_sizes.icon_width | default(50) }}">
+                <input type="number" class="form-control" id="profile-icon-page-w" name="profile-icon_width" required value="{{ profile_image_sizes.icon_width | default(35) }}">
             </div>
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Quality (in %)</label>
-                <input type="number" class="form-control" id="event-large-page-q" name="profile-icon_quality" required value="{{ event_image_sizes.full_quality | default(100) }}">
+                <input type="number" class="form-control" id="event-large-page-q" name="profile-icon_quality" required value="{{ event_image_sizes.full_quality | default(80) }}">
             </div>
             <div class="col-md-12">
                 <p> Found in : <br>

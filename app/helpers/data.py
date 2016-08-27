@@ -864,10 +864,75 @@ class DataManager(object):
 
             user_detail.details = form['details']
             logo = form.get('logo', None)
+            print logo
             if string_not_empty(logo) and logo:
-                logo_file = uploaded_file(file_content=logo)
+                filename = '{}.png'.format(time.time())
+                filepath = '{}/static/{}'.format(path.realpath('.'),
+                           logo[len('/serve_static/'):])
+                logo_file = UploadedFile(filepath, filename)
                 logo = upload(logo_file, 'users/%d/avatar' % int(user_id))
                 user_detail.avatar_uploaded = logo
+                image_sizes = DataGetter.get_image_sizes_by_type(type='profile')
+                if not image_sizes:
+                    image_sizes = ImageSizes(full_width=150,
+                                             full_height=150,
+                                             icon_width=35,
+                                             icon_height=35,
+                                             thumbnail_width=50,
+                                             thumbnail_height=50,
+                                             type='profile')
+                save_to_db(image_sizes, "Image Sizes Saved")
+                filename = '{}.jpg'.format(time.time())
+                filepath = '{}/static/{}'.format(path.realpath('.'),
+                           logo[len('/serve_static/'):])
+                logo_file = UploadedFile(filepath, filename)
+
+                temp_img_file = upload_local(logo_file,
+                                             'users/{user_id}/temp'.format(user_id=int(user_id)))
+                temp_img_file = temp_img_file.replace('/serve_', '')
+
+                basewidth = image_sizes.full_width
+                img = Image.open(temp_img_file)
+                hsize = image_sizes.full_height
+                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+                img.save(temp_img_file)
+                file_name = temp_img_file.rsplit('/', 1)[1]
+                large_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+                profile_thumbnail_url = upload(
+                    large_file,
+                    UPLOAD_PATHS['user']['thumbnail'].format(
+                        user_id=int(user_id)
+                    ))
+
+                basewidth = image_sizes.thumbnail_width
+                img = Image.open(temp_img_file)
+                hsize = image_sizes.thumbnail_height
+                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+                img.save(temp_img_file)
+                file_name = temp_img_file.rsplit('/', 1)[1]
+                thumbnail_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+                profile_small_url = upload(
+                    thumbnail_file,
+                    UPLOAD_PATHS['user']['small'].format(
+                        user_id=int(user_id)
+                    ))
+
+                basewidth = image_sizes.icon_width
+                img = Image.open(temp_img_file)
+                hsize = image_sizes.icon_height
+                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+                img.save(temp_img_file)
+                file_name = temp_img_file.rsplit('/', 1)[1]
+                icon_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+                profile_icon_url = upload(
+                    icon_file,
+                    UPLOAD_PATHS['user']['icon'].format(
+                        user_id=int(user_id)
+                    ))
+                shutil.rmtree(path='static/media/' + 'users/{user_id}/temp'.format(user_id=int(user_id)))
+                user_detail.thumbnail = profile_thumbnail_url
+                user_detail.small = profile_small_url
+                user_detail.icon = profile_icon_url
         user, user_detail, save_to_db(user, "User updated")
         record_activity('update_user', user=user)
 
@@ -1028,10 +1093,13 @@ class DataManager(object):
             if not image_sizes:
                 image_sizes = ImageSizes(full_width=1300,
                                          full_height=500,
+                                         full_aspect='on',
                                          icon_width=75,
                                          icon_height=30,
+                                         icon_aspect='on',
                                          thumbnail_width=500,
                                          thumbnail_height=200,
+                                         thumbnail_aspect='on',
                                          type='event')
                 save_to_db(image_sizes, "Image Sizes Saved")
             if temp_background:
