@@ -6,7 +6,7 @@
             <h4>Large Size</h4>
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Width (in px)</label>
-                <input type="number" class="form-control" id="event-front-page-w" name="event-large_width" required value="{{ event_image_sizes.full_width | default(1300) }}">
+                <input type="number" class="form-control" id="event-large-page-w" name="event-large_width" required value="{{ event_image_sizes.full_width | default(1300) }}">
             </div>
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Height (in px)</label>
@@ -17,7 +17,7 @@
                 <input type="number" class="form-control" id="event-large-page-q" name="event-large_quality" required value="{{ event_image_sizes.full_quality | default(80) }}">
             </div>
             <div class="col-md-12">
-                <input type="checkbox" id="event-large-page-a" name="event-large_aspect" {% if event_image_sizes.full_aspect == 'on' %}checked{% endif %}> Standard aspect ratio is 13:5. Tick to maintain aspect ratio.
+                <input type="checkbox" id="event-large-page-a" name="event-large_aspect" {% if event_image_sizes.full_aspect != 'off' %}checked{% endif %}> Standard aspect ratio is 13:5. Tick to maintain aspect ratio.
             </div><br><br>
             <div class="col-md-12">
                 <p> Standard Size of the available area is 1300px X 500px</p>
@@ -41,10 +41,10 @@
             </div>
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Quality (in %)</label>
-                <input type="number" class="form-control" id="event-large-page-q" name="event-thumbnail_quality" required value="{{ event_image_sizes.thumbnail_quality | default(80) }}">
+                <input type="number" class="form-control" id="event-thumbnail-page-q" name="event-thumbnail_quality" required value="{{ event_image_sizes.thumbnail_quality | default(80) }}">
             </div>
             <div class="col-md-12">
-                <input type="checkbox" id="event-thumbnail-page-a" name="event-thumbnail_aspect" {% if event_image_sizes.thumbnail_aspect == 'on' %}checked{% endif %}> Standard aspect ratio is 5:2. Tick to maintain aspect ratio.
+                <input type="checkbox" id="event-thumbnail-page-a" name="event-thumbnail_aspect" {% if event_image_sizes.thumbnail_aspect != 'off' %}checked{% endif %}> Standard aspect ratio is 5:2. Tick to maintain aspect ratio.
             </div><br><br>
             <div class="col-md-12">
                 <p> Standard Size of the available area is 500px X 200px</p>
@@ -70,10 +70,10 @@
             </div>
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Quality (in %)</label>
-                <input type="number" class="form-control" id="event-large-page-q" name="event-icon_quality" required value="{{ event_image_sizes.icon_quality | default(80) }}">
+                <input type="number" class="form-control" id="event-icon-page-q" name="event-icon_quality" required value="{{ event_image_sizes.icon_quality | default(80) }}">
             </div>
             <div class="col-md-12">
-                <input type="checkbox" id="event-icon-page-a" name="event-icon_aspect" {% if event_image_sizes.icon_aspect == 'on' %}checked{% endif %}> Standard aspect ratio is 5:2. Tick to maintain aspect ratio.
+                <input type="checkbox" id="event-icon-page-a" name="event-icon_aspect" {% if event_image_sizes.icon_aspect != 'off' %}checked{% endif %}> Standard aspect ratio is 5:2. Tick to maintain aspect ratio.
             </div><br><br>
             <div class="col-md-12">
                 <p> Standard Size of the available area is 75px X 30px</p>
@@ -166,3 +166,64 @@
     </form>
   </div>
 </div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+    var large_width = 1300;
+    var large_height = 500;
+    var thumbnail_width = 500;
+    var thumbnail_height = 200;
+    var icon_width = 75;
+    var icon_height = 30;
+    $('#event-large-page-w').change(function(){
+        if ($('#event-large-page-a').prop('checked') == true) {
+            var width = $('#event-large-page-w').val();
+            var wpercent = width / large_width;
+            var height = large_height * wpercent
+            $('#event-large-page-h').val(height);
+        }
+    });
+    $('#event-large-page-h').change(function(){
+        if ($('#event-large-page-a').prop('checked') == true) {
+            var height = $('#event-large-page-h').val();
+            var hpercent = height / large_height;
+            var width = large_width * hpercent;
+            $('#event-large-page-w').val(width);
+        }
+    });
+
+    $('#event-thumbnail-page-w').change(function(){
+        if ($('#event-thumbnail-page-a').prop('checked') == true) {
+            var width = $('#event-thumbnail-page-w').val();
+            var wpercent = width / thumbnail_width;
+            var height = thumbnail_height * wpercent
+            $('#event-thumbnail-page-h').val(height);
+        }
+    });
+    $('#event-thumbnail-page-h').change(function(){
+        if ($('#event-thumbnail-page-a').prop('checked') == true) {
+            var height = $('#event-thumbnail-page-h').val();
+            var hpercent = height / thumbnail_height;
+            var width = thumbnail_width * hpercent;
+            $('#event-thumbnail-page-w').val(width);
+        }
+    });
+
+    $('#event-icon-page-w').change(function(){
+        if ($('#event-icon-page-a').prop('checked') == true) {
+            var width = $('#event-icon-page-w').val();
+            var wpercent = width / icon_width;
+            var height = icon_height * wpercent
+            $('#event-icon-page-h').val(height);
+        }
+    });
+    $('#event-icon-page-h').change(function(){
+        if ($('#event-icon-page-a').prop('checked') == true) {
+            var height = $('#event-icon-page-h').val();
+            var hpercent = height / icon_height;
+            var width = icon_width * hpercent;
+            $('#event-icon-page-w').val(width);
+        }
+    });
+});
+</script>
