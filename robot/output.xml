@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generated="20160826 20:24:41.063" generator="Robot 3.0 (Python 2.7.9 on linux2)">
+<robot generated="20160827 04:11:18.618" generator="Robot 3.0 (Python 2.7.9 on linux2)">
 <suite source="/home/travis/build/fossasia/open-event-orga-server/tests/robot" id="s1" name="Robot">
 <suite source="/home/travis/build/fossasia/open-event-orga-server/tests/robot/login.robot" id="s1-s1" name="Login">
 <test id="s1-s1-t1" name="Valid Login">
@@ -11,19 +11,19 @@
 <arg>${LOGIN URL}</arg>
 <arg>${BROWSER}</arg>
 </arguments>
-<msg timestamp="20160826 20:24:41.167" level="INFO">Opening browser 'Firefox' to base url 'http://localhost:5000/login'</msg>
-<status status="PASS" endtime="20160826 20:24:43.313" starttime="20160826 20:24:41.167"></status>
+<msg timestamp="20160827 04:11:18.723" level="INFO">Opening browser 'Firefox' to base url 'http://localhost:5000/login'</msg>
+<status status="PASS" endtime="20160827 04:11:21.739" starttime="20160827 04:11:18.722"></status>
 </kw>
 <kw name="Maximize Browser Window" library="Selenium2Library">
 <doc>Maximizes current browser window.</doc>
-<status status="PASS" endtime="20160826 20:24:43.320" starttime="20160826 20:24:43.314"></status>
+<status status="PASS" endtime="20160827 04:11:21.749" starttime="20160827 04:11:21.739"></status>
 </kw>
 <kw name="Set Selenium Speed" library="Selenium2Library">
 <doc>Sets the delay in seconds that is waited after each Selenium command.</doc>
 <arguments>
 <arg>${DELAY}</arg>
 </arguments>
-<status status="PASS" endtime="20160826 20:24:43.320" starttime="20160826 20:24:43.320"></status>
+<status status="PASS" endtime="20160827 04:11:21.749" starttime="20160827 04:11:21.749"></status>
 </kw>
 <kw name="Login Page Should Be Open" library="resource">
 <kw name="Title Should Be" library="Selenium2Library">
@@ -31,12 +31,12 @@
 <arguments>
 <arg>Login - Open Event</arg>
 </arguments>
-<msg timestamp="20160826 20:24:43.325" level="INFO">Page title is 'Login - Open Event'.</msg>
-<status status="PASS" endtime="20160826 20:24:43.325" starttime="20160826 20:24:43.321"></status>
+<msg timestamp="20160827 04:11:21.754" level="INFO">Page title is 'Login - Open Event'.</msg>
+<status status="PASS" endtime="20160827 04:11:21.754" starttime="20160827 04:11:21.750"></status>
 </kw>
-<status status="PASS" endtime="20160826 20:24:43.325" starttime="20160826 20:24:43.321"></status>
+<status status="PASS" endtime="20160827 04:11:21.754" starttime="20160827 04:11:21.750"></status>
 </kw>
-<status status="PASS" endtime="20160826 20:24:43.326" starttime="20160826 20:24:41.166"></status>
+<status status="PASS" endtime="20160827 04:11:21.755" starttime="20160827 04:11:18.722"></status>
 </kw>
 <kw name="Input Username" library="resource">
 <arguments>
@@ -48,10 +48,10 @@
 <arg>email</arg>
 <arg>${username}</arg>
 </arguments>
-<msg timestamp="20160826 20:24:43.326" level="INFO">Typing text 'open_event_test_user@fossasia.org' into text field 'email'</msg>
-<status status="PASS" endtime="20160826 20:24:43.436" starttime="20160826 20:24:43.326"></status>
+<msg timestamp="20160827 04:11:21.755" level="INFO">Typing text 'open_event_test_user@fossasia.org' into text field 'email'</msg>
+<status status="PASS" endtime="20160827 04:11:21.858" starttime="20160827 04:11:21.755"></status>
 </kw>
-<status status="PASS" endtime="20160826 20:24:43.436" starttime="20160826 20:24:43.326"></status>
+<status status="PASS" endtime="20160827 04:11:21.859" starttime="20160827 04:11:21.755"></status>
 </kw>
 <kw name="Input Password" library="resource">
 <arguments>
@@ -63,10 +63,10 @@
 <arg>password</arg>
 <arg>${password}</arg>
 </arguments>
-<msg timestamp="20160826 20:24:43.439" level="INFO">Typing text 'fossasia' into text field 'password'</msg>
-<status status="PASS" endtime="20160826 20:24:43.482" starttime="20160826 20:24:43.438"></status>
+<msg timestamp="20160827 04:11:21.861" level="INFO">Typing text 'fossasia' into text field 'password'</msg>
+<status status="PASS" endtime="20160827 04:11:21.905" starttime="20160827 04:11:21.861"></status>
 </kw>
-<status status="PASS" endtime="20160826 20:24:43.483" starttime="20160826 20:24:43.437"></status>
+<status status="PASS" endtime="20160827 04:11:21.905" starttime="20160827 04:11:21.859"></status>
 </kw>
 <kw name="Submit Credentials" library="resource">
 <kw name="Click Button" library="Selenium2Library">
@@ -74,10 +74,10 @@
 <arguments>
 <arg>Log in</arg>
 </arguments>
-<msg timestamp="20160826 20:24:43.483" level="INFO">Clicking button 'Log in'.</msg>
-<status status="PASS" endtime="20160826 20:24:44.738" starttime="20160826 20:24:43.483"></status>
+<msg timestamp="20160827 04:11:21.906" level="INFO">Clicking button 'Log in'.</msg>
+<status status="PASS" endtime="20160827 04:11:22.834" starttime="20160827 04:11:21.906"></status>
 </kw>
-<status status="PASS" endtime="20160826 20:24:44.738" starttime="20160826 20:24:43.483"></status>
+<status status="PASS" endtime="20160827 04:11:22.834" starttime="20160827 04:11:21.905"></status>
 </kw>
 <kw name="Welcome Page Should Be Open" library="resource">
 <kw name="Location Should Be" library="Selenium2Library">
@@ -85,26 +85,26 @@
 <arguments>
 <arg>${WELCOME URL}</arg>
 </arguments>
-<msg timestamp="20160826 20:24:44.745" level="INFO">Current location is 'http://localhost:5000/'.</msg>
-<status status="PASS" endtime="20160826 20:24:44.745" starttime="20160826 20:24:44.739"></status>
+<msg timestamp="20160827 04:11:22.839" level="INFO">Current location is 'http://localhost:5000/'.</msg>
+<status status="PASS" endtime="20160827 04:11:22.839" starttime="20160827 04:11:22.835"></status>
 </kw>
 <kw name="Title Should Be" library="Selenium2Library">
 <doc>Verifies that current page title equals `title`.</doc>
 <arguments>
 <arg>Home - Open Event</arg>
 </arguments>
-<msg timestamp="20160826 20:24:44.749" level="INFO">Page title is 'Home - Open Event'.</msg>
-<status status="PASS" endtime="20160826 20:24:44.749" starttime="20160826 20:24:44.745"></status>
+<msg timestamp="20160827 04:11:22.843" level="INFO">Page title is 'Home - Open Event'.</msg>
+<status status="PASS" endtime="20160827 04:11:22.843" starttime="20160827 04:11:22.840"></status>
 </kw>
-<status status="PASS" endtime="20160826 20:24:44.749" starttime="20160826 20:24:44.738"></status>
+<status status="PASS" endtime="20160827 04:11:22.843" starttime="20160827 04:11:22.835"></status>
 </kw>
-<status status="PASS" endtime="20160826 20:24:44.749" starttime="20160826 20:24:41.166"></status>
+<status status="PASS" endtime="20160827 04:11:22.843" starttime="20160827 04:11:18.721"></status>
 </kw>
 <kw type="teardown" name="Close Browser" library="Selenium2Library">
 <doc>Closes the current browser.</doc>
-<status status="PASS" endtime="20160826 20:24:44.774" starttime="20160826 20:24:44.750"></status>
+<status status="PASS" endtime="20160827 04:11:22.867" starttime="20160827 04:11:22.844"></status>
 </kw>
-<status status="PASS" endtime="20160826 20:24:44.774" critical="yes" starttime="20160826 20:24:41.165"></status>
+<status status="PASS" endtime="20160827 04:11:22.867" critical="yes" starttime="20160827 04:11:18.721"></status>
 </test>
 <test id="s1-s1-t2" name="Invalid Login nonexistent user">
 <kw name="Open Browser To Login Page" library="resource">
@@ -114,19 +114,19 @@
 <arg>${LOGIN URL}</arg>
 <arg>${BROWSER}</arg>
 </arguments>
-<msg timestamp="20160826 20:24:44.777" level="INFO">Opening browser 'Firefox' to base url 'http://localhost:5000/login'</msg>
-<status status="PASS" endtime="20160826 20:24:46.541" starttime="20160826 20:24:44.776"></status>
+<msg timestamp="20160827 04:11:22.870" level="INFO">Opening browser 'Firefox' to base url 'http://localhost:5000/login'</msg>
+<status status="PASS" endtime="20160827 04:11:24.608" starttime="20160827 04:11:22.869"></status>
 </kw>
 <kw name="Maximize Browser Window" library="Selenium2Library">
 <doc>Maximizes current browser window.</doc>
-<status status="PASS" endtime="20160826 20:24:46.548" starttime="20160826 20:24:46.542"></status>
+<status status="PASS" endtime="20160827 04:11:24.617" starttime="20160827 04:11:24.608"></status>
 </kw>
 <kw name="Set Selenium Speed" library="Selenium2Library">
 <doc>Sets the delay in seconds that is waited after each Selenium command.</doc>
 <arguments>
 <arg>${DELAY}</arg>
 </arguments>
-<status status="PASS" endtime="20160826 20:24:46.548" starttime="20160826 20:24:46.548"></status>
+<status status="PASS" endtime="20160827 04:11:24.617" starttime="20160827 04:11:24.617"></status>
 </kw>
 <kw name="Login Page Should Be Open" library="resource">
 <kw name="Title Should Be" library="Selenium2Library">
@@ -134,12 +134,12 @@
 <arguments>
 <arg>Login - Open Event</arg>
 </arguments>
-<msg timestamp="20160826 20:24:46.553" level="INFO">Page title is 'Login - Open Event'.</msg>
-<status status="PASS" endtime="20160826 20:24:46.553" starttime="20160826 20:24:46.549"></status>
+<msg timestamp="20160827 04:11:24.622" level="INFO">Page title is 'Login - Open Event'.</msg>
+<status status="PASS" endtime="20160827 04:11:24.622" starttime="20160827 04:11:24.618"></status>
 </kw>
-<status status="PASS" endtime="20160826 20:24:46.553" starttime="20160826 20:24:46.548"></status>
+<status status="PASS" endtime="20160827 04:11:24.622" starttime="20160827 04:11:24.618"></status>
 </kw>
-<status status="PASS" endtime="20160826 20:24:46.553" starttime="20160826 20:24:44.776"></status>
+<status status="PASS" endtime="20160827 04:11:24.622" starttime="20160827 04:11:22.869"></status>
 </kw>
 <kw name="Input Username" library="resource">
 <arguments>
@@ -151,10 +151,10 @@
 <arg>email</arg>
 <arg>${username}</arg>
 </arguments>
-<msg timestamp="20160826 20:24:46.554" level="INFO">Typing text 'some_random_email_id@fossasia.org' into text field 'email'</msg>
-<status status="PASS" endtime="20160826 20:24:46.658" starttime="20160826 20:24:46.554"></status>
+<msg timestamp="20160827 04:11:24.623" level="INFO">Typing text 'some_random_email_id@fossasia.org' into text field 'email'</msg>
+<status status="PASS" endtime="20160827 04:11:24.732" starttime="20160827 04:11:24.623"></status>
 </kw>
-<status status="PASS" endtime="20160826 20:24:46.658" starttime="20160826 20:24:46.554"></status>
+<status status="PASS" endtime="20160827 04:11:24.732" starttime="20160827 04:11:24.623"></status>
 </kw>
 <kw name="Input Password" library="resource">
 <arguments>
@@ -166,10 +166,10 @@
 <arg>password</arg>
 <arg>${password}</arg>
 </arguments>
-<msg timestamp="20160826 20:24:46.659" level="INFO">Typing text 'some_random_password' into text field 'password'</msg>
-<status status="PASS" endtime="20160826 20:24:46.710" starttime="20160826 20:24:46.659"></status>
+<msg timestamp="20160827 04:11:24.733" level="INFO">Typing text 'some_random_password' into text field 'password'</msg>
+<status status="PASS" endtime="20160827 04:11:24.785" starttime="20160827 04:11:24.733"></status>
 </kw>
-<status status="PASS" endtime="20160826 20:24:46.710" starttime="20160826 20:24:46.658"></status>
+<status status="PASS" endtime="20160827 04:11:24.785" starttime="20160827 04:11:24.733"></status>
 </kw>
 <kw name="Submit Credentials" library="resource">
 <kw name="Click Button" library="Selenium2Library">
@@ -177,24 +177,24 @@
 <arguments>
 <arg>Log in</arg>
 </arguments>
-<msg timestamp="20160826 20:24:46.711" level="INFO">Clicking button 'Log in'.</msg>
-<status status="PASS" endtime="20160826 20:24:47.207" starttime="20160826 20:24:46.711"></status>
+<msg timestamp="20160827 04:11:24.786" level="INFO">Clicking button 'Log in'.</msg>
+<status status="PASS" endtime="20160827 04:11:25.323" starttime="20160827 04:11:24.786"></status>
 </kw>
-<status status="PASS" endtime="20160826 20:24:47.207" starttime="20160826 20:24:46.710"></status>
+<status status="PASS" endtime="20160827 04:11:25.323" starttime="20160827 04:11:24.785"></status>
 </kw>
 <kw name="Page Should Contain" library="Selenium2Library">
 <doc>Verifies that current page contains `text`.</doc>
 <arguments>
 <arg>User doesn't exist</arg>
 </arguments>
-<msg timestamp="20160826 20:24:47.225" level="INFO">Current page contains text 'User doesn't exist'.</msg>
-<status status="PASS" endtime="20160826 20:24:47.225" starttime="20160826 20:24:47.208"></status>
+<msg timestamp="20160827 04:11:25.342" level="INFO">Current page contains text 'User doesn't exist'.</msg>
+<status status="PASS" endtime="20160827 04:11:25.342" starttime="20160827 04:11:25.324"></status>
 </kw>
 <kw type="teardown" name="Close Browser" library="Selenium2Library">
 <doc>Closes the current browser.</doc>
-<status status="PASS" endtime="20160826 20:24:47.250" starttime="20160826 20:24:47.225"></status>
+<status status="PASS" endtime="20160827 04:11:25.366" starttime="20160827 04:11:25.343"></status>
 </kw>
-<status status="PASS" endtime="20160826 20:24:47.250" critical="yes" starttime="20160826 20:24:44.775"></status>
+<status status="PASS" endtime="20160827 04:11:25.366" critical="yes" starttime="20160827 04:11:22.868"></status>
 </test>
 <test id="s1-s1-t3" name="Invalid Login wrong password">
 <kw name="Open Browser To Login Page" library="resource">
@@ -204,19 +204,19 @@
 <arg>${LOGIN URL}</arg>
 <arg>${BROWSER}</arg>
 </arguments>
-<msg timestamp="20160826 20:24:47.252" level="INFO">Opening browser 'Firefox' to base url 'http://localhost:5000/login'</msg>
-<status status="PASS" endtime="20160826 20:24:49.050" starttime="20160826 20:24:47.252"></status>
+<msg timestamp="20160827 04:11:25.368" level="INFO">Opening browser 'Firefox' to base url 'http://localhost:5000/login'</msg>
+<status status="PASS" endtime="20160827 04:11:27.097" starttime="20160827 04:11:25.368"></status>
 </kw>
 <kw name="Maximize Browser Window" library="Selenium2Library">
 <doc>Maximizes current browser window.</doc>
-<status status="PASS" endtime="20160826 20:24:49.058" starttime="20160826 20:24:49.051"></status>
+<status status="PASS" endtime="20160827 04:11:27.106" starttime="20160827 04:11:27.098"></status>
 </kw>
 <kw name="Set Selenium Speed" library="Selenium2Library">
 <doc>Sets the delay in seconds that is waited after each Selenium command.</doc>
 <arguments>
 <arg>${DELAY}</arg>
 </arguments>
-<status status="PASS" endtime="20160826 20:24:49.059" starttime="20160826 20:24:49.058"></status>
+<status status="PASS" endtime="20160827 04:11:27.107" starttime="20160827 04:11:27.107"></status>
 </kw>
 <kw name="Login Page Should Be Open" library="resource">
 <kw name="Title Should Be" library="Selenium2Library">
@@ -224,12 +224,12 @@
 <arguments>
 <arg>Login - Open Event</arg>
 </arguments>
-<msg timestamp="20160826 20:24:49.063" level="INFO">Page title is 'Login - Open Event'.</msg>
-<status status="PASS" endtime="20160826 20:24:49.063" starttime="20160826 20:24:49.059"></status>
+<msg timestamp="20160827 04:11:27.112" level="INFO">Page title is 'Login - Open Event'.</msg>
+<status status="PASS" endtime="20160827 04:11:27.112" starttime="20160827 04:11:27.108"></status>
 </kw>
-<status status="PASS" endtime="20160826 20:24:49.063" starttime="20160826 20:24:49.059"></status>
+<status status="PASS" endtime="20160827 04:11:27.112" starttime="20160827 04:11:27.107"></status>
 </kw>
-<status status="PASS" endtime="20160826 20:24:49.064" starttime="20160826 20:24:47.252"></status>
+<status status="PASS" endtime="20160827 04:11:27.112" starttime="20160827 04:11:25.367"></status>
 </kw>
 <kw name="Input Username" library="resource">
 <arguments>
@@ -241,10 +241,10 @@
 <arg>email</arg>
 <arg>${username}</arg>
 </arguments>
-<msg timestamp="20160826 20:24:49.064" level="INFO">Typing text 'open_event_test_user@fossasia.org' into text field 'email'</msg>
-<status status="PASS" endtime="20160826 20:24:49.177" starttime="20160826 20:24:49.064"></status>
+<msg timestamp="20160827 04:11:27.113" level="INFO">Typing text 'open_event_test_user@fossasia.org' into text field 'email'</msg>
+<status status="PASS" endtime="20160827 04:11:27.221" starttime="20160827 04:11:27.113"></status>
 </kw>
-<status status="PASS" endtime="20160826 20:24:49.177" starttime="20160826 20:24:49.064"></status>
+<status status="PASS" endtime="20160827 04:11:27.222" starttime="20160827 04:11:27.113"></status>
 </kw>
 <kw name="Input Password" library="resource">
 <arguments>
@@ -256,10 +256,10 @@
 <arg>password</arg>
 <arg>${password}</arg>
 </arguments>
-<msg timestamp="20160826 20:24:49.178" level="INFO">Typing text 'some_random_password' into text field 'password'</msg>
-<status status="PASS" endtime="20160826 20:24:49.228" starttime="20160826 20:24:49.178"></status>
+<msg timestamp="20160827 04:11:27.223" level="INFO">Typing text 'some_random_password' into text field 'password'</msg>
+<status status="PASS" endtime="20160827 04:11:27.275" starttime="20160827 04:11:27.222"></status>
 </kw>
-<status status="PASS" endtime="20160826 20:24:49.228" starttime="20160826 20:24:49.177"></status>
+<status status="PASS" endtime="20160827 04:11:27.275" starttime="20160827 04:11:27.222"></status>
 </kw>
 <kw name="Submit Credentials" library="resource">
 <kw name="Click Button" library="Selenium2Library">
@@ -267,32 +267,32 @@
 <arguments>
 <arg>Log in</arg>
 </arguments>
-<msg timestamp="20160826 20:24:49.229" level="INFO">Clicking button 'Log in'.</msg>
-<status status="PASS" endtime="20160826 20:24:49.780" starttime="20160826 20:24:49.228"></status>
+<msg timestamp="20160827 04:11:27.276" level="INFO">Clicking button 'Log in'.</msg>
+<status status="PASS" endtime="20160827 04:11:27.839" starttime="20160827 04:11:27.276"></status>
 </kw>
-<status status="PASS" endtime="20160826 20:24:49.780" starttime="20160826 20:24:49.228"></status>
+<status status="PASS" endtime="20160827 04:11:27.840" starttime="20160827 04:11:27.275"></status>
 </kw>
 <kw name="Page Should Contain" library="Selenium2Library">
 <doc>Verifies that current page contains `text`.</doc>
 <arguments>
 <arg>Incorrect Password</arg>
 </arguments>
-<msg timestamp="20160826 20:24:49.797" level="INFO">Current page contains text 'Incorrect Password'.</msg>
-<status status="PASS" endtime="20160826 20:24:49.797" starttime="20160826 20:24:49.781"></status>
+<msg timestamp="20160827 04:11:27.858" level="INFO">Current page contains text 'Incorrect Password'.</msg>
+<status status="PASS" endtime="20160827 04:11:27.858" starttime="20160827 04:11:27.840"></status>
 </kw>
 <kw type="teardown" name="Close Browser" library="Selenium2Library">
 <doc>Closes the current browser.</doc>
-<status status="PASS" endtime="20160826 20:24:49.821" starttime="20160826 20:24:49.798"></status>
+<status status="PASS" endtime="20160827 04:11:27.883" starttime="20160827 04:11:27.859"></status>
 </kw>
-<status status="PASS" endtime="20160826 20:24:49.821" critical="yes" starttime="20160826 20:24:47.251"></status>
+<status status="PASS" endtime="20160827 04:11:27.883" critical="yes" starttime="20160827 04:11:25.367"></status>
 </test>
 <doc>A test suite with a single test for valid login.
 
 This test has a workflow that is created using keywords in
 the imported resource file.</doc>
-<status status="PASS" endtime="20160826 20:24:49.822" starttime="20160826 20:24:41.087"></status>
+<status status="PASS" endtime="20160827 04:11:27.884" starttime="20160827 04:11:18.642"></status>
 </suite>
-<status status="PASS" endtime="20160826 20:24:49.826" starttime="20160826 20:24:41.065"></status>
+<status status="PASS" endtime="20160827 04:11:27.888" starttime="20160827 04:11:18.619"></status>
 </suite>
 <statistics>
 <total>
