@@ -20,6 +20,7 @@
                 <input type="checkbox" id="event-large-page-a" name="event-large_aspect" {% if event_image_sizes.full_aspect == 'on' %}checked{% endif %}> Standard aspect ratio is 13:5. Tick to maintain aspect ratio.
             </div><br><br>
             <div class="col-md-12">
+                <p> Standard Size of the available area is 1300px X 500px</p>
                 <p> Found in : <br>
                     <ul>
                         <li>Background Header Image in Public Event Page</li>
@@ -46,6 +47,7 @@
                 <input type="checkbox" id="event-thumbnail-page-a" name="event-thumbnail_aspect" {% if event_image_sizes.thumbnail_aspect == 'on' %}checked{% endif %}> Standard aspect ratio is 5:2. Tick to maintain aspect ratio.
             </div><br><br>
             <div class="col-md-12">
+                <p> Standard Size of the available area is 500px X 200px</p>
                 <p> Found in : <br>
                     <ul>
                         <li>Home Page Event Images</li>
@@ -72,6 +74,9 @@
             </div>
             <div class="col-md-12">
                 <input type="checkbox" id="event-icon-page-a" name="event-icon_aspect" {% if event_image_sizes.icon_aspect == 'on' %}checked{% endif %}> Standard aspect ratio is 5:2. Tick to maintain aspect ratio.
+            </div><br><br>
+            <div class="col-md-12">
+                <p> Standard Size of the available area is 75px X 30px</p>
             </div>
             <div class="help-block with-errors"></div>
         </div><hr>
@@ -84,6 +89,10 @@
             <div class="col-md-4" style="margin-bottom:30px;">
                 <label>Height (in px)</label>
                 <input type="number" class="form-control" id="logo-page-h" name="logo_height" required value="{{ event_image_sizes.logo_height | default(200) }}">
+            </div>
+            <br><br>
+            <div class="col-md-12">
+                <p> Standard Size of the available area is 500px X 200px</p>
             </div>
             <div class="help-block with-errors"></div>
         </div>
@@ -101,6 +110,7 @@
                 <input type="number" class="form-control" id="event-large-page-q" name="profile-large_quality" required value="{{ event_image_sizes.full_quality | default(80) }}">
             </div>
             <div class="col-md-12">
+                <p> Standard Size of the available area is 150px X 150px</p>
                 <p> Found in : <br>
                     <ul>
                         <li>Event Public Page</li>
@@ -120,6 +130,7 @@
                 <input type="number" class="form-control" id="event-large-page-q" name="profile-thumbnail_quality" required value="{{ event_image_sizes.full_quality | default(80) }}">
             </div>
             <div class="col-md-12">
+                <p> Standard Size of the available area is 50px X 50px</p>
                 <p> Found in : <br>
                     <ul>
                         <li>Speaker Tab in Event Dashboard</li>
@@ -139,6 +150,7 @@
                 <input type="number" class="form-control" id="event-large-page-q" name="profile-icon_quality" required value="{{ event_image_sizes.full_quality | default(80) }}">
             </div>
             <div class="col-md-12">
+                <p> Standard Size of the available area is 35px X 35px</p>
                 <p> Found in : <br>
                     <ul>
                         <li>Top Bar Right Corner</li>
