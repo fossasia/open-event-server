@@ -5,6 +5,7 @@
             <div class="col-md-3 col-sm-3">
                 <h4 class="footer-header">Use Open Event</h4>
                 <ul>
+                  <li><a href="/sitemap">Sitemap</a></li>
                     {% for page in system_pages %}
                         {% if page.place == 'use_open_event'%}
                             <li><a href="{{page.url}}">{{page.name}}</a></li>
