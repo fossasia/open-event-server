@@ -28,6 +28,7 @@ from ..models.service import Service
 from ..models.permission import Permission
 from ..models.user import User
 from ..models.file import File
+from ..models.system_role import CustomSysRole
 from ..models.panel_permissions import PanelPermission
 from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
@@ -133,9 +134,12 @@ class DataGetter(object):
                                           hash=hash_code, **kwargs).first()
 
     @staticmethod
-    def get_panel_permission(role_name, panel_name):
-        return PanelPermission.query.filter_by(role_name=role_name,
-                                               panel_name=panel_name).first()
+    def get_custom_sys_roles():
+        return CustomSysRole.query.all()
+
+    @staticmethod
+    def get_panel_permission(role, panel_name):
+        return PanelPermission.query.filter_by(role=role, panel_name=panel_name).first()
 
     @staticmethod
     def get_user_permissions():

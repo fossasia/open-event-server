@@ -52,7 +52,7 @@ Permissions
             </tr>
           </thead>
           <tbody>
-          {% for sys_role, panels in sys_perms.iteritems() %}
+          {% for sys_role, panels in builtin_sys_perms.iteritems() %}
             <tr>
               <td>{{ sys_role.replace('_', ' ') | title }}</td>
               <td>
