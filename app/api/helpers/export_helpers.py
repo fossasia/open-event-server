@@ -92,6 +92,18 @@ FILENAME_EXCLUDE = '<>:"/\|?*;'
 
 # FUNCTIONS
 
+def sorted_dict(data):
+    """
+    sorts a json (dict/list->dict) and returns OrderedDict
+    """
+    if type(data) == dict:
+        data = OrderedDict(sorted(data.items(), key=lambda t: t[0]))
+    elif type(data) == list:
+        for count in range(len(data)):
+            data[count] = OrderedDict(sorted(data[count].items(), key=lambda t: t[0]))
+    return data
+
+
 def _order_json(data, srv):
     """
     sorts the data a/c FIELD_ORDER and returns.
@@ -99,13 +111,13 @@ def _order_json(data, srv):
     """
     new_data = OrderedDict()
     for field in FIELD_ORDER[srv[0]]:
-        new_data[field] = data[field]
+        new_data[field] = sorted_dict(data[field])
         data.pop(field, None)
     # remaining fields, sort and add
     # https://docs.python.org/2/library/collections.html#collections.OrderedDict
     data = OrderedDict(sorted(data.items(), key=lambda t: t[0]))
     for key in data:
-        new_data[key] = data[key]
+        new_data[key] = sorted_dict(data[key])
     return new_data
 
 
