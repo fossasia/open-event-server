@@ -96,6 +96,8 @@ def sorted_dict(data):
     """
     sorts a json (dict/list->dict) and returns OrderedDict
     """
+    if type(data) == OrderedDict:
+        data = dict(data)
     if type(data) == dict:
         data = OrderedDict(sorted(data.items(), key=lambda t: t[0]))
     elif type(data) == list:
