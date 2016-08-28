@@ -3,6 +3,8 @@ from . import db
 
 
 class Role(db.Model):
+    """Event Role
+    """
     __tablename__ = 'role'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -21,4 +23,3 @@ class Role(db.Model):
 
     def __unicode__(self):
         return self.name
-
