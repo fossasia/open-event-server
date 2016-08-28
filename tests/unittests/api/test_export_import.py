@@ -165,6 +165,8 @@ class TestEventExport(ImportExportBase):
         data = open(dr + '/event', 'r').read()
         self.assertTrue(data.find('id') < data.find('background_image'))
         self.assertTrue(data.find('location_name') < data.find('copyright'))
+        # test nested order, they should be sorted alphabetically as they are nested
+        self.assertTrue(data.find('event_ver') < data.find('tracks_ver'))
         # sessions (a service)
         data = open(dr + '/sessions', 'r').read()
         self.assertTrue(data.find('id') < data.find('audio'))
