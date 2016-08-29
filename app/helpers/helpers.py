@@ -463,6 +463,7 @@ def send_notif_when_changes_email(user, old_email, new_email):
 
 def send_notif_event_role(user, role_name, event_name, accept_link, decline_link):
     message_settings = MessageSettings.query.filter_by(action=NOTIF_EVENT_ROLE).first()
+    print message_settings, "Notify"
     if not message_settings or message_settings.notif_status == 1:
         notif = NOTIFS[NOTIF_EVENT_ROLE]
         action = NOTIF_EVENT_ROLE
