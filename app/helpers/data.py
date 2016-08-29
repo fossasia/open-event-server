@@ -410,79 +410,81 @@ class DataManager(object):
             speaker.photo = speaker_img
             speaker_modified = True
         logo = form.get('photo', None)
-        print logo
         if string_not_empty(logo) and logo:
             filename = '{}.png'.format(time.time())
             filepath = '{}/static/{}'.format(path.realpath('.'),
                        logo[len('/serve_static/'):])
-            logo_file = UploadedFile(filepath, filename)
-            logo = upload(logo_file, 'events/%d/speakers/%d/photo' % (int(event_id), int(speaker.id)))
-            speaker.photo = logo
-            image_sizes = DataGetter.get_image_sizes_by_type(type='profile')
-            if not image_sizes:
-                image_sizes = ImageSizes(full_width=150,
-                                         full_height=150,
-                                         icon_width=35,
-                                         icon_height=35,
-                                         thumbnail_width=50,
-                                         thumbnail_height=50,
-                                         type='profile')
-            save_to_db(image_sizes, "Image Sizes Saved")
-            filename = '{}.jpg'.format(time.time())
-            filepath = '{}/static/{}'.format(path.realpath('.'),
-                       logo[len('/serve_static/'):])
-            logo_file = UploadedFile(filepath, filename)
+            try:
+                logo_file = UploadedFile(filepath, filename)
+                logo = upload(logo_file, 'events/%d/speakers/%d/photo' % (int(event_id), int(speaker.id)))
+                speaker.photo = logo
+                image_sizes = DataGetter.get_image_sizes_by_type(type='profile')
+                if not image_sizes:
+                    image_sizes = ImageSizes(full_width=150,
+                                             full_height=150,
+                                             icon_width=35,
+                                             icon_height=35,
+                                             thumbnail_width=50,
+                                             thumbnail_height=50,
+                                             type='profile')
+                save_to_db(image_sizes, "Image Sizes Saved")
+                filename = '{}.jpg'.format(time.time())
+                filepath = '{}/static/{}'.format(path.realpath('.'),
+                           logo[len('/serve_static/'):])
+                logo_file = UploadedFile(filepath, filename)
 
-            temp_img_file = upload_local(logo_file,
-                                         'events/{event_id}/speakers/{id}/temp'.format(
-                                         event_id=int(event_id), id=int(speaker.id)))
-            temp_img_file = temp_img_file.replace('/serve_', '')
+                temp_img_file = upload_local(logo_file,
+                                             'events/{event_id}/speakers/{id}/temp'.format(
+                                             event_id=int(event_id), id=int(speaker.id)))
+                temp_img_file = temp_img_file.replace('/serve_', '')
 
-            basewidth = image_sizes.full_width
-            img = Image.open(temp_img_file)
-            hsize = image_sizes.full_height
-            img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
-            img.save(temp_img_file)
-            file_name = temp_img_file.rsplit('/', 1)[1]
-            large_file = UploadedFile(file_path=temp_img_file, filename=file_name)
-            profile_thumbnail_url = upload(
-                large_file,
-                UPLOAD_PATHS['speakers']['thumbnail'].format(
-                    event_id=int(event_id), id=int(speaker.id)
-                ))
+                basewidth = image_sizes.full_width
+                img = Image.open(temp_img_file)
+                hsize = image_sizes.full_height
+                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+                img.save(temp_img_file)
+                file_name = temp_img_file.rsplit('/', 1)[1]
+                large_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+                profile_thumbnail_url = upload(
+                    large_file,
+                    UPLOAD_PATHS['speakers']['thumbnail'].format(
+                        event_id=int(event_id), id=int(speaker.id)
+                    ))
 
-            basewidth = image_sizes.thumbnail_width
-            img = Image.open(temp_img_file)
-            hsize = image_sizes.thumbnail_height
-            img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
-            img.save(temp_img_file)
-            file_name = temp_img_file.rsplit('/', 1)[1]
-            thumbnail_file = UploadedFile(file_path=temp_img_file, filename=file_name)
-            profile_small_url = upload(
-                thumbnail_file,
-                UPLOAD_PATHS['speakers']['small'].format(
-                    event_id=int(event_id), id=int(speaker.id)
-                ))
+                basewidth = image_sizes.thumbnail_width
+                img = Image.open(temp_img_file)
+                hsize = image_sizes.thumbnail_height
+                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+                img.save(temp_img_file)
+                file_name = temp_img_file.rsplit('/', 1)[1]
+                thumbnail_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+                profile_small_url = upload(
+                    thumbnail_file,
+                    UPLOAD_PATHS['speakers']['small'].format(
+                        event_id=int(event_id), id=int(speaker.id)
+                    ))
 
-            basewidth = image_sizes.icon_width
-            img = Image.open(temp_img_file)
-            hsize = image_sizes.icon_height
-            img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
-            img.save(temp_img_file)
-            file_name = temp_img_file.rsplit('/', 1)[1]
-            icon_file = UploadedFile(file_path=temp_img_file, filename=file_name)
-            profile_icon_url = upload(
-                icon_file,
-                UPLOAD_PATHS['speakers']['icon'].format(
-                    event_id=int(event_id), id=int(speaker.id)
-                ))
-            shutil.rmtree(path='static/media/' + 'events/{event_id}/speakers/{id}/temp'.format(
-                          event_id=int(event_id), id=int(speaker.id)))
-            speaker.thumbnail = profile_thumbnail_url
-            speaker.small = profile_small_url
-            speaker.icon = profile_icon_url
-            save_to_db(speaker, "Speaker photo saved")
-            record_activity('update_speaker', speaker=speaker, event_id=event_id)
+                basewidth = image_sizes.icon_width
+                img = Image.open(temp_img_file)
+                hsize = image_sizes.icon_height
+                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+                img.save(temp_img_file)
+                file_name = temp_img_file.rsplit('/', 1)[1]
+                icon_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+                profile_icon_url = upload(
+                    icon_file,
+                    UPLOAD_PATHS['speakers']['icon'].format(
+                        event_id=int(event_id), id=int(speaker.id)
+                    ))
+                shutil.rmtree(path='static/media/' + 'events/{event_id}/speakers/{id}/temp'.format(
+                              event_id=int(event_id), id=int(speaker.id)))
+                speaker.thumbnail = profile_thumbnail_url
+                speaker.small = profile_small_url
+                speaker.icon = profile_icon_url
+                save_to_db(speaker, "Speaker photo saved")
+                record_activity('update_speaker', speaker=speaker, event_id=event_id)
+            except:
+                pass
             speaker_modified = True
 
         if session_modified:
