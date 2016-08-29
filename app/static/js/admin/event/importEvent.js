@@ -74,7 +74,7 @@ function importTaskTable(task, field_id){
                 $(field_id).html('Failed');
                 return;
             }
-            if (data['state'] != 'SUCCESS'){
+            if (data['state'] != 'SUCCESS' && data['state'] != 'FAILURE'){
                 $(field_id).html('<b>Status:</b> ' + data['state']);
                 setTimeout(function(){
                     importTaskTable(task, field_id);
