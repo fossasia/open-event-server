@@ -47,24 +47,47 @@ Permissions
         <table class="table table-bordered no-global-dt">
           <thead>
             <tr>
-              <th>SYSTEM ROLE</th>
-              <th>PANELS</th>
+              <th>System Role</th>
+              <th>
+                <a href="#" data-toggle="tooltip" title="Panels Role has access to">Panels</a>
+              </th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
           {% for sys_role, panels in builtin_sys_perms.iteritems() %}
             <tr>
-              <td>{{ sys_role.replace('_', ' ') | title }}</td>
               <td>
-              {% for panel, can_access in panels.iteritems() %}
-                  <div class="col-md-3 col-xs-12">
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox" name="{{ sys_role + '-' + panel }}" {{ 'checked' if can_access else '' }}>{{ panel | capitalize }} Panel
-                      </label>
-                    </div>
-                  </div>
-              {% endfor %}
+                {{ sys_role.replace('_', ' ') | title }}
+                <br>
+                <em>(Built-in Role)</em>
+              </td>
+              <td>
+                <ul>
+                {% for panel, can_access in panels.iteritems() %}
+                      {% if can_access %}
+                          <li>{{ panel | capitalize }} Panel</li>
+                      {% endif %}
+                {% endfor %}
+                </ul>
+              </td>
+              <td></td>
+            </tr>
+          {% endfor %}
+          {% for sys_role, panels in custom_sys_perms.iteritems() %}
+            <tr>
+              <td>{{ sys_role.name | title }}</td>
+              <td>
+                <ul>
+                {% for panel, can_access in panels.iteritems() %}
+                      {% if can_access %}
+                          <li>{{ panel | capitalize }} Panel</li>
+                      {% endif %}
+                {% endfor %}
+                </ul>
+              </td>
+              <td>
+                <a href="#">Edit Permissions</a>
               </td>
             </tr>
           {% endfor %}
