@@ -1,8 +1,9 @@
-from flask import request, redirect, url_for
+from flask import request, redirect, url_for, flash
 from flask_admin import expose
 
 from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView, PERMISSIONS, PANEL_LIST
 from app.models.user import SYS_ROLES_LIST
+from app.models.system_role import CustomSysRole
 from app.helpers.data_getter import DataGetter
 from app.helpers.data import DataManager
 
@@ -54,7 +55,8 @@ class SuperAdminPermissionsView(SuperAdminBaseView):
                          key=lambda (k, v): k.name),
             custom_sys_perms=custom_sys_perms,
             builtin_sys_perms=builtin_sys_perms,
-            user_perms=user_perms)
+            user_perms=user_perms,
+            panel_list=PANEL_LIST)
 
     @expose('/event-roles', methods=('POST','GET'))
     def event_roles_view(self):
@@ -62,10 +64,31 @@ class SuperAdminPermissionsView(SuperAdminBaseView):
             DataManager.update_permissions(request.form)
         return redirect(url_for('.index_view'))
 
-    @expose('/system-roles', methods=('POST', 'GET'))
-    def system_roles_view(self):
+    @expose('/system-roles/new', methods=('POST', 'GET'))
+    def create_custom_sys_role(self):
         if request.method == 'POST':
-            DataManager.update_panel_permissions(request.form)
+            role_name = request.form.get('role_name')
+            sys_role = CustomSysRole.query.filter_by(name=role_name).first()
+            if sys_role:
+                flash('A System Role with similar name already exists. Please choose a different name.')
+                return redirect(url_for('.index_view'))
+            DataManager.create_custom_sys_role(request.form)
+        return redirect(url_for('.index_view'))
+
+    @expose('/system-roles', methods=('POST', 'GET'))
+    def update_custom_sys_role(self):
+        if request.method == 'POST':
+            role_name = request.form.get('role_name')
+            sys_role = CustomSysRole.query.filter_by(name=role_name).first()
+            if not sys_role:
+                flash('No such role exists.')
+                return redirect(url_for('.index_view'))
+            DataManager.update_custom_sys_role(request.form)
+        return redirect(url_for('.index_view'))
+
+    @expose('/system-roles/delete/<int:role_id>', methods=('POST', 'GET'))
+    def delete_custom_sys_role(self, role_id):
+        DataManager.delete_custom_sys_role(role_id)
         return redirect(url_for('.index_view'))
 
     @expose('/user-roles', methods=('POST', 'GET'))

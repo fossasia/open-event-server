@@ -51,6 +51,7 @@ from ..models.file import File
 from ..models.invite import Invite
 from ..models.microlocation import Microlocation
 from ..models.user_permissions import UserPermission
+from ..models.system_role import CustomSysRole
 from ..models.permission import Permission
 from ..models.role import Role
 from ..models.role_invite import RoleInvite
@@ -63,7 +64,7 @@ from ..models.social_link import SocialLink
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.track import Track
-from ..models.user import User, ORGANIZER, ATTENDEE, SYS_ROLES_LIST
+from ..models.user import User, ORGANIZER, ATTENDEE
 from ..models.user_detail import UserDetail
 from ..models.users_events_roles import UsersEventsRoles
 from ..models.page import Page
@@ -955,17 +956,39 @@ class DataManager(object):
         db.session.commit()
 
     @staticmethod
-    def update_panel_permissions(form):
-        for role in SYS_ROLES_LIST:
-            for panel in PANEL_LIST:
-                field_name = '{}-{}'.format(role, panel)
-                field_val = form.get(field_name)
-                perm, _ = get_or_create(PanelPermission, panel_name=panel,
-                    role_name=role)
+    def create_custom_sys_role(form):
+        role_name = form.get('role_name')
+        sys_role = CustomSysRole(name=role_name)
+        save_to_db(sys_role)
+        for panel in PANEL_LIST:
+            if form.get(panel):
+                perm = PanelPermission(panel, sys_role, True)
+            else:
+                perm = PanelPermission(panel, sys_role, False)
+            save_to_db(perm)
 
-                perm.can_access = True if field_val == 'on' else False
-                db.session.add(perm)
+    @staticmethod
+    def update_custom_sys_role(form):
+        role_name = form.get('role_name')
+        sys_role = CustomSysRole.query.filter_by(name=role_name).first()
+        sys_role.name = form.get('new_role_name')
+        db.session.add(sys_role)
+        for panel in PANEL_LIST:
+            perm, _ = get_or_create(PanelPermission, panel_name=panel,
+                role=sys_role)
+            if form.get(panel):
+                perm.can_access = True
+            else:
+                perm.can_access = False
+            db.session.add(perm)
+
         db.session.commit()
+
+    @staticmethod
+    def delete_custom_sys_role(role_id):
+        sys_role = CustomSysRole.query.get(role_id)
+        if sys_role:
+            delete_from_db(sys_role, 'System Role deleted')
 
     @staticmethod
     def update_permissions(form):

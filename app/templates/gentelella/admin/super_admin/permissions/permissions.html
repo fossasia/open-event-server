@@ -35,11 +35,9 @@ Permissions
 </ul>
 <div id="myTabContent" class="tab-content">
     <div role="tabpanel" class="tab-pane fade active in" id="tab_content0" aria-labelledby="system-roles-tab">
-      <form action="{{ url_for('sadmin_permissions.system_roles_view') }}" method="post" style="margin-top: 60px;">
-        <h2>
+        <h2 style="margin-top: 60px;">
           System Roles
-        </h2>
-        <hr>
+        </h2><hr>
 
         <h2>
           Panel Permissions
@@ -63,12 +61,15 @@ Permissions
                 <em>(Built-in Role)</em>
               </td>
               <td>
+                All Panels
+                {#
                 <ul>
                 {% for panel, can_access in panels.iteritems() %}
                       {% if can_access %}
                           <li>{{ panel | capitalize }} Panel</li>
                       {% endif %}
                 {% endfor %}
+                #}
                 </ul>
               </td>
               <td></td>
@@ -76,7 +77,7 @@ Permissions
           {% endfor %}
           {% for sys_role, panels in custom_sys_perms.iteritems() %}
             <tr>
-              <td>{{ sys_role.name | title }}</td>
+              <td>{{ sys_role.name }}</td>
               <td>
                 <ul>
                 {% for panel, can_access in panels.iteritems() %}
@@ -87,14 +88,83 @@ Permissions
                 </ul>
               </td>
               <td>
-                <a href="#">Edit Permissions</a>
+                <div class="btn-group btn-group-sm">
+                  <a href="#" data-toggle="modal" data-target="#edit-sys-perm-modal-{{ loop.index }}" class="btn btn-default">
+                    <i class="glyphicon glyphicon-pencil"></i>
+                  </a>
+                  <a href="{{ url_for('sadmin_permissions.delete_custom_sys_role', role_id=sys_role.id) }}" class="btn btn-default" data-toggle="tooltip" data-placement="top" onclick="return confirm('Are you sure you want to delete this role?');" title="Delete Role">
+                    <i class="glyphicon glyphicon-trash"></i>
+                  </a>
+                </div>
+
+                <div class="modal fade" id="edit-sys-perm-modal-{{ loop.index }}" role="dialog">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">×</button>
+                        <h4 class="modal-title">Update System Role</h4>
+                      </div>
+                      <div class="modal-body">
+                        <form action="{{ url_for('sadmin_permissions.update_custom_sys_role') }}" method="post" role="form">
+                            <div class="item form-group">
+                              <input type="text" class="form-control" name="new_role_name" value="{{ sys_role.name }}">
+                              <input type="hidden" name="role_name" value="{{ sys_role.name }}">
+                            </div>
+                            {% for panel in panel_list %}
+                              <div class="checkbox">
+                                <label>
+                                  <input type="checkbox" name="{{ panel }}" {{ 'checked' if panels[panel] else '' }}> {{ panel | capitalize}} Panel
+                                </label>
+                              </div>
+                            {% endfor %}
+
+                            <button type="submit" class="btn btn-success pull-right">Update</button>
+                            <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </td>
             </tr>
           {% endfor %}
+          <tr>
+            <td>
+              <a href="#" class="btn btn-default" data-toggle="modal" data-target="#add-sys-role-modal">Add new Role</a>
+
+              <div class="modal fade" id="add-sys-role-modal" role="dialog">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">×</button>
+                      <h4 class="modal-title">Add new System Role</h4>
+                    </div>
+                    <div class="modal-body">
+                      <form action="{{ url_for('sadmin_permissions.create_custom_sys_role') }}" method="post" role="form">
+                          <div class="item form-group">
+                            <input type="text" class="form-control" placeholder="Enter Role name" name="role_name" required>
+                          </div>
+                          {% for panel in panel_list %}
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" name="{{ panel }}"> {{ panel | capitalize}} Panel
+                              </label>
+                            </div>
+                          {% endfor %}
+
+                          <button type="submit" class="btn btn-success pull-right">Create Role</button>
+                          <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td></td>
+            <td></td>
+          </tr>
           </tbody>
         </table>
-        <button type="submit" class="btn btn-success pull-right">Save</button>
-      </form>
 
       <form action="{{ url_for('sadmin_permissions.user_roles_view') }}" method="post" style="margin-top: 60px;">
         <h2>
