@@ -19,7 +19,10 @@ UPLOAD_PATHS = {
         'slides': 'events/{event_id}/slides/{id}/slides'
     },
     'speakers': {
-        'photo': 'events/{event_id}/speakers/{id}/photo'
+        'photo': 'events/{event_id}/speakers/{id}/photo',
+        'thumbnail': 'events/{event_id}/speakers/{id}/thumbnail',
+        'small': 'events/{event_id}/speakers/{id}/small',
+        'icon': 'events/{event_id}/speakers/{id}/icon'
     },
     'event': {
         'logo': 'events/{event_id}/logo',
