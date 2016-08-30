@@ -1,8 +1,9 @@
-from flask import request, redirect, url_for
+from flask import request, redirect, url_for, flash
 from flask_admin import expose
 
 from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView, PERMISSIONS, PANEL_LIST
 from app.models.user import SYS_ROLES_LIST
+from app.models.system_role import CustomSysRole
 from app.helpers.data_getter import DataGetter
 from app.helpers.data import DataManager
 
@@ -13,14 +14,20 @@ class SuperAdminPermissionsView(SuperAdminBaseView):
     @expose('/', methods=('GET',))
     def index_view(self):
         # System-Role (Panel) Permissions
-        sys_perms = dict()
-        get_panel_perm = DataGetter.get_panel_permission
-
-        for sys_role in SYS_ROLES_LIST:
-            sys_perms[sys_role] = dict()
+        builtin_sys_perms = dict()
+        for role in SYS_ROLES_LIST:
+            builtin_sys_perms[role] = dict()
             for panel in PANEL_LIST:
-                p = get_panel_perm(role_name=sys_role, panel_name=panel)
-                sys_perms[sys_role][panel] = False if not p else p.can_access
+                builtin_sys_perms[role][panel] = True
+
+        custom_sys_perms = dict()
+        custom_sys_roles = DataGetter.get_custom_sys_roles()
+        get_panel_perm = DataGetter.get_panel_permission
+        for role in custom_sys_roles:
+            custom_sys_perms[role] = dict()
+            for panel in PANEL_LIST:
+                perm = get_panel_perm(role, panel)
+                custom_sys_perms[role][panel] = False if not perm else perm.can_access
 
         ## User Permissions
         user_perms = DataGetter.get_user_permissions()
@@ -46,7 +53,10 @@ class SuperAdminPermissionsView(SuperAdminBaseView):
             '/gentelella/admin/super_admin/permissions/permissions.html',
             event_perms=sorted(event_perms.iteritems(),
                          key=lambda (k, v): k.name),
-            sys_perms=sys_perms, user_perms=user_perms)
+            custom_sys_perms=custom_sys_perms,
+            builtin_sys_perms=builtin_sys_perms,
+            user_perms=user_perms,
+            panel_list=PANEL_LIST)
 
     @expose('/event-roles', methods=('POST','GET'))
     def event_roles_view(self):
@@ -54,10 +64,31 @@ class SuperAdminPermissionsView(SuperAdminBaseView):
             DataManager.update_permissions(request.form)
         return redirect(url_for('.index_view'))
 
-    @expose('/system-roles', methods=('POST', 'GET'))
-    def system_roles_view(self):
+    @expose('/system-roles/new', methods=('POST', 'GET'))
+    def create_custom_sys_role(self):
         if request.method == 'POST':
-            DataManager.update_panel_permissions(request.form)
+            role_name = request.form.get('role_name')
+            sys_role = CustomSysRole.query.filter_by(name=role_name).first()
+            if sys_role:
+                flash('A System Role with similar name already exists. Please choose a different name.')
+                return redirect(url_for('.index_view'))
+            DataManager.create_custom_sys_role(request.form)
+        return redirect(url_for('.index_view'))
+
+    @expose('/system-roles', methods=('POST', 'GET'))
+    def update_custom_sys_role(self):
+        if request.method == 'POST':
+            role_name = request.form.get('role_name')
+            sys_role = CustomSysRole.query.filter_by(name=role_name).first()
+            if not sys_role:
+                flash('No such role exists.')
+                return redirect(url_for('.index_view'))
+            DataManager.update_custom_sys_role(request.form)
+        return redirect(url_for('.index_view'))
+
+    @expose('/system-roles/delete/<int:role_id>', methods=('POST', 'GET'))
+    def delete_custom_sys_role(self, role_id):
+        DataManager.delete_custom_sys_role(role_id)
         return redirect(url_for('.index_view'))
 
     @expose('/user-roles', methods=('POST', 'GET'))

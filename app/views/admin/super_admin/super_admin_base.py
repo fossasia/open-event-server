@@ -19,15 +19,15 @@ SALES = 'sales'
 PANEL_LIST = [
     BASE,
     EVENTS,
+    SALES,
     SESSIONS,
     USERS,
     PERMISSIONS,
+    MESSAGES,
     REPORTS,
     SETTINGS,
-    MESSAGES,
     MODULES,
     CONTENT,
-    SALES,
 ]
 
 class SuperAdminBaseView(BaseView):
