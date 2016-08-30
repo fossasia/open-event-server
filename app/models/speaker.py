@@ -10,6 +10,9 @@ class Speaker(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     photo = db.Column(db.String)
+    thumbnail = db.Column(db.String)
+    small = db.Column(db.String)
+    icon = db.Column(db.String)
     short_biography = db.Column(db.Text)
     long_biography = db.Column(db.Text)
     email = db.Column(db.String, nullable=False)
@@ -31,6 +34,9 @@ class Speaker(db.Model):
     def __init__(self,
                  name=None,
                  photo=None,
+                 thumbnail=None,
+                 small=None,
+                 icon=None,
                  short_biography=None,
                  long_biography=None,
                  email=None,
@@ -48,6 +54,9 @@ class Speaker(db.Model):
                  user=None):
         self.name = name
         self.photo = photo
+        self.thumbnail = thumbnail
+        self.small = small
+        self.icon = icon
         self.short_biography = short_biography
         self.long_biography = long_biography
         self.email = email
@@ -96,6 +105,9 @@ class Speaker(db.Model):
             'id': self.id,
             'name': self.name,
             'photo': self.photo,
+            'thumbnail': self.thumbnail,
+            'small': self.small,
+            'icon': self.icon,
             'short_biography': self.short_biography,
             'long_biography': self.long_biography,
             'email': self.email,
