@@ -405,8 +405,11 @@ def model_custom_form(cf_data, model):
     tmp = model.clone('TempModel')
     cf = json.loads(cf_data)
     for key in tmp:
-        if key in cf and cf[key]['require'] == 1:
-            tmp[key].required = True
+        if key in cf:
+            if cf[key]['require'] == 1:
+                tmp[key].required = True
+            elif cf[key]['require'] == 0:
+                tmp[key].required = False
     return tmp
 
 

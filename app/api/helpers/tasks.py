@@ -29,7 +29,7 @@ def import_event_task(self, file):
         print traceback.format_exc()
         update_import_job(task_id, e.message, e.status)
         result = {'__error': True, 'result': e.to_dict()}
-    except Exception:
+    except Exception as e:
         print traceback.format_exc()
         update_import_job(task_id, e.message, e.status)
         result = {'__error': True, 'result': ServerError().to_dict()}

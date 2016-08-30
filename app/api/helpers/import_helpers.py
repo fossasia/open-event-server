@@ -29,13 +29,13 @@ from errors import BaseError, ServerError, NotFoundError
 
 IMPORT_SERIES = [
     ('social_links', SocialLinkDAO),
+    ('forms', CustomFormDAO),
     ('microlocations', MicrolocationDAO),
     ('sponsors', SponsorDAO),
     ('speakers', SpeakerDAO),
     ('tracks', TrackDAO),
     ('session_types', SessionTypeDAO),
-    ('sessions', SessionDAO),
-    ('forms', CustomFormDAO)
+    ('sessions', SessionDAO)
 ]
 
 DELETE_FIELDS = {
