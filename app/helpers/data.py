@@ -1779,6 +1779,7 @@ class DataManager(object):
 
         # Remove all the tickets that are not in form
         # except those that already have placed orders
+        save_to_db(event, 'Event saved')
         for ticket in event.tickets:
             if ticket.name not in ticket_names and not ticket.has_order_tickets():
                 delete_from_db(ticket, 'Delete ticket')
