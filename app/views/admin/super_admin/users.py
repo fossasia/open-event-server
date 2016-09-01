@@ -3,7 +3,7 @@ from flask_admin import expose
 
 from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView, USERS
 from ....helpers.data_getter import DataGetter
-from ....helpers.data import update_role_to_admin, delete_from_db
+from ....helpers.data import delete_from_db, DataManager, save_to_db
 from flask import url_for, redirect, flash
 from app.helpers.data import trash_user, restore_user
 from sqlalchemy_continuum import transaction_class
@@ -21,6 +21,7 @@ class SuperAdminUsersView(SuperAdminBaseView):
         active_users = DataGetter.get_active_users()
         trash_users = DataGetter.get_trash_users()
         all_users = DataGetter.get_all_users()
+        custom_sys_roles = DataGetter.get_custom_sys_roles()
         for user in all_users:
             event_roles = DataGetter.get_event_roles_for_user(user.id)
             all_user_list.append({
@@ -39,11 +40,14 @@ class SuperAdminUsersView(SuperAdminBaseView):
                 'user': user,
                 'event_roles': event_roles,}
             )
-        return self.render('/gentelella/admin/super_admin/users/users.html', active_user_list=active_user_list, trash_user_list=trash_user_list, all_user_list=all_user_list)
+        return self.render('/gentelella/admin/super_admin/users/users.html',
+            active_user_list=active_user_list,
+            trash_user_list=trash_user_list,
+            all_user_list=all_user_list,
+            custom_sys_roles=custom_sys_roles)
 
     @expose('/<user_id>/edit/', methods=('GET', 'POST'))
     def edit_view(self, user_id):
-        update_role_to_admin(request.form, user_id)
         active_user_list = []
         trash_user_list = []
         active_users = DataGetter.get_active_users()
@@ -61,6 +65,26 @@ class SuperAdminUsersView(SuperAdminBaseView):
                 'event_roles': event_roles,}
             )
         return redirect(url_for('.index_view'))
+
+    @expose('/<user_id>/update-roles', methods=('GET', 'POST'))
+    def update_roles_view(self, user_id):
+        user = DataGetter.get_user(user_id)
+        if request.form.get('admin') == 'yes':
+            user.is_admin = True
+        else:
+            user.is_admin = False
+        save_to_db(user)
+
+        custom_sys_roles = DataGetter.get_custom_sys_roles()
+        for role in custom_sys_roles:
+            field = request.form.get('custom_role-{}'.format(role.id))
+            if field:
+                DataManager.get_or_create_user_sys_role(user, role)
+            else:
+                DataManager.delete_user_sys_role(user, role)
+
+        return redirect(url_for('.index_view'))
+
     @expose('/<user_id>/', methods=('GET', 'POST'))
     def details_view(self, user_id):
         profile = DataGetter.get_user(user_id)

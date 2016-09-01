@@ -38,7 +38,7 @@ class UserSystemRole(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship('User')
+    user = db.relationship('User', backref='sys_roles')
 
     role_id = db.Column(db.Integer, db.ForeignKey('custom_sys_role.id'))
     role = db.relationship('CustomSysRole')

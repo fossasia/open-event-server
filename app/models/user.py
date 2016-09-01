@@ -205,6 +205,13 @@ class User(db.Model):
     def is_staff(self):
         return self.is_super_admin or self.is_admin
 
+    def is_sys_role(self, role_id):
+        """Check if a user has a Custom System Role assigned.
+        `role_id` is id of a `CustomSysRole` instance.
+        """
+        role = UserSystemRole.query.filter_by(user=self, role_id=role_id).first()
+        return bool(role)
+
     def can_access_panel(self, panel_name):
         """Check if user can access an Admin Panel
         """
