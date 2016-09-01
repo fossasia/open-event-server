@@ -51,7 +51,7 @@ from ..models.file import File
 from ..models.invite import Invite
 from ..models.microlocation import Microlocation
 from ..models.user_permissions import UserPermission
-from ..models.system_role import CustomSysRole
+from ..models.system_role import CustomSysRole, UserSystemRole
 from ..models.permission import Permission
 from ..models.role import Role
 from ..models.role_invite import RoleInvite
@@ -1140,6 +1140,17 @@ class DataManager(object):
         sys_role = CustomSysRole.query.get(role_id)
         if sys_role:
             delete_from_db(sys_role, 'System Role deleted')
+
+    @staticmethod
+    def get_or_create_user_sys_role(user, role):
+        role, _ = get_or_create(UserSystemRole, user=user, role=role)
+        save_to_db(role, 'Custom System Role saved')
+
+    @staticmethod
+    def delete_user_sys_role(user, role):
+        role = UserSystemRole.query.filter_by(user=user, role=role).first()
+        if role:
+            delete_from_db(role, 'Custom System Role deleted')
 
     @staticmethod
     def update_permissions(form):
