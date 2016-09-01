@@ -64,6 +64,9 @@ Users
                       Unverified User
                   {% endif %}
               </li>
+          {% for sys_role in user['user'].sys_roles %}
+              <li>{{ sys_role.role.name }}</li>
+          {% endfor %}
           </ul>
         </td>
         <td>
