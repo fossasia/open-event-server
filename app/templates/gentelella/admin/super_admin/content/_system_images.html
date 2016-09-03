@@ -1,12 +1,23 @@
 <div class="row">
-    <div class="col-md-8 col-md-offset-2">
-        {% for image in placeholder_images %}
-            <h4>{{ image }}</h4>
-            {% set vars = {'foo': False} %}
-              <div class="system-images" data-name="{{ image }}" style="margin-left:50px;">
+        <div class="col-md-2 col-xs-12">
+            <div class="list-group">
+                {% for image in placeholder_images %}
+                    <a class="list-group-item" id="{{ image | replace(',', '') | replace('&', '') | replace(' ','_') }}-link" href="#">{{ image }} <i class="fa fa-caret-right fa-lg pull-right" style="margin-top: 3px;"></i> </a>
+                {% endfor %}
+            </div>
+
+        </div>
+        <div class="col-md-10 col-xs-12">
+            {% for image in placeholder_images %}
+            <div class="list-group-content" id="{{ image | replace(',', '') | replace('&', '') | replace(' ','_') }}-content" style="display:none;">
+              <h4>{{ image }}</h4>
+              {% for subtopic in subtopics[image] %}
+              {% set vars = {'foo': False} %}
+              <div class="system-images" data-name="{{ subtopic }}" style="margin-left:50px;">
+                <b>{{ subtopic }}</b>
               {% for custom_image in custom_placeholder %}
                 {% if custom_image.name == image %}
-                  <img src='{{ custom_image.url }}' style="width:80%; " id="image-{{ image | replace(',', '') | replace('&', '') | replace(' ','_')}}"/>
+                  <img src='{{ custom_image.url }}' style="width:80%; " id="image-{{ subtopic | replace(',', '') | replace('&', '') | replace(' ','_')}}"/>
                   {% if vars.update({'foo': True}) %} {% endif %}
                   {% if custom_image.copyright %}
                     <p><b>Copyright Info:</b> {{ custom_image.copyright }}</p>
@@ -17,15 +28,19 @@
                 {% endif %}
               {% endfor %}
                 {% if not vars.foo %}
-                  <img src='{{ url_for("static", filename="placeholders/" + placeholder_images[image]) }}' style="width:80%; " id="image-{{ image | replace(',', '') | replace('&', '') | replace(' ','_')}}"/>
+                  <img src='{{ url_for("static", filename="placeholders/" + placeholder_images[subtopic]) }}' style="width:80%; " id="image-{{ subtopic | replace(',', '') | replace('&', '') | replace(' ','_')}}"/>
                 {% endif %}
                 <br>
-                <button class="btn btn-primary btn-sys" id="sys-{{ image | replace(',', '') |replace('&', '') | replace(' ','_')}}" style="margin-top:10px;"> Change</button>
+                <button class="btn btn-primary btn-sys" id="sys-{{ subtopic | replace(',', '') |replace('&', '') | replace(' ','_')}}" style="margin-top:10px;"> Change</button>
               </div>
               <br><hr>
-        {% endfor %}
+              {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
     </div>
-</div>
+
+
 
 <div class="modal fade" id="system-image-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
@@ -88,6 +103,18 @@
   </div>
 </div>
 <script type="text/javascript">
+    $(document).ready(function(){
+        $('.list-group-item:first').addClass('active');
+        $('.list-group-content:first').show();
+    });
+
+    $('.list-group-item').click(function(){
+        $('.list-group-item').removeClass('active');
+        $('.list-group-content').hide();
+        $(this).addClass('active');
+        var id = $(this).attr('id').replace('link', 'content');
+        $('#'+id).show();
+    });
     var name='';
     $('.btn-update').click(function(){
         var origin_info = $('#origin').val();

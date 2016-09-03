@@ -21,6 +21,7 @@ class SuperAdminContentView(SuperAdminBaseView):
         placeholder_images = DataGetter.get_event_default_images()
         pages = DataGetter.get_all_pages()
         custom_placeholder = DataGetter.get_custom_placeholders()
+        subtopics = DataGetter.get_event_subtopics()
         settings = get_settings()
         if request.method == 'POST':
             dic = dict(request.form.copy())
@@ -29,7 +30,7 @@ class SuperAdminContentView(SuperAdminBaseView):
                 set_settings(**settings)
         return self.render(
             '/gentelella/admin/super_admin/content/content.html', pages=pages, settings=settings,
-            placeholder_images=placeholder_images, custom_placeholder=custom_placeholder
+            placeholder_images=placeholder_images, subtopics=subtopics, custom_placeholder=custom_placeholder
         )
 
     @expose('/create/files/placeholder', methods=('POST',))
