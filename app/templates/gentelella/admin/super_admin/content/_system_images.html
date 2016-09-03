@@ -1,14 +1,14 @@
 <div class="row">
         <div class="col-md-2 col-xs-12">
             <div class="list-group">
-                {% for image in placeholder_images %}
+                {% for image in subtopics %}
                     <a class="list-group-item" id="{{ image | replace(',', '') | replace('&', '') | replace(' ','_') }}-link" href="#">{{ image }} <i class="fa fa-caret-right fa-lg pull-right" style="margin-top: 3px;"></i> </a>
                 {% endfor %}
             </div>
 
         </div>
         <div class="col-md-10 col-xs-12">
-            {% for image in placeholder_images %}
+            {% for image in subtopics %}
             <div class="list-group-content" id="{{ image | replace(',', '') | replace('&', '') | replace(' ','_') }}-content" style="display:none;">
               <h4>{{ image }}</h4>
               {% for subtopic in subtopics[image] %}
