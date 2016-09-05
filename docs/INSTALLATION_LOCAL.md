@@ -33,7 +33,7 @@ sudo -u postgres psql
 * When inside psql, create a user for open-event and then using the user create the database.
 
 ```sql
-create user open_event_user with password 'test';
+create user open_event_user with password 'start';
 create database test with owner=open_event_user;
 ```
 
