@@ -1,6 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 
 # Ignore ExtDeprecationWarnings for Flask 0.11 - see http://stackoverflow.com/a/38080580
+import re
 import base64
 import warnings
 from StringIO import StringIO
@@ -313,6 +314,26 @@ def money_filter(string):
 @app.template_filter('datetime')
 def simple_datetime_display(date):
     return date.strftime('%B %d, %Y %I:%M %p')
+
+
+@app.template_filter('external_url')
+def external_url(url):
+    """Returns an external URL for the given `url`.
+    If URL is already external, it remains unchanged.
+    """
+    url_pattern = r'^(https?)://.*$'
+    scheme = re.match(url_pattern, url)
+    if not scheme:
+        url_root = request.url_root.rstrip('/')
+        return '{}{}'.format(url_root, url)
+    else:
+        return url
+
+
+@app.context_processor
+def fb_app_id():
+    fb_app_id = get_settings()['fb_client_id']
+    return dict(fb_app_id=fb_app_id)
 
 
 @app.context_processor
