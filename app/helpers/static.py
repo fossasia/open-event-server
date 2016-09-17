@@ -210,7 +210,7 @@ PAYMENT_CURRENCIES = {
     ('SGD', True, True),
     ('THB', True, True),
     ('TWD', True, True),
-
+    ('USD', True, True),
 }
 
 # Event Images with Event Topics and Subtopics
