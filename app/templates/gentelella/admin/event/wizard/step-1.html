@@ -1503,12 +1503,11 @@ payment and indicate your order ref. no.&#13;&#10;&#13;&#10;Account Details&#13;
                 }
             };
         }
-
         var $stripeConnectedMessage = $("#stripe-connected-message");
         $(".stripe-connect").click(function (e) {
             e.preventDefault();
             $.oauthpopup({
-                path: "https://connect.stripe.com/oauth/authorize?response_type=code&client_id={{ settings.stripe_client_id }}&scope=read_write&redirect_uri={{ url_for('ticketing.stripe_callback', _external=true) }}",
+                path: "https://connect.stripe.com/oauth/authorize?response_type=code&client_id={{ key_settings.stripe_client_id }}&scope=read_write&redirect_uri={{ url_for('ticketing.stripe_callback', _external=true) }}",
                 callback: function () {
                     // TODO Disallow test accounts. Only accept live accounts.
                     if (1 || window.oauth_response.live_mode) {
