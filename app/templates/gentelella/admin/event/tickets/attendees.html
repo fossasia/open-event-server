@@ -57,6 +57,13 @@
             <label class="btn btn-default btn-responsive">
                 <input type="radio" name="show_state" autocomplete="off" value="Expired"> Expired
             </label>
+            <label class="btn btn-default btn-responsive">
+                <input type="radio" name="show_state" autocomplete="off" value="checked_in"> Checked In
+            </label>
+            <label class="btn btn-default btn-responsive">
+                <input type="radio" name="show_state" autocomplete="off" value="not_checked_in"> Not Checked In
+            </label>
+
         </div>
     </div>
 
@@ -131,7 +138,7 @@
                         {% if order.status == 'completed' %}
                             {% if holder.checked_in %}
                                 <button class="btn btn-warning holder-check-in-toggle" data-holder-id="{{ holder.id }}">
-                                   Undo
+                                    Undo
                                 </button>
                             {% else %}
                                 <button class="btn btn-success holder-check-in-toggle" data-holder-id="{{ holder.id }}">
@@ -155,10 +162,13 @@
         $.fn.dataTable.ext.search.push(
                 function (settings, data, dataIndex) {
                     var user_option = $("input[name=show_state]:checked").val();
-                    console.log(data);
                     var state = data[2].trim() || 'pending';
                     if (user_option === "all") {
                         return true;
+                    } else if (user_option === 'checked_in') {
+                        return data[8].trim().indexOf('Undo') !== -1
+                    } else if (user_option === 'not_checked_in') {
+                        return data[8].trim().indexOf('Check In') !== -1
                     } else if (user_option === state) {
                         return true;
                     }
@@ -214,11 +224,16 @@
                 success: function (result) {
                     $btn.prop("disabled", false);
                     if (result.status === "ok") {
-                        if(result.checked_in) {
+                        if (result.checked_in) {
                             $btn.html("Undo").removeClass("btn-success").addClass("btn-warning");
                         } else {
                             $btn.html('<i class="fa fa-check fa-fw"></i> Check In').removeClass("btn-warning").addClass("btn-success");
                         }
+                        var row = table.row($btn.closest('tr'));
+                        var data = row.data();
+                        data[8] = $btn.text();
+                        row.invalidate();
+                        table.draw();
                     } else {
                         $btn.html(oldText);
                         createSnackbar("There was an error while processing.", "Try Again", function () {
