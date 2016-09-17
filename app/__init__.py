@@ -2,6 +2,7 @@
 
 # Ignore ExtDeprecationWarnings for Flask 0.11 - see http://stackoverflow.com/a/38080580
 import re
+from pytz import timezone
 import base64
 import warnings
 from StringIO import StringIO
@@ -328,6 +329,15 @@ def external_url(url):
         return '{}{}'.format(url_root, url)
     else:
         return url
+
+
+@app.template_filter('localize_dt')
+def localize_dt(dt, tzname):
+    """Accepts a Datetime object and a Timezone name.
+    Returns Timezone aware Datetime.
+    """
+    localized_dt = timezone(tzname).localize(dt)
+    return localized_dt.isoformat()
 
 
 @app.context_processor

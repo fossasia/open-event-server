@@ -25,6 +25,14 @@
     <meta property="og:description" content="{{ event.description }}"/>
     <meta property="og:image" content="{{ event_image | external_url }}"/>
     <meta property="og:type" content="events.event"/>
+    {% if event.latitude %}
+        <meta property="event:location:latitude" content="{{ event.latitude }}">
+    {% endif %}
+    {% if event.longitude %}
+        <meta property="event:location:longitude" content="{{ event.longitude }}">
+    {% endif %}
+    <meta property="event:start_time" content="{{ event.start_time | localize_dt(event.timezone) }}">
+    <meta property="event:end_time" content="{{ event.end_time | localize_dt(event.timezone) }}">
 {% endblock %}
 
 {% block head_css %}
