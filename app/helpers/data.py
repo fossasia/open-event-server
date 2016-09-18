@@ -1016,14 +1016,15 @@ class DataManager(object):
 
             user_detail.details = form['details']
             logo = form.get('logo', None)
-            print logo
+            #print logo
             if string_not_empty(logo) and logo:
                 filename = '{}.png'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
                            logo[len('/serve_static/'):])
+                #print "File path 1", filepath
                 logo_file = UploadedFile(filepath, filename)
-                logo = upload(logo_file, 'users/%d/avatar' % int(user_id))
-                user_detail.avatar_uploaded = logo
+                logo_temp = upload(logo_file, 'users/%d/avatar' % int(user_id))
+                user_detail.avatar_uploaded = logo_temp
                 image_sizes = DataGetter.get_image_sizes_by_type(type='profile')
                 if not image_sizes:
                     image_sizes = ImageSizes(full_width=150,
@@ -1037,6 +1038,7 @@ class DataManager(object):
                 filename = '{}.jpg'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
                            logo[len('/serve_static/'):])
+                #print "File path 1", filepath
                 logo_file = UploadedFile(filepath, filename)
 
                 temp_img_file = upload_local(logo_file,
