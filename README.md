@@ -88,12 +88,14 @@ The default value for `REDIS_URL` is `redis://localhost:6379/0` which is the sam
 
 ## Technology Stack
 
+Please get familiar with the components of the project in order to be able to contribute.
+
 ### Components
 
-* Database - Postgres
-* Webserver - Nginx
-* App server - uwsgi
-* Web framework - flask (particularly flask-admin)
+* Database - [Postgres](https://www.postgresql.org)
+* Webserver - [Nginx](https://www.nginx.com)
+* App server - [uwsgi](https://github.com/unbit/uwsgi)
+* Web framework - [flask](http://flask.pocoo.org) (particularly [flask-admin](https://github.com/flask-admin))
 
 ### Services and Dependencies
 
