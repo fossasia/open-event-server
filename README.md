@@ -136,6 +136,10 @@ For ticket sales the service integrates payment gateways:
 
 ## API Access and Import/Export
 
+Every installation of the project includes the API docs with Swagger, e.g. here on the test install http://open-event-dev.herokuapp.com/api/v2/ .
+
+A hosted version of the API docs is available in the gh-pages branch of the repository at https://fossasia.github.io/open-event-orga-server/api/v2/
+
 The data of events is provided over API endpoints as described [here](/docs/API.md)
 
 It is also possible to export or import data matching the API structure as a compressed file with JSON and binary media files. Read more about this [here](/docs/IMPORT_EXPORT.md).
