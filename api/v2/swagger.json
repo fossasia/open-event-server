@@ -2172,7 +2172,7 @@
         }, 
         "summary": "Get attendees of the event", 
         "tags": [
-          "ticketing"
+          "attendees"
         ]
       }, 
       "parameters": [
@@ -2241,7 +2241,7 @@
         }, 
         "summary": "Toggle and Attendee's Checked in State", 
         "tags": [
-          "ticketing"
+          "attendees"
         ]
       }
     }, 
@@ -2302,7 +2302,7 @@
         }, 
         "summary": "Check in attendee", 
         "tags": [
-          "ticketing"
+          "attendees"
         ]
       }
     }, 
@@ -2363,7 +2363,7 @@
         }, 
         "summary": "Check out attendee", 
         "tags": [
-          "ticketing"
+          "attendees"
         ]
       }
     }, 
@@ -4068,6 +4068,125 @@
         ]
       }
     }, 
+    "/events/{event_id}/tickets/": {
+      "get": {
+        "operationId": "get_tickets_list", 
+        "parameters": [
+          {
+            "description": "An optional fields mask", 
+            "format": "mask", 
+            "in": "header", 
+            "name": "X-Fields", 
+            "type": "string"
+          }
+        ], 
+        "responses": {
+          "200": {
+            "description": "Success", 
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Ticket"
+              }, 
+              "type": "array"
+            }
+          }, 
+          "201": {
+            "description": "Resource created successfully"
+          }, 
+          "400": {
+            "description": "Validation error", 
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }, 
+          "401": {
+            "description": "Authentication failure", 
+            "schema": {
+              "$ref": "#/definitions/NotAuthorizedError"
+            }
+          }, 
+          "404": {
+            "description": "Event does not exist", 
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          }
+        }, 
+        "summary": "Get tickets of the event", 
+        "tags": [
+          "tickets"
+        ]
+      }, 
+      "parameters": [
+        {
+          "in": "path", 
+          "name": "event_id", 
+          "required": true, 
+          "type": "integer"
+        }
+      ]
+    }, 
+    "/events/{event_id}/tickets/{ticket_id}": {
+      "get": {
+        "operationId": "get_ticket", 
+        "parameters": [
+          {
+            "description": "An optional fields mask", 
+            "format": "mask", 
+            "in": "header", 
+            "name": "X-Fields", 
+            "type": "string"
+          }
+        ], 
+        "responses": {
+          "200": {
+            "description": "Success", 
+            "schema": {
+              "$ref": "#/definitions/Ticket"
+            }
+          }, 
+          "201": {
+            "description": "Resource created successfully"
+          }, 
+          "400": {
+            "description": "Validation error", 
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }, 
+          "401": {
+            "description": "Authentication failure", 
+            "schema": {
+              "$ref": "#/definitions/NotAuthorizedError"
+            }
+          }, 
+          "404": {
+            "description": "Event does not exist", 
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          }
+        }, 
+        "summary": "Get information about a ticket", 
+        "tags": [
+          "tickets"
+        ]
+      }, 
+      "parameters": [
+        {
+          "in": "path", 
+          "name": "event_id", 
+          "required": true, 
+          "type": "integer"
+        }, 
+        {
+          "in": "path", 
+          "name": "ticket_id", 
+          "required": true, 
+          "type": "integer"
+        }
+      ]
+    }, 
     "/events/{event_id}/tracks": {
       "get": {
         "operationId": "get_track_list", 
@@ -4759,8 +4878,12 @@
       "name": "errors"
     }, 
     {
-      "description": "Ticketing", 
-      "name": "ticketing"
+      "description": "Attendees", 
+      "name": "attendees"
+    }, 
+    {
+      "description": "Tickets", 
+      "name": "tickets"
     }
   ]
 }
