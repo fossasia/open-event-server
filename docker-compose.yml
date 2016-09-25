@@ -13,8 +13,8 @@ services:
     image: postgres:9.5
     environment:
       POSTGRES_PASSWORD: 'test'
-    volumes:
-      - 'pgdata:/var/lib/postgresql/data/'
+    volumes_from:
+      - data
     ports:
       - '5432:5432'
 
@@ -29,7 +29,7 @@ services:
   web:
     build: .
     expose:
-    - "8000"
+    - "5000"
     environment:
       DATABASE_URL: postgresql://postgres:test@postgres:5432/opev
       REDIS_URL: redis://redis:6379/0
