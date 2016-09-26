@@ -8,6 +8,15 @@ services:
     volumes:
       - /var/lib/postgresql
     command: echo true
+    
+  nginx:
+    build: .
+    ports:
+        - "80:80"
+    volumes_from:
+        - data
+    links:
+        - data:data
 
   postgres:
     image: postgres:9.5
@@ -38,6 +47,7 @@ services:
     links:
       - postgres:postgres
       - redis:redis
+      - nginx:nginx
     volumes:
       - 'storage:/open_event/static'
     ports:
