@@ -96,7 +96,46 @@
     <a href="/e/{{ event.identifier }}">
         <div class="col-md-4 col-xs-12 col-sm-6 event-holder">
             <div class="thumbnail">
-                <img src='{% if event.background_url%}{{ event.thumbnail }}{% elif order.event.topic%}{% set vars = {"foo": False} %}{% for custom_image in custom_placeholder %}{% if custom_image.name == session.event.topic %}{{ custom_image.url }}{% if vars.update({"foo": True}) %} {% endif %}{% endif %}{% endfor %}{% if not vars.foo %}{{ url_for("static", filename="placeholders/" + placeholder_images[order.event.topic])}}{% endif %}{% elif order.event.subtopic %}{% set vars = {"foo": False} %}{% for custom_image in custom_placeholder %}{% if custom_image.name == session.event.subtopic %}{{ custom_image.url }}{% if vars.update({"foo": True}) %} {% endif %}{% endif %}{% endfor %}{% if not vars.foo %}{ url_for("static", filename="placeholders/" + placeholder_images[order.event.subtopic])}}{% endif %}{% else %}{% set vars = {"foo": False} %}{% for custom_image in custom_placeholder %}{% if custom_image.name == "Other" %}{{ custom_image.url }}{% if vars.update({"foo": True}) %} {% endif %}{% endif %}{% endfor %}{% if not vars.foo %}{{ url_for("static", filename="placeholders/" + placeholder_images["Other"])}}{% endif %}{% endif %}' onerror="imgError(this, true)">
+                <img src='
+                {% if event.background_url%}
+                    {{ event.thumbnail }}
+                {% elif event.topic%}
+                {% set vars = {"foo": False} %}
+                {% for custom_image in custom_placeholder %}
+                {% if custom_image.name == event.topic %}
+                    {{ custom_image.url }}
+                {% if vars.update({"foo": True}) %}
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+                {% if not vars.foo %}
+                    {{ url_for("static", filename="placeholders/" + placeholder_images[event.topic])}}
+                {% endif %}
+                {% elif event.subtopic %}
+                {% set vars = {"foo": False} %}
+                {% for custom_image in custom_placeholder %}
+                {% if custom_image.name == event.subtopic %}
+                    {{ custom_image.url }}
+                {% if vars.update({"foo": True}) %}
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+                {% if not vars.foo %}
+                    {{ url_for("static", filename="placeholders/" + placeholder_images[event.subtopic])}}
+                {% endif %}
+                {% else %}
+                {% set vars = {"foo": False} %}
+                {% for custom_image in custom_placeholder %}
+                {% if custom_image.name == "Other" %}
+                    {{ custom_image.url }}
+                {% if vars.update({"foo": True}) %}
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+                {% if not vars.foo %}
+                    {{ url_for("static", filename="placeholders/" + placeholder_images["Other"])}}
+                {% endif %}
+                {% endif %}' onerror="imgError(this, true)">
                 <div class="caption">
                     <small class="time">{{ event.start_time.strftime('%a, %B %d %I:%M %p') }}</small>
                     <h4 class="name">{{ event.name }}</h4>
