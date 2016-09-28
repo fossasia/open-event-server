@@ -5,7 +5,7 @@ from app.api.microlocations import MICROLOCATION
 from app.api.sessions import SESSION
 from app.api.speakers import SPEAKER
 from app.api.sponsors import SPONSOR
-from app.api.ticketing import TICKET
+from app.api.attendees import TICKET
 from app.api.tracks import TRACK
 from app.models.event import Event as EventModel
 from app.models.social_link import SocialLink as SocialLinkModel
