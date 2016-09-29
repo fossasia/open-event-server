@@ -54,6 +54,11 @@
         "identifier": {
           "type": "string"
         }, 
+        "large": {
+          "example": "http://website.com", 
+          "format": "uri", 
+          "type": "string"
+        }, 
         "latitude": {
           "example": 0.0, 
           "format": "float", 
@@ -111,6 +116,11 @@
         }, 
         "sub_topic": {
           "example": "Air", 
+          "type": "string"
+        }, 
+        "thumbnail": {
+          "example": "http://website.com", 
+          "format": "uri", 
           "type": "string"
         }, 
         "ticket_url": {
@@ -216,6 +226,11 @@
         "identifier": {
           "type": "string"
         }, 
+        "large": {
+          "example": "http://website.com", 
+          "format": "uri", 
+          "type": "string"
+        }, 
         "latitude": {
           "example": 0.0, 
           "format": "float", 
@@ -297,6 +312,11 @@
         }, 
         "sub_topic": {
           "example": "Air", 
+          "type": "string"
+        }, 
+        "thumbnail": {
+          "example": "http://website.com", 
+          "format": "uri", 
           "type": "string"
         }, 
         "ticket_url": {
@@ -451,6 +471,11 @@
         "identifier": {
           "type": "string"
         }, 
+        "large": {
+          "example": "http://website.com", 
+          "format": "uri", 
+          "type": "string"
+        }, 
         "latitude": {
           "example": 0.0, 
           "format": "float", 
@@ -502,6 +527,11 @@
         }, 
         "sub_topic": {
           "example": "Air", 
+          "type": "string"
+        }, 
+        "thumbnail": {
+          "example": "http://website.com", 
+          "format": "uri", 
           "type": "string"
         }, 
         "ticket_url": {
