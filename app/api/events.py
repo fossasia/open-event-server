@@ -99,8 +99,8 @@ EVENT = api.model('Event', {
     'call_for_papers': fields.Nested(EVENT_CFS, allow_null=True),
     'version': fields.Nested(EVENT_VERSION),
     'has_session_speakers': fields.Boolean(default=False),
-    'thumbnail' : fields.String(),
-    'large' : fields.String()
+    'thumbnail' : fields.Uri(),
+    'large' : fields.Uri()
 })
 
 EVENT_COMPLETE = api.clone('EventComplete', EVENT, {
