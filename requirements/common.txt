@@ -43,7 +43,7 @@ stripe
 xhtml2pdf
 nameparser
 pillow
-librabbitmq
+librabbitmq==1.5.1
 anyjson
 mako
 functools32
@@ -51,3 +51,4 @@ Flask-Cache
 forex-python
 oauth2
 qrcode
+python-magic
