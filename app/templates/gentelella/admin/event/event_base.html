@@ -69,7 +69,11 @@
                     <br>
                     <div class="dropdown accordion-link" id="event_tabs_small">
                         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-                        {{ active_page | capitalize }}
+                        {% if active_page == "home" %}
+                            Overview
+                        {% else %}
+                            {{ active_page | capitalize }}
+                        {% endif %}
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             {% for href, id, caption in navigation_bar %}
