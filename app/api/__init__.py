@@ -16,8 +16,8 @@ from .extras import api as extras_api
 from .notifications import api as notifications_api
 from .attendees import api as attendees_api
 from .tickets import api as tickets_apt
-from helpers.error_docs import api as error_models
-from helpers.errors import (
+from .helpers.error_docs import api as error_models
+from .helpers.errors import (
     NotFoundError,
     NotAuthorizedError,
     PermissionDeniedError,

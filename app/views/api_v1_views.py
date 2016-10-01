@@ -1,6 +1,6 @@
 """Copyright 2015 Rafal Kowalski"""
 import os
-from urllib2 import urlopen
+from urllib.request import urlopen
 
 from flask import jsonify, url_for, redirect, request, send_from_directory, \
     render_template, make_response
@@ -20,7 +20,7 @@ from ..helpers.object_formatter import ObjectFormatter
 from ..helpers.helpers import get_serializer
 from ..helpers.data_getter import DataGetter
 from ..helpers.data import save_to_db, uploaded_file_provided_by_url
-from views_helpers import event_status_code, api_response
+from .views_helpers import event_status_code, api_response
 from flask import Blueprint
 from flask.ext.autodoc import Autodoc
 from icalendar import Calendar
@@ -565,7 +565,7 @@ def run_migrations():
     try:
         upgrade()
     except:
-        print "Migrations have been run"
+        print("Migrations have been run")
     return jsonify({'status': 'ok'})
 
 

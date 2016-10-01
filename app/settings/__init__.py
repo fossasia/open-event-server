@@ -56,7 +56,7 @@ def set_settings(**kwargs):
         if not setting:
             setting = Setting(**kwargs)
         else:
-            for key, value in kwargs.iteritems():
+            for key, value in kwargs.items():
                 setattr(setting, key, value)
         from app.helpers.data import save_to_db
         save_to_db(setting, 'Setting saved')
@@ -67,7 +67,7 @@ def set_settings(**kwargs):
 
 def make_dict(s):
     arguments = {}
-    for name, column in s.__mapper__.columns.items():
+    for name, column in list(s.__mapper__.columns.items()):
         if not (column.primary_key or column.unique):
             arguments[name] = getattr(s, name)
     return arguments

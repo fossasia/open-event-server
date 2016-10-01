@@ -6,8 +6,8 @@ from flask_restplus import Model
 from app.models.custom_forms import CustomForms
 from app.helpers.data import update_or_create
 
-from utils import ServiceDAO
-import custom_fields as fields
+from .utils import ServiceDAO
+from . import custom_fields as fields
 
 # #############
 # DEFINE MODELS

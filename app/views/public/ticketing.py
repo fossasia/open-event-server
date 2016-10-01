@@ -4,7 +4,7 @@ from flask.ext.restplus import abort
 from flask_admin import BaseView, expose
 from flask import redirect, url_for, request, jsonify, make_response, flash
 from xhtml2pdf import pisa
-from cStringIO import StringIO
+from io import StringIO
 
 import pycountry
 

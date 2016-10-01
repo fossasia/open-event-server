@@ -51,8 +51,8 @@ class SuperAdminPermissionsView(SuperAdminBaseView):
 
         return self.render(
             '/gentelella/admin/super_admin/permissions/permissions.html',
-            event_perms=sorted(event_perms.iteritems(),
-                         key=lambda (k, v): k.name),
+            event_perms=sorted(iter(event_perms.items()),
+                         key=lambda k_v: k_v[0].name),
             custom_sys_perms=custom_sys_perms,
             builtin_sys_perms=builtin_sys_perms,
             user_perms=user_perms,

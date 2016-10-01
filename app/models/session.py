@@ -123,7 +123,7 @@ class Session(db.Model):
         return '<Session %r>' % self.title
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        return str(self).encode('utf-8')
 
     def __setattr__(self, name, value):
         if name == 'short_abstract' or name == 'long_abstract' or name == 'comments':

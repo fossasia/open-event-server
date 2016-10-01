@@ -9,7 +9,7 @@ from flask.ext.restplus import Resource, Namespace
 from celery.result import AsyncResult
 from flask import jsonify, current_app
 
-from helpers.utils import TASK_RESULTS
+from .helpers.utils import TASK_RESULTS
 
 
 api = Namespace('extras', description='Extras', path='/')

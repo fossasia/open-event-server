@@ -1,6 +1,6 @@
 """Copyright 2016 Niranjan Rajendran"""
-import urlparse
-from urllib import urlencode
+import urllib.parse
+from urllib.parse import urlencode
 
 import sqlalchemy
 import stripe
@@ -202,7 +202,7 @@ class PayPalPaymentsManager(object):
                 count += 1
 
         response = requests.post(credentials['SERVER'], data=data)
-        token = dict(urlparse.parse_qsl(response.text))['TOKEN']
+        token = dict(urllib.parse.parse_qsl(response.text))['TOKEN']
         order_invoice.paypal_token = token
         save_to_db(order_invoice)
         return credentials['CHECKOUT_URL'] + "?" + urlencode({
@@ -233,7 +233,7 @@ class PayPalPaymentsManager(object):
             return data
 
         response = requests.post(credentials['SERVER'], data=data)
-        return dict(urlparse.parse_qsl(response.text))
+        return dict(urllib.parse.parse_qsl(response.text))
 
     @staticmethod
     def capture_payment(order_invoice, payer_id, currency=None, credentials=None):
@@ -264,4 +264,4 @@ class PayPalPaymentsManager(object):
         }
 
         response = requests.post(credentials['SERVER'], data=data)
-        return dict(urlparse.parse_qsl(response.text))
+        return dict(urllib.parse.parse_qsl(response.text))

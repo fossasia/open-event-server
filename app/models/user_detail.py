@@ -44,7 +44,7 @@ class UserDetail(db.Model):
         return '<UserDetail %r>' % self.id
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        return str(self).encode('utf-8')
 
     def __unicode__(self):
         return self.fullname
@@ -60,7 +60,7 @@ class UserDetail(db.Model):
         firstname = self.firstname if self.firstname else ''
         lastname = self.lastname if self.lastname else ''
         if firstname and lastname:
-            return u'{} {}'.format(firstname, lastname)
+            return '{} {}'.format(firstname, lastname)
         else:
             return ''
 

@@ -12,13 +12,13 @@ from flask_jwt import jwt_required, JWTError, current_identity
 
 from app.models.event import Event as EventModel
 from app.models import db
-from custom_fields import CustomField
+from .custom_fields import CustomField
 from .errors import NotFoundError, InvalidServiceError, ValidationError, \
     NotAuthorizedError, ServerError, PermissionDeniedError
 from app.models.user import User as UserModel
 from app.helpers.data import save_to_db, delete_from_db
 
-from query_filters import extract_special_queries, apply_special_queries
+from .query_filters import extract_special_queries, apply_special_queries
 
 
 def _get_queryset(klass):
@@ -329,7 +329,7 @@ def auth_jwt():
 
 def erase_from_dict(dct, key):
     if isinstance(dct, dict):
-        if key in dct.keys():
+        if key in list(dct.keys()):
             dct.pop(key)
 
 
@@ -394,7 +394,7 @@ def parse_args(parser, keep_none=False):
     """
     args = parser.parse_args()
     if not keep_none:
-        args = {k: v for k, v in args.items() if v is not None}
+        args = {k: v for k, v in list(args.items()) if v is not None}
     return args
 
 

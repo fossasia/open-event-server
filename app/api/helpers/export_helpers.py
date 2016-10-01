@@ -21,7 +21,7 @@ from ..speakers import DAO as SpeakerDAO, SPEAKER
 from ..sponsors import DAO as SponsorDAO, SPONSOR
 from ..tracks import DAO as TrackDAO, TRACK
 from .non_apis import CustomFormDAO, CUSTOM_FORM
-from import_helpers import is_downloadable, get_filename_from_cd
+from .import_helpers import is_downloadable, get_filename_from_cd
 
 
 # DELETE FIELDS
@@ -99,10 +99,10 @@ def sorted_dict(data):
     if type(data) == OrderedDict:
         data = dict(data)
     if type(data) == dict:
-        data = OrderedDict(sorted(data.items(), key=lambda t: t[0]))
+        data = OrderedDict(sorted(list(data.items()), key=lambda t: t[0]))
     elif type(data) == list:
         for count in range(len(data)):
-            data[count] = OrderedDict(sorted(data[count].items(), key=lambda t: t[0]))
+            data[count] = OrderedDict(sorted(list(data[count].items()), key=lambda t: t[0]))
     return data
 
 
@@ -117,7 +117,7 @@ def _order_json(data, srv):
         data.pop(field, None)
     # remaining fields, sort and add
     # https://docs.python.org/2/library/collections.html#collections.OrderedDict
-    data = OrderedDict(sorted(data.items(), key=lambda t: t[0]))
+    data = OrderedDict(sorted(list(data.items()), key=lambda t: t[0]))
     for key in data:
         new_data[key] = sorted_dict(data[key])
     return new_data

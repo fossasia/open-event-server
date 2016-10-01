@@ -8,7 +8,7 @@ from flask import url_for
 from app.models.session import Session
 from app.models.speaker import Speaker
 from . import db
-from user_detail import UserDetail
+from .user_detail import UserDetail
 from .role import Role
 from .service import Service
 from .permission import Permission
@@ -125,7 +125,7 @@ class User(db.Model):
             'update': 'can_update',
             'delete': 'can_delete',
         }
-        if operation not in operations.keys():
+        if operation not in list(operations.keys()):
             raise ValueError('No such operation defined')
 
         try:
@@ -253,7 +253,7 @@ class User(db.Model):
         return '<User %r>' % self.email
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        return str(self).encode('utf-8')
 
     def __unicode__(self):
         return self.email

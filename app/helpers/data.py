@@ -21,7 +21,7 @@ from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from requests_oauthlib import OAuth2Session
 from sqlalchemy.orm.collections import InstrumentedList
 from sqlalchemy.sql.expression import exists
-from urllib2 import urlopen
+from urllib.request import urlopen
 from werkzeug import secure_filename
 from wtforms import ValidationError
 
@@ -554,7 +554,7 @@ class DataManager(object):
             save_to_db(speaker, "Speaker photo saved")
             record_activity('update_speaker', speaker=speaker, event_id=event_id)
         logo = form.get('photo', None)
-        print logo
+        print(logo)
         if string_not_empty(logo) and logo:
             filename = '{}.png'.format(time.time())
             filepath = '{}/static/{}'.format(path.realpath('.'),
@@ -796,19 +796,19 @@ class DataManager(object):
         :param form: view data form
         :param event_id: Speaker belongs to Event by event id
         """
-        speaker = Speaker(name=form["name"] if "name" in form.keys() else "",
-                          photo=form["photo"] if "photo" in form.keys() else "",
-                          short_biography=form["short_biography"] if "short_biography" in form.keys() else "",
-                          email=form["email"] if "email" in form.keys() else "",
-                          website=form["website"] if "website" in form.keys() else "",
+        speaker = Speaker(name=form["name"] if "name" in list(form.keys()) else "",
+                          photo=form["photo"] if "photo" in list(form.keys()) else "",
+                          short_biography=form["short_biography"] if "short_biography" in list(form.keys()) else "",
+                          email=form["email"] if "email" in list(form.keys()) else "",
+                          website=form["website"] if "website" in list(form.keys()) else "",
                           event_id=event_id,
-                          twitter=form["twitter"] if "twitter" in form.keys() else "",
-                          facebook=form["facebook"] if "facebook" in form.keys() else "",
-                          github=form["github"] if "github" in form.keys() else "",
-                          linkedin=form["linkedin"] if "linkedin" in form.keys() else "",
-                          organisation=form["organisation"] if "organisation" in form.keys() else "",
-                          position=form["position"] if "position" in form.keys() else "",
-                          country=form["country"] if "country" in form.keys() else "",
+                          twitter=form["twitter"] if "twitter" in list(form.keys()) else "",
+                          facebook=form["facebook"] if "facebook" in list(form.keys()) else "",
+                          github=form["github"] if "github" in list(form.keys()) else "",
+                          linkedin=form["linkedin"] if "linkedin" in list(form.keys()) else "",
+                          organisation=form["organisation"] if "organisation" in list(form.keys()) else "",
+                          position=form["position"] if "position" in list(form.keys()) else "",
+                          country=form["country"] if "country" in list(form.keys()) else "",
                           user=user)
         save_to_db(speaker, "Speaker saved")
         update_version(event_id, False, "speakers_ver")
@@ -915,7 +915,7 @@ class DataManager(object):
         :param microlocation: object contains all earlier data
         """
         data = form.data
-        if "session" in data.keys():
+        if "session" in list(data.keys()):
             del data["session"]
         db.session.query(Microlocation) \
             .filter_by(id=microlocation.id) \
@@ -1169,7 +1169,7 @@ class DataManager(object):
                 if not perm:
                     perm = Permission(role=role, service=service)
 
-                for v, attr in oper.iteritems():
+                for v, attr in oper.items():
                     if v in form.getlist(field):
                         setattr(perm, oper[v], True)
                     else:
@@ -1226,7 +1226,7 @@ class DataManager(object):
                       type=form['type'],
                       topic=form['topic'],
                       sub_topic=form['sub_topic'],
-                      privacy=form.get('privacy', u'public'),
+                      privacy=form.get('privacy', 'public'),
                       ticket_url=form.get('ticket_url', None),
                       copyright=copyright,
                       show_map=1 if form.get('show_map') == "on" else 0,
@@ -1251,16 +1251,16 @@ class DataManager(object):
 
         event = DataManager.update_searchable_location_name(event)
 
-        if form.get('organizer_state', u'off') == u'on':
+        if form.get('organizer_state', 'off') == 'on':
             event.organizer_name = form['organizer_name']
             event.organizer_description = form['organizer_description']
 
-        if form.get('coc_state', u'off') == u'on':
+        if form.get('coc_state', 'off') == 'on':
             event.code_of_conduct = form['code_of_conduct']
 
         state = form.get('state', None)
-        if state and ((state == u'Published' and not string_empty(
-            event.location_name)) or state != u'Published') and login.current_user.is_verified:
+        if state and ((state == 'Published' and not string_empty(
+            event.location_name)) or state != 'Published') and login.current_user.is_verified:
             event.state = state
 
         if event.start_time <= event.end_time:
@@ -1451,7 +1451,7 @@ class DataManager(object):
             sponsor_logo_url = []
 
             if 'pay_by_stripe' in form:
-                if form.get('stripe_added', u'no') == u'yes':
+                if form.get('stripe_added', 'no') == 'yes':
                     stripe_authorization = StripeAuthorization(
                         stripe_secret_key=form.get('stripe_secret_key', ''),
                         stripe_refresh_token=form.get('stripe_refresh_token', ''),
@@ -1462,7 +1462,7 @@ class DataManager(object):
                     )
                     save_to_db(stripe_authorization)
 
-            if form.get('sponsors_state', u'off') == u'on':
+            if form.get('sponsors_state', 'off') == 'on':
                 for index, name in enumerate(sponsor_name):
                     if not string_empty(name):
                         sponsor = Sponsor(name=name, url=sponsor_url[index],
@@ -1494,7 +1494,7 @@ class DataManager(object):
                     db.session.add(social_link)
 
             event.has_session_speakers = False
-            if form.get('has_session_speakers', u'no') == u'yes':
+            if form.get('has_session_speakers', 'no') == 'yes':
                 event.has_session_speakers = True
                 session_type_names = form.getlist('session_type[name]')
                 session_type_length = form.getlist('session_type[length]')
@@ -1614,9 +1614,9 @@ class DataManager(object):
             try:
                 response = requests.get(url, params).json()
             except ConnectionError:
-                response['status'] = u'Error'
+                response['status'] = 'Error'
 
-            if response['status'] == u'OK':
+            if response['status'] == 'OK':
                 for addr in response['results'][0]['address_components']:
                     if addr['types'] == ['locality', 'political']:
                         event.searchable_location_name = addr['short_name']
@@ -1644,7 +1644,7 @@ class DataManager(object):
                       organizer_name=event_old.organizer_name,
                       organizer_description=event_old.organizer_description)
 
-        event.state = u'Draft'
+        event.state = 'Draft'
         save_to_db(event, "Event copy saved")
 
         sponsors_old = DataGetter.get_sponsors(event_id)
@@ -1855,14 +1855,14 @@ class DataManager(object):
 
         event = DataManager.update_searchable_location_name(event)
 
-        if form.get('organizer_state', u'off') == u'on':
+        if form.get('organizer_state', 'off') == 'on':
             event.organizer_name = form['organizer_name']
             event.organizer_description = form['organizer_description']
         else:
             event.organizer_name = ""
             event.organizer_description = ""
 
-        if form.get('coc_state', u'off') == u'on':
+        if form.get('coc_state', 'off') == 'on':
             event.code_of_conduct = form['code_of_conduct']
         else:
             event.code_of_conduct = ""
@@ -1882,8 +1882,8 @@ class DataManager(object):
         event.copyright.logo = logo
 
         state = form.get('state', None)
-        if state and ((state == u'Published' and not string_empty(
-            event.location_name)) or state != u'Published') and login.current_user.is_verified:
+        if state and ((state == 'Published' and not string_empty(
+            event.location_name)) or state != 'Published') and login.current_user.is_verified:
             event.state = state
 
         social_link_name = form.getlist('social[name]')
@@ -1928,7 +1928,7 @@ class DataManager(object):
             delete_from_db(event.stripe, "Old stripe auth deleted")
 
         if 'pay_by_stripe' in form:
-            if form.get('stripe_added', u'no') == u'yes':
+            if form.get('stripe_added', 'no') == 'yes':
                 stripe_authorization = StripeAuthorization(
                     stripe_secret_key=form.get('stripe_secret_key', ''),
                     stripe_refresh_token=form.get('stripe_refresh_token', ''),
@@ -1939,7 +1939,7 @@ class DataManager(object):
                 )
                 save_to_db(stripe_authorization)
 
-        if form.get('has_session_speakers', u'no') == u'yes':
+        if form.get('has_session_speakers', 'no') == 'yes':
 
             session_type_names = form.getlist('session_type[name]')
             session_type_id = form.getlist('session_type[id]')
@@ -2054,7 +2054,7 @@ class DataManager(object):
         for sponsor in sponsors:
             delete_from_db(sponsor, "Sponsor Deleted")
 
-        if form.get('sponsors_state', u'off') == u'on':
+        if form.get('sponsors_state', 'off') == 'on':
             for index, name in enumerate(sponsor_name):
                 if not string_empty(name):
                     sponsor = Sponsor(name=name, url=sponsor_url[index],
@@ -2238,9 +2238,9 @@ def save_to_db(item, msg="Saved to db", print_error=True):
         logging.info('added to session')
         db.session.commit()
         return True
-    except Exception, e:
+    except Exception as e:
         if print_error:
-            print e
+            print(e)
             traceback.print_exc()
         logging.error('DB Exception! %s' % e)
         db.session.rollback()
@@ -2258,7 +2258,7 @@ def delete_from_db(item, msg='Deleted from db'):
         logging.info('removed from session')
         db.session.commit()
         return True
-    except Exception, error:
+    except Exception as error:
         logging.error('DB Exception! %s' % error)
         db.session.rollback()
         return False

@@ -12,10 +12,10 @@ class QueryFilter(object):
         filters = {}
         column = None
 
-        for key, value in dict(self.args).items():
+        for key, value in list(dict(self.args).items()):
             filters[key] = ''.join(value)
 
-        if "order_by" in filters.keys():
+        if "order_by" in list(filters.keys()):
             column = filters["order_by"]
             del filters["order_by"]
 

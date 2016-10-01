@@ -1,5 +1,5 @@
 import base64
-from StringIO import StringIO
+from io import StringIO
 
 import qrcode
 
@@ -59,7 +59,7 @@ class TicketHolder(db.Model):
         firstname = self.firstname if self.firstname else ''
         lastname = self.lastname if self.lastname else ''
         if firstname and lastname:
-            return u'{} {}'.format(firstname, lastname)
+            return '{} {}'.format(firstname, lastname)
         else:
             return ''
 

@@ -34,7 +34,7 @@ class Track(db.Model):
         return '<Track %r>' % self.name
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        return str(self).encode('utf-8')
 
     def __unicode__(self):
         return self.name

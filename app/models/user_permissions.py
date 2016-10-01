@@ -29,4 +29,4 @@ class UserPermission(db.Model):
         return 'UserPerm %r' % self.name
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        return str(self).encode('utf-8')

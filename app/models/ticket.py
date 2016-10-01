@@ -78,7 +78,7 @@ class Ticket(db.Model):
         return '<Ticket %r>' % self.name
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        return str(self).encode('utf-8')
 
     def __unicode__(self):
         return self.name
@@ -103,7 +103,7 @@ class TicketTag(db.Model):
         return '<TicketTag %r>' % self.name
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        return str(self).encode('utf-8')
 
     def __unicode__(self):
         return self.name
@@ -132,7 +132,7 @@ class BookedTicket(db.Model):
                                            self.user, )
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        return str(self).encode('utf-8')
 
     def __unicode__(self):
         return self.ticket

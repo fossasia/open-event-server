@@ -8,9 +8,9 @@ from flask import url_for
 
 from app import celery
 from app.helpers.request_context_task import RequestContextTask
-from errors import BaseError, ServerError
-from export_helpers import send_export_mail
-from import_helpers import update_import_job, send_import_mail
+from .errors import BaseError, ServerError
+from .export_helpers import send_export_mail
+from .import_helpers import update_import_job, send_import_mail
 
 from ..imports import import_event_task_base
 from ..exports import event_export_task_base
@@ -26,11 +26,11 @@ def import_event_task(self, file):
         update_import_job(task_id, result['id'], 'SUCCESS')
         # return item
     except BaseError as e:
-        print traceback.format_exc()
+        print(traceback.format_exc())
         update_import_job(task_id, e.message, e.status)
         result = {'__error': True, 'result': e.to_dict()}
     except Exception as e:
-        print traceback.format_exc()
+        print(traceback.format_exc())
         update_import_job(task_id, e.message, e.status)
         result = {'__error': True, 'result': ServerError().to_dict()}
     # send email
@@ -53,7 +53,7 @@ def export_event_task(self, event_id, settings):
     except BaseError as e:
         result = {'__error': True, 'result': e.to_dict()}
     except Exception:
-        print traceback.format_exc()
+        print(traceback.format_exc())
         result = {'__error': True, 'result': ServerError().to_dict()}
     logging.info('Exporting done.. sending email')
     # send email

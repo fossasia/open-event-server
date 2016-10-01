@@ -3,10 +3,10 @@ from flask import send_file, make_response, jsonify, url_for, current_app
 from flask.ext.restplus import Resource, Namespace, marshal
 
 from app.helpers.data import record_activity
-from helpers.export_helpers import export_event_json, create_export_job, send_export_mail
-from helpers.utils import TASK_RESULTS
-from helpers import custom_fields as fields
-from helpers.helpers import nocache, can_access, requires_auth
+from .helpers.export_helpers import export_event_json, create_export_job, send_export_mail
+from .helpers.utils import TASK_RESULTS
+from .helpers import custom_fields as fields
+from .helpers.helpers import nocache, can_access, requires_auth
 
 
 api = Namespace('exports', description='Exports', path='/')
@@ -27,7 +27,7 @@ class EventExportJson(Resource):
     @can_access
     @api.expect(EXPORT_SETTING)
     def post(self, event_id):
-        from helpers.tasks import export_event_task
+        from .helpers.tasks import export_event_task
         # queue task
         task = export_event_task.delay(
             event_id, marshal(self.api.payload, EXPORT_SETTING))
