@@ -745,7 +745,7 @@ class DataGetter(object):
                     response = requests.get(
                         "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
                             event.longitude)).json()
-                    if response['status'] == u'OK':
+                    if response['status'] == 'OK':
                         for addr in response['results'][0]['address_components']:
                             if addr['types'] == ['locality', 'political']:
                                 names.append(addr['short_name'])

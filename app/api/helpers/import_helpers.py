@@ -24,7 +24,7 @@ from ..sponsors import DAO as SponsorDAO
 from ..tracks import DAO as TrackDAO
 from .non_apis import CustomFormDAO
 
-from errors import BaseError, ServerError, NotFoundError
+from .errors import BaseError, ServerError, NotFoundError
 
 
 IMPORT_SERIES = [
@@ -203,10 +203,10 @@ def _upload_media(task_handle, event_id, base_path):
                 key = key.format(event_id=event_id)
             else:
                 key = key.format(event_id=event_id, id=id_)
-            print key
+            print(key)
             new_url = upload(file, key)
         except Exception:
-            print traceback.format_exc()
+            print(traceback.format_exc())
             new_url = None
         setattr(item, field, new_url)
         save_to_db(item, msg='Url updated')
@@ -340,7 +340,7 @@ def import_event_json(task_handle, zip_path):
         EventDAO.delete(new_event.id)
         raise make_error(item[0], er=ServerError('Invalid json'))
     except Exception:
-        print traceback.format_exc()
+        print(traceback.format_exc())
         EventDAO.delete(new_event.id)
         raise make_error(item[0], id_=CUR_ID)
     # run uploads

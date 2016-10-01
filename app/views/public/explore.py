@@ -38,7 +38,7 @@ def get_paginated(**kwargs):
 
 def erase_from_dict(d, k):
     if isinstance(d, dict):
-        if k in d.keys():
+        if k in list(d.keys()):
             d.pop(k)
 
 class ExploreView(BaseView):
@@ -54,7 +54,7 @@ class ExploreView(BaseView):
 
     @expose('/autocomplete/categories.json', methods=('GET', 'POST'))
     def categories_autocomplete(self):
-        categories = CATEGORIES.keys()
+        categories = list(CATEGORIES.keys())
         return jsonify([{'value': category, 'type': 'category'} for category in categories])
 
     @expose('/autocomplete/events/<location_slug>.json', methods=('GET', 'POST'))
@@ -83,7 +83,7 @@ class ExploreView(BaseView):
         day_filter = request.args.get('period', None)
         sub_category = request.args.get('sub-category', None)
         category = request.args.get('category', None)
-        print location
+        print(location)
         if day_filter:
             start, end = get_date_range(day_filter)
         if location:
@@ -100,7 +100,7 @@ class ExploreView(BaseView):
             filtering['__event_start_time_gt'] = start
         if end:
             filtering['__event_end_time_lt'] = end
-        filters = request.args.items()
+        filters = list(request.args.items())
         erase_from_dict(filters, 'page')
         results = get_paginated(**filtering)
 

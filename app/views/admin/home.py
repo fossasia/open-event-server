@@ -1,8 +1,8 @@
 """Copyright 2015 Rafal Kowalski"""
 import logging
 import os
-import urllib
-from urllib2 import urlopen
+import urllib.request, urllib.parse, urllib.error
+from urllib.request import urlopen
 
 from flask import url_for, redirect, request, session, flash
 from flask.ext import login
@@ -196,9 +196,9 @@ class MyHomeView(AdminIndexView):
 
     @expose('/browse/', methods=('GET',))
     def browse_view(self):
-        params = request.args.items()
+        params = list(request.args.items())
         params = dict((k, v) for k, v in params if v)
-        print params
+        print(params)
 
         def test_and_remove(key):
             if request.args.get(key):
@@ -223,7 +223,7 @@ class MyHomeView(AdminIndexView):
         erase_from_dict(params, 'location')
 
         return redirect(url_for('explore.explore_view', location=slugify(country)) + '?' +
-                        urllib.urlencode(params))
+                        urllib.parse.urlencode(params))
 
     @expose('/check_email/', methods=('POST', 'GET'))
     def check_duplicate_email(self):

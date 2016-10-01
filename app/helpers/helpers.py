@@ -19,7 +19,7 @@ from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, NEXT_EVENT, 
     AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, TICKET_PURCHASED, EVENT_EXPORTED, \
     EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_FOLLOWUP_EMAIL, MONTHLY_PAYMENT_EMAIL, \
     EVENT_IMPORTED, EVENT_IMPORT_FAIL
-from system_mails import MAILS
+from .system_mails import MAILS
 from app.models.notifications import (
     # Prepended with `NOTIF_` to differentiate from mails
     EVENT_ROLE_INVITE as NOTIF_EVENT_ROLE,
@@ -35,7 +35,7 @@ from app.models.notifications import (
 
 )
 
-from system_notifications import NOTIFS
+from .system_notifications import NOTIFS
 from app.helpers.storage import UploadedFile
 
 
@@ -91,7 +91,7 @@ def send_email_invitation(email, event_name, link):
     """Send email for submit papers"""
     message_settings = MessageSettings.query.filter_by(action=INVITE_PAPERS).first()
     if not message_settings or message_settings.mail_status == 1:
-        print "sending mail"
+        print("sending mail")
         send_email(
             to=email,
             action=INVITE_PAPERS,
@@ -108,7 +108,7 @@ def send_new_session_organizer(email, event_name, link):
     """Send email after new sesions proposal"""
     message_settings = MessageSettings.query.filter_by(action=NEW_SESSION).first()
     if not message_settings or message_settings.mail_status == 1:
-        print "sending mail"
+        print("sending mail")
         send_email(
             to=email,
             action=NEW_SESSION,
@@ -125,7 +125,7 @@ def send_session_accept_reject(email, session_name, acceptance, link):
     """Send session accepted or rejected"""
     message_settings = MessageSettings.query.filter_by(action=SESSION_ACCEPT_REJECT).first()
     if not message_settings or message_settings.mail_status == 1:
-        print "sending mail"
+        print("sending mail")
         send_email(
             to=email,
             action=SESSION_ACCEPT_REJECT,
@@ -143,7 +143,7 @@ def send_schedule_change(email, session_name, link):
     """Send schedule change in session"""
     message_settings = MessageSettings.query.filter_by(action=SESSION_SCHEDULE).first()
     if not message_settings or message_settings.mail_status == 1:
-        print "sending mail"
+        print("sending mail")
         send_email(
             to=email,
             action=SESSION_SCHEDULE,
@@ -160,7 +160,7 @@ def send_next_event(email, event_name, link, up_coming_events):
     """Send next event"""
     message_settings = MessageSettings.query.filter_by(action=NEXT_EVENT).first()
     if not message_settings or message_settings.mail_status == 1:
-        print "sending mail"
+        print("sending mail")
         upcoming_event_html = "<ul>"
         for event in up_coming_events:
             upcoming_event_html += "<a href='%s'><li> %s </li></a>" % (url_for('events.details_view',
@@ -184,7 +184,7 @@ def send_after_event(email, event_name, upcoming_events):
     """Send after event mail"""
     message_settings = MessageSettings.query.filter_by(action=AFTER_EVENT).first()
     if not message_settings or message_settings.mail_status == 1:
-        print "sending mail"
+        print("sending mail")
         upcoming_event_html = "<ul>"
         for event in upcoming_events:
             upcoming_event_html += "<a href='%s'><li> %s </li></a>" % (url_for('events.details_view',
@@ -207,7 +207,7 @@ def send_event_publish(email, event_name, link):
     """Send email on publishing event"""
     message_settings = MessageSettings.query.filter_by(action=NEXT_EVENT).first()
     if not message_settings or message_settings.mail_status == 1:
-        print "sending mail"
+        print("sending mail")
         send_email(
             to=email,
             action=NEXT_EVENT,
@@ -383,7 +383,7 @@ def send_email(to, action, subject, html):
     if not string_empty(to):
         key = get_settings()['sendgrid_key']
         if not key and not current_app.config['TESTING']:
-            print 'Sendgrid key not defined'
+            print('Sendgrid key not defined')
             return
 
         if not current_app.config['TESTING']:
@@ -396,7 +396,7 @@ def send_email(to, action, subject, html):
                 'subject': subject,
                 'html': html
             }
-            from tasks import send_email_task
+            from .tasks import send_email_task
             send_email_task.delay(payload, headers)
         # record_mail(to, action, subject, html)
         mail = Mail(
@@ -404,7 +404,7 @@ def send_email(to, action, subject, html):
             message=html, time=datetime.now()
         )
 
-        from data import save_to_db, record_activity
+        from .data import save_to_db, record_activity
         save_to_db(mail, 'Mail Recorded')
         record_activity('mail_event', email=to, action=action, subject=subject)
     return
@@ -481,7 +481,7 @@ def send_notif_event_role(user, role_name, event_name, accept_link, decline_link
 
 
 def send_notif_new_session_organizer(user, event_name, link):
-    print "sending"
+    print("sending")
     message_settings = MessageSettings.query.filter_by(action=NOTIF_NEW_SESSION).first()
     if not message_settings or message_settings.notif_status == 1:
         notif = NOTIFS[NOTIF_NEW_SESSION]
@@ -586,9 +586,9 @@ def get_commit_info(commit_number):
 
 
 def string_empty(string):
-    if type(string) is not str and type(string) is not unicode:
+    if type(string) is not str and type(string) is not str:
         return False
-    if string and string.strip() and string != u'' and string != u' ':
+    if string and string.strip() and string != '' and string != ' ':
         return False
     else:
         return True

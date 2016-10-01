@@ -8,10 +8,10 @@ from flask.ext import login
 from app.helpers.date_formatter import DateFormatter
 from app.helpers.helpers import get_count
 from app.helpers.versioning import clean_up_string, clean_html
-from custom_forms import CustomForms, session_form_str, speaker_form_str
+from .custom_forms import CustomForms, session_form_str, speaker_form_str
 from app.models.email_notifications import EmailNotification
 from app.models.user import ATTENDEE
-from version import Version
+from .version import Version
 from . import db
 
 
@@ -198,7 +198,7 @@ class Event(db.Model):
         return '<Event %r>' % self.name
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        return str(self).encode('utf-8')
 
     def __unicode__(self):
         return self.name

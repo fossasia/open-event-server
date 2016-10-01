@@ -26,10 +26,10 @@ class CustomPlaceholder(db.Model):
         self.origin = origin
 
     def __str__(self):
-        return 'Name:' + unicode(self.name).encode('utf-8')
+        return 'Name:' + str(self.name).encode('utf-8')
 
     def __unicode__(self):
-        return unicode(self.id)
+        return str(self.id)
 
     @property
     def serialize(self):

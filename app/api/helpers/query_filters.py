@@ -5,7 +5,7 @@ from sqlalchemy import or_, func, and_
 from app.helpers.helpers import get_date_range
 from app.models.event import Event
 from app.models.session import Session
-from custom_fields import DateTime
+from .custom_fields import DateTime
 
 
 def extract_special_queries(queries):
@@ -69,7 +69,7 @@ def event_search_location(value, query):
 
     for i in locations:
         response = requests.get(
-            "https://maps.googleapis.com/maps/api/geocode/json?address=" + unicode(i)).json()
+            "https://maps.googleapis.com/maps/api/geocode/json?address=" + str(i)).json()
         if response["results"]:
             lng = float(response["results"][0]["geometry"]["location"]["lng"])
             lat = float(response["results"][0]["geometry"]["location"]["lat"])

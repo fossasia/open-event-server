@@ -17,10 +17,10 @@ class ImageConfig(db.Model):
         self.size = size
 
     def __str__(self):
-        return 'Page:' + unicode(self.page).encode('utf-8')
+        return 'Page:' + str(self.page).encode('utf-8')
 
     def __unicode__(self):
-        return unicode(self.id)
+        return str(self.id)
 
     @property
     def serialize(self):

@@ -22,7 +22,7 @@ from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, BaseDAO, ServiceDAO
 from .helpers.utils import Resource, ETAG_HEADER_DEFN
 from .helpers import custom_fields as fields
-from helpers.special_fields import EventTypeField, EventTopicField, \
+from .helpers.special_fields import EventTypeField, EventTopicField, \
     EventPrivacyField, EventSubTopicField, EventStateField
 
 api = Namespace('events', description='Events')
@@ -266,8 +266,8 @@ class EventResource():
     Event Resource Base class
     """
     event_parser = reqparse.RequestParser()
-    event_parser.add_argument('location', type=unicode, dest='__event_search_location')
-    event_parser.add_argument('contains', type=unicode, dest='__event_contains')
+    event_parser.add_argument('location', type=str, dest='__event_search_location')
+    event_parser.add_argument('contains', type=str, dest='__event_contains')
     event_parser.add_argument('state', type=str)
     event_parser.add_argument('privacy', type=str)
     event_parser.add_argument('type', type=str)

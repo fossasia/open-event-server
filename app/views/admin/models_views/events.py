@@ -124,7 +124,7 @@ class EventsView(BaseView):
                 for img_file in imd.getlist('sponsors[logo]'):
                     img_files.append(img_file)
             event = DataManager.create_event(request.form, img_files)
-            if request.form.get('state', u'Draft') == u'Published' and string_empty(event.location_name):
+            if request.form.get('state', 'Draft') == 'Published' and string_empty(event.location_name):
                 flash(
                     "Your event was saved. To publish your event please review the highlighted fields below.",
                     "warning")
@@ -321,7 +321,7 @@ class EventsView(BaseView):
                 preselect.append(speaker_field)
                 if speaker_form[speaker_field]['require'] == 1:
                     required.append(speaker_field)
-        print preselect
+        print(preselect)
 
         if request.method == 'GET':
 
@@ -376,7 +376,7 @@ class EventsView(BaseView):
                 traceback.print_exc()
 
             if (request.form.get('state',
-                                 u'Draft') == u'Published') and string_empty(
+                                 'Draft') == 'Published') and string_empty(
                 event.location_name):
                 flash(
                     "Your event was saved. To publish your event please review the highlighted fields below.",

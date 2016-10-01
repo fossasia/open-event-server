@@ -18,7 +18,7 @@ from ...helpers.data_getter import DataGetter
 
 def get_published_event_or_abort(identifier):
     event = DataGetter.get_event_by_identifier(identifier=identifier)
-    if not event or event.state != u'Published':
+    if not event or event.state != 'Published':
         user = login.current_user
         if not login.current_user.is_authenticated or (not user.is_organizer(event.id) and not
                                                        user.is_coorganizer(event.id) and not

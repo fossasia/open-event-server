@@ -2,11 +2,11 @@ from flask.ext.restplus import Resource, Namespace, marshal
 from flask import jsonify, url_for, current_app
 
 from app.helpers.data import record_activity
-from helpers.import_helpers import get_file_from_request, import_event_json, create_import_job, \
+from .helpers.import_helpers import get_file_from_request, import_event_json, create_import_job, \
     send_import_mail
-from helpers.helpers import requires_auth
-from helpers.utils import TASK_RESULTS
-from events import EVENT
+from .helpers.helpers import requires_auth
+from .helpers.utils import TASK_RESULTS
+from .events import EVENT
 
 
 api = Namespace('imports', description='Imports', path='/')
@@ -18,7 +18,7 @@ class EventImportJson(Resource):
     @requires_auth
     def post(self):
         file = get_file_from_request(['zip'])
-        from helpers.tasks import import_event_task
+        from .helpers.tasks import import_event_task
         task = import_event_task.delay(file)
         # store import job in db
         try:

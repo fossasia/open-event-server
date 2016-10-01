@@ -26,7 +26,7 @@ class ImportJob(db.Model):
         return '<ImportJob %d by user %s>' % (self.id, str(self.user))
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        return str(self).encode('utf-8')
 
     def __unicode__(self):
         return self.__repr__()

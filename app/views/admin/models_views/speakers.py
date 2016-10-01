@@ -68,13 +68,13 @@ class SpeakersView(BaseView):
                     ))
                 speaker.photo = speaker_img
             logo = request.form.get('photo', None)
-            print logo
+            print(logo)
             if logo != '' and logo:
                 filename = '{}.png'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
                            logo[len('/serve_static/'):])
                 logo_file = UploadedFile(filepath, filename)
-                print logo_file
+                print(logo_file)
                 logo = upload(logo_file, 'events/%d/speakers/%d/photo' % (int(event_id), int(speaker.id)))
                 speaker.photo = logo
                 image_sizes = DataGetter.get_image_sizes_by_type(type='profile')

@@ -25,7 +25,7 @@ class SuperAdminContentView(SuperAdminBaseView):
         settings = get_settings()
         if request.method == 'POST':
             dic = dict(request.form.copy())
-            for key, value in dic.items():
+            for key, value in list(dic.items()):
                 settings[key] = value[0]
                 set_settings(**settings)
         return self.render(

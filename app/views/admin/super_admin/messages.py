@@ -3,7 +3,7 @@ from flask import redirect, request, url_for
 
 from app.helpers.system_mails import MAILS
 from app.helpers.system_notifications import NOTIFS
-from super_admin_base import SuperAdminBaseView, MESSAGES
+from .super_admin_base import SuperAdminBaseView, MESSAGES
 
 from ....helpers.data_getter import DataGetter
 from ....helpers.data import DataManager

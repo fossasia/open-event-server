@@ -1,6 +1,6 @@
 from app.helpers.data_getter import DataGetter
 
-import custom_fields as fields
+from . import custom_fields as fields
 
 
 class EventTypeField(fields.ChoiceString):

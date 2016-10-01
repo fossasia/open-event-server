@@ -1,5 +1,5 @@
 from flask import request
-from urlparse import urlparse
+from urllib.parse import urlparse
 import oauth2
 from app.settings import get_settings
 
@@ -108,9 +108,9 @@ class TwitterOAuth(object):
             self.TW_ACCESS_TOKEN + 'oauth_verifier=' + oauth_verifier + "&oauth_token=" + oauth_token, "POST")
 
     def get_authorized_client(self, oauth_verifier, oauth_token):
-        import urlparse
+        import urllib.parse
         resp, content = self.get_access_token(oauth_verifier, oauth_token)
-        access_token = dict(urlparse.parse_qsl(content))
+        access_token = dict(urllib.parse.parse_qsl(content))
         token = oauth2.Token(access_token["oauth_token"], access_token["oauth_token_secret"])
         token.set_verifier(oauth_verifier)
         return oauth2.Client(self.get_consumer(), token), access_token

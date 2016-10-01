@@ -28,13 +28,13 @@ class CustomField(Raw):
         works only for GET requests
         """
         if not self.validate(value):
-            print 'Validation of field with value \"%s\" (%s) failed' % (
-                value, str(self.__class__.__name__))
+            print('Validation of field with value \"%s\" (%s) failed' % (
+                value, str(self.__class__.__name__)))
             # raise MarshallingError
             # disabling for development purposes as the server crashes when
             # exception is raised. can be enabled when the project is mature
         if self.__schema_type__ == 'string':
-            return unicode(value)
+            return str(value)
         else:
             return value
 
@@ -105,7 +105,7 @@ class Upload(Uri):
             return value
         if value.startswith('/'):  # relative link
             value = request.url_root.strip('/') + value
-        return unicode(value)
+        return str(value)
 
     def validate(self, value):
         r = super(Upload, self).validate(value)
@@ -143,7 +143,7 @@ class DateTime(CustomField):
 
     def to_str(self, value):
         return None if not value \
-            else unicode(value.strftime(self.dt_format))
+            else str(value.strftime(self.dt_format))
 
     def from_str(self, value):
         if not value:

@@ -48,7 +48,7 @@ class Notification(db.Model):
         return '<Notif %s:%s>' % (self.user, self.title)
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        return str(self).encode('utf-8')
 
     def __unicode__(self):
         return '%r: %r' % (self.user, self.title)

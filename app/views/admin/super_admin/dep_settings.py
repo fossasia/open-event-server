@@ -1,6 +1,6 @@
 from flask import request
 from flask_admin import expose
-from super_admin_base import SuperAdminBaseView, SETTINGS
+from .super_admin_base import SuperAdminBaseView, SETTINGS
 
 from app.settings import get_settings, set_settings
 from app.helpers.data_getter import DataGetter

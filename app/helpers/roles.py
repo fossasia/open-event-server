@@ -1,6 +1,6 @@
 from functools import wraps
 
-from data_getter import DataGetter
+from .data_getter import DataGetter
 from enum import Enum
 from flask import flash
 

@@ -182,7 +182,7 @@ MAILS = {
     },
     EVENT_IMPORTED: {
         'recipient': 'User',
-        'subject': u'Event {event_name} has been imported',
+        'subject': 'Event {event_name} has been imported',
         'message': (
             "Click on the following link to manage your event" +
             "<br> <a href='{event_url}'>Link</a>"

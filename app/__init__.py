@@ -5,7 +5,7 @@ import re
 from pytz import timezone
 import base64
 import warnings
-from StringIO import StringIO
+from io import StringIO
 
 import qrcode
 from flask.exthook import ExtDeprecationWarning
@@ -52,8 +52,8 @@ from app.models.user import User
 from app.models.event import Event
 from app.models.session import Session
 from app.views.admin.admin import AdminView
-from helpers.jwt import jwt_authenticate, jwt_identity
-from helpers.formatter import operation_name
+from .helpers.jwt import jwt_authenticate, jwt_identity
+from .helpers.formatter import operation_name
 from app.helpers.data_getter import DataGetter
 from app.views.api_v1_views import app as api_v1_routes
 from app.views.sitemap import app as sitemap_routes
@@ -62,7 +62,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from app.helpers.data import DataManager, delete_from_db
 from app.helpers.helpers import send_after_event
 from app.helpers.cache import cache
-from helpers.helpers import send_email_for_expired_orders
+from .helpers.helpers import send_email_for_expired_orders
 from werkzeug.contrib.profiler import ProfilerMiddleware
 
 from flask.ext.sqlalchemy import get_debug_queries
@@ -436,8 +436,8 @@ def update_sent_state(sender=None, body=None, **kwargs):
 
 # register celery tasks. removing them will cause the tasks to not function. so don't remove them
 # it is important to register them after celery is defined to resolve circular imports
-import api.helpers.tasks
-import helpers.tasks
+from . import api.helpers.tasks
+from . import helpers.tasks
 
 
 @app.context_processor
