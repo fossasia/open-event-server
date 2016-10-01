@@ -9,17 +9,17 @@ from populate_db import populate
 
 @manager.command
 def list_routes():
-    import urllib
+    import urllib.request, urllib.parse, urllib.error
 
     output = []
     for rule in app.url_map.iter_rules():
         methods = ','.join(rule.methods)
-        line = urllib.unquote("{:50s} {:20s} {}".format(
+        line = urllib.parse.unquote("{:50s} {:20s} {}".format(
             rule.endpoint, methods, rule))
         output.append(line)
 
     for line in sorted(output):
-        print line
+        print(line)
 
 @manager.command
 def add_event_identifier():

@@ -126,18 +126,18 @@ def populate():
     """
     Create defined Roles, Services and Permissions.
     """
-    print
-    print 'Creating roles...'
+    print()
+    print('Creating roles...')
     create_roles()
-    print 'Creating services...'
+    print('Creating services...')
     create_services()
-    print 'Creating permissions...'
+    print('Creating permissions...')
     create_permissions()
-    print 'Creating custom system roles...'
+    print('Creating custom system roles...')
     create_custom_sys_roles()
-    print 'Creating admin panel permissions...'
+    print('Creating admin panel permissions...')
     create_panel_permissions()
-    print 'Creating user permissions...'
+    print('Creating user permissions...')
     create_user_permissions()
 
     db.session.commit()

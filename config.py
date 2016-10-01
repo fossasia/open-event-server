@@ -34,7 +34,7 @@ class ProductionConfig(Config):
     # you don't want production on default db
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', '')
     if not SQLALCHEMY_DATABASE_URI:
-        print '`DATABASE_URL` either not exported or empty'
+        print('`DATABASE_URL` either not exported or empty')
 
 
 class StagingConfig(Config):
@@ -57,7 +57,7 @@ class DevelopmentConfig(Config):
 
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', '')
     if not SQLALCHEMY_DATABASE_URI:
-        print '`DATABASE_URL` either not exported or empty'
+        print('`DATABASE_URL` either not exported or empty')
 
 
 class TestingConfig(Config):
