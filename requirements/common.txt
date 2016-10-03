@@ -23,6 +23,7 @@ psycopg2==2.6.2
 xlrd==1.0.0
 mock==2.0.0
 SQLAlchemy-Utils==0.32.7
+pycparser==2.13
 cryptography==1.4
 itsdangerous==0.24
 humanize==0.5.1
