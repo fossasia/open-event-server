@@ -14,7 +14,7 @@
 <div>
 
     <form id="settings_form" method="post" class="form-horizontal form-label-left">
-        <ul id="settings-tabs" class="nav nav-tabs bar_tabs" role="tablist" style="background: #FFFFFF;">
+        <ul id="settings-tabs" class="nav nav-tabs bar_tabs large_tab_list" role="tablist" style="background: #FFFFFF;">
             <li class="active">
                 <a href="#tab_content0" id="profile-tab" data-toggle="tab">System Tokens</a>
             </li>
@@ -37,7 +37,33 @@
             </li>
             {% endif %}
         </ul>
-
+        <div class="dropdown tabs_small">
+            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+            <span class="drop_header">All Pending</span>
+            <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li value="System Tokens" class="small_tab_list active">
+                    <a href="#tab_content0" id="profile-tab" data-toggle="tab">System Tokens</a>
+                </li>
+                <li value="Microservices" class="small_tab_list">
+                    <a href="#tab_content2" id="microservice-tab" data-toggle="tab">Microservices</a>
+                </li>
+                <li value="Images" class="small_tab_list">
+                    <a href="#tab_content4" id="image-config-tab" data-toggle="tab">Images</a>
+                </li>
+                <li value="Analytics" class="small_tab_list">
+                    <a href="#tab_content5" id="analytics-tab" data-toggle="tab">Analytics</a>
+                </li>
+                <li value="Payment Gateways" class="small_tab_list">
+                    <a href="#tab_content1" id="payment-gateway-tab" data-toggle="tab">Payment Gateways</a>
+                </li>
+                {% if 'ticketing' in included_settings and 'payments' in included_settings %}
+                <li value="Ticket Fees" class="small_tab_list">
+                    <a href="#tab_content3" id="ticket-fees-tab" data-toggle="tab">Ticket Fees</a>
+                </li>
+            {% endif %}
+            </ul>
+        </div>
         <div id="myTabContent" class="tab-content">
             <div role="tabpanel" class="tab-pane fade active in" id="tab_content0" aria-labelledby="profile-tab">
                  {% include 'gentelella/admin/super_admin/settings/_system.html' %}
@@ -91,6 +117,15 @@
         storage_form();
     });
 
+    $(".small_tab_list").click(function(){
+    $(".small_tab_list").removeClass("active");
+    $(this).addClass("active");
+    var clicked_link = $(this).attr("value");
+    $(".drop_header").text(clicked_link);
+    });
+    $('.tabs_small a').click(function(){
+    $(this).tab('show');
+    }); 
     </script>
 
 {% endblock %}

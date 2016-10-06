@@ -22,10 +22,23 @@ Reports
 
 
 <div>
-  <ul id="reports_tabs" class="nav nav-tabs bar_tabs" role="tablist">
+  <ul id="reports_tabs" class="nav nav-tabs bar_tabs large_tab_list" role="tablist">
     <li class="active"><a href="#tab_content4" id="all-tab" data-toggle="tab">System Logs</a></li>
     <li><a href="#tab_content1" id="home-tab" data-toggle="tab">Server Logs</a></li>
   </ul>
+  <div class="dropdown tabs_small">
+      <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+      <span class="drop_header">System Roles</span>
+      <span class="caret"></span></button>
+      <ul class="dropdown-menu">
+           <li value="System Logs" class="small_tab_list active">
+               <a href="#tab_content4" id="all-tab" data-toggle="tab">System Logs</a>
+           </li>
+           <li value="Server Logs" class="small_tab_list">
+               <a href="#tab_content1" id="home-tab" data-toggle="tab">Server Logs</a>
+           </li>
+      </ul>
+  </div>
   <div id="myTabContent" class="tab-content">
     <div role="tabpanel" class="tab-pane fade active in" id="tab_content4"
          aria-labelledby="all-tab">
@@ -44,6 +57,22 @@ Reports
 
 {% block tail_js %}
 {{ super() }}
-
+<script>
+    $(".small_tab_list").click(function(){
+    $(".small_tab_list").removeClass("active");
+    $(this).addClass("active");
+    var clicked_link = $(this).attr("value");
+    $(".drop_header").text(clicked_link);
+    });
+    $(".small_tab_list2").click(function(){
+    $(".small_tab_list2").removeClass("active");
+    $(this).addClass("active");
+    var clicked_link = $(this).attr("value");
+    $(".drop_header2").text(clicked_link);
+    });
+    $('.tabs_small a').click(function(){
+    $(this).tab('show');
+    }); 
+</script>
 {% endblock %}
 

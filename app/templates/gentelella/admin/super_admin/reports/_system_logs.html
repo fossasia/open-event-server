@@ -7,11 +7,27 @@
 
 </style>
 <div>
-  <ul id="system_logs" class="nav nav-tabs bar_tabs" role="tablist">
+  <ul id="system_logs" class="nav nav-tabs bar_tabs large_tab_list" role="tablist">
     <li class="active"><a href="#activity_div" data-toggle="tab">Activity</a></li>
     <li class=""><a href="#mail_div" data-toggle="tab">Mails</a></li>
     <li class=""><a href="#notif_div" data-toggle="tab">Notifications</a></li>
   </ul>
+  <div class="dropdown tabs_small">
+      <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+      <span class="drop_header2">Activity</span>
+      <span class="caret"></span></button>
+      <ul class="dropdown-menu">
+           <li value="Activity" class="small_tab_list2 active">
+               <a href="#activity_div" data-toggle="tab">Activity</a>
+           </li>
+           <li value="Mails" class="small_tab_list2">
+               <a href="#mail_div" data-toggle="tab">Mails</a>
+           </li>
+           <li value="Notifications" class="small_tab_list2">
+               <a href="#notif_div" data-toggle="tab">Notifications</a>
+           </li>
+      </ul>
+  </div>
   <!-- tab contents -->
   <div id="myTabContent" class="tab-content">
     <!-- activity tab -->
