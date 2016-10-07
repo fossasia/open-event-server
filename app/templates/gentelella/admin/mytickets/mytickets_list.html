@@ -1,92 +1,106 @@
 {% extends 'gentelella/admin/base.html' %}
-
 {% block title %}
     {{page_content.title}}
 {% endblock %}
-
 {% block head_css %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/explore.css') }}">
-
 {% endblock %}
-
 {% macro order_element(order) %}
-    <a href="{{ url_for('ticketing.view_order_after_payment', order_identifier=order.identifier) }}">
-        <div class="col-xs-12 event-holder">
-            <div class="thumbnail row">
-                <div class="img-box col-md-3 col-sm-3 col-xs-3">
-                    <img class="event-image" src='{% if order.event.logo %}{{ order.event.logo }}{% elif order.event.background_url %}{{ order.event.thumbnail }}{% elif order.event.topic%}{% set vars = {"foo": False} %}{% for custom_image in custom_placeholder %}{% if custom_image.name == order.event.topic %}{{ custom_image.url }}{% if vars.update({"foo": True}) %} {% endif %}{% endif %}{% endfor %}{% if not vars.foo %}{{ url_for("static", filename="placeholders/" + placeholder_images[order.event.topic])}}{% endif %}{% elif order.event.subtopic %}{% set vars = {"foo": False} %}{% for custom_image in custom_placeholder %}{% if custom_image.name == order.event.subtopic %}{{ custom_image.url }}{% if vars.update({"foo": True}) %} {% endif %}{% endif %}{% endfor %}{% if not vars.foo %}{ url_for("static", filename="placeholders/" + placeholder_images[order.event.subtopic])}}{% endif %}{% else %}{% set vars = {"foo": False} %}{% for custom_image in custom_placeholder %}{% if custom_image.name == "Other" %}{{ custom_image.url }}{% if vars.update({"foo": True}) %} {% endif %}{% endif %}{% endfor %}{% if not vars.foo %}{{ url_for("static", filename="placeholders/" + placeholder_images["Other"])}}{% endif %}{% endif %}'
-                         onerror="imgError(this, true)">
-                </div>
-                <div class="caption col-md-9 col-sm-9 col-xs-9">
-                    <small class="time">
-                        {% if order.event %}{{ order.event.start_time.strftime('%a, %B %d %I:%M %p') }}{% endif %}</small>
-                    <h4 class="name">{{ order.event.name }}</h4>
-                    <small class="location_name">
-                        {% if order.event %}{{ order.event.location_name.split(",")[0] }}{% endif %}</small>
-                    <hr>
-                    <p class="tags">
-                        <span class="filter-hashtag">
-                            {% if order.amount == 0 %}Free{% else %}${{ order.amount | money }}{% endif %} order #{{ order.get_invoice_number() }} on {{ order.completed_at.strftime('%B %d, %Y %I:%M %p') }}
-                        </span>
-                    </p>
-                </div>
+<a href="{{ url_for('ticketing.view_order_after_payment', order_identifier=order.identifier) }}">
+    <div class="col-xs-12 event-holder">
+        <div class="thumbnail row">
+            <div class="img-box col-md-3 col-sm-3 col-xs-3">
+                <img class="event-image" src='{% if order.event.logo %}{{ order.event.logo }}{% elif order.event.background_url %}{{ order.event.thumbnail }}{% elif order.event.topic%}{% set vars = {"foo": False} %}{% for custom_image in custom_placeholder %}{% if custom_image.name == order.event.topic %}{{ custom_image.url }}{% if vars.update({"foo": True}) %} {% endif %}{% endif %}{% endfor %}{% if not vars.foo %}{{ url_for("static", filename="placeholders/" + placeholder_images[order.event.topic])}}{% endif %}{% elif order.event.subtopic %}{% set vars = {"foo": False} %}{% for custom_image in custom_placeholder %}{% if custom_image.name == order.event.subtopic %}{{ custom_image.url }}{% if vars.update({"foo": True}) %} {% endif %}{% endif %}{% endfor %}{% if not vars.foo %}{ url_for("static", filename="placeholders/" + placeholder_images[order.event.subtopic])}}{% endif %}{% else %}{% set vars = {"foo": False} %}{% for custom_image in custom_placeholder %}{% if custom_image.name == "Other" %}{{ custom_image.url }}{% if vars.update({"foo": True}) %} {% endif %}{% endif %}{% endfor %}{% if not vars.foo %}{{ url_for("static", filename="placeholders/" + placeholder_images["Other"])}}{% endif %}{% endif %}'
+                onerror="imgError(this, true)">
+            </div>
+            <div class="caption col-md-9 col-sm-9 col-xs-9">
+                <small class="time">
+                {% if order.event %}{{ order.event.start_time.strftime('%a, %B %d %I:%M %p') }}{% endif %}</small>
+                <h4 class="name">{{ order.event.name }}</h4>
+                <small class="location_name">
+                {% if order.event %}{{ order.event.location_name.split(",")[0] }}{% endif %}</small>
+                <hr>
+                <p class="tags">
+                    <span class="filter-hashtag">
+                        {% if order.amount == 0 %}Free{% else %}${{ order.amount | money }}{% endif %} order #{{ order.get_invoice_number() }} on {{ order.completed_at.strftime('%B %d, %Y %I:%M %p') }}
+                    </span>
+                </p>
             </div>
         </div>
-    </a>
-{% endmacro %}
-
-
-
-{% block body %}
-    <div class="page-title">
-        <div class="title_left">
-            <h3>{{page_content.title}}</h3>
-        </div>
     </div>
-
-    <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="x_panel" style="min-height:600px;">
-                <div class="x_content">
-                    <ul class="nav nav-tabs bar_tabs" style="background-color: white;">
-                        <li role="presentation" class="active">
-                            <a href="#upcoming-events-tab" role="tab" data-toggle="tab" aria-expanded="true">{{page_content.tab_upcoming_events}}</a>
+</a>
+{% endmacro %}
+{% block body %}
+<div class="page-title">
+    <div class="title_left">
+        <h3>{{page_content.title}}</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel" style="min-height:600px;">
+            <div class="x_content">
+                <ul class="nav nav-tabs bar_tabs tickets_tab" style="background-color: white;">
+                    <li role="presentation" class="active">
+                        <a href="#upcoming-events-tab" role="tab" data-toggle="tab" aria-expanded="true">{{page_content.tab_upcoming_events}}</a>
+                    </li>
+                    <li role="presentation" class="">
+                        <a href="#past-events-tab" role="tab" data-toggle="tab" aria-expanded="false">{{page_content.tab_past_events}}</a>
+                    </li>
+                </ul>
+                <div class="dropdown tabs_small">
+                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span class="drop_header">{{page_content.tab_upcoming_events}}</span>
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li value="{{page_content.tab_upcoming_events}}" class="small_tab_list">
+                            <a href="#upcoming-events-tab" role="tab" data-toggle="tab" aria-expanded="true">
+                                {{page_content.tab_upcoming_events}}
+                            </a>
                         </li>
-                        <li role="presentation" class="">
-                            <a href="#past-events-tab" role="tab" data-toggle="tab" aria-expanded="false">{{page_content.tab_past_events}}</a>
+                        <li value="{{page_content.tab_past_events}}" class="small_tab_list">
+                            <a href="#past-events-tab" role="tab" data-toggle="tab" aria-expanded="false">
+                                {{page_content.tab_past_events}}
+                            </a>
                         </li>
                     </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane fade active in" id="upcoming-events-tab">
-                            <div class="row">
-                                {% for order in upcoming_events_orders %}
-                                    <div class="col-md-12 col-sm-12 col-xs-12">
-                                        {{ order_element(order) }}
-                                    </div>
-                                {% else %}
-                                    <span class="message">No tickets for upcoming events found.</span>
-                                {% endfor %}
-                            </div>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane fade active in" id="upcoming-events-tab">
+                        <div class="row">
+                            {% for order in upcoming_events_orders %}
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    {{ order_element(order) }}
+                                </div>
+                            {% else %}
+                                <span class="message">No tickets for upcoming events found.</span>
+                            {% endfor %}
                         </div>
-                        <div class="tab-pane fade" id="past-events-tab">
-                            <div class="row">
-                                {% for order in past_events_orders %}
-                                    <div class="col-md-12 col-sm-12 col-xs-12">
-                                        {{ order_element(order) }}
-                                    </div>
-                                {% else %}
-                                    <span class="message">No tickets for past events found</span>
-                                {% endfor %}
-                            </div>
+                    </div>
+                    <div class="tab-pane fade" id="past-events-tab">
+                        <div class="row">
+                            {% for order in past_events_orders %}
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    {{ order_element(order) }}
+                                </div>
+                            {% else %}
+                                <span class="message">No tickets for past events found</span>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 {% endblock %}
 {% block tail_js %}
-    {{ super() }}
+<script>
+  $(".small_tab_list").click(function(){
+    var clicked_link = $(this).attr("value");
+    $(".drop_header").text(clicked_link);
+    });  
+</script>
+{{ super() }}
 {% endblock %}
-

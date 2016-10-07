@@ -1,82 +1,90 @@
 {% extends 'gentelella/admin/super_admin/dashboard.html' %}
-
 {% block title %}
     Content
 {% endblock %}
-
 {% set active_page = "content" %}
-
 {% block head_css %}
     {{ super() }}
 {% endblock %}
-
 {% block content %}
-<div>
-    <div class="responsive-tabs-container accordion-xs">
-        <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist" style="background: #FFFFFF;">
-            <li role="presentation" class="active">
-                <a href="#tab_content2" id="profile-tab" data-toggle="tab">Social Links</a>
-            </li>
-            <li role="presentation">
-                <a href="#tab_content3" id="microservice-tab" data-toggle="tab">Pages</a>
-            </li>
-            <li role="presentation">
-                <a href="#tab_content4" id="images-tab" data-toggle="tab">System Images</a>
-            </li>
-        </ul>
-        <div class="nav bar_tabs" role="tablist">
-                <a href="#tab_content2" class="accordion-link active"id="home-tab" data-toggle="tab">Social Links</a>
-                <a href="#tab_content3" class="accordion-link"id="profile-tab" data-toggle="tab">Pages</a>
-                <a href="#tab_content4" class="accordion-link"id="images-tab" data-toggle="tab">System Images</a>
-        </div>
-
-        <div id="myTabContent" class="tab-content">
-
-            <div class="tab-pane fade in active" id="tab_content2">
-                  <form id="settings_form" method="post" class="form-horizontal form-label-left">
-                      {% include 'gentelella/admin/super_admin/content/_social.html' %}
-                  </form>
+    <div>
+        <div class="responsive-tabs-container accordion-xs">
+            <ul id="myTab" class="nav nav-tabs bar_tabs large_tab_list" role="tablist" style="background: #FFFFFF;">
+                <li role="presentation" class="active">
+                    <a href="#tab_content2" id="profile-tab" data-toggle="tab">Social Links</a>
+                </li>
+                <li role="presentation">
+                    <a href="#tab_content3" id="microservice-tab" data-toggle="tab">Pages</a>
+                </li>
+                <li role="presentation">
+                    <a href="#tab_content4" id="images-tab" data-toggle="tab">System Images</a>
+                </li>
+            </ul>
+            <div class="dropdown tabs_small">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                <span class="drop_header">Social Links</span>
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li role="presentation" value="Social Links" class="small_tab_list active">
+                        <a href="#tab_content2" id="profile-tab" data-toggle="tab">Social Links</a>
+                    </li>
+                    <li role="presentation" value="Pages" class="small_tab_list">
+                        <a href="#tab_content3" id="microservice-tab" data-toggle="tab">Pages</a>
+                    </li>
+                    <li role="presentation" value="System Images" class="small_tab_list">
+                        <a href="#tab_content4" id="images-tab" data-toggle="tab">System Images</a>
+                    </li>
+                </ul>
             </div>
-            <div class="tab-pane fade in" id="tab_content3">
-                 {% include 'gentelella/admin/super_admin/pages/pages.html' %}
+            <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade in active" id="tab_content2">
+                    <form id="settings_form" method="post" class="form-horizontal form-label-left">
+                        {% include 'gentelella/admin/super_admin/content/_social.html' %}
+                    </form>
+                </div>
+                <div class="tab-pane fade in" id="tab_content3">
+                    {% include 'gentelella/admin/super_admin/pages/pages.html' %}
+                </div>
+                <div class="tab-pane fade in" id="tab_content4">
+                    {% include 'gentelella/admin/super_admin/content/_system_images.html' %}
+                </div>
             </div>
-
-            <div class="tab-pane fade in" id="tab_content4">
-                 {% include 'gentelella/admin/super_admin/content/_system_images.html' %}
-            </div>
-
-        </div>
         </div>
     </div>
 </div>
-
-
-
-
 {% endblock %}
-
 {% block tail_js %}
-    {{ super() }}
-    <script type="text/javascript">
-    // manage the storage form events
-    function storage_form(){
-        sel_opt = $('input[name=storage_place]:checked', '#settings_form').val();
-        if (sel_opt == 'local')
-            disable = true;
-        else
-            disable = false;
-        $('[name^=aws_]').prop("readonly", disable);
-        $('[name^=aws_]').prop("required", ~disable);
-    }
+{{ super() }}
+<script type="text/javascript">
+// manage the storage form events
+function storage_form(){
+sel_opt = $('input[name=storage_place]:checked', '#settings_form').val();
+if (sel_opt == 'local')
+disable = true;
+else
+disable = false;
+$('[name^=aws_]').prop("readonly", disable);
+$('[name^=aws_]').prop("required", ~disable);
+}
 
-    $('.radio_storage').click(function(event){
-        storage_form();
-    });
+$('.radio_storage').click(function(event){
+storage_form();
+});
 
-    $(document).ready(function(){
-        storage_form();
-        $(".rich-area").summernote(summernoteConfig);
-    });
-    </script>
+$(document).ready(function(){
+storage_form();
+$(".rich-area").summernote(summernoteConfig);
+});
 
+$(".small_tab_list").click(function(){
+$(".small_tab_list").removeClass("active");
+$(this).addClass("active");
+var clicked_link = $(this).attr("value");
+$(".drop_header").text(clicked_link);
+});
+
+$('.tabs_small a').click(function(){
+    $(this).tab('show');
+})
+</script>
 {% endblock %}
