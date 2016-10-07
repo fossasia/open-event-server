@@ -42,7 +42,7 @@
                                         <span class="drop_header">Live</span>
                                         <span class="caret"></span></button>
                                         <ul class="dropdown-menu">
-                                            <li value="Live" class="small_tab_list">
+                                            <li value="Live" class="small_tab_list active">
                                                 <a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab">
                                                     Live
                                                 </a>
@@ -92,16 +92,25 @@
             <script src="{{ url_for('static', filename='admin/lib/bootstrap-progressbar/bootstrap-progressbar.min.js') }}"></script>
             <script type="text/javascript">
             $('.table').DataTable();
+
             $(document).ready(function() {
-            $('.progress .progress-bar').progressbar({display_text: 'center', use_percentage: false});
+                $('.progress .progress-bar').progressbar({display_text: 'center', use_percentage: false});
             });
+                
             $('.accordion-link').click(function(){
-            $('.accordion-link').removeClass('active');
-            $(this).addClass('active');
+                $('.accordion-link').removeClass('active');
+                $(this).addClass('active');
             });
+
             $(".small_tab_list").click(function(){
-            var clicked_link = $(this).attr("value");
-            $(".drop_header").text(clicked_link);
+                $(".small_tab_list").removeClass("active");
+                $(this).addClass("active");
+                var clicked_link = $(this).attr("value");
+                $(".drop_header").text(clicked_link);
+            });
+
+            $('.tabs_small a').click(function(){
+                $(this).tab('show');
             });
             </script>
         {% endblock %}

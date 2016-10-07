@@ -85,7 +85,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel" style="min-height:600px;">
                 <div class="x_content">
-                    <ul class="nav nav-tabs bar_tabs sessions_tab" style="background-color: white;">
+                    <ul class="nav nav-tabs bar_tabs sessions_tab large_tab_list" style="background-color: white;">
                         <li role="presentation" class="active">
                             <a href="#upcoming-events-tab" role="tab" data-toggle="tab" aria-expanded="true">{{page_content.tab_upcoming_events}}</a>
                         </li>
@@ -98,7 +98,7 @@
                         <span class="drop_header">{{page_content.tab_upcoming_events}}</span>
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu">
-                            <li value="{{page_content.tab_upcoming_events}}" class="small_tab_list">
+                            <li value="{{page_content.tab_upcoming_events}}" class="small_tab_list active">
                                 <a href="#upcoming-events-tab" role="tab" data-toggle="tab" aria-expanded="true">
                                     {{page_content.tab_upcoming_events}}
                                 </a>
@@ -141,10 +141,16 @@
 {% endblock %}
 {% block tail_js %}
 <script>
-  $(".small_tab_list").click(function(){
+$(".small_tab_list").click(function(){
+    $(".small_tab_list").removeClass("active");
+    $(this).addClass("active");
     var clicked_link = $(this).attr("value");
     $(".drop_header").text(clicked_link);
-    });  
+});
+
+$('.tabs_small a').click(function(){
+    $(this).tab('show');
+});  
 </script>
     {{ super() }}
 {% endblock %}
