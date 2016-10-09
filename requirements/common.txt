@@ -53,3 +53,7 @@ forex-python
 oauth2
 qrcode
 python-magic
+ptyz
+SLUG_OK
+stripe
+python_oauth2
