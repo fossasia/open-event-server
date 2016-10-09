@@ -78,13 +78,35 @@ Sessions
 
 
 <div>
-    <ul id="event-tabs" class="nav nav-tabs bar_tabs" role="tablist">
+    <ul id="event-tabs" class="nav nav-tabs bar_tabs large_tab_list" role="tablist">
         <li class=""><a href="#tab_content4" id="all-tab" data-toggle="tab">All Sessions</a></li>
         <li class="active"><a href="#tab_content1" id="home-tab" data-toggle="tab">All Pending</a></li>
         <li class=""><a href="#tab_content2" id="profile-tab" data-toggle="tab">All Accepted</a></li>
         <li class=""><a href="#tab_content3" id="profile-tab2" data-toggle="tab">All Rejected</a></li>
         <li class=""><a href="#tab_content5" id="profile-tab3" data-toggle="tab">All Deleted Sessions</a></li>
     </ul>
+    <div class="dropdown tabs_small">
+            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+            <span class="drop_header">All Pending</span>
+            <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li value="All Sessions" class="small_tab_list">
+                    <a href="#tab_content4" id="all-tab" data-toggle="tab">All Sessions</a>
+                </li>
+                <li value="All Pending" class="small_tab_list active">
+                    <a href="#tab_content1" id="home-tab" data-toggle="tab">All Pending</a>
+                </li>
+                <li value="All Accepted" class="small_tab_list">
+                    <a href="#tab_content2" id="profile-tab" data-toggle="tab">All Accepted</a>
+                </li>
+                <li value="All Rejected" class="small_tab_list">
+                    <a href="#tab_content3" id="profile-tab2" data-toggle="tab">All Rejected</a>
+                </li>
+                <li value="All Deleted Events" class="small_tab_list">
+                    <a href="#tab_content5" id="profile-tab3" data-toggle="tab">All Deleted Events</a>
+                </li>
+            </ul>
+    </div>
     <div id="myTabContent" class="tab-content">
         <div role="tabpanel" class="tab-pane fade" id="tab_content4"
              aria-labelledby="all-tab">
@@ -196,7 +218,15 @@ Sessions
 
 
 
-
+        $(".small_tab_list").click(function(){
+        $(".small_tab_list").removeClass("active");
+        $(this).addClass("active");
+        var clicked_link = $(this).attr("value");
+        $(".drop_header").text(clicked_link);
+        });
+        $('.tabs_small a').click(function(){
+        $(this).tab('show');
+        }); 
 </script>
 {% endblock %}
 

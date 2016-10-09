@@ -1,102 +1,105 @@
 {% extends 'gentelella/admin/base.html' %}
 {% block head %}
-{{ super() }}
+    {{ super() }}
 {% endblock %}
-
 {% block head_css %}
-{{ super() }}
-<link rel="stylesheet"
-          href="{{ url_for('static', filename='admin/lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"/>
-<style type="text/css">
-#admin-title {
-    width:0;
-}
-
-@media (max-width: 1000px) {
-    #admin-title {
+    {{ super() }}
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='admin/lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"/>
+        <style type="text/css">
+        #admin-title {
+        width:0;
+        }
+        @media (max-width: 1000px) {
+        #admin-title {
         width:100%;
-    }
-}
-</style>
-{% endblock %}
-
-{% set navigation_bar = [
-('/admin/', 'home', 'Admin', 'Dashboard'),
-('/admin/events/', 'events', 'Events', 'Manage All Events'),
-('/admin/sales/', 'sales', 'Sales', 'View all Sales'),
-('/admin/sessions/', 'sessions', 'Sessions', 'Manage All Sessions'),
-('/admin/users/', 'users', 'Users', 'Users'),
-('/admin/permissions/', 'permissions', 'Permissions', 'Permissions'),
-('/admin/messages/', 'messages', 'Messages', 'System Messages'),
-('/admin/reports/', 'reports', 'Reports', 'Reports'),
-('/admin/settings/', 'settings', 'Settings', 'Settings'),
-('/admin/modules/', 'modules', 'Modules', 'Modules'),
-('/admin/content/', 'content', 'Content', 'Content')
-] -%}
-
-{% set active_page = active_page|default('home') -%}
-
-{% macro tabs() %}
-<ul class="nav nav-tabs bar_tabs right" role="tablist"
-    style="background: #FFFFFF; margin-bottom:0px; border-bottom: 0px; background: none; margin-top:40px">
-    {% for href, id, caption, title in navigation_bar|reverse %}
-    <li
-    {% if id == active_page %} class="active"{% endif %}><a href="{{ href|e }}">{{ caption|e }}</a></li>
-    {% endfor %}
-</ul>
-{% endmacro %}
-
-{% block body %}
-
-
-<div class="row">
-
-    <div class="col-md-12">
-        <div class="page-title left" id="admin-title">
-            <div class="title_left">
-                {% for href, id, caption, page_title in navigation_bar %}
-                    {% if id == active_page %}
-                     <h3 style="white-space: nowrap;">{{page_title}} </h3>
+        }
+        }
+        </style>
+    {% endblock %}
+    {% set navigation_bar = [
+    ('/admin/', 'home', 'Admin', 'Dashboard'),
+    ('/admin/events/', 'events', 'Events', 'Manage All Events'),
+    ('/admin/sales/', 'sales', 'Sales', 'View all Sales'),
+    ('/admin/sessions/', 'sessions', 'Sessions', 'Manage All Sessions'),
+    ('/admin/users/', 'users', 'Users', 'Users'),
+    ('/admin/permissions/', 'permissions', 'Permissions', 'Permissions'),
+    ('/admin/messages/', 'messages', 'Messages', 'System Messages'),
+    ('/admin/reports/', 'reports', 'Reports', 'Reports'),
+    ('/admin/settings/', 'settings', 'Settings', 'Settings'),
+    ('/admin/modules/', 'modules', 'Modules', 'Modules'),
+    ('/admin/content/', 'content', 'Content', 'Content')
+    ] -%}
+    {% set active_page = active_page|default('home') -%}
+    {% macro tabs() %}
+    <ul class="nav nav-tabs bar_tabs right admin_tabs" role="tablist"
+        style="background: #FFFFFF; margin-bottom:0px; border-bottom: 0px; background: none; margin-top:40px">
+        {% for href, id, caption, title in navigation_bar|reverse %}
+            <li
+                {% if id == active_page %} class="active"{% endif %}><a href="{{ href|e }}">{{ caption|e }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endmacro %}
+    {% block body %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-title left" id="admin-title">
+                    <div class="title_left">
+                        {% for href, id, caption, page_title in navigation_bar %}
+                            {% if id == active_page %}
+                                <h3 style="white-space: nowrap;">{{page_title}} </h3>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {{ tabs() }}
+                <div class="dropdown tabs_small">
+                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                    {% if active_page == "home" %}
+                        Admin
+                    {% else %}
+                        {{ active_page | capitalize }}
                     {% endif %}
-                {% endfor %}
-            </div>
-        </div>
-        {{ tabs() }}
-        <div class="x_panel" style="min-height:600px;">
-
-            <div class="x_content">
-
-                <br>
-                {% block content %}
-
-                {% endblock %}
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        {% for href, id, caption, page_title in navigation_bar %}
+                            <li>
+                                <a href="{{ href|e }}" id="{% if id == active_page %}activated_link{% endif %}">
+                                {{ caption|e }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            <div class="x_panel" style="min-height:600px;">
+                <div class="x_content">
+                    <br>
+                    {% block content %}
+                    {% endblock %}
+                </div>
             </div>
         </div>
     </div>
-</div>
-
 {% endblock %}
 {% block tail_js %}
-{{ super() }}
-
-<script src="{{ url_for('static', filename='admin/lib/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ url_for('static', filename='admin/lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
-<script type="text/javascript">
-     $('.table:not(.no-global-dt)').DataTable({"lengthMenu": [ 25, 50, 100, 200 ], "pageLength": 50});
-
-     function change_column_time_to_humanize_format(datatable_name, column_id) {
-        $(datatable_name).each(function( key, value ) {
-          $(value).children().each(function( key1, value2 ) {
-             if(key1 === column_id ){
-                var current_value = $(value2).text().slice(0, 16);
-                var changed_value = moment(current_value, "YYYY-MM-DD hh:mm").fromNow()
-                var isValid = moment(current_value, "YYYY-MM-DD HH:mm", true).isValid()
-                if (changed_value !== current_value && isValid === true){
-                    $(value2).text(changed_value)
-                }
-            }
-        });
-      });
+    {{ super() }}
+    <script src="{{ url_for('static', filename='admin/lib/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script type="text/javascript">
+    $('.table:not(.no-global-dt)').DataTable({"lengthMenu": [ 25, 50, 100, 200 ], "pageLength": 50});
+    function change_column_time_to_humanize_format(datatable_name, column_id) {
+    $(datatable_name).each(function( key, value ) {
+    $(value).children().each(function( key1, value2 ) {
+    if(key1 === column_id ){
+    var current_value = $(value2).text().slice(0, 16);
+    var changed_value = moment(current_value, "YYYY-MM-DD hh:mm").fromNow()
+    var isValid = moment(current_value, "YYYY-MM-DD HH:mm", true).isValid()
+    if (changed_value !== current_value && isValid === true){
+    $(value2).text(changed_value)
     }
-</script>
+    }
+    });
+    });
+    }
+    </script>
 {% endblock %}

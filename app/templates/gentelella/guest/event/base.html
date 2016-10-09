@@ -19,6 +19,15 @@
 {% block head_meta %}
     {# Facebook Open Graph Tags #}
     <meta property="fb:app_id" content="{{ fb_app_id | default('', true) }}"/>
+
+    {# Twitter Card Tags Start #}
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:site" content="@fossasia"/>
+    <meta name="twitter:title" content="{{ event.name }}"/>
+    <meta name="twitter:description" content="{{ event.description }}"/>
+    <meta name="twitter:image" content="{{ event_image | external_url }}"/>
+    {# Twitter Card Tags Over #}
+
     <meta property="og:title" content="{{ event.name }}"/>
     <meta property="og:site_name" content="Organizer Server"/>
     <meta property="og:url" content="{{ request.url }}"/>
