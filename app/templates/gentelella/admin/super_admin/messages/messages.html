@@ -94,12 +94,20 @@ System Messages
 
     <script type="text/javascript">
         $('#mails_table').DataTable({
-            "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+            "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>><"table-responsive"t>ip',
+            "initComplete": function(settings, json){
+                table_width_adjust();
+                window.onresize = table_width_adjust;
+            },
             "pageLength": 25,
             "aaSorting": []
         });
         $('#notifs_table').DataTable({
-            "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+            "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>><"table-responsive"t>ip',
+            "initComplete": function(settings, json){
+                table_width_adjust();
+                window.onresize = table_width_adjust;
+            },
             "aaSorting": []
         });
     </script>

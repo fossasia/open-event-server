@@ -305,13 +305,18 @@
     <script src="{{ url_for('static', filename='admin/lib/bootstrap-progressbar/bootstrap-progressbar.min.js') }}"></script>
     <script type="text/javascript">
         var table = $('.table.no-global-dt').DataTable({
-            "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+            "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>><"table-responsive"t>ip',
             "lengthMenu": [25, 50, 100, 200],
             "pageLength": 50,
+            "initComplete": function(settings, json){
+                table_width_adjust();
+                window.onresize = table_width_adjust;
+            },
             "language": {
                 "lengthMenu": "Show _MENU_ Events"
               }
         });
+
         $(document).ready(function() {
           $('.progress .progress-bar').progressbar({display_text: 'center', use_percentage: false});
         });

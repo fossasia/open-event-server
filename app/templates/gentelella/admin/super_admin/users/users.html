@@ -243,7 +243,7 @@ Users
 
 {% block tail_js %}
 {{ super() }}
-        <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
+<script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
 <script type="text/javascript">
 
         $('#active_users_table').dataTable({
@@ -281,9 +281,13 @@ Users
     } );
 
     $('#all_users_table').dataTable({
-        "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+        "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>><"table-responsive"t>ip',
         "lengthMenu": [25, 50, 100, 200],
         "pageLength": 50,
+        "initComplete": function(settings, json){
+                table_width_adjust();
+                window.onresize = table_width_adjust;
+        },
         "language": {
             "lengthMenu": "Show _MENU_ Users",
         },
@@ -299,13 +303,14 @@ Users
     } );
 
     $(".small_tab_list").click(function(){
-    $(".small_tab_list").removeClass("active");
-    $(this).addClass("active");
-    var clicked_link = $(this).attr("value");
-    $(".drop_header").text(clicked_link);
+        $(".small_tab_list").removeClass("active");
+        $(this).addClass("active");
+        var clicked_link = $(this).attr("value");
+        $(".drop_header").text(clicked_link);
     });
+
     $('.tabs_small a').click(function(){
-    $(this).tab('show');
+        $(this).tab('show');
     }); 
     </script>
 {% endblock %}
