@@ -128,7 +128,11 @@
 
 
       $('#activity_table').DataTable({
-          "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+          "dom": '<"<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>><"table-responsive"t>ip',
+          "initComplete": function(settings, json){
+                table_width_adjust();
+                window.onresize = table_width_adjust;
+            },
           "lengthMenu": [25, 50, 100, 200],
           "pageLength": 25,
           "aaSorting": [],
@@ -144,7 +148,11 @@
       } );
 
       $('#mail_table').dataTable({
-          "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+          "dom": '<"<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>><"table-responsive"t>ip',
+          "initComplete": function(settings, json){
+                table_width_adjust();
+                window.onresize = table_width_adjust;
+            },
           /* Disable initial sort */
           "aaSorting": [],
       });
@@ -155,7 +163,11 @@
       } );
 
       $('#notif_table').dataTable({
-          "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+          "dom": '<"<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>><"table-responsive"t>ip',
+          "initComplete": function(settings, json){
+                table_width_adjust();
+                window.onresize = table_width_adjust;
+            },
           /* Disable initial sort */
           "aaSorting": []
       });
