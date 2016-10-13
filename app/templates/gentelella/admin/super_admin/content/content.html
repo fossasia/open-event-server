@@ -19,6 +19,9 @@
                 <li role="presentation">
                     <a href="#tab_content4" id="images-tab" data-toggle="tab">System Images</a>
                 </li>
+                <li role="presentation">
+                    <a href="#tab_content5" id="translations-tab" data-toggle="tab">Translations</a>
+                </li>
             </ul>
             <div class="dropdown tabs_small">
                 <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
@@ -34,6 +37,9 @@
                     <li role="presentation" value="System Images" class="small_tab_list">
                         <a href="#tab_content4" id="images-tab" data-toggle="tab">System Images</a>
                     </li>
+                    <li role="presentation" value="Translations" class="small_tab_list">
+                        <a href="#tab_content5" id="translations-tab" data-toggle="tab">Translations</a>
+                    </li>
                 </ul>
             </div>
             <div id="myTabContent" class="tab-content">
@@ -47,6 +53,9 @@
                 </div>
                 <div class="tab-pane fade in" id="tab_content4">
                     {% include 'gentelella/admin/super_admin/content/_system_images.html' %}
+                </div>
+                <div class="tab-pane fade in" id="tab_content5">
+                    {% include 'gentelella/admin/super_admin/content/_translations.html' %}
                 </div>
             </div>
         </div>

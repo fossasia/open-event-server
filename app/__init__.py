@@ -497,3 +497,26 @@ if __name__ == '__main__':
         socketio.run(current_app)
     else:
         current_app.run()
+
+
+# Implementation for i18n
+
+from flask.ext.babel import Babel
+from config import LANGUAGES
+app.config['BABEL_DEFAULT_LOCALE'] = 'en'
+babel = Babel(app)
+
+@app.route('/choose_language', methods=('POST',))
+def set_lang():
+    global selected_lang
+    l_code = request.form.get('l_code')
+    if l_code:
+        selected_lang = l_code
+    return selected_lang
+    
+@babel.localeselector
+def get_locale():
+    try:
+        return selected_lang
+    except:
+        return request.accept_languages.best_match(LANGUAGES.keys())
