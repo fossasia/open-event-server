@@ -14,6 +14,7 @@ import shutil
 import os
 from config import _basedir, LANGUAGES
 from flask import send_from_directory
+from babel.messages import frontend as babel
 
 
 BASE_TRANSLATIONS_DIR = str(_basedir) + "/app/translations"
@@ -126,12 +127,18 @@ class SuperAdminContentView(SuperAdminBaseView):
             return 'No selected file'
         extension = os.path.splitext(file.filename)[1]
         if file and extension == '.po':
-            filename = secure_filename(file.filename)
-            l_code = request.form["l_code"]
-            file_destination = BASE_TRANSLATIONS_DIR + "/" + l_code + "/LC_MESSAGES"
-            file.save(os.path.join(file_destination, "messages.po"))
-            return "Uploading Done!"
-
+            try:
+                filename = secure_filename(file.filename)
+                l_code = request.form["l_code"]
+                file_destination = BASE_TRANSLATIONS_DIR + "/" + l_code + "/LC_MESSAGES"
+                file.save(os.path.join(file_destination, "messages.po"))
+                compiler = babel.compile_catalog()
+                compiler.input_file = os.path.join(file_destination, "messages.po")
+                compiler.output_file = os.path.join(file_destination, "messages.mo")
+                compiler.run()
+                return "Uploading and Compiling Done!"
+            except Exception,e:
+                print str(e)
         return "File extension not allowed"
 
     @expose('/translation_uploads/<path:l_code>', methods=['GET', 'POST'])
