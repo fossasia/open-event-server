@@ -6,10 +6,12 @@ from flask import url_for
 from flask_admin import expose
 from werkzeug.exceptions import abort
 from werkzeug.utils import redirect
+from flask.ext import login
 
 from app import forex
 from app.helpers.data_getter import DataGetter
 from app.helpers.payment import get_fee
+from app.models.system_role import CustomSysRole
 from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView, SALES
 from app.helpers.ticketing import TicketingManager
 from app.helpers.invoicing import InvoicingManager
@@ -33,14 +35,18 @@ class SuperAdminSalesView(SuperAdminBaseView):
 
             return redirect(url_for('.fees_by_events_view'))
 
+        marketer_role = CustomSysRole.query.filter_by(name='Marketer').first()
+        marketer_id = login.current_user.id if login.current_user.is_sys_role(marketer_role.id) else None
+
         if from_date and to_date:
             orders = TicketingManager.get_orders(
                 from_date=datetime.strptime(from_date, '%d/%m/%Y'),
                 to_date=datetime.strptime(to_date, '%d/%m/%Y'),
-                status='completed'
+                status='completed',
+                marketer_id=marketer_id
             )
         else:
-            orders = TicketingManager.get_orders(status='completed')
+            orders = TicketingManager.get_orders(status='completed', marketer_id=marketer_id)
 
         events = DataGetter.get_all_events()
 
@@ -115,13 +121,17 @@ class SuperAdminSalesView(SuperAdminBaseView):
 
             return redirect(url_for('.sales_by_events_view', path=path))
 
+        marketer_role = CustomSysRole.query.filter_by(name='Marketer').first()
+        marketer_id = login.current_user.id if login.current_user.is_sys_role(marketer_role.id) else None
+
         if from_date and to_date:
             orders = TicketingManager.get_orders(
                 from_date=datetime.strptime(from_date, '%d/%m/%Y'),
-                to_date=datetime.strptime(to_date, '%d/%m/%Y')
+                to_date=datetime.strptime(to_date, '%d/%m/%Y'),
+                marketer_id=marketer_id
             )
         else:
-            orders = TicketingManager.get_orders()
+            orders = TicketingManager.get_orders(marketer_id=marketer_id)
 
         events = DataGetter.get_all_events()
 
