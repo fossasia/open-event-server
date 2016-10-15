@@ -17,6 +17,9 @@ class DiscountCode(db.Model):
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
     event = db.relationship('Event', backref='discount_codes')
 
+    marketer_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    marketer = db.relationship('User', backref='discount_codes')
+
     def __init__(self,
                  code=None,
                  value=None,
