@@ -24,7 +24,7 @@ from app.models.ticket_holder import TicketHolder
 from app.models.order import OrderTicket
 from app.models.event import Event
 from app.models.user_detail import UserDetail
-from app.models.discount_code import DiscountCode
+from app.models.discount_code import DiscountCode, TICKET
 from sqlalchemy import or_
 
 from app.helpers.helpers import send_email_after_account_create_with_password
@@ -153,14 +153,20 @@ class TicketingManager(object):
 
     @staticmethod
     def get_discount_codes(event_id):
-        return DiscountCode.query.filter_by(event_id=event_id).all()
+        return DiscountCode.query.filter_by(event_id=event_id).filter_by(used_for=TICKET).all()
 
     @staticmethod
     def get_discount_code(event_id, discount_code):
         if represents_int(discount_code):
-            return DiscountCode.query.get(discount_code)
+            return DiscountCode.query\
+                .filter_by(id=discount_code)\
+                .filter_by(event_id=event_id)\
+                .filter_by(used_for=TICKET).first()
         else:
-            return DiscountCode.query.filter_by(code=discount_code).first()
+            return DiscountCode.query\
+                .filter_by(code=discount_code)\
+                .filter_by(event_id=event_id)\
+                .filter_by(used_for=TICKET).first()
 
     @staticmethod
     def get_or_create_user_by_email(email, data=None):
@@ -379,6 +385,8 @@ class TicketingManager(object):
         discount_code.max_quantity = form.get('max_quantity', None)
         discount_code.tickets_number = form.get('tickets_number')
         discount_code.event_id = event_id
+        discount_code.used_for = TICKET
+        discount_code.is_active = form.get('status', 'in_active') == 'active'
 
         if discount_code.min_quantity == "":
             discount_code.min_quantity = None
