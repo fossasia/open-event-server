@@ -139,3 +139,38 @@ class InvoicingManager(object):
                 return False, capture_result['L_SHORTMESSAGE0']
         else:
             return False, 'Payer ID missing. Payment flow tampered.'
+
+    @staticmethod
+    def create_edit_discount_code(form, discount_code_id=None):
+        if not discount_code_id:
+            discount_code = DiscountCode()
+        else:
+            discount_code = InvoicingManager.get_discount_code(discount_code_id)
+        discount_code.code = form.get('code')
+        discount_code.value = form.get('value')
+        discount_code.type = 'percent'
+        discount_code.max_quantity = form.get('max_quantity', None)
+        discount_code.tickets_number = form.get('tickets_number')
+        discount_code.used_for = EVENT
+        discount_code.marketer_id = form.get('marketer')
+        discount_code.is_active = form.get('status', 'in_active') == 'active'
+
+        if discount_code.max_quantity == "":
+            discount_code.max_quantity = None
+
+        try:
+            discount_code.valid_from = datetime.strptime(form.get('start_date', None) + ' ' +
+                                                         form.get('start_time', None), '%m/%d/%Y %H:%M')
+        except:
+            discount_code.valid_from = None
+
+        try:
+            discount_code.valid_till = datetime.strptime(form.get('end_date', None) + ' ' +
+                                                         form.get('end_time', None), '%m/%d/%Y %H:%M')
+        except:
+            discount_code.valid_till = None
+
+        save_to_db(discount_code)
+
+        return discount_code
+
