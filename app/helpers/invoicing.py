@@ -4,8 +4,10 @@ from datetime import datetime
 
 from app.helpers.cache import cache
 from app.helpers.data import save_to_db
-from app.helpers.helpers import get_count
+from app.helpers.helpers import get_count, represents_int
+from app.models.discount_code import DiscountCode, EVENT
 from app.models.event_invoice import EventInvoice
+from app.models.event import Event
 
 from app.helpers.payment import StripePaymentsManager, PayPalPaymentsManager
 
@@ -19,6 +21,21 @@ class InvoicingManager(object):
     @staticmethod
     def get_invoice_by_identifier(identifier):
         return EventInvoice.query.filter_by(identifier=identifier).first()
+
+    @staticmethod
+    def get_discount_codes():
+        return DiscountCode.query.filter_by(used_for=EVENT).all()
+
+    @staticmethod
+    def get_discount_code_used_count(discount_code_id):
+        return Event.query.filter_by(discount_code_id=discount_code_id).count()
+
+    @staticmethod
+    def get_discount_code(discount_code):
+        if represents_int(discount_code):
+            return DiscountCode.query.filter_by(id=discount_code).filter_by(used_for=EVENT).first()
+        else:
+            return DiscountCode.query.filter_by(code=discount_code).filter_by(used_for=EVENT).first()
 
     @staticmethod
     def get_invoices(event_id=None, status=None, from_date=None, to_date=None):

@@ -1411,6 +1411,9 @@ class DataManager(object):
                 ticket_max_orders = form.getlist('tickets[max_order]')
                 ticket_tags = form.getlist('tickets[tags]')
 
+                discount_code_id = form.get('discount_code_id', None)
+                event.discount_code_id = discount_code_id if discount_code_id and discount_code_id != '' else None
+
                 for i, name in enumerate(ticket_names):
                     if name.strip():
                         ticket_prices[i] = ticket_prices[i] if ticket_prices[i] != '' else 0
