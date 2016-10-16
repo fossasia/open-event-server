@@ -57,26 +57,29 @@ from helpers.formatter import operation_name
 from app.helpers.data_getter import DataGetter
 from app.views.api_v1_views import app as api_v1_routes
 from app.views.sitemap import app as sitemap_routes
+from app.views.public.babel_view import app as babel_routes
 from app.api.helpers.errors import NotFoundError
 from apscheduler.schedulers.background import BackgroundScheduler
 from app.helpers.data import DataManager, delete_from_db
 from app.helpers.helpers import send_after_event
 from app.helpers.cache import cache
+from app.helpers.babel import babel
 from helpers.helpers import send_email_for_expired_orders
 from werkzeug.contrib.profiler import ProfilerMiddleware
 
 from flask.ext.sqlalchemy import get_debug_queries
-from config import ProductionConfig
+from config import ProductionConfig, LANGUAGES
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
 
-
 def create_app():
     Autodoc(app)
     # cal = Calendar()
+    babel.init_app(app)
 
+    app.register_blueprint(babel_routes)
     app.register_blueprint(api_v1_routes)
     app.register_blueprint(sitemap_routes)
     Migrate(app, db)
@@ -96,6 +99,7 @@ def create_app():
     stripe.api_key = 'SomeStripeKey'
     app.secret_key = 'super secret key'
     app.json_encoder = MiniJSONEncoder
+    app.config['BABEL_DEFAULT_LOCALE'] = 'en'
     app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
     app.config['UPLOADS_FOLDER'] = os.path.realpath('.') + '/static/'
     app.config['FILE_SYSTEM_STORAGE_FILE_VIEW'] = 'static'
@@ -164,6 +168,16 @@ def request_wants_json():
     best = request.accept_mimetypes.best_match(
         ['application/json', 'text/html'])
     return best == 'application/json' and request.accept_mimetypes[best] > request.accept_mimetypes['text/html']
+
+
+@app.context_processor
+def all_languages():
+    return dict(all_languages=LANGUAGES)
+
+@app.context_processor
+def selected_lang():
+    return dict(selected_lang=get_locale())
+
 
 @app.context_processor
 def locations():
@@ -497,3 +511,11 @@ if __name__ == '__main__':
         socketio.run(current_app)
     else:
         current_app.run()
+
+
+@babel.localeselector
+def get_locale():
+    try:
+        return request.cookies["selected_lang"]
+    except:
+        return request.accept_languages.best_match(LANGUAGES.keys())

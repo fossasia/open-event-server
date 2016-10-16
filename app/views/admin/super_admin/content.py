@@ -11,7 +11,12 @@ import PIL
 from PIL import Image
 import shutil
 import os
+from config import _basedir, LANGUAGES
+from flask import send_from_directory
+from babel.messages import frontend as babel
 
+
+BASE_TRANSLATIONS_DIR = str(_basedir) + "/app/translations"
 
 class SuperAdminContentView(SuperAdminBaseView):
     PANEL_NAME = CONTENT
@@ -23,6 +28,7 @@ class SuperAdminContentView(SuperAdminBaseView):
         custom_placeholder = DataGetter.get_custom_placeholders()
         subtopics = DataGetter.get_event_subtopics()
         settings = get_settings()
+        LANGUAGES.pop("en")
         if request.method == 'POST':
             dic = dict(request.form.copy())
             for key, value in dic.items():
@@ -30,7 +36,8 @@ class SuperAdminContentView(SuperAdminBaseView):
                 set_settings(**settings)
         return self.render(
             '/gentelella/admin/super_admin/content/content.html', pages=pages, settings=settings,
-            placeholder_images=placeholder_images, subtopics=subtopics, custom_placeholder=custom_placeholder
+            placeholder_images=placeholder_images, subtopics=subtopics, custom_placeholder=custom_placeholder,
+            languages=LANGUAGES
         )
 
     @expose('/create/files/placeholder', methods=('POST',))
@@ -108,3 +115,34 @@ class SuperAdminContentView(SuperAdminBaseView):
         page = DataGetter.get_page_by_id(page_id)
         delete_from_db(page, "Page has already deleted")
         return redirect(url_for('sadmin_content.index_view'))
+
+
+    @expose('/update_translation', methods=('POST',))
+    def upload_translation(self):
+        if 'file' not in request.files:
+            return 'No file part'
+        file = request.files['file']
+        if file.filename == '':
+            return 'No selected file'
+        extension = os.path.splitext(file.filename)[1]
+        if file and extension == '.po':
+            try:
+                l_code = request.form["l_code"]
+                file_destination = BASE_TRANSLATIONS_DIR + "/" + l_code + "/LC_MESSAGES"
+                file.save(os.path.join(file_destination, "messages.po"))
+                compiler = babel.compile_catalog()
+                compiler.input_file = os.path.join(file_destination, "messages.po")
+                compiler.output_file = os.path.join(file_destination, "messages.mo")
+                compiler.run()
+                return "Uploading and Compiling Done!"
+            except Exception,e:
+                return str(e)
+        return "File extension not allowed"
+
+    @expose('/translation_uploads/<path:l_code>', methods=['GET', 'POST'])
+    def download(self,l_code):
+        file_destination = BASE_TRANSLATIONS_DIR + "/" + l_code + "/LC_MESSAGES"
+        return send_from_directory(directory=file_destination, filename="messages.po")
+
+
+

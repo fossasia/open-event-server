@@ -1,0 +1,77 @@
+<style>
+	.languages{
+		text-align: center;
+	}
+	#upload-file-btn{
+		min-width: 80px;
+	}
+</style>
+<div class="container-fluid languages">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-6"><b>Language</b></div>
+				<div class="col-md-6"><b>Download .PO files</b></div>
+			</div>
+			<br>
+			{% for code in languages %}
+				<div class="row">
+					<div class="col-md-6">{{languages[code]}}</div>
+					<div class="col-md-6"><a href="translation_uploads/{{code}}"> Download</a></div>
+				</div>
+			{% endfor %}
+		</div>
+		<div class="col-md-6">
+			<p>
+				<b>
+					Update .PO files :
+				</b>
+			</p>
+			<form id="upload-file" method="post" enctype="multipart/form-data" class="form-inline">
+				<div class="form-group">
+					<fieldset>
+						<input name="file" type="file" class="form-control">
+					</fieldset>
+				</div>
+				<div class="form-group">
+					<label for="email">language :</label>
+					<select name="l_code" id="codes" class="form-control">
+						{% for code in languages %}
+							<option value="{{code}}">{{languages[code]}}</option>
+						{% endfor %}
+					</select>
+				</div>
+				<br><br>
+				<button id="upload-file-btn" type="button">Upload</button>
+			</form>
+			<p>
+				<b>
+					<span id="upload_msg"></span>
+				</b>
+			</p>
+		</div>
+	</div>
+</div>
+<script>
+$(function() {
+	$('#upload-file-btn').click(function() {
+		$(this).attr('disabled','disabled');
+		var form_data = new FormData($('#upload-file')[0]);
+		$("#upload_msg").text("Uploading....")
+		$.ajax({
+			type: 'POST',
+			url: 'update_translation',
+			data: form_data,
+			contentType: false,
+			cache: false,
+			processData: false,
+			async: false,
+		success: function(data) {
+			console.log(data);
+			$("#upload_msg").text(data);
+			$('#upload-file-btn').removeAttr('disabled');
+			},
+		});
+	});
+});
+</script>

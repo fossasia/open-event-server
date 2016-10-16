@@ -1,0 +1,80 @@
+# German translations for PROJECT.
+# Copyright (C) 2016 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2016-10-13 12:56+0530\n"
+"PO-Revision-Date: 2016-10-13 12:56+0530\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: de\n"
+"Language-Team: de <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
+
+#: app/templates/gentelella/index.html:170
+msgid "The simplest way to create events."
+msgstr "Die einfachste Möglichkeit, Ereignisse zu erstellen."
+
+#: app/templates/gentelella/index.html:172
+msgid "Create Event"
+msgstr "Event erstellen"
+
+#: app/templates/gentelella/index.html:192
+msgid "All Dates"
+msgstr "Alle Termine"
+
+#: app/templates/gentelella/index.html:193
+msgid "Today"
+msgstr "Heute"
+
+#: app/templates/gentelella/index.html:194
+msgid "Tomorrow"
+msgstr "Morgen"
+
+#: app/templates/gentelella/index.html:195
+msgid "This Week"
+msgstr "Diese Woche"
+
+#: app/templates/gentelella/index.html:196
+msgid "This Weekend"
+msgstr "Dieses Wochenende"
+
+#: app/templates/gentelella/index.html:197
+msgid "Next Week"
+msgstr "Nächste Woche"
+
+#: app/templates/gentelella/index.html:198
+msgid "This Month"
+msgstr "Diesen Monat"
+
+#: app/templates/gentelella/index.html:202
+msgid "Search"
+msgstr "Suchen"
+
+#: app/templates/gentelella/index.html:206
+msgid "Upcoming Events"
+msgstr "Kommende Events"
+
+#: app/templates/gentelella/index.html:212
+msgid "No upcoming events available at this time"
+msgstr "Keine anstehenden Veranstaltungen zur Verfügung zu diesem Zeitpunkt"
+
+#: app/templates/gentelella/index.html:217
+msgid "Call for Speakers"
+msgstr "Call for Speakers"
+
+#: app/templates/gentelella/index.html:223
+msgid "No call for speakers open at this time"
+msgstr "Kein Anruf für Lautsprecher offen zu diesem Zeitpunkt"
+
+#: app/templates/gentelella/index.html:238
+msgid "Share this event"
+msgstr "Dieses Event"
+
