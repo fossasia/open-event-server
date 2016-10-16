@@ -1,7 +1,9 @@
 import copy
 from datetime import datetime, timedelta
 
-from flask import request
+import flask_login
+from flask import flash
+from flask import request, jsonify
 from flask import url_for
 from flask_admin import expose
 from werkzeug.exceptions import abort
@@ -9,9 +11,11 @@ from werkzeug.utils import redirect
 from flask.ext import login
 
 from app import forex
+from app.helpers.data import save_to_db, delete_from_db
 from app.helpers.data_getter import DataGetter
 from app.helpers.payment import get_fee
-from app.models.system_role import CustomSysRole
+from app.models.user import User
+from app.models.system_role import CustomSysRole, UserSystemRole
 from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView, SALES
 from app.helpers.ticketing import TicketingManager
 from app.helpers.invoicing import InvoicingManager
@@ -243,3 +247,79 @@ class SuperAdminSalesView(SuperAdminBaseView):
 
         else:
             abort(404)
+
+    @expose('/discounts/', methods=('GET',))
+    @flask_login.login_required
+    def discount_codes_view(self):
+        discount_codes = InvoicingManager.get_discount_codes()
+        return self.render('/gentelella/admin/super_admin/sales/discount_codes.html')
+
+    @expose('/discounts/create/', methods=('GET', 'POST'))
+    @flask_login.login_required
+    def discount_codes_create(self, discount_code_id=None):
+        if request.method == 'POST':
+            InvoicingManager.create_edit_discount_code(request.form)
+            flash("The discount code has been added.", "success")
+            return redirect(url_for('.discount_codes_view'))
+        discount_code = None
+        if discount_code_id:
+            discount_code = InvoicingManager.get_discount_code(discount_code_id)
+
+        user_roles = UserSystemRole.query.filter(CustomSysRole.name == 'Marketer').all()
+
+        active_users_ids = [x.id for x in user_roles]
+
+        marketers = User.query.filter(User.id.in_(active_users_ids)).all()
+
+        return self.render('/gentelella/admin/super_admin/sales/discount_codes_create.html',
+                           discount_code=discount_code, marketers=marketers)
+
+    @expose('/discounts/check/duplicate/', methods=('GET',))
+    @flask_login.login_required
+    def check_duplicate_discount_code(self):
+        code = request.args.get('code')
+        current = request.args.get('current')
+        if not current:
+            current = ''
+        discount_code = InvoicingManager.get_discount_code(code)
+        if (current == "" and discount_code) or (current != "" and discount_code and discount_code.id != int(current)):
+            return jsonify({
+                "status": "invalid"
+            }), 404
+
+        return jsonify({
+            "status": "valid"
+        }), 200
+
+    @expose('/discounts/<int:discount_code_id>/edit/', methods=('GET', 'POST'))
+    @flask_login.login_required
+    def discount_codes_edit(self, discount_code_id=None):
+        if not InvoicingManager.get_discount_code(discount_code_id):
+            abort(404)
+        if request.method == 'POST':
+            InvoicingManager.create_edit_discount_code(request.form, discount_code_id)
+            flash("The discount code has been edited.", "success")
+            return redirect(url_for('.discount_codes_view'))
+        return self.discount_codes_create(discount_code_id)
+
+    @expose('/discounts/<int:discount_code_id>/toggle/', methods=('GET',))
+    @flask_login.login_required
+    def discount_codes_toggle(self, discount_code_id=None):
+        discount_code = InvoicingManager.get_discount_code(discount_code_id)
+        if not discount_code:
+            abort(404)
+        discount_code.is_active = not discount_code.is_active
+        save_to_db(discount_code)
+        message = "Activated." if discount_code.is_active else "Deactivated."
+        flash("The discount code has been " + message, "success")
+        return redirect(url_for('.discount_codes_view'))
+
+    @expose('/discounts/<int:discount_code_id>/delete/', methods=('GET',))
+    @flask_login.login_required
+    def discount_codes_delete(self, discount_code_id=None):
+        discount_code = InvoicingManager.get_discount_code(discount_code_id)
+        if not discount_code:
+            abort(404)
+        delete_from_db(discount_code, "Discount code deleted")
+        flash("The discount code has been deleted.", "warning")
+        return redirect(url_for('.discount_codes_view'))
