@@ -389,6 +389,27 @@
         <div id="payment-system-holder" class="item form-group"
              {% if not event or ('paid' not in ticket_types and 'donation' not in ticket_types) %}style="display:none;"{% endif %}>
             <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
+                <i class="fa fa-percent"></i>
+                Redeem Discount Code
+                <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
+            </h2>
+            <div class="row">
+                <div class="col-xs-6">
+                    <div class="item form-group">
+                        <label for="discount-code-entry">Enter Discount Code</label>
+                        <input type="hidden" name="discount_code_id" value="">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="" id="discount-code-entry">
+                            <span class="input-group-btn">
+                                <button class="btn btn-success" id="discount-code-entry-apply" type="button">Apply Discount</button>
+                            </span>
+                        </div>
+                        <span class="help-text" style="display: none;"><strong>Code applied !</strong> 10% off on monthly payments for 3 months</span>
+                    </div>
+                </div>
+            </div>
+
+            <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
                 <i class="fa fa-money"></i>
                 Add Payment details
                 <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
@@ -768,11 +789,11 @@
                                     </div>
 
                                     <div class="col-sm-12 input-group">
-                                        <label for="buisness_address">Buisness Address<span
+                                        <label for="buisness_address">Business Address<span
                                                 class="required">*</span></label>
                                         <input value="{{ tax.address | default('', true) }}" type="text"
                                                class="form-control" name="buisness_address" id="buisness_address"
-                                               placeholder="Enter Buisness Address">
+                                               placeholder="Enter Business Address">
                                     </div>
 
                                     <div class="col-sm-12 input-group">
@@ -1589,6 +1610,52 @@ payment and indicate your order ref. no.&#13;&#10;&#13;&#10;Account Details&#13;
                 $onsiteHolder.fadeIn();
             else
                 $onsiteHolder.fadeOut();
+        });
+
+        var $discountCodeEntry = $("#discount-code-entry");
+        var $discountCodeFormGroup = $discountCodeEntry.closest('.form-group');
+        var $discountCodeId = $discountCodeFormGroup.find('input[name=discount_code_id]');
+        var $helpText = $discountCodeFormGroup.find('.help-text');
+        var $discountCodeEntryApply = $("#discount-code-entry-apply");
+
+        var discountCodeApplyUrl = "{{ url_for('events.apply_discount_code')  }}";
+
+        $discountCodeEntryApply.click(function () {
+            $discountCodeFormGroup.removeClass('has-error').removeClass('has-success');
+            $helpText.removeClass('text-danger').removeClass('text-success').hide();
+            $discountCodeId.val("");
+            var discountCodeValue = $discountCodeEntry.val().trim();
+            if(discountCodeValue != "") {
+                $discountCodeEntry.disable();
+                $discountCodeEntryApply.html('Verifying <i class="fa fa-spin fa-cog fa-fw"></i>').disable();
+                $.post(discountCodeApplyUrl, { discount_code: discountCodeValue })
+                  .done(function(data) {
+                      $discountCodeEntry.enable();
+                      $discountCodeEntryApply.enable().html('Apply Discount');
+                      $helpText.show();
+                      if(data.status === 'ok') {
+                          $discountCodeFormGroup.addClass('has-success');
+                          $discountCodeId.val(data.discount_code.id);
+                          var message = data.discount_code.value + "% over a period of " + data.discount_code.max_quantity + " month(s)";
+                          $helpText.addClass('text-success').html("<strong>Discount Applied!</strong> " + message);
+                      } else {
+                          $discountCodeFormGroup.addClass('has-error');
+                          if(data.hasOwnProperty('message')) {
+                              $helpText.addClass('text-danger').text(data.message);
+                          } else {
+                              $helpText.addClass('text-danger').text("An error occurred while trying to apply the discount code.");
+                          }
+                      }
+                  });
+
+            }
+        });
+
+        $discountCodeEntry.valueChange(function (value) {
+            $discountCodeFormGroup.removeClass('has-error').removeClass('has-success');
+            $helpText.removeClass('text-danger').removeClass('text-success').hide();
+            $discountCodeEntryApply.enable().html('Apply Discount');
+            $discountCodeId.val("");
         });
     });
 </script>

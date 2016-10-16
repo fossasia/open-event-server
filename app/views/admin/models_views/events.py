@@ -12,6 +12,7 @@ from flask.ext.restplus import abort
 from flask_admin import expose
 
 from app import db
+from app.helpers.invoicing import InvoicingManager
 from app.helpers.storage import upload, upload_local, UPLOAD_PATHS
 from app.helpers.helpers import uploaded_file
 from app.helpers.permission_decorators import is_organizer, is_super_admin, can_access
@@ -561,6 +562,20 @@ class EventsView(BaseView):
             return redirect(url_for('.details_view', event_id=event.id))
         else:
             abort(404)
+
+    @expose('/discount/apply', methods=('POST',))
+    def apply_discount_code(self):
+        discount_code = request.form['discount_code']
+        discount_code = InvoicingManager.get_discount_code(discount_code)
+        if discount_code:
+            if discount_code.is_active:
+                if InvoicingManager.get_discount_code_used_count(discount_code.id) >= discount_code.tickets_number:
+                    return jsonify({'status': 'error', 'message': 'Expired discount code'})
+                return jsonify({'status': 'ok', 'discount_code': discount_code.serialize})
+            else:
+                return jsonify({'status': 'error', 'message': 'Expired discount code'})
+        else:
+            return jsonify({'status': 'error', 'message': 'Invalid discount code'})
 
     def get_module_settings(self):
         included_setting = []
