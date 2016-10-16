@@ -32,9 +32,11 @@ sudo -u postgres psql
 
 * When inside psql, create a user for open-event and then using the user create the database.
 
+For ease development, you should create Postgres user with the same username as your OS account. If your OS login account is _john_, for example, you should create _john_ user in Postgres. By this, you can skip entering password when using database.
+
 ```sql
-create user open_event_user with password 'start';
-create database test with owner=open_event_user;
+CREATE USER john WITH PASSWORD 'start';
+CREATE DATABASE oevent WITH OWNER john;
 ```
 
 * Once database is created, exit the psql shell with `\q` followed by ENTER.
@@ -51,9 +53,11 @@ bower install
 * **Step 4** - Create application environment variables.
 
 ```sh
-export DATABASE_URL=postgresql://open_event_user:start@127.0.0.1:5432/test
+export DATABASE_URL=postgresql:///oevent
 export SERVER_NAME=localhost:5000
 ```
+
+The URL is short, thank to the resemble of Postgres user and OS user.
 
 
 * **Step 5** - Start the postgres service.
@@ -73,19 +77,18 @@ python manage.py db stamp head
 
 
 * **Step 7** - Start the application along with the needed services.
-The `&` at the end of the commands below make them run in background so that they don't hold the terminal. See [REDIS.md](../README.md#redis) for more info.
 
 ```sh
-# download and run redis
-bash run_redis.sh
-redis-3.2.1/src/redis-server &
+# Install and run redis
+# For Ubuntu, Debian and alike
+sudo apt install redis-server
+# For Fedora, RedHat, CentOS
+sudo dnf install redis-server
 
-# run worker
-export INTEGRATE_SOCKETIO=false
+# Run Celery
 # socketio has problems with celery "blocking" tasks
 # also socketio is not used in a celery task so no problem to turn it off
-celery worker -A app.celery &
-unset INTEGRATE_SOCKETIO
+INTEGRATE_SOCKETIO=false celery worker -A app.celery
 
 # run app
 python manage.py runserver
@@ -157,7 +160,7 @@ You can directly use this configuration and put it inside sites-available (`/etc
 Test the Nginx configuration and restart the Nginx server. Then run the Gunicorn server.
 
 ```bash
-sudo ngnix -t # Should respond with "test is successful"
+sudo service nginx testconfig # Should respond with "test is successful"
 sudo service nginx restart
 gunicorn app:app --worker-class eventlet -w 1 --bind 0.0.0.0:5001 --reload
 ```
