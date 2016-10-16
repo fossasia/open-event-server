@@ -68,7 +68,7 @@ from helpers.helpers import send_email_for_expired_orders
 from werkzeug.contrib.profiler import ProfilerMiddleware
 
 from flask.ext.sqlalchemy import get_debug_queries
-from config import ProductionConfig
+from config import ProductionConfig, LANGUAGES
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -168,6 +168,16 @@ def request_wants_json():
     best = request.accept_mimetypes.best_match(
         ['application/json', 'text/html'])
     return best == 'application/json' and request.accept_mimetypes[best] > request.accept_mimetypes['text/html']
+
+
+@app.context_processor
+def all_languages():
+    return dict(all_languages=LANGUAGES)
+
+@app.context_processor
+def selected_lang():
+    return dict(selected_lang=get_locale())
+
 
 @app.context_processor
 def locations():
@@ -502,3 +512,10 @@ if __name__ == '__main__':
     else:
         current_app.run()
 
+
+@babel.localeselector
+def get_locale():
+    try:
+        return request.cookies["selected_lang"]
+    except:
+        return request.accept_languages.best_match(LANGUAGES.keys())

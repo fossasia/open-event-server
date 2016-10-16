@@ -1,4 +1,4 @@
-from flask import redirect, request, url_for, jsonify, json
+from flask import redirect, request, url_for, jsonify
 from flask_admin import expose
 from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView, CONTENT
 from ....helpers.data_getter import DataGetter
@@ -7,7 +7,6 @@ from ....models.custom_placeholder import CustomPlaceholder
 from app.settings import get_settings, set_settings
 from app.helpers.storage import upload, UploadedFile
 from app.helpers.helpers import uploaded_file
-from werkzeug.utils import secure_filename
 import PIL
 from PIL import Image
 import shutil
@@ -128,7 +127,6 @@ class SuperAdminContentView(SuperAdminBaseView):
         extension = os.path.splitext(file.filename)[1]
         if file and extension == '.po':
             try:
-                filename = secure_filename(file.filename)
                 l_code = request.form["l_code"]
                 file_destination = BASE_TRANSLATIONS_DIR + "/" + l_code + "/LC_MESSAGES"
                 file.save(os.path.join(file_destination, "messages.po"))
@@ -138,7 +136,7 @@ class SuperAdminContentView(SuperAdminBaseView):
                 compiler.run()
                 return "Uploading and Compiling Done!"
             except Exception,e:
-                print str(e)
+                return str(e)
         return "File extension not allowed"
 
     @expose('/translation_uploads/<path:l_code>', methods=['GET', 'POST'])

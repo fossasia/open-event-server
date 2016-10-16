@@ -68,13 +68,13 @@
                 <div class="col-md-3 col-sm-4 col-xs-8 dropup col-xs-offset-2 col-sm-offset-4 col-md-offset-0">
                     <div class="dropdown-toggle footer-dropdown" data-toggle="dropdown">
                         <i class="fa fa-globe"></i>
-                        <span class="dropdown-text lang-header" style="color: #D2D6DF;">Singapore</span>
+                        <span class="dropdown-text lang-header" style="color: #D2D6DF;">{{all_languages[selected_lang]}}</span>
                         <span class="fa fa-chevron-down"></span>
                     </div>
-                    <ul class="dropdown-menu">
-                        <li><a href="#" style="color:#969191;" class="translate" id="en">Singapore</a></li>
-                        <li><a href="#" style="color:#969191;" class="translate" id="en">Deutschland</a></li>
-                        <li><a href="#" style="color:#969191;" class="translate" id="de">Germany</a></li>
+                    <ul class="dropdown-menu lang-list">
+                    {% for code in all_languages %}
+                    <li><a href='#' style='color:#969191;' class='translate' id='{{code}}'>{{all_languages[code]}}</a></li>
+                    {% endfor %}
                     </ul>
                 </div>
             </div>
@@ -87,7 +87,7 @@
     </div>
 </footer>
 <script>
-    $(".translate").click(function(){
+    $(".lang-list").on('click','.translate', function(){
         var l_code = $(this).attr("id");
         var request_url = window.location.protocol + "//" + window.location.host + "/choose_language";
         $.ajax({

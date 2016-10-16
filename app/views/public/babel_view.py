@@ -1,21 +1,13 @@
-from app.helpers.babel import babel
-from flask import request, Blueprint
-from config import LANGUAGES
-
+from flask import request, Blueprint, make_response
+import datetime
 
 app = Blueprint('babel', __name__)
 
 @app.route('/choose_language', methods=('POST',))
 def set_lang():
-    global selected_lang
-    l_code = request.form.get('l_code')
-    if l_code:
-        selected_lang = l_code
-    return selected_lang
-
-@babel.localeselector
-def get_locale():
-    try:
-        return selected_lang
-    except:
-        return request.accept_languages.best_match(LANGUAGES.keys())
+	l_code = request.form.get('l_code')
+	response = make_response(l_code)
+	expire_date = datetime.datetime.now()
+	expire_date = expire_date + datetime.timedelta(days=60)
+	response.set_cookie('selected_lang',value=l_code, expires=expire_date)
+	return response
