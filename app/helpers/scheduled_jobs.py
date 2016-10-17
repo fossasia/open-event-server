@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from dateutil.relativedelta import relativedelta
 from flask import url_for
 from sqlalchemy_continuum import transaction_class
 
@@ -85,6 +86,13 @@ def send_event_fee_notification():
 
             if fee_total > 0:
                 new_invoice = EventInvoice(amount=fee_total, event_id=event.id, user_id=event.creator_id)
+
+                if event.discount_code_id and event.discount_code:
+                    r = relativedelta(datetime.utcnow(), event.created_at)
+                    if r <= event.discount_code.max_quantity:
+                        new_invoice.amount = fee_total - (fee_total * (event.discount_code.value/100))
+                        new_invoice.discount_code_id = event.discount_code_id
+
                 save_to_db(new_invoice)
                 prev_month = monthdelta(new_invoice.created_at, 1).strftime("%b %Y")  # Displayed as Aug 2016
                 send_email_for_monthly_fee_payment(new_invoice.user.email,
