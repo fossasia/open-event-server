@@ -113,6 +113,46 @@ class SuperAdminSalesView(SuperAdminBaseView):
                            invoices=invoices,
                            to_date=to_date)
 
+    @expose('/marketer/')
+    def sales_by_marketer_view(self):
+        from_date = request.args.get('from_date')
+        to_date = request.args.get('to_date')
+
+        if ('from_date' in request.args and not from_date) or ('to_date' in request.args and not to_date) or \
+            ('from_date' in request.args and 'to_date' not in request.args) or \
+                ('to_date' in request.args and 'from_date' not in request.args):
+
+            return redirect(url_for('.sales_by_marketer_view'))
+
+        if from_date and to_date:
+            orders = TicketingManager.get_orders(
+                from_date=datetime.strptime(from_date, '%d/%m/%Y'),
+                to_date=datetime.strptime(to_date, '%d/%m/%Y')
+            )
+        else:
+            orders = TicketingManager.get_orders()
+
+        events = DataGetter.get_all_events()
+
+        completed_count = 0
+        completed_amount = 0
+        tickets_count = 0
+        discounts_amount = 0
+
+        orders_summary = {
+            'completed': {
+                'class': 'success',
+                'tickets_count': 0,
+                'orders_count': 0,
+                'total_sales': 0,
+                'total_discounts': 0
+            }
+        }
+
+        tickets_summary = {}
+
+
+
     @expose('/<path>/')
     def sales_by_events_view(self, path):
 
@@ -167,6 +207,7 @@ class SuperAdminSalesView(SuperAdminBaseView):
         tickets_summary_event_wise = {}
         tickets_summary_organizer_wise = {}
         tickets_summary_location_wise = {}
+
         for event in events:
             tickets_summary_event_wise[str(event.id)] = {
                 'name': event.name,
