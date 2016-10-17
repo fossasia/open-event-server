@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from . import db
 
 TICKET = 'ticket'
@@ -19,7 +21,7 @@ class DiscountCode(db.Model):
     tickets = db.Column(db.String)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
     event = db.relationship('Event', backref='discount_codes', foreign_keys=[event_id])
-
+    created_at = db.Column(db.DateTime)
     marketer_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     marketer = db.relationship('User', backref='discount_codes')
 
@@ -47,6 +49,7 @@ class DiscountCode(db.Model):
         self.valid_till = valid_till
         self.event_id = event_id
         self.is_active = is_active
+        self.created_at = datetime.utcnow()
         self.used_for = used_for
 
     def __repr__(self):
