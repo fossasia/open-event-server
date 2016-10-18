@@ -54,7 +54,6 @@ class SuperAdminSettingsView(SuperAdminBaseView):
                             im.logo_height = request.form['logo_height']
                             save_to_db(im, "Image Sizes saved")
                 else:
-                    print request.form['profile-large_width']
                     im_size = ImageSizes(type='profile',
                                          full_width=request.form['profile-large_width'],
                                          full_height=request.form['profile-large_width'],

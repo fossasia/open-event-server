@@ -321,7 +321,6 @@ class EventsView(BaseView):
                 preselect.append(speaker_field)
                 if speaker_form[speaker_field]['require'] == 1:
                     required.append(speaker_field)
-        print preselect
 
         if request.method == 'GET':
 

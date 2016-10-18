@@ -34,7 +34,6 @@ class TestEvents(OpenEventTestCase):
             db.session.commit()
             url = url_for('sadmin_events.index_view')
             self.app.get(url, follow_redirects=True)
-            print time.clock() - start
             for query in get_debug_queries():
                 if query.duration >= ProductionConfig.DATABASE_QUERY_TIMEOUT:
                     app.logger.warning("SLOW QUERY: %s\nParameters: %s\nDuration: %fs\nContext: %s\n" % (
@@ -66,7 +65,7 @@ class TestEvents(OpenEventTestCase):
             db.session.commit()
             url = url_for('sadmin_users.index_view')
             self.app.get(url, follow_redirects=True)
-            print time.clock() - start
+
             for query in get_debug_queries():
                 if query.duration >= ProductionConfig.DATABASE_QUERY_TIMEOUT:
                     app.logger.warning("SLOW QUERY: %s\nParameters: %s\nDuration: %fs\nContext: %s\n" % (
