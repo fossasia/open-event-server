@@ -8,6 +8,7 @@ from datetime import timedelta, datetime
 from flask import url_for
 
 from flask.ext import login
+from sqlalchemy import asc
 
 from app.models import db
 from app.helpers.cache import cache
@@ -73,6 +74,9 @@ class TicketingManager(object):
             orders = orders.filter(Order.created_at <= to_date)
         if marketer_id:
             orders = orders.filter_by(marketer_id=marketer_id)
+
+            orders = orders.order_by(asc(Order.created_at))
+
         return orders.all()
 
     @staticmethod
