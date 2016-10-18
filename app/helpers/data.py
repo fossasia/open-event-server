@@ -1287,7 +1287,7 @@ class DataManager(object):
             session_form = ""
             speaker_form = ""
             for index, name in enumerate(custom_forms_name):
-                print name
+
                 if name == "session_form":
                     session_form = custom_forms_value[index]
                 elif name == "speaker_form":
@@ -1825,7 +1825,6 @@ class DataManager(object):
                             sponsor.logo = old_sponsor_logos[index]
                         else:
                             sponsor.logo = ""
-                    print sponsor.logo
                     save_to_db(sponsor, "Sponsor updated")
 
         session_form = ""

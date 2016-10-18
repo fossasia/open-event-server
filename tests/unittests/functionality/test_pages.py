@@ -26,7 +26,7 @@ class TestPagesUrls(OpenEventTestCase):
                     try:
                         response = self.app.get(request.url[:-1] + str(rule).replace('//', '/'),
                                                 follow_redirects=True)
-                        print str(rule), response.status_code, rule.endpoint
+
                         if 'api' in str(rule):
                             self.assertTrue(response.status_code in [200, 302, 401, 404], msg=response.data)
                         else:
