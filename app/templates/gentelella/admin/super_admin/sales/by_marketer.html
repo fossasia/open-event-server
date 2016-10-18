@@ -1,8 +1,12 @@
 {% extends 'gentelella/admin/super_admin/sales/filter_table_base.html' %}
 
-{% set active_side_page = active_side_page|default('home') -%}
-{% set key_name = key_name|default('events') -%}
+
 {% set title = "Tickets Summary" -%}
+{% if key_name == 'discount codes' %}
+    {% set active_side_page = 'by_discount_code' -%}
+{% else %}
+    {% set active_side_page = 'by_marketer' -%}
+{% endif %}
 
 {% block head_css %}
     {{ super() }}
@@ -48,73 +52,69 @@
     <br><br>
     <table class="table" id="tickets-summary-table" style="margin-top: 60px;">
         <thead>
-        <tr>
-            <th rowspan="2">
-                {{ key_name | capitalize }}
-            </th>
-            <th colspan="2" class="success">
-                Completed Orders
-            </th>
-            <th colspan="2" class="warning">
-                Pending Orders
-            </th>
-        </tr>
-        <tr class="active">
-            <th>
-                Tickets
-            </th>
-            <th>
-                Sales
-            </th>
-            <th>
-                Tickets
-            </th>
-            <th>
-                Sales
-            </th>
-        </tr>
+            <tr>
+                <th rowspan="2">
+                    {{ key_name | capitalize }}
+                </th>
+                {% if key_name == 'discount codes' %}
+                    <th rowspan="2" style="border-left: none !important; border-top: none!important; ">
+                        Marketer
+                    </th>
+                {% endif %}
+                <th colspan="4" class="success">
+                    Completed Orders
+                </th>
+            </tr>
+            <tr class="active">
+                <th>
+                    Tickets
+                </th>
+                <th>
+                    Sales (discounted)
+                </th>
+                <th>
+                    Discount amount
+                </th>
+            </tr>
         </thead>
         <tbody>
         {% for id, item in tickets_summary.iteritems() %}
-
             <tr>
                 <td>
-                    {{ item.name }}
+                    {{ item.email }} - {{ item.name }}
+                </td>
+                {% if key_name == 'discount codes' %}
+                    <td>
+                        {{ item.marketer }}
+                    </td>
+                {% endif %}
+                <td>
+                    {{ item.tickets_count }}
                 </td>
                 <td>
-                    {{ item.completed.tickets_count }}
+                    {{ display_currency | currency_symbol }}{{ forex(item.payment_currency, display_currency, item.sales) | money }}
                 </td>
                 <td>
-                    {{ display_currency | currency_symbol }}{{ forex(item.payment_currency, display_currency, item.completed.sales) | money }}
-                </td>
-                <td>
-                    {{ item.pending.tickets_count }}
-                </td>
-                <td>
-                    {{ display_currency | currency_symbol }}{{ forex(item.payment_currency, display_currency, item.pending.sales) | money }}
+                    {{ display_currency | currency_symbol }}{{ forex(item.payment_currency, display_currency, item.discounts) | money }}
                 </td>
             </tr>
         {% endfor %}
-
         </tbody>
         <tfoot>
-        <tr>
-            <th>
-                Total
-            </th>
-            <th>
-                {{ orders_summary.completed.tickets_count }}
-            </th>
-            <th>
-                {{ display_currency | currency_symbol }}{{ orders_summary.completed.total_sales | money }}
-            </th>
-            <th>
-                {{ orders_summary.pending.tickets_count }}
-            </th>
-            <th>
-                {{ display_currency | currency_symbol }}{{ orders_summary.pending.total_sales | money }}
-            </th>
-        </tr>
+            <tr>
+                <th {% if key_name == 'discount codes' %} colspan="2" style="text-align: right" {% endif %}>
+                    Total
+                </th>
+                <th>
+                    {{ orders_summary.tickets_count }}
+                </th>
+                <th>
+                    {{ display_currency | currency_symbol }}{{ orders_summary.total_sales | money }}
+                </th>
+                <th>
+                    {{ display_currency | currency_symbol }}{{ orders_summary.total_discounts | money }}
+                </th>
+            </tr>
         </tfoot>
     </table>
 
