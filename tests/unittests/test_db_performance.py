@@ -13,6 +13,7 @@ from flask.ext.sqlalchemy import get_debug_queries
 from config import ProductionConfig
 from tests.unittests.setup_database import Setup
 
+
 class TestEvents(OpenEventViewTestCase):
     def setUp(self):
         self.app = Setup.create_app()
@@ -34,7 +35,7 @@ class TestEvents(OpenEventViewTestCase):
             url = url_for('sadmin_events.index_view')
             start = time.clock()
             self.app.get(url, follow_redirects=True)
-            print time.clock() - start
+
             with open("output_events.txt", "w") as text_file:
                 for query in get_debug_queries():
                     if query.duration >= ProductionConfig.DATABASE_QUERY_TIMEOUT:
@@ -52,7 +53,7 @@ class TestEvents(OpenEventViewTestCase):
             url = url_for('sadmin_sessions.display_my_sessions_view')
             start = time.clock()
             self.app.get(url, follow_redirects=True)
-            print time.clock() - start
+
             with open("output_session.txt", "w") as text_file:
                 for query in get_debug_queries():
                     if query.duration >= ProductionConfig.DATABASE_QUERY_TIMEOUT:
@@ -70,15 +71,12 @@ class TestEvents(OpenEventViewTestCase):
             url = url_for('sadmin_users.index_view')
             start = time.clock()
             self.app.get(url, follow_redirects=True)
-            print time.clock() - start
             with open("output_users.txt", "w") as text_file:
                 for query in get_debug_queries():
                     if query.duration >= ProductionConfig.DATABASE_QUERY_TIMEOUT:
                         text_file.write("SLOW QUERY: %s\nParameters: %s\nDuration: %fs\nContext: %s\n" % (
                             query.statement, query.parameters, query.duration, query.context))
                         text_file.write("\n")
-
-
 
     def tearDown(self):
         with app.test_request_context():

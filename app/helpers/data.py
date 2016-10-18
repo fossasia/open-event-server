@@ -1545,6 +1545,7 @@ class DataManager(object):
             session_form = ""
             speaker_form = ""
             for index, name in enumerate(custom_forms_name):
+
                 if name == "session_form":
                     session_form = custom_forms_value[index]
                 elif name == "speaker_form":

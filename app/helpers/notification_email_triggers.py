@@ -24,7 +24,6 @@ def trigger_new_session_notifications(session_id, event_id=None, event=None):
                 admin_msg_setting.user_control_status == 0:
             send_new_session_organizer(organizer.user.email, event.name, link)
         # Send notification
-        print " notif Sending"
         send_notif_new_session_organizer(organizer.user, event.name, link)
 
 

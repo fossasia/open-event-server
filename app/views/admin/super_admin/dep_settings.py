@@ -54,6 +54,7 @@ class SuperAdminSettingsView(SuperAdminBaseView):
                     all_im_sizes = DataGetter.get_image_sizes()
                     for sizes in all_im_sizes:
                         delete_from_db(sizes, 'Delete Image Sizes')
+
                     im_size = ImageSizes(type='profile',
                                          full_width=request.form['profile-large_width'],
                                          full_height=request.form['profile-large_width'],

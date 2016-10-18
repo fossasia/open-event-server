@@ -81,7 +81,6 @@ class SettingsView(BaseView):
             name = request.form.get('name')
             value = int(request.form.get('value'))
             event_id = request.form.get('event_id')
-            print name, value, event_id
 
             message = ''
 

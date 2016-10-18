@@ -36,6 +36,7 @@ class RoleView(BaseView):
                                                         role.title_name,
                                                         event.name,
                                                         signup_invite_link)
+
                 flash('An email invitation has been sent to user')
             else:
                 if user.has_role(event.id):

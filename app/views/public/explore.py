@@ -83,7 +83,7 @@ class ExploreView(BaseView):
         day_filter = request.args.get('period', None)
         sub_category = request.args.get('sub-category', None)
         category = request.args.get('category', None)
-        print location
+
         if day_filter:
             start, end = get_date_range(day_filter)
         if location:
