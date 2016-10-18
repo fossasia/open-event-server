@@ -5,6 +5,7 @@ from flask.ext.scrypt import generate_password_hash
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 from werkzeug.utils import secure_filename
+import magic
 
 from app.settings import get_settings
 
@@ -19,7 +20,10 @@ UPLOAD_PATHS = {
         'slides': 'events/{event_id}/slides/{id}/slides'
     },
     'speakers': {
-        'photo': 'events/{event_id}/speakers/{id}/photo'
+        'photo': 'events/{event_id}/speakers/{id}/photo',
+        'thumbnail': 'events/{event_id}/speakers/{id}/thumbnail',
+        'small': 'events/{event_id}/speakers/{id}/small',
+        'icon': 'events/{event_id}/speakers/{id}/icon'
     },
     'event': {
         'logo': 'events/{event_id}/logo',
@@ -35,7 +39,10 @@ UPLOAD_PATHS = {
         'track_image_url': 'events/{event_id}/tracks/{id}/track_image'
     },
     'user': {
-        'avatar': 'users/{user_id}/avatar'
+        'avatar': 'users/{user_id}/avatar',
+        'thumbnail': 'users/{user_id}/thumbnail',
+        'small': 'users/{user_id}/small',
+        'icon': 'users/{user_id}/icon'
     },
     'temp': {
         'event': 'events/temp/{uuid}'
@@ -96,6 +103,7 @@ def upload(file, key, **kwargs):
     aws_key = get_settings()['aws_key']
     aws_secret = get_settings()['aws_secret']
     storage_place = get_settings()['storage_place']
+
     # upload
     if bucket_name and aws_key and aws_secret and storage_place == 's3':
         return upload_to_aws(bucket_name, aws_key, aws_secret, file, key, **kwargs)
@@ -138,12 +146,15 @@ def upload_to_aws(bucket_name, aws_key, aws_secret, file, key, acl='public-read'
     for item in bucket.list(prefix='/' + key_dir):
         item.delete()
     # set object settings
+
     file_data = file.read()
+    file_mime = magic.from_buffer(file_data, mime=True)
     size = len(file_data)
     sent = k.set_contents_from_string(
         file_data,
         headers={
-            'Content-Disposition': 'attachment; filename=%s' % filename
+            'Content-Disposition': 'attachment; filename=%s' % filename,
+            'Content-Type': '%s' % file_mime
         }
     )
     k.set_acl(acl)

@@ -66,10 +66,8 @@
 {% endblock %}
 {{ analytics.render_analytics() }}
 <script type="text/javascript">
-    $(document).ready(function() {
-        var notificationViewPath = "{{ url_for('notifications.index_view') }}";
-        setATagsInNotifMenuDropDown(notificationViewPath);
-    });
+    var notificationViewPath = "{{ url_for('notifications.index_view') }}";
+    setATagsInNotifMenuDropDown(notificationViewPath);
 </script>
 
 {% if current_user.is_authenticated and integrate_socketio %}

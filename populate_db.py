@@ -1,6 +1,6 @@
 from app import current_app
 from app.models import db
-from app.helpers.data import get_or_create#, save_to_db
+from app.helpers.data import get_or_create  # , save_to_db
 
 # Event Role-Service Permissions
 from app.models.role import Role
@@ -17,8 +17,8 @@ from app.models.user import ORGANIZER, COORGANIZER, TRACK_ORGANIZER, MODERATOR, 
 
 # Admin Panel Permissions
 from app.models.panel_permissions import PanelPermission
-from app.models.user import SUPERADMIN, ADMIN, SALES_ADMIN
-from app.views.admin.super_admin.super_admin_base import PANEL_LIST, SALES
+from app.models.system_role import CustomSysRole
+from app.views.admin.super_admin.super_admin_base import SALES
 
 # User Permissions
 from app.models.user_permissions import UserPermission
@@ -97,35 +97,32 @@ def create_permissions():
     db.session.add(perm)
 
 
+def create_custom_sys_roles():
+    role, _ = get_or_create(CustomSysRole, name='Sales Admin')
+    db.session.add(role)
+    role, _ = get_or_create(CustomSysRole, name='Marketer')
+    db.session.add(role)
+
+
 def create_panel_permissions():
-    # For Super Admin
-    for panel in PANEL_LIST:
-        panel_perm, _ = get_or_create(PanelPermission, role_name=SUPERADMIN, panel_name=panel)
-        panel_perm.can_access = True
-        db.session.add(panel_perm)
-
-    # For Admin
-    for panel in PANEL_LIST:
-        panel_perm, _ = get_or_create(PanelPermission, role_name=ADMIN, panel_name=panel)
-        panel_perm.can_access = True
-        db.session.add(panel_perm)
-
-    # For Sales Admin
-    panel_perm, _ = get_or_create(PanelPermission, role_name=SALES_ADMIN, panel_name=SALES)
-    panel_perm.can_access = True
-    db.session.add(panel_perm)
+    sales_admin = CustomSysRole.query.filter_by(name='Sales Admin').first()
+    perm, _ = get_or_create(PanelPermission, panel_name=SALES, role=sales_admin)
+    db.session.add(perm)
+    marketer = CustomSysRole.query.filter_by(name='Marketer').first()
+    perm, _ = get_or_create(PanelPermission, panel_name=SALES, role=marketer)
+    db.session.add(perm)
 
 
 def create_user_permissions():
     # Publish Event
     user_perm, _ = get_or_create(UserPermission, name='publish_event',
-        description='Publish event (make event live)')
+                                 description='Publish event (make event live)')
     user_perm.verified_user = True
     db.session.add(user_perm)
 
     # Create Event
     user_perm, _ = get_or_create(UserPermission, name='create_event',
-        description='Create event')
+                                 description='Create event')
     user_perm.verified_user, user_perm.unverified_user = True, True
     db.session.add(user_perm)
 
@@ -141,6 +138,8 @@ def populate():
     create_services()
     print 'Creating permissions...'
     create_permissions()
+    print 'Creating custom system roles...'
+    create_custom_sys_roles()
     print 'Creating admin panel permissions...'
     create_panel_permissions()
     print 'Creating user permissions...'

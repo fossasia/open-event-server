@@ -1,6 +1,8 @@
 """Copyright 2015 Rafal Kowalski"""
 
 # Ignore ExtDeprecationWarnings for Flask 0.11 - see http://stackoverflow.com/a/38080580
+import re
+from pytz import timezone
 import base64
 import warnings
 from StringIO import StringIO
@@ -55,26 +57,29 @@ from helpers.formatter import operation_name
 from app.helpers.data_getter import DataGetter
 from app.views.api_v1_views import app as api_v1_routes
 from app.views.sitemap import app as sitemap_routes
+from app.views.public.babel_view import app as babel_routes
 from app.api.helpers.errors import NotFoundError
 from apscheduler.schedulers.background import BackgroundScheduler
 from app.helpers.data import DataManager, delete_from_db
 from app.helpers.helpers import send_after_event
 from app.helpers.cache import cache
+from app.helpers.babel import babel
 from helpers.helpers import send_email_for_expired_orders
 from werkzeug.contrib.profiler import ProfilerMiddleware
 
 from flask.ext.sqlalchemy import get_debug_queries
-from config import ProductionConfig
+from config import ProductionConfig, LANGUAGES
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
 
-
 def create_app():
     Autodoc(app)
     # cal = Calendar()
+    babel.init_app(app)
 
+    app.register_blueprint(babel_routes)
     app.register_blueprint(api_v1_routes)
     app.register_blueprint(sitemap_routes)
     Migrate(app, db)
@@ -94,6 +99,7 @@ def create_app():
     stripe.api_key = 'SomeStripeKey'
     app.secret_key = 'super secret key'
     app.json_encoder = MiniJSONEncoder
+    app.config['BABEL_DEFAULT_LOCALE'] = 'en'
     app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
     app.config['UPLOADS_FOLDER'] = os.path.realpath('.') + '/static/'
     app.config['FILE_SYSTEM_STORAGE_FILE_VIEW'] = 'static'
@@ -162,6 +168,16 @@ def request_wants_json():
     best = request.accept_mimetypes.best_match(
         ['application/json', 'text/html'])
     return best == 'application/json' and request.accept_mimetypes[best] > request.accept_mimetypes['text/html']
+
+
+@app.context_processor
+def all_languages():
+    return dict(all_languages=LANGUAGES)
+
+@app.context_processor
+def selected_lang():
+    return dict(selected_lang=get_locale())
+
 
 @app.context_processor
 def locations():
@@ -315,6 +331,35 @@ def simple_datetime_display(date):
     return date.strftime('%B %d, %Y %I:%M %p')
 
 
+@app.template_filter('external_url')
+def external_url(url):
+    """Returns an external URL for the given `url`.
+    If URL is already external, it remains unchanged.
+    """
+    url_pattern = r'^(https?)://.*$'
+    scheme = re.match(url_pattern, url)
+    if not scheme:
+        url_root = request.url_root.rstrip('/')
+        return '{}{}'.format(url_root, url)
+    else:
+        return url
+
+
+@app.template_filter('localize_dt')
+def localize_dt(dt, tzname):
+    """Accepts a Datetime object and a Timezone name.
+    Returns Timezone aware Datetime.
+    """
+    localized_dt = timezone(tzname).localize(dt)
+    return localized_dt.isoformat()
+
+
+@app.context_processor
+def fb_app_id():
+    fb_app_id = get_settings()['fb_client_id']
+    return dict(fb_app_id=fb_app_id)
+
+
 @app.context_processor
 def flask_helpers():
     def string_empty(string):
@@ -466,3 +511,11 @@ if __name__ == '__main__':
         socketio.run(current_app)
     else:
         current_app.run()
+
+
+@babel.localeselector
+def get_locale():
+    try:
+        return request.cookies["selected_lang"]
+    except:
+        return request.accept_languages.best_match(LANGUAGES.keys())

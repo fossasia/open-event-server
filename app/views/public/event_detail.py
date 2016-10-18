@@ -127,7 +127,33 @@ class EventDetailView(BaseView):
         call_for_speakers = CallForPaper.query.filter_by(hash=hash).first()
         if not call_for_speakers:
             abort(404)
-        return self.display_event_cfs(call_for_speakers.event_id, True)
+        event = DataGetter.get_event(call_for_speakers.event_id)
+        placeholder_images = DataGetter.get_event_default_images()
+        custom_placeholder = DataGetter.get_custom_placeholders()
+        if not event.has_session_speakers:
+            abort(404)
+
+        accepted_sessions = DataGetter.get_sessions(event.id)
+
+        if not call_for_speakers:
+            abort(404)
+
+        form_elems = DataGetter.get_custom_form_elements(event.id)
+        speaker_form = json.loads(form_elems.speaker_form)
+        session_form = json.loads(form_elems.session_form)
+
+        now = datetime.now()
+        state = "now"
+        if call_for_speakers.end_date < now:
+            state = "past"
+        elif call_for_speakers.start_date > now:
+            state = "future"
+        speakers = DataGetter.get_speakers(event.id).all()
+        return self.render('/gentelella/guest/event/cfs.html', event=event, accepted_sessions=accepted_sessions,
+                           speaker_form=speaker_form,
+                           session_form=session_form, call_for_speakers=call_for_speakers,
+                           placeholder_images=placeholder_images, state=state, speakers=speakers,
+                           via_hash=True, custom_placeholder=custom_placeholder)
 
     @expose('/<identifier>/cfs/', methods=('POST',))
     def process_event_cfs(self, identifier):

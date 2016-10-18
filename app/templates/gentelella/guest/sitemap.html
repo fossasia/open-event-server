@@ -1,0 +1,84 @@
+{% extends 'gentelella/admin/base.html' %}
+
+{% block title %}
+Site Map
+{% endblock %}
+
+{% block head_css %}
+  {{ super() }}
+
+  <style type="text/css">
+  .cat {
+    margin-top: 15px;
+    margin-bottom: 15px;
+
+    font-size: 1.2em;
+  }
+
+  .x_content h4 {
+    font-size: 1.3em;
+    text-decoration: underline;
+  }
+
+  .x_content {
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    float: none;
+  }
+  </style>
+{% endblock %}
+
+{% block body %}
+<h3>Sitemap</h3>
+
+<div class="x_panel" style="min-height:600px;">
+  <div class="x_content">
+    <div class="row">
+
+      <div class="col-md-4 cat">
+        <h4>General Information</h4>
+
+        <a href="/">Home</a><br>
+        {% for page in system_pages %}
+          {% if page.place == 'use_open_event'%}
+              <a href="{{page.url}}">{{page.name}}</a><br>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <div class="col-md-4 cat">
+        <h4>Open Event</h4>
+
+        <a href="https://github.com/fossasia/open-event">Github Repository</a><br>
+        <a href="http://opev.wordpress.com">Blog</a><br>
+      </div>
+
+      <div class="col-md-4 cat">
+        <h4>Account Management</h4>
+
+        <a href="{{ url_for('admin.register_view') }}">Register</a><br>
+        <a href="{{ url_for('admin.login_view') }}">Login</a><br>
+        <a href="{{ url_for('admin.password_reset_view') }}">Reset Password</a><br>
+        <a href="{{ url_for('profile.index_view') }}">View own profile</a><br>
+      </div>
+
+      <div class="col-md-4 cat">
+        <h4>Attending Events</h4>
+
+        <a href="{{ url_for('admin.browse_view') }}">Find Events</a><br>
+        <a href="{{ url_for('my_tickets.display_my_tickets') }}">My Event Tickets</a><br>
+      </div>
+
+      <div class="col-md-4 cat">
+        <h4>Managing Events</h4>
+
+        <a href="{{ url_for('events.create_view') }}">Create Event</a><br>
+        <a href="{{ url_for('events.index_view') }}">List own events</a><br>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -25,6 +25,7 @@ class Order(db.Model):
     zipcode = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    marketer_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     created_at = db.Column(db.DateTime)
     completed_at = db.Column(db.DateTime, nullable=True, default=None)
     transaction_id = db.Column(db.String)
@@ -43,7 +44,8 @@ class Order(db.Model):
     discount_code = db.relationship('DiscountCode', backref='orders')
 
     event = db.relationship('Event', backref='orders')
-    user = db.relationship('User', backref='orders')
+    user = db.relationship('User', backref='orders', foreign_keys=[user_id])
+    marketer = db.relationship('User', backref='marketed_orders', foreign_keys=[marketer_id])
     tickets = db.relationship("OrderTicket")
 
     def __init__(self,

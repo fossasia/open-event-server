@@ -1,13 +1,21 @@
 import json
+from uuid import uuid4
+import time
+from os import path
+import PIL
+from PIL import Image
+import shutil
 
 from flask.ext.admin import BaseView
 from flask.ext.restplus import abort
 from flask_admin import expose
 from flask.ext import login
-from flask import request, url_for, redirect, flash
+from flask import request, url_for, redirect, flash, jsonify
 from ....helpers.data import delete_from_db, save_to_db
 from ....helpers.data_getter import DataGetter
-from ....helpers.storage import upload, UPLOAD_PATHS
+from app.helpers.storage import upload, upload_local, UPLOAD_PATHS, UploadedFile
+from ....models.image_sizes import ImageSizes
+from app.helpers.helpers import uploaded_file
 
 
 def get_speaker_or_throw(speaker_id):
@@ -59,6 +67,80 @@ class SpeakersView(BaseView):
                         event_id=int(event_id), id=int(speaker.id)
                     ))
                 speaker.photo = speaker_img
+            logo = request.form.get('photo', None)
+            print logo
+            if logo != '' and logo:
+                filename = '{}.png'.format(time.time())
+                filepath = '{}/static/{}'.format(path.realpath('.'),
+                           logo[len('/serve_static/'):])
+                logo_file = UploadedFile(filepath, filename)
+                print logo_file
+                logo = upload(logo_file, 'events/%d/speakers/%d/photo' % (int(event_id), int(speaker.id)))
+                speaker.photo = logo
+                image_sizes = DataGetter.get_image_sizes_by_type(type='profile')
+                if not image_sizes:
+                    image_sizes = ImageSizes(full_width=150,
+                                             full_height=150,
+                                             icon_width=35,
+                                             icon_height=35,
+                                             thumbnail_width=50,
+                                             thumbnail_height=50,
+                                             type='profile')
+                save_to_db(image_sizes, "Image Sizes Saved")
+                filename = '{}.jpg'.format(time.time())
+                filepath = '{}/static/{}'.format(path.realpath('.'),
+                           logo[len('/serve_static/'):])
+                logo_file = UploadedFile(filepath, filename)
+
+                temp_img_file = upload_local(logo_file,
+                                             'events/{event_id}/speakers/{id}/temp'.format(
+                                             event_id=int(event_id), id=int(speaker.id)))
+                temp_img_file = temp_img_file.replace('/serve_', '')
+
+                basewidth = image_sizes.full_width
+                img = Image.open(temp_img_file)
+                hsize = image_sizes.full_height
+                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+                img.save(temp_img_file)
+                file_name = temp_img_file.rsplit('/', 1)[1]
+                large_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+                profile_thumbnail_url = upload(
+                    large_file,
+                    UPLOAD_PATHS['speakers']['thumbnail'].format(
+                        event_id=int(event_id), id=int(speaker.id)
+                    ))
+
+                basewidth = image_sizes.thumbnail_width
+                img = Image.open(temp_img_file)
+                hsize = image_sizes.thumbnail_height
+                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+                img.save(temp_img_file)
+                file_name = temp_img_file.rsplit('/', 1)[1]
+                thumbnail_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+                profile_small_url = upload(
+                    thumbnail_file,
+                    UPLOAD_PATHS['speakers']['small'].format(
+                        event_id=int(event_id), id=int(speaker.id)
+                    ))
+
+                basewidth = image_sizes.icon_width
+                img = Image.open(temp_img_file)
+                hsize = image_sizes.icon_height
+                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+                img.save(temp_img_file)
+                file_name = temp_img_file.rsplit('/', 1)[1]
+                icon_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+                profile_icon_url = upload(
+                    icon_file,
+                    UPLOAD_PATHS['speakers']['icon'].format(
+                        event_id=int(event_id), id=int(speaker.id)
+                    ))
+                shutil.rmtree(path='static/media/' + 'events/{event_id}/speakers/{id}/temp'.format(
+                              event_id=int(event_id), id=int(speaker.id)))
+                speaker.thumbnail = profile_thumbnail_url
+                speaker.small = profile_small_url
+                speaker.icon = profile_icon_url
+                save_to_db(speaker, "Speaker photo saved")
             # set other fields
             speaker.name = request.form.get('name', None)
             speaker.short_biography = request.form.get('short_biography', None)
@@ -85,3 +167,57 @@ class SpeakersView(BaseView):
         delete_from_db(speaker, 'Speaker Rejected')
         flash("The speaker has been deleted", "danger")
         return redirect(url_for('.index_view', event_id=event_id))
+
+    @expose('/<int:speaker_id>/photo_upload', methods=('POST',))
+    def photo_upload(self, event_id, speaker_id):
+        speaker = get_speaker_or_throw(speaker_id)
+        event = DataGetter.get_event(event_id)
+        photo = request.form['photo']
+        if photo:
+            photo_file = uploaded_file(file_content=photo)
+            photo = upload(
+                photo_file,
+                UPLOAD_PATHS['speakers']['photo'].format(
+                        event_id=int(event_id), id=int(speaker.id)
+                ))
+            speaker.photo = photo
+            save_to_db(speaker)
+            return jsonify({'status': 'ok', 'photo': photo})
+        else:
+            speaker.photo = None
+            save_to_db(speaker)
+            return jsonify({'status': 'Removed'})
+
+    @expose('/<int:speaker_id>/editfiles/bgimage', methods=('POST', 'DELETE'))
+    def bgimage_upload(self, event_id, speaker_id):
+        if request.method == 'POST':
+            background_image = request.form['bgimage']
+            if background_image:
+                background_file = uploaded_file(file_content=background_image)
+                background_url = upload(
+                    background_file,
+                    UPLOAD_PATHS['speakers']['photo'].format(
+                        event_id=int(event_id), id=int(speaker_id)
+                    ))
+                return jsonify({'status': 'ok', 'background_url': background_url})
+            else:
+                return jsonify({'status': 'no bgimage'})
+        elif request.method == 'DELETE':
+            speaker = DataGetter.get_speaker(int(speaker_id))
+            speaker.photo = ''
+            save_to_db(speaker)
+            return jsonify({'status': 'ok'})
+
+    @expose('/create/files/bgimage', methods=('POST',))
+    def create_event_bgimage_upload(self, event_id):
+        if request.method == 'POST':
+            background_image = request.form['bgimage']
+            if background_image:
+                background_file = uploaded_file(file_content=background_image)
+                background_url = upload_local(
+                    background_file,
+                    UPLOAD_PATHS['temp']['event'].format(uuid=uuid4())
+                )
+                return jsonify({'status': 'ok', 'background_url': background_url})
+            else:
+                return jsonify({'status': 'no bgimage'})

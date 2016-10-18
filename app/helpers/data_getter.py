@@ -28,6 +28,7 @@ from ..models.service import Service
 from ..models.permission import Permission
 from ..models.user import User
 from ..models.file import File
+from ..models.system_role import CustomSysRole
 from ..models.panel_permissions import PanelPermission
 from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
@@ -91,6 +92,12 @@ class DataGetter(object):
         return Event.query.order_by(desc(Event.id)).filter_by(in_trash=False).all()
 
     @staticmethod
+    def get_all_events_with_discounts():
+        """Method return all events"""
+        return Event.query.order_by(desc(Event.id)).filter_by(in_trash=False)\
+            .filter(Event.discount_code_id is not None).filter(Event.discount_code_id > 0).all()
+
+    @staticmethod
     def get_custom_placeholders():
         return CustomPlaceholder.query.all()
 
@@ -133,9 +140,12 @@ class DataGetter(object):
                                           hash=hash_code, **kwargs).first()
 
     @staticmethod
-    def get_panel_permission(role_name, panel_name):
-        return PanelPermission.query.filter_by(role_name=role_name,
-                                               panel_name=panel_name).first()
+    def get_custom_sys_roles():
+        return CustomSysRole.query.all()
+
+    @staticmethod
+    def get_panel_permission(role, panel_name):
+        return PanelPermission.query.filter_by(role=role, panel_name=panel_name).first()
 
     @staticmethod
     def get_user_permissions():
@@ -384,7 +394,7 @@ class DataGetter(object):
         return db_model.query.get(object_id)
 
     @staticmethod
-    def get_event(event_id_or_identifier):
+    def get_event(event_id_or_identifier, should_abort=True):
         """Returns an Event given its id/identifier.
         Aborts with a 404 if event not found.
         """
@@ -392,7 +402,7 @@ class DataGetter(object):
             event = Event.query.get(event_id_or_identifier)
         else:
             event = Event.query.filter_by(identifier=event_id_or_identifier).first()
-        if event is None:
+        if event is None and should_abort:
             abort(404)
         return event
 

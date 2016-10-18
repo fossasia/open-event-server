@@ -19,6 +19,22 @@ Users
     table.table {
         margin-top: 20px !important;
     }
+    
+    .update-roles-form .checkbox,
+    .update-roles-form .radio {
+        display: block;
+    }
+
+    .update-roles-form .checkbox label,
+    .update-roles-form .radio label {
+        padding-left: 20px;
+    }
+
+    .update-roles-form .checkbox input[type=checkbox],
+    .update-roles-form .radio input[type=radio] {
+        position: absolute;
+        margin-left: -20px;
+    }
     </style>
 {% endblock %}
 
@@ -48,6 +64,9 @@ Users
                       Unverified User
                   {% endif %}
               </li>
+          {% for sys_role in user['user'].sys_roles %}
+              <li>{{ sys_role.role.name }}</li>
+          {% endfor %}
           </ul>
         </td>
         <td>
@@ -62,10 +81,11 @@ Users
         <td>
         <div class="btn-group btn-group-sm">
             {% if not user['user'].is_super_admin %}
-            <a class="btn btn-default" href='#' data-toggle="modal" data-target="#importModal" title="Edit role" data-user-id="{{user['user'].id}}">
+            <a class="btn btn-default" href='#' data-toggle="modal" data-target="#update-sys-role-{{ user['user'].id }}" title="Edit role" data-user-id="{{user['user'].id}}">
                 <i class="glyphicon glyphicon-pencil"></i>
             </a>
             {% endif %}
+
             <a data-toggle="tooltip" data-placement="top" class="btn btn-default" href="{{ get_url('sadmin_users.details_view', user_id=user['user'].id)}}" title="View details">
                 <i class="glyphicon glyphicon-eye-open"></i>
             </a>
@@ -91,6 +111,41 @@ Users
                             </a>
             {% endif %}
         </div>
+        <!-- Update-Roles modal -->
+            <div class="modal fade" id="update-sys-role-{{ user['user'].id }}" role="dialog">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Update System Roles</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form method="post" action="{{ url_for('sadmin_users.update_roles_view', user_id=user['user'].id) }}" role="form" class="update-roles-form">
+                      <h5>Provide Admin access?</h5>
+                      <div class="radio">
+                        <label>
+                          <input type="radio" name="admin" value="yes" {{ 'checked' if user['user'].is_admin else '' }}> Yes
+                        </label>
+                        &nbsp;
+                        <label>
+                          <input type="radio" name="admin" value="no" {{ '' if user['user'].is_admin else 'checked' }}> No
+                        </label>
+                      </div>
+
+                      <h5>Custom System Roles</h5>
+                      {% for role in custom_sys_roles %}
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" name="custom_role-{{ role.id }}" {{ 'checked' if user['user'].is_sys_role(role.id) else '' }}> {{ role.name }}
+                          </label>
+                        </div>
+                      {% endfor %}
+                      <button type="submit" class="btn btn-success pull-right">Save</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
         </td>
     </tr>
     {%endfor%}
@@ -98,11 +153,27 @@ Users
 
 {% block content %}
 <div>
-    <ul id="event-tabs" class="nav nav-tabs bar_tabs" role="tablist">
+    <ul id="event-tabs" class="nav nav-tabs bar_tabs large_tab_list" role="tablist">
             <li class="active"><a href="#tab_content1" id="all-users-tab" data-toggle="tab">All Users</a></li>
             <li class=""><a href="#tab_content1" id="live-users-tab" data-toggle="tab">Active Users</a></li>
             <li class=""><a href="#tab_content2" id="deleted-users-tab" data-toggle="tab">Deleted Users</a></li>
     </ul>
+    <div class="dropdown tabs_small">
+            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+            <span class="drop_header">All Users</span>
+            <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li value="All Users" class="small_tab_list active">
+                    <a href="#tab_content1" id="all-users-tab" data-toggle="tab">All Users</a>
+                </li>
+                <li value="Active Users" class="small_tab_list active">
+                    <a href="#tab_content1" id="live-users-tab" data-toggle="tab">Active Users</a>
+                </li>
+                <li value="Deleted Users" class="small_tab_list">
+                    <a href="#tab_content2" id="deleted-users-tab" data-toggle="tab">Deleted Users</a>
+                </li>
+            </ul>
+    </div>
     <div id="myTabContent" class="tab-content">
             <div role="tabpanel" class="tab-pane fade active in" id="tab_content0"
                  aria-labelledby="all-users-tab">
@@ -167,44 +238,13 @@ Users
         </div>
 </div>
 
-          <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Change Role</h4>
-      </div>
-      <div class="modal-body">
-        <h5>Provide Admin Access ?</h5><br>
-        <form id="give-admin-access" method="post" >
-            <!-- <label class="btn btn-default btn-file"> -->
-            {% if user.is_admin %}
-                <input type="radio" checked name="admin_perm" value="isAdmin">Yes
-                <input type="radio" name="admin_perm" value="isNotAdmin">No
-            {% endif %}
-            {% if not user.is_admin %}
-                <input type="radio" name="admin_perm" value="isAdmin">Yes
-                <input type="radio" checked name="admin_perm" value="isNotAdmin">No
-            {% endif %}
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-success">Done</button>
-      </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
 
 {% endblock %}
 
 {% block tail_js %}
 {{ super() }}
-        <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
+<script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
 <script type="text/javascript">
-        $(document).on('click', 'a[data-target="#importModal"]',function(){
-            var userId = $(this).data('user-id');
-            $("#importModal").find("form").attr("action","/admin/users/" + userId + "/edit/");
-        });
 
         $('#active_users_table').dataTable({
         "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
@@ -241,9 +281,13 @@ Users
     } );
 
     $('#all_users_table').dataTable({
-        "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+        "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>><"table-responsive"t>ip',
         "lengthMenu": [25, 50, 100, 200],
         "pageLength": 50,
+        "initComplete": function(settings, json){
+                table_width_adjust();
+                window.onresize = table_width_adjust;
+        },
         "language": {
             "lengthMenu": "Show _MENU_ Users",
         },
@@ -257,6 +301,17 @@ Users
         change_column_time_to_humanize_format('#all_users_table tr', 5)
         change_column_time_to_humanize_format('#all_users_table tr', 6)
     } );
+
+    $(".small_tab_list").click(function(){
+        $(".small_tab_list").removeClass("active");
+        $(this).addClass("active");
+        var clicked_link = $(this).attr("value");
+        $(".drop_header").text(clicked_link);
+    });
+
+    $('.tabs_small a').click(function(){
+        $(this).tab('show');
+    }); 
     </script>
 {% endblock %}
 

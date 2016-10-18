@@ -5,13 +5,52 @@
 {% set carousel_height = 500 if active_page == 'info' else 300 -%}
 {% set scrollspy_top = (carousel_height + 95) ~ "px" %}
 
+{# Set `event_image` to use inside template #}
+{% if event.background_url %}
+    {% set event_image = event.background_url %}
+{% elif event.topic %}
+    {% set event_image = url_for("static", filename="placeholders/" + placeholder_images[event.topic], _external=True) %}
+{% elif event.subtopic %}
+    {% set event_image = url_for("static", filename="placeholders/" + placeholder_images[event.subtopic], _external=True) %}
+{% else %}
+    {% set event_image = url_for("static", filename="placeholders/" + placeholder_images["Other"], _external=True) %}
+{% endif %}
+
+{% block head_meta %}
+    {# Facebook Open Graph Tags #}
+    <meta property="fb:app_id" content="{{ fb_app_id | default('', true) }}"/>
+
+    {# Twitter Card Tags Start #}
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:site" content="@fossasia"/>
+    <meta name="twitter:title" content="{{ event.name }}"/>
+    <meta name="twitter:description" content="{{ event.description }}"/>
+    <meta name="twitter:image" content="{{ event_image | external_url }}"/>
+    {# Twitter Card Tags Over #}
+
+    <meta property="og:title" content="{{ event.name }}"/>
+    <meta property="og:site_name" content="Organizer Server"/>
+    <meta property="og:url" content="{{ request.url }}"/>
+    <meta property="og:description" content="{{ event.description }}"/>
+    <meta property="og:image" content="{{ event_image | external_url }}"/>
+    <meta property="og:type" content="events.event"/>
+    {% if event.latitude %}
+        <meta property="event:location:latitude" content="{{ event.latitude }}">
+    {% endif %}
+    {% if event.longitude %}
+        <meta property="event:location:longitude" content="{{ event.longitude }}">
+    {% endif %}
+    <meta property="event:start_time" content="{{ event.start_time | localize_dt(event.timezone) }}">
+    <meta property="event:end_time" content="{{ event.end_time | localize_dt(event.timezone) }}">
+{% endblock %}
+
 {% block head_css %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/details.css') }}"/>
     <style type="text/css">
         .carousel .item {
             height: {{ carousel_height }}px;
-            background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)), url('{% if event.background_url %}{{ event.large }}{% elif order.event.topic%}{% set vars = {"foo": False} %}{% for custom_image in custom_placeholder %}{% if custom_image.name == session.event.topic %}{{ custom_image.url }}{% if vars.update({"foo": True}) %} {% endif %}{% endif %}{% endfor %}{% if not vars.foo %}{{ url_for("static", filename="placeholders/" + placeholder_images[order.event.topic])}}{% endif %}{% elif order.event.subtopic %}{% set vars = {"foo": False} %}{% for custom_image in custom_placeholder %}{% if custom_image.name == session.event.subtopic %}{{ custom_image.url }}{% if vars.update({"foo": True}) %} {% endif %}{% endif %}{% endfor %}{% if not vars.foo %}{ url_for("static", filename="placeholders/" + placeholder_images[order.event.subtopic])}}{% endif %}{% else %}{% set vars = {"foo": False} %}{% for custom_image in custom_placeholder %}{% if custom_image.name == "Other" %}{{ custom_image.url }}{% if vars.update({"foo": True}) %} {% endif %}{% endif %}{% endfor %}{% if not vars.foo %}{{ url_for("static", filename="placeholders/" + placeholder_images["Other"])}}{% endif %}{% endif %}');
+            background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)), url('{{ event_image }}');
             background-size: cover;
         }
 
@@ -170,6 +209,7 @@
                 </div>
             {% endif %}
         </div>
+    </div>
     </div>
 {% endblock %}
 

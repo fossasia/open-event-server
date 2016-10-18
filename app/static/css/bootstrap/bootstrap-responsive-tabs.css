@@ -14,11 +14,35 @@
 .responsive-tabs-container[class*="accordion-"] .accordion-link.active{
   background-color: #f5f5f5;
 }
+#activated_link{
+  display: none;
+}
+#event_tabs_small, #event_tabs_small button, #event_tabs_small .dropdown-menu, .tabs_small, .tabs_small button, .tabs_small .dropdown-menu{
+  width: 100%;
+}
+#event_tabs_small button, #event_tabs_small .dropdown-menu, .tabs_small button, .tabs_small .dropdown-menu{
+  text-align: center;
+  font-size: 1.3em;
+  font-weight: 300;
+}
+.tabs_small{
+    display: none;
+  }
+.tabs_small .active{
+  display: none;
+}
 @media (max-width: 767px) {
   .responsive-tabs-container.accordion-xs .nav-tabs {
     display: none;
   }
   .responsive-tabs-container.accordion-xs .accordion-link {
+    display: block;
+  }
+
+  .tickets_tab,.session_tabs,.admin_tabs,.admin_event_tabs, .large_tab_list{
+    display: none;
+  }
+  .tabs_small{
     display: block;
   }
 }

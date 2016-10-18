@@ -1,4 +1,9 @@
+from datetime import datetime
+
 from . import db
+
+TICKET = 'ticket'
+EVENT = 'event'
 
 class DiscountCode(db.Model):
     __tablename__ = "discount_codes"
@@ -8,14 +13,19 @@ class DiscountCode(db.Model):
     value = db.Column(db.Integer)
     type = db.Column(db.String)
     is_active = db.Column(db.Boolean)
-    tickets_number = db.Column(db.Integer)
+    tickets_number = db.Column(db.Integer)  # For event level discount this holds the max. uses
     min_quantity = db.Column(db.Integer)
-    max_quantity = db.Column(db.Integer)
+    max_quantity = db.Column(db.Integer)  # For event level discount this holds the months for which it is valid
     valid_from = db.Column(db.DateTime, nullable=True)
     valid_till = db.Column(db.DateTime, nullable=True)
     tickets = db.Column(db.String)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
-    event = db.relationship('Event', backref='discount_codes')
+    event = db.relationship('Event', backref='discount_codes', foreign_keys=[event_id])
+    created_at = db.Column(db.DateTime)
+    marketer_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    marketer = db.relationship('User', backref='discount_codes')
+
+    used_for = db.Column(db.String)
 
     def __init__(self,
                  code=None,
@@ -27,6 +37,7 @@ class DiscountCode(db.Model):
                  valid_from=None,
                  valid_till=None,
                  is_active=True,
+                 used_for=None,
                  event_id=None):
         self.code = code
         self.type = type
@@ -38,6 +49,8 @@ class DiscountCode(db.Model):
         self.valid_till = valid_till
         self.event_id = event_id
         self.is_active = is_active
+        self.created_at = datetime.utcnow()
+        self.used_for = used_for
 
     def __repr__(self):
         return '<DiscountCode %r>' % self.id
@@ -54,6 +67,12 @@ class DiscountCode(db.Model):
         return {'id': self.id,
                 'code': self.code,
                 'value': self.value,
+                'type': self.type,
                 'tickets_number': self.tickets_number,
+                'min_quantity': self.min_quantity,
+                'max_quantity': self.max_quantity,
+                'used_for': self.used_for,
+                'valid_from': self.valid_from,
+                'valid_till': self.valid_till,
                 'event_id': self.event_id,
                 'is_active': self.is_active}

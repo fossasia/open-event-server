@@ -2,9 +2,12 @@ from flask import request, url_for, redirect, abort, flash, jsonify
 from flask.ext.admin import BaseView
 from flask_admin import expose
 from flask.ext import login
+from uuid import uuid4
 
 from app.views.admin.models_views.events import is_verified_user
-from ....helpers.data import DataManager, get_facebook_auth, get_instagram_auth, get_twitter_auth_url
+from app.helpers.storage import upload, upload_local, UPLOAD_PATHS
+from app.helpers.helpers import uploaded_file
+from ....helpers.data import DataManager, get_facebook_auth, get_instagram_auth, get_twitter_auth_url, save_to_db
 from ....helpers.data_getter import DataGetter
 from app.helpers.oauth import FbOAuth, InstagramOAuth, TwitterOAuth
 
@@ -60,6 +63,40 @@ class ProfileView(BaseView):
         instagram = get_instagram_auth()
         instagram_auth_url, state = instagram.authorization_url(InstagramOAuth.get_auth_uri(), access_type='offline')
         return redirect(instagram_auth_url)
+
+    @expose('/<int:user_id>/editfiles/bgimage', methods=('POST', 'DELETE'))
+    def bgimage_upload(self, user_id):
+        if request.method == 'POST':
+            background_image = request.form['bgimage']
+            if background_image:
+                background_file = uploaded_file(file_content=background_image)
+                background_url = upload(
+                    background_file,
+                    UPLOAD_PATHS['user']['avatar'].format(
+                        user_id=user_id
+                    ))
+                return jsonify({'status': 'ok', 'background_url': background_url})
+            else:
+                return jsonify({'status': 'no bgimage'})
+        elif request.method == 'DELETE':
+            profile = DataGetter.get_user(int(user_id))
+            profile.avatar_uploaded = ''
+            save_to_db(profile)
+            return jsonify({'status': 'ok'})
+
+    @expose('/create/files/bgimage', methods=('POST',))
+    def create_event_bgimage_upload(self):
+        if request.method == 'POST':
+            background_image = request.form['bgimage']
+            if background_image:
+                background_file = uploaded_file(file_content=background_image)
+                background_url = upload_local(
+                    background_file,
+                    UPLOAD_PATHS['temp']['event'].format(uuid=uuid4())
+                )
+                return jsonify({'status': 'ok', 'background_url': background_url})
+            else:
+                return jsonify({'status': 'no bgimage'})
 
 
 class NotificationView(BaseView):

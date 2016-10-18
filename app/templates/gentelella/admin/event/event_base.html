@@ -2,111 +2,117 @@
 {% block head_css %}
     {{ super() }}
     <style type="text/css">
-        .event-btn-group .btn {
-            text-transform: uppercase;
-            font-weight: 300;
-        }
+    .event-btn-group .btn {
+    text-transform: uppercase;
+    font-weight: 300;
+    }
     </style>
 {% endblock %}
-
-
 {% set navigation_bar = [
-    ('/events/' ~ event.id ~ '/', 'home', 'Overview'),
-    ('/events/' ~ event.id ~ '/tickets', 'tickets', 'Tickets'),
-    ('/events/' ~ event.id ~ '/scheduler', 'scheduler', 'Scheduler'),
-    ('/events/' ~ event.id ~ '/sessions', 'sessions', 'Sessions'),
-    ('/events/' ~ event.id ~ '/speakers', 'speakers', 'Speakers'),
-    ('/events/' ~ event.id ~ '/export', 'export', 'Export'),
+('/events/' ~ event.id ~ '/', 'home', 'Overview'),
+('/events/' ~ event.id ~ '/tickets', 'tickets', 'Tickets'),
+('/events/' ~ event.id ~ '/scheduler', 'scheduler', 'Scheduler'),
+('/events/' ~ event.id ~ '/sessions', 'sessions', 'Sessions'),
+('/events/' ~ event.id ~ '/speakers', 'speakers', 'Speakers'),
+('/events/' ~ event.id ~ '/export', 'export', 'Export'),
 ] -%}
-
 {% set active_page = active_page|default('home') -%}
-
 {% macro tabs() %}
-    <ul class="nav nav-tabs bar_tabs" role="tablist" style="background: #FFFFFF;">
-        {% for href, id, caption in navigation_bar %}
-            <li{% if id == active_page %} class="active"{% endif %}><a href="{{ href|e }}">{{ caption|e }}</a></li>
-        {% endfor %}
-    </ul>
+<ul class="nav nav-tabs bar_tabs" role="tablist" style="background: #FFFFFF;">
+    {% for href, id, caption in navigation_bar %}
+        <li{% if id == active_page %} class="active"{% endif %}><a href="{{ href|e }}">{{ caption|e }}</a></li>
+    {% endfor %}
+</ul>
 {% endmacro %}
-
 {% block body %}
-    <div class="page-title">
-        <div class="title_left">
-            <h3>{{ event.name }}
-                {% if active_page != "home" %}
-                    <span style="font-weight: 300; color: #73879C;"> | {{ active_page | capitalize }}</span>
-                {% endif %}
-            </h3>
-        </div>
-        <div class="title_right" style="text-align: right">
-            {% if event.state == 'Published' %}
-
-            {% endif %}
-            <div class="btn-group event-btn-group" role="group" style="">
-                <a href="/e/{{ event.identifier }}/" target="_blank" type="button" class="btn btn-default">
-                    {% if event.state == 'Published' %}
-                        View
-                    {% else %}
-                        Preview
-                    {% endif %}
-                </a>
-            </div>
-            <div class="btn-group event-btn-group" role="group" style="">
+<div class="page-title">
+    <div class="title_left">
+        <h3>{{ event.name }}
+        {% if active_page != "home" %}
+            <span style="font-weight: 300; color: #73879C;"> | {{ active_page | capitalize }}</span>
+        {% endif %}
+        </h3>
+    </div>
+    <div class="title_right" style="text-align: right">
+        {% if event.state == 'Published' %}
+        {% endif %}
+        <div class="btn-group event-btn-group" role="group" style="">
+            <a href="/e/{{ event.identifier }}/" target="_blank" type="button" class="btn btn-default">
                 {% if event.state == 'Published' %}
-                    <a href="/events/{{ event.id }}/unpublish" type="button" class="btn btn-default">Unpublish</a>
+                    View
                 {% else %}
-                    <a href="/events/{{ event.id }}/publish" type="button" class="btn btn-default">Publish</a>
+                    Preview
                 {% endif %}
-                <a href="/events/{{ event.id }}/copy" type="button" class="btn btn-default">Copy</a>
-            </div>
-            <div class="btn-group event-btn-group" role="group" style="">
-                <button data-toggle="modal" data-target="#delete-confirm-modal" type="button" class="btn btn-danger">
-                    Delete
-                </button>
-            </div>
-
+            </a>
+        </div>
+        <div class="btn-group event-btn-group" role="group" style="">
+            {% if event.state == 'Published' %}
+                <a href="/events/{{ event.id }}/unpublish" type="button" class="btn btn-default">Unpublish</a>
+            {% else %}
+                <a href="/events/{{ event.id }}/publish" type="button" class="btn btn-default">Publish</a>
+            {% endif %}
+            <a href="/events/{{ event.id }}/copy" type="button" class="btn btn-default">Copy</a>
+        </div>
+        <div class="btn-group event-btn-group" role="group" style="">
+            <button data-toggle="modal" data-target="#delete-confirm-modal" type="button" class="btn btn-danger">
+            Delete
+            </button>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="x_panel">
-                <div class="x_content">
-                    <div class="responsive-tabs-container accordion-xs">
-                        {{ tabs() }}
-                        <br>
-                        <div class="tabContent tab-content">
+</div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_content">
+                <div class="responsive-tabs-container accordion-xs">
+                    {{ tabs() }}
+                    <br>
+                    <div class="dropdown accordion-link" id="event_tabs_small">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                        {% if active_page == "home" %}
+                            Overview
+                        {% else %}
+                            {{ active_page | capitalize }}
+                        {% endif %}
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
                             {% for href, id, caption in navigation_bar %}
-                                <a href="{{ href|e }}" class="accordion-link {% if id == active_page %} active{% endif %}">{{ caption|e }}</a>
+                                <li>
+                                    <a href="{{ href|e }}" id="{% if id == active_page %}activated_link{% endif %}">
+                                    {{ caption|e }}
+                                </a>
+                                </li>
                             {% endfor %}
-                        </div>
-                        {% block content %}
-
-                        {% endblock %}
+                        </ul>
                     </div>
-                </div>
+                <!-- <div class="tabContent tab-content">
+                    {% for href, id, caption in navigation_bar %}
+                        <a href="{{ href|e }}" class="accordion-link {% if id == active_page %} active{% endif %}">{{ caption|e }}</a>
+                    {% endfor %}
+                </div> -->
+                {% block content %}
+                {% endblock %}
             </div>
         </div>
     </div>
-
-
-    <div id="delete-confirm-modal" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Are you sure you would like to delete this event ?</h4>
-                </div>
-                <div class="modal-footer">
-                    <a type="button" class="btn btn-default" data-dismiss="modal">Cancel</a>
-                    <a href="/events/{{ event.id }}/trash" type="button" class="btn btn-danger">Confirm Delete</a>
-                </div>
-            </div>
+</div>
+</div>
+<div id="delete-confirm-modal" class="modal fade" tabindex="-1" role="dialog">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Are you sure you would like to delete this event ?</h4>
+        </div>
+        <div class="modal-footer">
+            <a type="button" class="btn btn-default" data-dismiss="modal">Cancel</a>
+            <a href="/events/{{ event.id }}/trash" type="button" class="btn btn-danger">Confirm Delete</a>
         </div>
     </div>
+</div>
+</div>
 {% endblock %}
-
 {% block tail_js %}
-    {{ super() }}
+{{ super() }}
 {% endblock %}
-

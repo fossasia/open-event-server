@@ -37,8 +37,8 @@
                         <li>
                             <a href="#" class="user-profile dropdown-toggle" data-toggle="dropdown"
                                aria-expanded="false">
-                                {% if current_user.user_detail.avatar_uploaded %}
-                                <img src="{{ current_user.user_detail.avatar_uploaded }}" onerror="imgError(this)"/>
+                                {% if current_user.user_detail.icon %}
+                                <img src="{{ current_user.user_detail.icon }}" onerror="imgError(this)"/>
                                 {% else %}
                                 <img src="{{ url_for('static', filename='img/avatar.png') }}" onerror="imgError(this)"/>
                                 {% endif %}
@@ -85,7 +85,7 @@
                                     </span>
                                 </li>
                             {% if current_user.get_unread_notifs() %}
-                                {% for notif in current_user.get_unread_notifs(reverse=True) %}
+                                {% for notif in current_user.get_unread_notifs() %}
                                     <li class="notif-menu-li">
                                         <a>
                                             <span class="message">{{ notif.title }}</span>

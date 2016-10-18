@@ -13,6 +13,9 @@ class UserDetail(db.Model):
     facebook = db.Column(db.String)
     twitter = db.Column(db.String)
     avatar_uploaded = db.Column(db.String)
+    thumbnail = db.Column(db.String)
+    small = db.Column(db.String)
+    icon = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __init__(self,
@@ -23,12 +26,18 @@ class UserDetail(db.Model):
                  user_id=None,
                  facebook=None,
                  twitter=None,
+                 thumbnail=None,
+                 small=None,
+                 icon=None,
                  avatar_uploaded=None):
         self.avatar = avatar
         self.contact = contact
         self.user_id = user_id
         self.facebook = facebook
         self.twitter = twitter
+        self.thumbnail = thumbnail
+        self.small = small
+        self.icon = icon
         self.avatar_uploaded = avatar_uploaded
 
     def __repr__(self):
@@ -64,4 +73,7 @@ class UserDetail(db.Model):
                 'contact': self.contact,
                 'facebook': self.facebook,
                 'twitter': self.twitter,
-                'avatar_uploaded':self.avatar_uploaded}
+                'thumbnail': self.thumbnail,
+                'small': self.small,
+                'icon': self.icon,
+                'avatar_uploaded': self.avatar_uploaded}

@@ -51,6 +51,7 @@ from ..models.file import File
 from ..models.invite import Invite
 from ..models.microlocation import Microlocation
 from ..models.user_permissions import UserPermission
+from ..models.system_role import CustomSysRole, UserSystemRole
 from ..models.permission import Permission
 from ..models.role import Role
 from ..models.role_invite import RoleInvite
@@ -63,7 +64,7 @@ from ..models.social_link import SocialLink
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
 from ..models.track import Track
-from ..models.user import User, ORGANIZER, ATTENDEE, SYS_ROLES_LIST
+from ..models.user import User, ORGANIZER, ATTENDEE
 from ..models.user_detail import UserDetail
 from ..models.users_events_roles import UsersEventsRoles
 from ..models.page import Page
@@ -106,7 +107,7 @@ class DataManager(object):
         emit('notifs-response',
              {'meta': 'New notifications',
               'notif_count': user.get_unread_notif_count(),
-              'notifs': user.get_unread_notifs(reverse=True)},
+              'notifs': user.get_unread_notifs()},
              room=user_room,
              namespace='/notifs')
         emit('notifpage-response',
@@ -146,7 +147,7 @@ class DataManager(object):
         role = Role.query.filter_by(name=role_name).first()
 
         event = Event.query.get(event_id)
-        role_invite = RoleInvite(email=email,
+        role_invite = RoleInvite(email=email.lower(),
                                  event=event,
                                  role=role,
                                  create_time=datetime.now())
@@ -409,6 +410,83 @@ class DataManager(object):
                 ))
             speaker.photo = speaker_img
             speaker_modified = True
+        logo = form.get('photo', None)
+        if string_not_empty(logo) and logo:
+            filename = '{}.png'.format(time.time())
+            filepath = '{}/static/{}'.format(path.realpath('.'),
+                       logo[len('/serve_static/'):])
+            try:
+                logo_file = UploadedFile(filepath, filename)
+                logo = upload(logo_file, 'events/%d/speakers/%d/photo' % (int(event_id), int(speaker.id)))
+                speaker.photo = logo
+                image_sizes = DataGetter.get_image_sizes_by_type(type='profile')
+                if not image_sizes:
+                    image_sizes = ImageSizes(full_width=150,
+                                             full_height=150,
+                                             icon_width=35,
+                                             icon_height=35,
+                                             thumbnail_width=50,
+                                             thumbnail_height=50,
+                                             type='profile')
+                save_to_db(image_sizes, "Image Sizes Saved")
+                filename = '{}.jpg'.format(time.time())
+                filepath = '{}/static/{}'.format(path.realpath('.'),
+                           logo[len('/serve_static/'):])
+                logo_file = UploadedFile(filepath, filename)
+
+                temp_img_file = upload_local(logo_file,
+                                             'events/{event_id}/speakers/{id}/temp'.format(
+                                             event_id=int(event_id), id=int(speaker.id)))
+                temp_img_file = temp_img_file.replace('/serve_', '')
+
+                basewidth = image_sizes.full_width
+                img = Image.open(temp_img_file)
+                hsize = image_sizes.full_height
+                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+                img.save(temp_img_file)
+                file_name = temp_img_file.rsplit('/', 1)[1]
+                large_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+                profile_thumbnail_url = upload(
+                    large_file,
+                    UPLOAD_PATHS['speakers']['thumbnail'].format(
+                        event_id=int(event_id), id=int(speaker.id)
+                    ))
+
+                basewidth = image_sizes.thumbnail_width
+                img = Image.open(temp_img_file)
+                hsize = image_sizes.thumbnail_height
+                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+                img.save(temp_img_file)
+                file_name = temp_img_file.rsplit('/', 1)[1]
+                thumbnail_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+                profile_small_url = upload(
+                    thumbnail_file,
+                    UPLOAD_PATHS['speakers']['small'].format(
+                        event_id=int(event_id), id=int(speaker.id)
+                    ))
+
+                basewidth = image_sizes.icon_width
+                img = Image.open(temp_img_file)
+                hsize = image_sizes.icon_height
+                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+                img.save(temp_img_file)
+                file_name = temp_img_file.rsplit('/', 1)[1]
+                icon_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+                profile_icon_url = upload(
+                    icon_file,
+                    UPLOAD_PATHS['speakers']['icon'].format(
+                        event_id=int(event_id), id=int(speaker.id)
+                    ))
+                shutil.rmtree(path='static/media/' + 'events/{event_id}/speakers/{id}/temp'.format(
+                              event_id=int(event_id), id=int(speaker.id)))
+                speaker.thumbnail = profile_thumbnail_url
+                speaker.small = profile_small_url
+                speaker.icon = profile_icon_url
+                save_to_db(speaker, "Speaker photo saved")
+                record_activity('update_speaker', speaker=speaker, event_id=event_id)
+            except:
+                pass
+            speaker_modified = True
 
         if session_modified:
             save_to_db(new_session, "Session saved")
@@ -473,6 +551,80 @@ class DataManager(object):
                     event_id=int(event_id), id=int(speaker.id)
                 ))
             speaker.photo = speaker_img
+            save_to_db(speaker, "Speaker photo saved")
+            record_activity('update_speaker', speaker=speaker, event_id=event_id)
+        logo = form.get('photo', None)
+        print logo
+        if string_not_empty(logo) and logo:
+            filename = '{}.png'.format(time.time())
+            filepath = '{}/static/{}'.format(path.realpath('.'),
+                       logo[len('/serve_static/'):])
+            logo_file = UploadedFile(filepath, filename)
+            logo = upload(logo_file, 'events/%d/speakers/%d/photo' % (int(event_id), int(speaker.id)))
+            speaker.photo = logo
+            image_sizes = DataGetter.get_image_sizes_by_type(type='profile')
+            if not image_sizes:
+                image_sizes = ImageSizes(full_width=150,
+                                         full_height=150,
+                                         icon_width=35,
+                                         icon_height=35,
+                                         thumbnail_width=50,
+                                         thumbnail_height=50,
+                                         type='profile')
+            save_to_db(image_sizes, "Image Sizes Saved")
+            filename = '{}.jpg'.format(time.time())
+            filepath = '{}/static/{}'.format(path.realpath('.'),
+                       logo[len('/serve_static/'):])
+            logo_file = UploadedFile(filepath, filename)
+
+            temp_img_file = upload_local(logo_file,
+                                         'events/{event_id}/speakers/{id}/temp'.format(
+                                         event_id=int(event_id), id=int(speaker.id)))
+            temp_img_file = temp_img_file.replace('/serve_', '')
+
+            basewidth = image_sizes.full_width
+            img = Image.open(temp_img_file)
+            hsize = image_sizes.full_height
+            img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+            img.save(temp_img_file)
+            file_name = temp_img_file.rsplit('/', 1)[1]
+            large_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+            profile_thumbnail_url = upload(
+                large_file,
+                UPLOAD_PATHS['speakers']['thumbnail'].format(
+                    event_id=int(event_id), id=int(speaker.id)
+                ))
+
+            basewidth = image_sizes.thumbnail_width
+            img = Image.open(temp_img_file)
+            hsize = image_sizes.thumbnail_height
+            img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+            img.save(temp_img_file)
+            file_name = temp_img_file.rsplit('/', 1)[1]
+            thumbnail_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+            profile_small_url = upload(
+                thumbnail_file,
+                UPLOAD_PATHS['speakers']['small'].format(
+                    event_id=int(event_id), id=int(speaker.id)
+                ))
+
+            basewidth = image_sizes.icon_width
+            img = Image.open(temp_img_file)
+            hsize = image_sizes.icon_height
+            img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+            img.save(temp_img_file)
+            file_name = temp_img_file.rsplit('/', 1)[1]
+            icon_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+            profile_icon_url = upload(
+                icon_file,
+                UPLOAD_PATHS['speakers']['icon'].format(
+                    event_id=int(event_id), id=int(speaker.id)
+                ))
+            shutil.rmtree(path='static/media/' + 'events/{event_id}/speakers/{id}/temp'.format(
+                          event_id=int(event_id), id=int(speaker.id)))
+            speaker.thumbnail = profile_thumbnail_url
+            speaker.small = profile_small_url
+            speaker.icon = profile_icon_url
             save_to_db(speaker, "Speaker photo saved")
             record_activity('update_speaker', speaker=speaker, event_id=event_id)
         update_version(event_id, False, 'speakers_ver')
@@ -864,10 +1016,77 @@ class DataManager(object):
 
             user_detail.details = form['details']
             logo = form.get('logo', None)
+            #print logo
             if string_not_empty(logo) and logo:
-                logo_file = uploaded_file(file_content=logo)
-                logo = upload(logo_file, 'users/%d/avatar' % int(user_id))
-                user_detail.avatar_uploaded = logo
+                filename = '{}.png'.format(time.time())
+                filepath = '{}/static/{}'.format(path.realpath('.'),
+                           logo[len('/serve_static/'):])
+                #print "File path 1", filepath
+                logo_file = UploadedFile(filepath, filename)
+                logo_temp = upload(logo_file, 'users/%d/avatar' % int(user_id))
+                user_detail.avatar_uploaded = logo_temp
+                image_sizes = DataGetter.get_image_sizes_by_type(type='profile')
+                if not image_sizes:
+                    image_sizes = ImageSizes(full_width=150,
+                                             full_height=150,
+                                             icon_width=35,
+                                             icon_height=35,
+                                             thumbnail_width=50,
+                                             thumbnail_height=50,
+                                             type='profile')
+                save_to_db(image_sizes, "Image Sizes Saved")
+                filename = '{}.jpg'.format(time.time())
+                filepath = '{}/static/{}'.format(path.realpath('.'),
+                           logo[len('/serve_static/'):])
+                #print "File path 1", filepath
+                logo_file = UploadedFile(filepath, filename)
+
+                temp_img_file = upload_local(logo_file,
+                                             'users/{user_id}/temp'.format(user_id=int(user_id)))
+                temp_img_file = temp_img_file.replace('/serve_', '')
+
+                basewidth = image_sizes.full_width
+                img = Image.open(temp_img_file)
+                hsize = image_sizes.full_height
+                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+                img.save(temp_img_file)
+                file_name = temp_img_file.rsplit('/', 1)[1]
+                large_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+                profile_thumbnail_url = upload(
+                    large_file,
+                    UPLOAD_PATHS['user']['thumbnail'].format(
+                        user_id=int(user_id)
+                    ))
+
+                basewidth = image_sizes.thumbnail_width
+                img = Image.open(temp_img_file)
+                hsize = image_sizes.thumbnail_height
+                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+                img.save(temp_img_file)
+                file_name = temp_img_file.rsplit('/', 1)[1]
+                thumbnail_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+                profile_small_url = upload(
+                    thumbnail_file,
+                    UPLOAD_PATHS['user']['small'].format(
+                        user_id=int(user_id)
+                    ))
+
+                basewidth = image_sizes.icon_width
+                img = Image.open(temp_img_file)
+                hsize = image_sizes.icon_height
+                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+                img.save(temp_img_file)
+                file_name = temp_img_file.rsplit('/', 1)[1]
+                icon_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+                profile_icon_url = upload(
+                    icon_file,
+                    UPLOAD_PATHS['user']['icon'].format(
+                        user_id=int(user_id)
+                    ))
+                shutil.rmtree(path='static/media/' + 'users/{user_id}/temp'.format(user_id=int(user_id)))
+                user_detail.thumbnail = profile_thumbnail_url
+                user_detail.small = profile_small_url
+                user_detail.icon = profile_icon_url
         user, user_detail, save_to_db(user, "User updated")
         record_activity('update_user', user=user)
 
@@ -890,17 +1109,50 @@ class DataManager(object):
         db.session.commit()
 
     @staticmethod
-    def update_panel_permissions(form):
-        for role in SYS_ROLES_LIST:
-            for panel in PANEL_LIST:
-                field_name = '{}-{}'.format(role, panel)
-                field_val = form.get(field_name)
-                perm, _ = get_or_create(PanelPermission, panel_name=panel,
-                    role_name=role)
+    def create_custom_sys_role(form):
+        role_name = form.get('role_name')
+        sys_role = CustomSysRole(name=role_name)
+        save_to_db(sys_role)
+        for panel in PANEL_LIST:
+            if form.get(panel):
+                perm = PanelPermission(panel, sys_role, True)
+            else:
+                perm = PanelPermission(panel, sys_role, False)
+            save_to_db(perm)
 
-                perm.can_access = True if field_val == 'on' else False
-                db.session.add(perm)
+    @staticmethod
+    def update_custom_sys_role(form):
+        role_name = form.get('role_name')
+        sys_role = CustomSysRole.query.filter_by(name=role_name).first()
+        sys_role.name = form.get('new_role_name')
+        db.session.add(sys_role)
+        for panel in PANEL_LIST:
+            perm, _ = get_or_create(PanelPermission, panel_name=panel,
+                role=sys_role)
+            if form.get(panel):
+                perm.can_access = True
+            else:
+                perm.can_access = False
+            db.session.add(perm)
+
         db.session.commit()
+
+    @staticmethod
+    def delete_custom_sys_role(role_id):
+        sys_role = CustomSysRole.query.get(role_id)
+        if sys_role:
+            delete_from_db(sys_role, 'System Role deleted')
+
+    @staticmethod
+    def get_or_create_user_sys_role(user, role):
+        role, _ = get_or_create(UserSystemRole, user=user, role=role)
+        save_to_db(role, 'Custom System Role saved')
+
+    @staticmethod
+    def delete_user_sys_role(user, role):
+        role = UserSystemRole.query.filter_by(user=user, role=role).first()
+        if role:
+            delete_from_db(role, 'Custom System Role deleted')
 
     @staticmethod
     def update_permissions(form):
@@ -1028,10 +1280,13 @@ class DataManager(object):
             if not image_sizes:
                 image_sizes = ImageSizes(full_width=1300,
                                          full_height=500,
+                                         full_aspect='on',
                                          icon_width=75,
                                          icon_height=30,
+                                         icon_aspect='on',
                                          thumbnail_width=500,
                                          thumbnail_height=200,
+                                         thumbnail_aspect='on',
                                          type='event')
                 save_to_db(image_sizes, "Image Sizes Saved")
             if temp_background:
@@ -1155,6 +1410,9 @@ class DataManager(object):
                 ticket_min_orders = form.getlist('tickets[min_order]')
                 ticket_max_orders = form.getlist('tickets[max_order]')
                 ticket_tags = form.getlist('tickets[tags]')
+
+                discount_code_id = form.get('discount_code_id', None)
+                event.discount_code_id = discount_code_id if discount_code_id and discount_code_id != '' else None
 
                 for i, name in enumerate(ticket_names):
                     if name.strip():
@@ -1538,6 +1796,7 @@ class DataManager(object):
 
         # Remove all the tickets that are not in form
         # except those that already have placed orders
+        save_to_db(event, 'Event saved')
         for ticket in event.tickets:
             if ticket.name not in ticket_names and not ticket.has_order_tickets():
                 delete_from_db(ticket, 'Delete ticket')

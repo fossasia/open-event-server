@@ -1,98 +1,91 @@
 {% extends 'gentelella/admin/base.html' %}
-
 {% block title %}
     {{page_content.title}}
 {% endblock %}
-
 {% block head_css %}
     {{ super() }}
     <link href="{{ url_for('static', filename='css/admin/mysessions.css') }}" rel="stylesheet">
 {% endblock %}
-
-
 {% macro session_element(session) -%}
-    <div class="session row"
-         onclick="window.location.href='{{ url_for('my_sessions.display_session_view',session_id=session.id) }}'">
-        <div class="col col-md-4 col-sm-4 col-xs-12" style="line-height:155px;">
-            {% if session.event.logo %}
-                <img src="{{ session.event.logo }}" style="height: 88%">
+<div class="session row"
+    onclick="window.location.href='{{ url_for('my_sessions.display_session_view',session_id=session.id) }}'">
+    <div class="col col-md-4 col-sm-4 col-xs-12" style="line-height:155px;">
+        {% if session.event.logo %}
+            <img src="{{ session.event.logo }}" style="height: 88%">
             {% elif session.event.background_url %}
-                <img src="{{ session.event.thumbnail }}" style="height: 88%">
+            <img src="{{ session.event.thumbnail }}" style="height: 88%">
             {% elif session.event.topic %}
-                {% set vars = {'foo': False} %}
-                {% for custom_image in custom_placeholder %}
-                    {% if custom_image.name == session.event.topic %}
-                        <img src='{{ custom_image.url }}' style="height: 88%">
-                        {% if vars.update({'foo': True}) %} {% endif %}
-                    {% endif %}
-                {% endfor %}
-                {% if not vars.foo %}
-                    <img src='{{ url_for("static", filename="placeholders/thumbnails/" + placeholder_images[session.event.topic]) }}' style="height: 88%">
+            {% set event_image = {'status': False} %}
+            {% for custom_image in custom_placeholder %}
+                {% if custom_image.name == session.event.topic %}
+                    <img src='{{ custom_image.url }}' style="height: 88%">
+                    {% if event_image.update({'status': True}) %} {% endif %}
                 {% endif %}
+            {% endfor %}
+            {% if not event_image.status %}
+                <img src='{{ url_for("static", filename="placeholders/thumbnails/" + placeholder_images[session.event.topic]) }}' style="height: 88%">
+            {% endif %}
             {% elif session.event.subtopic %}
-                {% set vars = {'foo': False} %}
-                {% for custom_image in custom_placeholder %}
-                    {% if custom_image.name == session.event.subtopic %}
-                        <img src='{{ custom_image.url }}' style="height: 88%">
-                        {% if vars.update({'foo': True}) %} {% endif %}
-                    {% endif %}
-                {% endfor %}
-                {% if not vars.foo %}
-                    <img src='{{ url_for("static", filename="placeholders/thumbnails/" + placeholder_images[session.event.subtopic]) }}' style="height: 88%">
+            {% set event_image = {'status': False} %}
+            {% for custom_image in custom_placeholder %}
+                {% if custom_image.name == session.event.subtopic %}
+                    <img src='{{ custom_image.url }}' style="height: 88%">
+                    {% if event_image.update({'status': True}) %} {% endif %}
                 {% endif %}
-            {% else %}
-                {% set vars = {'foo': False} %}
-                {% for custom_image in custom_placeholder %}
-                    {% if custom_image.name == "Other" %}
-                        <img src='{{ custom_image.url }}' style="height: 88%">
-                        {% if vars.update({'foo': True}) %} {% endif %}
-                    {% endif %}
-                {% endfor %}
-                {% if not vars.foo %}
-                    <img src='{{ url_for("static", filename="placeholders/thumbnails/" + placeholder_images["Other"]) }}' style="height: 88%">
-                {% endif %}
+            {% endfor %}
+            {% if not event_image.status %}
+                <img src='{{ url_for("static", filename="placeholders/thumbnails/" + placeholder_images[session.event.subtopic]) }}' style="height: 88%">
             {% endif %}
-        </div>
-        <div class="col col-md-5 col-sm-5  col-xs-12" style="position: relative;">
-            <h3 class="title">{{ session.title }}</h3>
-            <span class="time">
-                {% if session.start_time %}
-                    {{ session.event.start_time.strftime('%B %d, %Y - %I:%M %p') }}
-                {% else %}
-                    {{ session.event.start_time.strftime('%B %d, %Y - %I:%M %p') }}
+        {% else %}
+            {% set event_image = {'status': False} %}
+            {% for custom_image in custom_placeholder %}
+                {% if custom_image.name == "Other" %}
+                    <img src='{{ custom_image.url }}' style="height: 88%">
+                    {% if event_image.update({'status': True}) %} {% endif %}
                 {% endif %}
-            </span><br><br>
-            <span class="event-name">{{ session.event.name }}</span>
-        </div>
-        <div class="col col-md-3 col-sm-3 col-xs-12">
-            {% if session.state == 'pending' %}
-                <span class="status label label-warning pull-right">Under Review</span>
-            {% elif session.state == 'draft' %}
-                <span class="detail-status label label-warning pull-right">Draft</span>
-            {% elif session.state == 'accepted' %}
-                <span class="status label label-success pull-right">Accepted</span>
-            {% elif session.state == 'rejected' %}
-                <span class="status label label-danger pull-right">Rejected</span>
-            {% else %}
-                <span class="status label label-info pull-right">N/A</span>
+            {% endfor %}
+            {% if not event_image.status %}
+                <img src='{{ url_for("static", filename="placeholders/thumbnails/" + placeholder_images["Other"]) }}' style="height: 88%">
             {% endif %}
-
-        </div>
+        {% endif %}
     </div>
+    <div class="col col-md-5 col-sm-5  col-xs-12" style="position: relative;">
+        <h3 class="title">{{ session.title }}</h3>
+        <span class="time">
+            {% if session.start_time %}
+                {{ session.event.start_time.strftime('%B %d, %Y - %I:%M %p') }}
+            {% else %}
+                {{ session.event.start_time.strftime('%B %d, %Y - %I:%M %p') }}
+            {% endif %}
+        </span><br><br>
+        <span class="event-name">{{ session.event.name }}</span>
+    </div>
+    <div class="col col-md-3 col-sm-3 col-xs-12">
+        {% if session.state == 'pending' %}
+            <span class="status label label-warning pull-right">Under Review</span>
+            {% elif session.state == 'draft' %}
+            <span class="detail-status label label-warning pull-right">Draft</span>
+            {% elif session.state == 'accepted' %}
+            <span class="status label label-success pull-right">Accepted</span>
+            {% elif session.state == 'rejected' %}
+            <span class="status label label-danger pull-right">Rejected</span>
+        {% else %}
+            <span class="status label label-info pull-right">N/A</span>
+        {% endif %}
+    </div>
+</div>
 {%- endmacro %}
-
 {% block body %}
     <div class="page-title">
         <div class="title_left">
             <h3>{{page_content.title}}</h3>
         </div>
     </div>
-
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel" style="min-height:600px;">
                 <div class="x_content">
-                    <ul class="nav nav-tabs bar_tabs" style="background-color: white;">
+                    <ul class="nav nav-tabs bar_tabs sessions_tab large_tab_list" style="background-color: white;">
                         <li role="presentation" class="active">
                             <a href="#upcoming-events-tab" role="tab" data-toggle="tab" aria-expanded="true">{{page_content.tab_upcoming_events}}</a>
                         </li>
@@ -100,6 +93,23 @@
                             <a href="#past-events-tab" role="tab" data-toggle="tab" aria-expanded="false">{{page_content.tab_past_events}}</a>
                         </li>
                     </ul>
+                    <div class="dropdown tabs_small">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                        <span class="drop_header">{{page_content.tab_upcoming_events}}</span>
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li value="{{page_content.tab_upcoming_events}}" class="small_tab_list active">
+                                <a href="#upcoming-events-tab" role="tab" data-toggle="tab" aria-expanded="true">
+                                    {{page_content.tab_upcoming_events}}
+                                </a>
+                            </li>
+                            <li value="{{page_content.tab_past_events}}" class="small_tab_list">
+                                <a href="#past-events-tab" role="tab" data-toggle="tab" aria-expanded="false">
+                                    {{page_content.tab_past_events}}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                     <div class="tab-content">
                         <div class="tab-pane fade active in" id="upcoming-events-tab">
                             <div class="row">
@@ -130,6 +140,17 @@
     </div>
 {% endblock %}
 {% block tail_js %}
+<script>
+$(".small_tab_list").click(function(){
+    $(".small_tab_list").removeClass("active");
+    $(this).addClass("active");
+    var clicked_link = $(this).attr("value");
+    $(".drop_header").text(clicked_link);
+});
+
+$('.tabs_small a').click(function(){
+    $(this).tab('show');
+});  
+</script>
     {{ super() }}
 {% endblock %}
-

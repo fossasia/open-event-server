@@ -5,7 +5,7 @@ from app.api.microlocations import MICROLOCATION
 from app.api.sessions import SESSION
 from app.api.speakers import SPEAKER
 from app.api.sponsors import SPONSOR
-from app.api.ticketing import TICKET
+from app.api.attendees import TICKET
 from app.api.tracks import TRACK
 from app.models.event import Event as EventModel
 from app.models.social_link import SocialLink as SocialLinkModel
@@ -98,7 +98,9 @@ EVENT = api.model('Event', {
     'social_links': fields.List(fields.Nested(SOCIAL_LINK), attribute='social_link'),
     'call_for_papers': fields.Nested(EVENT_CFS, allow_null=True),
     'version': fields.Nested(EVENT_VERSION),
-    'has_session_speakers': fields.Boolean(default=False)
+    'has_session_speakers': fields.Boolean(default=False),
+    'thumbnail' : fields.Uri(),
+    'large' : fields.Uri()
 })
 
 EVENT_COMPLETE = api.clone('EventComplete', EVENT, {

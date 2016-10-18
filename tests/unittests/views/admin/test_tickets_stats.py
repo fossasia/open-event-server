@@ -37,6 +37,7 @@ def create_discount_code(self):
         "value_type": "amount",
         "min_quantity": "1",
         "max_quantity": "2",
+        "status": 'active',
         "tickets_number": "30",
         "tickets[]": ["1", "2"]
     }

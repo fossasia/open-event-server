@@ -1,6 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
 import binascii
 import os
+from datetime import datetime
 
 from sqlalchemy import event
 
@@ -40,7 +41,7 @@ class Event(db.Model):
     """Event object table"""
     __tablename__ = 'events'
     __versioned__ = {
-        'exclude': ['creator_id', 'schedule_published_on']
+        'exclude': ['creator_id', 'schedule_published_on', 'created_at']
     }
     id = db.Column(db.Integer, primary_key=True)
     identifier = db.Column(db.String)
@@ -98,6 +99,11 @@ class Event(db.Model):
     cheque_details = db.Column(db.String)
     bank_details = db.Column(db.String)
     onsite_details = db.Column(db.String)
+    created_at = db.Column(db.DateTime)
+
+    discount_code_id = db.Column(db.Integer, db.ForeignKey('discount_codes.id', ondelete='SET NULL'),
+                                 nullable=True, default=None)
+    discount_code = db.relationship('DiscountCode', backref='events', foreign_keys=[discount_code_id])
 
     def __init__(self,
                  name=None,
@@ -145,6 +151,7 @@ class Event(db.Model):
                  pay_onsite=None,
                  cheque_details=None,
                  bank_details=None,
+                 discount_code_id=None,
                  onsite_details=None):
 
         self.name = name
@@ -193,6 +200,8 @@ class Event(db.Model):
         self.cheque_details = cheque_details
         self.bank_details = bank_details
         self.onsite_details = onsite_details
+        self.discount_code_id = discount_code_id
+        self.created_at = datetime.utcnow()
 
     def __repr__(self):
         return '<Event %r>' % self.name

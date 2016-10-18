@@ -47,6 +47,10 @@ class EventInvoice(db.Model):
     event = db.relationship('Event', backref='invoices')
     user = db.relationship('User', backref='invoices')
 
+    discount_code_id = db.Column(db.Integer, db.ForeignKey('discount_codes.id', ondelete='SET NULL'),
+                                 nullable=True, default=None)
+    discount_code = db.relationship('DiscountCode', backref='event_invoices')
+
     def __init__(self,
                  amount=None,
                  address=None,
@@ -57,6 +61,7 @@ class EventInvoice(db.Model):
                  transaction_id=None,
                  paid_via=None,
                  user_id=None,
+                 discount_code_id=None,
                  event_id=None):
         self.identifier = get_new_identifier()
         self.amount = amount
@@ -69,6 +74,7 @@ class EventInvoice(db.Model):
         self.transaction_id = transaction_id
         self.paid_via = paid_via
         self.created_at = datetime.utcnow()
+        self.discount_code_id = discount_code_id
         self.status = 'pending'
 
     def get_invoice_number(self):

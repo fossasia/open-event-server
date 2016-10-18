@@ -41,6 +41,6 @@ class RoleInvite(db.Model):
         return unicode(self).encode('utf-8')
 
     def __unicode__(self):
-        return 'Invite for %r' % (self.email,
-                                  self.event,
-                                  self.role, )
+        return 'Invite for %r:%r:%r' % (self.email,
+                                        self.event,
+                                        self.role)

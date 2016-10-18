@@ -88,12 +88,14 @@ The default value for `REDIS_URL` is `redis://localhost:6379/0` which is the sam
 
 ## Technology Stack
 
+Please get familiar with the components of the project in order to be able to contribute.
+
 ### Components
 
-* Database - Postgres
-* Webserver - Nginx
-* App server - uwsgi
-* Web framework - flask (particularly flask-admin)
+* Database - [Postgres](https://www.postgresql.org)
+* Webserver - [Nginx](https://www.nginx.com)
+* App server - [uwsgi](https://github.com/unbit/uwsgi)
+* Web framework - [flask](http://flask.pocoo.org) (particularly [flask-admin](https://github.com/flask-admin))
 
 ### Services and Dependencies
 
@@ -135,6 +137,10 @@ For ticket sales the service integrates payment gateways:
  2. Paypal
 
 ## API Access and Import/Export
+
+Every installation of the project includes the API docs with Swagger, e.g. here on the test install http://open-event-dev.herokuapp.com/api/v2/ .
+
+A hosted version of the API docs is available in the gh-pages branch of the repository at https://fossasia.github.io/open-event-orga-server/api/v2/
 
 The data of events is provided over API endpoints as described [here](/docs/API.md)
 

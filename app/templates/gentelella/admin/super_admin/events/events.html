@@ -145,7 +145,7 @@
 {% block content %}
 
     <div>
-        <ul id="event-tabs" class="nav nav-tabs bar_tabs" role="tablist">
+        <ul id="event-tabs" class="nav nav-tabs bar_tabs admin_event_tabs" role="tablist">
             <li class=""><a href="#tab_content4" id="all-tab" data-toggle="tab">All Events</a></li>
             <li class="active"><a href="#tab_content1" id="home-tab" data-toggle="tab">All Live</a></li>
             <li class=""><a href="#tab_content2" id="profile-tab" data-toggle="tab">All Drafts</a></li>
@@ -153,6 +153,31 @@
             <li class=""><a href="#tab_content5" id="profile-tab3" data-toggle="tab">All Deleted Events</a></li>
             <li class=""><a href="#tab_content7" id="profile-tab7" data-toggle="tab">Import</a></li>
         </ul>
+        <div class="dropdown tabs_small">
+            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+            <span class="drop_header">All Live</span>
+            <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li value="All Events" class="small_tab_list">
+                    <a href="#tab_content4" id="all-tab" data-toggle="tab">All Events</a>
+                </li>
+                <li value="All Live" class="small_tab_list active">
+                    <a href="#tab_content1" id="home-tab" data-toggle="tab">All Live</a>
+                </li>
+                <li value="All Drafts" class="small_tab_list">
+                    <a href="#tab_content2" id="profile-tab" data-toggle="tab">All Drafts</a>
+                </li>
+                <li value="All Past" class="small_tab_list">
+                    <a href="#tab_content3" id="profile-tab2" data-toggle="tab">All Past</a>
+                </li>
+                <li value="All Deleted Events" class="small_tab_list">
+                    <a href="#tab_content5" id="profile-tab3" data-toggle="tab">All Deleted Events</a>
+                </li>
+                <li value="Import" class="small_tab_list">
+                    <a href="#tab_content7" id="profile-tab7" data-toggle="tab">Import</a>
+                </li>
+            </ul>
+        </div>
         <div id="myTabContent" class="tab-content">
             <div role="tabpanel" class="tab-pane fade" id="tab_content4"
                  aria-labelledby="all-tab">
@@ -280,17 +305,31 @@
     <script src="{{ url_for('static', filename='admin/lib/bootstrap-progressbar/bootstrap-progressbar.min.js') }}"></script>
     <script type="text/javascript">
         var table = $('.table.no-global-dt').DataTable({
-            "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+            "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>><"table-responsive"t>ip',
             "lengthMenu": [25, 50, 100, 200],
             "pageLength": 50,
+            "initComplete": function(settings, json){
+                table_width_adjust();
+                window.onresize = table_width_adjust;
+            },
             "language": {
                 "lengthMenu": "Show _MENU_ Events"
               }
         });
+
         $(document).ready(function() {
           $('.progress .progress-bar').progressbar({display_text: 'center', use_percentage: false});
         });
 
+        $(".small_tab_list").click(function(){
+        $(".small_tab_list").removeClass("active");
+        $(this).addClass("active");
+        var clicked_link = $(this).attr("value");
+        $(".drop_header").text(clicked_link);
+        });
+        $('.tabs_small a').click(function(){
+        $(this).tab('show');
+        });   
     </script>
 {% endblock %}
 

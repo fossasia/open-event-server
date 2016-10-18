@@ -8,7 +8,7 @@
 
 {% macro speaker_info(speaker) %}
     <div class="col-md-3 col-sm-6 speaker-info" style="text-align: center; height: 250px">
-        <img src="{{ speaker.photo }}" style="width: 133px; height: 133px;" onerror="imgError(this);"><br>
+        <img src="{{ speaker.thumbnail }}" style="width: 133px; height: 133px;" onerror="imgError(this);"><br>
         <h4 style="font-weight: 500;">{{ speaker.name }}</h4>
         <h5 style="margin-top: 0;">{{ speaker.organisation }}</h5>
         {% if speaker.facebook %}<a href="{{ speaker.facebook }}"><i class="fa fa-facebook-square"></i></a>{% endif %}
@@ -88,7 +88,7 @@
                     <div id="map"
                          class="col-md-8 col-sm-8 col-xs-12 {% if event.latitude == 0 or event.longitude ==0 %}hidden{% endif %}"></div>
                 {% endif %}
-                <div class="col-md-4" style="text-align: left;">
+                <div class="col-md-4" style="text-align: left; padding-left: 4%;">
                     <h4>Address</h4>
                     {{ event.location_name }}
                 </div>

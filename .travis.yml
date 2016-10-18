@@ -23,7 +23,7 @@ before_script:
 # command to run tests
 script:
   - nosetests tests/unittests --with-coverage
-  - robot tests/robot
+#  - robot -v BROWSER:phantomjs tests/robot
 # upload coverage
 after_success:
   - bash <(curl -s https://codecov.io/bash)

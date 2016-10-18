@@ -14,7 +14,8 @@ from .imports import api as imports_api
 from .users import api as users_api
 from .extras import api as extras_api
 from .notifications import api as notifications_api
-from .ticketing import api as ticketing_api
+from .attendees import api as attendees_api
+from .tickets import api as tickets_apt
 from helpers.error_docs import api as error_models
 from helpers.errors import (
     NotFoundError,
@@ -44,8 +45,8 @@ api.add_namespace(extras_api)
 api.add_namespace(notifications_api)
 api.add_namespace(error_models)
 api.add_namespace(error_models)
-api.add_namespace(ticketing_api)
-
+api.add_namespace(attendees_api)
+api.add_namespace(tickets_apt)
 
 @api.documentation
 def custom_ui():
