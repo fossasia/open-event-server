@@ -7,8 +7,9 @@ from app.helpers.data_getter import DataGetter
 from app.helpers.data import save_to_db, delete_from_db
 from werkzeug.datastructures import ImmutableMultiDict
 from app.views.admin.models_views.events import EventsView
-from app.models.image_config import ImageConfig
+
 from app.models.image_sizes import ImageSizes
+
 
 class SuperAdminSettingsView(SuperAdminBaseView):
     PANEL_NAME = SETTINGS

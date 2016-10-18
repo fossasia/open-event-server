@@ -33,7 +33,6 @@ class TestEvents(OpenEventViewTestCase):
                 db.session.add(event)
             db.session.commit()
             url = url_for('sadmin_events.index_view')
-            start = time.clock()
             self.app.get(url, follow_redirects=True)
 
             with open("output_events.txt", "w") as text_file:
@@ -42,6 +41,11 @@ class TestEvents(OpenEventViewTestCase):
                         text_file.write("SLOW QUERY: %s\nParameters: %s\nDuration: %fs\nContext: %s\n" % (
                             query.statement, query.parameters, query.duration, query.context))
                         text_file.write("\n")
+
+            for query in get_debug_queries():
+                if query.duration >= ProductionConfig.DATABASE_QUERY_TIMEOUT:
+                    app.logger.warning("SLOW QUERY: %s\nParameters: %s\nDuration: %fs\nContext: %s\n" % (
+                        query.statement, query.parameters, query.duration, query.context))
 
     def test_db_sessions(self):
         with app.test_request_context():
@@ -69,8 +73,9 @@ class TestEvents(OpenEventViewTestCase):
                 db.session.add(user)
             db.session.commit()
             url = url_for('sadmin_users.index_view')
-            start = time.clock()
+
             self.app.get(url, follow_redirects=True)
+
             with open("output_users.txt", "w") as text_file:
                 for query in get_debug_queries():
                     if query.duration >= ProductionConfig.DATABASE_QUERY_TIMEOUT:
