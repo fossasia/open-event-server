@@ -39,6 +39,8 @@
                                aria-expanded="false">
                                 {% if current_user.user_detail.icon %}
                                 <img src="{{ current_user.user_detail.icon }}" onerror="imgError(this)"/>
+                                {%  elif current_user.user_detail.avatar_uploaded %}
+                                <img src="{{ current_user.user_detail.avatar_uploaded }}" onerror="imgError(this)"/>
                                 {% else %}
                                 <img src="{{ url_for('static', filename='img/avatar.png') }}" onerror="imgError(this)"/>
                                 {% endif %}
