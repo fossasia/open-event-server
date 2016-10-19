@@ -52,6 +52,14 @@
             <th rowspan="2">
                 {{ key_name | capitalize }}
             </th>
+            {% if path and path == 'promoted-events' %}
+                    <th rowspan="2" style="border-left: none !important; border-top: none!important; ">
+                        Discount Code
+                    </th>
+                    <th rowspan="2" style="border-left: none !important; border-top: none!important; ">
+                        Marketer
+                    </th>
+            {% endif %}
             <th colspan="2" class="success">
                 Completed Orders
             </th>
@@ -81,6 +89,14 @@
                 <td>
                     {{ item.name }}
                 </td>
+                {% if path and path == 'promoted-events' %}
+                    <td>
+                        {{ item.discount_code }}
+                    </td>
+                    <td>
+                        {{ item.marketer }}
+                    </td>
+                {% endif %}
                 <td>
                     {{ item.completed.tickets_count }}
                 </td>
@@ -99,7 +115,7 @@
         </tbody>
         <tfoot>
         <tr>
-            <th>
+            <th colspan="3">
                 Total
             </th>
             <th>
