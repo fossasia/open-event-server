@@ -95,7 +95,7 @@ class DataGetter(object):
     def get_all_events_with_discounts():
         """Method return all events"""
         return Event.query.order_by(desc(Event.id)).filter_by(in_trash=False)\
-            .filter(Event.discount_code_id is not None).filter(Event.discount_code_id > 0).all()
+            .filter(Event.discount_code_id != None).filter(Event.discount_code_id > 0).all()
 
     @staticmethod
     def get_custom_placeholders():
