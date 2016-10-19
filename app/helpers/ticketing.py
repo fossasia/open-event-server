@@ -55,7 +55,7 @@ class TicketingManager(object):
             return query.filter(Event.end_time < datetime.now())
 
     @staticmethod
-    def get_orders(event_id=None, status=None, from_date=None, to_date=None, marketer_id=None):
+    def get_orders(event_id=None, status=None, from_date=None, to_date=None, marketer_id=None, promoted_event=False):
         if event_id:
             if status:
                 orders = Order.query.filter_by(event_id=event_id).filter_by(status=status) \
@@ -72,8 +72,9 @@ class TicketingManager(object):
             orders = orders.filter(Order.created_at >= from_date)
         if to_date:
             orders = orders.filter(Order.created_at <= to_date)
-        if marketer_id:
-            orders = orders.filter_by(marketer_id=marketer_id)
+
+        if promoted_event:
+            orders = orders.join(Order.event).filter(Event.discount_code_id != None)
 
             orders = orders.order_by(asc(Order.created_at))
 

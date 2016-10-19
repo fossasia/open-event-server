@@ -227,19 +227,21 @@ class SuperAdminSalesView(SuperAdminBaseView):
 
             return redirect(url_for('.sales_by_events_view', path=path))
 
-        marketer_role = CustomSysRole.query.filter_by(name='Marketer').first()
-        marketer_id = login.current_user.id if login.current_user.is_sys_role(marketer_role.id) else None
+        promoted_events = path == 'promoted-events'
 
         if from_date and to_date:
             orders = TicketingManager.get_orders(
                 from_date=datetime.strptime(from_date, '%d/%m/%Y'),
                 to_date=datetime.strptime(to_date, '%d/%m/%Y'),
-                marketer_id=marketer_id
+                promoted_event=promoted_events
             )
         else:
-            orders = TicketingManager.get_orders(marketer_id=marketer_id)
+            orders = TicketingManager.get_orders(promoted_event=promoted_events)
 
-        events = DataGetter.get_all_events()
+        if promoted_events:
+            events = DataGetter.get_all_events_with_discounts()
+        else:
+            events = DataGetter.get_all_events()
 
         completed_count = 0
         completed_amount = 0
@@ -274,6 +276,8 @@ class SuperAdminSalesView(SuperAdminBaseView):
             tickets_summary_event_wise[str(event.id)] = {
                 'name': event.name,
                 'payment_currency': event.payment_currency,
+                'marketer': '',
+                'discount_code': '',
                 'completed': {
                     'tickets_count': 0,
                     'sales': 0
@@ -288,6 +292,13 @@ class SuperAdminSalesView(SuperAdminBaseView):
                     'sales': 0
                 }
             }
+
+            if promoted_events:
+                tickets_summary_event_wise[str(event.id)]['marketer'] = \
+                    event.discount_code.marketer.email
+                tickets_summary_event_wise[str(event.id)]['discount_code'] = \
+                    str(event.discount_code.value) + '% off for ' + str(event.discount_code.max_quantity) + ' months'
+
             tickets_summary_organizer_wise[str(event.creator_id)] = \
                 copy.deepcopy(tickets_summary_event_wise[str(event.id)])
             if event.creator:
@@ -326,12 +337,13 @@ class SuperAdminSalesView(SuperAdminBaseView):
                                                                                      status)]['sales'] += \
                         order_ticket.quantity * ticket.price
 
-        if path == 'events':
+        if path == 'events' or path == 'promoted-events':
             return self.render('/gentelella/admin/super_admin/sales/by_events.html',
                                tickets_summary=tickets_summary_event_wise,
                                display_currency=self.display_currency,
                                from_date=from_date,
                                to_date=to_date,
+                               path=path,
                                orders_summary=orders_summary)
         elif path == 'organizers':
             return self.render('/gentelella/admin/super_admin/sales/by_organizer.html',
@@ -339,6 +351,7 @@ class SuperAdminSalesView(SuperAdminBaseView):
                                display_currency=self.display_currency,
                                from_date=from_date,
                                to_date=to_date,
+                               path=path,
                                orders_summary=orders_summary)
         elif path == 'locations':
             return self.render('/gentelella/admin/super_admin/sales/by_location.html',
@@ -346,6 +359,7 @@ class SuperAdminSalesView(SuperAdminBaseView):
                                display_currency=self.display_currency,
                                from_date=from_date,
                                to_date=to_date,
+                               path=path,
                                orders_summary=orders_summary)
 
         else:
