@@ -52,5 +52,13 @@ class Ticket(Resource):
         """Get information about a ticket"""
         return TicketingManager.get_ticket(ticket_id=ticket_id)
 
+@api.route('/events/<int:event_id>/orders/<string:identifier>')
+class Order(Resource):
+    @requires_auth
+    @api.doc('order', responses=POST_RESPONSES)
+    @api.marshal_with(ORDER)
+    def get(self, event_id, identifier):
+        """Get information about a ticket"""
+        return TicketingManager.get_order_by_identifier(identifier=identifier)
 
 
