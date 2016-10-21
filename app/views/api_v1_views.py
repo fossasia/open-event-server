@@ -536,9 +536,8 @@ def documentation():
 
 @app.route('/api/location/', methods=('GET', 'POST'))
 def location():
-    ip = get_real_ip()
-    if ip == '127.0.0.1' or ip == '0.0.0.0':
-        ip = urlopen('http://ip.42.pl/raw').read()  # On local test environments
+    ip = get_real_ip(True)
+
     try:
         reader = geoip2.database.Reader(os.path.realpath('.') + '/static/data/GeoLite2-Country.mmdb')
         response = reader.country(ip)
