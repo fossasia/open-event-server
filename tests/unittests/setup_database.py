@@ -1,6 +1,9 @@
 """Copyright 2015 Rafal Kowalski"""
 import os
 
+import sys
+from flask import logging
+
 from populate_db import populate
 from app import current_app as app, celery
 from app.models import db
@@ -23,6 +26,8 @@ class Setup(object):
         # app.config['CELERY_RESULT_BACKEND'] = ''
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(_basedir, 'test.db')
         app.secret_key = 'super secret key'
+        app.logger.addHandler(logging.StreamHandler(sys.stdout))
+        app.logger.setLevel(logging.ERROR)
         celery.conf.update(app.config)
         with app.test_request_context():
             db.create_all()
