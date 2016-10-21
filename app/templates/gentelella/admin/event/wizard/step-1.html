@@ -144,7 +144,7 @@
                                         {% if event.timezone == value %}selected{% endif %}>{{ text }}</option>
                             {% else %}
                                 <option value="{{ value }}"
-                                        {% if value == 'UTC' %}selected{% endif %}>{{ text }}</option>
+                                        {% if value == current_timezone %}selected{% endif %}>{{ text }}</option>
                             {% endif %}
                         {% endfor %}
                     </select>

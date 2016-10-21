@@ -54,3 +54,5 @@ oauth2
 qrcode
 python-magic
 Flask-Babel
+python-geoip
+python-geoip-geolite2
