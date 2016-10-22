@@ -109,7 +109,7 @@ def create_app():
     app.config['SQLALCHEMY_RECORD_QUERIES'] = True
 
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
-    app.logger.setLevel(logging.WARNING)
+    app.logger.setLevel(logging.ERROR)
     app.jinja_env.add_extension('jinja2.ext.do')
     app.jinja_env.add_extension('jinja2.ext.loopcontrols')
     app.jinja_env.undefined = SilentUndefined

@@ -13,17 +13,14 @@ install: "pip install -r requirements/tests.txt"
 env:
 - APP_CONFIG="config.TestingConfig"
 before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 3 # give xvfb some time to start
   - psql -c 'create database test;' -U postgres
   - export DATABASE_URL=postgresql://postgres@localhost:5432/test
   - python manage.py initialize_db -c open_event_test_user@fossasia.org:fossasia
   - python manage.py runserver &
 # command to run tests
 script:
-  - nosetests tests/unittests --with-coverage
-#  - robot -v BROWSER:phantomjs tests/robot
+  - nosetests tests/unittests -v --with-coverage
+  - robot tests/robot
 # upload coverage
 after_success:
   - bash <(curl -s https://codecov.io/bash)
