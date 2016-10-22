@@ -2986,6 +2986,67 @@
         ]
       }
     }, 
+    "/events/{event_id}/orders/{identifier}": {
+      "get": {
+        "operationId": "get_order", 
+        "parameters": [
+          {
+            "description": "An optional fields mask", 
+            "format": "mask", 
+            "in": "header", 
+            "name": "X-Fields", 
+            "type": "string"
+          }
+        ], 
+        "responses": {
+          "200": {
+            "description": "Success", 
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }, 
+          "201": {
+            "description": "Resource created successfully"
+          }, 
+          "400": {
+            "description": "Validation error", 
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }, 
+          "401": {
+            "description": "Authentication failure", 
+            "schema": {
+              "$ref": "#/definitions/NotAuthorizedError"
+            }
+          }, 
+          "404": {
+            "description": "Event does not exist", 
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          }
+        }, 
+        "summary": "Get information about a ticket", 
+        "tags": [
+          "tickets"
+        ]
+      }, 
+      "parameters": [
+        {
+          "in": "path", 
+          "name": "event_id", 
+          "required": true, 
+          "type": "integer"
+        }, 
+        {
+          "in": "path", 
+          "name": "identifier", 
+          "required": true, 
+          "type": "string"
+        }
+      ]
+    }, 
     "/events/{event_id}/sessions": {
       "get": {
         "operationId": "get_session_list", 
