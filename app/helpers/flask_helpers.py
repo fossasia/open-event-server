@@ -1,19 +1,25 @@
 import re
+from urllib2 import urlopen
+
 from flask import request
 from flask.json import JSONEncoder
 from jinja2 import Undefined
 from slugify import slugify as unicode_slugify
 from slugify import SLUG_OK
 
-def get_real_ip():
+def get_real_ip(local_correct=False):
     try:
         if 'X-Forwarded-For' in request.headers:
-            return request.headers.getlist("X-Forwarded-For")[0].rpartition(' ')[-1]
+            ip = request.headers.getlist("X-Forwarded-For")[0].rpartition(' ')[-1]
         else:
-            return request.remote_addr or 'untrackable'
-    except:
-        return 'untrackable'
+            ip = request.remote_addr or None
 
+        if local_correct and (ip == '127.0.0.1' or ip == '0.0.0.0'):
+            ip = urlopen('http://ip.42.pl/raw').read()  # On local test environments
+    except:
+        ip = None
+
+    return ip
 
 class MiniJSONEncoder(JSONEncoder):
     """Minify JSON output."""
