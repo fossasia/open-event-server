@@ -226,8 +226,7 @@ class User(db.Model):
         return False
 
     def get_unread_notif_count(self):
-        return len(Notification.query.filter_by(user=self,
-                                                has_read=False).all())
+        return Notification.query.filter_by(user=self, has_read=False).count()
 
     def get_unread_notifs(self):
         """Get unread notifications with titles, humanized receiving time
