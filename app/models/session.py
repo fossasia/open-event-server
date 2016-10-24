@@ -45,6 +45,7 @@ class Session(db.Model):
     trash_date = db.Column(db.DateTime)
     submission_date = db.Column(db.DateTime)
     submission_modifier = db.Column(db.String)
+    state_email_sent = db.Column(db.Boolean, default=False)
 
     def __init__(self,
                  title=None,
@@ -66,6 +67,7 @@ class Session(db.Model):
                  signup_url=None,
                  session_type=None,
                  created_at=None,
+                 state_email_sent=False,
                  in_trash=False,
                  trash_date=None):
         self.title = title
@@ -89,6 +91,7 @@ class Session(db.Model):
         self.created_at = created_at
         self.in_trash = in_trash
         self.trash_date = trash_date
+        self.state_email_sent = state_email_sent
 
     @staticmethod
     def get_service_name():

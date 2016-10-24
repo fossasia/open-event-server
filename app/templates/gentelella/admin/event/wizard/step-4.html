@@ -33,16 +33,14 @@
                 <label>Ends</label>
                 <br>
                 <div class="col-xs-8" style="padding-left: 0;">
-                        <input required="required"
-                               name="cfs_end_date"
+                        <input name="cfs_end_date"
                                data-error="End date & time is required"
                                value="{{ call_for_speakers.end_date.strftime('%m/%d/%Y') if call_for_speakers else '' }}"
                                class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY"/>
 
                     </div>
                     <div class="col-xs-4" style="padding-left: 0;">
-                        <input required="required"
-                               name="cfs_end_time"
+                        <input name="cfs_end_time"
                                value="{{ call_for_speakers.end_date.strftime('%H:%M') if call_for_speakers else '' }}"
                                class="form-control col-xs-6 time end" placeholder="HH:MM"/>
 

@@ -1,4 +1,5 @@
 from flask import url_for
+
 from app.helpers.data_getter import DataGetter
 from app.helpers.helpers import send_new_session_organizer, send_notif_new_session_organizer, \
     send_notif_session_accept_reject, send_session_accept_reject, send_schedule_change, send_notif_session_schedule
@@ -41,6 +42,9 @@ def trigger_session_state_change_notifications(session, event_id, state=None):
             send_session_accept_reject(speaker.email, session.title, state, link)
             # Send notification
         send_notif_session_accept_reject(speaker.user, session.title, state, link)
+    session.state_email_sent = True
+    from app.helpers.data import save_to_db
+    save_to_db(session)
 
 
 def trigger_session_schedule_change_notifications(session, event_id):

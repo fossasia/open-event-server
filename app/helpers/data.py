@@ -663,12 +663,14 @@ class DataManager(object):
         update_version(session.event_id, False, "sessions_ver")
 
     @staticmethod
-    def session_accept_reject(session, event_id, state):
+    def session_accept_reject(session, event_id, state, send_email = True):
         session.state = state
         session.submission_date = datetime.now()
         session.submission_modifier = login.current_user.email
+        session.state_email_sent = False
         save_to_db(session, 'Session State Updated')
-        trigger_session_state_change_notifications(session, event_id)
+        if send_email:
+            trigger_session_state_change_notifications(session, event_id)
         flash("The session has been %s" % state)
 
     @staticmethod
