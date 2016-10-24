@@ -56,6 +56,15 @@ from app.helpers.cache import cache
 
 
 class DataGetter(object):
+
+    @staticmethod
+    def get_super_admin_user():
+        return User.query\
+            .filter_by(is_super_admin=True)\
+            .filter_by(is_admin=True)\
+            .filter_by(is_verified=True)\
+            .order_by(asc(User.id)).first()
+
     @staticmethod
     def get_all_user_notifications(user):
         return Notification.query.filter_by(user=user).all()
