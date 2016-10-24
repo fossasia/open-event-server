@@ -684,9 +684,9 @@ def update_state(task_handle, state, result=None):
         )
 
 
-def uploaded_file(extention='.png', file_content=None):
-    filename = str(time.time()) + extention
-    file_path = os.path.realpath('.') + '/static/temp/' + filename
+def uploaded_file(extension='.png', file_content=None):
+    filename = str(time.time()) + extension
+    file_path = current_app.config.get('BASE_DIR') + '/static/temp/' + filename
     file = open(file_path, "wb")
     file.write(file_content.split(",")[1].decode('base64'))
     file.close()

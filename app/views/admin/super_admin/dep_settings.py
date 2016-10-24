@@ -16,6 +16,10 @@ class SuperAdminSettingsView(SuperAdminBaseView):
     @expose('/', methods=('GET', 'POST'))
     def index_view(self):
         if request.method == 'POST':
+            if 'super_admin_email' in request.form:
+                super_admin = DataGetter.get_super_admin_user()
+                super_admin.email = request.form['super_admin_email']
+                save_to_db(super_admin)
             if 'event-thumbnail_width' in request.form:
                 im_size_profile = DataGetter.get_image_sizes_by_type(type='profile')
                 im_size_event = DataGetter.get_image_sizes_by_type(type='event')
@@ -114,6 +118,7 @@ class SuperAdminSettingsView(SuperAdminBaseView):
             payment_currencies=DataGetter.get_payment_currencies(),
             included_settings=event_view.get_module_settings(),
             image_config=image_config,
+            super_admin_email=DataGetter.get_super_admin_user().email,
             event_image_sizes=event_image_sizes,
             profile_image_sizes=profile_image_sizes
         )
