@@ -65,6 +65,14 @@
                     <label>POSITION</label>
                     <input type="number" class="form-control col-md-7 col-xs-12" name="index" value="{{ current_page.index if current_page.index else '0' }}" />
                 </div>
+                <div class="item form-group">
+                    <label>LANGUAGE</label>
+                    <select  class="form-control col-md-7 col-xs-12" name="language">
+                    {% for code in all_languages %}
+                        <option value='{{code}}' {% if (current_page.language and current_page.language == code) or (not current_page.language and code == 'en') %}selected{% endif %}>{{all_languages[code]}}</option>
+                    {% endfor %}
+                    </select>
+                </div>
                 <button class="btn btn-success">Update</button>
             </form>
             {% endif %}
