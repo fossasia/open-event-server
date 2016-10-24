@@ -122,7 +122,7 @@ class EventDetailView(BaseView):
                            placeholder_images=placeholder_images, state=state, speakers=speakers,
                            via_hash=via_hash, custom_placeholder=custom_placeholder)
 
-    @expose('/cfs/<hash>', methods=('GET',))
+    @expose('/cfs/<hash>/', methods=('GET', 'POST'))
     def display_event_cfs_via_hash(self, hash):
         call_for_speakers = CallForPaper.query.filter_by(hash=hash).first()
         if not call_for_speakers:
@@ -137,6 +137,9 @@ class EventDetailView(BaseView):
 
         if not call_for_speakers:
             abort(404)
+
+        if request.method == 'POST':
+            return self.process_event_cfs(event.identifier)
 
         form_elems = DataGetter.get_custom_form_elements(event.id)
         speaker_form = json.loads(form_elems.speaker_form)

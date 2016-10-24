@@ -2,6 +2,7 @@ from flask.ext.admin import BaseView
 from flask_admin import expose
 
 from app import db
+from app.helpers.notification_email_triggers import trigger_session_state_change_notifications
 from app.helpers.permission_decorators import *
 from flask.ext import login
 from flask import request, url_for, redirect, flash
@@ -144,21 +145,36 @@ class SessionsView(BaseView):
             flash("The speaker has been added to session")
             return redirect(url_for('.index_view', event_id=event_id))
 
-    @expose('/<int:session_id>/accept', methods=('GET',))
+    @expose('/<int:session_id>/accept/', methods=('GET',))
     @can_accept_and_reject
     def accept_session(self, event_id, session_id):
         session = get_session_or_throw(session_id)
-        DataManager.session_accept_reject(session, event_id, 'accepted')
+        skip = request.args.get('skip')
+        send_email = True
+        if skip and skip == 'email':
+            send_email = False
+        DataManager.session_accept_reject(session, event_id, 'accepted', send_email)
         return redirect(url_for('.index_view', event_id=event_id))
 
-    @expose('/<int:session_id>/reject', methods=('GET',))
+    @expose('/<int:session_id>/reject/', methods=('GET',))
     @can_accept_and_reject
     def reject_session(self, event_id, session_id):
         session = get_session_or_throw(session_id)
-        DataManager.session_accept_reject(session, event_id, 'rejected')
+        skip = request.args.get('skip')
+        send_email = True
+        if skip and skip == 'email':
+            send_email = False
+        DataManager.session_accept_reject(session, event_id, 'rejected', send_email)
         return redirect(url_for('.index_view', event_id=event_id))
 
-    @expose('/<int:session_id>/trash', methods=('GET',))
+    @expose('/<int:session_id>/send-emails/', methods=('GET',))
+    @can_accept_and_reject
+    def send_emails_session(self, event_id, session_id):
+        session = get_session_or_throw(session_id)
+        trigger_session_state_change_notifications(session, event_id)
+        return redirect(url_for('.index_view', event_id=event_id))
+
+    @expose('/<int:session_id>/trash/', methods=('GET',))
     def trash_session(self, event_id, session_id):
         session = get_session_or_throw(session_id)
         session = trash_session(session_id)

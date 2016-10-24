@@ -64,6 +64,7 @@
                     <th>Short Abstract</th>
                     <th>Submission Date</th>
                     <th>Last Changed Date</th>
+                    <th>Email Sent</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -88,6 +89,9 @@
                         <td>{{ session.short_abstract|striptags }}</td>
                         <td>{{ session.start_time }}</td>
                         <td>{{ session.end_time }}</td>
+                        <td>
+                            {{ "Yes" if session.state_email_sent else "No"  }}
+                        </td>
                         <td>
                             <div class="btn-group-vertical btn-group-xs" role="group" aria-label="...">
                                 <a data-toggle="tooltip" data-placement="left" title="View" href="{{ session.id }}/"
@@ -114,14 +118,26 @@
                         <td>
                             <div class="btn-group-vertical" role="group" aria-label="...">
                                 {% if session.state != 'accepted' %}
-                                <a href="{{ session.id }}/accept" class="btn btn-sm btn-success">
+                                <a href="{{ session.id }}/accept/?skip=email" class="btn btn-sm btn-success" data-toggle="tooltip" title="Approve" data-placement="right">
                                     <i class="fa fa-check"></i>
                                 </a>
+                                <a href="{{ session.id }}/accept/" class="btn btn-sm btn-success" data-toggle="tooltip" title="Approve and send email" data-placement="right">
+                                    <i class="fa fa-check fa-fw"></i> <i class="fa fa-envelope fa-fw"></i>
+                                </a>
                                 {% endif %}
+
                                 {% if session.state != 'rejected' %}
-                                <a href="{{ session.id }}/reject" class="btn btn-sm btn-danger">
+                                <a href="{{ session.id }}/reject/?skip=email" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Reject" data-placement="right">
                                     <i class="fa fa-times"></i>
                                 </a>
+                                <a href="{{ session.id }}/reject/" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Reject and send email" data-placement="right">
+                                    <i class="fa fa-times fa-fw"></i> <i class="fa fa-envelope fa-fw"></i>
+                                </a>
+                                {% endif %}
+                                {% if not session.state_email_sent and (session.state == 'accepted' or session.state == 'rejected') %}
+                                    <a href="{{ session.id }}/send-emails/" class="btn btn-sm btn-info" data-toggle="tooltip" title="Sending pending email" data-placement="right">
+                                        <i class="fa fa-envelope"></i>
+                                    </a>
                                 {% endif %}
                             </div>
                         </td>
