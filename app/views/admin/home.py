@@ -2,6 +2,8 @@
 import logging
 import os
 import urllib
+import string
+import random
 from urllib2 import urlopen
 
 from flask import url_for, redirect, request, session, flash
@@ -36,6 +38,8 @@ def record_user_login_logout(template, user):
         **req_stats
     )
 
+def str_generator(size=6, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
 
 class MyHomeView(AdminIndexView):
     @expose('/')
@@ -98,7 +102,7 @@ class MyHomeView(AdminIndexView):
             s = get_serializer()
             data = [request.form['email'], request.form['password']]
             user = DataManager.create_user(data)
-            form_hash = s.dumps(data)
+            form_hash = s.dumps([request.form['email'], str_generator()])
             link = url_for('.create_account_after_confirmation_view', hash=form_hash, _external=True)
             send_email_confirmation(request.form, link)
             login.login_user(user)
@@ -238,7 +242,7 @@ class MyHomeView(AdminIndexView):
     def resend_email_confirmation(self):
         user = DataGetter.get_user(login.current_user.id)
         s = get_serializer()
-        data = [user.email, user.password]
+        data = [user.email, str_generator()]
         form_hash = s.dumps(data)
         link = url_for('.create_account_after_confirmation_view', hash=form_hash, _external=True)
         form = {"email": user.email, "password": user.password}
