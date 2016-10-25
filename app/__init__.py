@@ -233,7 +233,7 @@ def base_dir():
 
 @app.context_processor
 def pages():
-    pages = DataGetter.get_all_pages()
+    pages = DataGetter.get_all_pages(get_locale())
     return dict(system_pages=pages)
 
 @app.context_processor

@@ -719,17 +719,22 @@ class DataGetter(object):
             .filter_by(in_trash=False)
 
     @staticmethod
-    @cache.cached(timeout=604800, key_prefix='pages')
-    def get_all_pages():
-        return Page.query.order_by(desc(Page.index)).all()
+    def get_all_pages(selected_lang=None):
+        if not selected_lang:
+            return Page.query.order_by(desc(Page.index)).all()
+        else:
+            return Page.query.filter_by(language=selected_lang).order_by(desc(Page.index)).all()
 
     @staticmethod
     def get_page_by_id(page_id):
         return Page.query.get(page_id)
 
     @staticmethod
-    def get_page_by_url(url):
-        results = Page.query.filter(Page.url.contains(url))
+    def get_page_by_url(url, selected_language=False):
+        if selected_language:
+            results = Page.query.filter_by(language=selected_language).filter(Page.url.contains(url))
+        else:
+            results = Page.query.filter(Page.url.contains(url))
         if results:
             return results.first()
         return results
