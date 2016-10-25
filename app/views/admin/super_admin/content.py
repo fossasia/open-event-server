@@ -14,7 +14,7 @@ import os
 from config import _basedir, LANGUAGES
 from flask import send_from_directory
 from babel.messages import frontend as babel
-
+import copy
 
 BASE_TRANSLATIONS_DIR = str(_basedir) + "/app/translations"
 
@@ -28,7 +28,11 @@ class SuperAdminContentView(SuperAdminBaseView):
         custom_placeholder = DataGetter.get_custom_placeholders()
         subtopics = DataGetter.get_event_subtopics()
         settings = get_settings()
-        LANGUAGES.pop("en")
+        languages_copy = copy.deepcopy(LANGUAGES)
+        try:
+            languages_copy.pop("en")
+        except:
+            pass
         if request.method == 'POST':
             dic = dict(request.form.copy())
             for key, value in dic.items():
@@ -37,7 +41,7 @@ class SuperAdminContentView(SuperAdminBaseView):
         return self.render(
             '/gentelella/admin/super_admin/content/content.html', pages=pages, settings=settings,
             placeholder_images=placeholder_images, subtopics=subtopics, custom_placeholder=custom_placeholder,
-            languages=LANGUAGES
+            languages=languages_copy
         )
 
     @expose('/create/files/placeholder', methods=('POST',))

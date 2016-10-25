@@ -2198,7 +2198,8 @@ class DataManager(object):
     def create_page(form):
 
         page = Page(name=form.get('name', ''), title=form.get('title', ''), description=form.get('description', ''),
-                    url=form.get('url', ''), place=form.get('place', ''), index=form.get('index', 0))
+                    url=form.get('url', ''), place=form.get('place', ''), index=form.get('index', 0),
+                    language=form.get('language', 'en'))
         save_to_db(page, "Page created")
         cache.delete('pages')
 
@@ -2209,6 +2210,7 @@ class DataManager(object):
         page.url = form.get('url', '')
         page.place = form.get('place', '')
         page.index = form.get('index', '')
+        page.language = form.get('language', 'en')
         save_to_db(page, "Page updated")
         cache.delete('pages')
 

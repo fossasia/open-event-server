@@ -36,6 +36,15 @@
                         <label>POSITION</label>
                         <input required type="number" class="form-control col-md-7 col-xs-12" name="index" value="0" />
                     </div>
+                     <div class="item form-group">
+                         <label>LANGUAGE</label>
+                         <select class="form-control col-md-7 col-xs-12" name="language">
+                             {% for code in all_languages %}
+                                 <option value='{{ code }}' {% if code == 'en' %}selected{% endif %}>{{ all_languages[code] }}</option>
+                             {% endfor %}
+                         </select>
+                     </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" id="btnImportEvent" onclick="">Create Page</button>
