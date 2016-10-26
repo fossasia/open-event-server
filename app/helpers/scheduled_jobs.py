@@ -36,6 +36,7 @@ def empty_trash():
             if datetime.now() - session_.trash_date >= timedelta(days=30):
                 delete_from_db(session_, "Session deleted permanently")
 
+
 def send_after_event_mail():
     with app.app_context():
         events = Event.query.all()
@@ -61,6 +62,7 @@ def send_mail_to_expired_orders():
             send_email_for_expired_orders(order.user.email, order.event.name, order.get_invoice_number(),
                                           url_for('ticketing.view_order_after_payment',
                                                   order_identifier=order.identifier, _external=True))
+
 
 def send_event_fee_notification():
     with app.app_context():
@@ -101,6 +103,7 @@ def send_event_fee_notification():
                                                    new_invoice.amount,
                                                    url_for('event_invoicing.view_invoice',
                                                            invoice_identifier=new_invoice.identifier, _external=True))
+
 
 def send_event_fee_notification_followup():
     with app.app_context():

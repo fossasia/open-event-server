@@ -120,6 +120,7 @@ class InstagramOAuth(object):
     INSTAGRAM_OAUTH_URI = "https://api.instagram.com/oauth/authorize/"
     INSTAGRAM_TOKEN_URI = "https://api.instagram.com/oauth/access_token"
     SCOPE = ['basic', 'public_content']
+
     @classmethod
     def get_client_id(self):
         return get_settings()['in_client_id']

@@ -20,6 +20,7 @@ from app.settings import get_settings
 
 DEFAULT_FEE = 0.0
 
+
 @cache.memoize(5)
 def forex(from_currency, to_currency, amount):
     try:
@@ -28,6 +29,7 @@ def forex(from_currency, to_currency, amount):
     except:
         return amount
 
+
 @cache.memoize(5)
 def get_fee(currency):
     fee = TicketFees.query.filter_by(currency=currency).order_by(sqlalchemy.desc(TicketFees.id)).first()
@@ -35,6 +37,7 @@ def get_fee(currency):
         return fee.service_fee
     else:
         return DEFAULT_FEE
+
 
 class StripePaymentsManager(object):
 
@@ -99,6 +102,7 @@ class StripePaymentsManager(object):
             return charge
         except:
             return None
+
 
 class PayPalPaymentsManager(object):
 
