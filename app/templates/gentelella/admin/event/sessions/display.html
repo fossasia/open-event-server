@@ -1,7 +1,7 @@
 {% extends 'gentelella/admin/event/event_base.html' %}
 
 {% block title %}
-    {{ session.title }} - Sessions
+    {{ session.title }} - {{_('Sessions')}}
 {% endblock %}
 
 {% block head_css %}
@@ -28,21 +28,21 @@
             {% if session.slides or session.video or session.audio %}
             <div class="row">
                 <div class="col-md-12">
-                    <h4>Media</h4>
+                    <h4>{{_('Media')}}</h4>
                 </div>
                 {% if session.slides %}
                     <div class="col-md-4">
-                        <h5>Slide</h5><a href="{{ session.slides }}" download>Download</a>
+                        <h5>{{_('Slide')}}</h5><a href="{{ session.slides }}" download>{{_('Download')}}</a>
                     </div>
                 {% endif %}
                 {% if session.video %}
                     <div class="col-md-4">
-                        <h5>Video</h5><a href="{{ session.video }}" download>Download</a>
+                        <h5>{{_('Video')}}</h5><a href="{{ session.video }}" download>{{_('Download')}}</a>
                     </div>
                 {% endif %}
                 {% if session.audio %}
                     <div class="col-md-4">
-                        <h5>Audio</h5><a href="{{ session.audio }}" download>Download</a>
+                        <h5>{{_('Audio')}}</h5><a href="{{ session.audio }}" download>{{_('Download')}}</a>
                     </div>
                 {% endif %}
             </div>

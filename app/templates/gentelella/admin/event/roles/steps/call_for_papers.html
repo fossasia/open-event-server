@@ -1,16 +1,16 @@
 <div id="step-2" class="wizard_content" style="display: block;">
 
     <div class="row">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12">Number of Sessions: 10
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_('Number of Sessions: 10')}}
         </label>
 
-        <button class="btn btn-success " type="button" data-toggle="modal" data-target="#invite-speaker-modal">Invite Person</button>
-        <a href="{{ url_for('event_sessions.index_view', event_id=event.id) }}"><button class="btn btn-warning ">Accept/Reject Session</button></a>
+        <button class="btn btn-success " type="button" data-toggle="modal" data-target="#invite-speaker-modal">{{_('Invite Person')}}</button>
+        <a href="{{ url_for('event_sessions.index_view', event_id=event.id) }}"><button class="btn btn-warning ">{{_('Accept/Reject Session')}}</button></a>
     </div>
     <div class="row">
         <div class="col-md-offset-10">
-            <a class=" btn btn-danger" id="back_to_draft">Back to Draft</a>
-            <a class=" btn btn-success " id="start_scheduling">Start Scheduling</a>
+            <a class=" btn btn-danger" id="back_to_draft">{{_('Back to Draft')}}</a>
+            <a class=" btn btn-success " id="start_scheduling">{{_('Start Scheduling')}}</a>
         </div>
 
     </div>
@@ -25,13 +25,13 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title">Invite Speakers</h4>
+                    <h4 class="modal-title">{{_('Invite Speakers')}}</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row tracks">
                         <div class="col-sm-12">
                             <div class="col-sm-12 input-group">
-                                <label>Email:</label><span class="required">*</span>
+                                <label>{{_('Email')}}:</label><span class="required">*</span>
                                 <input type="text" required="required" class="form-control" name="email"
                                        placeholder="Enter email to invite">
                             </div>
@@ -43,9 +43,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="close-add-track" class="btn btn-default" data-dismiss="modal">Close
+                    <button type="button" id="close-add-track" class="btn btn-default" data-dismiss="modal">{{_('Close')}}
                     </button>
-                    <button type="submit" class="btn btn-primary">Invite Speakers</button>
+                    <button type="submit" class="btn btn-primary">{{_('Invite Speakers')}}</button>
                 </div>
 
             </div>

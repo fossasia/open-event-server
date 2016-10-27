@@ -29,7 +29,7 @@
                     <div id="when-where-holder">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title">When & Where</h3>
+                                <h3 class="panel-title">{{_('When & Where')}}</h3>
                             </div>
                             <div class="panel-body" style="padding-bottom: 10px;">
                                 <strong>{{ event.location_name }}</strong><br>
@@ -42,14 +42,13 @@
                         <div id="when-where-holder" class="hidden-print">
                             <div class="panel panel-default hidden-print">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title">Organizer</h3>
+                                    <h3 class="panel-title">{{_('Organizer')}}</h3>
                                 </div>
                                 <div class="panel-body" style="padding-bottom: 10px;">
                                     <h4>{{ event.organizer_name }}</h4>
                                     {% if event.email %}
                                         <hr>
-                                        <a class="btn btn-default" href="mailto:{{ event.email }}" target="_blank">Contact
-                                            the organizer</a>
+                                        <a class="btn btn-default" href="mailto:{{ event.email }}" target="_blank">{{_('Contact the organizer')}}</a>
                                     {% endif %}
                                 </div>
                             </div>
@@ -62,7 +61,7 @@
             </div>
         </div>
     </div>
-    <button id="pay-via-stripe" type="button" style="display:none;">Pay Via Stripe</button>
+    <button id="pay-via-stripe" type="button" style="display:none;">{{_('Pay Via Stripe')}}</button>
 {% endblock %}
 
 {% block tail_js %}

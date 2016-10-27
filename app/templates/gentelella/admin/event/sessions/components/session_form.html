@@ -14,11 +14,11 @@
             {% endif %}
         {% endfor %}
         <div class="item form-group">
-            <label>Modify Speakers</label>
+            <label>{{_('Modify Speakers')}}</label>
             <select multiple="multiple" id="speakers" name="speakers[]">
                 {% for existing_speaker in speakers %}
                     <option value="{{ existing_speaker.id }}"
-                            {% if session and existing_speaker in session.speakers %}selected{% endif %}
+                            {% if session and existing_speaker in session.speakers %}{{_('selected')}}{% endif %}
                             data-html-addon="<img src='{{ existing_speaker.photo }}' onerror='imgError(this);' style='width: 2rem; height: 2rem;border-radius: 50%;'>">
                         {{ existing_speaker.name }}
                     </option>
@@ -27,9 +27,9 @@
         </div>
 
         <br>
-        <button type="submit" class="btn btn-success">Save Session</button>
+        <button type="submit" class="btn btn-success">{{_('Save Session')}}</button>
         {% if session.state == "draft" %}
-            <button type="submit" class="btn btn-primary" name="state" value="pending">Submit Session</button>
+            <button type="submit" class="btn btn-primary" name="state" value="pending">{{_('Submit Session')}}</button>
         {% endif %}
     </div>
 </form>

@@ -1,7 +1,7 @@
 {% extends 'gentelella/admin/super_admin/dashboard.html' %}
 
 {% block title %}
-Users
+{{_('Users')}}
 {% endblock %}
 
 {% set active_page = "users" %}
@@ -45,23 +45,23 @@ Users
         <td>{{ 'Not Available' if not user['user'].user_detail.fullname else user['user'].user_detail.fullname }}</td>
         <td>{{ user['user'].email }}</td>
         {% if user['user'].in_trash == False %}
-        <td>Active</td>
+        <td>{{_('Active')}}</td>
         {% else %}
-        <td>Deleted</td>
+        <td>{{_('Deleted')}}</td>
         {% endif %}
         <td>
           <ul style="padding-left:0;">
           {% if user['user'].is_super_admin %}
-            <li>Super Admin</li>
+            <li>{{_('Super Admin')}}</li>
           {% endif %}
           {% if user['user'].is_admin %}
-            <li>Admin</li>
+            <li>{{_('Admin')}}</li>
           {% endif %}
               <li>
                   {% if user['user'].is_verified %}
-                      Registered User
+                      {{_('Registered User')}}
                   {% else %}
-                      Unverified User
+                      {{_('Unverified User')}}
                   {% endif %}
               </li>
           {% for sys_role in user['user'].sys_roles %}
@@ -107,7 +107,7 @@ Users
                             <a class="btn btn-success" href="{{ get_url('sadmin_users.restore_view', user_id=user['user'].id)}}"
                                data-toggle="tooltip" data-placement="top"
                                title="Restore User">
-                                <i>Restore User</i>
+                                <i>{{_('Restore User')}}</i>
                             </a>
             {% endif %}
         </div>
@@ -117,11 +117,11 @@ Users
                 <div class="modal-content">
                   <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Update System Roles</h4>
+                    <h4 class="modal-title">{{_('Update System Roles')}}</h4>
                   </div>
                   <div class="modal-body">
                     <form method="post" action="{{ url_for('sadmin_users.update_roles_view', user_id=user['user'].id) }}" role="form" class="update-roles-form">
-                      <h5>Provide Admin access?</h5>
+                      <h5>{{_('Provide Admin access')}}?</h5>
                       <div class="radio">
                         <label>
                           <input type="radio" name="admin" value="yes" {{ 'checked' if user['user'].is_admin else '' }}> Yes
@@ -132,7 +132,7 @@ Users
                         </label>
                       </div>
 
-                      <h5>Custom System Roles</h5>
+                      <h5>{{_('Custom System Roles')}}</h5>
                       {% for role in custom_sys_roles %}
                         <div class="checkbox">
                           <label>
@@ -140,7 +140,7 @@ Users
                           </label>
                         </div>
                       {% endfor %}
-                      <button type="submit" class="btn btn-success pull-right">Save</button>
+                      <button type="submit" class="btn btn-success pull-right">{{_('Save')}}</button>
                     </form>
                   </div>
                 </div>
@@ -154,9 +154,9 @@ Users
 {% block content %}
 <div>
     <ul id="event-tabs" class="nav nav-tabs bar_tabs large_tab_list" role="tablist">
-            <li class="active"><a href="#tab_content1" id="all-users-tab" data-toggle="tab">All Users</a></li>
-            <li class=""><a href="#tab_content1" id="live-users-tab" data-toggle="tab">Active Users</a></li>
-            <li class=""><a href="#tab_content2" id="deleted-users-tab" data-toggle="tab">Deleted Users</a></li>
+            <li class="active"><a href="#tab_content1" id="all-users-tab" data-toggle="tab">{{_('All Users')}}</a></li>
+            <li class=""><a href="#tab_content1" id="live-users-tab" data-toggle="tab">{{_('Active Users')}}</a></li>
+            <li class=""><a href="#tab_content2" id="deleted-users-tab" data-toggle="tab">{{_('Deleted Users')}}</a></li>
     </ul>
     <div class="dropdown tabs_small">
             <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
@@ -164,13 +164,13 @@ Users
             <span class="caret"></span></button>
             <ul class="dropdown-menu">
                 <li value="All Users" class="small_tab_list active">
-                    <a href="#tab_content1" id="all-users-tab" data-toggle="tab">All Users</a>
+                    <a href="#tab_content1" id="all-users-tab" data-toggle="tab">{{_('All Users')}}</a>
                 </li>
                 <li value="Active Users" class="small_tab_list active">
-                    <a href="#tab_content1" id="live-users-tab" data-toggle="tab">Active Users</a>
+                    <a href="#tab_content1" id="live-users-tab" data-toggle="tab">{{_('Active Users')}}</a>
                 </li>
                 <li value="Deleted Users" class="small_tab_list">
-                    <a href="#tab_content2" id="deleted-users-tab" data-toggle="tab">Deleted Users</a>
+                    <a href="#tab_content2" id="deleted-users-tab" data-toggle="tab">{{_('Deleted Users')}}</a>
                 </li>
             </ul>
     </div>
@@ -180,14 +180,14 @@ Users
                 <table class="table table-striped no-global-dt" id="all_users_table">
                     <thead>
                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Status</th>
-                        <th>System Roles</th>
-                        <th>Event Roles</th>
-                        <th>Member Since</th>
-                        <th>Last Access</th>
-                        <th>Options</th>
+                        <th>{{_('Name')}}</th>
+                        <th>{{_('Email')}}</th>
+                        <th>{{_('Status')}}</th>
+                        <th>{{_('System Roles')}}</th>
+                        <th>{{_('Event Roles')}}</th>
+                        <th>{{_('Member Since')}}</th>
+                        <th>{{_('Last Access')}}</th>
+                        <th>{{_('Options')}}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -200,14 +200,14 @@ Users
                 <table class="table table-striped no-global-dt" id="active_users_table">
                     <thead>
                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Status</th>
-                        <th>System Roles</th>
-                        <th>Event Roles</th>
-                        <th>Member Since</th>
-                        <th>Last Access</th>
-                        <th>Options</th>
+                        <th>{{_('Name')}}</th>
+                        <th>{{_('Email')}}</th>
+                        <th>{{_('Status')}}</th>
+                        <th>{{_('System Roles')}}</th>
+                        <th>{{_('Event Roles')}}</th>
+                        <th>{{_('Member Since')}}</th>
+                        <th>{{_('Last Access')}}</th>
+                        <th>{{_('Options')}}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -220,14 +220,14 @@ Users
                 <table class="table table-striped no-global-dt" id="deleted_users_table">
                      <thead>
                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Status</th>
-                        <th>System Roles</th>
-                        <th>Event Roles</th>
-                        <th>Member Since</th>
-                        <th>Last Access</th>
-                        <th>Options</th>
+                        <th>{{_('Name')}}</th>
+                        <th>{{_('Email')}}</th>
+                        <th>{{_('Status')}}</th>
+                        <th>{{_('System Roles')}}</th>
+                        <th>{{_('Event Roles')}}</th>
+                        <th>{{_('Member Since')}}</th>
+                        <th>{{_('Last Access')}}</th>
+                        <th>{{_('Options')}}</th>
                     </tr>
                     </thead>
                     <tbody>

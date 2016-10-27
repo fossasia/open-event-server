@@ -23,21 +23,20 @@
 <div>
     <div class="col-md-8 col-md-push-2">
         <div class="item row form-group">
-            <label>Name <span class="required">*</span></label>
+            <label>{{_('Name')}} <span class="required">*</span></label>
             <input required="required"
                    data-error="Event name is required"
                    name="name" class="form-control col-md-7 col-xs-12"
                    value="{{ event.name | default('', true) }}"/>
 
         </div>
-
         <div class="row form-group">
-            <label>Location</label>
+            <label>{{_('Location')}}</label>
             <input value="{{ event.location_name | default('', true) }}" name="location_name" id="location_name"
                    placeholder="Location is required to make event live"
                    class="form-control col-md-7 col-xs-12"/>
         </div>
-        <a id="show_addr" onclick="show_map_holder();" style="cursor:pointer;">Enter Address</a>
+        <a id="show_addr" onclick="show_map_holder();" style="cursor:pointer;">{{_('Enter Address')}}</a>
 
         <div class="row" id="map-holder" style="display:none;">
             <div class="col-md-6">
@@ -66,7 +65,7 @@
                            placeholder="Country" onchange="address_update();"/>
                 </div>
                 <div class="col-md-4">
-                    <a id="reset_addr" onclick="remove_map_holder();" style="cursor:pointer;">Reset Location</a>
+                    <a id="reset_addr" onclick="remove_map_holder();" style="cursor:pointer;">{{_('Reset Location')}}</a>
                 </div>
                 <div class="col-md-8">
                     <div class="checkbox" style="padding-top:0;">
@@ -76,7 +75,7 @@
                             {% else %}
                                 <input type="checkbox" class="flat" name="show_map" checked="checked">
                             {% endif %}
-                            Show map on event page
+                            {{_('Show map on event page')}}
                         </label>
                     </div>
                 </div>
@@ -91,7 +90,7 @@
         <div class="row event-date-picker">
             <div class="col-md-4">
                 <div class="item form-group">
-                    <label>Starts <span class="required">*</span></label>
+                    <label>{{_('Starts')}} <span class="required">*</span></label>
                     <br>
                     <div class="col-xs-8" style="padding-left: 0;">
                         <input required="required"
@@ -113,7 +112,7 @@
             </div>
             <div class="col-md-4">
                 <div class="item form-group">
-                    <label>Ends <span class="required">*</span></label>
+                    <label>{{_('Ends')}} <span class="required">*</span></label>
                     <br>
                     <div class="col-xs-8" style="padding-left: 0;">
                         <input required="required"
@@ -136,7 +135,7 @@
             </div>
             <div class="col-md-4 col-xs-8">
                 <div class="form-group">
-                    <label>Timezone <span class="required">*</span></label>
+                    <label>{{_('Timezone')}} <span class="required">*</span></label>
                     <select name="timezone" class="form-control">
                         {% for value, text in timezones %}
                             {% if event %}
@@ -152,7 +151,7 @@
             </div>
         </div>
         <div class="item form-group">
-            <label>Description</label>
+            <label>{{_('Description')}}</label>
             <textarea name="description"
                       class="form-control event-textarea">{{ event.description | default('', true) }}</textarea>
         </div>
@@ -162,36 +161,36 @@
 
                 <div class="item form-group" id="image-upload-group"
                      {% if event and event.background_url and event.background_url != '' %}style="display: none;"{% endif %}>
-                    <label>Event Image</label><br>
+                    <label>{{_('Event Image')}}</label><br>
                     <div class="image-box">
                         <input type="file" id="event-image-upload" name="event-image-upload"
                                class="image-upload-btn no-js"
                                accept="image/*"/>
                         <label class="file-label" for="event-image-upload" id="event-image-upload-label">
                             <i class="fa fa-4x fa-camera-retro" aria-hidden="true"></i> <br>
-                            <h3>Select Event Image</h3>
+                            <h3>{{_('Select Event Image')}}</h3>
                         </label><br>
                     </div>
                     <span class="text-muted" style="color: #a2a2a2;">
-                        We recommend using at least a 2160x1080px (2:1 ratio) image<br>that's no larger than 10MB.
+                        {{_('We recommend using at least a 2160x1080px (2:1 ratio) image')}}<br>{{_("that's no larger than 10MB.")}}
                     </span>
                 </div>
 
                 <div class="item form-group" id="image-view-group"
                      {% if not event or not event.background_url or event.background_url == '' %}style="display: none;"{% endif %}>
-                    <label>Event Image</label><br>
+                    <label>{{_('Event Image')}}</label><br>
                     <img src="{{ event.background_url | default('', true) }}"
                          style="width: 350px; height: 175px;"><br><br>
                     {% if not event %}
                         <button type="button" class="btn btn-sm btn-default" data-target="#cropper-modal"
                                 data-toggle="modal">
                             <i class="fa fa-arrows" aria-hidden="true"></i>
-                            Adjust
+                            {{_('Adjust')}}
                         </button>
                     {% endif %}
                     <button type="button" class="btn btn-sm btn-default" id="remove-image-btn">
                         <i class="fa fa-trash-o" aria-hidden="true"></i>
-                        Remove
+                        {{_('Remove')}}
                     </button>
                     <br>
                 </div>
@@ -208,27 +207,27 @@
 
                 <div class="item form-group" id="logo-upload-group"
                      {% if event and event.logo and event.logo != '' %}style="display: none;"{% endif %}>
-                    <label>Logo</label><br>
+                    <label>{{_('Logo')}}</label><br>
                     <div class="image-box">
                         <input type="file" id="logo-upload" name="logo-upload" class="image-upload-btn no-js"
                                accept="image/*"/>
                         <label class="file-label" for="logo-upload" id="logo-upload-label">
                             <i class="fa fa-4x fa-file-image-o" aria-hidden="true"></i> <br>
-                            <h3>Select Logo</h3>
+                            <h3>{{_('Select Logo')}}</h3>
                         </label><br>
                     </div>
                     <span class="text-muted" style="color: #a2a2a2;">
-                        Logo size must be less than 1MB.
+                        {{_('Logo size must be less than 1MB.')}}
                     </span>
                 </div>
 
                 <div class="item form-group" id="logo-view-group"
                      {% if not event or not event.logo or event.logo == '' %}style="display: none;"{% endif %}>
-                    <label>Logo</label><br>
+                    <label>{{_('Logo')}}</label><br>
                     <img src="{{ event.logo | default('', true) }}" style="width: 350px;"><br><br>
                     <button type="button" class="btn btn-sm btn-default" id="remove-logo-btn">
                         <i class="fa fa-trash-o" aria-hidden="true"></i>
-                        Remove
+                        {{_('Remove')}}
                     </button>
                     <br>
                 </div>
@@ -236,7 +235,7 @@
         </div>
 
         <div class="item form-group">
-            <label><span class="organizer-state">Add</span> Organizer Information
+            <label><span class="organizer-state">Add</span> {{_('Organizer Information')}}
             </label>
             <input type="checkbox" class="toggle-switch" name="organizer_state"
                    value="on" id="organizer-switch"
@@ -246,12 +245,12 @@
         <div id="organizer-holder"
              {% if not event.organizer_name and not event.organizer_description %}style="display:none;"{% endif %}>
             <div class="item form-group">
-                <label>Organizer name</label>
+                <label>{{_('Organizer name')}}</label>
                 <input name="organizer_name" class="form-control"
                        value="{{ event.organizer_name | default('', true) }}"/>
             </div>
             <div class="item form-group">
-                <label>Organizer Description
+                <label>{{_('Organizer Description')}}
                 </label>
                 <textarea
                         name="organizer_description"
@@ -259,7 +258,7 @@
             </div>
         </div>
         <div class="item form-group">
-            <label>Links and Social Media</label>
+            <label>{{_('Links and Social Media')}}</label>
             <div >
                 <div class=" col-sm-3" style="padding-left: 0;">
                     <input type="text" class="form-control" placeholder="External Event URL"
@@ -295,7 +294,7 @@
         </div>
         {% if event.ticket_include or 'ticketing' in included_items %}
             <div class="item form-group">
-                <label><span class="ticket-state">Use Ticketing System</span>
+                <label><span class="ticket-state">{{_('Use Ticketing System')}}</span>
                 </label>
                 <input type="checkbox" class="toggle-switch" name="ticket_state"
                        value="on" id="ticket-switch" {% if not event.ticket_url %}checked="checked"{% endif %}/>
@@ -305,7 +304,7 @@
         <div id="ticket-system-holder" class="item form-group" {% if event.ticket_url %}style="display:none;"{% endif %}>
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
             <i class="fa fa-ticket"></i>
-            Ticket Details
+            {{_('Ticket Details')}}
             <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
         </h2>
 
@@ -313,16 +312,16 @@
         <div class="tickets-segment">
             <div class="row">
                 <div class="col-xs-4">
-                    <h3 style="font-size: 15px;">Ticket Name <span class="required">*</span></h3>
+                    <h3 style="font-size: 15px;">{{_('Ticket Name')}} <span class="required">*</span></h3>
                 </div>
                 <div class="col-xs-3">
-                    <h3 style="font-size: 15px;">Price</h3>
+                    <h3 style="font-size: 15px;">{{_('Price')}}</h3>
                 </div>
                 <div class="col-xs-3">
-                    <h3 style="font-size: 15px;">Quantity <span class="required">*</span></h3>
+                    <h3 style="font-size: 15px;">{{_('Quantity')}} <span class="required">*</span></h3>
                 </div>
                 <div class="col-xs-2">
-                    <h3 style="font-size: 15px;">Options</h3>
+                    <h3 style="font-size: 15px;">{{_('Options')}}</h3>
                 </div>
             </div>
             <div class="tickets-holder" style="margin-bottom: 10px;">
@@ -339,16 +338,16 @@
         <div class="row">
             <div class="text-center">
                 <a class="btn btn-info add-free-ticket">
-                    <i class="glyphicon glyphicon-plus-sign"></i> Free Ticket
+                    <i class="glyphicon glyphicon-plus-sign"></i> {{_('Free Ticket')}}
                 </a>
                 {% if 'payments' in included_items %}
                     <a class="btn btn-info add-paid-ticket">
-                        <i class="glyphicon glyphicon-plus-sign"></i> Paid Ticket
+                        <i class="glyphicon glyphicon-plus-sign"></i> {{_('Paid Ticket')}}
                     </a>
                 {% endif %}
                 {% if 'donations' in included_items %}
                     <a class="btn btn-info add-donation-ticket">
-                        <i class="glyphicon glyphicon-plus-sign"></i> Donation
+                        <i class="glyphicon glyphicon-plus-sign"></i> {{_('Donation')}}
                     </a>
                 {% endif %}
             </div>
@@ -360,11 +359,11 @@
                  {% if not event.ticket_url %}style="display:none;"{% endif %}>
                 <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
                     <i class="fa fa-ticket"></i>
-                    Add Ticket URL
+                    {{_('Add Ticket URL')}}
                     <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
                 </h2>
                 <div class="item form-group">
-                    <label>Ticket URL
+                    <label>{{_('Ticket URL')}}
                     </label>
                     <input type="url" pattern="https?://.+" name="ticket_url" class="form-control"
                            value="{{ event.ticket_url | default('', true) }}" data-error="Please enter a valid URL"/>
@@ -374,11 +373,11 @@
         {% else %}
             <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
                 <i class="fa fa-ticket"></i>
-                Add Ticket URL
+                {{_('Add Ticket URL')}}
                 <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
             </h2>
             <div class="item form-group">
-                <label>Ticket URL
+                <label>{{_('Ticket URL')}}
                 </label>
                 <input type="url" pattern="https?://.+" name="ticket_url" class="form-control"
                        value="{{ event.ticket_url | default('', true) }}" data-error="Please enter a valid URL"/>
@@ -390,37 +389,37 @@
              {% if not event or ('paid' not in ticket_types and 'donation' not in ticket_types) %}style="display:none;"{% endif %}>
             <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
                 <i class="fa fa-percent"></i>
-                Redeem Discount Code
+                {{_('Redeem Discount Code')}}
                 <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
             </h2>
             <div class="row">
                 <div class="col-xs-6">
                     <div class="item form-group">
-                        <label for="discount-code-entry">Enter Discount Code</label>
+                        <label for="discount-code-entry">{{_('Enter Discount Code')}}</label>
                         <input type="hidden" name="discount_code_id" value="">
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="" id="discount-code-entry">
                             <span class="input-group-btn">
-                                <button class="btn btn-success" id="discount-code-entry-apply" type="button">Apply Discount</button>
+                                <button class="btn btn-success" id="discount-code-entry-apply" type="button">{{_('Apply Discount')}}</button>
                             </span>
                         </div>
-                        <span class="help-text" style="display: none;"><strong>Code applied !</strong> 10% off on monthly payments for 3 months</span>
+                        <span class="help-text" style="display: none;"><strong>{{_('Code applied !')}}</strong> {{_('10 percent off on monthly payments for 3 months')}}</span>
                     </div>
                 </div>
             </div>
 
             <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
                 <i class="fa fa-money"></i>
-                Add Payment details
+                {{_('Add Payment details')}}
                 <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
             </h2>
             <div class="row">
                 <div class="col-xs-6">
                     <div class="item form-group">
-                        <label>Choose Country <span class="required">*</span></label>
+                        <label>{{_('Choose Country')}} <span class="required">*</span></label>
                         <select name="payment_country" id="payment_country_name" class="form-control">
                             {% if not event or not event.payment_country %}
-                                <option value="">Choose a country for your payment</option>
+                                <option value="">{{_('Choose a country for your payment')}}</option>
                             {% endif %}
                             {% for country in payment_countries %}
                                 <option value="{{ country }}" {{ "selected" if event and event.payment_country == country else '' }}>{{ country }}</option>
@@ -430,10 +429,10 @@
                 </div>
                 <div class="col-xs-6">
                     <div class="item form-group">
-                        <label>Choose Currency <span class="required">*</span></label>
+                        <label>{{_('Choose Currency')}} <span class="required">*</span></label>
                         <select name="payment_currency" id="payment_currency_name" class="form-control">
                             {% if not event or not event.payment_currency %}
-                                <option value="">Please select a currency</option>
+                                <option value="">{{_('Please select a currency')}}</option>
                             {% endif %}
                             {% for code,has_paypal,has_stripe in payment_currencies %}
                                 <option value="{{ code }}" data-has-paypal="{{ has_paypal }}" data-has-stripe="{{ has_stripe }}" {{ "selected" if event and event.payment_currency == code else '' }}>{{ code }} - {{ code | currency_name }} ({{ code | currency_symbol }})</option>
@@ -445,21 +444,20 @@
             <div class="item form-group">
             <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color: #5bc0de;">
             <i class="fa fa-credit-card"></i>
-            Choose Payment Methods
+            {{_('Choose Payment Methods')}}
             <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
             </h2>
             <div id="paypal-gateway">
-                <label class="control-label" style="font-size: 20px;">Online Payments</label>
+                <label class="control-label" style="font-size: 20px;">{{_('Online Payments')}}</label>
                 <div class="col-sm-12 input-group">
-                        <label class="control-label">Payment by PayPal</label>
+                        <label class="control-label">{{_('Payment by PayPal')}}</label>
                         <div class="checkbox">
                             <label style="font-weight: 300;">
                                 <input type="checkbox" name="pay_by_paypal" id="pay_by_paypal"
                                        value="paypalYes"
                                        {% if event.pay_by_paypal %}checked="checked"{% endif %}>
-                                <strong style="font-weight: 400;">YES, accept payment through PayPal </strong><br>
-                                Paypal accepts credit card, debit card and PayPal payments. To learn how it works
-                                click <a href="">here.</a>
+                                <strong style="font-weight: 400;">{{_('YES, accept payment through PayPal ')}}</strong><br>
+                                {{_('Paypal accepts credit card, debit card and PayPal payments. To learn how it works click')}} <a href="">{{_('here.')}}</a>
                             </label>
                         </div>
                 </div>
@@ -467,28 +465,28 @@
                     <label>PayPal Email <span class="required">*</span></label>
                     <input type="email" placeholder="PayPal Email" name="paypal_email" class="form-control"
                            value="{{ event.paypal_email | default('', true) }}">
-                    <strong style="font-weight: 400;">Don't have a PayPal account? </strong><a
+                    <strong style="font-weight: 400;">{{_("Don't have a PayPal account?")}} </strong><a
                         href="https://www.paypal.com/us/webapps/mpp/referral/paypal-express-checkout?partner_id=W9QW5TKUA246E"
-                        target="_blank">Create a free PayPal merchant account.</a>
+                        target="_blank">{{_('Create a free PayPal merchant account.')}}</a>
                 </div>
 
             </div>
             <div id="stripe-gateway">
                 <div class="col-sm-12 input-group">
-                                        <label class="control-label">Payment by Stripe</label>
+                                        <label class="control-label">{{_('Payment by Stripe')}}</label>
                                         <div class="checkbox">
                                             <label style="font-weight: 300;">
                                                 <input type="checkbox" name="pay_by_stripe" id="pay_by_stripe"
                                                        value="stripeYes"
                                                        {% if event.pay_by_stripe %}checked="checked"{% endif %}>
-                                                <strong style="font-weight: 400;">YES, accept payment through Stripe </strong><br>
-                                                Stripe accepts Visa, Master and Amex. To learn how it works click <a href="">here.</a>
-                                                Find out more about Stripe <a href="">here.</a>
+                                                <strong style="font-weight: 400;">{{_('YES, accept payment through Stripe')}} </strong><br>
+                                                {{_('Stripe accepts Visa, Master and Amex. To learn how it works click')}} <a href="">{{_('here.')}}</a>
+                                                {{_('Find out more about Stripe')}} <a href="">{{_('here.')}}</a>
                                             </label>
                                         </div>
                 </div>
                 <div id="stripe-holder" class="item form-group" {% if not event.pay_by_stripe %}style="display: none"{% endif %}>
-                    <label>Use Stripe for payments <span class="required">*</span></label><br>
+                    <label>{{_('Use Stripe for payments')}} <span class="required">*</span></label><br>
                     <input type="hidden" name="stripe_added" value="{% if event.stripe %}yes{% else %}no{% endif %}">
                     <div id="stripe-connected-message" style="{% if not event.stripe %}display: none;{% endif %}">
                         <input type="hidden" name="stripe_secret_key" value="{{ event.stripe.stripe_secret_key | default('', true) }}">
@@ -496,26 +494,26 @@
                         <input type="hidden" name="stripe_publishable_key" value="{{ event.stripe.stripe_publishable_key | default('', true) }}">
                         <input type="hidden" name="stripe_user_id" value="{{ event.stripe.stripe_user_id | default('', true) }}">
                         <input type="hidden" name="stripe_email" value="{{ event.stripe.stripe_email | default('', true) }}">
-                        The stripe account <strong class="stripe-email">{{ event.stripe.stripe_email | default('', true) }}</strong> has been connected. <a href="#" class="stripe-delink">Click to De-link the account.</a><br><br>
+                        {{_('The stripe account')}} <strong class="stripe-email">{{ event.stripe.stripe_email | default('', true) }}</strong> {{_('has been connected.')}} <a href="#" class="stripe-delink">{{_('Click to De-link the account.')}}</a><br><br>
                     </div>
-                    <a href="#" class="stripe-connect" style="{% if event.stripe %}display:none;{% endif %}"><span>Connect with Stripe</span></a>
+                    <a href="#" class="stripe-connect" style="{% if event.stripe %}display:none;{% endif %}"><span>{{_('Connect with Stripe')}}</span></a>
                 </div>
             </div>
             <br>
             <div id="offline-gateway">
-            <label class="control-label" style="font-size: 20px;">Offline Payments</label>
+            <label class="control-label" style="font-size: 20px;">{{_('Offline Payments')}}</label>
             <div class="col-sm-12 input-group">
                                     <div class="checkbox">
                                         <label style="font-weight: 300;">
                                             <input type="checkbox" name="pay_by_cheque" id="pay_by_cheque"
                                                    value="chequeYes"
                                                    {% if event.pay_by_cheque %}checked="checked"{% endif %}>
-                                            <strong style="font-weight: 400;">YES, accept payment by Cheque </strong><br>
+                                            <strong style="font-weight: 400;">{{_('YES, accept payment by Cheque')}} </strong><br>
                                         </label>
                                     </div>
                                     <div class="item form-group" id="cheque-instuctions-holder" {% if not event.pay_by_cheque %}style="display: none"{% endif %}>
-                                        <label>Enter your PayPal account name and payment details instructions to ticket buyers [See an
-                                               <a href='#' data-toggle="modal" data-target="#chequeModal" title="Show cheque instructions"><strong style="font-weight: 400;">example</strong></a> here]
+                                        <label>{{_('Enter your PayPal account name and payment details instructions to ticket buyers')}} [See an
+                                               <a href='#' data-toggle="modal" data-target="#chequeModal" title="Show cheque instructions"><strong style="font-weight: 400;">{{_('example')}}</strong></a> {{_('here')}}]
                                         </label>
                                         <textarea placeholder="Enter account details and instructions for cheque payment"
                                                 name="cheque-details"
@@ -527,12 +525,12 @@
                                             <input type="checkbox" name="pay_by_bank" id="pay_by_bank"
                                                    value="bankYes"
                                                    {% if event.pay_by_bank %}checked="checked"{% endif %}>
-                                            <strong style="font-weight: 400;">YES, accept payment by Telegraphic Transfer(TT) / Bank Transfer </strong><br>
+                                            <strong style="font-weight: 400;">{{_('YES, accept payment by Telegraphic Transfer(TT) / Bank Transfer')}} </strong><br>
                                         </label>
                                     </div>
                                     <div class="item form-group" id="bank-instuctions-holder" {% if not event.pay_by_bank %}style="display: none"{% endif %}>
-                                        <label>Enter your bank details and instructions to ticket buyers [See an
-                                               <a href='#' data-toggle="modal" data-target="#bankModal" title="Show bank details instructions"><strong style="font-weight: 400;">example</strong></a> here]
+                                        <label>{{_('Enter your bank details and instructions to ticket buyers')}} [{{_('See an')}}
+                                               <a href='#' data-toggle="modal" data-target="#bankModal" title="Show bank details instructions"><strong style="font-weight: 400;">{{_('example')}}</strong></a> {{_('here')}}]
                                         </label>
                                         <textarea placeholder="Enter account details and instructions for Telegraphic Transfer(TT) / Bank Transfer payment"
                                                 name="bank-details"
@@ -544,11 +542,11 @@
                                             <input type="checkbox" name="pay_onsite" id="pay_onsite"
                                                    value="onsiteYes"
                                                    {% if event.pay_onsite %}checked="checked"{% endif %}>
-                                            <strong style="font-weight: 400;">YES, accept payment at the event(on site) </strong><br>
+                                            <strong style="font-weight: 400;">{{_('YES, accept payment at the event(on site)')}} </strong><br>
                                         </label>
                                     </div>
                                     <div class="item form-group" id="onsite-instuctions-holder" {% if not event.pay_onsite %}style="display: none"{% endif %}>
-                                        <label>Enter payment instructions to ticket buyers to make payments onsite</label>
+                                        <label>{{_('Enter payment instructions to ticket buyers to make payments onsite')}}</label>
                                         <textarea placeholder="Enter instructions for payment at door"
                                                 name="onsite-details"
                                                 class="form-control" rows="6" cols="15">{{ event.onsite_details | default('', true) }}</textarea>
@@ -558,40 +556,39 @@
             <br>
             <div class="">
                 <a href='#' data-toggle="modal" data-target="#taxModal" title="Add tax option">
-                    <h5>+ Add Tax</h5>
+                    <h5>+ {{_('Add Tax')}}</h5>
                 </a>
             </div>
         </div>
         </div>
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color: #5bc0de;">
             <i class="fa fa-plus-circle"></i>
-            Additional Details
+            {{_('Additional Details')}}
             <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
         </h2>
         <div class="item form-group">
-            <label class="control-label">Listing Privacy</label>
+            <label class="control-label">{{_('Listing Privacy')}}</label>
             <div class="radio">
                 <label style="font-weight: 300;">
                     <input type="radio" name="privacy" value="public"
                            {% if (event and event.privacy == 'public') or not event %}checked{% endif %}>
-                    <strong style="font-weight: 400;">Public page:</strong> list this event on Open Event and search
-                    engines
+                    <strong style="font-weight: 400;">Public page:</strong> {{_('list this event on Open Event and search engines')}}
                 </label>
             </div>
             <div class="radio">
                 <label style="font-weight: 300;">
                     <input type="radio" name="privacy" value="private"
                            {% if (event and event.privacy == 'private') %}checked{% endif %}>
-                    <strong style="font-weight: 400;">Private page:</strong> do not list this event publicly
+                    <strong style="font-weight: 400;">{{_('Private page')}}:</strong> {{_('do not list this event publicly')}}
                 </label>
             </div>
         </div>
 
         <div class="item form-group">
-            <label class="control-label">Event Type</label>
+            <label class="control-label">{{_('Event Type')}}</label>
             <select class="form-control" name="type">
                 {% if not event or not event.type %}
-                    <option value="">Choose..</option>
+                    <option value="">{{_('Choose')}}..</option>
                 {% endif %}
                 {% for type in event_types %}
                     <option value="{{ type }}" {{ "selected" if event and event.type == type else '' }}>{{ type }}</option>
@@ -605,7 +602,7 @@
                     </label>
                     <select class="form-control" id="topic" name='topic'>
                         {% if not event or not event.topic %}
-                            <option value="">Choose..</option>
+                            <option value="">{{_('Choose')}}..</option>
                         {% endif %}
                         {% for topic in event_topics %}
                             <option value="{{ topic }}" {{ "selected" if event and event.topic == topic else '' }}>{{ topic }}</option>
@@ -618,11 +615,11 @@
         <div class="row">
             <div class="col-md-6 col-sm-6 col-xs-12">
                 <div class="item form-group">
-                    <label class="control-label">Event Sub-Topic
+                    <label class="control-label">{{_('Event Sub-Topic')}}
                     </label>
                     <select class="form-control" id="sub_topic" name='sub_topic'>
                         {% if not event or not event.sub_topic %}
-                            <option value="">Choose..</option>
+                            <option value="">{{_('Choose')}}..</option>
                         {% endif %}
                         {% for sub_topic in event_sub_topics %}
                             <option value="{{ sub_topic }}" {{ "selected" if event and event.sub_topic == sub_topic else '' }}>{{ sub_topic }}</option>
@@ -632,7 +629,7 @@
             </div>
         </div>
         <div class="item form-group">
-            <label><span class="coc-state">Add</span> Code of Conduct
+            <label><span class="coc-state">{{_('Add')}}</span> {{_('Code of Conduct')}}
             </label>
             <input type="checkbox" class="toggle-switch" name="coc_state"
                    value="on" id="coc-switch" {% if event.code_of_conduct %}checked="checked"{% endif %}/>
@@ -643,7 +640,7 @@
             </div>
         </div>
         <div class="item form-group">
-            <label>License of Event Data and Content <a class="btn btn-info btn-xs licence-help"
+            <label>{{_('License of Event Data and Content')}} <a class="btn btn-info btn-xs licence-help"
                                                         data-toggle="licence-modal"
                                                         data-target="#licence_modal">?</a></label>
             <div id="licence-list" style="display: none;">
@@ -656,7 +653,7 @@
                 </ul>
             </div>
             <select name="copyright_licence" class="form-control">
-                <option value="">Choose Licence</option>
+                <option value="">{{_('Choose Licence')}}</option>
                 {{ event_licences }}
                 {% for licence in event_licences %}
                     <option value="{{ licence }}" {{ "selected" if event and event.copyright.licence == licence else '' }}>
@@ -682,7 +679,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Crop your image</h4>
+                <h4 class="modal-title">{{_('Crop your image')}}</h4>
             </div>
             <div class="modal-body">
                 <div id="upload-cropper">
@@ -691,8 +688,8 @@
             </div>
             <div class="modal-footer">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="button" id="save-crop" class="btn btn-success">Done</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{_('Cancel')}}</button>
+                    <button type="button" id="save-crop" class="btn btn-success">{{_('Done')}}</button>
                 </div>
 
             </div>
@@ -707,13 +704,13 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                     </button>
-                    <h3 class="modal-title">Tax Options</h3>
+                    <h3 class="modal-title">{{_('Tax Options')}}</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-sm-12">
                             <div id="tax-charge-holder">
-                                <h3>Do you need to charge tax for this event ? <a href="#" data-toggle="tooltip" title="Some event organizers need to charge tax on their tickets.
+                                <h3>{{_('Do you need to charge tax for this event ?')}} <a href="#" data-toggle="tooltip" title="Some event organizers need to charge tax on their tickets.
                                                             Please check with your tax advisor about your own situation"
                                                                                   class="fa fa-info-circle"></a></h3>
                                 <div class="radio">
@@ -733,10 +730,10 @@
                             </div>
                             <div id="tax-form-holder" {% if not event.tax_allow %}style="display: none";{% endif %}>
                                 <div class="col-sm-12 input-group">
-                                    <label>Country<span class="required">*</span></label>
+                                    <label>{{_('Country')}}<span class="required">*</span></label>
                                     <select name="tax_country" id="tax_country_name" class="form-control">
                                         {% if not event or not tax.country %}
-                                            <option value="">Choose a country for your tax payment</option>
+                                            <option value="">{{_('Choose a country for your tax payment')}}</option>
                                         {% endif %}
                                         {% for country in payment_countries %}
                                             <option value="{{ tax.country | default('', true) }}" {{ "selected" if event and tax.country == country else '' }}>{{ country }}</option>
@@ -745,43 +742,42 @@
                                 </div>
 
                                 <div class="col-sm-12 input-group">
-                                    <label for="tax_name">Tax Name<span class="required">*</span></label>
+                                    <label for="tax_name">{{_('Tax Name')}}<span class="required">*</span></label>
                                     <input type="text" id="tax_name" name="tax_name" class="form-control"
                                            value="{{ tax.tax_name | default('', true) }}">
                                 </div>
 
                                 <div class="col-sm-12 input-group">
-                                    <label for="tax_rate">Tax Rate<span class="required">*</span></label>
+                                    <label for="tax_rate">{{_('Tax Rate')}}<span class="required">*</span></label>
                                     <input value="{{ tax.tax_rate | default(0, true) }}" type="text"
                                            class="form-control" name="tax_rate" id="tax_rate"
                                            placeholder="Enter Tax Rate">
                                 </div>
 
                                 <div class="col-sm-12 input-group">
-                                    <label for="tax_id">Tax ID<span class="required">*</span></label>
+                                    <label for="tax_id">{{_('Tax ID')}}<span class="required">*</span></label>
                                     <input value="{{ tax.tax_id | default(0, true) }}" type="text" class="form-control"
                                            name="tax_id" id="tax_id"
                                            placeholder="Enter Tax ID">
                                 </div>
 
                                 <div class="col-sm-12 input-group">
-                                    <label class="control-label">Tax Invoices:</label>
+                                    <label class="control-label">{{_('Tax Invoices')}}:</label>
                                     <div class="checkbox">
                                         <label style="font-weight: 300;">
                                             <input type="checkbox" name="tax_invoice" id="tax_invoice"
                                                    value="invoiceYes"
                                                    {% if tax.send_invoice %}checked="checked"{% endif %}>
-                                            <strong style="font-weight: 400;">Send tax invoice to attendees: </strong>
-                                            Tax Invoices are sent to your attendees when you select this feature.
-                                            Enter your registered business company name and address to be included on
-                                            the tax invoice
+                                            <strong style="font-weight: 400;">{{_('Send tax invoice to attendees')}}: </strong>
+                                            {{_('Tax Invoices are sent to your attendees when you select this feature.')}}
+                                            {{_('Enter your registered business company name and address to be included on the tax invoice')}}
                                         </label>
                                     </div>
                                 </div>
                                 <div id="tax-invoice-holder"
                                      {% if not tax.send_invoice %}style="display: none"{% endif %}>
                                     <div class="col-sm-12 input-group">
-                                        <label for="registered_company">Registered Company<span
+                                        <label for="registered_company">{{_('Registered Company')}}<span
                                                 class="required">*</span></label>
                                         <input value="{{ tax.registered_company | default('', true) }}" type="text"
                                                class="form-control" name="registered_company" id="registered_company"
@@ -789,7 +785,7 @@
                                     </div>
 
                                     <div class="col-sm-12 input-group">
-                                        <label for="buisness_address">Business Address<span
+                                        <label for="buisness_address">{{_('Business Address')}}<span
                                                 class="required">*</span></label>
                                         <input value="{{ tax.address | default('', true) }}" type="text"
                                                class="form-control" name="buisness_address" id="buisness_address"
@@ -797,14 +793,14 @@
                                     </div>
 
                                     <div class="col-sm-12 input-group">
-                                        <label for="invoice_city">City<span class="required">*</span></label>
+                                        <label for="invoice_city">{{_('City')}}<span class="required">*</span></label>
                                         <input value="{{ tax.city | default('', true) }}" type="text"
                                                class="form-control" name="invoice_city" id="invoice_city"
                                                placeholder="City">
                                     </div>
 
                                     <div class="col-sm-12 input-group">
-                                        <label for="invoice_state">State<span class="required">*</span></label>
+                                        <label for="invoice_state">{{_('State')}}<span class="required">*</span></label>
                                         <input value="{{ tax.state | default('', true) }}" type="text"
                                                class="form-control" name="invoice_state" id="invoice_state"
                                                placeholder="State">
@@ -818,7 +814,7 @@
                                     </div>
 
                                     <div class="col-sm-12 input-group">
-                                        <label for="invoice_footer">Optional Text for Invoice Footer<span
+                                        <label for="invoice_footer">{{_('Optional Text for Invoice Footer')}}<span
                                                 class="required">*</span></label>
                                         <textarea class="form-control" name="invoice_footer"
                                                   id="invoice_footer">{{ tax.invoice_footer | default('', true) }}" </textarea>
@@ -826,20 +822,19 @@
                                 </div>
 
                                 <div class="col-sm-12 input-group">
-                                    <label class="control-label">Add or Include:</label>
+                                    <label class="control-label">{{_('Add or Include')}}:</label>
                                     <div class="radio">
                                         <label style="font-weight: 300;">
                                             <input type="radio" name="tax_options" value="tax_separate"
                                                    {% if not tax.tax_include_in_price %}checked="checked"{% endif %}>
-                                            <strong style="font-weight: 400;">Add tax as separate fee on top of the
-                                                price</strong>
+                                            <strong style="font-weight: 400;">{{_('Add tax as separate fee on top of the price')}}</strong>
                                         </label>
                                     </div>
                                     <div class="radio">
                                         <label style="font-weight: 300;">
                                             <input type="radio" name="tax_options" value="tax_include"
                                                    {% if tax.tax_include_in_price %}checked="checked"{% endif %}>
-                                            <strong style="font-weight: 400;">Include tax in ticket price</strong>
+                                            <strong style="font-weight: 400;">{{_('Include tax in ticket price')}}</strong>
                                         </label>
                                     </div>
                                 </div>
@@ -851,7 +846,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="reset" id="close-tax-form" class="btn btn-default" data-dismiss="modal">
-                        Save
+                        {{_('Save')}}
                     </button>
                 </div>
             </div>
@@ -866,7 +861,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                     </button>
-                    <h3 class="modal-title">Cheque Instructions</h3>
+                    <h3 class="modal-title">{{_('Cheque Instructions')}}</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -881,7 +876,7 @@ left-hand corner of the cheque.&#13;&#10;2. Indicate the order ref. no. and comp
                 </div>
                 <div class="modal-footer">
                     <button type="reset" id="close-cheque-form" class="btn btn-default" data-dismiss="modal">
-                        Save
+                        {{_('Save')}}
                     </button>
                 </div>
             </div>
@@ -896,7 +891,7 @@ left-hand corner of the cheque.&#13;&#10;2. Indicate the order ref. no. and comp
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                     </button>
-                    <h3 class="modal-title">Bank Instructions</h3>
+                    <h3 class="modal-title">{{_('Bank Instructions')}}</h3>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -911,7 +906,7 @@ payment and indicate your order ref. no.&#13;&#10;&#13;&#10;Account Details&#13;
                 </div>
                 <div class="modal-footer">
                     <button type="reset" id="close-bank-form" class="btn btn-default" data-dismiss="modal">
-                        Save
+                        {{_('Save')}}
                     </button>
                 </div>
             </div>

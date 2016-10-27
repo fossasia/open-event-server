@@ -1,11 +1,11 @@
 {% extends 'gentelella/admin/base.html' %}
 {% block title %}
-Session Invitation
+{{_('Session Invitation')}}
 {% endblock %}
 {% block body %}
 <div class="page-title">
     <div class="title_left">
-        <h3>Invitation Page</h3>
+        <h3>{{_('Invitation Pag')}}e</h3>
     </div>
 </div>
 <div class="row">
@@ -13,7 +13,7 @@ Session Invitation
         <div class="x_panel" style="min-height:600px;">
             <div class="row">
             	<center>
-                    <h3>You have been invited for session: </h3><br>
+                    <h3>{{_('You have been invited for session')}}: </h3><br>
                     <h4>{{session.title}}</h4>
                     <p><b>{{session.short_abstract|striptags}}</b></p>
                     <p>{{session.long_abstract|striptags}}</p>
@@ -22,8 +22,8 @@ Session Invitation
             <div class="row">
             	<div class="col-md-4 col-sm-12 col-xs-12"></div>
             	<center><div class="col-md-4 col-sm-12 col-xs-12">
-            		<button class="btn btn-success" onclick="accepted(1);">Accept</button>
-            		<button class="btn btn-danger" onclick="accepted(0);">Reject</button>
+            		<button class="btn btn-success" onclick="accepted(1);">{{_('Accept')}}</button>
+            		<button class="btn btn-danger" onclick="accepted(0);">{{_('Reject')}}</button>
             	</div></center>
             </div>
         </div>

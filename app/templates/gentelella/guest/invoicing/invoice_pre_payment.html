@@ -1,6 +1,6 @@
 {% extends 'gentelella/guest/invoicing/invoice_base.html' %}
 
-{% block title %}Your Invoice{% endblock %}
+{% block title %}{{_('Your Invoice')}}{% endblock %}
 
 {% block head_css %}
     {{ super() }}
@@ -12,29 +12,29 @@
     <div id="registration-information-holder">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Registration Information</h3>
+                <h3 class="panel-title">{{_('Registration Information')}}</h3>
             </div>
             <div class="panel-body" style="padding-bottom: 10px;">
                 <form class="form-horizontal" data-toggle="validator" id="order-payment-form"
                       action="{{ url_for('event_invoicing.initiate_invoice_payment') }}">
                     <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
                         <i class="fa fa-ticket"></i>
-                        Personal Information
+                        {{_('Personal Information')}}
                         <hr style="margin:0;binvoice-width: 2px; binvoice-color: #5bc0de;">
                     </h2>
                     <br>
                     {% if not current_user.is_authenticated and not from_organizer %}
                         <div style="width: 100%; text-align: center">
-                            Have you used Open Event before? <a
-                                href="{{ url_for('admin.login_view', next=url_for('event_invoicing.view_invoice', invoice_identifier=invoice.identifier, _external=True)) }}">Sign
-                            In</a> To Your Account to
-                            continue.
+                            {{_('Have you used Open Event before')}}? <a
+                                href="{{ url_for('admin.login_view', next=url_for('event_invoicing.view_invoice', invoice_identifier=invoice.identifier, _external=True)) }}">{{_('Sign')}}
+                            {{_('In')}}</a> {{_('To Your Account to
+                                                                                                                                            continue')}}.
                         </div>
                         <br>
                     {% endif %}
                     <input type="hidden" name="identifier" value="{{ invoice.identifier }}">
                     <div class="form-group">
-                        <label for="firstname" class="col-sm-4 control-label">First name <span
+                        <label for="firstname" class="col-sm-4 control-label">{{_('First name')}} <span
                                 class="required">*</span></label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="firstname" name="firstname"
@@ -43,7 +43,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="lastname" class="col-sm-4 control-label">Last name <span
+                        <label for="lastname" class="col-sm-4 control-label">{{_('Last name')}} <span
                                 class="required">*</span></label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="lastname" name="lastname"
@@ -53,7 +53,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="email" class="col-sm-4 control-label">Email <span
+                        <label for="email" class="col-sm-4 control-label">{{_('Email')}} <span
                                 class="required">*</span></label>
                         <div class="col-sm-6">
                             <input type="email" class="form-control"
@@ -65,7 +65,7 @@
                     </div>
                     {% if not current_user.is_authenticated or from_organizer %}
                         <div class="form-group">
-                            <label for="email_confirm" class="col-sm-4 control-label">Confirm Email <span
+                            <label for="email_confirm" class="col-sm-4 control-label">{{_('Confirm Email')}} <span
                                     class="required">*</span></label>
                             <div class="col-sm-6">
                                 <input type="email" class="form-control" id="email_confirm"
@@ -79,16 +79,16 @@
 
                     <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
                         <i class="fa fa-ticket"></i>
-                        Billing Information
+                        {{_('Billing Information')}}
                         <hr style="margin:0;binvoice-width: 2px; binvoice-color: #5bc0de;">
                     </h2>
                     <br>
                     <div class="form-group">
-                        <label for="country" class="col-sm-4 control-label">Country <span
+                        <label for="country" class="col-sm-4 control-label">{{_('Country')}} <span
                                 class="required">*</span></label>
                         <div class="col-sm-6">
                             <select class="form-control" name="country" id="country" required>
-                                <option value="" selected>Select country</option>
+                                <option value="" selected>{{_('Select country')}}</option>
                                 {% for country in countries %}
                                     <option value="{{ country.name }}">{{ country.name }}</option>
                                 {% endfor %}
@@ -97,7 +97,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="address" class="col-sm-4 control-label">Address <span
+                        <label for="address" class="col-sm-4 control-label">{{_('Address')}} <span
                                 class="required">*</span></label>
                         <div class="col-sm-6">
                             <textarea class="form-control" id="address" name="address"
@@ -106,7 +106,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="city" class="col-sm-4 control-label">City <span
+                        <label for="city" class="col-sm-4 control-label">{{_('City')}} <span
                                 class="required">*</span></label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="city" name="city" required>
@@ -114,7 +114,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="state" class="col-sm-4 control-label">State/Province <span
+                        <label for="state" class="col-sm-4 control-label">{{_('State/Province')}} <span
                                 class="required">*</span></label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="state" name="state" required>
@@ -122,7 +122,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="zipcode" class="col-sm-4 control-label">Zip Code <span
+                        <label for="zipcode" class="col-sm-4 control-label">Zip {{_('Code')}} <span
                                 class="required">*</span></label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="zipcode" name="zipcode"
@@ -131,7 +131,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="zipcode" class="col-sm-4 control-label">Pay Via <span
+                        <label for="zipcode" class="col-sm-4 control-label">{{_('Pay')}} Via <span
                                 class="required">*</span></label>
                         <div class="col-sm-6">
                             {% if pay_by_stripe %}
@@ -157,9 +157,7 @@
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-4 control-label"></label>
                         <div class="col-sm-6">
-                            By clicking "Pay Now", I acknowledge that I have read and agree with
-                            the
-                            Open Event terms of service, and privacy policy.<br><br>
+                            {{_('By clicking "Pay Now", I acknowledge that I have read and agree with the Open Event terms of service, and privacy policy.')}}<br><br>
                             <button type="submit" class="btn btn-success btn-lg">Pay Now</button>
                         </div>
                     </div>

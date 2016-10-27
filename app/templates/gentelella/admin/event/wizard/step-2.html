@@ -9,7 +9,7 @@
                    class="upload-btn" value="" />
             <label class="file-label" for="sponsors-logo-{{ sponsor.id | default(1) }}">
                 <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-                Upload File</label>
+                {{_('Upload File')}}</label>
         </td>
         <td><input type="number" value="{{ sponsor.level | default('') }}" name="sponsors[level]"
                    class="form-control col-md-7 col-xs-12"/></td>
@@ -28,7 +28,7 @@
 
            <td colspan="5">
                <div class="form-group">
-                   <label>Description</label>
+                   <label>{{_('Description')}}</label>
                    <textarea name="sponsors[description]"
                   class="form-control sponsor-textarea col-md-7 col-xs-12">{{ sponsor.description }}</textarea>
                </div>
@@ -40,11 +40,11 @@
     <div class="col-md-8 col-md-push-2">
     <div style="width: 100%; text-align: center">
             {% if sponsors and sponsors.count() > 0 %}
-                <h2 style="font-weight: 300;">Turn <span class="state">off</span> sponsors</h2>
+                <h2 style="font-weight: 300;">Turn <span class="state">{{_('off')}}</span> {{_('sponsors')}}</h2>
                 <input type="checkbox" class="toggle-switch" name="sponsors_state"
                        value="on" id="sponsors-switch" checked/>
             {% else %}
-                <h2 style="font-weight: 300;">Turn <span class="state">on</span> sponsors</h2>
+                <h2 style="font-weight: 300;">Turn <span class="state">{{_('on')}}</span> {{_('sponsors')}}</h2>
                 <input type="checkbox" class="toggle-switch" name="sponsors_state"
                        value="on" id="sponsors-switch"/>
             {% endif %}
@@ -55,10 +55,10 @@
                 <thead>
                 <tr>
                     <th>Sl.</th>
-                    <th>Name</th>
-                    <th>Logo</th>
-                    <th>Level</th>
-                    <th>Type</th>
+                    <th>{{_('Name')}}</th>
+                    <th>{{_('Logo')}}</th>
+                    <th>{{_('Level')}}</th>
+                    <th>{{_('Type')}}</th>
                     <th>URL</th>
                 </tr>
                 </thead>
@@ -73,7 +73,7 @@
                 </tbody>
             </table>
         <span class='input-group-btn'>
-            <button type='button' class='btn btn-success add-sponsor'>Add Another Sponsor</button>
+            <button type='button' class='btn btn-success add-sponsor'>{{_('Add Another Sponsor')}}</button>
         </span>
 
         </div>

@@ -1,7 +1,7 @@
 {% extends 'gentelella/admin/super_admin/dashboard.html' %}
 
 {% block title %}
-    Events
+    {{_('Events')}}
 {% endblock %}
 
 {% set active_page = "events" %}
@@ -62,11 +62,11 @@
             </td>
             <td>
                 <ol style="padding-left:0;">
-                    <li>Drafts: {{ drafts.count }}</li>
-                    <li>Submitted: {{ event.session | length }}</li>
-                    <li>Accepted: {{ accepted.count }}</li>
-                    <li>Pending: {{ pending.count }}</li>
-                    <li>Rejected: {{ rejected.count }}</li>
+                    <li>{{_('Drafts')}}: {{ drafts.count }}</li>
+                    <li>{{_('Submitted')}}: {{ event.session | length }}</li>
+                    <li>{{_('Accepted')}}: {{ accepted.count }}</li>
+                    <li>{{_('Pending')}}: {{ pending.count }}</li>
+                    <li>{{_('Rejected')}}: {{ rejected.count }}</li>
                 </ol>
             </td>
             <td>
@@ -78,7 +78,7 @@
                 {% else %}
                     {% if max_paid_ticket[event.id] and max_paid_ticket[event.id] != 0 %}
                     <div>
-                        <p>Paid</p>
+                        <p>{{_('Paid')}}</p>
                         <div class="progress">
                           <div class="progress-bar progress-bar-success" role="progressbar" data-transitiongoal="{{ paid_ticket_count[event.id] }}" aria-valuemin="0" aria-valuemax="{{ max_paid_ticket[event.id] }}"></div>
                         </div>
@@ -86,7 +86,7 @@
                     {% endif %}
                     {% if max_free_ticket[event.id] and max_free_ticket[event.id] != 0 %}
                     <div>
-                        <p>Free</p>
+                        <p>{{_('Free')}}</p>
                         <div class="progress">
                           <div class="progress-bar progress-bar-success" role="progressbar" data-transitiongoal="{{ free_ticket_count[event.id] }}" aria-valuemin="0" aria-valuemax="{{ max_free_ticket[event.id] }}"></div>
                         </div>
@@ -94,7 +94,7 @@
                     {% endif %}
                     {% if max_donation_ticket[event.id] and max_donation_ticket[event.id] != 0 %}
                     <div>
-                        <p>Donation</p>
+                        <p>{{_('Donation')}}</p>
                         <div class="progress">
                           <div class="progress-bar progress-bar-success" role="progressbar" data-transitiongoal="{{ donation_ticket_count[event.id] }}" aria-valuemin="0" aria-valuemax="{{ max_donation_ticket[event.id] }}"></div>
                         </div>
@@ -133,7 +133,7 @@
                             <a class="btn btn-success" href="/events/{{ event.id }}/restore/"
                                data-toggle="tooltip" data-placement="top"
                                title="Restore Event">
-                                <i>Restore Event</i>
+                                <i>{{_('Restore Event')}}</i>
                             </a>
                             {% endif %}
                         </div>
@@ -146,35 +146,35 @@
 
     <div>
         <ul id="event-tabs" class="nav nav-tabs bar_tabs admin_event_tabs" role="tablist">
-            <li class=""><a href="#tab_content4" id="all-tab" data-toggle="tab">All Events</a></li>
-            <li class="active"><a href="#tab_content1" id="home-tab" data-toggle="tab">All Live</a></li>
-            <li class=""><a href="#tab_content2" id="profile-tab" data-toggle="tab">All Drafts</a></li>
-            <li class=""><a href="#tab_content3" id="profile-tab2" data-toggle="tab">All Past</a></li>
-            <li class=""><a href="#tab_content5" id="profile-tab3" data-toggle="tab">All Deleted Events</a></li>
-            <li class=""><a href="#tab_content7" id="profile-tab7" data-toggle="tab">Import</a></li>
+            <li class=""><a href="#tab_content4" id="all-tab" data-toggle="tab">{{_('All Events')}}</a></li>
+            <li class="active"><a href="#tab_content1" id="home-tab" data-toggle="tab">{{_('All Live')}}</a></li>
+            <li class=""><a href="#tab_content2" id="profile-tab" data-toggle="tab">{{_('All Drafts')}}</a></li>
+            <li class=""><a href="#tab_content3" id="profile-tab2" data-toggle="tab">{{_('All Past')}}</a></li>
+            <li class=""><a href="#tab_content5" id="profile-tab3" data-toggle="tab">{{_('All Deleted Events')}}</a></li>
+            <li class=""><a href="#tab_content7" id="profile-tab7" data-toggle="tab">{{_('Import')}}</a></li>
         </ul>
         <div class="dropdown tabs_small">
             <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-            <span class="drop_header">All Live</span>
+            <span class="drop_header">{{_('All Live')}}</span>
             <span class="caret"></span></button>
             <ul class="dropdown-menu">
                 <li value="All Events" class="small_tab_list">
-                    <a href="#tab_content4" id="all-tab" data-toggle="tab">All Events</a>
+                    <a href="#tab_content4" id="all-tab" data-toggle="tab">{{_('All Events')}}</a>
                 </li>
                 <li value="All Live" class="small_tab_list active">
-                    <a href="#tab_content1" id="home-tab" data-toggle="tab">All Live</a>
+                    <a href="#tab_content1" id="home-tab" data-toggle="tab">{{_('All Live')}}</a>
                 </li>
                 <li value="All Drafts" class="small_tab_list">
-                    <a href="#tab_content2" id="profile-tab" data-toggle="tab">All Drafts</a>
+                    <a href="#tab_content2" id="profile-tab" data-toggle="tab">{{_('All Drafts')}}</a>
                 </li>
                 <li value="All Past" class="small_tab_list">
-                    <a href="#tab_content3" id="profile-tab2" data-toggle="tab">All Past</a>
+                    <a href="#tab_content3" id="profile-tab2" data-toggle="tab">{{_('All Past')}}</a>
                 </li>
                 <li value="All Deleted Events" class="small_tab_list">
-                    <a href="#tab_content5" id="profile-tab3" data-toggle="tab">All Deleted Events</a>
+                    <a href="#tab_content5" id="profile-tab3" data-toggle="tab">{{_('All Deleted Events')}}</a>
                 </li>
                 <li value="Import" class="small_tab_list">
-                    <a href="#tab_content7" id="profile-tab7" data-toggle="tab">Import</a>
+                    <a href="#tab_content7" id="profile-tab7" data-toggle="tab">{{_('Import')}}</a>
                 </li>
             </ul>
         </div>
@@ -184,16 +184,16 @@
                 <table class="table table-striped no-global-dt">
                     <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>State</th>
-                        <th>Public URL</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Roles</th>
-                        <th>Sessions</th>
-                        <th>Speakers</th>
-                        <th>Tickets</th>
-                        <th>Options</th>
+                        <th>{{_('Name')}}</th>
+                        <th>{{_('State')}}</th>
+                        <th>{{_('Public')}} URL</th>
+                        <th>{{_('Start Date')}}</th>
+                        <th>{{_('End Date')}}</th>
+                        <th>{{_('Roles')}}</th>
+                        <th>{{_('Sessions')}}</th>
+                        <th>{{_('Speakers')}}</th>
+                        <th>{{_('Tickets')}}</th>
+                        <th>{{_('Options')}}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -206,16 +206,16 @@
                 <table class="table table-striped no-global-dt">
                     <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>State</th>
-                        <th>Public URL</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Roles</th>
-                        <th>Sessions</th>
-                        <th>Speakers</th>
-                        <th>Tickets</th>
-                        <th>Options</th>
+                        <th>{{_('Name')}}</th>
+                        <th>{{_('State')}}</th>
+                        <th>{{_('Public')}} URL</th>
+                        <th>{{_('Start Date')}}</th>
+                        <th>{{_('End Date')}}</th>
+                        <th>{{_('Roles')}}</th>
+                        <th>{{_('Sessions')}}</th>
+                        <th>{{_('Speakers')}}</th>
+                        <th>{{_('Tickets')}}</th>
+                        <th>{{_('Options')}}</th>
 
                     </tr>
                     </thead>
@@ -228,16 +228,16 @@
                 <table class="table table-striped no-global-dt">
                     <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>State</th>
-                        <th>Public URL</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Roles</th>
-                        <th>Sessions</th>
-                        <th>Speakers</th>
-                        <th>Tickets</th>
-                        <th>Options</th>
+                        <th>{{_('Name')}}</th>
+                        <th>{{_('State')}}</th>
+                        <th>{{_('Public')}} URL</th>
+                        <th>{{_('Start Date')}}</th>
+                        <th>{{_('End Date')}}</th>
+                        <th>{{_('Roles')}}</th>
+                        <th>{{_('Sessions')}}</th>
+                        <th>{{_('Speakers')}}</th>
+                        <th>{{_('Tickets')}}</th>
+                        <th>{{_('Options')}}</th>
 
                     </tr>
                     </thead>
@@ -250,16 +250,16 @@
                 <table class="table table-striped no-global-dt">
                     <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>State</th>
-                        <th>Public URL</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Roles</th>
-                        <th>Sessions</th>
-                        <th>Speakers</th>
-                        <th>Tickets</th>
-                        <th>Options</th>
+                        <th>{{_('Name')}}</th>
+                        <th>{{_('State')}}</th>
+                        <th>{{_('Public')}} URL</th>
+                        <th>{{_('Start Date')}}</th>
+                        <th>{{_('End Date')}}</th>
+                        <th>{{_('Roles')}}</th>
+                        <th>{{_('Sessions')}}</th>
+                        <th>{{_('Speakers')}}</th>
+                        <th>{{_('Tickets')}}</th>
+                        <th>{{_('Options')}}</th>
 
                     </tr>
                     </thead>
@@ -272,16 +272,16 @@
                 <table class="table table-striped no-global-dt">
                     <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>State</th>
-                        <th>Public URL</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Roles</th>
-                        <th>Sessions</th>
-                        <th>Speakers</th>
-                        <th>Tickets</th>
-                        <th>Options</th>
+                        <th>{{_('Name')}}</th>
+                        <th>{{_('State')}}</th>
+                        <th>{{_('Public URL')}}</th>
+                        <th>{{_('Start Date')}}</th>
+                        <th>{{_('End Date')}}</th>
+                        <th>{{_('Roles')}}</th>
+                        <th>{{_('Sessions')}}</th>
+                        <th>{{_('Speakers')}}</th>
+                        <th>{{_('Tickets')}}</th>
+                        <th>{{_('Options')}}</th>
 
                     </tr>
                     </thead>

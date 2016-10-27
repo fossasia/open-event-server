@@ -46,28 +46,28 @@
     <div id="toolbar-holder" style="display: none;">
         <div class="btn-group pull-left" data-toggle="buttons">
             <label class="btn btn-default active btn-responsive">
-                <input type="radio" name="show_state" autocomplete="off" value="all" checked> All
+                <input type="radio" name="show_state" autocomplete="off" value="all" checked> {{_('All')}}
             </label>
             <label class="btn btn-default btn-responsive">
-                <input type="radio" name="show_state" autocomplete="off" value="Completed"> Completed
+                <input type="radio" name="show_state" autocomplete="off" value="Completed"> {{_('Completed')}}
             </label>
             <label class="btn btn-default btn-responsive">
-                <input type="radio" name="show_state" autocomplete="off" value="Pending"> Pending
+                <input type="radio" name="show_state" autocomplete="off" value="Pending"> {{_('Pending')}}
             </label>
             <label class="btn btn-default btn-responsive">
-                <input type="radio" name="show_state" autocomplete="off" value="Expired"> Expired
+                <input type="radio" name="show_state" autocomplete="off" value="Expired"> {{_('Expired')}}
             </label>
             <label class="btn btn-default btn-responsive">
-                <input type="radio" name="show_state" autocomplete="off" value="checked_in"> Checked In
+                <input type="radio" name="show_state" autocomplete="off" value="checked_in"> {{_('Checked In')}}
             </label>
             <label class="btn btn-default btn-responsive">
-                <input type="radio" name="show_state" autocomplete="off" value="not_checked_in"> Not Checked In
+                <input type="radio" name="show_state" autocomplete="off" value="not_checked_in"> {{_('Not Checked In')}}
             </label>
 
         </div>
     </div>
 
-    <h3>View Attendees</h3>
+    <h3>{{_('View Attendees')}}</h3>
     <br>
     <table class="table with-datatable" id="orders-table">
         <thead>
@@ -76,28 +76,28 @@
                 #
             </th>
             <th>
-                Order
+                {{_('Order')}}
             </th>
             <th>
-                Order Status
+                {{_('Order Status')}}
             </th>
             <th>
-                Ticket Name
+                {{_('Ticket Name')}}
             </th>
             <th>
-                Ticket Price
+                {{_('Ticket Price')}}
             </th>
             <th>
-                First Name
+                {{_('First Name')}}
             </th>
             <th>
-                Last Name
+                {{_('Last Name')}}
             </th>
             <th>
-                Email
+                {{_('Email')}}
             </th>
             <th>
-                Action
+                {{_('Action')}}
             </th>
         </tr>
         </thead>
@@ -138,11 +138,11 @@
                         {% if order.status == 'completed' %}
                             {% if holder.checked_in %}
                                 <button class="btn btn-warning holder-check-in-toggle" data-holder-id="{{ holder.id }}">
-                                    Undo
+                                    {{_('Undo')}}
                                 </button>
                             {% else %}
                                 <button class="btn btn-success holder-check-in-toggle" data-holder-id="{{ holder.id }}">
-                                    <i class="fa fa-check fa-fw"></i> Check In
+                                    <i class="fa fa-check fa-fw"></i> {{_('Check In')}}
                                 </button>
                             {% endif %}
                         {% endif %}

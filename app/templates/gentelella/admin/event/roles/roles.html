@@ -1,18 +1,18 @@
 {% extends 'gentelella/admin/event/details/base_panel.html' %}
 {% from 'gentelella/admin/event/details/roles/_edit.html' import editrole %}
 {% block panel_title %}
-Manage Roles
+{{_('Manage Roles')}}
 <button class="btn btn-info pull-right" data-toggle="modal" data-target="#add-role">+</button>
 {% endblock %}
 {% block panel_content %}
 <div class="col-md-12">
-    <h4>Permissions List</h4>
+    <h4>{{_('Permissions List')}}</h4>
     <table class="role-table table table-striped table-responsive">
         <thead>
         <tr>
-            <th>User Email</th>
-            <th>Role</th>
-            <th>Options</th>
+            <th>{{_('User Email')}}</th>
+            <th>{{_('Role')}}</th>
+            <th>{{_('Options')}}</th>
 
         </tr>
         </thead>
@@ -45,27 +45,27 @@ Manage Roles
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Add Role</h4>
+                <h4 class="modal-title">{{_('Add Role')}}</h4>
             </div>
             <div class="modal-body">
                 <form action="/events/{{event.id}}/roles/new/" method="POST" role="form">
                     <p>
-                        <label>User email:</label>
+                        <label>{{_('User email')}}:</label>
                         <input name="user_email" type="email" placeholder="User" class="form-control" required>
                     </p>
-                    <p> <label>Permissions:</label>
+                    <p> <label>{{_('Permissions')}}:</label>
                         <select name="user_role" id="heard" class="form-control" required>
-                            <option value="">Choose..</option>
-                            <option value="track_organizer">Track Organizer</option>
-                            <option value="coorganizer">Co-Organizer</option>
-                            <option value="moderator">Moderator</option>
+                            <option value="">{{_('Choose')}}..</option>
+                            <option value="track_organizer">{{_('Track Organizer')}}</option>
+                            <option value="coorganizer">{{_('Co-Organizer')}}</option>
+                            <option value="moderator">{{_('Moderator')}}</option>
                         </select>
                     </p>
-                    <button type="submit" class="btn btn-success">Add</button>
+                    <button type="submit" class="btn btn-success">{{_('Add')}}</button>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{_('Close')}}</button>
             </div>
         </div>
     </div>

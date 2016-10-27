@@ -1,7 +1,7 @@
 {% extends 'gentelella/admin/super_admin/dashboard.html' %}
 
 {% block title %}
-Permissions
+{{_('Permissions')}}
 {% endblock %}
 
 {% set active_page = "permissions" %}
@@ -27,42 +27,42 @@ Permissions
 {% block content %}
 <ul id="perm-tabs" class="nav nav-tabs bar_tabs large_tab_list" role="tablist">
     <li class="active">
-      <a href="#tab_content0" id="system-roles-tab" data-toggle="tab">System Roles</a>
+      <a href="#tab_content0" id="system-roles-tab" data-toggle="tab">{{_('System Roles')}}</a>
     </li>
     <li class="">
-      <a href="#tab_content1" id="event-roles-tab" data-toggle="tab">Event Roles</a>
+      <a href="#tab_content1" id="event-roles-tab" data-toggle="tab">{{_('Event Roles')}}</a>
     </li>
 </ul>
     <div class="dropdown tabs_small">
       <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-      <span class="drop_header">System Roles</span>
+      <span class="drop_header">{{_('System Roles')}}</span>
       <span class="caret"></span></button>
       <ul class="dropdown-menu">
            <li value="System Roles" class="small_tab_list active">
-               <a href="#tab_content0" id="system-roles-tab" data-toggle="tab">System Roles</a>
+               <a href="#tab_content0" id="system-roles-tab" data-toggle="tab">{{_('System Roles')}}</a>
            </li>
            <li value="Event Roles" class="small_tab_list">
-               <a href="#tab_content1" id="event-roles-tab" data-toggle="tab">Event Roles</a>
+               <a href="#tab_content1" id="event-roles-tab" data-toggle="tab">{{_('Event Roles')}}</a>
            </li>
        </ul>
     </div>
 <div id="myTabContent" class="tab-content">
     <div role="tabpanel" class="tab-pane fade active in" id="tab_content0" aria-labelledby="system-roles-tab">
         <h2 style="margin-top: 60px;">
-          System Roles
+          {{_('System Roles')}}
         </h2><hr>
 
         <h2>
-          Panel Permissions
+          {{_('Panel Permissions')}}
         </h2>
         <table class="table table-bordered no-global-dt">
           <thead>
             <tr>
-              <th>System Role</th>
+              <th>{{_('System Role')}}</th>
               <th>
-                <a href="#" data-toggle="tooltip" title="Panels Role has access to">Panels</a>
+                <a href="#" data-toggle="tooltip" title="Panels Role has access to">{{_('Panels')}}</a>
               </th>
-              <th>Actions</th>
+              <th>{{_('Actions')}}</th>
             </tr>
           </thead>
           <tbody>
@@ -71,15 +71,15 @@ Permissions
               <td>
                 {{ sys_role.replace('_', ' ') | title }}
                 <br>
-                <em>(Built-in Role)</em>
+                <em>({{_('Built-in Role')}})</em>
               </td>
               <td>
-                All Panels
+                {{_('All Panels')}}
                 {#
                 <ul>
                 {% for panel, can_access in panels.iteritems() %}
                       {% if can_access %}
-                          <li>{{ panel | capitalize }} Panel</li>
+                          <li>{{ panel | capitalize }} {{_('Panel')}}</li>
                       {% endif %}
                 {% endfor %}
                 #}
@@ -95,7 +95,7 @@ Permissions
                 <ul>
                 {% for panel, can_access in panels.iteritems() %}
                       {% if can_access %}
-                          <li>{{ panel | capitalize }} Panel</li>
+                          <li>{{ panel | capitalize }} {{_('Panel')}}</li>
                       {% endif %}
                 {% endfor %}
                 </ul>
@@ -115,7 +115,7 @@ Permissions
                     <div class="modal-content">
                       <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">×</button>
-                        <h4 class="modal-title">Update System Role</h4>
+                        <h4 class="modal-title">{{_('Update System Role')}}</h4>
                       </div>
                       <div class="modal-body">
                         <form action="{{ url_for('sadmin_permissions.update_custom_sys_role') }}" method="post" role="form">
@@ -126,13 +126,13 @@ Permissions
                             {% for panel in panel_list %}
                               <div class="checkbox">
                                 <label>
-                                  <input type="checkbox" name="{{ panel }}" {{ 'checked' if panels[panel] else '' }}> {{ panel | capitalize}} Panel
+                                  <input type="checkbox" name="{{ panel }}" {{ 'checked' if panels[panel] else '' }}> {{ panel | capitalize}} {{_('Panel')}}
                                 </label>
                               </div>
                             {% endfor %}
 
-                            <button type="submit" class="btn btn-success pull-right">Update</button>
-                            <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success pull-right">{{_('Update')}}</button>
+                            <button type="button" class="btn btn-default pull-right" data-dismiss="modal">{{_('Close')}}</button>
                         </form>
                       </div>
                     </div>
@@ -143,14 +143,14 @@ Permissions
           {% endfor %}
           <tr>
             <td>
-              <a href="#" class="btn btn-default" data-toggle="modal" data-target="#add-sys-role-modal">Add new Role</a>
+              <a href="#" class="btn btn-default" data-toggle="modal" data-target="#add-sys-role-modal">{{_('Add new Role')}}</a>
 
               <div class="modal fade" id="add-sys-role-modal" role="dialog">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal">×</button>
-                      <h4 class="modal-title">Add new System Role</h4>
+                      <h4 class="modal-title">{{_('Add new System Role')}}</h4>
                     </div>
                     <div class="modal-body">
                       <form action="{{ url_for('sadmin_permissions.create_custom_sys_role') }}" method="post" role="form">
@@ -160,13 +160,13 @@ Permissions
                           {% for panel in panel_list %}
                             <div class="checkbox">
                               <label>
-                                <input type="checkbox" name="{{ panel }}"> {{ panel | capitalize}} Panel
+                                <input type="checkbox" name="{{ panel }}"> {{ panel | capitalize}} {{_('Panel')}}
                               </label>
                             </div>
                           {% endfor %}
 
-                          <button type="submit" class="btn btn-success pull-right">Create Role</button>
-                          <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-success pull-right">{{_('Create Role')}}</button>
+                          <button type="button" class="btn btn-default pull-right" data-dismiss="modal">{{_('Close')}}</button>
                       </form>
                     </div>
                   </div>
@@ -181,21 +181,21 @@ Permissions
 
       <form action="{{ url_for('sadmin_permissions.user_roles_view') }}" method="post" style="margin-top: 60px;">
         <h2>
-          User Permissions
+          {{_('User Permissions')}}
         </h2>
 
         <table class="table table-bordered no-global-dt">
           <thead>
             <tr>
-              <th>Permission</th>
+              <th>{{_('Permission')}}</th>
               <th>
-                <a data-toggle="tooltip" title="Registered user with verified email address">Verified User</a>
+                <a data-toggle="tooltip" title="Registered user with verified email address">{{_('Verified User')}}</a>
               </th>
               <th>
-                <a data-toggle="tooltip" title="Registered user with unverified email address">Unverified User</a>
+                <a data-toggle="tooltip" title="Registered user with unverified email address">{{_('Unverified User')}}</a>
               </th>
               <th>
-                <a data-toggle="tooltip" title="Unregistered user">Anonymous User</a>
+                <a data-toggle="tooltip" title="Unregistered user">{{_('Anonymous User')}}</a>
               </th>
             </tr>
           </thead>
@@ -206,49 +206,49 @@ Permissions
               <td>
                 <div class="checkbox">
                   <label>
-                    <input type="checkbox" name="{{ perm.name + '-verified_user' }}" {{ 'checked' if perm.verified_user else '' }}> Verified User
+                    <input type="checkbox" name="{{ perm.name + '-verified_user' }}" {{ 'checked' if perm.verified_user else '' }}> {{_('Verified User')}}
                   </label>
                 </div>
               </td>
               <td>
                 <div class="checkbox">
                   <label>
-                    <input type="checkbox" name="{{ perm.name + '-unverified_user' }}" {{ 'checked' if perm.unverified_user else '' }}> Unverified User
+                    <input type="checkbox" name="{{ perm.name + '-unverified_user' }}" {{ 'checked' if perm.unverified_user else '' }}> {{_('Unverified User')}}
                   </label>
                 </div>
               </td>
               <td>
                 <div class="checkbox">
                   <label>
-                    <input type="checkbox" name="{{ perm.name + '-anonymous_user' }}" {{ 'checked' if perm.anonymous_user else '' }} disabled> Anonymous User
+                    <input type="checkbox" name="{{ perm.name + '-anonymous_user' }}" {{ 'checked' if perm.anonymous_user else '' }} disabled> {{_('Anonymous User')}}
                   </label>
                 </div>
-                Account creation is necessary.
+                {{_('Account creation is necessary')}}.
               </td>
             </tr>
           {% endfor %}
           </tbody>
         </table>
-        <button type="submit" class="btn btn-success pull-right">Save</button>
+        <button type="submit" class="btn btn-success pull-right">{{_('Save')}}</button>
       </form>
     </div>
 
     <div role="tabpanel" class="tab-pane fade" id="tab_content1" aria-labelledby="event-roles-tab">
       <form method="post" style="margin-top: 60px;" action="{{ url_for('sadmin_permissions.event_roles_view') }}">
       <h2>
-        Event Roles
+        {{_('Event Roles')}}
       </h2>
       <hr>
 
       <table class="table table-bordered no-global-dt">
         <thead>
           <tr>
-            <th>EVENT ROLE / SERVICE</th>
-            <th>Track</th>
-            <th>Session</th>
-            <th>Speaker</th>
-            <th>Sponsor</th>
-            <th>Microlocation</th>
+            <th>{{_('EVENT ROLE')}} / {{_('SERVICE')}}</th>
+            <th>{{_('Track')}}</th>
+            <th>{{_('Session')}}</th>
+            <th>{{_('Speaker')}}</th>
+            <th>{{_('Sponsor')}}</th>
+            <th>{{_('Microlocation')}}</th>
           </tr>
         </thead>
         <tbody>
@@ -305,7 +305,7 @@ Permissions
         </tbody>
       </table>
       </form>
-      <button type="submit" class="btn btn-success pull-right">Save</button>
+      <button type="submit" class="btn btn-success pull-right">{{_('Save')}}</button>
     </div>
 
 

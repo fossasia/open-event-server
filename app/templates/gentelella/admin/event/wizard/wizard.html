@@ -27,18 +27,18 @@
     <div class="btn-toolbar pull-right" style="margin-top: 25px;">
         <div class="btn-group btn-group-lg">
             {% if show_prev %}
-                <button type="button" class="btn btn-default prev-step"><i class="fa fa-chevron-left"></i> Previous
+                <button type="button" class="btn btn-default prev-step"><i class="fa fa-chevron-left"></i> {{_('Previous')}}
                 </button>
             {% endif %}
             {% if show_next %}
-                <button type="button" class="btn btn-default next-step">Next <i class="fa fa-chevron-right"></i>
+                <button type="button" class="btn btn-default next-step">{{_('Next')}} <i class="fa fa-chevron-right"></i>
                 </button>
             {% endif %}
-            <button type="button" class="btn btn-default save-event">Save</button>
+            <button type="button" class="btn btn-default save-event">{{_('Save')}}</button>
         {% if event and event.state == 'Published' and not is_copy %}
-            <button type="button" class="btn btn-lg btn-danger publish-unpublish-event">Unpublish event</button>
+            <button type="button" class="btn btn-lg btn-danger publish-unpublish-event">{{_('Unpublish event')}}</button>
         {% else %}
-            <button type="button" class="btn btn-lg btn-success publish-unpublish-event">Make your event live</button>
+            <button type="button" class="btn btn-lg btn-success publish-unpublish-event">{{_('Make your event live')}}</button>
         {% endif %}
 
         </div>
@@ -69,7 +69,7 @@
                                         <i class="fa fa-info"></i>
                                     </span>
                                 </a>
-                                <span class="description hidden-xs hidden-sm">Basic Details</span>
+                                <span class="description hidden-xs hidden-sm">{{_('Basic Details')}}</span>
                             </li>
 
                             <li {% if step == 'sponsors' %}class="active"{% endif %}>
@@ -78,7 +78,7 @@
                                         <i class="fa fa-usd"></i>
                                     </span>
                                 </a>
-                                <span class="description hidden-xs hidden-sm">Sponsors</span>
+                                <span class="description hidden-xs hidden-sm">{{_('Sponsors')}}</span>
                             </li>
                             <li {% if step == 'sessions-tracks-rooms' or step == 'call-for-speakers' or step == 'form-customization' %}class="active"{% endif %}>
                                 <a href="#step3" data-toggle="tab" title="Session, Tracks, Rooms"
@@ -87,7 +87,7 @@
                                         <i class="fa fa-list-ol"></i>
                                     </span>
                                 </a>
-                                <span class="description hidden-xs hidden-sm">Sessions & Speakers</span>
+                                <span class="description hidden-xs hidden-sm">{{_('Sessions')}} & {{_('Speakers')}}</span>
                             </li>
                         </ul>
                     </div>
@@ -134,31 +134,31 @@
                     </div>
                     <div class="row" style="display: none;background-color: #f2f2f2;border: 1px solid #dcdcdc;padding-left: 5px;padding-top: 8px;">
                             <div class="col-xs-12 col-md-8">
-                                <div style="font-size: 15px;margin-bottom: 5px;">Settings</div>
+                                <div style="font-size: 15px;margin-bottom: 5px;">{{_('Settings')}}</div>
                                 <hr style="margin-bottom: 0; margin-top: 0;">
                                 <div class="item form-group">
-                                    <label>Ticket Description</label>
+                                    <label>{{_('Ticket Description')}}</label>
                                     <textarea name="tickets[description]" class="form-control" rows="4" style="height: 90px;" placeholder="This description would be available to the attendees when ordering tickets." maxlength="160">{{ description }}</textarea>
                                 </div>
                                 <div class="item form-group">
                                     <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1; margin-top: 0;">
                                         <input type="checkbox" class="checkbox flat form-control" name="tickets_description_toggle_{{ serialno }}" {{ 'checked' if description_toggle else ''}}>
-                                        Display Ticket description on Public Events page
+                                        {{_('Display Ticket description on Public Events page')}}
                                     </label>
                                 </div>
                                 <div class="item form-group">
-                                    <div style="font-size: 15px;margin-bottom: 5px;">Ticket visibility</div>
+                                    <div style="font-size: 15px;margin-bottom: 5px;">{{_('Ticket visibility')}}</div>
                                     <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1;  margin-top: 0;">
                                         <input type="checkbox" class="checkbox flat form-control" name="tickets_hide_{{ serialno }}" {{ 'checked' if hide else ''}}>
-                                        Hide Ticket
+                                        {{_('Hide Ticket')}}
                                     </label>
                                     <div style="font-size: 13px;">
-                                        Hides ticket from the Public Events page.<br>
-                                        Ticket would still be available for sale to Organizers.
+                                        {{_('Hides ticket from the Public Events page.')}}<br>
+                                        {{_('Ticket would still be available for sale to Organizers.')}}
                                     </div>
                                 </div>
                                 <div class="item form-group">
-                                    <label>Sales Start</label><br>
+                                    <label>{{_('Sales Start')}}</label><br>
                                     <div class="col-xs-7" style="padding: 0;">
                                         <input value="{{ sales_start.strftime('%m/%d/%Y') if sales_start else current_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY" name="tickets[sales_start_date]">
                                     </div>
@@ -175,7 +175,7 @@
                                     {% set sales_end_date = start_date.strftime('%m/%d/%Y') %}
                                 {% endif %}
                                 <div class="item form-group">
-                                    <label>Sales End</label><br>
+                                    <label>{{_('Sales End')}}</label><br>
                                     <div class="col-xs-7" style="padding: 0;">
                                         <input value="{{ sales_end_date }}" class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY" name="tickets[sales_end_date]">
                                     </div>
@@ -184,18 +184,18 @@
                                     </div>
                                 </div>
                                 <div class="item form-group">
-                                    <div style="font-size: 15px;margin-bottom: 5px;">Number of tickets allowed per order</div>
+                                    <div style="font-size: 15px;margin-bottom: 5px;">{{_('Number of tickets allowed per order')}}</div>
                                     <div class="col-xs-6" style="padding-left: 0;">
-                                        <label style="font-weight: normal;">Minimum Order</label>
+                                        <label style="font-weight: normal;">{{_('Minimum Order')}}</label>
                                         <input type="number" min="1" class="form-control" value="{{ min_order }}" placeholder="1" name="tickets[min_order]">
                                     </div>
                                     <div class="col-xs-6" style="padding-left: 0;">
-                                        <label style="font-weight: normal;">Maximum Order</label>
+                                        <label style="font-weight: normal;">{{_('Maximum Order')}}</label>
                                         <input type="number" min="1" class="form-control" value="{{ max_order }}" placeholder="10" name="tickets[max_order]">
                                     </div>
                                 </div>
                                 <div class="item form-group col-xs-12" style="padding-left: 0;">
-                                    <label>Ticket Code Group</label>
+                                    <label>{{_('Ticket Code Group')}}</label>
                                     <input type="text" class="form-control ticket-tags" name="tickets[tags]"
                                         value="{{ ticket_tags| join(',') }}" placeholder="None specified">
                                 </div>

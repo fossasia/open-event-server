@@ -1,7 +1,7 @@
 {% extends 'gentelella/admin/super_admin/dashboard.html' %}
 {% import 'gentelella/admin/mysessions/mysessions_list.html' as mysessions with context %}
 {% block title %}
-Sessions
+{{_('Sessions')}}
 {% endblock %}
 
 {% set active_page = "sessions" %}
@@ -64,7 +64,7 @@ Sessions
                             <a class="btn btn-success" href="/events/{{ session.event.id }}/sessions/{{ session.id }}/restore_trash"
                                data-toggle="tooltip" data-placement="top"
                                title="Restore Session">
-                                <i>Restore Session</i>
+                                <i>{{_('Restore Session')}}</i>
                             </a>
             {% endif %}
         </div>
@@ -79,31 +79,31 @@ Sessions
 
 <div>
     <ul id="event-tabs" class="nav nav-tabs bar_tabs large_tab_list" role="tablist">
-        <li class=""><a href="#tab_content4" id="all-tab" data-toggle="tab">All Sessions</a></li>
-        <li class="active"><a href="#tab_content1" id="home-tab" data-toggle="tab">All Pending</a></li>
-        <li class=""><a href="#tab_content2" id="profile-tab" data-toggle="tab">All Accepted</a></li>
-        <li class=""><a href="#tab_content3" id="profile-tab2" data-toggle="tab">All Rejected</a></li>
-        <li class=""><a href="#tab_content5" id="profile-tab3" data-toggle="tab">All Deleted Sessions</a></li>
+        <li class=""><a href="#tab_content4" id="all-tab" data-toggle="tab">{{_('All Sessions')}}</a></li>
+        <li class="active"><a href="#tab_content1" id="home-tab" data-toggle="tab">{{_('All Pending')}}</a></li>
+        <li class=""><a href="#tab_content2" id="profile-tab" data-toggle="tab">{{_('All Accepted')}}</a></li>
+        <li class=""><a href="#tab_content3" id="profile-tab2" data-toggle="tab">{{_('All Rejected')}}</a></li>
+        <li class=""><a href="#tab_content5" id="profile-tab3" data-toggle="tab">{{_('All Deleted Sessions')}}</a></li>
     </ul>
     <div class="dropdown tabs_small">
             <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-            <span class="drop_header">All Pending</span>
+            <span class="drop_header">{{_('All Pending')}}</span>
             <span class="caret"></span></button>
             <ul class="dropdown-menu">
                 <li value="All Sessions" class="small_tab_list">
-                    <a href="#tab_content4" id="all-tab" data-toggle="tab">All Sessions</a>
+                    <a href="#tab_content4" id="all-tab" data-toggle="tab">{{_('All Sessions')}}</a>
                 </li>
                 <li value="All Pending" class="small_tab_list active">
-                    <a href="#tab_content1" id="home-tab" data-toggle="tab">All Pending</a>
+                    <a href="#tab_content1" id="home-tab" data-toggle="tab">{{_('All Pending')}}</a>
                 </li>
                 <li value="All Accepted" class="small_tab_list">
-                    <a href="#tab_content2" id="profile-tab" data-toggle="tab">All Accepted</a>
+                    <a href="#tab_content2" id="profile-tab" data-toggle="tab">{{_('All Accepted')}}</a>
                 </li>
                 <li value="All Rejected" class="small_tab_list">
-                    <a href="#tab_content3" id="profile-tab2" data-toggle="tab">All Rejected</a>
+                    <a href="#tab_content3" id="profile-tab2" data-toggle="tab">{{_('All Rejected')}}</a>
                 </li>
                 <li value="All Deleted Events" class="small_tab_list">
-                    <a href="#tab_content5" id="profile-tab3" data-toggle="tab">All Deleted Events</a>
+                    <a href="#tab_content5" id="profile-tab3" data-toggle="tab">{{_('All Deleted Events')}}</a>
                 </li>
             </ul>
     </div>
@@ -113,12 +113,12 @@ Sessions
             <table class="table table-striped no-global-dt">
                 <thead>
                 <tr>
-                    <th>Event</th>
-                    <th>Title</th>
-                    <th>Speakers</th>
-                    <th>Date of Submission</th>
-                    <th>Date of Event</th>
-                    <th>Options</th>
+                    <th>{{_('Event')}}</th>
+                    <th>{{_('Title')}}</th>
+                    <th>{{_('Speakers')}}</th>
+                    <th>{{_('Date of Submission')}}</th>
+                    <th>{{_('Date of Event')}}</th>
+                    <th>{{_('Options')}}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -131,12 +131,12 @@ Sessions
             <table class="table table-striped no-global-dt">
                 <thead>
                 <tr>
-                    <th>Event</th>
-                    <th>Title</th>
-                    <th>Speakers</th>
-                    <th>Date of Submission</th>
-                    <th>Date of Event</th>
-                    <th>Options</th>
+                    <th>{{_('Event')}}</th>
+                    <th>{{_('Title')}}</th>
+                    <th>{{_('Speakers')}}</th>
+                    <th>{{_('Date of Submission')}}</th>
+                    <th>{{_('Date of Event')}}</th>
+                    <th>{{_('Options')}}</th>
 
                 </tr>
                 </thead>
@@ -149,12 +149,12 @@ Sessions
             <table class="table table-striped no-global-dt">
                 <thead>
                 <tr>
-                    <th>Event</th>
-                    <th>Title</th>
-                    <th>Speakers</th>
-                    <th>Date of Submission</th>
-                    <th>Date of Event</th>
-                    <th>Options</th>
+                    <th>{{_('Event')}}</th>
+                    <th>{{_('Title')}}</th>
+                    <th>{{_('Speakers')}}</th>
+                    <th>{{_('Date of Submission')}}</th>
+                    <th>{{_('Date of Event')}}</th>
+                    <th>{{_('Options')}}</th>
 
                 </tr>
                 </thead>
@@ -167,12 +167,12 @@ Sessions
             <table class="table table-striped no-global-dt">
                 <thead>
                 <tr>
-                    <th>Event</th>
-                    <th>Title</th>
-                    <th>Speakers</th>
-                    <th>Date of Submission</th>
-                    <th>Date of Event</th>
-                    <th>Options</th>
+                    <th>{{_('Event')}}</th>
+                    <th>{{_('Title')}}</th>
+                    <th>{{_('Speakers')}}</th>
+                    <th>{{_('Date of Submission')}}</th>
+                    <th>{{_('Date of Event')}}</th>
+                    <th>{{_('Options')}}</th>
 
                 </tr>
                 </thead>
@@ -185,12 +185,12 @@ Sessions
             <table class="table table-striped no-global-dt">
                 <thead>
                 <tr>
-                    <th>Event</th>
-                    <th>Title</th>
-                    <th>Speakers</th>
-                    <th>Date of Submission</th>
-                    <th>Date of Event</th>
-                    <th>Options</th>
+                    <th>{{_('Event')}}</th>
+                    <th>{{_('Title')}}</th>
+                    <th>{{_('Speakers')}}</th>
+                    <th>{{_('Date of Submission')}}</th>
+                    <th>{{_('Date of Event')}}</th>
+                    <th>{{_('Options')}}</th>
 
                 </tr>
                 </thead>

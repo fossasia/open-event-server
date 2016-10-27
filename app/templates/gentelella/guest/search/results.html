@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block title %}
-    Explore
+    {{_('Explore')}}
 {% endblock %}
 {% macro event_block(event) %}
     <a href="/e/{{ event.identifier }}">
@@ -69,7 +69,7 @@
         </div>
         <div class="col-md-8">
             <h1 style="font-weight: 300;"><span class="location-name"
-                                                style="text-transform: capitalize;">{{ location | title }}</span> Events
+                                                style="text-transform: capitalize;">{{ location | title }}</span> {{_('Events')}}
             </h1>
             <div>
                 <ul class="list-inline prod_size filtering">
@@ -81,7 +81,7 @@
                 </ul>
             </div>
             <div style="overflow: hidden">
-                <div class="loader" style="display: none;">Loading...</div>
+                <div class="loader" style="display: none;">{{_('Loading')}}...</div>
             </div>
 
             <div id="events-holder" {% if results.count <= 0 %}style="display: none;"{% endif %}>
@@ -90,7 +90,7 @@
                 {% endfor %}
             </div>
             <div id="no-results" {% if results.count > 0 %}style="display: none;"{% endif %}>
-                <h2 style="font-weight: 300; font-size: 26px;">No events found for the selected parameters.</h2>
+                <h2 style="font-weight: 300; font-size: 26px;">{{_('No events found for the selected parameters.')}}</h2>
             </div>
             <br>
             <div id="pagination"></div>
@@ -103,7 +103,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4>Share this event</h4>
+                    <h4>{{_('Share this event')}}</h4>
                 </div>
                 <div class="modal-body" style="text-align: center;">
                     {% include 'gentelella/components/social_buttons.html' %}

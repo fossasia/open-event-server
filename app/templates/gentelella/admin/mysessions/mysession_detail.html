@@ -17,18 +17,17 @@
                 <div class="x_content">
                     <br>
                     {% if session.state == 'pending' %}
-                        <span class="detail-status label label-warning">Under Review</span>
+                        <span class="detail-status label label-warning">{{_('Under Review')}}</span>
                     {% elif session.state == 'draft' %}
-                        <span class="detail-status label label-warning">Draft</span>
+                        <span class="detail-status label label-warning">{{_('Draft')}}</span>
                     {% elif session.state == 'accepted' %}
-                        <span class="detail-status label label-success">Accepted</span>
+                        <span class="detail-status label label-success">{{_('Accepted')}}</span>
                     {% elif session.state == 'rejected' %}
-                        <span class="detail-status label label-danger">Rejected</span>
+                        <span class="detail-status label label-danger">{{_('Rejected')}}</span>
                     {% else %}
                         <span class="detail-status label label-info">N/A</span>
                     {% endif %}
-                    <button class="btn btn-info pull-right" data-toggle="modal" data-target="#edit-session-modal">Edit
-                        Proposal
+                    <button class="btn btn-info pull-right" data-toggle="modal" data-target="#edit-session-modal">{{_('Edit Proposal')}}
                     </button>
                     <br>
                     <br>
@@ -48,14 +47,14 @@
                     </h4>
                     <br>
                     {% if session.short_abstract %}
-                    <h5>Short Abstract</h5>
+                    <h5>{{_('Short Abstract')}}</h5>
                     <p style="text-align: justify;"><i class="short_abstract">
                         {{ session.short_abstract | safe }}
                     </i></p>
                     <br>
                     {% endif %}
                     {% if session.long_abstract %}
-                    <h5>Long Abstract</h5>
+                    <h5>{{_('Long Abstract')}}</h5>
                     <p style="text-align: justify" class="long_abstract">
                         {{ session.long_abstract | safe }}
                     </p>
@@ -64,13 +63,13 @@
                     <div class="row" style="text-align: center; font-size: 16px;">
                         {% if session.microlocation %}
                         <div class="col-md-2 col-md-push-1">
-                            <strong>Microlocation</strong><br>
+                            <strong>{{_('Microlocation')}}</strong><br>
                             {{ session.microlocation.name }}
                         </div>
                         {% endif %}
                         {% if session.track %}
                         <div class="col-md-2 col-md-push-1">
-                            <strong>Track</strong><br>
+                            <strong>{{_('Track')}}</strong><br>
                             {{ session.track.name }}
                         </div>
                         {% endif %}
@@ -78,21 +77,21 @@
                     {% if session.slides or session.video or session.audio %}
                     <div class="row">
                         <div class="col-md-12">
-                            <h4>Media</h4>
+                            <h4>{{_('Media')}}</h4>
                         </div>
                         {% if session.slides %}
                             <div class="col-md-4">
-                                <h5>Slide</h5><a href="{{ session.slides }}" download>Download</a>
+                                <h5>{{_('Slide')}}</h5><a href="{{ session.slides }}" download>{{_('Download')}}</a>
                             </div>
                         {% endif %}
                         {% if session.video %}
                             <div class="col-md-4">
-                                <h5>Video</h5><a href="{{ session.video }}" download>Download</a>
+                                <h5>{{_('Video')}}</h5><a href="{{ session.video }}" download>{{_('Download')}}</a>
                             </div>
                         {% endif %}
                         {% if session.audio %}
                             <div class="col-md-4">
-                                <h5>Audio</h5><a href="{{ session.audio }}" download>Download</a>
+                                <h5>{{_('Audio')}}</h5><a href="{{ session.audio }}" download>{{_('Download')}}</a>
                             </div>
                         {% endif %}
                     </div>
@@ -109,7 +108,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title">Edit Session Proposal</h4>
+                    <h4 class="modal-title">{{_('Edit Session Proposal')}}</h4>
                 </div>
                 <div class="modal-body">
                     {% include 'gentelella/admin/event/sessions/components/session_speaker_form.html' %}

@@ -58,22 +58,22 @@
                 </th>
                 {% if key_name == 'discount codes' %}
                     <th rowspan="2" style="border-left: none !important; border-top: none!important; ">
-                        Marketer
+                        {{_('Marketer')}}
                     </th>
                 {% endif %}
                 <th colspan="4" class="success">
-                    Completed Orders
+                    {{_('Completed Orders')}}
                 </th>
             </tr>
             <tr class="active">
                 <th>
-                    Tickets
+                    {{_('Tickets')}}
                 </th>
                 <th>
-                    Sales (discounted)
+                    {{_('Sales')}} ({{_('discounted')}})
                 </th>
                 <th>
-                    Discount amount
+                    {{_('Discount amount')}}
                 </th>
             </tr>
         </thead>

@@ -40,15 +40,15 @@
 {% macro options_table(columns, group) %}
 
     <div style="width: 100%; text-align: center">
-        <h2 style="font-weight: 300; font-size: 19px;">Collect {{ group | capitalize }} Details</h2>
+        <h2 style="font-weight: 300; font-size: 19px;">{{_('Collect')}} {{ group | capitalize }} {{_('Details')}}</h2>
     </div>
 
     <table class="table table-striped table-bordered table-hover options-table {{ group }}-options-table">
         <thead>
         <tr>
-            <th>Option</th>
-            <th>Include</th>
-            <th>Require</th>
+            <th>{{_('Option')}}</th>
+            <th>{{_('Include')}}</th>
+            <th>{{_('Require')}}</th>
         </tr>
         </thead>
         <tbody>
@@ -65,7 +65,7 @@
     <div class="col-xs-12 col-md-8 col-md-push-2">
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
             <i class="fa fa-check-square-o"></i>
-            Customize Registration Form
+            {{_('Customize Registration Form')}}
             <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
         </h2>
     </div>

@@ -1,7 +1,7 @@
 {% extends 'gentelella/admin/base.html' %}
 
 {% block title %}
-Notifications
+{{_('Notifications')}}
 {% endblock %}
 
 {% block head_css %}
@@ -20,7 +20,7 @@ Notifications
         <div class="col-xs-12 col-sm-10 col-sm-push-1 col-md-8 col-md-push-2">
             <div class="x_panel" style="min-height: 700px;">
                 <div class="x_title">
-                    <h2>Notifications</h2>
+                    <h2>{{_('Notifications')}}</h2>
 
                     <div class="clearfix"></div>
                 </div>
@@ -31,26 +31,26 @@ Notifications
                                 <div class="btn-group pull-left" data-toggle="buttons">
                                     <label class="btn btn-default active btn-responsive">
                                         <input type="radio" name="notif_status" autocomplete="off" value="unread"
-                                               checked> Unread
+                                               checked> {{_('Unread')}}
                                     </label>
                                     <label class="btn btn-default btn-responsive">
-                                        <input type="radio" name="notif_status" autocomplete="off" value="all"> All
+                                        <input type="radio" name="notif_status" autocomplete="off" value="all"> {{_('All')}}
                                     </label>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xs-4">
-                            <a href="{{ url_for('notifications.mark_all_read') }}" class="btn btn-default pull-right">Mark all read</a>
+                            <a href="{{ url_for('notifications.mark_all_read') }}" class="btn btn-default pull-right">{{_('Mark all read')}}</a>
                         </div>
                         <div class="col-xs-12">
                             <table class="notif-table table table-hover" style="margin-top: 16px;">
                                 <thead>
                                 <tr>
-                                    <th style="display:none;">Status</th>
-                                    <th>Message</th>
-                                    <th>Received At</th>
-                                    <th>Received At (Humanized)</th>
-                                    <th>Options</th>
+                                    <th style="display:none;">{{_('Status')}}</th>
+                                    <th>{{_('Message')}}</th>
+                                    <th>{{_('Received At')}}</th>
+                                    <th>{{_('Received At (Humanized)')}}</th>
+                                    <th>{{_('Options')}}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -69,8 +69,8 @@ Notifications
                                         <td>
                                             {% if not notif.has_read %}
                                                 <a class="read-btn btn btn-default btn-xs"
-                                                   href="{{ url_for('notifications.mark_as_read', notification_id=notif.id) }}">Mark
-                                                    as Read</a>
+                                                   href="{{ url_for('notifications.mark_as_read', notification_id=notif.id) }}">{{_('Mark')}}
+                                                    {{_('as Read')}}</a>
                                             {% endif %}
                                         </td>
                                     </tr>

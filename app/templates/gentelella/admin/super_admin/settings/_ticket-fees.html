@@ -3,14 +3,14 @@
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
     <form id="settings_form" method="post" class="form-horizontal form-label-left">
-      <h3>List of Supported Currencies</h3>
+      <h3>{{_('List of Supported Currencies')}}</h3>
         <br>
         {% for code, has_paypal, has_stripe in payment_currencies %}
         <label class="control-label" >{{ code }} - {{ code | currency_name }} ({{ code | currency_symbol }})</label>
         <br>
         <br>
         <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="position:relative; top: 19px;">Service Fee</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="position:relative; top: 19px;">{{_('Service Fee')}}</label>
             <div class=" col-md-9 col-xs-12">
                 <span style="position:relative; top: 27px; left: 85px">%</span>
                 <input type="text" name="service_fee" class="form-control"
@@ -18,7 +18,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="position:relative; top: 19px;">Maximum Fee</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="position:relative; top: 19px;">{{_('Maximum Fee')}}</label>
             <div class=" col-md-9 col-xs-12">
                 <span style="position:relative; top: 27px; left: 93px">{{ code }} </span>
                 <input type="text" name="maximum_fee" class="form-control"
@@ -31,7 +31,7 @@
         {% endfor %}
       <div class="ln_solid"></div>
         <div class="form-group">
-            <button id="fee-save" type="submit" class="btn btn-success pull-right">Save</button>
+            <button id="fee-save" type="submit" class="btn btn-success pull-right">{{_('Save')}}</button>
         </div>
     </form>
   </div>

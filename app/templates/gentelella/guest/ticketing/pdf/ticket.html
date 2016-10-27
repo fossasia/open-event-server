@@ -41,17 +41,17 @@
 </body>
 </html>
 {% for holder in order.ticket_holders %}
-        <span class="label">Event</span><br>
+        <span class="label">{{_('Event')}}</span><br>
         <span style="font-size: 20px;">{{ order.event.name }}</span><br><br>
 
-        <span class="label">Location</span><br>
+        <span class="label">{{_('Location')}}</span><br>
         <span style="font-size: 15px;">{{ order.event.location_name }}</span><br><br>
 
-        <span class="label">Date and Time</span><br>
+        <span class="label">{{_('Date and Time')}}</span><br>
         <span  style="font-size: 15px;">{{ order.event.start_time | datetime }} to {{ order.event.end_time | datetime }}</span>
         <br><br>
 
-        <span class="label">Type</span><br>
+        <span class="label">{{_('Type')}}</span><br>
         <span  style="font-size: 20px;">{{ holder.ticket.name }}</span>
         <br><br>
 
