@@ -1,5 +1,4 @@
 import icalendar
-from flask import make_response
 from flask import url_for
 from icalendar import Calendar
 from pentabarf.Event import Event
@@ -10,6 +9,7 @@ from sqlalchemy import DATE
 from sqlalchemy import asc
 from sqlalchemy import cast
 from sqlalchemy import func
+from app.models.event import Event as EventModel
 
 from app import db
 from app.models.session import Session
@@ -77,7 +77,7 @@ class ExportHelper:
 
                     for speaker in session.speakers:
                         person = Person(id=speaker.id, name=speaker.name)
-                        session_event.add_person(speaker)
+                        session_event.add_person(person)
 
                     room.add_event(session_event)
                 day.add_room(room)
@@ -90,8 +90,7 @@ class ExportHelper:
         """Takes an event id and returns the event in iCal format"""
         cal = Calendar()
         event = icalendar.Event()
-        from app.models.event import Event
-        matching_event = Event.query.get(event_id)
+        matching_event = EventModel.query.get(event_id)
         event.add('summary', matching_event.name)
         event.add('geo', (matching_event.latitude, matching_event.longitude))
         event.add('location', matching_event.location_name)

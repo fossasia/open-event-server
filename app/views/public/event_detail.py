@@ -96,11 +96,8 @@ class EventDetailView(BaseView):
     @expose('/<identifier>/schedule/pentabarf.xml')
     def display_event_schedule_pentabarf(self, identifier):
         event = get_published_event_or_abort(identifier)
-        placeholder_images = DataGetter.get_event_default_images()
-        custom_placeholder = DataGetter.get_custom_placeholders()
         if not event.has_session_speakers:
             abort(404)
-        tracks = DataGetter.get_tracks(event.id)
         accepted_sessions = DataGetter.get_sessions(event.id)
         if not accepted_sessions or not event.schedule_published_on:
             abort(404)
@@ -112,11 +109,8 @@ class EventDetailView(BaseView):
     @expose('/<identifier>/schedule/calendar.ics')
     def display_event_schedule_ical(self, identifier):
         event = get_published_event_or_abort(identifier)
-        placeholder_images = DataGetter.get_event_default_images()
-        custom_placeholder = DataGetter.get_custom_placeholders()
         if not event.has_session_speakers:
             abort(404)
-        tracks = DataGetter.get_tracks(event.id)
         accepted_sessions = DataGetter.get_sessions(event.id)
         if not accepted_sessions or not event.schedule_published_on:
             abort(404)
