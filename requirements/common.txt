@@ -56,3 +56,4 @@ python-magic
 Flask-Babel
 python-geoip
 python-geoip-geolite2
+python-pentabarf-xml
