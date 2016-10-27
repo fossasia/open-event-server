@@ -25,6 +25,7 @@ def clean_up_string(target_string):
             return remove_line_breaks(target_string).strip()
     return target_string
 
+
 def clean_html(html):
     tags = [
         'b',
@@ -49,8 +50,10 @@ def clean_html(html):
     cleaned = bleach.clean(html, tags=tags, attributes=attrs, styles=styles, strip=True)
     return bleach.linkify(cleaned, callbacks=[nofollow, target_blank], parse_email=True)
 
+
 def strip_tags(html):
     return bleach.clean(html, tags=[], attributes={}, styles=[], strip=True)
+
 
 def side_by_side_diff(old_text, new_text):
     """

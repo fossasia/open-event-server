@@ -366,11 +366,6 @@ class DataManager(object):
 
         new_session.speakers.append(speaker)
 
-        # existing_speaker_ids = form.getlist("speakers[]")
-        # for existing_speaker_id in existing_speaker_ids:
-        #     existing_speaker = DataGetter.get_speaker(existing_speaker_id)
-        #     new_session.speakers.append(existing_speaker)
-
         save_to_db(new_session, "Session saved")
 
         if state == 'pending':
@@ -554,7 +549,7 @@ class DataManager(object):
             save_to_db(speaker, "Speaker photo saved")
             record_activity('update_speaker', speaker=speaker, event_id=event_id)
         logo = form.get('photo', None)
-        print logo
+
         if string_not_empty(logo) and logo:
             filename = '{}.png'.format(time.time())
             filepath = '{}/static/{}'.format(path.realpath('.'),
@@ -716,16 +711,8 @@ class DataManager(object):
             session.long_abstract = form.get('long_abstract', '')
             session.short_abstract = form.get('short_abstract', '')
             session.state = form_state
-
-            if form.get('track', None) != "":
-                session.track_id = form.get('track', None)
-            else:
-                session.track_id = None
-
-            if form.get('session_type', None) != "":
-                session.session_type_id = form.get('session_type', None)
-            else:
-                session.session_type_id = None
+            session.track_id = form.get('track', None) if form.get('track', None) != "" else  None
+            session.session_type_id = form.get('session_type', None)  if form.get('session_type', None) != "" else None
 
             existing_speaker_ids = form.getlist("speakers[]")
             current_speaker_ids = []
@@ -2445,10 +2432,7 @@ def update_or_create(model, event_id, **kwargs):
 def update_role_to_admin(form, user_id):
     user = DataGetter.get_user(user_id)
     old_admin_status = user.is_admin
-    if form['admin_perm'] == 'isAdmin':
-        user.is_admin = True
-    else:
-        user.is_admin = False
+    user.is_admin = True if form['admin_perm'] == 'isAdmin' else False
 
     save_to_db(user, "User role Updated")
     if old_admin_status != user.is_admin:
@@ -2501,20 +2485,9 @@ def create_modules(form):
     if module is None:
         module = Module()
 
-    if str(modules_form_value[0][24]) == '1':
-        module.ticket_include = True
-    else:
-        module.ticket_include = False
-
-    if str(modules_form_value[0][49]) == '1':
-        module.payment_include = True
-    else:
-        module.payment_include = False
-
-    if str(modules_form_value[0][75]) == '1':
-        module.donation_include = True
-    else:
-        module.donation_include = False
+    module.ticket_include = True if str(modules_form_value[0][24]) == '1' else False
+    module.payment_include = True if str(modules_form_value[0][49]) == '1' else False
+    module.donation_include = True if str(modules_form_value[0][75]) == '1' else False
 
     save_to_db(module, "Module settings saved")
     events = DataGetter.get_all_events()
