@@ -316,7 +316,6 @@ def generate_icalendar_event(event_id):
     event.add('summary', matching_event.name)
     event.add('geo', (matching_event.latitude, matching_event.longitude))
     event.add('location', matching_event.location_name)
-    event.add('color', matching_event.color)
     event.add('dtstart', matching_event.start_time)
     event.add('dtend', matching_event.end_time)
     event.add('logo', matching_event.logo)

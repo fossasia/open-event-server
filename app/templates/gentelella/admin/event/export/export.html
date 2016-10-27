@@ -45,7 +45,8 @@
 {% block content %}
     <div class="row">
         <div class="col-md-5 col-md-push-1">
-            <h3 style="font-weight: 300;">Select which media files you want in the zip</h3>
+            <h3 style="font-weight: 300;">Export and Download Event as zip</h3>
+            <h4 style="font-weight: 300;">Select which media files you want in the zip</h4>
             <form id="exportForm" style="margin-top:20px;">
                 <div class="checkbox">
                     <input type="checkbox" class="toggle-switch" name="image" id="image">
@@ -77,6 +78,19 @@
             <span id="export_creator" style="display: none;">Started by <span id="export_creator_email">user_email</span>,
               <span id="export_creator_datetime">datetime</span>
             </span>
+            <hr>
+            <h3 style="font-weight: 300;">Download Event as Pentabarf XML</h3>
+            Once the event is live and the schedule is published, pentabarf XML version of the schedule will be available at:<br><br>
+            <pre><code>{{ url_for('event_detail.display_event_schedule_pentabarf', identifier=event.identifier, _external=True) }}</code></pre>
+            Alternatively, you can download the pentabarf XML here<br><br>
+            <a href="{{ url_for('.pentabarf_export_view', event_id=event.id)  }}" class="btn btn-info">Download pentabarf.xml</a>
+            <hr>
+            <h3 style="font-weight: 300;">Download Event as iCalendar</h3>
+            Once the event is live and the schedule is published, iCalendar version of the event will be available at:<br><br>
+            <pre><code>{{ url_for('event_detail.display_event_schedule_ical', identifier=event.identifier, _external=True) }}</code></pre>
+            Alternatively, you can download the iCalendar here<br><br>
+            <a href="{{ url_for('.ical_export_view', event_id=event.id)  }}" class="btn btn-info">Download event.ics</a>
+
         </div>
         <div class="col-md-5 col-md-push-1">
             <h3 style="font-weight: 300;">Access event information via REST API</h3>

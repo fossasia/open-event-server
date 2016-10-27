@@ -4,6 +4,7 @@ import logging
 import os
 from datetime import datetime
 
+from flask import make_response
 from flask import request, url_for, flash
 from flask.ext.restplus import abort
 from flask.ext import login
@@ -12,6 +13,7 @@ from markupsafe import Markup
 from werkzeug.utils import redirect, secure_filename
 
 from app.helpers.data import DataManager
+from app.helpers.export import ExportHelper
 from app.models.call_for_papers import CallForPaper
 from ...helpers.data_getter import DataGetter
 
@@ -90,6 +92,38 @@ class EventDetailView(BaseView):
         return self.render('/gentelella/guest/event/schedule.html', event=event,
                            placeholder_images=placeholder_images, accepted_sessions=accepted_sessions,
                            tracks=tracks, custom_placeholder=custom_placeholder)
+
+    @expose('/<identifier>/schedule/pentabarf.xml')
+    def display_event_schedule_pentabarf(self, identifier):
+        event = get_published_event_or_abort(identifier)
+        placeholder_images = DataGetter.get_event_default_images()
+        custom_placeholder = DataGetter.get_custom_placeholders()
+        if not event.has_session_speakers:
+            abort(404)
+        tracks = DataGetter.get_tracks(event.id)
+        accepted_sessions = DataGetter.get_sessions(event.id)
+        if not accepted_sessions or not event.schedule_published_on:
+            abort(404)
+
+        response = make_response(ExportHelper.export_as_pentabarf(event.id))
+        response.headers["Content-Type"] = "application/xml"
+        return response
+
+    @expose('/<identifier>/schedule/calendar.ics')
+    def display_event_schedule_ical(self, identifier):
+        event = get_published_event_or_abort(identifier)
+        placeholder_images = DataGetter.get_event_default_images()
+        custom_placeholder = DataGetter.get_custom_placeholders()
+        if not event.has_session_speakers:
+            abort(404)
+        tracks = DataGetter.get_tracks(event.id)
+        accepted_sessions = DataGetter.get_sessions(event.id)
+        if not accepted_sessions or not event.schedule_published_on:
+            abort(404)
+
+        response = make_response(ExportHelper.export_as_ical(event.id))
+        response.headers["Content-Type"] = "text/calendar"
+        return response
 
     @expose('/<identifier>/cfs/', methods=('GET',))
     def display_event_cfs(self, identifier, via_hash=False):
