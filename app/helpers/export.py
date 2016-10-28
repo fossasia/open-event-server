@@ -1,4 +1,5 @@
 import icalendar
+import pytz
 from flask import url_for
 from icalendar import Calendar
 from pentabarf.Event import Event
@@ -10,6 +11,7 @@ from sqlalchemy import asc
 from sqlalchemy import cast
 from sqlalchemy import func
 from app.models.event import Event as EventModel
+from xml.etree.ElementTree import Element, SubElement, Comment, tostring
 
 from app import db
 from app.models.session import Session
@@ -101,17 +103,43 @@ class ExportHelper:
     @staticmethod
     def export_as_ical(event_id):
         """Takes an event id and returns the event in iCal format"""
+
+        event = EventModel.query.get(event_id)
+
         cal = Calendar()
-        event = icalendar.Event()
-        matching_event = EventModel.query.get(event_id)
-        event.add('summary', matching_event.name)
-        event.add('geo', (matching_event.latitude, matching_event.longitude))
-        event.add('location', matching_event.location_name)
-        event.add('dtstart', matching_event.start_time)
-        event.add('dtend', matching_event.end_time)
-        event.add('logo', matching_event.logo)
-        event.add('email', matching_event.email)
-        event.add('description', matching_event.description)
-        event.add('url', url_for('event_detail.display_event_detail_home', identifier=matching_event.identifier, _external=True))
-        cal.add_component(event)
+        cal.add('prodid', '-//fossasia//open-event//EN')
+        cal.add('version', '2.0')
+        cal.add('x-wr-caldesc', event.name)
+        cal.add('x-wr-calname', "Schedule for sessions at " + event.name)
+
+        tz = event.timezone or 'UTC'
+        tz = pytz.timezone(tz)
+
+        sessions = Session.query\
+            .filter_by(event_id=event_id) \
+            .filter_by(state='accepted') \
+            .filter(Session.in_trash is not True) \
+            .order_by(asc(Session.start_time)).all()
+
+        for session in sessions:
+
+            if session and session.start_time and session.end_time:
+                event_component = icalendar.Event()
+                event_component.add('summary', session.title)
+                event_component.add('geo', (event.latitude, event.longitude))
+                event_component.add('location', session.microlocation.name or '' + " " + event.location_name)
+                event_component.add('dtstart', tz.localize(session.start_time))
+                event_component.add('dtend', tz.localize(session.end_time))
+                event_component.add('email', event.email)
+                event_component.add('description', session.short_abstract)
+                event_component.add('url', url_for('event_detail.display_event_detail_home',
+                                                   identifier=event.identifier, _external=True))
+
+                attendees = []
+                for speaker in session.speakers:
+                    attendees.append(speaker.name)
+                    event_component.add('attendee', attendees)
+
+                cal.add_component(event_component)
+
         return cal.to_ical()
