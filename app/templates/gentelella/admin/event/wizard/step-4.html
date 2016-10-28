@@ -7,10 +7,11 @@
     <div class="row event-date-picker">
         <div class="col-md-4 col-xs-6">
             <div class="item form-group">
-                <label>Starts</label>
+                <label>Starts<span class="required">*</span></label>
                 <br>
                 <div class="col-xs-8" style="padding-left: 0;">
                         <input
+                               required="required"
                                name="cfs_start_date"
                                data-error="Start date & time is required"
                                value="{{ call_for_speakers.start_date.strftime('%m/%d/%Y')  if call_for_speakers else '' }}"
@@ -19,6 +20,7 @@
                     </div>
                     <div class="col-xs-4" style="padding-left: 0;">
                         <input
+                               required="required"
                                name="cfs_start_time"
                                value="{{ call_for_speakers.start_date.strftime('%H:%M') if call_for_speakers else '' }}"
                                class="form-control col-xs-6 time start" placeholder="HH:MM"/>
@@ -30,10 +32,11 @@
         </div>
         <div class="col-md-4 col-xs-6">
             <div class="item form-group">
-                <label>Ends</label>
+                <label>Ends<span class="required">*</span></label>
                 <br>
                 <div class="col-xs-8" style="padding-left: 0;">
                         <input name="cfs_end_date"
+                               required="required"
                                data-error="End date & time is required"
                                value="{{ call_for_speakers.end_date.strftime('%m/%d/%Y') if call_for_speakers else '' }}"
                                class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY"/>
@@ -41,6 +44,7 @@
                     </div>
                     <div class="col-xs-4" style="padding-left: 0;">
                         <input name="cfs_end_time"
+                               required="required"
                                value="{{ call_for_speakers.end_date.strftime('%H:%M') if call_for_speakers else '' }}"
                                class="form-control col-xs-6 time end" placeholder="HH:MM"/>
 
