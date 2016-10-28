@@ -41,28 +41,41 @@ class ExportHelper:
         event = DataGetter.get_event(event_id)
         diff = (event.end_time - event.start_time)
 
-        conference = Conference(title=event.name, start=event.start_time, end=event.end_time,
+        tz = event.timezone or 'UTC'
+        tz = pytz.timezone(tz)
+
+        conference = Conference(title=event.name, start=tz.localize(event.start_time), end=tz.localize(event.end_time),
                                 days=diff.days if diff.days > 0 else 1,
                                 day_change="00:00", timeslot_duration="00:15")
         dates = (db.session.query(cast(Session.start_time, DATE))
-                 .filter_by(event_id=event_id).order_by(asc(Session.start_time)).distinct().all())
+                 .filter_by(event_id=event_id)
+                 .filter_by(state='accepted')
+                 .filter(Session.in_trash is not True)
+                 .order_by(asc(Session.start_time)).distinct().all())
 
         for date in dates:
             date = date[0]
             day = Day(date=date)
             microlocation_ids = list(db.session.query(Session.microlocation_id)
                                      .filter(func.date(Session.start_time) == date)
+                                     .filter_by(state='accepted')
+                                     .filter(Session.in_trash is not True)
                                      .order_by(asc(Session.microlocation_id)).distinct())
             for microlocation_id in microlocation_ids:
                 microlocation_id = microlocation_id[0]
                 microlocation = DataGetter.get_microlocation(microlocation_id)
                 sessions = Session.query.filter_by(microlocation_id=microlocation_id) \
-                    .filter(func.date(Session.start_time) == date).order_by(asc(Session.start_time)).all()
+                    .filter(func.date(Session.start_time) == date) \
+                    .filter_by(state='accepted')\
+                    .filter(Session.in_trash is not True)\
+                    .order_by(asc(Session.start_time)).all()
+
                 room = Room(name=microlocation.name)
                 for session in sessions:
+
                     session_event = Event(id=session.id,
-                                          date=session.start_time,
-                                          start=session.start_time.strftime("%H:%M"),
+                                          date=tz.localize(session.start_time),
+                                          start=tz.localize(session.start_time).strftime("%H:%M"),
                                           duration=format_timedelta(session.end_time - session.start_time),
                                           track=session.track.name,
                                           abstract=session.short_abstract,
