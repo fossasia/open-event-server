@@ -464,14 +464,14 @@ class DataGetter(object):
         if include_private:
             events = DataGetter.get_all_published_events(include_private)
             for e in events:
-                call_for_speakers = DataGetter.get_call_for_papers(e.id).first()
+                call_for_speakers = CallForPaper.query.filter_by(event_id=e.id).filter(CallForPaper.start_date <= datetime.datetime.now()).filter(CallForPaper.end_date >= datetime.datetime.now()).first()
                 if call_for_speakers and not e.in_trash:
                     results.append(e)
 
         else:
             events = DataGetter.get_all_published_events()
             for e in events:
-                call_for_speakers = DataGetter.get_call_for_papers(e.id).first()
+                call_for_speakers = CallForPaper.query.filter_by(event_id=e.id).filter(CallForPaper.start_date <= datetime.datetime.now()).filter(CallForPaper.end_date >= datetime.datetime.now()).first()
                 if call_for_speakers and not e.in_trash:
                     results.append(e)
         return results[:12]
