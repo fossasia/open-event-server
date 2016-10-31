@@ -4,8 +4,15 @@
 
 * Python 2
 * Postgres
+```sh
+sudo apt-get update
+sudo apt-get install postgresql postgresql-contrib
+```
 * NodeJS
-
+```sh
+sudo apt-get update
+sudo apt-get install nodejs
+```
 
 ## Steps
 
