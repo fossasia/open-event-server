@@ -8,8 +8,8 @@
 sudo apt-get update
 sudo apt-get install postgresql postgresql-contrib
 ```
-* NodeJS
-if nvm(Node Version Manager)  is not installed:
+* NodeJS  
+if nvm(Node Version Manager)  is not installed:  
 using cURL:
 ```sh
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh | bash
