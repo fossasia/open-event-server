@@ -1,0 +1,67 @@
+{
+  "kind": "Deployment",
+  "apiVersion": "extensions/v1beta1",
+  "metadata": {
+    "name": "web",
+    "creationTimestamp": null
+  },
+  "spec": {
+    "replicas": 1,
+    "template": {
+      "metadata": {
+        "creationTimestamp": null,
+        "labels": {
+          "service": "web"
+        }
+      },
+      "spec": {
+        "volumes": [
+          {
+            "name": "openeventorgaserver_storage",
+            "persistentVolumeClaim": {
+              "claimName": "openeventorgaserver_storage"
+            }
+          }
+        ],
+        "containers": [
+          {
+            "name": "web",
+            "ports": [
+              {
+                "containerPort": 5000,
+                "protocol": "TCP"
+              }
+            ],
+            "env": [
+              {
+                "name": "C_FORCE_ROOT",
+                "value": "true"
+              },
+              {
+                "name": "DATABASE_URL",
+                "value": "postgresql://postgres:test@postgres:5432/opev"
+              },
+              {
+                "name": "REDIS_URL",
+                "value": "redis://redis:6379/0"
+              },
+              {
+                "name": "SERVER_NAME"
+              }
+            ],
+            "resources": {},
+            "volumeMounts": [
+              {
+                "name": "opev_storage",
+                "mountPath": "/open_event/static"
+              }
+            ]
+          }
+        ],
+        "restartPolicy": "Always"
+      }
+    },
+    "strategy": {}
+  },
+  "status": {}
+}
