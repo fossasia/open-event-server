@@ -1,19 +1,19 @@
 {
-  "kind": "PersistentVolumeClaim",
-  "apiVersion": "v1",
-  "metadata": {
-    "name": "opev_redis",
-    "creationTimestamp": null
-  },
-  "spec": {
-    "accessModes": [
-      "ReadWriteOnce"
-    ],
-    "resources": {
-      "requests": {
-        "storage": "100Mi"
-      }
-    }
-  },
-  "status": {}
+    "kind": "PersistentVolumeClaim",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "redis-0",
+        "creationTimestamp": null
+    },
+    "spec": {
+        "accessModes": [
+            "ReadWriteOnce"
+        ],
+        "resources": {
+            "requests": {
+                "storage": "100Mi"
+            }
+        }
+    },
+    "status": {}
 }

@@ -17,15 +17,16 @@
       "spec": {
         "volumes": [
           {
-            "name": "openeventorgaserver_storage",
+            "name": "storage-0",
             "persistentVolumeClaim": {
-              "claimName": "openeventorgaserver_storage"
+              "claimName": "storage-0"
             }
           }
         ],
         "containers": [
           {
             "name": "web",
+            "image": "python:2-slim",
             "ports": [
               {
                 "containerPort": 5000,
@@ -52,8 +53,8 @@
             "resources": {},
             "volumeMounts": [
               {
-                "name": "opev_storage",
-                "mountPath": "/open_event/static"
+                "name": "storage-0",
+                "mountPath": "/data/open_event/static"
               }
             ]
           }

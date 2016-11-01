@@ -17,9 +17,9 @@
       "spec": {
         "volumes": [
           {
-            "name": "data-claim0",
+            "name": "data-0",
             "persistentVolumeClaim": {
-              "claimName": "data-claim0"
+              "claimName": "data-0"
             }
           }
         ],
@@ -40,7 +40,7 @@
             "resources": {},
             "volumeMounts": [
               {
-                "name": "data-claim0",
+                "name": "data-0",
                 "mountPath": "/var/lib/postgresql"
               }
             ]

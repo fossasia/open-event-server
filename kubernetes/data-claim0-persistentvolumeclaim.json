@@ -2,7 +2,7 @@
   "kind": "PersistentVolumeClaim",
   "apiVersion": "v1",
   "metadata": {
-    "name": "data-claim0",
+    "name": "data-0",
     "creationTimestamp": null
   },
   "spec": {

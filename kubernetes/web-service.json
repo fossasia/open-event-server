@@ -1,27 +1,28 @@
 {
-  "kind": "Service",
-  "apiVersion": "v1",
-  "metadata": {
-    "name": "web",
-    "creationTimestamp": null,
-    "labels": {
-      "service": "web"
+    "kind": "Service",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "web",
+        "creationTimestamp": null,
+        "labels": {
+            "service": "web"
+        }
+    },
+    "spec": {
+        "ports": [
+            {
+                "name": "80",
+                "protocol": "TCP",
+                "port": 80,
+                "targetPort": 5000
+            }
+        ],
+        "selector": {
+            "service": "web"
+        },
+        "type": "LoadBalancer"
+    },
+    "status": {
+        "loadBalancer": {}
     }
-  },
-  "spec": {
-    "ports": [
-      {
-        "name": "80",
-        "protocol": "TCP",
-        "port": 80,
-        "targetPort": 5000
-      }
-    ],
-    "selector": {
-      "service": "web"
-    }
-  },
-  "status": {
-    "loadBalancer": {}
-  }
 }
