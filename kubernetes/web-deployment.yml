@@ -1,0 +1,32 @@
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: web
+  creationTimestamp:
+spec:
+  replicas: 1
+  template:
+    metadata:
+      creationTimestamp:
+      labels:
+        service: web
+    spec:
+      containers:
+      - name: web
+        image: python:2-slim
+        command: ["/bin/sh","-c"]
+        args: ["./kubernetes/run.sh"]
+        ports:
+        - containerPort: 5000
+          protocol: TCP
+        env:
+        - name: C_FORCE_ROOT
+          value: 'true'
+        - name: DATABASE_URL
+          value: postgresql://postgres:test@postgres:5432/opev
+        - name: REDIS_URL
+          value: redis://redis:6379/0
+        - name: SERVER_NAME
+        resources: {}
+      restartPolicy: Always
