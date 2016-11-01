@@ -112,7 +112,7 @@ EVENT_TOPICS = {
         "Opera", "Other", "Pop", "R&B", "Reggae", "Religious/Spiritual", "Rock",
         "Top 40"
     ],
-    'Other': [],
+    'Other': ["Avatar"],
     'Performing & Visual Arts': [
         "Ballet", "Comedy", "Craft", "Dance", "Fine Art", "Literary Arts",
         "Musical", "Opera", "Orchestra", "Other", "Theatre"
@@ -386,4 +386,5 @@ DEFAULT_EVENT_IMAGES = {
     "Kayaking": 'travel.jpg',
     "Rafting": 'travel.jpg',
     "Travel": 'travel.jpg',
+    "Avatar": 'avatar.png'
 }
