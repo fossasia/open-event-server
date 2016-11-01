@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: web
-        image: python:2-slim
+        image: gcr.io/$PROJECT_ID/opev:v1
         command: ["/bin/sh","-c"]
         args: ["./kubernetes/run.sh"]
         ports:
