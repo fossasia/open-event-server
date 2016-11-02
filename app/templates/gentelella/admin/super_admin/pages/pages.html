@@ -2,8 +2,8 @@
 
     <div class="row">
         <div class="col-md-4">
-            <h3 class="pull-left">{{_('Pages')}}</h3>
-            <button class="btn btn-info pull-right" style="color: #FFFFFF; margin: 0;" data-toggle="modal" data-target="#importModal">{{_('Create Page')}}</button><div style="clear:both"></div>
+            <h3 class="pull-left">{{_("Pages")}}</h3>
+            <button class="btn btn-info pull-right" style="color: #FFFFFF; margin: 0;" data-toggle="modal" data-target="#importModal">{{_("Create Page")}}</button><div style="clear:both"></div>
             <h4>Use Open Event:</h4>
             <ul class="list-group">
                 {% for page in pages %}
@@ -19,7 +19,7 @@
                     {% endif %}
                 {% endfor %}
             </ul>
-            <h4>{{_('Footer Menu')}}:</h4>
+            <h4>{{_("Footer Menu")}}:</h4>
             <ul class="list-group">
                 {% for page in pages %}
                     {% if page.place == 'footer_menu'%}
@@ -39,11 +39,11 @@
             {% if current_page %}
             <form class="admin-form form-horizontal" action="/admin/content/pages/{{current_page.id}}" method="POST">
                 <div class="item form-group">
-                    <label>{{_('NAME')}}</label>
+                    <label>{{_("NAME")}}</label>
                     <input type="text" class="form-control col-md-7 col-xs-12" name="name" value="{{current_page.name}}"/>
                 </div>
                 <div class="item form-group">
-                    <label>{{_('TITLE')}}</label>
+                    <label>{{_("TITLE")}}</label>
                     <input type="text" class="form-control col-md-7 col-xs-12" name="title" value="{{current_page.title}}"/>
                 </div>
                 <div class="item form-group">
@@ -51,29 +51,29 @@
                     <input type="text" class="form-control col-md-7 col-xs-12" name="url" value="{{current_page.url}}" placeholder="/example or http://example.com"/>
                 </div>
                 <div class="item form-group">
-                    <label>{{_('DESCRIPTION')}}</label>
+                    <label>{{_("DESCRIPTION")}}</label>
                     <textarea type="text" class="form-control col-md-7 col-xs-12 rich-area" name="description">{{current_page.description}}</textarea>
                 </div>
                 <div class="item form-group">
-                    <label>{{_('PLACE')}}</label>
+                    <label>{{_("PLACE")}}</label>
                     <select type="text" class="form-control col-md-7 col-xs-12" name="place" value="{{current_page.place}}">
-                        <option value="use_open_event">{{_('Use Open Even')}}t</option>
-                        <option value="footer_menu">{{_('Footer Menu')}}</option>
+                        <option value="use_open_event">{{_("Use Open Even")}}t</option>
+                        <option value="footer_menu">{{_("Footer Menu")}}</option>
                     </select>
                 </div>
                 <div class="item form-group">
-                    <label>{{_('POSITION')}}</label>
+                    <label>{{_("POSITION")}}</label>
                     <input type="number" class="form-control col-md-7 col-xs-12" name="index" value="{{ current_page.index if current_page.index else '0' }}" />
                 </div>
                 <div class="item form-group">
-                    <label>{{_('LANGUAGE')}}</label>
+                    <label>{{_("LANGUAGE")}}</label>
                     <select  class="form-control col-md-7 col-xs-12" name="language">
                     {% for code in all_languages %}
                         <option value='{{code}}' {% if (current_page.language and current_page.language == code) or (not current_page.language and code == 'en') %}selected{% endif %}>{{all_languages[code]}}</option>
                     {% endfor %}
                     </select>
                 </div>
-                <button class="btn btn-success">{{_('Update')}}</button>
+                <button class="btn btn-success">{{_("Update")}}</button>
             </form>
             {% endif %}
         </div>

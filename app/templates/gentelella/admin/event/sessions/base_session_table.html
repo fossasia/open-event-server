@@ -1,7 +1,7 @@
 {% extends 'gentelella/admin/event/event_base.html' %}
 
 {% block title %}
-    {{ event.name }} - {{_('Sessions')}}
+    {{ event.name }} - {{_("Sessions")}}
 {% endblock %}
 
 {% block head_css %}
@@ -34,21 +34,21 @@
             <div id="toolbar-holder" style="display: none;">
                 <div class="btn-group pull-left" data-toggle="buttons">
                     <label class="btn btn-default active btn-responsive">
-                        <input type="radio" name="show_state" autocomplete="off" value="all" checked> {{_('All')}}
+                        <input type="radio" name="show_state" autocomplete="off" value="all" checked> {{_("All")}}
                     </label>
                     <label class="btn btn-default btn-responsive">
-                        <input type="radio" name="show_state" autocomplete="off" value="pending"> {{_('Pending')}}
+                        <input type="radio" name="show_state" autocomplete="off" value="pending"> {{_("Pending")}}
                     </label>
                     <label class="btn btn-default btn-responsive">
-                        <input type="radio" name="show_state" autocomplete="off" value="accepted"> {{_('Accepted')}}
+                        <input type="radio" name="show_state" autocomplete="off" value="accepted"> {{_("Accepted")}}
                     </label>
                     <label class="btn btn-default btn-responsive">
-                        <input type="radio" name="show_state" autocomplete="off" value="rejected"> {{_('Rejected')}}
+                        <input type="radio" name="show_state" autocomplete="off" value="rejected"> {{_("Rejected")}}
                     </label>
                 </div>
                 <div class="btn-group pull-left" style="margin-left: 5px; margin-right: 10px;">
                     <a class="btn btn-info btn-responsive" href="{{ get_url('event_sessions.create_view', event_id=event_id) }}">
-                        {{_('Create Session')}}
+                        {{_("Create Session")}}
                     </a>
                 </div>
             </div>
@@ -57,14 +57,14 @@
             <table class="table table-striped table-hover with-datatable">
                 <thead>
                 <tr>
-                    <th>{{_('State')}}</th>
-                    <th>{{_('Title')}}</th>
-                    <th>{{_('Speakers')}}</th>
-                    <th>{{_('Track')}}</th>
-                    <th>{{_('Short Abstract')}}</th>
-                    <th>{{_('Submission Date')}}</th>
-                    <th>{{_('Last Changed Date')}}</th>
-                    <th>{{_('Email Sent')}}</th>
+                    <th>{{_("State")}}</th>
+                    <th>{{_("Title")}}</th>
+                    <th>{{_("Speakers")}}</th>
+                    <th>{{_("Track")}}</th>
+                    <th>{{_("Short Abstract")}}</th>
+                    <th>{{_("Submission Date")}}</th>
+                    <th>{{_("Last Changed Date")}}</th>
+                    <th>{{_("Email Sent")}}</th>
                     <th></th>
                     <th></th>
                 </tr>

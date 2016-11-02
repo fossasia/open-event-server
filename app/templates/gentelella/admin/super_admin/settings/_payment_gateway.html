@@ -1,88 +1,88 @@
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
     <form id="settings_form" method="post" class="form-horizontal form-label-left">
-<h4>{{_('Stripe Keys')}}</h4>
-        See <a href="https://stripe.com/docs/dashboard">{{_('here')}}</a> {{_('on how to obtain these keys')}}.<br><br>
+<h4>{{_("Stripe Keys")}}</h4>
+        See <a href="https://stripe.com/docs/dashboard">{{_("here")}}</a> {{_("on how to obtain these keys")}}.<br><br>
         <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_('Client')}} ID</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_("Client")}} ID</label>
             <div class=" col-md-9 col-xs-12">
                 <input name="stripe_client_id" class="form-control col-md-6 col-xs-6"
                        value="{{ settings.stripe_client_id|default('', True) }}">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_('Secret Key')}}</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_("Secret Key")}}</label>
             <div class=" col-md-9 col-xs-12">
                 <input name="stripe_secret_key" class="form-control col-md-6 col-xs-6"
                        value="{{ settings.stripe_secret_key|default('', True) }}">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_('Publishable Key')}}</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_("Publishable Key")}}</label>
             <div class=" col-md-9 col-xs-12">
                 <input name="stripe_publishable_key" class="form-control col-md-6 col-xs-6"
                        value="{{ settings.stripe_publishable_key|default('', True) }}">
             </div>
         </div>
         <br>
-        <h4>PayPal {{_('Credentials')}}</h4>
-        {{_('See')}} <a
-            href="https://developer.paypal.com/docs/classic/express-checkout/integration-guide/ECAPICredentials/?mark=lifecycle%20credentials">{{_('here')}}</a>
-        {{_('on how to obtain these credentials')}}.<br><br>
+        <h4>PayPal {{_("Credentials")}}</h4>
+        {{_("See")}} <a
+            href="https://developer.paypal.com/docs/classic/express-checkout/integration-guide/ECAPICredentials/?mark=lifecycle%20credentials">{{_("here")}}</a>
+        {{_("on how to obtain these credentials")}}.<br><br>
         <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">PayPal {{_('Integration')}}{{_(' Mod')}}{{_('e')}}</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">PayPal {{_("Integration")}}{{_(" Mod")}}{{_("e")}}</label>
             <div class=" col-md-9 col-xs-12">
                 <div class="radio">
                     <label>
                         <input type="radio" name="paypal_mode" id="paypal_mode_sandbox" value="sandbox" {% if settings.paypal_mode == "sandbox" %}checked{% endif %}>
-                        {{_('Sandbox')}} {{_('mode')}} - {{_('Used during development and testing')}}
+                        {{_("Sandbox")}} {{_("mode")}} - {{_("Used during development and testing")}}
                     </label>
                 </div>
                 <div class="radio">
                     <label>
                         <input type="radio" name="paypal_mode" id="paypal_mode_live" value="live" {% if settings.paypal_mode == "live" %}checked{% endif %}>
-                        {{_('Live mode - Used during production')}}
+                        {{_("Live mode - Used during production")}}
                     </label>
                 </div>
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_('Sandbox username')}}</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_("Sandbox username")}}</label>
             <div class=" col-md-9 col-xs-12">
                 <input name="paypal_sandbox_username" class="form-control col-md-6 col-xs-6"
                        value="{{ settings.paypal_sandbox_username|default('', True) }}">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_('Sandbox password')}}</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_("Sandbox password")}}</label>
             <div class=" col-md-9 col-xs-12">
                 <input name="paypal_sandbox_password" class="form-control col-md-6 col-xs-6"
                        value="{{ settings.paypal_sandbox_password|default('', True) }}">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_('Sandbox signature')}}</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_("Sandbox signature")}}</label>
             <div class=" col-md-9 col-xs-12">
                 <input name="paypal_sandbox_signature" class="form-control col-md-6 col-xs-6"
                        value="{{ settings.paypal_sandbox_signature|default('', True) }}">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_('Live username')}}</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_("Live username")}}</label>
             <div class=" col-md-9 col-xs-12">
                 <input name="paypal_live_username" class="form-control col-md-6 col-xs-6"
                        value="{{ settings.paypal_live_username|default('', True) }}">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_('Live password')}}</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_("Live password")}}</label>
             <div class=" col-md-9 col-xs-12">
                 <input name="paypal_live_password" class="form-control col-md-6 col-xs-6"
                        value="{{ settings.paypal_live_password|default('', True) }}">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_('Live signature')}}</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_("Live signature")}}</label>
             <div class=" col-md-9 col-xs-12">
                 <input name="paypal_live_signature" class="form-control col-md-6 col-xs-6"
                        value="{{ settings.paypal_live_signature|default('', True) }}">
@@ -90,7 +90,7 @@
         </div>
         <div class="ln_solid"></div>
         <div class="form-group">
-            <button type="submit" class="btn btn-success pull-right">{{_('Save')}}</button>
+            <button type="submit" class="btn btn-success pull-right">{{_("Save")}}</button>
         </div>
     </form>
   </div>

@@ -7,8 +7,8 @@ function open_page(page){
 
 <div class="swagger-login">
 {% if user.email %}
-    <span class="gray">{{_('Logged in as')}}</span> <span class="handle">{{ user.email }}</span>
+    <span class="gray">{{_("Logged in as")}}</span> <span class="handle">{{ user.email }}</span>
 {% else %}
-    <a href="javascript:open_page('login');">{{_('Login')}}</a> | <a href="javascript:open_page('register');">{{_('Register')}}</a>
+    <a href="javascript:open_page('login');">Login</a> | <a href="javascript:open_page('register');">{{_("Register")}}</a>
 {% endif %}
 </div>

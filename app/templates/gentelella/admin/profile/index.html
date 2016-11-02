@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/Croppie/croppie.css') }}"/>
 <div class="page-title col-md-offset-1" style="width: auto;">
     <div class="title_left">
-        <h3>{{_('Profile')}}</h3>
+        <h3>{{_("Profile")}}</h3>
     </div>
 </div>
 <div class="clearfix"></div>
@@ -33,11 +33,11 @@
                                        accept="image/*"/>
                                 <label class="file-label" for="event-image-upload" id="event-image-upload-label">
                                     <i class="fa fa-4x fa-camera-retro" aria-hidden="true"></i> <br>
-                                    <h3>{{_('Select Avatar')}}</h3>
+                                    <h3>{{_("Select Avatar")}}</h3>
                                 </label><br>
                             </div>
                             <span class="text-muted" style="color: #a2a2a2;">
-                                {{_('Avatar size must be less than 1MB')}}.
+                                {{_("Avatar size must be less than 1MB")}}.
                             </span>
                         </div>
 
@@ -48,12 +48,12 @@
                                 <button type="button" class="btn btn-sm btn-default" data-target="#cropper-modal"
                                         data-toggle="modal">
                                     <i class="fa fa-arrows" aria-hidden="true"></i>
-                                    {{_('Adjust')}}
+                                    {{_("Adjust")}}
                                 </button>
                             {% endif %}
                             <button type="button" class="btn btn-sm btn-default" id="remove-image-btn">
                                 <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                {{_('Remove')}}
+                                {{_("Remove")}}
                             </button>
                             <br>
                         </div>
@@ -112,7 +112,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">{{_('Crop your image')}}</h4>
+                <h4 class="modal-title">{{_("Crop your image")}}</h4>
             </div>
             <div class="modal-body">
                 <div id="upload-cropper">
@@ -121,8 +121,8 @@
             </div>
             <div class="modal-footer">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{{_('Cancel')}}</button>
-                    <button type="button" id="save-crop" class="btn btn-success">{{_('Done')}}</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{_("Cancel")}}</button>
+                    <button type="button" id="save-crop" class="btn btn-success">{{_("Done")}}</button>
                 </div>
 
             </div>

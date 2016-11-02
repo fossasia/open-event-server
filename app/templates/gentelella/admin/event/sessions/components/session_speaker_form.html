@@ -6,14 +6,14 @@
     {% endif %}
     <div class="row">
         <div class="col-md-8 col-sm-8 col-xs-12 col-md-offset-2 col-sm-offset-2 session_form" style="margin-right: 25px;">
-            <h4>{{_('Session Details')}}</h4>
+            <h4>{{_("Session Details")}}</h4>
             {% for elem in _session_component.session_fields %}
                 {% if session_form[elem].include==1 %}
                     {{ _session_component.session_form_field(elem, session_form[elem].require) }}
                 {% endif %}
             {% endfor %}
            {# <div class="item form-group">
-                <label>{{_('Choose from existing speakers')}}</label>
+                <label>{{_("Choose from existing speakers")}}</label>
                 <select multiple="multiple" id="speakers" name="speakers[]">
                     {% for existing_speaker in speakers %}
                         <option value="{{ existing_speaker.id }}" {% if session and existing_speaker in session.speaker %}selected{% endif %}
@@ -25,7 +25,7 @@
             </div>#}
         </div>
         <div class="col-md-8 col-sm-8 col-xs-12 col-md-offset-2 col-sm-offset-2 speaker_form">
-            <hr><h4>{{_('Speaker Details')}}</h4>
+            <hr><h4>{{_("Speaker Details")}}</h4>
             {% for elem in _speaker_component.speaker_fields %}
                 {% if speaker_form[elem].include==1 %}
                     {{ _speaker_component.speaker_form_field(elem, speaker_form[elem].require) }}
@@ -33,9 +33,9 @@
             {% endfor %}
             <div class="speakers">
                 <hr>
-                <br><h4>{{_('Invite Speakers')}}</h4>
+                <br><h4>{{_("Invite Speakers")}}</h4>
                 <div class="item form-group">
-                    <label class="control-label">{{_('Email')}} </label>
+                    <label class="control-label">{{_("Email")}} </label>
                     <div class="">
                         <input type="email" class="form-control col-md-7 col-sm-7" name="speakers[email]"
                                placeholder="Email Address of Speaker" style="width:60%;">
@@ -52,8 +52,8 @@
     </div>
     <div class="row">
         <div style="text-align: center;">
-            <button type="submit" class="btn btn-primary" name="state" value="draft">{{_('Save as Draft')}}</button>
-            <button type="submit" class="btn btn-success" name="state" value="pending">{{_('Submit Session')}}</button>
+            <button type="submit" class="btn btn-primary" name="state" value="draft">{{_("Save as Draft")}}</button>
+            <button type="submit" class="btn btn-success" name="state" value="pending">{{_("Submit Session")}}</button>
         </div>
     </div>
 </form>

@@ -2,13 +2,13 @@
     <div class="col-md-10 col-sm-10 col-xs-12">
         <div class="panel panel-default">
             <div class="panel-heading" style="background-color: #ffffff;">
-                <h3 class="panel-title">{{_('Ticket Information')}}</h3>
+                <h3 class="panel-title">{{_("Ticket Information")}}</h3>
             </div>
             <div class="panel-body">
-                <a class="btn btn-success" href="{{ event.ticket_url }}">{{_('Click to order tickets')}}</a>
+                <a class="btn btn-success" href="{{ event.ticket_url }}">{{_("Click to order tickets")}}</a>
                 <br><br>
                 <span style="color: #adadad;">
-                    {{_('You will be taken to')}} {{ event.ticket_url }} {{_('to complete the purchase of the tickets')}}
+                    {{_("You will be taken to")}} {{ event.ticket_url }} {{_("to complete the purchase of the tickets")}}
                 </span>
             </div>
         </div>
@@ -20,18 +20,18 @@
             <input type="hidden" name="event_id" value="{{ event.id }}">
             <div class="panel panel-default">
                 <div class="panel-heading" style="background-color: #ffffff;">
-                    <h3 class="panel-title">{{_('Ticket Information')}}</h3>
+                    <h3 class="panel-title">{{_("Ticket Information")}}</h3>
                 </div>
                 <div class="panel-body" style="padding-bottom: 10px;overflow-x: auto;overflow-y: hidden;">
                     <table class="table" style="margin-bottom: 0;">
                         <thead>
                         <tr>
-                            <th>{{_('Ticket type')}}</th>
-                            <th>{{_('Sales ends')}}</th>
-                            <th>{{_('Price')}}</th>
-                            <th>{{_('Fee')}}</th>
-                            <th>{{_('Quantity')}}</th>
-                            <th>{{_('Subtotal')}}</th>
+                            <th>{{_("Ticket type")}}</th>
+                            <th>{{_("Sales ends")}}</th>
+                            <th>{{_("Price")}}</th>
+                            <th>{{_("Fee")}}</th>
+                            <th>{{_("Quantity")}}</th>
+                            <th>{{_("Subtotal")}}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -66,10 +66,10 @@
                                             {{ event.payment_currency | currency_symbol }}{{ 0 | money }}</td>
                                     {% else %}
                                         {% if ticket.sales_end < datetime_now %}
-                                            <td colspan="2" style="color: #adadad;">{{_('This ticket's sale has ended')}}</td>
+                                            <td colspan="2" style="color: #adadad;">{{_("This ticket's sale has ended")}}</td>
                                         {% elif ticket.sales_start >= datetime_now %}
-                                            <td colspan="2" style="color: #adadad;">{{_('This ticket's sale will start')}}
-                                                {{_('on')}} {{ ticket.sales_start | datetime }}</td>
+                                            <td colspan="2" style="color: #adadad;">{{_("This ticket's sale will start")}}
+                                                {{_("on")}} {{ ticket.sales_start | datetime }}</td>
                                         {% endif %}
                                     {% endif %}
                                 </tr>
@@ -78,7 +78,7 @@
                                 <tr>
                                     <td colspan="5" class="text-right">
                                         <div style="font-weight: 300; font-size: 16px;line-height: 39px;text-transform: uppercase;">
-                                            {{_('Total')}}
+                                            {{_("Total")}}
                                         </div>
                                     </td>
                                     <td>
@@ -94,7 +94,7 @@
                         {% else %}
                             <tr>
                                 <td colspan="5" style="text-align: center">
-                                    {{_('No tickets available right now.')}}
+                                    {{_("No tickets available right now.")}}
                                 </td>
                             </tr>
                         {% endfor %}
@@ -102,7 +102,7 @@
                     </table>
                     <hr style="margin-top: 0;margin-bottom: 10px;">
                     <div class="" style="width: 100%; text-align: right;">
-                        <a href="#" class="promo-code-open" style="color: #2aa9dd;">{{_('Enter promotional code')}}</a>
+                        <a href="#" class="promo-code-open" style="color: #2aa9dd;">{{_("Enter promotional code")}}</a>
                         <div class="col-md-5 pull-right promo-code-box" style="padding-right:0;display:none;">
                             <div class="input-group" style="margin-bottom: 0;">
                                 <input type="text" name="promo_code" class="form-control" placeholder="Promotional code"

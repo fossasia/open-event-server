@@ -1,6 +1,6 @@
 {% extends 'gentelella/admin/event/event_base.html' %}
 {% block title %}
-    {{_('Edit Session')}} - {{ event.name }}
+    {{_("Edit Session")}} - {{ event.name }}
 {% endblock %}
 
 {% set active_page = "sessions" %}
@@ -17,7 +17,7 @@
 
         <div class="col-md-12">
             <div style="text-align: center">
-                <h3>{{_('Edit Session')}}</h3>
+                <h3>{{_("Edit Session")}}</h3>
             </div>
             {% include 'gentelella/admin/event/sessions/components/session_form.html' %}
         </div>

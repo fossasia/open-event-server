@@ -78,18 +78,18 @@
         <ul class="nav nav-pills review-menu mobile">
             <li {% if active_page == 'info' %}class="active"{% endif %} id="info-menu"><a href="/e/{{ event.identifier }}/#info">Info</a></li>
             {% if accepted_sessions[0] %}
-                <li {% if active_page == 'sessions' %}class="active"{% endif %}><a href="/e/{{ event.identifier }}/sessions">{{_('Sessions')}}</a>
+                <li {% if active_page == 'sessions' %}class="active"{% endif %}><a href="/e/{{ event.identifier }}/sessions">{{_("Sessions")}}</a>
                 </li>
             {% endif %}
             {% if call_for_speakers and call_for_speakers.privacy == 'public' %}
-                <li {% if active_page == 'cfs' %}class="active"{% endif %}><a href="/e/{{ event.identifier }}/cfs">{{_('Call for speakers')}}</a></li>
+                <li {% if active_page == 'cfs' %}class="active"{% endif %}><a href="/e/{{ event.identifier }}/cfs">{{_("Call for speakers")}}</a></li>
             {% endif %}
             {% if event.schedule_published_on %}
-                <li {% if active_page == 'schedule' %}class="active"{% endif %}><a href="/e/{{ event.identifier }}/schedule">{{_('Schedule')}}</a>
+                <li {% if active_page == 'schedule' %}class="active"{% endif %}><a href="/e/{{ event.identifier }}/schedule">{{_("Schedule")}}</a>
                 </li>
             {% endif %}
             {% if event.code_of_conduct and event.code_of_conduct != '' and event.code_of_conduct != ' ' %}
-                <li {% if active_page == 'coc' %}class="active"{% endif %}><a href="/e/{{ event.identifier }}/coc">{{_('Code of Conduct')}}</a></li>
+                <li {% if active_page == 'coc' %}class="active"{% endif %}><a href="/e/{{ event.identifier }}/coc">{{_("Code of Conduct")}}</a></li>
             {% endif %}
         </ul>
     </div>
@@ -97,31 +97,31 @@
         <ul class="nav nav-pills nav-stacked preview-menu">
             <li {% if active_page == 'info' %}class="active"{% endif %} id="info-menu"><a href="/e/{{ event.identifier }}/#info">Info</a></li>
             {% if accepted_sessions[0] %}
-                <li id="speakers-menu"><a href="/e/{{ event.identifier }}/#speakers">{{_('Speakers')}}</a></li>
+                <li id="speakers-menu"><a href="/e/{{ event.identifier }}/#speakers">{{_("Speakers")}}</a></li>
             {% endif %}
             {% if event.sponsor[0] %}
-                <li id="sponsors-menu"><a href="/e/{{ event.identifier }}/#sponsors">{{_('Sponsors')}}</a></li>
+                <li id="sponsors-menu"><a href="/e/{{ event.identifier }}/#sponsors">{{_("Sponsors")}}</a></li>
             {% endif %}
             {% if accepted_sessions[0] %}
-                <li {% if active_page == 'sessions' %}class="active"{% endif %}><a href="/e/{{ event.identifier }}/sessions">{{_('Sessions')}}</a>
+                <li {% if active_page == 'sessions' %}class="active"{% endif %}><a href="/e/{{ event.identifier }}/sessions">{{_("Sessions")}}</a>
                 </li>
             {% endif %}
             {% if call_for_speakers and call_for_speakers.privacy == 'public' %}
-                <li {% if active_page == 'cfs' %}class="active"{% endif %}><a href="/e/{{ event.identifier }}/cfs">{{_('Call for speakers')}}</a></li>
+                <li {% if active_page == 'cfs' %}class="active"{% endif %}><a href="/e/{{ event.identifier }}/cfs">{{_("Call for speakers")}}</a></li>
             {% endif %}
             {% if event.schedule_published_on %}
-                <li {% if active_page == 'schedule' %}class="active"{% endif %}><a href="/e/{{ event.identifier }}/schedule">{{_('Schedule')}}</a>
+                <li {% if active_page == 'schedule' %}class="active"{% endif %}><a href="/e/{{ event.identifier }}/schedule">{{_("Schedule")}}</a>
                 </li>
             {% endif %}
             {% if event.organizer_name %}
-                <li id="organizer-menu"><a href="/e/{{ event.identifier }}/#organizer">{{_('Organizer')}}</a></li>
+                <li id="organizer-menu"><a href="/e/{{ event.identifier }}/#organizer">{{_("Organizer")}}</a></li>
             {% endif %}
             {% if event.location_name %}
-                <li id="getting-here-menu"><a href="/e/{{ event.identifier }}/#getting-here">{{_('Getting Here')}}</a></li>
+                <li id="getting-here-menu"><a href="/e/{{ event.identifier }}/#getting-here">{{_("Getting Here")}}</a></li>
             {% endif %}
             {% if event.code_of_conduct and event.code_of_conduct != '' and event.code_of_conduct != ' ' %}
-                <li {% if active_page == 'coc' %}class="active"{% endif %}><a href="/e/{{ event.identifier }}/coc">{{_('Code of')}}
-                    {{_('Conduct')}}</a></li>
+                <li {% if active_page == 'coc' %}class="active"{% endif %}><a href="/e/{{ event.identifier }}/coc">{{_("Code of")}}
+                    {{_("Conduct")}}</a></li>
             {% endif %}
         </ul>
     </div>

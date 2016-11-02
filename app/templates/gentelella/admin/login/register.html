@@ -3,7 +3,7 @@
 {% block register %}
 <div class="login_content">
   <form data-toggle="validator" method="post">
-    <h1>{{_('Registration Form')}}</h1>
+    <h1>{{_("Registration Form")}}</h1>
     <div class="form-group has-feedback">
       <input type="email" name="email" class="form-control" id="email" placeholder="Email" data-remote="{{ url_for('admin.check_duplicate_email') }}" data-remote-error="Email Address already exists" required="">
       <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
@@ -14,12 +14,12 @@
         <div class="help-block with-errors"></div>
       </div>
     <div>
-         <button type="submit" class="btn btn-default">{{_('Submit')}}</button>
+         <button type="submit" class="btn btn-default">{{_("Submit")}}</button>
     </div>
 
      <div class="separator">
-        <p class="change_link">{{_('Already a member')}} ?
-          <a href="/login" class="to_register"> {{_('Log in')}} </a>
+        <p class="change_link">{{_("Already a member")}} ?
+          <a href="/login" class="to_register"> {{_("Log in")}} </a>
         </p>
 
         <div class="clearfix"></div>

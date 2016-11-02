@@ -1,7 +1,7 @@
 {% extends 'gentelella/admin/event/event_base.html' %}
 
 {% block title %}
-    {{ event.name }} - {{_('Speakers')}}
+    {{ event.name }} - {{_("Speakers")}}
 {% endblock %}
 
 {% block head_css %}
@@ -53,20 +53,20 @@
             <div id="toolbar-holder" style="display: none;">
                 <div class="btn-group pull-left" data-toggle="buttons" style="margin-left: 5px; margin-right: 10px;">
                     <label class="btn btn-default btn-responsive active">
-                        <input type="radio" name="show_state" autocomplete="off" value="all" checked> {{_('All')}}
+                        <input type="radio" name="show_state" autocomplete="off" value="all" checked> {{_("All")}}
                     </label>
                     <label class="btn btn-default btn-responsive">
-                        <input type="radio" name="show_state" autocomplete="off" value="pending"> {{_('Pending')}}
+                        <input type="radio" name="show_state" autocomplete="off" value="pending"> {{_("Pending")}}
                     </label>
                     <label class="btn btn-default btn-responsive">
-                        <input type="radio" name="show_state" autocomplete="off" value="accepted"> {{_('Accepted')}}
+                        <input type="radio" name="show_state" autocomplete="off" value="accepted"> {{_("Accepted")}}
                     </label>
                     <label class="btn btn-default btn-responsive">
-                        <input type="radio" name="show_state" autocomplete="off" value="rejected"> {{_('Rejected')}}
+                        <input type="radio" name="show_state" autocomplete="off" value="rejected"> {{_("Rejected")}}
                     </label>
                 </div>
                 <div class="btn-group pull-left btn-responsive" style="margin-left: 5px; margin-right: 10px;">
-                    <a href="{{ url_for('event_sessions.create_view', event_id=event_id) }}?from=speaker" class="btn btn-info">{{_('Add Speaker')}}</a>
+                    <a href="{{ url_for('event_sessions.create_view', event_id=event_id) }}?from=speaker" class="btn btn-info">{{_("Add Speaker")}}</a>
                 </div>
 
             </div>
@@ -76,11 +76,11 @@
                 <thead>
                 <tr>
                     <th></th>
-                    <th>{{_('Name')}}</th>
-                    <th>{{_('Email')}}</th>
-                    <th>{{_('Phone')}}</th>
-                    <th>{{_('Submitted Sessions')}}</th>
-                    <th>{{_('State')}}</th>
+                    <th>{{_("Name")}}</th>
+                    <th>{{_("Email")}}</th>
+                    <th>{{_("Phone")}}</th>
+                    <th>{{_("Submitted Sessions")}}</th>
+                    <th>{{_("State")}}</th>
                     <th></th>
                 </tr>
                 </thead>

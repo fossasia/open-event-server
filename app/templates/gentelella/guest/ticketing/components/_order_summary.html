@@ -1,17 +1,17 @@
 <div id="order-summary-holder">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">{{_('Order Summary')}}</h3>
+            <h3 class="panel-title">{{_("Order Summary")}}</h3>
         </div>
         <div class="panel-body" style="padding-bottom: 10px;">
             <table class="table" style="margin-bottom: 0;">
                 <thead>
                 <tr>
-                    <th align="left">{{_('Ticket type')}}</th>
-                    <th align="left">{{_('Price')}}</th>
-                    <th align="left">{{_('Fee')}}</th>
-                    <th align="left">{{_('Quantity')}}</th>
-                    <th align="left">{{_('Subtotal')}}</th>
+                    <th align="left">{{_("Ticket type")}}</th>
+                    <th align="left">{{_("Price")}}</th>
+                    <th align="left">{{_("Fee")}}</th>
+                    <th align="left">{{_("Quantity")}}</th>
+                    <th align="left">{{_("Subtotal")}}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -32,13 +32,13 @@
                 {% else %}
                     <tr>
                         <td colspan="5" style="text-align: center">
-                            {{_('No tickets selected.')}}
+                            {{_("No tickets selected.")}}
                         </td>
                     </tr>
                 {% endfor %}
 
                 <tr class="total-row">
-                    <td colspan="4" align="right" class="order-total"><strong>{{_('Order total')}}:</strong></td>
+                    <td colspan="4" align="right" class="order-total"><strong>{{_("Order total")}}:</strong></td>
                     <td><strong>{{ order.event.payment_currency | currency_symbol }}{{ order.amount | money }}</strong></td>
                 </tr>
                 </tbody>

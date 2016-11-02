@@ -54,31 +54,31 @@
             </th>
             {% if path and path == 'promoted-events' %}
                     <th rowspan="2" style="border-left: none !important; border-top: none!important; ">
-                        {{_('Discount Code')}}
+                        {{_("Discount Code")}}
                     </th>
                     <th rowspan="2" style="border-left: none !important; border-top: none!important; ">
-                        {{_('Marketer')}}
+                        {{_("Marketer")}}
                     </th>
             {% endif %}
             <th colspan="2" class="success">
-                {{_('Completed Orders')}}
+                {{_("Completed Orders")}}
             </th>
             <th colspan="2" class="warning">
-                {{_('Pending Orders')}}
+                {{_("Pending Orders")}}
             </th>
         </tr>
         <tr class="active">
             <th>
-                {{_('Tickets')}}
+                {{_("Tickets")}}
             </th>
             <th>
-                {{_('Sales')}}
+                {{_("Sales")}}
             </th>
             <th>
-                {{_('Tickets')}}
+                {{_("Tickets")}}
             </th>
             <th>
-                {{_('Sales')}}
+                {{_("Sales")}}
             </th>
         </tr>
         </thead>
@@ -116,7 +116,7 @@
         <tfoot>
         <tr>
             <th colspan="3">
-                {{_('Total')}}
+                {{_("Total")}}
             </th>
             <th>
                 {{ orders_summary.completed.tickets_count }}

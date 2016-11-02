@@ -13,22 +13,22 @@
         <thead>
         <tr>
             <th>
-                {{_('Invoice')}}#
+                {{_("Invoice")}}#
             </th>
             <th>
-                {{_('Event')}}
+                {{_("Event")}}
             </th>
             <th>
-                {{_('Dated')}}
+                {{_("Dated")}}
             </th>
             <th>
-                {{_('Amount')}}
+                {{_("Amount")}}
             </th>
             <th>
-                {{_('Sent to')}}
+                {{_("Sent to")}}
             </th>
             <th>
-                {{_('Status')}}
+                {{_("Status")}}
             </th>
         </tr>
         </thead>
@@ -56,9 +56,9 @@
                         <span class="label label-success">Paid</span>
                     {% else %}
                         {% if current_date > overdue_date %}
-                            <span class="label label-danger">{{_('Overdue')}}</span>
+                            <span class="label label-danger">{{_("Overdue")}}</span>
                         {% else %}
-                            <span class="label label-success">{{_('Pending')}}</span>
+                            <span class="label label-success">{{_("Pending")}}</span>
                         {% endif %}
                     {% endif %}
                 </th>

@@ -1,6 +1,6 @@
 {% extends 'gentelella/guest/ticketing/order_base.html' %}
 
-{% block title %}{{_('Your Order')}}{% endblock %}
+{% block title %}{{_("Your Order")}}{% endblock %}
 
 {% block head_css %}
     {{ super() }}
@@ -31,10 +31,10 @@
 
 {% block right_addon %}
     <button type="button" class="btn btn-info hidden-print" onclick="window.print();"><i class="fa fa-print fa-fw"></i>
-        {{_('Print Invoice')}}
+        {{_("Print Invoice")}}
     </button>
     <a href="{{ url_for('ticketing.view_order_tickets_after_payment_pdf', order_identifier=order.identifier) }}"
-       class="btn btn-default hidden-print" target="_blank"><i class="fa fa-file-pdf-o fa-fw"></i> {{_('Download Tickets')}}</a>
+       class="btn btn-default hidden-print" target="_blank"><i class="fa fa-file-pdf-o fa-fw"></i> {{_("Download Tickets")}}</a>
 {% endblock %}
 
 {% block tail_js %}
