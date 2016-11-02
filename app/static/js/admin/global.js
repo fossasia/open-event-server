@@ -22,7 +22,7 @@ function imgError(image, transparent) {
     if(transparent) {
         image.src = '/static/img/trans_white.png';
     } else {
-        image.src = '/static/img/avatar.png';
+        image.src = '/static/placeholders/avatar.png';
     }
     return true;
 }
