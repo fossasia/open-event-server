@@ -14,9 +14,9 @@ spec:
     spec:
       containers:
       - name: web
-        image: gcr.io/$PROJECT_ID/opev:v1
+        image: gcr.io/open-event-dev/opev:v2.1
         command: ["/bin/sh","-c"]
-        args: ["./kubernetes/run.sh"]
+        args: ["chmod +x ./kubernetes/run.sh && ./kubernetes/run.sh"]
         ports:
         - containerPort: 5000
           protocol: TCP

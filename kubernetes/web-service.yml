@@ -8,9 +8,9 @@ metadata:
     service: web
 spec:
   ports:
-  - name: '80'
+  - port: 80
+    name: "http"
     protocol: TCP
-    port: 80
     targetPort: 5000
   selector:
     service: web
