@@ -1,7 +1,7 @@
 {% extends 'gentelella/admin/event/event_base.html' %}
 
 {% block title %}
-    {{ event.name }} - Export
+    {{ event.name }} - {{_("Export")}}
 {% endblock %}
 
 {% set active_page = "export" %}
@@ -45,38 +45,38 @@
 {% block content %}
     <div class="row">
         <div class="col-md-5 col-md-push-1">
-            <h3 style="font-weight: 300;">Export and Download Event as zip</h3>
-            <h4 style="font-weight: 300;">Select which media files you want in the zip</h4>
+            <h3 style="font-weight: 300;">{{_("Export and Download Event as zip")}}</h3>
+            <h4 style="font-weight: 300;">{{_("Select which media files you want in the zip")}}</h4>
             <form id="exportForm" style="margin-top:20px;">
                 <div class="checkbox">
                     <input type="checkbox" class="toggle-switch" name="image" id="image">
-                    <label for="image"></label> <span class="checkbox-label">Image</span>
+                    <label for="image"></label> <span class="checkbox-label">{{_("Image")}}</span>
                 </div>
                 <div class="checkbox">
                     <input type="checkbox" class="toggle-switch" name="video" id="video">
-                    <label for="video"></label> <span class="checkbox-label">Video</span>
+                    <label for="video"></label> <span class="checkbox-label">{{_(Video)}}</span>
 
                 </div>
                 <div class="checkbox">
                     <input type="checkbox" class="toggle-switch" name="audio" id="audio">
-                    <label for="audio"></label> <span class="checkbox-label">Audio</span>
+                    <label for="audio"></label> <span class="checkbox-label">{{_("Audio")}}</span>
                 </div>
                 <div class="checkbox">
                     <input type="checkbox" class="toggle-switch" name="document" id="document">
-                    <label for="document"></label> <span class="checkbox-label">Document</span>
+                    <label for="document"></label> <span class="checkbox-label">{{_("Document")}}</span>
                 </div>
             </form>
             <br>
             <div class="btn-group">
                 <button type="button" class="btn btn-primary" id="btnStartExport" onclick="exportEvent({{ event.id }}, '{{current_user.email}}')"
-                        style="margin-bottom: 0px; margin-right: 10px;" disabled="disabled">Start
+                        style="margin-bottom: 0px; margin-right: 10px;" disabled="disabled">{{_("Start")}}
                 </button>
-                <button type="button" class="btn btn-default" id="btnExportEvent" disabled="disabled">Download</button>
+                <button type="button" class="btn btn-default" id="btnExportEvent" disabled="disabled">{{_("Download")}}</button>
             </div>
             <br><br>
             <span id="export_status"></span><br>
-            <span id="export_creator" style="display: none;">Started by <span id="export_creator_email">user_email</span>,
-              <span id="export_creator_datetime">datetime</span>
+            <span id="export_creator" style="display: none;">{{_("Started by")}} <span id="export_creator_email">user_email</span>,
+              <span id="export_creator_datetime">{{_("datetime")}}</span>
             </span>
             <hr>
             <h3 style="font-weight: 300;">Download Event as Pentabarf XML</h3>
@@ -99,43 +99,43 @@
 
         </div>
         <div class="col-md-5 col-md-push-1">
-            <h3 style="font-weight: 300;">Access event information via REST API</h3>
+            <h3 style="font-weight: 300;">{{_("Access event information via REST API")}}</h3>
             <form style="margin-top:20px;" id="api-form">
                 <div class="checkbox">
                     <input type="checkbox" class="toggle-switch" name="basic_event_details" id="basic_event_details"
                            checked disabled>
-                    <label for="basic_event_details"></label> <span class="checkbox-label">Basic Event Details</span>
+                    <label for="basic_event_details"></label> <span class="checkbox-label">{{_("Basic Event Details")}}</span>
                 </div>
                 <div class="checkbox">
                     <input type="checkbox" class="toggle-switch" name="event_sessions" id="event_sessions">
-                    <label for="event_sessions"></label> <span class="checkbox-label">Sessions</span>
+                    <label for="event_sessions"></label> <span class="checkbox-label">{{_("Sessions")}}</span>
                 </div>
                 <div class="checkbox">
                     <input type="checkbox" class="toggle-switch" name="event_microlocations" id="event_microlocations">
-                    <label for="event_microlocations"></label> <span class="checkbox-label">Microlocations</span>
+                    <label for="event_microlocations"></label> <span class="checkbox-label">{{_("Microlocations")}}</span>
                 </div>
                 <div class="checkbox">
                     <input type="checkbox" class="toggle-switch" name="event_tracks" id="event_tracks">
-                    <label for="event_tracks"></label> <span class="checkbox-label">Tracks</span>
+                    <label for="event_tracks"></label> <span class="checkbox-label">{{_("Tracks")}}</span>
                 </div>
                 <div class="checkbox">
                     <input type="checkbox" class="toggle-switch" name="event_speakers" id="event_speakers">
-                    <label for="event_speakers"></label> <span class="checkbox-label">Speakers</span>
+                    <label for="event_speakers"></label> <span class="checkbox-label">{{_("Speakers")}}</span>
                 </div>
                 <div class="checkbox">
                     <input type="checkbox" class="toggle-switch" name="event_sponsors" id="event_sponsors">
-                    <label for="event_sponsors"></label> <span class="checkbox-label">Sponsors</span>
+                    <label for="event_sponsors"></label> <span class="checkbox-label">{{_("Sponsors")}}</span>
                 </div>
                  <div class="checkbox">
                     <input type="checkbox" class="toggle-switch" name="event_tickets" id="event_tickets">
-                    <label for="event_tickets"></label> <span class="checkbox-label">Tickets</span>
+                    <label for="event_tickets"></label> <span class="checkbox-label">{{_("Tickets")}}</span>
                 </div>
             </form>
             <br>
-            <p>You can make a <code>GET</code> request to the following endpoint to access the selected information</p>
+            <p>{{_("You can make a")}} <code>GET</code> {{_("request to the following endpoint to access the selected information")}}</p>
             <pre><code id="endpoint-url-holder" data-event-id="{{ event.id }}"></code></pre>
             <br>
-            <h4>Response</h4>
+            <h4>{{_("Response")}}</h4>
             <pre id="json-response"></pre>
         </div>
     </div>

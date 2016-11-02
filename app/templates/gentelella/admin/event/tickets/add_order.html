@@ -25,7 +25,7 @@
 {% endblock %}
 
 {% block inner_content %}
-    <h3>Add Order</h3>
+    <h3>{{_("Add Order")}}</h3>
     <br>
     <div class="col-md-6">
         <form class="form-inline" method="POST">
@@ -33,10 +33,10 @@
             <table class="table" id="add-order-table">
                 <thead>
                 <tr>
-                    <th>Ticket Type</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Item Total</th>
+                    <th>{{_("Ticket Type")}}</th>
+                    <th>{{_("Price")}}</th>
+                    <th>{{_("Quantity")}}</th>
+                    <th>{{_("Item Total")}}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -64,24 +64,24 @@
                 <tfoot>
                 <tr>
                     <th colspan="3" class="text-right" style="font-size: 17px;">
-                        Grand Total:
+                        {{_("Grand Total")}}:
                     </th>
                     <th><input type="number" min="0" class="form-control" name="grand_total" readonly value="0"></th>
                 </tr>
                 </tfoot>
             </table>
             <div class="form-group">
-                <strong>Payment Type: </strong>
+                <strong>{{_("Payment Type")}}: </strong>
                 <select name="payment_via" class="form-control" id="payment-type" required style="margin-left: 5px;">
-                    <option value="">Select payment type</option>
-                    <option value="cheque">Cheque</option>
-                    <option value="transfer">Telegraphic Transfer (TT) / Bank Transfer</option>
-                    <option value="onsite">Onsite / Cash</option>
-                    {% if event.pay_by_stripe %}<option value="stripe">Stripe</option>{% endif %}
-                    <option value="free">Free Order</option>
+                    <option value="">{{_("Select payment type")}}</option>
+                    <option value="cheque">{{_("Cheque")}}</option>
+                    <option value="transfer">{{_("Telegraphic Transfer (TT) / Bank Transfer")}}</option>
+                    <option value="onsite">{{_("Onsite / Cash")}}</option>
+                    {% if event.pay_by_stripe %}<option value="stripe">{{_("Stripe")}}</option>{% endif %}
+                    <option value="free">{{_("Free Order")}}</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-success pull-right btn-lg" id="add-order-btn" style="margin-top: 30px;" disabled>Continue</button>
+            <button type="submit" class="btn btn-success pull-right btn-lg" id="add-order-btn" style="margin-top: 30px;" disabled>{{_("Continue")}}</button>
         </form>
     </div>
 {% endblock %}

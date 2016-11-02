@@ -30,14 +30,14 @@ Site Map
 {% endblock %}
 
 {% block body %}
-<h3>Sitemap</h3>
+<h3>{{_("Sitemap")}}</h3>
 
 <div class="x_panel" style="min-height:600px;">
   <div class="x_content">
     <div class="row">
 
       <div class="col-md-4 cat">
-        <h4>General Information</h4>
+        <h4>{{_("General Information")}}</h4>
 
         <a href="/">Home</a><br>
         {% for page in system_pages %}
@@ -55,26 +55,26 @@ Site Map
       </div>
 
       <div class="col-md-4 cat">
-        <h4>Account Management</h4>
+        <h4>{{_("Account Management")}}</h4>
 
-        <a href="{{ url_for('admin.register_view') }}">Register</a><br>
+        <a href="{{ url_for('admin.register_view') }}">{{_("Register")}}</a><br>
         <a href="{{ url_for('admin.login_view') }}">Login</a><br>
-        <a href="{{ url_for('admin.password_reset_view') }}">Reset Password</a><br>
-        <a href="{{ url_for('profile.index_view') }}">View own profile</a><br>
+        <a href="{{ url_for('admin.password_reset_view') }}">{{_("Reset Password")}}</a><br>
+        <a href="{{ url_for('profile.index_view') }}">{{_("View own profile")}}</a><br>
       </div>
 
       <div class="col-md-4 cat">
-        <h4>Attending Events</h4>
+        <h4>{{_("Attending Events")}}</h4>
 
-        <a href="{{ url_for('admin.browse_view') }}">Find Events</a><br>
-        <a href="{{ url_for('my_tickets.display_my_tickets') }}">My Event Tickets</a><br>
+        <a href="{{ url_for('admin.browse_view') }}">{{_("Find Events")}}</a><br>
+        <a href="{{ url_for('my_tickets.display_my_tickets') }}">{{_("My Event Tickets")}}</a><br>
       </div>
 
       <div class="col-md-4 cat">
-        <h4>Managing Events</h4>
+        <h4>{{_("Managing Events")}}</h4>
 
-        <a href="{{ url_for('events.create_view') }}">Create Event</a><br>
-        <a href="{{ url_for('events.index_view') }}">List own events</a><br>
+        <a href="{{ url_for('events.create_view') }}">{{_("Create Event")}}</a><br>
+        <a href="{{ url_for('events.index_view') }}">{{_("List own events")}}</a><br>
       </div>
 
     </div>

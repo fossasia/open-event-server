@@ -4,7 +4,7 @@
     <div class="animate form login_form">
       <section class="login_content">
         <form method="post" id="login-form">
-          <h1>Login Form</h1>
+          <h1>{{_("Login Form")}}</h1>
           <div>
             <input name="email" type="email" class="form-control" placeholder="Email" required="" />
           </div>
@@ -13,14 +13,14 @@
           </div>
           <div>
               <button type="submit" class="btn btn-default" >Log in</button>
-              <a class="reset_pass" href="/password/reset">Lost your password?</a>
+              <a class="reset_pass" href="/password/reset">{{_("Lost your password")}}?</a>
             </div>
 
           <div class="clearfix"></div>
 
           <div class="separator">
-            <p class="change_link">New to site?
-              <a href="{{ url_for('admin.register_view') }}" class="to_register"> Create Account </a>
+            <p class="change_link">{{_("New to site")}}?
+              <a href="{{ url_for('admin.register_view') }}" class="to_register"> {{_("Create Account")}} </a>
             </p>
 
             <div class="clearfix"></div>

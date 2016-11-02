@@ -74,7 +74,7 @@
                                     {{ order_element(order) }}
                                 </div>
                             {% else %}
-                                <span class="message">No tickets for upcoming events found.</span>
+                                <span class="message">{{_("No tickets for upcoming events found")}}.</span>
                             {% endfor %}
                         </div>
                     </div>
@@ -85,7 +85,7 @@
                                     {{ order_element(order) }}
                                 </div>
                             {% else %}
-                                <span class="message">No tickets for past events found</span>
+                                <span class="message">{{_("No tickets for past events found")}}</span>
                             {% endfor %}
                         </div>
                     </div>

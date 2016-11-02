@@ -118,13 +118,13 @@
             <div class="hidden-xs">
                 <p class="session-location">
                     {# {% if session.state == 'pending' %}#}
-                    {#     <span class="detail-status label label-warning">Under Review</span>#}
+                    {#     <span class="detail-status label label-warning">{{_("Under Review")}}</span>#}
                     {# {% elif session.state == 'draft' %}#}
-                    {#     <span class="detail-status label label-warning">Draft</span>#}
+                    {#     <span class="detail-status label label-warning">{{_("Draft")}}</span>#}
                     {# {% elif session.state == 'accepted' %}#}
-                    {#     <span class="detail-status label label-success">Accepted</span>#}
+                    {#     <span class="detail-status label label-success">{{_("Accepted")}}</span>#}
                     {# {% elif session.state == 'rejected' %}#}
-                    {#     <span class="detail-status label label-danger">Rejected</span>#}
+                    {#     <span class="detail-status label label-danger">{{_("Rejected")}}</span>#}
                     {# {% else %}#}
                     {#     <span class="detail-status label label-info">N/A</span>#}
                     {# {% endif %}#}

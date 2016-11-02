@@ -6,7 +6,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Edit Role</h4>
+                <h4 class="modal-title">{{_("Edit Role")}}</h4>
             </div>
             <div class="modal-body">
                 <form action="/events/{{current_event.id}}/roles/{{role.id}}/update/" method="POST" role="form">
@@ -23,14 +23,14 @@
                     </p>
                     <p> 
                         <select name="user_role" class="form-control" required="" style="width: 100%;">
-                            <option value="track_organizer" {{'selected' if 'track_organizer' == role.role.name else '' }}>Track Organizer</option>
-                            <option value="coorganizer" {{'selected' if 'coorganizer' == role.role.name else '' }}>Co-organizer</option>
-                            <option value="moderator" {{'selected' if 'moderator' == role.role.name else '' }}>Moderator</option>
+                            <option value="track_organizer" {{'selected' if 'track_organizer' == role.role.name else '' }}>{{_("Track Organizer")}}</option>
+                            <option value="coorganizer" {{'selected' if 'coorganizer' == role.role.name else '' }}>{{_("Co-organizer")}}</option>
+                            <option value="moderator" {{'selected' if 'moderator' == role.role.name else '' }}>{{_("Moderator")}}</option>
                         </select>
                     </p><br>
                     <p class="pull-right">
-                        <button type="submit" class="btn btn-warning">Update Role</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-warning">{{_("Update Role")}}</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{{_("Close")}}</button>
                     </p>
                 </form>
             </div>

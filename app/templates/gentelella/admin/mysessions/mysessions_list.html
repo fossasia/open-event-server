@@ -62,13 +62,13 @@
     </div>
     <div class="col col-md-3 col-sm-3 col-xs-12">
         {% if session.state == 'pending' %}
-            <span class="status label label-warning pull-right">Under Review</span>
+            <span class="status label label-warning pull-right">{{_("Under Review")}}</span>
             {% elif session.state == 'draft' %}
-            <span class="detail-status label label-warning pull-right">Draft</span>
+            <span class="detail-status label label-warning pull-right">{{_("Draft")}}</span>
             {% elif session.state == 'accepted' %}
-            <span class="status label label-success pull-right">Accepted</span>
+            <span class="status label label-success pull-right">{{_("Accepted")}}</span>
             {% elif session.state == 'rejected' %}
-            <span class="status label label-danger pull-right">Rejected</span>
+            <span class="status label label-danger pull-right">{{_("Rejected")}}</span>
         {% else %}
             <span class="status label label-info pull-right">N/A</span>
         {% endif %}
@@ -118,7 +118,7 @@
                                         {{ session_element(session) }}
                                     </div>
                                 {% else %}
-                                    <span class="message">No session proposals for upcoming events found</span>
+                                    <span class="message">{{_("No session proposals for upcoming events found")}}</span>
                                 {% endfor %}
                             </div>
                         </div>
@@ -129,7 +129,7 @@
                                         {{ session_element(session) }}
                                     </div>
                                 {% else %}
-                                    <span class="message">No session proposals for past events found</span>
+                                    <span class="message">{{_("No session proposals for past events found")}}</span>
                                 {% endfor %}
                             </div>
                         </div>

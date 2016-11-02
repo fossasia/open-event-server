@@ -1,7 +1,7 @@
 {% extends 'gentelella/admin/super_admin/dashboard.html' %}
 
 {% block title %}
-    Settings
+    {{_("Settings")}}
 {% endblock %}
 
 {% set active_page = "settings" %}
@@ -16,50 +16,50 @@
     <form id="settings_form" method="post" class="form-horizontal form-label-left">
         <ul id="settings-tabs" class="nav nav-tabs bar_tabs large_tab_list" role="tablist" style="background: #FFFFFF;">
             <li class="active">
-                <a href="#tab_content0" id="profile-tab" data-toggle="tab">System</a>
+                <a href="#tab_content0" id="profile-tab" data-toggle="tab">{{_("System")}}</a>
             </li>
             <li>
-                <a href="#tab_content2" id="microservice-tab" data-toggle="tab">Microservices</a>
+                <a href="#tab_content2" id="microservice-tab" data-toggle="tab">{{_("Microservices")}}</a>
             </li>
             <li>
-                <a href="#tab_content4" id="image-config-tab" data-toggle="tab">Images</a>
+                <a href="#tab_content4" id="image-config-tab" data-toggle="tab">{{_("Images")}}</a>
             </li>
             <li>
-                <a href="#tab_content5" id="analytics-tab" data-toggle="tab">Analytics</a>
+                <a href="#tab_content5" id="analytics-tab" data-toggle="tab">{{_("Analytics")}}</a>
             </li>
             <li>
-                <a href="#tab_content1" id="payment-gateway-tab" data-toggle="tab">Payment Gateways</a>
+                <a href="#tab_content1" id="payment-gateway-tab" data-toggle="tab">{{_("Payment Gateways")}}</a>
             </li>
 
             {% if 'ticketing' in included_settings and 'payments' in included_settings %}
             <li>
-                <a href="#tab_content3" id="ticket-fees-tab" data-toggle="tab">Ticket Fees</a>
+                <a href="#tab_content3" id="ticket-fees-tab" data-toggle="tab">{{_("Ticket Fees")}}</a>
             </li>
             {% endif %}
         </ul>
         <div class="dropdown tabs_small">
             <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-            <span class="drop_header">All Pending</span>
+            <span class="drop_header">{{_("All Pending")}}</span>
             <span class="caret"></span></button>
             <ul class="dropdown-menu">
-                <li value="System Tokens" class="small_tab_list active">
-                    <a href="#tab_content0" id="profile-tab" data-toggle="tab">System</a>
+                <li value="{{_("System Tokens")}}" class="small_tab_list active">
+                    <a href="#tab_content0" id="profile-tab" data-toggle="tab">{{_("System")}}</a>
                 </li>
-                <li value="Microservices" class="small_tab_list">
-                    <a href="#tab_content2" id="microservice-tab" data-toggle="tab">Microservices</a>
+                <li value="{{_("Microservices")}}" class="small_tab_list">
+                    <a href="#tab_content2" id="microservice-tab" data-toggle="tab">{{_("Microservices")}}</a>
                 </li>
-                <li value="Images" class="small_tab_list">
-                    <a href="#tab_content4" id="image-config-tab" data-toggle="tab">Images</a>
+                <li value="{{_("Images")}}" class="small_tab_list">
+                    <a href="#tab_content4" id="image-config-tab" data-toggle="tab">{{_("Images")}}</a>
                 </li>
-                <li value="Analytics" class="small_tab_list">
-                    <a href="#tab_content5" id="analytics-tab" data-toggle="tab">Analytics</a>
+                <li value="{{_("Analytics")}}" class="small_tab_list">
+                    <a href="#tab_content5" id="analytics-tab" data-toggle="tab">{{_("Analytics")}}</a>
                 </li>
-                <li value="Payment Gateways" class="small_tab_list">
-                    <a href="#tab_content1" id="payment-gateway-tab" data-toggle="tab">Payment Gateways</a>
+                <li value="{{_("Payment Gateways")}}" class="small_tab_list">
+                    <a href="#tab_content1" id="payment-gateway-tab" data-toggle="tab">P{{_("ayment Gateways")}}</a>
                 </li>
                 {% if 'ticketing' in included_settings and 'payments' in included_settings %}
-                <li value="Ticket Fees" class="small_tab_list">
-                    <a href="#tab_content3" id="ticket-fees-tab" data-toggle="tab">Ticket Fees</a>
+                <li value="{{_("Ticket Fees")}}" class="small_tab_list">
+                    <a href="#tab_content3" id="ticket-fees-tab" data-toggle="tab">{{_("Ticket Fees")}}</a>
                 </li>
             {% endif %}
             </ul>

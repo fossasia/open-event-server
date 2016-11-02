@@ -1,6 +1,6 @@
 {% extends 'gentelella/admin/super_admin/dashboard.html' %}
 {% block title %}
-    Content
+    {{_("Content")}}
 {% endblock %}
 {% set active_page = "content" %}
 {% block head_css %}
@@ -11,34 +11,34 @@
         <div class="responsive-tabs-container accordion-xs">
             <ul id="myTab" class="nav nav-tabs bar_tabs large_tab_list" role="tablist" style="background: #FFFFFF;">
                 <li role="presentation" class="active">
-                    <a href="#tab_content2" id="profile-tab" data-toggle="tab">Social Links</a>
+                    <a href="#tab_content2" id="profile-tab" data-toggle="tab">{{_("Social Links")}}</a>
                 </li>
                 <li role="presentation">
-                    <a href="#tab_content3" id="microservice-tab" data-toggle="tab">Pages</a>
+                    <a href="#tab_content3" id="microservice-tab" data-toggle="tab">{{_("Pages")}}</a>
                 </li>
                 <li role="presentation">
-                    <a href="#tab_content4" id="images-tab" data-toggle="tab">System Images</a>
+                    <a href="#tab_content4" id="images-tab" data-toggle="tab">{{_("System Images")}}</a>
                 </li>
                 <li role="presentation">
-                    <a href="#tab_content5" id="translations-tab" data-toggle="tab">Translations</a>
+                    <a href="#tab_content5" id="translations-tab" data-toggle="tab">{{_("Translations")}}</a>
                 </li>
             </ul>
             <div class="dropdown tabs_small">
                 <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-                <span class="drop_header">Social Links</span>
+                <span class="drop_header">{{_("Social Links")}}</span>
                 <span class="caret"></span></button>
                 <ul class="dropdown-menu">
-                    <li role="presentation" value="Social Links" class="small_tab_list active">
-                        <a href="#tab_content2" id="profile-tab" data-toggle="tab">Social Links</a>
+                    <li role="presentation" value="{{_("Social Links")}}" class="small_tab_list active">
+                        <a href="#tab_content2" id="profile-tab" data-toggle="tab">{{_("Social Links")}}</a>
                     </li>
-                    <li role="presentation" value="Pages" class="small_tab_list">
-                        <a href="#tab_content3" id="microservice-tab" data-toggle="tab">Pages</a>
+                    <li role="presentation" value="{{_("Pages")}}" class="small_tab_list">
+                        <a href="#tab_content3" id="microservice-tab" data-toggle="tab">{{_("Pages")}}</a>
                     </li>
-                    <li role="presentation" value="System Images" class="small_tab_list">
-                        <a href="#tab_content4" id="images-tab" data-toggle="tab">System Images</a>
+                    <li role="presentation" value="{{_("System Images")}}" class="small_tab_list">
+                        <a href="#tab_content4" id="images-tab" data-toggle="tab">{{_("System Images")}}</a>
                     </li>
-                    <li role="presentation" value="Translations" class="small_tab_list">
-                        <a href="#tab_content5" id="translations-tab" data-toggle="tab">Translations</a>
+                    <li role="presentation" value="{{_("Translations")}}" class="small_tab_list">
+                        <a href="#tab_content5" id="translations-tab" data-toggle="tab">{{_("Translations")}}</a>
                     </li>
                 </ul>
             </div>
@@ -67,29 +67,29 @@
 <script type="text/javascript">
 // manage the storage form events
 function storage_form(){
-sel_opt = $('input[name=storage_place]:checked', '#settings_form').val();
-if (sel_opt == 'local')
-disable = true;
-else
-disable = false;
-$('[name^=aws_]').prop("readonly", disable);
-$('[name^=aws_]').prop("required", ~disable);
+    sel_opt = $('input[name=storage_place]:checked', '#settings_form').val();
+    if (sel_opt == 'local')
+        disable = true;
+    else
+        disable = false;
+    $('[name^=aws_]').prop("readonly", disable);
+    $('[name^=aws_]').prop("required", ~disable);
 }
 
 $('.radio_storage').click(function(event){
-storage_form();
+    storage_form();
 });
 
 $(document).ready(function(){
-storage_form();
-$(".rich-area").summernote(summernoteConfig);
+    storage_form();
+    $(".rich-area").summernote(summernoteConfig);
 });
 
 $(".small_tab_list").click(function(){
-$(".small_tab_list").removeClass("active");
-$(this).addClass("active");
-var clicked_link = $(this).attr("value");
-$(".drop_header").text(clicked_link);
+    $(".small_tab_list").removeClass("active");
+    $(this).addClass("active");
+    var clicked_link = $(this).attr("value");
+    $(".drop_header").text(clicked_link);
 });
 
 $('.tabs_small a').click(function(){

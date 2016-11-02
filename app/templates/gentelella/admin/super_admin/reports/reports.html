@@ -1,7 +1,7 @@
 {% extends 'gentelella/admin/super_admin/dashboard.html' %}
 
 {% block title %}
-Reports
+{{_("Reports")}}
 {% endblock %}
 
 {% set active_page = "reports" %}
@@ -23,19 +23,19 @@ Reports
 
 <div>
   <ul id="reports_tabs" class="nav nav-tabs bar_tabs large_tab_list" role="tablist">
-    <li class="active"><a href="#tab_content4" id="all-tab" data-toggle="tab">System Logs</a></li>
-    <li><a href="#tab_content1" id="home-tab" data-toggle="tab">Server Logs</a></li>
+    <li class="active"><a href="#tab_content4" id="all-tab" data-toggle="tab">{{_("System Logs")}}</a></li>
+    <li><a href="#tab_content1" id="home-tab" data-toggle="tab">{{_("Server Logs")}}</a></li>
   </ul>
   <div class="dropdown tabs_small">
       <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-      <span class="drop_header">System Roles</span>
+      <span class="drop_header">{{_("System Roles")}}</span>
       <span class="caret"></span></button>
       <ul class="dropdown-menu">
            <li value="System Logs" class="small_tab_list active">
-               <a href="#tab_content4" id="all-tab" data-toggle="tab">System Logs</a>
+               <a href="#tab_content4" id="all-tab" data-toggle="tab">{{_("System Logs")}}</a>
            </li>
            <li value="Server Logs" class="small_tab_list">
-               <a href="#tab_content1" id="home-tab" data-toggle="tab">Server Logs</a>
+               <a href="#tab_content1" id="home-tab" data-toggle="tab">{{_("Server Logs")}}</a>
            </li>
       </ul>
   </div>

@@ -1,6 +1,6 @@
 {% extends 'gentelella/guest/ticketing/order_base.html' %}
 
-{% block title %}Your Order{% endblock %}
+{% block title %}{{_("Your Order")}}{% endblock %}
 
 {% block head_css %}
     {{ super() }}
@@ -12,7 +12,7 @@
     <div id="registration-information-holder">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Registration Information</h3>
+                <h3 class="panel-title">{{_("Registration Information")}}</h3>
             </div>
             <div class="panel-body" style="padding-bottom: 10px;">
                 {% if not from_organizer %}
@@ -21,8 +21,8 @@
                             09:59
                         </div>
                         <p>
-                            Please complete registration within 10:00 minutes.<br>
-                            After 10:00 minutes, the reservation we're holding will be released to others.
+                            {{_("Please complete registration within 10:00 minutes")}}.<br>
+                            {{_("After 10:00 minutes, the reservation we're holding will be released to others.")}}
                         </p>
                     </div>
                 {% endif %}
@@ -30,22 +30,21 @@
                       action="{{ url_for('ticketing.initiate_order_payment') }}">
                     <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
                         <i class="fa fa-ticket"></i>
-                        Ticket {% if from_organizer %}Holder{% else %}Buyer{% endif %}
+                        {{_("Ticket")}} {% if from_organizer %}Holder{% else %}Buyer{% endif %}
                         <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
                     </h2>
                     <br>
                     {% if not current_user.is_authenticated and not from_organizer %}
                         <div style="width: 100%; text-align: center">
-                            Have you used Open Event before? <a
-                                href="{{ url_for('admin.login_view', next=url_for('ticketing.view_order', order_identifier=order.identifier, _external=True)) }}">Sign
-                            In</a> To Your Account to
-                            continue.
+                            {{_("Have you used Open Event before")}}? <a
+                                href="{{ url_for('admin.login_view', next=url_for('ticketing.view_order', order_identifier=order.identifier, _external=True)) }}">{{_("Sign In")}}
+                            </a> {{_("To Your Account to continue")}}
                         </div>
                         <br>
                     {% endif %}
                     <input type="hidden" name="identifier" value="{{ order.identifier }}">
                     <div class="form-group">
-                        <label for="firstname" class="col-sm-4 control-label">First name <span
+                        <label for="firstname" class="col-sm-4 control-label">{{_("First name")}} <span
                                 class="required">*</span></label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="firstname" name="firstname"
@@ -54,7 +53,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="lastname" class="col-sm-4 control-label">Last name <span
+                        <label for="lastname" class="col-sm-4 control-label">{{_("Last name")}} <span
                                 class="required">*</span></label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="lastname" name="lastname"
@@ -64,7 +63,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="email" class="col-sm-4 control-label">Email <span
+                        <label for="email" class="col-sm-4 control-label">{{_("Email")}} <span
                                 class="required">*</span></label>
                         <div class="col-sm-6">
                             <input type="email" class="form-control"
@@ -76,7 +75,7 @@
                     </div>
                     {% if not current_user.is_authenticated or from_organizer %}
                         <div class="form-group">
-                            <label for="email_confirm" class="col-sm-4 control-label">Confirm Email <span
+                            <label for="email_confirm" class="col-sm-4 control-label">{{_("Confirm Email")}} <span
                                     class="required">*</span></label>
                             <div class="col-sm-6">
                                 <input type="email" class="form-control" id="email_confirm"
@@ -91,7 +90,7 @@
 
                     <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
                         <i class="fa fa-ticket"></i>
-                        Ticket Holders' Information
+                        {{_("Ticket Holders' Information")}}
                         <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
                     </h2>
                     {% for ticket_order in order.tickets %}
@@ -101,13 +100,13 @@
                             <h4 class="col-sm-6 col-sm-push-4"
                                 style="font-weight:300;  margin-top: 20px; margin-bottom: 20px; color:#5bc0de;">
                                 <i class="fa fa-user"></i>
-                                {{ ticket_order.ticket.name }} Ticket Holder {{ loop.index }}
+                                {{ ticket_order.ticket.name }} {{_("Ticket Holder")}} {{ loop.index }}
                             </h4>
                             <div class="clearfix"></div>
                             <input type="hidden" name="holders[ticket_id]" value="{{ ticket_order.ticket_id }}">
                             <div class="form-group">
-                                <label for="{{ loop.index }}-holders[firstname]" class="col-sm-4 control-label">First
-                                    name <span
+                                <label for="{{ loop.index }}-holders[firstname]" class="col-sm-4 control-label">{{_("First")}}
+                                    {{_("name")}} <span
                                             class="required">*</span></label>
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control" id="{{ loop.index }}-holders[firstname]"
@@ -117,7 +116,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="{{ loop.index }}-holders[lastname]" class="col-sm-4 control-label">Last name
+                                <label for="{{ loop.index }}-holders[lastname]" class="col-sm-4 control-label">{{_("Last name")}}
                                     <span
                                             class="required">*</span></label>
                                 <div class="col-sm-6">
@@ -129,7 +128,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="{{ loop.index }}-holders[email]" class="col-sm-4 control-label">Email <span
+                                <label for="{{ loop.index }}-holders[email]" class="col-sm-4 control-label">{{_("Email")}} <span
                                         class="required">*</span></label>
                                 <div class="col-sm-6">
                                     <input type="email" class="form-control"
@@ -145,16 +144,16 @@
                     {% if order.amount > 0 %}
                         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
                             <i class="fa fa-ticket"></i>
-                            Billing Information
+                            {{_("Billing Information")}}
                             <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
                         </h2>
                         <br>
                         <div class="form-group">
-                            <label for="country" class="col-sm-4 control-label">Country <span
+                            <label for="country" class="col-sm-4 control-label">{{_("Country")}} <span
                                     class="required">*</span></label>
                             <div class="col-sm-6">
                                 <select class="form-control" name="country" id="country" required>
-                                    <option value="" selected>Select country</option>
+                                    <option value="" selected>{{_("Select country")}}</option>
                                     {% for country in countries %}
                                         <option value="{{ country.name }}">{{ country.name }}</option>
                                     {% endfor %}
@@ -163,7 +162,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="address" class="col-sm-4 control-label">Address <span
+                            <label for="address" class="col-sm-4 control-label">{{_("Address")}} <span
                                     class="required">*</span></label>
                             <div class="col-sm-6">
                                                 <textarea class="form-control" id="address" name="address"
@@ -172,7 +171,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="city" class="col-sm-4 control-label">City <span
+                            <label for="city" class="col-sm-4 control-label">{{_("City")}} <span
                                     class="required">*</span></label>
                             <div class="col-sm-6">
                                 <input type="text" class="form-control" id="city" name="city" required>
@@ -180,7 +179,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="state" class="col-sm-4 control-label">State/Province <span
+                            <label for="state" class="col-sm-4 control-label">{{_("State/Province")}} <span
                                     class="required">*</span></label>
                             <div class="col-sm-6">
                                 <input type="text" class="form-control" id="state" name="state" required>
@@ -188,7 +187,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="zipcode" class="col-sm-4 control-label">Zip Code <span
+                            <label for="zipcode" class="col-sm-4 control-label">{{_("Zip Code")}} <span
                                     class="required">*</span></label>
                             <div class="col-sm-6">
                                 <input type="text" class="form-control" id="zipcode" name="zipcode"
@@ -197,7 +196,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="zipcode" class="col-sm-4 control-label">Pay Via <span
+                            <label for="zipcode" class="col-sm-4 control-label">{{_("Pay Via")}} <span
                                     class="required">*</span></label>
                             <div class="col-sm-8">
                                 {% if event.pay_by_stripe %}
@@ -239,7 +238,7 @@
                                         <label style="margin-top: 10px;">
                                             <input type="radio" name="pay_via_service" id="pay_via_service4"
                                                    value="transfer" required class="offline-payment-service">
-                                                Telegraphic Transfer(TT) / Bank Transfer<br>
+                                                {{_("Telegraphic Transfer(TT) / Bank Transfer")}}<br>
                                                 {% if event.bank_details and event.bank_details != "" %}
                                                     <pre style="margin-top: 12px; display: none;">{{ event.bank_details }}</pre>
                                                 {% endif %}
@@ -251,7 +250,7 @@
                                         <label style="margin-top: 10px;">
                                             <input type="radio" name="pay_via_service" id="pay_via_service5"
                                                    value="onsite" required class="offline-payment-service">
-                                            Onsite/Cash
+                                            {{_("Onsite/Cash")}}
                                              {% if event.onsite_details and event.onsite_details != "" %}
                                                     <pre style="margin-top: 12px; display: none;">{{ event.onsite_details }}</pre>
                                                 {% endif %}
@@ -265,14 +264,14 @@
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-4 control-label"></label>
                         <div class="col-sm-6">
-                            By clicking "
+                            {{_("By clicking")}} "
                             {% if order.amount == 0 or (is_organizer and (pay_via == 'stripe' or pay_via == 'paypal')) %}
-                                Order Now{% else %}Pay Now{% endif %}", I acknowledge that I have read and agree with
-                            the
-                            Open Event terms of service, and privacy policy.<br><br>
+                                {{_("Order Now")}}{% else %}Pay Now{% endif %}", {{_("I acknowledge that I have read and agree with")}}
+                            {{_("the")}}
+                            {{_("Open Event terms of service, and privacy policy.")}}<br><br>
                             <button type="submit" class="btn btn-success btn-lg">
                                 {% if order.amount == 0 or (is_organizer and (pay_via == 'stripe' or pay_via == 'paypal')) %}
-                                    Order now{% else %}Pay Now{% endif %}</button>
+                                    {{_("Order now")}}{% else %}Pay Now{% endif %}</button>
                         </div>
                     </div>
                 </form>

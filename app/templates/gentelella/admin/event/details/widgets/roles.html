@@ -1,10 +1,10 @@
 {% extends 'gentelella/admin/event/details/base_panel.html' %}
 {% from 'gentelella/admin/event/details/roles/_edit.html' import editrole %}
 {% block panel_title %}
-Manage Roles
+{{_("Manage Roles")}}
 {% endblock %}
 {% block addon_link %}
-<button class="btn btn-info pull-right" style="color: #FFFFFF; margin: 0;" data-toggle="modal" data-target="#add-role">Add People</button>
+<button class="btn btn-info pull-right" style="color: #FFFFFF; margin: 0;" data-toggle="modal" data-target="#add-role">{{_("Add Peopl")}}e</button>
 {% endblock %}
 {% block panel_content %}
 
@@ -12,28 +12,28 @@ Manage Roles
     <div id="toolbar-holder" style="display: none;">
         <div class="btn-group pull-left" data-toggle="buttons">
             <label class="btn btn-default active btn-responsive">
-                <input type="radio" name="role_status" autocomplete="off" value="accepted" checked> Accepted
+                <input type="radio" name="role_status" autocomplete="off" value="accepted" checked> {{_("Accepted")}}
             </label>
             <label class="btn btn-default btn-responsive">
-                <input type="radio" name="role_status" autocomplete="off" value="invited"> Invited
+                <input type="radio" name="role_status" autocomplete="off" value="invited"> {{_("Invited")}}
             </label>
         </div>
     </div>
     <table class="role-table table table-striped">
         <thead>
         <tr>
-            <th style="display: none;">Status</th>
-            <th style="display: none;">User Email</th>
-            <th>User (Email)</th>
-            <th>Role</th>
-            <th>Options</th>
+            <th style="display: none;">{{_("Status")}}</th>
+            <th style="display: none;">{{_("User Email")}}</th>
+            <th>{{_("User (Email)")}}</th>
+            <th>{{_("Role")}}</th>
+            <th>{{_("Options")}}</th>
 
         </tr>
         </thead>
         <tbody>
         {% for role in event.get_staff_roles() %}
         <tr>
-            <td style="display: none;">accepted</td>
+            <td style="display: none;">{{_("accepted")}}</td>
             <td style="display: none;">{{ role.user.email }}</td>
             <td>
                 {% if not role.user.user_detail.fullname %}
@@ -59,7 +59,7 @@ Manage Roles
         {%endfor%}
         {% for invite in event.role_invites %}
         <tr>
-            <td style="display:none;">invited</td>
+            <td style="display:none;">{{_("invited")}}</td>
             <td style="display:none;">{{ invite.email }}</td>
             <td>{{ invite.email }}</td>
             <td>{{ invite.role.title_name }}</td>
@@ -67,18 +67,18 @@ Manage Roles
             {% if invite.has_expired() %}
                 <del>
                     <a href="javascript:;" data-toggle="tooltip" data-placement="left" data-original-title="Invitation expired">
-                        Invitation Link
+                        {{_("Invitation Link")}}
                     </a>
                 </del>
             {% elif invite.declined %}
                 <del>
                     <a href="javascript:;" data-toggle="tooltip" data-placement="left" data-original-title="Invitation declined">
-                        Invitation Link
+                        {{_("Invitation Link")}}
                     </a>
                 </del>
             {% else %}
                 <a href="{{ url_for('events.user_role_invite', event_id=event.id, hash=invite.hash) }}" title="Link sent to the user">
-                    Invitation Link
+                    {{_("Invitation Link")}}
                 </a>
             {% endif %}
 
@@ -100,7 +100,7 @@ Manage Roles
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Add Role</h4>
+                <h4 class="modal-title">{{_("Add Role")}}</h4>
             </div>
             <div class="modal-body">
                 <div class="alert alert-danger" style="color: #FFFFFF;display: none;" id="add-role-alert-box">
@@ -111,20 +111,20 @@ Manage Roles
                 </div>
                 <form action="/events/{{event.id}}/roles/new/" method="POST" role="form" id="add-role-form">
                     <p>
-                        <label>User email:</label>
+                        <label>{{_("User email")}}:</label>
                         <input name="user_email" type="email" placeholder="User" class="form-control" required="">
                     </p>
-                    <p> <label>Role:</label>
+                    <p> <label>{{_("Role")}}:</label>
                         <select name="user_role" id="heard" class="form-control" required="">
-                            <option value="">Choose..</option>
-                            <option value="track_organizer">Track Organizer</option>
-                            <option value="coorganizer">Co-organizer</option>
-                            <option value="moderator">Moderator</option>
+                            <option value="">{{_("Choose")}}..</option>
+                            <option value="track_organizer">{{_("Track Organizer")}}</option>
+                            <option value="coorganizer">{{_("Co-organizer")}}</option>
+                            <option value="moderator">{{_("Moderator")}}</option>
                         </select>
                     </p><br>
                     <p class="pull-right">
-                        <button type="submit" class="btn btn-success">Add Role</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">{{_("Add Role")}}</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{{_("Close")}}</button>
                     </p>
                 </form>
             </div>

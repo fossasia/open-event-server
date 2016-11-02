@@ -1,20 +1,20 @@
 {% extends 'gentelella/admin/event/details/base_panel.html' %}
 {% block panel_title %}
-Event Sponsors
+{{_("Event Sponsors")}}
 {% endblock %}
 {% block addon_link %}
-<button onclick="addSponsor();" class="btn btn-info pull-right" style="color: #FFFFFF; margin: 0; padding-left: 10px;" data-target="#add-role">Add Sponsor</button>
+<button onclick="addSponsor();" class="btn btn-info pull-right" style="color: #FFFFFF; margin: 0; padding-left: 10px;" data-target="#add-role">{{_("Add Sponsor")}}</button>
 {% endblock %}
 {% block panel_content %}
 <div class="col-md-12 sponsor-widget">
     <table class="sponsor-table table table-striped">
         <thead>
         <tr>
-            <th>Logo</th>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Level</th>
-            <th>Options</th>
+            <th>{{_("Logo")}}</th>
+            <th>{{_("Name")}}</th>
+            <th>{{_("Type")}}</th>
+            <th>{{_("Level")}}</th>
+            <th>{{_("Options")}}</th>
         </tr>
         </thead>
         <tbody>

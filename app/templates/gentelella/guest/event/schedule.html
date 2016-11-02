@@ -21,9 +21,9 @@
     <div>
         <div class="row">
             <div class="col-md-12">
-                <h1 style="font-weight: 300; font-size: 24px">Schedule
+                <h1 style="font-weight: 300; font-size: 24px">{{_("Schedule")}}
                     <small>
-                        (Published on {{ event.schedule_published_on.strftime('%B %d, %Y') }})
+                        ({{_("Published on")}} {{ event.schedule_published_on.strftime('%B %d, %Y') }})
                     </small>
                 </h1>
             </div>
@@ -33,14 +33,14 @@
 
                     </div>
                      <div class="btn-group pull-right" role="group">
-                        <button type="button" class="btn btn-default rooms-view">Rooms View</button>
-                        <button type="button" class="btn btn-default tracks-view">Tracks View</button>
-                        <button type="button" class="btn btn-default sessions-view">Sessions View</button>
+                        <button type="button" class="btn btn-default rooms-view">{{_("Rooms View")}}</button>
+                        <button type="button" class="btn btn-default tracks-view">{{_("Tracks View")}}</button>
+                        <button type="button" class="btn btn-default sessions-view">{{_("Sessions View")}}</button>
                     </div>
                 </div>
 
                 <div class="flash-message-holder" style="width: 100%; text-align: center;">
-                    <span class="text-muted message loading-text" style="font-weight: 300; font-size: 30px;">Sessions loading ...</span>
+                    <span class="text-muted message loading-text" style="font-weight: 300; font-size: 30px;">{{_("Sessions loading")}} ...</span>
                 </div>
                 <div class="scheduler-holder" style="display: none;">
                     <div id="session-view-holder" class="hidden">

@@ -1,6 +1,6 @@
 {% extends 'gentelella/admin/event/event_base.html' %}
 {% block title %}
-    Create Session - {{ event.name }}
+    {{_("Create Session")}} - {{ event.name }}
 {% endblock %}
 
 {% set active_page = "sessions" %}
@@ -16,7 +16,7 @@
     <div class="row">
         <div class="col-md-12">
             <div style="text-align: center">
-                <h3>Create Session</h3>
+                <h3>{{_("Create Session")}}</h3>
             </div>
             {% include 'gentelella/admin/event/sessions/components/session_speaker_form.html' %}
         </div>
