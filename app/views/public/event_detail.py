@@ -119,6 +119,20 @@ class EventDetailView(BaseView):
         response.headers["Content-Type"] = "text/calendar"
         return response
 
+    @expose('/<identifier>/schedule/calendar.xcs')
+    def display_event_schedule_xcal(self, identifier):
+        event = get_published_event_or_abort(identifier)
+        if not event.has_session_speakers:
+            abort(404)
+        accepted_sessions = DataGetter.get_sessions(event.id)
+        if not accepted_sessions or not event.schedule_published_on:
+            abort(404)
+
+        response = make_response(ExportHelper.export_as_xcal(event.id))
+        response.headers["Content-Type"] = "application/xml"
+        return response
+
+
     @expose('/<identifier>/cfs/', methods=('GET',))
     def display_event_cfs(self, identifier, via_hash=False):
         event = get_published_event_or_abort(identifier)
