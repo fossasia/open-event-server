@@ -10,15 +10,12 @@ spec:
       image: postgres
       env:
         - name: DB_PASS
-          value: password
-        - name: PGDATA
-          value: /var/lib/postgresql/data/pgdata
+          value: test
+        - name: DB_NAME
+          value: opev
+        - name: POSTGRES_DB
+          value: opev
+        - name: POSTGRES_PASSWORD
+          value: test
       ports:
         - containerPort: 5432
-      volumeMounts:
-        - mountPath: /var/lib/postgresql/data
-          name: pg-data
-  volumes:
-    - name: pg-data
-      persistentVolumeClaim:
-        claimName: pg-data-claim
