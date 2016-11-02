@@ -1,6 +1,6 @@
 ---
 kind: Deployment
-apiVersion: v1
+apiVersion: extensions/v1beta1
 metadata:
   name: redis
   creationTimestamp:
@@ -12,10 +12,6 @@ spec:
       labels:
         service: redis
     spec:
-      volumes:
-      - name: redis-0
-        persistentVolumeClaim:
-          claimName: redis-0
       containers:
       - name: redis
         image: redis:3-alpine
@@ -24,8 +20,4 @@ spec:
         ports:
         - containerPort: 6379
           protocol: TCP
-        resources: {}
-        volumeMounts:
-        - name: redis-0
-          mountPath: "/var/lib/redis/data"
       restartPolicy: Always
