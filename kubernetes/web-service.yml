@@ -4,6 +4,8 @@ apiVersion: v1
 metadata:
   name: web
   creationTimestamp:
+  annotations:
+    service.alpha.kubernetes.io/external-traffic: OnlyLocal
   labels:
     service: web
 spec:
