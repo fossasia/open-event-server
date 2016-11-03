@@ -36,5 +36,14 @@ class ExportView(BaseView):
     def ical_export_view(self, event_id):
         response = make_response(ExportHelper.export_as_ical(event_id))
         response.headers["Content-Type"] = "text/calendar"
-        response.headers["Content-Disposition"] = "attachment; filename=event-calendar-" + str(event_id) + ".ics"
+        response.headers["Content-Disposition"] = "attachment; filename=calendar.ics"
         return response
+
+    @expose('/calendar.xcs')
+    @flask_login.login_required
+    def xcal_export_view(self, event_id):
+        response = make_response(ExportHelper.export_as_xcal(event_id))
+        response.headers["Content-Type"] = "text/calendar"
+        response.headers["Content-Disposition"] = "attachment; filename=calendar.xcs"
+        return response
+

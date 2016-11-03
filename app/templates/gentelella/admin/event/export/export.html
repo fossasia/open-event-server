@@ -89,7 +89,13 @@
             Once the event is live and the schedule is published, iCalendar version of the event will be available at:<br><br>
             <pre><code>{{ url_for('event_detail.display_event_schedule_ical', identifier=event.identifier, _external=True) }}</code></pre>
             Alternatively, you can download the iCalendar here<br><br>
-            <a href="{{ url_for('.ical_export_view', event_id=event.id)  }}" class="btn btn-info">Download event.ics</a>
+            <a href="{{ url_for('.ical_export_view', event_id=event.id)  }}" class="btn btn-info">Download calendar.ics</a>
+            <hr>
+            <h3 style="font-weight: 300;">Download Event as iCalendar XML (xCal)</h3>
+            Once the event is live and the schedule is published, iCalendar version of the event will be available at:<br><br>
+            <pre><code>{{ url_for('event_detail.display_event_schedule_xcal', identifier=event.identifier, _external=True) }}</code></pre>
+            Alternatively, you can download the iCalendar XML (xCal) here<br><br>
+            <a href="{{ url_for('.xcal_export_view', event_id=event.id)  }}" class="btn btn-info">Download calendar.xcs</a>
 
         </div>
         <div class="col-md-5 col-md-push-1">

@@ -8,10 +8,30 @@
 {# Set `event_image` to use inside template #}
 {% if event.background_url %}
     {% set event_image = event.background_url %}
+{% elif event.sub_topic %}
+    {% set event_image = {'status': False,'img': event_image} %}
+    {% for custom_image in custom_placeholder %}
+        {% if custom_image.name == event.sub_topic %}
+            {% if event_image.update({'status': True,'img': custom_image.url}) %} {% endif %}
+        {% endif %}
+    {% endfor %}
+    {%  set event_image_status = event_image.status %}
+    {%  set event_image = event_image.img %}
+    {% if not event_image_status %}
+        {% set event_image = url_for("static", filename="placeholders/" + placeholder_images[event.sub_topic], _external=True) %}
+    {% endif %}
 {% elif event.topic %}
-    {% set event_image = url_for("static", filename="placeholders/" + placeholder_images[event.topic], _external=True) %}
-{% elif event.subtopic %}
-    {% set event_image = url_for("static", filename="placeholders/" + placeholder_images[event.subtopic], _external=True) %}
+    {% set event_image = {'status': False,'img': event_image} %}
+    {% for custom_image in custom_placeholder %}
+        {% if custom_image.name == event.topic %}
+            {% if event_image.update({'status': True,'img': custom_image.url}) %} {% endif %}
+        {% endif %}
+    {% endfor %}
+    {%  set event_image_status = event_image.status %}
+    {%  set event_image = event_image.img %}
+    {% if not event_image_status %}
+        {% set event_image = url_for("static", filename="placeholders/" + placeholder_images[event.topic], _external=True) %}
+    {% endif %}
 {% else %}
     {% set event_image = url_for("static", filename="placeholders/" + placeholder_images["Other"], _external=True) %}
 {% endif %}
@@ -71,7 +91,6 @@
 {% block title %}
     {{ event.name }}
 {% endblock %}
-
 
 {% block body %}
     <div class="mobile-menu hidden-sm hidden-lg hidden-md">
