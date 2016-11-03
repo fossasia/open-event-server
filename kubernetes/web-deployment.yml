@@ -16,7 +16,7 @@ spec:
       - name: web
         image: gcr.io/open-event-dev/opev:v3
         command: ["/bin/sh","-c"]
-        args: ["chmod +x ./kubernetes/run.sh && ./kubernetes/run.sh"]
+        args: ["chmod +x ./setup.sh && ./setup.sh"]
         ports:
         - containerPort: 5000
           protocol: TCP

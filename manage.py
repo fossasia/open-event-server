@@ -31,10 +31,16 @@ def add_event_identifier():
 @manager.option('-c', '--credentials', help='Super admin credentials. Eg. username:password')
 def initialize_db(credentials):
     with app.app_context():
-        db.create_all()
-        credentials = credentials.split(":")
-        DataManager.create_super_admin(credentials[0], credentials[1])
-        populate()
+        populate_data = True
+        try:
+            db.create_all()
+            credentials = credentials.split(":")
+            DataManager.create_super_admin(credentials[0], credentials[1])
+        except:
+            populate_data = False
+            print "Could not create tables. Either database does not exist or tables already created"
+        if populate_data:
+            populate()
 
 if __name__ == "__main__":
     manager.run()
