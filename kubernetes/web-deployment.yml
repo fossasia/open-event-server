@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: web
-        image: gcr.io/open-event-dev/opev:v2.1
+        image: gcr.io/open-event-dev/opev:v3
         command: ["/bin/sh","-c"]
         args: ["chmod +x ./kubernetes/run.sh && ./kubernetes/run.sh"]
         ports:
@@ -23,10 +23,9 @@ spec:
         env:
         - name: C_FORCE_ROOT
           value: 'true'
-        - name: DATABASE_URL
-          value: postgresql://postgres:test@postgres:5432/opev
-        - name: REDIS_URL
-          value: redis://redis:6379/0
-        - name: SERVER_NAME
+        - name: REPOSITORY
+          value: 'https://github.com/fossasia/open-event-orga-server.git'
+        - name: BRANCH
+          value: 'development'
         resources: {}
       restartPolicy: Always
