@@ -17,5 +17,14 @@ spec:
           value: opev
         - name: POSTGRES_PASSWORD
           value: test
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
       ports:
         - containerPort: 5432
+      volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: pg-data
+  volumes:
+    - name: pg-data
+      persistentVolumeClaim:
+        claimName: pg-data-claim
