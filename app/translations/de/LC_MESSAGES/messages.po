@@ -3522,4 +3522,3 @@ msgstr "Datum und Uhrzeit"
 #: app/templates/swagger/user-info.html:10
 msgid "Logged in as"
 msgstr "Eingeloggt als"
-
