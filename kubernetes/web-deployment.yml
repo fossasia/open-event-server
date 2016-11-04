@@ -8,13 +8,12 @@ spec:
   replicas: 1
   template:
     metadata:
-      creationTimestamp:
       labels:
         service: web
     spec:
       containers:
       - name: web
-        image: gcr.io/open-event-dev/opev:v3
+        image: gcr.io/eventyay/web:v1
         command: ["/bin/sh","-c"]
         args: ["chmod +x ./setup.sh && ./setup.sh"]
         ports:
