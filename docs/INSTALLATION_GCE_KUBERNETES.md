@@ -3,30 +3,30 @@
 
 ## Setup and Requirements
 
-If you don’t already have a Google Account (Gmail or Google Apps), you must []create one](https://accounts.google.com/SignUp). Then, sign-in to Google Cloud Platform console ([console.cloud.google.com](http://console.cloud.google.com/)) and create a new project:
+- If you don’t already have a Google Account (Gmail or Google Apps), you must [create one](https://accounts.google.com/SignUp). Then, sign-in to Google Cloud Platform console ([console.cloud.google.com](http://console.cloud.google.com/)) and create a new project:
 
 
-Store your project ID into a variable as many commands below use it:
+- Store your project ID into a variable as many commands below use it:
 
-```
-export PROJECT_ID="your-project-id"
-```
+    ```
+    export PROJECT_ID="your-project-id"
+    ```
 
-Next, [enable billing](https://console.cloud.google.com/billing) in the Cloud Console in order to use Google Cloud resources and [enable the Container Engine API](https://console.cloud.google.com/project/_/kubernetes/list).
+- Next, [enable billing](https://console.cloud.google.com/billing) in the Cloud Console in order to use Google Cloud resources and [enable the Container Engine API](https://console.cloud.google.com/project/_/kubernetes/list).
 
-Install [Docker](https://docs.docker.com/engine/installation/), and [Google Cloud SDK](https://cloud.google.com/sdk/).
+- Install [Docker](https://docs.docker.com/engine/installation/), and [Google Cloud SDK](https://cloud.google.com/sdk/).
 
-Finally, after Google Cloud SDK installs, run the following command to install `kubectl`:
+- Finally, after Google Cloud SDK installs, run the following command to install `kubectl`:
 
-```
-gcloud components install kubectl
-```
+    ```
+    gcloud components install kubectl
+    ```
 
-First, choose a [Google Cloud Project zone](https://cloud.google.com/compute/docs/regions-zones/regions-zones) to run your service. We will be using us-central1-a. This is configured on the command line via:
+- Choose a [Google Cloud Project zone](https://cloud.google.com/compute/docs/regions-zones/regions-zones) to run your service. We will be using us-central1-a. This is configured on the command line via:
 
-```
-gcloud config set compute/zone us-west1-a
-```
+    ```
+    gcloud config set compute/zone us-west1-a
+    ```
 
 ## Create and format a persistent data disk for postgres
 
