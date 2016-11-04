@@ -1,9 +1,7 @@
----
 kind: Service
 apiVersion: v1
 metadata:
   name: redis
-  creationTimestamp:
   labels:
     service: redis
 spec:

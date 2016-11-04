@@ -3,7 +3,6 @@ kind: Service
 apiVersion: v1
 metadata:
   name: web
-  creationTimestamp:
   annotations:
     service.alpha.kubernetes.io/external-traffic: OnlyLocal
   labels:
@@ -17,3 +16,4 @@ spec:
   selector:
     service: web
   type: LoadBalancer
+  loadBalancerIP: '104.196.233.213'
