@@ -96,43 +96,43 @@
     <a href="/e/{{ event.identifier }}">
         <div class="col-md-4 col-xs-12 col-sm-6 event-holder">
             <div class="thumbnail">
-                <img src='  
+                <img src='
                             {% if event.background_url%}
                                 {{ event.thumbnail }}
-                            {% elif event.topic%}
+                            {% elif event.sub_topic%}
 
-                                {% set image_placed = False %} {# tells whether the url has image url has been placed #}
+                                {% set event_placed = {'image_placed': False }%} {# tells whether the url has image url has been placed #}
                                 {% for custom_image in custom_placeholder %}
-                                    {% if custom_image.name == event.topic %}
+                                    {% if custom_image.name == event.sub_topic %}
                                         {{ custom_image.url }}
-                                        {% set image_placed = True %}
+                                        {% if event_placed.update({'image_placed': True}) %} {% endif %}
                                     {% endif %}
                                 {% endfor %}
 
-                                {% if not image_placed %}
+                                {% if not event_placed.image_placed %}
+                                    {{ url_for("static", filename="placeholders/" + placeholder_images[event.sub_topic])}}
+                                {% endif %}
+                            {% elif event.topic %}
+                                {% set event_placed = {'image_placed': False }%}
+                                {% for custom_image in custom_placeholder %}
+                                    {% if custom_image.name == session.event.topic %}
+                                        {{ custom_image.url }}
+                                        {% if event_placed.update({'image_placed': True}) %} {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if not event_placed.image_placed %}
                                     {{ url_for("static", filename="placeholders/" + placeholder_images[event.topic])}}
                                 {% endif %}
-                            {% elif event.subtopic %}
-                                {% set image_placed = False %}
-                                {% for custom_image in custom_placeholder %}
-                                    {% if custom_image.name == session.event.subtopic %}
-                                        {{ custom_image.url }}
-                                        {% set image_placed = True %}
-                                    {% endif %}
-                                {% endfor %}
-                                
-                                {% if not image_placed %}
-                                    {{ url_for("static", filename="placeholders/" + placeholder_images[event.subtopic])}}
-                                {% endif %}
                             {% else %}
-                                {% set image_placed = False %}
+                                {% set event_placed = {'image_placed': False }%}
                                 {% for custom_image in custom_placeholder %}
                                     {% if custom_image.name == "Other" %}
                                         {{ custom_image.url }}
-                                        {% set image_placed = True %}
+                                        {% if event_placed.update({'image_placed': True}) %} {% endif %}
                                     {% endif %}
                                 {% endfor %}
-                                {% if not image_placed %}
+                                {% if not event_placed.image_placed %}
                                     {{ url_for("static", filename="placeholders/" + placeholder_images["Other"])}}
                                 {% endif %}
                             {% endif %}

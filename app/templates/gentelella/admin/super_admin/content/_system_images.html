@@ -16,7 +16,7 @@
               <div class="system-images" data-name="{{ subtopic }}" style="margin-left:50px;">
                 <b>{{ subtopic }}</b>
               {% for custom_image in custom_placeholder %}
-                {% if custom_image.name == image %}
+                {% if custom_image.name == subtopic %}
                   <img src='{{ custom_image.url }}' style="width:80%; " id="image-{{ subtopic | replace(',', '') | replace('&', '') | replace(' ','_')}}"/>
                   {% if vars.update({'foo': True}) %} {% endif %}
                   {% if custom_image.copyright %}
