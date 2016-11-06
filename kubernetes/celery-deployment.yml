@@ -1,23 +1,20 @@
 kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
-  name: web
+  name: celery
   creationTimestamp:
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        service: web
+        service: celery
     spec:
       containers:
-      - name: web
+      - name: celery
         image: gcr.io/eventyay/web:v1
         command: ["/bin/sh","-c"]
         args: ["chmod +x ./setup.sh && ./setup.sh"]
-        ports:
-        - containerPort: 5000
-          protocol: TCP
         env:
         - name: C_FORCE_ROOT
           value: 'true'
@@ -26,6 +23,6 @@ spec:
         - name: BRANCH
           value: 'development'
         - name: DEPLOYMENT
-          value: 'web'
+          value: 'celery'
         resources: {}
       restartPolicy: Always
