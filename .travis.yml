@@ -7,10 +7,6 @@ addons:
     - libffi-dev
 python:
   - "2.7"
-# Cache our Gcloud SDK between commands
-cache:
-  directories:
-  - "$HOME/google-cloud-sdk/"
 before_install:
 - bash kubernetes/deployment/setup.sh
 install:
