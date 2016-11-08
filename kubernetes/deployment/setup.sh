@@ -6,6 +6,7 @@ if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_REPO_SLUG" != "fossasia/open-
 fi
 
 if ! type "gcloud" > /dev/null; then
+  rm -rf $HOME/google-cloud-sdk/
   curl https://sdk.cloud.google.com | bash;
   gcloud components install kubectl
 fi
