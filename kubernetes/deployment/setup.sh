@@ -16,5 +16,6 @@ gcloud config set compute/zone us-west1-a
 openssl aes-256-cbc -K $encrypted_27e15b7757b4_key -iv $encrypted_27e15b7757b4_iv -in eventyay-8245fde7ab8a.json.enc -out eventyay-8245fde7ab8a.json -d
 mkdir -p lib
 gcloud auth activate-service-account --key-file eventyay-8245fde7ab8a.json
+export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/eventyay-8245fde7ab8a.json
 gcloud config set project eventyay
 gcloud container clusters get-credentials eventyay-cluster
