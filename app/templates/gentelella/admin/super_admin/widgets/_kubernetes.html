@@ -1,0 +1,34 @@
+<div class="x_panel" style="height: auto;">
+    <div class="x_title">
+        <h2>{{ _("Kubernetes Deployment Info") }}
+        </h2>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <div class="dashboard-widget-content">
+            <strong>Repository: </strong> <a href="{{ version }}"><i class="fa fa-code-fork"></i> {{ version }}</a><br>
+            <strong>Branch: </strong> {{ commit_info }}
+            <table class="table table-bordered no-global-dt" style="margin-top: 12px;">
+                <thead>
+                <tr>
+                    <th>Pod</th>
+                    <th>Pod IP</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if pods_info %}
+                    {% for pod in pods_info %}
+                        <tr>
+                            <td>{{ pod['metadata']['name'] }}</td>
+                            <td>{{ pod['status']['podIP'] }}</td>
+                            <td>{{ pod['status']['phase'] }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
