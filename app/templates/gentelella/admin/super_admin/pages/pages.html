@@ -4,7 +4,7 @@
         <div class="col-md-4">
             <h3 class="pull-left">{{_("Pages")}}</h3>
             <button class="btn btn-info pull-right" style="color: #FFFFFF; margin: 0;" data-toggle="modal" data-target="#importModal">{{_("Create Page")}}</button><div style="clear:both"></div>
-            <h4>Use Open Event:</h4>
+            <h4>Use {{ app_name }}:</h4>
             <ul class="list-group">
                 {% for page in pages %}
                     {% if page.place == 'use_open_event'%}

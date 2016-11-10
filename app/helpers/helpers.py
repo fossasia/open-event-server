@@ -218,7 +218,7 @@ def send_email_after_account_create(form):
     send_email(
         to=form['email'],
         action=USER_REGISTER,
-        subject=MAILS[USER_REGISTER]['subject'],
+        subject=MAILS[USER_REGISTER]['subject'].format(app_name=get_settings()['app_name']),
         html=MAILS[USER_REGISTER]['message'].format(email=form['email'])
     )
 
@@ -228,7 +228,7 @@ def send_email_after_account_create_with_password(form):
     send_email(
         to=form['email'],
         action=USER_REGISTER_WITH_PASSWORD,
-        subject=MAILS[USER_REGISTER_WITH_PASSWORD]['subject'],
+        subject=MAILS[USER_REGISTER_WITH_PASSWORD]['subject'].format(app_name=get_settings()['app_name']),
         html=MAILS[USER_REGISTER_WITH_PASSWORD]['message'].format(email=form['email'], password=form['password'])
     )
 
@@ -261,7 +261,7 @@ def send_email_with_reset_password_hash(email, link):
     send_email(
         to=email,
         action=PASSWORD_RESET,
-        subject=MAILS[PASSWORD_RESET]['subject'],
+        subject=MAILS[PASSWORD_RESET]['subject'].format(app_name=get_settings()['app_name']),
         html=MAILS[PASSWORD_RESET]['message'].format(link=link)
     )
 
@@ -314,7 +314,8 @@ def send_email_for_monthly_fee_payment(email, event_name, date, amount, payment_
         action=MONTHLY_PAYMENT_EMAIL,
         subject=MAILS[MONTHLY_PAYMENT_EMAIL]['subject'].format(event_name=event_name, date=date),
         html=MAILS[MONTHLY_PAYMENT_EMAIL]['message'].format(event_name=event_name, date=date,
-                                                            payment_url=payment_url, amount=amount)
+                                                            payment_url=payment_url, amount=amount,
+                                                            app_name=get_settings()['app_name'])
     )
 
 
@@ -325,7 +326,8 @@ def send_followup_email_for_monthly_fee_payment(email, event_name, date, amount,
         action=MONTHLY_PAYMENT_FOLLOWUP_EMAIL,
         subject=MAILS[MONTHLY_PAYMENT_FOLLOWUP_EMAIL]['subject'].format(event_name=event_name, date=date),
         html=MAILS[MONTHLY_PAYMENT_FOLLOWUP_EMAIL]['message'].format(event_name=event_name, date=date,
-                                                                     payment_url=payment_url, amount=amount)
+                                                                     payment_url=payment_url, amount=amount,
+                                                                     app_name=get_settings()['app_name'])
     )
 
 

@@ -192,6 +192,9 @@ def get_key_settings():
     key_settings = get_settings()
     return dict(key_settings=key_settings)
 
+@app.context_processor
+def get_app_name():
+    return dict(app_name=get_settings()['app_name'])
 
 @app.context_processor
 def fee_helpers():

@@ -25,7 +25,7 @@
                     <br>
                     {% if not current_user.is_authenticated and not from_organizer %}
                         <div style="width: 100%; text-align: center">
-                            {{_("Have you used Open Event before")}}? <a
+                            Have you used {{ app_name }} before ? <a
                                 href="{{ url_for('admin.login_view', next=url_for('event_invoicing.view_invoice', invoice_identifier=invoice.identifier, _external=True)) }}">{{_("Sign")}}
                             {{_("In")}}</a> {{_("To Your Account to
                                                                                                                                             continue")}}.
@@ -157,7 +157,7 @@
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-4 control-label"></label>
                         <div class="col-sm-6">
-                            {{_("By clicking "Pay Now", I acknowledge that I have read and agree with the Open Event terms of service, and privacy policy.")}}<br><br>
+                            {{_("By clicking "Pay Now", I acknowledge that I have read and agree with our terms of service, and privacy policy.")}}<br><br>
                             <button type="submit" class="btn btn-success btn-lg">Pay Now</button>
                         </div>
                     </div>

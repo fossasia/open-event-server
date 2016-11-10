@@ -1,5 +1,15 @@
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
+        <h4>App Name</h4>
+        The name of your deployment. This will be used throughout this application.<br><br>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">App Name</label>
+            <div class=" col-md-9 col-xs-12">
+                <input name="app_name" class="form-control"
+                       required
+                       value="{{ settings.app_name|default('Open Event', True) }}"/>
+            </div>
+        </div>
         <h4>{{_("Google Tokens")}}</h4>
         {{_("See")}} <a href="https://auth0.com/docs/connections/social/google">{{_("here")}}</a> {{_("on how to obtain these tokens")}}.<br><br>
         <div class="form-group">
