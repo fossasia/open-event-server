@@ -53,7 +53,7 @@ class SuperAdminView(SuperAdminBaseView):
                            events=events,
                            version=version,
                            commit_info=commit_info,
-                           on_kubernetes=True,
+                           on_kubernetes=on_kubernetes,
                            pods_info=pods_info,
                            number_live_events=number_live_events,
                            number_draft_events=number_draft_events,
