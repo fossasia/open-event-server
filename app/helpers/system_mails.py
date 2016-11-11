@@ -76,7 +76,7 @@ MAILS = {
     },
     USER_REGISTER: {
         'recipient': 'User',
-        'subject': 'Account Created on Open Event',
+        'subject': 'Account Created on {app_name}',
         'message': (
             "Your Account Has Been Created! Congratulations!" +
             "<br/> Your login: {email}"
@@ -84,7 +84,7 @@ MAILS = {
     },
     USER_REGISTER_WITH_PASSWORD: {
         'recipient': 'User',
-        'subject': 'Welcome to Open Event',
+        'subject': 'Welcome to {app_name}',
         'message': (
             "Your Account Has Been Created! Congratulations!" +
             "<br/> <strong>Your login:</strong><br><strong>Email:</strong> {email}<br>"
@@ -109,7 +109,7 @@ MAILS = {
     },
     PASSWORD_RESET: {
         'recipient': 'User',
-        'subject': 'Open Event: Password Reset',
+        'subject': '{app_name}: Password Reset',
         'message': (
             "Please use the following link to reset your password.<br> {link}"
         )
@@ -165,7 +165,7 @@ MAILS = {
             "The total service fee for the ticket sales of {event_name} in the month of {date} is {amount}." +
             "<br/> That payment for the same has to be made in two weeks. <a href='{payment_url}'>Click here</a> to "
             "view your invoice and complete the payment."
-            "<br><br><em>Thank you for using Open Event.</em>"
+            "<br><br><em>Thank you for using {app_name}.</em>"
         ),
         'sent_at': '1st day of the month'
     },
@@ -176,7 +176,7 @@ MAILS = {
             "The total service fee for the ticket sales of {event_name} in the month of {date} is {amount}." +
             "<br/> That payment for the same is past the due date. <a href='{payment_url}'>Click here</a> to "
             "view your invoice and complete the payment to prevent loss of functionality."
-            "<br><br><em>Thank you for using Open Event.</em>"
+            "<br><br><em>Thank you for using {app_name}.</em>"
         ),
         'sent_at': '15th day of the month'
     },
