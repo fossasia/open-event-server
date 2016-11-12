@@ -34,10 +34,8 @@ nvm install 6.9.1
 
 Make sure you have the dependencies mentioned above installed before proceeding further.
 
-Run the command mentioned below with the terminal active in the project's root directory.
 
-
-* **Step 1** - Install python requirements.
+* **Step 1** - Install python requirements. You need to be present into the root directory of the project.
 
 ```sh
 pip install -r requirements.txt
@@ -76,7 +74,7 @@ sudo npm install bower -g
 bower install
 ```
 
-* **Step 4** - Create application environment variables.
+* **Step 4** - Create application environment variables. 
 
 ```sh
 export DATABASE_URL=postgresql:///oevent
