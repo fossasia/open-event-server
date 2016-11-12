@@ -1,0 +1,19 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: web
+  annotations:
+    service.alpha.kubernetes.io/external-traffic: OnlyLocal
+  labels:
+    service: web
+spec:
+  ports:
+  - port: 80
+    name: "http"
+    protocol: TCP
+    targetPort: 5000
+  selector:
+    service: web
+  type: LoadBalancer
+  loadBalancerIP: '104.196.233.213'

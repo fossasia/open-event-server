@@ -14,13 +14,13 @@
             {% endif %}
         {% endfor %}
         <div class="item form-group speaker-fields featured-toggle-holder" style="display: none;">
-            <label class="control-label">Featured Speaker</label>
-            <input type="checkbox" class="toggle-switch include-switch" name="featured" value="true" id="featured-switch" {% if speaker.featured %}checked{% endif %}/>
+            <label class="control-label">{{_("Featured Speaker")}}</label>
+            <input type="checkbox" class="toggle-switch include-switch" name="featured" value="true" id="featured-switch" {% if speaker.featured %}{{_("checked")}}{% endif %}/>
             <label for="featured-switch" style="margin-left: 0;"> </label>
         </div>
         <br>
 
-        <button type="submit" class="btn btn-success">Save Speaker</button>
+        <button type="submit" class="btn btn-success">{{_("Save Speaker")}}</button>
     </div>
     <div style="text-align: center;">
     </div>

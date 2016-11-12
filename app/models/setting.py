@@ -4,6 +4,7 @@ from . import db
 class Setting(db.Model):
     __tablename__ = 'settings'
     id = db.Column(db.Integer, primary_key=True)
+    app_name = db.Column(db.String)
     # S3
     aws_key = db.Column(db.String)
     aws_secret = db.Column(db.String)
@@ -58,6 +59,7 @@ class Setting(db.Model):
                  in_client_id=None, in_client_secret=None,
                  tw_consumer_secret=None, sendgrid_key=None,
                  secret=None, storage_place=None,
+                 app_name=None,
                  google_url=None, github_url=None,
                  twitter_url=None, support_url=None,
                  analytics_key=None,
@@ -82,6 +84,7 @@ class Setting(db.Model):
         self.in_client_secret = in_client_secret
         self.sendgrid_key = sendgrid_key
         self.analytics_key = analytics_key
+        self.app_name = app_name
         self.secret = secret
         self.storage_place = storage_place
         self.google_url = google_url

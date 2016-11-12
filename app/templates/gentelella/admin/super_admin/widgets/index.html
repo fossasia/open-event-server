@@ -1,38 +1,42 @@
 {% extends 'gentelella/admin/super_admin/dashboard.html' %}
 
 {% block title %}
-Home
+    Home
 {% endblock %}
 
 {% block head_css %}
-{{ super() }}
+    {{ super() }}
 {% endblock %}
 
 {% block content %}
 
-<div class="tab-content">
-  <div class="tab-pane fade active in" id="upcoming-events-tab">
-    <div class="row">
-      <div class="col-md-4 col-sm-4 col-xs-12">
-        {% include 'gentelella/admin/super_admin/widgets/_heroku.html' %}
-        {% include 'gentelella/admin/super_admin/widgets/_sessions.html' %}
-      </div>
-      <div class="col-md-4 col-sm-4 col-xs-12">
-        {% include 'gentelella/admin/super_admin/widgets/_events.html' %}
-        {% include 'gentelella/admin/super_admin/widgets/_messages.html' %}
-      </div>
-      <div class="col-md-4 col-sm-4 col-xs-12">
-        {% include 'gentelella/admin/super_admin/widgets/_users.html' %}
-      </div>
+    <div class="tab-content">
+        <div class="tab-pane fade active in" id="upcoming-events-tab">
+            <div class="row">
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    {% if on_kubernetes %}
+                        {% include 'gentelella/admin/super_admin/widgets/_kubernetes.html' %}
+                    {% else %}
+                        {% include 'gentelella/admin/super_admin/widgets/_heroku.html' %}
+                    {% endif %}
+                    {% include 'gentelella/admin/super_admin/widgets/_sessions.html' %}
+                </div>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    {% include 'gentelella/admin/super_admin/widgets/_events.html' %}
+                    {% include 'gentelella/admin/super_admin/widgets/_messages.html' %}
+                </div>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    {% include 'gentelella/admin/super_admin/widgets/_users.html' %}
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
 
 {% endblock %}
 
 {% block tail_js %}
-{{ super() }}
+    {{ super() }}
 
 {% endblock %}
 

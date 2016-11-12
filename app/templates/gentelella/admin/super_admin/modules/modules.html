@@ -2,7 +2,7 @@
 
 
 {% block title %}
-    Modules
+    {{_("Modules")}}
 {% endblock %}
 
 {% set active_page = "modules" %}
@@ -14,33 +14,33 @@
 
 {% macro options_table(columns, group) %}
 
-    <h2>Enable/Disable Modules</h2>
+    <h2>{{_("Enable/Disable Modules")}}</h2>
     <hr>
 
     <table class="table table-bordered table-hover modules-options-table no-global-dt">
         <thead>
         <tr>
-            <th>Modules</th>
-            <th>Status</th>
+            <th>{{_("Modules")}}</th>
+            <th>{{_("Status")}}</th>
         </tr>
         </thead>
         <tbody>
             <tr>
-                <td>Ticketing</td>
+                <td>{{_("Ticketing")}}</td>
                 <td>
                     <input type="checkbox" class="toggle-switch" value="on" {{ 'checked' if module.ticket_include else '' }} name="ticketing" id="ticketing-switch">
                     <label for="ticketing-switch"></label>
                 </td>
             </tr>
             <tr>
-                <td>Payments</td>
+                <td>{{_("Payments")}}</td>
                 <td>
                     <input type="checkbox" class="toggle-switch" value="on" {{ 'checked' if module.payment_include else '' }} name="payments" id="payments-switch">
                     <label for="payments-switch"></label>
                 </td>
             </tr>
             <tr>
-                <td>Donations</td>
+                <td>{{_("Donations")}}</td>
                 <td>
                     <input type="checkbox" class="toggle-switch" value="on" {{ 'checked' if module.donation_include else '' }} name="donations" id="donations-switch">
                     <label for="donations-switch"></label>

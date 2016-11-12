@@ -7,11 +7,16 @@ addons:
     - libffi-dev
 python:
   - "2.7"
-# command to install dependencies
-install: "pip install -r requirements/tests.txt"
+cache:
+  directories:
+  - "$HOME/google-cloud-sdk/"
+before_install:
+- bash kubernetes/deployment/setup.sh
+install:
+- pip install -r requirements/tests.txt
 # Environment variables
 env:
-- APP_CONFIG="config.TestingConfig"
+- APP_CONFIG="config.TestingConfig" PATH=$PATH:${HOME}/google-cloud-sdk/bin CLOUDSDK_CORE_DISABLE_PROMPTS=1
 before_script:
   - psql -c 'create database test;' -U postgres
   - export DATABASE_URL=postgresql://postgres@localhost:5432/test
@@ -26,6 +31,7 @@ after_success:
   - bash <(curl -s https://codecov.io/bash)
   - coveralls
   - codeclimate-test-reporter
+  - bash kubernetes/deployment/deploy.sh
   - bash scripts/push_api_docs.sh
 addons:
   code_climate:

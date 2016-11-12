@@ -1,15 +1,15 @@
 <div id="order-summary-holder">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Invoice Summary</h3>
+            <h3 class="panel-title">{{_("Invoice Summary")}}</h3>
         </div>
         <div class="panel-body" style="padding-bottom: 10px;">
             <table class="table" style="margin-bottom: 0;">
                 <thead>
                 <tr>
-                    <th align="left">Event Name</th>
-                    <th align="left">Fee Percent</th>
-                    <th align="left">Fee</th>
+                    <th align="left">{{_("Event Name")}}</th>
+                    <th align="left">{{_("Fee Percent")}}</th>
+                    <th align="left">{{_("Fee")}}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -23,7 +23,7 @@
                     </td>
                 </tr>
                 <tr class="total-row">
-                    <td colspan="4" align="right" class="order-total"><strong>Invoice total:</strong></td>
+                    <td colspan="4" align="right" class="order-total"><strong>{{_("Invoice total")}}:</strong></td>
                     <td><strong>{{ invoice.event.payment_currency | currency_symbol }}{{ invoice.amount | money }}</strong></td>
                 </tr>
                 </tbody>

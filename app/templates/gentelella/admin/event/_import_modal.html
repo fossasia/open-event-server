@@ -4,18 +4,18 @@
 
 <div class="col-md-10 col-md-offset-1">
 
-  <h3>Import Event</h3>
+  <h3>{{_("Import Event")}}</h3>
   <hr>
 
   <div>
-    <h5>Select event zip</h5>
+    <h5>{{_("Select event")}} zip</h5>
     <form>
         <input type="file" name="file" id="import_file">
     </form>
   </div>
 
   <div style="margin-top: 15px;">
-    <button type="button" class="btn btn-primary" id="btnImportEvent" onclick="importEventZip();">Create Event</button>
+    <button type="button" class="btn btn-primary" id="btnImportEvent" onclick="importEventZip();">{{_("Create Event")}}</button>
   </div>
 
   <div style="margin-top: 10px;">
@@ -25,7 +25,7 @@
 
   <br><br>
 
-  <h3>Previous Imports</h3>
+  <h3>{{_("Previous Imports")}}</h3>
   <hr>
 
   <div>
@@ -33,9 +33,9 @@
   <table class="table table-striped" id="importListTable">
   <thead>
     <tr>
-      <th>State</th>
-      <th>Message</th>
-      <th>Started</th>
+      <th>{{_("State")}}</th>
+      <th>{{_("Message")}}</th>
+      <th>{{_("Started")}}</th>
     </tr>
   </thead>
   <tbody>
@@ -43,16 +43,16 @@
       <tr>
       <td>
       {% if e.result_status == "SUCCESS" %}
-        <i class="fa fa-check-circle green" aria-hidden="true"></i> Success
+        <i class="fa fa-check-circle green" aria-hidden="true"></i> {{_("Success")}}
       {% elif e.result_status %}
         <i class="fa fa-exclamation-circle red" aria-hidden="true"></i> {{e.result_status}}
       {% else %}
-        <i class="fa fa-circle-o-notch yellow" aria-hidden="true"></i> Processing
+        <i class="fa fa-circle-o-notch yellow" aria-hidden="true"></i> {{_("Processing")}}
       {% endif %}
       </td>
       <td id="task_msg_{{e.id}}">
         {% if e.result_status == "SUCCESS" %}
-          Check your event <a href="/events/{{ e.result }}">here</a>
+          Check your event <a href="/events/{{ e.result }}">{{_("here")}}</a>
         {% elif e.result %}
           {{ e.result }}
         {% endif %}

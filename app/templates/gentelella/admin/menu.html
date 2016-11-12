@@ -5,7 +5,7 @@
                 <ul class="nav navbar-nav">
                     <li style="margin-left: 10px;">
                         <a href="/" style="font-size: 26px; font-weight: 300;">
-                            Open Event
+                            {{ app_name }}
                         </a>
 
                     </li>
@@ -30,8 +30,7 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="/events/create/" class="hide-small" aria-expanded="false"
-                           style="color: #46b8da!important;">Create
-                        Event</a></li>
+                           style="color: #46b8da!important;">{{_("Create Event")}}</a></li>
                     {% if current_user.is_authenticated %}
 
                         <li>
@@ -49,21 +48,20 @@
                             </a>
                             <ul class="dropdown-menu dropdown-usermenu pull-right">
                                 <li><a href="/events/create/" class="hide-large"
-                                   style="color: #46b8da!important; font-weight:bold">Create
-                                Event</a></li>
+                                   style="color: #46b8da!important; font-weight:bold">{{_("Create Event")}}</a></li>
                                 <li class="divider hide-large"></li>
-                                <li><a href="/mytickets/">My Tickets</a></li>
-                                <li><a href="/events/mysessions/">My Sessions</a></li>
-                                <li><a href="/events/">Manage Events</a></li>
+                                <li><a href="/mytickets/">{{_("My Tickets")}}</a></li>
+                                <li><a href="/events/mysessions/">{{_("My Sessions")}}</a></li>
+                                <li><a href="/events/">{{_("Manage Events")}}</a></li>
                                 <li class="divider" ></li>
-                                <li><a href="/profile"> Profile</a></li>
-                                <li><a href="/settings"> Settings</a></li>
+                                <li><a href="/profile"> {{_("Profile")}}</a></li>
+                                <li><a href="/settings"> {{_("Settings")}}</a></li>
                                 {% if current_user.is_staff %}
-                                    <li><a href="/admin"> Admin</a></li>
+                                    <li><a href="/admin"> {{_("Admin")}}</a></li>
                                 {% endif %}
                                 <li class="divider"></li>
-                                <li><a href="/browse" class="user-profile hide-large">Browse Events</a></li>
-                                <li><a href="/logout/"><i class="fa fa-sign-out pull-right"></i> Logout</a>
+                                <li><a href="/browse" class="user-profile hide-large">{{_("Browse Events")}}</a></li>
+                                <li><a href="/logout/"><i class="fa fa-sign-out pull-right"></i> {{_("Logout")}}</a>
                                 </li>
                             </ul>
                         </li>
@@ -76,13 +74,13 @@
                                 <li style="border: 0;">
                                     <span>
                                         <a href="{{ url_for('notifications.index_view') }}" style="font-size: 12px;" title="See all Notifications">
-                                            <strong>Notifications</strong>
+                                            <strong>{{_("Notifications")}}</strong>
                                         </a>
                                     </span>
                                     <span class="pull-right">
                                         <a class="notif-mark-all-read"
                                             data-markallread="{{ url_for('notifications.mark_all_read') }}">
-                                            Mark All as Read
+                                            {{_("Mark All as Read")}}
                                         </a>
                                     </span>
                                 </li>
@@ -92,13 +90,13 @@
                                         <a>
                                             <span class="message">{{ notif.title }}</span>
                                             <span class="time">{{ notif.received_at }}</span>
-                                            <span class="mark-as-read btn btn-default btn-xs" data-markread="{{ notif.mark_read }}">Mark as read</span>
+                                            <span class="mark-as-read btn btn-default btn-xs" data-markread="{{ notif.mark_read }}">{{_("Mark as read")}}</span>
                                         </a>
                                     </li>
                                 {% endfor %}
                             {% else %}
                                 <li>
-                                    <div class="text-center">No new notifications</div>
+                                    <div class="text-center">{{_("No new notifications")}}</div>
                                 </li>
                             {% endif %}
                             </ul>
@@ -106,7 +104,7 @@
                     {% else %}
                         <li><a href="/login" class="user-profile">Login</a></li>
                     {% endif %}
-                    <li><a href="/browse" class="user-profile hide-small">Browse Events</a></li>
+                    <li><a href="/browse" class="user-profile hide-small">{{_("Browse Events")}}</a></li>
                 </ul>
             </nav>
         </div>

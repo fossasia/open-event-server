@@ -29,5 +29,5 @@
 </div>
 
 <div style="float: right; margin-top: 10px;">
-    All the timings are in {{ event.timezone | default('UTC', true) }}
+    {{_("All the timings are in")}} {{ event.timezone | default('UTC', true) }}
 </div>

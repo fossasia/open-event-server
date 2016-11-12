@@ -1,0 +1,28 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: celery
+  creationTimestamp:
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        service: celery
+    spec:
+      containers:
+      - name: celery
+        image: gcr.io/eventyay/web:v1
+        command: ["/bin/sh","-c"]
+        args: ["chmod +x ./setup.sh && ./setup.sh"]
+        env:
+        - name: C_FORCE_ROOT
+          value: 'true'
+        - name: REPOSITORY
+          value: 'https://github.com/fossasia/open-event-orga-server.git'
+        - name: BRANCH
+          value: 'development'
+        - name: DEPLOYMENT
+          value: 'celery'
+        resources: {}
+      restartPolicy: Always

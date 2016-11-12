@@ -1,7 +1,7 @@
 {% extends 'gentelella/admin/base.html' %}
 
 {% block title %}
-    Settings
+    {{_("Settings")}}
 {% endblock %}
 {% block head_css %}
     {{ super() }}
@@ -23,7 +23,7 @@
 {% block body %}
     <div class="row">
         <div class="col-md-push-1 col-md-2 col-sm-2 hidden-xs" style="text-align: right">
-            <h2 style="font-weight: 300; font-size: 24px;">Settings</h2>
+            <h2 style="font-weight: 300; font-size: 24px;">{{_("Settings")}}</h2>
             <nav class="settings">
                 <ul>
                     {% for href, id, title, page_title in navigation_bar %}

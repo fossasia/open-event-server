@@ -1,7 +1,7 @@
 {% extends 'gentelella/admin/settings/base.html' %}
 
 {% block title %}
-    Email Preferences - Settings
+    {{_("Email Preferences - Settings")}}
 {% endblock %}
 
 {% set active_page = "email_preferences" %}
@@ -55,7 +55,7 @@
         <div id="event-{{ event.id }}" class="panel-collapse collapse">
             <div class="panel-body" style="overflow: hidden;">
                 {% if current_user.is_speaker_at_event(event.id) %}
-                    <h4 style="font-weight: 400;">Speaker Notifications</h4>
+                    <h4 style="font-weight: 400;">{{_("Speaker Notifications")}}</h4>
                     <hr style="margin-top: 0;">
                     {% for key,value in email_speaker_fields.iteritems() %}
                         {% if message_settings[value['action']].user_control_status == 1 %}
@@ -71,7 +71,7 @@
                     <br>
                 {% endif %}
                 {% if current_user.is_organizer(event.id) %}
-                    <h4 style="font-weight: 400;">Organizer Notifications</h4>
+                    <h4 style="font-weight: 400;">{{_("Organizer Notifications")}}</h4>
                     <hr style="margin-top: 0;">
                     {% for key,value in email_organizer_fields.iteritems() %}
                         {% if message_settings[value['action']].user_control_status == 1 %}
@@ -110,7 +110,7 @@
         {% endif %}
 
     {% endfor %}
-    <h4 style="font-weight: 300;" class="pull-left" id="email-toggle-text"> Email Updates
+    <h4 style="font-weight: 300;" class="pull-left" id="email-toggle-text"> {{_("Email Updates")}}
         are <span class="global-email-stat"
                   style="color: #73879C;">{{ settings_notifications.email }}</span>
     </h4>
@@ -120,7 +120,7 @@
 
     <div class="clearfix"></div>
     <hr style="margin-top: 10px; margin-bottom: 16px;">
-    <h3 style="font-weight: 300;margin-bottom: 0;font-size: 22px;">Updates about events</h3>
+    <h3 style="font-weight: 300;margin-bottom: 0;font-size: 22px;">{{_("Updates about events")}}</h3>
     <br>
     <div class="row">
         <div class="panel-group" id="events-accordion">

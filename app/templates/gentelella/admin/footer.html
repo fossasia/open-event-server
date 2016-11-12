@@ -3,9 +3,9 @@
     <div class="row hide-small hide-medium">
         <div class="col-md-offset-1">
             <div class="col-md-3 col-sm-3">
-                <h4 class="footer-header">Use Open Event</h4>
+                <h4 class="footer-header">Use {{ app_name }}</h4>
                 <ul>
-                  <li><a href="/sitemap">Sitemap</a></li>
+                  <li><a href="/sitemap">{{_("Sitemap")}}</a></li>
                     {% for page in system_pages %}
                         {% if page.place == 'use_open_event'%}
                             <li><a href="{{page.url}}">{{page.name}}</a></li>
@@ -14,7 +14,7 @@
                 </ul>
             </div>
             <div class="col-md-3 col-sm-3">
-                <h4>Categories</h4>
+                <h4>{{_("Categories")}}</h4>
                 <ul>
 
                     {% for event_type in event_typo%}
@@ -22,7 +22,7 @@
                     {%endfor%}
                 </ul>
             </div>
-            <div class="col-md-3 col-sm-3"><h4>Locations</h4>
+            <div class="col-md-3 col-sm-3"><h4>{{_("Locations")}}</h4>
                 <ul>
                     {% for location in locations() %}
                     <li><a href="/explore/{{ location | slugify }}/events/">{{location}}</a></li>
@@ -30,25 +30,25 @@
                 </ul>
             </div>
             <div class="col-md-3 col-sm-3">
-                <h4>Connect With Us</h4>
+                <h4>{{_("Connect With Us")}}</h4>
                 <ul>
                     {% if settes.support_url %}
-                        <li><i class="fa fa-info fa-fw"></i> <a href="{{settes.support_url}}">Support</a></li>
+                        <li><i class="fa fa-info fa-fw"></i> <a href="{{settes.support_url}}">{{_("Support")}}</a></li>
                     {% endif %}
                     {% if settes.twitter_url %}
-                        <li><i class="fa fa-twitter fa-fw"></i> <a href="{{settes.twitter_url}}">Twitter</a></li>
+                        <li><i class="fa fa-twitter fa-fw"></i> <a href="{{settes.twitter_url}}">{{_("Twitter")}}</a></li>
                     {% endif %}
                     {% if settes.facebook_url %}
-                        <li><i class="fa fa-facebook fa-fw"></i> <a href="{{settes.facebook_url}}">Facebook</a></li>
+                        <li><i class="fa fa-facebook fa-fw"></i> <a href="{{settes.facebook_url}}">{{_("Facebook")}}</a></li>
                     {% endif %}
                     {% if settes.google_url %}
-                        <li><i class="fa fa-google-plus fa-fw"></i> <a href="{{settes.google_url}}">Google</a></li>
+                        <li><i class="fa fa-google-plus fa-fw"></i> <a href="{{settes.google_url}}">{{_("Google")}}</a></li>
                     {% endif %}
                     {% if settes.youtube_url %}
-                        <li><i class="fa fa-youtube-play fa-fw"></i> <a href="{{settes.youtube_url}}">Youtube</a></li>
+                        <li><i class="fa fa-youtube-play fa-fw"></i> <a href="{{settes.youtube_url}}">{{_("Youtube")}}</a></li>
                     {% endif %}
                     {% if settes.github_url %}
-                        <li><i class="fa fa-github fa-fw"></i> <a href="{{settes.github_url}}">Github</a></li>
+                        <li><i class="fa fa-github fa-fw"></i> <a href="{{settes.github_url}}">{{_("Github")}}</a></li>
                     {% endif %}
                 </ul>
             </div>
@@ -83,7 +83,7 @@
 
     </div>
     <div class="row">
-        <div class="copyright">© 2016 Open Event</div>
+        <div class="copyright">© 2016 {{ app_name }}</div>
     </div>
 </footer>
 <script>

@@ -13,7 +13,7 @@ def get_settings():
         return current_app.config['custom_settings']
     s = Setting.query.order_by(desc(Setting.id)).first()
     if s is None:
-        set_settings(secret='super secret key')
+        set_settings(secret='super secret key', app_name='Open Event')
     else:
         current_app.config['custom_settings'] = make_dict(s)
     return current_app.config['custom_settings']

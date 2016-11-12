@@ -1,9 +1,13 @@
+import os
+
 from flask_admin import expose
 
 from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView
 from ....helpers.data_getter import DataGetter
 from app.helpers.helpers import get_latest_heroku_release, get_commit_info, get_count
 from app.models.user import ATTENDEE,TRACK_ORGANIZER, COORGANIZER, ORGANIZER
+from app.helpers.kubernetes import KubernetesApi
+
 
 class SuperAdminView(SuperAdminBaseView):
 
@@ -25,16 +29,32 @@ class SuperAdminView(SuperAdminBaseView):
         rejected_sessions = DataGetter.get_all_rejected_sessions()
         draft_sessions = DataGetter.get_all_draft_sessions()
         email_times = DataGetter.get_email_by_times()
-        version = get_latest_heroku_release()
-        commit_number = None
+
         commit_info = None
-        if version:
-            commit_number = version['description'].split(' ')[1]
-            commit_info = get_commit_info(commit_number)
+        version = None
+        on_kubernetes = False
+        pods_info = None
+
+        if KubernetesApi.is_on_kubernetes():
+            on_kubernetes = True
+            kubernetes_api = KubernetesApi()
+            pods_info = kubernetes_api.get_pods()['items']
+            version = os.getenv('REPOSITORY', 'https://github.com/fossasia/open-event-orga-server.git')
+            commit_info = os.getenv('BRANCH', 'development')
+        else:
+            version = get_latest_heroku_release()
+            commit_info = None
+            commit_number = None
+            if version:
+                commit_number = version['description'].split(' ')[1]
+                commit_info = get_commit_info(commit_number)
+
         return self.render('/gentelella/admin/super_admin/widgets/index.html',
                            events=events,
                            version=version,
                            commit_info=commit_info,
+                           on_kubernetes=on_kubernetes,
+                           pods_info=pods_info,
                            number_live_events=number_live_events,
                            number_draft_events=number_draft_events,
                            number_past_events=number_past_events,
