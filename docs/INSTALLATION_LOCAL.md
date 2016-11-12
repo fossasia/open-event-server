@@ -34,7 +34,7 @@ nvm install 6.9.1
 
 Make sure you have the dependencies mentioned above installed before proceeding further.
 
-Run the commands mentioned below with the terminal active in the project's root directory.
+Run the command mentioned below with the terminal active in the project's root directory.
 
 
 * **Step 1** - Install python requirements.
