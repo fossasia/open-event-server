@@ -85,6 +85,10 @@ The URL is short, thank to the resemble of Postgres user and OS user.
 ```sh
 sudo service postgresql restart
 ```
+for mac user:
+```sh
+brew services restart postgresql
+```
 
 
 * **Step 6** - Create the tables. For that we will use `create_db.py`.
