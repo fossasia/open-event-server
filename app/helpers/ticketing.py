@@ -184,10 +184,8 @@ class TicketingManager(object):
                 'email': email,
                 'password': password
             })
-        if user.user_detail:
-            user.user_detail.firstname = data['firstname']
-            user.user_detail.lastname = data['lastname']
-        else:
+
+        if not user.user_detail:
             user_detail = UserDetail(firstname=data['firstname'], lastname=data['lastname'])
             user.user_detail = user_detail
 
