@@ -119,7 +119,7 @@ class TestTicketingPage(OpenEventTestCase):
             save_to_db(order)
             response = self.app.get(url_for('ticketing.view_order_after_payment', order_identifier=identifier),
                                     follow_redirects=True)
-            self.assertTrue("John" in response.data, msg=response.data)
+            self.assertTrue("Your Order" in response.data, msg=response.data)
             self.assertTrue("ACME Lane" in response.data, msg=response.data)
             self.assertTrue("1234" in response.data, msg=response.data)
             self.assertTrue(str(event.name) in response.data, msg=response.data)
@@ -161,7 +161,6 @@ class TestTicketingPage(OpenEventTestCase):
             save_to_db(order)
             response = self.app.get(url_for('ticketing.view_order_after_payment', order_identifier=identifier),
                                     follow_redirects=True)
-            self.assertTrue("John" in response.data, msg=response.data)
             self.assertTrue("ACME Lane" in response.data, msg=response.data)
             self.assertTrue("87906533255" in response.data, msg=response.data)
             self.assertTrue(str(event.name) in response.data, msg=response.data)
