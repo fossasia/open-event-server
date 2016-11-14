@@ -17,7 +17,7 @@
                 <b>{{ subtopic }}</b>
               {% for custom_image in custom_placeholder %}
                 {% if custom_image.name == subtopic %}
-                  <img src='{{ custom_image.url }}' style="width:80%; " id="image-{{ subtopic | replace(',', '') | replace('&', '') | replace(' ','_')}}"/>
+                  <img src='{{ custom_image.url }}' style="max-width:80%; " id="image-{{ subtopic | replace(',', '') | replace('&', '') | replace(' ','_')}}"/>
                   {% if vars.update({'foo': True}) %} {% endif %}
                   {% if custom_image.copyright %}
                     <p><b>{{_("Copyright Info")}}:</b> {{ custom_image.copyright }}</p>
@@ -28,7 +28,7 @@
                 {% endif %}
               {% endfor %}
                 {% if not vars.foo %}
-                  <img src='{{ url_for("static", filename="placeholders/" + placeholder_images[subtopic]) }}' style="width:80%; " id="image-{{ subtopic | replace(',', '') | replace('&', '') | replace(' ','_')}}"/>
+                  <img src='{{ url_for("static", filename="placeholders/" + placeholder_images[subtopic]) }}' style="max-width:80%; " id="image-{{ subtopic | replace(',', '') | replace('&', '') | replace(' ','_')}}"/>
                 {% endif %}
                 <br>
                 <button class="btn btn-primary btn-sys" id="sys-{{ subtopic | replace(',', '') |replace('&', '') | replace(' ','_')}}" style="margin-top:10px;"> {{_("Change")}}</button>
@@ -66,7 +66,7 @@
                     </label><br>
                 </div>
                 <span class="text-muted" style="color: #a2a2a2;">
-                    {{_("We recommend using at least a 1300x550px (2:1 ratio) image")}}<br>{{_("that's no larger than 10MB")}}.
+                    {{_("For Cover Photos : We recommend using at least a 1300x550px (2:1 ratio) image")}}<br>{{_("For Avatar Photos : We recommend using at least a 360x360px (1:1 ratio) image")}}<br>{{_("The images should be no larger than 10MB")}}.
                 </span>
             </div>
 
