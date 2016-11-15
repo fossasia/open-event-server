@@ -123,9 +123,11 @@
         var $addOnElement = $($(".row-sponsor-addon")[0]).clone();
         $element.find("td:nth-child(1)").text(sponsor_counter);
         $element.find("input").val("").attr("value", "");
-        $addOnElement.find("input").val("").attr("value", "");
-        $element.find("input[type=file]").attr("id", "sponsors-logo-" + sponsor_counter);
+        $addOnElement.find("textarea").val("").attr("value", "");
+        $addOnElement.find("p").html("");
+        $element.find("input[type=file]").val("").attr("id", "sponsors-logo-" + sponsor_counter);
         $element.find(".file-label").attr("for", "sponsors-logo-" + sponsor_counter);
+        $element.find(".file-label").html('<i class="fa fa-cloud-upload" aria-hidden="true"></i>Upload File');
         $('.sponsors').append($element).append($addOnElement);
         $('.remove-sponsor').show();
         superFileUploadButton();
