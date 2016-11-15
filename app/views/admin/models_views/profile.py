@@ -4,6 +4,8 @@ from flask_admin import expose
 from flask.ext import login
 from uuid import uuid4
 
+from markupsafe import Markup
+
 from app.views.admin.models_views.events import is_verified_user
 from app.helpers.storage import upload, upload_local, UPLOAD_PATHS
 from app.helpers.helpers import uploaded_file
@@ -13,7 +15,6 @@ from app.helpers.oauth import FbOAuth, InstagramOAuth, TwitterOAuth
 
 
 class ProfileView(BaseView):
-
     def is_accessible(self):
         return login.current_user.is_authenticated
 
@@ -24,8 +25,10 @@ class ProfileView(BaseView):
     @expose('/')
     def index_view(self):
         if not is_verified_user():
-            flash("Your account is unverified. "
-                  "Please verify by clicking on the confirmation link that has been emailed to you.")
+            flash(Markup("Your account is unverified. "
+                         "Please verify by clicking on the confirmation link that has been emailed to you."
+                         '<br>Did not get the email? Please <a href="/resend_email/" class="alert-link"> '
+                         'click here to resend the confirmation.</a>'))
         profile = DataGetter.get_user(login.current_user.id)
         return self.render('/gentelella/admin/profile/index.html',
                            profile=profile)

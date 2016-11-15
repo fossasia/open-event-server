@@ -4,6 +4,7 @@ import flask_login
 from flask import flash, redirect, url_for, request
 from flask.ext.restplus import abort
 from flask_admin import BaseView, expose
+from markupsafe import Markup
 
 from app.helpers.data import DataManager
 from app.views.admin.models_views.events import is_verified_user
@@ -11,7 +12,6 @@ from ....helpers.data_getter import DataGetter
 
 
 class MySessionView(BaseView):
-
     @expose('/')
     @flask_login.login_required
     def display_my_sessions_view(self):
@@ -28,8 +28,10 @@ class MySessionView(BaseView):
                         "tab_past_events": "Past Sessions",
                         "title": "My Session Proposals"}
         if not is_verified_user():
-            flash("Your account is unverified. "
-                  "Please verify by clicking on the confirmation link that has been emailed to you.")
+            flash(Markup("Your account is unverified. "
+                         "Please verify by clicking on the confirmation link that has been emailed to you."
+                         '<br>Did not get the email? Please <a href="/resend_email/" class="alert-link"> '
+                         'click here to resend the confirmation.</a>'))
         return self.render('/gentelella/admin/mysessions/mysessions_list.html',
                            upcoming_events_sessions=upcoming_events_sessions, past_events_sessions=past_events_sessions,
                            page_content=page_content, placeholder_images=placeholder_images,
