@@ -3,10 +3,12 @@ from flask import flash
 from flask import make_response
 from flask_login import current_user
 from flask_admin import BaseView, expose
+from markupsafe import Markup
 
 from app.views.admin.models_views.events import is_verified_user
 from app.helpers.data_getter import DataGetter
 from app.helpers.export import ExportHelper
+
 
 class ExportView(BaseView):
     @expose('/')
@@ -16,8 +18,10 @@ class ExportView(BaseView):
         export_jobs = DataGetter.get_export_jobs(event_id)
         user = current_user
         if not is_verified_user():
-            flash("Your account is unverified. "
-                  "Please verify by clicking on the confirmation link that has been emailed to you.")
+            flash(Markup("Your account is unverified. "
+                         "Please verify by clicking on the confirmation link that has been emailed to you."
+                         '<br>Did not get the email? Please <a href="/resend_email/" class="alert-link"> '
+                         'click here to resend the confirmation.</a>'))
         return self.render(
             '/gentelella/admin/event/export/export.html', event=event, export_jobs=export_jobs,
             current_user=user
@@ -46,4 +50,3 @@ class ExportView(BaseView):
         response.headers["Content-Type"] = "text/calendar"
         response.headers["Content-Disposition"] = "attachment; filename=calendar.xcs"
         return response
-

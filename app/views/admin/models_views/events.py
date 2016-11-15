@@ -68,8 +68,10 @@ class EventsView(BaseView):
             max_donation_ticket[event.id] = TicketingManager.get_max_orders_count(event.id, type='donation')
         if not is_verified_user():
             flash(Markup('Your account is unverified. '
-                         'Please verify by clicking on the confirmation link that has been emailed to you.<br>'
-                         'Did not get the email? Please <a href="/resend_email/" class="alert-link"> click here to resend the confirmation.</a>'))
+                         'Please verify by clicking on the confirmation link that has been emailed to you.'
+                         '<br>Did not get the email? Please <a href="/resend_email/" class="alert-link"> '
+                         'click here to resend the confirmation.</a>'))
+
         return self.render('/gentelella/admin/event/index.html',
                            live_events=live_events,
                            draft_events=draft_events,
