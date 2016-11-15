@@ -1381,6 +1381,8 @@ payment and indicate your order ref. no.&#13;&#10;&#13;&#10;Account Details&#13;
         }
         $($ticket.children()[1]).html(html);
 
+        $ticketMore.find('.ticket-sales.date.end').val($("input[name=end_date]").val());
+        $ticketMore.find('.ticket-sales.time.end').val($("input[name=end_time]").val());
         /* Append ticket to table */
         $ticket.hide();
         $ticketMore.hide();

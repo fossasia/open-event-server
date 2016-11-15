@@ -163,7 +163,7 @@
                                         <input value="{{ sales_start.strftime('%m/%d/%Y') if sales_start else current_date.strftime('%m/%d/%Y') }}" class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY" name="tickets[sales_start_date]">
                                     </div>
                                     <div class="col-xs-5">
-                                        <input value="{{ sales_start.strftime('%H:%M') if sales_start else '19:00' }}" class="form-control col-xs-6 time start ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="tickets[sales_start_time]">
+                                        <input value="{{ sales_start.strftime('%H:%M') if sales_start else current_date.strftime('%H:%M') }}" class="form-control col-xs-6 time start ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="tickets[sales_start_time]">
                                     </div>
                                 </div>
                                 {# Calculate default Ticket Sales End date #}
@@ -177,10 +177,10 @@
                                 <div class="item form-group">
                                     <label>{{_("Sales End")}}</label><br>
                                     <div class="col-xs-7" style="padding: 0;">
-                                        <input value="{{ sales_end_date }}" class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY" name="tickets[sales_end_date]">
+                                        <input value="{{ sales_end_date }}" class="form-control col-xs-6 date end ticket-sales" placeholder="MM/DD/YYYY" name="tickets[sales_end_date]">
                                     </div>
                                     <div class="col-xs-5">
-                                        <input value="{{ sales_end.strftime('%H:%M') if sales_end else '22:00' }}" class="form-control col-xs-6 time end ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="tickets[sales_end_time]">
+                                        <input value="{{ sales_end.strftime('%H:%M') if sales_end else '22:00' }}" class="form-control col-xs-6 ticket-sales time end ui-timepicker-input" placeholder="HH:MM" autocomplete="off" name="tickets[sales_end_time]">
                                     </div>
                                 </div>
                                 <div class="item form-group">
