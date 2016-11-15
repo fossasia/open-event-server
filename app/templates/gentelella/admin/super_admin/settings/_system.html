@@ -10,83 +10,86 @@
                        value="{{ settings.app_name|default('Open Event', True) }}"/>
             </div>
         </div>
-        <h4>{{_("Google Tokens")}}</h4>
-        {{_("See")}} <a href="https://auth0.com/docs/connections/social/google">{{_("here")}}</a> {{_("on how to obtain these tokens")}}.<br><br>
+        <h4>{{ _("Google Tokens") }}</h4>
+        {{ _("See") }} <a
+            href="https://auth0.com/docs/connections/social/google">{{ _("here") }}</a> {{ _("on how to obtain these tokens") }}.<br><br>
         <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_("Client")}} ID</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("Client") }} ID</label>
             <div class=" col-md-9 col-xs-12">
                 <input name="google_client_id" class="form-control"
                        value="{{ settings.google_client_id|default('', True) }}"/>
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_("Client secret")}}</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("Client secret") }}</label>
             <div class=" col-md-9 col-xs-12">
                 <input name="google_client_secret" class="form-control"
                        value="{{ settings.google_client_secret|default('', True) }}">
             </div>
         </div>
         <br>
-        <h4>Facebook {{_("Tokens")}}</h4>
-        {{_("See")}} <a href="https://developers.facebook.com/docs/apps/register">{{_("here")}}</a> {{_("on how to obtain these tokens")}}.<br><br>
+        <h4>Facebook {{ _("Tokens") }}</h4>
+        {{ _("See") }} <a
+            href="https://developers.facebook.com/docs/apps/register">{{ _("here") }}</a> {{ _("on how to obtain these tokens") }}.<br><br>
         <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_("Client")}} ID</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("Client") }} ID</label>
             <div class=" col-md-9 col-xs-12">
                 <input name="fb_client_id" class="form-control col-md-6 col-xs-6"
                        value="{{ settings.fb_client_id|default('', True) }}">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_("Client secret")}}</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("Client secret") }}</label>
             <div class=" col-md-9 col-xs-12">
                 <input name="fb_client_secret" class="form-control col-md-6 col-xs-6"
                        value="{{ settings.fb_client_secret|default('', True) }}">
             </div>
         </div>
         <br>
-        <h4>Twitter {{_("Tokens")}}</h4>
-        {{_("See")}} <a href="https://dev.twitter.com/overview/documentation">{{_("here")}}</a> {{_("on how to obtain these tokens")}}.<br><br>
+        <h4>Twitter {{ _("Tokens") }}</h4>
+        {{ _("See") }} <a
+            href="https://dev.twitter.com/overview/documentation">{{ _("here") }}</a> {{ _("on how to obtain these tokens") }}.<br><br>
         <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_("Consumer key")}}</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("Consumer key") }}</label>
             <div class=" col-md-9 col-xs-12">
                 <input name="tw_consumer_key" class="form-control col-md-6 col-xs-6"
                        value="{{ settings.tw_consumer_key|default('', True) }}">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_("Consumer secret")}}</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("Consumer secret") }}</label>
             <div class=" col-md-9 col-xs-12">
                 <input name="tw_consumer_secret" class="form-control col-md-6 col-xs-6"
                        value="{{ settings.tw_consumer_secret|default('', True) }}">
             </div>
         </div>
         <br>
-        <h4>Instagram {{_("Tokens")}}</h4>
-        {{_("See")}} <a href="https://www.instagram.com/developer/authentication/">{{_("here")}}</a> {{_("on how to obtain these
-                                        tokens")}}.<br><br>
+        <h4>Instagram {{ _("Tokens") }}</h4>
+        {{ _("See") }} <a href="https://www.instagram.com/developer/authentication/">{{ _("here") }}</a> {{ _("on how to obtain these
+                                        tokens") }}.<br><br>
         <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_("Client")}} ID</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("Client") }} ID</label>
             <div class=" col-md-9 col-xs-12">
                 <input name="in_client_id" class="form-control col-md-6 col-xs-6"
                        value="{{ settings.in_client_id|default('', True) }}">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_("Client secret")}}</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("Client secret") }}</label>
             <div class=" col-md-9 col-xs-12">
                 <input name="in_client_secret" class="form-control col-md-6 col-xs-6"
                        value="{{ settings.in_client_secret|default('', True) }}">
             </div>
         </div>
         <br>
-        <h4>{{_("Storage")}}</h4>
-        {{_("Where to store data")}} ?
+        <h4>{{ _("Storage") }}</h4>
+        {{ _("Where to store data") }} ?
         <div class="form-group col-md-offset-1">
             <div class="radio">
                 <label>
                     <input type="radio" name="storage_place" id="storage_local" class="radio_storage" value="local"
                            {% if settings.storage_place != "s3" %}checked{% endif %}>
-                    {{_("Local")}}
+                    {{ _("Local") }}
                     <small style="margin-left: 5px;">(stored in /static/media/ folder)</small>
                 </label>
             </div>
@@ -94,12 +97,12 @@
                 <label>
                     <input type="radio" name="storage_place" id="storage_aws" class="radio_storage" value="s3"
                            {% if settings.storage_place == "s3" %}checked{% endif %}>
-                    {{_("Amazon S3")}}
+                    {{ _("Amazon S3") }}
                     <!-- <span style="line-height: 2em;"> -->
                     <small style="margin-left: 5px;">
-                        ({{_("See")}} <a
-                            href="http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/AWSCredentials.html">{{_("here")}}</a>
-                        {{_("on how to obtain these keys")}})
+                        ({{ _("See") }} <a
+                            href="http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/AWSCredentials.html">{{ _("here") }}</a>
+                        {{ _("on how to obtain these keys") }})
                     </small>
                     <!-- </span> -->
                 </label>
@@ -107,21 +110,21 @@
             <!-- s3 form -->
             <br>
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_("Bucket name")}}</label>
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("Bucket name") }}</label>
                 <div class=" col-md-9 col-xs-12">
                     <input name="aws_bucket_name" class="form-control col-md-6 col-xs-6"
                            value="{{ settings.aws_bucket_name|default('', True) }}">
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_("Key")}}</label>
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("Key") }}</label>
                 <div class=" col-md-9 col-xs-12">
                     <input name="aws_key" class="form-control col-md-6 col-xs-6"
                            value="{{ settings.aws_key|default('', True) }}">
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_("Secret")}}</label>
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("Secret") }}</label>
                 <div class=" col-md-9 col-xs-12">
                     <input name="aws_secret" class="form-control col-md-6 col-xs-6"
                            value="{{ settings.aws_secret|default('', True) }}">
@@ -129,18 +132,89 @@
             </div>
         </div>
         <br>
-        <h4>{{_("Sendgrid Token")}}</h4>
-        {{_("See")}} <a href="https://sendgrid.com/docs/User_Guide/Settings/api_keys.html">{{_("here")}}</a> {{_("on how to get this token")}}.<br><br>
-        <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_("Token")}}</label>
-            <div class=" col-md-9 col-xs-12">
-                <input name="sendgrid_key" class="form-control col-md-6 col-xs-6"
-                       value="{{ settings.sendgrid_key|default('', True) }}">
+
+
+        <h4>{{ _("Mail Settings") }}</h4>
+        <div class="form-group col-md-offset-1">
+           <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("From Email") }}</label>
+                <div class=" col-md-9 col-xs-12">
+                    <input name="email_from" class="form-control col-md-6 col-xs-6"
+                           value="{{ settings.email_from|default('', True) }}">
+                </div>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="email_service" id="email_service_smtp" class="radio_email" value="smtp"
+                           {% if settings.email_service == "smtp" %}checked{% endif %}>
+                    {{ _("SMTP") }}
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("Host") }}</label>
+                <div class=" col-md-9 col-xs-12">
+                    <input name="smtp_host" class="form-control col-md-6 col-xs-6"
+                           value="{{ settings.smtp_host|default('', True) }}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("Port") }}</label>
+                <div class=" col-md-9 col-xs-12">
+                    <input name="smtp_port" class="form-control col-md-6 col-xs-6"
+                           value="{{ settings.smtp_port|default('', True) }}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("Encryption") }}</label>
+                <div class=" col-md-9 col-xs-12">
+                    <select name="smtp_encryption" class="form-control col-md-6 col-xs-6">
+                        <option value="tls" {% if settings.smtp_encryption == 'tls' %}selected{% endif %}>TLS</option>
+                        <option value="tls_optional" {% if settings.smtp_encryption == 'tls_optional' %}selected{% endif %}>TLS (optional)</option>
+                        <option value="ssl" {% if settings.smtp_encryption == 'ssl' %}selected{% endif %}>SSL</option>
+                        <option value="none" {% if settings.smtp_encryption == 'none' %}selected{% endif %}>No Encryption</option>
+                    </select>
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("Username") }}</label>
+                <div class=" col-md-9 col-xs-12">
+                    <input name="smtp_username" class="form-control col-md-6 col-xs-6"
+                           value="{{ settings.smtp_username|default('', True) }}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("Password") }}</label>
+                <div class=" col-md-9 col-xs-12">
+                    <input name="smtp_password" class="form-control col-md-6 col-xs-6"
+                           value="{{ settings.smtp_password|default('', True) }}">
+                </div>
+            </div>
+
+            <div class="radio">
+                <label>
+                    <input type="radio" name="email_service" id="email_service_sendgrid" class="radio_email" value="sendgrid"
+                           {% if settings.email_service == "sendgrid" %}checked{% endif %}>
+                    {{ _("Sendgrid API") }}
+                    <small style="margin-left: 5px;">
+                        ({{ _("See") }} <a
+                            href="https://sendgrid.com/docs/User_Guide/Settings/api_keys.html">{{ _("here") }}</a> {{ _("on how to get this token") }}.)
+                    </small>
+                    <!-- </span> -->
+                </label>
+            </div>
+            <br>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("Sendgrid Token") }}</label>
+                <div class=" col-md-9 col-xs-12">
+                    <input name="sendgrid_key" class="form-control col-md-6 col-xs-6"
+                           value="{{ settings.sendgrid_key|default('', True) }}">
+                </div>
             </div>
         </div>
         <br>
-        <h4>{{_("App secret key")}}</h4>
-        {{_("Secret key for the application. Recommended is a random string minimum 20 characters in length.")}}<br><br>
+        <h4>{{ _("App secret key") }}</h4>
+        {{ _("Secret key for the application. Recommended is a random string minimum 20 characters in length.") }}<br><br>
         <div class="item form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">Secret</label>
             <div class=" col-md-9 col-xs-12">
@@ -149,10 +223,10 @@
             </div>
         </div>
         <br>
-        <h4>{{_("Super Admin Email ID")}}</h4>
-        {{_("The email ID of the super admin user created during initial deployment.")}}<br><br>
+        <h4>{{ _("Super Admin Email ID") }}</h4>
+        {{ _("The email ID of the super admin user created during initial deployment.") }}<br><br>
         <div class="item form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{_("Email")}}</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("Email") }}</label>
             <div class=" col-md-9 col-xs-12">
                 <input name="super_admin_email" class="form-control col-md-6 col-xs-6" type="email"
                        value="{{ super_admin_email }}">
@@ -161,7 +235,7 @@
         <br>
         <div class="ln_solid"></div>
         <div class="form-group">
-            <button type="submit" class="btn btn-success pull-right">{{_("Save")}}</button>
+            <button type="submit" class="btn btn-success pull-right">{{ _("Save") }}</button>
         </div>
     </div>
 

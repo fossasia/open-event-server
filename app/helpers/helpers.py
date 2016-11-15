@@ -376,23 +376,50 @@ def send_email(to, action, subject, html):
     Sends email and records it in DB
     """
     if not string_empty(to):
-        key = get_settings()['sendgrid_key']
-        if not key and not current_app.config['TESTING']:
-            print 'Sendgrid key not defined'
-            return
+        email_service = get_settings()['email_service']
+        email_from = get_settings()['email_from']
+        payload = {
+            'to': to,
+            'from': email_from,
+            'subject': subject,
+            'html': html
+        }
 
         if not current_app.config['TESTING']:
-            headers = {
-                "Authorization": ("Bearer " + key)
-            }
-            payload = {
-                'to': to,
-                'from': 'open-event@googlegroups.com',
-                'subject': subject,
-                'html': html
-            }
-            from tasks import send_email_task
-            send_email_task.delay(payload, headers)
+            if email_service == 'smtp':
+                smtp_encryption = get_settings()['smtp_host']
+
+                if smtp_encryption == 'tls':
+                    smtp_encryption = 'required'
+                elif smtp_encryption == 'ssl':
+                    smtp_encryption = 'ssl'
+                elif smtp_encryption == 'tls_optional':
+                    smtp_encryption = 'optional'
+                else:
+                    smtp_encryption = 'none'
+
+                config = {
+                    'host': get_settings()['smtp_host'],
+                    'username': get_settings()['smtp_username'],
+                    'password': get_settings()['smtp_password'],
+                    'tls': smtp_encryption,
+                    'port': get_settings()['smtp_port'],
+                }
+
+                from tasks import send_mail_via_smtp_task
+                send_mail_via_smtp_task.delay(config, payload)
+
+            else:
+                key = get_settings()['sendgrid_key']
+                if not key and not current_app.config['TESTING']:
+                    print 'Sendgrid key not defined'
+                    return
+                headers = {
+                    "Authorization": ("Bearer " + key)
+                }
+                from tasks import send_email_task
+                send_email_task.delay(payload, headers)
+
         # record_mail(to, action, subject, html)
         mail = Mail(
             recipient=to, action=action, subject=subject,

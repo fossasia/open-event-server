@@ -111,6 +111,23 @@ class MyHomeView(AdminIndexView):
             user_logged_in(user)
             return redirect(intended_url())
 
+    @expose('/resend/', methods=('GET',))
+    def resend_email_confirmation(self):
+        user = login.current_user
+        if not user.is_verified:
+            s = get_serializer()
+            email = user.email
+            form_hash = s.dumps([email, str_generator()])
+            link = url_for('.create_account_after_confirmation_view', hash=form_hash, _external=True)
+            data = {
+                "email": email
+            }
+            send_email_confirmation(data, link)
+            flash('Confirmation email has been sent again.', 'info')
+        else:
+            flash('Your email has already been confirmed.', 'info')
+        return redirect(url_for('events.index_view'))
+
     @expose('/account/create/<hash>', methods=('GET',))
     def create_account_after_confirmation_view(self, hash):
         s = get_serializer()
@@ -239,13 +256,5 @@ class MyHomeView(AdminIndexView):
                 return abort(404)
 
     @expose('/resend_email/')
-    def resend_email_confirmation(self):
-        user = DataGetter.get_user(login.current_user.id)
-        s = get_serializer()
-        data = [user.email, str_generator()]
-        form_hash = s.dumps(data)
-        link = url_for('.create_account_after_confirmation_view', hash=form_hash, _external=True)
-        form = {"email": user.email, "password": user.password}
-        form = ImmutableMultiDict(form)
-        send_email_confirmation(form, link)
-        return redirect(url_for('events.index_view'))
+    def resend_email_confirmation_old(self):
+        return self.resend_email_confirmation()
