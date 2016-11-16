@@ -15,6 +15,12 @@ spec:
         image: gcr.io/eventyay/web:v1
         command: ["/bin/sh","-c"]
         args: ["chmod +x ./setup.sh && ./setup.sh"]
+        livenessProbe:
+          httpGet:
+            path: /health-check/
+            port: 5000
+          initialDelaySeconds: 15
+          timeoutSeconds: 1
         ports:
         - containerPort: 5000
           protocol: TCP

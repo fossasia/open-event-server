@@ -1,4 +1,7 @@
 """Copyright 2015 Rafal Kowalski"""
+from flask.ext.migrate import stamp
+from sqlalchemy.engine import reflection
+
 from app.helpers.data import save_to_db
 from app.models.event import Event, get_new_event_identifier
 from app import manager
@@ -32,15 +35,20 @@ def add_event_identifier():
 def initialize_db(credentials):
     with app.app_context():
         populate_data = True
-        try:
-            db.create_all()
-            credentials = credentials.split(":")
-            DataManager.create_super_admin(credentials[0], credentials[1])
-        except:
-            populate_data = False
-            print "Could not create tables. Either database does not exist or tables already created"
-        if populate_data:
-            populate()
+        inspector = reflection.Inspector.from_engine(db.engine)
+        table_name = 'events'
+        table_names = inspector.get_table_names()
+        if table_name not in table_names:
+            try:
+                db.create_all()
+                stamp()
+            except:
+                populate_data = False
+                print "Could not create tables. Either database does not exist or tables already created"
+            if populate_data:
+                credentials = credentials.split(":")
+                DataManager.create_super_admin(credentials[0], credentials[1])
+                populate()
 
 if __name__ == "__main__":
     manager.run()

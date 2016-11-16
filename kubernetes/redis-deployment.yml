@@ -14,6 +14,12 @@ spec:
         image: redis:3-alpine
         args:
         - redis-server
+        livenessProbe:
+          exec:
+            command:
+              - "/bin/sh"
+              - "-c"
+              - "redis-cli set liveness-probe \"`date`\" | grep OK"
         ports:
         - containerPort: 6379
           protocol: TCP
