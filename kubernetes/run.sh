@@ -8,9 +8,8 @@ then
     bower install --allow-root && bower cache clean --allow-root
 fi
 pwd
-python manage.py initialize_db -c open_event_test_user@fossasia.org:fossasia # TODO. Temporary hack. will be removed
+python manage.py initialize_db -c open_event_test_user@fossasia.org:fossasia
 python manage.py db upgrade > /dev/null 2>&1
-python manage.py db stamp head # TODO. Temporary hack. will be removed
 if [ "$DEPLOYMENT" == "web" ]
 then
     gunicorn -b 0.0.0.0:5000 app:app --worker-class eventlet -w 1

@@ -532,6 +532,11 @@ def favicon():
 def documentation():
     return auto.html()
 
+@app.route('/health-check/')
+def health_check():
+    return jsonify({
+        "status": "ok"
+    })
 
 @app.route('/api/location/', methods=('GET', 'POST'))
 def location():
