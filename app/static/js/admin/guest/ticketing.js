@@ -83,6 +83,7 @@ $orderPaymentForm.submit(function (e) {
         dataType: 'json',
         data: data,
         success: function (json) {
+            $('html,body').animate({scrollTop: 0}, 'slow');
             if (json.status === "ok") {
                 if (json.hasOwnProperty('email')) {
                     userEmail = json.email;
@@ -112,6 +113,7 @@ $orderPaymentForm.submit(function (e) {
                         });
                         break;
                 }
+
             } else {
                 $orderPaymentForm.setFormLoading(false, 'Pay now');
                 createSnackbar("An error occurred while initializing your payment.", "Try again", function () {
