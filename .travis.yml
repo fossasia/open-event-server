@@ -13,8 +13,6 @@ python:
 cache:
   directories:
   - "$HOME/google-cloud-sdk/"
-before_install:
-- bash kubernetes/deployment/setup.sh
 install:
 - pip install -r requirements/tests.txt
 # Environment variables
