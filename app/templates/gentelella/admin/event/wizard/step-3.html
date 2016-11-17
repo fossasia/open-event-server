@@ -166,7 +166,7 @@
         var $element = $($(".session-type-holder")[0]).clone();
         $element.find("input").val('').attr("value", "");
         $element.find(".session-length").timepicker({
-            'timeFormat': 'G.i'
+            'timeFormat': 'H.i'
         });
 
         $('.session-types').append($element);
