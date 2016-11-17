@@ -13,13 +13,15 @@ RUN apt-get install -y --no-install-recommends build-essential python-dev libpq-
 # nodejs bower
 RUN curl -sL https://deb.nodesource.com/setup_4.x | bash && apt-get install -y --force-yes nodejs
 
+RUN npm install bower -g && npm cache clean
+
 ENV INSTALL_PATH /opev
 
 RUN mkdir -p $INSTALL_PATH
 
-RUN npm install bower -g && npm cache clean
+WORKDIR $INSTALL_PATH
 
-RUN chmod +x setup.sh
+COPY . .
 
 RUN bash setup.sh
 
