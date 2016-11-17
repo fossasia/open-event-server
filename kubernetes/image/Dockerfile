@@ -1,6 +1,9 @@
 FROM python:2-slim
 MAINTAINER Niranjan Rajendran <niranjan94@yahoo.com>
 
+ENV REPOSITORY https://github.com/fossasia/open-event-orga-server.git
+ENV BRANCH development
+
 # apt-get update
 RUN apt-get clean -y && apt-get update -y
 # update some packages
@@ -14,8 +17,8 @@ ENV INSTALL_PATH /opev
 
 RUN mkdir -p $INSTALL_PATH
 
-WORKDIR $INSTALL_PATH
-
 RUN npm install bower -g && npm cache clean
 
-COPY setup.sh setup.sh
+CMD bash setup.sh
+
+WORKDIR $INSTALL_PATH/open_event
