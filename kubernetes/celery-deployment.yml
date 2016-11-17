@@ -12,16 +12,12 @@ spec:
     spec:
       containers:
       - name: celery
-        image: gcr.io/eventyay/web:v1
+        image: gcr.io/eventyay/web:latest
         command: ["/bin/sh","-c"]
-        args: ["chmod +x ./setup.sh && ./setup.sh"]
+        args: ["./kubernetes/run.sh"]
         env:
         - name: C_FORCE_ROOT
           value: 'true'
-        - name: REPOSITORY
-          value: 'https://github.com/fossasia/open-event-orga-server.git'
-        - name: BRANCH
-          value: 'development'
         - name: DEPLOYMENT
           value: 'celery'
         resources: {}
