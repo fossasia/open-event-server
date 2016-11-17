@@ -10,9 +10,6 @@ addons:
     - libffi-dev
 python:
   - "2.7"
-cache:
-  directories:
-  - "$HOME/google-cloud-sdk/"
 install:
 - pip install -r requirements/tests.txt
 # Environment variables

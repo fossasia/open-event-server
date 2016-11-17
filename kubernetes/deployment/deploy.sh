@@ -5,12 +5,15 @@ if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_REPO_SLUG" != "fossasia/open-
     exit 0
 fi
 
-if ! type "kubectl" > /dev/null; then
-  rm -rf $HOME/google-cloud-sdk/
-  curl https://sdk.cloud.google.com | bash;
-  gcloud components install kubectl
-fi
-gcloud components update
+sudo rm -f /usr/bin/git-credential-gcloud.sh
+sudo rm -f /usr/bin/bq
+sudo rm -f /usr/bin/gsutil
+sudo rm -f /usr/bin/gcloud
+
+curl https://sdk.cloud.google.com | bash;
+source ~/.bashrc
+gcloud components install kubectl
+
 gcloud config set compute/zone us-west1-a
 # Decrypt the credentials we added to the repo using the key we added with the Travis command line tool
 openssl aes-256-cbc -K $encrypted_27e15b7757b4_key -iv $encrypted_27e15b7757b4_iv -in eventyay-8245fde7ab8a.json.enc -out eventyay-8245fde7ab8a.json -d
