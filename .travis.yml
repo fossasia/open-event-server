@@ -1,4 +1,7 @@
 language: python
+sudo: required
+services:
+  - docker
 addons:
   apt:
     packages:
