@@ -19,6 +19,8 @@ RUN mkdir -p $INSTALL_PATH
 
 RUN npm install bower -g && npm cache clean
 
+RUN chmod +x setup.sh
+
 RUN bash setup.sh
 
 WORKDIR $INSTALL_PATH/open_event
