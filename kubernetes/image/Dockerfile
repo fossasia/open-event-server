@@ -4,7 +4,7 @@ MAINTAINER Niranjan Rajendran <niranjan94@yahoo.com>
 ENV REPOSITORY https://github.com/fossasia/open-event-orga-server.git
 ENV BRANCH development
 
-ENV COMMIT_HASH $COMMIT_HASH
+ARG COMMIT_HASH
 
 # apt-get update
 RUN apt-get clean -y && apt-get update -y
