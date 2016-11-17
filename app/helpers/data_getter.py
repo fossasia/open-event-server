@@ -503,20 +503,20 @@ class DataGetter(object):
     def get_live_events():
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.end_time >= datetime.datetime.now()) \
-            .filter(Event.state == 'Published').filter(Event.in_trash is not True)
+            .filter(Event.state == 'Published').filter(Event.in_trash == False)
         return DataGetter.trim_attendee_events(events)
 
     @staticmethod
     def get_draft_events():
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
-            .filter(Event.state == 'Draft').filter(Event.in_trash is not True)
+            .filter(Event.state == 'Draft').filter(Event.in_trash == False)
         return DataGetter.trim_attendee_events(events)
 
     @staticmethod
     def get_past_events():
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.end_time <= datetime.datetime.now()).filter(
-            or_(Event.state == 'Completed', Event.state == 'Published')).filter(Event.in_trash is not True)
+            or_(Event.state == 'Completed', Event.state == 'Published')).filter(Event.in_trash == False)
         return DataGetter.trim_attendee_events(events)
 
     @staticmethod
