@@ -117,6 +117,20 @@ class EventsView(BaseView):
             else:
                 return jsonify({'status': 'no logo'})
 
+    @expose('/create/files/sponsor_logo', methods=('POST',))
+    def create_sponsor_logo_upload(self):
+        if request.method == 'POST':
+            logo_image = request.form['logo']
+            if logo_image:
+                logo_file = uploaded_file(file_content=logo_image)
+                logo = upload_local(
+                    logo_file,
+                    UPLOAD_PATHS['temp']['event'].format(uuid=uuid4())
+                )
+                return jsonify({'status': 'ok', 'logo': logo})
+            else:
+                return jsonify({'status': 'no logo'})
+
     @expose('/create/', methods=('GET', 'POST'))
     def create_view(self, ):
         if request.method == 'POST':
@@ -297,6 +311,29 @@ class EventsView(BaseView):
             event = DataGetter.get_event(event_id)
             event.logo = ''
             save_to_db(event)
+            return jsonify({'status': 'ok'})
+
+    @expose('/<int:event_id>/sponsor/<int:sponsor_id>/editfiles/sponsor_logo', methods=('POST', 'DELETE'))
+    def sponsor_logo_upload(self, event_id, sponsor_id):
+        if request.method == 'POST':
+            logo_image = request.form['logo']
+            if logo_image:
+                logo_file = uploaded_file(file_content=logo_image)
+                logo = upload(
+                    logo_file,
+                    UPLOAD_PATHS['sponsors']['logo'].format(
+                        event_id=event_id, id=sponsor_id
+                    ))
+                sponsor = DataGetter.get_sponsor(sponsor_id)
+                sponsor.logo = logo
+                save_to_db(sponsor)
+                return jsonify({'status': 'ok', 'logo': logo})
+            else:
+                return jsonify({'status': 'no logo'})
+        elif request.method == 'DELETE':
+            sponsor = DataGetter.get_sponsor(sponsor_id)
+            sponsor.logo = ''
+            save_to_db(sponsor)
             return jsonify({'status': 'ok'})
 
     @expose('/<event_id>/edit/', methods=('GET', 'POST'))
