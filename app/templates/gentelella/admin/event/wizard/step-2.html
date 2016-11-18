@@ -4,13 +4,6 @@
         <td><input value="{{ sponsor.name | default('') }}" name="sponsors[name]"
                    class="form-control col-md-7 col-xs-12"/>
         </td>
-        <td width="11%">
-            <input type="file" id="sponsors-logo-{{ sponsor.id | default(1) }}" name="sponsors[logo]"
-                   class="upload-btn" value="" />
-            <label class="file-label" for="sponsors-logo-{{ sponsor.id | default(1) }}">
-                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-                {{_("Upload File")}}</label>
-        </td>
         <td><input type="number" value="{{ sponsor.level | default('') }}" name="sponsors[level]"
                    class="form-control col-md-7 col-xs-12"/></td>
         <td><input name="sponsors[type]" class="form-control col-md-7 col-xs-12"
@@ -26,14 +19,51 @@
     </tr>
     <tr class="row-sponsor-addon">
 
-           <td colspan="5">
+           <td>
                <div class="form-group">
                    <label>{{_("Description")}}</label>
                    <textarea name="sponsors[description]"
                   class="form-control sponsor-textarea col-md-7 col-xs-12">{{ sponsor.description }}</textarea>
                </div>
            </td>
+           <td colspan="5">
+               {% if sponsor.id %}
+                    <input type="hidden" class="spnsrs_logo_inp" id="sponsors-logo-{{ sponsor.id | default(1) }}">
+                {% else %}
+                    <input type="hidden" class="spnsrs_logo_inp" name="sponsors[logo]" id="sponsors-logo-{{ sponsor.id | default(1) }}">
+                {% endif %}
+
+                <div class="item form-group" id="sponsor-logo-upload-group"
+                     {% if sponsor.logo and sponsor.logo != '' %}style="display: none;"{% endif %}>
+                    <label>{{_("Logo")}}</label><br>
+                    <div class="image-box">
+                        <input type="file" data-id="{{ sponsor.id | default(0)}}" id="sponsor-logo-upload-{{ sponsor.id | default(1) }}" name="logo-upload" class="spnsr-image-upload-btn no-js"
+                               accept="image/*"/>
+                        <label class="spnsr-file-label" for="sponsor-logo-upload-{{ sponsor.id | default(1) }}" id="logo-upload-label-{{ sponsor.id | default(1) }}">
+                            <i class="fa fa-4x fa-file-image-o" aria-hidden="true"></i> <br>
+                            <h3>{{_("Select Logo")}}</h3>
+                        </label><br>
+                    </div>
+                    <span class="text-muted" style="color: #a2a2a2;">
+                        {{_("Logo size must be less than 1MB.")}}
+                    </span>
+                </div>
+
+                <div class="item form-group" id="sponsor-logo-view-group"
+                     {% if not sponsor.logo or sponsor.logo == '' %}style="display: none;"{% endif %}>
+                    <label>{{_("Logo")}}</label><br>
+                    <img src="{{ event.logo | default('', true) }}" style="width: 350px;"><br><br>
+                    <button type="button" class="btn btn-sm btn-default remove-spnsr-logo" id="remove-logo-btn">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                        {{_("Remove")}}
+                    </button>
+                    <br>
+                </div>
+           </td>
     </tr>
+    <script type="text/javascript">
+
+    </script>
 {% endmacro %}
 
 <div id="step-2" class="wizard_content" >
@@ -56,7 +86,6 @@
                 <tr>
                     <th>Sl.</th>
                     <th>{{_("Name")}}</th>
-                    <th>{{_("Logo")}}</th>
                     <th>{{_("Level")}}</th>
                     <th>{{_("Type")}}</th>
                     <th>URL</th>
@@ -125,9 +154,11 @@
         $element.find("input").val("").attr("value", "");
         $addOnElement.find("textarea").val("").attr("value", "");
         $addOnElement.find("p").html("");
-        $element.find("input[type=file]").val("").attr("id", "sponsors-logo-" + sponsor_counter);
-        $element.find(".file-label").attr("for", "sponsors-logo-" + sponsor_counter);
-        $element.find(".file-label").html('<i class="fa fa-cloud-upload" aria-hidden="true"></i>Upload File');
+        $addOnElement.find('.spnsrs_logo_inp').val("").attr("value", "").attr("id", "sponsors-logo-"+sponsor_counter);
+        $addOnElement.find('.spnsr-image-upload-btn').val("").attr("value", "").attr("id", "sponsor-logo-upload-"+sponsor_counter);
+        $addOnElement.find('.spnsr-file-label').val('<i class="fa fa-4x fa-file-image-o" aria-hidden="true"></i> <br><h3>Select Logo</h3>').attr("id", "logo-upload-label-"+sponsor_counter).attr("for", "sponsor-logo-upload-"+sponsor_counter);
+        $addOnElement.find('#sponsor-logo-upload-group').show();
+        $addOnElement.find('#sponsor-logo-view-group').hide();
         $('.sponsors').append($element).append($addOnElement);
         $('.remove-sponsor').show();
     });
@@ -150,4 +181,84 @@
     $(function () {
         superFileUploadButton();
     });
+
+    function resetFormElement(e) {
+        e = $(e);
+        e.wrap('<form>').closest('form').get(0).reset();
+        e.unwrap();
+    }
+
+    $(document).on('change', ".spnsr-image-upload-btn", function () {
+        var input = this;
+        var sponsor_id = $(this).attr('data-id');
+        console.log($(this).attr('id'));
+        if (input.files && input.files[0]) {
+            if (input.files[0].size > 1048576) {
+                createSnackbar("Image must be less than 1 MB in size");
+                resetFormElement(input);
+            } else {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $(input).parent().find('.spnsr-file-label').html(loadingImage);
+                    $(".save-event").prop("disabled", true);
+                    $(".publish-unpublish-event").prop("disabled", true);
+                    var url = "";
+                    if (sponsor_id == '0') {
+                        url = "{{ url_for('events.create_sponsor_logo_upload') }}"
+                    } else {
+                        url = "events/{{ event.id }}/sponsor/"+sponsor_id+"/editfiles/sponsor_logo"
+                    }
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {logo: e.target.result},
+                        dataType: 'json'
+                    }).done(function(data) {
+                            console.log(data);
+                            resetFormElement(input);
+                            $(input).parent().parent().parent().find('.spnsrs_logo_inp').val(data.logo);
+                            $(input).parent().parent().hide();
+                            $(input).parent().parent().parent().find('#sponsor-logo-view-group').show().find("img").attr("src", e.target.result);
+                        }).fail(function(data) {
+                            alert("Something went wrong. Please try again.");
+                        }).always(function() {
+                            $(input).parent().find('.spnsr-file-label').html('<i class="fa fa-4x fa-file-image-o" aria-hidden="true"></i> <br> <h3>Select Logo</h3>');
+                            /* Enable Save Event buttons */
+                            $(".save-event").prop("disabled", false);
+                            $(".publish-unpublish-event").prop("disabled", false);
+                        });
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        else {
+            logError("No FileReader support");
+        }
+
+    });
+    var loadingImage = '<img src="' + "{{ url_for('static', filename='img/loading.gif') }}" + '" style="width: 50px;"> <h3>Uploading</h3>';
+    {% if event %}
+
+    $(".remove-spnsr-logo").click(function () {
+        $.ajax({
+            type: 'DELETE',
+            url: "{{ url_for('sadmin_content.placeholder_upload', event_id=event.id) }}",
+            dataType: 'json'
+        }).done(function(data) {
+            console.log(data);
+            $("#placeholder-view-group").hide();
+            $("#placeholder-upload-group").show();
+            $("#placeholder").val('');
+        }).fail(function(data) {
+            alert("Something went wrong. Please try again.");
+        });
+    });
+    {% else %}
+
+    $(".remove-spnsr-logo").click(function () {
+        $("#placeholder-view-group").hide();
+        $("#placeholder-upload-group").show();
+        $("#placeholder").val('');
+    });
+    {% endif %}
 </script>

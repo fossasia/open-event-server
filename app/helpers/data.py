@@ -1440,7 +1440,7 @@ class DataManager(object):
             sponsor_url = form.getlist('sponsors[url]')
             sponsor_level = form.getlist('sponsors[level]')
             sponsor_description = form.getlist('sponsors[description]')
-            sponsor_logo_url = []
+            sponsor_logo = form.getlist('sponsors[logo]')
 
             if 'pay_by_stripe' in form:
                 if form.get('stripe_added', u'no') == u'yes':
@@ -1461,14 +1461,19 @@ class DataManager(object):
                                           level=sponsor_level[index], description=sponsor_description[index],
                                           event_id=event.id)
                         save_to_db(sponsor, "Sponsor created")
-                        if len(img_files) != 0:
-                            img_url = upload(
-                                img_files[index],
+                        print "#########"+sponsor_logo[index]
+                        if sponsor_logo[index] != "":
+                            filename = '{}.png'.format(time.time())
+                            filepath = '{}/static/{}'.format(path.realpath('.'),
+                                sponsor_logo[index][len('/serve_static/'):])
+                            print "**************"+filepath
+                            logo_file = UploadedFile(filepath, filename)
+                            logo = upload(
+                                logo_file,
                                 UPLOAD_PATHS['sponsors']['logo'].format(
                                     event_id=int(event.id), id=int(sponsor.id)
                                 ))
-                            sponsor_logo_url.append(img_url)
-                            sponsor.logo = sponsor_logo_url[index]
+                            sponsor.logo = logo
                         else:
                             sponsor.logo = ""
                         save_to_db(sponsor, "Sponsor updated")
