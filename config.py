@@ -21,6 +21,10 @@ class Config(object):
     CACHING = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///../app.db')
     BASE_DIR = _basedir
+    FORCE_SSL = os.getenv('FORCE_SSL', 'no') == 'yes'
+
+    if FORCE_SSL:
+        PREFERRED_URL_SCHEME = 'https'
 
 
 class ProductionConfig(Config):

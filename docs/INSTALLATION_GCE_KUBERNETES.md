@@ -104,7 +104,7 @@ _You can delete the instance if your not planning to use it for anything else. B
 - From the project directory, use kubectl to deploy our application from the defined configuration files that are in the `kubernetes` directory.
 
     ```
-    kubectl create -f ./kubernetes
+    kubectl create -R -f ./kubernetes/yamls
     ```
 
 - The Kubernetes master creates the load balancer and related Compute Engine forwarding rules, target pools, and firewall rules to make the service fully accessible from outside of Google Cloud Platform.
@@ -126,7 +126,7 @@ _You can delete the instance if your not planning to use it for anything else. B
 - Delete all created pods, services and deployments
 
     ```
-    kubectl delete -f kubernetes/
+    kubectl delete -R -f kubernetes/yamls/
     ```
     
 -  Access The Kubernetes dashboard Web GUI

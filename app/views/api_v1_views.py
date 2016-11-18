@@ -538,6 +538,14 @@ def health_check():
         "status": "ok"
     })
 
+@app.route('/healthz/')
+def healthz_check():
+    return health_check()
+
+@app.route('/healthz')
+def healthz_check_no_slash():
+    return health_check()
+
 @app.route('/api/location/', methods=('GET', 'POST'))
 def location():
     ip = get_real_ip(True)
