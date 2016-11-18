@@ -1461,12 +1461,10 @@ class DataManager(object):
                                           level=sponsor_level[index], description=sponsor_description[index],
                                           event_id=event.id)
                         save_to_db(sponsor, "Sponsor created")
-                        print "#########"+sponsor_logo[index]
                         if sponsor_logo[index] != "":
                             filename = '{}.png'.format(time.time())
                             filepath = '{}/static/{}'.format(path.realpath('.'),
                                 sponsor_logo[index][len('/serve_static/'):])
-                            print "**************"+filepath
                             logo_file = UploadedFile(filepath, filename)
                             logo = upload(
                                 logo_file,
@@ -1889,7 +1887,7 @@ class DataManager(object):
         social_link_id = form.getlist('social[id]')
 
         sponsor_name = form.getlist('sponsors[name]')
-        sponsor_logo_url = []
+        sponsor_logo = form.getlist('sponsors[logo]')
         sponsor_url = form.getlist('sponsors[url]')
         sponsor_type = form.getlist('sponsors[type]')
         sponsor_level = form.getlist('sponsors[level]')
@@ -2059,20 +2057,17 @@ class DataManager(object):
                                       level=sponsor_level[index], description=sponsor_description[index],
                                       event_id=event.id, sponsor_type=sponsor_type[index])
                     save_to_db(sponsor, "Sponsor created")
-                    if len(img_files) != 0:
-                        if img_files[index]:
-                            img_url = upload(
-                                img_files[index],
-                                UPLOAD_PATHS['sponsors']['logo'].format(
-                                    event_id=int(event.id), id=int(sponsor.id)
-                                ))
-                            sponsor_logo_url.append(img_url)
-                            sponsor.logo = sponsor_logo_url[index]
-                        else:
-                            if name in old_sponsor_names:
-                                sponsor.logo = old_sponsor_logos[index]
-                            else:
-                                sponsor.logo = ""
+                    if sponsor_logo[index] != "":
+                        filename = '{}.png'.format(time.time())
+                        filepath = '{}/static/{}'.format(path.realpath('.'),
+                            sponsor_logo[index][len('/serve_static/'):])
+                        logo_file = UploadedFile(filepath, filename)
+                        logo = upload(
+                            logo_file,
+                            UPLOAD_PATHS['sponsors']['logo'].format(
+                                event_id=int(event.id), id=int(sponsor.id)
+                            ))
+                        sponsor.logo = logo
                     else:
                         if name in old_sponsor_names:
                             sponsor.logo = old_sponsor_logos[index]

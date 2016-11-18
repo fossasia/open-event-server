@@ -27,11 +27,7 @@
                </div>
            </td>
            <td colspan="5">
-               {% if sponsor.id %}
-                    <input type="hidden" class="spnsrs_logo_inp" id="sponsors-logo-{{ sponsor.id | default(1) }}">
-                {% else %}
-                    <input type="hidden" class="spnsrs_logo_inp" name="sponsors[logo]" id="sponsors-logo-{{ sponsor.id | default(1) }}">
-                {% endif %}
+                <input type="hidden" class="spnsrs_logo_inp" name="sponsors[logo]" id="sponsors-logo-{{ sponsor.id | default(1) }}" value="{{ sponsor.logo | default('') }}">
 
                 <div class="item form-group" id="sponsor-logo-upload-group"
                      {% if sponsor.logo and sponsor.logo != '' %}style="display: none;"{% endif %}>
@@ -52,7 +48,7 @@
                 <div class="item form-group" id="sponsor-logo-view-group"
                      {% if not sponsor.logo or sponsor.logo == '' %}style="display: none;"{% endif %}>
                     <label>{{_("Logo")}}</label><br>
-                    <img src="{{ event.logo | default('', true) }}" style="width: 350px;"><br><br>
+                    <img src="{{ sponsor.logo | default('', true) }}" style="width: 350px;"><br><br>
                     <button type="button" class="btn btn-sm btn-default remove-spnsr-logo" id="remove-logo-btn">
                         <i class="fa fa-trash-o" aria-hidden="true"></i>
                         {{_("Remove")}}
@@ -155,7 +151,7 @@
         $addOnElement.find("textarea").val("").attr("value", "");
         $addOnElement.find("p").html("");
         $addOnElement.find('.spnsrs_logo_inp').val("").attr("value", "").attr("id", "sponsors-logo-"+sponsor_counter);
-        $addOnElement.find('.spnsr-image-upload-btn').val("").attr("value", "").attr("id", "sponsor-logo-upload-"+sponsor_counter);
+        $addOnElement.find('.spnsr-image-upload-btn').val("").attr("value", "").attr("id", "sponsor-logo-upload-"+sponsor_counter).attr("data-id",  "0");
         $addOnElement.find('.spnsr-file-label').val('<i class="fa fa-4x fa-file-image-o" aria-hidden="true"></i> <br><h3>Select Logo</h3>').attr("id", "logo-upload-label-"+sponsor_counter).attr("for", "sponsor-logo-upload-"+sponsor_counter);
         $addOnElement.find('#sponsor-logo-upload-group').show();
         $addOnElement.find('#sponsor-logo-view-group').hide();
@@ -191,7 +187,6 @@
     $(document).on('change', ".spnsr-image-upload-btn", function () {
         var input = this;
         var sponsor_id = $(this).attr('data-id');
-        console.log($(this).attr('id'));
         if (input.files && input.files[0]) {
             if (input.files[0].size > 1048576) {
                 createSnackbar("Image must be less than 1 MB in size");
@@ -206,7 +201,7 @@
                     if (sponsor_id == '0') {
                         url = "{{ url_for('events.create_sponsor_logo_upload') }}"
                     } else {
-                        url = "events/{{ event.id }}/sponsor/"+sponsor_id+"/editfiles/sponsor_logo"
+                        url = "/events/{{ event.id }}/sponsor/"+sponsor_id+"/editfiles/sponsor_logo"
                     }
                     $.ajax({
                         type: 'POST',
@@ -214,7 +209,6 @@
                         data: {logo: e.target.result},
                         dataType: 'json'
                     }).done(function(data) {
-                            console.log(data);
                             resetFormElement(input);
                             $(input).parent().parent().parent().find('.spnsrs_logo_inp').val(data.logo);
                             $(input).parent().parent().hide();
@@ -237,28 +231,26 @@
 
     });
     var loadingImage = '<img src="' + "{{ url_for('static', filename='img/loading.gif') }}" + '" style="width: 50px;"> <h3>Uploading</h3>';
-    {% if event %}
 
     $(".remove-spnsr-logo").click(function () {
-        $.ajax({
-            type: 'DELETE',
-            url: "{{ url_for('sadmin_content.placeholder_upload', event_id=event.id) }}",
-            dataType: 'json'
-        }).done(function(data) {
-            console.log(data);
-            $("#placeholder-view-group").hide();
-            $("#placeholder-upload-group").show();
-            $("#placeholder").val('');
-        }).fail(function(data) {
-            alert("Something went wrong. Please try again.");
-        });
+        var sponsor_id = $(this).parent().parent().find(".spnsr-image-upload-btn").attr("data-id");
+        var remove = this;
+        if (sponsor_id != '0') {
+            $.ajax({
+                type: 'DELETE',
+                url: "/events/{{ event.id }}/sponsor/"+sponsor_id+"/editfiles/sponsor_logo",
+                dataType: 'json'
+            }).done(function(data) {
+                $(remove).parent().hide();
+                $(remove).parent().parent().find("#sponsor-logo-upload-group").show();
+                $(remove).parent().parent().find(".spnsrs_logo_inp").val('');
+            }).fail(function(data) {
+                alert("Something went wrong. Please try again.");
+            });
+        } else {
+            $(remove).parent().hide();
+            $(remove).parent().parent().find("#sponsor-logo-upload-group").show();
+            $(remove).parent().parent().find(".spnsrs_logo_inp").val('');
+        }
     });
-    {% else %}
-
-    $(".remove-spnsr-logo").click(function () {
-        $("#placeholder-view-group").hide();
-        $("#placeholder-upload-group").show();
-        $("#placeholder").val('');
-    });
-    {% endif %}
 </script>

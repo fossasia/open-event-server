@@ -322,7 +322,7 @@ class EventsView(BaseView):
                 logo = upload(
                     logo_file,
                     UPLOAD_PATHS['sponsors']['logo'].format(
-                        event_id=event_id, sponsor_id=sponsor_id
+                        event_id=event_id, id=sponsor_id
                     ))
                 sponsor = DataGetter.get_sponsor(sponsor_id)
                 sponsor.logo = logo
