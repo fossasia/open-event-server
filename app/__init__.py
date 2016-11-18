@@ -483,14 +483,6 @@ def after_request(response):
                                                                                                  query.context))
     return response
 
-# HTTPS Redirect
-@app.before_request
-def before_request():
-    if request.url.startswith('http://') and current_app.config.get('FORCE_SSL', False):
-        url = request.url.replace('http://', 'https://', 1)
-        code = 301
-        return redirect(url, code=code)
-
 # Flask-SocketIO integration
 socketio = None
 if current_app.config.get('INTEGRATE_SOCKETIO', False):
