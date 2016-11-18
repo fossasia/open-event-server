@@ -45,6 +45,7 @@ class TestEvents(OpenEventViewTestCase):
             data['sponsors[type]'] = ['Gold', 'Silver']
             data['sponsors[url]'] = ["", ""]
             data['sponsors[description]'] = ["", ""]
+            data['sponsors[logo]'] = ["", ""]
             data['sponsors[level]'] = ["", ""]
             data['start_date'] = '07/04/2016'
             data['start_time'] = '19:00'
@@ -163,6 +164,7 @@ class TestEvents(OpenEventViewTestCase):
             data['sponsors[name]'] = ['Sponsor 1', 'Sponsor 2']
             data['sponsors[type]'] = ['Gold', 'Silver']
             data['sponsors[url]'] = ["", ""]
+            data['sponsors[logo]'] = ["", ""]
             data['sponsors[description]'] = ["", ""]
             data['sponsors[level]'] = ["", ""]
             data['name'] = 'EditTestName'

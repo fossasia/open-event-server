@@ -48,7 +48,7 @@
                 <div class="item form-group" id="sponsor-logo-view-group"
                      {% if not sponsor.logo or sponsor.logo == '' %}style="display: none;"{% endif %}>
                     <label>{{_("Logo")}}</label><br>
-                    <img src="{{ sponsor.logo | default('', true) }}" style="width: 350px;"><br><br>
+                    <img src="{{ sponsor.logo | default('', true) }}" style="max-width: 200px;"><br><br>
                     <button type="button" class="btn btn-sm btn-default remove-spnsr-logo" id="remove-logo-btn">
                         <i class="fa fa-trash-o" aria-hidden="true"></i>
                         {{_("Remove")}}
