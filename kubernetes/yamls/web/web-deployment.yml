@@ -2,13 +2,12 @@ kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
   name: web
-  creationTimestamp:
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        service: web
+        app: web
     spec:
       containers:
       - name: web
@@ -18,16 +17,17 @@ spec:
         livenessProbe:
           httpGet:
             path: /health-check/
-            port: 5000
+            port: 8080
           initialDelaySeconds: 15
           timeoutSeconds: 1
         ports:
-        - containerPort: 5000
+        - containerPort: 8080
           protocol: TCP
         env:
         - name: C_FORCE_ROOT
           value: 'true'
         - name: DEPLOYMENT
           value: 'web'
-        resources: {}
+        - name: FORCE_SSL
+          value: 'yes'
       restartPolicy: Always
