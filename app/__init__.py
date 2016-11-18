@@ -2,6 +2,8 @@
 
 # Ignore ExtDeprecationWarnings for Flask 0.11 - see http://stackoverflow.com/a/38080580
 import re
+
+from flask import redirect
 from pytz import timezone
 import base64
 import warnings
@@ -481,8 +483,15 @@ def after_request(response):
                                                                                                  query.context))
     return response
 
-# Flask-SocketIO integration
+# HTTPS Redirect
+@app.before_request
+def before_request():
+    if request.url.startswith('http://') and current_app.config.get('FORCE_SSL', False):
+        url = request.url.replace('http://', 'https://', 1)
+        code = 301
+        return redirect(url, code=code)
 
+# Flask-SocketIO integration
 socketio = None
 if current_app.config.get('INTEGRATE_SOCKETIO', False):
     from eventlet import monkey_patch
