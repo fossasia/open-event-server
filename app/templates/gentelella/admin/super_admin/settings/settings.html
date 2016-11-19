@@ -102,8 +102,11 @@
         // manage the storage form events
         function storage_form() {
             var sel_opt = $('input[name=storage_place]:checked', '#settings_form').val();
-            var disable = sel_opt == 'local';
-            $('[name^=aws_]').prop("disabled", disable).prop("required", ~disable);
+            var aws_disable = sel_opt != 's3';
+            var gs_disable = sel_opt != 'gs';
+
+            $('[name^=aws_]').prop("disabled", aws_disable).prop("required", ~aws_disable);
+            $('[name^=gs_]').prop("disabled", gs_disable).prop("required", ~gs_disable);
         }
 
         $('.radio_storage').click(function (event) {

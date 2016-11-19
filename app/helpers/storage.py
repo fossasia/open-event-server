@@ -1,6 +1,8 @@
 import os
 from base64 import b64encode
 from shutil import copyfile, rmtree
+
+from boto.gs.connection import GSConnection
 from flask.ext.scrypt import generate_password_hash
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
@@ -99,14 +101,21 @@ def upload(file, key, **kwargs):
     Upload handler
     """
     # refresh settings
-    bucket_name = get_settings()['aws_bucket_name']
+    aws_bucket_name = get_settings()['aws_bucket_name']
     aws_key = get_settings()['aws_key']
     aws_secret = get_settings()['aws_secret']
+
+    gs_bucket_name = get_settings()['gs_bucket_name']
+    gs_key = get_settings()['gs_key']
+    gs_secret = get_settings()['gs_secret']
+
     storage_place = get_settings()['storage_place']
 
     # upload
-    if bucket_name and aws_key and aws_secret and storage_place == 's3':
-        return upload_to_aws(bucket_name, aws_key, aws_secret, file, key, **kwargs)
+    if aws_bucket_name and aws_key and aws_secret and storage_place == 's3':
+        return upload_to_aws(aws_bucket_name, aws_key, aws_secret, file, key, **kwargs)
+    elif gs_bucket_name and aws_key and aws_secret and storage_place == 'gs':
+        return upload_to_gs(gs_bucket_name, aws_key, aws_secret, file, key, **kwargs)
     else:
         return upload_local(file, key, **kwargs)
 
@@ -163,6 +172,34 @@ def upload_to_aws(bucket_name, aws_key, aws_secret, file, key, acl='public-read'
         return s3_url + k.key
     return False
 
+def upload_to_gs(bucket_name, client_id, client_secret, file, key, acl='public-read'):
+    conn = GSConnection(client_id, client_secret)
+    bucket = conn.get_bucket(bucket_name)
+    k = Key(bucket)
+    # generate key
+    filename = secure_filename(file.filename)
+    key_dir = key + '/' + generate_hash(key) + '/'
+    k.key = key_dir + filename
+    # delete old data
+    for item in bucket.list(prefix='/' + key_dir):
+        item.delete()
+    # set object settings
+
+    file_data = file.read()
+    file_mime = magic.from_buffer(file_data, mime=True)
+    size = len(file_data)
+    sent = k.set_contents_from_string(
+        file_data,
+        headers={
+            'Content-Disposition': 'attachment; filename=%s' % filename,
+            'Content-Type': '%s' % file_mime
+        }
+    )
+    k.set_acl(acl)
+    gs_url = 'https://storage.googleapis.com/%s/' % (bucket_name)
+    if sent == size:
+        return gs_url + key
+    return False
 
 # ########
 # HELPERS
