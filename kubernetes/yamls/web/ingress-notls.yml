@@ -11,12 +11,12 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: web
-          servicePort: 80
+          serviceName: redirector
+          servicePort: 8080
   - host: eventyay.com
     http:
       paths:
       - path: /
         backend:
           serviceName: web
-          servicePort: 80
+          servicePort: 8080
