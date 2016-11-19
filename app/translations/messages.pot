@@ -555,7 +555,7 @@ msgid "Manage Roles"
 msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:7
-msgid "Add Peopl"
+msgid "Add People"
 msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:18
