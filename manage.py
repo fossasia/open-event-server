@@ -1,7 +1,4 @@
 """Copyright 2015 Rafal Kowalski"""
-from flask.ext.migrate import stamp
-from sqlalchemy.engine import reflection
-
 from app.helpers.data import save_to_db
 from app.models.event import Event, get_new_event_identifier
 from app import manager
@@ -9,6 +6,8 @@ from app import current_app as app
 from app.models import db
 from app.helpers.data import DataManager
 from populate_db import populate
+from flask.ext.migrate import stamp
+from sqlalchemy.engine import reflection
 
 @manager.command
 def list_routes():

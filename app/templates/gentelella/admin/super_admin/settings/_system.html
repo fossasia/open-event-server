@@ -93,6 +93,44 @@
                     <small style="margin-left: 5px;">(stored in /static/media/ folder)</small>
                 </label>
             </div>
+                    <div class="radio">
+                <label>
+                    <input type="radio" name="storage_place" id="storage_gs" class="radio_storage" value="gs"
+                           {% if settings.storage_place == "gs" %}checked{% endif %}>
+                    {{ _("Google Storage") }}
+                    <!-- <span style="line-height: 2em;"> -->
+                    <small style="margin-left: 5px;">
+                        ({{ _("See") }} <a
+                            href="https://cloud.google.com/storage/docs/migrating#defaultproj">{{ _("here") }}</a>
+                        {{ _("on how to obtain these keys") }})
+                    </small>
+                    <!-- </span> -->
+                </label>
+            </div>
+            <!-- s3 form -->
+            <br>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("Bucket name") }}</label>
+                <div class=" col-md-9 col-xs-12">
+                    <input name="gs_bucket_name" class="form-control col-md-6 col-xs-6"
+                           value="{{ settings.gs_bucket_name|default('', True) }}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("Interoperable access key") }}</label>
+                <div class=" col-md-9 col-xs-12">
+                    <input name="gs_key" class="form-control col-md-6 col-xs-6"
+                           value="{{ settings.gs_key|default('', True) }}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("Interoperable access secret") }}</label>
+                <div class=" col-md-9 col-xs-12">
+                    <input name="gs_secret" class="form-control col-md-6 col-xs-6"
+                           value="{{ settings.gs_secret|default('', True) }}">
+                </div>
+            </div>
+
             <div class="radio">
                 <label>
                     <input type="radio" name="storage_place" id="storage_aws" class="radio_storage" value="s3"

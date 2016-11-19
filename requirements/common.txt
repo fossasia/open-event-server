@@ -14,7 +14,7 @@ Flask-JWT==0.3.2
 Flask-SocketIO==2.5
 eventlet==0.19.0
 requests-oauthlib==0.6.1
-boto==2.41.0
+boto
 icalendar==3.10
 requests[security]==2.10.0
 WTForms-Components==0.10.0
@@ -58,3 +58,4 @@ python-geoip
 python-geoip-geolite2
 python-pentabarf-xml
 marrow.mailer
+gsutil

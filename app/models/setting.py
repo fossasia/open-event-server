@@ -24,6 +24,10 @@ class Setting(db.Model):
     aws_key = db.Column(db.String)
     aws_secret = db.Column(db.String)
     aws_bucket_name = db.Column(db.String)
+    # Google Storage
+    gs_key = db.Column(db.String)
+    gs_secret = db.Column(db.String)
+    gs_bucket_name = db.Column(db.String)
 
     #
     # Social Login
@@ -94,7 +98,13 @@ class Setting(db.Model):
     android_app_url = db.Column(db.String)
     web_app_url = db.Column(db.String)
 
-    def __init__(self, aws_key=None, aws_secret=None, aws_bucket_name=None,
+    def __init__(self,
+                 aws_key=None,
+                 aws_secret=None,
+                 aws_bucket_name=None,
+                 gs_key=None,
+                 gs_secret=None,
+                 gs_bucket_name=None,
                  google_client_id=None, google_client_secret=None,
                  fb_client_id=None, fb_client_secret=None, tw_consumer_key=None,
                  stripe_client_id=None,
@@ -125,6 +135,11 @@ class Setting(db.Model):
         self.aws_key = aws_key
         self.aws_secret = aws_secret
         self.aws_bucket_name = aws_bucket_name
+
+        self.gs_key = gs_key
+        self.gs_secret = gs_secret
+        self.gs_bucket_name = gs_bucket_name
+
         self.google_client_id = google_client_id
         self.google_client_secret = google_client_secret
         self.fb_client_id = fb_client_id

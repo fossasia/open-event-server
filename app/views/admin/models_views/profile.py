@@ -93,7 +93,7 @@ class ProfileView(BaseView):
             background_image = request.form['bgimage']
             if background_image:
                 background_file = uploaded_file(file_content=background_image)
-                background_url = upload_local(
+                background_url = upload(
                     background_file,
                     UPLOAD_PATHS['temp']['event'].format(uuid=uuid4())
                 )
