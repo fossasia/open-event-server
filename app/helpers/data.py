@@ -993,13 +993,13 @@ class DataManager(object):
             user_detail.firstname = form['firstname']
             user_detail.lastname = form['lastname']
 
-            if form['facebook'] != 'https://www.facebook.com/':
-                user_detail.facebook = form['facebook']
+            if form['facebook'].strip() != '':
+                user_detail.facebook = 'https://facebook.com/' + form['facebook'].strip()
             else:
                 user_detail.facebook = ''
 
-            if form['twitter'] != 'https://twitter.com/':
-                user_detail.twitter = form['twitter']
+            if form['twitter'].strip() != '':
+                user_detail.twitter = 'https://twitter.com/' + form['twitter'].strip()
             else:
                 user_detail.twitter = ''
 
