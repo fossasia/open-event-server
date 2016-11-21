@@ -59,3 +59,4 @@ python-geoip-geolite2
 python-pentabarf-xml
 marrow.mailer
 gsutil
+defusedxml
