@@ -38,6 +38,29 @@ def import_event_task(self, file):
     # return result
     return result
 
+@celery.task(base=RequestContextTask, name='import.event.pentabarf', bind=True,
+             throws=(BaseError,))
+def import_event_from_pentabarf_task(self, file, current_user):
+    """Import Event Task"""
+    task_id = self.request.id.__str__()  # str(async result)
+    try:
+        result = import_event_task_base(self, file, current_user=current_user)
+        update_import_job(task_id, result['id'], 'SUCCESS')
+        # return item
+    except BaseError as e:
+        print traceback.format_exc()
+        update_import_job(task_id, e.message, e.status)
+        result = {'__error': True, 'result': e.to_dict()}
+    except Exception as e:
+        print traceback.format_exc()
+        update_import_job(task_id, e.message, e.status)
+        result = {'__error': True, 'result': ServerError().to_dict()}
+    # send email
+    send_import_mail(task_id, result)
+    # return result
+    return result
+
+
 
 @celery.task(base=RequestContextTask, name='export.event', bind=True)
 def export_event_task(self, event_id, settings):
