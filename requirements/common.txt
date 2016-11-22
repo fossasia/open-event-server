@@ -56,7 +56,7 @@ python-magic
 Flask-Babel
 python-geoip
 python-geoip-geolite2
-python-pentabarf-xml
+python-pentabarf-xml==0.18
 marrow.mailer
 gsutil
 defusedxml
