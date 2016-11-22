@@ -5,6 +5,7 @@ from flask_login import current_user
 from flask_admin import BaseView, expose
 from markupsafe import Markup
 
+from app.helpers.importers import ImportHelper
 from app.views.admin.models_views.events import is_verified_user
 from app.helpers.data_getter import DataGetter
 from app.helpers.export import ExportHelper
@@ -50,3 +51,14 @@ class ExportView(BaseView):
         response.headers["Content-Type"] = "text/calendar"
         response.headers["Content-Disposition"] = "attachment; filename=calendar.xcs"
         return response
+
+    @expose('/import')
+    @flask_login.login_required
+    def xcal_export_view(self, event_id):
+        event = ImportHelper.import_from_pentabarf(file_path='/home/niranjan94/Downloads/xml.xml')
+        resp = make_response(event.id)
+        resp.headers['Content-type'] = 'text/plain'
+        return resp
+
+
+

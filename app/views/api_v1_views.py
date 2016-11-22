@@ -1,6 +1,5 @@
 """Copyright 2015 Rafal Kowalski"""
 import os
-from urllib2 import urlopen
 
 from flask import jsonify, url_for, redirect, request, send_from_directory, \
     render_template, make_response
@@ -29,10 +28,8 @@ from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth, TwitterOAuth
 from requests.exceptions import HTTPError
 from ..helpers.data import get_google_auth, create_user_oauth, get_facebook_auth, user_logged_in, get_instagram_auth
 import geoip2.database
-import time
 import json
-from app.helpers.storage import upload, UploadedFile
-
+from app.helpers.storage import upload
 
 auto = Autodoc()
 
