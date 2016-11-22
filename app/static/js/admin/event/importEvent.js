@@ -1,7 +1,13 @@
-
-function importEventZip(){
+function importEvent(type) {
     var data = new FormData();
-    jQuery.each(jQuery('#import_file')[0].files, function(i, file) {
+
+    var endpoint = '/api/v2/events/import/json';
+    jQuery.each(jQuery('#import_file')[0].files, function (i, file) {
+        var ext = file.name.split(".");
+        ext = ext[ext.length - 1].toLowerCase();
+        if(ext == 'xml') {
+            endpoint = '/api/v2/events/import/pentabarf';
+        }
         data.append('file', file);
     });
 
@@ -10,21 +16,21 @@ function importEventZip(){
     $('#btnImportEvent').prop('disabled', true);
     $('#import_file').prop('disabled', true);
     jQuery.ajax({
-        url: '/api/v2/events/import/json',
+        url: endpoint,
         data: data,
         cache: false,
         contentType: false,
         processData: false,
         type: 'POST',
-        success: function(data){
+        success: function (data) {
             console.log(data);
             // redirect to created event
             // document.location = '/events/' + data['id'];
-            setTimeout(function(){
+            setTimeout(function () {
                 importTask(data['task_url']);
             }, 1000);
         },
-        error: function(x){
+        error: function (x) {
             obj = JSON.parse(x.responseText);
             console.log(obj);
             $('#import_status').text('');
@@ -34,15 +40,15 @@ function importEventZip(){
 }
 
 
-function importTask(url){
+function importTask(url) {
     jQuery.ajax({
         url: url,
         type: 'GET',
-        success: function(data){
+        success: function (data) {
             console.log(data);
-            if (data['state'] != 'SUCCESS'){
+            if (data['state'] != 'SUCCESS') {
                 $('#import_status').html('<b>Status:</b> ' + data['state']);
-                setTimeout(function(){
+                setTimeout(function () {
                     importTask(url);
                 }, 3000);
             } else {
@@ -50,7 +56,7 @@ function importTask(url){
                 document.location = '/events/' + data['result']['id'];
             }
         },
-        error: function(x){
+        error: function (x) {
             obj = JSON.parse(x.responseText);
             console.log(obj);
             $('#import_status').text('');
@@ -62,28 +68,28 @@ function importTask(url){
 }
 
 
-function importTaskTable(task, field_id){
+function importTaskTable(task, field_id) {
     console.log(task);
     url = '/api/v2/tasks/' + task;
     jQuery.ajax({
         url: url,
         type: 'GET',
-        success: function(data){
+        success: function (data) {
             console.log(data);
-            if (data['state'] == 'PENDING'){ // task is lost
+            if (data['state'] == 'PENDING') { // task is lost
                 $(field_id).html('Failed');
                 return;
             }
-            if (data['state'] != 'SUCCESS' && data['state'] != 'FAILURE'){
+            if (data['state'] != 'SUCCESS' && data['state'] != 'FAILURE') {
                 $(field_id).html('<b>Status:</b> ' + data['state']);
-                setTimeout(function(){
+                setTimeout(function () {
                     importTaskTable(task, field_id);
                 }, 3000);
             } else {
                 $(field_id).html('<b>Status:</b> ' + data['state']);
             }
         },
-        error: function(x){
+        error: function (x) {
             console.log(x.responseText);
             obj = JSON.parse(x.responseText);
             $(field_id).text(obj['message']);
