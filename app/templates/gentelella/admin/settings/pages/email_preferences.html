@@ -140,6 +140,16 @@
 
         var $eventsAccordion = $("#events-accordion");
         var $globalEmailStat = $(".global-email-stat");
+
+        if($eventsAccordion.children().length == 1) {
+            $("#email-switch").prop('disabled', true);
+
+            $globalEmailStat.tooltip({
+                'title': 'Email updates for events cannot be changed since no related events were found.',
+                'placement': 'right'
+            }).tooltip('show');
+        }
+
         function updateEventStatus($eventPanel) {
             var allOff = true;
             $.each($eventPanel.find('.setting-toggle'), function (index, toggle) {
