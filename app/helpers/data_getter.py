@@ -56,13 +56,12 @@ from app.helpers.cache import cache
 
 
 class DataGetter(object):
-
     @staticmethod
     def get_super_admin_user():
-        return User.query\
-            .filter_by(is_super_admin=True)\
-            .filter_by(is_admin=True)\
-            .filter_by(is_verified=True)\
+        return User.query \
+            .filter_by(is_super_admin=True) \
+            .filter_by(is_admin=True) \
+            .filter_by(is_verified=True) \
             .order_by(asc(User.id)).first()
 
     @staticmethod
@@ -103,7 +102,7 @@ class DataGetter(object):
     @staticmethod
     def get_all_events_with_discounts():
         """Method return all events"""
-        return Event.query.order_by(desc(Event.id)).filter_by(in_trash=False)\
+        return Event.query.order_by(desc(Event.id)).filter_by(in_trash=False) \
             .filter(Event.discount_code_id != None).filter(Event.discount_code_id > 0).all()
 
     @staticmethod
@@ -439,7 +438,7 @@ class DataGetter(object):
 
     @staticmethod
     def get_user_events(user_id=None):
-        return Event.query.join(Event.roles, aliased=True)\
+        return Event.query.join(Event.roles, aliased=True) \
             .filter_by(user_id=login.current_user.id if not user_id else user_id)
 
     @staticmethod
@@ -464,18 +463,18 @@ class DataGetter(object):
         if include_private:
             events = DataGetter.get_all_published_events(include_private)
             for e in events:
-                call_for_speakers = CallForPaper.query.filter_by(event_id=e.id)\
-                                    .filter(CallForPaper.start_date <= datetime.datetime.now())\
-                                    .filter(CallForPaper.end_date >= datetime.datetime.now()).first()
+                call_for_speakers = CallForPaper.query.filter_by(event_id=e.id) \
+                    .filter(CallForPaper.start_date <= datetime.datetime.now()) \
+                    .filter(CallForPaper.end_date >= datetime.datetime.now()).first()
                 if call_for_speakers and not e.in_trash:
                     results.append(e)
 
         else:
             events = DataGetter.get_all_published_events()
             for e in events:
-                call_for_speakers = CallForPaper.query.filter_by(event_id=e.id)\
-                                    .filter(CallForPaper.start_date <= datetime.datetime.now())\
-                                    .filter(CallForPaper.end_date >= datetime.datetime.now()).first()
+                call_for_speakers = CallForPaper.query.filter_by(event_id=e.id) \
+                    .filter(CallForPaper.start_date <= datetime.datetime.now()) \
+                    .filter(CallForPaper.end_date >= datetime.datetime.now()).first()
                 if call_for_speakers and not e.in_trash:
                     results.append(e)
         return results[:12]
@@ -539,7 +538,6 @@ class DataGetter(object):
         return Event.query.filter(Event.end_time <= datetime.datetime.now(),
                                   Event.in_trash == False,
                                   or_(Event.state == 'Completed', Event.state == 'Published'))
-
 
     @staticmethod
     def get_session(session_id):
