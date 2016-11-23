@@ -316,8 +316,8 @@ def import_event_json(task_handle, zip_path):
         _upload_media_queue(srv, new_event)
     except BaseError as e:
         raise make_error('event', er=e)
-    except Exception:
-        raise make_error('event')
+    except Exception as e:
+        raise make_error('event', er=e)
     # create other services
     try:
         service_ids = {}
