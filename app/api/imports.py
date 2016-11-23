@@ -69,7 +69,6 @@ def import_event_task_base(task_handle, file, source_type='json', current_user=N
     elif source_type == 'pentabarf':
         new_event = ImportHelper.import_from_pentabarf(file_path=file, task_handle=task_handle,
                                                        creator=current_user)
-
     if new_event:
         record_activity('import_event', event_id=new_event.id)
         return marshal(new_event, EVENT)
