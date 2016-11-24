@@ -105,13 +105,15 @@ def get_file_from_request(ext=None, folder=None, name='file'):
     return os.path.join(folder, filename)
 
 
-def make_error(file, er=None, id_=None):
+def make_error(uploaded_file, er=None, id_=None):
     if er is None:
         er = ServerError()
-    istr = 'File %s' % file
+    istr = 'File %s' % uploaded_file
     if id_ is not None:
         istr = '%s, ID %s' % (istr, id_)
     er.message = '%s, %s' % (istr, er.message)
+    if not er.code:
+        er.code = 500
     return er
 
 

@@ -96,7 +96,7 @@ class UploadedMemory(object):
 # MAIN
 #########
 
-def upload(file, key, **kwargs):
+def upload(uploaded_file, key, **kwargs):
     """
     Upload handler
     """
@@ -113,18 +113,18 @@ def upload(file, key, **kwargs):
 
     # upload
     if aws_bucket_name and aws_key and aws_secret and storage_place == 's3':
-        return upload_to_aws(aws_bucket_name, aws_key, aws_secret, file, key, **kwargs)
-    elif gs_bucket_name and aws_key and aws_secret and storage_place == 'gs':
-        return upload_to_gs(gs_bucket_name, aws_key, aws_secret, file, key, **kwargs)
+        return upload_to_aws(aws_bucket_name, aws_key, aws_secret, uploaded_file, key, **kwargs)
+    elif gs_bucket_name and gs_key and gs_secret and storage_place == 'gs':
+        return upload_to_gs(gs_bucket_name, gs_key, gs_secret, uploaded_file, key, **kwargs)
     else:
-        return upload_local(file, key, **kwargs)
+        return upload_local(uploaded_file, key, **kwargs)
 
 
-def upload_local(file, key, **kwargs):
+def upload_local(uploaded_file, key, **kwargs):
     """
     Uploads file locally. Base dir - static/media/
     """
-    filename = secure_filename(file.filename)
+    filename = secure_filename(uploaded_file.filename)
     file_path = 'static/media/' + key + '/' + generate_hash(key) + '/' + filename
     dir_path = file_path.rsplit('/', 1)[0]
     # delete current
@@ -135,7 +135,7 @@ def upload_local(file, key, **kwargs):
     # create dirs
     if not os.path.isdir(dir_path):
         os.makedirs(dir_path)
-    file.save(file_path)
+    uploaded_file.save(file_path)
     return '/serve_' + file_path
 
 
@@ -167,10 +167,11 @@ def upload_to_aws(bucket_name, aws_key, aws_secret, file, key, acl='public-read'
         }
     )
     k.set_acl(acl)
-    s3_url = 'https://%s.s3.amazonaws.com/' % (bucket_name)
+    s3_url = 'https://%s.s3.amazonaws.com/' % bucket_name
     if sent == size:
         return s3_url + k.key
     return False
+
 
 def upload_to_gs(bucket_name, client_id, client_secret, file, key, acl='public-read'):
     conn = GSConnection(client_id, client_secret)
@@ -196,7 +197,7 @@ def upload_to_gs(bucket_name, client_id, client_secret, file, key, acl='public-r
         }
     )
     k.set_acl(acl)
-    gs_url = 'https://storage.googleapis.com/%s/' % (bucket_name)
+    gs_url = 'https://storage.googleapis.com/%s/' % bucket_name
     if sent == size:
         return gs_url + key
     return False
@@ -204,6 +205,7 @@ def upload_to_gs(bucket_name, client_id, client_secret, file, key, acl='public-r
 # ########
 # HELPERS
 # ########
+
 
 def generate_hash(key):
     """
