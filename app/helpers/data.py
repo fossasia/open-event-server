@@ -2501,7 +2501,7 @@ def create_modules(form):
 def uploaded_file_provided_by_url(url):
     response_file = urlopen(url)
     filename = str(time.time()) + '.jpg'
-    file_path = os.path.realpath('.') + '/static/temp/' + filename
+    file_path = os.path.realpath('.') + '/static/uploads/' + filename
     fh = open(file_path, "wb")
     fh.write(response_file.read())
     fh.close()

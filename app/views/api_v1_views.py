@@ -35,6 +35,7 @@ auto = Autodoc()
 
 app = Blueprint('', __name__)
 
+
 @app.route('/api/v1/event', methods=['GET'])
 @auto.doc()
 @cross_origin()
@@ -318,10 +319,11 @@ def generate_icalendar_event(event_id):
     event.add('logo', matching_event.logo)
     event.add('email', matching_event.email)
     event.add('description', matching_event.description)
-    event.add('url', url_for('event_detail.display_event_detail_home', identifier=matching_event.identifier, _external=True))
+    event.add('url',
+              url_for('event_detail.display_event_detail_home', identifier=matching_event.identifier, _external=True))
     cal.add_component(event)
 
-    #Saving ical in file
+    # Saving ical in file
     filename = "event_calendar/event-calendar-" + str(event_id) + ".ics"
     f = open(os.path.join(os.path.realpath('.') + '/static/', filename), 'wb')
     f.write(cal.to_ical())
@@ -463,18 +465,22 @@ def get_fb_auth():
         return 'HTTP Error occurred'
     return get_facebook_auth(token=token), token
 
+
 @app.route('/tCallback/', methods=('GET', 'POST'))
 def twitter_callback():
     oauth_verifier = request.args.get('oauth_verifier', '')
     oauth_token = request.args.get('oauth_token', '')
     client, access_token = TwitterOAuth().get_authorized_client(oauth_verifier,
                                                                 oauth_token)
-    resp, content = client.request("https://api.twitter.com/1.1/users/show.json?screen_name=" + access_token["screen_name"] +"&user_id=" + access_token["user_id"] , "GET")
+    resp, content = client.request(
+        "https://api.twitter.com/1.1/users/show.json?screen_name=" + access_token["screen_name"] + "&user_id=" +
+        access_token["user_id"], "GET")
     user_info = json.loads(content)
     update_user_details(first_name=user_info['name'],
                         file_url=user_info['profile_image_url'],
                         twitter_link="https://twitter.com/" + access_token["screen_name"])
     return redirect(url_for('profile.index_view'))
+
 
 @app.route('/iCallback/', methods=('GET', 'POST'))
 def instagram_callback():
@@ -487,7 +493,9 @@ def instagram_callback():
                                       authorization_url=request.url,
                                       code=code_url,
                                       client_secret=InstagramOAuth.get_client_secret())
-        response = instagram.get('https://api.instagram.com/v1/users/self/media/recent/?access_token=' + token.get('access_token', '')).json()
+        response = instagram.get(
+            'https://api.instagram.com/v1/users/self/media/recent/?access_token=' + token.get('access_token',
+                                                                                              '')).json()
         for el in response.get('data'):
             filename, uploaded_file = uploaded_file_provided_by_url(el['images']['standard_resolution']['url'])
             upload(uploaded_file, '/image/' + filename)
@@ -525,9 +533,11 @@ def favicon():
     return send_from_directory(os.path.dirname(os.path.dirname(__file__)) + '/static/', 'favicon.ico',
                                mimetype='image/vnd.microsoft.icon')
 
+
 @app.route('/documentation')
 def documentation():
     return auto.html()
+
 
 @app.route('/health-check/')
 def health_check():
@@ -535,13 +545,16 @@ def health_check():
         "status": "ok"
     })
 
+
 @app.route('/healthz/')
 def healthz_check():
     return health_check()
 
+
 @app.route('/healthz')
 def healthz_check_no_slash():
     return health_check()
+
 
 @app.route('/api/location/', methods=('GET', 'POST'))
 def location():

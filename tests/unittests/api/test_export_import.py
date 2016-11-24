@@ -65,14 +65,14 @@ class ImportExportBase(OpenEventTestCase):
 
     def _create_set(self, event_id=1, config={'image': True}):
         """
-        exports and extracts in static/temp/test_event_import
+        exports and extracts in static/uploads/test_event_import
         """
         # export
         resp = self._do_successful_export(event_id, config)
         zip_file = StringIO()
         zip_file.write(resp.data)
         # extract
-        path = 'static/temp/test_event_import'
+        path = 'static/uploads/test_event_import'
         if os.path.isdir(path):
             shutil.rmtree(path, ignore_errors=True)
         with zipfile.ZipFile(zip_file) as z:
@@ -125,7 +125,7 @@ class TestEventExport(ImportExportBase):
         resp = self._put(get_path(1), {'organizer_name': 'SandraMüllrick'})
         # export and unzip files
         self._create_set()
-        dr = 'static/temp/test_event_import'
+        dr = 'static/uploads/test_event_import'
         data = open(dr + '/event', 'r').read()
         self.assertIn('images/logo', data)
         # test unicode in file
@@ -148,7 +148,7 @@ class TestEventExport(ImportExportBase):
         resp = self._put(get_path(1), {'logo': 'https://placehold.it/350x150'})
         self.assertIn('placehold', resp.data, resp.data)
         self._create_set(1, {})
-        dr = 'static/temp/test_event_import'
+        dr = 'static/uploads/test_event_import'
         data = open(dr + '/event', 'r').read()
         obj = json.loads(data)
         self.assertIn('placehold', obj['logo'])
@@ -160,7 +160,7 @@ class TestEventExport(ImportExportBase):
         Tests order of export of fields in export files
         """
         self._create_set()
-        dr = 'static/temp/test_event_import'
+        dr = 'static/uploads/test_event_import'
         # event
         data = open(dr + '/event', 'r').read()
         self.assertTrue(data.find('id') < data.find('background_image'))

@@ -34,17 +34,24 @@ class SuperAdminView(SuperAdminBaseView):
         version = None
         on_kubernetes = False
         pods_info = None
+        repository = None
+        commit_number = None
+        branch = None
 
         if KubernetesApi.is_on_kubernetes():
             on_kubernetes = True
             kubernetes_api = KubernetesApi()
             pods_info = kubernetes_api.get_pods()['items']
-            version = os.getenv('REPOSITORY', 'https://github.com/fossasia/open-event-orga-server.git')
-            commit_info = os.getenv('BRANCH', 'development')
+            repository = os.getenv('REPOSITORY', 'https://github.com/fossasia/open-event-orga-server.git')
+            branch = os.getenv('BRANCH', 'development')
+            commit_number = os.getenv('COMMIT_HASH', 'null')
+            if commit_number != 'null':
+                commit_info = get_commit_info(commit_number)
+            else:
+                commit_number = None
         else:
             version = get_latest_heroku_release()
             commit_info = None
-            commit_number = None
             if version:
                 commit_number = version['description'].split(' ')[1]
                 commit_info = get_commit_info(commit_number)
@@ -53,6 +60,7 @@ class SuperAdminView(SuperAdminBaseView):
                            events=events,
                            version=version,
                            commit_info=commit_info,
+                           commit_number=commit_number,
                            on_kubernetes=on_kubernetes,
                            pods_info=pods_info,
                            number_live_events=number_live_events,
@@ -61,6 +69,8 @@ class SuperAdminView(SuperAdminBaseView):
                            super_admins=super_admins,
                            admins=admins,
                            registered_users=registered_users,
+                           repository=repository,
+                           branch=branch,
                            organizers=organizers,
                            co_organizers=co_organizers,
                            track_organizers=track_organizers,

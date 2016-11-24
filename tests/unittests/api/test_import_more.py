@@ -23,7 +23,7 @@ class TestImportUploads(ImportExportBase):
             create_services(1, '1')
 
     def _update_json(self, file, field, value, number=None):
-        fp = 'static/temp/test_event_import/%s' % file
+        fp = 'static/uploads/test_event_import/%s' % file
         ptr = open(fp)
         data = json.loads(ptr.read())
         if file == 'event':
@@ -36,7 +36,7 @@ class TestImportUploads(ImportExportBase):
         ptr.close()
 
     def _create_file(self, name):
-        f = open('static/temp/test_event_import/%s' % name, 'w+')
+        f = open('static/uploads/test_event_import/%s' % name, 'w+')
         f.write('test')
         f.close()
 
@@ -47,7 +47,7 @@ class TestImportUploads(ImportExportBase):
         return data[field]
 
     def _make_zip_from_dir(self):
-        dir_path = 'static/temp/test_event_import'
+        dir_path = 'static/uploads/test_event_import'
         shutil.make_archive(dir_path, 'zip', dir_path)
         file = open(dir_path + '.zip', 'r').read()
         os.remove(dir_path + '.zip')
@@ -122,7 +122,7 @@ class TestImportUploads(ImportExportBase):
         Tests if version data is being preserved
         """
         self._create_set()
-        data_old = json.loads(open('static/temp/test_event_import/event').read())
+        data_old = json.loads(open('static/uploads/test_event_import/event').read())
         # import
         data = self._make_zip_from_dir()
         event_dic = self._do_succesful_import(data)

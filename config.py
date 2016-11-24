@@ -22,7 +22,14 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///../app.db')
     BASE_DIR = _basedir
     FORCE_SSL = os.getenv('FORCE_SSL', 'no') == 'yes'
-    UPLOAD_FOLDER = BASE_DIR + '/static/temp/'
+    SQLALCHEMY_RECORD_QUERIES = False
+
+    UPLOADS_FOLDER = BASE_DIR + '/static/uploads/'
+    TEMP_UPLOADS_FOLDER = BASE_DIR + '/static/uploads/temp/'
+    UPLOAD_FOLDER = UPLOADS_FOLDER
+    STATIC_URL = '/static/'
+    STATIC_ROOT = 'staticfiles'
+    STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
     if FORCE_SSL:
         PREFERRED_URL_SCHEME = 'https'
@@ -76,6 +83,7 @@ class TestingConfig(Config):
     CACHING = False
     CELERY_ALWAYS_EAGER = True
     CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
+    SQLALCHEMY_RECORD_QUERIES = True
 
 
 class LocalPSQLConfig(Config):
