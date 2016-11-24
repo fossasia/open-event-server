@@ -22,6 +22,7 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///../app.db')
     BASE_DIR = _basedir
     FORCE_SSL = os.getenv('FORCE_SSL', 'no') == 'yes'
+    UPLOAD_FOLDER = BASE_DIR + '/static/temp/'
 
     if FORCE_SSL:
         PREFERRED_URL_SCHEME = 'https'

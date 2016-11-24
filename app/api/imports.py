@@ -10,7 +10,6 @@ from helpers.helpers import requires_auth
 from helpers.utils import TASK_RESULTS
 from events import EVENT
 
-
 api = Namespace('imports', description='Imports', path='/')
 
 
@@ -19,9 +18,9 @@ api = Namespace('imports', description='Imports', path='/')
 class EventImportJson(Resource):
     @requires_auth
     def post(self):
-        file = get_file_from_request(['zip'])
+        file_path = get_file_from_request(['zip'])
         from helpers.tasks import import_event_task
-        task = import_event_task.delay(file)
+        task = import_event_task.delay(file_path)
         # store import job in db
         try:
             create_import_job(task.id)
@@ -37,15 +36,17 @@ class EventImportJson(Resource):
         return jsonify(
             task_url=url_for('api.extras_celery_task', task_id=task.id)
         )
+
 
 @api.route('/events/import/pentabarf')
 @api.hide
 class EventImportPentabarf(Resource):
     @requires_auth
     def post(self):
-        file = get_file_from_request(['xml'])
+        file_path = get_file_from_request(['xml'])
         from helpers.tasks import import_event_from_pentabarf_task
-        task = import_event_from_pentabarf_task.delay(file, g.user)
+        task = import_event_from_pentabarf_task.delay(file_path, g.user)
+
         # store import job in db
         try:
             create_import_job(task.id)
@@ -62,12 +63,13 @@ class EventImportPentabarf(Resource):
             task_url=url_for('api.extras_celery_task', task_id=task.id)
         )
 
-def import_event_task_base(task_handle, file, source_type='json', current_user=None):
+
+def import_event_task_base(task_handle, file_path, source_type='json', current_user=None):
     new_event = None
     if source_type == 'json':
-        new_event = import_event_json(task_handle, file)
+        new_event = import_event_json(task_handle, file_path)
     elif source_type == 'pentabarf':
-        new_event = ImportHelper.import_from_pentabarf(file_path=file, task_handle=task_handle,
+        new_event = ImportHelper.import_from_pentabarf(file_path=file_path, task_handle=task_handle,
                                                        creator=current_user)
     if new_event:
         record_activity('import_event', event_id=new_event.id)
