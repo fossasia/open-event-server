@@ -8,7 +8,7 @@ class BasicPagesView(BaseView):
     def index(self):
         pass
 
-    @expose('/<url>', methods=('GET', 'POST'))
+    @expose('/<url>/', methods=('GET', 'POST'))
     def url_view(self, url):
         from app import get_locale
         page = DataGetter.get_page_by_url('/' + url, get_locale())

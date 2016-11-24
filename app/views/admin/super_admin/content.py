@@ -18,6 +18,7 @@ import copy
 
 BASE_TRANSLATIONS_DIR = str(_basedir) + "/app/translations"
 
+
 class SuperAdminContentView(SuperAdminBaseView):
     PANEL_NAME = CONTENT
 
@@ -44,7 +45,7 @@ class SuperAdminContentView(SuperAdminBaseView):
             languages=languages_copy
         )
 
-    @expose('/create/files/placeholder', methods=('POST',))
+    @expose('/create/files/placeholder/', methods=('POST',))
     def placeholder_upload(self):
         if request.method == 'POST':
             placeholder_image = request.form['placeholder']
@@ -85,7 +86,7 @@ class SuperAdminContentView(SuperAdminBaseView):
             else:
                 return jsonify({'status': 'no logo'})
 
-    @expose('/update_placeholder', methods=('POST',))
+    @expose('/update_placeholder/', methods=('POST',))
     def placeholder_upload_details(self):
         if request.method == 'POST':
             copyright_info = request.form['copyright']
@@ -98,12 +99,12 @@ class SuperAdminContentView(SuperAdminBaseView):
             return jsonify({'status': 'ok'})
         return jsonify({'status': 'error'})
 
-    @expose('/pages/create', methods=['POST'])
+    @expose('/pages/create/', methods=['POST'])
     def create_view(self):
         DataManager.create_page(request.form)
         return redirect(url_for('sadmin_content.index_view'))
 
-    @expose('/pages/<page_id>', methods=['GET', 'POST'])
+    @expose('/pages/<page_id>/', methods=['GET', 'POST'])
     def details_view(self, page_id):
         page = DataGetter.get_page_by_id(page_id)
         if request.method == 'POST':
@@ -114,14 +115,13 @@ class SuperAdminContentView(SuperAdminBaseView):
                            pages=pages,
                            current_page=page)
 
-    @expose('/pages/<page_id>/trash', methods=['GET'])
+    @expose('/pages/<page_id>/trash/', methods=['GET'])
     def trash_view(self, page_id):
         page = DataGetter.get_page_by_id(page_id)
         delete_from_db(page, "Page has already deleted")
         return redirect(url_for('sadmin_content.index_view'))
 
-
-    @expose('/update_translation', methods=('POST',))
+    @expose('/update_translation/', methods=('POST',))
     def upload_translation(self):
         if 'file' not in request.files:
             return 'No file part'
@@ -143,7 +143,7 @@ class SuperAdminContentView(SuperAdminBaseView):
                 return str(e)
         return "File extension not allowed"
 
-    @expose('/translation_uploads/<path:l_code>', methods=['GET', 'POST'])
+    @expose('/translation_uploads/<path:l_code>/', methods=['GET', 'POST'])
     def download(self,l_code):
         file_destination = BASE_TRANSLATIONS_DIR + "/" + l_code + "/LC_MESSAGES"
         return send_from_directory(directory=file_destination, filename="messages.po")
