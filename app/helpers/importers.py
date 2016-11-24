@@ -13,6 +13,7 @@ from app.models import db
 from datetime import timedelta, datetime
 import random
 
+
 def string_to_timedelta(string):
     if string:
         t = datetime.strptime(string, "%H:%M")
@@ -23,7 +24,7 @@ def string_to_timedelta(string):
 
 def update_status(task_handle, status):
     if task_handle and status:
-        update_state(task_handle, 'Started')
+        update_state(task_handle, status)
 
 
 class ImportHelper:
@@ -52,9 +53,11 @@ class ImportHelper:
             event.name = conference_object.title
             event.location_name = conference_object.venue + ', ' + conference_object.city
             event.searchable_location_name = conference_object.city
+            event.state = 'Published'
+            event.privacy = 'public'
             db.session.add(event)
             update_status(task_handle, 'Adding sessions')
-
+            index = 1
             for day_object in conference_object.day_objects:
                 for room_object in day_object.room_objects:
                     microlocation, _ = get_or_create(Microlocation, event_id=event.id, name=room_object.name)
@@ -86,7 +89,13 @@ class ImportHelper:
                         session.video = event_object.video_url
                         session.audio = event_object.audio_url
                         session.signup_url = event_object.conf_url
+                        session.event_id = event.id
+                        session.state = 'accepted'
                         db.session.add(session)
+
+                        update_status(task_handle, 'Adding session "' + session.title + '"')
+
+                        index += 1
 
                         for person_object in event_object.person_objects:
                             name_mix = person_object.name + ' ' + conference_object.title
