@@ -77,24 +77,32 @@ def _available_path(folder, filename):
     return path
 
 
-def get_file_from_request(ext=[], folder='/static/temp/', name='file'):
+def get_file_from_request(ext=None, folder=None, name='file'):
     """
     Get file from a request, save it locally and return its path
     """
-    with app.app_context():
-        folder = app.config['BASE_DIR'] + folder
+    if ext is None:
+        ext = []
 
-    if 'file' not in request.files:
+    print("get_file_from_request() INVOKED. We have: request.files = %r" % request.files)
+
+    if name not in request.files:
         raise NotFoundError('File not found')
-    file = request.files['file']
-    if file.filename == '':
+    uploaded_file = request.files[name]
+    if uploaded_file.filename == '':
         raise NotFoundError('File not found')
-    if not _allowed_file(file.filename, ext):
+    if not _allowed_file(uploaded_file.filename, ext):
         raise NotFoundError('Invalid file type')
-    filename = secure_filename(file.filename)
-    path = _available_path(folder, filename)
-    file.save(path)
-    return path
+
+    if not folder:
+        folder = app.config['UPLOAD_FOLDER']
+    else:
+        with app.app_context():
+            folder = app.config['BASE_DIR'] + folder
+
+    filename = secure_filename(uploaded_file.filename)
+    uploaded_file.save(os.path.join(folder, filename))
+    return os.path.join(folder, filename)
 
 
 def make_error(file, er=None, id_=None):
