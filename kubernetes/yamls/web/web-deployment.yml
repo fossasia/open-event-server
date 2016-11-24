@@ -26,6 +26,8 @@ spec:
         env:
         - name: C_FORCE_ROOT
           value: 'true'
+        - name: PYTHONUNBUFFERED
+          value: 'TRUE'
         - name: DEPLOYMENT
           value: 'web'
         - name: FORCE_SSL
