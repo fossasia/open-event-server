@@ -4,16 +4,6 @@
  * and open the template in the editor.
  */
 
-var CURRENT_URL = window.location.href.split('?')[0],
-    $BODY = $('body'),
-    $MENU_TOGGLE = $('#menu_toggle'),
-    $SIDEBAR_MENU = $('#sidebar-menu'),
-    $SIDEBAR_FOOTER = $('.sidebar-footer'),
-    $LEFT_COL = $('.left_col'),
-    $RIGHT_COL = $('.right_col'),
-    $NAV_MENU = $('.nav_menu'),
-    $FOOTER = $('footer');
-
 // Panel toolbox
 $(document).ready(function() {
     $('.collapse-link').on('click', function() {
@@ -89,8 +79,7 @@ $('table input').on('ifChecked', function () {
     checkState = '';
     $(this).parent().parent().parent().addClass('selected');
     countChecked();
-});
-$('table input').on('ifUnchecked', function () {
+}).on('ifUnchecked', function () {
     checkState = '';
     $(this).parent().parent().parent().removeClass('selected');
     countChecked();
@@ -102,8 +91,7 @@ $('.bulk_action input').on('ifChecked', function () {
     checkState = '';
     $(this).parent().parent().parent().addClass('selected');
     countChecked();
-});
-$('.bulk_action input').on('ifUnchecked', function () {
+}).on('ifUnchecked', function () {
     checkState = '';
     $(this).parent().parent().parent().removeClass('selected');
     countChecked();
@@ -111,8 +99,7 @@ $('.bulk_action input').on('ifUnchecked', function () {
 $('.bulk_action input#check-all').on('ifChecked', function () {
     checkState = 'all';
     countChecked();
-});
-$('.bulk_action input#check-all').on('ifUnchecked', function () {
+}).on('ifUnchecked', function () {
     checkState = 'none';
     countChecked();
 });

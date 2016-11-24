@@ -1,14 +1,13 @@
 // export event main
-function exportEvent(event_id, current_user_email=""){
-    url = '/api/v2/events/' + event_id + '/export/json';
+function exportEvent(event_id, current_user_email){
+    var url = '/api/v2/events/' + event_id + '/export/json';
     // generate payload
-    fields = ['image', 'video', 'audio', 'document'];
-    payload = {};
-    for (i=0; i<4; i++){
-        payload[fields[i]] = $('#exportForm [name=' + fields[i] + ']').is(':checked') ? true : false;
+    var fields = ['image', 'video', 'audio', 'document'];
+    var payload = {};
+    for (var i=0; i<4; i++){
+        payload[fields[i]] = $('#exportForm').find('[name=' + fields[i] + ']').is(':checked') ? true : false;
     }
-    $('#btnExportEvent').unbind('click');
-    $('#btnExportEvent').prop('disabled', true); // in case of second export
+    $('#btnExportEvent').unbind('click').prop('disabled', true); // in case of second export
     $('#btnStartExport').prop('disabled', true);
     // set creator user
     $('#export_creator').show();
@@ -29,8 +28,7 @@ function exportEvent(event_id, current_user_email=""){
             }, 1000);
         },
         error: function(x){
-            obj = JSON.parse(x.responseText);
-            console.log(obj);
+            var obj = JSON.parse(x.responseText);
             $('#export_status').html('<span class="red">' + obj['message'] + '</span>');
         }
     });
@@ -42,7 +40,6 @@ function exportTask(url){
     url: url,
     type: 'GET',
     success: function(data){
-        console.log(data);
         if (data['state'] != 'SUCCESS'){
             $('#export_status').text('Status: ' + data['state']);
             setTimeout(function(){
@@ -50,16 +47,14 @@ function exportTask(url){
             }, 3000);
         } else {
             $('#export_status').text('Status: ' + data['state']);
-            $('#btnExportEvent').prop('disabled', false);
             $('#btnStartExport').prop('disabled', false);
-            $('#btnExportEvent').click(function(){
+            $('#btnExportEvent').prop('disabled', false).click(function(){
                 document.location = data['result']['download_url'];
             });
         }
     },
     error: function(x){
-        obj = JSON.parse(x.responseText);
-        console.log(obj);
+        var obj = JSON.parse(x.responseText);
         $('#export_status').html('<span class="red">' + obj['message'] + '</span>');
         $('#btnStartExport').prop('disabled', false);
     }
