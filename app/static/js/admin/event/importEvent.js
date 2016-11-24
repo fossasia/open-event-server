@@ -31,8 +31,7 @@ function importEvent(type) {
             }, 1000);
         },
         error: function (x) {
-            obj = JSON.parse(x.responseText);
-            console.log(obj);
+            var obj = JSON.parse(x.responseText);
             $('#import_status').text('');
             $('#import_error').text(obj['message']);
         }
@@ -57,8 +56,7 @@ function importTask(url) {
             }
         },
         error: function (x) {
-            obj = JSON.parse(x.responseText);
-            console.log(obj);
+            var obj = JSON.parse(x.responseText);
             $('#import_status').text('');
             $('#btnImportEvent').prop('disabled', false);
             $('#import_file').prop('disabled', false);
@@ -69,14 +67,12 @@ function importTask(url) {
 
 
 function importTaskTable(task, field_id) {
-    console.log(task);
-    url = '/api/v2/tasks/' + task;
+    var url = '/api/v2/tasks/' + task;
     jQuery.ajax({
         url: url,
         type: 'GET',
         success: function (data) {
-            console.log(data);
-            if (data['state'] == 'PENDING') { // task is lost
+            if (data['state'] == 'PENDING') {
                 $(field_id).html('Failed');
                 return;
             }
@@ -90,8 +86,7 @@ function importTaskTable(task, field_id) {
             }
         },
         error: function (x) {
-            console.log(x.responseText);
-            obj = JSON.parse(x.responseText);
+            var obj = JSON.parse(x.responseText);
             $(field_id).text(obj['message']);
         }
     });
