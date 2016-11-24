@@ -7,6 +7,7 @@ from ....models.custom_placeholder import CustomPlaceholder
 from app.settings import get_settings, set_settings
 from app.helpers.storage import upload, UploadedFile
 from app.helpers.helpers import uploaded_file
+from flask import current_app as app
 import PIL
 from PIL import Image
 import shutil
@@ -54,7 +55,7 @@ class SuperAdminContentView(SuperAdminBaseView):
                 placeholder_file = uploaded_file(file_content=placeholder_image)
                 placeholder = upload(
                     placeholder_file,
-                    'placeholders/original/'+filename
+                    'placeholders/original/' + filename
                 )
                 temp_img_file = placeholder.replace('/serve_', '')
 
@@ -63,15 +64,15 @@ class SuperAdminContentView(SuperAdminBaseView):
                 wpercent = (basewidth / float(img.size[0]))
                 hsize = int((float(img.size[1]) * float(wpercent)))
                 img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
-                os.mkdir('static/media/temp/')
-                img.save('static/media/temp/temp.png')
+                os.mkdir(app.config['TEMP_UPLOADS_FOLDER'])
+                img.save(app.config['TEMP_UPLOADS_FOLDER'] + '/temp.png')
                 file_name = temp_img_file.rsplit('/', 1)[1]
                 thumbnail_file = UploadedFile(file_path=temp_img_file, filename=file_name)
                 background_thumbnail_url = upload(
                     thumbnail_file,
-                    'placeholders/thumbnail/'+filename
+                    'placeholders/thumbnail/' + filename
                 )
-                shutil.rmtree(path='static/media/temp/')
+                shutil.rmtree(path=app.config['TEMP_UPLOADS_FOLDER'] + '/temp/')
                 placeholder_db = DataGetter.get_custom_placeholder_by_name(request.form['name'])
                 if placeholder_db:
                     placeholder_db.url = placeholder
@@ -139,7 +140,7 @@ class SuperAdminContentView(SuperAdminBaseView):
                 compiler.output_file = os.path.join(file_destination, "messages.mo")
                 compiler.run()
                 return "Uploading and Compiling Done!"
-            except Exception,e:
+            except Exception, e:
                 return str(e)
         return "File extension not allowed"
 
@@ -147,6 +148,3 @@ class SuperAdminContentView(SuperAdminBaseView):
     def download(self,l_code):
         file_destination = BASE_TRANSLATIONS_DIR + "/" + l_code + "/LC_MESSAGES"
         return send_from_directory(directory=file_destination, filename="messages.po")
-
-
-

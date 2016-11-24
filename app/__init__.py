@@ -103,12 +103,7 @@ def create_app():
     app.json_encoder = MiniJSONEncoder
     app.config['BABEL_DEFAULT_LOCALE'] = 'en'
     app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
-    app.config['UPLOADS_FOLDER'] = os.path.realpath('.') + '/static/'
     app.config['FILE_SYSTEM_STORAGE_FILE_VIEW'] = 'static'
-    app.config['STATIC_URL'] = '/static/'
-    app.config['STATIC_ROOT'] = 'staticfiles'
-    app.config['STATICFILES_DIRS'] = (os.path.join(BASE_DIR, 'static'),)
-    app.config['SQLALCHEMY_RECORD_QUERIES'] = True
 
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     app.logger.setLevel(logging.ERROR)
@@ -124,8 +119,7 @@ def create_app():
     jwt = JWT(app, jwt_authenticate, jwt_identity)
 
     # setup celery
-    app.config['CELERY_BROKER_URL'] = environ.get('REDIS_URL',
-                                                  'redis://localhost:6379/0')
+    app.config['CELERY_BROKER_URL'] = environ.get('REDIS_URL', 'redis://localhost:6379/0')
     app.config['CELERY_RESULT_BACKEND'] = app.config['CELERY_BROKER_URL']
 
     HTMLMIN(app)

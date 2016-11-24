@@ -303,7 +303,7 @@ def import_event_json(task_handle, zip_path):
     update_state(task_handle, 'Started')
 
     with app.app_context():
-        path = app.config['BASE_DIR'] + '/static/temp/import_event'
+        path = app.config['BASE_DIR'] + '/static/uploads/import_event'
     # delete existing files
     if os.path.isdir(path):
         shutil.rmtree(path, ignore_errors=True)

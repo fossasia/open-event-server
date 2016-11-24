@@ -1,10 +1,14 @@
 FROM python:2-slim
 MAINTAINER Niranjan Rajendran <niranjan94@yahoo.com>
 
-ENV REPOSITORY https://github.com/fossasia/open-event-orga-server.git
-ENV BRANCH development
 
 ARG COMMIT_HASH
+ARG BRANCH
+ARG REPOSITORY
+
+ENV COMMIT_HASH ${COMMIT_HASH:-null}
+ENV BRANCH ${BRANCH:-master}
+ENV REPOSITORY ${REPOSITORY:-https://github.com/fossasia/open-event-orga-server.git}
 
 # apt-get update
 RUN apt-get clean -y && apt-get update -y

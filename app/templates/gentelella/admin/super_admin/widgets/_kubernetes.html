@@ -6,8 +6,44 @@
     </div>
     <div class="x_content">
         <div class="dashboard-widget-content">
-            <strong>Repository: </strong> <a href="{{ version }}"><i class="fa fa-code-fork"></i> {{ version }}</a><br>
-            <strong>Branch: </strong> {{ commit_info }}
+            <table class="table table-bordered" style="margin-top: 12px;">
+                <tbody>
+                <tr>
+                    <td>{{ _("Repository") }}</td>
+                    <td><a href="{{ repository }}"><i class="fa fa-code-fork"></i> {{ repository }}</a></td>
+                </tr>
+                <tr>
+                    <td>{{ _("Branch") }}</td>
+                    <td><a href="{{ branch }}"><i class="fa fa-code-fork"></i> {{ branch }}</a></td>
+                </tr>
+                {% if commit_number %}
+                    <tr>
+                        <td>{{ _("Commit Hash") }}</td>
+                        <td><a href="{{ commit_info.html_url }}" target="_blank">{{ commit_number }} <i
+                                class="fa fa-code-fork"></i></a></td>
+                    </tr>
+                {% endif %}
+                {% if commit_info and commit_info.commit %}
+                    <tr>
+                        <td>{{ _("Author Name") }}</td>
+                        <td><a href="{{ commit_info.author.html_url }}"
+                               target="_blank">{{ commit_info.commit.author.name }}
+                            <i class="fa fa-external-link"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td>{{ _("Email") }}</td>
+                        <td><a href="mailto:{{ commit_info.commit.author.email }}"
+                               target="_blank">{{ commit_info.commit.author.email }}</a></td>
+                    </tr>
+                    <tr>
+                        <td>{{ _("Commit Message") }}</td>
+                        <td><a href="{{ commit_info.html_url }}" target="_blank">{{ commit_info.commit.message }} <i
+                                class="fa fa-github"></i></a></td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+
             <table class="table table-bordered no-global-dt" style="margin-top: 12px;">
                 <thead>
                 <tr>
