@@ -9,6 +9,7 @@ spec:
       labels:
         role: nfs-server
     spec:
+      hostname: nfs-server
       containers:
       - name: nfs-server
         image: gcr.io/google-samples/nfs-server:1.1

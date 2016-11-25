@@ -12,3 +12,4 @@ spec:
       port: 111
   selector:
     role: nfs-server
+  clusterIP: 10.3.244.20
