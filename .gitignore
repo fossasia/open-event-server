@@ -32,6 +32,10 @@ static/temp/*
 static/media/*
 !static/media/.gitkeep
 
+# uploads dir
+static/uploads/*
+!static/uploads/.gitkeep
+
 # redis
 redis-3.2.1/
 dump.rdb
