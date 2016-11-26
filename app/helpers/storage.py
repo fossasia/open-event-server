@@ -199,7 +199,7 @@ def upload_to_gs(bucket_name, client_id, client_secret, file, key, acl='public-r
     k.set_acl(acl)
     gs_url = 'https://storage.googleapis.com/%s/' % bucket_name
     if sent == size:
-        return gs_url + key
+        return gs_url + k.key
     return False
 
 # ########

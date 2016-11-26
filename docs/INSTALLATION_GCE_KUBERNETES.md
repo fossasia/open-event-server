@@ -90,7 +90,7 @@ _You can delete the instance if your not planning to use it for anything else. B
 - Create a cluster via the `gcloud` command line tool:
 
     ```
-    gcloud container clusters create opev-cluster
+    gcloud container clusters create opev-cluster --image-type=container_vm
     ```
 
 - Get the credentials for `kubectl` to use.
