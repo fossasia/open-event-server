@@ -26,7 +26,7 @@ gcloud auth activate-service-account --key-file eventyay-8245fde7ab8a.json
 export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/eventyay-8245fde7ab8a.json
 gcloud config set project eventyay
 gcloud container clusters get-credentials eventyay-cluster
-cd kubernetes/image
+cd kubernetes/images/web
 docker build --build-arg COMMIT_HASH=$TRAVIS_COMMIT --build-arg BRANCH=$DEPLOY_BRANCH --build-arg REPOSITORY=$REPOSITORY --no-cache -t gcr.io/eventyay/web:$TRAVIS_COMMIT .
 docker tag gcr.io/eventyay/web:$TRAVIS_COMMIT gcr.io/eventyay/web:latest
 gcloud docker -- push gcr.io/eventyay/web
