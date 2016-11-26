@@ -23,7 +23,7 @@ spec:
         securityContext:
           privileged: true
         volumeMounts:
-          - mountPath: /data
+          - mountPath: /exports
             name: data-pvc
       volumes:
         - name: data-pvc

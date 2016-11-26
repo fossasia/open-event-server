@@ -20,7 +20,7 @@ spec:
         - name: DEPLOYMENT
           value: 'celery'
         volumeMounts:
-          - mountPath: /opev/open_event/static/uploads
+          - mountPath: /opev/open_event/static/uploads/
             name: nfs-storage
       restartPolicy: Always
       volumes:
