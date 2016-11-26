@@ -200,19 +200,50 @@ class EventDetailView(BaseView):
                            placeholder_images=placeholder_images, state=state, speakers=speakers,
                            via_hash=True, custom_placeholder=custom_placeholder)
 
-    @expose('/<identifier>/cfs/', methods=('POST',))
-    def process_event_cfs(self, identifier):
-        email = request.form['email']
-        event = DataGetter.get_event_by_identifier(identifier)
-        if not event.has_session_speakers:
-            abort(404)
-        DataManager.add_session_to_event(request, event.id)
-        if login.current_user.is_authenticated:
-            flash("Your session proposal has been submitted", "success")
-            return redirect(url_for('my_sessions.display_my_sessions_view', event_id=event.id))
-        else:
-            flash(Markup("Your session proposal has been submitted. Please login/register with <strong><u>" + email + "</u></strong> to manage it."), "success")
-            return redirect(url_for('admin.login_view', next=url_for('my_sessions.display_my_sessions_view')))
+    @expose('/<identifier>/cfs/new/', methods=('POST', 'GET'))
+    def process_event_cfs(self, identifier, via_hash=False):
+        if request.method == 'GET':
+            event = get_published_event_or_abort(identifier)
+            placeholder_images = DataGetter.get_event_default_images()
+            custom_placeholder = DataGetter.get_custom_placeholders()
+            if not event.has_session_speakers:
+                abort(404)
+
+            call_for_speakers = DataGetter.get_call_for_papers(event.id).first()
+            accepted_sessions = DataGetter.get_sessions(event.id)
+
+            if not call_for_speakers or (not via_hash and call_for_speakers.privacy == 'private'):
+                abort(404)
+
+            form_elems = DataGetter.get_custom_form_elements(event.id)
+            speaker_form = json.loads(form_elems.speaker_form)
+            session_form = json.loads(form_elems.session_form)
+
+            now = datetime.now()
+            state = "now"
+            if call_for_speakers.end_date < now:
+                state = "past"
+            elif call_for_speakers.start_date > now:
+                state = "future"
+            speakers = DataGetter.get_speakers(event.id).all()
+            return self.render('/gentelella/guest/event/cfs_new.html', event=event, accepted_sessions=accepted_sessions,
+                               speaker_form=speaker_form,
+                               session_form=session_form, call_for_speakers=call_for_speakers,
+                               placeholder_images=placeholder_images, state=state, speakers=speakers,
+                               via_hash=via_hash, custom_placeholder=custom_placeholder)
+
+        if request.method == 'POST':
+            email = request.form['email']
+            event = DataGetter.get_event_by_identifier(identifier)
+            if not event.has_session_speakers:
+                abort(404)
+            DataManager.add_session_to_event(request, event.id)
+            if login.current_user.is_authenticated:
+                flash("Your session proposal has been submitted", "success")
+                return redirect(url_for('my_sessions.display_my_sessions_view', event_id=event.id))
+            else:
+                flash(Markup("Your session proposal has been submitted. Please login/register with <strong><u>" + email + "</u></strong> to manage it."), "success")
+                return redirect(url_for('admin.login_view', next=url_for('my_sessions.display_my_sessions_view')))
 
     @expose('/<identifier>/coc/', methods=('GET',))
     def display_event_coc(self, identifier):

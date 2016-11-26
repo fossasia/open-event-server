@@ -39,6 +39,7 @@
 .profile_avatar {
   width: 100%;
   height: auto;
+  max-width: 250px;
 }
 
 .nav-sm .main_container .top_nav {

@@ -6,6 +6,7 @@
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/multiselect/css/multi-select.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/Croppie/croppie.css') }}"/>
 {% endblock %}
 
 {% block content %}
@@ -27,28 +28,12 @@
                     <strong>{{ call_for_speakers.end_date.strftime('%a, %B %d at %I:%M %p') }}</strong></p>
                 {{ call_for_speakers.announcement | safe }}
                 {% if state == "now" or via_hash %}
-                    <button class="btn btn-success" data-toggle="modal" data-target="#session-model">{{_("Submit Proposal")}}
-                    </button>
+                    <a href="/e/{{ event.identifier }}/cfs/new"><button class="btn btn-success" data-toggle="modal" data-target="#session-model">{{_("Submit Proposal")}}
+                    </button></a>
                 {% endif %}
             </div>
         </div>
     </div>
-    {% if state == "now" or via_hash %}
-        <div class="modal fade" tabindex="-1" role="dialog" id="session-model">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">{{_("Submit Proposal")}}</h4>
-                    </div>
-                    <div class="modal-body">
-                        {% include 'gentelella/admin/event/sessions/components/session_speaker_form.html' %}
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endif %}
 
 {% endblock %}
 

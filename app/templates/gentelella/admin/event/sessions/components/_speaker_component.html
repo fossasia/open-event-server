@@ -29,7 +29,7 @@
               <div class="col-md-7">
                   <input type="hidden" name="photo" id="logo">
                   <div class="item form-group" id="image-upload-group"
-                       {% if profile and profile.user_detail.avatar_uploaded and profile.user_detail.avatar_uploaded != '' %}style="display: none;"{% endif %}>
+                       {% if (speaker and speaker.thumbnail and speaker.thumbnail != '') or (session.speakers and session.speakers[0].thumbnail and session.speakers[0].thumbnail != '') %}style="display: none;"{% endif %}>
                       <div class="image-box">
                           <input type="file" id="event-image-upload" name="event-image-upload"
                                  class="image-upload-btn no-js"
@@ -45,8 +45,8 @@
                   </div>
 
                   <div class="item form-group" id="image-view-group"
-                       {% if not profile or not profile.user_detail.avatar_uploaded or profile.user_detail.avatar_uploaded == '' %}style="display: none;"{% endif %}>
-                      <img src="{{ profile.user_detail.avatar_uploaded | default('', true) }}" class="profile_avatar"><br><br>
+                       {% if (not speaker or not speaker.thumbnail or speaker.thumbnail == '') and (not session.speakers or not session.speakers[0].thumbnail or session.speakers[0].thumbnail == '') %}style="display: none;"{% endif %}>
+                      <img src="{% if speaker %}{{ speaker.thumbnail }}{% elif session.speakers %}{{ session.speakers[0].thumbnail }}{% endif %} " class="profile_avatar"><br><br>
                       {% if not profile.user_detail.avatar_uploaded %}
                           <button type="button" class="btn btn-sm btn-default" data-target="#cropper-modal"
                                   data-toggle="modal">
