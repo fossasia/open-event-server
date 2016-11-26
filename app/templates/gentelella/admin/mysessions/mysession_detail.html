@@ -3,7 +3,8 @@
     {{ super() }}
     <link href="{{ url_for('static', filename='css/admin/mysessions.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/multiselect/css/multi-select.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/multiselect/css/multi-select.css') }}" />    
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/Croppie/croppie.css') }}"/>
 
 {% endblock %}
 {% block title %}
@@ -27,8 +28,8 @@
                     {% else %}
                         <span class="detail-status label label-info">N/A</span>
                     {% endif %}
-                    <button class="btn btn-info pull-right" data-toggle="modal" data-target="#edit-session-modal">{{_("Edit Proposal")}}
-                    </button>
+                    <a href="{{ url_for('my_sessions.process_session_view',session_id=session.id) }}"><button class="btn btn-info pull-right" data-toggle="modal" data-target="#edit-session-modal">{{_("Edit Proposal")}}
+                    </button></a>
                     <br>
                     <br>
                     <h4 style="font-weight: 300; color: #8d8d8d">{{ session.event.name }}
@@ -98,20 +99,6 @@
                     {% endif %}
                     <br>
                     <br>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="edit-session-modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title">{{_("Edit Session Proposal")}}</h4>
-                </div>
-                <div class="modal-body">
-                    {% include 'gentelella/admin/event/sessions/components/session_speaker_form.html' %}
                 </div>
             </div>
         </div>

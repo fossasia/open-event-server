@@ -55,10 +55,27 @@ class MySessionView(BaseView):
         return self.render('/gentelella/admin/mysessions/mysession_detail.html', session=session,
                            speaker_form=speaker_form, session_form=session_form, event=event, speakers=speakers)
 
-    @expose('/<int:session_id>/', methods=('POST',))
+    @expose('/<int:session_id>/edit/', methods=('POST', 'GET'))
     @flask_login.login_required
     def process_session_view(self, session_id):
-        session = DataGetter.get_sessions_of_user_by_id(session_id)
-        DataManager.edit_session(request, session)
-        flash("The session has been updated successfully", "success")
-        return redirect(url_for('.display_session_view', session_id=session_id))
+        if request.method == 'GET':
+            session = DataGetter.get_sessions_of_user_by_id(session_id)
+            if not session:
+                abort(404)
+            form_elems = DataGetter.get_custom_form_elements(session.event_id)
+            if not form_elems:
+                flash("Speaker and Session forms have been incorrectly configured for this event."
+                      " Session creation has been disabled", "danger")
+                return redirect(url_for('.display_my_sessions_view', event_id=session.event_id))
+            speaker_form = json.loads(form_elems.speaker_form)
+            session_form = json.loads(form_elems.session_form)
+            event = DataGetter.get_event(session.event_id)
+            speakers = DataGetter.get_speakers(session.event_id).all()
+            return self.render('/gentelella/admin/mysessions/mysession_detail_edit.html', session=session,
+                               speaker_form=speaker_form, session_form=session_form, event=event, speakers=speakers)
+
+        if request.method == 'POST':
+            session = DataGetter.get_sessions_of_user_by_id(session_id)
+            DataManager.edit_session(request, session)
+            flash("The session has been updated successfully", "success")
+            return redirect(url_for('.display_session_view', session_id=session_id))
