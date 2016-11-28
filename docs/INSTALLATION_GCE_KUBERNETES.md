@@ -85,6 +85,8 @@
 
 _You can delete the instance if your not planning to use it for anything else. But make sure the disk `pg-data-disk` is not deleted._
 
+Repeat the same procedure and create another disk named `nfs-data-disk`.
+
 ## Create your Kubernetes Cluster
 
 - Create a cluster via the `gcloud` command line tool:
@@ -101,10 +103,10 @@ _You can delete the instance if your not planning to use it for anything else. B
 
 ## Deploy our pods, services and deployments
 
-- From the project directory, use kubectl to deploy our application from the defined configuration files that are in the `kubernetes` directory.
+- From the project directory, use the provided deploy script to deploy our application from the defined configuration files that are in the `kubernetes` directory.
 
     ```
-    kubectl create -R -f ./kubernetes/yamls
+    ./kubernetes/deploy.sh
     ```
 
 - The Kubernetes master creates the load balancer and related Compute Engine forwarding rules, target pools, and firewall rules to make the service fully accessible from outside of Google Cloud Platform.
