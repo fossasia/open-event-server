@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 import flask_login
 from flask import flash, redirect, url_for, request
@@ -6,7 +7,7 @@ from flask.ext.restplus import abort
 from flask_admin import BaseView, expose
 from markupsafe import Markup
 
-from app.helpers.data import DataManager
+from app.helpers.data import DataManager, save_to_db
 from app.views.admin.models_views.events import is_verified_user
 from ....helpers.data_getter import DataGetter
 
@@ -79,3 +80,13 @@ class MySessionView(BaseView):
             DataManager.edit_session(request, session)
             flash("The session has been updated successfully", "success")
             return redirect(url_for('.display_session_view', session_id=session_id))
+
+    @expose('/<int:session_id>/withdraw/', methods=('GET',))
+    @flask_login.login_required
+    def withdraw_session_view(self, session_id):
+        session = DataGetter.get_sessions_of_user_by_id(session_id)
+        session.in_trash = True
+        session.trash_date = datetime.now()
+        save_to_db(session)
+        flash("The session has been withdrawn", "success")
+        return redirect(url_for('.display_my_sessions_view', session_id=session_id))

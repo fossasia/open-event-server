@@ -3,7 +3,7 @@
     {{ super() }}
     <link href="{{ url_for('static', filename='css/admin/mysessions.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/multiselect/css/multi-select.css') }}" />    
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/multiselect/css/multi-select.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/Croppie/croppie.css') }}"/>
 
 {% endblock %}
@@ -18,18 +18,28 @@
                 <div class="x_content">
                     <br>
                     {% if session.state == 'pending' %}
-                        <span class="detail-status label label-warning">{{_("Under Review")}}</span>
+                        <span class="detail-status label label-warning">{{ _("Under Review") }}</span>
                     {% elif session.state == 'draft' %}
-                        <span class="detail-status label label-warning">{{_("Draft")}}</span>
+                        <span class="detail-status label label-warning">{{ _("Draft") }}</span>
                     {% elif session.state == 'accepted' %}
-                        <span class="detail-status label label-success">{{_("Accepted")}}</span>
+                        <span class="detail-status label label-success">{{ _("Accepted") }}</span>
                     {% elif session.state == 'rejected' %}
-                        <span class="detail-status label label-danger">{{_("Rejected")}}</span>
+                        <span class="detail-status label label-danger">{{ _("Rejected") }}</span>
                     {% else %}
                         <span class="detail-status label label-info">N/A</span>
                     {% endif %}
-                    <a href="{{ url_for('my_sessions.process_session_view',session_id=session.id) }}"><button class="btn btn-info pull-right" data-toggle="modal" data-target="#edit-session-modal">{{_("Edit Proposal")}}
-                    </button></a>
+                    <div class="btn-group pull-right">
+                        {% if session.state == 'pending' or session.state == 'accepted' or session.state == 'rejected' %}
+                        <a href="{{ url_for('my_sessions.withdraw_session_view',session_id=session.id) }}"
+                           class="btn btn-danger ">
+                            {{ _("Withdraw Proposal") }}
+                        </a>
+                        {% endif %}
+                        <a href="{{ url_for('my_sessions.process_session_view',session_id=session.id) }}"
+                           class="btn btn-info">
+                            {{ _("Edit Proposal") }}
+                        </a>
+                    </div>
                     <br>
                     <br>
                     <h4 style="font-weight: 300; color: #8d8d8d">{{ session.event.name }}
@@ -48,54 +58,57 @@
                     </h4>
                     <br>
                     {% if session.short_abstract %}
-                    <h5>{{_("Short Abstract")}}</h5>
-                    <p style="text-align: justify;"><i class="short_abstract">
-                        {{ session.short_abstract | safe }}
-                    </i></p>
-                    <br>
+                        <h5>{{ _("Short Abstract") }}</h5>
+                        <p style="text-align: justify;"><i class="short_abstract">
+                            {{ session.short_abstract | safe }}
+                        </i></p>
+                        <br>
                     {% endif %}
                     {% if session.long_abstract %}
-                    <h5>{{_("Long Abstract")}}</h5>
-                    <p style="text-align: justify" class="long_abstract">
-                        {{ session.long_abstract | safe }}
-                    </p>
-                    <br>
+                        <h5>{{ _("Long Abstract") }}</h5>
+                        <p style="text-align: justify" class="long_abstract">
+                            {{ session.long_abstract | safe }}
+                        </p>
+                        <br>
                     {% endif %}
                     <div class="row" style="text-align: center; font-size: 16px;">
                         {% if session.microlocation %}
-                        <div class="col-md-2 col-md-push-1">
-                            <strong>{{_("Microlocation")}}</strong><br>
-                            {{ session.microlocation.name }}
-                        </div>
+                            <div class="col-md-2 col-md-push-1">
+                                <strong>{{ _("Microlocation") }}</strong><br>
+                                {{ session.microlocation.name }}
+                            </div>
                         {% endif %}
                         {% if session.track %}
-                        <div class="col-md-2 col-md-push-1">
-                            <strong>{{_("Track")}}</strong><br>
-                            {{ session.track.name }}
-                        </div>
+                            <div class="col-md-2 col-md-push-1">
+                                <strong>{{ _("Track") }}</strong><br>
+                                {{ session.track.name }}
+                            </div>
                         {% endif %}
                     </div>
                     {% if session.slides or session.video or session.audio %}
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h4>{{_("Media")}}</h4>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>{{ _("Media") }}</h4>
+                            </div>
+                            {% if session.slides %}
+                                <div class="col-md-4">
+                                    <h5>{{ _("Slide") }}</h5><a href="{{ session.slides }}"
+                                                                download>{{ _("Download") }}</a>
+                                </div>
+                            {% endif %}
+                            {% if session.video %}
+                                <div class="col-md-4">
+                                    <h5>{{ _("Video") }}</h5><a href="{{ session.video }}"
+                                                                download>{{ _("Download") }}</a>
+                                </div>
+                            {% endif %}
+                            {% if session.audio %}
+                                <div class="col-md-4">
+                                    <h5>{{ _("Audio") }}</h5><a href="{{ session.audio }}"
+                                                                download>{{ _("Download") }}</a>
+                                </div>
+                            {% endif %}
                         </div>
-                        {% if session.slides %}
-                            <div class="col-md-4">
-                                <h5>{{_("Slide")}}</h5><a href="{{ session.slides }}" download>{{_("Download")}}</a>
-                            </div>
-                        {% endif %}
-                        {% if session.video %}
-                            <div class="col-md-4">
-                                <h5>{{_("Video")}}</h5><a href="{{ session.video }}" download>{{_("Download")}}</a>
-                            </div>
-                        {% endif %}
-                        {% if session.audio %}
-                            <div class="col-md-4">
-                                <h5>{{_("Audio")}}</h5><a href="{{ session.audio }}" download>{{_("Download")}}</a>
-                            </div>
-                        {% endif %}
-                    </div>
                     {% endif %}
                     <br>
                     <br>
