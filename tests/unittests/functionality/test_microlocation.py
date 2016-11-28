@@ -6,6 +6,7 @@ from app import current_app as app
 from app.helpers.data import save_to_db
 from app.models.microlocation import Microlocation
 
+
 class TestMicrolocationApi(OpenEventTestCase):
     def setUp(self):
         self.app = Setup.create_app()
@@ -25,6 +26,7 @@ class TestMicrolocationApi(OpenEventTestCase):
                                        event_id=1)
         self.assertEqual(microlocation1.event_id, 1)
         self.assertEqual(microlocation2.event_id, 1)
+
 
 if __name__ == '__main__':
     unittest.main()

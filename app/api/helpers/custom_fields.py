@@ -4,9 +4,8 @@ from datetime import datetime
 from flask import request
 from flask.ext.restplus.fields import Raw, Nested, List
 
-
 EMAIL_REGEX = re.compile(r'\S+@\S+\.\S+')
-URI_REGEX = re.compile(r'(http|https|ftp)://\S*(\S+\.|localhost(\:\d+)?/)\S+')
+URI_REGEX = re.compile(r'(http|https|ftp)://\S*(\S+\.|localhost(:\d+)?/)\S+')
 
 
 class CustomField(Raw):
@@ -172,6 +171,7 @@ class String(CustomField):
     """
     Custom String Field
     """
+
     def validate(self, value):
         if not value:
             return self.validate_empty()
@@ -241,6 +241,7 @@ class ChoiceString(String):
     Args:
         choice_list - List of valid choices
     """
+
     def __init__(self, **kwargs):
         super(ChoiceString, self).__init__(**kwargs)
         self.choice_list = kwargs.get('choice_list', [])

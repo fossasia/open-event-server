@@ -20,6 +20,7 @@ class TestModelUnicode(OpenEventTestCase):
     """
     Tests for unicode handling in models
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():

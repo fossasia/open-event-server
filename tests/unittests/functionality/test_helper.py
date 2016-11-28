@@ -1,4 +1,3 @@
-"""Copyright 2015 Rafal Kowalski"""
 import unittest
 from tests.unittests.utils import OpenEventTestCase
 from mock import patch

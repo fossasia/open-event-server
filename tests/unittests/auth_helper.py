@@ -1,4 +1,3 @@
-"""Copyright 2015 Rafal Kowalski"""
 from flask import url_for
 
 from app.helpers.helpers import get_serializer
@@ -29,12 +28,14 @@ def register(app, email, password):
         url_for('admin.create_account_after_confirmation_view', hash=data_hash),
         follow_redirects=True)
 
+
 def create_super_admin(email, password):
     user = DataManager.create_user([email, password], is_verified=True)
     user.is_super_admin = True
     user.is_admin = True
     save_to_db(user, "User updated")
     return user
+
 
 def create_user(email, password, is_verified=True):
     """

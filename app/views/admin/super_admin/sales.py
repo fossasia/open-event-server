@@ -15,12 +15,12 @@ from app.helpers.data import save_to_db, delete_from_db
 from app.helpers.data_getter import DataGetter
 from app.helpers.payment import get_fee
 from app.models.user import User
-from app.models.event import Event
 from app.helpers.cached_getter import CachedGetter
 from app.models.system_role import CustomSysRole, UserSystemRole
 from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView, SALES
 from app.helpers.ticketing import TicketingManager
 from app.helpers.invoicing import InvoicingManager
+
 
 class SuperAdminSalesView(SuperAdminBaseView):
     PANEL_NAME = SALES
@@ -37,8 +37,7 @@ class SuperAdminSalesView(SuperAdminBaseView):
 
         if ('from_date' in request.args and not from_date) or ('to_date' in request.args and not to_date) or \
             ('from_date' in request.args and 'to_date' not in request.args) or \
-                ('to_date' in request.args and 'from_date' not in request.args):
-
+            ('to_date' in request.args and 'from_date' not in request.args):
             return redirect(url_for('.fees_by_events_view'))
 
         marketer_role = CustomSysRole.query.filter_by(name='Marketer').first()
@@ -75,7 +74,7 @@ class SuperAdminSalesView(SuperAdminBaseView):
                 tickets_total += order_ticket.quantity
                 ticket = CachedGetter.get_ticket(order_ticket.ticket_id)
                 if order.paid_via != 'free' and order.amount > 0 and ticket.price > 0:
-                    fee = ticket.price * (get_fee(order.event.payment_currency)/100)
+                    fee = ticket.price * (get_fee(order.event.payment_currency) / 100)
                     fee = forex(order.event.payment_currency, self.display_currency, fee)
                     fee_summary[str(order.event.id)]['fee_amount'] += fee
                     fee_total += fee
@@ -95,8 +94,7 @@ class SuperAdminSalesView(SuperAdminBaseView):
 
         if ('from_date' in request.args and not from_date) or ('to_date' in request.args and not to_date) or \
             ('from_date' in request.args and 'to_date' not in request.args) or \
-                ('to_date' in request.args and 'from_date' not in request.args):
-
+            ('to_date' in request.args and 'from_date' not in request.args):
             return redirect(url_for('.fees_status_view'))
 
         if from_date and to_date:
@@ -122,8 +120,7 @@ class SuperAdminSalesView(SuperAdminBaseView):
 
         if ('from_date' in request.args and not from_date) or ('to_date' in request.args and not to_date) or \
             ('from_date' in request.args and 'to_date' not in request.args) or \
-                ('to_date' in request.args and 'from_date' not in request.args):
-
+            ('to_date' in request.args and 'from_date' not in request.args):
             return redirect(url_for('.sales_by_marketer_view'))
 
         orders_summary = {
@@ -199,7 +196,7 @@ class SuperAdminSalesView(SuperAdminBaseView):
             for amount in temp_month_summary:
                 if discount_coupon.max_quantity <= month_count:
                     tickets_summary[key]['discounts'] \
-                        += amount * (discount_coupon.value/100)
+                        += amount * (discount_coupon.value / 100)
                     orders_summary['total_discounts'] += amount * (discount_coupon.value / 100)
                 month_count += 1
 
@@ -223,8 +220,7 @@ class SuperAdminSalesView(SuperAdminBaseView):
 
         if ('from_date' in request.args and not from_date) or ('to_date' in request.args and not to_date) or \
             ('from_date' in request.args and 'to_date' not in request.args) or \
-                ('to_date' in request.args and 'from_date' not in request.args):
-
+            ('to_date' in request.args and 'from_date' not in request.args):
             return redirect(url_for('.sales_by_events_view', path=path))
 
         promoted_events = path == 'promoted-events'
@@ -242,10 +238,6 @@ class SuperAdminSalesView(SuperAdminBaseView):
             events = DataGetter.get_all_events_with_discounts()
         else:
             events = DataGetter.get_all_events()
-
-        completed_count = 0
-        completed_amount = 0
-        tickets_count = 0
 
         orders_summary = {
             'completed': {
@@ -369,7 +361,7 @@ class SuperAdminSalesView(SuperAdminBaseView):
     @flask_login.login_required
     def discount_codes_view(self):
         discount_codes = InvoicingManager.get_discount_codes()
-        return self.render('/gentelella/admin/super_admin/sales/discount_codes.html')
+        return self.render('/gentelella/admin/super_admin/sales/discount_codes.html', discount_codes=discount_codes)
 
     @expose('/discounts/create/', methods=('GET', 'POST'))
     @flask_login.login_required

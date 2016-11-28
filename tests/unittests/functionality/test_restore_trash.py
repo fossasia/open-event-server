@@ -10,6 +10,7 @@ from app.helpers.data import restore_event, restore_session, restore_user
 from app.models.user import User
 from app.models.session import Session
 
+
 class TestAdminTrash(OpenEventTestCase):
     def setUp(self):
         self.app = Setup.create_app()
@@ -50,6 +51,7 @@ class TestAdminTrash(OpenEventTestCase):
             save_to_db(session, "Session saved")
             restore_session(1)
             self.assertEqual(session.in_trash, False)
+
 
 if __name__ == '__main__':
     unittest.main()

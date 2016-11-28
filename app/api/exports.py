@@ -8,7 +8,6 @@ from helpers.utils import TASK_RESULTS
 from helpers import custom_fields as fields
 from helpers.helpers import nocache, can_access, requires_auth
 
-
 api = Namespace('exports', description='Exports', path='/')
 
 EXPORT_SETTING = api.model('ExportSetting', {

@@ -136,9 +136,9 @@ def _download_media(data, srv, dir_path, settings):
             continue
         path = DOWNLOAD_FIEDLS[srv][i][1]
         if srv == 'speakers':
-            path = path % (make_filename(data['name']), data['id'])
+            path %= make_filename(data['name']), data['id']
         elif srv == 'sponsors':
-            path = path % (make_filename(data['name']), data['id'])
+            path %= make_filename(data['name']), data['id']
         elif srv != 'event':
             path = path % (data['id'])
         if data[i].find('.') > -1:  # add extension
@@ -248,7 +248,7 @@ def send_export_mail(event_id, result):
     send_notif_after_export(user, event_name, result)
 
 
-# FIELD DATA FORMATTERS
+# FIELD DATA FORMATTER
 
 def make_filename(name):
     """Make speaker image filename for export"""

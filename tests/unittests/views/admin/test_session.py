@@ -1,4 +1,3 @@
-"""Copyright 2015 Rafal Kowalski"""
 import unittest
 
 from tests.unittests.api.utils_post_data import POST_SESSION_DATA, POST_SPEAKER_DATA

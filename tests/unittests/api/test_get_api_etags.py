@@ -46,7 +46,7 @@ class TestEtagGetApi(OpenEventTestCase):
 
             # Send new request with If-None-Match header set
             response = self.app.get(path, headers={'If-None-Match': etag},
-                follow_redirects=True)
+                                    follow_redirects=True)
 
             # Check if response was 304 Not Modified
             self.assertEqual(response.status_code, 304)

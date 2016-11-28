@@ -1,6 +1,6 @@
 import unittest
 import urllib
-from datetime import datetime,timedelta
+from datetime import datetime, timedelta
 
 from flask import url_for
 
@@ -9,6 +9,7 @@ from tests.unittests.object_mother import ObjectMother
 from tests.unittests.utils import OpenEventTestCase
 from app import current_app as app
 from app.helpers.flask_helpers import slugify
+
 
 def get_event():
     event = ObjectMother.get_event()
@@ -20,12 +21,14 @@ def get_event():
     event.state = 'Published'
     return event
 
+
 def get_event_two():
     event = get_event()
     event.start_time = datetime.now() + timedelta(days=8)
     event.end_time = event.start_time + timedelta(days=4)
     event.name = 'Random Event'
     return event
+
 
 def assert_events(self, location_name, query_params_one=None, query_params_two=None):
     if query_params_two is None:
@@ -41,8 +44,8 @@ def assert_events(self, location_name, query_params_one=None, query_params_two=N
     self.assertTrue("Super Event" not in rv.data, msg=rv.data)
     self.assertTrue("Random Event" in rv.data, msg=rv.data)
 
-class TestSearchEventPage(OpenEventTestCase):
 
+class TestSearchEventPage(OpenEventTestCase):
     def test_location_filter(self):
         with app.test_request_context():
             event = get_event()
@@ -126,6 +129,7 @@ class TestSearchEventPage(OpenEventTestCase):
                           (event_two.end_time + timedelta(days=1)).strftime('%m-%d-%Y')
             }
             assert_events(self, event_one.location_name, query_params_one, query_params_two)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -59,6 +59,3 @@ class ExportView(BaseView):
         resp = make_response(event.id)
         resp.headers['Content-type'] = 'text/plain'
         return resp
-
-
-

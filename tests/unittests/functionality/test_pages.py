@@ -7,8 +7,8 @@ from app import current_app as app
 from flask import request
 from jinja2 import TemplateNotFound
 
-class TestPagesUrls(OpenEventTestCase):
 
+class TestPagesUrls(OpenEventTestCase):
     def setUp(self):
         self.app = Setup.create_app()
 
@@ -18,8 +18,8 @@ class TestPagesUrls(OpenEventTestCase):
 
             for rule in app.url_map.iter_rules():
                 methods = ','.join(rule.methods)
-                if "<" not in str(rule) and\
-                        "favicon" not in str(rule) and\
+                if "<" not in str(rule) and \
+                        "favicon" not in str(rule) and \
                         "check_email" not in str(rule) and \
                         "set_role" not in str(rule) and \
                         "GET" in methods:
@@ -37,6 +37,7 @@ class TestPagesUrls(OpenEventTestCase):
                         pass
                     except ValueError:
                         pass
+
 
 if __name__ == '__main__':
     unittest.main()

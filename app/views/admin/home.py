@@ -1,4 +1,3 @@
-"""Copyright 2015 Rafal Kowalski"""
 import logging
 import os
 import urllib
@@ -38,8 +37,10 @@ def record_user_login_logout(template, user):
         **req_stats
     )
 
+
 def str_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
+
 
 class MyHomeView(AdminIndexView):
     @expose('/')

@@ -75,9 +75,9 @@ class TicketHolder(db.Model):
         qr.make(fit=True)
         img = qr.make_image()
 
-        buffer = StringIO()
-        img.save(buffer, format="JPEG")
-        img_str = base64.b64encode(buffer.getvalue())
+        _buffer = StringIO()
+        img.save(_buffer, format="JPEG")
+        img_str = base64.b64encode(_buffer.getvalue())
         return img_str
 
     @property

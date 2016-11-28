@@ -145,6 +145,6 @@ class SuperAdminContentView(SuperAdminBaseView):
         return "File extension not allowed"
 
     @expose('/translation_uploads/<path:l_code>/', methods=['GET', 'POST'])
-    def download(self,l_code):
+    def download(self, l_code):
         file_destination = BASE_TRANSLATIONS_DIR + "/" + l_code + "/LC_MESSAGES"
         return send_from_directory(directory=file_destination, filename="messages.po")

@@ -20,7 +20,9 @@ def role_required(roles=(Role.any,)):
             if can(roles, kwargs):
                 return decorated_function(*args, **kwargs)
             return flash('Not permission')
+
         return decorated_view
+
     return wrapper
 
 

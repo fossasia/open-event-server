@@ -16,7 +16,6 @@ from .helpers import custom_fields as fields
 
 api = Namespace('users', description='Users', path='/')
 
-
 USER_DETAIL = api.model('UserDetail', {
     'firstname': fields.String(),
     'lastname': fields.String(),
@@ -111,6 +110,7 @@ class User(Resource):
         record_activity('update_user', user=user)
         return user
 
+
 @api.route('/users/me')
 @api.response(404, 'User not found')
 class UserSelf(Resource):
@@ -120,6 +120,7 @@ class UserSelf(Resource):
     def get(self):
         """Fetch the current authenticated user"""
         return getattr(g, 'user', None), 200
+
 
 @api.route('/users/me/events')
 @api.response(404, 'User not found')

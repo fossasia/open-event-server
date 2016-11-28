@@ -11,7 +11,6 @@ from flask import jsonify, current_app
 
 from helpers.utils import TASK_RESULTS
 
-
 api = Namespace('extras', description='Extras', path='/')
 
 

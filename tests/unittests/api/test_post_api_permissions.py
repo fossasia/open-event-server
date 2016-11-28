@@ -17,6 +17,7 @@ class TestPostApiPermissionDenied(PostApiAuthTestCase, OpenEventTestCase):
     """
     Test 403 permission denied in Post API
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():

@@ -21,5 +21,6 @@ class TestSuperAdmin(OpenEventViewTestCase):
             rv = self.app.get(url_for('sadmin.index_view'), follow_redirects=True)
             self.assertEqual(rv.status_code, 403)
 
+
 if __name__ == '__main__':
     unittest.main()

@@ -9,12 +9,15 @@ class TestPutApiValidation(TestPutApiBase, ApiValidationTestCase):
     """
     Tests the input validation in PUT API
     """
-    def _test_model(self, name, data, fields=[]):
+
+    def _test_model(self, name, data, fields=None):
         """
         Sets a random value to each of the :fields in :data and makes
         sure PUT request failed.
         At last check if original value had prevailed
         """
+        if fields is None:
+            fields = []
         path = get_path(1) if name == 'event' else get_path(1, name + 's', 1)
         self._login_user()
         for field in fields:

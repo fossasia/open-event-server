@@ -13,17 +13,19 @@ from app.helpers.data import save_to_db
 from app.helpers.ticketing import TicketingManager
 from app.helpers.payment import PayPalPaymentsManager
 
+
 def create_pdf(pdf_data):
     pdf = StringIO()
     pisa.CreatePDF(StringIO(pdf_data.encode('utf-8')), pdf)
     return pdf
+
 
 class TicketingView(BaseView):
     @expose('/', methods=('GET',))
     def index(self):
         return redirect("/")
 
-    @expose('/create/', methods=('POST', ))
+    @expose('/create/', methods=('POST',))
     def create_order(self):
         order = TicketingManager.create_order(request.form)
         if request.form.get('promo_code', '') != '':

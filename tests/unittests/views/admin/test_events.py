@@ -89,7 +89,7 @@ class TestEvents(OpenEventViewTestCase):
                                data=postdata)
             self.assertTrue('TestEvent 1' in rv.data, msg=rv.data)
 
-            #Test Payment Details
+            # Test Payment Details
             self.assertTrue(data['payment_country'] in rv.data, msg=rv.data)
             self.assertTrue(data['paypal_email'] in rv.data, msg=rv.data)
 
@@ -100,7 +100,7 @@ class TestEvents(OpenEventViewTestCase):
             for ticket in event.tickets:
                 self.assertIn(ticket.name, data['tickets[name]'], msg=data['tickets[name]'])
 
-            #Test Tax Form
+            # Test Tax Form
             tax = DataGetter.get_tax_options(1)
             self.assertEqual(tax.country, data['tax_country'])
             self.assertEqual(tax.tax_rate, data['tax_rate'])
@@ -232,7 +232,6 @@ class TestEvents(OpenEventViewTestCase):
             url = url_for('events.copy_event', event_id=event.id)
             rv = self.app.get(url, follow_redirects=True)
             self.assertTrue("Copy of event1" in rv.data, msg=rv.data)
-
 
 
 if __name__ == '__main__':

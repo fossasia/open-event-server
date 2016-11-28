@@ -35,7 +35,7 @@ class RoleInvite(db.Model):
     def __repr__(self):
         return '<RoleInvite %r:%r:%r>' % (self.email,
                                           self.event,
-                                          self.role, )
+                                          self.role,)
 
     def __str__(self):
         return unicode(self).encode('utf-8')

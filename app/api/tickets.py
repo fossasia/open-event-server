@@ -2,9 +2,7 @@ from flask.ext.restplus import Namespace
 
 from app.helpers.ticketing import TicketingManager
 
-from .helpers.helpers import (
-    requires_auth,
-    can_access)
+from .helpers.helpers import requires_auth
 from .helpers.utils import POST_RESPONSES
 from .helpers.utils import Resource
 from .helpers import custom_fields as fields
@@ -52,6 +50,7 @@ class Ticket(Resource):
         """Get information about a ticket"""
         return TicketingManager.get_ticket(ticket_id=ticket_id)
 
+
 @api.route('/events/<int:event_id>/orders/<string:identifier>')
 class Order(Resource):
     @requires_auth
@@ -60,5 +59,3 @@ class Order(Resource):
     def get(self, event_id, identifier):
         """Get information about a ticket"""
         return TicketingManager.get_order_by_identifier(identifier=identifier)
-
-

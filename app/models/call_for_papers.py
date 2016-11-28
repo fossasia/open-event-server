@@ -17,7 +17,8 @@ class CallForPaper(db.Model):
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     events = db.relationship("Event", backref=backref("call_for_papers", uselist=False))
 
-    def __init__(self, announcement=None, start_date=None, end_date=None, timezone='UTC', hash=None, privacy='public', event_id=None):
+    def __init__(self, announcement=None, start_date=None, end_date=None, timezone='UTC',
+                 hash=None, privacy='public', event_id=None):
         self.announcement = announcement
         self.start_date = start_date
         self.end_date = end_date

@@ -5,6 +5,7 @@ from app.models.user import User
 
 from app.helpers.data_getter import DataGetter
 
+
 class CachedGetter(object):
     """Cached data getters"""
 

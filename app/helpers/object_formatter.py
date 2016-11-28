@@ -1,14 +1,13 @@
-"""Copyright 2015 Rafal Kowalski"""
 from flask import jsonify
 
 from .query_filter import QueryFilter
-
 
 PER_PAGE = 20
 
 
 class ObjectFormatter(object):
     """Object formatter class"""
+
     @staticmethod
     def get_json(name, query, request, page=None):
         """Returns formatted json"""
@@ -21,7 +20,7 @@ class ObjectFormatter(object):
                     for table_object in
                     objects]})
         else:
-            if count <= ((page-1) * PER_PAGE):  # no results possible
+            if count <= ((page - 1) * PER_PAGE):  # no results possible
                 return jsonify({})
             pagination = objects.paginate(page, PER_PAGE)
             return jsonify({

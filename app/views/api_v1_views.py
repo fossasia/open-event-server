@@ -1,4 +1,3 @@
-"""Copyright 2015 Rafal Kowalski"""
 import os
 
 from flask import jsonify, url_for, redirect, request, send_from_directory, \
@@ -21,7 +20,6 @@ from ..helpers.data_getter import DataGetter
 from ..helpers.data import save_to_db, uploaded_file_provided_by_url
 from views_helpers import event_status_code, api_response
 from flask import Blueprint
-from flask.ext.autodoc import Autodoc
 from icalendar import Calendar
 import icalendar
 from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth, TwitterOAuth
@@ -31,13 +29,11 @@ import geoip2.database
 import json
 from app.helpers.storage import upload
 
-auto = Autodoc()
 
 app = Blueprint('', __name__)
 
 
 @app.route('/api/v1/event', methods=['GET'])
-@auto.doc()
 @cross_origin()
 def get_events():
     """Returns all events"""
@@ -45,7 +41,6 @@ def get_events():
 
 
 @app.route('/api/v1/event/page/<int:page>', methods=['GET'])
-@auto.doc()
 @cross_origin()
 def get_events_per_page(page):
     """Returns 20 events per page"""
@@ -56,7 +51,6 @@ def get_events_per_page(page):
 
 
 @app.route('/api/v1/event/<int:event_id>', methods=['GET'])
-@auto.doc()
 @cross_origin()
 def get_event_by_id(event_id):
     """Returns events by event id"""
@@ -70,7 +64,6 @@ def get_event_by_id(event_id):
 
 
 @app.route('/api/v1/event/search/name/<name_search>', methods=['GET'])
-@auto.doc()
 @cross_origin()
 def search_events_by_name(name_search):
     """Returns events which have a name matching a string"""
@@ -79,7 +72,6 @@ def search_events_by_name(name_search):
 
 
 @app.route('/api/v1/event/<int:event_id>/sessions', methods=['GET'])
-@auto.doc()
 @cross_origin()
 def get_sessions(event_id):
     """Returns all event's sessions"""
@@ -92,7 +84,6 @@ def get_sessions(event_id):
 
 
 @app.route('/api/v1/event/sessions/<int:session_id>', methods=['GET'])
-@auto.doc()
 @cross_origin()
 def get_session_by_id(session_id):
     """Returns a session's data by session id"""
@@ -106,7 +97,6 @@ def get_session_by_id(session_id):
 
 
 @app.route('/api/v1/event/<int:event_id>/sessions/page/<int:page>', methods=['GET'])
-@auto.doc()
 @cross_origin()
 def get_sessions_per_page(event_id, page):
     """Returns 20 event's sessions"""
@@ -120,7 +110,6 @@ def get_sessions_per_page(event_id, page):
 
 
 @app.route('/api/v1/event/<int:event_id>/tracks', methods=['GET'])
-@auto.doc()
 @cross_origin()
 def get_tracks(event_id):
     """Returns all event's tracks"""
@@ -133,7 +122,6 @@ def get_tracks(event_id):
 
 
 @app.route('/api/v1/event/<int:event_id>/tracks/page/<int:page>', methods=['GET'])
-@auto.doc()
 @cross_origin()
 def get_tracks_per_page(event_id, page):
     """Returns 20 event's tracks"""
@@ -147,7 +135,6 @@ def get_tracks_per_page(event_id, page):
 
 
 @app.route('/api/v1/event/<int:event_id>/speakers', methods=['GET'])
-@auto.doc()
 @cross_origin()
 def get_speakers(event_id):
     """Returns all event's speakers"""
@@ -160,7 +147,6 @@ def get_speakers(event_id):
 
 
 @app.route('/api/v1/event/speakers/<int:speaker_id>', methods=['GET'])
-@auto.doc()
 @cross_origin()
 def get_speaker_by_id(speaker_id):
     """Return speaker data by speaker id"""
@@ -174,7 +160,6 @@ def get_speaker_by_id(speaker_id):
 
 
 @app.route('/api/v1/event/<int:event_id>/speakers/page/<int:page>', methods=['GET'])
-@auto.doc()
 @cross_origin()
 def get_speakers_per_page(event_id, page):
     """Returns 20 event's speakers"""
@@ -188,7 +173,6 @@ def get_speakers_per_page(event_id, page):
 
 
 @app.route('/api/v1/event/<int:event_id>/sponsors', methods=['GET'])
-@auto.doc()
 @cross_origin()
 def get_sponsors(event_id):
     """Returns all event's sponsors"""
@@ -201,7 +185,6 @@ def get_sponsors(event_id):
 
 
 @app.route('/api/v1/event/<int:event_id>/sponsors/page/<int:page>', methods=['GET'])
-@auto.doc()
 @cross_origin()
 def get_sponsors_per_page(event_id, page):
     """Returns 20 event's sponsors"""
@@ -215,7 +198,6 @@ def get_sponsors_per_page(event_id, page):
 
 
 @app.route('/api/v1/event/<int:event_id>/microlocations', methods=['GET'])
-@auto.doc()
 @cross_origin()
 def get_microlocations(event_id):
     """Returns all event's microlocations"""
@@ -228,7 +210,6 @@ def get_microlocations(event_id):
 
 
 @app.route('/api/v1/event/<int:event_id>/microlocations/page/<int:page>', methods=['GET'])
-@auto.doc()
 @cross_origin()
 def get_microlocations_per_page(event_id, page):
     """Returns 20 event's microlocations"""
@@ -242,7 +223,6 @@ def get_microlocations_per_page(event_id, page):
 
 
 @app.route('/api/v1/version', methods=['GET'])
-@auto.doc()
 @cross_origin()
 def get_versions():
     """Returns the latest version"""
@@ -256,7 +236,6 @@ def get_versions():
 
 
 @app.route('/api/v1/event/<int:event_id>/version', methods=['GET'])
-@auto.doc()
 @cross_origin()
 def get_event_version(event_id):
     """Returns event's the latest version"""
@@ -270,7 +249,6 @@ def get_event_version(event_id):
 
 
 @app.route('/api/v1/event/<int:event_id>/sessions/title/<string:session_title>', methods=['GET'])
-@auto.doc()
 @cross_origin()
 def get_sessions_at_event(event_id, session_title):
     """
@@ -286,7 +264,6 @@ def get_sessions_at_event(event_id, session_title):
 
 
 @app.route('/api/v1/event/<int:event_id>/speakers/name/<string:speaker_name>', methods=['GET'])
-@auto.doc()
 @cross_origin()
 def get_speakers_at_event(event_id, speaker_name):
     """
@@ -302,7 +279,6 @@ def get_speakers_at_event(event_id, speaker_name):
 
 
 @app.route('/api/v1/event/<int:event_id>/export/ical', methods=['GET'])
-@auto.doc()
 @cross_origin()
 def generate_icalendar_event(event_id):
     """Takes an event id and returns the event in iCal format"""
@@ -337,7 +313,6 @@ def generate_icalendar_event(event_id):
 
 
 @app.route('/api/v1/event/<int:event_id>/tracks/<int:track_id>/export/ical', methods=['GET'])
-@auto.doc()
 @cross_origin()
 def generate_icalendar_track(event_id, track_id):
     """Takes a track id and returns the track in iCal format"""
@@ -504,14 +479,12 @@ def instagram_callback():
 
 
 @app.route('/pic/<path:filename>')
-@auto.doc()
 def send_pic(filename):
     """Returns image"""
     return send_from_directory(os.path.realpath('.') + '/static/', filename)
 
 
 @app.route('/calendar/<path:filename>')
-@auto.doc()
 def send_cal(filename):
     """Returns calendar"""
     return send_from_directory(os.path.realpath('.') + '/static/', filename)
@@ -532,12 +505,6 @@ def serve_static(filename):
 def favicon():
     return send_from_directory(os.path.dirname(os.path.dirname(__file__)) + '/static/', 'favicon.ico',
                                mimetype='image/vnd.microsoft.icon')
-
-
-@app.route('/documentation')
-def documentation():
-    return auto.html()
-
 
 @app.route('/health-check/')
 def health_check():

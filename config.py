@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-"""Written by - Rafal Kowalski"""
 import os
 
 _basedir = os.path.abspath(os.path.dirname(__file__))
@@ -9,6 +8,7 @@ LANGUAGES = {
     'en': 'English',
     'de': 'German'
 }
+
 
 class Config(object):
     DEBUG = False

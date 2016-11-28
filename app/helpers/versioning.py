@@ -76,20 +76,20 @@ def side_by_side_diff(old_text, new_text):
     old_text = unicodedata.normalize("NFKD", old_text)
     new_text = unicodedata.normalize("NFKD", new_text)
 
-    def yield_open_entry(open_entry):
+    def yield_open_entry(_open_entry):
         """ Yield all open changes. """
-        ls, rs = open_entry
+        _ls, _rs = _open_entry
         # Get unchanged parts onto the right line
-        if ls[0] == rs[0]:
-            yield (False, ls[0], rs[0])
-            for l, r in itertools.izip_longest(ls[1:], rs[1:]):
+        if _ls[0] == _rs[0]:
+            yield (False, _ls[0], _rs[0])
+            for l, r in itertools.izip_longest(_ls[1:], _rs[1:]):
                 yield (True, l, r)
-        elif ls[-1] == rs[-1]:
-            for l, r in itertools.izip_longest(ls[:-1], rs[:-1]):
+        elif _ls[-1] == _rs[-1]:
+            for l, r in itertools.izip_longest(_ls[:-1], _rs[:-1]):
                 yield (l != r, l, r)
-            yield (False, ls[-1], rs[-1])
+            yield (False, _ls[-1], _rs[-1])
         else:
-            for l, r in itertools.izip_longest(ls, rs):
+            for l, r in itertools.izip_longest(_ls, _rs):
                 yield (True, l, r)
 
     line_split = re.compile(r'(?:\r?\n)')
@@ -116,8 +116,8 @@ def side_by_side_diff(old_text, new_text):
             if change_type == 0:
                 ls[-1] = ls[-1] or ''
                 rs[-1] = rs[-1] or ''
-                ls[-1] = ls[-1] + line
-                rs[-1] = rs[-1] + line
+                ls[-1] += line
+                rs[-1] += line
             elif change_type == 1:
                 rs[-1] = rs[-1] or ''
                 rs[-1] += '<ins>%s</ins>' % line if line else ''

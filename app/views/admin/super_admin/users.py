@@ -32,19 +32,19 @@ class SuperAdminUsersView(SuperAdminBaseView):
             event_roles = DataGetter.get_event_roles_for_user(user.id)
             active_user_list.append({
                 'user': user,
-                'event_roles': event_roles,}
+                'event_roles': event_roles, }
             )
         for user in trash_users:
             event_roles = DataGetter.get_event_roles_for_user(user.id)
             trash_user_list.append({
                 'user': user,
-                'event_roles': event_roles,}
+                'event_roles': event_roles, }
             )
         return self.render('/gentelella/admin/super_admin/users/users.html',
-            active_user_list=active_user_list,
-            trash_user_list=trash_user_list,
-            all_user_list=all_user_list,
-            custom_sys_roles=custom_sys_roles)
+                           active_user_list=active_user_list,
+                           trash_user_list=trash_user_list,
+                           all_user_list=all_user_list,
+                           custom_sys_roles=custom_sys_roles)
 
     @expose('/<user_id>/edit/', methods=('GET', 'POST'))
     def edit_view(self, user_id):
@@ -56,13 +56,13 @@ class SuperAdminUsersView(SuperAdminBaseView):
             event_roles = DataGetter.get_event_roles_for_user(user.id)
             active_user_list.append({
                 'user': user,
-                'event_roles': event_roles,}
+                'event_roles': event_roles, }
             )
         for user in trash_users:
             event_roles = DataGetter.get_event_roles_for_user(user.id)
             trash_user_list.append({
                 'user': user,
-                'event_roles': event_roles,}
+                'event_roles': event_roles, }
             )
         return redirect(url_for('.index_view'))
 
@@ -90,7 +90,6 @@ class SuperAdminUsersView(SuperAdminBaseView):
         profile = DataGetter.get_user(user_id)
         return self.render('/gentelella/admin/profile/index.html',
                            profile=profile, user_id=user_id)
-
 
     @expose('/<user_id>/trash/', methods=('GET',))
     def trash_view(self, user_id):

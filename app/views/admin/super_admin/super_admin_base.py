@@ -30,6 +30,7 @@ PANEL_LIST = [
     CONTENT,
 ]
 
+
 class SuperAdminBaseView(BaseView):
     PANEL_NAME = BASE
 

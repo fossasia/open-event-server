@@ -1,7 +1,6 @@
 import unittest
 import json
 
-
 from tests.unittests.setup_database import Setup
 from tests.unittests.utils import OpenEventTestCase
 from tests.unittests.api.utils import create_event, get_path, Event, Session
@@ -14,6 +13,7 @@ class TestDeleteApi(OpenEventTestCase):
     """
     Test Delete APIs for 200 (successful) status codes
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():

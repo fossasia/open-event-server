@@ -2,7 +2,7 @@ from flask_admin import expose
 from flask import request
 from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView, MODULES
 from app.models.modules import Module
-from app.helpers.data import  save_to_db
+from app.helpers.data import save_to_db
 from app.helpers.data_getter import DataGetter
 
 
@@ -24,4 +24,4 @@ class SuperAdminModulesView(SuperAdminBaseView):
             save_to_db(module)
 
         return self.render('/gentelella/admin/super_admin/modules/modules.html',
-            module=module)
+                           module=module)

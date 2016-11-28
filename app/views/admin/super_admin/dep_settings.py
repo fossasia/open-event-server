@@ -123,8 +123,3 @@ class SuperAdminSettingsView(SuperAdminBaseView):
             event_image_sizes=event_image_sizes,
             profile_image_sizes=profile_image_sizes
         )
-
-    # @expose('/update', methods=('POST'))
-    # def update_view(self):
-    #     print request.form
-    #     # set_settings(request.form[])

@@ -60,6 +60,7 @@ class UploadedFile(object):
     """
     Helper for a disk-file to replicate request.files[ITEM] class
     """
+
     def __init__(self, file_path, filename):
         self.file_path = file_path
         self.filename = filename
@@ -79,6 +80,7 @@ class UploadedMemory(object):
     """
     Helper for a memory file to replicate request.files[ITEM] class
     """
+
     def __init__(self, data, filename):
         self.data = data
         self.filename = filename
@@ -201,6 +203,7 @@ def upload_to_gs(bucket_name, client_id, client_secret, file, key, acl='public-r
     if sent == size:
         return gs_url + k.key
     return False
+
 
 # ########
 # HELPERS

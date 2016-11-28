@@ -1,21 +1,17 @@
-"""Copyright 2015 Rafal Kowalski"""
-
 # Ignore ExtDeprecationWarnings for Flask 0.11 - see http://stackoverflow.com/a/38080580
-import re
+import warnings
+from flask.exthook import ExtDeprecationWarning
+warnings.simplefilter('ignore', ExtDeprecationWarning)
+# Keep it before flask extensions are imported
 
-from flask import redirect
+import re
 from pytz import timezone
 import base64
-import warnings
 from StringIO import StringIO
-
 import qrcode
-from flask.exthook import ExtDeprecationWarning
 from forex_python.converter import CurrencyCodes
 from pytz import utc
 
-warnings.simplefilter('ignore', ExtDeprecationWarning)
-# Keep it before flask extensions are imported
 
 from app.helpers.scheduled_jobs import send_mail_to_expired_orders, empty_trash, send_after_event_mail, \
     send_event_fee_notification, send_event_fee_notification_followup
@@ -30,7 +26,6 @@ from os import environ
 import sys
 import json
 from flask import Flask, session
-from flask.ext.autodoc import Autodoc
 from app.settings import get_settings, get_setts
 from flask.ext.cors import CORS
 from flask.ext.migrate import Migrate, MigrateCommand
@@ -76,8 +71,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
 
+
 def create_app():
-    Autodoc(app)
     # cal = Calendar()
     babel.init_app(app)
 
@@ -86,11 +81,10 @@ def create_app():
     app.register_blueprint(sitemap_routes)
     Migrate(app, db)
 
-    app.config.from_object(environ.get('APP_CONFIG',
-                                       'config.ProductionConfig'))
+    app.config.from_object(environ.get('APP_CONFIG', 'config.ProductionConfig'))
     db.init_app(app)
-    manager = Manager(app)
-    manager.add_command('db', MigrateCommand)
+    _manager = Manager(app)
+    _manager.add_command('db', MigrateCommand)
 
     if app.config['CACHING']:
         cache.init_app(app, config={'CACHE_TYPE': 'simple'})
@@ -116,7 +110,7 @@ def create_app():
     app.config['JWT_AUTH_USERNAME_KEY'] = 'email'
     app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=24 * 60 * 60)
     app.config['JWT_AUTH_URL_RULE'] = None
-    jwt = JWT(app, jwt_authenticate, jwt_identity)
+    _jwt = JWT(app, jwt_authenticate, jwt_identity)
 
     # setup celery
     app.config['CELERY_BROKER_URL'] = environ.get('REDIS_URL', 'redis://localhost:6379/0')
@@ -128,7 +122,6 @@ def create_app():
     admin_view.init_login(app)
 
     if app.config['TESTING']:
-        # Profiling
         app.config['PROFILE'] = True
         app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[30])
 
@@ -139,7 +132,7 @@ def create_app():
 
     sa.orm.configure_mappers()
 
-    return app, manager, db, jwt
+    return app, _manager, db, _jwt
 
 
 current_app, manager, database, jwt = create_app()
@@ -159,6 +152,7 @@ def forbidden(e):
         return json.dumps({"error": "forbidden"}), 403
     return render_template('gentelella/admin/forbidden.html'), 403
 
+
 # taken from http://flask.pocoo.org/snippets/45/
 def request_wants_json():
     best = request.accept_mimetypes.best_match(
@@ -169,6 +163,7 @@ def request_wants_json():
 @app.context_processor
 def all_languages():
     return dict(all_languages=LANGUAGES)
+
 
 @app.context_processor
 def selected_lang():
@@ -188,9 +183,11 @@ def get_key_settings():
     key_settings = get_settings()
     return dict(key_settings=key_settings)
 
+
 @app.context_processor
 def get_app_name():
     return dict(app_name=get_settings()['app_name'])
+
 
 @app.context_processor
 def fee_helpers():
@@ -214,16 +211,19 @@ def qrcode_generator():
         qr.make(fit=True)
         img = qr.make_image()
 
-        buffer = StringIO()
-        img.save(buffer, format="JPEG")
-        img_str = base64.b64encode(buffer.getvalue())
+        _buffer = StringIO()
+        img.save(_buffer, format="JPEG")
+        img_str = base64.b64encode(_buffer.getvalue())
         return img_str
+
     return dict(generate_qr=generate_qr)
+
 
 @app.context_processor
 def event_types():
-    event_types = DataGetter.get_event_types()
-    return dict(event_typo=event_types[:10])
+    _event_types = DataGetter.get_event_types()
+    return dict(event_types=_event_types[:10])
+
 
 @app.context_processor
 def base_dir():
@@ -232,17 +232,17 @@ def base_dir():
 
 @app.context_processor
 def pages():
-    pages = DataGetter.get_all_pages(get_locale())
-    return dict(system_pages=pages)
+    return dict(system_pages=DataGetter.get_all_pages(get_locale()))
+
 
 @app.context_processor
 def datetime_now():
     return dict(datetime_now=datetime.now())
 
+
 @app.context_processor
 def social_settings():
-    settings = get_setts()
-    return dict(settes=settings)
+    return dict(settes=get_setts())
 
 
 @app.template_filter('pretty_name')
@@ -355,8 +355,7 @@ def localize_dt(dt, tzname):
 
 @app.context_processor
 def fb_app_id():
-    fb_app_id = get_settings()['fb_client_id']
-    return dict(fb_app_id=fb_app_id)
+    return dict(fb_app_id=get_settings()['fb_client_id'])
 
 
 @app.context_processor
@@ -365,8 +364,8 @@ def flask_helpers():
         from app.helpers.helpers import string_empty
         return string_empty(string)
 
-    def current_date(format='%a, %B %d %I:%M %p', **kwargs):
-        return (datetime.now() + timedelta(**kwargs)).strftime(format)
+    def current_date(_format='%a, %B %d %I:%M %p', **kwargs):
+        return (datetime.now() + timedelta(**kwargs)).strftime(_format)
 
     return dict(string_empty=string_empty, current_date=current_date, forex=forex)
 
@@ -417,20 +416,20 @@ def track_user():
         current_user.update_lat()
 
 
-def make_celery(app):
-    celery = Celery(app.import_name, broker=app.config['CELERY_BROKER_URL'])
-    celery.conf.update(app.config)
-    task_base = celery.Task
+def make_celery(_app):
+    _celery = Celery(_app.import_name, broker=_app.config['CELERY_BROKER_URL'])
+    _celery.conf.update(_app.config)
+    task_base = _celery.Task
 
     class ContextTask(task_base):
         abstract = True
 
         def __call__(self, *args, **kwargs):
-            with app.app_context():
+            with _app.app_context():
                 return task_base.__call__(self, *args, **kwargs)
 
-    celery.Task = ContextTask
-    return celery
+    _celery.Task = ContextTask
+    return _celery
 
 
 celery = make_celery(current_app)
@@ -438,7 +437,7 @@ celery = make_celery(current_app)
 
 # http://stackoverflow.com/questions/9824172/find-out-whether-celery-task-exists
 @after_task_publish.connect
-def update_sent_state(sender=None, body=None, **kwargs):
+def update_sent_state(sender=None, body=None):
     # the task may not exist if sent using `send_task` which
     # sends tasks by name, so fall back to the default result backend
     # if that is the case.
@@ -458,6 +457,7 @@ def integrate_socketio():
     integrate = current_app.config.get('INTEGRATE_SOCKETIO', False)
     return dict(integrate_socketio=integrate)
 
+
 scheduler = BackgroundScheduler(timezone=utc)
 scheduler.add_job(send_mail_to_expired_orders, 'interval', hours=5)
 scheduler.add_job(empty_trash, 'cron', day_of_week='mon-fri', hour=5, minute=30)
@@ -465,6 +465,7 @@ scheduler.add_job(send_after_event_mail, 'cron', day_of_week='mon-fri', hour=5, 
 scheduler.add_job(send_event_fee_notification, 'cron', day=1)
 scheduler.add_job(send_event_fee_notification_followup, 'cron', day=15)
 scheduler.start()
+
 
 # Testing database performance
 @app.after_request
@@ -476,6 +477,7 @@ def after_request(response):
                                                                                                  query.duration,
                                                                                                  query.context))
     return response
+
 
 # Flask-SocketIO integration
 socketio = None

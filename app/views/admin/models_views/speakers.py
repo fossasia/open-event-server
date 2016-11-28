@@ -26,7 +26,6 @@ def get_speaker_or_throw(speaker_id):
 
 
 class SpeakersView(BaseView):
-
     def is_accessible(self):
         return login.current_user.is_authenticated
 
@@ -35,7 +34,8 @@ class SpeakersView(BaseView):
             return redirect(url_for('admin.login_view', next=request.url))
         event = DataGetter.get_event(kwargs['event_id'])
         if not event.has_session_speakers:
-            return self.render('/gentelella/admin/event/info/enable_module.html', active_page='speakers', title='Speakers', event=event)
+            return self.render('/gentelella/admin/event/info/enable_module.html', active_page='speakers',
+                               title='Speakers', event=event)
 
     @expose('/')
     def index_view(self, event_id):
@@ -72,7 +72,7 @@ class SpeakersView(BaseView):
             if logo != '' and logo:
                 filename = '{}.png'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
-                           logo[len('/serve_static/'):])
+                                                 logo[len('/serve_static/'):])
                 logo_file = UploadedFile(filepath, filename)
                 print logo_file
                 logo = upload(logo_file, 'events/%d/speakers/%d/photo' % (int(event_id), int(speaker.id)))
@@ -89,12 +89,12 @@ class SpeakersView(BaseView):
                 save_to_db(image_sizes, "Image Sizes Saved")
                 filename = '{}.jpg'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
-                           logo[len('/serve_static/'):])
+                                                 logo[len('/serve_static/'):])
                 logo_file = UploadedFile(filepath, filename)
 
                 temp_img_file = upload_local(logo_file,
                                              'events/{event_id}/speakers/{id}/temp'.format(
-                                             event_id=int(event_id), id=int(speaker.id)))
+                                                 event_id=int(event_id), id=int(speaker.id)))
                 temp_img_file = temp_img_file.replace('/serve_', '')
 
                 basewidth = image_sizes.full_width
@@ -136,7 +136,7 @@ class SpeakersView(BaseView):
                         event_id=int(event_id), id=int(speaker.id)
                     ))
                 shutil.rmtree(path='static/media/' + 'events/{event_id}/speakers/{id}/temp'.format(
-                              event_id=int(event_id), id=int(speaker.id)))
+                    event_id=int(event_id), id=int(speaker.id)))
                 speaker.thumbnail = profile_thumbnail_url
                 speaker.small = profile_small_url
                 speaker.icon = profile_icon_url
@@ -178,7 +178,7 @@ class SpeakersView(BaseView):
             photo = upload(
                 photo_file,
                 UPLOAD_PATHS['speakers']['photo'].format(
-                        event_id=int(event_id), id=int(speaker.id)
+                    event_id=int(event_id), id=int(speaker.id)
                 ))
             speaker.photo = photo
             save_to_db(speaker)

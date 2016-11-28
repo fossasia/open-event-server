@@ -9,6 +9,7 @@ from app.helpers.data import DataManager, save_to_db
 from app.models.email_notifications import EmailNotification
 from ....helpers.data_getter import DataGetter
 
+
 def get_or_create_notification_settings(event_id):
     email_notification = DataGetter \
         .get_email_notification_settings_by_event_id(login.current_user.id, event_id)

@@ -36,6 +36,7 @@ del MICROLOCATION_POST['id']
 class MicrolocationDAO(ServiceDAO):
     version_key = 'microlocations_ver'
 
+
 DAO = MicrolocationDAO(MicrolocationModel, MICROLOCATION_POST)
 
 

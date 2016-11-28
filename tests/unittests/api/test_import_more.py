@@ -15,6 +15,7 @@ class TestImportUploads(ImportExportBase):
     """
     Test Import for media uploads
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():

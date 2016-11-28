@@ -1,4 +1,3 @@
-"""Copyright 2015 Rafal Kowalski"""
 from app.helpers.helpers import get_event_id
 from app.helpers.data_getter import DataGetter
 from app.models.event import Event
@@ -15,7 +14,7 @@ class CustomDateSessionValidate(object):
         session_start = form['start_time'].data
         session_end = form['end_time'].data
         if session_start != None and session_end != None:
-            if not (event.start_time <= session_start and session_end <= event.end_time and session_start < session_end):
+            if not (event.start_time <= session_start >= session_end > session_start):
                 self.message = "Session date should be between Event date"
                 raise ValidationError(self.message)
 
