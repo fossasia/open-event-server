@@ -93,7 +93,13 @@ The `&` at the end of the commands below make them run in background so that the
 
 ```sh
 # download and run redis
-bash run_redis.sh
+wget http://download.redis.io/releases/redis-3.2.1.tar.gz
+tar xzf redis-3.2.1.tar.gz
+rm redis-3.2.1.tar.gz
+cd redis-3.2.1
+make
+
+# To run redis
 redis-3.2.1/src/redis-server &
 
 # run worker
