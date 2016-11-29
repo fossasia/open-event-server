@@ -43,3 +43,4 @@ dump.rdb
 /output.xml
 /log.html
 /selenium-screenshot-1.png
+jobs.sqlite

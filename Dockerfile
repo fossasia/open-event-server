@@ -31,4 +31,4 @@ RUN bower install --allow-root && bower cache clean --allow-root
 # copy remaining files
 COPY . .
 
-CMD bash docker_run.sh
+CMD bash scripts/docker_run.sh

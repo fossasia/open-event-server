@@ -176,14 +176,14 @@ class DataGetter(object):
         """
         :return: All Sessions with correct event_id
         """
-        return Session.query.filter_by(event_id=event_id)
+        return Session.query.filter_by(event_id=event_id).filter(Session.in_trash == False)
 
     @staticmethod
     def get_sessions_by_state(state):
         """
         :return: All Sessions with correct event_id
         """
-        return Session.query.filter(Session.state == state).filter(Session.in_trash is not True)
+        return Session.query.filter(Session.state == state).filter(Session.in_trash == False)
 
     @staticmethod
     def get_sessions_by_state_and_event_id(state, event_id):
@@ -196,7 +196,7 @@ class DataGetter(object):
 
     @staticmethod
     def get_all_sessions():
-        return Session.query.filter(Session.in_trash is not True).all()
+        return Session.query.filter(Session.in_trash == False).all()
 
     @staticmethod
     def get_tracks(event_id):
@@ -223,7 +223,7 @@ class DataGetter(object):
         return Session.query.filter_by(
             event_id=event_id,
             state=state
-        )
+        ).filter(Session.in_trash == False)
 
     @staticmethod
     def get_image_sizes():
@@ -263,7 +263,7 @@ class DataGetter(object):
         """
         try:
             return Session.query.filter(Session.speakers.any(Speaker.user_id == user.id)).filter(
-                Session.id == session_id).one()
+                Session.id == session_id).filter(Session.in_trash == False).one()
         except MultipleResultsFound:
             return None
         except NoResultFound:
@@ -276,10 +276,10 @@ class DataGetter(object):
         """
         if upcoming_events:
             return Session.query.filter(Session.speakers.any(Speaker.user_id == login.current_user.id)).filter(
-                Session.start_time >= datetime.datetime.now())
+                Session.start_time >= datetime.datetime.now()).filter(Session.in_trash == False)
         else:
             return Session.query.filter(Session.speakers.any(Speaker.user_id == login.current_user.id)).filter(
-                Session.start_time < datetime.datetime.now())
+                Session.start_time < datetime.datetime.now()).filter(Session.in_trash == False)
 
     @staticmethod
     def get_all_sessions_of_user(upcoming_events=True):
@@ -287,9 +287,9 @@ class DataGetter(object):
         :return: Return all Sessions objects with the current user as a speaker
         """
         if upcoming_events:
-            return Session.query.filter(Event.state != 'Completed')
+            return Session.query.filter(Event.state != 'Completed').filter(Session.in_trash == False)
         else:
-            return Session.query.filter(Event.state == 'Completed')
+            return Session.query.filter(Event.state == 'Completed').filter(Session.in_trash == False)
 
     @staticmethod
     def get_speakers(event_id):
@@ -855,15 +855,15 @@ class DataGetter(object):
 
     @staticmethod
     def get_all_accepted_sessions():
-        return get_count(Session.query.filter_by(state='accepted'))
+        return get_count(Session.query.filter_by(state='accepted').filter(Session.in_trash == False))
 
     @staticmethod
     def get_all_rejected_sessions():
-        return get_count(Session.query.filter_by(state='rejected'))
+        return get_count(Session.query.filter_by(state='rejected').filter(Session.in_trash == False))
 
     @staticmethod
     def get_all_draft_sessions():
-        return get_count(Session.query.filter_by(state='pending'))
+        return get_count(Session.query.filter_by(state='pending').filter(Session.in_trash == False))
 
     @staticmethod
     def get_email_by_times():

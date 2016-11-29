@@ -63,11 +63,14 @@ For steps regarding how to deploy your version of the Open Event Server to Herok
 
 Orga Server requires Redis to run Celery which runs the background tasks in the application.
 
-To setup Redis in your system, use the `run_redis.sh` script. It will download and build redis in the project's folder.
-Also if Redis has been already downloaded, it won't download it again.
+To setup Redis in your system, run the following commands
 
 ```sh
-bash run_redis.sh
+wget http://download.redis.io/releases/redis-3.2.1.tar.gz
+tar xzf redis-3.2.1.tar.gz
+rm redis-3.2.1.tar.gz
+cd redis-3.2.1
+make
 ```
 
 To start the redis server, run the following command while at project's root directory.
