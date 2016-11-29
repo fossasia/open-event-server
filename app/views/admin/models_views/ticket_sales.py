@@ -26,10 +26,6 @@ class TicketSalesView(BaseView):
         event = DataGetter.get_event(event_id)
         orders = TicketingManager.get_orders(event_id)
 
-        completed_count = 0
-        completed_amount = 0
-        tickets_count = 0
-
         orders_summary = {
             'completed': {
                 'class': 'success',

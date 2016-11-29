@@ -15,6 +15,7 @@ class TestGetListQueries(OpenEventTestCase):
     """
     Test Get List Queries
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():

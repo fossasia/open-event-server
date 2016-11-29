@@ -8,7 +8,6 @@ from ....helpers import helpers as Helper
 
 
 class InviteView(BaseView):
-
     @expose('/')
     def index_view(self):
         abort(404)

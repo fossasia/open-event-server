@@ -15,6 +15,7 @@ from app.models.event_copyright import EventCopyright as Copyright
 
 def create_event(name='TestEvent', creator_email=None):
     """Creates Event and returns its `id`.
+    :param creator_email:
     :param name Name of Event
     """
     copyright = Copyright(holder='copyright holder')
@@ -47,7 +48,7 @@ def create_session(event_id, serial_no='', **kwargs):
     kwargs['speakers'] = [
         Speaker.query.get(i) for i in kwargs['speakers']
         if Speaker.query.get(i) is not None
-    ]
+        ]
     session = Session(
         title='TestSession%d_%s' % (event_id, serial_no),
         long_abstract='descp',

@@ -8,12 +8,7 @@ def error_404_message(item):
     return '%s does not exist' % item
 
 
-def api_response(
-        data=None,
-        status_code=200,
-        error='Item',
-        check_data=False,
-        error_data='Page'):
+def api_response(data=None, status_code=200, error='Item', check_data=False, error_data='Page'):
     """
     Api response helper
     if status_code is 200, return data

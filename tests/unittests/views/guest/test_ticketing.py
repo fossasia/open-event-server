@@ -175,7 +175,7 @@ class TestTicketingPage(OpenEventTestCase):
     def test_order_payment_paypal_cancel(self):
         with app.test_request_context():
             event, ticket, identifier = create_order(self)
-            response = self.app.get(
+            self.app.get(
                 url_for('ticketing.paypal_callback', order_identifier=identifier, function="cancel"),
                 follow_redirects=True)
             order = TicketingManager.get_order_by_identifier(identifier)

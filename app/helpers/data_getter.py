@@ -1,4 +1,3 @@
-"""Copyright 2015 Rafal Kowalski"""
 from collections import Counter
 
 from flask import url_for
@@ -715,7 +714,7 @@ class DataGetter(object):
         return Session.query.filter_by(in_trash=True)
 
     @staticmethod
-    def get_upcoming_events(event_id):
+    def get_upcoming_events():
         return Event.query.join(Event.roles, aliased=True) \
             .filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
             .filter_by(in_trash=False)
@@ -762,8 +761,9 @@ class DataGetter(object):
         names = []
         try:
             for event in DataGetter.get_live_and_public_events():
-                if not string_empty(event.location_name) and not string_empty(event.latitude) and not string_empty(
-                    event.longitude):
+                if not string_empty(event.location_name) and not string_empty(event.latitude) and not \
+                    string_empty(event.longitude):
+
                     response = requests.get(
                         "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
                             event.longitude)).json()

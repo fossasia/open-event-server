@@ -14,6 +14,7 @@ class PaginatedApiTestCase:
     """
     Base class to inherit from when creating a paginated Api TestCase
     """
+
     def __init__(self):
         pass
 
@@ -40,6 +41,7 @@ class TestGetApiPaginated(OpenEventTestCase, PaginatedApiTestCase):
     """
     Basic test for Paginated APIs
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
@@ -69,6 +71,7 @@ class TestGetApiPaginatedUrls(OpenEventTestCase, PaginatedApiTestCase):
     Test the next and previous urls returned in the
     paginated APIs
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
@@ -124,6 +127,7 @@ class TestGetApiPaginatedEvents(OpenEventTestCase):
     """
     Test Paginated GET API for Events
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():

@@ -1,4 +1,3 @@
-"""Copyright 2015 Rafal Kowalski"""
 from app.helpers.versioning import clean_up_string, clean_html
 from . import db
 from app.helpers.date_formatter import DateFormatter
@@ -6,7 +5,7 @@ import datetime
 
 speakers_sessions = db.Table('speakers_sessions', db.Column(
     'speaker_id', db.Integer, db.ForeignKey('speaker.id', ondelete='CASCADE')), db.Column(
-        'session_id', db.Integer, db.ForeignKey('session.id', ondelete='CASCADE')))
+    'session_id', db.Integer, db.ForeignKey('session.id', ondelete='CASCADE')))
 
 
 class Session(db.Model):
@@ -58,7 +57,7 @@ class Session(db.Model):
                  track=None,
                  language=None,
                  microlocation=None,
-                 speakers=[],
+                 speakers=None,
                  event_id=None,
                  state="pending",
                  slides=None,
@@ -70,6 +69,10 @@ class Session(db.Model):
                  state_email_sent=False,
                  in_trash=False,
                  trash_date=None):
+
+        if speakers is None:
+            speakers = []
+
         self.title = title
         self.subtitle = subtitle
         self.short_abstract = short_abstract
@@ -117,7 +120,7 @@ class Session(db.Model):
             'speakers': [
                 {'id': speaker.id,
                  'name': speaker.name} for speaker in self.speakers
-            ],
+                ],
             'microlocation': self.microlocation.id
             if self.microlocation else None
         }

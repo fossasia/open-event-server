@@ -254,7 +254,8 @@ class EventsView(BaseView):
         if not current_user.can_publish_event() and not is_verified_user():
             flash(Markup('To make your event live, please verify your email by '
                          'clicking on the confirmation link that has been emailed to you.<br>'
-                         'Did not get the email? Please <a href="/resend_email/" class="alert-link"> click here to resend the confirmation.</a>'))
+                         'Did not get the email? Please <a href="/resend_email/" class="alert-link"> click here to '
+                         'resend the confirmation.</a>'))
 
         sessions = {'pending': DataGetter.get_sessions_by_state_and_event_id('pending', event_id).count(),
                     'accepted': DataGetter.get_sessions_by_state_and_event_id('accepted', event_id).count(),
@@ -430,9 +431,7 @@ class EventsView(BaseView):
             except Exception:
                 traceback.print_exc()
 
-            if (request.form.get('state',
-                                 u'Draft') == u'Published') and string_empty(
-                event.location_name):
+            if (request.form.get('state', u'Draft') == u'Published') and string_empty(event.location_name):
                 flash(
                     "Your event was saved. To publish your event please review the highlighted fields below.",
                     "warning")
@@ -446,7 +445,7 @@ class EventsView(BaseView):
         if request.method == "GET":
             DataManager.trash_event(event_id)
         flash("Your event has been deleted.", "danger")
-        if current_user.is_super_admin == True:
+        if current_user.is_super_admin:
             return redirect(url_for('sadmin_events.index_view'))
         return redirect(url_for('.index_view'))
 

@@ -11,15 +11,20 @@ class ApiValidationTestCase():
     Base class for testing api validation
     NOTE - validates only for custom fields like email, url, color, datetime
     """
-    def _test_model(self, name, data, fields=[]):
+
+    def __init__(self):
         pass
+
+    def _test_model(self, name, data, fields=None):
+        if fields is None:
+            fields = []
 
     def test_event_api(self):
         return self._test_model(
             'event',
             POST_EVENT_DATA,
             ['email', 'logo', 'event_url', 'background_image',
-                'type', 'topic', 'privacy', 'sub_topic', 'state', 'has_session_speakers']
+             'type', 'topic', 'privacy', 'sub_topic', 'state', 'has_session_speakers']
         )
 
     def test_speaker_api(self):
@@ -44,6 +49,7 @@ class TestPostApiValidation(TestPostApiBase, ApiValidationTestCase):
     """
     Tests the input validation in POST API
     """
+
     def _test_model(self, name, data, fields=[]):
         """
         Sets a random value to each of the :fields in :data and makes

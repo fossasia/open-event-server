@@ -10,11 +10,10 @@ from app.helpers.data import DataGetter
 from app.models.event import Event
 from flask import request, redirect, url_for, jsonify
 
-
 RESULTS_PER_PAGE = 10
 
-def get_paginated(**kwargs):
 
+def get_paginated(**kwargs):
     current_page = request.args.get('page')
     if current_page:
         current_page = int(current_page) - 1
@@ -36,13 +35,14 @@ def get_paginated(**kwargs):
             'results': []
         }
 
+
 def erase_from_dict(d, k):
     if isinstance(d, dict):
         if k in d.keys():
             d.pop(k)
 
-class ExploreView(BaseView):
 
+class ExploreView(BaseView):
     @expose('/', methods=('GET', 'POST'))
     def explore_base(self):
         return redirect(url_for('admin.browse_view'))

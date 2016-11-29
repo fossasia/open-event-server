@@ -12,8 +12,8 @@ from app import current_app as app
 from tests.unittests.views.view_test_case import OpenEventViewTestCase
 from app.models.users_events_roles import UsersEventsRoles
 
-class TestRoles(OpenEventViewTestCase):
 
+class TestRoles(OpenEventViewTestCase):
     def test_role_create_post(self):
         with app.test_request_context():
             event = ObjectMother.get_event()
@@ -44,7 +44,8 @@ class TestRoles(OpenEventViewTestCase):
             role = Role.query.filter_by(name='coorganizer').first()
             uer = UsersEventsRoles(user, event, role)
             save_to_db(uer, "UER Saved")
-            rv = self.app.get(url_for('event_roles.delete_view', uer_id=uer.id, event_id=event.id), follow_redirects=True)
+            rv = self.app.get(url_for('event_roles.delete_view', uer_id=uer.id, event_id=event.id),
+                              follow_redirects=True)
             uer = UsersEventsRoles.query.get(uer.id)
             self.assertTrue(uer is None, msg=rv.data)
 

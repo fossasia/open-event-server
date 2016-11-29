@@ -12,7 +12,6 @@ from tests.unittests.views.view_test_case import OpenEventViewTestCase
 
 
 class TestMySession(OpenEventViewTestCase):
-
     def test_my_session_detail(self):
         with app.test_request_context():
             event = ObjectMother.get_event()
@@ -63,6 +62,7 @@ class TestMySession(OpenEventViewTestCase):
         with app.test_request_context():
             rv = self.app.get(url_for('my_sessions.display_my_sessions_view'), follow_redirects=True)
             self.assertTrue("My Session Proposals" in rv.data, msg=rv.data)
+
 
 if __name__ == '__main__':
     unittest.main()

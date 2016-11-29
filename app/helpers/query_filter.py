@@ -1,6 +1,3 @@
-"""Copyright 2015 Rafal Kowalski"""
-
-
 class QueryFilter(object):
     """Query filter class"""
     def __init__(self, args, query):

@@ -123,7 +123,7 @@ def _trim_id(data):
     """
     old_id = data['id']
     del data['id']
-    return (old_id, data)
+    return old_id, data
 
 
 def _delete_fields(srv, data):
@@ -187,26 +187,26 @@ def _upload_media(task_handle, event_id, base_path):
             path = base_path + path
             if os.path.isfile(path):
                 filename = path.rsplit('/', 1)[1]
-                file = UploadedFile(path, filename)
+                _file = UploadedFile(path, filename)
             else:
-                file = ''  # remove current file setting
+                _file = ''  # remove current file setting
         else:
             # absolute links
             try:
                 filename = UPLOAD_PATHS[name][field].rsplit('/', 1)[1]
                 if is_downloadable(path):
                     r = requests.get(path, allow_redirects=True)
-                    file = UploadedMemory(r.content, filename)
+                    _file = UploadedMemory(r.content, filename)
                 else:
-                    file = None
+                    _file = None
             except:
-                file = None
+                _file = None
         # don't update current file setting
-        if file is None:
+        if _file is None:
             continue
         # upload
         try:
-            if file == '':
+            if _file == '':
                 raise Exception()
             key = UPLOAD_PATHS[name][field]
             if name == 'event':
@@ -214,7 +214,7 @@ def _upload_media(task_handle, event_id, base_path):
             else:
                 key = key.format(event_id=event_id, id=id_)
             print key
-            new_url = upload(file, key)
+            new_url = upload(_file, key)
         except Exception:
             print traceback.format_exc()
             new_url = None
@@ -393,9 +393,9 @@ def get_filename_from_cd(cd):
     return fn[0], '' if len(fn) == 1 else ('.' + fn[1])
 
 
-def write_file(file, data):
+def write_file(_file, data):
     """simple write to file"""
-    fp = open(file, 'w')
+    fp = open(_file, 'w')
     fp.write(data)
     fp.close()
 

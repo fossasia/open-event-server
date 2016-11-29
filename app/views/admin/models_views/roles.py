@@ -45,7 +45,7 @@ class RoleView(BaseView):
 
                 # Send a notification with the invitation link
                 send_notif_event_role(user, role.title_name, event.name,
-                    accept_link, decline_link)
+                                      accept_link, decline_link)
 
                 flash('A notification has been sent to user')
 
@@ -63,4 +63,3 @@ class RoleView(BaseView):
         uer = DataGetter.get_user_event_role(uer_id)
         DataManager.update_user_event_role(request.form, uer)
         return redirect(url_for('events.details_view', event_id=event_id))
-

@@ -25,5 +25,6 @@ class TestScheduler(OpenEventViewTestCase):
             event = DataGetter.get_event(event.id)
             self.assertTrue(event.schedule_published_on is not None, msg=rv.data)
 
+
 if __name__ == '__main__':
     unittest.main()

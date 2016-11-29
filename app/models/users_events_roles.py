@@ -23,7 +23,7 @@ class UsersEventsRoles(db.Model):
     def __repr__(self):
         return '<UER %r:%r:%r>' % (self.user,
                                    self.event_id,
-                                   self.role, )
+                                   self.role,)
 
     def __str__(self):
         return unicode(self).encode('utf-8')
@@ -31,4 +31,4 @@ class UsersEventsRoles(db.Model):
     def __unicode__(self):
         return '%r: %r in %r' % (self.user,
                                  self.role,
-                                 self.event_id, )
+                                 self.event_id,)

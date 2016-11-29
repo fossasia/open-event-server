@@ -11,6 +11,7 @@ from app.helpers.data import DataManager, trash_user, trash_session
 from app.models.user import User
 from app.models.session import Session
 
+
 class TestAdminTrash(OpenEventTestCase):
     def setUp(self):
         self.app = Setup.create_app()
@@ -24,7 +25,7 @@ class TestAdminTrash(OpenEventTestCase):
 
             save_to_db(event, "Event saved")
             DataManager.trash_event(1)
-            url= url_for('events.index_view')
+            url = url_for('events.index_view')
             rv = self.app.get(url)
             self.assertFalse('event1' in rv.data)
             self.assertEqual(event.in_trash, True)
@@ -57,6 +58,7 @@ class TestAdminTrash(OpenEventTestCase):
             rv = self.app.get(url)
             self.assertFalse('Session 1' in rv.data)
             self.assertEqual(session.in_trash, True)
+
 
 if __name__ == '__main__':
     unittest.main()

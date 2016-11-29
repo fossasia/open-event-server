@@ -21,6 +21,7 @@ class TestPostApiBase(OpenEventTestCase):
     Base class to test POST APIs
     Includes some helper methods which are required by POST API testcases
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
@@ -51,6 +52,7 @@ class TestPostApi(TestPostApiBase):
     Test POST APIs against 401 (unauthorized) and
     201 (successful) status codes
     """
+
     def _test_model(self, name, data, path=None, checks=[]):
         """
         Tests -
@@ -136,6 +138,7 @@ class TestPostApiMin(TestPostApiBase):
     Test POST API with minimum payload
     Only required payloads are kept
     """
+
     def _test_model(self, name, data, api_model, path=None):
         # strip data
         data = data.copy()

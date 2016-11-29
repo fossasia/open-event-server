@@ -48,6 +48,7 @@ api.add_namespace(error_models)
 api.add_namespace(attendees_api)
 api.add_namespace(tickets_apt)
 
+
 @api.documentation
 def custom_ui():
     return render_template(

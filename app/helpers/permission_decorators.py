@@ -136,7 +136,7 @@ def can_access(f):
         if '/edit/' in url:
             if 'events/' + event_id + '/edit/' in url:
                 if user.is_organizer(event_id) or user.is_coorganizer(
-                        event_id):
+                     event_id):
                     return f(*args, **kwargs)
             if 'session' in url:
                 if user.can_update(Session, event_id):
@@ -157,11 +157,11 @@ def can_access(f):
         if '/delete/' in url or '/trash/' in url:
             if 'events/' + event_id + '/delete/' in url:
                 if user.is_organizer(event_id) or user.is_coorganizer(
-                        event_id):
+                     event_id):
                     return f(*args, **kwargs)
             if 'events/' + event_id + '/trash/' in url:
                 if user.is_organizer(event_id) or user.is_coorganizer(
-                        event_id):
+                     event_id):
                     return f(*args, **kwargs)
             if 'session' in url:
                 if user.can_delete(Session, event_id):

@@ -13,7 +13,7 @@ from sqlalchemy import func
 
 from app.settings import get_settings
 from app.models.event import Event as EventModel
-from xml.etree.ElementTree import Element, SubElement, Comment, tostring
+from xml.etree.ElementTree import Element, SubElement, tostring
 
 from app import db
 from app.models.session import Session
@@ -30,8 +30,6 @@ def format_timedelta(td):
         hours = '0%s' % int(hours)
     if minutes < 10:
         minutes = '0%s' % minutes
-    if seconds < 10:
-        seconds = '0%s' % seconds
     return '%s:%s' % (hours, minutes)
 
 

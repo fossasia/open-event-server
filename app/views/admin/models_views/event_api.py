@@ -33,7 +33,7 @@ class EventApiView(BaseView):
                             definition = data['paths'][path][method]['responses']['200']['schema']['items'][
                                 '$ref'].replace('#/definitions/', '')
                             events_data[path_modified][method]['responses']['200']['schema']['items']['ref_def'] = \
-                            data['definitions'][definition]
+                                data['definitions'][definition]
                         except:
                             pass
 
@@ -41,7 +41,7 @@ class EventApiView(BaseView):
                             definition = data['paths'][path][method]['responses']['200']['schema']['$ref'].replace(
                                 '#/definitions/', '')
                             events_data[path_modified][method]['responses']['200']['schema']['ref_def'] = \
-                            data['definitions'][definition]
+                                data['definitions'][definition]
                             for prop in data['definitions'][definition]['properties']:
                                 if '$ref' in data['definitions'][definition]['properties'][prop]:
                                     def_ = data['definitions'][definition]['properties'][prop]['$ref'].replace(
@@ -55,7 +55,7 @@ class EventApiView(BaseView):
                             definition = data['paths'][path][method]['responses']['400']['schema']['$ref'].replace(
                                 '#/definitions/', '')
                             events_data[path_modified][method]['responses']['400']['schema']['ref_def'] = \
-                            data['definitions'][definition]
+                                data['definitions'][definition]
                         except:
                             pass
 
@@ -63,7 +63,7 @@ class EventApiView(BaseView):
                             definition = data['paths'][path][method]['responses']['401']['schema']['$ref'].replace(
                                 '#/definitions/', '')
                             events_data[path_modified][method]['responses']['401']['schema']['ref_def'] = \
-                            data['definitions'][definition]
+                                data['definitions'][definition]
                         except:
                             pass
 
@@ -71,7 +71,7 @@ class EventApiView(BaseView):
                             definition = data['paths'][path][method]['responses']['404']['schema']['$ref'].replace(
                                 '#/definitions/', '')
                             events_data[path_modified][method]['responses']['404']['schema']['ref_def'] = \
-                            data['definitions'][definition]
+                                data['definitions'][definition]
                         except:
                             pass
 
@@ -80,7 +80,7 @@ class EventApiView(BaseView):
                             definition = data['paths'][path][method]['parameters'][0]['schema']['$ref'].replace(
                                 '#/definitions/', '')
                             events_data[path_modified][method]['parameters'][0]['schema']['ref_def'] = \
-                            data['definitions'][definition]
+                                data['definitions'][definition]
                             for prop in data['definitions'][definition]['properties']:
                                 if '$ref' in data['definitions'][definition]['properties'][prop]:
                                     def_ = data['definitions'][definition]['properties'][prop]['$ref'].replace(
@@ -94,7 +94,7 @@ class EventApiView(BaseView):
                             definition = data['paths'][path][method]['responses']['200']['schema']['$ref'].replace(
                                 '#/definitions/', '')
                             events_data[path_modified][method]['responses']['200']['schema']['ref_def'] = \
-                            data['definitions'][definition]
+                                data['definitions'][definition]
                             for prop in data['definitions'][definition]['properties']:
                                 if '$ref' in data['definitions'][definition]['properties'][prop]:
                                     def_ = data['definitions'][definition]['properties'][prop]['$ref'].replace(
@@ -108,7 +108,7 @@ class EventApiView(BaseView):
                             definition = data['paths'][path][method]['responses']['400']['schema']['$ref'].replace(
                                 '#/definitions/', '')
                             events_data[path_modified][method]['responses']['400']['schema']['ref_def'] = \
-                            data['definitions'][definition]
+                                data['definitions'][definition]
                         except:
                             pass
 
@@ -116,7 +116,7 @@ class EventApiView(BaseView):
                             definition = data['paths'][path][method]['responses']['401']['schema']['$ref'].replace(
                                 '#/definitions/', '')
                             events_data[path_modified][method]['responses']['401']['schema']['ref_def'] = \
-                            data['definitions'][definition]
+                                data['definitions'][definition]
                         except:
                             pass
 
@@ -124,7 +124,7 @@ class EventApiView(BaseView):
                             definition = data['paths'][path][method]['responses']['404']['schema']['$ref'].replace(
                                 '#/definitions/', '')
                             events_data[path_modified][method]['responses']['404']['schema']['ref_def'] = \
-                            data['definitions'][definition]
+                                data['definitions'][definition]
                         except:
                             pass
 

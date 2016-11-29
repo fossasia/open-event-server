@@ -212,7 +212,7 @@ def validate_payload(payload, api_model, check_required=True):
                 if not field.validate(i):
                     raise ValidationError(field=key,
                                           message=field.validation_error %
-                                          ('\'%s\'' % key))
+                                                  ('\'%s\'' % key))
 
 
 def save_db_model(new_model, model_name, event_id=None):
@@ -280,6 +280,7 @@ def requires_auth(f):
     Allows JWT token based access and Basic auth access
     Falls back to active session if both are not present
     """
+
     @wraps(f)
     def decorated(*args, **kwargs):
         message = 'Authentication credentials not found'
@@ -316,6 +317,7 @@ def requires_auth(f):
             return f(*args, **kwargs)
         else:
             raise NotAuthorizedError(message=message)
+
     return decorated
 
 
@@ -364,6 +366,7 @@ def fake_marshal_with(fields, as_list=False, code=200, description=None, **kwarg
         }
         func.__apidoc__ = merge(getattr(func, '__apidoc__', {}), doc)
         return func
+
     return wrapper
 
 
@@ -383,6 +386,7 @@ def nocache(view):
         response.headers['Pragma'] = 'no-cache'
         response.headers['Expires'] = '-1'
         return response
+
     return update_wrapper(no_cache, view)
 
 
@@ -425,6 +429,7 @@ def staff_only(func):
             return func(*args, **kwargs)
         else:
             raise PermissionDeniedError()
+
     return wrapper
 
 
@@ -432,6 +437,7 @@ def can_access(func):
     """Check if User can Read/Update/Delete an Event.
     This is done by checking if the User has a Role in an Event.
     """
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         user = getattr(g, 'user', None)
@@ -444,6 +450,7 @@ def can_access(func):
             return func(*args, **kwargs)
         else:
             raise PermissionDeniedError()
+
     return wrapper
 
 
@@ -466,7 +473,9 @@ def can_create(DAO):
                 return func(*args, **kwargs)
             else:
                 raise PermissionDeniedError()
+
         return wrapper
+
     return decorator
 
 
@@ -485,7 +494,9 @@ def can_read(DAO):
                 return func(*args, **kwargs)
             else:
                 raise PermissionDeniedError()
+
         return wrapper
+
     return decorator
 
 
@@ -504,7 +515,9 @@ def can_update(DAO):
                 return func(*args, **kwargs)
             else:
                 raise PermissionDeniedError()
+
         return wrapper
+
     return decorator
 
 
@@ -523,7 +536,9 @@ def can_delete(DAO):
                 return func(*args, **kwargs)
             else:
                 raise PermissionDeniedError()
+
         return wrapper
+
     return decorator
 
 
@@ -535,6 +550,7 @@ def can_delete(DAO):
 def can_access_account(func):
     """Check if User can access account information.
     """
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         user = getattr(g, 'user', None)
@@ -545,4 +561,5 @@ def can_access_account(func):
             return func(*args, **kwargs)
         else:
             raise PermissionDeniedError()
+
     return wrapper

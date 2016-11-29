@@ -1,4 +1,3 @@
-"""Copyright 2015 Rafal Kowalski"""
 import binascii
 import os
 from datetime import datetime

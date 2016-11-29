@@ -211,10 +211,14 @@ SESSIONS_PARAMS = {
 # #########
 
 
-class SessionResource():
+class SessionResource:
     """
     Session Resource Base class
     """
+
+    def __init__(self):
+        pass
+
     session_parser = reqparse.RequestParser()
     session_parser.add_argument('start_time_gt', dest='__sessions_start_time_gt')
     session_parser.add_argument('start_time_lt', dest='__sessions_start_time_lt')

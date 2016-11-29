@@ -10,14 +10,15 @@ from ....helpers.data import DataManager, delete_from_db, trash_session, restore
 from ....helpers.data_getter import DataGetter
 import json
 
+
 def get_session_or_throw(session_id):
     session = DataGetter.get_session(session_id)
     if not session:
         abort(404)
     return session
 
-class SessionsView(BaseView):
 
+class SessionsView(BaseView):
     def is_accessible(self):
         return login.current_user.is_authenticated
 
@@ -211,4 +212,3 @@ class SessionsView(BaseView):
         db.session.commit()
         flash("The session has been restored.", "success")
         return redirect(url_for('.index_view', event_id=event_id))
-

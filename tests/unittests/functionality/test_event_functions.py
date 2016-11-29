@@ -17,5 +17,6 @@ class TestEventFunctions(OpenEventTestCase):
             save_to_db(event, "Event saved")
             self.assertEqual(event.id, event.id)
 
+
 if __name__ == '__main__':
     unittest.main()

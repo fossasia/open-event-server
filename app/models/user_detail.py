@@ -31,6 +31,8 @@ class UserDetail(db.Model):
                  icon=None,
                  avatar_uploaded=None):
         self.avatar = avatar
+        self.lastname = lastname
+        self.firstname = lastname
         self.contact = contact
         self.user_id = user_id
         self.facebook = facebook

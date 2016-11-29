@@ -2,7 +2,6 @@ from datetime import datetime
 
 from . import db
 
-
 ACTIVITIES = {
     'create_user': 'User {user} created',
     'update_user': 'Profile of user {user} updated',
@@ -55,7 +54,7 @@ class Activity(db.Model):
         self.action = action
 
     def __repr__(self):
-        return '<Activity by %s>' % (self.actor)
+        return '<Activity by %s>' % self.actor
 
     def __str__(self):
         return unicode(self).encode('utf-8')

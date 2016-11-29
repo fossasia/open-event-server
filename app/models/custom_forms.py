@@ -1,7 +1,6 @@
 import json
 from . import db
 
-
 SESSION_FORM = {
     "title": {"include": 1, "require": 1},
     "subtitle": {"include": 0, "require": 0},

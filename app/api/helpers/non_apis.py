@@ -22,6 +22,7 @@ CUSTOM_FORM = Model('CustomForm', {
 CUSTOM_FORM_POST = CUSTOM_FORM.clone('CustomFormPost')
 del CUSTOM_FORM_POST['id']
 
+
 # ##########
 # DEFINE DAO
 # ##########
@@ -31,5 +32,6 @@ class CFDAO(ServiceDAO):
     def create(self, event_id, data, url):
         data = self.validate(data)
         return update_or_create(self.model, event_id=event_id, **data)
+
 
 CustomFormDAO = CFDAO(CustomForms, CUSTOM_FORM_POST)

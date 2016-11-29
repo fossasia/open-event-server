@@ -3,6 +3,7 @@ from app import celery
 from marrow.mailer import Mailer, Message
 from app.helpers.versioning import strip_tags
 
+
 @celery.task(name='send.email.post')
 def send_email_task(payload, headers):
     requests.post(
@@ -14,7 +15,6 @@ def send_email_task(payload, headers):
 
 @celery.task(name='send.email.post.smtp')
 def send_mail_via_smtp_task(config, payload):
-
     mailer_config = {
         'transport': {
             'use': 'smtp',

@@ -11,6 +11,7 @@ from app.models.event import Event
 
 from app.helpers.payment import StripePaymentsManager, PayPalPaymentsManager
 
+
 class InvoicingManager(object):
     """All event service fee invoicing related functions"""
 
@@ -63,11 +64,9 @@ class InvoicingManager(object):
     @staticmethod
     def initiate_invoice_payment(form):
         identifier = form['identifier']
-        email = form['email']
 
         invoice = InvoicingManager.get_invoice_by_identifier(identifier)
         if invoice:
-            user = invoice.user
             if invoice.amount > 0 \
                 and (not invoice.paid_via
                      or (invoice.paid_via
@@ -120,11 +119,11 @@ class InvoicingManager(object):
 
     @staticmethod
     def charge_paypal_invoice_payment(invoice):
-        payment_details = PayPalPaymentsManager\
+        payment_details = PayPalPaymentsManager \
             .get_approved_payment_details(invoice, credentials=PayPalPaymentsManager.get_credentials())
 
         if 'PAYERID' in payment_details:
-            capture_result = PayPalPaymentsManager\
+            capture_result = PayPalPaymentsManager \
                 .capture_payment(invoice, payment_details['PAYERID'],
                                  credentials=PayPalPaymentsManager.get_credentials())
 
@@ -173,4 +172,3 @@ class InvoicingManager(object):
         save_to_db(discount_code)
 
         return discount_code
-

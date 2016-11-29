@@ -192,6 +192,7 @@ class ServiceDAO(BaseDAO):
     Data Access Object for service models like microlocations,
     speakers and so.
     """
+
     def get(self, event_id, sid):
         return get_object_in_event(self.model, sid, event_id)
 
@@ -224,6 +225,7 @@ class ServiceDAO(BaseDAO):
         item = delete_model(self.model, service_id, event_id=event_id)
         self.update_version(event_id)
         return item
+
 
 # store task results in case of testing
 # state and info

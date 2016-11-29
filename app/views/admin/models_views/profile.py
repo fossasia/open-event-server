@@ -1,17 +1,17 @@
-from flask import request, url_for, redirect, abort, flash, jsonify
-from flask.ext.admin import BaseView
-from flask_admin import expose
-from flask.ext import login
 from uuid import uuid4
 
+from flask import request, url_for, redirect, abort, flash, jsonify
+from flask.ext import login
+from flask.ext.admin import BaseView
+from flask_admin import expose
 from markupsafe import Markup
 
-from app.views.admin.models_views.events import is_verified_user
-from app.helpers.storage import upload, upload_local, UPLOAD_PATHS
 from app.helpers.helpers import uploaded_file
+from app.helpers.oauth import FbOAuth, InstagramOAuth
+from app.helpers.storage import upload, UPLOAD_PATHS
+from app.views.admin.models_views.events import is_verified_user
 from ....helpers.data import DataManager, get_facebook_auth, get_instagram_auth, get_twitter_auth_url, save_to_db
 from ....helpers.data_getter import DataGetter
-from app.helpers.oauth import FbOAuth, InstagramOAuth, TwitterOAuth
 
 
 class ProfileView(BaseView):

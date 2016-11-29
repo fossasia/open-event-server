@@ -13,6 +13,7 @@ class TestPutApiBase(OpenEventTestCase):
     """
     Base class for help testing PUT APIs
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
@@ -42,6 +43,7 @@ class TestPutApi(TestPutApiBase):
     Test PUT APIs against 401 (unauthorized) and
     200 (successful) status codes
     """
+
     def _test_model(self, name, data, path=None, *args):
         """
         Tests -
@@ -98,6 +100,7 @@ class TestPutApiMin(TestPutApiBase):
     """
     Test PUT API with payload as just one field.
     """
+
     def _test_change_json(self, old, new, field):
         old = json.loads(old)
         new = json.loads(new)

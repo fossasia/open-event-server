@@ -28,4 +28,3 @@ class KubernetesApi:
     @staticmethod
     def is_on_kubernetes():
         return 'KUBERNETES_SERVICE_HOST' in os.environ
-

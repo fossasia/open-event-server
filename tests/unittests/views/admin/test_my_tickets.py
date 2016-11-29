@@ -9,8 +9,8 @@ from app import current_app as app
 from tests.unittests.views.guest.test_ticketing import create_order
 from tests.unittests.views.view_test_case import OpenEventViewTestCase
 
-class TestMySession(OpenEventViewTestCase):
 
+class TestMySession(OpenEventViewTestCase):
     def test_tickets_overview_page(self):
         with app.test_request_context():
             event, ticket, identifier = create_order(self)
@@ -28,6 +28,7 @@ class TestMySession(OpenEventViewTestCase):
             response = self.app.get(url_for('my_tickets.display_my_tickets'), follow_redirects=True)
             self.assertTrue(str(event.name) in response.data, msg=response.data)
             self.assertTrue(str(ticket.name) not in response.data, msg=response.data)
+
 
 if __name__ == '__main__':
     unittest.main()

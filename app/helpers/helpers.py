@@ -1,4 +1,3 @@
-"""Copyright 2015 Rafal Kowalski"""
 import json
 import os
 import re
@@ -243,6 +242,7 @@ def send_email_confirmation(form, link):
             email=form['email'], link=link
         )
     )
+
 
 def send_email_when_changes_email(old_email, new_email):
     """account confirmation"""
@@ -644,7 +644,7 @@ def get_request_stats():
 
 def get_date_range(day_filter):
     day_filter = day_filter.lower()  # Use lower case for match
-    format = "%Y-%m-%dT%H:%M:%S"
+    _format = "%Y-%m-%dT%H:%M:%S"
     date_now = datetime.now()
     start, end = None, None
     if day_filter == 'all days':
@@ -686,7 +686,7 @@ def get_date_range(day_filter):
             start = date_now.replace(hour=00, minute=00)
             end = date_now.replace(hour=23, minute=59)
             pass
-    return start.strftime(format), end.strftime(format)
+    return start.strftime(_format), end.strftime(_format)
 
 
 def last_day_of_month(date):
@@ -716,7 +716,7 @@ def update_state(task_handle, state, result=None):
 def uploaded_file(extension='.png', file_content=None):
     filename = str(time.time()) + extension
     file_path = current_app.config.get('BASE_DIR') + '/static/uploads/' + filename
-    file = open(file_path, "wb")
-    file.write(file_content.split(",")[1].decode('base64'))
-    file.close()
+    _file = open(file_path, "wb")
+    _file.write(file_content.split(",")[1].decode('base64'))
+    _file.close()
     return UploadedFile(file_path, filename)

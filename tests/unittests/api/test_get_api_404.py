@@ -50,7 +50,6 @@ class TestGetApiNonExistingServices(OpenEventTestCase):
             self.assertEqual(response.status_code, 404)
             self.assertIn('does not exist', response.data)
 
-
     def test_microlocation_api(self):
         path = get_path(1, 'microlocations', 1)
         self._test_path(path)

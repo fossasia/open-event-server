@@ -1,17 +1,16 @@
 from . import db
 
-
 ticket_tags_table = db.Table('association', db.Model.metadata,
-    db.Column('ticket_id', db.Integer, db.ForeignKey('ticket.id')),
-    db.Column('ticket_tag_id', db.Integer, db.ForeignKey('ticket_tag.id'))
-)
+                             db.Column('ticket_id', db.Integer, db.ForeignKey('ticket.id')),
+                             db.Column('ticket_tag_id', db.Integer, db.ForeignKey('ticket_tag.id'))
+                             )
 
 
 class Ticket(db.Model):
     __tablename__ = 'ticket'
     __table_args__ = (db.UniqueConstraint('name',
                                           'event_id',
-                                          name='name_event_uc'), )
+                                          name='name_event_uc'),)
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
@@ -47,7 +46,11 @@ class Ticket(db.Model):
                  price=0,
                  min_order=1,
                  max_order=10,
-                 tags=[]):
+                 tags=None):
+
+        if tags is None:
+            tags = []
+
         self.name = name
         self.quantity = quantity
         self.type = type
@@ -113,7 +116,7 @@ class BookedTicket(db.Model):
     __tablename__ = 'booked_ticket'
     __table_args__ = (db.UniqueConstraint('user_id',
                                           'ticket_id',
-                                          name='user_ticket_uc'), )
+                                          name='user_ticket_uc'),)
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -129,7 +132,7 @@ class BookedTicket(db.Model):
 
     def __repr__(self):
         return '<BookedTicket %r by %r' % (self.ticket,
-                                           self.user, )
+                                           self.user,)
 
     def __str__(self):
         return unicode(self).encode('utf-8')

@@ -9,8 +9,8 @@ from tests.unittests.object_mother import ObjectMother
 from tests.unittests.utils import OpenEventTestCase
 from app import current_app as app
 
-class TestGuestEventPage(OpenEventTestCase):
 
+class TestGuestEventPage(OpenEventTestCase):
     def test_published_event_view(self):
         with app.test_request_context():
             event = ObjectMother.get_event()
@@ -123,7 +123,6 @@ class TestGuestEventPage(OpenEventTestCase):
 
     def test_published_event_cfs_view(self):
         with app.test_request_context():
-
             event = ObjectMother.get_event()
             event.state = 'Published'
             save_to_db(event, "Event Saved")
@@ -151,6 +150,7 @@ class TestGuestEventPage(OpenEventTestCase):
             rv = self.app.get(url_for('event_detail.display_event_cfs',
                                       identifier=event.identifier), follow_redirects=True)
             self.assertEqual(rv.status_code, 404)
+
 
 if __name__ == '__main__':
     unittest.main()

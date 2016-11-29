@@ -1,4 +1,3 @@
-"""Copyright 2015 Rafal Kowalski"""
 import flask_login as login
 from flask_admin import Admin
 
@@ -35,6 +34,7 @@ from app.views.admin.super_admin.modules import SuperAdminModulesView
 from app.views.admin.super_admin.content import SuperAdminContentView
 from app.views.public.ticketing import TicketingView
 
+
 class AdminView(object):
     """Main Admin class View"""
 
@@ -50,7 +50,6 @@ class AdminView(object):
         self._add_views()
 
     def _add_views(self):
-
         # Public pages
         self.admin.add_view(BasicPagesView(name='Page', url='/'))
         self.admin.add_view(EventDetailView(name='Event Detail', url='/e', endpoint="event_detail"))

@@ -11,6 +11,9 @@ from app import current_app as app
 
 
 class PostApiAuthTestCase:
+    def __init__(self):
+        pass
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
@@ -41,6 +44,7 @@ class TestPostApiBasicAuth(PostApiAuthTestCase, OpenEventTestCase):
     """
     Tests the Basic Authorization in Post API
     """
+
     def _test_model(self, name, data):
         with app.test_request_context():
             path = get_path() if name == 'event' else get_path(1, name + 's')
@@ -50,7 +54,7 @@ class TestPostApiBasicAuth(PostApiAuthTestCase, OpenEventTestCase):
                 headers={
                     'content-type': 'application/json',
                     'Authorization': 'Basic %s' %
-                    base64.b64encode('myemail@gmail.com:test')
+                                     base64.b64encode('myemail@gmail.com:test')
                 }
             )
             self.assertNotEqual(response.status_code, 401)
@@ -62,6 +66,7 @@ class TestPostApiJWTAuth(PostApiAuthTestCase, OpenEventTestCase):
     """
     Tests the JWT Auth in Post API
     """
+
     def _send_login_request(self, password):
         """
         sends a login request and returns the response

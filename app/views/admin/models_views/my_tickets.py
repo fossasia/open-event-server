@@ -5,7 +5,6 @@ from app.helpers.data_getter import DataGetter
 
 
 class MyTicketsView(BaseView):
-
     @expose('/')
     @flask_login.login_required
     def display_my_tickets(self):

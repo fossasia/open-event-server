@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import unittest
 import json
 import logging
@@ -11,7 +9,7 @@ from StringIO import StringIO
 
 from tests.unittests.setup_database import Setup
 from tests.unittests.utils import OpenEventTestCase
-from tests.unittests.api.utils import create_event, get_path, create_services,\
+from tests.unittests.api.utils import create_event, get_path, create_services, \
     create_session, save_to_db, Speaker
 from tests.unittests.auth_helper import register
 from app import current_app as app
@@ -21,6 +19,7 @@ class ImportExportBase(OpenEventTestCase):
     """
     Helper functions to test import/export
     """
+
     def _upload(self, data, url, filename='anything'):
         return self.app.post(
             url,
@@ -83,6 +82,7 @@ class TestEventExport(ImportExportBase):
     """
     Test export of event
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
@@ -180,6 +180,7 @@ class TestEventImport(ImportExportBase):
     """
     Test import of event
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
@@ -277,6 +278,7 @@ class TestImportOTS(ImportExportBase):
     """
     Tests import of OTS sample
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():

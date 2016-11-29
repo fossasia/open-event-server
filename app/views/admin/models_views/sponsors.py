@@ -17,7 +17,7 @@ class SponsorsView(BaseView):
         event = DataGetter.get_event(event_id)
         return self.render('/gentelella/admin/event/sponsors/new.html', event_id=event_id, event=event)
 
-    @expose('/<sponsor_id>/delete/', methods=('GET', ))
+    @expose('/<sponsor_id>/delete/', methods=('GET',))
     @can_access
     def delete_view(self, event_id, sponsor_id):
         sponsor = DataGetter.get_sponsor(sponsor_id)

@@ -119,8 +119,8 @@ class TicketingManager(object):
 
     @staticmethod
     def get_attendees(event_id):
-        return TicketHolder.query.join(TicketHolder.order, aliased=True)\
-                .filter(Order.status == 'completed').filter(Order.event_id == event_id).all()
+        return TicketHolder.query.join(TicketHolder.order, aliased=True) \
+            .filter(Order.status == 'completed').filter(Order.event_id == event_id).all()
 
     @staticmethod
     def attendee_check_in_out(id, state=None):
@@ -163,14 +163,14 @@ class TicketingManager(object):
     @staticmethod
     def get_discount_code(event_id, discount_code):
         if represents_int(discount_code):
-            return DiscountCode.query\
-                .filter_by(id=discount_code)\
-                .filter_by(event_id=event_id)\
+            return DiscountCode.query \
+                .filter_by(id=discount_code) \
+                .filter_by(event_id=event_id) \
                 .filter_by(used_for=TICKET).first()
         else:
-            return DiscountCode.query\
-                .filter_by(code=discount_code)\
-                .filter_by(event_id=event_id)\
+            return DiscountCode.query \
+                .filter_by(code=discount_code) \
+                .filter_by(event_id=event_id) \
                 .filter_by(used_for=TICKET).first()
 
     @staticmethod
@@ -204,7 +204,7 @@ class TicketingManager(object):
         if order and not order.paid_via:
             if override \
                 or (order.status != 'completed' and order.status != 'placed' and
-                    (order.created_at + timedelta(
+                            (order.created_at + timedelta(
                                 minutes=TicketingManager.get_order_expiry())) < datetime.utcnow()):
                 order.status = 'expired'
                 save_to_db(order)
@@ -228,11 +228,11 @@ class TicketingManager(object):
             ticket_subtotals = form.getlist('ticket_subtotals[]')
 
         amount = 0
-        for index, id in enumerate(ticket_ids):
-            if not string_empty(id) and int(ticket_quantity[index]) > 0:
+        for index, _id in enumerate(ticket_ids):
+            if not string_empty(_id) and int(ticket_quantity[index]) > 0:
                 with db.session.no_autoflush:
                     order_ticket = OrderTicket()
-                    order_ticket.ticket = TicketingManager.get_ticket(id)
+                    order_ticket.ticket = TicketingManager.get_ticket(_id)
                     order_ticket.quantity = int(ticket_quantity[index])
                     order.tickets.append(order_ticket)
 

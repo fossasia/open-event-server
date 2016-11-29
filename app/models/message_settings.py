@@ -29,13 +29,13 @@ class MessageSettings(db.Model):
         self.user_control_status = user_control_status
 
     def __repr__(self):
-        return '<Message Setting %r >' % (self.action)
+        return '<Message Setting %r >' % self.action
 
     def __str__(self):
         return unicode(self).encode('utf-8')
 
     def __unicode__(self):
-        return 'Message Setting %r' % (self.action)
+        return 'Message Setting %r' % self.action
 
     @property
     def serialize(self):

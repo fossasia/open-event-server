@@ -13,30 +13,30 @@ class OAuth(object):
     SCOPE = ['profile', 'email']
 
     @classmethod
-    def get_client_id(self):
+    def get_client_id(cls):
         return get_settings()['google_client_id']
 
     @classmethod
-    def get_client_secret(self):
+    def get_client_secret(cls):
         return get_settings()['google_client_secret']
 
     @classmethod
-    def get_redirect_uri(self):
+    def get_redirect_uri(cls):
         url = urlparse(request.url)
         redirect_uri = url.scheme + '://' + url.netloc + '/gCallback'
         return redirect_uri
 
     @classmethod
-    def get_auth_uri(self):
-        return self.AUTH_URI
+    def get_auth_uri(cls):
+        return cls.AUTH_URI
 
     @classmethod
-    def get_token_uri(self):
-        return self.TOKEN_URI
+    def get_token_uri(cls):
+        return cls.TOKEN_URI
 
     @classmethod
-    def get_user_info(self):
-        return self.USER_INFO
+    def get_user_info(cls):
+        return cls.USER_INFO
 
 
 class FbOAuth(object):
@@ -47,30 +47,30 @@ class FbOAuth(object):
     SCOPE = ['public_profile', 'email']
 
     @classmethod
-    def get_client_id(self):
+    def get_client_id(cls):
         return get_settings()['fb_client_id']
 
     @classmethod
-    def get_client_secret(self):
+    def get_client_secret(cls):
         return get_settings()['fb_client_secret']
 
     @classmethod
-    def get_redirect_uri(self):
+    def get_redirect_uri(cls):
         url = urlparse(request.url)
         fb_redirect_uri = url.scheme + '://' + url.netloc + '/fCallback'
         return fb_redirect_uri
 
     @classmethod
-    def get_auth_uri(self):
-        return self.Fb_AUTH_URI
+    def get_auth_uri(cls):
+        return cls.Fb_AUTH_URI
 
     @classmethod
-    def get_token_uri(self):
-        return self.Fb_TOKEN_URI
+    def get_token_uri(cls):
+        return cls.Fb_TOKEN_URI
 
     @classmethod
-    def get_user_info(self):
-        return self.Fb_USER_INFO
+    def get_user_info(cls):
+        return cls.Fb_USER_INFO
 
 
 class TwitterOAuth(object):
@@ -80,15 +80,15 @@ class TwitterOAuth(object):
     TW_ACCESS_TOKEN = "https://api.twitter.com/oauth/access_token?"
 
     @classmethod
-    def get_client_id(self):
+    def get_client_id(cls):
         return get_settings()['tw_consumer_key']
 
     @classmethod
-    def get_client_secret(self):
+    def get_client_secret(cls):
         return get_settings()['tw_consumer_secret']
 
     @classmethod
-    def get_redirect_uri(self):
+    def get_redirect_uri(cls):
         url = urlparse(request.url)
         tw_redirect_uri = url.scheme + '://' + url.netloc + '/tCallback'
         return tw_redirect_uri
@@ -122,23 +122,23 @@ class InstagramOAuth(object):
     SCOPE = ['basic', 'public_content']
 
     @classmethod
-    def get_client_id(self):
+    def get_client_id(cls):
         return get_settings()['in_client_id']
 
     @classmethod
-    def get_client_secret(self):
+    def get_client_secret(cls):
         return get_settings()['in_client_secret']
 
     @classmethod
-    def get_redirect_uri(self):
+    def get_redirect_uri(cls):
         url = urlparse(request.url)
         i_redirect_uri = url.scheme + '://' + url.netloc + '/iCallback'
         return i_redirect_uri
 
     @classmethod
-    def get_auth_uri(self):
-        return self.INSTAGRAM_OAUTH_URI
+    def get_auth_uri(cls):
+        return cls.INSTAGRAM_OAUTH_URI
 
     @classmethod
-    def get_token_uri(self):
-        return self.INSTAGRAM_TOKEN_URI
+    def get_token_uri(cls):
+        return cls.INSTAGRAM_TOKEN_URI

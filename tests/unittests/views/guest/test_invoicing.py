@@ -35,10 +35,9 @@ def get_event_invoice():
 
 
 class TestInvoicing(OpenEventTestCase):
-
     def test_invoice_display(self):
         with app.test_request_context():
-            event, invoice = get_event_invoice()
+            get_event_invoice()
 
     def test_invoice_payment_stripe(self):
         with app.test_request_context():
@@ -55,7 +54,8 @@ class TestInvoicing(OpenEventTestCase):
                 "country": "Warner",
                 "pay_via_service": "stripe"
             }
-            response = self.app.post(url_for('event_invoicing.initiate_invoice_payment'), data=data, follow_redirects=True)
+            response = self.app.post(url_for('event_invoicing.initiate_invoice_payment'), data=data,
+                                     follow_redirects=True)
             response_json = json.loads(response.data)
             self.assertEqual(data['email'], response_json['email'], msg=response.data)
             self.assertEqual("start_stripe", response_json['action'], msg=response.data)
@@ -70,14 +70,16 @@ class TestInvoicing(OpenEventTestCase):
             invoice.paid_via = "stripe"
             invoice.payment_mode = "card"
             save_to_db(invoice)
-            response = self.app.get(url_for('event_invoicing.view_invoice_after_payment', invoice_identifier=invoice.identifier),
-                                    follow_redirects=True)
+            response = self.app.get(
+                url_for('event_invoicing.view_invoice_after_payment', invoice_identifier=invoice.identifier),
+                follow_redirects=True)
             self.assertTrue(str(event.name) in response.data, msg=response.data)
             response = self.app.get(url_for('event_invoicing.view_invoice', invoice_identifier=invoice.identifier),
                                     follow_redirects=False)
             self.assertEqual(response.status_code, 302, msg=response.status_code)
-            response = self.app.get(url_for('event_invoicing.view_invoice_after_payment_pdf', invoice_identifier=invoice.identifier),
-                                    follow_redirects=False)
+            response = self.app.get(
+                url_for('event_invoicing.view_invoice_after_payment_pdf', invoice_identifier=invoice.identifier),
+                follow_redirects=False)
             self.assertEqual(response.status_code, 200, msg=response.status_code)
 
     def test_invoice_payment_paypal(self):
@@ -95,7 +97,8 @@ class TestInvoicing(OpenEventTestCase):
                 "country": "Warner",
                 "pay_via_service": "paypal"
             }
-            response = self.app.post(url_for('event_invoicing.initiate_invoice_payment'), data=data, follow_redirects=True)
+            response = self.app.post(url_for('event_invoicing.initiate_invoice_payment'), data=data,
+                                     follow_redirects=True)
             response_json = json.loads(response.data)
             self.assertEqual(data['email'], response_json['email'], msg=response.data)
             self.assertEqual("start_paypal", response_json['action'], msg=response.data)
@@ -108,14 +111,16 @@ class TestInvoicing(OpenEventTestCase):
             invoice.paid_via = "paypal"
             invoice.transaction_id = "87906533255"
             save_to_db(invoice)
-            response = self.app.get(url_for('event_invoicing.view_invoice_after_payment', invoice_identifier=invoice.identifier),
-                                    follow_redirects=True)
+            response = self.app.get(
+                url_for('event_invoicing.view_invoice_after_payment', invoice_identifier=invoice.identifier),
+                follow_redirects=True)
             self.assertTrue(str(event.name) in response.data, msg=response.data)
             response = self.app.get(url_for('event_invoicing.view_invoice', invoice_identifier=invoice.identifier),
                                     follow_redirects=False)
             self.assertEqual(response.status_code, 302, msg=response.status_code)
-            response = self.app.get(url_for('event_invoicing.view_invoice_after_payment_pdf', invoice_identifier=invoice.identifier),
-                                    follow_redirects=False)
+            response = self.app.get(
+                url_for('event_invoicing.view_invoice_after_payment_pdf', invoice_identifier=invoice.identifier),
+                follow_redirects=False)
             self.assertEqual(response.status_code, 200, msg=response.status_code)
 
     def test_invoice_payment_paypal_cancel(self):

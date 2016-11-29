@@ -22,11 +22,8 @@ event_details_pages = [
 
 @app.route('/sitemap.xml', methods=('GET', 'POST'))
 def render_sitemap():
-    urls = []
+    urls = [full_url(url_for('sitemaps.render_pages_sitemap'))]
     # pages sitemap
-    urls.append(
-        full_url(url_for('sitemaps.render_pages_sitemap'))
-    )
     # get events pages
     events = get_indexable_events()
     pages = int(ceil(len(events) / (PER_PAGE_EVENTS * 1.0)))

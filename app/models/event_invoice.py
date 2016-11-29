@@ -5,6 +5,7 @@ import time
 from app.helpers.helpers import get_count
 from . import db
 
+
 def get_new_identifier():
     identifier = str(uuid.uuid4())
     count = get_count(EventInvoice.query.filter_by(identifier=identifier))
@@ -12,6 +13,7 @@ def get_new_identifier():
         return identifier
     else:
         return get_new_identifier()
+
 
 class EventInvoice(db.Model):
     """

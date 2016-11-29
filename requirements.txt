@@ -1,1 +1,2 @@
+slugify
 -r requirements/prod.txt

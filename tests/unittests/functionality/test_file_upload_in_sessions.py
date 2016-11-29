@@ -20,5 +20,6 @@ class TestImageUpload(OpenEventTestCase):
                                      follow_redirects=True)
             self.assertTrue(response.status_code, 200)
 
+
 if __name__ == '__main__':
     unittest.main()

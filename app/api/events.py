@@ -99,8 +99,8 @@ EVENT = api.model('Event', {
     'call_for_papers': fields.Nested(EVENT_CFS, allow_null=True),
     'version': fields.Nested(EVENT_VERSION),
     'has_session_speakers': fields.Boolean(default=False),
-    'thumbnail' : fields.Uri(),
-    'large' : fields.Uri()
+    'thumbnail': fields.Uri(),
+    'large': fields.Uri()
 })
 
 EVENT_COMPLETE = api.clone('EventComplete', EVENT, {
@@ -187,7 +187,7 @@ class EventDAO(BaseDAO):
         # update copyright if key exists
         if 'copyright' in payload:
             CopyrightDAO.update(event.copyright.id, payload['copyright']
-                                if payload['copyright'] else {})
+            if payload['copyright'] else {})
             payload.pop('copyright')
         # update cfs
         if 'call_for_papers' in payload:
@@ -258,13 +258,18 @@ def get_extended_event_model(includes=None):
         included_fields['tickets'] = fields.List(fields.Nested(TICKET), attribute='tickets')
     return EVENT.extend('ExtendedEvent', included_fields)
 
+
 # DEFINE RESOURCES
 
 
-class EventResource():
+class EventResource:
     """
     Event Resource Base class
     """
+
+    def __init__(self):
+        pass
+
     event_parser = reqparse.RequestParser()
     event_parser.add_argument('location', type=unicode, dest='__event_search_location')
     event_parser.add_argument('contains', type=unicode, dest='__event_contains')
@@ -281,7 +286,10 @@ class EventResource():
     event_parser.add_argument('include', type=str)
 
 
-class SingleEventResource():
+class SingleEventResource:
+    def __init__(self):
+        pass
+
     event_parser = reqparse.RequestParser()
     event_parser.add_argument('include', type=str)
 
