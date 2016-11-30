@@ -1,21 +1,20 @@
-"""Copyright 2015 Rafal Kowalski"""
-
 # Ignore ExtDeprecationWarnings for Flask 0.11 - see http://stackoverflow.com/a/38080580
-import re
-
-from flask import redirect
-from pytz import timezone
-import base64
 import warnings
-from StringIO import StringIO
 
-import qrcode
 from flask.exthook import ExtDeprecationWarning
-from forex_python.converter import CurrencyCodes
-from pytz import utc
 
 warnings.simplefilter('ignore', ExtDeprecationWarning)
 # Keep it before flask extensions are imported
+
+import re
+
+from pytz import timezone
+import base64
+from StringIO import StringIO
+
+import qrcode
+from forex_python.converter import CurrencyCodes
+from pytz import utc
 
 from app.helpers.scheduled_jobs import send_mail_to_expired_orders, empty_trash, send_after_event_mail, \
     send_event_fee_notification, send_event_fee_notification_followup
@@ -30,9 +29,7 @@ from os import environ
 import sys
 import json
 from flask import Flask, session
-from flask.ext.autodoc import Autodoc
 from app.settings import get_settings, get_setts
-from flask.ext.cors import CORS
 from flask.ext.migrate import Migrate, MigrateCommand
 from flask.ext.script import Manager
 from flask.ext.login import current_user
@@ -57,7 +54,7 @@ from app.views.admin.admin import AdminView
 from helpers.jwt import jwt_authenticate, jwt_identity
 from helpers.formatter import operation_name
 from app.helpers.data_getter import DataGetter
-from app.views.api_v1_views import app as api_v1_routes
+from app.views.utils_routes import app as utils_routes
 from app.views.sitemap import app as sitemap_routes
 from app.views.public.babel_view import app as babel_routes
 from app.api.helpers.errors import NotFoundError
@@ -76,28 +73,24 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
 
-def create_app():
-    Autodoc(app)
-    # cal = Calendar()
-    babel.init_app(app)
 
+def create_app():
+    babel.init_app(app)
     app.register_blueprint(babel_routes)
-    app.register_blueprint(api_v1_routes)
+    app.register_blueprint(utils_routes)
     app.register_blueprint(sitemap_routes)
     Migrate(app, db)
 
-    app.config.from_object(environ.get('APP_CONFIG',
-                                       'config.ProductionConfig'))
+    app.config.from_object(environ.get('APP_CONFIG', 'config.ProductionConfig'))
     db.init_app(app)
-    manager = Manager(app)
-    manager.add_command('db', MigrateCommand)
+    _manager = Manager(app)
+    _manager.add_command('db', MigrateCommand)
 
     if app.config['CACHING']:
         cache.init_app(app, config={'CACHE_TYPE': 'simple'})
     else:
         cache.init_app(app, config={'CACHE_TYPE': 'null'})
 
-    CORS(app)
     stripe.api_key = 'SomeStripeKey'
     app.secret_key = 'super secret key'
     app.json_encoder = MiniJSONEncoder
@@ -116,7 +109,7 @@ def create_app():
     app.config['JWT_AUTH_USERNAME_KEY'] = 'email'
     app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=24 * 60 * 60)
     app.config['JWT_AUTH_URL_RULE'] = None
-    jwt = JWT(app, jwt_authenticate, jwt_identity)
+    _jwt = JWT(app, jwt_authenticate, jwt_identity)
 
     # setup celery
     app.config['CELERY_BROKER_URL'] = environ.get('REDIS_URL', 'redis://localhost:6379/0')
@@ -139,7 +132,7 @@ def create_app():
 
     sa.orm.configure_mappers()
 
-    return app, manager, db, jwt
+    return app, _manager, db, _jwt
 
 
 current_app, manager, database, jwt = create_app()
@@ -159,6 +152,7 @@ def forbidden(e):
         return json.dumps({"error": "forbidden"}), 403
     return render_template('gentelella/admin/forbidden.html'), 403
 
+
 # taken from http://flask.pocoo.org/snippets/45/
 def request_wants_json():
     best = request.accept_mimetypes.best_match(
@@ -169,6 +163,7 @@ def request_wants_json():
 @app.context_processor
 def all_languages():
     return dict(all_languages=LANGUAGES)
+
 
 @app.context_processor
 def selected_lang():
@@ -188,9 +183,11 @@ def get_key_settings():
     key_settings = get_settings()
     return dict(key_settings=key_settings)
 
+
 @app.context_processor
 def get_app_name():
     return dict(app_name=get_settings()['app_name'])
+
 
 @app.context_processor
 def fee_helpers():
@@ -218,12 +215,15 @@ def qrcode_generator():
         img.save(buffer, format="JPEG")
         img_str = base64.b64encode(buffer.getvalue())
         return img_str
+
     return dict(generate_qr=generate_qr)
+
 
 @app.context_processor
 def event_types():
     event_types = DataGetter.get_event_types()
     return dict(event_typo=event_types[:10])
+
 
 @app.context_processor
 def base_dir():
@@ -235,9 +235,11 @@ def pages():
     pages = DataGetter.get_all_pages(get_locale())
     return dict(system_pages=pages)
 
+
 @app.context_processor
 def datetime_now():
     return dict(datetime_now=datetime.now())
+
 
 @app.context_processor
 def social_settings():
@@ -458,6 +460,7 @@ def integrate_socketio():
     integrate = current_app.config.get('INTEGRATE_SOCKETIO', False)
     return dict(integrate_socketio=integrate)
 
+
 scheduler = BackgroundScheduler(timezone=utc)
 scheduler.add_job(send_mail_to_expired_orders, 'interval', hours=5)
 scheduler.add_job(empty_trash, 'cron', day_of_week='mon-fri', hour=5, minute=30)
@@ -465,6 +468,7 @@ scheduler.add_job(send_after_event_mail, 'cron', day_of_week='mon-fri', hour=5, 
 scheduler.add_job(send_event_fee_notification, 'cron', day=1)
 scheduler.add_job(send_event_fee_notification_followup, 'cron', day=15)
 scheduler.start()
+
 
 # Testing database performance
 @app.after_request
@@ -476,6 +480,7 @@ def after_request(response):
                                                                                                  query.duration,
                                                                                                  query.context))
     return response
+
 
 # Flask-SocketIO integration
 socketio = None
