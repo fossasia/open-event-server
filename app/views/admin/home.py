@@ -23,7 +23,6 @@ from app.helpers.oauth import OAuth, FbOAuth
 from app.models.user import User
 import geoip2.database
 from flask import abort
-from werkzeug.datastructures import ImmutableMultiDict
 
 
 def intended_url():
@@ -38,8 +37,10 @@ def record_user_login_logout(template, user):
         **req_stats
     )
 
+
 def str_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
+
 
 class MyHomeView(AdminIndexView):
     @expose('/')
@@ -62,6 +63,10 @@ class MyHomeView(AdminIndexView):
 
     @expose('/login/', methods=('GET', 'POST'))
     def login_view(self):
+
+        if login.current_user.is_authenticated:
+            return redirect(url_for('.index'))
+
         if request.method == 'GET':
             google = get_google_auth()
             auth_url, state = google.authorization_url(OAuth.get_auth_uri(), access_type='offline')
@@ -94,6 +99,10 @@ class MyHomeView(AdminIndexView):
 
     @expose('/register/', methods=('GET', 'POST'))
     def register_view(self):
+
+        if login.current_user.is_authenticated:
+            return redirect(url_for('.index'))
+
         """Register view page"""
         if request.method == 'GET':
             return self.render('/gentelella/admin/login/register.html')
