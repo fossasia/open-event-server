@@ -2,9 +2,10 @@ import os
 from base64 import b64encode
 from shutil import copyfile, rmtree
 
+import boto
 from boto.gs.connection import GSConnection
 from flask.ext.scrypt import generate_password_hash
-from boto.s3.connection import S3Connection
+from boto.s3.connection import S3Connection, OrdinaryCallingFormat
 from boto.s3.key import Key
 from werkzeug.utils import secure_filename
 import magic
@@ -144,7 +145,7 @@ def upload_to_aws(bucket_name, aws_key, aws_secret, file, key, acl='public-read'
     Uploads to AWS at key
     http://{bucket}.s3.amazonaws.com/{key}
     """
-    conn = S3Connection(aws_key, aws_secret)
+    conn = S3Connection(aws_key, aws_secret, calling_format=OrdinaryCallingFormat())
     bucket = conn.get_bucket(bucket_name)
     k = Key(bucket)
     # generate key
@@ -174,7 +175,7 @@ def upload_to_aws(bucket_name, aws_key, aws_secret, file, key, acl='public-read'
 
 
 def upload_to_gs(bucket_name, client_id, client_secret, file, key, acl='public-read'):
-    conn = GSConnection(client_id, client_secret)
+    conn = GSConnection(client_id, client_secret, calling_format=OrdinaryCallingFormat())
     bucket = conn.get_bucket(bucket_name)
     k = Key(bucket)
     # generate key
