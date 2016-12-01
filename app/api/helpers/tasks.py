@@ -2,8 +2,9 @@
 Define all API v2 celery tasks here
 This is done to resolve circular imports
 """
-import traceback
 import logging
+import traceback
+
 from flask import url_for
 
 from app import celery
@@ -11,9 +12,8 @@ from app.helpers.request_context_task import RequestContextTask
 from errors import BaseError, ServerError
 from export_helpers import send_export_mail
 from import_helpers import update_import_job, send_import_mail
-
-from ..imports import import_event_task_base
 from ..exports import event_export_task_base
+from ..imports import import_event_task_base
 
 
 @celery.task(base=RequestContextTask, name='import.event', bind=True,

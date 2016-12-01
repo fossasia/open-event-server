@@ -1,13 +1,15 @@
 import unicodedata
+
 from flask import request, url_for, redirect, jsonify, flash
+from flask.ext import login
 from flask.ext.admin import BaseView
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from flask_admin import expose
-from flask.ext import login
 
 from app.helpers.data import DataManager, save_to_db
 from app.models.email_notifications import EmailNotification
 from ....helpers.data_getter import DataGetter
+
 
 def get_or_create_notification_settings(event_id):
     email_notification = DataGetter \

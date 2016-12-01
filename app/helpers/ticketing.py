@@ -1,34 +1,29 @@
-"""Copyright 2016 Niranjan Rajendran"""
 import binascii
 import os
 import uuid
-
 from datetime import timedelta, datetime
 
 from flask import url_for
-
 from flask.ext import login
 from sqlalchemy import asc
-
-from app.models import db
-from app.helpers.cache import cache
-from app.helpers.data import save_to_db
-from app.helpers.helpers import string_empty, send_email_for_after_purchase, get_count, \
-    send_notif_for_after_purchase
-from app.models.order import Order
-from app.models.ticket import Ticket
-from app.helpers.data_getter import DataGetter
-from app.helpers.data import DataManager
-
-from app.helpers.payment import StripePaymentsManager, represents_int, PayPalPaymentsManager
-from app.models.ticket_holder import TicketHolder
-from app.models.order import OrderTicket
-from app.models.event import Event
-from app.models.user_detail import UserDetail
-from app.models.discount_code import DiscountCode, TICKET
 from sqlalchemy import or_
 
+from app.helpers.cache import cache
+from app.helpers.data import DataManager
+from app.helpers.data import save_to_db
+from app.helpers.data_getter import DataGetter
 from app.helpers.helpers import send_email_after_account_create_with_password
+from app.helpers.helpers import string_empty, send_email_for_after_purchase, get_count, \
+    send_notif_for_after_purchase
+from app.helpers.payment import StripePaymentsManager, represents_int, PayPalPaymentsManager
+from app.models import db
+from app.models.discount_code import DiscountCode, TICKET
+from app.models.event import Event
+from app.models.order import Order
+from app.models.order import OrderTicket
+from app.models.ticket import Ticket
+from app.models.ticket_holder import TicketHolder
+from app.models.user_detail import UserDetail
 
 
 class TicketingManager(object):
@@ -119,8 +114,8 @@ class TicketingManager(object):
 
     @staticmethod
     def get_attendees(event_id):
-        return TicketHolder.query.join(TicketHolder.order, aliased=True)\
-                .filter(Order.status == 'completed').filter(Order.event_id == event_id).all()
+        return TicketHolder.query.join(TicketHolder.order, aliased=True) \
+            .filter(Order.status == 'completed').filter(Order.event_id == event_id).all()
 
     @staticmethod
     def attendee_check_in_out(id, state=None):
@@ -163,14 +158,14 @@ class TicketingManager(object):
     @staticmethod
     def get_discount_code(event_id, discount_code):
         if represents_int(discount_code):
-            return DiscountCode.query\
-                .filter_by(id=discount_code)\
-                .filter_by(event_id=event_id)\
+            return DiscountCode.query \
+                .filter_by(id=discount_code) \
+                .filter_by(event_id=event_id) \
                 .filter_by(used_for=TICKET).first()
         else:
-            return DiscountCode.query\
-                .filter_by(code=discount_code)\
-                .filter_by(event_id=event_id)\
+            return DiscountCode.query \
+                .filter_by(code=discount_code) \
+                .filter_by(event_id=event_id) \
                 .filter_by(used_for=TICKET).first()
 
     @staticmethod
@@ -204,7 +199,7 @@ class TicketingManager(object):
         if order and not order.paid_via:
             if override \
                 or (order.status != 'completed' and order.status != 'placed' and
-                    (order.created_at + timedelta(
+                            (order.created_at + timedelta(
                                 minutes=TicketingManager.get_order_expiry())) < datetime.utcnow()):
                 order.status = 'expired'
                 save_to_db(order)

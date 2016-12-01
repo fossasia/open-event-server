@@ -1,17 +1,18 @@
+import random
+from datetime import timedelta, datetime
+
 from flask.ext.login import current_user
 from pentabarf.PentabarfParser import PentabarfParser
 
+from app.helpers.data import get_or_create, save_to_db
 from app.helpers.helpers import update_state
+from app.models import db
 from app.models.event import Event
-from app.models.session import Session
 from app.models.microlocation import Microlocation
+from app.models.session import Session
 from app.models.session_type import SessionType
 from app.models.speaker import Speaker
 from app.models.track import Track
-from app.helpers.data import get_or_create, save_to_db
-from app.models import db
-from datetime import timedelta, datetime
-import random
 
 
 def string_to_timedelta(string):

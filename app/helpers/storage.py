@@ -2,13 +2,12 @@ import os
 from base64 import b64encode
 from shutil import copyfile, rmtree
 
-import boto
+import magic
 from boto.gs.connection import GSConnection
-from flask.ext.scrypt import generate_password_hash
 from boto.s3.connection import S3Connection, OrdinaryCallingFormat
 from boto.s3.key import Key
+from flask.ext.scrypt import generate_password_hash
 from werkzeug.utils import secure_filename
-import magic
 
 from app.settings import get_settings
 
@@ -61,6 +60,7 @@ class UploadedFile(object):
     """
     Helper for a disk-file to replicate request.files[ITEM] class
     """
+
     def __init__(self, file_path, filename):
         self.file_path = file_path
         self.filename = filename
@@ -80,6 +80,7 @@ class UploadedMemory(object):
     """
     Helper for a memory file to replicate request.files[ITEM] class
     """
+
     def __init__(self, data, filename):
         self.data = data
         self.filename = filename
@@ -202,6 +203,7 @@ def upload_to_gs(bucket_name, client_id, client_secret, file, key, acl='public-r
     if sent == size:
         return gs_url + k.key
     return False
+
 
 # ########
 # HELPERS

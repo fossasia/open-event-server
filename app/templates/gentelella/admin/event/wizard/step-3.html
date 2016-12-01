@@ -16,7 +16,7 @@
                        name="tracks[color]" title="track-color"/>
                 <span class="input-group-addon"><i></i></span>
             </div>
-        <span class="input-group-btn">
+            <span class="input-group-btn">
             <button type="button" class="btn btn-danger remove-tracks">-</button>
             <button type="button" class="btn btn-primary add-tracks">+</button>
         </span>
@@ -40,7 +40,7 @@
                        placeholder="Floor"
                        title="rooms-floor"
                        value="{{ microlocation.floor | default('') }}"/>
-                        <span class="input-group-btn">
+                <span class="input-group-btn">
                             <button type="button" class="btn btn-danger remove-rooms">-</button>
                             <button type="button" class="btn btn-primary add-rooms">+</button>
                         </span>
@@ -75,30 +75,33 @@
     <br>
     <div style="width: 100%; text-align: center">
         {% if event and event.has_session_speakers %}
-            <h2 style="font-weight: 300;">{{_("Turn")}} <span class="str-state">{{_("off")}}</span> {{_("Sessions and Speakers")}}</h2>
+            <h2 style="font-weight: 300;">{{ _("Turn") }} <span
+                    class="str-state">{{ _("off") }}</span> {{ _("Sessions and Speakers") }}</h2>
             <input type="checkbox" class="toggle-switch" name="has_session_speakers"
                    value="yes" id="session-tracks-rooms-switch" checked/>
         {% else %}
-            <h2 style="font-weight: 300;">{{_("Turn")}} <span class="str-state">{{_("on")}}</span> {{_("Sessions and Speakers")}}</h2>
+            <h2 style="font-weight: 300;">{{ _("Turn") }} <span
+                    class="str-state">{{ _("on") }}</span> {{ _("Sessions and Speakers") }}</h2>
             <input type="checkbox" class="toggle-switch" name="has_session_speakers"
                    value="yes" id="session-tracks-rooms-switch"/>
         {% endif %}
         <label for="session-tracks-rooms-switch"></label>
     </div>
 </div>
-<div id="step-3" class="wizard_content" style="{% if event and event.has_session_speakers %}display: block;{% else %}display:none;{% endif %}" >
+<div id="step-3" class="wizard_content"
+     style="{% if event and event.has_session_speakers %}display: block;{% else %}display:none;{% endif %}">
     <div class="col-md-8 col-md-push-2">
 
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
             <i class="fa fa-list-ol"></i>
-            {{_("Session, Microlocations, Session types")}}
+            {{ _("Session, Microlocations, Session types") }}
             <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
         </h2>
 
 
-        <div class="row" id="session-tracks-rooms-holder" >
+        <div class="row" id="session-tracks-rooms-holder">
             <div class="col-md-7 tracks">
-                <h2 class="label-header">{{_("Tracks")}}</h2>
+                <h2 class="label-header">{{ _("Tracks") }}</h2>
                 {% if tracks %}
                     {% for track in tracks %}
                         {{ track_entry(track) }}
@@ -109,7 +112,7 @@
             </div>
             <div class="clearfix"></div>
             <div class="col-md-7 rooms">
-                <h2 class="label-header">{{_("Microlocations")}}</h2>
+                <h2 class="label-header">{{ _("Microlocations") }}</h2>
                 {% if microlocations %}
                     {% for microlocation in microlocations %}
                         {{ microlocation_entry(microlocation) }}
@@ -120,7 +123,7 @@
             </div>
             <div class="clearfix"></div>
             <div class="col-md-7 session-types">
-                <h2 class="label-header">{{_("Session Types")}}</h2>
+                <h2 class="label-header">{{ _("Session Types") }}</h2>
                 {% if session_types %}
                     {% for session_type in session_types %}
                         {{ session_type_entry(session_type) }}

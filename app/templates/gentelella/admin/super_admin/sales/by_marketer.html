@@ -52,30 +52,30 @@
     <br><br>
     <table class="table" id="tickets-summary-table" style="margin-top: 60px;">
         <thead>
-            <tr>
-                <th rowspan="2">
-                    {{ key_name | capitalize }}
+        <tr>
+            <th rowspan="2">
+                {{ key_name | capitalize }}
+            </th>
+            {% if key_name == 'discount codes' %}
+                <th rowspan="2" style="border-left: none !important; border-top: none!important; ">
+                    {{ _("Marketer") }}
                 </th>
-                {% if key_name == 'discount codes' %}
-                    <th rowspan="2" style="border-left: none !important; border-top: none!important; ">
-                        {{_("Marketer")}}
-                    </th>
-                {% endif %}
-                <th colspan="4" class="success">
-                    {{_("Completed Orders")}}
-                </th>
-            </tr>
-            <tr class="active">
-                <th>
-                    {{_("Tickets")}}
-                </th>
-                <th>
-                    {{_("Sales")}} ({{_("discounted")}})
-                </th>
-                <th>
-                    {{_("Discount amount")}}
-                </th>
-            </tr>
+            {% endif %}
+            <th colspan="4" class="success">
+                {{ _("Completed Orders") }}
+            </th>
+        </tr>
+        <tr class="active">
+            <th>
+                {{ _("Tickets") }}
+            </th>
+            <th>
+                {{ _("Sales") }} ({{ _("discounted") }})
+            </th>
+            <th>
+                {{ _("Discount amount") }}
+            </th>
+        </tr>
         </thead>
         <tbody>
         {% for id, item in tickets_summary.iteritems() %}
@@ -101,20 +101,20 @@
         {% endfor %}
         </tbody>
         <tfoot>
-            <tr>
-                <th {% if key_name == 'discount codes' %} colspan="2" style="text-align: right" {% endif %}>
-                    Total
-                </th>
-                <th>
-                    {{ orders_summary.tickets_count }}
-                </th>
-                <th>
-                    {{ display_currency | currency_symbol }}{{ orders_summary.total_sales | money }}
-                </th>
-                <th>
-                    {{ display_currency | currency_symbol }}{{ orders_summary.total_discounts | money }}
-                </th>
-            </tr>
+        <tr>
+            <th {% if key_name == 'discount codes' %} colspan="2" style="text-align: right" {% endif %}>
+                Total
+            </th>
+            <th>
+                {{ orders_summary.tickets_count }}
+            </th>
+            <th>
+                {{ display_currency | currency_symbol }}{{ orders_summary.total_sales | money }}
+            </th>
+            <th>
+                {{ display_currency | currency_symbol }}{{ orders_summary.total_discounts | money }}
+            </th>
+        </tr>
         </tfoot>
     </table>
 

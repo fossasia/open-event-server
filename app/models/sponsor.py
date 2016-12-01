@@ -1,4 +1,3 @@
-"""Copyright 2015 Rafal Kowalski"""
 from app.helpers.versioning import clean_up_string, clean_html
 from . import db
 

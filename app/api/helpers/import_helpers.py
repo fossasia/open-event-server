@@ -1,31 +1,29 @@
-import zipfile
-import os
-import shutil
-import re
-import requests
-import traceback
 import json
+import os
+import re
+import shutil
+import traceback
+import zipfile
+
+import requests
+from flask import current_app as app
 from flask import request, g
 from werkzeug import secure_filename
 
-from flask import current_app as app
-from app.models.import_jobs import ImportJob
-from app.helpers.storage import UploadedFile, upload, UploadedMemory, \
-    UPLOAD_PATHS
 from app.helpers.data import save_to_db
 from app.helpers.helpers import update_state, send_email_after_import
+from app.helpers.storage import UploadedFile, upload, UploadedMemory, \
+    UPLOAD_PATHS
 from app.helpers.update_version import VersionUpdater
-
+from app.models.import_jobs import ImportJob
+from errors import BaseError, ServerError, NotFoundError
+from .non_apis import CustomFormDAO
 from ..events import DAO as EventDAO, LinkDAO as SocialLinkDAO
 from ..microlocations import DAO as MicrolocationDAO
 from ..sessions import DAO as SessionDAO, TypeDAO as SessionTypeDAO
 from ..speakers import DAO as SpeakerDAO
 from ..sponsors import DAO as SponsorDAO
 from ..tracks import DAO as TrackDAO
-from .non_apis import CustomFormDAO
-
-from errors import BaseError, ServerError, NotFoundError
-
 
 IMPORT_SERIES = [
     ('social_links', SocialLinkDAO),
@@ -261,12 +259,14 @@ def _fix_related_fields(srv, data, service_ids):
     return data
 
 
-def create_service_from_json(task_handle, data, srv, event_id, service_ids={}):
+def create_service_from_json(task_handle, data, srv, event_id, service_ids=None):
     """
     Given :data as json, create the service on server
     :service_ids are the mapping of ids of already created services.
         Used for mapping old ids to new
     """
+    if service_ids is None:
+        service_ids = {}
     global CUR_ID
     # sort by id
     data.sort(key=lambda k: k['id'])

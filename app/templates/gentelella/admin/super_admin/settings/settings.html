@@ -123,7 +123,7 @@
             var disable = sel_opt != 'smtp';
             $('[name^=smtp_]').prop("disabled", disable).prop("required", ~disable);
             $('[name=sendgrid_key]').prop("disabled", !disable).prop("required", disable);
-            if(!sel_opt) {
+            if (!sel_opt) {
                 $('[name=sendgrid_key]').prop("disabled", disable).prop("required", ~disable);
             }
         }

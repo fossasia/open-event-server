@@ -1,8 +1,6 @@
-"""Copyright 2015 Rafal Kowalski"""
-
-
 class Formatter(object):
     """Formatter class"""
+
     @staticmethod
     def column_formatter(view, context, model, name):
         """Column table formatter"""

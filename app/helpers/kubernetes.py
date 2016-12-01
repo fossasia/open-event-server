@@ -1,12 +1,9 @@
-import logging
 import os
 
 import requests
-logging.captureWarnings(True)
 
 
 class KubernetesApi:
-
     service_host = os.getenv('KUBERNETES_SERVICE_HOST', '')
     api_url = 'https://' + service_host + '/api/v1/'
     token = ''
@@ -28,4 +25,3 @@ class KubernetesApi:
     @staticmethod
     def is_on_kubernetes():
         return 'KUBERNETES_SERVICE_HOST' in os.environ
-

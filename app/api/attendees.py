@@ -22,6 +22,7 @@ ATTENDEE = api.model('TicketHolder', {
     'ticket': fields.Nested(TICKET, allow_null=False)
 })
 
+
 @api.route('/events/<int:event_id>/attendees/')
 class AttendeesList(Resource):
     @requires_auth
@@ -31,6 +32,7 @@ class AttendeesList(Resource):
     def get(self, event_id):
         """Get attendees of the event"""
         return TicketingManager.get_attendees(event_id)
+
 
 @api.route('/events/<int:event_id>/attendees/check_in_toggle/<holder_identifier>')
 class AttendeeCheckInToggle(Resource):
@@ -43,6 +45,7 @@ class AttendeeCheckInToggle(Resource):
         holder = TicketingManager.attendee_check_in_out(holder_identifier)
         return holder, 200
 
+
 @api.route('/events/<int:event_id>/attendees/check_in_toggle/<holder_identifier>/check_in')
 class AttendeeCheckIn(Resource):
     @requires_auth
@@ -53,6 +56,7 @@ class AttendeeCheckIn(Resource):
         """Check in attendee"""
         holder = TicketingManager.attendee_check_in_out(holder_identifier, True)
         return holder, 200
+
 
 @api.route('/events/<int:event_id>/attendees/check_in_toggle/<holder_identifier>/check_out')
 class AttendeeCheckOut(Resource):

@@ -5,7 +5,7 @@ function importEvent(type) {
     jQuery.each(jQuery('#import_file')[0].files, function (i, file) {
         var ext = file.name.split(".");
         ext = ext[ext.length - 1].toLowerCase();
-        if(ext == 'xml') {
+        if (ext == 'xml') {
             endpoint = '/api/v2/events/import/pentabarf';
         }
         data.append('file', file);

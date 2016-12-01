@@ -1,4 +1,3 @@
-
 <!-- croppie Modal -->
 <div class="modal fade" tabindex="-1" role="dialog" id="cropper-modal">
     <div class="modal-dialog">
@@ -6,7 +5,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">{{_("Crop your image")}}</h4>
+                <h4 class="modal-title">{{ _("Crop your image") }}</h4>
             </div>
             <div class="modal-body">
                 <div id="upload-cropper">
@@ -15,8 +14,8 @@
             </div>
             <div class="modal-footer">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{{_("Cancel")}}</button>
-                    <button type="button" id="save-crop" class="btn btn-success">{{_("Done")}}</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ _("Cancel") }}</button>
+                    <button type="button" id="save-crop" class="btn btn-success">{{ _("Done") }}</button>
                 </div>
 
             </div>
@@ -34,7 +33,7 @@
         e.wrap('<form>').closest('form').get(0).reset();
         e.unwrap();
     }
-    $(document).ready(function (){
+    $(document).ready(function () {
         $uploadCropper = $('#upload-cropper').croppie({
             viewport: {
                 width: 190,
@@ -121,14 +120,14 @@
                 url: "{{ url_for('event_speakers.bgimage_upload', event_id=event.id, speaker_id=speaker.id) if speaker.photo else url_for('event_speakers.create_event_bgimage_upload', event_id=event.id) }}",
                 data: {bgimage: resp},
                 dataType: 'json'
-            }).done(function(data) {
+            }).done(function (data) {
                 console.log(data);
                 $("#logo").val(data.background_url);
                 $("#image-view-group").show().find("img").attr("src", resp);
                 $("#image-upload-group").hide();
-            }).fail(function(data) {
+            }).fail(function (data) {
                 alert("Something went wrong. Please try again.");
-            }).always(function() {
+            }).always(function () {
                 $("#event-image-upload-label").html('<i class="fa fa-3x fa-camera-retro" aria-hidden="true"></i><br><h3>Select Avatar</h3>');
                 /* Enable Save Event buttons */
                 $(".save-event").prop("disabled", false);
@@ -138,47 +137,47 @@
     });
 
     {% if profile.user_detail.avatar_uploaded %}
-    $("#remove-image-btn").click(function () {
-        $.ajax({
-            type: 'DELETE',
-            url: "{{ url_for('event_speakers.bgimage_upload', event_id=event.id, speaker_id=speaker.id) }}",
-            dataType: 'json'
-        }).done(function(data) {
-            console.log(data);
+        $("#remove-image-btn").click(function () {
+            $.ajax({
+                type: 'DELETE',
+                url: "{{ url_for('event_speakers.bgimage_upload', event_id=event.id, speaker_id=speaker.id) }}",
+                dataType: 'json'
+            }).done(function (data) {
+                console.log(data);
+                $("#image-view-group").hide();
+                $("#image-upload-group").show();
+                $("#logo").val('');
+            }).fail(function (data) {
+                alert("Something went wrong. Please try again.");
+            });
+        });
+
+        $("#remove-logo-btn").click(function () {
+            $.ajax({
+                type: 'DELETE',
+                url: "{{ url_for('events.logo_upload', event_id=event.id) }}",
+                dataType: 'json'
+            }).done(function (data) {
+                console.log(data);
+                $("#logo-view-group").hide();
+                $("#logo-upload-group").show();
+                $("#logo").val('');
+            }).fail(function (data) {
+                alert("Something went wrong. Please try again.");
+            });
+        });
+    {% else %}
+        $("#remove-image-btn").click(function () {
             $("#image-view-group").hide();
             $("#image-upload-group").show();
             $("#logo").val('');
-        }).fail(function(data) {
-            alert("Something went wrong. Please try again.");
         });
-    });
 
-    $("#remove-logo-btn").click(function () {
-        $.ajax({
-            type: 'DELETE',
-            url: "{{ url_for('events.logo_upload', event_id=event.id) }}",
-            dataType: 'json'
-        }).done(function(data) {
-            console.log(data);
+        $("#remove-logo-btn").click(function () {
             $("#logo-view-group").hide();
             $("#logo-upload-group").show();
             $("#logo").val('');
-        }).fail(function(data) {
-            alert("Something went wrong. Please try again.");
         });
-    });
-    {% else %}
-    $("#remove-image-btn").click(function () {
-        $("#image-view-group").hide();
-        $("#image-upload-group").show();
-        $("#logo").val('');
-    });
-
-    $("#remove-logo-btn").click(function () {
-        $("#logo-view-group").hide();
-        $("#logo-upload-group").show();
-        $("#logo").val('');
-    });
     {% endif %}
 
     $('#cropper-modal').on('shown.bs.modal', function (e) {

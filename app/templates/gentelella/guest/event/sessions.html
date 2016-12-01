@@ -11,7 +11,7 @@
     <div>
         <div class="row">
             <div class="col-md-12">
-                <h1 style="font-weight: 300; font-size: 30px">{{_("Sessions")}}</h1>
+                <h1 style="font-weight: 300; font-size: 30px">{{ _("Sessions") }}</h1>
                 {% include 'gentelella/guest/event/_sessions_list.html' %}
             </div>
         </div>
@@ -22,12 +22,12 @@
     {{ super() }}
     <script type="text/javascript">
 
-    $(".audio-btn").popover({
-        html: true,
-        placement: 'top'
-    }).click(function(e){
-        e.preventDefault();
-    });
+        $(".audio-btn").popover({
+            html: true,
+            placement: 'top'
+        }).click(function (e) {
+            e.preventDefault();
+        });
 
     </script>
 {% endblock %}

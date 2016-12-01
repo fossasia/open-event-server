@@ -1,13 +1,13 @@
 from flask import request
-from flask_admin import expose
-
-from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView, USERS
-from ....helpers.data_getter import DataGetter
-from ....helpers.data import delete_from_db, DataManager, save_to_db
 from flask import url_for, redirect, flash
-from app.helpers.data import trash_user, restore_user
+from flask_admin import expose
 from sqlalchemy_continuum import transaction_class
+
+from app.helpers.data import trash_user, restore_user
 from app.models.event import Event
+from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView, USERS
+from ....helpers.data import delete_from_db, DataManager, save_to_db
+from ....helpers.data_getter import DataGetter
 
 
 class SuperAdminUsersView(SuperAdminBaseView):
@@ -32,19 +32,19 @@ class SuperAdminUsersView(SuperAdminBaseView):
             event_roles = DataGetter.get_event_roles_for_user(user.id)
             active_user_list.append({
                 'user': user,
-                'event_roles': event_roles,}
+                'event_roles': event_roles, }
             )
         for user in trash_users:
             event_roles = DataGetter.get_event_roles_for_user(user.id)
             trash_user_list.append({
                 'user': user,
-                'event_roles': event_roles,}
+                'event_roles': event_roles, }
             )
         return self.render('/gentelella/admin/super_admin/users/users.html',
-            active_user_list=active_user_list,
-            trash_user_list=trash_user_list,
-            all_user_list=all_user_list,
-            custom_sys_roles=custom_sys_roles)
+                           active_user_list=active_user_list,
+                           trash_user_list=trash_user_list,
+                           all_user_list=all_user_list,
+                           custom_sys_roles=custom_sys_roles)
 
     @expose('/<user_id>/edit/', methods=('GET', 'POST'))
     def edit_view(self, user_id):
@@ -56,13 +56,13 @@ class SuperAdminUsersView(SuperAdminBaseView):
             event_roles = DataGetter.get_event_roles_for_user(user.id)
             active_user_list.append({
                 'user': user,
-                'event_roles': event_roles,}
+                'event_roles': event_roles, }
             )
         for user in trash_users:
             event_roles = DataGetter.get_event_roles_for_user(user.id)
             trash_user_list.append({
                 'user': user,
-                'event_roles': event_roles,}
+                'event_roles': event_roles, }
             )
         return redirect(url_for('.index_view'))
 
@@ -91,7 +91,6 @@ class SuperAdminUsersView(SuperAdminBaseView):
         return self.render('/gentelella/admin/profile/index.html',
                            profile=profile, user_id=user_id)
 
-
     @expose('/<user_id>/trash/', methods=('GET',))
     def trash_view(self, user_id):
         trash_user(user_id)
@@ -111,5 +110,5 @@ class SuperAdminUsersView(SuperAdminBaseView):
             transaction = transaction_class(Event)
             transaction.query.filter_by(user_id=user_id).delete()
             delete_from_db(profile, "User's been permanently removed")
-        flash("User" + user_id + " has been permenently deleted.", "danger")
+        flash("User" + user_id + " has been permanently deleted.", "danger")
         return redirect(url_for('.index_view'))

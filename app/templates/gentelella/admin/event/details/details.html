@@ -6,8 +6,10 @@
 
 {% block head_css %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/nouislider/distribute/nouislider.min.css') }}"/>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='admin/lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"/>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='admin/lib/nouislider/distribute/nouislider.min.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/versioning.css') }}"/>
 
     <style type="text/css">
@@ -17,24 +19,23 @@
             border-color: rgba(120, 120, 120, 0.88);
         }
 
-
     </style>
 {% endblock %}
 
 {% block content %}
 
     <div class="row">
-      <div class="col-md-6 col-sm-6 col-xs-12">
-        {% include 'gentelella/admin/event/details/widgets/setup_checklist.html' %}
-        {% include 'gentelella/admin/event/details/widgets/roles.html' %}
-        {%if settings.android_app_url and settings.web_app_url %}
-          {% include 'gentelella/admin/event/details/widgets/microservices.html' %}
-        {% endif %}
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            {% include 'gentelella/admin/event/details/widgets/setup_checklist.html' %}
+            {% include 'gentelella/admin/event/details/widgets/roles.html' %}
+            {% if settings.android_app_url and settings.web_app_url %}
+                {% include 'gentelella/admin/event/details/widgets/microservices.html' %}
+            {% endif %}
         </div>
-      <div class="col-md-6 col-sm-6 col-xs-12">
-        {% include 'gentelella/admin/event/details/widgets/general_info.html' %}
-        {% include 'gentelella/admin/event/details/widgets/sponsors_list.html' %}
-      </div>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            {% include 'gentelella/admin/event/details/widgets/general_info.html' %}
+            {% include 'gentelella/admin/event/details/widgets/sponsors_list.html' %}
+        </div>
     </div>
 
 {% endblock %}
@@ -50,10 +51,7 @@
             function (settings, data, dataIndex) {
                 var user_option = $("input[name=role_status]:checked").val();
                 var state = data[0].trim();
-                if (user_option === state || state === "") {
-                    return true;
-                }
-                return false;
+                return user_option === state || state === "";
             }
         );
         var roleTable = $('.role-table').DataTable({
@@ -91,14 +89,14 @@
             return resp;
         }
 
-        $("#add-role-form").submit(function() {
+        $("#add-role-form").submit(function () {
             var userEmail = $("#add-role-form input[name=user_email]").val().trim();
             var res = searchAcceptedRoles(userEmail);
 
             if (res !== null) {
                 var addRoleAlertBox = $("#add-role-alert-box");
                 var msg = userEmail + " has already been assigned a Role in the Event.<br>" +
-                    "Click <a href='#' style='color:white;text-decoration:underline;' onclick=\"openRoleEdit('"+res+"')\">here</a> to edit it.";
+                    "Click <a href='#' style='color:white;text-decoration:underline;' onclick=\"openRoleEdit('" + res + "')\">here</a> to edit it.";
                 addRoleAlertBox.children("span").html(msg);
                 addRoleAlertBox.show();
                 return false;

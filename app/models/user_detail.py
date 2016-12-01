@@ -33,6 +33,8 @@ class UserDetail(db.Model):
         self.avatar = avatar
         self.contact = contact
         self.user_id = user_id
+        self.firstname = firstname
+        self.lastname = lastname
         self.facebook = facebook
         self.twitter = twitter
         self.thumbnail = thumbnail

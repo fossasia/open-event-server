@@ -1,9 +1,12 @@
+from xml.etree.ElementTree import Element, SubElement, tostring
+
 import icalendar
 import pytz
 from flask import url_for
 from icalendar import Calendar
-from pentabarf.Event import Event
+from pentabarf.Conference import Conference
 from pentabarf.Day import Day
+from pentabarf.Event import Event
 from pentabarf.Person import Person
 from pentabarf.Room import Room
 from sqlalchemy import DATE
@@ -11,15 +14,11 @@ from sqlalchemy import asc
 from sqlalchemy import cast
 from sqlalchemy import func
 
-from app.settings import get_settings
-from app.models.event import Event as EventModel
-from xml.etree.ElementTree import Element, SubElement, Comment, tostring
-
 from app import db
-from app.models.session import Session
-
 from app.helpers.data_getter import DataGetter
-from pentabarf.Conference import Conference
+from app.models.event import Event as EventModel
+from app.models.session import Session
+from app.settings import get_settings
 
 
 def format_timedelta(td):
@@ -30,13 +29,10 @@ def format_timedelta(td):
         hours = '0%s' % int(hours)
     if minutes < 10:
         minutes = '0%s' % minutes
-    if seconds < 10:
-        seconds = '0%s' % seconds
     return '%s:%s' % (hours, minutes)
 
 
 class ExportHelper:
-
     def __init__(self):
         pass
 
@@ -70,8 +66,8 @@ class ExportHelper:
                 microlocation = DataGetter.get_microlocation(microlocation_id)
                 sessions = Session.query.filter_by(microlocation_id=microlocation_id) \
                     .filter(func.date(Session.start_time) == date) \
-                    .filter_by(state='accepted')\
-                    .filter(Session.in_trash is not True)\
+                    .filter_by(state='accepted') \
+                    .filter(Session.in_trash is not True) \
                     .order_by(asc(Session.start_time)).all()
 
                 room = Room(name=microlocation.name)
@@ -117,7 +113,7 @@ class ExportHelper:
         tz = event.timezone or 'UTC'
         tz = pytz.timezone(tz)
 
-        sessions = Session.query\
+        sessions = Session.query \
             .filter_by(event_id=event_id) \
             .filter_by(state='accepted') \
             .filter(Session.in_trash is not True) \
@@ -165,7 +161,7 @@ class ExportHelper:
         cal_name_node = SubElement(v_calendar_node, 'x-wr-calname')
         cal_name_node.text = "Schedule for sessions at " + event.name
 
-        sessions = Session.query\
+        sessions = Session.query \
             .filter_by(event_id=event_id) \
             .filter_by(state='accepted') \
             .filter(Session.in_trash is not True) \

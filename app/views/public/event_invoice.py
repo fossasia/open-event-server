@@ -1,18 +1,21 @@
+from cStringIO import StringIO
+
+import pycountry
+from flask import redirect, url_for, request, jsonify, make_response, flash
 from flask.ext.restplus import abort
 from flask_admin import BaseView, expose
-from flask import redirect, url_for, request, jsonify, make_response, flash
 from xhtml2pdf import pisa
-from cStringIO import StringIO
-import pycountry
 
 from app.helpers.data import save_to_db
 from app.helpers.invoicing import InvoicingManager
 from app.helpers.payment import PayPalPaymentsManager, StripePaymentsManager
 
+
 def create_pdf(pdf_data):
     pdf = StringIO()
     pisa.CreatePDF(StringIO(pdf_data.encode('utf-8')), pdf)
     return pdf
+
 
 class EventInvoicingView(BaseView):
     @expose('/', methods=('GET',))
@@ -25,7 +28,8 @@ class EventInvoicingView(BaseView):
         if not invoice:
             abort(404)
         if invoice.status == 'completed':
-            return redirect(url_for('event_invoicing.view_invoice_after_payment', invoice_identifier=invoice_identifier))
+            return redirect(
+                url_for('event_invoicing.view_invoice_after_payment', invoice_identifier=invoice_identifier))
 
         pay_by_stripe = False
         pay_by_paypal = False
@@ -50,7 +54,8 @@ class EventInvoicingView(BaseView):
         invoice = InvoicingManager.get_invoice_by_identifier(invoice_identifier)
         if not invoice or invoice.status != 'completed':
             abort(404)
-        return self.render('/gentelella/guest/invoicing/invoice_post_payment.html', invoice=invoice, event=invoice.event)
+        return self.render('/gentelella/guest/invoicing/invoice_post_payment.html', invoice=invoice,
+                           event=invoice.event)
 
     @expose('/<invoice_identifier>/view/pdf/', methods=('GET',))
     def view_invoice_after_payment_pdf(self, invoice_identifier):

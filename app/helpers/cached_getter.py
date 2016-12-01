@@ -1,9 +1,9 @@
 from app.helpers.cache import cache
-from app.models.ticket import Ticket
+from app.helpers.data_getter import DataGetter
 from app.models.discount_code import DiscountCode
+from app.models.ticket import Ticket
 from app.models.user import User
 
-from app.helpers.data_getter import DataGetter
 
 class CachedGetter(object):
     """Cached data getters"""

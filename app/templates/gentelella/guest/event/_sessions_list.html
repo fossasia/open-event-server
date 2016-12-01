@@ -34,7 +34,9 @@
                     class="fa fa-youtube-play fa-fw"></i></a>
         {% elif what == 'audio' %}
             <a href="{{ link }}" class="btn btn-default audio-btn" data-toggle="tooltip" data-placement="right"
-               title="{{ what | capitalize }}" data-content="<audio controls preload='none'><source src='{{link}}' type='audio/mpeg'></audio>" target="_blank"><i
+               title="{{ what | capitalize }}"
+               data-content="<audio controls preload='none'><source src='{{ link }}' type='audio/mpeg'></audio>"
+               target="_blank"><i
                     class="fa fa-volume-up fa-fw"></i></a>
         {% elif what == 'slides' %}
             <a href="{{ link }}" class="btn btn-default" data-toggle="tooltip" data-placement="right"
@@ -117,17 +119,6 @@
             </div>
             <div class="hidden-xs">
                 <p class="session-location">
-                    {# {% if session.state == 'pending' %}#}
-                    {#     <span class="detail-status label label-warning">{{_("Under Review")}}</span>#}
-                    {# {% elif session.state == 'draft' %}#}
-                    {#     <span class="detail-status label label-warning">{{_("Draft")}}</span>#}
-                    {# {% elif session.state == 'accepted' %}#}
-                    {#     <span class="detail-status label label-success">{{_("Accepted")}}</span>#}
-                    {# {% elif session.state == 'rejected' %}#}
-                    {#     <span class="detail-status label label-danger">{{_("Rejected")}}</span>#}
-                    {# {% else %}#}
-                    {#     <span class="detail-status label label-info">N/A</span>#}
-                    {# {% endif %}#}
                     {{ session.microlocation.name }} <i class="fa fa-map-marker fa-fw"></i><br>
                     {{ session.start_time.strftime('%I:%M %p') }} <i class="fa fa-clock-o fa-fw"></i>
                 </p>

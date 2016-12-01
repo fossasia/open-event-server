@@ -1,20 +1,19 @@
+from flask import request, redirect, url_for, jsonify
 from flask.ext.restplus import abort
 from flask_admin import BaseView, expose
-
 from flask_restplus import marshal
+
 from app.api.events import EVENT
 from app.api.helpers.helpers import get_paginated_list, get_object_list
+from app.helpers.data import DataGetter
 from app.helpers.flask_helpers import deslugify
 from app.helpers.helpers import get_date_range
-from app.helpers.data import DataGetter
 from app.models.event import Event
-from flask import request, redirect, url_for, jsonify
-
 
 RESULTS_PER_PAGE = 10
 
-def get_paginated(**kwargs):
 
+def get_paginated(**kwargs):
     current_page = request.args.get('page')
     if current_page:
         current_page = int(current_page) - 1
@@ -36,13 +35,14 @@ def get_paginated(**kwargs):
             'results': []
         }
 
+
 def erase_from_dict(d, k):
     if isinstance(d, dict):
         if k in d.keys():
             d.pop(k)
 
-class ExploreView(BaseView):
 
+class ExploreView(BaseView):
     @expose('/', methods=('GET', 'POST'))
     def explore_base(self):
         return redirect(url_for('admin.browse_view'))

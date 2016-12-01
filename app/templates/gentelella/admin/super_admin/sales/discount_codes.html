@@ -23,23 +23,23 @@
 {% endblock %}
 
 {% block inner_content %}
-    <h3 class="pull-left">{{_("Discount Codes")}} </h3>
+    <h3 class="pull-left">{{ _("Discount Codes") }} </h3>
     <a class="btn btn-info pull-right"
        href="{{ url_for('sadmin_sales.discount_codes_create') }}"><i
-            class="fa fa-plus fa-fw"></i> {{_("Create a discount")}}</a>
+            class="fa fa-plus fa-fw"></i> {{ _("Create a discount") }}</a>
     <br>
     <br>
     <br>
     <div id="toolbar-holder" style="display: none;">
         <div class="btn-group pull-left" data-toggle="buttons">
             <label class="btn btn-default active btn-responsive">
-                <input type="radio" name="show_state" autocomplete="off" value="all" checked> {{_("All")}}
+                <input type="radio" name="show_state" autocomplete="off" value="all" checked> {{ _("All") }}
             </label>
             <label class="btn btn-default btn-responsive">
-                <input type="radio" name="show_state" autocomplete="off" value="active"> {{_("Active")}}
+                <input type="radio" name="show_state" autocomplete="off" value="active"> {{ _("Active") }}
             </label>
             <label class="btn btn-default btn-responsive">
-                <input type="radio" name="show_state" autocomplete="off" value="inactive"> {{_("Inactive")}}
+                <input type="radio" name="show_state" autocomplete="off" value="inactive"> {{ _("Inactive") }}
             </label>
         </div>
     </div>
@@ -48,11 +48,11 @@
         <thead>
         <tr>
             <th>#</th>
-            <th>{{_("Discount Code")}}</th>
-            <th>{{_("Discount Per Ticket")}}</th>
-            <th>{{_("Validity")}}</th>
-            <th>{{_("Status")}}</th>
-            <th>{{_("Action")}}</th>
+            <th>{{ _("Discount Code") }}</th>
+            <th>{{ _("Discount Per Ticket") }}</th>
+            <th>{{ _("Validity") }}</th>
+            <th>{{ _("Status") }}</th>
+            <th>{{ _("Action") }}</th>
         </tr>
         </thead>
         <tbody>
@@ -77,9 +77,9 @@
                 </td>
                 <td>
                     {% if discount_code.is_active %}
-                        <span class="label label-success">{{_("Active")}}</span>
+                        <span class="label label-success">{{ _("Active") }}</span>
                     {% else %}
-                        <span class="label label-warning">{{_("Inactive")}}</span>
+                        <span class="label label-warning">{{ _("Inactive") }}</span>
                     {% endif %}
                 </td>
                 <td>
@@ -89,15 +89,15 @@
                                 class="fa fa-pencil fa-fw"></i></a>
                         {% if discount_code.is_active %}
                             <a class="btn btn-default" data-toggle="tooltip" title="Deactivate"
-                             href="{{ url_for('sadmin_sales.discount_codes_toggle', discount_code_id=discount_code.id) }}">
+                               href="{{ url_for('sadmin_sales.discount_codes_toggle', discount_code_id=discount_code.id) }}">
                                 <i class="fa fa-times fa-fw"></i></a>
                         {% else %}
                             <a class="btn btn-default" data-toggle="tooltip" title="Activate"
-                             href="{{ url_for('sadmin_sales.discount_codes_toggle', discount_code_id=discount_code.id) }}">
+                               href="{{ url_for('sadmin_sales.discount_codes_toggle', discount_code_id=discount_code.id) }}">
                                 <i class="fa fa-check fa-fw"></i></a>
                         {% endif %}
                         <a class="btn btn-default" data-toggle="tooltip" title="Delete"
-                         href="{{ url_for('sadmin_sales.discount_codes_delete', discount_code_id=discount_code.id) }}"><i
+                           href="{{ url_for('sadmin_sales.discount_codes_delete', discount_code_id=discount_code.id) }}"><i
                                 class="fa fa-trash fa-fw"></i></a>
                     </div>
                 </td>
@@ -115,17 +115,17 @@
     <script type="text/javascript">
 
         $.fn.dataTable.ext.search.push(
-                function (settings, data) {
-                    var user_option = $("input[name=show_state]:checked").val();
-                    console.log(data);
-                    var state = data[4].trim().toLowerCase() || 'inactive';
-                    if (user_option === "all") {
-                        return true;
-                    } else if (user_option === state) {
-                        return true;
-                    }
-                    return false;
+            function (settings, data) {
+                var user_option = $("input[name=show_state]:checked").val();
+                console.log(data);
+                var state = data[4].trim().toLowerCase() || 'inactive';
+                if (user_option === "all") {
+                    return true;
+                } else if (user_option === state) {
+                    return true;
                 }
+                return false;
+            }
         );
 
         var table = $('.with-datatable').DataTable({

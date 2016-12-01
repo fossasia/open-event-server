@@ -11,11 +11,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/jt.timepicker/jquery.timepicker.css') }}">
     <link rel="stylesheet"
           href="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}">
-
-
-    <style type="text/css">
-
-    </style>
 {% endblock %}
 
 {% block inner_content %}
@@ -23,7 +18,7 @@
     <div id="new-discount-form-holder" class="col-md-7">
         <form method="post" data-toggle="validator" id="new-discount-form" data-delay="100" data-disable="true">
             <div class="form-group has-feedback">
-                <label for="code">{{_("Discount Code")}} <span class="required">*</span></label>
+                <label for="code">{{ _("Discount Code") }} <span class="required">*</span></label>
                 <input type="text" name="code" class="form-control" id="code" placeholder="Discount Code"
                        data-remote="{{ url_for('event_ticket_sales.check_duplicate_discount_code', event_id=event.id, current=discount_code.id) }}"
                        pattern="^[\w-]+$"
@@ -37,7 +32,7 @@
             </div>
             <div class="col-md-6" style="padding-left: 0;">
                 <div class="form-group has-feedback">
-                    <label for="code">{{_("Enter Discount")}} <span class="required">*</span></label>
+                    <label for="code">{{ _("Enter Discount") }} <span class="required">*</span></label>
                     <div class="input-group">
                     <span class="input-group-addon radio">
                         <label style="margin-bottom: -10px;">
@@ -49,6 +44,7 @@
                                {% if discount_code and discount_code.type != 'amount' %}disabled name="__value"
                                {% else %}name="value" {% endif %}
                                value="
+
                                        {% if discount_code and discount_code.type == 'amount' %}{{ discount_code.value }}{% endif %}">
                     </div>
                     <i class="glyphicon form-control-feedback" aria-hidden="true" style="margin-top: 14px;"></i>
@@ -67,6 +63,7 @@
                                {% if not discount_code or (discount_code and discount_code.type != 'percent') %}disabled
                                required name="__value"{% else %} name="value" {% endif %}
                                value="
+
                                        {% if discount_code and discount_code.type == 'percent' %}{{ discount_code.value }}{% endif %}">
                     </div>
                     <i class="glyphicon form-control-feedback" aria-hidden="true" style="margin-top: 6px;"></i>
@@ -76,7 +73,8 @@
             </div>
             <div class="clearfix"></div>
             <div class="form-group has-feedback col-md-6" style="padding-left: 0;">
-                <label for="tickets_number">{{_("Number of discount tickets")}} <span class="required">*</span></label>
+                <label for="tickets_number">{{ _("Number of discount tickets") }} <span
+                        class="required">*</span></label>
                 <input type="number" name="tickets_number" class="form-control" id="tickets_number"
                        required
                        value="{{ discount_code.tickets_number | default('', true) }}">
@@ -85,31 +83,32 @@
             </div>
             <div class="clearfix"></div>
             <div class="form-group has-feedback">
-                <label for="code">{{_("Status")}} <span class="required">*</span></label>
+                <label for="code">{{ _("Status") }} <span class="required">*</span></label>
                 <div class="radio">
                     <label>
                         <input type="radio" name="status" id="status_active" value="active"
                                {% if not discount_code or discount_code.is_active %}checked{% endif %} required>
-                        {{_("Active")}}
+                        {{ _("Active") }}
                     </label>
                 </div>
                 <div class="radio">
                     <label>
                         <input type="radio" name="status" id="status_inactive" value="in_active"
                                {% if discount_code and not discount_code.is_active %}checked{% endif %} required>
-                        {{_("Not Active")}}
+                        {{ _("Not Active") }}
                     </label>
                 </div>
                 <i class="glyphicon form-control-feedback" aria-hidden="true" style="margin-top: 14px;"></i>
                 <div class="help-block with-errors"></div>
             </div>
             <div class="form-group has-feedback col-md-6" style="padding-left: 0;">
-                <label for="code">{{_("Select Ticket(s) applied to the discount code")}} <span class="required">*</span></label>
+                <label for="code">{{ _("Select Ticket(s) applied to the discount code") }} <span
+                        class="required">*</span></label>
                 <div class="checkbox">
                     <label>
                         <input type="checkbox" value="all" class="all-tickets"
                                {% if not discount_code %}checked{% endif %}>
-                        {{_("Select all Tickets Type")}}
+                        {{ _("Select all Tickets Type") }}
                     </label>
                 </div>
                 <hr>
@@ -128,23 +127,24 @@
             </div>
             <div class="clearfix"></div>
             <hr>
-            <a class="btn btn-link" data-toggle="collapse" href="#more-options" style="padding-left: 0;">{{_("Show other options")}} <i class="fa fa-chevron-down"></i> </a>
+            <a class="btn btn-link" data-toggle="collapse" href="#more-options"
+               style="padding-left: 0;">{{ _("Show other options") }} <i class="fa fa-chevron-down"></i> </a>
             <div class="collapse" id="more-options">
 
                 <div class="form-group has-feedback">
-                    <label for="code">{{_("Set the min. and max. quantity allowed to purchase per order (optional)")}}</label>
+                    <label for="code">{{ _("Set the min. and max. quantity allowed to purchase per order (optional)") }}</label>
                     <div class="row">
                         <div class="col-md-3">
                             <div class="input-group">
-                                <span class="input-group-addon">{{_("Min")}}</span>
-                                <input type="number" class="form-control" name="min_quantity"
+                                <span class="input-group-addon">{{ _("Min") }}</span>
+                                <input title="minimum quantity" type="number" class="form-control" name="min_quantity"
                                        value="{{ discount_code.min_quantity | default('', true) }}">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="input-group">
-                                <span class="input-group-addon">{{_("Max")}}</span>
-                                <input type="number" class="form-control" name="max_quantity"
+                                <span class="input-group-addon">{{ _("Max") }}</span>
+                                <input title="maximum quantity" type="number" class="form-control" name="max_quantity"
                                        value="{{ discount_code.max_quantity | default('', true) }}">
                             </div>
                         </div>
@@ -153,11 +153,11 @@
                     <div class="help-block with-errors"></div>
                 </div>
                 <div class="form-group has-feedback">
-                    <label for="code">{{_("Validity period (optional)")}}</label>
+                    <label for="code">{{ _("Validity period (optional)") }}</label>
                     <div class="row event-date-picker">
                         <div class="col-md-5">
                             <div class="item form-group">
-                                <label>{{_("Valid from")}}</label>
+                                <label>{{ _("Valid from") }}</label>
                                 <br>
                                 <div class="col-xs-8" style="padding-left: 0;">
                                     <input name="start_date"
@@ -177,7 +177,7 @@
                         </div>
                         <div class="col-md-5">
                             <div class="item form-group">
-                                <label>{{_("Expires on")}}</label>
+                                <label>{{ _("Expires on") }}</label>
                                 <br>
                                 <div class="col-xs-8" style="padding-left: 0;">
                                     <input name="end_date"
@@ -204,8 +204,8 @@
             <div class="clearfix"></div>
             <div class="btn-group btn-group-lg" role="group">
                 <a type="button" class="btn btn-default"
-                   href="{{ url_for('event_ticket_sales.discount_codes_view', event_id=event.id) }}">{{_("Cancel")}}</a>
-                <button type="submit" class="btn btn-success">{{_("Save Discount")}}</button>
+                   href="{{ url_for('event_ticket_sales.discount_codes_view', event_id=event.id) }}">{{ _("Cancel") }}</a>
+                <button type="submit" class="btn btn-success">{{ _("Save Discount") }}</button>
             </div>
 
         </form>

@@ -1,30 +1,28 @@
 from flask.ext.restplus import Namespace, reqparse
 from sqlalchemy.orm.collections import InstrumentedList
 
+from app.helpers.data import record_activity, save_to_db
+from app.helpers.data_getter import DataGetter
 from app.helpers.notification_email_triggers import trigger_new_session_notifications, \
     trigger_session_schedule_change_notifications
 from app.helpers.notification_email_triggers import trigger_session_state_change_notifications
-from app.models.session import Session as SessionModel
-from app.models.track import Track as TrackModel
 from app.models.microlocation import Microlocation as MicrolocationModel
-from app.models.speaker import Speaker as SpeakerModel
+from app.models.session import Session as SessionModel
 from app.models.session_type import SessionType as SessionTypeModel
-from app.helpers.data import record_activity, save_to_db
-from app.helpers.data_getter import DataGetter
-
-from .helpers.helpers import save_db_model, get_object_in_event, \
-    model_custom_form, requires_auth, parse_args
+from app.models.speaker import Speaker as SpeakerModel
+from app.models.track import Track as TrackModel
+from .helpers import custom_fields as fields
 from .helpers.helpers import (
     can_create,
     can_update,
     can_delete
 )
-from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO,\
+from .helpers.helpers import save_db_model, get_object_in_event, \
+    model_custom_form, requires_auth, parse_args
+from .helpers.special_fields import SessionLanguageField, SessionStateField
+from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
 from .helpers.utils import Resource, ETAG_HEADER_DEFN
-from .helpers import custom_fields as fields
-from .helpers.special_fields import SessionLanguageField, SessionStateField
-
 
 api = Namespace('sessions', description='Sessions', path='/')
 
@@ -108,7 +106,7 @@ class SessionDAO(ServiceDAO):
 
     def _delete_fields(self, data):
         data = self._del(data, ['speaker_ids', 'track_id',
-                         'microlocation_id', 'session_type_id'])
+                                'microlocation_id', 'session_type_id'])
         # convert datetime fields
         for _ in ['start_time', 'end_time']:
             if _ in data:
@@ -158,7 +156,7 @@ class SessionDAO(ServiceDAO):
                 trigger_new_session_notifications(session.id, event_id=event_id)
 
             if (data['state'] == 'accepted' and session.state != 'accepted') \
-                    or (data['state'] == 'rejected' and session.state != 'rejected'):
+                or (data['state'] == 'rejected' and session.state != 'rejected'):
                 trigger_session_state_change_notifications(obj, event_id=event_id, state=data['state'])
 
         if session.start_time != obj.start_time or session.end_time != obj.end_time:
@@ -205,6 +203,7 @@ SESSIONS_PARAMS = {
         'description': 'Order by a field, example "start_time.asc" or "end_time.desc"'
     }
 }
+
 
 # #########
 # Resources

@@ -53,7 +53,7 @@ class Order(db.Model):
                  quantity=None,
                  amount=None,
                  address=None,
-                 city=city,
+                 city=None,
                  state=None,
                  country=None,
                  zipcode=None,
@@ -65,6 +65,7 @@ class Order(db.Model):
         self.identifier = identifier
         self.quantity = quantity
         self.amount = amount
+        self.city = city
         self.address = address
         self.state = state
         self.country = country

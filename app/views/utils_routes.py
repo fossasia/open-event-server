@@ -1,21 +1,21 @@
+import json
 import os
 
+import geoip2.database
+from flask import Blueprint
 from flask import jsonify, url_for, redirect, request, send_from_directory, \
     render_template, make_response
 from flask.ext import login
 from flask.ext.migrate import upgrade
+from requests.exceptions import HTTPError
 
 from app.helpers.flask_helpers import get_real_ip, slugify
-from ..helpers.helpers import get_serializer
-from ..helpers.data_getter import DataGetter
-from ..helpers.data import save_to_db, uploaded_file_provided_by_url
-from flask import Blueprint
 from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth, TwitterOAuth
-from requests.exceptions import HTTPError
-from ..helpers.data import get_google_auth, create_user_oauth, get_facebook_auth, user_logged_in, get_instagram_auth
-import geoip2.database
-import json
 from app.helpers.storage import upload
+from ..helpers.data import get_google_auth, create_user_oauth, get_facebook_auth, user_logged_in, get_instagram_auth
+from ..helpers.data import save_to_db, uploaded_file_provided_by_url
+from ..helpers.data_getter import DataGetter
+from ..helpers.helpers import get_serializer
 
 app = Blueprint('', __name__)
 

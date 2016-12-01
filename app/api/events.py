@@ -1,29 +1,28 @@
-from flask.ext.restplus import Namespace, reqparse, marshal
 from flask import g
+from flask.ext.restplus import Namespace, reqparse, marshal
 
+from app.api.attendees import TICKET
 from app.api.microlocations import MICROLOCATION
 from app.api.sessions import SESSION
 from app.api.speakers import SPEAKER
 from app.api.sponsors import SPONSOR
-from app.api.attendees import TICKET
 from app.api.tracks import TRACK
-from app.models.event import Event as EventModel
-from app.models.social_link import SocialLink as SocialLinkModel
-from app.models.users_events_roles import UsersEventsRoles
-from app.models.event_copyright import EventCopyright
-from app.models.call_for_papers import CallForPaper as EventCFS
-from app.models.role import Role
-from app.models.user import ORGANIZER
 from app.helpers.data import save_to_db, record_activity
-
+from app.models.call_for_papers import CallForPaper as EventCFS
+from app.models.event import Event as EventModel
+from app.models.event_copyright import EventCopyright
+from app.models.role import Role
+from app.models.social_link import SocialLink as SocialLinkModel
+from app.models.user import ORGANIZER
+from app.models.users_events_roles import UsersEventsRoles
+from helpers.special_fields import EventTypeField, EventTopicField, \
+    EventPrivacyField, EventSubTopicField, EventStateField
+from .helpers import custom_fields as fields
 from .helpers.helpers import requires_auth, parse_args, \
     can_access, fake_marshal_with, fake_marshal_list_with, erase_from_dict
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, BaseDAO, ServiceDAO
 from .helpers.utils import Resource, ETAG_HEADER_DEFN
-from .helpers import custom_fields as fields
-from helpers.special_fields import EventTypeField, EventTopicField, \
-    EventPrivacyField, EventSubTopicField, EventStateField
 
 api = Namespace('events', description='Events')
 
@@ -99,8 +98,8 @@ EVENT = api.model('Event', {
     'call_for_papers': fields.Nested(EVENT_CFS, allow_null=True),
     'version': fields.Nested(EVENT_VERSION),
     'has_session_speakers': fields.Boolean(default=False),
-    'thumbnail' : fields.Uri(),
-    'large' : fields.Uri()
+    'thumbnail': fields.Uri(),
+    'large': fields.Uri()
 })
 
 EVENT_COMPLETE = api.clone('EventComplete', EVENT, {
@@ -187,7 +186,7 @@ class EventDAO(BaseDAO):
         # update copyright if key exists
         if 'copyright' in payload:
             CopyrightDAO.update(event.copyright.id, payload['copyright']
-                                if payload['copyright'] else {})
+            if payload['copyright'] else {})
             payload.pop('copyright')
         # update cfs
         if 'call_for_papers' in payload:
@@ -257,6 +256,7 @@ def get_extended_event_model(includes=None):
     if 'tickets' in includes:
         included_fields['tickets'] = fields.List(fields.Nested(TICKET), attribute='tickets')
     return EVENT.extend('ExtendedEvent', included_fields)
+
 
 # DEFINE RESOURCES
 

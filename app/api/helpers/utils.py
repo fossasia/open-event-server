@@ -5,18 +5,17 @@ from flask import request
 from flask.ext.restplus import Resource as RestplusResource
 from flask_restplus import Model, fields, reqparse
 
-from .helpers import get_object_list, get_object_or_404, get_object_in_event, \
-    create_model, validate_payload, delete_model, update_model, \
-    handle_extra_payload, get_paginated_list, fix_attribute_names
-from app.models.event import Event as EventModel
 from app.helpers.data import update_version
-
+from app.models.event import Event as EventModel
 from .error_docs import (
     notfound_error_model,
     notauthorized_error_model,
     validation_error_model,
     invalidservice_error_model,
 )
+from .helpers import get_object_list, get_object_or_404, get_object_in_event, \
+    create_model, validate_payload, delete_model, update_model, \
+    handle_extra_payload, get_paginated_list, fix_attribute_names
 
 DEFAULT_PAGE_START = 1
 DEFAULT_PAGE_LIMIT = 20
@@ -192,6 +191,7 @@ class ServiceDAO(BaseDAO):
     Data Access Object for service models like microlocations,
     speakers and so.
     """
+
     def get(self, event_id, sid):
         return get_object_in_event(self.model, sid, event_id)
 
@@ -224,6 +224,7 @@ class ServiceDAO(BaseDAO):
         item = delete_model(self.model, service_id, event_id=event_id)
         self.update_version(event_id)
         return item
+
 
 # store task results in case of testing
 # state and info

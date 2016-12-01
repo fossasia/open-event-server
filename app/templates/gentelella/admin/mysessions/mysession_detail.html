@@ -30,10 +30,10 @@
                     {% endif %}
                     <div class="btn-group pull-right">
                         {% if session.state == 'pending' or session.state == 'accepted' or session.state == 'rejected' %}
-                        <a href="{{ url_for('my_sessions.withdraw_session_view',session_id=session.id) }}"
-                           class="btn btn-danger ">
-                            {{ _("Withdraw Proposal") }}
-                        </a>
+                            <a href="{{ url_for('my_sessions.withdraw_session_view',session_id=session.id) }}"
+                               class="btn btn-danger ">
+                                {{ _("Withdraw Proposal") }}
+                            </a>
                         {% endif %}
                         <a href="{{ url_for('my_sessions.process_session_view',session_id=session.id) }}"
                            class="btn btn-info">

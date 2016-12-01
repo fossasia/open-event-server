@@ -6,9 +6,9 @@ from flask import request
 from flask import url_for
 from flask_admin import BaseView, expose
 
-from app.helpers.data import delete_from_db
 from app import get_settings
 from app.helpers.cache import cache
+from app.helpers.data import delete_from_db
 from app.helpers.data import save_to_db
 from app.helpers.data_getter import DataGetter
 from app.helpers.ticketing import TicketingManager
@@ -25,10 +25,6 @@ class TicketSalesView(BaseView):
     def display_ticket_stats(self, event_id):
         event = DataGetter.get_event(event_id)
         orders = TicketingManager.get_orders(event_id)
-
-        completed_count = 0
-        completed_amount = 0
-        tickets_count = 0
 
         orders_summary = {
             'completed': {
