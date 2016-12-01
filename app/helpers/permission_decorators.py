@@ -110,7 +110,7 @@ def can_access(f):
         url = request.url
         if user.is_staff:
             return f(*args, **kwargs)
-        if 'events/' + event_id + '/' in url:
+        if 'events/' + str(event_id) + '/' in url:
             if user.has_role(event_id):
                 return f(*args, **kwargs)
             abort(403)
@@ -134,7 +134,7 @@ def can_access(f):
                     return f(*args, **kwargs)
             abort(403)
         if '/edit/' in url:
-            if 'events/' + event_id + '/edit/' in url:
+            if 'events/' + str(event_id) + '/edit/' in url:
                 if user.is_organizer(event_id) or user.is_coorganizer(
                         event_id):
                     return f(*args, **kwargs)
@@ -155,11 +155,11 @@ def can_access(f):
                     return f(*args, **kwargs)
             abort(403)
         if '/delete/' in url or '/trash/' in url:
-            if 'events/' + event_id + '/delete/' in url:
+            if 'events/' + str(event_id) + '/delete/' in url:
                 if user.is_organizer(event_id) or user.is_coorganizer(
                         event_id):
                     return f(*args, **kwargs)
-            if 'events/' + event_id + '/trash/' in url:
+            if 'events/' + str(event_id) + '/trash/' in url:
                 if user.is_organizer(event_id) or user.is_coorganizer(
                         event_id):
                     return f(*args, **kwargs)
