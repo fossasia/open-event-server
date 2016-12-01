@@ -1,14 +1,13 @@
 from flask import request
 from flask_admin import expose
-from super_admin_base import SuperAdminBaseView, SETTINGS
-
-from app.settings import get_settings, set_settings
-from app.helpers.data_getter import DataGetter
-from app.helpers.data import save_to_db, delete_from_db
 from werkzeug.datastructures import ImmutableMultiDict
-from app.views.admin.models_views.events import EventsView
 
+from app.helpers.data import save_to_db, delete_from_db
+from app.helpers.data_getter import DataGetter
 from app.models.image_sizes import ImageSizes
+from app.settings import get_settings, set_settings
+from app.views.admin.models_views.events import EventsView
+from super_admin_base import SuperAdminBaseView, SETTINGS
 
 
 class SuperAdminSettingsView(SuperAdminBaseView):
@@ -123,8 +122,3 @@ class SuperAdminSettingsView(SuperAdminBaseView):
             event_image_sizes=event_image_sizes,
             profile_image_sizes=profile_image_sizes
         )
-
-    # @expose('/update', methods=('POST'))
-    # def update_view(self):
-    #     print request.form
-    #     # set_settings(request.form[])

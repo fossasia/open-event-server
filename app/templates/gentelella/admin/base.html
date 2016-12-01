@@ -26,7 +26,8 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/custom/footer.css') }}"/>
         <link href="{{ url_for('static', filename='admin/lib/summernote/dist/summernote.css') }}" rel="stylesheet">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/bootstrap-responsive-tabs.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap-social/bootstrap-social.css') }}">
+        <link rel="stylesheet"
+              href="{{ url_for('static', filename='admin/lib/bootstrap-social/bootstrap-social.css') }}">
     {% endblock %}
 
     {% block head_js %}
@@ -71,31 +72,31 @@
 </script>
 
 {% if current_user.is_authenticated and integrate_socketio %}
-<script type="text/javascript">
-    $(document).ready(function() {
-        var namespace = '/notifs';
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var namespace = '/notifs';
 
-        var socket = io.connect(location.protocol + "//" + location.host + namespace, {reconnection: false});
+            var socket = io.connect(location.protocol + "//" + location.host + namespace, {reconnection: false});
 
-        socket.on('notifs-response', function(msg) {
-            console.log(msg.meta);
-            if (msg.hasOwnProperty("notif_count") && msg.hasOwnProperty("notifs")) {
-                $("#notif_count").text(msg.notif_count);
-                $("#notif-menu li.notif-menu-li").each(function(i, li) {
-                    $(li).remove();
-                });
-                var html = '';
-                $.each(msg.notifs, function(i, notif) {
-                    html += '<li class="notif-menu-li"><a><span class="message">'+ notif.title +
-                        '</span><span class="time">' + notif.received_at + '</span><span class="mark-as-read btn btn-default btn-xs"' +
-                        ' data-markread="' + notif.mark_read + '">Mark as read</span>';
-                });
-                $("ul#notif-menu li:first-child").after(html);
-                setATagsInNotifMenuDropDown(notificationViewPath);
-            }
+            socket.on('notifs-response', function (msg) {
+                console.log(msg.meta);
+                if (msg.hasOwnProperty("notif_count") && msg.hasOwnProperty("notifs")) {
+                    $("#notif_count").text(msg.notif_count);
+                    $("#notif-menu").find("li.notif-menu-li").each(function (i, li) {
+                        $(li).remove();
+                    });
+                    var html = '';
+                    $.each(msg.notifs, function (i, notif) {
+                        html += '<li class="notif-menu-li"><a><span class="message">' + notif.title +
+                            '</span><span class="time">' + notif.received_at + '</span><span class="mark-as-read btn btn-default btn-xs"' +
+                            ' data-markread="' + notif.mark_read + '">Mark as read</span>';
+                    });
+                    $("ul#notif-menu li:first-child").after(html);
+                    setATagsInNotifMenuDropDown(notificationViewPath);
+                }
+            });
         });
-    });
-</script>
+    </script>
 {% endif %}
 </body>
 </html>

@@ -1,21 +1,21 @@
-from sqlalchemy import event, desc
 from datetime import datetime
 
 import humanize
-from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from flask import url_for
+from sqlalchemy import event, desc
+from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from app.models.session import Session
 from app.models.speaker import Speaker
-from . import db
 from user_detail import UserDetail
+from . import db
+from .notifications import Notification
+from .permission import Permission
 from .role import Role
 from .service import Service
-from .permission import Permission
 from .system_role import UserSystemRole
 from .user_permissions import UserPermission
 from .users_events_roles import UsersEventsRoles as UER
-from .notifications import Notification
 
 # System-wide
 ADMIN = 'admin'
@@ -84,7 +84,7 @@ class User(db.Model):
         """
         attendee_role = Role.query.filter_by(name=ATTENDEE).first()
         uer = UER.query.filter(UER.user == self, UER.event_id == event_id,
-            UER.role != attendee_role).first()
+                               UER.role != attendee_role).first()
         if uer is None:
             return False
         else:
@@ -95,8 +95,8 @@ class User(db.Model):
         """
         role = Role.query.filter_by(name=role_name).first()
         uer = UER.query.filter_by(user=self,
-                                               event_id=event_id,
-                                               role=role).first()
+                                  event_id=event_id,
+                                  role=role).first()
         if not uer:
             return False
         else:
@@ -140,7 +140,7 @@ class User(db.Model):
         service = Service.query.filter_by(name=service_name).first()
 
         uer_querylist = UER.query.filter_by(user=self,
-                                                         event_id=event_id)
+                                            event_id=event_id)
         for uer in uer_querylist:
             role = uer.role
             perm = Permission.query.filter_by(role=role,

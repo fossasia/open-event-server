@@ -1,4 +1,5 @@
 from flask.ext.scrypt import check_password_hash
+
 from app.models.user import User
 
 

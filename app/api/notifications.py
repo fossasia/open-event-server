@@ -1,16 +1,16 @@
 from flask.ext.restplus import Namespace
 
-from app.models.notifications import Notification as NotificationModel
 from app.helpers.data import DataManager
 from app.helpers.data_getter import DataGetter
+from app.models.notifications import Notification as NotificationModel
+from .helpers import custom_fields as fields
 from .helpers.helpers import (
     can_create,
     requires_auth
 )
 from .helpers.utils import PAGINATED_MODEL, ServiceDAO, \
-     POST_RESPONSES
+    POST_RESPONSES
 from .helpers.utils import Resource
-from .helpers import custom_fields as fields
 
 api = Namespace('notifications', description='Notifications', path='/')
 
@@ -46,7 +46,6 @@ DAO = NotificationDAO(NotificationModel, NOTIFICATION_POST)
 
 @api.route('/events/<int:event_id>/notifications')
 class UserNotifications(Resource):
-
     @requires_auth
     @can_create(DAO)
     @api.doc('create_user_notification', responses=POST_RESPONSES)

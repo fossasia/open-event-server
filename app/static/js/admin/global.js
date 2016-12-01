@@ -19,7 +19,7 @@ var summernoteConfig = {
 
 function imgError(image, transparent) {
     image.onerror = "";
-    if(transparent) {
+    if (transparent) {
         image.src = '/static/img/trans_white.png';
     } else {
         image.src = '/static/placeholders/avatar.png';
@@ -117,27 +117,29 @@ var createSnackbar = (function () {
 })();
 
 
-$.oauthpopup = function(options)
-{
-    options.windowName = options.windowName ||  'ConnectWithOAuth'; // should not include space for IE
+$.oauthpopup = function (options) {
+    options.windowName = options.windowName || 'ConnectWithOAuth'; // should not include space for IE
     options.windowOptions = options.windowOptions || 'location=0,status=0,width=800,height=400';
-    options.callback = options.callback || function(){ window.location.reload(); };
+    options.callback = options.callback || function () {
+            window.location.reload();
+        };
     var that = this;
     that._oauthWindow = window.open(options.path, options.windowName, options.windowOptions);
-    that._oauthInterval = window.setInterval(function(){
+    that._oauthInterval = window.setInterval(function () {
         if (that._oauthWindow.closed) {
             window.clearInterval(that._oauthInterval);
             options.callback();
         }
     }, 1000);
 
-    var responsePoll = setInterval(function() {
+    var responsePoll = setInterval(function () {
         try {
-            if(typeof that._oauthWindow.oauth_response !== 'undefined') {
+            if (typeof that._oauthWindow.oauth_response !== 'undefined') {
                 window.oauth_response = that._oauthWindow.oauth_response;
                 clearInterval(responsePoll);
             }
         }
-        catch (error) { }
+        catch (error) {
+        }
     }, 250);
 };

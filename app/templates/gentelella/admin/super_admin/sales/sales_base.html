@@ -1,7 +1,7 @@
 {% extends 'gentelella/admin/super_admin/dashboard.html' %}
 
 {% block title %}
-    {{_("Sales")}}
+    {{ _("Sales") }}
 {% endblock %}
 
 {% set active_page = "sales" %}
@@ -31,7 +31,9 @@
         <div class="col-md-2 col-xs-12">
             <div class="list-group">
                 {% for href, id, caption in side_bar %}
-                    <a class="list-group-item {% if id == active_side_page %}active{% endif %}" href="{{ href|e }}">{{ caption|e }} <i class="fa fa-caret-right fa-lg pull-right" style="margin-top: 3px;"></i> </a>
+                    <a class="list-group-item {% if id == active_side_page %}active{% endif %}"
+                       href="{{ href|e }}">{{ caption|e }} <i class="fa fa-caret-right fa-lg pull-right"
+                                                              style="margin-top: 3px;"></i> </a>
                 {% endfor %}
             </div>
 

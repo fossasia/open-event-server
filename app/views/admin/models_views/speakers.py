@@ -1,21 +1,22 @@
 import json
-from uuid import uuid4
+import shutil
 import time
 from os import path
+from uuid import uuid4
+
 import PIL
 from PIL import Image
-import shutil
-
+from flask import request, url_for, redirect, flash, jsonify
+from flask.ext import login
 from flask.ext.admin import BaseView
 from flask.ext.restplus import abort
 from flask_admin import expose
-from flask.ext import login
-from flask import request, url_for, redirect, flash, jsonify
+
+from app.helpers.helpers import uploaded_file
+from app.helpers.storage import upload, upload_local, UPLOAD_PATHS, UploadedFile
 from ....helpers.data import delete_from_db, save_to_db
 from ....helpers.data_getter import DataGetter
-from app.helpers.storage import upload, upload_local, UPLOAD_PATHS, UploadedFile
 from ....models.image_sizes import ImageSizes
-from app.helpers.helpers import uploaded_file
 
 
 def get_speaker_or_throw(speaker_id):
@@ -26,7 +27,6 @@ def get_speaker_or_throw(speaker_id):
 
 
 class SpeakersView(BaseView):
-
     def is_accessible(self):
         return login.current_user.is_authenticated
 
@@ -35,7 +35,8 @@ class SpeakersView(BaseView):
             return redirect(url_for('admin.login_view', next=request.url))
         event = DataGetter.get_event(kwargs['event_id'])
         if not event.has_session_speakers:
-            return self.render('/gentelella/admin/event/info/enable_module.html', active_page='speakers', title='Speakers', event=event)
+            return self.render('/gentelella/admin/event/info/enable_module.html', active_page='speakers',
+                               title='Speakers', event=event)
 
     @expose('/')
     def index_view(self, event_id):
@@ -72,7 +73,7 @@ class SpeakersView(BaseView):
             if logo != '' and logo:
                 filename = '{}.png'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
-                           logo[len('/serve_static/'):])
+                                                 logo[len('/serve_static/'):])
                 logo_file = UploadedFile(filepath, filename)
                 print logo_file
                 logo = upload(logo_file, 'events/%d/speakers/%d/photo' % (int(event_id), int(speaker.id)))
@@ -89,12 +90,12 @@ class SpeakersView(BaseView):
                 save_to_db(image_sizes, "Image Sizes Saved")
                 filename = '{}.jpg'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
-                           logo[len('/serve_static/'):])
+                                                 logo[len('/serve_static/'):])
                 logo_file = UploadedFile(filepath, filename)
 
                 temp_img_file = upload_local(logo_file,
                                              'events/{event_id}/speakers/{id}/temp'.format(
-                                             event_id=int(event_id), id=int(speaker.id)))
+                                                 event_id=int(event_id), id=int(speaker.id)))
                 temp_img_file = temp_img_file.replace('/serve_', '')
 
                 basewidth = image_sizes.full_width
@@ -136,7 +137,7 @@ class SpeakersView(BaseView):
                         event_id=int(event_id), id=int(speaker.id)
                     ))
                 shutil.rmtree(path='static/media/' + 'events/{event_id}/speakers/{id}/temp'.format(
-                              event_id=int(event_id), id=int(speaker.id)))
+                    event_id=int(event_id), id=int(speaker.id)))
                 speaker.thumbnail = profile_thumbnail_url
                 speaker.small = profile_small_url
                 speaker.icon = profile_icon_url
@@ -178,7 +179,7 @@ class SpeakersView(BaseView):
             photo = upload(
                 photo_file,
                 UPLOAD_PATHS['speakers']['photo'].format(
-                        event_id=int(event_id), id=int(speaker.id)
+                    event_id=int(event_id), id=int(speaker.id)
                 ))
             speaker.photo = photo
             save_to_db(speaker)

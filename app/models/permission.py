@@ -7,7 +7,7 @@ class Permission(db.Model):
     __tablename__ = 'permissions'
     __table_args__ = (db.UniqueConstraint('role_id',
                                           'service_id',
-                                          name='role_service_uc'), )
+                                          name='role_service_uc'),)
 
     id = db.Column(db.Integer, primary_key=True)
 
@@ -38,11 +38,11 @@ class Permission(db.Model):
 
     def __repr__(self):
         return '<Perm %r for %r>' % (self.role,
-                                     self.service, )
+                                     self.service,)
 
     def __str__(self):
         return unicode(self).encode('utf-8')
 
     def __unicode__(self):
         return 'Perm %r for %r' % (self.role,
-                                   self.service, )
+                                   self.service,)

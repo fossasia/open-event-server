@@ -2,7 +2,6 @@ from datetime import datetime
 
 from . import db
 
-
 ACTIVITIES = {
     'create_user': 'User {user} created',
     'update_user': 'Profile of user {user} updated',

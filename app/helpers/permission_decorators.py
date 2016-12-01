@@ -1,13 +1,14 @@
-from flask.ext import login
 from functools import wraps
+
 from flask import request
+from flask.ext import login
 from flask.ext.restplus import abort
 
-from app.models.session import Session
 from app.models.microlocation import Microlocation
-from app.models.track import Track
+from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
+from app.models.track import Track
 
 
 def is_super_admin(f):
@@ -135,8 +136,7 @@ def can_access(f):
             abort(403)
         if '/edit/' in url:
             if 'events/' + str(event_id) + '/edit/' in url:
-                if user.is_organizer(event_id) or user.is_coorganizer(
-                        event_id):
+                if user.is_organizer(event_id) or user.is_coorganizer(event_id):
                     return f(*args, **kwargs)
             if 'session' in url:
                 if user.can_update(Session, event_id):
@@ -156,12 +156,10 @@ def can_access(f):
             abort(403)
         if '/delete/' in url or '/trash/' in url:
             if 'events/' + str(event_id) + '/delete/' in url:
-                if user.is_organizer(event_id) or user.is_coorganizer(
-                        event_id):
+                if user.is_organizer(event_id) or user.is_coorganizer(event_id):
                     return f(*args, **kwargs)
             if 'events/' + str(event_id) + '/trash/' in url:
-                if user.is_organizer(event_id) or user.is_coorganizer(
-                        event_id):
+                if user.is_organizer(event_id) or user.is_coorganizer(event_id):
                     return f(*args, **kwargs)
             if 'session' in url:
                 if user.can_delete(Session, event_id):

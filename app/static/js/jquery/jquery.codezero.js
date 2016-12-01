@@ -114,7 +114,7 @@ jQuery.fn.extend({
             if (typeof flag === 'undefined') {
                 isLoading = true;
             }
-            if(isLoading) {
+            if (isLoading) {
                 $(this).lockForm();
                 $(this).find("button[type=submit]").html("<i class='fa fa-refresh fa-spin fa-fw'></i> Processing");
             } else {

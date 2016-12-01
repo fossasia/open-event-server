@@ -97,11 +97,12 @@
         <div class="col-md-4 col-xs-12 col-sm-6 event-holder">
             <div class="thumbnail">
                 <img src='
-                            {% if event.background_url%}
+                            {% if event.background_url %}
                                 {{ event.thumbnail }}
-                            {% elif event.sub_topic%}
+                            {% elif event.sub_topic %}
 
-                                {% set event_placed = {'image_placed': False }%} {# tells whether the url has image url has been placed #}
+                                {% set event_placed = {'image_placed': False } %}
+                    {# tells whether the url has image url has been placed #}
                                 {% for custom_image in custom_placeholder %}
                                     {% if custom_image.name == event.sub_topic %}
                                         {{ custom_image.url }}
@@ -110,10 +111,10 @@
                                 {% endfor %}
 
                                 {% if not event_placed.image_placed %}
-                                    {{ url_for("static", filename="placeholders/" + placeholder_images[event.sub_topic])}}
+                                    {{ url_for("static", filename="placeholders/" + placeholder_images[event.sub_topic]) }}
                                 {% endif %}
                             {% elif event.topic %}
-                                {% set event_placed = {'image_placed': False }%}
+                                {% set event_placed = {'image_placed': False } %}
                                 {% for custom_image in custom_placeholder %}
                                     {% if custom_image.name == session.event.topic %}
                                         {{ custom_image.url }}
@@ -122,10 +123,10 @@
                                 {% endfor %}
 
                                 {% if not event_placed.image_placed %}
-                                    {{ url_for("static", filename="placeholders/" + placeholder_images[event.topic])}}
+                                    {{ url_for("static", filename="placeholders/" + placeholder_images[event.topic]) }}
                                 {% endif %}
                             {% else %}
-                                {% set event_placed = {'image_placed': False }%}
+                                {% set event_placed = {'image_placed': False } %}
                                 {% for custom_image in custom_placeholder %}
                                     {% if custom_image.name == "Other" %}
                                         {{ custom_image.url }}
@@ -133,7 +134,7 @@
                                     {% endif %}
                                 {% endfor %}
                                 {% if not event_placed.image_placed %}
-                                    {{ url_for("static", filename="placeholders/" + placeholder_images["Other"])}}
+                                    {{ url_for("static", filename="placeholders/" + placeholder_images["Other"]) }}
                                 {% endif %}
                             {% endif %}
                             ' onerror="imgError(this, true)">
@@ -167,9 +168,10 @@
             <div class="item active">
                 <div class="container">
                     <div class="carousel-caption">
-                        <h1>{{_("The simplest way to create events.")}}</h1>
+                        <h1>{{ _("The simplest way to create events.") }}</h1>
                         <p></p>
-                        <p><a class="btn btn-info btn-lg" href="/events/create/" role="button">{{_("Create Event")}}</a>
+                        <p><a class="btn btn-info btn-lg" href="/events/create/"
+                              role="button">{{ _("Create Event") }}</a>
                         </p>
                     </div>
                 </div>
@@ -188,39 +190,41 @@
                            placeholder="Location">
                 </div>
                 <div class="form-group col-sm-3 hidden-xs">
-                    <select class="form-control input-lg" name="period" style="width: 100%;">
-                        <option value="" selected="selected">{{_("All Dates")}}</option>
-                        <option value="Today">{{_("Today")}}</option>
-                        <option value="Tomorrow">{{_("Tomorrow")}}</option>
-                        <option value="This Week">{{_("This Week")}}</option>
-                        <option value="This Weekend">{{_("This Weekend")}}</option>
-                        <option value="Next Week">{{_("Next Week")}}</option>
-                        <option value="This Month">{{_("This Month")}}</option>
+                    <select class="form-control input-lg" name="period" style="width: 100%;" title="Period">
+                        <option value="" selected="selected">{{ _("All Dates") }}</option>
+                        <option value="Today">{{ _("Today") }}</option>
+                        <option value="Tomorrow">{{ _("Tomorrow") }}</option>
+                        <option value="This Week">{{ _("This Week") }}</option>
+                        <option value="This Weekend">{{ _("This Weekend") }}</option>
+                        <option value="Next Week">{{ _("Next Week") }}</option>
+                        <option value="This Month">{{ _("This Month") }}</option>
                     </select>
                 </div>
                 <button type="submit" class="col-sm-2 col-xs-2 btn btn-lg btn-info" style="margin-bottom: 0;">
-                    <span class="visible-xs"><i class="fa fa-search"></i> </span><span class="hidden-xs"> {{_("Search")}}</span>
+                    <span class="visible-xs"><i class="fa fa-search"></i> </span><span
+                        class="hidden-xs"> {{ _("Search") }}</span>
                 </button>
             </form>
             <div class="row">
-                <h3 class="section-header" style="margin-left: 10px; margin-bottom: 0;">{{_("Upcoming Events")}}</h3>
+                <h3 class="section-header" style="margin-left: 10px; margin-bottom: 0;">{{ _("Upcoming Events") }}</h3>
             </div>
             <div class="row">
                 {% for upcoming_event in upcoming_events %}
                     {{ event_box(upcoming_event) }}
                 {% else %}
-                    <div class="row no-data-message">{{_("No upcoming events available at this time")}}</div>
+                    <div class="row no-data-message">{{ _("No upcoming events available at this time") }}</div>
                 {% endfor %}
             </div>
 
             <div class="row">
-                <h3 class="section-header" style="margin-left: 10px; margin-bottom: 0;">{{_("Call for Speakers")}}</h3>
+                <h3 class="section-header"
+                    style="margin-left: 10px; margin-bottom: 0;">{{ _("Call for Speakers") }}</h3>
             </div>
             <div class="row">
                 {% for call_for_speakers_event in call_for_speakers_events %}
                     {{ event_box(call_for_speakers_event) }}
                 {% else %}
-                    <div class="row no-data-message">{{_("No call for speakers open at this time")}}</div>
+                    <div class="row no-data-message">{{ _("No call for speakers open at this time") }}</div>
                 {% endfor %}
             </div>
 
@@ -235,7 +239,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4>{{_("Share this event")}}</h4>
+                    <h4>{{ _("Share this event") }}</h4>
                 </div>
                 <div class="modal-body" style="text-align: center;">
                     {% include 'gentelella/components/social_buttons.html' %}
@@ -253,7 +257,7 @@
 
     <script type="text/javascript">
         var $locationInput = $("#location");
-        var placeSearch, autocomplete;
+        var autocomplete;
         var componentForm = {
             street_number: 'short_name',
             route: 'long_name',

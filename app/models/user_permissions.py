@@ -15,7 +15,7 @@ class UserPermission(db.Model):
     anonymous_user = db.Column(db.Boolean)
 
     def __init__(self, name, description, verified_user=False, unverified_user=False,
-            anonymous_user=False):
+                 anonymous_user=False):
         self.name = name
         self.description = description
         self.verified_user = verified_user

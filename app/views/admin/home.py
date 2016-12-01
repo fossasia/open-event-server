@@ -1,28 +1,27 @@
-"""Copyright 2015 Rafal Kowalski"""
 import logging
 import os
-import urllib
-import string
 import random
+import string
+import urllib
 from urllib2 import urlopen
 
+import geoip2.database
+from flask import abort
 from flask import url_for, redirect, request, session, flash
 from flask.ext import login
+from flask.ext.scrypt import generate_password_hash
 from flask_admin import expose
 from flask_admin.base import AdminIndexView
-from flask.ext.scrypt import generate_password_hash
 
 from app.helpers.flask_helpers import get_real_ip, slugify
+from app.helpers.oauth import OAuth, FbOAuth
+from app.models.user import User
 from app.views.public.explore import erase_from_dict
 from ...helpers.data import DataManager, save_to_db, get_google_auth, get_facebook_auth, create_user_password, \
     user_logged_in, record_activity
 from ...helpers.data_getter import DataGetter
 from ...helpers.helpers import send_email_with_reset_password_hash, send_email_confirmation, \
     get_serializer, get_request_stats
-from app.helpers.oauth import OAuth, FbOAuth
-from app.models.user import User
-import geoip2.database
-from flask import abort
 
 
 def intended_url():

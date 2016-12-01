@@ -1,9 +1,10 @@
+import time
 import uuid
 from datetime import datetime
-import time
 
 from app.helpers.helpers import get_count
 from . import db
+
 
 def get_new_identifier():
     identifier = str(uuid.uuid4())
@@ -12,6 +13,7 @@ def get_new_identifier():
         return identifier
     else:
         return get_new_identifier()
+
 
 class EventInvoice(db.Model):
     """
@@ -54,7 +56,7 @@ class EventInvoice(db.Model):
     def __init__(self,
                  amount=None,
                  address=None,
-                 city=city,
+                 city=None,
                  state=None,
                  country=None,
                  zipcode=None,
@@ -69,6 +71,7 @@ class EventInvoice(db.Model):
         self.state = state
         self.country = country
         self.zipcode = zipcode
+        self.city = city
         self.user_id = user_id
         self.event_id = event_id
         self.transaction_id = transaction_id

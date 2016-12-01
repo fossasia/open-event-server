@@ -1,4 +1,3 @@
-"""Copyright 2015 Rafal Kowalski"""
 from sqlalchemy.event import listens_for
 
 from .event import Event

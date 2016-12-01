@@ -1,6 +1,6 @@
 {% extends 'gentelella/admin/event/event_base.html' %}
 {% block title %}
-    {{_("Browse revisions")}} - {{ event.name }}
+    {{ _("Browse revisions") }} - {{ event.name }}
 {% endblock %}
 
 {% set active_page = "sessions" %}
@@ -16,7 +16,7 @@
     <div class="row">
         <div class="col-md-12">
             <div style="text-align: center">
-                <h3>{{_("Browse Revisions")}}</h3>
+                <h3>{{ _("Browse Revisions") }}</h3>
             </div>
             <br>
             <div class="row">
@@ -42,9 +42,9 @@
                             <div class="col-xs-6 text-right">
                                 {% if version_number != versions_count-1 %}
                                     <a href="{{ url_for('event_sessions.restore_session_revision', event_id=event.id, session_id=session.id, version_id=version_number) }}"
-                                       class="btn btn-info">{{_("Restore this revision")}}</a>
+                                       class="btn btn-info">{{ _("Restore this revision") }}</a>
                                 {% else %}
-                                    <button disabled class="btn btn-success">{{_("Current revision")}}</button>
+                                    <button disabled class="btn btn-success">{{ _("Current revision") }}</button>
                                 {% endif %}
                             </div>
                         </div>
@@ -86,45 +86,45 @@
     <script src="{{ url_for('static', filename='admin/lib/nouislider/distribute/nouislider.min.js') }}"></script>
 
     {% if versions_count > 1 %}
-    <script type="text/javascript">
-        $(function () {
-            var slider = document.getElementById('revision-slider');
-            noUiSlider.create(slider, {
-                start: [{{ versions_count-1 }}],
-                step: 1,
-                range: {
-                    'min': 0,
-                    'max': {{ versions_count-1 }}
-                }
-            });
+        <script type="text/javascript">
+            $(function () {
+                var slider = document.getElementById('revision-slider');
+                noUiSlider.create(slider, {
+                    start: [{{ versions_count-1 }}],
+                    step: 1,
+                    range: {
+                        'min': 0,
+                        'max': {{ versions_count-1 }}
+                    }
+                });
 
-            var $sliderHandle = $(".noUi-handle");
-            $sliderHandle.popover({
-                animation: false,
-                trigger: 'hover',
-                placement: 'top',
-                html: true
-            });
+                var $sliderHandle = $(".noUi-handle");
+                $sliderHandle.popover({
+                    animation: false,
+                    trigger: 'hover',
+                    placement: 'top',
+                    html: true
+                });
 
-            var $revisionsHolder = $("#versions-holder");
-            var show = false;
-            slider.noUiSlider.on('update', function (values, handle) {
-                var value = Math.round(values[handle]);
-                $sliderHandle.popover("show");
-                $revisionsHolder.find(".version-entry").hide();
-                var $currentVersion = $revisionsHolder.find("#version-" + value);
-                $currentVersion.show();
-                $sliderHandle.attr("data-content", "Revised by <strong>" + $currentVersion.data("user") + "</strong><br>" + $currentVersion.data('date'));
-                if (show) {
+                var $revisionsHolder = $("#versions-holder");
+                var show = false;
+                slider.noUiSlider.on('update', function (values, handle) {
+                    var value = Math.round(values[handle]);
                     $sliderHandle.popover("show");
-                }
+                    $revisionsHolder.find(".version-entry").hide();
+                    var $currentVersion = $revisionsHolder.find("#version-" + value);
+                    $currentVersion.show();
+                    $sliderHandle.attr("data-content", "Revised by <strong>" + $currentVersion.data("user") + "</strong><br>" + $currentVersion.data('date'));
+                    if (show) {
+                        $sliderHandle.popover("show");
+                    }
+                });
+
+                $sliderHandle.popover("hide");
+                show = true;
             });
 
-            $sliderHandle.popover("hide");
-            show = true;
-        });
-
-    </script>
+        </script>
     {% endif %}
 
 {% endblock %}

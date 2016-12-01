@@ -1,11 +1,11 @@
 import flask_login
 from flask_admin import BaseView, expose
-from app.helpers.ticketing import TicketingManager
+
 from app.helpers.data_getter import DataGetter
+from app.helpers.ticketing import TicketingManager
 
 
 class MyTicketsView(BaseView):
-
     @expose('/')
     @flask_login.login_required
     def display_my_tickets(self):

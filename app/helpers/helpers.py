@@ -1,25 +1,17 @@
-"""Copyright 2015 Rafal Kowalski"""
 import json
 import os
-import re
-import requests
 import os.path
+import re
 import time
 from datetime import datetime, timedelta
+
+import requests
 from flask import request, url_for, current_app
 from itsdangerous import Serializer
 from sqlalchemy import func
 
 from app.helpers.flask_helpers import get_real_ip
-from app.settings import get_settings
-from ..models.message_settings import MessageSettings
-from ..models.track import Track
-from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, NEXT_EVENT, \
-    USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, EVENT_PUBLISH, Mail, \
-    AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, TICKET_PURCHASED, EVENT_EXPORTED, \
-    EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_FOLLOWUP_EMAIL, MONTHLY_PAYMENT_EMAIL, \
-    EVENT_IMPORTED, EVENT_IMPORT_FAIL
-from system_mails import MAILS
+from app.helpers.storage import UploadedFile
 from app.models.notifications import (
     # Prepended with `NOTIF_` to differentiate from mails
     EVENT_ROLE_INVITE as NOTIF_EVENT_ROLE,
@@ -34,9 +26,16 @@ from app.models.notifications import (
     EVENT_EXPORTED as NOTIF_EVENT_EXPORTED,
 
 )
-
+from app.settings import get_settings
+from system_mails import MAILS
 from system_notifications import NOTIFS
-from app.helpers.storage import UploadedFile
+from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, NEXT_EVENT, \
+    USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, EVENT_PUBLISH, Mail, \
+    AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, TICKET_PURCHASED, EVENT_EXPORTED, \
+    EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_FOLLOWUP_EMAIL, MONTHLY_PAYMENT_EMAIL, \
+    EVENT_IMPORTED, EVENT_IMPORT_FAIL
+from ..models.message_settings import MessageSettings
+from ..models.track import Track
 
 
 def represents_int(string):
@@ -104,7 +103,7 @@ def send_email_invitation(email, event_name, link):
 
 
 def send_new_session_organizer(email, event_name, link):
-    """Send email after new sesions proposal"""
+    """Send email after new sessions proposal"""
     message_settings = MessageSettings.query.filter_by(action=NEW_SESSION).first()
     if not message_settings or message_settings.mail_status == 1:
         send_email(
@@ -243,6 +242,7 @@ def send_email_confirmation(form, link):
             email=form['email'], link=link
         )
     )
+
 
 def send_email_when_changes_email(old_email, new_email):
     """account confirmation"""
@@ -580,8 +580,8 @@ def ensure_social_link(website, link):
         return website + '/' + link
 
 
-def get_serializer(secret_key=None):
-    return Serializer('secret_key')
+def get_serializer(secret_key='secret_key'):
+    return Serializer(secret_key)
 
 
 def get_latest_heroku_release():
