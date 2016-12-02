@@ -2,10 +2,10 @@ import datetime
 
 from flask import request, Blueprint, make_response
 
-app = Blueprint('babel', __name__)
+babel = Blueprint('babel', __name__)
 
 
-@app.route('/choose_language', methods=('POST',))
+@babel.route('/choose_language', methods=('POST',))
 def set_lang():
     l_code = request.form.get('l_code')
     response = make_response(l_code)

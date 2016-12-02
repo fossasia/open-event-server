@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
-"""Written by - Rafal Kowalski"""
 import os
 
-_basedir = os.path.abspath(os.path.dirname(__file__))
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 # available languages
 LANGUAGES = {
     'en': 'English',
     'de': 'German'
 }
+
 
 class Config(object):
     DEBUG = False
@@ -20,7 +20,7 @@ class Config(object):
     ERROR_404_HELP = False
     CACHING = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///../app.db')
-    BASE_DIR = _basedir
+    BASE_DIR = basedir
     FORCE_SSL = os.getenv('FORCE_SSL', 'no') == 'yes'
     SQLALCHEMY_RECORD_QUERIES = False
 
@@ -95,4 +95,4 @@ class LocalPSQLConfig(Config):
 class LocalSQLITEConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'app.db')
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')

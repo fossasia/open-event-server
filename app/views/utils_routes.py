@@ -17,10 +17,10 @@ from ..helpers.data import save_to_db, uploaded_file_provided_by_url
 from ..helpers.data_getter import DataGetter
 from ..helpers.helpers import get_serializer
 
-app = Blueprint('', __name__)
+utils_routes = Blueprint('', __name__)
 
 
-@app.route('/gCallback/', methods=('GET', 'POST'))
+@utils_routes.route('/gCallback/', methods=('GET', 'POST'))
 def callback():
     if login.current_user is not None and login.current_user.is_authenticated:
         return redirect(url_for('admin.index'))
@@ -61,7 +61,7 @@ def callback():
         return 'did not find user info'
 
 
-@app.route('/fCallback/', methods=('GET', 'POST'))
+@utils_routes.route('/fCallback/', methods=('GET', 'POST'))
 def facebook_callback():
     if login.current_user is not None and login.current_user.is_authenticated:
         try:
@@ -133,7 +133,7 @@ def get_fb_auth():
     return get_facebook_auth(token=token), token
 
 
-@app.route('/tCallback/', methods=('GET', 'POST'))
+@utils_routes.route('/tCallback/', methods=('GET', 'POST'))
 def twitter_callback():
     oauth_verifier = request.args.get('oauth_verifier', '')
     oauth_token = request.args.get('oauth_token', '')
@@ -149,7 +149,7 @@ def twitter_callback():
     return redirect(url_for('profile.index_view'))
 
 
-@app.route('/iCallback/', methods=('GET', 'POST'))
+@utils_routes.route('/iCallback/', methods=('GET', 'POST'))
 def instagram_callback():
     instagram = get_instagram_auth()
     state = instagram.authorization_url(InstagramOAuth.get_auth_uri(), access_type='offline')
@@ -170,19 +170,19 @@ def instagram_callback():
     return 'Not implemented'
 
 
-@app.route('/pic/<path:filename>')
+@utils_routes.route('/pic/<path:filename>')
 def send_pic(filename):
     """Returns image"""
     return send_from_directory(os.path.realpath('.') + '/static/', filename)
 
 
-@app.route('/calendar/<path:filename>')
+@utils_routes.route('/calendar/<path:filename>')
 def send_cal(filename):
     """Returns calendar"""
     return send_from_directory(os.path.realpath('.') + '/static/', filename)
 
 
-@app.route('/serve_static/<path:filename>')
+@utils_routes.route('/serve_static/<path:filename>')
 def serve_static(filename):
     """
     Sends static file
@@ -193,30 +193,30 @@ def serve_static(filename):
     return send_from_directory(os.path.realpath('.') + '/static/', filename)
 
 
-@app.route('/favicon.ico')
+@utils_routes.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.dirname(os.path.dirname(__file__)) + '/static/', 'favicon.ico',
                                mimetype='image/vnd.microsoft.icon')
 
 
-@app.route('/health-check/')
+@utils_routes.route('/health-check/')
 def health_check():
     return jsonify({
         "status": "ok"
     })
 
 
-@app.route('/healthz/')
+@utils_routes.route('/healthz/')
 def healthz_check():
     return health_check()
 
 
-@app.route('/healthz')
+@utils_routes.route('/healthz')
 def healthz_check_no_slash():
     return health_check()
 
 
-@app.route('/api/location/', methods=('GET', 'POST'))
+@utils_routes.route('/api/location/', methods=('GET', 'POST'))
 def location():
     ip = get_real_ip(True)
 
@@ -241,7 +241,7 @@ def location():
         })
 
 
-@app.route('/migrate/', methods=('GET', 'POST'))
+@utils_routes.route('/migrate/', methods=('GET', 'POST'))
 def run_migrations():
     try:
         upgrade()
@@ -254,7 +254,7 @@ def intended_url():
     return request.args.get('next') or url_for('admin.index')
 
 
-@app.route('/robots.txt', methods=('GET', 'POST'))
+@utils_routes.route('/robots.txt', methods=('GET', 'POST'))
 def robots_txt():
     resp = make_response(render_template('robots.txt'))
     resp.headers['Content-type'] = 'text/plain'
