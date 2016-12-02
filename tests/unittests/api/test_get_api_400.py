@@ -1,11 +1,10 @@
 import unittest
 
+from app import current_app as app
+from tests.unittests.api.utils import get_path, create_event, create_services
+from tests.unittests.auth_helper import register, login
 from tests.unittests.setup_database import Setup
 from tests.unittests.utils import OpenEventTestCase
-from tests.unittests.auth_helper import register, login
-from tests.unittests.api.utils import get_path, create_event, create_services
-
-from app import current_app as app
 
 
 class TestGetApiUnrelatedServices(OpenEventTestCase):
@@ -29,7 +28,7 @@ class TestGetApiUnrelatedServices(OpenEventTestCase):
             event_id = create_event(creator_email=u'test@example.com')
             # Associate services to event_id=2
             # No need to create the event though
-            create_services(event_id+1)
+            create_services(event_id + 1)
 
     def _test_path(self, path):
         """Test response for 400 status code. Also test if response body

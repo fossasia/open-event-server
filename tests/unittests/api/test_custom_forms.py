@@ -1,23 +1,22 @@
-import unittest
 import json
+import unittest
 
+from app import current_app as app
 from app.helpers.data import update_or_create
 from app.models.custom_forms import CustomForms, SESSION_FORM, \
     SPEAKER_FORM
-
+from tests.unittests.api.utils import get_path, create_event
 from tests.unittests.auth_helper import register
 from tests.unittests.setup_database import Setup
 from tests.unittests.utils import OpenEventTestCase
-from tests.unittests.api.utils import get_path, create_event
 from utils_post_data import *
-
-from app import current_app as app
 
 
 class TestCustomForms(OpenEventTestCase):
     """
     Test Custom Forms
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():

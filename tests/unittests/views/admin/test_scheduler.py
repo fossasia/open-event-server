@@ -2,11 +2,11 @@ import unittest
 
 from flask import url_for
 
-from app.helpers.data import save_to_db
-from tests.unittests.object_mother import ObjectMother
 from app import current_app as app
-from tests.unittests.views.view_test_case import OpenEventViewTestCase
+from app.helpers.data import save_to_db
 from app.helpers.data_getter import DataGetter
+from tests.unittests.object_mother import ObjectMother
+from tests.unittests.views.view_test_case import OpenEventViewTestCase
 
 
 class TestScheduler(OpenEventViewTestCase):
@@ -24,6 +24,7 @@ class TestScheduler(OpenEventViewTestCase):
             rv = self.app.get(url_for('event_scheduler.publish', event_id=event.id), follow_redirects=True)
             event = DataGetter.get_event(event.id)
             self.assertTrue(event.schedule_published_on is not None, msg=rv.data)
+
 
 if __name__ == '__main__':
     unittest.main()

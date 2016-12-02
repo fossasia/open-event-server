@@ -1,10 +1,10 @@
 import unittest
 
-from tests.unittests.utils import OpenEventTestCase
-from tests.unittests.setup_database import Setup
-from tests.unittests.object_mother import ObjectMother
 from app import current_app as app
 from app.helpers.data import save_to_db
+from tests.unittests.object_mother import ObjectMother
+from tests.unittests.setup_database import Setup
+from tests.unittests.utils import OpenEventTestCase
 
 
 class TestEventFunctions(OpenEventTestCase):
@@ -16,6 +16,7 @@ class TestEventFunctions(OpenEventTestCase):
             event = ObjectMother.get_event()
             save_to_db(event, "Event saved")
             self.assertEqual(event.id, event.id)
+
 
 if __name__ == '__main__':
     unittest.main()

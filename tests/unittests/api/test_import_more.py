@@ -1,20 +1,21 @@
-import unittest
 import json
+import os
 import shutil
 import time
-import os
+import unittest
 
-from tests.unittests.setup_database import Setup
-from tests.unittests.api.utils import create_event, get_path, create_services
-from tests.unittests.auth_helper import register
 from app import current_app as app
 from test_export_import import ImportExportBase
+from tests.unittests.api.utils import create_event, get_path, create_services
+from tests.unittests.auth_helper import register
+from tests.unittests.setup_database import Setup
 
 
 class TestImportUploads(ImportExportBase):
     """
     Test Import for media uploads
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():

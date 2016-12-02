@@ -2,8 +2,8 @@ import unittest
 
 from flask import url_for
 
-from tests.unittests.auth_helper import logout, login, register
 from app import current_app as app
+from tests.unittests.auth_helper import logout, login, register
 from tests.unittests.views.view_test_case import OpenEventViewTestCase
 
 
@@ -20,6 +20,7 @@ class TestSuperAdmin(OpenEventViewTestCase):
             login(self.app, "HelloUser@hello.com", "SomeRandomPassword")
             rv = self.app.get(url_for('sadmin.index_view'), follow_redirects=True)
             self.assertEqual(rv.status_code, 403)
+
 
 if __name__ == '__main__':
     unittest.main()

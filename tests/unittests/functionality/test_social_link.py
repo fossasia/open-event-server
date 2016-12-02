@@ -1,10 +1,11 @@
 import unittest
-from tests.unittests.utils import OpenEventTestCase
-from app.models.social_link import SocialLink
-from tests.unittests.setup_database import Setup
+
 from app import current_app as app
 from app.helpers.data import save_to_db
+from app.models.social_link import SocialLink
 from tests.unittests.object_mother import ObjectMother
+from tests.unittests.setup_database import Setup
+from tests.unittests.utils import OpenEventTestCase
 
 
 class TestSocialLink(OpenEventTestCase):

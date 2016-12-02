@@ -1,4 +1,3 @@
-"""Copyright 2015 Rafal Kowalski"""
 import unittest
 
 from tests.unittests.object_mother import ObjectMother

@@ -1,20 +1,20 @@
-import unittest
 import json
+import unittest
 
+from app import current_app as app
 from app.helpers.data import update_role_to_admin
+from tests.unittests.api.utils import get_path, create_event
 from tests.unittests.auth_helper import register, login
 from tests.unittests.setup_database import Setup
 from tests.unittests.utils import OpenEventTestCase
-from tests.unittests.api.utils import get_path, create_event
 from utils_post_data import *
-
-from app import current_app as app
 
 
 class TestGetListQueries(OpenEventTestCase):
     """
     Test Get List Queries
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():

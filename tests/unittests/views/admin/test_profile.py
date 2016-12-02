@@ -3,8 +3,8 @@ import unittest
 from flask import url_for
 
 from app import current_app as app
-from app.models.notifications import Notification
 from app.helpers.data import DataManager
+from app.models.notifications import Notification
 from tests.unittests.views.view_test_case import OpenEventViewTestCase, get_or_create_super_admin
 
 
