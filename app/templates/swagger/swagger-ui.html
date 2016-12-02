@@ -12,8 +12,8 @@
                 validatorUrl: "{{ config.SWAGGER_VALIDATOR_URL }}" || null,
                 dom_id: "swagger-ui-container",
                 supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
-                onComplete: function(swaggerApi, swaggerUi){
-                    if(typeof initOAuth == "function") {
+                onComplete: function (swaggerApi, swaggerUi) {
+                    if (typeof initOAuth == "function") {
                         {% if config.SWAGGER_UI_OAUTH_CLIENT_ID -%}
                             initOAuth({
                                 clientId: "{{ config.SWAGGER_UI_OAUTH_CLIENT_ID }}",
@@ -22,11 +22,11 @@
                             });
                         {%- endif %}
                     }
-                    $('pre code').each(function(i, e) {
+                    $('pre code').each(function (i, e) {
                         hljs.highlightBlock(e)
                     });
                 },
-                onFailure: function(data) {
+                onFailure: function (data) {
                     log("Unable to Load SwaggerUI");
                 },
                 jsonEditor: {{ config.SWAGGER_UI_JSONEDITOR | default(False) | string | lower }},
@@ -38,8 +38,8 @@
 </head>
 
 <body class="swagger-section">
-    <div id="message-bar" class="swagger-ui-wrap">&nbsp;</div>
-    {% include 'swagger/user-info.html' %}
-    <div id="swagger-ui-container" class="swagger-ui-wrap"></div>
+<div id="message-bar" class="swagger-ui-wrap">&nbsp;</div>
+{% include 'swagger/user-info.html' %}
+<div id="swagger-ui-container" class="swagger-ui-wrap"></div>
 </body>
 </html>

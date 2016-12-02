@@ -1,32 +1,32 @@
-import json
+import binascii
 import datetime
+import json
 import os
 import traceback
-import binascii
 from uuid import uuid4
 
 from flask import flash, url_for, redirect, request, jsonify, Markup
-from flask.ext.login import current_user
 from flask.ext.admin import BaseView
+from flask.ext.login import current_user
 from flask.ext.restplus import abort
 from flask_admin import expose
 from geoip import geolite2
+from werkzeug.datastructures import ImmutableMultiDict
 
 from app import db
 from app.helpers.flask_helpers import get_real_ip
-from app.helpers.invoicing import InvoicingManager
-from app.helpers.storage import upload, upload_local, UPLOAD_PATHS
-from app.helpers.helpers import uploaded_file
-from app.helpers.permission_decorators import is_organizer, is_super_admin, can_access
 from app.helpers.helpers import fields_not_empty, string_empty
+from app.helpers.helpers import send_event_publish
+from app.helpers.helpers import uploaded_file
+from app.helpers.invoicing import InvoicingManager
+from app.helpers.microservices import AndroidAppCreator, WebAppCreator
+from app.helpers.permission_decorators import is_organizer, is_super_admin, can_access
+from app.helpers.storage import upload, upload_local, UPLOAD_PATHS
+from app.helpers.ticketing import TicketingManager
 from app.models.call_for_papers import CallForPaper
+from app.settings import get_settings
 from ....helpers.data import DataManager, save_to_db, record_activity, delete_from_db, restore_event
 from ....helpers.data_getter import DataGetter
-from werkzeug.datastructures import ImmutableMultiDict
-from app.helpers.helpers import send_event_publish
-from app.helpers.ticketing import TicketingManager
-from app.settings import get_settings
-from app.helpers.microservices import AndroidAppCreator, WebAppCreator
 
 
 def is_verified_user():
@@ -254,7 +254,8 @@ class EventsView(BaseView):
         if not current_user.can_publish_event() and not is_verified_user():
             flash(Markup('To make your event live, please verify your email by '
                          'clicking on the confirmation link that has been emailed to you.<br>'
-                         'Did not get the email? Please <a href="/resend_email/" class="alert-link"> click here to resend the confirmation.</a>'))
+                         'Did not get the email? Please <a href="/resend_email/" class="alert-link"> click here to '
+                         'resend the confirmation.</a>'))
 
         sessions = {'pending': DataGetter.get_sessions_by_state_and_event_id('pending', event_id).count(),
                     'accepted': DataGetter.get_sessions_by_state_and_event_id('accepted', event_id).count(),
@@ -430,9 +431,7 @@ class EventsView(BaseView):
             except Exception:
                 traceback.print_exc()
 
-            if (request.form.get('state',
-                                 u'Draft') == u'Published') and string_empty(
-                event.location_name):
+            if (request.form.get('state',  u'Draft') == u'Published') and string_empty(event.location_name):
                 flash(
                     "Your event was saved. To publish your event please review the highlighted fields below.",
                     "warning")
@@ -446,7 +445,7 @@ class EventsView(BaseView):
         if request.method == "GET":
             DataManager.trash_event(event_id)
         flash("Your event has been deleted.", "danger")
-        if current_user.is_super_admin == True:
+        if current_user.is_super_admin:
             return redirect(url_for('sadmin_events.index_view'))
         return redirect(url_for('.index_view'))
 
@@ -631,7 +630,8 @@ class EventsView(BaseView):
         else:
             return jsonify({'status': 'error', 'message': 'Invalid discount code'})
 
-    def get_module_settings(self):
+    @staticmethod
+    def get_module_settings():
         included_setting = []
         module = DataGetter.get_module()
         if module is not None:

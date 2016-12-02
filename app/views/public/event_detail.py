@@ -1,16 +1,13 @@
-import inspect
 import json
-import logging
-import os
 from datetime import datetime
 
 from flask import make_response
 from flask import request, url_for, flash
-from flask.ext.restplus import abort
 from flask.ext import login
+from flask.ext.restplus import abort
 from flask_admin import BaseView, expose
 from markupsafe import Markup
-from werkzeug.utils import redirect, secure_filename
+from werkzeug.utils import redirect
 
 from app.helpers.data import DataManager
 from app.helpers.export import ExportHelper
@@ -23,8 +20,8 @@ def get_published_event_or_abort(identifier):
     if not event or event.state != u'Published':
         user = login.current_user
         if not login.current_user.is_authenticated or (not user.is_organizer(event.id) and not
-                                                       user.is_coorganizer(event.id) and not
-                                                       user.is_track_organizer(event.id)):
+        user.is_coorganizer(event.id) and not
+        user.is_track_organizer(event.id)):
             abort(404)
 
     if event.in_trash:
@@ -33,7 +30,6 @@ def get_published_event_or_abort(identifier):
 
 
 class EventDetailView(BaseView):
-
     @expose('/')
     def display_default(self):
         return redirect("/browse")
@@ -131,7 +127,6 @@ class EventDetailView(BaseView):
         response = make_response(ExportHelper.export_as_xcal(event.id))
         response.headers["Content-Type"] = "application/xml"
         return response
-
 
     @expose('/<identifier>/cfs/', methods=('GET',))
     def display_event_cfs(self, identifier, via_hash=False):
@@ -242,7 +237,9 @@ class EventDetailView(BaseView):
                 flash("Your session proposal has been submitted", "success")
                 return redirect(url_for('my_sessions.display_my_sessions_view', event_id=event.id))
             else:
-                flash(Markup("Your session proposal has been submitted. Please login/register with <strong><u>" + email + "</u></strong> to manage it."), "success")
+                flash(Markup(
+                    "Your session proposal has been submitted. Please login/register with <strong><u>" + email + "</u></strong> to manage it."),
+                      "success")
                 return redirect(url_for('admin.login_view', next=url_for('my_sessions.display_my_sessions_view')))
 
     @expose('/<identifier>/coc/', methods=('GET',))

@@ -97,7 +97,7 @@ function initializeSearchAutoComplete(location_slug) {
 
 function handleDataTablePagination($table) {
     var $paginator = $table.closest(".dataTables_wrapper").find(".dataTables_paginate");
-    if($paginator.find(".paginate_button").length > 3) {
+    if ($paginator.find(".paginate_button").length > 3) {
         $paginator.show();
     } else {
         $paginator.hide();

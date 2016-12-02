@@ -2,20 +2,18 @@ from flask import g
 from flask.ext.restplus import Resource, Namespace
 
 from app.api.events import EVENT
+from app.helpers.data import DataManager, record_activity
+from app.helpers.data_getter import DataGetter
 from app.models.role import Role
 from app.models.user import User as UserModel, ATTENDEE
 from app.models.user_detail import UserDetail as UserDetailModel
-from app.helpers.data import DataManager, record_activity
-from app.helpers.data_getter import DataGetter
 from app.models.users_events_roles import UsersEventsRoles
-
+from .helpers import custom_fields as fields
 from .helpers.helpers import requires_auth, can_access_account, staff_only
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, BaseDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
-from .helpers import custom_fields as fields
 
 api = Namespace('users', description='Users', path='/')
-
 
 USER_DETAIL = api.model('UserDetail', {
     'firstname': fields.String(),
@@ -111,6 +109,7 @@ class User(Resource):
         record_activity('update_user', user=user)
         return user
 
+
 @api.route('/users/me')
 @api.response(404, 'User not found')
 class UserSelf(Resource):
@@ -120,6 +119,7 @@ class UserSelf(Resource):
     def get(self):
         """Fetch the current authenticated user"""
         return getattr(g, 'user', None), 200
+
 
 @api.route('/users/me/events')
 @api.response(404, 'User not found')

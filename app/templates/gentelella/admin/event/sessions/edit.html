@@ -1,6 +1,6 @@
 {% extends 'gentelella/admin/event/event_base.html' %}
 {% block title %}
-    {{_("Edit Session")}} - {{ event.name }}
+    {{ _("Edit Session") }} - {{ event.name }}
 {% endblock %}
 
 {% set active_page = "sessions" %}
@@ -8,7 +8,7 @@
 {% block head_css %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/multiselect/css/multi-select.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/multiselect/css/multi-select.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/Croppie/croppie.css') }}"/>
 {% endblock %}
 
@@ -17,7 +17,7 @@
 
         <div class="col-md-12">
             <div style="text-align: center">
-                <h3>{{_("Edit Session")}}</h3>
+                <h3>{{ _("Edit Session") }}</h3>
             </div>
             {% include 'gentelella/admin/event/sessions/components/session_form.html' %}
         </div>

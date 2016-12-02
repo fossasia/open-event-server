@@ -93,7 +93,7 @@
                     <small style="margin-left: 5px;">(stored in /static/media/ folder)</small>
                 </label>
             </div>
-                    <div class="radio">
+            <div class="radio">
                 <label>
                     <input type="radio" name="storage_place" id="storage_gs" class="radio_storage" value="gs"
                            {% if settings.storage_place == "gs" %}checked{% endif %}>
@@ -174,7 +174,7 @@
 
         <h4>{{ _("Mail Settings") }}</h4>
         <div class="form-group col-md-offset-1">
-           <div class="form-group">
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("From Email") }}</label>
                 <div class=" col-md-9 col-xs-12">
                     <input name="email_from" class="form-control col-md-6 col-xs-6"
@@ -207,9 +207,13 @@
                 <div class=" col-md-9 col-xs-12">
                     <select name="smtp_encryption" class="form-control col-md-6 col-xs-6">
                         <option value="tls" {% if settings.smtp_encryption == 'tls' %}selected{% endif %}>TLS</option>
-                        <option value="tls_optional" {% if settings.smtp_encryption == 'tls_optional' %}selected{% endif %}>TLS (optional)</option>
+                        <option value="tls_optional"
+                                {% if settings.smtp_encryption == 'tls_optional' %}selected{% endif %}>TLS (optional)
+                        </option>
                         <option value="ssl" {% if settings.smtp_encryption == 'ssl' %}selected{% endif %}>SSL</option>
-                        <option value="none" {% if settings.smtp_encryption == 'none' %}selected{% endif %}>No Encryption</option>
+                        <option value="none" {% if settings.smtp_encryption == 'none' %}selected{% endif %}>No
+                            Encryption
+                        </option>
                     </select>
 
                 </div>
@@ -231,7 +235,8 @@
 
             <div class="radio">
                 <label>
-                    <input type="radio" name="email_service" id="email_service_sendgrid" class="radio_email" value="sendgrid"
+                    <input type="radio" name="email_service" id="email_service_sendgrid" class="radio_email"
+                           value="sendgrid"
                            {% if settings.email_service == "sendgrid" %}checked{% endif %}>
                     {{ _("Sendgrid API") }}
                     <small style="margin-left: 5px;">

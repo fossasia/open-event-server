@@ -1,39 +1,39 @@
-"""Copyright 2015 Rafal Kowalski"""
 import flask_login as login
 from flask_admin import Admin
 
 from app.models import db
 from app.models.user import User
-from app.views.admin.models_views.events import EventsView
-from app.views.admin.models_views.my_tickets import MyTicketsView
-from app.views.admin.models_views.my_sessions import MySessionView
-from app.views.admin.models_views.export import ExportView
-from app.views.admin.models_views.roles import RoleView
-from app.views.admin.models_views.profile import ProfileView, NotificationView
-from app.views.admin.models_views.settings import SettingsView
-from app.views.admin.models_views.scheduler import SchedulerView
-from app.views.admin.models_views.invite import InviteView
-from app.views.admin.models_views.sessions import SessionsView
-from app.views.admin.models_views.speakers import SpeakersView
 from app.views.admin.home import MyHomeView
+from app.views.admin.models_views.events import EventsView
+from app.views.admin.models_views.export import ExportView
+from app.views.admin.models_views.invite import InviteView
+from app.views.admin.models_views.my_sessions import MySessionView
+from app.views.admin.models_views.my_tickets import MyTicketsView
+from app.views.admin.models_views.profile import ProfileView, NotificationView
+from app.views.admin.models_views.roles import RoleView
+from app.views.admin.models_views.scheduler import SchedulerView
+from app.views.admin.models_views.sessions import SessionsView
+from app.views.admin.models_views.settings import SettingsView
+from app.views.admin.models_views.speakers import SpeakersView
 from app.views.admin.models_views.sponsors import SponsorsView
 from app.views.admin.models_views.ticket_sales import TicketSalesView
+from app.views.admin.super_admin.content import SuperAdminContentView
+from app.views.admin.super_admin.dep_settings import SuperAdminSettingsView
+from app.views.admin.super_admin.events import SuperAdminEventsView
+from app.views.admin.super_admin.messages import SuperAdminMessagesView
+from app.views.admin.super_admin.modules import SuperAdminModulesView
+from app.views.admin.super_admin.my_sessions import SuperAdminMySessionView
+from app.views.admin.super_admin.permissions import SuperAdminPermissionsView
+from app.views.admin.super_admin.reports import SuperAdminReportsView
 from app.views.admin.super_admin.sales import SuperAdminSalesView
+from app.views.admin.super_admin.super_admin import SuperAdminView
+from app.views.admin.super_admin.users import SuperAdminUsersView
 from app.views.public.event_detail import EventDetailView
 from app.views.public.event_invoice import EventInvoicingView
 from app.views.public.explore import ExploreView
 from app.views.public.pages import BasicPagesView
-from app.views.admin.super_admin.super_admin import SuperAdminView
-from app.views.admin.super_admin.events import SuperAdminEventsView
-from app.views.admin.super_admin.my_sessions import SuperAdminMySessionView
-from app.views.admin.super_admin.users import SuperAdminUsersView
-from app.views.admin.super_admin.messages import SuperAdminMessagesView
-from app.views.admin.super_admin.permissions import SuperAdminPermissionsView
-from app.views.admin.super_admin.reports import SuperAdminReportsView
-from app.views.admin.super_admin.dep_settings import SuperAdminSettingsView
-from app.views.admin.super_admin.modules import SuperAdminModulesView
-from app.views.admin.super_admin.content import SuperAdminContentView
 from app.views.public.ticketing import TicketingView
+
 
 class AdminView(object):
     """Main Admin class View"""
@@ -50,7 +50,6 @@ class AdminView(object):
         self._add_views()
 
     def _add_views(self):
-
         # Public pages
         self.admin.add_view(BasicPagesView(name='Page', url='/'))
         self.admin.add_view(EventDetailView(name='Event Detail', url='/e', endpoint="event_detail"))

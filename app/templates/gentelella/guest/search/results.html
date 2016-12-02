@@ -14,14 +14,15 @@
 {% endblock %}
 
 {% block title %}
-    {{_("Explore")}}
+    {{ _("Explore") }}
 {% endblock %}
 {% macro event_block(event) %}
     <a href="/e/{{ event.identifier }}">
         <div class="col-xs-12 event-holder">
             <div class="thumbnail row">
                 <div class="img-box col-md-3 col-sm-3 col-xs-3">
-                    <img class="event-image" src='{% if event.background_url %}{{ event.thumbnail }}{% elif order.event.sub_topic%}{% set vars = {"foo": False} %}{% for custom_image in custom_placeholder %}{% if custom_image.name == session.event.sub_topic %}{{ custom_image.url }}{% if vars.update({"foo": True}) %} {% endif %}{% endif %}{% endfor %}{% if not vars.foo %}{{ url_for("static", filename="placeholders/" + placeholder_images[order.event.sub_topic])}}{% endif %}{% elif order.event.topic %}{% set vars = {"foo": False} %}{% for custom_image in custom_placeholder %}{% if custom_image.name == session.event.topic %}{{ custom_image.url }}{% if vars.update({"foo": True}) %} {% endif %}{% endif %}{% endfor %}{% if not vars.foo %}{ url_for("static", filename="placeholders/" + placeholder_images[order.event.topic])}}{% endif %}{% else %}{% set vars = {"foo": False} %}{% for custom_image in custom_placeholder %}{% if custom_image.name == "Other" %}{{ custom_image.url }}{% if vars.update({"foo": True}) %} {% endif %}{% endif %}{% endfor %}{% if not vars.foo %}{{ url_for("static", filename="placeholders/" + placeholder_images["Other"])}}{% endif %}{% endif %}'
+                    <img class="event-image" src='
+                            {% if event.background_url %}{{ event.thumbnail }}{% elif order.event.sub_topic %}{% set vars = {"foo": False} %}{% for custom_image in custom_placeholder %}{% if custom_image.name == session.event.sub_topic %}{{ custom_image.url }}{% if vars.update({"foo": True}) %} {% endif %}{% endif %}{% endfor %}{% if not vars.foo %}{{ url_for("static", filename="placeholders/" + placeholder_images[order.event.sub_topic]) }}{% endif %}{% elif order.event.topic %}{% set vars = {"foo": False} %}{% for custom_image in custom_placeholder %}{% if custom_image.name == session.event.topic %}{{ custom_image.url }}{% if vars.update({"foo": True}) %} {% endif %}{% endif %}{% endfor %}{% if not vars.foo %}{ url_for("static", filename="placeholders/" + placeholder_images[order.event.topic])}}{% endif %}{% else %}{% set vars = {"foo": False} %}{% for custom_image in custom_placeholder %}{% if custom_image.name == "Other" %}{{ custom_image.url }}{% if vars.update({"foo": True}) %} {% endif %}{% endif %}{% endfor %}{% if not vars.foo %}{{ url_for("static", filename="placeholders/" + placeholder_images["Other"]) }}{% endif %}{% endif %}'
                          onerror="imgError(this, true)">
                 </div>
                 <div class="caption col-md-9 col-sm-9 col-xs-9">
@@ -33,10 +34,12 @@
                     <hr>
                     <p class="tags">
                         {% if event and event.type %}
-                            <span class="filter-hashtag" data-name="type" data-value="{{ event.type }}">#{{ event.type | default('', true) |  camel_case }}</span>
+                            <span class="filter-hashtag" data-name="type"
+                                  data-value="{{ event.type }}">#{{ event.type | default('', true) |  camel_case }}</span>
                         {% endif %}
                         {% if event and event.topic %}
-                            <span class="filter-hashtag" data-name="category" data-value="{{ event.topic }}">#{{ event.topic | default('', true) | camel_case }}</span>
+                            <span class="filter-hashtag" data-name="category"
+                                  data-value="{{ event.topic }}">#{{ event.topic | default('', true) | camel_case }}</span>
                         {% endif %}
                         <i data-event-id="{{ event.identifier | default('', true) }}"
                            data-title="{{ event.name | default('', true) }}"
@@ -69,7 +72,7 @@
         </div>
         <div class="col-md-8">
             <h1 style="font-weight: 300;"><span class="location-name"
-                                                style="text-transform: capitalize;">{{ location | title }}</span> {{_("Events")}}
+                                                style="text-transform: capitalize;">{{ location | title }}</span> {{ _("Events") }}
             </h1>
             <div>
                 <ul class="list-inline prod_size filtering">
@@ -81,7 +84,7 @@
                 </ul>
             </div>
             <div style="overflow: hidden">
-                <div class="loader" style="display: none;">{{_("Loading")}}...</div>
+                <div class="loader" style="display: none;">{{ _("Loading") }}...</div>
             </div>
 
             <div id="events-holder" {% if results.count <= 0 %}style="display: none;"{% endif %}>
@@ -90,7 +93,7 @@
                 {% endfor %}
             </div>
             <div id="no-results" {% if results.count > 0 %}style="display: none;"{% endif %}>
-                <h2 style="font-weight: 300; font-size: 26px;">{{_("No events found for the selected parameters.")}}</h2>
+                <h2 style="font-weight: 300; font-size: 26px;">{{ _("No events found for the selected parameters.") }}</h2>
             </div>
             <br>
             <div id="pagination"></div>
@@ -103,7 +106,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4>{{_("Share this event")}}</h4>
+                    <h4>{{ _("Share this event") }}</h4>
                 </div>
                 <div class="modal-body" style="text-align: center;">
                     {% include 'gentelella/components/social_buttons.html' %}
@@ -128,7 +131,9 @@
 {% block tail_js %}
     {{ super() }}
     <script>
-        var pages = {{ results.count }}/ {{ results.limit }};
+        var pages =
+        {{ results.count }}/
+        {{ results.limit }};
         $('#pagination').bootpag({
             total: Math.ceil(pages),
             page: {{ current_page }}
@@ -179,14 +184,14 @@
                 geocoder.geocode({'location': map.getCenter()}, function (results, status) {
                     if (status === google.maps.GeocoderStatus.OK) {
                         var address;
-                        if(map.getZoom() > 4) {
+                        if (map.getZoom() > 4) {
                             address = results[1].formatted_address.replace(/[0-9]/g, '');
                         } else {
-                            address = results[results.length-1].formatted_address.replace(/[0-9]/g, '');
+                            address = results[results.length - 1].formatted_address.replace(/[0-9]/g, '');
                         }
                         $('#location').val(address).trigger('autocomplete');
                     } else {
-                         console.log('Geocode was not successful for the following reason: ' + status);
+                        console.log('Geocode was not successful for the following reason: ' + status);
                     }
                 });
             });

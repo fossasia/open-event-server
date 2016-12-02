@@ -2,15 +2,14 @@ import os
 
 from flask_admin import expose
 
+from app.helpers.helpers import get_latest_heroku_release, get_commit_info, get_count
+from app.helpers.kubernetes import KubernetesApi
+from app.models.user import ATTENDEE, TRACK_ORGANIZER, COORGANIZER, ORGANIZER
 from app.views.admin.super_admin.super_admin_base import SuperAdminBaseView
 from ....helpers.data_getter import DataGetter
-from app.helpers.helpers import get_latest_heroku_release, get_commit_info, get_count
-from app.models.user import ATTENDEE,TRACK_ORGANIZER, COORGANIZER, ORGANIZER
-from app.helpers.kubernetes import KubernetesApi
 
 
 class SuperAdminView(SuperAdminBaseView):
-
     @expose('/')
     def index_view(self):
         events = DataGetter.get_all_events()[:5]

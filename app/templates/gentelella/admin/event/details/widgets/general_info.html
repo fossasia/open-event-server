@@ -7,54 +7,55 @@
 {% block panel_content %}
 
     <table class="table table-striped">
-        <tbody style="white-space">
+        <tbody style="white-space: nowrap">
 
         <tr>
+            <td colspan="2">
+                <div style="white-space: nowrap; padding: 8px; line-height: 1.42857143; vertical-align: top; border-top: 1px solid #ddd; background: #f9f9f9">
+                    {% if event.state == 'Published' %}
+                        {{ _("Your event is live at") }}
+                        <a href="{{ url_for('event_detail.display_event_detail_home', identifier=event.identifier) |replace('events', 'e') }}">
+                            {{ url_for('event_detail.display_event_detail_home', identifier=event.identifier, _external=True) |replace('events', 'e') }}
+                        </a>
+                    {% else %}
+                        {{ _("Your event is not live yet. Make it live") }}
+                        <a href="/events/{{ event.id }}/publish">{{ _("now") }}</a>.
+                    {% endif %}
+                </div>
 
-          <div style="white-space: nowrap; padding: 8px; line-height: 1.42857143; vertical-align: top; border-top: 1px solid #ddd; background: #f9f9f9">
-            {% if event.state == 'Published' %}
-              {{_("Your event is live at")}}
-              <a href="{{ url_for('event_detail.display_event_detail_home', identifier=event.identifier) |replace('events', 'e') }}" >
-                {{ url_for('event_detail.display_event_detail_home', identifier=event.identifier, _external=True) |replace('events', 'e') }}
-              </a>
-            {% else %}
-              {{_("Your event is not live yet. Make it live")}} <a href="/events/{{event.id}}/publish">{{_("now")}}</a>.
-            {% endif %}
-          </div>
-
-
+            </td>
         <tr>
-            <td>{{_("No. of Revisions")}}</td>
+            <td>{{ _("No. of Revisions") }}</td>
             <td>
                 {% if versions_count > 0 %}
                     {{ versions_count }}&nbsp;&nbsp;(
-                    <a href="#" data-toggle="modal" data-target="#view-revisions-modal">{{_("View revisions")}}</a>)
+                    <a href="#" data-toggle="modal" data-target="#view-revisions-modal">{{ _("View revisions") }}</a>)
                 {% else %}
-                    {{_("No revisions available")}}.
+                    {{ _("No revisions available") }}.
                 {% endif %}
             </td>
         </tr>
         <tr>
-            <td>{{_("Location")}} </td>
+            <td>{{ _("Location") }} </td>
             <td>
                 {% if event.location_name %}
                     {{ event.location_name }}
                 {% else %}
-                    <a href="{{ url_for('events.edit_view', event_id=event.id) }}">{{_("Click to set location")}}</a>
+                    <a href="{{ url_for('events.edit_view', event_id=event.id) }}">{{ _("Click to set location") }}</a>
                 {% endif %}
             </td>
         </tr>
         <tr>
-            <td>{{_("Start Time")}} </td>
+            <td>{{ _("Start Time") }} </td>
             <td>{{ event.start_time.strftime('%B %d, %Y %I:%M %p') }} ({{ event.timezone }})</td>
         </tr>
         <tr>
-            <td>{{_("End Time")}} </td>
+            <td>{{ _("End Time") }} </td>
             <td>{{ event.end_time.strftime('%B %d, %Y %I:%M %p') }} ({{ event.timezone }})</td>
         </tr>
         {% if event.session_type %}
             <tr>
-                <td>{{_("Session Types")}}</td>
+                <td>{{ _("Session Types") }}</td>
                 <td>
                     {% for sessionType in event.session_type %}
                         {% if loop.index > 1 %}, {% endif %}{{ sessionType.name }}
@@ -63,34 +64,34 @@
             </tr>
         {% endif %}
         <tr>
-            <td>{{_("Links and Social Media")}} </td>
+            <td>{{ _("Links and Social Media") }} </td>
             <td>
                 {% for socialLink in event.social_link %}
                     {% if loop.index > 1 %}, {% endif %}<a href="{{ socialLink.link }}">{{ socialLink.name }}</a>
                 {% else %}
-                    {{_("No social links added.")}}
-                    <a href="{{ url_for("events.edit_view", event_id=event.id) }}">{{_("Click to add.")}}</a>
+                    {{ _("No social links added.") }}
+                    <a href="{{ url_for("events.edit_view", event_id=event.id) }}">{{ _("Click to add.") }}</a>
                 {% endfor %}
             </td>
         </tr>
         <tr>
-            <td>{{_("Number of Speakers")}}</td>
+            <td>{{ _("Number of Speakers") }}</td>
             <td>
-                {{event.speaker | length}}
+                {{ event.speaker | length }}
             </td>
         </tr>
         <tr>
-            <td>{{_("Number of Sessions")}}</td>
+            <td>{{ _("Number of Sessions") }}</td>
             <td>
-              <p>{{_("All")}}: {{event.session | length}} {{_("Accepted")}}: {{sessions.accepted}} {{_("Pending")}}: {{sessions.pending }}</p>
-              <p>{{_("Rejected")}}: {{sessions.rejected}}
-              {{_("Draft")}}: {{sessions.draft}}</p>
+                <p>{{ _("All") }}: {{ event.session | length }} {{ _("Accepted") }}: {{ sessions.accepted }} {{ _("Pending") }}: {{ sessions.pending }}</p>
+                <p>{{ _("Rejected") }}: {{ sessions.rejected }}
+                    {{ _("Draft") }}: {{ sessions.draft }}</p>
             </td>
         </tr>
         <tr>
-            <td>{{_("Number of Sponsors")}}</td>
+            <td>{{ _("Number of Sponsors") }}</td>
             <td>
-              {{event.sponsor | length}}
+                {{ event.sponsor | length }}
             </td>
         </tr>
         </tbody>
@@ -103,7 +104,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">{{_("Revisions")}}</h4>
+                    <h4 class="modal-title">{{ _("Revisions") }}</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -122,14 +123,17 @@
 
                                 <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
                                     <div class="col-xs-6">
-                                        {{_("Revision by")}} <strong>{{ user_name }}</strong><br>
-                                        {{ transaction.issued_at | humanize }} ({{ transaction.issued_at.strftime('%B %d @ %I:%M %p') }})
+                                        {{ _("Revision by") }} <strong>{{ user_name }}</strong><br>
+                                        {{ transaction.issued_at | humanize }}
+                                        ({{ transaction.issued_at.strftime('%B %d @ %I:%M %p') }})
                                     </div>
                                     <div class="col-xs-6 text-right">
                                         {% if version_number != versions_count-1 %}
-                                            <a href="{{ url_for('events.restore_event_revision', event_id=event.id, version_id=version_number) }}" class="btn btn-info">{{_("Restore this revision")}}</a>
+                                            <a href="{{ url_for('events.restore_event_revision', event_id=event.id, version_id=version_number) }}"
+                                               class="btn btn-info">{{ _("Restore this revision") }}</a>
                                         {% else %}
-                                            <button disabled class="btn btn-success">{{_("Current revision")}}</button>
+                                            <button disabled
+                                                    class="btn btn-success">{{ _("Current revision") }}</button>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -165,7 +169,7 @@
             </div>
         </div>
     </div>
-     {% if versions_count > 1 %}
+    {% if versions_count > 1 %}
         <script type="text/javascript">
             $(function () {
                 var slider = document.getElementById('revision-slider');
@@ -195,7 +199,7 @@
                     var $currentVersion = $revisionsHolder.find("#version-" + value);
                     $currentVersion.show();
                     $sliderHandle.attr("data-content", "Revised by <strong>" + $currentVersion.data("user") + "</strong><br>" + $currentVersion.data('date'));
-                    if(show) {
+                    if (show) {
                         $sliderHandle.popover("show");
                     }
                 });

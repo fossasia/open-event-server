@@ -19,7 +19,8 @@
             <textarea {% if require==1 %}
                 required="required"
             {% endif %}
-                name="{{ identifier }}" class="form-control col-md-7 col-xs-12">{{ session[identifier] | default('', true) }}</textarea>
+                name="{{ identifier }}"
+                class="form-control col-md-7 col-xs-12" title="{{ pretty_name }}">{{ session[identifier] | default('', true) }}</textarea>
         {% elif identifier in dropdown_fields %}
             {% if identifier == 'track' %}
                 {% set data_set = event.track %}
@@ -27,7 +28,8 @@
                 {% set data_set = event.session_type %}
             {% endif %}
             {% if identifier != 'track' or (identifier == 'track' and data_set[1]) %}
-                <select {% if require==1 or identifier=='track' %}required="required"{% endif %}  name="{{ identifier }}"  class="form-control col-md-7 col-xs-12">
+                <select title="{{ pretty_name }}" {% if require==1 or identifier=='track' %}required="required"{% endif %} name="{{ identifier }}"
+                        class="form-control col-md-7 col-xs-12">
                     <option value="" {% if not session %}selected{% endif %}>Select {{ pretty_name }}</option>
                     {% for data in data_set %}
                         {% if session and session[identifier + '_id'] == data.id %}
@@ -50,11 +52,11 @@
                 <i class="fa fa-cloud-upload" aria-hidden="true"></i>
                 Choose a file</label>
         {% else %}
-            <input {% if require==1 %}
+            <input title="{{ pretty_name }}" {% if require==1 %}
                 required="required"
             {% endif %}
                 name="{{ identifier }}" class="form-control col-md-7 col-xs-12"
-                value="{{ session[identifier] | default('', true) }}" />
+                value="{{ session[identifier] | default('', true) }}"/>
         {% endif %}
     </div>
 {% endmacro %}

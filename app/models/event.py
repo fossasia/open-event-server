@@ -1,17 +1,16 @@
-"""Copyright 2015 Rafal Kowalski"""
 import binascii
 import os
 from datetime import datetime
 
+from flask.ext import login
 from sqlalchemy import event
 
-from flask.ext import login
 from app.helpers.date_formatter import DateFormatter
 from app.helpers.helpers import get_count
 from app.helpers.versioning import clean_up_string, clean_html
-from custom_forms import CustomForms, session_form_str, speaker_form_str
 from app.models.email_notifications import EmailNotification
 from app.models.user import ATTENDEE
+from custom_forms import CustomForms, session_form_str, speaker_form_str
 from version import Version
 from . import db
 

@@ -1,11 +1,9 @@
 import itertools
+import re
+import unicodedata
 
 import bleach
 import diff_match_patch
-import re
-
-import unicodedata
-
 from bleach.callbacks import target_blank, nofollow
 
 
@@ -116,8 +114,8 @@ def side_by_side_diff(old_text, new_text):
             if change_type == 0:
                 ls[-1] = ls[-1] or ''
                 rs[-1] = rs[-1] or ''
-                ls[-1] = ls[-1] + line
-                rs[-1] = rs[-1] + line
+                ls[-1] += line
+                rs[-1] += line
             elif change_type == 1:
                 rs[-1] = rs[-1] or ''
                 rs[-1] += '<ins>%s</ins>' % line if line else ''

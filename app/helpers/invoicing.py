@@ -1,15 +1,13 @@
-"""Copyright 2016 Niranjan Rajendran"""
-
 from datetime import datetime
 
 from app.helpers.cache import cache
 from app.helpers.data import save_to_db
 from app.helpers.helpers import get_count, represents_int
-from app.models.discount_code import DiscountCode, EVENT
-from app.models.event_invoice import EventInvoice
-from app.models.event import Event
-
 from app.helpers.payment import StripePaymentsManager, PayPalPaymentsManager
+from app.models.discount_code import DiscountCode, EVENT
+from app.models.event import Event
+from app.models.event_invoice import EventInvoice
+
 
 class InvoicingManager(object):
     """All event service fee invoicing related functions"""
@@ -120,11 +118,11 @@ class InvoicingManager(object):
 
     @staticmethod
     def charge_paypal_invoice_payment(invoice):
-        payment_details = PayPalPaymentsManager\
+        payment_details = PayPalPaymentsManager \
             .get_approved_payment_details(invoice, credentials=PayPalPaymentsManager.get_credentials())
 
         if 'PAYERID' in payment_details:
-            capture_result = PayPalPaymentsManager\
+            capture_result = PayPalPaymentsManager \
                 .capture_payment(invoice, payment_details['PAYERID'],
                                  credentials=PayPalPaymentsManager.get_credentials())
 
@@ -173,4 +171,3 @@ class InvoicingManager(object):
         save_to_db(discount_code)
 
         return discount_code
-

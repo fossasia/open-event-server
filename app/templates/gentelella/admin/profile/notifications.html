@@ -1,18 +1,11 @@
 {% extends 'gentelella/admin/base.html' %}
 
 {% block title %}
-{{_("Notifications")}}
+    {{ _("Notifications") }}
 {% endblock %}
 
 {% block head_css %}
     {{ super() }}
-    <style type="text/css">
-    /*
-        .notification {
-            cursor: pointer;
-        }
-    */
-    </style>
 {% endblock %}
 {% block body %}
 
@@ -20,7 +13,7 @@
         <div class="col-xs-12 col-sm-10 col-sm-push-1 col-md-8 col-md-push-2">
             <div class="x_panel" style="min-height: 700px;">
                 <div class="x_title">
-                    <h2>{{_("Notifications")}}</h2>
+                    <h2>{{ _("Notifications") }}</h2>
 
                     <div class="clearfix"></div>
                 </div>
@@ -31,26 +24,28 @@
                                 <div class="btn-group pull-left" data-toggle="buttons">
                                     <label class="btn btn-default active btn-responsive">
                                         <input type="radio" name="notif_status" autocomplete="off" value="unread"
-                                               checked> {{_("Unread")}}
+                                               checked> {{ _("Unread") }}
                                     </label>
                                     <label class="btn btn-default btn-responsive">
-                                        <input type="radio" name="notif_status" autocomplete="off" value="all"> {{_("All")}}
+                                        <input type="radio" name="notif_status" autocomplete="off"
+                                               value="all"> {{ _("All") }}
                                     </label>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xs-4">
-                            <a href="{{ url_for('notifications.mark_all_read') }}" class="btn btn-default pull-right">{{_("Mark all read")}}</a>
+                            <a href="{{ url_for('notifications.mark_all_read') }}"
+                               class="btn btn-default pull-right">{{ _("Mark all read") }}</a>
                         </div>
                         <div class="col-xs-12">
                             <table class="notif-table table table-hover" style="margin-top: 16px;">
                                 <thead>
                                 <tr>
-                                    <th style="display:none;">{{_("Status")}}</th>
-                                    <th>{{_("Message")}}</th>
-                                    <th>{{_("Received At")}}</th>
-                                    <th>{{_("Received At (Humanized)")}}</th>
-                                    <th>{{_("Options")}}</th>
+                                    <th style="display:none;">{{ _("Status") }}</th>
+                                    <th>{{ _("Message") }}</th>
+                                    <th>{{ _("Received At") }}</th>
+                                    <th>{{ _("Received At (Humanized)") }}</th>
+                                    <th>{{ _("Options") }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -69,8 +64,8 @@
                                         <td>
                                             {% if not notif.has_read %}
                                                 <a class="read-btn btn btn-default btn-xs"
-                                                   href="{{ url_for('notifications.mark_as_read', notification_id=notif.id) }}">{{_("Mark")}}
-                                                    {{_("as Read")}}</a>
+                                                   href="{{ url_for('notifications.mark_as_read', notification_id=notif.id) }}">{{ _("Mark") }}
+                                                    {{ _("as Read") }}</a>
                                             {% endif %}
                                         </td>
                                     </tr>
@@ -94,14 +89,14 @@
 
     <script type="text/javascript">
         $.fn.dataTable.ext.search.push(
-                function (settings, data, dataIndex) {
-                    var user_option = $("input[name=notif_status]:checked").val();
-                    var state = data[0].trim() || 'unread';
-                    if (user_option === "all") {
-                        return true;
-                    }
-                    return !!(user_option === state || state === "");
+            function (settings, data, dataIndex) {
+                var user_option = $("input[name=notif_status]:checked").val();
+                var state = data[0].trim() || 'unread';
+                if (user_option === "all") {
+                    return true;
                 }
+                return (user_option === state || state === "");
+            }
         );
 
         var notifTable = $('.notif-table').DataTable({
@@ -115,17 +110,17 @@
             "order": [[2, "desc"]]
         });
 
-        $("body").click(function(e) {
-            if($(e.target).is('a.read-btn')) {
+        $("body").click(function (e) {
+            if ($(e.target).is('a.read-btn')) {
                 e.preventDefault(); // prevent href behavior
-                $.getJSON($(e.target).attr('href'), function(data){
-                  console.log(data.status);
-                  $(e.target).parents('.notification').removeClass('info'); // show notification as read
-                  $(e.target).remove(); // delete mark as read button
+                $.getJSON($(e.target).attr('href'), function (data) {
+                    console.log(data.status);
+                    $(e.target).parents('.notification').removeClass('info'); // show notification as read
+                    $(e.target).remove(); // delete mark as read button
                 });
-            }else if (e.target.class == "notification" || $(e.target).parents(".notification").size()) {
+            } else if (e.target.class == "notification" || $(e.target).parents(".notification").size()) {
                 var read_button = $(e.target).parents(".notification").find('a.read-btn');
-                $.getJSON(read_button.attr('href'), function(data){
+                $.getJSON(read_button.attr('href'), function (data) {
                     console.log(data.status);
                 });
                 window.location = document.URL;
@@ -146,25 +141,25 @@
         /* SocketIO Notification-Page messages
          *
          */
-         $(document).ready(function() {
+        $(document).ready(function () {
             var namespace = '/notifpage';
             var socket = io.connect(location.protocol + "//" + location.host + namespace, {reconnection: false});
 
-            socket.on('notifpage-response', function(msg) {
+            socket.on('notifpage-response', function (msg) {
                 console.log(msg.meta);
                 if (msg.hasOwnProperty("notif")) {
                     var notif = msg.notif;
                     html = '<tr class="notification info">' +
                         '<td style="display: none;">unread</td>' +
-                        '<td><h4>'+ notif.title +'</h4><p class="clickable-link-holder">'+ notif.message +'</p></td>' +
-                        '<td style="display: none;">'+ notif.received_at +'</td>' +
-                        '<td>'+ notif.received_at_human +'</td>' +
-                        '<td><a class="read-btn btn btn-default btn-xs" href="'+ notif.mark_read +'">Mark as Read</a></td>' +
+                        '<td><h4>' + notif.title + '</h4><p class="clickable-link-holder">' + notif.message + '</p></td>' +
+                        '<td style="display: none;">' + notif.received_at + '</td>' +
+                        '<td>' + notif.received_at_human + '</td>' +
+                        '<td><a class="read-btn btn btn-default btn-xs" href="' + notif.mark_read + '">Mark as Read</a></td>' +
                         '</tr>';
                     $(".notif-table tbody").prepend(html);
                 }
             });
-         });
+        });
 
     </script>
 

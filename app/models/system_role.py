@@ -2,6 +2,7 @@ from . import db
 
 from .panel_permissions import PanelPermission
 
+
 class CustomSysRole(db.Model):
     """Custom System Role
     """
@@ -15,7 +16,7 @@ class CustomSysRole(db.Model):
 
     def can_access(self, panel_name):
         perm = PanelPermission.query.filter_by(role=self,
-            panel_name=panel_name).first()
+                                               panel_name=panel_name).first()
         if perm:
             return perm.can_access
         else:

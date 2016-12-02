@@ -11,7 +11,7 @@ class PanelPermission(db.Model):
     panel_name = db.Column(db.String)
     # Custom System Role
     role_id = db.Column(db.Integer, db.ForeignKey('custom_sys_role.id',
-        ondelete='CASCADE'))
+                                                  ondelete='CASCADE'))
     role = db.relationship('CustomSysRole')
 
     can_access = db.Column(db.Boolean)

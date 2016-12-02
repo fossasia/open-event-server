@@ -1,22 +1,21 @@
+from functools import wraps
+
+from flask import g
 from flask.ext.restplus import Namespace, marshal_with
 from flask_login import current_user
-from functools import wraps
-from flask import g
 
+from app.helpers.data_getter import DataGetter
 from app.models.speaker import Speaker as SpeakerModel
-
-from .helpers.helpers import model_custom_form, requires_auth
+from .helpers import custom_fields as fields
 from .helpers.helpers import (
     can_create,
     can_update,
     can_delete
 )
-from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO,\
+from .helpers.helpers import model_custom_form, requires_auth
+from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
 from .helpers.utils import Resource, ETAG_HEADER_DEFN
-from .helpers import custom_fields as fields
-from app.helpers.data_getter import DataGetter
-
 
 api = Namespace('speakers', description='Speakers', path='/')
 
@@ -82,6 +81,7 @@ class SpeakerDAO(ServiceDAO):
         return ServiceDAO.validate(
             self, data, model, check_required=check_required)
 
+
 DAO = SpeakerDAO(SpeakerModel, SPEAKER_POST)
 
 
@@ -93,6 +93,7 @@ def speakers_marshal_with(fields=None, fields_private=None):
     """
     Response marshalling for speakers. Doesn't update apidoc
     """
+
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -107,7 +108,9 @@ def speakers_marshal_with(fields=None, fields_private=None):
                 model = fields_private if fields_private else SPEAKER_PRIVATE
             func2 = marshal_with(model)(func)
             return func2(*args, **kwargs)
+
         return wrapper
+
     return decorator
 
 

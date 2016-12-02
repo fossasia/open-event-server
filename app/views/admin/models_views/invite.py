@@ -1,14 +1,14 @@
+from flask import request, url_for, redirect
 from flask.ext.admin import BaseView
 from flask.ext.restplus import abort
 from flask_admin import expose
-from flask import request, url_for, redirect
+
+from ....helpers import helpers as Helper
 from ....helpers.data import DataManager
 from ....helpers.data_getter import DataGetter
-from ....helpers import helpers as Helper
 
 
 class InviteView(BaseView):
-
     @expose('/')
     def index_view(self):
         abort(404)

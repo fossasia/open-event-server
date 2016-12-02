@@ -4,6 +4,7 @@ Disallow: /api/
 Allow: /api/v2/$
 Disallow: /fCallback
 Disallow: /gCallback
+Disallow: /iCallback
 Disallow: /admin/
 Disallow: /events/
 

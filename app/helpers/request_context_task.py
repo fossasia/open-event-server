@@ -4,10 +4,9 @@ vars when a task is executed
 Based on http://xion.io/post/code/celery-include-flask-request-context.html
 """
 from celery import Task
-from flask import has_request_context, make_response, request, g
+from flask import has_request_context, request, g
 
 from app import current_app as app
-
 
 __all__ = ['RequestContextTask']
 

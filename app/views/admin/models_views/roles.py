@@ -1,11 +1,12 @@
+from flask import request, url_for, redirect, flash
 from flask.ext.admin import BaseView
 from flask_admin import expose
-from flask import request, url_for, redirect, flash
-from ....helpers.data import DataManager
-from ....helpers.data_getter import DataGetter
-from app.helpers.permission_decorators import is_organizer
+
 from app.helpers import helpers as Helper
 from app.helpers.helpers import send_notif_event_role
+from app.helpers.permission_decorators import is_organizer
+from ....helpers.data import DataManager
+from ....helpers.data_getter import DataGetter
 
 
 class RoleView(BaseView):
@@ -45,7 +46,7 @@ class RoleView(BaseView):
 
                 # Send a notification with the invitation link
                 send_notif_event_role(user, role.title_name, event.name,
-                    accept_link, decline_link)
+                                      accept_link, decline_link)
 
                 flash('A notification has been sent to user')
 
@@ -63,4 +64,3 @@ class RoleView(BaseView):
         uer = DataGetter.get_user_event_role(uer_id)
         DataManager.update_user_event_role(request.form, uer)
         return redirect(url_for('events.details_view', event_id=event_id))
-

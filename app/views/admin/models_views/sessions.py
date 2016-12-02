@@ -1,14 +1,15 @@
+import json
+
+from flask import url_for, redirect, flash
 from flask.ext.admin import BaseView
 from flask_admin import expose
 
 from app import db
 from app.helpers.notification_email_triggers import trigger_session_state_change_notifications
 from app.helpers.permission_decorators import *
-from flask.ext import login
-from flask import request, url_for, redirect, flash
 from ....helpers.data import DataManager, delete_from_db, trash_session, restore_session
 from ....helpers.data_getter import DataGetter
-import json
+
 
 def get_session_or_throw(session_id):
     session = DataGetter.get_session(session_id)
@@ -16,8 +17,8 @@ def get_session_or_throw(session_id):
         abort(404)
     return session
 
-class SessionsView(BaseView):
 
+class SessionsView(BaseView):
     def is_accessible(self):
         return login.current_user.is_authenticated
 
@@ -176,8 +177,8 @@ class SessionsView(BaseView):
 
     @expose('/<int:session_id>/trash/', methods=('GET',))
     def trash_session(self, event_id, session_id):
-        session = get_session_or_throw(session_id)
-        session = trash_session(session_id)
+        get_session_or_throw(session_id)
+        trash_session(session_id)
         flash("The session has been deleted", "danger")
         if login.current_user.is_super_admin:
             return redirect(url_for('sadmin_sessions.display_my_sessions_view', event_id=event_id))
@@ -211,4 +212,3 @@ class SessionsView(BaseView):
         db.session.commit()
         flash("The session has been restored.", "success")
         return redirect(url_for('.index_view', event_id=event_id))
-

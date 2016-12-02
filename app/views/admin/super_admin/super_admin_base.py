@@ -1,7 +1,7 @@
 from flask import request, url_for, redirect
+from flask.ext.login import current_user
 from flask.ext.restplus import abort
 from flask_admin import BaseView
-from flask.ext.login import current_user
 
 # Admin Panels
 BASE = 'admin'
@@ -29,6 +29,7 @@ PANEL_LIST = [
     MODULES,
     CONTENT,
 ]
+
 
 class SuperAdminBaseView(BaseView):
     PANEL_NAME = BASE

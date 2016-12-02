@@ -72,20 +72,20 @@
     <div class="col-md-3 col-sm-4 col-xs-12">
         <div class="panel panel-default stats-panel">
             <div class="panel-heading text-center">
-                <h2 class="panel-title">{{_("Orders")}}</h2>
+                <h2 class="panel-title">{{ _("Orders") }}</h2>
             </div>
             <div class="panel-body text-center">
                 {{ orders_summary.completed.orders_count }}
             </div>
             <div class="panel-footer text-right">
-                <a href="./orders">{{_("View orders")}}</a>
+                <a href="./orders">{{ _("View orders") }}</a>
             </div>
         </div>
     </div>
     <div class="col-md-3 col-sm-4 col-xs-12">
         <div class="panel panel-default stats-panel">
             <div class="panel-heading text-center">
-                <h2 class="panel-title">{{_("Sales")}}</h2>
+                <h2 class="panel-title">{{ _("Sales") }}</h2>
             </div>
             <div class="panel-body text-center">
                 {{ event.payment_currency | currency_symbol }}{{ orders_summary.completed.total_sales|money }}
@@ -99,39 +99,39 @@
     <div class="col-md-3 col-sm-4 col-xs-12">
         <div class="panel panel-default stats-panel">
             <div class="panel-heading text-center">
-                <h2 class="panel-title">{{_("Tickets sold")}}</h2>
+                <h2 class="panel-title">{{ _("Tickets sold") }}</h2>
             </div>
             <div class="panel-body text-center">
                 {{ orders_summary.completed.tickets_count }}
             </div>
             <div class="panel-footer text-right">
-                <a href="./attendees">{{_("View attendees")}}</a>
+                <a href="./attendees">{{ _("View attendees") }}</a>
             </div>
         </div>
     </div>
     <div class="clearfix"></div>
     <hr>
-    <h3>{{_("Orders Summary")}}
-        <small> {{_("by order status")}}</small>
+    <h3>{{ _("Orders Summary") }}
+        <small> {{ _("by order status") }}</small>
     </h3>
     <div class="col-md-12">
         <table class="table" id="order-summmary-table">
             <thead>
             <tr>
                 <th>
-                    {{_("Order Status")}}
+                    {{ _("Order Status") }}
                 </th>
                 <th>
-                    {{_("Total Tickets")}}
+                    {{ _("Total Tickets") }}
                 </th>
                 <th>
-                    {{_("Total Orders")}}
+                    {{ _("Total Orders") }}
                 </th>
                 <th>
-                    {{_("Total Sales")}} ({{ event.payment_currency | currency_symbol }})
+                    {{ _("Total Sales") }} ({{ event.payment_currency | currency_symbol }})
                 </th>
                 <th>
-                    {{_("View Reports")}}
+                    {{ _("View Reports") }}
                 </th>
             </tr>
             </thead>
@@ -151,7 +151,8 @@
                         {{ event.payment_currency | currency_symbol }}{{ item.total_sales | money }}
                     </td>
                     <td>
-                        <a href="./orders">{{_("View orders")}}</a> / <a href="./attendees">{{_("View attendees")}}</a>
+                        <a href="./orders">{{ _("View orders") }}</a> / <a
+                            href="./attendees">{{ _("View attendees") }}</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -160,39 +161,39 @@
     </div>
     <div class="clearfix"></div>
     <hr>
-    <h3>{{_("Tickets Summary")}}
-        <small> {{_("by order status")}}</small>
+    <h3>{{ _("Tickets Summary") }}
+        <small> {{ _("by order status") }}</small>
     </h3>
     <div class="col-md-12">
         <table class="table" id="tickets-summary-table">
             <thead>
             <tr>
                 <th rowspan="2">
-                    {{_("Ticket Type")}}
+                    {{ _("Ticket Type") }}
                 </th>
                 <th rowspan="2" class="active">
-                    {{_("Tickets Capacity Set")}}
+                    {{ _("Tickets Capacity Set") }}
                 </th>
 
                 <th colspan="2" class="success">
-                    {{_("Completed Orders")}}
+                    {{ _("Completed Orders") }}
                 </th>
                 <th colspan="2" class="warning">
-                    {{_("Pending Orders")}}
+                    {{ _("Pending Orders") }}
                 </th>
             </tr>
             <tr class="active">
                 <th>
-                    {{_("Tickets")}}
+                    {{ _("Tickets") }}
                 </th>
                 <th>
-                    {{_("Sales")}}
+                    {{ _("Sales") }}
                 </th>
                 <th>
-                    {{_("Tickets")}}
+                    {{ _("Tickets") }}
                 </th>
                 <th>
-                    {{_("Sales")}}
+                    {{ _("Sales") }}
                 </th>
             </tr>
             </thead>
@@ -225,7 +226,7 @@
             <tfoot>
             <tr>
                 <th>
-                    {{_("Total")}}
+                    {{ _("Total") }}
                 </th>
                 <th>
 

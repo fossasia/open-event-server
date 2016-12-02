@@ -1,58 +1,56 @@
-"""Copyright 2015 Rafal Kowalski"""
+import datetime
 from collections import Counter
 
-from flask import url_for
+import humanize
 import pytz
 import requests
-import humanize
+from flask import flash, abort
+from flask import url_for
+from flask.ext import login
+from sqlalchemy import desc, asc, or_
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
+from app.helpers.cache import cache
+from app.helpers.helpers import get_event_id, string_empty, represents_int, get_count
+from .language_list import LANGUAGE_LIST
+from .static import EVENT_TOPICS, EVENT_LICENCES, PAYMENT_COUNTRIES, PAYMENT_CURRENCIES, DEFAULT_EVENT_IMAGES
+from ..models.activity import Activity
+from ..models.call_for_papers import CallForPaper
+from ..models.custom_forms import CustomForms
+from ..models.custom_placeholder import CustomPlaceholder
+from ..models.email_notifications import EmailNotification
 from ..models.event import Event, EventsUsers
-from ..models.session import Session
-# User Notifications
-from ..models.notifications import Notification
-from ..models.message_settings import MessageSettings
-from ..models.track import Track
+from ..models.export_jobs import ExportJob
+from ..models.fees import TicketFees
+from ..models.file import File
 from ..models.image_config import ImageConfig
 from ..models.image_sizes import ImageSizes
-from ..models.custom_placeholder import CustomPlaceholder
+from ..models.import_jobs import ImportJob
 from ..models.invite import Invite
-from ..models.speaker import Speaker
-from ..models.email_notifications import EmailNotification
-from ..models.sponsor import Sponsor
+from ..models.mail import Mail
+from ..models.message_settings import MessageSettings
 from ..models.microlocation import Microlocation
-from ..models.users_events_roles import UsersEventsRoles
+from ..models.modules import Module
+from ..models.notifications import Notification
+from ..models.order import Order
+from ..models.page import Page
+from ..models.panel_permissions import PanelPermission
+from ..models.permission import Permission
 from ..models.role import Role
 from ..models.role_invite import RoleInvite
 from ..models.service import Service
-from ..models.permission import Permission
-from ..models.user import User
-from ..models.file import File
-from ..models.system_role import CustomSysRole
-from ..models.panel_permissions import PanelPermission
+from ..models.session import Session
 from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
-from ..models.call_for_papers import CallForPaper
-from ..models.custom_forms import CustomForms
-from ..models.mail import Mail
-from ..models.activity import Activity
-from ..models.ticket import Ticket
-from ..models.user_permissions import UserPermission
-from ..models.modules import Module
-from ..models.page import Page
-from ..models.export_jobs import ExportJob
+from ..models.speaker import Speaker
+from ..models.sponsor import Sponsor
+from ..models.system_role import CustomSysRole
 from ..models.tax import Tax
-from ..models.fees import TicketFees
-from ..models.order import Order
-from ..models.import_jobs import ImportJob
-from .language_list import LANGUAGE_LIST
-from .static import EVENT_TOPICS, EVENT_LICENCES, PAYMENT_COUNTRIES, PAYMENT_CURRENCIES, DEFAULT_EVENT_IMAGES
-from app.helpers.helpers import get_event_id, string_empty, represents_int, get_count
-from flask.ext import login
-from flask import flash, abort
-import datetime
-from sqlalchemy import desc, asc, or_
-from app.helpers.cache import cache
+from ..models.ticket import Ticket
+from ..models.track import Track
+from ..models.user import User
+from ..models.user_permissions import UserPermission
+from ..models.users_events_roles import UsersEventsRoles
 
 
 class DataGetter(object):
@@ -307,7 +305,7 @@ class DataGetter(object):
     def get_sponsors(event_id):
         """
         :param event_id: Event id
-        :return: All Sponsors fitered by event_id
+        :return: All Sponsors filtered by event_id
         """
         return Sponsor.query.filter_by(event_id=event_id)
 
@@ -661,7 +659,7 @@ class DataGetter(object):
     @staticmethod
     def get_all_notifications(count=300):
         """
-        Get all notfications, latest first.
+        Get all notifications, latest first.
         """
         notifications = Notification.query.order_by(desc(
             Notification.received_at)).limit(count).all()
@@ -763,7 +761,8 @@ class DataGetter(object):
         try:
             for event in DataGetter.get_live_and_public_events():
                 if not string_empty(event.location_name) and not string_empty(event.latitude) and not string_empty(
-                    event.longitude):
+                     event.longitude):
+
                     response = requests.get(
                         "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
                             event.longitude)).json()

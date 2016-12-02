@@ -1,32 +1,31 @@
-"""Copyright 2015 Rafal Kowalski"""
 import json
 import logging
 import os.path
 import random
-import traceback
-import oauth2
-import time
-from os import path
-from datetime import datetime, timedelta
-import PIL
-from PIL import Image
 import shutil
+import time
+import traceback
+from datetime import datetime, timedelta
+from os import path
+from urllib2 import urlopen
 
+import PIL
+import oauth2
 import requests
-from requests.exceptions import ConnectionError
+from PIL import Image
 from flask import flash, request, url_for, g, current_app
-from flask_socketio import emit
 from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
+from flask_socketio import emit
+from requests.exceptions import ConnectionError
 from requests_oauthlib import OAuth2Session
 from sqlalchemy.orm.collections import InstrumentedList
 from sqlalchemy.sql.expression import exists
-from urllib2 import urlopen
 from werkzeug import secure_filename
 from wtforms import ValidationError
 
 from app.helpers.cache import cache
-from app.helpers.helpers import string_empty, string_not_empty, uploaded_file
+from app.helpers.helpers import string_empty, string_not_empty
 from app.helpers.notification_email_triggers import trigger_new_session_notifications, \
     trigger_session_state_change_notifications
 from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth, TwitterOAuth
@@ -34,44 +33,43 @@ from app.helpers.storage import upload, UPLOAD_PATHS, UploadedFile, upload_local
 from app.models.notifications import Notification
 from app.models.stripe_authorization import StripeAuthorization
 from app.views.admin.super_admin.super_admin_base import PANEL_LIST
-# from app.views.api_v1_views import save_file_provided_by_url
 from ..helpers import helpers as Helper
 from ..helpers.data_getter import DataGetter
 from ..helpers.static import EVENT_LICENCES
-from ..helpers.update_version import VersionUpdater, get_all_columns
 from ..helpers.system_mails import MAILS
+from ..helpers.update_version import VersionUpdater, get_all_columns
 from ..models import db
 from ..models.activity import Activity, ACTIVITIES
 from ..models.call_for_papers import CallForPaper
-from ..models.panel_permissions import PanelPermission
 from ..models.custom_forms import CustomForms
+from ..models.email_notifications import EmailNotification
 from ..models.event import Event, EventsUsers
 from ..models.event_copyright import EventCopyright
 from ..models.file import File
+from ..models.image_sizes import ImageSizes
 from ..models.invite import Invite
+from ..models.message_settings import MessageSettings
 from ..models.microlocation import Microlocation
-from ..models.user_permissions import UserPermission
-from ..models.system_role import CustomSysRole, UserSystemRole
+from ..models.modules import Module
+from ..models.page import Page
+from ..models.panel_permissions import PanelPermission
 from ..models.permission import Permission
 from ..models.role import Role
 from ..models.role_invite import RoleInvite
-from ..models.ticket import Ticket, TicketTag
 from ..models.service import Service
-from ..models.image_sizes import ImageSizes
 from ..models.session import Session
 from ..models.session_type import SessionType
 from ..models.social_link import SocialLink
 from ..models.speaker import Speaker
 from ..models.sponsor import Sponsor
+from ..models.system_role import CustomSysRole, UserSystemRole
+from ..models.tax import Tax
+from ..models.ticket import Ticket, TicketTag
 from ..models.track import Track
 from ..models.user import User, ORGANIZER, ATTENDEE
 from ..models.user_detail import UserDetail
+from ..models.user_permissions import UserPermission
 from ..models.users_events_roles import UsersEventsRoles
-from ..models.page import Page
-from ..models.modules import Module
-from ..models.email_notifications import EmailNotification
-from ..models.message_settings import MessageSettings
-from ..models.tax import Tax
 
 
 class DataManager(object):
@@ -294,8 +292,8 @@ class DataManager(object):
     def create_session(form, event_id, is_accepted=True):
         """
         Session will be saved to database with proper Event id
+        :param is_accepted:
         :param form: view data form
-        :param slide_file:
         :param event_id: Session belongs to Event by event id
         """
         new_session = Session(title=form.title.data,
@@ -409,7 +407,7 @@ class DataManager(object):
         if string_not_empty(logo) and logo:
             filename = '{}.png'.format(time.time())
             filepath = '{}/static/{}'.format(path.realpath('.'),
-                       logo[len('/serve_static/'):])
+                                             logo[len('/serve_static/'):])
             try:
                 logo_file = UploadedFile(filepath, filename)
                 logo = upload(logo_file, 'events/%d/speakers/%d/photo' % (int(event_id), int(speaker.id)))
@@ -426,12 +424,12 @@ class DataManager(object):
                 save_to_db(image_sizes, "Image Sizes Saved")
                 filename = '{}.jpg'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
-                           logo[len('/serve_static/'):])
+                                                 logo[len('/serve_static/'):])
                 logo_file = UploadedFile(filepath, filename)
 
                 temp_img_file = upload_local(logo_file,
                                              'events/{event_id}/speakers/{id}/temp'.format(
-                                             event_id=int(event_id), id=int(speaker.id)))
+                                                 event_id=int(event_id), id=int(speaker.id)))
                 temp_img_file = temp_img_file.replace('/serve_', '')
 
                 basewidth = image_sizes.full_width
@@ -473,7 +471,7 @@ class DataManager(object):
                         event_id=int(event_id), id=int(speaker.id)
                     ))
                 shutil.rmtree(path='static/media/' + 'events/{event_id}/speakers/{id}/temp'.format(
-                              event_id=int(event_id), id=int(speaker.id)))
+                    event_id=int(event_id), id=int(speaker.id)))
                 speaker.thumbnail = profile_thumbnail_url
                 speaker.small = profile_small_url
                 speaker.icon = profile_icon_url
@@ -538,7 +536,6 @@ class DataManager(object):
                               user=user if login and login.current_user.is_authenticated else None)
             save_to_db(speaker, "Speaker saved")
             record_activity('create_speaker', speaker=speaker, event_id=event_id)
-        speaker_img = ""
         if speaker_img_file != "":
             speaker_img = upload(
                 speaker_img_file,
@@ -553,7 +550,7 @@ class DataManager(object):
         if string_not_empty(logo) and logo:
             filename = '{}.png'.format(time.time())
             filepath = '{}/static/{}'.format(path.realpath('.'),
-                       logo[len('/serve_static/'):])
+                                             logo[len('/serve_static/'):])
             logo_file = UploadedFile(filepath, filename)
             logo = upload(logo_file, 'events/%d/speakers/%d/photo' % (int(event_id), int(speaker.id)))
             speaker.photo = logo
@@ -569,12 +566,12 @@ class DataManager(object):
             save_to_db(image_sizes, "Image Sizes Saved")
             filename = '{}.jpg'.format(time.time())
             filepath = '{}/static/{}'.format(path.realpath('.'),
-                       logo[len('/serve_static/'):])
+                                             logo[len('/serve_static/'):])
             logo_file = UploadedFile(filepath, filename)
 
             temp_img_file = upload_local(logo_file,
                                          'events/{event_id}/speakers/{id}/temp'.format(
-                                         event_id=int(event_id), id=int(speaker.id)))
+                                             event_id=int(event_id), id=int(speaker.id)))
             temp_img_file = temp_img_file.replace('/serve_', '')
 
             basewidth = image_sizes.full_width
@@ -616,7 +613,7 @@ class DataManager(object):
                     event_id=int(event_id), id=int(speaker.id)
                 ))
             shutil.rmtree(path='static/media/' + 'events/{event_id}/speakers/{id}/temp'.format(
-                          event_id=int(event_id), id=int(speaker.id)))
+                event_id=int(event_id), id=int(speaker.id)))
             speaker.thumbnail = profile_thumbnail_url
             speaker.small = profile_small_url
             speaker.icon = profile_icon_url
@@ -658,7 +655,7 @@ class DataManager(object):
         update_version(session.event_id, False, "sessions_ver")
 
     @staticmethod
-    def session_accept_reject(session, event_id, state, send_email = True):
+    def session_accept_reject(session, event_id, state, send_email=True):
         session.state = state
         session.submission_date = datetime.now()
         session.submission_modifier = login.current_user.email
@@ -712,7 +709,7 @@ class DataManager(object):
             session.short_abstract = form.get('short_abstract', '')
             session.state = form_state
             session.track_id = form.get('track', None) if form.get('track', None) != "" else  None
-            session.session_type_id = form.get('session_type', None)  if form.get('session_type', None) != "" else None
+            session.session_type_id = form.get('session_type', None) if form.get('session_type', None) != "" else None
 
             existing_speaker_ids = form.getlist("speakers[]")
             current_speaker_ids = []
@@ -727,7 +724,9 @@ class DataManager(object):
                 current_speaker_ids.append(str(current_speaker.id))
 
             for current_speaker_id in current_speaker_ids:
-                if current_speaker_id not in existing_speaker_ids and current_speaker_id not in existing_speaker_ids_by_email:
+                if current_speaker_id not in existing_speaker_ids and current_speaker_id \
+                     not in existing_speaker_ids_by_email:
+
                     current_speaker = DataGetter.get_speaker(current_speaker_id)
                     session.speakers.remove(current_speaker)
                     db.session.commit()
@@ -1005,12 +1004,12 @@ class DataManager(object):
 
             user_detail.details = form['details']
             logo = form.get('logo', None)
-            #print logo
+            # print logo
             if string_not_empty(logo) and logo:
                 filename = '{}.png'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
-                           logo[len('/serve_static/'):])
-                #print "File path 1", filepath
+                                                 logo[len('/serve_static/'):])
+                # print "File path 1", filepath
                 logo_file = UploadedFile(filepath, filename)
                 logo_temp = upload(logo_file, 'users/%d/avatar' % int(user_id))
                 user_detail.avatar_uploaded = logo_temp
@@ -1026,8 +1025,8 @@ class DataManager(object):
                 save_to_db(image_sizes, "Image Sizes Saved")
                 filename = '{}.jpg'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
-                           logo[len('/serve_static/'):])
-                #print "File path 1", filepath
+                                                 logo[len('/serve_static/'):])
+                # print "File path 1", filepath
                 logo_file = UploadedFile(filepath, filename)
 
                 temp_img_file = upload_local(logo_file,
@@ -1117,7 +1116,7 @@ class DataManager(object):
         db.session.add(sys_role)
         for panel in PANEL_LIST:
             perm, _ = get_or_create(PanelPermission, panel_name=panel,
-                role=sys_role)
+                                    role=sys_role)
             if form.get(panel):
                 perm.can_access = True
             else:
@@ -1223,7 +1222,7 @@ class DataManager(object):
                       payment_country=form.get('payment_country', ''),
                       payment_currency=payment_currency,
                       paypal_email=paypal_email,
-                      cheque_details=form.get('cheque-details',''),
+                      cheque_details=form.get('cheque-details', ''),
                       bank_details=form.get('bank-details', ''),
                       onsite_details=form.get('onsite-details', ''))
 
@@ -1286,7 +1285,7 @@ class DataManager(object):
                 bg.save(out_im, quality=55)
                 filename = '{}.png'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
-                           temp_background[len('/serve_static/'):])
+                                                 temp_background[len('/serve_static/'):])
                 background_file = UploadedFile(filepath, filename)
                 background_url = upload(
                     background_file,
@@ -1296,7 +1295,7 @@ class DataManager(object):
 
                 filename = '{}.jpg'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
-                           temp_background[len('/serve_static/'):])
+                                                 temp_background[len('/serve_static/'):])
                 background_file = UploadedFile(filepath, filename)
 
                 temp_img_file = upload_local(background_file,
@@ -1370,7 +1369,7 @@ class DataManager(object):
             if temp_logo:
                 filename = '{}.png'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
-                    temp_logo[len('/serve_static/'):])
+                                                 temp_logo[len('/serve_static/'):])
                 logo_file = UploadedFile(filepath, filename)
                 logo = upload(
                     logo_file,
@@ -1464,7 +1463,7 @@ class DataManager(object):
                         if sponsor_logo[index] != "":
                             filename = '{}.png'.format(time.time())
                             filepath = '{}/static/{}'.format(path.realpath('.'),
-                                sponsor_logo[index][len('/serve_static/'):])
+                                                             sponsor_logo[index][len('/serve_static/'):])
                             logo_file = UploadedFile(filepath, filename)
                             logo = upload(
                                 logo_file,
@@ -1548,7 +1547,7 @@ class DataManager(object):
                 session_form=session_form, speaker_form=speaker_form)
 
             if module and (module.payment_include or module.donation_include) \
-                and ('paid' or 'donation') in form.getlist('tickets[type]'):
+                 and ('paid' or 'donation') in form.getlist('tickets[type]'):
 
                 if form['taxAllow'] == 'taxNo':
                     event.tax_allow = False
@@ -1767,7 +1766,7 @@ class DataManager(object):
                 description_toggle = form.get('tickets_description_toggle_{}'.format(i), False)
                 description_toggle = True if description_toggle == 'on' else False
 
-                tag_list = DataManager.create_ticket_tags(ticket_tags[i], event.id,)
+                tag_list = DataManager.create_ticket_tags(ticket_tags[i], event.id, )
 
                 ticket, _ = get_or_create(Ticket, name=name, event=event, type=ticket_types[i])
 
@@ -1879,8 +1878,9 @@ class DataManager(object):
 
         state = form.get('state', None)
         if state and ((state == u'Published' and not string_empty(
-            event.location_name)) or state != u'Published') and login.current_user.is_verified:
-            event.state = state
+           event.location_name)) or state != u'Published') and login.current_user.is_verified:
+
+           event.state = state
 
         social_link_name = form.getlist('social[name]')
         social_link_link = form.getlist('social[link]')
@@ -2060,7 +2060,7 @@ class DataManager(object):
                     if sponsor_logo[index] != "":
                         filename = '{}.png'.format(time.time())
                         filepath = '{}/static/{}'.format(path.realpath('.'),
-                            sponsor_logo[index][len('/serve_static/'):])
+                                                         sponsor_logo[index][len('/serve_static/'):])
                         logo_file = UploadedFile(filepath, filename)
                         logo = upload(
                             logo_file,
@@ -2123,8 +2123,7 @@ class DataManager(object):
         """
         file = request.files["file"]
         filename = secure_filename(file.filename)
-        if not db.session.query(exists() \
-                                    .where(File.name == filename)).scalar():
+        if not db.session.query(exists().where(File.name == filename)).scalar():
             if file.mimetype.split('/', 1)[0] == "image":
                 file.save(os.path.join(os.path.realpath('.')
                                        + '/static/', filename))
@@ -2136,8 +2135,7 @@ class DataManager(object):
                 save_to_db(file_object, "file saved")
                 flash("Image added")
             else:
-                flash("The selected file is not an image. Please select a " \
-                      "image file and try again.")
+                flash("The selected file is not an image. Please select a image file and try again.")
         else:
             flash("A file named \"" + filename + "\" already exists")
 
@@ -2190,7 +2188,8 @@ class DataManager(object):
         save_to_db(page, "Page created")
         cache.delete('pages')
 
-    def update_page(self, page, form):
+    @staticmethod
+    def update_page(page, form):
         page.name = form.get('name', '')
         page.title = form.get('title', '')
         page.description = form.get('description', '')
@@ -2224,6 +2223,7 @@ class DataManager(object):
 
 def save_to_db(item, msg="Saved to db", print_error=True):
     """Convenience function to wrap a proper DB save
+    :param print_error:
     :param item: will be saved to database
     :param msg: Message to log
     """
@@ -2296,7 +2296,6 @@ def get_twitter_auth_url():
     client = oauth2.Client(consumer)
     resp, content = client.request('https://api.twitter.com/oauth/request_token', "GET")
     return content + "&redirect_uri" + TwitterOAuth.get_redirect_uri(), consumer
-
 
 
 def create_user_oauth(user, user_data, token, method):
@@ -2389,7 +2388,7 @@ def record_activity(template, login_user=None, **kwargs):
 
 
 def update_version(event_id, is_created, column_to_increment):
-    """Function resposnible for increasing version when some data will be
+    """Function responsible for increasing version when some data will be
     created or changed
     :param event_id: Event id
     :param is_created: Object exist True/False

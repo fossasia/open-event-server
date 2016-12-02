@@ -1,5 +1,4 @@
 import requests
-
 from sqlalchemy import or_, func, and_
 
 from app.helpers.helpers import get_date_range
@@ -18,7 +17,7 @@ def extract_special_queries(queries):
         if i.startswith('__') and i in FILTERS_LIST:
             specials[i] = queries[i]
             del dc[i]
-    return (dc, specials)
+    return dc, specials
 
 
 def apply_special_queries(query, specials):

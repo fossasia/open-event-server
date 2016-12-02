@@ -1,6 +1,6 @@
-"""Copyright 2015 Rafal Kowalski"""
-from . import db
 from sqlalchemy.orm import backref
+
+from . import db
 
 
 class Version(db.Model):

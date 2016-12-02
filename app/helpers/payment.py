@@ -1,17 +1,15 @@
-"""Copyright 2016 Niranjan Rajendran"""
 import urlparse
 from urllib import urlencode
 
+import requests
 import sqlalchemy
 import stripe
 from flask import url_for, current_app
-
-import requests
 from forex_python.converter import CurrencyRates
 
 from app.helpers.cache import cache
-from app.helpers.data_getter import DataGetter
 from app.helpers.data import save_to_db
+from app.helpers.data_getter import DataGetter
 from app.helpers.helpers import represents_int
 from app.models.fees import TicketFees
 from app.models.order import Order
@@ -40,12 +38,12 @@ def get_fee(currency):
 
 
 class StripePaymentsManager(object):
-
     @staticmethod
     def get_credentials(event=None):
         if not event:
             settings = get_settings()
-            if settings['stripe_secret_key'] and settings["stripe_publishable_key"] and settings['stripe_secret_key'] != "" and \
+            if settings['stripe_secret_key'] and settings["stripe_publishable_key"] and settings[
+                'stripe_secret_key'] != "" and \
                     settings["stripe_publishable_key"] != "":
                 return {
                     'SECRET_KEY': settings['stripe_secret_key'],
@@ -105,7 +103,6 @@ class StripePaymentsManager(object):
 
 
 class PayPalPaymentsManager(object):
-
     api_version = 93
 
     @staticmethod

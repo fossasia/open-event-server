@@ -1,9 +1,10 @@
 from flask import url_for, redirect
 from flask.ext.admin import BaseView
 from flask_admin import expose
-from ....helpers.data_getter import DataGetter
-from app.helpers.permission_decorators import *
+
 from app.helpers.data import delete_from_db
+from app.helpers.permission_decorators import *
+from ....helpers.data_getter import DataGetter
 
 
 class SponsorsView(BaseView):
@@ -17,7 +18,7 @@ class SponsorsView(BaseView):
         event = DataGetter.get_event(event_id)
         return self.render('/gentelella/admin/event/sponsors/new.html', event_id=event_id, event=event)
 
-    @expose('/<sponsor_id>/delete/', methods=('GET', ))
+    @expose('/<sponsor_id>/delete/', methods=('GET',))
     @can_access
     def delete_view(self, event_id, sponsor_id):
         sponsor = DataGetter.get_sponsor(sponsor_id)

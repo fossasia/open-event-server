@@ -1,14 +1,14 @@
 import flask_login
 from flask import flash
 from flask import make_response
-from flask_login import current_user
 from flask_admin import BaseView, expose
+from flask_login import current_user
 from markupsafe import Markup
 
-from app.helpers.importers import ImportHelper
-from app.views.admin.models_views.events import is_verified_user
 from app.helpers.data_getter import DataGetter
 from app.helpers.export import ExportHelper
+from app.helpers.importers import ImportHelper
+from app.views.admin.models_views.events import is_verified_user
 
 
 class ExportView(BaseView):
@@ -59,6 +59,3 @@ class ExportView(BaseView):
         resp = make_response(event.id)
         resp.headers['Content-type'] = 'text/plain'
         return resp
-
-
-

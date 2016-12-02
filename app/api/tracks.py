@@ -1,7 +1,7 @@
 from flask.ext.restplus import Namespace
 
 from app.models.track import Track as TrackModel
-
+from .helpers import custom_fields as fields
 from .helpers.helpers import (
     can_create,
     can_update,
@@ -10,7 +10,6 @@ from .helpers.helpers import (
 )
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
-from .helpers import custom_fields as fields
 from .helpers.utils import Resource, ETAG_HEADER_DEFN
 
 api = Namespace('tracks', description='Tracks', path='/')
@@ -42,6 +41,7 @@ del TRACK_POST['sessions']
 # Create DAO
 class TrackDAO(ServiceDAO):
     version_key = 'tracks_ver'
+
 
 DAO = TrackDAO(TrackModel, TRACK_POST)
 

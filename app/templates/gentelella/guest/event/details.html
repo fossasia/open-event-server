@@ -21,8 +21,8 @@
 {% macro organizer_info() %}
     <div class="col-md-4 speaker-info" style="text-align: center">
         <img src="{{ url_for('static', filename='img/1.jpg') }}" style="width: 100%;"><br>
-        <h4 style="font-weight: 500;">{{_("Firstname Lastname")}}</h4>
-        <h5 style="margin-top: 0;">{{_("Organisation")}}</h5>
+        <h4 style="font-weight: 500;">{{ _("Firstname Lastname") }}</h4>
+        <h5 style="margin-top: 0;">{{ _("Organisation") }}</h5>
         <a href=""><i class="fa fa-facebook-square"></i></a> <a href=""><i class="fa fa-twitter-square"></i></a>
     </div>
 {% endmacro %}
@@ -57,7 +57,7 @@
                             {{ speaker_info(speaker) }}
                         {% endfor %}
                     {% else %}
-                        {{_("No sessions have been published yet")}}
+                        {{ _("No sessions have been published yet") }}
                     {% endfor %}
                 </div>
             </div>
@@ -70,19 +70,19 @@
                     {% for sponsor in event.sponsor %}
                         {{ sponsor_info(sponsor) }}
                     {% else %}
-                        {{_("Sponsors info unavailable")}}
+                        {{ _("Sponsors info unavailable") }}
                     {% endfor %}
                 </div>
             </div>
             <br>
         {% endif %}
         {% if event.organizer_name %}
-            <h3 id="organizer">{{_("Organized by")}} {{ event.organizer_name }}</h3>
+            <h3 id="organizer">{{ _("Organized by") }} {{ event.organizer_name }}</h3>
             <p>{{ event.organizer_description | safe }}</p>
             <br>
         {% endif %}
         {% if event.location_name %}
-            <h3 id="getting-here">{{_("Getting Here")}}</h3>
+            <h3 id="getting-here">{{ _("Getting Here") }}</h3>
             <div class="row">
                 {% if event.show_map != 0 %}
                     <div id="map"
@@ -155,7 +155,6 @@
                 }
             }
         });
-
 
 
     </script>

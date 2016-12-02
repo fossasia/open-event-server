@@ -4,7 +4,6 @@ from datetime import datetime
 from flask import request
 from flask.ext.restplus.fields import Raw, Nested, List
 
-
 EMAIL_REGEX = re.compile(r'\S+@\S+\.\S+')
 URI_REGEX = re.compile(r'(http|https|ftp)://\S*(\S+\.|localhost(\:\d+)?/)\S+')
 

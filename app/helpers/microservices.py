@@ -1,7 +1,8 @@
 import requests
-from app.helpers.data_getter import DataGetter
 from flask import request, flash
 from flask.ext import login
+
+from app.helpers.data_getter import DataGetter
 from app.settings import get_settings
 
 

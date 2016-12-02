@@ -1,9 +1,10 @@
-from flask import url_for, render_template, make_response, request, \
-    Blueprint, abort
 from math import ceil
 
-from app.models.event import Event
+from flask import url_for, render_template, make_response, request, \
+    Blueprint, abort
+
 from app.helpers.data_getter import DataGetter
+from app.models.event import Event
 
 app = Blueprint('sitemaps', __name__)
 
@@ -22,11 +23,8 @@ event_details_pages = [
 
 @app.route('/sitemap.xml', methods=('GET', 'POST'))
 def render_sitemap():
-    urls = []
+    urls = [full_url(url_for('sitemaps.render_pages_sitemap'))]
     # pages sitemap
-    urls.append(
-        full_url(url_for('sitemaps.render_pages_sitemap'))
-    )
     # get events pages
     events = get_indexable_events()
     pages = int(ceil(len(events) / (PER_PAGE_EVENTS * 1.0)))
@@ -47,7 +45,7 @@ def render_pages_sitemap():
         page.url if page.url.find('://') > -1 else
         full_url(url_for('basicpagesview.url_view', url=page.url))
         for page in DataGetter.get_all_pages()
-    ]
+        ]
     return make_sitemap_response(urls)
 
 
@@ -64,9 +62,10 @@ def render_event_pages(num):
         urls = [
             full_url(url_for('event_detail.' + view, identifier=e.identifier))
             for view in event_details_pages
-        ]
+            ]
         main_urls += urls
     return make_sitemap_response(main_urls)
+
 
 ##########
 # Helpers

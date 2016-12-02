@@ -1,9 +1,8 @@
-"""Copyright 2015 Rafal Kowalski"""
 from . import db
 
 
 class ImageConfig(db.Model):
-    """image conig model class"""
+    """image config model class"""
     __tablename__ = 'image_config'
     id = db.Column(db.Integer,
                    primary_key=True)
