@@ -18,11 +18,11 @@
                 <tbody>
                 <tr>
                     <td>{{ _("Heroku Version") }}</td>
-                    <td>{{ version.version }}</td>
+                    <td>{{ heroku_release.version }}</td>
                 </tr>
                 <tr>
                     <td>{{ _("Revision") }}</td>
-                    <td><a href="{{ commit_info.html_url }}" target="_blank">{{ version.description }} <i
+                    <td><a href="{{ commit_info.html_url }}" target="_blank">{{ heroku_release.description }} <i
                             class="fa fa-code-fork"></i></a></td>
                 </tr>
                 <tr>

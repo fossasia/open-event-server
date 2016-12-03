@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 
 from dateutil.relativedelta import relativedelta
-from flask import current_app as app
 from flask import url_for
 from sqlalchemy_continuum import transaction_class
 
@@ -19,6 +18,7 @@ from app.models.user import User
 
 
 def empty_trash():
+    from app import current_app as app
     with app.app_context():
         events = Event.query.filter_by(in_trash=True)
         users = User.query.filter_by(in_trash=True)
@@ -39,6 +39,7 @@ def empty_trash():
 
 
 def send_after_event_mail():
+    from app import current_app as app
     with app.app_context():
         events = Event.query.all()
         for event in events:
@@ -57,6 +58,7 @@ def send_after_event_mail():
 
 
 def send_mail_to_expired_orders():
+    from app import current_app as app
     with app.app_context():
         orders = DataGetter.get_expired_orders()
         for order in orders:
@@ -66,6 +68,7 @@ def send_mail_to_expired_orders():
 
 
 def send_event_fee_notification():
+    from app import current_app as app
     with app.app_context():
         events = Event.query.all()
         for event in events:
@@ -107,6 +110,7 @@ def send_event_fee_notification():
 
 
 def send_event_fee_notification_followup():
+    from app import current_app as app
     with app.app_context():
         incomplete_invoices = EventInvoice.query.filter(EventInvoice.status != 'completed').all()
         for incomplete_invoice in incomplete_invoices:
