@@ -1,14 +1,16 @@
 import unittest
 from datetime import datetime
-from tests.unittests.utils import OpenEventTestCase
-from tests.unittests.setup_database import Setup
-from tests.unittests.object_mother import ObjectMother
+
 from app import current_app as app
+from app.helpers.data import restore_event, restore_session, restore_user
 from app.helpers.data import save_to_db
 from app.models.event import Event
-from app.helpers.data import restore_event, restore_session, restore_user
-from app.models.user import User
 from app.models.session import Session
+from app.models.user import User
+from tests.unittests.object_mother import ObjectMother
+from tests.unittests.setup_database import Setup
+from tests.unittests.utils import OpenEventTestCase
+
 
 class TestAdminTrash(OpenEventTestCase):
     def setUp(self):
@@ -50,6 +52,7 @@ class TestAdminTrash(OpenEventTestCase):
             save_to_db(session, "Session saved")
             restore_session(1)
             self.assertEqual(session.in_trash, False)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,16 +1,15 @@
-"""Copyright 2015 Rafal Kowalski"""
 from datetime import datetime
 
 from app.models.call_for_papers import CallForPaper
 from app.models.custom_forms import CustomForms, session_form_str, speaker_form_str
-from app.models.track import Track
 from app.models.event import Event
+from app.models.message_settings import MessageSettings
+from app.models.microlocation import Microlocation
+from app.models.notifications import Notification
 from app.models.session import Session
 from app.models.speaker import Speaker
-from app.models.microlocation import Microlocation
+from app.models.track import Track
 from app.models.user import User
-from app.models.message_settings import MessageSettings
-from app.models.notifications import Notification
 
 
 class ObjectMother(object):
@@ -47,6 +46,7 @@ class ObjectMother(object):
                              latitude=1.0,
                              longitude=1.0,
                              event_id=event_id)
+
     @staticmethod
     def get_custom_form(event_id=1):
         return CustomForms(event_id=event_id,
@@ -55,10 +55,10 @@ class ObjectMother(object):
 
     @staticmethod
     def get_speaker():
-        return Speaker( name="name",
-                        email="email@gmail.com",
-                        organisation="FOSSASIA",
-                        country="India")
+        return Speaker(name="name",
+                       email="email@gmail.com",
+                       organisation="FOSSASIA",
+                       country="India")
 
     @staticmethod
     def get_user():
@@ -84,8 +84,8 @@ class ObjectMother(object):
     def get_notification():
         user = ObjectMother.get_user()
         return Notification(
-                 user=user,
-                 title="test title",
-                 message="test msg",
-                 action="Testing",
-                 received_at=datetime.now())
+            user=user,
+            title="test title",
+            message="test msg",
+            action="Testing",
+            received_at=datetime.now())

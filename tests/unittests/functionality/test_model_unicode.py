@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
 import unittest
-
-from tests.unittests.setup_database import Setup
-from tests.unittests.utils import OpenEventTestCase
+from datetime import datetime
 
 from app import current_app as app
 from app.helpers.data import save_to_db
 from app.models.event import Event
+from app.models.microlocation import Microlocation
 from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
-from app.models.microlocation import Microlocation
+from tests.unittests.setup_database import Setup
+from tests.unittests.utils import OpenEventTestCase
 
 UNICODE_STRING = u'☺'
 
@@ -20,6 +19,7 @@ class TestModelUnicode(OpenEventTestCase):
     """
     Tests for unicode handling in models
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():

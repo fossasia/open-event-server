@@ -1,19 +1,18 @@
-import unittest
 import json
+import unittest
 
-from tests.unittests.setup_database import Setup
-from tests.unittests.utils import OpenEventTestCase
-from tests.unittests.api.utils import create_event, get_path
-from tests.unittests.api.utils_post_data import *
-from tests.unittests.auth_helper import register, login, logout
 from app import current_app as app
-
 from app.api.events import EVENT_POST, SOCIAL_LINK_POST
-from app.api.tracks import TRACK_POST
 from app.api.microlocations import MICROLOCATION_POST
 from app.api.sessions import SESSION_POST, SESSION_TYPE_POST
 from app.api.speakers import SPEAKER_POST
 from app.api.sponsors import SPONSOR_POST
+from app.api.tracks import TRACK_POST
+from tests.unittests.api.utils import create_event, get_path
+from tests.unittests.api.utils_post_data import *
+from tests.unittests.auth_helper import register, login, logout
+from tests.unittests.setup_database import Setup
+from tests.unittests.utils import OpenEventTestCase
 
 
 class TestPostApiBase(OpenEventTestCase):
@@ -21,6 +20,7 @@ class TestPostApiBase(OpenEventTestCase):
     Base class to test POST APIs
     Includes some helper methods which are required by POST API testcases
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
@@ -51,6 +51,7 @@ class TestPostApi(TestPostApiBase):
     Test POST APIs against 401 (unauthorized) and
     201 (successful) status codes
     """
+
     def _test_model(self, name, data, path=None, checks=[]):
         """
         Tests -
@@ -136,6 +137,7 @@ class TestPostApiMin(TestPostApiBase):
     Test POST API with minimum payload
     Only required payloads are kept
     """
+
     def _test_model(self, name, data, api_model, path=None):
         # strip data
         data = data.copy()

@@ -1,12 +1,13 @@
 import unittest
-from tests.unittests.utils import OpenEventTestCase
-from app.models.session_type import SessionType
-from app.models.session import Session
-from tests.unittests.setup_database import Setup
+from datetime import datetime
+
 from app import current_app as app
 from app.helpers.data import save_to_db
+from app.models.session import Session
+from app.models.session_type import SessionType
 from tests.unittests.object_mother import ObjectMother
-from datetime import datetime
+from tests.unittests.setup_database import Setup
+from tests.unittests.utils import OpenEventTestCase
 
 
 class TestSessionType(OpenEventTestCase):

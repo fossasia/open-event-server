@@ -2,18 +2,18 @@ import unittest
 
 from flask import url_for
 
+from app import current_app as app
 from app.helpers.data import save_to_db
+from app.helpers.data_getter import DataGetter
 from app.models.role import Role
 from app.models.role_invite import RoleInvite
-from populate_db import populate
-from app.helpers.data_getter import DataGetter
-from tests.unittests.object_mother import ObjectMother
-from app import current_app as app
-from tests.unittests.views.view_test_case import OpenEventViewTestCase
 from app.models.users_events_roles import UsersEventsRoles
+from populate_db import populate
+from tests.unittests.object_mother import ObjectMother
+from tests.unittests.views.view_test_case import OpenEventViewTestCase
+
 
 class TestRoles(OpenEventViewTestCase):
-
     def test_role_create_post(self):
         with app.test_request_context():
             event = ObjectMother.get_event()
@@ -44,7 +44,8 @@ class TestRoles(OpenEventViewTestCase):
             role = Role.query.filter_by(name='coorganizer').first()
             uer = UsersEventsRoles(user, event, role)
             save_to_db(uer, "UER Saved")
-            rv = self.app.get(url_for('event_roles.delete_view', uer_id=uer.id, event_id=event.id), follow_redirects=True)
+            rv = self.app.get(url_for('event_roles.delete_view', uer_id=uer.id, event_id=event.id),
+                              follow_redirects=True)
             uer = UsersEventsRoles.query.get(uer.id)
             self.assertTrue(uer is None, msg=rv.data)
 

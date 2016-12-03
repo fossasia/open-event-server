@@ -1,19 +1,18 @@
-from flask_admin import BaseView, expose
+from flask import Blueprint
+from flask import render_template
 
-from ...helpers.data_getter import DataGetter
+from app.helpers.data_getter import DataGetter
+
+pages = Blueprint('basicpagesview', __name__)
 
 
-class BasicPagesView(BaseView):
-    @expose('/', methods=('GET', 'POST'))
-    def index(self):
-        pass
+@pages.route('/<url>/', methods=('GET', 'POST'))
+def url_view(url):
+    from app import get_locale
+    page = DataGetter.get_page_by_url('/' + url, get_locale())
+    return render_template('gentelella/guest/page.html', page=page)
 
-    @expose('/<url>/', methods=('GET', 'POST'))
-    def url_view(self, url):
-        from app import get_locale
-        page = DataGetter.get_page_by_url('/' + url, get_locale())
-        return self.render('/gentelella/guest/page.html', page=page)
 
-    @expose('/sitemap', methods=('GET', 'POST'))
-    def sitemap_view(self):
-        return self.render('/gentelella/guest/sitemap.html')
+@pages.route('/sitemap', methods=('GET', 'POST'))
+def sitemap_view():
+    return render_template('gentelella/guest/sitemap.html')

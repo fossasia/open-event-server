@@ -1,12 +1,12 @@
 import unittest
 
+from app import current_app as app
 from app.helpers.data import save_to_db
 from app.models.page import Page
-from tests.unittests.object_mother import ObjectMother
 from tests.unittests.auth_helper import register
+from tests.unittests.object_mother import ObjectMother
 from tests.unittests.setup_database import Setup
 from tests.unittests.utils import OpenEventTestCase
-from app import current_app as app
 
 
 class TestSitemaps(OpenEventTestCase):
@@ -47,7 +47,7 @@ class TestSitemaps(OpenEventTestCase):
             page2 = Page(name='def', url='http://def.com')
             save_to_db(page2)
         resp = self.app.get('/sitemaps/pages.xml.gz')
-        #self.assertIn('localhost/abc', resp.data)
+        # self.assertIn('localhost/abc', resp.data)
         self.assertIn('<loc>http://def.com', resp.data)
 
 

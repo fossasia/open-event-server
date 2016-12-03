@@ -3,18 +3,18 @@ import unittest
 from datetime import datetime, timedelta
 from os import environ
 
-from flask import url_for
 from bs4 import BeautifulSoup
+from flask import url_for
 
+from app import current_app as app
 from app.helpers.data import save_to_db
+from app.helpers.ticketing import TicketingManager
 from app.models.modules import Module
 from app.models.stripe_authorization import StripeAuthorization
 from app.models.ticket import Ticket
 from app.settings import set_settings
 from tests.unittests.object_mother import ObjectMother
 from tests.unittests.utils import OpenEventTestCase
-from app import current_app as app
-from app.helpers.ticketing import TicketingManager
 
 
 def get_event_ticket():
@@ -175,7 +175,7 @@ class TestTicketingPage(OpenEventTestCase):
     def test_order_payment_paypal_cancel(self):
         with app.test_request_context():
             event, ticket, identifier = create_order(self)
-            response = self.app.get(
+            self.app.get(
                 url_for('ticketing.paypal_callback', order_identifier=identifier, function="cancel"),
                 follow_redirects=True)
             order = TicketingManager.get_order_by_identifier(identifier)

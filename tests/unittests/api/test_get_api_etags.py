@@ -1,11 +1,10 @@
 import unittest
 
+from app import current_app as app
+from tests.unittests.api.utils import get_path, create_event, create_services
+from tests.unittests.auth_helper import register, login
 from tests.unittests.setup_database import Setup
 from tests.unittests.utils import OpenEventTestCase
-from tests.unittests.auth_helper import register, login
-from tests.unittests.api.utils import get_path, create_event, create_services
-
-from app import current_app as app
 
 
 class TestEtagGetApi(OpenEventTestCase):
@@ -46,7 +45,7 @@ class TestEtagGetApi(OpenEventTestCase):
 
             # Send new request with If-None-Match header set
             response = self.app.get(path, headers={'If-None-Match': etag},
-                follow_redirects=True)
+                                    follow_redirects=True)
 
             # Check if response was 304 Not Modified
             self.assertEqual(response.status_code, 304)

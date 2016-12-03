@@ -1,15 +1,18 @@
 import unittest
 from datetime import datetime
-from tests.unittests.utils import OpenEventTestCase
-from tests.unittests.setup_database import Setup
-from tests.unittests.object_mother import ObjectMother
-from app import current_app as app
-from app.helpers.data import save_to_db
+
 from flask import url_for
-from app.models.event import Event
+
+from app import current_app as app
 from app.helpers.data import DataManager, trash_user, trash_session
-from app.models.user import User
+from app.helpers.data import save_to_db
+from app.models.event import Event
 from app.models.session import Session
+from app.models.user import User
+from tests.unittests.object_mother import ObjectMother
+from tests.unittests.setup_database import Setup
+from tests.unittests.utils import OpenEventTestCase
+
 
 class TestAdminTrash(OpenEventTestCase):
     def setUp(self):
@@ -24,7 +27,7 @@ class TestAdminTrash(OpenEventTestCase):
 
             save_to_db(event, "Event saved")
             DataManager.trash_event(1)
-            url= url_for('events.index_view')
+            url = url_for('events.index_view')
             rv = self.app.get(url)
             self.assertFalse('event1' in rv.data)
             self.assertEqual(event.in_trash, True)
@@ -57,6 +60,7 @@ class TestAdminTrash(OpenEventTestCase):
             rv = self.app.get(url)
             self.assertFalse('Session 1' in rv.data)
             self.assertEqual(session.in_trash, True)
+
 
 if __name__ == '__main__':
     unittest.main()

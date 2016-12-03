@@ -1,18 +1,19 @@
-import unittest
 import json
+import unittest
 
-from tests.unittests.setup_database import Setup
-from tests.unittests.utils import OpenEventTestCase
+from app import current_app as app
 from tests.unittests.api.utils import create_event, get_path, create_services
 from tests.unittests.api.utils_post_data import *
 from tests.unittests.auth_helper import register, login, logout
-from app import current_app as app
+from tests.unittests.setup_database import Setup
+from tests.unittests.utils import OpenEventTestCase
 
 
 class TestPutApiBase(OpenEventTestCase):
     """
     Base class for help testing PUT APIs
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
@@ -42,6 +43,7 @@ class TestPutApi(TestPutApiBase):
     Test PUT APIs against 401 (unauthorized) and
     200 (successful) status codes
     """
+
     def _test_model(self, name, data, path=None, *args):
         """
         Tests -
@@ -98,6 +100,7 @@ class TestPutApiMin(TestPutApiBase):
     """
     Test PUT API with payload as just one field.
     """
+
     def _test_change_json(self, old, new, field):
         old = json.loads(old)
         new = json.loads(new)
@@ -116,7 +119,9 @@ class TestPutApiMin(TestPutApiBase):
                     return i
         return False
 
-    def _test_model(self, name, data, path=None, exclude=[]):
+    def _test_model(self, name, data, path=None, exclude=None):
+        if exclude is None:
+            exclude = []
         if not path:
             path = get_path(1) if name == 'event' else get_path(1, name + 's', 1)
         self._login_user()

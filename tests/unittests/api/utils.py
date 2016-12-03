@@ -1,20 +1,21 @@
 from datetime import datetime
 
 from app.helpers.data import save_to_db, DataManager
-from app.models.user import User, ORGANIZER
 from app.models.event import Event
-from app.models.session import Session
-from app.models.speaker import Speaker
-from app.models.sponsor import Sponsor
+from app.models.event_copyright import EventCopyright as Copyright
 from app.models.microlocation import Microlocation
+from app.models.session import Session
 from app.models.session_type import SessionType
 from app.models.social_link import SocialLink
+from app.models.speaker import Speaker
+from app.models.sponsor import Sponsor
 from app.models.track import Track
-from app.models.event_copyright import EventCopyright as Copyright
+from app.models.user import User, ORGANIZER
 
 
 def create_event(name='TestEvent', creator_email=None):
     """Creates Event and returns its `id`.
+    :param creator_email:
     :param name Name of Event
     """
     copyright = Copyright(holder='copyright holder')
@@ -47,7 +48,7 @@ def create_session(event_id, serial_no='', **kwargs):
     kwargs['speakers'] = [
         Speaker.query.get(i) for i in kwargs['speakers']
         if Speaker.query.get(i) is not None
-    ]
+        ]
     session = Session(
         title='TestSession%d_%s' % (event_id, serial_no),
         long_abstract='descp',

@@ -1,6 +1,7 @@
+from flask import Blueprint
+from flask import render_template
 from flask import request, redirect, url_for, jsonify
 from flask.ext.restplus import abort
-from flask_admin import BaseView, expose
 from flask_restplus import marshal
 
 from app.api.events import EVENT
@@ -42,69 +43,75 @@ def erase_from_dict(d, k):
             d.pop(k)
 
 
-class ExploreView(BaseView):
-    @expose('/', methods=('GET', 'POST'))
-    def explore_base(self):
-        return redirect(url_for('admin.browse_view'))
+explore = Blueprint('explore', __name__, url_prefix='/explore')
 
-    @expose('/autocomplete/locations.json', methods=('GET', 'POST'))
-    def locations_autocomplete(self):
-        locations = DataGetter.get_locations_of_events()
-        return jsonify([{'value': location, 'type': 'location'} for location in locations])
 
-    @expose('/autocomplete/categories.json', methods=('GET', 'POST'))
-    def categories_autocomplete(self):
-        categories = CATEGORIES.keys()
-        return jsonify([{'value': category, 'type': 'category'} for category in categories])
+@explore.route('/', methods=('GET', 'POST'))
+def explore_base():
+    return redirect(url_for('admin.browse_view'))
 
-    @expose('/autocomplete/events/<location_slug>.json', methods=('GET', 'POST'))
-    def events_autocomplete(self, location_slug):
-        location = deslugify(location_slug)
-        results = get_object_list(Event, __event_search_location=location)
-        results = marshal(results, EVENT)
-        return jsonify([{'value': result['name'], 'type': 'event_name'} for result in results])
 
-    @expose('/<location>/events/', methods=('GET', 'POST'))
-    def explore_view(self, location):
-        placeholder_images = DataGetter.get_event_default_images()
-        custom_placeholder = DataGetter.get_custom_placeholders()
-        location = deslugify(location)
-        current_page = request.args.get('page')
-        query = request.args.get('query', '')
-        if not current_page:
-            current_page = 1
-        else:
-            current_page = int(current_page)
+@explore.route('/autocomplete/locations.json', methods=('GET', 'POST'))
+def locations_autocomplete():
+    locations = DataGetter.get_locations_of_events()
+    return jsonify([{'value': location, 'type': 'location'} for location in locations])
 
-        filtering = {'privacy': 'public', 'state': 'Published'}
-        start, end = None, None
-        word = request.args.get('query', None)
-        event_type = request.args.get('type', None)
-        day_filter = request.args.get('period', None)
-        sub_category = request.args.get('sub-category', None)
-        category = request.args.get('category', None)
 
-        if day_filter:
-            start, end = get_date_range(day_filter)
-        if location:
-            filtering['__event_search_location'] = location
-        if word:
-            filtering['__event_contains'] = word
-        if category:
-            filtering['topic'] = category
-        if sub_category:
-            filtering['sub_topic'] = sub_category
-        if event_type:
-            filtering['type'] = event_type
-        if start:
-            filtering['__event_start_time_gt'] = start
-        if end:
-            filtering['__event_end_time_lt'] = end
-        filters = request.args.items()
-        erase_from_dict(filters, 'page')
-        results = get_paginated(**filtering)
+@explore.route('/autocomplete/categories.json', methods=('GET', 'POST'))
+def categories_autocomplete():
+    categories = CATEGORIES.keys()
+    return jsonify([{'value': category, 'type': 'category'} for category in categories])
 
-        return self.render('/gentelella/guest/search/results.html',
+
+@explore.route('/autocomplete/events/<location_slug>.json', methods=('GET', 'POST'))
+def events_autocomplete(location_slug):
+    location = deslugify(location_slug)
+    results = get_object_list(Event, __event_search_location=location)
+    results = marshal(results, EVENT)
+    return jsonify([{'value': result['name'], 'type': 'event_name'} for result in results])
+
+
+@explore.route('/<location>/events/', methods=('GET', 'POST'))
+def explore_view(location):
+    placeholder_images = DataGetter.get_event_default_images()
+    custom_placeholder = DataGetter.get_custom_placeholders()
+    location = deslugify(location)
+    current_page = request.args.get('page')
+    query = request.args.get('query', '')
+    if not current_page:
+        current_page = 1
+    else:
+        current_page = int(current_page)
+
+    filtering = {'privacy': 'public', 'state': 'Published'}
+    start, end = None, None
+    word = request.args.get('query', None)
+    event_type = request.args.get('type', None)
+    day_filter = request.args.get('period', None)
+    sub_category = request.args.get('sub-category', None)
+    category = request.args.get('category', None)
+
+    if day_filter:
+        start, end = get_date_range(day_filter)
+    if location:
+        filtering['__event_search_location'] = location
+    if word:
+        filtering['__event_contains'] = word
+    if category:
+        filtering['topic'] = category
+    if sub_category:
+        filtering['sub_topic'] = sub_category
+    if event_type:
+        filtering['type'] = event_type
+    if start:
+        filtering['__event_start_time_gt'] = start
+    if end:
+        filtering['__event_end_time_lt'] = end
+    filters = request.args.items()
+    erase_from_dict(filters, 'page')
+    results = get_paginated(**filtering)
+
+    return render_template('gentelella/guest/search/results.html',
                            results=results,
                            location=location,
                            filters=filters,
