@@ -1,16 +1,8 @@
-<style type="text/css">
-    #system_logs {
-        position: absolute;
-        background: transparent;
-        width: auto;
-    }
-
-</style>
 <div>
-    <ul id="system_logs" class="nav nav-tabs bar_tabs large_tab_list" role="tablist">
-        <li class="active"><a href="#activity_div" data-toggle="tab">{{ _("Activity") }}</a></li>
-        <li class=""><a href="#mail_div" data-toggle="tab">{{ _("Mails") }}</a></li>
-        <li class=""><a href="#notif_div" data-toggle="tab">{{ _("Notifications") }}</a></li>
+    <ul id="system_logs" class="nav nav-tabs bar_tabs large_tab_list" role="tablist" style="background: #FFFFFF; margin-bottom:0; border-bottom: 0; background: none;">
+        <li class="active"><a href="#activity-logs" data-toggle="tab">{{ _("Activity") }}</a></li>
+        <li class=""><a href="#mail-logs" data-toggle="tab">{{ _("Mails") }}</a></li>
+        <li class=""><a href="#notification-logs" data-toggle="tab">{{ _("Notifications") }}</a></li>
     </ul>
     <div class="dropdown tabs_small">
         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
@@ -18,20 +10,20 @@
             <span class="caret"></span></button>
         <ul class="dropdown-menu">
             <li value="{{ _("Activity") }}" class="small_tab_list2 active">
-                <a href="#activity_div" data-toggle="tab">{{ _("Activity") }}</a>
+                <a href="#activity-logs" data-toggle="tab">{{ _("Activity") }}</a>
             </li>
             <li value="{{ _("Mails") }}" class="small_tab_list2">
-                <a href="#mail_div" data-toggle="tab">{{ _("Mails") }}</a>
+                <a href="#mail-logs" data-toggle="tab">{{ _("Mails") }}</a>
             </li>
             <li value="{{ _("Notifications") }}" class="small_tab_list2">
-                <a href="#notif_div" data-toggle="tab">{{ _("Notifications") }}</a>
+                <a href="#notification-logs" data-toggle="tab">{{ _("Notifications") }}</a>
             </li>
         </ul>
     </div>
     <!-- tab contents -->
-    <div id="myTabContent" class="tab-content">
+    <div id="myTabContent" class="tab-content" style="margin-top: 20px;">
         <!-- activity tab -->
-        <div role="tabpanel" class="tab-pane fade active in" id="activity_div"
+        <div role="tabpanel" class="tab-pane fade active in" id="activity-logs"
              aria-labelledby="all-tab">
             <table id="activity_table" class="table table-striped with-datatable no-global-dt">
                 <thead>
@@ -55,7 +47,7 @@
             </table>
         </div>
         <!-- mails tab -->
-        <div role="tabpanel" class="tab-pane fade" id="mail_div"
+        <div role="tabpanel" class="tab-pane fade" id="mail-logs"
              aria-labelledby="mail-tab">
             <table id="mail_table" class="table table-striped with-datatable no-global-dt">
                 <thead>
@@ -88,7 +80,7 @@
             </table>
         </div>
         <!-- notifications tab -->
-        <div role="tabpanel" class="tab-pane fade" id="notif_div"
+        <div role="tabpanel" class="tab-pane fade" id="notification-logs"
              aria-labelledby="notif-tab">
             <table id="notif_table" class="table table-striped with-datatable no-global-dt">
                 <thead>

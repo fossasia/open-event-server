@@ -16,7 +16,7 @@
                 <div class="col-md-4 col-sm-4 col-xs-12">
                     {% if on_kubernetes %}
                         {% include 'gentelella/admin/super_admin/widgets/_kubernetes.html' %}
-                    {% else %}
+                    {% elif on_heroku %}
                         {% include 'gentelella/admin/super_admin/widgets/_heroku.html' %}
                     {% endif %}
                     {% include 'gentelella/admin/super_admin/widgets/_sessions.html' %}
