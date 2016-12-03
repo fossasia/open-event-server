@@ -13,10 +13,11 @@ from geoip import geolite2
 from werkzeug.datastructures import ImmutableMultiDict
 
 from app import db
+from app.helpers.auth import AuthManager
 from app.helpers.data import DataManager, save_to_db, record_activity, delete_from_db, restore_event
 from app.helpers.data_getter import DataGetter
 from app.helpers.flask_helpers import get_real_ip
-from app.helpers.helpers import fields_not_empty, string_empty
+from app.helpers.helpers import fields_not_empty, string_empty, get_count
 from app.helpers.helpers import send_event_publish
 from app.helpers.helpers import uploaded_file
 from app.helpers.invoicing import InvoicingManager
@@ -26,7 +27,6 @@ from app.helpers.storage import upload, upload_local, UPLOAD_PATHS
 from app.helpers.ticketing import TicketingManager
 from app.models.call_for_papers import CallForPaper
 from app.settings import get_settings
-from app.helpers.auth import AuthManager
 
 
 def get_random_hash():
@@ -38,9 +38,9 @@ events = Blueprint('events', __name__, url_prefix='/events')
 
 @events.route('/')
 def index_view():
-    live_events = DataGetter.get_live_events()
-    draft_events = DataGetter.get_draft_events()
-    past_events = DataGetter.get_past_events()
+    live_events = DataGetter.get_live_events_of_user()
+    draft_events = DataGetter.get_draft_events_of_user()
+    past_events = DataGetter.get_past_events_of_user()
     all_events = DataGetter.get_all_events()
     imported_events = DataGetter.get_imports_by_user()
     free_ticket_count = {}
@@ -132,12 +132,7 @@ def create_view():
         if not current_user.can_create_event():
             flash("You don't have permission to create event.")
             return redirect(url_for('.index_view'))
-        img_files = []
-        imd = ImmutableMultiDict(request.files)
-        if 'sponsors[logo]' in imd and request.files['sponsors[logo]'].filename != "":
-            for img_file in imd.getlist('sponsors[logo]'):
-                img_files.append(img_file)
-        event = DataManager.create_event(request.form, img_files)
+        event = DataManager.create_event(request.form)
         if request.form.get('state', u'Draft') == u'Published' and string_empty(event.location_name):
             flash(
                 "Your event was saved. To publish your event please review the highlighted fields below.",
@@ -253,10 +248,10 @@ def details_view(event_id):
                      'Did not get the email? Please <a href="/resend_email/" class="alert-link"> click here to '
                      'resend the confirmation.</a>'))
 
-    sessions = {'pending': DataGetter.get_sessions_by_state_and_event_id('pending', event_id).count(),
-                'accepted': DataGetter.get_sessions_by_state_and_event_id('accepted', event_id).count(),
-                'rejected': DataGetter.get_sessions_by_state_and_event_id('rejected', event_id).count(),
-                'draft': DataGetter.get_sessions_by_state_and_event_id('draft', event_id).count()}
+    sessions = {'pending': get_count(DataGetter.get_sessions_by_state_and_event_id('pending', event_id)),
+                'accepted': get_count(DataGetter.get_sessions_by_state_and_event_id('accepted', event_id)),
+                'rejected': get_count(DataGetter.get_sessions_by_state_and_event_id('rejected', event_id)),
+                'draft': get_count(DataGetter.get_sessions_by_state_and_event_id('draft', event_id))}
 
     return render_template('gentelella/admin/event/details/details.html',
                            event=event,
@@ -412,11 +407,6 @@ def edit_view_stepped(event_id, step):
                                ticket_types=ticket_types)
 
     if request.method == "POST":
-        img_files = []
-        imd = ImmutableMultiDict(request.files)
-        if 'sponsors[logo]' in imd and request.files['sponsors[logo]'].filename != "":
-            for img_file in imd.getlist('sponsors[logo]'):
-                img_files.append(img_file)
 
         old_sponsor_logos = []
         old_sponsor_names = []
@@ -426,8 +416,8 @@ def edit_view_stepped(event_id, step):
 
         try:
             event = DataManager.edit_event(
-                request, event_id, event, session_types, tracks, social_links,
-                microlocations, call_for_speakers, sponsors, custom_forms, img_files, old_sponsor_logos,
+                request, event, session_types, tracks, social_links,
+                microlocations, call_for_speakers, sponsors, old_sponsor_logos,
                 old_sponsor_names, tax)
         except Exception:
             traceback.print_exc()

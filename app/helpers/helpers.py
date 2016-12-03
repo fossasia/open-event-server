@@ -69,19 +69,6 @@ def get_event_id():
     return result.group(0).split('/')[1]
 
 
-def is_track_name_unique_in_event(form, event_id, *args):
-    """Check unique of track name in event"""
-    track_name = form.name.data
-    track_id = args[0] if len(args) else None
-    tracks = Track.query.filter_by(event_id=event_id, name=track_name)
-    if not track_id:
-        return tracks.count() == 0
-    else:
-        for track in tracks.all():
-            return str(track.id) == track_id
-        return True
-
-
 #########
 # Mails #
 #########

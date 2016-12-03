@@ -46,9 +46,6 @@ class SilentUndefined(Undefined):
         _fail_with_undefined_error
 
 
-_punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|}.]+')
-
-
 def slugify(text):
     """Generates an ASCII-only slug."""
     return unicode(unicode_slugify(text, ok=SLUG_OK + ',').replace(',', '--'))

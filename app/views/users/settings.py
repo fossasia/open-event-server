@@ -65,8 +65,7 @@ def email_preferences_view():
 def contact_info_view():
     user_id = login.current_user.id
     if request.method == 'POST':
-        url = ""
-        DataManager.update_user(request.form, int(user_id), url, contacts_only_update=True)
+        DataManager.update_user(request.form, int(user_id), contacts_only_update=True)
         flash("Your contact info has been updated.", "success")
         return redirect(url_for('.contact_info_view'))
     profile = DataGetter.get_user(int(user_id))

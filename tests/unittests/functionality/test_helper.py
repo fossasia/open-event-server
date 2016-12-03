@@ -18,15 +18,6 @@ class TestDataManager(OpenEventTestCase):
             db.session.add(ObjectMother.get_event())
             db.session.commit()
 
-    def _delete_object_from_db(self):
-        DataManager().remove_microlocation(1)
-
-    @patch.object(db.session, "rollback")
-    def test_rollback_called_when_object_doesnt_exist(self, method):
-        with app.test_request_context():
-            self._delete_object_from_db()
-            self.assertTrue(method.called)
-
     def test_update_version_function(self):
         with app.test_request_context():
             update_version(1, False, "tracks_ver")

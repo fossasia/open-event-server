@@ -19,6 +19,7 @@ from app.views.super_admin.modules import sadmin_modules
 from app.views.super_admin.my_sessions import sadmin_sessions
 from app.views.super_admin.permissions import sadmin_permissions
 from app.views.super_admin.reports import sadmin_reports
+from app.views.super_admin.sales import sadmin_sales
 from app.views.super_admin.super_admin import sadmin
 from app.views.super_admin.users import sadmin_users
 from app.views.users.events import events
@@ -79,14 +80,14 @@ class BlueprintsManager:
         # Blueprints that are accessible only by a super admin
         app.register_blueprint(sadmin)
         app.register_blueprint(sadmin_events)
+        app.register_blueprint(sadmin_sales)
         app.register_blueprint(sadmin_sessions)
         app.register_blueprint(sadmin_users)
         app.register_blueprint(sadmin_permissions)
+        app.register_blueprint(sadmin_messages)
         app.register_blueprint(sadmin_reports)
         app.register_blueprint(sadmin_settings)
-        app.register_blueprint(sadmin_messages)
         app.register_blueprint(sadmin_modules)
-        app.register_blueprint(sadmin_content)
         app.register_blueprint(sadmin_content)
 
 
