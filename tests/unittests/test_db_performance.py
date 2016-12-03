@@ -1,17 +1,17 @@
-import unittest
 import time
+import unittest
 
 from flask import url_for
+from flask.ext.sqlalchemy import get_debug_queries
 from werkzeug.contrib.profiler import ProfilerMiddleware
 
-from tests.unittests.views.view_test_case import OpenEventViewTestCase
-from app.models import db
 from app import current_app as app
+from app.models import db
+from config import ProductionConfig
 from populate_db import populate
 from tests.unittests.object_mother import ObjectMother
-from flask.ext.sqlalchemy import get_debug_queries
-from config import ProductionConfig
 from tests.unittests.setup_database import Setup
+from tests.unittests.views.view_test_case import OpenEventViewTestCase
 
 
 class TestEvents(OpenEventViewTestCase):
@@ -55,7 +55,7 @@ class TestEvents(OpenEventViewTestCase):
                 db.session.add(session)
             db.session.commit()
             url = url_for('sadmin_sessions.display_my_sessions_view')
-            start = time.clock()
+            time.clock()
             self.app.get(url, follow_redirects=True)
 
             with open("output_session.txt", "w") as text_file:

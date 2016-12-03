@@ -1,10 +1,12 @@
 import unittest
-from tests.unittests.utils import OpenEventTestCase
-from tests.unittests.setup_database import Setup
-from tests.unittests.object_mother import ObjectMother
+
 from app import current_app as app
 from app.helpers.data import save_to_db
 from app.models.microlocation import Microlocation
+from tests.unittests.object_mother import ObjectMother
+from tests.unittests.setup_database import Setup
+from tests.unittests.utils import OpenEventTestCase
+
 
 class TestMicrolocationApi(OpenEventTestCase):
     def setUp(self):
@@ -25,6 +27,7 @@ class TestMicrolocationApi(OpenEventTestCase):
                                        event_id=1)
         self.assertEqual(microlocation1.event_id, 1)
         self.assertEqual(microlocation2.event_id, 1)
+
 
 if __name__ == '__main__':
     unittest.main()

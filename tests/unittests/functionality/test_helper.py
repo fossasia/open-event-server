@@ -1,14 +1,14 @@
-"""Copyright 2015 Rafal Kowalski"""
 import unittest
-from tests.unittests.utils import OpenEventTestCase
+
 from mock import patch
 
-from tests.unittests.object_mother import ObjectMother
-from tests.unittests.setup_database import Setup
 from app import current_app as app
+from app.helpers.data import DataManager, update_version
 from app.models import db
 from app.models.version import Version
-from app.helpers.data import DataManager, update_version
+from tests.unittests.object_mother import ObjectMother
+from tests.unittests.setup_database import Setup
+from tests.unittests.utils import OpenEventTestCase
 
 
 class TestDataManager(OpenEventTestCase):

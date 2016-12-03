@@ -1,12 +1,11 @@
 import unittest
 
-from tests.unittests.setup_database import Setup
-from tests.unittests.utils import OpenEventTestCase
-from tests.unittests.auth_helper import register, login
-from tests.unittests.api.utils import get_path, create_event, create_services
-
 from app import current_app as app
 from app.helpers.data import update_role_to_admin
+from tests.unittests.api.utils import get_path, create_event, create_services
+from tests.unittests.auth_helper import register, login
+from tests.unittests.setup_database import Setup
+from tests.unittests.utils import OpenEventTestCase
 
 
 class TestGetApiListed(OpenEventTestCase):

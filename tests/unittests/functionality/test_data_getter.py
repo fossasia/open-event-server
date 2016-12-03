@@ -1,16 +1,13 @@
-"""Copyright 2016 Rafal Kowalski"""
 import unittest
-from tests.unittests.utils import OpenEventTestCase
-
 
 from app import current_app as app
 from app.helpers.data import save_to_db
-from tests.unittests.object_mother import ObjectMother
 from app.helpers.data_getter import DataGetter
+from tests.unittests.object_mother import ObjectMother
+from tests.unittests.utils import OpenEventTestCase
 
 
 class TestDataGetter(OpenEventTestCase):
-
     def test_all_user_notifications(self):
         with app.test_request_context():
             user = ObjectMother.get_user()
@@ -21,12 +18,6 @@ class TestDataGetter(OpenEventTestCase):
             notification = ObjectMother.get_notification()
             save_to_db(notification, 'Save')
             self.assertTrue(DataGetter.get_user_notification(1))
-
-    # def test_latest_notif(self):
-    #     with app.test_request_context():
-    #         user = ObjectMother.get_user()
-    #         notification = DataGetter.get_latest_notif(user)
-    #         self.assertTrue(notification)
 
     def test_get_invite_by_user(self):
         with app.test_request_context():
@@ -60,6 +51,7 @@ class TestDataGetter(OpenEventTestCase):
     def test_get_services(self):
         with app.test_request_context():
             self.assertTrue(DataGetter.get_services())
+
 
 if __name__ == '__main__':
     unittest.main()

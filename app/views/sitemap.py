@@ -6,7 +6,7 @@ from flask import url_for, render_template, make_response, request, \
 from app.helpers.data_getter import DataGetter
 from app.models.event import Event
 
-app = Blueprint('sitemaps', __name__)
+sitemaps = Blueprint('sitemaps', __name__)
 
 # INDEX PAGES LIST
 
@@ -21,7 +21,7 @@ event_details_pages = [
 ]
 
 
-@app.route('/sitemap.xml', methods=('GET', 'POST'))
+@sitemaps.route('/sitemap.xml', methods=('GET', 'POST'))
 def render_sitemap():
     urls = [full_url(url_for('sitemaps.render_pages_sitemap'))]
     # pages sitemap
@@ -39,7 +39,7 @@ def render_sitemap():
     return resp
 
 
-@app.route('/sitemaps/pages.xml.gz', methods=('GET', 'POST'))
+@sitemaps.route('/sitemaps/pages.xml.gz', methods=('GET', 'POST'))
 def render_pages_sitemap():
     urls = [
         page.url if page.url.find('://') > -1 else
@@ -49,7 +49,7 @@ def render_pages_sitemap():
     return make_sitemap_response(urls)
 
 
-@app.route('/sitemaps/events/<int:num>.xml.gz', methods=('GET', 'POST'))
+@sitemaps.route('/sitemaps/events/<int:num>.xml.gz', methods=('GET', 'POST'))
 def render_event_pages(num):
     main_urls = []
     start = (num - 1) * PER_PAGE_EVENTS

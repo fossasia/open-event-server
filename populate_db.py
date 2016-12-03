@@ -18,7 +18,6 @@ from app.models.user import ORGANIZER, COORGANIZER, TRACK_ORGANIZER, MODERATOR, 
 # Admin Panel Permissions
 from app.models.panel_permissions import PanelPermission
 from app.models.system_role import CustomSysRole
-from app.views.admin.super_admin.super_admin_base import SALES
 
 # User Permissions
 from app.models.user_permissions import UserPermission
@@ -106,6 +105,7 @@ def create_custom_sys_roles():
 
 def create_panel_permissions():
     sales_admin = CustomSysRole.query.filter_by(name='Sales Admin').first()
+    from app.views.super_admin import SALES
     perm, _ = get_or_create(PanelPermission, panel_name=SALES, role=sales_admin)
     db.session.add(perm)
     marketer = CustomSysRole.query.filter_by(name='Marketer').first()

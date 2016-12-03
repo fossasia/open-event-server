@@ -1,19 +1,19 @@
-import unittest
 import json
-
-from tests.unittests.setup_database import Setup
-from tests.unittests.utils import OpenEventTestCase
-from tests.unittests.auth_helper import register, login
-from tests.unittests.api.utils import create_event, create_services, get_path
+import unittest
 
 from app import current_app as app
 from app.helpers.data import update_role_to_admin
+from tests.unittests.api.utils import create_event, create_services, get_path
+from tests.unittests.auth_helper import register, login
+from tests.unittests.setup_database import Setup
+from tests.unittests.utils import OpenEventTestCase
 
 
 class PaginatedApiTestCase:
     """
     Base class to inherit from when creating a paginated Api TestCase
     """
+
     def __init__(self):
         pass
 
@@ -40,6 +40,7 @@ class TestGetApiPaginated(OpenEventTestCase, PaginatedApiTestCase):
     """
     Basic test for Paginated APIs
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
@@ -69,6 +70,7 @@ class TestGetApiPaginatedUrls(OpenEventTestCase, PaginatedApiTestCase):
     Test the next and previous urls returned in the
     paginated APIs
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
@@ -124,6 +126,7 @@ class TestGetApiPaginatedEvents(OpenEventTestCase):
     """
     Test Paginated GET API for Events
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():

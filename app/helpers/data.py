@@ -22,7 +22,6 @@ from requests_oauthlib import OAuth2Session
 from sqlalchemy.orm.collections import InstrumentedList
 from sqlalchemy.sql.expression import exists
 from werkzeug import secure_filename
-from wtforms import ValidationError
 
 from app.helpers.cache import cache
 from app.helpers.helpers import string_empty, string_not_empty
@@ -32,7 +31,6 @@ from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth, TwitterOAuth
 from app.helpers.storage import upload, UPLOAD_PATHS, UploadedFile, upload_local
 from app.models.notifications import Notification
 from app.models.stripe_authorization import StripeAuthorization
-from app.views.admin.super_admin.super_admin_base import PANEL_LIST
 from ..helpers import helpers as Helper
 from ..helpers.data_getter import DataGetter
 from ..helpers.static import EVENT_LICENCES
@@ -700,7 +698,9 @@ class DataManager(object):
                     ))
                 session.video = video_url
 
-            if form_state == 'pending' and session.state != 'pending' and session.state != 'accepted' and session.state != 'rejected':
+            if form_state == 'pending' and session.state != 'pending' and \
+                    session.state != 'accepted' and session.state != 'rejected':
+
                 trigger_new_session_notifications(session.id, event_id=event_id)
 
             session.title = form.get('title', '')
@@ -1101,6 +1101,7 @@ class DataManager(object):
         role_name = form.get('role_name')
         sys_role = CustomSysRole(name=role_name)
         save_to_db(sys_role)
+        from app.views.super_admin import PANEL_LIST
         for panel in PANEL_LIST:
             if form.get(panel):
                 perm = PanelPermission(panel, sys_role, True)
@@ -1114,6 +1115,7 @@ class DataManager(object):
         sys_role = CustomSysRole.query.filter_by(name=role_name).first()
         sys_role.name = form.get('new_role_name')
         db.session.add(sys_role)
+        from app.views.super_admin import PANEL_LIST
         for panel in PANEL_LIST:
             perm, _ = get_or_create(PanelPermission, panel_name=panel,
                                     role=sys_role)
@@ -1592,7 +1594,7 @@ class DataManager(object):
                 save_to_db(new_email_notification_setting, "EmailSetting Saved")
                 return event
         else:
-            raise ValidationError("start date greater than end date")
+            raise Exception("start date greater than end date")
 
     @staticmethod
     def get_event_time_field_format(form, field):

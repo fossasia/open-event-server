@@ -1,26 +1,27 @@
 # -*- coding: utf-8 -*-
 
-import unittest
 import json
 import logging
-import shutil
-import zipfile
-import time
 import os
+import shutil
+import time
+import unittest
+import zipfile
 from StringIO import StringIO
 
-from tests.unittests.setup_database import Setup
-from tests.unittests.utils import OpenEventTestCase
-from tests.unittests.api.utils import create_event, get_path, create_services,\
+from app import current_app as app
+from tests.unittests.api.utils import create_event, get_path, create_services, \
     create_session, save_to_db, Speaker
 from tests.unittests.auth_helper import register
-from app import current_app as app
+from tests.unittests.setup_database import Setup
+from tests.unittests.utils import OpenEventTestCase
 
 
 class ImportExportBase(OpenEventTestCase):
     """
     Helper functions to test import/export
     """
+
     def _upload(self, data, url, filename='anything'):
         return self.app.post(
             url,
@@ -41,7 +42,9 @@ class ImportExportBase(OpenEventTestCase):
             headers={'content-type': 'application/json'}
         )
 
-    def _do_successful_export(self, event_id, config={'image': True}):
+    def _do_successful_export(self, event_id, config=None):
+        if config is None:
+            config = {'image': True}
         path = get_path(event_id, 'export', 'json')
         resp = self._post(path, config)
         self.assertEqual(resp.status_code, 200)
@@ -63,11 +66,13 @@ class ImportExportBase(OpenEventTestCase):
         self.assertEqual(resp.status_code, 200)
         return resp
 
-    def _create_set(self, event_id=1, config={'image': True}):
+    def _create_set(self, event_id=1, config=None):
         """
         exports and extracts in static/uploads/test_event_import
         """
         # export
+        if config is None:
+            config = {'image': True}
         resp = self._do_successful_export(event_id, config)
         zip_file = StringIO()
         zip_file.write(resp.data)
@@ -83,6 +88,7 @@ class TestEventExport(ImportExportBase):
     """
     Test export of event
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
@@ -180,6 +186,7 @@ class TestEventImport(ImportExportBase):
     """
     Test import of event
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():
@@ -221,8 +228,10 @@ class TestEventImport(ImportExportBase):
         # No errors generally means everything went fine
         # The method will crash and return 500 in case of any problem
 
-    def _test_import_error(self, checks=[]):
+    def _test_import_error(self, checks=None):
         # first export
+        if checks is None:
+            checks = []
         resp = self._do_successful_export(1)
         file = resp.data
         # import
@@ -277,6 +286,7 @@ class TestImportOTS(ImportExportBase):
     """
     Tests import of OTS sample
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():

@@ -1,14 +1,16 @@
 import unittest
-from app.api.helpers.custom_fields import Color, Email, Uri,\
+
+from app import current_app as app
+from app.api.helpers.custom_fields import Color, Email, Uri, \
     ImageUri, DateTime, Integer, Float, ChoiceString, Upload
 from tests.unittests.utils import OpenEventTestCase
-from app import current_app as app
 
 
 class TestCustomFieldsValidation(OpenEventTestCase):
     """
     Test the validation methods of custom fields
     """
+
     def _test_common(self, field):
         field.required = False
         self.assertTrue(field.validate(None))
