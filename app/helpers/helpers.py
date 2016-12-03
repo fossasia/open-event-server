@@ -584,23 +584,6 @@ def get_serializer(secret_key='secret_key'):
     return Serializer(secret_key)
 
 
-def get_latest_heroku_release():
-    token = os.environ.get('API_TOKEN_HEROKU', '')
-    headers = {
-        "Accept": "application/vnd.heroku+json; version=3",
-        "Authorization": "Bearer " + token,
-        "Range": "version ..; max=1, order=desc"
-    }
-    response = requests.get(
-        "https://api.heroku.com/apps/%s/releases" % os.environ.get('HEROKU_APP_NAME', 'open-event'),
-        headers=headers
-    )
-    try:
-        return json.loads(response.text)[0]
-    except:
-        return []
-
-
 def get_commit_info(commit_number):
     response = requests.get("https://api.github.com/repos/fossasia/open-event-orga-server/commits/" + commit_number)
     return json.loads(response.text)

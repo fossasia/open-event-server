@@ -15,8 +15,6 @@ class HerokuApi:
             "Authorization": "Bearer " + self.token,
         }
 
-        pass
-
     def get(self, endpoint, headers=None, params=None):
         """
         Make a GET request

@@ -4,8 +4,9 @@ from flask import Blueprint
 from flask import render_template
 
 from app.helpers.data_getter import DataGetter
-from app.helpers.helpers import get_latest_heroku_release, get_commit_info, get_count
-from app.helpers.kubernetes import KubernetesApi
+from app.helpers.deployment.kubernetes import KubernetesApi
+from app.helpers.deployment.heroku import HerokuApi
+from app.helpers.helpers import get_commit_info, get_count
 from app.models.user import ATTENDEE, TRACK_ORGANIZER, COORGANIZER, ORGANIZER
 from app.views.super_admin import BASE, check_accessible
 
@@ -36,12 +37,13 @@ def index_view():
     email_times = DataGetter.get_email_by_times()
 
     commit_info = None
-    version = None
+    heroku_release = None
     on_kubernetes = False
     pods_info = None
     repository = None
     commit_number = None
     branch = None
+    on_heroku = False
 
     if KubernetesApi.is_on_kubernetes():
         on_kubernetes = True
@@ -54,18 +56,21 @@ def index_view():
             commit_info = get_commit_info(commit_number)
         else:
             commit_number = None
-    else:
-        version = get_latest_heroku_release()
+    elif HerokuApi.is_on_heroku():
         commit_info = None
-        if version:
-            commit_number = version['description'].split(' ')[1]
+        on_heroku = True
+        heroku_api = HerokuApi()
+        heroku_release = heroku_api.get_latest_release()
+        if heroku_release:
+            commit_number = heroku_release['description'].split(' ')[1]
             commit_info = get_commit_info(commit_number)
 
     return render_template('gentelella/admin/super_admin/widgets/index.html',
                            events=events,
-                           version=version,
+                           heroku_release=heroku_release,
                            commit_info=commit_info,
                            commit_number=commit_number,
+                           on_heroku=on_heroku,
                            on_kubernetes=on_kubernetes,
                            pods_info=pods_info,
                            number_live_events=number_live_events,

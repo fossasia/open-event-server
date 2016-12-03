@@ -8,7 +8,7 @@ from app.helpers.system_mails import MAILS
 from app.helpers.system_notifications import NOTIFS
 from app.views.super_admin import MESSAGES, check_accessible
 
-sadmin_messages = Blueprint('sadmin_messages', __name__, url_prefix='/admin/content')
+sadmin_messages = Blueprint('sadmin_messages', __name__, url_prefix='/admin/messages')
 
 
 @sadmin_messages.before_request

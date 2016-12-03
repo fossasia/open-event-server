@@ -14,7 +14,6 @@ class KubernetesApi:
         self.token = open('/var/run/secrets/kubernetes.io/serviceaccount/token', 'r').read().replace('\n', '')
         self.namespace = open('/var/run/secrets/kubernetes.io/serviceaccount/namespace', 'r').read().replace('\n', '')
         self.headers = {'Authorization': 'Bearer ' + self.token}
-        pass
 
     def get(self, endpoint, headers=None, params=None, return_json=True):
         """
