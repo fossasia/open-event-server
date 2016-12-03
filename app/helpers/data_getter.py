@@ -12,45 +12,44 @@ from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from app.helpers.cache import cache
 from app.helpers.helpers import get_event_id, string_empty, represents_int, get_count
-from .language_list import LANGUAGE_LIST
-from .static import EVENT_TOPICS, EVENT_LICENCES, PAYMENT_COUNTRIES, PAYMENT_CURRENCIES, DEFAULT_EVENT_IMAGES
-from ..models.activity import Activity
-from ..models.call_for_papers import CallForPaper
-from ..models.custom_forms import CustomForms
-from ..models.custom_placeholder import CustomPlaceholder
-from ..models.email_notifications import EmailNotification
-from ..models.event import Event, EventsUsers
-from ..models.export_jobs import ExportJob
-from ..models.fees import TicketFees
-from ..models.file import File
-from ..models.image_config import ImageConfig
-from ..models.image_sizes import ImageSizes
-from ..models.import_jobs import ImportJob
-from ..models.invite import Invite
-from ..models.mail import Mail
-from ..models.message_settings import MessageSettings
-from ..models.microlocation import Microlocation
-from ..models.modules import Module
-from ..models.notifications import Notification
-from ..models.order import Order
-from ..models.page import Page
-from ..models.panel_permissions import PanelPermission
-from ..models.permission import Permission
-from ..models.role import Role
-from ..models.role_invite import RoleInvite
-from ..models.service import Service
-from ..models.session import Session
-from ..models.session_type import SessionType
-from ..models.social_link import SocialLink
-from ..models.speaker import Speaker
-from ..models.sponsor import Sponsor
-from ..models.system_role import CustomSysRole
-from ..models.tax import Tax
-from ..models.ticket import Ticket
-from ..models.track import Track
-from ..models.user import User
-from ..models.user_permissions import UserPermission
-from ..models.users_events_roles import UsersEventsRoles
+from app.helpers.language_list import LANGUAGE_LIST
+from app.helpers.static import EVENT_TOPICS, EVENT_LICENCES, PAYMENT_COUNTRIES, PAYMENT_CURRENCIES, DEFAULT_EVENT_IMAGES
+from app.models.activity import Activity
+from app.models.call_for_papers import CallForPaper
+from app.models.custom_forms import CustomForms
+from app.models.custom_placeholder import CustomPlaceholder
+from app.models.email_notifications import EmailNotification
+from app.models.event import Event
+from app.models.export_jobs import ExportJob
+from app.models.fees import TicketFees
+from app.models.image_config import ImageConfig
+from app.models.image_sizes import ImageSizes
+from app.models.import_jobs import ImportJob
+from app.models.invite import Invite
+from app.models.mail import Mail
+from app.models.message_settings import MessageSettings
+from app.models.microlocation import Microlocation
+from app.models.modules import Module
+from app.models.notifications import Notification
+from app.models.order import Order
+from app.models.page import Page
+from app.models.panel_permissions import PanelPermission
+from app.models.permission import Permission
+from app.models.role import Role
+from app.models.role_invite import RoleInvite
+from app.models.service import Service
+from app.models.session import Session
+from app.models.session_type import SessionType
+from app.models.social_link import SocialLink
+from app.models.speaker import Speaker
+from app.models.sponsor import Sponsor
+from app.models.system_role import CustomSysRole
+from app.models.tax import Tax
+from app.models.ticket import Ticket
+from app.models.track import Track
+from app.models.user import User
+from app.models.user_permissions import UserPermission
+from app.models.users_events_roles import UsersEventsRoles
 
 
 class DataGetter(object):
@@ -280,26 +279,12 @@ class DataGetter(object):
                 Session.start_time < datetime.datetime.now()).filter(Session.in_trash == False)
 
     @staticmethod
-    def get_all_sessions_of_user(upcoming_events=True):
-        """
-        :return: Return all Sessions objects with the current user as a speaker
-        """
-        if upcoming_events:
-            return Session.query.filter(Event.state != 'Completed').filter(Session.in_trash == False)
-        else:
-            return Session.query.filter(Event.state == 'Completed').filter(Session.in_trash == False)
-
-    @staticmethod
     def get_speakers(event_id):
         """
         :param event_id: Event id
         :return: Speaker objects filter by event_id
         """
         return Speaker.query.filter_by(event_id=event_id).order_by(asc(Speaker.name))
-
-    @staticmethod
-    def get_speaker_columns():
-        return Speaker.__table__.columns
 
     @staticmethod
     def get_sponsors(event_id):
@@ -333,31 +318,6 @@ class DataGetter(object):
         return Microlocation.query.get(microlocation_id)
 
     @staticmethod
-    def get_event_owner(event_id):
-        """
-        :param event_id: Event id
-        :return: Owner of proper event
-        """
-        owner_id = Event.query.get(event_id).owner
-        return User.query.get(owner_id).login
-
-    @staticmethod
-    def get_all_files_tuple():
-        """
-        :return All files filtered by owner, Format [(test.png, test1.png)...]:
-        """
-        files = File.query.filter_by(owner_id=login.current_user.id)
-        return [(file_obj.name, file_obj.name) for file_obj in files]
-
-    @staticmethod
-    def get_all_owner_files():
-        """
-        :return: All owner files
-        """
-        files = File.query.filter_by(owner_id=login.current_user.id)
-        return files
-
-    @staticmethod
     def get_user_by_email(email, no_flash=None):
         user = User.query.filter_by(email=email).first()
         if not user:
@@ -382,22 +342,6 @@ class DataGetter(object):
         :return: User
         """
         return User.query.get(int(user_id))
-
-    @staticmethod
-    def get_association():
-        """Return instance of EventUser"""
-        return EventsUsers()
-
-    @staticmethod
-    def get_association_by_event_and_user(event_id, user_id):
-        """Returns EventUser filtered by user_id and event_id"""
-        return EventsUsers.query.filter_by(
-            event_id=event_id,
-            user_id=user_id).first()
-
-    @staticmethod
-    def get_object(db_model, object_id):
-        return db_model.query.get(object_id)
 
     @staticmethod
     def get_event(event_id_or_identifier, should_abort=True):
@@ -440,12 +384,6 @@ class DataGetter(object):
             .filter_by(user_id=login.current_user.id if not user_id else user_id)
 
     @staticmethod
-    def get_completed_events():
-        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
-            .filter(Event.state == 'Completed')
-        return DataGetter.trim_attendee_events(events)
-
-    @staticmethod
     def get_all_published_events(include_private=False):
         if include_private:
             events = Event.query.filter(Event.state == 'Published')
@@ -485,32 +423,20 @@ class DataGetter(object):
         return [_ for _ in events if _.has_staff_access()]
 
     @staticmethod
-    def get_published_events():
-        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
-            .filter(Event.state == 'Published')
-        return DataGetter.trim_attendee_events(events)
-
-    @staticmethod
-    def get_current_events():
-        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
-            .filter(Event.state != 'Completed')
-        return DataGetter.trim_attendee_events(events)
-
-    @staticmethod
-    def get_live_events():
+    def get_live_events_of_user():
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.end_time >= datetime.datetime.now()) \
             .filter(Event.state == 'Published').filter(Event.in_trash == False)
         return DataGetter.trim_attendee_events(events)
 
     @staticmethod
-    def get_draft_events():
+    def get_draft_events_of_user():
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.state == 'Draft').filter(Event.in_trash == False)
         return DataGetter.trim_attendee_events(events)
 
     @staticmethod
-    def get_past_events():
+    def get_past_events_of_user():
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
             .filter(Event.end_time <= datetime.datetime.now()).filter(
             or_(Event.state == 'Completed', Event.state == 'Published')).filter(Event.in_trash == False)
@@ -543,10 +469,6 @@ class DataGetter(object):
         return Session.query.get(session_id)
 
     @staticmethod
-    def get_session_columns():
-        return Session.__table__.columns
-
-    @staticmethod
     def get_speaker(speaker_id):
         """Get speaker by id"""
         return Speaker.query.get(speaker_id)
@@ -573,20 +495,8 @@ class DataGetter(object):
         return SocialLink.query.filter_by(event_id=event_id)
 
     @staticmethod
-    def get_user_sessions():
-        return Session.query.all()
-
-    @staticmethod
     def get_call_for_papers(event_id):
         return CallForPaper.query.filter_by(event_id=event_id)
-
-    @staticmethod
-    def get_sponsor_types(event_id):
-        return list(set(
-            sponsor.sponsor_type for sponsor in
-            Sponsor.query.filter_by(event_id=event_id)
-            if sponsor.sponsor_type
-        ))
 
     @staticmethod
     def get_event_types():
@@ -713,7 +623,7 @@ class DataGetter(object):
         return Session.query.filter_by(in_trash=True)
 
     @staticmethod
-    def get_upcoming_events(event_id):
+    def get_upcoming_events():
         return Event.query.join(Event.roles, aliased=True) \
             .filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
             .filter_by(in_trash=False)
@@ -824,10 +734,6 @@ class DataGetter(object):
         return TicketFees.query.all()
 
     @staticmethod
-    def get_fee_settings():
-        return TicketFees.query.all()
-
-    @staticmethod
     def get_expired_orders():
         return Order.query.filter(Order.status != 'completed')
 
@@ -843,8 +749,6 @@ class DataGetter(object):
     def get_all_registered_users():
         return get_count(User.query.filter_by(is_verified=True))
 
-    # TODO Make this more efficient
-
     @staticmethod
     def get_all_user_roles(role_name):
         role = Role.query.filter_by(name=role_name).first()
@@ -854,15 +758,15 @@ class DataGetter(object):
 
     @staticmethod
     def get_all_accepted_sessions():
-        return get_count(Session.query.filter_by(state='accepted').filter(Session.in_trash == False))
+        return Session.query.filter_by(state='accepted').filter(Session.in_trash == False)
 
     @staticmethod
     def get_all_rejected_sessions():
-        return get_count(Session.query.filter_by(state='rejected').filter(Session.in_trash == False))
+        return Session.query.filter_by(state='rejected').filter(Session.in_trash == False)
 
     @staticmethod
     def get_all_draft_sessions():
-        return get_count(Session.query.filter_by(state='pending').filter(Session.in_trash == False))
+        return Session.query.filter_by(state='pending').filter(Session.in_trash == False)
 
     @staticmethod
     def get_email_by_times():

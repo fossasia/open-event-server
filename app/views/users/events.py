@@ -38,9 +38,9 @@ events = Blueprint('events', __name__, url_prefix='/events')
 
 @events.route('/')
 def index_view():
-    live_events = DataGetter.get_live_events()
-    draft_events = DataGetter.get_draft_events()
-    past_events = DataGetter.get_past_events()
+    live_events = DataGetter.get_live_events_of_user()
+    draft_events = DataGetter.get_draft_events_of_user()
+    past_events = DataGetter.get_past_events_of_user()
     all_events = DataGetter.get_all_events()
     imported_events = DataGetter.get_imports_by_user()
     free_ticket_count = {}
@@ -132,12 +132,7 @@ def create_view():
         if not current_user.can_create_event():
             flash("You don't have permission to create event.")
             return redirect(url_for('.index_view'))
-        img_files = []
-        imd = ImmutableMultiDict(request.files)
-        if 'sponsors[logo]' in imd and request.files['sponsors[logo]'].filename != "":
-            for img_file in imd.getlist('sponsors[logo]'):
-                img_files.append(img_file)
-        event = DataManager.create_event(request.form, img_files)
+        event = DataManager.create_event(request.form)
         if request.form.get('state', u'Draft') == u'Published' and string_empty(event.location_name):
             flash(
                 "Your event was saved. To publish your event please review the highlighted fields below.",
@@ -412,11 +407,6 @@ def edit_view_stepped(event_id, step):
                                ticket_types=ticket_types)
 
     if request.method == "POST":
-        img_files = []
-        imd = ImmutableMultiDict(request.files)
-        if 'sponsors[logo]' in imd and request.files['sponsors[logo]'].filename != "":
-            for img_file in imd.getlist('sponsors[logo]'):
-                img_files.append(img_file)
 
         old_sponsor_logos = []
         old_sponsor_names = []
@@ -426,8 +416,8 @@ def edit_view_stepped(event_id, step):
 
         try:
             event = DataManager.edit_event(
-                request, event_id, event, session_types, tracks, social_links,
-                microlocations, call_for_speakers, sponsors, custom_forms, img_files, old_sponsor_logos,
+                request, event, session_types, tracks, social_links,
+                microlocations, call_for_speakers, sponsors, old_sponsor_logos,
                 old_sponsor_names, tax)
         except Exception:
             traceback.print_exc()

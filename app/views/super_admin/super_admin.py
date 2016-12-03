@@ -30,9 +30,9 @@ def index_view():
     co_organizers = get_count(DataGetter.get_all_user_roles(COORGANIZER))
     track_organizers = get_count(DataGetter.get_all_user_roles(TRACK_ORGANIZER))
     attendees = get_count(DataGetter.get_all_user_roles(ATTENDEE))
-    accepted_sessions = DataGetter.get_all_accepted_sessions()
-    rejected_sessions = DataGetter.get_all_rejected_sessions()
-    draft_sessions = DataGetter.get_all_draft_sessions()
+    accepted_sessions = get_count(DataGetter.get_all_accepted_sessions())
+    rejected_sessions = get_count(DataGetter.get_all_rejected_sessions())
+    draft_sessions = get_count(DataGetter.get_all_draft_sessions())
     email_times = DataGetter.get_email_by_times()
 
     commit_info = None

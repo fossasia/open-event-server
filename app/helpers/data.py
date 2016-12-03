@@ -13,15 +13,12 @@ import PIL
 import oauth2
 import requests
 from PIL import Image
-from flask import flash, request, url_for, g, current_app
+from flask import flash, url_for, g, current_app
 from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from flask_socketio import emit
 from requests.exceptions import ConnectionError
 from requests_oauthlib import OAuth2Session
-from sqlalchemy.orm.collections import InstrumentedList
-from sqlalchemy.sql.expression import exists
-from werkzeug import secure_filename
 
 from app.helpers.cache import cache
 from app.helpers.helpers import string_empty, string_not_empty
@@ -31,43 +28,41 @@ from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth, TwitterOAuth
 from app.helpers.storage import upload, UPLOAD_PATHS, UploadedFile, upload_local
 from app.models.notifications import Notification
 from app.models.stripe_authorization import StripeAuthorization
-from ..helpers import helpers as Helper
-from ..helpers.data_getter import DataGetter
-from ..helpers.static import EVENT_LICENCES
-from ..helpers.system_mails import MAILS
-from ..helpers.update_version import VersionUpdater, get_all_columns
-from ..models import db
-from ..models.activity import Activity, ACTIVITIES
-from ..models.call_for_papers import CallForPaper
-from ..models.custom_forms import CustomForms
-from ..models.email_notifications import EmailNotification
-from ..models.event import Event, EventsUsers
-from ..models.event_copyright import EventCopyright
-from ..models.file import File
-from ..models.image_sizes import ImageSizes
-from ..models.invite import Invite
-from ..models.message_settings import MessageSettings
-from ..models.microlocation import Microlocation
-from ..models.modules import Module
-from ..models.page import Page
-from ..models.panel_permissions import PanelPermission
-from ..models.permission import Permission
-from ..models.role import Role
-from ..models.role_invite import RoleInvite
-from ..models.service import Service
-from ..models.session import Session
-from ..models.session_type import SessionType
-from ..models.social_link import SocialLink
-from ..models.speaker import Speaker
-from ..models.sponsor import Sponsor
-from ..models.system_role import CustomSysRole, UserSystemRole
-from ..models.tax import Tax
-from ..models.ticket import Ticket, TicketTag
-from ..models.track import Track
-from ..models.user import User, ORGANIZER, ATTENDEE
-from ..models.user_detail import UserDetail
-from ..models.user_permissions import UserPermission
-from ..models.users_events_roles import UsersEventsRoles
+from app.helpers import helpers as Helper
+from app.helpers.data_getter import DataGetter
+from app.helpers.static import EVENT_LICENCES
+from app.helpers.system_mails import MAILS
+from app.helpers.update_version import VersionUpdater, get_all_columns
+from app.models import db
+from app.models.activity import Activity, ACTIVITIES
+from app.models.call_for_papers import CallForPaper
+from app.models.custom_forms import CustomForms
+from app.models.email_notifications import EmailNotification
+from app.models.event import Event, EventsUsers
+from app.models.event_copyright import EventCopyright
+from app.models.image_sizes import ImageSizes
+from app.models.invite import Invite
+from app.models.message_settings import MessageSettings
+from app.models.microlocation import Microlocation
+from app.models.page import Page
+from app.models.panel_permissions import PanelPermission
+from app.models.permission import Permission
+from app.models.role import Role
+from app.models.role_invite import RoleInvite
+from app.models.service import Service
+from app.models.session import Session
+from app.models.session_type import SessionType
+from app.models.social_link import SocialLink
+from app.models.speaker import Speaker
+from app.models.sponsor import Sponsor
+from app.models.system_role import CustomSysRole, UserSystemRole
+from app.models.tax import Tax
+from app.models.ticket import Ticket, TicketTag
+from app.models.track import Track
+from app.models.user import User, ORGANIZER, ATTENDEE
+from app.models.user_detail import UserDetail
+from app.models.user_permissions import UserPermission
+from app.models.users_events_roles import UsersEventsRoles
 
 
 class DataManager(object):
@@ -177,21 +172,6 @@ class DataManager(object):
         record_activity('invite_user', event_id=event_id, user_id=user_id)
 
     @staticmethod
-    def create_track(form, event_id):
-        """
-        Track will be saved to database with proper Event id
-        :param form: view data form
-        :param event_id: Track belongs to Event by event id
-        """
-        new_track = Track(name=form.name.data,
-                          description=form.description.data,
-                          event_id=event_id,
-                          track_image_url=form.track_image_url.data)
-        save_to_db(new_track, "Track saved")
-        record_activity('create_track', event_id=event_id, track=new_track)
-        update_version(event_id, False, "tracks_ver")
-
-    @staticmethod
     def toggle_email_notification_settings(user_id, value):
         """
         Settings will be toggled to database with proper User id
@@ -219,96 +199,6 @@ class DataManager(object):
                     save_to_db(new_email_notification_setting, "EmailSetting Toggled")
                     notification_ids.append(new_email_notification_setting.id)
         return notification_ids
-
-    @staticmethod
-    def add_email_notification_settings(form, user_id, event_id):
-        """
-        Settings will be saved to database with proper Event id and User id
-        :param form: view data form
-        :param event_id: Settings belongs to Event by event id
-        :param user_id: Settings belongs to User by user id
-        """
-        email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(user_id, event_id)
-        if email_notification_setting:
-            email_notification_setting.next_event = int(form.get('next_event', 0))
-            email_notification_setting.new_paper = int(form.get('new_paper', 0))
-            email_notification_setting.session_schedule = int(form.get('session_schedule', 0))
-            email_notification_setting.session_accept_reject = int(form.get('session_accept_reject', 0))
-
-            save_to_db(email_notification_setting, "EmailSettings Updated")
-        else:
-            new_email_notification_setting = EmailNotification(next_event=int(form.get('next_event', 0)),
-                                                               new_paper=int(form.get('new_paper', 0)),
-                                                               session_schedule=int(form.get('session_schedule', 0)),
-                                                               session_accept_reject=int(
-                                                                   form.get('session_accept_reject', 0)),
-                                                               user_id=user_id,
-                                                               event_id=event_id)
-            save_to_db(new_email_notification_setting, "EmailSetting Saved")
-
-    @staticmethod
-    def create_new_track(form, event_id):
-        """
-        Track will be saved to database with proper Event id
-        :param form: view data form
-        :param event_id: Track belongs to Event by event id
-        """
-        new_track = Track(name=form['name'],
-                          description=form['description'],
-                          event_id=event_id,
-                          track_image_url=form['track_image_url'])
-        record_activity('create_track', event_id=event_id, track=new_track)
-        save_to_db(new_track, "Track saved")
-
-    @staticmethod
-    def update_track(form, track):
-        """
-        Track will be updated in database
-        :param form: view data form
-        :param track: object contains all earlier data
-        """
-        data = form.data
-        db.session.query(Track) \
-            .filter_by(id=track.id) \
-            .update(dict(data))
-        save_to_db(track, "Track updated")
-        record_activity('update_track', event_id=track.event_id, track=track)
-        update_version(track.event_id, False, "tracks_ver")
-
-    @staticmethod
-    def remove_track(track_id):
-        """
-        Track will be removed from database
-        :param track_id: Track id to remove object
-        """
-        track = Track.query.get(track_id)
-        delete_from_db(track, "Track deleted")
-        record_activity('delete_track', event_id=track.event_id, track=track)
-        flash('You successfully deleted track')
-
-    @staticmethod
-    def create_session(form, event_id, is_accepted=True):
-        """
-        Session will be saved to database with proper Event id
-        :param is_accepted:
-        :param form: view data form
-        :param event_id: Session belongs to Event by event id
-        """
-        new_session = Session(title=form.title.data,
-                              subtitle=form.subtitle.data,
-                              long_abstract=form.long_abstract.data,
-                              start_time=form.start_time.data,
-                              end_time=form.end_time.data,
-                              event_id=event_id,
-                              short_abstract=form.short_abstract.data)
-
-        new_session.speakers = InstrumentedList(
-            form.speakers.data if form.speakers.data else [])
-        new_session.microlocation = form.microlocation.data
-        new_session.track = form.track.data
-        save_to_db(new_session, "Session saved")
-        record_activity('create_session', session=new_session, event_id=event_id)
-        update_version(event_id, False, "sessions_ver")
 
     @staticmethod
     def add_session_to_event(request, event_id, state=None):
@@ -638,21 +528,6 @@ class DataManager(object):
         update_version(event_id, False, "sessions_ver")
 
     @staticmethod
-    def create_speaker_session_relation(session_id, speaker_id, event_id):
-        """
-        Session, speaker ids will be saved to database
-        :param speaker_id:
-        :param session_id:
-        :param event_id: Session, speaker belongs to Event by event id
-        """
-        speaker = DataGetter.get_speaker(speaker_id)
-        session = DataGetter.get_session(session_id)
-        session.speakers.append(speaker)
-        save_to_db(session, "Session Speaker saved")
-        update_version(speaker.event_id, False, "speakers_ver")
-        update_version(session.event_id, False, "sessions_ver")
-
-    @staticmethod
     def session_accept_reject(session, event_id, state, send_email=True):
         session.state = state
         session.submission_date = datetime.now()
@@ -741,134 +616,6 @@ class DataManager(object):
             update_version(event_id, False, "sessions_ver")
 
     @staticmethod
-    def update_session(form, session):
-        """
-        Session will be updated in database
-        :param form: view data form
-        :param session: object contains all earlier data
-        """
-        data = form.data
-        speakers = data["speakers"]
-        microlocation = data["microlocation"]
-        track = data["track"]
-        del data["speakers"]
-        del data["microlocation"]
-        del data["track"]
-        db.session.query(Session) \
-            .filter_by(id=session.id) \
-            .update(dict(data))
-        session.speakers = InstrumentedList(speakers if speakers else [])
-        session.microlocation = microlocation
-        session.track = track
-        save_to_db(session, "Session updated")
-        update_version(session.event_id, False, "sessions_ver")
-        record_activity('update_session', session=session, event_id=session.event_id)
-
-    @staticmethod
-    def remove_session(session_id):
-        """
-        Session will be removed from database
-        :param session_id: Session id to remove object
-        """
-        session = Session.query.get(session_id)
-        delete_from_db(session, "Session deleted")
-        flash('You successfully delete session')
-        record_activity('delete_session', session=session, event_id=session.event_id)
-        update_version(session.event_id, False, "sessions_ver")
-
-    @staticmethod
-    def create_speaker(form, event_id, user=login.current_user):
-        """
-        Speaker will be saved to database with proper Event id
-        :param user:
-        :param form: view data form
-        :param event_id: Speaker belongs to Event by event id
-        """
-        speaker = Speaker(name=form["name"] if "name" in form.keys() else "",
-                          photo=form["photo"] if "photo" in form.keys() else "",
-                          short_biography=form["short_biography"] if "short_biography" in form.keys() else "",
-                          email=form["email"] if "email" in form.keys() else "",
-                          website=form["website"] if "website" in form.keys() else "",
-                          event_id=event_id,
-                          twitter=form["twitter"] if "twitter" in form.keys() else "",
-                          facebook=form["facebook"] if "facebook" in form.keys() else "",
-                          github=form["github"] if "github" in form.keys() else "",
-                          linkedin=form["linkedin"] if "linkedin" in form.keys() else "",
-                          organisation=form["organisation"] if "organisation" in form.keys() else "",
-                          position=form["position"] if "position" in form.keys() else "",
-                          country=form["country"] if "country" in form.keys() else "",
-                          user=user)
-        save_to_db(speaker, "Speaker saved")
-        update_version(event_id, False, "speakers_ver")
-
-    @staticmethod
-    def update_speaker(form, speaker):
-        """
-        Speaker will be updated in database
-        :param form: view data form
-        :param speaker: object contains all earlier data
-        """
-        data = form.data
-        del data['sessions']
-        db.session.query(Speaker) \
-            .filter_by(id=speaker.id) \
-            .update(dict(data))
-        speaker.sessions = InstrumentedList(
-            form.sessions.data if form.sessions.data else [])
-        speaker.ensure_social_links()
-        save_to_db(speaker, "Speaker updated")
-        record_activity('update_speaker', speaker=speaker, event_id=speaker.event_id)
-        update_version(speaker.event_id, False, "speakers_ver")
-
-    @staticmethod
-    def remove_speaker(speaker_id):
-        """
-        Speaker will be removed from database
-        :param speaker_id: Speaker id to remove object
-        """
-        speaker = Speaker.query.get(speaker_id)
-        delete_from_db(speaker, "Speaker deleted")
-        record_activity('delete_speaker', speaker=speaker, event_id=speaker.event_id)
-        update_version(speaker.event_id, False, "speakers_ver")
-        flash('You successfully delete speaker')
-
-    @staticmethod
-    def create_sponsor(form, event_id):
-        """
-        Sponsor will be saved to database with proper Event id
-        :param form: view data form
-        :param event_id: Sponsor belongs to Event by event id
-        """
-        new_sponsor = Sponsor(name=form.name.data,
-                              url=form.url.data,
-                              event_id=event_id,
-                              logo=form.logo.data)
-        save_to_db(new_sponsor, "Sponsor saved")
-        update_version(event_id, False, "sponsors_ver")
-
-    @staticmethod
-    def update_sponsor(form, sponsor):
-        """
-        Sponsor will be updated in database
-        :param form: view data form
-        :param sponsor: object contains all earlier data
-        """
-        data = form.data
-        db.session.query(Sponsor).filter_by(id=sponsor.id).update(dict(data))
-        save_to_db(sponsor, "Sponsor updated")
-        update_version(sponsor.event_id, False, "sponsors_ver")
-
-    @staticmethod
-    def remove_sponsor(sponsor_id):
-        """
-        Sponsor will be removed from database
-        :param sponsor_id: Sponsor id to remove object
-        """
-        sponsor = Sponsor.query.get(sponsor_id)
-        delete_from_db(sponsor, "Sponsor deleted")
-        flash('You successfully delete sponsor')
-
-    @staticmethod
     def remove_role(uer_id):
         """
         Role will be removed from database
@@ -878,48 +625,6 @@ class DataManager(object):
         record_activity('delete_role', role=uer.role, user=uer.user, event_id=uer.event_id)
         delete_from_db(uer, "UER deleted")
         flash("You've successfully deleted role.")
-
-    @staticmethod
-    def create_microlocation(form, event_id):
-        """
-        Microlocation will be saved to database with proper Event id
-        :param form: view data form
-        :param event_id: Microlocation belongs to Event by event id
-        """
-        new_microlocation = Microlocation(name=form.name.data,
-                                          latitude=form.latitude.data,
-                                          longitude=form.longitude.data,
-                                          floor=form.floor.data,
-                                          room=form.room.data,
-                                          event_id=event_id)
-        save_to_db(new_microlocation, "Microlocation saved")
-        update_version(event_id, False, "microlocations_ver")
-
-    @staticmethod
-    def update_microlocation(form, microlocation):
-        """
-        Microlocation will be updated in database
-        :param form: view data form
-        :param microlocation: object contains all earlier data
-        """
-        data = form.data
-        if "session" in data.keys():
-            del data["session"]
-        db.session.query(Microlocation) \
-            .filter_by(id=microlocation.id) \
-            .update(dict(data))
-        save_to_db(microlocation, "Microlocation updated")
-        update_version(microlocation.event_id, False, "microlocations_ver")
-
-    @staticmethod
-    def remove_microlocation(microlocation_id):
-        """
-        Microlocation will be removed from database
-        :param microlocation_id: Sponsor id to remove object
-        """
-        microlocation = Microlocation.query.get(microlocation_id)
-        delete_from_db(microlocation, "Microlocation deleted")
-        flash('You successfully delete microlocation')
 
     @staticmethod
     def create_user(userdata, is_verified=False):
@@ -968,7 +673,7 @@ class DataManager(object):
         save_to_db(user, "password resetted")
 
     @staticmethod
-    def update_user(form, user_id, avatar_img, contacts_only_update=False):
+    def update_user(form, user_id, contacts_only_update=False):
 
         user = User.query.filter_by(id=user_id).first()
         user_detail = UserDetail.query.filter_by(user_id=user_id).first()
@@ -1079,11 +784,6 @@ class DataManager(object):
         record_activity('update_user', user=user)
 
     @staticmethod
-    def add_owner_to_event(owner_id, event):
-        event.owner = owner_id
-        db.session.commit()
-
-    @staticmethod
     def update_user_permissions(form):
         for perm in UserPermission.query.all():
             ver_user = '{}-verified_user'.format(perm.name)
@@ -1179,10 +879,9 @@ class DataManager(object):
         return tag_list
 
     @staticmethod
-    def create_event(form, img_files):
+    def create_event(form):
         """
         Event will be saved to database with proper Event id
-        :param img_files:
         :param form: view data form
         """
         # Filter out Copyright info
@@ -1549,7 +1248,7 @@ class DataManager(object):
                 session_form=session_form, speaker_form=speaker_form)
 
             if module and (module.payment_include or module.donation_include) \
-                 and ('paid' or 'donation') in form.getlist('tickets[type]'):
+                and ('paid' or 'donation') in form.getlist('tickets[type]'):
 
                 if form['taxAllow'] == 'taxNo':
                     event.tax_allow = False
@@ -1676,8 +1375,8 @@ class DataManager(object):
         return event
 
     @staticmethod
-    def edit_event(request, event_id, event, session_types, tracks, social_links, microlocations, call_for_papers,
-                   sponsors, custom_forms, img_files, old_sponsor_logos, old_sponsor_names, tax):
+    def edit_event(request, event, session_types, tracks, social_links, microlocations, call_for_papers,
+                   sponsors, old_sponsor_logos, old_sponsor_names, tax):
         """
         Event will be updated in database
         :param call_for_papers:
@@ -1687,11 +1386,8 @@ class DataManager(object):
         :param social_links:
         :param tracks:
         :param session_types:
-        :param event_id:
         :param request:
         :param sponsors:
-        :param custom_forms:
-        :param img_files:
         :param old_sponsor_logos:
         :param event: object contains all earlier data
         """
@@ -1882,7 +1578,7 @@ class DataManager(object):
         if state and ((state == u'Published' and not string_empty(
            event.location_name)) or state != u'Published') and login.current_user.is_verified:
 
-           event.state = state
+            event.state = state
 
         social_link_name = form.getlist('social[name]')
         social_link_link = form.getlist('social[link]')
@@ -2117,39 +1813,6 @@ class DataManager(object):
         event.trash_date = datetime.now()
         save_to_db(event, "Event Added to Trash")
         return event
-
-    @staticmethod
-    def create_file():
-        """
-        File from request will be saved to database
-        """
-        file = request.files["file"]
-        filename = secure_filename(file.filename)
-        if not db.session.query(exists().where(File.name == filename)).scalar():
-            if file.mimetype.split('/', 1)[0] == "image":
-                file.save(os.path.join(os.path.realpath('.')
-                                       + '/static/', filename))
-                file_object = File(
-                    name=filename,
-                    path='',
-                    owner_id=login.current_user.id
-                )
-                save_to_db(file_object, "file saved")
-                flash("Image added")
-            else:
-                flash("The selected file is not an image. Please select a image file and try again.")
-        else:
-            flash("A file named \"" + filename + "\" already exists")
-
-    @staticmethod
-    def remove_file(file_id):
-        """
-        File from request will be removed from database
-        """
-        file_obj = File.query.get(file_id)
-        os.remove(os.path.join(os.path.realpath('.') + '/static/', file_obj.name))
-        delete_from_db(file_obj, "File removed")
-        flash("File removed")
 
     @staticmethod
     def add_role_to_event(form, event_id, record=True):
@@ -2477,26 +2140,6 @@ def restore_session(session_id):
     session.in_trash = False
     save_to_db(session, "Session restored from Trash")
     update_version(session.event_id, False, 'sessions_ver')
-
-
-def create_modules(form):
-    modules_form_value = form.getlist('modules_form[value]')
-    module = DataGetter.get_module()
-
-    if module is None:
-        module = Module()
-
-    module.ticket_include = True if str(modules_form_value[0][24]) == '1' else False
-    module.payment_include = True if str(modules_form_value[0][49]) == '1' else False
-    module.donation_include = True if str(modules_form_value[0][75]) == '1' else False
-
-    save_to_db(module, "Module settings saved")
-    events = DataGetter.get_all_events()
-
-    if module.ticket_include:
-        for event in events:
-            event.ticket_include = True
-            save_to_db(event, "Event updated")
 
 
 def uploaded_file_provided_by_url(url):

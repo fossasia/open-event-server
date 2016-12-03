@@ -113,9 +113,8 @@ def create_app():
     HTMLMIN(app)
     AuthManager.init_login(app)
 
-    if app.config['TESTING']:
+    if app.config['TESTING'] and app.config['PROFILE']:
         # Profiling
-        app.config['PROFILE'] = True
         app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[30])
 
     # API version 2

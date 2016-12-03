@@ -37,8 +37,7 @@ def edit_view(user_id=None):
     else:
         admin = True
     if request.method == 'POST':
-        url = ""
-        DataManager.update_user(request.form, int(user_id), url)
+        DataManager.update_user(request.form, int(user_id))
         if admin:
             return redirect(url_for('sadmin_users.details_view', user_id=user_id))
         return redirect(url_for('.index_view'))

@@ -42,7 +42,7 @@ def send_after_event_mail():
     with app.app_context():
         events = Event.query.all()
         for event in events:
-            upcoming_events = DataGetter.get_upcoming_events(event.id)
+            upcoming_events = DataGetter.get_upcoming_events()
             organizers = DataGetter.get_user_event_roles_by_role_name(
                 event.id, 'organizer')
             speakers = DataGetter.get_user_event_roles_by_role_name(event.id,
