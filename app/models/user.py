@@ -5,6 +5,7 @@ from flask import url_for
 from sqlalchemy import event, desc
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
+from app.helpers.helpers import get_count
 from app.models.session import Session
 from app.models.speaker import Speaker
 from user_detail import UserDetail
@@ -226,7 +227,7 @@ class User(db.Model):
         return False
 
     def get_unread_notif_count(self):
-        return Notification.query.filter_by(user=self, has_read=False).count()
+        return get_count(Notification.query.filter_by(user=self, has_read=False))
 
     def get_unread_notifs(self):
         """Get unread notifications with titles, humanized receiving time

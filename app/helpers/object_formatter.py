@@ -1,5 +1,6 @@
 from flask import jsonify
 
+from app.helpers.helpers import get_count
 from .query_filter import QueryFilter
 
 PER_PAGE = 20
@@ -12,7 +13,7 @@ class ObjectFormatter(object):
     def get_json(name, query, request, page=None):
         """Returns formatted json"""
         objects = QueryFilter(request.args, query).get_filtered_data()
-        count = objects.count()
+        count = get_count(objects)
         if not page:
             return jsonify(
                 {name: [

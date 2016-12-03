@@ -13,10 +13,11 @@ from geoip import geolite2
 from werkzeug.datastructures import ImmutableMultiDict
 
 from app import db
+from app.helpers.auth import AuthManager
 from app.helpers.data import DataManager, save_to_db, record_activity, delete_from_db, restore_event
 from app.helpers.data_getter import DataGetter
 from app.helpers.flask_helpers import get_real_ip
-from app.helpers.helpers import fields_not_empty, string_empty
+from app.helpers.helpers import fields_not_empty, string_empty, get_count
 from app.helpers.helpers import send_event_publish
 from app.helpers.helpers import uploaded_file
 from app.helpers.invoicing import InvoicingManager
@@ -26,7 +27,6 @@ from app.helpers.storage import upload, upload_local, UPLOAD_PATHS
 from app.helpers.ticketing import TicketingManager
 from app.models.call_for_papers import CallForPaper
 from app.settings import get_settings
-from app.helpers.auth import AuthManager
 
 
 def get_random_hash():
@@ -253,10 +253,10 @@ def details_view(event_id):
                      'Did not get the email? Please <a href="/resend_email/" class="alert-link"> click here to '
                      'resend the confirmation.</a>'))
 
-    sessions = {'pending': DataGetter.get_sessions_by_state_and_event_id('pending', event_id).count(),
-                'accepted': DataGetter.get_sessions_by_state_and_event_id('accepted', event_id).count(),
-                'rejected': DataGetter.get_sessions_by_state_and_event_id('rejected', event_id).count(),
-                'draft': DataGetter.get_sessions_by_state_and_event_id('draft', event_id).count()}
+    sessions = {'pending': get_count(DataGetter.get_sessions_by_state_and_event_id('pending', event_id)),
+                'accepted': get_count(DataGetter.get_sessions_by_state_and_event_id('accepted', event_id)),
+                'rejected': get_count(DataGetter.get_sessions_by_state_and_event_id('rejected', event_id)),
+                'draft': get_count(DataGetter.get_sessions_by_state_and_event_id('draft', event_id))}
 
     return render_template('gentelella/admin/event/details/details.html',
                            event=event,

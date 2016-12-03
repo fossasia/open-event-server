@@ -26,7 +26,7 @@ class InvoicingManager(object):
 
     @staticmethod
     def get_discount_code_used_count(discount_code_id):
-        return Event.query.filter_by(discount_code_id=discount_code_id).count()
+        return get_count(Event.query.filter_by(discount_code_id=discount_code_id))
 
     @staticmethod
     def get_discount_code(discount_code):
