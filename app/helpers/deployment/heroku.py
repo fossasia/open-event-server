@@ -7,7 +7,7 @@ class HerokuApi:
     token = os.environ.get('API_TOKEN_HEROKU', '')
     namespace = 'default'
     headers = {}
-    api_url = "https://api.heroku.com/apps/%s/" % os.environ.get('HEROKU_APP_NAME', 'open-event'),
+    api_url = "https://api.heroku.com/apps/%s/" % os.environ.get('HEROKU_APP_NAME', 'open-event')
 
     def __init__(self):
         self.headers = {
