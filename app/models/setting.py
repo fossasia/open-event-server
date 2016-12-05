@@ -24,6 +24,7 @@ class Setting(db.Model):
     aws_key = db.Column(db.String)
     aws_secret = db.Column(db.String)
     aws_bucket_name = db.Column(db.String)
+    aws_region = db.Column(db.String)
     # Google Storage
     gs_key = db.Column(db.String)
     gs_secret = db.Column(db.String)

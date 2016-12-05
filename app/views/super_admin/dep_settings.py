@@ -1,3 +1,4 @@
+import boto
 from flask import Blueprint
 from flask import render_template
 from flask import request
@@ -119,6 +120,7 @@ def index_view():
         'gentelella/admin/super_admin/settings/settings.html',
         settings=settings,
         fees=fees,
+        s3_regions=boto.s3.regions(),
         payment_currencies=DataGetter.get_payment_currencies(),
         included_settings=get_module_settings(),
         image_config=image_config,
