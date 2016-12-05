@@ -1,92 +1,43 @@
 #  Open Event Orga Server
 
-The Open Event Orga Server enables organizers to manage events from concerts to conferences and meetups. It offers features for events with several tracks and venues. Event managers can create invitation forms for speakers and build schedules in a drag and drop interface. The event information is stored in a database. The system provides API endpoints to fetch the data, and to modify and update it. Organizers can import and export event data in a standard compressed file format that includes the event data in JSON and binary media files like images and audio.
+The Open Event Orga Server enables organizers to manage events from concerts to conferences and meet-ups. It offers features for events with several tracks and venues. Event managers can create invitation forms for speakers and build schedules in a drag and drop interface. The event information is stored in a database. The system provides API endpoints to fetch the data, and to modify and update it. Organizers can import and export event data in a standard compressed file format that includes the event data in JSON and binary media files like images and audio.
 
-[![Build Status](https://travis-ci.org/fossasia/open-event-orga-server.svg?branch=master)](https://travis-ci.org/fossasia/open-event-orga-server)
-[![Dependency Status](https://gemnasium.com/badges/github.com/fossasia/open-event-orga-server.svg)](https://gemnasium.com/github.com/fossasia/open-event-orga-server)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1ac554483fac462797ffa5a8b9adf2fa)](https://www.codacy.com/app/fossasia/open-event-orga-server?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fossasia/open-event-orga-server&amp;utm_campaign=Badge_Grade)
-[![Issue Count](https://codeclimate.com/github/fossasia/open-event-orga-server/badges/issue_count.svg)](https://codeclimate.com/github/fossasia/open-event-orga-server)
-[![Test Coverage](https://codeclimate.com/github/fossasia/open-event-orga-server/badges/coverage.svg)](https://codeclimate.com/github/fossasia/open-event-orga-server/coverage)
-[![Coverage Status](https://coveralls.io/repos/github/fossasia/open-event-orga-server/badge.svg?branch=master)](https://coveralls.io/github/fossasia/open-event-orga-server?branch=master)
-[![codecov](https://codecov.io/gh/fossasia/open-event-orga-server/branch/master/graph/badge.svg)](https://codecov.io/gh/fossasia/open-event-orga-server)
-[![Gitter](https://badges.gitter.im/fossasia/open-event-orga-server.svg)](https://gitter.im/fossasia/open-event-orga-server?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Travis branch](https://img.shields.io/travis/fossasia/open-event-orga-server/master.svg?style=flat-square)](https://travis-ci.org/fossasia/open-event-orga-server)
+[![Gemnasium](https://img.shields.io/gemnasium/fossasia/open-event-orga-server.svg?style=flat-square)](https://gemnasium.com/github.com/fossasia/open-event-orga-server)
+[![Coveralls branch](https://img.shields.io/coveralls/fossasia/open-event-orga-server/master.svg?style=flat-square&label=Coveralls+Coverage)](https://coveralls.io/github/fossasia/open-event-orga-server?branch=master)
+[![Codacy branch grade](https://img.shields.io/codacy/grade/1ac554483fac462797ffa5a8b9adf2fa/master.svg?style=flat-square)](https://www.codacy.com/app/fossasia/open-event-orga-server)
+[![Codecov branch](https://img.shields.io/codecov/c/github/fossasia/open-event-orga-server/master.svg?style=flat-square&label=Codecov+Coverage)](https://codecov.io/gh/fossasia/open-event-orga-server)
+[![Gitter](https://img.shields.io/badge/chat-on%20gitter-ff006f.svg?style=flat-square)](https://gitter.im/fossasia/open-event-orga-server)
 
 ## Communication
 
 Please join our mailing list to discuss questions regarding the project: https://groups.google.com/forum/#!forum/open-event
 
-Our chat channel is on gitter here: https://gitter.im/fossasia/open-event-orga-server
+Our chat channel is on Gitter here: [gitter.im/fossasia/open-event-orga-server](https://gitter.im/fossasia/open-event-orga-server)
 
 ## Demo version
 
 A demo version is automatically deployed from our repositories:
-* [Go to demo version deployed from master branch](http://open-event.herokuapp.com/)
-* [Go to demo version deployed from development branch](http://open-event-dev.herokuapp.com/)
+* Deployment from the master branch - [open-event.herokuapp.com](http://open-event.herokuapp.com/)
+* Deployment from the development branch - [open-event-dev.herokuapp.com](http://open-event-dev.herokuapp.com/)
 
 ## Installation
 
-### How do I install the Open Event System on a Server
+The Open Event Orga Server can be easily deployed on a variety of platforms. Detailed platform specific installation instructions have been provided below.
 
-Please check out [the documentation here](/docs/INSTALLATION.md).
+1. [Generic Installation Instructions](/docs/INSTALLATION.md)
+1. [Local Installation](/docs/INSTALLATION.md)
+1. [Vagrant Installation](/docs/INSTALLATION_VAGRANT.md)
+1. [Deployment on Google Compute Engine](/docs/INSTALLATION_GOOGLE.md)
+1. [Deployment on Google Container Engine (Kubernetes)](/docs/INSTALLATION_GCE_KUBERNETES.md)
+1. [Deployment on AWS EC2](/docs/INSTALLATION_AWS.md)
+1. [Deployment on Digital Ocean](/docs/INSTALLATION_DIGITALOCEAN.md)
+1. [Deployment with Docker](/docs/INSTALLATION_DOCKER.md)
+1. [Deployment on Heroku](/docs/INSTALLATION_HEROKU.md)
 
-### How do I run Open Event Server locally
-
-A step-by-step guide on how to run Orga Server on a system locally can be found in [Installations document](/docs/INSTALLATION_LOCAL.md)
-
-### How do I install Open-Event Server with Vagrant
-
-For installation steps on how to deploy Open-Event Server using vagrant please refer to [Vagrant installation](docs/INSTALLATION_VAGRANT.md)
-
-### How do I install Open Event Orga Server on Google Cloud
-
-To install the system on Google Cloud please refer to the [Google Cloud installation readme](/docs/INSTALLATION_GOOGLE.md).
-
-### How do I install the Open Event Orga Server on AWS
-
-To install the system on AWS please refer to the [AWS installation readme](/docs/INSTALLATION_AWS.md).
-
-### How do I install Open Event Orga Server on Digital Ocean
-
-To install the system on Digital Ocean please refer to the [Digital Ocean installation readme](/docs/INSTALLATION_DIGITALOCEAN.md).
-
-### How do I install Open Event Server with Docker
-
-To install Open-Event Server with Docker please refer to [Docker installation](/docs/INSTALLATION_DOCKER.md)
-
-### How do I deploy Open-Event Server to Heroku
-
-For steps regarding how to deploy your version of the Open Event Server to Heroku, please refer [Heroku deployment](docs/INSTALLATION_HEROKU.md) or use the one button deployment.
+One-click Heroku deployment is also available:
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-
-## Redis
-
-Orga Server requires Redis to run Celery which runs the background tasks in the application.
-
-To setup Redis in your system, run the following commands
-
-```sh
-wget http://download.redis.io/releases/redis-3.2.1.tar.gz
-tar xzf redis-3.2.1.tar.gz
-rm redis-3.2.1.tar.gz
-cd redis-3.2.1
-make
-```
-
-To start the redis server, run the following command while at project's root directory.
-
-```sh
-redis-3.2.1/src/redis-server
-```
-
-You can use ampersand (&) at the end of the above command if you want to start redis server as daemon (i.e. in background).
-
-```sh
-redis-3.2.1/src/redis-server &
-```
-
-If you want to use a different Redis server than the above, then you can provide the server url in `REDIS_URL` environment variable.
-The default value for `REDIS_URL` is `redis://localhost:6379/0` which is the same as that of local Redis server.
 
 
 ## Technology Stack
@@ -95,99 +46,102 @@ Please get familiar with the components of the project in order to be able to co
 
 ### Components
 
-* Database - [Postgres](https://www.postgresql.org)
-* Webserver - [Nginx](https://www.nginx.com)
-* App server - [uwsgi](https://github.com/unbit/uwsgi)
-* Web framework - [flask](http://flask.pocoo.org) (particularly [flask-admin](https://github.com/flask-admin))
+* Database - [PostgreSQL](https://www.postgresql.org)
+* Web framework - [Flask](http://flask.pocoo.org)
+* App server - [uWSGI](https://github.com/unbit/uwsgi)
+* Web Server - [NGINX](https://www.nginx.com)
 
-### Services and Dependencies
+### External Service Dependencies
 
-#### Authentication OAuth
+#### OAuth Social Authentication
 
 OAuth is used to get information from Facebook and Google accounts, that enables users to sign in with their respective credentials:
- 1. Google https://accounts.google.com/o/oauth2/auth
- 2. Facebook https://graph.facebook.com/oauth
+ 1. Google - https://accounts.google.com/o/oauth2/auth
+ 2. Facebook - https://graph.facebook.com/oauth
 
 #### Twitter
 
-The server integrates twitter on event pages. To obtain the required keys visit: https://dev.twitter.com/overview/documentation
+Twitter feed integration is provided in the public event pages. 
+
+Required keys can be obtained from [https://dev.twitter.com/overview/documentation](https://dev.twitter.com/overview/documentation)
 
 #### Instagram
 
-It is possible to extend the functionality and offer images from Instagram in the event service. To obtain required keys visit: https://www.instagram.com/developer/authentication/
+It is possible to extend the functionality and offer images from Instagram in the event service. 
+
+Required keys can be obtained from [https://www.instagram.com/developer/authentication/](https://www.instagram.com/developer/authentication/).
 
 #### Google Maps
 
-We are using on Google maps to get information about location (info about country, city, latitude and longitude) https://maps.googleapis.com/maps/api/ We use it to get current location and display closes events.
+Google maps is used to get information about location (info about country, city, latitude and longitude).
 
-#### Local Storage and Amazon S3
+Required keys can be obtained from [https://maps.googleapis.com/maps/api](https://maps.googleapis.com/maps/api).
 
-We are storing audio, avatars and logos either on local storage or Amazon S3. Read more about the set up of [Amazon S3 here](/docs/AMAZON_S3.md)
+#### Media Storage - Local/Amazon S3/Google Cloud
 
-#### Sendgrid
-To send emails we are using sendgrid
-https://api.sendgrid.com/api/mail.send.json
+Media (like audio, avatars and logos) can be stored either Locally or on Amazon S3 or on Google Storage.
+ 
+1. [Amazon S3 Setup Instructions](/docs/AMAZON_S3.md)
+1. [Google Cloud Setup Instructions](https://cloud.google.com/storage/docs/migrating#defaultproj)
 
-#### Heroku Logs
+#### Emails - SMTP/Sendgrid
 
-We use heroku releases to see which version is deployed https://api.heroku.com/apps/open-event/releases
-and we also use Github to get info about commit (for example: commit message, author name) at https://api.github.com/repos/fossasia/open-event-orga-server/commits
+The server can send emails via SMTP or using the sendgrid API.
+
+1. SMTP can be configured directly at `admin/settings`
+2. Obtaining [Sendgrid API Token](https://sendgrid.com/docs/User_Guide/Settings/api_keys.html).
+
+#### Heroku API
+
+If the application is deployed on Heroku, we use the heroku API to obtain the latest release and also to display the heroku.
+
+Required token can be obtained from [https://devcenter.heroku.com/articles/authentication](https://devcenter.heroku.com/articles/authentication).
 
 #### Payment Gateways
 
 For ticket sales the service integrates payment gateways:
- 1. Stripe
- 2. Paypal
+ 1. Stripe - [Obtaining Keys](https://support.stripe.com/questions/where-do-i-find-my-api-keys).
+ 2. Paypal - [Obtaining Credentials](https://developer.paypal.com/docs/classic/lifecycle/ug_sandbox/).
 
-## API Access and Import/Export
+## Data Access
 
-Every installation of the project includes the API docs with Swagger, e.g. here on the test install http://open-event-dev.herokuapp.com/api/v2/ .
+#### REST API
 
-A hosted version of the API docs is available in the gh-pages branch of the repository at https://fossasia.github.io/open-event-orga-server/api/v2/
+The Open Event Orga Server exposes a well documented REST API that can be used by external services (like the Open Event App generators for example) to access the data.
 
-The data of events is provided over API endpoints as described [here](/docs/API.md)
+**API Documentation:**
+- Every installation of the project includes the API docs with Swagger, (e.g. here on the test install [http://open-event-dev.herokuapp.com/api/v2](http://open-event-dev.herokuapp.com/api/v2/)).
+-  A hosted version of the API docs is available in the `gh-pages` branch of the repository at [https://fossasia.github.io/open-event-orga-server/api/v2/](https://fossasia.github.io/open-event-orga-server/api/v2/).
+- The data of events is provided over API endpoints as described [here](/docs/API.md).
 
-It is also possible to export or import data matching the API structure as a compressed file with JSON and binary media files. Read more about this [here](/docs/IMPORT_EXPORT.md).
+
+
+#### Import & Export
+
+**Import:**
+
+Open Event Orga server supports multiple formats as a valid source for import.
+
+- A **zip archive** with JSON (matching the API structure) and binary media files. Read more about this [here](/docs/IMPORT_EXPORT.md).
+- The **Pentabarf XML** format is also supported as a valid import source. ([Sample file](https://archive.fosdem.org/2016/schedule/xml)).
+
+**Export:**
+
+The event data and the sessions can be exported in various formats.
+- A **zip archive** with JSON (matching the API structure) and binary media files. Read more about this [here](/docs/IMPORT_EXPORT.md).
+- The **Pentabarf XML** format. ([Sample file](https://archive.fosdem.org/2016/schedule/xml)).
+- The **iCal** format. ([Sample file](https://archive.fosdem.org/2016/schedule/ical)).
+- The **xCal** format. ([Sample file](https://archive.fosdem.org/2016/schedule/xcal)).
+
 
 ## Roles
 
-The system has two kind of role type. 1. System roles are related to the Open Event organization and operator of the application. 2. Event Roles are related to the users of the system with their different permissions. Read more [here](/docs/ROLES.md).
+The system has two kind of role type. 
 
-## Configuration
+1. System roles are related to the Open Event organization and operator of the application. 
+2. Event Roles are related to the users of the system with their different permissions. 
 
-### How to configure Bower
-
-We use [Bower](http://bower.io) to manage front-end dependencies. `cd` to the directory where `bower.json` is stored and run:
-* First we have to install npm and nodejs. Run the following:
-```sudo apt-get install npm```
-
-* Then run the following command to get Bower:
-```sudo npm install -g bower```
-
-* Finally run the following command to install the dependencies from bower.json:
-```
-bower install
-```
-
-Note: If you are working from within a proxied network of an organization/institute, Bower might not be able to install the libraries. For that, we need to configure .bowerrc to work via proxy.
-* Open .bowerrc in any text editor like vim. Run:
-```vim .bowerrc```
-* The contents of .bowerrc will be something like this:
-```
-{
-	"directory": "app/static/admin/lib"
-}
-```
-* Modify the file to add "proxy" and "https-proxy" properties like this:
-```
-{
-	"directory": "app/static/admin/lib",
-	"proxy": "http://172.31.1.23:8080",
-	"https-proxy": "http://172.31.1.23:8080"
-}
-```
-* Save and exit. Now we can run ```bower install``` to install our libraries.
-
+Read more [here](/docs/ROLES.md).
 
 ## Development
 
@@ -199,7 +153,7 @@ To enable development mode (development Flask config), set `APP_CONFIG` environm
 export APP_CONFIG=config.DevelopmentConfig
 ```
 
-### Model updates
+### Model updates & migrations
 
 When writing changes to models. Use migrations.
 
@@ -212,23 +166,21 @@ When writing changes to models. Use migrations.
 
  # To rollback
  python manage.py db downgrade
-
  ```
 
 When checking in code for models, please update migrations as well.
 
+### Testing
 
-## Testing
-
-First install the repo and set up the server according to the steps listed. Make sure you have installed are the dependencies required for testing by running
+Clone the repo and set up the server according to the steps listed. Make sure you have installed are the dependencies required for testing by running
 
 ```
 pip install -r requirements/tests.txt
 ```
 
-### Running unit tests
+#### Running unit tests
 
-* Next go to the project directory and run the following command:
+* Go to the project directory and run the following command:
 ```
 python -m unittest discover tests/unittests/
 ```
@@ -239,7 +191,7 @@ python -m unittest discover tests/unittests/
 nosetests tests/unittests/
 ```
 
-### Running robot framework tests
+#### Running robot framework tests
 * Make sure you have FireFox installed
 * Start your local flask server instance.
 * Go to the project directory and Run the tests by using the following command.
@@ -252,16 +204,15 @@ Change all the parameters inside `{}` as per your local server. The final comman
 ```
 robot -v SERVER:localhost:5000 -v SUPERUSER_USERNAME:test@opev.net -v SUPERUSER_PASSWORD:test_password tests/robot
 ```
-* Once the tests are completed, a report and a log would be generated at `report.html` and `log.html` repectively in your root directory.
+* Once the tests are completed, a report and a log would be generated at `report.html` and `log.html` respectively in your root directory.
 
 ## Logging
 
-Certain information is being logged and stored in the database for future reference, resolving conflicts in case of hacks and for maintaining an overview of the system. Read more about [loggin here](/docs/LOGS.md).
+Certain information is being logged and stored in the database for future reference, resolving conflicts in case of hacks and for maintaining an overview of the system. Read more about [logging here](/docs/LOGS.md).
 
 ## Contributions, Bug Reports, Feature Requests
 
 This is an Open Source project and we would be happy to see contributors who report bugs and file feature requests submitting pull requests as well. Please report issues here https://github.com/fossasia/open-event-orga-server/issues
-
 
 ## Branch Policy
 
@@ -271,11 +222,11 @@ We have the following branches
 	 you are supposed to make a pull request to _development_.
 	 PRs to master must pass a build check and a unit-test check on Travis
  * **master**
-   This contains shipped code. After significant features/bugfixes are accumulated on development, we make a version update, and make a release.
+   This contains shipped code. After significant features/bug-fixes are accumulated on development, we make a version update, and make a release.
 
 
 ## License
 
 This project is currently licensed under the GNU General Public License v3. A
 copy of LICENSE.md should be present along with the source code. To obtain the
-software under a different license, please contact FOSSASIA.
+software under a different license, please contact [FOSSASIA](http://blog.fossasia.org/contact/).
