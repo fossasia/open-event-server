@@ -210,6 +210,17 @@ robot -v SERVER:localhost:5000 -v SUPERUSER_USERNAME:test@opev.net -v SUPERUSER_
 
 Certain information is being logged and stored in the database for future reference, resolving conflicts in case of hacks and for maintaining an overview of the system. Read more about [logging here](/docs/LOGS.md).
 
+## Internalization (i18n)
+
+[![Translation status](https://hosted.weblate.org/widgets/open-event/-/multi-blue.svg)](https://hosted.weblate.org/engage/open-event)
+
+Open Event is being translated using Weblate, a web tool designed to ease translating for both developers and translators.
+
+If you would like to contribute to translation of Open Event, you need to [register on this server](https://hosted.weblate.org/accounts/register/).
+
+Once you have activated your account just proceed to the [translation section](https://hosted.weblate.org/projects/open-event/).   
+
+
 ## Contributions, Bug Reports, Feature Requests
 
 This is an Open Source project and we would be happy to see contributors who report bugs and file feature requests submitting pull requests as well. Please report issues here https://github.com/fossasia/open-event-orga-server/issues
