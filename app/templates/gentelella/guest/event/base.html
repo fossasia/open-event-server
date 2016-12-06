@@ -97,7 +97,7 @@
         <ul class="nav nav-pills review-menu mobile">
             <li {% if active_page == 'info' %}class="active"{% endif %} id="info-menu"><a
                     href="/e/{{ event.identifier }}/#info">Info</a></li>
-            {% if accepted_sessions[0] %}
+            {% if accepted_sessions_count > 0 %}
                 <li {% if active_page == 'sessions' %}class="active"{% endif %}><a
                         href="/e/{{ event.identifier }}/sessions">{{ _("Sessions") }}</a>
                 </li>
@@ -121,13 +121,13 @@
         <ul class="nav nav-pills nav-stacked preview-menu">
             <li {% if active_page == 'info' %}class="active"{% endif %} id="info-menu"><a
                     href="/e/{{ event.identifier }}/#info">Info</a></li>
-            {% if accepted_sessions[0] %}
+            {% if accepted_sessions_count > 0 %}
                 <li id="speakers-menu"><a href="/e/{{ event.identifier }}/#speakers">{{ _("Speakers") }}</a></li>
             {% endif %}
             {% if event.sponsor[0] %}
                 <li id="sponsors-menu"><a href="/e/{{ event.identifier }}/#sponsors">{{ _("Sponsors") }}</a></li>
             {% endif %}
-            {% if accepted_sessions[0] %}
+            {% if accepted_sessions_count > 0 %}
                 <li {% if active_page == 'sessions' %}class="active"{% endif %}><a
                         href="/e/{{ event.identifier }}/sessions">{{ _("Sessions") }}</a>
                 </li>
