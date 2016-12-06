@@ -7,11 +7,11 @@
 {% block panel_content %}
 
     <table class="table table-striped">
-        <tbody style="white-space: nowrap">
+        <tbody>
 
         <tr>
             <td colspan="2">
-                <div style="white-space: nowrap; padding: 8px; line-height: 1.42857143; vertical-align: top; border-top: 1px solid #ddd; background: #f9f9f9">
+                <div style="font-size: large; font-weight: 300;">
                     {% if event.state == 'Published' %}
                         {{ _("Your event is live at") }}
                         <a href="{{ url_for('event_detail.display_event_detail_home', identifier=event.identifier) |replace('events', 'e') }}">
@@ -25,7 +25,7 @@
 
             </td>
         <tr>
-            <td>{{ _("No. of Revisions") }}</td>
+            <td width="200px">{{ _("No. of Revisions") }}</td>
             <td>
                 {% if versions_count > 0 %}
                     {{ versions_count }}&nbsp;&nbsp;(
