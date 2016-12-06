@@ -57,18 +57,16 @@
             <tr>
                 <td>{{ _("Session Types") }}</td>
                 <td>
-                    {% for sessionType in event.session_type %}
-                        {% if loop.index > 1 %}, {% endif %}{{ sessionType.name }}
-                    {% endfor %}
+                    {% set comma = joiner(",") %}
+                    {% for sessionType in event.session_type %}{{ comma() }} {{ sessionType.name }}{% endfor %}
                 </td>
             </tr>
         {% endif %}
         <tr>
             <td>{{ _("Links and Social Media") }} </td>
             <td>
-                {% for socialLink in event.social_link %}
-                    {% if loop.index > 1 %}, {% endif %}<a href="{{ socialLink.link }}">{{ socialLink.name }}</a>
-                {% else %}
+                {% set comma = joiner(",") %}
+                {% for socialLink in event.social_link %}{{ comma() }} <a href="{{ socialLink.link }}">{{ socialLink.name }}</a>{% else %}
                     {{ _("No social links added.") }}
                     <a href="{{ url_for("events.edit_view", event_id=event.id) }}">{{ _("Click to add.") }}</a>
                 {% endfor %}
