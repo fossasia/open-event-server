@@ -2,6 +2,7 @@
 import warnings
 
 from flask.exthook import ExtDeprecationWarning
+
 warnings.simplefilter('ignore', ExtDeprecationWarning)
 # Keep it before flask extensions are imported
 
@@ -69,6 +70,25 @@ from app.views import BlueprintsManager
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
+
+
+class ReverseProxied(object):
+    """
+    ReverseProxied flask wsgi app wrapper from http://stackoverflow.com/a/37842465/1562480 by aldel
+    """
+    def __init__(self, app):
+        self.app = app
+
+    def __call__(self, environ, start_response):
+        scheme = environ.get('HTTP_X_FORWARDED_PROTO')
+        if scheme:
+            environ['wsgi.url_scheme'] = scheme
+        if os.getenv('FORCE_SSL', 'no') == 'yes':
+            environ['wsgi.url_scheme'] = 'https'
+        return self.app(environ, start_response)
+
+
+app.wsgi_app = ReverseProxied(app.wsgi_app)
 
 
 def create_app():
