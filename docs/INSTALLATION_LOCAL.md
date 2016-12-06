@@ -189,3 +189,25 @@ sudo service nginx testconfig # Should respond with "test is successful"
 sudo service nginx restart
 gunicorn app:app --worker-class eventlet -w 1 --bind 0.0.0.0:5001 --reload
 ```
+
+---
+
+**Note:**
+
+If you are working from within a proxied network of an organization/institute, Bower might not be able to install the libraries. For that, we need to configure .bowerrc to work via proxy.
+* Open .bowerrc in any text editor like vim. Run:
+```vim .bowerrc```
+* The contents of .bowerrc will be something like this:
+```
+{
+	"directory": "app/static/admin/lib"
+}
+```
+* Modify the file to add "proxy" and "https-proxy" properties like this:
+```
+{
+	"directory": "app/static/admin/lib",
+	"proxy": "http://172.31.1.23:8080",
+	"https-proxy": "http://172.31.1.23:8080"
+}
+```
