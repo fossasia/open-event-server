@@ -26,7 +26,7 @@ A demo version is automatically deployed from our repositories:
 The Open Event Orga Server can be easily deployed on a variety of platforms. Detailed platform specific installation instructions have been provided below.
 
 1. [Generic Installation Instructions](/docs/INSTALLATION.md)
-1. [Local Installation](/docs/INSTALLATION.md)
+1. [Local Installation](/docs/INSTALLATION_LOCAL.md)
 1. [Vagrant Installation](/docs/INSTALLATION_VAGRANT.md)
 1. [Deployment on Google Compute Engine](/docs/INSTALLATION_GOOGLE.md)
 1. [Deployment on Google Container Engine (Kubernetes)](/docs/INSTALLATION_GCE_KUBERNETES.md)
