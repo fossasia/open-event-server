@@ -1,5 +1,10 @@
 # How to deploy server to Heroku
-### Steps
+
+One-click Heroku deployment is available:
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
+### Steps for Manual Deployment
 
 * We need to install heroku on our machine. Type the following in your linux terminal:
 	* ```wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh```

@@ -12,6 +12,7 @@ from werkzeug.utils import redirect
 from app.helpers.data import DataManager
 from app.helpers.data_getter import DataGetter
 from app.helpers.export import ExportHelper
+from app.helpers.helpers import get_count
 from app.models.call_for_papers import CallForPaper
 
 
@@ -44,7 +45,7 @@ def display_event_detail_home(identifier):
     placeholder_images = DataGetter.get_event_default_images()
     custom_placeholder = DataGetter.get_custom_placeholders()
     call_for_speakers = DataGetter.get_call_for_papers(event.id).first()
-    accepted_sessions = DataGetter.get_sessions(event.id)
+    accepted_sessions = DataGetter.get_sessions(event.id).all()
     if event.copyright:
         licence_details = DataGetter.get_licence_details(event.copyright.licence)
     else:
@@ -57,6 +58,7 @@ def display_event_detail_home(identifier):
                            placeholder_images=placeholder_images,
                            custom_placeholder=custom_placeholder,
                            accepted_sessions=accepted_sessions,
+                           accepted_sessions_count=len(accepted_sessions),
                            call_for_speakers=call_for_speakers,
                            licence_details=licence_details,
                            module=module,
@@ -71,12 +73,11 @@ def display_event_sessions(identifier):
     if not event.has_session_speakers:
         abort(404)
     call_for_speakers = DataGetter.get_call_for_papers(event.id).first()
+    accepted_session_count = get_count(DataGetter.get_sessions(event.id))
     tracks = DataGetter.get_tracks(event.id)
-    accepted_sessions = DataGetter.get_sessions(event.id)
-    if not accepted_sessions:
-        abort(404)
     return render_template('gentelella/guest/event/sessions.html', event=event,
-                           placeholder_images=placeholder_images, accepted_sessions=accepted_sessions, tracks=tracks,
+                           placeholder_images=placeholder_images, tracks=tracks,
+                           accepted_sessions_count=accepted_session_count,
                            call_for_speakers=call_for_speakers, custom_placeholder=custom_placeholder)
 
 
@@ -88,11 +89,12 @@ def display_event_schedule(identifier):
     if not event.has_session_speakers:
         abort(404)
     tracks = DataGetter.get_tracks(event.id)
-    accepted_sessions = DataGetter.get_sessions(event.id)
-    if not accepted_sessions or not event.schedule_published_on:
+    accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
+    if accepted_sessions_count == 0 or not event.schedule_published_on:
         abort(404)
     return render_template('gentelella/guest/event/schedule.html', event=event,
-                           placeholder_images=placeholder_images, accepted_sessions=accepted_sessions,
+                           placeholder_images=placeholder_images,
+                           accepted_sessions_count=accepted_sessions_count,
                            tracks=tracks, custom_placeholder=custom_placeholder)
 
 
@@ -101,10 +103,9 @@ def display_event_schedule_pentabarf(identifier):
     event = get_published_event_or_abort(identifier)
     if not event.has_session_speakers:
         abort(404)
-    accepted_sessions = DataGetter.get_sessions(event.id)
-    if not accepted_sessions or not event.schedule_published_on:
+    accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
+    if accepted_sessions_count == 0 or not event.schedule_published_on:
         abort(404)
-
     response = make_response(ExportHelper.export_as_pentabarf(event.id))
     response.headers["Content-Type"] = "application/xml"
     return response
@@ -115,10 +116,9 @@ def display_event_schedule_ical(identifier):
     event = get_published_event_or_abort(identifier)
     if not event.has_session_speakers:
         abort(404)
-    accepted_sessions = DataGetter.get_sessions(event.id)
-    if not accepted_sessions or not event.schedule_published_on:
+    accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
+    if accepted_sessions_count == 0 or not event.schedule_published_on:
         abort(404)
-
     response = make_response(ExportHelper.export_as_ical(event.id))
     response.headers["Content-Type"] = "text/calendar"
     return response
@@ -129,10 +129,9 @@ def display_event_schedule_xcal(identifier):
     event = get_published_event_or_abort(identifier)
     if not event.has_session_speakers:
         abort(404)
-    accepted_sessions = DataGetter.get_sessions(event.id)
-    if not accepted_sessions or not event.schedule_published_on:
+    accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
+    if accepted_sessions_count == 0 or not event.schedule_published_on:
         abort(404)
-
     response = make_response(ExportHelper.export_as_xcal(event.id))
     response.headers["Content-Type"] = "application/xml"
     return response
@@ -147,7 +146,6 @@ def display_event_cfs(identifier, via_hash=False):
         abort(404)
 
     call_for_speakers = DataGetter.get_call_for_papers(event.id).first()
-    accepted_sessions = DataGetter.get_sessions(event.id)
 
     if not call_for_speakers or (not via_hash and call_for_speakers.privacy == 'private'):
         abort(404)
@@ -163,8 +161,10 @@ def display_event_cfs(identifier, via_hash=False):
     elif call_for_speakers.start_date > now:
         state = "future"
     speakers = DataGetter.get_speakers(event.id).all()
-    return render_template('gentelella/guest/event/cfs.html', event=event, accepted_sessions=accepted_sessions,
+    accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
+    return render_template('gentelella/guest/event/cfs.html', event=event,
                            speaker_form=speaker_form,
+                           accepted_sessions_count=accepted_sessions_count,
                            session_form=session_form, call_for_speakers=call_for_speakers,
                            placeholder_images=placeholder_images, state=state, speakers=speakers,
                            via_hash=via_hash, custom_placeholder=custom_placeholder)
@@ -180,8 +180,6 @@ def display_event_cfs_via_hash(hash):
     custom_placeholder = DataGetter.get_custom_placeholders()
     if not event.has_session_speakers:
         abort(404)
-
-    accepted_sessions = DataGetter.get_sessions(event.id)
 
     if not call_for_speakers:
         abort(404)
@@ -200,8 +198,10 @@ def display_event_cfs_via_hash(hash):
     elif call_for_speakers.start_date > now:
         state = "future"
     speakers = DataGetter.get_speakers(event.id).all()
-    return render_template('gentelella/guest/event/cfs.html', event=event, accepted_sessions=accepted_sessions,
+    accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
+    return render_template('gentelella/guest/event/cfs.html', event=event,
                            speaker_form=speaker_form,
+                           accepted_sessions_count=accepted_sessions_count,
                            session_form=session_form, call_for_speakers=call_for_speakers,
                            placeholder_images=placeholder_images, state=state, speakers=speakers,
                            via_hash=True, custom_placeholder=custom_placeholder)
@@ -217,7 +217,6 @@ def process_event_cfs(identifier, via_hash=False):
             abort(404)
 
         call_for_speakers = DataGetter.get_call_for_papers(event.id).first()
-        accepted_sessions = DataGetter.get_sessions(event.id)
 
         if not call_for_speakers or (not via_hash and call_for_speakers.privacy == 'private'):
             abort(404)
@@ -233,8 +232,10 @@ def process_event_cfs(identifier, via_hash=False):
         elif call_for_speakers.start_date > now:
             state = "future"
         speakers = DataGetter.get_speakers(event.id).all()
-        return render_template('gentelella/guest/event/cfs_new.html', event=event, accepted_sessions=accepted_sessions,
+        accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
+        return render_template('gentelella/guest/event/cfs_new.html', event=event,
                                speaker_form=speaker_form,
+                               accepted_sessions_count=accepted_sessions_count,
                                session_form=session_form, call_for_speakers=call_for_speakers,
                                placeholder_images=placeholder_images, state=state, speakers=speakers,
                                via_hash=via_hash, custom_placeholder=custom_placeholder)
@@ -260,14 +261,14 @@ def display_event_coc(identifier):
     event = get_published_event_or_abort(identifier)
     placeholder_images = DataGetter.get_event_default_images()
     custom_placeholder = DataGetter.get_custom_placeholders()
-    accepted_sessions = DataGetter.get_sessions(event.id)
     call_for_speakers = DataGetter.get_call_for_papers(event.id).first()
     if not (event.code_of_conduct and event.code_of_conduct != '' and event.code_of_conduct != ' '):
         abort(404)
+    accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
     return render_template('gentelella/guest/event/code_of_conduct.html', event=event,
                            placeholder_images=placeholder_images,
+                           accepted_sessions_count=accepted_sessions_count,
                            custom_placeholder=custom_placeholder,
-                           accepted_sessions=accepted_sessions,
                            call_for_speakers=call_for_speakers)
 
 
@@ -282,10 +283,12 @@ def display_event_tickets(identifier):
         licence_details = None
     module = DataGetter.get_module()
     tickets = DataGetter.get_sales_open_tickets(event.id, True)
+    accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
     return render_template('gentelella/guest/event/details.html',
                            event=event,
                            placeholder_images=placeholder_images,
                            custom_placeholder=custom_placeholder,
+                           accepted_sessions_count=accepted_sessions_count,
                            licence_details=licence_details,
                            module=module,
                            tickets=tickets if tickets else [])

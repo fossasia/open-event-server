@@ -143,7 +143,7 @@
     {% for track in tracks %}
         <h3 style="font-weight: 300;" id="track-{{ track.id }}">{{ track.name }}</h3>
         {% for session in track.sessions %}
-            {% if session in accepted_sessions %}
+            {% if session.state == 'accepted' and not session.in_trash %}
                 {{ session_element(session, loop.index) }}
             {% endif %}
         {% endfor %}
