@@ -70,7 +70,7 @@
     <style type="text/css">
         .carousel .item {
             height: {{ carousel_height }}px;
-            background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)), url('{{ event_image }}');
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('{{ event_image }}');
             background-size: cover;
         }
 
@@ -160,9 +160,9 @@
             <div class="item active">
                 <div class="container">
                     <div class="carousel-caption">
-                        <h4>{{ event.start_time.strftime('%a, %B %d at %I:%M %p') | upper }}</h4>
+                        <h4 style="font-weight: 300;">{{ event.start_time.strftime('%a, %B %d at %I:%M %p') | upper }}</h4>
                         <h1>{{ event.name }}</h1>
-                        <h4><i class="glyphicon glyphicon-map-marker"></i> {{ event.location_name | upper }}</h4>
+                        <h4 style="font-weight: 300;"><i class="glyphicon glyphicon-map-marker"></i> {{ event.location_name | upper }}</h4>
                         <p></p>
                     </div>
                 </div>
