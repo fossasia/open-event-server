@@ -10,7 +10,6 @@ from flask import flash, url_for, redirect, request, jsonify, Markup, render_tem
 from flask.ext.login import current_user
 from flask.ext.restplus import abort
 from geoip import geolite2
-from werkzeug.datastructures import ImmutableMultiDict
 
 from app import db
 from app.helpers.auth import AuthManager

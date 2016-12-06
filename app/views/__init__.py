@@ -35,6 +35,7 @@ from app.views.users.scheduler import event_scheduler
 from app.views.users.sessions import event_sessions
 from app.views.users.speakers import event_speakers
 from app.views.users.ticket_sales import event_ticket_sales
+from app.views.users.sponsors import event_sponsors
 from app.views.utils_routes import utils_routes
 
 
@@ -70,6 +71,7 @@ class BlueprintsManager:
         app.register_blueprint(event_roles)
         app.register_blueprint(event_invites)
         app.register_blueprint(event_ticket_sales)
+        app.register_blueprint(event_sponsors)
 
         app.register_blueprint(my_tickets)
         app.register_blueprint(my_sessions)
@@ -97,6 +99,7 @@ class BlueprintsManager:
 @event_export.before_request
 @events.before_request
 @event_roles.before_request
+@event_sponsors.before_request
 @event_invites.before_request
 @event_ticket_sales.before_request
 @my_tickets.before_request
