@@ -6,9 +6,15 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 # available languages
 LANGUAGES = {
     'en': 'English',
+    'zh': 'Chinese',
+    'fr': 'French',
     'de': 'German',
     'id': 'Indonesian',
+    'ko': 'Korean',
     'pl': 'Polish',
+    'es': 'Spanish',
+    'th': 'Thai',
+    'vi': 'Vietnamese',
 }
 
 
