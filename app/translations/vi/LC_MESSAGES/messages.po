@@ -1,4 +1,4 @@
-# Indonesian translations for fossasia/open-event-orga-server.
+# Vietnamese translations for fossasia/open-event-orga-server.
 # Copyright (C) 2016 fossasia
 # This file is distributed under the same license as the
 # fossasia/open-event-orga-server project.
@@ -9,11 +9,11 @@ msgstr ""
 "Project-Id-Version:  v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2016-12-07 10:57+0530\n"
-"PO-Revision-Date: 2016-12-07 11:14+0530\n"
+"PO-Revision-Date: 2016-12-07 11:15+0530\n"
 "Last-Translator: FOSSASIA <open-event@googlegroups.com>\n"
-"Language: id\n"
-"Language-Team: id <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Language: vi\n"
+"Language-Team: vi <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,23 +21,23 @@ msgstr ""
 
 #: app/templates/404.html:8 app/templates/404.html:26
 msgid "You got"
-msgstr "Anda punya"
+msgstr "Bạn có"
 
 #: app/templates/404.html:8
 msgid "Page Not Found"
-msgstr "Halaman tidak ditemukan"
+msgstr "Không tìm thấy trang"
 
 #: app/templates/404.html:27
 msgid "Sorry but we couldn't find this page"
-msgstr "Maaf karena kami tidak bisa menemukan halaman ini"
+msgstr "Xin lỗi, nhưng chúng tôi không thể tìm thấy trang này"
 
 #: app/templates/404.html:28
 msgid "This page you are looking for does not exist"
-msgstr "Halaman ini Anda cari tidak ada"
+msgstr "Trang này bạn đang tìm kiếm không tồn tại"
 
 #: app/templates/gentelella/index.html:171
 msgid "The simplest way to create events."
-msgstr "Cara paling sederhana untuk membuat acara."
+msgstr "Cách đơn giản nhất để tạo ra các sự kiện."
 
 #: app/templates/gentelella/admin/event/_import_modal.html:18
 #: app/templates/gentelella/admin/menu.html:34
@@ -45,90 +45,90 @@ msgstr "Cara paling sederhana untuk membuat acara."
 #: app/templates/gentelella/guest/sitemap.html:76
 #: app/templates/gentelella/index.html:174
 msgid "Create Event"
-msgstr "Buat Acara"
+msgstr "tạo sự kiện"
 
 #: app/templates/gentelella/index.html:194
 msgid "All Dates"
-msgstr "semua Tanggal"
+msgstr "Tất cả các Ngày"
 
 #: app/templates/gentelella/index.html:195
 msgid "Today"
-msgstr "Hari ini"
+msgstr "Hôm nay"
 
 #: app/templates/gentelella/index.html:196
 msgid "Tomorrow"
-msgstr "Besok"
+msgstr "Ngày mai"
 
 #: app/templates/gentelella/index.html:197
 msgid "This Week"
-msgstr "Minggu ini"
+msgstr "Tuần này"
 
 #: app/templates/gentelella/index.html:198
 msgid "This Weekend"
-msgstr "Akhir minggu ini"
+msgstr "Cuối tuần này"
 
 #: app/templates/gentelella/index.html:199
 msgid "Next Week"
-msgstr "Minggu depan"
+msgstr "Tuần tới"
 
 #: app/templates/gentelella/index.html:200
 msgid "This Month"
-msgstr "Bulan ini"
+msgstr "Tháng này"
 
 #: app/templates/gentelella/index.html:205
 msgid "Search"
-msgstr "Pencarian"
+msgstr "Tìm kiếm"
 
 #: app/templates/gentelella/index.html:209
 msgid "Upcoming Events"
-msgstr "Acara Mendatang"
+msgstr "sự kiện sắp tới"
 
 #: app/templates/gentelella/index.html:215
 msgid "No upcoming events available at this time"
-msgstr "Tidak ada acara mendatang tersedia saat ini"
+msgstr "Không có sự kiện sắp diễn ra tại thời điểm này"
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:116
 #: app/templates/gentelella/guest/event/cfs.html:16
 #: app/templates/gentelella/index.html:221
 msgid "Call for Speakers"
-msgstr "Call for Speakers"
+msgstr "Gọi cho Loa"
 
 #: app/templates/gentelella/index.html:227
 msgid "No call for speakers open at this time"
-msgstr "Tidak ada panggilan untuk speaker terbuka saat ini"
+msgstr "Không gọi điện cho loa mở vào thời điểm này"
 
 #: app/templates/gentelella/guest/search/results.html:109
 #: app/templates/gentelella/index.html:242
 msgid "Share this event"
-msgstr "Bagikan acara ini"
+msgstr "Chia sẻ sự kiện này"
 
 #: app/templates/gentelella/admin/footer.html:8
 #: app/templates/gentelella/guest/sitemap.html:33
 msgid "Sitemap"
-msgstr "sitemap"
+msgstr "Sơ đồ trang web"
 
 #: app/templates/gentelella/admin/footer.html:17
 #: app/templates/gentelella/guest/search/_collapse_search.html:14
 msgid "Categories"
-msgstr "kategori"
+msgstr "Thể loại"
 
 #: app/templates/gentelella/admin/footer.html:25
 msgid "Locations"
-msgstr "lokasi"
+msgstr "địa điểm"
 
 #: app/templates/gentelella/admin/footer.html:33
 msgid "Connect With Us"
-msgstr "Terhubung Dengan Kami"
+msgstr "Kết nối với chúng tôi"
 
 #: app/templates/gentelella/admin/footer.html:37
 #: app/templates/gentelella/admin/super_admin/content/_social.html:5
 #: app/templates/gentelella/admin/super_admin/content/_social.html:7
 msgid "Support"
-msgstr "Mendukung"
+msgstr "Ủng hộ"
 
 #: app/templates/gentelella/admin/footer.html:41
 msgid "Twitter"
-msgstr "Kericau"
+msgstr "Twitter"
 
 #: app/templates/gentelella/admin/footer.html:45
 msgid "Facebook"
@@ -148,29 +148,29 @@ msgstr "Github"
 
 #: app/templates/gentelella/admin/forbidden.html:10
 msgid "Access denied"
-msgstr "Akses ditolak"
+msgstr "truy cập bị từ chối"
 
 #: app/templates/gentelella/admin/forbidden.html:11
 msgid "Sorry, but you don't have permission access to this page."
-msgstr "Maaf, tapi Anda tidak memiliki izin akses ke halaman ini."
+msgstr "Xin lỗi, nhưng bạn không có quyền truy cập cho phép xem trang này."
 
 #: app/templates/gentelella/admin/menu.html:65
 msgid "My Tickets"
-msgstr "Tiket saya"
+msgstr "Vé của tôi"
 
 #: app/templates/gentelella/admin/menu.html:66
 msgid "My Sessions"
-msgstr "Sesi saya"
+msgstr "Sessions My"
 
 #: app/templates/gentelella/admin/event/index.html:16
 #: app/templates/gentelella/admin/menu.html:67
 msgid "Manage Events"
-msgstr "mengelola Acara"
+msgstr "quản lý sự kiện"
 
 #: app/templates/gentelella/admin/menu.html:69
 #: app/templates/gentelella/admin/profile/index.html:11
 msgid "Profile"
-msgstr "Profil"
+msgstr "Hồ sơ"
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:151
 #: app/templates/gentelella/admin/menu.html:70
@@ -178,21 +178,21 @@ msgstr "Profil"
 #: app/templates/gentelella/admin/settings/base.html:25
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:4
 msgid "Settings"
-msgstr "pengaturan"
+msgstr "Cài đặt"
 
 #: app/templates/gentelella/admin/menu.html:72
 #: app/templates/gentelella/admin/super_admin/users/users.html:58
 msgid "Admin"
-msgstr "Admin"
+msgstr "quản trị viên"
 
 #: app/templates/gentelella/admin/menu.html:75
 #: app/templates/gentelella/admin/menu.html:122
 msgid "Browse Events"
-msgstr "Acara Kuliah"
+msgstr "Duyệt sự kiện"
 
 #: app/templates/gentelella/admin/menu.html:76
 msgid "Logout"
-msgstr "Keluar"
+msgstr "Đăng xuất"
 
 #: app/templates/gentelella/admin/menu.html:91
 #: app/templates/gentelella/admin/profile/notifications.html:4
@@ -201,31 +201,31 @@ msgstr "Keluar"
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:18
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:19
 msgid "Notifications"
-msgstr "pemberitahuan"
+msgstr "thông báo"
 
 #: app/templates/gentelella/admin/menu.html:97
 msgid "Mark All as Read"
-msgstr "Tandai semua telah dibaca"
+msgstr "Đánh dấu tất cả như đã đọc"
 
 #: app/templates/gentelella/admin/menu.html:108
 msgid "Mark as read"
-msgstr "tandai sebagai membaca"
+msgstr "đánh dấu là đã đọc"
 
 #: app/templates/gentelella/admin/menu.html:114
 msgid "No new notifications"
-msgstr "Tidak ada pemberitahuan baru"
+msgstr "Không có thông báo mới"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:6
 msgid "Import Event"
-msgstr "impor Kegiatan"
+msgstr "Sự kiện nhập khẩu"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:10
 msgid "Select event"
-msgstr "Pilih acara"
+msgstr "Chọn sự kiện"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:28
 msgid "Previous Imports"
-msgstr "Impor sebelumnya"
+msgstr "Nhập khẩu trước"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:36
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:61
@@ -237,28 +237,28 @@ msgstr "Impor sebelumnya"
 #: app/templates/gentelella/admin/super_admin/events/events.html:262
 #: app/templates/gentelella/admin/super_admin/events/events.html:284
 msgid "State"
-msgstr "Negara"
+msgstr "Tiểu bang"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:37
 #: app/templates/gentelella/admin/profile/notifications.html:45
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:58
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:91
 msgid "Message"
-msgstr "Pesan"
+msgstr "Thông điệp"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:38
 msgid "Started"
-msgstr "mulai"
+msgstr "bắt đầu"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:46
 msgid "Success"
-msgstr "Keberhasilan"
+msgstr "Sự thành công"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:50
 #: app/templates/gentelella/guest/ticketing/stripe_oauth_callback.html:5
 #: app/templates/gentelella/guest/ticketing/stripe_oauth_callback.html:21
 msgid "Processing"
-msgstr "Pengolahan"
+msgstr "Chế biến"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:55
 #: app/templates/gentelella/admin/event/wizard/step-1.html:544
@@ -274,7 +274,7 @@ msgstr "Pengolahan"
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:142
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:256
 msgid "here"
-msgstr "sini"
+msgstr "đây"
 
 #: app/templates/gentelella/admin/event/_table.html:6
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:16
@@ -291,13 +291,13 @@ msgstr "sini"
 #: app/templates/gentelella/admin/super_admin/users/users.html:221
 #: app/templates/gentelella/admin/super_admin/users/users.html:241
 msgid "Name"
-msgstr "Nama"
+msgstr "Tên"
 
 #: app/templates/gentelella/admin/event/_table.html:7
 #: app/templates/gentelella/guest/search/_collapse_search.html:71
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:27
 msgid "Date"
-msgstr "Tanggal"
+msgstr "Ngày"
 
 #: app/templates/gentelella/admin/event/_table.html:8
 #: app/templates/gentelella/admin/super_admin/events/events.html:200
@@ -306,7 +306,7 @@ msgstr "Tanggal"
 #: app/templates/gentelella/admin/super_admin/events/events.html:266
 #: app/templates/gentelella/admin/super_admin/events/events.html:288
 msgid "Roles"
-msgstr "peran"
+msgstr "Vai trò"
 
 #: app/templates/gentelella/admin/event/_table.html:9
 #: app/templates/gentelella/admin/event/export/export.html:136
@@ -322,7 +322,7 @@ msgstr "peran"
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:3
 #: app/templates/gentelella/guest/event/sessions.html:14
 msgid "Sessions"
-msgstr "sesi"
+msgstr "Sessions"
 
 #: app/templates/gentelella/admin/event/_table.html:10
 #: app/templates/gentelella/admin/event/export/export.html:149
@@ -341,7 +341,7 @@ msgstr "sesi"
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:178
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:196
 msgid "Speakers"
-msgstr "pembicara"
+msgstr "Diễn giả"
 
 #: app/templates/gentelella/admin/event/_table.html:11
 #: app/templates/gentelella/admin/event/export/export.html:157
@@ -359,7 +359,7 @@ msgstr "pembicara"
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:78
 #: app/templates/gentelella/guest/event/tickets.html:7
 msgid "Tickets"
-msgstr "tiket"
+msgstr "Vé"
 
 #: app/templates/gentelella/admin/event/_table.html:12
 #: app/templates/gentelella/admin/super_admin/events/events.html:197
@@ -367,17 +367,17 @@ msgstr "tiket"
 #: app/templates/gentelella/admin/super_admin/events/events.html:241
 #: app/templates/gentelella/admin/super_admin/events/events.html:263
 msgid "Public"
-msgstr "Publik"
+msgstr "Công cộng"
 
 #: app/templates/gentelella/admin/event/_table.html:56
 #: app/templates/gentelella/admin/super_admin/events/events.html:65
 msgid "Drafts"
-msgstr "draft"
+msgstr "nháp"
 
 #: app/templates/gentelella/admin/event/_table.html:57
 #: app/templates/gentelella/admin/super_admin/events/events.html:66
 msgid "Submitted"
-msgstr "Dikirim"
+msgstr "Đăng"
 
 #: app/templates/gentelella/admin/event/_table.html:58
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:18
@@ -388,7 +388,7 @@ msgstr "Dikirim"
 #: app/templates/gentelella/admin/super_admin/events/events.html:67
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:12
 msgid "Accepted"
-msgstr "diterima"
+msgstr "Được chấp nhận"
 
 #: app/templates/gentelella/admin/event/_table.html:59
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:40
@@ -398,7 +398,7 @@ msgstr "diterima"
 #: app/templates/gentelella/admin/super_admin/events/events.html:68
 #: app/templates/gentelella/admin/super_admin/sales/fees_status.html:62
 msgid "Pending"
-msgstr "tertunda"
+msgstr "chưa giải quyết"
 
 #: app/templates/gentelella/admin/event/_table.html:60
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:46
@@ -408,47 +408,47 @@ msgstr "tertunda"
 #: app/templates/gentelella/admin/super_admin/events/events.html:69
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:14
 msgid "Rejected"
-msgstr "Ditolak"
+msgstr "Từ chối"
 
 #: app/templates/gentelella/admin/event/_table.html:67
 msgid "No Ticket Information"
-msgstr "Tidak ada Informasi Tiket"
+msgstr "Không có thông tin vé"
 
 #: app/templates/gentelella/admin/event/_table.html:71
 #: app/templates/gentelella/admin/super_admin/events/events.html:81
 msgid "Paid"
-msgstr "dibayar"
+msgstr "Đã thanh toán"
 
 #: app/templates/gentelella/admin/event/_table.html:81
 #: app/templates/gentelella/admin/super_admin/events/events.html:91
 msgid "Free"
-msgstr "Bebas"
+msgstr "Miễn phí"
 
 #: app/templates/gentelella/admin/event/_table.html:91
 #: app/templates/gentelella/admin/event/wizard/step-1.html:355
 #: app/templates/gentelella/admin/super_admin/events/events.html:101
 msgid "Donation"
-msgstr "Sumbangan"
+msgstr "Quyên góp"
 
 #: app/templates/gentelella/admin/event/event_base.html:51
 msgid "Unpublish"
-msgstr "Batalkan publikasi"
+msgstr "Unpubish"
 
 #: app/templates/gentelella/admin/event/event_base.html:54
 msgid "Publish"
-msgstr "Menerbitkan"
+msgstr "Công bố"
 
 #: app/templates/gentelella/admin/event/event_base.html:56
 msgid "Copy"
-msgstr "Salinan"
+msgstr "bản sao"
 
 #: app/templates/gentelella/admin/event/event_base.html:60
 msgid "Delete"
-msgstr "Menghapus"
+msgstr "Xóa bỏ"
 
 #: app/templates/gentelella/admin/event/event_base.html:109
 msgid "Are you sure you would like to delete this event"
-msgstr "Apakah Anda yakin ingin menghapus acara ini"
+msgstr "Bạn có chắc chắn muốn xóa sự kiện này"
 
 #: app/templates/gentelella/admin/event/event_base.html:112
 #: app/templates/gentelella/admin/event/sessions/components/_speaker_croppie.html:17
@@ -458,25 +458,25 @@ msgstr "Apakah Anda yakin ingin menghapus acara ini"
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:111
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:128
 msgid "Cancel"
-msgstr "Membatalkan"
+msgstr "hủy bỏ"
 
 #: app/templates/gentelella/admin/event/event_base.html:114
 msgid "Confirm Delete"
-msgstr "konfirmasi Hapus"
+msgstr "Xác nhận Xóa"
 
 #: app/templates/gentelella/admin/event/index.html:11
 #: app/templates/gentelella/admin/super_admin/events/events.html:4
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:3
 #: app/templates/gentelella/guest/search/results.html:75
 msgid "Events"
-msgstr "Acara"
+msgstr "Sự kiện"
 
 #: app/templates/gentelella/admin/event/index.html:28
 #: app/templates/gentelella/admin/event/index.html:42
 #: app/templates/gentelella/admin/event/index.html:47
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:11
 msgid "Live"
-msgstr "Hidup"
+msgstr "Trực tiếp"
 
 #: app/templates/gentelella/admin/event/index.html:31
 #: app/templates/gentelella/admin/event/index.html:52
@@ -485,49 +485,49 @@ msgstr "Hidup"
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:12
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:13
 msgid "Draft"
-msgstr "Konsep"
+msgstr "Bản nháp"
 
 #: app/templates/gentelella/admin/event/index.html:34
 #: app/templates/gentelella/admin/event/index.html:57
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:13
 msgid "Past"
-msgstr "Lalu"
+msgstr "Quá khứ"
 
 #: app/templates/gentelella/admin/event/index.html:37
 #: app/templates/gentelella/admin/event/index.html:62
 #: app/templates/gentelella/admin/super_admin/events/events.html:162
 #: app/templates/gentelella/admin/super_admin/events/events.html:185
 msgid "Import"
-msgstr "Impor"
+msgstr "nhập"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:9
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:9
 msgid "Edit Role"
-msgstr "mengedit Peran"
+msgstr "chỉnh sửa vai trò"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:24
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:131
 #: app/templates/gentelella/admin/event/roles/roles.html:62
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:20
 msgid "Track Organizer"
-msgstr "track Organizer"
+msgstr "Theo dõi Organizer"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:25
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:132
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:21
 msgid "Co-organizer"
-msgstr "Co-organizer"
+msgstr "Đồng tổ chức"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:26
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:133
 #: app/templates/gentelella/admin/event/roles/roles.html:64
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:22
 msgid "Moderator"
-msgstr "moderator"
+msgstr "Moderator"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:31
 msgid "Update Role"
-msgstr "Update Peran"
+msgstr "cập nhật Role"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:32
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:139
@@ -537,28 +537,28 @@ msgstr "Update Peran"
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:137
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:177
 msgid "Close"
-msgstr "Dekat"
+msgstr "Gần"
 
 #: app/templates/gentelella/admin/event/details/widgets/microservices.html:12
 msgid "Generate Android App"
-msgstr "Menghasilkan Android App"
+msgstr "Tạo Android App"
 
 #: app/templates/gentelella/admin/event/details/widgets/microservices.html:17
 msgid "Generate Web App"
-msgstr "Menghasilkan Web App"
+msgstr "Tạo Web App"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:4
 #: app/templates/gentelella/admin/event/roles/roles.html:4
 msgid "Manage Roles"
-msgstr "mengelola Peran"
+msgstr "quản lý vai trò"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:8
 msgid "Add Peopl"
-msgstr "Tambahkan Peopl"
+msgstr "Thêm peopl"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:21
 msgid "Invited"
-msgstr "diundang"
+msgstr "mời"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:28
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:51
@@ -572,22 +572,22 @@ msgstr "diundang"
 #: app/templates/gentelella/admin/super_admin/users/users.html:223
 #: app/templates/gentelella/admin/super_admin/users/users.html:243
 msgid "Status"
-msgstr "Status"
+msgstr "Trạng thái"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:29
 #: app/templates/gentelella/admin/event/roles/roles.html:13
 msgid "User Email"
-msgstr "pengguna Email"
+msgstr "Email người dùng"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:30
 msgid "User (Email)"
-msgstr "Pengguna (Email)"
+msgstr "Người dùng (Email)"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:31
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:128
 #: app/templates/gentelella/admin/event/roles/roles.html:14
 msgid "Role"
-msgstr "Peran"
+msgstr "Vai trò"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:32
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:19
@@ -609,33 +609,33 @@ msgstr "Peran"
 #: app/templates/gentelella/admin/super_admin/users/users.html:228
 #: app/templates/gentelella/admin/super_admin/users/users.html:248
 msgid "Options"
-msgstr "Pilihan"
+msgstr "Tùy chọn"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:39
 msgid "accepted"
-msgstr "diterima"
+msgstr "chấp nhận"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:68
 msgid "invited"
-msgstr "diundang"
+msgstr "mời"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:77
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:84
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:90
 msgid "Invitation Link"
-msgstr "undangan Tautan"
+msgstr "Liên kết lời mời"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:114
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:138
 #: app/templates/gentelella/admin/event/roles/roles.html:51
 msgid "Add Role"
-msgstr "Tambahkan Peran"
+msgstr "Thêm vai trò"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:125
 #: app/templates/gentelella/admin/event/roles/roles.html:56
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:14
 msgid "User email"
-msgstr "email pengguna"
+msgstr "email của người dùng"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:130
 #: app/templates/gentelella/admin/event/roles/roles.html:61
@@ -643,15 +643,15 @@ msgstr "email pengguna"
 #: app/templates/gentelella/admin/event/wizard/step-1.html:643
 #: app/templates/gentelella/admin/event/wizard/step-1.html:660
 msgid "Choose"
-msgstr "Memilih"
+msgstr "Chọn"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:3
 msgid "Event Sponsors"
-msgstr "Sponsor acara"
+msgstr "tài trợ cho sự kiện"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:8
 msgid "Add Sponsor"
-msgstr "Tambahkan Sponsor"
+msgstr "Thêm tài trợ"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:15
 #: app/templates/gentelella/admin/event/wizard/step-1.html:213
@@ -666,42 +666,42 @@ msgstr "Logo"
 #: app/templates/gentelella/admin/event/wizard/step-4.html:91
 #: app/templates/gentelella/guest/ticketing/pdf/ticket.html:54
 msgid "Type"
-msgstr "Mengetik"
+msgstr "Kiểu"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:18
 #: app/templates/gentelella/admin/event/wizard/step-2.html:90
 msgid "Level"
-msgstr "Tingkat"
+msgstr "Cấp độ"
 
 #: app/templates/gentelella/admin/event/export/export.html:4
 msgid "Export"
-msgstr "Ekspor"
+msgstr "Xuất khẩu"
 
 #: app/templates/gentelella/admin/event/export/export.html:64
 msgid "Export and Download Event as zip"
-msgstr "Ekspor dan Unduh acara sebagai zip"
+msgstr "Xuất khẩu và Tải về tổ chức sự kiện như zip"
 
 #: app/templates/gentelella/admin/event/export/export.html:65
 msgid "Select which media files you want in the zip"
-msgstr "Pilih file media yang Anda inginkan dalam zip"
+msgstr "Chọn các tập tin phương tiện truyền thông mà bạn muốn trong zip"
 
 #: app/templates/gentelella/admin/event/export/export.html:69
 msgid "Image"
-msgstr "Gambar"
+msgstr "hình ảnh"
 
 #: app/templates/gentelella/admin/event/export/export.html:78
 #: app/templates/gentelella/admin/event/sessions/display.html:45
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:107
 msgid "Audio"
-msgstr "Audio"
+msgstr "âm thanh"
 
 #: app/templates/gentelella/admin/event/export/export.html:82
 msgid "Document"
-msgstr "Dokumen"
+msgstr "tài liệu"
 
 #: app/templates/gentelella/admin/event/export/export.html:89
 msgid "Start"
-msgstr "Mulai"
+msgstr "Khởi đầu"
 
 #: app/templates/gentelella/admin/event/export/export.html:92
 #: app/templates/gentelella/admin/event/sessions/display.html:35
@@ -712,23 +712,23 @@ msgstr "Mulai"
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:108
 #: app/templates/gentelella/admin/super_admin/content/_translations.html:21
 msgid "Download"
-msgstr "Download"
+msgstr "Tải về"
 
 #: app/templates/gentelella/admin/event/export/export.html:96
 msgid "Started by"
-msgstr "dimulai oleh"
+msgstr "bắt đầu bởi"
 
 #: app/templates/gentelella/admin/event/export/export.html:97
 msgid "datetime"
-msgstr "tanggal Waktu"
+msgstr "ngày giờ"
 
 #: app/templates/gentelella/admin/event/export/export.html:126
 msgid "Access event information via REST API"
-msgstr "Akses informasi acara melalui API REST"
+msgstr "thông tin sự kiện truy cập thông qua API REST"
 
 #: app/templates/gentelella/admin/event/export/export.html:132
 msgid "Basic Event Details"
-msgstr "Dasar Rincian Kegiatan"
+msgstr "Cơ bản Chi tiết sự kiện"
 
 #: app/templates/gentelella/admin/event/export/export.html:141
 #: app/templates/gentelella/admin/event/wizard/step-3.html:115
@@ -738,96 +738,96 @@ msgstr "Microlocations"
 #: app/templates/gentelella/admin/event/export/export.html:145
 #: app/templates/gentelella/admin/event/wizard/step-3.html:104
 msgid "Tracks"
-msgstr "Lintasan"
+msgstr "Tracks"
 
 #: app/templates/gentelella/admin/event/export/export.html:153
 #: app/templates/gentelella/admin/event/wizard/wizard.html:85
 msgid "Sponsors"
-msgstr "sponsor"
+msgstr "nhà tài trợ"
 
 #: app/templates/gentelella/admin/event/export/export.html:161
 msgid "You can make a"
-msgstr "Anda dapat membuat"
+msgstr "Bạn có thể làm cho một"
 
 #: app/templates/gentelella/admin/event/export/export.html:162
 msgid "request to the following endpoint to access the selected information"
-msgstr "meminta kepada endpoint berikut untuk mengakses informasi yang dipilih"
+msgstr "yêu cầu các thiết bị đầu cuối sau đây để truy cập vào các thông tin được lựa chọn"
 
 #: app/templates/gentelella/admin/event/export/export.html:165
 msgid "Response"
-msgstr "Tanggapan"
+msgstr "Phản ứng"
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:15
 msgid "In order to use this feature activate"
-msgstr "Untuk menggunakan mengaktifkan fitur ini"
+msgstr "Để sử dụng tính năng kích hoạt này"
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:15
 #: app/templates/gentelella/admin/event/wizard/step-3.html:79
 #: app/templates/gentelella/admin/event/wizard/step-3.html:84
 msgid "Sessions and Speakers"
-msgstr "Sesi dan Pembicara"
+msgstr "Sessions và Loa"
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:15
 msgid "for the event"
-msgstr "untuk acara"
+msgstr "cho sự kiện"
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:15
 msgid "Please"
-msgstr "Silahkan"
+msgstr "Xin vui lòng"
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:17
 msgid "click here"
-msgstr "klik disini"
+msgstr "bấm vào đây"
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:17
 msgid "to activate this module."
-msgstr "untuk mengaktifkan modul ini."
+msgstr "để kích hoạt module này."
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:3
 msgid "General Info"
-msgstr "Informasi Umum"
+msgstr "Thông tin chung"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:9
 msgid "Event ID"
-msgstr "event ID"
+msgstr "tổ chức sự kiện ID"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:13
 msgid "Event Url"
-msgstr "acara Url"
+msgstr "Sự kiện Url"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:17
 msgid "Event Start Time"
-msgstr "Kegiatan Waktu Mulai"
+msgstr "Tổ chức sự kiện Thời gian bắt đầu"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:21
 msgid "Event End Time"
-msgstr "Kegiatan Akhir Waktu"
+msgstr "Tổ chức sự kiện End Time"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:25
 msgid "Event Session Types"
-msgstr "Jenis Sesi acara"
+msgstr "Loại sự kiện phiên"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:33
 msgid "Event Links and Social media"
-msgstr "Link acara dan media sosial"
+msgstr "Liên kết tổ chức sự kiện và phương tiện truyền thông xã hội"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:40
 msgid "'Do you want to edit this record?'"
-msgstr ""Apakah Anda ingin mengedit rekaman ini?""
+msgstr "'Bạn có muốn chỉnh sửa hồ sơ này?'"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:41
 msgid "Edit Event"
-msgstr "mengedit Kegiatan"
+msgstr "Sửa tổ chức sự kiện"
 
 #: app/templates/gentelella/admin/event/roles/roles.html:9
 msgid "Permissions List"
-msgstr "Daftar izin"
+msgstr "Danh sách Quyền"
 
 #: app/templates/gentelella/admin/event/roles/roles.html:59
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:18
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:4
 msgid "Permissions"
-msgstr "izin"
+msgstr "Quyền"
 
 #: app/templates/gentelella/admin/event/roles/roles.html:63
 msgid "Co-Organizer"
@@ -836,64 +836,64 @@ msgstr "Co-Organizer"
 #: app/templates/gentelella/admin/event/roles/roles.html:67
 #: app/templates/gentelella/admin/event/wizard/step-1.html:670
 msgid "Add"
-msgstr "Menambahkan"
+msgstr "Thêm vào"
 
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:25
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:110
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:135
 msgid "Update"
-msgstr "Memperbarui"
+msgstr "cập nhật"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:4
 msgid "Scheduler"
-msgstr "scheduler"
+msgstr "Lập lịch biểu"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:21
 #: app/templates/gentelella/guest/event/schedule.html:44
 msgid "Sessions loading"
-msgstr "sesi memuat"
+msgstr "Sessions tải"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:23
 msgid "Error loading sessions"
-msgstr "sesi error loading"
+msgstr "phiên Lỗi tải"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:35
 msgid "Unpublish Schedule"
-msgstr "Jadwal Unpublish"
+msgstr "Lịch Unpubish"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:39
 msgid "Publish Schedule"
-msgstr "mempublikasikan Jadwal"
+msgstr "Xuất bản Lịch"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:43
 msgid "Unscheduled Sessions"
-msgstr "Sesi terjadwal"
+msgstr "Sessions đột xuất"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:57
 msgid "No Unscheduled sessions"
-msgstr "Tidak ada sesi terjadwal"
+msgstr "Không có phiên đột xuất"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:61
 msgid "Schedule last published on"
-msgstr "Jadwal terakhir yang dipublikasikan pada"
+msgstr "Lịch công bố cuối cùng trên"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:72
 msgid "Clear Overlaps"
-msgstr "jelas Tumpang Tindih"
+msgstr "rõ ràng Chông"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:75
 msgid "Add New Microlocation"
-msgstr "Tambahkan New Microlocation"
+msgstr "Thêm mới Microlocation"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:80
 msgid "Export as"
-msgstr "ekspor sebagai"
+msgstr "Xuất khẩu như"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:102
 #: app/templates/gentelella/admin/event/sessions/edit.html:3
 #: app/templates/gentelella/admin/event/sessions/edit.html:20
 msgid "Edit Session"
-msgstr "mengedit Sesi"
+msgstr "chỉnh sửa phiên"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:108
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:62
@@ -903,58 +903,58 @@ msgstr "mengedit Sesi"
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:177
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:195
 msgid "Title"
-msgstr "Judul"
+msgstr "Chức vụ"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:114
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:68
 msgid "Long Abstract"
-msgstr "panjang Abstrak"
+msgstr "Tóm tắt dài"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:119
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:65
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:61
 msgid "Short Abstract"
-msgstr "singkat Abstrak"
+msgstr "Tóm tắt ngắn"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:125
 msgid "Start Time"
-msgstr "Waktu mulai"
+msgstr "Thời gian bắt đầu"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:131
 msgid "End Time"
-msgstr "Akhir waktu"
+msgstr "Thời gian kết thúc"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:142
 msgid "Update Session"
-msgstr "Sesi pembaruan"
+msgstr "cập nhật phiên"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:157
 msgid "New Microlocation"
-msgstr "baru Microlocation"
+msgstr "New Microlocation"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:169
 msgid "Latitude"
-msgstr "Lintang"
+msgstr "vĩ độ"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:175
 msgid "Longitude"
-msgstr "Garis bujur"
+msgstr "kinh độ"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:181
 msgid "Floor"
-msgstr "Lantai"
+msgstr "Sàn nhà"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:187
 msgid "Room"
-msgstr "Kamar"
+msgstr "Phòng"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:198
 msgid "Add Microlocation"
-msgstr "Tambahkan Microlocation"
+msgstr "Thêm Microlocation"
 
 #: app/templates/gentelella/admin/event/scheduler/components/timeline.html:33
 msgid "All the timings are in"
-msgstr "Semua timing berada di"
+msgstr "Tất cả các timings trong"
 
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:37
 #: app/templates/gentelella/admin/event/speakers/base_speaker_table.html:56
@@ -964,41 +964,41 @@ msgstr "Semua timing berada di"
 #: app/templates/gentelella/admin/profile/notifications.html:31
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:36
 msgid "All"
-msgstr "Semua"
+msgstr "Tất cả các"
 
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:52
 #: app/templates/gentelella/admin/event/sessions/new.html:3
 #: app/templates/gentelella/admin/event/sessions/new.html:19
 msgid "Create Session"
-msgstr "Buat Sesi"
+msgstr "tạo phiên"
 
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:64
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:83
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:261
 msgid "Track"
-msgstr "Jalur"
+msgstr "đường ray"
 
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:66
 msgid "Submission Date"
-msgstr "Tanggal penyerahan"
+msgstr "Ngày nộp hồ sơ"
 
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:67
 msgid "Last Changed Date"
-msgstr "Terakhir Diubah Tanggal"
+msgstr "Cuối ngày thay đổi"
 
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:68
 msgid "Email Sent"
-msgstr "Email terkirim"
+msgstr "email gửi"
 
 #: app/templates/gentelella/admin/event/sessions/display.html:31
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:91
 msgid "Media"
-msgstr "Media"
+msgstr "Phương tiện truyền thông"
 
 #: app/templates/gentelella/admin/event/sessions/display.html:35
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:95
 msgid "Slide"
-msgstr "Meluncur"
+msgstr "Trượt"
 
 #: app/templates/gentelella/admin/event/sessions/display.html:40
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:101
@@ -1007,74 +1007,74 @@ msgstr "Video"
 
 #: app/templates/gentelella/admin/event/sessions/invited.html:3
 msgid "Session Invitation"
-msgstr "sesi Undangan"
+msgstr "Lời mời họp"
 
 #: app/templates/gentelella/admin/event/sessions/invited.html:8
 msgid "Invitation Pag"
-msgstr "undangan Pag"
+msgstr "lời mời Pag"
 
 #: app/templates/gentelella/admin/event/sessions/invited.html:15
 msgid "You have been invited for session"
-msgstr "Anda telah diundang untuk sesi"
+msgstr "Bạn đã được mời tham dự phiên"
 
 #: app/templates/gentelella/admin/event/sessions/invited.html:23
 msgid "Accept"
-msgstr "Menerima"
+msgstr "Chấp nhận"
 
 #: app/templates/gentelella/admin/event/sessions/invited.html:24
 msgid "Reject"
-msgstr "Menolak"
+msgstr "Từ chối"
 
 #: app/templates/gentelella/admin/event/sessions/components/_speaker_component.html:39
 #: app/templates/gentelella/admin/profile/index.html:36
 msgid "Select Avatar"
-msgstr "Pilih Avatar"
+msgstr "Chọn Avatar"
 
 #: app/templates/gentelella/admin/event/sessions/components/_speaker_component.html:43
 msgid "Avatar size must be less than 1MB."
-msgstr "Ukuran Avatar harus kurang dari 1MB."
+msgstr "Avatar kích thước phải nhỏ hơn 1MB."
 
 #: app/templates/gentelella/admin/event/sessions/components/_speaker_croppie.html:8
 #: app/templates/gentelella/admin/event/wizard/step-1.html:720
 #: app/templates/gentelella/admin/profile/index.html:114
 msgid "Crop your image"
-msgstr "Memotong gambar Anda"
+msgstr "Cắt hình ảnh của bạn"
 
 #: app/templates/gentelella/admin/event/sessions/components/_speaker_croppie.html:18
 #: app/templates/gentelella/admin/event/wizard/step-1.html:730
 #: app/templates/gentelella/admin/profile/index.html:124
 msgid "Done"
-msgstr "matang"
+msgstr "Làm xong"
 
 #: app/templates/gentelella/admin/event/sessions/components/session_form.html:17
 #: app/templates/gentelella/admin/event/sessions/components/session_form.html:18
 msgid "Modify Speakers"
-msgstr "memodifikasi Pembicara"
+msgstr "Sửa Loa"
 
 #: app/templates/gentelella/admin/event/sessions/components/session_form.html:21
 msgid "selected"
-msgstr "terpilih"
+msgstr "đã chọn"
 
 #: app/templates/gentelella/admin/event/sessions/components/session_form.html:30
 msgid "Save Session"
-msgstr "save Session"
+msgstr "Lưu phiên"
 
 #: app/templates/gentelella/admin/event/sessions/components/session_form.html:33
 #: app/templates/gentelella/admin/event/sessions/components/session_speaker_form.html:59
 msgid "Submit Session"
-msgstr "Kirim Sesi"
+msgstr "Gửi phiên"
 
 #: app/templates/gentelella/admin/event/sessions/components/session_speaker_form.html:10
 msgid "Session Details"
-msgstr "Detail sesi"
+msgstr "Chi tiết phiên"
 
 #: app/templates/gentelella/admin/event/sessions/components/session_speaker_form.html:30
 msgid "Speaker Details"
-msgstr "Detail speaker"
+msgstr "Chi tiết Loa"
 
 #: app/templates/gentelella/admin/event/sessions/components/session_speaker_form.html:38
 msgid "Invite Speakers"
-msgstr "Undang Pembicara"
+msgstr "mời Loa"
 
 #: app/templates/gentelella/admin/event/sessions/components/session_speaker_form.html:40
 #: app/templates/gentelella/admin/event/speakers/base_speaker_table.html:81
@@ -1093,146 +1093,146 @@ msgstr "E-mail"
 
 #: app/templates/gentelella/admin/event/sessions/components/session_speaker_form.html:57
 msgid "Save as Draft"
-msgstr "Simpan sebagai draf"
+msgstr "Save as Draft"
 
 #: app/templates/gentelella/admin/event/sessions/components/speaker_form.html:17
 msgid "Featured Speaker"
-msgstr "Speaker Pilihan"
+msgstr "Các loa"
 
 #: app/templates/gentelella/admin/event/sessions/components/speaker_form.html:19
 msgid "checked"
-msgstr "diperiksa"
+msgstr "đã kiểm tra"
 
 #: app/templates/gentelella/admin/event/sessions/components/speaker_form.html:24
 msgid "Save Speaker"
-msgstr "Simpan Speaker"
+msgstr "Lưu loa"
 
 #: app/templates/gentelella/admin/event/speakers/base_speaker_table.html:70
 msgid "Add Speaker"
-msgstr "Tambahkan Speaker"
+msgstr "Thêm loa"
 
 #: app/templates/gentelella/admin/event/speakers/base_speaker_table.html:82
 #: app/templates/gentelella/admin/settings/pages/contact_info.html:24
 msgid "Phone"
-msgstr "Telepon"
+msgstr "Điện thoại"
 
 #: app/templates/gentelella/admin/event/speakers/base_speaker_table.html:83
 msgid "Submitted Sessions"
-msgstr "Sesi disampaikan"
+msgstr "Sessions gửi"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:28
 msgid "Add Order"
-msgstr "Tambahkan Pesanan"
+msgstr "Thêm thứ tự"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:36
 #: app/templates/gentelella/admin/event/tickets/tickets.html:172
 msgid "Ticket Type"
-msgstr "Jenis tiket"
+msgstr "Loại vé"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:37
 #: app/templates/gentelella/admin/event/wizard/step-1.html:323
 #: app/templates/gentelella/guest/event/_ticketing_box.html:31
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:11
 msgid "Price"
-msgstr "Harga"
+msgstr "Giá bán"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:38
 #: app/templates/gentelella/admin/event/wizard/step-1.html:326
 #: app/templates/gentelella/guest/event/_ticketing_box.html:33
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:13
 msgid "Quantity"
-msgstr "Kuantitas"
+msgstr "Số lượng, lượng"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:39
 msgid "Item Total"
-msgstr "Item Jumlah"
+msgstr "mục Tổng số"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:67
 msgid "Grand Total"
-msgstr "Total keseluruhan"
+msgstr "Tổng cộng"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:74
 msgid "Payment Type"
-msgstr "Tipe pembayaran"
+msgstr "Hình thức thanh toán"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:76
 msgid "Select payment type"
-msgstr "Pilih jenis pembayaran"
+msgstr "Chọn loại thanh toán"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:77
 msgid "Cheque"
-msgstr "Memeriksa"
+msgstr "kiểm tra"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:78
 msgid "Telegraphic Transfer (TT) / Bank Transfer"
-msgstr "Transfer Bank (TT) / Bank Transfer"
+msgstr "Điện báo chuyển giao (TT) / Bank Transfer"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:79
 msgid "Onsite / Cash"
-msgstr "Onsite / Cash"
+msgstr "Tại khách sạn / Tiền"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:81
 msgid "Stripe"
-msgstr "Garis"
+msgstr "Vạch sọc"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:82
 msgid "Free Order"
-msgstr "Pesanan gratis"
+msgstr "miễn phí tự"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:86
 msgid "Continue"
-msgstr "Terus"
+msgstr "Tiếp tục"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:52
 #: app/templates/gentelella/admin/event/tickets/orders.html:47
 msgid "Completed"
-msgstr "Lengkap"
+msgstr "Đã hoàn thành"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:58
 #: app/templates/gentelella/admin/event/tickets/orders.html:53
 msgid "Expired"
-msgstr "kedaluwarsa"
+msgstr "Đã hết hạn"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:61
 msgid "Checked In"
-msgstr "Check in"
+msgstr "Đi vào"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:65
 msgid "Not Checked In"
-msgstr "Tidak Diperiksa Dalam"
+msgstr "Không Checked Trong"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:71
 msgid "View Attendees"
-msgstr "Lihat Peserta"
+msgstr "Xem người tham dự"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:80
 #: app/templates/gentelella/admin/event/tickets/orders.html:67
 msgid "Order"
-msgstr "Memesan"
+msgstr "Gọi món"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:83
 #: app/templates/gentelella/admin/event/tickets/orders.html:70
 #: app/templates/gentelella/admin/event/tickets/tickets.html:122
 msgid "Order Status"
-msgstr "Status pemesanan"
+msgstr "Tình trạng đặt hàng"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:86
 #: app/templates/gentelella/admin/event/wizard/step-1.html:320
 msgid "Ticket Name"
-msgstr "Nama tiket"
+msgstr "Tên vé"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:89
 msgid "Ticket Price"
-msgstr "Harga tiket"
+msgstr "Giá vé"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:92
 #: app/templates/gentelella/admin/profile/_form.html:8
 msgid "First Name"
-msgstr "Nama depan"
+msgstr "Tên đầu tiên"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:95
 msgid "Last Name"
-msgstr "Nama keluarga"
+msgstr "tên họ"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:101
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:52
@@ -1241,25 +1241,25 @@ msgstr "Nama keluarga"
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:90
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:55
 msgid "Action"
-msgstr "Tindakan"
+msgstr "Hoạt động"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:142
 msgid "Undo"
-msgstr "Membuka"
+msgstr "Hủy bỏ"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:146
 msgid "Check In"
-msgstr "Mendaftar"
+msgstr "đăng ký vào"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:23
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:26
 msgid "Discount Codes"
-msgstr "Kode diskon"
+msgstr "Mã giảm giá"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:26
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:29
 msgid "Create a discount"
-msgstr "Buat diskon"
+msgstr "Tạo một giảm giá"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:36
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:77
@@ -1269,14 +1269,14 @@ msgstr "Buat diskon"
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:82
 #: app/templates/gentelella/admin/super_admin/users/users.html:48
 msgid "Active"
-msgstr "Aktif"
+msgstr "hoạt động"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:39
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:79
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:42
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:82
 msgid "Inactive"
-msgstr "non-aktif"
+msgstr "Không hoạt động"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:48
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:21
@@ -1284,51 +1284,51 @@ msgstr "non-aktif"
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:30
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:57
 msgid "Discount Code"
-msgstr "Kode diskon"
+msgstr "Mã giảm giá"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:49
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:52
 msgid "Discount Per Ticket"
-msgstr "Diskon Per Tiket"
+msgstr "Giảm giá mỗi vé"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:50
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:53
 msgid "Validity"
-msgstr "Keabsahan"
+msgstr "Hiệu lực"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:35
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:44
 msgid "Enter Discount"
-msgstr "Masukkan Diskon"
+msgstr "nhập Giảm giá"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:76
 msgid "Number of discount tickets"
-msgstr "Jumlah tiket diskon"
+msgstr "Số lượng vé giảm giá"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:98
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:89
 msgid "Not Active"
-msgstr "Tidak aktif"
+msgstr "Không hoạt động"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:105
 msgid "Select Ticket(s) applied to the discount code"
-msgstr "Pilih Tiket (s) diterapkan pada kode diskon"
+msgstr "Chọn Ticket (s) áp dụng cho các mã giảm giá"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:111
 msgid "Select all Tickets Type"
-msgstr "Pilih semua Tiket Jenis"
+msgstr "Chọn tất cả Loại Vé"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:131
 msgid "Show other options"
-msgstr "Tampilkan pilihan lain"
+msgstr "Hiển thị tùy chọn khác"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:135
 msgid "Set the min. and max. quantity allowed to purchase per order (optional)"
-msgstr "Mengatur min. dan max. kuantitas diizinkan untuk membeli per order (opsional)"
+msgstr "Đặt phút. và tối đa. số lượng được phép mua mỗi đơn hàng (tùy chọn)"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:139
 msgid "Min"
-msgstr "Min"
+msgstr "min"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:146
 msgid "Max"
@@ -1336,45 +1336,45 @@ msgstr "Max"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:156
 msgid "Validity period (optional)"
-msgstr "masa berlaku (opsional)"
+msgstr "Thời hạn hiệu lực (tùy chọn)"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:160
 msgid "Valid from"
-msgstr "Berlaku dari"
+msgstr "Có hiệu lực từ"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:180
 msgid "Expires on"
-msgstr "Kadaluarsa pada"
+msgstr "Hết hạn vào"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:208
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:129
 msgid "Save Discount"
-msgstr "Paket Hemat"
+msgstr "Lưu Giảm giá"
 
 #: app/templates/gentelella/admin/event/tickets/orders.html:58
 msgid "View Orders"
-msgstr "Lihat Pesanan"
+msgstr "Xem đơn đặt hàng"
 
 #: app/templates/gentelella/admin/event/tickets/orders.html:73
 msgid "Total Amount"
-msgstr "Jumlah total"
+msgstr "Tổng cộng"
 
 #: app/templates/gentelella/admin/event/tickets/orders.html:76
 msgid "Qty"
-msgstr "qty"
+msgstr "Số lượng"
 
 #: app/templates/gentelella/admin/event/tickets/orders.html:79
 msgid "Buyer / Registration Contact"
-msgstr "Pembeli / Pendaftaran Hubungi"
+msgstr "Người mua / Đăng ký Liên"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:75
 msgid "Orders"
-msgstr "pesanan"
+msgstr "Đơn đặt hàng"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:81
 #: app/templates/gentelella/admin/event/tickets/tickets.html:154
 msgid "View orders"
-msgstr "Lihat perintah"
+msgstr "Xem đơn đặt hàng"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:88
 #: app/templates/gentelella/admin/event/tickets/tickets.html:190
@@ -1384,127 +1384,127 @@ msgstr "Lihat perintah"
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:75
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:81
 msgid "Sales"
-msgstr "Penjualan"
+msgstr "doanh số bán hàng"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:102
 msgid "Tickets sold"
-msgstr "tiket dijual"
+msgstr "vé được bán"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:108
 #: app/templates/gentelella/admin/event/tickets/tickets.html:155
 msgid "View attendees"
-msgstr "Lihat peserta"
+msgstr "Xem người tham dự"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:114
 msgid "Orders Summary"
-msgstr "pesanan Ringkasan"
+msgstr "Đơn đặt hàng Tóm tắt"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:115
 #: app/templates/gentelella/admin/event/tickets/tickets.html:165
 msgid "by order status"
-msgstr "oleh status pesanan"
+msgstr "bởi trạng thái đơn hàng"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:125
 msgid "Total Tickets"
-msgstr "total Tiket"
+msgstr "Tổng Vé"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:128
 msgid "Total Orders"
-msgstr "total Pesanan"
+msgstr "Tổng số đơn đặt hàng"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:131
 msgid "Total Sales"
-msgstr "total Penjualan"
+msgstr "Tổng doanh"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:134
 msgid "View Reports"
-msgstr "Lihat Laporan"
+msgstr "Xem Báo cáo"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:164
 msgid "Tickets Summary"
-msgstr "tiket Ringkasan"
+msgstr "vé Tóm tắt"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:175
 msgid "Tickets Capacity Set"
-msgstr "Tiket Kapasitas Set"
+msgstr "Đặt vé Dung"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:179
 #: app/templates/gentelella/admin/super_admin/sales/by_marketer.html:65
 #: app/templates/gentelella/admin/super_admin/sales/fees.html:56
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:64
 msgid "Completed Orders"
-msgstr "selesai Pesanan"
+msgstr "Đơn đặt hàng đã hoàn thành"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:182
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:67
 msgid "Pending Orders"
-msgstr "pending Order"
+msgstr "Cấp phát đơn đặt hàng"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:229
 #: app/templates/gentelella/admin/super_admin/sales/fees.html:95
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:119
 #: app/templates/gentelella/guest/event/_ticketing_box.html:83
 msgid "Total"
-msgstr "Total"
+msgstr "Tổng số"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:34
 #: app/templates/gentelella/guest/ticketing/pdf/ticket.html:47
 msgid "Location"
-msgstr "tempat"
+msgstr "Vị trí"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:39
 msgid "Enter Address"
-msgstr "Masukkan Alamat"
+msgstr "nhập Địa chỉ"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:69
 msgid "Reset Location"
-msgstr "ulang Lokasi"
+msgstr "Thiết lập lại từ"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:80
 msgid "Show map on event page"
-msgstr "Tampilkan peta di halaman event"
+msgstr "Hiện bản đồ trên trang sự kiện"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:96
 #: app/templates/gentelella/admin/event/wizard/step-4.html:10
 msgid "Starts"
-msgstr "mulai"
+msgstr "bắt đầu"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:118
 #: app/templates/gentelella/admin/event/wizard/step-4.html:35
 msgid "Ends"
-msgstr "berakhir"
+msgstr "Kết thúc"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:141
 #: app/templates/gentelella/admin/event/wizard/step-4.html:57
 msgid "Timezone"
-msgstr "Zona waktu"
+msgstr "Múi giờ"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:157
 #: app/templates/gentelella/admin/event/wizard/step-2.html:24
 msgid "Description"
-msgstr "Deskripsi"
+msgstr "Sự miêu tả"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:167
 #: app/templates/gentelella/admin/event/wizard/step-1.html:184
 msgid "Event Image"
-msgstr "acara Gambar"
+msgstr "hình ảnh sự kiện"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:174
 msgid "Select Event Image"
-msgstr "Pilih Acara Gambar"
+msgstr "Chọn sự kiện ảnh"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:178
 msgid "We recommend using at least a 2160x1080px (2:1 ratio) image"
-msgstr "Sebaiknya gunakan setidaknya 2160x1080px a (2: 1 rasio) image"
+msgstr "Chúng tôi khuyên bạn nên sử dụng ít nhất một 2160x1080px (tỷ lệ 2: 1) hình ảnh"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:178
 msgid "that's no larger than 10MB."
-msgstr "itu tidak lebih besar dari 10MB."
+msgstr "đó là không lớn hơn 10MB."
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:191
 #: app/templates/gentelella/admin/profile/index.html:52
 msgid "Adjust"
-msgstr "Menyesuaikan"
+msgstr "Điều chỉnh"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:196
 #: app/templates/gentelella/admin/event/wizard/step-1.html:233
@@ -1512,332 +1512,332 @@ msgstr "Menyesuaikan"
 #: app/templates/gentelella/admin/profile/index.html:57
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:90
 msgid "Remove"
-msgstr "Menghapus"
+msgstr "Tẩy"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:219
 #: app/templates/gentelella/admin/event/wizard/step-2.html:44
 msgid "Select Logo"
-msgstr "Pilih Logo"
+msgstr "Chọn Logo"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:223
 #: app/templates/gentelella/admin/event/wizard/step-2.html:48
 msgid "Logo size must be less than 1MB."
-msgstr "Ukuran logo harus kurang dari 1MB."
+msgstr "kích thước logo phải nhỏ hơn 1MB."
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:241
 msgid "Organizer Information"
-msgstr "Informasi Organizer"
+msgstr "Thông tin tổ chức"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:251
 msgid "Organizer name"
-msgstr "nama Organizer"
+msgstr "tên tổ chức"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:256
 msgid "Organizer Description"
-msgstr "Organizer Deskripsi"
+msgstr "Organizer Mô tả"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:264
 msgid "Links and Social Media"
-msgstr "Link dan Media Sosial"
+msgstr "Liên kết và truyền thông xã hội"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:300
 msgid "Use Ticketing System"
-msgstr "Gunakan Ticketing Sistem"
+msgstr "Sử dụng hệ thống bán vé"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:312
 msgid "Ticket Details"
-msgstr "Detail tiket"
+msgstr "Chi tiết vé"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:346
 msgid "Free Ticket"
-msgstr "Tiket Gratis"
+msgstr "vé miễn phí"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:350
 msgid "Paid Ticket"
-msgstr "dibayar Tiket"
+msgstr "vé Paid"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:367
 #: app/templates/gentelella/admin/event/wizard/step-1.html:382
 msgid "Add Ticket URL"
-msgstr "Tambahkan URL Tiket"
+msgstr "Thêm URL vé"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:371
 #: app/templates/gentelella/admin/event/wizard/step-1.html:386
 msgid "Ticket URL"
-msgstr "URL tiket"
+msgstr "URL vé"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:398
 msgid "Redeem Discount Code"
-msgstr "Gunakan Kode Diskon"
+msgstr "Đổi Giảm Mã"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:404
 msgid "Enter Discount Code"
-msgstr "Masukkan Kode Diskon"
+msgstr "Nhập Mã giảm giá"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:410
 msgid "Apply Discount"
-msgstr "Terapkan Diskon"
+msgstr "Áp dụng giảm giá"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:414
 msgid "Code applied !"
-msgstr "Kode diterapkan!"
+msgstr "Mã áp dụng!"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:414
 msgid "10 percent off on monthly payments for 3 months"
-msgstr "10 persen dari pembayaran bulanan selama 3 bulan"
+msgstr "10 phần trăm tắt về khoản thanh toán hàng tháng cho 3 tháng"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:421
 msgid "Add Payment details"
-msgstr "Tambahkan detail Pembayaran"
+msgstr "Thêm chi tiết thanh toán"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:427
 msgid "Choose Country"
-msgstr "Pilih negara"
+msgstr "Chọn quốc gia"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:430
 msgid "Choose a country for your payment"
-msgstr "Pilih negara untuk pembayaran"
+msgstr "Chọn một quốc gia thanh toán của bạn"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:440
 msgid "Choose Currency"
-msgstr "Pilih mata uang"
+msgstr "chọn đơn vị tiền tệ"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:443
 msgid "Please select a currency"
-msgstr "Silakan pilih mata uang"
+msgstr "Vui lòng chọn tiền tệ"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:458
 msgid "Choose Payment Methods"
-msgstr "Pilih Metode Pembayaran"
+msgstr "Chọn Phương thức thanh toán"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:462
 msgid "Online Payments"
-msgstr "Pembayaran online"
+msgstr "Thanh toán trực tuyến"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:464
 msgid "Payment by PayPal"
-msgstr "Pembayaran dengan PayPal"
+msgstr "Thanh toán bằng PayPal"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:470
 msgid "YES, accept payment through PayPal "
-msgstr "YES, menerima pembayaran melalui PayPal "
+msgstr "YES, chấp nhận thanh toán qua PayPal "
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:471
 msgid ""
 "Paypal accepts credit card, debit card and PayPal payments. To learn how "
 "it works click"
-msgstr "Paypal menerima kartu kredit, kartu debit dan pembayaran PayPal. Untuk mempelajari cara kerjanya klik"
+msgstr "Paypal chấp nhận thẻ tín dụng, thẻ ghi nợ và thanh toán PayPal. Để tìm hiểu cách thức hoạt động nhấp chuột"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:472
 #: app/templates/gentelella/admin/event/wizard/step-1.html:497
 #: app/templates/gentelella/admin/event/wizard/step-1.html:498
 msgid "here."
-msgstr "sini."
+msgstr "đây."
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:481
 msgid "Don't have a PayPal account?"
-msgstr "Tidak memiliki rekening PayPal?"
+msgstr "Không có một tài khoản PayPal?"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:483
 msgid "Create a free PayPal merchant account."
-msgstr "Buat PayPal merchant account gratis."
+msgstr "Tạo một tài khoản thương PayPal miễn phí."
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:489
 msgid "Payment by Stripe"
-msgstr "Pembayaran dengan Stripe"
+msgstr "Thanh toán bằng sọc"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:495
 msgid "YES, accept payment through Stripe"
-msgstr "YES, menerima pembayaran melalui Stripe"
+msgstr "YES, chấp nhận thanh toán qua các sọc"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:496
 msgid "Stripe accepts Visa, Master and Amex. To learn how it works click"
-msgstr "Stripe menerima Visa, Master dan Amex. Untuk mempelajari cara kerjanya klik"
+msgstr "Sọc chấp nhận Visa, Master và Amex. Để tìm hiểu cách thức hoạt động nhấp chuột"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:498
 msgid "Find out more about Stripe"
-msgstr "Cari tahu lebih lanjut tentang Stripe"
+msgstr "Tìm hiểu thêm về sọc"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:504
 msgid "Use Stripe for payments"
-msgstr "Gunakan Stripe untuk pembayaran"
+msgstr "Sử dụng sọc thanh toán"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:518
 msgid "The stripe account"
-msgstr "Akun stripe"
+msgstr "Các tài khoản sọc"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:519
 msgid "has been connected."
-msgstr "telah terhubung."
+msgstr "đã được kết nối."
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:520
 msgid "Click to De-link the account."
-msgstr "Klik untuk De-link account."
+msgstr "Nhấn vào đây để De-link tài khoản."
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:523
 msgid "Connect with Stripe"
-msgstr "Terhubung dengan Stripe"
+msgstr "Kết nối với sọc"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:528
 msgid "Offline Payments"
-msgstr "Pembayaran Offline"
+msgstr "Thanh toán ẩn"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:535
 msgid "YES, accept payment by Cheque"
-msgstr "YES, menerima pembayaran dengan Cek"
+msgstr "YES, chấp nhận thanh toán bằng séc"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:540
 msgid ""
 "Enter your PayPal account name and payment details instructions to ticket"
 " buyers"
-msgstr "Masukkan PayPal nama akun dan pembayaran rincian petunjuk Anda untuk pembeli tiket"
+msgstr "Nhập tên tài khoản PayPal và thanh toán chi tiết hướng dẫn của bạn để mua vé"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:544
 #: app/templates/gentelella/admin/event/wizard/step-1.html:566
 msgid "example"
-msgstr "contoh"
+msgstr "thí dụ"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:557
 msgid "YES, accept payment by Telegraphic Transfer(TT) / Bank Transfer"
-msgstr "YES, menerima pembayaran dengan Transfer Bank (TT) / Bank Transfer"
+msgstr "YES, chấp nhận thanh toán bằng điện báo chuyển giao (TT) / Chuyển khoản Ngân hàng"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:562
 msgid "Enter your bank details and instructions to ticket buyers"
-msgstr "Masukkan rincian bank Anda dan instruksi untuk pembeli tiket"
+msgstr "Nhập chi tiết ngân hàng và hướng dẫn của bạn để mua vé"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:563
 msgid "See an"
-msgstr "melihat"
+msgstr "xem một"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:580
 msgid "YES, accept payment at the event(on site)"
-msgstr "YES, menerima pembayaran pada acara tersebut (lokasi)"
+msgstr "YES, chấp nhận thanh toán tại các sự kiện (tại chỗ)"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:585
 msgid "Enter payment instructions to ticket buyers to make payments onsite"
-msgstr "Masukkan instruksi pembayaran untuk pembeli tiket untuk melakukan pembayaran di tempat"
+msgstr "Nhập hướng dẫn thanh toán cho người mua vé để thực hiện thanh toán tại chỗ"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:596
 msgid "Add Tax"
-msgstr "Tambahkan Pajak"
+msgstr "Thêm thuế"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:603
 msgid "Additional Details"
-msgstr "detil tambahan"
+msgstr "Chi tiết bổ sung"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:607
 msgid "Listing Privacy"
-msgstr "Listing Privasi"
+msgstr "Bảng liệt kê mật"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:613
 msgid "list this event on Open Event and search engines"
-msgstr "daftar acara ini di buka acara dan mesin pencari"
+msgstr "liệt kê sự kiện này vào Open tổ chức sự kiện và công cụ tìm kiếm"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:620
 msgid "Private page"
-msgstr "halaman pribadi"
+msgstr "trang cá nhân"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:620
 msgid "do not list this event publicly"
-msgstr "tidak daftar acara ini secara publik"
+msgstr "không liệt kê sự kiện này công khai"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:626
 #: app/templates/gentelella/guest/search/_collapse_search.html:52
 msgid "Event Type"
-msgstr "Jenis acara"
+msgstr "Loại sự kiện"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:656
 msgid "Event Sub-Topic"
-msgstr "Kegiatan Sub-Topik"
+msgstr "Sự kiện Sub-Topic"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:670
 #: app/templates/gentelella/guest/event/code_of_conduct.html:7
 msgid "Code of Conduct"
-msgstr "Kode etik"
+msgstr "Quy tắc ứng xử"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:681
 msgid "License of Event Data and Content"
-msgstr "Lisensi Data Kegiatan dan Konten"
+msgstr "Giấy phép tổ chức sự kiện dữ liệu và nội dung"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:694
 msgid "Choose Licence"
-msgstr "Pilih Lisensi"
+msgstr "Chọn Giấy phép"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:745
 msgid "Tax Options"
-msgstr "Pilihan pajak"
+msgstr "Tùy chọn thuế"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:751
 msgid "Do you need to charge tax for this event ?"
-msgstr "Apakah Anda perlu biaya pajak untuk acara ini?"
+msgstr "Bạn cần phải tính thuế đối với sự kiện này?"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:774
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:155
 msgid "Country"
-msgstr "Negara"
+msgstr "Quốc gia"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:777
 msgid "Choose a country for your tax payment"
-msgstr "Pilih negara untuk pembayaran pajak Anda"
+msgstr "Chọn một quốc gia nộp thuế của bạn"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:786
 msgid "Tax Name"
-msgstr "Nama pajak"
+msgstr "Tên thuế"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:792
 msgid "Tax Rate"
-msgstr "Persentase pajak"
+msgstr "Thuế suất"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:799
 msgid "Tax ID"
-msgstr "Id pajak"
+msgstr "Mã số thuế"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:806
 msgid "Tax Invoices"
-msgstr "Faktur pajak"
+msgstr "Hoá đơn thuế"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:812
 msgid "Send tax invoice to attendees"
-msgstr "Kirim faktur pajak untuk peserta"
+msgstr "Gửi hóa đơn thuế cho người tham dự"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:813
 msgid "Tax Invoices are sent to your attendees when you select this feature."
-msgstr "Faktur pajak dikirim ke peserta Anda bila Anda memilih fitur ini."
+msgstr "Hoá đơn thuế được gửi đến tham dự của bạn khi bạn chọn tính năng này."
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:814
 msgid ""
 "Enter your registered business company name and address to be included on"
 " the tax invoice"
-msgstr "Masukkan nama perusahaan yang terdaftar bisnis Anda dan alamat untuk dimasukkan pada faktur pajak"
+msgstr "Nhập tên công ty đăng ký kinh doanh của bạn và địa chỉ để được bao gồm trên hóa đơn thuế"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:821
 msgid "Registered Company"
-msgstr "Perusahaan terdaftar"
+msgstr "Công ty đăng ký"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:829
 msgid "Business Address"
-msgstr "Alamat bisnis"
+msgstr "Địa chỉ kinh doanh"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:837
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:177
 msgid "City"
-msgstr "Kota"
+msgstr "thành phố"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:859
 msgid "Optional Text for Invoice Footer"
-msgstr "Teks opsional untuk Faktur Footer"
+msgstr "Tiêu Tùy chọn cho Hóa đơn Footer"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:867
 msgid "Add or Include"
-msgstr "Tambah atau Sertakan"
+msgstr "Thêm hoặc Bao gồm"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:872
 msgid "Add tax as separate fee on top of the price"
-msgstr "Tambahkan pajak sebagai biaya terpisah di atas harga"
+msgstr "Thêm thuế như lệ phí riêng biệt trên đỉnh giá"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:879
 msgid "Include tax in ticket price"
-msgstr "Termasuk pajak dalam harga tiket"
+msgstr "Bao gồm thuế giá vé"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:891
 #: app/templates/gentelella/admin/event/wizard/step-1.html:921
@@ -1856,245 +1856,245 @@ msgstr "Termasuk pajak dalam harga tiket"
 #: app/templates/gentelella/admin/super_admin/settings/_ticket-fees.html:39
 #: app/templates/gentelella/admin/super_admin/users/users.html:159
 msgid "Save"
-msgstr "Menyimpan"
+msgstr "Tiết kiệm"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:906
 msgid "Cheque Instructions"
-msgstr "Petunjuk Cek"
+msgstr "Hướng dẫn Séc"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:936
 msgid "Bank Instructions"
-msgstr "Instruksi Bank"
+msgstr "Hướng dẫn Ngân hàng"
 
 #: app/templates/gentelella/admin/event/wizard/step-2.html:73
 #: app/templates/gentelella/admin/event/wizard/step-3.html:79
 msgid "off"
-msgstr "mati"
+msgstr "tắt"
 
 #: app/templates/gentelella/admin/event/wizard/step-2.html:73
 #: app/templates/gentelella/admin/event/wizard/step-2.html:77
 msgid "sponsors"
-msgstr "sponsor"
+msgstr "nhà tài trợ"
 
 #: app/templates/gentelella/admin/event/wizard/step-2.html:77
 #: app/templates/gentelella/admin/event/wizard/step-3.html:84
 #: app/templates/gentelella/guest/event/_ticketing_box.html:74
 msgid "on"
-msgstr "di"
+msgstr "trên"
 
 #: app/templates/gentelella/admin/event/wizard/step-2.html:106
 msgid "Add Another Sponsor"
-msgstr "Tambahkan Sponsor lain"
+msgstr "Thêm tài trợ khác"
 
 #: app/templates/gentelella/admin/event/wizard/step-3.html:78
 #: app/templates/gentelella/admin/event/wizard/step-3.html:83
 msgid "Turn"
-msgstr "Giliran"
+msgstr "Xoay"
 
 #: app/templates/gentelella/admin/event/wizard/step-3.html:97
 msgid "Session, Microlocations, Session types"
-msgstr "Sesi, Microlocations, jenis sesi"
+msgstr "Session, Microlocations, loại phiên"
 
 #: app/templates/gentelella/admin/event/wizard/step-3.html:126
 msgid "Session Types"
-msgstr "Jenis sesi"
+msgstr "loại phiên"
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:3
 msgid "Announcement"
-msgstr "Pengumuman"
+msgstr "Thông báo"
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:72
 msgid "Private link"
-msgstr "Link swasta"
+msgstr "liên kết cá nhân"
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:85
 msgid ""
 "Share this link to get private submission independently of open/closed "
 "Call for Speakers at any time."
-msgstr "Bagi link ini untuk mendapatkan pengajuan pribadi secara independen dari terbuka / tertutup Panggilan untuk Penutur setiap saat."
+msgstr "Chia sẻ liên kết này để có được trình tư nhân độc lập mở / đóng Call for Speakers bất cứ lúc nào."
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:85
 msgid "the link will be active once the event is saved"
-msgstr "link akan aktif setelah acara tersebut disimpan"
+msgstr "liên kết sẽ được hoạt động sau khi sự kiện được lưu"
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:96
 msgid ""
 "Display this publicly. Anybody will be able to submit a proposal within "
 "the dates chosen, once the event is published."
-msgstr "Tampilan ini secara publik. Siapa saja akan dapat mengajukan proposal dalam tanggal yang dipilih, setelah acara ini diterbitkan."
+msgstr "Hiển thị này công khai. Bất kỳ ai có thể nộp đề xuất trong ngày lựa chọn, một khi sự kiện này được công bố."
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:103
 msgid "Private"
-msgstr "Pribadi"
+msgstr "Riêng tư"
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:103
 msgid ""
 "Do not display this publicly. Proposals can be submitted only using the "
 "private link."
-msgstr "Tidak menampilkan secara umum. Proposal dapat diajukan hanya menggunakan link pribadi."
+msgstr "Không hiển thị công khai này. Đề xuất có thể được nộp chỉ bằng cách sử dụng liên kết riêng."
 
 #: app/templates/gentelella/admin/event/wizard/step-5.html:45
 msgid "Collect"
-msgstr "Mengumpulkan"
+msgstr "Sưu tầm"
 
 #: app/templates/gentelella/admin/event/wizard/step-5.html:45
 msgid "Details"
-msgstr "rincian"
+msgstr "Chi tiết"
 
 #: app/templates/gentelella/admin/event/wizard/step-5.html:51
 msgid "Option"
-msgstr "Pilihan"
+msgstr "Tùy chọn"
 
 #: app/templates/gentelella/admin/event/wizard/step-5.html:52
 msgid "Include"
-msgstr "memasukkan"
+msgstr "bao gồm"
 
 #: app/templates/gentelella/admin/event/wizard/step-5.html:53
 msgid "Require"
-msgstr "Memerlukan"
+msgstr "yêu cầu"
 
 #: app/templates/gentelella/admin/event/wizard/step-5.html:71
 msgid "Customize Registration Form"
-msgstr "Sesuaikan Formulir Pendaftaran"
+msgstr "Tùy chỉnh Mẫu đăng ký"
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:31
 msgid "Previous"
-msgstr "Sebelumnya"
+msgstr "Trước"
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:35
 msgid "Next"
-msgstr "Berikutnya"
+msgstr "Kế tiếp"
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:42
 msgid "Unpublish event"
-msgstr "acara Unpublish"
+msgstr "sự kiện Unpubish"
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:45
 msgid "Make your event live"
-msgstr "Membuat acara Anda hidup"
+msgstr "Làm cho sự kiện của bạn trực tiếp"
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:76
 msgid "Basic Details"
-msgstr "Detail dasar"
+msgstr "Chi tiết cơ bản"
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:154
 msgid "Ticket Description"
-msgstr "tiket Deskripsi"
+msgstr "vé Mô tả"
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:164
 msgid "Display Ticket description on Public Events page"
-msgstr "Deskripsi tampilan Tiket di halaman Acara Umum"
+msgstr "Mô tả vé Hiển thị trên trang sự kiện công cộng"
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:168
 msgid "Ticket visibility"
-msgstr "visibilitas tiket"
+msgstr "tầm nhìn vé"
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:172
 msgid "Hide Ticket"
-msgstr "Sembunyikan Tiket"
+msgstr "Ẩn vé"
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:175
 msgid "Hides ticket from the Public Events page."
-msgstr "Menyembunyikan tiket dari laman Acara Umum."
+msgstr "Ẩn vé từ trang sự kiện công cộng."
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:176
 msgid "Ticket would still be available for sale to Organizers."
-msgstr "Tiket masih akan tersedia untuk dijual ke Penyelenggara."
+msgstr "Vé vẫn sẽ có sẵn để bán cho các nhà tổ chức."
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:180
 msgid "Sales Start"
-msgstr "Mulai penjualan"
+msgstr "Bắt đầu bán hàng"
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:201
 msgid "Sales End"
-msgstr "penjualan End"
+msgstr "Kết thúc bán hàng"
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:214
 msgid "Number of tickets allowed per order"
-msgstr "Jumlah tiket diperbolehkan per pesanan"
+msgstr "Số lượng vé cho phép mỗi đơn hàng"
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:216
 msgid "Minimum Order"
-msgstr "Pemesanan minimum"
+msgstr "Đặt hàng tối thiểu"
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:221
 msgid "Maximum Order"
-msgstr "Pesanan maksimum"
+msgstr "Đặt hàng tối đa"
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:227
 msgid "Ticket Code Group"
-msgstr "Tiket Kode Grup"
+msgstr "Nhóm Mã vé"
 
 #: app/templates/gentelella/admin/login/change_password.html:7
 #: app/templates/gentelella/guest/sitemap.html:62
 msgid "Reset Password"
-msgstr "Reset password"
+msgstr "Đặt lại mật khẩu"
 
 #: app/templates/gentelella/admin/login/change_password.html:19
 #: app/templates/gentelella/admin/login/create_password.html:19
 #: app/templates/gentelella/admin/login/password_reminder.html:12
 #: app/templates/gentelella/admin/login/register.html:20
 msgid "Submit"
-msgstr "Menyerahkan"
+msgstr "Đệ trình"
 
 #: app/templates/gentelella/admin/login/create_password.html:7
 msgid "Create Password"
-msgstr "membuat password"
+msgstr "Tạo mật khẩu"
 
 #: app/templates/gentelella/admin/login/email_confirmation.html:7
 msgid "Email Confirmation"
-msgstr "konfirmasi email"
+msgstr "xác nhận thư điện tử"
 
 #: app/templates/gentelella/admin/login/email_confirmation.html:8
 msgid ""
 "We have sent you an email confirmation on the email you have given. "
 "Please follow the link in the email to create your account."
-msgstr "Kami telah mengirim email konfirmasi dari email yang telah Anda berikan. Silakan ikuti link dalam email untuk membuat akun."
+msgstr "Chúng tôi đã gửi cho bạn một email xác nhận vào email mà bạn đã đưa ra. Hãy làm theo các liên kết trong email để tạo tài khoản của bạn."
 
 #: app/templates/gentelella/admin/login/login.html:7
 msgid "Login Form"
-msgstr "Login Form"
+msgstr "mẫu đăng nhập"
 
 #: app/templates/gentelella/admin/login/login.html:16
 msgid "Lost your password"
-msgstr "Kehilangan password"
+msgstr "Quên mật khẩu"
 
 #: app/templates/gentelella/admin/login/login.html:22
 msgid "New to site"
-msgstr "Baru ke situs"
+msgstr "Mới vào trang web"
 
 #: app/templates/gentelella/admin/login/login.html:24
 msgid "Create Account"
-msgstr "Membuat akun"
+msgstr "Tạo tài khoản"
 
 #: app/templates/gentelella/admin/login/password_reminder.html:7
 msgid "Forgot Password"
-msgstr "Lupa kata sandi"
+msgstr "Quên mật khẩu"
 
 #: app/templates/gentelella/admin/login/register.html:6
 msgid "Registration Form"
-msgstr "Formulir pendaftaran"
+msgstr "Mẫu đăng ký"
 
 #: app/templates/gentelella/admin/login/register.html:24
 msgid "Already a member"
-msgstr "Sudah menjadi anggota"
+msgstr "Đã là thành viên hay chưa"
 
 #: app/templates/gentelella/admin/login/register.html:25
 msgid "Log in"
-msgstr "Masuk"
+msgstr "Đăng nhập"
 
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:21
 #: app/templates/gentelella/admin/mysessions/mysessions_list.html:68
 msgid "Under Review"
-msgstr "Di bawah Ulasan"
+msgstr "Theo giá"
 
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:35
 msgid "Withdraw Proposal"
-msgstr "menarik Proposal"
+msgstr "rút đề xuất"
 
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:40
 msgid "Edit Proposal"
-msgstr "mengedit Proposal"
+msgstr "Sửa Proposal"
 
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:77
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:265
@@ -2103,240 +2103,240 @@ msgstr "Microlocation"
 
 #: app/templates/gentelella/admin/mysessions/mysessions_list.html:126
 msgid "No session proposals for upcoming events found"
-msgstr "Tidak ada sesi proposal untuk acara mendatang ditemukan"
+msgstr "Không có đề xuất họp cho các sự kiện sắp tới tìm thấy"
 
 #: app/templates/gentelella/admin/mysessions/mysessions_list.html:137
 msgid "No session proposals for past events found"
-msgstr "Tidak ada sesi proposal untuk peristiwa masa lalu ditemukan"
+msgstr "Không có đề xuất họp cho các sự kiện trong quá khứ tìm thấy"
 
 #: app/templates/gentelella/admin/mytickets/mytickets_list.html:82
 msgid "No tickets for upcoming events found"
-msgstr "Tidak ada tiket untuk acara mendatang ditemukan"
+msgstr "Không có vé cho các sự kiện sắp tới tìm thấy"
 
 #: app/templates/gentelella/admin/mytickets/mytickets_list.html:93
 msgid "No tickets for past events found"
-msgstr "Tidak ada tiket untuk peristiwa masa lalu ditemukan"
+msgstr "Không có vé cho các sự kiện trong quá khứ tìm thấy"
 
 #: app/templates/gentelella/admin/profile/_form.html:11
 msgid "Family Name"
-msgstr "Nama keluarga"
+msgstr "Tên gia đình"
 
 #: app/templates/gentelella/admin/profile/_form.html:15
 msgid "Details about User"
-msgstr "Rincian tentang Pengguna"
+msgstr "Các chi tiết về tài"
 
 #: app/templates/gentelella/admin/profile/_form.html:21
 msgid "Integrate Social Networks"
-msgstr "Mengintegrasikan Jaringan Sosial"
+msgstr "Tích hợp mạng xã hội"
 
 #: app/templates/gentelella/admin/profile/_form.html:35
 #: app/templates/gentelella/admin/profile/_form.html:57
 msgid "Connect"
-msgstr "Menghubungkan"
+msgstr "Kết nối"
 
 #: app/templates/gentelella/admin/profile/_form.html:67
 msgid "Connect Account"
-msgstr "Hubungkan Akun"
+msgstr "Kết nối tài khoản"
 
 #: app/templates/gentelella/admin/profile/index.html:40
 msgid "Avatar size must be less than 1MB"
-msgstr "Ukuran Avatar harus kurang dari 1MB"
+msgstr "Avatar kích thước phải nhỏ hơn 1MB"
 
 #: app/templates/gentelella/admin/profile/notifications.html:27
 msgid "Unread"
-msgstr "belum dibaca"
+msgstr "chưa đọc"
 
 #: app/templates/gentelella/admin/profile/notifications.html:38
 msgid "Mark all read"
-msgstr "Tandai semua baca"
+msgstr "Đánh dấu tất cả đã đọc"
 
 #: app/templates/gentelella/admin/profile/notifications.html:46
 msgid "Received At"
-msgstr "menerima Pada"
+msgstr "nhận Tại"
 
 #: app/templates/gentelella/admin/profile/notifications.html:47
 msgid "Received At (Humanized)"
-msgstr "Menerima Pada (manusiawi)"
+msgstr "Nhận Tại (humanized)"
 
 #: app/templates/gentelella/admin/profile/notifications.html:67
 msgid "Mark"
-msgstr "Menandai"
+msgstr "dấu"
 
 #: app/templates/gentelella/admin/profile/notifications.html:68
 msgid "as Read"
-msgstr "sebagai Baca"
+msgstr "đọc"
 
 #: app/templates/gentelella/admin/settings/pages/contact_info.html:4
 msgid "Contact Info - Settings"
-msgstr "Kontak - Pengaturan"
+msgstr "Liên Lạc - Cài đặt"
 
 #: app/templates/gentelella/admin/settings/pages/email_preferences.html:4
 msgid "Email Preferences - Settings"
-msgstr "Preferensi Email - Pengaturan"
+msgstr "Tuỳ chọn Email - Cài đặt"
 
 #: app/templates/gentelella/admin/settings/pages/email_preferences.html:58
 msgid "Speaker Notifications"
-msgstr "speaker Pemberitahuan"
+msgstr "Loa thông báo"
 
 #: app/templates/gentelella/admin/settings/pages/email_preferences.html:74
 msgid "Organizer Notifications"
-msgstr "Organizer Pemberitahuan"
+msgstr "tổ chức thông báo"
 
 #: app/templates/gentelella/admin/settings/pages/email_preferences.html:113
 msgid "Email Updates"
-msgstr "email Updates"
+msgstr "email cập nhật"
 
 #: app/templates/gentelella/admin/settings/pages/email_preferences.html:123
 msgid "Updates about events"
-msgstr "Update tentang kejadian"
+msgstr "Cập nhật về các sự kiện"
 
 #: app/templates/gentelella/admin/settings/pages/password.html:4
 msgid "Password - Settings"
-msgstr "Sandi - Pengaturan"
+msgstr "Mật khẩu - Cài đặt"
 
 #: app/templates/gentelella/admin/settings/pages/password.html:18
 msgid "Current Password"
-msgstr "kata sandi saat ini"
+msgstr "Mật khẩu hiện tại"
 
 #: app/templates/gentelella/admin/settings/pages/password.html:24
 msgid "New Password"
-msgstr "kata sandi baru"
+msgstr "Mật khẩu mới"
 
 #: app/templates/gentelella/admin/settings/pages/password.html:30
 msgid "Repeat Password"
-msgstr "Ulangi kata kunci"
+msgstr "Lặp lại mật khẩu"
 
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:28
 msgid "Copyright Info"
-msgstr "Info hak cipta"
+msgstr "Bản quyền thông tin"
 
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:31
 msgid "Origin Info"
-msgstr "Info asal"
+msgstr "xuất xứ Thông tin"
 
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:43
 msgid "Change"
-msgstr "Perubahan"
+msgstr "Thay đổi"
 
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:60
 msgid "Update Image"
-msgstr "Update Gambar"
+msgstr "cập nhật hình ảnh"
 
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:69
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:86
 msgid "Placeholder"
-msgstr "placeholder"
+msgstr "Placeholder"
 
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:76
 msgid "Select Placeholder"
-msgstr "pilih Placeholder"
+msgstr "chọn Placeholder"
 
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:80
 msgid ""
 "For Cover Photos : We recommend using at least a 1300x550px (2:1 ratio) "
 "image"
-msgstr "Untuk Foto Sampul: Sebaiknya gunakan setidaknya 1300x550px a (2: 1 rasio) image"
+msgstr "Cover Hình ảnh: Chúng tôi khuyên bạn nên sử dụng ít nhất một 1300x550px (2: 1 ratio) hình ảnh"
 
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:80
 msgid ""
 "For Avatar Photos : We recommend using at least a 360x360px (1:1 ratio) "
 "image"
-msgstr "Untuk Foto Avatar: Sebaiknya gunakan setidaknya 360x360px sebuah (1: 1 rasio) image"
+msgstr "Đối với Avatar Hình ảnh: Chúng tôi khuyên bạn nên sử dụng ít nhất một 360x360px (1: 1) hình ảnh"
 
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:80
 msgid "The images should be no larger than 10MB"
-msgstr "Gambar harus tidak lebih besar dari 10MB"
+msgstr "Các hình ảnh không nên lớn hơn 10MB"
 
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:97
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:98
 msgid "Copyright Information"
-msgstr "Informasi hak cipta"
+msgstr "Thông tin bản quyền"
 
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:102
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:103
 msgid "Origin Information"
-msgstr "Informasi asal"
+msgstr "Thông tin xứ"
 
 #: app/templates/gentelella/admin/super_admin/content/_translations.html:14
 msgid "Language"
-msgstr "Bahasa"
+msgstr "ngôn ngữ"
 
 #: app/templates/gentelella/admin/super_admin/content/_translations.html:15
 msgid "Download .PO files"
-msgstr "Download file .po"
+msgstr "Tải tập tin .po"
 
 #: app/templates/gentelella/admin/super_admin/content/_translations.html:28
 msgid "Update .PO files"
-msgstr "file update .po"
+msgstr "Thông tin file .po"
 
 #: app/templates/gentelella/admin/super_admin/content/_translations.html:38
 msgid "language"
-msgstr "bahasa"
+msgstr "ngôn ngữ"
 
 #: app/templates/gentelella/admin/super_admin/content/_translations.html:46
 msgid "Upload"
-msgstr "Upload"
+msgstr "Tải lên"
 
 #: app/templates/gentelella/admin/super_admin/content/content.html:3
 msgid "Content"
-msgstr "kadar"
+msgstr "Nội dung"
 
 #: app/templates/gentelella/admin/super_admin/content/content.html:14
 #: app/templates/gentelella/admin/super_admin/content/content.html:28
 #: app/templates/gentelella/admin/super_admin/content/content.html:31
 #: app/templates/gentelella/admin/super_admin/content/content.html:32
 msgid "Social Links"
-msgstr "Link sosial"
+msgstr "Liên kết xã hội"
 
 #: app/templates/gentelella/admin/super_admin/content/content.html:17
 #: app/templates/gentelella/admin/super_admin/content/content.html:34
 #: app/templates/gentelella/admin/super_admin/content/content.html:35
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:3
 msgid "Pages"
-msgstr "Pages"
+msgstr "trang"
 
 #: app/templates/gentelella/admin/super_admin/content/content.html:20
 #: app/templates/gentelella/admin/super_admin/content/content.html:37
 #: app/templates/gentelella/admin/super_admin/content/content.html:38
 msgid "System Images"
-msgstr "Gambar sistem"
+msgstr "hệ thống hình ảnh"
 
 #: app/templates/gentelella/admin/super_admin/content/content.html:23
 #: app/templates/gentelella/admin/super_admin/content/content.html:40
 #: app/templates/gentelella/admin/super_admin/content/content.html:41
 msgid "Translations"
-msgstr "terjemahan"
+msgstr "Dịch"
 
 #: app/templates/gentelella/admin/super_admin/events/events.html:143
 msgid "Restore Event"
-msgstr "Kembalikan Kegiatan"
+msgstr "Khôi phục tổ chức sự kiện"
 
 #: app/templates/gentelella/admin/super_admin/events/events.html:156
 #: app/templates/gentelella/admin/super_admin/events/events.html:170
 msgid "All Events"
-msgstr "semua Acara"
+msgstr "Tất cả sự kiện"
 
 #: app/templates/gentelella/admin/super_admin/events/events.html:157
 #: app/templates/gentelella/admin/super_admin/events/events.html:166
 #: app/templates/gentelella/admin/super_admin/events/events.html:173
 msgid "All Live"
-msgstr "semua Hidup"
+msgstr "Tất cả Sống"
 
 #: app/templates/gentelella/admin/super_admin/events/events.html:158
 #: app/templates/gentelella/admin/super_admin/events/events.html:176
 msgid "All Drafts"
-msgstr "semua Konsep"
+msgstr "Tất cả nháp"
 
 #: app/templates/gentelella/admin/super_admin/events/events.html:159
 #: app/templates/gentelella/admin/super_admin/events/events.html:179
 msgid "All Past"
-msgstr "semua Past"
+msgstr "Tất cả quá khứ"
 
 #: app/templates/gentelella/admin/super_admin/events/events.html:160
 #: app/templates/gentelella/admin/super_admin/events/events.html:182
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:112
 msgid "All Deleted Events"
-msgstr "Semua Acara Dihapus"
+msgstr "Tất cả sự kiện đã bị xóa"
 
 #: app/templates/gentelella/admin/super_admin/events/events.html:198
 #: app/templates/gentelella/admin/super_admin/events/events.html:220
@@ -2345,7 +2345,7 @@ msgstr "Semua Acara Dihapus"
 #: app/templates/gentelella/admin/super_admin/events/events.html:286
 #: app/templates/gentelella/guest/search/_collapse_search.html:90
 msgid "Start Date"
-msgstr "Mulai tanggal"
+msgstr "ngày bắt đầu"
 
 #: app/templates/gentelella/admin/super_admin/events/events.html:199
 #: app/templates/gentelella/admin/super_admin/events/events.html:221
@@ -2354,117 +2354,117 @@ msgstr "Mulai tanggal"
 #: app/templates/gentelella/admin/super_admin/events/events.html:287
 #: app/templates/gentelella/guest/search/_collapse_search.html:98
 msgid "End Date"
-msgstr "Tanggal akhir"
+msgstr "Ngày cuối"
 
 #: app/templates/gentelella/admin/super_admin/events/events.html:285
 msgid "Public URL"
-msgstr "URL publik"
+msgstr "URL công cộng"
 
 #: app/templates/gentelella/admin/super_admin/messages/messages.html:4
 msgid "System Messages"
-msgstr "Pesan sistem"
+msgstr "hệ thống tin nhắn"
 
 #: app/templates/gentelella/admin/super_admin/messages/messages.html:34
 msgid "Recipient"
-msgstr "Penerima"
+msgstr "Người nhận"
 
 #: app/templates/gentelella/admin/super_admin/messages/messages.html:35
 msgid "Trigger"
-msgstr "Pelatuk"
+msgstr "Cò súng, cò kích hoạt"
 
 #: app/templates/gentelella/admin/super_admin/messages/messages.html:36
 msgid "Email Message"
-msgstr "email Pesan"
+msgstr "tin nhắn Gửi email"
 
 #: app/templates/gentelella/admin/super_admin/messages/messages.html:37
 msgid "Notification Message"
-msgstr "Pemberitahuan Pesan"
+msgstr "tin thông báo"
 
 #: app/templates/gentelella/admin/super_admin/messages/messages.html:39
 msgid "Time/Date of Sent out"
-msgstr "Waktu / Tanggal Dikirim keluar"
+msgstr "Thời gian / Ngày Sent ra"
 
 #: app/templates/gentelella/admin/super_admin/modules/modules.html:5
 #: app/templates/gentelella/admin/super_admin/modules/modules.html:23
 msgid "Modules"
-msgstr "modul"
+msgstr "modules"
 
 #: app/templates/gentelella/admin/super_admin/modules/modules.html:17
 msgid "Enable/Disable Modules"
-msgstr "Aktifkan / Nonaktifkan Modul"
+msgstr "Bật / Tắt Modules"
 
 #: app/templates/gentelella/admin/super_admin/modules/modules.html:29
 msgid "Ticketing"
-msgstr "tiket"
+msgstr "Ticketing"
 
 #: app/templates/gentelella/admin/super_admin/modules/modules.html:37
 msgid "Payments"
-msgstr "pembayaran"
+msgstr "Thanh toán"
 
 #: app/templates/gentelella/admin/super_admin/modules/modules.html:46
 msgid "Donations"
-msgstr "sumbangan"
+msgstr "Sự đóng góp"
 
 #: app/templates/gentelella/admin/super_admin/pages/_create_page_modal.html:8
 msgid "Page Details"
-msgstr "Detail halaman"
+msgstr "Chi tiết trang"
 
 #: app/templates/gentelella/admin/super_admin/pages/_create_page_modal.html:13
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:35
 msgid "NAME"
-msgstr "NAMA"
+msgstr "TÊN"
 
 #: app/templates/gentelella/admin/super_admin/pages/_create_page_modal.html:17
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:40
 msgid "TITLE"
-msgstr "JUDUL"
+msgstr "CHỨC VỤ"
 
 #: app/templates/gentelella/admin/super_admin/pages/_create_page_modal.html:26
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:50
 msgid "DESCRIPTION"
-msgstr "DESKRIPSI"
+msgstr "SỰ MIÊU TẢ"
 
 #: app/templates/gentelella/admin/super_admin/pages/_create_page_modal.html:31
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:55
 msgid "PLACE"
-msgstr "TEMPAT"
+msgstr "ĐỊA ĐIỂM"
 
 #: app/templates/gentelella/admin/super_admin/pages/_create_page_modal.html:33
 msgid "Use Open Event"
-msgstr "Gunakan Buka Acara"
+msgstr "Sử dụng sự kiện mở"
 
 #: app/templates/gentelella/admin/super_admin/pages/_create_page_modal.html:34
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:18
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:61
 msgid "Footer Menu"
-msgstr "Footer menu"
+msgstr "Footer đơn"
 
 #: app/templates/gentelella/admin/super_admin/pages/_create_page_modal.html:38
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:65
 msgid "POSITION"
-msgstr "POSISI"
+msgstr "CHỨC VỤ"
 
 #: app/templates/gentelella/admin/super_admin/pages/_create_page_modal.html:42
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:70
 msgid "LANGUAGE"
-msgstr "BAHASA"
+msgstr "NGÔN NGỮ"
 
 #: app/templates/gentelella/admin/super_admin/pages/_create_page_modal.html:53
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:5
 msgid "Create Page"
-msgstr "Membuat halaman"
+msgstr "Tạo trang"
 
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:58
 msgid "Use Open Even"
-msgstr "Gunakan Terbuka Bahkan"
+msgstr "Sử dụng Mở Thậm chí"
 
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:78
 msgid "Update Page"
-msgstr "Update Page"
+msgstr "cập nhật lại trang"
 
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:83
 msgid "Delete Page"
-msgstr "Hapus Halaman"
+msgstr "xóa trang"
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:30
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:38
@@ -2476,7 +2476,7 @@ msgstr "Hapus Halaman"
 #: app/templates/gentelella/admin/super_admin/users/users.html:244
 #: app/templates/gentelella/admin/super_admin/widgets/_users.html:11
 msgid "System Roles"
-msgstr "Peran sistem"
+msgstr "Vai trò hệ thống"
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:33
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:45
@@ -2486,209 +2486,209 @@ msgstr "Peran sistem"
 #: app/templates/gentelella/admin/super_admin/users/users.html:245
 #: app/templates/gentelella/admin/super_admin/widgets/_users.html:34
 msgid "Event Roles"
-msgstr "Peran acara"
+msgstr "Vai trò tổ chức sự kiện"
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:57
 msgid "Panel Permissions"
-msgstr "panel Izin"
+msgstr "bảng điều chỉnh Quyền"
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:62
 msgid "System Role"
-msgstr "sistem Peran"
+msgstr "Vai trò hệ thống"
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:64
 msgid "Panels"
-msgstr "panel"
+msgstr "Panels"
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:66
 msgid "Actions"
-msgstr "tindakan"
+msgstr "Hoạt động"
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:75
 msgid "Built-in Role"
-msgstr "Built-in Peran"
+msgstr "Built-in Role"
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:91
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:129
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:169
 msgid "Panel"
-msgstr "Panel"
+msgstr "bảng điều chỉnh"
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:115
 msgid "Update System Role"
-msgstr "Pembaruan sistem Peran"
+msgstr "Cập nhật Vai trò hệ thống"
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:149
 msgid "Add new Role"
-msgstr "Tambahkan Peran baru"
+msgstr "Thêm vai trò mới"
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:156
 msgid "Add new System Role"
-msgstr "Tambahkan Peran Sistem baru"
+msgstr "Thêm Vai trò hệ thống mới"
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:175
 msgid "Create Role"
-msgstr "Buat Peran"
+msgstr "tạo Vai trò"
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:192
 msgid "User Permissions"
-msgstr "Izin pengguna"
+msgstr "Quyền của người dùng"
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:198
 msgid "Permission"
-msgstr "Izin"
+msgstr "sự cho phép"
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:201
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:220
 msgid "Verified User"
-msgstr "Pengguna diverifikasi"
+msgstr "xác minh tài"
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:205
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:228
 #: app/templates/gentelella/admin/super_admin/users/users.html:64
 msgid "Unverified User"
-msgstr "belum diverifikasi Pengguna"
+msgstr "Mẫu giáo"
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:208
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:237
 msgid "Anonymous User"
-msgstr "Anonymous Pengguna"
+msgstr "Anonymous tài"
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:240
 msgid "Account creation is necessary"
-msgstr "Pembuatan akun diperlukan"
+msgstr "tạo tài khoản là cần thiết"
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:260
 msgid "EVENT ROLE"
-msgstr "EVENT PERAN"
+msgstr "TRƯỜNG VAI TRÒ"
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:260
 msgid "SERVICE"
-msgstr "LAYANAN"
+msgstr "DỊCH VỤ"
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:262
 msgid "Session"
-msgstr "Sidang"
+msgstr "Phiên"
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:263
 msgid "Speaker"
-msgstr "Pembicara"
+msgstr "Loa"
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:264
 msgid "Sponsor"
-msgstr "Sponsor"
+msgstr "Nhà tài trợ"
 
 #: app/templates/gentelella/admin/super_admin/reports/_server_logs.html:23
 msgid "Server logs display is supported only on Kubernetes abd Heroku deployments"
-msgstr "Server log display hanya didukung pada penyebaran Kubernetes abd Heroku"
+msgstr "hiển thị nhật ký máy chủ chỉ hỗ trợ triển khai Kubernetes abd Heroku"
 
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:3
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:9
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:12
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:13
 msgid "Activity"
-msgstr "Aktivitas"
+msgstr "Hoạt động"
 
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:4
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:15
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:16
 msgid "Mails"
-msgstr "mail"
+msgstr "mails"
 
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:31
 msgid "Actor"
-msgstr "Aktor"
+msgstr "Diễn viên"
 
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:32
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:56
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:89
 msgid "Time"
-msgstr "Waktu"
+msgstr "Thời gian"
 
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:55
 msgid "To"
-msgstr "Untuk"
+msgstr "Đến"
 
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:88
 msgid "For"
-msgstr "Untuk"
+msgstr "vì"
 
 #: app/templates/gentelella/admin/super_admin/reports/reports.html:4
 msgid "Reports"
-msgstr "laporan"
+msgstr "Báo cáo"
 
 #: app/templates/gentelella/admin/super_admin/reports/reports.html:31
 #: app/templates/gentelella/admin/super_admin/reports/reports.html:45
 msgid "System Logs"
-msgstr "Log sistem"
+msgstr "Nhật ký hệ thống"
 
 #: app/templates/gentelella/admin/super_admin/reports/reports.html:35
 #: app/templates/gentelella/admin/super_admin/reports/reports.html:48
 msgid "Server Logs"
-msgstr "Server Log"
+msgstr "Logs máy chủ"
 
 #: app/templates/gentelella/admin/super_admin/sales/by_marketer.html:61
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:60
 msgid "Marketer"
-msgstr "marketer"
+msgstr "Marketer"
 
 #: app/templates/gentelella/admin/super_admin/sales/by_marketer.html:73
 msgid "discounted"
-msgstr "diskon"
+msgstr "giảm giá"
 
 #: app/templates/gentelella/admin/super_admin/sales/by_marketer.html:76
 msgid "Discount amount"
-msgstr "Jumlah diskon"
+msgstr "số tiền giảm giá"
 
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:26
 msgid "Edit"
-msgstr "mengedit"
+msgstr "Chỉnh sửa"
 
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:26
 msgid "Discount"
-msgstr "Diskon"
+msgstr "Giảm giá"
 
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:50
 msgid "Percent"
-msgstr "Persen"
+msgstr "Phần trăm"
 
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:66
 msgid "Number of redemptions allowed"
-msgstr "Jumlah pencairan diperbolehkan"
+msgstr "Số redemptions phép"
 
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:98
 msgid "Discount duration"
-msgstr "durasi diskon"
+msgstr "thời gian giảm giá"
 
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:102
 msgid "Months"
-msgstr "Bulan"
+msgstr "Tháng"
 
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:111
 msgid "Attached to Marketer"
-msgstr "Melekat Marketer"
+msgstr "Kèm theo Marketer"
 
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:113
 msgid "Select Marketer"
-msgstr "Pilih Marketer"
+msgstr "Chọn Marketer"
 
 #: app/templates/gentelella/admin/super_admin/sales/fees.html:64
 #: app/templates/gentelella/guest/event/_ticketing_box.html:32
 #: app/templates/gentelella/guest/invoicing/components/_invoice_summary.html:12
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:12
 msgid "Fee"
-msgstr "Biaya"
+msgstr "Chi phí"
 
 #: app/templates/gentelella/admin/super_admin/sales/fees.html:68
 msgid "Revenue"
-msgstr "Pendapatan"
+msgstr "lợi tức"
 
 #: app/templates/gentelella/admin/super_admin/sales/fees_status.html:16
 #: app/templates/gentelella/guest/invoicing/invoice_pdf.html:5
 #: app/templates/gentelella/guest/invoicing/invoice_pdf.html:37
 #: app/templates/gentelella/guest/ticketing/invoice_pdf.html:37
 msgid "Invoice"
-msgstr "Faktur"
+msgstr "Hóa đơn"
 
 #: app/templates/gentelella/admin/super_admin/sales/fees_status.html:19
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:122
@@ -2698,70 +2698,70 @@ msgstr "Faktur"
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:194
 #: app/templates/gentelella/guest/ticketing/pdf/ticket.html:44
 msgid "Event"
-msgstr "Peristiwa"
+msgstr "Biến cố"
 
 #: app/templates/gentelella/admin/super_admin/sales/fees_status.html:22
 msgid "Dated"
-msgstr "Bertanggal"
+msgstr "ngày tháng"
 
 #: app/templates/gentelella/admin/super_admin/sales/fees_status.html:25
 msgid "Amount"
-msgstr "Jumlah"
+msgstr "Số tiền"
 
 #: app/templates/gentelella/admin/super_admin/sales/fees_status.html:28
 msgid "Sent to"
-msgstr "Dikirim ke"
+msgstr "Gửi đến"
 
 #: app/templates/gentelella/admin/super_admin/sales/fees_status.html:60
 msgid "Overdue"
-msgstr "Terlambat"
+msgstr "Quá hạn"
 
 #: app/templates/gentelella/admin/super_admin/sales/filter_table_base.html:41
 #: app/templates/gentelella/guest/search/_collapse_search.html:106
 msgid "Filter"
-msgstr "Menyaring"
+msgstr "Lọc"
 
 #: app/templates/gentelella/admin/super_admin/sales/filter_table_base.html:53
 msgid "Showing all records"
-msgstr "Menampilkan semua catatan"
+msgstr "Hiển thị tất cả hồ sơ"
 
 #: app/templates/gentelella/admin/super_admin/sales/filter_table_base.html:57
 msgid "Filter by Date"
-msgstr "Filter oleh Tanggal"
+msgstr "Lọc theo ngày"
 
 #: app/templates/gentelella/admin/super_admin/sales/filter_table_base.html:61
 msgid "Remove Filters"
-msgstr "Hapus Filter"
+msgstr "Di lọc"
 
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:72
 msgid "Restore Session"
-msgstr "Kembalikan Sesi"
+msgstr "Khôi phục phiên"
 
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:87
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:100
 msgid "All Sessions"
-msgstr "semua Sesi"
+msgstr "Tất cả các phiên"
 
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:88
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:96
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:103
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:43
 msgid "All Pending"
-msgstr "semua Pending"
+msgstr "Tất cả chờ"
 
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:89
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:106
 msgid "All Accepted"
-msgstr "semua diterima"
+msgstr "Tất cả được chấp nhận"
 
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:90
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:109
 msgid "All Rejected"
-msgstr "semua Ditolak"
+msgstr "Tất cả bị từ chối"
 
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:91
 msgid "All Deleted Sessions"
-msgstr "Semua Sesi Dihapus"
+msgstr "Tất cả các phiên xóa"
 
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:125
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:143
@@ -2769,7 +2769,7 @@ msgstr "Semua Sesi Dihapus"
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:179
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:197
 msgid "Date of Submission"
-msgstr "Tanggal Penyerahan"
+msgstr "Ngày thông tin"
 
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:126
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:144
@@ -2777,11 +2777,11 @@ msgstr "Tanggal Penyerahan"
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:180
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:198
 msgid "Date of Event"
-msgstr "Tanggal Kegiatan"
+msgstr "Ngày tổ chức sự kiện"
 
 #: app/templates/gentelella/admin/super_admin/settings/_analytics.html:3
 msgid "Google Analytics Tracking ID"
-msgstr "Google Analytics Tracking ID"
+msgstr "ID theo dõi Google Analytics"
 
 #: app/templates/gentelella/admin/super_admin/settings/_analytics.html:4
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:30
@@ -2793,23 +2793,23 @@ msgstr "Google Analytics Tracking ID"
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:141
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:255
 msgid "See"
-msgstr "Lihat"
+msgstr "Xem"
 
 #: app/templates/gentelella/admin/super_admin/settings/_analytics.html:5
 msgid "on how to get this Tracking ID"
-msgstr "tentang cara untuk mendapatkan ID Pelacakan ini"
+msgstr "làm thế nào để có được ID theo dõi này"
 
 #: app/templates/gentelella/admin/super_admin/settings/_analytics.html:7
 msgid "Tracking ID"
-msgstr "pelacakan ID"
+msgstr "ID theo dõi"
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:4
 msgid "Event Images"
-msgstr "Gambar acara"
+msgstr "Hình ảnh sự kiện"
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:6
 msgid "Large Size"
-msgstr "Ukuran besar"
+msgstr "kích thước lớn"
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:8
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:40
@@ -2818,7 +2818,7 @@ msgstr "Ukuran besar"
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:123
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:145
 msgid "Width"
-msgstr "Lebar"
+msgstr "Chiều rộng"
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:13
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:45
@@ -2827,7 +2827,7 @@ msgstr "Lebar"
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:123
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:145
 msgid "Height"
-msgstr "Tinggi"
+msgstr "Chiều cao"
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:18
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:50
@@ -2836,11 +2836,11 @@ msgstr "Tinggi"
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:151
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:173
 msgid "Quality"
-msgstr "Kualitas"
+msgstr "Phẩm chất"
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:24
 msgid "Standard aspect ratio is 13:5. Tick to maintain aspect ratio."
-msgstr "rasio aspek standar 13: 5. Centang untuk mempertahankan rasio aspek."
+msgstr "tỉ lệ chuẩn là 13: 5. Đánh dấu vào để duy trì tỷ lệ khía cạnh."
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:28
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:60
@@ -2850,7 +2850,7 @@ msgstr "rasio aspek standar 13: 5. Centang untuk mempertahankan rasio aspek."
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:156
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:178
 msgid "Standard Size of the available area is"
-msgstr "Standar Ukuran area yang tersedia adalah"
+msgstr "Kích thước chuẩn của khu vực có sẵn là"
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:29
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:61
@@ -2858,70 +2858,70 @@ msgstr "Standar Ukuran area yang tersedia adalah"
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:157
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:179
 msgid "Found in"
-msgstr "Ditemukan di"
+msgstr "Tìm thấy trong"
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:31
 msgid "Background Header Image in Public Event Page"
-msgstr "Background Header Image di Halaman Public Acara"
+msgstr "Hình ảnh Nền đầu trong công tổ chức sự kiện trang"
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:38
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:121
 msgid "Thumbnail Size"
-msgstr "thumbnail Size"
+msgstr "Kích thước thu nhỏ"
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:56
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:90
 msgid "Standard aspect ratio is 5:2. Tick to maintain aspect ratio."
-msgstr "rasio aspek standar adalah 5: 2. Centang untuk mempertahankan rasio aspek."
+msgstr "tỉ lệ chuẩn là 5: 2. Đánh dấu vào để duy trì tỷ lệ khía cạnh."
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:63
 msgid "Home Page Event Images"
-msgstr "Gambar Halaman Acara"
+msgstr "Trang chủ Sự kiện Hình ảnh"
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:64
 msgid "My Session Page Event Images"
-msgstr "Saya Images Sesi Halaman Kegiatan"
+msgstr "My Images phiên Trang tổ chức sự kiện"
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:65
 msgid "My Ticket Page Event Images"
-msgstr "Halaman Saya Tiket Images Kegiatan"
+msgstr "My Images vé sự kiện trang"
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:72
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:166
 msgid "Icon Size"
-msgstr "Ukuran ikon"
+msgstr "Biểu tượng Kích"
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:100
 msgid "Logo Size"
-msgstr "Ukuran logo"
+msgstr "Logo Kích"
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:100
 msgid "Event Wizard"
-msgstr "acara Wisaya"
+msgstr "Sự kiện Hướng dẫn"
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:119
 msgid "Profile/Speaker Images"
-msgstr "Profil / Gambar Speaker"
+msgstr "Hồ sơ / loa Images"
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:136
 msgid "Event Public Page"
-msgstr "Acara Umum Halaman"
+msgstr "Tổ chức sự kiện Trang Công"
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:143
 msgid "Small Size"
-msgstr "Ukuran kecil"
+msgstr "Kích thước nhỏ"
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:159
 msgid "Speaker Tab in Event Dashboard"
-msgstr "Speaker Tab di acara Dashboard"
+msgstr "Loa Tab trong Bảng điều khiển tổ chức sự kiện"
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:168
 msgid "Width & Height"
-msgstr "Lebar tinggi"
+msgstr "Chiều rộng Chiều cao &"
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:181
 msgid "Top Bar Right Corner"
-msgstr "Top Bar Right Corner"
+msgstr "Top Bar Ngay góc"
 
 #: app/templates/gentelella/admin/super_admin/settings/_microservices.html:4
 msgid "Android"
@@ -2929,48 +2929,48 @@ msgstr "Android"
 
 #: app/templates/gentelella/admin/super_admin/settings/_microservices.html:13
 msgid "Web"
-msgstr "jaringan"
+msgstr "Web"
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:4
 msgid "Stripe Keys"
-msgstr "stripe Keys"
+msgstr "Stripe phím"
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:6
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:105
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:143
 msgid "on how to obtain these keys"
-msgstr "tentang cara untuk mendapatkan kunci ini"
+msgstr "làm thế nào để có được các phím"
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:8
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:17
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:35
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:71
 msgid "Client"
-msgstr "Klien"
+msgstr "khách hàng"
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:15
 msgid "Secret Key"
-msgstr "Kunci rahasia"
+msgstr "Chìa khoá bí mật"
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:22
 msgid "Publishable Key"
-msgstr "Key diterbitkan"
+msgstr "Key được xuất bản"
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:29
 msgid "Credentials"
-msgstr "surat kepercayaan"
+msgstr "Thông tin đăng nhập"
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:32
 msgid "on how to obtain these credentials"
-msgstr "tentang bagaimana mendapatkan mandat ini"
+msgstr "làm thế nào để có được những thông tin quan trọng"
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:35
 msgid "Integration"
-msgstr "Integrasi"
+msgstr "Hội nhập"
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:35
 msgid " Mod"
-msgstr " modern"
+msgstr " mod"
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:35
 msgid "e"
@@ -2978,108 +2978,108 @@ msgstr "e"
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:41
 msgid "Sandbox"
-msgstr "Bak pasir"
+msgstr "hộp đựng cát"
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:41
 msgid "mode"
-msgstr "mode"
+msgstr "chế độ"
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:41
 msgid "Used during development and testing"
-msgstr "Digunakan selama pengembangan dan pengujian"
+msgstr "Được sử dụng trong quá trình phát triển và thử nghiệm"
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:48
 msgid "Live mode - Used during production"
-msgstr "Hidup modus - Digunakan selama produksi"
+msgstr "Sống chế độ - Được sử dụng trong quá trình sản xuất"
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:54
 msgid "Sandbox username"
-msgstr "nama Sandbox"
+msgstr "tên truy nhập Sandbox"
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:61
 msgid "Sandbox password"
-msgstr "sandi Sandbox"
+msgstr "mật khẩu Sandbox"
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:68
 msgid "Sandbox signature"
-msgstr "signature Sandbox"
+msgstr "chữ ký Sandbox"
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:75
 msgid "Live username"
-msgstr "hidup nama"
+msgstr "sống username"
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:82
 msgid "Live password"
-msgstr "hidup sandi"
+msgstr "sống mật khẩu"
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:89
 msgid "Live signature"
-msgstr "hidup signature"
+msgstr "chữ ký trực tiếp"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:13
 msgid "Google Tokens"
-msgstr "Google Token"
+msgstr "Google Tokens"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:15
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:33
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:51
 msgid "on how to obtain these tokens"
-msgstr "tentang bagaimana mendapatkan token ini"
+msgstr "làm thế nào để có được những thẻ"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:24
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:42
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:78
 msgid "Client secret"
-msgstr "rahasia klien"
+msgstr "bí mật của khách hàng"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:31
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:49
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:67
 msgid "Tokens"
-msgstr "token"
+msgstr "tokens"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:53
 msgid "Consumer key"
-msgstr "kunci konsumen"
+msgstr "khóa người sử dụng"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:60
 msgid "Consumer secret"
-msgstr "rahasia konsumen"
+msgstr "bí mật của người tiêu dùng"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:68
 msgid ""
 "on how to obtain these\n"
 "                                        tokens"
-msgstr "tentang cara untuk mendapatkan \ n token ini"
+msgstr "làm thế nào để có được những \ n token"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:85
 msgid "Storage"
-msgstr "Penyimpanan"
+msgstr "Lưu trữ"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:86
 msgid "Where to store data"
-msgstr "Di mana untuk menyimpan data"
+msgstr "Nơi lưu trữ dữ liệu"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:92
 msgid "Local"
-msgstr "Lokal"
+msgstr "địa phương"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:100
 msgid "Google Storage"
-msgstr "Google Storage"
+msgstr "Google lưu trữ"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:113
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:163
 msgid "Bucket name"
-msgstr "nama ember"
+msgstr "tên Bucket"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:120
 msgid "Interoperable access key"
-msgstr "tombol akses interoperable"
+msgstr "khóa truy cập tương thích"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:127
 msgid "Interoperable access secret"
-msgstr "rahasia akses interoperable"
+msgstr "bí mật truy cập tương thích"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:138
 msgid "Amazon S3"
@@ -3087,23 +3087,23 @@ msgstr "Amazon S3"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:151
 msgid "Region"
-msgstr "Wilayah"
+msgstr "Khu vực"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:170
 msgid "Key"
-msgstr "Kunci"
+msgstr "Chìa khóa"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:177
 msgid "Secret"
-msgstr "Rahasia"
+msgstr "Bí mật"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:187
 msgid "Mail Settings"
-msgstr "Pengaturan Mail"
+msgstr "Cài đặt email"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:190
 msgid "From Email"
-msgstr "Dari email"
+msgstr "Từ thư điện tử"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:200
 msgid "SMTP"
@@ -3111,23 +3111,23 @@ msgstr "SMTP"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:204
 msgid "Host"
-msgstr "Tuan rumah"
+msgstr "chủ nhà"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:211
 msgid "Port"
-msgstr "Pelabuhan"
+msgstr "Hải cảng"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:218
 msgid "Encryption"
-msgstr "enkripsi"
+msgstr "Encryption"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:234
 msgid "Username"
-msgstr "Nama pengguna"
+msgstr "Tên đăng nhập"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:241
 msgid "Password"
-msgstr "Kata sandi"
+msgstr "Mật khẩu"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:253
 msgid "Sendgrid API"
@@ -3135,46 +3135,46 @@ msgstr "API Sendgrid"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:256
 msgid "on how to get this token"
-msgstr "tentang cara untuk mendapatkan token ini"
+msgstr "làm thế nào để nhận mã thông báo này"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:263
 msgid "Sendgrid Token"
-msgstr "Sendgrid Token"
+msgstr "Sendgrid Mã"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:271
 msgid "App secret key"
-msgstr "Aplikasi kunci rahasia"
+msgstr "App khóa bí mật"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:272
 msgid ""
 "Secret key for the application. Recommended is a random string minimum 20"
 " characters in length."
-msgstr "Kunci rahasia untuk aplikasi. Direkomendasikan adalah string acak minimal 20 karakter."
+msgstr "khóa bí mật cho các ứng dụng. Đề xuất là một chuỗi ngẫu nhiên tối thiểu 20 ký tự."
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:281
 msgid "Super Admin Email ID"
-msgstr "Super Admin ID Email"
+msgstr "Email ID Super Admin"
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:282
 msgid "The email ID of the super admin user created during initial deployment."
-msgstr "Email ID dari admin super user diciptakan selama penyebaran awal."
+msgstr "Email ID của người sử dụng quản trị siêu tạo trong quá trình triển khai ban đầu."
 
 #: app/templates/gentelella/admin/super_admin/settings/_ticket-fees.html:6
 msgid "List of Supported Currencies"
-msgstr "Daftar Mata Uang yang didukung"
+msgstr "Danh sách tiền tệ hỗ trợ"
 
 #: app/templates/gentelella/admin/super_admin/settings/_ticket-fees.html:15
 msgid "Service Fee"
-msgstr "Biaya jasa"
+msgstr "Phí dịch vụ"
 
 #: app/templates/gentelella/admin/super_admin/settings/_ticket-fees.html:24
 msgid "Maximum Fee"
-msgstr "Biaya maksimum"
+msgstr "Phí tối đa"
 
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:20
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:47
 msgid "System"
-msgstr "Sistem"
+msgstr "hệ thống"
 
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:23
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:49
@@ -3186,28 +3186,28 @@ msgstr "Microservices"
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:52
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:53
 msgid "Images"
-msgstr "gambar"
+msgstr "hình ảnh"
 
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:29
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:55
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:56
 msgid "Analytics"
-msgstr "Analytics"
+msgstr "phân tích"
 
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:32
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:58
 msgid "Payment Gateways"
-msgstr "Gateway Pembayaran"
+msgstr "Cổng thanh toán"
 
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:37
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:63
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:64
 msgid "Ticket Fees"
-msgstr "Biaya tiket"
+msgstr "Lệ phí vé"
 
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:46
 msgid "System Tokens"
-msgstr "sistem Token"
+msgstr "hệ thống Tokens"
 
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:60
 msgid "ayment Gateways"
@@ -3216,11 +3216,11 @@ msgstr "ayment Gateways"
 #: app/templates/gentelella/admin/super_admin/users/users.html:4
 #: app/templates/gentelella/admin/super_admin/widgets/_users.html:3
 msgid "Users"
-msgstr "pengguna"
+msgstr "Người dùng"
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:50
 msgid "Deleted"
-msgstr "dihapus"
+msgstr "Đã bị xóa"
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:55
 msgid "Super Admin"
@@ -3228,215 +3228,215 @@ msgstr "super Admin"
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:62
 msgid "Registered User"
-msgstr "terdaftar Pengguna"
+msgstr "Người dùng đã đăng kí"
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:120
 msgid "Restore User"
-msgstr "Kembalikan Pengguna"
+msgstr "Khôi phục người dùng"
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:131
 msgid "Update System Roles"
-msgstr "Peran Pembaruan sistem"
+msgstr "Vai trò Cập nhật hệ thống"
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:137
 msgid "Provide Admin access"
-msgstr "Menyediakan akses Admin"
+msgstr "Cung cấp truy cập quản trị"
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:150
 msgid "Custom System Roles"
-msgstr "Peran Sistem kustom"
+msgstr "Vai trò hệ thống tùy chỉnh"
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:173
 #: app/templates/gentelella/admin/super_admin/users/users.html:185
 msgid "All Users"
-msgstr "Semua pengguna"
+msgstr "Tất cả người dùng"
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:175
 #: app/templates/gentelella/admin/super_admin/users/users.html:188
 msgid "Active Users"
-msgstr "Pengguna aktif"
+msgstr "người dùng hoạt động"
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:176
 #: app/templates/gentelella/admin/super_admin/users/users.html:191
 msgid "Deleted Users"
-msgstr "Pengguna dihapus"
+msgstr "người dùng đã xóa"
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:206
 #: app/templates/gentelella/admin/super_admin/users/users.html:226
 #: app/templates/gentelella/admin/super_admin/users/users.html:246
 msgid "Member Since"
-msgstr "Anggota Sejak"
+msgstr "thành viên từ"
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:207
 #: app/templates/gentelella/admin/super_admin/users/users.html:227
 #: app/templates/gentelella/admin/super_admin/users/users.html:247
 msgid "Last Access"
-msgstr "Akses terakhir"
+msgstr "Lần truy cập"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:8
 msgid "Number of Events"
-msgstr "Jumlah Acara"
+msgstr "Số Sự kiện"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_heroku.html:3
 msgid "Heroku Info"
-msgstr "Info Heroku"
+msgstr "Heroku Thông tin"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_heroku.html:20
 msgid "Heroku Version"
-msgstr "Heroku Versi"
+msgstr "Heroku Version"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_heroku.html:24
 msgid "Revision"
-msgstr "Revisi"
+msgstr "Revision"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_heroku.html:29
 #: app/templates/gentelella/admin/super_admin/widgets/_kubernetes.html:28
 msgid "Author Name"
-msgstr "penulis Nama"
+msgstr "tác giả Tên"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_heroku.html:39
 #: app/templates/gentelella/admin/super_admin/widgets/_kubernetes.html:39
 msgid "Commit Message"
-msgstr "komit Pesan"
+msgstr "cam kết tin nhắn"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_kubernetes.html:3
 msgid "Kubernetes Deployment Info"
-msgstr "Kubernetes Deployment Info"
+msgstr "Kubernetes Triển khai Thông tin"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_kubernetes.html:12
 msgid "Repository"
-msgstr "Repositori"
+msgstr "Kho"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_kubernetes.html:16
 msgid "Branch"
-msgstr "Cabang"
+msgstr "Chi nhánh"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_kubernetes.html:21
 msgid "Commit Hash"
-msgstr "komit Hash"
+msgstr "cam kết Hash"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_messages.html:3
 msgid "Messages"
-msgstr "pesan"
+msgstr "Tin nhắn"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_messages.html:11
 msgid "No. of Sent Mails"
-msgstr "Jumlah Email Terkirim"
+msgstr "Số thư gửi"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_messages.html:18
 msgid "In last 24 hours"
-msgstr "Dalam 24 jam terakhir"
+msgstr "Trong 24 giờ qua"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_messages.html:22
 msgid "In last 3 days"
-msgstr "Dalam 3 hari terakhir"
+msgstr "Trong 3 ngày qua"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_messages.html:26
 msgid "In last 7 days"
-msgstr "Dalam 7 hari terakhir"
+msgstr "Trong 7 ngày qua"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_messages.html:30
 msgid "In last 1 month"
-msgstr "Dalam 1 bulan terakhir"
+msgstr "Trong 1 tháng trước"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_messages.html:34
 msgid "Since installation"
-msgstr "Sejak instalasi"
+msgstr "Kể từ khi lắp đặt"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:9
 msgid "Number of Sessions"
-msgstr "Jumlah Sesi"
+msgstr "Số lượng phiên"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_users.html:18
 msgid "Super Admins"
-msgstr "Admin super"
+msgstr "Quản trị viên"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_users.html:22
 msgid "of Admins"
-msgstr "dari Admin"
+msgstr "của quản trị viên"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_users.html:26
 msgid "Registered Users"
-msgstr "Pengguna terdaftar"
+msgstr "người dùng đăng ký"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_users.html:41
 msgid "Organizers"
-msgstr "penyelenggara"
+msgstr "Các nhà tổ chức"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_users.html:45
 msgid "Co-Organizers"
-msgstr "Co-Penyelenggara"
+msgstr "Đồng tổ chức"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_users.html:49
 msgid "Track Organizers"
-msgstr "track Penyelenggara"
+msgstr "theo dõi tổ chức"
 
 #: app/templates/gentelella/admin/super_admin/widgets/_users.html:53
 msgid "Attendees"
-msgstr "peserta"
+msgstr "Những người tham dự"
 
 #: app/templates/gentelella/guest/sitemap.html:40
 msgid "General Information"
-msgstr "Informasi Umum"
+msgstr "Thông tin chung"
 
 #: app/templates/gentelella/guest/sitemap.html:58
 msgid "Account Management"
-msgstr "Manajemen akun"
+msgstr "Quản lý tài khoản"
 
 #: app/templates/gentelella/guest/sitemap.html:60
 #: app/templates/swagger/user-info.html:14
 msgid "Register"
-msgstr "Daftar"
+msgstr "Ghi danh"
 
 #: app/templates/gentelella/guest/sitemap.html:63
 msgid "View own profile"
-msgstr "Lihat profil sendiri"
+msgstr "Xem hồ sơ cá nhân của riêng"
 
 #: app/templates/gentelella/guest/sitemap.html:67
 msgid "Attending Events"
-msgstr "menghadiri Acara"
+msgstr "tham dự sự kiện"
 
 #: app/templates/gentelella/guest/sitemap.html:69
 msgid "Find Events"
-msgstr "Cari Acara"
+msgstr "Tìm sự kiện"
 
 #: app/templates/gentelella/guest/sitemap.html:70
 msgid "My Event Tickets"
-msgstr "Saya Tiket Acara"
+msgstr "Vé cho sự kiện của tôi"
 
 #: app/templates/gentelella/guest/sitemap.html:74
 msgid "Managing Events"
-msgstr "mengelola Acara"
+msgstr "quản lý sự kiện"
 
 #: app/templates/gentelella/guest/sitemap.html:77
 msgid "List own events"
-msgstr "Daftar acara sendiri"
+msgstr "Liệt kê các sự kiện riêng"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:5
 #: app/templates/gentelella/guest/event/_ticketing_box.html:23
 msgid "Ticket Information"
-msgstr "Informasi tiket"
+msgstr "Thông tin vé"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:8
 msgid "Click to order tickets"
-msgstr "Klik untuk memesan tiket"
+msgstr "Nhấn vào đây để đặt vé"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:11
 msgid "You will be taken to"
-msgstr "Anda akan dibawa ke"
+msgstr "Bạn sẽ được đưa đến"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:11
 msgid "to complete the purchase of the tickets"
-msgstr "untuk menyelesaikan pembelian tiket"
+msgstr "để hoàn tất việc mua vé"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:29
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:10
 msgid "Ticket type"
-msgstr "Jenis tiket"
+msgstr "loại vé"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:30
 msgid "Sales ends"
-msgstr "penjualan ujung"
+msgstr "bán hàng đầu"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:34
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:14
@@ -3445,325 +3445,325 @@ msgstr "Subtotal"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:70
 msgid "This ticket's sale has ended"
-msgstr "penjualan ini tiket telah berakhir"
+msgstr "bán của vé này đã kết thúc"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:73
 msgid "This ticket's sale will start"
-msgstr "Penjualan ini tiket ini akan mulai"
+msgstr "bán của vé này sẽ bắt đầu"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:99
 msgid "No tickets available right now."
-msgstr "Tidak ada tiket yang tersedia sekarang."
+msgstr "Không có vé có sẵn ngay bây giờ."
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:108
 msgid "Enter promotional code"
-msgstr "Masukkan kode promosi"
+msgstr "Nhập mã khuyến mại"
 
 #: app/templates/gentelella/guest/event/cfs.html:19
 msgid "Open"
-msgstr "Buka"
+msgstr "Mở"
 
 #: app/templates/gentelella/guest/event/cfs.html:21
 msgid "Closed"
-msgstr "Tutup"
+msgstr "đóng"
 
 #: app/templates/gentelella/guest/event/cfs.html:23
 msgid "Yet to Open"
-msgstr "Namun untuk Buka"
+msgstr "Tuy nhiên, để mở"
 
 #: app/templates/gentelella/guest/event/cfs.html:33
 msgid "Submit Proposal"
-msgstr "menyerahkan Proposal"
+msgstr "Gửi Ðề xuất"
 
 #: app/templates/gentelella/guest/event/details.html:51
 msgid "No sessions have been published yet"
-msgstr "Tidak ada sesi telah diterbitkan belum"
+msgstr "Không có phiên đã được xuất bản"
 
 #: app/templates/gentelella/guest/event/details.html:64
 msgid "Sponsors info unavailable"
-msgstr "Sponsor Info tidak tersedia"
+msgstr "Nhà tài trợ Thông tin không có sẵn"
 
 #: app/templates/gentelella/guest/event/details.html:71
 msgid "Organized by"
-msgstr "Diorganisir oleh"
+msgstr "Được tổ chức bởi"
 
 #: app/templates/gentelella/guest/event/details.html:76
 msgid "Getting Here"
-msgstr "mendapatkan sini"
+msgstr "Bắt đây"
 
 #: app/templates/gentelella/guest/event/schedule.html:24
 msgid "Schedule"
-msgstr "Susunan acara"
+msgstr "lịch trình"
 
 #: app/templates/gentelella/guest/event/schedule.html:26
 msgid "Published on"
-msgstr "Diterbitkan di"
+msgstr "Được đăng trên"
 
 #: app/templates/gentelella/guest/event/schedule.html:36
 msgid "Rooms View"
-msgstr "kamar Lihat"
+msgstr "phòng Xem"
 
 #: app/templates/gentelella/guest/event/schedule.html:37
 msgid "Tracks View"
-msgstr "trek Lihat"
+msgstr "Tracks Xem"
 
 #: app/templates/gentelella/guest/event/schedule.html:38
 msgid "Sessions View"
-msgstr "sesi View"
+msgstr "Sessions Xem"
 
 #: app/templates/gentelella/guest/invoicing/invoice_base.html:30
 #: app/templates/gentelella/guest/ticketing/order_base.html:65
 msgid "Pay Via Stripe"
-msgstr "Bayar Via Stripe"
+msgstr "Pay Via sọc"
 
 #: app/templates/gentelella/guest/invoicing/invoice_post_payment.html:18
 #: app/templates/gentelella/guest/ticketing/order_post_payment.html:34
 msgid "Print Invoice"
-msgstr "cetak Faktur"
+msgstr "In hóa đơn"
 
 #: app/templates/gentelella/guest/invoicing/invoice_post_payment.html:22
 msgid "Download Invoice"
-msgstr "Download Faktur"
+msgstr "Tải về hóa đơn"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:5
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:5
 msgid "Billing Details"
-msgstr "Detail penagihan"
+msgstr "Chi tiết Thanh toán"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:19
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:19
 msgid "Payment Information"
-msgstr "Informasi Pembayaran"
+msgstr "Thông tin thanh toán"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:22
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:22
 msgid "Paid Via"
-msgstr "dibayar Via"
+msgstr "Paid Via"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:23
 msgid "Transaction"
-msgstr "Transaksi"
+msgstr "Giao dịch"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:25
 msgid "Card Name"
-msgstr "kartu Nama"
+msgstr "Name card"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:26
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:26
 msgid "Card Number"
-msgstr "Nomor kartu"
+msgstr "Số thẻ"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:27
 msgid "Exp Date"
-msgstr "Tanggal kadaluarsa"
+msgstr "Ngày hết hạn"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:29
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:29
 msgid "Payment Date"
-msgstr "Tanggal pembayaran"
+msgstr "Ngày thanh toán"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:30
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:30
 msgid "Invoice number"
-msgstr "Nomor faktur"
+msgstr "Số hóa đơn"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice_summary.html:4
 msgid "Invoice Summary"
-msgstr "Ringkasan faktur"
+msgstr "Tóm tắt hóa đơn"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice_summary.html:10
 msgid "Event Name"
-msgstr "Nama acara"
+msgstr "Tên tổ chức sự kiện"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice_summary.html:11
 msgid "Fee Percent"
-msgstr "biaya Persen"
+msgstr "phí Phần trăm"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice_summary.html:26
 msgid "Invoice total"
-msgstr "Total faktur"
+msgstr "Tổng hóa đơn"
 
 #: app/templates/gentelella/guest/search/_collapse_search.html:21
 msgid "All Categories"
-msgstr "semua Kategori"
+msgstr "Tất cả danh mục"
 
 #: app/templates/gentelella/guest/search/_collapse_search.html:59
 msgid "All Event Types"
-msgstr "Semua Jenis Acara"
+msgstr "Tất cả các loại tổ chức sự kiện"
 
 #: app/templates/gentelella/guest/search/_collapse_search.html:85
 msgid "Custom Dates"
-msgstr "Tanggal kustom"
+msgstr "Ngày tùy chỉnh"
 
 #: app/templates/gentelella/guest/search/results.html:17
 msgid "Explore"
-msgstr "menjelajah"
+msgstr "Khám phá"
 
 #: app/templates/gentelella/guest/search/results.html:87
 msgid "Loading"
-msgstr "Pemuatan"
+msgstr "Tải"
 
 #: app/templates/gentelella/guest/search/results.html:96
 msgid "No events found for the selected parameters."
-msgstr "Tidak ada acara ditemukan parameter yang dipilih."
+msgstr "Không tìm thấy thông số đã chọn sự kiện."
 
 #: app/templates/gentelella/guest/ticketing/order_base.html:32
 msgid "When & Where"
-msgstr "Kapan & Dimana"
+msgstr "Khi & ở đâu"
 
 #: app/templates/gentelella/guest/ticketing/order_base.html:45
 msgid "Organizer"
-msgstr "Penyelenggara"
+msgstr "người tổ chức"
 
 #: app/templates/gentelella/guest/ticketing/order_base.html:52
 msgid "Contact the organizer"
-msgstr "Hubungi penyelenggara"
+msgstr "Liên lạc với ban tổ chức"
 
 #: app/templates/gentelella/guest/ticketing/order_post_payment.html:3
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:3
 msgid "Your Order"
-msgstr "Pesanan Anda"
+msgstr "Đơn hàng của bạn"
 
 #: app/templates/gentelella/guest/ticketing/order_post_payment.html:38
 msgid "Download Tickets"
-msgstr "Download Tiket"
+msgstr "Tải về Vé"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:15
 msgid "Registration Information"
-msgstr "informasi pendaftaran"
+msgstr "Thông tin đăng kí"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:24
 msgid "Please complete registration within 10:00 minutes"
-msgstr "Lengkapi pendaftaran dalam 10:00 menit"
+msgstr "Vui lòng hoàn tất đăng ký trong vòng vài phút 10:00"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:25
 msgid ""
 "After 10:00 minutes, the reservation we're holding will be released to "
 "others."
-msgstr "Setelah 10:00 menit, reservasi kita memegang akan dirilis kepada orang lain."
+msgstr "Phút 10:00, đặt phòng, chúng tôi đang nắm giữ sẽ được phát hành cho người khác."
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:33
 msgid "Ticket"
-msgstr "Tiket"
+msgstr "vé"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:39
 msgid "Have you used Open Event before"
-msgstr "Apakah Anda menggunakan Terbuka acara sebelumnya"
+msgstr "Bạn đã sử dụng mở sự kiện trước"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:40
 msgid "Sign In"
-msgstr "Masuk"
+msgstr "Đăng nhập"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:41
 msgid "To Your Account to continue"
-msgstr "Untuk Akun Anda untuk melanjutkan"
+msgstr "Tài khoản của bạn để tiếp tục"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:47
 msgid "First name"
-msgstr "Nama depan"
+msgstr "Tên đầu tiên"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:56
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:121
 msgid "Last name"
-msgstr "nama keluarga"
+msgstr "tên họ"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:78
 msgid "Confirm Email"
-msgstr "Konfirmasi email"
+msgstr "Xác nhận Email"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:93
 msgid "Ticket Holders' Information"
-msgstr "Informasi Pemegang tiket '"
+msgstr "Thông tin Holders vé '"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:103
 msgid "Ticket Holder"
-msgstr "pemegang karcis"
+msgstr "Chủ vé"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:109
 msgid "First"
-msgstr "Pertama"
+msgstr "Đầu tiên"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:110
 msgid "name"
-msgstr "nama"
+msgstr "Tên"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:150
 msgid "Billing Information"
-msgstr "Informasi tagihan"
+msgstr "thông tin thanh toan"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:159
 msgid "Select country"
-msgstr "Pilih negara"
+msgstr "Chọn quốc gia"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:168
 msgid "Address"
-msgstr "Alamat"
+msgstr "Địa chỉ nhà"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:185
 msgid "State/Province"
-msgstr "Negara Bagian / Provinsi"
+msgstr "Tiểu bang / Tỉnh"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:193
 msgid "Zip Code"
-msgstr "Kode Pos"
+msgstr "Mã Bưu Chính"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:202
 msgid "Pay Via"
-msgstr "bayar Via"
+msgstr "Pay Via"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:244
 msgid "Telegraphic Transfer(TT) / Bank Transfer"
-msgstr "Transfer Bank (TT) / Bank Transfer"
+msgstr "Điện báo chuyển giao (TT) / Bank Transfer"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:256
 msgid "Onsite/Cash"
-msgstr "Onsite / Cash"
+msgstr "Tại khách sạn / Tiền"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:270
 msgid "By clicking"
-msgstr "Dengan mengklik"
+msgstr "Bằng cách nhấp chuột"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:272
 msgid "Order Now"
-msgstr "Pesan sekarang"
+msgstr "Đặt hàng"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:273
 msgid "I acknowledge that I have read and agree with"
-msgstr "Saya mengakui bahwa saya telah membaca dan setuju dengan"
+msgstr "Tôi xác nhận rằng tôi đã đọc và đồng ý với"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:274
 msgid "the"
-msgstr "itu"
+msgstr "các"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:275
 msgid "Open Event terms of service, and privacy policy."
-msgstr "Acara hal terbuka pelayanan, dan kebijakan privasi."
+msgstr "về tổ chức sự kiện mở của dịch vụ và chính sách bảo mật."
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:278
 msgid "Order now"
-msgstr "Pesan sekarang"
+msgstr "Đặt hàng"
 
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:25
 msgid "Card Nam"
-msgstr "Nam kartu"
+msgstr "thẻ Nam"
 
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:4
 msgid "Order Summary"
-msgstr "Ringkasan rangka"
+msgstr "Tóm tắt theo thứ tự"
 
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:35
 msgid "No tickets selected."
-msgstr "Tidak ada tiket yang dipilih."
+msgstr "Không có vé chọn."
 
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:41
 msgid "Order total"
-msgstr "total order"
+msgstr "tổng số thứ tự"
 
 #: app/templates/gentelella/guest/ticketing/pdf/ticket.html:50
 msgid "Date and Time"
-msgstr "Tanggal dan waktu"
+msgstr "Ngày và giờ"
 
 #: app/templates/swagger/user-info.html:11
 msgid "Logged in as"
-msgstr "masuk sebagai"
+msgstr "Đăng nhập như"
 
