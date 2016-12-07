@@ -1,4 +1,3 @@
-
 <div class="timeline hidden-xs" id="timeline" data-event-id="{{ event.id }}"
      data-event-start="{{ event.start_time }}"
      data-event-end="{{ event.end_time }}"
@@ -20,14 +19,16 @@
     </table>
 </div>
 
-<div id="tracks-timeline" class="hidden" data-event-id="{{ event.id }}" data-event-start="{{ event.start_time }}" data-event-end="{{ event.end_time }}">
+<div id="tracks-timeline" class="hidden" data-event-id="{{ event.id }}" data-event-start="{{ event.start_time }}"
+     data-event-end="{{ event.end_time }}">
 
 </div>
 
-<div id="mobile-timeline" class="visible-xs" data-event-id="{{ event.id }}" data-event-start="{{ event.start_time }}" data-event-end="{{ event.end_time }}">
+<div id="mobile-timeline" class="visible-xs" data-event-id="{{ event.id }}" data-event-start="{{ event.start_time }}"
+     data-event-end="{{ event.end_time }}">
 
 </div>
 
 <div style="float: right; margin-top: 10px;">
-    {{_("All the timings are in")}} {{ event.timezone | default('UTC', true) }}
+    {{ _("All the timings are in") }} {{ event.timezone | default('UTC', true) }}
 </div>

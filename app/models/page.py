@@ -1,4 +1,3 @@
-"""Copyright 2016 Rafal Kowalski"""
 from . import db
 
 

@@ -1,14 +1,14 @@
 import unittest
 
-from tests.unittests.setup_database import Setup
-from tests.unittests.utils import OpenEventTestCase
+from app import current_app as app
 from app.helpers.data import save_to_db
+from app.helpers.data import update_role_to_admin
 from app.models.user import User
-from tests.unittests.auth_helper import register
 from tests.unittests.api.utils import get_path, create_event, create_services, \
     Event, Session
-from app import current_app as app
-from app.helpers.data import update_role_to_admin
+from tests.unittests.auth_helper import register
+from tests.unittests.setup_database import Setup
+from tests.unittests.utils import OpenEventTestCase
 
 
 class TestTrashedItems404(OpenEventTestCase):

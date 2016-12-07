@@ -1,7 +1,8 @@
-from tests.unittests.utils import OpenEventTestCase
-from tests.unittests.setup_database import Setup
 from StringIO import StringIO
+
 from app import current_app as app
+from tests.unittests.setup_database import Setup
+from tests.unittests.utils import OpenEventTestCase
 
 
 class TestImageUpload(OpenEventTestCase):

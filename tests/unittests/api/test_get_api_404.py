@@ -1,11 +1,10 @@
 import unittest
 
+from app import current_app as app
+from tests.unittests.api.utils import get_path, create_event
+from tests.unittests.auth_helper import register, login
 from tests.unittests.setup_database import Setup
 from tests.unittests.utils import OpenEventTestCase
-from tests.unittests.auth_helper import register, login
-from tests.unittests.api.utils import get_path, create_event
-
-from app import current_app as app
 
 
 class TestGetApiNonExistingEvent(OpenEventTestCase):
@@ -49,7 +48,6 @@ class TestGetApiNonExistingServices(OpenEventTestCase):
             response = self.app.get(path)
             self.assertEqual(response.status_code, 404)
             self.assertIn('does not exist', response.data)
-
 
     def test_microlocation_api(self):
         path = get_path(1, 'microlocations', 1)

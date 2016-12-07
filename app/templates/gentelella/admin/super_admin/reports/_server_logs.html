@@ -1,5 +1,45 @@
-{% if log_url %}
-  <iframe style="width:100%; height: 500px" src="https://longboard-classic.heroku.com/logs?logplexUrl={{ log_url }}"></iframe>
+{% if on_kubernetes %}
+    <ul class="nav nav-tabs bar_tabs large_tab_list kubernetes-pods-tab"
+        style="background: #FFFFFF; margin-bottom:0; border-bottom: 0; background: none; margin-top:40px">
+        {% for pod in pods_info %}
+            <li><a href="#{{ pod['metadata']['name'] }}" data-toggle="tab">{{ pod['metadata']['name'] }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="home">
+            <br>
+            <div class="col-md-12">
+                <pre id="log-display" style="display: none; max-height: 600px; overflow-y: auto;"></pre>
+            </div>
+        </div>
+    </div>
+{% elif on_heroku %}
+    <h4>Heroku</h4>
+    <iframe style="width:100%; height: 500px"
+            src="https://longboard-classic.heroku.com/logs?logplexUrl={{ logplex_url }}"></iframe>
 {% else %}
-<div>{{_("Either the Heroku API Token is invalid or it has not been set. Please set a valid <code>API_TOKEN_HEROKU</code> environment variable")}}.</div>
+    <div>{{ _("Server logs display is supported only on Kubernetes abd Heroku deployments") }}.</div>
 {% endif %}
+
+{% if on_kubernetes %}
+    <script>
+        var $logDisplay = $("#log-display");
+        $('.kubernetes-pods-tab').find("a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+            var podName = $(e.target).attr("href").substr(1);
+            $logDisplay.show().text("Loading logs for " + podName + " ...");
+            $.get("/admin/reports/kubernetes/logs/" + podName + "/", function (data) {
+                if (data.trim() == "") {
+                    $logDisplay.text('Log is empty for ' + podName + '.');
+                } else {
+                    $logDisplay.text(data);
+                    $logDisplay.scrollTop($logDisplay.prop("scrollHeight"));
+                }
+            });
+        });
+    </script>
+{% endif %}
+
+
+

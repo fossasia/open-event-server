@@ -1,14 +1,14 @@
 from flask import g
-from flask.ext.restplus import Resource, Namespace, marshal
 from flask import jsonify, url_for, current_app
+from flask.ext.restplus import Resource, Namespace, marshal
 
 from app.helpers.data import record_activity
 from app.helpers.importers import ImportHelper
+from events import EVENT
+from helpers.helpers import requires_auth
 from helpers.import_helpers import get_file_from_request, import_event_json, create_import_job, \
     send_import_mail
-from helpers.helpers import requires_auth
 from helpers.utils import TASK_RESULTS
-from events import EVENT
 
 api = Namespace('imports', description='Imports', path='/')
 

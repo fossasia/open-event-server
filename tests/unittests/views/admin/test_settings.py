@@ -3,11 +3,12 @@ import unittest
 
 from flask import url_for
 
-from app.helpers.data import save_to_db
-from tests.unittests.object_mother import ObjectMother
 from app import current_app as app
-from tests.unittests.views.view_test_case import OpenEventViewTestCase
+from app.helpers.data import save_to_db
 from app.helpers.data_getter import DataGetter
+from tests.unittests.object_mother import ObjectMother
+from tests.unittests.views.view_test_case import OpenEventViewTestCase
+
 
 def basic_setup(super_admin):
     event = ObjectMother.get_event()
@@ -20,14 +21,16 @@ def basic_setup(super_admin):
     save_to_db(speaker, "Speaker saved")
     return event
 
+
 email_fields = ['session_accept_reject', 'session_schedule', 'next_event', 'new_paper', 'session_schedule']
+
 
 def asset_notification(self, notification, value):
     for field in email_fields:
         self.assertEqual(getattr(notification, field), value)
 
-class TestSettings(OpenEventViewTestCase):
 
+class TestSettings(OpenEventViewTestCase):
     def test_contact_info_view(self):
         with app.test_request_context():
             rv = self.app.get(url_for('settings.contact_info_view'), follow_redirects=True)
@@ -79,6 +82,7 @@ class TestSettings(OpenEventViewTestCase):
                     for notification_setting_id in result[u'notification_setting_ids']:
                         notification = DataGetter.get_email_notification_settings_by_id(notification_setting_id)
                         self.assertEqual(getattr(notification, field), data['value'])
+
 
 if __name__ == '__main__':
     unittest.main()

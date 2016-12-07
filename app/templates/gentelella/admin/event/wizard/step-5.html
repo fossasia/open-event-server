@@ -20,14 +20,16 @@
             {% if identifier in required_list or identifier in required %}<span class="required">*</span>{% endif %}
         </td>
         <td>
-            <input type="checkbox" class="toggle-switch include-switch" data-group="{{ group }}" id="{{ identifier }}-include"
+            <input type="checkbox" class="toggle-switch include-switch" data-group="{{ group }}"
+                   id="{{ identifier }}-include"
                    {% if identifier not in required_list %}onclick="includeClick(this)"{% endif %}
                    {% if (include or identifier in preselect_list or identifier in required_list or identifier in required) and ((identifier != 'session_type') or microlocations or session_types or not event) %}checked="checked"{% endif %}
                    {% if (identifier in required_list) or ((identifier == 'session_type') and not microlocations and not session_types and event) %}disabled{% endif %}/>
             <label for="{{ identifier }}-include"> </label>
         </td>
         <td>
-            <input type="checkbox" class="toggle-switch require-switch" data-group="{{ group }}" id="{{ identifier }}-require"
+            <input type="checkbox" class="toggle-switch require-switch" data-group="{{ group }}"
+                   id="{{ identifier }}-require"
                    {% if identifier not in required_list %}onclick="requireClick(this)"{% endif %}
                    {% if (include or identifier in required_list or identifier in required) and ((identifier != 'session_type') or microlocations or session_types or not event) %}checked="checked"{% endif %}
                    {% if (identifier in required_list) or ((identifier == 'session_type') and not microlocations and not session_types and event) %}disabled{% endif %}/>
@@ -40,15 +42,15 @@
 {% macro options_table(columns, group) %}
 
     <div style="width: 100%; text-align: center">
-        <h2 style="font-weight: 300; font-size: 19px;">{{_("Collect")}} {{ group | capitalize }} {{_("Details")}}</h2>
+        <h2 style="font-weight: 300; font-size: 19px;">{{ _("Collect") }} {{ group | capitalize }} {{ _("Details") }}</h2>
     </div>
 
     <table class="table table-striped table-bordered table-hover options-table {{ group }}-options-table">
         <thead>
         <tr>
-            <th>{{_("Option")}}</th>
-            <th>{{_("Include")}}</th>
-            <th>{{_("Require")}}</th>
+            <th>{{ _("Option") }}</th>
+            <th>{{ _("Include") }}</th>
+            <th>{{ _("Require") }}</th>
         </tr>
         </thead>
         <tbody>
@@ -61,11 +63,12 @@
 
 {% endmacro %}
 
-<div id="step-5" class="wizard_content" style="{% if event and event.has_session_speakers %}display: block;{% else %}display:none;{% endif %}">
+<div id="step-5" class="wizard_content"
+     style="{% if event and event.has_session_speakers %}display: block;{% else %}display:none;{% endif %}">
     <div class="col-xs-12 col-md-8 col-md-push-2">
         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
             <i class="fa fa-check-square-o"></i>
-            {{_("Customize Registration Form")}}
+            {{ _("Customize Registration Form") }}
             <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
         </h2>
     </div>

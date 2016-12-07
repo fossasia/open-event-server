@@ -1,77 +1,68 @@
-"""Copyright 2015 Rafal Kowalski"""
 import json
 import logging
 import os.path
 import random
-import traceback
-import oauth2
-import time
-from os import path
-from datetime import datetime, timedelta
-import PIL
-from PIL import Image
 import shutil
+import time
+import traceback
+from datetime import datetime, timedelta
+from os import path
+from urllib2 import urlopen
 
+import PIL
+import oauth2
 import requests
-from requests.exceptions import ConnectionError
-from flask import flash, request, url_for, g, current_app
-from flask_socketio import emit
+from PIL import Image
+from flask import flash, url_for, g, current_app
 from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
+from flask_socketio import emit
+from requests.exceptions import ConnectionError
 from requests_oauthlib import OAuth2Session
-from sqlalchemy.orm.collections import InstrumentedList
-from sqlalchemy.sql.expression import exists
-from urllib2 import urlopen
-from werkzeug import secure_filename
-from wtforms import ValidationError
 
 from app.helpers.cache import cache
-from app.helpers.helpers import string_empty, string_not_empty, uploaded_file
+from app.helpers.helpers import string_empty, string_not_empty
 from app.helpers.notification_email_triggers import trigger_new_session_notifications, \
     trigger_session_state_change_notifications
 from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth, TwitterOAuth
 from app.helpers.storage import upload, UPLOAD_PATHS, UploadedFile, upload_local
 from app.models.notifications import Notification
 from app.models.stripe_authorization import StripeAuthorization
-from app.views.admin.super_admin.super_admin_base import PANEL_LIST
-# from app.views.api_v1_views import save_file_provided_by_url
-from ..helpers import helpers as Helper
-from ..helpers.data_getter import DataGetter
-from ..helpers.static import EVENT_LICENCES
-from ..helpers.update_version import VersionUpdater, get_all_columns
-from ..helpers.system_mails import MAILS
-from ..models import db
-from ..models.activity import Activity, ACTIVITIES
-from ..models.call_for_papers import CallForPaper
-from ..models.panel_permissions import PanelPermission
-from ..models.custom_forms import CustomForms
-from ..models.event import Event, EventsUsers
-from ..models.event_copyright import EventCopyright
-from ..models.file import File
-from ..models.invite import Invite
-from ..models.microlocation import Microlocation
-from ..models.user_permissions import UserPermission
-from ..models.system_role import CustomSysRole, UserSystemRole
-from ..models.permission import Permission
-from ..models.role import Role
-from ..models.role_invite import RoleInvite
-from ..models.ticket import Ticket, TicketTag
-from ..models.service import Service
-from ..models.image_sizes import ImageSizes
-from ..models.session import Session
-from ..models.session_type import SessionType
-from ..models.social_link import SocialLink
-from ..models.speaker import Speaker
-from ..models.sponsor import Sponsor
-from ..models.track import Track
-from ..models.user import User, ORGANIZER, ATTENDEE
-from ..models.user_detail import UserDetail
-from ..models.users_events_roles import UsersEventsRoles
-from ..models.page import Page
-from ..models.modules import Module
-from ..models.email_notifications import EmailNotification
-from ..models.message_settings import MessageSettings
-from ..models.tax import Tax
+from app.helpers import helpers as Helper
+from app.helpers.data_getter import DataGetter
+from app.helpers.static import EVENT_LICENCES
+from app.helpers.system_mails import MAILS
+from app.helpers.update_version import VersionUpdater, get_all_columns
+from app.models import db
+from app.models.activity import Activity, ACTIVITIES
+from app.models.call_for_papers import CallForPaper
+from app.models.custom_forms import CustomForms
+from app.models.email_notifications import EmailNotification
+from app.models.event import Event, EventsUsers
+from app.models.event_copyright import EventCopyright
+from app.models.image_sizes import ImageSizes
+from app.models.invite import Invite
+from app.models.message_settings import MessageSettings
+from app.models.microlocation import Microlocation
+from app.models.page import Page
+from app.models.panel_permissions import PanelPermission
+from app.models.permission import Permission
+from app.models.role import Role
+from app.models.role_invite import RoleInvite
+from app.models.service import Service
+from app.models.session import Session
+from app.models.session_type import SessionType
+from app.models.social_link import SocialLink
+from app.models.speaker import Speaker
+from app.models.sponsor import Sponsor
+from app.models.system_role import CustomSysRole, UserSystemRole
+from app.models.tax import Tax
+from app.models.ticket import Ticket, TicketTag
+from app.models.track import Track
+from app.models.user import User, ORGANIZER, ATTENDEE
+from app.models.user_detail import UserDetail
+from app.models.user_permissions import UserPermission
+from app.models.users_events_roles import UsersEventsRoles
 
 
 class DataManager(object):
@@ -181,21 +172,6 @@ class DataManager(object):
         record_activity('invite_user', event_id=event_id, user_id=user_id)
 
     @staticmethod
-    def create_track(form, event_id):
-        """
-        Track will be saved to database with proper Event id
-        :param form: view data form
-        :param event_id: Track belongs to Event by event id
-        """
-        new_track = Track(name=form.name.data,
-                          description=form.description.data,
-                          event_id=event_id,
-                          track_image_url=form.track_image_url.data)
-        save_to_db(new_track, "Track saved")
-        record_activity('create_track', event_id=event_id, track=new_track)
-        update_version(event_id, False, "tracks_ver")
-
-    @staticmethod
     def toggle_email_notification_settings(user_id, value):
         """
         Settings will be toggled to database with proper User id
@@ -223,96 +199,6 @@ class DataManager(object):
                     save_to_db(new_email_notification_setting, "EmailSetting Toggled")
                     notification_ids.append(new_email_notification_setting.id)
         return notification_ids
-
-    @staticmethod
-    def add_email_notification_settings(form, user_id, event_id):
-        """
-        Settings will be saved to database with proper Event id and User id
-        :param form: view data form
-        :param event_id: Settings belongs to Event by event id
-        :param user_id: Settings belongs to User by user id
-        """
-        email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(user_id, event_id)
-        if email_notification_setting:
-            email_notification_setting.next_event = int(form.get('next_event', 0))
-            email_notification_setting.new_paper = int(form.get('new_paper', 0))
-            email_notification_setting.session_schedule = int(form.get('session_schedule', 0))
-            email_notification_setting.session_accept_reject = int(form.get('session_accept_reject', 0))
-
-            save_to_db(email_notification_setting, "EmailSettings Updated")
-        else:
-            new_email_notification_setting = EmailNotification(next_event=int(form.get('next_event', 0)),
-                                                               new_paper=int(form.get('new_paper', 0)),
-                                                               session_schedule=int(form.get('session_schedule', 0)),
-                                                               session_accept_reject=int(
-                                                                   form.get('session_accept_reject', 0)),
-                                                               user_id=user_id,
-                                                               event_id=event_id)
-            save_to_db(new_email_notification_setting, "EmailSetting Saved")
-
-    @staticmethod
-    def create_new_track(form, event_id):
-        """
-        Track will be saved to database with proper Event id
-        :param form: view data form
-        :param event_id: Track belongs to Event by event id
-        """
-        new_track = Track(name=form['name'],
-                          description=form['description'],
-                          event_id=event_id,
-                          track_image_url=form['track_image_url'])
-        record_activity('create_track', event_id=event_id, track=new_track)
-        save_to_db(new_track, "Track saved")
-
-    @staticmethod
-    def update_track(form, track):
-        """
-        Track will be updated in database
-        :param form: view data form
-        :param track: object contains all earlier data
-        """
-        data = form.data
-        db.session.query(Track) \
-            .filter_by(id=track.id) \
-            .update(dict(data))
-        save_to_db(track, "Track updated")
-        record_activity('update_track', event_id=track.event_id, track=track)
-        update_version(track.event_id, False, "tracks_ver")
-
-    @staticmethod
-    def remove_track(track_id):
-        """
-        Track will be removed from database
-        :param track_id: Track id to remove object
-        """
-        track = Track.query.get(track_id)
-        delete_from_db(track, "Track deleted")
-        record_activity('delete_track', event_id=track.event_id, track=track)
-        flash('You successfully deleted track')
-
-    @staticmethod
-    def create_session(form, event_id, is_accepted=True):
-        """
-        Session will be saved to database with proper Event id
-        :param form: view data form
-        :param slide_file:
-        :param event_id: Session belongs to Event by event id
-        """
-        new_session = Session(title=form.title.data,
-                              subtitle=form.subtitle.data,
-                              long_abstract=form.long_abstract.data,
-                              start_time=form.start_time.data,
-                              end_time=form.end_time.data,
-                              event_id=event_id,
-                              short_abstract=form.short_abstract.data)
-
-        new_session.speakers = InstrumentedList(
-            form.speakers.data if form.speakers.data else [])
-        new_session.microlocation = form.microlocation.data
-        new_session.track = form.track.data
-        save_to_db(new_session, "Session saved")
-        record_activity('create_session', session=new_session, event_id=event_id)
-        update_version(event_id, False, "sessions_ver")
 
     @staticmethod
     def add_session_to_event(request, event_id, state=None):
@@ -409,7 +295,7 @@ class DataManager(object):
         if string_not_empty(logo) and logo:
             filename = '{}.png'.format(time.time())
             filepath = '{}/static/{}'.format(path.realpath('.'),
-                       logo[len('/serve_static/'):])
+                                             logo[len('/serve_static/'):])
             try:
                 logo_file = UploadedFile(filepath, filename)
                 logo = upload(logo_file, 'events/%d/speakers/%d/photo' % (int(event_id), int(speaker.id)))
@@ -426,12 +312,12 @@ class DataManager(object):
                 save_to_db(image_sizes, "Image Sizes Saved")
                 filename = '{}.jpg'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
-                           logo[len('/serve_static/'):])
+                                                 logo[len('/serve_static/'):])
                 logo_file = UploadedFile(filepath, filename)
 
                 temp_img_file = upload_local(logo_file,
                                              'events/{event_id}/speakers/{id}/temp'.format(
-                                             event_id=int(event_id), id=int(speaker.id)))
+                                                 event_id=int(event_id), id=int(speaker.id)))
                 temp_img_file = temp_img_file.replace('/serve_', '')
 
                 basewidth = image_sizes.full_width
@@ -473,7 +359,7 @@ class DataManager(object):
                         event_id=int(event_id), id=int(speaker.id)
                     ))
                 shutil.rmtree(path='static/media/' + 'events/{event_id}/speakers/{id}/temp'.format(
-                              event_id=int(event_id), id=int(speaker.id)))
+                    event_id=int(event_id), id=int(speaker.id)))
                 speaker.thumbnail = profile_thumbnail_url
                 speaker.small = profile_small_url
                 speaker.icon = profile_icon_url
@@ -538,7 +424,6 @@ class DataManager(object):
                               user=user if login and login.current_user.is_authenticated else None)
             save_to_db(speaker, "Speaker saved")
             record_activity('create_speaker', speaker=speaker, event_id=event_id)
-        speaker_img = ""
         if speaker_img_file != "":
             speaker_img = upload(
                 speaker_img_file,
@@ -553,7 +438,7 @@ class DataManager(object):
         if string_not_empty(logo) and logo:
             filename = '{}.png'.format(time.time())
             filepath = '{}/static/{}'.format(path.realpath('.'),
-                       logo[len('/serve_static/'):])
+                                             logo[len('/serve_static/'):])
             logo_file = UploadedFile(filepath, filename)
             logo = upload(logo_file, 'events/%d/speakers/%d/photo' % (int(event_id), int(speaker.id)))
             speaker.photo = logo
@@ -569,12 +454,12 @@ class DataManager(object):
             save_to_db(image_sizes, "Image Sizes Saved")
             filename = '{}.jpg'.format(time.time())
             filepath = '{}/static/{}'.format(path.realpath('.'),
-                       logo[len('/serve_static/'):])
+                                             logo[len('/serve_static/'):])
             logo_file = UploadedFile(filepath, filename)
 
             temp_img_file = upload_local(logo_file,
                                          'events/{event_id}/speakers/{id}/temp'.format(
-                                         event_id=int(event_id), id=int(speaker.id)))
+                                             event_id=int(event_id), id=int(speaker.id)))
             temp_img_file = temp_img_file.replace('/serve_', '')
 
             basewidth = image_sizes.full_width
@@ -616,7 +501,7 @@ class DataManager(object):
                     event_id=int(event_id), id=int(speaker.id)
                 ))
             shutil.rmtree(path='static/media/' + 'events/{event_id}/speakers/{id}/temp'.format(
-                          event_id=int(event_id), id=int(speaker.id)))
+                event_id=int(event_id), id=int(speaker.id)))
             speaker.thumbnail = profile_thumbnail_url
             speaker.small = profile_small_url
             speaker.icon = profile_icon_url
@@ -643,22 +528,7 @@ class DataManager(object):
         update_version(event_id, False, "sessions_ver")
 
     @staticmethod
-    def create_speaker_session_relation(session_id, speaker_id, event_id):
-        """
-        Session, speaker ids will be saved to database
-        :param speaker_id:
-        :param session_id:
-        :param event_id: Session, speaker belongs to Event by event id
-        """
-        speaker = DataGetter.get_speaker(speaker_id)
-        session = DataGetter.get_session(session_id)
-        session.speakers.append(speaker)
-        save_to_db(session, "Session Speaker saved")
-        update_version(speaker.event_id, False, "speakers_ver")
-        update_version(session.event_id, False, "sessions_ver")
-
-    @staticmethod
-    def session_accept_reject(session, event_id, state, send_email = True):
+    def session_accept_reject(session, event_id, state, send_email=True):
         session.state = state
         session.submission_date = datetime.now()
         session.submission_modifier = login.current_user.email
@@ -703,7 +573,9 @@ class DataManager(object):
                     ))
                 session.video = video_url
 
-            if form_state == 'pending' and session.state != 'pending' and session.state != 'accepted' and session.state != 'rejected':
+            if form_state == 'pending' and session.state != 'pending' and \
+                    session.state != 'accepted' and session.state != 'rejected':
+
                 trigger_new_session_notifications(session.id, event_id=event_id)
 
             session.title = form.get('title', '')
@@ -712,7 +584,7 @@ class DataManager(object):
             session.short_abstract = form.get('short_abstract', '')
             session.state = form_state
             session.track_id = form.get('track', None) if form.get('track', None) != "" else  None
-            session.session_type_id = form.get('session_type', None)  if form.get('session_type', None) != "" else None
+            session.session_type_id = form.get('session_type', None) if form.get('session_type', None) != "" else None
 
             existing_speaker_ids = form.getlist("speakers[]")
             current_speaker_ids = []
@@ -727,7 +599,9 @@ class DataManager(object):
                 current_speaker_ids.append(str(current_speaker.id))
 
             for current_speaker_id in current_speaker_ids:
-                if current_speaker_id not in existing_speaker_ids and current_speaker_id not in existing_speaker_ids_by_email:
+                if current_speaker_id not in existing_speaker_ids and current_speaker_id \
+                     not in existing_speaker_ids_by_email:
+
                     current_speaker = DataGetter.get_speaker(current_speaker_id)
                     session.speakers.remove(current_speaker)
                     db.session.commit()
@@ -742,134 +616,6 @@ class DataManager(object):
             update_version(event_id, False, "sessions_ver")
 
     @staticmethod
-    def update_session(form, session):
-        """
-        Session will be updated in database
-        :param form: view data form
-        :param session: object contains all earlier data
-        """
-        data = form.data
-        speakers = data["speakers"]
-        microlocation = data["microlocation"]
-        track = data["track"]
-        del data["speakers"]
-        del data["microlocation"]
-        del data["track"]
-        db.session.query(Session) \
-            .filter_by(id=session.id) \
-            .update(dict(data))
-        session.speakers = InstrumentedList(speakers if speakers else [])
-        session.microlocation = microlocation
-        session.track = track
-        save_to_db(session, "Session updated")
-        update_version(session.event_id, False, "sessions_ver")
-        record_activity('update_session', session=session, event_id=session.event_id)
-
-    @staticmethod
-    def remove_session(session_id):
-        """
-        Session will be removed from database
-        :param session_id: Session id to remove object
-        """
-        session = Session.query.get(session_id)
-        delete_from_db(session, "Session deleted")
-        flash('You successfully delete session')
-        record_activity('delete_session', session=session, event_id=session.event_id)
-        update_version(session.event_id, False, "sessions_ver")
-
-    @staticmethod
-    def create_speaker(form, event_id, user=login.current_user):
-        """
-        Speaker will be saved to database with proper Event id
-        :param user:
-        :param form: view data form
-        :param event_id: Speaker belongs to Event by event id
-        """
-        speaker = Speaker(name=form["name"] if "name" in form.keys() else "",
-                          photo=form["photo"] if "photo" in form.keys() else "",
-                          short_biography=form["short_biography"] if "short_biography" in form.keys() else "",
-                          email=form["email"] if "email" in form.keys() else "",
-                          website=form["website"] if "website" in form.keys() else "",
-                          event_id=event_id,
-                          twitter=form["twitter"] if "twitter" in form.keys() else "",
-                          facebook=form["facebook"] if "facebook" in form.keys() else "",
-                          github=form["github"] if "github" in form.keys() else "",
-                          linkedin=form["linkedin"] if "linkedin" in form.keys() else "",
-                          organisation=form["organisation"] if "organisation" in form.keys() else "",
-                          position=form["position"] if "position" in form.keys() else "",
-                          country=form["country"] if "country" in form.keys() else "",
-                          user=user)
-        save_to_db(speaker, "Speaker saved")
-        update_version(event_id, False, "speakers_ver")
-
-    @staticmethod
-    def update_speaker(form, speaker):
-        """
-        Speaker will be updated in database
-        :param form: view data form
-        :param speaker: object contains all earlier data
-        """
-        data = form.data
-        del data['sessions']
-        db.session.query(Speaker) \
-            .filter_by(id=speaker.id) \
-            .update(dict(data))
-        speaker.sessions = InstrumentedList(
-            form.sessions.data if form.sessions.data else [])
-        speaker.ensure_social_links()
-        save_to_db(speaker, "Speaker updated")
-        record_activity('update_speaker', speaker=speaker, event_id=speaker.event_id)
-        update_version(speaker.event_id, False, "speakers_ver")
-
-    @staticmethod
-    def remove_speaker(speaker_id):
-        """
-        Speaker will be removed from database
-        :param speaker_id: Speaker id to remove object
-        """
-        speaker = Speaker.query.get(speaker_id)
-        delete_from_db(speaker, "Speaker deleted")
-        record_activity('delete_speaker', speaker=speaker, event_id=speaker.event_id)
-        update_version(speaker.event_id, False, "speakers_ver")
-        flash('You successfully delete speaker')
-
-    @staticmethod
-    def create_sponsor(form, event_id):
-        """
-        Sponsor will be saved to database with proper Event id
-        :param form: view data form
-        :param event_id: Sponsor belongs to Event by event id
-        """
-        new_sponsor = Sponsor(name=form.name.data,
-                              url=form.url.data,
-                              event_id=event_id,
-                              logo=form.logo.data)
-        save_to_db(new_sponsor, "Sponsor saved")
-        update_version(event_id, False, "sponsors_ver")
-
-    @staticmethod
-    def update_sponsor(form, sponsor):
-        """
-        Sponsor will be updated in database
-        :param form: view data form
-        :param sponsor: object contains all earlier data
-        """
-        data = form.data
-        db.session.query(Sponsor).filter_by(id=sponsor.id).update(dict(data))
-        save_to_db(sponsor, "Sponsor updated")
-        update_version(sponsor.event_id, False, "sponsors_ver")
-
-    @staticmethod
-    def remove_sponsor(sponsor_id):
-        """
-        Sponsor will be removed from database
-        :param sponsor_id: Sponsor id to remove object
-        """
-        sponsor = Sponsor.query.get(sponsor_id)
-        delete_from_db(sponsor, "Sponsor deleted")
-        flash('You successfully delete sponsor')
-
-    @staticmethod
     def remove_role(uer_id):
         """
         Role will be removed from database
@@ -879,48 +625,6 @@ class DataManager(object):
         record_activity('delete_role', role=uer.role, user=uer.user, event_id=uer.event_id)
         delete_from_db(uer, "UER deleted")
         flash("You've successfully deleted role.")
-
-    @staticmethod
-    def create_microlocation(form, event_id):
-        """
-        Microlocation will be saved to database with proper Event id
-        :param form: view data form
-        :param event_id: Microlocation belongs to Event by event id
-        """
-        new_microlocation = Microlocation(name=form.name.data,
-                                          latitude=form.latitude.data,
-                                          longitude=form.longitude.data,
-                                          floor=form.floor.data,
-                                          room=form.room.data,
-                                          event_id=event_id)
-        save_to_db(new_microlocation, "Microlocation saved")
-        update_version(event_id, False, "microlocations_ver")
-
-    @staticmethod
-    def update_microlocation(form, microlocation):
-        """
-        Microlocation will be updated in database
-        :param form: view data form
-        :param microlocation: object contains all earlier data
-        """
-        data = form.data
-        if "session" in data.keys():
-            del data["session"]
-        db.session.query(Microlocation) \
-            .filter_by(id=microlocation.id) \
-            .update(dict(data))
-        save_to_db(microlocation, "Microlocation updated")
-        update_version(microlocation.event_id, False, "microlocations_ver")
-
-    @staticmethod
-    def remove_microlocation(microlocation_id):
-        """
-        Microlocation will be removed from database
-        :param microlocation_id: Sponsor id to remove object
-        """
-        microlocation = Microlocation.query.get(microlocation_id)
-        delete_from_db(microlocation, "Microlocation deleted")
-        flash('You successfully delete microlocation')
 
     @staticmethod
     def create_user(userdata, is_verified=False):
@@ -969,7 +673,7 @@ class DataManager(object):
         save_to_db(user, "password resetted")
 
     @staticmethod
-    def update_user(form, user_id, avatar_img, contacts_only_update=False):
+    def update_user(form, user_id, contacts_only_update=False):
 
         user = User.query.filter_by(id=user_id).first()
         user_detail = UserDetail.query.filter_by(user_id=user_id).first()
@@ -1005,12 +709,12 @@ class DataManager(object):
 
             user_detail.details = form['details']
             logo = form.get('logo', None)
-            #print logo
+            # print logo
             if string_not_empty(logo) and logo:
                 filename = '{}.png'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
-                           logo[len('/serve_static/'):])
-                #print "File path 1", filepath
+                                                 logo[len('/serve_static/'):])
+                # print "File path 1", filepath
                 logo_file = UploadedFile(filepath, filename)
                 logo_temp = upload(logo_file, 'users/%d/avatar' % int(user_id))
                 user_detail.avatar_uploaded = logo_temp
@@ -1026,8 +730,8 @@ class DataManager(object):
                 save_to_db(image_sizes, "Image Sizes Saved")
                 filename = '{}.jpg'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
-                           logo[len('/serve_static/'):])
-                #print "File path 1", filepath
+                                                 logo[len('/serve_static/'):])
+                # print "File path 1", filepath
                 logo_file = UploadedFile(filepath, filename)
 
                 temp_img_file = upload_local(logo_file,
@@ -1080,11 +784,6 @@ class DataManager(object):
         record_activity('update_user', user=user)
 
     @staticmethod
-    def add_owner_to_event(owner_id, event):
-        event.owner = owner_id
-        db.session.commit()
-
-    @staticmethod
     def update_user_permissions(form):
         for perm in UserPermission.query.all():
             ver_user = '{}-verified_user'.format(perm.name)
@@ -1102,6 +801,7 @@ class DataManager(object):
         role_name = form.get('role_name')
         sys_role = CustomSysRole(name=role_name)
         save_to_db(sys_role)
+        from app.views.super_admin import PANEL_LIST
         for panel in PANEL_LIST:
             if form.get(panel):
                 perm = PanelPermission(panel, sys_role, True)
@@ -1115,9 +815,10 @@ class DataManager(object):
         sys_role = CustomSysRole.query.filter_by(name=role_name).first()
         sys_role.name = form.get('new_role_name')
         db.session.add(sys_role)
+        from app.views.super_admin import PANEL_LIST
         for panel in PANEL_LIST:
             perm, _ = get_or_create(PanelPermission, panel_name=panel,
-                role=sys_role)
+                                    role=sys_role)
             if form.get(panel):
                 perm.can_access = True
             else:
@@ -1178,10 +879,9 @@ class DataManager(object):
         return tag_list
 
     @staticmethod
-    def create_event(form, img_files):
+    def create_event(form):
         """
         Event will be saved to database with proper Event id
-        :param img_files:
         :param form: view data form
         """
         # Filter out Copyright info
@@ -1223,7 +923,7 @@ class DataManager(object):
                       payment_country=form.get('payment_country', ''),
                       payment_currency=payment_currency,
                       paypal_email=paypal_email,
-                      cheque_details=form.get('cheque-details',''),
+                      cheque_details=form.get('cheque-details', ''),
                       bank_details=form.get('bank-details', ''),
                       onsite_details=form.get('onsite-details', ''))
 
@@ -1286,7 +986,7 @@ class DataManager(object):
                 bg.save(out_im, quality=55)
                 filename = '{}.png'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
-                           temp_background[len('/serve_static/'):])
+                                                 temp_background[len('/serve_static/'):])
                 background_file = UploadedFile(filepath, filename)
                 background_url = upload(
                     background_file,
@@ -1296,7 +996,7 @@ class DataManager(object):
 
                 filename = '{}.jpg'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
-                           temp_background[len('/serve_static/'):])
+                                                 temp_background[len('/serve_static/'):])
                 background_file = UploadedFile(filepath, filename)
 
                 temp_img_file = upload_local(background_file,
@@ -1370,7 +1070,7 @@ class DataManager(object):
             if temp_logo:
                 filename = '{}.png'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
-                    temp_logo[len('/serve_static/'):])
+                                                 temp_logo[len('/serve_static/'):])
                 logo_file = UploadedFile(filepath, filename)
                 logo = upload(
                     logo_file,
@@ -1464,7 +1164,7 @@ class DataManager(object):
                         if sponsor_logo[index] != "":
                             filename = '{}.png'.format(time.time())
                             filepath = '{}/static/{}'.format(path.realpath('.'),
-                                sponsor_logo[index][len('/serve_static/'):])
+                                                             sponsor_logo[index][len('/serve_static/'):])
                             logo_file = UploadedFile(filepath, filename)
                             logo = upload(
                                 logo_file,
@@ -1593,7 +1293,7 @@ class DataManager(object):
                 save_to_db(new_email_notification_setting, "EmailSetting Saved")
                 return event
         else:
-            raise ValidationError("start date greater than end date")
+            raise Exception("start date greater than end date")
 
     @staticmethod
     def get_event_time_field_format(form, field):
@@ -1675,8 +1375,8 @@ class DataManager(object):
         return event
 
     @staticmethod
-    def edit_event(request, event_id, event, session_types, tracks, social_links, microlocations, call_for_papers,
-                   sponsors, custom_forms, img_files, old_sponsor_logos, old_sponsor_names, tax):
+    def edit_event(request, event, session_types, tracks, social_links, microlocations, call_for_papers,
+                   sponsors, old_sponsor_logos, old_sponsor_names, tax):
         """
         Event will be updated in database
         :param call_for_papers:
@@ -1686,11 +1386,8 @@ class DataManager(object):
         :param social_links:
         :param tracks:
         :param session_types:
-        :param event_id:
         :param request:
         :param sponsors:
-        :param custom_forms:
-        :param img_files:
         :param old_sponsor_logos:
         :param event: object contains all earlier data
         """
@@ -1767,7 +1464,7 @@ class DataManager(object):
                 description_toggle = form.get('tickets_description_toggle_{}'.format(i), False)
                 description_toggle = True if description_toggle == 'on' else False
 
-                tag_list = DataManager.create_ticket_tags(ticket_tags[i], event.id,)
+                tag_list = DataManager.create_ticket_tags(ticket_tags[i], event.id, )
 
                 ticket, _ = get_or_create(Ticket, name=name, event=event, type=ticket_types[i])
 
@@ -1879,7 +1576,8 @@ class DataManager(object):
 
         state = form.get('state', None)
         if state and ((state == u'Published' and not string_empty(
-            event.location_name)) or state != u'Published') and login.current_user.is_verified:
+           event.location_name)) or state != u'Published') and login.current_user.is_verified:
+
             event.state = state
 
         social_link_name = form.getlist('social[name]')
@@ -2060,7 +1758,7 @@ class DataManager(object):
                     if sponsor_logo[index] != "":
                         filename = '{}.png'.format(time.time())
                         filepath = '{}/static/{}'.format(path.realpath('.'),
-                            sponsor_logo[index][len('/serve_static/'):])
+                                                         sponsor_logo[index][len('/serve_static/'):])
                         logo_file = UploadedFile(filepath, filename)
                         logo = upload(
                             logo_file,
@@ -2117,41 +1815,6 @@ class DataManager(object):
         return event
 
     @staticmethod
-    def create_file():
-        """
-        File from request will be saved to database
-        """
-        file = request.files["file"]
-        filename = secure_filename(file.filename)
-        if not db.session.query(exists() \
-                                    .where(File.name == filename)).scalar():
-            if file.mimetype.split('/', 1)[0] == "image":
-                file.save(os.path.join(os.path.realpath('.')
-                                       + '/static/', filename))
-                file_object = File(
-                    name=filename,
-                    path='',
-                    owner_id=login.current_user.id
-                )
-                save_to_db(file_object, "file saved")
-                flash("Image added")
-            else:
-                flash("The selected file is not an image. Please select a " \
-                      "image file and try again.")
-        else:
-            flash("A file named \"" + filename + "\" already exists")
-
-    @staticmethod
-    def remove_file(file_id):
-        """
-        File from request will be removed from database
-        """
-        file_obj = File.query.get(file_id)
-        os.remove(os.path.join(os.path.realpath('.') + '/static/', file_obj.name))
-        delete_from_db(file_obj, "File removed")
-        flash("File removed")
-
-    @staticmethod
     def add_role_to_event(form, event_id, record=True):
         user = User.query.filter_by(email=form['user_email']).first()
         role = Role.query.filter_by(name=form['user_role']).first()
@@ -2190,7 +1853,8 @@ class DataManager(object):
         save_to_db(page, "Page created")
         cache.delete('pages')
 
-    def update_page(self, page, form):
+    @staticmethod
+    def update_page(page, form):
         page.name = form.get('name', '')
         page.title = form.get('title', '')
         page.description = form.get('description', '')
@@ -2224,6 +1888,7 @@ class DataManager(object):
 
 def save_to_db(item, msg="Saved to db", print_error=True):
     """Convenience function to wrap a proper DB save
+    :param print_error:
     :param item: will be saved to database
     :param msg: Message to log
     """
@@ -2296,7 +1961,6 @@ def get_twitter_auth_url():
     client = oauth2.Client(consumer)
     resp, content = client.request('https://api.twitter.com/oauth/request_token', "GET")
     return content + "&redirect_uri" + TwitterOAuth.get_redirect_uri(), consumer
-
 
 
 def create_user_oauth(user, user_data, token, method):
@@ -2389,7 +2053,7 @@ def record_activity(template, login_user=None, **kwargs):
 
 
 def update_version(event_id, is_created, column_to_increment):
-    """Function resposnible for increasing version when some data will be
+    """Function responsible for increasing version when some data will be
     created or changed
     :param event_id: Event id
     :param is_created: Object exist True/False
@@ -2476,26 +2140,6 @@ def restore_session(session_id):
     session.in_trash = False
     save_to_db(session, "Session restored from Trash")
     update_version(session.event_id, False, 'sessions_ver')
-
-
-def create_modules(form):
-    modules_form_value = form.getlist('modules_form[value]')
-    module = DataGetter.get_module()
-
-    if module is None:
-        module = Module()
-
-    module.ticket_include = True if str(modules_form_value[0][24]) == '1' else False
-    module.payment_include = True if str(modules_form_value[0][49]) == '1' else False
-    module.donation_include = True if str(modules_form_value[0][75]) == '1' else False
-
-    save_to_db(module, "Module settings saved")
-    events = DataGetter.get_all_events()
-
-    if module.ticket_include:
-        for event in events:
-            event.ticket_include = True
-            save_to_db(event, "Event updated")
 
 
 def uploaded_file_provided_by_url(url):

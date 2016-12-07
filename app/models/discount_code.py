@@ -5,6 +5,7 @@ from . import db
 TICKET = 'ticket'
 EVENT = 'event'
 
+
 class DiscountCode(db.Model):
     __tablename__ = "discount_codes"
 

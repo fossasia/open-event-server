@@ -6,7 +6,6 @@
   "keywords": [
     "open-event",
     "fossasia",
-    "gsoc",
     "flask"
   ],
   "env": {
@@ -32,6 +31,6 @@
       }
     ],
   "scripts": {
-    "postdeploy": "python create_db.py"
+    "postdeploy": "python manage.py initialize_db -c open_event_test_user@fossasia.org:fossasia"
   }
 }

@@ -78,8 +78,8 @@
                 <button class="btn btn-success">{{ _("Update Page") }}</button>
 
                 <a class="btn btn-danger"
-                        onclick="return confirm('Are you sure you want to delete this page?');"
-                        href="{{ get_url('sadmin_content.trash_view', page_id=current_page.id) }}">
+                   onclick="return confirm('Are you sure you want to delete this page?');"
+                   href="{{ url_for('sadmin_content.trash_view', page_id=current_page.id) }}">
                     {{ _("Delete Page") }}
                 </a>
 

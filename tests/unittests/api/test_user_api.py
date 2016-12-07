@@ -1,13 +1,12 @@
-import unittest
 import json
+import unittest
 
 from app import current_app as app
-from app.models.user import User
 from app.helpers.data import update_role_to_admin
-
+from app.models.user import User
+from tests.unittests.auth_helper import register, login, logout
 from tests.unittests.setup_database import Setup
 from tests.unittests.utils import OpenEventTestCase
-from tests.unittests.auth_helper import register, login, logout
 from utils_post_data import POST_USER_DATA, PUT_USER_DATA
 
 
@@ -95,9 +94,9 @@ class TestUserApiWritable(TestUserApi):
             self.assertNotIn('gmail', resp.data)
             self.assertIn('TestUser', resp.data)
             # test adding invalid field and resistance
-            extraData = PUT_USER_DATA.copy()
-            extraData['user_detail']['new_field'] = 'value'
-            resp = self._put(path, extraData)
+            extra_data = PUT_USER_DATA.copy()
+            extra_data['user_detail']['new_field'] = 'value'
+            resp = self._put(path, extra_data)
             self.assertEqual(resp.status_code, 200)
 
     def test_delete_api(self):
@@ -111,7 +110,7 @@ class TestUserApiWritable(TestUserApi):
             resp = self.app.get(path)
             self.assertEqual(resp.status_code, 404)
 
-            # test existance in database (in trash)
+            # test existence in database (in trash)
             user = User.query.get(1)
             self.assertNotEqual(user, None)
             self.assertEqual(user.in_trash, True)

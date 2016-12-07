@@ -8,22 +8,13 @@
 
 {% macro speaker_info(speaker) %}
     <div class="col-md-3 col-sm-6 speaker-info" style="text-align: center; height: 250px">
-        <img src="{{ speaker.thumbnail }}" style="width: 133px; height: 133px;" onerror="imgError(this);"><br>
+        <img src="{{ speaker.photo }}" style="width: 133px; height: 133px;" onerror="imgError(this);"><br>
         <h4 style="font-weight: 500;">{{ speaker.name }}</h4>
         <h5 style="margin-top: 0;">{{ speaker.organisation }}</h5>
         {% if speaker.facebook %}<a href="{{ speaker.facebook }}"><i class="fa fa-facebook-square"></i></a>{% endif %}
         {% if speaker.twitter %}<a href="{{ speaker.twitter }}"><i class="fa fa-twitter-square"></i></a>{% endif %}
         {% if speaker.linkedin %}<a href="{{ speaker.linkedin }}"><i class="fa fa-linkedin-square"></i></a>{% endif %}
         {% if speaker.github %}<a href="{{ speaker.github }}"><i class="fa fa-github-square"></i></a>{% endif %}
-    </div>
-{% endmacro %}
-
-{% macro organizer_info() %}
-    <div class="col-md-4 speaker-info" style="text-align: center">
-        <img src="{{ url_for('static', filename='img/1.jpg') }}" style="width: 100%;"><br>
-        <h4 style="font-weight: 500;">{{_("Firstname Lastname")}}</h4>
-        <h5 style="margin-top: 0;">{{_("Organisation")}}</h5>
-        <a href=""><i class="fa fa-facebook-square"></i></a> <a href=""><i class="fa fa-twitter-square"></i></a>
     </div>
 {% endmacro %}
 
@@ -37,7 +28,6 @@
     </div>
 {% endmacro %}
 
-
 {% block content %}
     <div>
         {% if event.description %}
@@ -47,6 +37,7 @@
         {% endif %}
         {% if module.ticket_include %}
             {% include 'gentelella/guest/event/_ticketing_box.html' %}
+            <div class="clearfix"></div>
         {% endif %}
         {% if accepted_sessions[0] %}
             <h3 id="speakers">Speakers</h3>
@@ -57,7 +48,7 @@
                             {{ speaker_info(speaker) }}
                         {% endfor %}
                     {% else %}
-                        {{_("No sessions have been published yet")}}
+                        {{ _("No sessions have been published yet") }}
                     {% endfor %}
                 </div>
             </div>
@@ -70,19 +61,19 @@
                     {% for sponsor in event.sponsor %}
                         {{ sponsor_info(sponsor) }}
                     {% else %}
-                        {{_("Sponsors info unavailable")}}
+                        {{ _("Sponsors info unavailable") }}
                     {% endfor %}
                 </div>
             </div>
             <br>
         {% endif %}
         {% if event.organizer_name %}
-            <h3 id="organizer">{{_("Organized by")}} {{ event.organizer_name }}</h3>
+            <h3 id="organizer">{{ _("Organized by") }} {{ event.organizer_name }}</h3>
             <p>{{ event.organizer_description | safe }}</p>
             <br>
         {% endif %}
         {% if event.location_name %}
-            <h3 id="getting-here">{{_("Getting Here")}}</h3>
+            <h3 id="getting-here">{{ _("Getting Here") }}</h3>
             <div class="row">
                 {% if event.show_map != 0 %}
                     <div id="map"
@@ -155,7 +146,6 @@
                 }
             }
         });
-
 
 
     </script>

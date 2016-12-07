@@ -4,10 +4,10 @@ from dateutil.relativedelta import relativedelta
 from flask import url_for
 from sqlalchemy_continuum import transaction_class
 
-from app.helpers.helpers import send_after_event, monthdelta, send_followup_email_for_monthly_fee_payment
-from app.helpers.helpers import send_email_for_expired_orders, send_email_for_monthly_fee_payment
 from app.helpers.data import DataManager, delete_from_db, save_to_db
 from app.helpers.data_getter import DataGetter
+from app.helpers.helpers import send_after_event, monthdelta, send_followup_email_for_monthly_fee_payment
+from app.helpers.helpers import send_email_for_expired_orders, send_email_for_monthly_fee_payment
 from app.helpers.payment import get_fee
 from app.helpers.ticketing import TicketingManager
 from app.models.event import Event
@@ -15,9 +15,10 @@ from app.models.event_invoice import EventInvoice
 from app.models.order import Order
 from app.models.session import Session
 from app.models.user import User
-from flask import current_app as app
+
 
 def empty_trash():
+    from app import current_app as app
     with app.app_context():
         events = Event.query.filter_by(in_trash=True)
         users = User.query.filter_by(in_trash=True)
@@ -38,10 +39,11 @@ def empty_trash():
 
 
 def send_after_event_mail():
+    from app import current_app as app
     with app.app_context():
         events = Event.query.all()
         for event in events:
-            upcoming_events = DataGetter.get_upcoming_events(event.id)
+            upcoming_events = DataGetter.get_upcoming_events()
             organizers = DataGetter.get_user_event_roles_by_role_name(
                 event.id, 'organizer')
             speakers = DataGetter.get_user_event_roles_by_role_name(event.id,
@@ -56,6 +58,7 @@ def send_after_event_mail():
 
 
 def send_mail_to_expired_orders():
+    from app import current_app as app
     with app.app_context():
         orders = DataGetter.get_expired_orders()
         for order in orders:
@@ -65,15 +68,16 @@ def send_mail_to_expired_orders():
 
 
 def send_event_fee_notification():
+    from app import current_app as app
     with app.app_context():
         events = Event.query.all()
         for event in events:
             latest_invoice = EventInvoice.filter_by(event_id=event.id).order_by(EventInvoice.created_at.desc()).first()
 
             if latest_invoice:
-                orders = Order.query\
-                    .filter_by(event_id=event.id)\
-                    .filter_by(status='completed')\
+                orders = Order.query \
+                    .filter_by(event_id=event.id) \
+                    .filter_by(status='completed') \
                     .filter(Order.completed_at > latest_invoice.created_at).all()
             else:
                 orders = Order.query.filter_by(event_id=event.id).filter_by(status='completed').all()
@@ -92,7 +96,7 @@ def send_event_fee_notification():
                 if event.discount_code_id and event.discount_code:
                     r = relativedelta(datetime.utcnow(), event.created_at)
                     if r <= event.discount_code.max_quantity:
-                        new_invoice.amount = fee_total - (fee_total * (event.discount_code.value/100))
+                        new_invoice.amount = fee_total - (fee_total * (event.discount_code.value / 100))
                         new_invoice.discount_code_id = event.discount_code_id
 
                 save_to_db(new_invoice)
@@ -106,6 +110,7 @@ def send_event_fee_notification():
 
 
 def send_event_fee_notification_followup():
+    from app import current_app as app
     with app.app_context():
         incomplete_invoices = EventInvoice.query.filter(EventInvoice.status != 'completed').all()
         for incomplete_invoice in incomplete_invoices:

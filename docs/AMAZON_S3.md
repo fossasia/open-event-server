@@ -107,13 +107,15 @@ S3 works on the concept of keys. Using the same idea, `app.helpers.storage` modu
 Here is a basic example.
 
 ```python
+from flask import request, current_app as app
 from app.helpers.storage import upload
+from flask.ext import login
 
 @app.route('/users/upload/', methods=('POST'))
-    def view(self):
-        profile_pic = request.files['profile_pic']
-        url = upload(profile_pic, 'users/%d/profile_pic' % login.current_user.id)
-        print url  # full URL to the uploaded resource, either on local server or S3
+def view():
+    profile_pic = request.files['profile_pic']
+    url = upload(profile_pic, 'users/%d/profile_pic' % login.current_user.id)
+    print url  # full URL to the uploaded resource, either on local server or S3
 ```
 
 `upload` takes 2 parameters; the file object and the key. The key should be chosen wisely according to the purpose.

@@ -1,19 +1,17 @@
-"""Copyright 2015 Rafal Kowalski"""
 import os
-
 import sys
+
 from flask import logging
 
-from populate_db import populate
 from app import current_app as app, celery
 from app.models import db
 from app.settings import set_settings
+from populate_db import populate
 
 _basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Setup(object):
-
     @staticmethod
     def create_app():
         # app.config.from_object('config.TestingConfig')

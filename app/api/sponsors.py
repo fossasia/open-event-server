@@ -1,7 +1,7 @@
 from flask.ext.restplus import Namespace
 
 from app.models.sponsor import Sponsor as SponsorModel
-
+from .helpers import custom_fields as fields
 from .helpers.helpers import (
     can_create,
     can_update,
@@ -11,7 +11,6 @@ from .helpers.helpers import (
 from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
 from .helpers.utils import Resource, ETAG_HEADER_DEFN
-from .helpers import custom_fields as fields
 
 api = Namespace('sponsors', description='Sponsors', path='/')
 

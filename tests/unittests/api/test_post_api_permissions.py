@@ -1,12 +1,12 @@
-import unittest
 import json
+import unittest
 
-from tests.unittests.setup_database import Setup
-from tests.unittests.api.utils import create_event, get_path
-from tests.unittests.utils import OpenEventTestCase
-from test_post_api_auth import PostApiAuthTestCase
-from tests.unittests.auth_helper import register
 from app import current_app as app
+from test_post_api_auth import PostApiAuthTestCase
+from tests.unittests.api.utils import create_event, get_path
+from tests.unittests.auth_helper import register
+from tests.unittests.setup_database import Setup
+from tests.unittests.utils import OpenEventTestCase
 
 
 # Post API Permissions Success is being already sort of
@@ -17,6 +17,7 @@ class TestPostApiPermissionDenied(PostApiAuthTestCase, OpenEventTestCase):
     """
     Test 403 permission denied in Post API
     """
+
     def setUp(self):
         self.app = Setup.create_app()
         with app.test_request_context():

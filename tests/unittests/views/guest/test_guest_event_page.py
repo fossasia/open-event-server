@@ -3,14 +3,14 @@ from datetime import datetime
 
 from flask import url_for
 
+from app import current_app as app
 from app.helpers.data import save_to_db
 from app.models.call_for_papers import CallForPaper
 from tests.unittests.object_mother import ObjectMother
 from tests.unittests.utils import OpenEventTestCase
-from app import current_app as app
+
 
 class TestGuestEventPage(OpenEventTestCase):
-
     def test_published_event_view(self):
         with app.test_request_context():
             event = ObjectMother.get_event()
@@ -71,7 +71,8 @@ class TestGuestEventPage(OpenEventTestCase):
             session = ObjectMother.get_session()
             session.event_id = event.id
             session.speakers = [speaker]
-            save_to_db(speaker, "Session Saved")
+            session.state = 'accepted'
+            save_to_db(session, "Session Saved")
             rv = self.app.get(url_for('event_detail.display_event_sessions', identifier=event.identifier),
                               follow_redirects=True)
             self.assertTrue("Sessions" in rv.data, msg=rv.data)
@@ -92,9 +93,10 @@ class TestGuestEventPage(OpenEventTestCase):
             save_to_db(microlocation, "Microlocation Saved")
             session = ObjectMother.get_session()
             session.event_id = event.id
+            session.state = 'accepted'
             session.microlocation_id = microlocation.id
             session.speakers = [speaker]
-            save_to_db(speaker, "Session Saved")
+            save_to_db(session, "Session Saved")
             rv = self.app.get(url_for('event_detail.display_event_schedule', identifier=event.identifier),
                               follow_redirects=True)
             self.assertTrue("Schedule" in rv.data, msg=rv.data)
@@ -116,14 +118,14 @@ class TestGuestEventPage(OpenEventTestCase):
             session.event_id = event.id
             session.microlocation_id = microlocation.id
             session.speakers = [speaker]
-            save_to_db(speaker, "Session Saved")
+            session.state = 'accepted'
+            save_to_db(session, "Session Saved")
             rv = self.app.get(url_for('event_detail.display_event_schedule', identifier=event.identifier),
                               follow_redirects=True)
             self.assertEqual(rv.status_code, 404)
 
     def test_published_event_cfs_view(self):
         with app.test_request_context():
-
             event = ObjectMother.get_event()
             event.state = 'Published'
             save_to_db(event, "Event Saved")
@@ -151,6 +153,7 @@ class TestGuestEventPage(OpenEventTestCase):
             rv = self.app.get(url_for('event_detail.display_event_cfs',
                                       identifier=event.identifier), follow_redirects=True)
             self.assertEqual(rv.status_code, 404)
+
 
 if __name__ == '__main__':
     unittest.main()

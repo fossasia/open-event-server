@@ -1,13 +1,13 @@
-import unittest
-import json
 import base64
+import json
+import unittest
 
-from tests.unittests.setup_database import Setup
-from tests.unittests.utils import OpenEventTestCase
+from app import current_app as app
 from tests.unittests.api.utils import create_event, get_path
 from tests.unittests.api.utils_post_data import *
 from tests.unittests.auth_helper import register, logout
-from app import current_app as app
+from tests.unittests.setup_database import Setup
+from tests.unittests.utils import OpenEventTestCase
 
 
 class PostApiAuthTestCase:
@@ -41,6 +41,7 @@ class TestPostApiBasicAuth(PostApiAuthTestCase, OpenEventTestCase):
     """
     Tests the Basic Authorization in Post API
     """
+
     def _test_model(self, name, data):
         with app.test_request_context():
             path = get_path() if name == 'event' else get_path(1, name + 's')
@@ -50,7 +51,7 @@ class TestPostApiBasicAuth(PostApiAuthTestCase, OpenEventTestCase):
                 headers={
                     'content-type': 'application/json',
                     'Authorization': 'Basic %s' %
-                    base64.b64encode('myemail@gmail.com:test')
+                                     base64.b64encode('myemail@gmail.com:test')
                 }
             )
             self.assertNotEqual(response.status_code, 401)
@@ -62,6 +63,7 @@ class TestPostApiJWTAuth(PostApiAuthTestCase, OpenEventTestCase):
     """
     Tests the JWT Auth in Post API
     """
+
     def _send_login_request(self, password):
         """
         sends a login request and returns the response

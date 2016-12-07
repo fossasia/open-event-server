@@ -1,7 +1,7 @@
 {% extends 'gentelella/admin/super_admin/dashboard.html' %}
 
 {% block title %}
-    {{_("Events")}}
+    {{ _("Events") }}
 {% endblock %}
 
 {% set active_page = "events" %}
@@ -9,16 +9,16 @@
 {% block head_css %}
     {{ super() }}
     <style type="text/css">
-    #event-tabs {
-        position: absolute;
-        background: transparent;
-        top: 9px;
-        width: auto;
-    }
+        #event-tabs {
+            position: absolute;
+            background: transparent;
+            top: 9px;
+            width: auto;
+        }
 
-    table.table {
-        margin-top: 20px !important;
-    }
+        table.table {
+            margin-top: 20px !important;
+        }
     </style>
 {% endblock %}
 
@@ -43,13 +43,13 @@
         {% endfor %}
 
         <tr>
-            <td>{{event.name}}</td>
-            <td>{{event.state}}</td>
+            <td>{{ event.name }}</td>
+            <td>{{ event.state }}</td>
             <td>
-              <a target="_blank" href="/e/{{event.identifier}}">/e/{{event.identifier}}</a>
+                <a target="_blank" href="/e/{{ event.identifier }}">/e/{{ event.identifier }}</a>
             </td>
-            <td>{{event.start_time}}</td>
-            <td>{{event.end_time}}</td>
+            <td>{{ event.start_time }}</td>
+            <td>{{ event.end_time }}</td>
             <td>
                 <ol style="padding-left:0;">
                     {% for role in event.get_staff_roles() %}
@@ -62,11 +62,11 @@
             </td>
             <td>
                 <ol style="padding-left:0;">
-                    <li>{{_("Drafts")}}: {{ drafts.count }}</li>
-                    <li>{{_("Submitted")}}: {{ event.session | length }}</li>
-                    <li>{{_("Accepted")}}: {{ accepted.count }}</li>
-                    <li>{{_("Pending")}}: {{ pending.count }}</li>
-                    <li>{{_("Rejected")}}: {{ rejected.count }}</li>
+                    <li>{{ _("Drafts") }}: {{ drafts.count }}</li>
+                    <li>{{ _("Submitted") }}: {{ event.session | length }}</li>
+                    <li>{{ _("Accepted") }}: {{ accepted.count }}</li>
+                    <li>{{ _("Pending") }}: {{ pending.count }}</li>
+                    <li>{{ _("Rejected") }}: {{ rejected.count }}</li>
                 </ol>
             </td>
             <td>
@@ -77,67 +77,74 @@
                     No Ticket Information
                 {% else %}
                     {% if max_paid_ticket[event.id] and max_paid_ticket[event.id] != 0 %}
-                    <div>
-                        <p>{{_("Paid")}}</p>
-                        <div class="progress">
-                          <div class="progress-bar progress-bar-success" role="progressbar" data-transitiongoal="{{ paid_ticket_count[event.id] }}" aria-valuemin="0" aria-valuemax="{{ max_paid_ticket[event.id] }}"></div>
+                        <div>
+                            <p>{{ _("Paid") }}</p>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success" role="progressbar"
+                                     data-transitiongoal="{{ paid_ticket_count[event.id] }}" aria-valuemin="0"
+                                     aria-valuemax="{{ max_paid_ticket[event.id] }}"></div>
+                            </div>
                         </div>
-                    </div>
                     {% endif %}
                     {% if max_free_ticket[event.id] and max_free_ticket[event.id] != 0 %}
-                    <div>
-                        <p>{{_("Free")}}</p>
-                        <div class="progress">
-                          <div class="progress-bar progress-bar-success" role="progressbar" data-transitiongoal="{{ free_ticket_count[event.id] }}" aria-valuemin="0" aria-valuemax="{{ max_free_ticket[event.id] }}"></div>
+                        <div>
+                            <p>{{ _("Free") }}</p>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success" role="progressbar"
+                                     data-transitiongoal="{{ free_ticket_count[event.id] }}" aria-valuemin="0"
+                                     aria-valuemax="{{ max_free_ticket[event.id] }}"></div>
+                            </div>
                         </div>
-                    </div>
                     {% endif %}
                     {% if max_donation_ticket[event.id] and max_donation_ticket[event.id] != 0 %}
-                    <div>
-                        <p>{{_("Donation")}}</p>
-                        <div class="progress">
-                          <div class="progress-bar progress-bar-success" role="progressbar" data-transitiongoal="{{ donation_ticket_count[event.id] }}" aria-valuemin="0" aria-valuemax="{{ max_donation_ticket[event.id] }}"></div>
+                        <div>
+                            <p>{{ _("Donation") }}</p>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success" role="progressbar"
+                                     data-transitiongoal="{{ donation_ticket_count[event.id] }}" aria-valuemin="0"
+                                     aria-valuemax="{{ max_donation_ticket[event.id] }}"></div>
+                            </div>
                         </div>
-                    </div>
                     {% endif %}
                 {% endif %}
             </td>
             <td> {% if event %}
-                        <div class="btn-group btn-group-sm" role="group" aria-label="...">
-                            <a class="btn btn-default" data-toggle="tooltip" data-placement="top" href="{{ get_url('events.edit_view', event_id=event.id) }}"
-                               title="Edit record">
-                                <i class="glyphicon glyphicon-pencil"></i>
-                            </a>
-                            {% if event.in_trash == True %}
-                            <a class="btn btn-default"
-                               data-toggle="tooltip" data-placement="top"
-                               onclick="return confirm('Are you sure you want to delete this record?');"
-                               href="{{ get_url('events.delete_view', event_id=event.id) }}" title="Delete record">
-                                <i class="glyphicon glyphicon-trash"></i>
-                            </a>
-                            {% endif %}
-                            {% if event.in_trash == False %}
-                            <a class="btn btn-default"
-                               data-toggle="tooltip" data-placement="top"
-                               onclick="return confirm('Are you sure you want to delete this record?');"
-                               href="{{ get_url('events.trash_view', event_id=event.id) }}" title="Delete record">
-                                <i class="glyphicon glyphicon-trash"></i>
-                            </a>
-                            {% endif %}
-                            <a class="btn btn-default" href="{{ get_url('events.details_view', event_id=event.id) }}"
-                               data-toggle="tooltip" data-placement="top"
-                               title="View Event Details">
-                                <i class="glyphicon glyphicon-eye-open"></i>
-                            </a>
-                            {% if event.in_trash == True %}
-                            <a class="btn btn-success" href="/events/{{ event.id }}/restore/"
-                               data-toggle="tooltip" data-placement="top"
-                               title="Restore Event">
-                                <i>{{_("Restore Event")}}</i>
-                            </a>
-                            {% endif %}
-                        </div>
-                    {% endif %}</td>
+                <div class="btn-group btn-group-sm" role="group" aria-label="...">
+                    <a class="btn btn-default" data-toggle="tooltip" data-placement="top"
+                       href="{{ url_for('events.edit_view', event_id=event.id) }}"
+                       title="Edit record">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                    </a>
+                    {% if event.in_trash == True %}
+                        <a class="btn btn-default"
+                           data-toggle="tooltip" data-placement="top"
+                           onclick="return confirm('Are you sure you want to delete this record?');"
+                           href="{{ url_for('events.delete_view', event_id=event.id) }}" title="Delete record">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                    {% endif %}
+                    {% if event.in_trash == False %}
+                        <a class="btn btn-default"
+                           data-toggle="tooltip" data-placement="top"
+                           onclick="return confirm('Are you sure you want to delete this record?');"
+                           href="{{ url_for('events.trash_view', event_id=event.id) }}" title="Delete record">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                    {% endif %}
+                    <a class="btn btn-default" href="{{ url_for('events.details_view', event_id=event.id) }}"
+                       data-toggle="tooltip" data-placement="top"
+                       title="View Event Details">
+                        <i class="glyphicon glyphicon-eye-open"></i>
+                    </a>
+                    {% if event.in_trash == True %}
+                        <a class="btn btn-success" href="/events/{{ event.id }}/restore/"
+                           data-toggle="tooltip" data-placement="top"
+                           title="Restore Event">
+                            <i>{{ _("Restore Event") }}</i>
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}</td>
         </tr>
     {% endfor %}
 {% endmacro %}
@@ -146,35 +153,36 @@
 
     <div>
         <ul id="event-tabs" class="nav nav-tabs bar_tabs admin_event_tabs" role="tablist">
-            <li class=""><a href="#tab_content4" id="all-tab" data-toggle="tab">{{_("All Events")}}</a></li>
-            <li class="active"><a href="#tab_content1" id="home-tab" data-toggle="tab">{{_("All Live")}}</a></li>
-            <li class=""><a href="#tab_content2" id="profile-tab" data-toggle="tab">{{_("All Drafts")}}</a></li>
-            <li class=""><a href="#tab_content3" id="profile-tab2" data-toggle="tab">{{_("All Past")}}</a></li>
-            <li class=""><a href="#tab_content5" id="profile-tab3" data-toggle="tab">{{_("All Deleted Events")}}</a></li>
-            <li class=""><a href="#tab_content7" id="profile-tab7" data-toggle="tab">{{_("Import")}}</a></li>
+            <li class=""><a href="#tab_content4" id="all-tab" data-toggle="tab">{{ _("All Events") }}</a></li>
+            <li class="active"><a href="#tab_content1" id="home-tab" data-toggle="tab">{{ _("All Live") }}</a></li>
+            <li class=""><a href="#tab_content2" id="profile-tab" data-toggle="tab">{{ _("All Drafts") }}</a></li>
+            <li class=""><a href="#tab_content3" id="profile-tab2" data-toggle="tab">{{ _("All Past") }}</a></li>
+            <li class=""><a href="#tab_content5" id="profile-tab3" data-toggle="tab">{{ _("All Deleted Events") }}</a>
+            </li>
+            <li class=""><a href="#tab_content7" id="profile-tab7" data-toggle="tab">{{ _("Import") }}</a></li>
         </ul>
         <div class="dropdown tabs_small">
             <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-            <span class="drop_header">{{_("All Live")}}</span>
-            <span class="caret"></span></button>
+                <span class="drop_header">{{ _("All Live") }}</span>
+                <span class="caret"></span></button>
             <ul class="dropdown-menu">
                 <li value="All Events" class="small_tab_list">
-                    <a href="#tab_content4" id="all-tab" data-toggle="tab">{{_("All Events")}}</a>
+                    <a href="#tab_content4" id="all-tab" data-toggle="tab">{{ _("All Events") }}</a>
                 </li>
                 <li value="All Live" class="small_tab_list active">
-                    <a href="#tab_content1" id="home-tab" data-toggle="tab">{{_("All Live")}}</a>
+                    <a href="#tab_content1" id="home-tab" data-toggle="tab">{{ _("All Live") }}</a>
                 </li>
                 <li value="All Drafts" class="small_tab_list">
-                    <a href="#tab_content2" id="profile-tab" data-toggle="tab">{{_("All Drafts")}}</a>
+                    <a href="#tab_content2" id="profile-tab" data-toggle="tab">{{ _("All Drafts") }}</a>
                 </li>
                 <li value="All Past" class="small_tab_list">
-                    <a href="#tab_content3" id="profile-tab2" data-toggle="tab">{{_("All Past")}}</a>
+                    <a href="#tab_content3" id="profile-tab2" data-toggle="tab">{{ _("All Past") }}</a>
                 </li>
                 <li value="All Deleted Events" class="small_tab_list">
-                    <a href="#tab_content5" id="profile-tab3" data-toggle="tab">{{_("All Deleted Events")}}</a>
+                    <a href="#tab_content5" id="profile-tab3" data-toggle="tab">{{ _("All Deleted Events") }}</a>
                 </li>
                 <li value="Import" class="small_tab_list">
-                    <a href="#tab_content7" id="profile-tab7" data-toggle="tab">{{_("Import")}}</a>
+                    <a href="#tab_content7" id="profile-tab7" data-toggle="tab">{{ _("Import") }}</a>
                 </li>
             </ul>
         </div>
@@ -184,20 +192,20 @@
                 <table class="table table-striped no-global-dt">
                     <thead>
                     <tr>
-                        <th>{{_("Name")}}</th>
-                        <th>{{_("State")}}</th>
-                        <th>{{_("Public")}} URL</th>
-                        <th>{{_("Start Date")}}</th>
-                        <th>{{_("End Date")}}</th>
-                        <th>{{_("Roles")}}</th>
-                        <th>{{_("Sessions")}}</th>
-                        <th>{{_("Speakers")}}</th>
-                        <th>{{_("Tickets")}}</th>
-                        <th>{{_("Options")}}</th>
+                        <th>{{ _("Name") }}</th>
+                        <th>{{ _("State") }}</th>
+                        <th>{{ _("Public") }} URL</th>
+                        <th>{{ _("Start Date") }}</th>
+                        <th>{{ _("End Date") }}</th>
+                        <th>{{ _("Roles") }}</th>
+                        <th>{{ _("Sessions") }}</th>
+                        <th>{{ _("Speakers") }}</th>
+                        <th>{{ _("Tickets") }}</th>
+                        <th>{{ _("Options") }}</th>
                     </tr>
                     </thead>
                     <tbody>
-                        {{ events_row(all_events) }}
+                    {{ events_row(all_events) }}
                     </tbody>
                 </table>
             </div>
@@ -206,16 +214,16 @@
                 <table class="table table-striped no-global-dt">
                     <thead>
                     <tr>
-                        <th>{{_("Name")}}</th>
-                        <th>{{_("State")}}</th>
-                        <th>{{_("Public")}} URL</th>
-                        <th>{{_("Start Date")}}</th>
-                        <th>{{_("End Date")}}</th>
-                        <th>{{_("Roles")}}</th>
-                        <th>{{_("Sessions")}}</th>
-                        <th>{{_("Speakers")}}</th>
-                        <th>{{_("Tickets")}}</th>
-                        <th>{{_("Options")}}</th>
+                        <th>{{ _("Name") }}</th>
+                        <th>{{ _("State") }}</th>
+                        <th>{{ _("Public") }} URL</th>
+                        <th>{{ _("Start Date") }}</th>
+                        <th>{{ _("End Date") }}</th>
+                        <th>{{ _("Roles") }}</th>
+                        <th>{{ _("Sessions") }}</th>
+                        <th>{{ _("Speakers") }}</th>
+                        <th>{{ _("Tickets") }}</th>
+                        <th>{{ _("Options") }}</th>
 
                     </tr>
                     </thead>
@@ -228,16 +236,16 @@
                 <table class="table table-striped no-global-dt">
                     <thead>
                     <tr>
-                        <th>{{_("Name")}}</th>
-                        <th>{{_("State")}}</th>
-                        <th>{{_("Public")}} URL</th>
-                        <th>{{_("Start Date")}}</th>
-                        <th>{{_("End Date")}}</th>
-                        <th>{{_("Roles")}}</th>
-                        <th>{{_("Sessions")}}</th>
-                        <th>{{_("Speakers")}}</th>
-                        <th>{{_("Tickets")}}</th>
-                        <th>{{_("Options")}}</th>
+                        <th>{{ _("Name") }}</th>
+                        <th>{{ _("State") }}</th>
+                        <th>{{ _("Public") }} URL</th>
+                        <th>{{ _("Start Date") }}</th>
+                        <th>{{ _("End Date") }}</th>
+                        <th>{{ _("Roles") }}</th>
+                        <th>{{ _("Sessions") }}</th>
+                        <th>{{ _("Speakers") }}</th>
+                        <th>{{ _("Tickets") }}</th>
+                        <th>{{ _("Options") }}</th>
 
                     </tr>
                     </thead>
@@ -250,16 +258,16 @@
                 <table class="table table-striped no-global-dt">
                     <thead>
                     <tr>
-                        <th>{{_("Name")}}</th>
-                        <th>{{_("State")}}</th>
-                        <th>{{_("Public")}} URL</th>
-                        <th>{{_("Start Date")}}</th>
-                        <th>{{_("End Date")}}</th>
-                        <th>{{_("Roles")}}</th>
-                        <th>{{_("Sessions")}}</th>
-                        <th>{{_("Speakers")}}</th>
-                        <th>{{_("Tickets")}}</th>
-                        <th>{{_("Options")}}</th>
+                        <th>{{ _("Name") }}</th>
+                        <th>{{ _("State") }}</th>
+                        <th>{{ _("Public") }} URL</th>
+                        <th>{{ _("Start Date") }}</th>
+                        <th>{{ _("End Date") }}</th>
+                        <th>{{ _("Roles") }}</th>
+                        <th>{{ _("Sessions") }}</th>
+                        <th>{{ _("Speakers") }}</th>
+                        <th>{{ _("Tickets") }}</th>
+                        <th>{{ _("Options") }}</th>
 
                     </tr>
                     </thead>
@@ -272,16 +280,16 @@
                 <table class="table table-striped no-global-dt">
                     <thead>
                     <tr>
-                        <th>{{_("Name")}}</th>
-                        <th>{{_("State")}}</th>
-                        <th>{{_("Public URL")}}</th>
-                        <th>{{_("Start Date")}}</th>
-                        <th>{{_("End Date")}}</th>
-                        <th>{{_("Roles")}}</th>
-                        <th>{{_("Sessions")}}</th>
-                        <th>{{_("Speakers")}}</th>
-                        <th>{{_("Tickets")}}</th>
-                        <th>{{_("Options")}}</th>
+                        <th>{{ _("Name") }}</th>
+                        <th>{{ _("State") }}</th>
+                        <th>{{ _("Public URL") }}</th>
+                        <th>{{ _("Start Date") }}</th>
+                        <th>{{ _("End Date") }}</th>
+                        <th>{{ _("Roles") }}</th>
+                        <th>{{ _("Sessions") }}</th>
+                        <th>{{ _("Speakers") }}</th>
+                        <th>{{ _("Tickets") }}</th>
+                        <th>{{ _("Options") }}</th>
 
                     </tr>
                     </thead>
@@ -308,28 +316,28 @@
             "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>><"table-responsive"t>ip',
             "lengthMenu": [25, 50, 100, 200],
             "pageLength": 50,
-            "initComplete": function(settings, json){
+            "initComplete": function (settings, json) {
                 table_width_adjust();
                 window.onresize = table_width_adjust;
             },
             "language": {
                 "lengthMenu": "Show _MENU_ Events"
-              }
+            }
         });
 
-        $(document).ready(function() {
-          $('.progress .progress-bar').progressbar({display_text: 'center', use_percentage: false});
+        $(document).ready(function () {
+            $('.progress .progress-bar').progressbar({display_text: 'center', use_percentage: false});
         });
 
-        $(".small_tab_list").click(function(){
-        $(".small_tab_list").removeClass("active");
-        $(this).addClass("active");
-        var clicked_link = $(this).attr("value");
-        $(".drop_header").text(clicked_link);
+        $(".small_tab_list").click(function () {
+            $(".small_tab_list").removeClass("active");
+            $(this).addClass("active");
+            var clicked_link = $(this).attr("value");
+            $(".drop_header").text(clicked_link);
         });
-        $('.tabs_small a').click(function(){
-        $(this).tab('show');
-        });   
+        $('.tabs_small a').click(function () {
+            $(this).tab('show');
+        });
     </script>
 {% endblock %}
 

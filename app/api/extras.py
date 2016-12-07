@@ -5,12 +5,11 @@ OR
 that are not important to the end-user
 """
 
-from flask.ext.restplus import Resource, Namespace
 from celery.result import AsyncResult
 from flask import jsonify, current_app
+from flask.ext.restplus import Resource, Namespace
 
 from helpers.utils import TASK_RESULTS
-
 
 api = Namespace('extras', description='Extras', path='/')
 

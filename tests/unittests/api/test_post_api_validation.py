@@ -44,11 +44,13 @@ class TestPostApiValidation(TestPostApiBase, ApiValidationTestCase):
     """
     Tests the input validation in POST API
     """
-    def _test_model(self, name, data, fields=[]):
+    def _test_model(self, name, data, fields=None):
         """
         Sets a random value to each of the :fields in :data and makes
         sure POST request failed
         """
+        if fields is None:
+            fields = []
         path = get_path() if name == 'event' else get_path(1, name + 's')
         self._login_user()
         for field in fields:

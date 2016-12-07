@@ -1,17 +1,17 @@
 import unittest
 
+from flask import url_for
+from werkzeug.datastructures import ImmutableMultiDict
+
+from app import current_app as app
+from app.api.events import EVENT_POST
+from app.api.helpers.helpers import fix_attribute_names
+from app.helpers.data import save_to_db
+from app.helpers.data_getter import DataGetter
+from app.models.modules import Module
 from tests.unittests.api.utils_post_data import POST_EVENT_DATA
 from tests.unittests.object_mother import ObjectMother
-from app import current_app as app
-from app.helpers.data import save_to_db
-from app.models.modules import Module
-from app.helpers.data_getter import DataGetter
-from app.api.helpers.helpers import fix_attribute_names
-from app.api.events import EVENT_POST
-from flask import url_for
-
 from tests.unittests.views.view_test_case import OpenEventViewTestCase
-from werkzeug.datastructures import ImmutableMultiDict
 
 
 class TestEvents(OpenEventViewTestCase):
@@ -89,7 +89,7 @@ class TestEvents(OpenEventViewTestCase):
                                data=postdata)
             self.assertTrue('TestEvent 1' in rv.data, msg=rv.data)
 
-            #Test Payment Details
+            # Test Payment Details
             self.assertTrue(data['payment_country'] in rv.data, msg=rv.data)
             self.assertTrue(data['paypal_email'] in rv.data, msg=rv.data)
 
@@ -100,7 +100,7 @@ class TestEvents(OpenEventViewTestCase):
             for ticket in event.tickets:
                 self.assertIn(ticket.name, data['tickets[name]'], msg=data['tickets[name]'])
 
-            #Test Tax Form
+            # Test Tax Form
             tax = DataGetter.get_tax_options(1)
             self.assertEqual(tax.country, data['tax_country'])
             self.assertEqual(tax.tax_rate, data['tax_rate'])
@@ -232,7 +232,6 @@ class TestEvents(OpenEventViewTestCase):
             url = url_for('events.copy_event', event_id=event.id)
             rv = self.app.get(url, follow_redirects=True)
             self.assertTrue("Copy of event1" in rv.data, msg=rv.data)
-
 
 
 if __name__ == '__main__':

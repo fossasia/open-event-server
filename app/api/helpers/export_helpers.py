@@ -1,18 +1,20 @@
 import json
 import os
 import shutil
-import requests
 from collections import OrderedDict
 from datetime import datetime
+
+import requests
 from flask import request, g, url_for
 from flask_restplus import marshal
 
-from app.models.export_jobs import ExportJob
-from app.models.event import Event as EventModel
 from app.helpers.data import save_to_db
 from app.helpers.data_getter import DataGetter
 from app.helpers.helpers import send_email_after_export, send_notif_after_export
-
+from app.models.event import Event as EventModel
+from app.models.export_jobs import ExportJob
+from import_helpers import is_downloadable, get_filename_from_cd
+from .non_apis import CustomFormDAO, CUSTOM_FORM
 from ..events import DAO as EventDAO, EVENT as EVENT_MODEL
 from ..microlocations import DAO as MicrolocationDAO, MICROLOCATION
 from ..sessions import DAO as SessionDAO, SESSION, \
@@ -20,15 +22,11 @@ from ..sessions import DAO as SessionDAO, SESSION, \
 from ..speakers import DAO as SpeakerDAO, SPEAKER
 from ..sponsors import DAO as SponsorDAO, SPONSOR
 from ..tracks import DAO as TrackDAO, TRACK
-from .non_apis import CustomFormDAO, CUSTOM_FORM
-from import_helpers import is_downloadable, get_filename_from_cd
-
 
 # DELETE FIELDS
 # All fields to be deleted go here
 EVENT = EVENT_MODEL.clone('EventExport')
 del EVENT['creator'].model['id']
-
 
 EXPORTS = [
     ('event', EventDAO, EVENT),
@@ -136,9 +134,9 @@ def _download_media(data, srv, dir_path, settings):
             continue
         path = DOWNLOAD_FIEDLS[srv][i][1]
         if srv == 'speakers':
-            path = path % (make_filename(data['name']), data['id'])
+            path %= make_filename(data['name']), data['id']
         elif srv == 'sponsors':
-            path = path % (make_filename(data['name']), data['id'])
+            path %= make_filename(data['name']), data['id']
         elif srv != 'event':
             path = path % (data['id'])
         if data[i].find('.') > -1:  # add extension
@@ -169,8 +167,7 @@ def _generate_meta():
     """
     Generate Meta information for export
     """
-    d = {}
-    d['root_url'] = request.url_root
+    d = {'root_url': request.url_root}
     return d
 
 
@@ -249,7 +246,6 @@ def send_export_mail(event_id, result):
 
 
 # FIELD DATA FORMATTERS
-
 def make_filename(name):
     """Make speaker image filename for export"""
     for _ in FILENAME_EXCLUDE:

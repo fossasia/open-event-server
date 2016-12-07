@@ -3,12 +3,12 @@ from base64 import b64encode
 from shutil import copyfile, rmtree
 
 import boto
+import magic
 from boto.gs.connection import GSConnection
-from flask.ext.scrypt import generate_password_hash
 from boto.s3.connection import S3Connection, OrdinaryCallingFormat
 from boto.s3.key import Key
+from flask.ext.scrypt import generate_password_hash
 from werkzeug.utils import secure_filename
-import magic
 
 from app.settings import get_settings
 
@@ -61,6 +61,7 @@ class UploadedFile(object):
     """
     Helper for a disk-file to replicate request.files[ITEM] class
     """
+
     def __init__(self, file_path, filename):
         self.file_path = file_path
         self.filename = filename
@@ -80,6 +81,7 @@ class UploadedMemory(object):
     """
     Helper for a memory file to replicate request.files[ITEM] class
     """
+
     def __init__(self, data, filename):
         self.data = data
         self.filename = filename
@@ -105,6 +107,7 @@ def upload(uploaded_file, key, **kwargs):
     aws_bucket_name = get_settings()['aws_bucket_name']
     aws_key = get_settings()['aws_key']
     aws_secret = get_settings()['aws_secret']
+    aws_region = get_settings()['aws_region']
 
     gs_bucket_name = get_settings()['gs_bucket_name']
     gs_key = get_settings()['gs_key']
@@ -114,7 +117,7 @@ def upload(uploaded_file, key, **kwargs):
 
     # upload
     if aws_bucket_name and aws_key and aws_secret and storage_place == 's3':
-        return upload_to_aws(aws_bucket_name, aws_key, aws_secret, uploaded_file, key, **kwargs)
+        return upload_to_aws(aws_bucket_name, aws_region, aws_key, aws_secret, uploaded_file, key, **kwargs)
     elif gs_bucket_name and gs_key and gs_secret and storage_place == 'gs':
         return upload_to_gs(gs_bucket_name, gs_key, gs_secret, uploaded_file, key, **kwargs)
     else:
@@ -140,12 +143,22 @@ def upload_local(uploaded_file, key, **kwargs):
     return '/serve_' + file_path
 
 
-def upload_to_aws(bucket_name, aws_key, aws_secret, file, key, acl='public-read'):
+def upload_to_aws(bucket_name, aws_region, aws_key, aws_secret, file, key, acl='public-read'):
     """
     Uploads to AWS at key
     http://{bucket}.s3.amazonaws.com/{key}
     """
-    conn = S3Connection(aws_key, aws_secret, calling_format=OrdinaryCallingFormat())
+
+    if '.' in bucket_name and aws_region and aws_region != '':
+        conn = boto.s3.connect_to_region(
+            aws_region,
+            aws_access_key_id=aws_key,
+            aws_secret_access_key=aws_secret,
+            calling_format=OrdinaryCallingFormat()
+        )
+    else:
+        conn = S3Connection(aws_key, aws_secret)
+
     bucket = conn.get_bucket(bucket_name)
     k = Key(bucket)
     # generate key
@@ -202,6 +215,7 @@ def upload_to_gs(bucket_name, client_id, client_secret, file, key, acl='public-r
     if sent == size:
         return gs_url + k.key
     return False
+
 
 # ########
 # HELPERS

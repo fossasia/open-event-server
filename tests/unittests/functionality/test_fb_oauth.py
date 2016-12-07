@@ -1,12 +1,12 @@
 import unittest
 
-from tests.unittests.utils import OpenEventTestCase
-from tests.unittests.setup_database import Setup
 from app import current_app as app
-from app.helpers.oauth import FbOAuth
-from app.helpers.data import get_facebook_auth
-from tests.unittests.auth_helper import login, logout, register
 from app.helpers.data import create_user_oauth
+from app.helpers.data import get_facebook_auth
+from app.helpers.oauth import FbOAuth
+from tests.unittests.auth_helper import login, logout, register
+from tests.unittests.setup_database import Setup
+from tests.unittests.utils import OpenEventTestCase
 
 
 class TestFacebookOauth(OpenEventTestCase):

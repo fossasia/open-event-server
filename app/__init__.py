@@ -50,13 +50,9 @@ from app.models import db
 from app.models.user import User
 from app.models.event import Event
 from app.models.session import Session
-from app.views.admin.admin import AdminView
 from helpers.jwt import jwt_authenticate, jwt_identity
 from helpers.formatter import operation_name
 from app.helpers.data_getter import DataGetter
-from app.views.utils_routes import app as utils_routes
-from app.views.sitemap import app as sitemap_routes
-from app.views.public.babel_view import app as babel_routes
 from app.api.helpers.errors import NotFoundError
 from apscheduler.schedulers.background import BackgroundScheduler
 from app.helpers.data import DataManager, delete_from_db
@@ -68,17 +64,36 @@ from werkzeug.contrib.profiler import ProfilerMiddleware
 
 from flask.ext.sqlalchemy import get_debug_queries
 from config import ProductionConfig, LANGUAGES
+from app.helpers.auth import AuthManager
+from app.views import BlueprintsManager
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
 
 
+class ReverseProxied(object):
+    """
+    ReverseProxied flask wsgi app wrapper from http://stackoverflow.com/a/37842465/1562480 by aldel
+    """
+    def __init__(self, app):
+        self.app = app
+
+    def __call__(self, environ, start_response):
+        scheme = environ.get('HTTP_X_FORWARDED_PROTO')
+        if scheme:
+            environ['wsgi.url_scheme'] = scheme
+        if os.getenv('FORCE_SSL', 'no') == 'yes':
+            environ['wsgi.url_scheme'] = 'https'
+        return self.app(environ, start_response)
+
+
+app.wsgi_app = ReverseProxied(app.wsgi_app)
+
+
 def create_app():
     babel.init_app(app)
-    app.register_blueprint(babel_routes)
-    app.register_blueprint(utils_routes)
-    app.register_blueprint(sitemap_routes)
+    BlueprintsManager.register(app)
     Migrate(app, db)
 
     app.config.from_object(environ.get('APP_CONFIG', 'config.ProductionConfig'))
@@ -116,13 +131,10 @@ def create_app():
     app.config['CELERY_RESULT_BACKEND'] = app.config['CELERY_BROKER_URL']
 
     HTMLMIN(app)
-    admin_view = AdminView("Open Event")
-    admin_view.init(app)
-    admin_view.init_login(app)
+    AuthManager.init_login(app)
 
-    if app.config['TESTING']:
+    if app.config['TESTING'] and app.config['PROFILE']:
         # Profiling
-        app.config['PROFILE'] = True
         app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[30])
 
     # API version 2

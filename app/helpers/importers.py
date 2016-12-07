@@ -1,17 +1,21 @@
+import random
+from datetime import timedelta, datetime
+
 from flask.ext.login import current_user
 from pentabarf.PentabarfParser import PentabarfParser
 
+from app.helpers.data import get_or_create, save_to_db
 from app.helpers.helpers import update_state
+from app.models import db
 from app.models.event import Event
-from app.models.session import Session
 from app.models.microlocation import Microlocation
+from app.models.role import Role
+from app.models.session import Session
 from app.models.session_type import SessionType
 from app.models.speaker import Speaker
 from app.models.track import Track
-from app.helpers.data import get_or_create, save_to_db
-from app.models import db
-from datetime import timedelta, datetime
-import random
+from app.models.user import ORGANIZER
+from app.models.users_events_roles import UsersEventsRoles
 
 
 def string_to_timedelta(string):
@@ -49,7 +53,6 @@ class ImportHelper:
             event.start_time = conference_object.start
             event.end_time = conference_object.end
             event.has_session_speakers = True
-            event.creator = creator
             event.name = conference_object.title
             event.location_name = conference_object.venue + ', ' + conference_object.city
             event.searchable_location_name = conference_object.city
@@ -108,6 +111,9 @@ class ImportHelper:
             update_status(task_handle, 'Saving data')
             save_to_db(event)
             update_status(task_handle, 'Finalizing')
+            role = Role.query.filter_by(name=ORGANIZER).first()
+            uer = UsersEventsRoles(creator, event, role)
+            save_to_db(uer, 'UER saved')
         except Exception as e:
             from app.api.helpers.import_helpers import make_error
             raise make_error('event', er=e)
