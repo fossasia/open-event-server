@@ -17,11 +17,11 @@
                 <h4>{{ image }}</h4>
                 {% for subtopic in subtopics[image] %}
                     {% set vars = {'foo': False} %}
-                    <div class="system-images" data-name="{{ subtopic }}" style="margin-left:50px;">
-                        <b>{{ subtopic }}</b>
+                    <div class="system-images" data-name="{{ subtopic }}" style="">
+                        <b>{{ subtopic }}</b><br>
                         {% for custom_image in custom_placeholder %}
                             {% if custom_image.name == subtopic %}
-                                <img src='{{ custom_image.url }}' style="max-width:80%; "
+                                <img src='{{ custom_image.url }}' style="max-width:20%; "
                                      id="image-{{ subtopic | replace(',', '') | replace('&', '') | replace(' ','_') }}"/>
                                 {% if vars.update({'foo': True}) %} {% endif %}
                                 {% if custom_image.copyright %}
@@ -34,7 +34,7 @@
                         {% endfor %}
                         {% if not vars.foo %}
                             <img src='{{ url_for("static", filename="placeholders/" + placeholder_images[subtopic]) }}'
-                                 style="max-width:80%; "
+                                 style="max-width:20%; "
                                  id="image-{{ subtopic | replace(',', '') | replace('&', '') | replace(' ','_') }}"/>
                         {% endif %}
                         <br>
