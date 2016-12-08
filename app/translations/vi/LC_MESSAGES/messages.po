@@ -6,38 +6,40 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  v1\n"
+"Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2016-12-07 10:57+0530\n"
-"PO-Revision-Date: 2016-12-08 11:31+0530\n"
-"Last-Translator: FOSSASIA <open-event@googlegroups.com>\n"
+"PO-Revision-Date: 2016-12-08 16:59+0000\n"
+"Last-Translator: Thien Hoang <ryandavestewart@gmail.com>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/open-event"
+"/organizer-server/vi/>\n"
 "Language: vi\n"
-"Language-Team: vi <LL@li.org>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 2.10-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
 #: app/templates/404.html:8 app/templates/404.html:26
 msgid "You got"
-msgstr ""
+msgstr "Bạn có"
 
 #: app/templates/404.html:8
 msgid "Page Not Found"
-msgstr ""
+msgstr "Không tìm thấy trang"
 
 #: app/templates/404.html:27
 msgid "Sorry but we couldn't find this page"
-msgstr ""
+msgstr "Xin lỗi, chúng tôi không tìm thấy trang này"
 
 #: app/templates/404.html:28
 msgid "This page you are looking for does not exist"
-msgstr ""
+msgstr "Trang bạn đang tìm hiện không tồn tại"
 
 #: app/templates/gentelella/index.html:171
 msgid "The simplest way to create events."
-msgstr ""
+msgstr "Cách đơn giản nhất để tổ chức những sự kiện."
 
 #: app/templates/gentelella/admin/event/_import_modal.html:18
 #: app/templates/gentelella/admin/menu.html:34
@@ -45,132 +47,132 @@ msgstr ""
 #: app/templates/gentelella/guest/sitemap.html:76
 #: app/templates/gentelella/index.html:174
 msgid "Create Event"
-msgstr ""
+msgstr "Tạo sự kiện"
 
 #: app/templates/gentelella/index.html:194
 msgid "All Dates"
-msgstr ""
+msgstr "Tất cả các ngày"
 
 #: app/templates/gentelella/index.html:195
 msgid "Today"
-msgstr ""
+msgstr "Hôm nay"
 
 #: app/templates/gentelella/index.html:196
 msgid "Tomorrow"
-msgstr ""
+msgstr "Ngày mai"
 
 #: app/templates/gentelella/index.html:197
 msgid "This Week"
-msgstr ""
+msgstr "Tuần này"
 
 #: app/templates/gentelella/index.html:198
 msgid "This Weekend"
-msgstr ""
+msgstr "Cuối tuần này"
 
 #: app/templates/gentelella/index.html:199
 msgid "Next Week"
-msgstr ""
+msgstr "Tuần sau"
 
 #: app/templates/gentelella/index.html:200
 msgid "This Month"
-msgstr ""
+msgstr "Tháng này"
 
 #: app/templates/gentelella/index.html:205
 msgid "Search"
-msgstr ""
+msgstr "Tìm kiếm"
 
 #: app/templates/gentelella/index.html:209
 msgid "Upcoming Events"
-msgstr ""
+msgstr "Sự kiện sắp diễn ra"
 
 #: app/templates/gentelella/index.html:215
 msgid "No upcoming events available at this time"
-msgstr ""
+msgstr "Hiện tại không có sự kiện nào sắp diễn ra"
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:116
 #: app/templates/gentelella/guest/event/cfs.html:16
 #: app/templates/gentelella/index.html:221
 msgid "Call for Speakers"
-msgstr ""
+msgstr "Mời diễn giả"
 
 #: app/templates/gentelella/index.html:227
 msgid "No call for speakers open at this time"
-msgstr ""
+msgstr "Hiện không có nhu cầu mời diễn giả"
 
 #: app/templates/gentelella/guest/search/results.html:109
 #: app/templates/gentelella/index.html:242
 msgid "Share this event"
-msgstr ""
+msgstr "Chia sẻ sự kiện này"
 
 #: app/templates/gentelella/admin/footer.html:8
 #: app/templates/gentelella/guest/sitemap.html:33
 msgid "Sitemap"
-msgstr ""
+msgstr "Bản đồ sự kiện"
 
 #: app/templates/gentelella/admin/footer.html:17
 #: app/templates/gentelella/guest/search/_collapse_search.html:14
 msgid "Categories"
-msgstr ""
+msgstr "Phân loại"
 
 #: app/templates/gentelella/admin/footer.html:25
 msgid "Locations"
-msgstr ""
+msgstr "Địa điểm"
 
 #: app/templates/gentelella/admin/footer.html:33
 msgid "Connect With Us"
-msgstr ""
+msgstr "Kết nối với chúng tôi"
 
 #: app/templates/gentelella/admin/footer.html:37
 #: app/templates/gentelella/admin/super_admin/content/_social.html:5
 #: app/templates/gentelella/admin/super_admin/content/_social.html:7
 msgid "Support"
-msgstr ""
+msgstr "Hỗ trợ"
 
 #: app/templates/gentelella/admin/footer.html:41
 msgid "Twitter"
-msgstr ""
+msgstr "Twitter"
 
 #: app/templates/gentelella/admin/footer.html:45
 msgid "Facebook"
-msgstr ""
+msgstr "Facebook"
 
 #: app/templates/gentelella/admin/footer.html:49
 msgid "Google"
-msgstr ""
+msgstr "Google"
 
 #: app/templates/gentelella/admin/footer.html:53
 msgid "Youtube"
-msgstr ""
+msgstr "Youtube"
 
 #: app/templates/gentelella/admin/footer.html:57
 msgid "Github"
-msgstr ""
+msgstr "Github"
 
 #: app/templates/gentelella/admin/forbidden.html:10
 msgid "Access denied"
-msgstr ""
+msgstr "Truy cập bị từ chối"
 
 #: app/templates/gentelella/admin/forbidden.html:11
 msgid "Sorry, but you don't have permission access to this page."
-msgstr ""
+msgstr "Xin lỗi, bạn không có quyền truy cập trang này."
 
 #: app/templates/gentelella/admin/menu.html:65
 msgid "My Tickets"
-msgstr ""
+msgstr "Vé mời của tôi"
 
 #: app/templates/gentelella/admin/menu.html:66
 msgid "My Sessions"
-msgstr ""
+msgstr "Phiên của tôi"
 
 #: app/templates/gentelella/admin/event/index.html:16
 #: app/templates/gentelella/admin/menu.html:67
 msgid "Manage Events"
-msgstr ""
+msgstr "Quản lý sự kiện"
 
 #: app/templates/gentelella/admin/menu.html:69
 #: app/templates/gentelella/admin/profile/index.html:11
 msgid "Profile"
-msgstr ""
+msgstr "Hồ sơ"
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:151
 #: app/templates/gentelella/admin/menu.html:70
@@ -178,21 +180,21 @@ msgstr ""
 #: app/templates/gentelella/admin/settings/base.html:25
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:4
 msgid "Settings"
-msgstr ""
+msgstr "Cài đặt"
 
 #: app/templates/gentelella/admin/menu.html:72
 #: app/templates/gentelella/admin/super_admin/users/users.html:58
 msgid "Admin"
-msgstr ""
+msgstr "Quản trị viên"
 
 #: app/templates/gentelella/admin/menu.html:75
 #: app/templates/gentelella/admin/menu.html:122
 msgid "Browse Events"
-msgstr ""
+msgstr "Chọn sự kiện"
 
 #: app/templates/gentelella/admin/menu.html:76
 msgid "Logout"
-msgstr ""
+msgstr "Đăng xuất"
 
 #: app/templates/gentelella/admin/menu.html:91
 #: app/templates/gentelella/admin/profile/notifications.html:4
@@ -201,11 +203,11 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:18
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:19
 msgid "Notifications"
-msgstr ""
+msgstr "Thông báo"
 
 #: app/templates/gentelella/admin/menu.html:97
 msgid "Mark All as Read"
-msgstr ""
+msgstr "Đánh dấu tất cả là đã đọc"
 
 #: app/templates/gentelella/admin/menu.html:108
 msgid "Mark as read"
@@ -3766,4 +3768,3 @@ msgstr ""
 #: app/templates/swagger/user-info.html:11
 msgid "Logged in as"
 msgstr ""
-
