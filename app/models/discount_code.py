@@ -20,10 +20,10 @@ class DiscountCode(db.Model):
     valid_from = db.Column(db.DateTime, nullable=True)
     valid_till = db.Column(db.DateTime, nullable=True)
     tickets = db.Column(db.String)
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref='discount_codes', foreign_keys=[event_id])
     created_at = db.Column(db.DateTime)
-    marketer_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    marketer_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
     marketer = db.relationship('User', backref='discount_codes')
 
     used_for = db.Column(db.String)

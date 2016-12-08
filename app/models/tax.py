@@ -23,10 +23,8 @@ class Tax(db.Model):
     invoice_footer = db.Column(db.String)
     tax_include_in_price = db.Column(db.Boolean, default=False)
 
-    event_id = db.Column(
-        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
-    event = db.relationship(
-        'Event', backref=backref('tax', uselist=False))
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    event = db.relationship('Event', backref=backref('tax', uselist=False))
 
     def __init__(self,
                  country=None,

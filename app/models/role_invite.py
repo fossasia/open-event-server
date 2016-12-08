@@ -10,11 +10,10 @@ class RoleInvite(db.Model):
 
     email = db.Column(db.String)
 
-    event_id = db.Column(
-        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', back_populates='role_invites')
 
-    role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
+    role_id = db.Column(db.Integer, db.ForeignKey('role.id', ondelete='CASCADE'))
     role = db.relationship("Role")
 
     hash = db.Column(db.String)

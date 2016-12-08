@@ -11,8 +11,7 @@ class Track(db.Model):
     color = db.Column(db.String, nullable=False)
     location = db.Column(db.String)
     sessions = db.relationship('Session', backref='track', lazy='dynamic')
-    event_id = db.Column(
-        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
 
     def __init__(self, name=None, description=None, event_id=None,
                  session=None, track_image_url=None, color=None,
