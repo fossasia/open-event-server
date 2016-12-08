@@ -7,7 +7,10 @@
     <hr>
 
     <div>
-        <h5>{{ _("Select event") }} zip/pentabarf XML</h5>
+        <h4>{{ _("Select event source file to import") }}</h4>
+        <p>
+            <strong>Supported formats:</strong> Open Event compatible json package (.zip), PentabarfXML (.xml), iCalendar (.ical)
+        </p>
         <form>
             <input type="file" name="file" id="import_file">
         </form>
@@ -15,7 +18,7 @@
 
     <div style="margin-top: 15px;">
         <button type="button" class="btn btn-primary" id="btnImportEvent"
-                onclick="importEvent('json');">{{ _("Create Event") }}</button>
+                onclick="importEvent();">{{ _("Create Event") }}</button>
     </div>
 
     <div style="margin-top: 10px;">
@@ -23,13 +26,12 @@
         <span id="import_error" class="red"></span>
     </div>
 
-    <br><br>
+    <br>
 
     <h3>{{ _("Previous Imports") }}</h3>
     <hr>
 
     <div>
-
         <table class="table table-striped" id="importListTable">
             <thead>
             <tr>

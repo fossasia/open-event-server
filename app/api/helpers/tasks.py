@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 """
 Define all API v2 celery tasks here
 This is done to resolve circular imports
@@ -25,12 +27,12 @@ def import_event_task(self, file, source_type, creator_id):
         update_import_job(task_id, result['id'], 'SUCCESS')
         # return item
     except BaseError as e:
-        print traceback.format_exc()
-        update_import_job(task_id, e.message, e.status)
+        print(traceback.format_exc())
+        update_import_job(task_id, e.message, e.status if hasattr(e, 'status') else 'failure')
         result = {'__error': True, 'result': e.to_dict()}
     except Exception as e:
-        print traceback.format_exc()
-        update_import_job(task_id, e.message, e.status)
+        print(traceback.format_exc())
+        update_import_job(task_id, e.message, e.status if hasattr(e, 'status') else 'failure')
         result = {'__error': True, 'result': ServerError().to_dict()}
     # send email
     send_import_mail(task_id, result)
@@ -52,7 +54,7 @@ def export_event_task(self, event_id, settings):
     except BaseError as e:
         result = {'__error': True, 'result': e.to_dict()}
     except Exception:
-        print traceback.format_exc()
+        print(traceback.format_exc())
         result = {'__error': True, 'result': ServerError().to_dict()}
     logging.info('Exporting done.. sending email')
     # send email
