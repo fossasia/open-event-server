@@ -5,8 +5,10 @@ from flask_login import current_user
 from markupsafe import Markup
 
 from app.helpers.data_getter import DataGetter
-from app.helpers.export import ExportHelper
 from app.helpers.auth import AuthManager
+from app.helpers.exporters.ical import ICalExporter
+from app.helpers.exporters.pentabarfxml import PentabarfExporter
+from app.helpers.exporters.xcal import XCalExporter
 
 event_export = Blueprint('event_export', __name__, url_prefix='/events/<int:event_id>/export')
 
@@ -29,7 +31,7 @@ def display_export_view(event_id):
 
 @event_export.route('/pentabarf.xml')
 def pentabarf_export_view(event_id):
-    response = make_response(ExportHelper.export_as_pentabarf(event_id))
+    response = make_response(PentabarfExporter.export(event_id))
     response.headers["Content-Type"] = "application/xml"
     response.headers["Content-Disposition"] = "attachment; filename=pentabarf.xml"
     return response
@@ -37,7 +39,7 @@ def pentabarf_export_view(event_id):
 
 @event_export.route('/calendar.ical')
 def ical_export_view(event_id):
-    response = make_response(ExportHelper.export_as_ical(event_id))
+    response = make_response(ICalExporter.export(event_id))
     response.headers["Content-Type"] = "text/calendar"
     response.headers["Content-Disposition"] = "attachment; filename=calendar.ics"
     return response
@@ -45,7 +47,7 @@ def ical_export_view(event_id):
 
 @event_export.route('/calendar.xcs')
 def xcal_export_view(event_id):
-    response = make_response(ExportHelper.export_as_xcal(event_id))
+    response = make_response(XCalExporter.export(event_id))
     response.headers["Content-Type"] = "text/calendar"
     response.headers["Content-Disposition"] = "attachment; filename=calendar.xcs"
     return response

@@ -1,49 +1,28 @@
 import random
-from datetime import timedelta, datetime
 
 from flask.ext.login import current_user
 from pentabarf.PentabarfParser import PentabarfParser
 
 from app.helpers.data import get_or_create, save_to_db
-from app.helpers.helpers import update_state
+from app.helpers.importers.helpers import update_status, string_to_timedelta, own_event
 from app.models import db
 from app.models.event import Event
 from app.models.microlocation import Microlocation
-from app.models.role import Role
 from app.models.session import Session
 from app.models.session_type import SessionType
 from app.models.speaker import Speaker
 from app.models.track import Track
-from app.models.user import ORGANIZER
-from app.models.users_events_roles import UsersEventsRoles
 
 
-def string_to_timedelta(string):
-    if string:
-        t = datetime.strptime(string, "%H:%M")
-        return timedelta(hours=t.hour, minutes=t.minute, seconds=0)
-    else:
-        return timedelta(hours=0, minutes=0, seconds=0)
-
-
-def update_status(task_handle, status):
-    if task_handle and status:
-        update_state(task_handle, status)
-
-
-class ImportHelper:
+class PentabarfImporter:
     def __init__(self):
         pass
 
     @staticmethod
-    def import_from_pentabarf(file_path=None, string=None, creator=None, task_handle=None):
+    def import_data(file_path, creator_id, task_handle):
 
-        if file_path:
-            with open(file_path, 'r') as xml_file:
-                string = xml_file.read().replace('\n', '')
-
-        if not creator:
-            creator = current_user
+        with open(file_path, 'r') as xml_file:
+            string = xml_file.read().replace('\n', '')
 
         try:
             update_status(task_handle, 'Parsing XML file')
@@ -111,9 +90,7 @@ class ImportHelper:
             update_status(task_handle, 'Saving data')
             save_to_db(event)
             update_status(task_handle, 'Finalizing')
-            role = Role.query.filter_by(name=ORGANIZER).first()
-            uer = UsersEventsRoles(creator, event, role)
-            save_to_db(uer, 'UER saved')
+            own_event(event=event, user_id=creator_id)
         except Exception as e:
             from app.api.helpers.import_helpers import make_error
             raise make_error('event', er=e)
