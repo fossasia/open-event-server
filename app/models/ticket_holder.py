@@ -18,7 +18,7 @@ class TicketHolder(db.Model):
     state = db.Column(db.String)
     country = db.Column(db.String)
     ticket_id = db.Column(db.Integer, db.ForeignKey('ticket.id'))
-    order_id = db.Column(db.Integer, db.ForeignKey('orders.id'))
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.id', ondelete='CASCADE'))
     order = db.relationship('Order', backref='ticket_holders')
     ticket = db.relationship('Ticket', backref='ticket_holders')
     checked_in = db.Column(db.Boolean, default=False)

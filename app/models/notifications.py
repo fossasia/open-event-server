@@ -21,7 +21,7 @@ class Notification(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
     user = db.relationship('User', backref='notifications')
 
     title = db.Column(db.String)
@@ -30,13 +30,7 @@ class Notification(db.Model):
     received_at = db.Column(db.DateTime)
     has_read = db.Column(db.Boolean)
 
-    def __init__(self,
-                 user,
-                 title,
-                 message,
-                 action,
-                 received_at,
-                 has_read=False):
+    def __init__(self, user, title, message, action, received_at, has_read=False):
         self.user = user
         self.title = title
         self.message = message

@@ -4,18 +4,14 @@ from . import db
 class Microlocation(db.Model):
     """Microlocation model class"""
     __tablename__ = 'microlocation'
-    id = db.Column(db.Integer,
-                   primary_key=True)
-    name = db.Column(db.String,
-                     nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     floor = db.Column(db.Integer)
     room = db.Column(db.String)
-    session = db.relationship('Session',
-                              backref="microlocation")
-    event_id = db.Column(db.Integer,
-                         db.ForeignKey('events.id', ondelete='CASCADE'))
+    session = db.relationship('Session', backref="microlocation")
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
 
     def __init__(self,
                  name=None,

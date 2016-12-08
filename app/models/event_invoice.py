@@ -30,7 +30,7 @@ class EventInvoice(db.Model):
     country = db.Column(db.String)
     zipcode = db.Column(db.String)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'))
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='SET NULL'))
 
     created_at = db.Column(db.DateTime)

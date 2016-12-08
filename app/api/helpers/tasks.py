@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 """
 Define all API v2 celery tasks here
 This is done to resolve circular imports
@@ -16,45 +18,21 @@ from ..exports import event_export_task_base
 from ..imports import import_event_task_base
 
 
-@celery.task(base=RequestContextTask, name='import.event', bind=True,
-             throws=(BaseError,))
-def import_event_task(self, file):
+@celery.task(base=RequestContextTask, name='import.event', bind=True, throws=(BaseError,))
+def import_event_task(self, file, source_type, creator_id):
     """Import Event Task"""
     task_id = self.request.id.__str__()  # str(async result)
     try:
-        result = import_event_task_base(self, file)
+        result = import_event_task_base(self, file, source_type, creator_id)
         update_import_job(task_id, result['id'], 'SUCCESS')
         # return item
     except BaseError as e:
-        print traceback.format_exc()
-        update_import_job(task_id, e.message, e.status)
+        print(traceback.format_exc())
+        update_import_job(task_id, e.message, e.status if hasattr(e, 'status') else 'failure')
         result = {'__error': True, 'result': e.to_dict()}
     except Exception as e:
-        print traceback.format_exc()
-        update_import_job(task_id, e.message, e.status)
-        result = {'__error': True, 'result': ServerError().to_dict()}
-    # send email
-    send_import_mail(task_id, result)
-    # return result
-    return result
-
-
-@celery.task(base=RequestContextTask, name='import.event.pentabarf', bind=True,
-             throws=(BaseError,))
-def import_event_from_pentabarf_task(self, file, current_user):
-    """Import Event Task"""
-    task_id = self.request.id.__str__()  # str(async result)
-    try:
-        result = import_event_task_base(self, file, source_type='pentabarf', current_user=current_user)
-        update_import_job(task_id, result['id'], 'SUCCESS')
-        # return item
-    except BaseError as e:
-        print traceback.format_exc()
-        update_import_job(task_id, e.message, e.status)
-        result = {'__error': True, 'result': e.to_dict()}
-    except Exception as e:
-        print traceback.format_exc()
-        update_import_job(task_id, e.message, e.status)
+        print(traceback.format_exc())
+        update_import_job(task_id, e.message, e.status if hasattr(e, 'status') else 'failure')
         result = {'__error': True, 'result': ServerError().to_dict()}
     # send email
     send_import_mail(task_id, result)
@@ -76,7 +54,7 @@ def export_event_task(self, event_id, settings):
     except BaseError as e:
         result = {'__error': True, 'result': e.to_dict()}
     except Exception:
-        print traceback.format_exc()
+        print(traceback.format_exc())
         result = {'__error': True, 'result': ServerError().to_dict()}
     logging.info('Exporting done.. sending email')
     # send email

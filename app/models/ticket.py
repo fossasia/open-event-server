@@ -8,9 +8,7 @@ ticket_tags_table = db.Table('association', db.Model.metadata,
 
 class Ticket(db.Model):
     __tablename__ = 'ticket'
-    __table_args__ = (db.UniqueConstraint('name',
-                                          'event_id',
-                                          name='name_event_uc'),)
+    __table_args__ = (db.UniqueConstraint('name', 'event_id', name='name_event_uc'),)
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
@@ -27,8 +25,7 @@ class Ticket(db.Model):
     min_order = db.Column(db.Integer)
     max_order = db.Column(db.Integer)
 
-    event_id = db.Column(
-        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref='tickets')
 
     tags = db.relationship('TicketTag', secondary=ticket_tags_table, backref='tickets')

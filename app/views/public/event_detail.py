@@ -11,7 +11,9 @@ from werkzeug.utils import redirect
 
 from app.helpers.data import DataManager
 from app.helpers.data_getter import DataGetter
-from app.helpers.export import ExportHelper
+from app.helpers.exporters.ical import ICalExporter
+from app.helpers.exporters.pentabarfxml import PentabarfExporter
+from app.helpers.exporters.xcal import XCalExporter
 from app.helpers.helpers import get_count
 from app.models.call_for_papers import CallForPaper
 
@@ -106,7 +108,7 @@ def display_event_schedule_pentabarf(identifier):
     accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
     if accepted_sessions_count == 0 or not event.schedule_published_on:
         abort(404)
-    response = make_response(ExportHelper.export_as_pentabarf(event.id))
+    response = make_response(PentabarfExporter.export(event.id))
     response.headers["Content-Type"] = "application/xml"
     return response
 
@@ -119,7 +121,7 @@ def display_event_schedule_ical(identifier):
     accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
     if accepted_sessions_count == 0 or not event.schedule_published_on:
         abort(404)
-    response = make_response(ExportHelper.export_as_ical(event.id))
+    response = make_response(ICalExporter.export(event.id))
     response.headers["Content-Type"] = "text/calendar"
     return response
 
@@ -132,7 +134,7 @@ def display_event_schedule_xcal(identifier):
     accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
     if accepted_sessions_count == 0 or not event.schedule_published_on:
         abort(404)
-    response = make_response(ExportHelper.export_as_xcal(event.id))
+    response = make_response(XCalExporter.export(event.id))
     response.headers["Content-Type"] = "application/xml"
     return response
 

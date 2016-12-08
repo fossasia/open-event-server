@@ -1,4 +1,4 @@
-function importEvent(type) {
+function importEvent() {
     var data = new FormData();
 
     var endpoint = '/api/v2/events/import/json';
@@ -7,35 +7,39 @@ function importEvent(type) {
         ext = ext[ext.length - 1].toLowerCase();
         if (ext == 'xml') {
             endpoint = '/api/v2/events/import/pentabarf';
+        } else if (ext == 'ical') {
+            endpoint = '/api/v2/events/import/ical';
         }
         data.append('file', file);
+
+        $('#import_status').text('Uploading file.. Please don\'t close this window');
+        $('#import_error').text('');
+        $('#btnImportEvent').prop('disabled', true);
+        $('#import_file').prop('disabled', true);
+        jQuery.ajax({
+            url: endpoint,
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            type: 'POST',
+            success: function (data) {
+                console.log(data);
+                // redirect to created event
+                // document.location = '/events/' + data['id'];
+                setTimeout(function () {
+                    importTask(data['task_url']);
+                }, 1000);
+            },
+            error: function (x) {
+                var obj = JSON.parse(x.responseText);
+                $('#import_status').text('');
+                $('#import_error').text(obj['message']);
+            }
+        });
+
     });
 
-    $('#import_status').text('Uploading file.. Please don\'t close this window');
-    $('#import_error').text('');
-    $('#btnImportEvent').prop('disabled', true);
-    $('#import_file').prop('disabled', true);
-    jQuery.ajax({
-        url: endpoint,
-        data: data,
-        cache: false,
-        contentType: false,
-        processData: false,
-        type: 'POST',
-        success: function (data) {
-            console.log(data);
-            // redirect to created event
-            // document.location = '/events/' + data['id'];
-            setTimeout(function () {
-                importTask(data['task_url']);
-            }, 1000);
-        },
-        error: function (x) {
-            var obj = JSON.parse(x.responseText);
-            $('#import_status').text('');
-            $('#import_error').text(obj['message']);
-        }
-    });
 }
 
 

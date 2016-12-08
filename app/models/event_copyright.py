@@ -17,10 +17,8 @@ class EventCopyright(db.Model):
     year = db.Column(db.Integer)
     logo = db.Column(db.String)
 
-    event_id = db.Column(
-        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
-    event = db.relationship(
-        'Event', backref=backref('copyright', uselist=False))
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    event = db.relationship('Event', backref=backref('copyright', uselist=False))
 
     def __init__(self,
                  holder=None,

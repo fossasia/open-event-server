@@ -13,8 +13,7 @@ class CallForPaper(db.Model):
     timezone = db.Column(db.String, nullable=False, default="UTC")
     hash = db.Column(db.String, nullable=True)
     privacy = db.Column(db.String, nullable=False)
-    event_id = db.Column(
-        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     events = db.relationship("Event", backref=backref("call_for_papers", uselist=False))
 
     def __init__(self, announcement=None, start_date=None, end_date=None, timezone='UTC', hash=None, privacy='public',
