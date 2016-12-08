@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version:  v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2016-12-07 10:57+0530\n"
-"PO-Revision-Date: 2016-12-07 11:15+0530\n"
+"PO-Revision-Date: 2016-12-08 11:31+0530\n"
 "Last-Translator: FOSSASIA <open-event@googlegroups.com>\n"
 "Language: ko\n"
 "Language-Team: ko <LL@li.org>\n"
@@ -21,23 +21,23 @@ msgstr ""
 
 #: app/templates/404.html:8 app/templates/404.html:26
 msgid "You got"
-msgstr "당신은있어"
+msgstr ""
 
 #: app/templates/404.html:8
 msgid "Page Not Found"
-msgstr "페이지를 찾을 수 없습니다"
+msgstr ""
 
 #: app/templates/404.html:27
 msgid "Sorry but we couldn't find this page"
-msgstr "미안하지만 우리는이 페이지를 찾을 수 없습니다"
+msgstr ""
 
 #: app/templates/404.html:28
 msgid "This page you are looking for does not exist"
-msgstr "존재하지 않는 찾고있는이 페이지"
+msgstr ""
 
 #: app/templates/gentelella/index.html:171
 msgid "The simplest way to create events."
-msgstr "가장 간단한 방법은 이벤트를 만들 수 있습니다."
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_import_modal.html:18
 #: app/templates/gentelella/admin/menu.html:34
@@ -45,132 +45,132 @@ msgstr "가장 간단한 방법은 이벤트를 만들 수 있습니다."
 #: app/templates/gentelella/guest/sitemap.html:76
 #: app/templates/gentelella/index.html:174
 msgid "Create Event"
-msgstr "이벤트 만들기"
+msgstr ""
 
 #: app/templates/gentelella/index.html:194
 msgid "All Dates"
-msgstr "모든 날짜"
+msgstr ""
 
 #: app/templates/gentelella/index.html:195
 msgid "Today"
-msgstr "오늘"
+msgstr ""
 
 #: app/templates/gentelella/index.html:196
 msgid "Tomorrow"
-msgstr "내일"
+msgstr ""
 
 #: app/templates/gentelella/index.html:197
 msgid "This Week"
-msgstr "이번 주"
+msgstr ""
 
 #: app/templates/gentelella/index.html:198
 msgid "This Weekend"
-msgstr "이번 주말"
+msgstr ""
 
 #: app/templates/gentelella/index.html:199
 msgid "Next Week"
-msgstr "다음주"
+msgstr ""
 
 #: app/templates/gentelella/index.html:200
 msgid "This Month"
-msgstr "이번 달"
+msgstr ""
 
 #: app/templates/gentelella/index.html:205
 msgid "Search"
-msgstr "수색"
+msgstr ""
 
 #: app/templates/gentelella/index.html:209
 msgid "Upcoming Events"
-msgstr "다가오는 이벤트"
+msgstr ""
 
 #: app/templates/gentelella/index.html:215
 msgid "No upcoming events available at this time"
-msgstr "이 때 사용할 수있는 다가오는 이벤트가 없습니다"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:116
 #: app/templates/gentelella/guest/event/cfs.html:16
 #: app/templates/gentelella/index.html:221
 msgid "Call for Speakers"
-msgstr "스피커에 대한 문의"
+msgstr ""
 
 #: app/templates/gentelella/index.html:227
 msgid "No call for speakers open at this time"
-msgstr "현재 열려있는 스피커에 대한 호출 없음"
+msgstr ""
 
 #: app/templates/gentelella/guest/search/results.html:109
 #: app/templates/gentelella/index.html:242
 msgid "Share this event"
-msgstr "이 이벤트를 공유하기"
+msgstr ""
 
 #: app/templates/gentelella/admin/footer.html:8
 #: app/templates/gentelella/guest/sitemap.html:33
 msgid "Sitemap"
-msgstr "사이트 맵"
+msgstr ""
 
 #: app/templates/gentelella/admin/footer.html:17
 #: app/templates/gentelella/guest/search/_collapse_search.html:14
 msgid "Categories"
-msgstr "카테고리"
+msgstr ""
 
 #: app/templates/gentelella/admin/footer.html:25
 msgid "Locations"
-msgstr "위치"
+msgstr ""
 
 #: app/templates/gentelella/admin/footer.html:33
 msgid "Connect With Us"
-msgstr "우리와 연결"
+msgstr ""
 
 #: app/templates/gentelella/admin/footer.html:37
 #: app/templates/gentelella/admin/super_admin/content/_social.html:5
 #: app/templates/gentelella/admin/super_admin/content/_social.html:7
 msgid "Support"
-msgstr "지원하다"
+msgstr ""
 
 #: app/templates/gentelella/admin/footer.html:41
 msgid "Twitter"
-msgstr "지저귀다"
+msgstr ""
 
 #: app/templates/gentelella/admin/footer.html:45
 msgid "Facebook"
-msgstr "페이스 북"
+msgstr ""
 
 #: app/templates/gentelella/admin/footer.html:49
 msgid "Google"
-msgstr "구글"
+msgstr ""
 
 #: app/templates/gentelella/admin/footer.html:53
 msgid "Youtube"
-msgstr "유튜브"
+msgstr ""
 
 #: app/templates/gentelella/admin/footer.html:57
 msgid "Github"
-msgstr "Github에서"
+msgstr ""
 
 #: app/templates/gentelella/admin/forbidden.html:10
 msgid "Access denied"
-msgstr "접근 거부"
+msgstr ""
 
 #: app/templates/gentelella/admin/forbidden.html:11
 msgid "Sorry, but you don't have permission access to this page."
-msgstr "죄송합니다,하지만 당신은이 페이지에 권한 액세스 할 수 없습니다."
+msgstr ""
 
 #: app/templates/gentelella/admin/menu.html:65
 msgid "My Tickets"
-msgstr "내 티켓"
+msgstr ""
 
 #: app/templates/gentelella/admin/menu.html:66
 msgid "My Sessions"
-msgstr "내 세션"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/index.html:16
 #: app/templates/gentelella/admin/menu.html:67
 msgid "Manage Events"
-msgstr "이벤트 관리"
+msgstr ""
 
 #: app/templates/gentelella/admin/menu.html:69
 #: app/templates/gentelella/admin/profile/index.html:11
 msgid "Profile"
-msgstr "윤곽"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:151
 #: app/templates/gentelella/admin/menu.html:70
@@ -178,21 +178,21 @@ msgstr "윤곽"
 #: app/templates/gentelella/admin/settings/base.html:25
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:4
 msgid "Settings"
-msgstr "설정"
+msgstr ""
 
 #: app/templates/gentelella/admin/menu.html:72
 #: app/templates/gentelella/admin/super_admin/users/users.html:58
 msgid "Admin"
-msgstr "관리자"
+msgstr ""
 
 #: app/templates/gentelella/admin/menu.html:75
 #: app/templates/gentelella/admin/menu.html:122
 msgid "Browse Events"
-msgstr "검색 이벤트"
+msgstr ""
 
 #: app/templates/gentelella/admin/menu.html:76
 msgid "Logout"
-msgstr "로그 아웃"
+msgstr ""
 
 #: app/templates/gentelella/admin/menu.html:91
 #: app/templates/gentelella/admin/profile/notifications.html:4
@@ -201,31 +201,31 @@ msgstr "로그 아웃"
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:18
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:19
 msgid "Notifications"
-msgstr "알림"
+msgstr ""
 
 #: app/templates/gentelella/admin/menu.html:97
 msgid "Mark All as Read"
-msgstr "읽기로 모두 표시"
+msgstr ""
 
 #: app/templates/gentelella/admin/menu.html:108
 msgid "Mark as read"
-msgstr "읽은 상태로 표시"
+msgstr ""
 
 #: app/templates/gentelella/admin/menu.html:114
 msgid "No new notifications"
-msgstr "새로운 알림이 없습니다"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_import_modal.html:6
 msgid "Import Event"
-msgstr "가져 오기 이벤트"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_import_modal.html:10
 msgid "Select event"
-msgstr "이벤트 선택"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_import_modal.html:28
 msgid "Previous Imports"
-msgstr "이전 수입"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_import_modal.html:36
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:61
@@ -237,28 +237,28 @@ msgstr "이전 수입"
 #: app/templates/gentelella/admin/super_admin/events/events.html:262
 #: app/templates/gentelella/admin/super_admin/events/events.html:284
 msgid "State"
-msgstr "상태"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_import_modal.html:37
 #: app/templates/gentelella/admin/profile/notifications.html:45
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:58
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:91
 msgid "Message"
-msgstr "메시지"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_import_modal.html:38
 msgid "Started"
-msgstr "시작"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_import_modal.html:46
 msgid "Success"
-msgstr "성공"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_import_modal.html:50
 #: app/templates/gentelella/guest/ticketing/stripe_oauth_callback.html:5
 #: app/templates/gentelella/guest/ticketing/stripe_oauth_callback.html:21
 msgid "Processing"
-msgstr "처리"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_import_modal.html:55
 #: app/templates/gentelella/admin/event/wizard/step-1.html:544
@@ -274,7 +274,7 @@ msgstr "처리"
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:142
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:256
 msgid "here"
-msgstr "이리"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_table.html:6
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:16
@@ -291,13 +291,13 @@ msgstr "이리"
 #: app/templates/gentelella/admin/super_admin/users/users.html:221
 #: app/templates/gentelella/admin/super_admin/users/users.html:241
 msgid "Name"
-msgstr "이름"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_table.html:7
 #: app/templates/gentelella/guest/search/_collapse_search.html:71
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:27
 msgid "Date"
-msgstr "날짜"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_table.html:8
 #: app/templates/gentelella/admin/super_admin/events/events.html:200
@@ -306,7 +306,7 @@ msgstr "날짜"
 #: app/templates/gentelella/admin/super_admin/events/events.html:266
 #: app/templates/gentelella/admin/super_admin/events/events.html:288
 msgid "Roles"
-msgstr "역할"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_table.html:9
 #: app/templates/gentelella/admin/event/export/export.html:136
@@ -322,7 +322,7 @@ msgstr "역할"
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:3
 #: app/templates/gentelella/guest/event/sessions.html:14
 msgid "Sessions"
-msgstr "세션"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_table.html:10
 #: app/templates/gentelella/admin/event/export/export.html:149
@@ -341,7 +341,7 @@ msgstr "세션"
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:178
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:196
 msgid "Speakers"
-msgstr "스피커"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_table.html:11
 #: app/templates/gentelella/admin/event/export/export.html:157
@@ -359,7 +359,7 @@ msgstr "스피커"
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:78
 #: app/templates/gentelella/guest/event/tickets.html:7
 msgid "Tickets"
-msgstr "티켓"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_table.html:12
 #: app/templates/gentelella/admin/super_admin/events/events.html:197
@@ -367,17 +367,17 @@ msgstr "티켓"
 #: app/templates/gentelella/admin/super_admin/events/events.html:241
 #: app/templates/gentelella/admin/super_admin/events/events.html:263
 msgid "Public"
-msgstr "공공의"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_table.html:56
 #: app/templates/gentelella/admin/super_admin/events/events.html:65
 msgid "Drafts"
-msgstr "체커"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_table.html:57
 #: app/templates/gentelella/admin/super_admin/events/events.html:66
 msgid "Submitted"
-msgstr "제출"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_table.html:58
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:18
@@ -388,7 +388,7 @@ msgstr "제출"
 #: app/templates/gentelella/admin/super_admin/events/events.html:67
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:12
 msgid "Accepted"
-msgstr "허용"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_table.html:59
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:40
@@ -398,7 +398,7 @@ msgstr "허용"
 #: app/templates/gentelella/admin/super_admin/events/events.html:68
 #: app/templates/gentelella/admin/super_admin/sales/fees_status.html:62
 msgid "Pending"
-msgstr "대기 중"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_table.html:60
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:46
@@ -408,47 +408,47 @@ msgstr "대기 중"
 #: app/templates/gentelella/admin/super_admin/events/events.html:69
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:14
 msgid "Rejected"
-msgstr "거부"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_table.html:67
 msgid "No Ticket Information"
-msgstr "없음 티켓 정보 없음"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_table.html:71
 #: app/templates/gentelella/admin/super_admin/events/events.html:81
 msgid "Paid"
-msgstr "유료"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_table.html:81
 #: app/templates/gentelella/admin/super_admin/events/events.html:91
 msgid "Free"
-msgstr "비어 있는"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_table.html:91
 #: app/templates/gentelella/admin/event/wizard/step-1.html:355
 #: app/templates/gentelella/admin/super_admin/events/events.html:101
 msgid "Donation"
-msgstr "기부"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/event_base.html:51
 msgid "Unpublish"
-msgstr "게시 취소"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/event_base.html:54
 msgid "Publish"
-msgstr "게시"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/event_base.html:56
 msgid "Copy"
-msgstr "부"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/event_base.html:60
 msgid "Delete"
-msgstr "지우다"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/event_base.html:109
 msgid "Are you sure you would like to delete this event"
-msgstr "이 이벤트를 삭제 하시겠습니까"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/event_base.html:112
 #: app/templates/gentelella/admin/event/sessions/components/_speaker_croppie.html:17
@@ -458,25 +458,25 @@ msgstr "이 이벤트를 삭제 하시겠습니까"
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:111
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:128
 msgid "Cancel"
-msgstr "취소하다"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/event_base.html:114
 msgid "Confirm Delete"
-msgstr "삭제 확인"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/index.html:11
 #: app/templates/gentelella/admin/super_admin/events/events.html:4
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:3
 #: app/templates/gentelella/guest/search/results.html:75
 msgid "Events"
-msgstr "이벤트"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/index.html:28
 #: app/templates/gentelella/admin/event/index.html:42
 #: app/templates/gentelella/admin/event/index.html:47
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:11
 msgid "Live"
-msgstr "살고 있다"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/index.html:31
 #: app/templates/gentelella/admin/event/index.html:52
@@ -485,49 +485,49 @@ msgstr "살고 있다"
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:12
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:13
 msgid "Draft"
-msgstr "초안"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/index.html:34
 #: app/templates/gentelella/admin/event/index.html:57
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:13
 msgid "Past"
-msgstr "과거"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/index.html:37
 #: app/templates/gentelella/admin/event/index.html:62
 #: app/templates/gentelella/admin/super_admin/events/events.html:162
 #: app/templates/gentelella/admin/super_admin/events/events.html:185
 msgid "Import"
-msgstr "수입"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:9
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:9
 msgid "Edit Role"
-msgstr "역할 편집"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:24
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:131
 #: app/templates/gentelella/admin/event/roles/roles.html:62
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:20
 msgid "Track Organizer"
-msgstr "트랙 주최자"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:25
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:132
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:21
 msgid "Co-organizer"
-msgstr "공동 주최자"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:26
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:133
 #: app/templates/gentelella/admin/event/roles/roles.html:64
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:22
 msgid "Moderator"
-msgstr "중재자"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:31
 msgid "Update Role"
-msgstr "업데이트 역할"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:32
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:139
@@ -537,28 +537,28 @@ msgstr "업데이트 역할"
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:137
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:177
 msgid "Close"
-msgstr "닫기"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/microservices.html:12
 msgid "Generate Android App"
-msgstr "안드로이드 앱을 생성"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/microservices.html:17
 msgid "Generate Web App"
-msgstr "웹 응용 프로그램을 생성"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:4
 #: app/templates/gentelella/admin/event/roles/roles.html:4
 msgid "Manage Roles"
-msgstr "역할 관리"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:8
 msgid "Add Peopl"
-msgstr "Peopl 추가"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:21
 msgid "Invited"
-msgstr "초대"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:28
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:51
@@ -572,22 +572,22 @@ msgstr "초대"
 #: app/templates/gentelella/admin/super_admin/users/users.html:223
 #: app/templates/gentelella/admin/super_admin/users/users.html:243
 msgid "Status"
-msgstr "지위"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:29
 #: app/templates/gentelella/admin/event/roles/roles.html:13
 msgid "User Email"
-msgstr "사용자 이메일"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:30
 msgid "User (Email)"
-msgstr "사용자 (이메일)"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:31
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:128
 #: app/templates/gentelella/admin/event/roles/roles.html:14
 msgid "Role"
-msgstr "역할"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:32
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:19
@@ -609,33 +609,33 @@ msgstr "역할"
 #: app/templates/gentelella/admin/super_admin/users/users.html:228
 #: app/templates/gentelella/admin/super_admin/users/users.html:248
 msgid "Options"
-msgstr "옵션"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:39
 msgid "accepted"
-msgstr "허용"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:68
 msgid "invited"
-msgstr "초대"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:77
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:84
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:90
 msgid "Invitation Link"
-msgstr "초대 링크"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:114
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:138
 #: app/templates/gentelella/admin/event/roles/roles.html:51
 msgid "Add Role"
-msgstr "역할 추가"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:125
 #: app/templates/gentelella/admin/event/roles/roles.html:56
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:14
 msgid "User email"
-msgstr "사용자 이메일"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:130
 #: app/templates/gentelella/admin/event/roles/roles.html:61
@@ -643,15 +643,15 @@ msgstr "사용자 이메일"
 #: app/templates/gentelella/admin/event/wizard/step-1.html:643
 #: app/templates/gentelella/admin/event/wizard/step-1.html:660
 msgid "Choose"
-msgstr "고르다"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:3
 msgid "Event Sponsors"
-msgstr "이벤트 스폰서"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:8
 msgid "Add Sponsor"
-msgstr "스폰서 추가"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:15
 #: app/templates/gentelella/admin/event/wizard/step-1.html:213
@@ -659,49 +659,49 @@ msgstr "스폰서 추가"
 #: app/templates/gentelella/admin/event/wizard/step-2.html:35
 #: app/templates/gentelella/admin/event/wizard/step-2.html:54
 msgid "Logo"
-msgstr "심벌 마크"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:17
 #: app/templates/gentelella/admin/event/wizard/step-2.html:91
 #: app/templates/gentelella/admin/event/wizard/step-4.html:91
 #: app/templates/gentelella/guest/ticketing/pdf/ticket.html:54
 msgid "Type"
-msgstr "유형"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:18
 #: app/templates/gentelella/admin/event/wizard/step-2.html:90
 msgid "Level"
-msgstr "수평"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/export/export.html:4
 msgid "Export"
-msgstr "수출"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/export/export.html:64
 msgid "Export and Download Event as zip"
-msgstr "지퍼로 내보내기 및 다운로드 이벤트"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/export/export.html:65
 msgid "Select which media files you want in the zip"
-msgstr "당신은 우편으로 할 미디어 파일 선택"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/export/export.html:69
 msgid "Image"
-msgstr "영상"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/export/export.html:78
 #: app/templates/gentelella/admin/event/sessions/display.html:45
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:107
 msgid "Audio"
-msgstr "오디오"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/export/export.html:82
 msgid "Document"
-msgstr "문서"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/export/export.html:89
 msgid "Start"
-msgstr "스타트"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/export/export.html:92
 #: app/templates/gentelella/admin/event/sessions/display.html:35
@@ -712,188 +712,188 @@ msgstr "스타트"
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:108
 #: app/templates/gentelella/admin/super_admin/content/_translations.html:21
 msgid "Download"
-msgstr "다운로드"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/export/export.html:96
 msgid "Started by"
-msgstr "에 의해 시작"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/export/export.html:97
 msgid "datetime"
-msgstr "날짜 시간"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/export/export.html:126
 msgid "Access event information via REST API"
-msgstr "REST API를 통해 액세스 이벤트 정보"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/export/export.html:132
 msgid "Basic Event Details"
-msgstr "기본 이벤트 세부 정보"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/export/export.html:141
 #: app/templates/gentelella/admin/event/wizard/step-3.html:115
 msgid "Microlocations"
-msgstr "Microlocations"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/export/export.html:145
 #: app/templates/gentelella/admin/event/wizard/step-3.html:104
 msgid "Tracks"
-msgstr "트랙"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/export/export.html:153
 #: app/templates/gentelella/admin/event/wizard/wizard.html:85
 msgid "Sponsors"
-msgstr "스폰서"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/export/export.html:161
 msgid "You can make a"
-msgstr "당신은 할 수 있습니다"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/export/export.html:162
 msgid "request to the following endpoint to access the selected information"
-msgstr "선택된 정보에 액세스하는 다음 포인트로 요청할"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/export/export.html:165
 msgid "Response"
-msgstr "응답"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:15
 msgid "In order to use this feature activate"
-msgstr "이 기능의 활성화를 사용하기 위해"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:15
 #: app/templates/gentelella/admin/event/wizard/step-3.html:79
 #: app/templates/gentelella/admin/event/wizard/step-3.html:84
 msgid "Sessions and Speakers"
-msgstr "세션 및 스피커"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:15
 msgid "for the event"
-msgstr "이벤트에 대한"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:15
 msgid "Please"
-msgstr "부디"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:17
 msgid "click here"
-msgstr "여기를 클릭하십시오"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:17
 msgid "to activate this module."
-msgstr "이 모듈을 활성화합니다."
+msgstr ""
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:3
 msgid "General Info"
-msgstr "일반 정보"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:9
 msgid "Event ID"
-msgstr "이벤트 ID"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:13
 msgid "Event Url"
-msgstr "이벤트 URL"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:17
 msgid "Event Start Time"
-msgstr "이벤트 시작 시간"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:21
 msgid "Event End Time"
-msgstr "이벤트 종료 시간"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:25
 msgid "Event Session Types"
-msgstr "이벤트 세션 유형"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:33
 msgid "Event Links and Social media"
-msgstr "이벤트 링크 및 소셜 미디어"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:40
 msgid "'Do you want to edit this record?'"
-msgstr "'이 레코드를 편집 하시겠습니까?'"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:41
 msgid "Edit Event"
-msgstr "편집 이벤트"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/roles/roles.html:9
 msgid "Permissions List"
-msgstr "사용 권한 목록"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/roles/roles.html:59
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:18
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:4
 msgid "Permissions"
-msgstr "권한"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/roles/roles.html:63
 msgid "Co-Organizer"
-msgstr "공동 주최자"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/roles/roles.html:67
 #: app/templates/gentelella/admin/event/wizard/step-1.html:670
 msgid "Add"
-msgstr "더하다"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:25
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:110
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:135
 msgid "Update"
-msgstr "최신 정보"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:4
 msgid "Scheduler"
-msgstr "스케줄러"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:21
 #: app/templates/gentelella/guest/event/schedule.html:44
 msgid "Sessions loading"
-msgstr "세션로드"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:23
 msgid "Error loading sessions"
-msgstr "오류로드 세션"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:35
 msgid "Unpublish Schedule"
-msgstr "게시 취소 일정"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:39
 msgid "Publish Schedule"
-msgstr "일정을 게시"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:43
 msgid "Unscheduled Sessions"
-msgstr "예약되지 않은 세션"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:57
 msgid "No Unscheduled sessions"
-msgstr "아니 예약되지 않은 세션 없음"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:61
 msgid "Schedule last published on"
-msgstr "일정은 최종 발표"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:72
 msgid "Clear Overlaps"
-msgstr "클리어 오버랩"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:75
 msgid "Add New Microlocation"
-msgstr "새로운 Microlocation 추가"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:80
 msgid "Export as"
-msgstr "로 내보내기"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:102
 #: app/templates/gentelella/admin/event/sessions/edit.html:3
 #: app/templates/gentelella/admin/event/sessions/edit.html:20
 msgid "Edit Session"
-msgstr "편집 세션"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:108
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:62
@@ -903,58 +903,58 @@ msgstr "편집 세션"
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:177
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:195
 msgid "Title"
-msgstr "표제"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:114
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:68
 msgid "Long Abstract"
-msgstr "긴 추상"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:119
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:65
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:61
 msgid "Short Abstract"
-msgstr "짧은 추상"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:125
 msgid "Start Time"
-msgstr "시작 시간"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:131
 msgid "End Time"
-msgstr "종료 시간"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:142
 msgid "Update Session"
-msgstr "업데이트 세션"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:157
 msgid "New Microlocation"
-msgstr "새로운 Microlocation"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:169
 msgid "Latitude"
-msgstr "위도"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:175
 msgid "Longitude"
-msgstr "경도"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:181
 msgid "Floor"
-msgstr "바닥"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:187
 msgid "Room"
-msgstr "방"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:198
 msgid "Add Microlocation"
-msgstr "Microlocation 추가"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/components/timeline.html:33
 msgid "All the timings are in"
-msgstr "모든 타이밍에"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:37
 #: app/templates/gentelella/admin/event/speakers/base_speaker_table.html:56
@@ -964,117 +964,117 @@ msgstr "모든 타이밍에"
 #: app/templates/gentelella/admin/profile/notifications.html:31
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:36
 msgid "All"
-msgstr "모든"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:52
 #: app/templates/gentelella/admin/event/sessions/new.html:3
 #: app/templates/gentelella/admin/event/sessions/new.html:19
 msgid "Create Session"
-msgstr "세션 만들기"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:64
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:83
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:261
 msgid "Track"
-msgstr "선로"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:66
 msgid "Submission Date"
-msgstr "제출 날짜"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:67
 msgid "Last Changed Date"
-msgstr "마지막 변경 날짜"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:68
 msgid "Email Sent"
-msgstr "이메일 전송"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/display.html:31
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:91
 msgid "Media"
-msgstr "미디어"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/display.html:35
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:95
 msgid "Slide"
-msgstr "슬라이드"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/display.html:40
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:101
 msgid "Video"
-msgstr "비디오"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/invited.html:3
 msgid "Session Invitation"
-msgstr "세션 초대"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/invited.html:8
 msgid "Invitation Pag"
-msgstr "초대 파그"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/invited.html:15
 msgid "You have been invited for session"
-msgstr "당신은 세션에 초대되었습니다"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/invited.html:23
 msgid "Accept"
-msgstr "수락"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/invited.html:24
 msgid "Reject"
-msgstr "받지 않다"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/components/_speaker_component.html:39
 #: app/templates/gentelella/admin/profile/index.html:36
 msgid "Select Avatar"
-msgstr "선택 아바타"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/components/_speaker_component.html:43
 msgid "Avatar size must be less than 1MB."
-msgstr "아바타 크기는 1MB 미만이어야합니다."
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/components/_speaker_croppie.html:8
 #: app/templates/gentelella/admin/event/wizard/step-1.html:720
 #: app/templates/gentelella/admin/profile/index.html:114
 msgid "Crop your image"
-msgstr "이미지 자르기"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/components/_speaker_croppie.html:18
 #: app/templates/gentelella/admin/event/wizard/step-1.html:730
 #: app/templates/gentelella/admin/profile/index.html:124
 msgid "Done"
-msgstr "끝난"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/components/session_form.html:17
 #: app/templates/gentelella/admin/event/sessions/components/session_form.html:18
 msgid "Modify Speakers"
-msgstr "스피커를 수정"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/components/session_form.html:21
 msgid "selected"
-msgstr "선택된"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/components/session_form.html:30
 msgid "Save Session"
-msgstr "세션 저장"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/components/session_form.html:33
 #: app/templates/gentelella/admin/event/sessions/components/session_speaker_form.html:59
 msgid "Submit Session"
-msgstr "세션 제출"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/components/session_speaker_form.html:10
 msgid "Session Details"
-msgstr "세션 세부 사항"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/components/session_speaker_form.html:30
 msgid "Speaker Details"
-msgstr "스피커의 자세한 사항"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/components/session_speaker_form.html:38
 msgid "Invite Speakers"
-msgstr "스피커를 초대"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/components/session_speaker_form.html:40
 #: app/templates/gentelella/admin/event/speakers/base_speaker_table.html:81
@@ -1089,150 +1089,150 @@ msgstr "스피커를 초대"
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:66
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:134
 msgid "Email"
-msgstr "이메일"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/components/session_speaker_form.html:57
 msgid "Save as Draft"
-msgstr "임시 보관함에 저장"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/components/speaker_form.html:17
 msgid "Featured Speaker"
-msgstr "추천 스피커"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/components/speaker_form.html:19
 msgid "checked"
-msgstr "확인"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/components/speaker_form.html:24
 msgid "Save Speaker"
-msgstr "저장 스피커"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/speakers/base_speaker_table.html:70
 msgid "Add Speaker"
-msgstr "스피커 추가"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/speakers/base_speaker_table.html:82
 #: app/templates/gentelella/admin/settings/pages/contact_info.html:24
 msgid "Phone"
-msgstr "전화"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/speakers/base_speaker_table.html:83
 msgid "Submitted Sessions"
-msgstr "제출 세션"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:28
 msgid "Add Order"
-msgstr "추가 주문"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:36
 #: app/templates/gentelella/admin/event/tickets/tickets.html:172
 msgid "Ticket Type"
-msgstr "티켓 종류"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:37
 #: app/templates/gentelella/admin/event/wizard/step-1.html:323
 #: app/templates/gentelella/guest/event/_ticketing_box.html:31
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:11
 msgid "Price"
-msgstr "가격"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:38
 #: app/templates/gentelella/admin/event/wizard/step-1.html:326
 #: app/templates/gentelella/guest/event/_ticketing_box.html:33
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:13
 msgid "Quantity"
-msgstr "수량"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:39
 msgid "Item Total"
-msgstr "항목 전체"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:67
 msgid "Grand Total"
-msgstr "총계"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:74
 msgid "Payment Type"
-msgstr "지불 유형"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:76
 msgid "Select payment type"
-msgstr "선택 결제 유형"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:77
 msgid "Cheque"
-msgstr "검사"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:78
 msgid "Telegraphic Transfer (TT) / Bank Transfer"
-msgstr "전신환 (TT) / 은행 송금"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:79
 msgid "Onsite / Cash"
-msgstr "현장 / 현금"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:81
 msgid "Stripe"
-msgstr "줄무늬"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:82
 msgid "Free Order"
-msgstr "무료 주문"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:86
 msgid "Continue"
-msgstr "잇다"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:52
 #: app/templates/gentelella/admin/event/tickets/orders.html:47
 msgid "Completed"
-msgstr "완료"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:58
 #: app/templates/gentelella/admin/event/tickets/orders.html:53
 msgid "Expired"
-msgstr "만료"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:61
 msgid "Checked In"
-msgstr "에서 확인"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:65
 msgid "Not Checked In"
-msgstr "에서 검사하지 않음"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:71
 msgid "View Attendees"
-msgstr "보기 참석자"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:80
 #: app/templates/gentelella/admin/event/tickets/orders.html:67
 msgid "Order"
-msgstr "주문"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:83
 #: app/templates/gentelella/admin/event/tickets/orders.html:70
 #: app/templates/gentelella/admin/event/tickets/tickets.html:122
 msgid "Order Status"
-msgstr "주문 상태"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:86
 #: app/templates/gentelella/admin/event/wizard/step-1.html:320
 msgid "Ticket Name"
-msgstr "티켓 이름"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:89
 msgid "Ticket Price"
-msgstr "티켓 가격"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:92
 #: app/templates/gentelella/admin/profile/_form.html:8
 msgid "First Name"
-msgstr "이름"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:95
 msgid "Last Name"
-msgstr "성"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:101
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:52
@@ -1241,25 +1241,25 @@ msgstr "성"
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:90
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:55
 msgid "Action"
-msgstr "동작"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:142
 msgid "Undo"
-msgstr "끄르다"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:146
 msgid "Check In"
-msgstr "체크인"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:23
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:26
 msgid "Discount Codes"
-msgstr "할인 코드"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:26
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:29
 msgid "Create a discount"
-msgstr "할인 만들기"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:36
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:77
@@ -1269,14 +1269,14 @@ msgstr "할인 만들기"
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:82
 #: app/templates/gentelella/admin/super_admin/users/users.html:48
 msgid "Active"
-msgstr "유효한"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:39
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:79
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:42
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:82
 msgid "Inactive"
-msgstr "비활성"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:48
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:21
@@ -1284,97 +1284,97 @@ msgstr "비활성"
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:30
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:57
 msgid "Discount Code"
-msgstr "할인 코드"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:49
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:52
 msgid "Discount Per Ticket"
-msgstr "티켓 당 할인"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:50
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:53
 msgid "Validity"
-msgstr "효력"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:35
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:44
 msgid "Enter Discount"
-msgstr "할인을 입력"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:76
 msgid "Number of discount tickets"
-msgstr "할인 티켓의 수"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:98
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:89
 msgid "Not Active"
-msgstr "활동하지 않음"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:105
 msgid "Select Ticket(s) applied to the discount code"
-msgstr "선택 티켓 발 할인 코드인가"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:111
 msgid "Select all Tickets Type"
-msgstr "모든 티켓 유형을 선택"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:131
 msgid "Show other options"
-msgstr "다른 옵션보기"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:135
 msgid "Set the min. and max. quantity allowed to purchase per order (optional)"
-msgstr "최소를 설정합니다. 및 최대. 수량은 주문 당 구입 가능 (옵션)"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:139
 msgid "Min"
-msgstr "최소"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:146
 msgid "Max"
-msgstr "최대"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:156
 msgid "Validity period (optional)"
-msgstr "유효 기간 (선택 사항)"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:160
 msgid "Valid from"
-msgstr "유효"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:180
 msgid "Expires on"
-msgstr "만료"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:208
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:129
 msgid "Save Discount"
-msgstr "저장 할인"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/orders.html:58
 msgid "View Orders"
-msgstr "보기 주문"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/orders.html:73
 msgid "Total Amount"
-msgstr "총액"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/orders.html:76
 msgid "Qty"
-msgstr "수량"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/orders.html:79
 msgid "Buyer / Registration Contact"
-msgstr "구매자 / 등록 문의"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:75
 msgid "Orders"
-msgstr "명령"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:81
 #: app/templates/gentelella/admin/event/tickets/tickets.html:154
 msgid "View orders"
-msgstr "보기 주문"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:88
 #: app/templates/gentelella/admin/event/tickets/tickets.html:190
@@ -1384,127 +1384,127 @@ msgstr "보기 주문"
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:75
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:81
 msgid "Sales"
-msgstr "매상"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:102
 msgid "Tickets sold"
-msgstr "티켓 판매"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:108
 #: app/templates/gentelella/admin/event/tickets/tickets.html:155
 msgid "View attendees"
-msgstr "보기 참석자"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:114
 msgid "Orders Summary"
-msgstr "주문 요약"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:115
 #: app/templates/gentelella/admin/event/tickets/tickets.html:165
 msgid "by order status"
-msgstr "주문 상태로"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:125
 msgid "Total Tickets"
-msgstr "총 티켓"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:128
 msgid "Total Orders"
-msgstr "총 주문"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:131
 msgid "Total Sales"
-msgstr "총 판매"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:134
 msgid "View Reports"
-msgstr "보고서보기"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:164
 msgid "Tickets Summary"
-msgstr "티켓 요약"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:175
 msgid "Tickets Capacity Set"
-msgstr "티켓 용량 설정"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:179
 #: app/templates/gentelella/admin/super_admin/sales/by_marketer.html:65
 #: app/templates/gentelella/admin/super_admin/sales/fees.html:56
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:64
 msgid "Completed Orders"
-msgstr "완료 주문"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:182
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:67
 msgid "Pending Orders"
-msgstr "주문을 보류"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:229
 #: app/templates/gentelella/admin/super_admin/sales/fees.html:95
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:119
 #: app/templates/gentelella/guest/event/_ticketing_box.html:83
 msgid "Total"
-msgstr "합계"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:34
 #: app/templates/gentelella/guest/ticketing/pdf/ticket.html:47
 msgid "Location"
-msgstr "위치"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:39
 msgid "Enter Address"
-msgstr "주소를 입력"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:69
 msgid "Reset Location"
-msgstr "리셋 위치"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:80
 msgid "Show map on event page"
-msgstr "이벤트 페이지에서지도보기"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:96
 #: app/templates/gentelella/admin/event/wizard/step-4.html:10
 msgid "Starts"
-msgstr "시작"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:118
 #: app/templates/gentelella/admin/event/wizard/step-4.html:35
 msgid "Ends"
-msgstr "끝"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:141
 #: app/templates/gentelella/admin/event/wizard/step-4.html:57
 msgid "Timezone"
-msgstr "시간대"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:157
 #: app/templates/gentelella/admin/event/wizard/step-2.html:24
 msgid "Description"
-msgstr "기술"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:167
 #: app/templates/gentelella/admin/event/wizard/step-1.html:184
 msgid "Event Image"
-msgstr "이벤트 이미지"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:174
 msgid "Select Event Image"
-msgstr "이벤트 이미지를 선택"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:178
 msgid "We recommend using at least a 2160x1080px (2:1 ratio) image"
-msgstr "우리는 적어도 2160x1080px를 사용하는 것이 좋습니다 (2 : 1 비율) 이미지"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:178
 msgid "that's no larger than 10MB."
-msgstr "그 10메가바이트보다 크지 없습니다."
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:191
 #: app/templates/gentelella/admin/profile/index.html:52
 msgid "Adjust"
-msgstr "맞추다"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:196
 #: app/templates/gentelella/admin/event/wizard/step-1.html:233
@@ -1512,332 +1512,332 @@ msgstr "맞추다"
 #: app/templates/gentelella/admin/profile/index.html:57
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:90
 msgid "Remove"
-msgstr "없애다"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:219
 #: app/templates/gentelella/admin/event/wizard/step-2.html:44
 msgid "Select Logo"
-msgstr "선택 로고"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:223
 #: app/templates/gentelella/admin/event/wizard/step-2.html:48
 msgid "Logo size must be less than 1MB."
-msgstr "로고 크기는 1MB 미만이어야합니다."
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:241
 msgid "Organizer Information"
-msgstr "주최자 정보"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:251
 msgid "Organizer name"
-msgstr "주최자 이름"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:256
 msgid "Organizer Description"
-msgstr "주최자 설명"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:264
 msgid "Links and Social Media"
-msgstr "링크 및 소셜 미디어"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:300
 msgid "Use Ticketing System"
-msgstr "사용 발권 시스템"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:312
 msgid "Ticket Details"
-msgstr "티켓 세부 사항"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:346
 msgid "Free Ticket"
-msgstr "무료 티켓"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:350
 msgid "Paid Ticket"
-msgstr "유료 티켓"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:367
 #: app/templates/gentelella/admin/event/wizard/step-1.html:382
 msgid "Add Ticket URL"
-msgstr "티켓 URL 추가"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:371
 #: app/templates/gentelella/admin/event/wizard/step-1.html:386
 msgid "Ticket URL"
-msgstr "티켓 URL"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:398
 msgid "Redeem Discount Code"
-msgstr "할인 코드 사용"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:404
 msgid "Enter Discount Code"
-msgstr "할인 코드를 입력"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:410
 msgid "Apply Discount"
-msgstr "할인 적용"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:414
 msgid "Code applied !"
-msgstr "코드 적용!"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:414
 msgid "10 percent off on monthly payments for 3 months"
-msgstr "3개월에 대한 월별 지불에 10 % 떨어져"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:421
 msgid "Add Payment details"
-msgstr "지불 상세 정보 추가"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:427
 msgid "Choose Country"
-msgstr "국가 선택"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:430
 msgid "Choose a country for your payment"
-msgstr "귀하의 지불을위한 국가를 선택하십시오"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:440
 msgid "Choose Currency"
-msgstr "통화 선택"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:443
 msgid "Please select a currency"
-msgstr "통화를 선택하세요"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:458
 msgid "Choose Payment Methods"
-msgstr "지불 방법을 선택합니다"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:462
 msgid "Online Payments"
-msgstr "온라인 결제"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:464
 msgid "Payment by PayPal"
-msgstr "페이팔로 지불"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:470
 msgid "YES, accept payment through PayPal "
-msgstr "YES, 페이팔을 통해 지불을 수락 "
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:471
 msgid ""
 "Paypal accepts credit card, debit card and PayPal payments. To learn how "
 "it works click"
-msgstr "페이팔은 신용 카드, 직불 카드와 페이팔 지불을 수락합니다. 이 클릭을 작동하는 방법을 알아 보려면"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:472
 #: app/templates/gentelella/admin/event/wizard/step-1.html:497
 #: app/templates/gentelella/admin/event/wizard/step-1.html:498
 msgid "here."
-msgstr "이리."
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:481
 msgid "Don't have a PayPal account?"
-msgstr "페이팔 계정이 없으십니까?"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:483
 msgid "Create a free PayPal merchant account."
-msgstr "무료 페이팔 상인 계정을 만듭니다."
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:489
 msgid "Payment by Stripe"
-msgstr "스트라이프로 지불"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:495
 msgid "YES, accept payment through Stripe"
-msgstr "YES, 스트라이프을 통해 지불을 수락"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:496
 msgid "Stripe accepts Visa, Master and Amex. To learn how it works click"
-msgstr "스트라이프는 비자, 마스터 및 아멕스를 사용할 수 있습니다. 이 클릭을 작동하는 방법을 알아 보려면"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:498
 msgid "Find out more about Stripe"
-msgstr "스트라이프에 대해 자세히 알아보기"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:504
 msgid "Use Stripe for payments"
-msgstr "결제 스트라이프를 사용"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:518
 msgid "The stripe account"
-msgstr "스트라이프 계정"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:519
 msgid "has been connected."
-msgstr "연결되어있다."
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:520
 msgid "Click to De-link the account."
-msgstr "드 링크에 계정을 클릭합니다."
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:523
 msgid "Connect with Stripe"
-msgstr "스트라이프와 연결"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:528
 msgid "Offline Payments"
-msgstr "오프라인 결제"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:535
 msgid "YES, accept payment by Cheque"
-msgstr "YES, 수표로 지불을 수락"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:540
 msgid ""
 "Enter your PayPal account name and payment details instructions to ticket"
 " buyers"
-msgstr "티켓 구매자에게 당신의 페이팔 계정 이름과 지불 세부 지침을 입력"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:544
 #: app/templates/gentelella/admin/event/wizard/step-1.html:566
 msgid "example"
-msgstr "예"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:557
 msgid "YES, accept payment by Telegraphic Transfer(TT) / Bank Transfer"
-msgstr "YES, 전신환 (TT) / 은행 송금으로 지불을 수락"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:562
 msgid "Enter your bank details and instructions to ticket buyers"
-msgstr "티켓 구매자에게 은행 계좌 정보와 지침을 입력"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:563
 msgid "See an"
-msgstr "참조"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:580
 msgid "YES, accept payment at the event(on site)"
-msgstr "YES (온 사이트) 행사에서 지불을 수락"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:585
 msgid "Enter payment instructions to ticket buyers to make payments onsite"
-msgstr "지불은 현장 있도록 티켓 구매자에게 지급 명령을 입력"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:596
 msgid "Add Tax"
-msgstr "세금 추가"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:603
 msgid "Additional Details"
-msgstr "추가 세부 사항"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:607
 msgid "Listing Privacy"
-msgstr "목록 개인 정보 보호"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:613
 msgid "list this event on Open Event and search engines"
-msgstr "오픈 이벤트와 검색 엔진에이 이벤트를 나열"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:620
 msgid "Private page"
-msgstr "개인 페이지"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:620
 msgid "do not list this event publicly"
-msgstr "공개적으로이 이벤트를 나열하지 않습니다"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:626
 #: app/templates/gentelella/guest/search/_collapse_search.html:52
 msgid "Event Type"
-msgstr "이벤트 종류"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:656
 msgid "Event Sub-Topic"
-msgstr "이벤트 하위 주제"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:670
 #: app/templates/gentelella/guest/event/code_of_conduct.html:7
 msgid "Code of Conduct"
-msgstr "행동 강령"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:681
 msgid "License of Event Data and Content"
-msgstr "이벤트 데이터 및 컨텐츠의 라이센스"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:694
 msgid "Choose Licence"
-msgstr "라이센스를 선택"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:745
 msgid "Tax Options"
-msgstr "세금 옵션"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:751
 msgid "Do you need to charge tax for this event ?"
-msgstr "이 이벤트에 대해 세금을 부과해야합니까?"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:774
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:155
 msgid "Country"
-msgstr "국가"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:777
 msgid "Choose a country for your tax payment"
-msgstr "세금 납부에 대한 국가를 선택하십시오"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:786
 msgid "Tax Name"
-msgstr "세금 이름"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:792
 msgid "Tax Rate"
-msgstr "세율"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:799
 msgid "Tax ID"
-msgstr "세금 아이디"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:806
 msgid "Tax Invoices"
-msgstr "세금 계산서"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:812
 msgid "Send tax invoice to attendees"
-msgstr "참석자에게 세금 계산서 보내기"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:813
 msgid "Tax Invoices are sent to your attendees when you select this feature."
-msgstr "이 기능을 선택하면 세금 계산서는 참석자로 전송됩니다."
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:814
 msgid ""
 "Enter your registered business company name and address to be included on"
 " the tax invoice"
-msgstr "등록 된 사업 회사 이름과 주소를 입력하면 세금 계산서에 포함되는"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:821
 msgid "Registered Company"
-msgstr "등록 회사"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:829
 msgid "Business Address"
-msgstr "회사 주소"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:837
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:177
 msgid "City"
-msgstr "시티"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:859
 msgid "Optional Text for Invoice Footer"
-msgstr "송장 바닥 글에 대한 선택적 텍스트"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:867
 msgid "Add or Include"
-msgstr "추가 포함"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:872
 msgid "Add tax as separate fee on top of the price"
-msgstr "가격의 상단에 별도의 요금으로 세금을 추가"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:879
 msgid "Include tax in ticket price"
-msgstr "티켓 가격에 세금 포함"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:891
 #: app/templates/gentelella/admin/event/wizard/step-1.html:921
@@ -1856,487 +1856,487 @@ msgstr "티켓 가격에 세금 포함"
 #: app/templates/gentelella/admin/super_admin/settings/_ticket-fees.html:39
 #: app/templates/gentelella/admin/super_admin/users/users.html:159
 msgid "Save"
-msgstr "구하다"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:906
 msgid "Cheque Instructions"
-msgstr "수표 지침"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:936
 msgid "Bank Instructions"
-msgstr "은행 지침"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-2.html:73
 #: app/templates/gentelella/admin/event/wizard/step-3.html:79
 msgid "off"
-msgstr "떨어져서"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-2.html:73
 #: app/templates/gentelella/admin/event/wizard/step-2.html:77
 msgid "sponsors"
-msgstr "스폰서"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-2.html:77
 #: app/templates/gentelella/admin/event/wizard/step-3.html:84
 #: app/templates/gentelella/guest/event/_ticketing_box.html:74
 msgid "on"
-msgstr "...에"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-2.html:106
 msgid "Add Another Sponsor"
-msgstr "또 다른 스폰서 추가"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-3.html:78
 #: app/templates/gentelella/admin/event/wizard/step-3.html:83
 msgid "Turn"
-msgstr "회전"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-3.html:97
 msgid "Session, Microlocations, Session types"
-msgstr "세션, Microlocations, 세션 유형"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-3.html:126
 msgid "Session Types"
-msgstr "세션 유형"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:3
 msgid "Announcement"
-msgstr "발표"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:72
 msgid "Private link"
-msgstr "개인 링크"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:85
 msgid ""
 "Share this link to get private submission independently of open/closed "
 "Call for Speakers at any time."
-msgstr "독립적으로 개방의 개인 제출을 얻기 위해이 링크를 공유 / 언제든지 스피커에 대한 호출을 마감했다."
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:85
 msgid "the link will be active once the event is saved"
-msgstr "이벤트가 저장되면 링크가 활성화됩니다"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:96
 msgid ""
 "Display this publicly. Anybody will be able to submit a proposal within "
 "the dates chosen, once the event is published."
-msgstr "공개적으로 표시됩니다. 누구는 이벤트가 게시되면, 선택한 기간 내에 제안서를 제출할 수 있습니다."
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:103
 msgid "Private"
-msgstr "은밀한"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:103
 msgid ""
 "Do not display this publicly. Proposals can be submitted only using the "
 "private link."
-msgstr "공개적으로 표시되지 않습니다. 제안은 전용 링크를 통해 전송 될 수있다."
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-5.html:45
 msgid "Collect"
-msgstr "수집"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-5.html:45
 msgid "Details"
-msgstr "세부"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-5.html:51
 msgid "Option"
-msgstr "선택권"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-5.html:52
 msgid "Include"
-msgstr "포함"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-5.html:53
 msgid "Require"
-msgstr "필요"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-5.html:71
 msgid "Customize Registration Form"
-msgstr "등록 양식을 사용자 정의"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:31
 msgid "Previous"
-msgstr "너무 이른"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:35
 msgid "Next"
-msgstr "다음 것"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:42
 msgid "Unpublish event"
-msgstr "게시 취소 이벤트"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:45
 msgid "Make your event live"
-msgstr "이벤트가 실시간 확인"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:76
 msgid "Basic Details"
-msgstr "기본 세부 사항"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:154
 msgid "Ticket Description"
-msgstr "티켓 설명"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:164
 msgid "Display Ticket description on Public Events page"
-msgstr "공개 이벤트 페이지에 표시 티켓 설명"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:168
 msgid "Ticket visibility"
-msgstr "티켓 가시성"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:172
 msgid "Hide Ticket"
-msgstr "숨기기 티켓"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:175
 msgid "Hides ticket from the Public Events page."
-msgstr "공개 이벤트 페이지에서 티켓을 숨 깁니다."
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:176
 msgid "Ticket would still be available for sale to Organizers."
-msgstr "티켓은 여전히 ​​조직에 판매 할 수있다."
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:180
 msgid "Sales Start"
-msgstr "판매 시작"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:201
 msgid "Sales End"
-msgstr "판매 종료"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:214
 msgid "Number of tickets allowed per order"
-msgstr "티켓 번호는 주문 당 허용"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:216
 msgid "Minimum Order"
-msgstr "최소 주문"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:221
 msgid "Maximum Order"
-msgstr "최대 주문"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:227
 msgid "Ticket Code Group"
-msgstr "티켓 코드 그룹"
+msgstr ""
 
 #: app/templates/gentelella/admin/login/change_password.html:7
 #: app/templates/gentelella/guest/sitemap.html:62
 msgid "Reset Password"
-msgstr "암호를 재설정"
+msgstr ""
 
 #: app/templates/gentelella/admin/login/change_password.html:19
 #: app/templates/gentelella/admin/login/create_password.html:19
 #: app/templates/gentelella/admin/login/password_reminder.html:12
 #: app/templates/gentelella/admin/login/register.html:20
 msgid "Submit"
-msgstr "제출"
+msgstr ""
 
 #: app/templates/gentelella/admin/login/create_password.html:7
 msgid "Create Password"
-msgstr "비밀번호 생성"
+msgstr ""
 
 #: app/templates/gentelella/admin/login/email_confirmation.html:7
 msgid "Email Confirmation"
-msgstr "이메일 확인"
+msgstr ""
 
 #: app/templates/gentelella/admin/login/email_confirmation.html:8
 msgid ""
 "We have sent you an email confirmation on the email you have given. "
 "Please follow the link in the email to create your account."
-msgstr "우리는 당신에게 당신이 제공 한 이메일에서 확인 이메일을 보냈습니다. 계정을 만들 수있는 이메일에있는 링크를 클릭하십시오."
+msgstr ""
 
 #: app/templates/gentelella/admin/login/login.html:7
 msgid "Login Form"
-msgstr "로그인 양식"
+msgstr ""
 
 #: app/templates/gentelella/admin/login/login.html:16
 msgid "Lost your password"
-msgstr "암호를 잊으 셨나요"
+msgstr ""
 
 #: app/templates/gentelella/admin/login/login.html:22
 msgid "New to site"
-msgstr "사이트에 새"
+msgstr ""
 
 #: app/templates/gentelella/admin/login/login.html:24
 msgid "Create Account"
-msgstr "계정 만들기"
+msgstr ""
 
 #: app/templates/gentelella/admin/login/password_reminder.html:7
 msgid "Forgot Password"
-msgstr "비밀번호를 잊으 셨나요"
+msgstr ""
 
 #: app/templates/gentelella/admin/login/register.html:6
 msgid "Registration Form"
-msgstr "등록 양식"
+msgstr ""
 
 #: app/templates/gentelella/admin/login/register.html:24
 msgid "Already a member"
-msgstr "이미 회원"
+msgstr ""
 
 #: app/templates/gentelella/admin/login/register.html:25
 msgid "Log in"
-msgstr "로그인"
+msgstr ""
 
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:21
 #: app/templates/gentelella/admin/mysessions/mysessions_list.html:68
 msgid "Under Review"
-msgstr "검토 중"
+msgstr ""
 
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:35
 msgid "Withdraw Proposal"
-msgstr "제안을 철회"
+msgstr ""
 
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:40
 msgid "Edit Proposal"
-msgstr "수정 제안"
+msgstr ""
 
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:77
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:265
 msgid "Microlocation"
-msgstr "Microlocation"
+msgstr ""
 
 #: app/templates/gentelella/admin/mysessions/mysessions_list.html:126
 msgid "No session proposals for upcoming events found"
-msgstr "발견 예정된 이벤트에 대한 세션 제안 없음"
+msgstr ""
 
 #: app/templates/gentelella/admin/mysessions/mysessions_list.html:137
 msgid "No session proposals for past events found"
-msgstr "발견 된 과거의 사건에 대한 세션 제안 없음"
+msgstr ""
 
 #: app/templates/gentelella/admin/mytickets/mytickets_list.html:82
 msgid "No tickets for upcoming events found"
-msgstr "예정된 이벤트에 대한 티켓을 찾을 수 없습니다"
+msgstr ""
 
 #: app/templates/gentelella/admin/mytickets/mytickets_list.html:93
 msgid "No tickets for past events found"
-msgstr "과거의 사건에 대한 티켓을 찾을 수 없습니다"
+msgstr ""
 
 #: app/templates/gentelella/admin/profile/_form.html:11
 msgid "Family Name"
-msgstr "가족 이름"
+msgstr ""
 
 #: app/templates/gentelella/admin/profile/_form.html:15
 msgid "Details about User"
-msgstr "사용자에 대한 세부 정보"
+msgstr ""
 
 #: app/templates/gentelella/admin/profile/_form.html:21
 msgid "Integrate Social Networks"
-msgstr "소셜 네트워크 통합"
+msgstr ""
 
 #: app/templates/gentelella/admin/profile/_form.html:35
 #: app/templates/gentelella/admin/profile/_form.html:57
 msgid "Connect"
-msgstr "잇다"
+msgstr ""
 
 #: app/templates/gentelella/admin/profile/_form.html:67
 msgid "Connect Account"
-msgstr "계정을 연결"
+msgstr ""
 
 #: app/templates/gentelella/admin/profile/index.html:40
 msgid "Avatar size must be less than 1MB"
-msgstr "아바타 크기는 1MB 미만이어야합니다"
+msgstr ""
 
 #: app/templates/gentelella/admin/profile/notifications.html:27
 msgid "Unread"
-msgstr "읽히지 않는"
+msgstr ""
 
 #: app/templates/gentelella/admin/profile/notifications.html:38
 msgid "Mark all read"
-msgstr "마크 모든 읽기"
+msgstr ""
 
 #: app/templates/gentelella/admin/profile/notifications.html:46
 msgid "Received At"
-msgstr "수신"
+msgstr ""
 
 #: app/templates/gentelella/admin/profile/notifications.html:47
 msgid "Received At (Humanized)"
-msgstr "수신 (인간화)"
+msgstr ""
 
 #: app/templates/gentelella/admin/profile/notifications.html:67
 msgid "Mark"
-msgstr "표"
+msgstr ""
 
 #: app/templates/gentelella/admin/profile/notifications.html:68
 msgid "as Read"
-msgstr "읽기로"
+msgstr ""
 
 #: app/templates/gentelella/admin/settings/pages/contact_info.html:4
 msgid "Contact Info - Settings"
-msgstr "연락처 정보 - 설정"
+msgstr ""
 
 #: app/templates/gentelella/admin/settings/pages/email_preferences.html:4
 msgid "Email Preferences - Settings"
-msgstr "이메일 환경 설정 - 설정"
+msgstr ""
 
 #: app/templates/gentelella/admin/settings/pages/email_preferences.html:58
 msgid "Speaker Notifications"
-msgstr "스피커 알림"
+msgstr ""
 
 #: app/templates/gentelella/admin/settings/pages/email_preferences.html:74
 msgid "Organizer Notifications"
-msgstr "주최자 알림"
+msgstr ""
 
 #: app/templates/gentelella/admin/settings/pages/email_preferences.html:113
 msgid "Email Updates"
-msgstr "이메일 업데이트"
+msgstr ""
 
 #: app/templates/gentelella/admin/settings/pages/email_preferences.html:123
 msgid "Updates about events"
-msgstr "이벤트에 대한 업데이트"
+msgstr ""
 
 #: app/templates/gentelella/admin/settings/pages/password.html:4
 msgid "Password - Settings"
-msgstr "비밀번호 - 설정"
+msgstr ""
 
 #: app/templates/gentelella/admin/settings/pages/password.html:18
 msgid "Current Password"
-msgstr "현재 비밀번호"
+msgstr ""
 
 #: app/templates/gentelella/admin/settings/pages/password.html:24
 msgid "New Password"
-msgstr "새 비밀번호"
+msgstr ""
 
 #: app/templates/gentelella/admin/settings/pages/password.html:30
 msgid "Repeat Password"
-msgstr "반복 비밀"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:28
 msgid "Copyright Info"
-msgstr "저작권 정보"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:31
 msgid "Origin Info"
-msgstr "원산지 정보"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:43
 msgid "Change"
-msgstr "변화"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:60
 msgid "Update Image"
-msgstr "업데이트 이미지"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:69
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:86
 msgid "Placeholder"
-msgstr "자리 표시 자"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:76
 msgid "Select Placeholder"
-msgstr "자리 표시를 선택하십시오"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:80
 msgid ""
 "For Cover Photos : We recommend using at least a 1300x550px (2:1 ratio) "
 "image"
-msgstr "표지 사진의 경우 : 우리는 적어도 1300x550px를 사용하는 것이 좋습니다 (2 : 1 비율) 이미지"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:80
 msgid ""
 "For Avatar Photos : We recommend using at least a 360x360px (1:1 ratio) "
 "image"
-msgstr "아바타 사진의 경우 : 우리는 적어도 360x360px를 사용하는 것이 좋습니다 (1 : 1 비율) 이미지"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:80
 msgid "The images should be no larger than 10MB"
-msgstr "이미지는 10메가바이트 이하 여야한다"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:97
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:98
 msgid "Copyright Information"
-msgstr "저작권 정보"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:102
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:103
 msgid "Origin Information"
-msgstr "원산지 정보"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/content/_translations.html:14
 msgid "Language"
-msgstr "언어"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/content/_translations.html:15
 msgid "Download .PO files"
-msgstr "와 .po 파일 다운로드"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/content/_translations.html:28
 msgid "Update .PO files"
-msgstr "업데이트와 .po 파일"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/content/_translations.html:38
 msgid "language"
-msgstr "언어"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/content/_translations.html:46
 msgid "Upload"
-msgstr "업로드"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/content/content.html:3
 msgid "Content"
-msgstr "함유량"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/content/content.html:14
 #: app/templates/gentelella/admin/super_admin/content/content.html:28
 #: app/templates/gentelella/admin/super_admin/content/content.html:31
 #: app/templates/gentelella/admin/super_admin/content/content.html:32
 msgid "Social Links"
-msgstr "사회 링크"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/content/content.html:17
 #: app/templates/gentelella/admin/super_admin/content/content.html:34
 #: app/templates/gentelella/admin/super_admin/content/content.html:35
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:3
 msgid "Pages"
-msgstr "페이지"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/content/content.html:20
 #: app/templates/gentelella/admin/super_admin/content/content.html:37
 #: app/templates/gentelella/admin/super_admin/content/content.html:38
 msgid "System Images"
-msgstr "시스템 이미지"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/content/content.html:23
 #: app/templates/gentelella/admin/super_admin/content/content.html:40
 #: app/templates/gentelella/admin/super_admin/content/content.html:41
 msgid "Translations"
-msgstr "번역"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/events/events.html:143
 msgid "Restore Event"
-msgstr "이벤트 복원"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/events/events.html:156
 #: app/templates/gentelella/admin/super_admin/events/events.html:170
 msgid "All Events"
-msgstr "모든 이벤트"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/events/events.html:157
 #: app/templates/gentelella/admin/super_admin/events/events.html:166
 #: app/templates/gentelella/admin/super_admin/events/events.html:173
 msgid "All Live"
-msgstr "모든 라이브"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/events/events.html:158
 #: app/templates/gentelella/admin/super_admin/events/events.html:176
 msgid "All Drafts"
-msgstr "모든 임시 보관함"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/events/events.html:159
 #: app/templates/gentelella/admin/super_admin/events/events.html:179
 msgid "All Past"
-msgstr "모든 과거"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/events/events.html:160
 #: app/templates/gentelella/admin/super_admin/events/events.html:182
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:112
 msgid "All Deleted Events"
-msgstr "모든 삭제 된 이벤트"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/events/events.html:198
 #: app/templates/gentelella/admin/super_admin/events/events.html:220
@@ -2345,7 +2345,7 @@ msgstr "모든 삭제 된 이벤트"
 #: app/templates/gentelella/admin/super_admin/events/events.html:286
 #: app/templates/gentelella/guest/search/_collapse_search.html:90
 msgid "Start Date"
-msgstr "시작 날짜"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/events/events.html:199
 #: app/templates/gentelella/admin/super_admin/events/events.html:221
@@ -2354,117 +2354,117 @@ msgstr "시작 날짜"
 #: app/templates/gentelella/admin/super_admin/events/events.html:287
 #: app/templates/gentelella/guest/search/_collapse_search.html:98
 msgid "End Date"
-msgstr "종료 날짜"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/events/events.html:285
 msgid "Public URL"
-msgstr "공공 URL"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/messages/messages.html:4
 msgid "System Messages"
-msgstr "시스템 메시지"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/messages/messages.html:34
 msgid "Recipient"
-msgstr "받는 사람"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/messages/messages.html:35
 msgid "Trigger"
-msgstr "방아쇠"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/messages/messages.html:36
 msgid "Email Message"
-msgstr "이메일 메시지"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/messages/messages.html:37
 msgid "Notification Message"
-msgstr "통지 메시지"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/messages/messages.html:39
 msgid "Time/Date of Sent out"
-msgstr "의 시간 / 날짜 발송"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/modules/modules.html:5
 #: app/templates/gentelella/admin/super_admin/modules/modules.html:23
 msgid "Modules"
-msgstr "모듈"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/modules/modules.html:17
 msgid "Enable/Disable Modules"
-msgstr "/ 안 모듈을 사용하도록 설정"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/modules/modules.html:29
 msgid "Ticketing"
-msgstr "티켓"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/modules/modules.html:37
 msgid "Payments"
-msgstr "지급"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/modules/modules.html:46
 msgid "Donations"
-msgstr "기부"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/pages/_create_page_modal.html:8
 msgid "Page Details"
-msgstr "페이지 세부 사항"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/pages/_create_page_modal.html:13
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:35
 msgid "NAME"
-msgstr "이름"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/pages/_create_page_modal.html:17
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:40
 msgid "TITLE"
-msgstr "표제"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/pages/_create_page_modal.html:26
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:50
 msgid "DESCRIPTION"
-msgstr "기술"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/pages/_create_page_modal.html:31
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:55
 msgid "PLACE"
-msgstr "장소"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/pages/_create_page_modal.html:33
 msgid "Use Open Event"
-msgstr "사용 오픈 이벤트"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/pages/_create_page_modal.html:34
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:18
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:61
 msgid "Footer Menu"
-msgstr "바닥 글 메뉴"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/pages/_create_page_modal.html:38
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:65
 msgid "POSITION"
-msgstr "위치"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/pages/_create_page_modal.html:42
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:70
 msgid "LANGUAGE"
-msgstr "언어"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/pages/_create_page_modal.html:53
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:5
 msgid "Create Page"
-msgstr "페이지 만들기"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:58
 msgid "Use Open Even"
-msgstr "사용 열기도"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:78
 msgid "Update Page"
-msgstr "업데이트 페이지"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/pages/pages.html:83
 msgid "Delete Page"
-msgstr "페이지 삭제"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:30
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:38
@@ -2476,7 +2476,7 @@ msgstr "페이지 삭제"
 #: app/templates/gentelella/admin/super_admin/users/users.html:244
 #: app/templates/gentelella/admin/super_admin/widgets/_users.html:11
 msgid "System Roles"
-msgstr "시스템 역할"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:33
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:45
@@ -2486,209 +2486,209 @@ msgstr "시스템 역할"
 #: app/templates/gentelella/admin/super_admin/users/users.html:245
 #: app/templates/gentelella/admin/super_admin/widgets/_users.html:34
 msgid "Event Roles"
-msgstr "이벤트의 역할"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:57
 msgid "Panel Permissions"
-msgstr "패널 권한"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:62
 msgid "System Role"
-msgstr "시스템 역할"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:64
 msgid "Panels"
-msgstr "패널"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:66
 msgid "Actions"
-msgstr "행위"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:75
 msgid "Built-in Role"
-msgstr "내장 역할"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:91
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:129
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:169
 msgid "Panel"
-msgstr "패널"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:115
 msgid "Update System Role"
-msgstr "업데이트 시스템 역할"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:149
 msgid "Add new Role"
-msgstr "새 역할 추가"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:156
 msgid "Add new System Role"
-msgstr "새 시스템 역할 추가"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:175
 msgid "Create Role"
-msgstr "역할 만들기"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:192
 msgid "User Permissions"
-msgstr "사용자 권한"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:198
 msgid "Permission"
-msgstr "허가"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:201
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:220
 msgid "Verified User"
-msgstr "검증 사용자"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:205
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:228
 #: app/templates/gentelella/admin/super_admin/users/users.html:64
 msgid "Unverified User"
-msgstr "확인되지 않은 사용자"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:208
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:237
 msgid "Anonymous User"
-msgstr "익명의 사용자"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:240
 msgid "Account creation is necessary"
-msgstr "계정 생성이 필요하다"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:260
 msgid "EVENT ROLE"
-msgstr "EVENT의 역할"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:260
 msgid "SERVICE"
-msgstr "서비스"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:262
 msgid "Session"
-msgstr "세션"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:263
 msgid "Speaker"
-msgstr "스피커"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:264
 msgid "Sponsor"
-msgstr "스폰서"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/reports/_server_logs.html:23
 msgid "Server logs display is supported only on Kubernetes abd Heroku deployments"
-msgstr "디스플레이 서버 로그는 Kubernetes ABD Heroku를 배포에서만 지원됩니다"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:3
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:9
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:12
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:13
 msgid "Activity"
-msgstr "활동"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:4
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:15
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:16
 msgid "Mails"
-msgstr "메일"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:31
 msgid "Actor"
-msgstr "배우"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:32
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:56
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:89
 msgid "Time"
-msgstr "시각"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:55
 msgid "To"
-msgstr "에"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:88
 msgid "For"
-msgstr "에 대한"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/reports/reports.html:4
 msgid "Reports"
-msgstr "보고서"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/reports/reports.html:31
 #: app/templates/gentelella/admin/super_admin/reports/reports.html:45
 msgid "System Logs"
-msgstr "시스템 로그"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/reports/reports.html:35
 #: app/templates/gentelella/admin/super_admin/reports/reports.html:48
 msgid "Server Logs"
-msgstr "서버 로그"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sales/by_marketer.html:61
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:60
 msgid "Marketer"
-msgstr "마케팅"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sales/by_marketer.html:73
 msgid "discounted"
-msgstr "할인"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sales/by_marketer.html:76
 msgid "Discount amount"
-msgstr "할인 금액"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:26
 msgid "Edit"
-msgstr "편집하다"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:26
 msgid "Discount"
-msgstr "할인"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:50
 msgid "Percent"
-msgstr "퍼센트"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:66
 msgid "Number of redemptions allowed"
-msgstr "상환의 수는 허용"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:98
 msgid "Discount duration"
-msgstr "할인 기간"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:102
 msgid "Months"
-msgstr "달"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:111
 msgid "Attached to Marketer"
-msgstr "마케팅에 부착"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:113
 msgid "Select Marketer"
-msgstr "선택 마케팅"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sales/fees.html:64
 #: app/templates/gentelella/guest/event/_ticketing_box.html:32
 #: app/templates/gentelella/guest/invoicing/components/_invoice_summary.html:12
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:12
 msgid "Fee"
-msgstr "보수"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sales/fees.html:68
 msgid "Revenue"
-msgstr "수익"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sales/fees_status.html:16
 #: app/templates/gentelella/guest/invoicing/invoice_pdf.html:5
 #: app/templates/gentelella/guest/invoicing/invoice_pdf.html:37
 #: app/templates/gentelella/guest/ticketing/invoice_pdf.html:37
 msgid "Invoice"
-msgstr "송장"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sales/fees_status.html:19
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:122
@@ -2698,70 +2698,70 @@ msgstr "송장"
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:194
 #: app/templates/gentelella/guest/ticketing/pdf/ticket.html:44
 msgid "Event"
-msgstr "행사"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sales/fees_status.html:22
 msgid "Dated"
-msgstr "날짜가 적힌"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sales/fees_status.html:25
 msgid "Amount"
-msgstr "양"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sales/fees_status.html:28
 msgid "Sent to"
-msgstr "전송"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sales/fees_status.html:60
 msgid "Overdue"
-msgstr "연체"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sales/filter_table_base.html:41
 #: app/templates/gentelella/guest/search/_collapse_search.html:106
 msgid "Filter"
-msgstr "필터"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sales/filter_table_base.html:53
 msgid "Showing all records"
-msgstr "모든 레코드를 표시"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sales/filter_table_base.html:57
 msgid "Filter by Date"
-msgstr "날짜별로 필터"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sales/filter_table_base.html:61
 msgid "Remove Filters"
-msgstr "필터를 제거"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:72
 msgid "Restore Session"
-msgstr "세션 복원"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:87
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:100
 msgid "All Sessions"
-msgstr "모든 세션"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:88
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:96
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:103
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:43
 msgid "All Pending"
-msgstr "모든 보류"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:89
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:106
 msgid "All Accepted"
-msgstr "모두 허용"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:90
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:109
 msgid "All Rejected"
-msgstr "모든 거부"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:91
 msgid "All Deleted Sessions"
-msgstr "삭제 된 모든 세션"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:125
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:143
@@ -2769,7 +2769,7 @@ msgstr "삭제 된 모든 세션"
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:179
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:197
 msgid "Date of Submission"
-msgstr "제출 날짜"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:126
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:144
@@ -2777,11 +2777,11 @@ msgstr "제출 날짜"
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:180
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:198
 msgid "Date of Event"
-msgstr "이벤트 날짜"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_analytics.html:3
 msgid "Google Analytics Tracking ID"
-msgstr "Google 웹 로그 분석 추적 ID"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_analytics.html:4
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:30
@@ -2793,23 +2793,23 @@ msgstr "Google 웹 로그 분석 추적 ID"
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:141
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:255
 msgid "See"
-msgstr "만나다"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_analytics.html:5
 msgid "on how to get this Tracking ID"
-msgstr "방법은이 추적 ID를 얻으려면"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_analytics.html:7
 msgid "Tracking ID"
-msgstr "추적 ID"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:4
 msgid "Event Images"
-msgstr "이벤트 이미지"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:6
 msgid "Large Size"
-msgstr "대판"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:8
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:40
@@ -2818,7 +2818,7 @@ msgstr "대판"
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:123
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:145
 msgid "Width"
-msgstr "폭"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:13
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:45
@@ -2827,7 +2827,7 @@ msgstr "폭"
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:123
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:145
 msgid "Height"
-msgstr "신장"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:18
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:50
@@ -2836,11 +2836,11 @@ msgstr "신장"
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:151
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:173
 msgid "Quality"
-msgstr "품질"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:24
 msgid "Standard aspect ratio is 13:5. Tick to maintain aspect ratio."
-msgstr "표준 가로 세로 비율은 13 : 5이다. 가로 세로 비율을 유지하기 위해 체크."
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:28
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:60
@@ -2850,7 +2850,7 @@ msgstr "표준 가로 세로 비율은 13 : 5이다. 가로 세로 비율을 유
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:156
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:178
 msgid "Standard Size of the available area is"
-msgstr "사용 가능한 영역의 표준 크기입니다"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:29
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:61
@@ -2858,912 +2858,912 @@ msgstr "사용 가능한 영역의 표준 크기입니다"
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:157
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:179
 msgid "Found in"
-msgstr "에서 발견"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:31
 msgid "Background Header Image in Public Event Page"
-msgstr "공공 이벤트 페이지에서 배경 헤더 이미지"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:38
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:121
 msgid "Thumbnail Size"
-msgstr "썸네일 크기"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:56
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:90
 msgid "Standard aspect ratio is 5:2. Tick to maintain aspect ratio."
-msgstr "표준 가로 세로 비율이 5 : 2이다. 가로 세로 비율을 유지하기 위해 체크."
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:63
 msgid "Home Page Event Images"
-msgstr "홈 페이지 이벤트 이미지"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:64
 msgid "My Session Page Event Images"
-msgstr "내 세션 페이지 이벤트 이미지"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:65
 msgid "My Ticket Page Event Images"
-msgstr "내 티켓 페이지 이벤트 이미지"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:72
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:166
 msgid "Icon Size"
-msgstr "아이콘 크기"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:100
 msgid "Logo Size"
-msgstr "로고 크기"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:100
 msgid "Event Wizard"
-msgstr "이벤트 마법사"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:119
 msgid "Profile/Speaker Images"
-msgstr "프로필 / 스피커 이미지"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:136
 msgid "Event Public Page"
-msgstr "이벤트 홍보 페이지"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:143
 msgid "Small Size"
-msgstr "작은 크기"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:159
 msgid "Speaker Tab in Event Dashboard"
-msgstr "이벤트 대시 보드에서 스피커 탭"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:168
 msgid "Width & Height"
-msgstr "너비 및 높이"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_image_config.html:181
 msgid "Top Bar Right Corner"
-msgstr "톱 바 오른쪽 코너"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_microservices.html:4
 msgid "Android"
-msgstr "기계적 인조 인간"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_microservices.html:13
 msgid "Web"
-msgstr "편물"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:4
 msgid "Stripe Keys"
-msgstr "스트라이프 키"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:6
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:105
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:143
 msgid "on how to obtain these keys"
-msgstr "이러한 키를 구하는 방법에"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:8
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:17
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:35
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:71
 msgid "Client"
-msgstr "고객"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:15
 msgid "Secret Key"
-msgstr "비밀 키"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:22
 msgid "Publishable Key"
-msgstr "게시 가능한 키"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:29
 msgid "Credentials"
-msgstr "신임장"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:32
 msgid "on how to obtain these credentials"
-msgstr "이러한 자격 증명을 구하는 방법에 대한"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:35
 msgid "Integration"
-msgstr "완성"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:35
 msgid " Mod"
-msgstr " 모드"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:35
 msgid "e"
-msgstr "이자형"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:41
 msgid "Sandbox"
-msgstr "모래 상자"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:41
 msgid "mode"
-msgstr "방법"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:41
 msgid "Used during development and testing"
-msgstr "개발 및 테스트시 사용"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:48
 msgid "Live mode - Used during production"
-msgstr "라이브 모드 - 생산시 사용"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:54
 msgid "Sandbox username"
-msgstr "샌드 박스 사용자 이름"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:61
 msgid "Sandbox password"
-msgstr "샌드 박스 암호"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:68
 msgid "Sandbox signature"
-msgstr "샌드 박스 서명"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:75
 msgid "Live username"
-msgstr "라이브 사용자 이름"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:82
 msgid "Live password"
-msgstr "라이브 암호"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:89
 msgid "Live signature"
-msgstr "라이브 서명"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:13
 msgid "Google Tokens"
-msgstr "구글 토큰"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:15
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:33
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:51
 msgid "on how to obtain these tokens"
-msgstr "이 토큰을받는 방법에"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:24
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:42
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:78
 msgid "Client secret"
-msgstr "클라이언트의 비밀"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:31
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:49
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:67
 msgid "Tokens"
-msgstr "토큰"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:53
 msgid "Consumer key"
-msgstr "소비자 키"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:60
 msgid "Consumer secret"
-msgstr "소비자 비밀"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:68
 msgid ""
 "on how to obtain these\n"
 "                                        tokens"
-msgstr "이 \ n 개의 토큰을 구하는 방법에 대한"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:85
 msgid "Storage"
-msgstr "저장"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:86
 msgid "Where to store data"
-msgstr "어디에서 데이터를 저장하는 방법"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:92
 msgid "Local"
-msgstr "노동 조합 지부"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:100
 msgid "Google Storage"
-msgstr "Google 저장 용량"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:113
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:163
 msgid "Bucket name"
-msgstr "버킷 이름"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:120
 msgid "Interoperable access key"
-msgstr "상호 운용 가능한 액세스 키"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:127
 msgid "Interoperable access secret"
-msgstr "상호 운용 액세스 비밀"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:138
 msgid "Amazon S3"
-msgstr "아마존 S3"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:151
 msgid "Region"
-msgstr "부위"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:170
 msgid "Key"
-msgstr "키"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:177
 msgid "Secret"
-msgstr "비밀"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:187
 msgid "Mail Settings"
-msgstr "메일 설정"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:190
 msgid "From Email"
-msgstr "이메일에서"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:200
 msgid "SMTP"
-msgstr "SMTP"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:204
 msgid "Host"
-msgstr "주인"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:211
 msgid "Port"
-msgstr "포트"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:218
 msgid "Encryption"
-msgstr "암호화"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:234
 msgid "Username"
-msgstr "사용자 이름"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:241
 msgid "Password"
-msgstr "암호"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:253
 msgid "Sendgrid API"
-msgstr "Sendgrid API"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:256
 msgid "on how to get this token"
-msgstr "이 토큰을 얻는 방법에"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:263
 msgid "Sendgrid Token"
-msgstr "Sendgrid 토큰"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:271
 msgid "App secret key"
-msgstr "앱 비밀 키"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:272
 msgid ""
 "Secret key for the application. Recommended is a random string minimum 20"
 " characters in length."
-msgstr "응용 프로그램에 대한 비밀 키를 누릅니다. 길이가 20 자 최소 임의의 문자열을 권장합니다."
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:281
 msgid "Super Admin Email ID"
-msgstr "최고 관리자 이메일 ID"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:282
 msgid "The email ID of the super admin user created during initial deployment."
-msgstr "초기 배포 중에 생성 된 최고 관리자 사용자의 이메일 ID."
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_ticket-fees.html:6
 msgid "List of Supported Currencies"
-msgstr "지원되는 통화 목록"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_ticket-fees.html:15
 msgid "Service Fee"
-msgstr "서비스 요금"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/_ticket-fees.html:24
 msgid "Maximum Fee"
-msgstr "최대 요금"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:20
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:47
 msgid "System"
-msgstr "체계"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:23
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:49
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:50
 msgid "Microservices"
-msgstr "Microservices"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:26
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:52
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:53
 msgid "Images"
-msgstr "이미지"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:29
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:55
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:56
 msgid "Analytics"
-msgstr "해석학"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:32
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:58
 msgid "Payment Gateways"
-msgstr "지불 게이트웨이"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:37
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:63
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:64
 msgid "Ticket Fees"
-msgstr "티켓 요금"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:46
 msgid "System Tokens"
-msgstr "시스템 토큰"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:60
 msgid "ayment Gateways"
-msgstr "의 ayment 게이트웨이"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:4
 #: app/templates/gentelella/admin/super_admin/widgets/_users.html:3
 msgid "Users"
-msgstr "사용자"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:50
 msgid "Deleted"
-msgstr "삭제"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:55
 msgid "Super Admin"
-msgstr "최고 관리자"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:62
 msgid "Registered User"
-msgstr "등록 된 사용자"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:120
 msgid "Restore User"
-msgstr "사용자 복원"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:131
 msgid "Update System Roles"
-msgstr "업데이트 시스템 역할"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:137
 msgid "Provide Admin access"
-msgstr "관리자 액세스를 제공합니다"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:150
 msgid "Custom System Roles"
-msgstr "사용자 시스템의 역할"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:173
 #: app/templates/gentelella/admin/super_admin/users/users.html:185
 msgid "All Users"
-msgstr "모든 사용자들"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:175
 #: app/templates/gentelella/admin/super_admin/users/users.html:188
 msgid "Active Users"
-msgstr "활성 사용자"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:176
 #: app/templates/gentelella/admin/super_admin/users/users.html:191
 msgid "Deleted Users"
-msgstr "삭제 된 사용자"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:206
 #: app/templates/gentelella/admin/super_admin/users/users.html:226
 #: app/templates/gentelella/admin/super_admin/users/users.html:246
 msgid "Member Since"
-msgstr "회원 가입일"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:207
 #: app/templates/gentelella/admin/super_admin/users/users.html:227
 #: app/templates/gentelella/admin/super_admin/users/users.html:247
 msgid "Last Access"
-msgstr "마지막 액세스"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:8
 msgid "Number of Events"
-msgstr "이벤트의 수"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_heroku.html:3
 msgid "Heroku Info"
-msgstr "Heroku를 정보"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_heroku.html:20
 msgid "Heroku Version"
-msgstr "Heroku를 버전"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_heroku.html:24
 msgid "Revision"
-msgstr "개정"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_heroku.html:29
 #: app/templates/gentelella/admin/super_admin/widgets/_kubernetes.html:28
 msgid "Author Name"
-msgstr "저자 이름"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_heroku.html:39
 #: app/templates/gentelella/admin/super_admin/widgets/_kubernetes.html:39
 msgid "Commit Message"
-msgstr "메시지를 커밋"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_kubernetes.html:3
 msgid "Kubernetes Deployment Info"
-msgstr "는 Kubernetes 배포 정보"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_kubernetes.html:12
 msgid "Repository"
-msgstr "저장소"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_kubernetes.html:16
 msgid "Branch"
-msgstr "분기"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_kubernetes.html:21
 msgid "Commit Hash"
-msgstr "해시 커밋"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_messages.html:3
 msgid "Messages"
-msgstr "메시지"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_messages.html:11
 msgid "No. of Sent Mails"
-msgstr "보낸 메일의 번호"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_messages.html:18
 msgid "In last 24 hours"
-msgstr "지난 24 시간"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_messages.html:22
 msgid "In last 3 days"
-msgstr "지난 3 일"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_messages.html:26
 msgid "In last 7 days"
-msgstr "지난 7 일"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_messages.html:30
 msgid "In last 1 month"
-msgstr "최근 1 달"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_messages.html:34
 msgid "Since installation"
-msgstr "설치 이후"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:9
 msgid "Number of Sessions"
-msgstr "세션의 수"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_users.html:18
 msgid "Super Admins"
-msgstr "최고 관리자"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_users.html:22
 msgid "of Admins"
-msgstr "관리자의"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_users.html:26
 msgid "Registered Users"
-msgstr "등록 된 사용자"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_users.html:41
 msgid "Organizers"
-msgstr "조직"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_users.html:45
 msgid "Co-Organizers"
-msgstr "공동 주최"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_users.html:49
 msgid "Track Organizers"
-msgstr "트랙 조직"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/widgets/_users.html:53
 msgid "Attendees"
-msgstr "참석자"
+msgstr ""
 
 #: app/templates/gentelella/guest/sitemap.html:40
 msgid "General Information"
-msgstr "일반 정보"
+msgstr ""
 
 #: app/templates/gentelella/guest/sitemap.html:58
 msgid "Account Management"
-msgstr "계정 관리"
+msgstr ""
 
 #: app/templates/gentelella/guest/sitemap.html:60
 #: app/templates/swagger/user-info.html:14
 msgid "Register"
-msgstr "레지스터"
+msgstr ""
 
 #: app/templates/gentelella/guest/sitemap.html:63
 msgid "View own profile"
-msgstr "자신의 프로필보기"
+msgstr ""
 
 #: app/templates/gentelella/guest/sitemap.html:67
 msgid "Attending Events"
-msgstr "행사에 참석"
+msgstr ""
 
 #: app/templates/gentelella/guest/sitemap.html:69
 msgid "Find Events"
-msgstr "이벤트 찾기"
+msgstr ""
 
 #: app/templates/gentelella/guest/sitemap.html:70
 msgid "My Event Tickets"
-msgstr "내 이벤트 티켓"
+msgstr ""
 
 #: app/templates/gentelella/guest/sitemap.html:74
 msgid "Managing Events"
-msgstr "이벤트 관리"
+msgstr ""
 
 #: app/templates/gentelella/guest/sitemap.html:77
 msgid "List own events"
-msgstr "자신의 이벤트를 나열"
+msgstr ""
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:5
 #: app/templates/gentelella/guest/event/_ticketing_box.html:23
 msgid "Ticket Information"
-msgstr "티켓 정보"
+msgstr ""
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:8
 msgid "Click to order tickets"
-msgstr "티켓을 주문 클릭"
+msgstr ""
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:11
 msgid "You will be taken to"
-msgstr "당신은로 이동합니다"
+msgstr ""
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:11
 msgid "to complete the purchase of the tickets"
-msgstr "티켓의 구입을 완료합니다"
+msgstr ""
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:29
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:10
 msgid "Ticket type"
-msgstr "티켓 종류"
+msgstr ""
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:30
 msgid "Sales ends"
-msgstr "판매 종료"
+msgstr ""
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:34
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:14
 msgid "Subtotal"
-msgstr "소계"
+msgstr ""
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:70
 msgid "This ticket's sale has ended"
-msgstr "이 티켓의 판매는 종료"
+msgstr ""
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:73
 msgid "This ticket's sale will start"
-msgstr "이 티켓의 판매 시작"
+msgstr ""
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:99
 msgid "No tickets available right now."
-msgstr "현재 사용할 수있는 티켓이 없습니다."
+msgstr ""
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:108
 msgid "Enter promotional code"
-msgstr "프로모션 코드를 입력"
+msgstr ""
 
 #: app/templates/gentelella/guest/event/cfs.html:19
 msgid "Open"
-msgstr "열다"
+msgstr ""
 
 #: app/templates/gentelella/guest/event/cfs.html:21
 msgid "Closed"
-msgstr "닫은"
+msgstr ""
 
 #: app/templates/gentelella/guest/event/cfs.html:23
 msgid "Yet to Open"
-msgstr "그러나 열기"
+msgstr ""
 
 #: app/templates/gentelella/guest/event/cfs.html:33
 msgid "Submit Proposal"
-msgstr "제안서 제출"
+msgstr ""
 
 #: app/templates/gentelella/guest/event/details.html:51
 msgid "No sessions have been published yet"
-msgstr "어떤 세션은 아직 발표되지 않았다"
+msgstr ""
 
 #: app/templates/gentelella/guest/event/details.html:64
 msgid "Sponsors info unavailable"
-msgstr "스폰서 정보를 사용할 수 없습니다에게"
+msgstr ""
 
 #: app/templates/gentelella/guest/event/details.html:71
 msgid "Organized by"
-msgstr "주최"
+msgstr ""
 
 #: app/templates/gentelella/guest/event/details.html:76
 msgid "Getting Here"
-msgstr "여기 오기"
+msgstr ""
 
 #: app/templates/gentelella/guest/event/schedule.html:24
 msgid "Schedule"
-msgstr "시간표"
+msgstr ""
 
 #: app/templates/gentelella/guest/event/schedule.html:26
 msgid "Published on"
-msgstr "에 게시"
+msgstr ""
 
 #: app/templates/gentelella/guest/event/schedule.html:36
 msgid "Rooms View"
-msgstr "객실보기"
+msgstr ""
 
 #: app/templates/gentelella/guest/event/schedule.html:37
 msgid "Tracks View"
-msgstr "트랙보기"
+msgstr ""
 
 #: app/templates/gentelella/guest/event/schedule.html:38
 msgid "Sessions View"
-msgstr "세션보기"
+msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/invoice_base.html:30
 #: app/templates/gentelella/guest/ticketing/order_base.html:65
 msgid "Pay Via Stripe"
-msgstr "유료 통해 스트라이프"
+msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/invoice_post_payment.html:18
 #: app/templates/gentelella/guest/ticketing/order_post_payment.html:34
 msgid "Print Invoice"
-msgstr "인쇄 송장"
+msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/invoice_post_payment.html:22
 msgid "Download Invoice"
-msgstr "다운로드 송장"
+msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:5
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:5
 msgid "Billing Details"
-msgstr "결제 세부 정보"
+msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:19
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:19
 msgid "Payment Information"
-msgstr "결제 정보"
+msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:22
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:22
 msgid "Paid Via"
-msgstr "유료 통해"
+msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:23
 msgid "Transaction"
-msgstr "트랜잭션"
+msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:25
 msgid "Card Name"
-msgstr "카드 이름"
+msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:26
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:26
 msgid "Card Number"
-msgstr "카드 번호"
+msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:27
 msgid "Exp Date"
-msgstr "특급 날짜"
+msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:29
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:29
 msgid "Payment Date"
-msgstr "지불 날짜"
+msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:30
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:30
 msgid "Invoice number"
-msgstr "송장 번호"
+msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice_summary.html:4
 msgid "Invoice Summary"
-msgstr "인보이스 요약"
+msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice_summary.html:10
 msgid "Event Name"
-msgstr "이벤트 이름"
+msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice_summary.html:11
 msgid "Fee Percent"
-msgstr "수수료 비율"
+msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice_summary.html:26
 msgid "Invoice total"
-msgstr "송장 총"
+msgstr ""
 
 #: app/templates/gentelella/guest/search/_collapse_search.html:21
 msgid "All Categories"
-msgstr "모든 항목"
+msgstr ""
 
 #: app/templates/gentelella/guest/search/_collapse_search.html:59
 msgid "All Event Types"
-msgstr "모든 이벤트 유형"
+msgstr ""
 
 #: app/templates/gentelella/guest/search/_collapse_search.html:85
 msgid "Custom Dates"
-msgstr "사용자 정의 날짜"
+msgstr ""
 
 #: app/templates/gentelella/guest/search/results.html:17
 msgid "Explore"
-msgstr "탐구"
+msgstr ""
 
 #: app/templates/gentelella/guest/search/results.html:87
 msgid "Loading"
-msgstr "로드"
+msgstr ""
 
 #: app/templates/gentelella/guest/search/results.html:96
 msgid "No events found for the selected parameters."
-msgstr "선택한 매개 변수에 대한 검색 이벤트가 없습니다."
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_base.html:32
 msgid "When & Where"
-msgstr "언제 어디서"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_base.html:45
 msgid "Organizer"
-msgstr "조직자"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_base.html:52
 msgid "Contact the organizer"
-msgstr "주최자에게 문의"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_post_payment.html:3
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:3
 msgid "Your Order"
-msgstr "주문"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_post_payment.html:38
 msgid "Download Tickets"
-msgstr "다운로드 티켓"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:15
 msgid "Registration Information"
-msgstr "등록 정보"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:24
 msgid "Please complete registration within 10:00 minutes"
-msgstr "10시 분 이내에 등록을 완료하십시오"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:25
 msgid ""
 "After 10:00 minutes, the reservation we're holding will be released to "
 "others."
-msgstr "10시 분 후, 우리가 잡고있어 예약은 다른 사람에게 공개됩니다."
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:33
 msgid "Ticket"
-msgstr "티켓"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:39
 msgid "Have you used Open Event before"
-msgstr "당신이 전에 오픈 이벤트 사용이"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:40
 msgid "Sign In"
-msgstr "로그인"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:41
 msgid "To Your Account to continue"
-msgstr "계정에 계속"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:47
 msgid "First name"
-msgstr "이름"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:56
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:121
 msgid "Last name"
-msgstr "성"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:78
 msgid "Confirm Email"
-msgstr "이메일 확인"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:93
 msgid "Ticket Holders' Information"
-msgstr "티켓 홀더 '정보"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:103
 msgid "Ticket Holder"
-msgstr "티켓 홀더"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:109
 msgid "First"
-msgstr "먼저"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:110
 msgid "name"
-msgstr "이름"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:150
 msgid "Billing Information"
-msgstr "결제 정보"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:159
 msgid "Select country"
-msgstr "국가 선택"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:168
 msgid "Address"
-msgstr "주소"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:185
 msgid "State/Province"
-msgstr "시 /도"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:193
 msgid "Zip Code"
-msgstr "우편 번호"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:202
 msgid "Pay Via"
-msgstr "유료 통해"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:244
 msgid "Telegraphic Transfer(TT) / Bank Transfer"
-msgstr "전신환 (TT) / 은행 송금"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:256
 msgid "Onsite/Cash"
-msgstr "현장 / 현금"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:270
 msgid "By clicking"
-msgstr "클릭하면"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:272
 msgid "Order Now"
-msgstr "지금 주문하세요"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:273
 msgid "I acknowledge that I have read and agree with"
-msgstr "내가 읽고 동의했음을 인정"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:274
 msgid "the"
-msgstr "그만큼"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:275
 msgid "Open Event terms of service, and privacy policy."
-msgstr "오픈 서비스의 이벤트 약관 및 개인 정보 보호 정책."
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:278
 msgid "Order now"
-msgstr "지금 주문하세요"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:25
 msgid "Card Nam"
-msgstr "카드 남"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:4
 msgid "Order Summary"
-msgstr "주문 요약"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:35
 msgid "No tickets selected."
-msgstr "어떤 티켓을 선택하지 않았습니다."
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:41
 msgid "Order total"
-msgstr "주문 총"
+msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/pdf/ticket.html:50
 msgid "Date and Time"
-msgstr "날짜와 시간"
+msgstr ""
 
 #: app/templates/swagger/user-info.html:11
 msgid "Logged in as"
-msgstr "로 로그인"
+msgstr ""
 
