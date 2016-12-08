@@ -6,38 +6,42 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  v1\n"
+"Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2016-12-07 10:57+0530\n"
-"PO-Revision-Date: 2016-12-08 11:31+0530\n"
-"Last-Translator: FOSSASIA <open-event@googlegroups.com>\n"
+"PO-Revision-Date: 2016-12-08 11:48+0000\n"
+"Last-Translator: Arie Kurniawan <hubungi.aja@gmail.com>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/open-event"
+"/organizer-server/id/>\n"
 "Language: id\n"
-"Language-Team: id <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 2.10-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
 #: app/templates/404.html:8 app/templates/404.html:26
 msgid "You got"
-msgstr ""
+msgstr "Anda mendapatkan"
 
 #: app/templates/404.html:8
 msgid "Page Not Found"
-msgstr ""
+msgstr "Halaman Tidak Ditemukan"
 
 #: app/templates/404.html:27
+#, fuzzy
 msgid "Sorry but we couldn't find this page"
-msgstr ""
+msgstr "Maaf tapi kami tidak bisa menemukan halaman ini"
 
 #: app/templates/404.html:28
+#, fuzzy
 msgid "This page you are looking for does not exist"
-msgstr ""
+msgstr "Halaman yang Anda cari tidak ada"
 
 #: app/templates/gentelella/index.html:171
 msgid "The simplest way to create events."
-msgstr ""
+msgstr "Cara termudah untuk membuat acara."
 
 #: app/templates/gentelella/admin/event/_import_modal.html:18
 #: app/templates/gentelella/admin/menu.html:34
@@ -45,53 +49,55 @@ msgstr ""
 #: app/templates/gentelella/guest/sitemap.html:76
 #: app/templates/gentelella/index.html:174
 msgid "Create Event"
-msgstr ""
+msgstr "Buat Acara"
 
 #: app/templates/gentelella/index.html:194
+#, fuzzy
 msgid "All Dates"
-msgstr ""
+msgstr "Semua Waktu"
 
 #: app/templates/gentelella/index.html:195
 msgid "Today"
-msgstr ""
+msgstr "Hari ini"
 
 #: app/templates/gentelella/index.html:196
 msgid "Tomorrow"
-msgstr ""
+msgstr "Besok"
 
 #: app/templates/gentelella/index.html:197
 msgid "This Week"
-msgstr ""
+msgstr "Minggu ini"
 
 #: app/templates/gentelella/index.html:198
 msgid "This Weekend"
-msgstr ""
+msgstr "Kahir pekan ini"
 
 #: app/templates/gentelella/index.html:199
 msgid "Next Week"
-msgstr ""
+msgstr "Minggu depan"
 
 #: app/templates/gentelella/index.html:200
 msgid "This Month"
-msgstr ""
+msgstr "Bulan ini"
 
 #: app/templates/gentelella/index.html:205
 msgid "Search"
-msgstr ""
+msgstr "Cari"
 
 #: app/templates/gentelella/index.html:209
 msgid "Upcoming Events"
-msgstr ""
+msgstr "Acara yang akan datang"
 
 #: app/templates/gentelella/index.html:215
 msgid "No upcoming events available at this time"
-msgstr ""
+msgstr "Tidak ada acara yang tersedia saat ini"
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:116
 #: app/templates/gentelella/guest/event/cfs.html:16
 #: app/templates/gentelella/index.html:221
+#, fuzzy
 msgid "Call for Speakers"
-msgstr ""
+msgstr "Panggilan untuk Pembicara"
 
 #: app/templates/gentelella/index.html:227
 msgid "No call for speakers open at this time"
@@ -3766,4 +3772,3 @@ msgstr ""
 #: app/templates/swagger/user-info.html:11
 msgid "Logged in as"
 msgstr ""
-
