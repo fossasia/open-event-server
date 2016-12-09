@@ -393,4 +393,8 @@ DEFAULT_EVENT_IMAGES = {
     'Channukah': 'Channukah.jpg',
     'Film': 'Film.jpg',
     'Islam': 'Islam.jpg',
+    'Medical': 'Medical.jpg'
+    'Mental Health': 'MentalHealth.jpg'
+    'Personal Health': 'PersonalHealth.jpg'
+    'Spa': 'Spa.jpg'
 }
