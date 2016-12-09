@@ -6,38 +6,40 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  v1\n"
+"Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2016-12-07 10:57+0530\n"
-"PO-Revision-Date: 2016-12-09 13:18+0530\n"
-"Last-Translator: FOSSASIA <open-event@googlegroups.com>\n"
+"PO-Revision-Date: 2016-12-09 16:12+0000\n"
+"Last-Translator: Ridhwanul Haque <rhemon19@gmail.com>\n"
+"Language-Team: Bengali <https://hosted.weblate.org/projects/open-event"
+"/organizer-server/bn/>\n"
 "Language: bn\n"
-"Language-Team: bn <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.10-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
 #: app/templates/404.html:8 app/templates/404.html:26
 msgid "You got"
-msgstr ""
+msgstr "আপনি পেয়েছেন"
 
 #: app/templates/404.html:8
 msgid "Page Not Found"
-msgstr ""
+msgstr "পেইজটি পাওয়া যায়নি"
 
 #: app/templates/404.html:27
 msgid "Sorry but we couldn't find this page"
-msgstr ""
+msgstr "দুঃখিত, আমরা এই পেইজটি খোজে পায়নি"
 
 #: app/templates/404.html:28
 msgid "This page you are looking for does not exist"
-msgstr ""
+msgstr "আপনি যে পেইজটা খজছেন তা নেই"
 
 #: app/templates/gentelella/index.html:171
 msgid "The simplest way to create events."
-msgstr ""
+msgstr "সবচে সহজ ভাবে অনুষ্ঠান আয়োজন করুন"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:18
 #: app/templates/gentelella/admin/menu.html:34
@@ -45,90 +47,90 @@ msgstr ""
 #: app/templates/gentelella/guest/sitemap.html:76
 #: app/templates/gentelella/index.html:174
 msgid "Create Event"
-msgstr ""
+msgstr "অনুষ্ঠান তৈরি"
 
 #: app/templates/gentelella/index.html:194
 msgid "All Dates"
-msgstr ""
+msgstr "সব তারিখগুলো"
 
 #: app/templates/gentelella/index.html:195
 msgid "Today"
-msgstr ""
+msgstr "আজকে"
 
 #: app/templates/gentelella/index.html:196
 msgid "Tomorrow"
-msgstr ""
+msgstr "কালকে"
 
 #: app/templates/gentelella/index.html:197
 msgid "This Week"
-msgstr ""
+msgstr "এই সপ্তায়"
 
 #: app/templates/gentelella/index.html:198
 msgid "This Weekend"
-msgstr ""
+msgstr "এই সপ্তাহান্তিক কালে"
 
 #: app/templates/gentelella/index.html:199
 msgid "Next Week"
-msgstr ""
+msgstr "পরবর্তী সপ্তাহে"
 
 #: app/templates/gentelella/index.html:200
 msgid "This Month"
-msgstr ""
+msgstr "এই মাসে"
 
 #: app/templates/gentelella/index.html:205
 msgid "Search"
-msgstr ""
+msgstr "অনুসন্ধান"
 
 #: app/templates/gentelella/index.html:209
 msgid "Upcoming Events"
-msgstr ""
+msgstr "অসন্ন অনুষ্ঠানগুলো"
 
 #: app/templates/gentelella/index.html:215
 msgid "No upcoming events available at this time"
-msgstr ""
+msgstr "কোন অসন্ন অনুষ্ঠান এই মহুরতে নেই"
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:116
 #: app/templates/gentelella/guest/event/cfs.html:16
 #: app/templates/gentelella/index.html:221
 msgid "Call for Speakers"
-msgstr ""
+msgstr "স্পিকারদের জন্য ডাক"
 
 #: app/templates/gentelella/index.html:227
 msgid "No call for speakers open at this time"
-msgstr ""
+msgstr "কন স্পিকারদের ডাকার বাবস্থা নেই"
 
 #: app/templates/gentelella/guest/search/results.html:109
 #: app/templates/gentelella/index.html:242
 msgid "Share this event"
-msgstr ""
+msgstr "এই অনুষ্ঠানটি শেয়ার কর"
 
 #: app/templates/gentelella/admin/footer.html:8
 #: app/templates/gentelella/guest/sitemap.html:33
 msgid "Sitemap"
-msgstr ""
+msgstr "সাইটম্যাপ"
 
 #: app/templates/gentelella/admin/footer.html:17
 #: app/templates/gentelella/guest/search/_collapse_search.html:14
 msgid "Categories"
-msgstr ""
+msgstr "শ্রেণিগুলো"
 
 #: app/templates/gentelella/admin/footer.html:25
 msgid "Locations"
-msgstr ""
+msgstr "অবস্থানগুলো"
 
 #: app/templates/gentelella/admin/footer.html:33
 msgid "Connect With Us"
-msgstr ""
+msgstr "আমাদের সঙ্গে যুক্ত হন"
 
 #: app/templates/gentelella/admin/footer.html:37
 #: app/templates/gentelella/admin/super_admin/content/_social.html:5
 #: app/templates/gentelella/admin/super_admin/content/_social.html:7
 msgid "Support"
-msgstr ""
+msgstr "সাহায্য"
 
 #: app/templates/gentelella/admin/footer.html:41
 msgid "Twitter"
-msgstr ""
+msgstr "TwuiTar"
 
 #: app/templates/gentelella/admin/footer.html:45
 msgid "Facebook"
@@ -1344,7 +1346,7 @@ msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:180
 msgid "Expires on"
-msgstr ""
+msgstr "অবৈধ হবে"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:208
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:129
@@ -3766,4 +3768,3 @@ msgstr ""
 #: app/templates/swagger/user-info.html:11
 msgid "Logged in as"
 msgstr ""
-
