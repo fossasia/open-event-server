@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2016-12-07 10:57+0530\n"
-"PO-Revision-Date: 2016-12-09 16:12+0000\n"
-"Last-Translator: Ridhwanul Haque <rhemon19@gmail.com>\n"
+"PO-Revision-Date: 2016-12-09 16:13+0000\n"
+"Last-Translator: Niranjan Rajendran <niranjan94.eco@gmail.com>\n"
 "Language-Team: Bengali <https://hosted.weblate.org/projects/open-event"
 "/organizer-server/bn/>\n"
 "Language: bn\n"
@@ -130,7 +130,7 @@ msgstr "সাহায্য"
 
 #: app/templates/gentelella/admin/footer.html:41
 msgid "Twitter"
-msgstr "TwuiTar"
+msgstr "Twitter"
 
 #: app/templates/gentelella/admin/footer.html:45
 msgid "Facebook"
