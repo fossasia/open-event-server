@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2016-12-07 10:57+0530\n"
-"PO-Revision-Date: 2016-12-09 16:19+0000\n"
-"Last-Translator: Niranjan Rajendran <niranjan94.eco@gmail.com>\n"
+"PO-Revision-Date: 2016-12-09 16:21+0000\n"
+"Last-Translator: Ridhwanul Haque <rhemon19@gmail.com>\n"
 "Language-Team: Bengali <https://hosted.weblate.org/projects/open-event"
 "/organizer-server/bn/>\n"
 "Language: bn\n"
@@ -39,7 +39,7 @@ msgstr "আপনি যে পেইজটা খজছেন তা নেই"
 
 #: app/templates/gentelella/index.html:171
 msgid "The simplest way to create events."
-msgstr "সবচে সহজ ভাবে অনুষ্ঠান আয়োজন করুন"
+msgstr "সবচে সহজ ভাবে অনুষ্ঠান আয়োজন করুন।"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:18
 #: app/templates/gentelella/admin/menu.html:34
@@ -217,11 +217,11 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:18
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:19
 msgid "Notifications"
-msgstr ""
+msgstr "বিজ্ঞাপন"
 
 #: app/templates/gentelella/admin/menu.html:97
 msgid "Mark All as Read"
-msgstr ""
+msgstr "সবগুল পরা হয়েছে চিহ্নটি দাও"
 
 #: app/templates/gentelella/admin/menu.html:108
 #, fuzzy
@@ -240,7 +240,7 @@ msgstr ""
 
 #: app/templates/gentelella/admin/event/_import_modal.html:10
 msgid "Select event"
-msgstr ""
+msgstr "অনুষ্ঠান নির্বাচন কর"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:28
 #, fuzzy
@@ -282,7 +282,7 @@ msgstr ""
 #: app/templates/gentelella/guest/ticketing/stripe_oauth_callback.html:5
 #: app/templates/gentelella/guest/ticketing/stripe_oauth_callback.html:21
 msgid "Processing"
-msgstr ""
+msgstr "প্রিক্রিত হচ্ছে"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:55
 #: app/templates/gentelella/admin/event/wizard/step-1.html:544
@@ -316,7 +316,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/users/users.html:221
 #: app/templates/gentelella/admin/super_admin/users/users.html:241
 msgid "Name"
-msgstr ""
+msgstr "নাম"
 
 #: app/templates/gentelella/admin/event/_table.html:7
 #: app/templates/gentelella/guest/search/_collapse_search.html:71
@@ -349,7 +349,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:3
 #: app/templates/gentelella/guest/event/sessions.html:14
 msgid "Sessions"
-msgstr ""
+msgstr "সেশনগুলো"
 
 #: app/templates/gentelella/admin/event/_table.html:10
 #: app/templates/gentelella/admin/event/export/export.html:149
@@ -387,7 +387,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:78
 #: app/templates/gentelella/guest/event/tickets.html:7
 msgid "Tickets"
-msgstr ""
+msgstr "টিকেটগুলো"
 
 #: app/templates/gentelella/admin/event/_table.html:12
 #: app/templates/gentelella/admin/super_admin/events/events.html:197
@@ -395,7 +395,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/events/events.html:241
 #: app/templates/gentelella/admin/super_admin/events/events.html:263
 msgid "Public"
-msgstr ""
+msgstr "জনসাধারণ"
 
 #: app/templates/gentelella/admin/event/_table.html:56
 #: app/templates/gentelella/admin/super_admin/events/events.html:65
@@ -429,7 +429,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/events/events.html:68
 #: app/templates/gentelella/admin/super_admin/sales/fees_status.html:62
 msgid "Pending"
-msgstr ""
+msgstr "অমীমাংসিত"
 
 #: app/templates/gentelella/admin/event/_table.html:60
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:46
@@ -468,7 +468,7 @@ msgstr ""
 
 #: app/templates/gentelella/admin/event/event_base.html:51
 msgid "Unpublish"
-msgstr ""
+msgstr "অপ্রকাশিত করো"
 
 #: app/templates/gentelella/admin/event/event_base.html:54
 #, fuzzy
@@ -498,7 +498,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:111
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:128
 msgid "Cancel"
-msgstr ""
+msgstr "বাদ দাও"
 
 #: app/templates/gentelella/admin/event/event_base.html:114
 #, fuzzy
@@ -510,7 +510,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:3
 #: app/templates/gentelella/guest/search/results.html:75
 msgid "Events"
-msgstr ""
+msgstr "অনুষ্ঠানগুলো"
 
 #: app/templates/gentelella/admin/event/index.html:28
 #: app/templates/gentelella/admin/event/index.html:42
@@ -556,13 +556,13 @@ msgstr ""
 #: app/templates/gentelella/admin/event/roles/roles.html:62
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:20
 msgid "Track Organizer"
-msgstr ""
+msgstr "সংঘঠক ট্রাক করো"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:25
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:132
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:21
 msgid "Co-organizer"
-msgstr ""
+msgstr "অন্য সঙ্ঘঠক"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:26
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:133
@@ -585,7 +585,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:137
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:177
 msgid "Close"
-msgstr ""
+msgstr "বন্ধ করো"
 
 #: app/templates/gentelella/admin/event/details/widgets/microservices.html:12
 #, fuzzy
@@ -594,7 +594,7 @@ msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/microservices.html:17
 msgid "Generate Web App"
-msgstr ""
+msgstr "ওয়েব অ্যাপ তৈরি কর"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:4
 #: app/templates/gentelella/admin/event/roles/roles.html:4
@@ -624,7 +624,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/users/users.html:223
 #: app/templates/gentelella/admin/super_admin/users/users.html:243
 msgid "Status"
-msgstr ""
+msgstr "অবস্থান"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:29
 #: app/templates/gentelella/admin/event/roles/roles.html:13
@@ -714,7 +714,7 @@ msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:8
 msgid "Add Sponsor"
-msgstr ""
+msgstr "স্পন্সর যোগ দাও"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:15
 #: app/templates/gentelella/admin/event/wizard/step-1.html:213
@@ -722,7 +722,7 @@ msgstr ""
 #: app/templates/gentelella/admin/event/wizard/step-2.html:35
 #: app/templates/gentelella/admin/event/wizard/step-2.html:54
 msgid "Logo"
-msgstr ""
+msgstr "লগো"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:17
 #: app/templates/gentelella/admin/event/wizard/step-2.html:91
@@ -767,7 +767,7 @@ msgstr ""
 
 #: app/templates/gentelella/admin/event/export/export.html:82
 msgid "Document"
-msgstr ""
+msgstr "দলিল"
 
 #: app/templates/gentelella/admin/event/export/export.html:89
 #, fuzzy
