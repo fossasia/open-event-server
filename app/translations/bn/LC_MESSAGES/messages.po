@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2016-12-07 10:57+0530\n"
-"PO-Revision-Date: 2016-12-09 16:21+0000\n"
+"PO-Revision-Date: 2016-12-09 17:27+0000\n"
 "Last-Translator: Ridhwanul Haque <rhemon19@gmail.com>\n"
 "Language-Team: Bengali <https://hosted.weblate.org/projects/open-event"
 "/organizer-server/bn/>\n"
@@ -133,54 +133,44 @@ msgid "Twitter"
 msgstr "টুইটার"
 
 #: app/templates/gentelella/admin/footer.html:45
-#, fuzzy
 msgid "Facebook"
 msgstr "ফেসবুক"
 
 #: app/templates/gentelella/admin/footer.html:49
-#, fuzzy
 msgid "Google"
 msgstr "গুগোল"
 
 #: app/templates/gentelella/admin/footer.html:53
-#, fuzzy
 msgid "Youtube"
 msgstr "য়ুটুব"
 
 #: app/templates/gentelella/admin/footer.html:57
-#, fuzzy
 msgid "Github"
 msgstr "গিটহাব"
 
 #: app/templates/gentelella/admin/forbidden.html:10
-#, fuzzy
 msgid "Access denied"
 msgstr "অনুমতি অস্বীকৃত"
 
 #: app/templates/gentelella/admin/forbidden.html:11
-#, fuzzy
 msgid "Sorry, but you don't have permission access to this page."
-msgstr "দুঃখিত, এই পেইজ দেখার জন্য আপনার অনুমতি নেই"
+msgstr "দুঃখিত, এই পেইজ দেখার জন্য আপনার অনুমতি নেই।"
 
 #: app/templates/gentelella/admin/menu.html:65
-#, fuzzy
 msgid "My Tickets"
 msgstr "আমার টিকেট"
 
 #: app/templates/gentelella/admin/menu.html:66
-#, fuzzy
 msgid "My Sessions"
 msgstr "আমার সেশন"
 
 #: app/templates/gentelella/admin/event/index.html:16
 #: app/templates/gentelella/admin/menu.html:67
-#, fuzzy
 msgid "Manage Events"
 msgstr "অনুষ্ঠান পরিচালন"
 
 #: app/templates/gentelella/admin/menu.html:69
 #: app/templates/gentelella/admin/profile/index.html:11
-#, fuzzy
 msgid "Profile"
 msgstr "প্রোফাইল"
 
@@ -189,26 +179,22 @@ msgstr "প্রোফাইল"
 #: app/templates/gentelella/admin/settings/base.html:4
 #: app/templates/gentelella/admin/settings/base.html:25
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:4
-#, fuzzy
 msgid "Settings"
-msgstr ""
+msgstr "সেটিংস"
 
 #: app/templates/gentelella/admin/menu.html:72
 #: app/templates/gentelella/admin/super_admin/users/users.html:58
-#, fuzzy
 msgid "Admin"
-msgstr ""
+msgstr "অধিনায়ক"
 
 #: app/templates/gentelella/admin/menu.html:75
 #: app/templates/gentelella/admin/menu.html:122
-#, fuzzy
 msgid "Browse Events"
-msgstr ""
+msgstr "অনুষ্ঠানগুলো খোজে দেখুন"
 
 #: app/templates/gentelella/admin/menu.html:76
-#, fuzzy
 msgid "Logout"
-msgstr ""
+msgstr "বাহির হন"
 
 #: app/templates/gentelella/admin/menu.html:91
 #: app/templates/gentelella/admin/profile/notifications.html:4
@@ -224,28 +210,24 @@ msgid "Mark All as Read"
 msgstr "সবগুল পরা হয়েছে চিহ্নটি দাও"
 
 #: app/templates/gentelella/admin/menu.html:108
-#, fuzzy
 msgid "Mark as read"
-msgstr ""
+msgstr "\"পড়া হয়েছে\" চিহ্ন করে দাও"
 
 #: app/templates/gentelella/admin/menu.html:114
-#, fuzzy
 msgid "No new notifications"
-msgstr ""
+msgstr "নতুন কন বিজ্ঞাপন নেই"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:6
-#, fuzzy
 msgid "Import Event"
-msgstr ""
+msgstr "অনুষ্ঠান ভিতরে নিয়ে আসো"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:10
 msgid "Select event"
 msgstr "অনুষ্ঠান নির্বাচন কর"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:28
-#, fuzzy
 msgid "Previous Imports"
-msgstr ""
+msgstr "পূর্ববর্তি আমাদানিগুলো"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:36
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:61
@@ -256,27 +238,23 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/events/events.html:240
 #: app/templates/gentelella/admin/super_admin/events/events.html:262
 #: app/templates/gentelella/admin/super_admin/events/events.html:284
-#, fuzzy
 msgid "State"
-msgstr ""
+msgstr "অবস্থান"
 
 #: app/templates/gentates/gentelella/admin/event/_import_modal.html:37
 #: app/templates/gentelella/admin/profile/notifications.html:45
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:58
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:91
-#, fuzzy
 msgid "Message"
-msgstr ""
+msgstr "সংবাদ"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:38
-#, fuzzy
 msgid "Started"
-msgstr ""
+msgstr "শুরু হয়েগেছে"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:46
-#, fuzzy
 msgid "Success"
-msgstr ""
+msgstr "সাফল্য"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:50
 #: app/templates/gentelella/guest/ticketing/stripe_oauth_callback.html:5
@@ -297,9 +275,8 @@ msgstr "প্রিক্রিত হচ্ছে"
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:104
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:142
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:256
-#, fuzzy
 msgid "here"
-msgstr ""
+msgstr "এখানে"
 
 #: app/templates/gentelella/admin/event/_table.html:6
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:16
@@ -321,9 +298,8 @@ msgstr "নাম"
 #: app/templates/gentelella/admin/event/_table.html:7
 #: app/templates/gentelella/guest/search/_collapse_search.html:71
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:27
-#, fuzzy
 msgid "Date"
-msgstr ""
+msgstr "তারিখ"
 
 #: app/templates/gentelella/admin/event/_table.html:8
 #: app/templates/gentelella/admin/super_admin/events/events.html:200
@@ -331,9 +307,8 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/events/events.html:244
 #: app/templates/gentelella/admin/super_admin/events/events.html:266
 #: app/templates/gentelella/admin/super_admin/events/events.html:288
-#, fuzzy
 msgid "Roles"
-msgstr ""
+msgstr "চরিত্রগুল"
 
 #: app/templates/gentelella/admin/event/_table.html:9
 #: app/templates/gentelella/admin/event/export/export.html:136
@@ -367,9 +342,8 @@ msgstr "সেশনগুলো"
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:160
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:178
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:196
-#, fuzzy
 msgid "Speakers"
-msgstr ""
+msgstr "স্পিকাররা"
 
 #: app/templates/gentelella/admin/event/_table.html:11
 #: app/templates/gentelella/admin/event/export/export.html:157
@@ -399,15 +373,13 @@ msgstr "জনসাধারণ"
 
 #: app/templates/gentelella/admin/event/_table.html:56
 #: app/templates/gentelella/admin/super_admin/events/events.html:65
-#, fuzzy
 msgid "Drafts"
-msgstr ""
+msgstr "ড্রাফট"
 
 #: app/templates/gentelella/admin/event/_table.html:57
 #: app/templates/gentelella/admin/super_admin/events/events.html:66
-#, fuzzy
 msgid "Submitted"
-msgstr ""
+msgstr "জমা করা হয়েছে"
 
 #: app/templates/gentelella/admin/event/_table.html:58
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:18
@@ -417,9 +389,8 @@ msgstr ""
 #: app/templates/gentelella/admin/mysessions/mysessions_list.html:72
 #: app/templates/gentelella/admin/super_admin/events/events.html:67
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:12
-#, fuzzy
 msgid "Accepted"
-msgstr ""
+msgstr "গ্রহণ করা হয়েছে"
 
 #: app/templates/gentelella/admin/event/_table.html:59
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:40
@@ -438,57 +409,48 @@ msgstr "অমীমাংসিত"
 #: app/templates/gentelella/admin/mysessions/mysessions_list.html:74
 #: app/templates/gentelella/admin/super_admin/events/events.html:69
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:14
-#, fuzzy
 msgid "Rejected"
-msgstr ""
+msgstr "প্রত্যাখ্যান করা হয়েছে"
 
 #: app/templates/gentelella/admin/event/_table.html:67
-#, fuzzy
 msgid "No Ticket Information"
-msgstr ""
+msgstr "টিকেট সম্পর্কে কন তথ্য নেই"
 
 #: app/templates/gentelella/admin/event/_table.html:71
 #: app/templates/gentelella/admin/super_admin/events/events.html:81
-#, fuzzy
 msgid "Paid"
-msgstr ""
+msgstr "পরিশোধ করা হয়েছে"
 
 #: app/templates/gentelella/admin/event/_table.html:81
 #: app/templates/gentelella/admin/super_admin/events/events.html:91
-#, fuzzy
 msgid "Free"
-msgstr ""
+msgstr "বিনামূল্যে"
 
 #: app/templates/gentelella/admin/event/_table.html:91
 #: app/templates/gentelella/admin/event/wizard/step-1.html:355
 #: app/templates/gentelella/admin/super_admin/events/events.html:101
-#, fuzzy
 msgid "Donation"
-msgstr ""
+msgstr "দান করেন"
 
 #: app/templates/gentelella/admin/event/event_base.html:51
 msgid "Unpublish"
 msgstr "অপ্রকাশিত করো"
 
 #: app/templates/gentelella/admin/event/event_base.html:54
-#, fuzzy
 msgid "Publish"
-msgstr ""
+msgstr "প্রকাশিত করো"
 
 #: app/templates/gentelella/admin/event/event_base.html:56
-#, fuzzy
 msgid "Copy"
-msgstr ""
+msgstr "নকল"
 
 #: app/templates/gentelella/admin/event/event_base.html:60
-#, fuzzy
 msgid "Delete"
-msgstr ""
+msgstr "মুছে ফেলো"
 
 #: app/templates/gentelella/admin/event/event_base.html:109
-#, fuzzy
 msgid "Are you sure you would like to delete this event"
-msgstr ""
+msgstr "আপনি কি নিশ্চিত যে আপনি এই অনুষ্ঠান মুছে ফেলবেন"
 
 #: app/templates/gentelella/admin/event/event_base.html:112
 #: app/templates/gentelella/admin/event/sessions/components/_speaker_croppie.html:17
@@ -501,9 +463,8 @@ msgid "Cancel"
 msgstr "বাদ দাও"
 
 #: app/templates/gentelella/admin/event/event_base.html:114
-#, fuzzy
 msgid "Confirm Delete"
-msgstr ""
+msgstr "নিশ্চিত মুছে ফেলো"
 
 #: app/templates/gentelella/admin/event/index.html:11
 #: app/templates/gentelella/admin/super_admin/events/events.html:4
@@ -516,9 +477,8 @@ msgstr "অনুষ্ঠানগুলো"
 #: app/templates/gentelella/admin/event/index.html:42
 #: app/templates/gentelella/admin/event/index.html:47
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:11
-#, fuzzy
 msgid "Live"
-msgstr ""
+msgstr "সরাসরি"
 
 #: app/templates/gentelella/admin/event/index.html:31
 #: app/templates/gentelella/admin/event/index.html:52
@@ -526,30 +486,26 @@ msgstr ""
 #: app/templates/gentelella/admin/mysessions/mysessions_list.html:70
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:12
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:13
-#, fuzzy
 msgid "Draft"
-msgstr ""
+msgstr "ড্রাফট"
 
 #: app/templates/gentelella/admin/event/index.html:34
 #: app/templates/gentelella/admin/event/index.html:57
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:13
-#, fuzzy
 msgid "Past"
-msgstr ""
+msgstr "অতীত"
 
 #: app/templates/gentelella/admin/event/index.html:37
 #: app/templates/gentelella/admin/event/index.html:62
 #: app/templates/gentelella/admin/super_admin/events/events.html:162
 #: app/templates/gentelella/admin/super_admin/events/events.html:185
-#, fuzzy
 msgid "Import"
-msgstr ""
+msgstr "আমদান করা"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:9
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:9
-#, fuzzy
 msgid "Edit Role"
-msgstr ""
+msgstr "চরিত্র বদলাও"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:24
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:131
@@ -568,14 +524,12 @@ msgstr "অন্য সঙ্ঘঠক"
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:133
 #: app/templates/gentelella/admin/event/roles/roles.html:64
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:22
-#, fuzzy
 msgid "Moderator"
-msgstr ""
+msgstr "মোডারেটর"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:31
-#, fuzzy
 msgid "Update Role"
-msgstr ""
+msgstr "চরিত্র উন্নত করো"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:32
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:139
@@ -588,9 +542,8 @@ msgid "Close"
 msgstr "বন্ধ করো"
 
 #: app/templates/gentelella/admin/event/details/widgets/microservices.html:12
-#, fuzzy
 msgid "Generate Android App"
-msgstr ""
+msgstr "আন্ড্রয়েড অ্যাপ তৈরি কর"
 
 #: app/templates/gentelella/admin/event/details/widgets/microservices.html:17
 msgid "Generate Web App"
@@ -598,19 +551,16 @@ msgstr "ওয়েব অ্যাপ তৈরি কর"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:4
 #: app/templates/gentelella/admin/event/roles/roles.html:4
-#, fuzzy
 msgid "Manage Roles"
-msgstr ""
+msgstr "চরিত্র পরিচালন কর"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:8
-#, fuzzy
 msgid "Add Peopl"
-msgstr ""
+msgstr "লোক জগ দাও"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:21
-#, fuzzy
 msgid "Invited"
-msgstr ""
+msgstr "আমন্ত্রিত"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:28
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:51
@@ -628,21 +578,18 @@ msgstr "অবস্থান"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:29
 #: app/templates/gentelella/admin/event/roles/roles.html:13
-#, fuzzy
 msgid "User Email"
-msgstr ""
+msgstr "ব্যাবহারকারির ইমেইল"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:30
-#, fuzzy
 msgid "User (Email)"
-msgstr ""
+msgstr "বেবহারকারি (ইমেইল)"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:31
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:128
 #: app/templates/gentelella/admin/event/roles/roles.html:14
-#, fuzzy
 msgid "Role"
-msgstr ""
+msgstr "ভূমিকা"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:32
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:19
@@ -663,54 +610,46 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/users/users.html:208
 #: app/templates/gentelella/admin/super_admin/users/users.html:228
 #: app/templates/gentelella/admin/super_admin/users/users.html:248
-#, fuzzy
 msgid "Options"
-msgstr ""
+msgstr "উপায়ন্তর"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:39
-#, fuzzy
 msgid "accepted"
-msgstr ""
+msgstr "গ্রহণ করা হয়েছে"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:68
-#, fuzzy
 msgid "invited"
-msgstr ""
+msgstr "আমন্ত্রিত"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:77
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:84
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:90
-#, fuzzy
 msgid "Invitation Link"
-msgstr ""
+msgstr "আমন্ত্রনের লিংক"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:114
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:138
 #: app/templates/gentelella/admin/event/roles/roles.html:51
-#, fuzzy
 msgid "Add Role"
-msgstr ""
+msgstr "চরিত্র যোগ দাও"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:125
 #: app/templates/gentelella/admin/event/roles/roles.html:56
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:14
-#, fuzzy
 msgid "User email"
-msgstr ""
+msgstr "ব্যাবহারকারির ইমেইল"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:130
 #: app/templates/gentelella/admin/event/roles/roles.html:61
 #: app/templates/gentelella/admin/event/wizard/step-1.html:629
 #: app/templates/gentelella/admin/event/wizard/step-1.html:643
 #: app/templates/gentelella/admin/event/wizard/step-1.html:660
-#, fuzzy
 msgid "Choose"
-msgstr ""
+msgstr "বেছে নিন"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:3
-#, fuzzy
 msgid "Event Sponsors"
-msgstr ""
+msgstr "অনুষ্ঠানের স্পন্সররা"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:8
 msgid "Add Sponsor"
@@ -728,51 +667,43 @@ msgstr "লগো"
 #: app/templates/gentelella/admin/event/wizard/step-2.html:91
 #: app/templates/gentelella/admin/event/wizard/step-4.html:91
 #: app/templates/gentelella/guest/ticketing/pdf/ticket.html:54
-#, fuzzy
 msgid "Type"
-msgstr ""
+msgstr "ধরন"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:18
 #: app/templates/gentelella/admin/event/wizard/step-2.html:90
-#, fuzzy
 msgid "Level"
-msgstr ""
+msgstr "ভিবাগ"
 
 #: app/templates/gentelella/admin/event/export/export.html:4
-#, fuzzy
 msgid "Export"
-msgstr ""
+msgstr "রপ্তানি"
 
 #: app/templates/gentelella/admin/event/export/export.html:64
-#, fuzzy
 msgid "Export and Download Event as zip"
-msgstr ""
+msgstr "রপ্তানি করে জিপ ফাইল করে তা ডাউনলড করো"
 
 #: app/templates/gentelella/admin/event/export/export.html:65
-#, fuzzy
 msgid "Select which media files you want in the zip"
-msgstr ""
+msgstr "কন কন মিডিয়া ফাইল জিপ ফাইলে চাও তা বেছে নাও"
 
 #: app/templates/gentelella/admin/event/export/export.html:69
-#, fuzzy
 msgid "Image"
-msgstr ""
+msgstr "ছবি"
 
 #: app/templates/gentelella/admin/event/export/export.html:78
 #: app/templates/gentelella/admin/event/sessions/display.html:45
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:107
-#, fuzzy
 msgid "Audio"
-msgstr ""
+msgstr "শব্দ"
 
 #: app/templates/gentelella/admin/event/export/export.html:82
 msgid "Document"
 msgstr "দলিল"
 
 #: app/templates/gentelella/admin/event/export/export.html:89
-#, fuzzy
 msgid "Start"
-msgstr ""
+msgstr "শুরু"
 
 #: app/templates/gentelella/admin/event/export/export.html:92
 #: app/templates/gentelella/admin/event/sessions/display.html:35
@@ -784,3 +715,9 @@ msgid ""
 "_: app/templates/gentelella/admin/event/export/export.html:92 app/templates/gentelella/admin/event/sessions/display.html:35 app/templates/gentelella/admin/event/sessions/display.html:40 app/templates/gentelella/admin/event/sessions/display.html:45 app/templates/gentelella/admin/mysessions/mysession_detail.html:96 app/templates/gentelella/msgid ""\n"
 ""
 msgstr ""
+"app/templates/gentelella/admin/event/export/export.html:92 "
+"app/templates/gentelella/admin/event/sessions/display.html:35 "
+"app/templates/gentelella/admin/event/sessions/display.html:40 "
+"app/templates/gentelella/admin/event/sessions/display.html:45 "
+"app/templates/gentelella/admin/mysessions/mysession_detail.html:96 "
+"app/templates/gentelella/msgid \"\""
