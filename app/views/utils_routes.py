@@ -2,7 +2,7 @@ import json
 import os
 
 import geoip2.database
-from flask import Blueprint
+from flask import Blueprint, current_app
 from flask import jsonify, url_for, redirect, request, send_from_directory, \
     render_template, make_response
 from flask.ext import login
@@ -190,7 +190,7 @@ def serve_static(filename):
     system will be using it, it's OK.
     Static files in production are stored on AWS so this won't be used
     """
-    return send_from_directory(os.path.realpath('.') + '/static/', filename)
+    return send_from_directory(current_app.config['BASE_DIR'] + '/static/', filename)
 
 
 @utils_routes.route('/favicon.ico')

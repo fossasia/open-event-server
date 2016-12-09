@@ -978,15 +978,16 @@ class DataManager(object):
                                          thumbnail_aspect='on',
                                          type='event')
                 save_to_db(image_sizes, "Image Sizes Saved")
+
             if temp_background:
-                im = Image.open(temp_background[len('/serve_'):])
-                out_im = temp_background[len('/serve_'):].replace('png', 'jpg')
+                im = Image.open(current_app.config['BASE_DIR'] + '/' + temp_background[len('/serve_'):])
+                out_im = current_app.config['BASE_DIR'] + '/' + temp_background[len('/serve_'):].replace('png', 'jpg')
                 bg = Image.new("RGB", im.size, (255, 255, 255))
                 bg.paste(im, (0, 0), im)
                 bg.save(out_im, quality=55)
                 filename = '{}.png'.format(time.time())
-                filepath = '{}/static/{}'.format(path.realpath('.'),
-                                                 temp_background[len('/serve_static/'):])
+                filepath = '{}/static/{}'.format(current_app.config['BASE_DIR'],
+                                                  temp_background[len('/serve_static/'):])
                 background_file = UploadedFile(filepath, filename)
                 background_url = upload(
                     background_file,
@@ -995,13 +996,12 @@ class DataManager(object):
                     ))
 
                 filename = '{}.jpg'.format(time.time())
-                filepath = '{}/static/{}'.format(path.realpath('.'),
+                filepath = '{}/static/{}'.format(current_app.config['BASE_DIR'],
                                                  temp_background[len('/serve_static/'):])
                 background_file = UploadedFile(filepath, filename)
 
-                temp_img_file = upload_local(background_file,
-                                             'events/{event_id}/temp'.format(event_id=int(event.id)))
-                temp_img_file = temp_img_file.replace('/serve_', '')
+                temp_img_file = upload_local(background_file, 'events/{event_id}/temp'.format(event_id=int(event.id)))
+                temp_img_file = current_app.config['BASE_DIR'] + '/' + temp_img_file.replace('/serve_', '')
 
                 width_ = 1300
                 height_ = 500
@@ -1058,7 +1058,8 @@ class DataManager(object):
                     UPLOAD_PATHS['event']['icon'].format(
                         event_id=int(event.id)
                     ))
-                shutil.rmtree(path='static/media/' + 'events/{event_id}/temp'.format(event_id=int(event.id)))
+                shutil.rmtree(path=current_app.config['BASE_DIR'] + '/static/media/' +
+                              'events/{event_id}/temp'.format(event_id=int(event.id)))
 
             event.background_url = background_url
             event.thumbnail = background_thumbnail_url
@@ -1413,6 +1414,125 @@ class DataManager(object):
         event.pay_by_bank = 'pay_by_bank' in form
         event.pay_onsite = 'pay_onsite' in form
         event.pay_by_stripe = 'pay_by_stripe' in form
+
+        background_url = ''
+        background_thumbnail_url = ''
+        background_large_url = ''
+        background_icon_url = ''
+        temp_background = form['background_url']
+        image_sizes = DataGetter.get_image_sizes_by_type(type='event')
+        if not image_sizes:
+            image_sizes = ImageSizes(full_width=1300,
+                                     full_height=500,
+                                     full_aspect='on',
+                                     icon_width=75,
+                                     icon_height=30,
+                                     icon_aspect='on',
+                                     thumbnail_width=500,
+                                     thumbnail_height=200,
+                                     thumbnail_aspect='on',
+                                     type='event')
+            save_to_db(image_sizes, "Image Sizes Saved")
+        if temp_background:
+            im = Image.open(current_app.config['BASE_DIR'] + '/' + temp_background[len('/serve_'):])
+            out_im = current_app.config['BASE_DIR'] + '/' + temp_background[len('/serve_'):].replace('png', 'jpg')
+            bg = Image.new("RGB", im.size, (255, 255, 255))
+            bg.paste(im, (0, 0), im)
+            bg.save(out_im, quality=55)
+            filename = '{}.png'.format(time.time())
+            filepath = '{}/static/{}'.format(current_app.config['BASE_DIR'],
+                                             temp_background[len('/serve_static/'):])
+            background_file = UploadedFile(filepath, filename)
+            background_url = upload(
+                background_file,
+                UPLOAD_PATHS['event']['background_url'].format(
+                    event_id=event.id
+                ))
+
+            filename = '{}.jpg'.format(time.time())
+            filepath = '{}/static/{}'.format(current_app.config['BASE_DIR'],
+                                             temp_background[len('/serve_static/'):])
+            background_file = UploadedFile(filepath, filename)
+
+            temp_img_file = upload_local(background_file, 'events/{event_id}/temp'.format(event_id=int(event.id)))
+            temp_img_file = current_app.config['BASE_DIR'] + '/' + temp_img_file.replace('/serve_', '')
+
+            width_ = 1300
+            height_ = 500
+            basewidth = image_sizes.full_width
+            img = Image.open(temp_img_file)
+            if image_sizes.full_aspect == 'on':
+                wpercent = (basewidth / float(width_))
+                hsize = int((float(height_) * float(wpercent)))
+            else:
+                hsize = image_sizes.full_height
+            img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+            img.save(temp_img_file)
+            file_name = temp_img_file.rsplit('/', 1)[1]
+            large_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+            background_large_url = upload(
+                large_file,
+                UPLOAD_PATHS['event']['large'].format(
+                    event_id=int(event.id)
+                ))
+
+            width_ = 500
+            height_ = 200
+            basewidth = image_sizes.thumbnail_width
+            img = Image.open(temp_img_file)
+            if image_sizes.thumbnail_aspect == 'on':
+                wpercent = (basewidth / float(width_))
+                hsize = int((float(height_) * float(wpercent)))
+            else:
+                hsize = image_sizes.thumbnail_height
+            img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+            img.save(temp_img_file)
+            file_name = temp_img_file.rsplit('/', 1)[1]
+            thumbnail_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+            background_thumbnail_url = upload(
+                thumbnail_file,
+                UPLOAD_PATHS['event']['thumbnail'].format(
+                    event_id=int(event.id)
+                ))
+            width_ = 75
+            height_ = 30
+            basewidth = image_sizes.icon_width
+            img = Image.open(temp_img_file)
+            if image_sizes.icon_aspect == 'on':
+                wpercent = (basewidth / float(width_))
+                hsize = int((float(height_) * float(wpercent)))
+            else:
+                hsize = image_sizes.icon_height
+            img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+            img.save(temp_img_file)
+            file_name = temp_img_file.rsplit('/', 1)[1]
+            icon_file = UploadedFile(file_path=temp_img_file, filename=file_name)
+            background_icon_url = upload(
+                icon_file,
+                UPLOAD_PATHS['event']['icon'].format(
+                    event_id=int(event.id)
+                ))
+            shutil.rmtree(path=current_app.config['BASE_DIR'] + '/static/media/' +
+                               'events/{event_id}/temp'.format(event_id=int(event.id)))
+
+        event.background_url = background_url
+        event.thumbnail = background_thumbnail_url
+        event.large = background_large_url
+        event.icon = background_icon_url
+
+        logo = ''
+        temp_logo = form['logo']
+        if temp_logo:
+            filename = '{}.png'.format(time.time())
+            filepath = '{}/static/{}'.format(path.realpath('.'),
+                                             temp_logo[len('/serve_static/'):])
+            logo_file = UploadedFile(filepath, filename)
+            logo = upload(
+                logo_file,
+                UPLOAD_PATHS['event']['logo'].format(
+                    event_id=event.id
+                ))
+        event.logo = logo
 
         if 'pay_by_paypal' in form:
             event.paypal_email = form.get('paypal_email')
