@@ -377,7 +377,7 @@ DEFAULT_EVENT_IMAGES = {
     'Travel': 'Travel.jpg',
     'Dance': 'Dance.jpg',
     'Democratic Party': 'DemocraticParty.jpg',
-    'Avatar': 'Avatar.jpg',
+    'Avatar': 'avatar.png',
     'City/Town': 'City/Town.jpg',
     'Home & Lifestyle': 'Home&Lifestyle.jpg',
     'New Age': 'NewAge.jpg',

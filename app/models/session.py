@@ -23,14 +23,14 @@ class Session(db.Model):
     comments = db.Column(db.Text)
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
-    track_id = db.Column(db.Integer, db.ForeignKey('tracks.id'))
+    track_id = db.Column(db.Integer, db.ForeignKey('tracks.id', ondelete='CASCADE'))
     speakers = db.relationship(
         'Speaker',
         secondary=speakers_sessions,
         backref=db.backref('sessions', lazy='dynamic'))
     language = db.Column(db.String)
-    microlocation_id = db.Column(db.Integer, db.ForeignKey('microlocation.id'))
-    session_type_id = db.Column(db.Integer, db.ForeignKey('session_type.id'))
+    microlocation_id = db.Column(db.Integer, db.ForeignKey('microlocation.id', ondelete='CASCADE'))
+    session_type_id = db.Column(db.Integer, db.ForeignKey('session_type.id', ondelete='CASCADE'))
 
     slides = db.Column(db.String)
     video = db.Column(db.String)

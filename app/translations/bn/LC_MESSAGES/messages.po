@@ -1,4 +1,4 @@
-# French translations for fossasia/open-event-orga-server.
+# Bengali translations for fossasia/open-event-orga-server.
 # Copyright (C) 2016 fossasia
 # This file is distributed under the same license as the
 # fossasia/open-event-orga-server project.
@@ -6,24 +6,22 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: v1\n"
+"Project-Id-Version:  v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2016-12-07 10:57+0530\n"
-"PO-Revision-Date: 2016-12-09 05:23+0000\n"
-"Last-Translator: Ridhwanul Haque <rhemon19@gmail.com>\n"
-"Language-Team: French <https://hosted.weblate.org/projects/open-event"
-"/organizer-server/fr/>\n"
-"Language: fr\n"
+"PO-Revision-Date: 2016-12-09 13:18+0530\n"
+"Last-Translator: FOSSASIA <open-event@googlegroups.com>\n"
+"Language: bn\n"
+"Language-Team: bn <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.10-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
 #: app/templates/404.html:8 app/templates/404.html:26
 msgid "You got"
-msgstr "vous avez"
+msgstr ""
 
 #: app/templates/404.html:8
 msgid "Page Not Found"
@@ -3768,3 +3766,4 @@ msgstr ""
 #: app/templates/swagger/user-info.html:11
 msgid "Logged in as"
 msgstr ""
+

@@ -16,7 +16,7 @@ class UserDetail(db.Model):
     thumbnail = db.Column(db.String)
     small = db.Column(db.String)
     icon = db.Column(db.String)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
 
     def __init__(self,
                  firstname=None,

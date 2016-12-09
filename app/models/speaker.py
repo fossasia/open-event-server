@@ -25,9 +25,8 @@ class Speaker(db.Model):
     featured = db.Column(db.Boolean, default=False)
     position = db.Column(db.String)
     country = db.Column(db.String, nullable=False)
-    event_id = db.Column(
-        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'))
     user = db.relationship('User', backref='speakers')
 
     def __init__(self,

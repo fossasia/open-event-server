@@ -7,10 +7,8 @@ class Version(db.Model):
     """Version model class"""
     __tablename__ = 'versions'
     id = db.Column(db.Integer, primary_key=True)
-    event_id = db.Column(
-        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
-    events = db.relationship(
-        "Event", backref=backref('version', uselist=False))
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    events = db.relationship("Event", backref=backref('version', uselist=False))
 
     event_ver = db.Column(db.Integer, nullable=False, default=0)
     sessions_ver = db.Column(db.Integer, nullable=False, default=0)
