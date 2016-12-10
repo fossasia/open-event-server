@@ -66,42 +66,6 @@ function getHashValue(key) {
     return matches ? matches[1] : null;
 }
 
-function validate() {
-    try {
-        $wizardForm.validator("destroy");
-    } catch (ignored) {
-    }
-
-    $wizardForm.validator({
-        disable: false,
-        feedback: {
-            success: "glyphicon-ok",
-            error: "glyphicon-remove"
-        },
-        custom: {
-            uniqueticket: function ($el) {
-                var validation = true;
-                /* Check for non-unique ticket names */
-                $("#event-wizard-form").find("input[name='tickets[name]']").each(function (i, ticketName) {
-                    if (!$(ticketName).is($el)) {
-                        if ($(ticketName).val().trim() == $el.val().trim()) {
-                            validation = false;
-                            return false;
-                        }
-                    }
-                });
-                return validation;
-            }
-        },
-        errors: {
-            uniqueticket: "Please enter a unique ticket name"
-        }
-    });
-
-    $wizardForm.validator("validate");
-    return $wizardForm.data("bs.validator").hasErrors();
-}
-
 function nextTab(elem) {
     $(elem).next().find("a[data-toggle=tab]").click();
 }

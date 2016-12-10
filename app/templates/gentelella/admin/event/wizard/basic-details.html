@@ -148,8 +148,6 @@
     </div>
 </script>
 
-{% endraw %}
-
 <div id="event-wizard-step-one">
     <div class="col-md-8 col-md-push-2">
         <div class="row">
@@ -176,43 +174,43 @@
             </div>
 
         </div>
-        <a id="show_addr" onclick="show_map_holder();" style="cursor:pointer;">{{ _("Enter Address") }}</a>
+        <a id="show_addr" style="cursor:pointer;">{{ _("Enter Address") }}</a>
 
         <div class="row" id="map-holder" style="display:none;">
             <div class="col-md-6 col-xs-12">
                 <div class="item form-group">
                     <input value="" name="street_number" id="street_number" class="form-control"
-                           placeholder="Street Address line 1" onchange="address_update();"/>
+                           placeholder="Street Address line 1"/>
                 </div>
                 <div class="item form-group">
                     <input value="" name="route" id="route" class="form-control"
-                           placeholder="Street Address line 2" onchange="address_update();"/>
+                           placeholder="Street Address line 2"/>
                 </div>
                 <div class="item form-group">
                     <input value="" name="locality" id="locality" class="form-control"
-                           placeholder="City" onchange="address_update();"/>
+                           placeholder="City"/>
                 </div>
                 <div class="item form-group">
                     <input value="" name="state_area" id="administrative_area_level_1"
-                           class="form-control" placeholder="States" onchange="address_update();"/>
+                           class="form-control" placeholder="States"/>
                 </div>
                 <div class="item form-group">
                     <input value="" name="postal_code" id="postal_code" class="form-control"
-                           placeholder="Zip Code" onchange="address_update();"/>
+                           placeholder="Zip Code"/>
                 </div>
                 <div class="item form-group">
                     <input value="" name="country" id="country" class="form-control"
-                           placeholder="Country" onchange="address_update();"/>
+                           placeholder="Country"/>
                 </div>
                 <div class="col-md-4">
-                    <a id="reset_addr" onclick="remove_map_holder();"
+                    <a id="reset_addr"
                        style="cursor:pointer;">{{ _("Reset Location") }}</a>
                 </div>
                 <div class="col-md-8">
                     <div class="checkbox" style="padding-top:0;">
                         <label style="padding-left:0;">
                             <input type="checkbox" class="flat"
-                                   name="show_map" :checked="!event | event.show_map">
+                                   name="show_map" :checked="event.show_map">
                             {{ _("Show map on event page") }}
                         </label>
                     </div>
@@ -293,7 +291,7 @@
             <textarea name="description"
                       class="form-control event-textarea"
                       v-model="event.description"
-                      title=""></textarea>
+                      title="description"></textarea>
         </div>
         <div class="row">
             <div class="col-md-7 col-xs-12">
@@ -376,23 +374,19 @@
             </label>
             <input type="checkbox" class="toggle-switch" name="organizer_state"
                    value="on" id="organizer-switch"
-                   {% if event.organizer_name or event.organizer_description %}checked="checked"{% endif %}/>
+                   :checked="event.organizer_name != '' || event.organizer_description != ''" />
             <label for="organizer-switch" style="margin-left:0;"></label>
         </div>
         <div id="organizer-holder"
              {% if not event.organizer_name and not event.organizer_description %}style="display:none;"{% endif %}>
             <div class="item form-group">
                 <label>{{ _("Organizer name") }}</label>
-                <input name="organizer_name" title="organizer_name" class="form-control"
-                       value="{{ event.organizer_name | default('', true) }}"/>
+                <input name="organizer_name" title="organizer_name" class="form-control" :checked="event.organizer_name" />
             </div>
             <div class="item form-group">
                 <label>{{ _("Organizer Description") }}
                 </label>
-                <textarea
-                        name="organizer_description"
-                        title="organizer_description"
-                        class="form-control event-textarea">{{ event.organizer_description | default('', true) }}</textarea>
+                <textarea v-model="event.organizer_description" name="organizer_description" title="organizer_description" class="form-control event-textarea"></textarea>
             </div>
         </div>
         <div class="item form-group">
@@ -404,8 +398,8 @@
                 </div>
                 <div class="col-sm-5 input-group">
                     <input data-error="Please enter a valid URL" type="url" class="form-control" name="event_url"
-                           placeholder="Link"
-                           value="{{ event.event_url | default('', true) }}">
+                           v-model="event.event_url"
+                           placeholder="Link">
                     <div class="help-block with-errors"></div>
                     <span class="input-group-btn" style="opacity: 0; pointer-events: none;">
                         <button type="button" class="btn btn-danger remove-social-links">-</button>
@@ -415,19 +409,10 @@
             </div>
             <div class="row social-links">
                 <div class="col-md-12 col-sm-12 col-xs-12">
-                    {% if social_links %}
-                        {% for social_link in social_links %}
-                            {{ social_entry(social_link) }}
-                        {% else %}
-                            {{ social_entry(None, 'Twitter') }}
-                            {{ social_entry(None, 'Facebook') }}
-                        {% endfor %}
-                    {% else %}
-                        {{ social_entry(None, 'Twitter') }}
-                        {{ social_entry(None, 'Facebook') }}
-                    {% endif %}
+                    <social-link v-for="social_link in event.social_links"></social-link>
+                    <social-link title="Twitter" v-if="event.social_links && event.social_links.length"></social-link>
+                    <social-link title="Facebook" v-if="event.social_links && event.social_links.length"></social-link>
                 </div>
-
             </div>
         </div>
         {% if event.ticket_include or 'ticketing' in included_items %}
@@ -465,13 +450,7 @@
                         </div>
                     </div>
                     <div class="tickets-holder" style="margin-bottom: 10px;">
-                        {% if event %}
-                            {% for ticket in event.tickets %}
-                                {{ ticket_template(serialno=loop.index0, name=ticket.name, description=ticket.description, description_toggle=ticket.description_toggle, ticket_tags=ticket.tags,
-                    sales_start=ticket.sales_start, sales_end=ticket.sales_end, hide=ticket.hide, price=ticket.price, type=ticket.type,
-                    quantity=ticket.quantity, min_order=ticket.min_order, max_order=ticket.max_order, has_orders=ticket.has_order_tickets()) }}
-                            {% endfor %}
-                        {% endif %}
+                        <social-link v-for="ticket in event.tickets"></social-link>
                     </div>
                 </div>
 
