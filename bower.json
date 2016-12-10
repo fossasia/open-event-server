@@ -40,7 +40,8 @@
     "seedrandom": "^2.4.2",
     "typeahead.js": "^0.11.1",
     "clipboard": "^1.5.12",
-    "socket.io-client": "1.4.8"
+    "socket.io-client": "1.4.8",
+    "vue": "^2.1.4"
   },
   "resolutions": {
     "font-awesome": "^4.6.3"
