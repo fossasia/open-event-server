@@ -61,14 +61,24 @@ Vue.component('social-link', {
     }
 });
 
+Vue.use(VueGoogleMap, {
+    load: {
+        key: 'AIzaSyAHdXg0Y_zk-wCNpslbBqcezLdHniaEwkI',
+        v: '3',
+        libraries: 'places'
+    },
+    installComponents: false
+});
+
+Vue.component('google-map', VueGoogleMap.Map);
+
 var app = new Vue({
     el: '#event-wizard-step-one',
-    components: {
-        FileUpload: VueUploadComponent
-    },
+    components: {},
     data: {
         event: EVENT,
-        included_items: included_settings
+        included_items: included_settings,
+        addressShown: false
     },
     computed: {
         _: function () {
@@ -83,10 +93,10 @@ var app = new Vue({
     },
     watch: {
         'event.topic': function (val) {
-            this.event.sub_topic = ''
+            this.event.sub_topic = '';
         },
         'event.ticket_include': function (val) {
-            this.event.tickets = []
+            this.event.tickets = [];
         }
     },
     methods: {
@@ -98,35 +108,24 @@ var app = new Vue({
             this.event.social_links.splice(index, 1);
         },
         removeTicket: function (ticket) {
-            var index = this.event.tickets.indexOf(ticket);
-            this.event.tickets.splice(index, 1);
+            if (confirm("Are you sure you want to remove this ticket ?")) {
+                var index = this.event.tickets.indexOf(ticket);
+                this.event.tickets.splice(index, 1);
+            }
         },
         addTicket: function (ticketType) {
             var ticket = _.cloneDeep(TICKET);
             ticket.type = ticketType;
             this.event.tickets.push(ticket)
+        },
+        mapInstanceReady: function () {
+            var map = app.$refs.gmap.$mapObject;
+            console.log(map);
         }
     },
     compiled: function () {
         this.upload = this.$refs.upload;
         this.files = this.$refs.upload.files;
-    },
-    events: {
-        addFileUpload: function (file, component) {
-            console.log('addFileUpload');
-            if (this.auto) {
-                component.active = true;
-            }
-        },
-        fileUploadProgress: function (file, component) {
-            console.log('fileUploadProgress ' + file.progress);
-        },
-        afterFileUpload: function (file, component) {
-            console.log('afterFileUpload');
-        },
-        beforeFileUpload: function (file, component) {
-            console.log('beforeFileUpload');
-        }
     }
 });
 
@@ -155,5 +154,6 @@ app.$nextTick(function () {
     $eventDiv.find(".licence-help").click(function () {
         $("#licence-list").slideToggle();
     });
+
 });
 

@@ -178,55 +178,62 @@
             </div>
 
         </div>
-        <a id="show_addr" style="cursor:pointer;">{{ _("Enter Address") }}</a>
-
-        <div class="row" id="map-holder" style="display:none;">
-            <div class="col-md-6 col-xs-12">
-                <div class="item form-group">
-                    <input value="" name="street_number" id="street_number" class="form-control"
-                           placeholder="Street Address line 1"/>
-                </div>
-                <div class="item form-group">
-                    <input value="" name="route" id="route" class="form-control"
-                           placeholder="Street Address line 2"/>
-                </div>
-                <div class="item form-group">
-                    <input value="" name="locality" id="locality" class="form-control"
-                           placeholder="City"/>
-                </div>
-                <div class="item form-group">
-                    <input value="" name="state_area" id="administrative_area_level_1"
-                           class="form-control" placeholder="States"/>
-                </div>
-                <div class="item form-group">
-                    <input value="" name="postal_code" id="postal_code" class="form-control"
-                           placeholder="Zip Code"/>
-                </div>
-                <div class="item form-group">
-                    <input value="" name="country" id="country" class="form-control"
-                           placeholder="Country"/>
-                </div>
-                <div class="col-md-4">
-                    <a id="reset_addr"
-                       style="cursor:pointer;">{{ _("Reset Location") }}</a>
-                </div>
-                <div class="col-md-8">
-                    <div class="checkbox" style="padding-top:0;">
-                        <label style="padding-left:0;">
-                            <input type="checkbox" class="flat"
-                                   name="show_map" v-model="event.show_map">
-                            {{ _("Show map on event page") }}
-                        </label>
+        <a id="show_addr" style="cursor:pointer;" v-on:click="addressShown = !addressShown"
+           v-show="!addressShown">{{ _("Enter Address") }}</a>
+        <transition name="fade">
+            <div class="row" id="map-holder" v-show="addressShown">
+                <div class="col-md-6 col-xs-12">
+                    <div class="item form-group">
+                        <input value="" name="street_number" id="street_number" class="form-control"
+                               placeholder="Street Address line 1"/>
+                    </div>
+                    <div class="item form-group">
+                        <input value="" name="route" id="route" class="form-control"
+                               placeholder="Street Address line 2"/>
+                    </div>
+                    <div class="item form-group">
+                        <input value="" name="locality" id="locality" class="form-control"
+                               placeholder="City"/>
+                    </div>
+                    <div class="item form-group">
+                        <input value="" name="state_area" id="administrative_area_level_1"
+                               class="form-control" placeholder="States"/>
+                    </div>
+                    <div class="item form-group">
+                        <input value="" name="postal_code" id="postal_code" class="form-control"
+                               placeholder="Zip Code"/>
+                    </div>
+                    <div class="item form-group">
+                        <input value="" name="country" id="country" class="form-control"
+                               placeholder="Country"/>
+                    </div>
+                    <div class="col-md-4">
+                        <a id="reset_addr"
+                           style="cursor:pointer;" v-on:click="addressShown = false">{{ _("Reset Location") }}</a>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="checkbox" style="padding-top:0;">
+                            <label style="padding-left:0;">
+                                <input type="checkbox" class="flat"
+                                       name="show_map" v-model="event.show_map">
+                                {{ _("Show map on event page") }}
+                            </label>
+                        </div>
                     </div>
                 </div>
+                <div class="col-md-6">
+                </div>
+                <br>
+                <br>
             </div>
-            <div class="col-md-6">
-                <div id="map" class="hidden-xs" style="width:100%; height:300px"></div>
-            </div>
-            <br>
-            <br>
-        </div>
+        </transition>
         <br><br>
+        <google-map class="hidden-xs" style="width:100%; height:300px"
+                    ref="gmap"
+                    v-on:center_changed="mapInstanceReady"
+                    v-on:bounds_changed="mapInstanceReady"
+                    :center="{lat: 1.38, lng: 103.8}"
+                    :zoom="10"></google-map>
 
         <div class="row event-date-picker">
             <div class="col-md-4 col-xs-12">
@@ -425,7 +432,8 @@
 
             <label for="ticket-switch" style="margin-left:0;"></label>
         </div>
-        <div id="ticketing-system" v-if="event.ticket_include">
+        <div id="ticketing-system"
+             v-if="(event.ticket_include && event.tickets.length > 0) || (_.includes(included_items, 'ticketing') && event.ticket_include)">
             <div id="ticket-system-holder" class="item form-group"
                  {% if event.ticket_url and event.identifier not in event.ticket_url %}style="display:none;"{% endif %}>
                 <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
@@ -475,7 +483,7 @@
                 </div>
             </div>
         </div>
-        <div id="no-ticketing-system" v-if="!event.ticket_include">
+        <div id="no-ticketing-system" v-if="!event.ticket_include || !_.includes(included_items, 'ticketing')">
             <h2 class="underlined-heading">
                 <i class="fa fa-ticket"></i>
                 {{ _("Add Ticket URL") }}
@@ -736,8 +744,11 @@
                 <div class="item form-group">
                     <label class="control-label">{{ _("Event Sub-Topic") }}
                     </label>
-                    <select class="form-control" id="sub_topic" name='sub_topic' title="sub topic"  v-model="event.sub_topic">
-                        <option value="">{{ _("Choose") }}..</option>
+                    <select class="form-control" id="sub_topic" name='sub_topic' title="sub topic"
+                            v-model="event.sub_topic">
+                        <option value="" v-if="subTopics && subTopics.length > 0">{{ _("Choose") }}..</option>
+                        <option value=""
+                                v-if="!subTopics || subTopics.length <= 0">{{ _("Choose a topic first") }}</option>
                         <option v-for="subTopic in subTopics" :value="subTopic">{{ '{{ subTopic }}' }}</option>
                     </select>
                 </div>
