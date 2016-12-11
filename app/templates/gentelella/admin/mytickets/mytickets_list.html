@@ -5,6 +5,7 @@
 {% block head_css %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/explore.css') }}">
+    <link href="{{ url_for('static', filename='css/admin/mytickets.css') }}" rel="stylesheet">
 {% endblock %}
 {% macro order_element(order) %}
     <a href="{{ url_for('ticketing.view_order_after_payment', order_identifier=order.identifier) }}">
