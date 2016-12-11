@@ -179,37 +179,37 @@
 
         </div>
         <a id="show_addr" style="cursor:pointer;" v-on:click="addressShown = !addressShown"
-           v-show="!addressShown">{{ _("Enter Address") }}</a>
+           v-show="mapLoaded && !addressShown">{{ _("Enter Address") }}</a>
         <transition name="fade">
             <div class="row" id="map-holder" v-show="addressShown">
                 <div class="col-md-6 col-xs-12">
                     <div class="item form-group">
                         <input value="" name="street_number" id="street_number" class="form-control"
-                               placeholder="Street Address line 1"/>
+                               placeholder="Street Address line 1" v-on:keyup="updateAddress"/>
                     </div>
                     <div class="item form-group">
                         <input value="" name="route" id="route" class="form-control"
-                               placeholder="Street Address line 2"/>
+                               placeholder="Street Address line 2" v-on:keyup="updateAddress"/>
                     </div>
                     <div class="item form-group">
                         <input value="" name="locality" id="locality" class="form-control"
-                               placeholder="City"/>
+                               placeholder="City" v-on:keyup="updateAddress"/>
                     </div>
                     <div class="item form-group">
                         <input value="" name="state_area" id="administrative_area_level_1"
-                               class="form-control" placeholder="States"/>
+                               class="form-control" placeholder="States" v-on:keyup="updateAddress"/>
                     </div>
                     <div class="item form-group">
                         <input value="" name="postal_code" id="postal_code" class="form-control"
-                               placeholder="Zip Code"/>
+                               placeholder="Zip Code" v-on:keyup="updateAddress"/>
                     </div>
                     <div class="item form-group">
                         <input value="" name="country" id="country" class="form-control"
-                               placeholder="Country"/>
+                               placeholder="Country" v-on:keyup="updateAddress"/>
                     </div>
                     <div class="col-md-4">
                         <a id="reset_addr"
-                           style="cursor:pointer;" v-on:click="addressShown = false">{{ _("Reset Location") }}</a>
+                           style="cursor:pointer;" v-on:click="event.location_name= ''; addressShown = false;">{{ _("Reset Location") }}</a>
                     </div>
                     <div class="col-md-8">
                         <div class="checkbox" style="padding-top:0;">
@@ -222,18 +222,15 @@
                     </div>
                 </div>
                 <div class="col-md-6">
+                    <google-map class="hidden-xs" style="width:100%; height:300px" ref="gmap" :center="location" :zoom="zoom">
+                        <map-marker :position="location" :clickable="false" :draggable="false"></map-marker>
+                    </google-map>
                 </div>
                 <br>
                 <br>
             </div>
         </transition>
         <br><br>
-        <google-map class="hidden-xs" style="width:100%; height:300px"
-                    ref="gmap"
-                    v-on:center_changed="mapInstanceReady"
-                    v-on:bounds_changed="mapInstanceReady"
-                    :center="{lat: 1.38, lng: 103.8}"
-                    :zoom="10"></google-map>
 
         <div class="row event-date-picker">
             <div class="col-md-4 col-xs-12">
@@ -795,8 +792,8 @@
     </div>
     <div class="col-md-4">
     </div>
-    <input type="hidden" name="latitude" id="latitude" v-model="event.latitude"/>
-    <input type="hidden" name="longitude" id="longitude" v-model="event.longitude"/>
+    <input type="hidden" name="latitude" id="latitude" v-model.number="event.latitude"/>
+    <input type="hidden" name="longitude" id="longitude" v-model.number="event.longitude"/>
 
 
     <div class="modal fade" id="taxModal" tabindex="-1" role="dialog" aria-hidden="true">

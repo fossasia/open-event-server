@@ -66,7 +66,9 @@ var EVENT = {
         zip: '',
         invoice_footer: '',
         tax_include_in_price: 1
-    }
+    },
+    latitude: 0.0,
+    longitude: 0.0
 };
 
 var TICKET = {

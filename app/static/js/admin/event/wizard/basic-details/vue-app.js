@@ -71,14 +71,17 @@ Vue.use(VueGoogleMap, {
 });
 
 Vue.component('google-map', VueGoogleMap.Map);
+Vue.component('map-marker', VueGoogleMap.Marker);
 
+//noinspection JSUnusedGlobalSymbols
 var app = new Vue({
     el: '#event-wizard-step-one',
     components: {},
     data: {
         event: EVENT,
         included_items: included_settings,
-        addressShown: false
+        addressShown: false,
+        mapLoaded: false
     },
     computed: {
         _: function () {
@@ -89,6 +92,15 @@ var app = new Vue({
                 return []
             }
             return sub_topics[this.event.topic]
+        },
+        location: function () {
+            return {
+                lat: this.event.latitude,
+                lng: this.event.longitude
+            }
+        },
+        zoom: function () {
+            return this.event.latitude == 0.0 && this.event.longitude == 0.0 ? 1 : 15
         }
     },
     watch: {
@@ -97,6 +109,22 @@ var app = new Vue({
         },
         'event.ticket_include': function (val) {
             this.event.tickets = [];
+        },
+        'addressShown': function (val) {
+            if (val) {
+                var $this = this;
+                setTimeout(function () {
+                    $this.recenterMap();
+                }, 500);
+            }
+        },
+        'event.location_name': function (val) {
+            var $this = this;
+            geocodeAddress(window.geocoder, val, function (lat, lng) {
+                $this.addressShown = true;
+                $this.event.latitude = lat;
+                $this.event.longitude = lng;
+            });
         }
     },
     methods: {
@@ -118,9 +146,18 @@ var app = new Vue({
             ticket.type = ticketType;
             this.event.tickets.push(ticket)
         },
-        mapInstanceReady: function () {
-            var map = app.$refs.gmap.$mapObject;
-            console.log(map);
+        recenterMap: function () {
+            var center = window.map.getCenter();
+            google.maps.event.trigger(window.map, 'resize');
+            window.map.setZoom(window.map.getZoom());
+            window.map.setCenter(center);
+        },
+        updateAddress: function () {
+            var locationName = "";
+            for (var component in window.componentForm) {
+                locationName += $('#' + component).get(0).value + " ";
+            }
+            this.event.location_name = locationName;
         }
     },
     compiled: function () {
@@ -157,3 +194,22 @@ app.$nextTick(function () {
 
 });
 
+
+VueGoogleMap.loaded.then(function () {
+    window.geocoder = new google.maps.Geocoder();
+    var locationInput = $("#location_name")[0];
+    window.autocomplete = new google.maps.places.Autocomplete(locationInput, {types: ['geocode']});
+    window.autocomplete.addListener('place_changed', function () {
+        locationInput.dispatchEvent(new Event('input'));
+    });
+
+
+    var intervalID = setInterval(function () {
+        if (!_.isUndefined(app.$refs.gmap.$mapObject)) {
+            window.map = app.$refs.gmap.$mapObject;
+            clearInterval(intervalID);
+            app.recenterMap();
+            app.mapLoaded = true;
+        }
+    }, 100);
+});
