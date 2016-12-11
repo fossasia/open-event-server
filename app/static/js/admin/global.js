@@ -1,6 +1,7 @@
 /**
  * Created by Niranjan on 14-Jun-16.
  */
+
 var summernoteConfig = {
     toolbar: [
         ['style', ['bold', 'italic', 'underline', 'clear']],
@@ -14,7 +15,32 @@ var summernoteConfig = {
     },
     height: 150,
     disableDragAndDrop: true,
-    styleWithSpan: false
+    styleWithSpan: false,
+    callbacks: {
+        onChange: function (contents, $editable) {
+            if (contents == '<p><br></p>' || contents == " " || contents == "&nbsp;") {
+                contents = '';
+            }
+            $(this).html(contents);
+            this.dispatchEvent(new Event('input'));
+        },
+        onPaste: function (e) {
+            var contents = $(this).summernote('code');
+            if (contents == '<p><br></p>' || contents == " " || contents == "&nbsp;") {
+                contents = '';
+            }
+            $(this).html(contents);
+            this.dispatchEvent(new Event('input'));
+        },
+        onKeyup: function (e) {
+            var contents = $(this).summernote('code');
+            if (contents == '<p><br></p>' || contents == " " || contents == "&nbsp;") {
+                contents = '';
+            }
+            $(this).html(contents);
+            this.dispatchEvent(new Event('input'));
+        }
+    }
 };
 
 function imgError(image, transparent) {

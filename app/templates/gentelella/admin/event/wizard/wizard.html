@@ -118,10 +118,16 @@
 {% endblock %}
 {% block tail_js %}
     {{ super() }}
+
+    <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/lodash/dist/lodash.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/vue/dist/vue.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vue/vue-upload-component.min.js') }}"></script>
+
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHdXg0Y_zk-wCNpslbBqcezLdHniaEwkI&callback=initPlacesApi&libraries=places" async defer></script>
+    <script src="{{ url_for('static', filename='js/bootstrap/icheck.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/clipboard/dist/clipboard.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/google-material-color/dist/palette.js') }}"></script>
-    <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/jt.timepicker/jquery.timepicker.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/datepair.js/dist/datepair.min.js') }}"></script>
@@ -129,6 +135,10 @@
     <script src="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/selectize/dist/js/standalone/selectize.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/Croppie/croppie.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/event_wizard.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap/icheck.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/admin/event/wizard/basic-details/classic.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin/event/wizard/basic-details/vue-models.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin/event/wizard/basic-details/vue-app.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/admin/event/event_wizard.js') }}"></script>
 {% endblock %}
